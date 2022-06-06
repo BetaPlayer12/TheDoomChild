@@ -17,7 +17,7 @@ namespace DChild.Gameplay.UI
         {
             m_icon.sprite = info.icon;
             m_header.text = info.headerLabel;
-            m_instructions.text = info.instructions;
+            m_instructions.text = "<sprite=0>" + info.instructions;
         }
     }
 }

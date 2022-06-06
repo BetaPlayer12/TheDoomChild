@@ -6,6 +6,7 @@
 // Copyright (c) Pixel Crushers. All rights reserved.
 
 using DChild.UI;
+using DChildDebug.Cutscene;
 using Doozy.Engine;
 using System;
 using System.Collections.Generic;
@@ -21,9 +22,13 @@ namespace PixelCrushers.DialogueSystem
         private PlayableDirector m_director;
 
         private bool m_typeWriterEffectIsPlaying;
+        private bool m_isCutsceneSkipped;
 
         public override void ProcessFrame(Playable playable, FrameData info, object playerData)
         {
+            if (m_isCutsceneSkipped)
+                return;
+
             int inputCount = playable.GetInputCount();
 
             for (int i = 0; i < inputCount; i++)
@@ -76,7 +81,7 @@ namespace PixelCrushers.DialogueSystem
                 }
             }
 
-            m_typeWriterEffectIsPlaying = DChildStandardUIContinueButtonFastForward.currentTypewriterEffect?.isPlaying ?? false ;
+            m_typeWriterEffectIsPlaying = DChildStandardUIContinueButtonFastForward.currentTypewriterEffect?.isPlaying ?? false;
         }
 
         private void OnContinueDiag(GameEventMessage obj)
@@ -136,6 +141,15 @@ namespace PixelCrushers.DialogueSystem
                 PreviewUI.ShowMessage(message, 2, 0);
             }
         }
+        private void OnCutsceneSkip()
+        {
+            m_isCutsceneSkipped = true;
+            foreach (var input in m_behaviours)
+            {
+                PlaySequence(input.GetStopConversationSequence());
+                input.isWaitingForInput = false;
+            }
+        }
 
         public override void OnGraphStart(Playable playable)
         {
@@ -145,8 +159,9 @@ namespace PixelCrushers.DialogueSystem
             m_played.Clear();
             m_behaviours.Clear();
             DChildStandardDialogueUI.isInCutscene = true;
+            SequenceSkipHandle.SkipExecute += OnCutsceneSkip;
+            m_isCutsceneSkipped = false;
         }
-
 
 
         public override void OnGraphStop(Playable playable)
@@ -156,6 +171,7 @@ namespace PixelCrushers.DialogueSystem
             m_played.Clear();
             m_behaviours.Clear();
             DChildStandardDialogueUI.isInCutscene = false;
+            SequenceSkipHandle.SkipExecute -= OnCutsceneSkip;
         }
     }
 }

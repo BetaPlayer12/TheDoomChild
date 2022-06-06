@@ -32,6 +32,8 @@ namespace DChild.Gameplay.Systems
         [SerializeField]
         private LootAcquiredUI m_lootAcquiredUI;
         [SerializeField]
+        private StoreNotificationHandle m_storeNotification;
+        [SerializeField]
         private UIView m_skippableUI;
 
         public void UpdateNavMapConfiguration(Location location, Transform inGameReference, Vector2 mapReferencePoint, Vector2 calculationOffset)
@@ -92,7 +94,7 @@ namespace DChild.Gameplay.Systems
 
         public void PromptBestiaryNotification()
         {
-            GameEventMessage.SendEvent("Notification");
+            //GameEventMessage.SendEvent("Notification");
         }
 
         public void ShowQuickItem(bool willshow)
@@ -239,6 +241,21 @@ namespace DChild.Gameplay.Systems
             else
             {
                 m_skippableUI.Hide();
+            }
+        }
+
+        public void ShowNotification(StoreNotificationType storeNotificationType)
+        {
+            m_storeNotification.ShowNotification(storeNotificationType);
+            switch (storeNotificationType)
+            {
+                case StoreNotificationType.Bestiary:
+                    m_storeNavigator.SetPage(StorePage.Bestiary);
+                    break;
+                case StoreNotificationType.Lore:
+                    break;
+                case StoreNotificationType.Extras:
+                    break;
             }
         }
     }
