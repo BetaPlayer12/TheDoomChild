@@ -76,6 +76,9 @@ namespace DChild
             m_skeletonAnimation.state.Interrupt += OnAnimationStop;
         }
 
-
+        private void OnDisable()
+        {
+            m_callback.StopAllSounds();
+        }
     }
 }
