@@ -31,12 +31,15 @@ public class GameplayKeyboardKeymap : MonoBehaviour
         [SerializeField]
         private int m_bindingId;
         [SerializeField]
+        private string m_button;
+        [SerializeField]
         private string m_changeBindinTo;
 
 
         public string compositeName { get { return m_compositeName; } set { m_compositeName = value; } }
         public string bindingName { get { return m_bindingName; } set { m_bindingName = value; } }
         public int bindingId { get { return m_bindingId; } set { m_bindingId = value; } }
+        public string button { get { return m_button; } set { m_button = value; } }
         public string changeBindingTo { get { return m_changeBindinTo; } set { m_changeBindinTo = value; } }
     }
 
@@ -140,6 +143,7 @@ public class GameplayKeyboardKeymap : MonoBehaviour
                                 temp.compositeName = inputList[x].name;
                                 temp.bindingName = currentButton[y].name;
                                 temp.bindingId = index;
+                                temp.button = currentButton[y].path;
                                 m_bindingIds.Add(temp);
                             }
                             else
@@ -155,6 +159,7 @@ public class GameplayKeyboardKeymap : MonoBehaviour
                                 temp.compositeName = inputList[x].name;
                                 temp.bindingName = currentButton[y].name;
                                 temp.bindingId = index;
+                                temp.button = currentButton[y].path;
                                 m_bindingIds.Add(temp);
                             }
                             else
