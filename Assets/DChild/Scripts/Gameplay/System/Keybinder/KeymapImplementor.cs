@@ -11,6 +11,11 @@ namespace DChild.CustomInput.Keybind
         [SerializeField]
         private InputActionAsset m_inputAction;
 
+        public void ResetOverrides()
+        {
+            m_inputAction.AddActionMap("Gameplay").RemoveAllBindingOverrides();
+        }
+
         public void LoadKeyboardKeymap(KeyboardKeymapData keyboardKeymapData)
         {
             for (int i = 0; i < keyboardKeymapData.count; i++)
@@ -25,8 +30,7 @@ namespace DChild.CustomInput.Keybind
             for (int i = 0; i < addresses.count; i++)
             {
                 var address = addresses.GetAddress(i);
-                var action = m_inputAction.FindAction(address.actionMap);
-
+                var action = m_inputAction.FindAction(address.actionMap.action.name);
                 action.Disable();
                 if (keybindInfo.isOverriden)
                 {

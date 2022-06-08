@@ -4,11 +4,17 @@ namespace DChild.CustomInput.Keybind
 {
     public class KeyboardBindHandle : MonoBehaviour
     {
-        [SerializeField]
-        private KeybindSelection m_selection;
+        private KeyboardBindButton[] m_buttons;
 
-        private KeybindAddressesList m_addressList;
-
-        public void SetAddressList(KeybindAddressesList keybindAddressesList) => m_addressList = keybindAddressesList;
+        private void Start()
+        {
+            m_buttons = GetComponentsInChildren<KeyboardBindButton>();
+            var keybind = GameSystem.settings.keybind;
+            for (int i = 0; i < m_buttons.Length; i++)
+            {
+                var button = m_buttons[i];
+                button.SetAddressList(keybind.GetKeyboardAddressList(button.selection));
+            }
+        }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using DChild.Configurations.Visuals;
+using DChild.CustomInput.Keybind;
 using DChild.Serialization;
 using Sirenix.OdinInspector;
 using Sirenix.Serialization;
@@ -14,16 +15,17 @@ namespace DChild.Configurations
         [SerializeField]
         private GameSettingsConfiguration m_configuration;
 
+        [SerializeField]
+        private KeybindManager m_keybind;
         [SerializeField, Title("Visual Settings"), HideLabel]
         private VisualSettingsHandle m_visual;
-
         [SerializeField, Title("Audio Settings"), HideLabel]
         private AudioSettingsHandle m_audio;
         [SerializeField, Title("Gameplay Settings"), HideLabel]
         private GameplaySettings m_gameplay;
 
         public GameSettingsConfiguration configuration => m_configuration;
-
+        public KeybindManager keybind => m_keybind;
         public VisualSettingsHandle visual => m_visual;
 
         public  AudioSettingsHandle audio => m_audio;
@@ -48,6 +50,7 @@ namespace DChild.Configurations
                 LoadDefaultSettings();
             }
 
+            m_keybind.LoadKeyboardKeymap(m_configuration.keyboardKeyBindings);
             m_visual.Initialize(m_configuration);
             m_audio.Initialize(m_configuration);
         }

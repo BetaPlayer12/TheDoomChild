@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace DChild.CustomInput.Keybind
 {
@@ -6,11 +7,11 @@ namespace DChild.CustomInput.Keybind
     public class KeybindAddress
     {
         [SerializeField]
-        private string m_actionMap;
+        private InputActionReference m_actionMap;
         [SerializeField]
         private int m_index;
 
-        public string actionMap => m_actionMap;
+        public InputActionReference actionMap => m_actionMap;
         public int index => m_index;
     }
 
