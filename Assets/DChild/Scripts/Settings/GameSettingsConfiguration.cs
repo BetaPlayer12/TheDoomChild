@@ -1,4 +1,5 @@
-﻿using DChild.Serialization;
+﻿using DChild.CustomInput.Keybind;
+using DChild.Serialization;
 using Sirenix.OdinInspector;
 using System;
 using System.Collections;
@@ -33,6 +34,8 @@ namespace DChild.Configurations
             public float musicVolume;
         }
 
+        public KeyboardKeymapData keyboardKeyBindings;
+        public int m_controllerConfigurationIndex;
         public VisualConfiguration visualConfiguration;
         public AudioConfiguration audioConfiguration;
 
