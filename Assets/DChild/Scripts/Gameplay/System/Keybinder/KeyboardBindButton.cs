@@ -48,7 +48,7 @@ namespace DChild.CustomInput.Keybind
                     {
                         address = m_addressList.GetAddress(i);
                         RebindKey(address.actionMap.action, address.index, overridePath);
-                        action = address.actionMap.action;
+
                     }
                 }
 
