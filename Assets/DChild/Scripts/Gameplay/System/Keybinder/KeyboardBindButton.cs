@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Sirenix.OdinInspector;
+using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
@@ -10,6 +11,8 @@ namespace DChild.CustomInput.Keybind
         private KeyboardBindUI m_ui;
         [SerializeField]
         private KeybindSelection m_selection;
+        [SerializeField, ReadOnly]
+        private string m_currentPath;
 
         private KeybindAddressesList m_addressList;
 
@@ -24,9 +27,12 @@ namespace DChild.CustomInput.Keybind
         public void UpdateUI()
         {
             var address = m_addressList.GetAddress(0);
-            m_ui.UpdateVisual(address.actionMap.action.bindings[address.index]);
+            var binding = address.actionMap.action.bindings[address.index];
+            m_ui.UpdateVisual(binding);
+            m_currentPath = binding.effectivePath;
         }
 
+        [Button]
         public void RebindKey()
         {
             var address = m_addressList.GetAddress(0);

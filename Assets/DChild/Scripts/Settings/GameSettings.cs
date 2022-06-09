@@ -28,7 +28,7 @@ namespace DChild.Configurations
         public KeybindManager keybind => m_keybind;
         public VisualSettingsHandle visual => m_visual;
 
-        public  AudioSettingsHandle audio => m_audio;
+        public AudioSettingsHandle audio => m_audio;
         public GameplaySettings gameplay => m_gameplay;
 
         public void SaveSettings()
@@ -38,19 +38,19 @@ namespace DChild.Configurations
 
         public void LoadDefaultSettings()
         {
-            
+
         }
 
         public void Initialize()
         {
             SerializationHandle.LoadConfiguration(ref m_configuration);
-            if(m_configuration == null)
+            if (m_configuration == null)
             {
                 m_configuration = new GameSettingsConfiguration();
                 LoadDefaultSettings();
             }
 
-           //m_keybind.LoadKeyboardKeymap(m_configuration.keyboardKeyBindings);
+            m_keybind.LoadKeyboardKeymap(m_configuration.keyboardKeyBindings);
             m_visual.Initialize(m_configuration);
             m_audio.Initialize(m_configuration);
         }

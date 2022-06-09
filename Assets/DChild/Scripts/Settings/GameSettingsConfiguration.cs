@@ -41,6 +41,8 @@ namespace DChild.Configurations
 
         public GameSettingsConfiguration()
         {
+            keyboardKeyBindings = new KeyboardKeymapData();
+            m_controllerConfigurationIndex = 0;
             visualConfiguration = new VisualConfiguration
             {
                 resolutionIndex = 0,

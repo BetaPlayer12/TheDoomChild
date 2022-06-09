@@ -8,7 +8,7 @@ namespace DChild.CustomInput.Keybind
 
         private void Start()
         {
-            m_buttons = GetComponentsInChildren<KeyboardBindButton>();
+            m_buttons = GetComponentsInChildren<KeyboardBindButton>(true);
             var keybind = GameSystem.settings.keybind;
             for (int i = 0; i < m_buttons.Length; i++)
             {

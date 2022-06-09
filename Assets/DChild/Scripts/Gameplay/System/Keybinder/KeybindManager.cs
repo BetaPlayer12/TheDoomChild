@@ -18,6 +18,9 @@ namespace DChild.CustomInput.Keybind
 
         public void LoadKeyboardKeymap(KeyboardKeymapData keyboardKeymapData)
         {
+            if (keyboardKeymapData == null)
+                return;
+
             for (int i = 0; i < keyboardKeymapData.count; i++)
             {
                 LoadKeyboardBinding(i, keyboardKeymapData.GetKeybindInfo(i));
