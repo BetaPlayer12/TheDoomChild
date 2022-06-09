@@ -4,6 +4,14 @@
     {
         Up,
         Down,
+        Left, Right,
+        Slash, Whip,
+        Jump, Dash,
+        Previous_QuickItem,
+        Next_QuickItem,
+        UseItem,
+        Shift,
+        ShadowMorph,
         _Count
     }
 }
