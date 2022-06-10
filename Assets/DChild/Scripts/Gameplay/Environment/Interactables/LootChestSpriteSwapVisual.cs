@@ -18,20 +18,24 @@ namespace DChild.Gameplay.Environment
         private Sprite m_openVersion;
 
         private SpriteRenderer m_renderer;
+        private MaterialParameterCall m_materialParameterCall;
 
         public override void Close(bool instant = false)
         {
             m_renderer.sprite = m_closeVersion;
+            m_materialParameterCall.SetValue(true);
         }
 
         public override void Open(bool instant = false)
         {
             m_renderer.sprite = m_openVersion;
+            m_materialParameterCall.SetValue(false);
         }
 
         private void Awake()
         {
             m_renderer = GetComponent<SpriteRenderer>();
+            m_materialParameterCall = GetComponent<MaterialParameterCall>();
         }
     }
 }
