@@ -39,7 +39,7 @@ namespace DChild
             else
             {
                 //Find away to not rely on GetInstanceID all the time since it actually changes Value
-                m_ID =Mathf.Abs(GetInstanceID());
+                m_ID = Mathf.Abs(GetInstanceID());
                 m_name = m_customName;
                 string assetPath = AssetDatabase.GetAssetPath(GetInstanceID());
                 FileUtility.RenameAsset(this, assetPath, "Custom" + GetType().Name);

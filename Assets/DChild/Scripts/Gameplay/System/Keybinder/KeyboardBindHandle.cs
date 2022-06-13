@@ -6,6 +6,11 @@ namespace DChild.CustomInput.Keybind
     {
         private KeyboardBindButton[] m_buttons;
 
+        public void PerformRebind(KeyboardBindButton keyboardBindButton)
+        {
+            GameSystem.settings.keybind.RebindKeyboard(keyboardBindButton.selection, keyboardBindButton.UpdateUI);
+        }
+
         private void Start()
         {
             m_buttons = GetComponentsInChildren<KeyboardBindButton>(true);
@@ -13,7 +18,7 @@ namespace DChild.CustomInput.Keybind
             for (int i = 0; i < m_buttons.Length; i++)
             {
                 var button = m_buttons[i];
-                button.SetAddressList(keybind.GetKeyboardAddressList(button.selection));
+                button.UpdateUI(keybind.GetCurrentKeyboardInputBindind(button.selection));
             }
         }
     }
