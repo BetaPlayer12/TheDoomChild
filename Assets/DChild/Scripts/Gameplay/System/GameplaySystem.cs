@@ -11,6 +11,7 @@ using System;
 using UnityEngine;
 using PixelCrushers.DialogueSystem;
 using System.Collections;
+using DChild.Gameplay.SoulSkills;
 
 namespace DChild.Gameplay
 {
@@ -54,6 +55,7 @@ namespace DChild.Gameplay
         private static ZoneMoverHandle m_zoneMover;
         private static HealthTracker m_healthTracker;
         private static GameplayUIHandle m_gameplayUIHandle;
+        private static SoulSkillManager m_soulSkillManager;
 
 
         public static ICombatManager combatManager => m_combatManager;
@@ -80,6 +82,7 @@ namespace DChild.Gameplay
         public static ILootHandler lootHandler => m_lootHandler;
         public static IHealthTracker healthTracker => m_healthTracker;
         public static IGameplayUIHandle gamplayUIHandle => m_gameplayUIHandle;
+        public static ISoulSkillManager soulSkillManager => m_soulSkillManager;
         public static CampaignSerializer campaignSerializer => m_campaignSerializer;
         #endregion
         public static bool isGamePaused { get; private set; }
@@ -187,6 +190,7 @@ namespace DChild.Gameplay
             AssignModule(out m_campaignSerializer);
             AssignModule(out m_healthTracker);
             AssignModule(out m_gameplayUIHandle);
+            AssignModule(out m_soulSkillManager);
         }
 
         private void AssignModule<T>(out T module) where T : MonoBehaviour, IGameplaySystemModule => module = GetComponentInChildren<T>();

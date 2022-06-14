@@ -1,5 +1,6 @@
 ﻿using DChild.Gameplay.Characters.Players.SoulSkills;
 using DChild.Gameplay.SoulSkills.UI;
+using DChild.Gameplay.Systems;
 using Holysoft.Event;
 using Sirenix.OdinInspector;
 using System;
@@ -10,7 +11,8 @@ using UnityEngine.EventSystems;
 
 namespace DChild.Gameplay.SoulSkills
 {
-    public class SoulSkillManager : MonoBehaviour
+
+    public class SoulSkillManager : MonoBehaviour, IGameplaySystemModule, ISoulSkillManager
     {
         [SerializeField]
         private SoulSkillList m_completeSoulSkillList;
@@ -29,8 +31,12 @@ namespace DChild.Gameplay.SoulSkills
         private SoulSkillListUI m_availableListUI;
         [SerializeField, BoxGroup("UI")]
         private SoulSkillInfoUI m_infoUI;
-        [SerializeField, DisableInPlayMode]
+        [SerializeField]
+        private bool m_forceSoulSkillActivation;
+
         private bool m_canActivateSoulSkill;
+
+        private bool canActivateSoulSkill => m_canActivateSoulSkill || m_forceSoulSkillActivation;
 
         public void AllowSoulSkillActivation(bool canActivateSoulSkill)
         {
@@ -39,7 +45,7 @@ namespace DChild.Gameplay.SoulSkills
 
         public void ActivateSoulSkill(int soulSkillID)
         {
-            if (m_canActivateSoulSkill == false)
+            if (canActivateSoulSkill == false)
                 return;
 
             ActivateSoulSkill(m_completeSoulSkillList.GetInfo(soulSkillID));
@@ -47,7 +53,7 @@ namespace DChild.Gameplay.SoulSkills
 
         public void DeactivateSoulSkill(int soulSkillID)
         {
-            if (m_canActivateSoulSkill == false)
+            if (canActivateSoulSkill == false)
                 return;
 
             DeactivateSoulSkill(m_completeSoulSkillList.GetInfo(soulSkillID));
