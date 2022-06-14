@@ -22,9 +22,13 @@ namespace PixelCrushers.DialogueSystem
         private PlayableDirector m_director;
 
         private bool m_typeWriterEffectIsPlaying;
+        private bool m_isCutsceneSkipped;
 
         public override void ProcessFrame(Playable playable, FrameData info, object playerData)
         {
+            if (m_isCutsceneSkipped)
+                return;
+
             int inputCount = playable.GetInputCount();
 
             for (int i = 0; i < inputCount; i++)
@@ -139,11 +143,11 @@ namespace PixelCrushers.DialogueSystem
         }
         private void OnCutsceneSkip()
         {
+            m_isCutsceneSkipped = true;
             foreach (var input in m_behaviours)
             {
-                PlaySequence(input.GetEndBehaviourSequence());
+                PlaySequence(input.GetStopConversationSequence());
                 input.isWaitingForInput = false;
-                break;
             }
         }
 
@@ -156,6 +160,7 @@ namespace PixelCrushers.DialogueSystem
             m_behaviours.Clear();
             DChildStandardDialogueUI.isInCutscene = true;
             SequenceSkipHandle.SkipExecute += OnCutsceneSkip;
+            m_isCutsceneSkipped = false;
         }
 
 

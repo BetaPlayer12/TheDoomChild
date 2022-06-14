@@ -50,6 +50,9 @@ namespace DChild.Gameplay.NavigationMap
 
         private void MoveTrackerToCenter()
         {
+            if (m_currentMap == null)
+                return;
+
             m_currentMap.anchoredPosition = -m_tracker.trackerPosition;
         }
     }

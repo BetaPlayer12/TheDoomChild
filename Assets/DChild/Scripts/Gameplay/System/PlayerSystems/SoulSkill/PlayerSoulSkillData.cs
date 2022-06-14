@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using Sirenix.OdinInspector;
+using System.Collections;
+using UnityEngine;
 
 namespace DChild.Gameplay.SoulSkills
 {
@@ -7,9 +9,9 @@ namespace DChild.Gameplay.SoulSkills
     {
         [SerializeField]
         private int m_maxSoulCapacity;
-        [SerializeField]
+        [SerializeField,ValueDropdown("GetAllSoulSkills",IsUniqueList =true)]
         private int[] m_acquiredSoulSkills;
-        [SerializeField]
+        [SerializeField, ValueDropdown("m_acquiredSoulSkills")]
         private int[] m_activatedSoulSkills;
 
         public PlayerSoulSkillData()
@@ -29,5 +31,22 @@ namespace DChild.Gameplay.SoulSkills
         public int maxSoulCapacity => m_maxSoulCapacity;
         public int[] acquiredSoulSkills => m_acquiredSoulSkills;
         public int[] activatedSoulSkills => m_activatedSoulSkills;
+
+#if UNITY_EDITOR
+        private IEnumerable GetAllSoulSkills()
+        {
+            var connection = DChildDatabase.GetSoulSkillConnection();
+            connection.Initialize();
+            var infoList = connection.GetAllSkills();
+            connection.Close();
+
+            var list = new ValueDropdownList<int>();
+            for (int i = 0; i < infoList.Length; i++)
+            {
+                list.Add(infoList[i].name, infoList[i].id);
+            }
+            return list;
+        }
+#endif
     }
 }

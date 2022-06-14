@@ -6,16 +6,28 @@ namespace DChildDebug
 {
     public class EditorOnlyObject : MonoBehaviour
     {
+        [SerializeField]
+        private Transform someTransform;
         private void OnValidate()
         {
-            var allChildren = GetComponentsInChildren<Transform>();
-            foreach (var child in allChildren)
+           
+            foreach (Transform tr in someTransform)
             {
-                if(child.tag != "EditorOnly")
+                if (tr.tag != "EditorOnly")
                 {
-                    child.tag = "EditorOnly";
+                    tr.tag = "EditorOnly";
                 }
             }
+            //Transform.childCount;
+            //transform.GetChild()
+            //var allChildren = GetComponentsInChildren<Transform>();
+            //foreach (var child in allChildren)
+            //{
+               // if(child.tag != "EditorOnly")
+               // {
+                   // child.tag = "EditorOnly";
+                //}
+           //}
         }
     }
 }

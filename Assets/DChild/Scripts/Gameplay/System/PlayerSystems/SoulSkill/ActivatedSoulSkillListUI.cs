@@ -13,7 +13,7 @@ namespace DChild.Gameplay.SoulSkills.UI
 
         private SoulSkillUI[] m_buttons;
         private int m_activatedSkillCount;
-        private SoulSkillUI GetButton(int index) => m_buttons[index];
+        public SoulSkillUI GetButton(int index) => m_buttons[index];
 
         public void ActivateSoulSkill(SoulSkill soulSkill)
         {
