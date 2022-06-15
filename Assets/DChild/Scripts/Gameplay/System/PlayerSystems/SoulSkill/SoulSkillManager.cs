@@ -43,6 +43,11 @@ namespace DChild.Gameplay.SoulSkills
             m_canActivateSoulSkill = canActivateSoulSkill;
         }
 
+        public void ForceAllowSoulSkillActivation(bool forceCanActivateSoulSkill)
+        {
+            m_forceSoulSkillActivation = forceCanActivateSoulSkill;
+        }
+
         public void ActivateSoulSkill(int soulSkillID)
         {
             if (canActivateSoulSkill == false)
@@ -181,5 +186,7 @@ namespace DChild.Gameplay.SoulSkills
             m_activatedListUI.Reset();
             SyncWithSaveData();
         }
+
+
     }
 }

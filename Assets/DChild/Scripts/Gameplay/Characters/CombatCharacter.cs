@@ -7,6 +7,7 @@ using Holysoft.Event;
 using DChild.Gameplay.Characters;
 using DChild.Gameplay.Combat;
 using PixelCrushers;
+using Holysoft.Gameplay;
 
 namespace DChild.Gameplay.Characters
 {
@@ -42,6 +43,8 @@ namespace DChild.Gameplay.Characters
         IAttacker IAttacker.parentAttacker => throw new System.NotImplementedException();
 
         IAttacker IAttacker.rootParentAttacker => throw new System.NotImplementedException();
+
+        public ICappedStatInfo health => throw new System.NotImplementedException();
 
         public abstract void Heal(int health);
         public abstract void TakeDamage(int totalDamage, DamageType type);

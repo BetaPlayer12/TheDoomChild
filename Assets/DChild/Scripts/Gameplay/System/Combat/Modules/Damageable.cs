@@ -3,6 +3,7 @@ using Holysoft.Event;
 using DChild.Gameplay.Characters;
 using UnityEngine;
 using Sirenix.OdinInspector;
+using Holysoft.Gameplay;
 
 namespace DChild.Gameplay.Combat
 {
@@ -43,6 +44,8 @@ namespace DChild.Gameplay.Combat
         public IAttackResistance attackResistance => m_resistance;
 
         public Health health => m_health;
+
+        ICappedStatInfo IDamageable.health => m_health;
 
         public virtual void TakeDamage(int totalDamage, DamageType type)
         {
