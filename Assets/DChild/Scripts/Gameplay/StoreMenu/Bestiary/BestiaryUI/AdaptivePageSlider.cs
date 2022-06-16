@@ -32,7 +32,7 @@ namespace DChild.Menu.Bestiary
             SyncWithPageHandle();
         }
 
-        private void Awake()
+        private void Start()
         {
             m_slider = GetComponent<Slider>();
             m_pageHandle.PageChange += OnPageChange;
