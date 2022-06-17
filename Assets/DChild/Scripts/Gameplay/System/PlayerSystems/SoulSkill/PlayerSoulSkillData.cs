@@ -9,7 +9,7 @@ namespace DChild.Gameplay.SoulSkills
     {
         [SerializeField]
         private int m_maxSoulCapacity;
-        [SerializeField,ValueDropdown("GetAllSoulSkills",IsUniqueList =true)]
+        [SerializeField, ValueDropdown("GetAllSoulSkills", IsUniqueList = true)]
         private int[] m_acquiredSoulSkills;
         [SerializeField, ValueDropdown("m_acquiredSoulSkills")]
         private int[] m_activatedSoulSkills;

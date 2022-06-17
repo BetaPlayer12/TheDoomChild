@@ -81,7 +81,7 @@ namespace DChild.Gameplay.SoulSkills.UI
                 m_uiPair = new Dictionary<int, SoulSkillUI>();
             }
             m_uiPair.Clear();
-            var uiList = m_uiListParent.GetComponentsInChildren<SoulSkillUI>();
+            var uiList = m_uiListParent.GetComponentsInChildren<SoulSkillUI>(true);
             var idList = m_completeSoulSkillList.GetIDs();
 
             for (int i = 0; i < m_completeSoulSkillList.Count; i++)
