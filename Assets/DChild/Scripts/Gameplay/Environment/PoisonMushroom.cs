@@ -25,6 +25,8 @@ namespace DChild.Gameplay.Environment.Obstacles
 
         [SerializeField]
         private Transform m_anticipationTransformReference;
+        [SerializeField]
+        private float m_delayTime;
         private FX m_anticipationFX;
 
         private FX m_emissionFX;
@@ -107,7 +109,7 @@ namespace DChild.Gameplay.Environment.Obstacles
         IEnumerator DelayCoroutine()
         {
 
-            yield return new WaitForSeconds(1);
+            yield return new WaitForSeconds(m_delayTime);
             m_damageCollider.enabled = true;
 
         }
