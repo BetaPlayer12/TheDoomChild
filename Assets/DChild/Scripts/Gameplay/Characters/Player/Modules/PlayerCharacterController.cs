@@ -439,10 +439,13 @@ namespace DChild.Gameplay.Characters.Players.Modules
             }
             else
             {
-                m_basicSlashes.HandleNextAttackDelay();
-                m_slashCombo.HandleComboAttackDelay();
-                m_whip.HandleNextAttackDelay();
-                m_projectileThrow.HandleNextAttackDelay();
+                if (m_state.isAttacking == false)
+                { 
+                    m_basicSlashes.HandleNextAttackDelay();
+                    m_slashCombo.HandleComboAttackDelay();
+                    m_whip.HandleNextAttackDelay();
+                    m_projectileThrow.HandleNextAttackDelay();
+                }
             }
 
             if (m_state.isGrounded)

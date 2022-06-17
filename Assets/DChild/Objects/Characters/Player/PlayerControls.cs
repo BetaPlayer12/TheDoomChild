@@ -123,7 +123,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""interactions"": """"
                 },
                 {
-                    ""name"": ""SkullThrow"",
+                    ""name"": ""ProjectileThrow"",
                     ""type"": ""Button"",
                     ""id"": ""45bdfdf7-5e75-4839-be13-6dc77f575e8d"",
                     ""expectedControlType"": ""Button"",
@@ -420,7 +420,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""interactions"": ""Press(behavior=2)"",
                     ""processors"": """",
                     ""groups"": ""Keyboard"",
-                    ""action"": ""SkullThrow"",
+                    ""action"": ""ProjectileThrow"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -1395,7 +1395,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         m_Gameplay_Levitate = m_Gameplay.FindAction("Levitate", throwIfNotFound: true);
         m_Gameplay_Whip = m_Gameplay.FindAction("Whip", throwIfNotFound: true);
         m_Gameplay_Grab = m_Gameplay.FindAction("Grab", throwIfNotFound: true);
-        m_Gameplay_SkullThrow = m_Gameplay.FindAction("SkullThrow", throwIfNotFound: true);
+        m_Gameplay_ProjectileThrow = m_Gameplay.FindAction("ProjectileThrow", throwIfNotFound: true);
         m_Gameplay_QuickItemUse = m_Gameplay.FindAction("QuickItemUse", throwIfNotFound: true);
         m_Gameplay_QuickItemCycle = m_Gameplay.FindAction("QuickItemCycle", throwIfNotFound: true);
         m_Gameplay_StoreOpen = m_Gameplay.FindAction("StoreOpen", throwIfNotFound: true);
@@ -1484,7 +1484,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
     private readonly InputAction m_Gameplay_Levitate;
     private readonly InputAction m_Gameplay_Whip;
     private readonly InputAction m_Gameplay_Grab;
-    private readonly InputAction m_Gameplay_SkullThrow;
+    private readonly InputAction m_Gameplay_ProjectileThrow;
     private readonly InputAction m_Gameplay_QuickItemUse;
     private readonly InputAction m_Gameplay_QuickItemCycle;
     private readonly InputAction m_Gameplay_StoreOpen;
@@ -1511,7 +1511,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         public InputAction @Levitate => m_Wrapper.m_Gameplay_Levitate;
         public InputAction @Whip => m_Wrapper.m_Gameplay_Whip;
         public InputAction @Grab => m_Wrapper.m_Gameplay_Grab;
-        public InputAction @SkullThrow => m_Wrapper.m_Gameplay_SkullThrow;
+        public InputAction @ProjectileThrow => m_Wrapper.m_Gameplay_ProjectileThrow;
         public InputAction @QuickItemUse => m_Wrapper.m_Gameplay_QuickItemUse;
         public InputAction @QuickItemCycle => m_Wrapper.m_Gameplay_QuickItemCycle;
         public InputAction @StoreOpen => m_Wrapper.m_Gameplay_StoreOpen;
@@ -1569,9 +1569,9 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 @Grab.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnGrab;
                 @Grab.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnGrab;
                 @Grab.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnGrab;
-                @SkullThrow.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnSkullThrow;
-                @SkullThrow.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnSkullThrow;
-                @SkullThrow.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnSkullThrow;
+                @ProjectileThrow.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnProjectileThrow;
+                @ProjectileThrow.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnProjectileThrow;
+                @ProjectileThrow.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnProjectileThrow;
                 @QuickItemUse.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnQuickItemUse;
                 @QuickItemUse.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnQuickItemUse;
                 @QuickItemUse.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnQuickItemUse;
@@ -1642,9 +1642,9 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 @Grab.started += instance.OnGrab;
                 @Grab.performed += instance.OnGrab;
                 @Grab.canceled += instance.OnGrab;
-                @SkullThrow.started += instance.OnSkullThrow;
-                @SkullThrow.performed += instance.OnSkullThrow;
-                @SkullThrow.canceled += instance.OnSkullThrow;
+                @ProjectileThrow.started += instance.OnProjectileThrow;
+                @ProjectileThrow.performed += instance.OnProjectileThrow;
+                @ProjectileThrow.canceled += instance.OnProjectileThrow;
                 @QuickItemUse.started += instance.OnQuickItemUse;
                 @QuickItemUse.performed += instance.OnQuickItemUse;
                 @QuickItemUse.canceled += instance.OnQuickItemUse;
@@ -1854,7 +1854,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         void OnLevitate(InputAction.CallbackContext context);
         void OnWhip(InputAction.CallbackContext context);
         void OnGrab(InputAction.CallbackContext context);
-        void OnSkullThrow(InputAction.CallbackContext context);
+        void OnProjectileThrow(InputAction.CallbackContext context);
         void OnQuickItemUse(InputAction.CallbackContext context);
         void OnQuickItemCycle(InputAction.CallbackContext context);
         void OnStoreOpen(InputAction.CallbackContext context);

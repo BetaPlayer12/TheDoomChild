@@ -13,7 +13,7 @@ namespace DChild.Gameplay.Cinematics
     {
         [SerializeField]
         private Camera m_mainCamera;
-        [ShowInInspectorAttribute,ReadOnly]
+        [ShowInInspectorAttribute, ReadOnly]
         private IVirtualCamera m_currentVCam;
         [ShowInInspectorAttribute, ReadOnly]
         private IVirtualCamera m_previousCam;
@@ -92,8 +92,11 @@ namespace DChild.Gameplay.Cinematics
 
         public void ApplyCameraPeekMode(CameraPeekMode look)
         {
-            m_currentLookAhead = look;
-            m_offsetHandle.ApplyOffset(m_currentVCam, m_currentLookAhead);
+            if (m_offsetHandle != null)
+            {
+                m_currentLookAhead = look;
+                m_offsetHandle.ApplyOffset(m_currentVCam, m_currentLookAhead);
+            }
         }
 
         public void EnableCameraShake(bool enable)
