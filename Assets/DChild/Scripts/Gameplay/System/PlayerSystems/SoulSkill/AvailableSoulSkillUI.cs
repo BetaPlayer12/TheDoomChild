@@ -31,6 +31,7 @@ namespace DChild.Gameplay.SoulSkills.UI
 
         public override void SetIsAnActivatedUIState(bool isAnEquippedUI)
         {
+            m_hiddenVersion.SetActive(false);
             base.SetIsAnActivatedUIState(isAnEquippedUI);
             var colors = m_button.colors;
             colors.normalColor = m_isAnActivatedSoulSkill ? m_activatedColor : m_unactivatedColor;

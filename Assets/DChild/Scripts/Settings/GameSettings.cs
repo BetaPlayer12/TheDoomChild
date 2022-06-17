@@ -50,7 +50,7 @@ namespace DChild.Configurations
                 LoadDefaultSettings();
             }
 
-            m_keybind.LoadKeyboardKeymap(m_configuration.keyboardKeyBindings);
+            m_keybind.Initialize(m_configuration.keyboardKeyBindings);
             m_visual.Initialize(m_configuration);
             m_audio.Initialize(m_configuration);
         }

@@ -1,4 +1,5 @@
 ﻿using Holysoft.Event;
+using Holysoft.Gameplay;
 using UnityEngine;
 using static DChild.Gameplay.Combat.Damageable;
 
@@ -9,6 +10,7 @@ namespace DChild.Gameplay.Combat
         Vector2 position { get; }
         Transform transform { get; } //Gian Edit
         bool isAlive { get; }
+        ICappedStatInfo health { get; }
         IAttackResistance attackResistance { get; }
         void TakeDamage(int totalDamage, DamageType type);
         void BlockDamage(int totalDamage, DamageType type);

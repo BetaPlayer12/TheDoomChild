@@ -29,7 +29,16 @@ namespace DChild.Menu.Bestiary
 
         public int GetTotalPages()
         {
-            throw new System.NotImplementedException();
+            var itemCount = m_buttonCount;
+            var pageCount = 1;
+
+            while (itemCount < m_IDs.Length)
+            {
+                itemCount += m_contentSkipCountPerPage;
+                pageCount++;
+            }
+
+            return pageCount;
         }
 
         public void NextPage()
