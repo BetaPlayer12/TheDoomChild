@@ -5,6 +5,7 @@ using DChild.Gameplay.Combat;
 using Sirenix.OdinInspector;
 using Spine;
 using System;
+using System.Collections;
 
 namespace DChild.Gameplay.Environment.Obstacles
 {   
@@ -39,6 +40,7 @@ namespace DChild.Gameplay.Environment.Obstacles
             enabled = false;
             m_trigger.enabled = true;
             m_animation.SetAnimation(0, m_idleAnimation, true);
+           
         }
 
         private void OnDelayEnd(object sender, EventActionArgs eventArgs)
@@ -49,6 +51,7 @@ namespace DChild.Gameplay.Environment.Obstacles
             m_anticipationFX.Stop();
             m_anticipationFX = null;
             enabled = false;
+            m_damageCollider.enabled = false;
         }
 
         private void OnEmisionComplete(TrackEntry trackEntry)
@@ -64,7 +67,7 @@ namespace DChild.Gameplay.Environment.Obstacles
         {
             if (e.Data.Name == m_data.emissionFXEvent)
             {
-                OnEmissionFXSpawn(m_fxSpawner.InstantiateFX(m_data.emissionFXReference, Vector2.zero).gameObject, 0);
+               // OnEmissionFXSpawn(m_fxSpawner.InstantiateFX(m_data.emissionFXReference, Vector2.zero).gameObject, 0);
             }
         }
 
@@ -78,15 +81,14 @@ namespace DChild.Gameplay.Environment.Obstacles
             instanceTransform.parent = null;
             m_emissionFX = instance.GetComponent<FX>();
             m_emissionFX.Play();
-            m_emissionFX.Done += OnEmissionFXDone;
+            OnEmissionFXDone();
             instance.GetComponent<SortingHandle>().SetOrder(m_sortingHandle.sortingLayerID, m_sortingHandle.sortingOrder+1);
             m_damageCollider.enabled = true;
         }
 
-        private void OnEmissionFXDone(object sender, EventActionArgs eventArgs)
+        private void OnEmissionFXDone()
         {
             m_damageCollider.enabled = false;
-            m_emissionFX.Done -= OnEmissionFXDone;
             m_emissionFX = null;
         }
 
@@ -99,8 +101,16 @@ namespace DChild.Gameplay.Environment.Obstacles
 
             enabled = true;
             m_trigger.enabled = false;
-        }
+            StartCoroutine(DelayCoroutine());
 
+        }
+        IEnumerator DelayCoroutine()
+        {
+
+            yield return new WaitForSeconds(1);
+            m_damageCollider.enabled = true;
+
+        }
         private void OnAnticipationFXSpawn(GameObject instance, int index)
         {
             var instanceTransform = instance.transform;
@@ -148,6 +158,8 @@ namespace DChild.Gameplay.Environment.Obstacles
                 if (collision.TryGetComponentInParent(out Hitbox hitbox))
                 {
                     EmitPoison();
+                  
+                    
                 }
             }
         }
