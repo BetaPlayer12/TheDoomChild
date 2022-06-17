@@ -41,12 +41,16 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private SkeletonGhost m_skeletonGhost;
         private string SHADOW_MORPH_ANIMATION_STATE = "Shadow Morph Start";
 
+        private bool m_attackAllowed = false;
+
         public event EventAction<EventActionArgs> ExecuteModule;
         public event EventAction<EventActionArgs> End;
 
         public bool IsInShadowMode() => m_state.isInShadowMode;
 
         public bool HaveEnoughSourceForExecution() => m_sourceRequiredAmount <= m_source.currentValue;
+
+        //public bool IsAttackAllowed
 
         public void ConsumeSource()
         {
