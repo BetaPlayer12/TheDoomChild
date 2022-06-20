@@ -102,7 +102,7 @@ namespace DChild.Gameplay.SoulSkills.UI
         {
             if (m_buttons == null)
             {
-                m_buttons = GetComponentsInChildren<SoulSkillUI>();
+                m_buttons = GetComponentsInChildren<SoulSkillUI>(true);
             }
 
             SetAsActivedSoulSkills(null);

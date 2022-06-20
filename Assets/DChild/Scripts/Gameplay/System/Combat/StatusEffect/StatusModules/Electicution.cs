@@ -4,7 +4,7 @@ using UnityEngine;
 namespace DChild.Gameplay.Combat.StatusAilment
 {
     [System.Serializable]
-    public partial class Electicution : IStatusEffectUpdatableModule
+    public class Electicution : IStatusEffectUpdatableModule
     {
         [SerializeField, MinValue(0.1)]
         private float m_interval;

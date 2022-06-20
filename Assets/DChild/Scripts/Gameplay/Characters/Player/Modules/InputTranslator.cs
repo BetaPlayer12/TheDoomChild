@@ -186,7 +186,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             }
         }
 
-        private void OnSkullThrow(InputValue value)
+        private void OnProjectileThrow(InputValue value)
         {
             if (enabled == true)
             {
