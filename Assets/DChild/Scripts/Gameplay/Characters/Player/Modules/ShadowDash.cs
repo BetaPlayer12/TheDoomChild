@@ -12,10 +12,10 @@ namespace DChild.Gameplay.Characters.Players.Modules
     {
         [SerializeField]
         private Dash m_dash;
+        [SerializeField, MinValue(0)]
+        private int m_baseSourceRequiredAmount = 0;
         [SerializeField]
         private ParticleSystem m_shadowFX;
-        [SerializeField, MinValue(0)]
-        private int m_baseSourceRequiredAmount;
 
         private ICappedStat m_source;
         private IPlayerModifer m_modifier;
@@ -25,8 +25,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private int m_animationParameter;
         private SkeletonGhost m_skeletonGhost;
 
-        [ShowInInspector, ReadOnly, HideInEditorMode]
-        protected int sourceRequiredAmount => Mathf.FloorToInt(m_baseSourceRequiredAmount * m_modifier.Get(PlayerModifier.ShadowMagic_Requirement));
+        //[ShowInInspector, ReadOnly, HideInEditorMode]
+        //protected int sourceRequiredAmount => Mathf.FloorToInt(m_baseSourceRequiredAmount * m_modifier.Get(PlayerModifier.ShadowMagic_Requirement));
 
         public event EventAction<EventActionArgs> ExecuteModule;
         public event EventAction<EventActionArgs> End;
@@ -47,16 +47,21 @@ namespace DChild.Gameplay.Characters.Players.Modules
             GameplaySystem.world.SetShadowColliders(false);
             m_damageable.SetInvulnerability(Invulnerability.None);
             m_wasUsed = false;
-            m_shadowFX?.Stop(true);
+
+            if (m_shadowFX != null)
+            {
+                m_shadowFX?.Stop(true);
+            }
+
             m_animator.SetBool(m_animationParameter, false);
             //m_skeletonGhost.enabled = false;
 
             End?.Invoke(this, EventActionArgs.Empty);
         }
 
-        public bool HaveEnoughSourceForExecution() => sourceRequiredAmount <= m_source.currentValue;
+        public bool HaveEnoughSourceForExecution() => GetSourceRequiredAmount() <= m_source.currentValue;
 
-        public void ConsumeSource() => m_source.ReduceCurrentValue(sourceRequiredAmount);
+        public void ConsumeSource() => m_source.ReduceCurrentValue(GetSourceRequiredAmount());
 
         public void HandleCooldown() => m_dash.HandleCooldown();
 
@@ -68,6 +73,11 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void ResetDurationTimer() => m_dash.ResetDurationTimer();
 
+        public int GetSourceRequiredAmount()
+        {
+            return Mathf.FloorToInt(m_baseSourceRequiredAmount * m_modifier.Get(PlayerModifier.ShadowMagic_Requirement));
+        }
+
         public void Execute()
         {
             if (m_wasUsed == false)
@@ -75,7 +85,12 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 GameplaySystem.world.SetShadowColliders(true);
                 m_damageable.SetInvulnerability(Invulnerability.Level_2);
                 m_wasUsed = true;
-                m_shadowFX?.Play(true);
+
+                if (m_shadowFX != null)
+                {
+                    m_shadowFX?.Play(true);
+                }
+
                 m_animator.SetBool(m_animationParameter, true);
                 //m_skeletonGhost.enabled = true;
                 ExecuteModule?.Invoke(this, EventActionArgs.Empty);
