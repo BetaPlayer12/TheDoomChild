@@ -22,13 +22,14 @@ namespace DChild.Gameplay.Combat
 
         public void ResolveDamageRecieved(IPlayer player)
         {
+            m_spawnHandle.InstantiateFX(m_hitFX, player.character.centerMass.position);
+            m_reactiveCamera.HandleOnDamageRecieveShake();
+           
+            StartCoroutine(m_iFrameHandle.ExecuteTemporaryInvulnerability(player));
             if (player.state?.canFlinch ?? true)
             {
-                m_spawnHandle.InstantiateFX(m_hitFX, player.character.centerMass.position);
-                m_reactiveCamera.HandleOnDamageRecieveShake();
                 m_hitStopHandle.Execute(false);
                 StartCoroutine(m_iFrameHandle.DisableInputTemporarily(player));
-                StartCoroutine(m_iFrameHandle.ExecuteTemporaryInvulnerability(player));
             }
         }
 
