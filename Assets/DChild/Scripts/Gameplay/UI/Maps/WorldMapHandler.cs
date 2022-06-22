@@ -54,15 +54,17 @@ namespace DChild.Gameplay.UI
 
 
             LoadingHandle.SetLoadType(LoadingHandle.LoadType.Force);
+            LoadingHandle.LoadingDone += OnLoadingDone;
             GameplaySystem.ResumeGame();
-            GameSystem.LoadZone(m_transferingTo.scene, true, OnSceneDone);
+            GameSystem.LoadZone(m_transferingTo.scene, true);
 
             //Force Save for the Demo Delete this after proper saving is done
             GameplaySystem.campaignSerializer.slot.UpdateLocation(m_transferingTo.sceneInfo, m_transferingTo.location, m_transferingTo.position);
         }
 
-        private void OnSceneDone()
+        private void OnLoadingDone(object sender, EventActionArgs eventArgs)
         {
+            LoadingHandle.LoadingDone -= OnLoadingDone;
             GameEventMessage.SendEvent("Location Transfer");
             var playerManager = GameplaySystem.playerManager;
             var character = playerManager.player.character;
@@ -73,7 +75,6 @@ namespace DChild.Gameplay.UI
             collisionState.forcedCurrentGroundedness = false;
             GameplaySystem.playerManager.StopCharacterControlOverride();
         }
-
 
         private IEnumerable GetMapLocationButtons() => FindObjectsOfType<MapLocationButton>();
 
