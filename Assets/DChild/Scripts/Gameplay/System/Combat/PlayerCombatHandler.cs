@@ -22,7 +22,7 @@ namespace DChild.Gameplay.Combat
 
         public void ResolveDamageRecieved(IPlayer player)
         {
-            StartCoroutine(m_iFrameHandle.ExecuteTemporaryInvulnerability(player));
+            StopAllCoroutines();
 
             if (player.state?.canFlinch ?? true)
             {
@@ -30,6 +30,7 @@ namespace DChild.Gameplay.Combat
                 StartCoroutine(m_iFrameHandle.DisableInputTemporarily(player));
             }
 
+            StartCoroutine(m_iFrameHandle.ExecuteTemporaryInvulnerability(player));
             m_reactiveCamera.HandleOnDamageRecieveShake();
             m_spawnHandle.InstantiateFX(m_hitFX, player.character.centerMass.position);
         }
