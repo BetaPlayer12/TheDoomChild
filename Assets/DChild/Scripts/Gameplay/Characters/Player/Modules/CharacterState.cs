@@ -130,5 +130,11 @@ namespace DChild.Gameplay.Characters.Players.Modules
         [SerializeField, ReadOnly]
         private bool m_isDoingSwordThrust;
         public bool isDoingSwordThrust { get => m_isDoingSwordThrust; set => m_isDoingSwordThrust = value; }
+        [SerializeField, ReadOnly]
+        private bool m_canAttackInShadowMode;
+        public bool canAttackInShadowMode { get => m_canAttackInShadowMode; set => m_canAttackInShadowMode = value; }
+        [SerializeField, ReadOnly]
+        private bool m_canWallCrawl;
+        public bool canWallCrawl { get => m_canWallCrawl; set => m_canWallCrawl = value; }
     }
 }
