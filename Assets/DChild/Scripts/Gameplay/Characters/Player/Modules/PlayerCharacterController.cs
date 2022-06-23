@@ -440,7 +440,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             else
             {
                 if (m_state.isAttacking == false)
-                { 
+                {
                     m_basicSlashes.HandleNextAttackDelay();
                     m_slashCombo.HandleComboAttackDelay();
                     m_whip.HandleNextAttackDelay();
@@ -1000,37 +1000,64 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     #region Ground Attacks
                     if (m_input.slashPressed)
                     {
-                        if (m_input.verticalInput > 0)
+                        if (m_state.isInShadowMode == true)
                         {
-                            PrepareForGroundAttack();
-                            m_basicSlashes.Execute(BasicSlashes.Type.Ground_Overhead);
-                            return;
+                            if (m_shadowMorph.IsAttackAllowed() == true)
+                            {
+                                if (m_input.verticalInput > 0)
+                                {
+                                    PrepareForGroundAttack();
+                                    m_basicSlashes.Execute(BasicSlashes.Type.Ground_Overhead);
+                                    return;
+                                }
+                                else
+                                {
+                                    if (m_slashCombo.CanSlashCombo() == true)
+                                    {
+                                        PrepareForGroundAttack();
+                                        m_slashCombo.Execute();
+                                        return;
+                                    }
+                                }
+                            }
                         }
                         else
                         {
-                            if (m_slashCombo.CanSlashCombo() == true)
+                            if (m_input.verticalInput > 0)
                             {
                                 PrepareForGroundAttack();
-                                m_slashCombo.Execute();
+                                m_basicSlashes.Execute(BasicSlashes.Type.Ground_Overhead);
                                 return;
+                            }
+                            else
+                            {
+                                if (m_slashCombo.CanSlashCombo() == true)
+                                {
+                                    PrepareForGroundAttack();
+                                    m_slashCombo.Execute();
+                                    return;
+                                }
                             }
                         }
                     }
                     else if (m_input.whipPressed)
                     {
-                        if (m_skills.IsModuleActive(PrimarySkill.Whip))
+                        if (m_state.isInShadowMode == false)
                         {
-                            if (m_input.verticalInput > 0)
+                            if (m_skills.IsModuleActive(PrimarySkill.Whip))
                             {
-                                PrepareForGroundAttack();
-                                m_whip.Execute(WhipAttack.Type.Ground_Overhead);
-                                return;
-                            }
-                            else
-                            {
-                                PrepareForGroundAttack();
-                                m_whip.Execute(WhipAttack.Type.Ground_Forward);
-                                return;
+                                if (m_input.verticalInput > 0)
+                                {
+                                    PrepareForGroundAttack();
+                                    m_whip.Execute(WhipAttack.Type.Ground_Overhead);
+                                    return;
+                                }
+                                else
+                                {
+                                    PrepareForGroundAttack();
+                                    m_whip.Execute(WhipAttack.Type.Ground_Forward);
+                                    return;
+                                }
                             }
                         }
 

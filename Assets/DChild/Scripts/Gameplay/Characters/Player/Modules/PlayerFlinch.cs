@@ -52,23 +52,30 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void Flinch(Vector2 directionToSource, RelativeDirection damageSource, AttackSummaryInfo damageTypeRecieved)
         {
-            bool isAerialKnockback = false;
-            OnExecute?.Invoke(this, EventActionArgs.Empty);
-            m_rigidBody.velocity = Vector2.zero;
-            Vector2 knockBackDirection = Vector2.zero;
-            knockBackDirection.x = directionToSource.x > 0 ? -1 : 1;
-
-            if (m_state.isGrounded)
+            if (m_state.canFlinch == true)
             {
-                knockBackDirection.y = 1;
+                bool isAerialKnockback = false;
+                OnExecute?.Invoke(this, EventActionArgs.Empty);
+                m_rigidBody.velocity = Vector2.zero;
+                Vector2 knockBackDirection = Vector2.zero;
+                knockBackDirection.x = directionToSource.x > 0 ? -1 : 1;
+
+                if (m_state.isGrounded)
+                {
+                    knockBackDirection.y = 1;
+                }
+                else
+                {
+                    knockBackDirection.y = 1;
+                    isAerialKnockback = true;
+                }
+
+                StartCoroutine(FlinchRoutine(knockBackDirection, isAerialKnockback));
             }
             else
             {
-                knockBackDirection.y = 1;
-                isAerialKnockback = true;
+                return;
             }
-
-            StartCoroutine(FlinchRoutine(knockBackDirection, isAerialKnockback));
         }
 
         private IEnumerator FlinchRoutine(Vector2 direction, bool isAerialKnockBack)
@@ -77,7 +84,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             float aerialKnockBackPower = m_YknockbackPower;
             int flinchState = Random.Range(1, m_numberOfFlinchStates + 1);
 
-            m_state.waitForBehaviour= true;
+            m_state.waitForBehaviour = true;
             m_rigidBody.gravityScale = m_flinchGravityScale;
             m_rigidBody.drag = m_defaultLinearDrag;
 
@@ -88,7 +95,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
             m_rigidBody.velocity = Vector2.zero;
             m_rigidBody.AddForce(new Vector2(direction.x * knockBackPower, direction.y * aerialKnockBackPower), ForceMode2D.Impulse);
-            m_animator.SetBool(m_animationParameter,true);
+            m_animator.SetBool(m_animationParameter, true);
             m_animator.SetInteger(m_flinchStateAnimationParameter, flinchState);
 
             yield return new WaitForSeconds(m_flinchDuration);

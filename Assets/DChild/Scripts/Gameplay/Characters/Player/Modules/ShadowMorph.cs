@@ -47,7 +47,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         public event EventAction<EventActionArgs> End;
 
         public bool IsInShadowMode() => m_state.isInShadowMode;
-
+        public bool IsAttackAllowed() => m_attackAllowed;
         public bool HaveEnoughSourceForExecution() => m_sourceRequiredAmount <= m_source.currentValue;
 
         //public bool IsAttackAllowed
@@ -84,6 +84,15 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_playerShadow.SetActive(false);
             ExecuteModule?.Invoke(this, EventActionArgs.Empty);
             m_state.waitForBehaviour = true;
+
+            if (m_state.canAttackInShadowMode == true)
+            {
+                m_attackAllowed = true;
+            }
+            else
+            {
+                m_attackAllowed = false;
+            }
         }
 
         public void Cancel()

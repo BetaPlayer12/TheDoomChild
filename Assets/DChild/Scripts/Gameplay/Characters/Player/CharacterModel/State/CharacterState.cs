@@ -77,5 +77,7 @@ namespace DChild.Gameplay.Characters.Players.State
                 CombatModeChanged?.Invoke(this, new CombatStateEventArgs(m_inCombat));
             }
         }
+
+        public bool canWallCrawl { get => canWallCrawl; set => canWallCrawl = value; }
     }
 }
