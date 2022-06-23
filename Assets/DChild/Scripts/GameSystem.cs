@@ -82,12 +82,14 @@ namespace DChild
 
         public static void LoadZone(string sceneName, bool withLoadingScene)
         {
+            GameplaySystem.ListenToNextSceneLoad();
             m_zoneLoader.LoadZone(sceneName, withLoadingScene);
             GameplaySystem.ClearCaches();
         }
 
         public static void LoadZone(string sceneName, bool withLoadingScene, Action CallAfterSceneDone)
         {
+            GameplaySystem.ListenToNextSceneLoad();
             m_zoneLoader.LoadZone(sceneName, withLoadingScene, CallAfterSceneDone);
             GameplaySystem.ClearCaches();
         }

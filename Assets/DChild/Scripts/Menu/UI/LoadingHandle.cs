@@ -200,6 +200,22 @@ namespace DChild.Menu
             {
                 m_loadOperations[i].allowSceneActivation = true;
             }
+
+            bool allScenesDoneLoading = false;
+            while (allScenesDoneLoading)
+            {
+                allScenesDoneLoading = true;
+                for (int i = 0; i < m_loadOperations.Count; i++)
+                {
+                    if (m_loadOperations[i].isDone == false)
+                    {
+                        allScenesDoneLoading = false;
+                        break;
+                    }
+                }
+                yield return endOfFrame;
+            }
+
             Debug.LogError("False Positive: Scene Activation Done");
 
             yield return endOfFrame;

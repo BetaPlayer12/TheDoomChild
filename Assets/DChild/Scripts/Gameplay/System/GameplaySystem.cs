@@ -167,15 +167,40 @@ namespace DChild.Gameplay
             }
         }
 
+        public static void ListenToNextSceneLoad()
+        {
+            LoadingHandle.LoadingDone += OnLoadingSceneDone;
+        }
+
+        private static void OnLoadingSceneDone(object sender, EventActionArgs eventArgs)
+        {
+            LoadingHandle.LoadingDone -= OnLoadingSceneDone;
+            if (m_instance == null)
+                return;
+            m_playerManager.FreezePlayerPosition(false);
+        }
+
         private static void LoadGameDone(object sender, EventActionArgs eventArgs)
         {
+            LoadingHandle.SceneDone -= LoadGameDone;
+
+
             m_campaignSerializer.SetSlot(m_campaignToLoad);
             m_gameplayUIHandle.ResetGameplayUI();
             m_campaignSerializer.Load(SerializationScope.Gameplay, true);
             //m_playerManager.player.Revitilize();
             //m_playerManager.player.Reset();
-            LoadingHandle.SceneDone -= LoadGameDone;
         }
+
+        private static void LockPlayerToSpawnPosition()
+        {
+            if (m_campaignToLoad == null)
+                return;
+
+            m_playerManager.player.transform.position = m_campaignToLoad.spawnPosition;
+            m_playerManager.FreezePlayerPosition(true);
+        }
+
 
         private void AssignModules()
         {
@@ -247,10 +272,11 @@ namespace DChild.Gameplay
 
                 if (m_doNotTeleportPlayerOnAwake == false && m_campaignToLoad != null)
                 {
-                    m_playerManager.player.transform.position = m_campaignToLoad.spawnPosition;
+                    LockPlayerToSpawnPosition();
                 }
             }
         }
+
 
         private void Start()
         {
@@ -262,13 +288,14 @@ namespace DChild.Gameplay
             if (m_campaignToLoad != null)
             {
                 m_campaignSerializer.SetSlot(m_campaignToLoad);
+
                 m_campaignToLoad = null;
             }
 
             StartCoroutine(DelayedShowGameplay());
         }
 
-     
+
 
         private void OnEnable()
         {

@@ -193,6 +193,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private RandomAttackDecider<Attack> m_attackDecider;
 
         private State m_turnState;
+        private Coroutine m_bbRoutine;
 
 
         //[SerializeField]
@@ -394,9 +395,17 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             if (m_stateHandle.currentState != State.Detect)
             {
-                m_attackBB.SetActive(true);
                 m_breathFX.Play();
+                m_bbRoutine = StartCoroutine(PoisonBreathBBRoutine());
             }
+        }
+
+        private IEnumerator PoisonBreathBBRoutine()
+        {
+            yield return new WaitForSeconds(1f);
+            m_attackBB.SetActive(true);
+            m_bbRoutine = null;
+            yield return null;
         }
 
         protected override void Awake()
