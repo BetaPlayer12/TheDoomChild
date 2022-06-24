@@ -515,10 +515,11 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 else
                 {
                     var verticalInput = m_input.verticalInput;
-                    if (verticalInput < 0)
+                    if (verticalInput < 0 && m_state.canWallCrawl == true)
                     {
                         m_wallSlide?.Cancel();
                         m_wallMovement?.Move(verticalInput);
+
                         m_groundedness?.Evaluate();
                         if (m_state.isGrounded)
                             return;
@@ -526,13 +527,14 @@ namespace DChild.Gameplay.Characters.Players.Modules
                         if ((m_wallMovement?.IsThereAWall(WallMovement.SensorType.Body) ?? false) == false)
                         {
                             m_wallMovement?.Cancel();
-                            m_wallStick?.Cancel();
+                            //m_wallStick?.Cancel();
                         }
                     }
-                    else if (verticalInput > 0)
+                    else if (verticalInput > 0 && m_state.canWallCrawl == true)
                     {
                         m_wallSlide?.Cancel();
                         m_wallMovement?.Move(verticalInput);
+
                         if ((m_wallMovement?.IsThereAWall(WallMovement.SensorType.Overhead) ?? false) == false)
                         {
                             m_wallMovement?.Cancel();
