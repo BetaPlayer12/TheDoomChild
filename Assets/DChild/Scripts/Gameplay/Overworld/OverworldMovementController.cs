@@ -20,12 +20,14 @@ public class OverworldMovementController : MonoBehaviour
     private Rigidbody2D m_rigidbody;
     private PlayerInput m_playerinput;
     private OverworldObjectInteraction m_objectInteraction;
+    public OverworldCharacterAnimatorHandle m_animationhandler;
 
     public void Move(float directionx, float directiony)
     {
         var xVelocity = m_moveSpeed * directionx;
         var yVelocity = m_moveSpeed * directiony;
         m_rigidbody.velocity = new Vector2(xVelocity, yVelocity);
+        m_animationhandler.UpdateAnimator(new Vector2(xVelocity, yVelocity));
     }
     public void Disable()
     {

@@ -8,10 +8,12 @@ namespace DChild.Gameplay.Characters.Players.SoulSkills
 
         public void AttachTo(int soulSkillInstanceID, IPlayer player)
         {
+            player.state.canAttackInShadowMode = true;
         }
 
         public void DetachFrom(int soulSkillInstanceID, IPlayer player)
         {
+            player.state.canAttackInShadowMode = false;
         }
     }
 }
