@@ -93,9 +93,11 @@ namespace DChild.Gameplay.Puzzles
 
         void Start()
         {
+            
             m_entitybrain = m_entity.GetComponent<IResetableAIBrain>();
             m_entity.Destroyed += OnEntityDestroyed;
             m_deathCounter = DialogueLua.GetVariable(m_deathCounterDatabaseVariable).asInt;
+            UpdateEntityPosition();
         }
 
         private void OnDestroy()
