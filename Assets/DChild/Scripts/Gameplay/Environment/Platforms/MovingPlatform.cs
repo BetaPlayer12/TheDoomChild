@@ -225,6 +225,15 @@ namespace DChild.Gameplay.Environment
 
             enabled = true;
         }
+        public void PauseMovement()
+        {
+            enabled = false;
+        }
+        public void ResumeMovement()
+        {
+            enabled = true;
+        }
+
 
         private void Awake()
         {
