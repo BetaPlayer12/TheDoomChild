@@ -7,6 +7,7 @@ using Holysoft.Event;
 using PixelCrushers.DialogueSystem;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace DChild.Gameplay.Puzzles
 {
@@ -33,6 +34,10 @@ namespace DChild.Gameplay.Puzzles
         public int respawnDelay;
         [SerializeField]
         private Damageable m_entity;
+        [SerializeField]
+        private int m_totalDeaths;
+        [SerializeField]
+        private UnityEvent m_afterfinaldefeat;
         [SerializeField,VariablePopup(true)]
         private string m_deathCounterDatabaseVariable;
         [SerializeField]
@@ -88,6 +93,10 @@ namespace DChild.Gameplay.Puzzles
             else
             {
                 m_entity.gameObject.SetActive(false);
+            }
+            if(m_totalDeaths+1== m_deathCounter)
+            {
+                m_afterfinaldefeat?.Invoke();
             }
         }
 
