@@ -1,13 +1,28 @@
 ﻿using DChild.Gameplay.Characters.Players.Behaviour;
 using DChild.Gameplay.Characters.Players.State;
 using DChild.Gameplay.Environment;
+using Holysoft.Event;
 using Holysoft.Gameplay;
 using Sirenix.OdinInspector;
+using Sirenix.Utilities;
 using System;
 using UnityEngine;
 
 namespace DChild.Gameplay.Characters.Players.Modules
 {
+    public class DetectedMovableObject : IEventActionArgs
+    {
+        private MovableObject m_moveableObject;
+
+        public void Set(MovableObject moveableObject)
+        {
+            m_moveableObject = moveableObject;
+        }
+
+        public bool isEmpty => m_moveableObject == null;
+        public MovableObject movableObject => m_moveableObject;
+    }
+
     public class ObjectManipulation : MonoBehaviour, ICancellableBehaviour, IComplexCharacterModule
     {
         [SerializeField]
@@ -22,21 +37,20 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private Animator m_animator;
         private IGrabState m_state;
         private IPlayerModifer m_modifier;
-        private Collider2D m_movableObject;
+        private MovableObject m_movableObject;
         private Rigidbody2D m_rigidbody;
         private int m_isGrabbingAnimationParameter;
         private int m_isPullingAnimationParameter;
         private int m_isPushingAnimationParameter;
+
+        public event EventAction<DetectedMovableObject> MovableObjectDetected;
 
         public void GrabIdle()
         {
             m_animator.SetBool(m_isPullingAnimationParameter, false);
             m_animator.SetBool(m_isPushingAnimationParameter, false);
 
-            if (m_movableObject != null)
-            {
-                m_movableObject.gameObject?.GetComponentInParent<MovableObject>().StopMovement();
-            }
+            m_movableObject?.StopMovement();
         }
 
         public bool IsThereAMovableObject()
@@ -50,20 +64,30 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
                 for (int i = 0; i < hits.Length; i++)
                 {
-                    m_movableObject = hits[i].collider;
-                    if (m_movableObject.isTrigger)
+                    var collider = hits[i].collider;
+                    if (collider.isTrigger)
                     {
                         return false;
                     }
                     else
                     {
-                        if (m_movableObject.gameObject.GetComponentInParent<MovableObject>() != null)
+                        var newMovable = collider.gameObject.GetComponentInParent<MovableObject>();
+                        if (newMovable != null)
                         {
+                            if (m_movableObject != newMovable)
+                            {
+                                m_movableObject = newMovable;
+                                InvokeDetectedMoveableObject();
+                            }
                             isValid = true;
                         }
                         else
                         {
-                            m_movableObject = null;
+                            if (m_movableObject != null)
+                            {
+                                m_movableObject = null;
+                                InvokeDetectedMoveableObject();
+                            }
 
                             return false;
                         }
@@ -95,11 +119,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         {
             m_state.isGrabbing = true;
             m_animator.SetBool(m_isGrabbingAnimationParameter, true);
-
-            if (m_movableObject != null)
-            {
-                m_movableObject.gameObject?.GetComponentInParent<MovableObject>().SetGrabState(true);
-            }
+            m_movableObject?.SetGrabState(true);
         }
 
         public void Cancel()
@@ -113,10 +133,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
             if (m_movableObject != null)
             {
-                MovableObject x = m_movableObject.GetComponentInParent<MovableObject>();
-                x.source.SetParent(null);
-
-                m_movableObject.gameObject?.GetComponentInParent<MovableObject>().SetGrabState(false);
+                m_movableObject.source.SetParent(null);
+                m_movableObject.SetGrabState(false);
             }
         }
 
@@ -165,11 +183,11 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 if (dist > m_distanceCheck)
                 {
                     m_rigidbody.velocity = Vector2.zero;
-                    m_movableObject.GetComponentInParent<MovableObject>().MoveObject(direction, m_modifier.Get(PlayerModifier.MoveSpeed) * m_pullForce + (m_pullForce / 2));
+                    m_movableObject.MoveObject(direction, m_modifier.Get(PlayerModifier.MoveSpeed) * m_pullForce + (m_pullForce / 2));
                 }
                 else
                 {
-                    m_movableObject.GetComponentInParent<MovableObject>().MoveObject(direction, m_modifier.Get(PlayerModifier.MoveSpeed) * m_pullForce);
+                    m_movableObject.MoveObject(direction, m_modifier.Get(PlayerModifier.MoveSpeed) * m_pullForce);
                 }
             }
             else
@@ -180,11 +198,11 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 if (dist > m_distanceCheck)
                 {
                     m_rigidbody.velocity = Vector2.zero;
-                    m_movableObject.GetComponentInParent<MovableObject>().MoveObject(direction, m_modifier.Get(PlayerModifier.MoveSpeed) * m_pushForce / 2);
+                    m_movableObject.MoveObject(direction, m_modifier.Get(PlayerModifier.MoveSpeed) * m_pushForce / 2);
                 }
                 else
                 {
-                    m_movableObject.GetComponentInParent<MovableObject>().MoveObject(direction, m_modifier.Get(PlayerModifier.MoveSpeed) * m_pushForce);
+                    m_movableObject.MoveObject(direction, m_modifier.Get(PlayerModifier.MoveSpeed) * m_pushForce);
                 }
             }
         }
@@ -198,6 +216,16 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_isGrabbingAnimationParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.IsGrabbing);
             m_isPullingAnimationParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.IsPulling);
             m_isPushingAnimationParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.IsPushing);
+        }
+
+        private void InvokeDetectedMoveableObject()
+        {
+            using (Cache<DetectedMovableObject> cacheEvent = Cache<DetectedMovableObject>.Claim())
+            {
+                cacheEvent.Value.Set(m_movableObject);
+                MovableObjectDetected?.Invoke(this, cacheEvent.Value);
+                cacheEvent.Release();
+            }
         }
     }
 }

@@ -87,6 +87,7 @@ namespace DChild.Gameplay
                 m_uniqueHits = m_hitBufferList.ToArray();
                 return m_uniqueHits;
             }
+
         }
 
         public RaycastHit2D[] GetValidHits()
