@@ -51,7 +51,16 @@ namespace DChild.Gameplay.Combat
             }
 
             ApplyAttackDamage(summary, m_cacheTarget, targetInfo.isCharacter); //reference Struct
-            m_combatFXHandle.SpawnFX(attacker.hitCollider, attacker.damageFX, targetInfo.hitCollider, targetInfo.instance, targetInfo.damageFXInfo);
+
+            if (m_combatFXHandle != null)
+            {
+                m_combatFXHandle.SpawnFX(attacker.hitCollider, attacker.damageFX, targetInfo.hitCollider, targetInfo.instance, targetInfo.damageFXInfo);
+            }
+            else
+            {
+                m_combatFXHandle = new CombatFXHandle();
+                m_combatFXHandle.SpawnFX(attacker.hitCollider, attacker.damageFX, targetInfo.hitCollider, targetInfo.instance, targetInfo.damageFXInfo);
+            }
 
             if (m_cacheTarget.isAlive)
             {

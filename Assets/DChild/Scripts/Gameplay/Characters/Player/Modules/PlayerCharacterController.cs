@@ -364,7 +364,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     if (m_state.waitForBehaviour)
                         return;
 
-                    if (m_ledgeGrab?.IsDoable() ?? false)
+                    if (m_ledgeGrab?.IsDoable() ?? false) 
                     {
                         if (m_state.isAttacking == false)
                         {
@@ -636,7 +636,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                             {
                                 m_whip.Execute(WhipAttack.Type.MidAir_Overhead);
                             }
-                            else if (m_input.verticalInput == 0)
+                            else
                             {
                                 m_whip.Execute(WhipAttack.Type.MidAir_Forward);
                             }
@@ -842,17 +842,44 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 {
                     if (m_input.slashPressed)
                     {
-                        PrepareForGroundAttack();
-                        m_basicSlashes.Execute(BasicSlashes.Type.Crouch);
-                        return;
+                        if (m_state.isInShadowMode == true)
+                        {
+                            if (m_shadowMorph.IsAttackAllowed() == true)
+                            {
+                                PrepareForGroundAttack();
+                                m_basicSlashes.Execute(BasicSlashes.Type.Crouch);
+                                return;
+                            }
+                        }
+                        else
+                        {
+                            PrepareForGroundAttack();
+                            m_basicSlashes.Execute(BasicSlashes.Type.Crouch);
+                            return;
+                        }
                     }
                     else if (m_input.whipPressed)
                     {
-                        if (m_skills.IsModuleActive(PrimarySkill.Whip))
+                        if (m_state.isInShadowMode == true)
                         {
-                            PrepareForGroundAttack();
-                            m_whip.Execute(WhipAttack.Type.Crouch_Forward);
-                            return;
+                            if (m_shadowMorph.IsAttackAllowed() == true)
+                            {
+                                if (m_skills.IsModuleActive(PrimarySkill.Whip))
+                                {
+                                    PrepareForGroundAttack();
+                                    m_whip.Execute(WhipAttack.Type.Crouch_Forward);
+                                    return;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            if (m_skills.IsModuleActive(PrimarySkill.Whip))
+                            {
+                                PrepareForGroundAttack();
+                                m_whip.Execute(WhipAttack.Type.Crouch_Forward);
+                                return;
+                            }
                         }
 
                         return;
@@ -903,7 +930,9 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     if (m_crouch?.IsThereNoCeiling() ?? true)
                     {
                         m_crouch?.Cancel();
+                        m_basicSlashes.ResetAttackDelay();
                         m_movement?.SwitchConfigTo(Movement.Type.Jog);
+                        m_basicSlashes.AttackOver();
                     }
                 }
             }
@@ -1101,7 +1130,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     return;
                 }
 
-                if (m_input.interactPressed)
+                if (m_input.interactPressed && m_state.isInShadowMode == false)
                 {
                     m_objectInteraction?.Interact();
                     return;
@@ -1314,19 +1343,19 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 {
                     m_activeSlide = m_shadowSlide;
                     m_shadowSlide.ConsumeSource();
+
+                    m_activeSlide?.ResetDurationTimer();
+                    m_activeSlide?.Execute();
                 }
                 else
                 {
-                    m_activeSlide = m_slide;
+                    //m_activeSlide = m_slide;
                 }
             }
             else
             {
-                m_activeSlide = m_slide;
+                //m_activeSlide = m_slide;
             }
-
-            m_activeSlide?.ResetDurationTimer();
-            m_activeSlide?.Execute();
         }
 
         private void MoveCharacter(bool isGrabbing)

@@ -15,6 +15,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private int m_animationParameter;
         private Collider2D m_cacheCollider;
         private ICrouchState m_state;
+        private string m_animationName = "Crouch";
 
         public void Initialize(ComplexCharacterInfo info)
         {
@@ -98,6 +99,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         public void Execute()
         {
             m_animator.SetBool(m_animationParameter, true);
+            m_animator.Play(m_animationName);
             m_state.isCrouched = true;
         }
     }
