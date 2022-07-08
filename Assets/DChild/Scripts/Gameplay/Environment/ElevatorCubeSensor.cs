@@ -7,23 +7,32 @@ namespace DChild.Gameplay.Environment
 {
     public class ElevatorCubeSensor : MonoBehaviour
     {
-        private Collider2D m_collider;
+        public RaySensor m_sensor;
+        private bool m_cubefound = false;
         [SerializeField]
-        private UnityEvent m_event;
+        private UnityEvent m_cubedetected;
+        [SerializeField]
+        private UnityEvent m_cuberemoved;
+
        
-        void Start()
+        void Update()
         {
-            m_collider = GetComponent<Collider2D>();
-        }
-        private void OnCollisionEnter2D(Collision2D collision)
-        {
-            var colliderGameObject = collision.gameObject;
-            if (colliderGameObject.GetComponent<CelestialCube>() != null)
+            m_sensor.Cast();
+            RaycastHit2D[] RayGameObject = m_sensor.GetValidHits();
+            for (int i = 0; i < RayGameObject.Length; i++)
             {
-                m_event?.Invoke();
+                if (RayGameObject[i].collider.GetComponentInParent<CelestialCube>() != null)
+                {
+                    m_cubefound = true;
+                    m_cubedetected?.Invoke();
+                }
+                   if (m_cubefound == true)
+                    {
+                        m_cubefound = false;
+                        m_cuberemoved?.Invoke();
+                    }
             }
-        }
-
 
         }
+    }
 }
