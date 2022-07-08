@@ -36,11 +36,14 @@ namespace DChild.Menu
 
         private void OnDeleteAffirmed(object sender, EventActionArgs eventArgs)
         {
-            m_defaultSave.LoadFileTo(m_campaignSelect.selectedSlot);
-            //m_campaignSelect.selectedSlot.Reset();
+            //m_defaultSave.LoadFileTo(m_campaignSelect.selectedSlot);
+            m_campaignSelect.selectedSlot.Reset();
             m_campaignSelect.SendCampaignSelectedEvent();
-            //SerializationHandle.Delete(m_selectedSlotID);
-            SerializationHandle.SaveCampaignSlot(m_defaultSave.slot.id, m_defaultSave.slot); // For the Demos
+            if (m_campaignSelect.selectedSlot.allowWriteToDisk)
+            {
+                SerializationHandle.DeleteCampaignSlot(m_selectedSlotID);
+            }
+            SerializationHandle.SaveCampaignSlot(m_defaultSave.slot.id, m_defaultSave.slot);
         }
 
         protected override void Awake()

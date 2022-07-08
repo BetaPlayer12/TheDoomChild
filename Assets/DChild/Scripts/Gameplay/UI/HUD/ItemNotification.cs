@@ -1,17 +1,14 @@
 ﻿using DChild.Gameplay.Inventories;
-using DChild.Gameplay.Systems;
-using Doozy.Engine;
 using Holysoft.Collections;
 using Holysoft.Event;
 using Sirenix.OdinInspector;
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
 namespace DChild.Gameplay.UI
 {
+
     public class ItemNotification : SerializedMonoBehaviour
     {
         private List<string> m_messages;
@@ -20,10 +17,10 @@ namespace DChild.Gameplay.UI
 
         [SerializeField]
         private TextMeshProUGUI m_notification;
-        [SerializeField]
-        private IItemContainer[] m_toListen;
+        //[SerializeField]
+        //private IItemContainer[] m_toListen;
 
-        
+
         public void ShowNextNotif()
         {
             if (m_messages.Count > 0)
@@ -35,8 +32,8 @@ namespace DChild.Gameplay.UI
 
         private void ItemUpdate(object sender, ItemEventArgs eventArgs)
         {
-            var action = eventArgs.count < 0 ? "Lost" : "Acquired";
-            var message = $"{Mathf.Abs(eventArgs.count)} {eventArgs.data.itemName} {action}";
+            var action = eventArgs.countModification < 0 ? "Lost" : "Acquired";
+            var message = $"{Mathf.Abs(eventArgs.countModification)} {eventArgs.data.itemName} {action}";
             if (m_messages.Count == 0)
             {
                 m_notificationTimer.Reset();
@@ -58,10 +55,10 @@ namespace DChild.Gameplay.UI
         {
             m_messages = new List<string>();
             m_notificationTimer.CountdownEnd += OnNotifEnd;
-            for (int i = 0; i < m_toListen.Length; i++)
-            {
-                m_toListen[i].ItemUpdate += ItemUpdate;
-            }
+            //for (int i = 0; i < m_toListen.Length; i++)
+            //{
+            //    m_toListen[i].ItemUpdate += ItemUpdate;
+            //}
             enabled = false;
         }
 

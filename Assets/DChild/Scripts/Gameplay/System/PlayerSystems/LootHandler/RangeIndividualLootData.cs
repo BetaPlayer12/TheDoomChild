@@ -24,7 +24,17 @@ namespace DChild.Gameplay.Systems
 
         public void GenerateLootInfo(ref LootList recordList)
         {
-            recordList.Add(m_reference.data, m_count.GenerateRandomValue());
+            if (m_reference.data == null)
+            {
+                var soulEssenceValue = m_reference.loot.GetComponent<SoulEssenceLoot>().value;
+                soulEssenceValue *= m_count.GenerateRandomValue();
+                recordList.AddSoulEssence(soulEssenceValue);
+            }
+            else
+            {
+
+                recordList.Add(m_reference.data, m_count.GenerateRandomValue());
+            }
         }
 
 #if UNITY_EDITOR
@@ -41,15 +51,19 @@ namespace DChild.Gameplay.Systems
         {
             if (m_reference != null)
             {
-                var soulEssence = m_reference?.loot?.GetComponent<SoulEssenceLoot>() ?? null;
                 var suffix = label;
-                label = m_reference.name.Replace("LootReference", string.Empty);
-                if (soulEssence)
+                if (m_reference.data == null)
                 {
-                    EditorGUILayout.LabelField($"{label} ({soulEssence.value * m_count.min} -  {soulEssence.value * m_count.max}){suffix}");
+                    label = m_reference.name.Replace("LootReference", string.Empty);
+                    var soulEssence = m_reference?.loot?.GetComponent<SoulEssenceLoot>() ?? null;
+                    if (soulEssence)
+                    {
+                        EditorGUILayout.LabelField($"{label} ({soulEssence.value * m_count.min} -  {soulEssence.value * m_count.max}){suffix}");
+                    }
                 }
                 else
                 {
+                    label = m_reference.data.itemName;
                     EditorGUILayout.LabelField($"{label} ({m_count.min} - {m_count.max}){suffix}");
                 }
             }

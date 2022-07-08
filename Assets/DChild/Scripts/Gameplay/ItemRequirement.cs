@@ -26,12 +26,13 @@ namespace DChild.Gameplay
         [SerializeField,TableList]
         private Info[] m_requirements;
 
-        public bool HasAllItems(ITradableInventory inventory)
+        public bool HasAllItems(IInventory inventory)
         {
             bool hasAllItems = true;
             for (int i = 0; i < m_requirements.Length; i++)
             {
-                if (inventory.GetCurrentAmount(m_requirements[i].item) < m_requirements[i].count)
+                var requirement = m_requirements[i];
+                if (inventory.GetItem(requirement.item).count < requirement.count)
                 {
                     hasAllItems = false;
                     break;
@@ -40,7 +41,7 @@ namespace DChild.Gameplay
             return hasAllItems;
         }
 
-        public void ConsumeItems(ITradableInventory inventory)
+        public void ConsumeItems(IInventory inventory)
         {
             Info info = null;
             for (int i = 0; i < m_requirements.Length; i++)

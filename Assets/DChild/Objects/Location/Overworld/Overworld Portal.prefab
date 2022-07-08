@@ -1,0 +1,242 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &6642526335931721020
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6642526335931721019}
+  - component: {fileID: 6642526335931721016}
+  - component: {fileID: 6642526335931721017}
+  - component: {fileID: 6642526335931721022}
+  - component: {fileID: 6642526335931721023}
+  m_Layer: 11
+  m_Name: Overworld Portal
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6642526335931721019
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6642526335931721020}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1.9, y: -9.48, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 7011527655927193321}
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!210 &6642526335931721016
+SortingGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6642526335931721020}
+  m_Enabled: 1
+  m_SortingLayerID: 2073808055
+  m_SortingLayer: 2
+  m_SortingOrder: 1
+--- !u!114 &6642526335931721017
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6642526335931721020}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3562ad78cbfa81441aaff7610ceeeac7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_data: {fileID: 11400000, guid: 4ffbc3a86594b504685831c09200884e, type: 2}
+  m_locationPoint: {fileID: 6642526335931721019}
+  m_prevPosition: {x: 1.9, y: -9.48, z: 0}
+--- !u!114 &6642526335931721022
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6642526335931721020}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49f821a56b5551e44b483c0307c7459a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: m_handle
+      Entry: 7
+      Data: 0|DChild.Gameplay.Environment.TownPortalHandle, Assembly-CSharp
+    - Name: m_promptSource
+      Entry: 6
+      Data: 
+    - Name: m_promptOffset
+      Entry: 7
+      Data: UnityEngine.Vector3, UnityEngine.CoreModule
+    - Name: 
+      Entry: 4
+      Data: 0
+    - Name: 
+      Entry: 4
+      Data: 0
+    - Name: 
+      Entry: 4
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: m_forceExitFacing
+      Entry: 5
+      Data: false
+    - Name: m_exitFacing
+      Entry: 3
+      Data: 0
+    - Name: m_unavailableFeature
+      Entry: 5
+      Data: false
+    - Name: m_fromOverworld
+      Entry: 5
+      Data: true
+    - Name: m_miniplayer
+      Entry: 6
+      Data: 
+    - Name: m_destination
+      Entry: 7
+      Data: UnityEngine.Vector2, UnityEngine.CoreModule
+    - Name: 
+      Entry: 4
+      Data: 0
+    - Name: 
+      Entry: 4
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+  m_destination: {fileID: 11400000, guid: e75b120eef86fbf448b5d02bd78763a9, type: 2}
+--- !u!58 &6642526335931721023
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6642526335931721020}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: -0.2620356, y: 0.068398714}
+  serializedVersion: 2
+  m_Radius: 3.3271754
+--- !u!1001 &4135288066640015928
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 6642526335931721019}
+    m_Modifications:
+    - target: {fileID: 349896159344447524, guid: 9d97929562386054ead2b09049325d38,
+        type: 3}
+      propertyPath: m_Name
+      value: OverworldPortal_Prefab
+      objectReference: {fileID: 0}
+    - target: {fileID: 6354172079354637521, guid: 9d97929562386054ead2b09049325d38,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6354172079354637521, guid: 9d97929562386054ead2b09049325d38,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6354172079354637521, guid: 9d97929562386054ead2b09049325d38,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6354172079354637521, guid: 9d97929562386054ead2b09049325d38,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6354172079354637521, guid: 9d97929562386054ead2b09049325d38,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6354172079354637521, guid: 9d97929562386054ead2b09049325d38,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6354172079354637521, guid: 9d97929562386054ead2b09049325d38,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6354172079354637521, guid: 9d97929562386054ead2b09049325d38,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6354172079354637521, guid: 9d97929562386054ead2b09049325d38,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6354172079354637521, guid: 9d97929562386054ead2b09049325d38,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6354172079354637521, guid: 9d97929562386054ead2b09049325d38,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6354172079354637521, guid: 9d97929562386054ead2b09049325d38,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.9576804
+      objectReference: {fileID: 0}
+    - target: {fileID: 6354172079354637521, guid: 9d97929562386054ead2b09049325d38,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.9576804
+      objectReference: {fileID: 0}
+    - target: {fileID: 6354172079354637521, guid: 9d97929562386054ead2b09049325d38,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.9576804
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 9d97929562386054ead2b09049325d38, type: 3}
+--- !u!4 &7011527655927193321 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6354172079354637521, guid: 9d97929562386054ead2b09049325d38,
+    type: 3}
+  m_PrefabInstance: {fileID: 4135288066640015928}
+  m_PrefabAsset: {fileID: 0}

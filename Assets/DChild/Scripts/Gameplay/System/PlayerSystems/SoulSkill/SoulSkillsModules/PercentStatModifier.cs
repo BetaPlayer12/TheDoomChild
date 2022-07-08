@@ -3,8 +3,6 @@ using DChild.Gameplay.Combat;
 using Holysoft.Event;
 using Sirenix.OdinInspector;
 using UnityEngine;
-#if UNITY_EDITOR
-#endif
 
 namespace DChild.Gameplay.Characters.Players.SoulSkills
 {

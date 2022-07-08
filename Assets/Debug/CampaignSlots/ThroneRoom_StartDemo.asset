@@ -26,13 +26,16 @@ MonoBehaviour:
       Data: 0|DChild.Serialization.CampaignSlot, Assembly-CSharp
     - Name: m_id
       Entry: 3
-      Data: 11
+      Data: 10
     - Name: m_demoGame
       Entry: 5
       Data: false
     - Name: m_newGame
       Entry: 5
       Data: false
+    - Name: m_allowWriteToDisk
+      Entry: 5
+      Data: true
     - Name: m_sceneToLoad
       Entry: 7
       Data: 1|Holysoft.Collections.SceneInfo, HolysoftEditor
@@ -70,80 +73,14 @@ MonoBehaviour:
       Entry: 7
       Data: 2|DChild.Serialization.PlayerCharacterData, Assembly-CSharp
     - Name: m_inventoryData
-      Entry: 7
-      Data: 3|DChild.Serialization.PlayerInventoryData, Assembly-CSharp
-    - Name: m_soulEssence
-      Entry: 3
-      Data: 0
-    - Name: m_items
-      Entry: 7
-      Data: 4|DChild.Serialization.ItemContainerSaveData, Assembly-CSharp
-    - Name: m_datas
-      Entry: 7
-      Data: 5|DChild.Serialization.ItemContainerSaveData+Item[], Assembly-CSharp
-    - Name: 
-      Entry: 12
-      Data: 2
-    - Name: 
-      Entry: 7
-      Data: DChild.Serialization.ItemContainerSaveData+Item, Assembly-CSharp
-    - Name: m_ID
-      Entry: 3
-      Data: 43848
-    - Name: m_count
-      Entry: 3
-      Data: 5
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: DChild.Serialization.ItemContainerSaveData+Item, Assembly-CSharp
-    - Name: m_ID
-      Entry: 3
-      Data: 28966
-    - Name: m_count
-      Entry: 3
-      Data: 10
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: m_questItems
-      Entry: 7
-      Data: 6|DChild.Serialization.ItemContainerSaveData, Assembly-CSharp
-    - Name: m_datas
-      Entry: 7
-      Data: 7|DChild.Serialization.ItemContainerSaveData+Item[], Assembly-CSharp
-    - Name: 
-      Entry: 12
-      Data: 0
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 8
+      Entry: 6
       Data: 
     - Name: m_bestiaryProgressData
       Entry: 7
-      Data: 8|DChild.Serialization.AcquisitionData, Assembly-CSharp
+      Data: 3|DChild.Serialization.AcquisitionData, Assembly-CSharp
     - Name: m_serializeDatas
       Entry: 7
-      Data: 9|DChild.Serialization.AcquisitionData+SerializeData[], Assembly-CSharp
+      Data: 4|DChild.Serialization.AcquisitionData+SerializeData[], Assembly-CSharp
     - Name: 
       Entry: 12
       Data: 1
@@ -181,21 +118,114 @@ MonoBehaviour:
       Entry: 8
       Data: 
     - Name: m_soulSkillData
-      Entry: 6
+      Entry: 7
+      Data: 5|DChild.Gameplay.SoulSkills.PlayerSoulSkillData, Assembly-CSharp
+    - Name: m_maxSoulCapacity
+      Entry: 3
+      Data: 24
+    - Name: m_acquiredSoulSkills
+      Entry: 7
+      Data: 6|System.Int32[], mscorlib
+    - Name: 
+      Entry: 14
+      Data: 21
+    - Name: 
+      Entry: 3
+      Data: 32995
+    - Name: 
+      Entry: 3
+      Data: 11649
+    - Name: 
+      Entry: 3
+      Data: 2603914
+    - Name: 
+      Entry: 3
+      Data: 63156
+    - Name: 
+      Entry: 3
+      Data: 168818
+    - Name: 
+      Entry: 3
+      Data: 293974
+    - Name: 
+      Entry: 3
+      Data: 416012
+    - Name: 
+      Entry: 3
+      Data: 540002
+    - Name: 
+      Entry: 3
+      Data: 663150
+    - Name: 
+      Entry: 3
+      Data: 785468
+    - Name: 
+      Entry: 3
+      Data: 908238
+    - Name: 
+      Entry: 3
+      Data: 1030838
+    - Name: 
+      Entry: 3
+      Data: 1154094
+    - Name: 
+      Entry: 3
+      Data: 1276986
+    - Name: 
+      Entry: 3
+      Data: 1399236
+    - Name: 
+      Entry: 3
+      Data: 1522992
+    - Name: 
+      Entry: 3
+      Data: 1645584
+    - Name: 
+      Entry: 3
+      Data: 1769398
+    - Name: 
+      Entry: 3
+      Data: 1891938
+    - Name: 
+      Entry: 3
+      Data: 2014440
+    - Name: 
+      Entry: 3
+      Data: 2137414
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: m_activatedSoulSkills
+      Entry: 7
+      Data: 7|System.Int32[], mscorlib
+    - Name: 
+      Entry: 14
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
       Data: 
     - Name: 
       Entry: 8
       Data: 
     - Name: m_campaignProgress
       Entry: 7
-      Data: 10|DChild.Serialization.SerializeDataList, Assembly-CSharp
+      Data: 8|DChild.Serialization.SerializeDataList, Assembly-CSharp
     - Name: m_saveDatas
       Entry: 7
-      Data: 11|System.Collections.Generic.Dictionary`2[[DChild.Serialization.SerializeID,
+      Data: 9|System.Collections.Generic.Dictionary`2[[DChild.Serialization.SerializeID,
         Assembly-CSharp],[DChild.Serialization.ISaveData, Assembly-CSharp]], mscorlib
     - Name: comparer
       Entry: 7
-      Data: 12|DChild.Serialization.SerializeID+EqualityComparer, Assembly-CSharp
+      Data: 10|DChild.Serialization.SerializeID+EqualityComparer, Assembly-CSharp
     - Name: 
       Entry: 8
       Data: 
@@ -213,14 +243,14 @@ MonoBehaviour:
       Data: 
     - Name: m_zoneDatas
       Entry: 7
-      Data: 13|DChild.Serialization.SerializeDataList, Assembly-CSharp
+      Data: 11|DChild.Serialization.SerializeDataList, Assembly-CSharp
     - Name: m_saveDatas
       Entry: 7
-      Data: 14|System.Collections.Generic.Dictionary`2[[DChild.Serialization.SerializeID,
+      Data: 12|System.Collections.Generic.Dictionary`2[[DChild.Serialization.SerializeID,
         Assembly-CSharp],[DChild.Serialization.ISaveData, Assembly-CSharp]], mscorlib
     - Name: comparer
       Entry: 7
-      Data: 15|DChild.Serialization.SerializeID+EqualityComparer, Assembly-CSharp
+      Data: 13|DChild.Serialization.SerializeID+EqualityComparer, Assembly-CSharp
     - Name: 
       Entry: 8
       Data: 
@@ -241,14 +271,14 @@ MonoBehaviour:
       Data: 
     - Name: m_miscDatas
       Entry: 7
-      Data: 16|DChild.Serialization.SerializeDataList, Assembly-CSharp
+      Data: 14|DChild.Serialization.SerializeDataList, Assembly-CSharp
     - Name: m_saveDatas
       Entry: 7
-      Data: 17|System.Collections.Generic.Dictionary`2[[DChild.Serialization.SerializeID,
+      Data: 15|System.Collections.Generic.Dictionary`2[[DChild.Serialization.SerializeID,
         Assembly-CSharp],[DChild.Serialization.ISaveData, Assembly-CSharp]], mscorlib
     - Name: comparer
       Entry: 7
-      Data: 18|DChild.Serialization.SerializeID+EqualityComparer, Assembly-CSharp
+      Data: 16|DChild.Serialization.SerializeID+EqualityComparer, Assembly-CSharp
     - Name: 
       Entry: 8
       Data: 
@@ -270,4 +300,4 @@ MonoBehaviour:
     - Name: 
       Entry: 8
       Data: 
-  m_ID: 11
+  m_ID: 10

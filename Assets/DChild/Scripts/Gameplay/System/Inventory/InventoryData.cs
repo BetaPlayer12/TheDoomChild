@@ -5,50 +5,15 @@ using UnityEngine;
 namespace DChild.Gameplay.Inventories
 {
     [CreateAssetMenu(fileName = "InventoryData", menuName = "DChild/Database/Inventory Data")]
-    public class InventoryData : ScriptableObject
+    public class InventoryData : ScriptableObject, IInventoryInfo
     {
-        [System.Serializable]
-        public class Slot
-        {
-            [SerializeField]
-            private ItemData m_item;
-            [SerializeField, OnValueChanged("OnLimitCountChange")]
-            private bool m_hasLimitedCount;
-            [SerializeField, EnableIf("m_hasLimitedCount"), MinValue(1)]
-            private int m_count =1 ;
+        [SerializeField,TableList(AlwaysExpanded = true),HideLabel]
+        private BaseStoredItemList m_itemList;
 
-            public ItemData item => m_item;
-            public bool hasLimitedCount => m_hasLimitedCount;
-            public int count => m_count;
+        public int storedItemCount => m_itemList.storedItemCount;
 
-#if UNITY_EDITOR
-            private void OnLimitCountChange()
-            {
-                if (m_hasLimitedCount == false)
-                {
-                    m_count = 99;
-                }
-            }
-#endif
-        }
+        public IStoredItem GetItem(int index) => m_itemList.GetItem(index);
 
-        [SerializeField,TableList(AlwaysExpanded = true)]
-        private Slot[] m_slots;
-
-        public int slotCount => m_slots.Length;
-
-        public (ItemData item, int count) GetInfo(int index) => (m_slots[index].item, m_slots[index].count);
-
-        public bool HasLimitedCount(ItemData itemData)
-        {
-            for (int i = 0; i < m_slots.Length; i++)
-            {
-                if (m_slots[i].item == itemData)
-                {
-                    return m_slots[i].hasLimitedCount;
-                }
-            }
-            return false;
-        }
+        public IStoredItem GetItem(ItemData item) => m_itemList.GetItem(item);
     }
 }

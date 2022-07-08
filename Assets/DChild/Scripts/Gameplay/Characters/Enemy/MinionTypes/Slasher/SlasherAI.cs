@@ -30,6 +30,9 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField, TabGroup("Attack")]
             private SimpleAttackInfo m_attack = new SimpleAttackInfo();
             public SimpleAttackInfo attack => m_attack;
+            [SerializeField, ValueDropdown("GetAnimations"), TabGroup("Attack")]
+            private string m_attack2Animation;
+            public string attack2Animation => m_attack2Animation;
             [SerializeField, MinValue(0), TabGroup("Attack")]
             private float m_attackCD;
             public float attackCD => m_attackCD;
@@ -165,46 +168,33 @@ namespace DChild.Gameplay.Characters.Enemies
                 //    && m_stateHandle.currentState != State.WaitBehaviourEnd)
                 //{
                 //}
-                if (!TargetBlocked() && !m_enablePatience)
-                {
-                    m_selfCollider.enabled = false;
+                m_selfCollider.enabled = false;
 
-                    if (!m_isDetecting)
+                if (!m_isDetecting)
+                {
+                    if (m_randomIdleRoutine != null)
                     {
-                        if (m_randomIdleRoutine != null)
-                        {
-                            StopCoroutine(m_randomIdleRoutine);
-                            m_randomIdleRoutine = null;
-                        }
-                        if (m_randomTurnRoutine != null)
-                        {
-                            StopCoroutine(m_randomTurnRoutine);
-                            m_randomTurnRoutine = null;
-                        }
-                        m_isDetecting = true;
-                        m_stateHandle.SetState(State.Detect);
+                        StopCoroutine(m_randomIdleRoutine);
+                        m_randomIdleRoutine = null;
                     }
-                    m_currentPatience = 0;
-                    //m_randomIdleRoutine = null;
-                    //var patienceRoutine = PatienceRoutine();
-                    //StopCoroutine(patienceRoutine);
-                    m_enablePatience = false;
+                    if (m_randomTurnRoutine != null)
+                    {
+                        StopCoroutine(m_randomTurnRoutine);
+                        m_randomTurnRoutine = null;
+                    }
+                    m_isDetecting = true;
+                    m_stateHandle.SetState(State.Detect);
                 }
+                m_currentPatience = 0;
+                //m_randomIdleRoutine = null;
+                //var patienceRoutine = PatienceRoutine();
+                //StopCoroutine(patienceRoutine);
+                m_enablePatience = false;
             }
             else
             {
                 m_enablePatience = true;
             }
-        }
-
-        private bool TargetBlocked()
-        {
-            Vector2 wat = m_character.centerMass.position;
-            RaycastHit2D hit = Physics2D.Raycast(/*m_projectilePoint.position*/wat, m_targetInfo.position - wat, 1000, LayerMask.GetMask("Player") + DChildUtility.GetEnvironmentMask());
-            var eh = hit.transform.gameObject.layer == LayerMask.NameToLayer("Player") ? false : true;
-            Debug.DrawRay(wat, m_targetInfo.position - wat);
-            Debug.Log("Shot is " + eh + " by " + LayerMask.LayerToName(hit.transform.gameObject.layer));
-            return hit.transform.gameObject.layer == LayerMask.NameToLayer("Player") ? false : true;
         }
 
         private void OnTurnDone(object sender, FacingEventArgs eventArgs)
@@ -403,12 +393,13 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator AttackRoutine()
         {
             m_flinchHandle.m_enableMixFlinch = false;
-            for (int i = 0; i < 3; i++)
-            {
-                m_animation.SetAnimation(0, m_info.attack.animation, false);
-                yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack.animation);
-                m_animation.SetEmptyAnimation(0, 0);
-            }
+            m_animation.SetAnimation(0, m_info.attack.animation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack.animation);
+            m_animation.SetAnimation(0, m_info.attack2Animation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack2Animation);
+            m_animation.SetAnimation(0, m_info.attack.animation, false).AnimationStart = 0.1f;
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack.animation);
+            m_animation.SetEmptyAnimation(0, 0);
             m_flinchHandle.m_enableMixFlinch = true;
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_stateHandle.ApplyQueuedState();

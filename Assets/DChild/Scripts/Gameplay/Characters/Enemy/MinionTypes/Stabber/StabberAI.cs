@@ -144,6 +144,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private RaySensor m_edgeSensor;
         [SerializeField, TabGroup("BoundingBox")]
         private Collider2D m_attackBB;
+        [SerializeField, TabGroup("FX")]
+        private ParticleFX m_stabFX;
 
         [SerializeField]
         private bool m_willPatrol;
@@ -180,7 +182,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 //    && m_stateHandle.currentState != State.WaitBehaviourEnd)
                 //{
                 //}
-                if (!TargetBlocked() && !m_enablePatience)
+                if (/*!TargetBlocked() &&*/ !m_enablePatience)
                 {
                     m_selfCollider.enabled = false;
 
@@ -210,16 +212,6 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 m_enablePatience = true;
             }
-        }
-
-        private bool TargetBlocked()
-        {
-            Vector2 wat = m_character.centerMass.position;
-            RaycastHit2D hit = Physics2D.Raycast(/*m_projectilePoint.position*/wat, m_targetInfo.position - wat, 1000, LayerMask.GetMask("Player") + DChildUtility.GetEnvironmentMask());
-            var eh = hit.transform.gameObject.layer == LayerMask.NameToLayer("Player") ? false : true;
-            Debug.DrawRay(wat, m_targetInfo.position - wat);
-            Debug.Log("Shot is " + eh + " by " + LayerMask.LayerToName(hit.transform.gameObject.layer));
-            return hit.transform.gameObject.layer == LayerMask.NameToLayer("Player") ? false : true;
         }
 
         private void OnTurnDone(object sender, FacingEventArgs eventArgs)
@@ -319,6 +311,7 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 StopCoroutine(m_sneerRoutine);
             }
+            m_stabFX.Stop();
             m_attackBB.enabled = false;
             m_animation.SetEmptyAnimation(0, 0);
             m_animation.SetAnimation(0, m_info.deathAnimation, false);
@@ -430,16 +423,31 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack.animation);
             m_animation.SetAnimation(0, m_info.attackChargeLoopAnimation, true);
             yield return new WaitForSeconds(m_info.chargeDuration);
-            for (int i = 0; i < m_info.attackRepeats; i++)
+            m_stabFX.Play();
+            //for (int i = 0; i < m_info.attackRepeats; i++)
+            //{
+            //    if (!IsFacingTarget())
+            //    {
+            //        CustomTurn();
+            //    }
+            //    m_animation.SetAnimation(0, m_info.attackLoopAnimation, false);
+            //    yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attackLoopAnimation);
+            //    m_animation.SetEmptyAnimation(0, 0);
+            //}
+            var time = 0f;
+            while (time < 3f && m_edgeSensor.isDetecting)
             {
                 if (!IsFacingTarget())
-                {
                     CustomTurn();
-                }
-                m_animation.SetAnimation(0, m_info.attackLoopAnimation, false);
-                yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attackLoopAnimation);
-                m_animation.SetEmptyAnimation(0, 0);
+
+                m_animation.SetAnimation(0, m_info.attackLoopAnimation, true);
+                m_movement.MoveTowards(Vector2.one * transform.localScale.x, m_currentMoveSpeed);
+
+                time += Time.deltaTime;
+                yield return null;
             }
+            m_stabFX.Stop();
+            m_movement.Stop();
             m_attackBB.enabled = false;
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_stateHandle.ApplyQueuedState();
@@ -540,7 +548,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_stateHandle.Wait(State.Cooldown);
 
                     m_selfCollider.enabled = false;
-                    m_animation.EnableRootMotion(true, false);
+                    m_animation.EnableRootMotion(false, false);
                     switch (m_attackDecider.chosenAttack.attack)
                     {
                         case Attack.Attack:

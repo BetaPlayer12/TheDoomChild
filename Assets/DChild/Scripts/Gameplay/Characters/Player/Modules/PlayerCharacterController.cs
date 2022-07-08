@@ -319,7 +319,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
             if (m_state.isDead)
                 return;
-            
+
             if (m_introController.IsUsingIntroControls())
             {
                 m_introController.HandleIntroControlsFixedUpdate();
@@ -420,20 +420,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 }
             }
 
-            if (m_state.isDoingCombo)
-            {
-                if (m_state.waitForBehaviour == false)
-                {
-                    if (m_state.canAttack == false)
-                    {
-                        m_slashCombo.HandleComboAttackDelay();
-                    }
-                }
-
-                HandleGroundBehaviour();
-                return;
-            }
-
             if (m_state.waitForBehaviour)
                 return;
 
@@ -442,16 +428,24 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 m_combatReadiness?.HandleDuration();
             }
 
+            if (m_slashCombo.CanSlashCombo() == false)
+            {
+                m_slashCombo.HandleSlashComboTimer();
+            }
+
             if (m_state.canAttack == true)
             {
                 m_slashCombo.HandleComboResetTimer();
             }
             else
             {
-                m_basicSlashes.HandleNextAttackDelay();
-                m_slashCombo.HandleComboAttackDelay();
-                m_whip.HandleNextAttackDelay();
-                m_projectileThrow.HandleNextAttackDelay();
+                if (m_state.isAttacking == false)
+                {
+                    m_basicSlashes.HandleNextAttackDelay();
+                    m_slashCombo.HandleComboAttackDelay();
+                    m_whip.HandleNextAttackDelay();
+                    m_projectileThrow.HandleNextAttackDelay();
+                }
             }
 
             if (m_state.isGrounded)
@@ -521,10 +515,11 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 else
                 {
                     var verticalInput = m_input.verticalInput;
-                    if (verticalInput < 0)
+                    if (verticalInput < 0 && m_state.canWallCrawl == true)
                     {
                         m_wallSlide?.Cancel();
                         m_wallMovement?.Move(verticalInput);
+
                         m_groundedness?.Evaluate();
                         if (m_state.isGrounded)
                             return;
@@ -532,13 +527,14 @@ namespace DChild.Gameplay.Characters.Players.Modules
                         if ((m_wallMovement?.IsThereAWall(WallMovement.SensorType.Body) ?? false) == false)
                         {
                             m_wallMovement?.Cancel();
-                            m_wallStick?.Cancel();
+                            //m_wallStick?.Cancel();
                         }
                     }
-                    else if (verticalInput > 0)
+                    else if (verticalInput > 0 && m_state.canWallCrawl == true)
                     {
                         m_wallSlide?.Cancel();
                         m_wallMovement?.Move(verticalInput);
+
                         if ((m_wallMovement?.IsThereAWall(WallMovement.SensorType.Overhead) ?? false) == false)
                         {
                             m_wallMovement?.Cancel();
@@ -756,25 +752,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         private void HandleGroundBehaviour()
         {
-            if (m_state.isDoingCombo == true)
-            {
-                if (m_state.canAttack)
-                {
-                    if (m_input.slashPressed)
-                    {
-                        PrepareForGroundAttack();
-                        m_slashCombo.Execute();
-                        return;
-                    }
-                }
-                //if (m_state.isAttacking == false)
-                //{
-                //    MoveCharacter(m_state.isGrabbing);
-                //}
-
-                return;
-            }
-
             if (m_state.isDashing == false && m_state.canDash == false)
             {
                 m_dash?.HandleCooldown();
@@ -1025,34 +1002,64 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     #region Ground Attacks
                     if (m_input.slashPressed)
                     {
-                        if (m_input.verticalInput > 0)
+                        if (m_state.isInShadowMode == true)
                         {
-                            PrepareForGroundAttack();
-                            m_basicSlashes.Execute(BasicSlashes.Type.Ground_Overhead);
-                            return;
+                            if (m_shadowMorph.IsAttackAllowed() == true)
+                            {
+                                if (m_input.verticalInput > 0)
+                                {
+                                    PrepareForGroundAttack();
+                                    m_basicSlashes.Execute(BasicSlashes.Type.Ground_Overhead);
+                                    return;
+                                }
+                                else
+                                {
+                                    if (m_slashCombo.CanSlashCombo() == true)
+                                    {
+                                        PrepareForGroundAttack();
+                                        m_slashCombo.Execute();
+                                        return;
+                                    }
+                                }
+                            }
                         }
                         else
-                        {
-                            PrepareForGroundAttack();
-                            m_slashCombo.Execute();
-                            return;
-                        }
-                    }
-                    else if (m_input.whipPressed)
-                    {
-                        if (m_skills.IsModuleActive(PrimarySkill.Whip))
                         {
                             if (m_input.verticalInput > 0)
                             {
                                 PrepareForGroundAttack();
-                                m_whip.Execute(WhipAttack.Type.Ground_Overhead);
+                                m_basicSlashes.Execute(BasicSlashes.Type.Ground_Overhead);
                                 return;
                             }
                             else
                             {
-                                PrepareForGroundAttack();
-                                m_whip.Execute(WhipAttack.Type.Ground_Forward);
-                                return;
+                                if (m_slashCombo.CanSlashCombo() == true)
+                                {
+                                    PrepareForGroundAttack();
+                                    m_slashCombo.Execute();
+                                    return;
+                                }
+                            }
+                        }
+                    }
+                    else if (m_input.whipPressed)
+                    {
+                        if (m_state.isInShadowMode == false)
+                        {
+                            if (m_skills.IsModuleActive(PrimarySkill.Whip))
+                            {
+                                if (m_input.verticalInput > 0)
+                                {
+                                    PrepareForGroundAttack();
+                                    m_whip.Execute(WhipAttack.Type.Ground_Overhead);
+                                    return;
+                                }
+                                else
+                                {
+                                    PrepareForGroundAttack();
+                                    m_whip.Execute(WhipAttack.Type.Ground_Forward);
+                                    return;
+                                }
                             }
                         }
 

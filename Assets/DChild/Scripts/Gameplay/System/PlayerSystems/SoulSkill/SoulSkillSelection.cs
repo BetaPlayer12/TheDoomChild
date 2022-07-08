@@ -69,7 +69,7 @@ namespace DChild.Gameplay.SoulSkills
 
         private void Awake()
         {
-            var m_acquiredSoulSkillUIList = m_acquiredListUI.GetComponentsInChildren<SoulSkillUI>();
+            var m_acquiredSoulSkillUIList = m_acquiredListUI.GetComponentsInChildren<SoulSkillUI>(true);
             for (int i = 0; i < m_acquiredSoulSkillUIList.Length; i++)
             {
                 var soulSkillUI = m_acquiredSoulSkillUIList[i];
@@ -78,7 +78,7 @@ namespace DChild.Gameplay.SoulSkills
                 soulSkillUI.OnClick += OnSkillClicked;
             }
 
-            var m_activatedSoulSkillUIList = m_activatedListUI.GetComponentsInChildren<SoulSkillUI>();
+            var m_activatedSoulSkillUIList = m_activatedListUI.GetComponentsInChildren<SoulSkillUI>(true);
             for (int i = 0; i < m_activatedSoulSkillUIList.Length; i++)
             {
                 var soulSkillUI = m_activatedSoulSkillUIList[i];

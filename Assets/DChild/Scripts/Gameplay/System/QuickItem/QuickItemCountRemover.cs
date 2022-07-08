@@ -8,12 +8,12 @@ namespace DChild.Gameplay.Inventories
     [System.Serializable]
     public class QuickItemCountRemover
     {
-        private IItemContainer m_container;
+        private IInventory m_container;
         private ItemData m_toRemove;
         private int m_removeCount;
         private bool m_executeRemoveOnThrow;
 
-        public QuickItemCountRemover(IPlayer player, IItemContainer container)
+        public QuickItemCountRemover(IPlayer player, IInventory container)
         {
             player.character.GetComponentInChildren<ProjectileThrow>().ProjectileThrown += OnProjectileThrow;
             m_container = container;
@@ -29,7 +29,7 @@ namespace DChild.Gameplay.Inventories
                     m_executeRemoveOnThrow = true;
                     break;
                 case ItemCategory.Consumable:
-                    m_container.AddItem(data, -count);
+                    m_container.RemoveItem(data, count);
                     m_executeRemoveOnThrow = false;
                     break;
             }
@@ -39,7 +39,7 @@ namespace DChild.Gameplay.Inventories
         {
             if (m_executeRemoveOnThrow)
             {
-                m_container.AddItem(m_toRemove, -m_removeCount);
+                m_container.RemoveItem(m_toRemove, m_removeCount);
                 m_executeRemoveOnThrow = false; 
             }
         }

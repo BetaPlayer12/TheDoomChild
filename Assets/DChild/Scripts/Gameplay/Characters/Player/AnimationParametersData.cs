@@ -40,7 +40,8 @@ namespace DChild.Gameplay.Characters.Players
             IsBlocking,
             IsCharging,
             StepClimb,
-            AimingProjectile
+            AimingProjectile,
+            IsWallCrawling
         }
 
         [SerializeField]

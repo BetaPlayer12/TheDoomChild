@@ -80,6 +80,11 @@ namespace DChild.Gameplay.Environment
                 m_lerpDuration.SetValue(lerpValue);
                 LerpColors(lerpValue);
             }
+            else
+            {
+                StopAllCoroutines();
+                StartCoroutine(DelayedInitialization());
+            }
         }
         public void Initialize()
         {
@@ -123,6 +128,14 @@ namespace DChild.Gameplay.Environment
             m_visible = isVisible;
         }
 
+        public void InitializeAsVisible(bool isVisible)
+        {
+            if (m_currentRoutine == null)
+            {
+                SetAsVisible(isVisible);
+            }
+        }
+
         private IEnumerator LerpTo(bool isVisible)
         {
             int destination = isVisible ? 0 : 1;
@@ -144,6 +157,7 @@ namespace DChild.Gameplay.Environment
             {
                 SetRenderersActive(false);
             }
+            m_currentRoutine = null;
         }
 
         private void LerpColors(float lerpValue)
@@ -169,6 +183,18 @@ namespace DChild.Gameplay.Environment
             }
 
             //Enable Mesh Renderer for Skeleton Renderers
+        }
+
+        private IEnumerator DelayedInitialization()
+        {
+            while(m_isInitialized == false)
+            {
+                yield return null;
+            }
+
+            var lerpValue = m_visible ? 1 : 0;
+            m_lerpDuration.SetValue(lerpValue);
+            LerpColors(lerpValue);
         }
 
         private void Awake()

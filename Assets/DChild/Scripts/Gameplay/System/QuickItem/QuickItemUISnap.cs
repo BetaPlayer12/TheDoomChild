@@ -3,15 +3,17 @@ using Holysoft;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace DChild.Gameplay.Inventories.QuickItem
 {
-
     public class QuickItemUISnap : MonoBehaviour
     {
         [SerializeField]
         private QuickItemHandle m_handle;
+        [SerializeField]
+        private QuickItemSelections m_selections;
 
         [SerializeField]
         private QuickItemElement m_chosen;
@@ -20,29 +22,38 @@ namespace DChild.Gameplay.Inventories.QuickItem
         [SerializeField]
         private QuickItemElement m_next;
 
+        private int m_currentIndex;
+
         private void OnItemSelect(object sender, QuickItemHandle.SelectionEventArgs eventArgs)
         {
+            m_currentIndex = eventArgs.currentIndex;
             UpdateUI(eventArgs.currentIndex);
-            //if (eventArgs.selectionType != QuickItemHandle.SelectionEventArgs.SelectionType.None)
-            //{
-            //}
         }
 
         private void UpdateUI(int currentIndex)
         {
-            var length = m_handle.container.Count;
-            m_chosen.Set(m_handle.container.GetSlot(currentIndex));
-            if (m_handle.isWrapped)
+            var length = m_selections.itemCount;
+            if (length > 0)
             {
-                var prevIndex = (int)Mathf.Repeat(currentIndex - 1, length);
-                m_prev.Set(m_handle.container.GetSlot(prevIndex));
-                var nextIndex = (int)Mathf.Repeat(currentIndex + 1, length);
-                m_next.Set(m_handle.container.GetSlot(nextIndex));
+                m_chosen.ShowDetails(m_selections.GetItem(currentIndex));
+                if (m_handle.isWrapped)
+                {
+                    var prevIndex = (int)Mathf.Repeat(currentIndex - 1, length);
+                    m_prev.ShowDetails(m_selections.GetItem(prevIndex));
+                    var nextIndex = (int)Mathf.Repeat(currentIndex + 1, length);
+                    m_next.ShowDetails(m_selections.GetItem(nextIndex));
+                }
+                else
+                {
+                    m_prev.ShowDetails(currentIndex == 0 ? null : m_selections.GetItem(currentIndex - 1));
+                    m_next.ShowDetails(currentIndex == length - 1 ? null : m_selections.GetItem(currentIndex + 1));
+                }
             }
             else
             {
-                m_prev.Set(currentIndex == 0 ? null : m_handle.container.GetSlot(currentIndex - 1));
-                m_next.Set(currentIndex == length - 1 ? null : m_handle.container.GetSlot(currentIndex + 1));
+                m_chosen.ShowDetails(null);
+                m_prev.ShowDetails(null);
+                m_next.ShowDetails(null);
             }
         }
 

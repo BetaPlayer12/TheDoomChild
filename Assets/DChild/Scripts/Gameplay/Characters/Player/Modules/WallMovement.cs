@@ -1,10 +1,10 @@
 ﻿using DChild.Gameplay.Characters.Players.Behaviour;
+using DChild.Gameplay.Characters.Players.State;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace DChild.Gameplay.Characters.Players.Modules
 {
-
     public class WallMovement : MonoBehaviour, ICancellableBehaviour, IComplexCharacterModule
     {
         public enum SensorType
@@ -20,11 +20,17 @@ namespace DChild.Gameplay.Characters.Players.Modules
         [SerializeField]
         private RaySensor m_bodySensor;
 
+        private IWallStickState m_state;
         private Rigidbody2D m_rigibody;
+        private Animator m_animator;
+        private int m_animationParameter;
 
         public void Initialize(ComplexCharacterInfo info)
         {
+            m_state = info.state;
             m_rigibody = info.rigidbody;
+            m_animator = info.animator;
+            m_animationParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.IsWallCrawling);
         }
 
         public bool IsThereAWall(SensorType sensorType)
@@ -44,12 +50,20 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void Cancel()
         {
+            m_animator.SetBool(m_animationParameter, false);
             m_rigibody.velocity = Vector2.zero;
         }
 
         public void Move(float direction)
         {
-            m_rigibody.velocity = new Vector2(m_rigibody.velocity.x, m_speed * direction);
+            if (m_state.canWallCrawl == true)
+            {
+                if (direction != 0)
+                {
+                    m_animator.SetBool(m_animationParameter, true);
+                    m_rigibody.velocity = new Vector2(m_rigibody.velocity.x, m_speed * direction);
+                }
+            }
         }
     }
 }

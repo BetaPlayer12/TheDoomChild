@@ -9,6 +9,7 @@
 using DarkTonic.MasterAudio;
 using DChild.Gameplay.Environment.Interractables;
 using DChild.Gameplay.Systems;
+using DChild.Gameplay.UI;
 using DChild.Serialization;
 using Holysoft.Event;
 using Sirenix.OdinInspector;
@@ -35,14 +36,14 @@ namespace DChild.Gameplay.Environment
         }
 
         [SerializeField]
+        private LootChestVisual m_visuals;
+        [SerializeField]
         private Vector3 m_promptOffset;
-        [SerializeField]
-        private Sprite m_closeVersion;
-        [SerializeField]
-        private Sprite m_openVersion;
         [SerializeField]
         private ILootDataContainer m_loot;
         private bool m_isLooted;
+
+        private static LootList m_lootList;
 
         public event EventAction<EventActionArgs> InteractionOptionChange;
 
@@ -59,7 +60,7 @@ namespace DChild.Gameplay.Environment
                 //Force Player Animation?
                 //Enable Cinematic Thingy?
                 //Temporary Fix, If All Chest are the same dont make UnityEvent
-                GetComponent<SpriteRenderer>().sprite = m_openVersion;
+                m_visuals.Open(true);
                 GetComponent<Collider2D>().enabled = false;
                 //gameObject.SetActive(false);
 
@@ -67,7 +68,7 @@ namespace DChild.Gameplay.Environment
             else
             {
                 //Temporary Fix, If All Chest are the same dont make UnityEvent
-                GetComponent<SpriteRenderer>().sprite = m_closeVersion;
+                m_visuals.Close(true);
                 GetComponent<Collider2D>().enabled = true;
                 //gameObject.SetActive(true);
             }
@@ -79,6 +80,7 @@ namespace DChild.Gameplay.Environment
         }
         public ISaveData Save() => new SaveData(m_isLooted);
 
+        [Button]
         public void Interact(Character character)
         {
             m_isLooted = true;
@@ -87,12 +89,13 @@ namespace DChild.Gameplay.Environment
                 GivePlayerLoot();
                 SendNotification();
             }
+
             ShowOpenChestVisual();
         }
 
         private void ShowOpenChestVisual()
         {
-            GetComponent<SpriteRenderer>().sprite = m_openVersion;
+            m_visuals.Open();
             GetComponent<Collider2D>().enabled = false;
             GetComponent<EventSounds>().ActivateCodeTriggeredEvent1();
             GetComponent<VFXSpawner>().Spawn();
@@ -101,19 +104,33 @@ namespace DChild.Gameplay.Environment
         private void GivePlayerLoot()
         {
             var playerInventory = GameplaySystem.playerManager.player.inventory;
-            LootList lootList = new LootList();
-            m_loot.GenerateLootInfo(ref lootList);
-            var lootItems = lootList.GetAllItems();
+            m_lootList.Clear();
+            m_loot.GenerateLootInfo(ref m_lootList);
+            var lootItems = m_lootList.GetAllItems();
             for (int i = 0; i < lootItems.Length; i++)
             {
                 var item = lootItems[i];
-                playerInventory.AddItem(item, lootList.GetCountOf(item));
+                playerInventory.AddItem(item, m_lootList.GetCountOf(item));
+            }
+            if (m_lootList.soulEssenceAmount > 0)
+            {
+
+                playerInventory.AddSoulEssence(m_lootList.soulEssenceAmount);
             }
         }
 
         private void SendNotification()
         {
+            //Notify UI of loot chest content
+            GameplaySystem.gamplayUIHandle.ShowLootChestItemAcquired(m_lootList);
+        }
 
+        private void Awake()
+        {
+            if (m_lootList == null)
+            {
+                m_lootList = new LootList();
+            }
         }
 
         private void OnDrawGizmosSelected()

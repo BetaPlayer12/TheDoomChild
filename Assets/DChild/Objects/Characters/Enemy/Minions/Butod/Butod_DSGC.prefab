@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1254259574725381213}
   - component: {fileID: 6514216980236880780}
   m_Layer: 0
-  m_Name: Death
+  m_Name: Butod_Death
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -64,7 +64,7 @@ MonoBehaviour:
   logSound: 0
   soundPlayedEventActive: 0
   soundPlayedCustomEvent: 
-  busIndex: 4
+  busIndex: 3
   ignoreListenerPause: 0
   importance: 5
   isUninterruptible: 0
@@ -141,14 +141,14 @@ AudioSource:
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
-  Loop: 1
+  Loop: 0
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
   Priority: 128
   DopplerLevel: 1
-  MinDistance: 10
-  MaxDistance: 100
+  MinDistance: 200
+  MaxDistance: 200
   Pan2D: 0
   rolloffMode: 2
   BypassEffects: 0
@@ -295,7 +295,7 @@ GameObject:
   - component: {fileID: 5611425052478732423}
   - component: {fileID: 2441637039072471380}
   m_Layer: 0
-  m_Name: AttackFinalWithoutPuddle
+  m_Name: Butod_AttackFinalWithoutPuddle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -431,8 +431,8 @@ AudioSource:
   SpatializePostEffects: 0
   Priority: 128
   DopplerLevel: 1
-  MinDistance: 10
-  MaxDistance: 100
+  MinDistance: 200
+  MaxDistance: 200
   Pan2D: 0
   rolloffMode: 2
   BypassEffects: 0
@@ -579,7 +579,7 @@ GameObject:
   - component: {fileID: 6111686948713774520}
   - component: {fileID: 2885931344496473556}
   m_Layer: 0
-  m_Name: Turn
+  m_Name: Butod_Turn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -632,7 +632,7 @@ MonoBehaviour:
   logSound: 0
   soundPlayedEventActive: 0
   soundPlayedCustomEvent: 
-  busIndex: 4
+  busIndex: 3
   ignoreListenerPause: 0
   importance: 5
   isUninterruptible: 0
@@ -715,8 +715,8 @@ AudioSource:
   SpatializePostEffects: 0
   Priority: 128
   DopplerLevel: 1
-  MinDistance: 10
-  MaxDistance: 100
+  MinDistance: 200
+  MaxDistance: 200
   Pan2D: 0
   rolloffMode: 2
   BypassEffects: 0
@@ -863,7 +863,7 @@ GameObject:
   - component: {fileID: 3667023893778310793}
   - component: {fileID: 8984343600520088323}
   m_Layer: 0
-  m_Name: Move
+  m_Name: Butod_Move
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -916,10 +916,10 @@ MonoBehaviour:
   logSound: 0
   soundPlayedEventActive: 0
   soundPlayedCustomEvent: 
-  busIndex: 4
+  busIndex: 3
   ignoreListenerPause: 0
   importance: 5
-  isUninterruptible: 0
+  isUninterruptible: 1
   spatialBlendType: 1
   spatialBlend: 1
   groupPlayType: 0
@@ -999,8 +999,8 @@ AudioSource:
   SpatializePostEffects: 0
   Priority: 128
   DopplerLevel: 1
-  MinDistance: 10
-  MaxDistance: 100
+  MinDistance: 200
+  MaxDistance: 200
   Pan2D: 0
   rolloffMode: 2
   BypassEffects: 0
@@ -1188,8 +1188,8 @@ AudioSource:
   SpatializePostEffects: 0
   Priority: 128
   DopplerLevel: 1
-  MinDistance: 10
-  MaxDistance: 100
+  MinDistance: 200
+  MaxDistance: 200
   Pan2D: 0
   rolloffMode: 2
   BypassEffects: 0
@@ -1336,7 +1336,7 @@ GameObject:
   - component: {fileID: 5934112167697039433}
   - component: {fileID: 8755634914180782881}
   m_Layer: 0
-  m_Name: Flinch
+  m_Name: Butod_Flinch
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1389,7 +1389,7 @@ MonoBehaviour:
   logSound: 0
   soundPlayedEventActive: 0
   soundPlayedCustomEvent: 
-  busIndex: 4
+  busIndex: 3
   ignoreListenerPause: 0
   importance: 5
   isUninterruptible: 0
@@ -1431,7 +1431,7 @@ GameObject:
   - component: {fileID: 3296481505458510389}
   - component: {fileID: 7852652143722727742}
   m_Layer: 0
-  m_Name: AttackFinalWithPuddle
+  m_Name: Butod_AttackFinalWithPuddle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1588,7 +1588,7 @@ MonoBehaviour:
   showMusicDucking: 0
   musicDuckingSounds: []
   groupBuses:
-  - busName: Butod_Attacks
+  - busName: Butod_BUS
     volume: 1
     isSoloed: 0
     isMuted: 0
@@ -1596,19 +1596,7 @@ MonoBehaviour:
     isExisting: 0
     isTemporary: 0
     isUsingOcclusion: 0
-    busVoiceLimitExceededMode: 0
-    busColor: {r: 1, g: 1, b: 1, a: 1}
-    mixerChannel: {fileID: 0}
-    forceTo2D: 0
-  - busName: Butod_Movements
-    volume: 1
-    isSoloed: 0
-    isMuted: 0
-    voiceLimit: 1
-    isExisting: 0
-    isTemporary: 0
-    isUsingOcclusion: 0
-    busVoiceLimitExceededMode: 0
+    busVoiceLimitExceededMode: 1
     busColor: {r: 1, g: 1, b: 1, a: 1}
     mixerChannel: {fileID: 0}
     forceTo2D: 0
@@ -1680,8 +1668,8 @@ AudioSource:
   SpatializePostEffects: 0
   Priority: 128
   DopplerLevel: 1
-  MinDistance: 10
-  MaxDistance: 100
+  MinDistance: 200
+  MaxDistance: 200
   Pan2D: 0
   rolloffMode: 2
   BypassEffects: 0

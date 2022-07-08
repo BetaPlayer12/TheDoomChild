@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.Playables;
 using PixelCrushers.DialogueSystem;
 using Holysoft.Event;
+using System.Collections;
 
 namespace DChild.Gameplay
 {
@@ -26,7 +27,7 @@ namespace DChild.Gameplay
             ISaveData ISaveData.ProduceCopy() => new SaveData(m_isUsed);
         }
 
-        [SerializeField,FoldoutGroup("Has Skill Indicator")]
+        [SerializeField, FoldoutGroup("Has Skill Indicator")]
         private GameObject m_platformGlow;
         [SerializeField, FoldoutGroup("Has Skill Indicator")]
         private GameObject m_leftStatueGlow;
@@ -43,8 +44,10 @@ namespace DChild.Gameplay
         private Collider2D m_collider;
         [SerializeField, OnValueChanged("OnIsUsedChanged")]
         private bool m_isUsed;
-        [SerializeField,LuaScriptWizard(true)]
+        [SerializeField, LuaScriptWizard(true)]
         private string m_onInteractionCommand;
+        [SerializeField]
+        SkillShrineVisualHandle m_shrineVisualHandle;
 
         public event EventAction<EventActionArgs> InteractionOptionChange;
 
@@ -61,6 +64,7 @@ namespace DChild.Gameplay
             m_isUsed = ((SaveData)data).isUsed;
             m_collider.enabled = !m_isUsed;
             SetGlows(!m_isUsed);
+            m_shrineVisualHandle.SkillShrineState(m_isUsed);
         }
 
         public void Initialize()
@@ -68,6 +72,7 @@ namespace DChild.Gameplay
             m_isUsed = false;
             m_collider.enabled = true;
             SetGlows(true);
+            m_shrineVisualHandle.SkillShrineState(m_isUsed);
 
         }
 
@@ -78,16 +83,18 @@ namespace DChild.Gameplay
                 if (character)
                 {
                     character.GetComponent<PlayerControlledObject>().owner.skills.SetSkillStatus(m_toUnlock, true);
+
                 }
 
                 if (m_cinematic == null)
                 {
                     GameplaySystem.gamplayUIHandle.PromptPrimarySkillNotification();
+                    m_shrineVisualHandle.SkillShrineState(true);
                 }
                 else
                 {
                     m_cinematic.Play();
-                }
+                }   
 
                 m_isUsed = true;
                 m_collider.enabled = false;
@@ -97,8 +104,18 @@ namespace DChild.Gameplay
 
         private void OnCutsceneDone(PlayableDirector obj)
         {
+            StartCoroutine(OnCutsceneEnded());
+        }
+
+        private IEnumerator OnCutsceneEnded()
+        {
+         //makes sure cutscene has ended before calling notifyskill  
+            yield return new WaitForSeconds(1);
             NotifySkill(m_toUnlock);
             SetGlows(false);
+            m_shrineVisualHandle.SkillShrineState(false);
+
+
         }
 
         private void NotifySkill(PrimarySkill skill)

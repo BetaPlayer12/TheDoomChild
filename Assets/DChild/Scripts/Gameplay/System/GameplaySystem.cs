@@ -10,6 +10,8 @@ using Holysoft.Event;
 using System;
 using UnityEngine;
 using PixelCrushers.DialogueSystem;
+using System.Collections;
+using DChild.Gameplay.SoulSkills;
 
 namespace DChild.Gameplay
 {
@@ -53,6 +55,7 @@ namespace DChild.Gameplay
         private static ZoneMoverHandle m_zoneMover;
         private static HealthTracker m_healthTracker;
         private static GameplayUIHandle m_gameplayUIHandle;
+        private static SoulSkillManager m_soulSkillManager;
 
 
         public static ICombatManager combatManager => m_combatManager;
@@ -79,6 +82,7 @@ namespace DChild.Gameplay
         public static ILootHandler lootHandler => m_lootHandler;
         public static IHealthTracker healthTracker => m_healthTracker;
         public static IGameplayUIHandle gamplayUIHandle => m_gameplayUIHandle;
+        public static ISoulSkillManager soulSkillManager => m_soulSkillManager;
         public static CampaignSerializer campaignSerializer => m_campaignSerializer;
         #endregion
         public static bool isGamePaused { get; private set; }
@@ -163,15 +167,40 @@ namespace DChild.Gameplay
             }
         }
 
+        public static void ListenToNextSceneLoad()
+        {
+            LoadingHandle.LoadingDone += OnLoadingSceneDone;
+        }
+
+        private static void OnLoadingSceneDone(object sender, EventActionArgs eventArgs)
+        {
+            LoadingHandle.LoadingDone -= OnLoadingSceneDone;
+            if (m_instance == null)
+                return;
+            m_playerManager.FreezePlayerPosition(false);
+        }
+
         private static void LoadGameDone(object sender, EventActionArgs eventArgs)
         {
+            LoadingHandle.SceneDone -= LoadGameDone;
+
+
             m_campaignSerializer.SetSlot(m_campaignToLoad);
             m_gameplayUIHandle.ResetGameplayUI();
             m_campaignSerializer.Load(SerializationScope.Gameplay, true);
             //m_playerManager.player.Revitilize();
             //m_playerManager.player.Reset();
-            LoadingHandle.SceneDone -= LoadGameDone;
         }
+
+        private static void LockPlayerToSpawnPosition()
+        {
+            if (m_campaignToLoad == null)
+                return;
+
+            m_playerManager.player.transform.position = m_campaignToLoad.spawnPosition;
+            m_playerManager.FreezePlayerPosition(true);
+        }
+
 
         private void AssignModules()
         {
@@ -186,9 +215,21 @@ namespace DChild.Gameplay
             AssignModule(out m_campaignSerializer);
             AssignModule(out m_healthTracker);
             AssignModule(out m_gameplayUIHandle);
+            AssignModule(out m_soulSkillManager);
         }
 
         private void AssignModule<T>(out T module) where T : MonoBehaviour, IGameplaySystemModule => module = GetComponentInChildren<T>();
+
+        private IEnumerator DelayedShowGameplay()
+        {
+            int frameCount = 30;
+            do
+            {
+                yield return null;
+                frameCount--;
+            } while (frameCount > 0);
+            m_gameplayUIHandle.ShowGameplayUI(true);
+        }
 
 #if UNITY_EDITOR
         private void ValidateModule<T>() where T : MonoBehaviour, IGameplaySystemModule => this.ValidateChildComponent<T>();
@@ -231,10 +272,11 @@ namespace DChild.Gameplay
 
                 if (m_doNotTeleportPlayerOnAwake == false && m_campaignToLoad != null)
                 {
-                    m_playerManager.player.transform.position = m_campaignToLoad.spawnPosition;
+                    LockPlayerToSpawnPosition();
                 }
             }
         }
+
 
         private void Start()
         {
@@ -246,11 +288,14 @@ namespace DChild.Gameplay
             if (m_campaignToLoad != null)
             {
                 m_campaignSerializer.SetSlot(m_campaignToLoad);
+
                 m_campaignToLoad = null;
             }
 
-            m_gameplayUIHandle.ShowGameplayUI(true);
+            StartCoroutine(DelayedShowGameplay());
         }
+
+
 
         private void OnEnable()
         {

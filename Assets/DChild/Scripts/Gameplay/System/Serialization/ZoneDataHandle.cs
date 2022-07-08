@@ -79,6 +79,8 @@ namespace DChild.Serialization
         private ComponentSerializer[] m_componentSerializers;
         [SerializeField, ValueDropdown("GetDynamicSerializers", IsUniqueList = true), TabGroup("Serializer", "Dynamic"), OnValueChanged("UpdateEditorData", true)]
         private DynamicSerializableComponent[] m_dynamicSerializers;
+        [SerializeField, TabGroup("Serializer", "Dialogue Updates")]
+        private DialogueSystemTrigger[] m_dialogueSystemUpdates;
         [SerializeField, TabGroup("Serializer", "Quest Listeners")]
         private QuestStateListener[] m_questsListener;
         [OdinSerialize, HideInEditorMode]
@@ -128,7 +130,7 @@ namespace DChild.Serialization
                 {
                     m_zoneData.SetData(m_cacheComponentSerializer.ID, m_cacheComponentSerializer.SaveData());
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
                     Debug.LogError($"Serialization Error: {m_cacheComponentSerializer.gameObject.name} \n {e.Message}", m_cacheComponentSerializer);
                 }
@@ -139,6 +141,18 @@ namespace DChild.Serialization
             }
             var slot = GameplaySystem.campaignSerializer.slot;
             slot.UpdateZoneData(m_ID, m_zoneData);
+            slot.UpdateDialogueSaveData();
+        }
+
+        private void UpdateDialogueSaveData(CampaignSlot slot)
+        {
+            if (m_dialogueSystemUpdates != null)
+            {
+                for (int i = 0; i < m_dialogueSystemUpdates.Length; i++)
+                {
+                    m_dialogueSystemUpdates[i].OnUse();
+                }
+            }
             slot.UpdateDialogueSaveData();
         }
 
@@ -261,6 +275,8 @@ namespace DChild.Serialization
 
         private void OnDestroy()
         {
+            var slot = GameplaySystem.campaignSerializer.slot;
+
             GameplaySystem.campaignSerializer.PreSerialization -= OnPreSerialization;
             GameplaySystem.campaignSerializer.PostDeserialization -= OnPostDeserialization;
         }

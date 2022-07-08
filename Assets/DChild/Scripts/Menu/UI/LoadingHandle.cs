@@ -6,6 +6,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 namespace DChild.Menu
 {
@@ -21,6 +22,10 @@ namespace DChild.Menu
         private LoadingAnimation m_animation;
         [SerializeField]
         private SceneInfo m_loadingScene;
+        [SerializeField]
+        private Image m_loadingImages;
+        [SerializeField]
+        private Sprite[] m_loadingSceneImages;
 
         private static List<string> scenesToLoad;
         private static List<string> scenesToUnload;
@@ -195,6 +200,22 @@ namespace DChild.Menu
             {
                 m_loadOperations[i].allowSceneActivation = true;
             }
+
+            bool allScenesDoneLoading = false;
+            while (allScenesDoneLoading)
+            {
+                allScenesDoneLoading = true;
+                for (int i = 0; i < m_loadOperations.Count; i++)
+                {
+                    if (m_loadOperations[i].isDone == false)
+                    {
+                        allScenesDoneLoading = false;
+                        break;
+                    }
+                }
+                yield return endOfFrame;
+            }
+
             Debug.LogError("False Positive: Scene Activation Done");
 
             yield return endOfFrame;
@@ -222,6 +243,8 @@ namespace DChild.Menu
 
         private void Awake()
         {
+            m_loadingImages.sprite = m_loadingSceneImages[Random.Range(0, m_loadingSceneImages.Length)];
+
             if (m_isInitialized == false)
             {
                 m_loadOperations = new List<AsyncOperation>();

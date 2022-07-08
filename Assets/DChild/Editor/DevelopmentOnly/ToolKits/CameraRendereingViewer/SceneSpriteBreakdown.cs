@@ -1,4 +1,5 @@
-﻿using DChild.Gameplay;
+﻿using DChild;
+using DChild.Gameplay;
 using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
@@ -24,9 +25,13 @@ namespace DChildEditor.Utility
                 m_layer = sortingLayer;
             }
         }
+        [SerializeField]
+        private int m_sortLayer;
 
         [SerializeField]
         private Camera m_camera;
+
+        private bool m_sortLayers;
 
         [SerializeField]
         private Dictionary<GameObject, string> m_ObjectToLayerPair;
@@ -51,6 +56,11 @@ namespace DChildEditor.Utility
 
         }
 
+        public void SetSortingLayer(int layerName, bool useSortLayer)
+        {
+            m_sortLayers = useSortLayer;
+            m_sortLayer = layerName;
+        }
 
         public void GetSpriteRenderers()
         {
@@ -83,12 +93,23 @@ namespace DChildEditor.Utility
                                 {
                                     var spriteRenderer = (SpriteRenderer)currentRenderer;
                                     var sprite = spriteRenderer.sprite;
-
                                     if(sprite != null)
                                     {
                                         if(m_ObjectToLayerPair.ContainsKey(spriteRenderer.gameObject) == false)
                                         {
-                                            m_ObjectToLayerPair.Add(spriteRenderer.gameObject, spriteRenderer.sortingLayerName);
+                                            if (m_sortLayers)
+                                            {
+                                                if (spriteRenderer.sortingLayerID == m_sortLayer)
+                                                {
+                                                    m_ObjectToLayerPair.Add(spriteRenderer.gameObject, spriteRenderer.sortingLayerName);
+
+                                                }
+                                            }
+                                            else
+                                            {
+                                                m_ObjectToLayerPair.Add(spriteRenderer.gameObject, spriteRenderer.sortingLayerName);
+                                            }
+                                           
 
                                         }
                                         else

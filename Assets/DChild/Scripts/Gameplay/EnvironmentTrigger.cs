@@ -56,7 +56,9 @@ namespace DChild.Gameplay
                 {
                     m_wasTriggered = true;
                 }
+                
             }
+            
         }
 
         private void OnTriggerExit2D(Collider2D collision)

@@ -91,6 +91,20 @@ namespace DChild.Gameplay.Systems
             }
         }
 
+#if UNITY_EDITOR
+        [Button]
+        private void StopTime()
+        {
+            GameTime.RegisterValueChange(this, 0, GameTime.Factor.Multiplication);
+        }
+
+        [Button]
+        private void ResumeTime()
+        {
+            GameTime.RegisterValueChange(this, 1, GameTime.Factor.Multiplication);
+        }
+#endif
+
         private void Awake()
         {
             m_timeScale = m_prevTimeScale = 1;

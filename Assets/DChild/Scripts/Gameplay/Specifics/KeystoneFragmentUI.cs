@@ -26,8 +26,8 @@ namespace DChild.Gameplay.Items
             public bool instantAction;
         }
 
-        [SerializeField]
-        private IItemContainer m_inventory;
+        //[SerializeField]
+        //private IItemContainer m_inventory;
         [SerializeField]
         private Info[] m_infos;
         [SerializeField, ListDrawerSettings(HideRemoveButton = true, HideAddButton = true), HideInEditorMode]
@@ -64,7 +64,7 @@ namespace DChild.Gameplay.Items
         {
             for (int i = 0; i < m_infos.Length; i++)
             {
-                m_commands[i].isShown = m_inventory.GetCurrentAmount(m_infos[i].item) != 0;
+                //m_commands[i].isShown = m_inventory.GetCurrentAmount(m_infos[i].item) != 0;
                 m_commands[i].instantAction = true;
             }
         }
@@ -76,7 +76,7 @@ namespace DChild.Gameplay.Items
 
         private void ItemUpdated(object sender, ItemEventArgs eventArgs)
         {
-            if (eventArgs.count > 0)
+            if (eventArgs.currentCount > 0)
             {
                 for (int i = 0; i < m_infos.Length; i++)
                 {
@@ -103,7 +103,7 @@ namespace DChild.Gameplay.Items
 
         private void Start()
         {
-            m_inventory.ItemUpdate += ItemUpdated;
+            //m_inventory.ItemUpdate += ItemUpdated;
             GameplaySystem.campaignSerializer.PostDeserialization += OnCampaignLoaded;
             Initialize();
         }

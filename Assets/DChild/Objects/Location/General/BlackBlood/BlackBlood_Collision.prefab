@@ -14,7 +14,6 @@ GameObject:
   - component: {fileID: 7128876380534071449}
   - component: {fileID: 8354366707585115227}
   - component: {fileID: 5720697140465273474}
-  - component: {fileID: 4425768134900506023}
   - component: {fileID: 4199446144760402121}
   m_Layer: 11
   m_Name: BlackBlood_Collision
@@ -99,10 +98,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_canDetectInteractables: 0
-  m_damageUniqueHitboxesOnly: 0
-  m_collisionRegistrator: {fileID: 0}
+  m_damageUniqueHitboxesOnly: 1
+  m_collisionRegistrator: {fileID: 4199446144760402121}
   m_ignoreColliderList: []
-  m_damageInterval: 0.25
+  m_damageInterval: 1
 --- !u!114 &8354366707585115227
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -131,24 +130,8 @@ MonoBehaviour:
   gizmoColor:
     m_colorName: Obstacle
     m_color: {r: 0, g: 0, b: 0, a: 0}
+  m_considerChildrenCollider: 0
   m_colliderType: 1
---- !u!114 &4425768134900506023
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2297345776819925729}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 38f1c154d0bdfe644b279d0b4b6b7d08, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_canDetectInteractables: 0
-  m_damageUniqueHitboxesOnly: 1
-  m_collisionRegistrator: {fileID: 4199446144760402121}
-  m_ignoreColliderList: []
-  m_damageInterval: 1
 --- !u!114 &4199446144760402121
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -1,12 +1,10 @@
 ﻿using DChild.Gameplay.Characters.Enemies;
 using DChild.Gameplay.Characters.NPC;
 using DChild.Gameplay.Environment;
-using DChild.Gameplay.Inventories;
 using DChild.Gameplay.Systems.Lore;
-//using DChild.Gameplay.Trade;
-using DChild.Menu.Trading;
-using System.Collections;
-using System.Collections.Generic;
+using DChild.Gameplay.Trade;
+using DChild.Gameplay.UI;
+using DChild.Menu.Trade;
 using UnityEngine;
 
 namespace DChild.Gameplay.Systems
@@ -14,8 +12,7 @@ namespace DChild.Gameplay.Systems
     public interface IGameplayUIHandle
     {
         void UpdateNavMapConfiguration(Location location, Transform inGameReference, Vector2 mapReferencePoint, Vector2 calculationOffset);
-        void OpenTradeWindow(NPCProfile merchantData,ITradableInventory merchantInventory, ITraderAskingPrice merchantAskingPrice);
-        //void OpenTradeWindow(NPCProfile merchantData,ITradeInventory merchantInventory, TradeAskingPrice merchantBuyingPriceRate);
+        void OpenTradeWindow(NPCProfile merchantData,ITradeInventory merchantInventory, TradeAskingPrice merchantBuyingPriceRate);
         void ShowLoreNote(LoreData m_data);
         void OpenStorePage(StorePage storePage);
         void OpenStorePage();
@@ -42,5 +39,8 @@ namespace DChild.Gameplay.Systems
         void ShowGameOverScreen(bool willshow);
         void ShowItemAcquired(bool willshow);
         void ShowGameplayUI(bool willshow);
+        void ShowLootChestItemAcquired(LootList lootList);
+        void ShowNotification(StoreNotificationType storeNotificationType);
+        void ShowSequenceSkip(bool willShow);
     }
 }

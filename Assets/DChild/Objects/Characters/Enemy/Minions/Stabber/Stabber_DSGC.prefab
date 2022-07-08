@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4549023454221449027}
   - component: {fileID: 421792794767239088}
   m_Layer: 0
-  m_Name: Before_Charge
+  m_Name: Stabber_Before_Charge
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -106,7 +106,7 @@ GameObject:
   - component: {fileID: 5979780836247552946}
   - component: {fileID: 2354593478328802761}
   m_Layer: 0
-  m_Name: Death_Animation
+  m_Name: Stabber_Death_Animation
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -159,7 +159,7 @@ MonoBehaviour:
   logSound: 0
   soundPlayedEventActive: 0
   soundPlayedCustomEvent: 
-  busIndex: 4
+  busIndex: 3
   ignoreListenerPause: 0
   importance: 5
   isUninterruptible: 0
@@ -266,7 +266,7 @@ MonoBehaviour:
   showMusicDucking: 0
   musicDuckingSounds: []
   groupBuses:
-  - busName: Stabber_Attacks
+  - busName: Stabber_BUS
     volume: 1
     isSoloed: 0
     isMuted: 0
@@ -274,31 +274,7 @@ MonoBehaviour:
     isExisting: 0
     isTemporary: 0
     isUsingOcclusion: 0
-    busVoiceLimitExceededMode: 0
-    busColor: {r: 1, g: 1, b: 1, a: 1}
-    mixerChannel: {fileID: 0}
-    forceTo2D: 0
-  - busName: Stabber_Movements
-    volume: 1
-    isSoloed: 0
-    isMuted: 0
-    voiceLimit: 1
-    isExisting: 0
-    isTemporary: 0
-    isUsingOcclusion: 0
-    busVoiceLimitExceededMode: 0
-    busColor: {r: 1, g: 1, b: 1, a: 1}
-    mixerChannel: {fileID: 0}
-    forceTo2D: 0
-  - busName: Stabber_Flinching
-    volume: 1
-    isSoloed: 0
-    isMuted: 0
-    voiceLimit: -1
-    isExisting: 0
-    isTemporary: 0
-    isUsingOcclusion: 0
-    busVoiceLimitExceededMode: 0
+    busVoiceLimitExceededMode: 1
     busColor: {r: 1, g: 1, b: 1, a: 1}
     mixerChannel: {fileID: 0}
     forceTo2D: 0
@@ -370,8 +346,8 @@ AudioSource:
   SpatializePostEffects: 0
   Priority: 128
   DopplerLevel: 1
-  MinDistance: 10
-  MaxDistance: 100
+  MinDistance: 200
+  MaxDistance: 200
   Pan2D: 0
   rolloffMode: 2
   BypassEffects: 0
@@ -518,7 +494,7 @@ GameObject:
   - component: {fileID: 7952521227153003911}
   - component: {fileID: 6371079527567971142}
   m_Layer: 0
-  m_Name: Player_Detect
+  m_Name: Stabber_Player_Detect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -571,7 +547,7 @@ MonoBehaviour:
   logSound: 0
   soundPlayedEventActive: 0
   soundPlayedCustomEvent: 
-  busIndex: 4
+  busIndex: 3
   ignoreListenerPause: 0
   importance: 5
   isUninterruptible: 0
@@ -654,8 +630,8 @@ AudioSource:
   SpatializePostEffects: 0
   Priority: 128
   DopplerLevel: 1
-  MinDistance: 10
-  MaxDistance: 100
+  MinDistance: 200
+  MaxDistance: 200
   Pan2D: 0
   rolloffMode: 2
   BypassEffects: 0
@@ -843,8 +819,8 @@ AudioSource:
   SpatializePostEffects: 0
   Priority: 128
   DopplerLevel: 1
-  MinDistance: 10
-  MaxDistance: 100
+  MinDistance: 200
+  MaxDistance: 200
   Pan2D: 0
   rolloffMode: 2
   BypassEffects: 0
@@ -1032,8 +1008,8 @@ AudioSource:
   SpatializePostEffects: 0
   Priority: 128
   DopplerLevel: 1
-  MinDistance: 10
-  MaxDistance: 100
+  MinDistance: 200
+  MaxDistance: 200
   Pan2D: 0
   rolloffMode: 2
   BypassEffects: 0
@@ -1180,7 +1156,7 @@ GameObject:
   - component: {fileID: 8532813806606345944}
   - component: {fileID: 6092150942837434376}
   m_Layer: 0
-  m_Name: Attack_Loop
+  m_Name: Stabber_Attack_Loop
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1236,7 +1212,7 @@ MonoBehaviour:
   busIndex: 3
   ignoreListenerPause: 0
   importance: 5
-  isUninterruptible: 0
+  isUninterruptible: 1
   spatialBlendType: 1
   spatialBlend: 1
   groupPlayType: 0
@@ -1275,7 +1251,7 @@ GameObject:
   - component: {fileID: 252293500863144455}
   - component: {fileID: 1784595955981812430}
   m_Layer: 0
-  m_Name: Flinch_Animation
+  m_Name: Stabber_Flinch_Animation
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1328,7 +1304,7 @@ MonoBehaviour:
   logSound: 0
   soundPlayedEventActive: 0
   soundPlayedCustomEvent: 
-  busIndex: 5
+  busIndex: 3
   ignoreListenerPause: 0
   importance: 5
   isUninterruptible: 0
@@ -1411,8 +1387,8 @@ AudioSource:
   SpatializePostEffects: 0
   Priority: 128
   DopplerLevel: 1
-  MinDistance: 10
-  MaxDistance: 100
+  MinDistance: 200
+  MaxDistance: 200
   Pan2D: 0
   rolloffMode: 2
   BypassEffects: 0
@@ -1559,7 +1535,7 @@ GameObject:
   - component: {fileID: 859109015764760117}
   - component: {fileID: 991718313238352153}
   m_Layer: 0
-  m_Name: Walk_Cycle_Animation
+  m_Name: Stabber_Walk_Cycle_Animation
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1612,10 +1588,10 @@ MonoBehaviour:
   logSound: 0
   soundPlayedEventActive: 0
   soundPlayedCustomEvent: 
-  busIndex: 4
+  busIndex: 3
   ignoreListenerPause: 0
   importance: 5
-  isUninterruptible: 0
+  isUninterruptible: 1
   spatialBlendType: 1
   spatialBlend: 1
   groupPlayType: 0
@@ -1695,8 +1671,8 @@ AudioSource:
   SpatializePostEffects: 0
   Priority: 128
   DopplerLevel: 1
-  MinDistance: 10
-  MaxDistance: 100
+  MinDistance: 200
+  MaxDistance: 200
   Pan2D: 0
   rolloffMode: 2
   BypassEffects: 0
@@ -1884,8 +1860,8 @@ AudioSource:
   SpatializePostEffects: 0
   Priority: 128
   DopplerLevel: 1
-  MinDistance: 10
-  MaxDistance: 100
+  MinDistance: 200
+  MaxDistance: 200
   Pan2D: 0
   rolloffMode: 2
   BypassEffects: 0
@@ -2067,14 +2043,14 @@ AudioSource:
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
-  Loop: 0
+  Loop: 1
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
   Priority: 128
   DopplerLevel: 1
-  MinDistance: 10
-  MaxDistance: 100
+  MinDistance: 200
+  MaxDistance: 200
   Pan2D: 0
   rolloffMode: 2
   BypassEffects: 0
@@ -2221,7 +2197,7 @@ GameObject:
   - component: {fileID: 8071249551493073022}
   - component: {fileID: 1876399642880146905}
   m_Layer: 0
-  m_Name: Turn_Animation
+  m_Name: Stabber_Turn_Animation
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2274,7 +2250,7 @@ MonoBehaviour:
   logSound: 0
   soundPlayedEventActive: 0
   soundPlayedCustomEvent: 
-  busIndex: 4
+  busIndex: 3
   ignoreListenerPause: 0
   importance: 5
   isUninterruptible: 0
@@ -2316,7 +2292,7 @@ GameObject:
   - component: {fileID: 6723270174061606138}
   - component: {fileID: 3693601775626696073}
   m_Layer: 0
-  m_Name: Charge_Loop
+  m_Name: Stabber_Charge_Loop
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2372,7 +2348,7 @@ MonoBehaviour:
   busIndex: 3
   ignoreListenerPause: 0
   importance: 5
-  isUninterruptible: 0
+  isUninterruptible: 1
   spatialBlendType: 1
   spatialBlend: 1
   groupPlayType: 0
@@ -2452,8 +2428,8 @@ AudioSource:
   SpatializePostEffects: 0
   Priority: 128
   DopplerLevel: 1
-  MinDistance: 10
-  MaxDistance: 100
+  MinDistance: 200
+  MaxDistance: 200
   Pan2D: 0
   rolloffMode: 2
   BypassEffects: 0
@@ -2600,7 +2576,7 @@ GameObject:
   - component: {fileID: 4818263390611419344}
   - component: {fileID: 37013451802063822}
   m_Layer: 0
-  m_Name: Idle_Animation
+  m_Name: Stabber_Idle_Animation
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2653,10 +2629,10 @@ MonoBehaviour:
   logSound: 0
   soundPlayedEventActive: 0
   soundPlayedCustomEvent: 
-  busIndex: 4
+  busIndex: 3
   ignoreListenerPause: 0
   importance: 5
-  isUninterruptible: 0
+  isUninterruptible: 1
   spatialBlendType: 1
   spatialBlend: 1
   groupPlayType: 0

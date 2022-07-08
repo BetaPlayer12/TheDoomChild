@@ -76,6 +76,19 @@ namespace DChild.Gameplay.Systems
             m_characterInput?.Enable();
         }
 
+        public void FreezePlayerPosition(bool freezePlayerPosition)
+        {
+            var physics = m_player.character.GetComponent<Rigidbody2D>();
+            if (freezePlayerPosition)
+            {
+                physics.constraints = RigidbodyConstraints2D.FreezeAll;
+            }
+            else
+            {
+                physics.constraints = RigidbodyConstraints2D.FreezeRotation;
+            }
+        }
+
         public PlayerCharacterOverride OverrideCharacterControls()
         {
             m_gameplayInput?.SetStoreInputActive(false);

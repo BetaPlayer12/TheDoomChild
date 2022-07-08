@@ -47,42 +47,6 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 6.111603, y: 5.412033}
   m_EdgeRadius: 0
---- !u!114 &5406820306495070864
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3507299898276856346}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a345e74751b90eb46865600dc3709da1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_maxHealth: 1
---- !u!114 &5503756071171925821
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3507299898276856346}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e1819101304e6a3479b6fb001626539e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_collider2Ds:
-  - {fileID: 6181369018887259843}
-  m_damageFXInfo:
-    m_fx: {fileID: 0}
-    m_overrideColor: 0
-    m_colorToUse: {r: 0, g: 0, b: 0, a: 0}
-    m_overrideScale: 0
-    m_scaleToUse: {x: 0, y: 0, z: 0}
-  m_invulnerabilityLevel: 0
-  m_damageReduction: 0
-  m_canBlockDamage: 0
 --- !u!114 &1872144348169629417
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1511,6 +1475,42 @@ MonoBehaviour:
   useUnitySubmitSound: 0
   useUnityCancelSound: 0
   useUnityToggleSound: 0
+--- !u!114 &5406820306495070864
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3507299898276856346}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a345e74751b90eb46865600dc3709da1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_maxHealth: 1
+--- !u!114 &5503756071171925821
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3507299898276856346}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1819101304e6a3479b6fb001626539e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_collider2Ds:
+  - {fileID: 6181369018887259843}
+  m_damageFXInfo:
+    m_fx: {fileID: 0}
+    m_overrideColor: 0
+    m_colorToUse: {r: 0, g: 0, b: 0, a: 0}
+    m_overrideScale: 0
+    m_scaleToUse: {x: 0, y: 0, z: 0}
+  m_invulnerabilityLevel: 0
+  m_damageReduction: 0
+  m_canBlockDamage: 0
 --- !u!1 &4781734972981399844
 GameObject:
   m_ObjectHideFlags: 0
@@ -1703,6 +1703,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_onDestroy.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 7375215404248989701, guid: d4c78f8b3e7279e41b611cce66403e7f,
+        type: 3}
+      propertyPath: m_createDebris
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7375215404248989701, guid: d4c78f8b3e7279e41b611cce66403e7f,
+        type: 3}
+      propertyPath: m_debris.m_AssetGUID
+      value: e2eecc17221b4ec44be28258d1a1a120
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d4c78f8b3e7279e41b611cce66403e7f, type: 3}

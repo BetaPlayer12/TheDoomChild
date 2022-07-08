@@ -52,7 +52,7 @@ AudioSource:
   SpatializePostEffects: 0
   Priority: 128
   DopplerLevel: 1
-  MinDistance: 10
+  MinDistance: 100
   MaxDistance: 100
   Pan2D: 0
   rolloffMode: 2
@@ -159,6 +159,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   probabilityToPlay: 100
+  importance: 5
+  isUninterruptible: 0
   useLocalization: 0
   useRandomPitch: 0
   randomPitchMode: 0
@@ -168,7 +170,8 @@ MonoBehaviour:
   randomVolumeMode: 0
   randomVolumeMin: 0
   randomVolumeMax: 0
-  weight: 5
+  weight: 10
+  clipAlias: 
   audLocation: 0
   resourceFileName: 
   isExpanded: 1
@@ -251,8 +254,12 @@ MonoBehaviour:
   soundPlayedEventActive: 0
   soundPlayedCustomEvent: 
   busIndex: 3
+  ignoreListenerPause: 0
+  importance: 5
+  isUninterruptible: 0
   spatialBlendType: 1
   spatialBlend: 1
+  groupPlayType: 0
   busName: 
   isExistingBus: 0
   isCopiedFromDGSC: 0
@@ -342,8 +349,12 @@ MonoBehaviour:
   soundPlayedEventActive: 0
   soundPlayedCustomEvent: 
   busIndex: 3
+  ignoreListenerPause: 0
+  importance: 5
+  isUninterruptible: 0
   spatialBlendType: 1
   spatialBlend: 1
+  groupPlayType: 0
   busName: 
   isExistingBus: 0
   isCopiedFromDGSC: 0
@@ -420,7 +431,7 @@ AudioSource:
   SpatializePostEffects: 0
   Priority: 128
   DopplerLevel: 1
-  MinDistance: 10
+  MinDistance: 100
   MaxDistance: 100
   Pan2D: 0
   rolloffMode: 2
@@ -527,6 +538,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   probabilityToPlay: 100
+  importance: 5
+  isUninterruptible: 0
   useLocalization: 0
   useRandomPitch: 0
   randomPitchMode: 0
@@ -536,7 +549,8 @@ MonoBehaviour:
   randomVolumeMode: 0
   randomVolumeMin: 0
   randomVolumeMax: 0
-  weight: 5
+  weight: 10
+  clipAlias: 
   audLocation: 0
   resourceFileName: 
   isExpanded: 1
@@ -619,8 +633,12 @@ MonoBehaviour:
   soundPlayedEventActive: 0
   soundPlayedCustomEvent: 
   busIndex: 3
+  ignoreListenerPause: 0
+  importance: 5
+  isUninterruptible: 0
   spatialBlendType: 1
   spatialBlend: 1
+  groupPlayType: 0
   busName: 
   isExistingBus: 0
   isCopiedFromDGSC: 0
@@ -710,8 +728,12 @@ MonoBehaviour:
   soundPlayedEventActive: 0
   soundPlayedCustomEvent: 
   busIndex: 3
+  ignoreListenerPause: 0
+  importance: 5
+  isUninterruptible: 0
   spatialBlendType: 1
   spatialBlend: 1
+  groupPlayType: 0
   busName: 
   isExistingBus: 0
   isCopiedFromDGSC: 0
@@ -788,7 +810,7 @@ AudioSource:
   SpatializePostEffects: 0
   Priority: 128
   DopplerLevel: 1
-  MinDistance: 10
+  MinDistance: 100
   MaxDistance: 100
   Pan2D: 0
   rolloffMode: 2
@@ -895,6 +917,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   probabilityToPlay: 100
+  importance: 5
+  isUninterruptible: 0
   useLocalization: 0
   useRandomPitch: 0
   randomPitchMode: 0
@@ -904,7 +928,8 @@ MonoBehaviour:
   randomVolumeMode: 0
   randomVolumeMin: 0
   randomVolumeMax: 0
-  weight: 5
+  weight: 10
+  clipAlias: 
   audLocation: 0
   resourceFileName: 
   isExpanded: 1
@@ -987,8 +1012,12 @@ MonoBehaviour:
   soundPlayedEventActive: 0
   soundPlayedCustomEvent: 
   busIndex: 3
+  ignoreListenerPause: 0
+  importance: 5
+  isUninterruptible: 1
   spatialBlendType: 1
   spatialBlend: 1
+  groupPlayType: 0
   busName: 
   isExistingBus: 0
   isCopiedFromDGSC: 0
@@ -1086,15 +1115,15 @@ MonoBehaviour:
   showMusicDucking: 0
   musicDuckingSounds: []
   groupBuses:
-  - busName: Movements
+  - busName: MushroomBomb_BUS
     volume: 1
     isSoloed: 0
     isMuted: 0
-    voiceLimit: 1
-    stopOldest: 1
+    voiceLimit: -1
     isExisting: 0
     isTemporary: 0
     isUsingOcclusion: 0
+    busVoiceLimitExceededMode: 1
     busColor: {r: 1, g: 1, b: 1, a: 1}
     mixerChannel: {fileID: 0}
     forceTo2D: 0
@@ -1166,7 +1195,7 @@ AudioSource:
   SpatializePostEffects: 0
   Priority: 128
   DopplerLevel: 1
-  MinDistance: 10
+  MinDistance: 100
   MaxDistance: 100
   Pan2D: 0
   rolloffMode: 2
@@ -1273,6 +1302,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   probabilityToPlay: 100
+  importance: 5
+  isUninterruptible: 0
   useLocalization: 0
   useRandomPitch: 0
   randomPitchMode: 0
@@ -1282,7 +1313,8 @@ MonoBehaviour:
   randomVolumeMode: 0
   randomVolumeMin: 0
   randomVolumeMax: 0
-  weight: 5
+  weight: 10
+  clipAlias: 
   audLocation: 0
   resourceFileName: 
   isExpanded: 1
@@ -1352,7 +1384,7 @@ AudioSource:
   SpatializePostEffects: 0
   Priority: 128
   DopplerLevel: 1
-  MinDistance: 10
+  MinDistance: 100
   MaxDistance: 100
   Pan2D: 0
   rolloffMode: 2
@@ -1459,6 +1491,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   probabilityToPlay: 100
+  importance: 5
+  isUninterruptible: 0
   useLocalization: 0
   useRandomPitch: 0
   randomPitchMode: 0
@@ -1468,7 +1502,8 @@ MonoBehaviour:
   randomVolumeMode: 0
   randomVolumeMin: 0
   randomVolumeMax: 0
-  weight: 5
+  weight: 10
+  clipAlias: 
   audLocation: 0
   resourceFileName: 
   isExpanded: 1
@@ -1551,8 +1586,12 @@ MonoBehaviour:
   soundPlayedEventActive: 0
   soundPlayedCustomEvent: 
   busIndex: 3
+  ignoreListenerPause: 0
+  importance: 5
+  isUninterruptible: 1
   spatialBlendType: 1
   spatialBlend: 1
+  groupPlayType: 0
   busName: 
   isExistingBus: 0
   isCopiedFromDGSC: 0
@@ -1629,7 +1668,7 @@ AudioSource:
   SpatializePostEffects: 0
   Priority: 128
   DopplerLevel: 1
-  MinDistance: 10
+  MinDistance: 100
   MaxDistance: 100
   Pan2D: 0
   rolloffMode: 2
@@ -1736,6 +1775,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   probabilityToPlay: 100
+  importance: 5
+  isUninterruptible: 0
   useLocalization: 0
   useRandomPitch: 0
   randomPitchMode: 0
@@ -1745,7 +1786,8 @@ MonoBehaviour:
   randomVolumeMode: 0
   randomVolumeMin: 0
   randomVolumeMax: 0
-  weight: 5
+  weight: 10
+  clipAlias: 
   audLocation: 0
   resourceFileName: 
   isExpanded: 1

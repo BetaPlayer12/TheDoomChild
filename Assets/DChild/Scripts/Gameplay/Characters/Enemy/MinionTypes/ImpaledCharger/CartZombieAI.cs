@@ -147,11 +147,11 @@ namespace DChild.Gameplay.Characters.Enemies
         private RaySensor m_breakSensor;
 
         [SerializeField, TabGroup("FX")]
-        private ParticleSystem m_dustStartFX;
+        private ParticleFX m_dustStartFX;
         [SerializeField, TabGroup("FX")]
-        private ParticleSystem m_dustFrontFX;
+        private ParticleFX m_dustFrontFX;
         [SerializeField, TabGroup("FX")]
-        private ParticleSystem m_dustBackFX;
+        private ParticleFX m_dustBackFX;
 
         [SerializeField, TabGroup("Pusher")]
         private ImpaledChargerAI m_chargerAI;
@@ -198,20 +198,17 @@ namespace DChild.Gameplay.Characters.Enemies
                 //    && m_stateHandle.currentState != State.WaitBehaviourEnd)
                 //{
                 //}
-                if (!TargetBlocked() && !m_enablePatience)
-                {
 
-                    if (!m_isDetecting)
-                    {
-                        m_isDetecting = true;
-                        m_stateHandle.SetState(State.Detect);
-                    }
-                    m_currentPatience = 0;
-                    //m_randomIdleRoutine = null;
-                    //var patienceRoutine = PatienceRoutine();
-                    //StopCoroutine(patienceRoutine);
-                    m_enablePatience = false;
+                if (!m_isDetecting)
+                {
+                    m_isDetecting = true;
+                    m_stateHandle.SetState(State.Detect);
                 }
+                m_currentPatience = 0;
+                //m_randomIdleRoutine = null;
+                //var patienceRoutine = PatienceRoutine();
+                //StopCoroutine(patienceRoutine);
+                m_enablePatience = false;
             }
             else
             {
@@ -226,16 +223,6 @@ namespace DChild.Gameplay.Characters.Enemies
             m_isDetecting = true;
             m_stateHandle.OverrideState(State.Detect);
             m_chargerAI?.OverrideState(ImpaledChargerAI.State.Detect);
-        }
-
-        private bool TargetBlocked()
-        {
-            Vector2 wat = m_character.centerMass.position;
-            RaycastHit2D hit = Physics2D.Raycast(/*m_projectilePoint.position*/wat, m_targetInfo.position - wat, 1000, LayerMask.GetMask("Player") + DChildUtility.GetEnvironmentMask());
-            var eh = hit.transform.gameObject.layer == LayerMask.NameToLayer("Player") ? false : true;
-            Debug.DrawRay(wat, m_targetInfo.position - wat);
-            Debug.Log("Shot is " + eh + " by " + LayerMask.LayerToName(hit.transform.gameObject.layer));
-            return hit.transform.gameObject.layer == LayerMask.NameToLayer("Player") ? false : true;
         }
 
         private void OnTurnDone(object sender, FacingEventArgs eventArgs)
@@ -404,6 +391,8 @@ namespace DChild.Gameplay.Characters.Enemies
             m_chargerAI.transform.SetParent(null);
             m_chargerMovement = null;
             m_hitbox.Enable();
+            m_dustBackFX.Stop();
+            m_dustFrontFX.Stop();
             StopAllCoroutines();
             m_stateHandle.OverrideState(State.Idle);
         }
@@ -589,7 +578,6 @@ namespace DChild.Gameplay.Characters.Enemies
             m_initialPos = new Vector2(transform.position.x, GroundPosition().y);
             m_hitbox.SetInvulnerability(Invulnerability.Level_1);
 
-            m_randomTurnRoutine = StartCoroutine(RandomTurnRoutine());
         }
 
         protected override void Awake()
@@ -609,6 +597,8 @@ namespace DChild.Gameplay.Characters.Enemies
             m_stateHandle = new StateHandle<State>(State.Idle, State.WaitBehaviourEnd);
             m_attackDecider = new RandomAttackDecider<Attack>();
             UpdateAttackDeciderList();
+
+            m_randomTurnRoutine = StartCoroutine(RandomTurnRoutine());
         }
 
         private void Update()

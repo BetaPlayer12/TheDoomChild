@@ -1,4 +1,5 @@
 ﻿
+using DChild;
 using Sirenix.OdinInspector;
 using Sirenix.OdinInspector.Editor;
 using System;
@@ -23,6 +24,11 @@ namespace DChildEditor.Utility
         private bool m_useCustomCamera;
         [SerializeField, ShowIf("m_useCustomCamera")]
         private Camera m_camera;
+
+        [SerializeField]
+        private bool m_useSortLayer;
+        [SerializeField,SortingLayer, ShowIf("m_useSortLayer")]
+        private int m_selectedLayer;
 
         [SerializeField, TableList(AlwaysExpanded = true, IsReadOnly = true), TabGroup("Sprite Count")]
         private CameraRenderAnalyzer.Info[] m_results;
@@ -52,7 +58,7 @@ namespace DChildEditor.Utility
             m_breakdownInstance.GetSpriteRenderers();
             m_results = m_instance.AnalyzeShownSprites();
             m_spriteBreakdown = m_breakdownInstance.AnalyzedObjectRenderers();
-
+            m_breakdownInstance.SetSortingLayer(m_selectedLayer, m_useSortLayer);
             EditorApplication.playModeStateChanged -= OnPlayModeChange;
             EditorSceneManager.sceneClosed -= OnSceneClosed;
             EditorSceneManager.sceneOpened -= OnSceneOpen;
@@ -160,6 +166,7 @@ namespace DChildEditor.Utility
         {
             m_results = m_instance.AnalyzeShownSprites();
             m_spriteBreakdown = m_breakdownInstance.AnalyzedObjectRenderers();
+            m_breakdownInstance.SetSortingLayer(m_selectedLayer, m_useSortLayer);
             Repaint();
         }
     }

@@ -24,7 +24,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 605403231}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.13, y: 2.59, z: 0}
+  m_LocalPosition: {x: -0.13, y: 3.28, z: 0}
   m_LocalScale: {x: 1.3575609, y: 1.3575609, z: 1.3575609}
   m_Children: []
   m_Father: {fileID: 1176192760}
@@ -101,6 +101,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_canDetectInteractables: 0
+  m_damageUniqueHitboxesOnly: 0
+  m_collisionRegistrator: {fileID: 0}
   m_ignoreColliderList: []
   m_damageInterval: 5
 --- !u!1 &1176192755
@@ -280,12 +282,49 @@ MonoBehaviour:
   m_referenceOrder: 0
   m_renderers: []
   m_baseOrders: 
+  m_allowEditorUpdate: 1
   m_previousReferenceOrder: 0
   m_rendererList:
   - m_renderer: {fileID: 1176192758}
     m_baseOrder: 0
   - m_renderer: {fileID: 8699216088131146016}
     m_baseOrder: -1
+--- !u!114 &1932683124198343736
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9040251651802365863}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d4914fa10fe1f74fbac7bbe8b95c9b2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_data: {fileID: 11400000, guid: a631ec5b6abd9ed459191b1735e5f1c3, type: 2}
+--- !u!114 &4389150695274963011
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9040251651802365863}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e10454193b54c9a4eb8bfb67b80c746d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_centerMass: {fileID: 7987833189379398137}
+  m_data: {fileID: 11400000, guid: 28d3ecedb08a674498dc26885d12e453, type: 2}
+  m_currentAttackInfo:
+    damage:
+      m_type: 0
+      m_value: 0
+    criticalDamageInfo:
+      chance: 0
+      damageModifier: 0
+    ignoreInvulnerability: 0
+    ignoresBlock: 0
 --- !u!114 &7178814500626402457
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -302,6 +341,7 @@ MonoBehaviour:
   m_trigger: {fileID: 1282438985521207369}
   m_damageCollider: {fileID: 1055774890}
   m_anticipationTransformReference: {fileID: 605403232}
+  m_delayTime: 1
 --- !u!1 &5025386755950529445
 GameObject:
   m_ObjectHideFlags: 0
@@ -476,7 +516,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 3433672144977784850, guid: 13b4faa1e4e168946acde00f3dcfcde8, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 13b4faa1e4e168946acde00f3dcfcde8, type: 3}
 --- !u!1 &9040251651802365863 stripped
 GameObject:

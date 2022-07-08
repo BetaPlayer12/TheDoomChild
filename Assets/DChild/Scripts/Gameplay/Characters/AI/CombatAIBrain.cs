@@ -80,8 +80,6 @@ namespace DChild.Gameplay.Characters.AI
             m_targetInfo.Set(damageable, m_target);
         }
 
-
-
         public virtual void Enable()
         {
             enabled = true;
@@ -154,6 +152,15 @@ namespace DChild.Gameplay.Characters.AI
             }
         }
 
+        protected bool TargetBlocked()
+        {
+            RaycastHit2D hit = Physics2D.Raycast((Vector2)m_character.centerMass.position, m_targetInfo.position - (Vector2)m_character.centerMass.position, 1000, LayerMask.GetMask("Player") + DChildUtility.GetEnvironmentMask());
+            var eh = hit.transform.gameObject.layer == LayerMask.NameToLayer("Player") ? false : true;
+            Debug.DrawRay((Vector2)m_character.centerMass.position, m_targetInfo.position - (Vector2)m_character.centerMass.position);
+            //Debug.Log("Shot is " + eh + " by " + LayerMask.LayerToName(hit.transform.gameObject.layer));
+            return hit.transform.gameObject.layer == LayerMask.NameToLayer("Player") ? false : true;
+        }
+
 
         /// <summary>
         /// When its told that it cant attack target
@@ -201,6 +208,16 @@ namespace DChild.Gameplay.Characters.AI
                 LoadCharacterStatData(m_statsData);
                 m_damageable.health.ResetValueToMax();
             }
+        }
+
+        private void OnEnable()
+        {
+            CombatAIManager.instance?.Add(this);
+        }
+
+        private void OnDisable()
+        {
+            CombatAIManager.instance?.Remove(this);
         }
 
         protected virtual void LateUpdate()

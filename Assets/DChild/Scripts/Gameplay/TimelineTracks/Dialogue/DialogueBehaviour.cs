@@ -65,7 +65,13 @@ namespace PixelCrushers.DialogueSystem
         [HideInInspector]
         public bool isDone;
 
-
+        public string GetStopConversationSequence()
+        {
+            return "required SetDialogueInput(true);" +
+                         $"required Timeline(speed, {playableReference},1);" +
+                         "required StopConversation();" +
+                         "required SetDialoguePanel(false)";
+        }
 
         public string GetEndBehaviourSequence()
         {
@@ -75,10 +81,7 @@ namespace PixelCrushers.DialogueSystem
                     return "required SetDialogueInput(true);" +
                        $"required Timeline(speed, {playableReference},1)";
                 case EndBehaviour.EndConversation:
-                    return "required SetDialogueInput(true);" +
-                         $"required Timeline(speed, {playableReference},1);" +
-                         "required StopConversation();" +
-                         "required SetDialoguePanel(false)";
+                    return GetStopConversationSequence();
             }
             return "";
         }
