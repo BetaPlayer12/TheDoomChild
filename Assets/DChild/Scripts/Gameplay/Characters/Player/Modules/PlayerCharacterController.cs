@@ -996,6 +996,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             }
             else
             {
+
                 //From Standing
                 if (m_state.canAttack)
                 {
@@ -1182,6 +1183,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 }
                 #endregion
             }
+            m_objectManipulation?.LookForMoveableObject();
         }
 
         //ModuleHandling

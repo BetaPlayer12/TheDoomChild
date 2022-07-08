@@ -55,8 +55,12 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public bool IsThereAMovableObject()
         {
+            return m_movableObject != null;
+        }
+
+        public void LookForMoveableObject()
+        {
             m_grabRangeSensor.Cast();
-            bool isValid = false;
 
             if (m_grabRangeSensor.allRaysDetecting)
             {
@@ -67,7 +71,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     var collider = hits[i].collider;
                     if (collider.isTrigger)
                     {
-                        return false;
+                        continue;
                     }
                     else
                     {
@@ -79,7 +83,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
                                 m_movableObject = newMovable;
                                 InvokeDetectedMoveableObject();
                             }
-                            isValid = true;
                         }
                         else
                         {
@@ -89,7 +92,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                                 InvokeDetectedMoveableObject();
                             }
 
-                            return false;
+                            return;
                         }
 
                         //if (m_movableObject.CompareTag("InvisibleWall") == false)
@@ -111,8 +114,14 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     }
                 }
             }
-
-            return isValid;
+            else
+            {
+                if (m_movableObject != null)
+                {
+                    m_movableObject = null;
+                    InvokeDetectedMoveableObject();
+                }
+            }
         }
 
         public void Execute()
