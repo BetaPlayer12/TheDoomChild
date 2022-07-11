@@ -31,6 +31,8 @@ namespace DChild.Gameplay.Environment
         }
 
         [SerializeField]
+        private Vector3 m_promptOffset;
+        [SerializeField]
         private Transform m_source;
         [SerializeField, ReadOnly]
         private bool m_canBeMoved = true;
@@ -48,6 +50,7 @@ namespace DChild.Gameplay.Environment
         private bool m_isTouchingPlayer = false;
         public event EventAction<EventActionArgs> BecameUnmovable;
 
+        public Vector3 promptPosition => transform.position + m_promptOffset;
         public bool canBeMoved => m_canBeMoved;
 
         public Transform source => m_source;
@@ -170,6 +173,13 @@ namespace DChild.Gameplay.Environment
             {
                 m_source = transform;
             }
+        }
+
+        private void OnDrawGizmosSelected()
+        {
+            var position = promptPosition;
+            Gizmos.color = Color.cyan;
+            Gizmos.DrawSphere(position, 1f);
         }
     }
 }
