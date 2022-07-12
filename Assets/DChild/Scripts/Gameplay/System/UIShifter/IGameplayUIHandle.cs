@@ -33,6 +33,7 @@ namespace DChild.Gameplay.Systems
         void ShowBossHealth(bool willshow);
         void RevealBossName();
         void ShowInteractionPrompt(bool willshow);
+        void ShowMovableObjectPrompt(bool willshow);
         void ShowSoulEssenceNotify(bool willshow);
         void ShowPromptSoulEssenceChangeNotify();
         void ShowPauseMenu(bool willshow);

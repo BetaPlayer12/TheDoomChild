@@ -23,24 +23,36 @@ namespace DChild.Gameplay.Characters.Players.Modules
         public void SwordJumpSlashForwardFX()
         {
             m_basicSlashes?.PlayFXFor(BasicSlashes.Type.MidAir_Forward, true);
+        }
+        public void SwordJumpSlashForwardEnableCollision()
+        {
             m_basicSlashes?.EnableCollision(BasicSlashes.Type.MidAir_Forward, true);
         }
 
         public void JumpUpSlashFX()
         {
             m_basicSlashes?.PlayFXFor(BasicSlashes.Type.MidAir_Overhead, true);
+        }
+        public void SwordJumpUpSlashEnableCollision()
+        {
             m_basicSlashes?.EnableCollision(BasicSlashes.Type.MidAir_Overhead, true);
         }
 
         public void SwordUpSlashFX()
         {
             m_basicSlashes?.PlayFXFor(BasicSlashes.Type.Ground_Overhead, true);
+        }
+        public void SwordUpSlashEnableCollision()
+        {
             m_basicSlashes?.EnableCollision(BasicSlashes.Type.Ground_Overhead, true);
         }
 
         public void CrouchSlashFX()
         {
             m_basicSlashes?.PlayFXFor(BasicSlashes.Type.Crouch, true);
+        }
+        public void SwordCrouchSlashEnableCollision()
+        {
             m_basicSlashes?.EnableCollision(BasicSlashes.Type.Crouch, true);
         }
 

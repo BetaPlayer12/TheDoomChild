@@ -209,6 +209,12 @@ namespace DChild.Gameplay.Characters.Players.Modules
             }
         }
 
+        public void ResetAttackDelay()
+        {
+            m_timer = 1;
+            m_state.canAttack = true;
+        }
+
         public void HandleNextAttackDelay()
         {
             if (m_timer >= 0)

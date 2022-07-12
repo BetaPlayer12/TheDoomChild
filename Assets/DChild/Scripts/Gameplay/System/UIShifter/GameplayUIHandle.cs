@@ -138,6 +138,18 @@ namespace DChild.Gameplay.Systems
             }
         }
 
+        public void ShowMovableObjectPrompt(bool willshow)
+        {
+            if (willshow == true)
+            {
+                GameEventMessage.SendEvent("MovableObject Prompt Show");
+            }
+            else
+            {
+                GameEventMessage.SendEvent("MovableObject Prompt Hide");
+            }
+        }
+
         public void ShowSoulEssenceNotify(bool willshow)
         {
             if (willshow == true)
