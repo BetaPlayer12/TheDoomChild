@@ -41,7 +41,7 @@ namespace DChild.Gameplay.Pooling
             throw new Exception($"{typeof(T).Name} does not exist");
         }
 
-        private void Awake()
+        public void Initialize()
         {
             var pooledItemGO = new GameObject("PooledItems");
             SceneManager.MoveGameObjectToScene(pooledItemGO, gameObject.scene);
