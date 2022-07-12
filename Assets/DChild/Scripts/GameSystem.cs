@@ -128,6 +128,7 @@ namespace DChild
                 m_zoneLoader = GetComponentInChildren<SceneLoader>();
                 dataManager = GetComponentInChildren<GameDataManager>();
                 m_poolManager = GetComponentInChildren<PoolManager>();
+                m_poolManager.Initialize();
                 m_cursor = m_instanceCursor;
             }
         }
