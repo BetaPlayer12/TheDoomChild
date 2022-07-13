@@ -16,6 +16,7 @@ namespace DChild.Gameplay.Characters.Players
         AttackSpeed,
         Item_Effectivity,
         SoulAbsorb_Range,
+        Levitation_Speed,
         [HideInInspector]
         _COUNT
     }

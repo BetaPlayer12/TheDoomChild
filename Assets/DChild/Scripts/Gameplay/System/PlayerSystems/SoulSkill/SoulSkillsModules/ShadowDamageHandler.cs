@@ -15,7 +15,7 @@ namespace DChild.Gameplay.Characters.Players.SoulSkills
         private ShadowDash m_shadowdash;
         private ShadowSlide m_shadowslide;
 
-        private void Awake()
+        private void Start()
         {
             GameObject player = GetComponentInParent<Character>().gameObject;
 
