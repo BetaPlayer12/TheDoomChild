@@ -40,5 +40,15 @@ namespace DChild.Gameplay.Characters.Players.SoulSkills
         {
             m_collider.enabled = false;
         }
+        private void OnDestroy()
+        {
+
+            m_shadowmorph.ExecuteModule -= ShadowDamageActivate;
+            m_shadowmorph.End -= ShadowDamageDeactivate;
+            m_shadowdash.ExecuteModule -= ShadowDamageActivate;
+            m_shadowdash.End -= ShadowDamageDeactivate;
+            m_shadowslide.ExecuteModule -= ShadowDamageActivate;
+            m_shadowslide.End -= ShadowDamageDeactivate;
+        }
     }
 }

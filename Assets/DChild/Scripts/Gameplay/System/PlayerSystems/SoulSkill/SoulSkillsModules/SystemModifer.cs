@@ -8,7 +8,8 @@ namespace DChild.Gameplay.Characters.Players.SoulSkills
     {
         private enum Field
         {
-            SoulEssence_Drop
+            SoulEssence_Drop,
+            SoulEssence_Absorbption
         }
 
         [SerializeField]
@@ -21,7 +22,10 @@ namespace DChild.Gameplay.Characters.Players.SoulSkills
             switch (m_systemField)
             {
                 case Field.SoulEssence_Drop:
-            GameplaySystem.modifiers.minionSoulEssenceDrop = m_value;
+                    GameplaySystem.modifiers.minionSoulEssenceDrop = m_value;
+                    break;
+                case Field.SoulEssence_Absorbption:
+                    GameplaySystem.modifiers.SoulessenceAbsorption = m_value;
                     break;
             }
         }
@@ -32,6 +36,9 @@ namespace DChild.Gameplay.Characters.Players.SoulSkills
             {
                 case Field.SoulEssence_Drop:
                     GameplaySystem.modifiers.minionSoulEssenceDrop = 1;
+                    break;
+                case Field.SoulEssence_Absorbption:
+                    GameplaySystem.modifiers.SoulessenceAbsorption = 1;
                     break;
             }
         }

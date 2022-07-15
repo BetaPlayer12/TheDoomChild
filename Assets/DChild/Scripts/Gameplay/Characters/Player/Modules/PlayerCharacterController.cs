@@ -585,15 +585,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             }
             else
             {
-                if (m_state.isLevitating)
-                {
-                    m_devilWings?.MaintainHeight();
-                    m_devilWings?.ConsumeSource();
-                    if (m_input.levitateHeld == false || (m_devilWings?.HaveEnoughSourceForMaintainingHeight() ?? true) == false)
-                    {
-                        m_devilWings?.Cancel();
-                    }
-                }
+               
 
                 if (m_state.canAttack)
                 {
@@ -699,7 +691,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                         }
                     }
                 }
-                else if (m_input.levitatePressed)
+                else if (m_input.levitatePressed && m_state.isLevitating == false)
                 {
                     if (m_state.isInShadowMode == false)
                     {
@@ -747,6 +739,16 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     }
                 }
                 #endregion
+                if (m_state.isLevitating)
+                {
+                    m_devilWings?.MaintainHeight();
+                    m_devilWings?.GiveMovementBoost();
+                    m_devilWings?.ConsumeSource();
+                    if (m_input.levitateHeld == false || (m_devilWings?.HaveEnoughSourceForMaintainingHeight() ?? true) == false)
+                    {
+                        m_devilWings?.Cancel();
+                    }
+                }
             }
         }
 
