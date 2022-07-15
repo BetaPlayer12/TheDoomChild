@@ -114,8 +114,8 @@ namespace DChild.Gameplay.Environment
             }
             if (m_lootList.soulEssenceAmount > 0)
             {
-
-                playerInventory.AddSoulEssence(m_lootList.soulEssenceAmount);
+                float souls = m_lootList.soulEssenceAmount * GameplaySystem.modifiers.SoulessenceAbsorption;
+                playerInventory.AddSoulEssence((int)souls);
             }
         }
 

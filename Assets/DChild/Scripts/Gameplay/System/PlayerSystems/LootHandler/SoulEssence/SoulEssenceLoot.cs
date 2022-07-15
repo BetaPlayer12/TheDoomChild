@@ -22,7 +22,8 @@ namespace DChild.Gameplay.Essence
 
         protected override void OnApplyPickup(IPlayer player)
         {
-            player.inventory.AddSoulEssence(m_value);
+            float souls = m_value * GameplaySystem.modifiers.SoulessenceAbsorption;
+            player.inventory.AddSoulEssence((int)souls);
         }
     }
 }
