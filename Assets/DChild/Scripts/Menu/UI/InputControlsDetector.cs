@@ -1,5 +1,6 @@
 ﻿using Holysoft.Event;
 using Sirenix.OdinInspector;
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -7,12 +8,7 @@ namespace DChild.Menu.Inputs
 {
     public class InputControlsDetector : MonoBehaviour
     {
-        [SerializeField]
-        private GamepadIconData m_xboxIconData;
-        [SerializeField]
-        private GamepadIconData m_ps4IconData;
-
-        [SerializeField, ReadOnly]
+        [SerializeField, OnValueChanged("ForceDeviceChange")]
         private bool m_hasGamepad;
         private InputDevice m_currentGamepad;
         private bool m_isUsingGamepad;
@@ -20,8 +16,6 @@ namespace DChild.Menu.Inputs
         public event EventAction<EventActionArgs> InputControlChange;
 
         public bool isUsingGamepad => m_isUsingGamepad;
-
-        public GamepadIconData GetRelevantGamepadIconData() => m_xboxIconData; //Check
 
         private void UpdateCurrentActiveDevice()
         {
@@ -81,6 +75,18 @@ namespace DChild.Menu.Inputs
             }
         }
 
+        private void ForceDeviceChange()
+        {
+            if (m_isUsingGamepad)
+            {
+                InputControlChange?.Invoke(this, EventActionArgs.Empty);
+            }
+            else
+            {
+                InputControlChange?.Invoke(this, EventActionArgs.Empty);
+            }
+        }
+
         private void OnEnable()
         {
             InputSystem.onDeviceChange += OnDeviceChange;
@@ -97,7 +103,5 @@ namespace DChild.Menu.Inputs
         {
             InputSystem.onDeviceChange -= OnDeviceChange;
         }
-
     }
-
 }
