@@ -17,6 +17,8 @@ MonoBehaviour:
     SerializedBytes: 
     ReferencedUnityObjects:
     - {fileID: 11400000, guid: 2f72ad50e44a94d4d8705a02bd5a4957, type: 2}
+    - {fileID: 11400000, guid: 45f38dab13f072947968c011135acac7, type: 2}
+    - {fileID: 11400000, guid: 240380e0c8d07ed409944f359817499d, type: 2}
     SerializedBytesString: 
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
@@ -52,7 +54,31 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 12
+      Data: 2
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
       Data: 0
+    - Name: $v
+      Entry: 10
+      Data: 1
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 1
+    - Name: $v
+      Entry: 10
+      Data: 2
+    - Name: 
+      Entry: 8
+      Data: 
     - Name: 
       Entry: 13
       Data: 
@@ -72,7 +98,31 @@ MonoBehaviour:
       Data: 3
     - Name: 
       Entry: 12
+      Data: 2
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
       Data: 0
+    - Name: $v
+      Entry: 3
+      Data: 100
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 1
+    - Name: $v
+      Entry: 3
+      Data: 60
+    - Name: 
+      Entry: 8
+      Data: 
     - Name: 
       Entry: 13
       Data: 
@@ -86,206 +136,389 @@ MonoBehaviour:
       Entry: 8
       Data: 
     - Name: m_walk
-      Entry: 6
+      Entry: 7
+      Data: 6|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+MovementInfo[[DChild.Gameplay.Characters.Enemies.TheOneFirstFormAI+Info,
+        Assembly-CSharp]], Assembly-CSharp
+    - Name: m_animation
+      Entry: 1
+      Data: Walk
+    - Name: m_speed
+      Entry: 4
+      Data: 10
+    - Name: 
+      Entry: 8
       Data: 
     - Name: m_downwardSlash1Attack
       Entry: 7
-      Data: 6|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.TheOneFirstFormAI+Info,
+      Data: 7|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.TheOneFirstFormAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
-      Entry: 6
-      Data: 
+      Entry: 1
+      Data: DownwardSlash1
     - Name: m_range
       Entry: 4
-      Data: 0
+      Data: 60
     - Name: 
       Entry: 8
       Data: 
     - Name: m_downwardSlash2Attack
       Entry: 7
-      Data: 7|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.TheOneFirstFormAI+Info,
+      Data: 8|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.TheOneFirstFormAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
-      Entry: 6
-      Data: 
+      Entry: 1
+      Data: DownwardSlash2
     - Name: m_range
       Entry: 4
-      Data: 0
+      Data: 60
     - Name: 
       Entry: 8
       Data: 
     - Name: m_swordStabAttack
       Entry: 7
-      Data: 8|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.TheOneFirstFormAI+Info,
+      Data: 9|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.TheOneFirstFormAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
-      Entry: 6
-      Data: 
+      Entry: 1
+      Data: SwordStab
     - Name: m_range
       Entry: 4
-      Data: 0
+      Data: 60
     - Name: 
       Entry: 8
       Data: 
     - Name: m_heavySwordStabAttack
-      Entry: 6
+      Entry: 7
+      Data: 10|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.TheOneFirstFormAI+Info,
+        Assembly-CSharp]], Assembly-CSharp
+    - Name: m_animation
+      Entry: 1
+      Data: HeavySwordStab
+    - Name: m_range
+      Entry: 4
+      Data: 60
+    - Name: 
+      Entry: 8
       Data: 
     - Name: m_twinSlash1Attack
-      Entry: 6
+      Entry: 7
+      Data: 11|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.TheOneFirstFormAI+Info,
+        Assembly-CSharp]], Assembly-CSharp
+    - Name: m_animation
+      Entry: 1
+      Data: TwinSlash
+    - Name: m_range
+      Entry: 4
+      Data: 30
+    - Name: 
+      Entry: 8
       Data: 
     - Name: m_twinSlash2Attack
-      Entry: 6
+      Entry: 7
+      Data: 12|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.TheOneFirstFormAI+Info,
+        Assembly-CSharp]], Assembly-CSharp
+    - Name: m_animation
+      Entry: 1
+      Data: TwinSlashMidair
+    - Name: m_range
+      Entry: 4
+      Data: 30
+    - Name: 
+      Entry: 8
       Data: 
     - Name: m_drillDash1Attack
-      Entry: 6
+      Entry: 7
+      Data: 13|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.TheOneFirstFormAI+Info,
+        Assembly-CSharp]], Assembly-CSharp
+    - Name: m_animation
+      Entry: 1
+      Data: DrillDash
+    - Name: m_range
+      Entry: 4
+      Data: 100
+    - Name: 
+      Entry: 8
       Data: 
     - Name: m_drillDash2Attack
-      Entry: 6
+      Entry: 7
+      Data: 14|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.TheOneFirstFormAI+Info,
+        Assembly-CSharp]], Assembly-CSharp
+    - Name: m_animation
+      Entry: 1
+      Data: DrillDash
+    - Name: m_range
+      Entry: 4
+      Data: 100
+    - Name: 
+      Entry: 8
       Data: 
     - Name: m_projectilWaveSlashGround1Attack
-      Entry: 6
+      Entry: 7
+      Data: 15|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.TheOneFirstFormAI+Info,
+        Assembly-CSharp]], Assembly-CSharp
+    - Name: m_animation
+      Entry: 1
+      Data: ProjectileSlashGround1
+    - Name: m_range
+      Entry: 4
+      Data: 150
+    - Name: 
+      Entry: 8
       Data: 
     - Name: m_projectilWaveSlashGround2Attack
-      Entry: 6
+      Entry: 7
+      Data: 16|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.TheOneFirstFormAI+Info,
+        Assembly-CSharp]], Assembly-CSharp
+    - Name: m_animation
+      Entry: 1
+      Data: ProjectileSlashGround2
+    - Name: m_range
+      Entry: 4
+      Data: 150
+    - Name: 
+      Entry: 8
       Data: 
     - Name: m_projectilWaveSlashMidAir1Attack
-      Entry: 6
+      Entry: 7
+      Data: 17|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.TheOneFirstFormAI+Info,
+        Assembly-CSharp]], Assembly-CSharp
+    - Name: m_animation
+      Entry: 1
+      Data: ProjectileSlashMidAir1
+    - Name: m_range
+      Entry: 4
+      Data: 150
+    - Name: 
+      Entry: 8
       Data: 
     - Name: m_projectilWaveSlashMidAir2Attack
-      Entry: 6
+      Entry: 7
+      Data: 18|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.TheOneFirstFormAI+Info,
+        Assembly-CSharp]], Assembly-CSharp
+    - Name: m_animation
+      Entry: 1
+      Data: ProjectileSlashMidAir2
+    - Name: m_range
+      Entry: 4
+      Data: 150
+    - Name: 
+      Entry: 8
       Data: 
     - Name: m_scytheWaveAttack
-      Entry: 6
+      Entry: 7
+      Data: 19|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.TheOneFirstFormAI+Info,
+        Assembly-CSharp]], Assembly-CSharp
+    - Name: m_animation
+      Entry: 1
+      Data: ScytheWave
+    - Name: m_range
+      Entry: 4
+      Data: 150
+    - Name: 
+      Entry: 8
       Data: 
     - Name: m_scytheDoubleWaveAttack
-      Entry: 6
+      Entry: 7
+      Data: 20|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.TheOneFirstFormAI+Info,
+        Assembly-CSharp]], Assembly-CSharp
+    - Name: m_animation
+      Entry: 1
+      Data: ScytheWaveDoubleWave
+    - Name: m_range
+      Entry: 4
+      Data: 150
+    - Name: 
+      Entry: 8
       Data: 
     - Name: m_geyserBurstGreenAttack
-      Entry: 6
+      Entry: 7
+      Data: 21|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.TheOneFirstFormAI+Info,
+        Assembly-CSharp]], Assembly-CSharp
+    - Name: m_animation
+      Entry: 1
+      Data: GeyserBurstGreen
+    - Name: m_range
+      Entry: 4
+      Data: 200
+    - Name: 
+      Entry: 8
       Data: 
     - Name: m_geyserBurstPurpleAttack
-      Entry: 6
+      Entry: 7
+      Data: 22|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.TheOneFirstFormAI+Info,
+        Assembly-CSharp]], Assembly-CSharp
+    - Name: m_animation
+      Entry: 1
+      Data: GeyserBurstPurple
+    - Name: m_range
+      Entry: 4
+      Data: 200
+    - Name: 
+      Entry: 8
       Data: 
     - Name: m_geyserBurstRedAttack
-      Entry: 6
+      Entry: 7
+      Data: 23|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.TheOneFirstFormAI+Info,
+        Assembly-CSharp]], Assembly-CSharp
+    - Name: m_animation
+      Entry: 1
+      Data: GeyserBurstRed
+    - Name: m_range
+      Entry: 4
+      Data: 200
+    - Name: 
+      Entry: 8
       Data: 
-    - Name: m_phase1Pattern1CD
+    - Name: m_phase1PatternCooldown
+      Entry: 7
+      Data: 24|System.Collections.Generic.List`1[[System.Single, mscorlib]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 4
+    - Name: 
       Entry: 4
       Data: 0
-    - Name: m_phase1Pattern2CD
+    - Name: 
       Entry: 4
       Data: 0
-    - Name: m_phase1Pattern3CD
+    - Name: 
       Entry: 4
       Data: 0
-    - Name: m_phase1Pattern4CD
+    - Name: 
       Entry: 4
       Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: m_normalBladeCooldown
+      Entry: 4
+      Data: 30
+    - Name: m_alterBladeCooldown
+      Entry: 4
+      Data: 30
     - Name: m_drillNormalMixAnimation
-      Entry: 6
-      Data: 
+      Entry: 1
+      Data: DrillNormalMix
     - Name: m_drillGreenMixAnimation
-      Entry: 6
-      Data: 
+      Entry: 1
+      Data: DrillGreenMix
     - Name: m_drillPurpleMixAnimation
-      Entry: 6
-      Data: 
+      Entry: 1
+      Data: DrillPurpleMix
     - Name: m_drillRedMixAnimation
-      Entry: 6
-      Data: 
+      Entry: 1
+      Data: DrillRedMix
     - Name: m_swordNormalMixAnimation
-      Entry: 6
-      Data: 
+      Entry: 1
+      Data: SwordMixNormal
     - Name: m_swordGreenMixAnimation
-      Entry: 6
-      Data: 
+      Entry: 1
+      Data: SwordMixGreen
     - Name: m_swordPurpleMixAnimation
-      Entry: 6
-      Data: 
+      Entry: 1
+      Data: SwordMixPurple
     - Name: m_swordRedMixAnimation
-      Entry: 6
-      Data: 
+      Entry: 1
+      Data: SwordMixRed
+    - Name: m_blinkDuration
+      Entry: 4
+      Data: 0
+    - Name: m_fakeBlinkCount
+      Entry: 4
+      Data: 10
     - Name: m_blinkAppearBackwardAnimation
-      Entry: 6
-      Data: 
+      Entry: 1
+      Data: Blink_Appear_Backward
     - Name: m_blinkAppearForwardAnimation
-      Entry: 6
-      Data: 
+      Entry: 1
+      Data: Blink_Appear_Forward
     - Name: m_blinkAppearUpwardAnimation
-      Entry: 6
-      Data: 
+      Entry: 1
+      Data: Blink_Appear_Upward
     - Name: m_blinkDisappearBackwardAnimation
-      Entry: 6
-      Data: 
+      Entry: 1
+      Data: Blink_Disappear_Backward
     - Name: m_blinkDisappearForwardAnimation
-      Entry: 6
-      Data: 
+      Entry: 1
+      Data: Blink_Disappear_Forward
     - Name: m_blinkDisappearUpwardAnimation
-      Entry: 6
-      Data: 
+      Entry: 1
+      Data: Blink_Disappear_Upward
     - Name: m_blinkFakeAnimation
-      Entry: 6
-      Data: 
+      Entry: 1
+      Data: Blink_Fake
+    - Name: m_drillDashSpeed
+      Entry: 4
+      Data: 200
     - Name: m_swordChangeAnimation
-      Entry: 6
-      Data: 
+      Entry: 1
+      Data: SwordChange
     - Name: m_summonSwordsAnimation
-      Entry: 6
-      Data: 
+      Entry: 1
+      Data: SummonSwords
     - Name: m_phase1Pattern1Range
       Entry: 4
-      Data: 0
+      Data: 200
     - Name: m_phase1Pattern2Range
       Entry: 4
-      Data: 0
+      Data: 200
     - Name: m_phase1Pattern3Range
       Entry: 4
-      Data: 0
+      Data: 200
     - Name: m_phase1Pattern4Range
       Entry: 4
-      Data: 0
+      Data: 200
     - Name: m_targetDistanceTolerance
+      Entry: 4
+      Data: 100
+    - Name: m_phase1Pattern2WalkTime
+      Entry: 4
+      Data: 2
+    - Name: m_phase1Pattern3IdleTime
       Entry: 4
       Data: 0
     - Name: m_idleAnimation
-      Entry: 6
-      Data: 
+      Entry: 1
+      Data: Idle
     - Name: m_idleCombatAnimation
-      Entry: 6
-      Data: 
+      Entry: 1
+      Data: IdleCombat
     - Name: m_drillToGroundAnimation
-      Entry: 6
-      Data: 
-    - Name: m_groundtoDrillAnimation
-      Entry: 6
-      Data: 
+      Entry: 1
+      Data: DrilltoGround_Transition
+    - Name: m_groundToDrillAnimation
+      Entry: 1
+      Data: GroundtoDrill_Transition
     - Name: m_fallAniamtion
-      Entry: 6
-      Data: 
+      Entry: 1
+      Data: Fall
     - Name: m_landAnimation
-      Entry: 6
-      Data: 
+      Entry: 1
+      Data: Land
     - Name: m_staggerAnimation
-      Entry: 6
-      Data: 
+      Entry: 1
+      Data: Stagger
     - Name: m_staggerWithKnockbackAnimation
-      Entry: 6
-      Data: 
+      Entry: 1
+      Data: StaggerwithKnockBack
     - Name: m_defStaggerWithKnockbackAnimation
-      Entry: 6
-      Data: 
+      Entry: 1
+      Data: DefStaggerwithKnockBack2
     - Name: m_defeated1Animation
-      Entry: 6
-      Data: 
+      Entry: 1
+      Data: Defeated
     - Name: m_defeated2Animation
-      Entry: 6
-      Data: 
+      Entry: 1
+      Data: Defeated2
     - Name: m_defeated3Animation
-      Entry: 6
-      Data: 
+      Entry: 1
+      Data: Defeated3
     - Name: m_defeated4Animation
-      Entry: 6
-      Data: 
+      Entry: 1
+      Data: Defeated4
     - Name: m_fx
       Entry: 6
       Data: 

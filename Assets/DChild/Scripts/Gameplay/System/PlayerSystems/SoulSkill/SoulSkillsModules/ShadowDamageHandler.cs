@@ -14,12 +14,15 @@ namespace DChild.Gameplay.Characters.Players.SoulSkills
         private ShadowMorph m_shadowmorph;
         private ShadowDash m_shadowdash;
         private ShadowSlide m_shadowslide;
-        private void Awake()
+
+        private void Start()
         {
-            GameObject player = this.transform.parent.gameObject;
+            GameObject player = GetComponentInParent<Character>().gameObject;
+
             m_shadowmorph = player.GetComponentInChildren<ShadowMorph>();
             m_shadowdash = player.GetComponentInChildren<ShadowDash>();
             m_shadowslide = player.GetComponentInChildren<ShadowSlide>();
+
             m_shadowmorph.ExecuteModule += ShadowDamageActivate;
             m_shadowmorph.End += ShadowDamageDeactivate;
             m_shadowdash.ExecuteModule += ShadowDamageActivate;
