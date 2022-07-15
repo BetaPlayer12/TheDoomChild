@@ -136,7 +136,7 @@ public class GameplayKeyboardKeymap : MonoBehaviour
                     {
                         if (currentButton[y].isPartOfComposite)
                         {
-                            if (currentButton[y].path.Contains("<Keyboard>") || currentButton[y].path.Contains("<Mouse>"))
+                            if (currentButton[y].path.Contains("<Gamepad>"))
                             {
                                 var temp = new BindingInfo();
                                 var index = inputList[x].action.bindings.IndexOf(z => z.id == currentButton[y].id);
@@ -152,7 +152,7 @@ public class GameplayKeyboardKeymap : MonoBehaviour
                         }
                         else
                         {
-                            if (currentButton[y].path.Contains("<Keyboard>") || currentButton[y].path.Contains("<Mouse>"))
+                            if (currentButton[y].path.Contains("<Gamepad>"))
                             {
                                 var temp = new BindingInfo();
                                 var index = inputList[x].action.bindings.IndexOf(z => z.id == currentButton[y].id);
