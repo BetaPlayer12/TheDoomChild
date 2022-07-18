@@ -1,4 +1,5 @@
-﻿using DChild.Gameplay.Combat;
+﻿using DChild.Gameplay.Characters.Enemies;
+using DChild.Gameplay.Combat;
 using Sirenix.OdinInspector;
 using UnityEngine;
 #if UNITY_EDITOR
@@ -32,10 +33,13 @@ namespace DChild.Gameplay.Characters.Players.SoulSkills
             private void OnAttack(object sender, CombatConclusionEventArgs eventArgs)
             {
                 var targetHealth = eventArgs.target.instance.health;
+                Collider2D HitCollider = eventArgs.target.hitCollider;
                 bool instantlyKillTarget = false;
+                if (HitCollider.GetComponentInParent<Boss>() != null)
+                    return;
                 if (m_isPercentage)
                 {
-                    instantlyKillTarget = (targetHealth.currentValue / targetHealth.maxValue) <= (m_hpThreshold / 100f);
+                    instantlyKillTarget = (targetHealth.currentValue / (float) targetHealth.maxValue) <= (m_hpThreshold / 100f);
                 }
                 else
                 {

@@ -23,6 +23,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private ICappedStat m_source;
         private float m_cacheGravity;
         private Animator m_animator;
+        private IPlayerModifer m_modifier;
         private int m_animationParameter;
         private float m_stackedConsumptionRate;
 
@@ -36,6 +37,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_cacheGravity = m_rigidbody.gravityScale;
             m_source = info.magic;
             m_animator = info.animator;
+            m_modifier = info.modifier;
             m_animationParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.IsLevitating);
             m_stackedConsumptionRate = 0;
         }
@@ -69,6 +71,12 @@ namespace DChild.Gameplay.Characters.Players.Modules
         public void MaintainHeight()
         {
             m_rigidbody.velocity = new Vector2(m_rigidbody.velocity.x, 0);
+        }
+
+        public void GiveMovementBoost()
+        {
+            var velocity = m_rigidbody.velocity;
+            m_rigidbody.velocity = new Vector2(velocity.x * m_modifier.Get(PlayerModifier.Levitation_Speed), velocity.y);
         }
 
         public bool HaveEnoughSourceForExecution() => m_sourceRequiredAmount <= m_source.currentValue;

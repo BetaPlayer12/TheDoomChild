@@ -27,24 +27,25 @@ namespace DChild.Gameplay.Items
 
         public void Use(IPlayer player)
         {
+            var modifiedValue = Mathf.CeilToInt(m_value * player.modifiers.Get(PlayerModifier.Item_Effectivity));
             switch (m_toRegenerate)
             {
                 case Stat.Health:
                     if (player.health.isFull == false)
                     {
-                        GameplaySystem.combatManager.Heal(player.healableModule, m_value);
+                        GameplaySystem.combatManager.Heal(player.healableModule, modifiedValue);
                     }
                     break;
                 case Stat.Magic:
                     if (player.magic.isFull == false)
                     {
-                        player.magic.AddCurrentValue(m_value);
+                        player.magic.AddCurrentValue(modifiedValue);
                     }
                     break;
                 case Stat.Armor:
                     if (player.armor.isFull == false)
                     {
-                        player.armor.AddCurrentValue(m_value);
+                        player.armor.AddCurrentValue(modifiedValue);
                     }
                     break;
             }
