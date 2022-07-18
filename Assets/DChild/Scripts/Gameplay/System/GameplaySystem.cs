@@ -18,6 +18,7 @@ namespace DChild.Gameplay
     public class GameplayModifiers
     {
         public float minionSoulEssenceDrop = 1;
+        public float SoulessenceAbsorption = 1;
     }
 
     public class GameplaySystem : MonoBehaviour
