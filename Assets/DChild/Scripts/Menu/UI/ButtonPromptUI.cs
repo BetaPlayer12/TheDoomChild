@@ -1,50 +1,54 @@
 ﻿using DChild.CustomInput.Keybind;
-using Sirenix.OdinInspector;
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace DChild.Menu.Inputs
 {
-    public class ButtonPromptUI : MonoBehaviour
+    public class ButtonPromptUI : InputPromptUI
     {
         [SerializeField]
-        private string m_text;
-        [SerializeField]
-        private KeybindAddressesList[] m_addressesLists;
-
         private TextMeshProUGUI m_label;
-        private const string TOKEN  = "$#";
+        [SerializeField]
+        private TextMeshProUGUI m_empahsisLabel;
+        [SerializeField]
+        private KeybindAddressesList m_addressesList;
 
-        protected void UpdateInputIcons(GamepadIconData iconData, int inputIndex)
+        private InputBinding GetBinding(bool useGamepadIndex)
         {
-            if (iconData)
+            var address = m_addressesList.GetAddress(0);
+            var index = useGamepadIndex ? address.gamepadIndex : address.keyboardIndex;
+            return address.actionMap.action.bindings[index];
+        }
+
+        protected override void UpdateGamepadInputIcons(GamepadIconData iconData)
+        {
+            var binding = GetBinding(true);
+            if (iconData != null)
             {
+                var text = iconData.GetSprite(binding.effectivePath);
                 m_label.spriteAsset = iconData.spriteAsset;
+                m_label.text = text;
+                if (m_empahsisLabel)
+                {
+                    m_empahsisLabel.spriteAsset = iconData.spriteAsset;
+                    m_empahsisLabel.text = text;
+                }
             }
-            else
+        }
+
+        protected override void UpdateKeyboardInputIcons(GamepadIconData iconData)
+        {
+            var binding = GetBinding(false);
+            if (iconData == null)
             {
-            
+                var text = binding.effectivePath.Replace("<Keyboard>/", "");
+                m_label.text = text;
+                if (m_empahsisLabel)
+                {
+                    m_empahsisLabel.text = text;
+                }
             }
-        }
-
-        private void UpdateInputIcons(object sender, InputIconChangeEventArgs eventArgs)
-        {
-            UpdateInputIcons(eventArgs.iconData, InputIconHandle.inputIndex);
-        }
-        
-        private void Awake()
-        {
-            InputIconHandle.UpdateInputIcons += UpdateInputIcons;
-            UpdateInputIcons(InputIconHandle.GetCurrentInputIcon(), InputIconHandle.inputIndex);
-        }
-
-
-        private void OnDestroy()
-        {
-            InputIconHandle.UpdateInputIcons -= UpdateInputIcons;
         }
     }
 }

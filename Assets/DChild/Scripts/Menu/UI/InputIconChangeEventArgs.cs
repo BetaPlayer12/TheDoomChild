@@ -8,6 +8,6 @@ namespace DChild.Menu.Inputs
 
         public GamepadIconData iconData => m_iconData;
 
-        public void Set(GamepadIconData iconData,int indexInput) => m_iconData = iconData;
+        public void Set(GamepadIconData iconData) => m_iconData = iconData;
     }
 }

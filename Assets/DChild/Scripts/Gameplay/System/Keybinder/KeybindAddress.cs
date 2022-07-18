@@ -9,10 +9,13 @@ namespace DChild.CustomInput.Keybind
         [SerializeField]
         private InputActionReference m_actionMap;
         [SerializeField]
-        private int m_index;
+        private int m_keyboardIndex;
+        [SerializeField]
+        private int m_gamepadIndex;
 
         public InputActionReference actionMap => m_actionMap;
-        public int index => m_index;
+        public int keyboardIndex => m_keyboardIndex;
+        public int gamepadIndex => m_gamepadIndex;
     }
 
 }

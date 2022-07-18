@@ -11,13 +11,8 @@ namespace DChild.Menu.Inputs
         private static GamepadIconData ps4IconData;
         private static InputControlsDetector inputControlsDetector;
 
-        public static int inputIndex
-        {
-            get
-            {
-                return inputControlsDetector.isUsingGamepad ? 1 : 0;
-            }
-        }
+        public static bool useGamepad => inputControlsDetector.isUsingGamepad;
+
         public static event EventAction<InputIconChangeEventArgs> UpdateInputIcons;
 
         public static GamepadIconData GetCurrentInputIcon()
@@ -52,7 +47,7 @@ namespace DChild.Menu.Inputs
         {
             using(Cache< InputIconChangeEventArgs> cacheEvent = Cache<InputIconChangeEventArgs>.Claim())
             {
-                cacheEvent.Value.Set(GetCurrentInputIcon(), inputIndex);
+                cacheEvent.Value.Set(GetCurrentInputIcon());
                 UpdateInputIcons?.Invoke(this,cacheEvent.Value);
                 cacheEvent.Release();
             }

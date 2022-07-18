@@ -14,7 +14,7 @@ namespace DChild.Menu.Inputs
         private Dictionary<string, int> m_newInputSchemeToIcon;
 
         public TMP_SpriteAsset spriteAsset => m_spriteAsset;
-        public string GetSprite(string input) => $"<sprite = {m_newInputSchemeToIcon[input]}>";
+        public string GetSprite(string input) => $"<sprite={m_newInputSchemeToIcon[input]}>";
     }
 
 }

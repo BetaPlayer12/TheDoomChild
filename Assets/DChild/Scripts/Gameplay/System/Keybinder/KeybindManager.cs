@@ -22,7 +22,7 @@ namespace DChild.CustomInput.Keybind
         public InputBinding GetCurrentKeyboardInputBindind(KeybindSelection keybindSelection)
         {
             var address = GetKeyboardAddressList(keybindSelection).GetAddress(0);
-            return address.actionMap.action.bindings[address.index];
+            return address.actionMap.action.bindings[address.keyboardIndex];
         }
 
         public void RebindKeyboard(KeybindSelection keybindSelection, Action<InputBinding> callback = null)
@@ -53,11 +53,11 @@ namespace DChild.CustomInput.Keybind
                 action.Disable();
                 if (keybindInfo.isOverriden)
                 {
-                    action.ApplyBindingOverride(address.index, keybindInfo.keybind);
+                    action.ApplyBindingOverride(address.keyboardIndex, keybindInfo.keybind);
                 }
                 else
                 {
-                    action.RemoveBindingOverride(address.index);
+                    action.RemoveBindingOverride(address.keyboardIndex);
                 }
                 action.Enable();
             }
@@ -71,17 +71,17 @@ namespace DChild.CustomInput.Keybind
             var address = keybindAddressesList.GetAddress(0);
             var action = address.actionMap.action;
             action.Disable();
-            var rebind = action.PerformInteractiveRebinding(address.index);
+            var rebind = action.PerformInteractiveRebinding(address.keyboardIndex);
             rebind.OnComplete((operation) =>
             {
-                var binding = action.bindings[address.index];
+                var binding = action.bindings[address.keyboardIndex];
                 var overridePath = binding.overridePath;
                 if (keybindAddressesList.count > 1)
                 {
                     for (int i = 1; i < keybindAddressesList.count; i++)
                     {
                         address = keybindAddressesList.GetAddress(i);
-                        RebindKey(address.actionMap.action, address.index, overridePath);
+                        RebindKey(address.actionMap.action, address.keyboardIndex, overridePath);
                     }
                 }
 

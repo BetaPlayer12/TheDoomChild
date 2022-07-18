@@ -10,6 +10,8 @@ namespace DChild.Menu.Inputs
     {
         [SerializeField, OnValueChanged("ForceDeviceChange")]
         private bool m_hasGamepad;
+        [SerializeField]
+        private bool m_getRecentActiveDevice;
         private InputDevice m_currentGamepad;
         private bool m_isUsingGamepad;
 
@@ -19,20 +21,23 @@ namespace DChild.Menu.Inputs
 
         private void UpdateCurrentActiveDevice()
         {
-            if (m_isUsingGamepad)
+            if (m_getRecentActiveDevice)
             {
-                if (Keyboard.current.anyKey.wasPressedThisFrame || Mouse.current.wasUpdatedThisFrame)
+                if (m_isUsingGamepad)
                 {
-                    m_isUsingGamepad = false;
-                    InputControlChange?.Invoke(this, EventActionArgs.Empty);
+                    if (Keyboard.current.anyKey.wasPressedThisFrame || Mouse.current.wasUpdatedThisFrame)
+                    {
+                        m_isUsingGamepad = false;
+                        InputControlChange?.Invoke(this, EventActionArgs.Empty);
+                    }
                 }
-            }
-            else
-            {
-                if (Gamepad.current.wasUpdatedThisFrame)
+                else
                 {
-                    m_isUsingGamepad = true;
-                    InputControlChange?.Invoke(this, EventActionArgs.Empty);
+                    if (Gamepad.current?.wasUpdatedThisFrame ?? false)
+                    {
+                        m_isUsingGamepad = true;
+                        InputControlChange?.Invoke(this, EventActionArgs.Empty);
+                    }
                 }
             }
         }
@@ -77,14 +82,8 @@ namespace DChild.Menu.Inputs
 
         private void ForceDeviceChange()
         {
-            if (m_isUsingGamepad)
-            {
-                InputControlChange?.Invoke(this, EventActionArgs.Empty);
-            }
-            else
-            {
-                InputControlChange?.Invoke(this, EventActionArgs.Empty);
-            }
+            m_isUsingGamepad = m_hasGamepad;
+            InputControlChange?.Invoke(this, EventActionArgs.Empty);
         }
 
         private void OnEnable()
