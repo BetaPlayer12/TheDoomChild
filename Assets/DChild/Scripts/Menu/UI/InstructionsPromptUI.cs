@@ -40,7 +40,7 @@ namespace DChild.Menu.Inputs
 
         protected override void UpdateKeyboardInputIcons(GamepadIconData iconData)
         {
-            m_label.spriteAsset = iconData.spriteAsset;
+            m_label.spriteAsset = null;
             var currentText = m_text;
             for (int i = 0; i < m_addressesLists.Length; i++)
             {
@@ -49,7 +49,7 @@ namespace DChild.Menu.Inputs
                 currentText = currentText.Replace(token, textMesh);
 
             }
-            m_label.text = currentText.Replace("<Keyboard>", "");
+            m_label.text = currentText.Replace("<Keyboard>/", "");
         }
     }
 }
