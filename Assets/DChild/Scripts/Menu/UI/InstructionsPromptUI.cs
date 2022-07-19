@@ -8,8 +8,8 @@ namespace DChild.Menu.Inputs
     public class InstructionsPromptUI : InputPromptUI
     {
         [SerializeField]
-        private TextMeshPro m_label;
-        [SerializeField]
+        private TextMeshProUGUI m_label;
+        [SerializeField,Tooltip("Token: " + TOKEN + "<number>")]
         private string m_text;
         [SerializeField]
         private KeybindAddressesList[] m_addressesLists;
