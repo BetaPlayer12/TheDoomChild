@@ -765,6 +765,11 @@ namespace DChild.Gameplay.Characters.Enemies
                 StopCoroutine(m_blinkCoroutine);
                 m_blinkCoroutine = null;
             }
+            if (m_alterBladeMonitorCoroutine != null)
+            {
+                StopCoroutine(m_alterBladeMonitorCoroutine);
+                m_alterBladeMonitorCoroutine = null;
+            }
             if (m_alterBladeCoroutine != null)
             {
                 StopCoroutine(m_alterBladeCoroutine);
@@ -796,10 +801,12 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.staggerAnimation);
             m_animation.SetAnimation(0, m_info.summonSwordsAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.summonSwordsAnimation);
+            m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_hitbox.Enable();
             m_hitbox.SetCanBlockDamageState(false);
             m_changePhaseCoroutine = null;
             yield return new WaitForSeconds(m_info.phaseChangeToBlinkDelay);
+            m_alterBladeMonitorCoroutine = StartCoroutine(AlterBladeMonitorRoutine());
             m_blinkCoroutine = StartCoroutine(BlinkRoutine(BlinkState.DisappearForward, BlinkState.AppearForward, 25, m_info.midAirHeight, State.Chasing, true, false, false));
             yield return null;
         }
@@ -1161,27 +1168,31 @@ namespace DChild.Gameplay.Characters.Enemies
             switch (m_phase2pattern1Count)
             {
                 case 3:
-                    m_animation.SetAnimation(0, m_info.twinSlash2Attack.animation, false);
-                    yield return new WaitForAnimationComplete(m_animation.animationState, m_info.twinSlash2Attack.animation);
-                    m_animation.EnableRootMotion(true, false);
-                    m_animation.AddAnimation(0, m_info.fallAnimation, true, 0);
-                    yield return new WaitUntil(() => m_groundSensor.isDetecting);
-                    m_animation.SetAnimation(0, m_info.landAnimation, false);
-                    yield return new WaitForAnimationComplete(m_animation.animationState, m_info.landAnimation);
-                    //bool playerIsGrouned = Mathf.Abs(m_targetInfo.position.y - GroundPosition().y) < 1f ? true : false;
-                    //if (!playerIsGrouned)
-                    //{
-                    //    m_animation.SetAnimation(0, m_info.twinSlash2Attack.animation, false);
-                    //    m_animation.AddAnimation(0, m_info.fallAnimation, true, 0);
-                    //    yield return new WaitUntil(() => m_groundSensor.isDetecting);
-                    //    m_animation.SetAnimation(0, m_info.landAnimation, false);
-                    //    yield return new WaitForAnimationComplete(m_animation.animationState, m_info.landAnimation);
-                    //}
-                    //else
-                    //{
-                    //    m_animation.SetAnimation(0, m_info.twinSlash1Attack.animation, false);
-                    //    yield return new WaitForAnimationComplete(m_animation.animationState, m_info.twinSlash1Attack.animation);
-                    //}
+                    bool playerIsGrouned = Mathf.Abs(m_targetInfo.position.y - GroundPosition().y) < 10f ? true : false;
+                    if (!playerIsGrouned)
+                    {
+                        m_animation.SetAnimation(0, m_info.twinSlash2Attack.animation, false);
+                        yield return new WaitForAnimationComplete(m_animation.animationState, m_info.twinSlash2Attack.animation);
+                        m_animation.EnableRootMotion(true, false);
+                        m_animation.AddAnimation(0, m_info.fallAnimation, true, 0);
+                        yield return new WaitUntil(() => m_groundSensor.isDetecting);
+                        m_animation.SetAnimation(0, m_info.landAnimation, false);
+                        yield return new WaitForAnimationComplete(m_animation.animationState, m_info.landAnimation);
+                    }
+                    else
+                    {
+                        m_animation.SetAnimation(0, m_info.blinkDisappearBackwardAnimation, false);
+                        yield return new WaitForAnimationComplete(m_animation.animationState, m_info.blinkDisappearBackwardAnimation);
+                        m_animation.EnableRootMotion(true, false);
+                        yield return new WaitUntil(() => m_groundSensor.isDetecting);
+                        if (!IsFacingTarget())
+                            CustomTurn();
+                        transform.position = new Vector2(transform.position.x, GroundPosition().y);
+                        m_animation.SetAnimation(0, m_info.blinkAppearBackwardAnimation, false);
+                        yield return new WaitForAnimationComplete(m_animation.animationState, m_info.blinkAppearBackwardAnimation);
+                        m_animation.SetAnimation(0, m_info.twinSlash1Attack.animation, false);
+                        yield return new WaitForAnimationComplete(m_animation.animationState, m_info.twinSlash1Attack.animation);
+                    }
                     StopComboCounts();
                     m_attackDecider.hasDecidedOnAttack = false;
                     m_currentAttackCoroutine = null;
