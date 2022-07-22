@@ -93,8 +93,6 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Reference")]
         private Collider2D m_bodyCollider;
         [SerializeField, TabGroup("Reference")]
-        private Collider2D m_contactCollider;
-        [SerializeField, TabGroup("Reference")]
         private GameObject m_model;
         [SerializeField, TabGroup("Reference")]
         private GameObject m_parentObject;
@@ -102,14 +100,14 @@ namespace DChild.Gameplay.Characters.Enemies
         private Transform m_pushDirection;
         [SerializeField, TabGroup("Modules")]
         private FlinchHandler m_flinchHandle;
+        [SerializeField, TabGroup("Modules")]
+        private DamageContactLocator m_damageContactLocator;
         [SerializeField, TabGroup("HurtBox")]
         private Collider2D m_explodeBB;
         [SerializeField, TabGroup("Chain")]
         private GameObject m_chain;
         [SerializeField, TabGroup("Chain")]
         private List<Rigidbody2D> m_chainRigidbodies;
-
-        private Vector2 m_contactPosition;
 
         private string m_currentIdleAnimation;
         private string m_currentTwitchAnimation;
@@ -118,11 +116,6 @@ namespace DChild.Gameplay.Characters.Enemies
         private float m_currentTwitchTimer;
 
         private Coroutine m_floatRoutine;
-
-        private void OnTriggerEnter2D(Collider2D collision)
-        {
-            m_contactPosition = collision.transform.position;
-        }
 
         private void CustomTurn()
         {
@@ -165,14 +158,14 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.DisableRootMotion();
             m_hitbox.Disable();
             m_animation.SetEmptyAnimation(0, 0);
-            m_contactCollider.enabled = false;
             StartCoroutine(ExplodeRoutine());
             //m_rotateRoutine = StartCoroutine(RotateRoutine());
         }
 
         private IEnumerator ExplodeRoutine()
         {
-            Vector3 v_diff = (m_contactPosition - (Vector2)m_character.centerMass.position);
+            yield return new WaitUntil(() => m_damageContactLocator.damageContactPoint != Vector2.zero);
+            Vector3 v_diff = (m_damageContactLocator.damageContactPoint - (Vector2)m_character.centerMass.position);
             float atan2 = Mathf.Atan2(v_diff.y, v_diff.x);
             m_pushDirection.rotation = Quaternion.Euler(0f, 0f, atan2 * Mathf.Rad2Deg);
             m_character.physics.AddForce(-m_pushDirection.right * m_info.pushForce, ForceMode2D.Force);
