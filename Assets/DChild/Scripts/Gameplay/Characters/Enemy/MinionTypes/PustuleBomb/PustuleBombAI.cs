@@ -31,6 +31,15 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField, BoxGroup("Movement")]
             private float m_floatTwitchInterval;
             public float floatTwitchInterval => m_floatTwitchInterval;
+            [SerializeField, BoxGroup("Movement")]
+            private float m_idleTimeScale;
+            public float idleTimeScale => m_idleTimeScale;
+            [SerializeField, BoxGroup("Movement")]
+            private float m_twitchTimeScale;
+            public float twitchTimeScale => m_twitchTimeScale;
+            [SerializeField, BoxGroup("Movement")]
+            private float m_chainsDrag;
+            public float chainsDrag => m_chainsDrag;
 
             [SerializeField, BoxGroup("Attack")]
             private float m_explodeTimer;
@@ -40,8 +49,23 @@ namespace DChild.Gameplay.Characters.Enemies
             public float pushForce => m_pushForce;
 
             [SerializeField, BoxGroup("Animation"), ValueDropdown("GetAnimations")]
-            private string m_idleAnimation;
-            public string idleAnimation => m_idleAnimation;
+            private string m_idle1Animation;
+            public string idle1Animation => m_idle1Animation;
+            [SerializeField, BoxGroup("Animation"), ValueDropdown("GetAnimations")]
+            private string m_idle2Animation;
+            public string idle2Animation => m_idle2Animation;
+            [SerializeField, BoxGroup("Animation"), ValueDropdown("GetAnimations")]
+            private string m_idle3Animation;
+            public string idle3Animation => m_idle3Animation;
+            [SerializeField, BoxGroup("Animation"), ValueDropdown("GetAnimations")]
+            private string m_twitch1Animation;
+            public string twitch1Animation => m_twitch1Animation;
+            [SerializeField, BoxGroup("Animation"), ValueDropdown("GetAnimations")]
+            private string m_twitch2Animation;
+            public string twitch2Animation => m_twitch2Animation;
+            [SerializeField, BoxGroup("Animation"), ValueDropdown("GetAnimations")]
+            private string m_twitch3Animation;
+            public string twitch3Animation => m_twitch3Animation;
             [SerializeField, BoxGroup("Animation"), ValueDropdown("GetAnimations")]
             private string m_contactAnimation;
             public string contactAnimation => m_contactAnimation;
@@ -82,6 +106,9 @@ namespace DChild.Gameplay.Characters.Enemies
         private GameObject m_chain;
         [SerializeField, TabGroup("Chain")]
         private List<Rigidbody2D> m_chainRigidbodies;
+
+        private string m_currentIdleAnimation;
+        private string m_currentTwitchAnimation;
         
         private bool m_willTwitch;
         private float m_currentTwitchTimer;
@@ -181,6 +208,9 @@ namespace DChild.Gameplay.Characters.Enemies
                     var forceVelocity = new Vector2(UnityEngine.Random.Range(-m_info.forceVelocity.x, m_info.forceVelocity.x), UnityEngine.Random.Range(-m_info.forceVelocity.y, m_info.forceVelocity.y));
                     m_character.physics.AddForce(forceVelocity, ForceMode2D.Impulse);
                     m_model.transform.Rotate(new Vector3(0, 0, 1f), UnityEngine.Random.Range(-m_info.forceVelocity.x, m_info.forceVelocity.x));
+
+                    m_animation.SetAnimation(1, m_currentTwitchAnimation, false).TimeScale = m_info.twitchTimeScale;
+                    m_animation.AddEmptyAnimation(1, 0, 0);
                 }
 
                 if (m_currentTwitchTimer < m_info.floatTwitchInterval)
@@ -204,7 +234,28 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.DisableRootMotion();
             //m_knockbackFlinchHandle.ApplyKnockbackForce(m_info.pushForce);
 
-            m_animation.SetAnimation(0, m_info.idleAnimation, true);
+            for (int i = 0; i < m_chainRigidbodies.Count; i++)
+            {
+                m_chainRigidbodies[i].drag = m_info.chainsDrag;
+            }
+
+            var randomIdlePicker = UnityEngine.Random.Range(0, 3);
+            switch (randomIdlePicker)
+            {
+                case 0:
+                    m_currentIdleAnimation = m_info.idle1Animation;
+                    m_currentTwitchAnimation = m_info.twitch1Animation;
+                    break;
+                case 1:
+                    m_currentIdleAnimation = m_info.idle2Animation;
+                    m_currentTwitchAnimation = m_info.twitch2Animation;
+                    break;
+                case 2:
+                    m_currentIdleAnimation = m_info.idle3Animation;
+                    m_currentTwitchAnimation = m_info.twitch3Animation;
+                    break;
+            }
+            m_animation.SetAnimation(0, m_currentIdleAnimation, true).TimeScale = m_info.idleTimeScale;
             m_floatRoutine = StartCoroutine(FloatingRoutine());
         }
 

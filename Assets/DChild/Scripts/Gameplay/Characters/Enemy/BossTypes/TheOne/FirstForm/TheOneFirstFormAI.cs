@@ -469,6 +469,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         #region PatternCounts
         private int m_phase2pattern1Count;
+        private int m_phase2pattern2Count;
         private int m_phase2pattern5Count;
         private int m_fakeBlinkCount;
         private int m_drillDashComboCount;
@@ -648,8 +649,8 @@ namespace DChild.Gameplay.Characters.Enemies
             if (!IsFacingTarget())
                 CustomTurn();
 
-            m_animation.SetAnimation(0, m_info.defStaggerWithKnockbackAnimation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.defStaggerWithKnockbackAnimation);
+            m_animation.SetAnimation(0, m_info.staggerAnimation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.staggerAnimation);
             m_hitbox.Enable();
             m_staggerCoroutine = null;
             m_hitbox.SetCanBlockDamageState(false);
@@ -780,6 +781,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private void StopComboCounts()
         {
             m_phase2pattern1Count = 0;
+            m_phase2pattern2Count = 0;
             m_phase2pattern5Count = 0;
             m_fakeBlinkCount = 0;
             m_drillDashComboCount = 0;
@@ -1246,28 +1248,37 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator Phase2Pattern2AttackRoutine()
         {
-            if (Vector2.Distance(transform.position, m_targetInfo.position) > m_info.downwardSlash1Attack.range)
+            switch (m_phase2pattern2Count)
             {
-                m_animation.SetAnimation(0, m_info.projectilWaveSlashGround1Attack.animation, false);
-                yield return new WaitForAnimationComplete(m_animation.animationState, m_info.projectilWaveSlashGround1Attack.animation);
+                case 0:
+                    m_phase2pattern2Count++;
+                    if (m_blinkCoroutine != null)
+                        yield return new WaitUntil(() => m_blinkCoroutine == null);
 
-                var randomAttackAnimation = UnityEngine.Random.Range(0, 2) == 1 ? m_info.projectilWaveSlashGround2Attack.animation : m_info.scytheWaveAttack.animation;
+                    m_blinkCoroutine = StartCoroutine(BlinkRoutine(BlinkState.DisappearBackward, BlinkState.AppearBackward, 60, m_info.midAirHeight, State.Chasing, false, false, false));
+                    break;
+                case 1:
+                    m_phase2pattern2Count = 0;
+                    m_animation.SetAnimation(0, m_info.projectilWaveSlashGround1Attack.animation, false);
+                    yield return new WaitForAnimationComplete(m_animation.animationState, m_info.projectilWaveSlashGround1Attack.animation);
 
-                m_animation.SetAnimation(0, randomAttackAnimation, false);
-                yield return new WaitForAnimationComplete(m_animation.animationState, randomAttackAnimation);
+                    var randomAttackAnimation = UnityEngine.Random.Range(0, 2) == 1 ? m_info.projectilWaveSlashGround2Attack.animation : m_info.scytheWaveAttack.animation;
 
-                m_attackDecider.hasDecidedOnAttack = false;
-                m_currentAttackCoroutine = null;
-                if (m_alterBladeCoroutine == null)
-                    m_stateHandle.ApplyQueuedState();
+                    m_animation.SetAnimation(0, randomAttackAnimation, false);
+                    yield return new WaitForAnimationComplete(m_animation.animationState, randomAttackAnimation);
+
+                    m_attackDecider.hasDecidedOnAttack = false;
+                    m_currentAttackCoroutine = null;
+                    if (m_alterBladeCoroutine == null)
+                        m_stateHandle.ApplyQueuedState();
+                    break;
             }
-            else
-            {
-                if (m_blinkCoroutine != null)
-                    yield return new WaitUntil(() => m_blinkCoroutine == null);
-
-                m_blinkCoroutine = StartCoroutine(BlinkRoutine(BlinkState.DisappearBackward, BlinkState.AppearBackward, 60, m_info.midAirHeight, State.Chasing, false, false, false));
-            }
+            //if (Vector2.Distance(transform.position, m_targetInfo.position) > m_info.downwardSlash1Attack.range)
+            //{
+            //}
+            //else
+            //{
+            //}
             yield return null;
         }
 
