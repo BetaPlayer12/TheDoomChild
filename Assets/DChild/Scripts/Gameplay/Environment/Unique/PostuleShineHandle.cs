@@ -17,7 +17,14 @@ namespace DChild.Gameplay.Environment
 
         private IEnumerable GetAllPostuleShine()
         {
-            return FindObjectsOfType<PostuleBulb>();
+            var bulbs = FindObjectsOfType<PostuleBulb>();
+            var options = new ValueDropdownList<PostuleBulb>();
+            for (int i = 0; i < bulbs.Length; i++)
+            {
+                var bulb = bulbs[i];
+                options.Add($"All/{bulb.gameObject.name}", bulb);
+            }
+            return options;
         }
 
         private void Start()
