@@ -22,9 +22,21 @@ namespace DChild.Gameplay.Environment
             for (int i = 0; i < bulbs.Length; i++)
             {
                 var bulb = bulbs[i];
-                options.Add($"All/{bulb.gameObject.name}", bulb);
+                options.Add($"All/{GetHeirarchyPath(bulb.transform)}", bulb);
             }
             return options;
+        }
+
+        private string GetHeirarchyPath(Transform transform)
+        {
+            if(transform.parent == null)
+            {
+                return $"{GetHeirarchyPath(transform.parent)}/{transform.name}";
+            }
+            else
+            {
+                return transform.name;
+            }
         }
 
         private void Start()
