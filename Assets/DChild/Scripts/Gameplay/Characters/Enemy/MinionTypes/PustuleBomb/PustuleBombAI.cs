@@ -100,6 +100,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private Transform m_pushDirection;
         [SerializeField, TabGroup("Modules")]
         private FlinchHandler m_flinchHandle;
+        [SerializeField, TabGroup("Modules")]
+        private DamageContactLocator m_damageContactLocator;
         [SerializeField, TabGroup("HurtBox")]
         private Collider2D m_explodeBB;
         [SerializeField, TabGroup("Chain")]
@@ -114,7 +116,6 @@ namespace DChild.Gameplay.Characters.Enemies
         private float m_currentTwitchTimer;
 
         private Coroutine m_floatRoutine;
-        //private Coroutine m_rotateRoutine;
 
         private void CustomTurn()
         {
@@ -124,9 +125,11 @@ namespace DChild.Gameplay.Characters.Enemies
 
         public override void SetTarget(IDamageable damageable, Character m_target = null)
         {
-            if (damageable != null)
+            if (damageable != null && !m_health.isEmpty)
             {
                 base.SetTarget(damageable);
+                Debug.Log("PUSTULE DETECTED PLAYER");
+                Death();
             }
         }
 
@@ -142,6 +145,12 @@ namespace DChild.Gameplay.Characters.Enemies
             //    m_health.SetHealthPercentage(1f);
             //    m_hitbox.Enable();
             //}
+            //m_rotateRoutine = StartCoroutine(RotateRoutine());
+            Death();
+        }
+
+        private void Death()
+        {
             if (m_floatRoutine != null)
             {
                 StopCoroutine(m_floatRoutine);
@@ -158,21 +167,22 @@ namespace DChild.Gameplay.Characters.Enemies
             m_hitbox.Disable();
             m_animation.SetEmptyAnimation(0, 0);
             StartCoroutine(ExplodeRoutine());
-            //m_rotateRoutine = StartCoroutine(RotateRoutine());
         }
 
         private IEnumerator ExplodeRoutine()
         {
-            if (m_targetInfo.isValid)
+            if (m_health.isEmpty)
             {
-                Vector3 v_diff = (m_targetInfo.position - (Vector2)m_character.centerMass.position);
+                yield return new WaitUntil(() => m_damageContactLocator.damageContactPoint != Vector2.zero);
+                Vector3 v_diff = (m_damageContactLocator.damageContactPoint - (Vector2)m_character.centerMass.position);
                 float atan2 = Mathf.Atan2(v_diff.y, v_diff.x);
                 m_pushDirection.rotation = Quaternion.Euler(0f, 0f, atan2 * Mathf.Rad2Deg);
                 m_character.physics.AddForce(-m_pushDirection.right * m_info.pushForce, ForceMode2D.Force);
-                //m_animation.SetAnimation(0, m_info.flinchAnimation, true);
-                m_animation.SetAnimation(0, m_info.contactAnimation, true);
-                yield return new WaitForSeconds(m_info.explodeTimer);
             }
+            //m_animation.SetAnimation(0, m_info.flinchAnimation, true);
+            m_animation.SetAnimation(0, m_info.contactAnimation, true);
+            yield return new WaitForSeconds(m_info.explodeTimer);
+
             m_animation.SetAnimation(0, m_info.deathAnimation, false);
             yield return new WaitForSeconds(1f);
             //StopCoroutine(m_rotateRoutine);
@@ -204,10 +214,10 @@ namespace DChild.Gameplay.Characters.Enemies
                 if (m_willTwitch)
                 {
                     m_willTwitch = false;
-                    m_character.physics.SetVelocity(Vector2.zero);
-                    var forceVelocity = new Vector2(UnityEngine.Random.Range(-m_info.forceVelocity.x, m_info.forceVelocity.x), UnityEngine.Random.Range(-m_info.forceVelocity.y, m_info.forceVelocity.y));
-                    m_character.physics.AddForce(forceVelocity, ForceMode2D.Impulse);
-                    m_model.transform.Rotate(new Vector3(0, 0, 1f), UnityEngine.Random.Range(-m_info.forceVelocity.x, m_info.forceVelocity.x));
+                    //m_character.physics.SetVelocity(Vector2.zero);
+                    //var forceVelocity = new Vector2(UnityEngine.Random.Range(-m_info.forceVelocity.x, m_info.forceVelocity.x), UnityEngine.Random.Range(-m_info.forceVelocity.y, m_info.forceVelocity.y));
+                    //m_character.physics.AddForce(forceVelocity, ForceMode2D.Impulse);
+                    //m_model.transform.Rotate(new Vector3(0, 0, 1f), UnityEngine.Random.Range(-m_info.forceVelocity.x, m_info.forceVelocity.x));
 
                     m_animation.SetAnimation(1, m_currentTwitchAnimation, false).TimeScale = m_info.twitchTimeScale;
                     m_animation.AddEmptyAnimation(1, 0, 0);
@@ -261,7 +271,6 @@ namespace DChild.Gameplay.Characters.Enemies
 
         protected override void Awake()
         {
-            //Debug.Log(m_info);
             base.Awake();
             //m_hitbox.SetInvulnerability(Invulnerability.Level_2);
         }
