@@ -434,6 +434,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private SkeletonUtilityBone m_targetIK;
 
         private ProjectileLauncher m_projectileLauncher;
+        private ProjectileLauncher m_scytheWaveLauncher;
 
         [SerializeField]
         private SpineEventListener m_spineListener;
@@ -478,6 +479,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private int m_phase2pattern2Count;
         private int m_phase2pattern5Count;
         private int m_fakeBlinkCount;
+        private int m_fakeBlinkChosenDrillDashBehavior;
         private int m_drillDashComboCount;
         #endregion
 
@@ -835,8 +837,8 @@ namespace DChild.Gameplay.Characters.Enemies
             if (!IsFacingTarget())
                 CustomTurn();
             var target = new Vector2(m_scytheWavePoint.position.x + (5 * transform.localScale.x), m_scytheWavePoint.position.y);
-            m_projectileLauncher.AimAt(target);
-            m_projectileLauncher.LaunchProjectile();
+            m_scytheWaveLauncher.AimAt(target);
+            m_scytheWaveLauncher.LaunchProjectile();
         }
 
         private IEnumerator ProjectileIKControlRoutine()
@@ -899,11 +901,13 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_blinkCoroutine = StartCoroutine(BlinkRoutine(BlinkState.DisappearBackward, BlinkState.AppearBackward, 50, 0, State.Chasing, true, false, false));
                     break;
                 case 1:
-                    m_fakeBlinkCount = 0;
-                    m_fakeBlinkRoutine = null;
-                    m_hitbox.SetCanBlockDamageState(false);
+                    //m_fakeBlinkCount = 0;
+                    //m_fakeBlinkRoutine = null;
+                    //m_hitbox.SetCanBlockDamageState(false);
+                    if (m_currentAttackCoroutine == null)
+                        m_fakeBlinkChosenDrillDashBehavior = UnityEngine.Random.Range(0, 2);
                     if (m_alterBladeCoroutine == null)
-                        m_currentAttackCoroutine = StartCoroutine(UnityEngine.Random.Range(0, 2) == 1 ? DrillDashComboRoutine() : DrillDash2Routine());
+                        m_currentAttackCoroutine = StartCoroutine(m_fakeBlinkChosenDrillDashBehavior == 1 ? DrillDashComboRoutine() : DrillDash2Routine());
                     break;
             }
             yield return null;
@@ -939,6 +943,9 @@ namespace DChild.Gameplay.Characters.Enemies
                 }
                 m_attackDecider.hasDecidedOnAttack = false;
                 m_currentAttackCoroutine = null;
+                m_fakeBlinkCount = 0;
+                m_fakeBlinkRoutine = null;
+                m_hitbox.SetCanBlockDamageState(false);
                 if (m_alterBladeCoroutine == null)
                     m_stateHandle.ApplyQueuedState();
             }
@@ -1028,6 +1035,9 @@ namespace DChild.Gameplay.Characters.Enemies
                     StopComboCounts();
                     m_attackDecider.hasDecidedOnAttack = false;
                     m_currentAttackCoroutine = null;
+                    m_fakeBlinkCount = 0;
+                    m_fakeBlinkRoutine = null;
+                    m_hitbox.SetCanBlockDamageState(false);
                     if (m_alterBladeCoroutine == null)
                         m_stateHandle.ApplyQueuedState();
                     break;
@@ -1498,7 +1508,13 @@ namespace DChild.Gameplay.Characters.Enemies
             //if (blinkDuration != 0)
             //    m_attackDecider.hasDecidedOnAttack = false;
 
-            if (m_alterBladeCoroutine == null && !m_hitbox.canBlockDamage)
+            if (m_fakeBlinkRoutine != null)
+            {
+                m_fakeBlinkRoutine = StartCoroutine(FakeBlinkRoutine());
+                yield return null;
+            }
+
+            if (m_alterBladeCoroutine == null)
             {
                 switch (evadeBlink)
                 {
@@ -1514,13 +1530,12 @@ namespace DChild.Gameplay.Characters.Enemies
                         break;
                 }
             }
-            else
-            {
-                if (m_fakeBlinkRoutine != null)
-                {
-                    m_fakeBlinkRoutine = StartCoroutine(FakeBlinkRoutine());
-                }
-            }
+            //else
+            //{
+            //    if (m_phaseHandle.currentPhase == Phase.PhaseTwo && m_fakeBlinkRoutine != null)
+            //    {
+            //    }
+            //}
             yield return null;
         }
 
@@ -1754,8 +1769,8 @@ namespace DChild.Gameplay.Characters.Enemies
             m_damageable.DamageTaken += OnDamageTaken;
             //m_damageable.DamageTaken += OnDamageBlocked;
             //m_patternDecider = new RandomAttackDecider<Pattern>();
-            //m_projectileLauncher = new ProjectileLauncher(m_info.slashProjectile.projectileInfo, m_projectilePoint);
-            m_projectileLauncher = new ProjectileLauncher(m_info.scytheWaveProjectile.projectileInfo, m_scytheWavePoint);
+            m_projectileLauncher = new ProjectileLauncher(m_info.slashProjectile.projectileInfo, m_projectilePoint);
+            m_scytheWaveLauncher = new ProjectileLauncher(m_info.scytheWaveProjectile.projectileInfo, m_scytheWavePoint);
             m_attackDecider = new RandomAttackDecider<Attack>();
             m_stateHandle = new StateHandle<State>(State.Idle, State.WaitBehaviourEnd);
             UpdateAttackDeciderList();
@@ -1771,8 +1786,8 @@ namespace DChild.Gameplay.Characters.Enemies
         protected override void Start()
         {
             base.Start();
-            //m_spineListener.Subscribe(m_info.slashProjectile.launchOnEvent, LaunchProjectile);
-            m_spineListener.Subscribe(m_info.slashProjectile.launchOnEvent, LaunchScytheWave);
+            m_spineListener.Subscribe(m_info.slashProjectile.launchOnEvent, LaunchProjectile);
+            m_spineListener.Subscribe(m_info.scytheWaveProjectile.launchOnEvent, LaunchScytheWave);
             m_animation.DisableRootMotion();
             m_phaseHandle = new PhaseHandle<Phase, PhaseInfo>();
             m_phaseHandle.Initialize(Phase.PhaseOne, m_info.phaseInfo, m_character, ChangeState, ApplyPhaseData);
