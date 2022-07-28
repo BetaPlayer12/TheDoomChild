@@ -51,7 +51,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e62b69801781d5241b551f508c560853, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_height: 0
+  m_height: 0.5
   m_centerMass: {fileID: 341734292027573649}
   m_isolatedObject: {fileID: 7524001575673687598}
   m_physics: {fileID: 1142671709782792257}
@@ -128,13 +128,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_centerMass: {fileID: 341734292027573649}
   m_data: {fileID: 11400000, guid: a96cdec0e5347b24e8b40f22932c0a0e, type: 2}
-  m_info:
+  m_currentAttackInfo:
     damage:
-    - m_type: 0
+      m_type: 0
       m_value: 0
-    critChance: 0
-    critDamageModifier: 1
+    criticalDamageInfo:
+      chance: 0
+      damageModifier: 0
     ignoreInvulnerability: 0
+    ignoresBlock: 0
 --- !u!114 &7524001575673687598
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -261,9 +263,15 @@ MonoBehaviour:
   m_spine: {fileID: 2264181995778766190}
   m_physics: {fileID: 1142671709782792257}
   m_autoFlinch: 0
+  m_enableMixFlinch: 1
+  m_enableEmpytyIdle: 1
+  m_alphaBlendStrength: 0.5
+  m_mixDuration: 1
   m_skeletonAnimation: {fileID: 6582628810274258865}
   m_animation: Flinch
   m_idleAnimation: Idle
+  m_enableFlinchColor: 0
+  m_flinchColorAnimation: 
 --- !u!114 &349923348102146242
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -281,6 +289,7 @@ MonoBehaviour:
   m_animation: 
   m_bodyDuration:
     m_startTime: 3
+  m_fx: []
   m_destroySource: 0
 --- !u!114 &8502101106964822470
 MonoBehaviour:
@@ -308,6 +317,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_character: {fileID: 2227295269093126129}
+  m_maintainScaleValue: 1
+  m_maintainScaleValue: 1
 --- !u!114 &6828138422902686850
 MonoBehaviour:
   m_ObjectHideFlags: 0
