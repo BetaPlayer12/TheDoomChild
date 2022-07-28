@@ -23,6 +23,7 @@ namespace DChild.Gameplay.Environment
         private float m_startToActivatedPositionSqrMagnitude;
         private bool m_allowMovement = true;
 
+        [ShowInInspector,ReadOnly]
         public float lerpValue { get; private set; }
 
         public void SetAllowMovement(bool value) => m_allowMovement = value;
@@ -46,7 +47,7 @@ namespace DChild.Gameplay.Environment
         {
             if (m_allowMovement)
             {
-                m_platform.position = Vector3.MoveTowards(m_platform.position, m_destination, m_speed * GameplaySystem.time.deltaTime);
+                m_platform.position = Vector3.MoveTowards(m_platform.position, m_destination, m_speed * GameplaySystem.time.fixedDeltaTime);
             }
 
             var ToCurrentSqrMagnitude = (m_platform.position - m_startingPosition).sqrMagnitude;
