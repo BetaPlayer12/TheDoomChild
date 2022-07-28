@@ -282,6 +282,9 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField]
             private SimpleProjectileAttackInfo m_slashProjectile;
             public SimpleProjectileAttackInfo slashProjectile => m_slashProjectile;
+            [SerializeField]
+            private SimpleProjectileAttackInfo m_scytheWaveProjectile;
+            public SimpleProjectileAttackInfo scytheWaveProjectile => m_scytheWaveProjectile;
 
             [TitleGroup("FX")]
             [SerializeField]
@@ -315,6 +318,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_geyserBurstPurpleAttack.SetData(m_skeletonDataAsset);
                 m_geyserBurstRedAttack.SetData(m_skeletonDataAsset);
                 m_slashProjectile.SetData(m_skeletonDataAsset);
+                m_scytheWaveProjectile.SetData(m_skeletonDataAsset);
 #endif
             }
         }
@@ -424,6 +428,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private Collider2D m_randomSpawnCollider;
         [SerializeField, TabGroup("Spawn Points")]
         private Transform m_projectilePoint;
+        [SerializeField, TabGroup("Spawn Points")]
+        private Transform m_scytheWavePoint;
         [SerializeField, TabGroup("IK Control")]
         private SkeletonUtilityBone m_targetIK;
 
@@ -822,6 +828,15 @@ namespace DChild.Gameplay.Characters.Enemies
             m_projectileLauncher.AimAt(m_targetInfo.position);
             m_projectileLauncher.LaunchProjectile();
             StartCoroutine(ProjectileIKControlRoutine());
+        }
+
+        private void LaunchScytheWave()
+        {
+            if (!IsFacingTarget())
+                CustomTurn();
+            var target = new Vector2(m_scytheWavePoint.position.x + (5 * transform.localScale.x), m_scytheWavePoint.position.y);
+            m_projectileLauncher.AimAt(target);
+            m_projectileLauncher.LaunchProjectile();
         }
 
         private IEnumerator ProjectileIKControlRoutine()
@@ -1261,7 +1276,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_phase2pattern2Count = 0;
                     m_animation.SetAnimation(0, m_info.projectilWaveSlashGround1Attack.animation, false);
                     yield return new WaitForAnimationComplete(m_animation.animationState, m_info.projectilWaveSlashGround1Attack.animation);
-
+                    
                     var randomAttackAnimation = UnityEngine.Random.Range(0, 2) == 1 ? m_info.projectilWaveSlashGround2Attack.animation : m_info.scytheWaveAttack.animation;
 
                     m_animation.SetAnimation(0, randomAttackAnimation, false);
@@ -1739,7 +1754,8 @@ namespace DChild.Gameplay.Characters.Enemies
             m_damageable.DamageTaken += OnDamageTaken;
             //m_damageable.DamageTaken += OnDamageBlocked;
             //m_patternDecider = new RandomAttackDecider<Pattern>();
-            m_projectileLauncher = new ProjectileLauncher(m_info.slashProjectile.projectileInfo, m_projectilePoint);
+            //m_projectileLauncher = new ProjectileLauncher(m_info.slashProjectile.projectileInfo, m_projectilePoint);
+            m_projectileLauncher = new ProjectileLauncher(m_info.scytheWaveProjectile.projectileInfo, m_scytheWavePoint);
             m_attackDecider = new RandomAttackDecider<Attack>();
             m_stateHandle = new StateHandle<State>(State.Idle, State.WaitBehaviourEnd);
             UpdateAttackDeciderList();
@@ -1755,7 +1771,8 @@ namespace DChild.Gameplay.Characters.Enemies
         protected override void Start()
         {
             base.Start();
-            m_spineListener.Subscribe(m_info.slashProjectile.launchOnEvent, LaunchProjectile);
+            //m_spineListener.Subscribe(m_info.slashProjectile.launchOnEvent, LaunchProjectile);
+            m_spineListener.Subscribe(m_info.slashProjectile.launchOnEvent, LaunchScytheWave);
             m_animation.DisableRootMotion();
             m_phaseHandle = new PhaseHandle<Phase, PhaseInfo>();
             m_phaseHandle.Initialize(Phase.PhaseOne, m_info.phaseInfo, m_character, ChangeState, ApplyPhaseData);
