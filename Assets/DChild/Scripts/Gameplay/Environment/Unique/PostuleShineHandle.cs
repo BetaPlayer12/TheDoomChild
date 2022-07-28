@@ -31,11 +31,11 @@ namespace DChild.Gameplay.Environment
         {
             if(transform.parent == null)
             {
-                return $"{GetHeirarchyPath(transform.parent)}/{transform.name}";
+                return transform.name;
             }
             else
             {
-                return transform.name;
+                return $"{GetHeirarchyPath(transform.parent)}/{transform.name}";
             }
         }
 
