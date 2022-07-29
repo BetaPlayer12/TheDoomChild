@@ -476,7 +476,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnDamageTaken(object sender, Damageable.DamageEventArgs eventArgs)
         {
-            if (m_counterAttackCoroutine == null)
+            if (m_counterAttackCoroutine == null && m_changePhaseCoroutine == null)
             {
                 if (m_hitCounter < 5)
                     m_hitCounter++;
@@ -551,6 +551,7 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_hasPhaseChanged = true;
             m_phaseHandle.ApplyChange();
             m_animation.DisableRootMotion();
+            m_hitCounter = 0;
             m_animation.SetEmptyAnimation(0, 0);
             m_stateHandle.OverrideState(State.Phasing);
         }
