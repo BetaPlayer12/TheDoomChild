@@ -1184,6 +1184,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     {
                         if (m_changePhaseCoroutine == null)
                         {
+                            m_stateHandle.Wait(State.ReevaluateSituation);
                             m_changePhaseCoroutine = StartCoroutine(ChangePhaseRoutine());
                         }
                     }
@@ -1196,6 +1197,11 @@ namespace DChild.Gameplay.Characters.Enemies
                     }
                     break;
                 case State.Turning:
+                    if (m_currentAttackCoroutine != null)
+                    {
+                        StopCoroutine(m_currentAttackCoroutine);
+                        m_currentAttackCoroutine = null;
+                    }
                     m_phaseHandle.allowPhaseChange = false;
                     m_stateHandle.Wait(m_turnState);
                     m_turnHandle.Execute(m_info.turnAnimation, m_currentIdleAnimation);
