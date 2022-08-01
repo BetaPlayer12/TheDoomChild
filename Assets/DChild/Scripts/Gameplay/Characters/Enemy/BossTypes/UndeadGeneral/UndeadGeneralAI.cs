@@ -476,7 +476,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnDamageTaken(object sender, Damageable.DamageEventArgs eventArgs)
         {
-            if (m_counterAttackCoroutine == null)
+            if (m_counterAttackCoroutine == null && m_changePhaseCoroutine == null)
             {
                 if (m_hitCounter < 5)
                     m_hitCounter++;
@@ -551,6 +551,7 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_hasPhaseChanged = true;
             m_phaseHandle.ApplyChange();
             m_animation.DisableRootMotion();
+            m_hitCounter = 0;
             m_animation.SetEmptyAnimation(0, 0);
             m_stateHandle.OverrideState(State.Phasing);
         }
@@ -1183,6 +1184,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     {
                         if (m_changePhaseCoroutine == null)
                         {
+                            m_stateHandle.Wait(State.ReevaluateSituation);
                             m_changePhaseCoroutine = StartCoroutine(ChangePhaseRoutine());
                         }
                     }
@@ -1195,6 +1197,11 @@ namespace DChild.Gameplay.Characters.Enemies
                     }
                     break;
                 case State.Turning:
+                    if (m_currentAttackCoroutine != null)
+                    {
+                        StopCoroutine(m_currentAttackCoroutine);
+                        m_currentAttackCoroutine = null;
+                    }
                     m_phaseHandle.allowPhaseChange = false;
                     m_stateHandle.Wait(m_turnState);
                     m_turnHandle.Execute(m_info.turnAnimation, m_currentIdleAnimation);
