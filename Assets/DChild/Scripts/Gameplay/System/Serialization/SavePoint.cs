@@ -2,6 +2,7 @@
 using Holysoft.Collections;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace DChild.Gameplay
 {
@@ -13,11 +14,14 @@ namespace DChild.Gameplay
         private Location m_location;
         [SerializeField]
         private Vector2 m_spawnPosition;
+        [SerializeField]
+        private UnityEvent m_onSave;
 
         [Button]
         public void SaveGame()
         {
             GameplaySystem.playerManager.player.Revitilize();
+            m_onSave?.Invoke();
 
             //#if UNITY_EDITOR
             if (m_dontActuallySave)
