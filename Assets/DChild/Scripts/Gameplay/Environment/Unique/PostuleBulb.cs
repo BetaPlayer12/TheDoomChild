@@ -6,12 +6,14 @@ namespace DChild.Gameplay.Environment
 {
     public class PostuleBulb : MonoBehaviour
     {
-        private SpriteRenderer m_renderer;
-        public SpriteRenderer spriteRenderer => m_renderer;
+        private Renderer m_renderer;
+        public Renderer spriteRenderer => m_renderer;
+
+
 
         private void Awake()
         {
-            m_renderer = GetComponent<SpriteRenderer>();
+            m_renderer = GetComponent<Renderer>();
         }
     }
 }

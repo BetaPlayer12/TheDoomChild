@@ -805,6 +805,9 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator ChangePhaseRoutine()
         {
             m_stateHandle.Wait(State.Chasing);
+            if (IsFacingTarget())
+                CustomTurn();
+
             m_hitbox.Disable();
             m_animation.EnableRootMotion(true, false);
             m_animation.SetAnimation(0, m_info.staggerAnimation, false);
@@ -890,25 +893,27 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator FakeBlinkRoutine()
         {
-            m_animation.SetAnimation(0, m_info.idleAnimation, true);
-            switch (m_fakeBlinkCount)
+            if (m_currentAttackCoroutine == null)
             {
-                case 0:
-                    m_fakeBlinkCount++;
-                    if (m_blinkCoroutine != null)
-                        yield return new WaitUntil(() => m_blinkCoroutine == null);
-
-                    m_blinkCoroutine = StartCoroutine(BlinkRoutine(BlinkState.DisappearBackward, BlinkState.AppearBackward, 50, 0, State.Chasing, true, false, false));
-                    break;
-                case 1:
-                    //m_fakeBlinkCount = 0;
-                    //m_fakeBlinkRoutine = null;
-                    //m_hitbox.SetCanBlockDamageState(false);
-                    if (m_currentAttackCoroutine == null)
+                switch (m_fakeBlinkCount)
+                {
+                    case 0:
+                        m_fakeBlinkCount++;
                         m_fakeBlinkChosenDrillDashBehavior = UnityEngine.Random.Range(0, 2);
-                    if (m_alterBladeCoroutine == null)
+                        if (m_blinkCoroutine != null)
+                            yield return new WaitUntil(() => m_blinkCoroutine == null);
+
+                        //m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                        m_blinkCoroutine = StartCoroutine(BlinkRoutine(BlinkState.DisappearBackward, BlinkState.AppearBackward, 50, 0, State.Chasing, true, false, false));
+                        break;
+                    case 1:
+                        //m_fakeBlinkCount = 0;
+                        //m_fakeBlinkRoutine = null;
+                        //m_hitbox.SetCanBlockDamageState(false);
+
                         m_currentAttackCoroutine = StartCoroutine(m_fakeBlinkChosenDrillDashBehavior == 1 ? DrillDashComboRoutine() : DrillDash2Routine());
-                    break;
+                        break;
+                }
             }
             yield return null;
         }
@@ -917,6 +922,14 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             if (IsTargetInRange(m_info.drillDash1Attack.range))
             {
+                //if (!m_groundSensor.isDetecting)
+                //{
+                //    m_animation.DisableRootMotion();
+                //    m_animation.SetAnimation(0, m_info.fallAnimation, true);
+                //    yield return new WaitUntil(() => m_groundSensor.isDetecting);
+                //    m_animation.SetAnimation(0, m_info.landAnimation, false);
+                //    yield return new WaitForAnimationComplete(m_animation.animationState, m_info.landAnimation);
+                //}
                 m_animation.EnableRootMotion(false, false);
                 var drillCount = 0;
                 while (drillCount < 2)
@@ -1056,15 +1069,15 @@ namespace DChild.Gameplay.Characters.Enemies
                 if (!IsFacingTarget())
                     CustomTurn();
 
-                for (int i = 0; i < 3; i++)
+                for (int i = 0; i < 2; i++)
                 {
-                    if (/*!IsTargetInRange(m_info.swordStabAttack.range) ||*/ i == 2)
-                    {
-                        m_attackDecider.hasDecidedOnAttack = false;
-                        m_currentAttackCoroutine = null;
-                        if (m_alterBladeCoroutine == null)
-                            m_stateHandle.ApplyQueuedState();
-                    }
+                    //if (i == 2)
+                    //{
+                    //    m_attackDecider.hasDecidedOnAttack = false;
+                    //    m_currentAttackCoroutine = null;
+                    //    if (m_alterBladeCoroutine == null)
+                    //        m_stateHandle.ApplyQueuedState();
+                    //}
 
                     switch (i)
                     {
@@ -1079,6 +1092,10 @@ namespace DChild.Gameplay.Characters.Enemies
                             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.downwardSlash2Attack.animation);
                             m_animation.SetAnimation(0, m_info.twinSlash1Attack.animation, false);
                             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.twinSlash1Attack.animation);
+                            m_attackDecider.hasDecidedOnAttack = false;
+                            m_currentAttackCoroutine = null;
+                            if (m_alterBladeCoroutine == null)
+                                m_stateHandle.ApplyQueuedState();
                             break;
                     }
                 }
@@ -1640,7 +1657,6 @@ namespace DChild.Gameplay.Characters.Enemies
                             yield return null;
                         }
                         m_cachedSwordState = m_currentSwordState;
-                        //m_alterBladeRoutine = StartCoroutine(AlterBladeRoutine(m_currentSwordState));
                         break;
                     default:
                         yield return new WaitForSeconds(m_info.alterBladeCooldown);
@@ -1819,19 +1835,9 @@ namespace DChild.Gameplay.Characters.Enemies
                     }
                     break;
                 case State.Phasing:
-                    if (IsFacingTarget())
+                    if (m_changePhaseCoroutine == null)
                     {
-                        if (m_changePhaseCoroutine == null)
-                        {
-                            m_changePhaseCoroutine = StartCoroutine(ChangePhaseRoutine());
-                        }
-                    }
-                    else
-                    {
-                        //m_turnState = State.Phasing;
-                        //if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
-                        //    m_stateHandle.SetState(State.Turning);
-                        CustomTurn();
+                        m_changePhaseCoroutine = StartCoroutine(ChangePhaseRoutine());
                     }
                     break;
                 case State.Turning:
