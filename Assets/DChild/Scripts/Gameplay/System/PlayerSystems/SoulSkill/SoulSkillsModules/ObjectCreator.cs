@@ -29,11 +29,14 @@ namespace DChild.Gameplay.Characters.Players.SoulSkills
             public override void Initialize()
             {
                 m_instance = Object.Instantiate(m_instanceReference);
-                if (m_bindToPlayer)
-                {
-                    m_instance.transform.SetParent(m_playerCharacter.transform);
-                }
+                m_instance.transform.SetParent(m_playerCharacter.transform);
                 m_instance.transform.localPosition = Vector3.zero;
+                if (m_bindToPlayer == false)
+                {
+                    m_instance.transform.SetParent(null);
+                }
+
+
             }
         }
 
