@@ -5,7 +5,6 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Characters.Players.Modules
 {
-
     public class BasicSlashes : AttackBehaviour
     {
         public enum Type
