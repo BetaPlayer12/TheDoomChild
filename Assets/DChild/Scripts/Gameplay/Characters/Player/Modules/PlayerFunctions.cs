@@ -113,7 +113,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void ComboEnd()
         {
-            Debug.Log("Combo End");
             m_slashCombo?.ComboEnd();
         }
 
@@ -144,15 +143,13 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void SwordThrustEnd()
         {
-            Debug.Log("END");
             m_swordThrust?.AttackOver();
             m_swordThrust.EndExecution();
-        }
+        } 
 
         public void SwordThrustPush()
         {
             m_swordThrust?.Push();
-            Debug.Log("Sword Thrust Push!");
         }
 
         public void SkullThrowSpawnProjectile()
@@ -172,7 +169,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void EndShadowMorphCharge()
         {
-            Debug.Log("DONE SHADOW MORPH CHARGE");
             //m_shadowGaugeRegen?.Enable(true);
             m_shadowMorph.EndExecution();
         }

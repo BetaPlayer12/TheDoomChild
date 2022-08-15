@@ -27,29 +27,50 @@ namespace DChild.Gameplay.Characters.Players
             base.OnStateExit(animator, stateInfo, layerIndex);
 
             var player = animator.GetComponent<PlayerFunctions>();
-            switch (m_toExecute)
+
+            if (player != null)
             {
-                case Command.EndAttack:
-                    player.FinishAttackAnim();
-                    break;
-                case Command.EndEarthShaker:
-                    player.EarthShakerEnd();
-                    break;
-                case Command.EndLedgeGrab:
-                    player.EndLedgeGrab();
-                    break;
-                case Command.EndShadowMorphCharge:
-                    player.EndShadowMorphCharge();
-                    break;
-                case Command.EndComboAttack:
-                    player.ComboAttackEnd();
-                    break;
-                case Command.EndCombo:
-                    player.ComboEnd();
-                    break;
-                case Command.EndSwordThrust:
-                    player.SwordThrustEnd();
-                    break;
+                switch (m_toExecute)
+                {
+                    case Command.EndAttack:
+                        player.FinishAttackAnim();
+                        break;
+                    case Command.EndEarthShaker:
+                        player.EarthShakerEnd();
+                        break;
+                    case Command.EndLedgeGrab:
+                        player.EndLedgeGrab();
+                        break;
+                    case Command.EndShadowMorphCharge:
+                        player.EndShadowMorphCharge();
+                        break;
+                    case Command.EndComboAttack:
+                        player.ComboAttackEnd();
+                        break;
+                    case Command.EndCombo:
+                        player.ComboEnd();
+                        break;
+                    case Command.EndSwordThrust:
+                        player.SwordThrustEnd();
+                        break;
+                }
+            }
+            else
+            {
+                var shadow = animator.GetComponent<ShadowCloneAttackFX>();
+
+                switch (m_toExecute)
+                {
+                    case Command.EndAttack:
+                        shadow.FinishAttackAnim();
+                        break;
+                    case Command.EndComboAttack:
+                        shadow.FinishSlashComboAttackAnim();
+                        break;
+                    case Command.EndCombo:
+                        shadow.ComboEnd();
+                        break;
+                }
             }
         }
     }
