@@ -52,10 +52,18 @@ namespace DChild.Gameplay.Inventories
         public void Load(TradableInventorySerialization serializedData)
         {
             m_inventory.ClearList();
+            
             if (serializedData == null)
             {
+                m_inventory.SetCurrency(0);
+                SetSoulEssence(0);
                 m_inventory.InvokeMassInventoryItemUpdate();
                 return;
+            }
+            else
+            {
+                m_inventory.SetCurrency(serializedData.soulEssence);
+                SetSoulEssence(serializedData.soulEssence);
             }
 
             TradableInventory.Item inventoryItem = null;
@@ -66,7 +74,6 @@ namespace DChild.Gameplay.Inventories
                 m_inventory.AddItem(itemData, out inventoryItem, serializedItem.count);
                 inventoryItem.SetCountToInfinite(serializedItem.isInfinite);
             }
-
             m_inventory.InvokeMassInventoryItemUpdate();
         }
 
