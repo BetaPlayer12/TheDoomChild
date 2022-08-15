@@ -9,7 +9,11 @@ namespace DChild.Gameplay.Environment
         [SerializeField]
         private float m_bendDuration;
         [SerializeField]
-        private AnimationCurve m_bendCurve;
+        private float m_bendFrequency;
+        [SerializeField]
+        private float m_bendAmplitude;
+        [SerializeField]
+        private AnimationCurve m_bendAmplitudeDecay;
 
         private Renderer[] m_renderers;
 
@@ -21,8 +25,9 @@ namespace DChild.Gameplay.Environment
             var duration = 0f;
             do
             {
-                var bendValue = m_bendCurve.Evaluate(duration);
-                SetBendDirection(bendValue);
+                var evaluatedAmplitude = m_bendAmplitudeDecay.Evaluate(duration / m_bendDuration) * m_bendAmplitude;
+                var bendValue = Mathf.Sin(duration * m_bendFrequency) * evaluatedAmplitude;
+                SetBendDirection(bendValue  * startingDirection);
                 duration += GameplaySystem.time.deltaTime;
                 yield return null;
             } while (duration < m_bendDuration);
@@ -48,6 +53,7 @@ namespace DChild.Gameplay.Environment
         private void Awake()
         {
             m_renderers = GetComponentsInChildren<Renderer>();
+            m_propertyBlock = new MaterialPropertyBlock();
         }
 
         private void OnTriggerEnter2D(Collider2D collision)

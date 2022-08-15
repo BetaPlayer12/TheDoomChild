@@ -1,6 +1,4 @@
-﻿using System;
-using DChild.Gameplay;
-using Doozy.Engine.UI.Input;
+﻿using DChild.Gameplay;
 using Holysoft.Event;
 using UnityEngine;
 
