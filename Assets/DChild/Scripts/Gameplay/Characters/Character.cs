@@ -25,6 +25,8 @@ namespace DChild.Gameplay
         [SerializeField]
         private CharacterColliders m_colliders;
         [SerializeField]
+        private Animator m_AttackFX;
+        [SerializeField]
         private HorizontalDirection m_facing = HorizontalDirection.Right;
         [SerializeField, FoldoutGroup("Body Reference"), HideLabel]
         private BodyReference m_bodyReference;
@@ -43,6 +45,8 @@ namespace DChild.Gameplay
         public HorizontalDirection facing => m_facing;
 
         public Transform centerMass => m_centerMass;
+
+        public Animator attackFX => m_AttackFX;
 
         public int ID => m_ID;
         public bool hasID => m_hasID;

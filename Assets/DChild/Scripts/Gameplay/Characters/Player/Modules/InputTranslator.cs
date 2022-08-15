@@ -37,8 +37,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         private PlayerInput m_input;
 
-        public bool test;
-
         public void Disable()
         {
             if (this.enabled)
@@ -150,7 +148,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
             if (enabled == true)
             {
                 slashPressed = value.Get<float>() == 1;
-                test = true;
             }
         }
 
