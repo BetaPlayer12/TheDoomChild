@@ -568,19 +568,19 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_tentacleOverrideBones[i].mode = SkeletonUtilityBone.Mode.Override;
                 Debug.Log("Override Bones");
             }
-            while (m_willGripWall)
-            {
-                for (int i = 0; i < m_tentacleOverrideBones.Count; i++)
-                {
-                    if (m_tentacleOverrideBones[i].transform.position != m_tentacleOverridePoints[i].position)
-                    {
-                        m_tentacleOverrideBones[i].transform.position = m_tentacleOverridePoints[i].position;
-                    }
-                }
-                m_animation.SetAnimation(0, DynamicIdleAnimation(), true);
-                Debug.Log("Override BonePosition");
-                yield return null;
-            }
+            //while (m_willGripWall)
+            //{
+            //    for (int i = 0; i < m_tentacleOverrideBones.Count; i++)
+            //    {
+            //        if (m_tentacleOverrideBones[i].transform.position != m_tentacleOverridePoints[i].position)
+            //        {
+            //            m_tentacleOverrideBones[i].transform.position = m_tentacleOverridePoints[i].position;
+            //        }
+            //    }
+            //    m_animation.SetAnimation(0, DynamicIdleAnimation(), true);
+            //    Debug.Log("Override BonePosition");
+            //    yield return null;
+            //}
             yield return new WaitUntil(() => !m_willGripWall);
             for (int i = 0; i < m_tentacleOverrideBones.Count; i++)
             {
@@ -604,7 +604,7 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.wallGrappleExtendAnimations[m_wallGrappleDirectionIndex]);
             for (int i = 0; i < 4; i++)
             {
-                m_animation.SetAnimation(i + 5, m_info.wallGrappleAnimations[i + m_wallGrappleDirectionIndex], false);
+                m_animation.SetAnimation(i + 5, m_info.wallGrappleAnimations[i + m_wallGrappleDirectionIndex], true).TimeScale = 10f;
             }
             //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.wallGrappleAnimations[m_wallGrappleDirectionIndex]);
             while (true)
@@ -612,6 +612,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 //Vector2.MoveTowards(transform.position, m_tentaclePoints[m_wallGrappleDirectionIndex].position, m_info.retractPullSpeed * Time.deltaTime);
                 yield return null;
             }
+            //yield return new WaitForSeconds(3f);
             for (int i = 0; i < 4; i++)
             {
                 m_animation.SetAnimation(i + 5, m_info.wallGrappleRetractAnimations[i + m_wallGrappleDirectionIndex], false);
@@ -927,6 +928,21 @@ namespace DChild.Gameplay.Characters.Enemies
             m_phaseHandle.ApplyChange();
         }
 
+        private void FixedUpdate()
+        {
+            if (m_willGripWall)
+            {
+                for (int i = 0; i < m_tentacleOverrideBones.Count; i++)
+                {
+                    if (m_tentacleOverrideBones[i].transform.position != m_tentacleOverridePoints[i].position)
+                    {
+                        m_tentacleOverrideBones[i].transform.position = m_tentacleOverridePoints[i].position;
+                    }
+                }
+            }
+            m_animation.SetAnimation(0, DynamicIdleAnimation(), true);
+        }
+
         private void Update()
         {
             m_phaseHandle.MonitorPhase();
@@ -953,19 +969,19 @@ namespace DChild.Gameplay.Characters.Enemies
                     switch (m_currentAttack)
                     {
                         case Attack.Phase1Pattern1:
-                            m_currentAttackCoroutine = StartCoroutine(GrappleEvadeRoutine());
+                            m_grappleEvadeCoroutine = StartCoroutine(GrappleEvadeRoutine());
                             m_pickedCooldown = m_currentFullCooldown[0];
                             break;
                         case Attack.Phase1Pattern2:
-                            m_currentAttackCoroutine = StartCoroutine(GrappleEvadeRoutine());
+                            m_grappleEvadeCoroutine = StartCoroutine(GrappleEvadeRoutine());
                             m_pickedCooldown = m_currentFullCooldown[1];
                             break;
                         case Attack.Phase1Pattern3:
-                            m_currentAttackCoroutine = StartCoroutine(GrappleEvadeRoutine());
+                            m_grappleEvadeCoroutine = StartCoroutine(GrappleEvadeRoutine());
                             m_pickedCooldown = m_currentFullCooldown[2];
                             break;
                         case Attack.Phase1Pattern4:
-                            m_currentAttackCoroutine = StartCoroutine(GrappleEvadeRoutine());
+                            m_grappleEvadeCoroutine = StartCoroutine(GrappleEvadeRoutine());
                             m_pickedCooldown = m_currentFullCooldown[3];
                             break;
                         //case Attack.Phase2Pattern1:
@@ -1056,7 +1072,8 @@ namespace DChild.Gameplay.Characters.Enemies
                     return;
             }
 
-            m_idleAnimation = m_groundSensor.isDetecting ? m_info.idleAnimation : m_info.idleMidAirAnimation;
+            //m_idleAnimation = m_groundSensor.isDetecting ? m_info.idleAnimation : m_info.idleMidAirAnimation;
+
         }
 
         protected override void OnTargetDisappeared()
