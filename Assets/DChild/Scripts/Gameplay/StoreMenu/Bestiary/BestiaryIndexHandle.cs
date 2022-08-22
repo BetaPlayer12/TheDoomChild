@@ -4,6 +4,7 @@ using Sirenix.OdinInspector;
 using DChild.Gameplay.Characters.Players;
 using Holysoft.Collections;
 using Holysoft.Event;
+using DChild.Gameplay;
 
 namespace DChild.Menu.Bestiary
 {
@@ -11,6 +12,8 @@ namespace DChild.Menu.Bestiary
     {
         [SerializeField]
         private BestiaryList m_bestiaryList;
+        [SerializeField]
+        private bool m_revealAllContents;
         [SerializeField, InlineEditor]
         private BestiaryProgress m_tracker;
         [SerializeField, MinValue(1), PropertyOrder(-1)]
@@ -19,6 +22,7 @@ namespace DChild.Menu.Bestiary
         private int m_contentSkipCountPerPage;
         private BestiaryIndexButton[] m_buttons;
         private int m_buttonCount;
+        [SerializeField,ReadOnly]
         private int m_startIndex;
         private int m_availableButton;
         private int[] m_IDs;
@@ -47,7 +51,6 @@ namespace DChild.Menu.Bestiary
             {
                 m_page++;
                 SetPage(m_page);
-                UpdateUI();
             }
         }
 
@@ -57,14 +60,13 @@ namespace DChild.Menu.Bestiary
             {
                 m_page--;
                 SetPage(m_page);
-                UpdateUI();
             }
         }
 
         public void SetPage(int pageNumber)
         {
             m_page = pageNumber;
-            m_startIndex = ((pageNumber - 1) + m_contentSkipCountPerPage) - 1;
+            m_startIndex = ((pageNumber - 1) * m_contentSkipCountPerPage);
             var endIndex = m_startIndex + m_buttonCount;
             if (endIndex >= m_IDs.Length)
             {
@@ -75,6 +77,7 @@ namespace DChild.Menu.Bestiary
                 m_availableButton = m_buttonCount - 1;
             }
             PageChange?.Invoke(this, EventActionArgs.Empty);
+            UpdateUI();
         }
 
         [Button, HideInEditorMode, PropertyOrder(-1)]
@@ -88,7 +91,8 @@ namespace DChild.Menu.Bestiary
                 var data = m_bestiaryList.GetInfo(ID);
                 m_buttons[i].SetData(data);
                 m_buttons[i].Show();
-                m_buttons[i].SetInteractable(m_tracker?.HasInfoOf(ID) ?? true);
+                var hasInfo = m_tracker?.HasInfoOf(ID) ?? true;
+                m_buttons[i].SetInteractable(m_revealAllContents || hasInfo);
             }
 
             for (; i < m_buttonCount; i++)

@@ -34,6 +34,9 @@ namespace DChild.Menu.Bestiary
         [SerializeField]
         private TextMeshProUGUI m_hunterNotes;
 
+        private Color m_originalImageColor;
+        private Color m_originalSketchColor;
+
         private string creatureNameText
         {
             set
@@ -57,8 +60,7 @@ namespace DChild.Menu.Bestiary
             if (m_showDataOf == null)
             {
                 creatureNameText = "NOTHING";
-                SetImage(m_creatureImage, m_showDataOf.infoImage);
-                SetImage(m_sketchImage, m_showDataOf.sketchImage);
+                UpdateImage();
                 m_location.text = "THE VOID";
                 m_description.text = "Dead";
                 m_storeNotes.text = "Run, don't look back!!";
@@ -67,13 +69,18 @@ namespace DChild.Menu.Bestiary
             else
             {
                 creatureNameText = m_showDataOf.creatureName;
-                SetImage(m_creatureImage, m_showDataOf.infoImage);
-                SetImage(m_sketchImage, m_showDataOf.sketchImage);
+                UpdateImage();
                 UpdateLocation(m_showDataOf.locatedIn);
                 m_description.text = m_showDataOf.description;
                 m_storeNotes.text = m_showDataOf.storeNotes;
                 m_hunterNotes.text = m_showDataOf.hunterNotes;
             }
+        }
+
+        private void UpdateImage()
+        {
+            SetImage(m_creatureImage, m_showDataOf.infoImage, m_originalImageColor);
+            SetImage(m_sketchImage, m_showDataOf.sketchImage, m_originalSketchColor);
         }
 
         private void UpdateLocation(IReadOnlyList<Location> locations)
@@ -89,7 +96,7 @@ namespace DChild.Menu.Bestiary
             }
         }
 
-        private void SetImage(Image image, Sprite sprite)
+        private void SetImage(Image image, Sprite sprite, Color originalColor)
         {
             if (sprite == null)
             {
@@ -97,9 +104,15 @@ namespace DChild.Menu.Bestiary
             }
             else
             {
-                image.color = Color.white;
+                image.color = originalColor;
                 image.sprite = sprite;
             }
+        }
+
+        private void Start()
+        {
+            m_originalImageColor = m_creatureImage.color;
+            m_originalSketchColor = m_sketchImage.color;
         }
     }
 }
