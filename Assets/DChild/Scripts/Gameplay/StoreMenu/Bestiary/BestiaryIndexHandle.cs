@@ -4,6 +4,7 @@ using Sirenix.OdinInspector;
 using DChild.Gameplay.Characters.Players;
 using Holysoft.Collections;
 using Holysoft.Event;
+using DChild.Gameplay;
 
 namespace DChild.Menu.Bestiary
 {
