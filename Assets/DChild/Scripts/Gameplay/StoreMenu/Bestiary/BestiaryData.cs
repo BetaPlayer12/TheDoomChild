@@ -69,7 +69,11 @@ namespace DChild.Menu.Bestiary
         }
 #endif 
         #endregion
-        [SerializeField, ShowIf("@m_title != string.Empty || m_enableEdit"), ToggleGroup("m_enableEdit")]
+        [SerializeField, ToggleGroup("m_enableEdit"), LabelText("Use Display Name")]
+        private bool m_useCustomName;
+        [SerializeField,ShowIf("m_useCustomName"),ToggleGroup("m_enableEdit"),LabelText("Display Name")]
+        private string m_customCreatureName;
+        [SerializeField, ToggleGroup("m_enableEdit")]
         private string m_title;
         [SerializeField, PreviewField(100), ToggleGroup("m_enableEdit")]
         private Sprite m_indexImage;
@@ -92,7 +96,7 @@ namespace DChild.Menu.Bestiary
         private Location[] m_locatedIn;
 
         public int id { get => m_ID; }
-        public string creatureName { get => m_name; }
+        public string creatureName { get => m_useCustomName? m_customCreatureName : m_name; }
         public string title => m_title;
         public Sprite indexImage { get => m_indexImage; }
         public Sprite infoImage { get => m_infoImage; }
