@@ -13,11 +13,12 @@ using System.Collections.Generic;
 using DChild;
 using DChild.Gameplay.Characters.Enemies;
 using DChild.Gameplay.Pathfinding;
+using DarkTonic.MasterAudio;
 
 namespace DChild.Gameplay.Characters.Enemies
 {
-    [AddComponentMenu("DChild/Gameplay/Enemies/Minion/Wraith")]
-    public class WraithAI : CombatAIBrain<WraithAI.Info>
+    [AddComponentMenu("DChild/Gameplay/Enemies/Minion/JellyfishPoison")]
+    public class JellyfishPoisonAI : CombatAIBrain<JellyfishPoisonAI.Info>
     {
         [System.Serializable]
         public class Info : BaseInfo
@@ -32,17 +33,11 @@ namespace DChild.Gameplay.Characters.Enemies
 
             //Attack Behaviours
             [SerializeField]
-            private SimpleAttackInfo m_singleAttack = new SimpleAttackInfo();
-            public SimpleAttackInfo singleAttack => m_singleAttack;
-            [SerializeField]
-            private SimpleAttackInfo m_comboAttack = new SimpleAttackInfo();
-            public SimpleAttackInfo comboAttack => m_comboAttack;
+            private SimpleAttackInfo m_attack = new SimpleAttackInfo();
+            public SimpleAttackInfo attack => m_attack;
             [SerializeField]
             private float m_attackCD;
             public float attackCD => m_attackCD;
-            [SerializeField]
-            private float m_attackOffset;
-            public float attackOffset => m_attackOffset;
             //
             [SerializeField]
             private float m_targetDistanceTolerance;
@@ -56,35 +51,23 @@ namespace DChild.Gameplay.Characters.Enemies
             private string m_idleAnimation;
             public string idleAnimation => m_idleAnimation;
             [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_detectAnimation;
-            public string detectAnimation => m_detectAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_deathStartAnimation;
-            public string deathStartAnimation => m_deathStartAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_deathLoopAnimation;
-            public string deathLoopAnimation => m_deathLoopAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_deathEndAnimation;
-            public string deathEndAnimation => m_deathEndAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_deathCombinedAnimation;
-            public string deathCombinedAnimation => m_deathCombinedAnimation;
+            private string m_deathAnimation;
+            public string deathAnimation => m_deathAnimation;
             [SerializeField, ValueDropdown("GetAnimations")]
             private string m_flinchAnimation;
             public string flinchAnimation => m_flinchAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_turnAnimation;
-            public string turnAnimation => m_turnAnimation;
+
+            [SerializeField]
+            private SimpleProjectileAttackInfo m_projectile;
+            public SimpleProjectileAttackInfo projectile => m_projectile;
 
             public override void Initialize()
             {
 #if UNITY_EDITOR
                 m_patrol.SetData(m_skeletonDataAsset);
                 m_move.SetData(m_skeletonDataAsset);
-                m_singleAttack.SetData(m_skeletonDataAsset);
-                m_comboAttack.SetData(m_skeletonDataAsset);
-
+                m_attack.SetData(m_skeletonDataAsset);
+                m_projectile.SetData(m_skeletonDataAsset);
 #endif
             }
         }
@@ -104,8 +87,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private enum Attack
         {
-            SingleAttack,
-            ComboAttack,
+            Attack,
             [HideInInspector]
             _COUNT
         }
@@ -113,89 +95,86 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Reference")]
         private SpineEventListener m_spineEventListener;
         [SerializeField, TabGroup("Reference")]
-        private GameObject m_selfCollider;
-        [SerializeField, TabGroup("Reference")]
-        private Collider2D m_bodyCollider;
+        private Rigidbody2D m_rigidbody2D;
         [SerializeField, TabGroup("Reference")]
         private Hitbox m_hitbox;
         [SerializeField, TabGroup("Reference")]
-        private Collider2D m_hurtbox;
+        private GameObject m_selfCollider;
+        [SerializeField, TabGroup("Reference")]
+        private Collider2D m_bodycollider;
         [SerializeField, TabGroup("Modules")]
-        private AnimatedTurnHandle m_turnHandle;
-        [SerializeField, TabGroup("Modules")]
-        private TransformTurnHandle m_transformTurnHandle;
+        private TransformTurnHandle m_turnHandle;
         [SerializeField, TabGroup("Modules")]
         private PathFinderAgent m_agent;
         [SerializeField, TabGroup("Modules")]
+        private AttackHandle m_attackHandle;
+        [SerializeField, TabGroup("Modules")]
         private PatrolHandle m_patrolHandle;
         [SerializeField, TabGroup("Modules")]
-        private AttackHandle m_attackHandle;
+        private DeathHandle m_deathHandle;
         [SerializeField, TabGroup("Modules")]
         private FlinchHandler m_flinchHandle;
         [SerializeField, TabGroup("Sensors")]
-        private RaySensor m_selfSensor;
-        [SerializeField, TabGroup("Sensors")]
         private RaySensor m_groundSensor;
         [SerializeField, TabGroup("Sensors")]
-        private RaySensor m_floorSensor;
+        private RaySensor m_wallSensor;
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_roofSensor;
         [SerializeField, TabGroup("Sensors")]
-        private RaySensor m_wallSensor;
-
-        [SerializeField]
-        private SpineEventListener m_spineListener;
+        private RaySensor m_selfSensor;
 
         [ShowInInspector]
         private StateHandle<State> m_stateHandle;
         private State m_turnState;
         [ShowInInspector]
         private RandomAttackDecider<Attack> m_attackDecider;
-        private Attack m_currentAttack;
-        private float m_currentAttackRange;
 
-        private bool[] m_attackUsed;
-        private List<Attack> m_attackCache;
-        private List<float> m_attackRangeCache;
-        private Vector2 m_startPos;
+        private ProjectileLauncher m_projectileLauncher;
 
         private float m_currentCD;
         private bool m_isDetecting;
+        private Vector2 m_lastTargetPos;
+        private Vector2 m_startPos;
 
         private Coroutine m_executeMoveCoroutine;
 
         private void OnAttackDone(object sender, EventActionArgs eventArgs)
         {
-            m_animation.DisableRootMotion();
-            m_hurtbox.enabled = false;
-            m_flinchHandle.m_autoFlinch = true;
+            //m_currentAttack = Attack.Attack;
+            m_flinchHandle.gameObject.SetActive(true);
+            m_rigidbody2D.constraints = RigidbodyConstraints2D.FreezeRotation;
             m_stateHandle.ApplyQueuedState();
+            m_attackDecider.hasDecidedOnAttack = false;
         }
 
         private void OnTurnRequest(object sender, EventActionArgs eventArgs) => m_stateHandle.OverrideState(State.Turning);
-
-        private void CustomTurn()
-        {
-            transform.localScale = new Vector3(-transform.localScale.x, 1, 1);
-            m_character.SetFacing(transform.localScale.x == 1 ? HorizontalDirection.Right : HorizontalDirection.Left);
-        }
 
         public override void SetTarget(IDamageable damageable, Character m_target = null)
         {
             if (damageable != null)
             {
                 base.SetTarget(damageable);
-                m_selfCollider.SetActive(true);
                 if (m_stateHandle.currentState != State.Chasing && !m_isDetecting)
                 {
+                    m_selfCollider.SetActive(true);
                     m_isDetecting = true;
                     m_stateHandle.SetState(State.Detect);
                 }
+                //var patienceRoutine = PatienceRoutine();
+                //StopCoroutine(patienceRoutine);
             }
+        }
+
+        public void SetAI(AITargetInfo targetInfo)
+        {
+            m_isDetecting = true;
+            m_targetInfo = targetInfo;
+            m_stateHandle.OverrideState(State.ReevaluateSituation);
         }
 
         private void OnTurnDone(object sender, FacingEventArgs eventArgs)
         {
+            m_rigidbody2D.constraints = RigidbodyConstraints2D.FreezeRotation;
             m_stateHandle.ApplyQueuedState();
         }
 
@@ -206,6 +185,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 //m_animation.SetAnimation(0, m_info.flinchAnimation, false);
                 m_flinchHandle.m_autoFlinch = true;
                 m_agent.Stop();
+                m_rigidbody2D.constraints = RigidbodyConstraints2D.FreezeRotation;
                 m_stateHandle.Wait(State.ReevaluateSituation);
                 StopAllCoroutines();
             }
@@ -220,7 +200,6 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_stateHandle.ApplyQueuedState();
             }
         }
-
         private Vector2 WallPosition()
         {
             RaycastHit2D hit = Physics2D.Raycast(m_character.centerMass.position, Vector2.right * transform.localScale.x, 1000, DChildUtility.GetEnvironmentMask());
@@ -234,7 +213,7 @@ namespace DChild.Gameplay.Characters.Enemies
         //Patience Handler
         private void Patience()
         {
-            //StopAllCoroutines();
+            StopAllCoroutines();
             if (m_executeMoveCoroutine != null)
             {
                 StopCoroutine(m_executeMoveCoroutine);
@@ -244,24 +223,22 @@ namespace DChild.Gameplay.Characters.Enemies
             m_stateHandle.SetState(State.ReturnToPatrol);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_targetInfo.Set(null, null);
-            m_flinchHandle.m_autoFlinch = true;
             m_isDetecting = false;
         }
 
         public override void ApplyData()
         {
+            base.ApplyData();
             if (m_attackDecider != null)
             {
                 UpdateAttackDeciderList();
             }
-            base.ApplyData();
         }
 
         private void UpdateAttackDeciderList()
         {
-            Debug.Log("Apply Attacker Data");
-            m_attackDecider.SetList(new AttackInfo<Attack>(Attack.SingleAttack, m_info.singleAttack.range)
-                                  , new AttackInfo<Attack>(Attack.ComboAttack, m_info.comboAttack.range));
+            m_attackDecider.SetList(/*new AttackInfo<Attack>(Attack.Attack, m_info.attack.range),*/
+                                    new AttackInfo<Attack>(Attack.Attack, m_info.attack.range));
             m_attackDecider.hasDecidedOnAttack = false;
         }
 
@@ -283,113 +260,40 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             //m_Audiosource.clip = m_DeadClip;
             //m_Audiosource.Play();
-            m_stateHandle.Wait(State.WaitBehaviourEnd);
-            StopAllCoroutines();
             base.OnDestroyed(sender, eventArgs);
+            //m_lineRenderer.useWorldSpace = false;
+            //m_lineRenderer.SetPosition(0, Vector3.zero);
+            //m_lineRenderer.SetPosition(1, Vector3.zero);
+            //m_Points.Clear();
+            //for (int i = 0; i < m_lineRenderer.positionCount; i++)
+            //{
+            //    m_Points.Add(Vector2.zero);
+            //}
+            //m_edgeCollider.points = m_Points.ToArray();
+            StopAllCoroutines();
             if (m_executeMoveCoroutine != null)
             {
                 StopCoroutine(m_executeMoveCoroutine);
                 m_executeMoveCoroutine = null;
             }
-            m_hitbox.Disable();
-            m_hurtbox.enabled = false;
-            m_flinchHandle.gameObject.SetActive(false);
             m_agent.Stop();
+            m_bodycollider.enabled = false;
             m_selfCollider.SetActive(false);
-            //m_bodyCollider.SetActive(true);
-            //m_animation.SetAnimation(0, m_info.deathAnimation, false);
-            //m_character.physics.simulateGravity = true;
-            StartCoroutine(DeathRoutine());
+            m_rigidbody2D.constraints = RigidbodyConstraints2D.FreezeRotation;
+            //m_muzzleLoopFX.Stop();
+            m_animation.SetAnimation(0, m_info.deathAnimation, false);
         }
 
-        private IEnumerator DeathRoutine()
-        {
-            m_animation.SetAnimation(0, m_info.deathCombinedAnimation, false);
-            m_animation.EnableRootMotion(true, false);
-            //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.deathStartAnimation);
-            yield return new WaitForSeconds(1.6f);
-            //m_animation.DisableRootMotion();
-            m_character.physics.simulateGravity = true;
-            //m_animation.SetAnimation(0, m_info.deathLoopAnimation, true);
-            m_bodyCollider.enabled = true;
-            yield return new WaitUntil(() => m_groundSensor.isDetecting);
-            m_animation.EnableRootMotion(true, true);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.deathCombinedAnimation);
-            enabled = false;
-            this.gameObject.SetActive(false);
-            yield return null;
-        }
-
-        private void ChooseAttack()
-        {
-            if (!m_attackDecider.hasDecidedOnAttack)
-            {
-                IsAllAttackComplete();
-                for (int i = 0; i < m_attackCache.Count; i++)
-                {
-                    m_attackDecider.DecideOnAttack();
-                    if (m_attackCache[i] != m_currentAttack && !m_attackUsed[i])
-                    {
-                        m_attackUsed[i] = true;
-                        m_currentAttack = m_attackCache[i];
-                        m_currentAttackRange = m_attackRangeCache[i];
-                        return;
-                    }
-                }
-            }
-        }
-
-        private void IsAllAttackComplete()
-        {
-            for (int i = 0; i < m_attackUsed.Length; ++i)
-            {
-                if (!m_attackUsed[i])
-                {
-                    return;
-                }
-            }
-            for (int i = 0; i < m_attackUsed.Length; ++i)
-            {
-                m_attackUsed[i] = false;
-            }
-        }
-
-        void AddToAttackCache(params Attack[] list)
-        {
-            for (int i = 0; i < list.Length; i++)
-            {
-                m_attackCache.Add(list[i]);
-            }
-        }
-
-        void AddToRangeCache(params float[] list)
-        {
-            for (int i = 0; i < list.Length; i++)
-            {
-                m_attackRangeCache.Add(list[i]);
-            }
-        }
-
-        void UpdateRangeCache(params float[] list)
-        {
-            for (int i = 0; i < list.Length; i++)
-            {
-                m_attackRangeCache[i] = list[i];
-            }
-        }
-
+        #region Attack
         private void ExecuteAttack(Attack m_attack)
         {
-            m_flinchHandle.m_autoFlinch = false;
             m_agent.Stop();
-            m_animation.EnableRootMotion(true, false);
-            m_hurtbox.enabled = true;
-            switch (m_attack)
+            m_bodycollider.enabled = true;
+            m_rigidbody2D.constraints = RigidbodyConstraints2D.FreezePosition | RigidbodyConstraints2D.FreezeRotation;
+            switch (/*m_attack*/ m_attackDecider.chosenAttack.attack)
             {
-                case Attack.SingleAttack:
-                    m_attackHandle.ExecuteAttack(m_info.singleAttack.animation, m_info.idleAnimation);
-                    break;
-                case Attack.ComboAttack:
+                case Attack.Attack:
+                    m_lastTargetPos = m_targetInfo.position;
                     StartCoroutine(AttackRoutine());
                     break;
             }
@@ -397,45 +301,39 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator AttackRoutine()
         {
-            m_animation.SetAnimation(0, m_info.comboAttack.animation, false);
-            m_animation.AddAnimation(0, m_info.idleAnimation, true, 0).TimeScale = 5f;
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.comboAttack.animation);
-            m_hurtbox.enabled = false;
-            if (!IsFacingTarget())
-                CustomTurn();
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.idleAnimation);
-            m_animation.DisableRootMotion();
-            m_stateHandle.OverrideState(State.Chasing);
+            m_animation.SetAnimation(0, m_info.attack.animation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack.animation);
+            m_bodycollider.enabled = false;
+            m_stateHandle.ApplyQueuedState();
             yield return null;
         }
 
-        private IEnumerator DetectRoutine()
+        private void LaunchProjectile()
         {
-            m_animation.SetAnimation(0, m_info.detectAnimation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.detectAnimation);
-            m_stateHandle.OverrideState(State.ReevaluateSituation);
-            yield return null;
+            if (m_targetInfo.isValid)
+            {
+                m_projectileLauncher.AimAt(m_character.centerMass.position);
+                m_projectileLauncher.LaunchProjectile();
+            }
         }
+        #endregion
 
         #region Movement
         private IEnumerator ExecuteMove(float attackRange, /*float heightOffset,*/ Attack attack)
         {
-            m_animation.DisableRootMotion();
             bool inRange = false;
             /*Vector2.Distance(transform.position, target) > m_info.spearMeleeAttack.range*/ //old target in range condition
             var moveSpeed = m_info.move.speed - UnityEngine.Random.Range(0, 3);
-            var newPos = Vector2.zero;
             while (!inRange || TargetBlocked())
             {
-                newPos = new Vector2(m_targetInfo.position.x - ((Vector2.Distance(m_targetInfo.position, transform.position) > attackRange ? attackRange : 0f) * transform.localScale.x), /*GroundPosition().y + 20*/m_targetInfo.position.y - m_info.attackOffset);
-                bool xTargetInRange = Mathf.Abs(/*m_targetInfo.position.x*/newPos.x - transform.position.x) < (Vector2.Distance(m_targetInfo.position, transform.position) > attackRange ?  1 : attackRange) ? true : false;
-                bool yTargetInRange = Mathf.Abs(/*m_targetInfo.position.y*/newPos.y - transform.position.y) < 1 ? true : false;
+
+                bool xTargetInRange = Mathf.Abs(m_targetInfo.position.x - transform.position.x) < attackRange ? true : false;
+                bool yTargetInRange = Mathf.Abs(m_targetInfo.position.y - transform.position.y) < attackRange/*1*/ ? true : false;
                 if (xTargetInRange && yTargetInRange)
                 {
                     inRange = true;
                 }
-                //DynamicMovement(/*new Vector2(m_targetInfo.position.x, m_targetInfo.position.y)*/ newPos);
-                DynamicMovement(newPos, moveSpeed);
+                DynamicMovement(m_targetInfo.position, moveSpeed);
                 yield return null;
             }
             if (!IsFacingTarget())
@@ -446,9 +344,8 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return null;
         }
 
-        private void DynamicMovement(Vector2 target, float movespeed)
+        private void DynamicMovement(Vector2 target, float moveSpeed)
         {
-            var rb2d = GetComponent<Rigidbody2D>();
             m_agent.SetDestination(target);
 
             if (/*m_wallSensor.allRaysDetecting ||*/ m_selfSensor.isDetecting)
@@ -459,14 +356,19 @@ namespace DChild.Gameplay.Characters.Enemies
                 }
                 //m_bodyCollider.SetActive(true);
                 m_agent.Stop();
-                rb2d.isKinematic = false;
                 m_animation.SetAnimation(0, m_info.idleAnimation, true);
                 return;
             }
 
-            if (IsFacing(m_agent.hasPath && TargetBlocked() && !m_floorSensor.allRaysDetecting && !m_roofSensor.allRaysDetecting ? m_agent.segmentDestination : m_targetInfo.position))
+            if (IsFacing(m_agent.hasPath && TargetBlocked() && !m_groundSensor.allRaysDetecting && !m_roofSensor.allRaysDetecting ? m_agent.segmentDestination : target))
             {
-                if (!m_wallSensor.allRaysDetecting && (m_floorSensor.allRaysDetecting || m_roofSensor.allRaysDetecting))
+                if (m_animation.animationState.GetCurrent(0).IsComplete)
+                {
+                    var chosenMoveAnim = UnityEngine.Random.Range(0, 50) > 10 ? m_info.idleAnimation : m_info.move.animation;
+                    m_animation.SetAnimation(0, chosenMoveAnim, true);
+                }
+
+                if (!m_wallSensor.allRaysDetecting && (m_groundSensor.allRaysDetecting || m_roofSensor.allRaysDetecting))
                 {
                     //if (m_executeMoveCoroutine != null)
                     //{
@@ -475,22 +377,20 @@ namespace DChild.Gameplay.Characters.Enemies
                     //}
                     //StartCoroutine(DespawnRoutine());
                     //Vector3.MoveTowards(transform.position, m_targetInfo.position, m_info.move.speed);
-                    m_bodyCollider.enabled = false;
+                    m_bodycollider.enabled = false;
                     m_agent.Stop();
-                    Vector3 dir = (target - (Vector2)rb2d.transform.position).normalized;
-                    rb2d.MovePosition(rb2d.transform.position + dir * movespeed * Time.fixedDeltaTime);
+                    Vector3 dir = (target - (Vector2)m_rigidbody2D.transform.position).normalized;
+                    m_rigidbody2D.MovePosition(m_rigidbody2D.transform.position + dir * moveSpeed * Time.fixedDeltaTime);
 
                     m_animation.SetAnimation(0, m_info.move.animation, true);
                     return;
                 }
 
-                m_bodyCollider.enabled = true;
+                m_bodycollider.enabled = true;
                 var velocityX = GetComponent<IsolatedPhysics2D>().velocity.x;
                 var velocityY = GetComponent<IsolatedPhysics2D>().velocity.y;
                 m_agent.SetDestination(target);
-                m_agent.Move(movespeed);
-
-                m_animation.SetAnimation(0, m_info.move.animation, true);
+                m_agent.Move(moveSpeed);
             }
             else
             {
@@ -498,18 +398,17 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_stateHandle.OverrideState(State.Turning);
             }
         }
-
-        private Vector2 GroundPosition()
-        {
-            RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, 1000, DChildUtility.GetEnvironmentMask());
-            return hit.point;
-        }
         #endregion
 
         protected override void Start()
         {
             base.Start();
+            m_animation.SetAnimation(0, m_info.patrol.animation, true);
+            m_animation.DisableRootMotion();
+            m_bodycollider.enabled = false;
             m_startPos = transform.position;
+
+            m_spineEventListener.Subscribe(m_info.projectile.launchOnEvent, LaunchProjectile);
         }
 
         protected override void Awake()
@@ -521,15 +420,11 @@ namespace DChild.Gameplay.Characters.Enemies
             m_flinchHandle.FlinchStart += OnFlinchStart;
             m_flinchHandle.FlinchEnd += OnFlinchEnd;
             m_turnHandle.TurnDone += OnTurnDone;
-            m_transformTurnHandle.TurnDone += OnTurnDone;
+            m_deathHandle.SetAnimation(m_info.deathAnimation);
+            m_projectileLauncher = new ProjectileLauncher(m_info.projectile.projectileInfo, m_character.centerMass);
             m_stateHandle = new StateHandle<State>(State.Patrol, State.WaitBehaviourEnd);
             m_attackDecider = new RandomAttackDecider<Attack>();
             UpdateAttackDeciderList();
-            m_attackCache = new List<Attack>();
-            AddToAttackCache(Attack.SingleAttack, Attack.ComboAttack);
-            m_attackRangeCache = new List<float>();
-            AddToRangeCache(m_info.singleAttack.range, m_info.comboAttack.range);
-            m_attackUsed = new bool[m_attackCache.Count];
         }
 
         private void Update()
@@ -541,8 +436,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_agent.Stop();
                     if (IsFacingTarget())
                     {
-                        m_stateHandle.Wait(State.ReevaluateSituation);
-                        StartCoroutine(DetectRoutine());
+                        m_stateHandle.OverrideState(State.ReevaluateSituation);
                     }
                     else
                     {
@@ -554,13 +448,13 @@ namespace DChild.Gameplay.Characters.Enemies
                 case State.ReturnToPatrol:
                     if (IsFacing(m_startPos))
                     {
-                        if (Vector2.Distance(m_startPos, transform.position) > 5f)
+                        if (Vector2.Distance(m_startPos, transform.position) > 10f)
                         {
                             var rb2d = GetComponent<Rigidbody2D>();
-                            m_bodyCollider.enabled = false;
+                            m_bodycollider.enabled = false;
                             m_agent.Stop();
                             Vector3 dir = (m_startPos - (Vector2)rb2d.transform.position).normalized;
-                            rb2d.MovePosition(rb2d.transform.position + dir * m_info.patrol.speed * Time.fixedDeltaTime);
+                            rb2d.MovePosition(rb2d.transform.position + dir * m_info.move.speed * Time.fixedDeltaTime);
                             m_animation.SetAnimation(0, m_info.patrol.animation, true);
                         }
                         else
@@ -576,39 +470,34 @@ namespace DChild.Gameplay.Characters.Enemies
                     break;
 
                 case State.Patrol:
-                    m_turnState = State.Patrol;
-                    m_animation.SetAnimation(0, m_info.patrol.animation, true);
+                    m_turnState = State.ReevaluateSituation;
+                    if (m_animation.animationState.GetCurrent(0).IsComplete)
+                    {
+                        var chosenMoveAnim = UnityEngine.Random.Range(0, 100) < 25 ? m_info.idleAnimation : m_info.move.animation;
+                        m_animation.SetAnimation(0, chosenMoveAnim, true);
+                    }
+
                     var characterInfo = new PatrolHandle.CharacterInfo(m_character.centerMass.position, m_character.facing);
                     m_patrolHandle.Patrol(m_agent, m_info.patrol.speed, characterInfo);
                     break;
 
                 case State.Turning:
-                    if (m_animation.GetCurrentAnimation(0).ToString() != m_info.flinchAnimation)
+                    m_stateHandle.Wait(m_turnState);
+                    StopAllCoroutines();
+                    m_rigidbody2D.constraints = RigidbodyConstraints2D.FreezePosition | RigidbodyConstraints2D.FreezeRotation;
+                    if (m_executeMoveCoroutine != null)
                     {
-                        m_stateHandle.Wait(m_turnState);
-                        if (m_executeMoveCoroutine != null)
-                        {
-                            StopCoroutine(m_executeMoveCoroutine);
-                            m_executeMoveCoroutine = null;
-                        }
-                        m_agent.Stop();
-                        m_animation.SetAnimation(0, m_info.idleAnimation, true);
-                        switch (m_turnState)
-                        {
-                            case State.Patrol:
-                                m_transformTurnHandle.Execute();
-                                break;
-                            default:
-                                m_turnHandle.Execute(m_info.turnAnimation, m_info.idleAnimation);
-                                break;
-                        }
+                        StopCoroutine(m_executeMoveCoroutine);
+                        m_executeMoveCoroutine = null;
                     }
+                    m_agent.Stop();
+                    m_turnHandle.Execute();
                     break;
                 case State.Attacking:
                     m_stateHandle.Wait(State.Cooldown);
-                    //m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                    m_animation.SetAnimation(0, m_info.idleAnimation, true);
                     m_agent.Stop();
-                    m_executeMoveCoroutine = StartCoroutine(ExecuteMove(/*m_currentAttackRange*/ m_attackRangeCache[0], m_currentAttack));
+                    m_executeMoveCoroutine = StartCoroutine(ExecuteMove(m_attackDecider.chosenAttack.range, m_attackDecider.chosenAttack.attack));
                     m_attackDecider.hasDecidedOnAttack = false;
                     break;
                 case State.Cooldown:
@@ -616,21 +505,28 @@ namespace DChild.Gameplay.Characters.Enemies
                     if (!IsFacingTarget())
                     {
                         m_turnState = State.Cooldown;
-                        if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
-                            m_stateHandle.SetState(State.Turning);
+                        m_stateHandle.SetState(State.Turning);
                     }
                     else
                     {
                         if (Vector2.Distance(m_targetInfo.position, transform.position) <= m_info.targetDistanceTolerance)
                         {
-                            m_animation.EnableRootMotion(false, false);
-                            m_animation.SetAnimation(0, m_info.move.animation, true).TimeScale = 1f;
+                            if (m_character.physics.velocity.y > 1 || m_character.physics.velocity.y < -1)
+                            {
+                                m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                            }
+                            else
+                            {
+                                m_animation.SetAnimation(0, m_info.patrol.animation, true);
+                            }
+                            m_rigidbody2D.constraints = RigidbodyConstraints2D.FreezeRotation;
                             CalculateRunPath();
                             m_agent.Move(m_info.move.speed);
                         }
                         else
                         {
                             m_agent.Stop();
+                            m_rigidbody2D.constraints = RigidbodyConstraints2D.FreezePosition | RigidbodyConstraints2D.FreezeRotation;
                             m_animation.SetAnimation(0, m_info.idleAnimation, true).TimeScale = 1f;
                         }
                     }
@@ -642,15 +538,16 @@ namespace DChild.Gameplay.Characters.Enemies
                     else
                     {
                         m_currentCD = 0;
-                        m_selfCollider.SetActive(true);
+                        m_rigidbody2D.constraints = RigidbodyConstraints2D.FreezeRotation;
                         m_stateHandle.OverrideState(State.ReevaluateSituation);
                     }
 
                     break;
                 case State.Chasing:
+                    //m_attackDecider.DecideOnAttack();
                     m_attackDecider.hasDecidedOnAttack = false;
-                    ChooseAttack();
-                    if (m_attackDecider.hasDecidedOnAttack /*&& !ShotBlocked()*/)
+                    m_attackDecider.DecideOnAttack();
+                    if (m_attackDecider.hasDecidedOnAttack /*&& IsTargetInRange(m_currentAttackRange) && !m_wallSensor.allRaysDetecting*/)
                     {
                         m_agent.Stop();
                         m_stateHandle.SetState(State.Attacking);
@@ -690,28 +587,26 @@ namespace DChild.Gameplay.Characters.Enemies
         protected override void OnTargetDisappeared()
         {
             m_stateHandle.OverrideState(State.ReturnToPatrol);
+            m_hitbox.gameObject.SetActive(true);
             m_isDetecting = false;
         }
 
         public void ResetAI()
         {
-            m_selfCollider.SetActive(false);
-            m_bodyCollider.enabled = false;
             m_targetInfo.Set(null, null);
-            m_flinchHandle.m_autoFlinch = true;
             m_isDetecting = false;
-            m_stateHandle.OverrideState(State.ReturnToPatrol);
+            m_stateHandle.OverrideState(State.ReevaluateSituation);
             enabled = true;
-        }
-
-        protected override void OnForbidFromAttackTarget()
-        {
-            ResetAI();
         }
 
         public override void ReturnToSpawnPoint()
         {
             Patience();
+        }
+
+        protected override void OnForbidFromAttackTarget()
+        {
+            ResetAI();
         }
     }
 }
