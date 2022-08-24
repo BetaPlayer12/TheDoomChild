@@ -16,8 +16,8 @@ using DChild.Gameplay.Pathfinding;
 
 namespace DChild.Gameplay.Characters.Enemies
 {
-    [AddComponentMenu("DChild/Gameplay/Enemies/Minion/FlyingSkeleton")]
-    public class FlyingSkeletonAI : CombatAIBrain<FlyingSkeletonAI.Info>
+    [AddComponentMenu("DChild/Gameplay/Enemies/Minion/Wraith")]
+    public class WraithAI : CombatAIBrain<WraithAI.Info>
     {
         [System.Serializable]
         public class Info : BaseInfo
@@ -68,6 +68,9 @@ namespace DChild.Gameplay.Characters.Enemies
             private string m_deathEndAnimation;
             public string deathEndAnimation => m_deathEndAnimation;
             [SerializeField, ValueDropdown("GetAnimations")]
+            private string m_deathCombinedAnimation;
+            public string deathCombinedAnimation => m_deathCombinedAnimation;
+            [SerializeField, ValueDropdown("GetAnimations")]
             private string m_flinchAnimation;
             public string flinchAnimation => m_flinchAnimation;
             [SerializeField, ValueDropdown("GetAnimations")]
@@ -115,8 +118,12 @@ namespace DChild.Gameplay.Characters.Enemies
         private Collider2D m_bodyCollider;
         [SerializeField, TabGroup("Reference")]
         private Hitbox m_hitbox;
+        [SerializeField, TabGroup("Reference")]
+        private Collider2D m_hurtbox;
         [SerializeField, TabGroup("Modules")]
         private AnimatedTurnHandle m_turnHandle;
+        [SerializeField, TabGroup("Modules")]
+        private TransformTurnHandle m_transformTurnHandle;
         [SerializeField, TabGroup("Modules")]
         private PathFinderAgent m_agent;
         [SerializeField, TabGroup("Modules")]
@@ -160,6 +167,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private void OnAttackDone(object sender, EventActionArgs eventArgs)
         {
             m_animation.DisableRootMotion();
+            m_hurtbox.enabled = false;
             m_flinchHandle.m_autoFlinch = true;
             m_stateHandle.ApplyQueuedState();
         }
@@ -293,6 +301,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 StopCoroutine(m_executeMoveCoroutine);
                 m_executeMoveCoroutine = null;
             }
+            m_hurtbox.enabled = false;
             m_selfCollider.SetActive(false);
             //m_bodyCollider.SetActive(true);
             //m_animation.SetAnimation(0, m_info.deathAnimation, false);
@@ -303,18 +312,17 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator DeathRoutine()
         {
-            m_animation.SetAnimation(0, m_info.deathStartAnimation, false);
+            m_animation.SetAnimation(0, m_info.deathCombinedAnimation, false);
             m_animation.EnableRootMotion(true, false);
             //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.deathStartAnimation);
             yield return new WaitForSeconds(1.6f);
             //m_animation.DisableRootMotion();
             m_character.physics.simulateGravity = true;
-            m_animation.SetAnimation(0, m_info.deathLoopAnimation, true);
+            //m_animation.SetAnimation(0, m_info.deathLoopAnimation, true);
             m_bodyCollider.enabled = true;
             yield return new WaitUntil(() => m_groundSensor.isDetecting);
             m_animation.EnableRootMotion(true, true);
-            m_animation.SetAnimation(0, m_info.deathEndAnimation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.deathEndAnimation);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.deathCombinedAnimation);
             enabled = false;
             this.gameObject.SetActive(false);
             yield return null;
@@ -383,6 +391,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_flinchHandle.m_autoFlinch = false;
             m_agent.Stop();
             m_animation.EnableRootMotion(true, false);
+            m_hurtbox.enabled = true;
             switch (m_attack)
             {
                 case Attack.SingleAttack:
@@ -398,9 +407,13 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_animation.SetAnimation(0, m_info.comboAttack.animation, false);
             m_animation.AddAnimation(0, m_info.idleAnimation, true, 0).TimeScale = 5f;
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.comboAttack.animation);
+            m_hurtbox.enabled = false;
+            if (!IsFacingTarget())
+                CustomTurn();
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.idleAnimation);
             m_animation.DisableRootMotion();
-            m_stateHandle.ApplyQueuedState();
+            m_stateHandle.OverrideState(State.Chasing);
             yield return null;
         }
 
@@ -516,6 +529,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_flinchHandle.FlinchStart += OnFlinchStart;
             m_flinchHandle.FlinchEnd += OnFlinchEnd;
             m_turnHandle.TurnDone += OnTurnDone;
+            m_transformTurnHandle.TurnDone += OnTurnDone;
             m_stateHandle = new StateHandle<State>(State.Patrol, State.WaitBehaviourEnd);
             m_attackDecider = new RandomAttackDecider<Attack>();
             UpdateAttackDeciderList();
@@ -570,7 +584,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     break;
 
                 case State.Patrol:
-                    m_turnState = State.ReevaluateSituation;
+                    m_turnState = State.Patrol;
                     m_animation.SetAnimation(0, m_info.patrol.animation, true);
                     var characterInfo = new PatrolHandle.CharacterInfo(m_character.centerMass.position, m_character.facing);
                     m_patrolHandle.Patrol(m_agent, m_info.patrol.speed, characterInfo);
@@ -587,7 +601,15 @@ namespace DChild.Gameplay.Characters.Enemies
                         }
                         m_agent.Stop();
                         m_animation.SetAnimation(0, m_info.idleAnimation, true);
-                        m_turnHandle.Execute(m_info.turnAnimation, m_info.idleAnimation);
+                        switch (m_turnState)
+                        {
+                            case State.Patrol:
+                                m_transformTurnHandle.Execute();
+                                break;
+                            default:
+                                m_turnHandle.Execute(m_info.turnAnimation, m_info.idleAnimation);
+                                break;
+                        }
                     }
                     break;
                 case State.Attacking:
