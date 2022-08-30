@@ -256,15 +256,9 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField]
             private float m_projectileGravityScale;
             public float projectileGravityScale => m_projectileGravityScale;
-            //[SerializeField]
-            //private Vector2 m_targetOffset;
-            //public Vector2 targetOffset => m_targetOffset;
             [SerializeField]
             private float m_launchDelay;
             public float launchDelay => m_launchDelay;
-            //[SerializeField]
-            //private SimpleProjectileAttackInfo m_scytheWaveProjectile;
-            //public SimpleProjectileAttackInfo scytheWaveProjectile => m_scytheWaveProjectile;
 
             [TitleGroup("FX")]
             [SerializeField]
