@@ -350,7 +350,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator DetectRoutine()
         {
             m_movement.Stop();
-            m_animation.EnableRootMotion(true, true);
+            m_animation.EnableRootMotion(true, false);
             m_animation.SetAnimation(0, m_info.detectAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.detectAnimation);
             m_animation.DisableRootMotion();
@@ -379,7 +379,6 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator RunAttackRoutine()
         {
-            //m_animation.EnableRootMotion(true, false);
             var toTarget = m_currentTargetPos - (Vector2)m_character.centerMass.position;
             m_selfCollider.enabled = false;
             m_animation.SetAnimation(0, m_info.runAttack.animation, false);
@@ -393,7 +392,6 @@ namespace DChild.Gameplay.Characters.Enemies
             m_currentRunAttackDuration = 0;
             m_flinchHandle.m_enableMixFlinch = true;
             //yield return new WaitForSeconds(m_info.runAttackDuration);
-            //m_animation.EnableRootMotion(false, false);
             m_animation.SetAnimation(0, m_info.idleAnimation, true).MixDuration = 0.25f;
             m_selfCollider.enabled = true;
             m_stateHandle.ApplyQueuedState();
@@ -527,7 +525,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     if (m_animation.GetCurrentAnimation(0).ToString() != m_info.idleAnimation)
                     {
                         m_movement.Stop();
-                        m_animation.EnableRootMotion(true, true);
+                        m_animation.EnableRootMotion(true, false);
                     }
                     m_animation.SetAnimation(0, m_info.idleAnimation, true);
                     break;
@@ -546,7 +544,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         if (m_animation.GetCurrentAnimation(0).ToString() != m_info.idleAnimation)
                         {
                             m_movement.Stop();
-                            m_animation.EnableRootMotion(true, true);
+                            m_animation.EnableRootMotion(true, false);
                         }
                         m_animation.SetAnimation(0, m_info.idleAnimation, true);
                     }
@@ -585,19 +583,17 @@ namespace DChild.Gameplay.Characters.Enemies
                             m_isInAttackrange = false;
                             m_animation.SetAnimation(0, m_info.idleAnimation, true);
 
+                            m_animation.EnableRootMotion(true, false);
                             m_flinchHandle.m_enableMixFlinch = false;
                             switch (/*m_attackDecider.chosenAttack.attack*/ m_currentAttack)
                             {
                                 case Attack.Attack1:
-                                    m_animation.EnableRootMotion(true, false);
                                     m_attackHandle.ExecuteAttack(m_info.attack1.animation, m_info.idleAnimation);
                                     break;
                                 case Attack.Attack2:
-                                    m_animation.EnableRootMotion(true, false);
                                     m_attackHandle.ExecuteAttack(m_info.attack2.animation, m_info.idleAnimation);
                                     break;
                                 case Attack.Attack3:
-                                    m_animation.EnableRootMotion(true, false);
                                     m_attackHandle.ExecuteAttack(m_info.attack3.animation, m_info.idleAnimation);
                                     break;
                                 case Attack.RunAttack:
@@ -631,7 +627,7 @@ namespace DChild.Gameplay.Characters.Enemies
                                 {
                                     m_movement.Stop();
                                 }
-                                m_animation.EnableRootMotion(true, m_groundSensor.isDetecting ? true : false);
+                                m_animation.EnableRootMotion(true, false);
 
                                 m_selfCollider.enabled = true;
                                 m_animation.SetAnimation(0, m_info.idleAnimation, true);
@@ -671,7 +667,7 @@ namespace DChild.Gameplay.Characters.Enemies
                                 if (m_animation.GetCurrentAnimation(0).ToString() != m_info.idleAnimation)
                                 {
                                     m_movement.Stop();
-                                    m_animation.EnableRootMotion(true, true);
+                                    m_animation.EnableRootMotion(true, false);
                                 }
                                 m_selfCollider.enabled = true;
                                 m_animation.SetAnimation(0, m_info.idleAnimation, true);
