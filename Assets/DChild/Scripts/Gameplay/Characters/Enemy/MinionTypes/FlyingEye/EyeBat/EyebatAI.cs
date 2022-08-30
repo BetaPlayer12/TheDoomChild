@@ -18,7 +18,7 @@ using DarkTonic.MasterAudio;
 namespace DChild.Gameplay.Characters.Enemies
 {
     [AddComponentMenu("DChild/Gameplay/Enemies/Minion/Eyebat")]
-    public class EyebatAI : CombatAIBrain<EyebatAI.Info>, ISummonedEnemy
+    public class EyebatAI : CombatAIBrain<EyebatAI.Info>
     {
         [System.Serializable]
         public class Info : BaseInfo
@@ -115,8 +115,6 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Reference")]
         private Rigidbody2D m_rigidbody2D;
         [SerializeField, TabGroup("Reference")]
-        private Health m_health;
-        [SerializeField, TabGroup("Reference")]
         private Hitbox m_hitbox;
         [SerializeField, TabGroup("Reference")]
         private GameObject m_selfCollider;
@@ -196,6 +194,12 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnTurnRequest(object sender, EventActionArgs eventArgs) => m_stateHandle.OverrideState(State.Turning);
 
+        private void CustomTurn()
+        {
+            transform.localScale = new Vector3(-transform.localScale.x, 1, 1);
+            m_character.SetFacing(transform.localScale.x == 1 ? HorizontalDirection.Right : HorizontalDirection.Left);
+        }
+
         public override void SetTarget(IDamageable damageable, Character m_target = null)
         {
             if (damageable != null)
@@ -212,34 +216,15 @@ namespace DChild.Gameplay.Characters.Enemies
             }
         }
 
-        public void SummonAt(Vector2 position, AITargetInfo target)
+        public void SetAI(AITargetInfo targetInfo)
         {
-            m_targetInfo = target;
             m_isDetecting = true;
-            transform.position = new Vector2(m_targetInfo.position.x, m_targetInfo.position.y + 10f);
-            m_character.physics.simulateGravity = false;
-            m_hitbox.Enable();
-            m_flinchHandle.gameObject.SetActive(true);
-            m_health.SetHealthPercentage(1f);
-            this.gameObject.SetActive(true);
-            this.transform.SetParent(null);
-            if (!IsFacingTarget())
-                CustomTurn();
-            Awake();
-            m_stateHandle.OverrideState(State.Detect);
-            enabled = true;
+            m_targetInfo = targetInfo;
+            m_stateHandle.OverrideState(State.ReevaluateSituation);
         }
-
-        //public void SetAI(AITargetInfo targetInfo)
-        //{
-        //    m_isDetecting = true;
-        //    m_targetInfo = targetInfo;
-        //    m_stateHandle.OverrideState(State.ReevaluateSituation);
-        //}
 
         private void OnTurnDone(object sender, FacingEventArgs eventArgs)
         {
-            m_animation.DisableRootMotion();
             m_rigidbody2D.constraints = RigidbodyConstraints2D.FreezeRotation;
             m_stateHandle.ApplyQueuedState();
         }
@@ -315,8 +300,6 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_animation.SetAnimation(0, m_info.detectAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.detectAnimation);
-            if (!IsFacingTarget())
-                CustomTurn();
             m_stateHandle.OverrideState(State.ReevaluateSituation);
             yield return null;
         }
@@ -953,10 +936,6 @@ namespace DChild.Gameplay.Characters.Enemies
         protected override void OnForbidFromAttackTarget()
         {
             ResetAI();
-        }
-
-        public void DestroyObject()
-        {
         }
     }
 }

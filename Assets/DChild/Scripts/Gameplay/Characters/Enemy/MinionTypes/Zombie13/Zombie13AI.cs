@@ -486,7 +486,6 @@ namespace DChild.Gameplay.Characters.Enemies
             }
 
             m_startPoint = transform.position;
-            m_patrolDestination = m_patrolHandle.currentDestination;
             //m_spineEventListener.Subscribe(m_info.explodeEvent, m_explodeFX.Play);
         }
 
