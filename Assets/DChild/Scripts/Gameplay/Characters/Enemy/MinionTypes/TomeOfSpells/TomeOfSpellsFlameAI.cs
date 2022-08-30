@@ -14,77 +14,74 @@ using DChild;
 using DChild.Gameplay.Characters.Enemies;
 using DChild.Gameplay.Pathfinding;
 using DarkTonic.MasterAudio;
+using DChild.Gameplay.Pooling;
+using DChild.Gameplay.Projectiles;
+using Holysoft.Collections;
+using Holysoft.Pooling;
 
 namespace DChild.Gameplay.Characters.Enemies
 {
-    [AddComponentMenu("DChild/Gameplay/Enemies/Minion/Eyebat")]
-    public class EyebatAI : CombatAIBrain<EyebatAI.Info>, ISummonedEnemy
+    [AddComponentMenu("DChild/Gameplay/Enemies/Minion/TomeOfSpells (Flame)")]
+    public class TomeOfSpellsFlameAI : CombatAIBrain<TomeOfSpellsFlameAI.Info>
     {
         [System.Serializable]
         public class Info : BaseInfo
         {
             //Basic Behaviours
-            [SerializeField]
+            [SerializeField, BoxGroup("Movement")]
             private MovementInfo m_patrol = new MovementInfo();
             public MovementInfo patrol => m_patrol;
-            [SerializeField]
+            [SerializeField, BoxGroup("Movement")]
             private MovementInfo m_move = new MovementInfo();
             public MovementInfo move => m_move;
 
             //Attack Behaviours
-            [SerializeField]
-            private SimpleAttackInfo m_attack = new SimpleAttackInfo();
-            public SimpleAttackInfo attack => m_attack;
-            [SerializeField]
-            private SimpleAttackInfo m_attackMove = new SimpleAttackInfo();
-            public SimpleAttackInfo attackMove => m_attackMove;
-            [SerializeField]
-            private SimpleAttackInfo m_attackLazer = new SimpleAttackInfo();
-            public SimpleAttackInfo attackLazer => m_attackLazer;
-            [SerializeField]
+            [SerializeField, BoxGroup("Attack")]
+            private SimpleAttackInfo m_attackFlame = new SimpleAttackInfo();
+            public SimpleAttackInfo attackFlame => m_attackFlame;
+            [SerializeField, BoxGroup("Attack"), ValueDropdown("GetAnimations")]
+            private string m_attackFlameStartAnimation;
+            public string attackFlameStartAnimation => m_attackFlameStartAnimation;
+            [SerializeField, BoxGroup("Attack")]
             private float m_attackCD;
             public float attackCD => m_attackCD;
             //
-            [SerializeField]
+            [SerializeField, BoxGroup("Patience"), MinValue(0)]
+            private float m_patience;
+            public float patience => m_patience;
+
+            [SerializeField, BoxGroup("Patience")]
             private float m_targetDistanceTolerance;
             public float targetDistanceTolerance => m_targetDistanceTolerance;
-            [SerializeField]
+            [SerializeField, BoxGroup("Patience")]
             private float m_patienceDistanceTolerance = 50f;
             public float patienceDistanceTolerance => m_patienceDistanceTolerance;
 
             //Animations
-            [SerializeField, ValueDropdown("GetAnimations")]
+            [SerializeField, BoxGroup("Animation"), ValueDropdown("GetAnimations")]
             private string m_detectAnimation;
             public string detectAnimation => m_detectAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
+            [SerializeField, BoxGroup("Animation"), ValueDropdown("GetAnimations")]
             private string m_idleAnimation;
             public string idleAnimation => m_idleAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_deathAnimation;
-            public string deathAnimation => m_deathAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
+            [SerializeField, BoxGroup("Animation"), ValueDropdown("GetAnimations")]
+            private string m_deathStartAnimation;
+            public string deathStartAnimation => m_deathStartAnimation;
+            [SerializeField, BoxGroup("Animation"), ValueDropdown("GetAnimations")]
+            private string m_deathLoopAnimation;
+            public string deathLoopAnimation => m_deathLoopAnimation;
+            [SerializeField, BoxGroup("Animation"), ValueDropdown("GetAnimations")]
+            private string m_deathEndAnimation;
+            public string deathEndAnimation => m_deathEndAnimation;
+            [SerializeField, BoxGroup("Animation"), ValueDropdown("GetAnimations")]
             private string m_flinchAnimation;
             public string flinchAnimation => m_flinchAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_swoopAnimation;
-            public string swoopAnimation => m_swoopAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_swoopStartAnimation;
-            public string swoopStartAnimation => m_swoopStartAnimation;
-
-            [SerializeField]
-            private SimpleProjectileAttackInfo m_projectile;
-            public SimpleProjectileAttackInfo projectile => m_projectile;
 
             public override void Initialize()
             {
 #if UNITY_EDITOR
                 m_patrol.SetData(m_skeletonDataAsset);
                 m_move.SetData(m_skeletonDataAsset);
-                m_attack.SetData(m_skeletonDataAsset);
-                m_attackMove.SetData(m_skeletonDataAsset);
-                m_attackLazer.SetData(m_skeletonDataAsset);
-                m_projectile.SetData(m_skeletonDataAsset);
 #endif
             }
         }
@@ -105,7 +102,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private enum Attack
         {
             //Attack,
-            Lazer,
+            AttackStorm,
             [HideInInspector]
             _COUNT
         }
@@ -115,13 +112,15 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Reference")]
         private Rigidbody2D m_rigidbody2D;
         [SerializeField, TabGroup("Reference")]
-        private Health m_health;
-        [SerializeField, TabGroup("Reference")]
         private Hitbox m_hitbox;
+        [SerializeField, TabGroup("Reference")]
+        private Health m_health;
         [SerializeField, TabGroup("Reference")]
         private GameObject m_selfCollider;
         [SerializeField, TabGroup("Reference")]
-        private Collider2D m_bodycollider;
+        private Collider2D m_bodyCollider;
+        [SerializeField, TabGroup("Reference")]
+        private Collider2D m_legCollider;
         [SerializeField, TabGroup("Modules")]
         private TransformTurnHandle m_turnHandle;
         [SerializeField, TabGroup("Modules")]
@@ -142,27 +141,9 @@ namespace DChild.Gameplay.Characters.Enemies
         private RaySensor m_roofSensor;
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_selfSensor;
-        [SerializeField, TabGroup("Lazer")]
-        private LineRenderer m_lineRenderer;
-        [SerializeField, TabGroup("Lazer")]
-        private LineRenderer m_telegraphLineRenderer;
-        [SerializeField, TabGroup("Lazer")]
-        private EdgeCollider2D m_edgeCollider;
-        [SerializeField, TabGroup("Lazer")]
-        private GameObject m_muzzleFXGO;
-        [SerializeField, TabGroup("Lazer")]
-        private ParticleFX m_muzzleLoopFX;
-        [SerializeField, TabGroup("Lazer")]
-        private ParticleFX m_muzzleTelegraphFX;
-        [SerializeField, TabGroup("Audio")]
-        private EventSounds m_lazerAudio;
-        //[SerializeField, TabGroup("Lazer")]
-        //private Gradient m_telegraphGradient;
-        //[SerializeField, TabGroup("Lazer")]
-        //private Color m_lazerColor;
 
-        private List<Vector2> m_Points;
-        private IEnumerator m_aimRoutine;
+        [SerializeField, TabGroup("Magister")]
+        private Transform m_magister;
 
         [ShowInInspector]
         private StateHandle<State> m_stateHandle;
@@ -178,12 +159,16 @@ namespace DChild.Gameplay.Characters.Enemies
         private List<Attack> m_attackCache;
         private List<float> m_attackRangeCache;
 
+        private float m_currentPatience;
         private float m_currentCD;
         private bool m_isDetecting;
+        private bool m_enablePatience;
         private Vector2 m_lastTargetPos;
         private Vector2 m_startPos;
 
         private Coroutine m_executeMoveCoroutine;
+        private Coroutine m_attackRoutine;
+        private Coroutine m_patienceRoutine;
 
         private void OnAttackDone(object sender, EventActionArgs eventArgs)
         {
@@ -195,6 +180,12 @@ namespace DChild.Gameplay.Characters.Enemies
         }
 
         private void OnTurnRequest(object sender, EventActionArgs eventArgs) => m_stateHandle.OverrideState(State.Turning);
+
+        private void CustomTurn()
+        {
+            transform.localScale = new Vector3(-transform.localScale.x, 1, 1);
+            m_character.SetFacing(transform.localScale.x == 1 ? HorizontalDirection.Right : HorizontalDirection.Left);
+        }
 
         public override void SetTarget(IDamageable damageable, Character m_target = null)
         {
@@ -212,35 +203,15 @@ namespace DChild.Gameplay.Characters.Enemies
             }
         }
 
-        public void SummonAt(Vector2 position, AITargetInfo target)
+        public void SetAI(AITargetInfo targetInfo)
         {
-            //Lefix commento 3====D----
-            m_targetInfo = target;
             m_isDetecting = true;
-            transform.position = new Vector2(m_targetInfo.position.x, m_targetInfo.position.y + 10f);
-            m_character.physics.simulateGravity = false;
-            m_hitbox.Enable();
-            m_flinchHandle.gameObject.SetActive(true);
-            m_health.SetHealthPercentage(1f);
-            this.gameObject.SetActive(true);
-            this.transform.SetParent(null);
-            if (!IsFacingTarget())
-                CustomTurn();
-            Awake();
-            m_stateHandle.OverrideState(State.Detect);
-            enabled = true;
+            m_targetInfo = targetInfo;
+            m_stateHandle.OverrideState(State.ReevaluateSituation);
         }
-
-        //public void SetAI(AITargetInfo targetInfo)
-        //{
-        //    m_isDetecting = true;
-        //    m_targetInfo = targetInfo;
-        //    m_stateHandle.OverrideState(State.ReevaluateSituation);
-        //}
 
         private void OnTurnDone(object sender, FacingEventArgs eventArgs)
         {
-            m_animation.DisableRootMotion();
             m_rigidbody2D.constraints = RigidbodyConstraints2D.FreezeRotation;
             m_stateHandle.ApplyQueuedState();
         }
@@ -252,9 +223,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 //m_animation.SetAnimation(0, m_info.flinchAnimation, false);
                 m_flinchHandle.m_autoFlinch = true;
                 m_agent.Stop();
-                ResetLaser();
                 m_rigidbody2D.constraints = RigidbodyConstraints2D.FreezeRotation;
-                m_lazerAudio.enabled = false;
                 m_stateHandle.Wait(State.ReevaluateSituation);
                 StopAllCoroutines();
             }
@@ -282,18 +251,37 @@ namespace DChild.Gameplay.Characters.Enemies
         //Patience Handler
         private void Patience()
         {
+            if (m_patienceRoutine == null)
+            {
+                m_patienceRoutine = StartCoroutine(PatienceRoutine());
+            }
+            m_enablePatience = false;
+            m_stateHandle.OverrideState(State.ReevaluateSituation);
+        }
+
+        private IEnumerator PatienceRoutine()
+        {
+            //if (m_enablePatience)
+            //{
+            //    while (m_currentPatience < m_info.patience)
+            //    {
+            //        m_currentPatience += m_character.isolatedObject.deltaTime;
+            //        yield return null;
+            //    }
+            //}
+            yield return new WaitForSeconds(m_info.patience);
             StopAllCoroutines();
+            m_enablePatience = false;
+            m_targetInfo.Set(null, null);
+            m_isDetecting = false;
             if (m_executeMoveCoroutine != null)
             {
                 StopCoroutine(m_executeMoveCoroutine);
                 m_executeMoveCoroutine = null;
             }
-            ResetLaser();
             m_agent.Stop();
-            m_stateHandle.SetState(State.ReturnToPatrol);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
-            m_targetInfo.Set(null, null);
-            m_isDetecting = false;
+            m_stateHandle.SetState(State.ReturnToPatrol);
         }
 
         public override void ApplyData()
@@ -308,7 +296,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private void UpdateAttackDeciderList()
         {
             m_attackDecider.SetList(/*new AttackInfo<Attack>(Attack.Attack, m_info.attack.range),*/
-                                    new AttackInfo<Attack>(Attack.Lazer, m_info.attackLazer.range));
+                                    /*new AttackInfo<Attack>(Attack.AttackStorm, m_info.attackStorm.range)*/);
             m_attackDecider.hasDecidedOnAttack = false;
         }
 
@@ -316,8 +304,6 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_animation.SetAnimation(0, m_info.detectAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.detectAnimation);
-            if (!IsFacingTarget())
-                CustomTurn();
             m_stateHandle.OverrideState(State.ReevaluateSituation);
             yield return null;
         }
@@ -338,162 +324,168 @@ namespace DChild.Gameplay.Characters.Enemies
 
         protected override void OnDestroyed(object sender, EventActionArgs eventArgs)
         {
-            //m_Audiosource.clip = m_DeadClip;
-            //m_Audiosource.Play();
-            base.OnDestroyed(sender, eventArgs);
-            //m_lineRenderer.useWorldSpace = false;
-            //m_lineRenderer.SetPosition(0, Vector3.zero);
-            //m_lineRenderer.SetPosition(1, Vector3.zero);
-            //m_Points.Clear();
-            //for (int i = 0; i < m_lineRenderer.positionCount; i++)
-            //{
-            //    m_Points.Add(Vector2.zero);
-            //}
-            //m_edgeCollider.points = m_Points.ToArray();
             StopAllCoroutines();
+            base.OnDestroyed(sender, eventArgs);
             if (m_executeMoveCoroutine != null)
             {
                 StopCoroutine(m_executeMoveCoroutine);
                 m_executeMoveCoroutine = null;
             }
-            ResetLaser();
+            if (IsFacingTarget())
+                CustomTurn();
+
             m_agent.Stop();
-            m_lazerAudio.enabled = false;
-            m_bodycollider.enabled = false;
+            m_bodyCollider.enabled = false;
             m_selfCollider.SetActive(false);
             m_rigidbody2D.constraints = RigidbodyConstraints2D.FreezeRotation;
-            //m_muzzleLoopFX.Stop();
-            m_animation.SetAnimation(0, m_info.deathAnimation, false);
+            m_animation.DisableRootMotion();
+            var rb2d = GetComponent<Rigidbody2D>();
+            rb2d.isKinematic = false;
+            m_stateHandle.OverrideState(State.WaitBehaviourEnd);
+            m_hitbox.Disable();
+            m_animation.SetEmptyAnimation(0, 0);
+            StartCoroutine(DeathRoutine());
+        }
+
+        private IEnumerator DeathRoutine()
+        {
+            m_agent.Stop();
+            Debug.Log("DIE HERE");
+            m_animation.SetAnimation(0, m_info.deathStartAnimation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.deathStartAnimation);
+            m_character.physics.simulateGravity = true;
+            m_legCollider.enabled = true;
+            m_animation.SetAnimation(0, m_info.deathLoopAnimation, true);
+            yield return new WaitUntil(() => m_groundSensor.isDetecting);
+            m_animation.SetAnimation(0, m_info.deathEndAnimation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.deathEndAnimation);
+            enabled = false;
+            this.gameObject.SetActive(false);
+            this.transform.SetParent(m_magister);
+            yield return null;
+        }
+
+        public void SummonTome(AITargetInfo target)
+        {
+            m_targetInfo = target;
+            transform.position = new Vector2(m_targetInfo.position.x, m_targetInfo.position.y + 10f);
+            m_character.physics.simulateGravity = false;
+            m_legCollider.enabled = false;
+            m_hitbox.Enable();
+            m_flinchHandle.gameObject.SetActive(true);
+            m_health.SetHealthPercentage(1f);
+            enabled = true;
+            this.gameObject.SetActive(true);
+            this.transform.SetParent(null);
+            Awake();
+            m_stateHandle.OverrideState(State.ReevaluateSituation);
         }
 
         #region Attack
         private void ExecuteAttack(Attack m_attack)
         {
             m_agent.Stop();
-            m_bodycollider.enabled = true;
+            m_bodyCollider.enabled = true;
             m_rigidbody2D.constraints = RigidbodyConstraints2D.FreezePosition | RigidbodyConstraints2D.FreezeRotation;
             switch (/*m_attack*/ m_currentAttack)
             {
                 //case Attack.Attack:
                 //    StartCoroutine(AttackRoutine());
                 //    break;
-                case Attack.Lazer:
+                case Attack.AttackStorm:
                     m_lastTargetPos = m_targetInfo.position;
-                    StartCoroutine(LazerRoutine());
+                    //m_attackHandle.ExecuteAttack(m_info.attackFrost.animation, m_info.idleAnimation);
+                    m_attackRoutine = StartCoroutine(FlameAttackRoutine());
                     break;
             }
         }
 
-        private IEnumerator AttackRoutine()
+        private IEnumerator FlameAttackRoutine()
         {
-            m_animation.SetAnimation(0, m_info.swoopStartAnimation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.swoopStartAnimation);
-            m_animation.SetAnimation(0, m_info.swoopAnimation, false);
-            m_character.physics.SetVelocity(25 * transform.localScale.x, -25f);
-            yield return new WaitForSeconds(.25f);
-            m_agent.Stop();
-            m_character.physics.SetVelocity(15 * transform.localScale.x, 0);
-            m_animation.SetAnimation(0, m_info.attack.animation, false).AnimationStart = 0.25f;
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack.animation);
-            m_animation.animationState.GetCurrent(0).MixDuration = 0;
-            m_bodycollider.enabled = false;
+            m_animation.SetAnimation(0, m_info.attackFlameStartAnimation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attackFlameStartAnimation);
+            m_animation.SetAnimation(0, m_info.attackFlame.animation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attackFlame.animation);
+            m_animation.SetAnimation(0, m_info.idleAnimation, true);
+            m_flinchHandle.gameObject.SetActive(true);
+            m_rigidbody2D.constraints = RigidbodyConstraints2D.FreezeRotation;
+            //yield return SummonStormCloudsRoutine(m_info.numberOfStormClouds);
             m_stateHandle.ApplyQueuedState();
-            yield return null;
+            m_attackDecider.hasDecidedOnAttack = false;
         }
 
-        private IEnumerator AimRoutine()
-        {
-            while (true)
-            {
-                m_telegraphLineRenderer.SetPosition(0, m_telegraphLineRenderer.transform.position);
-                m_lineRenderer.SetPosition(0, m_lineRenderer.transform.position);
-                m_lineRenderer.SetPosition(1, m_lineRenderer.transform.position);
-                yield return null;
-            }
-        }
+        //private IEnumerator SummonStormCloudsRoutine(int numOfClouds)
+        //{
+        //    var playerCenter = m_targetInfo.position;
+        //    InstantiateStormCloud(playerCenter);
 
-        private IEnumerator TelegraphLineRoutine()
-        {
-            //float timer = 0;
-            m_muzzleTelegraphFX.Play();
-            m_telegraphLineRenderer.useWorldSpace = true;
-            m_lineRenderer.useWorldSpace = true;
-            m_telegraphLineRenderer.SetPosition(1, ShotPosition());
-            var timerOffset = m_telegraphLineRenderer.startWidth;
-            while (m_telegraphLineRenderer.startWidth > 0)
-            {
-                m_telegraphLineRenderer.startWidth -= Time.deltaTime * timerOffset;
-                yield return null;
-            }
-            yield return null;
-        }
+        //    for (int i = 0; i < numOfClouds - 1; i++)
+        //    {
+        //        var offset = UnityEngine.Random.insideUnitCircle * m_info.stormCloudOffset;
+        //        var spawnPosition = playerCenter + offset;
+        //        InstantiateStormCloud(spawnPosition);
+        //    }
+        //    yield return null;
+        //}
 
-        private IEnumerator LazerRoutine()
-        {
-            m_animation.SetAnimation(0, m_info.detectAnimation, false);
-            m_lazerAudio.enabled = true;
-            StartCoroutine(TelegraphLineRoutine());
-            StartCoroutine(m_aimRoutine);
-            yield return new WaitForSeconds(1f);
-            StopCoroutine(m_aimRoutine);
-            //m_muzzleLoopFX.Play();
-            m_lineRenderer.SetPosition(1, m_telegraphLineRenderer.GetPosition(1));
-            //var hitPointFX = this.InstantiateToScene(m_muzzleLoopFX.gameObject, m_telegraphLineRenderer.GetPosition(1), Quaternion.identity);
-            //hitPointFX.GetComponent<ParticleFX>().Play();
+        //private void InstantiateStormCloud(Vector2 spawnPosition)
+        //{
+        //    var instance = GameSystem.poolManager.GetPool<PoolableObjectPool>().GetOrCreateItem(m_info.stormCloud, gameObject.scene);
+        //    instance.SpawnAt(spawnPosition, Quaternion.identity);
+        //}
 
-            var muzzleLoopFX = GameSystem.poolManager.GetPool<FXPool>().GetOrCreateItem(m_muzzleFXGO.gameObject);
-            muzzleLoopFX.transform.position = m_telegraphLineRenderer.GetPosition(1);
-            //LaunchProjectile();
-            //var muzzleFX = this.InstantiateToScene(m_muzzleFXGO, m_muzzleLoopFX.transform.position, Quaternion.identity);
-            var muzzleFX = GameSystem.poolManager.GetPool<FXPool>().GetOrCreateItem(m_muzzleFXGO.gameObject);
-            muzzleFX.transform.position = muzzleLoopFX.transform.position;
-            //m_muzzleLoopFX.Stop();
-            for (int i = 0; i < m_lineRenderer.positionCount; i++)
-            {
-                var pos = m_lineRenderer.GetPosition(i) - m_edgeCollider.transform.position;
-                pos = new Vector2(m_character.facing == HorizontalDirection.Right ? pos.x : -pos.x, pos.y);
-                if (i > 0)
-                {
-                    pos = pos * 0.7f;
-                }
-                m_Points.Add(pos);
-            }
-            m_edgeCollider.points = m_Points.ToArray();
-            yield return new WaitForSeconds(.2f);
-            //hitPointFX.GetComponent<ParticleFX>().Stop();
-            //Destroy(hitPointFX.gameObject);
-            ResetLaser();
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.detectAnimation);
-            m_lazerAudio.enabled = false;
-            m_animation.animationState.GetCurrent(0).MixDuration = 0;
-            m_bodycollider.enabled = false;
-            m_stateHandle.ApplyQueuedState();
-            yield return null;
-        }
+        //private IEnumerator FrostAttackRoutine()
+        //{
+        //    m_animation.SetAnimation(0, m_info.attackFrostStartAnimation, false);
+        //    yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attackFrostStartAnimation);
+        //    m_animation.SetAnimation(0, m_info.attackFrost.animation, false);
+        //    yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attackFrost.animation);
+        //    m_animation.SetAnimation(0, m_info.idleAnimation, true);
+        //    m_flinchHandle.gameObject.SetActive(true);
+        //    m_rigidbody2D.constraints = RigidbodyConstraints2D.FreezeRotation;
+        //    m_stateHandle.ApplyQueuedState();
+        //    m_attackDecider.hasDecidedOnAttack = false;
+        //    yield return null;
+        //}
 
-        private void ResetLaser()
-        {
-            m_lineRenderer.useWorldSpace = false;
-            m_lineRenderer.SetPosition(0, Vector3.zero);
-            m_lineRenderer.SetPosition(1, Vector3.zero);
-            m_telegraphLineRenderer.SetPosition(0, Vector3.zero);
-            m_telegraphLineRenderer.SetPosition(1, Vector3.zero);
-            m_telegraphLineRenderer.startWidth = 1;
-            m_Points.Clear();
-            for (int i = 0; i < m_lineRenderer.positionCount; i++)
-            {
-                m_Points.Add(Vector2.zero);
-            }
-            m_edgeCollider.points = m_Points.ToArray();
-        }
+        //private void LaunchIcePattern(int numberOfProjectiles, int rotations)
+        //{
+        //    for (int x = 0; x < rotations; x++)
+        //    {
+        //        float angleStep = 360f / numberOfProjectiles;
+        //        float angle = 45f;
+        //        for (int z = 0; z < numberOfProjectiles; z++)
+        //        {
+        //            Vector2 startPoint = new Vector2(m_character.centerMass.position.x, m_character.centerMass.position.y);
+        //            float projectileDirXposition = startPoint.x + Mathf.Sin((angle * Mathf.PI) / 180) * 5;
+        //            float projectileDirYposition = startPoint.y + Mathf.Cos((angle * Mathf.PI) / 180) * 5;
+
+        //            Vector2 projectileVector = new Vector2(projectileDirXposition, projectileDirYposition);
+        //            Vector2 projectileMoveDirection = (projectileVector - startPoint).normalized * m_info.projectile.projectileInfo.speed;
+
+        //            GameObject projectile = m_info.projectile.projectileInfo.projectile;
+        //            var instance = GameSystem.poolManager.GetPool<ProjectilePool>().GetOrCreateItem(projectile);
+        //            instance.transform.position = m_character.centerMass.position;
+        //            var component = instance.GetComponent<Projectile>();
+        //            component.ResetState();
+        //            component.GetComponent<Rigidbody2D>().velocity = projectileMoveDirection;
+        //            Vector2 v = component.GetComponent<Rigidbody2D>().velocity;
+        //            var projRotation = Mathf.Atan2(v.y, v.x) * Mathf.Rad2Deg;
+        //            component.transform.rotation = Quaternion.AngleAxis(projRotation, Vector3.forward);
+
+        //            angle += angleStep;
+        //        }
+        //    }
+        //    //yield return null;
+        //}
 
         private void LaunchProjectile()
         {
             if (m_targetInfo.isValid)
             {
-                //m_targetPointIK.transform.position = m_lastTargetPos;
-                m_projectileLauncher.AimAt(m_lastTargetPos);
-                m_projectileLauncher.LaunchProjectile();
+                //m_projectileLauncher.AimAt(m_lastTargetPos);
+                //m_projectileLauncher.LaunchProjectile();
+                //LaunchIcePattern(4, 1)
             }
         }
         #endregion
@@ -557,7 +549,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     //}
                     //StartCoroutine(DespawnRoutine());
                     //Vector3.MoveTowards(transform.position, m_targetInfo.position, m_info.move.speed);
-                    m_bodycollider.enabled = false;
+                    m_bodyCollider.enabled = false;
                     m_agent.Stop();
                     Vector3 dir = (target - (Vector2)m_rigidbody2D.transform.position).normalized;
                     m_rigidbody2D.MovePosition(m_rigidbody2D.transform.position + dir * moveSpeed * Time.fixedDeltaTime);
@@ -565,8 +557,8 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_animation.SetAnimation(0, m_info.move.animation, true);
                     return;
                 }
-                
-                m_bodycollider.enabled = true;
+
+                m_bodyCollider.enabled = true;
                 var velocityX = GetComponent<IsolatedPhysics2D>().velocity.x;
                 var velocityY = GetComponent<IsolatedPhysics2D>().velocity.y;
                 m_agent.SetDestination(target);
@@ -742,9 +734,9 @@ namespace DChild.Gameplay.Characters.Enemies
             base.Start();
             m_animation.SetAnimation(0, m_info.patrol.animation, true);
             m_animation.DisableRootMotion();
-            m_bodycollider.enabled = false;
-            m_aimRoutine = AimRoutine();
+            m_bodyCollider.enabled = false;
             m_startPos = transform.position;
+            //m_spineEventListener.Subscribe(m_info.stormCloud.launchOnEvent, LaunchProjectile);
         }
 
         protected override void Awake()
@@ -756,18 +748,16 @@ namespace DChild.Gameplay.Characters.Enemies
             m_flinchHandle.FlinchStart += OnFlinchStart;
             m_flinchHandle.FlinchEnd += OnFlinchEnd;
             m_turnHandle.TurnDone += OnTurnDone;
-            m_deathHandle.SetAnimation(m_info.deathAnimation);
-            m_projectileLauncher = new ProjectileLauncher(m_info.projectile.projectileInfo, m_muzzleLoopFX.transform);
+            m_deathHandle?.SetAnimation(m_info.deathStartAnimation);
+            //m_projectileLauncher = new ProjectileLauncher(m_info.projectile.projectileInfo, transform);
             m_stateHandle = new StateHandle<State>(State.Patrol, State.WaitBehaviourEnd);
             m_attackDecider = new RandomAttackDecider<Attack>();
             UpdateAttackDeciderList();
 
-            m_Points = new List<Vector2>();
-
             m_attackCache = new List<Attack>();
-            AddToAttackCache(/*Attack.Attack,*/ Attack.Lazer);
+            AddToAttackCache(Attack.AttackStorm);
             m_attackRangeCache = new List<float>();
-            AddToRangeCache(m_info.attack.range, m_info.attackLazer.range);
+            AddToRangeCache(m_info.attackFlame.range);
             m_attackUsed = new bool[m_attackCache.Count];
         }
 
@@ -793,10 +783,10 @@ namespace DChild.Gameplay.Characters.Enemies
                 case State.ReturnToPatrol:
                     if (IsFacing(m_startPos))
                     {
-                        if (Vector2.Distance(m_startPos, transform.position) > 10f)
+                        if (Vector2.Distance(m_startPos, transform.position) > 5f)
                         {
                             var rb2d = GetComponent<Rigidbody2D>();
-                            m_bodycollider.enabled = false;
+                            m_bodyCollider.enabled = false;
                             m_agent.Stop();
                             Vector3 dir = (m_startPos - (Vector2)rb2d.transform.position).normalized;
                             rb2d.MovePosition(rb2d.transform.position + dir * m_info.move.speed * Time.fixedDeltaTime);
@@ -892,8 +882,8 @@ namespace DChild.Gameplay.Characters.Enemies
                     //m_attackDecider.DecideOnAttack();
                     m_attackDecider.hasDecidedOnAttack = false;
                     ChooseAttack();
-                    m_currentAttack = Attack.Lazer;
-                    m_currentAttackRange = m_info.attackLazer.range;
+                    m_currentAttack = Attack.AttackStorm;
+                    m_currentAttackRange = m_info.attackFlame.range;
                     if (m_attackDecider.hasDecidedOnAttack /*&& IsTargetInRange(m_currentAttackRange) && !m_wallSensor.allRaysDetecting*/)
                     {
                         m_agent.Stop();
@@ -954,10 +944,6 @@ namespace DChild.Gameplay.Characters.Enemies
         protected override void OnForbidFromAttackTarget()
         {
             ResetAI();
-        }
-
-        public void DestroyObject()
-        {
         }
     }
 }
