@@ -295,6 +295,12 @@ namespace DChild.Gameplay.Characters.Enemies
             }
         }
 
+        private void CustomTurn()
+        {
+            transform.localScale = new Vector3(-transform.localScale.x, 1, 1);
+            m_character.SetFacing(transform.localScale.x == 1 ? HorizontalDirection.Right : HorizontalDirection.Left);
+        }
+
         private IEnumerator IntroRoutine()
         {
             m_stateHandle.Wait(State.ReevaluateSituation);
