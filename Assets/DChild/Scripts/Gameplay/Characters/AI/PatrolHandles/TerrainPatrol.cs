@@ -26,6 +26,8 @@ namespace DChild.Gameplay.Characters.AI
         private bool m_directionFound;
         private bool m_shouldTurnAround;
 
+        public override Vector2 currentDestination => (Vector2)transform.position + (m_moveDirection * 1);
+
         public override void Patrol(MovementHandle2D movement, float speed, CharacterInfo characterInfo)
         {
             if (m_shouldTurnAround)
