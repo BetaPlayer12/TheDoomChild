@@ -1,4 +1,5 @@
 ﻿using DChild.Gameplay.Characters.Players;
+using DChild.Serialization;
 using Holysoft.Event;
 using PixelCrushers.DialogueSystem;
 using Sirenix.OdinInspector;
@@ -54,8 +55,18 @@ namespace DChild.Gameplay.NavigationMap
             m_isRevealed = isRevealed;
      
         }
+    }
 
+    public class PointOfInterestGroup : MonoBehaviour
+    {
+        [SerializeField]
+        private SerializeID m_zone;
+        [SerializeField]
+        private PointOfInterestTracker[] m_trackers;
 
+        private void Start()
+        {
+        }
     }
 }
 

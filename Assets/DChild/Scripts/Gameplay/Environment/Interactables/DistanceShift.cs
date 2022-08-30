@@ -16,6 +16,13 @@ namespace DChild.Gameplay.Environment
 {
     public abstract class DistanceShift<TargetType> : MonoBehaviour
     {
+        private enum CalculationType
+        {
+            Vector_Distance,
+            X_Distance,
+            Y_Distance
+        }
+
         [SerializeField, Range(0, 1), Tooltip("When Reference is in minDistanceThreshold")]
         private float m_fromAlpha = 0;
         [SerializeField, Range(0, 1), Tooltip("When Reference is in maxDistanceThreshold")]
@@ -25,7 +32,8 @@ namespace DChild.Gameplay.Environment
         private float m_minDistanceThreshold = 5f;
         [SerializeField]
         private float m_maxDistanceThreshold = 20f;
-
+        [SerializeField]
+        private CalculationType m_calculationType = CalculationType.Vector_Distance;
         [SerializeField]
         private Transform m_spriteCenter;
         [SerializeField, HideIf("m_distanceToReferenceIsPlayer")]
@@ -38,34 +46,56 @@ namespace DChild.Gameplay.Environment
 
         protected abstract void SetShiftValue(TargetType renderer, float value);
 
-        public void LateUpdate()
+        private float GetCalculatedDistance(Vector3 playerPosition, CalculationType calculationType)
         {
-            var playerPosition = m_distanceToReference.position;
-            var distance = Vector2.Distance(spriteCenter, playerPosition);
+            switch (calculationType)
+            {
+                case CalculationType.Vector_Distance:
+                    return Vector2.Distance(spriteCenter, playerPosition);
+                case CalculationType.X_Distance:
+                    return Mathf.Abs(playerPosition.x - spriteCenter.x);
+                case CalculationType.Y_Distance:
+                    return Mathf.Abs(playerPosition.y - spriteCenter.y);
+            }
+            return 0;
+        }
 
-            var lerpValue = 0f;
+        private float CalculateLerpValue(float distance)
+        {
             if (distance <= m_minDistanceThreshold)
             {
-                lerpValue = 0;
+                return 0;
             }
             else if (distance <= m_minDistanceThreshold)
             {
-                lerpValue = 1f;
+                return 1f;
             }
             else
             {
                 var thresholdReleativeDistance = m_maxDistanceThreshold - m_minDistanceThreshold;
                 var relativeDistanceToMinThreshold = distance - m_minDistanceThreshold;
-                lerpValue = relativeDistanceToMinThreshold / thresholdReleativeDistance;
+                return relativeDistanceToMinThreshold / thresholdReleativeDistance;
             }
+        }
 
-            var alpha = Mathf.Lerp(m_fromAlpha, m_toAlpha, lerpValue);
+        private float CalculateAlphaShift(Vector3 targetPosition)
+        {
+            var distance = GetCalculatedDistance(targetPosition, m_calculationType);
+            var lerpValue = CalculateLerpValue(distance);
+            return Mathf.Lerp(m_fromAlpha, m_toAlpha, lerpValue);
+        }
+
+
+        public void LateUpdate()
+        {
+            float alpha = CalculateAlphaShift(m_distanceToReference.position);
 
             for (int i = 0; i < targets.Length; i++)
             {
                 SetShiftValue(targets[i], alpha);
             }
         }
+
         private void Reset()
         {
             m_fromAlpha = 0;
