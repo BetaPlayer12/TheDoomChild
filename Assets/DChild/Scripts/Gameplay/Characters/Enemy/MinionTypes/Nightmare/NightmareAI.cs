@@ -198,6 +198,7 @@ namespace DChild.Gameplay.Characters.Enemies
         public void SummonAt(Vector2 position, AITargetInfo target)
         {
             //Lefix commento 3====D----
+            enabled = false;
             m_targetInfo = target;
             m_isDetecting = true;
             var xOffSet = transform.position.x - position.x;
