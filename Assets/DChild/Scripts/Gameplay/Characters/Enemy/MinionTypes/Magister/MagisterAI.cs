@@ -385,23 +385,26 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator SummonBookRoutine()
         {
+            enabled = false;
+            m_stateHandle.Wait(State.ReevaluateSituation);
             yield return new WaitUntil(() => m_teleportRoutine == null && m_healRoutine == null);
             m_hitbox.Enable();
-            m_stateHandle.Wait(State.Chasing);
             m_animation.SetAnimation(0, m_info.bookSummonAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.bookSummonAnimation);
             ApplyBookState(BookState.WithBook);
             m_summonBookRoutine = null;
             m_attackDecider.hasDecidedOnAttack = false;
             m_stateHandle.ApplyQueuedState();
+            enabled = true;
             yield return null;
         }
 
         private void OnDamageTaken(object sender, Damageable.DamageEventArgs eventArgs)
         {
             m_currentHealth = (float)m_health.currentValue / m_health.maxValue;
-            if (m_currentHealth < m_info.healthThreshhold && m_healRoutine == null && !m_hasHealed) 
+            if (m_currentHealth < m_info.healthThreshhold && m_healRoutine == null && !m_hasHealed)
             {
+                enabled = false;
                 m_stateHandle.Wait(State.ReevaluateSituation);
                 StopCurrentBehaviorRoutine();
                 m_healRoutine = StartCoroutine(HealRoutine());
@@ -410,7 +413,6 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator HealRoutine()
         {
-            enabled = false;
             m_hitbox.Disable();
             m_animation.SetAnimation(0, m_info.healAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.healAnimation);
@@ -620,6 +622,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator TeleportRoutine()
         {
+            enabled = false;
             yield return new WaitUntil(() => m_summonBookRoutine == null);
             m_hitbox.Disable();
             m_movement.Stop();
@@ -644,7 +647,10 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.teleportFromBelowAnimation);
             m_teleportRoutine = null;
             if (m_summonBookRoutine == null)
+            {
                 m_stateHandle.ApplyQueuedState();
+                enabled = true;
+            }
             yield return null;
         }
 
