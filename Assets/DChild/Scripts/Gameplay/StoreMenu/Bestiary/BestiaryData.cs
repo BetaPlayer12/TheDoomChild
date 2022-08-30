@@ -67,6 +67,12 @@ namespace DChild.Menu.Bestiary
             EditorUtility.SetDirty(this);
             AssetDatabase.SaveAssets();
         }
+
+        public void SetName(string name)
+        {
+            string assetPath = AssetDatabase.GetAssetPath(GetInstanceID());
+            FileUtility.RenameAsset(this, assetPath, name);
+        }
 #endif 
         #endregion
         [SerializeField, ToggleGroup("m_enableEdit"), LabelText("Use Display Name")]
