@@ -474,10 +474,10 @@ namespace DChild.Gameplay.Characters.Enemies
             m_currentMoveSpeed = UnityEngine.Random.Range(m_info.run.speed * .75f, m_info.run.speed * 1.25f);
             m_currentFullCD = UnityEngine.Random.Range(m_info.attackCD * .5f, m_info.attackCD * 2f);
 
-            //for (int i = 0; i < m_info.projectiles.Count; i++)
-            //{
-            //    m_spineEventListener.Subscribe(m_info.projectiles[i].launchOnEvent, LaunchAttack);
-            //}
+            for (int i = 0; i < m_info.projectiles.Count; i++)
+            {
+                m_spineEventListener.Subscribe(m_info.projectiles[i].launchOnEvent, LaunchAttack);
+            }
 
             if (!m_willPatrol)
             {
@@ -574,14 +574,12 @@ namespace DChild.Gameplay.Characters.Enemies
                             //m_attackRoutine = StartCoroutine(AttackRoutine());
                             break;
                         case Attack.SpellAttack:
-                            LaunchAttack();
                             m_attackHandle.ExecuteAttack(m_info.spellAttack.animation, m_info.idleAnimation);
                             //m_attackRoutine = StartCoroutine(AttackRoutine());
                             break;
                         case Attack.SummonAttack:
                             if (!m_minions[m_currentSummonID].gameObject.activeSelf)
                             {
-                                LaunchAttack();
                                 m_attackHandle.ExecuteAttack(m_info.summonAttack.animation, m_info.idleAnimation);
                             }
                             else
