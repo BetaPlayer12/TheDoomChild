@@ -12,17 +12,17 @@ namespace DChild.Menu.Bestiary
         private IPageHandle m_pageHandle;
         private float m_sliderValueToPageIndexModifier;
 
-        private Scrollbar m_scrollBar;
+        private Slider m_slider;
 
         public void SyncWithPageHandle()
         {
-            m_scrollBar.value = (m_pageHandle.currentPage - 1) * m_sliderValueToPageIndexModifier;
+            m_slider.value = (m_pageHandle.currentPage - 1) * m_sliderValueToPageIndexModifier;
         }
 
         public void OnSliderValueChange(float sliderValue)
         {
             m_pageHandle.PageChange -= OnPageChange;
-            var page = Mathf.FloorToInt(m_scrollBar.value / m_sliderValueToPageIndexModifier) + 1;
+            var page = Mathf.FloorToInt(m_slider.value / m_sliderValueToPageIndexModifier) + 1;
             m_pageHandle.SetPage(page);
             m_pageHandle.PageChange += OnPageChange;
         }
@@ -34,8 +34,7 @@ namespace DChild.Menu.Bestiary
 
         private void Start()
         {
-            m_scrollBar = GetComponent<Scrollbar>();
-            m_scrollBar.onValueChanged.AddListener(OnSliderValueChange);
+            m_slider = GetComponent<Slider>();
             m_pageHandle.PageChange += OnPageChange;
             m_sliderValueToPageIndexModifier = 1f / m_pageHandle.GetTotalPages();
         }

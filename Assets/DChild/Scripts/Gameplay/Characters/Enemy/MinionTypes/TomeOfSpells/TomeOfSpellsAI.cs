@@ -79,6 +79,7 @@ namespace DChild.Gameplay.Characters.Enemies
             private SimpleProjectileAttackInfo m_projectile;
             public SimpleProjectileAttackInfo projectile => m_projectile;
 
+
             public override void Initialize()
             {
 #if UNITY_EDITOR
@@ -107,6 +108,8 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             //Attack,
             AttackFrost,
+            AttackStorm,
+            AttackFlame,
             [HideInInspector]
             _COUNT
         }
