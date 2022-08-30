@@ -17,9 +17,11 @@ namespace DChild.Gameplay.Characters
             public Vector2 position { get; }
             public HorizontalDirection currentFacing { get; }
         }
-
+        public abstract Vector2 currentDestination { get; }
         public event EventAction<EventActionArgs> TurnRequest;
         public event EventAction<EventActionArgs> DestinationReached;
+
+
         public abstract void Patrol(MovementHandle2D movement, float speed, CharacterInfo characterInfo);
         public abstract void Patrol(PathFinderAgent agent, float speed, CharacterInfo characterInfo);
 

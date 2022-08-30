@@ -30,6 +30,9 @@ namespace DChild.Gameplay.Characters.AI
         private Vector2 m_snapToPosition;
         private Vector2 m_groundNormal;
         private float m_snapRotation;
+
+        public override Vector2 currentDestination => m_characterPhysics2D.position + (m_characterPhysics2D.moveAlongGround * 1);
+
         public event EventAction<EventActionArgs> RotateToEdge;
         public event EventAction<EventActionArgs> RotateToWall;
 

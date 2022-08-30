@@ -34,6 +34,9 @@ namespace DChild.Gameplay.Characters.Enemies
 
             [TitleGroup("Movement Behaviours")]
             [SerializeField]
+            private float m_crawlDuration;
+            public float crawlDuration => m_crawlDuration;
+            [SerializeField]
             private MovementInfo m_leftMove = new MovementInfo();
             public MovementInfo leftMove => m_leftMove;
             [SerializeField]
@@ -46,27 +49,24 @@ namespace DChild.Gameplay.Characters.Enemies
             private MovementInfo m_tentaSpearRightCrawl = new MovementInfo();
             public MovementInfo tentaSpearRightCrawl => m_tentaSpearRightCrawl;
 
-            [SerializeField, TitleGroup("Attack Behaviours")]
-            private float m_retractPullSpeed;
-            public float retractPullSpeed => m_retractPullSpeed;
+            [SerializeField, TitleGroup("Attack Behaviours"), Range(0.1f, 10f)]
+            private float m_tentacleSpeed;
+            public float tentacleSpeed => m_tentacleSpeed;
+            [SerializeField, TitleGroup("Attack Behaviours"), Range(0f, 1000f)]
+            private float m_toTargetRetractSpeed;
+            public float toTargetRetractSpeed => m_toTargetRetractSpeed;
+            [SerializeField, TitleGroup("Attack Behaviours"), MinMaxSlider(30, 150)]
+            private Vector2 m_grappleWidth = new Vector2(30, 150);
+            public Vector2 grappleWidth => m_grappleWidth;
+            [SerializeField, TitleGroup("Attack Behaviours"), Range(1, 10)]
+            private int m_bodySlamCount;
+            public int bodySlamCount => m_bodySlamCount;
             [SerializeField, BoxGroup("HeavyGroundStab"), Space]
-            private SimpleAttackInfo m_heavyGroundStab1LeftAttack = new SimpleAttackInfo();
-            public SimpleAttackInfo heavyGroundStab1LeftAttack => m_heavyGroundStab1LeftAttack;
-            [SerializeField, BoxGroup("HeavyGroundStab")]
-            private SimpleAttackInfo m_heavyGroundStab1RightAttack = new SimpleAttackInfo();
-            public SimpleAttackInfo heavyGroundStab1RightAttack => m_heavyGroundStab1RightAttack;
-            [SerializeField, BoxGroup("HeavyGroundStab")]
-            private SimpleAttackInfo m_heavyGroundStab2LeftAttack = new SimpleAttackInfo();
-            public SimpleAttackInfo heavyGroundStab2LeftAttack => m_heavyGroundStab2LeftAttack;
-            [SerializeField, BoxGroup("HeavyGroundStab")]
-            private SimpleAttackInfo m_heavyGroundStab2RightAttack = new SimpleAttackInfo();
-            public SimpleAttackInfo heavyGroundStab2RightAttack => m_heavyGroundStab2RightAttack;
-            [SerializeField, BoxGroup("HeavyGroundStab")]
-            private SimpleAttackInfo m_heavyGroundStab3LeftAttack = new SimpleAttackInfo();
-            public SimpleAttackInfo heavyGroundStab3LeftAttack => m_heavyGroundStab3LeftAttack;
-            [SerializeField, BoxGroup("HeavyGroundStab")]
-            private SimpleAttackInfo m_heavyGroundStab3RightAttack = new SimpleAttackInfo();
-            public SimpleAttackInfo heavyGroundStab3RightAttack => m_heavyGroundStab3RightAttack;
+            private List<SimpleAttackInfo> m_heavyGroundStabLeftAttacks = new List<SimpleAttackInfo>();
+            public List<SimpleAttackInfo> heavyGroundStabLeftAttacks => m_heavyGroundStabLeftAttacks;
+            [SerializeField, BoxGroup("HeavyGroundStab"), Space]
+            private List<SimpleAttackInfo> m_heavyGroundStabRightAttacks = new List<SimpleAttackInfo>();
+            public List<SimpleAttackInfo> heavyGroundStabRightAttacks => m_heavyGroundStabRightAttacks;
             [SerializeField, BoxGroup("HeavyGroundStab"), ValueDropdown("GetAnimations")]
             private string m_heavyGroundStabAnticipationLeftAnimation;
             public string heavyGroundStabAnticipationLeftAnimation => m_heavyGroundStabAnticipationLeftAnimation;
@@ -89,23 +89,14 @@ namespace DChild.Gameplay.Characters.Enemies
             private string m_krakenRageEndAnimation;
             public string krakenRageEndAnimation => m_krakenRageEndAnimation;
             [SerializeField, BoxGroup("SpikeSpitter")]
-            private SimpleAttackInfo m_spikeSpitter1Attack = new SimpleAttackInfo();
-            public SimpleAttackInfo spikeSpitter1Attack => m_spikeSpitter1Attack;
+            private List<SimpleAttackInfo> m_spikeSpitterAttacks = new List<SimpleAttackInfo>();
+            public List<SimpleAttackInfo> spikeSpitterAttacks => m_spikeSpitterAttacks;
             [SerializeField, BoxGroup("SpikeSpitter"), ValueDropdown("GetAnimations")]
-            private string m_spikeSpitter1ExtendAnimation;
-            public string spikeSpitter1ExtendAnimation => m_spikeSpitter1ExtendAnimation;
+            private List<string> m_spikeSpitterExtendAnimations;
+            public List<string> spikeSpitterExtendAnimations => m_spikeSpitterExtendAnimations;
             [SerializeField, BoxGroup("SpikeSpitter"), ValueDropdown("GetAnimations")]
-            private string m_spikeSpitter1ExtractAnimation;
-            public string spikeSpitter1ExtractAnimation => m_spikeSpitter1ExtractAnimation;
-            [SerializeField, BoxGroup("SpikeSpitter")]
-            private SimpleAttackInfo m_spikeSpitter2Attack = new SimpleAttackInfo();
-            public SimpleAttackInfo spikeSpitter2Attack => m_spikeSpitter2Attack;
-            [SerializeField, BoxGroup("SpikeSpitter"), ValueDropdown("GetAnimations")]
-            private string m_spikeSpitter2ExtendAnimation;
-            public string spikeSpitter2ExtendAnimation => m_spikeSpitter2ExtendAnimation;
-            [SerializeField, BoxGroup("SpikeSpitter"), ValueDropdown("GetAnimations")]
-            private string m_spikeSpitter2ExtractAnimation;
-            public string spikeSpitter2ExtractAnimation => m_spikeSpitter2ExtractAnimation;
+            private List<string> m_spikeSpitterExtractAnimations;
+            public List<string> spikeSpitterExtractAnimations => m_spikeSpitterExtractAnimations;
             [SerializeField, BoxGroup("BodySlam")]
             private SimpleAttackInfo m_bodySlamGroundNearAttack = new SimpleAttackInfo();
             public SimpleAttackInfo bodySlamGroundNearAttack => m_bodySlamGroundNearAttack;
@@ -258,10 +249,19 @@ namespace DChild.Gameplay.Characters.Enemies
             private string m_deathSelfDestructAnimation;
             public string deathSelfDestructAnimation => m_deathSelfDestructAnimation;
 
-            //[Title("Projectiles")]
+            [Title("Projectiles")]
+            [SerializeField]
+            private SimpleProjectileAttackInfo m_projectile;
+            public SimpleProjectileAttackInfo projectile => m_projectile;
+            [SerializeField]
+            private float m_projectileGravityScale;
+            public float projectileGravityScale => m_projectileGravityScale;
             //[SerializeField]
-            //private SimpleProjectileAttackInfo m_slashProjectile;
-            //public SimpleProjectileAttackInfo slashProjectile => m_slashProjectile;
+            //private Vector2 m_targetOffset;
+            //public Vector2 targetOffset => m_targetOffset;
+            [SerializeField]
+            private float m_launchDelay;
+            public float launchDelay => m_launchDelay;
             //[SerializeField]
             //private SimpleProjectileAttackInfo m_scytheWaveProjectile;
             //public SimpleProjectileAttackInfo scytheWaveProjectile => m_scytheWaveProjectile;
@@ -283,19 +283,24 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_tentaSpearRightCrawl.SetData(m_skeletonDataAsset);
                 m_leftMove.SetData(m_skeletonDataAsset);
                 m_rightMove.SetData(m_skeletonDataAsset);
-                m_heavyGroundStab1LeftAttack.SetData(m_skeletonDataAsset);
-                m_heavyGroundStab1RightAttack.SetData(m_skeletonDataAsset);
-                m_heavyGroundStab2LeftAttack.SetData(m_skeletonDataAsset);
-                m_heavyGroundStab2RightAttack.SetData(m_skeletonDataAsset);
-                m_heavyGroundStab3LeftAttack.SetData(m_skeletonDataAsset);
-                m_heavyGroundStab3RightAttack.SetData(m_skeletonDataAsset);
+                for (int i = 0; i < m_heavyGroundStabRightAttacks.Count; i++)
+                {
+                    m_heavyGroundStabRightAttacks[i].SetData(m_skeletonDataAsset);
+                }
+                for (int i = 0; i < m_heavyGroundStabLeftAttacks.Count; i++)
+                {
+                    m_heavyGroundStabLeftAttacks[i].SetData(m_skeletonDataAsset);
+                }
                 m_heavySpearStabLeftAttack.SetData(m_skeletonDataAsset);
                 m_heavySpearStabRightAttack.SetData(m_skeletonDataAsset);
                 m_krakenRageAttack.SetData(m_skeletonDataAsset);
-                m_spikeSpitter1Attack.SetData(m_skeletonDataAsset);
-                m_spikeSpitter2Attack.SetData(m_skeletonDataAsset);
+                for (int i = 0; i < m_spikeSpitterAttacks.Count; i++)
+                {
+                    m_spikeSpitterAttacks[i].SetData(m_skeletonDataAsset);
+                }
                 m_bodySlamGroundNearAttack.SetData(m_skeletonDataAsset);
                 m_bodySlamGroundFarAttack.SetData(m_skeletonDataAsset);
+                m_projectile.SetData(m_skeletonDataAsset);
 #endif
             }
         }
@@ -375,8 +380,10 @@ namespace DChild.Gameplay.Characters.Enemies
         private Collider2D m_legCollider;
         [SerializeField, TabGroup("Reference")]
         private GameObject m_model;
-        [SerializeField, TabGroup("Modules")]
-        private FlinchHandler m_flinchHandle;
+        [SerializeField, TabGroup("FlinchHandles")]
+        private FlinchHandler m_flinchRighthHandle;
+        [SerializeField, TabGroup("FlinchHandles")]
+        private FlinchHandler m_flinchLeftHandle;
         [SerializeField, TabGroup("Modules")]
         private MovementHandle2D m_movement;
         [SerializeField, TabGroup("Sensors")]
@@ -392,8 +399,24 @@ namespace DChild.Gameplay.Characters.Enemies
         private List<SkeletonUtilityBone> m_tentacleOverrideBones;
         [SerializeField, TabGroup("Tentacle Points")]
         private List<Transform> m_tentacleOverridePoints;
+        [SerializeField, TabGroup("Tentacle Points")]
+        private List<SpringJoint2D> m_chains;
+        [SerializeField, TabGroup("Tentacle Points")]
+        private Transform m_targetLooker;
+        [SerializeField, TabGroup("Tentacle Points")]
+        private Transform m_targetPosition;
+        private List<Transform> m_defaultTentacleOverridePoints;
+        //[SerializeField, TabGroup("Tentacle Points")]
+        //private Joint2D m_targetChain;
+        private int m_tentacleTargetPointIndex;
         private int m_wallGrappleDirectionIndex;
         private bool m_willGripWall;
+        private bool m_willGripTarget;
+        private bool m_willTentaspearChase;
+        #endregion
+        #region Spitter
+        [SerializeField, TabGroup("Spitter")]
+        private List<Transform> m_spitterPositions;
         #endregion
         //[SerializeField, TabGroup("Spawn Points")]
         //private Transform m_projectilePoint;
@@ -402,7 +425,7 @@ namespace DChild.Gameplay.Characters.Enemies
         //[SerializeField, TabGroup("IK Control")]
         //private SkeletonUtilityBone m_targetIK;
 
-        //private ProjectileLauncher m_projectileLauncher;
+        private BallisticProjectileLauncher m_projectileLauncher;
         //private ProjectileLauncher m_scytheWaveLauncher;
 
         [SerializeField]
@@ -457,18 +480,21 @@ namespace DChild.Gameplay.Characters.Enemies
             switch (m_phaseHandle.currentPhase)
             {
                 case Phase.PhaseOne:
+                    m_animation.SetAnimation(10, m_info.phase1MixAnimation, false);
                     AddToAttackCache(Attack.Phase1Pattern1, Attack.Phase1Pattern2, Attack.Phase1Pattern3, Attack.Phase1Pattern4);
                     AddToRangeCache(m_info.phase1Pattern1Range, m_info.phase1Pattern2Range, m_info.phase1Pattern3Range, m_info.phase1Pattern4Range);
                     for (int i = 0; i < m_info.phase1PatternCooldown.Count; i++)
                         m_patternCooldown.Add(m_info.phase1PatternCooldown[i]);
                     break;
                 case Phase.PhaseTwo:
+                    m_animation.SetAnimation(10, m_info.phase2MixAnimation, false);
                     AddToAttackCache(Attack.Phase2Pattern1, Attack.Phase2Pattern2, Attack.Phase2Pattern3, Attack.Phase2Pattern4, Attack.Phase2Pattern5, Attack.Phase2Pattern6);
                     AddToRangeCache(m_info.phase2Pattern1Range, m_info.phase2Pattern2Range, m_info.phase2Pattern3Range, m_info.phase2Pattern4Range, m_info.phase2Pattern5Range, m_info.phase2Pattern6Range);
                     for (int i = 0; i < m_info.phase2PatternCooldown.Count; i++)
                         m_patternCooldown.Add(m_info.phase2PatternCooldown[i]);
                     break;
                 case Phase.PhaseThree:
+                    m_animation.SetAnimation(10, m_info.phase3MixAnimation, false);
                     AddToAttackCache(Attack.Phase3Pattern1, Attack.Phase3Pattern2, Attack.Phase3Pattern3, Attack.Phase3Pattern4, Attack.Phase3Pattern5, Attack.Phase3Pattern6, Attack.Phase3Pattern7);
                     AddToRangeCache(m_info.phase3Pattern1Range, m_info.phase3Pattern2Range, m_info.phase3Pattern3Range, m_info.phase3Pattern4Range, m_info.phase3Pattern5Range, m_info.phase3Pattern7Range);
                     for (int i = 0; i < m_info.phase3PatternCooldown.Count; i++)
@@ -503,132 +529,125 @@ namespace DChild.Gameplay.Characters.Enemies
             }
         }
 
+        private void OnFlinchStart(object sender, EventActionArgs eventArgs)
+        {
+            if (m_targetInfo.position.x > transform.position.x)
+            {
+                m_flinchRighthHandle.gameObject.SetActive(true);
+            }
+            else
+            {
+                m_flinchLeftHandle.gameObject.SetActive(true);
+            }
+        }
+
+        private void OnFlinchEnd(object sender, EventActionArgs eventArgs)
+        {
+            m_flinchRighthHandle.gameObject.SetActive(false);
+            m_flinchLeftHandle.gameObject.SetActive(false);
+        }
+
         private void OnDamageTaken(object sender, Damageable.DamageEventArgs eventArgs)
         {
-            if (m_grappleEvadeCoroutine == null)
-            {
-                switch (m_phaseHandle.currentPhase)
-                {
-                    case Phase.PhaseOne:
-                        if (m_grappleEvadeCurrentHitCount < m_info.grappleEvadeHitCount)
-                            m_grappleEvadeCurrentHitCount++;
-                        else
-                        {
-                            m_hitbox.SetCanBlockDamageState(true);
-                        }
-
-                        if (m_hitbox.canBlockDamage)
-                        {
-                            if (m_currentAttackCoroutine != null)
-                            {
-                                StopCoroutine(m_currentAttackCoroutine);
-                                m_currentAttackCoroutine = null;
-                                m_attackDecider.hasDecidedOnAttack = false;
-                            }
-                            
-                            m_stateHandle.Wait(State.ReevaluateSituation);
-
-                            m_grappleEvadeCoroutine = StartCoroutine(GrappleEvadeRoutine());
-                            m_grappleEvadeCurrentHitCount = 0;
-
-                        }
-                        break;
-                    case Phase.PhaseTwo:
-                        if (m_grappleEvadeCurrentHitCount < m_info.grappleEvadeHitCount)
-                            m_grappleEvadeCurrentHitCount++;
-                        else
-                        {
-                            m_hitbox.SetCanBlockDamageState(true);
-                        }
-
-                        if (m_hitbox.canBlockDamage)
-                        {
-                            if (m_currentAttackCoroutine != null)
-                            {
-                                StopCoroutine(m_currentAttackCoroutine);
-                                m_currentAttackCoroutine = null;
-                                m_attackDecider.hasDecidedOnAttack = false;
-                            }
-
-                            m_stateHandle.Wait(State.ReevaluateSituation);
-
-                            m_grappleEvadeCoroutine = StartCoroutine(GrappleEvadeRoutine());
-                            m_grappleEvadeCurrentHitCount = 0;
-
-                        }
-                        break;
-                }
-            }
-        }
-
-        private IEnumerator TentacleControlRoutine()
-        {
-            for (int i = 0; i < m_tentacleOverrideBones.Count; i++)
-            {
-                m_tentacleOverrideBones[i].mode = SkeletonUtilityBone.Mode.Override;
-                Debug.Log("Override Bones");
-            }
-            //while (m_willGripWall)
+            //if (m_grappleEvadeCoroutine == null)
             //{
-            //    for (int i = 0; i < m_tentacleOverrideBones.Count; i++)
+            //    switch (m_phaseHandle.currentPhase)
             //    {
-            //        if (m_tentacleOverrideBones[i].transform.position != m_tentacleOverridePoints[i].position)
-            //        {
-            //            m_tentacleOverrideBones[i].transform.position = m_tentacleOverridePoints[i].position;
-            //        }
+            //        case Phase.PhaseOne:
+            //            if (m_grappleEvadeCurrentHitCount < m_info.grappleEvadeHitCount)
+            //                m_grappleEvadeCurrentHitCount++;
+            //            else
+            //            {
+            //                m_hitbox.SetCanBlockDamageState(true);
+            //            }
+
+            //            if (m_hitbox.canBlockDamage)
+            //            {
+            //                if (m_currentAttackCoroutine != null)
+            //                {
+            //                    StopCoroutine(m_currentAttackCoroutine);
+            //                    m_currentAttackCoroutine = null;
+            //                    m_attackDecider.hasDecidedOnAttack = false;
+            //                }
+                            
+            //                m_stateHandle.Wait(State.ReevaluateSituation);
+
+            //                m_grappleEvadeCoroutine = StartCoroutine(GrappleEvadeRoutine());
+            //                m_grappleEvadeCurrentHitCount = 0;
+
+            //            }
+            //            break;
+            //        case Phase.PhaseTwo:
+            //            if (m_grappleEvadeCurrentHitCount < m_info.grappleEvadeHitCount)
+            //                m_grappleEvadeCurrentHitCount++;
+            //            else
+            //            {
+            //                m_hitbox.SetCanBlockDamageState(true);
+            //            }
+
+            //            if (m_hitbox.canBlockDamage)
+            //            {
+            //                if (m_currentAttackCoroutine != null)
+            //                {
+            //                    StopCoroutine(m_currentAttackCoroutine);
+            //                    m_currentAttackCoroutine = null;
+            //                    m_attackDecider.hasDecidedOnAttack = false;
+            //                }
+
+            //                m_stateHandle.Wait(State.ReevaluateSituation);
+
+            //                m_grappleEvadeCoroutine = StartCoroutine(GrappleEvadeRoutine());
+            //                m_grappleEvadeCurrentHitCount = 0;
+
+            //            }
+            //            break;
             //    }
-            //    m_animation.SetAnimation(0, DynamicIdleAnimation(), true);
-            //    Debug.Log("Override BonePosition");
-            //    yield return null;
             //}
-            yield return new WaitUntil(() => !m_willGripWall);
-            for (int i = 0; i < m_tentacleOverrideBones.Count; i++)
-            {
-                m_tentacleOverrideBones[i].mode = SkeletonUtilityBone.Mode.Follow;
-            }
-            yield return null;
         }
 
-        private IEnumerator GrappleEvadeRoutine()
+        private IEnumerator GrappleRoutine(bool willTargetSlam, int slamCount, bool randomGrapple)
         {
-            CalculateWallGrapple();
-            //m_hitbox.Disable();
-            m_animation.DisableRootMotion();
-            m_character.physics.simulateGravity = false;
-            m_willGripWall = true;
-            StartCoroutine(TentacleControlRoutine());
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < slamCount; i++)
             {
-                m_animation.SetAnimation(i + 5, m_info.wallGrappleExtendAnimations[i + m_wallGrappleDirectionIndex], false);
+                CalculateWallGrapple(randomGrapple);
+                //m_hitbox.Disable();
+                m_animation.DisableRootMotion();
+                m_character.physics.simulateGravity = false;
+                StartCoroutine(GrappleExtendRoutine());
+                yield return new WaitForSeconds(3f);
+                if (willTargetSlam)
+                {
+                    m_willGripTarget = true;
+                    m_tentacleTargetPointIndex = m_wallGrappleDirectionIndex == 0 ? 6 : 0;
+                    var target = new Vector2(m_targetInfo.position.x, GroundPosition(transform.position).y);
+                    AimAt(target);
+                    m_targetPosition.position = target;
+                    m_animation.SetAnimation(9, m_info.wallGrappleExtendAnimations[m_tentacleTargetPointIndex], false).TimeScale = m_info.tentacleSpeed;
+                    yield return new WaitForAnimationComplete(m_animation.animationState, m_info.wallGrappleExtendAnimations[m_tentacleTargetPointIndex]);
+                }
+                StartCoroutine(GrappleRetractRoutine());
+                yield return new WaitUntil(() => !m_willGripWall);
+                if (willTargetSlam)
+                {
+                    m_animation.SetAnimation(9, m_info.wallGrappleAnimations[m_tentacleTargetPointIndex], false).MixDuration = 0;
+                    while (!m_groundSensor.isDetecting)
+                    {
+                        m_character.physics.SetVelocity(m_targetLooker.right * m_info.toTargetRetractSpeed);
+                        yield return null;
+                    }
+                    //yield return new WaitUntil(() => m_groundSensor.isDetecting);
+                    m_willGripTarget = false;
+                    m_targetPosition.position = Vector2.zero;
+                    //m_targetChain.gameObject.SetActive(false);
+                    m_animation.SetAnimation(9, m_info.wallGrappleRetractAnimations[m_tentacleTargetPointIndex], false).TimeScale = m_info.tentacleSpeed;
+                }
+                m_character.physics.simulateGravity = true;
+                yield return new WaitUntil(() => m_groundSensor.isDetecting);
+                m_movement.Stop();
+                m_animation.SetAnimation(0, m_info.bodySlamGroundFarAttack.animation, false);
+                yield return new WaitForAnimationComplete(m_animation.animationState, m_info.bodySlamGroundFarAttack.animation);
+                m_animation.SetEmptyAnimation(9, 0);
             }
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.wallGrappleExtendAnimations[m_wallGrappleDirectionIndex]);
-            for (int i = 0; i < 4; i++)
-            {
-                m_animation.SetAnimation(i + 5, m_info.wallGrappleAnimations[i + m_wallGrappleDirectionIndex], true).TimeScale = 10f;
-            }
-            //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.wallGrappleAnimations[m_wallGrappleDirectionIndex]);
-            while (true)
-            {
-                //Vector2.MoveTowards(transform.position, m_tentaclePoints[m_wallGrappleDirectionIndex].position, m_info.retractPullSpeed * Time.deltaTime);
-                yield return null;
-            }
-            //yield return new WaitForSeconds(3f);
-            for (int i = 0; i < 4; i++)
-            {
-                m_animation.SetAnimation(i + 5, m_info.wallGrappleRetractAnimations[i + m_wallGrappleDirectionIndex], false);
-            }
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.wallGrappleRetractAnimations[m_wallGrappleDirectionIndex]);
-            m_willGripWall = false;
-            //if (!m_groundSensor.isDetecting)
-            //{
-            //}
-            //m_animation.EnableRootMotion(true, false);
-            //if (!IsFacingTarget())
-            //    CustomTurn();
-
-            m_animation.SetAnimation(0, m_info.bodySlamGroundFarAttack.animation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.bodySlamGroundFarAttack.animation);
-            m_character.physics.simulateGravity = true;
             //m_hitbox.Enable();
             m_grappleEvadeCoroutine = null;
             m_hitbox.SetCanBlockDamageState(false);
@@ -638,12 +657,6 @@ namespace DChild.Gameplay.Characters.Enemies
             //TEMP
             m_stateHandle.ApplyQueuedState();
             yield return null;
-        }
-
-        private void CustomTurn()
-        {
-            transform.localScale = new Vector3(-transform.localScale.x, 1, 1);
-            m_character.SetFacing(transform.localScale.x == 1 ? HorizontalDirection.Right : HorizontalDirection.Left);
         }
 
         private IEnumerator IntroRoutine()
@@ -710,23 +723,102 @@ namespace DChild.Gameplay.Characters.Enemies
         }
         #region Attacks
 
-        //private void LaunchProjectile()
-        //{
-        //    if (!IsFacingTarget())
-        //        CustomTurn();
+        private void LaunchProjectile(bool groupProjectiles)
+        {
+            StartCoroutine(DelayedProjectileLauncher(groupProjectiles ? m_spitterPositions.Count : 1, m_info.launchDelay));
+        }
 
-        //    m_projectileLauncher.AimAt(m_targetInfo.position);
-        //    m_projectileLauncher.LaunchProjectile();
-        //    StartCoroutine(ProjectileIKControlRoutine());
-        //}
+        private IEnumerator DelayedProjectileLauncher(int launchCounts, float launchDelay)
+        {
+            yield return new WaitForSeconds(launchDelay);
+            for (int i = 0; i < launchCounts; i++)
+            {
+                m_projectileLauncher = new BallisticProjectileLauncher(m_info.projectile.projectileInfo, m_spitterPositions[i], m_info.projectileGravityScale, m_info.projectile.projectileInfo.speed);
+                m_projectileLauncher.LaunchBallisticProjectile(launchCounts == 1 ? m_lastTargetPos : SpitterAimPosition(m_spitterPositions[i])/*, m_info.targetOffset.y*/);
+                //m_projectileLauncher.LaunchBallisticProjectile(SpitterAimPosition(m_spitterPositions[i]), m_character.facing);
+                //m_projectileLauncher.AimAt(m_spitterPositions[i].right * 3);
+                //m_projectileLauncher.LaunchProjectile();
+            }
+            yield return null;
+        }
+
+        private Vector2 SpitterAimPosition(Transform spitter)
+        {
+            //tentacle.rotation = Quaternion.Euler(0, 0, UnityEngine.Random.Range(m_info.grappleWidth.x, m_info.grappleWidth.y));
+            int hitCount = 0;
+            //RaycastHit2D hit = Physics2D.Raycast(m_projectilePoint.position, Vector2.down,  1000, DChildUtility.GetEnvironmentMask());
+            RaycastHit2D[] hit = Cast(spitter.position, spitter.right, 1000, true, out hitCount, true);
+            Debug.DrawRay(spitter.position, hit[0].point);
+            //var hitPos = (new Vector2(m_projectilePoint.position.x, Vector2.down.y) * hit[0].distance);
+            //return hitPos;
+            return hit[0].point;
+        }
 
         private IEnumerator Phase1Pattern1AttackRoutine()
         {
             m_animation.EnableRootMotion(true, false);
-            //yield return new Wait
-            m_attackDecider.hasDecidedOnAttack = false;
-            m_currentAttackCoroutine = null;
-            m_stateHandle.ApplyQueuedState();
+            var timer = 0f;
+            while (timer <= m_info.crawlDuration /*&& !IsTargetInRange(m_info.heavyGroundStabRightAttacks[0].range - 5f)*/)
+            {
+                var tentaSpearAnim = m_targetInfo.position.x > transform.position.x ? m_info.tentaSpearRightCrawl.animation : m_info.tentaSpearLeftCrawl.animation;
+                m_animation.SetAnimation(0, tentaSpearAnim, true);
+                timer += Time.deltaTime;
+                yield return null;
+            }
+            m_animation.AddAnimation(0, DynamicIdleAnimation(), true, 0);
+            if (IsTargetInRange(m_info.heavyGroundStabRightAttacks[0].range))
+            {
+                for (int i = 0; i < m_info.heavyGroundStabRightAttacks.Count; i++)
+                {
+                    string heavyGroundStabAnticipation = m_targetInfo.position.x > transform.position.x ? m_info.heavyGroundStabAnticipationRightAnimation : m_info.heavyGroundStabAnticipationLeftAnimation;
+                    m_animation.SetAnimation(0, heavyGroundStabAnticipation, false);
+                    yield return new WaitForAnimationComplete(m_animation.animationState, heavyGroundStabAnticipation);
+                    var heavyGroundStabAttackAnimation = m_targetInfo.position.x > transform.position.x ? m_info.heavyGroundStabRightAttacks[i].animation : m_info.heavyGroundStabLeftAttacks[i].animation;
+                    m_animation.SetAnimation(0, heavyGroundStabAttackAnimation, false);
+                    yield return new WaitForAnimationComplete(m_animation.animationState, heavyGroundStabAttackAnimation);
+                }
+                m_animation.DisableRootMotion();
+                m_attackDecider.hasDecidedOnAttack = false;
+                m_currentAttackCoroutine = null;
+                m_stateHandle.ApplyQueuedState();
+            }
+            else
+            {
+                StartCoroutine(GrappleRoutine(false, m_info.bodySlamCount, true));
+            }
+            yield return null;
+        }
+
+        private IEnumerator Phase1Pattern2AttackRoutine()
+        {
+            m_animation.EnableRootMotion(true, false);
+            m_animation.AddAnimation(0, DynamicIdleAnimation(), true, 0);
+            if (IsTargetInRange(m_info.spikeSpitterAttacks[0].range))
+            {
+                for (int i = 0; i < m_info.spikeSpitterAttacks.Count; i++)
+                {
+                    if (!IsFacingTarget() && i == 0)
+                        CustomTurn();
+                    m_lastTargetPos = m_targetInfo.position;
+                    m_animation.SetAnimation(0, m_info.spikeSpitterExtendAnimations[i], false);
+                    yield return new WaitForAnimationComplete(m_animation.animationState, m_info.spikeSpitterExtendAnimations[i]);
+                    LaunchProjectile(i == 0 ? false : true);
+                    m_animation.SetAnimation(0, m_info.spikeSpitterAttacks[i].animation, false);
+                    yield return new WaitForAnimationComplete(m_animation.animationState, m_info.spikeSpitterAttacks[i].animation);
+                    m_animation.SetAnimation(0, m_info.spikeSpitterExtractAnimations[i], false);
+                    yield return new WaitForAnimationComplete(m_animation.animationState, m_info.spikeSpitterExtractAnimations[i]);
+                    if (m_character.facing != HorizontalDirection.Right && i == 0)
+                        CustomTurn();
+                }
+                m_animation.DisableRootMotion();
+                m_attackDecider.hasDecidedOnAttack = false;
+                m_currentAttackCoroutine = null;
+                m_stateHandle.ApplyQueuedState();
+            }
+            else
+            {
+                StartCoroutine(GrappleRoutine(true, m_info.bodySlamCount, true));
+            }
             yield return null;
         }
         #endregion
@@ -743,16 +835,18 @@ namespace DChild.Gameplay.Characters.Enemies
         #region Movement
         private void MoveToTarget(float targetRange)
         {
+            var moveRight = m_willTentaspearChase ? m_info.tentaSpearRightCrawl : m_info.rightMove;
+            var moveLeft= m_willTentaspearChase ? m_info.tentaSpearLeftCrawl : m_info.leftMove;
             if (!IsTargetInRange(targetRange) && m_groundSensor.isDetecting /*&& !m_wallSensor.isDetecting && m_edgeSensor.isDetecting*/)
             {
                 m_animation.EnableRootMotion(true, false);
-                m_animation.SetAnimation(0, m_character.facing == HorizontalDirection.Right ? m_info.tentaSpearRightCrawl.animation : m_info.tentaSpearLeftCrawl.animation, true);
+                m_animation.SetAnimation(0, m_targetInfo.position.x > transform.position.x ? moveRight.animation : moveLeft.animation, true);
                 //m_movement.MoveTowards(Vector2.one * transform.localScale.x, m_info.walk.speed);
             }
             else
             {
                 m_movement.Stop();
-                m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                m_animation.SetAnimation(0, DynamicIdleAnimation(), true);
             }
         }
 
@@ -761,16 +855,120 @@ namespace DChild.Gameplay.Characters.Enemies
             return m_groundSensor.isDetecting ? m_info.idleAnimation : m_info.idleMidAirAnimation;
         }
 
-        private void CalculateWallGrapple()
+        private void CalculateWallGrapple(bool randomized)
         {
-            if (m_targetInfo.position.x > transform.position.x)
+            switch (randomized)
             {
-                m_wallGrappleDirectionIndex = 4;
+                case true:
+                    m_lastTargetPos = m_targetInfo.position;
+                    ResetTentaclePosition();
+                    RandomizeTentaclePosition();
+                    break;
+                case false:
+                    if (m_targetInfo.position.x > transform.position.x)
+                    {
+                        m_wallGrappleDirectionIndex = 3;
+                    }
+                    else
+                    {
+                        m_wallGrappleDirectionIndex = 0;
+                    }
+                    break;
             }
-            else
+        }
+
+        private IEnumerator TentacleControlRoutine()
+        {
+            m_willGripWall = true;
+            for (int i = 0; i < m_tentacleOverrideBones.Count; i++)
             {
-                m_wallGrappleDirectionIndex = 0;
+                m_tentacleOverrideBones[i].mode = SkeletonUtilityBone.Mode.Override;
+                Debug.Log("Override Bones");
             }
+            yield return new WaitUntil(() => !m_willGripWall && !m_willGripTarget);
+            for (int i = 0; i < m_tentacleOverrideBones.Count; i++)
+            {
+                m_tentacleOverrideBones[i].mode = SkeletonUtilityBone.Mode.Follow;
+            }
+            yield return null;
+        }
+
+        private IEnumerator GrappleExtendRoutine()
+        {
+            StartCoroutine(TentacleControlRoutine());
+            for (int i = 0; i < 4; i++)
+            {
+                m_animation.SetAnimation(i + 5, m_info.wallGrappleExtendAnimations[i + m_wallGrappleDirectionIndex], false).TimeScale = m_info.tentacleSpeed;
+            }
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.wallGrappleExtendAnimations[m_wallGrappleDirectionIndex]);
+            for (int i = 0; i < 4; i++)
+            {
+                m_animation.SetAnimation(i + 5, m_info.wallGrappleAnimations[i + m_wallGrappleDirectionIndex], true).TimeScale = 5f;
+            }
+            for (int i = 0; i < 4; i++)
+            {
+                m_chains[i + m_wallGrappleDirectionIndex].gameObject.SetActive(true);
+            }
+            yield return null;
+        }
+
+        private IEnumerator GrappleRetractRoutine()
+        {
+            for (int i = 0; i < 4; i++)
+            {
+                m_chains[i + m_wallGrappleDirectionIndex].gameObject.SetActive(false);
+                m_chains[i + m_wallGrappleDirectionIndex].transform.localPosition = Vector2.zero;
+            }
+            for (int i = 0; i < 4; i++)
+            {
+                m_animation.SetAnimation(i + 5, m_info.wallGrappleRetractAnimations[i + m_wallGrappleDirectionIndex], false).TimeScale = m_info.tentacleSpeed;
+            }
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.wallGrappleRetractAnimations[m_wallGrappleDirectionIndex]);
+            for (int i = 0; i < 4; i++)
+            {
+                m_animation.SetEmptyAnimation(i + 5, 0);
+            }
+            for (int i = 0; i < m_tentacleOverridePoints.Count; i++)
+            {
+                m_tentacleOverridePoints[i].position = m_defaultTentacleOverridePoints[i].position;
+            }
+            m_willGripWall = false;
+            yield return null;
+        }
+
+        private void RandomizeTentaclePosition()
+        {
+            for (int i = 0; i < m_tentacleOverridePoints.Count; i++)
+            {
+                for (int x = 0; x < m_tentacleOverridePoints.Count; x++)
+                {
+                    m_tentacleOverridePoints[i].position = RandomTentaclePointPosition(m_tentacleOverridePoints[i]);
+                    if (Vector2.Distance(m_tentacleOverridePoints[i].position, m_tentacleOverridePoints[x].position) < 10f)
+                    {
+                        m_tentacleOverridePoints[i].position = RandomTentaclePointPosition(m_tentacleOverridePoints[i]);
+                    }
+                }
+            }
+        }
+
+        private void ResetTentaclePosition()
+        {
+            for (int i = 0; i < m_tentacleOverridePoints.Count; i++)
+            {
+                m_tentacleOverridePoints[i].position = Vector2.zero;
+            }
+        }
+
+        private Vector2 RandomTentaclePointPosition(Transform tentacle)
+        {
+            tentacle.rotation = Quaternion.Euler(0, 0, UnityEngine.Random.Range(m_info.grappleWidth.x, m_info.grappleWidth.y));
+            int hitCount = 0;
+            //RaycastHit2D hit = Physics2D.Raycast(m_projectilePoint.position, Vector2.down,  1000, DChildUtility.GetEnvironmentMask());
+            RaycastHit2D[] hit = Cast(m_lastTargetPos, tentacle.right, 1000, true, out hitCount, true);
+            Debug.DrawRay(tentacle.position, hit[0].point);
+            //var hitPos = (new Vector2(m_projectilePoint.position.x, Vector2.down.y) * hit[0].distance);
+            //return hitPos;
+            return hit[0].point;
         }
 
         private Vector2 GroundPosition(Vector2 startPoint)
@@ -845,11 +1043,11 @@ namespace DChild.Gameplay.Characters.Enemies
             m_attackDecider.hasDecidedOnAttack = false;
         }
 
-        private Vector2 GroundPosition()
-        {
-            RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, 1000, DChildUtility.GetEnvironmentMask());
-            return hit.point;
-        }
+        //private Vector2 GroundPosition()
+        //{
+        //    RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, 1000, DChildUtility.GetEnvironmentMask());
+        //    return hit.point;
+        //}
 
         private void ChooseAttack()
         {
@@ -864,6 +1062,60 @@ namespace DChild.Gameplay.Characters.Enemies
                         m_attackUsed[i] = true;
                         m_currentAttack = m_attackCache[i];
                         m_currentAttackRange = m_attackRangeCache[i];
+                        switch (m_currentAttack)
+                        {
+                            case Attack.Phase1Pattern1:
+                                m_willTentaspearChase = true;
+                                break;
+                            case Attack.Phase1Pattern2:
+                                m_willTentaspearChase = true;
+                                break;
+                            case Attack.Phase1Pattern3:
+                                m_willTentaspearChase = true;
+                                break;
+                            case Attack.Phase1Pattern4:
+                                m_willTentaspearChase = true;
+                                break;
+                            case Attack.Phase2Pattern1:
+                                m_willTentaspearChase = true;
+                                break;
+                            case Attack.Phase2Pattern2:
+                                m_willTentaspearChase = true;
+                                break;
+                            case Attack.Phase2Pattern3:
+                                m_willTentaspearChase = true;
+                                break;
+                            case Attack.Phase2Pattern4:
+                                m_willTentaspearChase = true;
+                                break;
+                            case Attack.Phase2Pattern5:
+                                m_willTentaspearChase = true;
+                                break;
+                            case Attack.Phase2Pattern6:
+                                m_willTentaspearChase = true;
+                                break;
+                            case Attack.Phase3Pattern1:
+                                m_willTentaspearChase = true;
+                                break;
+                            case Attack.Phase3Pattern2:
+                                m_willTentaspearChase = true;
+                                break;
+                            case Attack.Phase3Pattern3:
+                                m_willTentaspearChase = true;
+                                break;
+                            case Attack.Phase3Pattern4:
+                                m_willTentaspearChase = true;
+                                break;
+                            case Attack.Phase3Pattern5:
+                                m_willTentaspearChase = true;
+                                break;
+                            case Attack.Phase3Pattern6:
+                                m_willTentaspearChase = true;
+                                break;
+                            case Attack.Phase3Pattern7:
+                                m_willTentaspearChase = true;
+                                break;
+                        }
                         return;
                     }
                 }
@@ -905,6 +1157,10 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             base.Awake();
             m_damageable.DamageTaken += OnDamageTaken;
+            m_flinchRighthHandle.FlinchStart += OnFlinchStart;
+            m_flinchLeftHandle.FlinchStart += OnFlinchStart;
+            m_flinchRighthHandle.FlinchEnd += OnFlinchEnd;
+            m_flinchLeftHandle.FlinchEnd += OnFlinchEnd;
             //m_damageable.DamageTaken += OnDamageBlocked;
             //m_patternDecider = new RandomAttackDecider<Pattern>();
             m_attackDecider = new RandomAttackDecider<Attack>();
@@ -926,6 +1182,22 @@ namespace DChild.Gameplay.Characters.Enemies
             m_phaseHandle = new PhaseHandle<Phase, PhaseInfo>();
             m_phaseHandle.Initialize(Phase.PhaseOne, m_info.phaseInfo, m_character, ChangeState, ApplyPhaseData);
             m_phaseHandle.ApplyChange();
+            for (int i = 0; i < m_chains.Count; i++)
+            {
+                m_chains[i + m_wallGrappleDirectionIndex].gameObject.SetActive(false);
+                m_chains[i + m_wallGrappleDirectionIndex].transform.localPosition = Vector2.zero;
+            }
+            m_defaultTentacleOverridePoints = new List<Transform>();
+            for (int i = 0; i < m_tentacleOverridePoints.Count; i++)
+            {
+                m_defaultTentacleOverridePoints.Add(m_tentacleOverridePoints[i]);
+            }
+        }
+        public void AimAt(Vector2 target)
+        {
+            Vector3 v_diff = (target - (Vector2)m_targetLooker.position);
+            float atan2 = Mathf.Atan2(v_diff.y, v_diff.x);
+            m_targetLooker.rotation = Quaternion.Euler(0f, 0f, atan2 * Mathf.Rad2Deg);
         }
 
         private void FixedUpdate()
@@ -939,8 +1211,16 @@ namespace DChild.Gameplay.Characters.Enemies
                         m_tentacleOverrideBones[i].transform.position = m_tentacleOverridePoints[i].position;
                     }
                 }
+                m_animation.SetAnimation(0, DynamicIdleAnimation(), true);
             }
-            m_animation.SetAnimation(0, DynamicIdleAnimation(), true);
+            if (m_willGripTarget)
+            {
+                m_tentacleOverrideBones[m_tentacleTargetPointIndex].transform.position = m_targetPosition.position;
+            }
+            if (m_willGripWall || m_willGripTarget)
+            {
+                m_animation.SetAnimation(0, DynamicIdleAnimation(), true);
+            }
         }
 
         private void Update()
@@ -949,7 +1229,7 @@ namespace DChild.Gameplay.Characters.Enemies
             switch (m_stateHandle.currentState)
             {
                 case State.Idle:
-                    m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                    m_animation.SetAnimation(0, DynamicIdleAnimation(), true);
                     break;
                 case State.Intro:
                     StartCoroutine(IntroRoutine());
@@ -969,66 +1249,27 @@ namespace DChild.Gameplay.Characters.Enemies
                     switch (m_currentAttack)
                     {
                         case Attack.Phase1Pattern1:
-                            m_grappleEvadeCoroutine = StartCoroutine(GrappleEvadeRoutine());
+                            m_currentAttackCoroutine = StartCoroutine(Phase1Pattern1AttackRoutine());
                             m_pickedCooldown = m_currentFullCooldown[0];
                             break;
                         case Attack.Phase1Pattern2:
-                            m_grappleEvadeCoroutine = StartCoroutine(GrappleEvadeRoutine());
+                            m_currentAttackCoroutine = StartCoroutine(Phase1Pattern2AttackRoutine());
                             m_pickedCooldown = m_currentFullCooldown[1];
                             break;
                         case Attack.Phase1Pattern3:
-                            m_grappleEvadeCoroutine = StartCoroutine(GrappleEvadeRoutine());
+                            m_currentAttackCoroutine = StartCoroutine(Phase1Pattern1AttackRoutine());
                             m_pickedCooldown = m_currentFullCooldown[2];
                             break;
                         case Attack.Phase1Pattern4:
-                            m_grappleEvadeCoroutine = StartCoroutine(GrappleEvadeRoutine());
+                            m_currentAttackCoroutine = StartCoroutine(Phase1Pattern2AttackRoutine());
                             m_pickedCooldown = m_currentFullCooldown[3];
                             break;
-                        //case Attack.Phase2Pattern1:
-                        //    m_currentAttackCoroutine = StartCoroutine(Phase2Pattern1AttackRoutine());
-                        //    m_pickedCooldown = m_currentFullCooldown[0];
-                        //    break;
-                        //case Attack.Phase2Pattern2:
-                        //    m_currentAttackCoroutine = StartCoroutine(Phase2Pattern2AttackRoutine());
-                        //    m_pickedCooldown = m_currentFullCooldown[1];
-                        //    break;
-                        //case Attack.Phase2Pattern3:
-                        //    m_currentAttackCoroutine = StartCoroutine(Phase2Pattern3AttackRoutine());
-                        //    m_pickedCooldown = m_currentFullCooldown[2];
-                        //    break;
-                        //case Attack.Phase2Pattern4:
-                        //    if (m_patternCooldown[3] == m_info.phase2PatternCooldown[3])
-                        //    {
-                        //        if (m_currentSwordState != SwordState.Normal)
-                        //        {
-                        //            m_currentAttackCoroutine = StartCoroutine(Phase1Pattern4AttackRoutine());
-                        //            m_pickedCooldown = m_currentFullCooldown[3];
-                        //            StartCoroutine(CooldownMonitorRoutine(3));
-                        //        }
-                        //        else
-                        //        {
-                        //            //m_attackDecider.hasDecidedOnAttack = false;
-                        //            //m_currentAttackCoroutine = null;
-                        //            //if (m_alterBladeCoroutine == null)
-                        //            //    m_stateHandle.ApplyQueuedState();
-                        //            m_currentAttackCoroutine = StartCoroutine(DrillDashComboRoutine());
-                        //        }
-                        //    }
-                        //    else
-                        //    {
-                        //        m_currentAttackCoroutine = StartCoroutine(DrillDashComboRoutine());
-                        //    }
-                        //    break;
-                        //case Attack.Phase2Pattern5:
-                        //    m_currentAttackCoroutine = StartCoroutine(Phase2Pattern5AttackRoutine());
-                        //    m_pickedCooldown = m_currentFullCooldown[4];
-                        //    break;
                     }
 
                     break;
 
                 case State.Cooldown:
-                    m_animation.SetAnimation(0, m_idleAnimation, true).TimeScale = 1;
+                    m_animation.SetAnimation(0, DynamicIdleAnimation(), true);
 
                     if (m_currentCooldown <= m_pickedCooldown)
                     {
@@ -1071,9 +1312,6 @@ namespace DChild.Gameplay.Characters.Enemies
                 case State.WaitBehaviourEnd:
                     return;
             }
-
-            //m_idleAnimation = m_groundSensor.isDetecting ? m_info.idleAnimation : m_info.idleMidAirAnimation;
-
         }
 
         protected override void OnTargetDisappeared()
