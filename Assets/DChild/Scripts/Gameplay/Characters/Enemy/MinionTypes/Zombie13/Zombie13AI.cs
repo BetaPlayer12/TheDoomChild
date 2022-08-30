@@ -486,7 +486,9 @@ namespace DChild.Gameplay.Characters.Enemies
             }
 
             m_startPoint = transform.position;
-            m_patrolDestination = m_patrolHandle.currentDestination;
+            m_patrolDestination = m_patrolHandle.wayPoints[m_patrolHandle.startIndex];
+            if (!IsFacing(m_patrolDestination))
+                CustomTurn();
             //m_spineEventListener.Subscribe(m_info.explodeEvent, m_explodeFX.Play);
         }
 

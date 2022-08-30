@@ -10,8 +10,8 @@ namespace DChild.Gameplay.Combat
         public enum Operations
         {
             CriticalDamage = 1<<0,
-            DamageResistance = 1 << 1,
-            BlockDamage = 1 << 2,
+            DamageResistance = 1 << 0,
+            BlockDamage = 1 << 0,
 
             All = CriticalDamage|DamageResistance| BlockDamage
         }
