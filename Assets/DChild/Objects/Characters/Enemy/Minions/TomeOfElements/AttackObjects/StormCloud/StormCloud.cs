@@ -17,11 +17,13 @@ namespace DChild.Gameplay.Projectiles
         // Update is called once per frame
         void Update()
         {
-            while (timer > 0)
+            timer -= GameplaySystem.time.deltaTime;
+
+            if(timer < 0)
             {
-                timer -= GameplaySystem.time.deltaTime;
+                DestroyInstance();
             }
-            DestroyInstance();
+            
         }
     }
 
