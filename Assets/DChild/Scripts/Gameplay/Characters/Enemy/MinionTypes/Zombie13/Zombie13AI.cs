@@ -117,7 +117,7 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Modules")]
         private MovementHandle2D m_movement;
         [SerializeField, TabGroup("Modules")]
-        private PatrolHandle m_patrolHandle;
+        private WayPointPatrol m_patrolHandle;
         [SerializeField, TabGroup("Modules")]
         private AttackHandle m_attackHandle;
         [SerializeField, TabGroup("Modules")]
@@ -143,6 +143,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         [SerializeField]
         private bool m_willPatrol;
+        private Vector2 m_patrolDestination;
 
         [ShowInInspector]
         private StateHandle<State> m_stateHandle;
@@ -163,7 +164,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_stateHandle.ApplyQueuedState();
         }
 
-        private void OnTurnRequest(object sender, EventActionArgs eventArgs) => m_stateHandle.SetState(State.Turning);
+        //private void OnTurnRequest(object sender, EventActionArgs eventArgs) => m_stateHandle.SetState(State.Turning);
 
         public override void SetTarget(IDamageable damageable, Character m_target = null)
         {
@@ -207,13 +208,16 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnTurnDone(object sender, FacingEventArgs eventArgs)
         {
+            var wayPoints = m_patrolHandle.GetWaypoints();
+            for (int i = 0; i < wayPoints.Length; i++)
+            {
+                if (Vector2.Distance(m_patrolDestination, wayPoints[i]) > 1f)
+                {
+                    m_patrolDestination = wayPoints[i];
+                    break;
+                }
+            }
             m_stateHandle.ApplyQueuedState();
-        }
-
-        private void CustomTurn()
-        {
-            transform.localScale = new Vector3(-transform.localScale.x, 1, 1);
-            m_character.SetFacing(transform.localScale.x == 1 ? HorizontalDirection.Right : HorizontalDirection.Left);
         }
 
         //Patience Handler
@@ -458,6 +462,15 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return null;
         }
 
+        private IEnumerator TurnRoutine(string currentAnimation)
+        {
+            if (currentAnimation == m_info.attack.animation)
+                yield return new WaitForAnimationComplete(m_animation.animationState, currentAnimation);
+            var turnAnim = UnityEngine.Random.Range(0, 2) == 1 ? m_info.turn1Animation : m_info.turn2Animation;
+            m_turnHandle.Execute(turnAnim, RandomIdleAnimation());
+            yield return null;
+        }
+
         protected override void Start()
         {
             base.Start();
@@ -473,13 +486,14 @@ namespace DChild.Gameplay.Characters.Enemies
             }
 
             m_startPoint = transform.position;
+            m_patrolDestination = m_patrolHandle.currentDestination;
             //m_spineEventListener.Subscribe(m_info.explodeEvent, m_explodeFX.Play);
         }
 
         protected override void Awake()
         {
             base.Awake();
-            m_patrolHandle.TurnRequest += OnTurnRequest;
+            //m_patrolHandle.TurnRequest += OnTurnRequest;
             m_attackHandle.AttackDone += OnAttackDone;
             m_turnHandle.TurnDone += OnTurnDone;
             m_deathHandle.SetAnimation(m_info.deathAnimation);
@@ -521,10 +535,19 @@ namespace DChild.Gameplay.Characters.Enemies
                 case State.Patrol:
                     if (!m_wallSensor.isDetecting && m_groundSensor.isDetecting)
                     {
-                        m_turnState = State.ReevaluateSituation;
-                        m_animation.EnableRootMotion(true, false);
-                        m_animation.SetAnimation(0, m_info.walk.animation, true);
-                        var characterInfo = new PatrolHandle.CharacterInfo(m_character.centerMass.position, m_character.facing);
+                        if (IsFacing(m_patrolDestination))
+                        {
+                            m_turnState = State.Patrol;
+                            m_animation.EnableRootMotion(true, false);
+                            m_animation.SetAnimation(0, m_info.attack.animation, true);
+                            var characterInfo = new PatrolHandle.CharacterInfo(m_character.centerMass.position, m_character.facing);
+                        }
+                        else
+                        {
+                            m_turnState = State.Patrol;
+                            if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turn1Animation && m_animation.GetCurrentAnimation(0).ToString() != m_info.turn2Animation)
+                                m_stateHandle.SetState(State.Turning);
+                        }
                     }
                     else
                     {
@@ -541,8 +564,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
                 case State.Turning:
                     m_stateHandle.Wait(m_turnState);
-                    var turnAnim = UnityEngine.Random.Range(0, 2) == 1 ? m_info.turn1Animation : m_info.turn2Animation;
-                    m_turnHandle.Execute(turnAnim, RandomIdleAnimation());
+                    StartCoroutine(TurnRoutine(m_animation.GetCurrentAnimation(0)));
                     break;
 
                 case State.Attacking:
