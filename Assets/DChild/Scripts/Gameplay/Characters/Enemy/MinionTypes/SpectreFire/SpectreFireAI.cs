@@ -17,7 +17,7 @@ using DChild.Gameplay.Pathfinding;
 namespace DChild.Gameplay.Characters.Enemies
 {
     [AddComponentMenu("DChild/Gameplay/Enemies/Minion/SpectreFire")]
-    public class SpectreFireAI : CombatAIBrain<SpectreFireAI.Info>
+    public class SpectreFireAI : CombatAIBrain<SpectreFireAI.Info>, ISummonedEnemy
     {
         [System.Serializable]
         public class Info : BaseInfo
@@ -127,6 +127,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private Collider2D m_bodyCollider;
         [SerializeField, TabGroup("Reference")]
         private Hitbox m_hitbox;
+        [SerializeField, TabGroup("Reference")]
+        private Health m_health;
         [SerializeField, TabGroup("Modules")]
         private TransformTurnHandle m_turnHandle;
         [SerializeField, TabGroup("Modules")]
@@ -182,12 +184,6 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnTurnRequest(object sender, EventActionArgs eventArgs) => m_stateHandle.OverrideState(State.Turning);
 
-        private void CustomTurn()
-        {
-            transform.localScale = new Vector3(-transform.localScale.x, 1, 1);
-            m_character.SetFacing(transform.localScale.x == 1 ? HorizontalDirection.Right : HorizontalDirection.Left);
-        }
-
         public override void SetTarget(IDamageable damageable, Character m_target = null)
         {
             if (damageable != null)
@@ -200,6 +196,26 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_stateHandle.SetState(State.Chasing);
                 }
             }
+        }
+
+        public void SummonAt(Vector2 position, AITargetInfo target)
+        {
+            //Lefix commento 3====D----
+            enabled = false;
+            m_targetInfo = target;
+            m_isDetecting = true;
+            transform.position = new Vector2(m_targetInfo.position.x, m_targetInfo.position.y + 10f);
+            m_character.physics.simulateGravity = false;
+            m_hitbox.Enable();
+            m_flinchHandle.gameObject.SetActive(true);
+            m_health.SetHealthPercentage(1f);
+            this.gameObject.SetActive(true);
+            this.transform.SetParent(null);
+            if (!IsFacingTarget())
+                CustomTurn();
+            Awake();
+            m_stateHandle.OverrideState(State.Detect);
+            enabled = true;
         }
 
         private void OnTurnDone(object sender, FacingEventArgs eventArgs)
@@ -736,6 +752,10 @@ namespace DChild.Gameplay.Characters.Enemies
         public override void ReturnToSpawnPoint()
         {
             Patience();
+        }
+
+        public void DestroyObject()
+        {
         }
     }
 }
