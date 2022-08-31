@@ -6,16 +6,13 @@ namespace DChildEditor
 {
     public static class FileUtility
     {
-        public static void RenameAsset<T>(T reference, string assetPath, string newName,bool saveImmidiately = true) where T : UnityEngine.Object
+        public static void RenameAsset<T>(T reference, string assetPath, string newName) where T : UnityEngine.Object
         {
             if (AssetDatabase.LoadAssetAtPath<T>(assetPath) != null)
             {
                 string fileName = GetIndexedFileName(reference, GetDirectoryOf(assetPath), newName, GetAssetExtention(assetPath));
                 AssetDatabase.RenameAsset(assetPath, fileName);
-                if (saveImmidiately)
-                {
-                    AssetDatabase.SaveAssets();
-                }
+                AssetDatabase.SaveAssets();
             }
             else
             {

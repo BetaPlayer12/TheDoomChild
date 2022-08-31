@@ -227,6 +227,12 @@ namespace DChild.Gameplay.Characters.Enemies
             return 0;
         }
 
+        private void CustomTurn()
+        {
+            transform.localScale = new Vector3(-transform.localScale.x, 1, 1);
+            m_character.SetFacing(transform.localScale.x == 1 ? HorizontalDirection.Right : HorizontalDirection.Left);
+        }
+
         private void SpitProjectile()
         {
             if (m_targetInfo.isValid)
