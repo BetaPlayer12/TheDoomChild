@@ -16,7 +16,7 @@ using DChild.Gameplay.Characters.Enemies;
 namespace DChild.Gameplay.Characters.Enemies
 {
     [AddComponentMenu("DChild/Gameplay/Enemies/Minion/Nightmare")]
-    public class NightmareAI : CombatAIBrain<NightmareAI.Info>, IResetableAIBrain
+    public class NightmareAI : CombatAIBrain<NightmareAI.Info>, IResetableAIBrain, ISummonedEnemy
     {
         [System.Serializable]
         public class Info : BaseInfo
@@ -111,7 +111,11 @@ namespace DChild.Gameplay.Characters.Enemies
             [HideInInspector]
             _COUNT
         }
-
+        
+        [SerializeField, TabGroup("Reference")]
+        private Health m_health;
+        [SerializeField, TabGroup("Reference")]
+        private Hitbox m_hitbox;
         [SerializeField, TabGroup("Reference")]
         private Collider2D m_selfCollider;
         [SerializeField, TabGroup("Modules")]
@@ -189,6 +193,31 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_enablePatience = true;
                 //StartCoroutine(PatienceRoutine());
             }
+        }
+
+        public void SummonAt(Vector2 position, AITargetInfo target)
+        {
+            //Lefix commento 3====D----
+            enabled = false;
+            m_targetInfo = target;
+            m_isDetecting = true;
+            var xOffSet = position.x - transform.position.x;
+            transform.position = new Vector2(m_targetInfo.position.x + xOffSet, GroundPosition(m_targetInfo.position).y);
+            m_character.physics.simulateGravity = false;
+            m_flinchHandle.gameObject.SetActive(true);
+            m_health.SetHealthPercentage(1f);
+            m_hitbox.Enable();
+            this.gameObject.SetActive(true);
+            this.transform.SetParent(null);
+            if (!IsFacingTarget())
+                CustomTurn();
+            Awake();
+            m_stateHandle.OverrideState(State.Detect);
+            enabled = true;
+        }
+
+        public void DestroyObject()
+        {
         }
 
         private void OnTurnDone(object sender, FacingEventArgs eventArgs)
@@ -292,16 +321,6 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_attackDecider.SetList(new AttackInfo<Attack>(Attack.Attack, m_info.attack.range));
             m_attackDecider.hasDecidedOnAttack = false;
-        }
-
-        private void CustomTurn()
-        {
-            if (!IsFacingTarget())
-            {
-                //m_turnHandle.Execute(m_info.turnAnimation, m_info.idleAnimation);
-                transform.localScale = new Vector3(-transform.localScale.x, 1, 1);
-                m_character.SetFacing(transform.localScale.x == 1 ? HorizontalDirection.Right : HorizontalDirection.Left);
-            }
         }
 
         private IEnumerator DetectRoutine()
