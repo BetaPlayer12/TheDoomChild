@@ -54,8 +54,6 @@ namespace DChild.Gameplay.Characters.AI
         private int m_currentIndex;
         private Iteration m_iteration;
 
-        public override Vector2 currentDestination => m_wayPoints[m_currentIndex];
-
         public void Initialize()
         {
             m_currentIndex = m_startIndex;
@@ -167,8 +165,6 @@ namespace DChild.Gameplay.Characters.AI
         public int iteration => (int)m_startIteration;
         public int startIndex => m_startIndex;
         public Vector2[] wayPoints => m_wayPoints;
-
-        
 
         [FoldoutGroup("ToolKit")]
         [HideIf("@UnityEditor.Experimental.SceneManagement.PrefabStageUtility.GetCurrentPrefabStage() != null || m_useCurrentPosition")]

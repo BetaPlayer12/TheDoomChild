@@ -188,6 +188,11 @@ namespace DChild.Gameplay.Environment
             m_imitationDelayTimer = m_imitateDelay;
             m_isDelayed = true;
 
+            InitializeRecords();
+        }
+
+        private void InitializeRecords()
+        {
             if (m_positionToImitate == null)
             {
                 m_positionToImitate = new List<Vector3>();
@@ -196,6 +201,9 @@ namespace DChild.Gameplay.Environment
                 m_fxAnimationToImitate = new List<FXAnimationParameterInfo>();
             }
             m_positionToImitate.Clear();
+            m_scaleToImitate.Clear();
+            m_animationToImitate.Clear();
+            m_fxAnimationToImitate.Clear();
         }
 
         private void UpdateImitation()
@@ -235,7 +243,11 @@ namespace DChild.Gameplay.Environment
 
         private void Start()
         {
+            InitializeRecords();
             StartImitating(GameplaySystem.playerManager.player);
+            var lineConnectionTransform = m_lineConnection.transform;
+            lineConnectionTransform.SetParent(null);
+            lineConnectionTransform.position = Vector3.zero;
         }
 
         private void Update()
@@ -256,6 +268,11 @@ namespace DChild.Gameplay.Environment
             }
 
             DrawLineConnection();
+        }
+
+        private void OnDestroy()
+        {
+            Destroy(m_lineConnection.gameObject);
         }
     }
 }
