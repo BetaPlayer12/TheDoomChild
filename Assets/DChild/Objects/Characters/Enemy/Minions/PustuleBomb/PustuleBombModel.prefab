@@ -208,6 +208,7 @@ GameObject:
   - component: {fileID: 8492242874906350685}
   - component: {fileID: 9107922131531884513}
   - component: {fileID: 1915161007968349113}
+  - component: {fileID: 7707597165463360607}
   m_Layer: 13
   m_Name: CenterMass
   m_TagString: Hitbox
@@ -260,12 +261,24 @@ CircleCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 4
+--- !u!114 &7707597165463360607
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3147619058161129007}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37285c6ff7fc49b43bb0cfea43ae82b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3720066924447674057
 GameObject:
   m_ObjectHideFlags: 0
@@ -324,7 +337,7 @@ GameObject:
   - component: {fileID: 2280112690909923606}
   - component: {fileID: 147743124885111403}
   - component: {fileID: 7450167942279653062}
-  m_Layer: 14
+  m_Layer: 0
   m_Name: ExplodeBB
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -526,7 +539,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 28d49bfb6067f6942885fba406b09dbb, type: 2}
+  - {fileID: 2100000, guid: 350211b548660fb4d80553a266f116f4, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -559,7 +572,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d247ba06193faa74d9335f5481b2b56c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  skeletonDataAsset: {fileID: 11400000, guid: e275c7a1e0598be4ab233531a5371981, type: 2}
+  skeletonDataAsset: {fileID: 11400000, guid: 7d0966a25e0ef7b4e98644dbbae98d96, type: 2}
   initialSkinName: 
   initialFlipX: 1
   initialFlipY: 0
@@ -580,7 +593,7 @@ MonoBehaviour:
     materialsInsideMask: []
     materialsOutsideMask: []
   disableRenderingOnOverride: 1
-  _animationName: idle
+  _animationName: Idle 1
   loop: 1
   timeScale: 1
   m_alwaysUpdateMesh: 0
@@ -785,7 +798,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 100
+  m_Radius: 4.1
 --- !u!114 &7341108532651842189
 MonoBehaviour:
   m_ObjectHideFlags: 0

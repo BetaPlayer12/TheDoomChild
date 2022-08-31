@@ -54,7 +54,7 @@ namespace DChild.Menu.Bestiary
                 {
                     m_name = databaseName;
                     var fileName = m_name.Replace(" ", string.Empty);
-                    fileName += "Data";
+                    fileName += "_BD";
                     FileUtility.RenameAsset(this, assetPath, fileName);
                 }
                 connection.Close();
@@ -67,9 +67,39 @@ namespace DChild.Menu.Bestiary
             EditorUtility.SetDirty(this);
             AssetDatabase.SaveAssets();
         }
-#endif 
+
+        public void SetDisplayName(string name)
+        {
+            m_customCreatureName = name;
+        }
+        public void UseDisplayName(bool useName)
+        {
+            m_useCustomName = useName;
+        }
+        public void SetTitle(string title)
+        {
+            m_title = title;
+        }
+        public void SetDesciption(string desciption)
+        {
+            m_description = desciption;
+        }
+        public void SetStoreNotes(string storeNotes)
+        {
+            m_storeNotes = storeNotes;
+        }
+        public void SetHuntersNotes(string hunterNotes)
+        {
+            m_hunterNotes = hunterNotes;
+        }
+
+#endif
         #endregion
-        [SerializeField, ShowIf("@m_title != string.Empty || m_enableEdit"), ToggleGroup("m_enableEdit")]
+        [SerializeField, ToggleGroup("m_enableEdit"), LabelText("Use Display Name")]
+        private bool m_useCustomName;
+        [SerializeField, ShowIf("m_useCustomName"), ToggleGroup("m_enableEdit"), LabelText("Display Name")]
+        private string m_customCreatureName;
+        [SerializeField, ToggleGroup("m_enableEdit")]
         private string m_title;
         [SerializeField, PreviewField(100), ToggleGroup("m_enableEdit")]
         private Sprite m_indexImage;
@@ -92,7 +122,7 @@ namespace DChild.Menu.Bestiary
         private Location[] m_locatedIn;
 
         public int id { get => m_ID; }
-        public string creatureName { get => m_name; }
+        public string creatureName { get => m_useCustomName ? m_customCreatureName : m_name; }
         public string title => m_title;
         public Sprite indexImage { get => m_indexImage; }
         public Sprite infoImage { get => m_infoImage; }
@@ -169,6 +199,34 @@ namespace DChild.Menu.Bestiary
             EditorUtility.SetDirty(this);
             AssetDatabase.SaveAssets();
         }
+
+        [SerializeField, FoldoutGroup("File Utility")]
+        private string m_projectName;
+
+        public string projectName => m_projectName;
+
+        [Button, FoldoutGroup("File Utility")]
+        private void UpdateFileNames()
+        {
+            UpdateSpriteName(m_indexImage, " Index");
+            UpdateSpriteName(m_infoImage, " Image");
+            UpdateSpriteName(m_sketchImage, " Sketch");
+
+            string assetPath = AssetDatabase.GetAssetPath(GetInstanceID());
+            var fileName = m_projectName.Replace(" ", string.Empty);
+            fileName += "_BD";
+            FileUtility.RenameAsset(this, assetPath, fileName, false);
+
+            void UpdateSpriteName(Sprite sprite, string extention)
+            {
+                if (sprite)
+                {
+                    var indexSpriteFilePath = AssetDatabase.GetAssetPath(sprite);
+                    FileUtility.RenameAsset<Sprite>(sprite, indexSpriteFilePath, m_projectName + extention, false);
+                }
+            }
+        }
+
 #endif
     }
 }

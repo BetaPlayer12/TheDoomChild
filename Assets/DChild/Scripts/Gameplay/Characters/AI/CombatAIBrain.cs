@@ -152,6 +152,12 @@ namespace DChild.Gameplay.Characters.AI
             }
         }
 
+        protected void CustomTurn()
+        {
+            transform.localScale = new Vector3(-transform.localScale.x, 1, 1);
+            m_character.SetFacing(transform.localScale.x == 1 ? HorizontalDirection.Right : HorizontalDirection.Left);
+        }
+
         protected bool TargetBlocked()
         {
             RaycastHit2D hit = Physics2D.Raycast((Vector2)m_character.centerMass.position, m_targetInfo.position - (Vector2)m_character.centerMass.position, 1000, LayerMask.GetMask("Player") + DChildUtility.GetEnvironmentMask());
@@ -159,6 +165,54 @@ namespace DChild.Gameplay.Characters.AI
             Debug.DrawRay((Vector2)m_character.centerMass.position, m_targetInfo.position - (Vector2)m_character.centerMass.position);
             //Debug.Log("Shot is " + eh + " by " + LayerMask.LayerToName(hit.transform.gameObject.layer));
             return hit.transform.gameObject.layer == LayerMask.NameToLayer("Player") ? false : true;
+        }
+
+        protected Vector2 GroundPosition(Vector2 startPoint)
+        {
+            int hitCount = 0;
+            //RaycastHit2D hit = Physics2D.Raycast(m_projectilePoint.position, Vector2.down,  1000, DChildUtility.GetEnvironmentMask());
+            RaycastHit2D[] hit = Cast(startPoint, Vector2.down, 1000, true, out hitCount, true);
+            Debug.DrawRay(startPoint, hit[0].point);
+            //var hitPos = (new Vector2(m_projectilePoint.position.x, Vector2.down.y) * hit[0].distance);
+            //return hitPos;
+            return hit[0].point;
+        }
+
+        private static ContactFilter2D m_contactFilter;
+        private static RaycastHit2D[] m_hitResults;
+        private static bool m_isInitialized;
+
+        private static void Initialize()
+        {
+            if (m_isInitialized == false)
+            {
+                m_contactFilter.useLayerMask = true;
+                m_contactFilter.SetLayerMask(DChildUtility.GetEnvironmentMask());
+                //m_contactFilter.SetLayerMask(Physics2D.GetLayerCollisionMask(DChildUtility.GetEnvironmentMask()));
+                m_hitResults = new RaycastHit2D[16];
+                m_isInitialized = true;
+            }
+        }
+
+        protected static RaycastHit2D[] Cast(Vector2 origin, Vector2 direction, float distance, bool ignoreTriggers, out int hitCount, bool debugMode = false)
+        {
+            Initialize();
+            m_contactFilter.useTriggers = !ignoreTriggers;
+            hitCount = Physics2D.Raycast(origin, direction, m_contactFilter, m_hitResults, distance);
+#if UNITY_EDITOR
+            if (debugMode)
+            {
+                if (hitCount > 0)
+                {
+                    Debug.DrawRay(origin, direction * m_hitResults[0].distance, Color.cyan, 1f);
+                }
+                else
+                {
+                    Debug.DrawRay(origin, direction * distance, Color.cyan, 1f);
+                }
+            }
+#endif
+            return m_hitResults;
         }
 
 

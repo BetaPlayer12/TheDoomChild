@@ -1,9 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace DChild.Gameplay.Environment
 {
+
     public class FoilageOld : MonoBehaviour
     {
         private Renderer[] m_renderers;

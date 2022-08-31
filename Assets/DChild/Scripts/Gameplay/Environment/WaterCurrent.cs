@@ -12,7 +12,8 @@ namespace DChild.Gameplay.Environment
 
         private void FixedUpdate()
         {
-            m_registeredRigidbody.position += Vector2.right * m_flowForce * GameplaySystem.time.fixedDeltaTime;
+            if (m_registeredRigidbody)
+                m_registeredRigidbody.position += Vector2.right * m_flowForce * GameplaySystem.time.fixedDeltaTime;
         }
 
         private void OnTriggerEnter2D(Collider2D collision)
