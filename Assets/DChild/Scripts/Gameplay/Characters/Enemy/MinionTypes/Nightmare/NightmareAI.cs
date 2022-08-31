@@ -201,12 +201,12 @@ namespace DChild.Gameplay.Characters.Enemies
             enabled = false;
             m_targetInfo = target;
             m_isDetecting = true;
-            var xOffSet = transform.position.x - position.x;
+            var xOffSet = position.x - transform.position.x;
             transform.position = new Vector2(m_targetInfo.position.x + xOffSet, GroundPosition(m_targetInfo.position).y);
             m_character.physics.simulateGravity = false;
-            m_hitbox.Enable();
             m_flinchHandle.gameObject.SetActive(true);
             m_health.SetHealthPercentage(1f);
+            m_hitbox.Enable();
             this.gameObject.SetActive(true);
             this.transform.SetParent(null);
             if (!IsFacingTarget())
@@ -321,16 +321,6 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_attackDecider.SetList(new AttackInfo<Attack>(Attack.Attack, m_info.attack.range));
             m_attackDecider.hasDecidedOnAttack = false;
-        }
-
-        private void CustomTurn()
-        {
-            if (!IsFacingTarget())
-            {
-                //m_turnHandle.Execute(m_info.turnAnimation, m_info.idleAnimation);
-                transform.localScale = new Vector3(-transform.localScale.x, 1, 1);
-                m_character.SetFacing(transform.localScale.x == 1 ? HorizontalDirection.Right : HorizontalDirection.Left);
-            }
         }
 
         private IEnumerator DetectRoutine()

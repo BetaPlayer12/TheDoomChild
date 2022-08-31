@@ -372,7 +372,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_projectileLauncher.LaunchProjectile();
                     break;
                 case Attack.SummonAttack:
-                    m_summons[m_currentSummonID].SummonAt(new Vector2(m_lastTargetPos.x, m_lastTargetPos.y + 10f), m_targetInfo);
+                    m_summons[m_currentSummonID].SummonAt(m_currentSummonID == 0 ? (Vector2)transform.position : new Vector2(m_lastTargetPos.x, m_lastTargetPos.y + 10f), m_targetInfo);
                     break;
             }
         }
