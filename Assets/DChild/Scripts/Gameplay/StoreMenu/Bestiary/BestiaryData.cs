@@ -68,12 +68,32 @@ namespace DChild.Menu.Bestiary
             AssetDatabase.SaveAssets();
         }
 
-        public void SetName(string name)
+        public void SetDisplayName(string name)
         {
-            string assetPath = AssetDatabase.GetAssetPath(GetInstanceID());
-            FileUtility.RenameAsset(this, assetPath, name);
+            m_customCreatureName = name;
         }
-#endif 
+        public void UseDisplayName(bool useName)
+        {
+            m_useCustomName = useName;
+        }
+        public void SetTitle(string title)
+        {
+            m_title = title;
+        }
+        public void SetDesciption(string desciption)
+        {
+            m_description = desciption;
+        }
+        public void SetStoreNotes(string storeNotes)
+        {
+            m_storeNotes = storeNotes;
+        }
+        public void SetHuntersNotes(string hunterNotes)
+        {
+            m_hunterNotes = hunterNotes;
+        }
+
+#endif
         #endregion
         [SerializeField, ToggleGroup("m_enableEdit"), LabelText("Use Display Name")]
         private bool m_useCustomName;
@@ -182,6 +202,8 @@ namespace DChild.Menu.Bestiary
 
         [SerializeField, FoldoutGroup("File Utility")]
         private string m_projectName;
+
+        public string projectName => m_projectName;
 
         [Button, FoldoutGroup("File Utility")]
         private void UpdateFileNames()
