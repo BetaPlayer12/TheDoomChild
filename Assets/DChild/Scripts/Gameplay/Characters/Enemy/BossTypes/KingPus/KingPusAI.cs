@@ -256,15 +256,9 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField]
             private float m_projectileGravityScale;
             public float projectileGravityScale => m_projectileGravityScale;
-            //[SerializeField]
-            //private Vector2 m_targetOffset;
-            //public Vector2 targetOffset => m_targetOffset;
             [SerializeField]
             private float m_launchDelay;
             public float launchDelay => m_launchDelay;
-            //[SerializeField]
-            //private SimpleProjectileAttackInfo m_scytheWaveProjectile;
-            //public SimpleProjectileAttackInfo scytheWaveProjectile => m_scytheWaveProjectile;
 
             [TitleGroup("FX")]
             [SerializeField]
@@ -605,7 +599,7 @@ namespace DChild.Gameplay.Characters.Enemies
             //}
         }
 
-        private IEnumerator GrappleRoutine(bool willTargetSlam, int slamCount, bool randomGrapple)
+        private IEnumerator GrappleRoutine(Vector2 target, bool willTargetSlam, int slamCount, bool randomGrapple)
         {
             for (int i = 0; i < slamCount; i++)
             {
@@ -619,7 +613,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 {
                     m_willGripTarget = true;
                     m_tentacleTargetPointIndex = m_wallGrappleDirectionIndex == 0 ? 6 : 0;
-                    var target = new Vector2(m_targetInfo.position.x, GroundPosition(transform.position).y);
+                    //var target = new Vector2(m_targetInfo.position.x, GroundPosition(transform.position).y);
                     AimAt(target);
                     m_targetPosition.position = target;
                     m_animation.SetAnimation(9, m_info.wallGrappleExtendAnimations[m_tentacleTargetPointIndex], false).TimeScale = m_info.tentacleSpeed;
@@ -784,7 +778,7 @@ namespace DChild.Gameplay.Characters.Enemies
             }
             else
             {
-                StartCoroutine(GrappleRoutine(false, m_info.bodySlamCount, true));
+                StartCoroutine(GrappleRoutine(m_targetInfo.position, false, m_info.bodySlamCount, true));
             }
             yield return null;
         }
@@ -817,7 +811,43 @@ namespace DChild.Gameplay.Characters.Enemies
             }
             else
             {
-                StartCoroutine(GrappleRoutine(true, m_info.bodySlamCount, true));
+                StartCoroutine(GrappleRoutine(m_targetInfo.position, true, m_info.bodySlamCount, true));
+            }
+            yield return null;
+        }
+
+        private IEnumerator Phase1Pattern3AttackRoutine()
+        {
+            m_animation.EnableRootMotion(true, false);
+            m_animation.AddAnimation(0, DynamicIdleAnimation(), true, 0);
+            if (IsTargetInRange(m_info.spikeSpitterAttacks[0].range))
+            {
+                for (int i = 0; i < m_info.spikeSpitterAttacks.Count; i++)
+                {
+                    if (!IsFacingTarget() && i == 0)
+                        CustomTurn();
+                    m_lastTargetPos = m_targetInfo.position;
+                    m_animation.SetAnimation(0, m_info.spikeSpitterExtendAnimations[i], false);
+                    yield return new WaitForAnimationComplete(m_animation.animationState, m_info.spikeSpitterExtendAnimations[i]);
+                    LaunchProjectile(i == 0 ? false : true);
+                    m_animation.SetAnimation(0, m_info.spikeSpitterAttacks[i].animation, false);
+                    yield return new WaitForAnimationComplete(m_animation.animationState, m_info.spikeSpitterAttacks[i].animation);
+                    m_animation.SetAnimation(0, m_info.spikeSpitterExtractAnimations[i], false);
+                    yield return new WaitForAnimationComplete(m_animation.animationState, m_info.spikeSpitterExtractAnimations[i]);
+                    if (m_character.facing != HorizontalDirection.Right && i == 0)
+                        CustomTurn();
+                }
+                m_animation.DisableRootMotion();
+                m_attackDecider.hasDecidedOnAttack = false;
+                m_currentAttackCoroutine = null;
+                m_stateHandle.ApplyQueuedState();
+            }
+            else
+            {
+                RandomizeTentaclePosition();
+                var randomTentacleTarget = m_tentacleOverridePoints[UnityEngine.Random.Range(0, m_tentacleOverridePoints.Count)];
+                ResetTentaclePosition();
+                StartCoroutine(GrappleRoutine(randomTentacleTarget.position, true, m_info.bodySlamCount, true));
             }
             yield return null;
         }
@@ -969,54 +999,6 @@ namespace DChild.Gameplay.Characters.Enemies
             //var hitPos = (new Vector2(m_projectilePoint.position.x, Vector2.down.y) * hit[0].distance);
             //return hitPos;
             return hit[0].point;
-        }
-
-        private Vector2 GroundPosition(Vector2 startPoint)
-        {
-            int hitCount = 0;
-            //RaycastHit2D hit = Physics2D.Raycast(m_projectilePoint.position, Vector2.down,  1000, DChildUtility.GetEnvironmentMask());
-            RaycastHit2D[] hit = Cast(startPoint, Vector2.down, 1000, true, out hitCount, true);
-            Debug.DrawRay(startPoint, hit[0].point);
-            //var hitPos = (new Vector2(m_projectilePoint.position.x, Vector2.down.y) * hit[0].distance);
-            //return hitPos;
-            return hit[0].point;
-        }
-
-        private static ContactFilter2D m_contactFilter;
-        private static RaycastHit2D[] m_hitResults;
-        private static bool m_isInitialized;
-
-        private static void Initialize()
-        {
-            if (m_isInitialized == false)
-            {
-                m_contactFilter.useLayerMask = true;
-                m_contactFilter.SetLayerMask(DChildUtility.GetEnvironmentMask());
-                //m_contactFilter.SetLayerMask(Physics2D.GetLayerCollisionMask(DChildUtility.GetEnvironmentMask()));
-                m_hitResults = new RaycastHit2D[16];
-                m_isInitialized = true;
-            }
-        }
-
-        public static RaycastHit2D[] Cast(Vector2 origin, Vector2 direction, float distance, bool ignoreTriggers, out int hitCount, bool debugMode = false)
-        {
-            Initialize();
-            m_contactFilter.useTriggers = !ignoreTriggers;
-            hitCount = Physics2D.Raycast(origin, direction, m_contactFilter, m_hitResults, distance);
-#if UNITY_EDITOR
-            if (debugMode)
-            {
-                if (hitCount > 0)
-                {
-                    Debug.DrawRay(origin, direction * m_hitResults[0].distance, Color.cyan, 1f);
-                }
-                else
-                {
-                    Debug.DrawRay(origin, direction * distance, Color.cyan, 1f);
-                }
-            }
-#endif
-            return m_hitResults;
         }
         #endregion
 
@@ -1193,6 +1175,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_defaultTentacleOverridePoints.Add(m_tentacleOverridePoints[i]);
             }
         }
+
         public void AimAt(Vector2 target)
         {
             Vector3 v_diff = (target - (Vector2)m_targetLooker.position);
@@ -1257,7 +1240,7 @@ namespace DChild.Gameplay.Characters.Enemies
                             m_pickedCooldown = m_currentFullCooldown[1];
                             break;
                         case Attack.Phase1Pattern3:
-                            m_currentAttackCoroutine = StartCoroutine(Phase1Pattern1AttackRoutine());
+                            m_currentAttackCoroutine = StartCoroutine(Phase1Pattern3AttackRoutine());
                             m_pickedCooldown = m_currentFullCooldown[2];
                             break;
                         case Attack.Phase1Pattern4:

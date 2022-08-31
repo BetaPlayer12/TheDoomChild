@@ -22,30 +22,23 @@ namespace DChild.Gameplay.Characters.Enemies
         [System.Serializable]
         public class Info : BaseInfo
         {
-            [SerializeField, BoxGroup("Movement")]
+            [SerializeField, TabGroup("Movement")]
             private MovementInfo m_moveWithoutBook = new MovementInfo();
             public MovementInfo moveWithoutBook => m_moveWithoutBook;
-            [SerializeField, BoxGroup("Movement")]
+            [SerializeField, TabGroup("Movement")]
             private MovementInfo m_moveWithBook = new MovementInfo();
             public MovementInfo moveWithBook => m_moveWithBook;
 
             //Attack Behaviours
-            [SerializeField, BoxGroup("Attack")]
+            [SerializeField, TabGroup("Attack")]
             private SimpleAttackInfo m_attackCastingSpell = new SimpleAttackInfo();
             public SimpleAttackInfo attackCastingSpell => m_attackCastingSpell;
-            [SerializeField, BoxGroup("Attack")]
+            [SerializeField, TabGroup("Attack")]
             private SimpleAttackInfo m_attackConjureBooks = new SimpleAttackInfo();
             public SimpleAttackInfo attackConjureBooks => m_attackConjureBooks;
-            [SerializeField, MinValue(0), BoxGroup("Attack")]
+            [SerializeField, MinValue(0), TabGroup("Attack")]
             private float m_attackCD;
             public float attackCD => m_attackCD;
-
-            [SerializeField, Range(0.1f, 1f), BoxGroup("Behavior")]
-            private float m_healthThreshhold;
-            public float healthThreshhold => m_healthThreshhold;
-            [SerializeField, Range(0.1f, 1f), BoxGroup("Behavior")]
-            private float m_healValue;
-            public float healValue => m_healValue;
             //
             [SerializeField, MinValue(0)]
             private float m_patience;
@@ -145,8 +138,6 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Reference")]
         private SpineEventListener m_spineEventListener;
         [SerializeField, TabGroup("Reference")]
-        private Health m_health;
-        [SerializeField, TabGroup("Reference")]
         private Hitbox m_hitbox;
         [SerializeField, TabGroup("Reference")]
         private Collider2D m_selfCollider;
@@ -165,7 +156,6 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Modules")]
         private DeathHandle m_deathHandle;
 
-        private float m_currentHealth;
         private float m_currentPatience;
         private float m_currentCD;
         private float m_currentFullCD;
@@ -173,7 +163,6 @@ namespace DChild.Gameplay.Characters.Enemies
         private float m_currentRunAttackDuration;
         private bool m_enablePatience;
         private bool m_isDetecting;
-        private bool m_hasHealed;
         private Vector2 m_startPoint;
 
         [SerializeField, TabGroup("Sensors")]
@@ -208,8 +197,6 @@ namespace DChild.Gameplay.Characters.Enemies
         private Coroutine m_randomIdleRoutine;
         private Coroutine m_randomTurnRoutine;
         private Coroutine m_teleportRoutine;
-        private Coroutine m_summonBookRoutine;
-        private Coroutine m_healRoutine;
 
         private string m_currentIdleAnimation;
         private string m_currentMoveAnimation;
@@ -219,8 +206,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private void OnAttackDone(object sender, EventActionArgs eventArgs)
         {
             //m_animation.DisableRootMotion();
-            if (m_healRoutine == null)
-                m_stateHandle.ApplyQueuedState();
+            m_stateHandle.ApplyQueuedState();
         }
 
         private void OnTurnRequest(object sender, EventActionArgs eventArgs) => m_stateHandle.SetState(State.Turning);
@@ -230,6 +216,12 @@ namespace DChild.Gameplay.Characters.Enemies
             if (damageable != null /*&& !ShotBlocked()*/)
             {
                 base.SetTarget(damageable);
+                //if (m_stateHandle.currentState != State.Chasing 
+                //    && m_stateHandle.currentState != State.RunAway 
+                //    && m_stateHandle.currentState != State.Turning 
+                //    && m_stateHandle.currentState != State.WaitBehaviourEnd)
+                //{
+                //}
                 m_selfCollider.enabled = false;
 
                 if (!m_isDetecting)
@@ -259,29 +251,15 @@ namespace DChild.Gameplay.Characters.Enemies
             }
         }
 
-        private void StopCurrentBehaviorRoutine()
-        {
-            if (m_teleportRoutine != null)
-            {
-                StopCoroutine(m_teleportRoutine);
-                m_teleportRoutine = null;
-            }
-            if (m_summonBookRoutine != null)
-            {
-                StopCoroutine(m_summonBookRoutine);
-                m_summonBookRoutine = null;
-            }
-            if (m_healRoutine != null)
-            {
-                StopCoroutine(m_healRoutine);
-                m_healRoutine = null;
-            }
-        }
-
         private void OnTurnDone(object sender, FacingEventArgs eventArgs)
         {
-            if (m_healRoutine == null)
-                m_stateHandle.ApplyQueuedState();
+            m_stateHandle.ApplyQueuedState();
+        }
+
+        private void CustomTurn()
+        {
+            transform.localScale = new Vector3(-transform.localScale.x, 1, 1);
+            m_character.SetFacing(transform.localScale.x == 1 ? HorizontalDirection.Right : HorizontalDirection.Left);
         }
 
         //Patience Handler
@@ -379,53 +357,6 @@ namespace DChild.Gameplay.Characters.Enemies
             m_selfCollider.enabled = false;
         }
 
-        private void OnTomeDeath(object sender, EventActionArgs eventArgs)
-        {
-        }
-
-        private IEnumerator SummonBookRoutine()
-        {
-            enabled = false;
-            m_stateHandle.Wait(State.ReevaluateSituation);
-            yield return new WaitUntil(() => m_teleportRoutine == null && m_healRoutine == null);
-            m_hitbox.Enable();
-            m_animation.SetAnimation(0, m_info.bookSummonAnimation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.bookSummonAnimation);
-            ApplyBookState(BookState.WithBook);
-            m_summonBookRoutine = null;
-            m_attackDecider.hasDecidedOnAttack = false;
-            m_stateHandle.ApplyQueuedState();
-            enabled = true;
-            yield return null;
-        }
-
-        private void OnDamageTaken(object sender, Damageable.DamageEventArgs eventArgs)
-        {
-            m_currentHealth = (float)m_health.currentValue / m_health.maxValue;
-            if (m_currentHealth < m_info.healthThreshhold && m_healRoutine == null && !m_hasHealed)
-            {
-                enabled = false;
-                m_stateHandle.Wait(State.ReevaluateSituation);
-                StopCurrentBehaviorRoutine();
-                m_healRoutine = StartCoroutine(HealRoutine());
-            }
-        }
-
-        private IEnumerator HealRoutine()
-        {
-            m_hitbox.Disable();
-            m_animation.SetAnimation(0, m_info.healAnimation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.healAnimation);
-            m_health.SetHealthPercentage(m_currentHealth + m_info.healValue);
-            m_hasHealed = true;
-            m_hitbox.Enable();
-            m_healRoutine = null;
-            m_attackDecider.hasDecidedOnAttack = false;
-            m_stateHandle.ApplyQueuedState();
-            enabled = true;
-            yield return null;
-        }
-
         private void OnFlinchStart(object sender, EventActionArgs eventArgs)
         {
             if (m_animation.GetCurrentAnimation(0).ToString() == m_currentIdleAnimation && m_teleportRoutine == null)
@@ -443,8 +374,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_currentFlinchAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_currentFlinchAnimation);
             m_animation.SetAnimation(0, m_currentFlinchAnimation, true);
-            if (m_healRoutine == null)
-                m_stateHandle.ApplyQueuedState();
+            m_stateHandle.ApplyQueuedState();
             yield return null;
         }
 
@@ -544,8 +474,6 @@ namespace DChild.Gameplay.Characters.Enemies
             if (m_bookState == BookState.WithBook)
             {
                 ApplyBookState(BookState.WithoutBook);
-                m_tome.gameObject.SetActive(true);
-                m_tome.GetComponentInChildren<Health>().SetHealthPercentage(1);
                 m_tome.SummonTome(m_targetInfo);
             }
         }
@@ -622,8 +550,6 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator TeleportRoutine()
         {
-            enabled = false;
-            yield return new WaitUntil(() => m_summonBookRoutine == null);
             m_hitbox.Disable();
             m_movement.Stop();
             m_character.physics.simulateGravity = false;
@@ -631,7 +557,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_legCollider.enabled = false;
             m_animation.SetAnimation(0, m_info.teleportDisappearAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.teleportDisappearAnimation);
-            //yield return new WaitUntil(() => Vector2.Distance(m_targetInfo.position, transform.position) > m_info.targetDistanceTolerance);
+            yield return new WaitUntil(() => Vector2.Distance(m_targetInfo.position, transform.position) > m_info.targetDistanceTolerance);
             transform.position = new Vector2(m_targetInfo.position.x + (UnityEngine.Random.Range(0, 2) == 1 ? 25f : -25f), GroundPosition(m_targetInfo.position).y);
             yield return new WaitForSeconds(2f);
             while (m_wallSensor.isDetecting && m_backSensor.isDetecting)
@@ -646,11 +572,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_info.teleportFromBelowAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.teleportFromBelowAnimation);
             m_teleportRoutine = null;
-            if (m_summonBookRoutine == null)
-            {
-                m_stateHandle.ApplyQueuedState();
-                enabled = true;
-            }
+            m_stateHandle.ApplyQueuedState();
             yield return null;
         }
 
@@ -679,14 +601,13 @@ namespace DChild.Gameplay.Characters.Enemies
             m_attackHandle.AttackDone += OnAttackDone;
             m_turnHandle.TurnDone += OnTurnDone;
             m_deathHandle.SetAnimation(m_info.deathAnimation);
-            m_damageable.DamageTaken += OnDamageTaken;
-            m_tome.GetComponent<Damageable>().Destroyed += OnTomeDeath;
             m_flinchHandleWithoutBook.FlinchStart += OnFlinchStart;
             m_flinchHandleWithBook.FlinchStart += OnFlinchStart;
             m_stateHandle = new StateHandle<State>(m_willPatrol ? State.Patrol : State.Idle, State.WaitBehaviourEnd);
             m_attackDecider = new RandomAttackDecider<Attack>();
             UpdateAttackDeciderList();
         }
+
 
         private void Update()
         {
@@ -816,33 +737,26 @@ namespace DChild.Gameplay.Characters.Enemies
 
                     if (IsTargetInRange(m_info.targetDistanceTolerance) && !m_wallSensor.allRaysDetecting && !m_backSensor.allRaysDetecting)
                     {
-                        if (!m_tome.GetComponent<Damageable>().isAlive && m_summonBookRoutine == null)
+                        if (IsTargetInRange(m_info.fleeDistance))
                         {
-                            m_summonBookRoutine = StartCoroutine(SummonBookRoutine());
+                            m_stateHandle.Wait(State.ReevaluateSituation);
+                            m_teleportRoutine = StartCoroutine(TeleportRoutine());
                         }
                         else
                         {
-                            if (IsTargetInRange(m_info.fleeDistance))
+                            if (IsFacingTarget())
                             {
-                                m_stateHandle.Wait(State.ReevaluateSituation);
-                                m_teleportRoutine = StartCoroutine(TeleportRoutine());
+                                if (m_animation.GetCurrentAnimation(0).ToString() != m_currentIdleAnimation)
+                                    m_movement.Stop();
+
+                                m_selfCollider.enabled = true;
+                                m_animation.SetAnimation(0, m_currentIdleAnimation, true);
                             }
                             else
                             {
-                                if (IsFacingTarget())
-                                {
-                                    if (m_animation.GetCurrentAnimation(0).ToString() != m_currentIdleAnimation)
-                                        m_movement.Stop();
-
-                                    m_selfCollider.enabled = true;
-                                    m_animation.SetAnimation(0, m_currentIdleAnimation, true);
-                                }
-                                else
-                                {
-                                    m_turnState = State.ReevaluateSituation;
-                                    if (m_animation.GetCurrentAnimation(0).ToString() != m_currentTurnAnimation)
-                                        m_stateHandle.SetState(State.Turning);
-                                }
+                                m_turnState = State.ReevaluateSituation;
+                                if (m_animation.GetCurrentAnimation(0).ToString() != m_currentTurnAnimation)
+                                    m_stateHandle.SetState(State.Turning);
                             }
                         }
 
