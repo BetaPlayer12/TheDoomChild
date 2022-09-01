@@ -1,7 +1,7 @@
 ﻿using DChild.Gameplay.Characters.AI;
 using Sirenix.OdinInspector.Editor;
 using UnityEditor;
-using UnityEditor.Experimental.SceneManagement;
+
 using UnityEngine;
 
 namespace DChildEditor.Gameplay.Characters.AI
@@ -34,7 +34,7 @@ namespace DChildEditor.Gameplay.Characters.AI
 
         private void OnSceneGUI()
         {
-            if (PrefabStageUtility.GetCurrentPrefabStage() == null)
+            if (UnityEditor.SceneManagement.PrefabStageUtility.GetCurrentPrefabStage() == null)
             {
                 var patrolHandler = target as WayPointPatrol;
 
