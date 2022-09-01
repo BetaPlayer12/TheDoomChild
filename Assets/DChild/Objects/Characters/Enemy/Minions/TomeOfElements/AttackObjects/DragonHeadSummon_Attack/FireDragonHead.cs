@@ -6,11 +6,12 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DChild.Gameplay.Pooling;
 
 
-namespace DChild.Gameplay.Characters.Enemies
+namespace DChild.Gameplay.Projectiles
 {
-    public class FireDragonHead : MonoBehaviour
+    public class FireDragonHead : PoolableObject
     {
         [SerializeField]
         private SpineRootAnimation m_spine;
@@ -28,26 +29,30 @@ namespace DChild.Gameplay.Characters.Enemies
 
         public void PlayAttackAnimation()
         {
-            Debug.Log("Attack Animation Played");
             StartCoroutine(AttackRoutine());
         }
 
-        public IEnumerator AttackRoutine()
+        private IEnumerator AttackRoutine()
         {
-            Debug.Log("Attack Routine run");
             m_spine.SetAnimation(0, m_attackAnimation, false);
-            Debug.Log("animation state: " + m_attackAnimation);
             yield return new WaitForAnimationComplete(m_spine.animationState, m_attackAnimation);
-            gameObject.SetActive(false);
+            DestroyInstance();
             yield return null;
         }
 
         public void ShootFire()
         {
             Debug.Log("Fire shot");
+            //StartCoroutine(ShootFireRoutine());
             flameEffect.SetActive(true);
             flameCollider.SetActive(true);
         }
+
+        //private IEnumerator ShootFireRoutine()
+        //{
+        //    flameEffect.SetActive(true);
+        //    flameCollider.SetActive(true);
+        //}
 
         public void OffFire()
         {
@@ -58,7 +63,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void Start()
         {
-            
+            PlayAttackAnimation();
         }
     }
 }

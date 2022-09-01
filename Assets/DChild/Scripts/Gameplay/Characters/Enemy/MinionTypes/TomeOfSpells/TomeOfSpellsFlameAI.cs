@@ -78,7 +78,17 @@ namespace DChild.Gameplay.Characters.Enemies
             private string m_flinchAnimation;
             public string flinchAnimation => m_flinchAnimation;
 
-            
+            [SerializeField, TabGroup("Dragon Head Configuration")]
+            private GameObject m_fireDragonHead;
+            public GameObject fireDragonHead => m_fireDragonHead;
+
+            [SerializeField, BoxGroup("Dragon Head Configuration")]
+            private float m_fireDragonHeadOffset;
+            public float fireDragonHeadOffset => m_fireDragonHeadOffset;
+
+            [SerializeField, BoxGroup("Dragon Head Configuration")]
+            private int m_numberOfFireDragonHeads;
+            public int numberOfFireDragonHeads => m_numberOfFireDragonHeads;
 
             public override void Initialize()
             {
@@ -147,12 +157,6 @@ namespace DChild.Gameplay.Characters.Enemies
 
         [SerializeField, TabGroup("Magister")]
         private Transform m_magister;
-
-        [SerializeField, TabGroup("Reference")]
-        private FireDragonHead m_fireDragonHead;
-
-        [SerializeField, TabGroup("Reference")]
-        private GameObject m_fireDragonHeadModel;
 
         [ShowInInspector]
         private StateHandle<State> m_stateHandle;
@@ -404,10 +408,10 @@ namespace DChild.Gameplay.Characters.Enemies
                 case Attack.AttackFlame:
                     m_lastTargetPos = m_targetInfo.position;
                     //m_attackHandle.ExecuteAttack(m_info.attackFrost.animation, m_info.idleAnimation);
-                    //m_attackRoutine = StartCoroutine(m_fireDragonHead.attackRoutine());
+                    m_attackRoutine = StartCoroutine(FlameAttackRoutine());
                     Debug.Log("Flame Attack!");
-                    m_fireDragonHeadModel.SetActive(true);
-                    m_fireDragonHead.PlayAttackAnimation();
+                    //m_fireDragonHeadModel.SetActive(true);
+                    //m_fireDragonHead.PlayAttackAnimation();
                     break;
             }
         }
@@ -416,14 +420,29 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_animation.SetAnimation(0, m_info.attackFlameStartAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attackFlameStartAnimation);
-            m_animation.SetAnimation(0, m_info.attackFlame.animation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attackFlame.animation);
+            //m_animation.SetAnimation(0, m_info.attackFlame.animation, false);
+            //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attackFlame.animation);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
+            yield return SummonFireDragonHeadRoutine(); 
             m_flinchHandle.gameObject.SetActive(true);
             m_rigidbody2D.constraints = RigidbodyConstraints2D.FreezeRotation;
-            //yield return SummonStormCloudsRoutine(m_info.numberOfStormClouds);
             m_stateHandle.ApplyQueuedState();
             m_attackDecider.hasDecidedOnAttack = false;
+        }
+
+        private IEnumerator SummonFireDragonHeadRoutine()
+        {
+            var playerCenter = m_targetInfo.position;
+            var offset = UnityEngine.Random.insideUnitCircle * m_info.fireDragonHeadOffset;
+            var spawnPosition = playerCenter + offset;
+            InstantiateFireDragonHead(spawnPosition);
+            yield return null;
+        }
+
+        private void InstantiateFireDragonHead(Vector2 spawnPosition)
+        {
+            var instance = GameSystem.poolManager.GetPool<PoolableObjectPool>().GetOrCreateItem(m_info.fireDragonHead, gameObject.scene);
+            instance.SpawnAt(spawnPosition, Quaternion.identity);
         }
 
         //private IEnumerator SummonStormCloudsRoutine(int numOfClouds)
