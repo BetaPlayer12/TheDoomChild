@@ -18,6 +18,7 @@ using DChild.Gameplay.Pooling;
 using DChild.Gameplay.Projectiles;
 using Holysoft.Collections;
 using Holysoft.Pooling;
+using Holysoft.Pooling;
 
 namespace DChild.Gameplay.Characters.Enemies
 {
@@ -77,6 +78,8 @@ namespace DChild.Gameplay.Characters.Enemies
             private string m_flinchAnimation;
             public string flinchAnimation => m_flinchAnimation;
 
+            
+
             public override void Initialize()
             {
 #if UNITY_EDITOR
@@ -102,7 +105,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private enum Attack
         {
             //Attack,
-            AttackStorm,
+            AttackFlame,
             [HideInInspector]
             _COUNT
         }
@@ -144,6 +147,12 @@ namespace DChild.Gameplay.Characters.Enemies
 
         [SerializeField, TabGroup("Magister")]
         private Transform m_magister;
+
+        [SerializeField, TabGroup("Reference")]
+        private FireDragonHead m_fireDragonHead;
+
+        [SerializeField, TabGroup("Reference")]
+        private GameObject m_fireDragonHeadModel;
 
         [ShowInInspector]
         private StateHandle<State> m_stateHandle;
@@ -296,7 +305,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private void UpdateAttackDeciderList()
         {
             m_attackDecider.SetList(/*new AttackInfo<Attack>(Attack.Attack, m_info.attack.range),*/
-                                    /*new AttackInfo<Attack>(Attack.AttackStorm, m_info.attackStorm.range)*/);
+                                    new AttackInfo<Attack>(Attack.AttackFlame, m_info.attackFlame.range));
             m_attackDecider.hasDecidedOnAttack = false;
         }
 
@@ -392,10 +401,13 @@ namespace DChild.Gameplay.Characters.Enemies
                 //case Attack.Attack:
                 //    StartCoroutine(AttackRoutine());
                 //    break;
-                case Attack.AttackStorm:
+                case Attack.AttackFlame:
                     m_lastTargetPos = m_targetInfo.position;
                     //m_attackHandle.ExecuteAttack(m_info.attackFrost.animation, m_info.idleAnimation);
-                    m_attackRoutine = StartCoroutine(FlameAttackRoutine());
+                    //m_attackRoutine = StartCoroutine(m_fireDragonHead.attackRoutine());
+                    Debug.Log("Flame Attack!");
+                    m_fireDragonHeadModel.SetActive(true);
+                    m_fireDragonHead.PlayAttackAnimation();
                     break;
             }
         }
@@ -755,7 +767,7 @@ namespace DChild.Gameplay.Characters.Enemies
             UpdateAttackDeciderList();
 
             m_attackCache = new List<Attack>();
-            AddToAttackCache(Attack.AttackStorm);
+            AddToAttackCache(Attack.AttackFlame);
             m_attackRangeCache = new List<float>();
             AddToRangeCache(m_info.attackFlame.range);
             m_attackUsed = new bool[m_attackCache.Count];
@@ -828,6 +840,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_agent.Stop();
                     m_turnHandle.Execute();
                     break;
+
                 case State.Attacking:
                     m_stateHandle.Wait(State.Cooldown);
                     m_animation.SetAnimation(0, m_info.idleAnimation, true);
@@ -835,6 +848,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_executeMoveCoroutine = StartCoroutine(ExecuteMove(m_currentAttackRange, m_currentAttack));
                     m_attackDecider.hasDecidedOnAttack = false;
                     break;
+
                 case State.Cooldown:
                     //m_stateHandle.Wait(State.ReevaluateSituation);
                     if (!IsFacingTarget())
@@ -878,11 +892,12 @@ namespace DChild.Gameplay.Characters.Enemies
                     }
 
                     break;
+
                 case State.Chasing:
                     //m_attackDecider.DecideOnAttack();
                     m_attackDecider.hasDecidedOnAttack = false;
                     ChooseAttack();
-                    m_currentAttack = Attack.AttackStorm;
+                    m_currentAttack = Attack.AttackFlame;
                     m_currentAttackRange = m_info.attackFlame.range;
                     if (m_attackDecider.hasDecidedOnAttack /*&& IsTargetInRange(m_currentAttackRange) && !m_wallSensor.allRaysDetecting*/)
                     {
