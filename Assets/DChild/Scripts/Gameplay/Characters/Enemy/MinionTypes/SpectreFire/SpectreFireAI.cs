@@ -432,7 +432,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator AttackRoutine1()
         {
 
-            yield return new WaitForSeconds(1.25f);
+            yield return new WaitForSeconds(2f);
             LaunchProjectile();
             m_animation.SetAnimation(0, m_info.attack1.animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack1.animation);
