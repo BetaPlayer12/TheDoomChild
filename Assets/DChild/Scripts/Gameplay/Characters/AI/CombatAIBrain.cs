@@ -178,6 +178,17 @@ namespace DChild.Gameplay.Characters.AI
             return hit[0].point;
         }
 
+        protected Vector2 RoofPosition(Vector2 startPoint)
+        {
+            int hitCount = 0;
+            //RaycastHit2D hit = Physics2D.Raycast(m_projectilePoint.position, Vector2.down,  1000, DChildUtility.GetEnvironmentMask());
+            RaycastHit2D[] hit = Cast(startPoint, Vector2.up, 1000, true, out hitCount, true);
+            Debug.DrawRay(startPoint, hit[0].point);
+            //var hitPos = (new Vector2(m_projectilePoint.position.x, Vector2.down.y) * hit[0].distance);
+            //return hitPos;
+            return hit[0].point;
+        }
+
         private static ContactFilter2D m_contactFilter;
         private static RaycastHit2D[] m_hitResults;
         private static bool m_isInitialized;
