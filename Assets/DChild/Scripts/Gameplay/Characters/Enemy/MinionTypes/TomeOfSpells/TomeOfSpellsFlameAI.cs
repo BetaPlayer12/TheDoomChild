@@ -77,6 +77,18 @@ namespace DChild.Gameplay.Characters.Enemies
             private string m_flinchAnimation;
             public string flinchAnimation => m_flinchAnimation;
 
+            [SerializeField, TabGroup("Dragon Head Configuration")]
+            private GameObject m_fireDragonHead;
+            public GameObject fireDragonHead => m_fireDragonHead;
+
+            [SerializeField, BoxGroup("Dragon Head Configuration")]
+            private float m_fireDragonHeadOffset;
+            public float fireDragonHeadOffset => m_fireDragonHeadOffset;
+
+            [SerializeField, BoxGroup("Dragon Head Configuration")]
+            private int m_numberOfFireDragonHeads;
+            public int numberOfFireDragonHeads => m_numberOfFireDragonHeads;
+
             public override void Initialize()
             {
 #if UNITY_EDITOR
@@ -102,7 +114,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private enum Attack
         {
             //Attack,
-            AttackStorm,
+            AttackFlame,
             [HideInInspector]
             _COUNT
         }
@@ -203,13 +215,6 @@ namespace DChild.Gameplay.Characters.Enemies
             }
         }
 
-        public void SetAI(AITargetInfo targetInfo)
-        {
-            m_isDetecting = true;
-            m_targetInfo = targetInfo;
-            m_stateHandle.OverrideState(State.ReevaluateSituation);
-        }
-
         private void OnTurnDone(object sender, FacingEventArgs eventArgs)
         {
             m_rigidbody2D.constraints = RigidbodyConstraints2D.FreezeRotation;
@@ -296,7 +301,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private void UpdateAttackDeciderList()
         {
             m_attackDecider.SetList(/*new AttackInfo<Attack>(Attack.Attack, m_info.attack.range),*/
-                                    /*new AttackInfo<Attack>(Attack.AttackStorm, m_info.attackStorm.range)*/);
+                                    new AttackInfo<Attack>(Attack.AttackFlame, m_info.attackFlame.range));
             m_attackDecider.hasDecidedOnAttack = false;
         }
 
@@ -392,10 +397,13 @@ namespace DChild.Gameplay.Characters.Enemies
                 //case Attack.Attack:
                 //    StartCoroutine(AttackRoutine());
                 //    break;
-                case Attack.AttackStorm:
+                case Attack.AttackFlame:
                     m_lastTargetPos = m_targetInfo.position;
                     //m_attackHandle.ExecuteAttack(m_info.attackFrost.animation, m_info.idleAnimation);
                     m_attackRoutine = StartCoroutine(FlameAttackRoutine());
+                    Debug.Log("Flame Attack!");
+                    //m_fireDragonHeadModel.SetActive(true);
+                    //m_fireDragonHead.PlayAttackAnimation();
                     break;
             }
         }
@@ -404,90 +412,50 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_animation.SetAnimation(0, m_info.attackFlameStartAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attackFlameStartAnimation);
-            m_animation.SetAnimation(0, m_info.attackFlame.animation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attackFlame.animation);
+            //m_animation.SetAnimation(0, m_info.attackFlame.animation, false);
+            //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attackFlame.animation);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
+            yield return SummonFireDragonHeadRoutine(); 
             m_flinchHandle.gameObject.SetActive(true);
             m_rigidbody2D.constraints = RigidbodyConstraints2D.FreezeRotation;
-            //yield return SummonStormCloudsRoutine(m_info.numberOfStormClouds);
             m_stateHandle.ApplyQueuedState();
             m_attackDecider.hasDecidedOnAttack = false;
         }
 
-        //private IEnumerator SummonStormCloudsRoutine(int numOfClouds)
-        //{
-        //    var playerCenter = m_targetInfo.position;
-        //    InstantiateStormCloud(playerCenter);
-
-        //    for (int i = 0; i < numOfClouds - 1; i++)
-        //    {
-        //        var offset = UnityEngine.Random.insideUnitCircle * m_info.stormCloudOffset;
-        //        var spawnPosition = playerCenter + offset;
-        //        InstantiateStormCloud(spawnPosition);
-        //    }
-        //    yield return null;
-        //}
-
-        //private void InstantiateStormCloud(Vector2 spawnPosition)
-        //{
-        //    var instance = GameSystem.poolManager.GetPool<PoolableObjectPool>().GetOrCreateItem(m_info.stormCloud, gameObject.scene);
-        //    instance.SpawnAt(spawnPosition, Quaternion.identity);
-        //}
-
-        //private IEnumerator FrostAttackRoutine()
-        //{
-        //    m_animation.SetAnimation(0, m_info.attackFrostStartAnimation, false);
-        //    yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attackFrostStartAnimation);
-        //    m_animation.SetAnimation(0, m_info.attackFrost.animation, false);
-        //    yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attackFrost.animation);
-        //    m_animation.SetAnimation(0, m_info.idleAnimation, true);
-        //    m_flinchHandle.gameObject.SetActive(true);
-        //    m_rigidbody2D.constraints = RigidbodyConstraints2D.FreezeRotation;
-        //    m_stateHandle.ApplyQueuedState();
-        //    m_attackDecider.hasDecidedOnAttack = false;
-        //    yield return null;
-        //}
-
-        //private void LaunchIcePattern(int numberOfProjectiles, int rotations)
-        //{
-        //    for (int x = 0; x < rotations; x++)
-        //    {
-        //        float angleStep = 360f / numberOfProjectiles;
-        //        float angle = 45f;
-        //        for (int z = 0; z < numberOfProjectiles; z++)
-        //        {
-        //            Vector2 startPoint = new Vector2(m_character.centerMass.position.x, m_character.centerMass.position.y);
-        //            float projectileDirXposition = startPoint.x + Mathf.Sin((angle * Mathf.PI) / 180) * 5;
-        //            float projectileDirYposition = startPoint.y + Mathf.Cos((angle * Mathf.PI) / 180) * 5;
-
-        //            Vector2 projectileVector = new Vector2(projectileDirXposition, projectileDirYposition);
-        //            Vector2 projectileMoveDirection = (projectileVector - startPoint).normalized * m_info.projectile.projectileInfo.speed;
-
-        //            GameObject projectile = m_info.projectile.projectileInfo.projectile;
-        //            var instance = GameSystem.poolManager.GetPool<ProjectilePool>().GetOrCreateItem(projectile);
-        //            instance.transform.position = m_character.centerMass.position;
-        //            var component = instance.GetComponent<Projectile>();
-        //            component.ResetState();
-        //            component.GetComponent<Rigidbody2D>().velocity = projectileMoveDirection;
-        //            Vector2 v = component.GetComponent<Rigidbody2D>().velocity;
-        //            var projRotation = Mathf.Atan2(v.y, v.x) * Mathf.Rad2Deg;
-        //            component.transform.rotation = Quaternion.AngleAxis(projRotation, Vector3.forward);
-
-        //            angle += angleStep;
-        //        }
-        //    }
-        //    //yield return null;
-        //}
-
-        private void LaunchProjectile()
+        private IEnumerator SummonFireDragonHeadRoutine()
         {
-            if (m_targetInfo.isValid)
-            {
-                //m_projectileLauncher.AimAt(m_lastTargetPos);
-                //m_projectileLauncher.LaunchProjectile();
-                //LaunchIcePattern(4, 1)
-            }
+            var playerCenter = m_targetInfo.position;
+            var offset = UnityEngine.Random.insideUnitCircle * m_info.fireDragonHeadOffset;
+            var spawnPosition = playerCenter + offset;
+            InstantiateFireDragonHead(spawnPosition, m_targetInfo.position);
+            yield return null;
         }
+
+        private void InstantiateFireDragonHead(Vector2 spawnPosition, Vector2 playerPosition)
+        {
+            var instance = GameSystem.poolManager.GetPool<PoolableObjectPool>().GetOrCreateItem(m_info.fireDragonHead, gameObject.scene);
+            var toPlayer = playerPosition - spawnPosition;
+            var rad = Mathf.Atan2(toPlayer.y, toPlayer.x);
+            //Vector3 instScale = instance.GetComponent<Transform>().localScale;
+
+            //if (spawnPosition.x > playerPosition.x)
+            //{
+            //    instScale.x *= -1;
+            //    instance.GetComponent<Transform>().localScale = instScale;
+            //}
+            //if (spawnPosition.y > playerPosition.y)
+            //{    
+            //    instScale.y *= -1;
+            //    instance.GetComponent<Transform>().localScale = instScale;
+            //}
+            //instance.SpawnAt(spawnPosition, Quaternion.Euler(0f, 0f, rad * Mathf.Rad2Deg));
+            
+            //Debug.Log("sCALE: " + instance.GetComponent<Transform>().localScale);
+
+            instance.SpawnAt(spawnPosition, Quaternion.identity);
+            instance.GetComponent<FireDragonHead>().SetPlayerPosition(playerPosition);
+        }
+
         #endregion
 
         #region Movement
@@ -755,7 +723,7 @@ namespace DChild.Gameplay.Characters.Enemies
             UpdateAttackDeciderList();
 
             m_attackCache = new List<Attack>();
-            AddToAttackCache(Attack.AttackStorm);
+            AddToAttackCache(Attack.AttackFlame);
             m_attackRangeCache = new List<float>();
             AddToRangeCache(m_info.attackFlame.range);
             m_attackUsed = new bool[m_attackCache.Count];
@@ -828,6 +796,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_agent.Stop();
                     m_turnHandle.Execute();
                     break;
+
                 case State.Attacking:
                     m_stateHandle.Wait(State.Cooldown);
                     m_animation.SetAnimation(0, m_info.idleAnimation, true);
@@ -835,6 +804,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_executeMoveCoroutine = StartCoroutine(ExecuteMove(m_currentAttackRange, m_currentAttack));
                     m_attackDecider.hasDecidedOnAttack = false;
                     break;
+
                 case State.Cooldown:
                     //m_stateHandle.Wait(State.ReevaluateSituation);
                     if (!IsFacingTarget())
@@ -878,11 +848,12 @@ namespace DChild.Gameplay.Characters.Enemies
                     }
 
                     break;
+
                 case State.Chasing:
                     //m_attackDecider.DecideOnAttack();
                     m_attackDecider.hasDecidedOnAttack = false;
                     ChooseAttack();
-                    m_currentAttack = Attack.AttackStorm;
+                    m_currentAttack = Attack.AttackFlame;
                     m_currentAttackRange = m_info.attackFlame.range;
                     if (m_attackDecider.hasDecidedOnAttack /*&& IsTargetInRange(m_currentAttackRange) && !m_wallSensor.allRaysDetecting*/)
                     {
