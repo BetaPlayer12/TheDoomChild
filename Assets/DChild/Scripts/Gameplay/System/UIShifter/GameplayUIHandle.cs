@@ -8,8 +8,8 @@ using DChild.Gameplay.Systems.Lore;
 using DChild.Gameplay.Trade;
 using DChild.Gameplay.UI;
 using DChild.Menu.Trade;
-using Doozy.Engine;
-using Doozy.Engine.UI;
+using DChild.Temp;
+using Doozy.Runtime.UIManager.Containers;
 using System.Collections;
 using UnityEngine;
 
@@ -34,7 +34,7 @@ namespace DChild.Gameplay.Systems
         [SerializeField]
         private StoreNotificationHandle m_storeNotification;
         [SerializeField]
-        private UIView m_skippableUI;
+        private UIContainer m_skippableUI;
 
         public void UpdateNavMapConfiguration(Location location, Transform inGameReference, Vector2 mapReferencePoint, Vector2 calculationOffset)
         {

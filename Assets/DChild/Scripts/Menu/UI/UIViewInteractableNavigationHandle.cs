@@ -1,19 +1,17 @@
-﻿using Doozy.Engine.UI;
-using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using DChild.Temp;
+using Doozy.Runtime.UIManager.Containers;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
 namespace DChild.Menu
 {
-    [RequireComponent(typeof(UIView), typeof(CanvasGroup))]
+    [RequireComponent(typeof(UIContainer), typeof(CanvasGroup))]
     public class UIViewInteractableNavigationHandle : MonoBehaviour
     {
         [SerializeField]
         private GameObject m_firstSelected;
         private CanvasGroup m_canvasGroup;
-        private UIView m_uiView;
+        private UIContainer m_uiView;
 
         private GameObject m_previousSelectedGameObject;
         private void OnHideStart(GameObject obj)
@@ -32,11 +30,12 @@ namespace DChild.Menu
         private void Start()
         {
             m_canvasGroup = GetComponent<CanvasGroup>();
-            m_uiView = GetComponent<UIView>();
-            m_canvasGroup.interactable = m_uiView.IsHidden == false && m_uiView.IsHiding == false;
+            m_uiView = GetComponent<UIContainer>();
+            m_canvasGroup.interactable = m_uiView.isHidden == false && m_uiView.isHiding == false;
+            GameEventMessage.Send();
+            //m_uiView.ShowBehavior.OnFinished.Action += OnShowFinished;
+            //m_uiView.HideBehavior.OnStart.Action += OnHideStart;
 
-            m_uiView.ShowBehavior.OnFinished.Action += OnShowFinished;
-            m_uiView.HideBehavior.OnStart.Action += OnHideStart;
         }
     }
 }

@@ -1,5 +1,5 @@
 ﻿using DChild.UI;
-using Doozy.Engine.UI;
+using Doozy.Runtime.UIManager.Containers;
 using Sirenix.OdinInspector;
 using System;
 using UnityEngine;
@@ -13,14 +13,14 @@ namespace DChildDebug.Cutscene
         [SerializeField]
         private float m_holdButtonDuration;
 
-        private UIView m_view;
+        private UIContainer m_view;
         private float m_holdButtonDurationTimer;
 
         public static event Action SkipExecute;
 
         private void Awake()
         {
-            m_view = GetComponent<UIView>();
+            m_view = GetComponent<UIContainer>();
         }
 
         private void OnEnable()

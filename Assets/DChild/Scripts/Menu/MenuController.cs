@@ -1,5 +1,5 @@
 ﻿using DChild.Gameplay;
-using Doozy.Engine.UI.Input;
+using Doozy.Runtime.UIManager.Input;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;

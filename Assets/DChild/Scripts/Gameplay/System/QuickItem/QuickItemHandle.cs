@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections;
-using System.Linq;
+﻿using System.Collections;
 using DChild.Gameplay.Characters.Players;
 using DChild.Gameplay.Items;
-using Doozy.Engine.Nody;
+using Doozy.Runtime.Nody;
 using Holysoft.Event;
 using Sirenix.OdinInspector;
 using Sirenix.Utilities;
@@ -49,7 +47,7 @@ namespace DChild.Gameplay.Inventories
         [ShowInInspector, ReadOnly]
         private int m_currentIndex;
         [SerializeField]
-        private GraphController m_graph;
+        private FlowController m_graph;
         [SerializeField]
         private QuickItemCooldown m_cooldown;
 
@@ -223,7 +221,7 @@ namespace DChild.Gameplay.Inventories
             do
             {
                 yield return null;
-            } while (m_graph.Initialized == false);
+            } while (m_graph.initialized == false);
             yield return null;
             var hasQuickSlot = m_selections.HasItems();
             //m_hideUI = hasQuickSlot == false;

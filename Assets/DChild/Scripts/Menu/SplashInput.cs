@@ -1,10 +1,13 @@
-﻿using Doozy.Engine;
+﻿using DChild.Temp;
+using Doozy.Runtime.Signals;
 using UnityEngine;
 
 namespace DChild.Menu
 {
     public class SplashInput : MonoBehaviour
     {
+        [SerializeField]
+        private SignalSender m_signal;
         private void Start()
         {
             Debug.LogError("False Positive");
@@ -14,7 +17,7 @@ namespace DChild.Menu
         {
             if (Input.anyKeyDown)
             {
-                GameEventMessage.SendEvent("Splash Hide");
+                m_signal.SendSignal();
                 enabled = false;
             }
         }

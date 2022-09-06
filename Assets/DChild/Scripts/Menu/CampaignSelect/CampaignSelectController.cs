@@ -1,7 +1,5 @@
-﻿using Doozy.Engine.UI;
+﻿using Doozy.Runtime.UIManager.Components;
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -45,13 +43,13 @@ namespace DChild.Menu.Campaign
                 var moveInput = obj.ReadValue<Vector2>().x;
                 if (moveInput > 0)
                 {
-                    m_nextButton.ExecuteClick();
-                    m_nextButton.Button.onClick.Invoke();
+                    m_nextButton.Click();
+                    m_nextButton.onClickEvent.Invoke();
                 }
                 else if (moveInput < 0)
                 {
-                    m_previousButton.ExecuteClick();
-                    m_previousButton.Button.onClick.Invoke();
+                    m_previousButton.Click();
+                    m_previousButton.onClickEvent.Invoke();
                 }
             }
         }

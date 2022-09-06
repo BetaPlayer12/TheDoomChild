@@ -1,4 +1,4 @@
-﻿using Doozy.Engine.UI;
+﻿using Doozy.Runtime.UIManager.Containers;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,7 +11,7 @@ public class ButtonInterface : MonoBehaviour
         [SerializeField]
         public KeyCode m_buttons;
         [SerializeField]
-        public UIView m_screenItem;
+        public UIContainer m_screenItem;
     }
 
     [SerializeField]

@@ -3,7 +3,7 @@ using DChild.Gameplay.Combat;
 using DChild.Serialization;
 using Sirenix.OdinInspector;
 using UnityEngine;
-using Doozy.Engine.UI;
+using Doozy.Runtime.UIManager.Containers;
 
 namespace DChild.Gameplay.UI
 {
@@ -27,7 +27,7 @@ namespace DChild.Gameplay.UI
         [SerializeField]
         private bool m_Shown;
         [SerializeField]
-        private UIView m_UI;
+        private UIContainer m_UI;
         [SerializeField, MinValue(0)]
         private float m_TextFadeDelay;
 
