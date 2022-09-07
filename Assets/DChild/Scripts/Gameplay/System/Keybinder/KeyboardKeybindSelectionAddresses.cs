@@ -26,7 +26,21 @@ namespace DChild.CustomInput.Keybind
         private Info[] m_infos;
 
         public int count => m_infos.Length;
-        public KeybindAddressesList GetAddressList(int index) => m_infos[index].addressList;
+        public KeybindAddressesList GetAddressList(int index)
+        {
+            /*Addresses and Configuration Data may have a mismatch in index Length, This is a quick fix
+             * for that scenario... This script should be redone so that you do not have to Reset the array everytime
+             * there is an update to the KeybindSelection count
+             */
+            if (index < count - 1)
+            {
+                return m_infos[index].addressList;
+            }
+            else
+            {
+                return null;
+            }
+        }
 
 #if UNITY_EDITOR
         [Button, PropertyOrder(-1)]
