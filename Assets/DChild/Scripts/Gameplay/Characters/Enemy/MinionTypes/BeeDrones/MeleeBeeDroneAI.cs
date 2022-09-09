@@ -15,7 +15,7 @@ using DChild.Gameplay.Characters.Enemies;
 
 namespace DChild.Gameplay.Characters.Enemies
 {
-    public class MeleeBeeDroneAI : CombatAIBrain<MeleeBeeDroneAI.Info>
+    public class MeleeBeeDroneAI : CombatAIBrain<MeleeBeeDroneAI.Info>, ISummonedEnemy
     {
         [System.Serializable]
         public class Info : BaseInfo
@@ -90,6 +90,10 @@ namespace DChild.Gameplay.Characters.Enemies
 
         [SerializeField, TabGroup("Reference")]
         private Collider2D m_bodyCollider;
+        [SerializeField, TabGroup("Reference")]
+        private Health m_health;
+        [SerializeField, TabGroup("Reference")]
+        private Hitbox m_hitbox;
         [SerializeField, TabGroup("Modules")]
         private AnimatedTurnHandle m_turnHandle;
         [SerializeField, TabGroup("Modules")]
@@ -155,7 +159,20 @@ namespace DChild.Gameplay.Characters.Enemies
                
             }
         }
-
+        public void SummonAt(Vector2 position, AITargetInfo target)
+        {
+            enabled = false;
+            transform.position = position;
+            m_character.physics.simulateGravity = false;
+            m_hitbox.Enable();
+            m_flinchHandle.gameObject.SetActive(true);
+            m_health.SetHealthPercentage(1f);
+            this.gameObject.SetActive(true);
+            this.transform.SetParent(null);
+            Awake();
+            m_stateHandle.OverrideState(State.ReevaluateSituation);
+            enabled = true;
+        }
         private bool TargetBlocked()
         {
             Vector2 wat = m_character.centerMass.position;
@@ -462,5 +479,10 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             ResetAI();
         }
+        public void DestroyObject()
+        {
+        }
+
+      
     }
 }
