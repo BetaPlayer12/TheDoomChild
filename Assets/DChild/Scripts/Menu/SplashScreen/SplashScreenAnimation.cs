@@ -1,4 +1,5 @@
-﻿using Holysoft.Collections;
+﻿using DarkTonic.MasterAudio;
+using Holysoft.Collections;
 using Sirenix.OdinInspector;
 using Spine;
 using Spine.Unity;
@@ -16,6 +17,8 @@ namespace DChild.Menu.MainMenu
         [SerializeField]
         [SpineAnimation]
         private string m_startAnimation;
+        [SerializeField]
+        private EventSounds m_sounds;
 
         public string startAnimation => m_startAnimation;
 
@@ -32,6 +35,7 @@ namespace DChild.Menu.MainMenu
         public void TransistionAnimation()
         {
             m_zSkeleton.AnimationState.SetAnimation(0, m_startAnimation, false);
+            m_sounds.ActivateCodeTriggeredEvent1();
         }
 
         public void Hide()

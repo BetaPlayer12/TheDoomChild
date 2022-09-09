@@ -67,7 +67,7 @@ namespace DChild.Gameplay.Systems
         public void DisableInput()
         {
             m_gameplayInput?.SetStoreInputActive(false);
-            m_characterInput?.Disable();
+            //m_characterInput?.Disable();
         }
 
         public void EnableInput()

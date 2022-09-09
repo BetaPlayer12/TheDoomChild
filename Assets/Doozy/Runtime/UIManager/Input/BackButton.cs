@@ -221,13 +221,13 @@ namespace Doozy.Runtime.UIManager.Input
                 if (!data.buttonName.Equals(k_ButtonName))
                     return;
 
-                #if INPUT_SYSTEM_PACKAGE
+#if INPUT_SYSTEM_PACKAGE
                 Fire(new InputSignalData(UIInputActionName.Cancel, data.playerIndex));
-                #endif
+#endif
 
-                #if LEGACY_INPUT_MANAGER
+#if LEGACY_INPUT_MANAGER
                 Fire(new InputSignalData(LegacyInputMode.KeyCode, BackButton.k_BackButtonKeyCode, BackButton.k_BackButtonVirtualButtonName, data.playerIndex));
-                #endif
+#endif
 
             });
 
