@@ -248,7 +248,7 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_Audiosource.clip = m_DeadClip;
             //m_Audiosource.Play();
             StopAllCoroutines();
-            GetComponentInChildren<Hitbox>().gameObject.SetActive(false);
+            m_hitbox.Disable();
             base.OnDestroyed(sender, eventArgs);
             m_movement.Stop();
             m_selfCollider.enabled = false;
