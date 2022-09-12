@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Sirenix.OdinInspector;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace DChild.Gameplay.Characters
@@ -6,6 +7,7 @@ namespace DChild.Gameplay.Characters
     [AddComponentMenu("DChild/Gameplay/Object/Character Colliders")]
     public class CharacterColliders : MonoBehaviour
     {
+        [SerializeField]
         private Collider2D[] m_colliders;
         private ColliderIntersectDetector[] m_detectors;
         private List<Collider2D> m_ignoredCollisions;
@@ -84,9 +86,13 @@ namespace DChild.Gameplay.Characters
         private void Awake()
         {
             m_ignoredCollisions = new List<Collider2D>();
-            m_colliders = GetComponentsInChildren<Collider2D>();
             m_detectors = GetComponentsInChildren<ColliderIntersectDetector>();
         }
-    }
 
+        [Button]
+        public void UseChildrenColliders()
+        {
+            m_colliders = GetComponentsInChildren<Collider2D>();
+        }
+    }
 }

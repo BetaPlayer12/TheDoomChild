@@ -15,7 +15,6 @@ namespace DChild
         public static GameObject InstantiateToScene(this MonoBehaviour mono, GameObject gameObject, Transform parent)
         {
             var instance = Object.Instantiate(gameObject, parent);
-            SceneManager.MoveGameObjectToScene(instance, mono.gameObject.scene);
             return instance;
         }
 
@@ -50,6 +49,13 @@ namespace DChild
         public static GameObject InstantiateToScene(this System.Object @object, GameObject original, Scene scene)
         {
             GameObject instance = Object.Instantiate(original);
+            SceneManager.MoveGameObjectToScene(instance, scene);
+            return instance;
+        }
+
+        public static GameObject InstantiateToScene(this System.Object @object, GameObject original, Vector3 position, Quaternion rotation, Scene scene)
+        {
+            GameObject instance = Object.Instantiate(original, position, rotation);
             SceneManager.MoveGameObjectToScene(instance, scene);
             return instance;
         }

@@ -16,7 +16,7 @@ using DChild.Gameplay.Characters.Enemies;
 namespace DChild.Gameplay.Characters.Enemies
 {
     [AddComponentMenu("DChild/Gameplay/Enemies/Minion/Werewolf")]
-    public class WerewolfAI : CombatAIBrain<WerewolfAI.Info>
+    public class WerewolfAI : CombatAIBrain<WerewolfAI.Info>, IResetableAIBrain, IKnockbackable
     {
         [System.Serializable]
         public class Info : BaseInfo
@@ -30,6 +30,9 @@ namespace DChild.Gameplay.Characters.Enemies
             public MovementInfo move => m_move;
 
             //Attack Behaviours
+            [SerializeField, MinValue(0)]
+            private float m_attackCD;
+            public float attackCD => m_attackCD;
             [SerializeField]
             private SimpleAttackInfo m_biteAttack = new SimpleAttackInfo();
             public SimpleAttackInfo biteAttack => m_biteAttack;
@@ -81,6 +84,7 @@ namespace DChild.Gameplay.Characters.Enemies
             Patrol,
             Turning,
             Attacking,
+            Cooldown,
             Chasing,
             Flinch,
             ReevaluateSituation,
@@ -95,6 +99,10 @@ namespace DChild.Gameplay.Characters.Enemies
             _COUNT
         }
 
+        [SerializeField, TabGroup("Reference")]
+        private Collider2D m_selfCollider;
+        [SerializeField, TabGroup("Reference")]
+        private IsolatedCharacterPhysics2D m_characterPhysics;
         [SerializeField, TabGroup("Modules")]
         private AnimatedTurnHandle m_turnHandle;
         [SerializeField, TabGroup("Modules")]
@@ -111,6 +119,10 @@ namespace DChild.Gameplay.Characters.Enemies
         private float m_currentPatience;
         private bool m_enablePatience;
         private bool m_isDetecting;
+        private float m_currentCD;
+        private float m_currentFullCD;
+        private float m_currentMoveSpeed;
+        private Vector2 m_startPoint;
 
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_wallSensor;
@@ -124,6 +136,8 @@ namespace DChild.Gameplay.Characters.Enemies
         [ShowInInspector]
         private RandomAttackDecider<Attack> m_attackDecider;
 
+        private State m_turnState;
+
 
         //[SerializeField]
         //private AudioSource m_Audiosource;
@@ -135,7 +149,9 @@ namespace DChild.Gameplay.Characters.Enemies
         private void OnAttackDone(object sender, EventActionArgs eventArgs)
         {
             m_animation.DisableRootMotion();
-            m_stateHandle.OverrideState(State.ReevaluateSituation);
+            m_flinchHandle.m_autoFlinch = true;
+            m_flinchHandle.m_enableMixFlinch = true;
+            m_stateHandle.ApplyQueuedState();
         }
 
         private void OnTurnRequest(object sender, EventActionArgs eventArgs) => m_stateHandle.SetState(State.Turning);
@@ -144,18 +160,28 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             if (damageable != null)
             {
-                base.SetTarget(damageable, m_target);
-                if(m_stateHandle.currentState != State.Chasing && !m_isDetecting)
+                base.SetTarget(damageable);
+                m_selfCollider.enabled = false;
+                if (m_stateHandle.currentState != State.Chasing && !m_isDetecting)
                 {
                     m_isDetecting = true;
                     m_stateHandle.SetState(State.Detect);
                 }
                 m_currentPatience = 0;
+                //var patienceRoutine = PatienceRoutine();
+                //StopCoroutine(patienceRoutine);
                 m_enablePatience = false;
             }
             else
             {
+                //if (!m_enablePatience)
+                //{
+                //    m_enablePatience = true;
+                //    //Patience();
+                //    StartCoroutine(PatienceRoutine());
+                //}
                 m_enablePatience = true;
+                //StartCoroutine(PatienceRoutine());
             }
         }
 
@@ -173,12 +199,30 @@ namespace DChild.Gameplay.Characters.Enemies
             }
             else
             {
+                m_selfCollider.enabled = false;
                 m_targetInfo.Set(null, null);
+                m_flinchHandle.m_autoFlinch = true;
                 m_isDetecting = false;
                 m_enablePatience = false;
                 m_stateHandle.SetState(State.Patrol);
             }
         }
+        //private IEnumerator PatienceRoutine()
+        //{
+        //    //if (m_enablePatience)
+        //    //{
+        //    //    while (m_currentPatience < m_info.patience)
+        //    //    {
+        //    //        m_currentPatience += m_character.isolatedObject.deltaTime;
+        //    //        yield return null;
+        //    //    }
+        //    //}
+        //    yield return new WaitForSeconds(m_info.patience);
+        //    m_targetInfo.Set(null, null);
+        //    m_isDetecting = false;
+        //    m_enablePatience = false;
+        //    m_stateHandle.SetState(State.Patrol);
+        //}
 
         protected override void OnDestroyed(object sender, EventActionArgs eventArgs)
         {
@@ -190,14 +234,24 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnFlinchStart(object sender, EventActionArgs eventArgs)
         {
-            StopAllCoroutines();
-            //m_animation.SetAnimation(0, m_info.flinchAnimation, false);
-            m_stateHandle.OverrideState(State.WaitBehaviourEnd);
+            if (m_flinchHandle.m_autoFlinch)
+            {
+                StopAllCoroutines();
+                m_currentCD += m_currentCD + 0.5f;
+                //m_animation.SetAnimation(0, m_info.flinchAnimation, false);
+                m_stateHandle.Wait(m_targetInfo.isValid ? State.Cooldown : State.ReevaluateSituation);
+            }
         }
 
         private void OnFlinchEnd(object sender, EventActionArgs eventArgs)
         {
-            m_stateHandle.OverrideState(State.ReevaluateSituation);
+            if (m_flinchHandle.m_autoFlinch)
+            {
+                if (m_animation.GetCurrentAnimation(0).ToString() != m_info.deathAnimation)
+                    m_animation.SetEmptyAnimation(0, 0);
+                m_selfCollider.enabled = false;
+                m_stateHandle.ApplyQueuedState();
+            }
         }
 
         public override void ApplyData()
@@ -225,6 +279,60 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return null;
         }
 
+        private Vector2 GroundPosition()
+        {
+            int hitCount = 0;
+            //RaycastHit2D hit = Physics2D.Raycast(m_projectilePoint.position, Vector2.down,  1000, DChildUtility.GetEnvironmentMask());
+            RaycastHit2D[] hit = Cast(transform.position, Vector2.down, 1000, true, out hitCount, true);
+            //var hitPos = (new Vector2(m_projectilePoint.position.x, Vector2.down.y) * hit[0].distance);
+            //return hitPos;
+            return hit[0].point;
+        }
+
+        private static ContactFilter2D m_contactFilter;
+        private static RaycastHit2D[] m_hitResults;
+        private static bool m_isInitialized;
+
+        private static void Initialize()
+        {
+            if (m_isInitialized == false)
+            {
+                m_contactFilter.useLayerMask = true;
+                m_contactFilter.SetLayerMask(DChildUtility.GetEnvironmentMask());
+                //m_contactFilter.SetLayerMask(Physics2D.GetLayerCollisionMask(DChildUtility.GetEnvironmentMask()));
+                m_hitResults = new RaycastHit2D[16];
+                m_isInitialized = true;
+            }
+        }
+
+        public static RaycastHit2D[] Cast(Vector2 origin, Vector2 direction, float distance, bool ignoreTriggers, out int hitCount, bool debugMode = false)
+        {
+            Initialize();
+            m_contactFilter.useTriggers = !ignoreTriggers;
+            hitCount = Physics2D.Raycast(origin, direction, m_contactFilter, m_hitResults, distance);
+#if UNITY_EDITOR
+            if (debugMode)
+            {
+                if (hitCount > 0)
+                {
+                    Debug.DrawRay(origin, direction * m_hitResults[0].distance, Color.cyan, 1f);
+                }
+                else
+                {
+                    Debug.DrawRay(origin, direction * distance, Color.cyan, 1f);
+                }
+            }
+#endif
+            return m_hitResults;
+        }
+
+        protected override void Start()
+        {
+            base.Start();
+            m_currentMoveSpeed = UnityEngine.Random.Range(m_info.move.speed * .75f, m_info.move.speed *1.25f);
+            m_currentFullCD = UnityEngine.Random.Range(m_info.attackCD * .5f, m_info.attackCD * 2f);
+        }
+
         protected override void Awake()
         {
             base.Awake();
@@ -247,14 +355,26 @@ namespace DChild.Gameplay.Characters.Enemies
             switch (m_stateHandle.currentState)
             {
                 case State.Detect:
-                    m_stateHandle.Wait(State.ReevaluateSituation);
                     m_movement.Stop();
-                    StartCoroutine(DetectRoutine());
+                    m_selfCollider.enabled = false;
+                    m_flinchHandle.m_autoFlinch = false;
+                    if (IsFacingTarget())
+                    {
+                        m_stateHandle.Wait(State.ReevaluateSituation);
+                        StartCoroutine(DetectRoutine());
+                    }
+                    else
+                    {
+                        m_turnState = State.Detect;
+                        if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
+                            m_stateHandle.SetState(State.Turning);
+                    }
                     break;
 
                 case State.Patrol:
-                    if(!m_wallSensor.isDetecting && m_groundSensor.allRaysDetecting)
+                    if(!m_wallSensor.isDetecting && m_groundSensor.isDetecting)
                     {
+                        m_turnState = State.ReevaluateSituation;
                         m_animation.EnableRootMotion(false, false);
                         m_animation.SetAnimation(0, m_info.patrol.animation, true);
                         var characterInfo = new PatrolHandle.CharacterInfo(m_character.centerMass.position, m_character.facing);
@@ -268,13 +388,13 @@ namespace DChild.Gameplay.Characters.Enemies
                     break;
 
                 case State.Turning:
-                    m_stateHandle.Wait(State.ReevaluateSituation);
+                    m_stateHandle.Wait(m_turnState);
                     m_turnHandle.Execute(m_info.turnAnimation, m_info.idleAnimation);
                     break;
 
                 case State.Attacking:
-                    m_stateHandle.Wait(State.ReevaluateSituation);
-
+                    m_stateHandle.Wait(State.Cooldown);
+                    m_flinchHandle.m_enableMixFlinch = false;
 
                     switch (m_attackDecider.chosenAttack.attack)
                     {
@@ -290,14 +410,48 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_attackDecider.hasDecidedOnAttack = false;
 
                     break;
+
+                case State.Cooldown:
+                    //m_stateHandle.Wait(State.ReevaluateSituation);
+                    //if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
+                    if (!IsFacingTarget())
+                    {
+                        m_turnState = State.Cooldown;
+                        if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
+                            m_stateHandle.SetState(State.Turning);
+                    }
+                    else
+                    {
+                        if (m_animation.animationState.GetCurrent(0).IsComplete)
+                        {
+                            m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                        }
+                    }
+
+                    if (m_currentCD <= m_currentFullCD)
+                    {
+                        m_currentCD += Time.deltaTime;
+                    }
+                    else
+                    {
+                        m_currentCD = 0;
+                        //m_selfCollider.SetActive(true);
+                        m_stateHandle.OverrideState(State.ReevaluateSituation);
+                    }
+
+                    break;
                 case State.Chasing:
                     {
+                        m_flinchHandle.m_autoFlinch = false;
                         if (IsFacingTarget())
                         {
                             m_attackDecider.DecideOnAttack();
                             if (m_attackDecider.hasDecidedOnAttack && IsTargetInRange(m_attackDecider.chosenAttack.range) && !m_wallSensor.allRaysDetecting)
                             {
-                                m_movement.Stop();
+                                if (m_animation.GetCurrentAnimation(0).ToString() != m_info.idleAnimation)
+                                    m_movement.Stop();
+
+                                m_selfCollider.enabled = true;
                                 m_animation.SetAnimation(0, m_info.idleAnimation, true);
                                 m_stateHandle.SetState(State.Attacking);
                             }
@@ -305,20 +459,31 @@ namespace DChild.Gameplay.Characters.Enemies
                             {
                                 if (!m_wallSensor.isDetecting && m_groundSensor.isDetecting && m_edgeSensor.isDetecting)
                                 {
+                                    m_selfCollider.enabled = false;
                                     m_animation.EnableRootMotion(false, false);
                                     m_animation.SetAnimation(0, m_info.move.animation, true);
                                     //m_movement.MoveTowards(m_targetInfo.position, m_info.move.speed * transform.localScale.x);
-                                    m_movement.MoveTowards(Vector2.one * transform.localScale.x, m_info.move.speed);
+                                    m_movement.MoveTowards(Vector2.one * transform.localScale.x, m_currentMoveSpeed);
+                                    if (m_groundSensor.allRaysDetecting)
+                                    {
+                                        transform.position = new Vector2(transform.position.x, GroundPosition().y + 0.25f);
+                                    }
                                 }
                                 else
                                 {
-                                    m_movement.Stop();
-                                    m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                                    Debug.Log("IDLE CHASING");
+                                    if (m_animation.GetCurrentAnimation(0).ToString() != m_info.idleAnimation)
+                                        m_movement.Stop();
+
+                                    m_selfCollider.enabled = true;
+                                    if (m_animation.GetCurrentAnimation(0).ToString() != m_info.idleAnimation)
+                                        m_animation.SetAnimation(0, m_info.idleAnimation, true);
                                 }
                             }
                         }
                         else
                         {
+                            m_turnState = State.ReevaluateSituation;
                             if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
                                 m_stateHandle.SetState(State.Turning);
                         }
@@ -343,6 +508,7 @@ namespace DChild.Gameplay.Characters.Enemies
             if (m_enablePatience)
             {
                 Patience();
+                //StartCoroutine(PatienceRoutine());
             }
         }
 
@@ -352,6 +518,56 @@ namespace DChild.Gameplay.Characters.Enemies
             m_currentPatience = 0;
             m_enablePatience = false;
             m_isDetecting = false;
+            m_selfCollider.enabled = false;
+        }
+
+        public void ResetAI()
+        {
+            m_selfCollider.enabled = false;
+            m_targetInfo.Set(null, null);
+            m_flinchHandle.m_autoFlinch = true;
+            m_isDetecting = false;
+            m_enablePatience = false;
+            m_stateHandle.OverrideState(State.Patrol);
+            enabled = true;
+        }
+
+        public override void ReturnToSpawnPoint()
+        {
+            transform.position = m_startPoint;
+        }
+
+        protected override void OnForbidFromAttackTarget()
+        {
+            ResetAI();
+        }
+
+        public void HandleKnockback(float resumeAIDelay)
+        {
+            StopAllCoroutines();
+            m_stateHandle.Wait(State.ReevaluateSituation);
+            StartCoroutine(KnockbackRoutine(resumeAIDelay));
+        }
+
+        private IEnumerator KnockbackRoutine(float timer)
+        {
+            //enabled = false;
+            //m_flinchHandle.m_autoFlinch = false;
+            m_animation.DisableRootMotion();
+            m_characterPhysics.UseStepClimb(false);
+            if (m_animation.GetCurrentAnimation(0).ToString() != m_info.deathAnimation)
+            {
+                //m_flinchHandle.enabled = false;
+                m_animation.SetAnimation(0, m_info.flinchAnimation, false);
+                yield return new WaitForAnimationComplete(m_animation.animationState, m_info.flinchAnimation);
+                m_animation.SetAnimation(0, m_info.idleAnimation, true);
+            }
+            yield return new WaitForSeconds(timer);
+            m_characterPhysics.UseStepClimb(true);
+            //enabled = true;
+            //m_flinchHandle.enabled = true;
+            m_stateHandle.OverrideState(State.ReevaluateSituation);
+            yield return null;
         }
     }
 }

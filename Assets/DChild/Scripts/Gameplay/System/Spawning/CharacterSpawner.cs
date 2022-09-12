@@ -7,6 +7,7 @@ using UnityEngine;
 
 namespace DChild.Gameplay
 {
+
     public class CharacterSpawner : MonoBehaviour
     {
         [SerializeField, MinValue(1)]

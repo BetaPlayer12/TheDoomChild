@@ -46,9 +46,14 @@ namespace DChildEditor.Gameplay.Characters.AI
                 var waypoints = patrolHandler.wayPoints;
                 Handles.color = Color.blue;
 
+                EditorGUI.BeginChangeCheck();
                 for (int i = 0; i < waypoints.Length; i++)
                 {
                     waypoints[i] = Handles.FreeMoveHandle(waypoints[i], Quaternion.identity, 0.5f, Vector3.one * 0.05f, Handles.CubeHandleCap);
+                }
+                if (EditorGUI.EndChangeCheck())
+                {
+                    EditorUtility.SetDirty(patrolHandler);
                 }
 
                 DrawPatrolPath(waypoints, patrolHandler.startIndex, patrolHandler.iteration);

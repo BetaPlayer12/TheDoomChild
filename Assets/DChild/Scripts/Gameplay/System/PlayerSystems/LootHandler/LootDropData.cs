@@ -5,25 +5,26 @@ using UnityEngine;
 using System;
 
 #if UNITY_EDITOR
+using UnityEditor;
 using Sirenix.Utilities.Editor;
 #endif
 
 namespace DChild.Gameplay.Systems
 {
-    [CreateAssetMenu(fileName = "LootDropData", menuName = "DChild/Gameplay/Loot/Loot Drop Data")]
-    public class LootDropData : LootData
+    [System.Serializable]
+    public class LootDropData : ILootDataContainer
     {
         [System.Serializable]
         public class DropInfo
         {
             [SerializeField]
-            private LootData m_loot;
+            private ILootDataContainer m_loot;
             [SerializeField, Range(0, 100)]
             private float m_chance;
             [SerializeField, ReadOnly]
             private float m_percentScore;
 
-            public LootData loot { get => m_loot; }
+            public ILootDataContainer loot { get => m_loot; }
             public float chance
             {
                 get => m_chance;
@@ -48,11 +49,11 @@ namespace DChild.Gameplay.Systems
         }
 
         [SerializeField, ListDrawerSettings(CustomAddFunction = "AddElement", CustomRemoveElementFunction = "RemoveElement", DraggableItems = false, OnTitleBarGUI = "CreateToolbar")]
-        private List<DropInfo> m_drops;
+        private List<DropInfo> m_drops = new List<DropInfo>();
 
         public List<DropInfo> drops { get => m_drops; set => m_drops = value; }
 
-        private LootData GetRandomLoot()
+        private ILootDataContainer GetRandomLoot()
         {
             if (m_drops.Count > 0)
             {
@@ -70,16 +71,40 @@ namespace DChild.Gameplay.Systems
             }
         }
 
-        public override void DropLoot(Vector2 position)
+        public void DropLoot(Vector2 position)
         {
             GetRandomLoot()?.DropLoot(position);
+        }
+
+        public void GenerateLootInfo(ref LootList recordList)
+        {
+            GetRandomLoot()?.GenerateLootInfo(ref recordList);
         }
 
 #if UNITY_EDITOR
         [NonSerialized]
         public bool m_forcedEdit;
-        [NonSerialized,ShowInInspector,PropertyOrder(-1)]
+        [NonSerialized, ShowInInspector, PropertyOrder(-1)]
         public bool m_autoCalculate;
+
+        void ILootDataContainer.DrawDetails(bool drawContainer, string label = null)
+        {
+            SirenixEditorGUI.BeginBox(label);
+            EditorGUI.indentLevel++;
+            for (int i = 0; i < m_drops.Count; i++)
+            {
+                if (m_drops[i].loot == null)
+                {
+                    EditorGUILayout.LabelField($"None - {m_drops[i].chance}%");
+                }
+                else
+                {
+                    m_drops[i].loot.DrawDetails(true, $" - {m_drops[i].chance}%");
+                }
+            }
+            EditorGUI.indentLevel--;
+            SirenixEditorGUI.EndBox();
+        }
 
         private void CreateToolbar()
         {
@@ -180,7 +205,7 @@ namespace DChild.Gameplay.Systems
                         }
                     }
                 } while (deduction > 0);
-               
+
             }
         }
 

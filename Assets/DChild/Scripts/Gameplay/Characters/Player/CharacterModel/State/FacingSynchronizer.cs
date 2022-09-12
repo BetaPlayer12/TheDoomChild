@@ -6,15 +6,12 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
     public class FacingSynchronizer : MonoBehaviour, IComplexCharacterModule, IFacingComponent
     {
         [SerializeField]
+        private bool m_maintainScaleValue;
+        [SerializeField]
         private Transform[] m_scaleFlips;
-
-        private Animator m_animator;
-        private string m_facingLeftParamater;
 
         public void Initialize(ComplexCharacterInfo info)
         {
-            m_animator = info.animator;
-            m_facingLeftParamater = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.IsFacingLeft);
             info.character.CharacterTurn += OnCharacterTurn;
             var facing = info.character.facing;
             CallUpdate(facing);
@@ -22,25 +19,46 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
 
         private void AlignTransformScales(HorizontalDirection facing)
         {
-            var currentScale = facing == HorizontalDirection.Left ? new Vector3(-1, 1, 1) : Vector3.one;
-            for (int i = 0; i < m_scaleFlips.Length; i++)
+            if (m_maintainScaleValue)
             {
-                m_scaleFlips[i].localScale = currentScale;
+                var shouldBeNegative = facing == HorizontalDirection.Left;
+                foreach (var scaleFlip in m_scaleFlips)
+                {
+                    var scale = scaleFlip.localScale;
+                    if (shouldBeNegative && scale.x > 0)
+                    {
+                        scale.x = scale.x * -1;
+                    }
+                    else if (scale.x < 0)
+                    {
+                        scale.x = Mathf.Abs(scale.x);
+                    }
+                    scaleFlip.localScale = scale;
+                }
+            }
+            else
+            {
+                var currentScale = facing == HorizontalDirection.Left ? new Vector3(-1, 1, 1) : Vector3.one;
+                for (int i = 0; i < m_scaleFlips.Length; i++)
+                {
+                    m_scaleFlips[i].localScale = currentScale;
+                }
             }
         }
 
         public void CallUpdate(HorizontalDirection facing)
         {
-            if (m_animator)
-            {
-                m_animator?.SetBool(m_facingLeftParamater, facing == HorizontalDirection.Left);
-            }
             AlignTransformScales(facing);
         }
 
         private void OnCharacterTurn(object sender, FacingEventArgs eventArgs)
         {
             CallUpdate(eventArgs.currentFacingDirection);
+        }
+
+        private void Start()
+        {
+
         }
     }
 

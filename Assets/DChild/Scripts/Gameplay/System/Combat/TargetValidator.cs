@@ -25,9 +25,9 @@ namespace DChild.Gameplay.Combat
             }
 
             public void SetID(int id) => targetInstanceID = id;
-            public void Add(HitboxInfo info)
+            public void Add(HitboxInfo info, Invulnerability ignoresLevel)
             {
-                if (info.isInvulnerable)
+                if (info.invulnerabilityLevel > ignoresLevel)
                 {
                     invulnerableHitboxIDs.Add(info.targetID);
                 }
@@ -60,10 +60,10 @@ namespace DChild.Gameplay.Combat
             m_categorizedInfo = new Dictionary<int, GroupedHitboxInfo>();
         }
 
-        public List<Result> ValidateToDamage(Vector2 source, HitboxInfo[] infos)
+        public List<Result> ValidateToDamage(Vector2 source, HitboxInfo[] infos, Invulnerability ignoresLevel)
         {
             m_results.Clear();
-            CategorizeInfos(infos);
+            CategorizeInfos(infos, ignoresLevel);
 
             foreach (var info in m_categorizedInfo.Values)
             {
@@ -100,7 +100,7 @@ namespace DChild.Gameplay.Combat
             return m_results;
         }
 
-        private void CategorizeInfos(HitboxInfo[] infos)
+        private void CategorizeInfos(HitboxInfo[] infos, Invulnerability ignoresLevel)
         {
             m_categorizedInfo.Clear();
             //Categorize Hitboxes to targetInstances
@@ -110,13 +110,13 @@ namespace DChild.Gameplay.Combat
 
                 if (m_categorizedInfo.ContainsKey(info.targetID))
                 {
-                    m_categorizedInfo[info.targetID].Add(info);
+                    m_categorizedInfo[info.targetID].Add(info, ignoresLevel);
                 }
                 else
                 {
                     var groupedInfo = new GroupedHitboxInfo();
                     groupedInfo.SetID(info.targetID);
-                    groupedInfo.Add(info);
+                    groupedInfo.Add(info, ignoresLevel);
                     m_categorizedInfo.Add(info.targetID, groupedInfo);
                 }
             }

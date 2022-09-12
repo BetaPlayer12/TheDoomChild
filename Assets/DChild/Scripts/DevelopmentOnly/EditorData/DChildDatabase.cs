@@ -77,18 +77,13 @@ namespace DChild
                 return CreateListFromReader(reader);
             }
 
-            public Element[] GetSkillsOfType(SoulSkillType type)
-            {
-                var reader = m_connection.ExecuteQuery($"SELECT ID,Name FROM {table} Where Type = \"{type.ToString()}\" AND Blocked = false");
-                return CreateListFromReader(reader);
-            }
 
-            public void Update(int ID, SoulSkillType type, string description)
+            public void Update(int ID, int capacity, string description)
             {
                 var reader = m_connection.ExecuteQuery($"SELECT * FROM {table} WHERE ID ={ID}");
                 if (reader.Read())
                 {
-                    m_connection.ExecuteCommand($"UPDATE {table} SET Description = \"{description}\", Type = \"{type.ToString()}\" WHERE ID = {ID}");
+                    m_connection.ExecuteCommand($"UPDATE {table} SET Description = \"{description}\", Capacity = {capacity} WHERE ID = {ID}");
                 }
                 else
                 {
@@ -96,13 +91,13 @@ namespace DChild
                 }
             }
 
-            public (SoulSkillType type, string description) GetInfoOf(int ID)
+            public (int capacity, string description) GetInfoOf(int ID)
             {
                 var reader = m_connection.ExecuteQuery($"SELECT * FROM {table} WHERE ID = {ID}");
                 if (reader.Read())
                 {
-                    SoulSkillType result;
-                    Enum.TryParse(reader.GetData<string>("Type"), true, out result);
+                    int result;
+                    Enum.TryParse(reader.GetData<string>("Capacity"), true, out result);
                     return (result, reader.GetData<string>("Description"));
                 }
                 else
@@ -111,17 +106,17 @@ namespace DChild
                 }
             }
 
-            public int Insert(int ID, string name, string description, SoulSkillType type)
+            public int Insert(int ID, string name, string description, int capacity)
             {
                 var reader = m_connection.ExecuteQuery($"SELECT * FROM {table} WHERE ID ={ID}");
                 if (reader.Read())
                 {
                     //ChangeID and try Insert Again
-                    return Insert((int)UnityEngine.Random.Range(0, 999999), name, description, type);
+                    return Insert((int)UnityEngine.Random.Range(0, 999999), name, description, capacity);
                 }
                 else
                 {
-                    m_connection.ExecuteCommand($"INSERT INTO {table} (ID,Name, Description, Type) VALUES({ID},\"{name}\",\"{description}\",\"{type.ToString()}\");");
+                    m_connection.ExecuteCommand($"INSERT INTO {table} (ID,Name, Description, Capacity) VALUES({ID},\"{name}\",\"{description}\",{capacity});");
                     return ID;
                 }
             }

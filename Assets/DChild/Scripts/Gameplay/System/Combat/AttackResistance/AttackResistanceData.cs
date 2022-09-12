@@ -5,13 +5,13 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Combat
 {
-    [CreateAssetMenu(fileName = "AttackResistanceData", menuName = "DChild/Gameplay/Attack Resistance Data")]
+    [CreateAssetMenu(fileName = "AttackResistanceData", menuName = "DChild/Gameplay/Combat/Attack Resistance Data")]
     public class AttackResistanceData : SerializedScriptableObject
     {
         [PropertySpace]
         [OdinSerialize, HideReferenceObjectPicker, PropertyOrder(2), ReadOnly]
-        private Dictionary<AttackType, float> m_resistance = new Dictionary<AttackType, float>();
-        public Dictionary<AttackType, float> resistance => m_resistance;
+        private Dictionary<DamageType, float> m_resistance = new Dictionary<DamageType, float>();
+        public Dictionary<DamageType, float> resistance => m_resistance;
 
         private void OnEnable()
         {
@@ -57,9 +57,9 @@ namespace DChild.Gameplay.Combat
         private bool m_useType;
 
         [ShowInInspector, HideReferenceObjectPicker, PropertyOrder(1), ShowIf("m_useType"), OnValueChanged("Validate", true), FoldoutGroup("Edit Section")]
-        protected Dictionary<AttackType, AttackResistanceType> m_resistantType = new Dictionary<AttackType, AttackResistanceType>();
+        protected Dictionary<DamageType, AttackResistanceType> m_resistantType = new Dictionary<DamageType, AttackResistanceType>();
         [ShowInInspector, HideReferenceObjectPicker, PropertyOrder(1), HideIf("m_useType"), OnValueChanged("Validate", true)]
-        protected Dictionary<AttackType, Info> m_resistantInfo = new Dictionary<AttackType, Info>();
+        protected Dictionary<DamageType, Info> m_resistantInfo = new Dictionary<DamageType, Info>();
 
         private void Validate()
         {

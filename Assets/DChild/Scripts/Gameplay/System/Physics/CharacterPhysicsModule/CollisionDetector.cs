@@ -90,6 +90,13 @@ namespace DChild.Gameplay.Physics
         {
             if (m_recordsContactPoints)
             {
+                for (int i = m_contacts.Count - 1; i >= 0; i--)
+                {
+                    if(m_contacts[i].collider == collision.collider)
+                    {
+                        m_contacts.RemoveAt(i);
+                    }
+                }
                 m_contacts.AddRange(collision.contacts);
             }
             for (int i = 0; i < m_collisions.Count; i++)

@@ -8,20 +8,32 @@ namespace DChild.Gameplay.Essence
 {
     public abstract class EssenceLoot : Loot
     {
+        [SerializeField]
+        private Collider2D m_collision;
         [SerializeField, MinValue(0.1f)]
         private float m_pickUpVelocity;
         [SerializeField]
         private float m_floatGravity;
+        [SerializeField, MinValue(0.1f)]
+        private float m_floatDuration;
+        [SerializeField]
+        private float m_fallGravity;
+        [SerializeField, MinValue(0.1f)]
+        private float m_fadeAfterRestingDuration;
 
         protected bool m_isFloating;
+        protected bool m_hasFallen;
+        protected bool m_isFading;
         private float m_gravity;
         private bool m_hasBeenPickUp;
+        private float m_timer;
         protected abstract void OnApplyPickup(IPlayer player);
 
         public override void PickUp(IPlayer player)
         {
             base.PickUp(player);
             m_hasBeenPickUp = true;
+            m_collision.enabled = false;
         }
 
 
@@ -29,8 +41,12 @@ namespace DChild.Gameplay.Essence
         {
             base.SpawnAt(position, rotation);
             m_isFloating = false;
+            m_hasFallen = false;
+            m_isFading = false;
             m_rigidbody.gravityScale = m_gravity;
             m_hasBeenPickUp = false;
+            m_timer = 0;
+            m_collision.enabled = false;
         }
 
         protected override void ExecutePop(float delta)
@@ -53,6 +69,7 @@ namespace DChild.Gameplay.Essence
             //CallPoolRequest();
         }
 
+
         protected override void OnPopDurationEnd(object sender, EventActionArgs eventArgs)
         {
             base.OnPopDurationEnd(sender, eventArgs);
@@ -62,6 +79,7 @@ namespace DChild.Gameplay.Essence
             }
             m_rigidbody.velocity = Vector2.zero;
             m_rigidbody.gravityScale = 0;
+            m_timer = m_floatDuration;
         }
 
         protected override void Awake()
@@ -73,11 +91,43 @@ namespace DChild.Gameplay.Essence
         protected override void FixedUpdate()
         {
             base.FixedUpdate();
-            if (m_isPopping == false && m_hasBeenPickUp)
+            if (m_isPopping == false)
             {
-                var toPLayer = (m_pickedBy.damageableModule.position - m_rigidbody.position).normalized;
-                m_rigidbody.velocity = toPLayer * m_pickUpVelocity;
+                if (m_hasBeenPickUp)
+                {
+                    var toPLayer = (m_pickedBy.damageableModule.position - m_rigidbody.position).normalized;
+                    m_rigidbody.velocity = toPLayer * m_pickUpVelocity;
+                }
+                else if (m_isFloating)
+                {
+                    m_timer -= GameplaySystem.time.fixedDeltaTime;
+                    if (m_timer <= 0)
+                    {
+                        m_isFloating = false;
+                        m_hasFallen = true;
+                        m_rigidbody.gravityScale = m_fallGravity;
+                        m_collision.enabled = true;
+                    }
+                }
+                else if (m_isFading)
+                {
+                    m_timer -= GameplaySystem.time.fixedDeltaTime;
+                    if (m_timer <= 0)
+                    {
+                        CallPoolRequest();
+                    }
+                }
             }
+        }
+
+        private void OnCollisionEnter2D(Collision2D collision)
+        {
+            if (m_hasFallen && m_isFading == false)
+            {
+                m_isFading = true;
+                m_timer = m_fadeAfterRestingDuration;
+            }
+            
         }
     }
 }

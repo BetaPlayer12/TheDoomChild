@@ -27,7 +27,6 @@ namespace DarkTonic.MasterAudio {
         public bool useDialogFadeOut = false;
         public float dialogFadeOutTime = .5f;
 
-        public bool resourceClipsAllLoadAsync = true;
         public string comments;
         public bool logSound = false;
 
@@ -36,8 +35,20 @@ namespace DarkTonic.MasterAudio {
 
         public int busIndex = -1;
 
+        public bool ignoreListenerPause = false;
+
+        [Range(0f, 10f)]
+        public int importance = 5;
+        public bool isUninterruptible;
+
+#if DISABLE_3D_SOUND
+        public MasterAudio.ItemSpatialBlendType spatialBlendType = MasterAudio.ItemSpatialBlendType.ForceTo2D;
+#else
         public MasterAudio.ItemSpatialBlendType spatialBlendType = MasterAudio.ItemSpatialBlendType.ForceTo3D;
-		public float spatialBlend = 1f;
+#endif
+        public float spatialBlend = 1f;
+
+        public MasterAudio.DefaultGroupPlayType groupPlayType = MasterAudio.DefaultGroupPlayType.Always;
 
         public string busName = string.Empty; // only used to remember the bus name during group creation.
 		public bool isExistingBus; // marked from DGSC's only
@@ -68,6 +79,10 @@ namespace DarkTonic.MasterAudio {
         public List<string> endLinkedGroups = new List<string>();
         public MasterAudio.LinkedGroupSelectionType linkedStartGroupSelectionType = MasterAudio.LinkedGroupSelectionType.All;
         public MasterAudio.LinkedGroupSelectionType linkedStopGroupSelectionType = MasterAudio.LinkedGroupSelectionType.All;
+
+#if ADDRESSABLES_ENABLED
+        public int addressableUnusedSecondsLifespan = 0;
+#endif
 
         public List<DynamicGroupVariation> groupVariations = new List<DynamicGroupVariation>();
         // filled and used by Inspector only

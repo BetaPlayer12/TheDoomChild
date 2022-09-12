@@ -8,9 +8,9 @@ namespace DChild.Gameplay.Inventories
     [CreateAssetMenu(fileName = "ItemContainerData", menuName = "DChild/Database/Item Container Data")]
     public class ItemContainerData : ScriptableObject
     {
-        [SerializeField, TableList(ShowIndexLabels = true, NumberOfItemsPerPage = 5, ShowPaging = true)]
-        private List<ItemSlot> m_list;
+        //[SerializeField, TableList(ShowIndexLabels = true, NumberOfItemsPerPage = 5, ShowPaging = true)]
+        //private List<ItemSlot> m_list;
 
-        public ItemSlot[] list => m_list.ToArray();
+        //public ItemSlot[] list => m_list.ToArray();
     }
 }

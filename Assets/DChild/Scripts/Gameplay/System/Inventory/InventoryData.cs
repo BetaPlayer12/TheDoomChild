@@ -1,28 +1,19 @@
 ﻿using DChild.Gameplay.Items;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace DChild.Gameplay.Inventories
 {
     [CreateAssetMenu(fileName = "InventoryData", menuName = "DChild/Database/Inventory Data")]
-    public class InventoryData : ScriptableObject
+    public class InventoryData : ScriptableObject, IInventoryInfo
     {
-        [System.Serializable]
-        public class Slot
-        {
-            [SerializeField]
-            private ItemData m_item;
-            [SerializeField]
-            private int m_count;
+        [SerializeField,TableList(AlwaysExpanded = true),HideLabel]
+        private BaseStoredItemList m_itemList;
 
-            public ItemData item => m_item;
-            public int count => m_count;
-        }
+        public int storedItemCount => m_itemList.storedItemCount;
 
-        [SerializeField]
-        private Slot[] m_slots;
+        public IStoredItem GetItem(int index) => m_itemList.GetItem(index);
 
-        public int slotCount => m_slots.Length;
-
-        public (ItemData item, int count) GetInfo(int index) => (m_slots[index].item, m_slots[index].count);
+        public IStoredItem GetItem(ItemData item) => m_itemList.GetItem(item);
     }
 }

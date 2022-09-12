@@ -22,6 +22,7 @@ namespace DChild.Menu.UI
         private void Start()
         {
             m_button.StateUpdate += OnUpdateState;
+            m_isSettingState = false;
         }
 
         private void OnUpdateState(object sender, ButtonToggledEventArgs eventArgs)

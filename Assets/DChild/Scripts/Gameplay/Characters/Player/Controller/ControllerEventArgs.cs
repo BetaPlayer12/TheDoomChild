@@ -5,11 +5,11 @@ namespace DChild.Gameplay.Characters.Players.Modules
 {
     public struct ControllerEventArgs : IEventActionArgs
     {
-        public ControllerEventArgs(PlayerInput input)
+        public ControllerEventArgs(PlayerInputOld input)
         {
             this.input = input;
         }
 
-        public PlayerInput input { get; }
+        public PlayerInputOld input { get; }
     }
 }

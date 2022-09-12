@@ -6,6 +6,7 @@
 using DChild.Gameplay.Combat;
 using DChild.Gameplay.Systems;
 using Sirenix.OdinInspector;
+using System;
 using UnityEngine;
 
 namespace DChild.Gameplay.VFX
@@ -14,6 +15,8 @@ namespace DChild.Gameplay.VFX
     {
         T InstantiateFX<T>(GameObject fx, Vector3 position) where T : FX;
         void InstantiateFX(GameObject fx, Vector3 position);
+
+        void InstantiateFX(AssetReferenceFX reference, Action<GameObject, int> Callback);
     }
 
     public class FXManager : MonoBehaviour, IGameplaySystemModule, IGameplayInitializable, IFXManager
@@ -27,6 +30,11 @@ namespace DChild.Gameplay.VFX
 
         public T InstantiateFX<T>(GameObject fx, Vector3 position) where T : FX => (T)SmartInstantiateFX(position, fx);
         public void InstantiateFX(GameObject fx, Vector3 position) => SmartInstantiateFX(position, fx);
+
+        public void InstantiateFX(AssetReferenceFX reference, Action<GameObject, int> Callback)
+        {
+            m_pool.GetOrCreateItem(reference, 0, Callback);
+        }
 
         #region Instatiation
         private static FX SmartInstantiateFX(Vector3 position, GameObject fxGO)
@@ -45,6 +53,8 @@ namespace DChild.Gameplay.VFX
             }
         }
 
+
+
         private static FX UsePooledFX(Vector3 position, FX pooledFX)
         {
             pooledFX.transform.parent = null;
@@ -61,6 +71,9 @@ namespace DChild.Gameplay.VFX
             particleFX.Play();
             return particleFX;
         }
+
+
+
         #endregion
     }
 }

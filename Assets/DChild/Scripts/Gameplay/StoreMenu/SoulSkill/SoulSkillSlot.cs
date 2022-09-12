@@ -17,8 +17,6 @@ namespace DChild.Menu.SoulSkills
         }
 
         [SerializeField]
-        private SoulSkillType m_slotType;
-        [SerializeField]
         private int m_index;
 
         private SoulSkillUI m_containedUI;
@@ -27,7 +25,6 @@ namespace DChild.Menu.SoulSkills
         public event EventAction<SoulSkillSlotEventArgs> AttemptSkillRemoval;
 
         public SoulSkillUI containedUI => m_containedUI;
-        public SoulSkillType slotType { get => m_slotType; }
         public int index { get => m_index; }
 
         public void SetContainedUI(SoulSkillUI soulSkillUI)

@@ -64,8 +64,20 @@ namespace DChild.Gameplay
                 }
             }
 
+            public SaveData(bool isUnlocked, bool[] requirements)
+            {
+                this.isUnlocked = isUnlocked;
+                requirementState = new bool[requirements.Length];
+                for (int i = 0; i < requirementState.Length; i++)
+                {
+                    requirementState[i] = requirements[i];
+                }
+            }
+
             public bool[] requirementState { get; }
             public bool isUnlocked { get; }
+
+            ISaveData ISaveData.ProduceCopy() => new SaveData(isUnlocked,requirementState);
         }
 
         [ShowInInspector, OnValueChanged("OnStateChange")]
@@ -106,7 +118,15 @@ namespace DChild.Gameplay
                 m_requirements[i].SetComplete(requirementState[i]);
             }
         }
-
+        public void Initialize()
+        {
+            m_isUnlocked = false;
+            m_onLocked?.Invoke();
+            for (int i = 0; i < m_requirements.Length; i++)
+            {
+                m_requirements[i].SetComplete(false);
+            }
+        }
         public void SetLock(bool isLocked)
         {
             m_isUnlocked = !isLocked;

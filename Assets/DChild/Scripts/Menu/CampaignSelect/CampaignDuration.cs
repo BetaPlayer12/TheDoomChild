@@ -15,7 +15,7 @@ namespace DChild.Menu.Campaign
             if (enableCanvas)
             {
                 var duration = eventArgs.duration;
-                m_target.text = $"{duration.hours.ToString("00")}:{duration.minutes.ToString("00")}:{duration.seconds.ToString("00")}";
+                m_target.text = duration;
             }
         }
     }

@@ -20,6 +20,8 @@ public class DummyController : MonoBehaviour
     private GameObject m_attackHitBox;
     [SerializeField, TabGroup("Reference")]
     private Damageable m_damageable;
+    [SerializeField, TabGroup("Reference")]
+    private CollisionRegistrator m_collisionRegistrator;
     [SerializeField, TabGroup("Behaviours")]
     private MovementHandle2D m_movement;
     [SerializeField, TabGroup("Behaviours")]
@@ -58,6 +60,10 @@ public class DummyController : MonoBehaviour
             }
         }
 
+        if (Input.GetButtonDown("Fire1"))
+        {
+            m_collisionRegistrator.ResetHitCache();
+        }
         if (Input.GetButton("Fire1"))
         {
             m_attackHitBox.SetActive(true);
@@ -77,7 +83,7 @@ public class DummyController : MonoBehaviour
             m_character.SetFacing(HorizontalDirection.Right);
             //transform.localScale = new Vector3(-1, 1, 1);
         }
-        transform.localScale = m_character.facing == HorizontalDirection.Right ? transform.localScale = Vector3.one : new Vector3(-1, 1, 1);
+        transform.localScale = m_character.facing == HorizontalDirection.Right ? transform.localScale = new Vector3(-1, 1, 1) : Vector3.one;
         m_capeTransformReference.localScale = new Vector3(-transform.localScale.x, 1, 1);
     }
 }

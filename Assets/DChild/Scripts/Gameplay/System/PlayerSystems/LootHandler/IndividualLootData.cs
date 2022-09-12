@@ -1,24 +1,79 @@
-﻿using Sirenix.OdinInspector;
-using UnityEngine;
+﻿using UnityEngine;
+using Sirenix.OdinInspector;
+using DChild.Gameplay.Essence;
+
+#if UNITY_EDITOR
+using UnityEditor;
+using Sirenix.Utilities.Editor;
+#endif
 
 namespace DChild.Gameplay.Systems
 {
-    [CreateAssetMenu(fileName = "IndividualLootData", menuName = "DChild/Gameplay/Loot/Individual Loot Data")]
-    public class IndividualLootData : LootData
-    {
-        [SerializeField,ValidateInput("ValidateLoot","GameObject must have Loot component")]
-        private GameObject m_loot;
-        [SerializeField, MinValue(1)]
-        private int m_count;
 
-        public override void DropLoot(Vector2 position)
+    [System.Serializable]
+    public class IndividualLootData : ILootDataContainer
+    {
+        [SerializeField]
+        private LootReference m_reference;
+        [SerializeField, Min(1), OnInspectorGUI("OnLootReferenceGUI")]
+        private int m_count = 1;
+
+        public void DropLoot(Vector2 position)
         {
-            GameplaySystem.lootHandler.DropLoot(new LootDropRequest(m_loot, m_count, position));
+            GameplaySystem.lootHandler.DropLoot(new LootDropRequest(m_reference.loot, m_count, position));
         }
-#if UNITY_EDITOR
-        private bool ValidateLoot(GameObject loot)
+
+        public void GenerateLootInfo(ref LootList recordList)
         {
-            return loot?.GetComponent<Loot>() ?? false;
+            if (m_reference.data == null)
+            {
+                var soulEssenceValue = m_reference.loot.GetComponent<SoulEssenceLoot>().value;
+                soulEssenceValue *= m_count;
+                recordList.AddSoulEssence(soulEssenceValue);
+            }
+            else
+            {
+
+                recordList.Add(m_reference.data, m_count);
+            }
+        }
+
+#if UNITY_EDITOR
+        public LootReference reference => m_reference;
+        public int count => m_count;
+
+        private void OnLootReferenceGUI()
+        {
+            if (m_reference != null && m_reference.loot != null)
+            {
+                var soulEssence = m_reference?.loot?.GetComponent<SoulEssenceLoot>() ?? null;
+                if (soulEssence)
+                {
+                    SirenixEditorGUI.InfoMessageBox($"Soul Essence: {soulEssence.value * m_count}");
+                }
+            }
+        }
+
+        void ILootDataContainer.DrawDetails(bool drawContainer, string label = null)
+        {
+            if (m_reference != null)
+            {
+                var suffix = label;
+                if (m_reference.data == null)
+                {
+                    label = m_reference.name.Replace("LootReference", string.Empty);
+                    var soulEssence = m_reference?.loot?.GetComponent<SoulEssenceLoot>() ?? null;
+                    if (soulEssence)
+                    {
+                        EditorGUILayout.LabelField($"{label} ({soulEssence.value * m_count}){suffix}");
+                    }
+                }
+                else
+                {
+                    label = m_reference.data.itemName;
+                    EditorGUILayout.LabelField($"{label} ({m_count}){suffix}");
+                }
+            }
         }
 #endif
     }

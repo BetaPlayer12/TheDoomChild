@@ -16,7 +16,7 @@ namespace DChild.Gameplay.Characters
 
         [SerializeField]
         private CharacterPhysics2D m_characterPhysics;
-        private CalculateSlope m_calculate;
+        //private CalculateSlope m_calculate;
         private float m_defaultGravity;
 
         private void Start()

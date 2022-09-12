@@ -28,6 +28,9 @@ namespace DChild.Gameplay.Characters.Enemies
             //
 
             [SerializeField, MinValue(0)]
+            private float m_detectTime;
+            public float detectTime => m_detectTime;
+            [SerializeField, MinValue(0)]
             private float m_patience;
             public float patience => m_patience;
             [SerializeField, MinValue(0)]
@@ -80,6 +83,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private enum State
         {
+            Detect,
             Idle,
             Dead,
             Attacking,
@@ -102,8 +106,10 @@ namespace DChild.Gameplay.Characters.Enemies
         private SpineEventListener m_spineEventListener;
         [SerializeField, TabGroup("Reference")]
         private Hitbox m_hitbox;
-        [SerializeField, TabGroup("Sensors")]
-        private RaySensor m_groundSensor;
+        [SerializeField, TabGroup("Reference")]
+        private GameObject m_aggroSensorGO;
+        //[SerializeField, TabGroup("Sensors")]
+        //private RaySensor m_groundSensor;
 
         [SerializeField, TabGroup("FX")]
         private ParticleSystem m_muzzleFX;
@@ -132,6 +138,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private Vector2 m_boneDefaultPos;
         [SerializeField]
         private Transform m_modelTF;
+
+        private bool m_isDetecting;
 
         protected override void Start()
         {
@@ -171,9 +179,14 @@ namespace DChild.Gameplay.Characters.Enemies
             if (damageable != null)
             {
                 base.SetTarget(damageable, m_target);
-                m_stateHandle.SetState(State.Chasing);
                 m_currentPatience = 0;
                 m_enablePatience = false;
+                //StopCoroutine(PatienceRoutine()); //for latur
+                if (m_stateHandle.currentState != State.Chasing && !m_isDetecting)
+                {
+                    m_isDetecting = true;
+                    m_stateHandle.SetState(State.Detect);
+                }
             }
             else
             {
@@ -186,17 +199,15 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_animation.SetAnimation(0, m_info.flinch1Animation, false);
             //m_stateHandle.OverrideState(State.WaitBehaviourEnd);
             //StartCoroutine(DeathRoutine());
-            //StopAllCoroutines();
             //m_stateHandle.OverrideState(State.Dead);
+            StopAllCoroutines();
+            m_stateHandle.OverrideState(State.Dead);
+            StartCoroutine(DeathRoutine());
         }
 
         private void OnFlinchEnd(object sender, EventActionArgs eventArgs)
         {
             //m_isDed = true;
-            m_hitbox.SetInvulnerability(true);
-            StopAllCoroutines();
-            m_stateHandle.OverrideState(State.Dead);
-            StartCoroutine(DeathRoutine());
         }
 
         //Patience Handler
@@ -209,14 +220,27 @@ namespace DChild.Gameplay.Characters.Enemies
             else
             {
                 m_targetInfo.Set(null, null);
+                m_isDetecting = false;
                 m_enablePatience = false;
                 m_stateHandle.SetState(State.Idle);
             }
         }
 
+        private IEnumerator DetectRoutine()
+        {
+            m_animation.SetAnimation(0, m_info.idleAnimation, true);
+            yield return new WaitForSeconds(m_info.detectTime);
+            m_stateHandle.ApplyQueuedState();
+            yield return null;
+        }
+
         private IEnumerator DeathRoutine()
         {
             m_stateHandle.Wait(State.ReevaluateSituation);
+            m_targetInfo.Set(null, null);
+            m_hitbox.Disable();
+            m_isDetecting = false;
+            m_aggroSensorGO.SetActive(false);
             //Debug.Log("Bulb Rotation " + transform.rotation.z);
             //m_animation.SetAnimation(0, m_info.idleAnimation, false).TimeScale = 3f;
             //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.idleAnimation);
@@ -242,7 +266,8 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_info.respawnAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.respawnAnimation);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
-            m_hitbox.SetInvulnerability(false);
+            m_hitbox.Enable();
+            m_aggroSensorGO.SetActive(true);
             //m_isDed = false;
             m_canShoot = true;
             m_stateHandle.ApplyQueuedState();
@@ -251,12 +276,15 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator AttackRoutine()
         {
-            m_stateHandle.Wait(State.ReevaluateSituation);
             m_canShoot = false;
+            m_aggroSensorGO.SetActive(false);
             m_animation.EnableRootMotion(true, false);
-            m_attackHandle.ExecuteAttack(m_info.attack.animation, m_info.idleAnimation);
-            yield return new WaitForSeconds(2f);
+            m_animation.SetAnimation(0, m_info.attack.animation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack.animation);
+            m_animation.SetAnimation(0, m_info.idleAnimation, true);
+            yield return new WaitForSeconds(5f);
             m_canShoot = true;
+            m_aggroSensorGO.SetActive(true);
             m_stateHandle.ApplyQueuedState();
             yield return null;
         }
@@ -326,17 +354,22 @@ namespace DChild.Gameplay.Characters.Enemies
             //Debug.Log("Edge Sensor is " + m_edgeSensor.isDetecting);
             switch (m_stateHandle.currentState)
             {
+                case State.Detect:
+                    m_stateHandle.Wait(State.ReevaluateSituation);
+                    StartCoroutine(DetectRoutine());
+                    //m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                    break;
                 case State.Idle:
+                    m_targetInfo.Set(null);
                     m_animation.EnableRootMotion(false, false);
                     m_animation.SetAnimation(0, m_info.idleAnimation, true);
                     //m_animation.SetEmptyAnimation(0, 0);
                     break;
                 case State.Dead:
-                    //StopAllCoroutines();
                     break;
 
                 case State.Attacking:
-                    //m_stateHandle.Wait(State.ReevaluateSituation);
+                    m_stateHandle.Wait(State.ReevaluateSituation);
 
                     StartCoroutine(AttackRoutine());
 
@@ -384,15 +417,15 @@ namespace DChild.Gameplay.Characters.Enemies
                     //if (!m_isDed)
                     //{
                     //}
-                    m_stateHandle.SetState(State.Chasing);
-                    //if (m_targetInfo.isValid)
-                    //{
-                    //    m_stateHandle.SetState(State.Chasing);
-                    //}
-                    //else
-                    //{
-                    //    m_stateHandle.SetState(State.Idle);
-                    //}
+                    //m_stateHandle.SetState(State.Chasing);
+                    if (m_targetInfo.isValid)
+                    {
+                        m_stateHandle.SetState(State.Chasing);
+                    }
+                    else
+                    {
+                        m_stateHandle.SetState(State.Idle);
+                    }
                     break;
                 case State.WaitBehaviourEnd:
                     return;
@@ -410,6 +443,25 @@ namespace DChild.Gameplay.Characters.Enemies
             m_currentPatience = 0;
             m_enablePatience = false;
             m_canShoot = false;
+            m_isDetecting = false;
+        }
+
+        public void ResetAI()
+        {
+            m_targetInfo.Set(null, null);
+            m_isDetecting = false;
+            m_enablePatience = false;
+            m_stateHandle.OverrideState(State.ReevaluateSituation);
+            enabled = true;
+        }
+
+        public override void ReturnToSpawnPoint()
+        {
+        }
+
+        protected override void OnForbidFromAttackTarget()
+        {
+            ResetAI();
         }
     }
 }

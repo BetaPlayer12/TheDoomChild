@@ -14,7 +14,7 @@ namespace DChild
             GameSystem.CameraChange += OnCameraChange;
         }
 
-        private void nDestroy()
+        private void OnDestroy()
         {
             GameSystem.CameraChange -= OnCameraChange;
         }
@@ -22,6 +22,13 @@ namespace DChild
         private void OnCameraChange(object sender, CameraChangeEventArgs eventArgs)
         {
             m_canvas.worldCamera = eventArgs.camera;
+            m_canvas.enabled = eventArgs.camera != null;
+#if UNITY_EDITOR
+            if(eventArgs.camera != null)
+            {
+                Debug.LogError("MainCamera Component present in the Scene means No UI");
+            }
+#endif
         }
     }
 }

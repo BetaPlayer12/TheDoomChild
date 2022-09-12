@@ -8,7 +8,7 @@ namespace DChild.Gameplay.Combat.StatusAilment
     public class StatusInflictionHandle : SerializedMonoBehaviour
     {
         [OdinSerialize, HideReferenceObjectPicker, OnValueChanged("Validate")]
-        private Dictionary<StatusEffectType, StatusEffect> m_list = new Dictionary<StatusEffectType, StatusEffect>();
+        private Dictionary<StatusEffectType, StatusEffectData> m_list = new Dictionary<StatusEffectType, StatusEffectData>();
 
         public void Inflict(StatusEffectReciever reciever, StatusEffectType statusEffect)
         {

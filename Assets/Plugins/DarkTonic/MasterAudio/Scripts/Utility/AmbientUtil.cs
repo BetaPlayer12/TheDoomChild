@@ -13,7 +13,7 @@ namespace DarkTonic.MasterAudio {
 
         private static Transform _followerHolder;
         private static ListenerFollower _listenerFollower;
-#if !PHY3D_MISSING
+#if PHY3D_ENABLED
         private static Rigidbody _listenerFollowerRB;
 #endif
         private static List<TransformFollower> _transformFollowers = new List<TransformFollower>();
@@ -31,7 +31,7 @@ namespace DarkTonic.MasterAudio {
                 return false;
             }
 
-#if PHY3D_MISSING
+#if !PHY3D_ENABLED
             return false; // there is no Ambient Sound script functionality without Physics.
 #else
             var follower = ListenerFollower;
@@ -55,7 +55,7 @@ namespace DarkTonic.MasterAudio {
             MasterAudio.AmbientSoundExitMode exitMode, float exitFadeTime,
             MasterAudio.AmbientSoundReEnterMode reEnterMode, float reEnterFadeTime) {
 
-#if PHY3D_MISSING
+#if !PHY3D_ENABLED
             return null; // there is no Ambient Sound script functionality without Physics.
 #else
             if (ListenerFollower == null || FollowerHolder == null) {
@@ -72,11 +72,18 @@ namespace DarkTonic.MasterAudio {
             }
 
             SoundGroupVariation variation = null;
-            if (!string.IsNullOrEmpty(variationName)) {
-                variation = grp.groupVariations.Find(delegate (SoundGroupVariation v) {
-                    return v.name == variationName;
-                });
 
+            if (!string.IsNullOrEmpty(variationName)) {
+                for (var i = 0; i < grp.groupVariations.Count; i++)
+                {
+                    var aVar = grp.groupVariations[i];
+                    if (aVar.name == variationName)
+                    {
+                        variation = aVar;
+                        break;
+                    }
+                }
+                
                 if (variation == null) {
                     Debug.LogError("Could not find Variation '" + variationName + "' in Sound Group '" + soundGroupName);
                     return null;
@@ -128,7 +135,7 @@ namespace DarkTonic.MasterAudio {
                     _listenerFollower = follower.gameObject.AddComponent<ListenerFollower>();
                 }
 
-#if !PHY3D_MISSING
+#if PHY3D_ENABLED
                 if (MasterAudio.Instance.listenerFollowerHasRigidBody) {
                     var rb = follower.gameObject.GetComponent<Rigidbody>();
                     if (rb == null) {
@@ -187,9 +194,17 @@ namespace DarkTonic.MasterAudio {
             get { return _listenerFollower != null; }
         }
 
+        public static int AmbientCount
+        {
+            get
+            {
+                return _transformFollowers.Count;
+            }
+        }
+
         public static bool HasListenerFolowerRigidBody {
             get {
-#if !PHY3D_MISSING
+#if PHY3D_ENABLED
                 return _listenerFollowerRB != null;
 #else
                 return false;

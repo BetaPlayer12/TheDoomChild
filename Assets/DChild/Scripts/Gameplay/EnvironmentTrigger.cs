@@ -18,13 +18,15 @@ namespace DChild.Gameplay
             [ShowInInspector]
             public bool m_isTriggered;
             public bool isTriggered => m_isTriggered;
+
+            ISaveData ISaveData.ProduceCopy() => new SaveData(m_isTriggered);
         }
 
         [SerializeField, OnValueChanged("OnValueChange")]
         private bool m_oneTimeOnly;
-        [SerializeField]
+        [SerializeField, TabGroup("Enter")]
         private UnityEvent m_enterEvents;
-        [SerializeField, HideIf("m_oneTimeOnly")]
+        [SerializeField, HideIf("m_oneTimeOnly"), TabGroup("Exit")]
         private UnityEvent m_exitEvents;
 
         private bool m_wasTriggered;
@@ -38,7 +40,10 @@ namespace DChild.Gameplay
         {
             m_wasTriggered = ((SaveData)data).isTriggered;
         }
-
+        public void Initialize()
+        {
+            m_wasTriggered = false;
+        }
         private void OnTriggerEnter2D(Collider2D collision)
         {
             if (collision.CompareTag("Hitbox"))
@@ -51,7 +56,9 @@ namespace DChild.Gameplay
                 {
                     m_wasTriggered = true;
                 }
+                
             }
+            
         }
 
         private void OnTriggerExit2D(Collider2D collision)
@@ -67,10 +74,7 @@ namespace DChild.Gameplay
 
         private void OnValidate()
         {
-            if(this.TryGetComponentInChildren<Collider2D>(out Collider2D collider))
-            {
-                collider.isTrigger = true;
-            }
+            DChildUtility.ValidateSensor(gameObject);
         }
 
 #if UNITY_EDITOR

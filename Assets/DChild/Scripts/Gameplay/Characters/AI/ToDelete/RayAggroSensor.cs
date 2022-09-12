@@ -29,7 +29,7 @@ namespace DChild.Gameplay.Characters.AI
                 var rayOrigin = (Vector2)m_model.position;
                 var toRayTarget = m_spottedTarget.position - rayOrigin;
                 int hitCount = 0;
-                Raycaster.SetLayerCollisionMask(LayerMask.NameToLayer("Environment"));
+                Raycaster.SetLayerCollisionMask(DChildUtility.GetEnvironmentMask());
                 Raycaster.Cast(rayOrigin, toRayTarget.normalized, toRayTarget.magnitude, true, out hitCount);
                 if(RegisterSpottedPlayer(hitCount) == false)
                 {

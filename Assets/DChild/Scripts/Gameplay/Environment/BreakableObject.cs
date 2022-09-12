@@ -1,17 +1,28 @@
-﻿using DChild.Gameplay.Combat;
+﻿
+using DChild.Gameplay.Combat;
 using DChild.Serialization;
 using Holysoft.Event;
 using Sirenix.OdinInspector;
 using Sirenix.Serialization;
+using System;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 using UnityEngine.Events;
+using UnityEngine.Rendering;
+using UnityEngine.ResourceManagement.AsyncOperations;
 
 namespace DChild.Gameplay.Environment
 {
-
     [AddComponentMenu("DChild/Gameplay/Environment/Breakable Object")]
     public class BreakableObject : MonoBehaviour, ISerializableComponent
     {
+        public enum Type
+        {
+            Others,
+            Floor,
+            Wall
+        }
+
         [System.Serializable]
         public struct SaveData : ISaveData
         {
@@ -24,16 +35,26 @@ namespace DChild.Gameplay.Environment
             private bool m_isDestroyed;
 
             public bool isDestroyed => m_isDestroyed;
+
+            ISaveData ISaveData.ProduceCopy() => new SaveData(m_isDestroyed);
         }
 
         [SerializeField]
         private Damageable m_object;
+        [SerializeField]
+        private Type m_type;
         [ShowInInspector, OnValueChanged("SetObjectStateDebug")]
         private bool m_isDestroyed;
         [SerializeField]
         private bool m_createDebris;
         [SerializeField, ShowIf("m_createDebris"), Indent]
-        private GameObject m_debris;
+        private AssetReferenceGameObject m_debris;
+        [SerializeField, ShowIf("m_createDebris"), Indent]
+        private bool m_copySorting;
+        [SerializeField, ShowIf("m_createDebris"), Indent]
+        private bool m_applyDebrisColorChange;
+        [SerializeField, ShowIf("m_applyDebrisColorChange"), Indent]
+        private Color m_colorToApply = Color.white;
 
         [SerializeField, TabGroup("On Destroy")]
         private UnityEvent m_onDestroy;
@@ -46,6 +67,9 @@ namespace DChild.Gameplay.Environment
         private float m_force;
         private Debris m_instantiatedDebris;
         private Rigidbody2D[] m_leftOverDebris;
+        private int m_sortingID;
+
+        public Type type => m_type;
 
         public void SetObjectState(bool isDestroyed)
         {
@@ -86,62 +110,20 @@ namespace DChild.Gameplay.Environment
             }
             else
             {
-                m_onFix?.Invoke();
-                if (m_createDebris)
-                {
-                    DestroyInstantiatedDebris();
-                }
+                RevertToFixState();
             }
         }
 
-        private void InstantiateDebris(GameObject debris)
+        
+
+        public void Initialize()
         {
-            var instance = Instantiate(debris, m_object.position, Quaternion.identity);
-            m_instantiatedDebris = instance.GetComponent<Debris>();
-            m_instantiatedDebris.transform.localScale = transform.localScale;
-            m_instantiatedDebris.SetInitialForceReference(m_forceDirection, m_force);
-            m_leftOverDebris = m_instantiatedDebris.GetDetachables();
+            m_isDestroyed = false;
+            RevertToFixState();
         }
 
-        private void DestroyInstantiatedDebris()
-        {
-            if (m_leftOverDebris != null)
-            {
-                for (int i = m_leftOverDebris.Length - 1; i >= 0; i--)
-                {
-                    Destroy(m_leftOverDebris[i].gameObject);
-                }
-                m_leftOverDebris = null;
-                Destroy(m_instantiatedDebris.gameObject);
-            }
-        }
-
-        private void OnDestroyObject(object sender, EventActionArgs eventArgs)
-        {
-            SetObjectState(true);
-        }
-
-        // Start is called before the first frame update
-        private void Awake()
-        {
-            m_object.Destroyed += OnDestroyObject;
-            //if (m_isDestroyed == true)
-            //{
-            //    m_onDestroy?.Invoke();
-            //}
-            //else
-            //{
-            //    m_onFix?.Invoke();
-            //    if (m_createDebris)
-            //    {
-            //        DestroyInstantiatedDebris();
-            //    }
-            //}
-        }
-
-#if UNITY_EDITOR
         [Button, HideInEditorMode, HideIf("m_isDestroyed")]
-        private void BreakObject()
+        public void BreakObject()
         {
             m_isDestroyed = true;
             m_onDestroy?.Invoke();
@@ -150,7 +132,108 @@ namespace DChild.Gameplay.Environment
                 InstantiateDebris(m_debris);
             }
         }
+        private void RevertToFixState()
+        {
+            m_onFix?.Invoke();
+            if (m_createDebris)
+            {
+                DestroyInstantiatedDebris();
+            }
+        }
 
+        private void InstantiateDebris(GameObject debris)
+        {
+            var instance = Instantiate(debris, m_object.position, Quaternion.identity);
+            InitializeDebris(instance);
+        }
+
+        private void InstantiateDebris(AssetReferenceGameObject debris)
+        {
+            Addressables.InstantiateAsync(debris).Completed += OnDebrisSpawn;
+        }
+
+        private void OnDebrisSpawn(AsyncOperationHandle<GameObject> obj)
+        {
+            InitializeDebris(obj.Result);
+        }
+
+        private void InitializeDebris(GameObject instance)
+        {
+            var instanceTransform = instance.transform;
+            instanceTransform.parent = transform;
+            instanceTransform.localPosition = Vector3.zero;
+            instanceTransform.localScale = Vector3.one;
+            instanceTransform.parent = null;
+            m_instantiatedDebris = instance.GetComponent<Debris>();
+            if (m_instantiatedDebris != null)
+            {
+                m_instantiatedDebris.SetInitialForceReference(m_forceDirection, m_force);
+                m_leftOverDebris = m_instantiatedDebris.GetDetachables();
+                if (m_applyDebrisColorChange)
+                {
+                    m_instantiatedDebris.GetComponent<RendererColorChangeHandle>()?.ApplyColor(m_colorToApply);
+                }
+            }
+            else
+            {
+                //assuming the game object is particle effects rather than actual debris and effects shgould be going left to right
+                if(m_forceDirection.x == -1)
+                {
+
+                    instanceTransform.localScale = new Vector3(m_forceDirection.x, instanceTransform.localScale.y);
+
+                }
+                else
+                {
+
+                }
+            }
+
+            if (m_copySorting)
+            {
+                var renderers = instance.GetComponentsInChildren<Renderer>();
+                for (int i = 0; i < renderers.Length; i++)
+                {
+                    renderers[i].sortingLayerID = m_sortingID;
+                }
+            }
+        }
+
+        private void DestroyInstantiatedDebris()
+        {
+            if (m_leftOverDebris != null)
+            {
+                for (int i = m_leftOverDebris.Length - 1; i >= 0; i--)
+                {
+                    Addressables.ReleaseInstance(m_leftOverDebris[i].gameObject);
+                }
+                m_leftOverDebris = null;
+            }
+            if (m_instantiatedDebris != null)
+            {
+                Addressables.ReleaseInstance(m_instantiatedDebris.gameObject);
+            }
+        }
+
+        private void OnDestroyObject(object sender, EventActionArgs eventArgs)
+        {
+            SetObjectState(true);
+        }
+
+        private void Awake()
+        {
+            m_object.Destroyed += OnDestroyObject;
+            if (TryGetComponent(out SortingHandle sortingHandle))
+            {
+                m_sortingID = sortingHandle.sortingLayerID;
+            }
+            else if (TryGetComponent(out SortingGroup sortingGroup))
+            {
+                m_sortingID = sortingGroup.sortingOrder;
+            }
+        }
+
+#if UNITY_EDITOR
         [Button, HideInEditorMode, ShowIf("m_isDestroyed")]
         private void FixObject()
         {

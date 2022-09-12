@@ -8,13 +8,14 @@ namespace PlayerNew
     public class WallGrab : PlayerBehaviour
     {
         [SerializeField]
-        private Character m_character;
         private FaceDirection facing;
         private Renderer spriteRenderer;
         
 
         public bool canLedgeGrab = false;
         public bool ledgeDetected;
+
+        private bool climb = false;
 
         private float defaultGravityScale;
         private float defaultDrag;
@@ -33,103 +34,101 @@ namespace PlayerNew
         void Start()
         {
             facing = GetComponent<FaceDirection>();
-            spriteRenderer = GetComponent<Renderer>();
+            //spriteRenderer = GetComponent<Renderer>();
             
         }
 
         // Update is called once per frame
         void Update()
         {
-
-            //if (collisionState.onWall && !collisionState.grounded && !ledgeDetected)
-            //{
-            //    ledgeDetected = true;
-            //    ledgeBotPos = trans.position;
-            //    ToggleScripts(false);
-            //    CheckLedgeClimb();
-
-            //    //call animation
-            //}
-
-            if (!collisionState.grounded && !collisionState.isTouchingLedge && collisionState.onWall && collisionState.onWallLeg && !ledgeDetected)
+            
+            if (!stateManager.isGrounded && !stateManager.isTouchingLedge && stateManager.onWall && stateManager.onWallLeg && !ledgeDetected)
             {
                 ToggleScripts(false);
                 ledgeDetected = true;
                 ledgeBotPos = transform.position;
-                OnWallGrab();
             }
+
+            //wallGrab facing right
+            if (stateManager.onWall && facing.isFacingRight && !stateManager.isGrounded)
+            {
+                if (ledgeDetected && stateManager.onWall && (inputState.GetButtonValue(inputButtons[0]) || inputState.GetButtonValue(inputButtons[1])))
+                {
+                    OnWallGrab();
+                }
+                else if (ledgeDetected && stateManager.onWall && (inputState.GetButtonValue(inputButtons[2]) || inputState.GetButtonValue(inputButtons[3]) || inputState.GetButtonValue(inputButtons[4])))
+                {
+                    ToggleScripts(true);
+                    ledgeDetected = false;
+                }
+            }
+            //wallGrab facing left
+            else if (stateManager.onWall && !facing.isFacingRight && !stateManager.isGrounded)
+            {
+                if (ledgeDetected && stateManager.onWall && (inputState.GetButtonValue(inputButtons[0]) || inputState.GetButtonValue(inputButtons[3])))
+                {
+                    OnWallGrab();
+                }
+                else if (ledgeDetected && stateManager.onWall && (inputState.GetButtonValue(inputButtons[1]) || inputState.GetButtonValue(inputButtons[2]) || inputState.GetButtonValue(inputButtons[4])))
+                {
+                    ToggleScripts(true);
+                    ledgeDetected = false;
+                }
+            }
+
+
+
 
         }
 
         private void OnWallGrab()
         {
             
-           if(ledgeDetected && !canLedgeGrab)
+            if (ledgeDetected && !canLedgeGrab)
             {
-                 canLedgeGrab = true;
-                //if (!canLedgeGrab)
-                //{
-
-               // ledgeBotPos = trans.position;
-
-
+                canLedgeGrab = true;
+                ledgePos1 = transform.position;
 
                 if (facing.isFacingRight)
                 {
-                    ledgePos1 = new Vector2(Mathf.Floor(ledgeBotPos.x + collisionState.rightPosition.x) - ledgeClimbXOffset1, Mathf.Floor(ledgeBotPos.y) + ledgeClimbYOffset1);
-                    ledgePos2 = new Vector2(Mathf.Floor(ledgeBotPos.x + collisionState.rightPosition.x) + ledgeClimbXOffset2, Mathf.Floor(ledgeBotPos.y) + ledgeClimbYOffset2);
-                    // Debug.Log("1");
+
+                    float terminalPosX = Mathf.Floor(ledgeBotPos.x + stateManager.rightPosition.x) - ledgeClimbXOffset1;
+                    float terminalPosY = Mathf.Floor(ledgeBotPos.y) + ledgeClimbYOffset1;
+                    
+                    ledgePos2 = new Vector2(terminalPosX, terminalPosY);
+
                 }
                 else
                 {
-                    ledgePos1 = new Vector2(Mathf.Floor(ledgeBotPos.x - collisionState.rightPosition.x) + ledgeClimbXOffset1, Mathf.Floor(ledgeBotPos.y) + ledgeClimbYOffset1);
-                    ledgePos2 = new Vector2(Mathf.Floor(ledgeBotPos.x - collisionState.rightPosition.x) - ledgeClimbXOffset2, Mathf.Floor(ledgeBotPos.y) + ledgeClimbYOffset2);
-                    //  Debug.Log("2");
+                    float terminalPosX = Mathf.Floor(ledgeBotPos.x - stateManager.rightPosition.x) + ledgeClimbXOffset1;
+                    float terminalPosY = Mathf.Floor(ledgeBotPos.y) + ledgeClimbYOffset1;
+                    ledgePos2 = new Vector2(terminalPosX, terminalPosY);
+
                 }
-                //capsuleCollider.enabled = false;
-
                 canLedgeGrab = true;
-               // spriteRenderer.enabled = false;
-               
+                
 
-
-
-
-                // }
-
-                //if (canLedgeGrab)
-                //{
-                //    body2d.gravityScale = 0;
-                //    body2d.drag = 100;
-                //    // StartCoroutine(FinishedLedgeClimbRoutine());
-                //    //ToggleScripts(false);
-                //}
-
-                //FinishedLedgeClimb();
             }
-
         }
 
         IEnumerator FinishedLedgeClimbRoutine()
         {
-            Debug.Log("yeild");
             yield return new WaitForSeconds(0.1f);
-            // capsuleCollider.enabled = true;
-            
+            FinishedLedgeClimb();
+
         }
         private void FinishedLedgeClimb()
         {
-            //StartCoroutine(FinishedLedgeClimbRoutine());
             ledgeDetected = false;
             canLedgeGrab = false;
             ToggleScripts(true);
+            climb = false;
         }
 
         private void StartLedgeClimb()
         {
-            //Debug.Log("On climb");
-            //  spriteRenderer.enabled = true;
-            m_character.transform.position = ledgePos1;
+            transform.position = ledgePos2;
+            climb = true;
         }
     }
 

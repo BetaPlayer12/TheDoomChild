@@ -1,50 +1,50 @@
 ﻿using DChild.Gameplay.Characters.Players;
-using Sirenix.OdinInspector;
-using System.Collections;
+using DChild.Gameplay.Cinematics.Cameras;
+using DChild.Gameplay.Systems;
+using System;
 using UnityEngine;
 
 namespace DChild.Gameplay.Combat
 {
+
     public class PlayerCombatHandler : MonoBehaviour
     {
-        [SerializeField, BoxGroup("IFrame")]
-        private float m_invulnerabilityDuration;
-        [SerializeField, BoxGroup("IFrame")]
-        private float m_inputDisableDuration;
+        [SerializeField]
+        private GameObject m_hitFX;
+        [SerializeField]
+        private PlayerIFrameHandle m_iFrameHandle;
+        [SerializeField]
+        private ReactivePlayerCamera m_reactiveCamera;
+        [SerializeField]
+        private PlayerHitStopHandle m_hitStopHandle;
+
+        private FXSpawnHandle<FX> m_spawnHandle;
 
         public void ResolveDamageRecieved(IPlayer player)
         {
+            StopAllCoroutines();
+
             if (player.state?.canFlinch ?? true)
             {
-                StartCoroutine(DisableInputTemporarily(player));
+                m_hitStopHandle.Execute(false);
+                StartCoroutine(m_iFrameHandle.DisableInputTemporarily(player));
             }
-            StartCoroutine(TemporaryInvulnerability(player));
+
+            StartCoroutine(m_iFrameHandle.ExecuteTemporaryInvulnerability(player));
+            m_reactiveCamera.HandleOnDamageRecieveShake();
+            m_spawnHandle.InstantiateFX(m_hitFX, player.character.centerMass.position);
         }
 
-        //private int CalculateMagicDamageReduction(IPlayer player, System.Collections.Generic.List<AttackType> attackerDamageType)
-        //{
-        //    int magicDefense = 0;
-        //    var numberOfMagicAttackType = (attackerDamageType.Contains(AttackType.Physical) ? attackerDamageType.Count - 1 : attackerDamageType.Count);
-        //    if (numberOfMagicAttackType > 0)
-        //    {
-        //        magicDefense = (int)(player.magicDefense / numberOfMagicAttackType);
-        //    }
-
-        //    return magicDefense;
-        //}
-
-        private IEnumerator TemporaryInvulnerability(IPlayer player)
+        public void ResolveDamageDealt(CombatConclusionEventArgs eventArgs)
         {
-            player.damageableModule.SetInvulnerability(true);
-            yield return new WaitForWorldSeconds(m_invulnerabilityDuration);
-            player.damageableModule.SetInvulnerability(false);
+            m_reactiveCamera.HandleOnAttackHit(eventArgs);
+            m_hitStopHandle.Execute(true);
         }
 
-        private IEnumerator DisableInputTemporarily(IPlayer player)
+        private void Awake()
         {
-            player.controller.Disable();
-            yield return new WaitForWorldSeconds(m_inputDisableDuration);
-            player.controller.Enable();
+            m_spawnHandle = new FXSpawnHandle<FX>();
         }
+
     }
 }

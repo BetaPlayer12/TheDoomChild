@@ -2,24 +2,30 @@
 using DChild.Gameplay.Systems.WorldComponents;
 using Holysoft.Event;
 using Sirenix.OdinInspector;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace DChild.Gameplay
 {
+
     [SelectionBase]
     [AddComponentMenu("DChild/Gameplay/Objects/Character")]
     public class Character : MonoBehaviour, ICharacter, ITurningCharacter
     {
         public static string objectTag => "Character";
 
+        [SerializeField, MinValue(0.5f)]
+        private float m_height;
         [SerializeField]
         private Transform m_centerMass;
         [SerializeField]
         private IsolatedObject m_isolatedObject;
         [SerializeField]
-        private IsolatedPhysics2D m_physics;
+        private IsolatedCharacterPhysics2D m_physics;
         [SerializeField]
         private CharacterColliders m_colliders;
+        [SerializeField]
+        private Animator m_AttackFX;
         [SerializeField]
         private HorizontalDirection m_facing = HorizontalDirection.Right;
         [SerializeField, FoldoutGroup("Body Reference"), HideLabel]
@@ -31,12 +37,16 @@ namespace DChild.Gameplay
         public event EventAction<FacingEventArgs> CharacterTurn;
         public event EventAction<ObjectIDEventArgs> InstanceDestroyed;
 
+        public float height => m_height;
+
         public IsolatedObject isolatedObject => m_isolatedObject;
-        public IsolatedPhysics2D physics => m_physics;
+        public IsolatedCharacterPhysics2D physics => m_physics;
         public CharacterColliders colliders => m_colliders;
         public HorizontalDirection facing => m_facing;
 
         public Transform centerMass => m_centerMass;
+
+        public Animator attackFX => m_AttackFX;
 
         public int ID => m_ID;
         public bool hasID => m_hasID;
@@ -55,6 +65,11 @@ namespace DChild.Gameplay
             CharacterTurn?.Invoke(this, new FacingEventArgs(m_facing));
         }
 
+        private void OnDrawGizmosSelected()
+        {
+            Gizmos.DrawLine(transform.position, transform.position + (Vector3.up * m_height));
+        }
+
         private void OnDestroy()
         {
             InstanceDestroyed?.Invoke(this, new ObjectIDEventArgs(this));
@@ -70,7 +85,7 @@ namespace DChild.Gameplay
         }
 
 #if UNITY_EDITOR
-        public void InitializeField(Transform centermass, IsolatedObject isolatedObject, IsolatedPhysics2D physics, CharacterColliders colliders)
+        public void InitializeField(Transform centermass, IsolatedObject isolatedObject, IsolatedCharacterPhysics2D physics, CharacterColliders colliders)
         {
             m_centerMass = centermass;
             m_isolatedObject = isolatedObject;

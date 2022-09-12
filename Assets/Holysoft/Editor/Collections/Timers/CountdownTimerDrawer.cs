@@ -5,13 +5,12 @@ using Holysoft.Collections;
 
 namespace HolysoftEditor.Collections
 {
-    [OdinDrawer]
+    
     public class CountdownTimerDrawer : OdinValueDrawer<CountdownTimer>
     {
-        protected override void DrawPropertyLayout(IPropertyValueEntry<CountdownTimer> entry, GUIContent label)
+        protected override void DrawPropertyLayout(GUIContent label)
         {
-            var timer = entry.SmartValue;
-            timer.startTime = EditorGUILayout.FloatField(label, timer.startTime);
+            ValueEntry.Property.FindChild(x => x.Name == "m_startTime", true).Draw(new GUIContent(label.text));
         }
     }
 }

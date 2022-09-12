@@ -2,6 +2,6 @@
 {
     public interface ISaveData
     {
-        
+        ISaveData ProduceCopy();
     }
 }

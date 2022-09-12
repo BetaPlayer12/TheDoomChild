@@ -75,7 +75,7 @@ namespace Holysoft.UI
         }
 
 #if UNITY_EDITOR
-        [Button("Get Children Highlights")]
+        [Button("Get Children Highlights"),HideInPlayMode]
         private void GetChildrenHighlights()
         {
             List<UIHighlight> list = new List<UIHighlight>(GetComponentsInChildren<UIHighlight>());

@@ -22,7 +22,7 @@ namespace DChild.Gameplay.Combat
 
         }
 
-        public List<Hitbox> ValidateTargets(Vector2 source, List<Hitbox> hitboxes)
+        public List<Hitbox> ValidateTargets(Vector2 source, Invulnerability ignoresLevel, List<Hitbox> hitboxes)
         {
             m_processingInfo.Clear();
             m_targetList.Clear();
@@ -36,13 +36,13 @@ namespace DChild.Gameplay.Combat
                     m_targetList.Add(hitboxID, m_cacheHitbox);
                 }
             }
-            ProcessesValidTargets(source, m_processingInfo.ToArray());
+            ProcessesValidTargets(source, m_processingInfo.ToArray(), ignoresLevel);
 
             return m_hitboxes;
         }
 
        
-        public List<Hitbox> GetValidTargetsOfCircleAOE(Vector2 source, float radius, int layer)
+        public List<Hitbox> GetValidTargetsOfCircleAOE(Vector2 source, float radius, int layer, Invulnerability ignoresLevel)
         {
             m_processingInfo.Clear();
             m_targetList.Clear();
@@ -64,13 +64,13 @@ namespace DChild.Gameplay.Combat
                 }
             }
 
-            ProcessesValidTargets(source, m_processingInfo.ToArray());
+            ProcessesValidTargets(source, m_processingInfo.ToArray(), ignoresLevel);
             return m_hitboxes;
         }
 
-        private void ProcessesValidTargets(Vector2 source, HitboxInfo[] infos)
+        private void ProcessesValidTargets(Vector2 source, HitboxInfo[] infos, Invulnerability ignoresLevel)
         {
-            m_validationResult = m_targetValidator.ValidateToDamage(source, infos);
+            m_validationResult = m_targetValidator.ValidateToDamage(source, infos, ignoresLevel);
             m_hitboxes.Clear();
             for (int i = 0; i < m_validationResult.Count; i++)
             {

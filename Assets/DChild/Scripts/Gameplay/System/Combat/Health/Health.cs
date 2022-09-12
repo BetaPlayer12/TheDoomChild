@@ -7,8 +7,9 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Combat
 {
+
     [Serializable]
-    public abstract class Health : MonoBehaviour, ICappedStat
+    public abstract class Health : MonoBehaviour, ICappedStat, ICappedStatInfo
     {
         public event EventAction<EventActionArgs> Death;
         public event EventAction<StatInfoEventArgs> MaxValueChanged;

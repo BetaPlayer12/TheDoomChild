@@ -280,25 +280,34 @@ namespace Spine.Unity {
 		}
 
 		void UpdateLocal (ISkeletonAnimation anim) {
-			if (needToReprocessBones)
-				CollectBones();
+			if (skeletonRenderer.isVisible)
+			{
+				if (needToReprocessBones)
+					CollectBones();
 
-			var boneComponents = this.boneComponents;
-			if (boneComponents == null) return;
-			for (int i = 0, n = boneComponents.Count; i < n; i++)
-				boneComponents[i].transformLerpComplete = false;
+				var boneComponents = this.boneComponents;
+				if (boneComponents == null) return;
+				for (int i = 0, n = boneComponents.Count; i < n; i++)
+					boneComponents[i].transformLerpComplete = false;
 
-			UpdateAllBones(SkeletonUtilityBone.UpdatePhase.Local);
+				UpdateAllBones(SkeletonUtilityBone.UpdatePhase.Local); 
+			}
 		}
 
 		void UpdateWorld (ISkeletonAnimation anim) {
-			UpdateAllBones(SkeletonUtilityBone.UpdatePhase.World);
-			for (int i = 0, n = constraintComponents.Count; i < n; i++)
-				constraintComponents[i].DoUpdate();
+			if (skeletonRenderer.isVisible)
+			{
+				UpdateAllBones(SkeletonUtilityBone.UpdatePhase.World);
+				for (int i = 0, n = constraintComponents.Count; i < n; i++)
+					constraintComponents[i].DoUpdate();
+			}
 		}
 
 		void UpdateComplete (ISkeletonAnimation anim) {
-			UpdateAllBones(SkeletonUtilityBone.UpdatePhase.Complete);
+			if (skeletonRenderer.isVisible)
+			{
+				UpdateAllBones(SkeletonUtilityBone.UpdatePhase.Complete);
+			}
 		}
 
 		void UpdateAllBones (SkeletonUtilityBone.UpdatePhase phase) {

@@ -66,7 +66,7 @@ namespace DChildDebug
             m_player.GetComponentInChildren<StatToModelInjector>().Initialize(m_character);
             m_player.GetComponentInChildren<PlayerCharacterInitializer>().Initialize(m_character, m_animationParametersData, m_characterBehaviour);
             m_player.GetComponentInChildren<BestiaryProgressTracker>().Initialize(m_character);
-            m_player.GetComponentInChildren<PlayerCharacterController>().Initialize(m_character, m_characterBehaviour);
+            //m_player.GetComponentInChildren<PlayerCharacterControllerOld>().Initialize(m_character, m_characterBehaviour);
             if (m_gameplaySystem)
             {
                 m_gameplaySystem.GetComponentInChildren<Cinema>().Initialize(m_characterCenterMass);

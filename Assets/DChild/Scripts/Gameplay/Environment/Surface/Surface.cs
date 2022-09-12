@@ -11,5 +11,10 @@ namespace DChild.Gameplay.Environment
         private SurfaceData m_data;
 
         public SurfaceData data => m_data;
+
+        private void OnCollisionEnter2D(Collision2D collision)
+        {
+            var contact  = collision.contacts[0];
+        }
     }
 }

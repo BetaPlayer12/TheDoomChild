@@ -63,6 +63,11 @@ namespace DChild.Gameplay
             m_moveAlongGround = new Vector2(groundNormal.y, -groundNormal.x);
         }
 
+        public void UseStepClimb(bool stepClimb)
+        {
+            m_useStepClimb = stepClimb;
+        }
+
         public override void UpdatePhysics()
         {
             if (m_calculateGroundAngle)

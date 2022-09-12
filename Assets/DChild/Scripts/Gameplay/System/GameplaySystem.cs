@@ -1,21 +1,24 @@
-﻿using DChild.Configurations;
+﻿using DarkTonic.MasterAudio;
+using DChild.Configurations;
 using DChild.Gameplay.Cinematics;
 using DChild.Gameplay.Combat;
-using DChild.Gameplay.Databases;
 using DChild.Gameplay.Systems;
-using DChild.Gameplay.Systems.Serialization;
 using DChild.Gameplay.VFX;
 using DChild.Menu;
 using DChild.Serialization;
 using Holysoft.Event;
 using System;
 using UnityEngine;
+using PixelCrushers.DialogueSystem;
+using System.Collections;
+using DChild.Gameplay.SoulSkills;
 
 namespace DChild.Gameplay
 {
     public class GameplayModifiers
     {
         public float minionSoulEssenceDrop = 1;
+        public float SoulessenceAbsorption = 1;
     }
 
     public class GameplaySystem : MonoBehaviour
@@ -23,17 +26,21 @@ namespace DChild.Gameplay
 #if UNITY_EDITOR
         [SerializeField]
         private bool m_dontDestroyOnLoad;
+#endif
         [SerializeField]
         private bool m_doNotDeserializeOnAwake;
         [SerializeField]
         private bool m_doNotTeleportPlayerOnAwake;
-#endif
+
+        [SerializeField]
+        private AudioListenerPositioner m_audioListener;
 
         private GameplaySettings m_settings;
         private static GameplaySystem m_instance;
         private static CampaignSlot m_campaignToLoad;
         private static GameplayModifiers m_modifiers;
         public static GameplayModifiers modifiers => m_modifiers;
+        public static AudioListenerPositioner audioListener { get; private set; }
 
         #region Modules
         private static IGameplayActivatable[] m_activatableModules;
@@ -48,6 +55,8 @@ namespace DChild.Gameplay
         private static CampaignSerializer m_campaignSerializer;
         private static ZoneMoverHandle m_zoneMover;
         private static HealthTracker m_healthTracker;
+        private static GameplayUIHandle m_gameplayUIHandle;
+        private static SoulSkillManager m_soulSkillManager;
 
 
         public static ICombatManager combatManager => m_combatManager;
@@ -73,57 +82,66 @@ namespace DChild.Gameplay
         public static ISimulationHandler simulationHandler => m_simulation;
         public static ILootHandler lootHandler => m_lootHandler;
         public static IHealthTracker healthTracker => m_healthTracker;
+        public static IGameplayUIHandle gamplayUIHandle => m_gameplayUIHandle;
+        public static ISoulSkillManager soulSkillManager => m_soulSkillManager;
         public static CampaignSerializer campaignSerializer => m_campaignSerializer;
         #endregion
         public static bool isGamePaused { get; private set; }
 
-        #region Cinematic
-        public static void PlayCutscene(Cutscene cutscene)
-        {
-            //player.EnableBrain(false);
-            cutscene.InitializeScene();
-            cutscene.Play();
-        }
-
-        public static void StopCutscene(Cutscene cutscene)
-        {
-            cutscene.Stop();
-            cutscene.SetAsComplete();
-            //player.EnableBrain(true);
-        }
-        #endregion
-
         public static void ResumeGame()
         {
-            Time.timeScale = 1;
+            GameTime.UnregisterValueChange(m_instance, GameTime.Factor.Multiplication);
             m_playerManager?.EnableInput();
             isGamePaused = false;
             GameSystem.SetCursorVisibility(false);
+
+            try
+            {
+                MasterAudio.UnpauseEverything();
+            }
+            catch (Exception e)
+            {
+                Debug.LogError(e.Message);
+            }
+
+            //PostProcess.SetActiveToAll(true);
         }
 
         public static void PauseGame()
         {
-            Time.timeScale = 0;
+            GameTime.RegisterValueChange(m_instance, 0, GameTime.Factor.Multiplication);
             m_playerManager?.DisableInput();
             isGamePaused = true;
             GameSystem.SetCursorVisibility(true);
+
+            MasterAudio.PauseEverything();
+            //PostProcess.SetActiveToAll(false);
         }
 
         public static void ClearCaches()
         {
+            MasterAudio.StopEverything();
+            //MasterAudio.StopAllPlaylists();
             m_cinema?.ClearLists();
             m_healthTracker?.RemoveAllTrackers();
+            m_playerManager?.ClearCache();
         }
 
         public static void LoadGame(CampaignSlot campaignSlot, LoadingHandle.LoadType loadType)
         {
             m_campaignToLoad = campaignSlot;
             ClearCaches();
+            PersistentDataManager.ApplySaveData(campaignSlot.dialogueSaveData, DatabaseResetOptions.KeepAllLoaded);
             m_healthTracker?.RemoveAllTrackers();
             LoadingHandle.SetLoadType(loadType);
             GameSystem.LoadZone(m_campaignToLoad.sceneToLoad.sceneName, true);
-            m_playerManager.player.transform.position = m_campaignToLoad.spawnPosition;
+            //Reload Items
             LoadingHandle.SceneDone += LoadGameDone;
+        }
+
+        public static void ReloadGame()
+        {
+            LoadGame(campaignSerializer.slot, LoadingHandle.LoadType.Force);
         }
 
         public static void SetCurrentCampaign(CampaignSlot campaignSlot)
@@ -138,12 +156,52 @@ namespace DChild.Gameplay
             }
         }
 
+        public static void SetInputActive(bool isActive)
+        {
+            if (isActive)
+            {
+                m_playerManager?.gameplayInput.Enable();
+            }
+            else
+            {
+                m_playerManager?.gameplayInput.Disable();
+            }
+        }
+
+        public static void ListenToNextSceneLoad()
+        {
+            LoadingHandle.LoadingDone += OnLoadingSceneDone;
+        }
+
+        private static void OnLoadingSceneDone(object sender, EventActionArgs eventArgs)
+        {
+            LoadingHandle.LoadingDone -= OnLoadingSceneDone;
+            if (m_instance == null)
+                return;
+            m_playerManager.FreezePlayerPosition(false);
+        }
+
         private static void LoadGameDone(object sender, EventActionArgs eventArgs)
         {
-            m_campaignSerializer.SetSlot(m_campaignToLoad);
-            m_campaignSerializer.Load();
             LoadingHandle.SceneDone -= LoadGameDone;
+
+
+            m_campaignSerializer.SetSlot(m_campaignToLoad);
+            m_gameplayUIHandle.ResetGameplayUI();
+            m_campaignSerializer.Load(SerializationScope.Gameplay, true);
+            //m_playerManager.player.Revitilize();
+            //m_playerManager.player.Reset();
         }
+
+        private static void LockPlayerToSpawnPosition()
+        {
+            if (m_campaignToLoad == null)
+                return;
+
+            m_playerManager.player.transform.position = m_campaignToLoad.spawnPosition;
+            m_playerManager.FreezePlayerPosition(true);
+        }
+
 
         private void AssignModules()
         {
@@ -157,9 +215,22 @@ namespace DChild.Gameplay
             AssignModule(out m_zoneMover);
             AssignModule(out m_campaignSerializer);
             AssignModule(out m_healthTracker);
+            AssignModule(out m_gameplayUIHandle);
+            AssignModule(out m_soulSkillManager);
         }
 
         private void AssignModule<T>(out T module) where T : MonoBehaviour, IGameplaySystemModule => module = GetComponentInChildren<T>();
+
+        private IEnumerator DelayedShowGameplay()
+        {
+            int frameCount = 30;
+            do
+            {
+                yield return null;
+                frameCount--;
+            } while (frameCount > 0);
+            m_gameplayUIHandle.ShowGameplayUI(true);
+        }
 
 #if UNITY_EDITOR
         private void ValidateModule<T>() where T : MonoBehaviour, IGameplaySystemModule => this.ValidateChildComponent<T>();
@@ -194,38 +265,38 @@ namespace DChild.Gameplay
                 {
                     m_campaignSerializer.SetSlot(m_campaignToLoad);
                 }
-#if UNITY_EDITOR
+
                 if (m_doNotDeserializeOnAwake == false)
                 {
-                    m_campaignSerializer.Load(true);
+                    m_campaignSerializer.Load(SerializationScope.Gameplay, true);
                 }
-#else
-                m_campaignSerializer.Load(true);
-#endif
 
-#if UNITY_EDITOR
-                if (m_doNotTeleportPlayerOnAwake == false)
+                if (m_doNotTeleportPlayerOnAwake == false && m_campaignToLoad != null)
                 {
-                    m_playerManager.player.transform.position = m_campaignToLoad.spawnPosition;
+                    LockPlayerToSpawnPosition();
                 }
-#else
-                m_playerManager.player.transform.position = m_campaignToLoad.spawnPosition;
-#endif     
             }
         }
+
 
         private void Start()
         {
             //m_cinema.SetTrackingTarget(m_player.model);
+            audioListener = m_audioListener;
             m_settings = GameSystem.settings?.gameplay ?? null;
             m_modifiers = new GameplayModifiers();
-            isGamePaused = true;
+            isGamePaused = false;
             if (m_campaignToLoad != null)
             {
                 m_campaignSerializer.SetSlot(m_campaignToLoad);
+
                 m_campaignToLoad = null;
             }
+
+            StartCoroutine(DelayedShowGameplay());
         }
+
+
 
         private void OnEnable()
         {
@@ -241,6 +312,11 @@ namespace DChild.Gameplay
             {
                 m_activatableModules[i].Disable();
             }
+        }
+
+        private void LateUpdate()
+        {
+
         }
 
         private void OnApplicationQuit()
@@ -261,6 +337,7 @@ namespace DChild.Gameplay
                 m_playerManager = null;
                 m_zoneMover = null;
                 m_activatableModules = null;
+                GameTime.UnregisterValueChange(m_instance, GameTime.Factor.Multiplication);
             }
         }
     }

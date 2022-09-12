@@ -29,7 +29,7 @@ namespace DChild.Gameplay.Characters.Players.SoulSkills
             {
                 if (m_player.health.isFull == false)
                 {
-                    if (eventArgs.target.isCharacter && eventArgs.result.totalDamageDealt > 0)
+                    if (eventArgs.target.isCharacter && eventArgs.result.damageDealt > 0)
                     {
                         GameplaySystem.combatManager.Heal(m_player.healableModule, m_healValue);
                     }

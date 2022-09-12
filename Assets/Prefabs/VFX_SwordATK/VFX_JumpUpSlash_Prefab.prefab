@@ -1,5 +1,108 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &293500166159180592
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5974659449776949742}
+  - component: {fileID: 5786547046574030218}
+  - component: {fileID: 7620533101539384251}
+  m_Layer: 8
+  m_Name: JumpUpSlashCollider
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5974659449776949742
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 293500166159180592}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.1, y: -2.48, z: 0}
+  m_LocalScale: {x: -1.033377, y: 1.033377, z: 1.033377}
+  m_Children: []
+  m_Father: {fileID: 170796639592132424}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!60 &5786547046574030218
+PolygonCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 293500166159180592}
+  m_Enabled: 0
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Points:
+    m_Paths:
+    - - {x: 9.013336, y: 6.7766724}
+      - {x: 9.106689, y: 7.510498}
+      - {x: 9.054153, y: 8.132996}
+      - {x: 8.647491, y: 9.657318}
+      - {x: 8.264954, y: 10.498779}
+      - {x: 7.522537, y: 11.57962}
+      - {x: 6.482025, y: 12.637787}
+      - {x: 5.931717, y: 13.05957}
+      - {x: 5.209442, y: 13.283508}
+      - {x: 4.0725403, y: 13.558533}
+      - {x: 2.224411, y: 13.74469}
+      - {x: 0.92759705, y: 13.647064}
+      - {x: -0.5554199, y: 13.2230835}
+      - {x: -2.310852, y: 12.368683}
+      - {x: -3.3923645, y: 11.632996}
+      - {x: -4.179947, y: 10.766846}
+      - {x: -5.0852966, y: 9.329071}
+      - {x: -5.486252, y: 7.942749}
+      - {x: -5.5339203, y: 6.939514}
+      - {x: -5.389633, y: 6.306671}
+      - {x: -2.9640198, y: 6.880493}
+      - {x: -0.68174744, y: 7.3137207}
+      - {x: 1.7640076, y: 7.3856506}
+      - {x: 3.1144867, y: 7.241791}
+      - {x: 5.245041, y: 6.6779785}
+      - {x: 8.852997, y: 5.6598816}
+--- !u!114 &7620533101539384251
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 293500166159180592}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59adafb57d3f471409348179f9e0c77f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_canDetectInteractables: 1
+  m_damageUniqueHitboxesOnly: 1
+  m_collisionRegistrator: {fileID: 0}
+  m_damageFXHandle: {fileID: 0}
+  m_ignoreColliderList:
+  - m_target: {fileID: 0}
+    m_ignoreList: []
+  m_hasPlayerOnlyCheck: 0
 --- !u!1 &2638596245208085992
 GameObject:
   m_ObjectHideFlags: 0
@@ -9,7 +112,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 170796639592132424}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: VFX_JumpUpSlash_Prefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -28,6 +131,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 5687860312329151019}
+  - {fileID: 5974659449776949742}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -42,7 +146,7 @@ GameObject:
   - component: {fileID: 5687860312329151019}
   - component: {fileID: 1646533491651830877}
   - component: {fileID: 2043919843747476830}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: VFX_JumpUpSlash
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -79,7 +183,7 @@ ParticleSystem:
   ringBufferLoopRange: {x: 0, y: 1}
   looping: 0
   prewarm: 0
-  playOnAwake: 1
+  playOnAwake: 0
   useUnscaledTime: 0
   autoRandomSeed: 1
   useRigidbodyForVelocity: 1
@@ -136,7 +240,7 @@ ParticleSystem:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-  moveWithTransform: 0
+  moveWithTransform: 1
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 0
   randomSeed: 0

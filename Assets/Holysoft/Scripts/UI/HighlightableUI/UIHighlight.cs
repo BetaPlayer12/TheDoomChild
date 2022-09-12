@@ -1,4 +1,5 @@
 ﻿using Holysoft.Event;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace Holysoft.UI
@@ -8,9 +9,16 @@ namespace Holysoft.UI
         public event EventAction<EventActionArgs> HighlightEnd;
         public event EventAction<EventActionArgs> NormalizeEnd;
 
+        [Button,HideInEditorMode]
         public abstract void Highlight();
+
+        [Button, HideInEditorMode]
         public abstract void Normalize();
+
+        [Button, HideInEditorMode]
         public abstract void UseHighlightState();
+
+        [Button, HideInEditorMode]
         public abstract void UseNormalizeState();
     }
 }

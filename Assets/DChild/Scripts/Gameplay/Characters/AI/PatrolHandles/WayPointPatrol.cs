@@ -48,11 +48,13 @@ namespace DChild.Gameplay.Characters.AI
         private Iteration m_startIteration = Iteration.Forward;
         [SerializeField]
         [BoxGroup("Configuration")]
-        [ListDrawerSettings(CustomAddFunction = "AddToWaypoint"),HideIf("@UnityEditor.Experimental.SceneManagement.PrefabStageUtility.GetCurrentPrefabStage() != null")]
+        [ListDrawerSettings(CustomAddFunction = "AddToWaypoint"), HideIf("@UnityEditor.Experimental.SceneManagement.PrefabStageUtility.GetCurrentPrefabStage() != null")]
         private Vector2[] m_wayPoints;
 
         private int m_currentIndex;
         private Iteration m_iteration;
+        public Vector2[] wayPoints => m_wayPoints;
+        public int startIndex => m_startIndex;
 
         public void Initialize()
         {
@@ -67,8 +69,10 @@ namespace DChild.Gameplay.Characters.AI
             var movementInfo = GetInfo(currentPosition);
             if (GetProposedFacing(currentPosition, movementInfo.destination) != character.currentFacing)
             {
-                CallTurnRequest();
-
+                if (currentPosition.x != movementInfo.destination.x)
+                {
+                    CallTurnRequest();
+                }
             }
             else
             {
@@ -85,7 +89,10 @@ namespace DChild.Gameplay.Characters.AI
             {
                 if (GetProposedFacing(currentPosition, agent.segmentDestination) != characterInfo.currentFacing)
                 {
-                    CallTurnRequest();
+                    if (currentPosition.x != agent.segmentDestination.x)
+                    {
+                        CallTurnRequest();
+                    }
                 }
                 else
                 {
@@ -110,6 +117,13 @@ namespace DChild.Gameplay.Characters.AI
             return new PatrolInfo(position, destination);
         }
 
+        public Vector2[] GetWaypoints() => m_wayPoints;
+
+        public void SetWayPoints(Vector2[] waypoint)
+        {
+            m_wayPoints = waypoint;
+        }
+
         private bool IsNear(float position, float destination)
         {
             var distance = Mathf.Abs(destination - position);
@@ -128,6 +142,7 @@ namespace DChild.Gameplay.Characters.AI
             }
             m_currentIndex += (int)m_iteration;
         }
+
 
         private void Awake()
         {
@@ -150,8 +165,6 @@ namespace DChild.Gameplay.Characters.AI
         public bool useCurrentPosition => m_useCurrentPosition;
         public int overridePatrolIndex => m_overridePatrolIndex;
         public int iteration => (int)m_startIteration;
-        public int startIndex => m_startIndex;
-        public Vector2[] wayPoints => m_wayPoints;
 
         [FoldoutGroup("ToolKit")]
         [HideIf("@UnityEditor.Experimental.SceneManagement.PrefabStageUtility.GetCurrentPrefabStage() != null || m_useCurrentPosition")]

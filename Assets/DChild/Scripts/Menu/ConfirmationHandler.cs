@@ -26,7 +26,7 @@ namespace DChild.Menu
             m_listener?.Invoke(this, EventActionArgs.Empty);
         }
 
-        public void UnsubcribeListner()
+        public void UnsubcribeListener()
         {
             if (m_isListenerSubscribed && m_listener != null)
             {
@@ -40,7 +40,7 @@ namespace DChild.Menu
         {
             if (m_isListenerSubscribed)
             {
-                UnsubcribeListner();
+                UnsubcribeListener();
             }
         }
 

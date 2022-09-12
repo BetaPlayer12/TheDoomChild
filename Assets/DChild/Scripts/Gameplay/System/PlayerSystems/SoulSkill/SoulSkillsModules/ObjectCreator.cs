@@ -12,10 +12,13 @@ namespace DChild.Gameplay.Characters.Players.SoulSkills
             private GameObject m_instanceReference;
             private GameObject m_instance;
 
-            public Handle(Character m_playerCharacter, GameObject m_instance) : base(null)
+            private bool m_bindToPlayer;
+
+            public Handle(Character m_playerCharacter, GameObject m_instance, bool bindToPlayer) : base(null)
             {
                 this.m_playerCharacter = m_playerCharacter;
                 this.m_instanceReference = m_instance;
+                m_bindToPlayer = bindToPlayer;
             }
 
             public override void Dispose()
@@ -28,15 +31,23 @@ namespace DChild.Gameplay.Characters.Players.SoulSkills
                 m_instance = Object.Instantiate(m_instanceReference);
                 m_instance.transform.SetParent(m_playerCharacter.transform);
                 m_instance.transform.localPosition = Vector3.zero;
+                if (m_bindToPlayer == false)
+                {
+                    m_instance.transform.SetParent(null);
+                }
+
+
             }
         }
 
         [SerializeField]
         private GameObject m_toCreate;
+        [SerializeField]
+        private bool m_bindToPlayer;
 
         protected override BaseHandle CreateHandle(IPlayer player)
         {
-            return new Handle(player.character, m_toCreate);
+            return new Handle(player.character, m_toCreate, m_bindToPlayer);
         }
     }
 }

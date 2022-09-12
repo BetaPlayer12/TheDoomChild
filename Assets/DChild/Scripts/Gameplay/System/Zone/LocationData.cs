@@ -5,6 +5,9 @@ using Sirenix.Utilities;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Sirenix.OdinInspector;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 namespace DChild.Gameplay.Systems.Serialization
 {
@@ -34,12 +37,21 @@ namespace DChild.Gameplay.Systems.Serialization
         public string scene => m_scene.sceneName;
         public Vector2 position => m_position;
 
+        public SceneInfo sceneInfo => m_scene; //Temporary Fix for saving after picking a location
 
 #if UNITY_EDITOR
         public void Set(Scene scene, Vector2 position)
         {
             m_scene.Set(scene);
             m_position = position;
+            //EditorUtility.SetDirty(this);
+            //AssetDatabase.SaveAssets();
+        }
+
+        public void SaveAsset()
+        {
+            EditorUtility.SetDirty(this);
+            AssetDatabase.SaveAssets();
         }
 #endif
 

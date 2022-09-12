@@ -21,12 +21,8 @@ namespace DarkTonic.MasterAudio {
         [Tooltip("This option is useful if your caller ever moves, as it will make the Audio Source follow to the location of the caller every frame.")]
 		public bool FollowCaller;
 
-#if UNITY_5_6_OR_NEWER
         [Tooltip("Using this option, the Audio Source will be updated every frame to the closest position on the caller's collider, if any. This will override the Follow Caller option above and happen instead.")]
 		public bool UseClosestColliderPosition;
-#else
-		public bool UseClosestColliderPosition = false;
-#endif
 
         public bool UseTopCollider = true;
         public bool IncludeChildColliders = false;
@@ -40,7 +36,7 @@ namespace DarkTonic.MasterAudio {
 
         // ReSharper disable once UnusedMember.Local
         void OnEnable() {
-            StartTrackers();
+            MasterAudio.SetupAmbientNextFrame(this);
         }
 
         // ReSharper disable once UnusedMember.Local
@@ -57,6 +53,11 @@ namespace DarkTonic.MasterAudio {
                 return;
             }
 
+            MasterAudio.RemoveDelayedAmbient(this); // make sure it doesn't start playing or have trackers if it hasn't yet (< 1 frame since enabling).
+            StopTrackers();
+        }
+
+        private void StopTrackers() {
             var grp = MasterAudio.GrabGroup(AmbientSoundGroup, false); // script execution order thing with DGSC. Need to check so warnings don't get logged.
             if (grp != null) {
                 switch (exitMode) {
@@ -72,8 +73,8 @@ namespace DarkTonic.MasterAudio {
             RuntimeFollower = null;
         }
 
-		/*! \cond PRIVATE */
-		public void CalculateRadius() {
+        /*! \cond PRIVATE */
+        public void CalculateRadius() {
             var aud = GetNamedOrFirstAudioSource();
 
             if (aud == null) {
@@ -196,12 +197,12 @@ namespace DarkTonic.MasterAudio {
             Gizmos.DrawWireSphere(transform.position, colliderMaxDistance);
         }
 
-        private void StartTrackers() {
+        public void StartTrackers() {
             if (!IsValidSoundGroup) {
                 return;
             }
 
-#if PHY3D_MISSING
+#if !PHY3D_ENABLED
             MasterAudio.LogWarningIfNeverLogged("Ambient Sounds script will not function because you do not have Physics package installed.", MasterAudio.PHYSICS_DISABLED);
 #else
             var shouldIgnoreCollisions = Physics.GetIgnoreLayerCollision(AmbientUtil.IgnoreRaycastLayerNumber, AmbientUtil.IgnoreRaycastLayerNumber);
@@ -213,6 +214,7 @@ namespace DarkTonic.MasterAudio {
 
             var isListenerFollowerAvailable = AmbientUtil.InitListenerFollower();
             if (!isListenerFollowerAvailable) {
+                MasterAudio.LogWarning("Your Ambient Sound script on Game Object '" + name + "' will not function because you have no Audio Listener component in any active Game Object in the Scene.");
                 return; // don't bother creating the follower because there's no Listener to collide with.
             }
 
@@ -220,7 +222,7 @@ namespace DarkTonic.MasterAudio {
                 MasterAudio.LogWarning("Your Ambient Sound script on Game Object '" + name + "' will not function because you have turned off the Listener Follower RigidBody in Advanced Settings.");
             }
 
-            var followerName = name + "_" + AmbientSoundGroup + "_" + UnityEngine.Random.Range(0, 9) + "_Follower";
+			var followerName = name + "_" + AmbientSoundGroup + "_Follower" + "_" + Guid.NewGuid();
             RuntimeFollower = AmbientUtil.InitAudioSourceFollower(Trans, followerName, AmbientSoundGroup, variationName, playVolume, FollowCaller, UseClosestColliderPosition, UseTopCollider, IncludeChildColliders, exitMode, exitFadeTime, reEnterMode, reEnterFadeTime);
         }
 

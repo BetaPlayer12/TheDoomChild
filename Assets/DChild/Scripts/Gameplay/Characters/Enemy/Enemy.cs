@@ -32,7 +32,7 @@ namespace DChild.Gameplay.Characters.Enemies
         protected BehaviourHandler m_behaviour;
         protected CharacterColliders m_colliders;
         protected bool m_waitForBehaviourEnd;
-        protected AttackDamage m_currentDamage;
+        protected Damage m_currentDamage;
 
         public event EventAction<EnemyInfoEventArgs> Death;
 
@@ -44,6 +44,14 @@ namespace DChild.Gameplay.Characters.Enemies
         public abstract void InitializeAs(bool isAlive);
         protected abstract new CombatCharacterAnimation animation { get; }
 
+        public Invulnerability ignoreInvulnerability => throw new System.NotImplementedException();
+
+        public bool ignoresBlock => throw new System.NotImplementedException();
+
+        public IDamageDealer parentDamageDealer => throw new System.NotImplementedException();
+
+        public IDamageDealer rootParentDamageDealer => throw new System.NotImplementedException();
+
         public override void DisableController() => m_brain.Enable(false);
         public override void EnableController() => m_brain.Enable(true);
 
@@ -52,7 +60,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_health.AddCurrentValue(health);
         }
 
-        public override void TakeDamage(int totalDamage, AttackType type)
+        public override void TakeDamage(int totalDamage, DamageType type)
         {
             m_health.ReduceCurrentValue(totalDamage);
             if (isAlive == false)
@@ -82,7 +90,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         public virtual void Damage(TargetInfo targetInfo, BodyDefense targetDefense)
         {
-            if (!targetDefense.isInvulnerable)
+            if (targetDefense.invulnerabilityLevel == Invulnerability.None)
             {
                 //using (Cache<AttackerCombatInfo> info = Cache<AttackerCombatInfo>.Claim())
                 //{
@@ -94,7 +102,7 @@ namespace DChild.Gameplay.Characters.Enemies
             }
         }
 
-        protected void OnTakeDamage(AttackType type)
+        protected void OnTakeDamage(DamageType type)
         {
             m_behaviour.SetActiveBehaviour(null);
             animation?.DoDamage();
@@ -125,6 +133,21 @@ namespace DChild.Gameplay.Characters.Enemies
         private void OnValidate()
         {
             ComponentUtility.AssignNullComponent(this, ref m_health, ComponentUtility.ComponentSearchMethod.Child);
+        }
+
+        public void SetParentDamageDealer(IDamageDealer damageDealer)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void SetRootParentDamageDealer(IDamageDealer damageDealer)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void Damage(TargetInfo target, Collider2D colliderThatDealtDamage)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

@@ -141,7 +141,7 @@ namespace DChild.Gameplay
 
         public TrackEntry AddEmptyAnimation(int trackIndex, float mixDuration, float delay) => m_skeletonAnimation.state.AddEmptyAnimation(trackIndex, mixDuration, delay);
 
-        protected Track GetTrack(int id)
+        public Track GetTrack(int id)
         {
             for (int i = 0; i < m_animationTracks.Count; i++)
             {
@@ -162,10 +162,37 @@ namespace DChild.Gameplay
 
         private void OnComplete(TrackEntry trackEntry) => m_lockBehaviourWithAnimation = false;
 
+        public void LateUpdateAnimation()
+        {
+            m_skeletonAnimation.LateUpdateAnimation();
+        }
+
+        public void UpdateAnimation(float deltaTime)
+        {
+            m_skeletonAnimation.Update(deltaTime);
+        }
+
         protected virtual void Start()
         {
             m_skeletonAnimation.AnimationState.Start += OnStart;
             m_skeletonAnimation.AnimationState.Complete += OnComplete;
+        }
+
+        private void OnEnable()
+        {
+            if (SkeletonAnimationManager.hasInstance)
+            {
+                m_skeletonAnimation.enabled = false;
+                SkeletonAnimationManager.Register(this);
+            }
+        }
+
+        private void OnDisable()
+        {
+            if (SkeletonAnimationManager.hasInstance)
+            {
+                SkeletonAnimationManager.Unregister(this);
+            }
         }
 
         protected void OnValidate()

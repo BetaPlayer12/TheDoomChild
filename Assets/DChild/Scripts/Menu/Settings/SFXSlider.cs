@@ -3,9 +3,9 @@ using DChild.UI;
 
 namespace DChild.Menu.UI
 {
-    public class SFXSlider : ReferenceSlider, IValueUI, IReferenceUI<AudioSettings>
+    public class SFXSlider : ReferenceSlider, IValueUI, IReferenceUI<AudioSettingsHandle>
     {
-        private AudioSettings m_settings;
+        private AudioSettingsHandle m_settings;
 
         protected override float value
         {
@@ -20,7 +20,7 @@ namespace DChild.Menu.UI
             }
         }
 
-        public void SetReference(AudioSettings reference)
+        public void SetReference(AudioSettingsHandle reference)
         {
             m_settings = reference;
         }

@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using DChild.Gameplay.Characters.Enemies;
 using DChild.Gameplay.Systems;
 using DChild.Gameplay.Systems.WorldComponents;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace DChild.Gameplay.Systems
 {
-    public class World : MonoBehaviour, IGameplaySystemModule, ITime, IWorld
+    public class World : SerializedMonoBehaviour, IGameplaySystemModule, ITime, IWorld
     {
         private float m_timeScale;
         private float m_deltaTime;
@@ -23,8 +24,11 @@ namespace DChild.Gameplay.Systems
 
         private float m_prevTimeScale;
         private TimeIsolationHandler m_timeIsolationHandler;
+        [SerializeField]
         private IsolatedPhysicsHandler m_isolatedPhysicsHandler;
         private InteractiveEnvironmentHandler m_interactiveEnvironmentHandler;
+        private ShadowEnvironmentHandle m_shadowEnvironmentHandler;
+        private bool m_isShadowColliderEnable;
 
         public float CalculateDeltaTime(float timeScale) => Time.deltaTime * timeScale;
         public float CalculateFixedDeltaTime(float timeScale) => 0.02f * timeScale;
@@ -32,7 +36,7 @@ namespace DChild.Gameplay.Systems
         public void SetTimeScale(float timeScale)
         {
             m_timeScale = timeScale;
-            if(m_prevTimeScale != timeScale)
+            if (m_prevTimeScale != timeScale)
             {
                 m_timeIsolationHandler.AlignTimeScale();
                 m_prevTimeScale = timeScale;
@@ -68,6 +72,38 @@ namespace DChild.Gameplay.Systems
             m_fixedDeltaTime = Time.fixedDeltaTime;
             CleanUp();
         }
+
+        public void Register(ShadowEnvironmentHandle handler)
+        {
+            m_shadowEnvironmentHandler = handler;
+            if (m_shadowEnvironmentHandler != null)
+            {
+                m_shadowEnvironmentHandler.SetCollisions(m_isShadowColliderEnable);
+            }
+        }
+
+        public void SetShadowColliders(bool enable)
+        {
+            m_isShadowColliderEnable = enable;
+            if (m_shadowEnvironmentHandler != null)
+            {
+                m_shadowEnvironmentHandler.SetCollisions(enable);
+            }
+        }
+
+#if UNITY_EDITOR
+        [Button]
+        private void StopTime()
+        {
+            GameTime.RegisterValueChange(this, 0, GameTime.Factor.Multiplication);
+        }
+
+        [Button]
+        private void ResumeTime()
+        {
+            GameTime.RegisterValueChange(this, 1, GameTime.Factor.Multiplication);
+        }
+#endif
 
         private void Awake()
         {

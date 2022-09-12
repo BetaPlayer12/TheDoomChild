@@ -13,7 +13,10 @@ namespace PlayerNew
         Down,
         Jump,
         Attack,
-        Dash
+        Dash,
+        Attack2,
+        Interact,
+        Levitate
     }
 
     public enum Condition
@@ -59,6 +62,7 @@ namespace PlayerNew
         public InputState inputState;
 
         public event EventAction<EventActionArgs> ControllerDisabled;
+        public event EventAction<EventActionArgs> ControllerEnabled;
 
         public void Disable()
         {
@@ -67,11 +71,13 @@ namespace PlayerNew
             {
                 inputState.SetButtonValue(inputs[i].button, false);
             }
+            ControllerDisabled?.Invoke(this,EventActionArgs.Empty);
         }
 
         public void Enable()
         {
             enabled = true;
+            ControllerEnabled?.Invoke(this, EventActionArgs.Empty);
         }
 
         // Use this for initialization

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 205409657873435846}
   - component: {fileID: 2847626080713212405}
   - component: {fileID: 1012876126819829059}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: VFX_SwordCombo1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -48,7 +48,7 @@ ParticleSystem:
   ringBufferLoopRange: {x: 0, y: 1}
   looping: 0
   prewarm: 0
-  playOnAwake: 1
+  playOnAwake: 0
   useUnscaledTime: 0
   autoRandomSeed: 1
   useRigidbodyForVelocity: 1
@@ -105,7 +105,7 @@ ParticleSystem:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-  moveWithTransform: 0
+  moveWithTransform: 1
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 0
   randomSeed: 0
@@ -4821,7 +4821,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2684810338114243671}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: VFX_SwordCombo1_Prefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4840,6 +4840,91 @@ Transform:
   m_LocalScale: {x: -1, y: 1, z: 1}
   m_Children:
   - {fileID: 205409657873435846}
+  - {fileID: 2613120406196903765}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2613120406196903764
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2613120406196903765}
+  - component: {fileID: 2613120406196903762}
+  m_Layer: 8
+  m_Name: SwordCombo1Collider
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2613120406196903765
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2613120406196903764}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 2684810338114243671}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!60 &2613120406196903762
+PolygonCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2613120406196903764}
+  m_Enabled: 0
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Points:
+    m_Paths:
+    - - {x: 4.3900757, y: 6.678855}
+      - {x: 3.1570435, y: 7.0311594}
+      - {x: 2.1000977, y: 7.1335783}
+      - {x: 0.97309875, y: 7.20127}
+      - {x: -0.28875732, y: 7.177167}
+      - {x: -1.9229584, y: 7.0182753}
+      - {x: -3.033081, y: 6.7749987}
+      - {x: -4.1701965, y: 6.42966}
+      - {x: -4.8559265, y: 6.135785}
+      - {x: -5.74823, y: 5.544051}
+      - {x: -6.3904114, y: 4.974696}
+      - {x: -7.2034607, y: 3.9753294}
+      - {x: -7.67659, y: 2.9394674}
+      - {x: -7.888397, y: 2.2468538}
+      - {x: -8.101181, y: 1.2189226}
+      - {x: -8.093262, y: 0.6433344}
+      - {x: -7.964386, y: -0.38858128}
+      - {x: -7.5440216, y: -1.590128}
+      - {x: -6.6880646, y: -3.199254}
+      - {x: -5.7070312, y: -4.1195745}
+      - {x: -4.209305, y: -4.9596033}
+      - {x: -2.9358978, y: -5.551692}
+      - {x: -1.1606903, y: -6.108757}
+      - {x: 0.8813019, y: -6.438097}
+      - {x: 2.3755646, y: -6.470813}
+      - {x: 3.906189, y: -6.4412136}
+      - {x: 5.6930084, y: -6.2251186}
+      - {x: 5.7783203, y: 5.9323854}

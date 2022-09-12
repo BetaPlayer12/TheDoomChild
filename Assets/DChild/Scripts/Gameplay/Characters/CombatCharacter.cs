@@ -6,6 +6,8 @@ using UnityEngine;
 using Holysoft.Event;
 using DChild.Gameplay.Characters;
 using DChild.Gameplay.Combat;
+using PixelCrushers;
+using Holysoft.Gameplay;
 
 namespace DChild.Gameplay.Characters
 {
@@ -24,6 +26,7 @@ namespace DChild.Gameplay.Characters
         public event EventAction<EventActionArgs> Damaged;
         public event EventAction<Damageable.DamageEventArgs> DamageTaken;
         public event EventAction<EventActionArgs> Destroyed;
+        public event EventAction<Damageable.DamageEventArgs> DamageBlock;
 
         public Vector2 position => m_model.position;
         public HorizontalDirection currentFacingDirection => m_facing;
@@ -32,8 +35,19 @@ namespace DChild.Gameplay.Characters
         public virtual float critDamageModifier => 1f;
         public abstract bool isAlive { get; }
         public abstract IAttackResistance attackResistance { get; }
+
+        public IDamageDealer parentAttacker => throw new System.NotImplementedException();
+
+        public IDamageDealer rootParentAttacker => throw new System.NotImplementedException();
+
+        IAttacker IAttacker.parentAttacker => throw new System.NotImplementedException();
+
+        IAttacker IAttacker.rootParentAttacker => throw new System.NotImplementedException();
+
+        public ICappedStatInfo health => throw new System.NotImplementedException();
+
         public abstract void Heal(int health);
-        public abstract void TakeDamage(int totalDamage, AttackType type);
+        public abstract void TakeDamage(int totalDamage, DamageType type);
         public abstract void SetFacing(HorizontalDirection facing);
 
         public abstract void DisableController();
@@ -77,6 +91,31 @@ namespace DChild.Gameplay.Characters
         }
 
         public void SetInvulnerability(bool isInvulnerable)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void SetInvulnerability(Invulnerability level)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void BlockDamage(int totalDamage, DamageType type)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public Hitbox[] GetHitboxes()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void SetParentAttacker(IAttacker damageDealer)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void SetRootParentAttacker(IAttacker damageDealer)
         {
             throw new System.NotImplementedException();
         }

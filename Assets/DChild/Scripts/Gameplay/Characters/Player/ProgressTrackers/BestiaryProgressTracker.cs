@@ -1,4 +1,5 @@
 ﻿using DChild.Gameplay.Combat;
+using DChild.Gameplay.Systems;
 using DChild.Menu.Bestiary;
 using Doozy.Engine;
 using UnityEngine;
@@ -12,11 +13,12 @@ namespace DChild.Gameplay.Characters.Players
         [SerializeField]
         private Attacker m_attacker;
 
+
         public void RecordCreatureToBestiary(int ID)
         {
             if (m_progress.HasInfoOf(ID) == false)
             {
-                GameEventMessage.SendEvent("Notification");
+                GameplaySystem.gamplayUIHandle.ShowNotification(UI.StoreNotificationType.Bestiary);
             }
             m_progress.SetProgress(ID, true);
         }
@@ -33,9 +35,9 @@ namespace DChild.Gameplay.Characters.Players
 
         private void OnTargetDamaged(object sender, CombatConclusionEventArgs eventArgs)
         {
-            if (eventArgs.target.instance.isAlive == false && eventArgs.target.hasID)
+            if (eventArgs.target.instance.isAlive == false && eventArgs.target.hasBestiaryData)
             {
-                RecordCreatureToBestiary(eventArgs.target.characterID);
+                RecordCreatureToBestiary(eventArgs.target.bestiaryID);
             }
         }
 

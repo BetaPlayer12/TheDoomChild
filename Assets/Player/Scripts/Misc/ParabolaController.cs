@@ -50,16 +50,16 @@ namespace PlayerNew
 
             int accur = 50;
             Vector3 prevPos = gizmo.Points[0].position;
-            for (int c = 1; c <= accur; c++)
-            {
-                float currTime = c * gizmo.GetDuration() / accur;
-                Vector3 currPos = gizmo.GetPositionAtTime(currTime);
-                float mag = (currPos - prevPos).magnitude * 2;
-                Gizmos.color = new Color(mag, 0, 0, 1);
-                Gizmos.DrawLine(prevPos, currPos);
-                Gizmos.DrawSphere(currPos, 0.01f);
-                prevPos = currPos;
-            }
+            //for (int c = 1; c <= accur; c++)
+            //{
+            //    float currTime = c * gizmo.GetDuration() / accur;
+            //    Vector3 currPos = gizmo.GetPositionAtTime(currTime);
+            //    float mag = (currPos - prevPos).magnitude * 2;
+            //    Gizmos.color = new Color(mag, 0, 0, 1);
+            //    Gizmos.DrawLine(prevPos, currPos);
+            //    Gizmos.DrawSphere(currPos, 0.01f);
+            //    prevPos = currPos;
+            //}
         }
 
 

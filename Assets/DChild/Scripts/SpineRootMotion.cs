@@ -247,7 +247,8 @@ namespace Spine.Unity.Modules
 
         public void EnableRootMotion(bool v1, bool v2)
         {
-            throw new NotImplementedException();
+            useX = v1;
+            useY = v2;
         }
     }
 

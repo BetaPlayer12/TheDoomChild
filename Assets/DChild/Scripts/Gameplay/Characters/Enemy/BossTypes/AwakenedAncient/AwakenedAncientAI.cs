@@ -445,7 +445,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private float GroundDistance()
         {
-            RaycastHit2D hit = Physics2D.Raycast(m_seedSpitTF.position, Vector2.down, 1000, LayerMask.GetMask("Environment"));
+            RaycastHit2D hit = Physics2D.Raycast(m_seedSpitTF.position, Vector2.down, 1000, DChildUtility.GetEnvironmentMask());
             if (hit.collider != null)
             {
                 return hit.distance;
@@ -483,7 +483,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator ChangePhaseRoutine()
         {
             m_phaseHandle.ApplyChange();
-            m_hitbox.SetInvulnerability(true);
+            m_hitbox.SetInvulnerability(Invulnerability.MAX);
             m_animation.SetAnimation(0, m_info.flinchAnimation, false);
             while (m_skeletons.Count > 0)
             {
@@ -530,7 +530,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_info.unburrowAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.unburrowAnimation);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
-            m_hitbox.SetInvulnerability(false);
+            m_hitbox.SetInvulnerability(Invulnerability.None);
             m_tombs.Clear();
             m_stateHandle.OverrideState(State.ReevaluateSituation);
             yield return null;
@@ -755,6 +755,16 @@ namespace DChild.Gameplay.Characters.Enemies
         protected override void OnTargetDisappeared()
         {
             m_stateHandle.OverrideState(State.Idle);
+        }
+
+        protected override void OnForbidFromAttackTarget()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void ReturnToSpawnPoint()
+        {
+            throw new NotImplementedException();
         }
     }
 }

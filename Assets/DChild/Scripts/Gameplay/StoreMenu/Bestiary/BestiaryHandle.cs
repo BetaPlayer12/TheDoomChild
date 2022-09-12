@@ -7,7 +7,7 @@ namespace DChild.Menu.Bestiary
     public class BestiaryHandle : MonoBehaviour
     {
         [SerializeField]
-        private BestiaryInfoPage m_infoPage;
+        private BestiaryInfoUI m_infoPage;
 
         public void Select(BestiaryIndexButton indexButton)
         {

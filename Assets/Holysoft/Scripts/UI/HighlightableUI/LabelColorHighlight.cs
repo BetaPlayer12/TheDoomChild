@@ -44,7 +44,5 @@ namespace Holysoft.UI
                 m_target.color = m_deselected;
             }
         }
-
-
     }
 }

@@ -9,11 +9,11 @@ namespace DChild.Gameplay.Characters.Enemies
     public abstract class BossTemplate : Enemy
     {
         private Vector2 m_initialPosition;
-        protected AttackDamage[] m_currentDamage;
+        protected Damage[] m_currentDamage;
 
         public override EnemyType enemyType => EnemyType.Boss;
         public override IAttackResistance attackResistance => null;
-        protected abstract AttackDamage startDamage { get; }
+        protected abstract Damage startDamage { get; }
 
         public override void InitializeAs(bool isAlive)
         {
@@ -60,7 +60,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             base.Awake();
             m_initialPosition = transform.position;
-            m_currentDamage = new AttackDamage[1];
+            m_currentDamage = new Damage[1];
         }
 
         protected virtual void Start()

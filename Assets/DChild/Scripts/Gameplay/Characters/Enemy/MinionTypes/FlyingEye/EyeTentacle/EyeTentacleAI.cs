@@ -105,6 +105,22 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_stateHandle.OverrideState(State.Idle);
         }
+
+        public void ResetAI()
+        {
+            m_targetInfo.Set(null, null);
+            m_stateHandle.OverrideState(State.ReevaluateSituation);
+            enabled = true;
+        }
+
+        public override void ReturnToSpawnPoint()
+        {
+        }
+
+        protected override void OnForbidFromAttackTarget()
+        {
+            ResetAI();
+        }
     }
 }
 

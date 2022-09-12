@@ -18,7 +18,14 @@ namespace DChild.Gameplay.Characters.Players
             var modules = m_moduleContainer.GetComponentsInChildren<IComplexCharacterModule>(true);
             for (int i = 0; i < modules.Length; i++)
             {
-                modules[i].Initialize(m_info);
+                try
+                {
+                    modules[i].Initialize(m_info);
+                }
+                catch
+                {
+                    continue;
+                }
             }
         }
 

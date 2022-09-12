@@ -1,5 +1,4 @@
-﻿using System;
-using DChild.Gameplay;
+﻿using DChild.Gameplay;
 using Holysoft.Event;
 using UnityEngine;
 

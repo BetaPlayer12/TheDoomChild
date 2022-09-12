@@ -97,8 +97,8 @@ Rigidbody2D:
   m_UseAutoMass: 1
   m_Mass: 0.7113999
   m_LinearDrag: 0
-  m_AngularDrag: 0.05
-  m_GravityScale: 1
+  m_AngularDrag: 5
+  m_GravityScale: 5
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
@@ -252,8 +252,8 @@ Rigidbody2D:
   m_UseAutoMass: 1
   m_Mass: 1.4178998
   m_LinearDrag: 0
-  m_AngularDrag: 0.05
-  m_GravityScale: 1
+  m_AngularDrag: 5
+  m_GravityScale: 5
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
@@ -407,8 +407,8 @@ Rigidbody2D:
   m_UseAutoMass: 1
   m_Mass: 2.2649498
   m_LinearDrag: 0
-  m_AngularDrag: 0.05
-  m_GravityScale: 1
+  m_AngularDrag: 5
+  m_GravityScale: 5
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
@@ -471,17 +471,6 @@ PolygonCollider2D:
       - {x: 0.24, y: -0.89}
       - {x: 0.48999998, y: -0.45999998}
       - {x: 0.7, y: -0.22999999}
---- !u!210 &5834742996561807445
-SortingGroup:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2288738204852836067}
-  m_Enabled: 1
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 1
 --- !u!1 &6190436508630566443
 GameObject:
   m_ObjectHideFlags: 0
@@ -579,8 +568,8 @@ Rigidbody2D:
   m_UseAutoMass: 1
   m_Mass: 1.7028499
   m_LinearDrag: 0
-  m_AngularDrag: 0.05
-  m_GravityScale: 1
+  m_AngularDrag: 5
+  m_GravityScale: 5
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
@@ -646,6 +635,17 @@ PolygonCollider2D:
       - {x: -0.17999999, y: -0.94}
       - {x: -0.17, y: -0.87}
       - {x: -0.11, y: -0.64}
+--- !u!210 &5834742996561807445
+SortingGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2288738204852836067}
+  m_Enabled: 1
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 1
 --- !u!1001 &8678544185726971782
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -708,10 +708,20 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2452604886134795987, guid: 2bcba93ef25dbc440b86c5f12e33a61e,
+        type: 3}
+      propertyPath: m_angleOffset
+      value: 25
+      objectReference: {fileID: 0}
+    - target: {fileID: 2452604886134795987, guid: 2bcba93ef25dbc440b86c5f12e33a61e,
+        type: 3}
+      propertyPath: m_forceOffset
+      value: 25
+      objectReference: {fileID: 0}
     - target: {fileID: 7472415926648306021, guid: 2bcba93ef25dbc440b86c5f12e33a61e,
         type: 3}
       propertyPath: m_Name
-      value: BreakableJar(v3)_Debris Variant
+      value: BreakableJar(v3)_Debris
       objectReference: {fileID: 0}
     - target: {fileID: 7472415926648306021, guid: 2bcba93ef25dbc440b86c5f12e33a61e,
         type: 3}

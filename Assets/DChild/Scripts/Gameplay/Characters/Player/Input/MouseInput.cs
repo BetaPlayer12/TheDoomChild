@@ -50,6 +50,11 @@ namespace DChild.Inputs
                 return -1;
             }
         }
+
+        public void Reset()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 
 }

@@ -120,7 +120,7 @@ namespace Spine.Unity.Editor {
 					foreach (var o in targets) {
 						var bf = (BoneFollower)o;
 						bf.Initialize();
-						bf.LateUpdate();
+						bf.UpdateBone();
 					}
 					SceneView.RepaintAll();
 				}

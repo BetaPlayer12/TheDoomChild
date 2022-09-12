@@ -19,6 +19,10 @@ namespace DChild.Gameplay.Projectiles
             base.ResetState();
             gameObject.SetActive(true);
         }
+        public override void ForceCollision()
+        {
+            Detonate(transform.position);
+        }
 
         public virtual void Detonate(Vector2 position)
         {

@@ -45,7 +45,7 @@ namespace PixelCrushers.DialogueSystem
             VerifyAssignments();
             conversationUIElements.Initialize();
             alertUIElements.HideImmediate();
-            conversationUIElements.HideImmediate();
+            //conversationUIElements.HideImmediate();
             QTEIndicatorElements.HideImmediate();
         }
 

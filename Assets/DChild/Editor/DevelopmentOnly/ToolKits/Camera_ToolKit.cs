@@ -44,7 +44,7 @@ namespace DChildEditor.Gameplay.Cinematics
                     defaultCameraSensor.layer = LayerMask.NameToLayer(LAYER_PLAYERONLY);
                     defaultCameraSensor.isStatic = true;
                     defaultCameraSensor.transform.parent = defaultCameraGroupGO.transform;
-                    var setter = defaultCameraSensor.AddComponent<CameraDefaultSetter>();
+                    //var setter = defaultCameraSensor.AddComponent<CameraDefaultSetter>();
                     var sensor = defaultCameraSensor.AddComponent<PolygonCollider2D>();
                     sensor.isTrigger = true;
 
@@ -61,7 +61,7 @@ namespace DChildEditor.Gameplay.Cinematics
                     var defaultCamera = defaultCameraGO.AddComponent<VirtualCamera>();
                     var confiner = defaultCameraGO.AddComponent<CinemachineConfiner>();
                     confiner.m_BoundingShape2D = collider;
-                    setter.Set(defaultCamera);
+                    //setter.Set(defaultCamera);
 
                     CreateCameraTransitionArea();
                 }

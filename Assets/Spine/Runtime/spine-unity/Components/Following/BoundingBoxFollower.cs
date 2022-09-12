@@ -208,8 +208,11 @@ namespace Spine.Unity {
 		}
 
 		void LateUpdate () {
-			if (slot != null && slot.Attachment != currentAttachment)
-				MatchAttachment(slot.Attachment);
+			if (skeletonRenderer.isVisible)
+			{
+				if (slot != null && slot.Attachment != currentAttachment)
+					MatchAttachment(slot.Attachment); 
+			}
 		}
 
 		/// <summary>Sets the current collider to match attachment.</summary>

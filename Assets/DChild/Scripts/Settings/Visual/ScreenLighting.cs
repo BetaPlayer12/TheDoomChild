@@ -27,7 +27,7 @@ public class ScreenLighting : MonoBehaviour
 
         set
         {
-            m_brightness = Mathf.Clamp(value, 0, 1.5f);
+            m_brightness = Mathf.Clamp(value, -1, 1f);
         }
     }
     public float saturation

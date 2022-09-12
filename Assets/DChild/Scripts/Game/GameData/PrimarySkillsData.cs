@@ -9,32 +9,27 @@ namespace DChild.Serialization
     [System.Serializable, HideLabel, Title("Skills")]
     public struct PrimarySkillsData
     {
-        [SerializeField, HideInEditorMode, ReadOnly]
-        private bool[] m_movementSkills;
+        [SerializeField, ReadOnly]
+        private int m_activatedSkills;
 
-        public PrimarySkillsData(bool[] m_movementSkills) : this()
+        public PrimarySkillsData(PrimarySkill skills)
         {
-            this.m_movementSkills = m_movementSkills;
-        }
-
-        public bool[] movementSkills { get => m_movementSkills;}
+            m_activatedSkills = (int)skills;
 #if UNITY_EDITOR
-        [System.Serializable]
-        public class Elements : EnumElement<PrimarySkill, bool> { }
-        [System.Serializable]
-        public class ElementList : EnumList<Elements, PrimarySkill, bool>
-        {
-
-        }
-
-        [Button, HideInPlayMode, PropertyOrder(0)]
-        private void Validate()
-        {
-            m_movementSkills = m_movementSkillList.ToArray();
-        }
-
-        [NonSerialized,OdinSerialize, HideInPlayMode, PropertyOrder(1)]
-        private ElementList m_movementSkillList;
+            m_activatedSkillEnum = skills;
 #endif
+        }
+
+#if UNITY_EDITOR
+        [SerializeField, EnumToggleButtons, OnValueChanged("OnSkillChange")]
+        private PrimarySkill m_activatedSkillEnum;
+
+        private void OnSkillChange()
+        {
+            m_activatedSkills = (int)m_activatedSkillEnum;
+        }
+#endif
+
+        public PrimarySkill activatedSkills => (PrimarySkill)m_activatedSkills;
     }
 }

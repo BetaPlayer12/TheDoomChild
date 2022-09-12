@@ -1,23 +1,9 @@
-﻿using DChild;
-using DChild.Gameplay.Pooling;
+﻿using DChild.Gameplay.Pooling;
 using DChild.Gameplay.Projectiles;
-using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace DChild.Gameplay.Characters
 {
-    [System.Serializable]
-    public class ProjectileInfo
-    {
-        [SerializeField]
-        private GameObject m_projectile;
-        [SerializeField, MinValue(0.001f)]
-        private float m_speed;
-
-        public GameObject projectile => m_projectile;
-        public float speed => m_speed;
-    }
-
     [System.Serializable]
     public struct ProjectileLaunchHandle
     {
@@ -27,8 +13,17 @@ namespace DChild.Gameplay.Characters
             instance.transform.position = spawnPoint;
             var component = instance.GetComponent<Projectile>();
             component.ResetState();
-            component.SetVelocity(flightDirection, speed);
+            component.Launch(flightDirection, speed);
             return instance.gameObject;
+        }
+
+        public GameObject Launch(GameObject projectile, Vector2 flightDirection, float speed)
+        {
+            var component = projectile.GetComponent<Projectile>();
+            component.ResetState();
+            component.Launch(flightDirection, speed);
+
+            return projectile.gameObject;
         }
     }
 
@@ -38,6 +33,8 @@ namespace DChild.Gameplay.Characters
         private Transform m_spawnPoint;
         private ProjectileLaunchHandle m_handle;
 
+        private static GameObject m_cacheProjectile;
+
         public ProjectileLauncher(ProjectileInfo projectileInfo, Transform spawnPoint)
         {
             this.m_projectileInfo = projectileInfo;
@@ -46,6 +43,7 @@ namespace DChild.Gameplay.Characters
         }
 
         public void SetProjectile(ProjectileInfo info) => m_projectileInfo = info;
+
         public void SetSpawnPoint(Transform spawnPoint) => m_spawnPoint = spawnPoint;
 
         public void AimAt(Vector2 target)
@@ -56,6 +54,20 @@ namespace DChild.Gameplay.Characters
             m_spawnPoint.rotation = Quaternion.Euler(0f, 0f, atan2 * Mathf.Rad2Deg);
         }
 
-        public void LaunchProjectile() => m_handle.Launch(m_projectileInfo.projectile, m_spawnPoint.position, m_spawnPoint.right, m_projectileInfo.speed);
+        public void LaunchProjectile()
+        {
+            var spawnDirection = m_spawnPoint.right;
+            m_cacheProjectile =  m_handle.Launch(m_projectileInfo.projectile, m_spawnPoint.position, spawnDirection, m_projectileInfo.speed);
+        }
+
+        public void LaunchProjectile(Vector2 flightDirection)
+        {
+            m_cacheProjectile = m_handle.Launch(m_projectileInfo.projectile, m_spawnPoint.position, flightDirection, m_projectileInfo.speed);
+        }
+
+        public void LaunchProjectile(Vector2 flightDirection, GameObject projectile)
+        {
+            m_cacheProjectile = m_handle.Launch(projectile, flightDirection, m_projectileInfo.speed);
+        }
     }
 }

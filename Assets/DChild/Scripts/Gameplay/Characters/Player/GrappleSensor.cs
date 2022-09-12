@@ -191,7 +191,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
-            if (collision.CompareTag("Grappable"))
+            if (collision.CompareTag("Droppable"))
             {
                 m_grappleCandidates.Add(collision.GetComponent<IGrappleObject>());
             }
@@ -199,7 +199,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         private void OnTriggerExit2D(Collider2D collision)
         {
-            if (collision.CompareTag("Grappable"))
+            if (collision.CompareTag("Droppable"))
             {
                 m_grappleCandidates.Remove(collision.GetComponent<IGrappleObject>());
             }

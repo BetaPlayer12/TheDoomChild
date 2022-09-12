@@ -14,6 +14,8 @@ namespace DChild.Gameplay.Systems
 #if UNITY_EDITOR
         [SerializeField, PropertyOrder(-1)]
         private Transform m_locationPoint;
+        [SerializeField, HideInInspector]
+        private Vector3 m_prevPosition;
 
         private void OnValidate()
         {
@@ -22,18 +24,33 @@ namespace DChild.Gameplay.Systems
                 m_locationPoint = transform;
             }
 
-            if (Application.isPlaying == false)
+            if (UnityEditor.Experimental.SceneManagement.PrefabStageUtility.GetCurrentPrefabStage() == null)
             {
-                m_data?.Set(gameObject.scene, m_locationPoint.position);
-            }
-            if (gameObject.scene.name != null)
-            {
-                var newName = "LP_" + m_data?.name ?? "NONE";
-                if (gameObject.name != newName)
+                if (Application.isPlaying == false)
                 {
-                    gameObject.name = newName;
+                    var currentPosition = m_locationPoint.position;
+                    if (m_prevPosition != currentPosition)
+                    {
+                        m_data?.Set(gameObject.scene, currentPosition);
+                        m_prevPosition = currentPosition;
+                    }
                 }
+                if (gameObject.scene.name != null)
+                {
+                    var newName = "LP_" + m_data?.name ?? "NONE";
+                    if (gameObject.name != newName)
+                    {
+                        gameObject.name = newName;
+                    }
+                } 
             }
+        }
+
+        [Button,ShowIf("@m_data != null")]
+        private void SaveData()
+        {
+            m_data?.Set(gameObject.scene, m_locationPoint.position);
+            m_data?.SaveAsset();
         }
 #endif
     }

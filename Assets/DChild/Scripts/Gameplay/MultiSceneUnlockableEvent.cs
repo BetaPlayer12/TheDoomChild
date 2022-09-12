@@ -48,6 +48,8 @@ namespace DChild.Gameplay
             private bool m_isUnlocked;
 
             public bool isUnlocked => m_isUnlocked;
+
+            ISaveData ISaveData.ProduceCopy() => new SaveData(m_isUnlocked);
         }
 
         [ShowInInspector, OnValueChanged("OnStateChange")]
@@ -69,16 +71,7 @@ namespace DChild.Gameplay
             }
             else
             {
-                m_onLocked?.Invoke();
-                bool isComplete = true;
-                for (int i = 0; i < m_requirements.Length; i++)
-                {
-                    m_requirements[i].UpdateRequirement();
-                    if (isComplete)
-                    {
-                        isComplete = m_requirements[i].isComplete;
-                    }
-                }
+                ReverttoLocked();
             }
 
             //Find a way to do both multiscene and same scene;
@@ -88,8 +81,26 @@ namespace DChild.Gameplay
         {
             return new SaveData(m_isUnlocked);
         }
+        public void Initialize()
+        {
+            m_isUnlocked = false;
+            ReverttoLocked();
 
-#if UNITY_EDITOR
+        }
+        private void ReverttoLocked()
+        {
+            m_onLocked?.Invoke();
+            bool isComplete = true;
+            for (int i = 0; i < m_requirements.Length; i++)
+            {
+                m_requirements[i].UpdateRequirement();
+                if (isComplete)
+                {
+                    isComplete = m_requirements[i].isComplete;
+                }
+            }
+        }
+        #if UNITY_EDITOR
         private void OnStateChange()
         {
             if (m_isUnlocked)

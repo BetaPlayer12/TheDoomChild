@@ -13,9 +13,22 @@ namespace DChild.Gameplay.Characters.Players
 
         public event EventAction<ModifierChangeEventArgs> ModifierChange;
 
+        public void Add(PlayerModifier modifier, float value)
+        {
+            if (m_modifiers.ContainsKey(modifier))
+            {
+                m_modifiers[modifier] += value;
+            }
+            else
+            {
+                m_modifiers.Add(modifier, value);
+            }
+            ModifierChange?.Invoke(this, new ModifierChangeEventArgs(modifier, m_modifiers[modifier]));
+        }
+
         public void Set(PlayerModifier modifier, float value)
         {
-            if (m_modifiers.ContainsKey(modifier) == false)
+            if (m_modifiers.ContainsKey(modifier))
             {
                 m_modifiers[modifier] = value;
             }
@@ -27,8 +40,7 @@ namespace DChild.Gameplay.Characters.Players
         }
 
         public float Get(PlayerModifier modifier) => m_modifiers[modifier];
-
-        private void Awake()
+        public void Initialize()
         {
             m_modifiers = new Dictionary<PlayerModifier, float>();
             var size = (int)PlayerModifier._COUNT;

@@ -1,14 +1,10 @@
-﻿using DChild.Gameplay;
-using DChild.Gameplay.Characters.Players.Behaviour;
-using DChild.Gameplay.Environment;
-using DChild.Gameplay.Systems;
+﻿using DChild.Gameplay.Characters.Players.Modules;
 using PlayerNew;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace DChild.Gameplay.Environment
 {
-
     [System.Serializable]
     public struct HorizontalPassagewayHandle : ISwitchHandle
     {
@@ -18,26 +14,37 @@ namespace DChild.Gameplay.Environment
             Right = 1,
         }
 
-        [SerializeField,OnValueChanged("OnDirectionChange")]
+        [SerializeField, OnValueChanged("OnDirectionChange")]
         private TravelDirection m_entranceDirection;
-        [SerializeField,ShowIf("m_customTravelDirections")]
+        [SerializeField, ShowIf("m_customTravelDirections")]
         private TravelDirection m_exitDirection;
 
-        public float transitionDelay => 1;
+        public float transitionDelay => 0.2f;
+
+        public bool needsButtonInteraction => false;
+
+        public Vector3 promptPosition => Vector3.zero;
+
+        public string prompMessage => null;
+
+        public bool isDebugSwitchHandle => false;
 
         public void DoSceneTransition(Character character, TransitionType type)
         {
-            if (type == TransitionType.Enter)
+            switch (type)
             {
-                OnPassagewayEnter(character, m_entranceDirection);
-            }
-            else if (type == TransitionType.PostEnter)
-            {
-                OnPassageWayPostEnter(character);
-            }
-            else if (type == TransitionType.Exit)
-            {
-                OnPassagewayExit(character, m_exitDirection);
+                case TransitionType.Enter:
+                    OnPassagewayEnter(character, m_entranceDirection);
+                    break;
+                case TransitionType.PostEnter:
+                    OnPassageWayPostEnter(character);
+                    break;
+                case TransitionType.Exit:
+                    OnPassagewayExit(character, m_exitDirection);
+                    break;
+                case TransitionType.PostExit:
+                    OnPassagewayPostExit();
+                    break;
             }
         }
 
@@ -54,8 +61,8 @@ namespace DChild.Gameplay.Environment
 
             Rigidbody2D rigidBody = character.GetComponent<Rigidbody2D>();
             rigidBody.constraints = RigidbodyConstraints2D.FreezePositionY | RigidbodyConstraints2D.FreezeRotation;
-            CollisionState collisionState = character.GetComponentInChildren<CollisionState>();
-            collisionState.forceGrounded = true;
+            CharacterState collisionState = character.GetComponentInChildren<CharacterState>();
+            collisionState.forcedCurrentGroundedness = true;
         }
 
         private void OnPassagewayExit(Character character, TravelDirection exitDirection)
@@ -65,8 +72,13 @@ namespace DChild.Gameplay.Environment
 
             Rigidbody2D rigidBody = character.GetComponent<Rigidbody2D>();
             rigidBody.constraints = RigidbodyConstraints2D.FreezeRotation;
-            CollisionState collisionState = character.GetComponentInChildren<CollisionState>();
-            collisionState.forceGrounded = false;
+            CharacterState collisionState = character.GetComponentInChildren<CharacterState>();
+            collisionState.forcedCurrentGroundedness = false;
+        }
+
+        private void OnPassagewayPostExit()
+        {
+            GameplaySystem.playerManager.StopCharacterControlOverride();
         }
 
 #if UNITY_EDITOR
@@ -75,9 +87,9 @@ namespace DChild.Gameplay.Environment
 
         private void OnDirectionChange()
         {
-            if(m_customTravelDirections == false)
+            if (m_customTravelDirections == false)
             {
-                if(m_entranceDirection == TravelDirection.Left)
+                if (m_entranceDirection == TravelDirection.Left)
                 {
                     m_exitDirection = TravelDirection.Right;
                 }

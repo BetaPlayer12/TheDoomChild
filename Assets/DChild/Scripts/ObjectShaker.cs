@@ -70,7 +70,6 @@ namespace DChild
 
         private void Awake()
         {
-
             if (m_useAnchoredPosition)
             {
                 m_rectTransform = GetComponent<RectTransform>();

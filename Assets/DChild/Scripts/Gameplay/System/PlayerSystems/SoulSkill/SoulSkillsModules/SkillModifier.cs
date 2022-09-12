@@ -14,6 +14,7 @@ namespace DChild.Gameplay.Characters.Players.SoulSkills
         public void AttachTo(int soulSkillInstanceID, IPlayer player)
         {
             ChangeSkillValue(player.modifiers, m_value);
+            
         }
 
         public void DetachFrom(int soulSkillInstanceID, IPlayer player)

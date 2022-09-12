@@ -21,7 +21,7 @@ public class EnemyStatInjector : MonoBehaviour
     [SerializeField, MinValue(1)]
     private int m_damageModifier;
     [SerializeField]
-    private AttackType m_damageType;
+    private DamageType m_damageType;
 
     protected IEnumerable GetIDs()
     {
@@ -45,7 +45,7 @@ public class EnemyStatInjector : MonoBehaviour
         connection.Initialize();
         var ratings = connection.GetRatings(m_enemy);
         m_toInject.GetComponentInChildren<Health>().SetMaxValue(ratings.HP * m_damageModifier);
-        m_toInject.GetComponentInChildren<Attacker>().SetDamage(new AttackDamage(m_damageType, ratings.DMG * m_damageModifier));
+        m_toInject.GetComponentInChildren<Attacker>().SetDamage(new Damage(m_damageType, ratings.DMG * m_damageModifier));
     }
 }
 

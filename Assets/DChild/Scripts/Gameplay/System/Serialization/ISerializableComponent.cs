@@ -4,5 +4,7 @@
     {
         ISaveData Save();
         void Load(ISaveData data);
+
+        void Initialize();
     }
 }

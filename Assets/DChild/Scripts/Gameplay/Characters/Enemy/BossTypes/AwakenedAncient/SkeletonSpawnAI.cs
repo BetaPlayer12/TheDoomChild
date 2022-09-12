@@ -415,5 +415,17 @@ namespace DChild.Gameplay.Characters.Enemies
         {
 
         }
+
+        public void ResetAI()
+        {
+        }
+
+        public override void ReturnToSpawnPoint()
+        {
+        }
+
+        protected override void OnForbidFromAttackTarget()
+        {
+        }
     }
 }

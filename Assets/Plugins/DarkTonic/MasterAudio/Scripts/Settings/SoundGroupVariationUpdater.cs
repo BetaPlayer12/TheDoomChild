@@ -35,6 +35,7 @@ namespace DarkTonic.MasterAudio {
         private float _fadeInOutOutFactor;
 
         // fade out early vars
+        private System.Action _fadeOutEarlyCompletionCallback;
         private int _fadeOutEarlyTotalFrames;
         private float _fadeOutEarlyFrameVolChange;
         private int _fadeOutEarlyFrameNumber;
@@ -44,6 +45,7 @@ namespace DarkTonic.MasterAudio {
         private float _fadeToTargetFrameVolChange;
         private int _fadeToTargetFrameNumber;
         private float _fadeToTargetOrigVol;
+        private System.Action _fadeToTargetCompletionCallback;
         private int _fadeToTargetTotalFrames;
         private float _fadeToTargetVolume;
         private bool _fadeOutStarted;
@@ -97,7 +99,7 @@ namespace DarkTonic.MasterAudio {
             _glideToPitchCompletionCallback = completionCallback;
         }
 
-        public void FadeOverTimeToVolume(float targetVolume, float fadeTime) {
+        public void FadeOverTimeToVolume(float targetVolume, float fadeTime, System.Action completionCallback = null) {
             GrpVariation.curFadeMode = SoundGroupVariation.FadeMode.GradualFade;
 
             var volDiff = targetVolume - VarAudio.volume;
@@ -115,9 +117,10 @@ namespace DarkTonic.MasterAudio {
             _fadeToTargetFrameNumber = 0;
             _fadeToTargetOrigVol = VarAudio.volume;
             _fadeToTargetVolume = targetVolume;
+            _fadeToTargetCompletionCallback = completionCallback;
         }
 
-        public void FadeOutEarly(float fadeTime) {
+        public void FadeOutEarly(float fadeTime, System.Action completionCallback = null) {
             GrpVariation.curFadeMode = SoundGroupVariation.FadeMode.FadeOutEarly;
             // cancel the FadeInOut loop, if it's going.
 
@@ -131,6 +134,7 @@ namespace DarkTonic.MasterAudio {
                 frameTime = AudioUtil.FixedDeltaTime;
             }
 
+            _fadeOutEarlyCompletionCallback = completionCallback;
             _fadeOutEarlyTotalFrames = (int)(fadeTime / frameTime);
             _fadeOutEarlyFrameVolChange = -VarAudio.volume / _fadeOutEarlyTotalFrames;
             _fadeOutEarlyFrameNumber = 0;
@@ -336,25 +340,25 @@ namespace DarkTonic.MasterAudio {
                 GrpVariation.LowPassFilter = newFilter;
             }
 
-#if !PHY2D_MISSING
+#if PHY2D_ENABLED
             var oldQueriesStart = Physics2D.queriesStartInColliders;
             if (is2DRaycast) {
                 Physics2D.queriesStartInColliders = _maThisFrame.occlusionIncludeStartRaycast2DCollider;
             }
 #endif
 
-#if !PHY2D_MISSING || !PHY3D_MISSING
+#if PHY2D_ENABLED || PHY3D_ENABLED
             var oldRaycastsHitTriggers = true;
 #endif
 
             // ReSharper disable once ConvertIfStatementToConditionalTernaryExpression
             if (is2DRaycast) {
-#if !PHY2D_MISSING
+#if PHY2D_ENABLED
                 oldRaycastsHitTriggers = Physics2D.queriesHitTriggers;
                 Physics2D.queriesHitTriggers = _maThisFrame.occlusionRaycastsHitTriggers;
 #endif
             } else {
-#if !PHY3D_MISSING
+#if PHY3D_ENABLED
                 oldRaycastsHitTriggers = Physics.queriesHitTriggers;
                 Physics.queriesHitTriggers = _maThisFrame.occlusionRaycastsHitTriggers;
 #endif
@@ -367,7 +371,7 @@ namespace DarkTonic.MasterAudio {
             if (_maThisFrame.occlusionUseLayerMask) {
                 switch (_maThisFrame.occlusionRaycastMode) {
                     case MasterAudio.RaycastMode.Physics3D:
-#if !PHY3D_MISSING
+#if PHY3D_ENABLED
                         RaycastHit hitObject;
                         if (Physics.Raycast(raycastOrigin, direction, out hitObject, distanceToListener, _maThisFrame.occlusionLayerMask.value)) {
                             isHit = true;
@@ -377,7 +381,7 @@ namespace DarkTonic.MasterAudio {
 #endif
                         break;
                     case MasterAudio.RaycastMode.Physics2D:
-#if !PHY2D_MISSING
+#if PHY2D_ENABLED
                         var castHit2D = Physics2D.Raycast(raycastOrigin, direction, distanceToListener, _maThisFrame.occlusionLayerMask.value);
                         if (castHit2D.transform != null) {
                             isHit = true;
@@ -390,7 +394,7 @@ namespace DarkTonic.MasterAudio {
             } else {
                 switch (_maThisFrame.occlusionRaycastMode) {
                     case MasterAudio.RaycastMode.Physics3D:
-#if !PHY3D_MISSING
+#if PHY3D_ENABLED
                         RaycastHit hitObject;
                         if (Physics.Raycast(raycastOrigin, direction, out hitObject, distanceToListener)) {
                             isHit = true;
@@ -400,7 +404,7 @@ namespace DarkTonic.MasterAudio {
 #endif
                         break;
                     case MasterAudio.RaycastMode.Physics2D:
-#if !PHY2D_MISSING
+#if PHY2D_ENABLED
                         var castHit2D = Physics2D.Raycast(raycastOrigin, direction, distanceToListener);
                         if (castHit2D.transform != null) {
                             isHit = true;
@@ -413,12 +417,12 @@ namespace DarkTonic.MasterAudio {
             }
 
             if (is2DRaycast) {
-#if !PHY2D_MISSING
+#if PHY2D_ENABLED
                 Physics2D.queriesStartInColliders = oldQueriesStart;
                 Physics2D.queriesHitTriggers = oldRaycastsHitTriggers;
 #endif
             } else {
-#if !PHY3D_MISSING
+#if PHY3D_ENABLED
                 Physics.queriesHitTriggers = oldRaycastsHitTriggers;
 #endif
             }
@@ -479,7 +483,16 @@ namespace DarkTonic.MasterAudio {
 
             VarAudio.PlayScheduled(startTime);
 
-            AudioUtil.ClipPlayed(VarAudio.clip, GrpVariation.GameObj);
+            switch (GrpVariation.audLocation) {
+#if ADDRESSABLES_ENABLED
+                case MasterAudio.AudioLocation.Addressable:
+                    AudioAddressableOptimizer.AddAddressablePlayingClip(GrpVariation.audioClipAddressable, VarAudio);
+                    break;
+#endif
+                default:
+                    AudioUtil.ClipPlayed(VarAudio.clip, GrpVariation.GameObj);
+                    break;
+            }
 
             if (GrpVariation.useRandomStartTime) {
                 VarAudio.time = ClipStartPosition;
@@ -523,12 +536,11 @@ namespace DarkTonic.MasterAudio {
 
             // sound play worked! Duck music if a ducking sound and sound is not silent.
             if (!isSilent) {
-                MasterAudio.DuckSoundGroup(ParentGroup.GameObjectName, VarAudio);
+                MasterAudio.DuckSoundGroup(ParentGroup.GameObjectName, VarAudio, this);
             }
         }
 
         private void StopOrChain() {
-            //Debug.Log("stop or chain: " + name);
             var playSnd = GrpVariation.PlaySoundParm;
 
             var wasPlaying = playSnd.IsPlaying;
@@ -549,6 +561,7 @@ namespace DarkTonic.MasterAudio {
         public void Pause() {
             _isPaused = true;
             _pauseTime = AudioSettings.dspTime;
+            MasterAudio.EndDucking(this);
         }
 
         public void Unpause() {
@@ -663,6 +676,10 @@ namespace DarkTonic.MasterAudio {
                     if (_fadeOutEarlyFrameNumber >= _fadeOutEarlyTotalFrames) {
                         GrpVariation.curFadeMode = SoundGroupVariation.FadeMode.None;
                         GrpVariation.Stop();
+                        if (_fadeOutEarlyCompletionCallback != null)
+                        {
+                            _fadeOutEarlyCompletionCallback();
+                        }
                     }
 
                     break;
@@ -675,6 +692,10 @@ namespace DarkTonic.MasterAudio {
                     if (_fadeToTargetFrameNumber >= _fadeToTargetTotalFrames) {
                         VarAudio.volume = _fadeToTargetVolume;
                         StopFading();
+                        if (_fadeToTargetCompletionCallback != null)
+                        {
+                            _fadeToTargetCompletionCallback();
+                        }
                     } else {
                         VarAudio.volume = (_fadeToTargetFrameNumber * _fadeToTargetFrameVolChange) + _fadeToTargetOrigVol;
                     }
@@ -759,7 +780,7 @@ namespace DarkTonic.MasterAudio {
                                 GrpVariation.Stop();
                                 break;
                             case MasterAudioGroup.TargetDespawnedBehavior.FadeOut:
-                                GrpVariation.FadeOutNow(ParentGroup.despawnFadeTime);
+                                GrpVariation.FadeOutNowAndStop(ParentGroup.despawnFadeTime);
                                 break;
                         }
 
@@ -959,7 +980,7 @@ namespace DarkTonic.MasterAudio {
         }
 
         private bool IsOcclusionMeasuringPaused {
-            get { return _isWaitingForQueuedOcclusionRay || MasterAudio.IsOcclusionFreqencyTransitioning(GrpVariation); }
+            get { return _isWaitingForQueuedOcclusionRay || MasterAudio.IsOcclusionFrequencyTransitioning(GrpVariation); }
         }
 
         private bool HasEndLinkedGroups {

@@ -22,7 +22,13 @@ namespace Holysoft.Gameplay.UI
                 m_ui.maxValue = m_maxValue;
             }
 
-            public void SetActive(bool isActive) => m_canvas.enabled = isActive;
+            public void SetActive(bool isActive)
+            {
+                if (m_canvas)
+                {
+                    m_canvas.enabled = isActive;
+                }
+            }
 
             public void SetCurrentValue(float value)
             {

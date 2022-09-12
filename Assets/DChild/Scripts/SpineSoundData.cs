@@ -23,8 +23,13 @@ namespace DChild
                 }
             }
 
+            public void StopSound(CallBackSounds callBack)
+            {
+                callBack.StopSound(m_soundToPlay);
+            }
+
 #if UNITY_EDITOR
-            protected SkeletonDataAsset m_skeletonDataAsset; 
+            protected SkeletonDataAsset m_skeletonDataAsset;
 
             public void Initialize(SkeletonDataAsset skeletonData)
             {
@@ -51,7 +56,7 @@ namespace DChild
                     list.Add(reference[i].Name);
                 }
                 return list;
-            } 
+            }
 #endif
         }
 
@@ -60,8 +65,11 @@ namespace DChild
         {
             [SerializeField, ValueDropdown("GetAnimations"), PropertyOrder(-1)]
             private string m_animationName;
+            [SerializeField]
+            private bool m_soundStopsWithAnimation = true;
 
             public string animationName { get => m_animationName; }
+            public bool soundStopsWithAnimation { get => m_soundStopsWithAnimation; }
 
 #if UNITY_EDITOR
             protected IEnumerable GetAnimations()
@@ -73,7 +81,7 @@ namespace DChild
                     list.Add(reference[i].Name);
                 }
                 return list;
-            } 
+            }
 #endif
         }
 
@@ -106,7 +114,7 @@ namespace DChild
             {
                 m_animationStartInfo[i].Initialize(m_skeletonDataAsset);
             }
-        } 
+        }
 
         private void OnEnable()
         {

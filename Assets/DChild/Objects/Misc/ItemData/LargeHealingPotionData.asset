@@ -15,7 +15,8 @@ MonoBehaviour:
   serializationData:
     SerializedFormat: 2
     SerializedBytes: 
-    ReferencedUnityObjects: []
+    ReferencedUnityObjects:
+    - {fileID: 8512104784478948813, guid: 706590858092ee447afd41fa4d935fea, type: 3}
     SerializedBytesString: 
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
@@ -26,10 +27,10 @@ MonoBehaviour:
       Data: 0|DChild.Gameplay.Items.IUsableItemModule[], Assembly-CSharp
     - Name: 
       Entry: 12
-      Data: 1
+      Data: 2
     - Name: 
       Entry: 7
-      Data: 1|DChild.Gameplay.Items.RegenerationItemModule, Assembly-CSharp
+      Data: 1|DChild.Gameplay.Items.InstantRegenerationItemModule, Assembly-CSharp
     - Name: m_toRegenerate
       Entry: 3
       Data: 0
@@ -40,10 +41,37 @@ MonoBehaviour:
       Entry: 8
       Data: 
     - Name: 
+      Entry: 7
+      Data: 2|DChild.Gameplay.Items.FXSpawnItemEffect, Assembly-CSharp
+    - Name: m_fx
+      Entry: 10
+      Data: 0
+    - Name: m_spawnAtBodyPart
+      Entry: 3
+      Data: 2
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
       Entry: 13
       Data: 
     - Name: 
       Entry: 8
+      Data: 
+    - Name: m_durationEffectList
+      Entry: 7
+      Data: 3|DChild.Gameplay.Items.IDurationItemEffect[], Assembly-CSharp
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: m_updatableEffectList
+      Entry: 6
       Data: 
   m_ID: 43848
   m_name: Large Healing Potion
@@ -51,7 +79,13 @@ MonoBehaviour:
   m_databaseID: 43848
   m_customName: Large Healing Potion
   m_initialized: 1
+  m_category: 2
   m_icon: {fileID: 21300000, guid: c0b846982b844b54996eef337606aba1, type: 3}
   m_quantityLimit: 5
-  m_cost: 0
-  m_description: Recover a large amount of HP
+  m_cost: 300
+  m_description: Restores a large amount of health
+  m_canBeSold: 1
+  m_hasInfiniteUses: 0
+  m_durationEffect: 1
+  m_duration: 0
+  m_moduleSummary: 

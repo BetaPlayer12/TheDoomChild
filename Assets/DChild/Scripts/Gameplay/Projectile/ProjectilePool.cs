@@ -10,8 +10,11 @@ namespace DChild.Gameplay.Pooling
         protected override Projectile RetrieveFromPool(Projectile component)
         {
             var instance =  base.RetrieveFromPool(component);
-            instance.transform.parent = null;
-            instance.ResetState();
+            if (instance != null)
+            {
+                instance.transform.parent = null;
+                instance.ResetState();
+            }
             return instance;
         }
     }

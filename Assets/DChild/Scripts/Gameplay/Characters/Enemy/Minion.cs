@@ -11,7 +11,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         public override EnemyType enemyType => EnemyType.Minion;
         public override IAttackResistance attackResistance => null;
-        protected abstract AttackDamage startDamage { get; }
+        protected abstract Damage startDamage { get; }
 
         public override void InitializeAs(bool isAlive)
         {
@@ -69,7 +69,7 @@ namespace DChild.Gameplay.Characters.Enemies
             }
         }
 
-        public void Flinch(Vector2 directionToSource, RelativeDirection damageSource, IReadOnlyCollection<AttackType> damageTypeRecieved)
+        public void Flinch(Vector2 directionToSource, RelativeDirection damageSource, AttackSummaryInfo attackInfo)
         {
             throw new System.NotImplementedException();
         }

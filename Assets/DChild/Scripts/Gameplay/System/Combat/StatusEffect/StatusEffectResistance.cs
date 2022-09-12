@@ -23,7 +23,7 @@ namespace DChild.Gameplay.Combat.StatusAilment
         [SerializeField]
         private StatusEffectChanceData m_data;
         [ShowInInspector, HideInEditorMode]
-        private Dictionary<StatusEffectType, int> m_resistances;
+        private Dictionary<StatusEffectType, int> m_resistances = new Dictionary<StatusEffectType, int>();
 
         public event EventAction<ResistanceEventArgs> ResistanceChange;
 
@@ -72,21 +72,21 @@ namespace DChild.Gameplay.Combat.StatusAilment
             }
         }
 
+        public void Initialize()
+        {
+            m_resistances = new Dictionary<StatusEffectType, int>();
+            if (m_data != null)
+            {
+                Copy(m_data.chance, m_resistances);
+            }
+        }
+
         private void Copy(Dictionary<StatusEffectType, int> source, Dictionary<StatusEffectType, int> destination)
         {
             destination.Clear();
             foreach (var key in source.Keys)
             {
                 destination.Add(key, source[key]);
-            }
-        }
-
-        private void Awake()
-        {
-            m_resistances = new Dictionary<StatusEffectType, int>();
-            if (m_data != null)
-            {
-                Copy(m_data.chance, m_resistances);
             }
         }
     }

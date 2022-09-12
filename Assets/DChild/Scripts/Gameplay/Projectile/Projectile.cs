@@ -7,6 +7,7 @@ using Holysoft.Event;
 using Holysoft.Pooling;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace DChild.Gameplay.Projectiles
 {
@@ -24,6 +25,11 @@ namespace DChild.Gameplay.Projectiles
         private ParticleCallback m_particleCallback;
         [SerializeField, PropertyOrder(100), ToggleGroup("m_waitForParticlesEnd", "Destroy On Particle End")]
         private GameObject m_model;
+        [SerializeField, PropertyOrder(101), TabGroup("Launch")]
+        private UnityEvent m_onLaunch;
+        [SerializeField, PropertyOrder(101), TabGroup("Reset")]
+        private UnityEvent m_onReset;
+
 
         protected IsolatedPhysics2D m_physics;
         public event EventAction<EventActionArgs> Impacted;
@@ -35,6 +41,14 @@ namespace DChild.Gameplay.Projectiles
 
         protected abstract ProjectileData projectileData { get; }
 
+        public bool hasConstantSpeed => projectileData.hasConstantSpeed;
+
+        public IAttacker parentAttacker { get; private set; }
+
+        public IAttacker rootParentAttacker { get; private set; }
+
+        public abstract void ForceCollision();
+
         public virtual void ResetState()
         {
             if (m_waitForParticlesEnd)
@@ -42,16 +56,69 @@ namespace DChild.Gameplay.Projectiles
                 m_model?.SetActive(true);
                 m_particleSystem?.Play();
             }
+            m_onReset.Invoke();
         }
 
         public void ChangeTrajectory(Vector2 directionNormal) => transform.right = directionNormal;
 
+        public void Launch(Vector2 directionNormal, float speed)
+        {
+            SetVelocity(directionNormal, speed);
+            m_onLaunch.Invoke();
+        }
         public void SetVelocity(Vector2 directionNormal, float speed)
         {
             transform.right = directionNormal;
+            var scale = transform.localScale;
+            if (directionNormal.x < 0)
+            {
+                if (projectileData.isGroundProjectile)
+                {
+                    if (Mathf.Sign(scale.x) == 1)
+                    {
+                        scale.x *= -1;
+                    }
+                }
+                else
+                {
+                    if (Mathf.Sign(scale.y) == 1)
+                    {
+                        scale.y *= -1;
+                    }
+                }
+            }
+            else
+            {
+                if (projectileData.isGroundProjectile)
+                {
+                    if (Mathf.Sign(scale.x) == -1)
+                    {
+                        scale.x *= -1;
+                    }
+                }
+                else
+                {
+                    if (Mathf.Sign(scale.y) == -1)
+                    {
+                        scale.y *= -1;
+                    }
+                }
+            }
+            transform.localScale = scale;
             m_physics.SetVelocity(directionNormal * speed);
             //m_isolatedPhysicsTime.CalculateActualVelocity();
         }
+
+        public void SetParentAttacker(IAttacker damageDealer)
+        {
+            parentAttacker = damageDealer;
+        }
+
+        public void SetRootParentAttacker(IAttacker damageDealer)
+        {
+            rootParentAttacker = damageDealer;
+        }
+
         public void AddForce(Vector2 force)
         {
             m_physics.AddForce(force, ForceMode2D.Impulse);
@@ -64,6 +131,11 @@ namespace DChild.Gameplay.Projectiles
             ResetState();
         }
 
+        public virtual void SetOwner(GameObject gameObject)
+        {
+
+        }
+
         protected void UnloadProjectile()
         {
             if (m_particleSystem == null)
@@ -73,7 +145,7 @@ namespace DChild.Gameplay.Projectiles
             else
             {
                 m_model?.SetActive(false);
-                m_particleSystem?.Stop();
+                m_particleSystem.Stop(true, ParticleSystemStopBehavior.StopEmitting);
             }
         }
 
@@ -82,9 +154,11 @@ namespace DChild.Gameplay.Projectiles
             CallPoolRequest();
         }
 
+
+
         protected void CallAttackerAttacked(CombatConclusionEventArgs eventArgs) => TargetDamaged?.Invoke(this, eventArgs);
-        protected bool CollidedWithEnvironment(Collision2D collision) => collision.gameObject.layer == LayerMask.NameToLayer("Environment");
-        protected bool CollidedWithEnvironment(Collider2D collision) => CollidedWithSensor(collision) == false && collision.gameObject.layer == LayerMask.NameToLayer("Environment");
+        protected bool CollidedWithEnvironment(Collision2D collision) => DChildUtility.IsAnEnvironmentLayerObject(collision.gameObject);
+        protected bool CollidedWithEnvironment(Collider2D collision) => CollidedWithSensor(collision) == false && DChildUtility.IsAnEnvironmentLayerObject(collision.gameObject);
         protected bool CollidedWithTarget(Collision2D collision) => collision.gameObject.GetComponentInParent<Hitbox>();
         protected bool CollidedWithTarget(Collider2D collision) => CollidedWithSensor(collision) == false && collision.GetComponentInParent<Hitbox>();
         protected bool CollidedWithSensor(Collider2D collision) => collision.gameObject.CompareTag("Sensor");

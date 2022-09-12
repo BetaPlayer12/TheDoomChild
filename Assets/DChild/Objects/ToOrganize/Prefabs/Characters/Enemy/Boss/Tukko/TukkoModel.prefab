@@ -80,11 +80,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skeletonRenderer: {fileID: 8901287275915368455}
   boneName: main body2
+  followXYPosition: 1
   followZPosition: 1
   followBoneRotation: 1
   followSkeletonFlip: 1
   followLocalScale: 0
   initializeOnAwake: 1
+  m_updateOnFixedUpdate: 0
 --- !u!60 &3995453332141415442
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -164,7 +166,6 @@ MonoBehaviour:
   skeletonRenderer: {fileID: 8901287275915368455}
   slotName: stab_combo_bb1
   isTrigger: 1
-  usedByCompositeCollider: 0
   clearStateOnDisable: 1
 --- !u!114 &7195097734225004311
 MonoBehaviour:
@@ -180,11 +181,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skeletonRenderer: {fileID: 8901287275915368455}
   boneName: R hand
+  followXYPosition: 1
   followZPosition: 1
   followBoneRotation: 1
   followSkeletonFlip: 1
   followLocalScale: 0
   initializeOnAwake: 1
+  m_updateOnFixedUpdate: 0
 --- !u!60 &5983637617678289538
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -461,11 +464,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skeletonRenderer: {fileID: 8901287275915368455}
   boneName: main head
+  followXYPosition: 1
   followZPosition: 1
   followBoneRotation: 1
   followSkeletonFlip: 1
   followLocalScale: 0
   initializeOnAwake: 1
+  m_updateOnFixedUpdate: 0
 --- !u!60 &951133295081732495
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -546,7 +551,6 @@ MonoBehaviour:
   skeletonRenderer: {fileID: 8901287275915368455}
   slotName: stab_combo_bb3
   isTrigger: 1
-  usedByCompositeCollider: 0
   clearStateOnDisable: 1
 --- !u!114 &155748232349174922
 MonoBehaviour:
@@ -562,11 +566,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skeletonRenderer: {fileID: 8901287275915368455}
   boneName: R hand
+  followXYPosition: 1
   followZPosition: 1
   followBoneRotation: 1
   followSkeletonFlip: 1
   followLocalScale: 0
   initializeOnAwake: 1
+  m_updateOnFixedUpdate: 0
 --- !u!60 &5983637616604371455
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -645,7 +651,6 @@ MonoBehaviour:
   skeletonRenderer: {fileID: 8901287275915368455}
   slotName: Stab_bb
   isTrigger: 1
-  usedByCompositeCollider: 0
   clearStateOnDisable: 1
 --- !u!114 &2164722409278434198
 MonoBehaviour:
@@ -661,11 +666,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skeletonRenderer: {fileID: 8901287275915368455}
   boneName: R hand
+  followXYPosition: 1
   followZPosition: 1
   followBoneRotation: 1
   followSkeletonFlip: 1
   followLocalScale: 0
   initializeOnAwake: 1
+  m_updateOnFixedUpdate: 0
 --- !u!60 &3366405853982401946
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -757,6 +764,7 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -805,6 +813,7 @@ MonoBehaviour:
   clearStateOnDisable: 0
   tintBlack: 0
   singleSubmesh: 0
+  fixDrawOrder: 0
   addNormals: 0
   calculateTangents: 0
   maskInteraction: 0
@@ -816,6 +825,7 @@ MonoBehaviour:
   _animationName: Attack5_Jab
   loop: 1
   timeScale: 1
+  m_alwaysUpdateMesh: 0
 --- !u!114 &1385744743973217503
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -829,6 +839,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   boneRoot: {fileID: 0}
+  flipBy180DegreeRotation: 0
   skeletonRenderer: {fileID: 8901287275915368455}
 --- !u!114 &5600502550455573565
 MonoBehaviour:
@@ -895,7 +906,6 @@ MonoBehaviour:
   skeletonRenderer: {fileID: 8901287275915368455}
   slotName: stab_combo_bb2
   isTrigger: 1
-  usedByCompositeCollider: 0
   clearStateOnDisable: 1
 --- !u!114 &3789307468394507343
 MonoBehaviour:
@@ -911,11 +921,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skeletonRenderer: {fileID: 8901287275915368455}
   boneName: R hand
+  followXYPosition: 1
   followZPosition: 1
   followBoneRotation: 1
   followSkeletonFlip: 1
   followLocalScale: 0
   initializeOnAwake: 1
+  m_updateOnFixedUpdate: 0
 --- !u!60 &5983637616898909544
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -959,7 +971,7 @@ GameObject:
   - component: {fileID: 5983637616073739981}
   m_Layer: 0
   m_Name: main body2
-  m_TagString: Untagged
+  m_TagString: Hitbox
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -995,11 +1007,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skeletonRenderer: {fileID: 8901287275915368455}
   boneName: main body2
+  followXYPosition: 1
   followZPosition: 1
   followBoneRotation: 1
   followSkeletonFlip: 1
   followLocalScale: 1
   initializeOnAwake: 1
+  m_updateOnFixedUpdate: 0
 --- !u!60 &5983637616073739981
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -1044,7 +1058,7 @@ GameObject:
   - component: {fileID: 5983637616106078144}
   m_Layer: 0
   m_Name: L upper arm
-  m_TagString: Untagged
+  m_TagString: Hitbox
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1078,11 +1092,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skeletonRenderer: {fileID: 8901287275915368455}
   boneName: L upper arm
+  followXYPosition: 1
   followZPosition: 1
   followBoneRotation: 1
   followSkeletonFlip: 1
   followLocalScale: 1
   initializeOnAwake: 1
+  m_updateOnFixedUpdate: 0
 --- !u!60 &5983637616106078144
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -1125,7 +1141,7 @@ GameObject:
   - component: {fileID: 5983637616153350871}
   m_Layer: 0
   m_Name: R toe 2
-  m_TagString: Untagged
+  m_TagString: Hitbox
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1158,11 +1174,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skeletonRenderer: {fileID: 8901287275915368455}
   boneName: R toe 2
+  followXYPosition: 1
   followZPosition: 1
   followBoneRotation: 1
   followSkeletonFlip: 1
   followLocalScale: 1
   initializeOnAwake: 1
+  m_updateOnFixedUpdate: 0
 --- !u!60 &5983637616153350871
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -1205,7 +1223,7 @@ GameObject:
   - component: {fileID: 5983637616418791854}
   m_Layer: 0
   m_Name: tail
-  m_TagString: Untagged
+  m_TagString: Hitbox
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1238,11 +1256,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skeletonRenderer: {fileID: 8901287275915368455}
   boneName: tail
+  followXYPosition: 1
   followZPosition: 1
   followBoneRotation: 1
   followSkeletonFlip: 1
   followLocalScale: 1
   initializeOnAwake: 1
+  m_updateOnFixedUpdate: 0
 --- !u!60 &5983637616418791854
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -1285,7 +1305,7 @@ GameObject:
   - component: {fileID: 5983637616596572984}
   m_Layer: 0
   m_Name: L lower arm
-  m_TagString: Untagged
+  m_TagString: Hitbox
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1319,11 +1339,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skeletonRenderer: {fileID: 8901287275915368455}
   boneName: L lower arm
+  followXYPosition: 1
   followZPosition: 1
   followBoneRotation: 1
   followSkeletonFlip: 1
   followLocalScale: 1
   initializeOnAwake: 1
+  m_updateOnFixedUpdate: 0
 --- !u!60 &5983637616596572984
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -1366,7 +1388,7 @@ GameObject:
   - component: {fileID: 5983637616686541591}
   m_Layer: 0
   m_Name: R lower arm
-  m_TagString: Untagged
+  m_TagString: Hitbox
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1400,11 +1422,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skeletonRenderer: {fileID: 8901287275915368455}
   boneName: R lower arm
+  followXYPosition: 1
   followZPosition: 1
   followBoneRotation: 1
   followSkeletonFlip: 1
   followLocalScale: 1
   initializeOnAwake: 1
+  m_updateOnFixedUpdate: 0
 --- !u!60 &5983637616686541591
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -1447,7 +1471,7 @@ GameObject:
   - component: {fileID: 5983637616734773433}
   m_Layer: 0
   m_Name: L hand
-  m_TagString: Untagged
+  m_TagString: Hitbox
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1480,11 +1504,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skeletonRenderer: {fileID: 8901287275915368455}
   boneName: L hand
+  followXYPosition: 1
   followZPosition: 1
   followBoneRotation: 1
   followSkeletonFlip: 1
   followLocalScale: 1
   initializeOnAwake: 1
+  m_updateOnFixedUpdate: 0
 --- !u!60 &5983637616734773433
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -1896,7 +1922,7 @@ MonoBehaviour:
   - {fileID: 5983637617751578581}
   - {fileID: 5983637617329025992}
   - {fileID: 5983637616418791854}
-  m_isInvulnerable: 0
+  m_invulnerabilityLevel: 0
   m_damageReduction: 0
 --- !u!114 &5983637617120365616
 MonoBehaviour:
@@ -1911,6 +1937,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_canDetectInteractables: 0
+  m_damageUniqueHitboxesOnly: 0
+  m_collisionRegistrator: {fileID: 0}
   m_ignoreColliderList: []
 --- !u!1 &5983637617268642100
 GameObject:
@@ -1925,7 +1953,7 @@ GameObject:
   - component: {fileID: 5983637617268642102}
   m_Layer: 0
   m_Name: L upper leg
-  m_TagString: Untagged
+  m_TagString: Hitbox
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1959,11 +1987,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skeletonRenderer: {fileID: 8901287275915368455}
   boneName: L upper leg
+  followXYPosition: 1
   followZPosition: 1
   followBoneRotation: 1
   followSkeletonFlip: 1
   followLocalScale: 1
   initializeOnAwake: 1
+  m_updateOnFixedUpdate: 0
 --- !u!60 &5983637617268642102
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -2040,11 +2070,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skeletonRenderer: {fileID: 8901287275915368455}
   boneName: root
+  followXYPosition: 1
   followZPosition: 1
   followBoneRotation: 1
   followSkeletonFlip: 1
   followLocalScale: 1
   initializeOnAwake: 1
+  m_updateOnFixedUpdate: 0
 --- !u!1 &5983637617329025990
 GameObject:
   m_ObjectHideFlags: 0
@@ -2058,7 +2090,7 @@ GameObject:
   - component: {fileID: 5983637617329025992}
   m_Layer: 0
   m_Name: L toe 2
-  m_TagString: Untagged
+  m_TagString: Hitbox
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2091,11 +2123,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skeletonRenderer: {fileID: 8901287275915368455}
   boneName: L toe 2
+  followXYPosition: 1
   followZPosition: 1
   followBoneRotation: 1
   followSkeletonFlip: 1
   followLocalScale: 1
   initializeOnAwake: 1
+  m_updateOnFixedUpdate: 0
 --- !u!60 &5983637617329025992
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -2139,7 +2173,7 @@ GameObject:
   - component: {fileID: 5983637617352203860}
   m_Layer: 0
   m_Name: main head
-  m_TagString: Untagged
+  m_TagString: Hitbox
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2172,11 +2206,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skeletonRenderer: {fileID: 8901287275915368455}
   boneName: main head
+  followXYPosition: 1
   followZPosition: 1
   followBoneRotation: 1
   followSkeletonFlip: 1
   followLocalScale: 1
   initializeOnAwake: 1
+  m_updateOnFixedUpdate: 0
 --- !u!60 &5983637617352203860
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -2222,7 +2258,7 @@ GameObject:
   - component: {fileID: 5983637617402852919}
   m_Layer: 0
   m_Name: R lower leg
-  m_TagString: Untagged
+  m_TagString: Hitbox
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2256,11 +2292,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skeletonRenderer: {fileID: 8901287275915368455}
   boneName: R lower leg
+  followXYPosition: 1
   followZPosition: 1
   followBoneRotation: 1
   followSkeletonFlip: 1
   followLocalScale: 1
   initializeOnAwake: 1
+  m_updateOnFixedUpdate: 0
 --- !u!60 &5983637617402852919
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -2303,7 +2341,7 @@ GameObject:
   - component: {fileID: 5983637617451909352}
   m_Layer: 0
   m_Name: R thigh
-  m_TagString: Untagged
+  m_TagString: Hitbox
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2337,11 +2375,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skeletonRenderer: {fileID: 8901287275915368455}
   boneName: R thigh
+  followXYPosition: 1
   followZPosition: 1
   followBoneRotation: 1
   followSkeletonFlip: 1
   followLocalScale: 1
   initializeOnAwake: 1
+  m_updateOnFixedUpdate: 0
 --- !u!60 &5983637617451909352
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -2386,7 +2426,7 @@ GameObject:
   - component: {fileID: 5983637617528441130}
   m_Layer: 0
   m_Name: R foot
-  m_TagString: Untagged
+  m_TagString: Hitbox
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2420,11 +2460,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skeletonRenderer: {fileID: 8901287275915368455}
   boneName: R foot
+  followXYPosition: 1
   followZPosition: 1
   followBoneRotation: 1
   followSkeletonFlip: 1
   followLocalScale: 1
   initializeOnAwake: 1
+  m_updateOnFixedUpdate: 0
 --- !u!60 &5983637617528441130
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -2467,7 +2509,7 @@ GameObject:
   - component: {fileID: 5983637617686011114}
   m_Layer: 0
   m_Name: main body
-  m_TagString: Untagged
+  m_TagString: Hitbox
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2504,11 +2546,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skeletonRenderer: {fileID: 8901287275915368455}
   boneName: main body
+  followXYPosition: 1
   followZPosition: 1
   followBoneRotation: 1
   followSkeletonFlip: 1
   followLocalScale: 1
   initializeOnAwake: 1
+  m_updateOnFixedUpdate: 0
 --- !u!60 &5983637617686011114
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -2552,7 +2596,7 @@ GameObject:
   - component: {fileID: 5983637617751578581}
   m_Layer: 0
   m_Name: L foot
-  m_TagString: Untagged
+  m_TagString: Hitbox
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2586,11 +2630,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skeletonRenderer: {fileID: 8901287275915368455}
   boneName: L foot
+  followXYPosition: 1
   followZPosition: 1
   followBoneRotation: 1
   followSkeletonFlip: 1
   followLocalScale: 1
   initializeOnAwake: 1
+  m_updateOnFixedUpdate: 0
 --- !u!60 &5983637617751578581
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -2633,7 +2679,7 @@ GameObject:
   - component: {fileID: 5983637617781204520}
   m_Layer: 0
   m_Name: R hand
-  m_TagString: Untagged
+  m_TagString: Hitbox
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2666,11 +2712,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skeletonRenderer: {fileID: 8901287275915368455}
   boneName: R hand
+  followXYPosition: 1
   followZPosition: 1
   followBoneRotation: 1
   followSkeletonFlip: 1
   followLocalScale: 1
   initializeOnAwake: 1
+  m_updateOnFixedUpdate: 0
 --- !u!60 &5983637617781204520
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -2713,7 +2761,7 @@ GameObject:
   - component: {fileID: 5983637617837322143}
   m_Layer: 0
   m_Name: R upper arm
-  m_TagString: Untagged
+  m_TagString: Hitbox
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2747,11 +2795,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skeletonRenderer: {fileID: 8901287275915368455}
   boneName: R upper arm
+  followXYPosition: 1
   followZPosition: 1
   followBoneRotation: 1
   followSkeletonFlip: 1
   followLocalScale: 1
   initializeOnAwake: 1
+  m_updateOnFixedUpdate: 0
 --- !u!60 &5983637617837322143
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -2794,7 +2844,7 @@ GameObject:
   - component: {fileID: 5983637617900085517}
   m_Layer: 0
   m_Name: L lower leg
-  m_TagString: Untagged
+  m_TagString: Hitbox
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2828,11 +2878,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skeletonRenderer: {fileID: 8901287275915368455}
   boneName: L lower leg
+  followXYPosition: 1
   followZPosition: 1
   followBoneRotation: 1
   followSkeletonFlip: 1
   followLocalScale: 1
   initializeOnAwake: 1
+  m_updateOnFixedUpdate: 0
 --- !u!60 &5983637617900085517
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -2940,6 +2992,7 @@ MonoBehaviour:
     m_config: {fileID: 0}
     m_rayColor: {r: 0, g: 0, b: 0, a: 0}
   m_enable: 1
+  m_debugMode: 1
 --- !u!114 &4506479246515578731
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3065,11 +3118,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skeletonRenderer: {fileID: 8901287275915368455}
   boneName: main body
+  followXYPosition: 1
   followZPosition: 1
   followBoneRotation: 1
   followSkeletonFlip: 1
   followLocalScale: 0
   initializeOnAwake: 1
+  m_updateOnFixedUpdate: 0
 --- !u!60 &3118274026743245687
 PolygonCollider2D:
   m_ObjectHideFlags: 0

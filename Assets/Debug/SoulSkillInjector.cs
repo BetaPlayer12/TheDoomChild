@@ -7,6 +7,7 @@ using System.Collections;
 
 namespace DChildDebug
 {
+
     public class SoulSkillInjector : SerializedMonoBehaviour
     {
         //[HideInPlayMode]

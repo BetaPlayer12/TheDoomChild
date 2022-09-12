@@ -11,6 +11,9 @@ namespace DChild.Gameplay.Combat
     public interface IDamageDealer
     {
         Vector2 position { get; }
-        void Damage(TargetInfo target, BodyDefense targetDefense);
+        Invulnerability ignoreInvulnerability { get; }
+
+        bool ignoresBlock { get; }
+        void Damage(TargetInfo target, Collider2D colliderThatDealtDamage);
     }
 }

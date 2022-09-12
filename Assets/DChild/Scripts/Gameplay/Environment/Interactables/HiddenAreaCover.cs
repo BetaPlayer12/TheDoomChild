@@ -28,7 +28,7 @@ namespace DChild.Gameplay.Environment
         [SerializeField]
         private SkeletonRenderer[] m_spines;
         [ShowInInspector]
-        private bool m_isInvisible;
+        private bool m_visible;
 
         private bool m_isInitialized;
         private Coroutine m_currentRoutine;
@@ -45,6 +45,8 @@ namespace DChild.Gameplay.Environment
             private bool m_isInvisible;
 
             public bool isInvisible => m_isInvisible;
+
+            ISaveData ISaveData.ProduceCopy() => new SaveData(m_isInvisible);
         }
 
         private struct ColorInfo
@@ -67,22 +69,34 @@ namespace DChild.Gameplay.Environment
 
         private Dictionary<Object, ColorInfo> m_colorInfos;
 
-        public ISaveData Save() => new SaveData(m_isInvisible);
+        public ISaveData Save() => new SaveData(m_visible);
 
         public void Load(ISaveData data)
         {
-            m_isInvisible = ((SaveData)data).isInvisible;
+            m_visible = ((SaveData)data).isInvisible;
             if (m_isInitialized)
             {
-                var lerpValue = m_isInvisible ? 1 : 0;
+                var lerpValue = m_visible ? 1 : 0;
                 m_lerpDuration.SetValue(lerpValue);
                 LerpColors(lerpValue);
             }
+            else
+            {
+                StopAllCoroutines();
+                StartCoroutine(DelayedInitialization());
+            }
         }
-
+        public void Initialize()
+        {
+            m_visible = true;
+            SetVisibility(m_visible);
+            var lerpValue = m_visible ? 1 : 0;
+            m_lerpDuration.SetValue(lerpValue);
+            LerpColors(lerpValue);
+        }
         public void SetVisibility(bool isVisible)
         {
-            if (m_isInvisible != !isVisible)
+            if (m_visible != isVisible)
             {
                 if (isVisible)
                 {
@@ -102,20 +116,48 @@ namespace DChild.Gameplay.Environment
 
                     m_currentRoutine = StartCoroutine(LerpTo(true));
                 }
-                m_isInvisible = !isVisible;
+                m_visible = isVisible;
+            }
+        }
+
+        public void SetAsVisible(bool isVisible)
+        {
+            StopAllCoroutines();
+            LerpColors(isVisible ? 1 : 0);
+            SetRenderersActive(isVisible);
+            m_visible = isVisible;
+        }
+
+        public void InitializeAsVisible(bool isVisible)
+        {
+            if (m_currentRoutine == null)
+            {
+                SetAsVisible(isVisible);
             }
         }
 
         private IEnumerator LerpTo(bool isVisible)
         {
-            int destination = isVisible ? 1 : 0;
-            int signModifier = isVisible ? 1 : -1;
+            int destination = isVisible ? 0 : 1;
+
+            if (isVisible == false)
+            {
+                SetRenderersActive(true);
+            }
+
+            int signModifier = isVisible ? -1 : 1;
             do
             {
                 m_lerpDuration.Update(Time.deltaTime * signModifier);
                 LerpColors(m_lerpDuration.lerpValue);
                 yield return null;
             } while (m_lerpDuration.lerpValue != destination);
+
+            if (isVisible)
+            {
+                SetRenderersActive(false);
+            }
+            m_currentRoutine = null;
         }
 
         private void LerpColors(float lerpValue)
@@ -133,14 +175,36 @@ namespace DChild.Gameplay.Environment
             }
         }
 
+        private void SetRenderersActive(bool isTrue)
+        {
+            for (int i = 0; i < m_sprites.Length; i++)
+            {
+                m_sprites[i].enabled = isTrue;
+            }
+
+            //Enable Mesh Renderer for Skeleton Renderers
+        }
+
+        private IEnumerator DelayedInitialization()
+        {
+            while(m_isInitialized == false)
+            {
+                yield return null;
+            }
+
+            var lerpValue = m_visible ? 1 : 0;
+            m_lerpDuration.SetValue(lerpValue);
+            LerpColors(lerpValue);
+        }
+
         private void Awake()
         {
+            m_visible = true;
             m_colorInfos = new Dictionary<Object, ColorInfo>();
             for (int i = 0; i < m_sprites.Length; i++)
             {
                 m_colorInfos.Add(m_sprites[i], new ColorInfo(m_sprites[i].color, m_invisibleAlpha));
             }
-
             m_lerpDuration.SetValue(1);
         }
 
@@ -155,7 +219,7 @@ namespace DChild.Gameplay.Environment
 
             m_isInitialized = true;
 
-            if (m_isInvisible)
+            if (m_visible)
             {
                 LerpColors(1);
             }

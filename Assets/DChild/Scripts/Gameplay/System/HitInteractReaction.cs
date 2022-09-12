@@ -8,6 +8,8 @@ namespace DChild.Gameplay.Environment.Interractables
     [RequireComponent(typeof(IHitToInteract))]
     public class HitInteractReaction : MonoBehaviour
     {
+        [SerializeField]
+        private bool m_isInverted;
         [SerializeField, TabGroup("Left")]
         private UnityEvent m_onHitFromLeft;
         [SerializeField, TabGroup("Right")]
@@ -25,11 +27,25 @@ namespace DChild.Gameplay.Environment.Interractables
         {
             if (eventArgs.direction == HorizontalDirection.Left)
             {
-                m_onHitFromLeft?.Invoke();
+                if (m_isInverted)
+                {
+                    m_onHitFromRight?.Invoke();
+                }
+                else
+                {
+                    m_onHitFromLeft?.Invoke();
+                }
             }
             else
             {
-                m_onHitFromRight?.Invoke();
+                if (m_isInverted)
+                {
+                    m_onHitFromLeft?.Invoke();
+                }
+                else
+                {
+                    m_onHitFromRight?.Invoke();
+                }
             }
         }
     }

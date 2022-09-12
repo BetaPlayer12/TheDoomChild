@@ -11,6 +11,35 @@ namespace DChild
 {
     public static class DChildUtility
     {
+        public static LayerMask GetEnvironmentMask() => LayerMask.GetMask("Environment", "PassableEnvironment");
+        public static bool IsAnEnvironmentLayerObject(GameObject gameObject) => gameObject.layer == LayerMask.NameToLayer("Environment") || gameObject.layer == LayerMask.NameToLayer("PassableEnvironment");
+        public static string GetSensorTag() => "Sensor";
+        public static void ValidateSensor(GameObject gameObject)
+        {
+            var sensorTag = DChildUtility.GetSensorTag();
+            if (gameObject.CompareTag(sensorTag) == false)
+            {
+                gameObject.tag = sensorTag;
+            }
+            if (gameObject.TryGetComponent(out Rigidbody2D rigidbody2D))
+            {
+                var colliders = rigidbody2D.GetComponentsInChildren<Collider2D>(true);
+                foreach (var collider in colliders)
+                {
+                    if (collider.isTrigger && collider.gameObject.CompareTag(sensorTag) == false)
+                    {
+                        collider.gameObject.tag = sensorTag;
+                    }
+                }
+            }
+            else if (gameObject.TryGetComponent<Collider2D>(out Collider2D collider))
+            {
+                collider.isTrigger = true;
+            }
+        }
+
+        public static bool IsADroppable(Component component) => component.CompareTag("Droppable");
+
         public static bool HasInterface<T>(object instance) => (typeof(T)).IsAssignableFrom(instance.GetType());
         public static bool IsSubclassOf<T>(object instance) => instance.GetType().IsSubclassOf(typeof(T));
 
@@ -19,16 +48,6 @@ namespace DChild
             var connection = DChildDatabase.GetSoulSkillConnection();
             connection.Initialize();
             var skills = connection.GetAllSkills();
-            var list = ConvertToDropdownList(skills);
-            connection.Close();
-            return list;
-        }
-
-        public static ValueDropdownList<int> GetSoulSkillsOfType(SoulSkillType type)
-        {
-            var connection = DChildDatabase.GetSoulSkillConnection();
-            connection.Initialize();
-            var skills = connection.GetSkillsOfType(type);
             var list = ConvertToDropdownList(skills);
             connection.Close();
             return list;
