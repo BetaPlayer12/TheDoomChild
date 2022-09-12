@@ -8,7 +8,7 @@ using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
-public class BestiaryDataParser : MonoBehaviour
+public class BestiaryDataParser : Editor
 {
     [SerializeField]
     private TextAsset m_csvFile;

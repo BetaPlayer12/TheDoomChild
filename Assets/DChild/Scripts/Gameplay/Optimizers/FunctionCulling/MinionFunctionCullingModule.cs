@@ -54,7 +54,7 @@ namespace DChild.Gameplay.Optimization.Modules
                     }
                     var result = m_culler.IsVisible(m_centerMass.position, m_centerMass, cameraBounds);
                     m_animation.enabled = result;
-                    m_animation.gameObject.SetActive(result);
+                    //m_animation.gameObject.SetActive(result);
                     for (int i = 0; i < m_boneFollowers.Length; i++)
                     {
                         m_boneFollowers[i].enabled = result;

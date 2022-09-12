@@ -48,6 +48,7 @@ namespace DChild.Configurations
             {
                 m_configuration = new GameSettingsConfiguration();
                 LoadDefaultSettings();
+                SaveSettings();
             }
 
             m_keybind.Initialize(m_configuration.keyboardKeyBindings);
