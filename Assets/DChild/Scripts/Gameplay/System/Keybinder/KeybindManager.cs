@@ -46,6 +46,9 @@ namespace DChild.CustomInput.Keybind
         public void LoadKeyboardBinding(int selectionIndex, KeybindInfo keybindInfo)
         {
             var addresses = m_keyboardSelectionAddresses.GetAddressList(selectionIndex);
+            if (addresses == null)
+                return;
+
             for (int i = 0; i < addresses.count; i++)
             {
                 var address = addresses.GetAddress(i);
