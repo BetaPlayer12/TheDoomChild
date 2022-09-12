@@ -406,6 +406,7 @@ namespace DChild.Gameplay.Characters.Enemies
             return hit.point;
         }
 
+        #region AttackChooser
         private void ChooseAttack()
         {
             if (!m_attackDecider.hasDecidedOnAttack)
@@ -463,6 +464,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_attackRangeCache[i] = list[i];
             }
         }
+        #endregion
 
         protected override void Start()
         {
