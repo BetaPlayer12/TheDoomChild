@@ -291,7 +291,24 @@ namespace DChild.Gameplay.Characters.Enemies
             m_stateHandle.OverrideState(State.ReevaluateSituation);
             yield return null;
         }
-
+        private IEnumerator AttackRoutine1()
+        {
+            m_animation.SetAnimation(0, m_info.backhandAttack.animation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.backhandAttack.animation);
+            m_animation.SetAnimation(0, m_info.idleAnimation, true);
+            m_flinchHandle.m_autoFlinch = true;
+            m_stateHandle.ApplyQueuedState();
+            yield return null;
+        }
+        private IEnumerator AttackRoutine2()
+        {
+            m_animation.SetAnimation(0, m_info.armAttack.animation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.armAttack.animation);
+            m_animation.SetAnimation(0, m_info.idleAnimation, true);
+            m_flinchHandle.m_autoFlinch = true;
+            m_stateHandle.ApplyQueuedState();
+            yield return null;
+        }
         private Vector2 GroundPosition()
         {
             int hitCount = 0;
@@ -411,12 +428,14 @@ namespace DChild.Gameplay.Characters.Enemies
                     switch (m_attackDecider.chosenAttack.attack)
                     {
                         case Attack.Backhand:
-                            m_animation.EnableRootMotion(true, false);
-                            m_attackHandle.ExecuteAttack(m_info.backhandAttack.animation, m_info.idleAnimation);
+                            StartCoroutine(AttackRoutine1());
+                            //m_animation.EnableRootMotion(true, false);
+                            //m_attackHandle.ExecuteAttack(m_info.backhandAttack.animation, m_info.idleAnimation);
                             break;
                         case Attack.Arm:
-                            m_animation.EnableRootMotion(true, false);
-                            m_attackHandle.ExecuteAttack(m_info.armAttack.animation, m_info.idleAnimation);
+                            StartCoroutine(AttackRoutine2());
+                            //m_animation.EnableRootMotion(true, false);
+                            //m_attackHandle.ExecuteAttack(m_info.armAttack.animation, m_info.idleAnimation);
                             break;
                     }
                     m_attackDecider.hasDecidedOnAttack = false;
