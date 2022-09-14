@@ -17,7 +17,7 @@ namespace DChild.Gameplay.Projectiles
         [SerializeField]
         private SpineRootAnimation m_spine;
 
-        public GameObject m_flameEffect;
+        public ParticleSystem m_flameEffect;
         public GameObject m_flameCollider;
         public GameObject m_model;
         public Transform m_fireDragonMouthPos;
@@ -45,13 +45,14 @@ namespace DChild.Gameplay.Projectiles
 
         public void ShootFire()
         {
-            m_flameEffect.SetActive(true);
+            m_flameEffect.Play(true);
             m_flameCollider.SetActive(true);
+
         }
 
         public void OffFire()
         {
-            m_flameEffect.SetActive(false);
+            m_flameEffect.Stop(true);
             m_flameCollider.SetActive(false);
         }
 
