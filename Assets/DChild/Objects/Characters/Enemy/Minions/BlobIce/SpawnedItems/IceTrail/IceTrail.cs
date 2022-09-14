@@ -2,17 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 using DChild.Gameplay.Pooling;
+using Holysoft.Collections;
 
 namespace DChild.Gameplay.Environment.Obstacles
 {
     public class IceTrail : PoolableObject
     {
-        public float timer;
-        // Start is called before the first frame update
-        void Start()
-        {
-            //CallPoolRequest();
-        }
+        [SerializeField]
+        private float timer;
 
         // Update is called once per frame
         void Update()
@@ -25,6 +22,8 @@ namespace DChild.Gameplay.Environment.Obstacles
             }
 
         }
+
+
     }
 }
 

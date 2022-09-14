@@ -14,6 +14,7 @@ using DChild;
 using DChild.Gameplay.Characters.Enemies;
 using DChild.Gameplay.Pooling;
 using DChild.Gameplay.Projectiles;
+using DChild.Gameplay.Environment.Obstacles;
 
 namespace DChild.Gameplay.Characters.Enemies
 {
@@ -71,7 +72,9 @@ namespace DChild.Gameplay.Characters.Enemies
             private GameObject m_blobIceTrail;
             public GameObject blobIceTrail => m_blobIceTrail;
 
-
+            [SerializeField, BoxGroup("Blob Ice Cool Drip")]
+            private GameObject m_blobIceCoolDrip;
+            public GameObject blobIceCoolDrip => m_blobIceCoolDrip;
 
             public override void Initialize()
             {
@@ -139,6 +142,13 @@ namespace DChild.Gameplay.Characters.Enemies
 
         [SerializeField]
         private Renderer m_renderer;
+        [SerializeField]
+        private float m_coolDripInterval;
+        [SerializeField]
+        private float m_coolDripInterval2;
+
+        private float coolDripTimer;
+        private float coolDripInterval;
 
         private void OnAttackDone(object sender, EventActionArgs eventArgs)
         {
@@ -252,13 +262,22 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void InstantiateBlobIceTrail()
         {
-            var instance = GameSystem.poolManager.GetPool<FXPool>().GetOrCreateItem(m_info.blobIceTrail, gameObject.scene);
+            var instance = GameSystem.poolManager.GetPool<PoolableObjectPool>().GetOrCreateItem(m_info.blobIceTrail, gameObject.scene);
 
             if (!m_iceTrailSensor.isDetecting)
             {
                 instance.transform.position = m_iceTrailSensor.transform.position;
             }
         }
+
+
+        private void InstantiateBlobIceCoolDrip()
+        {
+            var instance = GameSystem.poolManager.GetPool<PoolableObjectPool>().GetOrCreateItem(m_info.blobIceCoolDrip, gameObject.scene);
+
+            instance.transform.position = m_iceTrailSensor.transform.position;
+        }
+
 
         public override void ApplyData()
         {
@@ -269,6 +288,8 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             base.Start();
             //m_currentMoveSpeed = UnityEngine.Random.Range(m_info.move.speed * .75f, m_info.move.speed * 1.25f);
+
+            coolDripTimer = UnityEngine.Random.Range(m_coolDripInterval, m_coolDripInterval2);
 
             m_startPoint = transform.position;
         }
@@ -284,20 +305,26 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void Update()
         {
+            coolDripTimer -= GameplaySystem.time.deltaTime;
             //Debug.Log("Wall Sensor is " + m_wallSensor.isDetecting);
             //Debug.Log("Edge Sensor is " + m_edgeSensor.isDetecting);
             switch (m_stateHandle.currentState)
             {
                 case State.Patrol:
-                    Debug.Log("Wall Sensor: " + m_wallSensor.isDetecting + "\n Ground Sensor: " + m_groundSensor.isDetecting);
                     if (!m_wallSensor.isDetecting && m_groundSensor.isDetecting)
                     {
                         m_turnState = State.ReevaluateSituation;
                         //m_animation.EnableRootMotion(true, false);
                         //m_animation.SetAnimation(0, m_info.move.animation, true);
                         var characterInfo = new PatrolHandle.CharacterInfo(m_character.centerMass.position, m_character.facing);
-                        m_patrolHandle.Patrol(m_movement, m_info.move.speed, characterInfo);
-                        InstantiateBlobIceTrail();
+                        m_patrolHandle.Patrol(m_movement, m_info.move.speed, characterInfo);        
+                    }
+                    InstantiateBlobIceTrail();
+
+                    if(coolDripTimer < 0)
+                    {
+                        InstantiateBlobIceCoolDrip();
+                        coolDripTimer = UnityEngine.Random.Range(m_coolDripInterval, m_coolDripInterval2);
                     }
                     //else
                     //{
@@ -345,6 +372,11 @@ namespace DChild.Gameplay.Characters.Enemies
 
                 case State.Retreat:
                     StartCoroutine(RetreatRoutine());
+                    if (coolDripTimer < 0)
+                    {
+                        InstantiateBlobIceCoolDrip();
+                        coolDripTimer = UnityEngine.Random.Range(m_coolDripInterval, m_coolDripInterval2);
+                    }
                     break;
                 case State.WaitBehaviourEnd:
                     return;
