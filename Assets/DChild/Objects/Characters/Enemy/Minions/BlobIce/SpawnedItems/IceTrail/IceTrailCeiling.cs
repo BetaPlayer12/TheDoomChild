@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using DChild.Gameplay.Pooling;
 using Holysoft.Collections;
+using Holysoft.Event;
 
 namespace DChild.Gameplay.Environment.Obstacles
 {
-    public class IceTrail : PoolableObject
+    public class IceTrailCeiling : PoolableObject
     {
         [SerializeField]
         private float timer;
@@ -20,10 +21,6 @@ namespace DChild.Gameplay.Environment.Obstacles
             {
                 DestroyInstance();
             }
-
         }
-
-
     }
 }
-
