@@ -42,6 +42,7 @@ namespace DChild.Gameplay.Characters
 
         public Vector2 BallisticVelocity(Vector2 target)
         {
+            m_projectileInfo.projectile.GetComponent<IsolatedObjectPhysics2D>().simulateGravity = true;
             m_projectileInfo.projectile.GetComponent<IsolatedObjectPhysics2D>().gravity.gravityScale = m_gravityScale;
 
             var yOffset = target.y + Mathf.Abs(GroundPosition(target).y - m_spawnPoint.position.y);

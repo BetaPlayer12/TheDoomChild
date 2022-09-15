@@ -70,6 +70,9 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField, TitleGroup("Attack Behaviours"), Range(0f, 1000f)]
             private float m_spikeSpitCount;
             public float spikeSpitCount => m_spikeSpitCount;
+            [SerializeField, TitleGroup("Attack Behaviours"), Range(1, 10)]
+            private List<int> m_spikeShowerCount;
+            public List<int> spikeShowerCount => m_spikeShowerCount;
             [SerializeField, BoxGroup("HeavyGroundStab"), Space]
             private List<SimpleAttackInfo> m_heavyGroundStabLeftAttacks = new List<SimpleAttackInfo>();
             public List<SimpleAttackInfo> heavyGroundStabLeftAttacks => m_heavyGroundStabLeftAttacks;
@@ -89,8 +92,11 @@ namespace DChild.Gameplay.Characters.Enemies
             private SimpleAttackInfo m_heavySpearStabRightAttack = new SimpleAttackInfo();
             public SimpleAttackInfo heavySpearStabRightAttack => m_heavySpearStabRightAttack;
             [SerializeField, BoxGroup("KrakenRage")]
+            private float m_krakenRageDuration;
+            public float krakenRageDuration => m_krakenRageDuration;
+            [SerializeField, BoxGroup("KrakenRage")]
             private SimpleAttackInfo m_krakenRageAttack = new SimpleAttackInfo();
-            public SimpleAttackInfo krakenRageAttackn => m_krakenRageAttack;
+            public SimpleAttackInfo krakenRageAttack => m_krakenRageAttack;
             [SerializeField, BoxGroup("KrakenRage"), ValueDropdown("GetAnimations")]
             private string m_krakenRageLoopAnimation;
             public string krakenRageLoopAnimation => m_krakenRageLoopAnimation;
@@ -112,7 +118,7 @@ namespace DChild.Gameplay.Characters.Enemies
             //[SerializeField, BoxGroup("BodySlam")]
             //private SimpleAttackInfo m_bodySlamGroundFarAttack = new SimpleAttackInfo();
             //public SimpleAttackInfo bodySlamGroundFarAttack => m_bodySlamGroundFarAttack;
-            
+
             [SerializeField, TitleGroup("Pattern Ranges")]
             private float m_targetDistanceTolerance;
             public float targetDistanceTolerance => m_targetDistanceTolerance;
@@ -269,8 +275,11 @@ namespace DChild.Gameplay.Characters.Enemies
 
             [Title("Projectiles")]
             [SerializeField]
-            private SimpleProjectileAttackInfo m_projectile;
-            public SimpleProjectileAttackInfo projectile => m_projectile;
+            private SimpleProjectileAttackInfo m_ballisticProjectile;
+            public SimpleProjectileAttackInfo ballisticProjectile => m_ballisticProjectile;
+            [SerializeField]
+            private SimpleProjectileAttackInfo m_airProjectile;
+            public SimpleProjectileAttackInfo airProjectile => m_airProjectile;
             [SerializeField]
             private float m_projectileGravityScale;
             public float projectileGravityScale => m_projectileGravityScale;
@@ -285,8 +294,18 @@ namespace DChild.Gameplay.Characters.Enemies
 
             [TitleGroup("Events")]
             [SerializeField, ValueDropdown("GetEvents")]
-            private string m_dustLandEvent;
-            public string dustLandEvent => m_dustLandEvent;
+            private string m_moveEvent;
+            public string moveEvent => m_moveEvent;
+            [SerializeField, ValueDropdown("GetEvents")]
+            private string m_stopEvent;
+            public string stopEvent => m_stopEvent;
+            [SerializeField, ValueDropdown("GetEvents")]
+            private string m_singleShotEvent;
+            public string singleShotEvent => m_singleShotEvent;
+            [TitleGroup("Events")]
+            [SerializeField, ValueDropdown("GetEvents")]
+            private string m_multiShotEvent;
+            public string multiShotEvent => m_multiShotEvent;
 
             public override void Initialize()
             {
@@ -312,7 +331,8 @@ namespace DChild.Gameplay.Characters.Enemies
                 }
                 //m_bodySlamGroundNearAttack.SetData(m_skeletonDataAsset);
                 //m_bodySlamGroundFarAttack.SetData(m_skeletonDataAsset);
-                m_projectile.SetData(m_skeletonDataAsset);
+                m_ballisticProjectile.SetData(m_skeletonDataAsset);
+                m_airProjectile.SetData(m_skeletonDataAsset);
 #endif
             }
         }
@@ -388,9 +408,12 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Reference")]
         private Boss m_boss;
         [SerializeField, TabGroup("Reference")]
+        private Rigidbody2D m_rb2d;
+        [SerializeField, TabGroup("Reference")]
         private Hitbox m_hitbox;
         [SerializeField, TabGroup("Reference")]
-        private Collider2D m_bodyCollider;
+        private CapsuleCollider2D m_bodyCollider;
+        private Vector2 m_bodyColliderCacheSize;
         [SerializeField, TabGroup("Reference")]
         private Collider2D m_legCollider;
         [SerializeField, TabGroup("Reference")]
@@ -409,6 +432,12 @@ namespace DChild.Gameplay.Characters.Enemies
         private RaySensor m_rightWallSensor;
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_cielingSensor;
+        [SerializeField, TabGroup("Sensors")]
+        private Transform m_sensorResizer;
+        [SerializeField, TabGroup("Hurtbox")]
+        private Collider2D m_krakenRageBB;
+        [SerializeField, TabGroup("Hurtbox")]
+        private Collider2D m_selfDestructBB;
         //[SerializeField, TabGroup("Hurtbox")]
         //private Collider2D m_swordSlash1BB;
 
@@ -456,6 +485,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
         [SerializeField]
         private SpineEventListener m_spineListener;
+        [SerializeField]
+        private PhysicsMaterial2D m_physicsMat;
 
         [ShowInInspector]
         private StateHandle<State> m_stateHandle;
@@ -510,7 +541,9 @@ namespace DChild.Gameplay.Characters.Enemies
             switch (m_phaseHandle.currentPhase)
             {
                 case Phase.PhaseOne:
-                    m_bodyCollider.transform.localScale = new Vector3(1, 0.75f, 1);
+                    m_bodyCollider.size = new Vector2(40, 15);
+                    m_hitbox.transform.localScale = new Vector3(0.75f, 0.75f, 1);
+                    m_sensorResizer.localScale = new Vector3(0.75f, 0.75f, 1);
                     m_animation.SetAnimation(10, m_info.phase1MixAnimation, false);
                     AddToAttackCache(Attack.Phase1Pattern1, Attack.Phase1Pattern2, Attack.Phase1Pattern3, Attack.Phase1Pattern4);
                     AddToRangeCache(m_info.phase1Pattern1Range, m_info.phase1Pattern2Range, m_info.phase1Pattern3Range, m_info.phase1Pattern4Range);
@@ -518,7 +551,9 @@ namespace DChild.Gameplay.Characters.Enemies
                         m_patternCooldown.Add(m_info.phase1PatternCooldown[i]);
                     break;
                 case Phase.PhaseTwo:
-                    m_bodyCollider.transform.localScale = new Vector3(1, 1, 1);
+                    m_bodyCollider.size = new Vector2(50, 18);
+                    m_hitbox.transform.localScale = new Vector3(1, 1, 1);
+                    m_sensorResizer.localScale = new Vector3(1, 1, 1);
                     m_animation.SetAnimation(10, m_info.phase2MixAnimation, false);
                     AddToAttackCache(Attack.Phase2Pattern1, Attack.Phase2Pattern2, Attack.Phase2Pattern3, Attack.Phase2Pattern4, Attack.Phase2Pattern5, Attack.Phase2Pattern6);
                     AddToRangeCache(m_info.phase2Pattern1Range, m_info.phase2Pattern2Range, m_info.phase2Pattern3Range, m_info.phase2Pattern4Range, m_info.phase2Pattern5Range, m_info.phase2Pattern6Range);
@@ -526,14 +561,17 @@ namespace DChild.Gameplay.Characters.Enemies
                         m_patternCooldown.Add(m_info.phase2PatternCooldown[i]);
                     break;
                 case Phase.PhaseThree:
-                    m_bodyCollider.transform.localScale = new Vector3(1, 1.25f, 1);
+                    m_bodyCollider.size = new Vector2(60, 20);
+                    m_hitbox.transform.localScale = new Vector3(1.25f, 1.25f, 1);
+                    m_sensorResizer.localScale = new Vector3(1.3f, 1.25f, 1);
                     m_animation.SetAnimation(10, m_info.phase3MixAnimation, false);
                     AddToAttackCache(Attack.Phase3Pattern1, Attack.Phase3Pattern2, Attack.Phase3Pattern3, Attack.Phase3Pattern4, Attack.Phase3Pattern5, Attack.Phase3Pattern6, Attack.Phase3Pattern7);
-                    AddToRangeCache(m_info.phase3Pattern1Range, m_info.phase3Pattern2Range, m_info.phase3Pattern3Range, m_info.phase3Pattern4Range, m_info.phase3Pattern5Range, m_info.phase3Pattern7Range);
+                    AddToRangeCache(m_info.phase3Pattern1Range, m_info.phase3Pattern2Range, m_info.phase3Pattern3Range, m_info.phase3Pattern4Range, m_info.phase3Pattern5Range, m_info.phase3Pattern6Range, m_info.phase3Pattern7Range);
                     for (int i = 0; i < m_info.phase3PatternCooldown.Count; i++)
                         m_patternCooldown.Add(m_info.phase3PatternCooldown[i]);
                     break;
             }
+            m_bodyColliderCacheSize = m_bodyCollider.size;
             m_attackUsed = new bool[m_attackCache.Count];
             if (m_currentFullCooldown.Count != 0)
             {
@@ -611,15 +649,13 @@ namespace DChild.Gameplay.Characters.Enemies
                             m_stateHandle.Wait(State.ReevaluateSituation);
 
                             m_willStickToWall = false;
-                            m_animation.SetEmptyAnimation(15, 0);
-                            m_animation.SetEmptyAnimation(3, 0);
-                            //m_grappleEvadeCoroutine = StartCoroutine(GrappleRoutine(false, true, m_info.bodySlamCount/*, true*/));
-                            m_wreckingBallCoroutine = StartCoroutine(WreckingBallRoutine(m_info.wreckingBallCount));
+                            m_legCollider.enabled = true;
+                            m_grappleEvadeCoroutine = StartCoroutine(GrappleRoutine(false, true, m_info.bodySlamCount/*, true*/));
                             m_currentHitCount = 0;
 
                         }
                         break;
-                    case Phase.PhaseTwo:
+                    default:
                         if (m_currentHitCount < m_maxHitCount)
                             m_currentHitCount++;
                         else
@@ -644,8 +680,7 @@ namespace DChild.Gameplay.Characters.Enemies
                             m_stateHandle.Wait(State.ReevaluateSituation);
 
                             m_willStickToWall = false;
-                            m_animation.SetEmptyAnimation(15, 0);
-                            m_animation.SetEmptyAnimation(3, 0);
+                            m_legCollider.enabled = true;
                             m_wreckingBallCoroutine = StartCoroutine(WreckingBallRoutine(m_info.wreckingBallCount));
                             m_currentHitCount = 0;
 
@@ -658,9 +693,12 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator GrappleRoutine(bool willTargetWall, bool willTargetSlam, int slamCount/*, bool randomGrapple*/)
         {
             enabled = true;
-            m_animation.DisableRootMotion();
+            m_animation.SetEmptyAnimation(3, 0);
+            m_animation.SetEmptyAnimation(15, 0);
+            m_animation.SetEmptyAnimation(27, 0);
             if (!m_groundSensor.isDetecting)
             {
+                m_animation.DisableRootMotion();
                 m_character.physics.simulateGravity = true;
                 StartCoroutine(GrappleRetractRoutine(4));
                 m_animation.SetAnimation(0, m_info.bodySlamStart, false);
@@ -676,27 +714,31 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_movement.Stop();
                 m_animation.SetEmptyAnimation(27, 0);
             }
+            m_animation.AddAnimation(0, m_info.idleAnimation, true, 0);
             for (int i = 0; i < slamCount; i++)
             {
+                m_animation.DisableRootMotion();
                 CalculateWallGrapple(true);
                 m_character.physics.simulateGravity = false;
                 m_movement.Stop();
+                m_bodyCollider.size = new Vector2(m_bodyCollider.size.y, m_bodyCollider.size.y);
                 StartCoroutine(GrappleExtendRoutine(4));
                 yield return new WaitForSeconds(3f);
+                m_legCollider.enabled = willTargetWall ? false : true;
                 if (willTargetSlam)
                 {
                     m_willGripTarget = true;
                     //m_tentacleTargetPointIndex = m_wallGrappleDirectionIndex == 0 ? 6 : 0;
                     m_targetPosition.position = willTargetWall ? m_tentacleOverridePoints[UnityEngine.Random.Range(0, m_tentacleOverridePoints.Count)].position : new Vector3(m_targetInfo.position.x, GroundPosition(m_targetInfo.position).y);
                     AimAt(m_targetPosition.position);
-                    m_animation.SetAnimation(27, m_info.wallGrappleExtendAnimations[m_info.wallGrappleExtendAnimations.Count -1], false).TimeScale = m_info.tentacleSpeed;
+                    m_animation.SetAnimation(27, m_info.wallGrappleExtendAnimations[m_info.wallGrappleExtendAnimations.Count - 1], false).TimeScale = m_info.tentacleSpeed;
                     yield return new WaitForAnimationComplete(m_animation.animationState, m_info.wallGrappleExtendAnimations[m_info.wallGrappleExtendAnimations.Count - 1]);
                 }
                 StartCoroutine(GrappleRetractRoutine(4));
-                yield return new WaitUntil(() => !m_willGripWall);
                 if (willTargetSlam)
                 {
-                    m_animation.SetAnimation(27, m_info.wallGrappleAnimations[m_info.wallGrappleAnimations.Count -1], false).MixDuration = 0;
+                    yield return new WaitForAnimationComplete(m_animation.animationState, m_info.wallGrappleRetractAnimations[0]);
+                    m_animation.SetAnimation(27, m_info.wallGrappleAnimations[m_info.wallGrappleAnimations.Count - 1], false).MixDuration = 0;
                     while (willTargetWall ? !m_groundSensor.isDetecting && !m_cielingSensor.isDetecting && !m_rightWallSensor.isDetecting && !m_leftWallSensor.isDetecting : !m_groundSensor.isDetecting)
                     {
                         m_character.physics.SetVelocity(m_targetLooker.right * m_info.toTargetRetractSpeed);
@@ -706,18 +748,22 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_willGripTarget = false;
                     m_targetPosition.position = Vector2.zero;
                     //m_targetChain.gameObject.SetActive(false);
-                    m_animation.SetAnimation(27, m_info.wallGrappleRetractAnimations[m_info.wallGrappleRetractAnimations.Count -1], false).TimeScale = m_info.tentacleSpeed;
+                    m_animation.SetAnimation(27, m_info.wallGrappleRetractAnimations[m_info.wallGrappleRetractAnimations.Count - 1], false).TimeScale = m_info.tentacleSpeed;
                 }
                 //m_animation.SetEmptyAnimation(0, 0);
                 //m_animation.SetAnimation(0, m_info.idleAnimation, true);
-                m_animation.DisableRootMotion();
                 m_character.physics.simulateGravity = true;
+                yield return new WaitUntil(() => !m_willGripWall);
                 switch (willTargetSlam)
                 {
                     case true:
                         yield return new WaitUntil(() => !m_willStickToWall);
+                        m_bodyCollider.size = m_bodyColliderCacheSize;
+                        m_legCollider.enabled = true;
                         break;
                     case false:
+                        m_bodyCollider.size = m_bodyColliderCacheSize;
+                        m_legCollider.enabled = true;
                         m_animation.SetAnimation(0, m_info.bodySlamStart, false);
                         yield return new WaitForAnimationComplete(m_animation.animationState, m_info.bodySlamStart);
                         while (!m_groundSensor.isDetecting)
@@ -747,6 +793,10 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator WreckingBallRoutine(int slamCount)
         {
             enabled = true;
+            m_rb2d.sharedMaterial = m_physicsMat;
+            m_animation.SetEmptyAnimation(3, 0);
+            m_animation.SetEmptyAnimation(15, 0);
+            m_animation.SetEmptyAnimation(27, 0);
             m_animation.DisableRootMotion();
             if (!m_groundSensor.isDetecting)
             {
@@ -765,11 +815,14 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_movement.Stop();
                 m_animation.SetEmptyAnimation(9, 0);
             }
+            m_animation.AddAnimation(0, m_info.idleAnimation, true, 0);
             CalculateWallGrapple(false);
             m_character.physics.simulateGravity = false;
             m_movement.Stop();
+            m_bodyCollider.size = new Vector2(m_bodyCollider.size.y, m_bodyCollider.size.y);
             StartCoroutine(GrappleExtendRoutine(m_info.wallGrappleExtendAnimations.Count - 1));
             yield return new WaitForSeconds(3f);
+            m_legCollider.enabled = false;
             var targetID = UnityEngine.Random.Range(0, m_tentacleOverridePoints.Count - 1);
             var target = m_tentacleOverridePoints[targetID].position;
             AimAt(target);
@@ -779,7 +832,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_character.physics.SetVelocity(m_targetLooker.right * m_info.wreckingBallSpeed);
                 if (m_groundSensor.isDetecting || m_cielingSensor.isDetecting || m_rightWallSensor.isDetecting || m_leftWallSensor.isDetecting)
                 {
-                    if (Vector2.Distance(transform.position, target) < 20f)
+                    if (Vector2.Distance(transform.position, target) < 25f)
                     {
                         m_movement.Stop();
                         if (targetID > m_tentacleOverridePoints.Count - 1)
@@ -795,21 +848,27 @@ namespace DChild.Gameplay.Characters.Enemies
             m_willGripTarget = false;
             m_targetPosition.position = Vector2.zero;
             m_animation.DisableRootMotion();
+            m_bodyCollider.size = m_bodyColliderCacheSize;
+            m_legCollider.enabled = true;
             m_character.physics.simulateGravity = true;
             StartCoroutine(GrappleRetractRoutine(m_info.wallGrappleRetractAnimations.Count - 1));
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.wallGrappleRetractAnimations[0]);
-            m_animation.SetAnimation(0, m_info.bodySlamStart, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.bodySlamStart);
-            while (!m_groundSensor.isDetecting)
+            if (!m_groundSensor.isDetecting)
             {
-                m_animation.SetAnimation(0, m_info.bodySlamLoop, true);
-                yield return null;
+                m_animation.SetAnimation(0, m_info.bodySlamStart, false);
+                yield return new WaitForAnimationComplete(m_animation.animationState, m_info.bodySlamStart);
+                while (!m_groundSensor.isDetecting)
+                {
+                    m_animation.SetAnimation(0, m_info.bodySlamLoop, true);
+                    yield return null;
+                }
             }
             m_movement.Stop();
             m_animation.SetAnimation(0, m_info.bodySlamEnd, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.bodySlamEnd);
+            m_rb2d.sharedMaterial = null;
             //m_hitbox.Enable();
-            m_grappleEvadeCoroutine = null;
+            m_wreckingBallCoroutine = null;
             m_hitbox.SetCanBlockDamageState(false);
             //TEMP
             m_attackDecider.hasDecidedOnAttack = false;
@@ -837,7 +896,11 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator SmartChangePhaseRoutine()
         {
             yield return new WaitWhile(() => !m_phaseHandle.allowPhaseChange);
+            m_movement.Stop();
+            m_rb2d.sharedMaterial = null;
             m_willStickToWall = false;
+            m_bodyCollider.size = m_bodyColliderCacheSize;
+            m_legCollider.enabled = true;
             m_willGripTarget = false;
             m_willGripWall = false;
             m_hitbox.SetCanBlockDamageState(false);
@@ -851,8 +914,9 @@ namespace DChild.Gameplay.Characters.Enemies
         private void SetAIToPhasing()
         {
             m_animation.SetEmptyAnimation(0, 0);
-            m_animation.SetEmptyAnimation(15, 0);
             m_animation.SetEmptyAnimation(3, 0);
+            m_animation.SetEmptyAnimation(15, 0);
+            m_animation.SetEmptyAnimation(27, 0);
             m_stateHandle.OverrideState(State.Phasing);
         }
 
@@ -874,6 +938,11 @@ namespace DChild.Gameplay.Characters.Enemies
                 StopCoroutine(m_grappleEvadeCoroutine);
                 m_grappleEvadeCoroutine = null;
             }
+            if (m_wreckingBallCoroutine != null)
+            {
+                StopCoroutine(m_wreckingBallCoroutine);
+                m_wreckingBallCoroutine = null;
+            }
         }
 
         private void ResetCounterCounts()
@@ -883,15 +952,12 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator ChangePhaseRoutine()
         {
-            //m_stateHandle.Wait(State.Chasing);
-            //if (m_character.facing != HorizontalDirection.Right)
-            //    CustomTurn();
             enabled = false;
             m_animation.DisableRootMotion();
             m_character.physics.simulateGravity = true;
-            if (!m_groundSensor.isDetecting)
+            StartCoroutine(GrappleRetractRoutine(m_info.wallGrappleRetractAnimations.Count - 1));
+            if (!m_character.physics.inContactWithGround)
             {
-                StartCoroutine(GrappleRetractRoutine(m_info.wallGrappleRetractAnimations.Count - 1));
                 yield return new WaitForAnimationComplete(m_animation.animationState, m_info.wallGrappleRetractAnimations[0]);
                 m_animation.SetAnimation(0, m_info.bodySlamStart, false);
                 yield return new WaitForAnimationComplete(m_animation.animationState, m_info.bodySlamStart);
@@ -936,24 +1002,56 @@ namespace DChild.Gameplay.Characters.Enemies
         }
         #region Attacks
 
-        private void LaunchProjectile(bool groupProjectiles)
+        private void LaunchSingleProjectile()
         {
-            StartCoroutine(DelayedProjectileLauncher(groupProjectiles ? m_spitterPositions.Count : 1, m_info.launchDelay));
+            var projectileInfo = m_willStickToWall ? m_info.airProjectile.projectileInfo : m_info.ballisticProjectile.projectileInfo;
+            m_projectileLauncher = new BallisticProjectileLauncher(projectileInfo, m_spitterPositions[0], m_info.projectileGravityScale, projectileInfo.speed);
+            m_projectileLauncher.AimAt(m_targetInfo.position);
+            switch (m_willStickToWall)
+            {
+                case true:
+                    m_projectileLauncher.LaunchProjectile();
+                    break;
+                case false:
+                    m_projectileLauncher.LaunchBallisticProjectile(m_targetInfo.position);
+                    break;
+            }
+
+            //StartCoroutine(DelayedProjectileLauncher(m_spitterPositions.Count, m_info.launchDelay));
         }
 
-        private IEnumerator DelayedProjectileLauncher(int launchCounts, float launchDelay)
+        private void LaunchMultiProjectile()
         {
-            yield return new WaitForSeconds(launchDelay);
-            for (int i = 0; i < launchCounts; i++)
+            var projectileInfo = m_willStickToWall ? m_info.airProjectile.projectileInfo : m_info.ballisticProjectile.projectileInfo;
+            for (int i = 0; i < m_spitterPositions.Count; i++)
             {
-                m_projectileLauncher = new BallisticProjectileLauncher(m_info.projectile.projectileInfo, m_spitterPositions[i], m_info.projectileGravityScale, m_info.projectile.projectileInfo.speed);
-                m_projectileLauncher.LaunchBallisticProjectile(launchCounts == 1 ? m_lastTargetPos : SpitterAimPosition(m_spitterPositions[i])/*, m_info.targetOffset.y*/);
-                //m_projectileLauncher.LaunchBallisticProjectile(SpitterAimPosition(m_spitterPositions[i]), m_character.facing);
-                //m_projectileLauncher.AimAt(m_spitterPositions[i].right * 3);
-                //m_projectileLauncher.LaunchProjectile();
+                m_projectileLauncher = new BallisticProjectileLauncher(projectileInfo, m_spitterPositions[i], m_info.projectileGravityScale, projectileInfo.speed);
+                m_projectileLauncher.AimAt(SpitterAimPosition(m_spitterPositions[i]));
+                switch (m_willStickToWall)
+                {
+                    case true:
+                        m_projectileLauncher.LaunchProjectile();
+                        break;
+                    case false:
+                        //m_projectileLauncher = new BallisticProjectileLauncher(projectileInfo, m_spitterPositions[i], m_info.projectileGravityScale, projectileInfo.speed);
+                        m_projectileLauncher.LaunchBallisticProjectile(SpitterAimPosition(m_spitterPositions[i]));
+                        break;
+                }
             }
-            yield return null;
+
+            //StartCoroutine(DelayedProjectileLauncher(m_spitterPositions.Count, m_info.launchDelay));
         }
+
+        //private IEnumerator DelayedProjectileLauncher(int launchCounts, float launchDelay)
+        //{
+        //    yield return new WaitForSeconds(launchDelay);
+        //    for (int i = 0; i < launchCounts; i++)
+        //    {
+        //        m_projectileLauncher = new BallisticProjectileLauncher(m_info.ballisticProjectile.projectileInfo, m_spitterPositions[i], m_info.projectileGravityScale, m_info.ballisticProjectile.projectileInfo.speed);
+        //        m_projectileLauncher.LaunchBallisticProjectile(SpitterAimPosition(m_spitterPositions[i]));
+        //    }
+        //    yield return null;
+        //}
 
         private Vector2 SpitterAimPosition(Transform spitter)
         {
@@ -968,16 +1066,15 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator Phase1Pattern1AttackRoutine()
         {
-            m_animation.EnableRootMotion(true, false);
             var timer = 0f;
             while (timer <= m_info.crawlDuration /*&& !IsTargetInRange(m_info.heavyGroundStabRightAttacks[0].range - 5f)*/)
             {
-                var tentaSpearAnim = m_targetInfo.position.x > transform.position.x ? m_info.tentaSpearRightCrawl.animation : m_info.tentaSpearLeftCrawl.animation;
-                m_animation.SetAnimation(0, tentaSpearAnim, true);
+                var tentaSpearCrawlAnimation = m_targetInfo.position.x > transform.position.x ? m_info.tentaSpearRightCrawl.animation : m_info.tentaSpearLeftCrawl.animation;
+                m_animation.SetAnimation(0, tentaSpearCrawlAnimation, true);
                 timer += Time.deltaTime;
                 yield return null;
             }
-            m_animation.AddAnimation(0, m_info.idleAnimation, true, 0);
+            m_animation.SetEmptyAnimation(0, 0);
 
             if (IsTargetInRange(m_info.heavyGroundStabRightAttacks[0].range))
             {
@@ -1020,7 +1117,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_lastTargetPos = m_targetInfo.position;
                     m_animation.SetAnimation(0, m_info.spikeSpitterExtendAnimations[i], false);
                     yield return new WaitForAnimationComplete(m_animation.animationState, m_info.spikeSpitterExtendAnimations[i]);
-                    LaunchProjectile(i == 0 ? false : true);
+                    //LaunchProjectile(i == 0 ? false : true);
                     m_animation.SetAnimation(0, m_info.spikeSpitterAttacks[i].animation, false);
                     yield return new WaitForAnimationComplete(m_animation.animationState, m_info.spikeSpitterAttacks[i].animation);
                     m_animation.SetAnimation(0, m_info.spikeSpitterRetractAnimations[i], false);
@@ -1060,7 +1157,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_animation.SetAnimation(15, m_info.spikeSpitterExtendAnimations[id], false);
                 Debug.Log("Pattern 1 Phase 3 Shoot ");
                 yield return new WaitForAnimationComplete(m_animation.animationState, m_info.spikeSpitterExtendAnimations[id]);
-                LaunchProjectile(spreadShot);
+                //LaunchProjectile(spreadShot);
                 m_animation.SetAnimation(15, m_info.spikeSpitterAttacks[id].animation, false);
                 yield return new WaitForAnimationComplete(m_animation.animationState, m_info.spikeSpitterAttacks[id].animation);
                 m_animation.SetAnimation(15, m_info.spikeSpitterRetractAnimations[id], false);
@@ -1089,22 +1186,22 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator Phase2Pattern1AttackRoutine()
         {
-            m_stateHandle.Wait(State.Attacking);
             if (IsTargetInRange(m_info.phase2Pattern1Range))
             {
-                m_animation.EnableRootMotion(true, false);
                 var timer = 0f;
                 while (timer <= m_info.crawlDuration /*&& !IsTargetInRange(m_info.heavyGroundStabRightAttacks[0].range - 5f)*/)
                 {
-                    var tentaSpearAnim = m_targetInfo.position.x > transform.position.x ? m_info.tentaSpearRightCrawl.animation : m_info.tentaSpearLeftCrawl.animation;
-                    m_animation.SetAnimation(0, tentaSpearAnim, true);
+                    var tentaSpearCrawlAnimation = m_targetInfo.position.x > transform.position.x ? m_info.tentaSpearRightCrawl.animation : m_info.tentaSpearLeftCrawl.animation;
+                    m_animation.SetAnimation(0, tentaSpearCrawlAnimation, true);
                     timer += Time.deltaTime;
                     yield return null;
                 }
+                m_animation.SetEmptyAnimation(0, 0);
+
                 if (IsTargetInRange(m_info.heavyGroundStabLeftAttacks[0].range))
                 {
                     var randomAttack = UnityEngine.Random.Range(0, 2) == 0 ? true : false;
-                    m_currentAttackCoroutine = StartCoroutine(randomAttack ? Phase2Pattern5AttackRoutine() : Phase2Pattern6AttackRoutine());
+                    m_currentAttackCoroutine = StartCoroutine(randomAttack ? HeavyGroundStabAttackRoutine() : HeavySpearStabAttackRoutine());
                 }
                 else
                 {
@@ -1119,7 +1216,7 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return null;
         }
 
-        private IEnumerator Phase2Pattern5AttackRoutine()
+        private IEnumerator HeavyGroundStabAttackRoutine()
         {
             for (int i = 0; i < m_info.heavyGroundStabRightAttacks.Count; i++)
             {
@@ -1142,14 +1239,118 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return null;
         }
 
-        private IEnumerator Phase2Pattern6AttackRoutine()
+        private IEnumerator HeavySpearStabAttackRoutine()
         {
             //string heavyGroundStabAnticipation = m_targetInfo.position.x > transform.position.x ? m_info.heavySpearStabRightAttack.animation : m_info.heavySpearStabLeftAttack.animation;
             //m_animation.SetAnimation(0, heavyGroundStabAnticipation, false);
             //yield return new WaitForAnimationComplete(m_animation.animationState, heavyGroundStabAnticipation);
-            var heavyGroundStabAttackAnimation = m_targetInfo.position.x > transform.position.x ? m_info.heavySpearStabRightAttack.animation : m_info.heavySpearStabLeftAttack.animation;
-            m_animation.SetAnimation(0, heavyGroundStabAttackAnimation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, heavyGroundStabAttackAnimation);
+            var heavySpearStabAttackAnimation = m_targetInfo.position.x > transform.position.x ? m_info.heavySpearStabRightAttack.animation : m_info.heavySpearStabLeftAttack.animation;
+            m_animation.SetAnimation(0, heavySpearStabAttackAnimation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, heavySpearStabAttackAnimation);
+            m_animation.DisableRootMotion();
+            m_attackDecider.hasDecidedOnAttack = false;
+            m_currentAttackCoroutine = null;
+            m_stateHandle.ApplyQueuedState();
+            yield return null;
+        }
+
+        private IEnumerator Phase3Pattern2AttackRoutine()
+        {
+            m_animation.EnableRootMotion(true, false);
+            m_animation.AddAnimation(0, m_info.idleAnimation, true, 0);
+            if (IsTargetInRange(m_info.spikeSpitterAttacks[0].range))
+            {
+                for (int i = 0; i < m_info.spikeSpitterAttacks.Count; i++)
+                {
+                    m_animation.SetAnimation(0, m_info.spikeSpitterExtendAnimations[i], false);
+                    yield return new WaitForAnimationComplete(m_animation.animationState, m_info.spikeSpitterExtendAnimations[i]);
+                    m_lastTargetPos = m_targetInfo.position;
+                    for (int x = 0; x < m_info.spikeShowerCount[i]; x++)
+                    {
+                        m_animation.SetAnimation(0, m_info.spikeSpitterAttacks[i].animation, false);
+                        yield return new WaitForAnimationComplete(m_animation.animationState, m_info.spikeSpitterAttacks[i].animation);
+                        m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                        m_lastTargetPos = m_targetInfo.position;
+                    }
+                    m_animation.SetAnimation(0, m_info.spikeSpitterRetractAnimations[i], false);
+                    yield return new WaitForAnimationComplete(m_animation.animationState, m_info.spikeSpitterRetractAnimations[i]);
+                }
+                m_animation.DisableRootMotion();
+                m_attackDecider.hasDecidedOnAttack = false;
+                m_currentAttackCoroutine = null;
+                m_stateHandle.ApplyQueuedState();
+            }
+            else
+            {
+                m_grappleCoroutine = StartCoroutine(GrappleRoutine(false, true, m_info.bodySlamCount/*, true*/));
+            }
+            yield return null;
+        }
+
+        private IEnumerator Phase3Pattern3AttackRoutine()
+        {
+            m_willStickToWall = true;
+            m_animation.EnableRootMotion(true, false);
+            m_animation.AddAnimation(0, m_info.idleAnimation, true, 0);
+            RandomizeTentaclePosition();
+            m_grappleCoroutine = StartCoroutine(GrappleRoutine(true, true, 1/*, true*/));
+            yield return new WaitUntil(() => m_character.physics.simulateGravity);
+            enabled = false;
+            m_animation.EnableRootMotion(true, true);
+            m_animation.SetAnimation(0, DynamicIdleAnimation(), true);
+            for (int i = 0; i < m_info.spikeSpitterAttacks.Count; i++)
+            {
+                m_animation.SetAnimation(0, m_info.spikeSpitterExtendAnimations[i], false);
+                yield return new WaitForAnimationComplete(m_animation.animationState, m_info.spikeSpitterExtendAnimations[i]);
+                m_lastTargetPos = m_targetInfo.position;
+                for (int x = 0; x < m_info.spikeShowerCount[i]; x++)
+                {
+                    m_animation.SetAnimation(0, m_info.spikeSpitterAttacks[i].animation, false);
+                    yield return new WaitForAnimationComplete(m_animation.animationState, m_info.spikeSpitterAttacks[i].animation);
+                    m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                    m_lastTargetPos = m_targetInfo.position;
+                }
+                m_animation.SetAnimation(0, m_info.spikeSpitterRetractAnimations[i], false);
+                yield return new WaitForAnimationComplete(m_animation.animationState, m_info.spikeSpitterRetractAnimations[i]);
+            }
+            m_animation.SetEmptyAnimation(3, 0);
+            m_animation.SetEmptyAnimation(15, 0);
+            m_animation.DisableRootMotion();
+            m_animation.SetAnimation(0, m_info.bodySlamStart, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.bodySlamStart);
+            while (!m_groundSensor.isDetecting)
+            {
+                m_animation.SetAnimation(0, m_info.bodySlamLoop, true);
+                yield return null;
+            }
+            //if (m_character.facing != HorizontalDirection.Right)
+            //    CustomTurn();
+            m_willStickToWall = false;
+            //m_animation.DisableRootMotion();
+            //m_attackDecider.hasDecidedOnAttack = false;
+            //m_currentAttackCoroutine = null;
+            //m_stateHandle.ApplyQueuedState();
+            yield return null;
+            enabled = true;
+        }
+
+        private IEnumerator Phase3Pattern7AttackRoutine()
+        {
+            m_animation.EnableRootMotion(true, false);
+            m_animation.SetAnimation(0, m_info.krakenRageAttack.animation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.krakenRageAttack.animation);
+            m_animation.SetAnimation(0, m_info.krakenRageLoopAnimation, true);
+            m_krakenRageBB.enabled = true;
+            //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.krakenRageAttack.animation);
+            var timer = 0f;
+            while (timer < m_info.krakenRageDuration)
+            {
+                timer += Time.deltaTime;
+                yield return null;
+            }
+            m_krakenRageBB.enabled = false;
+            m_animation.SetAnimation(0, m_info.krakenRageEndAnimation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.krakenRageEndAnimation);
             m_animation.DisableRootMotion();
             m_attackDecider.hasDecidedOnAttack = false;
             m_currentAttackCoroutine = null;
@@ -1165,16 +1366,54 @@ namespace DChild.Gameplay.Characters.Enemies
             m_hitbox.Disable();
             m_animation.DisableRootMotion();
             m_movement.Stop();
+            m_character.physics.simulateGravity = true;
+            StartCoroutine(DeathRoutine());
+        }
+
+        private IEnumerator DeathRoutine()
+        {
+            StartCoroutine(GrappleRetractRoutine(m_info.wallGrappleRetractAnimations.Count - 1));
+            if (!m_character.physics.inContactWithGround)
+            {
+                yield return new WaitForAnimationComplete(m_animation.animationState, m_info.wallGrappleRetractAnimations[0]);
+                m_animation.SetAnimation(0, m_info.bodySlamStart, false);
+                yield return new WaitForAnimationComplete(m_animation.animationState, m_info.bodySlamStart);
+                while (!m_groundSensor.isDetecting)
+                {
+                    m_animation.SetAnimation(0, m_info.bodySlamLoop, true);
+                    yield return null;
+                }
+                m_animation.SetAnimation(0, m_info.bodySlamEnd, false);
+                yield return new WaitForAnimationComplete(m_animation.animationState, m_info.bodySlamEnd);
+                enabled = false;
+                m_movement.Stop();
+                m_animation.SetEmptyAnimation(9, 0);
+                m_animation.SetAnimation(0, m_info.idleAnimation, true);
+            }
+            m_animation.SetEmptyAnimation(0, 0);
+            m_animation.SetEmptyAnimation(3, 0);
+            m_animation.SetEmptyAnimation(15, 0);
+            m_animation.SetEmptyAnimation(27, 0);
+            m_krakenRageBB.enabled = false;
+            m_animation.SetAnimation(0, m_info.deathSelfDestructAnimation, false);
+            yield return new WaitForSeconds(0.75f);
+            m_selfDestructBB.enabled = true;
+            yield return new WaitForSeconds(0.25f);
+            m_selfDestructBB.enabled = false;
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.deathSelfDestructAnimation);
+            m_animation.SetAnimation(0, m_info.deathAnimation, true);
+            enabled = false;
+            yield return null;
         }
 
         #region Movement
         private void MoveToTarget(float targetRange)
         {
             var moveRight = m_willTentaspearChase ? m_info.tentaSpearRightCrawl : m_info.rightMove;
-            var moveLeft= m_willTentaspearChase ? m_info.tentaSpearLeftCrawl : m_info.leftMove;
+            var moveLeft = m_willTentaspearChase ? m_info.tentaSpearLeftCrawl : m_info.leftMove;
             if (!IsTargetInRange(targetRange) && m_groundSensor.isDetecting /*&& !m_wallSensor.isDetecting && m_edgeSensor.isDetecting*/)
             {
-                m_animation.EnableRootMotion(true, false);
+                m_animation.EnableRootMotion(m_willTentaspearChase ? false :true, false);
                 m_animation.SetAnimation(0, m_targetInfo.position.x > transform.position.x ? moveRight.animation : moveLeft.animation, true);
                 //m_movement.MoveTowards(Vector2.one * transform.localScale.x, m_info.walk.speed);
             }
@@ -1183,6 +1422,17 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_movement.Stop();
                 m_animation.SetAnimation(0, m_info.idleAnimation, true);
             }
+        }
+        private void EventMove()
+        {
+            m_animation.DisableRootMotion();
+            //m_movement.MoveTowards(Vector2.one * transform.localScale.x, m_targetInfo.position.x > transform.position.x ? m_info.tentaSpearRightCrawl.speed : -m_info.tentaSpearRightCrawl.speed);
+            m_rb2d.AddForce(new Vector2(m_targetInfo.position.x > transform.position.x ? m_info.tentaSpearRightCrawl.speed : -m_info.tentaSpearRightCrawl.speed, transform.position.y), ForceMode2D.Impulse);
+        }
+        private void EventStop()
+        {
+            m_animation.EnableRootMotion(true, false);
+            m_movement.Stop();
         }
 
         private string DynamicIdleAnimation()
@@ -1343,7 +1593,19 @@ namespace DChild.Gameplay.Characters.Enemies
             m_attackDecider.SetList(new AttackInfo<Attack>(Attack.Phase1Pattern1, m_info.phase1Pattern1Range)
                                     , new AttackInfo<Attack>(Attack.Phase1Pattern2, m_info.phase1Pattern2Range)
                                     , new AttackInfo<Attack>(Attack.Phase1Pattern3, m_info.phase1Pattern3Range)
-                                    , new AttackInfo<Attack>(Attack.Phase1Pattern4, m_info.phase1Pattern4Range));
+                                    , new AttackInfo<Attack>(Attack.Phase1Pattern4, m_info.phase1Pattern4Range)
+                                    , new AttackInfo<Attack>(Attack.Phase2Pattern2, m_info.phase2Pattern2Range)
+                                    , new AttackInfo<Attack>(Attack.Phase2Pattern3, m_info.phase2Pattern3Range)
+                                    , new AttackInfo<Attack>(Attack.Phase2Pattern4, m_info.phase2Pattern4Range)
+                                    , new AttackInfo<Attack>(Attack.Phase2Pattern5, m_info.phase2Pattern5Range)
+                                    , new AttackInfo<Attack>(Attack.Phase2Pattern6, m_info.phase2Pattern6Range)
+                                    , new AttackInfo<Attack>(Attack.Phase3Pattern1, m_info.phase3Pattern1Range)
+                                    , new AttackInfo<Attack>(Attack.Phase3Pattern2, m_info.phase3Pattern2Range)
+                                    , new AttackInfo<Attack>(Attack.Phase3Pattern3, m_info.phase3Pattern3Range)
+                                    , new AttackInfo<Attack>(Attack.Phase3Pattern4, m_info.phase3Pattern4Range)
+                                    , new AttackInfo<Attack>(Attack.Phase3Pattern5, m_info.phase3Pattern5Range)
+                                    , new AttackInfo<Attack>(Attack.Phase3Pattern6, m_info.phase3Pattern6Range)
+                                    , new AttackInfo<Attack>(Attack.Phase3Pattern7, m_info.phase3Pattern7Range));
             m_attackDecider.hasDecidedOnAttack = false;
         }
 
@@ -1480,6 +1742,10 @@ namespace DChild.Gameplay.Characters.Enemies
             m_phaseHandle = new PhaseHandle<Phase, PhaseInfo>();
             m_phaseHandle.Initialize(Phase.PhaseOne, m_info.phaseInfo, m_character, ChangeState, ApplyPhaseData);
             m_phaseHandle.ApplyChange();
+            m_spineListener.Subscribe(m_info.singleShotEvent, LaunchSingleProjectile);
+            m_spineListener.Subscribe(m_info.multiShotEvent, LaunchMultiProjectile);
+            m_spineListener.Subscribe(m_info.moveEvent, EventMove);
+            m_spineListener.Subscribe(m_info.stopEvent, EventStop);
             for (int i = 0; i < m_chains.Count; i++)
             {
                 m_chains[i].gameObject.SetActive(false);
@@ -1513,7 +1779,7 @@ namespace DChild.Gameplay.Characters.Enemies
             }
             if (m_willGripTarget)
             {
-                m_tentacleOverrideBones[m_tentacleOverrideBones.Count -1].transform.position = m_targetPosition.position;
+                m_tentacleOverrideBones[m_tentacleOverrideBones.Count - 1].transform.position = m_targetPosition.position;
                 //m_animation.SetAnimation(0, DynamicIdleAnimation(), true);
             }
             if (m_willGripWall || m_willGripTarget)
@@ -1559,18 +1825,20 @@ namespace DChild.Gameplay.Characters.Enemies
                             m_pickedCooldown = m_currentFullCooldown[0];
                             break;
                         case Attack.Phase1Pattern2:
-                            m_currentAttackCoroutine = StartCoroutine(Phase1Pattern2AttackRoutine());
+                            //m_currentAttackCoroutine = StartCoroutine(Phase1Pattern2AttackRoutine());
+                            m_currentAttackCoroutine = StartCoroutine(Phase1Pattern1AttackRoutine());
                             m_pickedCooldown = m_currentFullCooldown[1];
                             break;
                         case Attack.Phase1Pattern3:
-                            m_currentAttackCoroutine = StartCoroutine(Phase1Pattern3And4AttackRoutine(false));
+                            //m_currentAttackCoroutine = StartCoroutine(Phase1Pattern3And4AttackRoutine(false));
+                            m_currentAttackCoroutine = StartCoroutine(Phase1Pattern1AttackRoutine());
                             m_pickedCooldown = m_currentFullCooldown[2];
                             break;
                         case Attack.Phase1Pattern4:
-                            m_currentAttackCoroutine = StartCoroutine(Phase1Pattern3And4AttackRoutine(true));
+                            //m_currentAttackCoroutine = StartCoroutine(Phase1Pattern3And4AttackRoutine(true));
+                            m_currentAttackCoroutine = StartCoroutine(Phase1Pattern1AttackRoutine());
                             m_pickedCooldown = m_currentFullCooldown[3];
                             break;
-                        #region WIP ATTACK PATTERNS
                         case Attack.Phase2Pattern1:
                             m_currentAttackCoroutine = StartCoroutine(Phase2Pattern1AttackRoutine());
                             m_pickedCooldown = m_currentFullCooldown[0];
@@ -1588,12 +1856,48 @@ namespace DChild.Gameplay.Characters.Enemies
                             m_pickedCooldown = m_currentFullCooldown[3];
                             break;
                         case Attack.Phase2Pattern5:
-                            m_currentAttackCoroutine = StartCoroutine(Phase2Pattern5AttackRoutine());
-                            m_pickedCooldown = m_currentFullCooldown[3];
+                            m_currentAttackCoroutine = StartCoroutine(HeavyGroundStabAttackRoutine());
+                            m_pickedCooldown = m_currentFullCooldown[4];
                             break;
                         case Attack.Phase2Pattern6:
-                            m_currentAttackCoroutine = StartCoroutine(Phase2Pattern6AttackRoutine());
+                            m_currentAttackCoroutine = StartCoroutine(HeavySpearStabAttackRoutine());
+                            m_pickedCooldown = m_currentFullCooldown[5];
+                            break;
+                        #region WIP ATTACK PATTERNS
+                        case Attack.Phase3Pattern1:
+                            if (IsTargetInRange(m_info.heavyGroundStabLeftAttacks[0].range))
+                            {
+                                m_currentAttackCoroutine = StartCoroutine(HeavySpearStabAttackRoutine());
+                            }
+                            else
+                            {
+                                m_currentAttackCoroutine = StartCoroutine(GrappleRoutine(false, true, m_info.bodySlamCount));
+                            }
+                            m_pickedCooldown = m_currentFullCooldown[0];
+                            break;
+                        case Attack.Phase3Pattern2:
+                            m_currentAttackCoroutine = StartCoroutine(Phase3Pattern2AttackRoutine());
+                            m_pickedCooldown = m_currentFullCooldown[1];
+                            break;
+                        case Attack.Phase3Pattern3:
+                            m_currentAttackCoroutine = StartCoroutine(Phase3Pattern3AttackRoutine());
+                            m_pickedCooldown = m_currentFullCooldown[2];
+                            break;
+                        case Attack.Phase3Pattern4:
+                            m_currentAttackCoroutine = StartCoroutine(Phase1Pattern3And4AttackRoutine(true));
                             m_pickedCooldown = m_currentFullCooldown[3];
+                            break;
+                        case Attack.Phase3Pattern5:
+                            m_currentAttackCoroutine = StartCoroutine(HeavyGroundStabAttackRoutine()); //LEAVE ALONE
+                            m_pickedCooldown = m_currentFullCooldown[4];
+                            break;
+                        case Attack.Phase3Pattern6:
+                            m_currentAttackCoroutine = StartCoroutine(HeavySpearStabAttackRoutine()); //LEAVE ALONE
+                            m_pickedCooldown = m_currentFullCooldown[5];
+                            break;
+                        case Attack.Phase3Pattern7:
+                            m_currentAttackCoroutine = StartCoroutine(Phase3Pattern7AttackRoutine());
+                            m_pickedCooldown = m_currentFullCooldown[6];
                             break;
                             #endregion
                     }
@@ -1610,6 +1914,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     else
                     {
                         m_currentCooldown = 0;
+                        m_animation.DisableRootMotion();
                         //m_stateHandle.OverrideState(State.ReevaluateSituation);
                         m_stateHandle.OverrideState(State.ReevaluateSituation);
                     }
@@ -1624,6 +1929,7 @@ namespace DChild.Gameplay.Characters.Enemies
                             CustomTurn();
                         if (IsTargetInRange(m_currentAttackRange) && m_currentAttackCoroutine == null)
                         {
+                            m_animation.SetEmptyAnimation(0, 0);
                             m_stateHandle.SetState(State.Attacking);
                         }
                         else

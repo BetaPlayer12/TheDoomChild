@@ -55,6 +55,9 @@ namespace DChild.Gameplay.Characters.Enemies
             private string m_idleAnimation;
             public string idleAnimation => m_idleAnimation;
             [SerializeField, ValueDropdown("GetAnimations")]
+            private string m_detectAnimation;
+            public string detectAnimation => m_detectAnimation;
+            [SerializeField, ValueDropdown("GetAnimations")]
             private string m_deathAnimation;
             public string deathAnimation => m_deathAnimation;
             [SerializeField, ValueDropdown("GetAnimations")]
@@ -87,6 +90,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private enum State
         {
+            Detect,
             Idle,
             Turning,
             Attacking,
@@ -179,7 +183,10 @@ namespace DChild.Gameplay.Characters.Enemies
                 {
                     base.SetTarget(damageable, m_target);
                     m_selfCollider.SetActive(true);
-                    m_stateHandle.SetState(State.Chasing);
+                    if (m_stateHandle.currentState == State.Idle)
+                    {
+                        m_stateHandle.SetState(State.Detect);
+                    }
                     m_currentPatience = 0;
                     m_enablePatience = false;
                     //StopCoroutine(PatienceRoutine());
@@ -211,6 +218,17 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_enablePatience = false;
                 m_stateHandle.SetState(State.Idle);
             }
+        }
+        private IEnumerator DetectRoutine()
+        {
+            m_movement.Stop();
+            m_animation.EnableRootMotion(true, true);
+            m_animation.SetAnimation(0, m_info.detectAnimation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.detectAnimation);
+            m_animation.DisableRootMotion();
+            m_animation.SetAnimation(0, m_info.idleAnimation, true);
+            m_stateHandle.OverrideState(State.ReevaluateSituation);
+            yield return null;
         }
 
         public IEnumerator DeathRoutine()
@@ -303,6 +321,20 @@ namespace DChild.Gameplay.Characters.Enemies
             //Debug.Log("Edge Sensor is " + m_edgeSensor.isDetecting);
             switch (m_stateHandle.currentState)
             {
+                case State.Detect:
+                    m_movement.Stop();
+                    m_flinchHandle.m_autoFlinch = false;
+                    if (IsFacingTarget())
+                    {
+                        m_stateHandle.Wait(State.ReevaluateSituation);
+                        StartCoroutine(DetectRoutine());
+                    }
+                    else
+                    {
+                        m_turnState = State.Detect;
+                        m_stateHandle.SetState(State.Turning);
+                    }
+                    break;
                 case State.Idle:
                     //Debug.Log("Patrolling");
                     m_animation.SetAnimation(0, m_info.idleAnimation, true);
