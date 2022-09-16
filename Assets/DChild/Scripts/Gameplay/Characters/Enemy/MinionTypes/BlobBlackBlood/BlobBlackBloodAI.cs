@@ -27,14 +27,15 @@ namespace DChild.Gameplay.Characters.Enemies
             private MovementInfo m_move = new MovementInfo();
             public MovementInfo move => m_move;
 
-            //Attack Behaviours
-            //
             [SerializeField, MinValue(0)]
             private float m_patience;
             public float patience => m_patience;
             [SerializeField, MinValue(0)]
             private float m_deathDuration;
             public float deathDuration => m_deathDuration;
+            [SerializeField, MinValue(0)]
+            private float m_sleepTimer;
+            public float sleepTimer => m_sleepTimer;
 
             [SerializeField]
             private float m_targetDistanceTolerance;
@@ -108,15 +109,15 @@ namespace DChild.Gameplay.Characters.Enemies
         [ShowInInspector]
         private StateHandle<State> m_stateHandle;
 
-        [ShowInInspector]
-        private float m_sleepTimer;
-
         private State m_turnState;
 
         private Coroutine m_sneerRoutine;
         private Coroutine m_patienceRoutine;
         private Coroutine m_randomIdleRoutine;
         private Coroutine m_randomTurnRoutine;
+
+        [ShowInInspector]
+        private float m_sleepTimerCounter;
 
         private void OnAttackDone(object sender, EventActionArgs eventArgs)
         {
@@ -169,17 +170,16 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_animation.SetAnimation(0, m_info.recoverAnimation, false);
             //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.recoverAnimation);
             //m_animation.SetAnimation(0, m_info.idleAnimation, true);
-            //m_stateHandle.OverrideState(State.Patrol);
             gameObject.transform.localEulerAngles = new Vector3(0f, 0f, 180f);
-            //gameObject.SetActive(false);
             yield return null;
         }
 
         private IEnumerator WakeUpRoutine()
         {
-            m_health.SetHealthPercentage(1f);
             gameObject.transform.localEulerAngles = new Vector3(0f, 0f, 0f);
-            m_stateHandle.SetState(State.Patrol);
+            m_hitbox.Enable();
+            m_selfCollider.enabled = true;
+            m_health.SetHealthPercentage(1f);
             yield return null;
         }
 
@@ -206,6 +206,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_currentMoveSpeed = UnityEngine.Random.Range(m_info.move.speed * .75f, m_info.move.speed * 1.25f);
 
             m_startPoint = transform.position;
+            m_sleepTimerCounter = 0f;
         }
 
         protected override void Awake()
@@ -264,15 +265,17 @@ namespace DChild.Gameplay.Characters.Enemies
                     }
                     break;
                 case State.Sleep:
-                    m_sleepTimer -= GameplaySystem.time.deltaTime;
+                    m_sleepTimerCounter += GameplaySystem.time.deltaTime;
 
-                    if(m_sleepTimer < 0)
+                    if(m_sleepTimerCounter > m_info.sleepTimer)
                     {
+                        m_sleepTimerCounter = 0;
                         m_stateHandle.SetState(State.WakeUp);
                     }
                     break;
                 case State.WakeUp:
                     StartCoroutine(WakeUpRoutine());
+                    m_stateHandle.OverrideState(State.Patrol);
                     break;
                 case State.WaitBehaviourEnd:
                     return;
