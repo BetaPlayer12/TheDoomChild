@@ -57,50 +57,6 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 2.1753068, y: 7.242697}
   m_EdgeRadius: 0
---- !u!1 &2429537028231182644
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2429537028231182646}
-  - component: {fileID: 2429537028231182645}
-  m_Layer: 0
-  m_Name: Stats
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &2429537028231182646
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2429537028231182644}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 2429537028785659068}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2429537028231182645
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2429537028231182644}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a345e74751b90eb46865600dc3709da1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_maxHealth: 5
 --- !u!1 &2429537028488067774
 GameObject:
   m_ObjectHideFlags: 0
@@ -195,7 +151,6 @@ GameObject:
   - component: {fileID: 2429537028785659068}
   - component: {fileID: 2429537028785659071}
   - component: {fileID: 2429537028785659070}
-  - component: {fileID: 2429537028785659069}
   m_Layer: 0
   m_Name: BlackBloodBlobWall
   m_TagString: Untagged
@@ -214,7 +169,6 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 2429537028231182646}
   - {fileID: 2480733784744462972}
   - {fileID: 2429537029404225740}
   m_Father: {fileID: 0}
@@ -258,7 +212,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 798a06706630eac4f982cedb713cc1bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_object: {fileID: 2429537028785659069}
+  m_object: {fileID: 2254229626442218805}
   m_type: 2
   m_createDebris: 0
   m_debris:
@@ -366,7 +320,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-      - m_Target: {fileID: 2429537028785659069}
+      - m_Target: {fileID: 0}
         m_MethodName: Heal
         m_Mode: 3
         m_Arguments:
@@ -432,21 +386,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
---- !u!114 &2429537028785659069
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2429537028785659067}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c106d3ee04e320140b205c0d1ae65bb4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_centerMass: {fileID: 0}
-  m_health: {fileID: 2429537028231182645}
-  m_resistance: {fileID: 0}
 --- !u!1 &2429537029404225739
 GameObject:
   m_ObjectHideFlags: 0
@@ -478,7 +417,7 @@ Transform:
   - {fileID: 2429537028488067775}
   - {fileID: 8354922766638386916}
   m_Father: {fileID: 2429537028785659068}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1020739086352900148
 MonoBehaviour:
@@ -5420,7 +5359,7 @@ PrefabInstance:
     - target: {fileID: 8195746250847233252, guid: 2fe08b8b03f5908428af19ec0724f826,
         type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8195746250847233252, guid: 2fe08b8b03f5908428af19ec0724f826,
         type: 3}
@@ -5445,3 +5384,15 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 6039456778670583448}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &2254229626442218805 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5519394541926601645, guid: 2fe08b8b03f5908428af19ec0724f826,
+    type: 3}
+  m_PrefabInstance: {fileID: 6039456778670583448}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c106d3ee04e320140b205c0d1ae65bb4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

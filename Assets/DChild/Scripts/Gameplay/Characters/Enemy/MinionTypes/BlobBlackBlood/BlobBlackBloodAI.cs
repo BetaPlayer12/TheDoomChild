@@ -179,6 +179,8 @@ namespace DChild.Gameplay.Characters.Enemies
             gameObject.transform.localEulerAngles = new Vector3(0f, 0f, 0f);
             m_hitbox.Enable();
             m_selfCollider.enabled = true;
+            m_damageable.Heal(9999);
+            GameplaySystem.combatManager.Heal(m_damageable, 9999);
             m_health.SetHealthPercentage(1f);
             yield return null;
         }
