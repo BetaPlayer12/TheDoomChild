@@ -132,15 +132,16 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             StopAllCoroutines();
             base.OnDestroyed(sender, eventArgs);
-            m_stateHandle.OverrideState(State.WaitBehaviourEnd);
             m_character.physics.UseStepClimb(true);
             if (m_animation.GetCurrentAnimation(0).ToString() != m_info.idleAnimation)
                 m_movement.Stop();
 
+            //enabled = false;
+            m_stateHandle.OverrideState(State.WaitBehaviourEnd);
             m_flinchHandle.gameObject.SetActive(false);
-            m_animation.SetEmptyAnimation(0, 0);
-            m_animation.SetEmptyAnimation(1, 0);
-            m_animation.SetEmptyAnimation(2, 0);
+            //m_animation.SetEmptyAnimation(0, 0);
+            //m_animation.SetEmptyAnimation(1, 0);
+            //m_animation.SetEmptyAnimation(2, 0);
         }
 
         private void OnFlinchStart(object sender, EventActionArgs eventArgs)
