@@ -942,6 +942,62 @@ MonoBehaviour:
   zPosition: 1
   overrideAlpha: 1
   hierarchy: {fileID: 3030838908956478251}
+--- !u!1 &1496379584706603283
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5896438297246102623}
+  - component: {fileID: 3929328160661503254}
+  m_Layer: 13
+  m_Name: DownwardTongueWhipAttack
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5896438297246102623
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1496379584706603283}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 5632979179378915120}
+  - {fileID: 6249616965371198703}
+  m_Father: {fileID: 6801725541459231587}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3929328160661503254
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1496379584706603283}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e10454193b54c9a4eb8bfb67b80c746d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_centerMass: {fileID: 6709534830428595724}
+  m_data: {fileID: 11400000, guid: c1741e40b2e17054d9abba4fe76b9fc6, type: 2}
+  m_currentAttackInfo:
+    damage:
+      m_type: 1
+      m_value: 0
+    criticalDamageInfo:
+      chance: 0
+      damageModifier: 0
+    ignoreInvulnerability: 0
+    ignoresBlock: 0
 --- !u!1 &1718053471559445104
 GameObject:
   m_ObjectHideFlags: 0
@@ -1048,6 +1104,61 @@ MonoBehaviour:
   zPosition: 1
   overrideAlpha: 1
   hierarchy: {fileID: 3030838908956478251}
+--- !u!1 &1915328188189776980
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2399912318091771725}
+  - component: {fileID: 413758086488711318}
+  m_Layer: 13
+  m_Name: LowerTongueWhipAttack
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2399912318091771725
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1915328188189776980}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 3679148943350611687}
+  m_Father: {fileID: 6801725541459231587}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &413758086488711318
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1915328188189776980}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e10454193b54c9a4eb8bfb67b80c746d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_centerMass: {fileID: 6709534830428595724}
+  m_data: {fileID: 11400000, guid: 912bf35186a0f774cba13c48148f7b5a, type: 2}
+  m_currentAttackInfo:
+    damage:
+      m_type: 1
+      m_value: 0
+    criticalDamageInfo:
+      chance: 0
+      damageModifier: 0
+    ignoreInvulnerability: 0
+    ignoresBlock: 0
 --- !u!1 &2024996403556865102
 GameObject:
   m_ObjectHideFlags: 0
@@ -2192,7 +2303,7 @@ GameObject:
   - component: {fileID: 3030838908956478251}
   - component: {fileID: 4787423042481499488}
   m_Layer: 13
-  m_Name: Zombie18Model
+  m_Name: MaranhigModel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2244,7 +2355,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 3be2a597dd2275d419736747790982e8, type: 2}
+  - {fileID: 2100000, guid: 99b623b8fa38ad14b85f91538ef6f3e6, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -2277,7 +2388,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d247ba06193faa74d9335f5481b2b56c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  skeletonDataAsset: {fileID: 11400000, guid: bfa4c54e38ee4fc43892e3a4894198ce, type: 2}
+  skeletonDataAsset: {fileID: 11400000, guid: 52cc18856788ed7439e605928f9c01fb, type: 2}
   initialSkinName: default
   initialFlipX: 0
   initialFlipY: 0
@@ -2355,6 +2466,61 @@ MonoBehaviour:
   - {fileID: 4338449232135749551}
   - {fileID: 5500236493312851395}
   - {fileID: 3276314560020322194}
+--- !u!1 &4443150779266240747
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5610381729619836015}
+  - component: {fileID: 3817130486905264328}
+  m_Layer: 13
+  m_Name: ForwardTongueWhipAttack
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5610381729619836015
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4443150779266240747}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 8966010721838610665}
+  m_Father: {fileID: 6801725541459231587}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3817130486905264328
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4443150779266240747}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e10454193b54c9a4eb8bfb67b80c746d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_centerMass: {fileID: 6709534830428595724}
+  m_data: {fileID: 11400000, guid: 1ebb0705bf5ebf3419b5b9f7028412a1, type: 2}
+  m_currentAttackInfo:
+    damage:
+      m_type: 1
+      m_value: 0
+    criticalDamageInfo:
+      chance: 0
+      damageModifier: 0
+    ignoreInvulnerability: 0
+    ignoresBlock: 0
 --- !u!1 &4540042793565088028
 GameObject:
   m_ObjectHideFlags: 0
@@ -3024,10 +3190,9 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.45, y: 0.45, z: 0.45}
   m_Children:
-  - {fileID: 8966010721838610665}
-  - {fileID: 3679148943350611687}
-  - {fileID: 5632979179378915120}
-  - {fileID: 6249616965371198703}
+  - {fileID: 5610381729619836015}
+  - {fileID: 2399912318091771725}
+  - {fileID: 5896438297246102623}
   m_Father: {fileID: 4338449232895505269}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3462,7 +3627,7 @@ GameObject:
   - component: {fileID: 5323412191396386099}
   - component: {fileID: 260980316089944509}
   - component: {fileID: 8757817187425324334}
-  - component: {fileID: 8781731720186554839}
+  - component: {fileID: 5111679493826250211}
   m_Layer: 13
   m_Name: Attack1BB
   m_TagString: Untagged
@@ -3481,7 +3646,7 @@ Transform:
   m_LocalPosition: {x: -0.253241, y: 10.972826, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 6801725541459231587}
+  m_Father: {fileID: 5610381729619836015}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &5323412191396386099
@@ -3537,7 +3702,7 @@ MonoBehaviour:
   m_damageUniqueHitboxesOnly: 0
   m_collisionRegistrator: {fileID: 0}
   m_ignoreColliderList: []
---- !u!60 &8781731720186554839
+--- !u!60 &5111679493826250211
 PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -3578,7 +3743,7 @@ GameObject:
   - component: {fileID: 8587063419281346870}
   - component: {fileID: 7870177346737102249}
   - component: {fileID: 8764148805007689088}
-  - component: {fileID: 6647153828804101169}
+  - component: {fileID: 5832646467286218863}
   m_Layer: 13
   m_Name: Attack3BB
   m_TagString: Untagged
@@ -3597,8 +3762,8 @@ Transform:
   m_LocalPosition: {x: -0.253241, y: 10.972826, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 6801725541459231587}
-  m_RootOrder: 2
+  m_Father: {fileID: 5896438297246102623}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &8587063419281346870
 MonoBehaviour:
@@ -3653,7 +3818,7 @@ MonoBehaviour:
   m_damageUniqueHitboxesOnly: 0
   m_collisionRegistrator: {fileID: 0}
   m_ignoreColliderList: []
---- !u!60 &6647153828804101169
+--- !u!60 &5832646467286218863
 PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -3746,6 +3911,7 @@ GameObject:
   - component: {fileID: 6709534830428595724}
   - component: {fileID: 5940742585085721277}
   - component: {fileID: 3350208737331332999}
+  - component: {fileID: 8794476330633779124}
   m_Layer: 13
   m_Name: bone3
   m_TagString: Hitbox
@@ -3816,6 +3982,22 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 4.360052, y: 2.532506}
   m_EdgeRadius: 0
+--- !u!114 &8794476330633779124
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6972610377838658905}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d74578be2c646f438409c91e5fd4ee4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_canDetectInteractables: 0
+  m_damageUniqueHitboxesOnly: 0
+  m_collisionRegistrator: {fileID: 0}
+  m_ignoreColliderList: []
 --- !u!1 &7090562817361572611
 GameObject:
   m_ObjectHideFlags: 0
@@ -3940,7 +4122,7 @@ GameObject:
   - component: {fileID: 711349268896843682}
   - component: {fileID: 6259246643606141766}
   - component: {fileID: 8945616408685937667}
-  - component: {fileID: 7132586466118222373}
+  - component: {fileID: 3733520845623981565}
   m_Layer: 13
   m_Name: Attack2BB
   m_TagString: Untagged
@@ -3959,8 +4141,8 @@ Transform:
   m_LocalPosition: {x: -0.253241, y: 10.972826, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 6801725541459231587}
-  m_RootOrder: 1
+  m_Father: {fileID: 2399912318091771725}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &711349268896843682
 MonoBehaviour:
@@ -4015,7 +4197,7 @@ MonoBehaviour:
   m_damageUniqueHitboxesOnly: 0
   m_collisionRegistrator: {fileID: 0}
   m_ignoreColliderList: []
---- !u!60 &7132586466118222373
+--- !u!60 &3733520845623981565
 PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -4490,7 +4672,7 @@ GameObject:
   - component: {fileID: 5382837294556051191}
   - component: {fileID: 2350308525357967500}
   - component: {fileID: 891916105012851947}
-  - component: {fileID: 8002184942816633440}
+  - component: {fileID: 2117166446646911206}
   m_Layer: 13
   m_Name: Attack4BB
   m_TagString: Untagged
@@ -4509,8 +4691,8 @@ Transform:
   m_LocalPosition: {x: -0.253241, y: 10.972826, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 6801725541459231587}
-  m_RootOrder: 3
+  m_Father: {fileID: 5896438297246102623}
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &5382837294556051191
 MonoBehaviour:
@@ -4565,7 +4747,7 @@ MonoBehaviour:
   m_damageUniqueHitboxesOnly: 0
   m_collisionRegistrator: {fileID: 0}
   m_ignoreColliderList: []
---- !u!60 &8002184942816633440
+--- !u!60 &2117166446646911206
 PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
