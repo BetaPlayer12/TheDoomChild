@@ -67,6 +67,12 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField, TitleGroup("Attack Behaviours"), Range(1, 10)]
             private int m_wreckingBallCount;
             public int wreckingBallCount => m_wreckingBallCount;
+            [SerializeField, TitleGroup("Attack Behaviours"), Range(1, 10)]
+            private int m_groundStabCount;
+            public int groundStabCount => m_groundStabCount;
+            [SerializeField, TitleGroup("Attack Behaviours"), Range(0.1f, 10f)]
+            private float m_groundStabStuckDuration;
+            public float groundStabStuckDuration => m_groundStabStuckDuration;
             [SerializeField, TitleGroup("Attack Behaviours"), Range(0f, 1000f)]
             private float m_spikeSpitCount;
             public float spikeSpitCount => m_spikeSpitCount;
@@ -74,17 +80,35 @@ namespace DChild.Gameplay.Characters.Enemies
             private List<int> m_spikeShowerCount;
             public List<int> spikeShowerCount => m_spikeShowerCount;
             [SerializeField, BoxGroup("HeavyGroundStab"), Space]
-            private List<SimpleAttackInfo> m_heavyGroundStabLeftAttacks = new List<SimpleAttackInfo>();
-            public List<SimpleAttackInfo> heavyGroundStabLeftAttacks => m_heavyGroundStabLeftAttacks;
+            private SimpleAttackInfo m_heavyGroundStabLeftAttack = new SimpleAttackInfo();
+            public SimpleAttackInfo heavyGroundStabLeftAttack => m_heavyGroundStabLeftAttack;
             [SerializeField, BoxGroup("HeavyGroundStab"), Space]
-            private List<SimpleAttackInfo> m_heavyGroundStabRightAttacks = new List<SimpleAttackInfo>();
-            public List<SimpleAttackInfo> heavyGroundStabRightAttacks => m_heavyGroundStabRightAttacks;
+            private SimpleAttackInfo m_heavyGroundStabRightAttack = new SimpleAttackInfo();
+            public SimpleAttackInfo heavyGroundStabRightAttack => m_heavyGroundStabRightAttack;
+            [SerializeField, BoxGroup("HeavyGroundStab"), ValueDropdown("GetAnimations")]
+            private string m_heavyGroundStabLoopLeftAnimation;
+            public string heavyGroundStabLoopLeftAnimation => m_heavyGroundStabLoopLeftAnimation;
+            [SerializeField, BoxGroup("HeavyGroundStab"), ValueDropdown("GetAnimations")]
+            private string m_heavyGroundStabLoopRightAnimation;
+            public string heavyGroundStabLoopRightAnimation => m_heavyGroundStabLoopRightAnimation;
             [SerializeField, BoxGroup("HeavyGroundStab"), ValueDropdown("GetAnimations")]
             private string m_heavyGroundStabAnticipationLeftAnimation;
             public string heavyGroundStabAnticipationLeftAnimation => m_heavyGroundStabAnticipationLeftAnimation;
             [SerializeField, BoxGroup("HeavyGroundStab"), ValueDropdown("GetAnimations")]
+            private string m_heavyGroundStabAnticipationLoopLeftAnimation;
+            public string heavyGroundStabAnticipationLoopLeftAnimation => m_heavyGroundStabAnticipationLoopLeftAnimation;
+            [SerializeField, BoxGroup("HeavyGroundStab"), ValueDropdown("GetAnimations")]
             private string m_heavyGroundStabAnticipationRightAnimation;
             public string heavyGroundStabAnticipationRightAnimation => m_heavyGroundStabAnticipationRightAnimation;
+            [SerializeField, BoxGroup("HeavyGroundStab"), ValueDropdown("GetAnimations")]
+            private string m_heavyGroundStabAnticipationLoopRightAnimation;
+            public string heavyGroundStabAnticipationLoopRightAnimation => m_heavyGroundStabAnticipationLoopRightAnimation;
+            [SerializeField, BoxGroup("HeavyGroundStab"), ValueDropdown("GetAnimations")]
+            private string m_heavyGroundStabReturnLeftAnimation;
+            public string heavyGroundStabReturnLeftAnimation => m_heavyGroundStabReturnLeftAnimation;
+            [SerializeField, BoxGroup("HeavyGroundStab"), ValueDropdown("GetAnimations")]
+            private string m_heavyGroundStabReturnRightAnimation;
+            public string heavyGroundStabReturnRightAnimation => m_heavyGroundStabReturnRightAnimation;
             [SerializeField, BoxGroup("HeavySpearStab")]
             private SimpleAttackInfo m_heavySpearStabLeftAttack = new SimpleAttackInfo();
             public SimpleAttackInfo heavySpearStabLeftAttack => m_heavySpearStabLeftAttack;
@@ -314,14 +338,8 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_tentaSpearRightCrawl.SetData(m_skeletonDataAsset);
                 m_leftMove.SetData(m_skeletonDataAsset);
                 m_rightMove.SetData(m_skeletonDataAsset);
-                for (int i = 0; i < m_heavyGroundStabRightAttacks.Count; i++)
-                {
-                    m_heavyGroundStabRightAttacks[i].SetData(m_skeletonDataAsset);
-                }
-                for (int i = 0; i < m_heavyGroundStabLeftAttacks.Count; i++)
-                {
-                    m_heavyGroundStabLeftAttacks[i].SetData(m_skeletonDataAsset);
-                }
+                m_heavyGroundStabRightAttack.SetData(m_skeletonDataAsset);
+                m_heavyGroundStabLeftAttack.SetData(m_skeletonDataAsset);
                 m_heavySpearStabLeftAttack.SetData(m_skeletonDataAsset);
                 m_heavySpearStabRightAttack.SetData(m_skeletonDataAsset);
                 m_krakenRageAttack.SetData(m_skeletonDataAsset);
@@ -696,6 +714,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetEmptyAnimation(3, 0);
             m_animation.SetEmptyAnimation(15, 0);
             m_animation.SetEmptyAnimation(27, 0);
+            m_animation.SetEmptyAnimation(30, 0);
             if (!m_groundSensor.isDetecting)
             {
                 m_animation.DisableRootMotion();
@@ -797,6 +816,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetEmptyAnimation(3, 0);
             m_animation.SetEmptyAnimation(15, 0);
             m_animation.SetEmptyAnimation(27, 0);
+            m_animation.SetEmptyAnimation(30, 0);
             m_animation.DisableRootMotion();
             if (!m_groundSensor.isDetecting)
             {
@@ -917,6 +937,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetEmptyAnimation(3, 0);
             m_animation.SetEmptyAnimation(15, 0);
             m_animation.SetEmptyAnimation(27, 0);
+            m_animation.SetEmptyAnimation(30, 0);
             m_stateHandle.OverrideState(State.Phasing);
         }
 
@@ -1076,26 +1097,10 @@ namespace DChild.Gameplay.Characters.Enemies
             }
             m_animation.SetEmptyAnimation(0, 0);
 
-            if (IsTargetInRange(m_info.heavyGroundStabRightAttacks[0].range))
+            if (IsTargetInRange(m_info.phase1Pattern1Range))
             {
-                for (int i = 0; i < m_info.heavyGroundStabRightAttacks.Count; i++)
-                {
-                    m_lastTargetPos = m_targetInfo.position;
-                    string heavyGroundStabAnticipation = m_lastTargetPos.x > transform.position.x ? m_info.heavyGroundStabAnticipationRightAnimation : m_info.heavyGroundStabAnticipationLeftAnimation;
-                    m_animation.SetAnimation(0, heavyGroundStabAnticipation, false);
-                    yield return new WaitForAnimationComplete(m_animation.animationState, heavyGroundStabAnticipation);
-                    m_stabHeadBone.mode = SkeletonUtilityBone.Mode.Override;
-                    m_stabHeadBone.transform.position = new Vector2(m_lastTargetPos.x, GroundPosition(m_lastTargetPos).y);
-                    var heavyGroundStabAttackAnimation = heavyGroundStabAnticipation == m_info.heavyGroundStabAnticipationRightAnimation ? m_info.heavyGroundStabRightAttacks[i].animation : m_info.heavyGroundStabLeftAttacks[i].animation;
-                    m_animation.SetAnimation(0, heavyGroundStabAttackAnimation, false);
-                    //yield return new WaitForSeconds(0.25f);
-                    yield return new WaitForAnimationComplete(m_animation.animationState, heavyGroundStabAttackAnimation);
-                    m_stabHeadBone.mode = SkeletonUtilityBone.Mode.Follow;
-                }
-                m_animation.DisableRootMotion();
-                m_attackDecider.hasDecidedOnAttack = false;
                 m_currentAttackCoroutine = null;
-                m_stateHandle.ApplyQueuedState();
+                m_currentAttackCoroutine = StartCoroutine(HeavyGroundStabAttackRoutine());
             }
             else
             {
@@ -1198,7 +1203,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 }
                 m_animation.SetEmptyAnimation(0, 0);
 
-                if (IsTargetInRange(m_info.heavyGroundStabLeftAttacks[0].range))
+                if (IsTargetInRange(m_info.heavyGroundStabRightAttack.range))
                 {
                     var randomAttack = UnityEngine.Random.Range(0, 2) == 0 ? true : false;
                     m_currentAttackCoroutine = StartCoroutine(randomAttack ? HeavyGroundStabAttackRoutine() : HeavySpearStabAttackRoutine());
@@ -1218,20 +1223,38 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator HeavyGroundStabAttackRoutine()
         {
-            for (int i = 0; i < m_info.heavyGroundStabRightAttacks.Count; i++)
+            for (int i = 0; i < m_info.groundStabCount; i++)
             {
-                m_lastTargetPos = m_targetInfo.position;
-                string heavyGroundStabAnticipation = m_lastTargetPos.x > transform.position.x ? m_info.heavyGroundStabAnticipationRightAnimation : m_info.heavyGroundStabAnticipationLeftAnimation;
-                m_animation.SetAnimation(0, heavyGroundStabAnticipation, false);
+                var heavyGroundStabAnticipation = m_targetInfo.position.x > transform.position.x ? m_info.heavyGroundStabAnticipationRightAnimation : m_info.heavyGroundStabAnticipationLeftAnimation;
+                m_animation.SetAnimation(30, heavyGroundStabAnticipation, false);
                 yield return new WaitForAnimationComplete(m_animation.animationState, heavyGroundStabAnticipation);
+                m_lastTargetPos = m_targetInfo.position;
+                var heavyGroundStabLoopAnticipation = "";
+                m_willTentaspearChase = false;
+                while (!IsTargetInRange(m_info.heavyGroundStabRightAttack.range))
+                {
+                    m_lastTargetPos = m_targetInfo.position;
+                    heavyGroundStabLoopAnticipation = m_lastTargetPos.x > transform.position.x ? m_info.heavyGroundStabAnticipationLoopRightAnimation : m_info.heavyGroundStabAnticipationLoopLeftAnimation;
+                    m_animation.SetAnimation(30, heavyGroundStabLoopAnticipation, true);
+                    MoveToTarget(m_info.heavyGroundStabRightAttack.range);
+                    yield return null;
+                }
+                m_movement.Stop();
+                m_animation.SetAnimation(0, m_info.idleAnimation, true);
                 m_stabHeadBone.mode = SkeletonUtilityBone.Mode.Override;
                 m_stabHeadBone.transform.position = new Vector2(m_lastTargetPos.x, GroundPosition(m_lastTargetPos).y);
-                var heavyGroundStabAttackAnimation = heavyGroundStabAnticipation == m_info.heavyGroundStabAnticipationRightAnimation ? m_info.heavyGroundStabRightAttacks[i].animation : m_info.heavyGroundStabLeftAttacks[i].animation;
-                m_animation.SetAnimation(0, heavyGroundStabAttackAnimation, false);
-                //yield return new WaitForSeconds(0.25f);
+                var heavyGroundStabAttackAnimation = m_lastTargetPos.x > transform.position.x ? m_info.heavyGroundStabRightAttack.animation : m_info.heavyGroundStabLeftAttack.animation;
+                m_animation.SetAnimation(30, heavyGroundStabAttackAnimation, false);
                 yield return new WaitForAnimationComplete(m_animation.animationState, heavyGroundStabAttackAnimation);
+                var heavyGroundStabStuckAnimation = m_lastTargetPos.x > transform.position.x ? m_info.heavyGroundStabLoopRightAnimation : m_info.heavyGroundStabLoopLeftAnimation;
+                m_animation.SetAnimation(30, heavyGroundStabStuckAnimation, true);
+                yield return new WaitForSeconds(m_info.groundStabStuckDuration);
+                var heavyGroundStabReturnAnimation = m_lastTargetPos.x > transform.position.x ? m_info.heavyGroundStabReturnRightAnimation : m_info.heavyGroundStabReturnLeftAnimation;
+                m_animation.SetAnimation(30, heavyGroundStabReturnAnimation, false);
+                yield return new WaitForAnimationComplete(m_animation.animationState, heavyGroundStabReturnAnimation);
                 m_stabHeadBone.mode = SkeletonUtilityBone.Mode.Follow;
             }
+            m_animation.SetEmptyAnimation(30, 0);
             m_animation.DisableRootMotion();
             m_attackDecider.hasDecidedOnAttack = false;
             m_currentAttackCoroutine = null;
@@ -1865,7 +1888,7 @@ namespace DChild.Gameplay.Characters.Enemies
                             break;
                         #region WIP ATTACK PATTERNS
                         case Attack.Phase3Pattern1:
-                            if (IsTargetInRange(m_info.heavyGroundStabLeftAttacks[0].range))
+                            if (IsTargetInRange(m_info.heavyGroundStabRightAttack.range))
                             {
                                 m_currentAttackCoroutine = StartCoroutine(HeavySpearStabAttackRoutine());
                             }

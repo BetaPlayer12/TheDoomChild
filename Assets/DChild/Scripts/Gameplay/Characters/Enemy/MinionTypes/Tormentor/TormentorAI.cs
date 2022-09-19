@@ -16,26 +16,35 @@ using DChild.Gameplay.Environment;
 
 namespace DChild.Gameplay.Characters.Enemies
 {
-    [AddComponentMenu("DChild/Gameplay/Enemies/Minion/Slasher")]
-    public class SlasherAI : CombatAIBrain<SlasherAI.Info>, IResetableAIBrain
+    [AddComponentMenu("DChild/Gameplay/Enemies/Minion/Tormentor")]
+    public class TormentorAI : CombatAIBrain<TormentorAI.Info>, IResetableAIBrain
     {
         [System.Serializable]
         public class Info : BaseInfo
         {
-            [SerializeField, TabGroup("Movement")]
+            [SerializeField, BoxGroup("Movement")]
             private MovementInfo m_walk = new MovementInfo();
             public MovementInfo walk => m_walk;
 
             //Attack Behaviours
-            [SerializeField, TabGroup("Attack")]
+            [SerializeField, BoxGroup("Attack")]
             private SimpleAttackInfo m_attack = new SimpleAttackInfo();
             public SimpleAttackInfo attack => m_attack;
-            [SerializeField, ValueDropdown("GetAnimations"), TabGroup("Attack")]
-            private string m_attack2Animation;
-            public string attack2Animation => m_attack2Animation;
-            [SerializeField, MinValue(0), TabGroup("Attack")]
+            [SerializeField, MinValue(0), BoxGroup("Attack")]
             private float m_attackCD;
             public float attackCD => m_attackCD;
+            [SerializeField, MinValue(0), BoxGroup("Attack")]
+            private float m_attackBBDelay;
+            public float attackBBDelay => m_attackBBDelay;
+            [SerializeField, BoxGroup("Helment"), ValueDropdown("GetAnimations")]
+            private List<string> m_helmetArmorsFlinchAnimation;
+            public List<string> helmetArmorsFlinchAnimation => m_helmetArmorsFlinchAnimation;
+            [SerializeField, BoxGroup("Helment"), ValueDropdown("GetAnimations")]
+            private List<string> m_helmetArmorsDestroyAnimation;
+            public List<string> helmetArmorsDestroyAnimation => m_helmetArmorsDestroyAnimation;
+            [SerializeField, BoxGroup("Helment"), ValueDropdown("GetAnimations")]
+            private List<string> m_helmetArmorsOffAnimation;
+            public List<string> helmetArmorsOffAnimation => m_helmetArmorsOffAnimation;
             //
             [SerializeField, MinValue(0)]
             private float m_patience;
@@ -50,6 +59,9 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField, ValueDropdown("GetAnimations")]
             private string m_idleAnimation;
             public string idleAnimation => m_idleAnimation;
+            [SerializeField, ValueDropdown("GetAnimations")]
+            private string m_detectionAnimation;
+            public string detectAnimation => m_detectionAnimation;
             [SerializeField, ValueDropdown("GetAnimations")]
             private string m_flinchAnimation;
             public string flinchAnimation => m_flinchAnimation;
@@ -114,6 +126,23 @@ namespace DChild.Gameplay.Characters.Enemies
         private DeathHandle m_deathHandle;
         [SerializeField, TabGroup("Modules")]
         private FlinchHandler m_flinchHandle;
+        private int m_flinchCount;
+        [SerializeField, TabGroup("Attack Resistance")]
+        private AttackResistance m_attackResistance;
+        [SerializeField, TabGroup("Attack Resistance")]
+        private AttackResistanceData m_strongResistance;
+        [SerializeField, TabGroup("Attack Resistance")]
+        private AttackResistanceData m_weakResistance;
+        [SerializeField, TabGroup("Helmet")]
+        private Damageable m_helmetDamageable;
+        [SerializeField, TabGroup("Helmet")]
+        private Health m_helmetHealth;
+        [SerializeField, TabGroup("Helmet")]
+        private Hitbox m_helmetHitbox;
+        [SerializeField, TabGroup("Helmet")]
+        private Collider2D m_headCollider;
+        private List<float> m_helmetHealthThreshholds;
+        private int m_helmetIndex;
 
         private float m_currentPatience;
         private float m_currentCD;
@@ -123,6 +152,10 @@ namespace DChild.Gameplay.Characters.Enemies
         private bool m_enablePatience;
         private bool m_isDetecting;
         private Vector2 m_startPoint;
+
+        //private string m_armorFlinchAnimation;
+        //private string m_armorDestroyAnimation;
+        //private string m_armorOffAnimation;
 
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_wallSensor;
@@ -143,7 +176,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private State m_turnState;
 
-        private Coroutine m_attackRoutine;
+        private Coroutine m_flinchRoutine;
         private Coroutine m_sneerRoutine;
         private Coroutine m_patienceRoutine;
         private Coroutine m_randomIdleRoutine;
@@ -280,10 +313,6 @@ namespace DChild.Gameplay.Characters.Enemies
             StopAllCoroutines();
             base.OnDestroyed(sender, eventArgs);
             m_stateHandle.OverrideState(State.WaitBehaviourEnd);
-            if (m_attackRoutine != null)
-            {
-                StopCoroutine(m_attackRoutine);
-            }
             if (m_sneerRoutine != null)
             {
                 StopCoroutine(m_sneerRoutine);
@@ -300,23 +329,81 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnFlinchStart(object sender, EventActionArgs eventArgs)
         {
-            if (m_animation.GetCurrentAnimation(0).ToString() == m_info.idleAnimation)
+            m_flinchCount++;
+            if (m_flinchCount > 7 && m_flinchRoutine == null || m_helmetIndex == 2 && WillDestroy())
             {
-                StopAllCoroutines();
+                //StopAllCoroutines();
                 m_selfCollider.enabled = true;
                 //m_animation.SetAnimation(0, m_info.flinchAnimation, false);
                 m_stateHandle.Wait(State.ReevaluateSituation);
-                StartCoroutine(FlinchRoutine());
+                m_flinchRoutine = StartCoroutine(FlinchRoutine());
             }
         }
 
         private IEnumerator FlinchRoutine()
         {
+            enabled = false;
             m_animation.SetAnimation(0, m_info.flinchAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.flinchAnimation);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
+            m_flinchCount = 0;
+            m_flinchRoutine = null;
             m_stateHandle.ApplyQueuedState();
             yield return null;
+            enabled = true;
+        }
+
+        private void OnHelmetDamageTaken(object sender, Damageable.DamageEventArgs eventArgs)
+        {
+            Debug.Log("HELMET FLINCH " + m_helmetHealth.currentValue);
+            m_animation.SetEmptyAnimation(10, 0);
+            StartCoroutine(ArmorFlinchRoutine());
+        }
+
+        private IEnumerator ArmorFlinchRoutine()
+        {
+            m_helmetHitbox.Disable();
+            m_animation.SetAnimation(10, m_info.helmetArmorsFlinchAnimation[m_helmetIndex], false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.helmetArmorsFlinchAnimation[m_helmetIndex]);
+            //bool willDestroy = false;
+            if (WillDestroy())
+            {
+                m_animation.SetAnimation(10, m_info.helmetArmorsDestroyAnimation[m_helmetIndex], false);
+                yield return new WaitForAnimationComplete(m_animation.animationState, m_info.helmetArmorsDestroyAnimation[m_helmetIndex]);
+                m_animation.SetAnimation(11, m_info.helmetArmorsOffAnimation[m_helmetIndex], false);
+                //willDestroy = false;
+                m_helmetIndex++;
+            }
+            if (m_helmetHealth.currentValue > 0f)
+                m_helmetHitbox.Enable();
+            else
+            {
+                m_helmetDamageable.gameObject.SetActive(false);
+                m_headCollider.enabled = true;
+            }
+            m_animation.SetEmptyAnimation(10, 0);
+            yield return null;
+        }
+
+        private bool WillDestroy()
+        {
+            if (m_helmetHealth.currentValue <= m_helmetHealthThreshholds[m_helmetIndex])
+            {
+                if (m_helmetIndex == 0)
+                    m_attackResistance.SetData(m_weakResistance);
+                else
+                    m_attackResistance.SetData(null);
+                return true;
+            }
+            //else if (m_helmetHealth.currentValue <= m_helmetHealth.maxValue * 0.3f)
+            //{
+            //    return true;
+            //}
+            //else if (m_helmetHealth.currentValue <= m_helmetHealth.maxValue * 0.6f)
+            //{
+            //    return true;
+            //}
+            return false;
         }
 
         public override void ApplyData()
@@ -332,6 +419,18 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_attackDecider.SetList(new AttackInfo<Attack>(Attack.Attack, m_info.attack.range));
             m_attackDecider.hasDecidedOnAttack = false;
+        }
+
+        private IEnumerator DetectRoutine()
+        {
+            m_movement.Stop();
+            m_animation.EnableRootMotion(true, true);
+            m_animation.SetAnimation(0, m_info.detectAnimation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.detectAnimation);
+            m_animation.DisableRootMotion();
+            m_animation.SetAnimation(0, m_info.idleAnimation, true);
+            m_stateHandle.OverrideState(State.ReevaluateSituation);
+            yield return null;
         }
 
         private IEnumerator RandomIdleRoutine()
@@ -384,22 +483,6 @@ namespace DChild.Gameplay.Characters.Enemies
             }
         }
 
-        private IEnumerator AttackRoutine()
-        {
-            m_flinchHandle.m_enableMixFlinch = false;
-            m_animation.SetAnimation(0, m_info.attack.animation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack.animation);
-            m_animation.SetAnimation(0, m_info.attack2Animation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack2Animation);
-            m_animation.SetAnimation(0, m_info.attack.animation, false).AnimationStart = 0.1f;
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack.animation);
-            m_animation.SetEmptyAnimation(0, 0);
-            m_flinchHandle.m_enableMixFlinch = true;
-            m_animation.SetAnimation(0, m_info.idleAnimation, true);
-            m_stateHandle.ApplyQueuedState();
-            yield return null;
-        }
-
         private void EnableAttackBB()
         {
             StartCoroutine(AttackBBRoutine());
@@ -407,6 +490,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator AttackBBRoutine()
         {
+            yield return new WaitForSeconds(m_info.attackBBDelay);
             m_attackBB.enabled = true;
             yield return new WaitForSeconds(0.1f);
             m_attackBB.enabled = false;
@@ -425,9 +509,14 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_randomTurnRoutine = StartCoroutine(RandomTurnRoutine());
                 m_randomIdleRoutine = StartCoroutine(RandomIdleRoutine());
             }
-            
-            m_spineEventListener.Subscribe(m_info.hitboxStartEvent, EnableAttackBB);
-            m_startPoint = transform.position;  
+
+            //m_spineEventListener.Subscribe(m_info.hitboxStartEvent, EnableAttackBB);
+            m_startPoint = transform.position;
+
+            m_attackResistance.SetData(m_strongResistance);
+            //m_armorFlinchAnimation = m_info.helmetArmorsFlinch[m_helmetIndex];
+            //m_armorDestroyAnimation = m_info.helmetArmorsDestroy[m_helmetIndex];
+            //m_armorOffAnimation = m_info.helmetArmorsOff[m_helmetIndex];
         }
 
         protected override void Awake()
@@ -441,8 +530,15 @@ namespace DChild.Gameplay.Characters.Enemies
             m_stateHandle = new StateHandle<State>(m_willPatrol ? State.Patrol : State.Idle, State.WaitBehaviourEnd);
             m_attackDecider = new RandomAttackDecider<Attack>();
             UpdateAttackDeciderList();
-        }
 
+            #region HelmetData
+            m_helmetDamageable.DamageTaken += OnHelmetDamageTaken;
+            m_helmetHealthThreshholds = new List<float>();
+            m_helmetHealthThreshholds.Add(m_helmetHealth.maxValue * 0.6f);
+            m_helmetHealthThreshholds.Add(m_helmetHealth.maxValue * 0.3f);
+            m_helmetHealthThreshholds.Add(m_helmetHealth.maxValue * 0f);
+            #endregion
+        }
 
         private void Update()
         {
@@ -462,7 +558,8 @@ namespace DChild.Gameplay.Characters.Enemies
                     }
                     else
                     {
-                        m_stateHandle.OverrideState(State.ReevaluateSituation);
+                        m_stateHandle.Wait(State.ReevaluateSituation);
+                        StartCoroutine(DetectRoutine());
                     }
                     break;
 
@@ -473,7 +570,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     if (!m_wallSensor.isDetecting && m_groundSensor.isDetecting)
                     {
                         m_turnState = State.ReevaluateSituation;
-                        m_animation.EnableRootMotion(false, false);
+                        m_animation.EnableRootMotion(true, false);
                         m_animation.SetAnimation(0, m_info.walk.animation, true).TimeScale = 2f;
                         var characterInfo = new PatrolHandle.CharacterInfo(m_character.centerMass.position, m_character.facing);
                         m_patrolHandle.Patrol(m_movement, m_info.walk.speed, characterInfo);
@@ -504,8 +601,9 @@ namespace DChild.Gameplay.Characters.Enemies
                     switch (m_attackDecider.chosenAttack.attack)
                     {
                         case Attack.Attack:
-                            //m_attackHandle.ExecuteAttack(m_info.attack.animation, m_info.idleAnimation);
-                            m_attackRoutine = StartCoroutine(AttackRoutine());
+                            m_attackHandle.ExecuteAttack(m_info.attack.animation, m_info.idleAnimation);
+                            EnableAttackBB();
+                            //m_attackRoutine = StartCoroutine(AttackRoutine());
                             break;
                     }
                     m_attackDecider.hasDecidedOnAttack = false;
@@ -556,12 +654,12 @@ namespace DChild.Gameplay.Characters.Enemies
                             }
                             else
                             {
-                                m_animation.EnableRootMotion(false, false);
+                                m_animation.EnableRootMotion(true, false);
                                 if (!m_wallSensor.isDetecting && m_groundSensor.isDetecting && m_edgeSensor.isDetecting)
                                 {
                                     m_selfCollider.enabled = false;
                                     m_animation.SetAnimation(0, m_info.walk.animation, true).TimeScale = 2f;
-                                    m_movement.MoveTowards(Vector2.one * transform.localScale.x, m_currentMoveSpeed);
+                                    //m_movement.MoveTowards(Vector2.one * transform.localScale.x, m_currentMoveSpeed);
                                 }
                                 else
                                 {
@@ -649,6 +747,8 @@ namespace DChild.Gameplay.Characters.Enemies
             }
             m_stateHandle.OverrideState(State.ReevaluateSituation);
             enabled = true;
+            m_helmetDamageable.gameObject.SetActive(true);
+            m_helmetIndex = 0;
         }
 
         public override void ReturnToSpawnPoint()
