@@ -234,24 +234,30 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnFlinchStart(object sender, EventActionArgs eventArgs)
         {
-            if (m_flinchHandle.m_autoFlinch)
+            StopAllCoroutines();
+            m_stateHandle.Wait(m_targetInfo.isValid ? State.Cooldown : State.ReevaluateSituation);
+            if (m_targetInfo.isValid)
             {
-                StopAllCoroutines();
-                m_currentCD += m_currentCD + 0.5f;
-                //m_animation.SetAnimation(0, m_info.flinchAnimation, false);
-                m_stateHandle.Wait(m_targetInfo.isValid ? State.Cooldown : State.ReevaluateSituation);
+                if (!IsFacingTarget())
+                {
+                    if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
+                        m_stateHandle.SetState(State.Turning);
+                }
+
+                else
+                {
+                    StartCoroutine(FlinchRoutine());
+                }
             }
         }
 
-        private void OnFlinchEnd(object sender, EventActionArgs eventArgs)
+        private IEnumerator FlinchRoutine()
         {
-            if (m_flinchHandle.m_autoFlinch)
-            {
-                if (m_animation.GetCurrentAnimation(0).ToString() != m_info.deathAnimation)
-                    m_animation.SetEmptyAnimation(0, 0);
-                m_selfCollider.enabled = false;
-                m_stateHandle.ApplyQueuedState();
-            }
+            m_animation.SetAnimation(0, m_info.flinchAnimation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.flinchAnimation);
+            m_animation.SetAnimation(0, m_info.idleAnimation, true);
+            m_stateHandle.ApplyQueuedState();
+            yield return null;
         }
 
         public override void ApplyData()
@@ -341,7 +347,6 @@ namespace DChild.Gameplay.Characters.Enemies
             m_turnHandle.TurnDone += OnTurnDone;
             m_deathHandle.SetAnimation(m_info.deathAnimation);
             m_flinchHandle.FlinchStart += OnFlinchStart;
-            m_flinchHandle.FlinchEnd += OnFlinchEnd;
             m_stateHandle = new StateHandle<State>(State.Patrol, State.WaitBehaviourEnd);
             m_attackDecider = new RandomAttackDecider<Attack>();
             UpdateAttackDeciderList();

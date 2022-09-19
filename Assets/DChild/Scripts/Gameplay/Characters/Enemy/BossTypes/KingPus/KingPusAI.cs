@@ -294,6 +294,12 @@ namespace DChild.Gameplay.Characters.Enemies
 
             [TitleGroup("Events")]
             [SerializeField, ValueDropdown("GetEvents")]
+            private string m_moveEvent;
+            public string moveEvent => m_moveEvent;
+            [SerializeField, ValueDropdown("GetEvents")]
+            private string m_stopEvent;
+            public string stopEvent => m_stopEvent;
+            [SerializeField, ValueDropdown("GetEvents")]
             private string m_singleShotEvent;
             public string singleShotEvent => m_singleShotEvent;
             [TitleGroup("Events")]
@@ -1060,7 +1066,6 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator Phase1Pattern1AttackRoutine()
         {
-            m_animation.EnableRootMotion(true, false);
             var timer = 0f;
             while (timer <= m_info.crawlDuration /*&& !IsTargetInRange(m_info.heavyGroundStabRightAttacks[0].range - 5f)*/)
             {
@@ -1183,7 +1188,6 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             if (IsTargetInRange(m_info.phase2Pattern1Range))
             {
-                m_animation.EnableRootMotion(true, false);
                 var timer = 0f;
                 while (timer <= m_info.crawlDuration /*&& !IsTargetInRange(m_info.heavyGroundStabRightAttacks[0].range - 5f)*/)
                 {
@@ -1193,6 +1197,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     yield return null;
                 }
                 m_animation.SetEmptyAnimation(0, 0);
+
                 if (IsTargetInRange(m_info.heavyGroundStabLeftAttacks[0].range))
                 {
                     var randomAttack = UnityEngine.Random.Range(0, 2) == 0 ? true : false;
@@ -1408,7 +1413,7 @@ namespace DChild.Gameplay.Characters.Enemies
             var moveLeft = m_willTentaspearChase ? m_info.tentaSpearLeftCrawl : m_info.leftMove;
             if (!IsTargetInRange(targetRange) && m_groundSensor.isDetecting /*&& !m_wallSensor.isDetecting && m_edgeSensor.isDetecting*/)
             {
-                m_animation.EnableRootMotion(true, false);
+                m_animation.EnableRootMotion(m_willTentaspearChase ? false :true, false);
                 m_animation.SetAnimation(0, m_targetInfo.position.x > transform.position.x ? moveRight.animation : moveLeft.animation, true);
                 //m_movement.MoveTowards(Vector2.one * transform.localScale.x, m_info.walk.speed);
             }
@@ -1417,6 +1422,17 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_movement.Stop();
                 m_animation.SetAnimation(0, m_info.idleAnimation, true);
             }
+        }
+        private void EventMove()
+        {
+            m_animation.DisableRootMotion();
+            //m_movement.MoveTowards(Vector2.one * transform.localScale.x, m_targetInfo.position.x > transform.position.x ? m_info.tentaSpearRightCrawl.speed : -m_info.tentaSpearRightCrawl.speed);
+            m_rb2d.AddForce(new Vector2(m_targetInfo.position.x > transform.position.x ? m_info.tentaSpearRightCrawl.speed : -m_info.tentaSpearRightCrawl.speed, transform.position.y), ForceMode2D.Impulse);
+        }
+        private void EventStop()
+        {
+            m_animation.EnableRootMotion(true, false);
+            m_movement.Stop();
         }
 
         private string DynamicIdleAnimation()
@@ -1728,6 +1744,8 @@ namespace DChild.Gameplay.Characters.Enemies
             m_phaseHandle.ApplyChange();
             m_spineListener.Subscribe(m_info.singleShotEvent, LaunchSingleProjectile);
             m_spineListener.Subscribe(m_info.multiShotEvent, LaunchMultiProjectile);
+            m_spineListener.Subscribe(m_info.moveEvent, EventMove);
+            m_spineListener.Subscribe(m_info.stopEvent, EventStop);
             for (int i = 0; i < m_chains.Count; i++)
             {
                 m_chains[i].gameObject.SetActive(false);
@@ -1807,15 +1825,18 @@ namespace DChild.Gameplay.Characters.Enemies
                             m_pickedCooldown = m_currentFullCooldown[0];
                             break;
                         case Attack.Phase1Pattern2:
-                            m_currentAttackCoroutine = StartCoroutine(Phase1Pattern2AttackRoutine());
+                            //m_currentAttackCoroutine = StartCoroutine(Phase1Pattern2AttackRoutine());
+                            m_currentAttackCoroutine = StartCoroutine(Phase1Pattern1AttackRoutine());
                             m_pickedCooldown = m_currentFullCooldown[1];
                             break;
                         case Attack.Phase1Pattern3:
-                            m_currentAttackCoroutine = StartCoroutine(Phase1Pattern3And4AttackRoutine(false));
+                            //m_currentAttackCoroutine = StartCoroutine(Phase1Pattern3And4AttackRoutine(false));
+                            m_currentAttackCoroutine = StartCoroutine(Phase1Pattern1AttackRoutine());
                             m_pickedCooldown = m_currentFullCooldown[2];
                             break;
                         case Attack.Phase1Pattern4:
-                            m_currentAttackCoroutine = StartCoroutine(Phase1Pattern3And4AttackRoutine(true));
+                            //m_currentAttackCoroutine = StartCoroutine(Phase1Pattern3And4AttackRoutine(true));
+                            m_currentAttackCoroutine = StartCoroutine(Phase1Pattern1AttackRoutine());
                             m_pickedCooldown = m_currentFullCooldown[3];
                             break;
                         case Attack.Phase2Pattern1:
@@ -1893,6 +1914,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     else
                     {
                         m_currentCooldown = 0;
+                        m_animation.DisableRootMotion();
                         //m_stateHandle.OverrideState(State.ReevaluateSituation);
                         m_stateHandle.OverrideState(State.ReevaluateSituation);
                     }

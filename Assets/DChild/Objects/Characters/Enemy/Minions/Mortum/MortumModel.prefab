@@ -1850,9 +1850,12 @@ GameObject:
   m_Component:
   - component: {fileID: 3083597159191882820}
   - component: {fileID: 1653188691714809269}
+  - component: {fileID: 6890701443152890921}
+  - component: {fileID: 213513912385132009}
+  - component: {fileID: 2934497772526117002}
   m_Layer: 13
   m_Name: pelvis14
-  m_TagString: Untagged
+  m_TagString: Hitbox
   m_Icon: {fileID: 2800000, guid: 97a43f11e00735147a9dc3dff6d68191, type: 3}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1896,6 +1899,69 @@ MonoBehaviour:
   zPosition: 1
   overrideAlpha: 1
   hierarchy: {fileID: 5991359388476826111}
+--- !u!61 &6890701443152890921
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3210036571304022240}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: -2.9726996, y: -0.6497865}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 15.716884, y: 8.685668}
+  m_EdgeRadius: 0
+--- !u!114 &213513912385132009
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3210036571304022240}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c4e9bbd2182b8f4c8eb5948ad8ba4b7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_includeInBuild: 0
+  m_referenceLayer: -1150295711
+  m_referenceOrder: 0
+  m_renderers: []
+  m_baseOrders: 
+  m_allowEditorUpdate: 1
+  m_previousReferenceOrder: 0
+  m_rendererList: []
+--- !u!114 &2934497772526117002
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3210036571304022240}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38f1c154d0bdfe644b279d0b4b6b7d08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_canDetectInteractables: 0
+  m_damageUniqueHitboxesOnly: 0
+  m_collisionRegistrator: {fileID: 0}
+  m_ignoreColliderList: []
+  m_damageInterval: 0
 --- !u!1 &3251378508193887757
 GameObject:
   m_ObjectHideFlags: 0
@@ -2106,7 +2172,7 @@ MonoBehaviour:
   - {fileID: 4087678756113279778}
   - {fileID: 6073149009139408107}
   - {fileID: 3845292530217515971}
-  - {fileID: 6333719313825300877}
+  - {fileID: 6890701443152890921}
   - {fileID: 4593309946852716806}
   - {fileID: 5426734312238007512}
   - {fileID: 6722726645316094774}
@@ -2751,7 +2817,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -2.0934544, y: -0.29108727}
+  m_Offset: {x: -1.104691, y: -0.29108715}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -2762,7 +2828,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 18.922813, y: 6.428238}
+  m_Size: {x: 14.003564, y: 6.428238}
   m_EdgeRadius: 0
 --- !u!114 &5514665241273657839
 MonoBehaviour:
@@ -3032,7 +3098,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 85b1fd4e98ab5de4a800a58337f5ff96, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_pointOfReference: {fileID: 0}
+  m_pointOfReference: {fileID: 398784696084523032}
   m_instance: {fileID: 5736134968132233259}
   m_maxDistance: 15
   m_calculateAlways: 0
@@ -4298,8 +4364,6 @@ GameObject:
   m_Component:
   - component: {fileID: 5952952525560920603}
   - component: {fileID: 3973325381016969798}
-  - component: {fileID: 6333719313825300877}
-  - component: {fileID: 1915030960101115461}
   m_Layer: 13
   m_Name: pelvis15
   m_TagString: Hitbox
@@ -4347,49 +4411,6 @@ MonoBehaviour:
   zPosition: 1
   overrideAlpha: 1
   hierarchy: {fileID: 5991359388476826111}
---- !u!61 &6333719313825300877
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6879339015124954821}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0, y: 0}
-    oldSize: {x: 0, y: 0}
-    newSize: {x: 0, y: 0}
-    adaptiveTilingThreshold: 0
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1}
-  m_EdgeRadius: 0
---- !u!114 &1915030960101115461
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6879339015124954821}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 38f1c154d0bdfe644b279d0b4b6b7d08, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_canDetectInteractables: 0
-  m_damageUniqueHitboxesOnly: 0
-  m_collisionRegistrator: {fileID: 0}
-  m_ignoreColliderList: []
-  m_damageInterval: 0
 --- !u!1 &6932231296443106039
 GameObject:
   m_ObjectHideFlags: 0
