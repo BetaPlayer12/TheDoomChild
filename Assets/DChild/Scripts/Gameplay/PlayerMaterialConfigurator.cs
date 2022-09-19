@@ -20,7 +20,7 @@ public class PlayerMaterialConfigurator : MonoBehaviour
         m_targetObject = FindObjectOfType<PlayerDamageable>().gameObject;
         var objectRenderer = m_targetObject.GetComponentInChildren<MeshRenderer>();
         objectRenderer.GetPropertyBlock(m_materialBlock);
-        m_materialBlock.SetFloat("Vector1_TextureHighlight", m_texHighlight );
+        m_materialBlock.SetFloat("Vector1_CutomTexHighlight", m_texHighlight );
         m_materialBlock.SetColor("Color_OverallTexColor", m_overAllColor);
         objectRenderer.SetPropertyBlock(m_materialBlock);
         
