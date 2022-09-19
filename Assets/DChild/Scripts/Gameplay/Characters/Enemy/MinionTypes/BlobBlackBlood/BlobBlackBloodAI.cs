@@ -41,7 +41,6 @@ namespace DChild.Gameplay.Characters.Enemies
             private float m_targetDistanceTolerance;
             public float targetDistanceTolerance => m_targetDistanceTolerance;
 
-
             //Animations
             [SerializeField, ValueDropdown("GetAnimations")]
             private string m_idleAnimation;
@@ -83,6 +82,8 @@ namespace DChild.Gameplay.Characters.Enemies
         //private SpineEventListener m_spineEventListener;
         [SerializeField, TabGroup("Reference")]
         private Hitbox m_hitbox;
+        [SerializeField, TabGroup("Reference")] 
+        private Renderer m_renderer;
         [SerializeField, TabGroup("Reference")]
         private Collider2D m_selfCollider;
         [SerializeField, TabGroup("Modules")]
@@ -117,7 +118,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private Coroutine m_randomTurnRoutine;
 
         [ShowInInspector]
-        private float m_sleepTimerCounter;
+        private float m_sleepTimerCounter;  
 
         private void OnAttackDone(object sender, EventActionArgs eventArgs)
         {
@@ -171,6 +172,7 @@ namespace DChild.Gameplay.Characters.Enemies
             //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.recoverAnimation);
             //m_animation.SetAnimation(0, m_info.idleAnimation, true);
             gameObject.transform.localEulerAngles = new Vector3(0f, 0f, 180f);
+            m_renderer.enabled = false;
             yield return null;
         }
 
@@ -178,10 +180,10 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             gameObject.transform.localEulerAngles = new Vector3(0f, 0f, 0f);
             m_hitbox.Enable();
-            m_selfCollider.enabled = true;
             m_damageable.Heal(9999);
             GameplaySystem.combatManager.Heal(m_damageable, 9999);
-            m_health.SetHealthPercentage(1f);
+            m_selfCollider.enabled = true;
+            m_renderer.enabled = true;
             yield return null;
         }
 
