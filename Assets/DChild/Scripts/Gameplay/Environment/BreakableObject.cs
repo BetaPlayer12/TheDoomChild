@@ -69,6 +69,12 @@ namespace DChild.Gameplay.Environment
         private Rigidbody2D[] m_leftOverDebris;
         private int m_sortingID;
 
+        [SerializeField]
+        private bool m_willRepairSelf;
+        [SerializeField]
+        private float m_selfRepairTime;
+        private float m_selfRepairTimer;
+
         public Type type => m_type;
 
         public void SetObjectState(bool isDestroyed)
@@ -76,12 +82,12 @@ namespace DChild.Gameplay.Environment
             if (isDestroyed)
             {
                 BreakObject();
-                m_object.Healed += ODamagaeableHeal;
+                //m_object.Healed += ODamagaeableHeal;
             }
             else
             {
                 RevertToFixState();
-                m_object.Healed -= ODamagaeableHeal;
+                //m_object.Healed -= ODamagaeableHeal;
             }
         }
 
@@ -236,6 +242,23 @@ namespace DChild.Gameplay.Environment
             else if (TryGetComponent(out SortingGroup sortingGroup))
             {
                 m_sortingID = sortingGroup.sortingOrder;
+            }
+        }
+
+        private void Update()
+        {            
+            if (m_willRepairSelf)
+            {
+                if (m_isDestroyed)
+                {
+                    m_selfRepairTimer += GameplaySystem.time.deltaTime;
+                    Debug.Log(m_selfRepairTimer);
+                    if (m_selfRepairTimer > m_selfRepairTime)
+                    {
+                        m_selfRepairTimer = 0;
+                        RevertToFixState();
+                    }
+                }   
             }
         }
 
