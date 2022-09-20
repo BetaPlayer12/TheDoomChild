@@ -15,7 +15,7 @@ namespace DChild.Gameplay.Systems
         void OpenTradeWindow(NPCProfile merchantData,ITradeInventory merchantInventory, TradeAskingPrice merchantBuyingPriceRate);
         void ShowLoreNote(LoreData m_data);
         void OpenStorePage(StorePage storePage);
-        void OpenStorePage();
+        void OpenStore();
 
         void OpenWorldMap(Location fromLocation);
         void OpenShadowGateMap(Location fromLocation);

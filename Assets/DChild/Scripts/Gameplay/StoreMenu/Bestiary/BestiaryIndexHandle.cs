@@ -11,6 +11,8 @@ namespace DChild.Menu.Bestiary
     {
         [SerializeField]
         private BestiaryList m_bestiaryList;
+        [SerializeField]
+        private bool m_revealAllData;
         [SerializeField, InlineEditor]
         private BestiaryProgress m_tracker;
         [SerializeField, MinValue(1), PropertyOrder(-1)]
@@ -24,6 +26,7 @@ namespace DChild.Menu.Bestiary
         private int[] m_IDs;
 
         public int currentPage => m_page;
+        public int buttonCount => m_buttonCount;
 
         public event EventAction<EventActionArgs> PageChange;
 
@@ -47,7 +50,6 @@ namespace DChild.Menu.Bestiary
             {
                 m_page++;
                 SetPage(m_page);
-                UpdateUI();
             }
         }
 
@@ -57,7 +59,6 @@ namespace DChild.Menu.Bestiary
             {
                 m_page--;
                 SetPage(m_page);
-                UpdateUI();
             }
         }
 
@@ -74,6 +75,7 @@ namespace DChild.Menu.Bestiary
             {
                 m_availableButton = m_buttonCount - 1;
             }
+            UpdateUI();
             PageChange?.Invoke(this, EventActionArgs.Empty);
         }
 
@@ -88,7 +90,8 @@ namespace DChild.Menu.Bestiary
                 var data = m_bestiaryList.GetInfo(ID);
                 m_buttons[i].SetData(data);
                 m_buttons[i].Show();
-                m_buttons[i].SetInteractable(m_tracker?.HasInfoOf(ID) ?? true);
+                var hasInfoOnID = m_tracker?.HasInfoOf(ID) ?? true;
+                m_buttons[i].SetInteractable(m_revealAllData || hasInfoOnID);
             }
 
             for (; i < m_buttonCount; i++)
@@ -96,6 +99,8 @@ namespace DChild.Menu.Bestiary
                 m_buttons[i].Hide();
             }
         }
+
+        public BestiaryIndexButton GetButton(int index) => m_buttons[index];
 
         private void Awake()
         {

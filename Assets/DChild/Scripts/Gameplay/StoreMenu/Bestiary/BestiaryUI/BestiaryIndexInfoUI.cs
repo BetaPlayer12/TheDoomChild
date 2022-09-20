@@ -2,12 +2,10 @@
 using UnityEngine.UI;
 using TMPro;
 using Sirenix.OdinInspector;
-#if UNITY_EDITOR
-#endif
 
 namespace DChild.Menu.Bestiary
 {
-    public class BestiaryIndexInfoThing : MonoBehaviour
+    public class BestiaryIndexInfoUI : MonoBehaviour
     {
         [SerializeField]
         private Image m_background;
@@ -18,35 +16,13 @@ namespace DChild.Menu.Bestiary
         [SerializeField, FoldoutGroup("Backgrounds")]
         private Sprite m_newCreaureBackground;
 
-        [PropertySpace]
-        [SerializeField]
-        private GameObject m_creatureInfoPanel;
+
         [SerializeField, FoldoutGroup("CreatureInfoUI")]
         private TextMeshProUGUI m_creatureLabel;
         [SerializeField, FoldoutGroup("CreatureInfoUI")]
         private Image m_creatureImage;
         [SerializeField, FoldoutGroup("CreatureInfoUI")]
         private Image m_newStamp;
-
-        [PropertySpace]
-        [SerializeField]
-        private GameObject m_unknownCreaturePanel;
-
-        [ResponsiveButtonGroup,Button]
-        public void SetAsUnknownCreature()
-        {
-            m_creatureInfoPanel.SetActive(false);
-            m_unknownCreaturePanel.SetActive(true);
-            m_background.sprite = m_unknownBackground;
-        }
-
-        [ResponsiveButtonGroup, Button]
-        public void SetAsKnownCreature()
-        {
-            m_creatureInfoPanel.SetActive(true);
-            m_unknownCreaturePanel.SetActive(false);
-            m_background.sprite = m_normalBackground;
-        }
 
         public void SetInfo(BestiaryData data)
         {
@@ -70,10 +46,10 @@ namespace DChild.Menu.Bestiary
             {
                 m_background.sprite = m_newCreaureBackground;
             }
-            else
-            {
-                m_background.sprite = m_normalBackground;
-            }
+            //else
+            //{
+            //    m_background.sprite = m_normalBackground;
+            //}
         }
 
 #if UNITY_EDITOR

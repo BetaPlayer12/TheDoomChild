@@ -43,7 +43,10 @@ namespace DChild.Gameplay.Characters.Players.Modules
             {
                 Reset();
             }
-            m_input.enabled = false;
+            if (m_input)
+            {
+                m_input.enabled = false;
+            }
             this.enabled = false;
         }
 
@@ -53,7 +56,10 @@ namespace DChild.Gameplay.Characters.Players.Modules
             {
                 Reset();
             }
-            m_input.enabled = true;
+            if (m_input)
+            {
+                m_input.enabled = true;
+            }
             this.enabled = true;
         }
 

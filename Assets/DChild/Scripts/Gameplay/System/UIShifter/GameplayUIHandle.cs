@@ -66,9 +66,9 @@ namespace DChild.Gameplay.Systems
             GameEventMessage.SendEvent("ShadowGateMap Open");
         }
 
-        public void OpenStorePage()
+        public void OpenStore()
         {
-            m_storeNavigator.OpenPage();
+            m_storeNavigator.OpenStore();
         }
 
         public void MonitorBoss(Boss boss)

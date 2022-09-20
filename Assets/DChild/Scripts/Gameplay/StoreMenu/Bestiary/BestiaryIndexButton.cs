@@ -1,4 +1,6 @@
-﻿using Sirenix.OdinInspector;
+﻿using Doozy.Runtime.UIManager;
+using Doozy.Runtime.UIManager.Components;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.UI;
 #if UNITY_EDITOR
@@ -6,7 +8,6 @@ using UnityEngine.UI;
 
 namespace DChild.Menu.Bestiary
 {
-    [RequireComponent(typeof(Button))]
     public class BestiaryIndexButton : MonoBehaviour
     {
         //Bestiary Data and isInteracble should be Not serialized later on
@@ -14,26 +15,25 @@ namespace DChild.Menu.Bestiary
         [SerializeField, OnValueChanged("UpdateInfo")]
         private BestiaryData m_data;
         [SerializeField]
-        private BestiaryIndexInfoThing m_info;
-        private Button m_button;
-        [SerializeField, OnValueChanged("UpdateInteractability")]
-        private bool m_isInteractable;
+        private BestiaryIndexInfoUI m_info;
+        private UIButton m_button;
         private CanvasGroup m_canvas;
 
         public BestiaryData data => m_data;
 
+        public void SetState(UISelectionState state)
+        {
+            m_button.SetState(state);
+        }
+
         public void Show()
         {
-            //m_canvas.alpha = 1;
-            //m_canvas.interactable = true;
-            //m_canvas.blocksRaycasts = true;
+            m_button.gameObject.SetActive(true);
         }
 
         public void Hide()
         {
-            //m_canvas.alpha = 0;
-            //m_canvas.interactable = false;
-            //m_canvas.blocksRaycasts = false;
+            m_button.gameObject.SetActive(false);
         }
 
         public void SetData(BestiaryData data)
@@ -47,33 +47,18 @@ namespace DChild.Menu.Bestiary
 
         public void SetInteractable(bool isInteractable)
         {
-            m_isInteractable = isInteractable;
-            UpdateInteractability();
-        }
-
-        private void UpdateInteractability()
-        {
 #if UNITY_EDITOR
             if (m_button == null)
             {
-                m_button = GetComponent<Button>();
+                m_button = GetComponent<UIButton>();
             }
 #endif
-            m_button.interactable = m_isInteractable;
-            if (m_isInteractable)
-            {
-                m_info.SetAsKnownCreature();
-            }
-            else
-            {
-                m_info.SetAsUnknownCreature();
-            }
+            m_button.interactable = isInteractable;
         }
 
         private void Awake()
         {
-            m_button = GetComponent<Button>();
-            //m_canvas = GetComponent<CanvasGroup>();
+            m_button = GetComponent<UIButton>();
         }
 
         private void Start()
