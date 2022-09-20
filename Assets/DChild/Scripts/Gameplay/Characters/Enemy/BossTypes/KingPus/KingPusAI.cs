@@ -48,6 +48,12 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField]
             private MovementInfo m_tentaSpearRightCrawl = new MovementInfo();
             public MovementInfo tentaSpearRightCrawl => m_tentaSpearRightCrawl;
+            [SerializeField, ValueDropdown("GetAnimations")]
+            private string m_tentaSpearCrawlLeftAnticipationAnimation;
+            public string tentaSpearCrawlLeftAnticipationAnimation => m_tentaSpearCrawlLeftAnticipationAnimation;
+            [SerializeField, ValueDropdown("GetAnimations")]
+            private string m_tentaSpearCrawlRightAnticipationAnimation;
+            public string tentaSpearCrawlRightAnticipationAnimation => m_tentaSpearCrawlRightAnticipationAnimation;
 
             [SerializeField, TitleGroup("Attack Behaviours"), Range(0.1f, 10f)]
             private float m_tentacleSpeed;
@@ -484,7 +490,7 @@ namespace DChild.Gameplay.Characters.Enemies
         //private int m_wallGrappleDirectionIndex;
         private bool m_willGripWall;
         private bool m_willGripTarget;
-        private bool m_willTentaspearChase;
+        //private bool m_willTentaspearChase;
         private bool m_willStickToWall;
         #endregion
         #region Spitter
@@ -1088,10 +1094,15 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator Phase1Pattern1AttackRoutine()
         {
             var timer = 0f;
-            while (timer <= m_info.crawlDuration /*&& !IsTargetInRange(m_info.heavyGroundStabRightAttacks[0].range - 5f)*/)
+            var tentacipationAnimation = m_targetInfo.position.x > transform.position.x ? m_info.tentaSpearCrawlRightAnticipationAnimation : m_info.tentaSpearCrawlLeftAnticipationAnimation;
+            if (!IsTargetInRange(m_info.heavyGroundStabRightAttack.range))
             {
-                var tentaSpearCrawlAnimation = m_targetInfo.position.x > transform.position.x ? m_info.tentaSpearRightCrawl.animation : m_info.tentaSpearLeftCrawl.animation;
-                m_animation.SetAnimation(0, tentaSpearCrawlAnimation, true);
+                m_animation.SetAnimation(0, tentacipationAnimation, false);
+                yield return new WaitForAnimationComplete(m_animation.animationState, tentacipationAnimation);
+            }
+            while (timer <= m_info.crawlDuration && !IsTargetInRange(m_info.heavyGroundStabRightAttack.range))
+            {
+                MoveToTarget(m_info.heavyGroundStabRightAttack.range, true);
                 timer += Time.deltaTime;
                 yield return null;
             }
@@ -1194,10 +1205,15 @@ namespace DChild.Gameplay.Characters.Enemies
             if (IsTargetInRange(m_info.phase2Pattern1Range))
             {
                 var timer = 0f;
-                while (timer <= m_info.crawlDuration /*&& !IsTargetInRange(m_info.heavyGroundStabRightAttacks[0].range - 5f)*/)
+                var tentacipationAnimation = m_targetInfo.position.x > transform.position.x ? m_info.tentaSpearCrawlRightAnticipationAnimation : m_info.tentaSpearCrawlLeftAnticipationAnimation;
+                if (!IsTargetInRange(m_info.heavyGroundStabRightAttack.range))
                 {
-                    var tentaSpearCrawlAnimation = m_targetInfo.position.x > transform.position.x ? m_info.tentaSpearRightCrawl.animation : m_info.tentaSpearLeftCrawl.animation;
-                    m_animation.SetAnimation(0, tentaSpearCrawlAnimation, true);
+                    m_animation.SetAnimation(0, tentacipationAnimation, false);
+                    yield return new WaitForAnimationComplete(m_animation.animationState, tentacipationAnimation);
+                }
+                while (timer <= m_info.crawlDuration && !IsTargetInRange(m_info.heavyGroundStabRightAttack.range))
+                {
+                    MoveToTarget(m_info.heavySpearStabRightAttack.range, true);
                     timer += Time.deltaTime;
                     yield return null;
                 }
@@ -1230,13 +1246,12 @@ namespace DChild.Gameplay.Characters.Enemies
                 yield return new WaitForAnimationComplete(m_animation.animationState, heavyGroundStabAnticipation);
                 m_lastTargetPos = m_targetInfo.position;
                 var heavyGroundStabLoopAnticipation = "";
-                m_willTentaspearChase = false;
                 while (!IsTargetInRange(m_info.heavyGroundStabRightAttack.range))
                 {
                     m_lastTargetPos = m_targetInfo.position;
                     heavyGroundStabLoopAnticipation = m_lastTargetPos.x > transform.position.x ? m_info.heavyGroundStabAnticipationLoopRightAnimation : m_info.heavyGroundStabAnticipationLoopLeftAnimation;
                     m_animation.SetAnimation(30, heavyGroundStabLoopAnticipation, true);
-                    MoveToTarget(m_info.heavyGroundStabRightAttack.range);
+                    MoveToTarget(m_info.heavyGroundStabRightAttack.range, false);
                     yield return null;
                 }
                 m_movement.Stop();
@@ -1430,13 +1445,13 @@ namespace DChild.Gameplay.Characters.Enemies
         }
 
         #region Movement
-        private void MoveToTarget(float targetRange)
+        private void MoveToTarget(float targetRange, bool willTentaSpearChase)
         {
-            var moveRight = m_willTentaspearChase ? m_info.tentaSpearRightCrawl : m_info.rightMove;
-            var moveLeft = m_willTentaspearChase ? m_info.tentaSpearLeftCrawl : m_info.leftMove;
+            var moveRight = willTentaSpearChase ? m_info.tentaSpearRightCrawl : m_info.rightMove;
+            var moveLeft = willTentaSpearChase ? m_info.tentaSpearLeftCrawl : m_info.leftMove;
             if (!IsTargetInRange(targetRange) && m_groundSensor.isDetecting /*&& !m_wallSensor.isDetecting && m_edgeSensor.isDetecting*/)
             {
-                m_animation.EnableRootMotion(m_willTentaspearChase ? false :true, false);
+                m_animation.EnableRootMotion(willTentaSpearChase ? false : true, false);
                 m_animation.SetAnimation(0, m_targetInfo.position.x > transform.position.x ? moveRight.animation : moveLeft.animation, true);
                 //m_movement.MoveTowards(Vector2.one * transform.localScale.x, m_info.walk.speed);
             }
@@ -1446,12 +1461,14 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_animation.SetAnimation(0, m_info.idleAnimation, true);
             }
         }
+
         private void EventMove()
         {
             m_animation.DisableRootMotion();
             //m_movement.MoveTowards(Vector2.one * transform.localScale.x, m_targetInfo.position.x > transform.position.x ? m_info.tentaSpearRightCrawl.speed : -m_info.tentaSpearRightCrawl.speed);
             m_rb2d.AddForce(new Vector2(m_targetInfo.position.x > transform.position.x ? m_info.tentaSpearRightCrawl.speed : -m_info.tentaSpearRightCrawl.speed, transform.position.y), ForceMode2D.Impulse);
         }
+
         private void EventStop()
         {
             m_animation.EnableRootMotion(true, false);
@@ -1645,60 +1662,6 @@ namespace DChild.Gameplay.Characters.Enemies
                         m_attackUsed[i] = true;
                         m_currentAttack = m_attackCache[i];
                         m_currentAttackRange = m_attackRangeCache[i];
-                        switch (m_currentAttack)
-                        {
-                            case Attack.Phase1Pattern1:
-                                m_willTentaspearChase = true;
-                                break;
-                            case Attack.Phase1Pattern2:
-                                m_willTentaspearChase = true;
-                                break;
-                            case Attack.Phase1Pattern3:
-                                m_willTentaspearChase = true;
-                                break;
-                            case Attack.Phase1Pattern4:
-                                m_willTentaspearChase = true;
-                                break;
-                            case Attack.Phase2Pattern1:
-                                m_willTentaspearChase = true;
-                                break;
-                            case Attack.Phase2Pattern2:
-                                m_willTentaspearChase = true;
-                                break;
-                            case Attack.Phase2Pattern3:
-                                m_willTentaspearChase = true;
-                                break;
-                            case Attack.Phase2Pattern4:
-                                m_willTentaspearChase = true;
-                                break;
-                            case Attack.Phase2Pattern5:
-                                m_willTentaspearChase = true;
-                                break;
-                            case Attack.Phase2Pattern6:
-                                m_willTentaspearChase = true;
-                                break;
-                            case Attack.Phase3Pattern1:
-                                m_willTentaspearChase = true;
-                                break;
-                            case Attack.Phase3Pattern2:
-                                m_willTentaspearChase = true;
-                                break;
-                            case Attack.Phase3Pattern3:
-                                m_willTentaspearChase = true;
-                                break;
-                            case Attack.Phase3Pattern4:
-                                m_willTentaspearChase = true;
-                                break;
-                            case Attack.Phase3Pattern5:
-                                m_willTentaspearChase = true;
-                                break;
-                            case Attack.Phase3Pattern6:
-                                m_willTentaspearChase = true;
-                                break;
-                            case Attack.Phase3Pattern7:
-                                m_willTentaspearChase = true;
-                                break;
-                        }
                         return;
                     }
                 }
@@ -1848,18 +1811,15 @@ namespace DChild.Gameplay.Characters.Enemies
                             m_pickedCooldown = m_currentFullCooldown[0];
                             break;
                         case Attack.Phase1Pattern2:
-                            //m_currentAttackCoroutine = StartCoroutine(Phase1Pattern2AttackRoutine());
-                            m_currentAttackCoroutine = StartCoroutine(Phase1Pattern1AttackRoutine());
+                            m_currentAttackCoroutine = StartCoroutine(Phase1Pattern2AttackRoutine());
                             m_pickedCooldown = m_currentFullCooldown[1];
                             break;
                         case Attack.Phase1Pattern3:
-                            //m_currentAttackCoroutine = StartCoroutine(Phase1Pattern3And4AttackRoutine(false));
-                            m_currentAttackCoroutine = StartCoroutine(Phase1Pattern1AttackRoutine());
+                            m_currentAttackCoroutine = StartCoroutine(Phase1Pattern3And4AttackRoutine(false));
                             m_pickedCooldown = m_currentFullCooldown[2];
                             break;
                         case Attack.Phase1Pattern4:
-                            //m_currentAttackCoroutine = StartCoroutine(Phase1Pattern3And4AttackRoutine(true));
-                            m_currentAttackCoroutine = StartCoroutine(Phase1Pattern1AttackRoutine());
+                            m_currentAttackCoroutine = StartCoroutine(Phase1Pattern3And4AttackRoutine(true));
                             m_pickedCooldown = m_currentFullCooldown[3];
                             break;
                         case Attack.Phase2Pattern1:
@@ -1957,7 +1917,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         }
                         else
                         {
-                            MoveToTarget(m_currentAttackRange);
+                            MoveToTarget(m_currentAttackRange, false);
                         }
                     }
                     break;
