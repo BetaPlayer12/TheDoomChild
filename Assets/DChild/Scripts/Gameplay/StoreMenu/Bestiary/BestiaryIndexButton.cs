@@ -16,14 +16,19 @@ namespace DChild.Menu.Bestiary
         private BestiaryData m_data;
         [SerializeField]
         private BestiaryIndexInfoUI m_info;
-        private UIButton m_button;
+        private UIToggle m_button;
         private CanvasGroup m_canvas;
 
         public BestiaryData data => m_data;
 
-        public void SetState(UISelectionState state)
+        public void SetIsOn(bool isOn)
         {
-            m_button.SetState(state);
+            m_button.SetIsOn(isOn);
+            if (isOn)
+            {
+                m_button.Select();
+            }
+            m_button.SendSignal(isOn);
         }
 
         public void Show()
@@ -50,7 +55,7 @@ namespace DChild.Menu.Bestiary
 #if UNITY_EDITOR
             if (m_button == null)
             {
-                m_button = GetComponent<UIButton>();
+                m_button = GetComponent<UIToggle>();
             }
 #endif
             m_button.interactable = isInteractable;
@@ -58,7 +63,7 @@ namespace DChild.Menu.Bestiary
 
         private void Awake()
         {
-            m_button = GetComponent<UIButton>();
+            m_button = GetComponent<UIToggle>();
         }
 
         private void Start()

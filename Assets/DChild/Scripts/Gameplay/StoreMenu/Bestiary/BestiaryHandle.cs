@@ -24,7 +24,7 @@ namespace DChild.Menu.Bestiary
             {
                 m_selectedBestiaryData = indexButton.data;
                 m_infoPage.ShowInfo(m_selectedBestiaryData);
-                indexButton.SetState(Doozy.Runtime.UIManager.UISelectionState.Pressed);
+                indexButton.SetIsOn(true);
                 StopAllCoroutines();
                 StartCoroutine(DelayedGameObjectSelect(indexButton.gameObject));
             }
@@ -40,6 +40,35 @@ namespace DChild.Menu.Bestiary
             m_lockOnSelectedData = false;
         }
 
+        public void HighlightSelectedData()
+        {
+            if (m_lockOnSelectedData)
+            {
+                bool hasSelectedButton = false;
+                for (int i = 0; i < m_indexHandle.buttonCount; i++)
+                {
+                    var button = m_indexHandle.GetButton(i);
+                    if (button.data == m_selectedBestiaryData)
+                    {
+                        Debug.Log("Selecting Bestiary of " + button.data.creatureName);
+                        button.SetIsOn(true);
+                        StopAllCoroutines();
+                        StartCoroutine(DelayedGameObjectSelect(button.gameObject));
+                        hasSelectedButton = true;
+                    }
+                    else
+                    {
+                        button.SetIsOn(false);
+                    }
+                }
+
+                if(hasSelectedButton == false)
+                {
+                    StopAllCoroutines();
+                }
+            }
+        }
+
         private IEnumerator DelayedGameObjectSelect(GameObject selectedGameObject)
         {
             yield return new WaitForEndOfFrame();
@@ -47,30 +76,15 @@ namespace DChild.Menu.Bestiary
             EventSystem.current.SetSelectedGameObject(selectedGameObject);
         }
 
+        private void OnPageChange(object sender, EventActionArgs eventArgs)
+        {
+            HighlightSelectedData();
+        }
+
         private void Awake()
         {
             m_indexHandle.PageChange += OnPageChange;
         }
 
-        private void OnPageChange(object sender, EventActionArgs eventArgs)
-        {
-            if (m_lockOnSelectedData)
-            {
-                for (int i = 0; i < m_indexHandle.buttonCount; i++)
-                {
-                    var button = m_indexHandle.GetButton(i);
-                    if (button.data == m_selectedBestiaryData)
-                    {
-                        button.SetState(Doozy.Runtime.UIManager.UISelectionState.Pressed);
-                        StopAllCoroutines();
-                        StartCoroutine(DelayedGameObjectSelect(button.gameObject));
-                    }
-                    else
-                    {
-                        button.SetState(Doozy.Runtime.UIManager.UISelectionState.Normal);
-                    }
-                }
-            }
-        }
     }
 }
