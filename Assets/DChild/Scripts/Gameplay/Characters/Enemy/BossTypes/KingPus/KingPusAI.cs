@@ -484,28 +484,16 @@ namespace DChild.Gameplay.Characters.Enemies
         private List<Vector2> m_defaultTentacleOverridePointPositions;
         [SerializeField, TabGroup("Tentacle Points")]
         private SkeletonUtilityBone m_stabHeadBone;
-        //[SerializeField, TabGroup("Tentacle Points")]
-        //private Joint2D m_targetChain;
-        //private int m_tentacleTargetPointIndex;
-        //private int m_wallGrappleDirectionIndex;
         private bool m_willGripWall;
         private bool m_willGripTarget;
-        //private bool m_willTentaspearChase;
         private bool m_willStickToWall;
         #endregion
         #region Spitter
         [SerializeField, TabGroup("Spitter")]
         private List<Transform> m_spitterPositions;
         #endregion
-        //[SerializeField, TabGroup("Spawn Points")]
-        //private Transform m_projectilePoint;
-        //[SerializeField, TabGroup("Spawn Points")]
-        //private Transform m_scytheWavePoint;
-        //[SerializeField, TabGroup("IK Control")]
-        //private SkeletonUtilityBone m_targetIK;
 
         private BallisticProjectileLauncher m_projectileLauncher;
-        //private ProjectileLauncher m_scytheWaveLauncher;
 
         [SerializeField]
         private SpineEventListener m_spineListener;
@@ -516,12 +504,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private StateHandle<State> m_stateHandle;
         [ShowInInspector]
         private PhaseHandle<Phase, PhaseInfo> m_phaseHandle;
-        //[ShowInInspector]
-        //private RandomAttackDecider<Pattern> m_patternDecider;
         [ShowInInspector]
         private RandomAttackDecider<Attack> m_attackDecider;
-        //private Pattern m_chosenPattern;
-        //private Pattern m_previousPattern;
         private Attack m_currentAttack;
         private float m_currentAttackRange;
         private int m_maxHitCount;
@@ -539,14 +523,9 @@ namespace DChild.Gameplay.Characters.Enemies
         private List<float> m_currentFullCooldown;
         private List<float> m_patternCooldown;
 
-        //#region PatternCounts
-        //private int m_phase2pattern1Count;
-        //private int m_phase2pattern2Count;
-        //private int m_phase2pattern5Count;
-        //private int m_fakeBlinkCount;
-        //private int m_fakeBlinkChosenDrillDashBehavior;
-        //private int m_drillDashComboCount;
-        //#endregion
+        #region Attack Ranges
+        private float m_currentGroundStabRange;
+        #endregion
 
         #region Animation
         private string m_idleAnimation;
@@ -568,6 +547,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_bodyCollider.size = new Vector2(40, 15);
                     m_hitbox.transform.localScale = new Vector3(0.75f, 0.75f, 1);
                     m_sensorResizer.localScale = new Vector3(0.75f, 0.75f, 1);
+                    m_currentGroundStabRange = m_info.heavyGroundStabRightAttack.range;
                     m_animation.SetAnimation(10, m_info.phase1MixAnimation, false);
                     AddToAttackCache(Attack.Phase1Pattern1, Attack.Phase1Pattern2, Attack.Phase1Pattern3, Attack.Phase1Pattern4);
                     AddToRangeCache(m_info.phase1Pattern1Range, m_info.phase1Pattern2Range, m_info.phase1Pattern3Range, m_info.phase1Pattern4Range);
@@ -578,6 +558,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_bodyCollider.size = new Vector2(50, 18);
                     m_hitbox.transform.localScale = new Vector3(1, 1, 1);
                     m_sensorResizer.localScale = new Vector3(1, 1, 1);
+                    m_currentGroundStabRange = m_info.heavyGroundStabRightAttack.range + 10;
                     m_animation.SetAnimation(10, m_info.phase2MixAnimation, false);
                     AddToAttackCache(Attack.Phase2Pattern1, Attack.Phase2Pattern2, Attack.Phase2Pattern3, Attack.Phase2Pattern4, Attack.Phase2Pattern5, Attack.Phase2Pattern6);
                     AddToRangeCache(m_info.phase2Pattern1Range, m_info.phase2Pattern2Range, m_info.phase2Pattern3Range, m_info.phase2Pattern4Range, m_info.phase2Pattern5Range, m_info.phase2Pattern6Range);
@@ -588,6 +569,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_bodyCollider.size = new Vector2(60, 20);
                     m_hitbox.transform.localScale = new Vector3(1.25f, 1.25f, 1);
                     m_sensorResizer.localScale = new Vector3(1.3f, 1.25f, 1);
+                    m_currentGroundStabRange = m_info.heavyGroundStabRightAttack.range + 20;
                     m_animation.SetAnimation(10, m_info.phase3MixAnimation, false);
                     AddToAttackCache(Attack.Phase3Pattern1, Attack.Phase3Pattern2, Attack.Phase3Pattern3, Attack.Phase3Pattern4, Attack.Phase3Pattern5, Attack.Phase3Pattern6, Attack.Phase3Pattern7);
                     AddToRangeCache(m_info.phase3Pattern1Range, m_info.phase3Pattern2Range, m_info.phase3Pattern3Range, m_info.phase3Pattern4Range, m_info.phase3Pattern5Range, m_info.phase3Pattern6Range, m_info.phase3Pattern7Range);
@@ -1246,12 +1228,12 @@ namespace DChild.Gameplay.Characters.Enemies
                 yield return new WaitForAnimationComplete(m_animation.animationState, heavyGroundStabAnticipation);
                 m_lastTargetPos = m_targetInfo.position;
                 var heavyGroundStabLoopAnticipation = "";
-                while (!IsTargetInRange(m_info.heavyGroundStabRightAttack.range))
+                while (!IsTargetInRange(m_currentGroundStabRange))
                 {
                     m_lastTargetPos = m_targetInfo.position;
                     heavyGroundStabLoopAnticipation = m_lastTargetPos.x > transform.position.x ? m_info.heavyGroundStabAnticipationLoopRightAnimation : m_info.heavyGroundStabAnticipationLoopLeftAnimation;
                     m_animation.SetAnimation(30, heavyGroundStabLoopAnticipation, true);
-                    MoveToTarget(m_info.heavyGroundStabRightAttack.range, false);
+                    MoveToTarget(m_currentGroundStabRange, false);
                     yield return null;
                 }
                 m_movement.Stop();
