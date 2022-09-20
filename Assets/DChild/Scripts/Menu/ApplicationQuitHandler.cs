@@ -7,7 +7,7 @@ namespace DChild.Menu
     {
         public void Execute()
         {
-            GameSystem.RequestConfirmation(OnAffirmation, "Would you like to Quit the Game");
+            GameSystem.RequestConfirmation(OnAffirmation, "Would you like to Quit the Game?");
         }
 
         private void OnAffirmation(object sender, EventActionArgs eventArgs)

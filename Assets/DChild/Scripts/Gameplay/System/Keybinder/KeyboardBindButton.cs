@@ -1,4 +1,4 @@
-﻿using Doozy.Engine.UI;
+﻿using Doozy.Runtime.UIManager.Components;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -27,7 +27,7 @@ namespace DChild.CustomInput.Keybind
         [Button]
         private void Rebind()
         {
-            GetComponent<UIButton>().ExecuteClick();
+            GetComponent<UIButton>().Click();
         }
 #endif
     }

@@ -1,16 +1,16 @@
-﻿using Doozy.Engine.UI;
+﻿using Doozy.Runtime.UIManager.Containers;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class GameTutorialHandle : MonoBehaviour
 {
-    public UIView m_movement;
-    public UIView m_jump;
-    public UIView m_highjump;
-    public UIView m_crouch;
-    public UIView m_dropdown;
-    public UIView m_attack;
+    public UIContainer m_movement;
+    public UIContainer m_jump;
+    public UIContainer m_highjump;
+    public UIContainer m_crouch;
+    public UIContainer m_dropdown;
+    public UIContainer m_attack;
     public bool m_active;
 
     public void SetMovementTutorialVisibility(bool active)

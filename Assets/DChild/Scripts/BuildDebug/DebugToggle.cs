@@ -11,8 +11,6 @@ namespace DChildDebug.Window
 
     public class DebugToggle : MonoBehaviour
     {
-        [SerializeField]
-        private UIHighlight m_highlight;
         [SerializeField, TabGroup("True")]
         private UnityEvent OnTrue;
         [SerializeField, TabGroup("False")]
@@ -26,12 +24,10 @@ namespace DChildDebug.Window
             m_isToggled = !m_isToggled;
             if (m_isToggled)
             {
-                m_highlight.Highlight();
                 OnTrue?.Invoke();
             }
             else
             {
-                m_highlight.Normalize();
                 OnFalse?.Invoke();
             }
         }
@@ -39,15 +35,6 @@ namespace DChildDebug.Window
         public void UpdateToggleHighlight()
         {
             m_isToggled = m_source.value;
-            if (m_isToggled)
-            {
-                m_highlight.UseHighlightState();
-            }
-            else
-            {
-                m_highlight.UseNormalizeState();
-            }
-
         }
         private void Start()
         {

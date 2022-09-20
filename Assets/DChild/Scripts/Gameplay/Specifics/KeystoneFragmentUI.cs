@@ -1,5 +1,5 @@
 ﻿using DChild.Gameplay.Inventories;
-using Doozy.Engine.UI;
+using Doozy.Runtime.UIManager.Containers;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -13,10 +13,10 @@ namespace DChild.Gameplay.Items
             [SerializeField]
             private ItemData m_item;
             [SerializeField]
-            private UIView m_view;
+            private UIContainer m_view;
 
             public ItemData item => m_item;
-            public UIView view => m_view;
+            public UIContainer view => m_view;
         }
 
         [System.Serializable]

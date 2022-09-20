@@ -24,7 +24,7 @@ namespace DChild.Gameplay.Systems
                 m_locationPoint = transform;
             }
 
-            if (UnityEditor.Experimental.SceneManagement.PrefabStageUtility.GetCurrentPrefabStage() == null)
+            if (UnityEditor.SceneManagement.PrefabStageUtility.GetCurrentPrefabStage() == null)
             {
                 if (Application.isPlaying == false)
                 {

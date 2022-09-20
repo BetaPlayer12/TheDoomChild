@@ -6,7 +6,7 @@ using DChild.Gameplay.Characters.Players.Modules;
 using DChild.Gameplay.Combat;
 using DChild.Inputs;
 using DChild.Visuals;
-using Doozy.Engine;
+using DChild.Temp;
 using Holysoft;
 using Holysoft.Collections;
 using Holysoft.Event;
@@ -67,7 +67,7 @@ namespace DChild.Gameplay.Systems
         public void DisableInput()
         {
             m_gameplayInput?.SetStoreInputActive(false);
-            m_characterInput?.Disable();
+            //m_characterInput?.Disable();
         }
 
         public void EnableInput()

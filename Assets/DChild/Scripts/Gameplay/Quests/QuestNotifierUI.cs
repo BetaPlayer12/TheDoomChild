@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using PixelCrushers.DialogueSystem;
 using TMPro;
-using Doozy.Engine;
+using DChild.Temp;
 
 namespace DChild.Gameplay.Quests
 {
