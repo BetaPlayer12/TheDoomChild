@@ -1,4 +1,5 @@
 ﻿using DChild.Gameplay.Items;
+using Doozy.Runtime.UIManager.Components;
 using Holysoft.Event;
 using Holysoft.UI;
 using Sirenix.OdinInspector;
@@ -14,8 +15,6 @@ namespace DChild.Gameplay.Inventories.UI
         private InventoryListUI<IInventory> m_listUI;
         [SerializeField]
         private ItemUI m_firstSelectedItemUI;
-        [SerializeField]
-        private SingleFocusHandler m_highlighter;
         [SerializeField]
         private UsableInventoryItemHandle m_usableInventoryItemHandle;
 
@@ -38,6 +37,8 @@ namespace DChild.Gameplay.Inventories.UI
             m_listUI.Reset();
             m_listUI.UpdateUIList();
             Select(m_firstSelectedItemUI);
+            var button = m_firstSelectedItemUI.GetComponent<UIToggle>();
+            button.SetIsOn(true);
         }
 
         private void OnListOverallChange(object sender, EventActionArgs eventArgs)
@@ -48,7 +49,6 @@ namespace DChild.Gameplay.Inventories.UI
         private void OnItemUsedConsumed(object sender, EventActionArgs eventArgs)
         {
             Select(null);
-            m_highlighter.DontFocusOnAnything();
         }
 
 
