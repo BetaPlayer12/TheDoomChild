@@ -17,8 +17,8 @@ using DChild.Gameplay.Projectiles;
 
 namespace DChild.Gameplay.Characters.Enemies
 {
-    [AddComponentMenu("DChild/Gameplay/Enemies/Minion/BlobBlackBlood")]
-    public class BlobBlackBloodAI : CombatAIBrain<BlobBlackBloodAI.Info>
+    [AddComponentMenu("DChild/Gameplay/Enemies/Minion/BlobBlackBloodPlatform")]
+    public class BlobBlackBloodPlatformAI : CombatAIBrain<BlobBlackBloodAI.Info>
     {
         [System.Serializable]
         public class Info : BaseInfo
@@ -82,18 +82,14 @@ namespace DChild.Gameplay.Characters.Enemies
         //private SpineEventListener m_spineEventListener;
         [SerializeField, TabGroup("Reference")]
         private Hitbox m_hitbox;
-        [SerializeField, TabGroup("Reference")] 
+        [SerializeField, TabGroup("Reference")]
         private Renderer m_renderer;
         [SerializeField, TabGroup("Reference")]
         private Collider2D m_selfCollider;
         [SerializeField, TabGroup("Reference")]
         private Transform m_blobSpawnPoint;
         [SerializeField, TabGroup("Modules")]
-        private TransformTurnHandle m_turnHandle;
-        [SerializeField, TabGroup("Modules")]
         private MovementHandle2D m_movement;
-        [SerializeField, TabGroup("Modules")]
-        private PatrolHandle m_patrolHandle;
         [SerializeField, TabGroup("Modules")]
         private PlatformPatrol m_platformPatrol;
         [SerializeField, TabGroup("Modules")]
@@ -122,7 +118,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private Coroutine m_randomTurnRoutine;
 
         [ShowInInspector]
-        private float m_sleepTimerCounter;  
+        private float m_sleepTimerCounter;
 
         private void OnAttackDone(object sender, EventActionArgs eventArgs)
         {
@@ -160,7 +156,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_movement.Stop();
             m_selfCollider.enabled = false;
             m_stateHandle.OverrideState(State.Sleep);
-            StartCoroutine(SleepRoutine());  
+            StartCoroutine(SleepRoutine());
         }
 
         private IEnumerator SleepRoutine()
@@ -221,8 +217,7 @@ namespace DChild.Gameplay.Characters.Enemies
         protected override void Awake()
         {
             base.Awake();
-            m_patrolHandle.TurnRequest += OnTurnRequest;
-            m_turnHandle.TurnDone += OnTurnDone;
+            //m_turnHandle.TurnDone += OnTurnDone;
             //m_flinchHandle.FlinchStart += OnFlinchStart;
             m_stateHandle = new StateHandle<State>(State.Patrol, State.WaitBehaviourEnd);
         }
@@ -240,8 +235,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         //m_animation.EnableRootMotion(true, false);
                         //m_animation.SetAnimation(0, m_info.move.animation, true);
                         var characterInfo = new PatrolHandle.CharacterInfo(m_character.centerMass.position, m_character.facing);
-                        m_patrolHandle.Patrol(m_movement, m_info.move.speed, characterInfo);
-                        //m_platformPatrol.Patrol(m_movement, m_info.move.speed, characterInfo);
+                        m_platformPatrol.Patrol(m_movement, m_info.move.speed, characterInfo);
                     }
                     //else
                     //{
@@ -254,7 +248,6 @@ namespace DChild.Gameplay.Characters.Enemies
 
                 case State.Turning:
                     m_stateHandle.Wait(m_turnState);
-                    m_turnHandle.Execute();
                     //m_turnHandle.Execute(m_info.turnAnimation, m_info.idleAnimation);
                     break;
 
@@ -277,7 +270,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 case State.Sleep:
                     m_sleepTimerCounter += GameplaySystem.time.deltaTime;
 
-                    if(m_sleepTimerCounter > m_info.sleepTimer)
+                    if (m_sleepTimerCounter > m_info.sleepTimer)
                     {
                         m_sleepTimerCounter = 0;
                         m_stateHandle.SetState(State.WakeUp);

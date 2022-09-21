@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5651290796628576149}
   - component: {fileID: 5651290796628576150}
-  m_Layer: 17
+  m_Layer: 11
   m_Name: Model
   m_TagString: Droppable
   m_Icon: {fileID: 0}
@@ -320,7 +320,8 @@ GameObject:
   m_Component:
   - component: {fileID: 5651290797439643923}
   - component: {fileID: 5651290797439643924}
-  m_Layer: 17
+  - component: {fileID: 2404539547433724427}
+  m_Layer: 11
   m_Name: Platform
   m_TagString: Droppable
   m_Icon: {fileID: 0}
@@ -392,6 +393,25 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!251 &2404539547433724427
+PlatformEffector2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5651290797439643922}
+  m_Enabled: 1
+  m_UseColliderMask: 1
+  m_ColliderMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_RotationalOffset: 0
+  m_UseOneWay: 1
+  m_UseOneWayGrouping: 0
+  m_SurfaceArc: 180
+  m_UseSideFriction: 0
+  m_UseSideBounce: 0
+  m_SideArc: 1
 --- !u!1 &5651290798041662536
 GameObject:
   m_ObjectHideFlags: 0
@@ -403,7 +423,7 @@ GameObject:
   - component: {fileID: 5651290798041662537}
   - component: {fileID: 5651290798041662539}
   - component: {fileID: 5651290798041662538}
-  m_Layer: 17
+  m_Layer: 11
   m_Name: DissolveWall_Embers
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5214,9 +5234,9 @@ GameObject:
   m_Component:
   - component: {fileID: 5651290798108135622}
   - component: {fileID: 5651290798108135623}
-  m_Layer: 17
+  m_Layer: 11
   m_Name: SolidWall (1)
-  m_TagString: InvisibleWall
+  m_TagString: Droppable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5270,7 +5290,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2316184247399892595}
-  m_Layer: 17
+  m_Layer: 11
   m_Name: BlobSpawnPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5384,6 +5404,11 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 3679767114051974153, guid: 6c1e4476c074cb64e8d317c6e6994553,
         type: 3}
+    - target: {fileID: 3679767114313270802, guid: 6c1e4476c074cb64e8d317c6e6994553,
+        type: 3}
+      propertyPath: m_facing
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3679767114313270804, guid: 6c1e4476c074cb64e8d317c6e6994553,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -5438,6 +5463,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3679767114313270804, guid: 6c1e4476c074cb64e8d317c6e6994553,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3679767114313270806, guid: 6c1e4476c074cb64e8d317c6e6994553,
         type: 3}
