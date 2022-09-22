@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3679767113393594918}
   - component: {fileID: 3679767113393594914}
-  - component: {fileID: 3679767113393594919}
+  - component: {fileID: 4402926044140038541}
   m_Layer: 13
   m_Name: Behaviours
   m_TagString: Untagged
@@ -25,9 +25,9 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3679767113393594937}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1.2, y: 0, z: 0}
-  m_LocalScale: {x: -0.325, y: 0.325, z: 0.325}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 3679767113436771299}
   - {fileID: 3679767115040699985}
@@ -47,7 +47,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_source: {fileID: 3679767114313270805}
---- !u!114 &3679767113393594919
+--- !u!114 &4402926044140038541
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -56,16 +56,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 3679767113393594937}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 89df0e11531c1d545a54dbbbc1e36c8c, type: 3}
+  m_Script: {fileID: 11500000, guid: 464ec224e928b5f4190f971103150419, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_characterPhysics2D: {fileID: 3679767114313270805}
-  m_leadGroundSensor: {fileID: 3679767114072766257}
-  m_edgeWallSensor: {fileID: 3679767114002200922}
-  m_wallSensor: {fileID: 3679767114105161229}
-  m_autoRotate: 1
-  m_snapOffset: {x: 0, y: 0}
-  m_toRotate: {fileID: 3679767115212796066}
+  m_groundSensor: {fileID: 3679767115426743866}
+  m_edgeSensor: {fileID: 3679767114002200922}
+  objectToRotate: {fileID: 0}
+  m_startIndex: 0
+  m_startIteration: 0
+  m_cornerPoints: []
+  m_clockwiseMovement: 0
+  m_nearDistanceTolerance: 0.1
 --- !u!1 &3679767113399672908
 GameObject:
   m_ObjectHideFlags: 0
@@ -5254,7 +5255,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3679767114002200927}
   m_LocalRotation: {x: 0, y: 0, z: 0.7071068, w: -0.7071068}
-  m_LocalPosition: {x: 1.75, y: 0, z: 0}
+  m_LocalPosition: {x: 1.75, y: -2.82, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 3679767114231788610}
@@ -5937,7 +5938,7 @@ MonoBehaviour:
   m_selfCollider: {fileID: 3679767113671665448}
   m_blobSpawnPoint: {fileID: 3679767113671665451}
   m_movement: {fileID: 3679767113393594914}
-  m_platformPatrol: {fileID: 3679767113393594919}
+  m_platformPatrol: {fileID: 4402926044140038541}
   m_flinchHandle: {fileID: 3679767115040699998}
   m_health: {fileID: 3679767114051974263}
   m_wallSensor: {fileID: 3679767114105161229}
