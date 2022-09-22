@@ -83,9 +83,16 @@ namespace DChild.Gameplay.Characters.AI
             IterateToNextPoint();
         }
 
-        public void RotateMinion()
+        public IEnumerator RotateMinion()
         {
+            float rotation = objectToRotate.rotation.z;
 
+            rotation -= 90f;
+
+            objectToRotate.rotation = Quaternion.Euler(0, 0, rotation);
+            objectToRotate.position = m_currentTargetPosition;
+
+            yield return null;
         }
 
         public override void Patrol(MovementHandle2D movement, float speed, CharacterInfo character)
@@ -93,14 +100,13 @@ namespace DChild.Gameplay.Characters.AI
             var currentPosition = character.position;
             var movementInfo = GetInfo(currentPosition);
 
-            if(currentPosition != m_currentTargetPosition)
+            if(m_edgeSensor.isDetecting)
             {
                 movement.MoveTowards(movementInfo.moveDirection, speed);
             }
             else
             {
-                objectToRotate.position = m_currentTargetPosition;
-                objectToRotate.rotation = Quaternion.Euler(0, 0, 90f);
+                StartCoroutine(RotateMinion());
             }
             
         }

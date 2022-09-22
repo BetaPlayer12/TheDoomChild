@@ -91,7 +91,7 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Modules")]
         private MovementHandle2D m_movement;
         [SerializeField, TabGroup("Modules")]
-        private PlatformPatrol m_platformPatrol;
+        private PlatformPatrolRemake m_platformPatrol;
         [SerializeField, TabGroup("Modules")]
         private FlinchHandler m_flinchHandle;
         [SerializeField, TabGroup("Modules")]
