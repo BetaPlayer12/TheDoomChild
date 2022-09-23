@@ -86,12 +86,16 @@ namespace DChild.Gameplay.Characters.Enemies
         private Renderer m_renderer;
         [SerializeField, TabGroup("Reference")]
         private Collider2D m_selfCollider;
+        [SerializeField, TabGroup("Reference")]
+        private Transform m_blobSpawnPoint;
         [SerializeField, TabGroup("Modules")]
         private TransformTurnHandle m_turnHandle;
         [SerializeField, TabGroup("Modules")]
         private MovementHandle2D m_movement;
         [SerializeField, TabGroup("Modules")]
         private PatrolHandle m_patrolHandle;
+        [SerializeField, TabGroup("Modules")]
+        private PlatformPatrol m_platformPatrol;
         [SerializeField, TabGroup("Modules")]
         private FlinchHandler m_flinchHandle;
         [SerializeField, TabGroup("Modules")]
@@ -178,6 +182,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator WakeUpRoutine()
         {
+            gameObject.transform.position = m_blobSpawnPoint.position;
             gameObject.transform.localEulerAngles = new Vector3(0f, 0f, 0f);
             m_hitbox.Enable();
             m_damageable.Heal(9999);
@@ -236,6 +241,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         //m_animation.SetAnimation(0, m_info.move.animation, true);
                         var characterInfo = new PatrolHandle.CharacterInfo(m_character.centerMass.position, m_character.facing);
                         m_patrolHandle.Patrol(m_movement, m_info.move.speed, characterInfo);
+                        //m_platformPatrol.Patrol(m_movement, m_info.move.speed, characterInfo);
                     }
                     //else
                     //{
