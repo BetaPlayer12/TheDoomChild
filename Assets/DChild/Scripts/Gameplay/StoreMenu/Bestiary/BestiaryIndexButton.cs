@@ -23,12 +23,15 @@ namespace DChild.Menu.Bestiary
 
         public void SetIsOn(bool isOn)
         {
-            m_button.SetIsOn(isOn);
-            if (isOn)
+            if (m_button.isOn != isOn)
             {
-                m_button.Select();
+                m_button.SetIsOn(isOn);
+                if (isOn)
+                {
+                    m_button.Select();
+                }
+                m_button.SendSignal(isOn);
             }
-            m_button.SendSignal(isOn);
         }
 
         public void Show()

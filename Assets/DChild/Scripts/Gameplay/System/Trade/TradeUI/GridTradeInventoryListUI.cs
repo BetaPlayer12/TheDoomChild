@@ -3,11 +3,9 @@ using DChild.Gameplay.Inventories.UI;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
-#if UNITY_EDITOR
-#endif
-
 namespace DChild.Gameplay.Trade.UI
 {
+
     public class GridTradeInventoryListUI : FilteredInventoryListUI<ITradeInventory>
     {
         [SerializeField, MinValue(1), PropertyOrder(-1)]

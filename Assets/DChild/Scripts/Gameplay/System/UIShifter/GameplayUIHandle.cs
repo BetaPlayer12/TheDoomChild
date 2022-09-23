@@ -9,7 +9,9 @@ using DChild.Gameplay.Trade;
 using DChild.Gameplay.UI;
 using DChild.Menu.Trade;
 using DChild.Temp;
+using Doozy.Runtime.Signals;
 using Doozy.Runtime.UIManager.Containers;
+using Sirenix.OdinInspector;
 using System.Collections;
 using UnityEngine;
 
@@ -17,8 +19,11 @@ namespace DChild.Gameplay.Systems
 {
     public class GameplayUIHandle : MonoBehaviour, IGameplayUIHandle, IGameplaySystemModule
     {
-        [SerializeField]
+        [SerializeField, BoxGroup("Merchant UI")]
+        private SignalSender m_tradeWindow;
+        [SerializeField, BoxGroup("Merchant UI")]
         private TradeManager m_tradeManager;
+
         [SerializeField]
         private StoreNavigator m_storeNavigator;
         [SerializeField]
@@ -46,7 +51,7 @@ namespace DChild.Gameplay.Systems
             m_tradeManager.SetSellerProfile(merchantData);
             m_tradeManager.SetSellingTradeRates(merchantBuyingPriceRate);
             m_tradeManager.SetupTrade(GameplaySystem.playerManager.player.inventory, merchantInventory);
-            GameEventMessage.SendEvent("Trade Open");
+            m_tradeWindow.SendSignal();
         }
 
         public void OpenStorePage(StorePage storePage)

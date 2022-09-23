@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DarkTonic.MasterAudio;
 using PixelCrushers.DialogueSystem;
+using Doozy.Runtime.Signals;
 
 namespace DChild
 {
@@ -38,15 +39,13 @@ namespace DChild
                     break;
             }
         }
-
-        public void SendAsDozzyEvent(string toSend) => GameEventMessage.SendEvent(toSend);
         public void SendAsMasterAudioEvent(string toSend) => MasterAudio.FireCustomEvent(toSend, transform);
         public void SendAsDialogueSystemMessage(string toSend) => Sequencer.Message(toSend);
 
 #if UNITY_EDITOR
         [SerializeField, OnValueChanged("OnValueChange"),
          ShowIf("@m_systemToSendTo == System.Doozy"), LabelText("Event")]
-        private string m_doozyEvent;
+        private SignalSender m_doozyEvent;
         [SerializeField, MasterCustomEvent, OnValueChanged("OnValueChange"),
          ShowIf("@m_systemToSendTo == System.MasterAudio"), LabelText("Event")]
         private string m_masterAudioEvent;
@@ -59,7 +58,7 @@ namespace DChild
             switch (m_systemToSendTo)
             {
                 case System.Doozy:
-                    m_event = m_doozyEvent;
+                    m_doozyEvent.SendSignal();
                     break;
                 case System.MasterAudio:
                     m_event = m_masterAudioEvent;
@@ -75,7 +74,7 @@ namespace DChild
             switch (m_systemToSendTo)
             {
                 case System.Doozy:
-                    m_event = m_doozyEvent;
+                    m_doozyEvent.SendSignal();
                     break;
                 case System.MasterAudio:
                     m_event = m_masterAudioEvent;

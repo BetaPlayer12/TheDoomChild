@@ -21,9 +21,10 @@ namespace DChild.Gameplay.Trade
         [Button]
         public void Commence()
         {
-            m_manager.SetSellerProfile(m_merchantProfile);
-            //m_manager.SetSellingTradeRates(m_rates.sellAskingPrice);
-            m_manager.SetupTrade(m_player, m_merchant);
+            //m_manager.SetSellerProfile(m_merchantProfile);
+            ////m_manager.SetSellingTradeRates(m_rates.sellAskingPrice);
+            //m_manager.SetupTrade(m_player, m_merchant);
+            GameplaySystem.gamplayUIHandle.OpenTradeWindow(null, null, null);
         }
     }
 }

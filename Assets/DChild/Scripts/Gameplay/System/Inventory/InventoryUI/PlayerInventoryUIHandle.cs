@@ -3,6 +3,7 @@ using Doozy.Runtime.UIManager.Components;
 using Holysoft.Event;
 using Holysoft.UI;
 using Sirenix.OdinInspector;
+using System;
 using UnityEngine;
 
 namespace DChild.Gameplay.Inventories.UI
@@ -51,12 +52,11 @@ namespace DChild.Gameplay.Inventories.UI
             Select(null);
         }
 
-
         private void Awake()
         {
             m_listUI.ListOverallChange += OnListOverallChange;
             m_usableInventoryItemHandle.AllItemCountConsumed += OnItemUsedConsumed;
         }
-
+        
     }
 }
