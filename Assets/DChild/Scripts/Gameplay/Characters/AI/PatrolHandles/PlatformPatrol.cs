@@ -138,11 +138,12 @@ namespace DChild.Gameplay.Characters.AI
 
         private void Start()
         {
-            if (m_leadGroundSensor)
+            Debug.Log("gROUND sENSOR: " + m_leadGroundSensor.isDetecting + "\n Wall Sensor: " + m_wallSensor.isDetecting);
+            if (m_leadGroundSensor != null)
             {
                 m_leadGroundSensor.SensorCast += OnGroundSensorCast;
             }
-            if (m_wallSensor)
+            if (m_wallSensor.isDetecting != null)
             {
                 m_wallSensor.SensorCast += OnWallensorCast;
             }

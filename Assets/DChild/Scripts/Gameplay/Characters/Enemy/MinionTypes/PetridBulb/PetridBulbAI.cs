@@ -36,6 +36,9 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField, MinValue(0)]
             private float m_respawnTime;
             public float respawnTime => m_respawnTime;
+            [SerializeField, MinValue(0)]
+            private float m_fireRate;
+            public float fireRate => m_fireRate;
 
             [SerializeField]
             private float m_targetDistanceTolerance;
@@ -282,7 +285,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_info.attack.animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack.animation);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
-            yield return new WaitForSeconds(5f);
+            yield return new WaitForSeconds(m_info.fireRate);
             m_canShoot = true;
             m_aggroSensorGO.SetActive(true);
             m_stateHandle.ApplyQueuedState();
