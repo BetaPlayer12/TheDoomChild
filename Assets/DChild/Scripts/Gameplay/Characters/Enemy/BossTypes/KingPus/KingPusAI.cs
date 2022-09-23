@@ -370,6 +370,12 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField]
             private int m_hitCount;
             public int hitCount => m_hitCount;
+            [SerializeField, Range(0, 2)]
+            private int m_blobCount;
+            public int blobCount => m_blobCount;
+            [SerializeField]
+            private int m_slamCount;
+            public int slamCount => m_slamCount;
             //[SerializeField]
             //private List<float> m_patternCooldown;
             //public List<float> patternCooldown => m_patternCooldown;
@@ -492,6 +498,9 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Spitter")]
         private List<Transform> m_spitterPositions;
         #endregion
+        [SerializeField, TabGroup("Blob")]
+        private List<GameObject> m_blobs;
+        private List<ISummonedEnemy> m_summons;
 
         private BallisticProjectileLauncher m_projectileLauncher;
 
@@ -510,6 +519,9 @@ namespace DChild.Gameplay.Characters.Enemies
         private float m_currentAttackRange;
         private int m_maxHitCount;
         private int m_currentHitCount;
+        private int m_slamCount;
+        private int m_currentSlamCount;
+        private int m_blobCounts;
 
         private Coroutine m_currentAttackCoroutine;
         private Coroutine m_changePhaseCoroutine;
@@ -541,6 +553,8 @@ namespace DChild.Gameplay.Characters.Enemies
             if (m_patternCooldown.Count != 0)
                 m_patternCooldown.Clear();
             m_maxHitCount = obj.hitCount;
+            m_slamCount = obj.slamCount;
+            m_blobCounts = obj.blobCount;
             switch (m_phaseHandle.currentPhase)
             {
                 case Phase.PhaseOne:
@@ -731,7 +745,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_bodyCollider.size = new Vector2(m_bodyCollider.size.y, m_bodyCollider.size.y);
                 StartCoroutine(GrappleExtendRoutine(4));
                 yield return new WaitForSeconds(3f);
-                m_legCollider.enabled = willTargetWall ? false : true;
+                m_legCollider.enabled = false;
                 if (willTargetSlam)
                 {
                     m_willGripTarget = true;
@@ -780,6 +794,27 @@ namespace DChild.Gameplay.Characters.Enemies
                         }
                         break;
                 }
+                for (int z = 0; z < m_blobCounts; z++)
+                {
+                    if (!m_blobs[z].activeSelf)
+                        m_summons[z].SummonAt(m_character.centerMass.position, m_targetInfo);
+                }
+                //if (m_phaseHandle.currentPhase != Phase.PhaseOne)
+                //{
+                //    if (m_currentSlamCount >= m_slamCount && willTargetSlam)
+                //    {
+                //        for (int z = 0; z < m_blobCounts; z++)
+                //        {
+                //            if (!m_blobs[z].activeSelf)
+                //                m_summons[z].SummonAt(m_character.centerMass.position, m_targetInfo);
+                //        }
+                //        m_currentSlamCount = 0;
+                //    }
+                //    else
+                //    {
+                //        m_currentSlamCount++;
+                //    }
+                //}
                 m_movement.Stop();
                 m_animation.SetAnimation(0, m_info.bodySlamEnd, false);
                 yield return new WaitForAnimationComplete(m_animation.animationState, m_info.bodySlamEnd);
@@ -1701,6 +1736,11 @@ namespace DChild.Gameplay.Characters.Enemies
             m_attackUsed = new bool[m_attackCache.Count];
             m_currentFullCooldown = new List<float>();
             m_patternCooldown = new List<float>();
+            m_summons = new List<ISummonedEnemy>();
+            for (int i = 0; i < m_blobs.Count; i++)
+            {
+                m_summons.Add(m_blobs[i].GetComponent<ISummonedEnemy>());
+            }
         }
 
         protected override void Start()
