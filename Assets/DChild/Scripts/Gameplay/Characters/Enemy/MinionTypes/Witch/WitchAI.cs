@@ -129,6 +129,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private RaySensor m_groundSensor;
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_edgeSensor;
+        [SerializeField, TabGroup("Hurtbox")]
+        private Collider2D m_attackBB;
 
         [SerializeField]
         private bool m_willPatrol;
@@ -248,7 +250,9 @@ namespace DChild.Gameplay.Characters.Enemies
                 StopCoroutine(m_sneerRoutine);
                 m_sneerRoutine = null;
             }
-            m_stateHandle.SetState(State.Patrol);
+            m_movement.Stop();
+            ReturnToSpawnPoint();
+            m_stateHandle.SetState(State.Idle);
         }
 
         protected override void OnDestroyed(object sender, EventActionArgs eventArgs)
@@ -279,6 +283,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_movement.Stop();
 
             m_selfCollider.enabled = false;
+            m_attackBB.enabled = false;
         }
 
         private void OnDamageTaken(object sender, Damageable.DamageEventArgs eventArgs)
@@ -410,9 +415,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     break;
 
                 case State.Idle:
-                    //m_stateHandle.Wait(State.Idle);
-                    //m_animation.SetAnimation(0, m_info.idle1Animation, true);
-                    //m_movement.Stop();
+                    m_animation.SetAnimation(0, m_info.idleSittingAnimation, true);
                     break;
 
                 case State.Patrol:
