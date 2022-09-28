@@ -184,7 +184,6 @@ namespace DChild.Gameplay.Characters.Enemies
             m_character.physics.UseStepClimb(true);
             m_movement.Stop();
             m_selfCollider.enabled = false;
-            Debug.Log("P Blob destroyed");
             StartCoroutine(DeathRoutine());
         }
 
@@ -192,16 +191,16 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_hitbox.Disable();
             m_selfCollider.enabled = false;
-            //m_animation.SetAnimation(0, m_info.deathAnimation, false);
-            //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.deathAnimation);
+            m_animation.SetAnimation(0, m_info.deathAnimation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.deathAnimation);
             //m_animation.SetAnimation(0, m_info.disassembledIdleAnimation, true);
             yield return new WaitForSeconds(m_info.deathDuration);
-            //m_health.SetHealthPercentage(1f);
-            //enabled = true;
-            //m_animation.SetAnimation(0, m_info.recoverAnimation, false);
-            //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.recoverAnimation);
-            //m_animation.SetAnimation(0, m_info.idleAnimation, true);
-            //m_stateHandle.OverrideState(State.Patrol);
+            m_health.SetHealthPercentage(1f);
+            enabled = true;
+            m_animation.SetAnimation(0, m_info.recoverAnimation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.recoverAnimation);
+            m_animation.SetAnimation(0, m_info.idleAnimation, true);
+            m_stateHandle.OverrideState(State.Patrol);
             InstantiateBlobIceCloud(transform.position);
             gameObject.SetActive(false);
             yield return null;
@@ -293,24 +292,23 @@ namespace DChild.Gameplay.Characters.Enemies
                     if (!m_wallSensor.isDetecting && m_groundSensor.isDetecting)
                     {
                         m_turnState = State.ReevaluateSituation;
-                        //m_animation.EnableRootMotion(true, false);
-                        //m_animation.SetAnimation(0, m_info.move.animation, true);
+                        m_animation.EnableRootMotion(true, false);
+                        m_animation.SetAnimation(0, m_info.move.animation, true);
                         var characterInfo = new PatrolHandle.CharacterInfo(m_character.centerMass.position, m_character.facing);
                         m_patrolHandle.Patrol(m_movement, m_info.move.speed, characterInfo);
                     }
-                    //else
-                    //{
-                    //    if (m_animation.animationState.GetCurrent(0).IsComplete)
-                    //    {
-                    //        m_animation.SetAnimation(0, m_info.idleAnimation, true);
-                    //    }
-                    //}
+                    else
+                    {
+                        if (m_animation.animationState.GetCurrent(0).IsComplete)
+                        {
+                            m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                        }
+                    }
                     break;
 
                 case State.Turning:
                     m_stateHandle.Wait(m_turnState);
                     m_turnHandle.Execute();
-                    //m_turnHandle.Execute(m_info.turnAnimation, m_info.idleAnimation);
                     break;
 
                 case State.ReevaluateSituation:
