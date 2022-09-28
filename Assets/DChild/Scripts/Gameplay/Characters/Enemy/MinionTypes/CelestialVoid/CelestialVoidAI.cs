@@ -504,7 +504,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     return;
                 }
 
-                m_bodyCollider.enabled = true;
+                //m_bodyCollider.enabled = true;
                 var velocityX = GetComponent<IsolatedPhysics2D>().velocity.x;
                 var velocityY = GetComponent<IsolatedPhysics2D>().velocity.y;
                 m_agent.SetDestination(target);
