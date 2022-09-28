@@ -288,11 +288,10 @@ namespace DChild.Gameplay.Characters.Enemies
             switch (m_stateHandle.currentState)
             {
                 case State.Patrol:
-                    Debug.Log("Wall Sensor: " + m_wallSensor.isDetecting + "\n Ground Sensor: " + m_groundSensor.isDetecting);
                     if (!m_wallSensor.isDetecting && m_groundSensor.isDetecting)
                     {
                         m_turnState = State.ReevaluateSituation;
-                        m_animation.EnableRootMotion(true, false);
+                        m_animation.EnableRootMotion(false, false);
                         m_animation.SetAnimation(0, m_info.move.animation, true);
                         var characterInfo = new PatrolHandle.CharacterInfo(m_character.centerMass.position, m_character.facing);
                         m_patrolHandle.Patrol(m_movement, m_info.move.speed, characterInfo);
