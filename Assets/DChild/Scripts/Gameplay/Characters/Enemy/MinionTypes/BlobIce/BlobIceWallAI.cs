@@ -322,7 +322,8 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 case State.Patrol:
                     m_turnState = State.ReevaluateSituation;
-
+                    m_animation.EnableRootMotion(false, false);
+                    m_animation.SetAnimation(0, m_info.move.animation, true);
                     var characterInfo = new PatrolHandle.CharacterInfo(m_character.centerMass.position, m_character.facing);
                     m_patrolHandle.Patrol(m_agent, m_info.move.speed, characterInfo);
                     InstantiateBlobIceTrail();

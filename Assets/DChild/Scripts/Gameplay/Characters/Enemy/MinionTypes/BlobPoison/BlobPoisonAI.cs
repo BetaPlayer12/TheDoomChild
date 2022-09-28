@@ -182,16 +182,16 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_hitbox.Disable();
             m_selfCollider.enabled = false;
-            //m_animation.SetAnimation(0, m_info.deathAnimation, false);
-            //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.deathAnimation);
+            m_animation.SetAnimation(0, m_info.deathAnimation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.deathAnimation);
             //m_animation.SetAnimation(0, m_info.disassembledIdleAnimation, true);
             yield return new WaitForSeconds(m_info.deathDuration);
-            //m_health.SetHealthPercentage(1f);
-            //enabled = true;
-            //m_animation.SetAnimation(0, m_info.recoverAnimation, false);
-            //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.recoverAnimation);
-            //m_animation.SetAnimation(0, m_info.idleAnimation, true);
-            //m_stateHandle.OverrideState(State.Patrol);
+            m_health.SetHealthPercentage(1f);
+            enabled = true;
+            m_animation.SetAnimation(0, m_info.recoverAnimation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.recoverAnimation);
+            m_animation.SetAnimation(0, m_info.idleAnimation, true);
+            m_stateHandle.OverrideState(State.Patrol);
             InstantiateBlobPoisonCloud(transform.position);
             Debug.Log("P Blob death routine");
             gameObject.SetActive(false);
@@ -240,19 +240,6 @@ namespace DChild.Gameplay.Characters.Enemies
             m_stateHandle = new StateHandle<State>(State.Patrol, State.WaitBehaviourEnd);
         }
 
-        private void LateUpdate()
-        {
-            switch (m_stateHandle.currentState)
-            {
-                case State.Patrol:
-                    if(!m_wallSensor.isDetecting && m_groundSensor.isDetecting)
-                    {
-                        
-                    }
-                    break;
-            }
-        }
-
         private void Update()
         {
             //Debug.Log("Wall Sensor is " + m_wallSensor.isDetecting);
@@ -263,8 +250,8 @@ namespace DChild.Gameplay.Characters.Enemies
                     if (!m_wallSensor.isDetecting && m_groundSensor.isDetecting)
                     {
                         m_turnState = State.ReevaluateSituation;
-                        //m_animation.EnableRootMotion(true, false);
-                        //m_animation.SetAnimation(0, m_info.move.animation, true);
+                        m_animation.EnableRootMotion(false, false);
+                        m_animation.SetAnimation(0, m_info.move.animation, true);
                         var characterInfo = new PatrolHandle.CharacterInfo(m_character.centerMass.position, m_character.facing);
                         m_patrolHandle.Patrol(m_movement, m_info.move.speed, characterInfo);
 
@@ -275,9 +262,6 @@ namespace DChild.Gameplay.Characters.Enemies
                             InstantiateBlobPoisonCloud(transform.position);
                             cloudTimer = 3f;
                         }
-
-                        Debug.Log("Poison Cloud Timer" + cloudTimer);
-
                     }
                     //else
                     //{
@@ -328,8 +312,8 @@ namespace DChild.Gameplay.Characters.Enemies
                         if (!m_wallSensor.isDetecting && m_groundSensor.isDetecting && m_edgeSensor.isDetecting)
                         {
                             var distance = Vector2.Distance(m_targetInfo.position, transform.position);
-                            //m_animation.EnableRootMotion(false, false);
-                            //m_animation.SetAnimation(0, distance >= m_info.targetDistanceTolerance ? m_info.run.animation : m_info.walk.animation, true);
+                            m_animation.EnableRootMotion(false, false);
+                            m_animation.SetAnimation(0, m_info.move.animation, true);
                             m_movement.MoveTowards(Vector2.one * transform.localScale.x, distance);
                             float poisonCloudTimer = 0f;
                             poisonCloudTimer += GameplaySystem.time.deltaTime;
@@ -342,7 +326,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         {
                             m_movement.Stop();
                             m_stateHandle.SetState(State.ReevaluateSituation);
-                            //m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                            m_animation.SetAnimation(0, m_info.idleAnimation, true);
                         }
                     }
                     else
