@@ -28,8 +28,11 @@ namespace DChild.Gameplay.Characters.Enemies
 
             //Attack Behaviours
             [SerializeField, TabGroup("Attack")]
-            private SimpleAttackInfo m_attack = new SimpleAttackInfo();
-            public SimpleAttackInfo attack => m_attack;
+            private SimpleAttackInfo m_slamAttack = new SimpleAttackInfo();
+            public SimpleAttackInfo slamAttack => m_slamAttack;
+            [SerializeField, TabGroup("Attack")]
+            private SimpleAttackInfo m_punchAttack = new SimpleAttackInfo();
+            public SimpleAttackInfo punchAttack => m_punchAttack;
             [SerializeField, MinValue(0), TabGroup("Attack")]
             private float m_attackCD;
             public float attackCD => m_attackCD;
@@ -69,7 +72,8 @@ namespace DChild.Gameplay.Characters.Enemies
             {
 #if UNITY_EDITOR
                 m_walk.SetData(m_skeletonDataAsset);
-                m_attack.SetData(m_skeletonDataAsset);
+                m_slamAttack.SetData(m_skeletonDataAsset);
+                m_punchAttack.SetData(m_skeletonDataAsset);
 #endif
             }
         }
@@ -91,7 +95,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private enum Attack
         {
-            Attack,
+            Slam,
+            Punch,
             [HideInInspector]
             _COUNT
         }
@@ -368,7 +373,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void UpdateAttackDeciderList()
         {
-            m_attackDecider.SetList(new AttackInfo<Attack>(Attack.Attack, m_info.attack.range));
+            m_attackDecider.SetList(new AttackInfo<Attack>(Attack.Slam, m_info.slamAttack.range)
+                                  , new AttackInfo<Attack>(Attack.Punch, m_info.punchAttack.range));
             m_attackDecider.hasDecidedOnAttack = false;
         }
 
@@ -537,8 +543,12 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_animation.EnableRootMotion(true, false);
                     switch (m_attackDecider.chosenAttack.attack)
                     {
-                        case Attack.Attack:
-                            m_attackHandle.ExecuteAttack(m_info.attack.animation, m_info.idleAnimation);
+                        case Attack.Slam:
+                            m_attackHandle.ExecuteAttack(m_info.slamAttack.animation, m_info.idleAnimation);
+                            //m_attackRoutine = StartCoroutine(AttackRoutine());
+                            break;
+                        case Attack.Punch:
+                            m_attackHandle.ExecuteAttack(m_info.punchAttack.animation, m_info.idleAnimation);
                             //m_attackRoutine = StartCoroutine(AttackRoutine());
                             break;
                     }
