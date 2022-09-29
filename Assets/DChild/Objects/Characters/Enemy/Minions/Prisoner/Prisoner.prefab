@@ -22,7 +22,7 @@ MonoBehaviour:
     PrefabModifications: []
     SerializationNodes: []
   m_data: {fileID: 0}
---- !u!60 &5037117039916371588
+--- !u!60 &2250447097227834776
 PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -222,8 +222,11 @@ MonoBehaviour:
   m_physicsObjects:
     m_rigidbody2Ds:
     - {fileID: 1397776419129432163}
+    - {fileID: 7878685975818866045}
     - {fileID: 3528417448359349862}
     m_physicsTimeObjectInfo:
+    - m_mass: 1
+      m_actualVelocity: {x: 0, y: 0}
     - m_mass: 1
       m_actualVelocity: {x: 0, y: 0}
     - m_mass: 1
@@ -577,7 +580,7 @@ PrefabInstance:
     - target: {fileID: 3541162794809714382, guid: 5b02381dfe83a324c98a6d73405c087d,
         type: 3}
       propertyPath: m_Name
-      value: ZombieIronBallModel
+      value: PrisonerModel
       objectReference: {fileID: 0}
     - target: {fileID: 3804726293564505054, guid: 5b02381dfe83a324c98a6d73405c087d,
         type: 3}
@@ -632,6 +635,7 @@ PrefabInstance:
     m_RemovedComponents:
     - {fileID: 2533479082414250687, guid: 5b02381dfe83a324c98a6d73405c087d, type: 3}
     - {fileID: 3201118036988078998, guid: 5b02381dfe83a324c98a6d73405c087d, type: 3}
+    - {fileID: 3663844738845469816, guid: 5b02381dfe83a324c98a6d73405c087d, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 5b02381dfe83a324c98a6d73405c087d, type: 3}
 --- !u!114 &3758942767643981274 stripped
 MonoBehaviour:
@@ -651,9 +655,9 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 7058537409641550594}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &2782914517970939620 stripped
+--- !u!114 &7418902101001592074 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5145943537930665446, guid: 5b02381dfe83a324c98a6d73405c087d,
+  m_CorrespondingSourceObject: {fileID: 504907040454659592, guid: 5b02381dfe83a324c98a6d73405c087d,
     type: 3}
   m_PrefabInstance: {fileID: 7058537409641550594}
   m_PrefabAsset: {fileID: 0}
@@ -663,6 +667,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 11a5cea4c16e7c4478a55620f5e666e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!50 &7878685975818866045 stripped
+Rigidbody2D:
+  m_CorrespondingSourceObject: {fileID: 910361846588153471, guid: 5b02381dfe83a324c98a6d73405c087d,
+    type: 3}
+  m_PrefabInstance: {fileID: 7058537409641550594}
+  m_PrefabAsset: {fileID: 0}
 --- !u!50 &3528417448359349862 stripped
 Rigidbody2D:
   m_CorrespondingSourceObject: {fileID: 5837653138928196964, guid: 5b02381dfe83a324c98a6d73405c087d,
@@ -687,6 +697,18 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 7058537409641550594}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &2782914517970939620 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5145943537930665446, guid: 5b02381dfe83a324c98a6d73405c087d,
+    type: 3}
+  m_PrefabInstance: {fileID: 7058537409641550594}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 11a5cea4c16e7c4478a55620f5e666e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!58 &4725050615384052008 stripped
 CircleCollider2D:
   m_CorrespondingSourceObject: {fileID: 2334613793692746282, guid: 5b02381dfe83a324c98a6d73405c087d,
@@ -733,18 +755,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d247ba06193faa74d9335f5481b2b56c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &7418902101001592074 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 504907040454659592, guid: 5b02381dfe83a324c98a6d73405c087d,
-    type: 3}
-  m_PrefabInstance: {fileID: 7058537409641550594}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 11a5cea4c16e7c4478a55620f5e666e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &3480364085880159876 stripped

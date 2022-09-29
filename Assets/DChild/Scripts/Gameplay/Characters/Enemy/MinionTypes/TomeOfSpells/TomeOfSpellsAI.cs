@@ -43,6 +43,9 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField, BoxGroup("Attack")]
             private float m_attackCD;
             public float attackCD => m_attackCD;
+            [SerializeField, BoxGroup("Attack")]
+            private float m_attackDelay;
+            public float attackDelay => m_attackDelay;
             //
             [SerializeField, BoxGroup("Patience"), MinValue(0)]
             private float m_patience;
@@ -148,6 +151,12 @@ namespace DChild.Gameplay.Characters.Enemies
         private RaySensor m_roofSensor;
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_selfSensor;
+        [SerializeField, TabGroup("FX")]
+        private ParticleFX m_attackBlastFX;
+        [SerializeField, TabGroup("FX")]
+        private ParticleFX m_attackSparkleFX;
+        [SerializeField, TabGroup("FX")]
+        private ParticleFX m_trailFX;
 
         [SerializeField, TabGroup("Magister")]
         private Transform m_magister;
@@ -175,6 +184,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private Coroutine m_executeMoveCoroutine;
         private Coroutine m_attackRoutine;
+        private Coroutine m_delayLaunchRoutine;
         private Coroutine m_patienceRoutine;
 
         private void OnAttackDone(object sender, EventActionArgs eventArgs)
@@ -187,12 +197,6 @@ namespace DChild.Gameplay.Characters.Enemies
         }
 
         private void OnTurnRequest(object sender, EventActionArgs eventArgs) => m_stateHandle.OverrideState(State.Turning);
-
-        private void CustomTurn()
-        {
-            transform.localScale = new Vector3(-transform.localScale.x, 1, 1);
-            m_character.SetFacing(transform.localScale.x == 1 ? HorizontalDirection.Right : HorizontalDirection.Left);
-        }
 
         public override void SetTarget(IDamageable damageable, Character m_target = null)
         {
@@ -350,6 +354,9 @@ namespace DChild.Gameplay.Characters.Enemies
             rb2d.isKinematic = false;
             m_stateHandle.OverrideState(State.WaitBehaviourEnd);
             m_hitbox.Disable();
+            m_attackBlastFX.Stop();
+            m_attackSparkleFX.Stop();
+            m_trailFX.Stop();
             m_animation.SetEmptyAnimation(0, 0);
             StartCoroutine(DeathRoutine());
         }
@@ -409,6 +416,9 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator FrostAttackRoutine()
         {
+            m_attackBlastFX.Play();
+            m_attackSparkleFX.Play();
+            LaunchProjectile();
             m_animation.SetAnimation(0, m_info.attackFrostStartAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attackFrostStartAnimation);
             m_animation.SetAnimation(0, m_info.attackFrost.animation, false);
@@ -416,6 +426,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_flinchHandle.gameObject.SetActive(true);
             m_rigidbody2D.constraints = RigidbodyConstraints2D.FreezeRotation;
+            m_attackRoutine = null;
             m_stateHandle.ApplyQueuedState();
             m_attackDecider.hasDecidedOnAttack = false;
             yield return null;
@@ -441,15 +452,29 @@ namespace DChild.Gameplay.Characters.Enemies
                     instance.transform.position = m_character.centerMass.position;
                     var component = instance.GetComponent<Projectile>();
                     component.ResetState();
-                    component.GetComponent<Rigidbody2D>().velocity = projectileMoveDirection;
-                    Vector2 v = component.GetComponent<Rigidbody2D>().velocity;
+                    //component.GetComponent<Rigidbody2D>().velocity = projectileMoveDirection;
+                    //Vector2 v = component.GetComponent<Rigidbody2D>().velocity;
+                    //var projRotation = Mathf.Atan2(v.y, v.x) * Mathf.Rad2Deg;
+                    //component.transform.rotation = Quaternion.AngleAxis(projRotation, Vector3.forward);
+                    Vector2 v = projectileMoveDirection;
                     var projRotation = Mathf.Atan2(v.y, v.x) * Mathf.Rad2Deg;
                     component.transform.rotation = Quaternion.AngleAxis(projRotation, Vector3.forward);
+                    m_delayLaunchRoutine = StartCoroutine(DelayedLaunchRoutine(component, projectileMoveDirection, m_info.attackDelay));
 
                     angle += angleStep;
                 }
             }
             //yield return null;
+        }
+
+        private IEnumerator DelayedLaunchRoutine(Projectile component, Vector2 projectileMoveDirection, float delay)
+        {
+            yield return new WaitForSeconds(delay);
+            component.GetComponent<Rigidbody2D>().velocity = projectileMoveDirection;
+            m_delayLaunchRoutine = null;
+            //Vector2 v = component.GetComponent<Rigidbody2D>().velocity;
+            //var projRotation = Mathf.Atan2(v.y, v.x) * Mathf.Rad2Deg;
+            //component.transform.rotation = Quaternion.AngleAxis(projRotation, Vector3.forward);
         }
 
         private void LaunchProjectile()
@@ -709,7 +734,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.DisableRootMotion();
             m_bodyCollider.enabled = false;
             m_startPos = transform.position;
-            m_spineEventListener.Subscribe(m_info.projectile.launchOnEvent, LaunchProjectile);
+            //m_spineEventListener.Subscribe(m_info.projectile.launchOnEvent, LaunchProjectile);
         }
 
         protected override void Awake()
@@ -791,7 +816,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
                 case State.Turning:
                     m_stateHandle.Wait(m_turnState);
-                    StopAllCoroutines();
+                    //StopAllCoroutines();
                     m_rigidbody2D.constraints = RigidbodyConstraints2D.FreezePosition | RigidbodyConstraints2D.FreezeRotation;
                     if (m_executeMoveCoroutine != null)
                     {

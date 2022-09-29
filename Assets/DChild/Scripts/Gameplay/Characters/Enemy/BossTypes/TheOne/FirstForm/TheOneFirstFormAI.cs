@@ -422,7 +422,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private Collider2D m_swordSlash1BB;
 
         [SerializeField, TabGroup("FX")]
-        private ParticleFX m_earthShakerExplosionFX;
+        private ParticleFX m_blinkFX;
 
         [SerializeField, TabGroup("Spawn Points")]
         private Collider2D m_randomSpawnCollider;
@@ -708,12 +708,6 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return null;
         }
 
-        private void CustomTurn()
-        {
-            transform.localScale = new Vector3(-transform.localScale.x, 1, 1);
-            m_character.SetFacing(transform.localScale.x == 1 ? HorizontalDirection.Right : HorizontalDirection.Left);
-        }
-
         private IEnumerator IntroRoutine()
         {
             m_stateHandle.Wait(State.Chasing);
@@ -804,6 +798,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator ChangePhaseRoutine()
         {
+            enabled = false;
             m_stateHandle.Wait(State.Chasing);
             if (IsFacingTarget())
                 CustomTurn();
@@ -822,6 +817,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_alterBladeMonitorCoroutine = StartCoroutine(AlterBladeMonitorRoutine());
             m_blinkCoroutine = StartCoroutine(BlinkRoutine(BlinkState.DisappearForward, BlinkState.AppearForward, 25, m_info.midAirHeight, State.Chasing, true, false, false));
             yield return null;
+            enabled = true;
         }
         #region Attacks
 
@@ -1488,9 +1484,10 @@ namespace DChild.Gameplay.Characters.Enemies
 
             transform.position = lastPos;
 
+            m_blinkFX.Play();
             yield return new WaitForSeconds(m_info.blinkDuration);
-            m_legCollider.enabled = true;
             m_model.SetActive(true);
+            m_legCollider.enabled = true;
             m_hitbox.Enable();
             m_character.physics.simulateGravity = true;
             m_bodyCollider.enabled = true;
