@@ -5,6 +5,8 @@ using System.Collections;
 using Spine;
 using System;
 using Holysoft.Collections;
+using DChild.Gameplay.Combat;
+using Holysoft.Event;
 
 namespace DChild.Gameplay.Environment
 {
@@ -409,6 +411,8 @@ namespace DChild.Gameplay.Environment
         private bool m_isReacting;
         private float m_timer;
         private IBehaviour m_currentBehaviour;
+        //[SerializeField]
+        private Damageable m_damageable;
 
         private int m_idlingBehaviourIndex;
         private int m_reactingBehaviourIndex;
@@ -434,9 +438,20 @@ namespace DChild.Gameplay.Environment
                 m_currentBehaviour = m_idlingBehaviour[m_idlingBehaviourIndex];
             }
 
+            m_damageable = GetComponent<Damageable>();
+            if (m_damageable != null)
+            {
+                m_damageable.Destroyed += OnDestroy;
+            }
+
 #if UNITY_EDITOR
             startPosition = transform.position;
 #endif
+        }
+
+        private void OnDestroy(object sender, EventActionArgs eventArgs)
+        {
+            enabled = false;
         }
 
         private void Start()
