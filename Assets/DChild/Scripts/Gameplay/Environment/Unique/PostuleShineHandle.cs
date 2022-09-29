@@ -49,10 +49,20 @@ namespace DChild.Gameplay.Environment
             var playerPosition = GameplaySystem.playerManager.player.character.centerMass.position;
             for (int i = 0; i < m_bulb.Length; i++)
             {
-                var renderer = m_bulb[i].spriteRenderer;
-                renderer.GetPropertyBlock(m_materialPropertyBlock);
-                m_materialPropertyBlock.SetVector(m_lightSourceProperty, playerPosition);
-                renderer.SetPropertyBlock(m_materialPropertyBlock);
+                var currentBulb = m_bulb[i];
+
+                if (currentBulb == null)
+                {
+
+                }
+                else
+                {
+                    var renderer = currentBulb.spriteRenderer;
+                    renderer.GetPropertyBlock(m_materialPropertyBlock);
+                    m_materialPropertyBlock.SetVector(m_lightSourceProperty, playerPosition);
+                    renderer.SetPropertyBlock(m_materialPropertyBlock);
+                }
+
             }
         }
     }

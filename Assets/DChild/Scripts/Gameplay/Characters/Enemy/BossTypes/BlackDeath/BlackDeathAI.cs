@@ -337,12 +337,6 @@ namespace DChild.Gameplay.Characters.Enemies
             }
         }
 
-        private void CustomTurn()
-        {
-            transform.localScale = new Vector3(-transform.localScale.x, 1, 1);
-            m_character.SetFacing(transform.localScale.x == 1 ? HorizontalDirection.Right : HorizontalDirection.Left);
-        }
-
         private IEnumerator IntroRoutine()
         {
             m_stateHandle.Wait(State.ReevaluateSituation);
@@ -386,12 +380,6 @@ namespace DChild.Gameplay.Characters.Enemies
             }
             StartCoroutine(m_phaseHandle.currentPhase == Phase.PhaseThree ? BloodLightningBarragePhase3Routine(m_currentLightningCount) : BloodLightningBarrageRoutine(m_currentLightningCount));
             yield return null;
-        }
-
-        private Vector2 GroundPosition(Vector2 startPoint)
-        {
-            RaycastHit2D hit = Physics2D.Raycast(/*m_projectilePoint.position*/startPoint, Vector2.down, 1000, DChildUtility.GetEnvironmentMask());
-            return hit.point;
         }
 
         protected override void OnDestroyed(object sender, EventActionArgs eventArgs)
