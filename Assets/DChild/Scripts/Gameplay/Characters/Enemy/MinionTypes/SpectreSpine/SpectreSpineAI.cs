@@ -299,13 +299,7 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack2preAnticipation);
             m_animation.SetAnimation(0, m_info.attack2Anticipation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack2Anticipation);
-            Vector3 targ = m_targetInfo.transform.position;
-            Vector3 objectPos = transform.position;
-            targ.x = m_targetInfo.position.x - objectPos.x;
-            targ.y = m_targetInfo.position.y - objectPos.y;
-
-            float angle = Mathf.Atan2(targ.y, targ.x) * Mathf.Rad2Deg;
-            transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
+           
             m_animation.SetAnimation(0, m_info.attack2postAnticipation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack2postAnticipation);
             m_hitbox.gameObject.SetActive(false);
@@ -316,7 +310,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_info.postattack2, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.postattack2);
             var random = UnityEngine.Random.Range(0, 2);
-            transform.position = new Vector2(m_targetInfo.position.x + (random == 0 ? 5 : -5), m_targetInfo.position.y);
+            transform.position = new Vector2(m_targetInfo.position.x + (random == 0 ? 5 : -5), m_targetInfo.position.y+5);
             yield return new WaitForSeconds(1);
             if (!IsFacingTarget())
             {
