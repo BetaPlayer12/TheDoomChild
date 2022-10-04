@@ -27,7 +27,8 @@ namespace DChild.Gameplay.Trade
         public void SetItemToTrade(ITradeItem item)
         {
             m_currentItemBeingTraded = item;
-            m_transaction.SetTransaction(m_currentItemBeingTraded.data, m_currentItemBeingTraded.cost, 1);
+            m_transaction.SetTransaction(m_currentItemBeingTraded.data, m_currentItemBeingTraded.cost, 0);
+            IncreaseItemCount();
         }
 
         public void IncreaseItemCount()
