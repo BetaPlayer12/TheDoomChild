@@ -108,7 +108,7 @@ namespace DChild.Serialization
                 PersistentDataManager.ApplySaveData(m_cacheSlot.dialogueSaveData, DatabaseResetOptions.KeepAllLoaded);
                 for (int i = 0; i < m_questsListener.Length; i++)
                 {
-                    m_questsListener[i].UpdateIndicator();
+                    m_questsListener[i].UpdateIndicator(true);
                 }
             }
         }

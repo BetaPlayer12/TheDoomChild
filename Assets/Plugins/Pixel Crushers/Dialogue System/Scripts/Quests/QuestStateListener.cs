@@ -24,6 +24,8 @@ namespace PixelCrushers.DialogueSystem
         [Serializable]
         public class QuestStateIndicatorLevel
         {
+            [SerializeField]
+            private bool m_updateOnInitializeOnly;
             [Tooltip("Quest state to listen for.")]
             public QuestState questState;
 
@@ -34,6 +36,8 @@ namespace PixelCrushers.DialogueSystem
             public int indicatorLevel;
 
             public UnityEvent onEnterState = new UnityEvent();
+
+            public bool updateOnInitializeOnly => m_updateOnInitializeOnly;
         }
 
         public QuestStateIndicatorLevel[] questStateIndicatorLevels = new QuestStateIndicatorLevel[0];
@@ -41,7 +45,9 @@ namespace PixelCrushers.DialogueSystem
         [Serializable]
         public class QuestEntryStateIndicatorLevel
         {
-            [Tooltip("Quest entry number."),QuestEntryPopup]
+            [SerializeField]
+            private bool m_updateOnInitializeOnly;
+            [Tooltip("Quest entry number."), QuestEntryPopup]
             public int entryNumber;
 
             [Tooltip("Quest entry state to listen for.")]
@@ -54,6 +60,8 @@ namespace PixelCrushers.DialogueSystem
             public int indicatorLevel;
 
             public UnityEvent onEnterState = new UnityEvent();
+
+            public bool updateOnInitializeOnly => m_updateOnInitializeOnly;
         }
 
         public QuestEntryStateIndicatorLevel[] questEntryStateIndicatorLevels = new QuestEntryStateIndicatorLevel[0];
@@ -127,7 +135,7 @@ namespace PixelCrushers.DialogueSystem
                 {
                     questStateDispatcher.AddListener(this);
                 }
-                UpdateIndicator();
+                UpdateIndicator(true);
             }
         }
 
@@ -143,21 +151,22 @@ namespace PixelCrushers.DialogueSystem
 
         public virtual void OnChange()
         {
-            UpdateIndicator();
+            UpdateIndicator(false);
         }
 
         /// <summary>
         /// Update the current quest state indicator based on the specified quest state indicator 
         /// levels and quest entry state indicator levels.
         /// </summary>
-        public virtual void UpdateIndicator()
+        public virtual void UpdateIndicator(bool isAnInitialization)
         {
             // Check quest state:
             var questState = QuestLog.GetQuestState(questName);
             for (int i = 0; i < questStateIndicatorLevels.Length; i++)
             {
                 var questStateIndicatorLevel = questStateIndicatorLevels[i];
-                if (questStateIndicatorLevel.questState.HasFlag(questState) && questStateIndicatorLevel.condition.IsTrue(null))
+                var canbeUpdated = questStateIndicatorLevel.updateOnInitializeOnly == false || (questStateIndicatorLevel.updateOnInitializeOnly && isAnInitialization);
+                if (canbeUpdated && questStateIndicatorLevel.questState.HasFlag(questState) && questStateIndicatorLevel.condition.IsTrue(null))
                 {
                     if (DialogueDebug.logInfo) Debug.Log("Dialogue System: " + name + ": Quest '" + questName + "' changed to state " + questState + ".", this);
                     if (questStateIndicator != null) questStateIndicator.SetIndicatorLevel(this, questStateIndicatorLevel.indicatorLevel);
@@ -170,7 +179,8 @@ namespace PixelCrushers.DialogueSystem
             {
                 var questEntryStateIndicatorLevel = questEntryStateIndicatorLevels[i];
                 var questEntryState = QuestLog.GetQuestEntryState(questName, questEntryStateIndicatorLevel.entryNumber);
-                if (questEntryStateIndicatorLevel.questState.HasFlag(questEntryState) && questEntryStateIndicatorLevel.condition.IsTrue(null))
+                var canbeUpdated = questEntryStateIndicatorLevel.updateOnInitializeOnly == false || (questEntryStateIndicatorLevel.updateOnInitializeOnly && isAnInitialization);
+                if (canbeUpdated && questEntryStateIndicatorLevel.questState.HasFlag(questEntryState) && questEntryStateIndicatorLevel.condition.IsTrue(null))
                 {
                     if (DialogueDebug.logInfo) Debug.Log("Dialogue System: " + name + ": Quest '" + questName + "' entry " + questEntryStateIndicatorLevel.entryNumber + " changed to state " + questEntryState + ".", this);
                     if (questStateIndicator != null) questStateIndicator.SetIndicatorLevel(this, questEntryStateIndicatorLevel.indicatorLevel);

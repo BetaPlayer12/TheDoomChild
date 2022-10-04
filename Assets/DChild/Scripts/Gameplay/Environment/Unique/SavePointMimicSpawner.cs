@@ -18,6 +18,7 @@ namespace DChild.Gameplay
 
         private void Start()
         {
+            resetMimics();
             rollSpawnChance();
         }
 

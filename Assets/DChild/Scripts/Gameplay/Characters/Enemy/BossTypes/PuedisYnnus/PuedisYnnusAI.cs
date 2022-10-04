@@ -50,9 +50,9 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField, BoxGroup("Phase 1")]
             private float m_phase1Pattern2Range;
             public float phase1Pattern2Range => m_phase1Pattern2Range;
-            [SerializeField, BoxGroup("Phase 1")]
-            private float m_phase1Pattern3Range;
-            public float phase1Pattern3Range => m_phase1Pattern3Range;
+            //[SerializeField, BoxGroup("Phase 1")]
+            //private float m_phase1Pattern3Range;
+            //public float phase1Pattern3Range => m_phase1Pattern3Range;
             [SerializeField, BoxGroup("Phase 2")]
             private float m_phase2Pattern1Range;
             public float phase2Pattern1Range => m_phase2Pattern1Range;
@@ -188,7 +188,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             Phase1Pattern1,
             Phase1Pattern2,
-            Phase1Pattern3,
+            //Phase1Pattern3,
             Phase2Pattern1,
             Phase2Pattern2,
             Phase2Pattern3,
@@ -283,8 +283,8 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 case Phase.PhaseOne:
                     //m_idleAnimation = m_info.idleCombatAnimation;
-                    AddToAttackCache(Attack.Phase1Pattern1, Attack.Phase1Pattern2, Attack.Phase1Pattern3);
-                    AddToRangeCache(m_info.phase1Pattern1Range, m_info.phase1Pattern2Range, m_info.phase1Pattern3Range);
+                    AddToAttackCache(Attack.Phase1Pattern1, Attack.Phase1Pattern2/*, Attack.Phase1Pattern3*/);
+                    AddToRangeCache(m_info.phase1Pattern1Range, m_info.phase1Pattern2Range/*, m_info.phase1Pattern3Range*/);
                     for (int i = 0; i < m_info.phase1PatternCooldown.Count; i++)
                         m_patternCooldown.Add(m_info.phase1PatternCooldown[i]);
                     break;
@@ -386,6 +386,16 @@ namespace DChild.Gameplay.Characters.Enemies
         }
 
         #region Attacks
+
+        private void LaunchSingleSpike()
+        {
+            var randomOffsetX = UnityEngine.Random.Range(10, 20);
+            randomOffsetX = UnityEngine.Random.Range(0, 2) == 1 ? randomOffsetX : randomOffsetX * -1;
+            var targetPos = new Vector2(m_targetInfo.position.x + randomOffsetX, GroundPosition(m_targetInfo.position).y);
+            m_singleFleshSpikeProjectileLauncher.AimAt(targetPos);
+            m_singleFleshSpikeProjectileLauncher.LaunchProjectile();
+        }
+        
         private IEnumerator RainProjectilesRoutine()
         {
             m_animation.SetAnimation(0, m_info.staffPointRainProjectile.animation, false);
@@ -394,6 +404,18 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return new WaitForSeconds(m_info.rainProjectilesDuration);
             m_animation.SetAnimation(0, m_info.staffPointToIdleRainProjectileAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.staffPointToIdleRainProjectileAnimation);
+            m_currentIdleAnimation = m_info.idleAnimations[UnityEngine.Random.Range(0, m_info.idleAnimations.Count)];
+            m_animation.SetAnimation(0, m_currentIdleAnimation, true);
+            m_attackDecider.hasDecidedOnAttack = false;
+            m_attackRoutine = null;
+            m_stateHandle.ApplyQueuedState();
+            yield return null;
+        }
+
+        private IEnumerator SingleFleshSpikeRoutine()
+        {
+            m_animation.SetAnimation(0, m_info.handClenchSingleFleshSpikeProjectile.animation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.handClenchSingleFleshSpikeProjectile.animation);
             m_currentIdleAnimation = m_info.idleAnimations[UnityEngine.Random.Range(0, m_info.idleAnimations.Count)];
             m_animation.SetAnimation(0, m_currentIdleAnimation, true);
             m_attackDecider.hasDecidedOnAttack = false;
@@ -468,7 +490,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_attackDecider.SetList(new AttackInfo<Attack>(Attack.Phase1Pattern1, m_info.phase1Pattern1Range),
                                      new AttackInfo<Attack>(Attack.Phase1Pattern2, m_info.phase1Pattern2Range),
-                                     new AttackInfo<Attack>(Attack.Phase1Pattern3, m_info.phase1Pattern3Range),
+                                     //new AttackInfo<Attack>(Attack.Phase1Pattern3, m_info.phase1Pattern3Range),
                                      new AttackInfo<Attack>(Attack.Phase2Pattern1, m_info.phase2Pattern1Range),
                                      new AttackInfo<Attack>(Attack.Phase2Pattern2, m_info.phase2Pattern2Range),
                                      new AttackInfo<Attack>(Attack.Phase2Pattern3, m_info.phase2Pattern3Range),
@@ -591,9 +613,9 @@ namespace DChild.Gameplay.Characters.Enemies
             UpdateAttackDeciderList();
             //m_patternCount = new float[4];
             m_attackCache = new List<Attack>();
-            AddToAttackCache(Attack.Phase1Pattern1, Attack.Phase1Pattern2, Attack.Phase1Pattern3, Attack.Phase2Pattern1, Attack.Phase2Pattern2, Attack.Phase2Pattern3, Attack.Phase2Pattern4, Attack.Phase2Pattern5);
+            AddToAttackCache(Attack.Phase1Pattern1, Attack.Phase1Pattern2/*, Attack.Phase1Pattern3*/, Attack.Phase2Pattern1, Attack.Phase2Pattern2, Attack.Phase2Pattern3, Attack.Phase2Pattern4, Attack.Phase2Pattern5);
             m_attackRangeCache = new List<float>();
-            AddToRangeCache(m_info.phase1Pattern1Range, m_info.phase1Pattern2Range, m_info.phase1Pattern3Range, m_info.phase2Pattern1Range, m_info.phase2Pattern2Range, m_info.phase2Pattern3Range, m_info.phase2Pattern5Range);
+            AddToRangeCache(m_info.phase1Pattern1Range, m_info.phase1Pattern2Range/*, m_info.phase1Pattern3Range*/, m_info.phase2Pattern1Range, m_info.phase2Pattern2Range, m_info.phase2Pattern3Range, m_info.phase2Pattern5Range);
             m_attackUsed = new bool[m_attackCache.Count];
             m_currentFullCooldown = new List<float>();
             m_patternCooldown = new List<float>();
@@ -604,7 +626,7 @@ namespace DChild.Gameplay.Characters.Enemies
             base.Start();
             //m_spineListener.Subscribe(m_info.OrbSummonRainProjectile.launchOnEvent, m_deathFX.Play);
             //m_spineListener.Subscribe(m_info.staffPointRainProjectile.launchOnEvent, m_deathFX.Play);
-            //m_spineListener.Subscribe(m_info.handClenchSingleFleshSpikeProjectile.launchOnEvent, m_deathFX.Play);
+            m_spineListener.Subscribe(m_info.handClenchSingleFleshSpikeProjectile.launchOnEvent, LaunchSingleSpike);
             //m_spineListener.Subscribe(m_info.multipleFleshSpikeProjectile.launchOnEvent, m_deathFX.Play);
             //m_spineListener.Subscribe(m_info.staffSpinFleshBombProjectile.launchOnEvent, m_deathFX.Play);
 
@@ -650,7 +672,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_movement.Stop();
                     break;
                 case State.Attacking:
-                    m_stateHandle.Wait(State.Attacking);
+                    m_stateHandle.Wait(State.Cooldown);
                     var randomFacing = UnityEngine.Random.Range(0, 2) == 1 ? 1 : -1;
                     var randomAttack = UnityEngine.Random.Range(0, 2);
                     var randomGroundPos = new Vector2(RandomTeleportPoint().x, GroundPosition(m_projectilePoint.position).y);
@@ -661,13 +683,13 @@ namespace DChild.Gameplay.Characters.Enemies
                             m_pickedCooldown = m_currentFullCooldown[0];
                             break;
                         case Attack.Phase1Pattern2:
-                            m_attackRoutine = StartCoroutine(RainProjectilesRoutine());
+                            m_attackRoutine = StartCoroutine(SingleFleshSpikeRoutine());
                             m_pickedCooldown = m_currentFullCooldown[1];
                             break;
-                        case Attack.Phase1Pattern3:
-                            m_attackRoutine = StartCoroutine(RainProjectilesRoutine());
-                            m_pickedCooldown = m_currentFullCooldown[3];
-                            break;
+                        //case Attack.Phase1Pattern3:
+                        //    m_attackRoutine = StartCoroutine(RainProjectilesRoutine());
+                        //    m_pickedCooldown = m_currentFullCooldown[3];
+                        //    break;
                         case Attack.Phase2Pattern1:
                             m_attackRoutine = StartCoroutine(RainProjectilesRoutine());
                             m_pickedCooldown = m_currentFullCooldown[0];
