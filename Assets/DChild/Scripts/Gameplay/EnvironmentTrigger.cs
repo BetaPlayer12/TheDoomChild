@@ -1,5 +1,8 @@
-﻿using DChild.Serialization;
+﻿using DChild.Gameplay.Characters.Players.Modules;
+using DChild.Gameplay.Characters.Players.State;
+using DChild.Serialization;
 using Sirenix.OdinInspector;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -24,12 +27,17 @@ namespace DChild.Gameplay
 
         [SerializeField, OnValueChanged("OnValueChange")]
         private bool m_oneTimeOnly;
+        [SerializeField]
+        private bool m_waitForPlayerToBeGrounded;   //Using Coroutines to check for Player State before execution when this is TRUE. Have to Directly Access Player State for this to work.
         [SerializeField, TabGroup("Enter")]
         private UnityEvent m_enterEvents;
         [SerializeField, HideIf("m_oneTimeOnly"), TabGroup("Exit")]
         private UnityEvent m_exitEvents;
 
         private bool m_wasTriggered;
+        private IGroundednessState m_playerGroundedness;
+        private Coroutine m_enterEventRoutine;
+        private Coroutine m_exitEventRoutine;
 
         public ISaveData Save()
         {
@@ -43,22 +51,81 @@ namespace DChild.Gameplay
         public void Initialize()
         {
             m_wasTriggered = false;
+            if (m_waitForPlayerToBeGrounded)
+            {
+                m_playerGroundedness = GameplaySystem.playerManager.player.character.GetComponentInChildren<IGroundednessState>();
+            }
         }
+
+        private IEnumerator ExecuteEnterWhenPlayerIsGrounded()
+        {
+            while (m_playerGroundedness.isGrounded == false)
+            {
+                yield return null;
+            }
+
+            TriggerEnterEvent();
+            m_enterEventRoutine = null;
+        }
+
+        private IEnumerator ExecuteExitWhenPlayerIsGrounded()
+        {
+            while (m_playerGroundedness.isGrounded == false)
+            {
+                yield return null;
+            }
+
+            TriggerExitEvent();
+            m_exitEventRoutine = null;
+        }
+
+        private void TriggerEnterEvent()
+        {
+            m_enterEvents?.Invoke();
+            if (m_oneTimeOnly)
+            {
+                m_wasTriggered = true;
+            }
+        }
+
+        private void TriggerExitEvent()
+        {
+            m_exitEvents?.Invoke();
+        }
+
+        private void Start()
+        {
+            Initialize();
+        }
+
         private void OnTriggerEnter2D(Collider2D collision)
         {
+       
+
             if (collision.CompareTag("Hitbox"))
             {
                 if ((m_oneTimeOnly && !m_wasTriggered) || !m_oneTimeOnly)
                 {
-                    m_enterEvents?.Invoke();
+                    if (m_waitForPlayerToBeGrounded)
+                    {
+                        if (m_exitEventRoutine != null)
+                        {
+                            StopCoroutine(m_exitEventRoutine);
+                            m_exitEventRoutine = null;
+                        }
+
+                        if (m_enterEventRoutine == null)
+                        {
+                            m_enterEventRoutine = StartCoroutine(ExecuteEnterWhenPlayerIsGrounded());
+                        }
+                    }
+                    else
+                    {
+                        TriggerEnterEvent();
+                    }
                 }
-                if (m_oneTimeOnly)
-                {
-                    m_wasTriggered = true;
-                }
-                
             }
-            
+
         }
 
         private void OnTriggerExit2D(Collider2D collision)
@@ -67,7 +134,23 @@ namespace DChild.Gameplay
             {
                 if (collision.CompareTag("Hitbox"))
                 {
-                    m_exitEvents?.Invoke();
+                    if (m_waitForPlayerToBeGrounded)
+                    {
+                        if (m_enterEventRoutine != null)
+                        {
+                            StopCoroutine(m_enterEventRoutine);
+                            m_enterEventRoutine = null;
+                        }
+
+                        if (m_exitEventRoutine == null)
+                        {
+                            m_exitEventRoutine = StartCoroutine(ExecuteExitWhenPlayerIsGrounded());
+                        }
+                    }
+                    else
+                    {
+                        TriggerExitEvent();
+                    }
                 }
             }
         }
