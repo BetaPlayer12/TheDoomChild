@@ -1,13 +1,16 @@
 ﻿using DChild.Temp;
+using Doozy.Runtime.UIManager.Components;
+using Doozy.Runtime.UIManager.Containers;
 using PixelCrushers.DialogueSystem;
 using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace DChild.UI
 {
     public class DoozyUISubtitlePanel : StandardUISubtitlePanel
     {
-        private static List<Button> m_continueButtons = new List<Button>();
+        private static List<UIButton> m_continueButtons = new List<UIButton>();
         private static bool isActive = true;
 
         public static AbstractTypewriterEffect currentTypeWriterEffect { get; private set; }
@@ -21,6 +24,10 @@ namespace DChild.UI
             }
         }
 
+        [SerializeField]
+        private UIButton m_continueUIButton;
+        private UIContainer m_container;
+
         public override void HideImmediate()
         {
             //GameEventMessage.SendEvent($"Dialogue End");
@@ -29,6 +36,11 @@ namespace DChild.UI
         public void SetPanelStateToOpen()
         {
             panelState = PanelState.Open;
+        }
+
+        public void SetPanelStateToClosed()
+        {
+            panelState = PanelState.Closed;
         }
 
         public override void Open()
@@ -52,7 +64,7 @@ namespace DChild.UI
                 PopFromPanelStack();
                 CancelInvoke();
                 if (panelState == PanelState.Closed || panelState == PanelState.Closing) return;
-                panelState = PanelState.Closing;
+                panelState = m_container.isHidden ? PanelState.Closed : PanelState.Closing;
                 onClose.Invoke();
 
                 // Deselect ours:
@@ -65,15 +77,55 @@ namespace DChild.UI
             hasFocus = false;
         }
 
-        private void Awake()
+        public override void HideContinueButton()
         {
-            m_continueButtons.Add(continueButton);
-            continueButton.interactable = isActive;
+            base.HideContinueButton();
+            Tools.SetGameObjectActive(m_continueUIButton, false);
+        }
+
+        public override void ShowContinueButton()
+        {
+            base.ShowContinueButton();
+            Tools.SetGameObjectActive(m_continueUIButton, true);
+            if (m_continueUIButton != null && m_continueUIButton.onClickEvent.GetPersistentEventCount() == 0)
+            {
+                m_continueUIButton.onClickEvent.RemoveAllListeners();
+                var fastForward = m_continueUIButton.GetComponent<StandardUIContinueButtonFastForward>();
+                if (fastForward != null)
+                {
+                    m_continueUIButton.onClickEvent.AddListener(fastForward.OnFastForward);
+                }
+                else
+                {
+                    m_continueUIButton.onClickEvent.AddListener(OnContinue);
+                }
+            }
+        }
+
+        public override void Select(bool allowStealFocus = true)
+        {
+            base.Select(allowStealFocus);
+            UITools.Select(m_continueUIButton, allowStealFocus);
+        }
+
+        protected override void SetUIElementsActive(bool value)
+        {
+            base.SetUIElementsActive(value);
+            Tools.SetGameObjectActive(m_continueUIButton, false);
+        }
+
+
+        protected override void Awake()
+        {
+            m_continueButtons.Add(m_continueUIButton);
+            m_continueUIButton.interactable = isActive;
+            m_container = GetComponent<UIContainer>();
+            base.Awake();
         }
 
         private void OnDestroy()
         {
-            m_continueButtons.Remove(continueButton);
+            m_continueButtons.Remove(m_continueUIButton);
         }
     }
 

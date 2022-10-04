@@ -131,7 +131,6 @@ namespace Doozy.Runtime.UIManager.Containers
         }
 
         #region Static Methods
-
         /// <summary> Get all the registered views with the given category and name </summary>
         /// <param name="category"> UIView category </param>
         /// <param name="name"> UIView name (from the given category) </param>

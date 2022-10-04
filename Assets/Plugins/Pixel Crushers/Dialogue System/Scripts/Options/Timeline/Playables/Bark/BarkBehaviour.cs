@@ -1,6 +1,3 @@
-// Recompile at 01/07/2021 2:56:36 PM
-
-
 #if USE_TIMELINE
 #if UNITY_2017_1_OR_NEWER
 // Copyright (c) Pixel Crushers. All rights reserved.
@@ -20,8 +17,14 @@ namespace PixelCrushers.DialogueSystem
         public bool useConversation = true;
 
         [Tooltip("Get the bark text from this conversation.")]
-        [ConversationPopup]
+        [ConversationPopup(true)]
         public string conversation;
+
+        [Tooltip("Bark a specific dialogue entry instead of starting from the conversation's START node.")]
+        public bool barkSpecificEntry;
+
+        [Tooltip("Dialogue entry to bark.")]
+        public int entryID;
 
         [Tooltip("Bark this text.")]
         public string text;
@@ -31,7 +34,9 @@ namespace PixelCrushers.DialogueSystem
 
         public string GetEditorBarkText()
         {
-            return useConversation ? "(From " + conversation + ")" : text;
+            return useConversation 
+                ? ("[" + conversation + "] '" + PreviewUI.GetDialogueText(conversation, -1) + "'")
+                : text;
         }
 
     }

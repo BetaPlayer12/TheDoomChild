@@ -11,8 +11,10 @@ namespace DChild.Gameplay.Systems
 {
     public interface IGameplayUIHandle
     {
+        void ToggleCinematicMode(bool on);
+
         void UpdateNavMapConfiguration(Location location, Transform inGameReference, Vector2 mapReferencePoint, Vector2 calculationOffset);
-        void OpenTradeWindow(NPCProfile merchantData,ITradeInventory merchantInventory, TradeAskingPrice merchantBuyingPriceRate);
+        void OpenTradeWindow(NPCProfile merchantData, ITradeInventory merchantInventory, TradeAskingPrice merchantBuyingPriceRate);
         void ShowLoreNote(LoreData m_data);
         void OpenStorePage(StorePage storePage);
         void OpenStore();

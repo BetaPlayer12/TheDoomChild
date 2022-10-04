@@ -2,7 +2,9 @@
 using Doozy.Runtime.UIManager.Containers;
 using Sirenix.OdinInspector;
 using System;
+using System.Collections;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace DChildDebug.Cutscene
 {
@@ -11,6 +13,8 @@ namespace DChildDebug.Cutscene
         [SerializeField]
         private DialogueSkipProgressionUI m_ui;
         [SerializeField]
+        private InputActionReference m_input;
+        [SerializeField]
         private float m_holdButtonDuration;
 
         private UIContainer m_view;
@@ -18,34 +22,48 @@ namespace DChildDebug.Cutscene
 
         public static event Action SkipExecute;
 
-        private void Awake()
-        {
-            m_view = GetComponent<UIContainer>();
-        }
-
-        private void OnEnable()
+        public void Reset()
         {
             m_holdButtonDurationTimer = 0;
             m_ui.SetProgression(0);
         }
 
-        private void Update()
+        public void SubscribeToInput()
         {
-            if (Input.GetKey(KeyCode.Mouse0))
+            m_input.action.started += OnSkipHoldStart;
+            m_input.action.canceled += OnSkipHoldCanceled;
+        }
+
+        public void UnsubscribeToInput()
+        {
+            m_input.action.started -= OnSkipHoldStart;
+            m_input.action.canceled -= OnSkipHoldCanceled;
+        }
+
+        private void OnSkipHoldStart(InputAction.CallbackContext obj)
+        {
+            StopAllCoroutines();
+            StartCoroutine(SkipRoutine());
+        }
+
+        private void OnSkipHoldCanceled(InputAction.CallbackContext obj)
+        {
+            Debug.Log("Skip Routine Canceled");
+            StopAllCoroutines();
+        }
+
+        private IEnumerator SkipRoutine()
+        {
+            Debug.Log("Skip Routine Start");
+            Reset();
+            yield return null;
+            do
             {
                 m_holdButtonDurationTimer += Time.unscaledDeltaTime;
                 m_ui.SetProgression(m_holdButtonDurationTimer / m_holdButtonDuration);
-                if (m_holdButtonDurationTimer >= m_holdButtonDuration)
-                {
-                    SkipSequence();
-                    enabled = false;
-                }
-            }
-            else
-            {
-                m_holdButtonDurationTimer = 0;
-                m_ui.SetProgression(0);
-            }
+                yield return null;
+            } while (m_holdButtonDurationTimer < m_holdButtonDuration);
+            SkipSequence();
         }
 
         [Button]
@@ -53,6 +71,11 @@ namespace DChildDebug.Cutscene
         {
             m_view.Hide();
             SkipExecute?.Invoke();
+        }
+
+        private void Awake()
+        {
+            m_view = GetComponent<UIContainer>();
         }
     }
 }

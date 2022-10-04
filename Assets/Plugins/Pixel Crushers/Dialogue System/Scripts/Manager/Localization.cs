@@ -31,7 +31,12 @@ namespace PixelCrushers.DialogueSystem
                 if (DialogueManager.instance != null)
                 {
                     var uiLocalizationManager = DialogueManager.instance.GetComponent<UILocalizationManager>();
-                    if (uiLocalizationManager != null) uiLocalizationManager.currentLanguage = value;
+                    if (uiLocalizationManager == null)
+                    {
+                        uiLocalizationManager = DialogueManager.instance.gameObject.AddComponent<UILocalizationManager>();
+                        uiLocalizationManager.textTable = DialogueManager.instance.displaySettings.localizationSettings.textTable;
+                    }
+                    uiLocalizationManager.currentLanguage = value;
                 }
             }
         }
@@ -69,7 +74,7 @@ namespace PixelCrushers.DialogueSystem
         private static int m_currentLanguageID = -1;
         private static bool m_useDefaultIfUndefined = true;
 
-#if UNITY_2019_3_OR_NEWER
+#if UNITY_2019_3_OR_NEWER && UNITY_EDITOR
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         static void InitStaticVariables()
         {

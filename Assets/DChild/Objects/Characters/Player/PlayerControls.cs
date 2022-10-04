@@ -233,6 +233,15 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""CameraPeek"",
+                    ""type"": ""Button"",
+                    ""id"": ""48741659-a096-4822-98d9-21febcd335d2"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -1170,6 +1179,105 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""action"": ""Store"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""PC"",
+                    ""id"": ""8a53bb6e-2fa3-48d0-bf26-5bf9de4f2c0e"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": ""Hold"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""CameraPeek"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""e046a1f2-2e36-4e0e-a5f6-90423c64a1b0"",
+                    ""path"": ""<Keyboard>/s"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""CameraPeek"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""884c3e68-6778-4330-8142-8c523dfcbd57"",
+                    ""path"": ""<Keyboard>/w"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""CameraPeek"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Gamepad"",
+                    ""id"": ""1d8b558a-2041-4b45-9cb5-7e536a0f662b"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""CameraPeek"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""6df156be-d06a-404e-9f1c-8f7450fbeaeb"",
+                    ""path"": ""<Gamepad>/leftStick/up"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""CameraPeek"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""21ca1260-de7f-4e32-9eb1-4d8ab731a378"",
+                    ""path"": ""<Gamepad>/leftStick/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""CameraPeek"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""PS4"",
+                    ""id"": ""828328ca-420c-4b36-8c1d-d2fe09144424"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""CameraPeek"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""3ee10651-48b3-42d8-a79f-6e546a7ff326"",
+                    ""path"": ""<DualShockGamepad>/leftStick/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""PS4"",
+                    ""action"": ""CameraPeek"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""13b435dc-1835-49bf-a495-35a442e054ff"",
+                    ""path"": ""<DualShockGamepad>/leftStick/up"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""PS4"",
+                    ""action"": ""CameraPeek"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
                 }
             ]
         },
@@ -2016,6 +2124,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         m_Gameplay_Block = m_Gameplay.FindAction("Block", throwIfNotFound: true);
         m_Gameplay_Pause = m_Gameplay.FindAction("Pause", throwIfNotFound: true);
         m_Gameplay_Store = m_Gameplay.FindAction("Store", throwIfNotFound: true);
+        m_Gameplay_CameraPeek = m_Gameplay.FindAction("CameraPeek", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -2115,6 +2224,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
     private readonly InputAction m_Gameplay_Block;
     private readonly InputAction m_Gameplay_Pause;
     private readonly InputAction m_Gameplay_Store;
+    private readonly InputAction m_Gameplay_CameraPeek;
     public struct GameplayActions
     {
         private @PlayerControls m_Wrapper;
@@ -2142,6 +2252,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         public InputAction @Block => m_Wrapper.m_Gameplay_Block;
         public InputAction @Pause => m_Wrapper.m_Gameplay_Pause;
         public InputAction @Store => m_Wrapper.m_Gameplay_Store;
+        public InputAction @CameraPeek => m_Wrapper.m_Gameplay_CameraPeek;
         public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -2220,6 +2331,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @Store.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnStore;
                 @Store.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnStore;
                 @Store.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnStore;
+                @CameraPeek.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnCameraPeek;
+                @CameraPeek.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnCameraPeek;
+                @CameraPeek.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnCameraPeek;
             }
             m_Wrapper.m_GameplayActionsCallbackInterface = instance;
             if (instance != null)
@@ -2293,6 +2407,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @Store.started += instance.OnStore;
                 @Store.performed += instance.OnStore;
                 @Store.canceled += instance.OnStore;
+                @CameraPeek.started += instance.OnCameraPeek;
+                @CameraPeek.performed += instance.OnCameraPeek;
+                @CameraPeek.canceled += instance.OnCameraPeek;
             }
         }
     }
@@ -2503,6 +2620,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         void OnBlock(InputAction.CallbackContext context);
         void OnPause(InputAction.CallbackContext context);
         void OnStore(InputAction.CallbackContext context);
+        void OnCameraPeek(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

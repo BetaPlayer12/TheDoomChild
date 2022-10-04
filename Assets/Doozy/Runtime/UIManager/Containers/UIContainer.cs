@@ -627,6 +627,7 @@ namespace Doozy.Runtime.UIManager.Containers
         /// Show with animations.
         /// <para/> Triggers visibility states IsShowing when Show starts and then Visible when Show finished.
         /// </summary>
+        [ContextMenu("Show")]
         public virtual void Show() =>
             Show(true);
 
@@ -715,6 +716,7 @@ namespace Doozy.Runtime.UIManager.Containers
         /// Hide with animations.
         /// <para/> Triggers visibility states IsHiding when Hide starts and then Hidden when Hide finished.
         /// </summary>
+        [ContextMenu("Hide")]
         public virtual void Hide() =>
             Hide(true);
 

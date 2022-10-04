@@ -110,9 +110,10 @@ namespace PixelCrushers.DialogueSystem
             {
                 Name = dialogueActor.GetActorName();
                 var actor = DialogueManager.masterDatabase.GetActor(dialogueActor.actor);
-                if (dialogueActor.portrait != null)
+                var dialogueActorPortrait = dialogueActor.GetPortraitSprite();
+                if (dialogueActorPortrait != null)
                 {
-                    this.portrait = dialogueActor.GetPortraitSprite();
+                    this.portrait = dialogueActorPortrait;
                 }
                 else if (actor != null)
                 {
@@ -157,6 +158,17 @@ namespace PixelCrushers.DialogueSystem
 
         private static Dictionary<string, Transform> registeredActorTransforms = new Dictionary<string, Transform>();
 
+#if UNITY_2019_3_OR_NEWER && UNITY_EDITOR
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        static void InitStaticVariables()
+        {
+            registeredActorTransforms = new Dictionary<string, Transform>();
+        }
+#endif
+
+        /// <summary>
+        /// Associates a transform with an actor name. Typically called automatically by DialogueActor.
+        /// </summary>
         public static void RegisterActorTransform(string actorName, Transform actorTransform)
         {
             if (string.IsNullOrEmpty(actorName) || (actorTransform == null)) return;
@@ -172,6 +184,9 @@ namespace PixelCrushers.DialogueSystem
             }
         }
 
+        /// <summary>
+        /// Unregisters a transform from an actor name. Typically called automatically by DialogueActor when disabled.
+        /// </summary>
         public static void UnregisterActorTransform(string actorName, Transform actorTransform)
         {
             if (string.IsNullOrEmpty(actorName) || (actorTransform == null)) return;
@@ -182,9 +197,22 @@ namespace PixelCrushers.DialogueSystem
             }
         }
 
+        /// <summary>
+        /// Gets the transform associated with an actor name, if any.
+        /// </summary>
         public static Transform GetRegisteredActorTransform(string actorName)
         {
             return registeredActorTransforms.ContainsKey(actorName) ? registeredActorTransforms[actorName] : null;
+        }
+
+        /// <summary>
+        /// Returns a list of all transforms registered by RegisterActorTransform, including transforms
+        /// registered by DialogueActor.
+        /// </summary>
+        /// <remarks>This method generates a new List when called.</remarks>
+        public static List<Transform> GetAllRegisteredActorTransforms()
+        {
+            return new List<Transform>(registeredActorTransforms.Values);
         }
 
         #endregion

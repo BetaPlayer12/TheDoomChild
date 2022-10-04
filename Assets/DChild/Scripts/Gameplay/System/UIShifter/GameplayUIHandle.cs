@@ -19,8 +19,17 @@ namespace DChild.Gameplay.Systems
 {
     public class GameplayUIHandle : MonoBehaviour, IGameplayUIHandle, IGameplaySystemModule
     {
+        [SerializeField]
+        private SignalSender m_cinemaSignal;
+
+        [SerializeField, BoxGroup("Full Screen Notifications")]
+        private SignalSender m_fullScreenNotifSignal;
+        [SerializeField, BoxGroup("Full Screen Notifications")]
+        private UIContainer m_primarySkillNotification;
+
+
         [SerializeField, BoxGroup("Merchant UI")]
-        private SignalSender m_tradeWindow;
+        private SignalSender m_tradeWindowSignal;
         [SerializeField, BoxGroup("Merchant UI")]
         private TradeManager m_tradeManager;
 
@@ -34,12 +43,23 @@ namespace DChild.Gameplay.Systems
         private NavigationMapManager m_navMap;
         [SerializeField]
         private LoreInfoUI m_loreUI;
-        [SerializeField]
+
+        [BoxGroup("Side Notification")]
+        [SerializeField, BoxGroup("Side Notification")]
         private LootAcquiredUI m_lootAcquiredUI;
-        [SerializeField]
+        [SerializeField, BoxGroup("Side Notification")]
         private StoreNotificationHandle m_storeNotification;
+        [SerializeField, BoxGroup("Side Notification")]
+        private UIContainer m_journalNotification;
+
         [SerializeField]
         private UIContainer m_skippableUI;
+
+        public void ToggleCinematicMode(bool on)
+        {
+            m_cinemaSignal.Payload.booleanValue = on;
+            m_cinemaSignal.SendSignal();
+        }
 
         public void UpdateNavMapConfiguration(Location location, Transform inGameReference, Vector2 mapReferencePoint, Vector2 calculationOffset)
         {
@@ -51,7 +71,7 @@ namespace DChild.Gameplay.Systems
             m_tradeManager.SetSellerProfile(merchantData);
             m_tradeManager.SetSellingTradeRates(merchantBuyingPriceRate);
             m_tradeManager.SetupTrade(GameplaySystem.playerManager.player.inventory, merchantInventory);
-            m_tradeWindow.SendSignal();
+            m_tradeWindowSignal.SendSignal();
         }
 
         public void OpenStorePage(StorePage storePage)
@@ -87,9 +107,11 @@ namespace DChild.Gameplay.Systems
             ShowBossHealth(false);
         }
 
+        [ContextMenu("Prompt/Primary Skill")]
         public void PromptPrimarySkillNotification()
         {
-            GameEventMessage.SendEvent("Primary Skill Acquired");
+            m_fullScreenNotifSignal.SendSignal();
+            m_primarySkillNotification.Show(true);
         }
 
         public void PromptKeystoneFragmentNotification()
@@ -166,6 +188,7 @@ namespace DChild.Gameplay.Systems
                 GameEventMessage.SendEvent("Soul Essence Hide");
             }
         }
+
         public void ShowPromptSoulEssenceChangeNotify()
         {
             GameEventMessage.SendEvent("Soul Essence Added");
@@ -221,9 +244,9 @@ namespace DChild.Gameplay.Systems
 
         public void ShowJournalNotificationPrompt(float duration)
         {
-            GameEventMessage.SendEvent("Hide JournalUpdate");
-            StopCoroutine("PromptJournalUpdateRoutine");
-            StartCoroutine(PromptJournalUpdateRoutine(duration));
+            m_journalNotification.InstantHide();
+            m_journalNotification.AutoHideAfterShowDelay = duration;
+            m_journalNotification.Show(true);
         }
 
         public void ShowLoreNote(LoreData data)
@@ -237,16 +260,10 @@ namespace DChild.Gameplay.Systems
             GameEventMessage.SendEvent("Show JournalInfo");
         }
 
-        private IEnumerator PromptJournalUpdateRoutine(float duration)
-        {
-            GameEventMessage.SendEvent("Show JournalUpdate");
-            yield return new WaitForSeconds(duration);
-            GameEventMessage.SendEvent("Hide JournalUpdate");
-        }
         public void ShowLootChestItemAcquired(LootList lootList)
         {
             m_lootAcquiredUI.SetDetails(lootList);
-            GameEventMessage.SendEvent("Loot Notify");
+            m_lootAcquiredUI.Show();
         }
 
         public void ShowSequenceSkip(bool willShow)

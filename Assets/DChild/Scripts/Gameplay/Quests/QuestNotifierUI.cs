@@ -2,11 +2,14 @@
 using PixelCrushers.DialogueSystem;
 using TMPro;
 using DChild.Temp;
+using Doozy.Runtime.UIManager.Containers;
 
 namespace DChild.Gameplay.Quests
 {
     public class QuestNotifierUI : MonoBehaviour
     {
+        [SerializeField]
+        private UIContainer m_container;
         [SerializeField]
         private TextMeshProUGUI m_questTitle;
         [SerializeField]
@@ -35,7 +38,7 @@ namespace DChild.Gameplay.Quests
 
         private void ShowNotifier()
         {
-            GameEventMessage.SendEvent("Quest Notify");
+            m_container.Show(true);
         }
 
         private void Awake()

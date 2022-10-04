@@ -40,11 +40,14 @@ namespace PixelCrushers.DialogueSystem
         public float minDelayBetweenQueuedBarks = 0;
         public float maxDelayBetweenQueuedBarks = 1;
 
+        [Tooltip("Hide bark when conversations start.")]
+        public bool hideBarkOnConversationStart = false;
+
         private string m_currentIdValue = string.Empty;
         public string currentIdValue { get { return m_currentIdValue; } }
 
         private IBarkUI m_barkUI = null;
-        private bool m_ignoreOnDisable = false;
+        private bool m_applicationIsQuitting = false;
 
         private IBarkUI barkUI
         {
@@ -67,18 +70,24 @@ namespace PixelCrushers.DialogueSystem
 
         private void OnApplicationQuit()
         {
-            m_ignoreOnDisable = true;
+            m_applicationIsQuitting = true;
         }
 
-        private void OnLevelWillBeUnloaded()
+        private void OnEnable()
         {
-            m_ignoreOnDisable = true;
+            if (hideBarkOnConversationStart) DialogueManager.instance.conversationStarted += OnConversationStarted;
         }
 
         private void OnDisable()
         {
-            if (m_ignoreOnDisable || BarkGroupManager.instance == null) return;
+            if (m_applicationIsQuitting || BarkGroupManager.instance == null) return;
             BarkGroupManager.instance.RemoveFromGroup(m_currentIdValue, this);
+            if (hideBarkOnConversationStart) DialogueManager.instance.conversationStarted -= OnConversationStarted;
+        }
+
+        private void OnConversationStarted(Transform actor)
+        {
+            CancelBark();
         }
 
         public void GroupBark(string conversation, Transform listener, BarkHistory barkHistory, float delayTime = -1)

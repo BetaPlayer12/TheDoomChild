@@ -57,6 +57,7 @@ namespace Doozy.Runtime.Signals
             if (SendOnDestroy) SendSignal();
         }
 
+        [ContextMenu("Send Signal")]
         /// <summary> Send a Signal with the set payload value to the stream with the given stream id </summary>
         public virtual void SendSignal()
         {

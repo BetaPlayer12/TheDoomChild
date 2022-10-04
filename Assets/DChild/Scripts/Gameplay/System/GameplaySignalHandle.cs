@@ -17,7 +17,7 @@ namespace DChild.Gameplay
 
         public void DoCinematicUIMode(bool value)
         {
-            GameEventMessage.SendEvent(value ? "Cinematic Start" : "Cinematic End");
+            GameplaySystem.gamplayUIHandle.ToggleCinematicMode(value);
         }
 
         public void MoveAudioListenerToPlayer()

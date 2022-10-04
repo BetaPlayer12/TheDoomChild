@@ -87,24 +87,27 @@ namespace PixelCrushers.DialogueSystem
             [Tooltip("If prepending actor name, separate from Dialogue Text with this string.")]
             public string prependActorNameSeparator = ": ";
 
+            [Tooltip("If prepending actor name, format this way, where {0} is name + separator, and {1} is Dialogue Text.")]
+            public string prependActorNameFormat = "{0}{1}";
+
             [Tooltip("Color to use for this actor's subtitles.")]
             public Color subtitleColor = Color.white;
         }
 
         public StandardDialogueUISettings standardDialogueUISettings = new StandardDialogueUISettings();
 
-        private void Start()
+        protected virtual void Awake()
         {
             SetupBarkUI();
             SetupDialoguePanels();
         }
 
-        public Sprite GetPortraitSprite()
+        public virtual Sprite GetPortraitSprite()
         {
             return UITools.GetSprite(portrait, spritePortrait);
         }
 
-        private void SetupBarkUI()
+        protected virtual void SetupBarkUI()
         {
             if (barkUISettings.barkUI != null && Tools.IsPrefab(barkUISettings.barkUI.gameObject))
             {
@@ -117,7 +120,7 @@ namespace PixelCrushers.DialogueSystem
             }
         }
 
-        private void SetupDialoguePanels()
+        protected virtual void SetupDialoguePanels()
         {
             if (standardDialogueUISettings.subtitlePanelNumber == SubtitlePanelNumber.Custom &&
                 standardDialogueUISettings.customSubtitlePanel != null &&
@@ -143,13 +146,13 @@ namespace PixelCrushers.DialogueSystem
             }
         }
 
-        private void OnEnable()
+        protected virtual void OnEnable()
         {
             if (string.IsNullOrEmpty(actor)) return;
             CharacterInfo.RegisterActorTransform(actor, transform);
         }
 
-        private void OnDisable()
+        protected virtual void OnDisable()
         {
             if (string.IsNullOrEmpty(actor)) return;
             CharacterInfo.UnregisterActorTransform(actor, transform);
@@ -158,7 +161,7 @@ namespace PixelCrushers.DialogueSystem
         /// <summary>
         /// Deprecated alias for GetActorName.
         /// </summary>
-        public string GetName()
+        public virtual string GetName()
         {
             return GetActorName();
         }
@@ -168,7 +171,7 @@ namespace PixelCrushers.DialogueSystem
         /// or [var] tag.
         /// </summary>
         /// <returns>The name to use, or <c>null</c> if not set.</returns>
-        public string GetActorName()
+        public virtual string GetActorName()
         {
             var actorName = string.IsNullOrEmpty(actor) ? name : actor;
             var result = CharacterInfo.GetLocalizedDisplayNameInDatabase(DialogueLua.GetActorField(actorName, "Name").asString);
@@ -186,7 +189,7 @@ namespace PixelCrushers.DialogueSystem
         /// <summary>
         /// Gets the name to use when saving persistent data.
         /// </summary>
-        public string GetPersistentDataName()
+        public virtual string GetPersistentDataName()
         {
             return string.IsNullOrEmpty(persistentDataName) ? GetActorName() : persistentDataName;
         }
@@ -194,7 +197,7 @@ namespace PixelCrushers.DialogueSystem
         /// <summary>
         /// Gets the panel number to use if using a Standard Dialogue UI.
         /// </summary>
-        public SubtitlePanelNumber GetSubtitlePanelNumber()
+        public virtual SubtitlePanelNumber GetSubtitlePanelNumber()
         {
             return standardDialogueUISettings.subtitlePanelNumber;
         }
@@ -203,7 +206,7 @@ namespace PixelCrushers.DialogueSystem
         /// Changes a dialogue actor's subtitle panel number. If a conversation is active, updates
         /// the dialogue UI.
         /// </summary>
-        public void SetSubtitlePanelNumber(SubtitlePanelNumber newSubtitlePanelNumber)
+        public virtual void SetSubtitlePanelNumber(SubtitlePanelNumber newSubtitlePanelNumber)
         {
             standardDialogueUISettings.subtitlePanelNumber = newSubtitlePanelNumber;
             if (DialogueManager.isConversationActive && DialogueManager.dialogueUI is IStandardDialogueUI)
@@ -215,7 +218,7 @@ namespace PixelCrushers.DialogueSystem
         /// <summary>
         /// Gets the menu panel number to use if using a Standard Dialogue UI.
         /// </summary>
-        public MenuPanelNumber GetMenuPanelNumber()
+        public virtual MenuPanelNumber GetMenuPanelNumber()
         {
             return standardDialogueUISettings.menuPanelNumber;
         }
@@ -224,7 +227,7 @@ namespace PixelCrushers.DialogueSystem
         /// Changes a dialogue actor's menu panel number. If a conversation is active, updates
         /// the dialogue UI.
         /// </summary>
-        public void SetMenuPanelNumber(MenuPanelNumber newMenuPanelNumber)
+        public virtual void SetMenuPanelNumber(MenuPanelNumber newMenuPanelNumber)
         {
             standardDialogueUISettings.menuPanelNumber = newMenuPanelNumber;
             if (DialogueManager.isConversationActive && DialogueManager.dialogueUI is IStandardDialogueUI)
@@ -238,13 +241,31 @@ namespace PixelCrushers.DialogueSystem
         /// </summary>
         /// <param name="subtitle">The subtitle containing the source text.</param>
         /// <returns>The subtitle text adjusted for the actor's color settings.</returns>
-        public string AdjustSubtitleColor(Subtitle subtitle)
+        public virtual string AdjustSubtitleColor(Subtitle subtitle)
         {
             var text = subtitle.formattedText.text;
-            return !standardDialogueUISettings.setSubtitleColor ? text
-                : (standardDialogueUISettings.applyColorToPrependedName ?
-                    UITools.WrapTextInColor(subtitle.speakerInfo.Name + standardDialogueUISettings.prependActorNameSeparator, standardDialogueUISettings.subtitleColor) + text
-                    : UITools.WrapTextInColor(text, standardDialogueUISettings.subtitleColor));
+            if (!standardDialogueUISettings.setSubtitleColor)
+            {
+                return text;
+            }
+            if (standardDialogueUISettings.applyColorToPrependedName)
+            {
+                if (string.IsNullOrEmpty(subtitle.speakerInfo.Name))
+                {
+                    return text;
+                }
+                else
+                {
+                    //return UITools.WrapTextInColor(subtitle.speakerInfo.Name + standardDialogueUISettings.prependActorNameSeparator, standardDialogueUISettings.subtitleColor) + text;
+                    var coloredName = UITools.WrapTextInColor(subtitle.speakerInfo.Name + standardDialogueUISettings.prependActorNameSeparator, standardDialogueUISettings.subtitleColor);
+                    var s = string.Format(standardDialogueUISettings.prependActorNameFormat, new object[] { coloredName, text });
+                    return FormattedText.Parse(s).text;
+                }
+            }
+            else
+            {
+                return UITools.WrapTextInColor(text, standardDialogueUISettings.subtitleColor);
+            }
         }
 
         /// <summary>

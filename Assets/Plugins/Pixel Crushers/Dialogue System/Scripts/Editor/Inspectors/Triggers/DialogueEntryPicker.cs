@@ -42,11 +42,6 @@ namespace PixelCrushers.DialogueSystem
             return idToIndex.ContainsKey(id) ? idToIndex[id] : -1;
         }
 
-        public string GetDialogue(int id)
-        {
-            return entryTexts[GetIndex(id)];
-        }
-
         public int Draw(Rect rect, string label, int id)
         {
             return GetID(EditorGUI.Popup(rect, label, GetIndex(id), entryTexts));
@@ -59,13 +54,9 @@ namespace PixelCrushers.DialogueSystem
 
         public void SetDialogueEntries(DialogueDatabase dialogueDatabase, string conversationTitle)
         {
-            var db = dialogueDatabase;
-            if (db == null) return;
-            var conversation = db.GetConversation(conversationTitle);
+            var conversation = dialogueDatabase.GetConversation(conversationTitle);
             if (conversation == null) return;
             entryTexts = new string[conversation.dialogueEntries.Count];
-            idToIndex.Clear();
-            indexToId.Clear();
             for (int i = 0; i < conversation.dialogueEntries.Count; i++)
             {
                 var entry = conversation.dialogueEntries[i];
@@ -73,6 +64,11 @@ namespace PixelCrushers.DialogueSystem
                 idToIndex.Add(entry.id, i);
                 indexToId.Add(i, entry.id);
             }
+        }
+
+        public string GetDialogue(int dialogueIndex)
+        {
+            return entryTexts[GetIndex(dialogueIndex)];
         }
     }
 }

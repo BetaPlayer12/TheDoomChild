@@ -36,6 +36,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         public bool projectileThrowHeld;
 
         private PlayerInput m_input;
+        private InputActionMap m_gameplayActionMap;
 
         public void Disable()
         {
@@ -45,7 +46,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             }
             if (m_input)
             {
-                m_input.enabled = false;
+                m_gameplayActionMap.Disable();
             }
             this.enabled = false;
         }
@@ -58,7 +59,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             }
             if (m_input)
             {
-                m_input.enabled = true;
+                m_gameplayActionMap.Enable();
             }
             this.enabled = true;
         }
@@ -243,13 +244,19 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private void Awake()
         {
             m_input = GetComponent<PlayerInput>();
-            m_mousePosition = Input.mousePosition;
+            if (m_input)
+            {
+                m_gameplayActionMap = m_input.actions.FindActionMap("Gameplay");
+            }
+            m_mousePosition = Mouse.current.position.ReadValue();
+
         }
 
         private void Update()
         {
-            m_mouseDelta = (Vector2)Input.mousePosition - m_mousePosition;
-            m_mousePosition = Input.mousePosition;
+            var mousePosition = Mouse.current.position.ReadValue();
+            m_mouseDelta = mousePosition - m_mousePosition;
+            m_mousePosition = mousePosition;
             m_mousePosition += new Vector2(controllerCursorHorizontalInput, controllerCursorVerticalInput).normalized;
         }
 

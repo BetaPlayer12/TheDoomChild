@@ -12,11 +12,39 @@ namespace PixelCrushers.DialogueSystem
 
     public enum SequenceSyntaxState { Unchecked, Valid, Error }
 
+    public delegate void SetupGenericMenuDelegate(GenericMenu menu);
+    public delegate bool TryDragAndDropDelegate(UnityEngine.Object obj, ref string sequence);
+
     /// <summary>
     /// This class provides a custom drawer for Sequence fields.
     /// </summary>
     public static class SequenceEditorTools
     {
+
+        /// <summary>
+        /// Assign delegate handler to check extra drag-n-drop options.
+        /// </summary>
+        public static TryDragAndDropDelegate tryDragAndDrop = null;
+
+        /// <summary>
+        /// Assign handler(s) to add extra menu items to the Sequence dropdown menu.
+        /// </summary>
+        public static event SetupGenericMenuDelegate customSequenceMenuSetup = null;
+
+        /// <summary>
+        /// Add text to the currently-edited sequence. Typically called from a
+        /// customSequenceMenuSetup handler.
+        /// </summary>
+        public static void AddText(string text)
+        {
+            if (!string.IsNullOrEmpty(queuedText))
+            {
+                queuedText += ";\n";
+            }
+            queuedText += text;
+        }
+
+        private static string queuedText = string.Empty;
 
         private enum MenuResult
         {
@@ -25,17 +53,17 @@ namespace PixelCrushers.DialogueSystem
 
         private static MenuResult menuResult = MenuResult.Unselected;
 
-        private enum AudioDragDropCommand { AudioWait, Audio, SALSA, LipSync }
+        private enum AudioDragDropCommand { AudioWait, Audio, SALSA, LipSync, Nothing }
 
         private static AudioDragDropCommand audioDragDropCommand = AudioDragDropCommand.AudioWait;
 
-        private enum GameObjectDragDropCommand { Camera, DOF, SetActiveTrue, SetActiveFalse }
+        private enum GameObjectDragDropCommand { Camera, DOF, SetActiveTrue, SetActiveFalse, Nothing }
 
         private static GameObjectDragDropCommand gameObjectDragDropCommand = GameObjectDragDropCommand.Camera;
 
         private static GameObjectDragDropCommand alternateGameObjectDragDropCommand = GameObjectDragDropCommand.SetActiveTrue;
 
-        private enum ComponentDragDropCommand { SetEnabledTrue, SetEnabledFalse }
+        private enum ComponentDragDropCommand { SetEnabledTrue, SetEnabledFalse, Nothing }
 
         private static ComponentDragDropCommand componentDragDropCommand = ComponentDragDropCommand.SetEnabledTrue;
 
@@ -77,10 +105,17 @@ namespace PixelCrushers.DialogueSystem
 
         public static string DrawLayout(GUIContent guiContent, string sequence, ref Rect rect, ref SequenceSyntaxState syntaxState)
         {
+            if (!string.IsNullOrEmpty(queuedText))
+            {
+                if (!string.IsNullOrEmpty(sequence)) sequence += ";\n";
+                sequence += queuedText;
+                queuedText = string.Empty;
+            }
+
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.LabelField(guiContent);
             EditorGUI.BeginDisabledGroup(string.IsNullOrEmpty(sequence));
-            if (GUILayout.Button(new GUIContent("Check", "Check sequence for errors."), EditorStyles.miniButton, GUILayout.Width(48)))
+            if (GUILayout.Button(new GUIContent("Check", "Check sequence for errors."), EditorStyles.miniButton, GUILayout.Width(52)))
             {
                 syntaxState = CheckSyntax(sequence);
             }
@@ -99,9 +134,12 @@ namespace PixelCrushers.DialogueSystem
                 menuResult = MenuResult.Unselected;
             }
 
-            EditorWindowTools.StartIndentedSection();
+            //EditorWindowTools.StartIndentedSection(); // Removed indent; looks better without.
+
             SetSyntaxStateGUIColor(syntaxState);
+
             var newSequence = EditorGUILayout.TextArea(sequence);
+
             ClearSyntaxStateGUIColor();
             if (!string.Equals(newSequence, sequence))
             {
@@ -124,19 +162,30 @@ namespace PixelCrushers.DialogueSystem
                             DragAndDrop.AcceptDrag();
                             foreach (var obj in DragAndDrop.objectReferences)
                             {
-                                if (obj is AudioClip)
+                                if (tryDragAndDrop != null && tryDragAndDrop(obj, ref sequence))
+                                {
+                                    GUI.changed = true;
+                                }
+                                else if (obj is AudioClip)
                                 {
                                     // Drop audio clip according to selected audio command:
+                                    var currentAudioCommand = GetCurrentAudioCommand();
+                                    if (string.IsNullOrEmpty(currentAudioCommand)) continue;
                                     var clip = obj as AudioClip;
                                     var path = AssetDatabase.GetAssetPath(clip);
                                     if (path.Contains("Resources"))
                                     {
-                                        sequence = AddCommandToSequence(sequence, GetCurrentAudioCommand() + "(" + GetResourceName(path) + ")");
+                                        sequence = AddCommandToSequence(sequence, currentAudioCommand + "(" + GetResourceName(path) + ")");
+                                        GUI.changed = true;
+                                    }
+                                    else if (currentAudioCommand == "LipSync")
+                                    {
+                                        sequence = AddCommandToSequence(sequence, currentAudioCommand + "(" + System.IO.Path.GetFileNameWithoutExtension(path) + ")");
                                         GUI.changed = true;
                                     }
                                     else
                                     {
-                                        EditorUtility.DisplayDialog("Not in Resources Folder", "Audio clips must be located in the hierarchy of a Resources folder or an AssetBundle.", "OK");
+                                        EditorUtility.DisplayDialog("Not in Resources Folder", "To use drag-n-drop, audio clips must be located in the hierarchy of a Resources folder.", "OK");
                                     }
                                 }
                                 else if (obj is GameObject)
@@ -152,7 +201,9 @@ namespace PixelCrushers.DialogueSystem
                                     {
                                         // Drop GameObject according to selected GameObject command:
                                         var command = Event.current.alt ? alternateGameObjectDragDropCommand : gameObjectDragDropCommand;
-                                        sequence = AddCommandToSequence(sequence, GetCurrentGameObjectCommand(command, go.name));
+                                        var currentGameObjectCommand = GetCurrentGameObjectCommand(command, go.name);
+                                        if (string.IsNullOrEmpty(currentGameObjectCommand)) continue;
+                                        sequence = AddCommandToSequence(sequence, currentGameObjectCommand);
                                     }
                                     GUI.changed = true;
                                 }
@@ -170,7 +221,9 @@ namespace PixelCrushers.DialogueSystem
                                     {
                                         // Drop component according to selected component command:
                                         var command = Event.current.alt ? alternateComponentDragDropCommand : componentDragDropCommand;
-                                        sequence = AddCommandToSequence(sequence, GetCurrentComponentCommand(command, component.GetType().Name, go.name));
+                                        var currentComponentCommand = GetCurrentComponentCommand(command, component.GetType().Name, go.name);
+                                        if (string.IsNullOrEmpty(currentComponentCommand)) continue;
+                                        sequence = AddCommandToSequence(sequence, currentComponentCommand);
                                     }
                                     GUI.changed = true;
                                 }
@@ -183,7 +236,7 @@ namespace PixelCrushers.DialogueSystem
             // If content changed, reset syntax check state:
             if (EditorGUI.EndChangeCheck()) syntaxState = SequenceSyntaxState.Unchecked;
 
-            EditorWindowTools.EndIndentedSection();
+            //EditorWindowTools.EndIndentedSection();
 
             return sequence;
         }
@@ -209,20 +262,27 @@ namespace PixelCrushers.DialogueSystem
             menu.AddItem(new GUIContent("Audio Drag-n-Drop/Use Audio()"), audioDragDropCommand == AudioDragDropCommand.Audio, SetAudioDragDropCommand, AudioDragDropCommand.Audio);
             menu.AddItem(new GUIContent("Audio Drag-n-Drop/Use SALSA() (3rd party)"), audioDragDropCommand == AudioDragDropCommand.SALSA, SetAudioDragDropCommand, AudioDragDropCommand.SALSA);
             menu.AddItem(new GUIContent("Audio Drag-n-Drop/Use LipSync() (3rd party)"), audioDragDropCommand == AudioDragDropCommand.LipSync, SetAudioDragDropCommand, AudioDragDropCommand.LipSync);
+            menu.AddItem(new GUIContent("Audio Drag-n-Drop/(Do Nothing)"), audioDragDropCommand == AudioDragDropCommand.Nothing, SetAudioDragDropCommand, AudioDragDropCommand.Nothing);
             menu.AddItem(new GUIContent("GameObject Drag-n-Drop/Help..."), false, ShowSequenceEditorGameObjectHelp, null);
             menu.AddItem(new GUIContent("GameObject Drag-n-Drop/Default/Use Camera()"), gameObjectDragDropCommand == GameObjectDragDropCommand.Camera, SetGameObjectDragDropCommand, GameObjectDragDropCommand.Camera);
             menu.AddItem(new GUIContent("GameObject Drag-n-Drop/Default/Use DOF()"), gameObjectDragDropCommand == GameObjectDragDropCommand.DOF, SetGameObjectDragDropCommand, GameObjectDragDropCommand.DOF);
             menu.AddItem(new GUIContent("GameObject Drag-n-Drop/Default/SetActive(GameObject,true)"), gameObjectDragDropCommand == GameObjectDragDropCommand.SetActiveTrue, SetGameObjectDragDropCommand, GameObjectDragDropCommand.SetActiveTrue);
             menu.AddItem(new GUIContent("GameObject Drag-n-Drop/Default/SetActive(GameObject,false)"), gameObjectDragDropCommand == GameObjectDragDropCommand.SetActiveFalse, SetGameObjectDragDropCommand, GameObjectDragDropCommand.SetActiveFalse);
+            menu.AddItem(new GUIContent("GameObject Drag-n-Drop/Default/(Do Nothing)"), gameObjectDragDropCommand == GameObjectDragDropCommand.Nothing, SetGameObjectDragDropCommand, GameObjectDragDropCommand.Nothing);
             menu.AddItem(new GUIContent("GameObject Drag-n-Drop/Alt-Key/Use Camera()"), alternateGameObjectDragDropCommand == GameObjectDragDropCommand.Camera, SetAlternateGameObjectDragDropCommand, GameObjectDragDropCommand.Camera);
             menu.AddItem(new GUIContent("GameObject Drag-n-Drop/Alt-Key/Use DOF()"), alternateGameObjectDragDropCommand == GameObjectDragDropCommand.DOF, SetAlternateGameObjectDragDropCommand, GameObjectDragDropCommand.DOF);
             menu.AddItem(new GUIContent("GameObject Drag-n-Drop/Alt-Key/SetActive(GameObject,true)"), alternateGameObjectDragDropCommand == GameObjectDragDropCommand.SetActiveTrue, SetAlternateGameObjectDragDropCommand, GameObjectDragDropCommand.SetActiveTrue);
             menu.AddItem(new GUIContent("GameObject Drag-n-Drop/Alt-Key/SetActive(GameObject,false)"), alternateGameObjectDragDropCommand == GameObjectDragDropCommand.SetActiveFalse, SetAlternateGameObjectDragDropCommand, GameObjectDragDropCommand.SetActiveFalse);
+            menu.AddItem(new GUIContent("GameObject Drag-n-Drop/Alt-Key/(Do Nothing)"), alternateGameObjectDragDropCommand == GameObjectDragDropCommand.Nothing, SetAlternateGameObjectDragDropCommand, GameObjectDragDropCommand.Nothing);
             menu.AddItem(new GUIContent("Component Drag-n-Drop/Default/SetEnabled(Component,true,GameObject)"), componentDragDropCommand == ComponentDragDropCommand.SetEnabledTrue, SetComponentDragDropCommand, ComponentDragDropCommand.SetEnabledTrue);
             menu.AddItem(new GUIContent("Component Drag-n-Drop/Default/SetEnabled(Component,false,GameObject)"), componentDragDropCommand == ComponentDragDropCommand.SetEnabledFalse, SetComponentDragDropCommand, ComponentDragDropCommand.SetEnabledFalse);
+            menu.AddItem(new GUIContent("Component Drag-n-Drop/Default/(Do Nothing)"), componentDragDropCommand == ComponentDragDropCommand.Nothing, SetComponentDragDropCommand, ComponentDragDropCommand.Nothing);
             menu.AddItem(new GUIContent("Component Drag-n-Drop/Alt-Key/SetEnabled(Component,true,GameObject)"), alternateComponentDragDropCommand == ComponentDragDropCommand.SetEnabledTrue, SetAlternateComponentDragDropCommand, ComponentDragDropCommand.SetEnabledTrue);
             menu.AddItem(new GUIContent("Component Drag-n-Drop/Alt-Key/SetEnabled(Component,false,GameObject)"), alternateComponentDragDropCommand == ComponentDragDropCommand.SetEnabledFalse, SetAlternateComponentDragDropCommand, ComponentDragDropCommand.SetEnabledFalse);
+            menu.AddItem(new GUIContent("Component Drag-n-Drop/Alt-Key/(Do Nothing)"), alternateComponentDragDropCommand == ComponentDragDropCommand.Nothing, SetAlternateComponentDragDropCommand, ComponentDragDropCommand.Nothing);
             AddAllSequencerCommands(menu);
+            AddAllShortcuts(menu);
+            if (customSequenceMenuSetup != null) customSequenceMenuSetup(menu);
             menu.ShowAsContext();
         }
 
@@ -233,7 +293,7 @@ namespace PixelCrushers.DialogueSystem
 
         private static void ShowSequenceEditorAudioHelp(object data)
         {
-            EditorUtility.DisplayDialog("Audio Drag & Drop Help", "Select an item in this Audio submenu to specify which command to add when dragging an audio clip onto the Sequence field. Audio clips must be in a Resources folder. Audio commands can use AssetBundles, but not with this drag-n-drop feature.", "OK");
+            EditorUtility.DisplayDialog("Audio Drag & Drop Help", "Select an item in this Audio submenu to specify which command to add when dragging an audio clip onto the Sequence field. Audio clips must be in a Resources folder.\n\nAudio commands can use AssetBundles and Addressables, but not with this drag-n-drop feature.\n\nIf using LipSync(), to use drag-n-drop the LipSync data file and audio file must be named the same, and you must drag the audio file into the Sequence field, but the audio file doesn't have to be in Resources.", "OK");
         }
 
         private static void SetAudioDragDropCommand(object data)
@@ -245,6 +305,8 @@ namespace PixelCrushers.DialogueSystem
         {
             switch (audioDragDropCommand)
             {
+                case AudioDragDropCommand.Nothing:
+                    return string.Empty;
                 case AudioDragDropCommand.Audio:
                     return "Audio";
                 case AudioDragDropCommand.SALSA:
@@ -285,6 +347,8 @@ namespace PixelCrushers.DialogueSystem
                     return "SetActive(" + goName + ",true)";
                 case GameObjectDragDropCommand.SetActiveFalse:
                     return "SetActive(" + goName + ",false)";
+                case GameObjectDragDropCommand.Nothing:
+                    return string.Empty;
             }
         }
 
@@ -308,6 +372,8 @@ namespace PixelCrushers.DialogueSystem
                     return "SetEnabled(" + componentName + ",true," + goName + ")";
                 case ComponentDragDropCommand.SetEnabledFalse:
                     return "SetEnabled(" + componentName+ ",false," + goName + ")";
+                case ComponentDragDropCommand.Nothing:
+                    return string.Empty;
             }
         }
 
@@ -361,7 +427,16 @@ namespace PixelCrushers.DialogueSystem
 
         private static string AddCommandToSequence(string sequence, string newCommand)
         {
-            return sequence + (string.IsNullOrEmpty(sequence) ? string.Empty : ";\n") + newCommand;
+            var s = sequence;
+            if (!string.IsNullOrEmpty(sequence) && !sequence.TrimEnd().EndsWith(";"))
+            {
+                s += ";\n";
+            }
+            else if (!string.IsNullOrEmpty(sequence) && !sequence.EndsWith("\n"))
+            {
+                s += "\n";
+            }
+            return s + newCommand;
         }
 
         private static string GetResourceName(string path)
@@ -427,10 +502,36 @@ namespace PixelCrushers.DialogueSystem
             }
         }
 
+        private static void AddAllShortcuts(GenericMenu menu)
+        {
+            menu.AddItem(new GUIContent("Shortcuts/Help..."), false, OpenURL, "https://www.pixelcrushers.com/dialogue_system/manual2x/html/cutscene_sequences.html#shortcuts");
+            var list = new List<string>();
+            var allSequencerShortcuts = GameObject.FindObjectsOfType<SequencerShortcuts>();
+            foreach (var sequencerShortcuts in allSequencerShortcuts)
+            {
+                foreach (var shortcut in sequencerShortcuts.shortcuts)
+                {
+                    list.Add(@"{{" + shortcut.shortcut + @"}}");
+                }
+            }
+            list.Sort();
+            for (int i = 0; i < list.Count; i++)
+            {
+                menu.AddItem(new GUIContent("Shortcuts/" + list[i]), false, StartOtherCommand, list[i]);
+            }
+        }
+
         private static void StartSequencerCommand(object data)
         {
 
             otherCommandName = (string)data + "(";
+            SetMenuResult(MenuResult.OtherCommand);
+        }
+
+        private static void StartOtherCommand(object data)
+        {
+
+            otherCommandName = (string)data;
             SetMenuResult(MenuResult.OtherCommand);
         }
 
@@ -442,6 +543,11 @@ namespace PixelCrushers.DialogueSystem
                 Replace("{{default}}", "None()").
                 Replace("{{end}}", "0");
             sequenceToCheck = Regex.Replace(sequenceToCheck, @"\{\{.+\}\}", string.Empty);
+            if (string.IsNullOrEmpty(sequenceToCheck) ||
+                string.IsNullOrEmpty(sequenceToCheck.Replace(";", string.Empty).Trim()))
+            {
+                return SequenceSyntaxState.Valid;
+            }
             var parser = new SequenceParser();
             var result = parser.Parse(sequenceToCheck);
             return (result == null || result.Count == 0) ? SequenceSyntaxState.Error : SequenceSyntaxState.Valid; 

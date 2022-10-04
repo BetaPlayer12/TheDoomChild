@@ -74,6 +74,28 @@ namespace PixelCrushers.DialogueSystem
 
         private const string ExternalVersionControlVisibleMetaFiles = "Visible Meta Files";
 
+        private static string versionControlMode
+        {
+            get
+            {
+#if UNITY_2020_1_OR_NEWER
+                return VersionControlSettings.mode;
+#else
+                return EditorSettings.externalVersionControl;
+#endif
+            }
+            set
+            {
+#if UNITY_2020_1_OR_NEWER
+                VersionControlSettings.mode = value;
+#else
+                EditorSettings.externalVersionControl = value;
+#endif
+            }
+        }
+
+
+
         private static void UpdateNow()
         {
             if (!SaveCurrentScenes())
@@ -112,16 +134,16 @@ namespace PixelCrushers.DialogueSystem
             }
 
             // Visible meta files:
-            var originalExternalVersionControl = EditorSettings.externalVersionControl;
-            if (!EditorSettings.externalVersionControl.Equals(ExternalVersionControlVisibleMetaFiles))
+            var originalExternalVersionControl = versionControlMode;
+            if (!versionControlMode.Equals(ExternalVersionControlVisibleMetaFiles))
             {
                 cancel = EditorUtility.DisplayCancelableProgressBar(DialogTitle, "Switching Version Control Mode to Visible Meta Files. This may take a while.", 0);
                 Debug.Log("Dialogue System: Set version control mode to Visible Meta Files.");
-                EditorSettings.externalVersionControl = ExternalVersionControlVisibleMetaFiles;
+                versionControlMode = ExternalVersionControlVisibleMetaFiles;
                 if (cancel)
                 {
                     Debug.Log("Dialogue System: Update process cancelled. Serialization mode is " + EditorSettings.serializationMode + " and Version Control Mode is " +
-                        EditorSettings.externalVersionControl + ". To change these settings, use menu item Edit > Project Settings > Editor.");
+                        versionControlMode + ". To change these settings, use menu item Edit > Project Settings > Editor.");
                     return;
                 }
             }
@@ -176,7 +198,7 @@ namespace PixelCrushers.DialogueSystem
                     {
                         EditorUtility.DisplayProgressBar(DialogTitle, "Restoring original version control mode. This may take a while.", 0.995f);
                         Debug.Log("Dialogue System: Set version control mode to " + originalExternalVersionControl + ".");
-                        EditorSettings.externalVersionControl = originalExternalVersionControl;
+                        versionControlMode = originalExternalVersionControl;
                     }
                     EditorUtility.ClearProgressBar();
                     EditorUtility.DisplayDialog(DialogTitle, "Update complete. Please check your project thoroughly. If you notice any issues or have any questions, please contact us at support@pixelcrushers.com.", "OK");
@@ -304,6 +326,7 @@ new Pair("m_Script: {fileID: 2103386216, guid: b5a7519e94754fb4a8ea0c272031db78,
 new Pair("m_Script: {fileID: 153521277, guid: b5a7519e94754fb4a8ea0c272031db78, type: 3}","m_Script: {fileID: 11500000, guid: 85d7493b5ec1a4a489ede41c8064d254, type: 3}"),
 new Pair("m_Script: {fileID: -1553868166, guid: b5a7519e94754fb4a8ea0c272031db78, type: 3}","m_Script: {fileID: 11500000, guid: 82108a54a0154e54391e877dad198cf3, type: 3}"),
 new Pair("m_Script: {fileID: 739958932, guid: b5a7519e94754fb4a8ea0c272031db78, type: 3}", "m_Script: {fileID: 11500000, guid: 55b94953a9871c543bb857d69986bb28, type: 3}"),
+new Pair("m_Script: {fileID: 1906560132, guid: b5a7519e94754fb4a8ea0c272031db78, type: 3}", "m_Script: {fileID: 11500000, guid: 57491ef32a12c6c4a91e9e9d1df87eb9, type: 3}"),
 new Pair("m_Script: {fileID: -1280735392, guid: b5a7519e94754fb4a8ea0c272031db78, type: 3}","m_Script: {fileID: 11500000, guid: 770763badfe5e144fb5374a7dcab2789, type: 3}")
 };
 

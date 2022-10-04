@@ -1,5 +1,6 @@
 ﻿using DChild.Gameplay.Systems;
 using DChild.Temp;
+using Doozy.Runtime.UIManager.Containers;
 using Sirenix.OdinInspector;
 using TMPro;
 using UnityEngine;
@@ -8,6 +9,8 @@ namespace DChild.Gameplay.UI
 {
     public class CurrencyUI : SerializedMonoBehaviour
     {
+        [SerializeField]
+        private UIContainer m_addedCurrencyContainer;
         [SerializeField]
         private ICurrency m_currency;
         [SerializeField]
@@ -78,10 +81,9 @@ namespace DChild.Gameplay.UI
 
         private void OnAmountSet(object sender, CurrencyUpdateEventArgs eventArgs)
         {
-            
+
             m_currentAmountText.text = eventArgs.amount.ToString();
             m_currentAmount = eventArgs.amount;
-            // GameEventMessage.SendEvent("Soul Essence Notify");
         }
 
         private void OnAmountAdded(object sender, CurrencyUpdateEventArgs eventArgs)
@@ -89,7 +91,7 @@ namespace DChild.Gameplay.UI
             addedAmount += eventArgs.amount;
             m_delayTimer = m_addAmountDelay;
             m_delayAddingOfAmount = true;
-            GameplaySystem.gamplayUIHandle.ShowPromptSoulEssenceChangeNotify();
+            m_addedCurrencyContainer.Show(true);
             enabled = true;
             m_updateRateStack = 0;
             m_currentUpdateFactor = 1;
@@ -102,7 +104,7 @@ namespace DChild.Gameplay.UI
             if (m_addedAmountIsNegative)
             {
                 simulatedAddedAmount += m_currentUpdateFactor;
-                if(simulatedAddedAmount> 0)
+                if (simulatedAddedAmount > 0)
                 {
                     m_currentUpdateFactor -= simulatedAddedAmount;
                 }
@@ -159,7 +161,7 @@ namespace DChild.Gameplay.UI
                     if (stopUpdate)
                     {
                         enabled = false;
-                        GameplaySystem.gamplayUIHandle.ShowSoulEssenceNotify(false);
+                        m_addedCurrencyContainer.Hide();
                     }
                 }
 

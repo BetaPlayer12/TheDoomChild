@@ -140,7 +140,7 @@ namespace PixelCrushers.DialogueSystem
                 cameraAngle = null;
             }
 
-#if UNITY_2018_3_OR_NEWER
+#if UNITY_2018_3_OR_NEWER || UNITY_2019_1_OR_NEWER
             bool isPrefab = PrefabUtility.IsPartOfAnyPrefab(cameraAngleCollection);
 #else
             bool isPrefab = (PrefabUtility.GetPrefabType(cameraAngleCollection) == PrefabType.Prefab);
