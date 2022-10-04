@@ -1,6 +1,7 @@
 ﻿using Holysoft.Event;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace DChild.Gameplay.Trade.UI
 {
@@ -8,6 +9,9 @@ namespace DChild.Gameplay.Trade.UI
     {
         [SerializeField]
         private TextMeshProUGUI m_amountToTrade;
+
+        [SerializeField]
+        private Button m_button;
 
         private ITradeTransactionInfo m_transactionInfo;
 
@@ -21,6 +25,16 @@ namespace DChild.Gameplay.Trade.UI
         private void OnTransactionModified(object sender, EventActionArgs eventArgs)
         {
             m_amountToTrade.text = m_transactionInfo.count.ToString();
+
+            if (m_transactionInfo.count > 0)
+            {
+
+                m_button.interactable = true;
+            }
+            else
+            {
+                m_button.interactable = false;
+            }
         }
     }
 }
