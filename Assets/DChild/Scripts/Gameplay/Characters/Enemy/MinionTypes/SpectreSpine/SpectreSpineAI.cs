@@ -37,8 +37,20 @@ namespace DChild.Gameplay.Characters.Enemies
             private SimpleAttackInfo m_attack2 = new SimpleAttackInfo();
             public SimpleAttackInfo attack2 => m_attack2;
             [SerializeField, ValueDropdown("GetAnimations")]
+            private string m_preattack2;
+            public string preattack2 => m_preattack2;
+            [SerializeField, ValueDropdown("GetAnimations")]
+            private string m_postattack2;
+            public string postattack2 => m_postattack2;
+            [SerializeField, ValueDropdown("GetAnimations")]
             private string m_attack2Anticipation;
             public string attack2Anticipation => m_attack2Anticipation;
+            [SerializeField, ValueDropdown("GetAnimations")]
+            private string m_attack2preAnticipation;
+            public string attack2preAnticipation => m_attack2preAnticipation;
+            [SerializeField, ValueDropdown("GetAnimations")]
+            private string m_attack2postAnticipation;
+            public string attack2postAnticipation => m_attack2postAnticipation;
             [SerializeField]
             private float m_attackCD;
             public float attackCD => m_attackCD;
@@ -63,9 +75,6 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField, ValueDropdown("GetAnimations")]
             private string m_flinchAnimation;
             public string flinchAnimation => m_flinchAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_counterFlinchAnimation;
-            public string counterFlinchAnimation => m_counterFlinchAnimation;
             [SerializeField, ValueDropdown("GetAnimations")]
             private string m_fadeInAnimation;
             public string fadeInAnimation => m_fadeInAnimation;
@@ -196,11 +205,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 {
                     CustomTurn();
                 }
-                if (m_animation.GetCurrentAnimation(0).ToString() == m_info.attack1.animation
-                    || m_animation.GetCurrentAnimation(0).ToString() == m_info.attack2Anticipation)
-                {
-                    StartCoroutine(CounterFlinchRoutine());
-                }
+               
                 else
                 {
                     StartCoroutine(FlinchRoutine());
@@ -213,39 +218,13 @@ namespace DChild.Gameplay.Characters.Enemies
             m_hitbox.gameObject.SetActive(false);
             m_animation.SetAnimation(0, m_info.flinchAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.flinchAnimation);
-            m_animation.SetAnimation(0, m_info.fadeOutAnimation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.fadeOutAnimation);
-            yield return new WaitForSeconds(2);
-            var random = UnityEngine.Random.Range(0, 2);
-            transform.position = new Vector2(m_targetInfo.position.x + (IsFacingTarget() ? -5 : 5), m_targetInfo.position.y);
-            if (!IsFacingTarget())
-            {
-                CustomTurn();
-            }
-            m_animation.SetAnimation(0, m_info.fadeInAnimation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.fadeInAnimation);
             m_hitbox.gameObject.SetActive(true);
-            m_animation.SetAnimation(0, m_info.attack2.animation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack2.animation);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_stateHandle.ApplyQueuedState();
             yield return null;
         }
 
-        private IEnumerator CounterFlinchRoutine()
-        {
-            m_animation.EnableRootMotion(true, true);
-            m_animation.SetAnimation(0, m_info.counterFlinchAnimation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.counterFlinchAnimation);
-            if (!IsFacingTarget())
-            {
-                CustomTurn();
-            }
-            m_animation.SetAnimation(0, m_info.detectAnimation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.detectAnimation);
-            ExecuteAttack(Attack.Attack2);
-            yield return null;
-        }
+        
 
         private void OnFlinchEnd(object sender, EventActionArgs eventArgs)
         {
@@ -316,9 +295,26 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator Attack2Routine()
         {
+            m_animation.SetAnimation(0, m_info.attack2preAnticipation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack2preAnticipation);
             m_animation.SetAnimation(0, m_info.attack2Anticipation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack2Anticipation);
+            Vector3 targ = m_targetInfo.transform.position;
+            Vector3 objectPos = transform.position;
+            targ.x = m_targetInfo.position.x - objectPos.x;
+            targ.y = m_targetInfo.position.y - objectPos.y;
+
+            float angle = Mathf.Atan2(targ.y, targ.x) * Mathf.Rad2Deg;
+            transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
+            m_animation.SetAnimation(0, m_info.attack2postAnticipation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack2postAnticipation);
             m_hitbox.gameObject.SetActive(false);
+            m_animation.SetAnimation(0, m_info.preattack2, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.preattack2);
+            m_animation.SetAnimation(0, m_info.attack2.animation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack2.animation);
+            m_animation.SetAnimation(0, m_info.postattack2, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.postattack2);
             var random = UnityEngine.Random.Range(0, 2);
             transform.position = new Vector2(m_targetInfo.position.x + (random == 0 ? 5 : -5), m_targetInfo.position.y);
             yield return new WaitForSeconds(1);
@@ -327,8 +323,6 @@ namespace DChild.Gameplay.Characters.Enemies
                 CustomTurn();
             }
             m_hitbox.gameObject.SetActive(true);
-            m_animation.SetAnimation(0, m_info.attack2.animation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack2.animation);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_selfCollider.SetActive(false);
             m_stateHandle.ApplyQueuedState();
@@ -514,23 +508,7 @@ namespace DChild.Gameplay.Characters.Enemies
             }
         }
 
-        //private void DynamicMovement(Vector2 target)
-        //{
-        //    if (IsFacingTarget())
-        //    {
-        //        var velocityX = GetComponent<IsolatedPhysics2D>().velocity.x;
-        //        var velocityY = GetComponent<IsolatedPhysics2D>().velocity.y;
-        //        m_agent.SetDestination(target);
-        //        m_agent.Move(m_info.move.speed);
-
-        //        m_animation.SetAnimation(0, m_info.move.animation, true);
-        //    }
-        //    else
-        //    {
-        //        m_turnState = State.Attacking;
-        //        m_stateHandle.OverrideState(State.Turning);
-        //    }
-        //}
+       
         #endregion
 
         protected override void Start()
