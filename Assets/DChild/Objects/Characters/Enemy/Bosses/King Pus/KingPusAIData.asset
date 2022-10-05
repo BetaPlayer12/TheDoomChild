@@ -16,11 +16,12 @@ MonoBehaviour:
     SerializedFormat: 2
     SerializedBytes: 
     ReferencedUnityObjects:
-    - {fileID: 11400000, guid: 9ee028f4518a65349b24413dcd450378, type: 2}
+    - {fileID: 11400000, guid: f0ec0aa80195ea04e98903a36d8293c9, type: 2}
     - {fileID: 11400000, guid: 26e234e7ac79c984d8d294bc2ec41ddc, type: 2}
     - {fileID: 11400000, guid: 2ee415d09f4ee074c8fe273f795bf727, type: 2}
     - {fileID: 11400000, guid: bd667643329d18e4b9095204517092c6, type: 2}
-    - {fileID: 8812716407408811161, guid: 20ca0934f51f2b240ba43ad07562b9dc, type: 3}
+    - {fileID: 8812716407408811161, guid: 4540085e516ceee4e99278738e94f821, type: 3}
+    - {fileID: 8812716407408811161, guid: cdee02e0c5a3bea46b10672149e384de, type: 3}
     SerializedBytesString: 
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
@@ -183,7 +184,7 @@ MonoBehaviour:
       Data: Move_left
     - Name: m_speed
       Entry: 4
-      Data: 0
+      Data: 15
     - Name: 
       Entry: 8
       Data: 
@@ -196,7 +197,7 @@ MonoBehaviour:
       Data: Move_right
     - Name: m_speed
       Entry: 4
-      Data: 0
+      Data: 15
     - Name: 
       Entry: 8
       Data: 
@@ -206,10 +207,10 @@ MonoBehaviour:
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
-      Data: Attack_Tentaspear crawl_Left
+      Data: Attack_Tentaspear crawl_Left_inplace
     - Name: m_speed
       Entry: 4
-      Data: 0
+      Data: 75
     - Name: 
       Entry: 8
       Data: 
@@ -219,19 +220,28 @@ MonoBehaviour:
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
-      Data: Attack_Tentaspear crawl_Right
+      Data: Attack_Tentaspear crawl_Right_inplace
     - Name: m_speed
       Entry: 4
-      Data: 0
+      Data: 75
     - Name: 
       Entry: 8
       Data: 
+    - Name: m_tentaSpearCrawlLeftAnticipationAnimation
+      Entry: 1
+      Data: Attack_Tentaspear crawl_Left_Anticipation
+    - Name: m_tentaSpearCrawlRightAnticipationAnimation
+      Entry: 1
+      Data: Attack_Tentaspear crawl_Right_Anticipation
     - Name: m_tentacleSpeed
       Entry: 4
       Data: 3
     - Name: m_toTargetRetractSpeed
       Entry: 4
       Data: 250
+    - Name: m_wreckingBallSpeed
+      Entry: 4
+      Data: 500
     - Name: m_grappleWidth
       Entry: 7
       Data: UnityEngine.Vector2, UnityEngine.CoreModule
@@ -247,119 +257,89 @@ MonoBehaviour:
     - Name: m_bodySlamCount
       Entry: 3
       Data: 3
-    - Name: m_heavyGroundStabLeftAttacks
+    - Name: m_wreckingBallCount
+      Entry: 3
+      Data: 10
+    - Name: m_groundStabCount
+      Entry: 3
+      Data: 3
+    - Name: m_groundStabStuckDuration
+      Entry: 4
+      Data: 1
+    - Name: m_spikeSpitCount
+      Entry: 4
+      Data: 3
+    - Name: m_spikeShowerCount
       Entry: 7
-      Data: 11|System.Collections.Generic.List`1[[DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.KingPusAI+Info,
-        Assembly-CSharp]], Assembly-CSharp]], mscorlib
+      Data: 11|System.Collections.Generic.List`1[[System.Int32, mscorlib]], mscorlib
     - Name: 
       Entry: 12
-      Data: 3
+      Data: 2
     - Name: 
+      Entry: 3
+      Data: 4
+    - Name: 
+      Entry: 3
+      Data: 5
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: m_heavyGroundStabLeftAttack
       Entry: 7
       Data: 12|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.KingPusAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
-      Data: Attack_Heavy Ground Stab_1_Left
+      Data: Attack_Heavy Ground Stab_IK_Left_Stab
     - Name: m_range
       Entry: 4
       Data: 25
     - Name: 
       Entry: 8
       Data: 
-    - Name: 
+    - Name: m_heavyGroundStabRightAttack
       Entry: 7
       Data: 13|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.KingPusAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
-      Data: Attack_Heavy Ground Stab_2_Left
+      Data: Attack_Heavy Ground Stab_IK_Right_Stab
     - Name: m_range
       Entry: 4
       Data: 25
     - Name: 
       Entry: 8
       Data: 
-    - Name: 
-      Entry: 7
-      Data: 14|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.KingPusAI+Info,
-        Assembly-CSharp]], Assembly-CSharp
-    - Name: m_animation
+    - Name: m_heavyGroundStabLoopLeftAnimation
       Entry: 1
-      Data: Attack_Heavy Ground Stab_3_Left
-    - Name: m_range
-      Entry: 4
-      Data: 25
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: m_heavyGroundStabRightAttacks
-      Entry: 7
-      Data: 15|System.Collections.Generic.List`1[[DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.KingPusAI+Info,
-        Assembly-CSharp]], Assembly-CSharp]], mscorlib
-    - Name: 
-      Entry: 12
-      Data: 3
-    - Name: 
-      Entry: 7
-      Data: 16|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.KingPusAI+Info,
-        Assembly-CSharp]], Assembly-CSharp
-    - Name: m_animation
+      Data: Attack_Heavy Ground Stab_IK_Left_Stab Loop
+    - Name: m_heavyGroundStabLoopRightAnimation
       Entry: 1
-      Data: Attack_Heavy Ground Stab_1_Right
-    - Name: m_range
-      Entry: 4
-      Data: 25
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 17|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.KingPusAI+Info,
-        Assembly-CSharp]], Assembly-CSharp
-    - Name: m_animation
-      Entry: 1
-      Data: Attack_Heavy Ground Stab_2_Right
-    - Name: m_range
-      Entry: 4
-      Data: 25
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 18|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.KingPusAI+Info,
-        Assembly-CSharp]], Assembly-CSharp
-    - Name: m_animation
-      Entry: 1
-      Data: Attack_Heavy Ground Stab_3_Right
-    - Name: m_range
-      Entry: 4
-      Data: 25
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
+      Data: Attack_Heavy Ground Stab_IK_Right_Stab Loop
     - Name: m_heavyGroundStabAnticipationLeftAnimation
       Entry: 1
-      Data: Attack_Heavy Ground Stab_Anticipation_Left
+      Data: Attack_Heavy Ground Stab_IK_Left_Anticipation
+    - Name: m_heavyGroundStabAnticipationLoopLeftAnimation
+      Entry: 1
+      Data: Attack_Heavy Ground Stab_IK_Left_Anticipation Loop
     - Name: m_heavyGroundStabAnticipationRightAnimation
       Entry: 1
-      Data: Attack_Heavy Ground Stab_Anticipation_Right
+      Data: Attack_Heavy Ground Stab_IK_Right_Anticipation
+    - Name: m_heavyGroundStabAnticipationLoopRightAnimation
+      Entry: 1
+      Data: Attack_Heavy Ground Stab_IK_Right_Anticipation Loop
+    - Name: m_heavyGroundStabReturnLeftAnimation
+      Entry: 1
+      Data: Attack_Heavy Ground Stab_IK_Left_return
+    - Name: m_heavyGroundStabReturnRightAnimation
+      Entry: 1
+      Data: Attack_Heavy Ground Stab_IK_Right_return
     - Name: m_heavySpearStabLeftAttack
       Entry: 7
-      Data: 19|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.KingPusAI+Info,
+      Data: 14|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.KingPusAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
@@ -372,7 +352,7 @@ MonoBehaviour:
       Data: 
     - Name: m_heavySpearStabRightAttack
       Entry: 7
-      Data: 20|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.KingPusAI+Info,
+      Data: 15|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.KingPusAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
@@ -383,9 +363,12 @@ MonoBehaviour:
     - Name: 
       Entry: 8
       Data: 
+    - Name: m_krakenRageDuration
+      Entry: 4
+      Data: 3
     - Name: m_krakenRageAttack
       Entry: 7
-      Data: 21|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.KingPusAI+Info,
+      Data: 16|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.KingPusAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
@@ -404,14 +387,14 @@ MonoBehaviour:
       Data: Attack_Kraken Rage_End
     - Name: m_spikeSpitterAttacks
       Entry: 7
-      Data: 22|System.Collections.Generic.List`1[[DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.KingPusAI+Info,
+      Data: 17|System.Collections.Generic.List`1[[DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.KingPusAI+Info,
         Assembly-CSharp]], Assembly-CSharp]], mscorlib
     - Name: 
       Entry: 12
       Data: 2
     - Name: 
       Entry: 7
-      Data: 23|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.KingPusAI+Info,
+      Data: 18|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.KingPusAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
@@ -424,7 +407,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 24|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.KingPusAI+Info,
+      Data: 19|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.KingPusAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
@@ -443,7 +426,7 @@ MonoBehaviour:
       Data: 
     - Name: m_spikeSpitterExtendAnimations
       Entry: 7
-      Data: 25|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+      Data: 20|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
     - Name: 
       Entry: 12
       Data: 2
@@ -459,47 +442,21 @@ MonoBehaviour:
     - Name: 
       Entry: 8
       Data: 
-    - Name: m_spikeSpitterExtractAnimations
+    - Name: m_spikeSpitterRetractAnimations
       Entry: 7
-      Data: 26|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+      Data: 21|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
     - Name: 
       Entry: 12
       Data: 2
     - Name: 
       Entry: 1
-      Data: Attack_Spike Spitter 1_Extract
+      Data: Attack_Spike Spitter 1_Retract
     - Name: 
       Entry: 1
-      Data: Attack_Spike Spitter 2_Extract
+      Data: Attack_Spike Spitter 2_Retract
     - Name: 
       Entry: 13
       Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: m_bodySlamGroundNearAttack
-      Entry: 7
-      Data: 27|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.KingPusAI+Info,
-        Assembly-CSharp]], Assembly-CSharp
-    - Name: m_animation
-      Entry: 1
-      Data: Body Slam_Ground_Near
-    - Name: m_range
-      Entry: 4
-      Data: 100
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: m_bodySlamGroundFarAttack
-      Entry: 7
-      Data: 28|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.KingPusAI+Info,
-        Assembly-CSharp]], Assembly-CSharp
-    - Name: m_animation
-      Entry: 1
-      Data: Body Slam_Ground_Far
-    - Name: m_range
-      Entry: 4
-      Data: 100
     - Name: 
       Entry: 8
       Data: 
@@ -508,7 +465,7 @@ MonoBehaviour:
       Data: 200
     - Name: m_phase1Pattern1Range
       Entry: 4
-      Data: 100
+      Data: 50
     - Name: m_phase1Pattern2Range
       Entry: 4
       Data: 100
@@ -520,7 +477,7 @@ MonoBehaviour:
       Data: 100
     - Name: m_phase2Pattern1Range
       Entry: 4
-      Data: 100
+      Data: 50
     - Name: m_phase2Pattern2Range
       Entry: 4
       Data: 100
@@ -559,7 +516,7 @@ MonoBehaviour:
       Data: 100
     - Name: m_phase1PatternCooldown
       Entry: 7
-      Data: 29|System.Collections.Generic.List`1[[System.Single, mscorlib]], mscorlib
+      Data: 22|System.Collections.Generic.List`1[[System.Single, mscorlib]], mscorlib
     - Name: 
       Entry: 12
       Data: 4
@@ -583,7 +540,7 @@ MonoBehaviour:
       Data: 
     - Name: m_phase2PatternCooldown
       Entry: 7
-      Data: 30|System.Collections.Generic.List`1[[System.Single, mscorlib]], mscorlib
+      Data: 23|System.Collections.Generic.List`1[[System.Single, mscorlib]], mscorlib
     - Name: 
       Entry: 12
       Data: 6
@@ -613,7 +570,7 @@ MonoBehaviour:
       Data: 
     - Name: m_phase3PatternCooldown
       Entry: 7
-      Data: 31|System.Collections.Generic.List`1[[System.Single, mscorlib]], mscorlib
+      Data: 24|System.Collections.Generic.List`1[[System.Single, mscorlib]], mscorlib
     - Name: 
       Entry: 12
       Data: 7
@@ -655,7 +612,7 @@ MonoBehaviour:
       Data: Flinchcolor
     - Name: m_grappleEvadeHitCount
       Entry: 3
-      Data: 0
+      Data: 18
     - Name: m_phase1MixAnimation
       Entry: 1
       Data: Phase 1
@@ -673,10 +630,10 @@ MonoBehaviour:
       Data: Rage quake Phase2 to Phase3
     - Name: m_wallGrappleAnimations
       Entry: 7
-      Data: 32|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+      Data: 25|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
     - Name: 
       Entry: 12
-      Data: 8
+      Data: 7
     - Name: 
       Entry: 1
       Data: Wall_Grappler_1
@@ -699,9 +656,6 @@ MonoBehaviour:
       Entry: 1
       Data: Wall_Grappler_7
     - Name: 
-      Entry: 1
-      Data: Wall_Grappler_4
-    - Name: 
       Entry: 13
       Data: 
     - Name: 
@@ -709,10 +663,10 @@ MonoBehaviour:
       Data: 
     - Name: m_wallGrappleExtendAnimations
       Entry: 7
-      Data: 33|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+      Data: 26|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
     - Name: 
       Entry: 12
-      Data: 8
+      Data: 7
     - Name: 
       Entry: 1
       Data: Wall_Grappler_1_Extend
@@ -735,9 +689,6 @@ MonoBehaviour:
       Entry: 1
       Data: Wall_Grappler_7_Extend
     - Name: 
-      Entry: 1
-      Data: Wall_Grappler_4_Extend
-    - Name: 
       Entry: 13
       Data: 
     - Name: 
@@ -745,10 +696,10 @@ MonoBehaviour:
       Data: 
     - Name: m_wallGrappleRetractAnimations
       Entry: 7
-      Data: 34|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+      Data: 27|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
     - Name: 
       Entry: 12
-      Data: 8
+      Data: 7
     - Name: 
       Entry: 1
       Data: Wall_Grapple_1_Retract
@@ -770,9 +721,6 @@ MonoBehaviour:
     - Name: 
       Entry: 1
       Data: Wall_Grappler_7_Retract
-    - Name: 
-      Entry: 1
-      Data: Wall_Grappler_4_Retract
     - Name: 
       Entry: 13
       Data: 
@@ -809,28 +757,65 @@ MonoBehaviour:
     - Name: m_deathSelfDestructAnimation
       Entry: 1
       Data: Death_Self Destruct
-    - Name: m_projectile
+    - Name: m_bodySlamStart
+      Entry: 1
+      Data: Body Slam_Anticipation
+    - Name: m_bodySlamLoop
+      Entry: 1
+      Data: Body Slam_Mid-air_loop
+    - Name: m_bodySlamEnd
+      Entry: 1
+      Data: Body Slam_Slam
+    - Name: m_ballisticProjectile
       Entry: 7
-      Data: 35|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleProjectileAttackInfo[[DChild.Gameplay.Characters.Enemies.KingPusAI+Info,
+      Data: 28|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleProjectileAttackInfo[[DChild.Gameplay.Characters.Enemies.KingPusAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
-      Entry: 1
-      Data: Attack_Spike Spitter 2_Shoot
-    - Name: m_launchOnEvent
       Entry: 6
       Data: 
+    - Name: m_launchOnEvent
+      Entry: 1
+      Data: Multiple spitter projectile spawn
     - Name: m_range
       Entry: 4
-      Data: 100
+      Data: 200
     - Name: m_projectileInfo
       Entry: 7
-      Data: 36|DChild.Gameplay.Characters.ProjectileInfo, Assembly-CSharp
+      Data: 29|DChild.Gameplay.Characters.ProjectileInfo, Assembly-CSharp
     - Name: m_projectile
       Entry: 10
       Data: 4
     - Name: m_speed
       Entry: 4
       Data: 3
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: m_airProjectile
+      Entry: 7
+      Data: 30|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleProjectileAttackInfo[[DChild.Gameplay.Characters.Enemies.KingPusAI+Info,
+        Assembly-CSharp]], Assembly-CSharp
+    - Name: m_animation
+      Entry: 6
+      Data: 
+    - Name: m_launchOnEvent
+      Entry: 1
+      Data: Spitter porjectile spawn
+    - Name: m_range
+      Entry: 4
+      Data: 200
+    - Name: m_projectileInfo
+      Entry: 7
+      Data: 31|DChild.Gameplay.Characters.ProjectileInfo, Assembly-CSharp
+    - Name: m_projectile
+      Entry: 10
+      Data: 5
+    - Name: m_speed
+      Entry: 4
+      Data: 100
     - Name: 
       Entry: 8
       Data: 
@@ -846,9 +831,18 @@ MonoBehaviour:
     - Name: m_fx
       Entry: 6
       Data: 
-    - Name: m_dustLandEvent
-      Entry: 6
-      Data: 
+    - Name: m_moveEvent
+      Entry: 1
+      Data: Move
+    - Name: m_stopEvent
+      Entry: 1
+      Data: Stop
+    - Name: m_singleShotEvent
+      Entry: 1
+      Data: Spitter porjectile spawn
+    - Name: m_multiShotEvent
+      Entry: 1
+      Data: Multiple spitter projectile spawn
     - Name: 
       Entry: 8
       Data: 

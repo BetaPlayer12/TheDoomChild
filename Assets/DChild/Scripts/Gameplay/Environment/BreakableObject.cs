@@ -69,28 +69,29 @@ namespace DChild.Gameplay.Environment
         private Rigidbody2D[] m_leftOverDebris;
         private int m_sortingID;
 
+        [SerializeField]
+        private bool m_willRepairSelf;
+        [SerializeField]
+        private float m_selfRepairTime;
+        private float m_selfRepairTimer;
+
         public Type type => m_type;
 
         public void SetObjectState(bool isDestroyed)
         {
-            m_isDestroyed = isDestroyed;
-            if (m_isDestroyed == true)
+            if (isDestroyed)
             {
-                m_onDestroy?.Invoke();
-                if (m_createDebris)
-                {
-                    InstantiateDebris(m_debris);
-                }
+                BreakObject();
+                //m_object.Healed += ODamagaeableHeal;
             }
             else
             {
-                m_onFix?.Invoke();
-                if (m_createDebris)
-                {
-                    DestroyInstantiatedDebris();
-                }
+                RevertToFixState();
+                //m_object.Healed -= ODamagaeableHeal;
             }
         }
+
+    
 
         public void RecordForceReceived(Vector2 forceDirection, float force)
         {
@@ -132,8 +133,12 @@ namespace DChild.Gameplay.Environment
                 InstantiateDebris(m_debris);
             }
         }
+
+
+        [Button, HideInEditorMode, ShowIf("m_isDestroyed")]
         private void RevertToFixState()
         {
+            m_isDestroyed = false;
             m_onFix?.Invoke();
             if (m_createDebris)
             {
@@ -150,6 +155,11 @@ namespace DChild.Gameplay.Environment
         private void InstantiateDebris(AssetReferenceGameObject debris)
         {
             Addressables.InstantiateAsync(debris).Completed += OnDebrisSpawn;
+        }
+
+        private void ODamagaeableHeal(object sender, EventActionArgs eventArgs)
+        {
+            throw new NotImplementedException();
         }
 
         private void OnDebrisSpawn(AsyncOperationHandle<GameObject> obj)
@@ -220,9 +230,11 @@ namespace DChild.Gameplay.Environment
             SetObjectState(true);
         }
 
+
         private void Awake()
         {
             m_object.Destroyed += OnDestroyObject;
+
             if (TryGetComponent(out SortingHandle sortingHandle))
             {
                 m_sortingID = sortingHandle.sortingLayerID;
@@ -233,18 +245,25 @@ namespace DChild.Gameplay.Environment
             }
         }
 
-#if UNITY_EDITOR
-        [Button, HideInEditorMode, ShowIf("m_isDestroyed")]
-        private void FixObject()
-        {
-            m_isDestroyed = false;
-            m_onFix?.Invoke();
-            if (m_createDebris)
+        private void Update()
+        {            
+            if (m_willRepairSelf)
             {
-                DestroyInstantiatedDebris();
+                if (m_isDestroyed)
+                {
+                    m_selfRepairTimer += GameplaySystem.time.deltaTime;
+                    Debug.Log(m_selfRepairTimer);
+                    if (m_selfRepairTimer > m_selfRepairTime)
+                    {
+                        m_selfRepairTimer = 0;
+                        RevertToFixState();
+                    }
+                }   
             }
         }
 
+
+#if UNITY_EDITOR
         public void SetObjectStateDebug(bool isDestroyed)
         {
             m_isDestroyed = isDestroyed;

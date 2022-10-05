@@ -76,10 +76,10 @@ namespace DChild.Gameplay.Characters.Enemies
             private List<SimpleProjectileAttackInfo> m_projectiles;
             public List<SimpleProjectileAttackInfo> projectiles => m_projectiles;
 
-            //[Title("Events")]
-            //[SerializeField, ValueDropdown("GetEvents")]
-            //private string m_hitboxStartEvent;
-            //public string hitboxStartEvent => m_hitboxStartEvent;
+            [Title("Events")]
+            [SerializeField, ValueDropdown("GetEvents")]
+            private string m_bookSummonEvent;
+            public string bookSummonEvent => m_bookSummonEvent;
 
             public override void Initialize()
             {
@@ -372,7 +372,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_projectileLauncher.LaunchProjectile();
                     break;
                 case Attack.SummonAttack:
-                    m_summons[m_currentSummonID].SummonAt(new Vector2(m_lastTargetPos.x, m_lastTargetPos.y + 10f), m_targetInfo);
+                    m_summons[m_currentSummonID].SummonAt(m_currentSummonID == 0 ? (Vector2)transform.position : new Vector2(m_lastTargetPos.x, m_lastTargetPos.y + 10f), m_targetInfo);
                     break;
             }
         }
@@ -474,10 +474,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_currentMoveSpeed = UnityEngine.Random.Range(m_info.run.speed * .75f, m_info.run.speed * 1.25f);
             m_currentFullCD = UnityEngine.Random.Range(m_info.attackCD * .5f, m_info.attackCD * 2f);
 
-            //for (int i = 0; i < m_info.projectiles.Count; i++)
-            //{
-            //    m_spineEventListener.Subscribe(m_info.projectiles[i].launchOnEvent, LaunchAttack);
-            //}
+            m_spineEventListener.Subscribe(m_info.bookSummonEvent, LaunchAttack);
 
             if (!m_willPatrol)
             {
@@ -574,14 +571,12 @@ namespace DChild.Gameplay.Characters.Enemies
                             //m_attackRoutine = StartCoroutine(AttackRoutine());
                             break;
                         case Attack.SpellAttack:
-                            LaunchAttack();
                             m_attackHandle.ExecuteAttack(m_info.spellAttack.animation, m_info.idleAnimation);
                             //m_attackRoutine = StartCoroutine(AttackRoutine());
                             break;
                         case Attack.SummonAttack:
                             if (!m_minions[m_currentSummonID].gameObject.activeSelf)
                             {
-                                LaunchAttack();
                                 m_attackHandle.ExecuteAttack(m_info.summonAttack.animation, m_info.idleAnimation);
                             }
                             else

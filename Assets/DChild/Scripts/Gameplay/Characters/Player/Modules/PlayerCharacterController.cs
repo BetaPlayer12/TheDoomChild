@@ -364,7 +364,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     if (m_state.waitForBehaviour)
                         return;
 
-                    if (m_ledgeGrab?.IsDoable() ?? false) 
+                    if (m_ledgeGrab?.IsDoable() ?? false)
                     {
                         if (m_state.isAttacking == false)
                         {
@@ -585,12 +585,12 @@ namespace DChild.Gameplay.Characters.Players.Modules
             }
             else
             {
-               
+
 
                 if (m_state.canAttack)
                 {
                     #region MidAir Attacks
-                    if (m_input.earthShakerPressed)
+                    if (m_input.slashPressed && m_input.verticalInput < 0 && m_skills.IsModuleActive(PrimarySkill.EarthShaker))
                     {
                         if (m_state.isInShadowMode == false)
                         {
