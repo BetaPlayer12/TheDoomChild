@@ -46,15 +46,6 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Crouch"",
-                    ""type"": ""Button"",
-                    ""id"": ""2a23e5e6-034f-4eb7-9047-a8052e9a00fe"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
                     ""name"": ""Dash"",
                     ""type"": ""Button"",
                     ""id"": ""c45691ef-fb79-4a6a-a15e-dc3729121b18"",
@@ -76,15 +67,6 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""name"": ""Slash"",
                     ""type"": ""Button"",
                     ""id"": ""9d4ab075-e02d-4431-b650-e1d29cbed247"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""EarthShaker"",
-                    ""type"": ""Button"",
-                    ""id"": ""f157fa1c-dc90-4a05-ae1a-65432abdf41c"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -346,39 +328,6 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""bda03e02-9d8b-4045-a9a0-eb25c5bd64c7"",
-                    ""path"": ""<Keyboard>/s"",
-                    ""interactions"": ""Press(behavior=2)"",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard"",
-                    ""action"": ""Crouch"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""296d31e7-ea05-481c-bbe0-521f329b4b44"",
-                    ""path"": ""<Gamepad>/leftStick/down"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Gamepad"",
-                    ""action"": ""Crouch"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""a8078715-d9bf-475e-acf7-5753eebf0ca0"",
-                    ""path"": ""<DualShockGamepad>/leftStick/down"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""PS4"",
-                    ""action"": ""Crouch"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
                     ""id"": ""3934d723-e12c-4b59-92df-79a35981d2f2"",
                     ""path"": ""<Keyboard>/leftCtrl"",
                     ""interactions"": """",
@@ -574,105 +523,6 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""action"": ""Slash"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": ""PC"",
-                    ""id"": ""396b4b4c-a7bf-4985-8ae3-032b019ef2e6"",
-                    ""path"": ""ButtonWithOneModifier"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""EarthShaker"",
-                    ""isComposite"": true,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": ""modifier"",
-                    ""id"": ""591c33ae-3fdd-4aa2-b9f3-12f41c67cf00"",
-                    ""path"": ""<Keyboard>/s"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard"",
-                    ""action"": ""EarthShaker"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""button"",
-                    ""id"": ""5ce2cd19-6377-4021-82d6-9b464fde0915"",
-                    ""path"": ""<Mouse>/leftButton"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard"",
-                    ""action"": ""EarthShaker"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""Gamepad"",
-                    ""id"": ""1d9b22b4-9dc4-4198-97ac-943272bdb736"",
-                    ""path"": ""ButtonWithOneModifier"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""EarthShaker"",
-                    ""isComposite"": true,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": ""modifier"",
-                    ""id"": ""3a66f45d-df0b-4f38-b718-e1a1fceb8c33"",
-                    ""path"": ""<Gamepad>/leftStick/down"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Gamepad"",
-                    ""action"": ""EarthShaker"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""button"",
-                    ""id"": ""adff64df-9187-45f6-b843-10c7f3888e6f"",
-                    ""path"": ""<Gamepad>/buttonWest"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Gamepad"",
-                    ""action"": ""EarthShaker"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""PS4"",
-                    ""id"": ""d8f64fd7-108f-40eb-88f9-7afbdab5e310"",
-                    ""path"": ""ButtonWithOneModifier"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""EarthShaker"",
-                    ""isComposite"": true,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": ""modifier"",
-                    ""id"": ""d4009af0-9692-444d-b73d-35b3ff125a44"",
-                    ""path"": ""<DualShockGamepad>/leftStick/down"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""PS4"",
-                    ""action"": ""EarthShaker"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""button"",
-                    ""id"": ""aa8fb548-6a88-4c84-8f7a-9568534deea8"",
-                    ""path"": ""<DualShockGamepad>/buttonWest"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""PS4"",
-                    ""action"": ""EarthShaker"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
                 },
                 {
                     ""name"": """",
@@ -2103,11 +1953,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         m_Gameplay = asset.FindActionMap("Gameplay", throwIfNotFound: true);
         m_Gameplay_HorizontalInput = m_Gameplay.FindAction("HorizontalInput", throwIfNotFound: true);
         m_Gameplay_VerticalInput = m_Gameplay.FindAction("VerticalInput", throwIfNotFound: true);
-        m_Gameplay_Crouch = m_Gameplay.FindAction("Crouch", throwIfNotFound: true);
         m_Gameplay_Dash = m_Gameplay.FindAction("Dash", throwIfNotFound: true);
         m_Gameplay_Jump = m_Gameplay.FindAction("Jump", throwIfNotFound: true);
         m_Gameplay_Slash = m_Gameplay.FindAction("Slash", throwIfNotFound: true);
-        m_Gameplay_EarthShaker = m_Gameplay.FindAction("EarthShaker", throwIfNotFound: true);
         m_Gameplay_SlashHeld = m_Gameplay.FindAction("SlashHeld", throwIfNotFound: true);
         m_Gameplay_SlashReleased = m_Gameplay.FindAction("SlashReleased", throwIfNotFound: true);
         m_Gameplay_Interact = m_Gameplay.FindAction("Interact", throwIfNotFound: true);
@@ -2203,11 +2051,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
     private IGameplayActions m_GameplayActionsCallbackInterface;
     private readonly InputAction m_Gameplay_HorizontalInput;
     private readonly InputAction m_Gameplay_VerticalInput;
-    private readonly InputAction m_Gameplay_Crouch;
     private readonly InputAction m_Gameplay_Dash;
     private readonly InputAction m_Gameplay_Jump;
     private readonly InputAction m_Gameplay_Slash;
-    private readonly InputAction m_Gameplay_EarthShaker;
     private readonly InputAction m_Gameplay_SlashHeld;
     private readonly InputAction m_Gameplay_SlashReleased;
     private readonly InputAction m_Gameplay_Interact;
@@ -2231,11 +2077,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         public GameplayActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
         public InputAction @HorizontalInput => m_Wrapper.m_Gameplay_HorizontalInput;
         public InputAction @VerticalInput => m_Wrapper.m_Gameplay_VerticalInput;
-        public InputAction @Crouch => m_Wrapper.m_Gameplay_Crouch;
         public InputAction @Dash => m_Wrapper.m_Gameplay_Dash;
         public InputAction @Jump => m_Wrapper.m_Gameplay_Jump;
         public InputAction @Slash => m_Wrapper.m_Gameplay_Slash;
-        public InputAction @EarthShaker => m_Wrapper.m_Gameplay_EarthShaker;
         public InputAction @SlashHeld => m_Wrapper.m_Gameplay_SlashHeld;
         public InputAction @SlashReleased => m_Wrapper.m_Gameplay_SlashReleased;
         public InputAction @Interact => m_Wrapper.m_Gameplay_Interact;
@@ -2268,9 +2112,6 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @VerticalInput.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnVerticalInput;
                 @VerticalInput.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnVerticalInput;
                 @VerticalInput.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnVerticalInput;
-                @Crouch.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnCrouch;
-                @Crouch.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnCrouch;
-                @Crouch.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnCrouch;
                 @Dash.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnDash;
                 @Dash.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnDash;
                 @Dash.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnDash;
@@ -2280,9 +2121,6 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @Slash.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnSlash;
                 @Slash.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnSlash;
                 @Slash.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnSlash;
-                @EarthShaker.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnEarthShaker;
-                @EarthShaker.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnEarthShaker;
-                @EarthShaker.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnEarthShaker;
                 @SlashHeld.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnSlashHeld;
                 @SlashHeld.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnSlashHeld;
                 @SlashHeld.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnSlashHeld;
@@ -2344,9 +2182,6 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @VerticalInput.started += instance.OnVerticalInput;
                 @VerticalInput.performed += instance.OnVerticalInput;
                 @VerticalInput.canceled += instance.OnVerticalInput;
-                @Crouch.started += instance.OnCrouch;
-                @Crouch.performed += instance.OnCrouch;
-                @Crouch.canceled += instance.OnCrouch;
                 @Dash.started += instance.OnDash;
                 @Dash.performed += instance.OnDash;
                 @Dash.canceled += instance.OnDash;
@@ -2356,9 +2191,6 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @Slash.started += instance.OnSlash;
                 @Slash.performed += instance.OnSlash;
                 @Slash.canceled += instance.OnSlash;
-                @EarthShaker.started += instance.OnEarthShaker;
-                @EarthShaker.performed += instance.OnEarthShaker;
-                @EarthShaker.canceled += instance.OnEarthShaker;
                 @SlashHeld.started += instance.OnSlashHeld;
                 @SlashHeld.performed += instance.OnSlashHeld;
                 @SlashHeld.canceled += instance.OnSlashHeld;
@@ -2599,11 +2431,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
     {
         void OnHorizontalInput(InputAction.CallbackContext context);
         void OnVerticalInput(InputAction.CallbackContext context);
-        void OnCrouch(InputAction.CallbackContext context);
         void OnDash(InputAction.CallbackContext context);
         void OnJump(InputAction.CallbackContext context);
         void OnSlash(InputAction.CallbackContext context);
-        void OnEarthShaker(InputAction.CallbackContext context);
         void OnSlashHeld(InputAction.CallbackContext context);
         void OnSlashReleased(InputAction.CallbackContext context);
         void OnInteract(InputAction.CallbackContext context);

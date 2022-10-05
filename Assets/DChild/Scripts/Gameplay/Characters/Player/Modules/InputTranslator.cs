@@ -98,6 +98,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             if (enabled == true)
             {
                 verticalInput = value.Get<float>();
+                crouchHeld = value.Get<float>() == -1;
 
                 if (verticalInput < 1 && verticalInput > -1)
                 {
