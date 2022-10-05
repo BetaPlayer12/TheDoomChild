@@ -141,10 +141,12 @@ MonoBehaviour:
   m_turnHandle: {fileID: 1900045256330896994}
   m_movement: {fileID: 978252311567941299}
   m_deathHandle: {fileID: 5411171094896841058}
-  m_groundSensor: {fileID: 0}
   m_spineListener: {fileID: 5441232046212251300}
   m_projectilePoint: {fileID: 6550721798225414196}
   m_randomSpawnCollider: {fileID: 0}
+  m_rainProjectilePoint: {fileID: 0}
+  m_enragedSpikePoint: {fileID: 0}
+  m_fleshBombPoint: {fileID: 8627291657219165026}
 --- !u!114 &7549230405166149406
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -228,7 +230,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_animationTracks: []
   m_skeletonAnimation: {fileID: 7806926612254816276}
---- !u!60 &1849680021822946202
+--- !u!60 &1053031253012573898
 PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -473,10 +475,10 @@ MonoBehaviour:
   m_alphaBlendStrength: 0.5
   m_mixDuration: 1
   m_skeletonAnimation: {fileID: 7806926612254816276}
-  m_animation: Frankenstein_Idle2
-  m_idleAnimation: Frankenstein_Idle
-  m_enableFlinchColor: 0
-  m_flinchColorAnimation: 
+  m_animation: Flinch 1
+  m_idleAnimation: Idle_Float_1
+  m_enableFlinchColor: 1
+  m_flinchColorAnimation: Flinchcolor
 --- !u!1001 &673096846379147812
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -606,17 +608,17 @@ PrefabInstance:
     - target: {fileID: 222155854964381867, guid: ee2cdf6aa069aac4083bb1c2cc2cef9e,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 10.886536
+      value: 10.916855
       objectReference: {fileID: 0}
     - target: {fileID: 725118420031817013, guid: ee2cdf6aa069aac4083bb1c2cc2cef9e,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.25610957
+      value: -0.25959882
       objectReference: {fileID: 0}
     - target: {fileID: 725118420031817013, guid: ee2cdf6aa069aac4083bb1c2cc2cef9e,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.96664774
+      value: 0.96571654
       objectReference: {fileID: 0}
     - target: {fileID: 1621379862574258950, guid: ee2cdf6aa069aac4083bb1c2cc2cef9e,
         type: 3}
@@ -681,12 +683,12 @@ PrefabInstance:
     - target: {fileID: 4493284216601179846, guid: ee2cdf6aa069aac4083bb1c2cc2cef9e,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 4.486046
+      value: 5.3546333
       objectReference: {fileID: 0}
     - target: {fileID: 4493284216601179846, guid: ee2cdf6aa069aac4083bb1c2cc2cef9e,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 10.526337
+      value: 11.390945
       objectReference: {fileID: 0}
     - target: {fileID: 5411510951581040013, guid: ee2cdf6aa069aac4083bb1c2cc2cef9e,
         type: 3}
@@ -698,6 +700,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: PuedisYnnusModel
       objectReference: {fileID: 0}
+    - target: {fileID: 6926169368481515794, guid: ee2cdf6aa069aac4083bb1c2cc2cef9e,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 8.142498
+      objectReference: {fileID: 0}
+    - target: {fileID: 6926169368481515794, guid: ee2cdf6aa069aac4083bb1c2cc2cef9e,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 21.684761
+      objectReference: {fileID: 0}
     - target: {fileID: 8066229815059960181, guid: ee2cdf6aa069aac4083bb1c2cc2cef9e,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -706,10 +718,12 @@ PrefabInstance:
     - target: {fileID: 8066229815059960181, guid: ee2cdf6aa069aac4083bb1c2cc2cef9e,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 10.886536
+      value: 10.916855
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 6677454935433813879, guid: ee2cdf6aa069aac4083bb1c2cc2cef9e, type: 3}
+    - {fileID: 6728383338217491085, guid: ee2cdf6aa069aac4083bb1c2cc2cef9e, type: 3}
+    - {fileID: 5640574529560821702, guid: ee2cdf6aa069aac4083bb1c2cc2cef9e, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: ee2cdf6aa069aac4083bb1c2cc2cef9e, type: 3}
 --- !u!70 &8550613984746572494 stripped
 CapsuleCollider2D:
@@ -774,6 +788,12 @@ Transform:
 --- !u!4 &6550721798225414196 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5569871443343657540, guid: ee2cdf6aa069aac4083bb1c2cc2cef9e,
+    type: 3}
+  m_PrefabInstance: {fileID: 1703766202573455984}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &8627291657219165026 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6926169368481515794, guid: ee2cdf6aa069aac4083bb1c2cc2cef9e,
     type: 3}
   m_PrefabInstance: {fileID: 1703766202573455984}
   m_PrefabAsset: {fileID: 0}
