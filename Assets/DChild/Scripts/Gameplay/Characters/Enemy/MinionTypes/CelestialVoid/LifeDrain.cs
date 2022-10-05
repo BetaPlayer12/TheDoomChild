@@ -58,6 +58,8 @@ public class LifeDrain : MonoBehaviour
     }
     private void OnTriggerExit2D(Collider2D collision)
     {
+       
+        StopAllCoroutines();
         m_drainable = false;
         this.gameObject.GetComponent<Collider2D>().enabled = false;
         m_celestialVoidAI.DeActivateLifeDrain();
