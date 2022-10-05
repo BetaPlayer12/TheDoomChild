@@ -26,6 +26,8 @@ namespace DChild.Gameplay.Systems
         private SignalSender m_fullScreenNotifSignal;
         [SerializeField, BoxGroup("Full Screen Notifications")]
         private UIContainer m_primarySkillNotification;
+        [SerializeField, BoxGroup("Full Screen Notifications")]
+        private LoreInfoUI m_loreNotification;
 
 
         [SerializeField, BoxGroup("Merchant UI")]
@@ -41,8 +43,7 @@ namespace DChild.Gameplay.Systems
         private WorldMapHandler m_worldMap;
         [SerializeField]
         private NavigationMapManager m_navMap;
-        [SerializeField]
-        private LoreInfoUI m_loreUI;
+
 
         [BoxGroup("Side Notification")]
         [SerializeField, BoxGroup("Side Notification")]
@@ -124,18 +125,6 @@ namespace DChild.Gameplay.Systems
             //GameEventMessage.SendEvent("Notification");
         }
 
-        public void ShowQuickItem(bool willshow)
-        {
-            if (willshow == true)
-            {
-                GameEventMessage.SendEvent("QuickItem Show");
-            }
-            else
-            {
-                GameEventMessage.SendEvent("QuickItem Hide");
-            }
-        }
-
         public void ShowBossHealth(bool willshow)
         {
             if (willshow == true)
@@ -189,23 +178,6 @@ namespace DChild.Gameplay.Systems
             }
         }
 
-        public void ShowPromptSoulEssenceChangeNotify()
-        {
-            GameEventMessage.SendEvent("Soul Essence Added");
-        }
-
-        public void ShowPauseMenu(bool willshow)
-        {
-            if (willshow == true)
-            {
-                GameEventMessage.SendEvent("Pause Game");
-            }
-            else
-            {
-
-            }
-        }
-
         public void ShowGameOverScreen(bool willshow)
         {
             if (willshow == true)
@@ -251,8 +223,9 @@ namespace DChild.Gameplay.Systems
 
         public void ShowLoreNote(LoreData data)
         {
-            m_loreUI.SetInfo(data);
-            GameEventMessage.SendEvent("Show LoreNote");
+            m_loreNotification.SetInfo(data);
+            m_fullScreenNotifSignal.SendSignal();
+            m_loreNotification.Show();
         }
 
         public void PromptJournalUpdateNotification()

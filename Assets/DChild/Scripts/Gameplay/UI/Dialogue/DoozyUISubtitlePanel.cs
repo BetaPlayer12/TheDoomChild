@@ -117,8 +117,11 @@ namespace DChild.UI
 
         protected override void Awake()
         {
-            m_continueButtons.Add(m_continueUIButton);
-            m_continueUIButton.interactable = isActive;
+            if (m_continueUIButton)
+            {
+                m_continueButtons.Add(m_continueUIButton);
+                m_continueUIButton.interactable = isActive;
+            }
             m_container = GetComponent<UIContainer>();
             base.Awake();
         }

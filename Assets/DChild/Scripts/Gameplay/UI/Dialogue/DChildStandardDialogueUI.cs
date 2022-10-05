@@ -11,7 +11,15 @@ namespace DChild.UI
 {
     public class DChildStandardDialogueUI : StandardDialogueUI
     {
+        private enum DialogueType
+        {
+            None,
+            Banter,
+            Dialogue
+        }
         [Title("DChild Settings")]
+        [SerializeField, ReadOnly]
+        private DialogueType m_currentDialogueType;
         [SerializeField]
         private UIPanel m_dialoguePanel;
         [SerializeField]
@@ -33,9 +41,19 @@ namespace DChild.UI
             {
                 if (conversation.LookupBool("IsBanter"))
                 {
-                    conversationUIElements.mainPanel = m_banterPanel;
-                    conversationUIElements.defaultPCSubtitlePanel = m_banterSubtitlePanel;
-                    conversationUIElements.defaultNPCSubtitlePanel = m_banterSubtitlePanel;
+                    if (m_currentDialogueType != DialogueType.Banter)
+                    {
+                        DialogueManager.displaySettings.subtitleSettings.continueButton = DisplaySettings.SubtitleSettings.ContinueButtonMode.Never;
+                        conversationUIElements.mainPanel = m_banterPanel;
+                        conversationUIElements.defaultPCSubtitlePanel = m_banterSubtitlePanel;
+                        conversationUIElements.defaultNPCSubtitlePanel = m_banterSubtitlePanel;
+
+                        ResetConversationUIElements();
+
+                        m_currentDialogueType = DialogueType.Banter;
+                    }
+
+
                 }
                 else
                 {
@@ -45,9 +63,18 @@ namespace DChild.UI
                         GameplaySystem.gamplayUIHandle.ShowSequenceSkip(true);
                         m_skipUIShown = true;
                     }
-                    conversationUIElements.mainPanel = m_dialoguePanel;
-                    conversationUIElements.defaultPCSubtitlePanel = m_dialoguePCSubtitlePanel;
-                    conversationUIElements.defaultNPCSubtitlePanel = m_dialogueNPCSubtitlePanel;
+
+                    if (m_currentDialogueType != DialogueType.Dialogue)
+                    {
+                        DialogueManager.displaySettings.subtitleSettings.continueButton = DisplaySettings.SubtitleSettings.ContinueButtonMode.Always;
+                        conversationUIElements.mainPanel = m_dialoguePanel;
+                        conversationUIElements.defaultPCSubtitlePanel = m_dialoguePCSubtitlePanel;
+                        conversationUIElements.defaultNPCSubtitlePanel = m_dialogueNPCSubtitlePanel;
+
+                        ResetConversationUIElements();
+
+                        m_currentDialogueType = DialogueType.Dialogue;
+                    }
 
                     GameplaySystem.playerManager.DisableControls();
 
@@ -61,6 +88,13 @@ namespace DChild.UI
 
             base.Open();
 
+        }
+
+        private void ResetConversationUIElements()
+        {
+            conversationUIElements.ClearAllSubtitleText();
+            conversationUIElements.ClearCaches();
+            conversationUIElements.Initialize();
         }
 
         private void OnSkipExecute()

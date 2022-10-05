@@ -30,15 +30,11 @@ namespace DChild.Gameplay.Systems
 
         void ShowJournalNotificationPrompt(float duration);
         void PromptJournalUpdateNotification();
-
-        void ShowQuickItem(bool willshow);
         void ShowBossHealth(bool willshow);
         void RevealBossName();
         void ShowInteractionPrompt(bool willshow);
         void ShowMovableObjectPrompt(bool willshow);
         void ShowSoulEssenceNotify(bool willshow);
-        void ShowPromptSoulEssenceChangeNotify();
-        void ShowPauseMenu(bool willshow);
         void ShowGameOverScreen(bool willshow);
         void ShowItemAcquired(bool willshow);
         void ShowGameplayUI(bool willshow);

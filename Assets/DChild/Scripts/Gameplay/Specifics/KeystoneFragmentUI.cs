@@ -43,11 +43,18 @@ namespace DChild.Gameplay.Items
                 var info = m_infos[i];
                 if (command.isShown)
                 {
-                    info.view.Show(command.instantAction);
+                    if (command.instantAction)
+                    {
+                        info.view.InstantShow();
+                    }
+                    else
+                    {
+                        info.view.Show();
+                    }
                 }
                 else
                 {
-                    info.view.Hide(true);
+                    info.view.InstantHide();
                 }
             }
         }
@@ -56,7 +63,7 @@ namespace DChild.Gameplay.Items
         {
             for (int i = 0; i < m_commands.Length; i++)
             {
-                m_infos[i].view.Hide(true);
+                m_infos[i].view.InstantHide();
             }
         }
 

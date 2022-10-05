@@ -14,6 +14,8 @@ GameObject:
   - component: {fileID: 1725290012975682659}
   - component: {fileID: 6169031014949935385}
   - component: {fileID: 7085184902153295658}
+  - component: {fileID: 2662587765342466032}
+  - component: {fileID: 6106816995672048848}
   m_Layer: 0
   m_Name: View - Banter Panel
   m_TagString: Untagged
@@ -34,7 +36,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2615764344572537835}
-  - {fileID: 7270367280689935924}
   m_Father: {fileID: 8093573713464822129}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -124,10 +125,36 @@ MonoBehaviour:
   m_deactivateOnHidden: 1
   onOpen:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2662587765342466032}
+        m_TargetAssemblyTypeName: Doozy.Runtime.UIManager.Containers.UIContainer,
+          Assembly-CSharp
+        m_MethodName: Show
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   onClose:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2662587765342466032}
+        m_TargetAssemblyTypeName: Doozy.Runtime.UIManager.Containers.UIContainer,
+          Assembly-CSharp
+        m_MethodName: Hide
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   onClosed:
     m_PersistentCalls:
       m_Calls: []
@@ -170,6 +197,623 @@ MonoBehaviour:
   m_isFocusing: 1
   m_actorOverridingPanel: {fileID: 0}
   m_continueUIButton: {fileID: 0}
+--- !u!114 &2662587765342466032
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1701304339205128966}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b71aa88e9bf8432f89217a09c5a0b21c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MultiplayerInfo: {fileID: 0}
+  OnStartBehaviour: 1
+  OnShowCallback:
+    EventName: OnShowCallback
+    Runners: []
+    Event:
+      m_PersistentCalls:
+        m_Calls: []
+  OnVisibleCallback:
+    EventName: OnVisibleCallback
+    Runners: []
+    Event:
+      m_PersistentCalls:
+        m_Calls: []
+  OnHideCallback:
+    EventName: OnHideCallback
+    Runners: []
+    Event:
+      m_PersistentCalls:
+        m_Calls: []
+  OnHiddenCallback:
+    EventName: OnHiddenCallback
+    Runners: []
+    Event:
+      m_PersistentCalls:
+        m_Calls: []
+  OnVisibilityChangedCallback:
+    m_PersistentCalls:
+      m_Calls: []
+  ShowProgressors: []
+  HideProgressors: []
+  ShowHideProgressors: []
+  CustomStartPosition: {x: 0, y: 0, z: 0}
+  UseCustomStartPosition: 1
+  AutoHideAfterShow: 0
+  AutoHideAfterShowDelay: 0
+  DisableGameObjectWhenHidden: 0
+  DisableCanvasWhenHidden: 1
+  DisableGraphicRaycasterWhenHidden: 1
+  ClearSelectedOnShow: 0
+  ClearSelectedOnHide: 0
+  AutoSelectAfterShow: 0
+  AutoSelectTarget: {fileID: 0}
+--- !u!114 &6106816995672048848
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1701304339205128966}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f5ac75d8059442fe85fb36ebf07c1dee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Controller: {fileID: 2662587765342466032}
+  ShowAnimation:
+    OnPlayCallback:
+      m_PersistentCalls:
+        m_Calls: []
+    OnStopCallback:
+      m_PersistentCalls:
+        m_Calls: []
+    OnFinishCallback:
+      m_PersistentCalls:
+        m_Calls: []
+    AnimationType: 0
+    Move:
+      Settings:
+        PlayMode: 0
+        EaseMode: 0
+        Ease: 9
+        Curve:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 0
+            inSlope: -0.5398274
+            outSlope: -0.5398274
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0.024151811
+          - serializedVersion: 3
+            time: 0.5360872
+            value: 0.4861448
+            inSlope: -2.2521195
+            outSlope: -2.2521195
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0.020654876
+            outWeight: 0.33333334
+          - serializedVersion: 3
+            time: 1
+            value: 1
+            inSlope: 0.04207796
+            outSlope: 0.04207796
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0.5248393
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 4
+        StartDelay: 0
+        Duration: 0.4
+        Loops: 0
+        LoopDelay: 0
+        UseRandomStartDelay: 0
+        UseRandomDuration: 0
+        UseRandomLoops: 0
+        UseRandomLoopDelay: 0
+        RandomStartDelay:
+          MIN: 0
+          MAX: 1
+        RandomDuration:
+          MIN: 0
+          MAX: 1
+        RandomLoops:
+          MIN: 0
+          MAX: 1
+        RandomLoopDelay:
+          MIN: 0
+          MAX: 1
+        Strength: 1
+        Vibration: 8
+        Elasticity: 1
+        FadeOutShake: 0
+      FromValue: {x: 0, y: 1080, z: 0}
+      ToValue: {x: 0, y: 0, z: 0}
+      CurrentValue: {x: 0, y: 0, z: 0}
+      Enabled: 0
+      AnimationType: 0
+      StartPosition: {x: 0, y: 0, z: 0}
+      FromReferenceValue: 0
+      ToReferenceValue: 0
+      FromCustomValue: {x: 0, y: 0, z: 0}
+      ToCustomValue: {x: 0, y: 0, z: 0}
+      FromOffset: {x: 0, y: 0, z: 0}
+      ToOffset: {x: 0, y: 0, z: 0}
+      FromDirection: 1
+      ToDirection: 13
+    Rotate:
+      Settings:
+        PlayMode: 0
+        EaseMode: 0
+        Ease: 15
+        Curve:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 0
+            inSlope: -1.5918956
+            outSlope: -1.5918956
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0.027026983
+          - serializedVersion: 3
+            time: 1
+            value: 1
+            inSlope: -2.2672713
+            outSlope: -2.2672713
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0.04600376
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 4
+        StartDelay: 0
+        Duration: 0.5
+        Loops: 0
+        LoopDelay: 0
+        UseRandomStartDelay: 0
+        UseRandomDuration: 0
+        UseRandomLoops: 0
+        UseRandomLoopDelay: 0
+        RandomStartDelay:
+          MIN: 0
+          MAX: 1
+        RandomDuration:
+          MIN: 0
+          MAX: 1
+        RandomLoops:
+          MIN: 0
+          MAX: 1
+        RandomLoopDelay:
+          MIN: 0
+          MAX: 1
+        Strength: 1
+        Vibration: 8
+        Elasticity: 1
+        FadeOutShake: 0
+      FromValue: {x: 0, y: 0, z: 240}
+      ToValue: {x: 0, y: 0, z: 0}
+      CurrentValue: {x: -0, y: 0, z: 0}
+      Enabled: 0
+      StartRotation: {x: -0, y: 0, z: 0}
+      FromReferenceValue: 0
+      ToReferenceValue: 0
+      FromCustomValue: {x: 0, y: 0, z: 0}
+      ToCustomValue: {x: 0, y: 0, z: 0}
+      FromOffset: {x: 0, y: 0, z: 240}
+      ToOffset: {x: 0, y: 0, z: 0}
+    Scale:
+      Settings:
+        PlayMode: 0
+        EaseMode: 0
+        Ease: 27
+        Curve:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 0
+            inSlope: 0
+            outSlope: 0
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          - serializedVersion: 3
+            time: 1
+            value: 1
+            inSlope: 5.9879365
+            outSlope: 5.9879365
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0.022426665
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 4
+        StartDelay: 0
+        Duration: 0.4
+        Loops: 0
+        LoopDelay: 0
+        UseRandomStartDelay: 0
+        UseRandomDuration: 0
+        UseRandomLoops: 0
+        UseRandomLoopDelay: 0
+        RandomStartDelay:
+          MIN: 0
+          MAX: 1
+        RandomDuration:
+          MIN: 0
+          MAX: 1
+        RandomLoops:
+          MIN: 0
+          MAX: 1
+        RandomLoopDelay:
+          MIN: 0
+          MAX: 1
+        Strength: 1
+        Vibration: 8
+        Elasticity: 1
+        FadeOutShake: 0
+      FromValue: {x: 0, y: 0, z: 0}
+      ToValue: {x: 1, y: 1, z: 1}
+      CurrentValue: {x: 1, y: 1, z: 1}
+      Enabled: 0
+      StartScale: {x: 1, y: 1, z: 1}
+      FromReferenceValue: 2
+      ToReferenceValue: 0
+      FromCustomValue: {x: 0, y: 0, z: 0}
+      ToCustomValue: {x: 1, y: 1, z: 0}
+      FromOffset: {x: 0.1, y: 0.1, z: 0}
+      ToOffset: {x: 0, y: 0, z: 0}
+    Fade:
+      Settings:
+        PlayMode: 0
+        EaseMode: 0
+        Ease: 1
+        Curve:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 0
+            inSlope: 0
+            outSlope: 1
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          - serializedVersion: 3
+            time: 1
+            value: 1
+            inSlope: 1
+            outSlope: 0
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 4
+        StartDelay: 0
+        Duration: 0.5
+        Loops: 0
+        LoopDelay: 0
+        UseRandomStartDelay: 0
+        UseRandomDuration: 0
+        UseRandomLoops: 0
+        UseRandomLoopDelay: 0
+        RandomStartDelay:
+          MIN: 0
+          MAX: 1
+        RandomDuration:
+          MIN: 0
+          MAX: 1
+        RandomLoops:
+          MIN: 0
+          MAX: 1
+        RandomLoopDelay:
+          MIN: 0
+          MAX: 1
+        Strength: 1
+        Vibration: 8
+        Elasticity: 1
+        FadeOutShake: 0
+      FromValue: 0
+      ToValue: 1
+      CurrentValue: 1
+      Enabled: 1
+      StartAlpha: 1
+      FromReferenceValue: 2
+      ToReferenceValue: 0
+      FromCustomValue: 0
+      ToCustomValue: 1
+      FromOffset: 0
+      ToOffset: 1
+  HideAnimation:
+    OnPlayCallback:
+      m_PersistentCalls:
+        m_Calls: []
+    OnStopCallback:
+      m_PersistentCalls:
+        m_Calls: []
+    OnFinishCallback:
+      m_PersistentCalls:
+        m_Calls: []
+    AnimationType: 1
+    Move:
+      Settings:
+        PlayMode: 0
+        EaseMode: 0
+        Ease: 8
+        Curve:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 0
+            inSlope: 0
+            outSlope: 1
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          - serializedVersion: 3
+            time: 1
+            value: 1
+            inSlope: 1
+            outSlope: 0
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 4
+        StartDelay: 0.1
+        Duration: 0.4
+        Loops: 0
+        LoopDelay: 0
+        UseRandomStartDelay: 0
+        UseRandomDuration: 0
+        UseRandomLoops: 0
+        UseRandomLoopDelay: 0
+        RandomStartDelay:
+          MIN: 0
+          MAX: 1
+        RandomDuration:
+          MIN: 0
+          MAX: 1
+        RandomLoops:
+          MIN: 0
+          MAX: 1
+        RandomLoopDelay:
+          MIN: 0
+          MAX: 1
+        Strength: 1
+        Vibration: 8
+        Elasticity: 1
+        FadeOutShake: 0
+      FromValue: {x: 0, y: 0, z: 0}
+      ToValue: {x: 0, y: 1080, z: 0}
+      CurrentValue: {x: 0, y: 0, z: 0}
+      Enabled: 0
+      AnimationType: 1
+      StartPosition: {x: 0, y: 0, z: 0}
+      FromReferenceValue: 0
+      ToReferenceValue: 0
+      FromCustomValue: {x: 0, y: 0, z: 0}
+      ToCustomValue: {x: 0, y: 0, z: 0}
+      FromOffset: {x: 0, y: 0, z: 0}
+      ToOffset: {x: 0, y: 0, z: 0}
+      FromDirection: 13
+      ToDirection: 1
+    Rotate:
+      Settings:
+        PlayMode: 0
+        EaseMode: 0
+        Ease: 8
+        Curve:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 0
+            inSlope: 0
+            outSlope: 1
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          - serializedVersion: 3
+            time: 1
+            value: 1
+            inSlope: 1
+            outSlope: 0
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 4
+        StartDelay: 0
+        Duration: 0.3
+        Loops: 0
+        LoopDelay: 0
+        UseRandomStartDelay: 0
+        UseRandomDuration: 0
+        UseRandomLoops: 0
+        UseRandomLoopDelay: 0
+        RandomStartDelay:
+          MIN: 0
+          MAX: 1
+        RandomDuration:
+          MIN: 0
+          MAX: 1
+        RandomLoops:
+          MIN: 0
+          MAX: 1
+        RandomLoopDelay:
+          MIN: 0
+          MAX: 1
+        Strength: 1
+        Vibration: 8
+        Elasticity: 1
+        FadeOutShake: 0
+      FromValue: {x: 0, y: 0, z: 0}
+      ToValue: {x: 0, y: 0, z: 240}
+      CurrentValue: {x: -0, y: 0, z: 0}
+      Enabled: 0
+      StartRotation: {x: -0, y: 0, z: 0}
+      FromReferenceValue: 0
+      ToReferenceValue: 0
+      FromCustomValue: {x: 0, y: 0, z: 0}
+      ToCustomValue: {x: 0, y: 0, z: 0}
+      FromOffset: {x: 0, y: 0, z: 0}
+      ToOffset: {x: 0, y: 0, z: 240}
+    Scale:
+      Settings:
+        PlayMode: 0
+        EaseMode: 0
+        Ease: 26
+        Curve:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 0
+            inSlope: 0
+            outSlope: 1
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          - serializedVersion: 3
+            time: 1
+            value: 1
+            inSlope: 1
+            outSlope: 0
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 4
+        StartDelay: 0
+        Duration: 0.5
+        Loops: 0
+        LoopDelay: 0
+        UseRandomStartDelay: 0
+        UseRandomDuration: 0
+        UseRandomLoops: 0
+        UseRandomLoopDelay: 0
+        RandomStartDelay:
+          MIN: 0
+          MAX: 1
+        RandomDuration:
+          MIN: 0
+          MAX: 1
+        RandomLoops:
+          MIN: 0
+          MAX: 1
+        RandomLoopDelay:
+          MIN: 0
+          MAX: 1
+        Strength: 1
+        Vibration: 8
+        Elasticity: 1
+        FadeOutShake: 0
+      FromValue: {x: 1, y: 1, z: 1}
+      ToValue: {x: 0, y: 0, z: 0}
+      CurrentValue: {x: 1, y: 1, z: 1}
+      Enabled: 0
+      StartScale: {x: 1, y: 1, z: 1}
+      FromReferenceValue: 0
+      ToReferenceValue: 2
+      FromCustomValue: {x: 0, y: 0, z: 0}
+      ToCustomValue: {x: 0, y: 0, z: 0}
+      FromOffset: {x: 0, y: 0, z: 0}
+      ToOffset: {x: 0.4, y: 0.4, z: 0}
+    Fade:
+      Settings:
+        PlayMode: 0
+        EaseMode: 0
+        Ease: 1
+        Curve:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 0
+            inSlope: 0
+            outSlope: 1
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          - serializedVersion: 3
+            time: 1
+            value: 1
+            inSlope: 1
+            outSlope: 0
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 4
+        StartDelay: 0
+        Duration: 0.5
+        Loops: 0
+        LoopDelay: 0
+        UseRandomStartDelay: 0
+        UseRandomDuration: 0
+        UseRandomLoops: 0
+        UseRandomLoopDelay: 0
+        RandomStartDelay:
+          MIN: 0
+          MAX: 1
+        RandomDuration:
+          MIN: 0
+          MAX: 1
+        RandomLoops:
+          MIN: 0
+          MAX: 1
+        RandomLoopDelay:
+          MIN: 0
+          MAX: 1
+        Strength: 1
+        Vibration: 8
+        Elasticity: 1
+        FadeOutShake: 0
+      FromValue: 1
+      ToValue: 0
+      CurrentValue: 0
+      Enabled: 1
+      StartAlpha: 1
+      FromReferenceValue: 2
+      ToReferenceValue: 2
+      FromCustomValue: 1
+      ToCustomValue: 0
+      FromOffset: 0
+      ToOffset: 0
 --- !u!1 &2168647268746333877
 GameObject:
   m_ObjectHideFlags: 0
@@ -404,7 +1048,9 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 7270367280689935924}
   - {fileID: 5671316558769267709}
+  - {fileID: 6896645453675832185}
   m_Father: {fileID: 8450357915977343487}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -573,13 +1219,13 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5317343426360979456}
-  m_Father: {fileID: 8450357915977343487}
-  m_RootOrder: 1
+  m_Father: {fileID: 2615764344572537835}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 39.099976, y: -436.96497}
-  m_SizeDelta: {x: -606, y: -880.25}
+  m_AnchorMin: {x: 0.104740754, y: 0.35297674}
+  m_AnchorMax: {x: 0.2364108, y: 0.6068107}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: -0.00000071525574, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5818697817217339936
 CanvasRenderer:
@@ -722,6 +1368,232 @@ MonoBehaviour:
   onEnd:
     m_PersistentCalls:
       m_Calls: []
+--- !u!1 &5023267308139754225
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6896645453675832185}
+  - component: {fileID: 8985656829974955290}
+  - component: {fileID: 1263337019132321264}
+  - component: {fileID: 4005338236185957018}
+  m_Layer: 0
+  m_Name: Colon
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &6896645453675832185
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5023267308139754225}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 6040962913706566817}
+  m_Father: {fileID: 2615764344572537835}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.23641074, y: 0.35297674}
+  m_AnchorMax: {x: 0.24410783, y: 0.6068107}
+  m_AnchoredPosition: {x: 0.000030517578, y: 0}
+  m_SizeDelta: {x: 0.00005340576, y: -0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &8985656829974955290
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5023267308139754225}
+  m_CullTransparentMesh: 0
+--- !u!114 &1263337019132321264
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5023267308139754225}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 0
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_text: ':'
+  m_isRightToLeft: 0
+  m_fontAsset: {fileID: 11400000, guid: 03de9f858562ece4c9ac9d91b56d9ad5, type: 2}
+  m_sharedMaterial: {fileID: 21213444537982326, guid: 03de9f858562ece4c9ac9d91b56d9ad5,
+    type: 2}
+  m_fontSharedMaterials: []
+  m_fontMaterial: {fileID: 0}
+  m_fontMaterials: []
+  m_fontColor32:
+    serializedVersion: 2
+    rgba: 4289112256
+  m_fontColor: {r: 0.75294125, g: 0.65882355, b: 0.6509804, a: 1}
+  m_enableVertexGradient: 0
+  m_colorMode: 3
+  m_fontColorGradient:
+    topLeft: {r: 1, g: 1, b: 1, a: 1}
+    topRight: {r: 1, g: 1, b: 1, a: 1}
+    bottomLeft: {r: 1, g: 1, b: 1, a: 1}
+    bottomRight: {r: 1, g: 1, b: 1, a: 1}
+  m_fontColorGradientPreset: {fileID: 0}
+  m_spriteAsset: {fileID: 0}
+  m_tintAllSprites: 0
+  m_StyleSheet: {fileID: 0}
+  m_TextStyleHashCode: -1183493901
+  m_overrideHtmlColors: 0
+  m_faceColor:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_fontSize: 21
+  m_fontSizeBase: 36
+  m_fontWeight: 400
+  m_enableAutoSizing: 1
+  m_fontSizeMin: 18
+  m_fontSizeMax: 21
+  m_fontStyle: 1
+  m_HorizontalAlignment: 4
+  m_VerticalAlignment: 512
+  m_textAlignment: 65535
+  m_characterSpacing: 1.75
+  m_wordSpacing: 23.62
+  m_lineSpacing: 0
+  m_lineSpacingMax: 0
+  m_paragraphSpacing: 0
+  m_charWidthMaxAdj: 0
+  m_enableWordWrapping: 1
+  m_wordWrappingRatios: 0.4
+  m_overflowMode: 0
+  m_linkedTextComponent: {fileID: 0}
+  parentLinkedComponent: {fileID: 0}
+  m_enableKerning: 1
+  m_enableExtraPadding: 0
+  checkPaddingRequired: 0
+  m_isRichText: 1
+  m_parseCtrlCharacters: 1
+  m_isOrthographic: 1
+  m_isCullingEnabled: 0
+  m_horizontalMapping: 0
+  m_verticalMapping: 0
+  m_uvLineOffset: 0
+  m_geometrySortingOrder: 0
+  m_IsTextObjectScaleStatic: 0
+  m_VertexBufferAutoSizeReduction: 1
+  m_useMaxVisibleDescender: 1
+  m_pageToDisplay: 1
+  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_isUsingLegacyAnimationComponent: 0
+  m_isVolumetricText: 0
+  m_hasFontAssetChanged: 0
+  m_baseMaterial: {fileID: 0}
+  m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &4005338236185957018
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5023267308139754225}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1360375efe462cd4ab520d1661206035, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rightToLeft: 0
+  charactersPerSecond: 50
+  audioClip: {fileID: 0}
+  alternateAudioClips: []
+  audioSource: {fileID: 0}
+  usePlayOneShot: 0
+  interruptAudioClip: 0
+  stopAudioOnSilentCharacters: 0
+  stopAudioOnPauseCodes: 0
+  silentCharacters: 
+  fullPauseCharacters: 
+  quarterPauseCharacters: 
+  fullPauseDuration: 1
+  quarterPauseDuration: 0.25
+  removeDuplicateTypewriterEffects: 1
+  playOnEnable: 1
+  waitOneFrameBeforeStarting: 1
+  stopOnConversationEnd: 0
+  autoScrollSettings:
+    autoScrollEnabled: 0
+    scrollRect: {fileID: 0}
+    scrollbarEnabler: {fileID: 0}
+  onBegin:
+    m_PersistentCalls:
+      m_Calls: []
+  onCharacter:
+    m_PersistentCalls:
+      m_Calls: []
+  onEnd:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!1 &5102055780322260359
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6040962913706566817}
+  - component: {fileID: 5446466269598733007}
+  m_Layer: 0
+  m_Name: TMP SubMeshUI [BACKCOUNTRY-Regular SDF Material + LiberationSans SDF Atlas]
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &6040962913706566817
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5102055780322260359}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6896645453675832185}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &5446466269598733007
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5102055780322260359}
+  m_CullTransparentMesh: 0
 --- !u!1 &5562878816111278853
 GameObject:
   m_ObjectHideFlags: 0
@@ -1526,10 +2398,11 @@ MonoBehaviour:
     menuPanels: []
     defaultMenuPanel: {fileID: 0}
     useFirstResponseForMenuPortrait: 0
-    waitForClose: 1
+    waitForClose: 0
   QTEIndicatorElements:
     QTEIndicators: []
   addEventSystemIfNeeded: 1
+  m_currentDialogueType: 0
   m_dialoguePanel: {fileID: 1131792084058436518}
   m_dialoguePCSubtitlePanel: {fileID: 7813575458030115212}
   m_dialogueNPCSubtitlePanel: {fileID: 1513226618614363262}
@@ -2158,7 +3031,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7309899279671139701}
-  - {fileID: 5673462402974691659}
   m_Father: {fileID: 8465421241542666025}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3049,11 +3921,11 @@ RectTransform:
   m_Children:
   - {fileID: 3263204228569666130}
   m_Father: {fileID: 2615764344572537835}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 6.0999756, y: 0}
+  m_AnchorMin: {x: 0.2441082, y: 0}
+  m_AnchorMax: {x: 1.0083548, y: 0.960339}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2082362853506063884
@@ -3168,6 +4040,8 @@ GameObject:
   - component: {fileID: 2665843816235912457}
   - component: {fileID: 5690551796882893798}
   - component: {fileID: 2172508631949950824}
+  - component: {fileID: 7725756751663136143}
+  - component: {fileID: 7890990981348507074}
   m_Layer: 0
   m_Name: View - Banter View
   m_TagString: Untagged
@@ -3278,22 +4152,11 @@ MonoBehaviour:
   onOpen:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: 
+      - m_Target: {fileID: 7725756751663136143}
+        m_TargetAssemblyTypeName: Doozy.Runtime.UIManager.Containers.UIContainer,
+          Assembly-CSharp
         m_MethodName: Show
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: Show
-        m_Mode: 6
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -3305,22 +4168,11 @@ MonoBehaviour:
   onClose:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: 
+      - m_Target: {fileID: 7725756751663136143}
+        m_TargetAssemblyTypeName: Doozy.Runtime.UIManager.Containers.UIContainer,
+          Assembly-CSharp
         m_MethodName: Hide
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: Hide
-        m_Mode: 6
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -3335,137 +4187,623 @@ MonoBehaviour:
   onBackButtonDown:
     m_PersistentCalls:
       m_Calls: []
---- !u!1001 &339698003543597976
-PrefabInstance:
+--- !u!114 &7725756751663136143
+MonoBehaviour:
   m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 7309899279648242411}
-    m_Modifications:
-    - target: {fileID: 5335347703158608595, guid: dc2525a1052ad5e459144355e39500bb,
-        type: 3}
-      propertyPath: m_Pivot.x
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 5335347703158608595, guid: dc2525a1052ad5e459144355e39500bb,
-        type: 3}
-      propertyPath: m_Pivot.y
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 5335347703158608595, guid: dc2525a1052ad5e459144355e39500bb,
-        type: 3}
-      propertyPath: m_RootOrder
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5335347703158608595, guid: dc2525a1052ad5e459144355e39500bb,
-        type: 3}
-      propertyPath: m_AnchorMax.x
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5335347703158608595, guid: dc2525a1052ad5e459144355e39500bb,
-        type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5335347703158608595, guid: dc2525a1052ad5e459144355e39500bb,
-        type: 3}
-      propertyPath: m_AnchorMin.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5335347703158608595, guid: dc2525a1052ad5e459144355e39500bb,
-        type: 3}
-      propertyPath: m_AnchorMin.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5335347703158608595, guid: dc2525a1052ad5e459144355e39500bb,
-        type: 3}
-      propertyPath: m_SizeDelta.x
-      value: -1483.6
-      objectReference: {fileID: 0}
-    - target: {fileID: 5335347703158608595, guid: dc2525a1052ad5e459144355e39500bb,
-        type: 3}
-      propertyPath: m_SizeDelta.y
-      value: -985.85
-      objectReference: {fileID: 0}
-    - target: {fileID: 5335347703158608595, guid: dc2525a1052ad5e459144355e39500bb,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5335347703158608595, guid: dc2525a1052ad5e459144355e39500bb,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5335347703158608595, guid: dc2525a1052ad5e459144355e39500bb,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5335347703158608595, guid: dc2525a1052ad5e459144355e39500bb,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5335347703158608595, guid: dc2525a1052ad5e459144355e39500bb,
-        type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5335347703158608595, guid: dc2525a1052ad5e459144355e39500bb,
-        type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5335347703158608595, guid: dc2525a1052ad5e459144355e39500bb,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5335347703158608595, guid: dc2525a1052ad5e459144355e39500bb,
-        type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 741.8
-      objectReference: {fileID: 0}
-    - target: {fileID: 5335347703158608595, guid: dc2525a1052ad5e459144355e39500bb,
-        type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 493
-      objectReference: {fileID: 0}
-    - target: {fileID: 5335347703158608595, guid: dc2525a1052ad5e459144355e39500bb,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5335347703158608595, guid: dc2525a1052ad5e459144355e39500bb,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5335347703158608595, guid: dc2525a1052ad5e459144355e39500bb,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8246984801449753344, guid: dc2525a1052ad5e459144355e39500bb,
-        type: 3}
-      propertyPath: m_Name
-      value: View - Skip
-      objectReference: {fileID: 0}
-    - target: {fileID: 8246984801449753344, guid: dc2525a1052ad5e459144355e39500bb,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 2719764137662295698, guid: dc2525a1052ad5e459144355e39500bb, type: 3}
-  m_SourcePrefab: {fileID: 100100000, guid: dc2525a1052ad5e459144355e39500bb, type: 3}
---- !u!224 &5673462402974691659 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 5335347703158608595, guid: dc2525a1052ad5e459144355e39500bb,
-    type: 3}
-  m_PrefabInstance: {fileID: 339698003543597976}
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8697171686993430946}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b71aa88e9bf8432f89217a09c5a0b21c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MultiplayerInfo: {fileID: 0}
+  OnStartBehaviour: 1
+  OnShowCallback:
+    EventName: OnShowCallback
+    Runners: []
+    Event:
+      m_PersistentCalls:
+        m_Calls: []
+  OnVisibleCallback:
+    EventName: OnVisibleCallback
+    Runners: []
+    Event:
+      m_PersistentCalls:
+        m_Calls: []
+  OnHideCallback:
+    EventName: OnHideCallback
+    Runners: []
+    Event:
+      m_PersistentCalls:
+        m_Calls: []
+  OnHiddenCallback:
+    EventName: OnHiddenCallback
+    Runners: []
+    Event:
+      m_PersistentCalls:
+        m_Calls: []
+  OnVisibilityChangedCallback:
+    m_PersistentCalls:
+      m_Calls: []
+  ShowProgressors: []
+  HideProgressors: []
+  ShowHideProgressors: []
+  CustomStartPosition: {x: 0, y: 0, z: 0}
+  UseCustomStartPosition: 1
+  AutoHideAfterShow: 0
+  AutoHideAfterShowDelay: 0
+  DisableGameObjectWhenHidden: 0
+  DisableCanvasWhenHidden: 1
+  DisableGraphicRaycasterWhenHidden: 1
+  ClearSelectedOnShow: 0
+  ClearSelectedOnHide: 0
+  AutoSelectAfterShow: 0
+  AutoSelectTarget: {fileID: 0}
+--- !u!114 &7890990981348507074
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8697171686993430946}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f5ac75d8059442fe85fb36ebf07c1dee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Controller: {fileID: 7725756751663136143}
+  ShowAnimation:
+    OnPlayCallback:
+      m_PersistentCalls:
+        m_Calls: []
+    OnStopCallback:
+      m_PersistentCalls:
+        m_Calls: []
+    OnFinishCallback:
+      m_PersistentCalls:
+        m_Calls: []
+    AnimationType: 0
+    Move:
+      Settings:
+        PlayMode: 0
+        EaseMode: 0
+        Ease: 9
+        Curve:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 0
+            inSlope: -0.5398274
+            outSlope: -0.5398274
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0.024151811
+          - serializedVersion: 3
+            time: 0.5360872
+            value: 0.4861448
+            inSlope: -2.2521195
+            outSlope: -2.2521195
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0.020654876
+            outWeight: 0.33333334
+          - serializedVersion: 3
+            time: 1
+            value: 1
+            inSlope: 0.04207796
+            outSlope: 0.04207796
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0.5248393
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 4
+        StartDelay: 0
+        Duration: 0.4
+        Loops: 0
+        LoopDelay: 0
+        UseRandomStartDelay: 0
+        UseRandomDuration: 0
+        UseRandomLoops: 0
+        UseRandomLoopDelay: 0
+        RandomStartDelay:
+          MIN: 0
+          MAX: 1
+        RandomDuration:
+          MIN: 0
+          MAX: 1
+        RandomLoops:
+          MIN: 0
+          MAX: 1
+        RandomLoopDelay:
+          MIN: 0
+          MAX: 1
+        Strength: 1
+        Vibration: 8
+        Elasticity: 1
+        FadeOutShake: 0
+      FromValue: {x: 0, y: 1080, z: 0}
+      ToValue: {x: 0, y: 0, z: 0}
+      CurrentValue: {x: 0, y: 0, z: 0}
+      Enabled: 0
+      AnimationType: 0
+      StartPosition: {x: 0, y: 0, z: 0}
+      FromReferenceValue: 0
+      ToReferenceValue: 0
+      FromCustomValue: {x: 0, y: 0, z: 0}
+      ToCustomValue: {x: 0, y: 0, z: 0}
+      FromOffset: {x: 0, y: 0, z: 0}
+      ToOffset: {x: 0, y: 0, z: 0}
+      FromDirection: 1
+      ToDirection: 13
+    Rotate:
+      Settings:
+        PlayMode: 0
+        EaseMode: 0
+        Ease: 15
+        Curve:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 0
+            inSlope: -1.5918956
+            outSlope: -1.5918956
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0.027026983
+          - serializedVersion: 3
+            time: 1
+            value: 1
+            inSlope: -2.2672713
+            outSlope: -2.2672713
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0.04600376
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 4
+        StartDelay: 0
+        Duration: 0.5
+        Loops: 0
+        LoopDelay: 0
+        UseRandomStartDelay: 0
+        UseRandomDuration: 0
+        UseRandomLoops: 0
+        UseRandomLoopDelay: 0
+        RandomStartDelay:
+          MIN: 0
+          MAX: 1
+        RandomDuration:
+          MIN: 0
+          MAX: 1
+        RandomLoops:
+          MIN: 0
+          MAX: 1
+        RandomLoopDelay:
+          MIN: 0
+          MAX: 1
+        Strength: 1
+        Vibration: 8
+        Elasticity: 1
+        FadeOutShake: 0
+      FromValue: {x: 0, y: 0, z: 240}
+      ToValue: {x: 0, y: 0, z: 0}
+      CurrentValue: {x: -0, y: 0, z: 0}
+      Enabled: 0
+      StartRotation: {x: -0, y: 0, z: 0}
+      FromReferenceValue: 0
+      ToReferenceValue: 0
+      FromCustomValue: {x: 0, y: 0, z: 0}
+      ToCustomValue: {x: 0, y: 0, z: 0}
+      FromOffset: {x: 0, y: 0, z: 240}
+      ToOffset: {x: 0, y: 0, z: 0}
+    Scale:
+      Settings:
+        PlayMode: 0
+        EaseMode: 0
+        Ease: 27
+        Curve:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 0
+            inSlope: 0
+            outSlope: 0
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          - serializedVersion: 3
+            time: 1
+            value: 1
+            inSlope: 5.9879365
+            outSlope: 5.9879365
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0.022426665
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 4
+        StartDelay: 0
+        Duration: 0.4
+        Loops: 0
+        LoopDelay: 0
+        UseRandomStartDelay: 0
+        UseRandomDuration: 0
+        UseRandomLoops: 0
+        UseRandomLoopDelay: 0
+        RandomStartDelay:
+          MIN: 0
+          MAX: 1
+        RandomDuration:
+          MIN: 0
+          MAX: 1
+        RandomLoops:
+          MIN: 0
+          MAX: 1
+        RandomLoopDelay:
+          MIN: 0
+          MAX: 1
+        Strength: 1
+        Vibration: 8
+        Elasticity: 1
+        FadeOutShake: 0
+      FromValue: {x: 0, y: 0, z: 0}
+      ToValue: {x: 1, y: 1, z: 1}
+      CurrentValue: {x: 1, y: 1, z: 1}
+      Enabled: 0
+      StartScale: {x: 1, y: 1, z: 1}
+      FromReferenceValue: 2
+      ToReferenceValue: 0
+      FromCustomValue: {x: 0, y: 0, z: 0}
+      ToCustomValue: {x: 1, y: 1, z: 0}
+      FromOffset: {x: 0.1, y: 0.1, z: 0}
+      ToOffset: {x: 0, y: 0, z: 0}
+    Fade:
+      Settings:
+        PlayMode: 0
+        EaseMode: 0
+        Ease: 1
+        Curve:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 0
+            inSlope: 0
+            outSlope: 1
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          - serializedVersion: 3
+            time: 1
+            value: 1
+            inSlope: 1
+            outSlope: 0
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 4
+        StartDelay: 0
+        Duration: 0.5
+        Loops: 0
+        LoopDelay: 0
+        UseRandomStartDelay: 0
+        UseRandomDuration: 0
+        UseRandomLoops: 0
+        UseRandomLoopDelay: 0
+        RandomStartDelay:
+          MIN: 0
+          MAX: 1
+        RandomDuration:
+          MIN: 0
+          MAX: 1
+        RandomLoops:
+          MIN: 0
+          MAX: 1
+        RandomLoopDelay:
+          MIN: 0
+          MAX: 1
+        Strength: 1
+        Vibration: 8
+        Elasticity: 1
+        FadeOutShake: 0
+      FromValue: 0
+      ToValue: 1
+      CurrentValue: 1
+      Enabled: 1
+      StartAlpha: 1
+      FromReferenceValue: 2
+      ToReferenceValue: 0
+      FromCustomValue: 0
+      ToCustomValue: 1
+      FromOffset: 0
+      ToOffset: 1
+  HideAnimation:
+    OnPlayCallback:
+      m_PersistentCalls:
+        m_Calls: []
+    OnStopCallback:
+      m_PersistentCalls:
+        m_Calls: []
+    OnFinishCallback:
+      m_PersistentCalls:
+        m_Calls: []
+    AnimationType: 1
+    Move:
+      Settings:
+        PlayMode: 0
+        EaseMode: 0
+        Ease: 8
+        Curve:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 0
+            inSlope: 0
+            outSlope: 1
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          - serializedVersion: 3
+            time: 1
+            value: 1
+            inSlope: 1
+            outSlope: 0
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 4
+        StartDelay: 0.1
+        Duration: 0.4
+        Loops: 0
+        LoopDelay: 0
+        UseRandomStartDelay: 0
+        UseRandomDuration: 0
+        UseRandomLoops: 0
+        UseRandomLoopDelay: 0
+        RandomStartDelay:
+          MIN: 0
+          MAX: 1
+        RandomDuration:
+          MIN: 0
+          MAX: 1
+        RandomLoops:
+          MIN: 0
+          MAX: 1
+        RandomLoopDelay:
+          MIN: 0
+          MAX: 1
+        Strength: 1
+        Vibration: 8
+        Elasticity: 1
+        FadeOutShake: 0
+      FromValue: {x: 0, y: 0, z: 0}
+      ToValue: {x: 0, y: 1080, z: 0}
+      CurrentValue: {x: 0, y: 0, z: 0}
+      Enabled: 0
+      AnimationType: 1
+      StartPosition: {x: 0, y: 0, z: 0}
+      FromReferenceValue: 0
+      ToReferenceValue: 0
+      FromCustomValue: {x: 0, y: 0, z: 0}
+      ToCustomValue: {x: 0, y: 0, z: 0}
+      FromOffset: {x: 0, y: 0, z: 0}
+      ToOffset: {x: 0, y: 0, z: 0}
+      FromDirection: 13
+      ToDirection: 1
+    Rotate:
+      Settings:
+        PlayMode: 0
+        EaseMode: 0
+        Ease: 8
+        Curve:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 0
+            inSlope: 0
+            outSlope: 1
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          - serializedVersion: 3
+            time: 1
+            value: 1
+            inSlope: 1
+            outSlope: 0
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 4
+        StartDelay: 0
+        Duration: 0.3
+        Loops: 0
+        LoopDelay: 0
+        UseRandomStartDelay: 0
+        UseRandomDuration: 0
+        UseRandomLoops: 0
+        UseRandomLoopDelay: 0
+        RandomStartDelay:
+          MIN: 0
+          MAX: 1
+        RandomDuration:
+          MIN: 0
+          MAX: 1
+        RandomLoops:
+          MIN: 0
+          MAX: 1
+        RandomLoopDelay:
+          MIN: 0
+          MAX: 1
+        Strength: 1
+        Vibration: 8
+        Elasticity: 1
+        FadeOutShake: 0
+      FromValue: {x: 0, y: 0, z: 0}
+      ToValue: {x: 0, y: 0, z: 240}
+      CurrentValue: {x: -0, y: 0, z: 0}
+      Enabled: 0
+      StartRotation: {x: -0, y: 0, z: 0}
+      FromReferenceValue: 0
+      ToReferenceValue: 0
+      FromCustomValue: {x: 0, y: 0, z: 0}
+      ToCustomValue: {x: 0, y: 0, z: 0}
+      FromOffset: {x: 0, y: 0, z: 0}
+      ToOffset: {x: 0, y: 0, z: 240}
+    Scale:
+      Settings:
+        PlayMode: 0
+        EaseMode: 0
+        Ease: 26
+        Curve:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 0
+            inSlope: 0
+            outSlope: 1
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          - serializedVersion: 3
+            time: 1
+            value: 1
+            inSlope: 1
+            outSlope: 0
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 4
+        StartDelay: 0
+        Duration: 0.5
+        Loops: 0
+        LoopDelay: 0
+        UseRandomStartDelay: 0
+        UseRandomDuration: 0
+        UseRandomLoops: 0
+        UseRandomLoopDelay: 0
+        RandomStartDelay:
+          MIN: 0
+          MAX: 1
+        RandomDuration:
+          MIN: 0
+          MAX: 1
+        RandomLoops:
+          MIN: 0
+          MAX: 1
+        RandomLoopDelay:
+          MIN: 0
+          MAX: 1
+        Strength: 1
+        Vibration: 8
+        Elasticity: 1
+        FadeOutShake: 0
+      FromValue: {x: 1, y: 1, z: 1}
+      ToValue: {x: 0, y: 0, z: 0}
+      CurrentValue: {x: 1, y: 1, z: 1}
+      Enabled: 0
+      StartScale: {x: 1, y: 1, z: 1}
+      FromReferenceValue: 0
+      ToReferenceValue: 2
+      FromCustomValue: {x: 0, y: 0, z: 0}
+      ToCustomValue: {x: 0, y: 0, z: 0}
+      FromOffset: {x: 0, y: 0, z: 0}
+      ToOffset: {x: 0.4, y: 0.4, z: 0}
+    Fade:
+      Settings:
+        PlayMode: 0
+        EaseMode: 0
+        Ease: 1
+        Curve:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 0
+            inSlope: 0
+            outSlope: 1
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          - serializedVersion: 3
+            time: 1
+            value: 1
+            inSlope: 1
+            outSlope: 0
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 4
+        StartDelay: 0
+        Duration: 0.5
+        Loops: 0
+        LoopDelay: 0
+        UseRandomStartDelay: 0
+        UseRandomDuration: 0
+        UseRandomLoops: 0
+        UseRandomLoopDelay: 0
+        RandomStartDelay:
+          MIN: 0
+          MAX: 1
+        RandomDuration:
+          MIN: 0
+          MAX: 1
+        RandomLoops:
+          MIN: 0
+          MAX: 1
+        RandomLoopDelay:
+          MIN: 0
+          MAX: 1
+        Strength: 1
+        Vibration: 8
+        Elasticity: 1
+        FadeOutShake: 0
+      FromValue: 1
+      ToValue: 0
+      CurrentValue: 0
+      Enabled: 1
+      StartAlpha: 1
+      FromReferenceValue: 2
+      ToReferenceValue: 2
+      FromCustomValue: 1
+      ToCustomValue: 0
+      FromOffset: 0
+      ToOffset: 0
 --- !u!1001 &965080625442180701
 PrefabInstance:
   m_ObjectHideFlags: 0
