@@ -160,6 +160,9 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField, BoxGroup("EnragedMultipleFleshSpike"), Min(0)]
             private Vector2 m_enragedSpikeOffset;
             public Vector2 enragedSpikeOffset => m_enragedSpikeOffset;
+            [SerializeField, BoxGroup("EnragedMultipleFleshSpike"), Min(0)]
+            private Vector2 m_enragedSpikeCageCount;
+            public Vector2 enragedSpikeCageCount => m_enragedSpikeCageCount;
             [SerializeField, BoxGroup("FleshBomb")]
             private SimpleProjectileAttackInfo m_staffSpinFleshBombProjectile;
             public SimpleProjectileAttackInfo staffSpinFleshBombProjectile => m_staffSpinFleshBombProjectile;
@@ -292,6 +295,10 @@ namespace DChild.Gameplay.Characters.Enemies
         private Transform m_cacheEnragedSpikePoint;
         [SerializeField, TabGroup("Spawn Points")]
         private Transform m_fleshBombPoint;
+        [SerializeField, TabGroup("Spike Group")]
+        private Transform m_horizontalSpikeGroup;
+        [SerializeField, TabGroup("Spike Group")]
+        private List<Transform> m_verticalSpikeGroups;
 
         private Vector2 m_lastTargetPos;
         private int m_currentPhaseIndex;
@@ -348,6 +355,22 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void ChangeState()
         {
+            if (m_currentAttackCoroutine != null)
+            {
+                StopCoroutine(m_currentAttackCoroutine);
+                m_currentAttackCoroutine = null;
+                m_attackDecider.hasDecidedOnAttack = false;
+            }
+            if (m_counterAttackCoroutine != null)
+            {
+                StopCoroutine(m_counterAttackCoroutine);
+                m_counterAttackCoroutine = null;
+            }
+            if (m_teleportCoroutine != null)
+            {
+                StopCoroutine(m_teleportCoroutine);
+                m_teleportCoroutine = null;
+            }
             enabled = true;
             StopAllCoroutines();
             m_stateHandle.OverrideState(State.Phasing);
@@ -385,11 +408,6 @@ namespace DChild.Gameplay.Characters.Enemies
                             m_currentHitCount++;
                         else
                         {
-                            m_hitbox.SetCanBlockDamageState(true);
-                        }
-
-                        if (m_hitbox.canBlockDamage)
-                        {
                             if (m_currentAttackCoroutine != null)
                             {
                                 StopCoroutine(m_currentAttackCoroutine);
@@ -403,7 +421,6 @@ namespace DChild.Gameplay.Characters.Enemies
                             m_teleportCoroutine = StartCoroutine(TeleportToTargetRoutine(m_randomSpawnCollider.bounds.center/*, Attack.EnragedAttack*/, Vector2.zero));
                             //m_counterAttackCoroutine = StartCoroutine(EnragedMultipleFleshSpikeRoutine());
                             m_currentHitCount = 0;
-
                         }
                         break;
                     case Phase.PhaseTwo:
@@ -411,12 +428,6 @@ namespace DChild.Gameplay.Characters.Enemies
                             m_currentHitCount++;
                         else
                         {
-                            m_hitbox.SetCanBlockDamageState(true);
-                        }
-
-                        if (m_hitbox.canBlockDamage)
-                        {
-                            enabled = false;
                             if (m_currentAttackCoroutine != null)
                             {
                                 StopCoroutine(m_currentAttackCoroutine);
@@ -430,7 +441,6 @@ namespace DChild.Gameplay.Characters.Enemies
                             m_teleportCoroutine = StartCoroutine(TeleportToTargetRoutine(m_randomSpawnCollider.bounds.center/*, Attack.EnragedAttack*/, Vector2.zero));
                             //m_counterAttackCoroutine = StartCoroutine(EnragedMultipleFleshSpikeRoutine());
                             m_currentHitCount = 0;
-
                         }
                         break;
                 }
@@ -472,6 +482,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator ChangePhaseRoutine()
         {
             enabled = false;
+            //m_hitbox.SetCanBlockDamageState(false);
             m_hitbox.Disable();
             m_stateHandle.Wait(State.Chasing);
             m_rainProjectilePoint = m_cacheRainProjectilePoint;
@@ -508,29 +519,21 @@ namespace DChild.Gameplay.Characters.Enemies
         private void LaunchSingleSpike()
         {
             m_lastTargetPos = m_targetInfo.position;
-            LaunchSpike(PuedisYnnusSpike.SkinType.Big, false);
+            LaunchSpike(PuedisYnnusSpike.SkinType.Big, false, Quaternion.identity, true);
         }
 
-        private void LaunchSpike(PuedisYnnusSpike.SkinType spikeType, bool isRandom)
+        private void LaunchSpike(PuedisYnnusSpike.SkinType spikeType, bool isRandom, Quaternion rotation, bool useOffset)
         {
             var randomOffsetX = UnityEngine.Random.Range(10, 20);
             randomOffsetX = UnityEngine.Random.Range(0, 2) == 1 ? randomOffsetX : randomOffsetX * -1;
-            var targetPos = new Vector2(m_lastTargetPos.x + randomOffsetX, GroundPosition(m_lastTargetPos).y);
-            //m_singleFleshSpikeProjectileLauncher.AimAt(targetPos);
-            //m_singleFleshSpikeProjectileLauncher.LaunchProjectile();
-
-
-            //var instance = GameSystem.poolManager.GetPool<ProjectilePool>().GetOrCreateItem(m_info.handClenchSingleFleshSpikeProjectile.projectileInfo.projectile);
-            //instance.transform.position = targetPos;
-            //var component = instance.GetComponent<Projectile>();
-            //component.ResetState();
-            //component.Launch(m_projectilePoint.right, m_info.handClenchSingleFleshSpikeProjectile.projectileInfo.speed);
-            //component.GetComponent<PuedisYnnusSpike>().SetSkin(PuedisYnnusSpike.SkinType.Small, true);
+            var targetPos = useOffset ? new Vector2(m_lastTargetPos.x + randomOffsetX, GroundPosition(m_lastTargetPos).y) : m_lastTargetPos;
 
             var component = Instantiate(m_info.handClenchSingleFleshSpikeProjectile.projectileInfo.projectile, targetPos, Quaternion.identity);
             component.GetComponent<PuedisYnnusSpike>().WillPool(false);
+            component.GetComponent<PuedisYnnusSpike>().RandomScale();
             component.GetComponent<PuedisYnnusSpike>().SetSkin(spikeType, isRandom);
 
+            component.transform.rotation = rotation;
             var middleSpawn = UnityEngine.Random.Range(0, 2) == 1 ? true : false;
             if (middleSpawn)
             {
@@ -637,14 +640,14 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 aimPoint = new Vector2(aimPoint.x + UnityEngine.Random.Range(-10, 10), aimPoint.y);
                 m_lastTargetPos = aimPoint;
-                LaunchSpike(PuedisYnnusSpike.SkinType.Small, true);
+                LaunchSpike(PuedisYnnusSpike.SkinType.Small, true, Quaternion.identity, true);
                 for (int x = 0; x < m_info.multipleFleshSpikeCount; x++)
                 {
                     m_lastTargetPos = offsetLeftAimPoint;
-                    LaunchSpike(PuedisYnnusSpike.SkinType.Small, true);
+                    LaunchSpike(PuedisYnnusSpike.SkinType.Small, true, Quaternion.identity, true);
                     offsetLeftAimPoint = new Vector2(offsetLeftAimPoint.x - UnityEngine.Random.Range(m_info.enragedSpikeOffset.x, m_info.enragedSpikeOffset.y), offsetLeftAimPoint.y);
                     m_lastTargetPos = offsetRightAimPoint;
-                    LaunchSpike(PuedisYnnusSpike.SkinType.Small, true);
+                    LaunchSpike(PuedisYnnusSpike.SkinType.Small, true, Quaternion.identity, true);
                     offsetRightAimPoint = new Vector2(offsetRightAimPoint.x + UnityEngine.Random.Range(m_info.enragedSpikeOffset.x, m_info.enragedSpikeOffset.y), offsetRightAimPoint.y);
                     yield return new WaitForSeconds(0.2f);
                 }
@@ -678,14 +681,14 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 aimPoint = new Vector2(aimPoint.x + UnityEngine.Random.Range(-10, 10), aimPoint.y);
                 m_lastTargetPos = aimPoint;
-                LaunchSpike(PuedisYnnusSpike.SkinType.Small, true);
+                LaunchSpike(PuedisYnnusSpike.SkinType.Small, true, Quaternion.identity, true);
                 for (int x = 0; x < m_info.enragedMultipleFleshSpikeCount; x++)
                 {
                     m_lastTargetPos = offsetLeftAimPoint;
-                    LaunchSpike(PuedisYnnusSpike.SkinType.Small, true);
+                    LaunchSpike(PuedisYnnusSpike.SkinType.Small, true, Quaternion.identity, true);
                     offsetLeftAimPoint = new Vector2(offsetLeftAimPoint.x - UnityEngine.Random.Range(m_info.enragedSpikeOffset.x, m_info.enragedSpikeOffset.y), offsetLeftAimPoint.y);
                     m_lastTargetPos = offsetRightAimPoint;
-                    LaunchSpike(PuedisYnnusSpike.SkinType.Small, true);
+                    LaunchSpike(PuedisYnnusSpike.SkinType.Small, true, Quaternion.identity, true);
                     offsetRightAimPoint = new Vector2(offsetRightAimPoint.x + UnityEngine.Random.Range(m_info.enragedSpikeOffset.x, m_info.enragedSpikeOffset.y), offsetRightAimPoint.y);
                     yield return new WaitForSeconds(0.2f);
                 }
@@ -697,10 +700,60 @@ namespace DChild.Gameplay.Characters.Enemies
                 offsetRightAimPoint = aimPoint;
             }
             m_enragedSpikePoint.position = m_cacheEnragedSpikePoint.position;
+            aimPoint = m_horizontalSpikeGroup.position;
+            offsetLeftAimPoint = aimPoint;
+            offsetRightAimPoint = aimPoint;
+            m_lastTargetPos = aimPoint;
+            LaunchSpike(PuedisYnnusSpike.SkinType.Big, false, Quaternion.identity, true);
+            for (int i = 0; i < m_info.enragedSpikeCageCount.x; i++)
+            {
+                m_lastTargetPos = offsetLeftAimPoint;
+                LaunchSpike(PuedisYnnusSpike.SkinType.Big, false, Quaternion.identity, true);
+                offsetLeftAimPoint = new Vector2(offsetLeftAimPoint.x - 20, offsetLeftAimPoint.y);
+                m_lastTargetPos = offsetRightAimPoint;
+                LaunchSpike(PuedisYnnusSpike.SkinType.Big, false, Quaternion.identity, true);
+                offsetRightAimPoint = new Vector2(offsetRightAimPoint.x + 20, offsetRightAimPoint.y);
+            }
+            yield return new WaitForSeconds(m_info.multipleFleshSpikeDuration);
+            aimPoint = m_verticalSpikeGroups[0].position;
+            offsetLeftAimPoint = aimPoint;
+            offsetRightAimPoint = aimPoint;
+            m_lastTargetPos = aimPoint;
+            LaunchSpike(PuedisYnnusSpike.SkinType.Big, false, Quaternion.Euler(0, 0, 270f), false);
+            for (int i = 0; i < m_info.enragedSpikeCageCount.y; i++)
+            {
+                m_lastTargetPos = offsetLeftAimPoint;
+                LaunchSpike(PuedisYnnusSpike.SkinType.Big, false, Quaternion.Euler(0, 0, 270f), false);
+                offsetLeftAimPoint = new Vector2(offsetLeftAimPoint.x, offsetLeftAimPoint.y - 20);
+                m_lastTargetPos = offsetRightAimPoint;
+                LaunchSpike(PuedisYnnusSpike.SkinType.Big, false, Quaternion.Euler(0, 0, 270f), false);
+                offsetRightAimPoint = new Vector2(offsetRightAimPoint.x, offsetRightAimPoint.y + 20);
+            }
+            aimPoint = m_verticalSpikeGroups[1].position;
+            offsetLeftAimPoint = aimPoint;
+            offsetRightAimPoint = aimPoint;
+            m_lastTargetPos = aimPoint;
+            LaunchSpike(PuedisYnnusSpike.SkinType.Big, false, Quaternion.Euler(0, 0, 90f), false);
+            for (int i = 0; i < m_info.enragedSpikeCageCount.y; i++)
+            {
+                m_lastTargetPos = offsetLeftAimPoint;
+                LaunchSpike(PuedisYnnusSpike.SkinType.Big, false, Quaternion.Euler(0, 0, 90f), false);
+                offsetLeftAimPoint = new Vector2(offsetLeftAimPoint.x, offsetLeftAimPoint.y - 20);
+                m_lastTargetPos = offsetRightAimPoint;
+                LaunchSpike(PuedisYnnusSpike.SkinType.Big, false, Quaternion.Euler(0, 0, 90f), false);
+                offsetRightAimPoint = new Vector2(offsetRightAimPoint.x, offsetRightAimPoint.y + 20);
+            }
+            //m_horizontalSpikeGroup.PlayRandomSpikeGroup(m_info.handClenchSingleFleshSpikeDuration);
+            //yield return new WaitForSeconds(m_info.multipleFleshSpikeDuration);
+            //for (int i = 0; i < m_verticalSpikeGroups.Count; i++)
+            //{
+            //    m_verticalSpikeGroups[i].PlayRandomSpikeGroup(m_info.handClenchSingleFleshSpikeDuration);
+            //}
+            yield return new WaitForSeconds(m_info.multipleFleshSpikeDuration);
             m_currentIdleAnimation = m_info.idleAnimations[UnityEngine.Random.Range(0, m_info.idleAnimations.Count)];
             m_animation.SetAnimation(0, m_currentIdleAnimation, true);
             m_attackDecider.hasDecidedOnAttack = false;
-            m_hitbox.SetCanBlockDamageState(false);
+            //m_hitbox.SetCanBlockDamageState(false);
             m_counterAttackCoroutine = null;
             m_stateHandle.ApplyQueuedState();
             yield return null;
