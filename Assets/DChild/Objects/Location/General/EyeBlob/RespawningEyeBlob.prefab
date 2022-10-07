@@ -16,8 +16,9 @@ GameObject:
   - component: {fileID: 4506040855702399884}
   - component: {fileID: 6399698193196166814}
   - component: {fileID: 3936014803696098055}
+  - component: {fileID: -2638536405599528546}
   m_Layer: 13
-  m_Name: Eye
+  m_Name: RespawningEyeBlob
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -64,7 +65,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: d02d4f0379791214b9129af36a336db7, type: 2}
+  - {fileID: 2100000, guid: cd654c8a3eaa0e342af0779c85174826, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -97,8 +98,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d247ba06193faa74d9335f5481b2b56c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  skeletonDataAsset: {fileID: 11400000, guid: 1d6b89cda436c4546b470f10dd3b67ee, type: 2}
-  initialSkinName: 
+  skeletonDataAsset: {fileID: 11400000, guid: baf671c5fba758e4cb645d0a24fae06a, type: 2}
+  initialSkinName: blob red
   initialFlipX: 1
   initialFlipY: 0
   separatorSlotNames: []
@@ -153,6 +154,7 @@ MonoBehaviour:
   m_animation: Death
   m_bodyDuration:
     m_startTime: 0
+  m_fx: []
   m_destroySource: 0
 --- !u!114 &6399698193196166814
 MonoBehaviour:
@@ -202,8 +204,7 @@ MonoBehaviour:
         m_MethodName: SetAnimation
         m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 11400000, guid: 16f2d2749721f7444bf120b00ae1c4b9,
-            type: 2}
+          m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: Spine.Unity.AnimationReferenceAsset,
             spine-unity
           m_IntArgument: 0
@@ -236,6 +237,21 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
+--- !u!114 &-2638536405599528546
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5977480033948744836}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c106d3ee04e320140b205c0d1ae65bb4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_centerMass: {fileID: 0}
+  m_health: {fileID: 0}
+  m_resistance: {fileID: 0}
 --- !u!1 &8002881488085024043
 GameObject:
   m_ObjectHideFlags: 0
@@ -308,5 +324,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_collider2Ds:
   - {fileID: 3580232948089305136}
+  m_damageFXInfo:
+    m_fx: {fileID: 0}
+    m_overrideColor: 0
+    m_colorToUse: {r: 0, g: 0, b: 0, a: 0}
+    m_overrideScale: 0
+    m_scaleToUse: {x: 0, y: 0, z: 0}
   m_invulnerabilityLevel: 0
   m_damageReduction: 0
+  m_canBlockDamage: 0
