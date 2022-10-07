@@ -5,6 +5,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.UI;
 
 namespace DChild.Gameplay.Systems
 {
@@ -12,21 +13,19 @@ namespace DChild.Gameplay.Systems
     public class GameplayInput : MonoBehaviour
     {
         [SerializeField]
+        private InputSystemUIInputModule m_uiInput;
+        [SerializeField]
         private InputActionReference m_storeToggleAction;
         [SerializeField]
         private bool m_actionIsCloseStore;
 
         private bool m_enableStoreInput;
         private bool m_inputOverridden;
+        private InputActionReference m_uiMoveInput;
 
-        public void Disable()
+        public void ToggleUINavigationInput(bool On)
         {
-            enabled = false;
-        }
-
-        public void Enable()
-        {
-            enabled = true;
+            m_uiInput.move = On ? m_uiMoveInput : null;
         }
 
         public void OverrideNewInfoNotif(float duration)
@@ -75,6 +74,10 @@ namespace DChild.Gameplay.Systems
         private void Awake()
         {
             m_storeToggleAction.action.performed += OnOpenStoreAction;
+            m_uiMoveInput = m_uiInput.move;
+
+            //Unity Input 1.4.X has a very weird bug This is a fix as advised by https://forum.unity.com/threads/input-system-1-4-1-released.1306062/
+            InputSystem.settings.SetInternalFeatureFlag("DISABLE_SHORTCUT_SUPPORT", true);
         }
 
 

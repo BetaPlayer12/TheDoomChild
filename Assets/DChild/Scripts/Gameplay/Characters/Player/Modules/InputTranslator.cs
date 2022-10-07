@@ -250,7 +250,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 m_gameplayActionMap = m_input.actions.FindActionMap("Gameplay");
             }
             m_mousePosition = Mouse.current.position.ReadValue();
-
         }
 
         private void Update()

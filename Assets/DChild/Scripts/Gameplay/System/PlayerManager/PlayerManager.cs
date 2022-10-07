@@ -67,12 +67,14 @@ namespace DChild.Gameplay.Systems
         public void DisableInput()
         {
             m_gameplayInput?.SetStoreInputActive(false);
-            //m_characterInput?.Disable();
+            m_gameplayInput?.ToggleUINavigationInput(true);
+            m_characterInput?.Disable();
         }
 
         public void EnableInput()
         {
             m_gameplayInput?.SetStoreInputActive(true);
+            m_gameplayInput?.ToggleUINavigationInput(false);
             m_characterInput?.Enable();
         }
 

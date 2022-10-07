@@ -1,6 +1,7 @@
 ﻿using System;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace DChild
 {
@@ -32,6 +33,8 @@ namespace DChild
         private Vector3 m_previousCameraPosition;
         private Quaternion m_previousCameraRotation;
         private float m_previousCameraFieldOfView;
+
+        private Vector2 mousePosition => Mouse.current.position.ReadValue();
 
         public void SetVisibility(bool isVisible)
         {
@@ -65,7 +68,7 @@ namespace DChild
             enabled = m_cacheCamera;
             if (enabled)
             {
-                FollowCursor(Input.mousePosition, m_cacheTransform.rotation, m_cacheTransform.position, m_cacheCamera.fieldOfView);
+                FollowCursor(mousePosition, m_cacheTransform.rotation, m_cacheTransform.position, m_cacheCamera.fieldOfView);
             }
         }
 
@@ -122,7 +125,7 @@ namespace DChild
         {
             if (m_cacheCamera)
             {
-                FollowCursor(Input.mousePosition, m_cacheTransform.rotation, m_cacheTransform.position, m_cacheCamera.fieldOfView);
+                FollowCursor(mousePosition, m_cacheTransform.rotation, m_cacheTransform.position, m_cacheCamera.fieldOfView);
             }
             else
             {

@@ -63,8 +63,8 @@ namespace DChild
 
         public static void ResetCursorPosition()
         {
-            m_cursor.SetLockState(CursorLockMode.Locked);
-            m_cursor.SetLockState(CursorLockMode.None);
+            m_cursor?.SetLockState(CursorLockMode.Locked);
+            m_cursor?.SetLockState(CursorLockMode.None);
         }
 
         public static bool RequestConfirmation(EventAction<EventActionArgs> listener, string message)

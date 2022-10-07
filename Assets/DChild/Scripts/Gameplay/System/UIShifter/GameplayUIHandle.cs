@@ -56,6 +56,11 @@ namespace DChild.Gameplay.Systems
         [SerializeField]
         private UIContainer m_skippableUI;
 
+        [SerializeField, BoxGroup("Object Prompt")]
+        private UIContainer m_interactablePrompt;
+        [SerializeField, BoxGroup("Object Prompt")]
+        private UIContainer m_movableObjectPrompt;
+
         public void ToggleCinematicMode(bool on)
         {
             m_cinemaSignal.Payload.booleanValue = on;
@@ -146,11 +151,11 @@ namespace DChild.Gameplay.Systems
         {
             if (willshow == true)
             {
-                GameEventMessage.SendEvent("Interaction Prompt Show");
+                m_interactablePrompt.Show();
             }
             else
             {
-                GameEventMessage.SendEvent("Interaction Prompt Hide");
+                m_interactablePrompt.Hide();
             }
         }
 
@@ -158,11 +163,11 @@ namespace DChild.Gameplay.Systems
         {
             if (willshow == true)
             {
-                GameEventMessage.SendEvent("MovableObject Prompt Show");
+                m_movableObjectPrompt.Show();
             }
             else
             {
-                GameEventMessage.SendEvent("MovableObject Prompt Hide");
+                m_movableObjectPrompt.Hide();
             }
         }
 
