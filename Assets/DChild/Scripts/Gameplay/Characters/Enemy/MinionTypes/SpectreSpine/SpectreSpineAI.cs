@@ -299,7 +299,9 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack2preAnticipation);
             m_animation.SetAnimation(0, m_info.attack2Anticipation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack2Anticipation);
-           
+            Vector3 v_diff=(m_targetInfo.transform.position-transform.position);
+            float angle = Mathf.Atan2(v_diff.y, v_diff.x );
+            transform.rotation=Quaternion.Euler(0f,0f,angle* Mathf.Rad2Deg);
             m_animation.SetAnimation(0, m_info.attack2postAnticipation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack2postAnticipation);
             m_hitbox.gameObject.SetActive(false);

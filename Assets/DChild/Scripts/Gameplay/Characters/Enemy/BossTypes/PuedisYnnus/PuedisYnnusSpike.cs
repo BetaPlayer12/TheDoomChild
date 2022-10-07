@@ -19,6 +19,8 @@ namespace DChild.Gameplay.Projectiles
 
         [SerializeField, SpineSkin]
         private List<string> m_skins;
+        [SerializeField, SpineSkin]
+        private string m_defaultSkin;
         [SerializeField, Spine.Unity.SpineAnimation(dataField = "m_skeletonAnimation")]
         private List<string> m_startAnimations;
         [SerializeField, Spine.Unity.SpineAnimation(dataField = "m_skeletonAnimation")]
@@ -29,7 +31,8 @@ namespace DChild.Gameplay.Projectiles
         private List<GameObject> m_hurtboxBB;
 
         private int m_skinID;
-        private bool m_willPool;
+        private bool m_willPool = true;
+        private bool m_willDestroy = true;
 
         public enum SkinType
         {
@@ -40,12 +43,22 @@ namespace DChild.Gameplay.Projectiles
         //protected override void Awake()
         //{
         //    base.Awake();
-        //    m_skeletonAnimation.skeleton.SetSkin();
+        //    m_skeletonAnimation.skeleton.SetSkin(m_defaultSkin);
         //}
 
         public void WillPool(bool willPool)
         {
             m_willPool = willPool;
+        }
+
+        public void WillDestroy(bool willDestroy)
+        {
+            m_willDestroy = willDestroy;
+        }
+
+        public void RandomScale()
+        {
+            transform.localScale = new Vector3(UnityEngine.Random.Range(0.75f, 1.25f), UnityEngine.Random.Range(0.75f, 1.25f), 1f);
         }
 
         public void SetSkin(SkinType skin, bool isRandom)
@@ -85,10 +98,12 @@ namespace DChild.Gameplay.Projectiles
         {
             StartCoroutine(RightSpikeRoutine(duration));
         }
+
         private IEnumerator LeftSpikeRoutine(float duration)
         {
-            m_hurtboxBB[m_skinID].SetActive(true);
             m_animation.SetAnimation(0, m_startAnimations[0], false);
+            yield return new WaitForSeconds(0.1f);
+            m_hurtboxBB[m_skinID].SetActive(true);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_startAnimations[0]);
             m_animation.SetAnimation(0, m_idleAnimations[0], true);
             yield return new WaitForSeconds(duration);
@@ -99,13 +114,20 @@ namespace DChild.Gameplay.Projectiles
             if (m_willPool)
                 CallPoolRequest();
             else
-                Destroy(this.gameObject);
+            {
+                if (m_willDestroy)
+                    Destroy(this.gameObject);
+                else
+                    m_skeletonAnimation.skeleton.SetSkin(m_defaultSkin);
+            }
             yield return null;
         }
+
         private IEnumerator MassiveSpikeRoutine(float duration)
         {
+            m_animation.SetAnimation(0, m_startAnimations[1], false).MixDuration = 0;
+            yield return new WaitForSeconds(0.1f);
             m_hurtboxBB[m_skinID].SetActive(true);
-            m_animation.SetAnimation(0, m_startAnimations[1], false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_startAnimations[1]);
             m_animation.SetAnimation(0, m_idleAnimations[1], true);
             yield return new WaitForSeconds(duration);
@@ -116,13 +138,20 @@ namespace DChild.Gameplay.Projectiles
             if (m_willPool)
                 CallPoolRequest();
             else
-                Destroy(this.gameObject);
+            {
+                if (m_willDestroy)
+                    Destroy(this.gameObject);
+                else
+                    m_skeletonAnimation.skeleton.SetSkin(m_defaultSkin);
+            }
             yield return null;
         }
+
         private IEnumerator RightSpikeRoutine(float duration)
         {
+            m_animation.SetAnimation(0, m_startAnimations[2], false).MixDuration = 0;
+            yield return new WaitForSeconds(0.1f);
             m_hurtboxBB[m_skinID].SetActive(true);
-            m_animation.SetAnimation(0, m_startAnimations[2], false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_startAnimations[2]);
             m_animation.SetAnimation(0, m_idleAnimations[2], true);
             yield return new WaitForSeconds(duration);
@@ -133,7 +162,12 @@ namespace DChild.Gameplay.Projectiles
             if (m_willPool)
                 CallPoolRequest();
             else
-                Destroy(this.gameObject);
+            {
+                if (m_willDestroy)
+                    Destroy(this.gameObject);
+                else
+                    m_skeletonAnimation.skeleton.SetSkin(m_defaultSkin);
+            }
             yield return null;
         }
     }
