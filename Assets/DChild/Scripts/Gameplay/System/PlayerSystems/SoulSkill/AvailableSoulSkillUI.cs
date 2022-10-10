@@ -1,9 +1,10 @@
-﻿using UnityEngine;
+﻿using DChild.Gameplay.Characters.Players.SoulSkills;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace DChild.Gameplay.SoulSkills.UI
 {
-    public sealed class AvailableSoulSkillUI : SoulSkillUI
+    public sealed class AvailableSoulSkillUI : SoulSkillButton
     {
         [SerializeField]
         private GameObject m_shownVersion;
@@ -36,6 +37,11 @@ namespace DChild.Gameplay.SoulSkills.UI
             var colors = m_button.colors;
             colors.normalColor = m_isAnActivatedSoulSkill ? m_activatedColor : m_unactivatedColor;
             m_button.colors = colors;
+        }
+
+        protected override void SetOrb(SoulSkillOrbData orbData)
+        {
+            m_orb.sprite = orbData.availableOrb;
         }
     }
 }

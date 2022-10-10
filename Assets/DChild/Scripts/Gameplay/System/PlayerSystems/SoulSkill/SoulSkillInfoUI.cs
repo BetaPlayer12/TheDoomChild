@@ -10,7 +10,7 @@ namespace DChild.Gameplay.SoulSkills.UI
         [SerializeField]
         private CanvasGroup m_parentCanvas;
         [SerializeField]
-        private Image m_icon;
+        private SoulSkillUI m_skillUI;
         [SerializeField]
         private TextMeshProUGUI m_name;
         [SerializeField]
@@ -22,8 +22,7 @@ namespace DChild.Gameplay.SoulSkills.UI
         public void DisplayInfoOf(SoulSkill soulSkill)
         {
             m_parentCanvas.enabled = soulSkill != null;
-
-            m_icon.sprite = soulSkill.icon;
+            m_skillUI.DisplayAs(soulSkill);
             m_name.text = soulSkill.name;
             m_capcity.text = soulSkill.capacity.ToString();
             m_description.text = soulSkill.description;

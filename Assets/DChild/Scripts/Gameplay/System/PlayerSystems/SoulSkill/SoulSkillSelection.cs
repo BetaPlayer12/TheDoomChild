@@ -16,9 +16,9 @@ namespace DChild.Gameplay.SoulSkills
         [SerializeField]
         private GameObject m_activatedListUI;
         [SerializeField]
-        private Image m_highlight;
+        private RectTransform m_highlight;
 
-        private SoulSkillUI m_currentSelectedSoulSkill;
+        private SoulSkillButton m_currentSelectedSoulSkill;
 
         public event EventAction<SoulSkillSelected> OnSelected;
         public event EventAction<SoulSkillSelected> OnActionRequired;
@@ -50,10 +50,9 @@ namespace DChild.Gameplay.SoulSkills
 
         private void OnSkillHighlight(object sender, SoulSkillSelected eventArgs)
         {
-            var rectTransform = m_highlight.rectTransform;
-            rectTransform.SetParent(eventArgs.soulskillUI.transform);
-            rectTransform.offsetMin = Vector2.zero;
-            rectTransform.offsetMax = Vector2.zero;
+            m_highlight.SetParent(eventArgs.soulskillUI.transform);
+            m_highlight.offsetMin = Vector2.zero;
+            m_highlight.offsetMax = Vector2.zero;
         }
         private void OnSkillClicked(object sender, SoulSkillSelected eventArgs)
         {
@@ -69,7 +68,7 @@ namespace DChild.Gameplay.SoulSkills
 
         private void Awake()
         {
-            var m_acquiredSoulSkillUIList = m_acquiredListUI.GetComponentsInChildren<SoulSkillUI>(true);
+            var m_acquiredSoulSkillUIList = m_acquiredListUI.GetComponentsInChildren<SoulSkillButton>(true);
             for (int i = 0; i < m_acquiredSoulSkillUIList.Length; i++)
             {
                 var soulSkillUI = m_acquiredSoulSkillUIList[i];
@@ -78,7 +77,7 @@ namespace DChild.Gameplay.SoulSkills
                 soulSkillUI.OnClick += OnSkillClicked;
             }
 
-            var m_activatedSoulSkillUIList = m_activatedListUI.GetComponentsInChildren<SoulSkillUI>(true);
+            var m_activatedSoulSkillUIList = m_activatedListUI.GetComponentsInChildren<SoulSkillButton>(true);
             for (int i = 0; i < m_activatedSoulSkillUIList.Length; i++)
             {
                 var soulSkillUI = m_activatedSoulSkillUIList[i];
