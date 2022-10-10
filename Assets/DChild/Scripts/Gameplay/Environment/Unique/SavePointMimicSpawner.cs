@@ -35,7 +35,6 @@ namespace DChild.Gameplay
             }
         }
 
-#if UNITY_EDITOR
         [Button]
         private void rollSpawnChanceEditor()
         {
@@ -58,7 +57,7 @@ namespace DChild.Gameplay
                 mimic.SetActive(false);
             }
         }
-#endif
+
     }
 }
 
