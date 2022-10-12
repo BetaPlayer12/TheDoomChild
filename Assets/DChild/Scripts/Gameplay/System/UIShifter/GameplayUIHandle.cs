@@ -110,7 +110,7 @@ namespace DChild.Gameplay.Systems
         public void ResetGameplayUI()
         {
             GameEventMessage.SendEvent("UI Reset");
-            ShowBossHealth(false);
+            ToggleBossCombatUI(false);
         }
 
         [ContextMenu("Prompt/Primary Skill")]
@@ -130,15 +130,15 @@ namespace DChild.Gameplay.Systems
             //GameEventMessage.SendEvent("Notification");
         }
 
-        public void ShowBossHealth(bool willshow)
+        public void ToggleBossCombatUI(bool willshow)
         {
             if (willshow == true)
             {
-                GameEventMessage.SendEvent("Boss Encounter");
+                m_bossCombat.Show();
             }
             else
             {
-                GameEventMessage.SendEvent("Boss Gone");
+                m_bossCombat.Hide();
             }
         }
 
