@@ -285,8 +285,20 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator Attack1Routine()
         {
+            m_hitbox.gameObject.SetActive(false);
+            transform.position = new Vector2(m_targetInfo.position.x + 1, GroundPosition().y + 1);
             m_animation.SetAnimation(0, m_info.attack1.animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack1.animation);
+
+            transform.rotation = Quaternion.Euler(0f, 0f, 0f);
+            var random = UnityEngine.Random.Range(0, 2);
+            transform.position = new Vector2(m_targetInfo.position.x + (random == 0 ? 5 : -5), m_targetInfo.position.y + 5);
+            yield return new WaitForSeconds(1);
+            if (!IsFacingTarget())
+            {
+                CustomTurn();
+            }
+            m_hitbox.gameObject.SetActive(true);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_selfCollider.SetActive(false);
             m_stateHandle.ApplyQueuedState();
@@ -295,22 +307,38 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator Attack2Routine()
         {
+
             m_animation.SetAnimation(0, m_info.attack2preAnticipation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack2preAnticipation);
+            Vector3 v_diff = (m_targetInfo.transform.position - transform.position);
+            float angle = Mathf.Atan2(v_diff.y, v_diff.x);
+            if (m_character.facing == HorizontalDirection.Right)
+            {
+                transform.rotation = Quaternion.Euler(0f, 0f, angle * Mathf.Rad2Deg );
+            }
+            else
+            {
+                transform.rotation = Quaternion.Euler(0f, 0f, angle * Mathf.Rad2Deg - 180);
+            }
+               
+            var currenttarget = m_targetInfo.transform.position;
             m_animation.SetAnimation(0, m_info.attack2Anticipation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack2Anticipation);
-            Vector3 v_diff=(m_targetInfo.transform.position-transform.position);
-            float angle = Mathf.Atan2(v_diff.y, v_diff.x );
-            transform.rotation=Quaternion.Euler(0f,0f,angle* Mathf.Rad2Deg);
-            m_animation.SetAnimation(0, m_info.attack2postAnticipation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack2postAnticipation);
+            
+           m_animation.SetAnimation(0, m_info.attack2postAnticipation, false);
+           yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack2postAnticipation);
             m_hitbox.gameObject.SetActive(false);
             m_animation.SetAnimation(0, m_info.preattack2, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.preattack2);
-            m_animation.SetAnimation(0, m_info.attack2.animation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack2.animation);
+           yield return new WaitForAnimationComplete(m_animation.animationState, m_info.preattack2);
+            m_animation.SetAnimation(0, m_info.attack2.animation, true);
+
+           
+            var moveSpeed = 20;
+            transform.position = Vector2.MoveTowards(transform.position, currenttarget, moveSpeed);
+
             m_animation.SetAnimation(0, m_info.postattack2, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.postattack2);
+            transform.rotation = Quaternion.Euler(0f, 0f, 0f);
             var random = UnityEngine.Random.Range(0, 2);
             transform.position = new Vector2(m_targetInfo.position.x + (random == 0 ? 5 : -5), m_targetInfo.position.y+5);
             yield return new WaitForSeconds(1);
@@ -442,7 +470,7 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 newPos = new Vector2(m_targetInfo.position.x, m_targetInfo.position.y);
                 bool xTargetInRange = Mathf.Abs(m_targetInfo.position.x - transform.position.x) < attackRange ? true : false;
-                bool yTargetInRange = Mathf.Abs(m_targetInfo.position.y - transform.position.y) < 1 ? true : false;
+                bool yTargetInRange = Mathf.Abs(m_targetInfo.position.y - transform.position.y) < attackRange ? true : false;
                 if (xTargetInRange && yTargetInRange)
                 {
                     inRange = true;
@@ -684,7 +712,11 @@ namespace DChild.Gameplay.Characters.Enemies
                 }
             }
         }
-
+        private Vector2 GroundPosition()
+        {
+            RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, 1000, DChildUtility.GetEnvironmentMask());
+            return hit.point;
+        }
         protected override void OnTargetDisappeared()
         {
             m_stateHandle.OverrideState(State.ReturnToPatrol);
