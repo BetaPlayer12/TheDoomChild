@@ -301,7 +301,6 @@ namespace DChild.Gameplay.Characters.Enemies
         private List<Transform> m_verticalSpikeGroups;
 
         private Vector2 m_lastTargetPos;
-        private int m_currentPhaseIndex;
         private float m_currentCooldown;
         private float m_pickedCooldown;
         private List<float> m_currentFullCooldown;
@@ -805,20 +804,6 @@ namespace DChild.Gameplay.Characters.Enemies
             return randomPos;
         }
         #endregion
-
-        private bool AllowAttack(int phaseIndex, State state)
-        {
-            if (m_currentPhaseIndex >= phaseIndex)
-            {
-                return true;
-            }
-            else
-            {
-                m_attackDecider.hasDecidedOnAttack = false;
-                m_stateHandle.OverrideState(state);
-                return false;
-            }
-        }
 
         //private void DecidedOnAttack(bool condition)
         //{
