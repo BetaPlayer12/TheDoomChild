@@ -8,56 +8,55 @@ namespace DChild.Gameplay
     public class SavePointMimicSpawner : MonoBehaviour
     {
         [SerializeField]
-        private GameObject[] savePointMimics;
+        private GameObject[] m_savePointMimics;
 
         [SerializeField, Range(0, 100)]
-        private int mimicSpawnChance;
+        private int m_mimicSpawnChance;
 
-        private int spawnDiceRoll;
-        private int mimicIndexRoll;
+        private int m_spawnDiceRoll;
+        private int m_mimicIndexRoll;
 
         private void Start()
         {
-            resetMimics();
-            rollSpawnChance();
+            ResetMimics();
+            RollSpawnChance();
         }
 
-        public void rollSpawnChance()
+        public void RollSpawnChance()
         {
-            mimicIndexRoll = Random.Range(0, savePointMimics.Length);
-            spawnDiceRoll = Random.Range(0, 100);
+            m_mimicIndexRoll = Random.Range(0, m_savePointMimics.Length);
+            m_spawnDiceRoll = Random.Range(0, 100);
 
-            Debug.Log("Spawn roll: " + spawnDiceRoll + " mimic index: " + mimicIndexRoll);
+            Debug.Log("Spawn roll: " + m_spawnDiceRoll + " mimic index: " + m_mimicIndexRoll);
 
-            if(spawnDiceRoll <= mimicSpawnChance)
+            if(m_spawnDiceRoll <= m_mimicSpawnChance)
             {
-                savePointMimics[mimicIndexRoll].SetActive(true);
+                m_savePointMimics[m_mimicIndexRoll].SetActive(true);
             }
         }
 
         [Button]
-        private void rollSpawnChanceEditor()
+        private void RollSpawnChanceEditor()
         {
-            mimicIndexRoll = Random.Range(0, savePointMimics.Length);
-            spawnDiceRoll = Random.Range(0, 100);
+            m_mimicIndexRoll = Random.Range(0, m_savePointMimics.Length);
+            m_spawnDiceRoll = Random.Range(0, 100);
 
-            Debug.Log("Spawn roll: " + spawnDiceRoll + "mimic index: " + mimicIndexRoll);
+            Debug.Log("Spawn roll: " + m_spawnDiceRoll + "mimic index: " + m_mimicIndexRoll);
 
-            if (spawnDiceRoll <= mimicSpawnChance)
+            if (m_spawnDiceRoll <= m_mimicSpawnChance)
             {
-                savePointMimics[mimicIndexRoll].SetActive(true);
+                m_savePointMimics[m_mimicIndexRoll].SetActive(true);
             }
         }
 
         [Button]
-        private void resetMimics()
+        private void ResetMimics()
         {
-            foreach(GameObject mimic in savePointMimics)
+            foreach(GameObject mimic in m_savePointMimics)
             {
                 mimic.SetActive(false);
             }
         }
-
     }
 }
 
