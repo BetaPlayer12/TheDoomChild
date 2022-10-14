@@ -12,7 +12,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnTriggerStay2D(Collider2D collision)
         {
-            if (collision.tag == "Character" && collision.gameObject.layer == 8)
+            if (collision.tag == "Character")
             {
                 Debug.Log("Player Grounded");
             }
@@ -20,7 +20,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnCollisionStay2D(Collision2D collision)
         {
-            if (collision.gameObject.tag == "Character" && collision.gameObject.layer == 8)
+            if (collision.gameObject.tag == "Character")
             {
                 Debug.Log("Player Grounded");
             }

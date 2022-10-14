@@ -93,6 +93,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private TentacleCeilingAttack m_tentacleCeilingAttack;
         [SerializeField, BoxGroup("The One Third Form Attacks")]
         private MovingTentacleGroundAttack m_movingTentacleGroundAttack;
+        [SerializeField, BoxGroup("The One Third Form Attacks")]
+        private ChasingGroundTentacleAttack m_chasingGroundTentacleAttack;
 
         private int m_tentacleStabCount = 0;
         [SerializeField]
@@ -100,6 +102,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private float m_tentacleStabTimerValue;
         [SerializeField]
         private bool m_playerIsGrounded; //temporary but we need to check someday how to get The One to see player is grounded
+        [SerializeField]
+        private PlayerGroundedChecker m_playerGroundedChecker;
 
         public override void SetTarget(IDamageable damageable, Character m_target = null)
         {
@@ -120,8 +124,11 @@ namespace DChild.Gameplay.Characters.Enemies
             //    m_tentacleStabTimer = m_tentacleStabTimerValue;
             //}
 
-            
-           
+
+            if (m_playerGroundedChecker.playerIsGrounded)
+            {
+                Debug.Log("Player is Grounded");
+            }
         }
 
         protected override void OnForbidFromAttackTarget()
@@ -139,15 +146,14 @@ namespace DChild.Gameplay.Characters.Enemies
             
         }
 
-#if UNITY_EDITOR
         [Button]
         private void ForceAttack()
         {
             //StartCoroutine(m_tentacleStabAttack.ExecuteAttack(m_targetInfo.position));
             //StartCoroutine(m_tentacleCeilingAttack.ExecuteAttack());
-            StartCoroutine(m_movingTentacleGroundAttack.ExecuteAttack());
+            //StartCoroutine(m_movingTentacleGroundAttack.ExecuteAttack());
+            StartCoroutine(m_chasingGroundTentacleAttack.ExecuteAttack());
         }
-#endif
 
     }
 }
