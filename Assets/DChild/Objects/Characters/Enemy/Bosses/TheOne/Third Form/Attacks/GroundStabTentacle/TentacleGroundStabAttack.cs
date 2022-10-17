@@ -52,9 +52,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 default:
                     break;
             }
-            
-           
-            
+
             yield return null;
         }
 

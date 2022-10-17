@@ -102,8 +102,6 @@ namespace DChild.Gameplay.Characters.Enemies
         private float m_tentacleStabTimerValue;
         [SerializeField]
         private bool m_playerIsGrounded; //temporary but we need to check someday how to get The One to see player is grounded
-        [SerializeField]
-        private PlayerGroundedChecker m_playerGroundedChecker;
 
         public override void SetTarget(IDamageable damageable, Character m_target = null)
         {
@@ -116,19 +114,16 @@ namespace DChild.Gameplay.Characters.Enemies
 
         void Update()
         {
-            //m_tentacleStabTimer -= GameplaySystem.time.deltaTime;
+            m_tentacleStabTimer -= GameplaySystem.time.deltaTime;
 
-            //if(m_tentacleStabTimer <= 0)
-            //{
-            //    StartCoroutine(m_tentacleStabAttack.ExecuteAttack(m_targetInfo.position));
-            //    m_tentacleStabTimer = m_tentacleStabTimerValue;
-            //}
-
-
-            if (m_playerGroundedChecker.playerIsGrounded)
+            if (m_tentacleStabTimer <= 0)
             {
-                Debug.Log("Player is Grounded");
+                Debug.Log("Player is detected: " + m_targetInfo.doesTargetExist);
+                StartCoroutine(m_tentacleStabAttack.ExecuteAttack(m_targetInfo.position));
+                m_tentacleStabTimer = m_tentacleStabTimerValue;
             }
+
+            Debug.Log("Player is grounded " + m_targetInfo.isCharacterGrounded);
         }
 
         protected override void OnForbidFromAttackTarget()
