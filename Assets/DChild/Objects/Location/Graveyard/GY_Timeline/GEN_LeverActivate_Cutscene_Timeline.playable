@@ -29,6 +29,7 @@ MonoBehaviour:
     - {fileID: 4958332113215169614}
     - {fileID: 8177356803825729548}
     - {fileID: 5159324089142623832}
+    - {fileID: 4692848000146929021}
 --- !u!114 &-7674959778946448095
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -414,6 +415,22 @@ MonoBehaviour:
   m_Clips: []
   m_Markers:
     m_Objects: []
+--- !u!114 &4692848000146929021
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 15c38f6fa1940124db1ab7f6fe7268d1, type: 3}
+  m_Name: Signal Emitter
+  m_EditorClassIdentifier: 
+  m_Time: 6.3
+  m_Retroactive: 0
+  m_EmitOnce: 0
+  m_Asset: {fileID: 11400000, guid: 05aafa9f28de326438106d4620cd2aeb, type: 2}
 --- !u!114 &4958332113215169614
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -457,7 +474,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15c38f6fa1940124db1ab7f6fe7268d1, type: 3}
   m_Name: Enable Player Controls
   m_EditorClassIdentifier: 
-  m_Time: 6.3
+  m_Time: 6.283333333333333
   m_Retroactive: 0
   m_EmitOnce: 0
   m_Asset: {fileID: 11400000, guid: f6de445c04f24fd4aa518d2b997e64f8, type: 2}
@@ -534,7 +551,25 @@ MonoBehaviour:
       m_RotationOrder: 4
     m_MixOutCurve:
       serializedVersion: 2
-      m_Curve: []
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
@@ -547,7 +582,7 @@ MonoBehaviour:
     m_PreExtrapolationMode: 0
     m_PostExtrapolationTime: 0
     m_PreExtrapolationTime: 0
-    m_DisplayName: Prison Realmgate CM vcam
+    m_DisplayName: P2EntranceVCam
   - m_Version: 1
     m_Start: 1.3
     m_ClipIn: 0
@@ -580,7 +615,7 @@ MonoBehaviour:
     m_PreExtrapolationMode: 0
     m_PostExtrapolationTime: 0
     m_PreExtrapolationTime: 0
-    m_DisplayName: PR1_OpenDoor1_vcam
+    m_DisplayName: UF3_OpenDoor_vcam
   - m_Version: 1
     m_Start: 5.366666666666666
     m_ClipIn: 0
@@ -631,7 +666,7 @@ MonoBehaviour:
     m_PreExtrapolationMode: 0
     m_PostExtrapolationTime: 0
     m_PreExtrapolationTime: 0
-    m_DisplayName: Prison Realmgate CM vcam
+    m_DisplayName: P2EntranceVCam
   m_Markers:
     m_Objects: []
 --- !u!114 &8177356803825729548
