@@ -95,6 +95,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private MovingTentacleGroundAttack m_movingTentacleGroundAttack;
         [SerializeField, BoxGroup("The One Third Form Attacks")]
         private ChasingGroundTentacleAttack m_chasingGroundTentacleAttack;
+        [SerializeField, BoxGroup("The One Third Form Attacks")]
+        private MouthBlastIIAttack m_mouthBlastIIAttack;
 
         private int m_tentacleStabCount = 0;
         [SerializeField]
@@ -114,14 +116,14 @@ namespace DChild.Gameplay.Characters.Enemies
 
         void Update()
         {
-            m_tentacleStabTimer -= GameplaySystem.time.deltaTime;
+            //m_tentacleStabTimer -= GameplaySystem.time.deltaTime;
 
-            if (m_tentacleStabTimer <= 0)
-            {
-                Debug.Log("Player is detected: " + m_targetInfo.doesTargetExist);
-                StartCoroutine(m_tentacleStabAttack.ExecuteAttack(m_targetInfo.position));
-                m_tentacleStabTimer = m_tentacleStabTimerValue;
-            }
+            //if (m_tentacleStabTimer <= 0)
+            //{
+            //    Debug.Log("Player is detected: " + m_targetInfo.doesTargetExist);
+            //    StartCoroutine(m_tentacleStabAttack.ExecuteAttack(m_targetInfo.position));
+            //    m_tentacleStabTimer = m_tentacleStabTimerValue;
+            //}
 
             Debug.Log("Player is grounded " + m_targetInfo.isCharacterGrounded);
         }
@@ -147,7 +149,8 @@ namespace DChild.Gameplay.Characters.Enemies
             //StartCoroutine(m_tentacleStabAttack.ExecuteAttack(m_targetInfo.position));
             //StartCoroutine(m_tentacleCeilingAttack.ExecuteAttack());
             //StartCoroutine(m_movingTentacleGroundAttack.ExecuteAttack());
-            StartCoroutine(m_chasingGroundTentacleAttack.ExecuteAttack());
+            //StartCoroutine(m_chasingGroundTentacleAttack.ExecuteAttack());
+            StartCoroutine(m_mouthBlastIIAttack.ExecuteAttack());
         }
 
     }
