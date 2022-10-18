@@ -91,11 +91,17 @@ namespace DChild.Gameplay.Characters.Enemies
         private TentacleGroundStabAttack m_tentacleStabAttack;
         [SerializeField, BoxGroup("The One Third Form Attacks")]
         private TentacleCeilingAttack m_tentacleCeilingAttack;
+        [SerializeField, BoxGroup("The One Third Form Attacks")]
+        private MovingTentacleGroundAttack m_movingTentacleGroundAttack;
+        [SerializeField, BoxGroup("The One Third Form Attacks")]
+        private ChasingGroundTentacleAttack m_chasingGroundTentacleAttack;
 
         private int m_tentacleStabCount = 0;
         [SerializeField]
         private float m_tentacleStabTimer = 0f;
         private float m_tentacleStabTimerValue;
+        [SerializeField]
+        private bool m_playerIsGrounded; //temporary but we need to check someday how to get The One to see player is grounded
 
         public override void SetTarget(IDamageable damageable, Character m_target = null)
         {
@@ -108,16 +114,16 @@ namespace DChild.Gameplay.Characters.Enemies
 
         void Update()
         {
-            //m_tentacleStabTimer -= GameplaySystem.time.deltaTime;
+            m_tentacleStabTimer -= GameplaySystem.time.deltaTime;
 
-            //if(m_tentacleStabTimer <= 0)
-            //{
-            //    StartCoroutine(m_tentacleStabAttack.ExecuteAttack(m_targetInfo.position));
-            //    m_tentacleStabTimer = m_tentacleStabTimerValue;
-            //}
+            if (m_tentacleStabTimer <= 0)
+            {
+                Debug.Log("Player is detected: " + m_targetInfo.doesTargetExist);
+                StartCoroutine(m_tentacleStabAttack.ExecuteAttack(m_targetInfo.position));
+                m_tentacleStabTimer = m_tentacleStabTimerValue;
+            }
 
-            
-           
+            Debug.Log("Player is grounded " + m_targetInfo.isCharacterGrounded);
         }
 
         protected override void OnForbidFromAttackTarget()
@@ -135,14 +141,14 @@ namespace DChild.Gameplay.Characters.Enemies
             
         }
 
-#if UNITY_EDITOR
         [Button]
         private void ForceAttack()
         {
             //StartCoroutine(m_tentacleStabAttack.ExecuteAttack(m_targetInfo.position));
-            StartCoroutine(m_tentacleCeilingAttack.ExecuteAttack());
+            //StartCoroutine(m_tentacleCeilingAttack.ExecuteAttack());
+            //StartCoroutine(m_movingTentacleGroundAttack.ExecuteAttack());
+            StartCoroutine(m_chasingGroundTentacleAttack.ExecuteAttack());
         }
-#endif
 
     }
 }
