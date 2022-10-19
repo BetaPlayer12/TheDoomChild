@@ -1,5 +1,4 @@
-﻿using System;
-using DChild.Gameplay;
+﻿using DChild.Gameplay;
 using DChild.Gameplay.Characters;
 using DChild.Gameplay.Combat;
 using Holysoft.Event;
@@ -50,6 +49,9 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             //base.Start();
             m_tentacleStabTimerValue = m_tentacleStabTimer;
+            m_mouthBlastOriginalPosition = transform.position;
+            m_mouthBlastOneLaser.SetActive(false);
+            m_doMouthBlastIAttack = false;
         }
 
         protected override void LateUpdate()
@@ -87,6 +89,11 @@ namespace DChild.Gameplay.Characters.Enemies
         //    WaitBehaviourEnd,
         //}
 
+        [SerializeField, TabGroup("Sensors")]
+        private RaySensor m_leftWallSensor;
+        [SerializeField, TabGroup("Sensors")]
+        private RaySensor m_rightWallSensor;
+
         [SerializeField, BoxGroup("The One Third Form Attacks")]
         private TentacleGroundStabAttack m_tentacleStabAttack;
         [SerializeField, BoxGroup("The One Third Form Attacks")]
@@ -98,13 +105,24 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, BoxGroup("The One Third Form Attacks")]
         private MouthBlastIIAttack m_mouthBlastIIAttack;
 
+        [SerializeField, BoxGroup("Mouth Blast I Stuff")]
+        private GameObject m_mouthBlastOneLaser;
+        [SerializeField, BoxGroup("Mouth Blast I Stuff")]
+        private Transform m_mouthBlastLeftSide;
+        [SerializeField, BoxGroup("Mouth Blast I Stuff")]
+        private Transform m_mouthBlastRightSide;
+        [SerializeField, BoxGroup("Mouth Blast I Stuff")]
+        private float m_mouthBlastMoveSpeed;
+        [SerializeField, BoxGroup("Mouth Blast I Stuff")]
+        private Vector2 m_mouthBlastOriginalPosition;
+        private bool m_doMouthBlastIAttack;
+
+        //stuff for tentacle stab attack
         private int m_tentacleStabCount = 0;
-        [SerializeField]
+        [SerializeField, BoxGroup("Tentacle Stab Attack Stuff")]
         private float m_tentacleStabTimer = 0f;
         private float m_tentacleStabTimerValue;
-        [SerializeField]
-        private bool m_playerIsGrounded; //temporary but we need to check someday how to get The One to see player is grounded
-
+       
         public override void SetTarget(IDamageable damageable, Character m_target = null)
         {
             if (damageable != null)
@@ -112,6 +130,64 @@ namespace DChild.Gameplay.Characters.Enemies
                 base.SetTarget(damageable, m_target);
                 GameEventMessage.SendEvent("Boss Encounter");
             }
+        }
+
+        private IEnumerator MouthBlastOneAttack(int side)
+        {         
+            //transform to mouth
+            yield return new WaitForSeconds(2f);
+            //move to left or right
+            if(side == 0)
+            {
+                transform.position = m_mouthBlastLeftSide.position;
+            }
+            else if(side == 1)
+            {
+                transform.position = m_mouthBlastRightSide.position;
+            }
+
+            yield return new WaitForSeconds(1f);
+
+            //spawn blast
+            m_mouthBlastOneLaser.SetActive(true);
+
+            yield return null;
+            
+        }
+
+        private IEnumerator MoveMouthBlast(int side)
+        {
+            Debug.Log("It's moving time");
+            if (side == 0)
+            {
+                transform.position = Vector2.MoveTowards(transform.position, m_mouthBlastRightSide.position, m_mouthBlastMoveSpeed);
+
+                if (m_rightWallSensor.isDetecting)
+                {
+                    StartCoroutine(EndMouthBlast());
+                }
+            }
+            else if (side == 1)
+            {
+                transform.position = Vector2.MoveTowards(transform.position, m_mouthBlastLeftSide.position, m_mouthBlastMoveSpeed);
+                if (m_leftWallSensor.isDetecting)
+                {
+                    StartCoroutine(EndMouthBlast());
+                }
+            }
+
+            yield return new WaitForSeconds(1f);
+        }
+
+        private IEnumerator EndMouthBlast()
+        {
+            m_doMouthBlastIAttack = false;
+            yield return new WaitForSeconds(2f);
+
+            //end attack, return to original position
+            transform.position = m_mouthBlastOriginalPosition;
+            m_mouthBlastOneLaser.SetActive(false);
+            yield return null;
         }
 
         void Update()
@@ -125,7 +201,14 @@ namespace DChild.Gameplay.Characters.Enemies
             //    m_tentacleStabTimer = m_tentacleStabTimerValue;
             //}
 
-            Debug.Log("Player is grounded " + m_targetInfo.isCharacterGrounded);
+            //StartCoroutine(MouthBlastOneAttack());
+            if (m_doMouthBlastIAttack)
+            {
+                //var rollSide = Random.Range(0, 2);
+                StartCoroutine(MouthBlastOneAttack(0));
+                StartCoroutine(MoveMouthBlast(0));
+                
+            }
         }
 
         protected override void OnForbidFromAttackTarget()
@@ -150,7 +233,9 @@ namespace DChild.Gameplay.Characters.Enemies
             //StartCoroutine(m_tentacleCeilingAttack.ExecuteAttack());
             //StartCoroutine(m_movingTentacleGroundAttack.ExecuteAttack());
             //StartCoroutine(m_chasingGroundTentacleAttack.ExecuteAttack());
-            StartCoroutine(m_mouthBlastIIAttack.ExecuteAttack());
+            //StartCoroutine(m_mouthBlastIIAttack.ExecuteAttack());
+            //StartCoroutine(MouthBlastOneAttack());
+            m_doMouthBlastIAttack = true;
         }
 
     }
