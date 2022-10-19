@@ -530,15 +530,7 @@ namespace DChild.Gameplay.Characters.Enemies
                             m_currentHitCount++;
                         else
                         {
-                            if (m_currentAttackCoroutine != null)
-                            {
-                                StopCoroutine(m_currentAttackCoroutine);
-                                m_currentAttackCoroutine = null;
-                                m_attackDecider.hasDecidedOnAttack = false;
-                            }
-                            m_muzzleLoopFX.Stop();
-                            m_aimOn = false;
-
+                            StopRoutines();
                             m_stateHandle.Wait(State.ReevaluateSituation);
 
                             m_counterAttackCoroutine = StartCoroutine(DodgeRoutine());
@@ -550,15 +542,7 @@ namespace DChild.Gameplay.Characters.Enemies
                             m_currentHitCount++;
                         else
                         {
-                            if (m_currentAttackCoroutine != null)
-                            {
-                                StopCoroutine(m_currentAttackCoroutine);
-                                m_currentAttackCoroutine = null;
-                                m_attackDecider.hasDecidedOnAttack = false;
-                            }
-                            m_muzzleLoopFX.Stop();
-                            m_aimOn = false;
-
+                            StopRoutines();
                             m_stateHandle.Wait(State.ReevaluateSituation);
 
                             m_counterAttackCoroutine = StartCoroutine(DodgeRoutine());
@@ -572,11 +556,19 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator DodgeRoutine()
         {
             enabled = false;
+            if (!IsFacingTarget())
+                CustomTurn();
+
+            m_muzzleLoopFX.Stop();
+            ResetLaser();
+            m_aimOn = false;
+            m_beamOn = false;
             m_animation.EnableRootMotion(true, false);
             m_animation.SetAnimation(0, m_info.dodgeAnimation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.dodgeAnimation);
+            m_animation.AddAnimation(0, m_info.idle1Animation, true, 0);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.idle1Animation);
             m_animation.DisableRootMotion();
-            m_animation.SetAnimation(0, RandomIdleAnimation(), true);
+            //m_animation.SetAnimation(0, RandomIdleAnimation(), true);
             m_stateHandle.ApplyQueuedState();
             yield return null;
             enabled = true;
@@ -625,6 +617,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.DisableRootMotion();
             m_animation.SetEmptyAnimation(0, 0);
             m_aimOn = false;
+            m_beamOn = false;
         }
 
         private void StopRoutines()
@@ -850,7 +843,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_aimBone.mode = SkeletonUtilityBone.Mode.Override;
             while (m_aimOn)
             {
-                m_aimBone.transform.position = m_targetInfo.position;
+                m_aimBone.transform.position = new Vector2(m_targetInfo.position.x, m_targetInfo.position.y -5f);
                 yield return null;
             }
             //Vector2 spitPos = m_aimBone.transform.position;
@@ -880,7 +873,7 @@ namespace DChild.Gameplay.Characters.Enemies
             Vector2 direction = (m_lazerTargetPos - startPoint).normalized;
 
             RaycastHit2D hit = Physics2D.Raycast(/*m_projectilePoint.position*/startPoint, direction, 1000, DChildUtility.GetEnvironmentMask());
-            Debug.DrawRay(startPoint, direction);
+            //Debug.DrawRay(startPoint, direction);
             return hit.point;
         }
 
@@ -921,11 +914,11 @@ namespace DChild.Gameplay.Characters.Enemies
                 for (int i = 0; i < m_lineRenderer.positionCount; i++)
                 {
                     var pos = m_lineRenderer.GetPosition(i) - m_edgeCollider.transform.position;
-                    pos = new Vector2(m_character.facing == HorizontalDirection.Right ? pos.x : -pos.x, pos.y);
-                    if (i > 0)
-                    {
-                        pos = pos * 0.7f;
-                    }
+                    pos = new Vector2(Mathf.Abs(pos.x), pos.y);
+                    //if (i > 0)
+                    //{
+                    //    pos = pos * 0.7f;
+                    //}
                     m_Points.Add(pos);
                 }
                 m_edgeCollider.points = m_Points.ToArray();
