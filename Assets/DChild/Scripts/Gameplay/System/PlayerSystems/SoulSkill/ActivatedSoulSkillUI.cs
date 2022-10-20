@@ -2,20 +2,28 @@
 
 namespace DChild.Gameplay.SoulSkills.UI
 {
-    public sealed class ActivatedSoulSkillUI : SoulSkillUI
+    public sealed class ActivatedSoulSkillUI : SoulSkillButton
     {
         [SerializeField]
         private GameObject m_chain;
 
         public override void Show(bool immidiate)
         {
-            gameObject.SetActive(true);
+            if(m_button == null)
+            {
+                Awake();
+            }
+            m_button.interactable = true;
             m_chain.SetActive(true);
         }
 
         public override void Hide(bool immidiate)
         {
-            gameObject.SetActive(false);
+            if (m_button == null)
+            {
+                Awake();
+            }
+            m_button.interactable = false;
             m_chain.SetActive(false);
         }
 

@@ -19,15 +19,15 @@ namespace DChild.Menu.SoulSkills
         [SerializeField]
         private int m_index;
 
-        private SoulSkillUI m_containedUI;
+        private SoulSkillUIOLD m_containedUI;
 
         public event EventAction<SoulSkillSlotEventArgs> AttemptToBeInserted;
         public event EventAction<SoulSkillSlotEventArgs> AttemptSkillRemoval;
 
-        public SoulSkillUI containedUI => m_containedUI;
+        public SoulSkillUIOLD containedUI => m_containedUI;
         public int index { get => m_index; }
 
-        public void SetContainedUI(SoulSkillUI soulSkillUI)
+        public void SetContainedUI(SoulSkillUIOLD soulSkillUI)
         {
             if (soulSkillUI == null)
             {
