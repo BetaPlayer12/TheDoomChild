@@ -123,7 +123,7 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, BoxGroup("Mouth Blast I Stuff")]
         private Vector2 m_mouthBlastOriginalPosition;
         [SerializeField, BoxGroup("Mouth Blast I Stuff")]
-        private GameObject m_blackBloodFlood;
+        private BlackBloodFlood m_blackBloodFlood;
         private bool m_doMouthBlastIAttack;
         private bool m_moveMouth;
         private int m_SideToStart;
@@ -164,32 +164,10 @@ namespace DChild.Gameplay.Characters.Enemies
             m_mouthBlastOneLaser.SetActive(true);
 
             m_moveMouth = true;
+            m_blackBloodFlood.m_isFlooding = true;
 
             yield return null;
             
-        }
-
-        private void MoveMouth(int side)
-        {
-            if (side == 0)
-            {
-                transform.position = Vector2.MoveTowards(transform.position, m_mouthBlastRightSide.position, m_mouthBlastMoveSpeed);
-
-                if (m_rightWallSensor.isDetecting)
-                {
-                    StartCoroutine(EndMouthBlast());
-                }
-
-            }
-            else if(side == 1)
-            {
-                transform.position = Vector2.MoveTowards(transform.position, m_mouthBlastRightSide.position, m_mouthBlastMoveSpeed);
-                if (m_rightWallSensor.isDetecting)
-                {
-                    StartCoroutine(EndMouthBlast());
-                }
-
-            }     
         }
 
         private IEnumerator MoveMouthBlast(int side)
@@ -219,6 +197,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator EndMouthBlast()
         {
             m_doMouthBlastIAttack = false;
+            m_blackBloodFlood.m_isFlooding = false;
             yield return new WaitForSeconds(2f);
 
             //end attack, return to original position
