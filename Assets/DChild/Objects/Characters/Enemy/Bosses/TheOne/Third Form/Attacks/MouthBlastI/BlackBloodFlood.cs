@@ -12,7 +12,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             if (m_isFlooding)
             {
-                transform.position = transform.Tra
+                
             }
         }
     }
