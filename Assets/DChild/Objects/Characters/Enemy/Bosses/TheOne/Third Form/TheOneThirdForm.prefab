@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1139564374867529812}
   - component: {fileID: 194051454834403030}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: LegCollider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -57,7 +57,7 @@ GameObject:
   m_Component:
   - component: {fileID: 747648855676213510}
   - component: {fileID: 585360166654225736}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: LeftWallSensor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -105,7 +105,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2138015985354354775}
   - component: {fileID: 5034065176944921632}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: BodyCollider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -169,7 +169,7 @@ GameObject:
   - component: {fileID: 1131129748201530869}
   - component: {fileID: 5828499132079470112}
   - component: {fileID: 7241466855170443021}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: TheOneThirdForm
   m_TagString: Character
   m_Icon: {fileID: 0}
@@ -188,6 +188,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2779383246727184696}
+  - {fileID: 1131811473740720506}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -210,6 +211,7 @@ MonoBehaviour:
   m_centerMass: {fileID: 2779383246727184696}
   m_aggroBoundary: {fileID: 4839421149860804277}
   m_statsData: {fileID: 11400000, guid: 374f634dac7bb8c4f82e338af3f34685, type: 2}
+  m_agent: {fileID: 2709267250372666414}
   m_leftWallSensor: {fileID: 585360166654225736}
   m_rightWallSensor: {fileID: 2656180952102682791}
   m_tentacleStabAttack: {fileID: 0}
@@ -222,6 +224,7 @@ MonoBehaviour:
   m_mouthBlastRightSide: {fileID: 0}
   m_mouthBlastMoveSpeed: 5
   m_mouthBlastOriginalPosition: {x: 0, y: 0}
+  m_blackBloodFlood: {fileID: 0}
   m_tentacleStabTimer: 0
 --- !u!114 &8160533390247193380
 MonoBehaviour:
@@ -385,7 +388,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2779383246727184696}
   - component: {fileID: 2779383246727184697}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Model
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -470,7 +473,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2010591758757814513}
   - component: {fileID: 4092321712695603035}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Hitbox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -515,6 +518,52 @@ MonoBehaviour:
   m_invulnerabilityLevel: 0
   m_damageReduction: 0
   m_canBlockDamage: 0
+--- !u!1 &3094245443879852298
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4441432819000843923}
+  - component: {fileID: 5993597085151201197}
+  m_Layer: 13
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4441432819000843923
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3094245443879852298}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1131811473740720506}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5993597085151201197
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3094245443879852298}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a6fd63998a5d1e419a9e1fee3c1b8d6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_destinationTolerance: 3
+  m_refreshPath: 0
+  m_refreshRate: 0
 --- !u!1 &3300722481985645961
 GameObject:
   m_ObjectHideFlags: 0
@@ -527,7 +576,7 @@ GameObject:
   - component: {fileID: 3514710525948685102}
   - component: {fileID: 5098449637660806098}
   - component: {fileID: 4839421149860804277}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Aggro
   m_TagString: Sensor
   m_Icon: {fileID: 0}
@@ -607,7 +656,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3281215260022090027}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: MouthBlast
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -629,6 +678,66 @@ Transform:
   m_Father: {fileID: 2779383246727184696}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &4031408028314615121
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1131811473740720506}
+  - component: {fileID: 5283011964300138538}
+  - component: {fileID: 2709267250372666414}
+  m_Layer: 13
+  m_Name: Behaviour
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1131811473740720506
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4031408028314615121}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 4441432819000843923}
+  m_Father: {fileID: 2779383245710350785}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5283011964300138538
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4031408028314615121}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1b0d68cd77a89d45b04c6c47d586049, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_source: {fileID: 4848072615983798210}
+--- !u!114 &2709267250372666414
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4031408028314615121}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b91f4cccbfb14d4f90c8d2512647826, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_navigation: {fileID: 5993597085151201197}
+  m_movementHandle: {fileID: 5283011964300138538}
 --- !u!1 &4764976307555132374
 GameObject:
   m_ObjectHideFlags: 0
@@ -639,7 +748,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5999141437983153079}
   - component: {fileID: 7946991350861291766}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Colliders
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -688,7 +797,7 @@ GameObject:
   - component: {fileID: 5221491039646966797}
   - component: {fileID: 7830181956653993045}
   - component: {fileID: 1332288243443055744}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Collider
   m_TagString: Hitbox
   m_Icon: {fileID: 0}
@@ -760,7 +869,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5201004806952625641}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Sensors
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -794,7 +903,7 @@ GameObject:
   m_Component:
   - component: {fileID: 895875039222944563}
   - component: {fileID: 2656180952102682791}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: RightWallSensor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -848,6 +957,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2491162674255990562, guid: f98224ae72d32974cb30e704732a7e70,
+        type: 3}
+      propertyPath: m_Layer
+      value: 13
       objectReference: {fileID: 0}
     - target: {fileID: 3623643730036008203, guid: f98224ae72d32974cb30e704732a7e70,
         type: 3}

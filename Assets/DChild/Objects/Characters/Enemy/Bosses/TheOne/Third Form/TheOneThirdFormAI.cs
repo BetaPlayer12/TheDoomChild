@@ -31,6 +31,10 @@ namespace DChild.Gameplay.Characters.Enemies
             //private PhaseInfo<Phase> m_phaseInfo;
             //public PhaseInfo<Phase> phaseInfo => m_phaseInfo;
 
+            [SerializeField]
+            private MovementInfo m_moveSideways = new MovementInfo();
+            public MovementInfo moveSideways => m_moveSideways;
+
             public override void Initialize()
             {
                 
@@ -89,6 +93,9 @@ namespace DChild.Gameplay.Characters.Enemies
         //    WaitBehaviourEnd,
         //}
 
+        [SerializeField, TabGroup("Modules")]
+        private PathFinderAgent m_agent;
+
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_leftWallSensor;
         [SerializeField, TabGroup("Sensors")]
@@ -115,7 +122,11 @@ namespace DChild.Gameplay.Characters.Enemies
         private float m_mouthBlastMoveSpeed;
         [SerializeField, BoxGroup("Mouth Blast I Stuff")]
         private Vector2 m_mouthBlastOriginalPosition;
+        [SerializeField, BoxGroup("Mouth Blast I Stuff")]
+        private GameObject m_blackBloodFlood;
         private bool m_doMouthBlastIAttack;
+        private bool m_moveMouth;
+        private int m_SideToStart;
 
         //stuff for tentacle stab attack
         private int m_tentacleStabCount = 0;
@@ -140,6 +151,7 @@ namespace DChild.Gameplay.Characters.Enemies
             if(side == 0)
             {
                 transform.position = m_mouthBlastLeftSide.position;
+                m_SideToStart = side;
             }
             else if(side == 1)
             {
@@ -151,13 +163,14 @@ namespace DChild.Gameplay.Characters.Enemies
             //spawn blast
             m_mouthBlastOneLaser.SetActive(true);
 
+            m_moveMouth = true;
+
             yield return null;
             
         }
 
-        private IEnumerator MoveMouthBlast(int side)
+        private void MoveMouth(int side)
         {
-            Debug.Log("It's moving time");
             if (side == 0)
             {
                 transform.position = Vector2.MoveTowards(transform.position, m_mouthBlastRightSide.position, m_mouthBlastMoveSpeed);
@@ -166,11 +179,35 @@ namespace DChild.Gameplay.Characters.Enemies
                 {
                     StartCoroutine(EndMouthBlast());
                 }
+
+            }
+            else if(side == 1)
+            {
+                transform.position = Vector2.MoveTowards(transform.position, m_mouthBlastRightSide.position, m_mouthBlastMoveSpeed);
+                if (m_rightWallSensor.isDetecting)
+                {
+                    StartCoroutine(EndMouthBlast());
+                }
+
+            }     
+        }
+
+        private IEnumerator MoveMouthBlast(int side)
+        {
+            if (side == 0)
+            {
+                transform.position = Vector2.MoveTowards(transform.position, m_mouthBlastRightSide.position, m_mouthBlastMoveSpeed);
+
+                if(transform.position == m_mouthBlastRightSide.position)
+                {
+                    StartCoroutine(EndMouthBlast());
+                }
             }
             else if (side == 1)
             {
                 transform.position = Vector2.MoveTowards(transform.position, m_mouthBlastLeftSide.position, m_mouthBlastMoveSpeed);
-                if (m_leftWallSensor.isDetecting)
+
+                if (transform.position == m_mouthBlastLeftSide.position)
                 {
                     StartCoroutine(EndMouthBlast());
                 }
@@ -187,6 +224,7 @@ namespace DChild.Gameplay.Characters.Enemies
             //end attack, return to original position
             transform.position = m_mouthBlastOriginalPosition;
             m_mouthBlastOneLaser.SetActive(false);
+            m_moveMouth = false;
             yield return null;
         }
 
@@ -201,14 +239,21 @@ namespace DChild.Gameplay.Characters.Enemies
             //    m_tentacleStabTimer = m_tentacleStabTimerValue;
             //}
 
-            //StartCoroutine(MouthBlastOneAttack());
             if (m_doMouthBlastIAttack)
             {
                 //var rollSide = Random.Range(0, 2);
-                StartCoroutine(MouthBlastOneAttack(0));
-                StartCoroutine(MoveMouthBlast(0));
-                
+                m_doMouthBlastIAttack = false;
+                StartCoroutine(MouthBlastOneAttack(m_SideToStart));
+                //
             }
+
+            if (m_moveMouth)
+            {
+                StartCoroutine(MoveMouthBlast(m_SideToStart));
+            }
+            
+
+            //transform.position = Vector2.MoveTowards(transform.position, m_mouthBlastLeftSide.position, m_mouthBlastMoveSpeed);
         }
 
         protected override void OnForbidFromAttackTarget()
@@ -236,6 +281,8 @@ namespace DChild.Gameplay.Characters.Enemies
             //StartCoroutine(m_mouthBlastIIAttack.ExecuteAttack());
             //StartCoroutine(MouthBlastOneAttack());
             m_doMouthBlastIAttack = true;
+            var rollSide = Random.Range(0, 2);
+            m_SideToStart = rollSide;
         }
 
     }
