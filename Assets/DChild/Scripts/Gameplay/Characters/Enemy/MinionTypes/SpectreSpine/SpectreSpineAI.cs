@@ -37,8 +37,20 @@ namespace DChild.Gameplay.Characters.Enemies
             private SimpleAttackInfo m_attack2 = new SimpleAttackInfo();
             public SimpleAttackInfo attack2 => m_attack2;
             [SerializeField, ValueDropdown("GetAnimations")]
+            private string m_preattack2;
+            public string preattack2 => m_preattack2;
+            [SerializeField, ValueDropdown("GetAnimations")]
+            private string m_postattack2;
+            public string postattack2 => m_postattack2;
+            [SerializeField, ValueDropdown("GetAnimations")]
             private string m_attack2Anticipation;
             public string attack2Anticipation => m_attack2Anticipation;
+            [SerializeField, ValueDropdown("GetAnimations")]
+            private string m_attack2preAnticipation;
+            public string attack2preAnticipation => m_attack2preAnticipation;
+            [SerializeField, ValueDropdown("GetAnimations")]
+            private string m_attack2postAnticipation;
+            public string attack2postAnticipation => m_attack2postAnticipation;
             [SerializeField]
             private float m_attackCD;
             public float attackCD => m_attackCD;
@@ -63,9 +75,6 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField, ValueDropdown("GetAnimations")]
             private string m_flinchAnimation;
             public string flinchAnimation => m_flinchAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_counterFlinchAnimation;
-            public string counterFlinchAnimation => m_counterFlinchAnimation;
             [SerializeField, ValueDropdown("GetAnimations")]
             private string m_fadeInAnimation;
             public string fadeInAnimation => m_fadeInAnimation;
@@ -196,11 +205,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 {
                     CustomTurn();
                 }
-                if (m_animation.GetCurrentAnimation(0).ToString() == m_info.attack1.animation
-                    || m_animation.GetCurrentAnimation(0).ToString() == m_info.attack2Anticipation)
-                {
-                    StartCoroutine(CounterFlinchRoutine());
-                }
+               
                 else
                 {
                     StartCoroutine(FlinchRoutine());
@@ -213,39 +218,13 @@ namespace DChild.Gameplay.Characters.Enemies
             m_hitbox.gameObject.SetActive(false);
             m_animation.SetAnimation(0, m_info.flinchAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.flinchAnimation);
-            m_animation.SetAnimation(0, m_info.fadeOutAnimation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.fadeOutAnimation);
-            yield return new WaitForSeconds(2);
-            var random = UnityEngine.Random.Range(0, 2);
-            transform.position = new Vector2(m_targetInfo.position.x + (IsFacingTarget() ? -5 : 5), m_targetInfo.position.y);
-            if (!IsFacingTarget())
-            {
-                CustomTurn();
-            }
-            m_animation.SetAnimation(0, m_info.fadeInAnimation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.fadeInAnimation);
             m_hitbox.gameObject.SetActive(true);
-            m_animation.SetAnimation(0, m_info.attack2.animation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack2.animation);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_stateHandle.ApplyQueuedState();
             yield return null;
         }
 
-        private IEnumerator CounterFlinchRoutine()
-        {
-            m_animation.EnableRootMotion(true, true);
-            m_animation.SetAnimation(0, m_info.counterFlinchAnimation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.counterFlinchAnimation);
-            if (!IsFacingTarget())
-            {
-                CustomTurn();
-            }
-            m_animation.SetAnimation(0, m_info.detectAnimation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.detectAnimation);
-            ExecuteAttack(Attack.Attack2);
-            yield return null;
-        }
+        
 
         private void OnFlinchEnd(object sender, EventActionArgs eventArgs)
         {
@@ -306,8 +285,20 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator Attack1Routine()
         {
+            m_hitbox.gameObject.SetActive(false);
+            transform.position = new Vector2(m_targetInfo.position.x + 1, GroundPosition().y + 1);
             m_animation.SetAnimation(0, m_info.attack1.animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack1.animation);
+
+            transform.rotation = Quaternion.Euler(0f, 0f, 0f);
+            var random = UnityEngine.Random.Range(0, 2);
+            transform.position = new Vector2(m_targetInfo.position.x + (random == 0 ? 5 : -5), m_targetInfo.position.y + 5);
+            yield return new WaitForSeconds(1);
+            if (!IsFacingTarget())
+            {
+                CustomTurn();
+            }
+            m_hitbox.gameObject.SetActive(true);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_selfCollider.SetActive(false);
             m_stateHandle.ApplyQueuedState();
@@ -316,19 +307,46 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator Attack2Routine()
         {
+
+            m_animation.SetAnimation(0, m_info.attack2preAnticipation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack2preAnticipation);
+            Vector3 v_diff = (m_targetInfo.transform.position - transform.position);
+            float angle = Mathf.Atan2(v_diff.y, v_diff.x);
+            if (m_character.facing == HorizontalDirection.Right)
+            {
+                transform.rotation = Quaternion.Euler(0f, 0f, angle * Mathf.Rad2Deg );
+            }
+            else
+            {
+                transform.rotation = Quaternion.Euler(0f, 0f, angle * Mathf.Rad2Deg - 180);
+            }
+               
+            var currenttarget = m_targetInfo.transform.position;
             m_animation.SetAnimation(0, m_info.attack2Anticipation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack2Anticipation);
+            
+           m_animation.SetAnimation(0, m_info.attack2postAnticipation, false);
+           yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack2postAnticipation);
             m_hitbox.gameObject.SetActive(false);
+            m_animation.SetAnimation(0, m_info.preattack2, false);
+           yield return new WaitForAnimationComplete(m_animation.animationState, m_info.preattack2);
+            m_animation.SetAnimation(0, m_info.attack2.animation, true);
+
+           
+            var moveSpeed = 20;
+            transform.position = Vector2.MoveTowards(transform.position, currenttarget, moveSpeed);
+
+            m_animation.SetAnimation(0, m_info.postattack2, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.postattack2);
+            transform.rotation = Quaternion.Euler(0f, 0f, 0f);
             var random = UnityEngine.Random.Range(0, 2);
-            transform.position = new Vector2(m_targetInfo.position.x + (random == 0 ? 5 : -5), m_targetInfo.position.y);
+            transform.position = new Vector2(m_targetInfo.position.x + (random == 0 ? 5 : -5), m_targetInfo.position.y+5);
             yield return new WaitForSeconds(1);
             if (!IsFacingTarget())
             {
                 CustomTurn();
             }
             m_hitbox.gameObject.SetActive(true);
-            m_animation.SetAnimation(0, m_info.attack2.animation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack2.animation);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_selfCollider.SetActive(false);
             m_stateHandle.ApplyQueuedState();
@@ -452,7 +470,7 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 newPos = new Vector2(m_targetInfo.position.x, m_targetInfo.position.y);
                 bool xTargetInRange = Mathf.Abs(m_targetInfo.position.x - transform.position.x) < attackRange ? true : false;
-                bool yTargetInRange = Mathf.Abs(m_targetInfo.position.y - transform.position.y) < 1 ? true : false;
+                bool yTargetInRange = Mathf.Abs(m_targetInfo.position.y - transform.position.y) < attackRange ? true : false;
                 if (xTargetInRange && yTargetInRange)
                 {
                     inRange = true;
@@ -514,23 +532,7 @@ namespace DChild.Gameplay.Characters.Enemies
             }
         }
 
-        //private void DynamicMovement(Vector2 target)
-        //{
-        //    if (IsFacingTarget())
-        //    {
-        //        var velocityX = GetComponent<IsolatedPhysics2D>().velocity.x;
-        //        var velocityY = GetComponent<IsolatedPhysics2D>().velocity.y;
-        //        m_agent.SetDestination(target);
-        //        m_agent.Move(m_info.move.speed);
-
-        //        m_animation.SetAnimation(0, m_info.move.animation, true);
-        //    }
-        //    else
-        //    {
-        //        m_turnState = State.Attacking;
-        //        m_stateHandle.OverrideState(State.Turning);
-        //    }
-        //}
+       
         #endregion
 
         protected override void Start()
@@ -710,7 +712,11 @@ namespace DChild.Gameplay.Characters.Enemies
                 }
             }
         }
-
+        private Vector2 GroundPosition()
+        {
+            RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, 1000, DChildUtility.GetEnvironmentMask());
+            return hit.point;
+        }
         protected override void OnTargetDisappeared()
         {
             m_stateHandle.OverrideState(State.ReturnToPatrol);

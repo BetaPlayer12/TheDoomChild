@@ -9,16 +9,18 @@ namespace DChild.Gameplay.SoulSkills.UI
     {
         [SerializeField]
         private GameObject m_uiListParent;
-        private Dictionary<int, SoulSkillUI> m_uiPair;
+        [SerializeField]
+        private bool m_considerAllAsAvailable;
+        private Dictionary<int, SoulSkillButton> m_uiPair;
 
-        public SoulSkillUI GetButton(int index) => m_uiPair.Values.ElementAt(index);
+        public SoulSkillButton GetButton(int index) => m_uiPair.Values.ElementAt(index);
 
         public void MakeAvailable(int soulSkillID)
         {
             m_uiPair[soulSkillID].Show(false);
         }
 
-        public SoulSkillUI MakeAvailableAndGetUI(int soulSkillID)
+        public SoulSkillButton MakeAvailableAndGetUI(int soulSkillID)
         {
             var button = m_uiPair[soulSkillID];
             button.Show(false);
@@ -55,7 +57,7 @@ namespace DChild.Gameplay.SoulSkills.UI
         {
             foreach (var ui in m_uiPair.Values)
             {
-                if (availableSoulSkillIDs.Contains(ui.soulSkillID))
+                if (m_considerAllAsAvailable || availableSoulSkillIDs.Contains(ui.soulSkillID))
                 {
                     ui.Show(true);
                 }
@@ -78,10 +80,10 @@ namespace DChild.Gameplay.SoulSkills.UI
         {
             if (m_uiPair == null)
             {
-                m_uiPair = new Dictionary<int, SoulSkillUI>();
+                m_uiPair = new Dictionary<int, SoulSkillButton>();
             }
             m_uiPair.Clear();
-            var uiList = m_uiListParent.GetComponentsInChildren<SoulSkillUI>(true);
+            var uiList = m_uiListParent.GetComponentsInChildren<SoulSkillButton>(true);
             var idList = m_completeSoulSkillList.GetIDs();
 
             for (int i = 0; i < m_completeSoulSkillList.Count; i++)

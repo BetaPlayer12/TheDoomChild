@@ -264,7 +264,14 @@ namespace DChild.Gameplay.Environment
             }
             else
             {
-                UpdateImitation();
+                if (GameplaySystem.isGamePaused)
+                {
+
+                }
+                else
+                {
+                    UpdateImitation();
+                }
             }
 
             DrawLineConnection();

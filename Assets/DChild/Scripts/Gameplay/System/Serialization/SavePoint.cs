@@ -1,6 +1,8 @@
 ﻿using DChild.Gameplay.Environment;
+using DChild.Serialization;
 using Holysoft.Collections;
 using Sirenix.OdinInspector;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -26,6 +28,22 @@ namespace DChild.Gameplay
             //#endif
             GameplaySystem.campaignSerializer.slot.UpdateLocation(m_sceneInfo, m_location, m_spawnPosition);
             GameplaySystem.campaignSerializer.Save(SerializationScope.Gameplay);
+        }
+        public void SaveGameAfterZoneInitialize()
+        {
+            StopAllCoroutines();
+            StartCoroutine(SaveGameAfterZoneInitializeRoutine());
+        }
+
+        private IEnumerator SaveGameAfterZoneInitializeRoutine()
+        {
+            var zoneDataHandle = FindObjectOfType<ZoneDataHandle>();
+            while (zoneDataHandle.hasLoaded == false)
+            {
+                yield return null;
+            }
+            SaveGame();
+
         }
 
         private void Awake()

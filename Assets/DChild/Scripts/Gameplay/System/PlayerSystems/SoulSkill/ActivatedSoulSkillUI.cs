@@ -2,7 +2,7 @@
 
 namespace DChild.Gameplay.SoulSkills.UI
 {
-    public sealed class ActivatedSoulSkillUI : SoulSkillUI
+    public sealed class ActivatedSoulSkillUI : SoulSkillButton
     {
         [SerializeField]
         private GameObject m_chain;
