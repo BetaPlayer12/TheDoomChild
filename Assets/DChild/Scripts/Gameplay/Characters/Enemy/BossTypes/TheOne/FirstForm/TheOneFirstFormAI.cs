@@ -303,6 +303,15 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField, BoxGroup("Scythe Wave Projectile")]
             private SimpleProjectileAttackInfo m_scytheWaveAcidProjectile;
             public SimpleProjectileAttackInfo scytheWaveAcidProjectile => m_scytheWaveAcidProjectile;
+            [SerializeField, BoxGroup("Geyser Burst Projectile")]
+            private SimpleProjectileAttackInfo m_geyserBurstBlackbloodProjectile;
+            public SimpleProjectileAttackInfo geyserBurstBlackbloodProjectile => m_geyserBurstBlackbloodProjectile;
+            [SerializeField, BoxGroup("Geyser Burst Projectile")]
+            private SimpleProjectileAttackInfo m_geyserBurstPoisonProjectile;
+            public SimpleProjectileAttackInfo geyserBurstPoisonProjectile => m_geyserBurstPoisonProjectile;
+            [SerializeField, BoxGroup("Geyser Burst Projectile")]
+            private SimpleProjectileAttackInfo m_geyserBurstAcidProjectile;
+            public SimpleProjectileAttackInfo geyserBurstAcidProjectile => m_geyserBurstAcidProjectile;
 
             [TitleGroup("FX")]
             [SerializeField]
@@ -335,6 +344,9 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_geyserBurstGreenAttack.SetData(m_skeletonDataAsset);
                 m_geyserBurstPurpleAttack.SetData(m_skeletonDataAsset);
                 m_geyserBurstRedAttack.SetData(m_skeletonDataAsset);
+                m_geyserBurstAcidProjectile.SetData(m_skeletonDataAsset);
+                m_geyserBurstPoisonProjectile.SetData(m_skeletonDataAsset);
+                m_geyserBurstBlackbloodProjectile.SetData(m_skeletonDataAsset);
                 m_slashNormalProjectile.SetData(m_skeletonDataAsset);
                 m_slashBlackbloodProjectile.SetData(m_skeletonDataAsset);
                 m_slashPoisonProjectile.SetData(m_skeletonDataAsset);
@@ -459,6 +471,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private ProjectileLauncher m_projectileLauncher;
         private ProjectileLauncher m_scytheWaveLauncher;
+        private ProjectileLauncher m_geyserBurstLauncher;
 
         [SerializeField]
         private SpineEventListener m_spineListener;
@@ -1246,6 +1259,8 @@ namespace DChild.Gameplay.Characters.Enemies
                     geyserAnimation = m_info.geyserBurstGreenAttack.animation;
                     break;
             }
+            m_geyserBurstLauncher.AimAt(GroundPosition(this.transform.position));
+            m_geyserBurstLauncher.LaunchProjectile();
             m_animation.AddAnimation(0, geyserAnimation, false, 0);
             yield return new WaitForAnimationComplete(m_animation.animationState, geyserAnimation);
             m_attackDecider.hasDecidedOnAttack = false;
@@ -1736,18 +1751,21 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_drillMixAnimation = m_info.drillRedMixAnimation;
                     m_projectileLauncher = new ProjectileLauncher(m_info.slashBlackbloodProjectile.projectileInfo, m_projectilePoint);
                     m_scytheWaveLauncher = new ProjectileLauncher(m_info.scytheWaveBlackbloodProjectile.projectileInfo, m_scytheWavePoint);
+                    m_geyserBurstLauncher = new ProjectileLauncher(m_info.geyserBurstBlackbloodProjectile.projectileInfo, this.transform);
                     break;
                 case SwordState.Poison:
                     m_swordMixAnimation = m_info.swordPurpleMixAnimation;
                     m_drillMixAnimation = m_info.drillPurpleMixAnimation;
                     m_projectileLauncher = new ProjectileLauncher(m_info.slashPoisonProjectile.projectileInfo, m_projectilePoint);
                     m_scytheWaveLauncher = new ProjectileLauncher(m_info.scytheWavePoisonProjectile.projectileInfo, m_scytheWavePoint);
+                    m_geyserBurstLauncher = new ProjectileLauncher(m_info.geyserBurstPoisonProjectile.projectileInfo, this.transform);
                     break;
                 case SwordState.Acid:
                     m_swordMixAnimation = m_info.swordGreenMixAnimation;
                     m_drillMixAnimation = m_info.drillGreenMixAnimation;
                     m_projectileLauncher = new ProjectileLauncher(m_info.slashAcidProjectile.projectileInfo, m_projectilePoint);
                     m_scytheWaveLauncher = new ProjectileLauncher(m_info.scytheWaveAcidProjectile.projectileInfo, m_scytheWavePoint);
+                    m_geyserBurstLauncher = new ProjectileLauncher(m_info.geyserBurstAcidProjectile.projectileInfo, this.transform);
                     break;
             }
             m_animation.SetAnimation(0, m_info.swordChangeAnimation, false);
@@ -1834,6 +1852,7 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_patternDecider = new RandomAttackDecider<Pattern>();
             m_projectileLauncher = new ProjectileLauncher(m_info.slashNormalProjectile.projectileInfo, m_projectilePoint);
             m_scytheWaveLauncher = new ProjectileLauncher(m_info.scytheWaveNormalProjectile.projectileInfo, m_scytheWavePoint);
+            m_geyserBurstLauncher = new ProjectileLauncher(m_info.geyserBurstAcidProjectile.projectileInfo, this.transform);
             m_attackDecider = new RandomAttackDecider<Attack>();
             m_stateHandle = new StateHandle<State>(State.Idle, State.WaitBehaviourEnd);
             UpdateAttackDeciderList();
