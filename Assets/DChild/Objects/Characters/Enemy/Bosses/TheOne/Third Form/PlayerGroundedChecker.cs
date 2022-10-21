@@ -1,10 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DChild.Gameplay.Combat;
+using DChild.Gameplay.Characters.Enemies;
 
-namespace DChild.Gameplay.Characters.Enemies
+namespace DChild.Gameplay.Characters.AI
 {
-    public class PlayerGroundedChecker : MonoBehaviour
+    public class PlayerGroundedChecker : AggroSensor
     {
         [SerializeField]
         private bool m_playerIsGrounded;
@@ -12,17 +14,21 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnTriggerStay2D(Collider2D collision)
         {
-            if (collision.tag == "Character")
+            var target = collision.GetComponentInParent<IEnemyTarget>();
+            if (target != null && collision.gameObject.layer == LayerMask.NameToLayer("Player"))
             {
+                m_playerIsGrounded = true;
                 Debug.Log("Player Grounded");
             }
         }
 
-        private void OnCollisionStay2D(Collision2D collision)
+        private void OnTriggerExit2D(Collider2D collision)
         {
-            if (collision.gameObject.tag == "Character")
+            var target = collision.GetComponentInParent<IEnemyTarget>();
+            if (target != null && collision.gameObject.layer == LayerMask.NameToLayer("Player"))
             {
-                Debug.Log("Player Grounded");
+                m_playerIsGrounded = false;
+                Debug.Log("Player Not Grounded");
             }
         }
     }
