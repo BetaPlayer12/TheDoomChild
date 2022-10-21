@@ -16,16 +16,24 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_floorSensor;
 
+        [SerializeField, TabGroup("Sensors")]
+        private GameObject m_floorSlamCollider;
+        [SerializeField, TabGroup("Sensors")]
+        private GameObject m_wallSlamCollider;
+
         // Start is called before the first frame update
         void Start()
         {
             m_wallIsGrounded = false;
             m_slideWall = false;
+            m_floorSlamCollider.SetActive(false);
+            m_wallSlamCollider.SetActive(false);
         }
 
         // Update is called once per frame
         void Update()
         {
+            Debug.Log("Floor Sensor " + m_wallIsGrounded);
             if (!m_wallIsGrounded)
             {
                 StartCoroutine(WallSmashOnGround());
@@ -44,7 +52,11 @@ namespace DChild.Gameplay.Characters.Enemies
                 transform.Translate(Vector3.down);
             }
 
+            m_floorSlamCollider.SetActive(true);
+
             yield return new WaitForSeconds(2f);
+
+            m_floorSlamCollider.SetActive(false);
 
             m_wallIsGrounded = true;
             m_slideWall = true;
@@ -58,6 +70,11 @@ namespace DChild.Gameplay.Characters.Enemies
             }
             else
             {
+                m_wallSlamCollider.SetActive(true);
+
+                yield return new WaitForSeconds(0.5f);
+
+                m_wallSlamCollider.SetActive(false);
                 //Destroy Wall animation here
                 DestroyInstance();
             }
