@@ -13,6 +13,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private Transform m_leftSpawnPoint;
         [SerializeField]
         private Transform m_rightSpawnPoint;
+        [SerializeField]
+        private Transform m_arenaCenter;
 
         public IEnumerator ExecuteAttack()
         {
@@ -21,14 +23,43 @@ namespace DChild.Gameplay.Characters.Enemies
 
         public IEnumerator ExecuteAttack(Vector2 PlayerPosition)
         {
-            throw new System.NotImplementedException();
+            if(PlayerPosition.x < m_arenaCenter.position.x)
+            {
+                InstantiateWall(m_rightSpawnPoint.position, m_monolithWall.gameObject, PlayerPosition);
+            }
+            else
+            {
+                InstantiateWall(m_leftSpawnPoint.position, m_monolithWall.gameObject, PlayerPosition);              
+            }
+            
+
+            yield return null;
         }
 
-        private void InstantiateWall(Vector2 spawnPosition, GameObject wall)
+        private void InstantiateWall(Vector2 spawnPosition, GameObject wall, Vector2 PlayerPosition)
         {
             var instance = GameSystem.poolManager.GetPool<PoolableObjectPool>().GetOrCreateItem(wall, gameObject.scene);
-            instance.GetComponent<SlidingStoneWall>().executeAttack = true;
+
+            if(PlayerPosition.x < m_arenaCenter.position.x)
+            {
+                instance.GetComponent<SlidingStoneWall>().slideRight = false;
+                instance.GetComponent<SlidingStoneWall>().executeAttack = true;
+            }
+            else
+            {
+                instance.GetComponent<SlidingStoneWall>().executeAttack = true;
+                instance.GetComponent<SlidingStoneWall>().slideRight = true;
+            }
+            
             instance.SpawnAt(spawnPosition, Quaternion.identity);           
+        }
+
+        private void InstantiateRightWall(Vector2 spawnPosition, GameObject wall)
+        {
+            var instance = GameSystem.poolManager.GetPool<PoolableObjectPool>().GetOrCreateItem(wall, gameObject.scene);
+            instance.GetComponent<SlidingStoneWall>().slideRight = false;
+            instance.GetComponent<SlidingStoneWall>().executeAttack = true;
+            instance.SpawnAt(spawnPosition, Quaternion.identity);
         }
 
         // Start is called before the first frame update

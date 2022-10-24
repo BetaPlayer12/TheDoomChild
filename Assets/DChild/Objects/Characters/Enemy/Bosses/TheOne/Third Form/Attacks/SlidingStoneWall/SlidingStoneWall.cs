@@ -12,6 +12,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private bool m_slideWall;
 
         public bool executeAttack;
+        public bool slideRight;
 
         [SerializeField]
         private Collider2D m_wallCollider;
@@ -25,6 +26,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private GameObject m_floorSlamCollider;
         [SerializeField, TabGroup("Damagers")]
         private GameObject m_wallSlamCollider;
+        
 
         // Start is called before the first frame update
         void Start()
@@ -33,6 +35,13 @@ namespace DChild.Gameplay.Characters.Enemies
             m_slideWall = false;
             m_floorSlamCollider.SetActive(false);
             m_wallSlamCollider.SetActive(false);
+
+            if (!slideRight)
+            {
+                Vector2 flipScale = transform.localScale;
+                flipScale.x = -25.97327f;
+                transform.localScale = flipScale;
+            }
         }
 
         // Update is called once per frame
@@ -68,16 +77,22 @@ namespace DChild.Gameplay.Characters.Enemies
 
             m_wallIsGrounded = true;
             m_slideWall = true;
-            }
-
-            
+            }        
         }
 
         private IEnumerator SlideWall()
         {
             if (!m_wallSensor.isDetecting)
             {
-                transform.Translate(Vector3.right);
+                if (slideRight)
+                {
+                    transform.Translate(Vector3.right);
+                }
+
+                if(!slideRight)
+                {
+                    transform.Translate(Vector3.left);
+                }     
             }
             else
             {
