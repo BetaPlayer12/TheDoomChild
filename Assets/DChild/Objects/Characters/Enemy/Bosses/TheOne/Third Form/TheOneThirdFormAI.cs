@@ -111,6 +111,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private ChasingGroundTentacleAttack m_chasingGroundTentacleAttack;
         [SerializeField, BoxGroup("The One Third Form Attacks")]
         private MouthBlastIIAttack m_mouthBlastIIAttack;
+        [SerializeField, BoxGroup("The One Third Form Attacks")]
+        private SlidingStoneWallAttack m_slidingWallAttack;
 
         [SerializeField, BoxGroup("Mouth Blast I Stuff")]
         private GameObject m_mouthBlastOneLaser;
@@ -218,18 +220,18 @@ namespace DChild.Gameplay.Characters.Enemies
             //    m_tentacleStabTimer = m_tentacleStabTimerValue;
             //}
 
-            if (m_doMouthBlastIAttack)
-            {
-                //var rollSide = Random.Range(0, 2);
-                m_doMouthBlastIAttack = false;
-                StartCoroutine(MouthBlastOneAttack(m_SideToStart));
-                //
-            }
+            //if (m_doMouthBlastIAttack)
+            //{
+            //    //var rollSide = Random.Range(0, 2);
+            //    m_doMouthBlastIAttack = false;
+            //    StartCoroutine(MouthBlastOneAttack(m_SideToStart));
+            //    //
+            //}
 
-            if (m_moveMouth)
-            {
-                StartCoroutine(MoveMouthBlast(m_SideToStart));
-            }
+            //if (m_moveMouth)
+            //{
+            //    StartCoroutine(MoveMouthBlast(m_SideToStart));
+            //}
             
 
             //transform.position = Vector2.MoveTowards(transform.position, m_mouthBlastLeftSide.position, m_mouthBlastMoveSpeed);
@@ -259,9 +261,12 @@ namespace DChild.Gameplay.Characters.Enemies
             //StartCoroutine(m_chasingGroundTentacleAttack.ExecuteAttack());
             //StartCoroutine(m_mouthBlastIIAttack.ExecuteAttack());
             //StartCoroutine(MouthBlastOneAttack());
-            m_doMouthBlastIAttack = true;
-            var rollSide = Random.Range(0, 2);
-            m_SideToStart = rollSide;
+
+            //m_doMouthBlastIAttack = true;
+            //var rollSide = Random.Range(0, 2);
+            //m_SideToStart = rollSide;
+
+            StartCoroutine(m_slidingWallAttack.ExecuteAttack());
         }
 
     }
