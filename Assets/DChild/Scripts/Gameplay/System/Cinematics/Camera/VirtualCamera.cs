@@ -11,6 +11,7 @@ namespace DChild.Gameplay.Cinematics.Cameras
         [SerializeField, OnValueChanged("ChangeName")]
         private string cameraName;
 
+        [Button]
         private void ChangeName()
         {
             if (cameraName != string.Empty)
@@ -23,7 +24,27 @@ namespace DChild.Gameplay.Cinematics.Cameras
                 if (m_vCam != null)
                 {
                     m_vCam.gameObject.name = cameraName + "VCam";
+                    var confiner = m_vCam.GetComponent<CinemachineConfiner>();
+                    if (confiner != null && confiner.m_BoundingShape2D)
+                    {
+                        confiner.m_BoundingShape2D.gameObject.name = cameraName + "_Confiner";
+                        var confineTransform = confiner.m_BoundingShape2D.transform;
+                        for (int i = 0; i < confineTransform.childCount; i++)
+                        {
+                            confineTransform.GetChild(i).gameObject.name = cameraName + $"_ConfineCollider ({i + 1})";
+                        }
+                    }
                 }
+
+                var transistionArea = GetComponentInChildren<CameraTransistionArea>();
+                transistionArea.gameObject.name = cameraName + "_TransistionArea";
+                var transistionAreaTransform = transistionArea.transform;
+                for (int i = 0; i < transistionAreaTransform.childCount; i++)
+                {
+                    transistionAreaTransform.GetChild(i).gameObject.name = cameraName + $"_TransistionCollider ({i + 1})";
+                }
+
+
             }
         }
 #endif
