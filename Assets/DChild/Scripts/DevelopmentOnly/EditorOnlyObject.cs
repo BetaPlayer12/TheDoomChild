@@ -10,14 +10,21 @@ namespace DChildDebug
         private Transform someTransform;
         private void OnValidate()
         {
-           
-            foreach (Transform tr in someTransform)
+           if(someTransform == null)
             {
-                if (tr.tag != "EditorOnly")
+
+            }
+            else
+            {
+                foreach (Transform tr in someTransform)
                 {
-                    tr.tag = "EditorOnly";
+                    if (tr.tag != "EditorOnly")
+                    {
+                        tr.tag = "EditorOnly";
+                    }
                 }
             }
+        
             //Transform.childCount;
             //transform.GetChild()
             //var allChildren = GetComponentsInChildren<Transform>();
