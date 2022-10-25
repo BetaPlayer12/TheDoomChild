@@ -208,16 +208,6 @@ namespace DChild.Gameplay.Characters.Enemies
             }
         }
 
-        private void CustomTurn()
-        {
-            if (!IsFacingTarget())
-            {
-                //m_turnHandle.Execute(m_info.turnAnimation, m_info.idleAnimation);
-                transform.localScale = new Vector3(-transform.localScale.x, 1, 1);
-                m_character.SetFacing(transform.localScale.x == 1 ? HorizontalDirection.Right : HorizontalDirection.Left);
-            }
-        }
-
         private void OnTurnDone(object sender, FacingEventArgs eventArgs)
         {
             m_stateHandle.ApplyQueuedState();
