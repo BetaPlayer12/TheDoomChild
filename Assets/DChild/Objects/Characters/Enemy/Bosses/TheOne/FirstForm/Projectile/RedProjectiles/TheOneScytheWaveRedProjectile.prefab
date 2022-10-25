@@ -16,7 +16,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &6299781540818762376
 Transform:
   m_ObjectHideFlags: 0
@@ -142,10 +142,7 @@ MonoBehaviour:
   m_physicsObjects:
     m_rigidbody2Ds:
     - {fileID: 3294752841817744060}
-    - {fileID: 5189041486518362205}
     m_physicsTimeObjectInfo:
-    - m_mass: 1
-      m_actualVelocity: {x: 0, y: 0}
     - m_mass: 1
       m_actualVelocity: {x: 0, y: 0}
   m_materials: []
@@ -284,6 +281,32 @@ PolygonCollider2D:
       - {x: -6.0161285, y: -26.298615}
       - {x: 10.510296, y: -26.453629}
       - {x: 8.127792, y: -5.4974785}
+--- !u!114 &3339682676648563049
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5189041486518362206}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 70443ecacf099b2478b8834eeb630323, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  OnCallBack:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 8089781613609798470}
+        m_MethodName: CallPoolRequest
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &8067472992538626994
 GameObject:
   m_ObjectHideFlags: 0
@@ -354,6 +377,26 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 654378074104659014}
     m_Modifications:
+    - target: {fileID: 4616088777796027016, guid: 9a817377635b8a745a0967865ee3c9f4,
+        type: 3}
+      propertyPath: stopAction
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4616088778085053863, guid: 9a817377635b8a745a0967865ee3c9f4,
+        type: 3}
+      propertyPath: stopAction
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4616088778405465571, guid: 9a817377635b8a745a0967865ee3c9f4,
+        type: 3}
+      propertyPath: stopAction
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4616088778446073698, guid: 9a817377635b8a745a0967865ee3c9f4,
+        type: 3}
+      propertyPath: stopAction
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 4616088778534359246, guid: 9a817377635b8a745a0967865ee3c9f4,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -409,13 +452,29 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4616088778534359247, guid: 9a817377635b8a745a0967865ee3c9f4,
+        type: 3}
+      propertyPath: stopAction
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 4616088778534359282, guid: 9a817377635b8a745a0967865ee3c9f4,
         type: 3}
       propertyPath: m_Name
       value: the_one_slash_fx_holder_red
       objectReference: {fileID: 0}
+    - target: {fileID: 4616088778608203851, guid: 9a817377635b8a745a0967865ee3c9f4,
+        type: 3}
+      propertyPath: stopAction
+      value: 3
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9a817377635b8a745a0967865ee3c9f4, type: 3}
+--- !u!1 &5189041486518362206 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4616088778534359282, guid: 9a817377635b8a745a0967865ee3c9f4,
+    type: 3}
+  m_PrefabInstance: {fileID: 579990134037164204}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &5189041486518362210 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4616088778534359246, guid: 9a817377635b8a745a0967865ee3c9f4,
@@ -425,12 +484,6 @@ Transform:
 --- !u!198 &5189041486518362211 stripped
 ParticleSystem:
   m_CorrespondingSourceObject: {fileID: 4616088778534359247, guid: 9a817377635b8a745a0967865ee3c9f4,
-    type: 3}
-  m_PrefabInstance: {fileID: 579990134037164204}
-  m_PrefabAsset: {fileID: 0}
---- !u!50 &5189041486518362205 stripped
-Rigidbody2D:
-  m_CorrespondingSourceObject: {fileID: 4616088778534359281, guid: 9a817377635b8a745a0967865ee3c9f4,
     type: 3}
   m_PrefabInstance: {fileID: 579990134037164204}
   m_PrefabAsset: {fileID: 0}

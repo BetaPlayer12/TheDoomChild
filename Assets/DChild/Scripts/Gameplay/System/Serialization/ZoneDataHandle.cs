@@ -85,9 +85,17 @@ namespace DChild.Serialization
         private QuestStateListener[] m_questsListener;
         [OdinSerialize, HideInEditorMode]
         private ZoneData m_zoneData = new ZoneData();
+        private bool m_hasLoaded;
+
 
         private CampaignSlot m_cacheSlot;
         private ComponentSerializer m_cacheComponentSerializer;
+        public bool hasLoaded => m_hasLoaded;
+
+        public void ForceUpdateZoneData()
+        {
+            GameplaySystem.campaignSerializer.UpdateData(SerializationScope.Zone);
+        }
 
         private void OnPostDeserialization(object sender, CampaignSlotUpdateEventArgs eventArgs)
         {
@@ -110,6 +118,8 @@ namespace DChild.Serialization
                 {
                     m_questsListener[i].UpdateIndicator(true);
                 }
+                Debug.Log("Zone Loaded:" + gameObject.scene.name);
+                m_hasLoaded = true;
             }
         }
 
@@ -118,6 +128,7 @@ namespace DChild.Serialization
             if (eventArgs.IsPartOfTheUpdate(SerializationScope.Zone))
             {
                 UpdateSaveData();
+                Debug.Log("Zone Saved:" + gameObject.scene.name);
             }
         }
 
@@ -142,6 +153,8 @@ namespace DChild.Serialization
             var slot = GameplaySystem.campaignSerializer.slot;
             slot.UpdateZoneData(m_ID, m_zoneData);
             slot.UpdateDialogueSaveData();
+            Debug.Log("Zone Save Updated:" + gameObject.scene.name);
+
         }
 
         private void UpdateDialogueSaveData(CampaignSlot slot)
@@ -170,6 +183,7 @@ namespace DChild.Serialization
                     Debug.LogError($"Deserialization Error: {m_cacheComponentSerializer.gameObject.name} \n {e.Message}", m_cacheComponentSerializer);
                 }
             }
+            Debug.Log("Zone Serializers Updated:" + gameObject.scene.name);
         }
 
         private IEnumerator LoadComponentsRoutine(bool hasData)
@@ -197,6 +211,8 @@ namespace DChild.Serialization
                 }
                 yield return null;
             }
+            Debug.Log("Zone Components Loaded:" + gameObject.scene.name);
+            m_hasLoaded = true;
         }
 
         private IEnumerator LoadDynamicComponentsRoutine()
