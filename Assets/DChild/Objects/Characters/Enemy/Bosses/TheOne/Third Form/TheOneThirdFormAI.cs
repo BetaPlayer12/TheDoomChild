@@ -468,6 +468,8 @@ namespace DChild.Gameplay.Characters.Enemies
             m_mouthBlastOriginalPosition = transform.position;
             m_mouthBlastOneLaser.SetActive(false);
             m_doMouthBlastIAttack = false;
+            m_monolithTimerValue = m_monolithTimer;
+            m_triggerMonolithSlamAttack = false;
 
             //m_animation.DisableRootMotion();
             m_phaseHandle = new PhaseHandle<Phase, PhaseInfo>();
@@ -544,7 +546,18 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, BoxGroup("Tentacle Stab Attack Stuff")]
         private float m_tentacleStabTimer = 0f;
         private float m_tentacleStabTimerValue;
-       
+
+        //Monolith Slam stuff
+        [SerializeField, BoxGroup("Monolith Slam Stuff")]
+        private int m_numOfMonoliths;
+        [SerializeField, BoxGroup("Monolith Slam Stuff")]
+        private int m_monolithCounter;
+        [SerializeField, BoxGroup("Monolith Slam Stuff")]
+        private bool m_triggerMonolithSlamAttack;
+        [SerializeField, BoxGroup("Monolith Slam Stuff")]
+        private float m_monolithTimer;
+        private float m_monolithTimerValue;
+
         public override void SetTarget(IDamageable damageable, Character m_target = null)
         {
             if (damageable != null)
@@ -1299,6 +1312,22 @@ namespace DChild.Gameplay.Characters.Enemies
 
 
             //transform.position = Vector2.MoveTowards(transform.position, m_mouthBlastLeftSide.position, m_mouthBlastMoveSpeed);
+
+            //if (m_triggerMonolithSlamAttack)
+            //{
+            //    Debug.Log("trigger monolith is: " + m_triggerMonolithSlamAttack);
+            //    m_monolithTimer -= GameplaySystem.time.deltaTime;
+
+            //    if(m_monolithCounter < m_numOfMonoliths)
+            //    {
+            //        if(m_monolithTimer <= 0)
+            //        {
+            //            StartCoroutine(m_monolithSlamAttack.SetUpMonoliths(m_targetInfo.position));
+            //            m_monolithCounter++;
+            //            m_monolithTimer = m_monolithTimerValue;
+            //        }
+            //    }
+            //}
         }
 
         protected override void OnForbidFromAttackTarget()
@@ -1331,6 +1360,16 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_SideToStart = rollSide;
 
             //StartCoroutine(m_slidingWallAttack.ExecuteAttack());
+
+            StartCoroutine(m_monolithSlamAttack.ExecuteAttack());
+            m_triggerMonolithSlamAttack = false;
+
+        }
+
+        [Button]
+        private void TriggerMonolithAttack()
+        {
+            m_triggerMonolithSlamAttack = true;
         }
 
     }

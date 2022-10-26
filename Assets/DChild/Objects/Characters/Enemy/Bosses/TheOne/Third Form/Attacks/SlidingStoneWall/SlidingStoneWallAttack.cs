@@ -24,15 +24,10 @@ namespace DChild.Gameplay.Characters.Enemies
         public IEnumerator ExecuteAttack(Vector2 PlayerPosition)
         {
             if(PlayerPosition.x < m_arenaCenter.position.x)
-            {
                 InstantiateWall(m_rightSpawnPoint.position, m_monolithWall.gameObject, PlayerPosition);
-            }
             else
-            {
                 InstantiateWall(m_leftSpawnPoint.position, m_monolithWall.gameObject, PlayerPosition);              
-            }
             
-
             yield return null;
         }
 

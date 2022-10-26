@@ -24,6 +24,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_impactCollider.enabled = true;
             m_obstacleCollider.enabled = false;
+            m_monolithGrounded = false;
         }
 
         // Update is called once per frame
@@ -31,10 +32,9 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             if (smashMonolith)
             {
+                StartCoroutine(MonolithSmashOnGround());
                 if (!m_monolithGrounded)
-                {
                     StartCoroutine(MonolithSmashOnGround());
-                }
             }        
         }
 
@@ -44,7 +44,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
             if (!m_floorSensor.isDetecting)
             {
-                transform.Translate(Vector3.right);
+                transform.Translate(Vector3.down);
             }
             else
             {
@@ -52,11 +52,10 @@ namespace DChild.Gameplay.Characters.Enemies
 
                 m_impactCollider.enabled = false;
                 m_obstacleCollider.enabled = true;
+                m_monolithGrounded = true;
 
                 if (destroyMonolith)
-                {
                     DestroyInstance();
-                }
             }
         }
     }
