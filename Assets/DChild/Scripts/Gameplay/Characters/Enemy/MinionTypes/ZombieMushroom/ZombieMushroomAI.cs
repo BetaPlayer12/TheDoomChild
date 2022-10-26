@@ -351,7 +351,7 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_animation.SetAnimation(0, m_info.detectAnimation, false);
             //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.detectAnimation);
             m_selfCollider.enabled = false;
-            m_animation.SetAnimation(0, m_info.move.animation, true).TimeScale = 2;
+            m_animation.SetAnimation(0, m_info.move.animation, true);
             float time = 0;
             while (time < m_info.chargeAttackDuration)
             {
@@ -576,7 +576,7 @@ namespace DChild.Gameplay.Characters.Enemies
                                 if (!m_wallSensor.isDetecting && m_groundSensor.isDetecting && m_edgeSensor.isDetecting)
                                 {
                                     m_selfCollider.enabled = false;
-                                    m_animation.SetAnimation(0, m_info.move.animation, true).TimeScale = m_currentTimeScale;
+                                    m_animation.SetAnimation(0, m_info.move.animation, true)/*.TimeScale = m_currentTimeScale*/;
                                     //m_movement.MoveTowards(Vector2.one * transform.localScale.x, m_info.move.speed);
                                 }
                                 else
