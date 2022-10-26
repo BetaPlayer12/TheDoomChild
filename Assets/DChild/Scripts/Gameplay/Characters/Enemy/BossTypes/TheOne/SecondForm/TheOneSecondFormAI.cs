@@ -1036,7 +1036,7 @@ namespace DChild.Gameplay.Characters.Enemies
             StopCoroutine(m_lazerLookCoroutine);
             m_lazerLookCoroutine = null;
             m_aimOn = false;
-            m_character.physics.SetVelocity(BallisticVelocity(new Vector2(m_targetInfo.position.x, (transform.position.y - m_targetInfo.position.y))));
+            m_character.physics.SetVelocity(BallisticVelocity(new Vector2(m_targetInfo.position.x, /*(transform.position.y - m_targetInfo.position.y)*/GroundPosition(m_targetInfo.position).y)));
             m_animation.SetAnimation(0, m_info.jumpSmashStartAnimation, false);
             //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.jumpSmashStartAnimation);
             yield return new WaitUntil(() => m_groundSensor.isDetecting);
