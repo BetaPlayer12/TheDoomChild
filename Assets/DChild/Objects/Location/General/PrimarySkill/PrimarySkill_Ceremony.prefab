@@ -5580,9 +5580,11 @@ MonoBehaviour:
   m_rightStatueGlow: {fileID: 4928636093383027525}
   m_toUnlock: 0
   m_promptOffset: {x: 0, y: 17.87, z: 0}
-  m_cinematic: {fileID: 0}
+  m_cinematic: {fileID: 2717298209394277184}
   m_collider: {fileID: 6430206957786715807}
   m_isUsed: 0
+  m_onInteractionCommand: 
+  m_shrineVisualHandle: {fileID: 0}
 --- !u!61 &6430206957786715807
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -5619,6 +5621,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8113220063933132824}
   - component: {fileID: 8113220063933132827}
+  - component: {fileID: 1762843965104243530}
   m_Layer: 0
   m_Name: Statue_L
   m_TagString: Untagged
@@ -5691,6 +5694,25 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!95 &1762843965104243530
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8113220063933132826}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 0}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &8113220065422257380
 GameObject:
   m_ObjectHideFlags: 0
@@ -5701,6 +5723,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8113220065422257378}
   - component: {fileID: 8113220065422257381}
+  - component: {fileID: 8433830464745788509}
   m_Layer: 0
   m_Name: Statue_R
   m_TagString: Untagged
@@ -5773,6 +5796,25 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!95 &8433830464745788509
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8113220065422257380}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 0}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &8113220065433321832
 GameObject:
   m_ObjectHideFlags: 0
@@ -5783,6 +5825,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8113220065433321833}
   - component: {fileID: 8113220065433321830}
+  - component: {fileID: 2717298209394277184}
   m_Layer: 0
   m_Name: Platform
   m_TagString: Untagged
@@ -5857,6 +5900,39 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!320 &2717298209394277184
+PlayableDirector:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8113220065433321832}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_PlayableAsset: {fileID: 11400000, guid: 4dfdeea25441b79438da533a0c103575, type: 2}
+  m_InitialState: 0
+  m_WrapMode: 2
+  m_DirectorUpdateMode: 1
+  m_InitialTime: 0
+  m_SceneBindings:
+  - key: {fileID: -8186123784629197966, guid: be810ba6eb68ed247a444159ebca0eb5, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: 7352195788739702933, guid: be810ba6eb68ed247a444159ebca0eb5, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: 3666141519617848099, guid: be810ba6eb68ed247a444159ebca0eb5, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: 5919817127332590208, guid: 4dfdeea25441b79438da533a0c103575, type: 2}
+    value: {fileID: 8433830464745788509}
+  - key: {fileID: 5392707150949068657, guid: 4dfdeea25441b79438da533a0c103575, type: 2}
+    value: {fileID: 1762843965104243530}
+  - key: {fileID: -9191760167516697314, guid: 4dfdeea25441b79438da533a0c103575, type: 2}
+    value: {fileID: 3184656945455508985}
+  - key: {fileID: -8092144775971894670, guid: 4dfdeea25441b79438da533a0c103575, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: 2322156516966285883, guid: 4dfdeea25441b79438da533a0c103575, type: 2}
+    value: {fileID: 0}
+  m_ExposedReferences:
+    m_References: []
 --- !u!1 &8734352112794982697
 GameObject:
   m_ObjectHideFlags: 0
@@ -10620,6 +10696,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2423014957807700868}
+  - component: {fileID: 3184656945455508985}
   m_Layer: 0
   m_Name: Ceremony_lights
   m_TagString: Untagged
@@ -10647,3 +10724,22 @@ Transform:
   m_Father: {fileID: 8113220065433321833}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!95 &3184656945455508985
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8897878042151800231}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 0}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
