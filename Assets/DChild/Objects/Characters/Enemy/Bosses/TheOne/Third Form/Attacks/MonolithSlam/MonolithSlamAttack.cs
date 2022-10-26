@@ -17,10 +17,22 @@ namespace DChild.Gameplay.Characters.Enemies
 
         public IEnumerator ExecuteAttack()
         {
-            foreach(PoolableObject monolith in m_monolithsSpawned)
+            if (m_leftToRightSequence)
+            {
+                OrganizeMonolithsSpawnedInDescendingOrder();
+                
+            }
+            else
+            {
+                OrganizeMonolithsSpawnedInAscendingOrder();
+            }
+
+            foreach (PoolableObject monolith in m_monolithsSpawned)
             {
                 monolith.GetComponent<MonolithSlam>().smashMonolith = true;
             }
+
+
             yield return null;
         }
 
@@ -40,8 +52,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             var instance = GameSystem.poolManager.GetPool<PoolableObjectPool>().GetOrCreateItem(monolith, gameObject.scene);
             instance.SpawnAt(new Vector2(spawnPosition.x, spawnPosition.y + 10f), Quaternion.identity);
-            m_monolithsSpawned.Add(instance);
-            
+            m_monolithsSpawned.Add(instance);            
         }
 
         public void OrganizeMonolithsSpawnedInDescendingOrder()
@@ -53,6 +64,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             //flip this j
             m_monolithsSpawned = m_monolithsSpawned.OrderByDescending(x => x.transform.position.x).ToList();
+            m_monolithsSpawned.Reverse();
         }
 
       

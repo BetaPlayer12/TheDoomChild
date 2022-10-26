@@ -669,6 +669,7 @@ namespace DChild.Gameplay.Characters.Enemies
             else if(side == 1)
             {
                 transform.position = m_mouthBlastRightSide.position;
+                m_SideToStart = side;
             }
 
             yield return new WaitForSeconds(1f);
@@ -709,9 +710,13 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator CompleteMouthBlastOneRoutine()
         {
-            var rollSide = Random.Range(0, 2);
-            StartCoroutine(MouthBlastOneAttack(m_SideToStart));
-
+            if (m_doMouthBlastIAttack)
+            {
+                var rollSide = Random.Range(0, 2);
+                StartCoroutine(MouthBlastOneAttack(m_SideToStart));
+                m_doMouthBlastIAttack = false;
+            }
+            
             if (m_moveMouth)
             {
                 StartCoroutine(MoveMouthBlast(m_SideToStart));
@@ -735,7 +740,10 @@ namespace DChild.Gameplay.Characters.Enemies
 
         void Update()
         {
+            m_tentacleStabTimer -= GameplaySystem.time.deltaTime;
+
             m_phaseHandle.MonitorPhase();
+
             switch (m_stateHandle.currentState)
             {
                 case State.Idle:
@@ -760,8 +768,8 @@ namespace DChild.Gameplay.Characters.Enemies
                         case Attack.Phase1Pattern1:
                             m_pickedCooldown = m_currentFullCooldown[0];
 
-                            m_tentacleStabTimer -= GameplaySystem.time.deltaTime;
-
+                            Debug.Log("Tentacle Stab Attack");
+                           
                             if (m_tentacleStabTimer <= 0)
                             {
                                 m_currentAttackCoroutine = StartCoroutine(m_tentacleStabAttack.ExecuteAttack(m_targetInfo.position));
@@ -826,8 +834,6 @@ namespace DChild.Gameplay.Characters.Enemies
                             break;
                         case Attack.Phase2Pattern1:
                             m_pickedCooldown = m_currentFullCooldown[0];
-
-                            m_tentacleStabTimer -= GameplaySystem.time.deltaTime;
 
                             if (m_tentacleStabTimer <= 0)
                             {
@@ -912,8 +918,6 @@ namespace DChild.Gameplay.Characters.Enemies
                             break;
                         case Attack.Phase3Pattern1:
                             m_pickedCooldown = m_currentFullCooldown[0];
-
-                            m_tentacleStabTimer -= GameplaySystem.time.deltaTime;
 
                             if (m_tentacleStabTimer <= 0)
                             {
@@ -1011,8 +1015,6 @@ namespace DChild.Gameplay.Characters.Enemies
                             m_pickedCooldown = m_currentFullCooldown[0];
 
                             Debug.Log("TENTACLE GROUND STAB ATTACK");
-
-                            m_tentacleStabTimer -= GameplaySystem.time.deltaTime;
 
                             if (m_tentacleStabTimer <= 0)
                             {
@@ -1328,7 +1330,7 @@ namespace DChild.Gameplay.Characters.Enemies
             //var rollSide = Random.Range(0, 2);
             //m_SideToStart = rollSide;
 
-            StartCoroutine(m_slidingWallAttack.ExecuteAttack());
+            //StartCoroutine(m_slidingWallAttack.ExecuteAttack());
         }
 
     }
