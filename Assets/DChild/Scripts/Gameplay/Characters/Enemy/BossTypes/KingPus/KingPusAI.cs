@@ -1483,7 +1483,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_animation.DisableRootMotion();
             //m_movement.MoveTowards(Vector2.one * transform.localScale.x, m_targetInfo.position.x > transform.position.x ? m_info.tentaSpearRightCrawl.speed : -m_info.tentaSpearRightCrawl.speed);
-            m_rb2d.AddForce(new Vector2(m_targetInfo.position.x > transform.position.x ? m_info.tentaSpearRightCrawl.speed : -m_info.tentaSpearRightCrawl.speed, transform.position.y), ForceMode2D.Impulse);
+            m_rb2d.AddForce(new Vector2(m_targetInfo.position.x > transform.position.x ? m_info.tentaSpearRightCrawl.speed : -m_info.tentaSpearRightCrawl.speed, m_character.physics.velocity.y), ForceMode2D.Impulse);
         }
 
         private void EventStop()
