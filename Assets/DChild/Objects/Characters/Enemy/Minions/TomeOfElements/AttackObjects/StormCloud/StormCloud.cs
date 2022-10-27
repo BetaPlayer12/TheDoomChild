@@ -7,7 +7,7 @@ namespace DChild.Gameplay.Projectiles
 {
     public class StormCloud : PoolableObject
     {
-        public float timer;
+        public float m_timer;
         // Start is called before the first frame update
         void Start()
         {
@@ -17,9 +17,9 @@ namespace DChild.Gameplay.Projectiles
         // Update is called once per frame
         void Update()
         {
-            timer -= GameplaySystem.time.deltaTime;
+            m_timer -= GameplaySystem.time.deltaTime;
 
-            if(timer < 0)
+            if(m_timer < 0)
             {
                 DestroyInstance();
             }
