@@ -26,6 +26,13 @@ namespace DChild.Gameplay.Characters.Enemies
 
             Debug.Log(m_monolithsSpawned);
 
+            if(m_monolithsSpawned.Count > 1)
+            {
+                int rollMonolithToKeep = Random.Range(0, m_monolithsSpawned.Count);
+
+                m_monolithsSpawned[rollMonolithToKeep].gameObject.GetComponent<MonolithSlam>().keepMonolith = true;
+            }
+
             foreach (PoolableObject monolith in m_monolithsSpawned)
             {
                 monolith.GetComponent<MonolithSlam>().smashMonolith = true;
