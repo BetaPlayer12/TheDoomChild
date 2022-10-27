@@ -141,7 +141,18 @@ namespace DChild.Gameplay.Characters.Enemies
         private RaySensor m_roofSensor;
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_wallSensor;
-
+        [SerializeField, TabGroup("FX")]
+        private GameObject m_lifeDrainFX;
+        [SerializeField, TabGroup("FX")]
+        private GameObject m_lifeDrainFXline;
+        [SerializeField, TabGroup("FX")]
+        private GameObject m_lifeDrainFXline2;
+        [SerializeField, TabGroup("FX")]
+        private GameObject m_lifeDrainEnragedFX;
+        [SerializeField, TabGroup("FX")]
+        private GameObject m_lifeDrainEnragedFXline;
+        [SerializeField, TabGroup("FX")]
+        private GameObject m_lifeDrainEnragedFXline2;
         [SerializeField]
         private bool m_willPatrol;
         [SerializeField]
@@ -162,8 +173,10 @@ namespace DChild.Gameplay.Characters.Enemies
         private float m_currentCD;
         private bool m_isDetecting;
         private Vector2 m_startPos;
+        private bool m_isEnraged;
 
         private Coroutine m_executeMoveCoroutine;
+
 
         private void OnTurnRequest(object sender, EventActionArgs eventArgs) => m_stateHandle.OverrideState(State.Turning);
 
@@ -246,6 +259,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private void OnFlinchEnd(object sender, EventActionArgs eventArgs)
         {
             m_lifedrain.setrage(true);
+            m_isEnraged = true;
             if (!m_targetInfo.isValid)
             {
                 m_stateHandle.ApplyQueuedState();
@@ -328,6 +342,15 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_info.lifeDrainAnticipationAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.lifeDrainAnticipationAnimation);
             m_lifedrain.ActivateLifeDrain();
+            if (m_isEnraged == true)
+            {
+                m_lifeDrainEnragedFX.SetActive(true);
+            }
+            else
+            {
+                m_lifeDrainFX.SetActive(true);
+            }
+            
             m_animation.SetAnimation(0, m_info.lifeDrainAnimation, true);
             yield return null;
 
@@ -339,10 +362,25 @@ namespace DChild.Gameplay.Characters.Enemies
         }
         private IEnumerator LifeDrainEndRoutine()
         {
+            m_lifeDrainFX.SetActive(false);
+            m_lifeDrainEnragedFX.SetActive(false);
             m_animation.SetAnimation(0, m_info.lifeDrainEndAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.lifeDrainEndAnimation);
-            m_animation.SetAnimation(0, m_info.idleAnimation, true);
-            m_stateHandle.ApplyQueuedState();
+            if (m_isEnraged == false)
+            {
+                
+                if (m_executeMoveCoroutine != null)
+                {
+                    StopCoroutine(m_executeMoveCoroutine);
+                    m_executeMoveCoroutine = null;
+                }
+                StartCoroutine(HealRoutine());
+            }
+            else
+            {
+                m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                m_stateHandle.ApplyQueuedState();
+            }
             yield return null;
 
         }
@@ -357,10 +395,12 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.healEndAnimation);
             m_agent.Stop();
             m_lifedrain.setrage(false);
+            m_isEnraged = false;
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_stateHandle.SetState(State.ReturnToPatrol);
             m_targetInfo.Set(null, null);
             m_isDetecting = false;
+            m_stateHandle.ApplyQueuedState();
             yield return null;
         }
             private bool IsInRange(Vector2 position, float distance) => Vector2.Distance(position, m_character.centerMass.position) <= distance;
@@ -542,6 +582,10 @@ namespace DChild.Gameplay.Characters.Enemies
             base.Start();
             m_startPos = transform.position;
             m_animation.SetAnimation(0, m_info.patrol.animation, true);
+            LineRenderer lineRenderer1 = m_lifeDrainFXline.GetComponent<LineRenderer>();
+            LineRenderer lineRenderer2 = m_lifeDrainFXline2.GetComponent<LineRenderer>();
+            LineRenderer EnragedlineRenderer1 = m_lifeDrainEnragedFXline.GetComponent<LineRenderer>();
+            LineRenderer EnragedlineRenderer2 = m_lifeDrainEnragedFXline2.GetComponent<LineRenderer>();
             //m_selfCollider.SetActive(false);
         }
 
@@ -562,6 +606,7 @@ namespace DChild.Gameplay.Characters.Enemies
             AddToAttackCache(Attack.Attack1);
             m_attackRangeCache = new List<float>();
             m_attackUsed = new bool[m_attackCache.Count];
+            m_isEnraged = false;
         }
 
         private void Update()
@@ -592,6 +637,7 @@ namespace DChild.Gameplay.Characters.Enemies
                             m_bodyCollider.enabled = false;
                             m_agent.Stop();
                             Vector3 dir = (m_startPos - (Vector2)rb2d.transform.position).normalized;
+                            rb2d.MovePosition(rb2d.transform.position + dir * m_info.patrol.speed * Time.fixedDeltaTime);
                             m_animation.SetAnimation(0, m_info.patrol.animation, true);
                         }
                         else
