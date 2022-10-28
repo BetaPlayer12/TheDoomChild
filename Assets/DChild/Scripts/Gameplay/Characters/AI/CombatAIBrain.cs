@@ -49,7 +49,7 @@ namespace DChild.Gameplay.Characters.AI
         [Flags]
         protected enum Restriction
         {
-            ForbiddenFromAttackingTarget = 1 <<0,
+            ForbiddenFromAttackingTarget = 1 << 0,
             IgnoreTarget = 1 << 1
         }
 
@@ -78,6 +78,14 @@ namespace DChild.Gameplay.Characters.AI
                 m_targetInfo = new AITargetInfo();
             }
             m_targetInfo.Set(damageable, m_target);
+        }
+
+        public virtual void ReactToConflict(IAttackerConflictInfo info)
+        {
+            if (info.isPlayer)
+            {
+                SetTarget(info.instance.GetComponent<IDamageable>(), info.instance.GetComponent<Character>());
+            }
         }
 
         public virtual void Enable()
@@ -307,8 +315,6 @@ namespace DChild.Gameplay.Characters.AI
             m_damageable = damageable;
             m_centerMass = centerMass;
         }
-
-
 #endif
     }
 }

@@ -13,7 +13,7 @@ namespace DChild.Gameplay.Inventories.UI
         private Image m_icon;
         [SerializeField]
         private TextMeshProUGUI m_description;
-        [SerializeField,BoxGroup("Optional")]
+        [SerializeField, BoxGroup("Optional")]
         private TextMeshProUGUI m_quantityLimit;
 
         private Canvas m_canvas;
@@ -30,7 +30,7 @@ namespace DChild.Gameplay.Inventories.UI
 
         public override void ShowDetails(IStoredItem reference)
         {
-            var data = reference.data;
+            var data = reference?.data ?? null;
             if (data == null)
             {
                 m_name.text = "Nothing";
