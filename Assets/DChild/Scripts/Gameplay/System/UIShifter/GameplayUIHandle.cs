@@ -3,6 +3,7 @@ using DChild.Gameplay.Characters.Enemies;
 using DChild.Gameplay.Characters.NPC;
 using DChild.Gameplay.Combat.UI;
 using DChild.Gameplay.Environment;
+using DChild.Gameplay.Items;
 using DChild.Gameplay.NavigationMap;
 using DChild.Gameplay.Systems.Lore;
 using DChild.Gameplay.Trade;
@@ -10,12 +11,13 @@ using DChild.Gameplay.UI;
 using DChild.Menu.Trade;
 using Doozy.Engine;
 using Doozy.Engine.UI;
+using Sirenix.OdinInspector;
 using System.Collections;
 using UnityEngine;
 
 namespace DChild.Gameplay.Systems
 {
-    public class GameplayUIHandle : MonoBehaviour, IGameplayUIHandle, IGameplaySystemModule
+    public class GameplayUIHandle : SerializedMonoBehaviour, IGameplayUIHandle, IGameplaySystemModule
     {
         [SerializeField]
         private TradeManager m_tradeManager;
@@ -33,6 +35,8 @@ namespace DChild.Gameplay.Systems
         private LootAcquiredUI m_lootAcquiredUI;
         [SerializeField]
         private StoreNotificationHandle m_storeNotification;
+        [SerializeField]
+        private IItemNotificationUI m_shardNotification;
         [SerializeField]
         private UIView m_skippableUI;
 
@@ -90,6 +94,16 @@ namespace DChild.Gameplay.Systems
         public void PromptKeystoneFragmentNotification()
         {
             GameEventMessage.SendEvent("Fragment Acquired"); // Currently Being called via string in ItemPickup
+        }
+
+
+        public void ShowItemNotification(ItemData itemData)
+        {
+            if (m_shardNotification.IsNotificationFor(itemData))
+            {
+                GameEventMessage.SendEvent("Shard Acquired");
+                m_shardNotification.ShowNotificationFor(itemData);
+            }
         }
 
         public void PromptBestiaryNotification()
