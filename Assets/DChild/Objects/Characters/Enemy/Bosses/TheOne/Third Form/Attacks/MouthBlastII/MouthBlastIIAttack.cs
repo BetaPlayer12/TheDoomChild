@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using DChild.Gameplay.Pooling;
+using DChild.Gameplay.Characters;
+using Sirenix.OdinInspector;
 
 namespace DChild.Gameplay.Characters.Enemies
 {
@@ -26,17 +28,24 @@ namespace DChild.Gameplay.Characters.Enemies
 
         [SerializeField]
         private float m_emergeSpeed;
-        
+
+        [SerializeField, BoxGroup("Laser")]
+        private LaserLauncher m_launcher;
+
         public IEnumerator ExecuteAttack()
         {
             //Emerge
             m_mouthBlastEntity.transform.position = m_wallPosition.transform.position;
             yield return new WaitForSeconds(m_mouthEntityEmergeTime);
             //Anticipation
+            m_launcher.SetBeam(true);
+            m_launcher.SetAim(false);
             yield return new WaitForSeconds(m_anticipationTime);
             //Attack
+            StartCoroutine(m_launcher.LazerBeamRoutine());
             m_mouthBlastLaser.SetActive(true);
             yield return new WaitForSeconds(m_blastDurationTime);
+            m_launcher.SetBeam(false);
             m_mouthBlastLaser.SetActive(false);
             m_mouthBlastEntity.transform.position = m_originalEntityPosition;
         }
