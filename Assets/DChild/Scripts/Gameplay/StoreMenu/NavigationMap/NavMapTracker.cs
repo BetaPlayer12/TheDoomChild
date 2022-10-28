@@ -57,6 +57,7 @@ namespace DChild.Gameplay.NavigationMap
             {
                 var distanceToRefencePoint = (Vector2)(m_toTrack.position - m_inGameTrackReferencePoint.position) * m_scaleOffset;
                 m_tracker.anchoredPosition = m_uiReferencePoint.anchoredPosition + distanceToRefencePoint + m_calculationOffset;
+                m_tracker.
             }
         }
     }
