@@ -524,6 +524,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private SlidingStoneWallAttack m_slidingWallAttack;
         [SerializeField, BoxGroup("The One Third Form Attacks")]
         private MonolithSlamAttack m_monolithSlamAttack;
+        [SerializeField, BoxGroup("The One Third Form Attacks")]
+        private TentacleBlastAttack m_tentacleBlastAttack;
 
         [SerializeField, BoxGroup("Mouth Blast I Stuff")]
         private GameObject m_mouthBlastOneLaser;
@@ -1318,9 +1320,9 @@ namespace DChild.Gameplay.Characters.Enemies
             //    Debug.Log("trigger monolith is: " + m_triggerMonolithSlamAttack);
             //    m_monolithTimer -= GameplaySystem.time.deltaTime;
 
-            //    if(m_monolithCounter < m_numOfMonoliths)
+            //    if (m_monolithCounter < m_numOfMonoliths)
             //    {
-            //        if(m_monolithTimer <= 0)
+            //        if (m_monolithTimer <= 0)
             //        {
             //            StartCoroutine(m_monolithSlamAttack.SetUpMonoliths(m_targetInfo.position));
             //            m_monolithCounter++;
@@ -1361,8 +1363,10 @@ namespace DChild.Gameplay.Characters.Enemies
 
             //StartCoroutine(m_slidingWallAttack.ExecuteAttack());
 
-            StartCoroutine(m_monolithSlamAttack.ExecuteAttack());
-            m_triggerMonolithSlamAttack = false;
+            //StartCoroutine(m_monolithSlamAttack.ExecuteAttack());
+            //m_triggerMonolithSlamAttack = false;
+
+            StartCoroutine(m_tentacleBlastAttack.ExecuteAttack());
 
         }
 

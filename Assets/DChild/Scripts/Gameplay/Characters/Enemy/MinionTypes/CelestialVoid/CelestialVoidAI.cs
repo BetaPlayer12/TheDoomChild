@@ -174,6 +174,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private bool m_isDetecting;
         private Vector2 m_startPos;
         private bool m_isEnraged;
+        private bool m_isdraining;
 
         private Coroutine m_executeMoveCoroutine;
 
@@ -350,7 +351,7 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 m_lifeDrainFX.SetActive(true);
             }
-            
+            m_isdraining = true;
             m_animation.SetAnimation(0, m_info.lifeDrainAnimation, true);
             yield return null;
 
@@ -364,6 +365,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_lifeDrainFX.SetActive(false);
             m_lifeDrainEnragedFX.SetActive(false);
+            m_isdraining = false;
             m_animation.SetAnimation(0, m_info.lifeDrainEndAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.lifeDrainEndAnimation);
             if (m_isEnraged == false)
@@ -607,6 +609,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_attackRangeCache = new List<float>();
             m_attackUsed = new bool[m_attackCache.Count];
             m_isEnraged = false;
+            m_isdraining = false;
         }
 
         private void Update()
