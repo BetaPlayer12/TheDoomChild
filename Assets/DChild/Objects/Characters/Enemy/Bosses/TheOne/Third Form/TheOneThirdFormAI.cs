@@ -1354,7 +1354,7 @@ namespace DChild.Gameplay.Characters.Enemies
             //StartCoroutine(m_tentacleCeilingAttack.ExecuteAttack());
             //StartCoroutine(m_movingTentacleGroundAttack.ExecuteAttack());
             //StartCoroutine(m_chasingGroundTentacleAttack.ExecuteAttack());
-            //StartCoroutine(m_mouthBlastIIAttack.ExecuteAttack());
+            StartCoroutine(m_mouthBlastIIAttack.ExecuteAttack());
             //StartCoroutine(MouthBlastOneAttack());
 
             //m_doMouthBlastIAttack = true;
@@ -1366,7 +1366,7 @@ namespace DChild.Gameplay.Characters.Enemies
             //StartCoroutine(m_monolithSlamAttack.ExecuteAttack());
             //m_triggerMonolithSlamAttack = false;
 
-            StartCoroutine(m_tentacleBlastAttack.ExecuteAttack());
+            //StartCoroutine(m_tentacleBlastAttack.ExecuteAttack());
 
         }
 
