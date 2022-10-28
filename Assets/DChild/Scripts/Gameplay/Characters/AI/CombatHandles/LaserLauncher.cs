@@ -110,6 +110,7 @@ namespace DChild.Gameplay.Characters
             var timerOffset = m_telegraphLineRenderer.startWidth;
             while (m_telegraphLineRenderer.startWidth > 0)
             {
+                m_muzzleTelegraphFX.transform.position = m_beamPoint.position;
                 m_telegraphLineRenderer.startWidth -= Time.deltaTime * timerOffset;
                 yield return null;
             }
