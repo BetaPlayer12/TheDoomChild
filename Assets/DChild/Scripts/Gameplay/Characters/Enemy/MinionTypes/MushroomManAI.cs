@@ -414,9 +414,15 @@ namespace DChild.Gameplay.Characters.Enemies
                                 }
                                 else
                                 {
-                                    m_movement.Stop();
-                                    m_selfCollider.enabled = true;
-                                    m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                                    if (m_animation.GetCurrentAnimation(0).ToString() != m_info.idleAnimation)
+                                    {
+                                        if (m_animation.animationState.GetCurrent(0).IsComplete)
+                                        {
+                                            m_movement.Stop();
+                                            m_selfCollider.enabled = true;
+                                            m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                                        }
+                                    }
                                 }
                             }
                         }

@@ -516,12 +516,6 @@ namespace DChild.Gameplay.Characters.Enemies
             }
         }
 
-        private void CustomTurn()
-        {
-            transform.localScale = new Vector3(-transform.localScale.x, 1, 1);
-            m_character.SetFacing(transform.localScale.x == 1 ? HorizontalDirection.Right : HorizontalDirection.Left);
-        }
-
         private IEnumerator IntroRoutine()
         {
             m_stateHandle.Wait(State.Chasing);
@@ -574,6 +568,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator ChangePhaseRoutine()
         {
             //m_stateHandle.Wait(State.ReevaluateSituation);
+            enabled = false;
             m_hitbox.Disable();
             m_trailFX.Stop();
             m_animation.EnableRootMotion(true, false);
@@ -601,6 +596,7 @@ namespace DChild.Gameplay.Characters.Enemies
             }
             m_stateHandle.OverrideState(State.Attacking);
             yield return null;
+            enabled = true;
         }
         #region Attacks
 
