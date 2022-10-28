@@ -153,6 +153,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private GameObject m_lifeDrainEnragedFXline;
         [SerializeField, TabGroup("FX")]
         private GameObject m_lifeDrainEnragedFXline2;
+        [SerializeField, TabGroup("FX")]
+        private Transform m_headPosition;
         [SerializeField]
         private bool m_willPatrol;
         [SerializeField]
@@ -175,6 +177,10 @@ namespace DChild.Gameplay.Characters.Enemies
         private Vector2 m_startPos;
         private bool m_isEnraged;
         private bool m_isdraining;
+        private LineRenderer lineRenderer1;
+        private LineRenderer lineRenderer2;
+        private LineRenderer EnragedlineRenderer1;
+        private LineRenderer EnragedlineRenderer2;
 
         private Coroutine m_executeMoveCoroutine;
 
@@ -345,10 +351,20 @@ namespace DChild.Gameplay.Characters.Enemies
             m_lifedrain.ActivateLifeDrain();
             if (m_isEnraged == true)
             {
+                Vector3 lifedrainposition = new Vector3(m_targetInfo.transform.position.x, m_targetInfo.transform.position.y + 6f, m_targetInfo.transform.position.z);
+                EnragedlineRenderer1.SetPosition(0, m_headPosition.transform.position);
+                EnragedlineRenderer2.SetPosition(0, m_headPosition.transform.position);
+                EnragedlineRenderer1.SetPosition(1, lifedrainposition);
+                EnragedlineRenderer2.SetPosition(1, lifedrainposition);
                 m_lifeDrainEnragedFX.SetActive(true);
             }
             else
             {
+                Vector3 lifedrainposition = new Vector3(m_targetInfo.transform.position.x, m_targetInfo.transform.position.y + 6f, m_targetInfo.transform.position.z);
+                lineRenderer1.SetPosition(0, m_headPosition.transform.position);
+                lineRenderer2.SetPosition(0, m_headPosition.transform.position);
+                lineRenderer1.SetPosition(1, lifedrainposition);
+                lineRenderer2.SetPosition(1, lifedrainposition);
                 m_lifeDrainFX.SetActive(true);
             }
             m_isdraining = true;
@@ -584,10 +600,10 @@ namespace DChild.Gameplay.Characters.Enemies
             base.Start();
             m_startPos = transform.position;
             m_animation.SetAnimation(0, m_info.patrol.animation, true);
-            LineRenderer lineRenderer1 = m_lifeDrainFXline.GetComponent<LineRenderer>();
-            LineRenderer lineRenderer2 = m_lifeDrainFXline2.GetComponent<LineRenderer>();
-            LineRenderer EnragedlineRenderer1 = m_lifeDrainEnragedFXline.GetComponent<LineRenderer>();
-            LineRenderer EnragedlineRenderer2 = m_lifeDrainEnragedFXline2.GetComponent<LineRenderer>();
+             lineRenderer1 = m_lifeDrainFXline.GetComponent<LineRenderer>();
+             lineRenderer2 = m_lifeDrainFXline2.GetComponent<LineRenderer>();
+             EnragedlineRenderer1 = m_lifeDrainEnragedFXline.GetComponent<LineRenderer>();
+             EnragedlineRenderer2 = m_lifeDrainEnragedFXline2.GetComponent<LineRenderer>();
             //m_selfCollider.SetActive(false);
         }
 
@@ -614,6 +630,25 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void Update()
         {
+            if (m_isdraining == true)
+            {
+                if (m_isEnraged == true)
+                {
+                    Vector3 lifedrainposition =new Vector3(m_targetInfo.transform.position.x, m_targetInfo.transform.position.y + 6f, m_targetInfo.transform.position.z);
+                    EnragedlineRenderer1.SetPosition(0, m_headPosition.transform.position);
+                    EnragedlineRenderer2.SetPosition(0, m_headPosition.transform.position);
+                    EnragedlineRenderer1.SetPosition(1, lifedrainposition);
+                    EnragedlineRenderer2.SetPosition(1, lifedrainposition);
+                }
+                else
+                {
+                    Vector3 lifedrainposition = new Vector3(m_targetInfo.transform.position.x, m_targetInfo.transform.position.y + 6f, m_targetInfo.transform.position.z);
+                    lineRenderer1.SetPosition(0, m_headPosition.transform.position);
+                    lineRenderer2.SetPosition(0, m_headPosition.transform.position);
+                    lineRenderer1.SetPosition(1, lifedrainposition);
+                    lineRenderer2.SetPosition(1, lifedrainposition);
+                }
+            }
 
             switch (m_stateHandle.currentState)
             {

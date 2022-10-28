@@ -20,6 +20,10 @@ namespace DChild.Gameplay
         private TextMeshProUGUI m_skillName;
         [SerializeField]
         private TextMeshProUGUI m_description;
+        [SerializeField]
+        private TextMeshProUGUI m_instruction;
+
+        private const string INSTRUCTION_HEADER = "<color=#710B0D>Button:</color><indent=15%>";
 
         public void SetNotifiedSkill(PrimarySkillData skill)
         {
@@ -27,6 +31,7 @@ namespace DChild.Gameplay
             m_icon.sprite = skill.icon;
             m_skillName.text = skill.skillName;
             m_description.text = skill.description;
+            m_instruction.text = INSTRUCTION_HEADER + skill.instruction;
         }
 
         private void OnSkillUpdate(object sender, PrimarySkillUpdateEventArgs eventArgs)
