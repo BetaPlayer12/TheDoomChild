@@ -18,28 +18,18 @@ public class ItemConversionHandler : SerializedMonoBehaviour
     [SerializeField]
     private IShardCompletionHandle m_completionHandle;
 
-    private int m_currentHeld = 0;
     protected static Player m_player;
     private static UsableItemData m_pickUpItem;
 
-    public void VerifyItem(ItemData m_pickup)
-    {
-        if (m_pickup.itemName == m_item.itemName)
-        {
-            m_currentHeld = m_currentHeld + 1;
-            VerifyItemLimit();
-        }
-    }
-    public void VerifyItemLimit()
-    {
-        if (m_currentHeld >= m_limit)
-        {
-            ItemCompletionReward();
-            m_player.inventory.AddItem(m_item, -m_limit);
 
-        }
+    private void ConvertItemToCompletedVersion()
+    {
+        m_player.inventory.InventoryItemUpdate -= onPickup;
+        m_player.inventory.AddItem(m_item, -m_limit);
+        ItemCompletionReward();
+        m_player.inventory.InventoryItemUpdate += onPickup;
     }
-    public void ItemCompletionReward()
+    private void ItemCompletionReward()
     {
         if (m_completeItem != null)
         {
@@ -48,6 +38,7 @@ public class ItemConversionHandler : SerializedMonoBehaviour
 
         m_completionHandle.Execute(m_player);
     }
+
     protected virtual void OnEnable()
     {
         var currentPlayer = GameplaySystem.playerManager.player;
@@ -55,12 +46,17 @@ public class ItemConversionHandler : SerializedMonoBehaviour
         {
             m_player = GameplaySystem.playerManager.player;
             m_player.inventory.InventoryItemUpdate += onPickup;
-
         }
     }
 
     private void onPickup(object sender, ItemEventArgs eventArgs)
     {
-        VerifyItem(eventArgs.data);
+        if (eventArgs.data.itemName == m_item.itemName)
+        {
+            if (eventArgs.currentCount >= m_limit)
+            {
+                ConvertItemToCompletedVersion();
+            }
+        }
     }
 }
