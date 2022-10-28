@@ -1594,6 +1594,7 @@ GameObject:
   - component: {fileID: 2543853542318265880}
   - component: {fileID: 2543853542318265883}
   - component: {fileID: 7165895439910178612}
+  - component: {fileID: 6543986801425367543}
   m_Layer: 0
   m_Name: MouthBlastIIAttack(Wall)
   m_TagString: Untagged
@@ -1637,6 +1638,7 @@ MonoBehaviour:
   m_anticipationTime: 2
   m_blastDurationTime: 3
   m_emergeSpeed: 5
+  m_launcher: {fileID: 0}
 --- !u!114 &7165895439910178612
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1655,6 +1657,29 @@ MonoBehaviour:
   m_muzzleLoopFX: {fileID: 2854726417528546102}
   m_muzzleTelegraphFX: {fileID: 6017089474400849200}
   m_beamPoint: {fileID: 6933251846007114707}
+--- !u!114 &6543986801425367543
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2543853542318265882}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e10454193b54c9a4eb8bfb67b80c746d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_centerMass: {fileID: 2543853542318265880}
+  m_data: {fileID: 11400000, guid: 64a8c88118f006743888ce92483ccc46, type: 2}
+  m_currentAttackInfo:
+    damage:
+      m_type: 0
+      m_value: 0
+    criticalDamageInfo:
+      chance: 0
+      damageModifier: 0
+    ignoreInvulnerability: 0
+    ignoresBlock: 0
 --- !u!1 &3080750442178014636
 GameObject:
   m_ObjectHideFlags: 0
