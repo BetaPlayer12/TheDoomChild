@@ -21,6 +21,7 @@ namespace DChild.Gameplay.Systems
         Player player { get; }
         IAutoReflexHandler autoReflex { get; }
         PlayerCharacterOverride OverrideCharacterControls();
+         bool playerIsDead { get; }
 
         bool IsPartOfPlayer(GameObject gameObject);
         bool IsPartOfPlayer(GameObject gameObject, out IPlayer player);
@@ -55,6 +56,7 @@ namespace DChild.Gameplay.Systems
         private InteractableDetector m_interactableDetector;
 
         public Player player => m_player;
+        public bool playerIsDead => m_playerIsDead;
 
         public GameplayInput gameplayInput => m_gameplayInput;
         public IAutoReflexHandler autoReflex => m_autoReflex;

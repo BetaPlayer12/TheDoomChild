@@ -1,6 +1,7 @@
 ﻿using DChild.Gameplay;
 using DChild.Gameplay.Characters;
 using DChild.Gameplay.Characters.Enemies;
+using DChild.Gameplay.Characters.Players.State;
 using DChild.Gameplay.Combat;
 using UnityEngine;
 
@@ -13,6 +14,7 @@ namespace DChild.Gameplay.Characters.AI
         public bool doesTargetExist => m_damageable != null;
         private IDamageable m_damageable;
         private Character m_target;
+        private IGroundednessState m_characterGroundedState;
 
         public AITargetInfo()
         {
@@ -20,6 +22,7 @@ namespace DChild.Gameplay.Characters.AI
             this.m_target = null;
             isCharacter = false;
             isValid = false;
+            m_characterGroundedState = null;
         }
 
         public AITargetInfo(IDamageable damageable, Character target)
@@ -28,7 +31,10 @@ namespace DChild.Gameplay.Characters.AI
             this.m_target = target;
             isCharacter = target;
             isValid = damageable != null;
+            m_characterGroundedState = target.GetComponent<IGroundednessState>();
         }
+
+        
 
         public AITargetInfo(IDamageable damageable)
         {
@@ -42,12 +48,17 @@ namespace DChild.Gameplay.Characters.AI
         //For parenting purposes of AI to the target.. some behaviours need this
         public Transform transform => m_damageable.transform;
 
+        public bool isCharacterGrounded => m_characterGroundedState.isGrounded;
+
         public void Set(IDamageable damageable, Character target)
         {
             m_damageable = damageable;
             this.m_target = target;
             isCharacter = target;
             isValid = damageable != null;
+            if(target != null)
+                m_characterGroundedState = target.GetComponentInChildren<IGroundednessState>();
+
         }
 
         public void Set(IDamageable damageable)

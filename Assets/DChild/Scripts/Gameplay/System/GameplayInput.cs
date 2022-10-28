@@ -52,8 +52,12 @@ namespace DChild.Gameplay.Systems
         {
             if (Input.GetKeyDown(m_pause))
             {
-                GameplaySystem.PauseGame();
-                GameplaySystem.gamplayUIHandle.ShowPauseMenu(true);
+                if (GameplaySystem.playerManager.playerIsDead)
+                {
+                    GameplaySystem.PauseGame();
+                    GameplaySystem.gamplayUIHandle.ShowPauseMenu(true);
+                }
+
             }
             else if (m_enableStoreInput == true)
             {

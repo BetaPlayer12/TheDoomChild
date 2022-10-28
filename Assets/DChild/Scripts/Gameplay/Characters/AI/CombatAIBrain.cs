@@ -49,7 +49,7 @@ namespace DChild.Gameplay.Characters.AI
         [Flags]
         protected enum Restriction
         {
-            ForbiddenFromAttackingTarget = 1 <<0,
+            ForbiddenFromAttackingTarget = 1 << 0,
             IgnoreTarget = 1 << 1
         }
 
@@ -78,6 +78,14 @@ namespace DChild.Gameplay.Characters.AI
                 m_targetInfo = new AITargetInfo();
             }
             m_targetInfo.Set(damageable, m_target);
+        }
+
+        public virtual void ReactToConflict(IAttackerConflictInfo info)
+        {
+            if (info.isPlayer)
+            {
+                SetTarget(info.instance.GetComponent<IDamageable>(), info.instance.GetComponent<Character>());
+            }
         }
 
         public virtual void Enable()
@@ -184,6 +192,17 @@ namespace DChild.Gameplay.Characters.AI
             //RaycastHit2D hit = Physics2D.Raycast(m_projectilePoint.position, Vector2.down,  1000, DChildUtility.GetEnvironmentMask());
             RaycastHit2D[] hit = Cast(startPoint, Vector2.up, 1000, true, out hitCount, true);
             Debug.DrawRay(startPoint, hit[0].point);
+            //var hitPos = (new Vector2(m_projectilePoint.position.x, Vector2.down.y) * hit[0].distance);
+            //return hitPos;
+            return hit[0].point;
+        }
+
+        protected Vector2 LookPosition(Transform startPoint)
+        {
+            int hitCount = 0;
+            //RaycastHit2D hit = Physics2D.Raycast(m_projectilePoint.position, Vector2.down,  1000, DChildUtility.GetEnvironmentMask());
+            RaycastHit2D[] hit = Cast(startPoint.position, startPoint.right, 1000, true, out hitCount, true);
+            Debug.DrawRay(startPoint.position, hit[0].point);
             //var hitPos = (new Vector2(m_projectilePoint.position.x, Vector2.down.y) * hit[0].distance);
             //return hitPos;
             return hit[0].point;
@@ -307,8 +326,6 @@ namespace DChild.Gameplay.Characters.AI
             m_damageable = damageable;
             m_centerMass = centerMass;
         }
-
-
 #endif
     }
 }
