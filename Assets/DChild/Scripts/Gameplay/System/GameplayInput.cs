@@ -52,7 +52,7 @@ namespace DChild.Gameplay.Systems
         {
             if (Input.GetKeyDown(m_pause))
             {
-                if (GameplaySystem.playerManager.playerIsDead)
+                if (!GameplaySystem.playerManager.playerIsDead)
                 {
                     GameplaySystem.PauseGame();
                     GameplaySystem.gamplayUIHandle.ShowPauseMenu(true);
