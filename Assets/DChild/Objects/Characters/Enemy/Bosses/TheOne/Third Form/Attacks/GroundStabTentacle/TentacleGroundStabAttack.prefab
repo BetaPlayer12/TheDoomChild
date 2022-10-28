@@ -1,5 +1,35 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &326780961171821875
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8489902890844475761}
+  m_Layer: 0
+  m_Name: TentacleSpawnHeight
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8489902890844475761
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 326780961171821875}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 6119479188711547184}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6119479188711547186
 GameObject:
   m_ObjectHideFlags: 0
@@ -25,9 +55,10 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6119479188711547186}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 17.307314, y: 23.53736, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 8489902890844475761}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -45,21 +76,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_tentaclesAtBackground:
   - {fileID: 8135972556375984720, guid: 1a62af81e65abc14d8e11ec9ae3e33c4, type: 3}
-  - {fileID: 8135972556375984720, guid: 60eec435c0257db4696c2020fde932b1, type: 3}
-  - {fileID: 8135972556375984720, guid: 0e22b41b0842fa3488f60d9e598d8ebb, type: 3}
-  - {fileID: 8135972556375984720, guid: 7a1f04b680e800c4a95d09630e47f8c6, type: 3}
+  - {fileID: 8135972556375984720, guid: 92fcf082e4620f042b4fc2a137698f95, type: 3}
+  - {fileID: 8135972556375984720, guid: 9d5ab61db0cefd34a9b950e96a742d92, type: 3}
+  - {fileID: 8135972556375984720, guid: 024bb5f209d378340944a7a0bc65de73, type: 3}
   m_tentaclesAtMidground:
-  - {fileID: 8135972556375984720, guid: 0043ec5d5f1ea90449a872ddf56fe827, type: 3}
-  - {fileID: 8135972556375984720, guid: dac83ba63057ce24aa5fa7d41870016d, type: 3}
-  - {fileID: 8135972556375984720, guid: b74619dd829eb444082388fbd157fb55, type: 3}
-  - {fileID: 8135972556375984720, guid: f0d0864b46ae1cd4fb5c82ac41b41c8c, type: 3}
+  - {fileID: 8135972556375984720, guid: a927deded2419484bb8847186cd3e1e8, type: 3}
+  - {fileID: 8135972556375984720, guid: a3c8601acf10b2d409ab41c5c50d9b28, type: 3}
+  - {fileID: 8135972556375984720, guid: d79c1a00cfc0c1b499c1f5ad7889427b, type: 3}
+  - {fileID: 8135972556375984720, guid: d0d55aef956e14d4284cd4411fe0c8c7, type: 3}
   m_tentaclesAtPlayableArea:
-  - {fileID: 8135972556375984720, guid: d65c7863f4ecde04cbfa131bc25cd57e, type: 3}
-  - {fileID: 8135972556375984720, guid: cb04a36b34f553d4296632b1d6ceb91f, type: 3}
-  - {fileID: 8135972556375984720, guid: e3a5f4ebb872ffb43bd7722b0e74451e, type: 3}
-  - {fileID: 8135972556375984720, guid: 3e5fe2ed1a10a39458090034bb915047, type: 3}
+  - {fileID: 8135972556375984720, guid: 495567af260781644b6128e19a990624, type: 3}
+  - {fileID: 8135972556375984720, guid: 176522c64c5fde847ae9bee8e40f6e8a, type: 3}
+  - {fileID: 8135972556375984720, guid: fdcb494a679633a4098155953a171742, type: 3}
+  - {fileID: 8135972556375984720, guid: fd5145a526e9d0b4a902926e58987bc9, type: 3}
   m_tentaclesAtForeground:
-  - {fileID: 8135972556375984720, guid: 5f89c34920bc6584a8cfe0a3d825a4fe, type: 3}
-  - {fileID: 8135972556375984720, guid: 65691fcdd4ef1684fabd47181c1639b4, type: 3}
-  - {fileID: 8135972556375984720, guid: 804a00a77f0af0b46bd0f39ccea23b0e, type: 3}
-  - {fileID: 8135972556375984720, guid: cac0fd3577618fb4282f397827df491a, type: 3}
+  - {fileID: 8135972556375984720, guid: 40b3b7a760c69ac458a5fb8ece85e012, type: 3}
+  - {fileID: 8135972556375984720, guid: 522d72d7ee44c5a45b24e7ee35415b07, type: 3}
+  - {fileID: 8135972556375984720, guid: b90fb53092eaa8b4994784c4230f3b5b, type: 3}
+  - {fileID: 8135972556375984720, guid: cafa71404da09c846b2335bd7eed60ce, type: 3}
+  m_tentacleStabTimer: 0

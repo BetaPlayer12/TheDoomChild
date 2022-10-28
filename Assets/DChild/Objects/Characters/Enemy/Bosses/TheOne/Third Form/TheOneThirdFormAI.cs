@@ -544,10 +544,13 @@ namespace DChild.Gameplay.Characters.Enemies
         private int m_SideToStart;
 
         //stuff for tentacle stab attack
-        private int m_tentacleStabCount = 0;
         [SerializeField, BoxGroup("Tentacle Stab Attack Stuff")]
         private float m_tentacleStabTimer = 0f;
+        [SerializeField, BoxGroup("Tentacle Stab Attack Stuff")]
+        private Transform m_tentacleStabSpawnHeight;
+        private int m_tentacleStabCount = 0;
         private float m_tentacleStabTimerValue;
+        private bool triggerTentacleGroundStab;
 
         //Monolith Slam stuff
         [SerializeField, BoxGroup("Monolith Slam Stuff")]
@@ -755,7 +758,24 @@ namespace DChild.Gameplay.Characters.Enemies
 
         void Update()
         {
-            m_tentacleStabTimer -= GameplaySystem.time.deltaTime;
+            if (triggerTentacleGroundStab)
+            {
+                m_tentacleStabTimer -= GameplaySystem.time.deltaTime;
+
+                Vector2 tentacleSpawn = new Vector2(m_targetInfo.position.x, m_tentacleStabSpawnHeight.position.y);
+                if (m_tentacleStabTimer <= 0)
+                {
+                    m_currentAttackCoroutine = StartCoroutine(m_tentacleStabAttack.ExecuteAttack(tentacleSpawn));
+                    m_tentacleStabCount++;
+                    m_tentacleStabTimer = m_tentacleStabTimerValue;      
+                }
+
+                if (m_tentacleStabCount > 4)
+                {
+                    m_tentacleStabCount = 0;
+                    triggerTentacleGroundStab = false;
+                }
+            }
 
             m_phaseHandle.MonitorPhase();
 
@@ -784,17 +804,19 @@ namespace DChild.Gameplay.Characters.Enemies
                             m_pickedCooldown = m_currentFullCooldown[0];
 
                             Debug.Log("Tentacle Stab Attack");
-                           
-                            if (m_tentacleStabTimer <= 0)
-                            {
-                                m_currentAttackCoroutine = StartCoroutine(m_tentacleStabAttack.ExecuteAttack(m_targetInfo.position));
-                                m_tentacleStabTimer = m_tentacleStabTimerValue;
-                            }
+
+                            if(!triggerTentacleGroundStab)
+                                triggerTentacleGroundStab = true;
 
                             //Temporary
                             //m_attackDecider.hasDecidedOnAttack = false;
                             //m_currentAttackCoroutine = null;
                             m_stateHandle.ApplyQueuedState();
+                            if (!triggerTentacleGroundStab)
+                            {
+                                
+                            }
+                            
                             //Temporary
                             break;
                         case Attack.Phase1Pattern2:
@@ -1290,14 +1312,6 @@ namespace DChild.Gameplay.Characters.Enemies
                 case State.WaitBehaviourEnd:
                     return;
             }
-            //m_tentacleStabTimer -= GameplaySystem.time.deltaTime;
-
-            //if (m_tentacleStabTimer <= 0)
-            //{
-            //    Debug.Log("Player is detected: " + m_targetInfo.doesTargetExist);
-            //    StartCoroutine(m_tentacleStabAttack.ExecuteAttack(m_targetInfo.position));
-            //    m_tentacleStabTimer = m_tentacleStabTimerValue;
-            //}
 
             //if (m_doMouthBlastIAttack)
             //{
@@ -1350,11 +1364,11 @@ namespace DChild.Gameplay.Characters.Enemies
         [Button]
         private void ForceAttack()
         {
-            //StartCoroutine(m_tentacleStabAttack.ExecuteAttack(m_targetInfo.position));
+            StartCoroutine(m_tentacleStabAttack.ExecuteAttack(m_targetInfo.position));
             //StartCoroutine(m_tentacleCeilingAttack.ExecuteAttack());
             //StartCoroutine(m_movingTentacleGroundAttack.ExecuteAttack());
             //StartCoroutine(m_chasingGroundTentacleAttack.ExecuteAttack());
-            StartCoroutine(m_mouthBlastIIAttack.ExecuteAttack());
+            //StartCoroutine(m_mouthBlastIIAttack.ExecuteAttack());
             //StartCoroutine(MouthBlastOneAttack());
 
             //m_doMouthBlastIAttack = true;
