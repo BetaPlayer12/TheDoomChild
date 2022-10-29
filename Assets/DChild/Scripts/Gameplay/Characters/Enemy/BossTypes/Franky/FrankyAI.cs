@@ -355,6 +355,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 base.SetTarget(damageable, m_target);
                 if (!m_isDetecting)
                 {
+                    m_isDetecting = true;
                     if (m_spriteMask.activeSelf)
                     {
                         m_stateHandle.OverrideState(State.Intro);

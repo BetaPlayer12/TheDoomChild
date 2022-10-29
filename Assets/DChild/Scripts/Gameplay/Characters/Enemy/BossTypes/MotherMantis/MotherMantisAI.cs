@@ -373,6 +373,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 base.SetTarget(damageable, m_target);
                 if (!m_isDetecting)
                 {
+                    m_isDetecting = true;
                     m_stateHandle.OverrideState(State.Intro);
                     GameEventMessage.SendEvent("Boss Encounter");
                 }
@@ -811,7 +812,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         m_animation.SetAnimation(0, m_info.idleAnimation, true);
                         m_hitbox.SetInvulnerability(Invulnerability.None);
                         m_animation.DisableRootMotion();
-                        m_stateHandle.ApplyQueuedState();
+                        m_stateHandle.OverrideState(State.Chasing);
                     }
                     else
                     {

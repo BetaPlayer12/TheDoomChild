@@ -293,6 +293,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 base.SetTarget(damageable, m_target);
                 if (!m_isDetecting)
                 {
+                    m_isDetecting = true;
                     m_stateHandle.OverrideState(State.ReevaluateSituation);
                     //GameEventMessage.SendEvent("Boss Encounter");
                 }
