@@ -75,7 +75,15 @@ namespace DChild.Gameplay.Systems
         public void EnableInput()
         {
             m_gameplayInput?.SetStoreInputActive(true);
-            m_characterInput?.Enable();
+
+            if (m_overrideController.enabled == false)
+            {
+                m_characterInput?.Enable();
+            }
+            else
+            {
+                Debug.LogError("You are trying to enable player controls while override controls are still enabled!", this);
+            }
         }
 
         public void FreezePlayerPosition(bool freezePlayerPosition)
