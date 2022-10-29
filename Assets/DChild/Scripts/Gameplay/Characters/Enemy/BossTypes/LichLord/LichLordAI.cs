@@ -257,6 +257,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private List<GameObject> m_spikeCache;
 
         private Coroutine m_changeLocationRoutine;
+        private bool m_isDetecting;
 
         private void ApplyPhaseData(PhaseInfo obj)
         {
@@ -290,8 +291,12 @@ namespace DChild.Gameplay.Characters.Enemies
             if (damageable != null)
             {
                 base.SetTarget(damageable, m_target);
-                m_stateHandle.OverrideState(State.ReevaluateSituation);
-                //GameEventMessage.SendEvent("Boss Encounter");
+                if (!m_isDetecting)
+                {
+                    m_isDetecting = true;
+                    m_stateHandle.OverrideState(State.ReevaluateSituation);
+                    //GameEventMessage.SendEvent("Boss Encounter");
+                }
             }
         }
 
@@ -399,6 +404,7 @@ namespace DChild.Gameplay.Characters.Enemies
             base.OnDestroyed(sender, eventArgs);
             StopAllCoroutines();
             m_agent.Stop();
+            m_isDetecting = false;
         }
 
         private void OnFlinchStart(object sender, EventActionArgs eventArgs)

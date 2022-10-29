@@ -544,7 +544,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private List<string> m_wallGrappleAnimations;
         private List<string> m_wallGrappleExtendAnimations;
         private List<string> m_wallGrappleRetractAnimations;
-        #endregion  
+        #endregion
+        private bool m_isDetecting;
 
         private void ApplyPhaseData(PhaseInfo obj)
         {
@@ -615,8 +616,12 @@ namespace DChild.Gameplay.Characters.Enemies
             if (damageable != null)
             {
                 base.SetTarget(damageable, m_target);
-                m_stateHandle.OverrideState(State.Intro);
-                GameEventMessage.SendEvent("Boss Encounter");
+                if (!m_isDetecting)
+                {
+                    m_isDetecting = true;
+                    m_stateHandle.OverrideState(State.Intro);
+                    GameEventMessage.SendEvent("Boss Encounter");
+                }
             }
         }
 
@@ -1457,6 +1462,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_selfDestructBB.enabled = false;
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.deathSelfDestructAnimation);
             m_animation.SetAnimation(0, m_info.deathAnimation, true);
+            m_isDetecting = false;
             enabled = false;
             yield return null;
         }

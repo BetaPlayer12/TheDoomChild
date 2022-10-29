@@ -250,6 +250,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private PhaseInfo m_phaseInfo;
         //private int m_hitCount;
         //private int[] m_patternAttackCount;
+        private bool m_isDetecting;
 
         private void ApplyPhaseData(PhaseInfo obj)
         {
@@ -281,8 +282,12 @@ namespace DChild.Gameplay.Characters.Enemies
             if (damageable != null)
             {
                 base.SetTarget(damageable, m_target);
-                m_stateHandle.OverrideState(State.Chasing);
-                GameEventMessage.SendEvent("Boss Encounter");
+                if (!m_isDetecting)
+                {
+                    m_isDetecting = true;
+                    m_stateHandle.OverrideState(State.Chasing);
+                    GameEventMessage.SendEvent("Boss Encounter");
+                }
             }
         }
 
@@ -293,12 +298,6 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_animation.animationState.TimeScale = 1f;
                 m_stateHandle.ApplyQueuedState();
             }
-        }
-
-        private void CustomTurn()
-        {
-            transform.localScale = new Vector3(-transform.localScale.x, 1, 1);
-            m_character.SetFacing(transform.localScale.x == 1 ? HorizontalDirection.Right : HorizontalDirection.Left);
         }
 
         private IEnumerator IntroRoutine()
@@ -359,6 +358,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_agent.Stop();
             m_hitbox.Disable();
             //this.gameObject.SetActive(false); //TEMP
+            m_isDetecting = false;
             if (!m_deathHandle.gameObject.activeSelf)
             {
                 this.enabled = false;
