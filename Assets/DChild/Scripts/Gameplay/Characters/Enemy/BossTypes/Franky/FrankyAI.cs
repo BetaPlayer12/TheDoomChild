@@ -322,6 +322,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private Coroutine m_currentAttackCoroutine;
         private Coroutine m_leapRoutine;
 
+        private bool m_isDetecting;
+
         private void ApplyPhaseData(PhaseInfo obj)
         {
             m_currentPhaseIndex = obj.phaseIndex;
@@ -351,11 +353,14 @@ namespace DChild.Gameplay.Characters.Enemies
             if (damageable != null)
             {
                 base.SetTarget(damageable, m_target);
-                if (m_spriteMask.activeSelf)
+                if (!m_isDetecting)
                 {
-                    m_stateHandle.OverrideState(State.Intro);
+                    if (m_spriteMask.activeSelf)
+                    {
+                        m_stateHandle.OverrideState(State.Intro);
+                    }
+                    GameEventMessage.SendEvent("Boss Encounter");
                 }
-                GameEventMessage.SendEvent("Boss Encounter");
             }
         }
 
@@ -759,6 +764,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_chainHurtBox.gameObject.SetActive(false);
             //m_deathFX.Play();
             m_movement.Stop();
+            m_isDetecting = false;
         }
 
         #region Movement

@@ -379,6 +379,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private bool m_canBlockCounter;
         private Collider2D m_currentHurtbox;
         private List<float> m_currentFullCD;
+        private bool m_isDetecting;
 
         private void ApplyPhaseData(PhaseInfo obj)
         {
@@ -456,8 +457,11 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 Debug.Log("UG Ecnountered Player");
                 base.SetTarget(damageable, m_target);
-                m_stateHandle.OverrideState(State.Intro);
-                GameEventMessage.SendEvent("Boss Encounter");
+                if (!m_isDetecting)
+                {
+                    m_stateHandle.OverrideState(State.Intro);
+                    GameEventMessage.SendEvent("Boss Encounter");
+                }
             }
         }
 
@@ -916,6 +920,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_info.defeatStartAnimation, false).MixDuration = 0;
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.moveFastAnticipationAnimation);
             m_animation.SetAnimation(0, m_info.defeatLoopAnimation, true);
+            m_isDetecting = false;
             enabled = false;
             yield return null;
         }

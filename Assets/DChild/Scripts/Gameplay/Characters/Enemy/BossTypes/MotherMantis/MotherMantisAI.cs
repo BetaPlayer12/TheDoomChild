@@ -221,6 +221,10 @@ namespace DChild.Gameplay.Characters.Enemies
             Wait,
         }
 
+        private bool[] m_attackUsed;
+        private List<Attack> m_attackCache;
+        private List<float> m_attackRangeCache;
+
         [SerializeField, TabGroup("Reference")]
         private Boss m_boss;
         [SerializeField, TabGroup("Reference")]
@@ -271,8 +275,10 @@ namespace DChild.Gameplay.Characters.Enemies
         private PhaseHandle<Phase, PhaseInfo> m_phaseHandle;
         [ShowInInspector]
         private RandomAttackDecider<Attack> m_attackDecider;
-        private Attack m_previousAttack;
-        private Attack m_chosenAttack;
+        //private Attack m_previousAttack;
+        //private Attack m_chosenAttack;
+        private Attack m_currentAttack;
+        private float m_currentAttackRange;
 
         private ProjectileLauncher m_petalLauncher;
 
@@ -319,6 +325,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private string m_moveAnim;
         private float m_moveSpeed;
+        private bool m_isDetecting;
 
         private void ApplyPhaseData(PhaseInfo obj)
         {
@@ -364,8 +371,11 @@ namespace DChild.Gameplay.Characters.Enemies
             if (damageable != null)
             {
                 base.SetTarget(damageable, m_target);
-                m_stateHandle.OverrideState(State.Intro);
-                GameEventMessage.SendEvent("Boss Encounter");
+                if (!m_isDetecting)
+                {
+                    m_stateHandle.OverrideState(State.Intro);
+                    GameEventMessage.SendEvent("Boss Encounter");
+                }
 
                 //m_testTarget = m_targetInfo.position;
             }
@@ -456,6 +466,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_deathFX.Play();
             StartCoroutine(LeapStickToGroundRoutine(m_groundPosition));
             m_movement.Stop();
+            m_isDetecting = false;
         }
 
         #region Attacks
@@ -660,12 +671,12 @@ namespace DChild.Gameplay.Characters.Enemies
             if (m_attackDecider.chosenAttack.attack == Attack.Attack1 && m_attack1Use <= 2 && m_currentPhaseIndex == 1)
             {
                 m_attack1Use++;
-                m_chosenAttack = Attack.Attack1;
+                m_currentAttack = Attack.Attack1;
             }
             else if (m_attackDecider.chosenAttack.attack == Attack.Attack2 && m_attack2Use <= 2 && m_currentPhaseIndex == 2)
             {
                 m_attack2Use++;
-                m_chosenAttack = Attack.Attack2;
+                m_currentAttack = Attack.Attack2;
             }
         }
 
@@ -698,6 +709,56 @@ namespace DChild.Gameplay.Characters.Enemies
             base.ApplyData();
         }
 
+        private void ChooseAttack()
+        {
+            if (!m_attackDecider.hasDecidedOnAttack)
+            {
+                IsAllAttackComplete();
+                for (int i = 0; i < m_attackCache.Count; i++)
+                {
+                    m_attackDecider.DecideOnAttack();
+                    if (m_attackCache[i] != m_currentAttack && !m_attackUsed[i])
+                    {
+                        m_attackUsed[i] = true;
+                        m_currentAttack = m_attackCache[i];
+                        m_currentAttackRange = m_attackRangeCache[i];
+                        return;
+                    }
+                }
+            }
+        }
+
+        private void IsAllAttackComplete()
+        {
+            for (int i = 0; i < m_attackUsed.Length; ++i)
+            {
+                if (!m_attackUsed[i])
+                {
+                    return;
+                }
+            }
+            for (int i = 0; i < m_attackUsed.Length; ++i)
+            {
+                m_attackUsed[i] = false;
+            }
+        }
+
+        void AddToAttackCache(params Attack[] list)
+        {
+            for (int i = 0; i < list.Length; i++)
+            {
+                m_attackCache.Add(list[i]);
+            }
+        }
+
+        void AddToRangeCache(params float[] list)
+        {
+            for (int i = 0; i < list.Length; i++)
+            {
+                m_attackRangeCache.Add(list[i]);
+            }
+        }
+
         protected override void Awake()
         {
             base.Awake();
@@ -708,8 +769,13 @@ namespace DChild.Gameplay.Characters.Enemies
             m_turnHandle.TurnDone += OnTurnDone;
             m_deathHandle.SetAnimation(m_info.deathAnimation);
             m_attackDecider = new RandomAttackDecider<Attack>();
-            UpdateAttackDeciderList();
             m_stateHandle = new StateHandle<State>(State.Idle, State.WaitBehaviourEnd);
+            UpdateAttackDeciderList();
+            m_attackCache = new List<Attack>();
+            AddToAttackCache(Attack.Attack1, Attack.Attack2, Attack.Attack3, Attack.Attack4, Attack.Attack5);
+            m_attackRangeCache = new List<float>();
+            AddToRangeCache(m_info.attack1.range, m_info.attack2.range, m_info.attack3.range, m_info.attack4.range, m_info.attack5.range);
+            m_attackUsed = new bool[m_attackCache.Count];
         }
 
         protected override void Start()
@@ -780,7 +846,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         {
                             //Debug.Log("Current Chance to Use Skill: " + chance);
                             //Debug.Log("Chance needed to Use Skill: " + m_info.universalAttackChance);
-                            switch (m_attackDecider.chosenAttack.attack)
+                            switch (m_currentAttack)
                             {
                                 case Attack.Attack1:
                                     //m_animation.EnableRootMotion(true, false);
@@ -880,15 +946,16 @@ namespace DChild.Gameplay.Characters.Enemies
 
                     if (IsFacingTarget())
                     {
-                        m_attackDecider.DecideOnAttack();
-                        if (m_attackDecider.chosenAttack.attack == m_previousAttack)
-                        {
-                            m_attackDecider.hasDecidedOnAttack = false;
-                        }
+                        //m_attackDecider.DecideOnAttack();
+                        //if (m_attackDecider.chosenAttack.attack == m_previousAttack)
+                        //{
+                        //    m_attackDecider.hasDecidedOnAttack = false;
+                        //}
+                        ChooseAttack();
                         if (m_attackDecider.hasDecidedOnAttack && IsTargetInRange(m_attackDecider.chosenAttack.range) /*&& !m_wallSensor.allRaysDetecting*/)
                         {
                             //StopAllCoroutines();
-                            m_previousAttack = m_attackDecider.chosenAttack.attack;
+                            //m_previousAttack = m_attackDecider.chosenAttack.attack;
                             //m_movement.Stop();
                             //m_animation.SetAnimation(0, m_info.idleAnimation, true);
                             m_stateHandle.SetState(State.Attacking);
