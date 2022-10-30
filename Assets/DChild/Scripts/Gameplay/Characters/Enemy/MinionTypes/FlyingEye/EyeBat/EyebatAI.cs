@@ -121,6 +121,8 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Reference")]
         private GameObject m_selfCollider;
         [SerializeField, TabGroup("Reference")]
+        private Collider2D m_environmentCollider;
+        [SerializeField, TabGroup("Reference")]
         private Collider2D m_bodycollider;
         [SerializeField, TabGroup("Modules")]
         private TransformTurnHandle m_turnHandle;
@@ -496,7 +498,7 @@ namespace DChild.Gameplay.Characters.Enemies
             bool inRange = false;
             /*Vector2.Distance(transform.position, target) > m_info.spearMeleeAttack.range*/ //old target in range condition
             var moveSpeed = m_info.move.speed - UnityEngine.Random.Range(0, 3);
-            while (!inRange || TargetBlocked())
+            while (!inRange || TargetBlocked() || m_environmentCollider.IsTouchingLayers(DChildUtility.GetEnvironmentMask()))
             {
 
                 bool xTargetInRange = Mathf.Abs(m_targetInfo.position.x - transform.position.x) < attackRange ? true : false;
