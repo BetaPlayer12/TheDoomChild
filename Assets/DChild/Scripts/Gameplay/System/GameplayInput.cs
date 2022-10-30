@@ -1,4 +1,5 @@
-﻿using Doozy.Engine;
+﻿using DChild.UI;
+using Doozy.Engine;
 using Sirenix.OdinInspector;
 using System.Collections;
 using UnityEngine;
@@ -52,12 +53,12 @@ namespace DChild.Gameplay.Systems
         {
             if (Input.GetKeyDown(m_pause))
             {
-                if (!GameplaySystem.playerManager.playerIsDead)
+                if(DChildStandardDialogueUI.dialogueActive == false) //Appaarently we cannot find where the pause button skips the dialogue so we just let da input take not if the dialogue is active so that game will not be paused during dialogue
                 {
                     GameplaySystem.PauseGame();
                     GameplaySystem.gamplayUIHandle.ShowPauseMenu(true);
                 }
-
+                
             }
             else if (m_enableStoreInput == true)
             {
