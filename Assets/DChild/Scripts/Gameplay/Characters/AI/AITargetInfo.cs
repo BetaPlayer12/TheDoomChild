@@ -56,7 +56,9 @@ namespace DChild.Gameplay.Characters.AI
             this.m_target = target;
             isCharacter = target;
             isValid = damageable != null;
-            m_characterGroundedState = target.GetComponentInChildren<IGroundednessState>();
+            if(target != null)
+                m_characterGroundedState = target.GetComponentInChildren<IGroundednessState>();
+
         }
 
         public void Set(IDamageable damageable)

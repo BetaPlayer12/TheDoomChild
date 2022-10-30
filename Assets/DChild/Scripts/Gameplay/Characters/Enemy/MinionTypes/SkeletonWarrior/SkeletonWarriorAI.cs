@@ -153,6 +153,10 @@ namespace DChild.Gameplay.Characters.Enemies
         private RaySensor m_groundSensor;
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_edgeSensor;
+        [SerializeField, TabGroup("Hurtbox")]
+        private GameObject m_footRightBB;
+        [SerializeField, TabGroup("Hurtbox")]
+        private GameObject m_footLeftBB;
 
         [SerializeField]
         private bool m_willPatrol = true;
@@ -187,6 +191,8 @@ namespace DChild.Gameplay.Characters.Enemies
             m_flinchHandle.m_enableMixFlinch = true;
             m_animation.DisableRootMotion();
             m_flinchHandle.m_autoFlinch = true;
+            m_footRightBB.SetActive(false);
+            m_footLeftBB.SetActive(false);
             m_stateHandle.ApplyQueuedState();
         }
 
@@ -270,6 +276,8 @@ namespace DChild.Gameplay.Characters.Enemies
             m_boundBoxGO.SetActive(false);
             base.OnDestroyed(sender, eventArgs);
             m_movement.Stop();
+            m_footRightBB.SetActive(false);
+            m_footLeftBB.SetActive(false);
         }
 
         //private void OnFlinchStart(object sender, EventActionArgs eventArgs)
@@ -601,6 +609,8 @@ namespace DChild.Gameplay.Characters.Enemies
                                 case Attack.Attack3:
                                     m_animation.EnableRootMotion(true, false);
                                     m_attackHandle.ExecuteAttack(m_info.attack3.animation, m_info.idleAnimation);
+                                    m_footRightBB.SetActive(true);
+                                    m_footLeftBB.SetActive(true);
                                     break;
                                 case Attack.RunAttack:
                                     m_animation.EnableRootMotion(false, false);

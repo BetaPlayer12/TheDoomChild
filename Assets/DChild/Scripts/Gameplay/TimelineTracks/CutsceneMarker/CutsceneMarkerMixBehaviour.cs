@@ -28,11 +28,11 @@ namespace DChildDebug.Cutscene
                     if (Application.isPlaying)
                     {
                         SequenceSkipHandle.SkipExecute += OnSkip;
-                        GameplaySystem.gamplayUIHandle.ShowSequenceSkip(true); 
+                        GameplaySystem.gamplayUIHandle.ShowSequenceSkip(true);
                     }
                     m_playedBehaviourIndex.Add(i);
                 }
-                else if(inputWeight < 0.001f && m_playedBehaviourIndex.Contains(i))
+                else if (inputWeight < 0.001f && m_playedBehaviourIndex.Contains(i))
                 {
                     if (Application.isPlaying)
                     {

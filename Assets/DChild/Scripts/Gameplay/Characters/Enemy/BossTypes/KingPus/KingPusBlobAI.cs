@@ -111,6 +111,8 @@ namespace DChild.Gameplay.Characters.Enemies
         //private RaySensor m_wallSensor;
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_groundSensor;
+        [SerializeField, TabGroup("Sensors")]
+        private RaySensor m_selfSensor;
 
         [SerializeField]
         private float m_rotateSpeed;
@@ -323,7 +325,6 @@ namespace DChild.Gameplay.Characters.Enemies
                                 if (/*!m_wallSensor.isDetecting &&*/ m_groundSensor.isDetecting && Mathf.Abs(m_master.position.x - transform.position.x) > 3f)
                                 {
                                     m_animation.EnableRootMotion(true, false);
-                                    m_selfCollider.enabled = true;
                                     m_animation.SetAnimation(0, m_crawlAnimation, true);
                                     //m_movement.MoveTowards(Vector2.one * transform.localScale.x, m_currentMoveSpeed);
                                 }
@@ -333,6 +334,10 @@ namespace DChild.Gameplay.Characters.Enemies
                                     //m_selfCollider.enabled = true;
                                     m_animation.SetAnimation(0, m_info.idleAnimation, true);
                                 }
+                                if (m_selfSensor.isDetecting)
+                                    m_selfCollider.enabled = true;
+                                else
+                                    m_selfCollider.enabled = false;
                             }
                             else
                             {

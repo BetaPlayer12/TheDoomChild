@@ -58,7 +58,19 @@ namespace DChild.Gameplay.Combat
                 var position = transform.position;
                 using (Cache<AttackerCombatInfo> cacheInfo = Cache<AttackerCombatInfo>.Claim())
                 {
-                    cacheInfo.Value.Initialize(gameObject, position, m_currentAttackInfo, colliderThatDealtDamage, m_data?.damageFX ?? null);
+                    var owner = gameObject;
+
+                    if (parentAttacker != null)
+                    {
+                        owner = parentAttacker.gameObject;
+                    }
+
+                    if (rootParentAttacker != null)
+                    {
+                        owner = rootParentAttacker.gameObject;
+                    }
+
+                    cacheInfo.Value.Initialize(owner, position, m_currentAttackInfo, colliderThatDealtDamage, m_data?.damageFX ?? null);
                     AttackSummaryInfo cacheResult = GameplaySystem.combatManager.ResolveConflict(cacheInfo.Value, targetInfo);
                     using (Cache<CombatConclusionEventArgs> cacheEventArgs = Cache<CombatConclusionEventArgs>.Claim())
                     {

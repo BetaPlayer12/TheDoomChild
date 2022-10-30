@@ -1,4 +1,5 @@
 ﻿using Holysoft.Event;
+using UnityEngine;
 
 namespace DChild.Gameplay.Combat
 {
@@ -6,11 +7,12 @@ namespace DChild.Gameplay.Combat
     {
         IAttacker parentAttacker { get; }
         IAttacker rootParentAttacker { get; }
+        GameObject gameObject { get; }
 
         event EventAction<CombatConclusionEventArgs> TargetDamaged;
 
         void SetParentAttacker(IAttacker damageDealer);
         void SetRootParentAttacker(IAttacker damageDealer);
 
-    }
+    } 
 }

@@ -457,6 +457,7 @@ namespace DChild.Gameplay.Characters.Enemies
         #region Animations
         private string m_currentIdleAnimation;
         #endregion
+        private bool m_isDetecting;
 
         private void ApplyPhaseData(PhaseInfo obj)
         {
@@ -514,8 +515,12 @@ namespace DChild.Gameplay.Characters.Enemies
             if (damageable != null)
             {
                 base.SetTarget(damageable, m_target);
-                m_stateHandle.OverrideState(State.Intro);
-                GameEventMessage.SendEvent("Boss Encounter");
+                if (!m_isDetecting)
+                {
+                    m_isDetecting = true;
+                    m_stateHandle.OverrideState(State.Intro);
+                    GameEventMessage.SendEvent("Boss Encounter");
+                }
             }
         }
 
@@ -956,6 +961,7 @@ namespace DChild.Gameplay.Characters.Enemies
             base.OnDestroyed(sender, eventArgs);
             StopAllCoroutines();
             m_movement.Stop();
+            m_isDetecting = false;
         }
 
         #region Movement
@@ -1036,7 +1042,7 @@ namespace DChild.Gameplay.Characters.Enemies
             StopCoroutine(m_lazerLookCoroutine);
             m_lazerLookCoroutine = null;
             m_aimOn = false;
-            m_character.physics.SetVelocity(BallisticVelocity(new Vector2(m_targetInfo.position.x, (transform.position.y - m_targetInfo.position.y))));
+            m_character.physics.SetVelocity(BallisticVelocity(new Vector2(m_targetInfo.position.x, /*(transform.position.y - m_targetInfo.position.y)*/GroundPosition(m_targetInfo.position).y)));
             m_animation.SetAnimation(0, m_info.jumpSmashStartAnimation, false);
             //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.jumpSmashStartAnimation);
             yield return new WaitUntil(() => m_groundSensor.isDetecting);
