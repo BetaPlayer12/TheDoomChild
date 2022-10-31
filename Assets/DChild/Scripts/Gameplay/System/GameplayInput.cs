@@ -25,7 +25,7 @@ namespace DChild.Gameplay.Systems
 
         public void ToggleUINavigationInput(bool On)
         {
-            m_uiInput.move = On ? m_uiMoveInput : null;
+            //m_uiInput.move = On ? m_uiMoveInput : null;
         }
 
         public void OverrideNewInfoNotif(float duration)

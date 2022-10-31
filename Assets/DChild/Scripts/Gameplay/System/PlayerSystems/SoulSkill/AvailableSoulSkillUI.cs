@@ -1,21 +1,15 @@
-﻿using UnityEngine;
+﻿using DChild.Gameplay.Characters.Players.SoulSkills;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace DChild.Gameplay.SoulSkills.UI
 {
-    public sealed class AvailableSoulSkillUI : SoulSkillUI
+    public sealed class AvailableSoulSkillUI : SoulSkillButton
     {
         [SerializeField]
         private GameObject m_shownVersion;
         [SerializeField]
         private GameObject m_hiddenVersion;
-
-        [SerializeField]
-        private Button m_button;
-        [SerializeField]
-        private Color m_unactivatedColor;
-        [SerializeField]
-        private Color m_activatedColor;
 
         public override void Show(bool immidiate)
         {
@@ -31,11 +25,19 @@ namespace DChild.Gameplay.SoulSkills.UI
 
         public override void SetIsAnActivatedUIState(bool isAnEquippedUI)
         {
+            if (m_button == null)
+            {
+                Awake();
+            }
+
             m_hiddenVersion.SetActive(false);
+            m_button.interactable = !isAnEquippedUI;
             base.SetIsAnActivatedUIState(isAnEquippedUI);
-            var colors = m_button.colors;
-            colors.normalColor = m_isAnActivatedSoulSkill ? m_activatedColor : m_unactivatedColor;
-            m_button.colors = colors;
+        }
+
+        protected override void SetOrb(SoulSkillOrbData orbData)
+        {
+            m_orb.sprite = orbData?.availableOrb ?? null;
         }
     }
 }

@@ -30,6 +30,7 @@ namespace DChild.UI
             m_lastToPosition = m_to.position;
         }
 
+        [ContextMenu("Update Chain")]
         void Update()
         {
             var position = m_from.position + m_fromOffset;
@@ -42,7 +43,7 @@ namespace DChild.UI
                 transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
 
                 var sizeDelta = m_rectTransform.sizeDelta;
-                sizeDelta.x = (direction.magnitude + m_lengthOffset) * 10f;
+                sizeDelta.x = (direction.magnitude + m_lengthOffset);
 
                 m_rectTransform.sizeDelta = sizeDelta;
 

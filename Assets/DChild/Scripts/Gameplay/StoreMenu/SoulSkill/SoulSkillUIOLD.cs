@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace DChild.Menu.SoulSkills
 {
-    public class SoulSkillUI : MonoBehaviour
+    public class SoulSkillUIOLD : MonoBehaviour
     {
         [ShowInInspector]
         private SoulSkill m_data;

@@ -95,6 +95,8 @@ namespace DChild.Gameplay.Characters.Players.SoulSkills
 #endif
         #endregion
         [SerializeField, ToggleGroup("m_enableEdit")]
+        private SoulSkillOrbData m_orbData;
+        [SerializeField, ToggleGroup("m_enableEdit")]
         private Sprite m_icon;
         [SerializeField, MinValue(1), ToggleGroup("m_enableEdit")]
         private int m_capacity = 1;
@@ -103,6 +105,7 @@ namespace DChild.Gameplay.Characters.Players.SoulSkills
         [NonSerialized, OdinSerialize, ToggleGroup("m_enableEdit")]
         private ISoulSkillModule[] m_modules = new ISoulSkillModule[1];
 
+        public SoulSkillOrbData orbData => m_orbData;
         public Sprite icon => m_icon;
         public int capacity => m_capacity;
         public string description => m_description;
