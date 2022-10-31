@@ -17,66 +17,66 @@ public class GameTutorialHandle : MonoBehaviour
     {
         if (active)
         {
-            m_movement.Show();
+            m_movement?.Show();
         }
         else
         {
-            m_movement.Hide();
+            m_movement?.Hide();
         }
     }
     public void SetJumpTutorialVisibility(bool active)
     {
         if (active)
         {
-            m_jump.Show();
+            m_jump?.Show();
         }
         else
         {
-            m_jump.Hide();
+            m_jump?.Hide();
         }
     }
     public void SetHighJumpTutorialVisibility(bool active)
     {
         if (active)
         {
-            m_highjump.Show();
+            m_highjump?.Show();
         }
         else
         {
-            m_highjump.Hide();
+            m_highjump?.Hide();
         }
     }
     public void SetCrouchTutorialVisibility(bool active)
     {
         if (active)
         {
-            m_crouch.Show();
+            m_crouch?.Show();
         }
         else
         {
-            m_crouch.Hide();
+            m_crouch?.Hide();
         }
     }
     public void SetDropdownTutorialVisibility(bool active)
     {
         if (active)
         {
-            m_dropdown.Show();
+            m_dropdown?.Show();
         }
         else
         {
-            m_dropdown.Hide();
+            m_dropdown?.Hide();
         }
     }
     public void SetAttackTutorialVisibility(bool active)
     {
         if (active)
         {
-            m_attack.Show();
+            m_attack?.Show();
         }
         else
         {
-            m_attack.Hide();
+            m_attack?.Hide();
         }
     }
 }
