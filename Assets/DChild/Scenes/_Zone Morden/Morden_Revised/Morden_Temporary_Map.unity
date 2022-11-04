@@ -98,7 +98,7 @@ LightmapSettings:
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 1
+  m_UseShadowmask: 0
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -6614,7 +6614,8 @@ MonoBehaviour:
   serializationData:
     SerializedFormat: 2
     SerializedBytes: 
-    ReferencedUnityObjects: []
+    ReferencedUnityObjects:
+    - {fileID: 1649058094}
     SerializedBytesString: 
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
@@ -6654,7 +6655,25 @@ MonoBehaviour:
         Assembly-CSharp]], mscorlib
     - Name: 
       Entry: 12
+      Data: 1
+    - Name: 
+      Entry: 7
+      Data: 5|DChild.Serialization.ZoneDataHandle+EditorData+ComponentData, Assembly-CSharp
+    - Name: m_serializer
+      Entry: 10
       Data: 0
+    - Name: m_saveData
+      Entry: 7
+      Data: 6|DChild.Gameplay.Environment.BreakableObject+SaveData, Assembly-CSharp
+    - Name: m_isDestroyed
+      Entry: 5
+      Data: false
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
     - Name: 
       Entry: 13
       Data: 
@@ -6663,7 +6682,7 @@ MonoBehaviour:
       Data: 
     - Name: m_dynamicDatas
       Entry: 7
-      Data: 5|System.Collections.Generic.List`1[[DChild.Serialization.ZoneDataHandle+EditorData+DynamicData,
+      Data: 7|System.Collections.Generic.List`1[[DChild.Serialization.ZoneDataHandle+EditorData+DynamicData,
         Assembly-CSharp]], mscorlib
     - Name: 
       Entry: 12
@@ -6679,9 +6698,10 @@ MonoBehaviour:
       Data: 
   Zone: {fileID: 0}
   m_ID:
-    m_ID: 0
+    m_ID: 393
     m_showHandle: 1
-  m_componentSerializers: []
+  m_componentSerializers:
+  - {fileID: 1649058094}
   m_dynamicSerializers: []
   m_dialogueSystemUpdates: []
   m_questsListener: []
@@ -8790,6 +8810,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32547a6b23b185d45bcbd798c84f0c5a, type: 3}
+--- !u!114 &1649058094 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3175691941386256017, guid: 32547a6b23b185d45bcbd798c84f0c5a,
+    type: 3}
+  m_PrefabInstance: {fileID: 1649058093}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 169904169d11e8b46aaa137c9857a428, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1676476804
 PrefabInstance:
   m_ObjectHideFlags: 0
