@@ -285,6 +285,7 @@ namespace DChild.Gameplay.Characters.Enemies
         //Patience Handler
         private void Patience()
         {
+            enabled = false;
             StopAllCoroutines();
             if (m_executeMoveCoroutine != null)
             {
@@ -293,10 +294,11 @@ namespace DChild.Gameplay.Characters.Enemies
             }
             ResetLaser();
             m_agent.Stop();
-            m_stateHandle.SetState(State.ReturnToPatrol);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_targetInfo.Set(null, null);
             m_isDetecting = false;
+            m_stateHandle.SetState(State.ReturnToPatrol);
+            enabled = true;
         }
 
         public override void ApplyData()
@@ -789,11 +791,12 @@ namespace DChild.Gameplay.Characters.Enemies
                     {
                         if (Vector2.Distance(m_startPos, transform.position) > 10f)
                         {
-                            var rb2d = GetComponent<Rigidbody2D>();
+                            //var rb2d = GetComponent<Rigidbody2D>();
                             m_bodycollider.enabled = false;
                             m_agent.Stop();
-                            Vector3 dir = (m_startPos - (Vector2)rb2d.transform.position).normalized;
-                            rb2d.MovePosition(rb2d.transform.position + dir * m_info.move.speed * Time.fixedDeltaTime);
+                            Vector3 dir = (m_startPos - (Vector2)m_rigidbody2D.transform.position).normalized;
+                            Debug.Log("Return to Patrol Direction: " + dir);
+                            m_rigidbody2D.MovePosition(m_rigidbody2D.transform.position + dir * m_info.move.speed * Time.fixedDeltaTime);
                             m_animation.SetAnimation(0, m_info.patrol.animation, true);
                         }
                         else
