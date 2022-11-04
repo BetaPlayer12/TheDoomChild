@@ -10,17 +10,36 @@ namespace DChild.Gameplay.Characters.Enemies
     {
         [SerializeField]
         private MonolithSlam m_monolith;
+        [SerializeField]
+        private Transform m_monolithSlamHeight;
 
-        private List<PoolableObject> m_monolithsSpawned;
+        private List<PoolableObject> m_monolithsSpawned = new List<PoolableObject>();
 
         private bool m_leftToRightSequence;
 
         public IEnumerator ExecuteAttack()
         {
-            foreach(PoolableObject monolith in m_monolithsSpawned)
+            if (m_leftToRightSequence)
+                OrganizeMonolithsSpawnedInDescendingOrder();
+            else
+                OrganizeMonolithsSpawnedInAscendingOrder();
+
+            Debug.Log(m_monolithsSpawned);
+
+            if(m_monolithsSpawned.Count > 1)
+            {
+                int rollMonolithToKeep = Random.Range(0, m_monolithsSpawned.Count);
+
+                m_monolithsSpawned[rollMonolithToKeep].gameObject.GetComponent<MonolithSlam>().keepMonolith = true;
+            }
+
+            foreach (PoolableObject monolith in m_monolithsSpawned)
             {
                 monolith.GetComponent<MonolithSlam>().smashMonolith = true;
+                yield return new WaitForSeconds(2f);
             }
+
+
             yield return null;
         }
 
@@ -39,9 +58,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private void InstantiateMonolith(Vector2 spawnPosition, GameObject monolith)
         {
             var instance = GameSystem.poolManager.GetPool<PoolableObjectPool>().GetOrCreateItem(monolith, gameObject.scene);
-            instance.SpawnAt(new Vector2(spawnPosition.x, spawnPosition.y + 10f), Quaternion.identity);
-            m_monolithsSpawned.Add(instance);
-            
+            instance.SpawnAt(new Vector2(spawnPosition.x, m_monolithSlamHeight.position.y), Quaternion.identity);
+            m_monolithsSpawned.Add(instance); 
         }
 
         public void OrganizeMonolithsSpawnedInDescendingOrder()
@@ -51,8 +69,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
         public void OrganizeMonolithsSpawnedInAscendingOrder()
         {
-            //flip this j
             m_monolithsSpawned = m_monolithsSpawned.OrderByDescending(x => x.transform.position.x).ToList();
+            m_monolithsSpawned.Reverse();
         }
 
       

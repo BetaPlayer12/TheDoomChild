@@ -2,7 +2,7 @@
 using System.Collections;
 using UnityEngine;
 #if UNITY_EDITOR
-using UnityEditor; 
+using UnityEditor;
 #endif
 
 namespace DChild.Gameplay.Characters.Players
@@ -14,6 +14,8 @@ namespace DChild.Gameplay.Characters.Players
         private string m_name;
         [SerializeField]
         private string m_description;
+        [SerializeField]
+        private string m_instruction;
         [SerializeField, OnValueChanged("SkillChanged")]
         private PrimarySkill m_skill;
         [SerializeField, PreviewField]
@@ -23,6 +25,7 @@ namespace DChild.Gameplay.Characters.Players
 
         public string skillName => m_name;
         public string description => m_description;
+        public string instruction => m_instruction;
         public PrimarySkill skill => m_skill;
         public Sprite border => m_border;
         public Sprite icon => m_icon;
@@ -31,7 +34,7 @@ namespace DChild.Gameplay.Characters.Players
         private void SkillChanged()
         {
             m_name = m_skill.ToString();
-           var path =  AssetDatabase.GetAssetPath(this);
+            var path = AssetDatabase.GetAssetPath(this);
             AssetDatabase.RenameAsset(path, m_name + "SkillData");
             EditorUtility.SetDirty(this);
             AssetDatabase.SaveAssets();

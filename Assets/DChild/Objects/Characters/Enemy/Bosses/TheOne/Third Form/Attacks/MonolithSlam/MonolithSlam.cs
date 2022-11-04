@@ -14,9 +14,7 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField]
         private RaySensor m_floorSensor;
 
-        private bool m_monolithGrounded;
-
-        public bool destroyMonolith;
+        public bool keepMonolith;
         public bool smashMonolith;
 
         // Start is called before the first frame update
@@ -24,6 +22,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_impactCollider.enabled = true;
             m_obstacleCollider.enabled = false;
+            keepMonolith = false;
         }
 
         // Update is called once per frame
@@ -31,10 +30,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             if (smashMonolith)
             {
-                if (!m_monolithGrounded)
-                {
-                    StartCoroutine(MonolithSmashOnGround());
-                }
+                StartCoroutine(MonolithSmashOnGround());
             }        
         }
 
@@ -44,7 +40,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
             if (!m_floorSensor.isDetecting)
             {
-                transform.Translate(Vector3.right);
+                transform.Translate(Vector3.down);
             }
             else
             {
@@ -53,10 +49,8 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_impactCollider.enabled = false;
                 m_obstacleCollider.enabled = true;
 
-                if (destroyMonolith)
-                {
+                if (!keepMonolith)
                     DestroyInstance();
-                }
             }
         }
     }

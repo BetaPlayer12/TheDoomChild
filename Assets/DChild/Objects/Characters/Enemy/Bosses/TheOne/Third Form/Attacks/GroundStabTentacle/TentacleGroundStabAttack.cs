@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using DChild.Gameplay.Pooling;
+using DChild.Gameplay.Projectiles;
 
 namespace DChild.Gameplay.Characters.Enemies
 {
@@ -19,6 +20,9 @@ namespace DChild.Gameplay.Characters.Enemies
         private int m_tentacleCount = 0;
         private Vector2 m_tentacleOffset = new Vector2(0, 50f);
 
+        [SerializeField]
+        private float m_tentacleStabTimer = 0;
+        private float m_tentacleStabTimerValue;
 
         public IEnumerator ExecuteAttack()
         {
@@ -60,9 +64,24 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             var instance = GameSystem.poolManager.GetPool<PoolableObjectPool>().GetOrCreateItem(tentacle, gameObject.scene);
             instance.SpawnAt(spawnPosition, Quaternion.identity);
+            //StartCoroutine(instance.GetComponent<TentacleLifeSpan>().StabRoutine());
         }
 
-        
+        private void Start()
+        {
+            m_tentacleStabTimerValue = m_tentacleStabTimer;
+        }
+
+        private void Update()
+        {
+            m_tentacleStabTimer -= GameplaySystem.time.deltaTime;
+
+            if (m_tentacleStabTimer <= 0)
+            {
+                //StartCoroutine(m_tentacleStabAttack.ExecuteAttack(m_targetInfo.position));
+                m_tentacleStabTimer = m_tentacleStabTimerValue;
+            }
+        }
     }
 }
 

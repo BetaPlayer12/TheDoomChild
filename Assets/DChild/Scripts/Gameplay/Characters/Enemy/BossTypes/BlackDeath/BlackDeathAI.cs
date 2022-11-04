@@ -291,6 +291,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private int m_currentLightningCount;
         private int m_currentTentacleCount;
         private float m_currentLightningSummonDuration;
+        private bool m_isDetecting;
 
         private void ApplyPhaseData(PhaseInfo obj)
         {
@@ -323,8 +324,12 @@ namespace DChild.Gameplay.Characters.Enemies
             if (damageable != null && m_stateHandle.currentState == State.Idle)
             {
                 base.SetTarget(damageable, m_target);
-                m_stateHandle.OverrideState(State.Intro);
-                GameEventMessage.SendEvent("Boss Encounter");
+                if (!m_isDetecting)
+                {
+                    m_isDetecting = true;
+                    m_stateHandle.OverrideState(State.Intro);
+                    GameEventMessage.SendEvent("Boss Encounter");
+                }
             }
         }
 
@@ -398,6 +403,7 @@ namespace DChild.Gameplay.Characters.Enemies
             }
             StopAllCoroutines();
             m_movement.Stop();
+            m_isDetecting = false;
         }
 
         #region Attacks

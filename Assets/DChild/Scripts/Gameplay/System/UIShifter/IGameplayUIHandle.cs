@@ -1,6 +1,7 @@
 ﻿using DChild.Gameplay.Characters.Enemies;
 using DChild.Gameplay.Characters.NPC;
 using DChild.Gameplay.Environment;
+using DChild.Gameplay.Items;
 using DChild.Gameplay.Systems.Lore;
 using DChild.Gameplay.Trade;
 using DChild.Gameplay.UI;
@@ -28,7 +29,7 @@ namespace DChild.Gameplay.Systems
 
         void ShowJournalNotificationPrompt(float duration);
         void PromptJournalUpdateNotification();
-
+        void ShowItemNotification(ItemData itemData);
         void ShowQuickItem(bool willshow);
         void ShowBossHealth(bool willshow);
         void RevealBossName();
