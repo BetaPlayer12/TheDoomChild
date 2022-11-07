@@ -4,6 +4,8 @@ namespace DChild.Menu.Inputs
 {
     public abstract class InputPromptUI : MonoBehaviour
     {
+        protected GamepadIconData m_currentIconData;
+
         protected abstract void UpdateGamepadInputIcons(GamepadIconData iconData);
         protected abstract void UpdateKeyboardInputIcons(GamepadIconData iconData);
 
@@ -12,7 +14,7 @@ namespace DChild.Menu.Inputs
             UpdateInputIcons(eventArgs.iconData);
         }
 
-        private void UpdateInputIcons(GamepadIconData iconData)
+        protected void UpdateInputIcons(GamepadIconData iconData)
         {
             if (InputIconHandle.useGamepad)
             {

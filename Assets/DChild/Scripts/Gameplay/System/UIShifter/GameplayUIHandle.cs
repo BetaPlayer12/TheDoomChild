@@ -3,6 +3,7 @@ using DChild.Gameplay.Characters.Enemies;
 using DChild.Gameplay.Characters.NPC;
 using DChild.Gameplay.Combat.UI;
 using DChild.Gameplay.Environment;
+using DChild.Gameplay.Items;
 using DChild.Gameplay.NavigationMap;
 using DChild.Gameplay.Systems.Lore;
 using DChild.Gameplay.Trade;
@@ -17,7 +18,7 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Systems
 {
-    public class GameplayUIHandle : MonoBehaviour, IGameplayUIHandle, IGameplaySystemModule
+    public class GameplayUIHandle : SerializedMonoBehaviour, IGameplayUIHandle, IGameplaySystemModule
     {
         [SerializeField]
         private SignalSender m_cinemaSignal;
@@ -28,7 +29,8 @@ namespace DChild.Gameplay.Systems
         private UIContainer m_primarySkillNotification;
         [SerializeField, BoxGroup("Full Screen Notifications")]
         private LoreInfoUI m_loreNotification;
-
+        [SerializeField, BoxGroup("Full Screen Notifications")]
+        private IItemNotificationUI[] m_itemNotifications;
 
         [SerializeField, BoxGroup("Merchant UI")]
         private SignalSender m_tradeWindowSignal;
@@ -118,6 +120,19 @@ namespace DChild.Gameplay.Systems
         {
             m_fullScreenNotifSignal.SendSignal();
             m_primarySkillNotification.Show(true);
+        }
+
+        public void ShowItemNotification(ItemData itemData)
+        {
+            m_fullScreenNotifSignal.SendSignal();
+            for (int i = 0; i < m_itemNotifications.Length; i++)
+            {
+                var notification = m_itemNotifications[i];
+                if (notification.IsNotificationFor(itemData))
+                {
+                    notification.ShowNotificationFor(itemData);
+                }
+            }
         }
 
         public void PromptKeystoneFragmentNotification()

@@ -9,12 +9,18 @@ namespace DChild.Menu.Inputs
     {
         [SerializeField]
         private TextMeshProUGUI m_label;
-        [SerializeField,Tooltip("Token: " + TOKEN + "<number>")]
+        [SerializeField, Tooltip("Token: " + TOKEN + "<number>")]
         private string m_text;
         [SerializeField]
         private KeybindAddressesList[] m_addressesLists;
 
         protected const string TOKEN = "$#";
+
+        public void SetText(string text)
+        {
+            m_text = text;
+            UpdateInputIcons(m_currentIconData);
+        }
 
         private InputBinding GetBinding(KeybindAddressesList addressesLists, bool useGamepad)
         {
@@ -25,6 +31,7 @@ namespace DChild.Menu.Inputs
 
         protected override void UpdateGamepadInputIcons(GamepadIconData iconData)
         {
+            m_currentIconData = iconData;
             m_label.spriteAsset = iconData.spriteAsset;
             var currentText = m_text;
             for (int i = 0; i < m_addressesLists.Length; i++)
@@ -40,6 +47,7 @@ namespace DChild.Menu.Inputs
 
         protected override void UpdateKeyboardInputIcons(GamepadIconData iconData)
         {
+            m_currentIconData = null;
             m_label.spriteAsset = null;
             var currentText = m_text;
             for (int i = 0; i < m_addressesLists.Length; i++)

@@ -1,6 +1,7 @@
 ﻿using DChild.Gameplay.Characters.Enemies;
 using DChild.Gameplay.Characters.NPC;
 using DChild.Gameplay.Environment;
+using DChild.Gameplay.Items;
 using DChild.Gameplay.Systems.Lore;
 using DChild.Gameplay.Trade;
 using DChild.Gameplay.UI;
@@ -24,6 +25,9 @@ namespace DChild.Gameplay.Systems
 
         void MonitorBoss(Boss boss);
         void ResetGameplayUI();
+
+        void ShowItemNotification(ItemData itemData);
+
         void PromptPrimarySkillNotification();
         void PromptKeystoneFragmentNotification();
         void PromptBestiaryNotification();

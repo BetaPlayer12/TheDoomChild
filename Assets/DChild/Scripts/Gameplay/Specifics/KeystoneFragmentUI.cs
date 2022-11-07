@@ -1,11 +1,12 @@
 ﻿using DChild.Gameplay.Inventories;
+using DChild.Gameplay.UI;
 using Doozy.Runtime.UIManager.Containers;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace DChild.Gameplay.Items
 {
-    public class KeystoneFragmentUI : SerializedMonoBehaviour
+    public class KeystoneFragmentUI : SerializedMonoBehaviour, IItemNotificationUI
     {
         [System.Serializable]
         private class Info
@@ -26,14 +27,32 @@ namespace DChild.Gameplay.Items
             public bool instantAction;
         }
 
-        //[SerializeField]
-        //private IItemContainer m_inventory;
+        [SerializeField]
+        private UIContainer m_container;
         [SerializeField]
         private Info[] m_infos;
         [SerializeField, ListDrawerSettings(HideRemoveButton = true, HideAddButton = true), HideInEditorMode]
         private Command[] m_commands;
 
         private int m_previousAcquiredIndex;
+
+        public bool IsNotificationFor(ItemData itemData)
+        {
+            for (int i = 0; i < m_infos.Length; i++)
+            {
+                if (m_infos[i].item == itemData)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public void ShowNotificationFor(ItemData itemData)
+        {
+            m_container.Show();
+            ExecuteCommands();
+        }
 
         public void ExecuteCommands()
         {
@@ -110,9 +129,11 @@ namespace DChild.Gameplay.Items
 
         private void Start()
         {
-            //m_inventory.ItemUpdate += ItemUpdated;
+            GameplaySystem.playerManager.player.inventory.InventoryItemUpdate += ItemUpdated;
             GameplaySystem.campaignSerializer.PostDeserialization += OnCampaignLoaded;
             Initialize();
         }
+
+
     }
 }

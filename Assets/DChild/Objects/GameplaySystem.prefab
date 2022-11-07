@@ -91,15 +91,34 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80fa87ea6f0badb4f9e4f9312a0cdacb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: m_itemNotifications
+      Entry: 6
+      Data: 
+  m_cinemaSignal: {fileID: 0}
+  m_fullScreenNotifSignal: {fileID: 0}
+  m_primarySkillNotification: {fileID: 0}
+  m_loreNotification: {fileID: 0}
+  m_tradeWindowSignal: {fileID: 0}
   m_tradeManager: {fileID: 0}
   m_storeNavigator: {fileID: 0}
   m_bossCombat: {fileID: 0}
   m_worldMap: {fileID: 0}
   m_navMap: {fileID: 0}
-  m_loreUI: {fileID: 0}
   m_lootAcquiredUI: {fileID: 0}
   m_storeNotification: {fileID: 0}
+  m_journalNotification: {fileID: 0}
   m_skippableUI: {fileID: 0}
+  m_interactablePrompt: {fileID: 0}
+  m_movableObjectPrompt: {fileID: 0}
 --- !u!1 &1799503189760083926
 GameObject:
   m_ObjectHideFlags: 0
@@ -452,6 +471,7 @@ MonoBehaviour:
     - Name: 
       Entry: 8
       Data: 
+  m_serializationSignal: {fileID: 0}
   m_toLoad: {fileID: 11400000, guid: 977ad03440026bf4d825063cb5372538, type: 2}
 --- !u!114 &5477176205055631910
 MonoBehaviour:
@@ -658,6 +678,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_hitFX: {fileID: 8136067223962249626, guid: 72dd955002c36fd4697cfc3cf04fcc59, type: 3}
+  m_hitScreenFX: {fileID: 0}
   m_iFrameHandle:
     m_invulnerabilityDuration: 1.2
     m_inputDisableDuration: 0.4
@@ -1023,6 +1044,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d0236126e39dd847b3b3f2ba6d7eac9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_verticalInput: {fileID: 0}
   m_holdForPeek: 0.5
 --- !u!114 &4538709575358643873
 MonoBehaviour:
@@ -1623,6 +1645,37 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+--- !u!1 &8697424349424193199
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7629489205284937667}
+  m_Layer: 0
+  m_Name: ShardConverter
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7629489205284937667
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8697424349424193199}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1656687072529629155}
+  m_RootOrder: 9
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &9027099112888996189
 GameObject:
   m_ObjectHideFlags: 0
@@ -1666,6 +1719,7 @@ Transform:
   - {fileID: 2698278797369900525}
   - {fileID: 8376592711962980934}
   - {fileID: 6181511787057418469}
+  - {fileID: 7629489205284937667}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1822,5 +1876,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b66272d8dcbcb044b9691b51f0b9939, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_uiInput: {fileID: 0}
   m_storeToggleAction: {fileID: 0}
   m_actionIsCloseStore: 0
