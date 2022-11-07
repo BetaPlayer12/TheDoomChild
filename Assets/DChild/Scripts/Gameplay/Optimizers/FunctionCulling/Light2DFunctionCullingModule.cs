@@ -1,13 +1,13 @@
 ﻿using Sirenix.OdinInspector;
 using UnityEngine;
-using UnityEngine.Experimental.Rendering.Universal;
+
 using UnityEngine.Profiling;
 
 namespace DChild.Gameplay.Optimization.Modules
 {
 
     [System.Serializable, InfoBox("Light 2D")]
-    public sealed class Light2DFunctionCullingModule : FunctionCullingModule<Light2DFunctionCullingModule.Info, Light2D>, IFunctionCullingModule2D
+    public sealed class Light2DFunctionCullingModule : FunctionCullingModule<Light2DFunctionCullingModule.Info, UnityEngine.Rendering.Universal.Light2D>, IFunctionCullingModule2D
     {
         public class Info : BaseInfo
         {
@@ -33,7 +33,7 @@ namespace DChild.Gameplay.Optimization.Modules
             {
                 get
                 {
-                    if (m_instance.lightType == Light2D.LightType.Freeform)
+                    if (m_instance.lightType == UnityEngine.Rendering.Universal.Light2D.LightType.Freeform)
                     {
                         return m_instance.transform.position + m_rotationOffset;
                     }

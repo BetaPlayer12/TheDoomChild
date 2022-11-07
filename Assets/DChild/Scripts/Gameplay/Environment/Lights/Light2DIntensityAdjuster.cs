@@ -1,6 +1,6 @@
 ﻿using Sirenix.OdinInspector;
 using UnityEngine;
-using UnityEngine.Experimental.Rendering.Universal;
+
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -8,14 +8,14 @@ using UnityEditor;
 namespace DChild.Gameplay.Environment
 {
 
-    [RequireComponent(typeof(Light2D)), ExecuteAlways]
+    [RequireComponent(typeof(UnityEngine.Rendering.Universal.Light2D)), ExecuteAlways]
     public class Light2DIntensityAdjuster : BaseLightIntensityAdjuster
     {
         [SerializeField, MinValue(0), ReadOnly, HorizontalGroup("OriginalIntesity")]
         private float m_originalIntesity;
         [SerializeField, Range(0f, 100f), SuffixLabel("%", overlay: true), OnValueChanged("OnIntensityChange")]
         private float m_intensityPercent = 100f;
-        private Light2D m_source;
+        private UnityEngine.Rendering.Universal.Light2D m_source;
 
         private float m_previousIntesityPercent;
 
@@ -47,7 +47,7 @@ namespace DChild.Gameplay.Environment
         {
             if (m_source == null)
             {
-                m_source = GetComponent<Light2D>();
+                m_source = GetComponent<UnityEngine.Rendering.Universal.Light2D>();
                 m_originalIntesity = m_source.intensity;
             }
             intensityPercentage = m_intensityPercent;
@@ -56,14 +56,14 @@ namespace DChild.Gameplay.Environment
         [Button, HorizontalGroup("OriginalIntesity"), HideInPlayMode]
         private void CopyProjectedIntensity()
         {
-            var intesity = GetComponent<Light2D>().intensity;
+            var intesity = GetComponent<UnityEngine.Rendering.Universal.Light2D>().intensity;
             m_originalIntesity = intesity / (m_intensityPercent / 100f);
         }
 
         private void Awake()
         {
             m_intensityPercent = 100;
-            m_source = GetComponent<Light2D>();
+            m_source = GetComponent<UnityEngine.Rendering.Universal.Light2D>();
             m_originalIntesity = m_source.intensity;
             m_previousIntesityPercent = m_intensityPercent;
         }
