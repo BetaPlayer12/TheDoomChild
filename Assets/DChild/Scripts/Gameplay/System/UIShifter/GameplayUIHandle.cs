@@ -9,8 +9,9 @@ using DChild.Gameplay.Systems.Lore;
 using DChild.Gameplay.Trade;
 using DChild.Gameplay.UI;
 using DChild.Menu.Trade;
-using Doozy.Engine;
-using Doozy.Engine.UI;
+using DChild.Temp;
+using Doozy.Runtime.Signals;
+using Doozy.Runtime.UIManager.Containers;
 using Sirenix.OdinInspector;
 using System.Collections;
 using UnityEngine;
@@ -20,7 +21,22 @@ namespace DChild.Gameplay.Systems
     public class GameplayUIHandle : SerializedMonoBehaviour, IGameplayUIHandle, IGameplaySystemModule
     {
         [SerializeField]
+        private SignalSender m_cinemaSignal;
+
+        [SerializeField, BoxGroup("Full Screen Notifications")]
+        private SignalSender m_fullScreenNotifSignal;
+        [SerializeField, BoxGroup("Full Screen Notifications")]
+        private UIContainer m_primarySkillNotification;
+        [SerializeField, BoxGroup("Full Screen Notifications")]
+        private LoreInfoUI m_loreNotification;
+        [SerializeField, BoxGroup("Full Screen Notifications")]
+        private IItemNotificationUI[] m_itemNotifications;
+
+        [SerializeField, BoxGroup("Merchant UI")]
+        private SignalSender m_tradeWindowSignal;
+        [SerializeField, BoxGroup("Merchant UI")]
         private TradeManager m_tradeManager;
+
         [SerializeField]
         private StoreNavigator m_storeNavigator;
         [SerializeField]
@@ -29,16 +45,29 @@ namespace DChild.Gameplay.Systems
         private WorldMapHandler m_worldMap;
         [SerializeField]
         private NavigationMapManager m_navMap;
-        [SerializeField]
-        private LoreInfoUI m_loreUI;
-        [SerializeField]
+
+
+        [BoxGroup("Side Notification")]
+        [SerializeField, BoxGroup("Side Notification")]
         private LootAcquiredUI m_lootAcquiredUI;
-        [SerializeField]
+        [SerializeField, BoxGroup("Side Notification")]
         private StoreNotificationHandle m_storeNotification;
+        [SerializeField, BoxGroup("Side Notification")]
+        private UIContainer m_journalNotification;
+
         [SerializeField]
-        private IItemNotificationUI m_shardNotification;
-        [SerializeField]
-        private UIView m_skippableUI;
+        private UIContainer m_skippableUI;
+
+        [SerializeField, BoxGroup("Object Prompt")]
+        private UIContainer m_interactablePrompt;
+        [SerializeField, BoxGroup("Object Prompt")]
+        private UIContainer m_movableObjectPrompt;
+
+        public void ToggleCinematicMode(bool on)
+        {
+            m_cinemaSignal.Payload.booleanValue = on;
+            m_cinemaSignal.SendSignal();
+        }
 
         public void UpdateNavMapConfiguration(Location location, Transform inGameReference, Vector2 mapReferencePoint, Vector2 calculationOffset)
         {
@@ -50,7 +79,7 @@ namespace DChild.Gameplay.Systems
             m_tradeManager.SetSellerProfile(merchantData);
             m_tradeManager.SetSellingTradeRates(merchantBuyingPriceRate);
             m_tradeManager.SetupTrade(GameplaySystem.playerManager.player.inventory, merchantInventory);
-            GameEventMessage.SendEvent("Trade Open");
+            m_tradeWindowSignal.SendSignal();
         }
 
         public void OpenStorePage(StorePage storePage)
@@ -70,9 +99,9 @@ namespace DChild.Gameplay.Systems
             GameEventMessage.SendEvent("ShadowGateMap Open");
         }
 
-        public void OpenStorePage()
+        public void OpenStore()
         {
-            m_storeNavigator.OpenPage();
+            m_storeNavigator.OpenStore();
         }
 
         public void MonitorBoss(Boss boss)
@@ -83,12 +112,27 @@ namespace DChild.Gameplay.Systems
         public void ResetGameplayUI()
         {
             GameEventMessage.SendEvent("UI Reset");
-            ShowBossHealth(false);
+            ToggleBossCombatUI(false);
         }
 
+        [ContextMenu("Prompt/Primary Skill")]
         public void PromptPrimarySkillNotification()
         {
-            GameEventMessage.SendEvent("Primary Skill Acquired");
+            m_fullScreenNotifSignal.SendSignal();
+            m_primarySkillNotification.Show(true);
+        }
+
+        public void ShowItemNotification(ItemData itemData)
+        {
+            m_fullScreenNotifSignal.SendSignal();
+            for (int i = 0; i < m_itemNotifications.Length; i++)
+            {
+                var notification = m_itemNotifications[i];
+                if (notification.IsNotificationFor(itemData))
+                {
+                    notification.ShowNotificationFor(itemData);
+                }
+            }
         }
 
         public void PromptKeystoneFragmentNotification()
@@ -96,42 +140,20 @@ namespace DChild.Gameplay.Systems
             GameEventMessage.SendEvent("Fragment Acquired"); // Currently Being called via string in ItemPickup
         }
 
-
-        public void ShowItemNotification(ItemData itemData)
-        {
-            if (m_shardNotification.IsNotificationFor(itemData))
-            {
-                GameEventMessage.SendEvent("Shard Acquired");
-                m_shardNotification.ShowNotificationFor(itemData);
-            }
-        }
-
         public void PromptBestiaryNotification()
         {
             //GameEventMessage.SendEvent("Notification");
         }
 
-        public void ShowQuickItem(bool willshow)
+        public void ToggleBossCombatUI(bool willshow)
         {
             if (willshow == true)
             {
-                GameEventMessage.SendEvent("QuickItem Show");
+                m_bossCombat.Show();
             }
             else
             {
-                GameEventMessage.SendEvent("QuickItem Hide");
-            }
-        }
-
-        public void ShowBossHealth(bool willshow)
-        {
-            if (willshow == true)
-            {
-                GameEventMessage.SendEvent("Boss Encounter");
-            }
-            else
-            {
-                GameEventMessage.SendEvent("Boss Gone");
+                m_bossCombat.Hide();
             }
         }
 
@@ -144,11 +166,11 @@ namespace DChild.Gameplay.Systems
         {
             if (willshow == true)
             {
-                GameEventMessage.SendEvent("Interaction Prompt Show");
+                m_interactablePrompt.Show();
             }
             else
             {
-                GameEventMessage.SendEvent("Interaction Prompt Hide");
+                m_interactablePrompt.Hide();
             }
         }
 
@@ -156,11 +178,11 @@ namespace DChild.Gameplay.Systems
         {
             if (willshow == true)
             {
-                GameEventMessage.SendEvent("MovableObject Prompt Show");
+                m_movableObjectPrompt.Show();
             }
             else
             {
-                GameEventMessage.SendEvent("MovableObject Prompt Hide");
+                m_movableObjectPrompt.Hide();
             }
         }
 
@@ -173,22 +195,6 @@ namespace DChild.Gameplay.Systems
             else
             {
                 GameEventMessage.SendEvent("Soul Essence Hide");
-            }
-        }
-        public void ShowPromptSoulEssenceChangeNotify()
-        {
-            GameEventMessage.SendEvent("Soul Essence Added");
-        }
-
-        public void ShowPauseMenu(bool willshow)
-        {
-            if (willshow == true)
-            {
-                GameEventMessage.SendEvent("Pause Game");
-            }
-            else
-            {
-
             }
         }
 
@@ -230,15 +236,16 @@ namespace DChild.Gameplay.Systems
 
         public void ShowJournalNotificationPrompt(float duration)
         {
-            GameEventMessage.SendEvent("Hide JournalUpdate");
-            StopCoroutine("PromptJournalUpdateRoutine");
-            StartCoroutine(PromptJournalUpdateRoutine(duration));
+            m_journalNotification.InstantHide();
+            m_journalNotification.AutoHideAfterShowDelay = duration;
+            m_journalNotification.Show(true);
         }
 
         public void ShowLoreNote(LoreData data)
         {
-            m_loreUI.SetInfo(data);
-            GameEventMessage.SendEvent("Show LoreNote");
+            m_loreNotification.SetInfo(data);
+            m_fullScreenNotifSignal.SendSignal();
+            m_loreNotification.Show();
         }
 
         public void PromptJournalUpdateNotification()
@@ -246,16 +253,10 @@ namespace DChild.Gameplay.Systems
             GameEventMessage.SendEvent("Show JournalInfo");
         }
 
-        private IEnumerator PromptJournalUpdateRoutine(float duration)
-        {
-            GameEventMessage.SendEvent("Show JournalUpdate");
-            yield return new WaitForSeconds(duration);
-            GameEventMessage.SendEvent("Hide JournalUpdate");
-        }
         public void ShowLootChestItemAcquired(LootList lootList)
         {
             m_lootAcquiredUI.SetDetails(lootList);
-            GameEventMessage.SendEvent("Loot Notify");
+            m_lootAcquiredUI.Show();
         }
 
         public void ShowSequenceSkip(bool willShow)

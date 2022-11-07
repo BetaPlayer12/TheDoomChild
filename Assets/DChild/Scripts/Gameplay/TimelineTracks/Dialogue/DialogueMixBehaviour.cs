@@ -7,7 +7,7 @@
 
 using DChild.UI;
 using DChildDebug.Cutscene;
-using Doozy.Engine;
+using DChild.Temp;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -84,57 +84,30 @@ namespace PixelCrushers.DialogueSystem
             m_typeWriterEffectIsPlaying = DChildStandardUIContinueButtonFastForward.currentTypewriterEffect?.isPlaying ?? false;
         }
 
-        private void OnDoozyEvent(GameEventMessage obj)
+        private void OnContinueDiag(GameEventMessage obj)
         {
-            if (obj.HasGameEvent )
+            if (obj.HasGameEvent && obj.EventName == "ContinueDiag")
             {
-                if (obj.EventName == "ContinueDiag")
+                foreach (var input in m_behaviours)
                 {
-                    OnContinueDiag();
-                }
-                else if (obj.EventName == "SkipDialogueLine")
-                {
-                    OnSkipDialogueLine();
-                }
-                    
-            }
-        }
-
-        private void OnContinueDiag()
-        {
-            foreach (var input in m_behaviours)
-            {
-                if (m_typeWriterEffectIsPlaying && input.isWaitingForInput == false)
-                {
-                    m_director.time = input.end - input.waitForInput;
-                    PlaySequence(input.GetWaitForInputSequence());
-                    input.isWaitingForInput = true;
-                    break;
-                }
-                else
-                {
-                    ExecuteDialogueBehaviorEnd(input);
-                    break;
+                    if (m_typeWriterEffectIsPlaying && input.isWaitingForInput == false)
+                    {
+                        m_director.time = input.end - input.waitForInput;
+                        PlaySequence(input.GetWaitForInputSequence());
+                        input.isWaitingForInput = true;
+                        break;
+                    }
+                    else
+                    {
+                        m_director.time = input.end;
+                        input.isDone = true;
+                        m_behaviours.Remove(input);
+                        PlaySequence(input.GetEndBehaviourSequence());
+                        input.isWaitingForInput = false;
+                        break;
+                    }
                 }
             }
-        }
-
-        private void OnSkipDialogueLine()
-        {
-            foreach (var input in m_behaviours)
-            {
-                ExecuteDialogueBehaviorEnd(input);
-                break;
-            }
-        }
-
-        private void ExecuteDialogueBehaviorEnd(DialogueBehaviour input)
-        {
-            m_director.time = input.end;
-            input.isDone = true;
-            m_behaviours.Remove(input);
-            PlaySequence(input.GetEndBehaviourSequence());
-            input.isWaitingForInput = false;
         }
 
         private void PlaySequence(string sequence)
@@ -182,7 +155,8 @@ namespace PixelCrushers.DialogueSystem
         {
             base.OnGraphStart(playable);
             m_director = (playable.GetGraph().GetResolver() as PlayableDirector);
-            Message.AddListener<GameEventMessage>(OnDoozyEvent);
+            //Message.AddListener<GameEventMessage>(OnContinueDiag);
+            GameEventMessage.Send();
             m_played.Clear();
             m_behaviours.Clear();
             DChildStandardDialogueUI.isInCutscene = true;
@@ -194,7 +168,8 @@ namespace PixelCrushers.DialogueSystem
         public override void OnGraphStop(Playable playable)
         {
             base.OnGraphStop(playable);
-            Message.RemoveListener<GameEventMessage>(OnDoozyEvent);
+            //Message.RemoveListener<GameEventMessage>(OnContinueDiag);
+            GameEventMessage.Send();
             m_played.Clear();
             m_behaviours.Clear();
             DChildStandardDialogueUI.isInCutscene = false;

@@ -35,26 +35,27 @@ MonoBehaviour:
     bold: 1
     italic: 0
     underline: 0
+  baseID: 1
   actors:
   - id: 1
     fields:
     - title: Name
       value: Player
       type: 0
-      typeString: 
+      typeString: CustomFieldType_Text
     - title: Pictures
       value: '[../../Art/Portraits/Player.png]'
       type: 3
-      typeString: 
+      typeString: CustomFieldType_Files
     - title: Description
       value: The player controls a soldier sent to intercept the evil space emperor's
         launch codes to prevent him from attacking your planet.
       type: 0
-      typeString: 
+      typeString: CustomFieldType_Text
     - title: IsPlayer
       value: True
       type: 2
-      typeString: 
+      typeString: CustomFieldType_Boolean
     portrait: {fileID: 2800000, guid: e63e2479a8b2dc54ea311a230ce6c979, type: 3}
     spritePortrait: {fileID: 0}
     alternatePortraits: []
@@ -64,20 +65,20 @@ MonoBehaviour:
     - title: Name
       value: Private Hart
       type: 0
-      typeString: 
+      typeString: CustomFieldType_Text
     - title: Pictures
       value: '[../../Art/Portraits/Private Hart.png]'
       type: 3
-      typeString: 
+      typeString: CustomFieldType_Files
     - title: Description
-      value: Private Hart offers the quest to hack the emperor's computer to get the
-        launch codes.
+      value: Private Hart offers the quest to hack the emperor's computer to get
+        the launch codes.
       type: 0
-      typeString: 
+      typeString: CustomFieldType_Text
     - title: IsPlayer
       value: False
       type: 2
-      typeString: 
+      typeString: CustomFieldType_Boolean
     portrait: {fileID: 2800000, guid: e63e2479a8b2dc54ea311a230ce6c979, type: 3}
     spritePortrait: {fileID: 0}
     alternatePortraits: []
@@ -183,7 +184,8 @@ MonoBehaviour:
       type: 0
       typeString: CustomFieldType_Text
     - title: Success Description
-      value: You get the launch codes and can redirect the weapon away from your homeworld.
+      value: You get the launch codes and can redirect the weapon away from your
+        homeworld.
       type: 0
       typeString: CustomFieldType_Text
     - title: Failure Description
@@ -321,13 +323,13 @@ MonoBehaviour:
     - title: Title
       value: Private Hart
       type: 0
-      typeString: 
+      typeString: CustomFieldType_Text
     - title: Description
       value: This conversation occurs between the Player and Private Hart, who explains
         the main quest (Get the Launch Codes). Nodes' Conditions fields branch the
         conversation based on the current quest state.
       type: 0
-      typeString: 
+      typeString: CustomFieldType_Text
     - title: Actor
       value: 1
       type: 5
@@ -354,6 +356,12 @@ MonoBehaviour:
       alwaysForceResponseMenu: 1
       includeInvalidEntries: 0
       responseTimeout: 0
+      cancelSubtitle:
+        key: 27
+        buttonName: 
+      cancelConversation:
+        key: 27
+        buttonName: 
     nodeColor: Red
     dialogueEntries:
     - id: 0
@@ -417,8 +425,6 @@ MonoBehaviour:
       onExecute:
         m_PersistentCalls:
           m_Calls: []
-        m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
       canvasRect:
         serializedVersion: 2
         x: 468
@@ -492,8 +498,6 @@ MonoBehaviour:
       onExecute:
         m_PersistentCalls:
           m_Calls: []
-        m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
       canvasRect:
         serializedVersion: 2
         x: 252
@@ -565,8 +569,6 @@ MonoBehaviour:
       onExecute:
         m_PersistentCalls:
           m_Calls: []
-        m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
       canvasRect:
         serializedVersion: 2
         x: 468
@@ -638,8 +640,6 @@ MonoBehaviour:
       onExecute:
         m_PersistentCalls:
           m_Calls: []
-        m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
       canvasRect:
         serializedVersion: 2
         x: 720
@@ -711,8 +711,6 @@ MonoBehaviour:
       onExecute:
         m_PersistentCalls:
           m_Calls: []
-        m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
       canvasRect:
         serializedVersion: 2
         x: 252
@@ -778,8 +776,6 @@ MonoBehaviour:
       onExecute:
         m_PersistentCalls:
           m_Calls: []
-        m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
       canvasRect:
         serializedVersion: 2
         x: 720
@@ -851,11 +847,9 @@ MonoBehaviour:
       onExecute:
         m_PersistentCalls:
           m_Calls: []
-        m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
       canvasRect:
         serializedVersion: 2
-        x: 252
+        x: 253
         y: 204
         width: 160
         height: 30
@@ -916,12 +910,11 @@ MonoBehaviour:
       conditionsString: 
       userScript: 'SetQuestState("Get the Launch Codes", "active");
 
-        Variable["Alert"] = "Mission: Get the Launch Codes"'
+        Variable["Alert"]
+        = "Mission: Get the Launch Codes"'
       onExecute:
         m_PersistentCalls:
           m_Calls: []
-        m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
       canvasRect:
         serializedVersion: 2
         x: 252
@@ -987,14 +980,13 @@ MonoBehaviour:
       onExecute:
         m_PersistentCalls:
           m_Calls: []
-        m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
       canvasRect:
         serializedVersion: 2
         x: 468
         y: 144
         width: 160
         height: 30
+    entryGroups: []
     canvasScrollPosition: {x: 215, y: 0}
     canvasZoom: 1
   - id: 2
@@ -1033,6 +1025,12 @@ MonoBehaviour:
       alwaysForceResponseMenu: 1
       includeInvalidEntries: 0
       responseTimeout: 0
+      cancelSubtitle:
+        key: 27
+        buttonName: 
+      cancelConversation:
+        key: 27
+        buttonName: 
     nodeColor: Red
     dialogueEntries:
     - id: 0
@@ -1096,8 +1094,6 @@ MonoBehaviour:
       onExecute:
         m_PersistentCalls:
           m_Calls: []
-        m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
       canvasRect:
         serializedVersion: 2
         x: 396
@@ -1159,8 +1155,6 @@ MonoBehaviour:
       onExecute:
         m_PersistentCalls:
           m_Calls: []
-        m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
       canvasRect:
         serializedVersion: 2
         x: 120
@@ -1232,8 +1226,6 @@ MonoBehaviour:
       onExecute:
         m_PersistentCalls:
           m_Calls: []
-        m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
       canvasRect:
         serializedVersion: 2
         x: 396
@@ -1305,8 +1297,6 @@ MonoBehaviour:
       onExecute:
         m_PersistentCalls:
           m_Calls: []
-        m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
       canvasRect:
         serializedVersion: 2
         x: 600
@@ -1378,8 +1368,6 @@ MonoBehaviour:
       onExecute:
         m_PersistentCalls:
           m_Calls: []
-        m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
       canvasRect:
         serializedVersion: 2
         x: 24
@@ -1445,8 +1433,6 @@ MonoBehaviour:
       onExecute:
         m_PersistentCalls:
           m_Calls: []
-        m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
       canvasRect:
         serializedVersion: 2
         x: 204
@@ -1510,12 +1496,11 @@ MonoBehaviour:
       conditionsString: Variable["enemiesKilled"] < 5
       userScript: 'SetQuestState("Enemy Attack", "active");
 
-        Variable["Alert"] = "Objective: Kill 5 Enemies"'
+        Variable["Alert"]
+        = "Objective: Kill 5 Enemies"'
       onExecute:
         m_PersistentCalls:
           m_Calls: []
-        m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
       canvasRect:
         serializedVersion: 2
         x: 24
@@ -1581,8 +1566,6 @@ MonoBehaviour:
       onExecute:
         m_PersistentCalls:
           m_Calls: []
-        m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
       canvasRect:
         serializedVersion: 2
         x: 396
@@ -1648,14 +1631,13 @@ MonoBehaviour:
       onExecute:
         m_PersistentCalls:
           m_Calls: []
-        m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
       canvasRect:
         serializedVersion: 2
         x: 600
         y: 120
         width: 160
         height: 30
+    entryGroups: []
     canvasScrollPosition: {x: 9, y: 0}
     canvasZoom: 1
   - id: 4
@@ -1666,9 +1648,9 @@ MonoBehaviour:
       typeString: 
     - title: Description
       value: This conversation demonstrates how to use the dialogue system for other
-        kinds of interaction (searching a body). The first node moves the camera to
-        the "Down" angle on the body over 1 second. The last node moves back to the
-        original position.
+        kinds of interaction (searching a body). The first node moves the camera
+        to the "Down" angle on the body over 1 second. The last node moves back to
+        the original position.
       type: 0
       typeString: 
     - title: Actor
@@ -1697,6 +1679,12 @@ MonoBehaviour:
       alwaysForceResponseMenu: 1
       includeInvalidEntries: 0
       responseTimeout: 0
+      cancelSubtitle:
+        key: 27
+        buttonName: 
+      cancelConversation:
+        key: 27
+        buttonName: 
     nodeColor: Red
     dialogueEntries:
     - id: 0
@@ -1748,8 +1736,6 @@ MonoBehaviour:
       onExecute:
         m_PersistentCalls:
           m_Calls: []
-        m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
       canvasRect:
         serializedVersion: 2
         x: 120
@@ -1813,8 +1799,6 @@ MonoBehaviour:
       onExecute:
         m_PersistentCalls:
           m_Calls: []
-        m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
       canvasRect:
         serializedVersion: 2
         x: 120
@@ -1870,8 +1854,6 @@ MonoBehaviour:
       onExecute:
         m_PersistentCalls:
           m_Calls: []
-        m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
       canvasRect:
         serializedVersion: 2
         x: 30
@@ -1921,8 +1903,6 @@ MonoBehaviour:
       onExecute:
         m_PersistentCalls:
           m_Calls: []
-        m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
       canvasRect:
         serializedVersion: 2
         x: 120
@@ -1978,14 +1958,13 @@ MonoBehaviour:
       onExecute:
         m_PersistentCalls:
           m_Calls: []
-        m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
       canvasRect:
         serializedVersion: 2
         x: 120
         y: 170
         width: 160
         height: 30
+    entryGroups: []
     canvasScrollPosition: {x: 0, y: 0}
     canvasZoom: 1
   - id: 5
@@ -1995,9 +1974,10 @@ MonoBehaviour:
       type: 0
       typeString: 
     - title: Description
-      value: This conversation is for the computer terminal where the player can download
-        the launch codes to complete the Get the Launch Codes quest. It overrides
-        the Default Sequence to delay instead of playing voiceover (see below).
+      value: This conversation is for the computer terminal where the player can
+        download the launch codes to complete the Get the Launch Codes quest. It
+        overrides the Default Sequence to delay instead of playing voiceover (see
+        below).
       type: 0
       typeString: 
     - title: Actor
@@ -2026,6 +2006,12 @@ MonoBehaviour:
       alwaysForceResponseMenu: 1
       includeInvalidEntries: 0
       responseTimeout: 0
+      cancelSubtitle:
+        key: 27
+        buttonName: 
+      cancelConversation:
+        key: 27
+        buttonName: 
     nodeColor: Red
     dialogueEntries:
     - id: 0
@@ -2077,8 +2063,6 @@ MonoBehaviour:
       onExecute:
         m_PersistentCalls:
           m_Calls: []
-        m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
       canvasRect:
         serializedVersion: 2
         x: 432
@@ -2114,7 +2098,8 @@ MonoBehaviour:
       - title: Sequence
         value: 'Camera(Terminal Camera Angle,,1);
 
-          TextInput(Text Field UI,Password,password)'
+          TextInput(Text Field
+          UI,Password,password)'
         type: 0
         typeString: 
       conversationID: 5
@@ -2136,8 +2121,6 @@ MonoBehaviour:
       onExecute:
         m_PersistentCalls:
           m_Calls: []
-        m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
       canvasRect:
         serializedVersion: 2
         x: 429
@@ -2199,8 +2182,6 @@ MonoBehaviour:
       onExecute:
         m_PersistentCalls:
           m_Calls: []
-        m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
       canvasRect:
         serializedVersion: 2
         x: 429
@@ -2262,8 +2243,6 @@ MonoBehaviour:
       onExecute:
         m_PersistentCalls:
           m_Calls: []
-        m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
       canvasRect:
         serializedVersion: 2
         x: 298
@@ -2331,8 +2310,6 @@ MonoBehaviour:
       onExecute:
         m_PersistentCalls:
           m_Calls: []
-        m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
       canvasRect:
         serializedVersion: 2
         x: 549
@@ -2410,8 +2387,6 @@ MonoBehaviour:
       onExecute:
         m_PersistentCalls:
           m_Calls: []
-        m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
       canvasRect:
         serializedVersion: 2
         x: 189
@@ -2477,8 +2452,6 @@ MonoBehaviour:
       onExecute:
         m_PersistentCalls:
           m_Calls: []
-        m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
       canvasRect:
         serializedVersion: 2
         x: 381
@@ -2542,12 +2515,11 @@ MonoBehaviour:
       conditionsString: 
       userScript: 'SetQuestState("Get the Launch Codes", "success");
 
-        Variable["Alert"] = "Mission Complete: Launch Codes Acquired"'
+        Variable["Alert"]
+        = "Mission Complete: Launch Codes Acquired"'
       onExecute:
         m_PersistentCalls:
           m_Calls: []
-        m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
       canvasRect:
         serializedVersion: 2
         x: 84
@@ -2619,14 +2591,13 @@ MonoBehaviour:
       onExecute:
         m_PersistentCalls:
           m_Calls: []
-        m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
       canvasRect:
         serializedVersion: 2
         x: 288
         y: 324
         width: 160
         height: 30
+    entryGroups: []
     canvasScrollPosition: {x: 0, y: 0}
     canvasZoom: 1
   - id: 6
@@ -2669,6 +2640,12 @@ MonoBehaviour:
       alwaysForceResponseMenu: 1
       includeInvalidEntries: 0
       responseTimeout: 0
+      cancelSubtitle:
+        key: 27
+        buttonName: 
+      cancelConversation:
+        key: 27
+        buttonName: 
     nodeColor: 
     dialogueEntries:
     - id: 0
@@ -2748,8 +2725,6 @@ MonoBehaviour:
       onExecute:
         m_PersistentCalls:
           m_Calls: []
-        m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
       canvasRect:
         serializedVersion: 2
         x: 20
@@ -2815,8 +2790,6 @@ MonoBehaviour:
       onExecute:
         m_PersistentCalls:
           m_Calls: []
-        m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
       canvasRect:
         serializedVersion: 2
         x: 200
@@ -2882,8 +2855,6 @@ MonoBehaviour:
       onExecute:
         m_PersistentCalls:
           m_Calls: []
-        m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
       canvasRect:
         serializedVersion: 2
         x: 200
@@ -2949,14 +2920,13 @@ MonoBehaviour:
       onExecute:
         m_PersistentCalls:
           m_Calls: []
-        m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
       canvasRect:
         serializedVersion: 2
         x: 200
         y: 129
         width: 160
         height: 30
+    entryGroups: []
     canvasScrollPosition: {x: 0, y: 0}
     canvasZoom: 1
   syncInfo:
@@ -2968,41 +2938,13 @@ MonoBehaviour:
     syncItemsDatabase: {fileID: 0}
     syncLocationsDatabase: {fileID: 0}
     syncVariablesDatabase: {fileID: 0}
-  templateJson: '{"treatItemsAsQuests":true,"actorFields":[{"title":"Name","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Pictures","value":"[]","type":3,"typeString":"CustomFieldType_Files"},{"title":"Description","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"IsPlayer","value":"False","type":2,"typeString":"CustomFieldType_Boolean"}],"itemFields":[{"title":"Name","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Pictures","value":"[]","type":3,"typeString":"CustomFieldType_Files"},{"title":"Description","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Is
-    Item","value":"True","type":2,"typeString":"CustomFieldType_Boolean"},{"title":"State","value":"(None)","type":0,"typeString":"CustomFieldType_QuestState"}],"questFields":[{"title":"Name","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Display
-    Name","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Is Item","value":"False","type":2,"typeString":"CustomFieldType_Boolean"},{"title":"Group","value":"Priority","type":0,"typeString":"CustomFieldType_GestaltQuestGroup"},{"title":"Description","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Success
+  templateJson: '{"treatItemsAsQuests":true,"actorFields":[{"title":"Name","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Pictures","value":"[]","type":3,"typeString":"CustomFieldType_Files"},{"title":"Description","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"IsPlayer","value":"False","type":2,"typeString":"CustomFieldType_Boolean"}],"itemFields":[{"title":"Name","value":"","type":0,"typeString":""},{"title":"Pictures","value":"[]","type":3,"typeString":"CustomFieldType_Files"},{"title":"Description","value":"","type":0,"typeString":""},{"title":"Is
+    Item","value":"True","type":2,"typeString":"CustomFieldType_Boolean"}],"questFields":[{"title":"Name","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Pictures","value":"[]","type":3,"typeString":"CustomFieldType_Files"},{"title":"Description","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Success
     Description","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Failure
-    Description","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"State","value":"unassigned","type":0,"typeString":"CustomFieldType_QuestState"},{"title":"Trackable","value":"True","type":2,"typeString":"CustomFieldType_Boolean"},{"title":"Track","value":"True","type":2,"typeString":"CustomFieldType_Boolean"},{"title":"XP
-    Reward","value":"0","type":1,"typeString":"CustomFieldType_Number"},{"title":"Scrap
-    Reward","value":"0","type":1,"typeString":"CustomFieldType_Number"},{"title":"Item
-    Reward Amount","value":"0","type":1,"typeString":"CustomFieldType_Number"},{"title":"Item
-    Reward","value":"","type":0,"typeString":"CustomFieldType_ItemReward"},{"title":"Entry
-    Count","value":"0","type":1,"typeString":"CustomFieldType_Number"},{"title":"Entry
-    1","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Entry 1
-    State","value":"(None)","type":0,"typeString":"CustomFieldType_QuestState"},{"title":"Entry
-    1 Display Name","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Entry
-    1 Active","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Entry
-    1 Success","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Entry
-    1 CurrentAmount","value":"0","type":1,"typeString":"CustomFieldType_Number"},{"title":"Entry
-    1 GoalAmount","value":"1","type":1,"typeString":"CustomFieldType_Number"},{"title":"Entry
-    2","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Entry 2
-    State","value":"(None)","type":0,"typeString":"CustomFieldType_QuestState"},{"title":"Entry
-    2 Display Name","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Entry
-    2 Active","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Entry
-    2 Success","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Entry
-    2 CurrentAmount","value":"0","type":1,"typeString":"CustomFieldType_Number"},{"title":"Entry
-    2 GoalAmount","value":"1","type":1,"typeString":"CustomFieldType_Number"},{"title":"Entry
-    3","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Entry 3
-    State","value":"(None)","type":0,"typeString":"CustomFieldType_QuestState"},{"title":"Entry
-    3 Display Name","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Entry
-    3 Active","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Entry
-    3 Success","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Entry
-    3 CurrentAmount","value":"0","type":1,"typeString":"CustomFieldType_Number"},{"title":"Entry
-    3 Goal Amount","value":"1","type":1,"typeString":"CustomFieldType_Number"}],"locationFields":[{"title":"Name","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Pictures","value":"[]","type":3,"typeString":"CustomFieldType_Files"},{"title":"Description","value":"","type":0,"typeString":"CustomFieldType_Text"}],"variableFields":[{"title":"Name","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Initial
-    Value","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Description","value":"","type":0,"typeString":"CustomFieldType_Text"}],"conversationFields":[{"title":"Title","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Pictures","value":"[]","type":3,"typeString":"CustomFieldType_Files"},{"title":"Description","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Actor","value":"0","type":5,"typeString":"CustomFieldType_Actor"},{"title":"Conversant","value":"0","type":5,"typeString":"CustomFieldType_Actor"}],"dialogueEntryFields":[{"title":"Title","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Description","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Actor","value":"","type":5,"typeString":"CustomFieldType_Actor"},{"title":"Conversant","value":"","type":5,"typeString":"CustomFieldType_Actor"},{"title":"Menu
+    Description","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"State","value":"unassigned","type":0,"typeString":"CustomFieldType_QuestState"},{"title":"Is
+    Item","value":"False","type":2,"typeString":"CustomFieldType_Boolean"}],"locationFields":[{"title":"Name","value":"","type":0,"typeString":""},{"title":"Pictures","value":"[]","type":3,"typeString":"CustomFieldType_Files"},{"title":"Description","value":"","type":0,"typeString":""}],"variableFields":[{"title":"Name","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Initial
+    Value","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Description","value":"","type":0,"typeString":"CustomFieldType_Text"}],"conversationFields":[{"title":"Title","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Pictures","value":"[]","type":3,"typeString":"CustomFieldType_Files"},{"title":"Description","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Actor","value":"0","type":5,"typeString":"CustomFieldType_Actor"},{"title":"Conversant","value":"0","type":5,"typeString":"CustomFieldType_Actor"}],"dialogueEntryFields":[{"title":"Title","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Pictures","value":"[]","type":3,"typeString":"CustomFieldType_Files"},{"title":"Description","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Actor","value":"","type":5,"typeString":"CustomFieldType_Actor"},{"title":"Conversant","value":"","type":5,"typeString":"CustomFieldType_Actor"},{"title":"Menu
     Text","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Dialogue
-    Text","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Sequence","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Response
-    Menu Sequence","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Portraits
-    Visible","value":"True","type":2,"typeString":"CustomFieldType_Boolean"}],"actorPrimaryFieldTitles":[],"itemPrimaryFieldTitles":[],"questPrimaryFieldTitles":["Display
-    Name","Group","Item Reward","Item Reward Amount","Scrap Reward","XP Reward"],"locationPrimaryFieldTitles":[],"variablePrimaryFieldTitles":[],"conversationPrimaryFieldTitles":[],"dialogueEntryPrimaryFieldTitles":["Portraits
-    Visible"],"npcLineColor":{"r":1.0,"g":0.0,"b":0.0,"a":1.0},"pcLineColor":{"r":0.0,"g":0.0,"b":1.0,"a":1.0},"repeatLineColor":{"r":0.5,"g":0.5,"b":0.5,"a":1.0}}'
+    Text","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Parenthetical","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Audio
+    Files","value":"[]","type":3,"typeString":"CustomFieldType_Files"},{"title":"Video
+    File","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Sequence","value":"","type":0,"typeString":"CustomFieldType_Text"}],"actorPrimaryFieldTitles":[],"itemPrimaryFieldTitles":[],"questPrimaryFieldTitles":[],"locationPrimaryFieldTitles":[],"variablePrimaryFieldTitles":[],"conversationPrimaryFieldTitles":[],"dialogueEntryPrimaryFieldTitles":[],"npcLineColor":{"r":1.0,"g":0.0,"b":0.0,"a":1.0},"pcLineColor":{"r":0.0,"g":0.0,"b":1.0,"a":1.0},"repeatLineColor":{"r":0.5,"g":0.5,"b":0.5,"a":1.0}}'

@@ -1,6 +1,3 @@
-// Recompile at 01/07/2021 2:56:36 PM
-
-
 #if USE_TIMELINE
 #if UNITY_2017_1_OR_NEWER
 // Copyright (c) Pixel Crushers. All rights reserved.
@@ -20,7 +17,7 @@ namespace PixelCrushers.DialogueSystem
         public Transform conversant;
 
         [Tooltip("The conversation to start.")]
-        [ConversationPopup]
+        [ConversationPopup(true)]
         public string conversation;
 
         [Tooltip("Jump to a specific dialogue entry instead of starting from the conversation's START node.")]
@@ -28,6 +25,15 @@ namespace PixelCrushers.DialogueSystem
 
         [Tooltip("Dialogue entry to jump to.")]
         public int entryID;
+
+        [Tooltip("Stop any active conversations before starting this one.")]
+        public bool exclusive = false;
+
+        public string GetEditorDialogueText()
+        {
+            var dialogueText = PreviewUI.GetDialogueText(conversation, jumpToSpecificEntry ? entryID : -1);
+            return "[" + conversation + "] '" + dialogueText + "'";
+        }
 
     }
 }

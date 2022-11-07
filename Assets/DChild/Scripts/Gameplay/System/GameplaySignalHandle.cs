@@ -3,7 +3,7 @@ using DChild.Gameplay.Characters.Players.Modules;
 using DChild.Gameplay.Systems.Serialization;
 using DChild.Menu;
 using DChild.Visuals;
-using Doozy.Engine;
+using DChild.Temp;
 using UnityEngine;
 
 namespace DChild.Gameplay
@@ -17,7 +17,7 @@ namespace DChild.Gameplay
 
         public void DoCinematicUIMode(bool value)
         {
-            GameEventMessage.SendEvent(value ? "Cinematic Start" : "Cinematic End");
+            GameplaySystem.gamplayUIHandle.ToggleCinematicMode(value);
         }
 
         public void MoveAudioListenerToPlayer()

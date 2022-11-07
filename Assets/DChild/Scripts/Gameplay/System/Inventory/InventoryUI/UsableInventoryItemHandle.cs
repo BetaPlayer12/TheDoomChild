@@ -1,5 +1,6 @@
 ﻿using DChild.Gameplay.Characters.Players;
 using DChild.Gameplay.Items;
+using Doozy.Runtime.UIManager.Components;
 using Holysoft.Event;
 using UnityEngine;
 using UnityEngine.UI;
@@ -9,7 +10,7 @@ namespace DChild.Gameplay.Inventories.UI
     public class UsableInventoryItemHandle : MonoBehaviour
     {
         [SerializeField]
-        private Button m_useItemButton;
+        private UIButton m_useItemButton;
 
         private Player m_player;
         private PlayerInventory m_inventory;

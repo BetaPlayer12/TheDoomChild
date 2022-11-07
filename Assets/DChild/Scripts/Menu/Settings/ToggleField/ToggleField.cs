@@ -1,6 +1,10 @@
 ﻿using DChild.UI;
+using Doozy.Runtime.UIManager.Components;
+using Doozy.Runtime.UIManager.Events;
 using Holysoft.Event;
+using System;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace DChild.Menu.UI
 {
@@ -9,23 +13,23 @@ namespace DChild.Menu.UI
         protected abstract bool value { get; set; }
 
         [SerializeField]
-        private ToggleButton m_button;
+        private UIToggle m_toggle;
 
         private bool m_isSettingState;
 
         public void UpdateUI()
         {
             m_isSettingState = true;
-            m_button.SetState(value);
+            m_toggle.SetIsOn(value);
         }
 
         private void Start()
         {
-            m_button.StateUpdate += OnUpdateState;
             m_isSettingState = false;
+            m_toggle.onToggleValueChangedCallback = OnToggle;
         }
 
-        private void OnUpdateState(object sender, ButtonToggledEventArgs eventArgs)
+        private void OnToggle(ToggleValueChangedEvent arg0)
         {
             if (m_isSettingState)
             {
@@ -33,7 +37,7 @@ namespace DChild.Menu.UI
             }
             else
             {
-                value = eventArgs.isTrue;
+                value = arg0.newValue;
             }
         }
 
@@ -48,11 +52,11 @@ namespace DChild.Menu.UI
 #if UNITY_EDITOR
             if (m_instantiated == false)
             {
-                if (m_button == null)
+                if (m_toggle == null)
                 {
-                    m_button = GetComponentInChildren<ToggleButton>();
+                    m_toggle = GetComponentInChildren<UIToggle>();
                 }
-                if (m_button != null)
+                if (m_toggle != null)
                 {
                     m_instantiated = true;
                 }

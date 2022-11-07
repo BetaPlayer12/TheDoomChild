@@ -13,6 +13,7 @@ namespace PixelCrushers.DialogueSystem
 
         private DialogueDatabase database = null;
         private string[] names = null;
+        private string[] popupNames = null;
         private bool showReferenceDatabase = false;
         private bool usePicker = true;
 
@@ -40,6 +41,7 @@ namespace PixelCrushers.DialogueSystem
                     EditorTools.selectedDatabase = newDatabase;
                     database = null;
                     names = null;
+                    popupNames = null;
                 }
             }
             if (EditorTools.selectedDatabase == null) usePicker = false;
@@ -54,7 +56,7 @@ namespace PixelCrushers.DialogueSystem
             var rect = new Rect(position.x, position.y, position.width - 48, position.height);
             if (usePicker)
             {
-                var newIndex = EditorGUI.Popup(rect, currentIndex, names);
+                var newIndex = EditorGUI.Popup(rect, currentIndex, popupNames);
                 if ((newIndex != currentIndex) && (0 <= newIndex && newIndex < names.Length))
                 {
                     currentIndex = newIndex;
@@ -85,6 +87,7 @@ namespace PixelCrushers.DialogueSystem
                 usePicker = newToggleValue;
                 if (usePicker && (EditorTools.selectedDatabase == null)) EditorTools.selectedDatabase = EditorTools.FindInitialDatabase();
                 names = null;
+                popupNames = null;
             }
 
             EditorGUI.EndProperty();
@@ -95,12 +98,14 @@ namespace PixelCrushers.DialogueSystem
             database = EditorTools.selectedDatabase;
             var foundCurrent = false;
             var list = new List<string>();
+            var popupList = new List<string>();
             if (database != null && database.variables != null)
             {
                 for (int i = 0; i < database.variables.Count; i++)
                 {
                     var assetName = database.variables[i].Name;
                     list.Add(assetName);
+                    popupList.Add(assetName.Replace(".", "/"));
                     if (string.Equals(currentSelection, assetName))
                     {
                         foundCurrent = true;
@@ -109,9 +114,11 @@ namespace PixelCrushers.DialogueSystem
                 if (!foundCurrent && !string.IsNullOrEmpty(currentSelection))
                 {
                     list.Add(currentSelection);
+                    popupList.Add(currentSelection.Replace(".", "/"));
                 }
             }
             names = list.ToArray();
+            popupNames = popupList.ToArray();
         }
 
         public int GetIndex(string currentSelection)

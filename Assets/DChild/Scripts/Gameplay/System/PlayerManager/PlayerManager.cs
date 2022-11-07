@@ -6,7 +6,7 @@ using DChild.Gameplay.Characters.Players.Modules;
 using DChild.Gameplay.Combat;
 using DChild.Inputs;
 using DChild.Visuals;
-using Doozy.Engine;
+using DChild.Temp;
 using Holysoft;
 using Holysoft.Collections;
 using Holysoft.Event;
@@ -21,7 +21,6 @@ namespace DChild.Gameplay.Systems
         Player player { get; }
         IAutoReflexHandler autoReflex { get; }
         PlayerCharacterOverride OverrideCharacterControls();
-         bool playerIsDead { get; }
 
         bool IsPartOfPlayer(GameObject gameObject);
         bool IsPartOfPlayer(GameObject gameObject, out IPlayer player);
@@ -56,7 +55,6 @@ namespace DChild.Gameplay.Systems
         private InteractableDetector m_interactableDetector;
 
         public Player player => m_player;
-        public bool playerIsDead => m_playerIsDead;
 
         public GameplayInput gameplayInput => m_gameplayInput;
         public IAutoReflexHandler autoReflex => m_autoReflex;
@@ -69,21 +67,15 @@ namespace DChild.Gameplay.Systems
         public void DisableInput()
         {
             m_gameplayInput?.SetStoreInputActive(false);
+            m_gameplayInput?.ToggleUINavigationInput(true);
             m_characterInput?.Disable();
         }
 
         public void EnableInput()
         {
             m_gameplayInput?.SetStoreInputActive(true);
-
-            if (m_overrideController.enabled == false)
-            {
-                m_characterInput?.Enable();
-            }
-            else
-            {
-                Debug.LogError("You are trying to enable player controls while override controls are still enabled!", this);
-            }
+            m_gameplayInput?.ToggleUINavigationInput(false);
+            m_characterInput?.Enable();
         }
 
         public void FreezePlayerPosition(bool freezePlayerPosition)

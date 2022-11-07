@@ -1,5 +1,7 @@
 ﻿using DChild.Gameplay;
-using Doozy.Engine;
+using DChild.Temp;
+using Doozy.Runtime.Nody;
+using Doozy.Runtime.Signals;
 using Holysoft.Collections;
 using Holysoft.Event;
 using System.Collections;
@@ -17,7 +19,12 @@ namespace DChild.Menu
             Smart,
             Force
         }
-
+        [SerializeField]
+        private FlowController m_flow;
+        [SerializeField]
+        private SignalSender m_loadStartSignal;
+        [SerializeField]
+        private SignalSender m_loadDoneSignal;
         [SerializeField]
         private LoadingAnimation m_animation;
         [SerializeField]
@@ -91,12 +98,13 @@ namespace DChild.Menu
             switch (loadType)
             {
                 case LoadType.Force:
-                    GameEventMessage.SendEvent("Force Load");
+                    m_loadStartSignal.Payload.booleanValue = true;
                     break;
                 case LoadType.Smart:
-                    GameEventMessage.SendEvent("Smart Load");
+                    m_loadStartSignal.Payload.booleanValue = false;
                     break;
             }
+            m_loadStartSignal.SendSignal();
         }
 
         public void AllowSceneTransfer() => m_canTransferScene = true;
@@ -230,7 +238,7 @@ namespace DChild.Menu
             Debug.LogError("False Positive: Scene Done Reaction Done");
             if (loadType == LoadType.Smart)
             {
-                GameEventMessage.SendEvent("Load Done");
+                m_loadDoneSignal.SendSignal();
                 yield return new WaitForSeconds(1f);
                 time += 1f;
             }
@@ -258,6 +266,14 @@ namespace DChild.Menu
             }
 
             GameplaySystem.SetInputActive(false);
+        }
+
+        private IEnumerator Start()
+        {
+            while (m_flow.initialized == false)
+                yield return null;
+
+            SendEvents();
         }
 
         private void Update()

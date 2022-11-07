@@ -12,7 +12,7 @@ using System.Collections;
 using System.Collections.Generic;
 using DChild;
 using DChild.Gameplay.Characters.Enemies;
-using Doozy.Engine;
+using DChild.Temp;
 using Spine.Unity.Modules;
 
 namespace DChild.Gameplay.Characters.Enemies

@@ -1,10 +1,13 @@
-﻿using UnityEngine;
+﻿using Doozy.Runtime.Signals;
+using UnityEngine;
 using UnityEngine.Video;
 
 namespace DChild.Gameplay.Systems
 {
-    public class StoreVideoEventHandle : GameEventSender
+    public class StoreVideoEventHandle : MonoBehaviour
     {
+        [SerializeField]
+        private SignalSender m_transistionSignal;
         [SerializeField]
         private VideoPlayer m_openVideo;
         [SerializeField]
@@ -27,7 +30,7 @@ namespace DChild.Gameplay.Systems
 
         private void OnVideoDone(VideoPlayer source)
         {
-           SendSavedEvent();
+            m_transistionSignal.SendSignal();
         }
     }
 }

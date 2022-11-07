@@ -1,4 +1,5 @@
-﻿using Holysoft.Event;
+﻿using Doozy.Runtime.UIManager.Components;
+using Holysoft.Event;
 using Sirenix.Utilities;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -17,12 +18,11 @@ namespace DChild.Gameplay.SoulSkills.UI
     public abstract class SoulSkillButton : SoulSkillUI
     {
 
-        protected Button m_button;
+        protected UIButton m_button;
         protected bool m_isAnActivatedSoulSkill;
 
         public bool isAnActivatedSoulSkill => m_isAnActivatedSoulSkill;
 
-        public event EventAction<SoulSkillSelected> OnHighlighted;
         public event EventAction<SoulSkillSelected> OnSelected;
         public event EventAction<SoulSkillSelected> OnClick;
 
@@ -46,11 +46,6 @@ namespace DChild.Gameplay.SoulSkills.UI
         public virtual void SetIsAnActivatedUIState(bool isAnEquippedUI)
         {
             m_isAnActivatedSoulSkill = isAnEquippedUI;
-        }
-
-        public void Highlight()
-        {
-            SendEvent(OnHighlighted);
         }
 
         public void Select()
@@ -79,7 +74,7 @@ namespace DChild.Gameplay.SoulSkills.UI
 
         protected virtual void Awake()
         {
-            m_button = GetComponent<Button>();
+            m_button = GetComponent<UIButton>();
         }
     }
 }

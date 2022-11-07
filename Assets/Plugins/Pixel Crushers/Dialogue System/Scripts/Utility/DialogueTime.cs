@@ -41,12 +41,32 @@ namespace PixelCrushers.DialogueSystem
         }
 
         /// <summary>
-        /// Gets or sets the time mode.
+        /// Gets or sets the time mode. Setting this also sets GameTime.mode.
         /// </summary>
         /// <value>
         /// The mode.
         /// </value>
-        public static TimeMode mode { get; set; }
+        public static TimeMode mode
+        {
+            get { return m_mode; }
+            set
+            {
+                m_mode = value;
+                switch (value)
+                {
+                    case TimeMode.Realtime:
+                        GameTime.mode = GameTimeMode.Realtime;
+                        break;
+                    case TimeMode.Gameplay:
+                        GameTime.mode = GameTimeMode.UnityStandard;
+                        break;
+                    case TimeMode.Custom:
+                        GameTime.mode = GameTimeMode.Manual;
+                        break;
+                }
+            }
+        }
+        private static TimeMode m_mode = TimeMode.Realtime;
 
         /// <summary>
         /// Gets the time based on the current Mode.
@@ -72,6 +92,31 @@ namespace PixelCrushers.DialogueSystem
             set
             {
                 m_customTime = value;
+                GameTime.time = value;
+            }
+        }
+
+        /// <summary>
+        /// The frame delta time based on the current time mode.
+        /// </summary>
+        public static float deltaTime
+        {
+            get
+            {
+                switch (mode)
+                {
+                    default:
+                    case TimeMode.Realtime:
+                        return m_isPaused ? 0 : Time.unscaledDeltaTime;
+                    case TimeMode.Gameplay:
+                        return Time.deltaTime;
+                    case TimeMode.Custom:
+                        return m_customDeltaTime;
+                }
+            }
+            set
+            {
+                m_customDeltaTime = value;
             }
         }
 
@@ -112,6 +157,7 @@ namespace PixelCrushers.DialogueSystem
                         break;
                 }
                 m_isPaused = value;
+                GameTime.isPaused = value;
             }
         }
 
@@ -121,6 +167,8 @@ namespace PixelCrushers.DialogueSystem
         /// @endcond
 
         private static float m_customTime = 0;
+
+        private static float m_customDeltaTime = 0;
 
         private static bool m_isPaused = false;
 

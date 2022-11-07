@@ -14,17 +14,27 @@ namespace PixelCrushers.DialogueSystem
     {
 
         /// <summary>
+        /// Dialogue databases may use Texture2Ds or Sprites for actor portraits. Unity UI uses sprites.
+        /// The CreateSprite method converts textures to sprites. This dictionary contains
+        /// converted sprites so we don't need to reconvert them every time we want to show 
+        /// an actor's portrait.
+        /// </summary>
+        public static Dictionary<Texture2D, Sprite> spriteCache = new Dictionary<Texture2D, Sprite>();
+
+#if UNITY_2019_3_OR_NEWER && UNITY_EDITOR
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        static void InitStaticVariables()
+        {
+            ClearSpriteCache();
+        }
+#endif
+
+        /// <summary>
         /// Ensures that the scene has an EventSystem.
         /// </summary>
         public static void RequireEventSystem()
         {
-            var eventSystem = GameObject.FindObjectOfType<UnityEngine.EventSystems.EventSystem>();
-            if (eventSystem == null)
-            {
-                if (DialogueDebug.logWarnings) Debug.LogWarning(DialogueDebug.Prefix + ": The scene is missing an EventSystem. Adding one.");
-                new GameObject("EventSystem", typeof(UnityEngine.EventSystems.EventSystem),
-                               typeof(UnityEngine.EventSystems.StandaloneInputModule));
-            }
+            UIUtility.RequireEventSystem(DialogueDebug.logWarnings ? "Dialogue System: The scene is missing an EventSystem. Adding one." : null);
         }
 
         /// <summary>
@@ -34,14 +44,6 @@ namespace PixelCrushers.DialogueSystem
         {
 			return animatorStateInfo.fullPathHash;
         }
-
-        /// <summary>
-        /// Dialogue databases may use Texture2Ds or Sprites for actor portraits. Unity UI uses sprites.
-        /// The CreateSprite method converts textures to sprites. This dictionary contains
-        /// converted sprites so we don't need to reconvert them every time we want to show 
-        /// an actor's portrait.
-        /// </summary>
-        public static Dictionary<Texture2D, Sprite> spriteCache = new Dictionary<Texture2D, Sprite>();
 
         /// <summary>
         /// Clears the sprite cache, forcing all textures to be converted to sprites
@@ -61,9 +63,13 @@ namespace PixelCrushers.DialogueSystem
         public static Sprite CreateSprite(Texture2D texture)
         {
             if (texture == null) return null;
-            if (spriteCache.ContainsKey(texture)) return spriteCache[texture];
+            if (spriteCache.ContainsKey(texture))
+            {
+                var cachedSprite = spriteCache[texture];
+                if (cachedSprite != null) return spriteCache[texture];
+            }
             var sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), Vector2.zero);
-            spriteCache.Add(texture, sprite);
+            spriteCache[texture] = sprite;
             return sprite;
         }
 
@@ -72,7 +78,11 @@ namespace PixelCrushers.DialogueSystem
         /// Gives preference to the Texture2D.
         public static Sprite GetSprite(Texture2D texture, Sprite sprite)
         {
-            return (texture != null) ? UITools.CreateSprite(texture) : sprite;
+            return (sprite != null) 
+                ? sprite 
+                : (texture != null) 
+                    ? UITools.CreateSprite(texture) 
+                    : null;
         }
 
         public static Texture2D GetTexture2D(Sprite sprite)
@@ -128,15 +138,7 @@ namespace PixelCrushers.DialogueSystem
         /// <param name="allowStealFocus"></param>
         public static void Select(UnityEngine.UI.Selectable selectable, bool allowStealFocus = true)
         {
-            var currentEventSystem = UnityEngine.EventSystems.EventSystem.current;
-            if (currentEventSystem == null || selectable == null) return;
-            if (currentEventSystem.alreadySelecting) return;
-            if (currentEventSystem.currentSelectedGameObject == null || allowStealFocus)
-            {
-                currentEventSystem.SetSelectedGameObject(selectable.gameObject);
-                selectable.Select();
-                selectable.OnSelect(null);
-            }
+            UIUtility.Select(selectable, allowStealFocus);
         }
 
         public const string RPGMakerCodeQuarterPause = @"\,";
@@ -157,6 +159,11 @@ namespace PixelCrushers.DialogueSystem
                 Replace(RPGMakerCodeInstantOpen, string.Empty).
                 Replace(RPGMakerCodeInstantClose, string.Empty)
                 : s;
+        }
+
+        public static string StripEmTags(string s)
+        {
+            return Regex.Replace(s, @"\[em\d+\]|\[/em\d+\]", string.Empty);
         }
 
         /// <summary>
@@ -197,8 +204,12 @@ namespace PixelCrushers.DialogueSystem
             {
                 if (canvas.worldCamera == null) canvas.worldCamera = Camera.main;
             }
-            var graphicRaycaster = go.GetComponentInChildren<UnityEngine.UI.GraphicRaycaster>() ?? go.GetComponentInParent<UnityEngine.UI.GraphicRaycaster>();
-            if (graphicRaycaster != null) graphicRaycaster.enabled = true;
+            if (InputDeviceManager.instance == null ||
+                (InputDeviceManager.instance.controlGraphicRaycasters && InputDeviceManager.currentInputDevice == InputDevice.Mouse))
+            {
+                var graphicRaycaster = go.GetComponentInChildren<UnityEngine.UI.GraphicRaycaster>() ?? go.GetComponentInParent<UnityEngine.UI.GraphicRaycaster>();
+                if (graphicRaycaster != null) graphicRaycaster.enabled = true;
+            }
         }
 
     }

@@ -1,6 +1,7 @@
 ﻿using Holysoft.UI;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace DChild.Menu
 {
@@ -21,29 +22,30 @@ namespace DChild.Menu
 
         private Vector2 m_initialValue;
         private Vector2 m_distanceFromInitialValue;
-        private Vector3 m_prevMousePosition;
+        private Vector2 m_prevMousePosition;
         protected Vector2 m_mouseMovement;
         private Vector2 m_movement;
 
         protected abstract Vector2 value { get; set; }
+        private Vector2 mousePosition => Mouse.current.position.ReadValue();
 
         protected virtual void Awake()
         {
             m_initialValue = value;
             m_distanceFromInitialValue = Vector2.zero;
-            m_prevMousePosition = Input.mousePosition;
+            m_prevMousePosition = mousePosition;
         }
 
         private void OnEnable()
         {
             value = m_initialValue;
             m_distanceFromInitialValue = Vector2.zero;
-            m_prevMousePosition = Input.mousePosition;
+            m_prevMousePosition = mousePosition;
         }
 
         private void Update()
         {
-            var currentMousePosition = Input.mousePosition;
+            var currentMousePosition = mousePosition;
             if (m_prevMousePosition != currentMousePosition)
             {
                 CalculateMouseMovement(currentMousePosition);
@@ -79,7 +81,7 @@ namespace DChild.Menu
             }
         }
 
-        private void CalculateMouseMovement(Vector3 currentMousePosition)
+        private void CalculateMouseMovement(Vector2 currentMousePosition)
         {
             var displacement = currentMousePosition - m_prevMousePosition;
             m_mouseMovement.x = Mathf.Clamp(displacement.x / m_maxMouseMoveThreshold, -1, 1);

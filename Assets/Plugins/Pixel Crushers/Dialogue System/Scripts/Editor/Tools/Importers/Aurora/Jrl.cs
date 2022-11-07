@@ -29,6 +29,7 @@ namespace PixelCrushers.DialogueSystem.Aurora
         [XmlElement("struct")]
         public Struct topLevelStruct;
 
+        [XmlIgnore]
         public List<Struct> Categories { get { return topLevelStruct.GetElementStructs("Categories"); } }
 
         public static Jrl Load(TextAsset xmlFile)

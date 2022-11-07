@@ -13,12 +13,14 @@ namespace PixelCrushers.DialogueSystem
     /// prefs to EditorPrefs between sessions.
     /// </summary>
     [Serializable]
-    public class UniqueIDWindowPrefs
+    public class UniqueIDWindowPrefs : ISerializationCallbackReceiver
     {
 
         private const string UniqueIDWindowPrefsKey = "PixelCrushers.DialogueSystem.UniqueIDTool";
 
         public List<DialogueDatabase> databases = new List<DialogueDatabase>();
+
+        public List<string> guids = new List<string>();
 
         public UniqueIDWindowPrefs() { }
 
@@ -43,8 +45,10 @@ namespace PixelCrushers.DialogueSystem
         /// </summary>
         public static UniqueIDWindowPrefs Load()
         {
-            return EditorPrefs.HasKey(UniqueIDWindowPrefsKey) ? JsonUtility.FromJson<UniqueIDWindowPrefs>(EditorPrefs.GetString(UniqueIDWindowPrefsKey))
+            var prefs = EditorPrefs.HasKey(UniqueIDWindowPrefsKey) ? JsonUtility.FromJson<UniqueIDWindowPrefs>(EditorPrefs.GetString(UniqueIDWindowPrefsKey))
                 : new UniqueIDWindowPrefs();
+            if (prefs == null) prefs = new UniqueIDWindowPrefs();
+            return prefs;
         }
 
         /// <summary>
@@ -55,5 +59,30 @@ namespace PixelCrushers.DialogueSystem
             EditorPrefs.SetString(UniqueIDWindowPrefsKey, JsonUtility.ToJson(this));
         }
 
+        public void OnBeforeSerialize()
+        {
+            guids.Clear();
+            foreach (var database in databases)
+            {
+                if (database == null) continue;
+                var guid = AssetDatabase.AssetPathToGUID(AssetDatabase.GetAssetPath(database));
+                guids.Add(guid);
+            }
+        }
+
+        public void OnAfterDeserialize() { }
+
+        public void RelinkDatabases()
+        {
+            databases.Clear();
+            foreach (var guid in guids)
+            {
+                var assetPath = AssetDatabase.GUIDToAssetPath(guid);
+                if (string.IsNullOrEmpty(assetPath)) continue;
+                var database = AssetDatabase.LoadAssetAtPath<DialogueDatabase>(assetPath);
+                if (database == null) continue;
+                databases.Add(database);
+            }
+        }
     }
 }

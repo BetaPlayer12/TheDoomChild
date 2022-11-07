@@ -29,14 +29,19 @@ namespace PixelCrushers.DialogueSystem.Aurora
         [XmlElement("struct")]
         public Struct topLevelStruct;
 
+        [XmlIgnore]
         public string EndConversation { get { return topLevelStruct.GetElementValue("EndConversation"); } }
 
+        [XmlIgnore]
         public string EndConverAbort { get { return topLevelStruct.GetElementValue("EndConverAbort"); } }
 
+        [XmlIgnore]
         public List<Struct> EntryList { get { return topLevelStruct.GetElementStructs("EntryList"); } }
 
+        [XmlIgnore]
         public List<Struct> StartingList { get { return topLevelStruct.GetElementStructs("StartingList"); } }
 
+        [XmlIgnore]
         public List<Struct> ReplyList { get { return topLevelStruct.GetElementStructs("ReplyList"); } }
 
         public static Dlg Load(TextAsset xmlFile)
@@ -67,32 +72,46 @@ namespace PixelCrushers.DialogueSystem.Aurora
         [XmlElement("element")]
         public List<Element> elements = new List<Element>();
 
+        [XmlIgnore]
         public int ID { get { return Tools.StringToInt(id); } }
 
+        [XmlIgnore]
         public string Comment { get { return GetElementValue("Comment"); } }
 
+        [XmlIgnore]
         public string Speaker { get { return GetElementValue("Speaker"); } }
 
+        [XmlIgnore]
         public bool ShowOnce { get { return string.Equals(GetElementValue("ShowOnce"), "1"); } }
 
+        [XmlIgnore]
         public string Quest { get { return GetElementValue("Quest"); } }
 
+        [XmlIgnore]
         public string QuestEntry { get { return GetElementValue("QuestEntry"); } }
 
+        [XmlIgnore]
         public string Script { get { return GetElementValue("Script"); } }
 
+        [XmlIgnore]
         public string Active { get { return GetElementValue("Active"); } }
 
+        [XmlIgnore]
         public List<Struct> EntriesList { get { return GetElementStructs("EntriesList"); } }
 
+        [XmlIgnore]
         public List<Struct> RepliesList { get { return GetElementStructs("RepliesList"); } }
 
+        [XmlIgnore]
         public List<LocalString> Text { get { return GetLocalStrings("Text"); } }
 
+        [XmlIgnore]
         public int Index { get { return Tools.StringToInt(GetElementValue("Index")); } }
 
+        [XmlIgnore]
         public bool IsChild { get { return string.Equals(GetElementValue("IsChild"), "1"); } }
 
+        [XmlIgnore]
         public bool End { get { return string.Equals(GetElementValue("End"), "1"); } }
 
         public Element GetElement(string elementName)
@@ -153,6 +172,7 @@ namespace PixelCrushers.DialogueSystem.Aurora
 
         public const string HungarianLanguageIDString = "260";
 
+        [XmlIgnore]
         public string value
         {
             //---Was: get { return !string.IsNullOrEmpty(cdata) ? cdata : _data; }
@@ -166,6 +186,7 @@ namespace PixelCrushers.DialogueSystem.Aurora
             }
         }
 
+        [XmlIgnore]
         public int LanguageID { get { return Tools.StringToInt(languageId); } }
     }
 

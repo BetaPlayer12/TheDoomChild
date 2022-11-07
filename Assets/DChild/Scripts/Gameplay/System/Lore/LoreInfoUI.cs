@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Doozy.Runtime.UIManager.Containers;
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -8,6 +9,8 @@ namespace DChild.Gameplay.Systems.Lore
 {
     public class LoreInfoUI : MonoBehaviour
     {
+        [SerializeField]
+        private UIContainer m_container;
         [SerializeField]
         private Image m_topicImage;
         [SerializeField]
@@ -26,6 +29,11 @@ namespace DChild.Gameplay.Systems.Lore
             m_baybayinLabel.text = loreData.baybayinName;
             m_messageLabel.text = loreData.message;
             m_authorLabel.text = loreData.author;
+        }
+
+        public void Show()
+        {
+            m_container.Show();
         }
     }
 }

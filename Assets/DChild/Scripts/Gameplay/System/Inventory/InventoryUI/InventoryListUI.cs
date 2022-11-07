@@ -17,7 +17,10 @@ namespace DChild.Gameplay.Inventories.UI
         public void SetInventoryReference(T tradeInventory)
         {
             m_inventory = tradeInventory;
-            UpdateUIList();
+            if (tradeInventory != null)
+            {
+                UpdateUIList();
+            }
         }
 
         public abstract void UpdateUIList();

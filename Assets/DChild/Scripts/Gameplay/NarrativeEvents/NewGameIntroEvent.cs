@@ -1,7 +1,7 @@
 ﻿using Cinemachine;
 using DChild.Gameplay.Cinematics;
 using DChild.Serialization;
-using Doozy.Engine;
+using DChild.Temp;
 using PixelCrushers.DialogueSystem;
 using Spine.Unity;
 using System;
@@ -47,8 +47,26 @@ namespace DChild.Gameplay.Narrative
         private GameObject m_storePickupSequence;
         [SerializeField]
         private ExtraDatabases m_database;
+        [SerializeField]
+        private InputActionReference m_wakeUpInput;
 
         private bool m_isDone;
+        bool hasPressedPrompt = false;
+
+        private void Awake()
+        {
+            m_wakeUpInput.action.performed += OnInputPerformed;
+        }
+
+        private void OnDestroy()
+        {
+            m_wakeUpInput.action.performed -= OnInputPerformed;
+        }
+
+        private void OnInputPerformed(InputAction.CallbackContext context)
+        {
+            hasPressedPrompt = true;
+        }
 
         public ISaveData Save()
         {
@@ -96,16 +114,12 @@ namespace DChild.Gameplay.Narrative
         private IEnumerator PromptPlayerToStandRoutine()
         {
             GameplaySystem.playerManager.OverrideCharacterControls();
+            GameplaySystem.playerManager.player.GetComponentInChildren<PlayerInput>().actions.FindActionMap("Gameplay").Enable();
             var skeleton = GameplaySystem.playerManager.player.character.GetComponentInChildren<SkeletonAnimation>();
-
             GameEventMessage.SendEvent("Prompt_Wakeup_Start");
-            bool hasPressedPrompt = false;
+
             while (hasPressedPrompt == false)
             {
-                if (Input.GetKeyDown(KeyCode.W))
-                {
-                    hasPressedPrompt = true;
-                }
                 yield return null;
             }
             m_cameraToDisable.enabled = false;

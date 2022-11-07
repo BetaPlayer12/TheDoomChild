@@ -1,4 +1,4 @@
-﻿using Doozy.Engine;
+﻿using DChild.Temp;
 using Sirenix.OdinInspector;
 using Spine.Unity;
 using System;
@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Video;
 using DarkTonic.MasterAudio;
+using Doozy.Runtime.Signals;
 
 namespace DChild.Menu.Campaign
 {
@@ -27,6 +28,8 @@ namespace DChild.Menu.Campaign
         private VideoInfo m_intro1;
         [SerializeField, BoxGroup("Intro")]
         private VideoInfo m_intro2;
+        [SerializeField, BoxGroup("Intro")]
+        private SignalSender m_introEndSignal;
         [SerializeField]
         private VideoInfo m_next;
         [SerializeField]
@@ -35,6 +38,8 @@ namespace DChild.Menu.Campaign
         private VideoInfo m_first;
         [SerializeField]
         private VideoInfo m_last;
+        [SerializeField]
+        private SignalSender m_transistionSignal;
 
         [SerializeField]
         private RenderTexture m_texture;
@@ -61,28 +66,28 @@ namespace DChild.Menu.Campaign
                     m_intro1.Play(m_vidPlayer, transform);
                     break;
                 case Type.First:
-                    m_vidPlayer.loopPointReached += OnEnd;
+                    m_vidPlayer.loopPointReached += OnTransistionEnd;
                     m_first.Play(m_vidPlayer, transform);
                     break;
                 case Type.Last:
-                    m_vidPlayer.loopPointReached += OnEnd;
+                    m_vidPlayer.loopPointReached += OnTransistionEnd;
                     m_last.Play(m_vidPlayer, transform);
                     break;
                 case Type.Next:
-                    m_vidPlayer.loopPointReached += OnEnd;
+                    m_vidPlayer.loopPointReached += OnTransistionEnd;
                     m_next.Play(m_vidPlayer, transform);
                     break;
                 case Type.Previous:
-                    m_vidPlayer.loopPointReached += OnEnd;
+                    m_vidPlayer.loopPointReached += OnTransistionEnd;
                     m_previous.Play(m_vidPlayer, transform);
                     break;
             }
         }
 
-        private void OnEnd(VideoPlayer source)
+        private void OnTransistionEnd(VideoPlayer source)
         {
-            GameEventMessage.SendEvent("Show Info");
-            m_vidPlayer.loopPointReached -= OnIntro1End;
+            m_transistionSignal.SendSignal();
+            m_vidPlayer.loopPointReached -= OnTransistionEnd;
 
         }
 
@@ -90,6 +95,13 @@ namespace DChild.Menu.Campaign
         {
             m_intro2.Play(source, transform);
             m_vidPlayer.loopPointReached -= OnIntro1End;
+            m_vidPlayer.loopPointReached += OnIntro2End;
+        }
+
+        private void OnIntro2End(VideoPlayer source)
+        {
+            m_introEndSignal.SendSignal();
+            m_vidPlayer.loopPointReached -= OnIntro2End;
         }
     }
 }

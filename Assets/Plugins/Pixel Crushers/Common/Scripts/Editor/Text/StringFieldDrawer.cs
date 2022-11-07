@@ -81,7 +81,7 @@ namespace PixelCrushers
 
                 if (isStringAssetAssigned || !isContentAssigned)
                 {
-                    float buttonWidth = 36;
+                    float buttonWidth = 40;
                     EditorGUI.PropertyField(new Rect(position.x, position.y + yOffset, position.width - buttonWidth, EditorGUIUtility.singleLineHeight), stringAssetProperty, GUIContent.none);
                     EditorGUI.BeginDisabledGroup(isStringAssetAssigned);
                     bool createNewAsset = GUI.Button(new Rect(position.x + position.width - buttonWidth, position.y + yOffset, buttonWidth, EditorGUIUtility.singleLineHeight),
@@ -158,7 +158,8 @@ namespace PixelCrushers
             {
                 var textTable = textTableProperty.objectReferenceValue as TextTable;
                 var textTableFieldIDProperty = stringFieldProperty.FindPropertyRelative("m_textTableFieldID");
-                return textTable.GetFieldTextForLanguage(textTableFieldIDProperty.intValue, UILocalizationManager.instance.currentLanguage);
+                return textTable.GetFieldTextForLanguage(textTableFieldIDProperty.intValue, 
+                    (UILocalizationManager.instance != null) ? UILocalizationManager.instance.currentLanguage : string.Empty);
             }
             return string.Empty;
         }

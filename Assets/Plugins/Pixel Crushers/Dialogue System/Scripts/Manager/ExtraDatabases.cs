@@ -44,7 +44,7 @@ namespace PixelCrushers.DialogueSystem
         /// Useful to avoid stutter when adding several databases.
         /// </summary>
         [Tooltip("Add/remove one database per frame instead of adding them all at the same time. Useful to avoid stutter when adding several databases.")]
-        public bool addAllInOneFrame = false;
+        public bool onePerFrame = false;
 
         /// <summary>
         /// This event is called after ExtraDatabases has finished adding its list of databases
@@ -58,9 +58,11 @@ namespace PixelCrushers.DialogueSystem
         /// </summary>
         public static event System.Action removedDatabases = delegate { };
 
-        private bool m_trying = false;
+        protected bool m_trying = false;
+        protected Coroutine m_destroyCoroutine = null;
+        protected int m_numActiveCoroutines = 0;
 
-        private void TryAddDatabases(Transform interactor, bool immediate)
+        protected virtual void TryAddDatabases(Transform interactor, bool onePerFrame)
         {
             if (!m_trying)
             {
@@ -69,11 +71,7 @@ namespace PixelCrushers.DialogueSystem
                 {
                     if ((condition == null) || condition.IsTrue(interactor))
                     {
-                        AddDatabases(immediate);
-                        if (immediate)
-                        {
-                            if (once) Destroy(this);
-                        }
+                        AddDatabases(onePerFrame);
                     }
                 }
                 finally
@@ -83,43 +81,42 @@ namespace PixelCrushers.DialogueSystem
             }
         }
 
-        public void AddDatabases(bool immediate)
+        public virtual void AddDatabases(bool onePerFrame)
         {
-            if (immediate)
-            {
-                AddDatabasesImmediate();
-            }
-            else if (gameObject.activeInHierarchy && enabled)
+            if (onePerFrame)
             {
                 StartCoroutine(AddDatabasesCoroutine());
             }
+            else if (gameObject.activeInHierarchy && enabled)
+            {
+                AddDatabasesImmediate();
+            }
         }
 
-        private void AddDatabasesImmediate()
+        protected virtual void AddDatabasesImmediate()
         {
             foreach (var database in databases)
             {
                 AddDatabase(database);
             }
             addedDatabases();
+            if (once) Destroy(this);
         }
 
-        private IEnumerator AddDatabasesCoroutine()
+        protected virtual IEnumerator AddDatabasesCoroutine()
         {
+            m_numActiveCoroutines++;
+            if (once && m_destroyCoroutine == null) m_destroyCoroutine = StartCoroutine(DestroyCoroutine());
             foreach (var database in databases)
             {
                 AddDatabase(database);
                 yield return null;
             }
             addedDatabases();
-
-            if (once)
-            {
-                Destroy(this);
-            }
+            m_numActiveCoroutines--;
         }
 
-        private void AddDatabase(DialogueDatabase database)
+        protected virtual void AddDatabase(DialogueDatabase database)
         {
             if (database != null)
             {
@@ -128,7 +125,7 @@ namespace PixelCrushers.DialogueSystem
             }
         }
 
-        private void TryRemoveDatabases(Transform interactor, bool immediate)
+        protected virtual void TryRemoveDatabases(Transform interactor, bool onePerFrame)
         {
             if (!m_trying)
             {
@@ -137,11 +134,7 @@ namespace PixelCrushers.DialogueSystem
                 {
                     if ((condition == null) || condition.IsTrue(interactor))
                     {
-                        RemoveDatabases(immediate);
-                        if (immediate)
-                        {
-                            if (once) Destroy(this);
-                        }
+                        RemoveDatabases(onePerFrame);
                     }
                 }
                 finally
@@ -151,43 +144,42 @@ namespace PixelCrushers.DialogueSystem
             }
         }
 
-        public void RemoveDatabases(bool immediate)
+        public virtual void RemoveDatabases(bool onePerFrame)
         {
-            if (immediate)
-            {
-                RemoveDatabasesImmediate();
-            }
-            else if (gameObject.activeInHierarchy && enabled)
+            if (onePerFrame)
             {
                 StartCoroutine(RemoveDatabasesCoroutine());
             }
+            else if (gameObject.activeInHierarchy && enabled)
+            {
+                RemoveDatabasesImmediate();
+            }
         }
 
-        private void RemoveDatabasesImmediate()
+        protected virtual void RemoveDatabasesImmediate()
         {
             foreach (var database in databases)
             {
                 RemoveDatabase(database);
             }
             removedDatabases();
+            if (once) Destroy(this);
         }
 
-        private IEnumerator RemoveDatabasesCoroutine()
+        protected virtual IEnumerator RemoveDatabasesCoroutine()
         {
+            m_numActiveCoroutines++;
+            if (once && m_destroyCoroutine == null) m_destroyCoroutine = StartCoroutine(DestroyCoroutine());
             foreach (var database in databases)
             {
                 RemoveDatabase(database);
                 yield return null;
             }
             removedDatabases();
-
-            if (once)
-            {
-                Destroy(this);
-            }
+            m_numActiveCoroutines--;
         }
 
-        private void RemoveDatabase(DialogueDatabase database)
+        protected virtual void RemoveDatabase(DialogueDatabase database)
         {
             if (database != null)
             {
@@ -196,79 +188,99 @@ namespace PixelCrushers.DialogueSystem
             }
         }
 
-        public void Start()
+        protected virtual IEnumerator DestroyCoroutine()
         {
-            if (addTrigger == DialogueTriggerEvent.OnStart) TryAddDatabases(null, addAllInOneFrame);
-            if (removeTrigger == DialogueTriggerEvent.OnStart) TryRemoveDatabases(null, addAllInOneFrame);
+            // If Once is ticked and component both adds & removes databases, we need to wait for both to finish:
+            while (m_numActiveCoroutines > 0)
+            {
+                yield return null;
+            }
+            m_destroyCoroutine = null;
+            Destroy(this);
         }
 
-        public void OnEnable()
+        public virtual void Start()
         {
-            if (addTrigger == DialogueTriggerEvent.OnEnable) TryAddDatabases(null, addAllInOneFrame);
-            if (removeTrigger == DialogueTriggerEvent.OnEnable) TryRemoveDatabases(null, addAllInOneFrame);
+            if (addTrigger == DialogueTriggerEvent.OnStart || removeTrigger == DialogueTriggerEvent.OnStart)
+            {
+                StartCoroutine(StartEndOfFrame());
+            }
         }
 
-        public void OnDisable()
+        protected virtual IEnumerator StartEndOfFrame()
         {
-            if (addTrigger == DialogueTriggerEvent.OnDisable) TryAddDatabases(null, addAllInOneFrame);
-            if (removeTrigger == DialogueTriggerEvent.OnDisable) TryRemoveDatabases(null, addAllInOneFrame);
+            yield return new WaitForEndOfFrame();
+            if (addTrigger == DialogueTriggerEvent.OnStart) TryAddDatabases(null, onePerFrame);
+            if (removeTrigger == DialogueTriggerEvent.OnStart) TryRemoveDatabases(null, onePerFrame);
         }
 
-        public void OnDestroy()
+        public virtual void OnEnable()
         {
-            if (addTrigger == DialogueTriggerEvent.OnDestroy) TryAddDatabases(null, addAllInOneFrame);
-            if (removeTrigger == DialogueTriggerEvent.OnDestroy) TryRemoveDatabases(null, addAllInOneFrame);
+            if (addTrigger == DialogueTriggerEvent.OnEnable) TryAddDatabases(null, onePerFrame);
+            if (removeTrigger == DialogueTriggerEvent.OnEnable) TryRemoveDatabases(null, onePerFrame);
         }
 
-        public void OnUse(Transform actor)
+        public virtual void OnDisable()
+        {
+            if (addTrigger == DialogueTriggerEvent.OnDisable) TryAddDatabases(null, false); // Can't run coroutine when disabled.
+            if (removeTrigger == DialogueTriggerEvent.OnDisable) TryRemoveDatabases(null, false);
+        }
+
+        public virtual void OnDestroy()
+        {
+            if (addTrigger == DialogueTriggerEvent.OnDestroy) TryAddDatabases(null, false); // Can't run coroutine when destroyed.
+            if (removeTrigger == DialogueTriggerEvent.OnDestroy) TryRemoveDatabases(null, false);
+        }
+
+        public virtual void OnUse(Transform actor)
         {
             if (!enabled) return;
-            if (addTrigger == DialogueTriggerEvent.OnUse) TryAddDatabases(actor, addAllInOneFrame);
-            if (removeTrigger == DialogueTriggerEvent.OnUse) TryRemoveDatabases(actor, addAllInOneFrame);
+            if (addTrigger == DialogueTriggerEvent.OnUse) TryAddDatabases(actor, onePerFrame);
+            if (removeTrigger == DialogueTriggerEvent.OnUse) TryRemoveDatabases(actor, onePerFrame);
         }
 
-        public void OnUse(string message)
+        public virtual void OnUse(string message)
         {
             if (!enabled) return;
-            if (addTrigger == DialogueTriggerEvent.OnUse) TryAddDatabases(null, addAllInOneFrame);
-            if (removeTrigger == DialogueTriggerEvent.OnUse) TryRemoveDatabases(null, addAllInOneFrame);
+            if (addTrigger == DialogueTriggerEvent.OnUse) TryAddDatabases(null, onePerFrame);
+            if (removeTrigger == DialogueTriggerEvent.OnUse) TryRemoveDatabases(null, onePerFrame);
         }
 
-        public void OnUse()
+        public virtual void OnUse()
         {
             if (!enabled) return;
-            if (addTrigger == DialogueTriggerEvent.OnUse) TryAddDatabases(null, addAllInOneFrame);
-            if (removeTrigger == DialogueTriggerEvent.OnUse) TryRemoveDatabases(null, addAllInOneFrame);
+            if (addTrigger == DialogueTriggerEvent.OnUse) TryAddDatabases(null, onePerFrame);
+            if (removeTrigger == DialogueTriggerEvent.OnUse) TryRemoveDatabases(null, onePerFrame);
         }
 
-        public void OnTriggerEnter(Collider other)
+        public virtual void OnTriggerEnter(Collider other)
         {
             if (!enabled) return;
-            if (addTrigger == DialogueTriggerEvent.OnTriggerEnter) TryAddDatabases(other.transform, addAllInOneFrame);
-            if (removeTrigger == DialogueTriggerEvent.OnTriggerEnter) TryRemoveDatabases(other.transform, addAllInOneFrame);
+            if (addTrigger == DialogueTriggerEvent.OnTriggerEnter) TryAddDatabases(other.transform, onePerFrame);
+            if (removeTrigger == DialogueTriggerEvent.OnTriggerEnter) TryRemoveDatabases(other.transform, onePerFrame);
         }
 
-        public void OnTriggerExit(Collider other)
+        public virtual void OnTriggerExit(Collider other)
         {
             if (!enabled) return;
-            if (addTrigger == DialogueTriggerEvent.OnTriggerExit) TryAddDatabases(other.transform, addAllInOneFrame);
-            if (removeTrigger == DialogueTriggerEvent.OnTriggerExit) TryRemoveDatabases(other.transform, addAllInOneFrame);
+            if (addTrigger == DialogueTriggerEvent.OnTriggerExit) TryAddDatabases(other.transform, onePerFrame);
+            if (removeTrigger == DialogueTriggerEvent.OnTriggerExit) TryRemoveDatabases(other.transform, onePerFrame);
         }
 
 #if USE_PHYSICS2D || !UNITY_2018_1_OR_NEWER
 
-        public void OnTriggerEnter2D(Collider2D other)
+        public virtual void OnTriggerEnter2D(Collider2D other)
         {
             if (!enabled) return;
-            if (addTrigger == DialogueTriggerEvent.OnTriggerEnter) TryAddDatabases(other.transform, addAllInOneFrame);
-            if (removeTrigger == DialogueTriggerEvent.OnTriggerEnter) TryRemoveDatabases(other.transform, addAllInOneFrame);
+            if (addTrigger == DialogueTriggerEvent.OnTriggerEnter) TryAddDatabases(other.transform, onePerFrame);
+            if (removeTrigger == DialogueTriggerEvent.OnTriggerEnter) TryRemoveDatabases(other.transform, onePerFrame);
         }
 
-        public void OnTriggerExit2D(Collider2D other)
+        public virtual void OnTriggerExit2D(Collider2D other)
         {
             if (!enabled) return;
-            if (addTrigger == DialogueTriggerEvent.OnTriggerExit) TryAddDatabases(other.transform, addAllInOneFrame);
-            if (removeTrigger == DialogueTriggerEvent.OnTriggerExit) TryRemoveDatabases(other.transform, addAllInOneFrame);
+            if (addTrigger == DialogueTriggerEvent.OnTriggerExit) TryAddDatabases(other.transform, onePerFrame);
+            if (removeTrigger == DialogueTriggerEvent.OnTriggerExit) TryRemoveDatabases(other.transform, onePerFrame);
         }
 
 #endif

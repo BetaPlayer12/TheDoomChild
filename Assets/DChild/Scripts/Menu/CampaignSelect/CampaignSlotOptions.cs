@@ -1,4 +1,5 @@
 ﻿using DChild.Serialization;
+using Doozy.Runtime.UIManager.Containers;
 using Holysoft.UI;
 using UnityEngine;
 
@@ -7,9 +8,9 @@ namespace DChild.Menu.Campaign
     public class CampaignSlotOptions : CampaignSelectSubElement
     {
         [SerializeField]
-        private UICanvas m_newGame;
+        private UIContainer m_newGame;
         [SerializeField]
-        private UICanvas m_loadGame;
+        private UIContainer m_loadGame;
 
         protected override void OnCampaignSelected(object sender, SelectedCampaignSlotEventArgs eventArgs)
         {

@@ -1,6 +1,3 @@
-// Recompile at 01/07/2021 2:56:36 PM
-
-
 #if USE_TIMELINE
 #if UNITY_2017_1_OR_NEWER
 // Copyright (c) Pixel Crushers. All rights reserved.
@@ -36,6 +33,10 @@ namespace PixelCrushers.DialogueSystem
                     StartConversationBehaviour input = inputPlayable.GetBehaviour();
                     if (Application.isPlaying)
                     {
+                        if (input.exclusive)
+                        {
+                            DialogueManager.StopAllConversations();
+                        }
                         if (input.jumpToSpecificEntry && input.entryID > 0)
                         {
                             DialogueManager.StartConversation(input.conversation, actorTransform, input.conversant, input.entryID);
@@ -47,7 +48,7 @@ namespace PixelCrushers.DialogueSystem
                     }
                     else
                     {
-                        var message = "Conversation (" + DialogueActor.GetActorName(actorTransform) + "->" + DialogueActor.GetActorName(input.conversant) + "): " + input.conversation;
+                        var message = "Conversation (" + DialogueActor.GetActorName(actorTransform) + "->" + DialogueActor.GetActorName(input.conversant) + "): [" + input.conversation + "] '" + input.GetEditorDialogueText() + "' (may vary)";
                         PreviewUI.ShowMessage(message, 2, 0);
                     }
                 }

@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.Events;
 using System;
 using System.Collections;
-using Sirenix.OdinInspector;
 
 namespace PixelCrushers.DialogueSystem
 {
@@ -24,8 +23,6 @@ namespace PixelCrushers.DialogueSystem
         [Serializable]
         public class QuestStateIndicatorLevel
         {
-            [SerializeField]
-            private bool m_updateOnInitializeOnly;
             [Tooltip("Quest state to listen for.")]
             public QuestState questState;
 
@@ -36,8 +33,6 @@ namespace PixelCrushers.DialogueSystem
             public int indicatorLevel;
 
             public UnityEvent onEnterState = new UnityEvent();
-
-            public bool updateOnInitializeOnly => m_updateOnInitializeOnly;
         }
 
         public QuestStateIndicatorLevel[] questStateIndicatorLevels = new QuestStateIndicatorLevel[0];
@@ -45,9 +40,7 @@ namespace PixelCrushers.DialogueSystem
         [Serializable]
         public class QuestEntryStateIndicatorLevel
         {
-            [SerializeField]
-            private bool m_updateOnInitializeOnly;
-            [Tooltip("Quest entry number."), QuestEntryPopup]
+            [Tooltip("Quest entry number.")]
             public int entryNumber;
 
             [Tooltip("Quest entry state to listen for.")]
@@ -60,11 +53,12 @@ namespace PixelCrushers.DialogueSystem
             public int indicatorLevel;
 
             public UnityEvent onEnterState = new UnityEvent();
-
-            public bool updateOnInitializeOnly => m_updateOnInitializeOnly;
         }
 
         public QuestEntryStateIndicatorLevel[] questEntryStateIndicatorLevels = new QuestEntryStateIndicatorLevel[0];
+
+        [Tooltip("When starting component, do not invoke any OnEnterState() events.")]
+        public bool suppressOnEnterStateEventsOnStart = false;
 
         protected QuestStateDispatcher m_questStateDispatcher;
         protected QuestStateDispatcher questStateDispatcher
@@ -115,6 +109,8 @@ namespace PixelCrushers.DialogueSystem
             set { m_started = value; }
         }
 
+        protected bool m_suppressOnEnterStateEvent = false;
+
         protected virtual void OnApplicationQuit()
         {
             enabled = false;
@@ -135,7 +131,9 @@ namespace PixelCrushers.DialogueSystem
                 {
                     questStateDispatcher.AddListener(this);
                 }
-                UpdateIndicator(true);
+                m_suppressOnEnterStateEvent = suppressOnEnterStateEventsOnStart;
+                UpdateIndicator();
+                m_suppressOnEnterStateEvent = false;
             }
         }
 
@@ -151,26 +149,28 @@ namespace PixelCrushers.DialogueSystem
 
         public virtual void OnChange()
         {
-            UpdateIndicator(false);
+            UpdateIndicator();
         }
 
         /// <summary>
         /// Update the current quest state indicator based on the specified quest state indicator 
         /// levels and quest entry state indicator levels.
         /// </summary>
-        public virtual void UpdateIndicator(bool isAnInitialization)
+        public virtual void UpdateIndicator()
         {
             // Check quest state:
             var questState = QuestLog.GetQuestState(questName);
             for (int i = 0; i < questStateIndicatorLevels.Length; i++)
             {
                 var questStateIndicatorLevel = questStateIndicatorLevels[i];
-                var canbeUpdated = questStateIndicatorLevel.updateOnInitializeOnly == false || (questStateIndicatorLevel.updateOnInitializeOnly && isAnInitialization);
-                if (canbeUpdated && questStateIndicatorLevel.questState.HasFlag(questState) && questStateIndicatorLevel.condition.IsTrue(null))
+                if (questState == questStateIndicatorLevel.questState && questStateIndicatorLevel.condition.IsTrue(null))
                 {
                     if (DialogueDebug.logInfo) Debug.Log("Dialogue System: " + name + ": Quest '" + questName + "' changed to state " + questState + ".", this);
                     if (questStateIndicator != null) questStateIndicator.SetIndicatorLevel(this, questStateIndicatorLevel.indicatorLevel);
-                    questStateIndicatorLevel.onEnterState.Invoke();
+                    if (!m_suppressOnEnterStateEvent)
+                    {
+                        questStateIndicatorLevel.onEnterState.Invoke();
+                    }
                 }
             }
 
@@ -179,12 +179,14 @@ namespace PixelCrushers.DialogueSystem
             {
                 var questEntryStateIndicatorLevel = questEntryStateIndicatorLevels[i];
                 var questEntryState = QuestLog.GetQuestEntryState(questName, questEntryStateIndicatorLevel.entryNumber);
-                var canbeUpdated = questEntryStateIndicatorLevel.updateOnInitializeOnly == false || (questEntryStateIndicatorLevel.updateOnInitializeOnly && isAnInitialization);
-                if (canbeUpdated && questEntryStateIndicatorLevel.questState.HasFlag(questEntryState) && questEntryStateIndicatorLevel.condition.IsTrue(null))
+                if (questEntryState == questEntryStateIndicatorLevel.questState && questEntryStateIndicatorLevel.condition.IsTrue(null))
                 {
                     if (DialogueDebug.logInfo) Debug.Log("Dialogue System: " + name + ": Quest '" + questName + "' entry " + questEntryStateIndicatorLevel.entryNumber + " changed to state " + questEntryState + ".", this);
                     if (questStateIndicator != null) questStateIndicator.SetIndicatorLevel(this, questEntryStateIndicatorLevel.indicatorLevel);
-                    questEntryStateIndicatorLevel.onEnterState.Invoke();
+                    if (!m_suppressOnEnterStateEvent)
+                    {
+                        questEntryStateIndicatorLevel.onEnterState.Invoke();
+                    }
                 }
             }
         }
