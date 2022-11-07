@@ -23,6 +23,7 @@ namespace PixelCrushers.DialogueSystem
         [Serializable]
         public class QuestStateIndicatorLevel
         {
+            public bool updateOnStartOnly;
             [Tooltip("Quest state to listen for.")]
             public QuestState questState;
 
@@ -132,7 +133,7 @@ namespace PixelCrushers.DialogueSystem
                     questStateDispatcher.AddListener(this);
                 }
                 m_suppressOnEnterStateEvent = suppressOnEnterStateEventsOnStart;
-                UpdateIndicator();
+                UpdateIndicator(true);
                 m_suppressOnEnterStateEvent = false;
             }
         }
@@ -149,20 +150,23 @@ namespace PixelCrushers.DialogueSystem
 
         public virtual void OnChange()
         {
-            UpdateIndicator();
+            UpdateIndicator(false);
         }
 
         /// <summary>
         /// Update the current quest state indicator based on the specified quest state indicator 
         /// levels and quest entry state indicator levels.
         /// </summary>
-        public virtual void UpdateIndicator()
+        public virtual void UpdateIndicator(bool isOnStart)
         {
             // Check quest state:
             var questState = QuestLog.GetQuestState(questName);
             for (int i = 0; i < questStateIndicatorLevels.Length; i++)
             {
                 var questStateIndicatorLevel = questStateIndicatorLevels[i];
+                if (isOnStart && questStateIndicatorLevel.updateOnStartOnly == false)
+                    continue;
+
                 if (questState == questStateIndicatorLevel.questState && questStateIndicatorLevel.condition.IsTrue(null))
                 {
                     if (DialogueDebug.logInfo) Debug.Log("Dialogue System: " + name + ": Quest '" + questName + "' changed to state " + questState + ".", this);
