@@ -598,6 +598,9 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return new WaitForSeconds(.6f);
             m_seedLaunchFX.Play();
             yield return new WaitForSeconds(1.4f);
+            m_seedLaunchFX.Play();
+            m_seedLaunchFX.Stop();
+            m_seedLaunchFX.Play();
             m_seedLaunchFX.Stop();
             StartCoroutine(SeedSpawnRoutine());
             yield return null;
