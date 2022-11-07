@@ -36,8 +36,8 @@ namespace DChild.Gameplay.Characters.Enemies
             private float m_attackCD;
             public float attackCD => m_attackCD;
             [SerializeField]
-            private SimpleAttackInfo m_stompAttack = new SimpleAttackInfo();
-            public SimpleAttackInfo stompAttack => m_stompAttack;
+            private SimpleAttackInfo m_clawAttack = new SimpleAttackInfo();
+            public SimpleAttackInfo clawAttack => m_clawAttack;
             [SerializeField]
             private SimpleAttackInfo m_jumpAttack = new SimpleAttackInfo();
             public SimpleAttackInfo jumpAttack => m_jumpAttack;
@@ -66,9 +66,6 @@ namespace DChild.Gameplay.Characters.Enemies
             private string m_damageAnimation;
             public string damageAnimation => m_damageAnimation;
             [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_turnAnimation;
-            public string turnAnimation => m_turnAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
             private string m_deathAnimation;
             public string deathAnimation => m_deathAnimation;
 
@@ -89,7 +86,7 @@ namespace DChild.Gameplay.Characters.Enemies
 #if UNITY_EDITOR
                 m_patrol.SetData(m_skeletonDataAsset);
                 m_move.SetData(m_skeletonDataAsset);
-                m_stompAttack.SetData(m_skeletonDataAsset);
+                m_clawAttack.SetData(m_skeletonDataAsset);
                 m_jumpAttack.SetData(m_skeletonDataAsset);
                 m_biteAttack.SetData(m_skeletonDataAsset);
                 m_spitAttack.SetData(m_skeletonDataAsset);
@@ -121,7 +118,7 @@ namespace DChild.Gameplay.Characters.Enemies
         }
 
         [SerializeField, TabGroup("Modules")]
-        private AnimatedTurnHandle m_turnHandle;
+        private TransformTurnHandle m_turnHandle;
         [SerializeField, TabGroup("Modules")]
         private MovementHandle2D m_movement;
         [SerializeField, TabGroup("Modules")]
@@ -372,8 +369,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     yield return null;
                 }
                 m_turnState = State.Idle;
-                if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
-                    m_stateHandle.SetState(State.Turning);
+                m_stateHandle.SetState(State.Turning);
                 yield return null;
             }
         }
@@ -394,11 +390,21 @@ namespace DChild.Gameplay.Characters.Enemies
             m_stateHandle.ApplyQueuedState();
             yield return null;
         }
-        private IEnumerator StompRoutine()
+        private IEnumerator ClawRoutine()
         {
             m_movement.Stop();
-            m_animation.SetAnimation(0, m_info.stompAttack.animation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.stompAttack.animation);
+            m_animation.SetAnimation(0, m_info.clawAttack.animation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.clawAttack.animation);
+            m_animation.SetAnimation(0, m_info.idleAnimation, true);
+            m_flinchHandle.m_autoFlinch = true;
+            m_stateHandle.ApplyQueuedState();
+            yield return null;
+        }
+        private IEnumerator JumpRoutine()
+        {
+            m_movement.Stop();
+            m_animation.SetAnimation(0, m_info.jumpAttack.animation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.jumpAttack.animation);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_flinchHandle.m_autoFlinch = true;
             m_stateHandle.ApplyQueuedState();
@@ -476,8 +482,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     else
                     {
                         m_turnState = State.Detect;
-                        if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
-                            m_stateHandle.SetState(State.Turning);
+                        m_stateHandle.SetState(State.Turning);
                     }
                     break;
                 case State.Idle:
@@ -507,7 +512,10 @@ namespace DChild.Gameplay.Characters.Enemies
 
                 case State.Turning:
                     m_stateHandle.Wait(m_turnState);
-                    m_turnHandle.Execute(m_info.turnAnimation, m_info.idleAnimation);
+                    StopAllCoroutines();
+                    
+                    m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                    m_turnHandle.Execute();
                     break;
 
                 case State.Attacking:
@@ -519,13 +527,20 @@ namespace DChild.Gameplay.Characters.Enemies
 
                         case Attack.Spit:
                             m_animation.EnableRootMotion(false, false);
-                            if (IsTargetInRange(m_info.stompAttack.range))
+                            if (IsTargetInRange(m_info.clawAttack.range))
                             {
-                                StartCoroutine(StompRoutine());
+                                StartCoroutine(ClawRoutine());
                             }
                             else
                             {
-                                StartCoroutine(ProjectileRoutine());
+                                if (IsTargetInRange(m_info.jumpAttack.range))
+                                {
+                                    StartCoroutine(JumpRoutine());
+                                }
+                                else
+                                {
+                                    StartCoroutine(ProjectileRoutine());
+                                }
                             }
                             break;
                     }
@@ -539,8 +554,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     if (!IsFacingTarget())
                     {
                         m_turnState = State.Cooldown;
-                        if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
-                            m_stateHandle.SetState(State.Turning);
+                        m_stateHandle.SetState(State.Turning);
                     }
                     else
                     {
@@ -593,8 +607,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         else
                         {
                             m_turnState = State.ReevaluateSituation;
-                            if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
-                                m_stateHandle.SetState(State.Turning);
+                            m_stateHandle.SetState(State.Turning);
                         }
                     }
                     break;
