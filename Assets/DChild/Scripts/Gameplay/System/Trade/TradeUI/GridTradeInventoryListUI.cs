@@ -59,6 +59,7 @@ namespace DChild.Gameplay.Trade.UI
             }
         }
 
+
         public override void Reset()
         {
             SetPage(1);

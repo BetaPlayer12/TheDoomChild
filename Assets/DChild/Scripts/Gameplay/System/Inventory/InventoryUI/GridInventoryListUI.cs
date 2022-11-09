@@ -1,4 +1,5 @@
-﻿using Sirenix.OdinInspector;
+﻿using System;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace DChild.Gameplay.Inventories.UI
@@ -9,7 +10,7 @@ namespace DChild.Gameplay.Inventories.UI
         private int m_page;
         private int m_startIndex;
         private int m_availableSlot;
-
+        private bool m_itemSubscribed;
 
         public void SetPage(int pageNumber)
         {
@@ -42,6 +43,47 @@ namespace DChild.Gameplay.Inventories.UI
                 m_itemUIs[i].Hide();
             }
             InvokeListOverallChange();
+        }
+
+        [ContextMenu("Subscibe To Inventory Updates")]
+        public void SubscribeToInventoryUpdates()
+        {
+            if (m_itemSubscribed == false)
+            {
+                m_inventory.InventoryItemUpdate += OnInvnetoryItemUpdate;
+                m_itemSubscribed = true;
+            }
+
+        }
+
+        [ContextMenu("UnSubscibe To Inventory Updates")]
+        public void UnSubscribeToInventoryUpdates()
+        {
+            if (m_itemSubscribed)
+            {
+                m_inventory.InventoryItemUpdate -= OnInvnetoryItemUpdate;
+                m_itemSubscribed = false;
+
+            }
+        }
+
+
+        private void OnInvnetoryItemUpdate(object sender, ItemEventArgs eventArgs)
+        {
+            if (eventArgs.currentCount == 0 || eventArgs.countModification > 0)
+            {
+                UpdateUIList();
+            }
+            else if (eventArgs.currentCount != 0 && eventArgs.countModification < 0)
+            {
+                for (int i = 0; i < m_availableSlot; i++)
+                {
+                    if (eventArgs.data == m_itemUIs[i].reference.data)
+                    {
+                        m_itemUIs[i].UpdateCurrentReferenceDetails();
+                    }
+                }
+            }
         }
 
         public override void Reset()

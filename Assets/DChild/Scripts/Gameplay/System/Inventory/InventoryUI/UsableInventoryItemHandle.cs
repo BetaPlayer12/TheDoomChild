@@ -49,7 +49,7 @@ namespace DChild.Gameplay.Inventories.UI
         private void Awake()
         {
             m_player = GameplaySystem.playerManager.player;
-            //m_inventory = m_player.inventory;
+            m_inventory = m_player.inventory;
         }
     }
 }
