@@ -202,6 +202,7 @@ namespace DChild.Gameplay.Characters.Enemies
         //Patience Handler
         private void Patience()
         {
+            enabled = false;
             if (m_executeMoveCoroutine != null)
             {
                 StopCoroutine(m_executeMoveCoroutine);
@@ -209,6 +210,7 @@ namespace DChild.Gameplay.Characters.Enemies
             }
             m_stateHandle.SetState(State.ReturnToPatrol);
             m_targetInfo.Set(null, null);
+            enabled = true;
         }
 
         private IEnumerator AttackRoutine()

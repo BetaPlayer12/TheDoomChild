@@ -326,6 +326,7 @@ namespace DChild.Gameplay.Characters.Enemies
         //Patience Handler
         private void Patience()
         {
+            enabled = false;
             StopAllCoroutines();
             if (m_executeMoveCoroutine != null)
             {
@@ -343,6 +344,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_isDetecting = false;
             m_skeletomAnimation.maskInteraction = SpriteMaskInteraction.VisibleOutsideMask;
             m_spriteMask.SetActive(true);
+            enabled = true;
         }
 
         public override void ApplyData()
