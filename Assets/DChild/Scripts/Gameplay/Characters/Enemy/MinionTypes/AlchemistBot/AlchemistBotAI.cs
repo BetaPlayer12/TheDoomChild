@@ -615,7 +615,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 return;
             }
 
-            if (IsFacing(m_agent.hasPath && (m_targetInfo.isCharacter ? TargetBlocked() && !m_groundSensor.allRaysDetecting : !m_groundSensor.allRaysDetecting) && !m_roofSensor.allRaysDetecting ? m_agent.segmentDestination : target))
+            if (IsFacing(m_agent.hasPath && (m_targetInfo.isValid ? TargetBlocked() && !m_groundSensor.allRaysDetecting : !m_groundSensor.allRaysDetecting) && !m_roofSensor.allRaysDetecting ? m_agent.segmentDestination : target))
             {
                 if (!m_wallSensor.allRaysDetecting && (m_groundSensor.allRaysDetecting || m_roofSensor.allRaysDetecting))
                 {

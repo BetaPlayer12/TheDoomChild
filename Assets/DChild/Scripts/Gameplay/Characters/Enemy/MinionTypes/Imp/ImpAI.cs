@@ -569,7 +569,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 return;
             }
 
-            if (IsFacing(m_agent.hasPath && (m_targetInfo.isCharacter ? TargetBlocked() && !m_floorSensor.allRaysDetecting : !m_floorSensor.allRaysDetecting) && !m_roofSensor.allRaysDetecting ? m_agent.segmentDestination : m_targetInfo.position))
+            if (IsFacing(m_agent.hasPath && (m_targetInfo.isValid ? TargetBlocked() && !m_floorSensor.allRaysDetecting : !m_floorSensor.allRaysDetecting) && !m_roofSensor.allRaysDetecting ? m_agent.segmentDestination : m_targetInfo.position))
             {
                 if (m_animation.animationState.GetCurrent(0).IsComplete)
                 {
