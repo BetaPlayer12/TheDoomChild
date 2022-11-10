@@ -621,7 +621,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 {
                     m_bodyCollider.enabled = false;
                     m_agent.Stop();
-                    Vector3 dir = (m_targetInfo.position - (Vector2)m_rigidbody2D.transform.position).normalized;
+                    Vector3 dir = (target - (Vector2)m_rigidbody2D.transform.position).normalized;
                     m_rigidbody2D.MovePosition(m_rigidbody2D.transform.position + dir * movespeed * Time.fixedDeltaTime);
 
                     m_animation.SetAnimation(0, m_info.move.animation, true);
