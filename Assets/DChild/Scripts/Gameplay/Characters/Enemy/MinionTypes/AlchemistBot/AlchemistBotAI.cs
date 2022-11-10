@@ -468,6 +468,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_animation.DisableRootMotion();
                 m_hitbox.Enable();
             }
+            m_startPos = transform.position;
             m_stateHandle.OverrideState(State.ReevaluateSituation);
             yield return null;
         }
