@@ -20,21 +20,23 @@ namespace DChild.Gameplay.Systems
 {
     public class GameplayUIHandle : SerializedMonoBehaviour, IGameplayUIHandle, IGameplaySystemModule
     {
-        [SerializeField]
+        [SerializeField, FoldoutGroup("Signals")]
         private SignalSender m_cinemaSignal;
+        [SerializeField, FoldoutGroup("Signals")]
+        private SignalSender m_gameOverSignal;
 
-        [SerializeField, BoxGroup("Full Screen Notifications")]
+        [SerializeField, FoldoutGroup("Full Screen Notifications")]
         private SignalSender m_fullScreenNotifSignal;
-        [SerializeField, BoxGroup("Full Screen Notifications")]
+        [SerializeField, FoldoutGroup("Full Screen Notifications")]
         private UIContainer m_primarySkillNotification;
-        [SerializeField, BoxGroup("Full Screen Notifications")]
+        [SerializeField, FoldoutGroup("Full Screen Notifications")]
         private LoreInfoUI m_loreNotification;
-        [SerializeField, BoxGroup("Full Screen Notifications")]
+        [SerializeField, FoldoutGroup("Full Screen Notifications")]
         private IItemNotificationUI[] m_itemNotifications;
 
-        [SerializeField, BoxGroup("Merchant UI")]
+        [SerializeField, FoldoutGroup("Merchant UI")]
         private SignalSender m_tradeWindowSignal;
-        [SerializeField, BoxGroup("Merchant UI")]
+        [SerializeField, FoldoutGroup("Merchant UI")]
         private TradeManager m_tradeManager;
 
         [SerializeField]
@@ -47,20 +49,20 @@ namespace DChild.Gameplay.Systems
         private NavigationMapManager m_navMap;
 
 
-        [BoxGroup("Side Notification")]
-        [SerializeField, BoxGroup("Side Notification")]
+        [FoldoutGroup("Side Notification")]
+        [SerializeField, FoldoutGroup("Side Notification")]
         private LootAcquiredUI m_lootAcquiredUI;
-        [SerializeField, BoxGroup("Side Notification")]
+        [SerializeField, FoldoutGroup("Side Notification")]
         private StoreNotificationHandle m_storeNotification;
-        [SerializeField, BoxGroup("Side Notification")]
+        [SerializeField, FoldoutGroup("Side Notification")]
         private UIContainer m_journalNotification;
 
         [SerializeField]
         private UIContainer m_skippableUI;
 
-        [SerializeField, BoxGroup("Object Prompt")]
+        [SerializeField, FoldoutGroup("Object Prompt")]
         private UIContainer m_interactablePrompt;
-        [SerializeField, BoxGroup("Object Prompt")]
+        [SerializeField, FoldoutGroup("Object Prompt")]
         private UIContainer m_movableObjectPrompt;
 
         public void ToggleCinematicMode(bool on)
@@ -198,16 +200,9 @@ namespace DChild.Gameplay.Systems
             }
         }
 
-        public void ShowGameOverScreen(bool willshow)
+        public void ShowGameOverScreen()
         {
-            if (willshow == true)
-            {
-                GameEventMessage.SendEvent("Game Over");
-            }
-            else
-            {
-
-            }
+            m_gameOverSignal.SendSignal();
         }
 
         public void ShowItemAcquired(bool willshow)
