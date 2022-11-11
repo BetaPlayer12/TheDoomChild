@@ -1,15 +1,23 @@
- // Copyright (c) Pixel Crushers. All rights reserved.
+// Copyright (c) Pixel Crushers. All rights reserved.
 
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System;
+using UnityEngine.SceneManagement;
+using System.Linq;
+#if USE_ADDRESSABLES
+using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
+#endif
 
 namespace PixelCrushers.DialogueSystem
 {
-
     public delegate bool GetInputButtonDownDelegate(string buttonName);
 
     public delegate void TransformDelegate(Transform t);
+
+    public delegate void AssetLoadedDelegate(UnityEngine.Object asset);
 
     /// <summary>
     /// This component ties together the elements of the Dialogue System: dialogue database, 
@@ -44,20 +52,34 @@ namespace PixelCrushers.DialogueSystem
         public bool allowSimultaneousConversations = false;
 
         /// <summary>
+        /// If not allowing simultaneous conversations and a conversation is active, stop it if another conversation wants to start.
+        /// </summary>
+        [Tooltip("If not allowing simultaneous conversations and a conversation is active, stop it if another conversation wants to start.")]
+        public bool interruptActiveConversations = false;
+
+        /// <summary>
         /// Set <c>true</c> to include sim status for each dialogue entry.
         /// </summary>
         [Tooltip("Tick if your conversations reference Dialog[x].SimStatus.")]
         public bool includeSimStatus = false;
+
+        [Tooltip("Use a copy of the dialogue database at runtime instead of the asset file directly. This allows you to change the database without affecting the asset.")]
+        public bool instantiateDatabase = true;
 
         /// <summary>
         /// If <c>true</c>, preloads the master database and dialogue UI. Otherwise they're lazy-
         /// loaded only before the first time they're needed.
         /// </summary>
         [Tooltip("Preload the dialogue database and dialogue UI at Start. Otherwise they're loaded at first use.")]
-        public bool preloadResources = false;
+        public bool preloadResources = true;
 
-        [Tooltip("Use a copy of the dialogue database at runtime instead of the asset file directly. This allows you to change the database without affecting the asset.")]
-        public bool instantiateDatabase = true;
+        public enum WarmUpMode { On, Extra, Off }
+
+        [Tooltip("Warm up conversation engine and dialogue UI at Start to avoid a small amount of overhead on first use. 'Extra' performs deeper warmup that takes 1.25s at startup.")]
+        public WarmUpMode warmUpConversationController = WarmUpMode.On;
+
+        [Tooltip("Don't run HideImmediate on dialogue UI when warming it up on start.")]
+        public bool dontHideImmediateDuringWarmup = false;
 
         /// <summary>
         /// If <c>true</c>, Unity will not destroy the game object when loading a new level.
@@ -72,6 +94,12 @@ namespace PixelCrushers.DialogueSystem
         /// </summary>
         [Tooltip("Ensure only one Dialogue Manager in the scene.")]
         public bool allowOnlyOneInstance = true;
+
+        /// <summary>
+        /// If <c>true</c>, Dialogue System Triggers set to OnStart should wait until save data has been applied or variables initialized.
+        /// </summary>
+        [Tooltip("Dialogue System Triggers set to OnStart should wait until save data has been applied or variables initialized.")]
+        public bool onStartTriggerWaitForSaveDataApplied = false;
 
         /// <summary>
         /// Time mode to use for conversations.
@@ -107,7 +135,7 @@ namespace PixelCrushers.DialogueSystem
 
         /// <summary>
         /// Raised when the Dialogue System has completely initialized, including
-        /// loadin the initial dialogue database and registering Lua functions.
+        /// loading the initial dialogue database and registering Lua functions.
         /// </summary>
         public event System.Action initializationComplete = delegate { };
 
@@ -129,19 +157,22 @@ namespace PixelCrushers.DialogueSystem
         private bool m_isOverrideUIPrefab = false;
         private ConversationController m_conversationController = null;
         private IsDialogueEntryValidDelegate m_isDialogueEntryValid = null;
+        private System.Action m_customResponseTimeoutHandler = null;
         private GetInputButtonDownDelegate m_savedGetInputButtonDownDelegate = null;
         private LuaWatchers m_luaWatchers = new LuaWatchers();
-        private AssetBundleManager m_assetBundleManager = new AssetBundleManager();
+        private PixelCrushers.DialogueSystem.AssetBundleManager m_assetBundleManager = new PixelCrushers.DialogueSystem.AssetBundleManager();
         private bool m_started = false;
         private DialogueDebug.DebugLevel m_lastDebugLevelSet = DialogueDebug.DebugLevel.None;
         private List<ActiveConversationRecord> m_activeConversations = new List<ActiveConversationRecord>();
         private UILocalizationManager m_uiLocalizationManager = null;
         private bool m_calledRandomizeNextEntry = false;
+        private bool m_isDuplicateBeingDestroyed = false;
 
+        public static bool isWarmingUp = false;
         public static bool applicationIsQuitting = false;
         public static string lastInitialDatabaseName = null;
 
-#if UNITY_2019_3_OR_NEWER
+#if UNITY_2019_3_OR_NEWER && UNITY_EDITOR
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         static void InitStaticVariables()
         {
@@ -180,6 +211,16 @@ namespace PixelCrushers.DialogueSystem
         }
 
         /// <summary>
+        /// Convenience property that casts the dialogueUI property as a StandardDialogueUI.
+        /// If the dialogueUI is not a StandardDialogueUI, returns null.
+        /// </summary>
+        public StandardDialogueUI standardDialogueUI
+        {
+            get { return dialogueUI as StandardDialogueUI; }
+            set { SetDialogueUI(value); }
+        }
+
+        /// <summary>
         /// The IsDialogueEntryValid delegate (if one is assigned). This is an optional delegate that you
         /// can add to check if a dialogue entry is valid before allowing a conversation to use it.
         /// </summary>
@@ -194,6 +235,15 @@ namespace PixelCrushers.DialogueSystem
                 m_isDialogueEntryValid = value;
                 if (m_conversationController != null) m_conversationController.isDialogueEntryValid = value;
             }
+        }
+
+        /// <summary>
+        /// If response timeout action is set to Custom and menu times out, call this method.
+        /// </summary>
+        public System.Action customResponseTimeoutHandler
+        {
+            get { return m_customResponseTimeoutHandler; }
+            set { m_customResponseTimeoutHandler = value; }
         }
 
         /// <summary>
@@ -236,6 +286,8 @@ namespace PixelCrushers.DialogueSystem
         /// <value>The title of the last conversation started.</value>
         public string lastConversationStarted { get; private set; }
 
+        public string lastConversationEnded { get; private set; }
+
         /// <summary>
         /// Gets the ID of the last conversation started.
         /// </summary>
@@ -247,7 +299,15 @@ namespace PixelCrushers.DialogueSystem
 
         public ConversationView conversationView { get { return (m_conversationController != null) ? m_conversationController.conversationView : null; } }
 
+        /// <summary>
+        /// List of conversations that are currently active.
+        /// </summary>
         public List<ActiveConversationRecord> activeConversations { get { return m_activeConversations; } }
+
+        /// <summary>
+        /// Conversation that is currently being examined by Conditions, Scripts, OnConversationLine, etc.
+        /// </summary>
+        public ActiveConversationRecord activeConversation { get; set; }
 
         /// @cond FOR_V1_COMPATIBILITY
         public DatabaseManager DatabaseManager { get { return databaseManager; } }
@@ -282,10 +342,18 @@ namespace PixelCrushers.DialogueSystem
         /// <value><c>true</c> to warn when actor and conversant are the same; otherwise, <c>false</c>.</value>
         public bool warnIfActorAndConversantSame { get; set; }
 
+        /// <summary>
+        /// Unload addressables when changing scenes. Some sequencer commands such as Audio() do not unload their addressables, so this cleans them up.
+        /// </summary>
+        public bool unloadAddressablesOnSceneChange { get { return m_unloadAddressablesOnSceneChange; } set { m_unloadAddressablesOnSceneChange = value; } }
+        private bool m_unloadAddressablesOnSceneChange = true;
+
         public void OnDestroy()
         {
-            //--- No need to unregister. Static functions: UnregisterLuaFunctions();
             if (dontDestroyOnLoad && allowOnlyOneInstance) applicationIsQuitting = true;
+            if (!applicationIsQuitting && !m_isDuplicateBeingDestroyed && DialogueTime.isPaused) Unpause();
+            UnityEngine.SceneManagement.SceneManager.sceneLoaded -= OnSceneLoaded;
+            //--- No need to unregister static Lua functions: UnregisterLuaFunctions();
         }
 
         /// <summary>
@@ -298,13 +366,14 @@ namespace PixelCrushers.DialogueSystem
             if (allowOnlyOneInstance && (FindObjectsOfType<DialogueSystemController>().Length > 1))
             {
                 // Scene already has an instance, so destroy this one:
+                m_isDuplicateBeingDestroyed = true;
                 Destroy(gameObject);
             }
             else
             {
                 // Otherwise initialize this one:
                 getInputButtonDown = StandardGetInputButtonDown;
-                if (instantiateDatabase && initialDatabase != null)
+                if ((instantiateDatabase || (warmUpConversationController != WarmUpMode.Off)) && initialDatabase != null)
                 {
                     var databaseInstance = Instantiate(initialDatabase) as DialogueDatabase;
                     databaseInstance.name = initialDatabase.name;
@@ -348,6 +417,7 @@ namespace PixelCrushers.DialogueSystem
                 DialogueDebug.level = debugLevel;
                 m_lastDebugLevelSet = debugLevel;
                 lastConversationStarted = string.Empty;
+                lastConversationEnded = string.Empty;
                 lastConversationID = -1;
                 currentActor = null;
                 currentConversant = null;
@@ -355,6 +425,24 @@ namespace PixelCrushers.DialogueSystem
                 InitializeDatabase();
                 InitializeDisplaySettings();
                 InitializeLocalization();
+                QuestLog.RegisterQuestLogFunctions();
+                RegisterLuaFunctions();
+                UnityEngine.SceneManagement.SceneManager.sceneLoaded += OnSceneLoaded;
+            }
+        }
+
+        private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+        {
+            if (mode == LoadSceneMode.Single)
+            {
+                if (unloadAddressablesOnSceneChange)
+                {
+                    UnloadAssets();
+                }
+                else
+                {
+                    ClearLoadedAssetHashes();
+                }
             }
         }
 
@@ -417,8 +505,9 @@ namespace PixelCrushers.DialogueSystem
             StartCoroutine(MonitorAlerts());
             m_started = true;
             if (preloadResources) PreloadResources();
-            QuestLog.RegisterQuestLogFunctions();
-            RegisterLuaFunctions();
+            if (warmUpConversationController != WarmUpMode.Off) WarmUpConversationController();
+            //QuestLog.RegisterQuestLogFunctions(); // Moved to Awake.
+            //RegisterLuaFunctions();
             m_isInitialized = true;
             initializationComplete();
         }
@@ -443,15 +532,19 @@ namespace PixelCrushers.DialogueSystem
             {
                 displaySettings.localizationSettings.language = Localization.GetLanguage(Application.systemLanguage);
             }
-            var m_uiLocalizationManager = GetComponent<UILocalizationManager>();
+            var m_uiLocalizationManager = GetComponent<UILocalizationManager>() ?? FindObjectOfType<UILocalizationManager>();
             var needsLocalizationManager = !string.IsNullOrEmpty(displaySettings.localizationSettings.language) || displaySettings.localizationSettings.textTable != null;
             if (needsLocalizationManager && m_uiLocalizationManager == null)
             {
-                m_uiLocalizationManager = gameObject.AddComponent<UILocalizationManager>(); ;
+                m_uiLocalizationManager = gameObject.AddComponent<UILocalizationManager>();
             }
-            if (m_uiLocalizationManager != null && m_uiLocalizationManager.textTable == null)
+            if (m_uiLocalizationManager != null)
             {
-                m_uiLocalizationManager.textTable = displaySettings.localizationSettings.textTable;
+                m_uiLocalizationManager.Initialize();
+                if (m_uiLocalizationManager.textTable == null)
+                {
+                    m_uiLocalizationManager.textTable = displaySettings.localizationSettings.textTable;
+                }
             }
             if (m_uiLocalizationManager != null && !string.IsNullOrEmpty(m_uiLocalizationManager.currentLanguage))
             {
@@ -471,9 +564,22 @@ namespace PixelCrushers.DialogueSystem
         /// </param>
         public void SetLanguage(string language)
         {
+            if (m_uiLocalizationManager == null)
+            {
+                m_uiLocalizationManager = GetComponent<UILocalizationManager>() ?? FindObjectOfType<UILocalizationManager>();
+                if (m_uiLocalizationManager == null)
+                {
+                    m_uiLocalizationManager = gameObject.AddComponent<UILocalizationManager>();
+
+                }
+                if (m_uiLocalizationManager.textTable == null)
+                {
+                    m_uiLocalizationManager.textTable = displaySettings.localizationSettings.textTable;
+                }
+            }
+            m_uiLocalizationManager.currentLanguage = language;
             displaySettings.localizationSettings.language = language;
             Localization.language = language;
-            if (m_uiLocalizationManager != null) m_uiLocalizationManager.currentLanguage = language;
         }
 
         private void CheckDebugLevel()
@@ -593,10 +699,10 @@ namespace PixelCrushers.DialogueSystem
         /// direct camera angles and perform other actions. In PC-NPC conversations, the conversant
         /// is usually the NPC.
         /// </param>
-        public bool ConversationHasValidEntry(string title, Transform actor, Transform conversant)
+        public bool ConversationHasValidEntry(string title, Transform actor, Transform conversant, int initialDialogueEntryID = -1)
         {
             if (string.IsNullOrEmpty(title)) return false;
-            var model = new ConversationModel(m_databaseManager.masterDatabase, title, actor, conversant, allowLuaExceptions, isDialogueEntryValid);
+            var model = new ConversationModel(m_databaseManager.masterDatabase, title, actor, conversant, allowLuaExceptions, isDialogueEntryValid, initialDialogueEntryID, true, true);
             return model.hasValidEntry;
         }
 
@@ -642,6 +748,129 @@ namespace PixelCrushers.DialogueSystem
         {
             PreloadMasterDatabase();
             PreloadDialogueUI();
+            Sequencer.Preload();
+        }
+
+        /// <summary>
+        /// Stop and start a fake conversation to initialize things to avoid a small delay the first time a conversation starts.
+        /// </summary>
+        public void WarmUpConversationController()
+        {
+            if (isConversationActive) return;
+
+            // Get the dialogue UI canvas:
+            var abstractDialogueUI = dialogueUI as AbstractDialogueUI;
+            if (abstractDialogueUI == null) return;
+            var canvas = abstractDialogueUI.GetComponentInParent<Canvas>();
+            if (canvas == null) return;
+
+            isWarmingUp = true;
+
+            // Make it temporarily invisible:
+            var canvasGroup = abstractDialogueUI.GetComponent<CanvasGroup>();
+            var addTempCanvasGroup = canvasGroup == null;
+            if (addTempCanvasGroup) canvasGroup = abstractDialogueUI.gameObject.AddComponent<CanvasGroup>();
+            var previousAlpha = canvasGroup.alpha;
+            canvasGroup.alpha = 0;
+            var previousLogLevel = DialogueDebug.level;
+            DialogueDebug.level = DialogueDebug.DebugLevel.None;
+            if (warmUpConversationController == WarmUpMode.Extra)
+            {
+                StartCoroutine(WarmUpConversationControllerExtra(abstractDialogueUI, canvasGroup, addTempCanvasGroup, previousAlpha, previousLogLevel));
+            }
+            else
+            {
+                try
+                {
+                    var fakeConversation = CreateFakeConversation();
+                    masterDatabase.conversations.Add(fakeConversation);
+                    try
+                    {
+                        var model = new ConversationModel(databaseManager.masterDatabase, FakeConversationTitle, null, null, false, null);
+                        var view = this.gameObject.AddComponent<ConversationView>();
+                        view.Initialize(dialogueUI, GetNewSequencer(), displaySettings, OnDialogueEntrySpoken);
+                        view.SetPCPortrait(model.GetPCSprite(), model.GetPCName());
+                        var controller = new ConversationController();
+                        controller.Initialize(model, view, displaySettings.inputSettings.alwaysForceResponseMenu, OnEndConversation);
+                        var standardDialogueUI = abstractDialogueUI as StandardDialogueUI;
+                        if (standardDialogueUI != null && !dontHideImmediateDuringWarmup) standardDialogueUI.conversationUIElements.HideImmediate();
+                        controller.Close();
+                    }
+                    finally
+                    {
+                        masterDatabase.conversations.Remove(fakeConversation);
+                    }
+                }
+                finally
+                {
+                    isWarmingUp = false;
+                    DialogueDebug.level = previousLogLevel;
+                    if (addTempCanvasGroup)
+                    {
+                        Destroy(canvasGroup);
+                    }
+                    else
+                    {
+                        canvasGroup.alpha = previousAlpha;
+                    }
+                }
+            }
+        }
+
+        private IEnumerator WarmUpConversationControllerExtra(AbstractDialogueUI abstractDialogueUI, CanvasGroup canvasGroup, bool addTempCanvasGroup,
+            float previousAlpha, DialogueDebug.DebugLevel previousLogLevel)
+        {
+            var fakeConversation = CreateFakeConversation();
+            masterDatabase.conversations.Add(fakeConversation);
+            var model = new ConversationModel(databaseManager.masterDatabase, FakeConversationTitle, null, null, false, null);
+            var view = this.gameObject.AddComponent<ConversationView>();
+            view.Initialize(dialogueUI, GetNewSequencer(), displaySettings, OnDialogueEntrySpoken);
+            view.SetPCPortrait(model.GetPCSprite(), model.GetPCName());
+            var controller = new ConversationController();
+            controller.Initialize(model, view, displaySettings.inputSettings.alwaysForceResponseMenu, OnEndConversation);
+            controller.GotoState(model.GetState(fakeConversation.dialogueEntries[1]));
+            Canvas.ForceUpdateCanvases();
+            yield return new WaitForSeconds(1.25f);
+            var standardDialogueUI = abstractDialogueUI as StandardDialogueUI;
+            if (standardDialogueUI != null && !dontHideImmediateDuringWarmup) standardDialogueUI.conversationUIElements.HideImmediate();
+            controller.Close();
+            masterDatabase.conversations.Remove(fakeConversation);
+            DialogueDebug.level = previousLogLevel;
+            if (addTempCanvasGroup)
+            {
+                Destroy(canvasGroup);
+            }
+            else if (isWarmingUp)
+            {
+                canvasGroup.alpha = previousAlpha;
+            }
+            isWarmingUp = false;
+        }
+
+        private const int FakeConversationID = -1;
+        private const string FakeConversationTitle = "__Internal_Warmup__";
+
+        private Conversation CreateFakeConversation()
+        {
+            var fakeConversation = new Conversation();
+            fakeConversation.id = FakeConversationID;
+            fakeConversation.fields = new List<Field>();
+            fakeConversation.fields.Add(new Field("Title", FakeConversationTitle, FieldType.Text));
+            var entry = new DialogueEntry();
+            entry.conversationID = FakeConversationID;
+            entry.id = 0;
+            entry.fields = new List<Field>();
+            entry.Sequence = "None()";
+            entry.outgoingLinks.Add(new Link(FakeConversationID, 0, FakeConversationID, 1));
+            fakeConversation.dialogueEntries.Add(entry);
+            entry = new DialogueEntry();
+            entry.conversationID = FakeConversationID;
+            entry.fields = new List<Field>();
+            entry.id = 1;
+            entry.DialogueText = " ";
+            entry.Sequence = "Delay(2)";
+            fakeConversation.dialogueEntries.Add(entry);
+            return fakeConversation;
         }
 
         /// <summary>
@@ -673,6 +902,10 @@ namespace PixelCrushers.DialogueSystem
         /// </example>
         public void StartConversation(string title, Transform actor, Transform conversant, int initialDialogueEntryID)
         {
+            if (isConversationActive && !allowSimultaneousConversations && interruptActiveConversations)
+            {
+                StopConversation();
+            }
             if (isConversationActive && !allowSimultaneousConversations)
             {
                 if (DialogueDebug.logWarnings) Debug.LogWarning(string.Format("{0}: Another conversation is already active. Not starting '{1}'.", new System.Object[] { DialogueDebug.Prefix, title }));
@@ -691,35 +924,71 @@ namespace PixelCrushers.DialogueSystem
                     if (DialogueDebug.logWarnings) Debug.LogWarning(string.Format("{0}: Actor and conversant are the same GameObject.", new System.Object[] { DialogueDebug.Prefix }));
                 }
                 CheckDebugLevel();
+
+                // Save currentActor, Conversation, Conversation in case we need to back out:
+                var prevActor = currentActor;
+                var prevConversant = currentConversant;
+                var prevLastConversation = lastConversationStarted;
+
                 currentActor = actor;
                 currentConversant = conversant;
                 lastConversationStarted = title;
 
+                // If we previously overrode display settings or UI, restore the original:
+                if ((m_overrodeDisplaySettings && m_originalDisplaySettings != null) || (m_originalDialogueUI != null))
+                {
+                    RestoreOriginalUI();
+                }
+
                 SetConversationUI(actor, conversant);
 
                 m_calledRandomizeNextEntry = false;
+                m_conversationController = new ConversationController();
                 var model = new ConversationModel(m_databaseManager.masterDatabase, title, actor, conversant, allowLuaExceptions, isDialogueEntryValid, initialDialogueEntryID);
                 var needToSetRandomizeNextEntryAgain = m_calledRandomizeNextEntry; // Special case when START node leads to group node with RandomizeNextEntry().
                 m_calledRandomizeNextEntry = false;
-                if (!model.hasValidEntry) return;
-                if (model.firstState != null && model.firstState.subtitle != null && model.firstState.subtitle.dialogueEntry != null) lastConversationID = model.firstState.subtitle.dialogueEntry.conversationID;
+                if (!model.hasValidEntry)
+                {
+                    // Back out:
+                    currentActor = prevActor;
+                    currentConversant = prevConversant;
+                    lastConversationStarted = prevLastConversation;
+                    return;
+                }
+                if (model.firstState != null && model.firstState.subtitle != null && model.firstState.subtitle.dialogueEntry != null)
+                {
+                    lastConversationID = model.firstState.subtitle.dialogueEntry.conversationID;
+                    if (model.firstState.subtitle.dialogueEntry.isGroup && model.firstState.subtitle.sequence == string.Empty)
+                    {
+                        // If starting on a group node, immediately continue to next node:
+                        model.firstState.isGroup = false;
+                        model.firstState.subtitle.sequence = "Continue()";
+                    }
+                }
+                var sequencer = GetNewSequencer();
+                sequencer.keepCameraPositionOnClose = displaySettings.cameraSettings.keepCameraPositionAtConversationEnd;
                 var view = this.gameObject.AddComponent<ConversationView>();
-                view.Initialize(dialogueUI, GetNewSequencer(), displaySettings, OnDialogueEntrySpoken);
+                view.Initialize(dialogueUI, sequencer, displaySettings, OnDialogueEntrySpoken);
                 view.SetPCPortrait(model.GetPCSprite(), model.GetPCName());
-                m_conversationController = new ConversationController(model, view, displaySettings.inputSettings.alwaysForceResponseMenu, OnEndConversation);
+                m_conversationController.Initialize(model, view, displaySettings.inputSettings.alwaysForceResponseMenu, OnEndConversation);
                 if (needToSetRandomizeNextEntryAgain) RandomizeNextEntry();
-                var target = (actor != null) ? actor : this.transform;
-                if (actor != this.transform) gameObject.BroadcastMessage(DialogueSystemMessages.OnConversationStart, target, SendMessageOptions.DontRequireReceiver);
 
                 // Add an active conversation record to the list:
                 var record = new ActiveConversationRecord();
+                record.conversationTitle = title;
                 record.actor = actor;
                 record.conversant = conversant;
                 record.conversationController = m_conversationController;
+                record.conversationController.activeConversationRecord = record;
                 record.originalDialogueUI = m_originalDialogueUI;
                 record.originalDisplaySettings = m_originalDisplaySettings;
                 record.isOverrideUIPrefab = m_isOverrideUIPrefab;
                 m_activeConversations.Add(record);
+                activeConversation = record;
+                view.sequencer.activeConversationRecord = record;
+
+                var target = (actor != null) ? actor : this.transform;
+                if (actor != this.transform) gameObject.BroadcastMessage(DialogueSystemMessages.OnConversationStart, target, SendMessageOptions.DontRequireReceiver);
             }
         }
 
@@ -799,6 +1068,17 @@ namespace PixelCrushers.DialogueSystem
         }
 
         /// <summary>
+        /// Stops all current conversations immediately.
+        /// </summary>
+        public void StopAllConversations()
+        {
+            for (int i = DialogueManager.instance.activeConversations.Count - 1; i >= 0; i--)
+            {
+                DialogueManager.instance.activeConversations[i].conversationController.Close();
+            }
+        }
+
+        /// <summary>
         /// Updates the responses for the current state of the current conversation.
         /// If the response menu entries' conditions have changed while the response menu is
         /// being shown, you can call this method to update the response menu.
@@ -859,7 +1139,24 @@ namespace PixelCrushers.DialogueSystem
                 }
                 else
                 {
-                    sprite = UITools.CreateSprite(DialogueManager.LoadAsset(portraitName) as Texture2D);
+                    LoadAsset(portraitName, typeof(Sprite),
+                        (asset) =>
+                        {
+                            var spriteAsset = asset as Sprite;
+                            if (spriteAsset != null)
+                            {
+                                SetActorPortraitSprite(actorName, spriteAsset);
+                            }
+                            else
+                            {
+                                LoadAsset(portraitName, typeof(Texture2D),
+                                    (textureAsset) =>
+                                    {
+                                        SetActorPortraitSprite(actorName, UITools.CreateSprite(textureAsset as Texture2D));
+                                    });
+                            }
+                        });
+                    return;
                 }
             }
             if (DialogueDebug.logWarnings && (sprite == null)) Debug.LogWarning(string.Format("{0}: SetPortrait({1}, {2}): portrait image not found.", new System.Object[] { DialogueDebug.Prefix, actorName, portraitName }));
@@ -894,6 +1191,14 @@ namespace PixelCrushers.DialogueSystem
                 ApplyOverrideUI(overrideUI);
             }
             ValidateCurrentDialogueUI();
+
+            // If warmup is Extra and dialogue UI is in a canvas and has a CanvasGroup, make sure alpha is 1:
+            if (isWarmingUp && displaySettings.dialogueUI != null)
+            {
+                isWarmingUp = false;
+                var canvasGroup = displaySettings.dialogueUI.GetComponent<CanvasGroup>();
+                if (canvasGroup != null) canvasGroup.alpha = 1;
+            }
         }
 
         private OverrideUIBase FindHighestPriorityOverrideUI(Transform actor, Transform conversant)
@@ -928,6 +1233,7 @@ namespace PixelCrushers.DialogueSystem
                     ? overrideUI : null;
         }
 
+        // Activate and use an override dialogue UI.
         private void ApplyOverrideUI(OverrideUIBase overrideUI)
         {
             var overrideDialogueUI = overrideUI as OverrideDialogueUI;
@@ -954,6 +1260,7 @@ namespace PixelCrushers.DialogueSystem
             }
         }
 
+        // If dialogue UI was overridden, restore the original UI.
         private void RestoreOriginalUI()
         {
             if (m_overrodeDisplaySettings && m_originalDisplaySettings != null)
@@ -965,7 +1272,7 @@ namespace PixelCrushers.DialogueSystem
                 if (m_isOverrideUIPrefab)
                 {
                     MonoBehaviour uiBehaviour = m_currentDialogueUI as MonoBehaviour;
-                    if (uiBehaviour != null) Destroy(uiBehaviour.gameObject);
+                    if (uiBehaviour != null) HideAndDestroyUI(uiBehaviour);
                 }
                 m_currentDialogueUI = m_originalDialogueUI;
                 displaySettings.dialogueUI = (m_originalDialogueUI as MonoBehaviour).gameObject;
@@ -974,6 +1281,33 @@ namespace PixelCrushers.DialogueSystem
             m_originalDialogueUI = null;
             m_originalDisplaySettings = null;
             m_overrodeDisplaySettings = false;
+        }
+
+        // Calls StandardDialogueUI.Close() first or, if not StandardDialogueUI, destroys UI immediately.
+        private void HideAndDestroyUI(MonoBehaviour uiBehaviour)
+        {
+            var standardDialogueUI = uiBehaviour as StandardDialogueUI;
+            if (standardDialogueUI != null && standardDialogueUI.conversationUIElements.mainPanel != null)
+            {
+                StartCoroutine(HideAndDestroyUICoroutine(standardDialogueUI));
+            }
+            else
+            {
+                Destroy(uiBehaviour.gameObject);
+            }
+        }
+
+        // Gives StandardDialogueUI.Close() time to run.
+        // Assumes standardDialogueUI and mainPanel are assigned.
+        private IEnumerator HideAndDestroyUICoroutine(StandardDialogueUI standardDialogueUI)
+        {
+            var timeout = Time.realtimeSinceStartup + 8f; // Safeguard
+            standardDialogueUI.Close();
+            while (standardDialogueUI.conversationUIElements.mainPanel.panelState != UIPanel.PanelState.Closed && Time.realtimeSinceStartup < timeout)
+            {
+                yield return null;
+            }
+            Destroy(standardDialogueUI.gameObject);
         }
 
         private void OnDialogueEntrySpoken(Subtitle subtitle)
@@ -986,31 +1320,37 @@ namespace PixelCrushers.DialogueSystem
         /// </summary>
         public void OnEndConversation(ConversationController endingConversationController)
         {
+            activeConversation = null;
+
             // Find and remove the record associated with the ConversationController:
             var record = m_activeConversations.Find(r => r.conversationController == endingConversationController);
-
-            m_activeConversations.Remove(record);
-
-            // Promote a remaining active conversation, or clear out the active conversation properties:
-            if (m_activeConversations.Count > 0)
+            if (record != null)
             {
-                var nextRecord = m_activeConversations[0];
-                m_conversationController = nextRecord.conversationController;
-                currentActor = nextRecord.actor;
-                currentConversant = nextRecord.conversant;
-            }
-            else
-            {
-                m_conversationController = null;
-                currentActor = null;
-                currentConversant = null;
-            }
+                lastConversationStarted = record.conversationTitle;
 
-            // Restore UI:
-            m_originalDialogueUI = record.originalDialogueUI;
-            m_originalDisplaySettings = record.originalDisplaySettings;
-            m_isOverrideUIPrefab = record.isOverrideUIPrefab;
-            RestoreOriginalUI();
+                m_activeConversations.Remove(record);
+
+                // Promote a remaining active conversation, or clear out the active conversation properties:
+                if (m_activeConversations.Count > 0)
+                {
+                    var nextRecord = m_activeConversations[0];
+                    m_conversationController = nextRecord.conversationController;
+                    currentActor = nextRecord.actor;
+                    currentConversant = nextRecord.conversant;
+                }
+                else
+                {
+                    m_conversationController = null;
+                    currentActor = null;
+                    currentConversant = null;
+                }
+
+                // Restore UI:
+                m_originalDialogueUI = record.originalDialogueUI;
+                m_originalDisplaySettings = record.originalDisplaySettings;
+                m_isOverrideUIPrefab = record.isOverrideUIPrefab;
+                RestoreOriginalUI();
+            }
 
             // End of conversation checks:
             m_luaWatchers.NotifyObservers(LuaWatchFrequency.EndOfConversation);
@@ -1070,6 +1410,7 @@ namespace PixelCrushers.DialogueSystem
                         m_conversationController.GotoLastResponse();
                         break;
                     case ResponseTimeoutAction.Custom:
+                        if (customResponseTimeoutHandler != null) customResponseTimeoutHandler();
                         break;
                 }
             }
@@ -1175,12 +1516,16 @@ namespace PixelCrushers.DialogueSystem
             }
             var speakerInfo = GetCharacterInfoFromTransform(speaker);
             var listenerInfo = GetCharacterInfoFromTransform(listener);
-            var formattedText = FormattedText.Parse(barkText, masterDatabase.emphasisSettings);
+            var formattedText = FormattedText.Parse(GetLocalizedText(barkText), masterDatabase.emphasisSettings);
             if (sequence == null) sequence = string.Empty;
             var responseMenuSequence = string.Empty; // Not used in barks.
             DialogueEntry dialogueEntry = null;
             var subtitle = new Subtitle(speakerInfo, listenerInfo, formattedText, sequence, responseMenuSequence, dialogueEntry);
-            if (DialogueDebug.logInfo) Debug.Log("Dialogue System: " + speaker + " barking string '" + barkText + "'.");
+            if (DialogueDebug.logInfo)
+            {
+                var speakerName = (speakerInfo != null) ? (" (" + speakerInfo.Name + ")") : string.Empty;
+                Debug.Log("Dialogue System: " + speaker + speakerName + " barking string '" + barkText + "'.");
+            }
             StartCoroutine(BarkController.Bark(subtitle));
         }
 
@@ -1219,10 +1564,12 @@ namespace PixelCrushers.DialogueSystem
         /// </param>
         public void ShowAlert(string message, float duration)
         {
+            if (message == null) return;
             if (dialogueUI != null && (displaySettings.alertSettings.allowAlertsDuringConversations || !isConversationActive))
             {
                 if (message.Contains("\\n")) message = message.Replace("\\n", "\n");
-                dialogueUI.ShowAlert(GetLocalizedText(message), duration);
+                gameObject.BroadcastMessage(DialogueSystemMessages.OnShowAlert, message, SendMessageOptions.DontRequireReceiver);
+                dialogueUI.ShowAlert(GetLocalizedText(FormattedText.ParseCode(message)), duration);
             }
         }
 
@@ -1293,21 +1640,26 @@ namespace PixelCrushers.DialogueSystem
         /// <summary>
         /// Gets localized text.
         /// </summary>
-        /// <returns>If the specified field exists in the table, returns the field's 
+        /// <returns>If the specified field exists in the text tables, returns the field's 
         /// localized text for the current language. Otherwise returns the field itself.</returns>
         /// <param name="s">The field to look up.</param>
         public string GetLocalizedText(string s)
         {
-            if (displaySettings.localizationSettings.textTable == null)
+            string localizedText;
+            // Try the Dialogue Manager's text table first:
+            var textTable = displaySettings.localizationSettings.textTable;
+            if (textTable != null)
             {
-                return s;
+                var languageID = Localization.GetCurrentLanguageID(textTable);
+                if (textTable.HasFieldTextForLanguage(s, languageID))
+                {
+                    localizedText = textTable.GetFieldTextForLanguage(s, languageID);
+                    if (!string.IsNullOrEmpty(localizedText)) return localizedText;
+                }
             }
-            else
-            {
-                var textTable = displaySettings.localizationSettings.textTable;
-                string localizedText = textTable.GetFieldTextForLanguage(s, Localization.GetCurrentLanguageID(textTable));
-                return string.IsNullOrEmpty(localizedText) ? s : localizedText;
-            }
+            // Failing that, try the UILocalizationManager's text table(s):
+            localizedText = UILocalizationManager.instance.GetLocalizedText(s);
+            return string.IsNullOrEmpty(localizedText) ? s : localizedText;
         }
 
         /// <summary>
@@ -1489,20 +1841,25 @@ namespace PixelCrushers.DialogueSystem
                 if (Tools.IsPrefab(uiBehaviour.gameObject))
                 {
                     // If prefab, instantiate it:
-                    var instanceGO = Instantiate(uiBehaviour.gameObject);
-                    instanceGO.name = uiBehaviour.gameObject.name;
-                    uiBehaviour = instanceGO.GetComponent(typeof(IDialogueUI)) as MonoBehaviour;
+                    GameObject instanceGO;
                     if (uiBehaviour is CanvasDialogueUI && uiBehaviour.GetComponentInChildren<Canvas>() == null)
                     {
                         // If a canvas-based UI that doesn't come with its own canvas, add a canvas:
                         var canvas = GetOrCreateDefaultCanvas();
-                        instanceGO.transform.SetParent(canvas.transform, false);
+                        instanceGO = Instantiate(uiBehaviour.gameObject, canvas.transform, false);
+                        uiBehaviour = instanceGO.GetComponent(typeof(IDialogueUI)) as MonoBehaviour;
                     }
                     else
                     {
-                        // Otherwise make it a direct child of the Dialogue Manager:
-                        instanceGO.transform.SetParent(transform);
+                        instanceGO = Instantiate(uiBehaviour.gameObject, transform);
+                        uiBehaviour = instanceGO.GetComponent(typeof(IDialogueUI)) as MonoBehaviour;
+                        if (uiBehaviour is CanvasDialogueUI && uiBehaviour.GetComponentInChildren<Canvas>() == null)
+                        {
+                            var canvas = GetOrCreateDefaultCanvas();
+                            instanceGO.transform.SetParent(canvas.transform, false);
+                        }
                     }
+                    instanceGO.name = uiBehaviour.gameObject.name;
                 }
 
                 displaySettings.dialogueUI = uiBehaviour.gameObject;
@@ -1592,6 +1949,7 @@ namespace PixelCrushers.DialogueSystem
 
         private Canvas GetOrCreateDefaultCanvas()
         {
+            if (displaySettings.defaultCanvas != null) return displaySettings.defaultCanvas;
             var canvas = GetComponentInChildren<Canvas>();
             if (canvas == null)
             {
@@ -1605,6 +1963,23 @@ namespace PixelCrushers.DialogueSystem
                 canvasObject.transform.SetParent(transform);
             }
             return canvas;
+        }
+
+        /// <summary>
+        /// Sets the dialogue UI's main panel visible or invisible.
+        /// </summary>
+        /// <param name="show">If true, show (or re-show) the panel; if false, hide it.</param>
+        /// <param name="immediate">If true, skip animation and change immediately.</param>
+        public void SetDialoguePanel(bool show, bool immediate = false)
+        {
+            if (conversationView == null)
+            {
+                if (DialogueDebug.logWarnings) Debug.LogWarning("Dialogue System: SetDialoguePanel() is only valid when a conversation is active.");
+            }
+            else
+            {
+                conversationView.sequencer.SetDialoguePanel(show, immediate);
+            }
         }
 
         private Sequencer GetNewSequencer()
@@ -1625,7 +2000,7 @@ namespace PixelCrushers.DialogueSystem
             //Lua.RegisterFunction("ShowAlert", null, typeof(DialogueSystemController).GetMethod("LuaShowAlert"));
 
             // Unregister previous instance's versions first:
-            Lua.UnregisterFunction("RandomizeNextEntry"); 
+            Lua.UnregisterFunction("RandomizeNextEntry");
             Lua.UnregisterFunction("UpdateTracker");
             // Then register functions:
             Lua.RegisterFunction("ShowAlert", null, SymbolExtensions.GetMethodInfo(() => LuaShowAlert(string.Empty)));
@@ -1635,6 +2010,10 @@ namespace PixelCrushers.DialogueSystem
             Lua.RegisterFunction("GetEntryText", null, SymbolExtensions.GetMethodInfo(() => GetEntryText((double)0, string.Empty)));
             Lua.RegisterFunction("GetEntryBool", null, SymbolExtensions.GetMethodInfo(() => GetEntryBool((double)0, string.Empty)));
             Lua.RegisterFunction("GetEntryNumber", null, SymbolExtensions.GetMethodInfo(() => GetEntryNumber((double)0, string.Empty)));
+            Lua.RegisterFunction("Conditional", null, SymbolExtensions.GetMethodInfo(() => Conditional(string.Empty, string.Empty)));
+            Lua.RegisterFunction("ChangeActorName", this, SymbolExtensions.GetMethodInfo(() => ChangeActorName(string.Empty, string.Empty)));
+            // Register DialogueLua in case they got unregistered:
+            DialogueLua.RegisterLuaFunctions();
         }
 
         private void UnregisterLuaFunctions()
@@ -1646,6 +2025,8 @@ namespace PixelCrushers.DialogueSystem
             Lua.UnregisterFunction("GetEntryText");
             Lua.UnregisterFunction("GetEntryBool");
             Lua.UnregisterFunction("GetEntryNumber");
+            Lua.UnregisterFunction("Conditional");
+            Lua.UnregisterFunction("ChangeActorName");
         }
 
         public void SendUpdateTracker()
@@ -1692,6 +2073,32 @@ namespace PixelCrushers.DialogueSystem
             m_calledRandomizeNextEntry = true;
             if (conversationController != null) conversationController.randomizeNextEntry = true;
         }
+
+        public static string Conditional(string condition, string value)
+        {
+            return Lua.IsTrue(condition) ? value : string.Empty;
+        }
+
+        /// <summary>
+        /// Changes an actor's Display Name.
+        /// </summary>
+        /// <param name="actorName">Actor's Name field.</param>
+        /// <param name="newDisplayName">New Display Name value.</param>
+        public static void ChangeActorName(string actorName, string newDisplayName)
+        {
+            if (DialogueDebug.logInfo) Debug.Log("Dialogue System: Changing " + actorName + "'s Display Name to " + newDisplayName);
+            DialogueLua.SetActorField(actorName, "Display Name", newDisplayName);
+            if (DialogueManager.isConversationActive)
+            {
+                var actor = DialogueManager.MasterDatabase.GetActor(actorName);
+                if (actor != null)
+                {
+                    var info = DialogueManager.ConversationModel.GetCharacterInfo(actor.id);
+                    if (info != null) info.Name = newDisplayName;
+                }
+            }
+        }
+
 
         /// <summary>
         /// Adds a Lua expression observer.
@@ -1797,23 +2204,206 @@ namespace PixelCrushers.DialogueSystem
 
         /// <summary>
         /// Loads a named asset from the registered asset bundles or from Resources.
+        /// Note: This version now also works with Addressables, and works synchronously.
         /// </summary>
         /// <returns>The asset, or <c>null</c> if not found.</returns>
         /// <param name="name">Name of the asset.</param>
         public UnityEngine.Object LoadAsset(string name)
         {
-            return m_assetBundleManager.Load(name);
+            var result = m_assetBundleManager.Load(name);
+            if (result != null) return result;
+
+#if USE_ADDRESSABLES
+            var loc = Addressables.LoadResourceLocationsAsync(name).WaitForCompletion();
+            if (loc.Count > 0)
+            {
+                return Addressables.LoadAssetAsync<UnityEngine.Object>(name).WaitForCompletion();
+            }
+            else
+            {
+                return null;
+            }
+#else
+            return null;
+#endif
         }
 
         /// <summary>
         /// Loads a named asset from the registered asset bundles or from Resources.
+        /// Note: This version now also works with Addressables, and works synchronously.
         /// </summary>
         /// <returns>The asset, or <c>null</c> if not found.</returns>
         /// <param name="name">Name of the asset.</param>
         /// <param name="type">Type of the asset.</param>
         public UnityEngine.Object LoadAsset(string name, System.Type type)
         {
-            return m_assetBundleManager.Load(name, type);
+            var result = m_assetBundleManager.Load(name, type);
+            if (result != null) return result;
+
+#if USE_ADDRESSABLES
+            var loc = Addressables.LoadResourceLocationsAsync(name).WaitForCompletion();
+            if (loc.Count > 0)
+            {
+                return Addressables.LoadAssetAsync<UnityEngine.Object>(name).WaitForCompletion();
+            }
+            else
+            {
+                return null;
+            }
+#else
+            return null;
+#endif
+        }
+
+        // For async Addressables support:
+        protected Dictionary<string, List<AssetLoadedDelegate>> m_assetsBeingLoaded = new Dictionary<string, List<AssetLoadedDelegate>>();
+
+        protected void AddDelegateForAssetBeingLoaded(string name, AssetLoadedDelegate assetLoaded)
+        {
+            if (!m_assetsBeingLoaded.ContainsKey(name))
+            {
+                m_assetsBeingLoaded.Add(name, new List<AssetLoadedDelegate>());
+            }
+            m_assetsBeingLoaded[name].Add(assetLoaded);
+        }
+
+        protected void RemoveDelegatesForAssetBeingLoaded(string name)
+        {
+            if (string.IsNullOrEmpty(name))
+            {
+                // If empty, remove first/only delegate:
+                if (m_assetsBeingLoaded.Count > 0)
+                {
+                    m_assetsBeingLoaded.Remove(m_assetsBeingLoaded.First().Key);
+                }
+            }
+            else
+            {
+                m_assetsBeingLoaded.Remove(name);
+            }
+        }
+
+        protected void CallDelegatesForAssetBeingLoaded(string name, UnityEngine.Object asset)
+        {
+            List<AssetLoadedDelegate> delegates = null;
+            if (string.IsNullOrEmpty(name))
+            {
+                // If empty, call first/only delegate:
+                if (m_assetsBeingLoaded.Count > 0)
+                {
+                    delegates = m_assetsBeingLoaded.First().Value;
+                }
+            }
+            else
+            {
+                if (!m_assetsBeingLoaded.TryGetValue(name, out delegates))
+                {
+                    delegates = null;
+                }
+            }
+            if (delegates != null)
+            {
+                var count = delegates.Count;
+                for (int i = 0; i < count; i++)
+                {
+                    delegates[i](asset);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Loads a named asset from the registered asset bundles, Resources, or
+        /// Addressables. Returns the asset in a callback delegate.
+        /// </summary>
+        /// <param name="name">Name of the asset.</param>
+        /// <param name="type">Type of the asset</param>
+        /// <param name="assetLoaded">Delegate method to call when returning loaded asset, or <c>null</c> if not found.</param>
+        public void LoadAsset(string name, System.Type type, AssetLoadedDelegate assetLoaded)
+        {
+            var asset = m_assetBundleManager.Load(name, type);
+            if (asset != null)
+            {
+                assetLoaded(asset);
+                return;
+            }
+#if USE_ADDRESSABLES
+            AddDelegateForAssetBeingLoaded(name, assetLoaded);
+            Addressables.LoadResourceLocationsAsync(name).Completed += (loc) =>
+            {
+                // If we have a result, load it. Otherwise return null;
+                if (loc.Result.Count > 0)
+                {
+                    Addressables.LoadAssetAsync<UnityEngine.Object>(name).Completed += (obj) => LoadCompleted(name, obj);
+                }
+                else
+                {
+                    RemoveDelegatesForAssetBeingLoaded(name);
+                    assetLoaded(null);
+                    return;
+                }
+            };
+#else
+            assetLoaded(null);
+#endif
+        }
+
+#if USE_ADDRESSABLES
+        // We need to record which addressables we've loaded so we know
+        // whether to tell Addressables to unload them or not.
+        private HashSet<int> loadedAddressableHashes = new HashSet<int>();
+        private List<UnityEngine.Object> loadedAddressables = new List<UnityEngine.Object>();
+
+        private void LoadCompleted(string name, AsyncOperationHandle<UnityEngine.Object> obj)
+        {
+            UnityEngine.Object result = null;
+            if (obj.Result != null)
+            {
+                result = obj.Result;
+                loadedAddressables.Add(result);
+                loadedAddressableHashes.Add(result.GetHashCode());
+            }
+            CallDelegatesForAssetBeingLoaded(name, result);
+            RemoveDelegatesForAssetBeingLoaded(name);
+        }
+#endif
+
+        /// <summary>
+        /// Unloads an object previously loaded by LoadAsset. Only unloads
+        /// if using addressables.
+        /// </summary>
+        public void UnloadAsset(object obj)
+        {
+#if USE_ADDRESSABLES
+            if (obj != null && loadedAddressables.Contains(obj as UnityEngine.Object))
+            {
+                loadedAddressableHashes.Remove(obj.GetHashCode());
+                loadedAddressables.Remove(obj as UnityEngine.Object);
+                Addressables.Release(obj);
+            }
+#endif
+        }
+
+        /// <summary>
+        /// Clears the register of loaded addressables. Typically called
+        /// automatically when a scene is loaded/unloaded.
+        /// </summary>
+        public void ClearLoadedAssetHashes()
+        {
+#if USE_ADDRESSABLES
+            loadedAddressableHashes.Clear();
+#endif
+        }
+
+        public void UnloadAssets()
+        {
+#if USE_ADDRESSABLES
+            for (int i = loadedAddressables.Count - 1; i >= 0; i--)
+            {
+                Addressables.Release(loadedAddressables[i]);
+            }
+            loadedAddressables.Clear();
+            loadedAddressableHashes.Clear();
+#endif
         }
 
 #if EVALUATION_VERSION
@@ -1823,8 +2413,9 @@ namespace PixelCrushers.DialogueSystem
         protected virtual void LateUpdate()
         {
             if (watermark != null) return;
-            watermark = new GameObject("Eval");
+            watermark = new GameObject(System.Guid.NewGuid().ToString());
             watermark.transform.SetParent(transform);
+            watermark.hideFlags = HideFlags.HideInHierarchy;
             var canvas = watermark.AddComponent<Canvas>();
             canvas.renderMode = RenderMode.ScreenSpaceOverlay;
             canvas.sortingOrder = 16383;
@@ -1836,12 +2427,11 @@ namespace PixelCrushers.DialogueSystem
             text.fontSize = 24;
             text.fontStyle = FontStyle.Bold;
             text.color = new Color(1, 1, 1, 0.75f);
-            text.alignment = (Random.value < 0.5f) ? TextAnchor.UpperLeft: TextAnchor.LowerRight;
+            text.alignment = (UnityEngine.Random.value < 0.5f) ? TextAnchor.UpperLeft: TextAnchor.LowerRight;
             text.raycastTarget = false;
         }
 
 #endif
-
 
     }
 

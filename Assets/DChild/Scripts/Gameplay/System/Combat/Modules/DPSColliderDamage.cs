@@ -40,7 +40,7 @@ namespace DChild.Gameplay.Combat
                 if (IsValidHitboxToHit(collider2D, hitbox))
                 {
                     OnValidCollider(collider2D, hitbox);
-                   
+
                 }
             }
         }
@@ -89,7 +89,6 @@ namespace DChild.Gameplay.Combat
 
         private void LateUpdate()
         {
-           
             for (int i = m_infos.Count - 1; i >= 0; i--)
             {
                 var info = m_infos[i];
@@ -105,7 +104,7 @@ namespace DChild.Gameplay.Combat
                     else
                     {
                         info.damageTimer = m_damageInterval;
-                        
+
                         if (CanBypassHitboxInvulnerability(toDamage))
                         {
                             var collision = m_affectedColliders[i];
@@ -127,7 +126,7 @@ namespace DChild.Gameplay.Combat
             }
         }
 
-      
+
 
         private void OnTriggerExit2D(Collider2D collision)
         {

@@ -40,13 +40,13 @@ namespace PixelCrushers
 
         private void Update()
         {
-            if (m_mainCamera == null) m_mainCamera = Camera.main;
-            if (m_mainCamera == null) return;
+            if (m_mainCamera == null || !m_mainCamera.enabled || !m_mainCamera.gameObject.activeInHierarchy) m_mainCamera = Camera.main;
+            if (m_mainCamera == null || !m_mainCamera.enabled || !m_mainCamera.gameObject.activeInHierarchy) return;
             if (rotate180)
             {
                 if (yAxisOnly)
                 {
-                    transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, (m_mainCamera.transform.rotation.eulerAngles + 180f * Vector3.up).y, transform.rotation.eulerAngles.x);
+                    transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, (m_mainCamera.transform.rotation.eulerAngles + 180f * Vector3.up).y, transform.rotation.eulerAngles.z);
                 }
                 else
                 {
@@ -57,7 +57,7 @@ namespace PixelCrushers
             {
                 if (yAxisOnly)
                 {
-                    transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, m_mainCamera.transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.x);
+                    transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, m_mainCamera.transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z);
                 }
                 else
                 {

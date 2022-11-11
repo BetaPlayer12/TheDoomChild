@@ -1,4 +1,5 @@
 ﻿using DChild.Gameplay.Characters.Enemies;
+using Doozy.Runtime.UIManager.Containers;
 using Holysoft.Gameplay.UI;
 using UnityEngine;
 
@@ -7,12 +8,23 @@ namespace DChild.Gameplay.Combat.UI
     public class BossCombatUI : MonoBehaviour
     {
         [SerializeField]
+        private UIContainer m_container;
+        [SerializeField]
         private BossBannerUI m_bossBanner;
         [SerializeField]
         private SliderStatUI m_bossHealth;
         [SerializeField]
         private SegmentedStatUI m_segmentedBossHealth;
 
+        public void Show()
+        {
+            m_container.Show(true);
+        }
+
+        public void Hide()
+        {
+            m_container.Hide(true);
+        }
 
         public void SetBoss(Boss boss)
         {

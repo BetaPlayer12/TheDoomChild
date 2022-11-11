@@ -52,7 +52,7 @@ namespace DChild.Menu.Inputs
                 case InputDeviceChange.Enabled:
                     if (m_hasGamepad == false)
                     {
-                        var currentGamepad = Gamepad.current.device;
+                        var currentGamepad = Gamepad.current?.device ?? null;
                         if (currentGamepad != null)
                         {
                             m_hasGamepad = true;

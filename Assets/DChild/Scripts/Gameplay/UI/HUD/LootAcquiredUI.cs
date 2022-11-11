@@ -1,4 +1,5 @@
 ﻿using DChild.Gameplay.Systems;
+using Doozy.Runtime.UIManager.Containers;
 using UnityEngine;
 
 namespace DChild.Gameplay.UI
@@ -6,7 +7,14 @@ namespace DChild.Gameplay.UI
     public class LootAcquiredUI : MonoBehaviour
     {
         [SerializeField]
+        private UIContainer m_container;
+        [SerializeField]
         private IndividualLootAcquiredUI[] m_individualLootUIs;
+
+        public void Show()
+        {
+            m_container.Show(true);
+        }
 
         public void SetDetails(LootList lootList)
         {

@@ -93,11 +93,12 @@ namespace DChild.Menu.Bestiary
         {
             if (sprite == null)
             {
-                image.color = Color.clear;
+                image.sprite = sprite;
+                //image.color = Color.clear;
             }
             else
             {
-                image.color = Color.white;
+                //image.color = Color.white;
                 image.sprite = sprite;
             }
         }

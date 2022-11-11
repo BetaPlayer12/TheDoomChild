@@ -113,7 +113,6 @@ namespace DChild.Gameplay
             m_playerManager?.DisableInput();
             isGamePaused = true;
             GameSystem.SetCursorVisibility(true);
-
             MasterAudio.PauseEverything();
             //PostProcess.SetActiveToAll(false);
         }
@@ -158,14 +157,14 @@ namespace DChild.Gameplay
 
         public static void SetInputActive(bool isActive)
         {
-            if (isActive)
-            {
-                m_playerManager?.gameplayInput.Enable();
-            }
-            else
-            {
-                m_playerManager?.gameplayInput.Disable();
-            }
+            //if (isActive)
+            //{
+            //    m_playerManager?.gameplayInput.Enable();
+            //}
+            //else
+            //{
+            //    m_playerManager?.gameplayInput.Disable();
+            //}
         }
 
         public static void ListenToNextSceneLoad()

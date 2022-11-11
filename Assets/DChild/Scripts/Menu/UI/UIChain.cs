@@ -30,6 +30,7 @@ namespace DChild.UI
             m_lastToPosition = m_to.position;
         }
 
+        [ContextMenu("Update Chain")]
         void Update()
         {
             var position = m_from.position + m_fromOffset;

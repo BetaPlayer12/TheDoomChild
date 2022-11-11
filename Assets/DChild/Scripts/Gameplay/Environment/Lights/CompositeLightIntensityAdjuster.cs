@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Experimental.Rendering.Universal;
+
 using System;
 #if UNITY_EDITOR
 using UnityEditor;
@@ -16,7 +16,7 @@ namespace DChild.Gameplay.Environment
         [SerializeField, Range(0, 100), OnValueChanged("OnIntesityChanged")]
         private float m_intensityPercent = 100f;
         [SerializeField,HorizontalGroup("Light")]
-        public Light2D[] m_lights;
+        public UnityEngine.Rendering.Universal.Light2D[] m_lights;
         [SerializeField, ReadOnly, HorizontalGroup("Light")]
         private float[] m_originalIntensity;
 

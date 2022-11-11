@@ -2,7 +2,7 @@
 using DChild.Gameplay.Combat;
 using DChild.Gameplay.Pooling;
 using DChild.Gameplay.Projectiles;
-using Doozy.Engine;
+using DChild.Temp;
 using Holysoft.Collections;
 using Holysoft.Event;
 using Holysoft.Pooling;
@@ -234,13 +234,19 @@ namespace DChild.Gameplay.Characters.Enemies
         private CountdownTimer m_attackIntervalTimer;
         private List<Projectile> m_soundBallList;
 
+        private bool m_isDetecting;
+
 
         public override void SetTarget(IDamageable damageable, Character m_target = null)
         {
             if (damageable != null)
             {
                 base.SetTarget(damageable, m_target);
-                GameEventMessage.SendEvent("Boss Encounter");
+                if (!m_isDetecting)
+                {
+                    m_isDetecting = true;
+                    GameEventMessage.SendEvent("Boss Encounter");
+                }
             }
         }
 
@@ -259,6 +265,7 @@ namespace DChild.Gameplay.Characters.Enemies
             this.enabled = false;
             GetComponentInChildren<Hitbox>().Disable();
             m_animation.SetAnimation(0, m_info.defeatAnimation, false);
+            m_isDetecting = false;
         }
 
         private void UpdateAttackList(IReadOnlyList<Attack> availableAttacks)

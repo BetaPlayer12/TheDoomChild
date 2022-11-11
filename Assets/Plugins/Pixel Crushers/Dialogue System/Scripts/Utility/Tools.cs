@@ -17,8 +17,10 @@ namespace PixelCrushers.DialogueSystem
 
         public static void DeprecationWarning(MonoBehaviour mb, string extraInfo = null)
         {
+#if !SUPPRESS_DEPRECATION_WARNINGS
             if (mb == null) return;
-            Debug.LogWarning("Dialogue System: " + mb.GetType().Name + " is deprecated and will be removed in the next version. " + extraInfo, mb);
+            Debug.LogWarning("Dialogue System: " + mb.GetType().Name + " is deprecated and will be removed in the next version. " + extraInfo + "\nTo supress this message, add the scripting define symbol SUPPRESS_DEPRECATION_WARNINGS", mb);
+#endif
         }
 
         /// <summary>
@@ -120,6 +122,17 @@ namespace PixelCrushers.DialogueSystem
         public static bool IsStringNullOrEmptyOrWhitespace(string s)
         {
             return string.IsNullOrEmpty(s) || string.IsNullOrEmpty(s.Trim());
+        }
+
+        /// <summary>
+        /// Returns the remainder of a string after all forward slashes, or
+        /// the enter string if it doesn't contain any forward slashes.
+        /// </summary>
+        public static string GetAllAfterSlashes(string s)
+        {
+            if (string.IsNullOrEmpty(s) || !s.Contains("/")) return s;
+            var pos = s.LastIndexOf("/") + 1;
+            return (0 < pos && pos < s.Length) ? s.Substring(pos) : s;
         }
 
         /// <summary>
@@ -327,19 +340,19 @@ namespace PixelCrushers.DialogueSystem
         public static string StripRichTextCodes(string s)
         {
             if (!s.Contains("<")) return s;
-            return Regex.Replace(s, @"<b>|</b>|<i>|</i>|<color=[#]\w+>|</color>", string.Empty);
+            return Regex.Replace(s, @"<b>|</b>|<i>|</i>|<p>|</p>|<\\/p>|<color=[#]?\w+>|</color>", string.Empty);
         }
 
         public static string StripTextMeshProTags(string s)
         {
             if (!s.Contains("<")) return s;
-            return Regex.Replace(s, @"<b>|</b>|<i>|</i>|<color=#\w+>|<color=""\w+"">|</color>|" +
-                @"<align=\w+>|</align>|<font=\w+>|</font>|<indent=\w+[%]>|</indent>|" +
-                @"<line-height=\w+[%]>|</line-height>|<line-indent=\w+[%]>|</line-ident>|" +
+            return Regex.Replace(s, @"<[Bb]>|</[Bb]>|<[Ii]>|</[Ii]>|<color=[#]?\w+>|<color=""\w+"">|</color>|" +
+                @"<align=\w+>|</align>|<font=[^>]+>|</font>|<indent=\w+\%>|<indent=\w+>|</indent>|" +
+                @"<line-height=\w+%>|<line-height=\w+>|</line-height>|<line-indent=\w+\%>|<line-ident=\w+>|</line-ident>|" +
                 @"<link=""[^""]+"">|</link>|<lowercase>|</lowercase>|<uppercase>|</uppercase>|" +
-                @"<smallcaps>|</smallcaps>|<margin=.+>|</margin>|<mark=#\w+>|</mark>|" +
-                @"<nobr>|</nobr>|<size=\w+[%]>|</size>|<sprite=.+>|<s>|</s>|<u>|</u>|" +
-                @"<sup>|</sup>|<sub>|</sub>", string.Empty);
+                @"<smallcaps>|</smallcaps>|<margin=.+>|<margin-?\w+=.+>|</margin>|<mark=#\w+>|</mark>|" +
+                @"<nobr>|</nobr>|<size=\w+\%>|<size=\w+>|</size>|<sprite=.+>|<[Ss]>|</[Ss]>|<[Uu]>|</[Uu]>|" +
+                @"<sup>|</sup>|<sub>|</sub>|<p>|</p>|<\\/p>", string.Empty);
         }
 
         /// <summary>

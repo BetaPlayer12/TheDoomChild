@@ -2,15 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 using DChild.Gameplay.Pooling;
+using Sirenix.OdinInspector;
+using Spine.Unity;
 
 namespace DChild.Gameplay.Characters.Enemies
 {
     public class TentacleCeilingAttack : MonoBehaviour, IEyeBossAttacks
     {
         [SerializeField]
-        private GameObject m_leftTentacle;
+        private TentacleCeiling m_leftTentacle;
         [SerializeField]
-        private GameObject m_rightTentacle;
+        private TentacleCeiling m_rightTentacle;
 
         [SerializeField]
         private Transform m_leftTentaclePosition;
@@ -38,24 +40,20 @@ namespace DChild.Gameplay.Characters.Enemies
                 if(rollSide == 1)
                 {
                     Debug.Log("Left Tentacle");
-                    m_leftTentacle.SetActive(true);
-                    m_leftTentacle.transform.position = m_singleTentaclePosition.position;
+                    StartCoroutine(m_leftTentacle.Attack());
                 }
                 else if(rollSide == 2)
                 {
                     Debug.Log("Right Tentacle");
-                    m_rightTentacle.SetActive(true);
-                    m_rightTentacle.transform.position = m_singleTentaclePosition.position;
+                    StartCoroutine(m_rightTentacle.Attack());
+
                 }
             }
             else if(rollOdds == 2)
             {
                 Debug.Log("Left and Right Tentacle");
-                m_leftTentacle.SetActive(true);
-                m_leftTentacle.transform.position = m_leftTentaclePosition.position;
-
-                m_rightTentacle.SetActive(true);
-                m_rightTentacle.transform.position = m_rightTentaclePosition.position;
+                StartCoroutine(m_leftTentacle.Attack());
+                StartCoroutine(m_rightTentacle.Attack());
             }
 
             yield return null;
@@ -74,9 +72,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
                 if (m_ceilingTimer <= 0)
                 {
-                    m_leftTentacle.SetActive(false);
-                    m_rightTentacle.SetActive(false);
-
+                    StartCoroutine(m_leftTentacle.Retract());
+                    StartCoroutine(m_rightTentacle.Retract());
                     m_ceilingTimer = m_ceilingTimerValue;
                     m_createWall = false;
                 }
@@ -86,9 +83,6 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void Start()
         {
-            m_leftTentacle.SetActive(false);
-            m_rightTentacle.SetActive(false);
-
             m_ceilingTimerValue = m_ceilingTimer;
         }
     }

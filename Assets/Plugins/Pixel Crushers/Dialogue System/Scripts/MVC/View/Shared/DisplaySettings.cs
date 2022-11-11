@@ -18,6 +18,9 @@ namespace PixelCrushers.DialogueSystem
         [Tooltip("Assign a GameObject that contains an active dialogue UI component. Can be a prefab. If unassigned, Dialogue Manager will search its children for an active dialogue UI component.")]
         public GameObject dialogueUI;
 
+        [Tooltip("Optional. Assign Canvas into which dialogue UI will be instantiated if it's a prefab.")]
+        public Canvas defaultCanvas;
+
         [System.Serializable]
         public class LocalizationSettings
         {
@@ -175,6 +178,9 @@ namespace PixelCrushers.DialogueSystem
             [Tooltip("How to handle continue buttons.")]
             public ContinueButtonMode continueButton = ContinueButtonMode.Never;
 
+            [Tooltip("If ticked, always require continue button on subtitle that ends conversation. Overrides Continue Button dropdown above.")]
+            public bool requireContinueOnLastLine = false;
+
             /// <summary>
             /// Set <c>true</c> to convert "[em#]" tags to rich text codes in formatted text.
             /// Your implementation of IDialogueUI must support rich text.
@@ -220,6 +226,12 @@ namespace PixelCrushers.DialogueSystem
             /// </summary>
             [Tooltip("Camera angle object or prefab. If unassigned, use default camera angle definitions.")]
             public GameObject cameraAngles = null;
+
+            /// <summary>
+            /// If conversation's sequences use Main Camera, leave camera in current position at end of conversation instead of restoring pre-conversation position.
+            /// </summary>
+            [Tooltip("If conversation's sequences use Main Camera, leave camera in current position at end of conversation instead of restoring pre-conversation position.")]
+            public bool keepCameraPositionAtConversationEnd = false;
 
             /// <summary>
             /// The default sequence to use if the dialogue entry doesn't have a sequence defined 
@@ -352,6 +364,12 @@ namespace PixelCrushers.DialogueSystem
             /// </summary>
             [Tooltip("Show barks  for at least this many seconds. If zero, use Subtitle Settings > Min Subtitle Seconds.")]
             public float minBarkSeconds = 0;
+
+            /// <summary>
+            /// If non-blank, play this sequence with barks that don't specify their own Sequence.
+            /// </summary>
+            [Tooltip("If non-blank, play this sequence with barks that don't specify their own Sequence.")]
+            public string defaultBarkSequence = string.Empty;
 
         }
 
@@ -493,6 +511,30 @@ namespace PixelCrushers.DialogueSystem
         {
             return ShouldUseInputOverrides() ? conversationOverrideSettings.responseTimeout :
                 ((inputSettings != null) ? inputSettings.responseTimeout : 0);
+        }
+
+        public EmTag GetEmTagForOldResponses()
+        {
+            return ShouldUseInputOverrides() ? conversationOverrideSettings.emTagForOldResponses :
+                ((inputSettings != null) ? inputSettings.emTagForOldResponses : EmTag.None);
+        }
+
+        public EmTag GetEmTagForInvalidResponses()
+        {
+            return ShouldUseInputOverrides() ? conversationOverrideSettings.emTagForInvalidResponses :
+                ((inputSettings != null) ? inputSettings.emTagForInvalidResponses : EmTag.None);
+        }
+
+        public InputTrigger GetCancelSubtitleInput()
+        {
+            return ShouldUseInputOverrides() ? conversationOverrideSettings.cancelSubtitle :
+                ((inputSettings != null) ? inputSettings.cancel : null);
+        }
+
+        public InputTrigger GetCancelConversationInput()
+        {
+            return ShouldUseInputOverrides() ? conversationOverrideSettings.cancelConversation :
+                ((inputSettings != null) ? inputSettings.cancelConversation : null);
         }
 
     }

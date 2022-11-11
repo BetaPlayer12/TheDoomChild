@@ -36,6 +36,7 @@ namespace DChild.Gameplay.SoulSkills
             if (m_currentSelectedSoulSkill != skillUI)
             {
                 m_currentSelectedSoulSkill = skillUI;
+                SetHighlightTo(skillUI);
                 OnSelected?.Invoke(this, eventArgs);
 
                 //MouseUp on Same Object triggers OnClick again, force it to not recognize that OnClick
@@ -48,12 +49,13 @@ namespace DChild.Gameplay.SoulSkills
 
         }
 
-        private void OnSkillHighlight(object sender, SoulSkillSelected eventArgs)
+        private void SetHighlightTo(SoulSkillButton soulskillUI)
         {
-            m_highlight.SetParent(eventArgs.soulskillUI.transform);
+            m_highlight.SetParent(soulskillUI.transform);
             m_highlight.offsetMin = Vector2.zero;
             m_highlight.offsetMax = Vector2.zero;
         }
+
         private void OnSkillClicked(object sender, SoulSkillSelected eventArgs)
         {
             if (m_doNotAcceptClickOnMouseRelease)
@@ -72,7 +74,6 @@ namespace DChild.Gameplay.SoulSkills
             for (int i = 0; i < m_acquiredSoulSkillUIList.Length; i++)
             {
                 var soulSkillUI = m_acquiredSoulSkillUIList[i];
-                soulSkillUI.OnHighlighted += OnSkillHighlight;
                 soulSkillUI.OnSelected += OnSkillSelected;
                 soulSkillUI.OnClick += OnSkillClicked;
             }
@@ -81,7 +82,6 @@ namespace DChild.Gameplay.SoulSkills
             for (int i = 0; i < m_activatedSoulSkillUIList.Length; i++)
             {
                 var soulSkillUI = m_activatedSoulSkillUIList[i];
-                soulSkillUI.OnHighlighted += OnSkillHighlight;
                 soulSkillUI.OnSelected += OnSkillSelected;
                 soulSkillUI.OnClick += OnSkillClicked;
             }

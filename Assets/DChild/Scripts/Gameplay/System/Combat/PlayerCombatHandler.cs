@@ -1,6 +1,7 @@
 ﻿using DChild.Gameplay.Characters.Players;
 using DChild.Gameplay.Cinematics.Cameras;
 using DChild.Gameplay.Systems;
+using Doozy.Runtime.UIManager.Containers;
 using System;
 using UnityEngine;
 
@@ -11,6 +12,8 @@ namespace DChild.Gameplay.Combat
     {
         [SerializeField]
         private GameObject m_hitFX;
+        [SerializeField]
+        private UIContainer m_hitScreenFX;
         [SerializeField]
         private PlayerIFrameHandle m_iFrameHandle;
         [SerializeField]
@@ -32,6 +35,7 @@ namespace DChild.Gameplay.Combat
 
             StartCoroutine(m_iFrameHandle.ExecuteTemporaryInvulnerability(player));
             m_reactiveCamera.HandleOnDamageRecieveShake();
+            m_hitScreenFX.Show();
             m_spawnHandle.InstantiateFX(m_hitFX, player.character.centerMass.position);
         }
 

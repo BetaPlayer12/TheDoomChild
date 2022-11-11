@@ -1,4 +1,5 @@
-﻿using DChild.Gameplay.Characters.Players.Modules;
+﻿using DChild.Gameplay;
+using DChild.Gameplay.Characters.Players.Modules;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -17,7 +18,7 @@ public class PlayerMaterialConfigurator : MonoBehaviour
     void Start()
     {
         m_materialBlock = new MaterialPropertyBlock();
-        m_targetObject = FindObjectOfType<PlayerDamageable>().gameObject;
+        m_targetObject = GameplaySystem.playerManager.player.character.gameObject;
         var objectRenderer = m_targetObject.GetComponentInChildren<MeshRenderer>();
         objectRenderer.GetPropertyBlock(m_materialBlock);
         m_materialBlock.SetFloat("Vector1_CutomTexHighlight", m_texHighlight );

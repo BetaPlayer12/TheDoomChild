@@ -16,6 +16,7 @@ namespace PixelCrushers.DialogueSystem
         public bool showReferenceDatabase = true;
 
         private string[] titles = null;
+        private string[] popupTitles = null;
         private int currentIndex = -1;
 
         public VariablePicker(DialogueDatabase database, string currentVariable, bool usePicker)
@@ -40,12 +41,16 @@ namespace PixelCrushers.DialogueSystem
             }
             else
             {
-                List<string> list = new List<string>();
+                var list = new List<string>();
+                var popupList = new List<string>();
                 foreach (var variable in database.variables)
                 {
-                    list.Add(variable.Name);
+                    var variableName = variable.Name;
+                    list.Add(variableName);
+                    popupList.Add(variableName.Replace(".", "/"));
                 }
                 titles = list.ToArray();
+                popupTitles = popupList.ToArray();
                 for (int i = 0; i < titles.Length; i++)
                 {
                     if (string.Equals(currentVariable, titles[i]))
@@ -81,7 +86,7 @@ namespace PixelCrushers.DialogueSystem
 
                 if (usePicker)
                 {
-                    currentIndex = EditorGUILayout.Popup("Variable", currentIndex, titles);
+                    currentIndex = EditorGUILayout.Popup("Variable", currentIndex, popupTitles);
                     if (0 <= currentIndex && currentIndex < titles.Length) currentVariable = titles[currentIndex];
                     if (!showReferenceDatabase)
                     {
@@ -96,7 +101,7 @@ namespace PixelCrushers.DialogueSystem
                 EditorGUILayout.BeginHorizontal();
                 if (usePicker)
                 {
-                    currentIndex = EditorGUILayout.Popup("Variable", currentIndex, titles);
+                    currentIndex = EditorGUILayout.Popup("Variable", currentIndex, popupTitles);
                     if (0 <= currentIndex && currentIndex < titles.Length) currentVariable = titles[currentIndex];
                 }
                 else
@@ -132,7 +137,7 @@ namespace PixelCrushers.DialogueSystem
             var rect = new Rect(position.x, position.y, position.width - 22, EditorGUIUtility.singleLineHeight);
             if (usePicker)
             {
-                currentIndex = EditorGUI.Popup(rect, currentIndex, titles);
+                currentIndex = EditorGUI.Popup(rect, currentIndex, popupTitles);
                 if (0 <= currentIndex && currentIndex < titles.Length) currentVariable = titles[currentIndex];
             }
             else

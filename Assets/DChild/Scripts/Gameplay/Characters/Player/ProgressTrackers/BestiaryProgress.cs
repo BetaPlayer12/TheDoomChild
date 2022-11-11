@@ -67,10 +67,6 @@ namespace DChild.Gameplay.Characters.Players
                 var data = saveData.GetData(i);
                 if (m_progress.ContainsKey(data.ID))
                 {
-                    if (data.hasData)
-                    {
-                        Debug.Log("HAHAHA");
-                    }
                     m_progress[data.ID] = data.hasData;
                 }
             }

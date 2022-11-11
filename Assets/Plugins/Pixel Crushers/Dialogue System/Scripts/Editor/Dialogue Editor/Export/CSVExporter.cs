@@ -45,7 +45,7 @@ namespace PixelCrushers.DialogueSystem
                 if (exportVariables) ExportAssets<Variable>("Variables", database.variables, CustomVariableHeader, CustomVariableValues, true, file);
                 if (exportConversations)
                 {
-                    if (!exportConversationsAfterEntries) ExportAssets<Conversation>("Conversations", database.conversations, null, null, false, file);
+                    if (!exportConversationsAfterEntries) ExportAssets<Conversation>("Conversations", database.conversations, CustomConversationHeader, CustomConversationValues, true, file);
                     ExportDialogueEntries(database, entrytagFormat, file);
                     ExportLinks(database, file);
                     if (exportConversationsAfterEntries) ExportAssets<Conversation>("Conversations", database.conversations, null, null, false, file);
@@ -76,15 +76,17 @@ namespace PixelCrushers.DialogueSystem
 
         private static void CustomActorHeader(StringBuilder titles, StringBuilder types)
         {
-            titles.Append(",Portrait,AltPortraits");
-            types.Append(",Special,Special");
+            titles.Append(",Portrait,AltPortraits,SpritePortrait,AltSpritePortraits");
+            types.Append(",Special,Special,Special,Special");
         }
 
         private static void CustomActorValues(StringBuilder sb, Actor actor)
         {
-            sb.AppendFormat(",{0},{1}",
+            sb.AppendFormat(",{0},{1},{2},{3}",
                             ((actor.portrait != null) ? CleanField(AssetDatabase.GetAssetPath(actor.portrait)) : string.Empty),
-                            AltPortraitsField(actor.alternatePortraits));
+                            AltPortraitsField(actor.alternatePortraits),
+                            ((actor.spritePortrait != null) ? CleanField(AssetDatabase.GetAssetPath(actor.spritePortrait)) : string.Empty),
+                            AltSpritePortraitsField(actor.spritePortraits));
         }
 
         private static void CustomVariableHeader(StringBuilder titles, StringBuilder types)
@@ -96,6 +98,17 @@ namespace PixelCrushers.DialogueSystem
         private static void CustomVariableValues(StringBuilder sb, Variable variable)
         {
             sb.AppendFormat(",{0}", variable.Type.ToString());
+        }
+
+        private static void CustomConversationHeader(StringBuilder titles, StringBuilder types)
+        {
+            titles.Append(",Overrides");
+            types.Append(",JSON");
+        }
+
+        private static void CustomConversationValues(StringBuilder sb, Conversation conversation)
+        {
+            sb.AppendFormat(",{0}", CleanField(JsonUtility.ToJson(conversation.overrideSettings)));
         }
 
         private static void ExportAssets<T>(string header, List<T> assets, HeaderDelegate headerDelegate, AssetDelegate<T> assetDelegate, bool delegatesAtEnd, StreamWriter file) where T : Asset
@@ -257,7 +270,6 @@ namespace PixelCrushers.DialogueSystem
             if (s2.Contains(",") || s2.Contains("\""))
             {
                 return "\"" + s2.Replace("\"", "\"\"") + "\"";
-                //---Was: return "\"" + s2.Replace("\"", "\\\"") + "\"";
             }
             else
             {
@@ -282,6 +294,21 @@ namespace PixelCrushers.DialogueSystem
             {
                 if (!first) sb.Append(";");
                 sb.Append(AssetDatabase.GetAssetPath(portrait));
+                first = false;
+            }
+            sb.Append("]");
+            return CleanField(sb.ToString());
+        }
+
+        private static string AltSpritePortraitsField(List<Sprite> spritePortraits)
+        {
+            if (spritePortraits == null || spritePortraits.Count == 0) return "[]";
+            StringBuilder sb = new StringBuilder("[");
+            bool first = true;
+            foreach (Sprite sprite in spritePortraits)
+            {
+                if (!first) sb.Append(";");
+                sb.Append(AssetDatabase.GetAssetPath(sprite));
                 first = false;
             }
             sb.Append("]");

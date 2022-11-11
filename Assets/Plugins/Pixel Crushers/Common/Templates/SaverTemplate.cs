@@ -1,5 +1,8 @@
 ﻿/* [REMOVE THIS LINE]
+ * [REMOVE THIS LINE] If your code references scripts or assets that are outside of the Plugins
+ * [REMOVE THIS LINE] folder, move this script outside of the Plugins folder, too.
 
+using System;
 using UnityEngine;
 
 namespace PixelCrushers
@@ -11,21 +14,44 @@ namespace PixelCrushers
     public class SaverTemplate : Saver // Rename this class.
     {
 
+        /// A common approach is to store data to save in a class or struct, such as the one below.
+        /// Mark it [Serializable] so the Save System can serialize it.
+        [Serializable]
+        public class Data
+        {
+            public bool someData;
+        }
+
         public override string RecordData()
         {
             /// This method should return a string that represents the data you want to save.
             /// You can use SaveSystem.Serialize() to serialize a serializable object to a 
             /// string. This will use the serializer component on the Save System GameObject,
-            /// which defaults to JSON serialization.
+            /// which defaults to Unity's built-in JSON serialization. Remember that Unity
+			/// cannot directly serialize lists or arrays, so you must put them inside a
+			/// class.
+            /// 
+            /// If you use a class to hold the data, use SaveSystem.Serialize to return a 
+            /// serialized version:
+            /// 
+            //Data data = new Data();
+            //data.someData = false;
+            //return SaveSystem.Serialize(data);
+
             return string.Empty;
         }
 
-        public override void ApplyData(string data)
+        public override void ApplyData(string s)
         {
             /// This method should process the string representation of saved data and apply
             /// it to the current state of the game. You can use SaveSystem.Deserialize()
             /// to deserialize the string to an object that specifies the state to apply to
             /// the game.
+            /// 
+            //if (string.IsNullOrEmpty(s)) return; // No data to apply.
+            //Data data = SaveSystem.Deserialize<Data>(s);
+            //if (data == null) return; // Serialized string isn't valid.
+            ////(do something with data here)
         }
 
         //public override void ApplyDataImmediate()

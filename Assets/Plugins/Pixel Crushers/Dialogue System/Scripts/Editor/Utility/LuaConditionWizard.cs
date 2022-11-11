@@ -43,6 +43,8 @@ namespace PixelCrushers.DialogueSystem
             public float floatValue2 = 0;
             public string[] conditionsQuestEntryNames = new string[0];
             public object[] customParamValues = null;
+            public string newVariableName = string.Empty;
+            public FieldType newVariableType = FieldType.Boolean;
 
             public ConditionItem()
             {
@@ -149,22 +151,22 @@ namespace PixelCrushers.DialogueSystem
             {
                 conditionItems.Add(new ConditionItem());
             }
-            conditionsLogicalOperator = (LogicalOperatorType)EditorGUILayout.EnumPopup(conditionsLogicalOperator, GUILayout.Width(48));
-            EditorGUILayout.LabelField("must be true.", GUILayout.Width(80));
+            conditionsLogicalOperator = (LogicalOperatorType)EditorGUILayout.EnumPopup(conditionsLogicalOperator, EditorTools.GUILayoutPopupWidth(conditionsLogicalOperator));
+            EditorGUILayout.LabelField("must be true.", EditorTools.GUILayoutLabelWidth("must be true."));
 
             GUILayout.FlexibleSpace();
-            append = EditorGUILayout.ToggleLeft("Append", append, GUILayout.Width(60));
+            append = EditorGUILayout.ToggleLeft("Append", append, EditorTools.GUILayoutToggleWidth("Append"));
 
             if (EditorGUI.EndChangeCheck())
             {
                 ApplyConditionsWizard();
             }
 
-            if (GUILayout.Button(new GUIContent("Revert", "Cancel these settings."), EditorStyles.miniButton, GUILayout.Width(48)))
+            if (GUILayout.Button(new GUIContent("Revert", "Cancel these settings."), EditorStyles.miniButton, EditorTools.GUILayoutButtonWidth("Revert")))
             {
                 luaCode = CancelConditionsWizard();
             }
-            if (GUILayout.Button(new GUIContent("Apply", "Apply these settings"), EditorStyles.miniButton, GUILayout.Width(48)))
+            if (GUILayout.Button(new GUIContent("Apply", "Apply these settings"), EditorStyles.miniButton, EditorTools.GUILayoutButtonWidth("Apply")))
             {
                 luaCode = AcceptConditionsWizard();
             }
@@ -179,7 +181,7 @@ namespace PixelCrushers.DialogueSystem
         {
             EditorGUILayout.BeginHorizontal();
 
-            ConditionWizardResourceType newConditionType = (ConditionWizardResourceType)EditorGUILayout.EnumPopup(item.conditionType, GUILayout.Width(96));
+            ConditionWizardResourceType newConditionType = (ConditionWizardResourceType)EditorGUILayout.EnumPopup(item.conditionType, EditorTools.GUILayoutPopupWidth(item.conditionType));
             if (newConditionType != item.conditionType)
             {
                 item.conditionType = newConditionType;
@@ -192,7 +194,7 @@ namespace PixelCrushers.DialogueSystem
             {
                 // Quest:
                 item.questNamesIndex = EditorGUILayout.Popup(item.questNamesIndex, questNames);
-                item.equalityType = (EqualityType)EditorGUILayout.EnumPopup(item.equalityType, GUILayout.Width(60));
+                item.equalityType = (EqualityType)EditorGUILayout.EnumPopup(item.equalityType, EditorTools.GUILayoutPopupWidth(item.equalityType));
                 item.questState = QuestStateDrawer.LayoutQuestStatePopup(item.questState, 96);
 
                 s_lastQuestNamesIndex = item.questNamesIndex;
@@ -211,7 +213,7 @@ namespace PixelCrushers.DialogueSystem
                     item.conditionsQuestEntryNames = GetQuestEntryNames(complexQuestNames[item.questNamesIndex]);
                 }
                 item.questEntryIndex = EditorGUILayout.Popup(item.questEntryIndex, item.conditionsQuestEntryNames);
-                item.equalityType = (EqualityType)EditorGUILayout.EnumPopup(item.equalityType, GUILayout.Width(60));
+                item.equalityType = (EqualityType)EditorGUILayout.EnumPopup(item.equalityType, EditorTools.GUILayoutPopupWidth(item.equalityType));
                 item.questState = QuestStateDrawer.LayoutQuestStatePopup(item.questState, 96);
 
                 s_lastQuestNamesIndex = item.questNamesIndex;
@@ -221,8 +223,21 @@ namespace PixelCrushers.DialogueSystem
             else if (item.conditionType == ConditionWizardResourceType.Variable)
             {
                 // Variable:
-                item.variableNamesIndex = EditorGUILayout.Popup(item.variableNamesIndex, variableNames);
-                DrawRightHand(item, GetWizardVariableType(item.variableNamesIndex));
+                item.variableNamesIndex = EditorGUILayout.Popup(item.variableNamesIndex, variablePopupNames);
+                FieldType variableType;
+                if (item.variableNamesIndex == 0)
+                {
+                    // New variable:
+                    item.newVariableName = EditorGUILayout.TextField(item.newVariableName);
+                    item.newVariableType = (FieldType)EditorGUILayout.EnumPopup(item.newVariableType);
+                    variableType = item.newVariableType;
+                }
+                else
+                {
+                    // Existing variable:
+                    variableType = GetWizardVariableType(item.variableNamesIndex);
+                }
+                DrawRightHand(item, variableType);
 
                 s_lastVariableNameIndex = item.variableNamesIndex;
             }
@@ -231,7 +246,9 @@ namespace PixelCrushers.DialogueSystem
                 // Actor:
                 item.actorNamesIndex = EditorGUILayout.Popup(item.actorNamesIndex, actorNames);
                 item.actorFieldIndex = EditorGUILayout.Popup(item.actorFieldIndex, actorFieldNames);
-                DrawRightHand(item, GetWizardActorFieldType(item.actorFieldIndex));
+
+                CustomFieldType customFieldType = GetCustomFieldType(database.actors, item.actorNamesIndex, item.actorFieldIndex);
+                DrawRightHand(item, GetWizardActorFieldType(item.actorFieldIndex), customFieldType);
 
                 s_lastActorNamesIndex = item.actorNamesIndex;
                 s_lastActorFieldIndex = item.actorFieldIndex;
@@ -241,7 +258,8 @@ namespace PixelCrushers.DialogueSystem
                 // Item:
                 item.itemNamesIndex = EditorGUILayout.Popup(item.itemNamesIndex, itemNames);
                 item.itemFieldIndex = EditorGUILayout.Popup(item.itemFieldIndex, itemFieldNames);
-                DrawRightHand(item, GetWizardItemFieldType(item.itemFieldIndex));
+                CustomFieldType customFieldType = GetCustomFieldType(database.items, item.itemNamesIndex, item.itemFieldIndex);
+                DrawRightHand(item, GetWizardItemFieldType(item.itemFieldIndex), customFieldType);
 
                 s_lastItemNamesIndex = item.itemNamesIndex;
                 s_lastItemFieldIndex = item.itemFieldIndex;
@@ -251,7 +269,8 @@ namespace PixelCrushers.DialogueSystem
                 // Location:
                 item.locationNamesIndex = EditorGUILayout.Popup(item.locationNamesIndex, locationNames);
                 item.locationFieldIndex = EditorGUILayout.Popup(item.locationFieldIndex, locationFieldNames);
-                DrawRightHand(item, GetWizardLocationFieldType(item.locationFieldIndex));
+                CustomFieldType customFieldType = GetCustomFieldType(database.locations, item.locationNamesIndex, item.locationFieldIndex);
+                DrawRightHand(item, GetWizardLocationFieldType(item.locationFieldIndex), customFieldType);
 
                 s_lastLocationNameIndex = item.locationNamesIndex;
                 s_lastLocationFieldIndex = item.locationFieldIndex;
@@ -263,13 +282,13 @@ namespace PixelCrushers.DialogueSystem
                 item.simStatusThisID = EditorGUILayout.Toggle(GUIContent.none, item.simStatusThisID, GUILayout.Width(14));
                 if (item.simStatusThisID)
                 {
-                    EditorGUILayout.LabelField("thisID", GUILayout.Width(38));
+                    EditorGUILayout.LabelField("thisID", EditorTools.GUILayoutLabelWidth("thisID"));
                 }
                 else
                 {
                     item.simStatusID = EditorGUILayout.IntField(item.simStatusID, GUILayout.Width(38));
                 }
-                item.equalityType = (EqualityType)EditorGUILayout.EnumPopup(item.equalityType, GUILayout.Width(56));
+                item.equalityType = (EqualityType)EditorGUILayout.EnumPopup(item.equalityType, EditorTools.GUILayoutPopupWidth(item.equalityType));
                 item.simStatusType = (SimStatusType)EditorGUILayout.EnumPopup(item.simStatusType);
             }
 
@@ -316,7 +335,17 @@ namespace PixelCrushers.DialogueSystem
                                 item.customParamValues[i] = EditorGUILayout.Popup((int)item.customParamValues[i], item.conditionsQuestEntryNames);
                                 break;
                             case CustomLuaParameterType.Variable:
-                                item.customParamValues[i] = EditorGUILayout.Popup((int)item.customParamValues[i], variableNames);
+                                item.customParamValues[i] = EditorGUILayout.Popup((int)item.customParamValues[i], variablePopupNames);
+                                break;
+                            case CustomLuaParameterType.Item:
+                                item.customParamValues[i] = EditorGUILayout.Popup((int)item.customParamValues[i], itemNames);
+                                break;
+                            case CustomLuaParameterType.QuestState:
+                                if (item.customParamValues[i] == null || item.customParamValues[i].GetType() != typeof(QuestState))
+                                {
+                                    item.customParamValues[i] = QuestState.Unassigned;
+                                }
+                                item.customParamValues[i] = (QuestState)EditorGUILayout.EnumPopup((QuestState)item.customParamValues[i]);
                                 break;
                         }
                     }
@@ -348,7 +377,7 @@ namespace PixelCrushers.DialogueSystem
             EditorGUILayout.EndHorizontal();
         }
 
-        private void DrawRightHand(ConditionItem item, FieldType fieldType)
+        private void DrawRightHand(ConditionItem item, FieldType fieldType, CustomFieldType customFieldType = null)
         {
             switch (fieldType)
             {
@@ -371,7 +400,15 @@ namespace PixelCrushers.DialogueSystem
                     break;
                 default:
                     item.equalityType = (EqualityType)EditorGUILayout.EnumPopup(item.equalityType, GUILayout.Width(60));
-                    item.stringValue = EditorGUILayout.TextField(item.stringValue);
+
+                    if (customFieldType != null)
+                    {
+                        item.stringValue = customFieldType.Draw(item.stringValue, database);
+                    }
+                    else
+                    {
+                        item.stringValue = EditorGUILayout.TextField(item.stringValue);
+                    }
                     break;
             }
         }
@@ -385,7 +422,19 @@ namespace PixelCrushers.DialogueSystem
         public string AcceptConditionsWizard()
         {
             isOpen = false;
+            AddNewVariables();
             return ApplyConditionsWizard();
+        }
+
+        private void AddNewVariables()
+        {
+            foreach (var item in conditionItems)
+            {
+                if (item.conditionType == ConditionWizardResourceType.Variable && item.variableNamesIndex == 0)
+                {
+                    AddNewVariable(item.newVariableName, item.newVariableType);
+                }
+            }
         }
 
         private string openParen = string.Empty;
@@ -437,8 +486,20 @@ namespace PixelCrushers.DialogueSystem
                     {
 
                         // Variable:
-                        string variableName = variableNames[item.variableNamesIndex];
-                        switch (GetWizardVariableType(item.variableNamesIndex))
+                        item.variableNamesIndex = Mathf.Clamp(item.variableNamesIndex, 0, variableNames.Length - 1);
+                        string variableName;
+                        FieldType variableType;
+                        if (item.variableNamesIndex == 0)
+                        {
+                            variableName = item.newVariableName;
+                            variableType = item.newVariableType;
+                        }
+                        else
+                        {
+                            variableName = (0 <= item.variableNamesIndex && item.variableNamesIndex < variableNames.Length) ? variableNames[item.variableNamesIndex] : "Alert";
+                            variableType = GetWizardVariableType(item.variableNamesIndex);
+                        }
+                        switch (variableType)
                         {
                             case FieldType.Boolean:
                                 sb.AppendFormat("{0}Variable[\"{1}\"] {2} {3}{4}",
@@ -486,6 +547,8 @@ namespace PixelCrushers.DialogueSystem
                         // Actor:
                         if (item.actorNamesIndex < actorNames.Length)
                         {
+                            item.actorNamesIndex = Mathf.Clamp(item.actorNamesIndex, 0, actorNames.Length - 1);
+                            item.actorFieldIndex = Mathf.Clamp(item.actorFieldIndex, 0, actorFieldNames.Length - 1);
                             var actorName = actorNames[item.actorNamesIndex];
                             var actorField = actorFieldNames[item.actorFieldIndex];
                             var actorFieldType = GetWizardActorFieldType(item.actorFieldIndex);
@@ -503,6 +566,8 @@ namespace PixelCrushers.DialogueSystem
                         // Item:
                         if (item.itemNamesIndex < itemNames.Length)
                         {
+                            item.itemNamesIndex = Mathf.Clamp(item.itemNamesIndex, 0, itemNames.Length - 1);
+                            item.itemFieldIndex = Mathf.Clamp(item.itemFieldIndex, 0, itemFieldNames.Length - 1);
                             var itemName = itemNames[item.itemNamesIndex];
                             var itemField = itemFieldNames[item.itemFieldIndex];
                             var itemFieldType = GetWizardItemFieldType(item.itemFieldIndex);
@@ -520,6 +585,8 @@ namespace PixelCrushers.DialogueSystem
                         // Location:
                         if (item.locationNamesIndex < locationNames.Length)
                         {
+                            item.locationNamesIndex = Mathf.Clamp(item.locationNamesIndex, 0, locationNames.Length - 1);
+                            item.locationFieldIndex = Mathf.Clamp(item.locationFieldIndex, 0, locationFieldNames.Length - 1);
                             var locationName = locationNames[item.locationNamesIndex];
                             var locationField = locationFieldNames[item.locationFieldIndex];
                             var locationFieldType = GetWizardLocationFieldType(item.locationFieldIndex);
@@ -548,11 +615,12 @@ namespace PixelCrushers.DialogueSystem
                     {
 
                         // Custom:
+                        if (customLuaFuncs == null) FindAllCustomLuaFuncs(true, out customLuaFuncs, out customLuaFuncNames);
                         if (0 <= item.customLuaFuncIndex && item.customLuaFuncIndex < customLuaFuncs.Length)
                         {
                             sb.Append(openParen);
                             var luaFuncRecord = customLuaFuncs[item.customLuaFuncIndex];
-                            sb.Append(luaFuncRecord.functionName + "(");
+                            sb.Append(Tools.GetAllAfterSlashes(luaFuncRecord.functionName) + "(");
                             if (item.customParamValues == null) InitCustomParamValues(luaFuncRecord, out item.customParamValues);
                             for (int p = 0; p < luaFuncRecord.parameters.Length; p++)
                             {
@@ -590,6 +658,16 @@ namespace PixelCrushers.DialogueSystem
                                         var variableIndex = (int)item.customParamValues[p];
                                         sb.Append((0 <= variableIndex && variableIndex < variableNames.Length) ? ("Variable[\"" + variableNames[variableIndex] + "\"]") : "\"\"");
                                         break;
+                                    case CustomLuaParameterType.Item:
+                                        if (item.customParamValues[p] == null) item.customParamValues[p] = (int)0;
+                                        var itemIndex = (int)item.customParamValues[p];
+                                        sb.Append((0 <= itemIndex && itemIndex < itemNames.Length) ? ("\"" + itemNames[itemIndex] + "\"") : "\"\"");
+                                        break;
+                                    case CustomLuaParameterType.QuestState:
+                                        var tempQuestState = (item.customParamValues[p] == null || item.customParamValues[p].GetType() != typeof(QuestState))
+                                            ? QuestState.Unassigned : ((QuestState)(item.customParamValues[p]));
+                                        sb.Append("\"" + QuestLog.StateToString(tempQuestState) + "\"");
+                                        break;
                                 }
                             }
                             sb.Append(") ");
@@ -624,7 +702,6 @@ namespace PixelCrushers.DialogueSystem
                 Debug.LogError(string.Format("{0}: Internal error building condition: {1}", DialogueDebug.Prefix, e.Message));
                 return savedLuaCode;
             }
-            //-- Moved to AcceptConditionsWizard: currentConditionsWizardEntry = null;
         }
 
         private void AppendFormat(StringBuilder sb, string tableName, string elementName, string fieldName, FieldType fieldType, ConditionItem item)
@@ -636,7 +713,7 @@ namespace PixelCrushers.DialogueSystem
                                     openParen,
                                     tableName,
                                     DialogueLua.StringToTableIndex(elementName),
-                                    DialogueLua.StringToTableIndex(fieldName),
+                                    DialogueLua.StringToFieldName(fieldName),
                                     GetWizardEqualityText(item.equalityType),
                                     (item.booleanValue == BooleanType.True) ? "true" : "false",
                                     closeParen);
@@ -648,7 +725,7 @@ namespace PixelCrushers.DialogueSystem
                                         openParen,
                                         tableName,
                                         DialogueLua.StringToTableIndex(elementName),
-                                        DialogueLua.StringToTableIndex(fieldName),
+                                        DialogueLua.StringToFieldName(fieldName),
                                         GetWizardComparisonText(item.comparisonType),
                                         item.floatValue,
                                         item.floatValue2,
@@ -660,7 +737,7 @@ namespace PixelCrushers.DialogueSystem
                                         openParen,
                                         tableName,
                                         DialogueLua.StringToTableIndex(elementName),
-                                        DialogueLua.StringToTableIndex(fieldName),
+                                        DialogueLua.StringToFieldName(fieldName),
                                         GetWizardComparisonText(item.comparisonType),
                                         item.floatValue,
                                         closeParen);
@@ -671,7 +748,7 @@ namespace PixelCrushers.DialogueSystem
                                     openParen,
                                     tableName,
                                     DialogueLua.StringToTableIndex(elementName),
-                                    DialogueLua.StringToTableIndex(fieldName),
+                                    DialogueLua.StringToFieldName(fieldName),
                                     GetWizardEqualityText(item.equalityType),
                                     item.stringValue,
                                     closeParen);
@@ -683,7 +760,7 @@ namespace PixelCrushers.DialogueSystem
         //===================================================================================
 
 
-        public string Draw(Rect position, GUIContent guiContent, string luaCode)
+        public string Draw(Rect position, GUIContent guiContent, string luaCode, bool flexibleHeight = false)
         {
             if (database == null) isOpen = false;
 
@@ -691,10 +768,13 @@ namespace PixelCrushers.DialogueSystem
             var rect = new Rect(position.x, position.y, position.width, EditorGUIUtility.singleLineHeight);
             EditorGUI.LabelField(rect, guiContent);
 
+            var luaFieldWidth = rect.width - 16f;
+            var textAreaHeight = flexibleHeight ? (EditorTools.textAreaGuiStyle.CalcHeight(new GUIContent(luaCode), luaFieldWidth) + 2f) : EditorGUIUtility.singleLineHeight;
+
             if (isOpen)
             {
                 // Lua wizard content:
-                rect = new Rect(position.x + 16, position.y + EditorGUIUtility.singleLineHeight + 2f, position.width - 16, position.height - (2 * (EditorGUIUtility.singleLineHeight + 2f)));
+                rect = new Rect(position.x + 16, position.y + EditorGUIUtility.singleLineHeight + 2f, position.width - 16, position.height - (2 * (EditorGUIUtility.singleLineHeight + 2f)) - textAreaHeight + EditorGUIUtility.singleLineHeight);
                 EditorGUI.BeginDisabledGroup(true);
                 GUI.Button(rect, GUIContent.none);
                 EditorGUI.EndDisabledGroup();
@@ -702,8 +782,16 @@ namespace PixelCrushers.DialogueSystem
                 luaCode = DrawConditionsWizard(new Rect(rect.x + 2, rect.y + 2, rect.width - 4, rect.height - 4), luaCode);
             }
 
-            rect = new Rect(position.x, position.y + position.height - EditorGUIUtility.singleLineHeight, position.width, EditorGUIUtility.singleLineHeight);
-            luaCode = EditorGUI.TextField(rect, luaCode);
+            if (flexibleHeight)
+            {
+                rect = new Rect(position.x, position.y + position.height - textAreaHeight, position.width, textAreaHeight);
+                luaCode = EditorGUI.TextArea(rect, luaCode, EditorTools.textAreaGuiStyle);
+            }
+            else
+            {
+                rect = new Rect(position.x, position.y + position.height - EditorGUIUtility.singleLineHeight, position.width, EditorGUIUtility.singleLineHeight);
+                luaCode = EditorGUI.TextField(rect, luaCode);
+            }
 
             return luaCode;
         }
@@ -757,12 +845,12 @@ namespace PixelCrushers.DialogueSystem
             }
 
             EditorGUI.BeginDisabledGroup(conditionItems.Count <= 0);
-            rect = new Rect(position.x + position.width - 48 - 4 - 48, y, 48, EditorGUIUtility.singleLineHeight);
+            rect = new Rect(position.x + position.width - 52 - 4 - 56, y, 56, EditorGUIUtility.singleLineHeight);
             if (GUI.Button(rect, new GUIContent("Revert", "Cancel these settings."), EditorStyles.miniButton))
             {
                 luaCode = CancelConditionsWizard();
             }
-            rect = new Rect(position.x + position.width - 48, y, 48, EditorGUIUtility.singleLineHeight);
+            rect = new Rect(position.x + position.width - 52, y, 52, EditorGUIUtility.singleLineHeight);
             GUI.Box(rect, GUIContent.none);
             if (GUI.Button(rect, new GUIContent("Apply", "Apply these settings"), EditorStyles.miniButton))
             {
@@ -846,10 +934,25 @@ namespace PixelCrushers.DialogueSystem
                 // Variable:
                 var freeWidth = position.width - (typeWidth + equalityWidth + deleteButtonWidth + 8);
                 rect = new Rect(x, y, freeWidth / 2, EditorGUIUtility.singleLineHeight);
-                item.variableNamesIndex = EditorGUI.Popup(rect, item.variableNamesIndex, variableNames);
+                FieldType variableType = FieldType.Text;
+                if (item.variableNamesIndex == 0)
+                {
+                    // New variable:
+                    var thirdWidth = rect.width / 3;
+                    item.variableNamesIndex = EditorGUI.Popup(new Rect(rect.x, rect.y, thirdWidth, rect.height), item.variableNamesIndex, variablePopupNames);
+                    item.newVariableName = EditorGUI.TextField(new Rect(rect.x + thirdWidth, rect.y, thirdWidth, rect.height), item.newVariableName);
+                    item.newVariableType = (FieldType)EditorGUI.EnumPopup(new Rect(rect.x + 2 * thirdWidth, rect.y, thirdWidth, rect.height), item.newVariableType);
+                    variableType = item.newVariableType;
+                }
+                else
+                {
+                    // Existing variable:
+                    item.variableNamesIndex = EditorGUI.Popup(rect, item.variableNamesIndex, variablePopupNames);
+                    variableType = GetWizardVariableType(item.variableNamesIndex);
+                }
                 x += rect.width + 2;
                 rect = new Rect(x, y, equalityWidth + 2 + (freeWidth / 2), EditorGUIUtility.singleLineHeight);
-                DrawRightHand(rect, item, GetWizardVariableType(item.variableNamesIndex));
+                DrawRightHand(rect, item, variableType);
                 x += rect.width + 2;
 
             }
@@ -925,6 +1028,87 @@ namespace PixelCrushers.DialogueSystem
                 item.simStatusType = (SimStatusType)EditorGUI.EnumPopup(rect, item.simStatusType);
                 x += rect.width + 2;
 
+            }
+            else if (item.conditionType == ConditionWizardResourceType.Custom)
+            {
+
+                // Custom Lua Functions:
+                if (customLuaFuncs == null) FindAllCustomLuaFuncs(true, out customLuaFuncs, out customLuaFuncNames);
+
+                var customPopupWidth = 60f;
+                var rightHandWidth = 80f;
+                rect = new Rect(x, y, customPopupWidth, EditorGUIUtility.singleLineHeight);
+                int newCustomLuaFuncIndex = EditorGUI.Popup(rect, item.customLuaFuncIndex, customLuaFuncNames);
+                if (newCustomLuaFuncIndex != item.customLuaFuncIndex)
+                {
+                    item.customLuaFuncIndex = newCustomLuaFuncIndex;
+                    item.customParamValues = null;
+                }
+                if (0 <= item.customLuaFuncIndex && item.customLuaFuncIndex < customLuaFuncs.Length)
+                {
+                    var luaFuncRecord = customLuaFuncs[item.customLuaFuncIndex];
+                    var numParams = luaFuncRecord.parameters.Length;
+                    var freeWidth = position.width - (typeWidth + equalityWidth + deleteButtonWidth + 10) - customPopupWidth - rightHandWidth;
+                    if (item.customParamValues == null) InitCustomParamValues(luaFuncRecord, out item.customParamValues);
+                    for (int i = 0; i < luaFuncRecord.parameters.Length; i++)
+                    {
+                        x += rect.width + 2;
+                        rect = new Rect(x, y, freeWidth / numParams, EditorGUIUtility.singleLineHeight);
+                        switch (luaFuncRecord.parameters[i])
+                        {
+                            case CustomLuaParameterType.Bool:
+                                item.customParamValues[i] = (BooleanType)EditorGUI.EnumPopup(rect, (BooleanType)item.customParamValues[i]);
+                                break;
+                            case CustomLuaParameterType.Double:
+                                item.customParamValues[i] = EditorGUI.FloatField(rect, (float)item.customParamValues[i]);
+                                break;
+                            case CustomLuaParameterType.String:
+                                item.customParamValues[i] = EditorGUI.TextField(rect, (string)item.customParamValues[i]);
+                                break;
+                            case CustomLuaParameterType.Actor:
+                                item.customParamValues[i] = EditorGUI.Popup(rect, (int)item.customParamValues[i], actorNames);
+                                break;
+                            case CustomLuaParameterType.Quest:
+                                item.customParamValues[i] = EditorGUI.Popup(rect, (int)item.customParamValues[i], questNames);
+                                item.questNamesIndex = (int)item.customParamValues[i];
+                                break;
+                            case CustomLuaParameterType.QuestEntry:
+                                if ((item.conditionsQuestEntryNames.Length == 0) && (item.questNamesIndex < complexQuestNames.Length))
+                                {
+                                    item.conditionsQuestEntryNames = GetQuestEntryNames(complexQuestNames[item.questNamesIndex]);
+                                }
+                                item.customParamValues[i] = EditorGUI.Popup(rect, (int)item.customParamValues[i], item.conditionsQuestEntryNames);
+                                break;
+                            case CustomLuaParameterType.Variable:
+                                item.customParamValues[i] = EditorGUI.Popup(rect, (int)item.customParamValues[i], variablePopupNames);
+                                break;
+                            case CustomLuaParameterType.Item:
+                                item.customParamValues[i] = EditorGUI.Popup(rect, (int)item.customParamValues[i], itemNames);
+                                break;
+                            case CustomLuaParameterType.QuestState:
+                                if (item.customParamValues[i] == null || item.customParamValues[i].GetType() != typeof(QuestState))
+                                {
+                                    item.customParamValues[i] = QuestState.Unassigned;
+                                }
+                                item.customParamValues[i] = (QuestState)EditorGUI.EnumPopup(rect, (QuestState)item.customParamValues[i]);
+                                break;
+                        }
+                    }
+                    x += rect.width + 2;
+                    rect = new Rect(x, y, position.width - x, EditorGUIUtility.singleLineHeight);
+                    switch (luaFuncRecord.returnValue)
+                    {
+                        case CustomLuaReturnType.Bool:
+                            DrawRightHand(rect, item, FieldType.Boolean);
+                            break;
+                        case CustomLuaReturnType.Double:
+                            DrawRightHand(rect, item, FieldType.Number);
+                            break;
+                        case CustomLuaReturnType.String:
+                            DrawRightHand(rect, item, FieldType.Text);
+                            break;
+                    }
+                }
             }
             else if (item.conditionType == ConditionWizardResourceType.ManualEnter)
             {

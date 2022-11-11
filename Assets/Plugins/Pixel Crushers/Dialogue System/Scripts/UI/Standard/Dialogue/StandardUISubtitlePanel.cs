@@ -35,11 +35,17 @@ namespace PixelCrushers.DialogueSystem
         [Tooltip("Each subtitle adds to Subtitle Text instead of replacing it.")]
         public bool accumulateText = false;
 
+        [Tooltip("If Accumulate Text is ticked, accumulate up to this many lines, removing the oldest lines when over the limit.")]
+        public int maxLines = 100;
+
         [Tooltip("If panel has a typewriter effect, don't start typing until panel's Show animation has completed.")]
         public bool delayTypewriterUntilOpen = false;
 
         [Tooltip("(Optional) Continue button. Only shown if Dialogue Manager's Continue Button mode uses continue button.")]
         public UnityEngine.UI.Button continueButton;
+
+        [Tooltip("If non-zero, prevent continue button clicks for this duration in seconds when opening subtitle panel.")]
+        public float blockInputDuration = 0;
 
         [Tooltip("When the subtitle UI elements should be visible.")]
         public UIVisibility visibility = UIVisibility.OnlyDuringContent;
@@ -50,11 +56,29 @@ namespace PixelCrushers.DialogueSystem
         [Tooltip("When unfocusing panel, set this animator trigger.")]
         public string unfocusAnimationTrigger = string.Empty;
 
+        [Tooltip("If a player actor uses this panel, don't show player portrait name & image; keep previous NPC portrait visible instead.")]
+        public bool onlyShowNPCPortraits = false;
+
         [Tooltip("Check Dialogue Actors for portrait animator controllers. Portrait image must have an Animator.")]
         public bool useAnimatedPortraits = false;
 
-        [Tooltip("If a player actor uses this panel, don't show player portrait name & image; keep previous NPC portrait visible instead.")]
-        public bool onlyShowNPCPortraits = false;
+        [Tooltip("Set Portrait Image to actor portrait's native size. Image's Rect Transform can't use Stretch anchors.")]
+        public bool usePortraitNativeSize = false;
+
+        [Tooltip("Wait for panel state to be Open before showing subtitle.")]
+        public bool waitForOpen = false;
+
+        [Tooltip("Wait for panels within this dialogue UI (not external panels) to close before showing.")]
+        public bool waitForClose = false;
+
+        [Tooltip("Clear text when closing panel, including when hiding using SetDialoguePanel().")]
+        public bool clearTextOnClose = true;
+
+        [Tooltip("Clear text when any conversation starts.")]
+        public bool clearTextOnConversationStart = false;
+
+        [Tooltip("If Subtitle Text doesn't have a typewriter effect, to enable scroll to bottom add UIScrollbarEnabler to Scroll Rect and assign it here.")]
+        public UIScrollbarEnabler scrollbarEnabler;
 
         /// <summary>
         /// Invoked when the subtitle panel gains focus.
@@ -76,6 +100,14 @@ namespace PixelCrushers.DialogueSystem
         {
             get { return m_hasFocus; }
             set { m_hasFocus = value; }
+        }
+
+        [SerializeField, Tooltip("Panel is playing the focus animation.")]
+        private bool m_isFocusing = true;
+        public bool isFocusing
+        {
+            get { return m_isFocusing; }
+            set { m_isFocusing = value; }
         }
 
         public override bool waitForShowAnimation { get { return true; } }
@@ -101,16 +133,61 @@ namespace PixelCrushers.DialogueSystem
         protected Color originalColor { get; set; }
         private string m_accumulatedText = string.Empty;
         public string accumulatedText { get { return m_accumulatedText; } set { m_accumulatedText = value; } }
-        private Animator m_animator = null;
-        private Animator animator { get { if (m_animator == null && portraitImage != null) m_animator = portraitImage.GetComponent<Animator>(); return m_animator; } }
+        protected int numAccumulatedLines = 0;
+
+        private Animator m_portraitAnimator = null;
+        protected virtual Animator animator { get { if (m_portraitAnimator == null && portraitImage != null) m_portraitAnimator = portraitImage.GetComponent<Animator>(); return m_portraitAnimator; } set { m_portraitAnimator = value; } }
+
+        private Animator m_panelAnimator = null;
+
         private bool m_isDefaultNPCPanel = false;
         public bool isDefaultNPCPanel { get { return m_isDefaultNPCPanel; } set { m_isDefaultNPCPanel = value; } }
         private bool m_isDefaultPCPanel = false;
         public bool isDefaultPCPanel { get { return m_isDefaultPCPanel; } set { m_isDefaultPCPanel = value; } }
         private int m_panelNumber = -1;
         public int panelNumber { get { return m_panelNumber; } set { m_panelNumber = value; } }
+        public Transform m_actorOverridingPanel = null;
+        public Transform actorOverridingPanel { get { return m_actorOverridingPanel; } set { m_actorOverridingPanel = value; } }
+        private int m_lastActorID = -1;
+        protected int lastActorID { get { return m_lastActorID; } set { m_lastActorID = value; } }
+        protected int frameLastSetContent = -1; // Frame when we last set this panel's content.
+        protected bool shouldShowContinueButton = false;
+        protected const float WaitForCloseTimeoutDuration = 8f;
+        private StandardDialogueUI m_dialogueUI = null;
+        public StandardDialogueUI dialogueUI
+        {
+            get
+            {
+                if (m_dialogueUI == null)
+                { 
+                    m_dialogueUI = GetComponentInParent<StandardDialogueUI>();
+                    if (m_dialogueUI == null) m_dialogueUI = DialogueManager.dialogueUI as StandardDialogueUI;
+                }
+                return m_dialogueUI;
+            }
+            set
+            {
+                m_dialogueUI = value;
+            }
+        }
 
-        private Coroutine m_focusWhenOpenCoroutine = null;
+        protected Coroutine m_focusWhenOpenCoroutine = null;
+        protected Coroutine m_showAfterClosingCoroutine = null;
+        protected Coroutine m_setAnimatorCoroutine = null;
+
+        #endregion
+
+        #region Initialization
+
+        protected virtual void Awake()
+        {
+            if (addSpeakerName)
+            {
+                addSpeakerNameFormat = addSpeakerNameFormat.Replace("\\n", "\n").Replace("\\t", "\t");
+            }
+            if (waitForClose) clearTextOnClose = false;
+            m_panelAnimator = GetComponent<Animator>();
+        }
 
         #endregion
 
@@ -162,11 +239,10 @@ namespace PixelCrushers.DialogueSystem
         {
             Open();
             SetUIElementsActive(true);
-            Tools.SetGameObjectActive(this.portraitImage, portraitSprite != null);
-            if (this.portraitImage != null) this.portraitImage.sprite = portraitSprite;
-            if (this.portraitName != null) this.portraitName.text = portraitName;
-            if (subtitleText.text != null) subtitleText.text = string.Empty;
+            SetPortraitImage(portraitSprite);
             portraitActorName = (dialogueActor != null) ? dialogueActor.actor : portraitName;
+            if (this.portraitName != null) this.portraitName.text = portraitActorName;
+            if (subtitleText.text != null) subtitleText.text = string.Empty;
             CheckDialogueActorAnimator(dialogueActor);
         }
 
@@ -176,9 +252,12 @@ namespace PixelCrushers.DialogueSystem
             OpenOnStartConversation(UITools.CreateSprite(portraitTexture), portraitName, dialogueActor);
         }
 
-        public virtual void OnConversationEnd(Transform actor)
+        public virtual void OnConversationStart(Transform actor)
         {
-            ClearText();
+            if (clearTextOnConversationStart && (frameLastSetContent < (Time.frameCount - 1))) // If we just set content, don't clear the text.
+            {
+                ClearText();
+            }
         }
 
         /// <summary>
@@ -186,12 +265,54 @@ namespace PixelCrushers.DialogueSystem
         /// </summary>
         public virtual void ShowSubtitle(Subtitle subtitle)
         {
+            var supercedeOnActorChange = waitForClose && isOpen && visibility == UIVisibility.UntilSupercededOrActorChange &&
+                subtitle != null && lastActorID != subtitle.speakerInfo.id;
+            if ((waitForClose && dialogueUI.AreAnyPanelsClosing(this)) || supercedeOnActorChange)
+            {
+                if (supercedeOnActorChange) Close();
+                StopShowAfterClosingCoroutine();
+                m_showAfterClosingCoroutine = DialogueManager.instance.StartCoroutine(ShowSubtitleAfterClosing(subtitle));
+            }
+            else
+            {
+                ShowSubtitleNow(subtitle);
+            }
+        }
+
+        protected virtual void ShowSubtitleNow(Subtitle subtitle)
+        {
             SetUIElementsActive(true);
-            if (!isOpen) hasFocus = false;
+            if (!isOpen)
+            {
+                hasFocus = false;
+                isFocusing = false;
+            }
             Open();
             Focus();
             SetContent(subtitle);
-            CheckSubtitleAnimator(subtitle);
+            actorOverridingPanel = null;
+        }
+
+        protected virtual IEnumerator ShowSubtitleAfterClosing(Subtitle subtitle)
+        {
+            shouldShowContinueButton = false;
+            float safeguardTime = Time.realtimeSinceStartup + WaitForCloseTimeoutDuration;
+            while (dialogueUI.AreAnyPanelsClosing() && Time.realtimeSinceStartup < safeguardTime)
+            {
+                yield return null;
+            }
+            ShowSubtitleNow(subtitle);
+            if (shouldShowContinueButton) ShowContinueButton();
+            m_showAfterClosingCoroutine = null;
+        }
+
+        protected virtual void StopShowAfterClosingCoroutine()
+        {
+            if (m_showAfterClosingCoroutine != null)
+            {
+                DialogueManager.instance.StopCoroutine(m_showAfterClosingCoroutine);
+                m_showAfterClosingCoroutine = null;
+            }
         }
 
         /// <summary>
@@ -214,7 +335,8 @@ namespace PixelCrushers.DialogueSystem
         protected override void OnHidden()
         {
             base.OnHidden();
-            DeactivateUIElements();
+            if (deactivateOnHidden) DeactivateUIElements();
+            currentSubtitle = null;
         }
 
         /// <summary>
@@ -230,9 +352,11 @@ namespace PixelCrushers.DialogueSystem
         /// </summary>
         public override void Close()
         {
+            StopShowAfterClosingCoroutine();
             if (isOpen) base.Close();
-            ClearText();
+            if (clearTextOnClose) ClearText();
             hasFocus = false;
+            isFocusing = false;
         }
 
         /// <summary>
@@ -266,6 +390,8 @@ namespace PixelCrushers.DialogueSystem
         {
             panelState = PanelState.Open;
             if (hasFocus) return;
+            isFocusing = true;
+            if (m_panelAnimator != null && !string.IsNullOrEmpty(unfocusAnimationTrigger)) m_panelAnimator.ResetTrigger(unfocusAnimationTrigger);
             if (string.IsNullOrEmpty(focusAnimationTrigger))
             {
                 OnFocused();
@@ -280,6 +406,7 @@ namespace PixelCrushers.DialogueSystem
         private void OnFocused()
         {
             hasFocus = true;
+            isFocusing = false;
         }
 
         /// <summary>
@@ -287,6 +414,7 @@ namespace PixelCrushers.DialogueSystem
         /// </summary>
         public virtual void Unfocus()
         {
+            if (m_panelAnimator != null && !string.IsNullOrEmpty(focusAnimationTrigger)) m_panelAnimator.ResetTrigger(focusAnimationTrigger);
             if (m_focusWhenOpenCoroutine != null)
             {
                 StopCoroutine(m_focusWhenOpenCoroutine);
@@ -298,7 +426,12 @@ namespace PixelCrushers.DialogueSystem
             }
             else
             {
-                if (!hasFocus) return;
+                if (!(hasFocus || isFocusing))
+                {
+                    hasFocus = false;
+                    isFocusing = false;
+                    return;
+                }
             }
             if (panelState == PanelState.Opening) panelState = PanelState.Open;
             hasFocus = false;
@@ -306,15 +439,15 @@ namespace PixelCrushers.DialogueSystem
             onUnfocus.Invoke();
         }
 
-        protected void ActivateUIElements()
+        public virtual void ActivateUIElements()
         {
             SetUIElementsActive(true);
         }
 
-        protected void DeactivateUIElements()
+        public virtual void DeactivateUIElements()
         {
             SetUIElementsActive(false);
-            ClearText();
+            if (clearTextOnClose) ClearText();
         }
 
         protected virtual void SetUIElementsActive(bool value)
@@ -330,11 +463,34 @@ namespace PixelCrushers.DialogueSystem
         {
             m_accumulatedText = string.Empty;
             subtitleText.text = string.Empty;
+            numAccumulatedLines = 0;
         }
 
         public virtual void ShowContinueButton()
         {
+            if (blockInputDuration > 0)
+            {
+                DialogueManager.instance.StartCoroutine(ShowContinueButtonAfterBlockDuration());
+            }
+            else
+            {
+                ShowContinueButtonNow();
+            }
+        }
+
+        protected virtual IEnumerator ShowContinueButtonAfterBlockDuration()
+        {
+            if (continueButton == null) yield break;
+            continueButton.interactable = false;
+            yield return DialogueManager.instance.StartCoroutine(DialogueTime.WaitForSeconds(blockInputDuration));
+            continueButton.interactable = true;
+            ShowContinueButtonNow();
+        }
+
+        protected virtual void ShowContinueButtonNow()
+        { 
             Tools.SetGameObjectActive(continueButton, true);
+            if (InputDeviceManager.autoFocus) Select(); 
             if (continueButton != null && continueButton.onClick.GetPersistentEventCount() == 0)
             {
                 continueButton.onClick.RemoveAllListeners();
@@ -348,6 +504,7 @@ namespace PixelCrushers.DialogueSystem
                     continueButton.onClick.AddListener(OnContinue);
                 }
             }
+            shouldShowContinueButton = true;
         }
 
         public virtual void HideContinueButton()
@@ -380,8 +537,6 @@ namespace PixelCrushers.DialogueSystem
         /// </summary>
         public virtual void OnContinue()
         {
-            var dialogueUI = GetComponentInParent<AbstractDialogueUI>();
-            if (dialogueUI == null) dialogueUI = DialogueManager.dialogueUI as AbstractDialogueUI;
             if (dialogueUI != null) dialogueUI.OnContinueConversation();
         }
 
@@ -392,26 +547,70 @@ namespace PixelCrushers.DialogueSystem
         {
             if (subtitle == null) return;
             currentSubtitle = subtitle;
+            lastActorID = subtitle.speakerInfo.id;
+            CheckSubtitleAnimator(subtitle);
             if (!onlyShowNPCPortraits || subtitle.speakerInfo.isNPC)
             {                
                 if (portraitImage != null)
                 {
                     var sprite = subtitle.GetSpeakerPortrait();
-                    portraitImage.sprite = sprite;
-                    Tools.SetGameObjectActive(portraitImage, sprite != null);
+                    SetPortraitImage(sprite);
                 }
                 portraitActorName = subtitle.speakerInfo.nameInDatabase;
-                portraitName.text = subtitle.speakerInfo.Name;
-                UITools.SendTextChangeMessage(portraitName);
+                if (portraitName.text != subtitle.speakerInfo.Name)
+                {
+                    portraitName.text = subtitle.speakerInfo.Name;
+                    UITools.SendTextChangeMessage(portraitName);
+                }
             }
+
+            if (waitForOpen && panelState != PanelState.Open)
+            {
+                DialogueManager.instance.StartCoroutine(SetSubtitleTextContentAfterOpen(subtitle));
+            }
+            else
+            {
+                SetSubtitleTextContent(subtitle);
+            }
+            frameLastSetContent = Time.frameCount;
+        }
+
+        protected virtual IEnumerator SetSubtitleTextContentAfterOpen(Subtitle subtitle)
+        {
+            float timeout = Time.realtimeSinceStartup + WaitForCloseTimeoutDuration;
+            while (panelState != PanelState.Open && Time.realtimeSinceStartup < timeout)
+            {
+                yield return null;
+            }
+            SetSubtitleTextContent(subtitle);
+        }
+
+        protected virtual void SetSubtitleTextContent(Subtitle subtitle)
+        {
             TypewriterUtility.StopTyping(subtitleText);
             var previousText = accumulateText ? m_accumulatedText : string.Empty;
+            if (accumulateText && !string.IsNullOrEmpty(subtitle.formattedText.text))
+            {
+                if (numAccumulatedLines < maxLines)
+                {
+                    numAccumulatedLines++;
+                }
+                else
+                {
+                    // If we're at the max number of lines, remove the first line from the accumulated text:
+                    previousText = previousText.Substring(previousText.IndexOf("\n") + 1);
+                }
+            }
             var previousChars = accumulateText ? UITools.StripRPGMakerCodes(Tools.StripTextMeshProTags(Tools.StripRichTextCodes(previousText))).Length : 0;
             SetFormattedText(subtitleText, previousText, subtitle.formattedText);
             if (accumulateText) m_accumulatedText = subtitleText.text + "\n";
-            if (delayTypewriterUntilOpen && !hasFocus)
+            if (scrollbarEnabler != null && !HasTypewriter())
             {
-                StartCoroutine(StartTypingWhenFocused(subtitleText, subtitleText.text, previousChars));
+                scrollbarEnabler.CheckScrollbarWithResetValue(0);
+            }
+            else if (delayTypewriterUntilOpen && !hasFocus)
+            {
+                DialogueManager.instance.StartCoroutine(StartTypingWhenFocused(subtitleText, subtitleText.text, previousChars));
             }
             else
             {
@@ -423,7 +622,7 @@ namespace PixelCrushers.DialogueSystem
         {
             subtitleText.text = string.Empty;
             float timeout = Time.realtimeSinceStartup + 5f;
-            while (!hasFocus && panelState != PanelState.Open && Time.realtimeSinceStartup < timeout)
+            while ((!hasFocus || panelState != PanelState.Open) && Time.realtimeSinceStartup < timeout)
             {
                 yield return null;
             }
@@ -447,50 +646,81 @@ namespace PixelCrushers.DialogueSystem
         {
             if (portraitImage == null) return;
             var sprite = AbstractDialogueUI.GetValidPortraitSprite(actorName, portraitSprite);
-            portraitImage.sprite = sprite;
-            Tools.SetGameObjectActive(portraitImage, sprite != null);
+            SetPortraitImage(sprite);
         }
 
-        public void CheckSubtitleAnimator(Subtitle subtitle)
+        protected virtual void SetPortraitImage(Sprite sprite)
+        {
+            if (portraitImage == null) return;
+            Tools.SetGameObjectActive(portraitImage, sprite != null);
+            portraitImage.sprite = sprite;
+            if (usePortraitNativeSize && sprite != null)
+            {
+                portraitImage.rectTransform.sizeDelta = sprite.packed ?
+                    new Vector2(sprite.rect.width, sprite.rect.height) :
+                    new Vector2(sprite.texture.width, sprite.texture.height);
+            }
+        }
+
+        public virtual void CheckSubtitleAnimator(Subtitle subtitle)
         {
             if (subtitle != null && useAnimatedPortraits && animator != null)
             {
                 var dialogueActor = DialogueActor.GetDialogueActorComponent(subtitle.speakerInfo.transform);
-                if (dialogueActor != null && dialogueActor.standardDialogueUISettings.portraitAnimatorController != null)
+                if (dialogueActor != null) // && dialogueActor.standardDialogueUISettings.portraitAnimatorController != null)
                 {
                     var speakerPanelNumber = dialogueActor.GetSubtitlePanelNumber();
-                    var isMyPanel = (PanelNumberUtility.GetSubtitlePanelIndex(speakerPanelNumber) == this.panelNumber) ||
+                    var isMyPanel =
+                        (actorOverridingPanel == subtitle.speakerInfo.transform) ||
+                        (PanelNumberUtility.GetSubtitlePanelIndex(speakerPanelNumber) == this.panelNumber) ||
                         (speakerPanelNumber == SubtitlePanelNumber.Default && subtitle.speakerInfo.isNPC && isDefaultNPCPanel) ||
                         (speakerPanelNumber == SubtitlePanelNumber.Default && subtitle.speakerInfo.isPlayer && isDefaultPCPanel) ||
                         (speakerPanelNumber == SubtitlePanelNumber.Custom && dialogueActor.standardDialogueUISettings.customSubtitlePanel == this);
                     if (isMyPanel)
                     {
-                        StartCoroutine(SetAnimatorAtEndOfFrame(dialogueActor.standardDialogueUISettings.portraitAnimatorController));
+                        if (m_setAnimatorCoroutine != null) StopCoroutine(m_setAnimatorCoroutine);
+                        m_setAnimatorCoroutine = StartCoroutine(SetAnimatorAtEndOfFrame(dialogueActor.standardDialogueUISettings.portraitAnimatorController));
                     }
+                }
+                else
+                {
+                    if (m_setAnimatorCoroutine != null) StopCoroutine(m_setAnimatorCoroutine);
+                    m_setAnimatorCoroutine = StartCoroutine(SetAnimatorAtEndOfFrame(null));
                 }
             }
         }
 
-        protected void CheckDialogueActorAnimator(DialogueActor dialogueActor)
+        protected virtual void CheckDialogueActorAnimator(DialogueActor dialogueActor)
         {
             if (dialogueActor != null && useAnimatedPortraits && animator != null &&
                 dialogueActor.standardDialogueUISettings.portraitAnimatorController != null)
             {
-                StartCoroutine(SetAnimatorAtEndOfFrame(dialogueActor.standardDialogueUISettings.portraitAnimatorController));
+                if (m_setAnimatorCoroutine != null) StopCoroutine(m_setAnimatorCoroutine);
+                m_setAnimatorCoroutine = StartCoroutine(SetAnimatorAtEndOfFrame(dialogueActor.standardDialogueUISettings.portraitAnimatorController));
             }
         }
 
-        private IEnumerator SetAnimatorAtEndOfFrame(RuntimeAnimatorController animatorController)
+        protected virtual IEnumerator SetAnimatorAtEndOfFrame(RuntimeAnimatorController animatorController)
         {
+            if (animator == null) yield break;
             if (animator.runtimeAnimatorController != animatorController)
             {
                 animator.runtimeAnimatorController = animatorController;
+            }
+            if (animatorController != null)
+            {
+                Tools.SetGameObjectActive(portraitImage, portraitImage.sprite != null);
             }
             yield return new WaitForEndOfFrame();
             if (animator.runtimeAnimatorController != animatorController)
             {
                 animator.runtimeAnimatorController = animatorController;
             }
+            if (animatorController != null)
+            {
+                Tools.SetGameObjectActive(portraitImage, portraitImage.sprite != null);
+            }
+            animator.enabled = animatorController != null;
         }
 
         #endregion

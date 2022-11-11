@@ -41,7 +41,7 @@ namespace PixelCrushers.DialogueSystem
         [Tooltip("How many dialogue entries' SimStatus values are recorded each frame; only used if saving SimStatus.")]
         public int asyncDialogueEntryBatchSize = 100;
 
-        [Tooltip("Initialize variables that were added to database after saved game.")]
+        [Tooltip("Initialize variables and quests that were added to database after saved game.")]
         public bool initializeNewVariables = true;
     }
 

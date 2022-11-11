@@ -1,4 +1,5 @@
 ﻿using DChild.Gameplay.Characters;
+using DChild.Gameplay.Characters.AI;
 using DChild.Gameplay.Characters.Enemies;
 using DChild.Gameplay.Combat.StatusAilment;
 using DChild.Gameplay.Combat.UI;
@@ -81,6 +82,12 @@ namespace DChild.Gameplay.Combat
                         {
                             FlinchTarget(targetInfo.flinchHandler, targetInfo.facing, m_cacheTarget.position, attacker.position, summary);
                         }
+                    }
+
+                    var combatBrain = targetInfo.instance.transform.GetComponent<ICombatAIBrain>();
+                    if(combatBrain!= null)
+                    {
+                        combatBrain.ReactToConflict(attacker);
                     }
                 }
             }

@@ -1,7 +1,7 @@
-﻿using Boo.Lang;
-using Sirenix.OdinInspector;
+﻿using Sirenix.OdinInspector;
 using Spine.Unity;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace DChild.Gameplay.UI

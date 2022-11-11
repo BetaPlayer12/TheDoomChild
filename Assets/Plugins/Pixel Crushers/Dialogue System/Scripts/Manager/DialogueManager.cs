@@ -36,6 +36,16 @@ namespace PixelCrushers.DialogueSystem
         /// <value><c>true</c> if has instance; otherwise, <c>false</c>.</value>
         public static bool hasInstance { get { return instance != null; } }
 
+#if UNITY_2019_3_OR_NEWER && UNITY_EDITOR
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        static void InitStaticVariables()
+        {
+            m_instance = null;
+        }
+#endif
+
+
+
         /// <summary>
         /// Gets the database manager.
         /// </summary>
@@ -65,6 +75,16 @@ namespace PixelCrushers.DialogueSystem
         }
 
         /// <summary>
+        /// Convenience property that casts the dialogueUI property as a StandardDialogueUI.
+        /// If the dialogueUI is not a StandardDialogueUI, returns null.
+        /// </summary>
+        public static StandardDialogueUI standardDialogueUI
+        {
+            get { return (instance != null) ? instance.standardDialogueUI : null; }
+            set { instance.standardDialogueUI = value; }
+        }
+
+        /// <summary>
         /// Gets the display settings.
         /// </summary>
         /// <value>
@@ -87,6 +107,12 @@ namespace PixelCrushers.DialogueSystem
         public static bool allowSimultaneousConversations { get { return hasInstance ? instance.allowSimultaneousConversations : false; } }
 
         /// <summary>
+        /// If not allowing simultaneous conversations and a conversation is active, stop it if another conversation wants to start.
+        /// </summary>
+        /// <value><c>true</c> to interrupt active conversation if another wants to start; otherwise, <c>false</c>.</value>
+        public static bool interruptActiveConversations { get { return hasInstance ? instance.interruptActiveConversations : false; } }
+
+        /// <summary>
         /// The IsDialogueEntryValid delegate (if one is assigned). This is an optional delegate that you
         /// can add to check if a dialogue entry is valid before allowing a conversation to use it.
         /// It should return <c>true</c> if the entry is valid.
@@ -95,6 +121,15 @@ namespace PixelCrushers.DialogueSystem
         {
             get { return hasInstance ? instance.isDialogueEntryValid : null; }
             set { instance.isDialogueEntryValid = value; }
+        }
+
+        /// <summary>
+        /// If response timeout action is set to Custom and menu times out, call this method.
+        /// </summary>
+        public static System.Action customResponseTimeoutHandler
+        {
+            get { return hasInstance ? instance.customResponseTimeoutHandler : null; }
+            set { instance.customResponseTimeoutHandler = value; }
         }
 
         /// <summary>
@@ -145,6 +180,12 @@ namespace PixelCrushers.DialogueSystem
         public static string lastConversationStarted { get { return hasInstance ? instance.lastConversationStarted : string.Empty; } }
 
         /// <summary>
+        /// Gets the title of the last conversation that ended.
+        /// </summary>
+        /// <value>The title of the last conversation ended.</value>
+        public static string lastConversationEnded { get { return hasInstance ? instance.lastConversationEnded : string.Empty; } }
+
+        /// <summary>
         /// Gets the ID of the last conversation started.
         /// </summary>
         public static int lastConversationID { get { return hasInstance ? instance.lastConversationID : -1; } }
@@ -163,6 +204,15 @@ namespace PixelCrushers.DialogueSystem
         /// Gets the active conversation's ConversationView.
         /// </summary>
         public static ConversationView conversationView { get { return hasInstance ? instance.conversationView : null; } }
+
+        /// <summary>
+        /// If <c>true</c>, Dialogue System Triggers set to OnStart should wait until save data has been applied or variables initialized.
+        /// </summary>
+        public static bool onStartTriggerWaitForSaveDataApplied
+        {
+            get { return hasInstance ? instance.onStartTriggerWaitForSaveDataApplied : false; }
+            set { if (hasInstance) instance.onStartTriggerWaitForSaveDataApplied = value; }
+        }
 
         /// <summary>
         /// Gets or sets the debug level.
@@ -338,9 +388,10 @@ namespace PixelCrushers.DialogueSystem
         /// direct camera angles and perform other actions. In PC-NPC conversations, the conversant
         /// is usually the NPC.
         /// </param>
-        public static bool ConversationHasValidEntry(string title, Transform actor, Transform conversant)
+        /// <param name="initialDialogueEntryID">Optional starting entry ID; omit to start at beginning.</param>
+        public static bool ConversationHasValidEntry(string title, Transform actor, Transform conversant, int initialDialogueEntryID = -1)
         {
-            return hasInstance ? instance.ConversationHasValidEntry(title, actor, conversant) : false;
+            return hasInstance ? instance.ConversationHasValidEntry(title, actor, conversant, initialDialogueEntryID) : false;
         }
 
         /// <summary>
@@ -485,6 +536,15 @@ namespace PixelCrushers.DialogueSystem
         }
 
         /// <summary>
+        /// Stops all current conversations immediately.
+        /// </summary>
+        public static void StopAllConversations()
+        {
+            if (!hasInstance) return;
+            instance.StopAllConversations();
+        }
+
+        /// <summary>
         /// Updates the responses for the current state of the current conversation.
         /// If the response menu entries' conditions have changed while the response menu is
         /// being shown, you can call this method to update the response menu.
@@ -493,6 +553,16 @@ namespace PixelCrushers.DialogueSystem
         {
             if (!hasInstance) return;
             instance.UpdateResponses();
+        }
+
+        /// <summary>
+        /// Changes an actor's Display Name.
+        /// </summary>
+        /// <param name="actorName">Actor's Name field.</param>
+        /// <param name="newDisplayName">New Display Name value.</param>
+        public static void ChangeActorName(string actorName, string newDisplayName)
+        {
+            DialogueSystemController.ChangeActorName(actorName, newDisplayName);
         }
 
         /// <summary>
@@ -653,7 +723,7 @@ namespace PixelCrushers.DialogueSystem
         /// <summary>
         /// Gets localized text.
         /// </summary>
-        /// <returns>If the specified field exists in the table, returns the field's 
+        /// <returns>If the specified field exists in the text tables, returns the field's 
         /// localized text for the current language. Otherwise returns the field itself.</returns>
         /// <param name="s">The field to look up.</param>
         public static string GetLocalizedText(string s)
@@ -810,6 +880,16 @@ namespace PixelCrushers.DialogueSystem
         }
 
         /// <summary>
+        /// Sets the dialogue UI's main panel visible or invisible.
+        /// </summary>
+        /// <param name="show">If true, show (or re-show) the panel; if false, hide it.</param>
+        /// <param name="immediate">If true, skip animation and change immediately.</param>
+        public static void SetDialoguePanel(bool show, bool immediate = false)
+        {
+            instance.SetDialoguePanel(show, immediate);
+        }
+
+        /// <summary>
         /// Sets an actor's portrait. If can be:
         /// - 'default' or <c>null</c> to use the primary portrait defined in the database,
         /// - 'pic=#' to use an alternate portrait defined in the database (numbered from 2), or
@@ -906,6 +986,7 @@ namespace PixelCrushers.DialogueSystem
 
         /// <summary>
         /// Loads a named asset from the registered asset bundles or from Resources.
+        /// Note: This version of LoadAsset does not load from Addressables.
         /// </summary>
         /// <returns>The asset, or <c>null</c> if not found.</returns>
         /// <param name="name">Name of the asset.</param>
@@ -916,6 +997,7 @@ namespace PixelCrushers.DialogueSystem
 
         /// <summary>
         /// Loads a named asset from the registered asset bundles or from Resources.
+        /// Note: This version of LoadAsset does not load from Addressables.
         /// </summary>
         /// <returns>The asset, or <c>null</c> if not found.</returns>
         /// <param name="name">Name of the asset.</param>
@@ -923,6 +1005,40 @@ namespace PixelCrushers.DialogueSystem
         public static UnityEngine.Object LoadAsset(string name, System.Type type)
         {
             return hasInstance ? instance.LoadAsset(name, type) : null;
+        }
+
+        /// <summary>
+        /// Loads a named asset from the registered asset bundles, Resources, or
+        /// Addressables. Returns the asset in a callback delegate. Addressables
+        /// will be unloaded when the scene is unloaded. To unload them earlier,
+        /// use DialogueManager.UnloadAsset(). 
+        /// 
+        /// By default, scene changes unload all addressables loaded via 
+        /// DialogueManager.LoadAsset(). To prevent the unload, set
+        /// DialogueManager.instance.unloadAddressablesOnSceneChange to false.
+        /// </summary>
+        /// <param name="name">Name of the asset.</param>
+        /// <param name="type">Type of the asset</param>
+        /// <param name="assetLoaded">Delegate method to call when returning loaded asset, or <c>null</c> if not found.</param>
+        public static void LoadAsset(string name, System.Type type, AssetLoadedDelegate assetLoaded)
+        {
+            if (hasInstance)
+            {
+                instance.LoadAsset(name, type, assetLoaded);
+            }
+            else if (assetLoaded != null)
+            {
+                assetLoaded(null);
+            }
+        }
+
+        /// <summary>
+        /// Unloads an object previously loaded by LoadAsset. Only unloads
+        /// if using addressables.
+        /// </summary>
+        public static void UnloadAsset(object obj)
+        {
+            if (hasInstance) instance.UnloadAsset(obj);
         }
 
         /// <summary>

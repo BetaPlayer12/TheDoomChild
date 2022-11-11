@@ -186,6 +186,7 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.deathAnimation);
             //m_animation.SetAnimation(0, m_info.disassembledIdleAnimation, true);
             yield return new WaitForSeconds(m_info.deathDuration);
+            gameObject.SetActive(false);
             m_health.SetHealthPercentage(1f);
             enabled = true;
             m_animation.SetAnimation(0, m_info.recoverAnimation, false);

@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Combat
 {
-    public class AttackerCombatInfo
+    public class AttackerCombatInfo : IAttackerConflictInfo
     {
         public bool isPlayer { get; private set; }
         public GameObject instance { get; private set; }

@@ -12,11 +12,11 @@ using System.Collections;
 using System.Collections.Generic;
 using DChild;
 using DChild.Gameplay.Characters.Enemies;
-using Doozy.Engine;
 using Spine.Unity.Modules;
 using Spine.Unity.Examples;
 using DChild.Gameplay.Pooling;
 using DChild.Gameplay.Projectiles;
+using DChild.Temp;
 
 namespace DChild.Gameplay.Characters.Enemies
 {
@@ -317,6 +317,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private string m_currentIdleAnimation;
         #endregion
 
+        private bool m_isDetecting;
+
         private void ApplyPhaseData(PhaseInfo obj)
         {
             m_attackCache.Clear();
@@ -391,8 +393,12 @@ namespace DChild.Gameplay.Characters.Enemies
             if (damageable != null && m_stateHandle.currentState == State.Idle)
             {
                 base.SetTarget(damageable, m_target);
-                m_stateHandle.OverrideState(State.Intro);
-                GameEventMessage.SendEvent("Boss Encounter");
+                if (!m_isDetecting)
+                {
+                    m_isDetecting = true;
+                    m_stateHandle.OverrideState(State.Intro);
+                    GameEventMessage.SendEvent("Boss Encounter");
+                }
             }
         }
 
@@ -503,6 +509,7 @@ namespace DChild.Gameplay.Characters.Enemies
             base.OnDestroyed(sender, eventArgs);
             StopAllCoroutines();
             m_movement.Stop();
+            m_isDetecting = false;
         }
 
         #region Attacks

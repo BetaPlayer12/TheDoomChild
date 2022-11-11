@@ -1,9 +1,8 @@
 ﻿using DChild.Gameplay.Characters.Players;
-using DChild.Gameplay.Systems;
-using Doozy.Engine;
-using Doozy.Engine.UI;
+using DChild.Temp;
+using Doozy.Runtime.UIManager.Animators;
+using Doozy.Runtime.UIManager.Containers;
 using Sirenix.OdinInspector;
-using System;
 using TMPro;
 using UnityEngine;
 
@@ -23,7 +22,7 @@ namespace DChild.Gameplay.UI
         private Canvas m_invalidPrompt;
         [SerializeField, TabGroup("Invalid Prompt")]
         private TextMeshProUGUI m_requirementMessage;
-        private UIView m_view;
+        private UIContainerUIAnimator m_animator;
         private Vector3 m_showStartPosition;
 
         private Vector3 m_newPromptPosition;
@@ -34,9 +33,12 @@ namespace DChild.Gameplay.UI
             if (eventArgs.interactable?.showPrompt ?? false)
             {
                 m_newPromptPosition = eventArgs.interactable.promptPosition;
-                var move = m_view.ShowBehavior.Animation.Move;
-                move.From = m_newPromptPosition + m_showStartPosition;
-                move.To = m_newPromptPosition;
+                GameEventMessage.Send();
+
+                var move = m_animator.showAnimation.Move;
+                move.fromCustomValue = m_newPromptPosition + m_showStartPosition;
+                move.toCustomValue = m_newPromptPosition;
+
                 m_validPrompt.enabled = eventArgs.showInteractionButton;
                 m_invalidPrompt.enabled = !eventArgs.showInteractionButton;
                 m_promptMessage.text = eventArgs.message;
@@ -56,8 +58,9 @@ namespace DChild.Gameplay.UI
             {
                 m_detector.InteractableDetected += OnInteractableDetected;
             }
-            m_view = m_prompt?.GetComponent<UIView>();
-            m_showStartPosition = m_view.ShowBehavior.Animation.Move.From;
+            m_animator = m_prompt?.GetComponent<UIContainerUIAnimator>();
+            GameEventMessage.Send();
+            m_showStartPosition = m_animator.showAnimation.Move.fromCustomValue;
         }
     }
 }

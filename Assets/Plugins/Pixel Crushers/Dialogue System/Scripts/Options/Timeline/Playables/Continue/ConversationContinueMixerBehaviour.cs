@@ -1,6 +1,3 @@
-// Recompile at 01/07/2021 2:56:36 PM
-
-
 #if USE_TIMELINE
 #if UNITY_2017_1_OR_NEWER
 // Copyright (c) Pixel Crushers. All rights reserved.
@@ -8,6 +5,7 @@
 using UnityEngine;
 using UnityEngine.Playables;
 using System.Collections.Generic;
+using UnityEngine.Timeline;
 
 namespace PixelCrushers.DialogueSystem
 {
@@ -63,7 +61,7 @@ namespace PixelCrushers.DialogueSystem
                         switch (input.operation)
                         {
                             case ContinueConversationBehaviour.Operation.Continue:
-                                PreviewUI.ShowMessage("Continue", 3, -1);
+                                PreviewUI.ShowMessage(GetEditorContinueText(playable), 3, -1);
                                 break;
                             case ContinueConversationBehaviour.Operation.ClearSubtitleText:
                                 break;
@@ -75,6 +73,61 @@ namespace PixelCrushers.DialogueSystem
                     played.Remove(i);
                 }
             }
+        }
+
+        private string GetEditorContinueText(Playable playable)
+        {
+#if UNITY_EDITOR
+            PlayableDirector director = playable.GetGraph().GetResolver() as PlayableDirector;
+            if (director != null && director.playableAsset != null)
+            {
+                var currentTime = director.time;
+                var timelineAsset = director.playableAsset as TimelineAsset;
+
+                // Find the latest StartConversationClip up to the current time:
+                double startConversationTime = 0;
+                string conversationTitle = string.Empty;
+                int startingEntryID = -1;
+                foreach (var track in timelineAsset.GetOutputTracks())
+                {
+                    foreach (var clip in track.GetClips())
+                    {
+                        if (clip.start > currentTime) break;
+                        if (clip.asset.GetType() == typeof(StartConversationClip))
+                        {
+                            var startConversationClip = clip.asset as StartConversationClip;
+                            startConversationTime = clip.start;
+                            conversationTitle = startConversationClip.template.conversation;
+                            startingEntryID = startConversationClip.template.jumpToSpecificEntry ? startConversationClip.template.entryID : -1;
+                        }
+                    }
+                }
+
+                // Count how many continues have passed since last StartConversationClip:
+                int numContinues = 0;
+                foreach (var track in timelineAsset.GetOutputTracks())
+                {
+                    foreach (var clip in track.GetClips())
+                    {
+                        if (clip.start > currentTime) break;
+                        if (clip.start > startConversationTime &&
+                            clip.asset.GetType() == typeof(ContinueConversationClip))
+                        {
+                            numContinues++;
+                        }
+                    }
+                }
+
+                var dialogueText = PreviewUI.GetDialogueText(conversationTitle, startingEntryID, numContinues);
+                //Debug.Log(numContinues + " continues since " + conversationTitle + " entry " + startingEntryID +
+                //    " started at " + startConversationTime + ": " + dialogueText);
+                if (!string.IsNullOrEmpty(dialogueText))
+                {
+                    return dialogueText + " (may vary)";
+                }
+            }
+#endif
+            return "Continue";
         }
 
         public override void OnGraphStart(Playable playable)

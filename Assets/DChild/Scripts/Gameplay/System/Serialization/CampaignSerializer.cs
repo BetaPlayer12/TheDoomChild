@@ -6,10 +6,11 @@ using Sirenix.Serialization;
 using Sirenix.Utilities;
 using UnityEngine;
 using System.Threading.Tasks;
-using Doozy.Engine;
+using DChild.Temp;
 using System;
 using PixelCrushers.DialogueSystem;
 using PixelCrushers;
+using Doozy.Runtime.Signals;
 #if UNITY_EDITOR
 using DChildDebug;
 #endif
@@ -44,6 +45,8 @@ namespace DChild.Gameplay
 
     public class CampaignSerializer : SerializedMonoBehaviour, IGameplaySystemModule
     {
+        [SerializeField]
+        private SignalSender m_serializationSignal;
 #if UNITY_EDITOR
         [SerializeField, PropertyOrder(-1), FoldoutGroup("Debug")]
         private CampaignSlotData m_toLoad;
@@ -84,7 +87,7 @@ namespace DChild.Gameplay
         [Button]
         public void Save(SerializationScope scope)
         {
-            GameEventMessage.SendEvent("Game Save Start");
+            m_serializationSignal.SendSignal();
             m_slot.SetAsNewGame(false);
             CallPreSerialization(scope);
             if (m_slot.allowWriteToDisk)
@@ -95,10 +98,8 @@ namespace DChild.Gameplay
 
         public async Task<bool> SaveAsync(SerializationScope scope)
         {
-            GameEventMessage.SendEvent("Game Save Start");
             CallPreSerialization(scope);
             await SerializationHandle.SaveCampaignSlotAsync(m_slot.id, m_slot);
-            GameEventMessage.SendEvent("Game Save End");
             return true;
         }
 
@@ -119,10 +120,8 @@ namespace DChild.Gameplay
 
         public async Task<bool> LoadAsync(SerializationScope scope)
         {
-            GameEventMessage.SendEvent("Game Load Start");
             await SerializationHandle.LoadCampaignSlotAsync(m_slot.id,m_slot);
             CallPostDeserialization(scope);
-            GameEventMessage.SendEvent("Game Load End");
             return true;
         }
 

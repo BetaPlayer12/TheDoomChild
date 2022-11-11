@@ -1,4 +1,5 @@
-﻿using TMPro;
+﻿using DChild.Menu.Inputs;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,13 +12,13 @@ namespace DChild.Gameplay.UI
         [SerializeField]
         private TextMeshProUGUI m_header;
         [SerializeField]
-        private TextMeshProUGUI m_instructions;
+        private InstructionsPromptUI m_instructions;
 
         public void Show(StoreNotificationInfo info)
         {
             m_icon.sprite = info.icon;
             m_header.text = info.headerLabel;
-            m_instructions.text = "<sprite=0>" + info.instructions;
+            m_instructions.SetText(info.instructions);
         }
     }
 }

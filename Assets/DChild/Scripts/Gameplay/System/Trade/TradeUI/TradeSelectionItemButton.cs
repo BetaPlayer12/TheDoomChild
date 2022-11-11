@@ -1,5 +1,5 @@
 ﻿using DChild.Gameplay.Inventories;
-using Doozy.Engine.UI;
+using Doozy.Runtime.UIManager.Components;
 using Holysoft.Event;
 using Sirenix.Serialization.Utilities;
 using TMPro;

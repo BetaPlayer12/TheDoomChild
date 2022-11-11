@@ -36,6 +36,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         public bool projectileThrowHeld;
 
         private PlayerInput m_input;
+        private InputActionMap m_gameplayActionMap;
 
         public void Disable()
         {
@@ -43,7 +44,10 @@ namespace DChild.Gameplay.Characters.Players.Modules
             {
                 Reset();
             }
-            m_input.enabled = false;
+            if (m_input)
+            {
+                m_gameplayActionMap.Disable();
+            }
             this.enabled = false;
         }
 
@@ -53,7 +57,10 @@ namespace DChild.Gameplay.Characters.Players.Modules
             {
                 Reset();
             }
-            m_input.enabled = true;
+            if (m_input)
+            {
+                m_gameplayActionMap.Enable();
+            }
             this.enabled = true;
         }
 
@@ -91,6 +98,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             if (enabled == true)
             {
                 verticalInput = value.Get<float>();
+                crouchHeld = value.Get<float>() == -1;
 
                 if (verticalInput < 1 && verticalInput > -1)
                 {
@@ -237,13 +245,18 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private void Awake()
         {
             m_input = GetComponent<PlayerInput>();
-            m_mousePosition = Input.mousePosition;
+            if (m_input)
+            {
+                m_gameplayActionMap = m_input.actions.FindActionMap("Gameplay");
+            }
+            m_mousePosition = Mouse.current.position.ReadValue();
         }
 
         private void Update()
         {
-            m_mouseDelta = (Vector2)Input.mousePosition - m_mousePosition;
-            m_mousePosition = Input.mousePosition;
+            var mousePosition = Mouse.current.position.ReadValue();
+            m_mouseDelta = mousePosition - m_mousePosition;
+            m_mousePosition = mousePosition;
             m_mousePosition += new Vector2(controllerCursorHorizontalInput, controllerCursorVerticalInput).normalized;
         }
 
