@@ -164,7 +164,7 @@ namespace PixelCrushers.DialogueSystem
             for (int i = 0; i < questStateIndicatorLevels.Length; i++)
             {
                 var questStateIndicatorLevel = questStateIndicatorLevels[i];
-                if (isOnStart && questStateIndicatorLevel.updateOnStartOnly == false)
+                if (isOnStart == false && questStateIndicatorLevel.updateOnStartOnly)
                     continue;
 
                 if (questState == questStateIndicatorLevel.questState && questStateIndicatorLevel.condition.IsTrue(null))
