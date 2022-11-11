@@ -1,5 +1,31 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &5547684644676023021
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2075784178885029445}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 70443ecacf099b2478b8834eeb630323, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  OnCallBack:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 8089781613609798470}
+        m_MethodName: CallPoolRequest
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &4555445818149904497
 GameObject:
   m_ObjectHideFlags: 0
@@ -16,7 +42,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &6299781540818762376
 Transform:
   m_ObjectHideFlags: 0
@@ -142,10 +168,7 @@ MonoBehaviour:
   m_physicsObjects:
     m_rigidbody2Ds:
     - {fileID: 3294752841817744060}
-    - {fileID: 2075784178885029442}
     m_physicsTimeObjectInfo:
-    - m_mass: 1
-      m_actualVelocity: {x: 0, y: 0}
     - m_mass: 1
       m_actualVelocity: {x: 0, y: 0}
   m_materials: []
@@ -354,10 +377,35 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 654378074104659014}
     m_Modifications:
+    - target: {fileID: 2944816205260953534, guid: 1db625a529a6be34cbb2d01c79aab382,
+        type: 3}
+      propertyPath: stopAction
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2944816205366389236, guid: 1db625a529a6be34cbb2d01c79aab382,
+        type: 3}
+      propertyPath: stopAction
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2944816206398719814, guid: 1db625a529a6be34cbb2d01c79aab382,
+        type: 3}
+      propertyPath: stopAction
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2944816206691355969, guid: 1db625a529a6be34cbb2d01c79aab382,
+        type: 3}
+      propertyPath: stopAction
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 2944816207033796875, guid: 1db625a529a6be34cbb2d01c79aab382,
         type: 3}
       propertyPath: m_Name
       value: the_one_slash_fx_holder_purple
+      objectReference: {fileID: 0}
+    - target: {fileID: 2944816207033796878, guid: 1db625a529a6be34cbb2d01c79aab382,
+        type: 3}
+      propertyPath: stopAction
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 2944816207033796879, guid: 1db625a529a6be34cbb2d01c79aab382,
         type: 3}
@@ -414,8 +462,19 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2944816207338062838, guid: 1db625a529a6be34cbb2d01c79aab382,
+        type: 3}
+      propertyPath: stopAction
+      value: 3
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1db625a529a6be34cbb2d01c79aab382, type: 3}
+--- !u!1 &2075784178885029445 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2944816207033796875, guid: 1db625a529a6be34cbb2d01c79aab382,
+    type: 3}
+  m_PrefabInstance: {fileID: 3751705243314906958}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &2075784178885029441 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2944816207033796879, guid: 1db625a529a6be34cbb2d01c79aab382,
@@ -425,12 +484,6 @@ Transform:
 --- !u!198 &2075784178885029440 stripped
 ParticleSystem:
   m_CorrespondingSourceObject: {fileID: 2944816207033796878, guid: 1db625a529a6be34cbb2d01c79aab382,
-    type: 3}
-  m_PrefabInstance: {fileID: 3751705243314906958}
-  m_PrefabAsset: {fileID: 0}
---- !u!50 &2075784178885029442 stripped
-Rigidbody2D:
-  m_CorrespondingSourceObject: {fileID: 2944816207033796876, guid: 1db625a529a6be34cbb2d01c79aab382,
     type: 3}
   m_PrefabInstance: {fileID: 3751705243314906958}
   m_PrefabAsset: {fileID: 0}

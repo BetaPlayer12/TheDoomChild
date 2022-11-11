@@ -213,9 +213,6 @@ namespace DChild.Gameplay.Characters.Enemies
 
             [TitleGroup("Misc")]
             [SerializeField]
-            private float m_targetDistanceTolerance;
-            public float targetDistanceTolerance => m_targetDistanceTolerance;
-            [SerializeField]
             private float m_phaseChangeToBlinkDelay;
             public float phaseChangeToBlinkDelay => m_phaseChangeToBlinkDelay;
             [SerializeField]
@@ -280,11 +277,41 @@ namespace DChild.Gameplay.Characters.Enemies
 
             [Title("Projectiles")]
             [SerializeField]
-            private SimpleProjectileAttackInfo m_slashProjectile;
-            public SimpleProjectileAttackInfo slashProjectile => m_slashProjectile;
-            [SerializeField]
-            private SimpleProjectileAttackInfo m_scytheWaveProjectile;
-            public SimpleProjectileAttackInfo scytheWaveProjectile => m_scytheWaveProjectile;
+            private float m_targetDistanceTolerance;
+            public float targetDistanceTolerance => m_targetDistanceTolerance;
+            [SerializeField, BoxGroup("Slash Projectile")]
+            private SimpleProjectileAttackInfo m_slashNormalProjectile;
+            public SimpleProjectileAttackInfo slashNormalProjectile => m_slashNormalProjectile;
+            [SerializeField, BoxGroup("Slash Projectile")]
+            private SimpleProjectileAttackInfo m_slashBlackbloodProjectile;
+            public SimpleProjectileAttackInfo slashBlackbloodProjectile => m_slashBlackbloodProjectile;
+            [SerializeField, BoxGroup("Slash Projectile")]
+            private SimpleProjectileAttackInfo m_slashPoisonProjectile;
+            public SimpleProjectileAttackInfo slashPoisonProjectile => m_slashPoisonProjectile;
+            [SerializeField, BoxGroup("Slash Projectile")]
+            private SimpleProjectileAttackInfo m_slashAcidProjectile;
+            public SimpleProjectileAttackInfo slashAcidProjectile => m_slashAcidProjectile;
+            [SerializeField, BoxGroup("Scythe Wave Projectile")]
+            private SimpleProjectileAttackInfo m_scytheWaveNormalProjectile;
+            public SimpleProjectileAttackInfo scytheWaveNormalProjectile => m_scytheWaveNormalProjectile;
+            [SerializeField, BoxGroup("Scythe Wave Projectile")]
+            private SimpleProjectileAttackInfo m_scytheWaveBlackbloodProjectile;
+            public SimpleProjectileAttackInfo scytheWaveBlackbloodProjectile => m_scytheWaveNormalProjectile;
+            [SerializeField, BoxGroup("Scythe Wave Projectile")]
+            private SimpleProjectileAttackInfo m_scytheWavePoisonProjectile;
+            public SimpleProjectileAttackInfo scytheWavePoisonProjectile => m_scytheWavePoisonProjectile;
+            [SerializeField, BoxGroup("Scythe Wave Projectile")]
+            private SimpleProjectileAttackInfo m_scytheWaveAcidProjectile;
+            public SimpleProjectileAttackInfo scytheWaveAcidProjectile => m_scytheWaveAcidProjectile;
+            [SerializeField, BoxGroup("Geyser Burst Projectile")]
+            private SimpleProjectileAttackInfo m_geyserBurstBlackbloodProjectile;
+            public SimpleProjectileAttackInfo geyserBurstBlackbloodProjectile => m_geyserBurstBlackbloodProjectile;
+            [SerializeField, BoxGroup("Geyser Burst Projectile")]
+            private SimpleProjectileAttackInfo m_geyserBurstPoisonProjectile;
+            public SimpleProjectileAttackInfo geyserBurstPoisonProjectile => m_geyserBurstPoisonProjectile;
+            [SerializeField, BoxGroup("Geyser Burst Projectile")]
+            private SimpleProjectileAttackInfo m_geyserBurstAcidProjectile;
+            public SimpleProjectileAttackInfo geyserBurstAcidProjectile => m_geyserBurstAcidProjectile;
 
             [TitleGroup("FX")]
             [SerializeField]
@@ -317,8 +344,17 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_geyserBurstGreenAttack.SetData(m_skeletonDataAsset);
                 m_geyserBurstPurpleAttack.SetData(m_skeletonDataAsset);
                 m_geyserBurstRedAttack.SetData(m_skeletonDataAsset);
-                m_slashProjectile.SetData(m_skeletonDataAsset);
-                m_scytheWaveProjectile.SetData(m_skeletonDataAsset);
+                m_geyserBurstAcidProjectile.SetData(m_skeletonDataAsset);
+                m_geyserBurstPoisonProjectile.SetData(m_skeletonDataAsset);
+                m_geyserBurstBlackbloodProjectile.SetData(m_skeletonDataAsset);
+                m_slashNormalProjectile.SetData(m_skeletonDataAsset);
+                m_slashBlackbloodProjectile.SetData(m_skeletonDataAsset);
+                m_slashPoisonProjectile.SetData(m_skeletonDataAsset);
+                m_slashAcidProjectile.SetData(m_skeletonDataAsset);
+                m_scytheWaveNormalProjectile.SetData(m_skeletonDataAsset);
+                m_scytheWaveBlackbloodProjectile.SetData(m_skeletonDataAsset);
+                m_scytheWavePoisonProjectile.SetData(m_skeletonDataAsset);
+                m_scytheWaveAcidProjectile.SetData(m_skeletonDataAsset);
 #endif
             }
         }
@@ -435,6 +471,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private ProjectileLauncher m_projectileLauncher;
         private ProjectileLauncher m_scytheWaveLauncher;
+        private ProjectileLauncher m_geyserBurstLauncher;
 
         [SerializeField]
         private SpineEventListener m_spineListener;
@@ -825,7 +862,21 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             if (!IsFacingTarget())
                 CustomTurn();
-
+            //switch (m_currentSwordState)
+            //{
+            //    case SwordState.Normal:
+            //        m_projectileLauncher = new ProjectileLauncher(m_info.slashNormalProjectile.projectileInfo, m_projectilePoint);
+            //        break;
+            //    case SwordState.BlackBlood:
+            //        m_projectileLauncher = new ProjectileLauncher(m_info.slashBlackbloodProjectile.projectileInfo, m_projectilePoint);
+            //        break;
+            //    case SwordState.Poison:
+            //        m_projectileLauncher = new ProjectileLauncher(m_info.slashPoisonProjectile.projectileInfo, m_projectilePoint);
+            //        break;
+            //    case SwordState.Acid:
+            //        m_projectileLauncher = new ProjectileLauncher(m_info.slashAcidProjectile.projectileInfo, m_projectilePoint);
+            //        break;
+            //}
             m_projectileLauncher.AimAt(m_targetInfo.position);
             m_projectileLauncher.LaunchProjectile();
             StartCoroutine(ProjectileIKControlRoutine());
@@ -835,6 +886,21 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             if (!IsFacingTarget())
                 CustomTurn();
+            //switch (m_currentSwordState)
+            //{
+            //    case SwordState.Normal:
+            //        m_scytheWaveLauncher = new ProjectileLauncher(m_info.scytheWaveNormalProjectile.projectileInfo, m_scytheWavePoint);
+            //        break;
+            //    case SwordState.BlackBlood:
+            //        m_scytheWaveLauncher = new ProjectileLauncher(m_info.scytheWaveBlackbloodProjectile.projectileInfo, m_scytheWavePoint);
+            //        break;
+            //    case SwordState.Poison:
+            //        m_scytheWaveLauncher = new ProjectileLauncher(m_info.scytheWavePoisonProjectile.projectileInfo, m_scytheWavePoint);
+            //        break;
+            //    case SwordState.Acid:
+            //        m_scytheWaveLauncher = new ProjectileLauncher(m_info.scytheWaveAcidProjectile.projectileInfo, m_scytheWavePoint);
+            //        break;
+            //}
             var target = new Vector2(m_scytheWavePoint.position.x + (5 * transform.localScale.x), m_scytheWavePoint.position.y);
             m_scytheWaveLauncher.AimAt(target);
             m_scytheWaveLauncher.LaunchProjectile();
@@ -1193,6 +1259,8 @@ namespace DChild.Gameplay.Characters.Enemies
                     geyserAnimation = m_info.geyserBurstGreenAttack.animation;
                     break;
             }
+            m_geyserBurstLauncher.AimAt(GroundPosition(this.transform.position));
+            m_geyserBurstLauncher.LaunchProjectile();
             m_animation.AddAnimation(0, geyserAnimation, false, 0);
             yield return new WaitForAnimationComplete(m_animation.animationState, geyserAnimation);
             m_attackDecider.hasDecidedOnAttack = false;
@@ -1566,17 +1634,6 @@ namespace DChild.Gameplay.Characters.Enemies
             return randomPos;
         }
 
-        private Vector2 GroundPosition(Vector2 startPoint)
-        {
-            int hitCount = 0;
-            //RaycastHit2D hit = Physics2D.Raycast(m_projectilePoint.position, Vector2.down,  1000, DChildUtility.GetEnvironmentMask());
-            RaycastHit2D[] hit = Cast(startPoint, Vector2.down, 1000, true, out hitCount, true);
-            Debug.DrawRay(startPoint, hit[0].point);
-            //var hitPos = (new Vector2(m_projectilePoint.position.x, Vector2.down.y) * hit[0].distance);
-            //return hitPos;
-            return hit[0].point;
-        }
-
         private static ContactFilter2D m_contactFilter;
         private static RaycastHit2D[] m_hitResults;
         private static bool m_isInitialized;
@@ -1686,18 +1743,29 @@ namespace DChild.Gameplay.Characters.Enemies
                 case SwordState.Normal:
                     m_swordMixAnimation = m_info.swordNormalMixAnimation;
                     m_drillMixAnimation = m_info.drillNormalMixAnimation;
+                    m_projectileLauncher = new ProjectileLauncher(m_info.slashNormalProjectile.projectileInfo, m_projectilePoint);
+                    m_scytheWaveLauncher = new ProjectileLauncher(m_info.scytheWaveNormalProjectile.projectileInfo, m_scytheWavePoint);
                     break;
                 case SwordState.BlackBlood:
                     m_swordMixAnimation = m_info.swordRedMixAnimation;
                     m_drillMixAnimation = m_info.drillRedMixAnimation;
+                    m_projectileLauncher = new ProjectileLauncher(m_info.slashBlackbloodProjectile.projectileInfo, m_projectilePoint);
+                    m_scytheWaveLauncher = new ProjectileLauncher(m_info.scytheWaveBlackbloodProjectile.projectileInfo, m_scytheWavePoint);
+                    m_geyserBurstLauncher = new ProjectileLauncher(m_info.geyserBurstBlackbloodProjectile.projectileInfo, this.transform);
                     break;
                 case SwordState.Poison:
                     m_swordMixAnimation = m_info.swordPurpleMixAnimation;
                     m_drillMixAnimation = m_info.drillPurpleMixAnimation;
+                    m_projectileLauncher = new ProjectileLauncher(m_info.slashPoisonProjectile.projectileInfo, m_projectilePoint);
+                    m_scytheWaveLauncher = new ProjectileLauncher(m_info.scytheWavePoisonProjectile.projectileInfo, m_scytheWavePoint);
+                    m_geyserBurstLauncher = new ProjectileLauncher(m_info.geyserBurstPoisonProjectile.projectileInfo, this.transform);
                     break;
                 case SwordState.Acid:
                     m_swordMixAnimation = m_info.swordGreenMixAnimation;
                     m_drillMixAnimation = m_info.drillGreenMixAnimation;
+                    m_projectileLauncher = new ProjectileLauncher(m_info.slashAcidProjectile.projectileInfo, m_projectilePoint);
+                    m_scytheWaveLauncher = new ProjectileLauncher(m_info.scytheWaveAcidProjectile.projectileInfo, m_scytheWavePoint);
+                    m_geyserBurstLauncher = new ProjectileLauncher(m_info.geyserBurstAcidProjectile.projectileInfo, this.transform);
                     break;
             }
             m_animation.SetAnimation(0, m_info.swordChangeAnimation, false);
@@ -1782,8 +1850,9 @@ namespace DChild.Gameplay.Characters.Enemies
             m_damageable.DamageTaken += OnDamageTaken;
             //m_damageable.DamageTaken += OnDamageBlocked;
             //m_patternDecider = new RandomAttackDecider<Pattern>();
-            m_projectileLauncher = new ProjectileLauncher(m_info.slashProjectile.projectileInfo, m_projectilePoint);
-            m_scytheWaveLauncher = new ProjectileLauncher(m_info.scytheWaveProjectile.projectileInfo, m_scytheWavePoint);
+            m_projectileLauncher = new ProjectileLauncher(m_info.slashNormalProjectile.projectileInfo, m_projectilePoint);
+            m_scytheWaveLauncher = new ProjectileLauncher(m_info.scytheWaveNormalProjectile.projectileInfo, m_scytheWavePoint);
+            m_geyserBurstLauncher = new ProjectileLauncher(m_info.geyserBurstAcidProjectile.projectileInfo, this.transform);
             m_attackDecider = new RandomAttackDecider<Attack>();
             m_stateHandle = new StateHandle<State>(State.Idle, State.WaitBehaviourEnd);
             UpdateAttackDeciderList();
@@ -1799,8 +1868,8 @@ namespace DChild.Gameplay.Characters.Enemies
         protected override void Start()
         {
             base.Start();
-            m_spineListener.Subscribe(m_info.slashProjectile.launchOnEvent, LaunchProjectile);
-            m_spineListener.Subscribe(m_info.scytheWaveProjectile.launchOnEvent, LaunchScytheWave);
+            m_spineListener.Subscribe(m_info.slashNormalProjectile.launchOnEvent, LaunchProjectile);
+            m_spineListener.Subscribe(m_info.scytheWaveNormalProjectile.launchOnEvent, LaunchScytheWave);
             m_animation.DisableRootMotion();
             m_phaseHandle = new PhaseHandle<Phase, PhaseInfo>();
             m_phaseHandle.Initialize(Phase.PhaseOne, m_info.phaseInfo, m_character, ChangeState, ApplyPhaseData);
