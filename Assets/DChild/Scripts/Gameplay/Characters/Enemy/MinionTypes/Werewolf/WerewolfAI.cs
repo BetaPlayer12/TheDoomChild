@@ -228,8 +228,12 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             //m_Audiosource.clip = m_DeadClip;
             //m_Audiosource.Play();
+            enabled = false;
             base.OnDestroyed(sender, eventArgs);
+            m_stateHandle.OverrideState(State.WaitBehaviourEnd);
+            StopAllCoroutines();
             m_movement.Stop();
+            m_animation.SetAnimation(0, m_info.deathAnimation, false);
         }
 
         private void OnFlinchStart(object sender, EventActionArgs eventArgs)
