@@ -39,7 +39,7 @@ namespace DChild.Gameplay.Systems
         void ShowInteractionPrompt(bool willshow);
         void ShowMovableObjectPrompt(bool willshow);
         void ShowSoulEssenceNotify(bool willshow);
-        void ShowGameOverScreen(bool willshow);
+        void ShowGameOverScreen();
         void ShowItemAcquired(bool willshow);
         void ShowGameplayUI(bool willshow);
         void ShowLootChestItemAcquired(LootList lootList);

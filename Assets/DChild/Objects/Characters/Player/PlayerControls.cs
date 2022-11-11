@@ -233,6 +233,15 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""MouseDelta"",
+                    ""type"": ""Value"",
+                    ""id"": ""604b8edc-904e-40a3-842e-19972de2258b"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -1170,6 +1179,17 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""action"": ""Store"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""61e7899e-8d40-4987-8df8-70467e04366c"",
+                    ""path"": ""<Mouse>/delta"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MouseDelta"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -1954,6 +1974,338 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""Debug Camera"",
+            ""id"": ""f3442c0d-a34a-4335-bc9d-e5e7e2801308"",
+            ""actions"": [
+                {
+                    ""name"": ""Camera_Horizontal"",
+                    ""type"": ""Button"",
+                    ""id"": ""b31c39a0-6205-48a1-b910-4dc7a6d3b667"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Camera_Vertical"",
+                    ""type"": ""Button"",
+                    ""id"": ""649b8f28-6096-4554-abd1-a1f984873381"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Camera_Zoom"",
+                    ""type"": ""Button"",
+                    ""id"": ""32331201-f309-400e-8d14-c5ee11d8dd3c"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": ""PC"",
+                    ""id"": ""ba0ef19c-ba7f-4f1b-a499-b8bdda89694d"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": ""Press(behavior=2)"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Camera_Horizontal"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""c48690ff-4a3e-455a-a944-0346cc7c1776"",
+                    ""path"": ""<Keyboard>/a"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""Camera_Horizontal"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""6b921c65-03d7-442c-ad96-0a2122c8b3cd"",
+                    ""path"": ""<Keyboard>/d"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""Camera_Horizontal"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Gamepad"",
+                    ""id"": ""5ad48998-4073-4459-bdc8-8774d66d7fad"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": ""Press(behavior=2)"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Camera_Horizontal"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""2eb42835-155d-46e9-8489-c130665c07a7"",
+                    ""path"": ""<Gamepad>/leftStick/left"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Camera_Horizontal"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""663c5385-9ea4-4639-94c3-b2ce47cfd577"",
+                    ""path"": ""<Gamepad>/leftStick/right"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Camera_Horizontal"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""PS4"",
+                    ""id"": ""7fcc9ae7-95fe-4b81-b36a-68d1317b8032"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Camera_Horizontal"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""92a3b814-36f2-4360-9a24-e21265ba2de2"",
+                    ""path"": ""<DualShockGamepad>/leftStick/left"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""PS4"",
+                    ""action"": ""Camera_Horizontal"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""4489ed91-82b0-4fb9-a72e-a28c139ad3b9"",
+                    ""path"": ""<DualShockGamepad>/leftStick/right"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""PS4"",
+                    ""action"": ""Camera_Horizontal"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""PC"",
+                    ""id"": ""476d3348-e37b-4a71-9d92-0c36db080ccb"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": ""Press(behavior=2)"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Camera_Vertical"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""59da2392-dc0e-448c-abfd-648d270865ae"",
+                    ""path"": ""<Keyboard>/s"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""Camera_Vertical"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""4588fcff-57bb-4c1e-876d-6c23a33a3a04"",
+                    ""path"": ""<Keyboard>/w"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""Camera_Vertical"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Gamepad"",
+                    ""id"": ""a4ef2461-5f4c-40b6-a1cf-950fb047d04f"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Camera_Vertical"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""c61c8bc3-d6bd-41c4-a7a8-bc708deb2c3c"",
+                    ""path"": ""<Gamepad>/leftStick/up"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Camera_Vertical"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""ab0d088f-4f92-426e-b901-e52622a9b90c"",
+                    ""path"": ""<Gamepad>/leftStick/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Camera_Vertical"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""PS4"",
+                    ""id"": ""88259bc6-b64d-4cd5-a77a-9a0db2875f68"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Camera_Vertical"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""0b196ec3-1c57-47fd-a3ac-94e3685d6574"",
+                    ""path"": ""<DualShockGamepad>/leftStick/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""PS4"",
+                    ""action"": ""Camera_Vertical"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""a1b16851-f41d-4578-af66-b82994c0775e"",
+                    ""path"": ""<DualShockGamepad>/leftStick/up"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""PS4"",
+                    ""action"": ""Camera_Vertical"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""PC"",
+                    ""id"": ""1460075d-a784-47e3-b8c5-15c0301bff9e"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": ""Press(behavior=2)"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Camera_Zoom"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""8521dc3a-21aa-4fe8-98c7-9dd4a15d9966"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""Camera_Zoom"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""c3b236e1-c0cf-44b4-8c19-ee263ced3241"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""Camera_Zoom"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Gamepad"",
+                    ""id"": ""a80d1f46-50d5-4bd8-bcdc-84245a236882"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Camera_Zoom"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""6b1e7f21-e425-43a1-a0e4-35e74af08e09"",
+                    ""path"": ""<Gamepad>/leftStick/up"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Camera_Zoom"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""6a2267a2-6c6c-4beb-89a2-8f8c7341ec05"",
+                    ""path"": ""<Gamepad>/leftStick/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Camera_Zoom"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""PS4"",
+                    ""id"": ""542c8b08-ebc3-4cdb-a5c3-8f33f31bcd1d"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Camera_Zoom"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""703f2d2b-7739-46c7-9a38-4197575419f5"",
+                    ""path"": ""<DualShockGamepad>/leftStick/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""PS4"",
+                    ""action"": ""Camera_Zoom"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""0d80bc32-da0e-46cc-b0c1-1b055e4adeb4"",
+                    ""path"": ""<DualShockGamepad>/leftStick/up"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""PS4"",
+                    ""action"": ""Camera_Zoom"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                }
+            ]
         }
     ],
     ""controlSchemes"": [
@@ -2016,6 +2368,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         m_Gameplay_Block = m_Gameplay.FindAction("Block", throwIfNotFound: true);
         m_Gameplay_Pause = m_Gameplay.FindAction("Pause", throwIfNotFound: true);
         m_Gameplay_Store = m_Gameplay.FindAction("Store", throwIfNotFound: true);
+        m_Gameplay_MouseDelta = m_Gameplay.FindAction("MouseDelta", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -2033,6 +2386,11 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         m_Minimap_HorizontalInput = m_Minimap.FindAction("HorizontalInput", throwIfNotFound: true);
         m_Minimap_VerticalInput = m_Minimap.FindAction("VerticalInput", throwIfNotFound: true);
         m_Minimap_Interact = m_Minimap.FindAction("Interact", throwIfNotFound: true);
+        // Debug Camera
+        m_DebugCamera = asset.FindActionMap("Debug Camera", throwIfNotFound: true);
+        m_DebugCamera_Camera_Horizontal = m_DebugCamera.FindAction("Camera_Horizontal", throwIfNotFound: true);
+        m_DebugCamera_Camera_Vertical = m_DebugCamera.FindAction("Camera_Vertical", throwIfNotFound: true);
+        m_DebugCamera_Camera_Zoom = m_DebugCamera.FindAction("Camera_Zoom", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -2115,6 +2473,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
     private readonly InputAction m_Gameplay_Block;
     private readonly InputAction m_Gameplay_Pause;
     private readonly InputAction m_Gameplay_Store;
+    private readonly InputAction m_Gameplay_MouseDelta;
     public struct GameplayActions
     {
         private @PlayerControls m_Wrapper;
@@ -2142,6 +2501,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         public InputAction @Block => m_Wrapper.m_Gameplay_Block;
         public InputAction @Pause => m_Wrapper.m_Gameplay_Pause;
         public InputAction @Store => m_Wrapper.m_Gameplay_Store;
+        public InputAction @MouseDelta => m_Wrapper.m_Gameplay_MouseDelta;
         public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -2220,6 +2580,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @Store.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnStore;
                 @Store.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnStore;
                 @Store.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnStore;
+                @MouseDelta.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnMouseDelta;
+                @MouseDelta.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnMouseDelta;
+                @MouseDelta.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnMouseDelta;
             }
             m_Wrapper.m_GameplayActionsCallbackInterface = instance;
             if (instance != null)
@@ -2293,6 +2656,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @Store.started += instance.OnStore;
                 @Store.performed += instance.OnStore;
                 @Store.canceled += instance.OnStore;
+                @MouseDelta.started += instance.OnMouseDelta;
+                @MouseDelta.performed += instance.OnMouseDelta;
+                @MouseDelta.canceled += instance.OnMouseDelta;
             }
         }
     }
@@ -2451,6 +2817,55 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         }
     }
     public MinimapActions @Minimap => new MinimapActions(this);
+
+    // Debug Camera
+    private readonly InputActionMap m_DebugCamera;
+    private IDebugCameraActions m_DebugCameraActionsCallbackInterface;
+    private readonly InputAction m_DebugCamera_Camera_Horizontal;
+    private readonly InputAction m_DebugCamera_Camera_Vertical;
+    private readonly InputAction m_DebugCamera_Camera_Zoom;
+    public struct DebugCameraActions
+    {
+        private @PlayerControls m_Wrapper;
+        public DebugCameraActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
+        public InputAction @Camera_Horizontal => m_Wrapper.m_DebugCamera_Camera_Horizontal;
+        public InputAction @Camera_Vertical => m_Wrapper.m_DebugCamera_Camera_Vertical;
+        public InputAction @Camera_Zoom => m_Wrapper.m_DebugCamera_Camera_Zoom;
+        public InputActionMap Get() { return m_Wrapper.m_DebugCamera; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(DebugCameraActions set) { return set.Get(); }
+        public void SetCallbacks(IDebugCameraActions instance)
+        {
+            if (m_Wrapper.m_DebugCameraActionsCallbackInterface != null)
+            {
+                @Camera_Horizontal.started -= m_Wrapper.m_DebugCameraActionsCallbackInterface.OnCamera_Horizontal;
+                @Camera_Horizontal.performed -= m_Wrapper.m_DebugCameraActionsCallbackInterface.OnCamera_Horizontal;
+                @Camera_Horizontal.canceled -= m_Wrapper.m_DebugCameraActionsCallbackInterface.OnCamera_Horizontal;
+                @Camera_Vertical.started -= m_Wrapper.m_DebugCameraActionsCallbackInterface.OnCamera_Vertical;
+                @Camera_Vertical.performed -= m_Wrapper.m_DebugCameraActionsCallbackInterface.OnCamera_Vertical;
+                @Camera_Vertical.canceled -= m_Wrapper.m_DebugCameraActionsCallbackInterface.OnCamera_Vertical;
+                @Camera_Zoom.started -= m_Wrapper.m_DebugCameraActionsCallbackInterface.OnCamera_Zoom;
+                @Camera_Zoom.performed -= m_Wrapper.m_DebugCameraActionsCallbackInterface.OnCamera_Zoom;
+                @Camera_Zoom.canceled -= m_Wrapper.m_DebugCameraActionsCallbackInterface.OnCamera_Zoom;
+            }
+            m_Wrapper.m_DebugCameraActionsCallbackInterface = instance;
+            if (instance != null)
+            {
+                @Camera_Horizontal.started += instance.OnCamera_Horizontal;
+                @Camera_Horizontal.performed += instance.OnCamera_Horizontal;
+                @Camera_Horizontal.canceled += instance.OnCamera_Horizontal;
+                @Camera_Vertical.started += instance.OnCamera_Vertical;
+                @Camera_Vertical.performed += instance.OnCamera_Vertical;
+                @Camera_Vertical.canceled += instance.OnCamera_Vertical;
+                @Camera_Zoom.started += instance.OnCamera_Zoom;
+                @Camera_Zoom.performed += instance.OnCamera_Zoom;
+                @Camera_Zoom.canceled += instance.OnCamera_Zoom;
+            }
+        }
+    }
+    public DebugCameraActions @DebugCamera => new DebugCameraActions(this);
     private int m_KeyboardSchemeIndex = -1;
     public InputControlScheme KeyboardScheme
     {
@@ -2503,6 +2918,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         void OnBlock(InputAction.CallbackContext context);
         void OnPause(InputAction.CallbackContext context);
         void OnStore(InputAction.CallbackContext context);
+        void OnMouseDelta(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {
@@ -2522,5 +2938,11 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         void OnHorizontalInput(InputAction.CallbackContext context);
         void OnVerticalInput(InputAction.CallbackContext context);
         void OnInteract(InputAction.CallbackContext context);
+    }
+    public interface IDebugCameraActions
+    {
+        void OnCamera_Horizontal(InputAction.CallbackContext context);
+        void OnCamera_Vertical(InputAction.CallbackContext context);
+        void OnCamera_Zoom(InputAction.CallbackContext context);
     }
 }
