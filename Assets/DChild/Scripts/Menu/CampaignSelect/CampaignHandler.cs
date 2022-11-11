@@ -12,6 +12,9 @@ namespace DChild.Menu
     public class CampaignHandler : CampaignSelectSubElement
     {
         [SerializeField]
+        private ConfirmationRequestHandle m_deleteRequester;
+
+        [SerializeField]
         private CampaignSlotData m_defaultSave;
         private ICampaignSelect m_campaignSelect;
         private int m_selectedSlotID;
@@ -23,7 +26,7 @@ namespace DChild.Menu
 
         public void RequestDelete()
         {
-            GameSystem.RequestConfirmation(OnDeleteAffirmed, "Do you want to delete this Save File?");
+            m_deleteRequester.Execute(OnDeleteAffirmed);
         }
 
         public void Play()
