@@ -589,7 +589,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_isDetecting = true;
                     m_alterBladeMonitorCoroutine = StartCoroutine(AlterBladeMonitorRoutine());
                     m_stateHandle.OverrideState(State.Intro);
-                    GameEventMessage.SendEvent("Boss Encounter");
+                    //GameEventMessage.SendEvent("Boss Encounter");
                 }
             }
         }
