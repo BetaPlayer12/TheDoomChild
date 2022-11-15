@@ -247,7 +247,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         m_sneerRoutine = null;
                     }
                     //m_enablePatience = false;
-                    m_turnState = State.WaitBehaviourEnd;
+                    m_turnState = State.Standby;
                     if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turn1Animation && m_animation.GetCurrentAnimation(0).ToString() != m_info.turn2Animation)
                         m_stateHandle.SetState(State.Turning);
                 }
@@ -698,12 +698,15 @@ namespace DChild.Gameplay.Characters.Enemies
                     return;
             }
 
-            if (m_enablePatience && m_stateHandle.currentState != State.Standby)
+            if (m_targetInfo.isValid)
             {
-                //Patience();
-                if (TargetBlocked())
+                if (m_enablePatience && m_stateHandle.currentState != State.Standby && m_stateHandle.currentState != State.Turning)
                 {
-                    m_stateHandle.OverrideState(State.Standby);
+                    //Patience();
+                    if (TargetBlocked())
+                    {
+                        m_stateHandle.OverrideState(State.Standby);
+                    }
                 }
             }
         }

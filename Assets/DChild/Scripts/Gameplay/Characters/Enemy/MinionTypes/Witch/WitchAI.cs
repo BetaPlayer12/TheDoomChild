@@ -219,7 +219,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         m_sneerRoutine = null;
                     }
                     //m_enablePatience = false;
-                    m_turnState = State.WaitBehaviourEnd;
+                    m_turnState = State.Standby;
                     if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
                         m_stateHandle.SetState(State.Turning);
                 }
@@ -542,10 +542,7 @@ namespace DChild.Gameplay.Characters.Enemies
                                         m_movement.Stop();
 
                                     m_selfCollider.enabled = true;
-                                    if (m_animation.animationState.GetCurrent(0).IsComplete)
-                                    {
-                                        m_animation.SetAnimation(0, m_info.idleAnimation, true);
-                                    }
+                                    m_animation.SetAnimation(0, m_info.idleAnimation, true);
                                 }
                             }
                         }
@@ -587,7 +584,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
             if (m_targetInfo.isValid)
             {
-                if (m_enablePatience && m_stateHandle.currentState != State.Standby)
+                if (m_enablePatience && m_stateHandle.currentState != State.Standby && m_stateHandle.currentState != State.Turning)
                 {
                     //Patience();
                     if (TargetBlocked())

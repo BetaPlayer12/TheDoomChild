@@ -236,12 +236,6 @@ namespace DChild.Gameplay.Characters.Enemies
             m_stateHandle.ApplyQueuedState();
         }
 
-        private void CustomTurn()
-        {
-            transform.localScale = new Vector3(-transform.localScale.x, 1, 1);
-            m_character.SetFacing(transform.localScale.x == 1 ? HorizontalDirection.Right : HorizontalDirection.Left);
-        }
-
         //Patience Handler
         private void Patience()
         {
@@ -269,7 +263,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         m_sneerRoutine = null;
                     }
                     //m_enablePatience = false;
-                    m_turnState = State.WaitBehaviourEnd;
+                    m_turnState = State.Standby;
                     if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turn1Animation && m_animation.GetCurrentAnimation(0).ToString() != m_info.turn2Animation)
                         m_stateHandle.SetState(State.Turning);
                 }
@@ -676,7 +670,10 @@ namespace DChild.Gameplay.Characters.Enemies
                                         || m_animation.GetCurrentAnimation(0).ToString() != m_info.idle2Animation
                                         || m_animation.GetCurrentAnimation(0).ToString() != m_info.idle3Animation
                                         || m_animation.GetCurrentAnimation(0).ToString() != m_info.idle4Animation)
+                                    {
+                                        m_animation.SetAnimation(0, m_info.idle1Animation, true);
                                         m_movement.Stop();
+                                    }
 
                                     m_selfCollider.enabled = true;
                                     if (m_animation.animationState.GetCurrent(0).IsComplete)
@@ -722,12 +719,15 @@ namespace DChild.Gameplay.Characters.Enemies
                     return;
             }
 
-            if (m_enablePatience && m_stateHandle.currentState != State.Standby)
+            if (m_targetInfo.isValid)
             {
-                //Patience();
-                if (TargetBlocked())
+                if (m_enablePatience && m_stateHandle.currentState != State.Standby && m_stateHandle.currentState != State.Turning)
                 {
-                    m_stateHandle.OverrideState(State.Standby);
+                    //Patience();
+                    if (TargetBlocked())
+                    {
+                        m_stateHandle.OverrideState(State.Standby);
+                    }
                 }
             }
         }
