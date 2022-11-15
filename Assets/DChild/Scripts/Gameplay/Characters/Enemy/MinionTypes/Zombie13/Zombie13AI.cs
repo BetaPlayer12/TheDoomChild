@@ -456,6 +456,7 @@ namespace DChild.Gameplay.Characters.Enemies
             GetComponent<IsolatedCharacterPhysics2D>().UseStepClimb(true);
             m_animation.EnableRootMotion(true, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack.animation);
+            GetComponent<IsolatedCharacterPhysics2D>().UseStepClimb(false);
             m_animation.SetAnimation(0, RandomIdleAnimation(), true);
             m_selfCollider.enabled = true;
             m_stateHandle.ApplyQueuedState();
@@ -490,6 +491,7 @@ namespace DChild.Gameplay.Characters.Enemies
             if (!IsFacing(m_patrolDestination))
                 CustomTurn();
             //m_spineEventListener.Subscribe(m_info.explodeEvent, m_explodeFX.Play);
+            GetComponent<IsolatedCharacterPhysics2D>().UseStepClimb(false);
         }
 
         protected override void Awake()
@@ -639,15 +641,25 @@ namespace DChild.Gameplay.Characters.Enemies
                                 }
                                 else
                                 {
-                                    if (m_animation.GetCurrentAnimation(0).ToString() != m_info.idle1Animation
-                                        || m_animation.GetCurrentAnimation(0).ToString() != m_info.idle2Animation
-                                        || m_animation.GetCurrentAnimation(0).ToString() != m_info.idle3Animation)
-                                        m_movement.Stop();
-
-                                    m_selfCollider.enabled = true;
-                                    if (m_animation.animationState.GetCurrent(0).IsComplete)
+                                    if (m_wallSensor.allRaysDetecting)
                                     {
-                                        m_animation.SetAnimation(0, RandomIdleAnimation(), true);
+                                        if (m_animation.GetCurrentAnimation(0).ToString() != m_info.idle1Animation
+                                            || m_animation.GetCurrentAnimation(0).ToString() != m_info.idle2Animation
+                                            || m_animation.GetCurrentAnimation(0).ToString() != m_info.idle3Animation)
+                                            m_movement.Stop();
+
+                                        m_selfCollider.enabled = true;
+                                        GetComponent<IsolatedCharacterPhysics2D>().UseStepClimb(false);
+                                        if (m_animation.animationState.GetCurrent(0).IsComplete)
+                                        {
+                                            m_animation.SetAnimation(0, RandomIdleAnimation(), true);
+                                        }
+                                    }
+                                    else if (m_wallSensor.isDetecting)
+                                    {
+                                        m_selfCollider.enabled = false;
+                                        GetComponent<IsolatedCharacterPhysics2D>().UseStepClimb(true);
+                                        m_animation.SetAnimation(0, m_info.attack.animation, true);
                                     }
                                 }
                             }
