@@ -471,10 +471,8 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 m_animation.SetAnimation(0, m_info.detectAnimation, false);
                 yield return new WaitForAnimationComplete(m_animation.animationState, m_info.detectAnimation);
-                //m_animation.SetAnimation(0, m_info.rawrAnimation, false);
-                //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.rawrAnimation);
-
-                //yield return new WaitForSeconds(3f);
+                m_animation.SetAnimation(0, RandomIdleAnimation(), true);
+                yield return new WaitForSeconds(1f);
                 yield return null;
             }
         }
