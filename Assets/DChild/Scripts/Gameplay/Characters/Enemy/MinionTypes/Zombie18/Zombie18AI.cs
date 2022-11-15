@@ -132,7 +132,7 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Modules")]
         private MovementHandle2D m_movement;
         [SerializeField, TabGroup("Modules")]
-        private PatrolHandle m_patrolHandle;
+        private WayPointPatrol m_patrolHandle;
         [SerializeField, TabGroup("Modules")]
         private AttackHandle m_attackHandle;
         [SerializeField, TabGroup("Modules")]
@@ -159,6 +159,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         [SerializeField]
         private bool m_willPatrol;
+        private Vector2 m_patrolDestination;
 
         [ShowInInspector]
         private StateHandle<State> m_stateHandle;
@@ -223,6 +224,15 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnTurnDone(object sender, FacingEventArgs eventArgs)
         {
+            var wayPoints = m_patrolHandle.GetWaypoints();
+            for (int i = 0; i < wayPoints.Length; i++)
+            {
+                if (Vector2.Distance(m_patrolDestination, wayPoints[i]) > 1f)
+                {
+                    m_patrolDestination = wayPoints[i];
+                    break;
+                }
+            }
             m_stateHandle.ApplyQueuedState();
         }
 
@@ -531,12 +541,35 @@ namespace DChild.Gameplay.Characters.Enemies
                     break;
 
                 case State.Patrol:
+                    //if (!m_wallSensor.isDetecting && m_groundSensor.isDetecting)
+                    //{
+                    //    m_turnState = State.ReevaluateSituation;
+                    //    m_animation.EnableRootMotion(true, false);
+                    //    m_animation.SetAnimation(0, m_info.walk.animation, true);
+                    //    var characterInfo = new PatrolHandle.CharacterInfo(m_character.centerMass.position, m_character.facing);
+                    //}
+                    //else
+                    //{
+                    //    if (m_animation.animationState.GetCurrent(0).IsComplete)
+                    //    {
+                    //        m_animation.SetAnimation(0, RandomIdleAnimation(), true);
+                    //    }
+                    //}
                     if (!m_wallSensor.isDetecting && m_groundSensor.isDetecting)
                     {
-                        m_turnState = State.ReevaluateSituation;
-                        m_animation.EnableRootMotion(true, false);
-                        m_animation.SetAnimation(0, m_info.walk.animation, true);
-                        var characterInfo = new PatrolHandle.CharacterInfo(m_character.centerMass.position, m_character.facing);
+                        if (IsFacing(m_patrolDestination) && m_edgeSensor.allRaysDetecting)
+                        {
+                            m_turnState = State.ReevaluateSituation;
+                            m_animation.EnableRootMotion(true, false);
+                            m_animation.SetAnimation(0, m_info.walk.animation, true);
+                            var characterInfo = new PatrolHandle.CharacterInfo(m_character.centerMass.position, m_character.facing);
+                        }
+                        else
+                        {
+                            m_turnState = State.Patrol;
+                            if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turn1Animation && m_animation.GetCurrentAnimation(0).ToString() != m_info.turn2Animation)
+                                m_stateHandle.SetState(State.Turning);
+                        }
                     }
                     else
                     {
