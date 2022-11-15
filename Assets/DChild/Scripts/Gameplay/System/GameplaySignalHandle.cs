@@ -20,6 +20,11 @@ namespace DChild.Gameplay
             GameplaySystem.gamplayUIHandle.ToggleCinematicMode(value);
         }
 
+        public void ToggleBossCombatUI(bool value)
+        {
+            GameplaySystem.gamplayUIHandle.ToggleBossCombatUI(value);
+        }
+
         public void MoveAudioListenerToPlayer()
         {
             GameplaySystem.audioListener.AttachToPlayer();
