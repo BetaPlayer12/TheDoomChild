@@ -143,11 +143,12 @@ namespace DChild.Gameplay.Characters.Players
 
         public void Initialize()
         {
+            m_stats.Initialize();
             m_weapon.Initialize();
             m_attackResistance.Initialize();
             m_statusResistance.Initialize();
             m_modifiers.Initialize();
-            m_soulSkills.Initialize();
+            m_soulSkills.Initialize();            
         }
 
         private void Awake()
