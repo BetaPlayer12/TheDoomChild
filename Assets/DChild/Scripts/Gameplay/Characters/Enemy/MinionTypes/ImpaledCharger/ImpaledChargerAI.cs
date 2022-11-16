@@ -187,6 +187,9 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Adutukat")]
         private Transform m_cartModel;
 
+        [SerializeField, TabGroup("Hurtbox")]
+        private GameObject m_hurtbox;
+
         [ShowInInspector]
         private StateHandle<State> m_stateHandle;
 
@@ -331,6 +334,7 @@ namespace DChild.Gameplay.Characters.Enemies
             base.OnDestroyed(sender, eventArgs);
             this.transform.SetParent(null);
             m_hitbox.Disable();
+            m_hurtbox.SetActive(false);
             IsDead?.Invoke(this, new EventActionArgs());
             m_stateHandle.OverrideState(State.WaitBehaviourEnd);
             if (m_attackRoutine != null)
@@ -373,6 +377,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_isCartDead = true;
             this.transform.SetParent(null);
             m_solidCollider.SetActive(false);
+            m_hurtbox.SetActive(true);
             m_hitbox.Enable();
             StopAllCoroutines();
             switch (m_character.facing)
