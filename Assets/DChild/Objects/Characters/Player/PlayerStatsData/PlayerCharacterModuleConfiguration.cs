@@ -44,5 +44,36 @@ namespace DChild.Gameplay.Characters.Players.Modules
         [SerializeField, HideLabel]
         private FlinchStatsInfo m_flinchStatsInfo;
         public FlinchStatsInfo flinchStatsInfo => m_flinchStatsInfo;
+
+        [Header("Skills")]
+        [Title("Dash")]
+        [SerializeField, HideLabel]
+        private DashStatsInfo m_dashStatsInfo;
+        public DashStatsInfo dashStatsInfo => m_dashStatsInfo;
+
+        [Title("Devil Wings")]
+        [SerializeField, HideLabel]
+        private DevilWingsStatsInfo m_devilWingsInfo;
+        public DevilWingsStatsInfo devilWingsInfo => m_devilWingsInfo;
+
+        [Title("Extra Jump")]
+        [SerializeField, HideLabel]
+        private ExtraJumpStatsInfo m_extraJumpInfo;
+        public ExtraJumpStatsInfo extraJumpInfo => m_extraJumpInfo;
+
+        [Title("Shadow Dash")]
+        [SerializeField, HideLabel]
+        private ShadowDashStatsInfo m_shadowDashInfo;
+        public ShadowDashStatsInfo shadowDashInfo => m_shadowDashInfo;
+
+        [Title("Shadow Slide")]
+        [SerializeField, HideLabel]
+        private ShadowSlideStatsInfo m_shadowSlideInfo;
+        public ShadowSlideStatsInfo shadowSlideInfo => m_shadowSlideInfo;
+
+        [Title("Slide")]
+        [SerializeField, HideLabel]
+        private SlideStatsInfo m_slideInfo;
+        public SlideStatsInfo slideInfo => m_slideInfo;
     }
 }

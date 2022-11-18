@@ -14,8 +14,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
     {
         [SerializeField]
         private Slide m_slide;
-        [SerializeField, MinValue(0)]
-        private int m_baseSourceRequiredAmount;
+        [SerializeField, HideLabel]
+        private ShadowSlideStatsInfo m_configuration;
         [SerializeField]
         private ParticleSystem m_shadowFX;
 
@@ -28,7 +28,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private SkeletonGhost m_skeletonGhost;
 
         [ShowInInspector, ReadOnly, HideInEditorMode]
-        protected int sourceRequiredAmount => Mathf.FloorToInt(m_baseSourceRequiredAmount * m_modifier.Get(PlayerModifier.ShadowMagic_Requirement));
+        protected int sourceRequiredAmount => Mathf.FloorToInt(m_configuration.baseSourceRequiredAmount * m_modifier.Get(PlayerModifier.ShadowMagic_Requirement));
 
         public event EventAction<EventActionArgs> ExecuteModule;
         public event EventAction<EventActionArgs> End;
@@ -41,6 +41,11 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_animator = info.animator;
             m_skeletonGhost = info.skeletonGhost;
             m_animationParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.ShadowMode);
+        }
+
+        public void SetConfiguration(ShadowSlideStatsInfo info)
+        {
+            m_configuration.CopyInfo(info);
         }
 
         public void Cancel()

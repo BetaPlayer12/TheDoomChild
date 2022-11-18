@@ -30,6 +30,20 @@ namespace DChild.Gameplay.Characters.Players.Modules
         [SerializeField]
         private PlayerFlinch m_flinch;
 
+        //MovementSkills
+        [SerializeField]
+        private Dash m_dash;
+        [SerializeField]
+        private ExtraJump m_extraJump;
+        [SerializeField]
+        private DevilWings m_devilWings;
+        [SerializeField]
+        private ShadowDash m_shadowDash;
+        [SerializeField]
+        private Slide m_slide;
+        [SerializeField]
+        private ShadowSlide m_shadowSlide;
+
         public void InitializeModuleConfigurations()
         {
             m_movement.SetConfiguration(m_playerBasicBehaviourConfiguration.movementStatsInfo);
@@ -39,6 +53,12 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_shadowMorph.SetConfiguration(m_playerBasicBehaviourConfiguration.shadowMorphStatsInfo);
             m_autoStepClimb.SetConfiguration(m_playerBasicBehaviourConfiguration.autoStepClimbStatsInfo);
             m_flinch.SetConfiguration(m_playerBasicBehaviourConfiguration.flinchStatsInfo);
+            m_dash.SetConfiguration(m_playerBasicBehaviourConfiguration.dashStatsInfo);
+            m_extraJump.SetConfiguration(m_playerBasicBehaviourConfiguration.extraJumpInfo);
+            m_devilWings.SetConfiguration(m_playerBasicBehaviourConfiguration.devilWingsInfo);
+            m_shadowDash.SetConfiguration(m_playerBasicBehaviourConfiguration.shadowDashInfo);
+            m_slide.SetConfiguration(m_playerBasicBehaviourConfiguration.slideInfo);
+            m_shadowSlide.SetConfiguration(m_playerBasicBehaviourConfiguration.shadowSlideInfo);
         }
     }
 }
