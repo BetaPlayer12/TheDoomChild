@@ -172,6 +172,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private RaySensor m_edgeSensor;
         [SerializeField, TabGroup("FX")]
         private GameObject m_hitFX;
+        [SerializeField, TabGroup("FX")]
+        private HitFXHandle m_hitFXHandle;
 
         [ShowInInspector]
         private StateHandle<State> m_stateHandle;
@@ -354,13 +356,6 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnFlinchStart(object sender, EventActionArgs eventArgs)
         {
-            var instance = GameSystem.poolManager.GetPool<FXPool>().GetOrCreateItem(m_hitFX);
-            instance.transform.position = m_character.centerMass.position;
-            instance.transform.rotation = Quaternion.Euler(0, 0, transform.position.x >= m_targetInfo.position.x ? 0 : 180f);
-            var component = instance.GetComponent<ParticleFX>();
-            component.Play();
-
-
             if (m_animation.GetCurrentAnimation(0).ToString() == m_info.idleAnimation)
             {
                 StopAllCoroutines();
@@ -390,6 +385,10 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_stateHandle.Wait(State.ReevaluateSituation);
                 StartCoroutine(CounterFlinchRoutine());
             }
+
+            //var instance = GameSystem.poolManager.GetPool<FXPool>().GetOrCreateItem(m_hitFX);
+            //instance.transform.position = m_character.centerMass.position;
+            //instance.transform.rotation = Quaternion.Euler(0, 0, transform.position.x >= m_targetInfo.position.x ? 0 : 180f);
         }
 
         private IEnumerator CounterFlinchRoutine()
@@ -401,6 +400,11 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_stateHandle.ApplyQueuedState();
             yield return null;
+        }
+
+        private void SpawnHitFX(object sender, Damageable.DamageEventArgs eventArgs)
+        {
+            m_hitFXHandle.SpawnFX(m_character.centerMass.position, /*m_targetInfo.facing*/m_character.facing);
         }
 
         public override void ApplyData()
@@ -543,6 +547,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_turnHandle.TurnDone += OnTurnDone;
             m_flinchHandle.FlinchStart += OnFlinchStart;
             m_damageable.DamageTaken += CounterFlinch;
+            m_damageable.DamageTaken += SpawnHitFX;
             m_stateHandle = new StateHandle<State>(State.Idle, State.WaitBehaviourEnd);
             m_attackDecider = new RandomAttackDecider<Attack>();
             UpdateAttackDeciderList();
