@@ -72,6 +72,8 @@ namespace DChild.Gameplay.Characters.Players
         private PlayerInventory m_inventory;
         [SerializeField]
         private ItemEffectHandle m_itemEffectHandle;
+        [SerializeField]
+        private PlayerCharacterModuleConfigurator m_moduleConfigurator;
 
 
         [Title("Serialzables")]
@@ -143,6 +145,7 @@ namespace DChild.Gameplay.Characters.Players
 
         public void Initialize()
         {
+            m_moduleConfigurator.InitializeModuleConfigurations();
             m_stats.Initialize();
             m_weapon.Initialize();
             m_attackResistance.Initialize();
