@@ -170,6 +170,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private RaySensor m_groundSensor;
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_edgeSensor;
+        [SerializeField, TabGroup("FX")]
+        private GameObject m_hitFX;
 
         [ShowInInspector]
         private StateHandle<State> m_stateHandle;
@@ -235,12 +237,6 @@ namespace DChild.Gameplay.Characters.Enemies
         private void OnTurnDone(object sender, FacingEventArgs eventArgs)
         {
             m_stateHandle.ApplyQueuedState();
-        }
-
-        private void CustomTurn()
-        {
-            transform.localScale = new Vector3(-transform.localScale.x, 1, 1);
-            m_character.SetFacing(transform.localScale.x == 1 ? HorizontalDirection.Right : HorizontalDirection.Left);
         }
 
         //Patience Handler
@@ -358,6 +354,13 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnFlinchStart(object sender, EventActionArgs eventArgs)
         {
+            var instance = GameSystem.poolManager.GetPool<FXPool>().GetOrCreateItem(m_hitFX);
+            instance.transform.position = m_character.centerMass.position;
+            instance.transform.rotation = Quaternion.Euler(0, 0, transform.position.x >= m_targetInfo.position.x ? 0 : 180f);
+            var component = instance.GetComponent<ParticleFX>();
+            component.Play();
+
+
             if (m_animation.GetCurrentAnimation(0).ToString() == m_info.idleAnimation)
             {
                 StopAllCoroutines();

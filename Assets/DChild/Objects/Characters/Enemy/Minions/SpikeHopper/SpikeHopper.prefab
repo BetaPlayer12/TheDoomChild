@@ -399,7 +399,7 @@ MonoBehaviour:
   m_data: {fileID: 11400000, guid: 0d8e567b28c11f6438a8d058c2962821, type: 2}
   m_currentAttackInfo:
     damage:
-      m_type: 0
+      m_type: 1
       m_value: 0
     criticalDamageInfo:
       chance: 0
@@ -508,8 +508,8 @@ MonoBehaviour:
     m_duration: 0
   m_useStepClimb: 1
   m_stepClimber:
-    m_maxStepHeight: 2
-    stepSearchOvershoot: 2
+    m_maxStepHeight: 10
+    stepSearchOvershoot: 0.5
     m_detector: {fileID: 3612089379292205510}
   m_calculateGroundAngle: 1
   m_acceptableWalkableAngle:
@@ -699,12 +699,12 @@ PrefabInstance:
     - target: {fileID: 1091431134070858389, guid: df7d015f7a0a25e468721d77079957bb,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 7.971484
+      value: 7.9714684
       objectReference: {fileID: 0}
     - target: {fileID: 1091431134070858389, guid: df7d015f7a0a25e468721d77079957bb,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 13.016909
+      value: 13.0169115
       objectReference: {fileID: 0}
     - target: {fileID: 1780095776349127282, guid: df7d015f7a0a25e468721d77079957bb,
         type: 3}
@@ -863,6 +863,7 @@ PrefabInstance:
     - {fileID: 8456880490974529548, guid: df7d015f7a0a25e468721d77079957bb, type: 3}
     - {fileID: 4637970404901390701, guid: df7d015f7a0a25e468721d77079957bb, type: 3}
     - {fileID: 1427755964526131784, guid: df7d015f7a0a25e468721d77079957bb, type: 3}
+    - {fileID: 3915345126443310380, guid: df7d015f7a0a25e468721d77079957bb, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: df7d015f7a0a25e468721d77079957bb, type: 3}
 --- !u!114 &289864991588742616 stripped
 MonoBehaviour:
@@ -906,7 +907,7 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 4116703414830672438}
   m_PrefabAsset: {fileID: 0}
---- !u!60 &368749457000124656
+--- !u!60 &9135766501712808845
 PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

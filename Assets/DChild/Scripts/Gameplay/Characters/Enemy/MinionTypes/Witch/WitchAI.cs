@@ -105,7 +105,7 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Modules")]
         private MovementHandle2D m_movement;
         [SerializeField, TabGroup("Modules")]
-        private PatrolHandle m_patrolHandle;
+        private WayPointPatrol m_patrolHandle;
         [SerializeField, TabGroup("Modules")]
         private AttackHandle m_attackHandle;
         [SerializeField, TabGroup("Modules")]
@@ -134,6 +134,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         [SerializeField]
         private bool m_willPatrol;
+        private Vector2 m_patrolDestination;
 
         [ShowInInspector]
         private StateHandle<State> m_stateHandle;
@@ -179,6 +180,15 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnTurnDone(object sender, FacingEventArgs eventArgs)
         {
+            var wayPoints = m_patrolHandle.GetWaypoints();
+            for (int i = 0; i < wayPoints.Length; i++)
+            {
+                if (Vector2.Distance(m_patrolDestination, wayPoints[i]) > 1f)
+                {
+                    m_patrolDestination = wayPoints[i];
+                    break;
+                }
+            }
             m_stateHandle.ApplyQueuedState();
         }
 
@@ -209,7 +219,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         m_sneerRoutine = null;
                     }
                     //m_enablePatience = false;
-                    m_turnState = State.WaitBehaviourEnd;
+                    m_turnState = State.Standby;
                     if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
                         m_stateHandle.SetState(State.Turning);
                 }
@@ -358,10 +368,8 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 m_animation.SetAnimation(0, m_info.detectAnimation, false);
                 yield return new WaitForAnimationComplete(m_animation.animationState, m_info.detectAnimation);
-                //m_animation.SetAnimation(0, m_info.rawrAnimation, false);
-                //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.rawrAnimation);
-
-                //yield return new WaitForSeconds(3f);
+                m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                yield return new WaitForSeconds(1f);
                 yield return null;
             }
         }
@@ -402,8 +410,6 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void Update()
         {
-            //Debug.Log("Wall Sensor is " + m_wallSensor.isDetecting);
-            //Debug.Log("Edge Sensor is " + m_edgeSensor.isDetecting);
             switch (m_stateHandle.currentState)
             {
                 case State.Detect:
@@ -419,17 +425,41 @@ namespace DChild.Gameplay.Characters.Enemies
                     break;
 
                 case State.Patrol:
+                    //if (!m_wallSensor.allRaysDetecting && m_groundSensor.isDetecting)
+                    //{
+                    //    m_turnState = State.ReevaluateSituation;
+                    //    m_animation.EnableRootMotion(true, false);
+                    //    m_animation.SetAnimation(0, m_info.move.animation, true);
+                    //    var characterInfo = new PatrolHandle.CharacterInfo(m_character.centerMass.position, m_character.facing);
+                    //}
+                    //else
+                    //{
+                    //    if (m_animation.GetCurrentAnimation(0).ToString() != m_info.idleAnimation)
+                    //        m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                    //}
+
                     if (!m_wallSensor.isDetecting && m_groundSensor.isDetecting)
                     {
-                        m_turnState = State.ReevaluateSituation;
-                        m_animation.EnableRootMotion(true, false);
-                        m_animation.SetAnimation(0, m_info.move.animation, true);
-                        var characterInfo = new PatrolHandle.CharacterInfo(m_character.centerMass.position, m_character.facing);
+                        if (IsFacing(m_patrolDestination) && m_edgeSensor.allRaysDetecting)
+                        {
+                            m_turnState = State.ReevaluateSituation;
+                            m_animation.EnableRootMotion(true, false);
+                            m_animation.SetAnimation(0, m_info.move.animation, true);
+                            var characterInfo = new PatrolHandle.CharacterInfo(m_character.centerMass.position, m_character.facing);
+                        }
+                        else
+                        {
+                            m_turnState = State.Patrol;
+                            if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
+                                m_stateHandle.SetState(State.Turning);
+                        }
                     }
                     else
                     {
-                        if (m_animation.GetCurrentAnimation(0).ToString() != m_info.idleAnimation)
+                        if (m_animation.animationState.GetCurrent(0).IsComplete)
+                        {
                             m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                        }
                     }
                     break;
 
@@ -500,7 +530,7 @@ namespace DChild.Gameplay.Characters.Enemies
                             else
                             {
                                 m_animation.EnableRootMotion(true, false);
-                                if (!m_wallSensor.isDetecting && m_groundSensor.isDetecting && m_edgeSensor.isDetecting)
+                                if (!m_wallSensor.allRaysDetecting && m_groundSensor.isDetecting && m_edgeSensor.isDetecting)
                                 {
                                     m_selfCollider.enabled = false;
                                     m_animation.SetAnimation(0, m_info.move.animation, true).TimeScale = m_currentTimeScale;
@@ -512,10 +542,7 @@ namespace DChild.Gameplay.Characters.Enemies
                                         m_movement.Stop();
 
                                     m_selfCollider.enabled = true;
-                                    if (m_animation.animationState.GetCurrent(0).IsComplete)
-                                    {
-                                        m_animation.SetAnimation(0, m_info.idleAnimation, true);
-                                    }
+                                    m_animation.SetAnimation(0, m_info.idleAnimation, true);
                                 }
                             }
                         }
@@ -557,7 +584,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
             if (m_targetInfo.isValid)
             {
-                if (m_enablePatience && m_stateHandle.currentState != State.Standby)
+                if (m_enablePatience && m_stateHandle.currentState != State.Standby && m_stateHandle.currentState != State.Turning)
                 {
                     //Patience();
                     if (TargetBlocked())
