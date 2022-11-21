@@ -75,5 +75,59 @@ namespace DChild.Gameplay.Characters.Players.Modules
         [SerializeField, HideLabel]
         private SlideStatsInfo m_slideInfo;
         public SlideStatsInfo slideInfo => m_slideInfo;
+
+        [Header("Movement Skills")]
+        [Title("Wall Jump")]
+        [SerializeField, HideLabel]
+        private WallJumpStatsInfo m_wallJumpStatsInfo;
+        public WallJumpStatsInfo wallJumpInfo => m_wallJumpStatsInfo;
+
+        [Title("Wall Movement")]
+        [SerializeField, HideLabel]       
+        private WallMovementStatsInfo m_wallMovementStatsInfo;
+        public WallMovementStatsInfo wallMovementInfo => m_wallMovementStatsInfo;
+
+        [Title("Wall Slide")]
+        [SerializeField, HideLabel]
+        private WallSlideStatsInfo m_wallSlideStatsInfo;
+        public WallSlideStatsInfo wallSlideInfo => m_wallSlideStatsInfo;
+
+        [Title("Wall Stick")]
+        [SerializeField, HideLabel]
+        private WallStickStatsInfo m_wallStickStatsInfo;
+        public WallStickStatsInfo wallStickInfo => m_wallStickStatsInfo;
+
+        [Header("Combat Skills")]
+        [Title("Earth Shaker")]
+        [SerializeField, HideLabel]
+        private EarthShakerStatsInfo m_earthShakerStatsInfo;
+        public EarthShakerStatsInfo earthShakerInfo => m_earthShakerStatsInfo;
+        [Title("Sword Thrust")]
+        [SerializeField, HideLabel]
+        private SwordThrustStatsInfo m_swordThrustStatsInfo;
+        public SwordThrustStatsInfo swordThrustInfo => m_swordThrustStatsInfo;
+        [Title("Whip Attack")]
+        [SerializeField, HideLabel]
+        private WhipAttackStatsInfo m_whipAttackStatsInfo;
+        public WhipAttackStatsInfo whipAttackInfo => m_whipAttackStatsInfo;
+        [Title("Projectile Throw")]
+        [SerializeField, HideLabel]
+        private ProjectileThrowStatsInfo m_projectileThrowStatsInfo;
+        public ProjectileThrowStatsInfo projectileThrowInfo => m_projectileThrowStatsInfo;
+        [Title("Block")]
+        [SerializeField, HideLabel]
+        private BlockStatsInfo m_blockStatsInfo;
+        public BlockStatsInfo blockInfo => m_blockStatsInfo;
+
+        [Header("Misc")]
+        [Title("Combat Readiness")]
+        [SerializeField, HideLabel]
+        private CombatReadinessStatsInfo m_combatReadinessStatsInfo;
+        public CombatReadinessStatsInfo combatReadinessInfo => m_combatReadinessStatsInfo;
+
+        [Title("Idle Handle")]
+        [SerializeField, HideLabel]
+        private IdleHandleStatsInfo m_idleHandleStatsInfo;
+        public IdleHandleStatsInfo idleHandleInfo => m_idleHandleStatsInfo;
     }
 }

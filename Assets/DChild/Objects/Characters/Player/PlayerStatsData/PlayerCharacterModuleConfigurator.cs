@@ -12,7 +12,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private PlayerCharacterModuleConfiguration m_playerBasicBehaviourConfiguration;
         public PlayerCharacterModuleConfiguration playerBasicBehaviourConfiguration => m_playerBasicBehaviourConfiguration;
 
-        //Basic
+        [Title("Basic")]
         [SerializeField]
         private Movement m_movement;
         [SerializeField]
@@ -26,11 +26,12 @@ namespace DChild.Gameplay.Characters.Players.Modules
         [SerializeField]
         private AutoStepClimb m_autoStepClimb;
 
-        //Combat
+        [Title("Combat")]
         [SerializeField]
         private PlayerFlinch m_flinch;
 
         //MovementSkills
+        [Title("Movement Skills")]
         [SerializeField]
         private Dash m_dash;
         [SerializeField]
@@ -43,6 +44,34 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private Slide m_slide;
         [SerializeField]
         private ShadowSlide m_shadowSlide;
+
+        [Title("Wall Based Movement")]
+        [SerializeField]
+        private WallStick m_wallStick;
+        [SerializeField]
+        private WallMovement m_wallMovement;
+        [SerializeField]
+        private WallJump m_wallJump;
+        [SerializeField]
+        private WallSlide m_wallSlide;
+
+        [Title("Combat Skills")]
+        [SerializeField]
+        private EarthShaker m_earthShaker;
+        [SerializeField]
+        private SwordThrust m_swordThrust;
+        [SerializeField]
+        private WhipAttack m_whipAttack;
+        [SerializeField]
+        private ProjectileThrow m_projectileThrow;
+        [SerializeField]
+        private PlayerBlock m_block;
+
+        [Title("Misc")]
+        [SerializeField]
+        private IdleHandle m_idleHandle;
+        [SerializeField]
+        private CombatReadiness m_combatReadiness;
 
         public void InitializeModuleConfigurations()
         {
@@ -59,6 +88,17 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_shadowDash.SetConfiguration(m_playerBasicBehaviourConfiguration.shadowDashInfo);
             m_slide.SetConfiguration(m_playerBasicBehaviourConfiguration.slideInfo);
             m_shadowSlide.SetConfiguration(m_playerBasicBehaviourConfiguration.shadowSlideInfo);
+            m_wallStick.SetConfiguration(m_playerBasicBehaviourConfiguration.wallStickInfo);
+            m_wallMovement.SetConfiguration(m_playerBasicBehaviourConfiguration.wallMovementInfo);
+            m_wallJump.SetConfiguration(m_playerBasicBehaviourConfiguration.wallJumpInfo);
+            m_wallSlide.SetConfiguration(m_playerBasicBehaviourConfiguration.wallSlideInfo);
+            m_earthShaker.SetConfiguration(m_playerBasicBehaviourConfiguration.earthShakerInfo);
+            m_swordThrust.SetConfiguration(m_playerBasicBehaviourConfiguration.swordThrustInfo);
+            m_whipAttack.SetConfiguration(m_playerBasicBehaviourConfiguration.whipAttackInfo);
+            m_projectileThrow.SetConfiguration(m_playerBasicBehaviourConfiguration.projectileThrowInfo);
+            m_block.SetConfiguration(m_playerBasicBehaviourConfiguration.blockInfo);
+            m_idleHandle.SetConfiguration(playerBasicBehaviourConfiguration.idleHandleInfo);
+            m_combatReadiness.SetConfiguration(m_playerBasicBehaviourConfiguration.combatReadinessInfo);
         }
     }
 }

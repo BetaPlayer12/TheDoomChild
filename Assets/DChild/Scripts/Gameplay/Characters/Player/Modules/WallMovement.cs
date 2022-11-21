@@ -13,8 +13,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
             Body
         }
 
-        [SerializeField, MinValue(0f)]
-        private float m_speed;
+        [SerializeField, HideLabel]
+        private WallMovementStatsInfo m_configuration;
         [SerializeField]
         private RaySensor m_overheadSensor;
         [SerializeField]
@@ -31,6 +31,11 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_rigibody = info.rigidbody;
             m_animator = info.animator;
             m_animationParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.IsWallCrawling);
+        }
+
+        public void SetConfiguration(WallMovementStatsInfo info)
+        {
+            m_configuration.CopyInfo(info);
         }
 
         public bool IsThereAWall(SensorType sensorType)
@@ -61,7 +66,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 if (direction != 0)
                 {
                     m_animator.SetBool(m_animationParameter, true);
-                    m_rigibody.velocity = new Vector2(m_rigibody.velocity.x, m_speed * direction);
+                    m_rigibody.velocity = new Vector2(m_rigibody.velocity.x, m_configuration.speed * direction);
                 }
             }
         }
