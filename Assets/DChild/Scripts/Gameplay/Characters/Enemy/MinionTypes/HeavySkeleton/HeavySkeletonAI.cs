@@ -171,9 +171,9 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_edgeSensor;
         [SerializeField, TabGroup("FX")]
-        private GameObject m_hitFX;
+        private HitFXHandle m_slashFX;
         [SerializeField, TabGroup("FX")]
-        private HitFXHandle m_hitFXHandle;
+        private HitFXHandle m_blockFX;
 
         [ShowInInspector]
         private StateHandle<State> m_stateHandle;
@@ -393,10 +393,10 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator CounterFlinchRoutine()
         {
-            m_hitbox.SetCanBlockDamageState(false);
             var randomCounter = UnityEngine.Random.Range(0, 2) == 1 ? m_info.counterFlinch1Animation : m_info.counterFlinch2Animation;
             m_animation.SetAnimation(0, randomCounter, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, randomCounter);
+            m_hitbox.SetCanBlockDamageState(false);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_stateHandle.ApplyQueuedState();
             yield return null;
@@ -404,7 +404,17 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void SpawnHitFX(object sender, Damageable.DamageEventArgs eventArgs)
         {
-            m_hitFXHandle.SpawnFX(m_character.centerMass.position, /*m_targetInfo.facing*/m_character.facing);
+            if (m_targetInfo.isValid)
+            {
+                if (m_hitbox.canBlockDamage)
+                {
+                    m_blockFX.SpawnFX(m_blockFX.transform.position, /*m_targetInfo.facing*/m_targetInfo.transform.position.x > transform.position.x ? HorizontalDirection.Left : HorizontalDirection.Right);
+                }
+                else
+                {
+                    m_slashFX.SpawnFX(m_character.centerMass.position, /*m_targetInfo.facing*/m_targetInfo.transform.position.x > transform.position.x ? HorizontalDirection.Left : HorizontalDirection.Right);
+                }
+            }
         }
 
         public override void ApplyData()
@@ -487,9 +497,9 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator BlockAttackRoutine()
         {
+            m_hitbox.SetCanBlockDamageState(true);
             m_animation.SetAnimation(0, m_info.blockStartAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.blockStartAnimation);
-            m_hitbox.SetCanBlockDamageState(true);
             m_animation.SetAnimation(0, m_info.blockLoopAnimation, true);
             float time = 0;
             while (time < m_info.blockDuration)
