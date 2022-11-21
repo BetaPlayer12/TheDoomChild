@@ -377,7 +377,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void CounterFlinch(object sender, Damageable.DamageEventArgs eventArgs)
         {
-            Debug.Log("HEAVY SKELETON BLOCKING");
+            //Debug.Log("HEAVY SKELETON BLOCKING");
             if (m_animation.GetCurrentAnimation(0).ToString() == m_info.blockLoopAnimation)
             {
                 StopAllCoroutines();
@@ -395,8 +395,9 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             var randomCounter = UnityEngine.Random.Range(0, 2) == 1 ? m_info.counterFlinch1Animation : m_info.counterFlinch2Animation;
             m_animation.SetAnimation(0, randomCounter, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, randomCounter);
+            yield return new WaitForSeconds(0.1f);
             m_hitbox.SetCanBlockDamageState(false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, randomCounter);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_stateHandle.ApplyQueuedState();
             yield return null;
