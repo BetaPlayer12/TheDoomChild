@@ -1,4 +1,5 @@
-﻿using Holysoft.Event;
+﻿using Doozy.Runtime.UIManager.Components;
+using Holysoft.Event;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -11,7 +12,7 @@ namespace DChild.Gameplay.Trade.UI
         private TextMeshProUGUI m_amountToTrade;
 
         [SerializeField]
-        private Button m_button;
+        private UIButton m_button;
 
         private ITradeTransactionInfo m_transactionInfo;
 
