@@ -405,7 +405,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void SpawnHitFX(object sender, Damageable.DamageEventArgs eventArgs)
         {
-            if (m_targetInfo.isValid)
+            if (m_targetInfo.isValid && enabled)
             {
                 if (m_hitbox.canBlockDamage)
                 {
