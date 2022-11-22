@@ -1,5 +1,9 @@
 ﻿using Holysoft.Collections;
+using System;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
+using UnityEngine.ResourceManagement.ResourceProviders;
 using UnityEngine.SceneManagement;
 
 namespace DChild
@@ -16,9 +20,14 @@ namespace DChild
         {
             if (m_hasPlayedIntro == false)
             {
-                SceneManager.LoadSceneAsync(m_introScene.sceneName, LoadSceneMode.Additive);
+                Addressables.LoadSceneAsync(m_introScene.sceneName, LoadSceneMode.Additive).Completed += OnIntroSceneLoaded;
                 m_hasPlayedIntro = true;
             }
+        }
+
+        private void OnIntroSceneLoaded(AsyncOperationHandle<SceneInstance> obj)
+        {
+            GameIntro.currentIntroScene = obj.Result;
         }
     }
 }

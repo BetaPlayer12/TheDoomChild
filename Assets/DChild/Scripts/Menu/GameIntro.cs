@@ -2,13 +2,19 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Video;
-using DChild.Temp;
 using Doozy.Runtime.Signals;
+using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
+using UnityEngine.ResourceManagement.ResourceProviders;
+
+using System.Collections;
 
 namespace DChild
 {
     public class GameIntro : MonoBehaviour
     {
+        public static SceneInstance currentIntroScene;
+
         [SerializeField]
         private VideoPlayer m_intro;
         [SerializeField]
@@ -16,28 +22,49 @@ namespace DChild
         [SerializeField]
         private SignalSender m_stopIntro;
 
-        private AsyncOperation m_toMainMenu;
+        private SceneInstance m_loadedMainMenu;
+        private bool m_isMainMenuLoaded;
         private bool m_unloadScene;
 
         public void ActivateNextScene()
         {
-            if (m_toMainMenu != null)
+            if (m_isMainMenuLoaded)
             {
-                m_toMainMenu.allowSceneActivation = true;
+                m_loadedMainMenu.ActivateAsync();
+            }
+            else
+            {
+                StopAllCoroutines();
+                StartCoroutine(ActivateNextSceneAsync());
             }
             m_unloadScene = true;
         }
 
         public void LoadScene()
         {
-            SceneManager.LoadSceneAsync(m_mainMenu.sceneName, LoadSceneMode.Additive);
-            SceneManager.UnloadSceneAsync(gameObject.scene);
+            Addressables.LoadSceneAsync(m_mainMenu.sceneName, LoadSceneMode.Additive);
+            Addressables.UnloadSceneAsync(currentIntroScene);
         }
 
         public void LoadSceneAsync()
         {
-            m_toMainMenu = SceneManager.LoadSceneAsync(m_mainMenu.sceneName, LoadSceneMode.Additive);
-            m_toMainMenu.allowSceneActivation = false;
+            m_isMainMenuLoaded = false;
+            Addressables.LoadSceneAsync(m_mainMenu.sceneName, LoadSceneMode.Additive, false).Completed += OnMainMenuLoaded;
+        }
+
+        private void OnMainMenuLoaded(AsyncOperationHandle<SceneInstance> obj)
+        {
+            m_loadedMainMenu = obj.Result;
+            obj.Completed -= OnMainMenuLoaded;
+            m_isMainMenuLoaded = true;
+        }
+
+        private IEnumerator ActivateNextSceneAsync()
+        {
+            while (m_isMainMenuLoaded == false)
+                yield return null;
+
+            m_loadedMainMenu.ActivateAsync();
         }
 
         private void Awake()
@@ -54,7 +81,7 @@ namespace DChild
         {
             if (m_unloadScene)
             {
-                SceneManager.UnloadSceneAsync(gameObject.scene);
+                Addressables.UnloadSceneAsync(currentIntroScene);
             }
         }
     }
