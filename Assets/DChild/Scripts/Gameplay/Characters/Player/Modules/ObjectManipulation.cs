@@ -25,14 +25,11 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
     public class ObjectManipulation : MonoBehaviour, ICancellableBehaviour, IComplexCharacterModule
     {
+        [SerializeField, HideLabel]
+        private ObjectManipulationStatsInfo m_configuration;
+
         [SerializeField]
         private RaySensor m_grabRangeSensor;
-        [SerializeField]
-        private float m_pushForce;
-        [SerializeField]
-        private float m_pullForce;
-        [SerializeField]
-        private float m_distanceCheck;
 
         private Animator m_animator;
         private IGrabState m_state;
@@ -189,14 +186,14 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 m_state.isPushing = false;
                 m_state.isPulling = true;
 
-                if (dist > m_distanceCheck)
+                if (dist > m_configuration.distanceCheck)
                 {
                     m_rigidbody.velocity = Vector2.zero;
-                    m_movableObject.MoveObject(direction, m_modifier.Get(PlayerModifier.MoveSpeed) * m_pullForce + (m_pullForce / 2));
+                    m_movableObject.MoveObject(direction, m_modifier.Get(PlayerModifier.MoveSpeed) * m_configuration.pushForce + (m_configuration.pullForce / 2));
                 }
                 else
                 {
-                    m_movableObject.MoveObject(direction, m_modifier.Get(PlayerModifier.MoveSpeed) * m_pullForce);
+                    m_movableObject.MoveObject(direction, m_modifier.Get(PlayerModifier.MoveSpeed) * m_configuration.pullForce);
                 }
             }
             else
@@ -204,14 +201,14 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 m_state.isPushing = true;
                 m_state.isPulling = false;
 
-                if (dist > m_distanceCheck)
+                if (dist > m_configuration.distanceCheck)
                 {
                     m_rigidbody.velocity = Vector2.zero;
-                    m_movableObject.MoveObject(direction, m_modifier.Get(PlayerModifier.MoveSpeed) * m_pushForce / 2);
+                    m_movableObject.MoveObject(direction, m_modifier.Get(PlayerModifier.MoveSpeed) * m_configuration.pushForce / 2);
                 }
                 else
                 {
-                    m_movableObject.MoveObject(direction, m_modifier.Get(PlayerModifier.MoveSpeed) * m_pushForce);
+                    m_movableObject.MoveObject(direction, m_modifier.Get(PlayerModifier.MoveSpeed) * m_configuration.pushForce);
                 }
             }
         }
@@ -225,6 +222,11 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_isGrabbingAnimationParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.IsGrabbing);
             m_isPullingAnimationParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.IsPulling);
             m_isPushingAnimationParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.IsPushing);
+        }
+
+        public void SetConfiguration(ObjectManipulationStatsInfo info)
+        {
+            m_configuration.CopyInfo(info);
         }
 
         private void InvokeDetectedMoveableObject()
