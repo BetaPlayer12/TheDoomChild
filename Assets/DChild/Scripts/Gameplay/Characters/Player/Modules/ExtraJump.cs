@@ -28,7 +28,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_rigidbody = info.rigidbody;
             m_currentCount = m_count;
             m_animator = info.animator;
-            m_animationParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.Jump);
+            m_animationParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.DoubleJump);
         }
 
         public bool HasExtras() => m_currentCount > 0;
