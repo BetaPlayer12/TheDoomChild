@@ -42,7 +42,8 @@ namespace DChild.Gameplay.Characters.Players
             StepClimb,
             AimingProjectile,
             IsWallCrawling,
-            DoubleJump
+            DoubleJump,
+            WallJump,
         }
 
         [SerializeField]

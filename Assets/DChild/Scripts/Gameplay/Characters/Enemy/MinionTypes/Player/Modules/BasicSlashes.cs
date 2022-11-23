@@ -259,7 +259,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 m_executedTypes.Add(type);
             }
 
-            Debug.Log(m_executedTypes.Count);
+            //Debug.Log(m_executedTypes.Count);
         }
 
         public (int index, float value) getSomething() { return (0, 1f); }
