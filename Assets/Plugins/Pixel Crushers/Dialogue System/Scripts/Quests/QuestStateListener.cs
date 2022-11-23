@@ -167,7 +167,7 @@ namespace PixelCrushers.DialogueSystem
                 if (isOnStart == false && questStateIndicatorLevel.updateOnStartOnly)
                     continue;
 
-                if (questState == questStateIndicatorLevel.questState && questStateIndicatorLevel.condition.IsTrue(null))
+                if (questStateIndicatorLevel.questState.HasFlag(questState) && questStateIndicatorLevel.condition.IsTrue(null))
                 {
                     if (DialogueDebug.logInfo) Debug.Log("Dialogue System: " + name + ": Quest '" + questName + "' changed to state " + questState + ".", this);
                     if (questStateIndicator != null) questStateIndicator.SetIndicatorLevel(this, questStateIndicatorLevel.indicatorLevel);
@@ -183,7 +183,7 @@ namespace PixelCrushers.DialogueSystem
             {
                 var questEntryStateIndicatorLevel = questEntryStateIndicatorLevels[i];
                 var questEntryState = QuestLog.GetQuestEntryState(questName, questEntryStateIndicatorLevel.entryNumber);
-                if (questEntryState == questEntryStateIndicatorLevel.questState && questEntryStateIndicatorLevel.condition.IsTrue(null))
+                if (questEntryStateIndicatorLevel.questState.HasFlag(questEntryState) && questEntryStateIndicatorLevel.condition.IsTrue(null))
                 {
                     if (DialogueDebug.logInfo) Debug.Log("Dialogue System: " + name + ": Quest '" + questName + "' entry " + questEntryStateIndicatorLevel.entryNumber + " changed to state " + questEntryState + ".", this);
                     if (questStateIndicator != null) questStateIndicator.SetIndicatorLevel(this, questEntryStateIndicatorLevel.indicatorLevel);

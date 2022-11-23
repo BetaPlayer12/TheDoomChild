@@ -8,9 +8,12 @@ namespace DChild.Gameplay.Combat
     [AddComponentMenu("DChild/Gameplay/Combat/Extended Attack Resistance")]
     public class ExtendedAttackResistance : AttackResistance
     {
+        [SerializeField]
+        private AttackResistanceData m_extendedAttackResistanceData;
+
         [HorizontalGroup("Split")]
 
-        [OdinSerialize, HideReferenceObjectPicker, OnValueChanged("SendEvent", true), BoxGroup("Split/Base")]
+        [OdinSerialize, HideReferenceObjectPicker, HideInEditorMode, OnValueChanged("SendEvent", true), BoxGroup("Split/Base")]
         protected Dictionary<DamageType, float> m_baseResistance = new Dictionary<DamageType, float>();
         [ShowInInspector, HideReferenceObjectPicker, HideInEditorMode, OnValueChanged("SendEvent", true), BoxGroup("Split/Added")]
         private Dictionary<DamageType, float> m_additionalResistance;
@@ -95,15 +98,16 @@ namespace DChild.Gameplay.Combat
         {
 
         }
+
         public void Initialize()
         {
+            m_baseResistance = new Dictionary<DamageType, float>(m_extendedAttackResistanceData.resistance);
             m_additionalResistance = new Dictionary<DamageType, float>();
             m_additionalResistance.Clear();
             m_combinedResistance = new Dictionary<DamageType, float>();
             m_combinedResistance.Clear();
             CalculateResistance();
         }
-
 
 #if UNITY_EDITOR
         private void SendEvent()

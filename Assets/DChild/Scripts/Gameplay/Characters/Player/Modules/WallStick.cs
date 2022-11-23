@@ -1,6 +1,7 @@
 ﻿using DChild.Gameplay.Characters.Players.Behaviour;
 using DChild.Gameplay.Characters.Players.State;
 using DChild.Gameplay.Environment;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace DChild.Gameplay.Characters.Players.Modules
@@ -11,8 +12,9 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private RaySensor m_wallSensor;
         [SerializeField]
         private RaySensor m_heightSensor;
-        [SerializeField]
-        private float m_wallStickOffset;
+
+        [SerializeField, HideLabel]
+        private WallStickStatsInfo m_configuration;
 
         private float m_cacheGravityScale;
 
@@ -32,6 +34,11 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_state = info.state;
             m_animator = info.animator;
             m_animationParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.WallStick);
+        }
+
+        public void SetConfiguration(WallStickStatsInfo info)
+        {
+            m_configuration.CopyInfo(info);
         }
 
         public void Cancel()
@@ -65,7 +72,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     {
                         if (m_cacheCollider.CompareTag("InvisibleWall") == false)
                         {
-                            if (hits[i].distance < m_wallStickOffset)
+                            if (hits[i].distance < m_configuration.wallStickOffset)
                             {
                                 isValid = true;
 
