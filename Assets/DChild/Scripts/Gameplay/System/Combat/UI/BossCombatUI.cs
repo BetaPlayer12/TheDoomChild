@@ -1,6 +1,7 @@
 ﻿using DChild.Gameplay.Characters.Enemies;
 using Doozy.Runtime.UIManager.Containers;
 using Holysoft.Gameplay.UI;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace DChild.Gameplay.Combat.UI
@@ -9,6 +10,10 @@ namespace DChild.Gameplay.Combat.UI
     {
         [SerializeField]
         private UIContainer m_container;
+        [SerializeField]
+        private UIContainer m_bossHealthContainer;
+        [SerializeField]
+        private UIContainer m_bossNameContainer;
         [SerializeField]
         private BossBannerUI m_bossBanner;
         [SerializeField]
@@ -24,6 +29,30 @@ namespace DChild.Gameplay.Combat.UI
         public void Hide()
         {
             m_container.Hide(true);
+        }
+
+        [Button]
+        public void ShowBossHealth()
+        {
+            m_bossHealthContainer.Show(true);
+        }
+
+        [Button]
+        public void ShowBossName()
+        {
+            m_bossNameContainer.Show(true);
+        }
+
+        [Button]
+        public void HideBossHealth()
+        {
+            m_bossHealthContainer.Hide(true);
+        }
+
+        [Button]
+        public void HideBossName()
+        {
+            m_bossNameContainer.Hide(true);
         }
 
         public void SetBoss(Boss boss)
