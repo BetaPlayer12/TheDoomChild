@@ -256,6 +256,11 @@ namespace DChild.Gameplay.Characters.Players.Modules
         {
             var oppositeFacing = m_character.facing == HorizontalDirection.Right ? HorizontalDirection.Left : HorizontalDirection.Right;
             m_character.SetFacing(oppositeFacing);
+            //Test
+            Debug.Log("Zee Flipped Position");
+            m_basicSlashes.Cancel();
+            m_slashCombo.Cancel();
+            m_whip.Cancel();
         }
 
         private void Awake()
@@ -925,7 +930,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     }
                 }
 
-                MoveCharacter(false);
+                if (!m_state.isAttacking)
+                    MoveCharacter(false);
 
                 if (m_input.crouchHeld == false)
                 {
@@ -1203,7 +1209,9 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 }
                 else
                 {
-                    MoveCharacter(m_state.isGrabbing);
+                    if (!m_state.isAttacking)
+                        MoveCharacter(m_state.isGrabbing);
+
                     if (m_input.horizontalInput != 0)
                     {
                         if (m_stepClimb.CheckForStepClimbableSurface())
@@ -1364,6 +1372,15 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         private void MoveCharacter(bool isGrabbing)
         {
+            if (m_input.horizontalInput > 0 && m_character.facing == HorizontalDirection.Left
+                || m_input.horizontalInput < 0 && m_character.facing == HorizontalDirection.Right)
+            {
+                //Debug.Log("Character Turning");
+                m_basicSlashes.Cancel();
+                m_slashCombo.Cancel();
+                m_whip.Cancel();
+            }
+
             if (isGrabbing == false)
             {
                 if (m_input.horizontalInput == 0)
