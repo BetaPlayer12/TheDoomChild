@@ -90,6 +90,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             base.Cancel();
 
             m_state.isDoingCombo = false;
+            m_fxAnimator.Play("Buffer");
         }
 
         public void PlayFX(bool value)
@@ -155,7 +156,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             }
             else
             {
-                Debug.Log("Attack Over");
+                //Debug.Log("Attack Over");
                 base.AttackOver();
                 m_state.canAttack = true;
                 //m_skeletonAnimation.state.SetEmptyAnimation(0, 0);

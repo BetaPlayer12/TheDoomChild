@@ -33,9 +33,12 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private Character m_character;
         private Animator m_animator;
         private int m_speedAnimationParameter;
+        private bool m_isTurning;
 
         [ShowInInspector, ReadOnly, HideInEditorMode]
         protected float speed => m_currentSpeed * m_modifier.Get(PlayerModifier.MoveSpeed);
+
+        public bool isTurning => m_isTurning;
 
         public void Initialize(ComplexCharacterInfo info)
         {
@@ -77,11 +80,13 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void UpdateFaceDirection(float direction)
         {
+            m_isTurning = true;
             if (Mathf.Sign(direction) != (int)m_character.facing)
             {
                 var otherFacing = m_character.facing == HorizontalDirection.Right ? HorizontalDirection.Left : HorizontalDirection.Right;
                 m_character.SetFacing(otherFacing);
             }
+            m_isTurning = false;
         }
 
         public void Move(float direction, bool faceDirection)
