@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.ResourceManagement.ResourceProviders;
@@ -35,6 +36,18 @@ namespace DChild.Menu
             for (int i = 0; i < m_loadedscenes.Count; i++)
             {
                 m_loadedscenes[i].ActivateAsync();
+            }
+        }
+
+        public IEnumerator ActivateLoadedScenesInOrder()
+        {
+
+            for (int i = 0; i < m_loadedscenes.Count; i++)
+            {
+                var loadedScene = m_loadedscenes[i];
+                loadedScene.ActivateAsync();
+                while (loadedScene.Scene.isLoaded == false)
+                    yield return null;
             }
         }
 
