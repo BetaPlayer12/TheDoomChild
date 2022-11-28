@@ -27,7 +27,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_rigidbody = info.rigidbody;
             m_currentCount = m_configuration.count;
             m_animator = info.animator;
-            m_animationParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.Jump);
+            m_animationParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.DoubleJump);
         }
 
         public void SetConfiguration(ExtraJumpStatsInfo info)

@@ -111,6 +111,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 case Type.Ground_Overhead:
                     m_timer = m_groundOverhead.nextAttackDelay;
                     m_attacker.SetDamageModifier(m_groundOverhead.damageModifier * m_modifier.Get(PlayerModifier.AttackDamage));
+                    m_rigidBody.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
                     break;
                 case Type.Crouch:
                     m_timer = m_crouch.nextAttackDelay;
@@ -175,6 +176,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         {
             base.AttackOver();
 
+            //Debug.Log("BASIC SLASHES ATTACK OVER");
             if (m_state.isDoingCombo == true)
             {
                 m_state.isDoingCombo = false;
@@ -187,6 +189,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             //test.state.ClearTrack(0);
             m_skeletonAnimation.state.SetEmptyAnimation(0, 0);
             //m_fxAnimator.Play("Buffer");
+            m_rigidBody.constraints = RigidbodyConstraints2D.None | RigidbodyConstraints2D.FreezeRotation;
         }
 
         public void ClearFXFor(Type type)
@@ -256,7 +259,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 m_executedTypes.Add(type);
             }
 
-            Debug.Log(m_executedTypes.Count);
+            //Debug.Log(m_executedTypes.Count);
         }
 
         public (int index, float value) getSomething() { return (0, 1f); }

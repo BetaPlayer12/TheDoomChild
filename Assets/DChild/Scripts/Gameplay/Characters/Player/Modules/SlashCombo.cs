@@ -1,4 +1,5 @@
 ﻿using DChild.Gameplay.Characters.Players.Behaviour;
+using Sirenix.OdinInspector;
 using Spine.Unity;
 using System.Collections.Generic;
 using UnityEngine;
@@ -15,6 +16,20 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private float m_slashComboCooldown;
         [SerializeField]
         private List<Info> m_slashComboInfo;
+
+        //TEST
+        [SerializeField, BoxGroup("Physics")]
+        private Character m_character;
+        [SerializeField, BoxGroup("Physics")]
+        private Rigidbody2D m_physics;
+        [SerializeField, BoxGroup("Physics")]
+        private List<Vector2> m_pushForce;
+        [SerializeField, BoxGroup("Sensors")]
+        private RaySensor m_enemySensor;
+        [SerializeField, BoxGroup("Sensors")]
+        private RaySensor m_wallSensor;
+        [SerializeField, BoxGroup("Sensors")]
+        private RaySensor m_edgeSensor;
 
         private bool m_canSlashCombo;
         private IPlayerModifer m_modifier;
@@ -75,6 +90,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             base.Cancel();
 
             m_state.isDoingCombo = false;
+            m_fxAnimator.Play("Buffer");
         }
 
         public void PlayFX(bool value)
@@ -101,6 +117,15 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     break;
                 default:
                     break;
+            }
+
+            //TEST
+            m_enemySensor.Cast();
+            m_wallSensor.Cast();
+            m_edgeSensor.Cast();
+            if (!m_enemySensor.isDetecting && !m_wallSensor.allRaysDetecting && m_edgeSensor.isDetecting)
+            {
+                m_physics.AddForce(m_character.facing == HorizontalDirection.Right ? m_pushForce[m_currentVisualSlashState] : -m_pushForce[m_currentVisualSlashState], ForceMode2D.Impulse);
             }
         }
 
@@ -131,7 +156,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             }
             else
             {
-                Debug.Log("Attack Over");
+                //Debug.Log("Attack Over");
                 base.AttackOver();
                 m_state.canAttack = true;
                 //m_skeletonAnimation.state.SetEmptyAnimation(0, 0);

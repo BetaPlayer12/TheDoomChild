@@ -100,6 +100,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void FinishAttackAnim()
         {
+            Debug.Log("Finish Attack Anim");
             m_basicSlashes?.AttackOver();
             m_basicSlashes?.ClearExecutedCollision();
             m_whip?.AttackOver();
