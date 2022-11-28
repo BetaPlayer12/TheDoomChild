@@ -77,7 +77,7 @@ namespace DChild.Gameplay
 
             LoadingHandle.SetLoadType(LoadingHandle.LoadType.Force);
             GameplaySystem.ResumeGame();
-            GameSystem.LoadZone(locationData.scene, true, OnTransferPlayerDone);
+            GameSystem.LoadZone(locationData.sceneInfo, true, OnTransferPlayerDone);
         }
 
         private void OnTransferPlayerDone()
