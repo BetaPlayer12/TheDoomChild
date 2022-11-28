@@ -185,6 +185,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                         m_whip?.Cancel();
                         m_slashCombo?.Cancel();
                         m_whipCombo?.Cancel();
+                        m_whipCombo?.Reset();
                     }
                 }
 
@@ -267,6 +268,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_slashCombo.Cancel();
             m_whip.Cancel();
             m_whipCombo.Cancel();
+            m_whipCombo.Reset();
         }
 
         private void Awake()
@@ -951,8 +953,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     }
                 }
 
-                if (!m_state.isAttacking)
-                    MoveCharacter(false);
+                MoveCharacter(false);
 
                 if (m_input.crouchHeld == false)
                 {
@@ -1062,6 +1063,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     #region Ground Attacks
                     if (m_input.slashPressed)
                     {
+                        m_whipCombo.Cancel();
+                        m_whipCombo.Reset();
                         if (m_state.isInShadowMode == true)
                         {
                             if (m_shadowMorph.IsAttackAllowed() == true)
@@ -1121,8 +1124,11 @@ namespace DChild.Gameplay.Characters.Players.Modules
                                         m_whip.Execute(WhipAttack.Type.Ground_Forward);
                                     else
                                     {
-                                        if (m_whipCombo.CanWhipCombo())
-                                            m_whipCombo.Execute();
+                                        if (IsFacingInput())
+                                        {
+                                            if (m_whipCombo.CanWhipCombo())
+                                                m_whipCombo.Execute();
+                                        }
                                     }
                                     return;
                                 }
@@ -1154,6 +1160,10 @@ namespace DChild.Gameplay.Characters.Players.Modules
                                 m_swordThrust?.StartCharge();
 
                                 return;
+                            }
+                            else
+                            {
+                                m_swordThrust?.Cancel();
                             }
                         }
                     }
@@ -1239,7 +1249,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 }
                 else
                 {
-                    if (m_state.canAttack && !m_state.isAttacking && !m_input.whipPressed && m_whipCombo.CanMove())
+                    if (/*m_state.canAttack &&*/ !m_state.isAttacking /*&& !m_input.whipPressed*/ && m_whipCombo.CanMove())
                         MoveCharacter(m_state.isGrabbing);
 
                     if (m_input.horizontalInput != 0)
@@ -1402,14 +1412,14 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         private void MoveCharacter(bool isGrabbing)
         {
-            if (m_input.horizontalInput > 0 && m_character.facing == HorizontalDirection.Left
-                || m_input.horizontalInput < 0 && m_character.facing == HorizontalDirection.Right)
+            if (!IsFacingInput())
             {
                 //Debug.Log("Character Turning");
                 m_basicSlashes.Cancel();
                 m_slashCombo.Cancel();
                 m_whip.Cancel();
                 m_whipCombo.Cancel();
+                m_whipCombo.Reset();
             }
 
             if (isGrabbing == false)
@@ -1429,6 +1439,11 @@ namespace DChild.Gameplay.Characters.Players.Modules
             {
                 m_movement?.Move(m_input.horizontalInput, false);
             }
+        }
+
+        private bool IsFacingInput()
+        {
+            return m_input.horizontalInput > 0 && m_character.facing == HorizontalDirection.Right || m_input.horizontalInput < 0 && m_character.facing == HorizontalDirection.Left;
         }
 
         private void PrepareForGroundAttack()
