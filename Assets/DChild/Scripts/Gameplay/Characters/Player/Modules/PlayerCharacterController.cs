@@ -60,6 +60,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private SwordThrust m_swordThrust;
         private EarthShaker m_earthShaker;
         private WhipAttack m_whip;
+        private WhipAttackCombo m_whipCombo;
         private ProjectileThrow m_projectileThrow;
         private PlayerBlock m_block;
         private PlayerIntroControlsController m_introController;
@@ -85,6 +86,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_swordThrust?.Cancel();
             m_earthShaker?.Cancel();
             m_whip?.Cancel();
+            m_whipCombo?.Cancel();
             m_projectileThrow?.Cancel();
             m_shadowMorph.Cancel();
             m_block?.Cancel();
@@ -133,7 +135,9 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     if (m_state.isAttacking)
                     {
                         m_basicSlashes.Cancel();
+                        m_slashCombo.Cancel();
                         m_whip.Cancel();
+                        m_whipCombo.Cancel();
                     }
                 }
                 else
@@ -180,6 +184,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                         m_basicSlashes?.Cancel();
                         m_whip?.Cancel();
                         m_slashCombo?.Cancel();
+                        m_whipCombo?.Cancel();
                     }
                 }
 
@@ -261,6 +266,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_basicSlashes.Cancel();
             m_slashCombo.Cancel();
             m_whip.Cancel();
+            m_whipCombo.Cancel();
         }
 
         private void Awake()
@@ -307,6 +313,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_swordThrust = m_character.GetComponentInChildren<SwordThrust>();
             m_earthShaker = m_character.GetComponentInChildren<EarthShaker>();
             m_whip = m_character.GetComponentInChildren<WhipAttack>();
+            m_whipCombo = m_character.GetComponentInChildren<WhipAttackCombo>();
             m_projectileThrow = m_character.GetComponentInChildren<ProjectileThrow>();
             m_projectileThrow.ExecutionRequested += OnProjectileThrowRequest;
             m_block = m_character.GetComponentInChildren<PlayerBlock>();
@@ -438,9 +445,20 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 m_slashCombo.HandleSlashComboTimer();
             }
 
+            if (m_whipCombo.CanWhipCombo() == false)
+            {
+                m_whipCombo.HandleComboTimer();
+            }
+
+            if (m_whipCombo.CanMove() == false)
+            {
+                m_whipCombo.HandleMovementTimer();
+            }
+
             if (m_state.canAttack == true)
             {
                 m_slashCombo.HandleComboResetTimer();
+                m_whipCombo.HandleComboResetTimer();
             }
             else
             {
@@ -449,6 +467,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     m_basicSlashes.HandleNextAttackDelay();
                     m_slashCombo.HandleComboAttackDelay();
                     m_whip.HandleNextAttackDelay();
+                    m_whipCombo.HandleComboAttackDelay();
                     m_projectileThrow.HandleNextAttackDelay();
                 }
             }
@@ -924,6 +943,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
                         {
                             m_idle?.Cancel();
                             m_movement?.Cancel();
+                            m_whipCombo?.Cancel();
+                            m_whipCombo?.Reset();
                             m_objectManipulation?.Cancel();
                             ExecuteSlide();
                         }
@@ -970,7 +991,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
                         else
                         {
                             PrepareForGroundAttack();
-                            m_slashCombo.Execute();
+                            if (m_slashCombo.CanSlashCombo())
+                                m_slashCombo.Execute();
                             return;
                         }
                     }
@@ -1095,7 +1117,13 @@ namespace DChild.Gameplay.Characters.Players.Modules
                                 else
                                 {
                                     PrepareForGroundAttack();
-                                    m_whip.Execute(WhipAttack.Type.Ground_Forward);
+                                    if (m_input.horizontalInput == 0)
+                                        m_whip.Execute(WhipAttack.Type.Ground_Forward);
+                                    else
+                                    {
+                                        if (m_whipCombo.CanWhipCombo())
+                                            m_whipCombo.Execute();
+                                    }
                                     return;
                                 }
                             }
@@ -1192,6 +1220,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
                         {
                             m_idle?.Cancel();
                             m_movement?.Cancel();
+                            m_whipCombo?.Cancel();
+                            m_whipCombo?.Reset();
                             m_objectManipulation?.Cancel();
                             ExecuteDash();
                         }
@@ -1209,7 +1239,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 }
                 else
                 {
-                    if (!m_state.isAttacking)
+                    if (m_state.canAttack && !m_state.isAttacking && !m_input.whipPressed && m_whipCombo.CanMove())
                         MoveCharacter(m_state.isGrabbing);
 
                     if (m_input.horizontalInput != 0)
@@ -1379,6 +1409,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 m_basicSlashes.Cancel();
                 m_slashCombo.Cancel();
                 m_whip.Cancel();
+                m_whipCombo.Cancel();
             }
 
             if (isGrabbing == false)
