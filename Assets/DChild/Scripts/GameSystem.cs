@@ -2,6 +2,7 @@
 using DChild.Gameplay;
 using DChild.Gameplay.Pooling;
 using DChild.Menu;
+using Holysoft.Collections;
 using Holysoft.Event;
 using Sirenix.Utilities;
 using System;
@@ -29,8 +30,8 @@ namespace DChild
         private static PoolManager m_poolManager;
         private static ConfirmationHandler m_confirmationHander;
         private static SceneLoader m_zoneLoader;
-        private static AddressableSceneManager m_sceneManager;
         private static Cursor m_cursor;
+        public static AddressableSceneManager sceneManager { get; private set; }
         public static GameSettings settings { get; private set; }
         public static GameDataManager dataManager { get; private set; }
         public static IPoolManager poolManager => m_poolManager;
@@ -80,17 +81,17 @@ namespace DChild
             }
         }
 
-        public static void LoadZone(string sceneName, bool withLoadingScene)
+        public static void LoadZone(SceneInfo scene, bool withLoadingScene)
         {
             GameplaySystem.ListenToNextSceneLoad();
-            m_zoneLoader.LoadZone(sceneName, withLoadingScene);
+            m_zoneLoader.LoadZone(scene, withLoadingScene);
             GameplaySystem.ClearCaches();
         }
 
-        public static void LoadZone(string sceneName, bool withLoadingScene, Action CallAfterSceneDone)
+        public static void LoadZone(SceneInfo scene, bool withLoadingScene, Action CallAfterSceneDone)
         {
             GameplaySystem.ListenToNextSceneLoad();
-            m_zoneLoader.LoadZone(sceneName, withLoadingScene, CallAfterSceneDone);
+            m_zoneLoader.LoadZone(scene, withLoadingScene, CallAfterSceneDone);
             GameplaySystem.ClearCaches();
         }
 
@@ -130,6 +131,8 @@ namespace DChild
                 m_poolManager = GetComponentInChildren<PoolManager>();
                 m_poolManager.Initialize();
                 m_cursor = m_instanceCursor;
+
+                sceneManager = new AddressableSceneManager();
             }
         }
 

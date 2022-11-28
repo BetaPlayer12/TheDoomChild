@@ -7,8 +7,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
 {
     public class CombatReadiness : MonoBehaviour, ICancellableBehaviour, IComplexCharacterModule
     {
-        [SerializeField,MinValue(0.1f)]
-        private float m_duration = 0.1f;
+        [SerializeField, HideLabel]
+        private CombatReadinessStatsInfo m_configuration;
 
         private float m_timer;
         private ICombatReadinessState m_state;
@@ -30,6 +30,11 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_animationParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.CombatMode);
         }
 
+        public void SetConfiguration(CombatReadinessStatsInfo info)
+        {
+            m_configuration.CopyInfo(info);
+        }
+
         public void HandleDuration()
         {
             if(m_timer > 0)
@@ -45,7 +50,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void Execution()
         {
-            m_timer = m_duration;
+            m_timer = m_configuration.duration;
             m_state.isCombatReady = true;
             m_animator.SetBool(m_animationParameter, true);
         }
