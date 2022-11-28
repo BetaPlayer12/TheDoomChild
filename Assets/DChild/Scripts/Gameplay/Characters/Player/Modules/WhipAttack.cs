@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Sirenix.OdinInspector;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -26,8 +27,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private Info m_midAirOverhead;
         [SerializeField]
         private Info m_crouchForward;
-        [SerializeField]
-        private float m_aerialGravity;
+        [SerializeField, HideLabel]
+        private WhipAttackStatsInfo m_configuration;
 
         private IPlayerModifer m_modifier;
         private int m_whipAttackAnimationParameter;
@@ -46,6 +47,11 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_rigidbody = info.rigidbody;
             m_cacheGravity = m_rigidbody.gravityScale;
             m_adjustGravity = true;
+        }
+
+        public void SetConfiguration(WhipAttackStatsInfo info)
+        {
+            m_configuration.CopyInfo(info);
         }
 
         public override void Cancel()
@@ -126,7 +132,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     if (m_adjustGravity == true)
                     {
                         m_cacheGravity = m_rigidbody.gravityScale;
-                        m_rigidbody.gravityScale = m_aerialGravity;
+                        m_rigidbody.gravityScale = m_configuration.aerialGravity;
                         m_rigidbody.velocity = Vector2.zero;
                     }
 
@@ -138,7 +144,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     if (m_adjustGravity == true)
                     {
                         m_cacheGravity = m_rigidbody.gravityScale;
-                        m_rigidbody.gravityScale = m_aerialGravity;
+                        m_rigidbody.gravityScale = m_configuration.aerialGravity;
                         m_rigidbody.velocity = Vector2.zero;
                     }
 

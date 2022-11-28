@@ -19,6 +19,7 @@ namespace DChild.Menu.Bestiary
         private UIToggle m_button;
         private CanvasGroup m_canvas;
 
+        public bool isAvailable => m_button.gameObject.activeInHierarchy && m_button.interactable;
         public BestiaryData data => m_data;
 
         public void SetIsOn(bool isOn)
