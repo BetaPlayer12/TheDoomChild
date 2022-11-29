@@ -12,6 +12,8 @@ namespace Holysoft.Collections
         private string m_sceneName;
         [SerializeField]
         private string m_scenePath;
+        [SerializeField]
+        private bool m_isAddressables;
 
         public string sceneName
         {
@@ -27,6 +29,15 @@ namespace Holysoft.Collections
 
 #if UNITY_EDITOR
             set => m_scenePath = value;
+#endif
+        }
+
+        public bool isAddressables
+        {
+            get => m_isAddressables;
+
+#if UNITY_EDITOR
+            set => m_isAddressables = value;
 #endif
         }
 

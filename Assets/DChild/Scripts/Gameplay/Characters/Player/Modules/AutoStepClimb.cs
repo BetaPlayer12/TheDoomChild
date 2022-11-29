@@ -9,12 +9,11 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private RaySensor m_legForwardEnvironment;
         [SerializeField]
         private RaySensor m_destinationFinder;
-        [SerializeField, MinValue(0)]
-        private float m_distanceFromLegContactForDestination;
         [SerializeField]
         private RaySensor m_spaceChecker;
-        [SerializeField, MinValue(0)]
-        private Vector2 m_spaceCheckerOffset;
+
+        [SerializeField, HideLabel]
+        private AutoStepClimbStatsInfo m_configuration;
 
         private Rigidbody2D m_physics;
         private Character m_character;
@@ -31,6 +30,11 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_animation = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.StepClimb);
         }
 
+        public void SetConfiguration(AutoStepClimbStatsInfo info)
+        {
+            m_configuration.CopyInfo(info);
+        }
+
         public bool CheckForStepClimbableSurface()
         {
             m_legForwardEnvironment.Cast();
@@ -39,7 +43,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 m_hitBuffer = m_legForwardEnvironment.GetValidHits();
                 var legEnvironmentContact = m_hitBuffer[0].point;
                 var destinationPosition = m_destinationFinder.transform.position;
-                destinationPosition.x = legEnvironmentContact.x + (m_distanceFromLegContactForDestination * (int)m_character.facing);
+                destinationPosition.x = legEnvironmentContact.x + (m_configuration.distanceFromLegContactForDestination * (int)m_character.facing);
                 m_destinationFinder.transform.position = destinationPosition;
 
                 m_destinationFinder.Cast();
@@ -52,8 +56,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     if (hitcount == 0)
                     {
                         destinationPosition = possibleDestination;
-                        destinationPosition.x += (m_spaceCheckerOffset.x * (int)m_character.facing);
-                        destinationPosition.y += m_spaceCheckerOffset.y;
+                        destinationPosition.x += (m_configuration.spaceCheckerOffset.x * (int)m_character.facing);
+                        destinationPosition.y += m_configuration.spaceCheckerOffset.y;
                         m_spaceChecker.transform.position = destinationPosition;
                         m_spaceChecker.Cast();
                         if (m_spaceChecker.isDetecting == false)

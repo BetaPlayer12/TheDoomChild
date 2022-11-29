@@ -12,8 +12,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
     {
         [SerializeField]
         private Dash m_dash;
-        [SerializeField, MinValue(0)]
-        private int m_baseSourceRequiredAmount = 0;
+        [SerializeField, HideLabel]
+        private ShadowDashStatsInfo m_configuration;
         [SerializeField]
         private ParticleSystem m_shadowFX;
 
@@ -39,6 +39,11 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_animator = info.animator;
             m_skeletonGhost = info.skeletonGhost;
             m_animationParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.ShadowMode);
+        }
+
+        public void SetConfiguration(ShadowDashStatsInfo info)
+        {
+            m_configuration.CopyInfo(info);
         }
 
         public void Cancel()
@@ -75,7 +80,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public int GetSourceRequiredAmount()
         {
-            return Mathf.FloorToInt(m_baseSourceRequiredAmount * m_modifier.Get(PlayerModifier.ShadowMagic_Requirement));
+            return Mathf.FloorToInt(m_configuration.baseSourceRequiredAmount * m_modifier.Get(PlayerModifier.ShadowMagic_Requirement));
         }
 
         public void Execute()

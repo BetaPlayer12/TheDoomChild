@@ -35,7 +35,7 @@ namespace DChild.Gameplay.Combat
 
             StartCoroutine(m_iFrameHandle.ExecuteTemporaryInvulnerability(player));
             m_reactiveCamera.HandleOnDamageRecieveShake();
-            m_hitScreenFX.Show();
+            m_hitScreenFX?.Show();
             m_spawnHandle.InstantiateFX(m_hitFX, player.character.centerMass.position);
         }
 
