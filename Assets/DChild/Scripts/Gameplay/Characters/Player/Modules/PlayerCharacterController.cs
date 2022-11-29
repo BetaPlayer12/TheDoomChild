@@ -447,6 +447,11 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 m_slashCombo.HandleSlashComboTimer();
             }
 
+            if (m_slashCombo.CanMove() == false)
+            {
+                m_slashCombo.HandleMovementTimer();
+            }
+
             if (m_whipCombo.CanWhipCombo() == false)
             {
                 m_whipCombo.HandleComboTimer();
@@ -947,13 +952,15 @@ namespace DChild.Gameplay.Characters.Players.Modules
                             m_movement?.Cancel();
                             m_whipCombo?.Cancel();
                             m_whipCombo?.Reset();
+                            m_earthShaker?.Cancel();
                             m_objectManipulation?.Cancel();
                             ExecuteSlide();
                         }
                     }
                 }
 
-                MoveCharacter(false);
+                if (/*!m_state.isAttacking &&*/ m_whipCombo.CanMove() && m_slashCombo.CanMove())
+                    MoveCharacter(false);
 
                 if (m_input.crouchHeld == false)
                 {
@@ -1232,6 +1239,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                             m_movement?.Cancel();
                             m_whipCombo?.Cancel();
                             m_whipCombo?.Reset();
+                            m_earthShaker?.Cancel();
                             m_objectManipulation?.Cancel();
                             ExecuteDash();
                         }
@@ -1249,7 +1257,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 }
                 else
                 {
-                    if (/*m_state.canAttack &&*/ !m_state.isAttacking /*&& !m_input.whipPressed*/ && m_whipCombo.CanMove())
+                    if (/*!m_state.isAttacking &&*/ m_whipCombo.CanMove() && m_slashCombo.CanMove())
                         MoveCharacter(m_state.isGrabbing);
 
                     if (m_input.horizontalInput != 0)
@@ -1414,7 +1422,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         {
             if (!IsFacingInput())
             {
-                //Debug.Log("Character Turning");
+                Debug.Log("Character Turning");
                 m_basicSlashes.Cancel();
                 m_slashCombo.Cancel();
                 m_whip.Cancel();
@@ -1443,7 +1451,9 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         private bool IsFacingInput()
         {
-            return m_input.horizontalInput > 0 && m_character.facing == HorizontalDirection.Right || m_input.horizontalInput < 0 && m_character.facing == HorizontalDirection.Left;
+            return m_input.horizontalInput > 0 && m_character.facing == HorizontalDirection.Right 
+                || m_input.horizontalInput < 0 && m_character.facing == HorizontalDirection.Left 
+                || m_input.horizontalInput == 0;
         }
 
         private void PrepareForGroundAttack()

@@ -65,7 +65,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_impactFX?.Play(true);
             m_impactCollider.enabled = true;
             m_rigidbody.velocity = Vector2.zero;
-            m_animator.SetBool(m_earthShakerAnimationParameter, false);
+            //m_animator.SetBool(m_earthShakerAnimationParameter, false);
             m_state.waitForBehaviour = true;
         }
 
