@@ -69,11 +69,19 @@ namespace DChild
                     LoadingHandle.UnloadScenes(m_activeZone);
                     m_activeZone = string.Empty;
                 }
-                if (SceneManager.GetSceneByName(m_gameplayScene.sceneName).isLoaded == false)
+                if (GameSystem.sceneManager.IsSceneLoaded(m_gameplayScene.sceneName) == false)
                 {
-                    SceneManager.LoadSceneAsync(m_gameplayScene.sceneName, LoadSceneMode.Additive);
+                    GameSystem.sceneManager.LoadSceneAsync(m_gameplayScene.sceneName);
                 }
-                SceneManager.LoadSceneAsync(scene.sceneName, LoadSceneMode.Additive);
+
+                if (scene.isAddressables)
+                {
+                    GameSystem.sceneManager.LoadSceneAsync(scene.sceneName);
+                }
+                else
+                {
+                    SceneManager.LoadSceneAsync(scene.sceneName, LoadSceneMode.Additive);
+                }
             }
             m_activeZone = scene.sceneName;
         }

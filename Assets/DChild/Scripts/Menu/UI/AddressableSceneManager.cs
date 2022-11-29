@@ -20,6 +20,18 @@ namespace DChild.Menu
 
         public bool isHandlingSceneOperations => m_ongoingOperation.Count > 0;
 
+        public bool areOngoingOperationsTechnicallyDone
+        {
+            get
+            {
+                for (int i = 0; i < m_ongoingOperation.Count; i++)
+                {
+
+                }
+                return false;
+            }
+        }
+
         public bool IsSceneLoaded(string sceneName)
         {
             for (int i = 0; i < m_loadedscenes.Count; i++)
@@ -41,7 +53,6 @@ namespace DChild.Menu
 
         public IEnumerator ActivateLoadedScenesInOrder()
         {
-
             for (int i = 0; i < m_loadedscenes.Count; i++)
             {
                 var loadedScene = m_loadedscenes[i];
@@ -67,7 +78,7 @@ namespace DChild.Menu
                 if (instance.Scene.name == scene)
                 {
                     UnloadScene(instance);
-                    continue;
+                    break;
                 }
             }
         }

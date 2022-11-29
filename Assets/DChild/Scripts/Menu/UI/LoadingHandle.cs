@@ -69,7 +69,8 @@ namespace DChild.Menu
                 var scene = scenes[i];
                 if (scene.isAddressables)
                 {
-                    addressableScenesToLoad.Add(scene.sceneName);
+                    if (GameSystem.sceneManager.IsSceneLoaded(scene.sceneName) == false)
+                        addressableScenesToLoad.Add(scene.sceneName);
                 }
                 else
                 {
@@ -151,23 +152,31 @@ namespace DChild.Menu
 
         private void ExecuteAddressableSceneLoading()
         {
-            for (int i = 0; i < addressableScenesToUnload.Count; i++)
-            {
-                GameSystem.sceneManager.UnloadSceneAsync(addressableScenesToUnload[i]);
-            }
-
             for (int i = 0; i < addressableScenesToLoad.Count; i++)
             {
                 GameSystem.sceneManager.LoadSceneAsync(addressableScenesToLoad[i], false);
             }
         }
 
-        private IEnumerator ActivateLoadedAddressableScenes()
+        private void ExecuteAddressableSceneUnloading()
+        {
+            for (int i = 0; i < addressableScenesToUnload.Count; i++)
+            {
+                GameSystem.sceneManager.UnloadSceneAsync(addressableScenesToUnload[i]);
+            }
+            addressableScenesToUnload.Clear();
+        }
+
+        private IEnumerator WaitForHandlingSceneOperations()
         {
             while (GameSystem.sceneManager.isHandlingSceneOperations)
                 yield return null;
+        }
 
+        private IEnumerator ActivateLoadedAddressableScenes()
+        {
             yield return GameSystem.sceneManager.ActivateLoadedScenesInOrder();
+            addressableScenesToLoad.Clear();
         }
 
         private IEnumerator ExecuteLoadUnloadScene()
@@ -214,8 +223,12 @@ namespace DChild.Menu
             scenesToUnload?.Clear();
             Debug.LogError("False Positive: Unloading Scenes Done");
 
+            ExecuteAddressableSceneUnloading();
+            yield return WaitForHandlingSceneOperations();
             ExecuteAddressableSceneLoading();
+            yield return WaitForHandlingSceneOperations();
             yield return ActivateLoadedAddressableScenes();
+
 
             Debug.LogError("False Positive: Loading Scenes Start");
             //Wait for Loading to Be done, Load scenes one by one
@@ -261,8 +274,6 @@ namespace DChild.Menu
                 time += 2.25f;
             }
 
-
-
             Debug.LogError("False Positive: Scene Activation Start");
             for (int i = 0; i < m_loadOperations.Count; i++)
             {
@@ -283,8 +294,6 @@ namespace DChild.Menu
                 }
                 yield return endOfFrame;
             }
-
-
 
             Debug.LogError("False Positive: Scene Activation Done");
 
@@ -342,7 +351,7 @@ namespace DChild.Menu
         {
             if (m_unloadThis)
             {
-                SceneManager.UnloadSceneAsync(m_loadingScene.sceneName, UnloadSceneOptions.UnloadAllEmbeddedSceneObjects);
+                GameSystem.sceneManager.UnloadSceneAsync(m_loadingScene.sceneName);
                 m_unloadThis = false;
             }
             GameplaySystem.SetInputActive(false);
