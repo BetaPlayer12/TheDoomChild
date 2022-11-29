@@ -9,12 +9,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
 {
     public class Dash : MonoBehaviour, IResettableBehaviour, ICancellableBehaviour, IComplexCharacterModule, IDash
     {
-        [SerializeField, MinValue(0)]
-        private float m_velocity;
-        [SerializeField, MinValue(0)]
-        private float m_cooldown;
-        [SerializeField, MinValue(0)]
-        private float m_duration;
+        [SerializeField, HideLabel]
+        private DashStatsInfo m_configuration;
 
         private float m_cooldownTimer;
         private float m_durationTimer;
@@ -39,6 +35,11 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_skeletonGhost = info.skeletonGhost;
         }
 
+        public void SetConfiguration(DashStatsInfo info)
+        {
+            m_configuration.CopyInfo(info);
+        }
+
         public void Cancel()
         {
             m_rigidbody.velocity = Vector2.zero;
@@ -59,13 +60,13 @@ namespace DChild.Gameplay.Characters.Players.Modules
             }
         }
 
-        public void ResetCooldownTimer() => m_cooldownTimer = m_cooldown * m_modifier.Get(PlayerModifier.Cooldown_Dash);
+        public void ResetCooldownTimer() => m_cooldownTimer = m_configuration.cooldown * m_modifier.Get(PlayerModifier.Cooldown_Dash);
 
         public void HandleDurationTimer() => m_durationTimer -= GameplaySystem.time.deltaTime;
 
         public bool IsDashDurationOver() => m_durationTimer <= 0;
 
-        public void ResetDurationTimer() => m_durationTimer = m_duration;
+        public void ResetDurationTimer() => m_durationTimer = m_configuration.duration;
 
         public void Execute()
         {
@@ -77,7 +78,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             }
             var direction = (float)m_character.facing;
             m_rigidbody.velocity = Vector2.zero;
-            m_rigidbody.AddForce(new Vector2(direction * m_velocity * m_modifier.Get(PlayerModifier.Dash_Distance), 0), ForceMode2D.Impulse);
+            m_rigidbody.AddForce(new Vector2(direction * m_configuration.velocity * m_modifier.Get(PlayerModifier.Dash_Distance), 0), ForceMode2D.Impulse);
             //m_skeletonGhost.enabled = true;
         }
 

@@ -8,14 +8,15 @@ namespace DChild.Gameplay.Characters.Players.Modules
 {
     public class LedgeGrab : MonoBehaviour, IComplexCharacterModule
     {
+        [SerializeField, HideLabel]
+        private LedgeGrabStatsInfo m_configuration;
+
         [SerializeField]
         private RaySensor m_grabbableWallSensor;
         [SerializeField]
         private RaySensor m_overheadSensor;
         [SerializeField]
         private RaySensor m_destinationSensor;
-        [SerializeField, MinValue(0f)]
-        private float m_destinationFromWallOffset;
         [SerializeField]
         private RaySensor m_clearingSensor;
         [SerializeField]
@@ -43,6 +44,11 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_animation = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.LedgeGrab);
         }
 
+        public void SetConfiguration(LedgeGrabStatsInfo info)
+        {
+            m_configuration.CopyInfo(info);
+        }
+
         public bool IsDoable()
         {
             m_grabbableWallSensor.Cast();
@@ -66,7 +72,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     {
                         var wallPoint = m_grabbableWallSensor.GetValidHits()[0].point;
                         var destinationPosition = m_destinationSensor.transform.position;
-                        destinationPosition.x = wallPoint.x + (m_destinationFromWallOffset * (int)m_character.facing);
+                        destinationPosition.x = wallPoint.x + (m_configuration.distanceFromWallOffset * (int)m_character.facing);
                         m_destinationSensor.transform.position = destinationPosition;
                         m_destinationSensor.Cast();
                         if (m_destinationSensor.isDetecting)

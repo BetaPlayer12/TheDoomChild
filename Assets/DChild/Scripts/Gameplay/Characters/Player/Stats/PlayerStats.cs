@@ -1,4 +1,5 @@
 ﻿using DChild.Gameplay.Characters.Players;
+using DChild.Gameplay.Characters.Players.Modules;
 using Holysoft.Event;
 using Sirenix.OdinInspector;
 using System;
@@ -18,6 +19,10 @@ namespace DChild.Gameplay.Characters.Players
     [AddComponentMenu("DChild/Gameplay/Player/Player Stats")]
     public class PlayerStats : MonoBehaviour, IPlayerStats
     {
+
+        [SerializeField]
+        private PlayerBaseStatsData m_defaultStatData;
+
         [HorizontalGroup("Split")]
 
         [SerializeField, HideLabel, OnValueChanged("CalculateStats"), BoxGroup("Split/Base")]
@@ -28,6 +33,7 @@ namespace DChild.Gameplay.Characters.Players
         private PlayerStatsInfo m_totalStats;
 
         public event EventAction<StatValueEventArgs> StatsChanged;
+
 
         public void AddStat(PlayerStat stat, int value)
         {
@@ -44,6 +50,11 @@ namespace DChild.Gameplay.Characters.Players
             m_baseStat.SetStat(stat, value);
             m_totalStats.SetStat(stat, value + m_addedStats.GetStat(stat));
             StatsChanged?.Invoke(this, new StatValueEventArgs(stat, m_totalStats.GetStat(stat)));
+        }
+
+        public void Initialize()
+        {
+            m_baseStat.CopyInfo(m_defaultStatData.info);
         }
 
         private void Awake()

@@ -22,11 +22,18 @@ namespace DChild.Menu.Bestiary
         {
             if (m_lockOnSelectedData == false)
             {
-                m_selectedBestiaryData = indexButton.data;
-                m_infoPage.ShowInfo(m_selectedBestiaryData);
-                indexButton.SetIsOn(true);
-                StopAllCoroutines();
-                StartCoroutine(DelayedGameObjectSelect(indexButton.gameObject));
+                if (indexButton.isAvailable)
+                {
+                    m_selectedBestiaryData = indexButton.data;
+                    m_infoPage.ShowInfo(m_selectedBestiaryData);
+                    indexButton.SetIsOn(true);
+                    StopAllCoroutines();
+                    StartCoroutine(DelayedGameObjectSelect(indexButton.gameObject));
+                }
+                else
+                {
+                    m_infoPage.ShowInfo(null);
+                }
             }
         }
 
@@ -62,7 +69,7 @@ namespace DChild.Menu.Bestiary
                     }
                 }
 
-                if(hasSelectedButton == false)
+                if (hasSelectedButton == false)
                 {
                     StopAllCoroutines();
                 }

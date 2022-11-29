@@ -98,5 +98,15 @@ namespace DChild.Gameplay.Characters.Players
                     throw new System.Exception($"{stat} does not exist");
             }
         }
+
+        public void CopyInfo(PlayerStatsInfo playerStatsInfo)
+        {
+            health = playerStatsInfo.GetStat(PlayerStat.Health);
+            magic = playerStatsInfo.GetStat(PlayerStat.Magic);
+            attack = playerStatsInfo.GetStat(PlayerStat.Attack);
+            magicAttack = playerStatsInfo.GetStat(PlayerStat.MagicAttack);
+            critChance = playerStatsInfo.GetStat(PlayerStat.CritChance);
+            statusChance = playerStatsInfo.GetStat(PlayerStat.StatusChance);
+        }
     }
 }
