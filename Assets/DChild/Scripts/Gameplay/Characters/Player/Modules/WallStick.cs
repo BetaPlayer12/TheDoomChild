@@ -12,12 +12,9 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private RaySensor m_wallSensor;
         [SerializeField]
         private RaySensor m_heightSensor;
-        [SerializeField]
-        private float m_wallStickOffset;
-        [SerializeField, BoxGroup("Sensors")]
-        private RaySensor m_frontWallStickSensor;
-        [SerializeField, BoxGroup("Sensors")]
-        private RaySensor m_backtWallStickSensor;
+
+        [SerializeField, HideLabel]
+        private WallStickStatsInfo m_configuration;
 
         private float m_cacheGravityScale;
 
@@ -25,8 +22,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private IWallStickState m_state;
         private Animator m_animator;
         private int m_animationParameter;
-        private int m_jumpAnimationParameter;
-        private int m_doubleJumpAnimationParameter;
         private Character m_character;
         private Collider2D m_cacheCollider;
         private GameObject m_attachedPlatform;
@@ -39,8 +34,12 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_state = info.state;
             m_animator = info.animator;
             m_animationParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.WallStick);
-            m_jumpAnimationParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.WallJump);
-            m_doubleJumpAnimationParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.DoubleJump);
+        }
+
+        public void SetConfiguration(WallStickStatsInfo info)
+        {
+            m_configuration.CopyInfo(info);
+
         }
 
         public void Cancel()
@@ -48,11 +47,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_state.isStickingToWall = false;
             m_rigidbody.gravityScale = m_cacheGravityScale;
             m_animator.SetBool(m_animationParameter, false);
-            m_animator.SetBool(m_doubleJumpAnimationParameter, false);
-
-            m_frontWallStickSensor.Cast();
-            m_backtWallStickSensor.Cast();
-            m_animator.SetBool(m_jumpAnimationParameter, m_frontWallStickSensor.isDetecting || m_backtWallStickSensor.isDetecting ? true : false);
 
             if (m_attachedPlatform != null)
             {
@@ -79,7 +73,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     {
                         if (m_cacheCollider.CompareTag("InvisibleWall") == false)
                         {
-                            if (hits[i].distance < m_wallStickOffset)
+                            if (hits[i].distance < m_configuration.wallStickOffset)
                             {
                                 isValid = true;
 
@@ -121,7 +115,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 m_rigidbody.gravityScale = 0;
                 m_rigidbody.velocity = Vector2.zero;
                 m_animator.SetBool(m_animationParameter, true);
-                m_animator.SetBool(m_doubleJumpAnimationParameter, false);
 
                 if (m_attachedPlatform != null)
                 {

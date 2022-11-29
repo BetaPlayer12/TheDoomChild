@@ -10,10 +10,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
 {
     public class DevilWings : MonoBehaviour, ICancellableBehaviour, IComplexCharacterModule
     {
-        [SerializeField, MinValue(0)]
-        private int m_sourceRequiredAmount;
-        [SerializeField, MinValue(0)]
-        private float m_sourceConsumptionRate;
+        [SerializeField, HideLabel]
+        private DevilWingsStatsInfo m_configuration;
 
         [SerializeField]
         private ParticleSystem m_wingsFX;
@@ -42,6 +40,12 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_stackedConsumptionRate = 0;
         }
 
+        public void SetConfiguration(DevilWingsStatsInfo info)
+        {
+            m_configuration.CopyInfo(info);
+
+        }
+
         public void Cancel()
         {
             m_wingsFX.Stop();
@@ -57,7 +61,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void Execute()
         {
-            m_source.ReduceCurrentValue(m_sourceRequiredAmount);
+            m_source.ReduceCurrentValue(m_configuration.sourceRequiredAmount);
             m_wingsFX.Play();
             m_state.isLevitating = true;
             m_cacheGravity = m_rigidbody.gravityScale;
@@ -79,14 +83,14 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_rigidbody.velocity = new Vector2(velocity.x * m_modifier.Get(PlayerModifier.Levitation_Speed), velocity.y);
         }
 
-        public bool HaveEnoughSourceForExecution() => m_sourceRequiredAmount <= m_source.currentValue;
+        public bool HaveEnoughSourceForExecution() => m_configuration.sourceRequiredAmount <= m_source.currentValue;
 
         public bool HaveEnoughSourceForMaintainingHeight() => m_source.currentValue > 0;
 
         public void ConsumeSource()
         {
-            m_stackedConsumptionRate += m_sourceConsumptionRate * GameplaySystem.time.deltaTime;
-            //Debug.Log(m_stackedConsumptionRate);
+            m_stackedConsumptionRate += m_configuration.sourceConsumptionRate * GameplaySystem.time.deltaTime;
+            Debug.Log(m_stackedConsumptionRate);
             if (m_stackedConsumptionRate >= 1)
             {
                 var integer = Mathf.FloorToInt(m_stackedConsumptionRate);
