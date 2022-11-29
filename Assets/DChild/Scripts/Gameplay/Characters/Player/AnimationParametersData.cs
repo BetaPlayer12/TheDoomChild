@@ -44,6 +44,8 @@ namespace DChild.Gameplay.Characters.Players
             IsWallCrawling,
             DoubleJump,
             WallJump,
+            WhipState,
+            XInput
         }
 
         [SerializeField]

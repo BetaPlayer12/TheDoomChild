@@ -67,6 +67,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 }
                 m_executedTypes.Clear();
             }
+
+            m_rigidBody.constraints = RigidbodyConstraints2D.None | RigidbodyConstraints2D.FreezeRotation;
         }
 
         public void EnableCollision(Type type, bool value)
