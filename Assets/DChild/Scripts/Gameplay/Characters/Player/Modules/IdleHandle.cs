@@ -6,10 +6,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
 {
     public class IdleHandle : MonoBehaviour, ICancellableBehaviour, IComplexCharacterModule
     {
-        [SerializeField, MinValue(1f)]
-        private float m_playExtendedIdleAnimAfter = 1f;
-        [SerializeField, MinValue(1)]
-        private int m_maxIdleAnimCount;
+        [SerializeField, HideLabel]
+        private IdleHandleStatsInfo m_configuration;
 
         private Animator m_animator;
         private int m_idleAnimationParameter;
@@ -27,9 +25,14 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_currentIdleIndex = 0;
         }
 
+        public void SetConfiguration(IdleHandleStatsInfo info)
+        {
+            m_configuration.CopyInfo(info);
+        }
+
         public void GenerateRandomState()
         {
-            m_currentIdleIndex = Random.Range(1, m_maxIdleAnimCount+1);
+            m_currentIdleIndex = Random.Range(1, m_configuration.maxIdleAnimCount + 1);
             m_animator.SetInteger(m_idleStateAnimationParameter, m_currentIdleIndex);
         }
 
@@ -60,7 +63,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 else
                 {
                     m_isInIdle = true;
-                    m_timer = m_playExtendedIdleAnimAfter;
+                    m_timer = m_configuration.playExtendedIdleAnimAfter;
                 }
             }
             else

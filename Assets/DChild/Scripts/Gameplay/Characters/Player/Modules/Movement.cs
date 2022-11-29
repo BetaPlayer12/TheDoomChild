@@ -16,16 +16,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
             Push
         }
 
-        [SerializeField]
-        private float m_jogSpeed;
-        [SerializeField]
-        private float m_crouchSpeed;
-        [SerializeField]
-        private float m_midAirSpeed;
-        [SerializeField]
-        private float m_pullSpeed;
-        [SerializeField]
-        private float m_pushSpeed;
+        [SerializeField, HideLabel]
+        private MovementStatsInfo m_configuration;
 
         private float m_currentSpeed;
         private IPlayerModifer m_modifier;
@@ -34,8 +26,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private Animator m_animator;
         private int m_speedAnimationParameter;
 
-        [ShowInInspector, ReadOnly, HideInEditorMode]
-        protected float speed => m_currentSpeed * m_modifier.Get(PlayerModifier.MoveSpeed);
+        [HideInEditorMode, ShowInInspector, ReadOnly]
+        protected float speed => m_currentSpeed * m_modifier?.Get(PlayerModifier.MoveSpeed) ?? 1;
 
         public void Initialize(ComplexCharacterInfo info)
         {
@@ -45,6 +37,11 @@ namespace DChild.Gameplay.Characters.Players.Modules
             SwitchConfigTo(Type.Jog);
             m_animator = info.animator;
             m_speedAnimationParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.SpeedX);
+        }
+
+        public void SetConfiguration(MovementStatsInfo info)
+        {
+            m_configuration.CopyInfo(info);
         }
 
         public void Cancel()
@@ -58,19 +55,19 @@ namespace DChild.Gameplay.Characters.Players.Modules
             switch (type)
             {
                 case Type.Crouch:
-                    m_currentSpeed = m_crouchSpeed;
+                    m_currentSpeed = m_configuration.crouchSpeed;
                     break;
                 case Type.Jog:
-                    m_currentSpeed = m_jogSpeed;
+                    m_currentSpeed = m_configuration.jogSpeed;
                     break;
                 case Type.MidAir:
-                    m_currentSpeed = m_midAirSpeed;
+                    m_currentSpeed = m_configuration.midAirSpeed;
                     break;
                 case Type.Pull:
-                    m_currentSpeed = m_pullSpeed;
+                    m_currentSpeed = m_configuration.pullSpeed;
                     break;
                 case Type.Push:
-                    m_currentSpeed = m_pushSpeed;
+                    m_currentSpeed = m_configuration.pushSpeed;
                     break;
             }
         }

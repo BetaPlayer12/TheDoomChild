@@ -6,8 +6,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
 {
     public class EarthShaker : AttackBehaviour
     {
-        [SerializeField, MinValue(0.1f)]
-        private float m_fallSpeed;
+        [SerializeField, HideLabel]
+        private EarthShakerStatsInfo m_configuration;
         [SerializeField]
         private ParticleSystem m_chargeFX;
         [SerializeField]
@@ -20,10 +20,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private ParticleSystem m_impactFX;
         [SerializeField]
         private Collider2D m_impactCollider;
-        [SerializeField, MinValue(0)]
-        private float m_fallDamageModifier = 1;
-        [SerializeField, MinValue(0)]
-        private float m_impactDamageModifier = 1;
 
         private IPlayerModifer m_modifier;
         private Rigidbody2D m_rigidbody;
@@ -39,6 +35,11 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_damageable = info.damageable;
             m_originalGravity = m_rigidbody.gravityScale;
             m_earthShakerAnimationParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.EarthShaker);
+        }
+
+        public void SetConfiguration(EarthShakerStatsInfo info)
+        {
+            m_configuration.CopyInfo(info);
         }
 
         public override void Cancel()
@@ -58,7 +59,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void Impact()
         {
-            m_attacker.SetDamageModifier(m_impactDamageModifier * m_modifier.Get(PlayerModifier.AttackDamage));
+            m_attacker.SetDamageModifier(m_configuration.impactDamageModifier * m_modifier.Get(PlayerModifier.AttackDamage));
             m_rigidBody.WakeUp();
             m_fallLoopFX?.Stop(true);
             m_fallCollider.enabled = false;
@@ -75,7 +76,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_preLoopFX?.Play(true);
             m_fallCollider.enabled = true;
             m_rigidbody.gravityScale = m_originalGravity;
-            m_rigidbody.velocity = Vector2.down * m_fallSpeed;
+            m_rigidbody.velocity = Vector2.down * m_configuration.fallSpeed;
         }
 
         public void HandleFall()
@@ -85,13 +86,13 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 m_preLoopFX?.Stop(true);
                 m_fallLoopFX?.Play(true);
             }
-            m_rigidbody.velocity = Vector2.down * m_fallSpeed;
+            m_rigidbody.velocity = Vector2.down * m_configuration.fallSpeed;
         }
 
         public void StartExecution()
         {
             m_damageable.SetInvulnerability(Invulnerability.Level_1);
-            m_attacker.SetDamageModifier(m_fallDamageModifier * m_modifier.Get(PlayerModifier.AttackDamage));
+            m_attacker.SetDamageModifier(m_configuration.fallDamageModifier * m_modifier.Get(PlayerModifier.AttackDamage));
             m_rigidbody.velocity = Vector2.zero;
             m_originalGravity = m_rigidbody.gravityScale;
             m_rigidbody.gravityScale = 0;

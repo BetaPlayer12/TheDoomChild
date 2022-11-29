@@ -197,7 +197,7 @@ namespace DChild.Gameplay.Systems
         }
         private void OnPlayerDeath(object sender, EventActionArgs eventArgs)
         {
-            GameplaySystem.gamplayUIHandle.ShowGameOverScreen(true);
+            GameplaySystem.gamplayUIHandle.ShowGameOverScreen();
             // m_input.Disable();
             //  m_player.controller.Disable();
             m_playerIsDead = true;

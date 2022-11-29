@@ -5,6 +5,7 @@ using Holysoft.Event;
 using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 using UnityEngine.SceneManagement;
 
 namespace DChild
@@ -31,14 +32,14 @@ namespace DChild
         public void SetAsActiveZone(string sceneName) => m_activeZone = sceneName;
 #endif
 
-        public void LoadZone(string sceneName, bool withLoadingScene, Action ToCallAfterSceneDone)
+        public void LoadZone(SceneInfo scene, bool withLoadingScene, Action ToCallAfterSceneDone)
         {
             CallAfterSceneDone = ToCallAfterSceneDone;
             LoadingHandle.LoadingDone += AfterSceneDone;
-            LoadZone(sceneName, withLoadingScene);
+            LoadZone(scene, withLoadingScene);
         }
 
-        public void LoadZone(string sceneName, bool withLoadingScene)
+        public void LoadZone(SceneInfo scene, bool withLoadingScene)
         {
             if (withLoadingScene)
             {
@@ -51,30 +52,38 @@ namespace DChild
 
                 if (m_gameplaySceneActive == false)
                 {
-                    LoadingHandle.LoadScenes(m_gameplayScene.sceneName);
+                    LoadingHandle.LoadScenes(m_gameplayScene);
                     m_gameplaySceneActive = true;
                 }
                 //if (m_activeZone != sceneName)
                 //{
-                LoadingHandle.LoadScenes(sceneName);
+                LoadingHandle.LoadScenes(scene);
                 //}
-                SceneManager.LoadScene(m_loadingScene.sceneName, LoadSceneMode.Additive);
+                GameSystem.sceneManager.LoadSceneAsync(m_loadingScene.sceneName);
             }
             else
             {
                 RoomActivityManager.UnloadAllRooms();
-                if (m_activeZone != string.Empty && m_activeZone != sceneName)
+                if (m_activeZone != string.Empty && m_activeZone != scene.sceneName)
                 {
                     LoadingHandle.UnloadScenes(m_activeZone);
                     m_activeZone = string.Empty;
                 }
-                if (SceneManager.GetSceneByName(m_gameplayScene.sceneName).isLoaded == false)
+                if (GameSystem.sceneManager.IsSceneLoaded(m_gameplayScene.sceneName) == false)
                 {
-                    SceneManager.LoadSceneAsync(m_gameplayScene.sceneName, LoadSceneMode.Additive);
+                    GameSystem.sceneManager.LoadSceneAsync(m_gameplayScene.sceneName);
                 }
-                SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
+
+                if (scene.isAddressables)
+                {
+                    GameSystem.sceneManager.LoadSceneAsync(scene.sceneName);
+                }
+                else
+                {
+                    SceneManager.LoadSceneAsync(scene.sceneName, LoadSceneMode.Additive);
+                }
             }
-            m_activeZone = sceneName;
+            m_activeZone = scene.sceneName;
         }
 
         public void LoadMainMenu()
@@ -84,11 +93,11 @@ namespace DChild
                 LoadingHandle.UnloadScenes(m_activeZone);
                 m_activeZone = string.Empty;
             }
-            LoadingHandle.UnloadScenes(m_gameplayScene.sceneName);
+            LoadingHandle.UnloadScenes(m_gameplayScene);
             m_gameplaySceneActive = false;
-            LoadingHandle.LoadScenes(m_mainMenu.sceneName);
+            LoadingHandle.LoadScenes(m_mainMenu);
             Time.timeScale = 1;
-            SceneManager.LoadScene(m_loadingScene.sceneName, LoadSceneMode.Additive);
+            GameSystem.sceneManager.LoadSceneAsync(m_loadingScene.sceneName);
         }
 
         private void AfterSceneDone(object sender, EventActionArgs eventArgs)
