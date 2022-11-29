@@ -13,8 +13,6 @@ namespace DChild
 {
     public class GameIntro : MonoBehaviour
     {
-        public static SceneInstance currentIntroScene;
-
         [SerializeField]
         private VideoPlayer m_intro;
         [SerializeField]
@@ -31,25 +29,26 @@ namespace DChild
             if (m_isMainMenuLoaded)
             {
                 m_loadedMainMenu.ActivateAsync();
+                m_unloadScene = true;
             }
             else
             {
                 StopAllCoroutines();
                 StartCoroutine(ActivateNextSceneAsync());
             }
-            m_unloadScene = true;
+
         }
 
         public void LoadScene()
         {
-            Addressables.LoadSceneAsync(m_mainMenu.sceneName, LoadSceneMode.Additive);
-            Addressables.UnloadSceneAsync(currentIntroScene);
+            GameSystem.sceneManager.LoadSceneAsync(m_mainMenu.sceneName);
+            GameSystem.sceneManager.UnloadSceneAsync(gameObject.scene.name);
         }
 
         public void LoadSceneAsync()
         {
             m_isMainMenuLoaded = false;
-            Addressables.LoadSceneAsync(m_mainMenu.sceneName, LoadSceneMode.Additive, false).Completed += OnMainMenuLoaded;
+            GameSystem.sceneManager.LoadSceneAsync(m_mainMenu.sceneName, false).Completed += OnMainMenuLoaded;
         }
 
         private void OnMainMenuLoaded(AsyncOperationHandle<SceneInstance> obj)
@@ -65,6 +64,7 @@ namespace DChild
                 yield return null;
 
             m_loadedMainMenu.ActivateAsync();
+            m_unloadScene = true;
         }
 
         private void Awake()
@@ -81,7 +81,7 @@ namespace DChild
         {
             if (m_unloadScene)
             {
-                Addressables.UnloadSceneAsync(currentIntroScene);
+                GameSystem.sceneManager.UnloadSceneAsync(gameObject.scene.name);
             }
         }
     }
