@@ -5,30 +5,18 @@ using UnityEngine;
 
 public class TentacleGrabAttack : MonoBehaviour, IEyeBossAttacks
 {
+    [SerializeField]
+    private TentacleGrab m_tentacleGrab;
+
     public IEnumerator ExecuteAttack()
     {
-        throw new System.NotImplementedException();
+        //Make it so different types of grab attacks can happen later
+        m_tentacleGrab.GroundSlamAttack();
+        yield return null;
     }
 
     public IEnumerator ExecuteAttack(Vector2 PlayerPosition)
     {
         throw new System.NotImplementedException();
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    private IEnumerator Emerge()
-    {
-        yield return null;
     }
 }
