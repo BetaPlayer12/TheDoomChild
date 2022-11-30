@@ -21,6 +21,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         [SerializeField, BoxGroup("Sensors")]
         private RaySensor m_wallSensor;
 
+        private bool m_canLevitate;
         private ILevitateState m_state;
         private Rigidbody2D m_rigidbody;
         private ICappedStat m_source;
@@ -33,6 +34,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
         public event EventAction<EventActionArgs> ExecuteModule;
         public event EventAction<EventActionArgs> End;
 
+        public bool CanLevitate() => m_canLevitate;
+
         public void Initialize(ComplexCharacterInfo info)
         {
             m_state = info.state;
@@ -43,6 +46,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_modifier = info.modifier;
             m_animationParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.IsLevitating);
             m_stackedConsumptionRate = 0;
+            m_canLevitate = true;
         }
 
         public void Cancel()
@@ -54,6 +58,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_rigidbody.velocity = Vector2.zero;
             m_animator.SetBool(m_animationParameter, false);
             m_stackedConsumptionRate = 0;
+            m_canLevitate = false;
 
             End?.Invoke(this, EventActionArgs.Empty);
         }
@@ -88,6 +93,11 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 m_wallSensor.Cast();
 
             return m_wallSensor.isDetecting;
+        }
+
+        public void EnableLevitate()
+        {
+            m_canLevitate = true;
         }
 
         public bool HaveEnoughSourceForExecution() => m_sourceRequiredAmount <= m_source.currentValue;

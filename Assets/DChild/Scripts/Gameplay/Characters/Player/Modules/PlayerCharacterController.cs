@@ -488,6 +488,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 m_basicSlashes?.ResetAirAttacks();
                 m_whip?.ResetAerialGravityControl();
                 m_whip?.ResetAirAttacks();
+                m_devilWings?.EnableLevitate();
             }
             else
             {
@@ -726,7 +727,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                         }
                     }
                 }
-                else if (m_input.levitatePressed && m_state.isLevitating == false)
+                else if (((m_input.levitatePressed && m_state.isLevitating == false) || (m_input.levitateHeld && m_state.isLevitating == false)) && m_devilWings.CanLevitate())
                 {
                     if (m_state.isInShadowMode == false)
                     {
