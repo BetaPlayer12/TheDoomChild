@@ -43,6 +43,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         public void SetConfiguration(DevilWingsStatsInfo info)
         {
             m_configuration.CopyInfo(info);
+
         }
 
         public void Cancel()
