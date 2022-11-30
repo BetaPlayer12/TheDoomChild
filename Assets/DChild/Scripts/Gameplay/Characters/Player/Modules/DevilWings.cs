@@ -86,7 +86,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         public void ConsumeSource()
         {
             m_stackedConsumptionRate += m_sourceConsumptionRate * GameplaySystem.time.deltaTime;
-            Debug.Log(m_stackedConsumptionRate);
+            //Debug.Log(m_stackedConsumptionRate);
             if (m_stackedConsumptionRate >= 1)
             {
                 var integer = Mathf.FloorToInt(m_stackedConsumptionRate);
