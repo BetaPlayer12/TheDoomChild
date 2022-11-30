@@ -10,6 +10,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private EarthShaker m_earthShaker;
         private SwordThrust m_swordThrust;
         private WhipAttack m_whip;
+        private WhipAttackCombo m_whipCombo;
         private ProjectileThrow m_projectileThrow;
         private LedgeGrab m_ledgeGrab;
         private ShadowMorph m_shadowMorph;
@@ -62,6 +63,12 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_slashCombo?.EnableCollision(true);
         }
 
+        public void WhipCombo()
+        {
+            //Debug.Log("Do Whip Combo EVENT");
+            m_whipCombo?.EnableCollision(true);
+        }
+
         public void GroundForwardWhipAttackFX()
         {
             //m_whip?.PlayFXFor(WhipAttack.Type.Ground_Forward, true);
@@ -100,7 +107,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void FinishAttackAnim()
         {
-            Debug.Log("Finish Attack Anim");
+            Debug.Log("FinishAttackAnim");
             m_basicSlashes?.AttackOver();
             m_basicSlashes?.ClearExecutedCollision();
             m_whip?.AttackOver();
@@ -115,6 +122,18 @@ namespace DChild.Gameplay.Characters.Players.Modules
         public void ComboEnd()
         {
             m_slashCombo?.ComboEnd();
+        }
+
+        public void ComboWhipAttackEnd()
+        {
+            //Debug.Log("ComboWhipAttackEnd");
+            m_whipCombo?.AttackOver();
+        }
+
+        public void ComboWhipEnd()
+        {
+            //Debug.Log("ComboWhipEnd");
+            m_whipCombo?.ComboEnd();
         }
 
         public void FinishProjectileThrow()
@@ -193,6 +212,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_earthShaker = character.GetComponentInChildren<EarthShaker>();
             m_swordThrust = character.GetComponentInChildren<SwordThrust>();
             m_whip = character.GetComponentInChildren<WhipAttack>();
+            m_whipCombo = character.GetComponentInChildren<WhipAttackCombo>();
             m_projectileThrow = character.GetComponentInChildren<ProjectileThrow>();
             m_ledgeGrab = character.GetComponentInChildren<LedgeGrab>();
             m_shadowMorph = character.GetComponentInChildren<ShadowMorph>();

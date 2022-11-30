@@ -251,6 +251,11 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 3541162794809714371, guid: 5b02381dfe83a324c98a6d73405c087d,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 3541162794809714381, guid: 5b02381dfe83a324c98a6d73405c087d,
         type: 3}
       propertyPath: m_RootOrder
@@ -356,6 +361,16 @@ PrefabInstance:
       propertyPath: m_LocalRotation.z
       value: 0.990254
       objectReference: {fileID: 0}
+    - target: {fileID: 6207983274298174681, guid: 5b02381dfe83a324c98a6d73405c087d,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 14.901141
+      objectReference: {fileID: 0}
+    - target: {fileID: 6207983274298174681, guid: 5b02381dfe83a324c98a6d73405c087d,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 26.663227
+      objectReference: {fileID: 0}
     - target: {fileID: 8749061194687745852, guid: 5b02381dfe83a324c98a6d73405c087d,
         type: 3}
       propertyPath: m_LocalPosition.y
@@ -365,6 +380,8 @@ PrefabInstance:
     - {fileID: 2533479082414250687, guid: 5b02381dfe83a324c98a6d73405c087d, type: 3}
     - {fileID: 3201118036988078998, guid: 5b02381dfe83a324c98a6d73405c087d, type: 3}
     - {fileID: 3663844738845469816, guid: 5b02381dfe83a324c98a6d73405c087d, type: 3}
+    - {fileID: 770878805011918491, guid: 5b02381dfe83a324c98a6d73405c087d, type: 3}
+    - {fileID: 7862388895166011351, guid: 5b02381dfe83a324c98a6d73405c087d, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 5b02381dfe83a324c98a6d73405c087d, type: 3}
 --- !u!114 &1544641902675529516 stripped
 MonoBehaviour:
@@ -384,7 +401,7 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 7058537409641550594}
   m_PrefabAsset: {fileID: 0}
---- !u!60 &2250447097227834776
+--- !u!60 &2368694621568011194
 PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -409,10 +426,18 @@ PolygonCollider2D:
   m_AutoTiling: 0
   m_Points:
     m_Paths:
-    - - {x: -5.2688, y: 5.3335996}
-      - {x: -5.8407, y: -4.1436}
-      - {x: 4.6986, y: -4.5520997}
-      - {x: 5.5021996, y: 5.0439997}
+    - - {x: 0.66639996, y: 4.3035}
+      - {x: -1.7636999, y: 3.8089998}
+      - {x: -3.5767, y: 2.3282}
+      - {x: -4.1092997, y: -0.0195}
+      - {x: -3.6845999, y: -2.1022}
+      - {x: -2.2519999, y: -3.5577}
+      - {x: -0.1904, y: -4.0822}
+      - {x: 1.9521999, y: -3.7229998}
+      - {x: 3.7312999, y: -2.2803998}
+      - {x: 4.3149, y: -0.4195}
+      - {x: 4.1254997, y: 1.8916999}
+      - {x: 2.6307, y: 3.5210998}
 --- !u!114 &2782914517970939620 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5145943537930665446, guid: 5b02381dfe83a324c98a6d73405c087d,
@@ -527,6 +552,42 @@ Rigidbody2D:
     type: 3}
   m_PrefabInstance: {fileID: 7058537409641550594}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &8644826426002221778 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1588752200144271824, guid: 5b02381dfe83a324c98a6d73405c087d,
+    type: 3}
+  m_PrefabInstance: {fileID: 7058537409641550594}
+  m_PrefabAsset: {fileID: 0}
+--- !u!60 &2792513966398133025
+PolygonCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8644826426002221778}
+  m_Enabled: 0
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Points:
+    m_Paths:
+    - - {x: 0.2199, y: 0.8717}
+      - {x: -0.14479999, y: -0.23709999}
+      - {x: 2.4775, y: -0.64849997}
+      - {x: 2.9480999, y: 0.91609997}
+      - {x: 1.4557, y: 1.3478}
 --- !u!1001 &9203697793259854442
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -672,7 +733,7 @@ MonoBehaviour:
   m_data: {fileID: 11400000, guid: a8c5e0387ff87e9448fa2978f5ed5be2, type: 2}
   m_currentAttackInfo:
     damage:
-      m_type: 0
+      m_type: 1
       m_value: 0
     criticalDamageInfo:
       chance: 0
@@ -712,6 +773,19 @@ MonoBehaviour:
   m_groundSensor: {fileID: 2782914517970939620}
   m_edgeSensor: {fileID: 3480364085880159876}
   m_willPatrol: 0
+--- !u!114 &1706103534699781950
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2672944950199444954}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 98dc5aa68ef252c47a0b4430fbb13cd3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_data: {fileID: 11400000, guid: af26b9c93fff9df4f996efac8f09eb52, type: 2}
 --- !u!114 &4613710291380214322
 MonoBehaviour:
   m_ObjectHideFlags: 0

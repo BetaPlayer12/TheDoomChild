@@ -25,11 +25,14 @@ namespace DChild.Gameplay.Characters.Players.Modules
         [SerializeField, MinValue(0)]
         private float m_impactDamageModifier = 1;
 
+        private bool m_canEarthShaker;
         private IPlayerModifer m_modifier;
         private Rigidbody2D m_rigidbody;
         private Damageable m_damageable; 
         private int m_earthShakerAnimationParameter;
         private float m_originalGravity;
+
+        public bool CanEarthShaker() => m_canEarthShaker;
 
         public override void Initialize(ComplexCharacterInfo info)
         {
@@ -39,6 +42,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_damageable = info.damageable;
             m_originalGravity = m_rigidbody.gravityScale;
             m_earthShakerAnimationParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.EarthShaker);
+            m_canEarthShaker = true;
         }
 
         public override void Cancel()
@@ -53,7 +57,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_impactCollider.enabled = false;
             m_rigidbody.gravityScale = m_originalGravity;
             m_rigidbody.velocity = Vector2.zero;
-            m_animator.SetBool(m_earthShakerAnimationParameter, false);
+            m_canEarthShaker = true;
+            m_animator.SetBool(m_earthShakerAnimationParameter, !m_canEarthShaker);
         }
 
         public void Impact()
@@ -65,12 +70,13 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_impactFX?.Play(true);
             m_impactCollider.enabled = true;
             m_rigidbody.velocity = Vector2.zero;
-            m_animator.SetBool(m_earthShakerAnimationParameter, false);
-            m_state.waitForBehaviour = true;
+            //m_animator.SetBool(m_earthShakerAnimationParameter, false);
+            //m_state.waitForBehaviour = true;
         }
 
         public void HandlePreFall()
         {
+            m_state.waitForBehaviour = true;
             m_chargeFX?.Stop(true);
             m_preLoopFX?.Play(true);
             m_fallCollider.enabled = true;
@@ -99,7 +105,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_state.isAttacking = true;
             m_state.canAttack = false;
             m_animator.SetBool(m_animationParameter, true);
-            m_animator.SetBool(m_earthShakerAnimationParameter, true);
+            m_canEarthShaker = false;
+            m_animator.SetBool(m_earthShakerAnimationParameter, !m_canEarthShaker);
         }
 
         public void EndExecution()
@@ -107,7 +114,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_damageable.SetInvulnerability(Invulnerability.None);
             m_impactFX?.Stop(true);
             m_animator.SetBool(m_animationParameter, false);
-            m_animator.SetBool(m_earthShakerAnimationParameter, false);
+            m_canEarthShaker = true;
+            m_animator.SetBool(m_earthShakerAnimationParameter, !m_canEarthShaker);
             m_impactCollider.enabled = false;
             m_state.waitForBehaviour = false;
             m_state.canAttack = true;
