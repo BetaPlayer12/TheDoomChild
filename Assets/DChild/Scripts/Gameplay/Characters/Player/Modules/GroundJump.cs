@@ -31,6 +31,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         public void SetConfiguration(GroundJumpStatsInfo info)
         {
             m_configuration.CopyInfo(info);
+
         }
 
         public void Cancel()

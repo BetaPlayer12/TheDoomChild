@@ -39,6 +39,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         public void SetConfiguration(WallStickStatsInfo info)
         {
             m_configuration.CopyInfo(info);
+
         }
 
         public void Cancel()
