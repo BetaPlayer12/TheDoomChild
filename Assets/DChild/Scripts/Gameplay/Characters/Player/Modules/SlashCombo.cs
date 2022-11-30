@@ -233,7 +233,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             }
             else
             {
-                Debug.Log("Can Move");
+                //Debug.Log("Can Move");
                 m_slashMovementCooldownTimer = m_slashMovementCooldown;
                 m_canMove = true;
             }

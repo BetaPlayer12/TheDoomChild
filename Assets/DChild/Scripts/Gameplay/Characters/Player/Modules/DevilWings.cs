@@ -18,6 +18,9 @@ namespace DChild.Gameplay.Characters.Players.Modules
         [SerializeField]
         private ParticleSystem m_wingsFX;
 
+        [SerializeField, BoxGroup("Sensors")]
+        private RaySensor m_wallSensor;
+
         private ILevitateState m_state;
         private Rigidbody2D m_rigidbody;
         private ICappedStat m_source;
@@ -77,6 +80,14 @@ namespace DChild.Gameplay.Characters.Players.Modules
         {
             var velocity = m_rigidbody.velocity;
             m_rigidbody.velocity = new Vector2(velocity.x * m_modifier.Get(PlayerModifier.Levitation_Speed), velocity.y);
+        }
+
+        public bool CanDetectWall()
+        {
+            if (m_rigidbody.velocity.x !=0)
+                m_wallSensor.Cast();
+
+            return m_wallSensor.isDetecting;
         }
 
         public bool HaveEnoughSourceForExecution() => m_sourceRequiredAmount <= m_source.currentValue;

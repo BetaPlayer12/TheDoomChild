@@ -75,7 +75,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         {
             base.Reset();
 
-            Debug.Log("Whip Combo State Reset");
+            //Debug.Log("Whip Combo State Reset");
             m_currentWhipState = 0;
             m_currentVisualWhipState = 0;
             m_animator.SetInteger(m_whipStateAnimationParameter, m_currentWhipState);
@@ -154,7 +154,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_canMove = false;
             m_animator.SetBool(m_whipAttackAnimationParameter, false);
 
-            Debug.Log("Whip Attack Over");
+            //Debug.Log("Whip Attack Over");
             for (int i = 0; i < m_whipComboInfo.Count; i++)
             {
                 m_whipComboInfo[i].ShowCollider(false);
@@ -185,7 +185,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void ComboEnd()
         {
-            Debug.Log("Whip Combo End");
+            //Debug.Log("Whip Combo End");
             //base.AttackOver();
             m_state.canAttack = true;
             m_canWhipCombo = true;
@@ -260,7 +260,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             }
             else
             {
-                Debug.Log("Whip Cooldown Done");
+                //Debug.Log("Whip Cooldown Done");
                 m_whipComboCooldownTimer = m_whipComboCooldown;
                 m_canWhipCombo = true;
             }
@@ -275,7 +275,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             }
             else
             {
-                Debug.Log("Can Move");
+                //Debug.Log("Can Move");
                 m_whipMovementCooldownTimer = m_whipMovementCooldown;
                 m_canMove = true;
             }

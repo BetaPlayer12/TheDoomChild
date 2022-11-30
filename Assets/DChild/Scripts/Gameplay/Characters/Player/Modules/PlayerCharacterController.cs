@@ -358,6 +358,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             {
                 if (m_earthShaker.CanEarthShaker())
                 {
+                    Debug.Log("LEDGE GRAB IS CHECKING");
                     if (m_state.isStickingToWall)
                     {
                         if (m_input.verticalInput > 0)
@@ -484,7 +485,9 @@ namespace DChild.Gameplay.Characters.Players.Modules
             {
                 HandleGroundBehaviour();
                 m_basicSlashes?.ResetAerialGravityControl();
+                m_basicSlashes?.ResetAirAttacks();
                 m_whip?.ResetAerialGravityControl();
+                m_whip?.ResetAirAttacks();
             }
             else
             {
@@ -636,7 +639,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                             return;
                         }
                     }
-                    else if (m_input.slashPressed)
+                    else if (m_input.slashPressed && m_basicSlashes.CanAirAttack())
                     {
                         PrepareForMidairAttack();
 
@@ -650,7 +653,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                         }
                         return;
                     }
-                    else if (m_input.whipPressed)
+                    else if (m_input.whipPressed && m_whip.CanAirWhip())
                     {
                         if (m_skills.IsModuleActive(PrimarySkill.Whip))
                         {
@@ -776,7 +779,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     m_devilWings?.MaintainHeight();
                     m_devilWings?.GiveMovementBoost();
                     m_devilWings?.ConsumeSource();
-                    if (m_input.levitateHeld == false || (m_devilWings?.HaveEnoughSourceForMaintainingHeight() ?? true) == false)
+                    if (m_input.levitateHeld == false || (m_devilWings?.HaveEnoughSourceForMaintainingHeight() ?? true) == false || m_devilWings.CanDetectWall())
                     {
                         m_devilWings?.Cancel();
                     }
@@ -830,7 +833,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 }
                 else if (m_state.isDoingSwordThrust)
                 {
-                    Debug.Log("Sword Thrusting!");
+                    //Debug.Log("Sword Thrusting!");
                     HandleSwordThrust();
                     return;
                 }
@@ -1421,10 +1424,10 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         private void MoveCharacter(bool isGrabbing)
         {
-            Debug.Log("Character IS MOVING");
+            //Debug.Log("Character IS MOVING");
             if (!IsFacingInput())
             {
-                Debug.Log("Character Turning");
+                //Debug.Log("Character Turning");
                 m_basicSlashes.Cancel();
                 m_slashCombo.Cancel();
                 m_whip.Cancel();
