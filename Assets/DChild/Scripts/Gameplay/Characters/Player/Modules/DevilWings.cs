@@ -10,6 +10,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
 {
     public class DevilWings : MonoBehaviour, ICancellableBehaviour, IComplexCharacterModule
     {
+        [SerializeField]
+        private Vector2 m_momentumVelocity;
         [SerializeField, MinValue(0)]
         private int m_sourceRequiredAmount;
         [SerializeField, MinValue(0)]
@@ -70,7 +72,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_state.isLevitating = true;
             m_cacheGravity = m_rigidbody.gravityScale;
             m_rigidbody.gravityScale = 0;
-            m_rigidbody.velocity = Vector2.zero;
+            m_rigidbody.velocity = /*Vector2.zero*/new Vector2(m_rigidbody.velocity.x * m_momentumVelocity.x, m_rigidbody.velocity.y * m_momentumVelocity.y);
             m_animator.SetBool(m_animationParameter, true);
 
             ExecuteModule?.Invoke(this, EventActionArgs.Empty);
