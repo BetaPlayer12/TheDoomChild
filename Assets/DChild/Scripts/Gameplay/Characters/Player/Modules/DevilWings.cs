@@ -10,6 +10,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
 {
     public class DevilWings : MonoBehaviour, ICancellableBehaviour, IComplexCharacterModule
     {
+        [SerializeField]
+        private Vector2 m_momentumVelocity;
         [SerializeField, MinValue(0)]
         private int m_sourceRequiredAmount;
         [SerializeField, MinValue(0)]
@@ -18,6 +20,10 @@ namespace DChild.Gameplay.Characters.Players.Modules
         [SerializeField]
         private ParticleSystem m_wingsFX;
 
+        [SerializeField, BoxGroup("Sensors")]
+        private RaySensor m_wallSensor;
+
+        private bool m_canLevitate;
         private ILevitateState m_state;
         private Rigidbody2D m_rigidbody;
         private ICappedStat m_source;
@@ -30,6 +36,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
         public event EventAction<EventActionArgs> ExecuteModule;
         public event EventAction<EventActionArgs> End;
 
+        public bool CanLevitate() => m_canLevitate;
+
         public void Initialize(ComplexCharacterInfo info)
         {
             m_state = info.state;
@@ -40,6 +48,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_modifier = info.modifier;
             m_animationParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.IsLevitating);
             m_stackedConsumptionRate = 0;
+            m_canLevitate = true;
         }
 
         public void Cancel()
@@ -51,6 +60,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_rigidbody.velocity = Vector2.zero;
             m_animator.SetBool(m_animationParameter, false);
             m_stackedConsumptionRate = 0;
+            m_canLevitate = false;
 
             End?.Invoke(this, EventActionArgs.Empty);
         }
@@ -62,7 +72,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_state.isLevitating = true;
             m_cacheGravity = m_rigidbody.gravityScale;
             m_rigidbody.gravityScale = 0;
-            m_rigidbody.velocity = Vector2.zero;
+            m_rigidbody.velocity = /*Vector2.zero*/new Vector2(m_rigidbody.velocity.x * m_momentumVelocity.x, m_rigidbody.velocity.y * m_momentumVelocity.y);
             m_animator.SetBool(m_animationParameter, true);
 
             ExecuteModule?.Invoke(this, EventActionArgs.Empty);
@@ -77,6 +87,19 @@ namespace DChild.Gameplay.Characters.Players.Modules
         {
             var velocity = m_rigidbody.velocity;
             m_rigidbody.velocity = new Vector2(velocity.x * m_modifier.Get(PlayerModifier.Levitation_Speed), velocity.y);
+        }
+
+        public bool CanDetectWall()
+        {
+            if (m_rigidbody.velocity.x !=0)
+                m_wallSensor.Cast();
+
+            return m_wallSensor.isDetecting;
+        }
+
+        public void EnableLevitate()
+        {
+            m_canLevitate = true;
         }
 
         public bool HaveEnoughSourceForExecution() => m_sourceRequiredAmount <= m_source.currentValue;

@@ -6,6 +6,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
 {
     public class EarthShaker : AttackBehaviour
     {
+        [SerializeField]
+        private Vector2 m_momentumVelocity;
         [SerializeField, MinValue(0.1f)]
         private float m_fallSpeed;
         [SerializeField]
@@ -98,7 +100,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         {
             m_damageable.SetInvulnerability(Invulnerability.Level_1);
             m_attacker.SetDamageModifier(m_fallDamageModifier * m_modifier.Get(PlayerModifier.AttackDamage));
-            m_rigidbody.velocity = Vector2.zero;
+            m_rigidbody.velocity = /*Vector2.zero*/new Vector2(m_rigidbody.velocity.x * m_momentumVelocity.x, m_rigidbody.velocity.y * m_momentumVelocity.y);
             m_originalGravity = m_rigidbody.gravityScale;
             m_rigidbody.gravityScale = 0;
             m_chargeFX?.Play(true);

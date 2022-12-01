@@ -33,9 +33,12 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private Rigidbody2D m_rigidbody;
         private float m_cacheGravity;
         private bool m_adjustGravity;
+        private bool m_canAirAttack;
 
         private Animator m_fxAnimator;
         private SkeletonAnimation m_skeletonAnimation;
+
+        public bool CanAirAttack() => m_canAirAttack;
 
         public override void Initialize(ComplexCharacterInfo info)
         {
@@ -45,6 +48,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_executedTypes = new List<Type>();
             m_cacheGravity = m_rigidbody.gravityScale;
             m_adjustGravity = true;
+            m_canAirAttack = true;
 
             m_fxAnimator = m_attackFX.gameObject.GetComponentInChildren<Animator>();
             m_skeletonAnimation = m_attackFX.gameObject.GetComponent<SkeletonAnimation>();
@@ -122,6 +126,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 case Type.MidAir_Forward:
                     m_timer = m_midAirForward.nextAttackDelay;
                     m_attacker.SetDamageModifier(m_midAirForward.damageModifier * m_modifier.Get(PlayerModifier.AttackDamage));
+                    m_canAirAttack = false;
 
                     if (m_adjustGravity == true)
                     {
@@ -134,6 +139,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 case Type.MidAir_Overhead:
                     m_timer = m_midAirOverhead.nextAttackDelay;
                     m_attacker.SetDamageModifier(m_midAirOverhead.damageModifier * m_modifier.Get(PlayerModifier.AttackDamage));
+                    m_canAirAttack = false;
 
                     if (m_adjustGravity == true)
                     {
@@ -235,6 +241,11 @@ namespace DChild.Gameplay.Characters.Players.Modules
         public void ResetAerialGravityControl()
         {
             m_adjustGravity = true;
+        }
+
+        public void ResetAirAttacks()
+        {
+            m_canAirAttack = true;
         }
 
         public void ClearExecutedCollision()
