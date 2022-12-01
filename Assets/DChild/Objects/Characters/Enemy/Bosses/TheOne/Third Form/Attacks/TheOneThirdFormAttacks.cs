@@ -85,4 +85,10 @@ public class TheOneThirdFormAttacks : MonoBehaviour
     {
         StartCoroutine(m_tentacleGrabScriptedAttack.ExecuteAttack());
     }
+
+    [Button]
+    public void MouthBlastWall()
+    {
+        StartCoroutine(m_mouthBlastIIAttack.ExecuteAttack());
+    }
 }
