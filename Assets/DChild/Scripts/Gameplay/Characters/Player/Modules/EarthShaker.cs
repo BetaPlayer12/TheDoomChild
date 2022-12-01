@@ -6,6 +6,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
 {
     public class EarthShaker : AttackBehaviour
     {
+        [SerializeField, HideLabel]
+        private EarthShakerStatsInfo m_configuration;
         [SerializeField]
         private Vector2 m_momentumVelocity;
         [SerializeField, MinValue(0.1f)]
@@ -46,6 +48,11 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_originalGravity = m_rigidbody.gravityScale;
             m_earthShakerAnimationParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.EarthShaker);
             m_canEarthShaker = true;
+        }
+
+        public void SetConfiguration(EarthShakerStatsInfo info)
+        {
+            m_configuration.CopyInfo(info);
         }
 
         public override void Cancel()

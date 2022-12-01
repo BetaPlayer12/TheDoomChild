@@ -12178,6 +12178,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f856ad4eb068baf46998aa73344042f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_configuration:
+    m_fallSpeed: 0
+    m_fallDamageModifier: 0
+    m_impactDamageModifier: 0
   m_momentumVelocity: {x: 0.5, y: 0.5}
   m_fallSpeed: 200
   m_chargeFX: {fileID: 4957500597277648190}
@@ -12200,18 +12204,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2092923524fb2f34bae2f761b8e17252, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_configuration:
+    m_chargeDuration: 0
+    m_thrustVelocity: 0
+    m_duration: 0
+    m_cooldown: 0
   m_chargeFX: {fileID: 58799102077630931}
   m_finishedChargeFX: {fileID: 1271597158320544495}
-  m_chargeDuration: 0.8
   m_thrust:
     m_fx: {fileID: 3177351808613845587}
     m_fxPosition: {fileID: 0}
     m_collider: {fileID: 8139053470413516159}
     m_damageModifier: 2
     m_nextAttackDelay: 0.5
-  m_thrustVelocity: 150
-  m_duration: 0.1
-  m_cooldown: 0.2
 --- !u!114 &5095745275346028896
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12224,6 +12229,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae0b63dcad7958a4e98b233780f056ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_configuration:
+    m_aerialGravity: 0
   m_momentumVelocity: {x: 0.25, y: 0.25}
   m_groundForward:
     m_fx: {fileID: 0}
@@ -12268,19 +12275,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6338b01d99260874ab274fd676b44abe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_configuration:
+    m_skullThrowCooldown: 0
+    m_defaultAim: {x: 0, y: 0}
+    m_horizontalThreshold:
+      m_min: 0
+      m_max: 0
+    m_verticalThreshold: 0
+    m_aimSensitivity: 0
+    m_adjustableXSpeed: 0
   m_projectile:
     m_projectile: {fileID: 2508720340444514364, guid: c76eb3ef8328d76459bb525e8f005672,
       type: 3}
     m_speed: 80
   m_spawnPoint: {fileID: 1702511588}
-  m_skullThrowCooldown: 0.5
-  m_defaultAim: {x: 5, y: 1.7}
-  m_horizontalThreshold:
-    m_min: 0
-    m_max: 10
-  m_verticalThreshold: 10
-  m_aimSensitivity: 0.5
-  m_adjustableXSpeed: 1
   m_skeletonAnimation: {fileID: 4084513133358244869}
 --- !u!114 &5613561246130837252
 MonoBehaviour:
@@ -12294,7 +12302,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a038f226fdf5b54eaab24ab48303f61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_blockDuration: 0
+  m_configuration:
+    m_blockDuration: 0
 --- !u!114 &6808753260488161894
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15178,6 +15187,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a3be5eea7c6f3264380e8fa56bd2bae4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_configuration:
+    m_wallStickOffset: 0
   m_wallSensor: {fileID: 2702825902955571488}
   m_heightSensor: {fileID: 1059131856817284389}
   m_wallStickOffset: 2.5
@@ -15195,7 +15206,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 938ea9e51135a25419005d0901a840b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_speed: 20
+  m_configuration:
+    m_speed: 0
   m_overheadSensor: {fileID: 2254278257848664139}
   m_bodySensor: {fileID: 2196268983073639650}
 --- !u!114 &2872343312770515746
@@ -15210,8 +15222,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 592dbf2a39a135d41a0f127484918d3f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_power: {x: 38, y: 70}
-  m_disableInputDuration: 0.1
+  m_configuration:
+    m_power: {x: 0, y: 0}
+    m_disableInputDuration: 0
 --- !u!114 &2243395253476139525
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15224,7 +15237,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a5f40b562c92af42937eeaf71992d0e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_speed: 15
+  m_configuration:
+    m_speed: 0
   m_bodySensor: {fileID: 2196268983073639650}
 --- !u!1 &2543273237206828019
 GameObject:
@@ -24779,6 +24793,7 @@ GameObject:
   - component: {fileID: 4294471024675222955}
   - component: {fileID: 4294471024675222959}
   - component: {fileID: 4787068810127392756}
+  - component: {fileID: 234887572369224968}
   m_Layer: 8
   m_Name: Stats
   m_TagString: Untagged
@@ -24886,6 +24901,44 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_delayBeforeRegenStart: 0.1
   m_regenRate: 6
+--- !u!114 &234887572369224968
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4294471024675222932}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8c3355d7addf8ce4c8d06790e205a6dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_playerBasicBehaviourConfiguration: {fileID: 11400000, guid: 14d67cee6c765084e8439d770c7c3e7a,
+    type: 2}
+  m_movement: {fileID: 8774232181620843986}
+  m_groundJump: {fileID: 580920807932927363}
+  m_objectManipulation: {fileID: 8663472620617601543}
+  m_ledgeGrab: {fileID: 381123879465033726}
+  m_shadowMorph: {fileID: 4676722058015644928}
+  m_autoStepClimb: {fileID: 8601462637692648743}
+  m_flinch: {fileID: 4482332402850809006}
+  m_dash: {fileID: 3466619102623167143}
+  m_extraJump: {fileID: 4671146485413262800}
+  m_devilWings: {fileID: 501625876454779571}
+  m_shadowDash: {fileID: 6636612100029514166}
+  m_slide: {fileID: 2923306862869210928}
+  m_shadowSlide: {fileID: 862145600443974084}
+  m_wallStick: {fileID: 6248623776655143063}
+  m_wallMovement: {fileID: 7027333220078225593}
+  m_wallJump: {fileID: 2872343312770515746}
+  m_wallSlide: {fileID: 2243395253476139525}
+  m_earthShaker: {fileID: 1447959042326891895}
+  m_swordThrust: {fileID: 3154730596595979594}
+  m_whipAttack: {fileID: 5095745275346028896}
+  m_projectileThrow: {fileID: 261958971}
+  m_block: {fileID: 5613561246130837252}
+  m_idleHandle: {fileID: 1530496967141879117}
+  m_combatReadiness: {fileID: 7993666839686586755}
 --- !u!1 &4341963958153839561
 GameObject:
   m_ObjectHideFlags: 0
@@ -41814,9 +41867,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9c875dce19d66b4bbe1c1ef8ea9eba3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_velocity: 160
-  m_cooldown: 0.5
-  m_duration: 0.2
+  m_configuration:
+    m_velocity: 0
+    m_cooldown: 0
+    m_duration: 0
 --- !u!114 &4671146485413262800
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -41829,8 +41883,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d957ec1cd845fd749ba004e35f0857b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_count: 1
-  m_power: 76
+  m_configuration:
+    m_count: 0
+    m_power: 0
   m_doubleJumpFX: {fileID: 6591791022139609674, guid: 49059362cc0fd774aa899246bad0a26b,
     type: 3}
   m_particleSpawnPosition: {fileID: 1661308704210578720}
@@ -41846,6 +41901,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ffa80939a11cdd45971eef268f2541b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_configuration:
+    m_sourceRequiredAmount: 0
+    m_sourceConsumptionRate: 0
   m_momentumVelocity: {x: 0.5, y: 0.5}
   m_sourceRequiredAmount: 1
   m_sourceConsumptionRate: 25
@@ -41864,7 +41922,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_dash: {fileID: 3466619102623167143}
-  m_baseSourceRequiredAmount: 25
+  m_configuration:
+    m_baseSourceRequiredAmount: 0
   m_shadowFX: {fileID: 0}
 --- !u!114 &2923306862869210928
 MonoBehaviour:
@@ -41878,9 +41937,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0e98305199396246b4903b8e667b102, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_velocity: 90
-  m_cooldown: 0.3
-  m_duration: 0.3
+  m_configuration:
+    m_velocity: 0
+    m_cooldown: 0
+    m_duration: 0
 --- !u!114 &862145600443974084
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -41894,7 +41954,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_slide: {fileID: 2923306862869210928}
-  m_baseSourceRequiredAmount: 25
+  m_configuration:
+    m_baseSourceRequiredAmount: 0
   m_shadowFX: {fileID: 6932414470649904744}
 --- !u!1 &5878400085730613352
 GameObject:
@@ -47329,12 +47390,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 192043915abdaf349a6f9dc5f7707c88, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_numberOfFlinchStates: 2
-  m_XknockBackPower: 20
-  m_YknockbackPower: 15
-  m_aerialKnockBackMultiplier: 1.5
-  m_flinchDuration: 0.2
-  m_flinchGravityScale: 13
+  m_configuration:
+    m_numberOfFlinchStates: 0
+    m_xKnockBackPower: 0
+    m_yKnockBackPower: 0
+    m_aerialKnockBackMultiplier: 0
+    m_flinchDuration: 0
+    m_flinchGravityScale: 0
 --- !u!114 &8951393349034339114
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -47667,11 +47729,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5bbd6c14745b1f4e88c79ee442c1706, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_jogSpeed: 45
-  m_crouchSpeed: 22
-  m_midAirSpeed: 28
-  m_pullSpeed: 10
-  m_pushSpeed: 25
+  m_configuration:
+    m_jogSpeed: 0
+    m_crouchSpeed: 0
+    m_midAirSpeed: 0
+    m_pullSpeed: 0
+    m_pushSpeed: 0
 --- !u!114 &3621822070288912009
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -47698,6 +47761,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d036ee962eb24b9478b57273ad1bb5a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_configuration:
+    m_jumpPower: 0
+    m_jumpCutoffPower: 0
+    m_allowCutoffAfterDuration: 0
   m_power: 86
   m_cutOffPower: 30
   m_allowCutoffAfterDuration: 0.1
@@ -47713,10 +47780,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 344533ee1cb91ec4da5081e4be46d7cb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_configuration:
+    m_pushForce: 0
+    m_pullForce: 0
+    m_distanceCheck: 0
   m_grabRangeSensor: {fileID: 3608228855213573075}
-  m_pushForce: 1300
-  m_pullForce: 600
-  m_distanceCheck: 10
 --- !u!114 &381123879465033726
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -47729,10 +47797,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c27287bc8cf986f46b90ee001dbbce77, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_configuration:
+    m_destinationFromWallOffset: 0
   m_grabbableWallSensor: {fileID: 5217173687477648001}
   m_overheadSensor: {fileID: 2254278257848664139}
   m_destinationSensor: {fileID: 2141399093233969744}
-  m_destinationFromWallOffset: 1.5
   m_clearingSensor: {fileID: 5193146964504964771}
   m_footingSensor: {fileID: 2801071417808159900}
   m_playerShadow: {fileID: 1076285428610936902}
@@ -47749,8 +47818,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5cd921de4fb55b43839d4202d8ca061, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_sourceRequiredAmount: 1
-  m_sourceConsumptionRate: 50
+  m_configuration:
+    m_sourceRequiredAmount: 0
+    m_sourceConsumptionRate: 0
   m_shadowMorphFX: {fileID: 6932414470649904744}
   m_originalSkinName: SkinDefault
   m_shadowMorphSkinName: SkinShadow
@@ -47770,9 +47840,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_legForwardEnvironment: {fileID: 1362655797280055142}
   m_destinationFinder: {fileID: 9175127697291507563}
-  m_distanceFromLegContactForDestination: 0.5
   m_spaceChecker: {fileID: 8278060011036467827}
-  m_spaceCheckerOffset: {x: 0, y: 5.06}
+  m_configuration:
+    m_distanceFromLegContactForDestination: 0
+    m_spaceCheckerOffset: {x: 0, y: 0}
 --- !u!1 &6704093185772120843
 GameObject:
   m_ObjectHideFlags: 0
@@ -79765,8 +79836,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 870ac8ef1d3244b4eb64c72897cca4a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_playExtendedIdleAnimAfter: 60
-  m_maxIdleAnimCount: 2
+  m_configuration:
+    m_playExtendedIdleAnimAfter: 0
+    m_maxIdleAnimCount: 0
 --- !u!114 &7993666839686586755
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -79779,7 +79851,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3f969fe928930046bed3e1009567733, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_duration: 5
+  m_configuration:
+    m_duration: 0
 --- !u!114 &1027567328968180746
 MonoBehaviour:
   m_ObjectHideFlags: 0

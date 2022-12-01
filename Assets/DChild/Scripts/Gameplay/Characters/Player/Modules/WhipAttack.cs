@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Sirenix.OdinInspector;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -16,6 +17,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
             Crouch_Forward
         }
 
+        [SerializeField, HideLabel]
+        private WhipAttackStatsInfo m_configuration;
         [SerializeField]
         private Vector2 m_momentumVelocity;
         [SerializeField]
@@ -52,6 +55,11 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_cacheGravity = m_rigidbody.gravityScale;
             m_adjustGravity = true;
             m_canAirWhip = true;
+        }
+
+        public void SetConfiguration(WhipAttackStatsInfo info)
+        {
+            m_configuration.CopyInfo(info);
         }
 
         public override void Cancel()
