@@ -52,6 +52,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         public void SetConfiguration(WhipAttackStatsInfo info)
         {
             m_configuration.CopyInfo(info);
+            //N-word
         }
 
         public override void Cancel()
