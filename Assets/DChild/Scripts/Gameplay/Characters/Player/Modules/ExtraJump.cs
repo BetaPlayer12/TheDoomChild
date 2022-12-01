@@ -35,7 +35,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void Cancel()
         {
-            m_rigidbody.velocity = Vector2.zero;
+            //m_rigidbody.velocity = Vector2.zero; Comment Out for Momentum Velocity
             m_animator.SetBool(m_animationParameter, false);
         }
 

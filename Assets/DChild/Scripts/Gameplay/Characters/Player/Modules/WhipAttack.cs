@@ -17,6 +17,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
         }
 
         [SerializeField]
+        private Vector2 m_momentumVelocity;
+        [SerializeField]
         private Info m_groundForward;
         [SerializeField]
         private Info m_groundOverhead;
@@ -132,7 +134,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     {
                         m_cacheGravity = m_rigidbody.gravityScale;
                         m_rigidbody.gravityScale = m_aerialGravity;
-                        m_rigidbody.velocity = Vector2.zero;
+                        m_rigidbody.velocity = /*Vector2.zero*/new Vector2(m_rigidbody.velocity.x * m_momentumVelocity.x, m_rigidbody.velocity.y * m_momentumVelocity.y);
                     }
 
                     break;
@@ -145,7 +147,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     {
                         m_cacheGravity = m_rigidbody.gravityScale;
                         m_rigidbody.gravityScale = m_aerialGravity;
-                        m_rigidbody.velocity = Vector2.zero;
+                        m_rigidbody.velocity = /*Vector2.zero*/new Vector2(m_rigidbody.velocity.x * m_momentumVelocity.x, m_rigidbody.velocity.y * m_momentumVelocity.y);
                     }
 
                     break;
