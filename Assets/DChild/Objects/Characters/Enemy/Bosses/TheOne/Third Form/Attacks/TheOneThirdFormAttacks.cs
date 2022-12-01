@@ -2,12 +2,13 @@ using DChild.Gameplay.Characters.Enemies;
 using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
+using DChild.Gameplay.Characters.AI;
 using UnityEngine;
 
 public class TheOneThirdFormAttacks : MonoBehaviour
 {
     [SerializeField, BoxGroup("The One Third Form Attacks")]
-    private TentacleGroundStabAttack m_tentacleStabAttack;
+    private TentacleGroundStabAttack m_tentacleGroundStabAttack;
     [SerializeField, BoxGroup("The One Third Form Attacks")]
     private TentacleCeilingAttack m_tentacleCeilingAttack;
     [SerializeField, BoxGroup("The One Third Form Attacks")]
@@ -61,6 +62,8 @@ public class TheOneThirdFormAttacks : MonoBehaviour
     private float m_monolithTimer;
     private float m_monolithTimerValue;
 
+    private TheOneThirdFormAI m_targetInfo;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -70,25 +73,52 @@ public class TheOneThirdFormAttacks : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        //if (triggerTentacleGroundStab)
+        //{
+        //    m_tentacleStabTimer -= GameplaySystem.time.deltaTime;
+
+        //    Vector2 tentacleSpawn = new Vector2(m_targetInfo.position.x, m_tentacleStabSpawnHeight.position.y);
+        //    if (m_tentacleStabTimer <= 0)
+        //    {
+        //        m_currentAttackCoroutine = StartCoroutine(m_tentacleStabAttack.ExecuteAttack(tentacleSpawn));
+        //        m_tentacleStabCount++;
+        //        m_tentacleStabTimer = m_tentacleStabTimerValue;
+        //    }
+
+        //    if (m_tentacleStabCount > 4)
+        //    {
+        //        m_tentacleStabCount = 0;
+        //        triggerTentacleGroundStab = false;
+        //    }
+        //}
     }
 
     //Attacks
     [Button]
-    public void TentacleCeilingAttack()
+    public IEnumerator TentacleCeilingAttack()
     {
         StartCoroutine(m_tentacleCeilingAttack.ExecuteAttack());
+        yield return null;
     }
 
     [Button]
-    public void TentacleGrabGroundSlam()
+    public IEnumerator TentacleGrabGroundSlam()
     {
         StartCoroutine(m_tentacleGrabScriptedAttack.ExecuteAttack());
+        yield return null;
     }
 
     [Button]
-    public void MouthBlastWall()
+    public IEnumerator MouthBlastWall()
     {
         StartCoroutine(m_mouthBlastIIAttack.ExecuteAttack());
+        yield return null;
+    }
+
+    [Button]
+    public IEnumerator TentacleGroundStab(Vector2 PlayerPosition)
+    {
+        StartCoroutine(m_tentacleGroundStabAttack.ExecuteAttack(PlayerPosition));
+        yield return null;
     }
 }

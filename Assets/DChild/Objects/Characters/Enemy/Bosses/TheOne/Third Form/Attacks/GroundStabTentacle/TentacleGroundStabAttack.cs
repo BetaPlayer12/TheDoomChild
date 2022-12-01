@@ -4,29 +4,38 @@ using UnityEngine;
 using DChild.Gameplay.Pooling;
 using DChild.Gameplay.Projectiles;
 using Spine.Unity;
+using Sirenix.OdinInspector;
 
 namespace DChild.Gameplay.Characters.Enemies
 {
     public class TentacleGroundStabAttack : MonoBehaviour, IEyeBossAttacks
     {
         [SerializeField]
-        private GameObject[] m_tentaclesAtBackground;
+        private GameObject m_groundTentacleStab;
         [SerializeField]
-        private GameObject[] m_tentaclesAtMidground;
-        [SerializeField]
-        private GameObject[] m_tentaclesAtPlayableArea;
-        [SerializeField]
-        private GameObject[] m_tentaclesAtForeground;
+        private float m_tentacleSpawnInterval = 2f;
 
         private int m_tentacleCount = 0;
         private Vector2 m_tentacleOffset = new Vector2(0, 50f);
 
         [SerializeField]
-        private float m_tentacleStabTimer = 0;
-        private float m_tentacleStabTimerValue;
+        private int m_backgroundSortingLayerID = -3;
+        [SerializeField]
+        private int m_midgroundSortingLayerID = -2;
+        [SerializeField]
+        private int m_playablegroundSortingLayerID = -1;
+        [SerializeField]
+        private int m_foregroundSortingLayerID = 2;
 
         [SerializeField]
-        private int m_backgroundSortingLayerID = -2;
+        private string m_backgroundSortingLayerName = "Background";
+        [SerializeField]
+        private string m_midgroundSortingLayerName = "Midground1";
+        [SerializeField]
+        private string m_playablegroundSortingLayerName = "PlayableGround";
+        [SerializeField]
+        private string m_foregroundSortingLayerName = "Foreground";
+
 
         public IEnumerator ExecuteAttack()
         {
@@ -35,62 +44,57 @@ namespace DChild.Gameplay.Characters.Enemies
 
         public IEnumerator ExecuteAttack(Vector2 PlayerPosition)
         {
-            m_tentacleCount++;
-            switch (m_tentacleCount)
+            while(m_tentacleCount < 5)
             {
-                case 1:
-                    InstantiateTentacles(PlayerPosition + m_tentacleOffset, m_tentaclesAtBackground[Random.Range(0, m_tentaclesAtBackground.Length)]);
-                    yield return new WaitForSeconds(2f);
-                    break;
-                case 2:
-                    InstantiateTentacles(PlayerPosition + m_tentacleOffset, m_tentaclesAtMidground[Random.Range(0, m_tentaclesAtMidground.Length)]);
-                    yield return new WaitForSeconds(2f);
-                    break;
-                case 3:
-                    InstantiateTentacles(PlayerPosition + m_tentacleOffset, m_tentaclesAtPlayableArea[Random.Range(0, m_tentaclesAtPlayableArea.Length)]);
-                    yield return new WaitForSeconds(2f);
-                    break;
-                case 4:
-                    InstantiateTentacles(PlayerPosition + m_tentacleOffset, m_tentaclesAtForeground[Random.Range(0, m_tentaclesAtForeground.Length)]);
-                    yield return new WaitForSeconds(2f);
-                    break;
-                case 5:
-                    m_tentacleCount = 0;
-                    break;
-                default:
-                    break;
+                m_tentacleCount++;
+                if (m_tentacleCount == 1)
+                {
+                    InstantiateTentacles(PlayerPosition + m_tentacleOffset, m_groundTentacleStab, m_backgroundSortingLayerID, m_backgroundSortingLayerName);
+                    yield return new WaitForSeconds(m_tentacleSpawnInterval);
+                }
+                else if(m_tentacleCount == 2)
+                {
+                    InstantiateTentacles(PlayerPosition + m_tentacleOffset, m_groundTentacleStab, m_midgroundSortingLayerID, m_midgroundSortingLayerName);
+                    yield return new WaitForSeconds(m_tentacleSpawnInterval);
+                }
+                else if (m_tentacleCount == 3)
+                {
+                    InstantiateTentacles(PlayerPosition + m_tentacleOffset, m_groundTentacleStab, m_playablegroundSortingLayerID, m_playablegroundSortingLayerName);
+                    yield return new WaitForSeconds(m_tentacleSpawnInterval);
+                }
+                else if (m_tentacleCount == 4)
+                {
+                    InstantiateTentacles(PlayerPosition + m_tentacleOffset, m_groundTentacleStab, m_foregroundSortingLayerID, m_foregroundSortingLayerName);
+                    yield return new WaitForSeconds(m_tentacleSpawnInterval);
+                }
             }
+            m_tentacleCount = 0;
 
             yield return null;
         }
 
-        private void InstantiateTentacles(Vector2 spawnPosition, GameObject tentacle)
+        private void InstantiateTentacles(Vector2 spawnPosition, GameObject tentacle, int sortingLayerID, string sortingLayerName)
         {
             var instance = GameSystem.poolManager.GetPool<PoolableObjectPool>().GetOrCreateItem(tentacle, gameObject.scene);
             instance.SpawnAt(spawnPosition, Quaternion.identity);
-            //StartCoroutine(instance.GetComponent<TentacleLifeSpan>().StabRoutine());
+            instance.GetComponentInChildren<MeshRenderer>().sortingLayerID = sortingLayerID;
+            instance.GetComponentInChildren<MeshRenderer>().sortingLayerName = sortingLayerName;
         }
 
         private void Start()
         {
-            m_tentacleStabTimerValue = m_tentacleStabTimer;
 
-            foreach(GameObject tentacle in m_tentaclesAtBackground)
-            {
-                tentacle.GetComponentInChildren<MeshRenderer>().sortingLayerID = m_backgroundSortingLayerID;
-                tentacle.GetComponentInChildren<MeshRenderer>().sortingLayerName = "Background";
-            }
         }
 
         private void Update()
         {
-            m_tentacleStabTimer -= GameplaySystem.time.deltaTime;
 
-            if (m_tentacleStabTimer <= 0)
-            {
-                //StartCoroutine(m_tentacleStabAttack.ExecuteAttack(m_targetInfo.position));
-                m_tentacleStabTimer = m_tentacleStabTimerValue;
-            }
+        }
+
+        [Button]
+        private void TestAttack()
+        {
+            StartCoroutine(ExecuteAttack(new Vector2(0f, 0f)));
         }
     }
 }
