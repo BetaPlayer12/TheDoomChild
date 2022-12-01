@@ -2,7 +2,6 @@
 using Holysoft.Event;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace DChild.Gameplay.Trade.UI
 {

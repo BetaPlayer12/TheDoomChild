@@ -15,10 +15,9 @@ namespace DChild.Gameplay.Characters.Players.Modules
 {
     public class ShadowMorph : MonoBehaviour, ICancellableBehaviour, IComplexCharacterModule, IResettableBehaviour
     {
-        [SerializeField, MinValue(0)]
-        private int m_sourceRequiredAmount;
-        [SerializeField, MinValue(0)]
-        private int m_sourceConsumptionRate;
+        [SerializeField, HideLabel]
+        private ShadowMorphStatsInfo m_configuration;
+
         [SerializeField]
         private ParticleSystem m_shadowMorphFX;
         //HACK
@@ -48,13 +47,13 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public bool IsInShadowMode() => m_state.isInShadowMode;
         public bool IsAttackAllowed() => m_attackAllowed;
-        public bool HaveEnoughSourceForExecution() => m_sourceRequiredAmount <= m_source.currentValue;
+        public bool HaveEnoughSourceForExecution() => m_configuration.sourceRequiredAmount <= m_source.currentValue;
 
         //public bool IsAttackAllowed
 
         public void ConsumeSource()
         {
-            m_stackedConsumptionRate += (m_sourceConsumptionRate * GameplaySystem.time.deltaTime) * m_modifier.Get(PlayerModifier.ShadowMagic_Requirement);
+            m_stackedConsumptionRate += (m_configuration.sourceConsumptionRate * GameplaySystem.time.deltaTime) * m_modifier.Get(PlayerModifier.ShadowMagic_Requirement);
 
             if (m_stackedConsumptionRate >= 1)
             {
@@ -119,6 +118,11 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_stackedConsumptionRate = 0;
             m_modifier = info.modifier;
             m_skeletonGhost = info.skeletonGhost;
+        }
+
+        public void SetConfiguration(ShadowMorphStatsInfo info)
+        {
+            m_configuration.CopyInfo(info);
         }
 
         public void Reset()
