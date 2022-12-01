@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DChild.Gameplay.Pooling;
 using DChild.Gameplay.Projectiles;
+using Spine.Unity;
 
 namespace DChild.Gameplay.Characters.Enemies
 {
@@ -23,6 +24,9 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField]
         private float m_tentacleStabTimer = 0;
         private float m_tentacleStabTimerValue;
+
+        [SerializeField]
+        private int m_backgroundSortingLayerID = -2;
 
         public IEnumerator ExecuteAttack()
         {
@@ -70,6 +74,12 @@ namespace DChild.Gameplay.Characters.Enemies
         private void Start()
         {
             m_tentacleStabTimerValue = m_tentacleStabTimer;
+
+            foreach(GameObject tentacle in m_tentaclesAtBackground)
+            {
+                tentacle.GetComponentInChildren<MeshRenderer>().sortingLayerID = m_backgroundSortingLayerID;
+                tentacle.GetComponentInChildren<MeshRenderer>().sortingLayerName = "Background";
+            }
         }
 
         private void Update()
