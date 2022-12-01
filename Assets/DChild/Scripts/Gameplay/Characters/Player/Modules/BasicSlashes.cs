@@ -16,6 +16,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
         }
 
         [SerializeField]
+        private Vector2 m_momentumVelocity;
+        [SerializeField]
         private SkeletonAnimation m_attackFX;
         [SerializeField]
         private Info m_groundOverhead;
@@ -33,9 +35,12 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private Rigidbody2D m_rigidbody;
         private float m_cacheGravity;
         private bool m_adjustGravity;
+        private bool m_canAirAttack;
 
         private Animator m_fxAnimator;
         private SkeletonAnimation m_skeletonAnimation;
+
+        public bool CanAirAttack() => m_canAirAttack;
 
         public override void Initialize(ComplexCharacterInfo info)
         {
@@ -45,6 +50,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_executedTypes = new List<Type>();
             m_cacheGravity = m_rigidbody.gravityScale;
             m_adjustGravity = true;
+            m_canAirAttack = true;
 
             m_fxAnimator = m_attackFX.gameObject.GetComponentInChildren<Animator>();
             m_skeletonAnimation = m_attackFX.gameObject.GetComponent<SkeletonAnimation>();
@@ -122,25 +128,27 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 case Type.MidAir_Forward:
                     m_timer = m_midAirForward.nextAttackDelay;
                     m_attacker.SetDamageModifier(m_midAirForward.damageModifier * m_modifier.Get(PlayerModifier.AttackDamage));
+                    m_canAirAttack = false;
 
                     if (m_adjustGravity == true)
                     {
                         m_cacheGravity = m_rigidbody.gravityScale;
                         m_rigidbody.gravityScale = m_aerialGravity;
                         //m_rigidbody.velocity = new Vector2(m_rigidBody.velocity.x, 0);
-                        m_rigidbody.velocity = Vector2.zero;
+                        m_rigidbody.velocity = /*Vector2.zero*/new Vector2(m_rigidbody.velocity.x * m_momentumVelocity.x, m_rigidbody.velocity.y * m_momentumVelocity.y);
                     }
                     break;
                 case Type.MidAir_Overhead:
                     m_timer = m_midAirOverhead.nextAttackDelay;
                     m_attacker.SetDamageModifier(m_midAirOverhead.damageModifier * m_modifier.Get(PlayerModifier.AttackDamage));
+                    m_canAirAttack = false;
 
                     if (m_adjustGravity == true)
                     {
                         m_cacheGravity = m_rigidbody.gravityScale;
                         m_rigidbody.gravityScale = m_aerialGravity;
                         //m_rigidbody.velocity = new Vector2(m_rigidBody.velocity.x, 0);
-                        m_rigidbody.velocity = Vector2.zero;
+                        m_rigidbody.velocity = /*Vector2.zero*/new Vector2(m_rigidbody.velocity.x * m_momentumVelocity.x, m_rigidbody.velocity.y * m_momentumVelocity.y);
                     }
                     break;
             }
@@ -235,6 +243,11 @@ namespace DChild.Gameplay.Characters.Players.Modules
         public void ResetAerialGravityControl()
         {
             m_adjustGravity = true;
+        }
+
+        public void ResetAirAttacks()
+        {
+            m_canAirAttack = true;
         }
 
         public void ClearExecutedCollision()

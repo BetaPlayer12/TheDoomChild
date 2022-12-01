@@ -34,20 +34,20 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return new WaitForAnimationComplete(m_animation.animationState, m_anticipationLoopAnimation);
         }
 
-        public IEnumerator Attack()
+        public IEnumerator Attack(float duration)
         {
             m_animation.SetAnimation(0, m_attackAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_attackAnimation);
 
-            StartCoroutine(Extended());
+            yield return Extended(duration);
         }
 
-        public IEnumerator Extended()
+        public IEnumerator Extended(float duration)
         {
-            m_tentacleHitBox.enabled = true;
             m_animation.SetAnimation(0, m_extendedAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_extendedAnimation);
-            yield return new WaitForSeconds(2f);
+            yield return new WaitForSeconds(duration);
+            yield return Retract();
         }
 
         public IEnumerator Retract()
@@ -59,17 +59,15 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void Start()
         {
-            StartCoroutine(AnticipateAttack());
+            m_animation.SetAnimation(0, m_waitForInputAnimation, true);
             m_tentacleHitBox = this.GetComponent<BoxCollider2D>();
-            m_tentacleHitBox.enabled = false;
         }
 
         [Button]
         private void DoAttack()
         {
-            StartCoroutine(Attack());
-            StartCoroutine(Extended());
-            StartCoroutine(Retract());
+            StartCoroutine(Attack(3.5f));
+            //StartCoroutine(Retract());
         }
     }
 }

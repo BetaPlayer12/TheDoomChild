@@ -58,11 +58,9 @@ public class TentacleGrab : MonoBehaviour
     }
 
     [Button]
-    private void GroundSlamAttack()
-    {
-        
-        StartCoroutine(GroundSlam());
-        
+    public void GroundSlamAttack()
+    {        
+        StartCoroutine(GroundSlam());        
     }
 
     private IEnumerator Emerge()
