@@ -644,6 +644,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     {
                         PrepareForMidairAttack();
                         m_devilWings?.EnableLevitate();
+                        m_extraJump?.Cancel();
 
                         if (m_input.verticalInput > 0)
                         {
@@ -661,6 +662,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                         {
                             PrepareForMidairAttack();
                             m_devilWings?.EnableLevitate();
+                            m_extraJump?.Cancel();
 
                             if (m_input.verticalInput > 0)
                             {
