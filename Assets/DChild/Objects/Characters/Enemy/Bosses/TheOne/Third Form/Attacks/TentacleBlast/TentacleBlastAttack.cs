@@ -6,10 +6,12 @@ namespace DChild.Gameplay.Characters.Enemies
 {
     public class TentacleBlastAttack : MonoBehaviour, IEyeBossAttacks
     {
+        [SerializeField]
+        private TentacleBlast m_tentacleBlast;
 
         public IEnumerator ExecuteAttack()
         {
-            throw new System.NotImplementedException();
+            yield return m_tentacleBlast.TentacleBlastAttack();
         }
 
         public IEnumerator ExecuteAttack(Vector2 PlayerPosition)

@@ -8,8 +8,12 @@ namespace DChild.Gameplay.Characters.Players.Modules
 {
     public class GroundJump : MonoBehaviour, ICancellableBehaviour, IComplexCharacterModule
     {
-        [SerializeField, HideLabel]
-        private GroundJumpStatsInfo m_configuration;
+        [SerializeField, MinValue(0.1f)]
+        private float m_power;
+        [SerializeField]
+        private float m_cutOffPower;
+        [SerializeField, MinValue(0f)]
+        private float m_allowCutoffAfterDuration;
 
         private Rigidbody2D m_rigidbody;
         private IHighJumpState m_state;
@@ -17,7 +21,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private int m_animationParameter;
         private float m_timer;
 
-        public float highJumpCutoffThreshold => m_configuration.jumpCutoffPower;
+        public float highJumpCutoffThreshold => m_cutOffPower;
         public event EventAction<EventActionArgs> ExecuteModule;
 
         public void Initialize(ComplexCharacterInfo info)
@@ -26,11 +30,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_state = info.state;
             m_animator = info.animator;
             m_animationParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.Jump);
-        }
-
-        public void SetConfiguration(GroundJumpStatsInfo info)
-        {
-            m_configuration.CopyInfo(info);
         }
 
         public void Cancel()
@@ -57,7 +56,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         {
             m_state.isHighJumping = false;
             m_animator.SetBool(m_animationParameter, false);
-            m_rigidbody.velocity = new Vector2(m_rigidbody.velocity.x, m_configuration.jumpCutoffPower);
+            m_rigidbody.velocity = new Vector2(m_rigidbody.velocity.x, m_cutOffPower);
         }
 
         public void Execute()
@@ -65,10 +64,10 @@ namespace DChild.Gameplay.Characters.Players.Modules
             Debug.Log("Jump");
             m_state.isHighJumping = true;
             m_animator.SetBool(m_animationParameter, true);
-            m_rigidbody.velocity = new Vector2(m_rigidbody.velocity.x, m_configuration.jumpPower);
-            m_animator.Play("Jump_Rise");
+            m_rigidbody.velocity = new Vector2(m_rigidbody.velocity.x, m_power);
+            m_animator.Play("Jump Entry");
             //m_rigidbody.sharedMaterial.friction = 0f;
-            m_timer = m_configuration.allowCutoffAfterDuration;
+            m_timer = m_allowCutoffAfterDuration;
 
             ExecuteModule?.Invoke(this, EventActionArgs.Empty);
         }

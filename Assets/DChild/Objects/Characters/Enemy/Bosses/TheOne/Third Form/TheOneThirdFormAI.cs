@@ -569,7 +569,7 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 base.SetTarget(damageable, m_target);
                 m_stateHandle.OverrideState(State.Intro);
-                GameEventMessage.SendEvent("Boss Encounter");
+                //GameEventMessage.SendEvent("Boss Encounter");
             }
         }
 
