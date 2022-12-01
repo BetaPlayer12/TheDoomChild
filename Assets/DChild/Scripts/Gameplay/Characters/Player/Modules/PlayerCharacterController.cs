@@ -643,6 +643,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     else if (m_input.slashPressed && m_basicSlashes.CanAirAttack())
                     {
                         PrepareForMidairAttack();
+                        m_devilWings?.EnableLevitate();
 
                         if (m_input.verticalInput > 0)
                         {
@@ -659,6 +660,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                         if (m_skills.IsModuleActive(PrimarySkill.Whip))
                         {
                             PrepareForMidairAttack();
+                            m_devilWings?.EnableLevitate();
 
                             if (m_input.verticalInput > 0)
                             {
@@ -1132,15 +1134,18 @@ namespace DChild.Gameplay.Characters.Players.Modules
                                 else
                                 {
                                     PrepareForGroundAttack();
-                                    if (m_input.horizontalInput == 0)
-                                        m_whip.Execute(WhipAttack.Type.Ground_Forward);
-                                    else
+                                    if (m_input.horizontalInput != 0)
                                     {
                                         if (IsFacingInput())
                                         {
                                             if (m_whipCombo.CanWhipCombo())
                                                 m_whipCombo.Execute();
                                         }
+                                    }
+                                    else
+                                    {
+                                        m_whipCombo.Reset();
+                                        m_whip.Execute(WhipAttack.Type.Ground_Forward);
                                     }
                                     return;
                                 }

@@ -59,7 +59,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_modifier = info.modifier;
             m_whipAttackAnimationParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.WhipAttack);
             m_whipStateAnimationParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.WhipState);
-            m_currentWhipState = 0;
+            m_currentWhipState = -1;
             m_currentVisualWhipState = 0;
             m_comboAttackDelayTimer = -1;
             m_comboResetDelayTimer = -1;
@@ -76,7 +76,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             base.Reset();
 
             //Debug.Log("Whip Combo State Reset");
-            m_currentWhipState = 0;
+            m_currentWhipState = -1;
             m_currentVisualWhipState = 0;
             m_animator.SetInteger(m_whipStateAnimationParameter, m_currentWhipState);
         }
@@ -84,6 +84,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         public void Execute()
         {
             //Debug.Log("Clicked Whip Combo Attack");
+            m_currentWhipState += m_currentWhipState >= m_whipStateAmount -1 ? 0 : 1;
             m_state.waitForBehaviour = true;
             m_state.isAttacking = true;
             m_state.canAttack = false;
@@ -92,7 +93,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_animator.SetInteger(m_whipStateAnimationParameter, m_currentWhipState);
             m_attacker.SetDamageModifier(m_whipComboInfo[m_currentWhipState].damageModifier * m_modifier.Get(PlayerModifier.AttackDamage));
             m_currentVisualWhipState = m_currentWhipState;
-            m_currentWhipState++;
 
             m_comboResetDelayTimer = m_whipComboInfo[m_currentWhipState].nextAttackDelay;
             m_whipMovementCooldownTimer = m_whipMovementCooldown;
@@ -154,6 +154,15 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_canMove = false;
             m_animator.SetBool(m_whipAttackAnimationParameter, false);
 
+            if (m_currentWhipState >= m_whipStateAmount -1)
+            {
+                m_currentWhipState = -1;
+                m_canWhipCombo = false;
+                m_canMove = false;
+
+                m_animator.SetInteger(m_whipStateAnimationParameter, m_currentWhipState);
+            }
+
             //Debug.Log("Whip Attack Over");
             for (int i = 0; i < m_whipComboInfo.Count; i++)
             {
@@ -190,15 +199,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_state.canAttack = true;
             m_canWhipCombo = true;
             //m_skeletonAnimation.state.SetEmptyAnimation(0, 0);
-
-            if (m_currentWhipState >= m_whipStateAmount)
-            {
-                m_currentWhipState = 0;
-                m_canWhipCombo = false;
-                m_canMove = false;
-            }
-
-            m_animator.SetInteger(m_whipStateAnimationParameter, m_currentWhipState);
             m_animator.SetBool(m_whipAttackAnimationParameter, false);
             //if (m_state.isAttacking == true)
             //{
