@@ -26,6 +26,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private float m_fallDamageModifier = 1;
         [SerializeField, MinValue(0)]
         private float m_impactDamageModifier = 1;
+        //GIGA NIGGA
 
         private bool m_canEarthShaker;
         private IPlayerModifer m_modifier;

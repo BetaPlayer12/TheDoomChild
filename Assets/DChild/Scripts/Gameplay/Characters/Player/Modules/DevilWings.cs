@@ -37,6 +37,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         public event EventAction<EventActionArgs> End;
 
         public bool CanLevitate() => m_canLevitate;
+        //OOOGA HATE CRIME
 
         public void Initialize(ComplexCharacterInfo info)
         {
