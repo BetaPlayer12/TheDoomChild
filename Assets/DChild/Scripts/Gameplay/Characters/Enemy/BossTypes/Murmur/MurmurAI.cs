@@ -245,7 +245,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 if (!m_isDetecting)
                 {
                     m_isDetecting = true;
-                    GameEventMessage.SendEvent("Boss Encounter");
+                    //GameEventMessage.SendEvent("Boss Encounter");
                 }
             }
         }

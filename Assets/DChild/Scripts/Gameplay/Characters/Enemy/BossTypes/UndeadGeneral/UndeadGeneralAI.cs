@@ -461,7 +461,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 {
                     m_isDetecting = true;
                     m_stateHandle.OverrideState(State.Intro);
-                    GameEventMessage.SendEvent("Boss Encounter");
+                    //GameEventMessage.SendEvent("Boss Encounter");
                 }
             }
         }
@@ -743,6 +743,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator DodgeAttackRoutine()
         {
+            enabled = false;
             if (!IsFacingTarget()) CustomTurn();
             m_animation.EnableRootMotion(true, false);
             m_hitCounter = 0;
@@ -784,10 +785,12 @@ namespace DChild.Gameplay.Characters.Enemies
             m_counterAttackCoroutine = null;
             m_stateHandle.ApplyQueuedState();
             yield return null;
+            enabled = true;
         }
 
         private IEnumerator GuardAttackRoutine(bool hasBlocked, bool willDodge)
         {
+            enabled = false;
             m_hitCounter = 0;
             if (!hasBlocked)
             {
@@ -841,6 +844,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_currentAttackCoroutine = null;
                 m_counterAttackCoroutine = null;
                 m_stateHandle.ApplyQueuedState();
+                enabled = true;
             }
             else
             {

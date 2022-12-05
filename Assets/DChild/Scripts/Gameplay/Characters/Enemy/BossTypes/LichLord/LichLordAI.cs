@@ -310,12 +310,6 @@ namespace DChild.Gameplay.Characters.Enemies
             }
         }
 
-        private void CustomTurn()
-        {
-            transform.localScale = new Vector3(-transform.localScale.x, 1, 1);
-            m_character.SetFacing(transform.localScale.x == 1 ? HorizontalDirection.Right : HorizontalDirection.Left);
-        }
-
         private IEnumerator IntroRoutine()
         {
             m_stateHandle.Wait(State.ReevaluateSituation);
@@ -332,6 +326,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator ChangePhaseRoutine()
         {
+            enabled = false;
             m_animation.SetAnimation(0, m_info.flinchAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.flinchAnimation);
             m_hasPhaseChanged = false;
@@ -391,6 +386,7 @@ namespace DChild.Gameplay.Characters.Enemies
             //    m_stateHandle.ApplyQueuedState();
             //}
             yield return null;
+            enabled = true;
         }
 
         private Vector2 GroundPosition()

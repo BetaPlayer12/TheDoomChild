@@ -589,7 +589,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_isDetecting = true;
                     m_alterBladeMonitorCoroutine = StartCoroutine(AlterBladeMonitorRoutine());
                     m_stateHandle.OverrideState(State.Intro);
-                    GameEventMessage.SendEvent("Boss Encounter");
+                    //GameEventMessage.SendEvent("Boss Encounter");
                 }
             }
         }
@@ -781,6 +781,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void SetAIToPhasing()
         {
+            enabled = true;
             m_phaseHandle.ApplyChange();
             m_animation.DisableRootMotion();
             m_animation.SetEmptyAnimation(0, 0);
@@ -952,7 +953,10 @@ namespace DChild.Gameplay.Characters.Enemies
                         m_attackDecider.hasDecidedOnAttack = false;
                         m_currentAttackCoroutine = null;
                         if (m_alterBladeCoroutine == null)
+                        {
                             m_stateHandle.ApplyQueuedState();
+                            enabled = true;
+                        }
                         break;
                     case 1:
                         m_currentAttackCoroutine = StartCoroutine(Phase1Pattern1AttackRoutine());
@@ -1048,6 +1052,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator DrillDashComboRoutine()
         {
             enabled = false;
+            m_drillDashComboCount = m_drillDashComboCount > 1 ? 1 : m_drillDashComboCount;
             switch (m_drillDashComboCount)
             {
                 case 0:
@@ -1170,7 +1175,11 @@ namespace DChild.Gameplay.Characters.Enemies
                             m_attackDecider.hasDecidedOnAttack = false;
                             m_currentAttackCoroutine = null;
                             if (m_alterBladeCoroutine == null)
+                            {
                                 m_stateHandle.ApplyQueuedState();
+                                enabled = true;
+                            }
+
                             break;
                     }
                 }
@@ -1210,7 +1219,10 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_attackDecider.hasDecidedOnAttack = false;
                 m_currentAttackCoroutine = null;
                 if (m_alterBladeCoroutine == null)
+                {
                     m_stateHandle.ApplyQueuedState();
+                    enabled = true;
+                }
             }
             else
             {
@@ -1279,7 +1291,10 @@ namespace DChild.Gameplay.Characters.Enemies
             m_attackDecider.hasDecidedOnAttack = false;
             m_currentAttackCoroutine = null;
             if (m_alterBladeCoroutine == null)
+            {
                 m_stateHandle.ApplyQueuedState();
+                enabled = true;
+            }
             yield return null;
         }
 
@@ -1318,7 +1333,10 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_attackDecider.hasDecidedOnAttack = false;
                     m_currentAttackCoroutine = null;
                     if (m_alterBladeCoroutine == null)
+                    {
                         m_stateHandle.ApplyQueuedState();
+                        enabled = true;
+                    }
                     yield return null;
                     break;
                 default:
@@ -1335,6 +1353,7 @@ namespace DChild.Gameplay.Characters.Enemies
                                 yield return new WaitForAnimationComplete(m_animation.animationState, m_info.downwardSlash1Attack.animation);
                                 m_phase2pattern1Count++;
                                 m_stateHandle.OverrideState(State.Attacking);
+                                enabled = true;
                                 break;
                             case 1:
                                 m_animation.SetAnimation(0, m_info.swordStabAttack.animation, false);
@@ -1343,6 +1362,7 @@ namespace DChild.Gameplay.Characters.Enemies
                                 yield return new WaitForAnimationComplete(m_animation.animationState, m_info.heavySwordStabAttack.animation);
                                 m_phase2pattern1Count++;
                                 m_stateHandle.OverrideState(State.Attacking);
+                                enabled = true;
                                 break;
                             case 2:
                                 m_animation.SetAnimation(0, m_info.downwardSlash2Attack.animation, false);
@@ -1389,7 +1409,10 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_attackDecider.hasDecidedOnAttack = false;
                     m_currentAttackCoroutine = null;
                     if (m_alterBladeCoroutine == null)
+                    {
                         m_stateHandle.ApplyQueuedState();
+                        enabled = true;
+                    }
                     break;
             }
             //if (Vector2.Distance(transform.position, m_targetInfo.position) > m_info.downwardSlash1Attack.range)
@@ -1411,7 +1434,10 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_attackDecider.hasDecidedOnAttack = false;
                 m_currentAttackCoroutine = null;
                 if (m_alterBladeCoroutine == null)
+                {
                     m_stateHandle.ApplyQueuedState();
+                    enabled = true;
+                }
             }
             else
             {
@@ -1426,6 +1452,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator Phase2Pattern5AttackRoutine()
         {
             var isMidAir = UnityEngine.Random.Range(0, 2) == 1 ? true : false;
+            m_phase2pattern5Count = m_phase2pattern5Count > 3 ? 3 : m_phase2pattern5Count;
             switch (m_phase2pattern5Count)
             {
                 case 0:
@@ -1623,6 +1650,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         break;
                     case false:
                         m_stateHandle.OverrideState(transitionState);
+                        enabled = true;
                         break;
                 }
             }
@@ -1741,6 +1769,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator AlterBladeRoutine(SwordState swordState)
         {
+            enabled = false;
             yield return new WaitUntil(() => m_currentAttackCoroutine == null && m_blinkCoroutine == null && m_changePhaseCoroutine == null && !m_hitbox.canBlockDamage);
             StopComboCounts();
             if (!m_groundSensor.isDetecting)
@@ -1789,6 +1818,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_alterBladeCoroutine = null;
             m_stateHandle.OverrideState(State.Chasing);
             yield return null;
+            enabled = true;
         }
         #endregion 
 
@@ -2001,6 +2031,7 @@ namespace DChild.Gameplay.Characters.Enemies
                             break;
                     }
 
+                    enabled = false;
                     break;
 
                 case State.Cooldown:

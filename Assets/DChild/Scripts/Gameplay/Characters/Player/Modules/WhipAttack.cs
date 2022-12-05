@@ -17,6 +17,10 @@ namespace DChild.Gameplay.Characters.Players.Modules
             Crouch_Forward
         }
 
+        [SerializeField, HideLabel]
+        private WhipAttackStatsInfo m_configuration;
+        [SerializeField]
+        private Vector2 m_momentumVelocity;
         [SerializeField]
         private Info m_groundForward;
         [SerializeField]
@@ -27,8 +31,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private Info m_midAirOverhead;
         [SerializeField]
         private Info m_crouchForward;
-        [SerializeField, HideLabel]
-        private WhipAttackStatsInfo m_configuration;
+        [SerializeField]
+        private float m_aerialGravity;
 
         private IPlayerModifer m_modifier;
         private int m_whipAttackAnimationParameter;
@@ -36,6 +40,9 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private Rigidbody2D m_rigidbody;
         private float m_cacheGravity;
         private bool m_adjustGravity;
+        private bool m_canAirWhip;
+
+        public bool CanAirWhip() => m_canAirWhip;
 
         public override void Initialize(ComplexCharacterInfo info)
         {
@@ -47,12 +54,12 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_rigidbody = info.rigidbody;
             m_cacheGravity = m_rigidbody.gravityScale;
             m_adjustGravity = true;
+            m_canAirWhip = true;
         }
 
         public void SetConfiguration(WhipAttackStatsInfo info)
         {
             m_configuration.CopyInfo(info);
-            //N-word
         }
 
         public override void Cancel()
@@ -129,24 +136,26 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 case Type.MidAir_Forward:
                     m_timer = m_midAirForward.nextAttackDelay;
                     m_attacker.SetDamageModifier(m_midAirForward.damageModifier * m_modifier.Get(PlayerModifier.AttackDamage));
+                    m_canAirWhip = false;
 
                     if (m_adjustGravity == true)
                     {
                         m_cacheGravity = m_rigidbody.gravityScale;
-                        m_rigidbody.gravityScale = m_configuration.aerialGravity;
-                        m_rigidbody.velocity = Vector2.zero;
+                        m_rigidbody.gravityScale = m_aerialGravity;
+                        m_rigidbody.velocity = /*Vector2.zero*/new Vector2(m_rigidbody.velocity.x * m_momentumVelocity.x, m_rigidbody.velocity.y * m_momentumVelocity.y);
                     }
 
                     break;
                 case Type.MidAir_Overhead:
                     m_timer = m_midAirOverhead.nextAttackDelay;
                     m_attacker.SetDamageModifier(m_midAirOverhead.damageModifier * m_modifier.Get(PlayerModifier.AttackDamage));
+                    m_canAirWhip = false;
 
                     if (m_adjustGravity == true)
                     {
                         m_cacheGravity = m_rigidbody.gravityScale;
-                        m_rigidbody.gravityScale = m_configuration.aerialGravity;
-                        m_rigidbody.velocity = Vector2.zero;
+                        m_rigidbody.gravityScale = m_aerialGravity;
+                        m_rigidbody.velocity = /*Vector2.zero*/new Vector2(m_rigidbody.velocity.x * m_momentumVelocity.x, m_rigidbody.velocity.y * m_momentumVelocity.y);
                     }
 
                     break;
@@ -188,6 +197,11 @@ namespace DChild.Gameplay.Characters.Players.Modules
         public void ResetAerialGravityControl()
         {
             m_adjustGravity = true;
+        }
+
+        public void ResetAirAttacks()
+        {
+            m_canAirWhip = true;
         }
 
         public void ClearExecutedCollision()
