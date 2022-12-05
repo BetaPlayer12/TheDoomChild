@@ -464,6 +464,11 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 m_whipCombo.HandleMovementTimer();
             }
 
+            if (m_whip.CanMove() == false)
+            {
+                m_whip.HandleMovementTimer();
+            }
+
             if (m_state.canAttack == true)
             {
                 m_slashCombo.HandleComboResetTimer();
@@ -968,7 +973,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     }
                 }
 
-                if (/*!m_state.isAttacking &&*/ m_whipCombo.CanMove() && m_slashCombo.CanMove() && m_earthShaker.CanEarthShaker())
+                if (/*!m_state.isAttacking &&*/ m_whipCombo.CanMove() && m_slashCombo.CanMove() && m_whip.CanMove() && m_earthShaker.CanEarthShaker())
                     MoveCharacter(false);
 
                 if (m_input.crouchHeld == false && m_earthShaker.CanEarthShaker())
@@ -1079,6 +1084,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     #region Ground Attacks
                     if (m_input.slashPressed)
                     {
+                        Debug.Log("SLASH COMBO CLICKED");
+                        m_whip.Cancel();
                         m_whipCombo.Cancel();
                         m_whipCombo.Reset();
                         if (m_state.isInShadowMode == true)
@@ -1269,7 +1276,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 }
                 else
                 {
-                    if (/*!m_state.isAttacking &&*/ m_whipCombo.CanMove() && m_slashCombo.CanMove() && m_earthShaker.CanEarthShaker())
+                    if (/*!m_state.isAttacking &&*/ m_whipCombo.CanMove() && m_slashCombo.CanMove() && m_whip.CanMove() && m_earthShaker.CanEarthShaker())
                         MoveCharacter(m_state.isGrabbing);
 
                     if (m_input.horizontalInput != 0)
