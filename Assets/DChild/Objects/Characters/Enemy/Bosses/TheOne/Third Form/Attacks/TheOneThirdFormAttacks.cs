@@ -94,28 +94,24 @@ public class TheOneThirdFormAttacks : MonoBehaviour
     }
 
     //Attacks
-    [Button]
     public IEnumerator TentacleCeilingAttack()
     {
         StartCoroutine(m_tentacleCeilingAttack.ExecuteAttack());
         yield return null;
     }
 
-    [Button]
     public IEnumerator TentacleGrabGroundSlam()
     {
         StartCoroutine(m_tentacleGrabScriptedAttack.ExecuteAttack());
         yield return null;
     }
 
-    [Button]
     public IEnumerator MouthBlastWall()
     {
         StartCoroutine(m_mouthBlastIIAttack.ExecuteAttack());
         yield return null;
     }
 
-    [Button]
     public IEnumerator TentacleGroundStab(Vector2 PlayerPosition)
     {
         StartCoroutine(m_tentacleGroundStabAttack.ExecuteAttack(PlayerPosition));
@@ -129,9 +125,15 @@ public class TheOneThirdFormAttacks : MonoBehaviour
         yield return null;
     }
 
-    [Button]
-    private void TestMoveTentacle()
+    public IEnumerator ChasingGroundTentacle()
     {
-        StartCoroutine(MovingTentacleGround());
+        StartCoroutine(m_chasingGroundTentacleAttack.ExecuteAttack());
+        yield return null;
+    }
+
+    [Button]
+    private void TestChaseTentacle()
+    {
+        StartCoroutine(ChasingGroundTentacle());
     }
 }

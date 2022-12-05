@@ -546,11 +546,9 @@ namespace DChild.Gameplay.Characters.Enemies
         //stuff for tentacle stab attack
         [SerializeField, BoxGroup("Tentacle Stab Attack Stuff")]
         private float m_tentacleStabTimer = 0f;
-        [SerializeField, BoxGroup("Tentacle Stab Attack Stuff")]
-        private Transform m_tentacleStabSpawnHeight;
         private int m_tentacleStabCount = 0;
         private float m_tentacleStabTimerValue;
-        private bool triggerTentacleGroundStab;
+        private bool m_triggerTentacleGroundStab;
 
         //Monolith Slam stuff
         [SerializeField, BoxGroup("Monolith Slam Stuff")]
@@ -816,14 +814,14 @@ namespace DChild.Gameplay.Characters.Enemies
 
                             m_currentAttackCoroutine = StartCoroutine(m_theOneThirdFormAttacks.TentacleGroundStab(m_targetInfo.position));
 
-                            if (!triggerTentacleGroundStab)
-                                triggerTentacleGroundStab = true;
+                            if (!m_triggerTentacleGroundStab)
+                                m_triggerTentacleGroundStab = true;
 
                             //Temporary
                             //m_attackDecider.hasDecidedOnAttack = false;
                             //m_currentAttackCoroutine = null;
                             m_stateHandle.ApplyQueuedState();
-                            if (!triggerTentacleGroundStab)
+                            if (!m_triggerTentacleGroundStab)
                             {
                                 
                             }
