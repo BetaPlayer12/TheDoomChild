@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Sirenix.OdinInspector;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -16,6 +17,12 @@ namespace DChild.Gameplay.Characters.Players.Modules
             Crouch_Forward
         }
 
+        [SerializeField, HideLabel]
+        private WhipAttackStatsInfo m_configuration;
+        [SerializeField]
+        private float m_whipMovementCooldown;
+        [SerializeField]
+        private Vector2 m_momentumVelocity;
         [SerializeField]
         private Info m_groundForward;
         [SerializeField]
@@ -29,6 +36,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         [SerializeField]
         private float m_aerialGravity;
 
+        private bool m_canMove;
         private IPlayerModifer m_modifier;
         private int m_whipAttackAnimationParameter;
         private List<Type> m_executedTypes;
@@ -36,7 +44,9 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private float m_cacheGravity;
         private bool m_adjustGravity;
         private bool m_canAirWhip;
+        private float m_whipMovementCooldownTimer;
 
+        public bool CanMove() => m_canMove;
         public bool CanAirWhip() => m_canAirWhip;
 
         public override void Initialize(ComplexCharacterInfo info)
@@ -50,6 +60,11 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_cacheGravity = m_rigidbody.gravityScale;
             m_adjustGravity = true;
             m_canAirWhip = true;
+        }
+
+        public void SetConfiguration(WhipAttackStatsInfo info)
+        {
+            m_configuration.CopyInfo(info);
         }
 
         public override void Cancel()
@@ -107,6 +122,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void Execute(Type type)
         {
+            m_canMove = false;
             m_state.canAttack = false;
             m_state.isAttacking = true;
             m_state.waitForBehaviour = true;
@@ -116,6 +132,9 @@ namespace DChild.Gameplay.Characters.Players.Modules
             switch (type)
             {
                 case Type.Ground_Forward:
+                    m_state.canAttack = true;
+                    m_state.isAttacking = false;
+                    m_state.waitForBehaviour = false;
                     m_timer = m_groundForward.nextAttackDelay;
                     m_attacker.SetDamageModifier(m_groundForward.damageModifier * m_modifier.Get(PlayerModifier.AttackDamage));
                     break;
@@ -132,7 +151,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     {
                         m_cacheGravity = m_rigidbody.gravityScale;
                         m_rigidbody.gravityScale = m_aerialGravity;
-                        m_rigidbody.velocity = Vector2.zero;
+                        m_rigidbody.velocity = /*Vector2.zero*/new Vector2(m_rigidbody.velocity.x * m_momentumVelocity.x, m_rigidbody.velocity.y * m_momentumVelocity.y);
                     }
 
                     break;
@@ -145,7 +164,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     {
                         m_cacheGravity = m_rigidbody.gravityScale;
                         m_rigidbody.gravityScale = m_aerialGravity;
-                        m_rigidbody.velocity = Vector2.zero;
+                        m_rigidbody.velocity = /*Vector2.zero*/new Vector2(m_rigidbody.velocity.x * m_momentumVelocity.x, m_rigidbody.velocity.y * m_momentumVelocity.y);
                     }
 
                     break;
@@ -161,6 +180,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         {
             base.AttackOver();
 
+            m_canMove = true;
             if (m_state.isDoingCombo == true)
             {
                 m_state.isDoingCombo = false;
@@ -215,6 +235,24 @@ namespace DChild.Gameplay.Characters.Players.Modules
             if (m_executedTypes.Contains(type) == false)
             {
                 m_executedTypes.Add(type);
+            }
+        }
+
+        public void HandleMovementTimer()
+        {
+            if (m_whipMovementCooldownTimer > 0)
+            {
+                m_whipMovementCooldownTimer -= GameplaySystem.time.deltaTime;
+                m_canMove = false;
+            }
+            else
+            {
+                if (!m_animator.GetBool(m_whipAttackAnimationParameter))
+                {
+                    //Debug.Log("Can Move");
+                    m_whipMovementCooldownTimer = m_whipMovementCooldown;
+                    m_canMove = true;
+                }
             }
         }
     }

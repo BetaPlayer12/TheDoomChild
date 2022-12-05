@@ -13,12 +13,15 @@ namespace DChild.Gameplay.SoulSkills
     public class PlayerSoulSkillHandle : SerializedMonoBehaviour
     {
         [SerializeField]
+        private PlayerSoulSkillsConfiguration m_playerSoulSkillsConfiguration;
+        [SerializeField]
         private IPlayer m_player;
         [SerializeField, MinValue(1)]
         private int m_maxActivatedSoulSkill = 9;
         [SerializeField, MinValue(1)]
         private int m_maxSoulCapacity = 1;
 
+        [ShowInInspector, HideInEditorMode]
         private int m_currentSoulCapacity;
         private HashSet<int> m_acquiredSkills;
         private HashSet<int> m_activatedSkillsID;
@@ -56,10 +59,9 @@ namespace DChild.Gameplay.SoulSkills
                     m_activatedSkillsID.Add(data.activatedSoulSkills[i]);
                 }
 
-                m_maxSoulCapacity = data.maxSoulCapacity;
+                m_currentSoulCapacity =  Mathf.Clamp(data.currentSoulCapacity, 0, m_maxSoulCapacity);
             }
 
-            m_currentSoulCapacity = m_maxSoulCapacity;
             SaveDataLoaded?.Invoke(this, EventActionArgs.Empty);
         }
 
@@ -123,6 +125,9 @@ namespace DChild.Gameplay.SoulSkills
 
         public void Initialize()
         {
+            m_maxActivatedSoulSkill = m_playerSoulSkillsConfiguration.maxActivatedSoulSkill;
+            m_maxSoulCapacity = m_playerSoulSkillsConfiguration.maxSoulCapacity;
+
             m_acquiredSkills = new HashSet<int>();
             m_activatedSkillsID = new HashSet<int>();
             m_activatedSkills = new HashSet<SoulSkill>();

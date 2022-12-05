@@ -7,18 +7,20 @@ namespace DChild.Gameplay.Characters.Players.Modules
 {
     public class ExtraJump : MonoBehaviour, IResettableBehaviour, IComplexCharacterModule, ICancellableBehaviour
     {
-        [SerializeField, MinValue(1)]
-        private int m_count;
-        [SerializeField, MinValue(0)]
-        private float m_power;
+        [SerializeField, HideLabel]
+        private ExtraJumpStatsInfo m_configuration;
+
         [SerializeField]
         private ParticleSystem m_doubleJumpFX;
         [SerializeField]
         private Transform m_particleSpawnPosition;
+        [SerializeField, BoxGroup("Sensors")]
+        private RaySensor m_frontWallStickSensor;
 
         private Rigidbody2D m_rigidbody;
         private Animator m_animator;
         private int m_animationParameter;
+        private int m_wallJumpAnimationParameter;
         private int m_currentCount;
 
         public event EventAction<EventActionArgs> ExecuteModule;
@@ -26,33 +28,50 @@ namespace DChild.Gameplay.Characters.Players.Modules
         public void Initialize(ComplexCharacterInfo info)
         {
             m_rigidbody = info.rigidbody;
-            m_currentCount = m_count;
+            m_currentCount = m_configuration.count;
             m_animator = info.animator;
             m_animationParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.DoubleJump);
+            m_wallJumpAnimationParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.WallJump);
+        }
+
+        public void SetConfiguration(ExtraJumpStatsInfo info)
+        {
+            m_configuration.CopyInfo(info);
         }
 
         public bool HasExtras() => m_currentCount > 0;
 
         public void Cancel()
         {
-            m_rigidbody.velocity = Vector2.zero;
+            //m_rigidbody.velocity = Vector2.zero; Comment Out for Momentum Velocity
             m_animator.SetBool(m_animationParameter, false);
+            m_animator.SetBool(m_wallJumpAnimationParameter, false);
         }
 
         public void EndExecution()
         {
             m_animator.SetBool(m_animationParameter, false);
+            m_animator.SetBool(m_wallJumpAnimationParameter, false);
         }
 
-        public void Reset() => m_currentCount = m_count;
+        public void Reset() => m_currentCount = m_configuration.count;
 
         public void Execute()
         {
             if (m_currentCount > 0)
             {
                 m_currentCount--;
-                m_rigidbody.velocity = new Vector2(0, m_power);
-                m_animator.SetBool(m_animationParameter, true);
+                m_rigidbody.velocity = new Vector2(0, m_configuration.power);
+
+                m_frontWallStickSensor.Cast();
+                if (m_frontWallStickSensor.isDetecting)
+                {
+                    m_animator.SetBool(m_wallJumpAnimationParameter, true);
+                }
+                else
+                {
+                    m_animator.SetBool(m_animationParameter, true);
+                }
                 m_doubleJumpFX.Play();
 
                 ParticleSystem particle = Instantiate(m_doubleJumpFX);

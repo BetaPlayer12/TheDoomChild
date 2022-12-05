@@ -8,6 +8,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
 {
     public class WallStick : MonoBehaviour, ICancellableBehaviour, IComplexCharacterModule
     {
+        [SerializeField, HideLabel]
+        private WallStickStatsInfo m_configuration;
         [SerializeField]
         private RaySensor m_wallSensor;
         [SerializeField]
@@ -41,6 +43,11 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_animationParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.WallStick);
             m_jumpAnimationParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.WallJump);
             m_doubleJumpAnimationParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.DoubleJump);
+        }
+
+        public void SetConfiguration(WallStickStatsInfo info)
+        {
+            m_configuration.CopyInfo(info);
         }
 
         public void Cancel()

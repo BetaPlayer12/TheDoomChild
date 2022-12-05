@@ -8,6 +8,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
 {
     public class GroundJump : MonoBehaviour, ICancellableBehaviour, IComplexCharacterModule
     {
+        [SerializeField, HideLabel]
+        private GroundJumpStatsInfo m_configuration;
         [SerializeField, MinValue(0.1f)]
         private float m_power;
         [SerializeField]
@@ -30,6 +32,11 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_state = info.state;
             m_animator = info.animator;
             m_animationParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.Jump);
+        }
+
+        public void SetConfiguration(GroundJumpStatsInfo info)
+        {
+            m_configuration.CopyInfo(info);
         }
 
         public void Cancel()

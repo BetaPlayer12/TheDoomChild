@@ -6,6 +6,10 @@ namespace DChild.Gameplay.Characters.Players.Modules
 {
     public class EarthShaker : AttackBehaviour
     {
+        [SerializeField, HideLabel]
+        private EarthShakerStatsInfo m_configuration;
+        [SerializeField]
+        private Vector2 m_momentumVelocity;
         [SerializeField, MinValue(0.1f)]
         private float m_fallSpeed;
         [SerializeField]
@@ -24,6 +28,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private float m_fallDamageModifier = 1;
         [SerializeField, MinValue(0)]
         private float m_impactDamageModifier = 1;
+        //GIGA NIGGA
 
         private bool m_canEarthShaker;
         private IPlayerModifer m_modifier;
@@ -43,6 +48,11 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_originalGravity = m_rigidbody.gravityScale;
             m_earthShakerAnimationParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.EarthShaker);
             m_canEarthShaker = true;
+        }
+
+        public void SetConfiguration(EarthShakerStatsInfo info)
+        {
+            m_configuration.CopyInfo(info);
         }
 
         public override void Cancel()
@@ -98,7 +108,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         {
             m_damageable.SetInvulnerability(Invulnerability.Level_1);
             m_attacker.SetDamageModifier(m_fallDamageModifier * m_modifier.Get(PlayerModifier.AttackDamage));
-            m_rigidbody.velocity = Vector2.zero;
+            m_rigidbody.velocity = /*Vector2.zero*/new Vector2(m_rigidbody.velocity.x * m_momentumVelocity.x, m_rigidbody.velocity.y * m_momentumVelocity.y);
             m_originalGravity = m_rigidbody.gravityScale;
             m_rigidbody.gravityScale = 0;
             m_chargeFX?.Play(true);
