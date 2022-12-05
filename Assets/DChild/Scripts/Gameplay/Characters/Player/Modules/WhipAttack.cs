@@ -16,6 +16,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
             Crouch_Forward
         }
 
+        [SerializeField, HideLabel]
+        private WhipAttackStatsInfo m_configuration;
         [SerializeField]
         private Vector2 m_momentumVelocity;
         [SerializeField]

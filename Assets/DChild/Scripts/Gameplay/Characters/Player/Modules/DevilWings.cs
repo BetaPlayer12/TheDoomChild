@@ -10,6 +10,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
 {
     public class DevilWings : MonoBehaviour, ICancellableBehaviour, IComplexCharacterModule
     {
+        [SerializeField, HideLabel]
+        private DevilWingsStatsInfo m_configuration;
         [SerializeField]
         private Vector2 m_momentumVelocity;
         [SerializeField, MinValue(0)]
@@ -50,6 +52,11 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_animationParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.IsLevitating);
             m_stackedConsumptionRate = 0;
             m_canLevitate = true;
+        }
+
+        public void SetConfiguration(DevilWingsStatsInfo info)
+        {
+            m_configuration.CopyInfo(info);
         }
 
         public void Cancel()
