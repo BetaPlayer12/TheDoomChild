@@ -81,16 +81,6 @@ namespace DChild.Gameplay.Characters.Enemies
             instance.GetComponentInChildren<MeshRenderer>().sortingLayerName = sortingLayerName;
         }
 
-        private void Start()
-        {
-
-        }
-
-        private void Update()
-        {
-
-        }
-
         [Button]
         private void TestAttack()
         {

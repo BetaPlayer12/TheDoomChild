@@ -121,4 +121,17 @@ public class TheOneThirdFormAttacks : MonoBehaviour
         StartCoroutine(m_tentacleGroundStabAttack.ExecuteAttack(PlayerPosition));
         yield return null;
     }
+
+    [Button]
+    public IEnumerator MovingTentacleGround()
+    {
+        StartCoroutine(m_movingTentacleGroundAttack.ExecuteAttack());
+        yield return null;
+    }
+
+    [Button]
+    private void TestMoveTentacle()
+    {
+        StartCoroutine(MovingTentacleGround());
+    }
 }
