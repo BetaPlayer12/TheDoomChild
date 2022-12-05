@@ -784,6 +784,10 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     }
                 }
                 #endregion
+
+                if (m_input.levitatePressed && !m_devilWings.CanDetectWall() && (m_devilWings?.HaveEnoughSourceForMaintainingHeight() ?? true) == true)
+                    m_devilWings.EnableLevitate();
+
                 if (m_state.isLevitating)
                 {
                     m_devilWings?.MaintainHeight();
