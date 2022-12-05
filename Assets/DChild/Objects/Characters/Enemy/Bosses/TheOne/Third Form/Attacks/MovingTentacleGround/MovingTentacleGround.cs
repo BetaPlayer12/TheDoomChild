@@ -5,18 +5,12 @@ using DChild.Gameplay.Pooling;
 
 namespace DChild.Gameplay.Characters.Enemies
 {
-    public class MovingTentacleGroundBehaviour : MonoBehaviour
+    public class MovingTentacleGround : MonoBehaviour
     {
-        [SerializeField]
-        private float m_moveSpeed;
-        [SerializeField]
-        private float m_attackDuration;
-        private float m_attackDurationValue;
-
         private Vector2 m_originalPosition;
 
         [SerializeField]
-        private bool m_isFacingRight;
+        private bool m_isLeftTentacle;
 
         private bool m_startAttack;
 
@@ -28,9 +22,16 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField]
         private Transform[] m_tentacleObstaclesPositions;
 
+        [SerializeField]
+        private Renderer m_renderer;
+
+        public float moveSpeed;
+        public float attackDuration;
+        private float m_attackDurationValue;
+
         private void Start()
         {
-            m_attackDurationValue = m_attackDuration;
+            m_attackDurationValue = attackDuration;
             m_originalPosition = transform.position;
             GenerateSpikesAndSafeZones();
         }
@@ -40,34 +41,30 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             if (m_startAttack)
             {
-                m_attackDuration -= GameplaySystem.time.deltaTime;
+                attackDuration -= GameplaySystem.time.deltaTime;
 
-                if(m_attackDuration > 0)
+                if(attackDuration > 0)
                 {
-                    if (m_isFacingRight)
-                    {
-                        transform.Translate(Vector2.right * m_moveSpeed * GameplaySystem.time.deltaTime);
-                    }
+                    if (m_isLeftTentacle)
+                        transform.Translate(Vector2.right * moveSpeed * GameplaySystem.time.deltaTime);
                     else
-                    {
-                        transform.Translate(Vector2.left * m_moveSpeed * GameplaySystem.time.deltaTime);
-                    } 
+                        transform.Translate(Vector2.left * moveSpeed * GameplaySystem.time.deltaTime);
                 }
                 else
                 {
+                    if (m_renderer.isVisible)
+                        transform.Translate(Vector2.down * moveSpeed * GameplaySystem.time.deltaTime);
                     ResetTentacle();
                     m_startAttack = false;
-                }
-                
+                }                
             }
-            
         }
 
         private void ResetTentacle()
         {
-            m_attackDuration = m_attackDurationValue;
+            attackDuration = m_attackDurationValue;
             transform.position = m_originalPosition;
-            DestroyChildren();
+            DestroyObstacleChildren();
             GenerateSpikesAndSafeZones();
         }
 
@@ -101,7 +98,7 @@ namespace DChild.Gameplay.Characters.Enemies
             instance.gameObject.transform.SetParent(parent);
         }
 
-        private void DestroyChildren()
+        private void DestroyObstacleChildren()
         {
             for(int i = 0; i < m_tentacleObstaclesPositions.Length; i++)
             {

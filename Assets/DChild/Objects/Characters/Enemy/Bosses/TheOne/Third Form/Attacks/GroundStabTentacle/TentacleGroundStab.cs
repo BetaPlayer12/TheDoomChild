@@ -8,11 +8,9 @@ using Spine.Unity;
 
 namespace DChild.Gameplay.Projectiles
 {
-    public class TentacleLifeSpan : PoolableObject
+    public class TentacleGroundStab : PoolableObject
     {
-        public float m_timer;
-
-        private BoxCollider2D m_tentacleHitBox;
+        public float m_lifespan;
 
         [SerializeField]
         private GameObject[] safeZones;
@@ -40,21 +38,20 @@ namespace DChild.Gameplay.Projectiles
             m_animation.SetAnimation(0, m_attackAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_attackAnimation);
 
-            StartCoroutine(TentacleStay());
+            yield return TentacleStay();
         }
 
         public IEnumerator TentacleStay()
         {
+            InitializeSafeZone();
             m_animation.SetAnimation(0, m_stayAnimation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_stayAnimation);
+            yield return new WaitForSeconds(m_lifespan);
+            yield return Retract();
         }
 
         public IEnumerator Retract()
         {
-            foreach (GameObject safeZone in safeZones)
-            {
-                safeZone.SetActive(false);
-            }
+            RemoveSafeZones();
             m_animation.SetAnimation(0, m_retractAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_retractAnimation);
             
@@ -64,22 +61,29 @@ namespace DChild.Gameplay.Projectiles
         // Start is called before the first frame update
         void Start()
         {
-            m_tentacleHitBox = this.GetComponent<BoxCollider2D>();
-            m_tentacleHitBox.enabled = false;
             StartCoroutine(StabRoutine());
         }
 
         // Update is called once per frame
         void Update()
         {
-            m_timer -= GameplaySystem.time.deltaTime;
-
-            if (m_timer < 0)
-            {
-                StartCoroutine(Retract());
-            }
+            
         }
 
+        private void InitializeSafeZone()
+        {
+            int randomSafeZone = Random.Range(0, safeZones.Length);
+
+            safeZones[randomSafeZone].SetActive(true);
+        }
+
+        private void RemoveSafeZones()
+        {
+            foreach (GameObject safeZone in safeZones)
+            {
+                safeZone.SetActive(false);
+            }
+        }
     }
 }
 
