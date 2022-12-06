@@ -14,10 +14,10 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private DevilWingsStatsInfo m_configuration;
         [SerializeField]
         private Vector2 m_momentumVelocity;
-        [SerializeField, MinValue(0)]
-        private int m_sourceRequiredAmount;
-        [SerializeField, MinValue(0)]
-        private float m_sourceConsumptionRate;
+        //[SerializeField, MinValue(0)]
+        //private int m_sourceRequiredAmount;
+        //[SerializeField, MinValue(0)]
+        //private float m_sourceConsumptionRate;
 
         [SerializeField]
         private ParticleSystem m_wingsFX;
@@ -75,7 +75,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void Execute()
         {
-            m_source.ReduceCurrentValue(m_sourceRequiredAmount);
+            m_source.ReduceCurrentValue(m_configuration.sourceRequiredAmount);
             m_wingsFX.Play();
             m_state.isLevitating = true;
             m_cacheGravity = m_rigidbody.gravityScale;
@@ -107,16 +107,17 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void EnableLevitate()
         {
-            m_canLevitate = true;
+            if (HaveEnoughSourceForExecution())
+                m_canLevitate = true;
         }
 
-        public bool HaveEnoughSourceForExecution() => m_sourceRequiredAmount <= m_source.currentValue;
+        public bool HaveEnoughSourceForExecution() => m_configuration.sourceRequiredAmount <= m_source.currentValue;
 
         public bool HaveEnoughSourceForMaintainingHeight() => m_source.currentValue > 0;
 
         public void ConsumeSource()
         {
-            m_stackedConsumptionRate += m_sourceConsumptionRate * GameplaySystem.time.deltaTime;
+            m_stackedConsumptionRate += m_configuration.sourceConsumptionRate * GameplaySystem.time.deltaTime;
             //Debug.Log(m_stackedConsumptionRate);
             if (m_stackedConsumptionRate >= 1)
             {
