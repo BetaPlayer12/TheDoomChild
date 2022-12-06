@@ -109,4 +109,16 @@ public class TheOneThirdFormAttacks : MonoBehaviour
         StartCoroutine(m_monolithSlamAttack.ExecuteAttack(Target));
         yield return null;
     }
+
+    public IEnumerator TentacleBlast()
+    {
+        StartCoroutine(m_tentacleBlastAttack.ExecuteAttack());
+        yield return null;
+    }
+
+    [Button]
+    private void TestTentacleBlast()
+    {
+        StartCoroutine(TentacleBlast());
+    }
 }
