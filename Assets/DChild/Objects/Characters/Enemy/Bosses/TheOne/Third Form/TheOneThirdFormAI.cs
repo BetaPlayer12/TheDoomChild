@@ -464,7 +464,6 @@ namespace DChild.Gameplay.Characters.Enemies
         protected override void Start()
         {
             //base.Start();
-            m_tentacleStabTimerValue = m_tentacleStabTimer;
             m_mouthBlastOriginalPosition = transform.position;
             m_mouthBlastOneLaser.SetActive(false);
             m_doMouthBlastIAttack = false;
@@ -543,13 +542,6 @@ namespace DChild.Gameplay.Characters.Enemies
         private bool m_moveMouth;
         private int m_SideToStart;
 
-        //stuff for tentacle stab attack
-        [SerializeField, BoxGroup("Tentacle Stab Attack Stuff")]
-        private float m_tentacleStabTimer = 0f;
-        private int m_tentacleStabCount = 0;
-        private float m_tentacleStabTimerValue;
-        private bool m_triggerTentacleGroundStab;
-
         //Monolith Slam stuff
         [SerializeField, BoxGroup("Monolith Slam Stuff")]
         private int m_numOfMonoliths;
@@ -563,12 +555,6 @@ namespace DChild.Gameplay.Characters.Enemies
 
         [SerializeField]
         private TheOneThirdFormAttacks m_theOneThirdFormAttacks;
-
-        [Button]
-        private void GroundStabAttack()
-        {
-            m_theOneThirdFormAttacks.TentacleGroundStab(m_targetInfo.position);
-        }
 
         public override void SetTarget(IDamageable damageable, Character m_target = null)
         {
@@ -763,27 +749,14 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return null;
         }
 
-        void Update()
+        [Button]
+        private void TestMonolithSlamAttack()
         {
-            //if (triggerTentacleGroundStab)
-            //{
-            //    m_tentacleStabTimer -= GameplaySystem.time.deltaTime;
+            StartCoroutine(m_theOneThirdFormAttacks.MonolithSlam(m_targetInfo));
+        }
 
-            //    Vector2 tentacleSpawn = new Vector2(m_targetInfo.position.x, m_tentacleStabSpawnHeight.position.y);
-            //    if (m_tentacleStabTimer <= 0)
-            //    {
-            //        m_currentAttackCoroutine = StartCoroutine(m_tentacleStabAttack.ExecuteAttack(tentacleSpawn));
-            //        m_tentacleStabCount++;
-            //        m_tentacleStabTimer = m_tentacleStabTimerValue;      
-            //    }
-
-            //    if (m_tentacleStabCount > 4)
-            //    {
-            //        m_tentacleStabCount = 0;
-            //        triggerTentacleGroundStab = false;
-            //    }
-            //}
-
+        void Update()
+        { 
             m_phaseHandle.MonitorPhase();
 
             switch (m_stateHandle.currentState)
@@ -812,19 +785,12 @@ namespace DChild.Gameplay.Characters.Enemies
 
                             Debug.Log("Tentacle Stab Attack");
 
-                            m_currentAttackCoroutine = StartCoroutine(m_theOneThirdFormAttacks.TentacleGroundStab(m_targetInfo.position));
-
-                            if (!m_triggerTentacleGroundStab)
-                                m_triggerTentacleGroundStab = true;
+                            m_currentAttackCoroutine = StartCoroutine(m_theOneThirdFormAttacks.TentacleGroundStab(m_targetInfo));
 
                             //Temporary
                             //m_attackDecider.hasDecidedOnAttack = false;
                             //m_currentAttackCoroutine = null;
                             m_stateHandle.ApplyQueuedState();
-                            if (!m_triggerTentacleGroundStab)
-                            {
-                                
-                            }
                             
                             //Temporary
                             break;
@@ -881,11 +847,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         case Attack.Phase2Pattern1:
                             m_pickedCooldown = m_currentFullCooldown[0];
 
-                            if (m_tentacleStabTimer <= 0)
-                            {
-                                m_currentAttackCoroutine = StartCoroutine(m_tentacleStabAttack.ExecuteAttack(m_targetInfo.position));
-                                m_tentacleStabTimer = m_tentacleStabTimerValue;
-                            }
+                            m_currentAttackCoroutine = StartCoroutine(m_theOneThirdFormAttacks.TentacleGroundStab(m_targetInfo));
 
                             //Temporary
                             //m_attackDecider.hasDecidedOnAttack = false;
@@ -965,12 +927,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         case Attack.Phase3Pattern1:
                             m_pickedCooldown = m_currentFullCooldown[0];
 
-                            if (m_tentacleStabTimer <= 0)
-                            {
-                                Debug.Log("Player is detected: " + m_targetInfo.doesTargetExist);
-                                m_currentAttackCoroutine = StartCoroutine(m_tentacleStabAttack.ExecuteAttack(m_targetInfo.position));
-                                m_tentacleStabTimer = m_tentacleStabTimerValue;
-                            }
+                            m_currentAttackCoroutine = StartCoroutine(m_theOneThirdFormAttacks.TentacleGroundStab(m_targetInfo));
 
                             //Temporary
                             //m_attackDecider.hasDecidedOnAttack = false;
@@ -1062,12 +1019,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
                             Debug.Log("TENTACLE GROUND STAB ATTACK");
 
-                            if (m_tentacleStabTimer <= 0)
-                            {
-                                Debug.Log("Player is detected: " + m_targetInfo.doesTargetExist);
-                                m_currentAttackCoroutine = StartCoroutine(m_tentacleStabAttack.ExecuteAttack(m_targetInfo.position));
-                                m_tentacleStabTimer = m_tentacleStabTimerValue;
-                            }
+                            m_currentAttackCoroutine = StartCoroutine(m_theOneThirdFormAttacks.TentacleGroundStab(m_targetInfo));
 
                             //Temporary
                             m_attackDecider.hasDecidedOnAttack = false;

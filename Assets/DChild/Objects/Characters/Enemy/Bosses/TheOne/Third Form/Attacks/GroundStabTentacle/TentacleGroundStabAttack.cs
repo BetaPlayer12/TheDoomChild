@@ -5,6 +5,7 @@ using DChild.Gameplay.Pooling;
 using DChild.Gameplay.Projectiles;
 using Spine.Unity;
 using Sirenix.OdinInspector;
+using DChild.Gameplay.Characters.AI;
 
 namespace DChild.Gameplay.Characters.Enemies
 {
@@ -42,29 +43,60 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return null;
         }
 
-        public IEnumerator ExecuteAttack(Vector2 PlayerPosition)
+        public IEnumerator ExecuteAttack(Vector2 target)
         {
             while(m_tentacleCount < 5)
             {
                 m_tentacleCount++;
                 if (m_tentacleCount == 1)
                 {
-                    InstantiateTentacles(PlayerPosition + m_tentacleOffset, m_groundTentacleStab, m_backgroundSortingLayerID, m_backgroundSortingLayerName);
+                    InstantiateTentacles(new Vector2(target.x, target.y) + m_tentacleOffset, m_groundTentacleStab, m_backgroundSortingLayerID, m_backgroundSortingLayerName);
                     yield return new WaitForSeconds(m_tentacleSpawnInterval);
                 }
                 else if(m_tentacleCount == 2)
                 {
-                    InstantiateTentacles(PlayerPosition + m_tentacleOffset, m_groundTentacleStab, m_midgroundSortingLayerID, m_midgroundSortingLayerName);
+                    InstantiateTentacles(new Vector2(target.x, target.y) + m_tentacleOffset, m_groundTentacleStab, m_midgroundSortingLayerID, m_midgroundSortingLayerName);
                     yield return new WaitForSeconds(m_tentacleSpawnInterval);
                 }
                 else if (m_tentacleCount == 3)
                 {
-                    InstantiateTentacles(PlayerPosition + m_tentacleOffset, m_groundTentacleStab, m_playablegroundSortingLayerID, m_playablegroundSortingLayerName);
+                    InstantiateTentacles(new Vector2(target.x, target.y) + m_tentacleOffset, m_groundTentacleStab, m_playablegroundSortingLayerID, m_playablegroundSortingLayerName);
                     yield return new WaitForSeconds(m_tentacleSpawnInterval);
                 }
                 else if (m_tentacleCount == 4)
                 {
-                    InstantiateTentacles(PlayerPosition + m_tentacleOffset, m_groundTentacleStab, m_foregroundSortingLayerID, m_foregroundSortingLayerName);
+                    InstantiateTentacles(new Vector2(target.x, target.y) + m_tentacleOffset, m_groundTentacleStab, m_foregroundSortingLayerID, m_foregroundSortingLayerName);
+                    yield return new WaitForSeconds(m_tentacleSpawnInterval);
+                }
+            }
+            m_tentacleCount = 0;
+
+            yield return null;
+        }
+
+        public IEnumerator ExecuteAttack(AITargetInfo Target)
+        {
+            while (m_tentacleCount < 5)
+            {
+                m_tentacleCount++;
+                if (m_tentacleCount == 1)
+                {
+                    InstantiateTentacles(new Vector2(Target.position.x, Target.position.y) + m_tentacleOffset, m_groundTentacleStab, m_backgroundSortingLayerID, m_backgroundSortingLayerName);
+                    yield return new WaitForSeconds(m_tentacleSpawnInterval);
+                }
+                else if (m_tentacleCount == 2)
+                {
+                    InstantiateTentacles(new Vector2(Target.position.x, Target.position.y) + m_tentacleOffset, m_groundTentacleStab, m_midgroundSortingLayerID, m_midgroundSortingLayerName);
+                    yield return new WaitForSeconds(m_tentacleSpawnInterval);
+                }
+                else if (m_tentacleCount == 3)
+                {
+                    InstantiateTentacles(new Vector2(Target.position.x, Target.position.y) + m_tentacleOffset, m_groundTentacleStab, m_playablegroundSortingLayerID, m_playablegroundSortingLayerName);
+                    yield return new WaitForSeconds(m_tentacleSpawnInterval);
+                }
+                else if (m_tentacleCount == 4)
+                {
+                    InstantiateTentacles(new Vector2(Target.position.x, Target.position.y) + m_tentacleOffset, m_groundTentacleStab, m_foregroundSortingLayerID, m_foregroundSortingLayerName);
                     yield return new WaitForSeconds(m_tentacleSpawnInterval);
                 }
             }
@@ -79,12 +111,6 @@ namespace DChild.Gameplay.Characters.Enemies
             instance.SpawnAt(spawnPosition, Quaternion.identity);
             instance.GetComponentInChildren<MeshRenderer>().sortingLayerID = sortingLayerID;
             instance.GetComponentInChildren<MeshRenderer>().sortingLayerName = sortingLayerName;
-        }
-
-        [Button]
-        private void TestAttack()
-        {
-            StartCoroutine(ExecuteAttack(new Vector2(0f, 0f)));
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using DChild.Gameplay.Pooling;
+﻿using DChild.Gameplay.Characters.AI;
+using DChild.Gameplay.Pooling;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -67,6 +68,11 @@ namespace DChild.Gameplay.Characters.Enemies
         void Update()
         {
 
+        }
+
+        public IEnumerator ExecuteAttack(AITargetInfo Target)
+        {
+            throw new System.NotImplementedException();
         }
     }
 
