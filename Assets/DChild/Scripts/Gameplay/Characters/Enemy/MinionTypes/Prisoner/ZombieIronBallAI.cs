@@ -203,16 +203,6 @@ namespace DChild.Gameplay.Characters.Enemies
             }
         }
 
-        private bool TargetBlocked()
-        {
-            Vector2 wat = m_character.centerMass.position;
-            RaycastHit2D hit = Physics2D.Raycast(/*m_projectilePoint.position*/wat, m_targetInfo.position - wat, 1000, LayerMask.GetMask("Player") + DChildUtility.GetEnvironmentMask());
-            var eh = hit.transform.gameObject.layer == LayerMask.NameToLayer("Player") ? false : true;
-            Debug.DrawRay(wat, m_targetInfo.position - wat);
-            Debug.Log("Shot is " + eh + " by " + LayerMask.LayerToName(hit.transform.gameObject.layer));
-            return hit.transform.gameObject.layer == LayerMask.NameToLayer("Player") ? false : true;
-        }
-
         private void OnTurnDone(object sender, FacingEventArgs eventArgs)
         {
             m_stateHandle.ApplyQueuedState();
@@ -484,8 +474,6 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void Update()
         {
-            //Debug.Log("Wall Sensor is " + m_wallSensor.isDetecting);
-            //Debug.Log("Edge Sensor is " + m_edgeSensor.isDetecting);
             switch (m_stateHandle.currentState)
             {
                 case State.Detect:
