@@ -367,6 +367,11 @@ namespace DChild.Gameplay.Characters.Players.Modules
                                 m_ledgeGrab?.Execute();
                             }
                         }
+                        else if ((m_input.horizontalInput > 0 && m_character.facing == HorizontalDirection.Left) || (m_input.horizontalInput < 0 && m_character.facing == HorizontalDirection.Right))
+                        {
+                            m_wallSlide?.Cancel();
+                            m_wallStick?.Cancel();
+                        }
 
                         return;
                     }
