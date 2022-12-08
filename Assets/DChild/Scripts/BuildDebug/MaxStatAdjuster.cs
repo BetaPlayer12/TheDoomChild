@@ -64,7 +64,7 @@ namespace DChildDebug.Window
         private void Awake()
         {
             m_currentIncrement = 0;
-            UpdateMaxValue();
+            //UpdateMaxValue();
         }
     }
 }

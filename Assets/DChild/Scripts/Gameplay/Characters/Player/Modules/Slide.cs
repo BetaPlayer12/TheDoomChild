@@ -7,12 +7,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
 {
     public class Slide : MonoBehaviour, IResettableBehaviour, ICancellableBehaviour, IComplexCharacterModule, ISlide
     {
-        [SerializeField, MinValue(0)]
-        private float m_velocity;
-        [SerializeField, MinValue(0)]
-        private float m_cooldown;
-        [SerializeField, MinValue(0)]
-        private float m_duration;
+        [SerializeField, HideLabel]
+        private SlideStatsInfo m_configuration;
 
         private float m_cooldownTimer;
         private float m_durationTimer;
@@ -33,6 +29,11 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_animationParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.IsSliding);
         }
 
+        public void SetConfiguration(SlideStatsInfo info)
+        {
+            m_configuration.CopyInfo(info);
+        }
+
         public void Execute()
         {
             if (m_state.isSliding == false)
@@ -44,7 +45,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
             var direction = (float)m_character.facing;
             m_rigidbody.velocity = new Vector2(0, m_rigidbody.velocity.y);
-            m_rigidbody.AddForce(new Vector2(direction * m_velocity, 0), ForceMode2D.Impulse);
+            m_rigidbody.AddForce(new Vector2(direction * m_configuration.velocity, 0), ForceMode2D.Impulse);
         }
 
         public void Reset()
@@ -73,13 +74,13 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void ResetCooldownTimer()
         {
-            m_cooldownTimer = m_cooldown;
+            m_cooldownTimer = m_configuration.cooldown;
         }
 
         public void HandleDurationTimer() => m_durationTimer -= GameplaySystem.time.deltaTime;
 
         public bool IsSlideDurationOver() => m_durationTimer <= 0;
 
-        public void ResetDurationTimer() => m_durationTimer = m_duration;
+        public void ResetDurationTimer() => m_durationTimer = m_configuration.duration;
     }
 }

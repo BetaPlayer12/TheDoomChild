@@ -8,7 +8,7 @@ namespace DChild.Gameplay.SoulSkills
     public class PlayerSoulSkillData
     {
         [SerializeField]
-        private int m_maxSoulCapacity;
+        private int m_currentSoulCapacity;
         [SerializeField, ValueDropdown("GetAllSoulSkills", IsUniqueList = true)]
         private int[] m_acquiredSoulSkills;
         [SerializeField, ValueDropdown("m_acquiredSoulSkills")]
@@ -18,17 +18,17 @@ namespace DChild.Gameplay.SoulSkills
         {
             m_acquiredSoulSkills = new int[0];
             m_activatedSoulSkills = new int[0];
-            m_maxSoulCapacity = 1;
+            m_currentSoulCapacity = 1;
         }
 
         public PlayerSoulSkillData(int maxSoulCapacity, int[] acquiredSoulSkills, int[] activatedSoulSkills)
         {
             m_acquiredSoulSkills = acquiredSoulSkills;
             m_activatedSoulSkills = activatedSoulSkills;
-            m_maxSoulCapacity = maxSoulCapacity;
+            m_currentSoulCapacity = maxSoulCapacity;
         }
 
-        public int maxSoulCapacity => m_maxSoulCapacity;
+        public int currentSoulCapacity => m_currentSoulCapacity;
         public int[] acquiredSoulSkills => m_acquiredSoulSkills;
         public int[] activatedSoulSkills => m_activatedSoulSkills;
 

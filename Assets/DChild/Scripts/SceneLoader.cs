@@ -5,6 +5,7 @@ using Holysoft.Event;
 using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 using UnityEngine.SceneManagement;
 
 namespace DChild
@@ -88,7 +89,7 @@ namespace DChild
             m_gameplaySceneActive = false;
             LoadingHandle.LoadScenes(m_mainMenu.sceneName);
             Time.timeScale = 1;
-            SceneManager.LoadScene(m_loadingScene.sceneName, LoadSceneMode.Additive);
+            Addressables.LoadSceneAsync(m_loadingScene.sceneName, LoadSceneMode.Additive);
         }
 
         private void AfterSceneDone(object sender, EventActionArgs eventArgs)

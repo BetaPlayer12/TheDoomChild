@@ -147,16 +147,23 @@ namespace DChild.Gameplay.Systems
             //GameEventMessage.SendEvent("Notification");
         }
 
+        [Button]
         public void ToggleBossCombatUI(bool willshow)
         {
-            if (willshow == true)
+            Debug.Log("Boss UI will show: " + willshow);
+            if (willshow)
             {
-                m_bossCombat.Show();
+                Debug.Log("Will show is: " + willshow);
+                m_bossCombat.ShowBossName();
+                m_bossCombat.ShowBossHealth();
             }
             else
             {
-                m_bossCombat.Hide();
+                m_bossCombat.HideBossHealth();
+                m_bossCombat.HideBossName();
             }
+
+            
         }
 
         public void RevealBossName()

@@ -7,10 +7,9 @@ namespace DChild.Gameplay.Characters.Players.Modules
 {
     public class ExtraJump : MonoBehaviour, IResettableBehaviour, IComplexCharacterModule, ICancellableBehaviour
     {
-        [SerializeField, MinValue(1)]
-        private int m_count;
-        [SerializeField, MinValue(0)]
-        private float m_power;
+        [SerializeField, HideLabel]
+        private ExtraJumpStatsInfo m_configuration;
+
         [SerializeField]
         private ParticleSystem m_doubleJumpFX;
         [SerializeField]
@@ -26,9 +25,14 @@ namespace DChild.Gameplay.Characters.Players.Modules
         public void Initialize(ComplexCharacterInfo info)
         {
             m_rigidbody = info.rigidbody;
-            m_currentCount = m_count;
+            m_currentCount = m_configuration.count;
             m_animator = info.animator;
             m_animationParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.Jump);
+        }
+
+        public void SetConfiguration(ExtraJumpStatsInfo info)
+        {
+            m_configuration.CopyInfo(info);
         }
 
         public bool HasExtras() => m_currentCount > 0;
@@ -44,14 +48,14 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_animator.SetBool(m_animationParameter, false);
         }
 
-        public void Reset() => m_currentCount = m_count;
+        public void Reset() => m_currentCount = m_configuration.count;
 
         public void Execute()
         {
             if (m_currentCount > 0)
             {
                 m_currentCount--;
-                m_rigidbody.velocity = new Vector2(0, m_power);
+                m_rigidbody.velocity = new Vector2(0, m_configuration.power);
                 m_animator.SetBool(m_animationParameter, true);
                 m_doubleJumpFX.Play();
 
