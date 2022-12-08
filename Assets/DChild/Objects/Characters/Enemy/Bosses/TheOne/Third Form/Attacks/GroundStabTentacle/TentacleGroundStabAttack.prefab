@@ -26,6 +26,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6119479188711547184}
   m_RootOrder: 0
@@ -57,6 +58,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8489902890844475761}
   m_Father: {fileID: 0}
@@ -74,24 +76,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e65fed36e4339184ca3fea9090d32df0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_tentaclesAtBackground:
-  - {fileID: 8135972556375984720, guid: 1a62af81e65abc14d8e11ec9ae3e33c4, type: 3}
-  - {fileID: 8135972556375984720, guid: 92fcf082e4620f042b4fc2a137698f95, type: 3}
-  - {fileID: 8135972556375984720, guid: 9d5ab61db0cefd34a9b950e96a742d92, type: 3}
-  - {fileID: 8135972556375984720, guid: 024bb5f209d378340944a7a0bc65de73, type: 3}
-  m_tentaclesAtMidground:
-  - {fileID: 8135972556375984720, guid: a927deded2419484bb8847186cd3e1e8, type: 3}
-  - {fileID: 8135972556375984720, guid: a3c8601acf10b2d409ab41c5c50d9b28, type: 3}
-  - {fileID: 8135972556375984720, guid: d79c1a00cfc0c1b499c1f5ad7889427b, type: 3}
-  - {fileID: 8135972556375984720, guid: d0d55aef956e14d4284cd4411fe0c8c7, type: 3}
-  m_tentaclesAtPlayableArea:
-  - {fileID: 8135972556375984720, guid: 495567af260781644b6128e19a990624, type: 3}
-  - {fileID: 8135972556375984720, guid: 176522c64c5fde847ae9bee8e40f6e8a, type: 3}
-  - {fileID: 8135972556375984720, guid: fdcb494a679633a4098155953a171742, type: 3}
-  - {fileID: 8135972556375984720, guid: fd5145a526e9d0b4a902926e58987bc9, type: 3}
-  m_tentaclesAtForeground:
-  - {fileID: 8135972556375984720, guid: 40b3b7a760c69ac458a5fb8ece85e012, type: 3}
-  - {fileID: 8135972556375984720, guid: 522d72d7ee44c5a45b24e7ee35415b07, type: 3}
-  - {fileID: 8135972556375984720, guid: b90fb53092eaa8b4994784c4230f3b5b, type: 3}
-  - {fileID: 8135972556375984720, guid: cafa71404da09c846b2335bd7eed60ce, type: 3}
+  m_groundTentacleStab: {fileID: 8135972556375984720, guid: cd2219acf832722409389111dfcb1fc9,
+    type: 3}
+  m_tentacleSpawnInterval: 2
   m_tentacleStabTimer: 0
+  m_backgroundSortingLayerID: -3
+  m_midgroundSortingLayerID: -2
+  m_playablegroundSortingLayerID: -1
+  m_foregroundSortingLayerID: 2
+  m_backgroundSortingLayerName: Background
+  m_midgroundSortingLayerName: Midground1
+  m_playablegroundSortingLayerName: PlayableGround
+  m_foregroundSortingLayerName: Foreground

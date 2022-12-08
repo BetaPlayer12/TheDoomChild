@@ -8,9 +8,13 @@ namespace DChild.Gameplay.Characters.Enemies
     public class MovingTentacleGroundAttack : MonoBehaviour, IEyeBossAttacks
     {
         [SerializeField]
-        private MovingTentacleGroundBehaviour m_leftTentacle;
+        private MovingTentacleGround m_leftTentacle;
         [SerializeField]
-        private MovingTentacleGroundBehaviour m_rightTentacle;
+        private MovingTentacleGround m_rightTentacle;
+        [SerializeField]
+        private float m_tentacleMoveSpeed;
+        [SerializeField]
+        private float m_tentacleAttackDuration;
 
         public IEnumerator ExecuteAttack()
         {
@@ -33,9 +37,12 @@ namespace DChild.Gameplay.Characters.Enemies
             throw new System.NotImplementedException();
         }
 
-        private void Update()
+        private void Start()
         {
-            
+            m_leftTentacle.attackDuration = m_tentacleAttackDuration;
+            m_leftTentacle.moveSpeed = m_tentacleMoveSpeed;
+            m_rightTentacle.attackDuration = m_tentacleAttackDuration;
+            m_rightTentacle.moveSpeed = m_tentacleMoveSpeed;
         }
     }
 }
