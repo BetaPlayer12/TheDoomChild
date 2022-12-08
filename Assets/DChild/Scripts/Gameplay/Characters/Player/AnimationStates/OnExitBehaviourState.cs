@@ -16,6 +16,8 @@ namespace DChild.Gameplay.Characters.Players
             EndShadowMorphCharge,
             EndComboAttack,
             EndCombo,
+            EndWhipComboAttack,
+            EndWhipCombo,
             EndSwordThrust
         }
 
@@ -49,6 +51,12 @@ namespace DChild.Gameplay.Characters.Players
                         break;
                     case Command.EndCombo:
                         player.ComboEnd();
+                        break;
+                    case Command.EndWhipComboAttack:
+                        player.ComboWhipAttackEnd();
+                        break;
+                    case Command.EndWhipCombo:
+                        player.ComboWhipEnd();
                         break;
                     case Command.EndSwordThrust:
                         player.SwordThrustEnd();

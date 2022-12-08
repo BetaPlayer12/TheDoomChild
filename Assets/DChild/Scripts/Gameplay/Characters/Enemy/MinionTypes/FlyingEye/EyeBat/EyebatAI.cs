@@ -509,6 +509,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 {
                     inRange = true;
                 }
+                m_turnState = State.ReevaluateSituation;
                 DynamicMovement(m_targetInfo.position, moveSpeed);
                 yield return null;
             }
@@ -536,7 +537,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 return;
             }
 
-            if (IsFacing(m_agent.hasPath && TargetBlocked() && !m_groundSensor.allRaysDetecting && !m_roofSensor.allRaysDetecting ? m_agent.segmentDestination : target))
+            if (IsFacing(m_agent.hasPath && (m_targetInfo.isValid ? TargetBlocked() && !m_groundSensor.allRaysDetecting : !m_groundSensor.allRaysDetecting)   && !m_roofSensor.allRaysDetecting ? m_agent.segmentDestination : target))
             {
                 if (m_animation.animationState.GetCurrent(0).IsComplete)
                 {
@@ -570,7 +571,7 @@ namespace DChild.Gameplay.Characters.Enemies
             }
             else
             {
-                m_turnState = State.ReevaluateSituation;
+                //m_turnState = State.ReevaluateSituation;
                 m_stateHandle.OverrideState(State.Turning);
             }
         }
@@ -787,28 +788,30 @@ namespace DChild.Gameplay.Characters.Enemies
                     break;
 
                 case State.ReturnToPatrol:
-                    if (IsFacing(m_startPos))
-                    {
+                    //if (IsFacing(m_startPos))
+                    //{
                         if (Vector2.Distance(m_startPos, transform.position) > 10f)
                         {
                             //var rb2d = GetComponent<Rigidbody2D>();
-                            m_bodycollider.enabled = false;
-                            m_agent.Stop();
-                            Vector3 dir = (m_startPos - (Vector2)m_rigidbody2D.transform.position).normalized;
-                            Debug.Log("Return to Patrol Direction: " + dir);
-                            m_rigidbody2D.MovePosition(m_rigidbody2D.transform.position + dir * m_info.move.speed * Time.fixedDeltaTime);
-                            m_animation.SetAnimation(0, m_info.patrol.animation, true);
+                            //m_bodycollider.enabled = false;
+                            //m_agent.Stop();
+                            //Vector3 dir = (m_startPos - (Vector2)m_rigidbody2D.transform.position).normalized;
+                            //Debug.Log("Return to Patrol Direction: " + dir);
+                            //m_rigidbody2D.MovePosition(m_rigidbody2D.transform.position + dir * m_info.move.speed * Time.fixedDeltaTime);
+                            //m_animation.SetAnimation(0, m_info.patrol.animation, true);
+                            m_turnState = State.ReturnToPatrol;
+                            DynamicMovement(m_startPos, m_info.move.speed);
                         }
                         else
                         {
                             m_stateHandle.OverrideState(State.Patrol);
                         }
-                    }
-                    else
-                    {
-                        m_turnState = State.ReturnToPatrol;
-                        m_stateHandle.SetState(State.Turning);
-                    }
+                    //}
+                    //else
+                    //{
+                    //    m_turnState = State.ReturnToPatrol;
+                    //    m_stateHandle.SetState(State.Turning);
+                    //}
                     break;
 
                 case State.Patrol:

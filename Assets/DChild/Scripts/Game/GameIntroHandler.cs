@@ -20,14 +20,9 @@ namespace DChild
         {
             if (m_hasPlayedIntro == false)
             {
-                Addressables.LoadSceneAsync(m_introScene.sceneName, LoadSceneMode.Additive).Completed += OnIntroSceneLoaded;
+                GameSystem.sceneManager.LoadSceneAsync(m_introScene.sceneName);
                 m_hasPlayedIntro = true;
             }
-        }
-
-        private void OnIntroSceneLoaded(AsyncOperationHandle<SceneInstance> obj)
-        {
-            GameIntro.currentIntroScene = obj.Result;
         }
     }
 }
