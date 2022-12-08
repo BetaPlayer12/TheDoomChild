@@ -755,6 +755,12 @@ namespace DChild.Gameplay.Characters.Enemies
             StartCoroutine(m_theOneThirdFormAttacks.MonolithSlam(m_targetInfo));
         }
 
+        [Button]
+        private void TestSlidingWallAttack()
+        {
+            StartCoroutine(m_theOneThirdFormAttacks.SlidingStoneWallAttack(m_targetInfo));
+        }
+
         void Update()
         { 
             m_phaseHandle.MonitorPhase();

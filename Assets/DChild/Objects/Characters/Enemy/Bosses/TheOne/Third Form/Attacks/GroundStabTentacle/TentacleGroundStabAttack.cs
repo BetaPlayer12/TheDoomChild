@@ -111,6 +111,15 @@ namespace DChild.Gameplay.Characters.Enemies
             instance.SpawnAt(spawnPosition, Quaternion.identity);
             instance.GetComponentInChildren<MeshRenderer>().sortingLayerID = sortingLayerID;
             instance.GetComponentInChildren<MeshRenderer>().sortingLayerName = sortingLayerName;
+            Component[] spriteRenderers;
+            spriteRenderers = instance.GetComponentsInChildren(typeof(SpriteRenderer), true);
+            foreach(SpriteRenderer safeZone in spriteRenderers)
+            {
+                safeZone.sortingLayerID = sortingLayerID;
+                safeZone.sortingLayerName = sortingLayerName;
+                if(sortingLayerName != m_playablegroundSortingLayerName)
+                    safeZone.gameObject.layer = 12;
+            }
         }
     }
 }

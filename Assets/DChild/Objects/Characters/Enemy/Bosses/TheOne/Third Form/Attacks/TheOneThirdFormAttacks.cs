@@ -42,17 +42,6 @@ public class TheOneThirdFormAttacks : MonoBehaviour
     private bool m_moveMouth;
     private int m_SideToStart;
 
-    //Monolith Slam stuff
-    [SerializeField, BoxGroup("Monolith Slam Stuff")]
-    private int m_numOfMonoliths;
-    [SerializeField, BoxGroup("Monolith Slam Stuff")]
-    private int m_monolithCounter;
-    [SerializeField, BoxGroup("Monolith Slam Stuff")]
-    private bool m_triggerMonolithSlamAttack;
-    [SerializeField, BoxGroup("Monolith Slam Stuff")]
-    private float m_monolithTimer;
-    private float m_monolithTimerValue;
-
     private TheOneThirdFormAI m_targetInfo;
 
     // Start is called before the first frame update
@@ -116,9 +105,9 @@ public class TheOneThirdFormAttacks : MonoBehaviour
         yield return null;
     }
 
-    [Button]
-    private void TestTentacleBlast()
+    public IEnumerator SlidingStoneWallAttack(AITargetInfo Target)
     {
-        StartCoroutine(TentacleBlast());
+        StartCoroutine(m_slidingWallAttack.ExecuteAttack(Target));
+        yield return null;
     }
 }
