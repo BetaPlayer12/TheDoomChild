@@ -262,8 +262,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
         {
             var oppositeFacing = m_character.facing == HorizontalDirection.Right ? HorizontalDirection.Left : HorizontalDirection.Right;
             m_character.SetFacing(oppositeFacing);
-            //Test
-            Debug.Log("Zee Flipped Position");
             m_basicSlashes.Cancel();
             m_slashCombo.Cancel();
             m_whip.Cancel();
@@ -358,7 +356,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
             {
                 if (m_earthShaker.CanEarthShaker())
                 {
-                    Debug.Log("LEDGE GRAB IS CHECKING");
                     if (m_state.isStickingToWall)
                     {
                         if (m_input.verticalInput > 0)
@@ -462,6 +459,11 @@ namespace DChild.Gameplay.Characters.Players.Modules
             if (m_whipCombo.CanMove() == false)
             {
                 m_whipCombo.HandleMovementTimer();
+            }
+
+            if (m_whip.CanMove() == false)
+            {
+                m_whip.HandleMovementTimer();
             }
 
             if (m_state.canAttack == true)
@@ -779,6 +781,10 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     }
                 }
                 #endregion
+
+                if (m_input.levitateHeld && !m_devilWings.CanDetectWall() && (m_devilWings?.HaveEnoughSourceForMaintainingHeight() ?? true) == true)
+                    m_devilWings.EnableLevitate();
+
                 if (m_state.isLevitating)
                 {
                     m_devilWings?.MaintainHeight();
@@ -838,7 +844,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 }
                 else if (m_state.isDoingSwordThrust)
                 {
-                    //Debug.Log("Sword Thrusting!");
                     HandleSwordThrust();
                     return;
                 }
@@ -968,7 +973,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     }
                 }
 
-                if (/*!m_state.isAttacking &&*/ m_whipCombo.CanMove() && m_slashCombo.CanMove() && m_earthShaker.CanEarthShaker())
+                if (/*!m_state.isAttacking &&*/ m_whipCombo.CanMove() && m_slashCombo.CanMove() && m_whip.CanMove() && m_earthShaker.CanEarthShaker())
                     MoveCharacter(false);
 
                 if (m_input.crouchHeld == false && m_earthShaker.CanEarthShaker())
@@ -1079,6 +1084,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     #region Ground Attacks
                     if (m_input.slashPressed)
                     {
+                        m_whip.Cancel();
                         m_whipCombo.Cancel();
                         m_whipCombo.Reset();
                         if (m_state.isInShadowMode == true)
@@ -1269,7 +1275,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 }
                 else
                 {
-                    if (/*!m_state.isAttacking &&*/ m_whipCombo.CanMove() && m_slashCombo.CanMove() && m_earthShaker.CanEarthShaker())
+                    if (/*!m_state.isAttacking &&*/ m_whipCombo.CanMove() && m_slashCombo.CanMove() && m_whip.CanMove() && m_earthShaker.CanEarthShaker())
                         MoveCharacter(m_state.isGrabbing);
 
                     if (m_input.horizontalInput != 0)
@@ -1432,10 +1438,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         private void MoveCharacter(bool isGrabbing)
         {
-            //Debug.Log("Character IS MOVING");
             if (!IsFacingInput())
             {
-                //Debug.Log("Character Turning");
                 m_basicSlashes.Cancel();
                 m_slashCombo.Cancel();
                 m_whip.Cancel();
