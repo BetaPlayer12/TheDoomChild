@@ -14,8 +14,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private RaySensor m_wallSensor;
         [SerializeField]
         private RaySensor m_heightSensor;
-        [SerializeField]
-        private float m_wallStickOffset;
+        //[SerializeField]
+        //private float m_wallStickOffset;
         [SerializeField, BoxGroup("Sensors")]
         private RaySensor m_frontWallStickSensor;
         [SerializeField, BoxGroup("Sensors")]
@@ -86,7 +86,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     {
                         if (m_cacheCollider.CompareTag("InvisibleWall") == false)
                         {
-                            if (hits[i].distance < m_wallStickOffset)
+                            if (hits[i].distance < /*m_wallStickOffset*/m_configuration.wallStickOffset)
                             {
                                 isValid = true;
 
