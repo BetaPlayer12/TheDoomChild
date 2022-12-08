@@ -25,6 +25,8 @@ public class TheOneThirdFormAttacks : MonoBehaviour
     private TentacleBlastAttack m_tentacleBlastAttack;
     [SerializeField, BoxGroup("The One Third Form Attacks")]
     private TentacleGrabAttack m_tentacleGrabScriptedAttack;
+    [SerializeField, BoxGroup("The One Third Form Attacks")]
+    private BubbleImprisonmentAttack m_bubbleImprisonmentAttack;
 
     [SerializeField, BoxGroup("Mouth Blast I Stuff")]
     private GameObject m_mouthBlastOneLaser;
@@ -44,18 +46,6 @@ public class TheOneThirdFormAttacks : MonoBehaviour
 
     private TheOneThirdFormAI m_targetInfo;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
     //Attacks
     public IEnumerator TentacleCeilingAttack()
     {
@@ -63,7 +53,7 @@ public class TheOneThirdFormAttacks : MonoBehaviour
         yield return null;
     }
 
-    public IEnumerator TentacleGrabGroundSlam()
+    public IEnumerator TentacleGrab()
     {
         StartCoroutine(m_tentacleGrabScriptedAttack.ExecuteAttack());
         yield return null;
@@ -108,6 +98,12 @@ public class TheOneThirdFormAttacks : MonoBehaviour
     public IEnumerator SlidingStoneWallAttack(AITargetInfo Target)
     {
         StartCoroutine(m_slidingWallAttack.ExecuteAttack(Target));
+        yield return null;
+    }
+
+    public IEnumerator BubbleImprisonment(AITargetInfo Target)
+    {
+        StartCoroutine(m_bubbleImprisonmentAttack.ExecuteAttack(Target));
         yield return null;
     }
 }

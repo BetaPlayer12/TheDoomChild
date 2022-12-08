@@ -751,24 +751,12 @@ MonoBehaviour:
   m_agent: {fileID: 4269384281896939962}
   m_leftWallSensor: {fileID: 4269384281852954654}
   m_rightWallSensor: {fileID: 4269384281483823036}
-  m_tentacleStabAttack: {fileID: 0}
-  m_tentacleCeilingAttack: {fileID: 0}
-  m_movingTentacleGroundAttack: {fileID: 0}
-  m_chasingGroundTentacleAttack: {fileID: 0}
-  m_mouthBlastIIAttack: {fileID: 0}
-  m_slidingWallAttack: {fileID: 0}
-  m_monolithSlamAttack: {fileID: 0}
-  m_tentacleBlastAttack: {fileID: 0}
   m_mouthBlastOneLaser: {fileID: 4269384281860038388}
   m_mouthBlastLeftSide: {fileID: 0}
   m_mouthBlastRightSide: {fileID: 0}
   m_mouthBlastMoveSpeed: 5
   m_mouthBlastOriginalPosition: {x: 0, y: 0}
   m_blackBloodFlood: {fileID: 0}
-  m_numOfMonoliths: 3
-  m_monolithCounter: 0
-  m_triggerMonolithSlamAttack: 0
-  m_monolithTimer: 3
   m_theOneThirdFormAttacks: {fileID: 352779732458433666}
 --- !u!114 &4269384281139691438
 MonoBehaviour:
@@ -2012,6 +2000,7 @@ Transform:
   - {fileID: 7641428553381898716}
   - {fileID: 6367123805211783164}
   - {fileID: 5187115986175276177}
+  - {fileID: 2993298581665207380}
   m_Father: {fileID: 4269384280951534902}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2036,6 +2025,7 @@ MonoBehaviour:
   m_monolithSlamAttack: {fileID: 6497036398069119881}
   m_tentacleBlastAttack: {fileID: 7641428553381898717}
   m_tentacleGrabScriptedAttack: {fileID: 5187115986175276176}
+  m_bubbleImprisonmentAttack: {fileID: 2993298581665207381}
   m_mouthBlastOneLaser: {fileID: 0}
   m_mouthBlastLeftSide: {fileID: 0}
   m_mouthBlastRightSide: {fileID: 0}
@@ -4372,6 +4362,93 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 3187536289471933815}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &3354521245884378126
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 2372867675176259316}
+    m_Modifications:
+    - target: {fileID: 506640113575770202, guid: 83585709cb6e6374297aaffeb9bc81fe,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 506640113575770202, guid: 83585709cb6e6374297aaffeb9bc81fe,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 506640113575770202, guid: 83585709cb6e6374297aaffeb9bc81fe,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -15
+      objectReference: {fileID: 0}
+    - target: {fileID: 506640113575770202, guid: 83585709cb6e6374297aaffeb9bc81fe,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 506640113575770202, guid: 83585709cb6e6374297aaffeb9bc81fe,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 506640113575770202, guid: 83585709cb6e6374297aaffeb9bc81fe,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 506640113575770202, guid: 83585709cb6e6374297aaffeb9bc81fe,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 506640113575770202, guid: 83585709cb6e6374297aaffeb9bc81fe,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 506640113575770202, guid: 83585709cb6e6374297aaffeb9bc81fe,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 506640113575770202, guid: 83585709cb6e6374297aaffeb9bc81fe,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 506640113575770202, guid: 83585709cb6e6374297aaffeb9bc81fe,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 506640113575770204, guid: 83585709cb6e6374297aaffeb9bc81fe,
+        type: 3}
+      propertyPath: m_Name
+      value: BubbleImprisonmentAttack
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 83585709cb6e6374297aaffeb9bc81fe, type: 3}
+--- !u!4 &2993298581665207380 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 506640113575770202, guid: 83585709cb6e6374297aaffeb9bc81fe,
+    type: 3}
+  m_PrefabInstance: {fileID: 3354521245884378126}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2993298581665207381 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 506640113575770203, guid: 83585709cb6e6374297aaffeb9bc81fe,
+    type: 3}
+  m_PrefabInstance: {fileID: 3354521245884378126}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c0c7f203ba13da42b10e5a3ac5dbf44, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &3482860451488952871
 PrefabInstance:
   m_ObjectHideFlags: 0
