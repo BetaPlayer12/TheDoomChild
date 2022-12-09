@@ -8,14 +8,17 @@ namespace DChild.Gameplay.Characters.Players.Modules
 {
     public class WhipAttackCombo : AttackBehaviour
     {
+        [SerializeField, HideLabel]
+        private WhipAttackComboStatsInfo m_configuration;
+
         [SerializeField]
         private SkeletonAnimation m_attackFX;
-        [SerializeField]
-        private int m_whipStateAmount;
-        [SerializeField]
-        private float m_whipComboCooldown;
-        [SerializeField]
-        private float m_whipMovementCooldown;
+        //[SerializeField]
+        //private int m_whipStateAmount;
+        //[SerializeField]
+        //private float m_whipComboCooldown;
+        //[SerializeField]
+        //private float m_whipMovementCooldown;
         [SerializeField]
         private List<Info> m_whipComboInfo;
 
@@ -24,8 +27,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private Character m_character;
         [SerializeField, BoxGroup("Physics")]
         private Rigidbody2D m_physics;
-        [SerializeField, BoxGroup("Physics")]
-        private List<Vector2> m_pushForce;
+        //[SerializeField, BoxGroup("Physics")]
+        //private List<Vector2> m_pushForce;
         [SerializeField, BoxGroup("Sensors")]
         private RaySensor m_enemySensor;
         [SerializeField, BoxGroup("Sensors")]
@@ -63,12 +66,17 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_currentVisualWhipState = 0;
             m_comboAttackDelayTimer = -1;
             m_comboResetDelayTimer = -1;
-            m_whipComboCooldownTimer = m_whipComboCooldown;
+            m_whipComboCooldownTimer = /*m_whipComboCooldown*/m_configuration.whipComboCooldown;
             m_allowAttackDelayHandling = true;
             m_canWhipCombo = true;
 
             m_fxAnimator = m_attackFX.gameObject.GetComponentInChildren<Animator>();
             m_skeletonAnimation = m_attackFX.gameObject.GetComponent<SkeletonAnimation>();
+        }
+
+        public void SetConfiguration(WhipAttackComboStatsInfo info)
+        {
+            m_configuration.CopyInfo(info);
         }
 
         public override void Reset()
@@ -84,7 +92,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         public void Execute()
         {
             //Debug.Log("Clicked Whip Combo Attack");
-            m_currentWhipState += m_currentWhipState >= m_whipStateAmount -1 ? 0 : 1;
+            m_currentWhipState += m_currentWhipState >= /*m_whipStateAmount*/m_configuration.whipStateAmount - 1 ? 0 : 1;
             m_state.waitForBehaviour = true;
             m_state.isAttacking = true;
             m_state.canAttack = false;
@@ -95,7 +103,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_currentVisualWhipState = m_currentWhipState;
 
             m_comboResetDelayTimer = m_whipComboInfo[m_currentWhipState].nextAttackDelay;
-            m_whipMovementCooldownTimer = m_whipMovementCooldown;
+            m_whipMovementCooldownTimer = /*m_whipMovementCooldown*/m_configuration.whipMovementCooldown;
         }
 
         public override void Cancel()
@@ -142,7 +150,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_edgeSensor.Cast();
             if (!m_enemySensor.isDetecting && !m_wallSensor.allRaysDetecting && m_edgeSensor.isDetecting)
             {
-                m_physics.AddForce(m_character.facing == HorizontalDirection.Right ? m_pushForce[m_currentVisualWhipState] : -m_pushForce[m_currentVisualWhipState], ForceMode2D.Impulse);
+                m_physics.AddForce(m_character.facing == HorizontalDirection.Right ? m_configuration.pushForce[m_currentVisualWhipState] : -m_configuration.pushForce[m_currentVisualWhipState], ForceMode2D.Impulse);
             }
         }
 
@@ -154,7 +162,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_canMove = false;
             m_animator.SetBool(m_whipAttackAnimationParameter, false);
 
-            if (m_currentWhipState >= m_whipStateAmount -1)
+            if (m_currentWhipState >= /*m_whipStateAmount*/m_configuration.whipStateAmount - 1)
             {
                 m_currentWhipState = -1;
                 m_canWhipCombo = false;
@@ -261,7 +269,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             else
             {
                 //Debug.Log("Whip Cooldown Done");
-                m_whipComboCooldownTimer = m_whipComboCooldown;
+                m_whipComboCooldownTimer = /*m_whipComboCooldown*/m_configuration.whipComboCooldown;
                 m_canWhipCombo = true;
             }
         }
@@ -276,7 +284,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             else
             {
                 //Debug.Log("Can Move");
-                m_whipMovementCooldownTimer = m_whipMovementCooldown;
+                m_whipMovementCooldownTimer = /*m_whipMovementCooldown*/m_configuration.whipMovementCooldown;
                 m_canMove = true;
             }
         }
