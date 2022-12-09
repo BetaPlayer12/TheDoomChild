@@ -28,22 +28,6 @@ public class TheOneThirdFormAttacks : MonoBehaviour
     [SerializeField, BoxGroup("The One Third Form Attacks")]
     private BubbleImprisonmentAttack m_bubbleImprisonmentAttack;
 
-    [SerializeField, BoxGroup("Mouth Blast I Stuff")]
-    private GameObject m_mouthBlastOneLaser;
-    [SerializeField, BoxGroup("Mouth Blast I Stuff")]
-    private Transform m_mouthBlastLeftSide;
-    [SerializeField, BoxGroup("Mouth Blast I Stuff")]
-    private Transform m_mouthBlastRightSide;
-    [SerializeField, BoxGroup("Mouth Blast I Stuff")]
-    private float m_mouthBlastMoveSpeed;
-    [SerializeField, BoxGroup("Mouth Blast I Stuff")]
-    private Vector2 m_mouthBlastOriginalPosition;
-    [SerializeField, BoxGroup("Mouth Blast I Stuff")]
-    private BlackBloodFlood m_blackBloodFlood;
-    private bool m_doMouthBlastIAttack;
-    private bool m_moveMouth;
-    private int m_SideToStart;
-
     private TheOneThirdFormAI m_targetInfo;
 
     //Attacks
