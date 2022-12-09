@@ -1,3 +1,4 @@
+using DChild.Gameplay.Characters.AI;
 using DChild.Gameplay.Characters.Enemies;
 using System.Collections;
 using System.Collections.Generic;
@@ -16,6 +17,11 @@ public class TentacleGrabAttack : MonoBehaviour, IEyeBossAttacks
     }
 
     public IEnumerator ExecuteAttack(Vector2 PlayerPosition)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public IEnumerator ExecuteAttack(AITargetInfo Target)
     {
         throw new System.NotImplementedException();
     }

@@ -33,8 +33,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private Info m_midAirOverhead;
         [SerializeField]
         private Info m_crouchForward;
-        [SerializeField]
-        private float m_aerialGravity;
+        //[SerializeField]
+        //private float m_aerialGravity;
 
         private bool m_canMove;
         private IPlayerModifer m_modifier;
@@ -150,7 +150,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     if (m_adjustGravity == true)
                     {
                         m_cacheGravity = m_rigidbody.gravityScale;
-                        m_rigidbody.gravityScale = m_aerialGravity;
+                        m_rigidbody.gravityScale = /*m_aerialGravity*/m_configuration.aerialGravity;
                         m_rigidbody.velocity = /*Vector2.zero*/new Vector2(m_rigidbody.velocity.x * m_momentumVelocity.x, m_rigidbody.velocity.y * m_momentumVelocity.y);
                     }
 
@@ -163,7 +163,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     if (m_adjustGravity == true)
                     {
                         m_cacheGravity = m_rigidbody.gravityScale;
-                        m_rigidbody.gravityScale = m_aerialGravity;
+                        m_rigidbody.gravityScale = /*m_aerialGravity*/m_configuration.aerialGravity;
                         m_rigidbody.velocity = /*Vector2.zero*/new Vector2(m_rigidbody.velocity.x * m_momentumVelocity.x, m_rigidbody.velocity.y * m_momentumVelocity.y);
                     }
 

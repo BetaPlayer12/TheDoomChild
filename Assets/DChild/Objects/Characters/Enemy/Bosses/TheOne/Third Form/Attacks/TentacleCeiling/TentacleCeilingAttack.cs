@@ -4,6 +4,7 @@ using UnityEngine;
 using DChild.Gameplay.Pooling;
 using Sirenix.OdinInspector;
 using Spine.Unity;
+using DChild.Gameplay.Characters.AI;
 
 namespace DChild.Gameplay.Characters.Enemies
 {
@@ -45,6 +46,11 @@ namespace DChild.Gameplay.Characters.Enemies
         }
 
         public IEnumerator ExecuteAttack(Vector2 PlayerPosition)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public IEnumerator ExecuteAttack(AITargetInfo Target)
         {
             throw new System.NotImplementedException();
         }
