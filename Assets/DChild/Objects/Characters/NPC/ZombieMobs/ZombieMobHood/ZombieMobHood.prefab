@@ -26,6 +26,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 6.71, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2166308357139259099}
   m_RootOrder: 1
@@ -45,6 +46,7 @@ GameObject:
   - component: {fileID: 2166308357037627579}
   - component: {fileID: 7852236734596173161}
   - component: {fileID: 6239757389530886338}
+  - component: {fileID: 3911091702639401440}
   m_Layer: 13
   m_Name: ZombieMobHood
   m_TagString: Character
@@ -62,6 +64,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 37532379395800959}
   - {fileID: 2166308357139259099}
@@ -86,6 +89,7 @@ MonoBehaviour:
   m_isolatedObject: {fileID: 2166308357037627579}
   m_physics: {fileID: 0}
   m_colliders: {fileID: 0}
+  m_AttackFX: {fileID: 0}
   m_facing: 1
   m_bodyReference:
     m_default: {fileID: 0}
@@ -171,10 +175,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b86047542d69154baa4237b097c65c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_skins:
-  - MobFemale1
-  - MobFemale2
-  - MobFemale3
+  m_variation: []
+  m_variationData: []
 --- !u!114 &6239757389530886338
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -189,6 +191,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_animationTracks: []
   m_skeletonAnimation: {fileID: 2166308357139259098}
+--- !u!114 &3911091702639401440
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2166308357037627558}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a5c74458f864974dbe651e07bb47a8c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_loot: {fileID: 11400000, guid: f65c3bc3ba7fc6247bef9d50653653c9, type: 2}
+  m_dropWhenDestroyed: 1
 --- !u!1 &2166308357139259096
 GameObject:
   m_ObjectHideFlags: 0
@@ -219,6 +235,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0.012146, y: 0.46, z: 0}
   m_LocalScale: {x: 2.0695, y: 2.0695, z: 2.0695}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 512887124398228035}
   - {fileID: 5507744837582957700}
@@ -244,10 +261,12 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -272,6 +291,7 @@ MeshRenderer:
   m_SortingLayerID: -1150295711
   m_SortingLayer: -1
   m_SortingOrder: 98
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!114 &2166308357139259098
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -353,6 +373,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6717366088956760865}
   m_RootOrder: 1
@@ -408,6 +429,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2166308357037627577}
   m_RootOrder: 0
@@ -452,6 +474,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6700434053079323588}
   - {fileID: 8524864338037271408}
@@ -505,6 +528,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6717366088956760865}
   m_RootOrder: 0
@@ -565,6 +589,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2166308357139259099}
   m_RootOrder: 0

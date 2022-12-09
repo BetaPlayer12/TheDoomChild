@@ -265,8 +265,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnFlinchEnd(object sender, EventActionArgs eventArgs)
         {
-            m_lifedrain.setrage(true);
-            m_isEnraged = true;
+           // m_lifedrain.setrage(true);
+           // m_isEnraged = true;
             if (!m_targetInfo.isValid)
             {
                 m_stateHandle.ApplyQueuedState();
@@ -404,14 +404,14 @@ namespace DChild.Gameplay.Characters.Enemies
         }
         private IEnumerator HealRoutine()
         {
-            m_animation.SetAnimation(0, m_info.healAnticipationAnimation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.healAnticipationAnimation);
-            m_lifedrain.AfterRage();
-            m_animation.SetAnimation(0, m_info.healAnimation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.healAnimation);
-            m_animation.SetAnimation(0, m_info.healEndAnimation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.healEndAnimation);
-            m_agent.Stop();
+            //m_animation.SetAnimation(0, m_info.healAnticipationAnimation, false);
+            //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.healAnticipationAnimation);
+            //m_lifedrain.AfterRage();
+           // m_animation.SetAnimation(0, m_info.healAnimation, false);
+           // yield return new WaitForAnimationComplete(m_animation.animationState, m_info.healAnimation);
+           // m_animation.SetAnimation(0, m_info.healEndAnimation, false);
+           // yield return new WaitForAnimationComplete(m_animation.animationState, m_info.healEndAnimation);
+           // m_agent.Stop();
             m_lifedrain.setrage(false);
             m_isEnraged = false;
             m_animation.SetAnimation(0, m_info.idleAnimation, true);

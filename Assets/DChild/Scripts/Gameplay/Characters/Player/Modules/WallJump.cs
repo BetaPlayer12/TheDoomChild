@@ -9,10 +9,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
     public class WallJump : MonoBehaviour, IComplexCharacterModule
     {
-        [SerializeField]
-        private Vector2 m_power;
-        [SerializeField, MinValue(0f)]
-        private float m_disableInputDuration;
+        [SerializeField, HideLabel]
+        private WallJumpStatsInfo m_configuration;
 
         private Character m_character;
         private Rigidbody2D m_rigidbody;
@@ -31,9 +29,14 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_animationParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.Jump);
         }
 
+        public void SetConfiguration(WallJumpStatsInfo info)
+        {
+            m_configuration.CopyInfo(info);
+        }
+
         public void JumpAway()
         {
-            var velocity = m_power;
+            var velocity = m_configuration.power;
             velocity.x *= (float)m_character.facing;
             m_rigidbody.velocity = velocity;
             ExecuteModule?.Invoke(this, EventActionArgs.Empty);
@@ -44,7 +47,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private IEnumerator DisableInputRoutine()
         {
             m_state.waitForBehaviour = true;
-            yield return new WaitForSeconds(m_disableInputDuration);
+            yield return new WaitForSeconds(m_configuration.disableInputDuration);
             m_state.waitForBehaviour = false;
         }
     }

@@ -140,10 +140,17 @@ namespace DChild.Gameplay.Characters.Enemies
 
         public override void SetTarget(IDamageable damageable, Character m_target = null)
         {
-            base.SetTarget(damageable);
-            if (m_stateHandle.currentState != State.Chase)
+            if (damageable != null)
             {
-                m_stateHandle.SetState(State.Detect);
+                base.SetTarget(damageable);
+                if (m_stateHandle.currentState != State.Chase)
+                {
+                    m_stateHandle.SetState(State.Detect);
+                }
+            }
+            else
+            {
+                //m_targetInfo.Set(null, null);
             }
         }
 
@@ -237,7 +244,7 @@ namespace DChild.Gameplay.Characters.Enemies
             base.Awake();
             m_patrolHandle.TurnRequest += OnTurnRequest;
             m_turnHandle.TurnDone += OnTurnDone;
-            //m_flinchHandle.FlinchStart += OnFlinchStart;
+           
             m_stateHandle = new StateHandle<State>(State.Patrol, State.WaitBehaviourEnd);
         }
 
@@ -281,29 +288,30 @@ namespace DChild.Gameplay.Characters.Enemies
 
                 case State.ReevaluateSituation:
                     //How far is target, is it worth it to chase or go back to patrol
-                    m_stateHandle.SetState(State.Patrol);
-
-                    if (m_patienceRoutine != null /*&& m_targetInfo.isValid*/)
+                    if (m_targetInfo.isValid)
                     {
-                        StopCoroutine(m_patienceRoutine);
-                        m_patienceRoutine = null;
+                        m_stateHandle.SetState(State.Chase);
                     }
-
-                    if (m_sneerRoutine != null /*&& m_targetInfo.isValid*/)
+                    else
                     {
-                        StopCoroutine(m_sneerRoutine);
-                        m_sneerRoutine = null;
+                        m_stateHandle.SetState(State.Patrol);
                     }
                     break;
 
                 case State.Detect:
+                    m_movement.Stop();
+                    m_selfCollider.enabled = false;
+                    m_flinchHandle.m_autoFlinch = false;
                     if (IsFacingTarget())
                     {
+                        m_stateHandle.Wait(State.ReevaluateSituation);
                         StartCoroutine(DetectRoutine());
                     }
                     else
                     {
-                        m_stateHandle.SetState(State.Turning);
+                        m_turnState = State.Detect;
+                        if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
+                            m_stateHandle.SetState(State.Turning);
                     }
                     break;
 
@@ -316,11 +324,12 @@ namespace DChild.Gameplay.Characters.Enemies
                             m_animation.EnableRootMotion(false, false);
                             m_animation.SetAnimation(0, m_info.move.animation, true);
                             m_movement.MoveTowards(Vector2.one * transform.localScale.x, distance);
-                            float poisonCloudTimer = 0f;
-                            poisonCloudTimer += GameplaySystem.time.deltaTime;
-                            if (poisonCloudTimer % 2 == 0)
+                            cloudTimer -= GameplaySystem.time.deltaTime;
+
+                            if (cloudTimer < 0)
                             {
                                 InstantiateBlobPoisonCloud(transform.position);
+                                cloudTimer = 3f;
                             }
                         }
                         else
@@ -342,7 +351,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator DetectRoutine()
         {
-            m_stateHandle.SetState(State.Chase);
+            m_stateHandle.OverrideState(State.ReevaluateSituation);
             yield return null;
         }
 
