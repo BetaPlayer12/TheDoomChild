@@ -19,10 +19,10 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         [SerializeField, HideLabel]
         private WhipAttackStatsInfo m_configuration;
-        [SerializeField]
-        private float m_whipMovementCooldown;
-        [SerializeField]
-        private Vector2 m_momentumVelocity;
+        //[SerializeField]
+        //private float m_whipMovementCooldown;
+        //[SerializeField]
+        //private Vector2 m_momentumVelocity;
         [SerializeField]
         private Info m_groundForward;
         [SerializeField]
@@ -151,7 +151,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     {
                         m_cacheGravity = m_rigidbody.gravityScale;
                         m_rigidbody.gravityScale = /*m_aerialGravity*/m_configuration.aerialGravity;
-                        m_rigidbody.velocity = /*Vector2.zero*/new Vector2(m_rigidbody.velocity.x * m_momentumVelocity.x, m_rigidbody.velocity.y * m_momentumVelocity.y);
+                        m_rigidbody.velocity = /*Vector2.zero*/new Vector2(m_rigidbody.velocity.x * m_configuration.momentumVelocity.x, m_rigidbody.velocity.y * m_configuration.momentumVelocity.y);
                     }
 
                     break;
@@ -164,7 +164,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     {
                         m_cacheGravity = m_rigidbody.gravityScale;
                         m_rigidbody.gravityScale = /*m_aerialGravity*/m_configuration.aerialGravity;
-                        m_rigidbody.velocity = /*Vector2.zero*/new Vector2(m_rigidbody.velocity.x * m_momentumVelocity.x, m_rigidbody.velocity.y * m_momentumVelocity.y);
+                        m_rigidbody.velocity = /*Vector2.zero*/new Vector2(m_rigidbody.velocity.x * m_configuration.momentumVelocity.x, m_rigidbody.velocity.y * m_configuration.momentumVelocity.y);
                     }
 
                     break;
@@ -250,7 +250,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 if (!m_animator.GetBool(m_whipAttackAnimationParameter))
                 {
                     //Debug.Log("Can Move");
-                    m_whipMovementCooldownTimer = m_whipMovementCooldown;
+                    m_whipMovementCooldownTimer = /*m_whipMovementCooldown*/m_configuration.whipMovementCooldown;
                     m_canMove = true;
                 }
             }
