@@ -292,6 +292,8 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             //m_Audiosource.clip = m_DeadClip;
             //m_Audiosource.Play();
+            if (!IsFacingTarget())
+                CustomTurn();
             base.OnDestroyed(sender, eventArgs);
             m_targetPointIK.mode = SkeletonUtilityBone.Mode.Follow;
             m_selfCollider.enabled = false;
