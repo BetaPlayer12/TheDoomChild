@@ -18,6 +18,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private ShadowSlideStatsInfo m_configuration;
         [SerializeField]
         private ParticleSystem m_shadowFX;
+        [SerializeField, BoxGroup("Sensors")]
+        private RaySensor m_groundSensor;
 
         private ICappedStat m_source;
         private IPlayerModifer m_modifier;
@@ -89,6 +91,12 @@ namespace DChild.Gameplay.Characters.Players.Modules
             }
 
             m_slide.Execute();
+        }
+
+        public bool HasGroundToSlideOn()
+        {
+            m_groundSensor.Cast();
+            return m_groundSensor.allRaysDetecting;
         }
 
         public void Reset()

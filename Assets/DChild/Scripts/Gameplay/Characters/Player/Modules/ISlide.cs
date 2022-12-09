@@ -9,6 +9,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         void HandleDurationTimer();
         bool IsSlideDurationOver();
         void ResetDurationTimer();
+        bool HasGroundToSlideOn();
 
         void Execute();
     }
