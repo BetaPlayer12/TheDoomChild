@@ -28,6 +28,10 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         [Title("Combat")]
         [SerializeField]
+        private BasicSlashes m_basicSlashes;
+        [SerializeField]
+        private SlashCombo m_slashCombo;
+        [SerializeField]
         private PlayerFlinch m_flinch;
 
         //MovementSkills
@@ -63,6 +67,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
         [SerializeField]
         private WhipAttack m_whipAttack;
         [SerializeField]
+        private WhipAttackCombo m_whipAttackCombo;
+        [SerializeField]
         private ProjectileThrow m_projectileThrow;
         [SerializeField]
         private PlayerBlock m_block;
@@ -81,6 +87,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_ledgeGrab.SetConfiguration(m_playerBasicBehaviourConfiguration.ledgeGrabStatsInfo);
             m_shadowMorph.SetConfiguration(m_playerBasicBehaviourConfiguration.shadowMorphStatsInfo);
             m_autoStepClimb.SetConfiguration(m_playerBasicBehaviourConfiguration.autoStepClimbStatsInfo);
+            m_basicSlashes.SetConfiguration(m_playerBasicBehaviourConfiguration.basicSlashesStatsInfo);
+            m_slashCombo.SetConfiguration(m_playerBasicBehaviourConfiguration.slashComboStatsInfo);
             m_flinch.SetConfiguration(m_playerBasicBehaviourConfiguration.flinchStatsInfo);
             m_dash.SetConfiguration(m_playerBasicBehaviourConfiguration.dashStatsInfo);
             m_extraJump.SetConfiguration(m_playerBasicBehaviourConfiguration.extraJumpInfo);
@@ -95,6 +103,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_earthShaker.SetConfiguration(m_playerBasicBehaviourConfiguration.earthShakerInfo);
             m_swordThrust.SetConfiguration(m_playerBasicBehaviourConfiguration.swordThrustInfo);
             m_whipAttack.SetConfiguration(m_playerBasicBehaviourConfiguration.whipAttackInfo);
+            m_whipAttackCombo.SetConfiguration(m_playerBasicBehaviourConfiguration.whipAttackComboInfo);
             m_projectileThrow.SetConfiguration(m_playerBasicBehaviourConfiguration.projectileThrowInfo);
             m_block.SetConfiguration(m_playerBasicBehaviourConfiguration.blockInfo);
             m_idleHandle.SetConfiguration(playerBasicBehaviourConfiguration.idleHandleInfo);

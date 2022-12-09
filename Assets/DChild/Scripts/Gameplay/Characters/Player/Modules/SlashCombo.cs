@@ -8,14 +8,17 @@ namespace DChild.Gameplay.Characters.Players.Modules
 {
     public class SlashCombo : AttackBehaviour
     {
+        [SerializeField, HideLabel]
+        private SlashComboStatsInfo m_configuration;
+
         [SerializeField]
         private SkeletonAnimation m_attackFX;
-        [SerializeField]
-        private int m_slashStateAmount;
-        [SerializeField]
-        private float m_slashComboCooldown;
-        [SerializeField]
-        private float m_slashMovementCooldown;
+        //[SerializeField]
+        //private int m_slashStateAmount;
+        //[SerializeField]
+        //private float m_slashComboCooldown;
+        //[SerializeField]
+        //private float m_slashMovementCooldown;
         [SerializeField]
         private List<Info> m_slashComboInfo;
 
@@ -24,8 +27,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private Character m_character;
         [SerializeField, BoxGroup("Physics")]
         private Rigidbody2D m_physics;
-        [SerializeField, BoxGroup("Physics")]
-        private List<Vector2> m_pushForce;
+        //[SerializeField, BoxGroup("Physics")]
+        //private List<Vector2> m_pushForce;
         [SerializeField, BoxGroup("Sensors")]
         private RaySensor m_enemySensor;
         [SerializeField, BoxGroup("Sensors")]
@@ -61,12 +64,17 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_currentVisualSlashState = 0;
             m_comboAttackDelayTimer = -1;
             m_comboResetDelayTimer = -1;
-            m_slashComboCooldownTimer = m_slashComboCooldown;
+            m_slashComboCooldownTimer = /*m_slashComboCooldown*/m_configuration.slashComboCooldown;
             m_allowAttackDelayHandling = true;
             m_canSlashCombo = true;
 
             m_fxAnimator = m_attackFX.gameObject.GetComponentInChildren<Animator>();
             m_skeletonAnimation = m_attackFX.gameObject.GetComponent<SkeletonAnimation>();
+        }
+
+        public void SetConfiguration(SlashComboStatsInfo info)
+        {
+            m_configuration.CopyInfo(info);
         }
 
         public override void Reset()
@@ -91,7 +99,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_currentSlashState++;
 
             m_comboResetDelayTimer = m_slashComboInfo[m_currentSlashState].nextAttackDelay;
-            m_slashMovementCooldownTimer = m_slashMovementCooldown;
+            m_slashMovementCooldownTimer = /*m_slashMovementCooldown*/m_configuration.slashMovementCooldown;
         }
 
         public override void Cancel()
@@ -134,7 +142,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_edgeSensor.Cast();
             if (!m_enemySensor.isDetecting && !m_wallSensor.allRaysDetecting && m_edgeSensor.isDetecting)
             {
-                m_physics.AddForce(m_character.facing == HorizontalDirection.Right ? m_pushForce[m_currentVisualSlashState] : -m_pushForce[m_currentVisualSlashState], ForceMode2D.Impulse);
+                m_physics.AddForce(m_character.facing == HorizontalDirection.Right ? m_configuration.pushForce[m_currentVisualSlashState] : -m_configuration.pushForce[m_currentVisualSlashState], ForceMode2D.Impulse);
             }
         }
 
@@ -148,7 +156,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 m_slashComboInfo[i].ShowCollider(false);
             }
 
-            if (m_currentSlashState >= m_slashStateAmount)
+            if (m_currentSlashState >= m_configuration.slashStateAmount)
             {
                 m_currentSlashState = 0;
                 m_canSlashCombo = false;
@@ -219,7 +227,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             }
             else
             {
-                m_slashComboCooldownTimer = m_slashComboCooldown;
+                m_slashComboCooldownTimer = m_configuration.slashComboCooldown;
                 m_canSlashCombo = true;
             }
         }
@@ -234,7 +242,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             else
             {
                 //Debug.Log("Can Move");
-                m_slashMovementCooldownTimer = m_slashMovementCooldown;
+                m_slashMovementCooldownTimer = m_configuration.slashMovementCooldown;
                 m_canMove = true;
             }
         }

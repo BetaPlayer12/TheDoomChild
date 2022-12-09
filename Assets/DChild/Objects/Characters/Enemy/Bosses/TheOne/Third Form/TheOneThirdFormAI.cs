@@ -510,9 +510,6 @@ namespace DChild.Gameplay.Characters.Enemies
         protected override void Start()
         {
             //base.Start();
-            m_mouthBlastOriginalPosition = transform.position;
-            m_mouthBlastOneLaser.SetActive(false);
-            m_doMouthBlastIAttack = false;
 
             //m_animation.DisableRootMotion();
             m_phaseHandle = new PhaseHandle<Phase, PhaseInfo>();
@@ -553,21 +550,7 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_rightWallSensor;
 
-        [SerializeField, BoxGroup("Mouth Blast I Stuff")]
-        private GameObject m_mouthBlastOneLaser;
-        [SerializeField, BoxGroup("Mouth Blast I Stuff")]
-        private Transform m_mouthBlastLeftSide;
-        [SerializeField, BoxGroup("Mouth Blast I Stuff")]
-        private Transform m_mouthBlastRightSide;
-        [SerializeField, BoxGroup("Mouth Blast I Stuff")]
-        private float m_mouthBlastMoveSpeed;
-        [SerializeField, BoxGroup("Mouth Blast I Stuff")]
-        private Vector2 m_mouthBlastOriginalPosition;
-        [SerializeField, BoxGroup("Mouth Blast I Stuff")]
-        private BlackBloodFlood m_blackBloodFlood;
-        private bool m_doMouthBlastIAttack;
-        private bool m_moveMouth;
-        private int m_SideToStart;
+        
 
         [SerializeField]
         private TheOneThirdFormAttacks m_theOneThirdFormAttacks;
@@ -681,88 +664,6 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.DisableRootMotion();
             m_animation.SetEmptyAnimation(0, 0);
             m_stateHandle.OverrideState(State.Phasing);
-        }
-
-        private IEnumerator MouthBlastOneAttack(int side)
-        {         
-            //transform to mouth
-            yield return new WaitForSeconds(2f);
-            //move to left or right
-            if(side == 0)
-            {
-                transform.position = m_mouthBlastLeftSide.position;
-                m_SideToStart = side;
-            }
-            else if(side == 1)
-            {
-                transform.position = m_mouthBlastRightSide.position;
-                m_SideToStart = side;
-            }
-
-            yield return new WaitForSeconds(1f);
-
-            //spawn blast
-            m_mouthBlastOneLaser.SetActive(true);
-
-            m_moveMouth = true;
-            m_blackBloodFlood.m_isFlooding = true;
-
-            yield return null;
-            
-        }
-
-        private IEnumerator MoveMouthBlast(int side)
-        {
-            if (side == 0)
-            {
-                transform.position = Vector2.MoveTowards(transform.position, m_mouthBlastRightSide.position, m_mouthBlastMoveSpeed);
-
-                if(transform.position == m_mouthBlastRightSide.position)
-                {
-                    StartCoroutine(EndMouthBlast());
-                }
-            }
-            else if (side == 1)
-            {
-                transform.position = Vector2.MoveTowards(transform.position, m_mouthBlastLeftSide.position, m_mouthBlastMoveSpeed);
-
-                if (transform.position == m_mouthBlastLeftSide.position)
-                {
-                    StartCoroutine(EndMouthBlast());
-                }
-            }
-
-            yield return new WaitForSeconds(1f);
-        }
-
-        private IEnumerator CompleteMouthBlastOneRoutine()
-        {
-            if (m_doMouthBlastIAttack)
-            {
-                var rollSide = Random.Range(0, 2);
-                StartCoroutine(MouthBlastOneAttack(m_SideToStart));
-                m_doMouthBlastIAttack = false;
-            }
-            
-            if (m_moveMouth)
-            {
-                StartCoroutine(MoveMouthBlast(m_SideToStart));
-            }
-
-            yield return null;
-        }
-
-        private IEnumerator EndMouthBlast()
-        {
-            m_doMouthBlastIAttack = false;
-            m_blackBloodFlood.m_isFlooding = false;
-            yield return new WaitForSeconds(2f);
-
-            //end attack, return to original position
-            transform.position = m_mouthBlastOriginalPosition;
-            m_mouthBlastOneLaser.SetActive(false);
-            m_moveMouth = false;
-            yield return null;
         }
 
         void Update()

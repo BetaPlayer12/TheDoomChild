@@ -43,6 +43,11 @@ namespace DChild.Gameplay.Characters.Enemies
             throw new System.NotImplementedException();
         }
 
+        public IEnumerator ExecuteAttack(AITargetInfo Target)
+        {
+            throw new System.NotImplementedException();
+        }
+
         [Button]
         private void ShootMouthBlast()
         {
@@ -83,11 +88,6 @@ namespace DChild.Gameplay.Characters.Enemies
         private void Start()
         {
             m_animation.SetAnimation(0, m_waitForInitializeAnimation, false);
-        }
-
-        public IEnumerator ExecuteAttack(AITargetInfo Target)
-        {
-            throw new System.NotImplementedException();
         }
     }
 }
