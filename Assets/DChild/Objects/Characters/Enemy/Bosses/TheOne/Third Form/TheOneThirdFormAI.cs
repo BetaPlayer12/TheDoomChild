@@ -159,6 +159,56 @@ namespace DChild.Gameplay.Characters.Enemies
             private List<float> m_phase5PatternCooldown;
             public List<float> phase5PatternCooldown => m_phase5PatternCooldown;
 
+            #region Animation
+            [TitleGroup("Animations")]
+            [SerializeField, ValueDropdown("GetAnimations")]
+            private string m_eyeShakeAnimation;
+            public string eyeShakeAnimation => m_eyeShakeAnimation;
+            [SerializeField, ValueDropdown("GetAnimations")]
+            private string m_eyeArmoredAnimation;
+            public string eyeArmoredAnimation => m_eyeArmoredAnimation;
+            [SerializeField, ValueDropdown("GetAnimations")]
+            private string m_eyeClosedAnimation;
+            public string eyeClosedAnimation => m_eyeClosedAnimation;
+            [SerializeField, ValueDropdown("GetAnimations")]
+            private string m_eyeDefaultAnimation;
+            public string eyeDefaultAnimation => m_eyeDefaultAnimation;
+            [SerializeField, ValueDropdown("GetAnimations")]
+            private string m_eyeMouthAnimation;
+            public string eyeMouthAnimation => m_eyeMouthAnimation;
+            [SerializeField, ValueDropdown("GetAnimations")]
+            private string m_eyeMouthBlastAnimation;
+            public string eyeMouthBlastAnimation => m_eyeMouthBlastAnimation;
+            [SerializeField, ValueDropdown("GetAnimations")]
+            private string m_eyeMouthBlastAnticipationAnimation;
+            public string eyeMouthBlastAnticipationAnimation => m_eyeMouthBlastAnticipationAnimation;
+            [SerializeField, ValueDropdown("GetAnimations")]
+            private string m_mouthIdleAnimation;
+            public string mouthIdleAnimation => m_mouthIdleAnimation;
+            [SerializeField, ValueDropdown("GetAnimations")]
+            private string m_eyeSquintAnimation;
+            public string eyeSquintAnimation => m_eyeSquintAnimation;
+            [SerializeField, ValueDropdown("GetAnimations")]
+            private string m_eyeSquintTwoAnimation;
+            public string eyeSquintTwoAnimation => m_eyeSquintTwoAnimation;
+            [SerializeField, ValueDropdown("GetAnimations")]
+            private string m_eyeWideOpenAnimation;
+            public string eyeWideOpenAnimation => m_eyeWideOpenAnimation;
+            [SerializeField, ValueDropdown("GetAnimations")]
+            private string m_eyeWideOpenTwoAnimation;
+            public string eyeWideOpenTwoAnimation => m_eyeWideOpenTwoAnimation;
+            [SerializeField, ValueDropdown("GetAnimations")]
+            private string m_idleAnimation;
+            public string idleAnimation => m_idleAnimation;
+            [SerializeField, ValueDropdown("GetAnimations")]
+            private string m_mouthBlastBodyLoopAnimation;
+            public string mouthBlastBodyLoopAnimation => m_mouthBlastBodyLoopAnimation;
+            [SerializeField, ValueDropdown("GetAnimations")]
+            private string m_animationAnimation;
+            public string animationAnimation => m_animationAnimation;
+
+            #endregion
+
             public override void Initialize()
             {
                 
@@ -268,10 +318,6 @@ namespace DChild.Gameplay.Characters.Enemies
         private Coroutine m_changePhaseCoroutine;
         private Coroutine m_currentAttackCoroutine;
         #endregion
-
-        #region Animation
-        private string m_idleAnimation;
-        #endregion  
 
         private void UpdateAttackDeciderList()
         {
@@ -719,12 +765,6 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return null;
         }
 
-        [Button]
-        private void TestBubbleImprisonment()
-        {
-            StartCoroutine(m_theOneThirdFormAttacks.BubbleImprisonment(m_targetInfo));
-        }
-
         void Update()
         { 
             m_phaseHandle.MonitorPhase();
@@ -732,7 +772,7 @@ namespace DChild.Gameplay.Characters.Enemies
             switch (m_stateHandle.currentState)
             {
                 case State.Idle:
-                    //m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                    m_animation.SetAnimation(0, m_info.idleAnimation, true);
                     break;
                 case State.Intro:
                     StartCoroutine(IntroRoutine());
@@ -746,6 +786,8 @@ namespace DChild.Gameplay.Characters.Enemies
                 case State.Attacking:
                     m_stateHandle.Wait(State.Cooldown);
                     m_lastTargetPos = m_targetInfo.position;
+
+                    m_animation.SetAnimation(0, m_info.eyeSquintAnimation, true);
 
                     Debug.Log("CURRENT ATTACK PATTERN " + m_currentAttack);
                     switch (m_currentAttack)
