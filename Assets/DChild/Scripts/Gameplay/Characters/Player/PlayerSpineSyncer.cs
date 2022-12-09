@@ -20,19 +20,36 @@ namespace DChild.Visuals
             StartCoroutine(DelayedSync(reference));
         }
 
+        public void SyncImmidiateWith(SpineSyncer reference)
+        {
+            StopAllCoroutines();
+            SyncAnimation(reference);
+            SyncPosition(reference);
+        }
+
         private IEnumerator DelayedSync(SpineSyncer reference)
         {
-            m_skeletonAnimation.state.SetAnimation(0, m_afterSyncAnimation, true);
-            m_skeletonAnimation.AnimationState.GetCurrent(0).TrackTime = reference.skeleton.state.GetCurrent(0).TrackTime;
+            SyncAnimation(reference);
             yield return new WaitForEndOfFrame();
-            var referenceTransform = reference.transform;
-            referenceTransform.position = transform.position;
-            referenceTransform.localScale = transform.localScale;
+            SyncPosition(reference);
 
             //if ((int)m_character.facing != reference.transform.localScale.x)
             //{
             //    reference.transform.localScale = new Vector3((int)m_character.facing, reference.transform.localScale.y, reference.transform.localScale.z);
             //}
+        }
+
+        private void SyncPosition(SpineSyncer reference)
+        {
+            var referenceTransform = reference.transform;
+            referenceTransform.position = transform.position;
+            referenceTransform.localScale = transform.localScale;
+        }
+
+        private void SyncAnimation(SpineSyncer reference)
+        {
+            m_skeletonAnimation.state.SetAnimation(0, m_afterSyncAnimation, true);
+            m_skeletonAnimation.AnimationState.GetCurrent(0).TrackTime = reference.skeleton.state.GetCurrent(0).TrackTime;
         }
     }
 }

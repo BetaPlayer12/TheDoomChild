@@ -16,6 +16,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
         }
 
         [SerializeField]
+        private Vector2 m_momentumVelocity;
+        [SerializeField]
         private SkeletonAnimation m_attackFX;
         [SerializeField]
         private Info m_groundOverhead;
@@ -33,9 +35,12 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private Rigidbody2D m_rigidbody;
         private float m_cacheGravity;
         private bool m_adjustGravity;
+        private bool m_canAirAttack;
 
         private Animator m_fxAnimator;
         private SkeletonAnimation m_skeletonAnimation;
+
+        public bool CanAirAttack() => m_canAirAttack;
 
         public override void Initialize(ComplexCharacterInfo info)
         {
@@ -45,6 +50,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_executedTypes = new List<Type>();
             m_cacheGravity = m_rigidbody.gravityScale;
             m_adjustGravity = true;
+            m_canAirAttack = true;
 
             m_fxAnimator = m_attackFX.gameObject.GetComponentInChildren<Animator>();
             m_skeletonAnimation = m_attackFX.gameObject.GetComponent<SkeletonAnimation>();
@@ -67,6 +73,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 }
                 m_executedTypes.Clear();
             }
+
+            m_rigidBody.constraints = RigidbodyConstraints2D.None | RigidbodyConstraints2D.FreezeRotation;
         }
 
         public void EnableCollision(Type type, bool value)
@@ -111,6 +119,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 case Type.Ground_Overhead:
                     m_timer = m_groundOverhead.nextAttackDelay;
                     m_attacker.SetDamageModifier(m_groundOverhead.damageModifier * m_modifier.Get(PlayerModifier.AttackDamage));
+                    m_rigidBody.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
                     break;
                 case Type.Crouch:
                     m_timer = m_crouch.nextAttackDelay;
@@ -119,25 +128,27 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 case Type.MidAir_Forward:
                     m_timer = m_midAirForward.nextAttackDelay;
                     m_attacker.SetDamageModifier(m_midAirForward.damageModifier * m_modifier.Get(PlayerModifier.AttackDamage));
+                    m_canAirAttack = false;
 
                     if (m_adjustGravity == true)
                     {
                         m_cacheGravity = m_rigidbody.gravityScale;
                         m_rigidbody.gravityScale = m_aerialGravity;
                         //m_rigidbody.velocity = new Vector2(m_rigidBody.velocity.x, 0);
-                        m_rigidbody.velocity = Vector2.zero;
+                        m_rigidbody.velocity = /*Vector2.zero*/new Vector2(m_rigidbody.velocity.x * m_momentumVelocity.x, m_rigidbody.velocity.y * m_momentumVelocity.y);
                     }
                     break;
                 case Type.MidAir_Overhead:
                     m_timer = m_midAirOverhead.nextAttackDelay;
                     m_attacker.SetDamageModifier(m_midAirOverhead.damageModifier * m_modifier.Get(PlayerModifier.AttackDamage));
+                    m_canAirAttack = false;
 
                     if (m_adjustGravity == true)
                     {
                         m_cacheGravity = m_rigidbody.gravityScale;
                         m_rigidbody.gravityScale = m_aerialGravity;
                         //m_rigidbody.velocity = new Vector2(m_rigidBody.velocity.x, 0);
-                        m_rigidbody.velocity = Vector2.zero;
+                        m_rigidbody.velocity = /*Vector2.zero*/new Vector2(m_rigidbody.velocity.x * m_momentumVelocity.x, m_rigidbody.velocity.y * m_momentumVelocity.y);
                     }
                     break;
             }
@@ -175,6 +186,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         {
             base.AttackOver();
 
+            //Debug.Log("BASIC SLASHES ATTACK OVER");
             if (m_state.isDoingCombo == true)
             {
                 m_state.isDoingCombo = false;
@@ -187,6 +199,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             //test.state.ClearTrack(0);
             m_skeletonAnimation.state.SetEmptyAnimation(0, 0);
             //m_fxAnimator.Play("Buffer");
+            m_rigidBody.constraints = RigidbodyConstraints2D.None | RigidbodyConstraints2D.FreezeRotation;
         }
 
         public void ClearFXFor(Type type)
@@ -232,6 +245,11 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_adjustGravity = true;
         }
 
+        public void ResetAirAttacks()
+        {
+            m_canAirAttack = true;
+        }
+
         public void ClearExecutedCollision()
         {
             //for (int i = 0; i < m_executedTypes.Count; i++)
@@ -256,7 +274,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 m_executedTypes.Add(type);
             }
 
-            Debug.Log(m_executedTypes.Count);
+            //Debug.Log(m_executedTypes.Count);
         }
 
         public (int index, float value) getSomething() { return (0, 1f); }

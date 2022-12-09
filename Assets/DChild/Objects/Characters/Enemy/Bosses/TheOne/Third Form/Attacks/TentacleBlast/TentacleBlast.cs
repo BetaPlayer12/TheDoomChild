@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿using Sirenix.OdinInspector;
+using Spine.Unity;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,136 +8,85 @@ namespace DChild.Gameplay.Characters.Enemies
 {
     public class TentacleBlast : MonoBehaviour
     {
+        [SerializeField, TabGroup("Reference")]
+        protected SpineRootAnimation m_animation;
         [SerializeField]
-        private GameObject m_tentacleEntity;
-        [SerializeField]
+        private SkeletonAnimation m_skeletonAnimation;
+        [SerializeField, Spine.Unity.SpineAnimation(dataField = "m_skeletonAnimation")]
+        private string m_initializeAnimation;
+        [SerializeField, Spine.Unity.SpineAnimation(dataField = "m_skeletonAnimation")]
+        private string m_despawnAnimation;
+        [SerializeField, Spine.Unity.SpineAnimation(dataField = "m_skeletonAnimation")]
+        private string m_mouthBlastAnimation;
+        [SerializeField, Spine.Unity.SpineAnimation(dataField = "m_skeletonAnimation")]
+        private string m_spawnAnimation;
+
+        [SerializeField, TabGroup("Lazer")]
+        private LineRenderer m_lineRenderer;
+        [SerializeField, TabGroup("Lazer")]
+        private LineRenderer m_telegraphLineRenderer;
+        [SerializeField, TabGroup("Lazer")]
+        private EdgeCollider2D m_edgeCollider;
+        [SerializeField, TabGroup("Lazer")]
+        private GameObject m_muzzleFXGO;
+        [SerializeField, TabGroup("Lazer")]
+        private ParticleFX m_muzzleLoopFX;
+        [SerializeField, TabGroup("Lazer")]
+        private ParticleFX m_muzzleTelegraphFX;
+
         private GameObject m_tentacleBlastLaser;
-        [SerializeField]
-        private Transform m_tentacleShootPosition;
-        [SerializeField]
-        private float m_tentacleMoveSpeed;
 
-        [SerializeField]
-        private Quaternion m_startRotation;
-        [SerializeField]
-        private Quaternion m_endRotation;
-        [SerializeField]
-        private Quaternion m_addRotation;
-
-        private Vector2 m_tentacleOriginalPosition;
-
-        public bool m_emergeTentacle;
-        public bool m_isRightTentacle;
-        private bool m_rotateTentacle;
-        private bool m_returnTentacle;
+        [SerializeField, BoxGroup("Laser")]
+        private LaserLauncher m_launcher;
 
         private IEnumerator EmergeTentacle()
         {
-            transform.position = Vector2.MoveTowards(transform.position, m_tentacleShootPosition.position, m_tentacleMoveSpeed);
+            m_animation.SetAnimation(0, m_spawnAnimation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_spawnAnimation);
 
-            if (transform.position == m_tentacleShootPosition.position)
-            {
-                transform.rotation = m_startRotation;
-                m_emergeTentacle = false;
-                m_rotateTentacle = true;
-            }
-
-            yield return new WaitForSeconds(1f);
+            m_launcher.SetBeam(true);
+            m_launcher.SetAim(false);
         }
 
-        private IEnumerator RotateRightTentacle()
+        private IEnumerator DespawnTentacle()
         {
-            if (!m_tentacleBlastLaser.activeSelf)
-                m_tentacleBlastLaser.SetActive(true);
+            m_animation.SetAnimation(0, m_despawnAnimation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_despawnAnimation);
 
-            if (transform.rotation.eulerAngles.z > 1)
-            {
-                transform.Rotate(0f, 0f, -0.1f - m_tentacleMoveSpeed * GameplaySystem.time.deltaTime);
-                //transform.rotation = Quaternion.Euler(new Vector3(0f, 0f, transform.rotation.z - 1f * GameplaySystem.time.deltaTime));
-                Debug.Log(transform.rotation.eulerAngles.z);
-                yield return new WaitForSeconds(1f);
-                if(transform.rotation.eulerAngles.z < 1)
-                {
-                    m_returnTentacle = true;
-                }              
-            }
-
-            if (m_returnTentacle)
-            {
-                m_tentacleBlastLaser.SetActive(false);
-                m_rotateTentacle = false;                
-            }
-
-            yield return new WaitForSeconds(1f);
         }
 
-        private IEnumerator RotateTentacle()
+        private IEnumerator ShootTentacleBeam()
         {
-            if (!m_tentacleBlastLaser.activeSelf)
-                m_tentacleBlastLaser.SetActive(true);
-
-            if (transform.rotation.eulerAngles.z > 1)
-            {
-                if (m_isRightTentacle)
-                {
-                    transform.Rotate(0f, 0f, -0.1f - m_tentacleMoveSpeed * GameplaySystem.time.deltaTime);
-                }
-                else
-                {
-                    transform.Rotate(0f, 0f, 1f - m_tentacleMoveSpeed * GameplaySystem.time.deltaTime);
-                }
-                
-                //transform.rotation = Quaternion.Euler(new Vector3(0f, 0f, transform.rotation.z - 1f * GameplaySystem.time.deltaTime));
-                Debug.Log(transform.rotation.eulerAngles.z);
-                yield return new WaitForSeconds(1f);
-                if (transform.rotation.eulerAngles.z < 1)
-                {
-                    m_returnTentacle = true;
-                }
-            }
-
-            if (m_returnTentacle)
-            {
-                m_tentacleBlastLaser.SetActive(false);
-                m_rotateTentacle = false;
-            }
-
-            yield return new WaitForSeconds(1f);
+            m_animation.SetAnimation(0, m_mouthBlastAnimation, false);
+            StartCoroutine(m_launcher.LazerBeamRoutine());
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_mouthBlastAnimation);
+            m_launcher.SetBeam(false);
         }
 
-        private IEnumerator ReturnRightTentacleToOriginalPosition()
+        public IEnumerator TentacleBlastAttack()
         {
-            transform.position = Vector2.MoveTowards(transform.position, m_tentacleOriginalPosition, m_tentacleMoveSpeed);
-
-            yield return null;
+            yield return EmergeTentacle();
+            yield return ShootTentacleBeam();
+            yield return DespawnTentacle();
         }
-
 
         // Start is called before the first frame update
         void Start()
         {
-            m_tentacleOriginalPosition = m_tentacleEntity.transform.position;
+            //m_tentacleOriginalPosition = m_tentacleEntity.transform.position;
             m_tentacleBlastLaser.SetActive(false);
         }
 
         // Update is called once per frame
         void Update()
         {
-            if (m_emergeTentacle)
-                StartCoroutine(EmergeTentacle());
+            
+        }
 
-            //if(m_isRightTentacle)
-            //    if (m_rotateTentacle)
-            //        StartCoroutine(RotateRightTentacle());
-            //else
-            //    if (m_rotateTentacle)
-            //        StartCoroutine(RotateLeftTentacle());
-
-            if (m_rotateTentacle)
-                StartCoroutine(RotateTentacle());
-
-            if (m_returnTentacle)
-                StartCoroutine(ReturnRightTentacleToOriginalPosition());
+        [Button]
+        private void ShootBlast()
+        {
+            StartCoroutine(TentacleBlastAttack());
         }
     }
 }

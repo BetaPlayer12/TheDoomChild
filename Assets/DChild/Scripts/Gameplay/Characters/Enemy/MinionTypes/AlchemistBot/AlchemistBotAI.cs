@@ -384,6 +384,7 @@ namespace DChild.Gameplay.Characters.Enemies
         //Patience Handler
         private void Patience()
         {
+            enabled = false;
             if (m_executeMoveCoroutine != null)
             {
                 StopCoroutine(m_executeMoveCoroutine);
@@ -392,6 +393,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_stateHandle.SetState(State.ReturnToPatrol);
             m_targetInfo.Set(null, null);
             m_isDetecting = false;
+            enabled = true;
         }
 
         public override void ApplyData()
@@ -468,6 +470,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_animation.DisableRootMotion();
                 m_hitbox.Enable();
             }
+            m_startPos = transform.position;
             m_stateHandle.OverrideState(State.ReevaluateSituation);
             yield return null;
         }
@@ -583,6 +586,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     inRange = true;
                 }
                 //DynamicMovement(/*new Vector2(m_targetInfo.position.x, m_targetInfo.position.y)*/ newPos);
+                m_turnState = State.ReevaluateSituation;
                 DynamicMovement(newPos, moveSpeed);
                 yield return null;
             }
@@ -611,13 +615,13 @@ namespace DChild.Gameplay.Characters.Enemies
                 return;
             }
 
-            if (IsFacing(m_agent.hasPath && TargetBlocked() && !m_groundSensor.allRaysDetecting && !m_roofSensor.allRaysDetecting ? m_agent.segmentDestination : target))
+            if (IsFacing(m_agent.hasPath && (m_targetInfo.isValid ? TargetBlocked() && !m_groundSensor.allRaysDetecting : !m_groundSensor.allRaysDetecting) && !m_roofSensor.allRaysDetecting ? m_agent.segmentDestination : target))
             {
                 if (!m_wallSensor.allRaysDetecting && (m_groundSensor.allRaysDetecting || m_roofSensor.allRaysDetecting))
                 {
                     m_bodyCollider.enabled = false;
                     m_agent.Stop();
-                    Vector3 dir = (m_targetInfo.position - (Vector2)m_rigidbody2D.transform.position).normalized;
+                    Vector3 dir = (target - (Vector2)m_rigidbody2D.transform.position).normalized;
                     m_rigidbody2D.MovePosition(m_rigidbody2D.transform.position + dir * movespeed * Time.fixedDeltaTime);
 
                     m_animation.SetAnimation(0, m_info.move.animation, true);
@@ -634,7 +638,6 @@ namespace DChild.Gameplay.Characters.Enemies
             }
             else
             {
-                m_turnState = State.ReevaluateSituation;
                 m_stateHandle.OverrideState(State.Turning);
             }
         }
@@ -757,26 +760,14 @@ namespace DChild.Gameplay.Characters.Enemies
                     break;
 
                 case State.ReturnToPatrol:
-                    if (IsFacing(m_startPos))
+                    if (Vector2.Distance(m_startPos, transform.position) > 10f)
                     {
-                        if (Vector2.Distance(m_startPos, transform.position) > 5f)
-                        {
-                            //var rb2d = GetComponent<Rigidbody2D>();
-                            m_bodyCollider.enabled = false;
-                            m_agent.Stop();
-                            Vector3 dir = (m_startPos - (Vector2)m_rigidbody2D.transform.position).normalized;
-                            m_rigidbody2D.MovePosition(m_rigidbody2D.transform.position + dir * m_info.move.speed * Time.fixedDeltaTime);
-                            m_animation.SetAnimation(0, m_info.patrol.animation, true);
-                        }
-                        else
-                        {
-                            m_stateHandle.OverrideState(State.Patrol);
-                        }
+                        m_turnState = State.ReturnToPatrol;
+                        DynamicMovement(m_startPos, m_info.move.speed);
                     }
                     else
                     {
-                        m_turnState = State.ReturnToPatrol;
-                        m_stateHandle.SetState(State.Turning);
+                        m_stateHandle.OverrideState(State.Patrol);
                     }
                     break;
 
