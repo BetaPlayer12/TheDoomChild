@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using DChild.Gameplay.Characters.AI;
 using Holysoft;
 using UnityEngine;
 
@@ -33,6 +34,11 @@ namespace DChild.Gameplay.Characters.Enemies
         }
 
         public IEnumerator ExecuteAttack(Vector2 PlayerPosition)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public IEnumerator ExecuteAttack(AITargetInfo Target)
         {
             throw new System.NotImplementedException();
         }

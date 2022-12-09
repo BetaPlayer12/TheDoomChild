@@ -9,6 +9,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
     {
         [SerializeField, HideLabel]
         private SlideStatsInfo m_configuration;
+        [SerializeField, BoxGroup("Sensors")]
+        private RaySensor m_groundSensor;
 
         private float m_cooldownTimer;
         private float m_durationTimer;
@@ -82,5 +84,11 @@ namespace DChild.Gameplay.Characters.Players.Modules
         public bool IsSlideDurationOver() => m_durationTimer <= 0;
 
         public void ResetDurationTimer() => m_durationTimer = m_configuration.duration;
+
+        public bool HasGroundToSlideOn()
+        {
+            m_groundSensor.Cast();
+            return m_groundSensor.allRaysDetecting;
+        }
     }
 }

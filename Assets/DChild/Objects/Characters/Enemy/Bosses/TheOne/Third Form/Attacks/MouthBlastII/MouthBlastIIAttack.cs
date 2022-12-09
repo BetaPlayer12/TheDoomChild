@@ -5,6 +5,7 @@ using DChild.Gameplay.Pooling;
 using DChild.Gameplay.Characters;
 using Sirenix.OdinInspector;
 using Spine.Unity;
+using DChild.Gameplay.Characters.AI;
 
 namespace DChild.Gameplay.Characters.Enemies
 {
@@ -82,6 +83,11 @@ namespace DChild.Gameplay.Characters.Enemies
         private void Start()
         {
             m_animation.SetAnimation(0, m_waitForInitializeAnimation, false);
+        }
+
+        public IEnumerator ExecuteAttack(AITargetInfo Target)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

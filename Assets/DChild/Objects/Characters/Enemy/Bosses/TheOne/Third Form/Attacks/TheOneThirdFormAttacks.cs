@@ -25,6 +25,8 @@ public class TheOneThirdFormAttacks : MonoBehaviour
     private TentacleBlastAttack m_tentacleBlastAttack;
     [SerializeField, BoxGroup("The One Third Form Attacks")]
     private TentacleGrabAttack m_tentacleGrabScriptedAttack;
+    [SerializeField, BoxGroup("The One Third Form Attacks")]
+    private BubbleImprisonmentAttack m_bubbleImprisonmentAttack;
 
     [SerializeField, BoxGroup("Mouth Blast I Stuff")]
     private GameObject m_mouthBlastOneLaser;
@@ -42,56 +44,7 @@ public class TheOneThirdFormAttacks : MonoBehaviour
     private bool m_moveMouth;
     private int m_SideToStart;
 
-    //stuff for tentacle stab attack
-    [SerializeField, BoxGroup("Tentacle Stab Attack Stuff")]
-    private float m_tentacleStabTimer = 0f;
-    [SerializeField, BoxGroup("Tentacle Stab Attack Stuff")]
-    private Transform m_tentacleStabSpawnHeight;
-    private int m_tentacleStabCount = 0;
-    private float m_tentacleStabTimerValue;
-    private bool triggerTentacleGroundStab;
-
-    //Monolith Slam stuff
-    [SerializeField, BoxGroup("Monolith Slam Stuff")]
-    private int m_numOfMonoliths;
-    [SerializeField, BoxGroup("Monolith Slam Stuff")]
-    private int m_monolithCounter;
-    [SerializeField, BoxGroup("Monolith Slam Stuff")]
-    private bool m_triggerMonolithSlamAttack;
-    [SerializeField, BoxGroup("Monolith Slam Stuff")]
-    private float m_monolithTimer;
-    private float m_monolithTimerValue;
-
     private TheOneThirdFormAI m_targetInfo;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        //if (triggerTentacleGroundStab)
-        //{
-        //    m_tentacleStabTimer -= GameplaySystem.time.deltaTime;
-
-        //    Vector2 tentacleSpawn = new Vector2(m_targetInfo.position.x, m_tentacleStabSpawnHeight.position.y);
-        //    if (m_tentacleStabTimer <= 0)
-        //    {
-        //        m_currentAttackCoroutine = StartCoroutine(m_tentacleStabAttack.ExecuteAttack(tentacleSpawn));
-        //        m_tentacleStabCount++;
-        //        m_tentacleStabTimer = m_tentacleStabTimerValue;
-        //    }
-
-        //    if (m_tentacleStabCount > 4)
-        //    {
-        //        m_tentacleStabCount = 0;
-        //        triggerTentacleGroundStab = false;
-        //    }
-        //}
-    }
 
     //Attacks
     public IEnumerator TentacleCeilingAttack()
@@ -100,7 +53,7 @@ public class TheOneThirdFormAttacks : MonoBehaviour
         yield return null;
     }
 
-    public IEnumerator TentacleGrabGroundSlam()
+    public IEnumerator TentacleGrab()
     {
         StartCoroutine(m_tentacleGrabScriptedAttack.ExecuteAttack());
         yield return null;
@@ -112,13 +65,12 @@ public class TheOneThirdFormAttacks : MonoBehaviour
         yield return null;
     }
 
-    public IEnumerator TentacleGroundStab(Vector2 PlayerPosition)
+    public IEnumerator TentacleGroundStab(AITargetInfo Target)
     {
-        StartCoroutine(m_tentacleGroundStabAttack.ExecuteAttack(PlayerPosition));
+        StartCoroutine(m_tentacleGroundStabAttack.ExecuteAttack(Target));
         yield return null;
     }
 
-    [Button]
     public IEnumerator MovingTentacleGround()
     {
         StartCoroutine(m_movingTentacleGroundAttack.ExecuteAttack());
@@ -131,9 +83,27 @@ public class TheOneThirdFormAttacks : MonoBehaviour
         yield return null;
     }
 
-    [Button]
-    private void TestChaseTentacle()
+    public IEnumerator MonolithSlam(AITargetInfo Target)
     {
-        StartCoroutine(ChasingGroundTentacle());
+        StartCoroutine(m_monolithSlamAttack.ExecuteAttack(Target));
+        yield return null;
+    }
+
+    public IEnumerator TentacleBlast()
+    {
+        StartCoroutine(m_tentacleBlastAttack.ExecuteAttack());
+        yield return null;
+    }
+
+    public IEnumerator SlidingStoneWallAttack(AITargetInfo Target)
+    {
+        StartCoroutine(m_slidingWallAttack.ExecuteAttack(Target));
+        yield return null;
+    }
+
+    public IEnumerator BubbleImprisonment(AITargetInfo Target)
+    {
+        StartCoroutine(m_bubbleImprisonmentAttack.ExecuteAttack(Target));
+        yield return null;
     }
 }

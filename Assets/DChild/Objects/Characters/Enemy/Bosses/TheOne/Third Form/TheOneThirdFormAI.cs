@@ -159,6 +159,56 @@ namespace DChild.Gameplay.Characters.Enemies
             private List<float> m_phase5PatternCooldown;
             public List<float> phase5PatternCooldown => m_phase5PatternCooldown;
 
+            #region Animation
+            [TitleGroup("Animations")]
+            [SerializeField, ValueDropdown("GetAnimations")]
+            private string m_eyeShakeAnimation;
+            public string eyeShakeAnimation => m_eyeShakeAnimation;
+            [SerializeField, ValueDropdown("GetAnimations")]
+            private string m_eyeArmoredAnimation;
+            public string eyeArmoredAnimation => m_eyeArmoredAnimation;
+            [SerializeField, ValueDropdown("GetAnimations")]
+            private string m_eyeClosedAnimation;
+            public string eyeClosedAnimation => m_eyeClosedAnimation;
+            [SerializeField, ValueDropdown("GetAnimations")]
+            private string m_eyeDefaultAnimation;
+            public string eyeDefaultAnimation => m_eyeDefaultAnimation;
+            [SerializeField, ValueDropdown("GetAnimations")]
+            private string m_eyeMouthAnimation;
+            public string eyeMouthAnimation => m_eyeMouthAnimation;
+            [SerializeField, ValueDropdown("GetAnimations")]
+            private string m_eyeMouthBlastAnimation;
+            public string eyeMouthBlastAnimation => m_eyeMouthBlastAnimation;
+            [SerializeField, ValueDropdown("GetAnimations")]
+            private string m_eyeMouthBlastAnticipationAnimation;
+            public string eyeMouthBlastAnticipationAnimation => m_eyeMouthBlastAnticipationAnimation;
+            [SerializeField, ValueDropdown("GetAnimations")]
+            private string m_mouthIdleAnimation;
+            public string mouthIdleAnimation => m_mouthIdleAnimation;
+            [SerializeField, ValueDropdown("GetAnimations")]
+            private string m_eyeSquintAnimation;
+            public string eyeSquintAnimation => m_eyeSquintAnimation;
+            [SerializeField, ValueDropdown("GetAnimations")]
+            private string m_eyeSquintTwoAnimation;
+            public string eyeSquintTwoAnimation => m_eyeSquintTwoAnimation;
+            [SerializeField, ValueDropdown("GetAnimations")]
+            private string m_eyeWideOpenAnimation;
+            public string eyeWideOpenAnimation => m_eyeWideOpenAnimation;
+            [SerializeField, ValueDropdown("GetAnimations")]
+            private string m_eyeWideOpenTwoAnimation;
+            public string eyeWideOpenTwoAnimation => m_eyeWideOpenTwoAnimation;
+            [SerializeField, ValueDropdown("GetAnimations")]
+            private string m_idleAnimation;
+            public string idleAnimation => m_idleAnimation;
+            [SerializeField, ValueDropdown("GetAnimations")]
+            private string m_mouthBlastBodyLoopAnimation;
+            public string mouthBlastBodyLoopAnimation => m_mouthBlastBodyLoopAnimation;
+            [SerializeField, ValueDropdown("GetAnimations")]
+            private string m_animationAnimation;
+            public string animationAnimation => m_animationAnimation;
+
+            #endregion
+
             public override void Initialize()
             {
                 
@@ -268,10 +318,6 @@ namespace DChild.Gameplay.Characters.Enemies
         private Coroutine m_changePhaseCoroutine;
         private Coroutine m_currentAttackCoroutine;
         #endregion
-
-        #region Animation
-        private string m_idleAnimation;
-        #endregion  
 
         private void UpdateAttackDeciderList()
         {
@@ -464,12 +510,9 @@ namespace DChild.Gameplay.Characters.Enemies
         protected override void Start()
         {
             //base.Start();
-            m_tentacleStabTimerValue = m_tentacleStabTimer;
             m_mouthBlastOriginalPosition = transform.position;
             m_mouthBlastOneLaser.SetActive(false);
             m_doMouthBlastIAttack = false;
-            m_monolithTimerValue = m_monolithTimer;
-            m_triggerMonolithSlamAttack = false;
 
             //m_animation.DisableRootMotion();
             m_phaseHandle = new PhaseHandle<Phase, PhaseInfo>();
@@ -510,23 +553,6 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_rightWallSensor;
 
-        [SerializeField, BoxGroup("The One Third Form Attacks")]
-        private TentacleGroundStabAttack m_tentacleStabAttack;
-        [SerializeField, BoxGroup("The One Third Form Attacks")]
-        private TentacleCeilingAttack m_tentacleCeilingAttack;
-        [SerializeField, BoxGroup("The One Third Form Attacks")]
-        private MovingTentacleGroundAttack m_movingTentacleGroundAttack;
-        [SerializeField, BoxGroup("The One Third Form Attacks")]
-        private ChasingGroundTentacleAttack m_chasingGroundTentacleAttack;
-        [SerializeField, BoxGroup("The One Third Form Attacks")]
-        private MouthBlastIIAttack m_mouthBlastIIAttack;
-        [SerializeField, BoxGroup("The One Third Form Attacks")]
-        private SlidingStoneWallAttack m_slidingWallAttack;
-        [SerializeField, BoxGroup("The One Third Form Attacks")]
-        private MonolithSlamAttack m_monolithSlamAttack;
-        [SerializeField, BoxGroup("The One Third Form Attacks")]
-        private TentacleBlastAttack m_tentacleBlastAttack;
-
         [SerializeField, BoxGroup("Mouth Blast I Stuff")]
         private GameObject m_mouthBlastOneLaser;
         [SerializeField, BoxGroup("Mouth Blast I Stuff")]
@@ -543,32 +569,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private bool m_moveMouth;
         private int m_SideToStart;
 
-        //stuff for tentacle stab attack
-        [SerializeField, BoxGroup("Tentacle Stab Attack Stuff")]
-        private float m_tentacleStabTimer = 0f;
-        private int m_tentacleStabCount = 0;
-        private float m_tentacleStabTimerValue;
-        private bool m_triggerTentacleGroundStab;
-
-        //Monolith Slam stuff
-        [SerializeField, BoxGroup("Monolith Slam Stuff")]
-        private int m_numOfMonoliths;
-        [SerializeField, BoxGroup("Monolith Slam Stuff")]
-        private int m_monolithCounter;
-        [SerializeField, BoxGroup("Monolith Slam Stuff")]
-        private bool m_triggerMonolithSlamAttack;
-        [SerializeField, BoxGroup("Monolith Slam Stuff")]
-        private float m_monolithTimer;
-        private float m_monolithTimerValue;
-
         [SerializeField]
         private TheOneThirdFormAttacks m_theOneThirdFormAttacks;
-
-        [Button]
-        private void GroundStabAttack()
-        {
-            m_theOneThirdFormAttacks.TentacleGroundStab(m_targetInfo.position);
-        }
 
         public override void SetTarget(IDamageable damageable, Character m_target = null)
         {
@@ -764,32 +766,13 @@ namespace DChild.Gameplay.Characters.Enemies
         }
 
         void Update()
-        {
-            //if (triggerTentacleGroundStab)
-            //{
-            //    m_tentacleStabTimer -= GameplaySystem.time.deltaTime;
-
-            //    Vector2 tentacleSpawn = new Vector2(m_targetInfo.position.x, m_tentacleStabSpawnHeight.position.y);
-            //    if (m_tentacleStabTimer <= 0)
-            //    {
-            //        m_currentAttackCoroutine = StartCoroutine(m_tentacleStabAttack.ExecuteAttack(tentacleSpawn));
-            //        m_tentacleStabCount++;
-            //        m_tentacleStabTimer = m_tentacleStabTimerValue;      
-            //    }
-
-            //    if (m_tentacleStabCount > 4)
-            //    {
-            //        m_tentacleStabCount = 0;
-            //        triggerTentacleGroundStab = false;
-            //    }
-            //}
-
+        { 
             m_phaseHandle.MonitorPhase();
 
             switch (m_stateHandle.currentState)
             {
                 case State.Idle:
-                    //m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                    m_animation.SetAnimation(0, m_info.idleAnimation, true);
                     break;
                 case State.Intro:
                     StartCoroutine(IntroRoutine());
@@ -804,6 +787,8 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_stateHandle.Wait(State.Cooldown);
                     m_lastTargetPos = m_targetInfo.position;
 
+                    m_animation.SetAnimation(0, m_info.eyeSquintAnimation, true);
+
                     Debug.Log("CURRENT ATTACK PATTERN " + m_currentAttack);
                     switch (m_currentAttack)
                     {
@@ -812,26 +797,21 @@ namespace DChild.Gameplay.Characters.Enemies
 
                             Debug.Log("Tentacle Stab Attack");
 
-                            m_currentAttackCoroutine = StartCoroutine(m_theOneThirdFormAttacks.TentacleGroundStab(m_targetInfo.position));
-
-                            if (!m_triggerTentacleGroundStab)
-                                m_triggerTentacleGroundStab = true;
-
+                            m_currentAttackCoroutine = StartCoroutine(m_theOneThirdFormAttacks.TentacleGroundStab(m_targetInfo));
+                            
                             //Temporary
                             //m_attackDecider.hasDecidedOnAttack = false;
                             //m_currentAttackCoroutine = null;
                             m_stateHandle.ApplyQueuedState();
-                            if (!m_triggerTentacleGroundStab)
-                            {
-                                
-                            }
                             
                             //Temporary
                             break;
                         case Attack.Phase1Pattern2:
                             m_pickedCooldown = m_currentFullCooldown[1];
 
-                            m_currentAttackCoroutine = StartCoroutine(m_chasingGroundTentacleAttack.ExecuteAttack());
+                            Debug.Log("Chasing Ground Tentacle");
+
+                            m_currentAttackCoroutine = StartCoroutine(m_theOneThirdFormAttacks.ChasingGroundTentacle());
 
                             //Temporary
                             //m_attackDecider.hasDecidedOnAttack = false;
@@ -842,11 +822,9 @@ namespace DChild.Gameplay.Characters.Enemies
                         case Attack.Phase1Pattern3:
                             m_pickedCooldown = m_currentFullCooldown[2];
 
-                            //if (m_targetInfo.position.x < transform.position.x)
-                            //{
-                            //    m_currentAttackCoroutine = StartCoroutine(TENTACLEBLAST.ExecuteAttack());
-                            //}
                             Debug.Log("TENTACLE BLAST I ATTACK");
+
+                            m_currentAttackCoroutine = StartCoroutine(m_theOneThirdFormAttacks.TentacleBlast());
 
                             //Temporary
                             //m_attackDecider.hasDecidedOnAttack = false;
@@ -859,7 +837,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
                             Debug.Log("MONILITH SLAM ATTACK");
 
-                            m_currentAttackCoroutine = StartCoroutine(m_slidingWallAttack.ExecuteAttack(m_targetInfo.position));
+                            m_currentAttackCoroutine = StartCoroutine(m_theOneThirdFormAttacks.MonolithSlam(m_targetInfo));
 
                             //Temporary
                             //m_attackDecider.hasDecidedOnAttack = false;
@@ -870,7 +848,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         case Attack.Phase1Pattern5:
                             m_pickedCooldown = m_currentFullCooldown[4];
 
-                            m_currentAttackCoroutine = StartCoroutine(m_mouthBlastIIAttack.ExecuteAttack());
+                            m_currentAttackCoroutine = StartCoroutine(m_theOneThirdFormAttacks.MouthBlastWall());
 
                             //Temporary
                             //m_attackDecider.hasDecidedOnAttack = false;
@@ -881,11 +859,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         case Attack.Phase2Pattern1:
                             m_pickedCooldown = m_currentFullCooldown[0];
 
-                            if (m_tentacleStabTimer <= 0)
-                            {
-                                m_currentAttackCoroutine = StartCoroutine(m_tentacleStabAttack.ExecuteAttack(m_targetInfo.position));
-                                m_tentacleStabTimer = m_tentacleStabTimerValue;
-                            }
+                            m_currentAttackCoroutine = StartCoroutine(m_theOneThirdFormAttacks.TentacleGroundStab(m_targetInfo));
 
                             //Temporary
                             //m_attackDecider.hasDecidedOnAttack = false;
@@ -896,7 +870,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         case Attack.Phase2Pattern2:
                             m_pickedCooldown = m_currentFullCooldown[1];
                             
-                            m_currentAttackCoroutine = StartCoroutine(m_chasingGroundTentacleAttack.ExecuteAttack());
+                            m_currentAttackCoroutine = StartCoroutine(m_theOneThirdFormAttacks.ChasingGroundTentacle());
 
                             //Temporary
                             //m_attackDecider.hasDecidedOnAttack = false;
@@ -909,6 +883,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
                             Debug.Log("TENTACLE BLAST II ATTACK");
 
+                            m_currentAttackCoroutine = StartCoroutine(m_theOneThirdFormAttacks.TentacleBlast());
 
                             //Temporary
                             m_attackDecider.hasDecidedOnAttack = false;
@@ -921,7 +896,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
                             Debug.Log("MONOLITH SLAM ATTACK");
 
-                            m_currentAttackCoroutine = StartCoroutine(m_monolithSlamAttack.ExecuteAttack());
+                            m_currentAttackCoroutine = StartCoroutine(m_theOneThirdFormAttacks.MonolithSlam(m_targetInfo));
 
                             //Temporary
                             //m_attackDecider.hasDecidedOnAttack = false;
@@ -932,7 +907,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         case Attack.Phase2Pattern5:
                             m_pickedCooldown = m_currentFullCooldown[4];
 
-                            m_currentAttackCoroutine = StartCoroutine(m_mouthBlastIIAttack.ExecuteAttack());
+                            m_currentAttackCoroutine = StartCoroutine(m_theOneThirdFormAttacks.MouthBlastWall());
 
                             //Temporary
                             //m_attackDecider.hasDecidedOnAttack = false;
@@ -941,20 +916,16 @@ namespace DChild.Gameplay.Characters.Enemies
                             //Temporary
                             break;
                         case Attack.Phase2Pattern6:
-                            m_pickedCooldown = m_currentFullCooldown[5];
+                            m_pickedCooldown = m_currentFullCooldown[0];
 
+                            Debug.Log("Tentacle Stab Attack");
 
-                            if (m_targetInfo.isCharacterGrounded)
-                            {
-                                m_currentAttackCoroutine = StartCoroutine(m_tentacleCeilingAttack.ExecuteAttack());
-                                m_stateHandle.ApplyQueuedState();
-                            }
-                            else
-                            {
-                                m_attackDecider.hasDecidedOnAttack = false;
-                                m_currentAttackCoroutine = null;
-                                m_stateHandle.OverrideState(State.Chasing);
-                            }
+                            m_currentAttackCoroutine = StartCoroutine(m_theOneThirdFormAttacks.TentacleGroundStab(m_targetInfo));
+
+                            //Temporary
+                            //m_attackDecider.hasDecidedOnAttack = false;
+                            //m_currentAttackCoroutine = null;
+                            m_stateHandle.ApplyQueuedState();
 
                             //Temporary
                             //m_attackDecider.hasDecidedOnAttack = false;
@@ -965,12 +936,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         case Attack.Phase3Pattern1:
                             m_pickedCooldown = m_currentFullCooldown[0];
 
-                            if (m_tentacleStabTimer <= 0)
-                            {
-                                Debug.Log("Player is detected: " + m_targetInfo.doesTargetExist);
-                                m_currentAttackCoroutine = StartCoroutine(m_tentacleStabAttack.ExecuteAttack(m_targetInfo.position));
-                                m_tentacleStabTimer = m_tentacleStabTimerValue;
-                            }
+                            m_currentAttackCoroutine = StartCoroutine(m_theOneThirdFormAttacks.TentacleGroundStab(m_targetInfo));
 
                             //Temporary
                             //m_attackDecider.hasDecidedOnAttack = false;
@@ -983,7 +949,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
                             Debug.Log("TENTACLE GARDEN / CHASING GROUND TENTACLE ATTACK");
 
-                            m_currentAttackCoroutine = StartCoroutine(m_chasingGroundTentacleAttack.ExecuteAttack());
+                            m_currentAttackCoroutine = StartCoroutine(m_theOneThirdFormAttacks.ChasingGroundTentacle());
                             
                             //Temporary
                             //m_attackDecider.hasDecidedOnAttack = false;
@@ -996,6 +962,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
                             Debug.Log("TENTACLE BLAST I/II ATTACK");
 
+                            m_currentAttackCoroutine = StartCoroutine(m_theOneThirdFormAttacks.TentacleBlast());
+
                             //Temporary
                             m_attackDecider.hasDecidedOnAttack = false;
                             m_currentAttackCoroutine = null;
@@ -1007,7 +975,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
                             Debug.Log("MONILITH SLAM ATTACK");
 
-                            m_currentAttackCoroutine = StartCoroutine(m_monolithSlamAttack.ExecuteAttack());
+                            m_currentAttackCoroutine = StartCoroutine(m_theOneThirdFormAttacks.MonolithSlam(m_targetInfo));
                             //Temporary
                             //m_attackDecider.hasDecidedOnAttack = false;
                             //m_currentAttackCoroutine = null;
@@ -1017,7 +985,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         case Attack.Phase3Pattern5:
                             m_pickedCooldown = m_currentFullCooldown[4];
 
-                            m_currentAttackCoroutine = StartCoroutine(m_mouthBlastIIAttack.ExecuteAttack());
+                            m_currentAttackCoroutine = StartCoroutine(m_theOneThirdFormAttacks.MouthBlastWall());
 
                             //Temporary
                             //m_attackDecider.hasDecidedOnAttack = false;
@@ -1026,19 +994,16 @@ namespace DChild.Gameplay.Characters.Enemies
                             //Temporary
                             break;
                         case Attack.Phase3Pattern6:
-                            m_pickedCooldown = m_currentFullCooldown[5];
+                            m_pickedCooldown = m_currentFullCooldown[0];
 
-                            if (m_targetInfo.isCharacterGrounded)
-                            {
-                                m_currentAttackCoroutine = StartCoroutine(m_tentacleCeilingAttack.ExecuteAttack());
-                                m_stateHandle.ApplyQueuedState();
-                            }
-                            else
-                            {
-                                m_attackDecider.hasDecidedOnAttack = false;
-                                m_currentAttackCoroutine = null;
-                                m_stateHandle.OverrideState(State.Chasing);
-                            }
+                            Debug.Log("Tentacle Stab Attack");
+
+                            m_currentAttackCoroutine = StartCoroutine(m_theOneThirdFormAttacks.TentacleGroundStab(m_targetInfo));
+
+                            //Temporary
+                            //m_attackDecider.hasDecidedOnAttack = false;
+                            //m_currentAttackCoroutine = null;
+                            m_stateHandle.ApplyQueuedState();
 
                             //Temporary
                             //m_attackDecider.hasDecidedOnAttack = false;
@@ -1051,6 +1016,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
                             Debug.Log("BUBBLE IMPRISONMENT ATTACK");
 
+                            m_currentAttackCoroutine = StartCoroutine(m_theOneThirdFormAttacks.BubbleImprisonment(m_targetInfo));
+
                             //Temporary
                             m_attackDecider.hasDecidedOnAttack = false;
                             m_currentAttackCoroutine = null;
@@ -1062,12 +1029,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
                             Debug.Log("TENTACLE GROUND STAB ATTACK");
 
-                            if (m_tentacleStabTimer <= 0)
-                            {
-                                Debug.Log("Player is detected: " + m_targetInfo.doesTargetExist);
-                                m_currentAttackCoroutine = StartCoroutine(m_tentacleStabAttack.ExecuteAttack(m_targetInfo.position));
-                                m_tentacleStabTimer = m_tentacleStabTimerValue;
-                            }
+                            m_currentAttackCoroutine = StartCoroutine(m_theOneThirdFormAttacks.TentacleGroundStab(m_targetInfo));
 
                             //Temporary
                             m_attackDecider.hasDecidedOnAttack = false;
@@ -1080,7 +1042,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
                             Debug.Log("TENTACLE GARDEN / CHASING GROUND TENTACLE ATTACK");
 
-                            m_currentAttackCoroutine = StartCoroutine(m_chasingGroundTentacleAttack.ExecuteAttack());
+                            m_currentAttackCoroutine = StartCoroutine(m_theOneThirdFormAttacks.ChasingGroundTentacle());
 
                             //Temporary
                             m_attackDecider.hasDecidedOnAttack = false;
@@ -1093,6 +1055,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
                             Debug.Log("TENTACLE BLAST II ATTACK");
 
+                            m_currentAttackCoroutine = StartCoroutine(m_theOneThirdFormAttacks.TentacleBlast());
+
                             //Temporary
                             m_attackDecider.hasDecidedOnAttack = false;
                             m_currentAttackCoroutine = null;
@@ -1104,7 +1068,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
                             Debug.Log("MONOLITH SLAM ATTACK");
 
-                            m_currentAttackCoroutine = StartCoroutine(m_monolithSlamAttack.ExecuteAttack());
+                            m_currentAttackCoroutine = StartCoroutine(m_theOneThirdFormAttacks.MonolithSlam(m_targetInfo));
                             //Temporary
                             //m_attackDecider.hasDecidedOnAttack = false;
                             //m_currentAttackCoroutine = null;
@@ -1116,6 +1080,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
                             Debug.Log("MOUTH BLAST II ATTACK");
 
+                            m_currentAttackCoroutine = StartCoroutine(m_theOneThirdFormAttacks.MouthBlastWall());
+
                             //Temporary
                             m_attackDecider.hasDecidedOnAttack = false;
                             m_currentAttackCoroutine = null;
@@ -1123,19 +1089,16 @@ namespace DChild.Gameplay.Characters.Enemies
                             //Temporary
                             break;
                         case Attack.Phase4Pattern6:
-                            m_pickedCooldown = m_currentFullCooldown[5];
+                            m_pickedCooldown = m_currentFullCooldown[0];
 
-                            if (m_targetInfo.isCharacterGrounded)
-                            {
-                                m_currentAttackCoroutine = StartCoroutine(m_tentacleCeilingAttack.ExecuteAttack());
-                                m_stateHandle.ApplyQueuedState();
-                            }
-                            else
-                            {
-                                m_attackDecider.hasDecidedOnAttack = false;
-                                m_currentAttackCoroutine = null;
-                                m_stateHandle.OverrideState(State.Chasing);
-                            }
+                            Debug.Log("Tentacle Stab Attack");
+
+                            m_currentAttackCoroutine = StartCoroutine(m_theOneThirdFormAttacks.TentacleGroundStab(m_targetInfo));
+
+                            //Temporary
+                            //m_attackDecider.hasDecidedOnAttack = false;
+                            //m_currentAttackCoroutine = null;
+                            m_stateHandle.ApplyQueuedState();
 
                             //Temporary
                             //m_attackDecider.hasDecidedOnAttack = false;
@@ -1148,6 +1111,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
                             Debug.Log("BUBBLE IMPRISONMENT ATTACK");
 
+                            m_currentAttackCoroutine = StartCoroutine(m_theOneThirdFormAttacks.BubbleImprisonment(m_targetInfo));
+
                             //Temporary
                             m_attackDecider.hasDecidedOnAttack = false;
                             m_currentAttackCoroutine = null;
@@ -1159,16 +1124,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
                             Debug.Log("GRABBER SWIPE + WALL SLAM ATTACK");
 
-                            //if (m_targetInfo.isCharacterGrounded)
-                            //{
-                            //    m_stateHandle.ApplyQueuedState();
-                            //}
-                            //else
-                            //{
-                            //    m_attackDecider.hasDecidedOnAttack = false;
-                            //    m_currentAttackCoroutine = null;
-                            //    m_stateHandle.OverrideState(State.Chasing);
-                            //}
+                            m_currentAttackCoroutine = StartCoroutine(m_theOneThirdFormAttacks.TentacleGrab());
 
                             //Temporary
                             m_attackDecider.hasDecidedOnAttack = false;
@@ -1179,7 +1135,14 @@ namespace DChild.Gameplay.Characters.Enemies
                         case Attack.Phase5Pattern1:
                             m_pickedCooldown = m_currentFullCooldown[0];
 
-                            m_currentAttackCoroutine = StartCoroutine(m_tentacleStabAttack.ExecuteAttack(m_lastTargetPos));
+                            Debug.Log("Tentacle Stab Attack");
+
+                            m_currentAttackCoroutine = StartCoroutine(m_theOneThirdFormAttacks.TentacleGroundStab(m_targetInfo));
+
+                            //Temporary
+                            //m_attackDecider.hasDecidedOnAttack = false;
+                            //m_currentAttackCoroutine = null;
+                            m_stateHandle.ApplyQueuedState();
 
                             //Temporary
                             //m_attackDecider.hasDecidedOnAttack = false;
@@ -1192,7 +1155,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
                             Debug.Log("TENTACLE GARDEN / CHASING GROUND TENTACLE ATTACK");
 
-                            m_currentAttackCoroutine = StartCoroutine(m_chasingGroundTentacleAttack.ExecuteAttack());
+                            m_currentAttackCoroutine = StartCoroutine(m_theOneThirdFormAttacks.ChasingGroundTentacle());
                             //Temporary
                             //m_attackDecider.hasDecidedOnAttack = false;
                             //m_currentAttackCoroutine = null;
@@ -1204,6 +1167,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
                             Debug.Log("TENTACLE BLAST I/II ATTACK");
 
+                            m_currentAttackCoroutine = StartCoroutine(m_theOneThirdFormAttacks.TentacleBlast());
+
                             //Temporary
                             m_attackDecider.hasDecidedOnAttack = false;
                             m_currentAttackCoroutine = null;
@@ -1214,6 +1179,8 @@ namespace DChild.Gameplay.Characters.Enemies
                             m_pickedCooldown = m_currentFullCooldown[3];
 
                             Debug.Log("MONOLITH SLAM ATTACK");
+
+                            m_currentAttackCoroutine = StartCoroutine(m_theOneThirdFormAttacks.MonolithSlam(m_targetInfo));
 
                             //Temporary
                             m_attackDecider.hasDecidedOnAttack = false;
@@ -1233,19 +1200,16 @@ namespace DChild.Gameplay.Characters.Enemies
                             //Temporary
                             break;
                         case Attack.Phase5Pattern6:
-                            m_pickedCooldown = m_currentFullCooldown[5];
+                            m_pickedCooldown = m_currentFullCooldown[0];
 
-                            if (m_targetInfo.isCharacterGrounded)
-                            {
-                                m_currentAttackCoroutine = StartCoroutine(m_tentacleCeilingAttack.ExecuteAttack());
-                                m_stateHandle.ApplyQueuedState();
-                            }
-                            else
-                            {
-                                m_attackDecider.hasDecidedOnAttack = false;
-                                m_currentAttackCoroutine = null;
-                                m_stateHandle.OverrideState(State.Chasing);
-                            }
+                            Debug.Log("Tentacle Stab Attack");
+
+                            m_currentAttackCoroutine = StartCoroutine(m_theOneThirdFormAttacks.TentacleGroundStab(m_targetInfo));
+
+                            //Temporary
+                            //m_attackDecider.hasDecidedOnAttack = false;
+                            //m_currentAttackCoroutine = null;
+                            m_stateHandle.ApplyQueuedState();
 
                             //Temporary
                             //m_attackDecider.hasDecidedOnAttack = false;
@@ -1258,6 +1222,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
                             Debug.Log("BUBBLE IMPRISONMENT ATTACK");
 
+                            m_currentAttackCoroutine = StartCoroutine(m_theOneThirdFormAttacks.BubbleImprisonment(m_targetInfo));
+
                             //Temporary
                             m_attackDecider.hasDecidedOnAttack = false;
                             m_currentAttackCoroutine = null;
@@ -1268,6 +1234,8 @@ namespace DChild.Gameplay.Characters.Enemies
                             m_pickedCooldown = m_currentFullCooldown[7];
 
                             Debug.Log("GRABBER SWIPE + WALL SLAM ATTACK");
+
+                            m_currentAttackCoroutine = StartCoroutine(m_theOneThirdFormAttacks.TentacleGrab());
 
                             //Temporary
                             m_attackDecider.hasDecidedOnAttack = false;
@@ -1337,22 +1305,6 @@ namespace DChild.Gameplay.Characters.Enemies
 
 
             //transform.position = Vector2.MoveTowards(transform.position, m_mouthBlastLeftSide.position, m_mouthBlastMoveSpeed);
-
-            //if (m_triggerMonolithSlamAttack)
-            //{
-            //    Debug.Log("trigger monolith is: " + m_triggerMonolithSlamAttack);
-            //    m_monolithTimer -= GameplaySystem.time.deltaTime;
-
-            //    if (m_monolithCounter < m_numOfMonoliths)
-            //    {
-            //        if (m_monolithTimer <= 0)
-            //        {
-            //            StartCoroutine(m_monolithSlamAttack.SetUpMonoliths(m_targetInfo.position));
-            //            m_monolithCounter++;
-            //            m_monolithTimer = m_monolithTimerValue;
-            //        }
-            //    }
-            //}
         }
 
         protected override void OnForbidFromAttackTarget()
@@ -1369,36 +1321,6 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             
         }
-
-        [Button]
-        private void ForceAttack()
-        {
-            StartCoroutine(m_tentacleStabAttack.ExecuteAttack(m_targetInfo.position));
-            //StartCoroutine(m_tentacleCeilingAttack.ExecuteAttack());
-            //StartCoroutine(m_movingTentacleGroundAttack.ExecuteAttack());
-            //StartCoroutine(m_chasingGroundTentacleAttack.ExecuteAttack());
-            //StartCoroutine(m_mouthBlastIIAttack.ExecuteAttack());
-            //StartCoroutine(MouthBlastOneAttack());
-
-            //m_doMouthBlastIAttack = true;
-            //var rollSide = Random.Range(0, 2);
-            //m_SideToStart = rollSide;
-
-            //StartCoroutine(m_slidingWallAttack.ExecuteAttack());
-
-            //StartCoroutine(m_monolithSlamAttack.ExecuteAttack());
-            //m_triggerMonolithSlamAttack = false;
-
-            //StartCoroutine(m_tentacleBlastAttack.ExecuteAttack());
-
-        }
-
-        [Button]
-        private void TriggerMonolithAttack()
-        {
-            m_triggerMonolithSlamAttack = true;
-        }
-
     }
 }
 

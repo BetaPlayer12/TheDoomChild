@@ -854,25 +854,31 @@ namespace DChild.Gameplay.Characters.Enemies
                     }
                     else
                     {
+                        if (m_animation.animationState.GetCurrent(0).IsComplete)
+                        {
+                            var chosenMoveAnim = UnityEngine.Random.Range(0, 50) > 10 ? m_info.idleAnimation : m_info.move.animation;
+                            m_animation.SetAnimation(0, chosenMoveAnim, true);
+                        }
+
                         if (Vector2.Distance(m_targetInfo.position, transform.position) <= m_info.targetDistanceTolerance)
                         {
-                            if (m_character.physics.velocity.y > 1 || m_character.physics.velocity.y < -1)
-                            {
-                                m_animation.SetAnimation(0, m_info.idleAnimation, true);
-                            }
-                            else
-                            {
-                                m_animation.SetAnimation(0, m_info.patrol.animation, true);
-                            }
                             m_rigidbody2D.constraints = RigidbodyConstraints2D.FreezeRotation;
                             CalculateRunPath();
                             m_agent.Move(m_info.move.speed);
                         }
                         else
                         {
-                            m_agent.Stop();
-                            m_rigidbody2D.constraints = RigidbodyConstraints2D.FreezePosition | RigidbodyConstraints2D.FreezeRotation;
-                            m_animation.SetAnimation(0, m_info.idleAnimation, true).TimeScale = 1f;
+                            if (Vector2.Distance(m_targetInfo.position, transform.position) > m_info.targetDistanceTolerance + 10)
+                            {
+                                m_agent.SetDestination(m_targetInfo.position);
+                                m_agent.Move(m_info.move.speed);
+                            }
+                            else
+                            {
+                                m_agent.Stop();
+                                m_rigidbody2D.constraints = RigidbodyConstraints2D.FreezePosition | RigidbodyConstraints2D.FreezeRotation;
+                                m_animation.SetAnimation(0, m_info.idleAnimation, true).TimeScale = 1f;
+                            }
                         }
                     }
 
