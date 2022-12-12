@@ -293,6 +293,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private Boss m_boss;
         [SerializeField, TabGroup("Reference")]
         private Hitbox m_hitbox;
+        [SerializeField, TabGroup("Reference")]
+        private GameObject m_model;
 
         [ShowInInspector]
         private StateHandle<State> m_stateHandle;
@@ -545,13 +547,6 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Modules")]
         private PathFinderAgent m_agent;
 
-        [SerializeField, TabGroup("Sensors")]
-        private RaySensor m_leftWallSensor;
-        [SerializeField, TabGroup("Sensors")]
-        private RaySensor m_rightWallSensor;
-
-        
-
         [SerializeField]
         private TheOneThirdFormAttacks m_theOneThirdFormAttacks;
 
@@ -666,6 +661,67 @@ namespace DChild.Gameplay.Characters.Enemies
             m_stateHandle.OverrideState(State.Phasing);
         }
 
+        #region MouthBlastOne Attack
+        private IEnumerator MouthBlastOneStart()
+        {
+            m_animation.SetAnimation(0, m_info.eyeClosedAnimation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.eyeClosedAnimation);
+            m_animation.SetAnimation(0, m_info.eyeMouthBlastAnticipationAnimation, true);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.eyeMouthBlastAnticipationAnimation);
+
+            yield return SetPositionForMouthBlast();
+        }
+
+        private IEnumerator SetPositionForMouthBlast()
+        {
+            int side = Random.Range(0, 2);
+            if (side == 0)
+            {
+                m_model.transform.position = new Vector2(m_theOneThirdFormAttacks.mouthBlastOneAttack.mouthBlastOneLeftSide.position.x, m_model.transform.position.y);
+            }
+            else if (side == 1)
+            {
+                m_model.transform.position = new Vector2(m_theOneThirdFormAttacks.mouthBlastOneAttack.mouthBlastOneRightSide.position.x, m_model.transform.position.y);
+            }
+            yield return MoveMouthBlast(side);
+        }
+
+        private IEnumerator MoveMouthBlast(int side)
+        {
+            m_animation.SetAnimation(0, m_info.eyeMouthBlastAnimation, true);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.eyeMouthBlastAnimation);
+
+            if(side == 0)
+            {
+                while(m_model.transform.position.x < m_theOneThirdFormAttacks.mouthBlastOneAttack.mouthBlastOneRightSide.position.x)
+                {
+                    m_model.transform.position = Vector2.MoveTowards(m_model.transform.position,
+                        new Vector2(m_theOneThirdFormAttacks.mouthBlastOneAttack.mouthBlastOneRightSide.position.x,
+                        m_model.transform.position.y), m_theOneThirdFormAttacks.mouthBlastOneAttack.mouthBlastOneMoveSpeed);
+                    StartCoroutine(m_theOneThirdFormAttacks.mouthBlastOneAttack.ExecuteAttack());
+                    yield return new WaitForSeconds(1f*GameplaySystem.time.deltaTime);
+                }
+            }
+            else if(side == 1)
+            {
+                while (m_model.transform.position.x > m_theOneThirdFormAttacks.mouthBlastOneAttack.mouthBlastOneLeftSide.position.x)
+                {
+                    m_model.transform.position = Vector2.MoveTowards(m_model.transform.position,
+                        new Vector2(m_theOneThirdFormAttacks.mouthBlastOneAttack.mouthBlastOneLeftSide.position.x,
+                        m_model.transform.position.y), m_theOneThirdFormAttacks.mouthBlastOneAttack.mouthBlastOneMoveSpeed);
+                    StartCoroutine(m_theOneThirdFormAttacks.mouthBlastOneAttack.ExecuteAttack());
+                    yield return new WaitForSeconds(1f * GameplaySystem.time.deltaTime);
+                }
+            }
+        }
+
+        [Button]
+        private void TestMouthBlastI()
+        {
+            StartCoroutine(MouthBlastOneStart());
+        }
+
+        #endregion
         void Update()
         { 
             m_phaseHandle.MonitorPhase();
