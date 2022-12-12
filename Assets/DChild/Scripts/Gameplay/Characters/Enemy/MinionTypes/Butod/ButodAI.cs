@@ -207,12 +207,6 @@ namespace DChild.Gameplay.Characters.Enemies
             m_stateHandle.ApplyQueuedState();
         }
 
-        private void CustomTurn()
-        {
-            transform.localScale = new Vector3(-transform.localScale.x, 1, 1);
-            m_character.SetFacing(transform.localScale.x == 1 ? HorizontalDirection.Right : HorizontalDirection.Left);
-        }
-
         //Patience Handler
         private void Patience()
         {
@@ -315,7 +309,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 StopAllCoroutines();
                 m_selfCollider.enabled = true;
                 //m_animation.SetAnimation(0, m_info.flinchAnimation, false);
-                m_stateHandle.Wait(State.ReevaluateSituation);
+                m_stateHandle.Wait(State.Cooldown);
                 StartCoroutine(FlinchRoutine());
             }
         }

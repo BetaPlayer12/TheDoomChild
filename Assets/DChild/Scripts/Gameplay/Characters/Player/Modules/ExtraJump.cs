@@ -14,10 +14,13 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private ParticleSystem m_doubleJumpFX;
         [SerializeField]
         private Transform m_particleSpawnPosition;
+        [SerializeField, BoxGroup("Sensors")]
+        private RaySensor m_frontWallStickSensor;
 
         private Rigidbody2D m_rigidbody;
         private Animator m_animator;
         private int m_animationParameter;
+        private int m_wallJumpAnimationParameter;
         private int m_currentCount;
 
         public event EventAction<EventActionArgs> ExecuteModule;
@@ -27,7 +30,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_rigidbody = info.rigidbody;
             m_currentCount = m_configuration.count;
             m_animator = info.animator;
-            m_animationParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.Jump);
+            m_animationParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.DoubleJump);
+            m_wallJumpAnimationParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.WallJump);
         }
 
         public void SetConfiguration(ExtraJumpStatsInfo info)
@@ -39,13 +43,15 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void Cancel()
         {
-            m_rigidbody.velocity = Vector2.zero;
+            //m_rigidbody.velocity = Vector2.zero; Comment Out for Momentum Velocity
             m_animator.SetBool(m_animationParameter, false);
+            m_animator.SetBool(m_wallJumpAnimationParameter, false);
         }
 
         public void EndExecution()
         {
             m_animator.SetBool(m_animationParameter, false);
+            m_animator.SetBool(m_wallJumpAnimationParameter, false);
         }
 
         public void Reset() => m_currentCount = m_configuration.count;
@@ -56,7 +62,16 @@ namespace DChild.Gameplay.Characters.Players.Modules
             {
                 m_currentCount--;
                 m_rigidbody.velocity = new Vector2(0, m_configuration.power);
-                m_animator.SetBool(m_animationParameter, true);
+
+                m_frontWallStickSensor.Cast();
+                if (m_frontWallStickSensor.isDetecting)
+                {
+                    m_animator.SetBool(m_wallJumpAnimationParameter, true);
+                }
+                else
+                {
+                    m_animator.SetBool(m_animationParameter, true);
+                }
                 m_doubleJumpFX.Play();
 
                 ParticleSystem particle = Instantiate(m_doubleJumpFX);

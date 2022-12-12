@@ -10,6 +10,12 @@ namespace DChild.Gameplay.Characters.Players.Modules
     {
         [SerializeField, HideLabel]
         private GroundJumpStatsInfo m_configuration;
+        //[SerializeField, MinValue(0.1f)]
+        //private float m_power;
+        //[SerializeField]
+        //private float m_cutOffPower;
+        //[SerializeField, MinValue(0f)]
+        //private float m_allowCutoffAfterDuration;
 
         private Rigidbody2D m_rigidbody;
         private IHighJumpState m_state;
@@ -31,7 +37,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
         public void SetConfiguration(GroundJumpStatsInfo info)
         {
             m_configuration.CopyInfo(info);
-
         }
 
         public void Cancel()
@@ -63,11 +68,10 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void Execute()
         {
-            Debug.Log("Jump");
             m_state.isHighJumping = true;
             m_animator.SetBool(m_animationParameter, true);
             m_rigidbody.velocity = new Vector2(m_rigidbody.velocity.x, m_configuration.jumpPower);
-            m_animator.Play("Jump_Rise");
+            m_animator.Play("Jump Entry");
             //m_rigidbody.sharedMaterial.friction = 0f;
             m_timer = m_configuration.allowCutoffAfterDuration;
 

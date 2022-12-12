@@ -22,7 +22,7 @@ namespace DChild.Gameplay.Environment
                 RaycastHit2D[] RayGameObject = m_sensor.GetValidHits();
                 for (int i = 0; i < RayGameObject.Length; i++)
                 {
-                    if (RayGameObject[i].collider.gameObject.layer == LayerMask.NameToLayer("Environment"))
+                    if (RayGameObject[i].collider.gameObject.layer == LayerMask.NameToLayer("Environment")|| RayGameObject[i].collider.gameObject.layer == LayerMask.NameToLayer("PassableEnvironment"))
                     {
                         m_platform = true;
                         m_grounddetected?.Invoke();
