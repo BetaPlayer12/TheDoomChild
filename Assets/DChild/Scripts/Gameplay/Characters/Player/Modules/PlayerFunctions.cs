@@ -135,6 +135,12 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_whipCombo?.ComboEnd();
         }
 
+        public void ResetWhipComboGravity()
+        {
+            //Debug.Log("ComboWhipEnd");
+            m_whipCombo?.ResetGravity();
+        }
+
         public void FinishProjectileThrow()
         {
             m_projectileThrow?.AttackOver();

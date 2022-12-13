@@ -27,6 +27,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private Character m_character;
         [SerializeField, BoxGroup("Physics")]
         private Rigidbody2D m_physics;
+        private float m_cacheGravity;
         //[SerializeField, BoxGroup("Physics")]
         //private List<Vector2> m_pushForce;
         [SerializeField, BoxGroup("Sensors")]
@@ -69,6 +70,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_whipComboCooldownTimer = /*m_whipComboCooldown*/m_configuration.whipComboCooldown;
             m_allowAttackDelayHandling = true;
             m_canWhipCombo = true;
+            m_cacheGravity = m_physics.gravityScale;
 
             m_fxAnimator = m_attackFX.gameObject.GetComponentInChildren<Animator>();
             m_skeletonAnimation = m_attackFX.gameObject.GetComponent<SkeletonAnimation>();
@@ -145,13 +147,23 @@ namespace DChild.Gameplay.Characters.Players.Modules
             //}
 
             //TEST
-            m_enemySensor.Cast();
-            m_wallSensor.Cast();
-            m_edgeSensor.Cast();
-            if (!m_enemySensor.isDetecting && !m_wallSensor.allRaysDetecting && m_edgeSensor.isDetecting)
+            if (CanAttack())
             {
                 m_physics.AddForce(m_character.facing == HorizontalDirection.Right ? m_configuration.pushForce[m_currentVisualWhipState] : -m_configuration.pushForce[m_currentVisualWhipState], ForceMode2D.Impulse);
             }
+        }
+
+        public bool CanAttack()
+        {
+            m_enemySensor.Cast();
+            m_wallSensor.Cast();
+            m_edgeSensor.Cast();
+            return !m_enemySensor.isDetecting && !m_wallSensor.allRaysDetecting && m_edgeSensor.isDetecting;
+        }
+
+        public void ResetGravity()
+        {
+            m_physics.gravityScale = m_cacheGravity;
         }
 
         public override void AttackOver()
