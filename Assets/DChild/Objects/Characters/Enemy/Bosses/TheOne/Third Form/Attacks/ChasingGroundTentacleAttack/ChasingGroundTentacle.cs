@@ -9,6 +9,8 @@ namespace DChild.Gameplay.Characters.Enemies
 {
     public class ChasingGroundTentacle : PoolableObject
     {
+        [SerializeField]
+        private Collider2D m_hitbox;
 
         [SerializeField, TabGroup("Reference")]
         protected SpineRootAnimation m_animation;
@@ -26,6 +28,7 @@ namespace DChild.Gameplay.Characters.Enemies
         // Start is called before the first frame update
         void Start()
         {
+            m_hitbox.enabled = false;
             StartCoroutine(WaitForInput());
         }
 
@@ -33,12 +36,12 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_animation.SetAnimation(0, m_anticipationLoopAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_anticipationLoopAnimation);
-
             StartCoroutine(Extended());
         }
 
         private IEnumerator Extended()
         {
+            m_hitbox.enabled = true;
             m_animation.SetAnimation(0, m_extendedAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_extendedAnimation);
         }

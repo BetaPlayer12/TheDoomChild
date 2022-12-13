@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DChild.Gameplay.Pooling;
 using System.Linq;
+using DChild.Gameplay.Characters.AI;
 
 namespace DChild.Gameplay.Characters.Enemies
 {
@@ -12,6 +13,12 @@ namespace DChild.Gameplay.Characters.Enemies
         private MonolithSlam m_monolith;
         [SerializeField]
         private Transform m_monolithSlamHeight;
+        [SerializeField]
+        private int m_numOfMonoliths;
+        [SerializeField]
+        private float m_timeBeforeSmash;
+        [SerializeField]
+        private float m_spawnIntervalForMonoliths;
 
         private List<PoolableObject> m_monolithsSpawned = new List<PoolableObject>();
 
@@ -19,28 +26,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         public IEnumerator ExecuteAttack()
         {
-            if (m_leftToRightSequence)
-                OrganizeMonolithsSpawnedInDescendingOrder();
-            else
-                OrganizeMonolithsSpawnedInAscendingOrder();
-
-            Debug.Log(m_monolithsSpawned);
-
-            if(m_monolithsSpawned.Count > 1)
-            {
-                int rollMonolithToKeep = Random.Range(0, m_monolithsSpawned.Count);
-
-                m_monolithsSpawned[rollMonolithToKeep].gameObject.GetComponent<MonolithSlam>().keepMonolith = true;
-            }
-
-            foreach (PoolableObject monolith in m_monolithsSpawned)
-            {
-                monolith.GetComponent<MonolithSlam>().smashMonolith = true;
-                yield return new WaitForSeconds(2f);
-            }
-
-
-            yield return null;
+            throw new System.NotImplementedException();
         }
 
         public IEnumerator ExecuteAttack(Vector2 PlayerPosition)
@@ -48,11 +34,42 @@ namespace DChild.Gameplay.Characters.Enemies
             throw new System.NotImplementedException();
         }
 
-        public IEnumerator SetUpMonoliths(Vector2 PlayerPosition)
+        public IEnumerator ExecuteAttack(AITargetInfo Target)
         {
-            InstantiateMonolith(PlayerPosition, m_monolith.gameObject);
+            int counter = 0;
+            while(counter < m_numOfMonoliths)
+            {
+                yield return SetUpMonoliths(Target);
+                counter++;
+            }            
 
-            yield return new WaitForSeconds(3f);
+            if (m_leftToRightSequence)
+                OrganizeMonolithsSpawnedInDescendingOrder();
+            else
+                OrganizeMonolithsSpawnedInAscendingOrder();
+
+            if (m_monolithsSpawned.Count > 1)
+            {
+                int rollMonolithToKeep = Random.Range(0, m_monolithsSpawned.Count);
+
+                m_monolithsSpawned[rollMonolithToKeep].gameObject.GetComponent<MonolithSlam>().keepMonolith = true;
+                FindObjectOfType<ObstacleChecker>().monolithSlamObstacleList.Add(m_monolithsSpawned[rollMonolithToKeep]);
+            }
+
+            yield return new WaitForSeconds(2f);
+
+            foreach (PoolableObject monolith in m_monolithsSpawned)
+            {
+                monolith.GetComponent<MonolithSlam>().smashMonolith = true;
+                yield return new WaitForSeconds(m_timeBeforeSmash);
+            }
+        }
+
+        public IEnumerator SetUpMonoliths(AITargetInfo Target)
+        {
+            InstantiateMonolith(new Vector2(Target.position.x, Target.position.y), m_monolith.gameObject);
+
+            yield return new WaitForSeconds(m_spawnIntervalForMonoliths);
         }
 
         private void InstantiateMonolith(Vector2 spawnPosition, GameObject monolith)
@@ -72,8 +89,6 @@ namespace DChild.Gameplay.Characters.Enemies
             m_monolithsSpawned = m_monolithsSpawned.OrderByDescending(x => x.transform.position.x).ToList();
             m_monolithsSpawned.Reverse();
         }
-
-      
     }
 }
 

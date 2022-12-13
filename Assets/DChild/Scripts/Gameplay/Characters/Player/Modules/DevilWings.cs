@@ -75,7 +75,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void Execute()
         {
-            m_source.ReduceCurrentValue(m_configuration.sourceRequiredAmount);
+            //m_source.ReduceCurrentValue(m_configuration.sourceRequiredAmount);
             m_wingsFX.Play();
             m_state.isLevitating = true;
             m_cacheGravity = m_rigidbody.gravityScale;

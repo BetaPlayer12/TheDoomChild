@@ -108,6 +108,11 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_groundChaseTentaclesOne.transform.GetChild(c).gameObject.transform.GetChild(c).GetComponent<ChasingGroundTentacle>().ErectTentacle();
             }
         }
+
+        public IEnumerator ExecuteAttack(AITargetInfo Target)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }
 

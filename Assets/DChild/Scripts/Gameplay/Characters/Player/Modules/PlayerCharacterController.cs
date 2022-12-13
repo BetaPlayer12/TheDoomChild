@@ -367,6 +367,11 @@ namespace DChild.Gameplay.Characters.Players.Modules
                                 m_ledgeGrab?.Execute();
                             }
                         }
+                        else if ((m_input.horizontalInput > 0 && m_character.facing == HorizontalDirection.Left) || (m_input.horizontalInput < 0 && m_character.facing == HorizontalDirection.Right))
+                        {
+                            m_wallSlide?.Cancel();
+                            m_wallStick?.Cancel();
+                        }
 
                         return;
                     }
@@ -1349,14 +1354,14 @@ namespace DChild.Gameplay.Characters.Players.Modules
             {
                 if (m_activeSlide?.IsSlideDurationOver() ?? true)
                 {
-                    if (m_crouch.IsThereNoCeiling())
+                    if (m_crouch.IsThereNoCeiling() || !m_slide.HasGroundToSlideOn() || !m_shadowSlide.HasGroundToSlideOn())
                     {
                         m_activeSlide?.Cancel();
                         m_activeSlide?.ResetCooldownTimer();
                     }
                     else
                     {
-                        if (m_crouch.IsCrouchingPossible())
+                        if (m_crouch.IsCrouchingPossible() || !m_slide.HasGroundToSlideOn() || !m_shadowSlide.HasGroundToSlideOn())
                         {
                             m_activeSlide?.Cancel();
                             m_activeSlide?.ResetCooldownTimer();

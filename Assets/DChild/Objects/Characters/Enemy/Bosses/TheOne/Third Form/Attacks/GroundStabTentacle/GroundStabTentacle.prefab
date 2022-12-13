@@ -759,7 +759,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8135972556375984721}
-  - component: {fileID: 5924520899791529594}
   - component: {fileID: 3764894348487869759}
   - component: {fileID: 6172365960537481960}
   m_Layer: 13
@@ -785,29 +784,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5924520899791529594
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8135972556375984720}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e10454193b54c9a4eb8bfb67b80c746d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_centerMass: {fileID: 8135972558278111480}
-  m_data: {fileID: 11400000, guid: 67298658d41d4104a8d126323896c3f3, type: 2}
-  m_currentAttackInfo:
-    damage:
-      m_type: 0
-      m_value: 0
-    criticalDamageInfo:
-      chance: 0
-      damageModifier: 0
-    ignoreInvulnerability: 0
-    ignoresBlock: 0
 --- !u!114 &3764894348487869759
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -841,6 +817,7 @@ MonoBehaviour:
   - {fileID: 755071990205299890}
   - {fileID: 3079796000687807833}
   - {fileID: 6484898778094621196}
+  m_hitbox: {fileID: 5726035907490597756}
   m_animation: {fileID: 3764894348487869759}
   m_skeletonAnimation: {fileID: 4984169512158935840}
   m_anticipationLoopAnimation: Anticipation_Loop
@@ -983,6 +960,8 @@ GameObject:
   - component: {fileID: 7192609081303638697}
   - component: {fileID: 1651060391447397337}
   - component: {fileID: 5726035907490597756}
+  - component: {fileID: 5478851737615308364}
+  - component: {fileID: 959767513718125075}
   m_Layer: 13
   m_Name: Hitbox
   m_TagString: Untagged
@@ -1042,3 +1021,42 @@ CapsuleCollider2D:
   m_Offset: {x: -0.16520011, y: 37.033195}
   m_Size: {x: 1.6878481, y: 75.06639}
   m_Direction: 0
+--- !u!114 &5478851737615308364
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9021568477795216959}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e10454193b54c9a4eb8bfb67b80c746d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_centerMass: {fileID: 7192609081303638697}
+  m_data: {fileID: 11400000, guid: 67298658d41d4104a8d126323896c3f3, type: 2}
+  m_currentAttackInfo:
+    damage:
+      m_type: 0
+      m_value: 0
+    criticalDamageInfo:
+      chance: 0
+      damageModifier: 0
+    ignoreInvulnerability: 0
+    ignoresBlock: 0
+--- !u!114 &959767513718125075
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9021568477795216959}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d74578be2c646f438409c91e5fd4ee4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_canDetectInteractables: 0
+  m_damageUniqueHitboxesOnly: 0
+  m_collisionRegistrator: {fileID: 0}
+  m_ignoreColliderList: []
