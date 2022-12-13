@@ -58,7 +58,7 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return null;
         }
 
-        private IEnumerator EndMouthBlast()
+        public IEnumerator EndMouthBlast()
         {
             m_blackBloodFlood.isFlooding = false;
             m_launcher.SetBeam(false);
