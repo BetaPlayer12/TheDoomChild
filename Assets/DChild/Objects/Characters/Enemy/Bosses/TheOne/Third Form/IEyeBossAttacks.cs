@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using DChild.Gameplay.Characters.AI;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,6 +9,7 @@ namespace DChild.Gameplay.Characters.Enemies
     {
         IEnumerator ExecuteAttack();
         IEnumerator ExecuteAttack(Vector2 PlayerPosition);
+        IEnumerator ExecuteAttack(AITargetInfo Target);
     }
 }
 

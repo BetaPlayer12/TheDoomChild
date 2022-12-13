@@ -66,6 +66,12 @@ namespace DChild.Gameplay.Characters.Enemies
             private string m_idleAnimation;
             public string idleAnimation => m_idleAnimation;
             [SerializeField, BoxGroup("Animation"), ValueDropdown("GetAnimations")]
+            private string m_changeAnimation;
+            public string changeAnimation => m_changeAnimation;
+            [SerializeField, BoxGroup("Animation"), ValueDropdown("GetAnimations")]
+            private string m_pattern2Animation;
+            public string pattern2Animation => m_pattern2Animation;
+            [SerializeField, BoxGroup("Animation"), ValueDropdown("GetAnimations")]
             private string m_deathStartAnimation;
             public string deathStartAnimation => m_deathStartAnimation;
             [SerializeField, BoxGroup("Animation"), ValueDropdown("GetAnimations")]
@@ -81,6 +87,9 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField, BoxGroup("Projectile")]
             private SimpleProjectileAttackInfo m_projectile;
             public SimpleProjectileAttackInfo projectile => m_projectile;
+            [SerializeField, BoxGroup("Projectile")]
+            private SimpleProjectileAttackInfo m_projectile2;
+            public SimpleProjectileAttackInfo projectile2 => m_projectile2;
 
 
             public override void Initialize()
@@ -90,6 +99,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_move.SetData(m_skeletonDataAsset);
                 m_attackFrost.SetData(m_skeletonDataAsset);
                 m_projectile.SetData(m_skeletonDataAsset);
+                m_projectile2.SetData(m_skeletonDataAsset);
 #endif
             }
         }
@@ -170,6 +180,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private float m_currentAttackRange;
 
         private ProjectileLauncher m_projectileLauncher;
+        private ProjectileLauncher m_projectileLauncher2;
+
 
         private bool[] m_attackUsed;
         private List<Attack> m_attackCache;
@@ -416,14 +428,20 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator FrostAttackRoutine()
         {
-            m_attackBlastFX.Play();
-            m_attackSparkleFX.Play();
-            LaunchProjectile();
+           // m_attackBlastFX.Play();
+            //m_attackSparkleFX.Play();
+            LaunchProjectile2();
             m_animation.SetAnimation(0, m_info.attackFrostStartAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attackFrostStartAnimation);
             m_animation.SetAnimation(0, m_info.attackFrost.animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attackFrost.animation);
+            m_animation.SetAnimation(0, m_info.changeAnimation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.changeAnimation);
+            LaunchProjectile();
+            m_animation.SetAnimation(0, m_info.pattern2Animation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.pattern2Animation);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
+
             m_flinchHandle.gameObject.SetActive(true);
             m_rigidbody2D.constraints = RigidbodyConstraints2D.FreezeRotation;
             m_attackRoutine = null;
@@ -437,7 +455,43 @@ namespace DChild.Gameplay.Characters.Enemies
             for (int x = 0; x < rotations; x++)
             {
                 float angleStep = 360f / numberOfProjectiles;
+                //float angle = 45f;
+                float angle = 90f;
+                for (int z = 0; z < numberOfProjectiles; z++)
+                {
+                    Vector2 startPoint = new Vector2(m_character.centerMass.position.x, m_character.centerMass.position.y);
+                    float projectileDirXposition = startPoint.x + Mathf.Sin((angle * Mathf.PI) / 180) * 5;
+                    float projectileDirYposition = startPoint.y + Mathf.Cos((angle * Mathf.PI) / 180) * 5;
+
+                    Vector2 projectileVector = new Vector2(projectileDirXposition, projectileDirYposition);
+                    Vector2 projectileMoveDirection = (projectileVector - startPoint).normalized * m_info.projectile.projectileInfo.speed;
+
+                    GameObject projectile = m_info.projectile.projectileInfo.projectile;
+                    var instance = GameSystem.poolManager.GetPool<ProjectilePool>().GetOrCreateItem(projectile);
+                    instance.transform.position = m_character.centerMass.position;
+                    var component = instance.GetComponent<Projectile>();
+                    component.ResetState();
+                    //component.GetComponent<Rigidbody2D>().velocity = projectileMoveDirection;
+                    //Vector2 v = component.GetComponent<Rigidbody2D>().velocity;
+                    //var projRotation = Mathf.Atan2(v.y, v.x) * Mathf.Rad2Deg;
+                    //component.transform.rotation = Quaternion.AngleAxis(projRotation, Vector3.forward);
+                    Vector2 v = projectileMoveDirection;
+                    var projRotation = Mathf.Atan2(v.y, v.x) * Mathf.Rad2Deg;
+                    component.transform.rotation = Quaternion.AngleAxis(projRotation, Vector3.forward);
+                    m_delayLaunchRoutine = StartCoroutine(DelayedLaunchRoutine(component, projectileMoveDirection, m_info.attackDelay));
+
+                    angle += angleStep;
+                }
+            }
+            //yield return null;
+        }
+        private void LaunchIcePattern2(int numberOfProjectiles, int rotations)
+        {
+            for (int x = 0; x < rotations; x++)
+            {
+                float angleStep = 360f / numberOfProjectiles;
                 float angle = 45f;
+                //float angle = 90f;
                 for (int z = 0; z < numberOfProjectiles; z++)
                 {
                     Vector2 startPoint = new Vector2(m_character.centerMass.position.x, m_character.centerMass.position.y);
@@ -484,6 +538,15 @@ namespace DChild.Gameplay.Characters.Enemies
                 //m_projectileLauncher.AimAt(m_lastTargetPos);
                 //m_projectileLauncher.LaunchProjectile();
                 LaunchIcePattern(4, 1);
+            }
+        }
+        private void LaunchProjectile2()
+        {
+            if (m_targetInfo.isValid)
+            {
+                //m_projectileLauncher.AimAt(m_lastTargetPos);
+                //m_projectileLauncher.LaunchProjectile();
+                LaunchIcePattern2(4, 1);
             }
         }
         #endregion
@@ -748,6 +811,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_turnHandle.TurnDone += OnTurnDone;
             m_deathHandle?.SetAnimation(m_info.deathStartAnimation);
             m_projectileLauncher = new ProjectileLauncher(m_info.projectile.projectileInfo, transform);
+            m_projectileLauncher2 = new ProjectileLauncher(m_info.projectile2.projectileInfo, transform);
             m_stateHandle = new StateHandle<State>(State.Patrol, State.WaitBehaviourEnd);
             m_attackDecider = new RandomAttackDecider<Attack>();
             UpdateAttackDeciderList();
