@@ -470,6 +470,22 @@ namespace DChild.Gameplay.Characters.Enemies
         private Collider2D m_selfDestructBB;
         //[SerializeField, TabGroup("Hurtbox")]
         //private Collider2D m_swordSlash1BB;
+        [SerializeField, TabGroup("FX")]
+        private ParticleFX m_crawlFX;
+        [SerializeField, TabGroup("FX")]
+        private ParticleFX m_tentaSpearCrawlFX;
+        [SerializeField, TabGroup("FX")]
+        private ParticleFX m_heavyGroundStabFX;
+        [SerializeField, TabGroup("FX")]
+        private ParticleFX m_stabSlashFX;
+        [SerializeField, TabGroup("FX")]
+        private ParticleFX m_krakenFX;
+        [SerializeField, TabGroup("FX")]
+        private ParticleFX m_bodySlamFX;
+        [SerializeField, TabGroup("FX")]
+        private ParticleFX m_healFX;
+        [SerializeField, TabGroup("FX")]
+        private ParticleFX m_deathFX;
 
         //[SerializeField, TabGroup("FX")]
         //private ParticleFX m_earthShakerExplosionFX;
@@ -645,6 +661,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnDamageTaken(object sender, Damageable.DamageEventArgs eventArgs)
         {
+            m_crawlFX.Stop();
             if (m_grappleEvadeCoroutine == null && m_wreckingBallCoroutine == null)
             {
                 switch (m_phaseHandle.currentPhase)
@@ -734,6 +751,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_animation.SetAnimation(0, m_info.bodySlamLoop, true);
                     yield return null;
                 }
+                m_bodySlamFX.Play();
                 m_animation.SetAnimation(0, m_info.bodySlamEnd, false);
                 yield return new WaitForAnimationComplete(m_animation.animationState, m_info.bodySlamEnd);
                 //yield return new WaitUntil(() => m_groundSensor.isDetecting);
@@ -820,6 +838,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 //        m_currentSlamCount++;
                 //    }
                 //}
+                m_bodySlamFX.Play();
                 m_movement.Stop();
                 m_animation.SetAnimation(0, m_info.bodySlamEnd, false);
                 yield return new WaitForAnimationComplete(m_animation.animationState, m_info.bodySlamEnd);
@@ -857,6 +876,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_animation.SetAnimation(0, m_info.bodySlamLoop, true);
                     yield return null;
                 }
+                m_bodySlamFX.Play();
                 m_animation.SetAnimation(0, m_info.bodySlamEnd, false);
                 yield return new WaitForAnimationComplete(m_animation.animationState, m_info.bodySlamEnd);
                 //yield return new WaitUntil(() => m_groundSensor.isDetecting);
@@ -912,6 +932,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 }
             }
             m_movement.Stop();
+            m_bodySlamFX.Play();
             m_animation.SetAnimation(0, m_info.bodySlamEnd, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.bodySlamEnd);
             m_rb2d.sharedMaterial = null;
@@ -1015,6 +1036,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_animation.SetAnimation(0, m_info.bodySlamLoop, true);
                     yield return null;
                 }
+                m_bodySlamFX.Play();
                 m_animation.SetAnimation(0, m_info.bodySlamEnd, false);
                 yield return new WaitForAnimationComplete(m_animation.animationState, m_info.bodySlamEnd);
                 enabled = false;
@@ -1122,6 +1144,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_animation.SetAnimation(0, tentacipationAnimation, false);
                 yield return new WaitForAnimationComplete(m_animation.animationState, tentacipationAnimation);
             }
+            m_crawlFX.Play();
             while (timer <= m_info.crawlDuration && !IsTargetInRange(m_info.heavyGroundStabRightAttack.range))
             {
                 MoveToTarget(m_info.heavyGroundStabRightAttack.range, true);
@@ -1129,6 +1152,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 yield return null;
             }
             m_animation.SetEmptyAnimation(0, 0);
+            m_crawlFX.Stop();
 
             if (IsTargetInRange(m_info.phase1Pattern1Range))
             {
@@ -1233,6 +1257,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_animation.SetAnimation(0, tentacipationAnimation, false);
                     yield return new WaitForAnimationComplete(m_animation.animationState, tentacipationAnimation);
                 }
+                m_crawlFX.Play();
                 while (timer <= m_info.crawlDuration && !IsTargetInRange(m_info.heavyGroundStabRightAttack.range))
                 {
                     MoveToTarget(m_info.heavySpearStabRightAttack.range, true);
@@ -1240,6 +1265,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     yield return null;
                 }
                 m_animation.SetEmptyAnimation(0, 0);
+                m_crawlFX.Stop();
 
                 if (IsTargetInRange(m_info.heavyGroundStabRightAttack.range))
                 {
@@ -1399,6 +1425,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.EnableRootMotion(true, false);
             m_animation.SetAnimation(0, m_info.krakenRageAttack.animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.krakenRageAttack.animation);
+            m_krakenFX.Play();
             m_animation.SetAnimation(0, m_info.krakenRageLoopAnimation, true);
             m_krakenRageBB.enabled = true;
             //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.krakenRageAttack.animation);
@@ -1409,6 +1436,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 yield return null;
             }
             m_krakenRageBB.enabled = false;
+            m_krakenFX.Stop();
             m_animation.SetAnimation(0, m_info.krakenRageEndAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.krakenRageEndAnimation);
             m_animation.DisableRootMotion();
@@ -1455,6 +1483,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetEmptyAnimation(15, 0);
             m_animation.SetEmptyAnimation(27, 0);
             m_krakenRageBB.enabled = false;
+            m_deathFX.Play();
             m_animation.SetAnimation(0, m_info.deathSelfDestructAnimation, false);
             yield return new WaitForSeconds(0.75f);
             m_selfDestructBB.enabled = true;
@@ -1470,6 +1499,7 @@ namespace DChild.Gameplay.Characters.Enemies
         #region Movement
         private void MoveToTarget(float targetRange, bool willTentaSpearChase)
         {
+            m_crawlFX.Play();
             var moveRight = willTentaSpearChase ? m_info.tentaSpearRightCrawl : m_info.rightMove;
             var moveLeft = willTentaSpearChase ? m_info.tentaSpearLeftCrawl : m_info.leftMove;
             if (!IsTargetInRange(targetRange) && m_groundSensor.isDetecting /*&& !m_wallSensor.isDetecting && m_edgeSensor.isDetecting*/)
@@ -1941,6 +1971,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         if (IsTargetInRange(m_currentAttackRange) && m_currentAttackCoroutine == null)
                         {
                             m_animation.SetEmptyAnimation(0, 0);
+                            m_crawlFX.Stop();
                             m_stateHandle.SetState(State.Attacking);
                         }
                         else
