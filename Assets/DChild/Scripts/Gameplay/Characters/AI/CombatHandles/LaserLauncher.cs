@@ -129,6 +129,7 @@ namespace DChild.Gameplay.Characters
             StopCoroutine(m_aimRoutine);
             m_muzzleLoopFX.Play();
 
+            m_edgeCollider.transform.position = m_beamPoint.position;
             m_lineRenderer.useWorldSpace = true;
             while (m_beamOn)
             {
@@ -180,7 +181,7 @@ namespace DChild.Gameplay.Characters
             int hitCount = 0;
             //RaycastHit2D hit = Physics2D.Raycast(m_projectilePoint.position, Vector2.down,  1000, DChildUtility.GetEnvironmentMask());
             RaycastHit2D[] hit = Cast(startPoint.position, startPoint.right, 1000, true, out hitCount, true);
-            Debug.DrawRay(startPoint.position, hit[0].point);
+            //Debug.DrawRay(startPoint.position, hit[0].point); //TEMP
             //var hitPos = (new Vector2(m_projectilePoint.position.x, Vector2.down.y) * hit[0].distance);
             //return hitPos;
             return hit[0].point;
@@ -208,17 +209,17 @@ namespace DChild.Gameplay.Characters
             m_contactFilter.useTriggers = !ignoreTriggers;
             hitCount = Physics2D.Raycast(origin, direction, m_contactFilter, m_hitResults, distance);
 #if UNITY_EDITOR
-            if (debugMode)
-            {
-                if (hitCount > 0)
-                {
-                    Debug.DrawRay(origin, direction * m_hitResults[0].distance, Color.cyan, 1f);
-                }
-                else
-                {
-                    Debug.DrawRay(origin, direction * distance, Color.cyan, 1f);
-                }
-            }
+            //if (debugMode)
+            //{
+            //    if (hitCount > 0)
+            //    {
+            //        Debug.DrawRay(origin, direction * m_hitResults[0].distance, Color.cyan, 1f);
+            //    }
+            //    else
+            //    {
+            //        Debug.DrawRay(origin, direction * distance, Color.cyan, 1f);
+            //    }
+            //}
 #endif
             return m_hitResults;
         }
