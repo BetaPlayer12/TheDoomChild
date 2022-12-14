@@ -76,7 +76,13 @@ public class TheOneThirdFormAttacks : MonoBehaviour
         yield return null;
     }
 
-    public IEnumerator TentacleBlast()
+    public IEnumerator TentacleBlastOne(AITargetInfo Target)
+    {
+        StartCoroutine(m_tentacleBlastAttack.ExecuteAttack(Target));
+        yield return null;
+    }
+
+    public IEnumerator TentacleBlastTwo()
     {
         StartCoroutine(m_tentacleBlastAttack.ExecuteAttack());
         yield return null;

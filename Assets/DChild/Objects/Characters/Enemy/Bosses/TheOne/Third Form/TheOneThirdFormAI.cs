@@ -738,7 +738,9 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             StartCoroutine(FullMouthBlastOneSequence());
         }
+        #endregion
 
+        #region AttackCoroutines
         private IEnumerator TentacleGroundStab(float cooldown)
         {
             m_currentAttackCoroutine = StartCoroutine(m_theOneThirdFormAttacks.TentacleGroundStab(m_targetInfo));
@@ -751,6 +753,13 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator ChasingGroundTentacle(float cooldown)
         {
+            var monolithPlatformsPresent = FindObjectOfType<ObstacleChecker>().monolithSlamObstacleList;
+
+            if(monolithPlatformsPresent != null)
+            {
+                yield return null;
+            }
+
             m_currentAttackCoroutine = StartCoroutine(m_theOneThirdFormAttacks.ChasingGroundTentacle());
             yield return new WaitForSeconds(cooldown);
             //Temporary
@@ -759,9 +768,29 @@ namespace DChild.Gameplay.Characters.Enemies
             m_stateHandle.ApplyQueuedState();
         }
 
-        private IEnumerator TentacleBlast(float cooldown)
+        private IEnumerator TentacleBlastOne(float cooldown)
         {
-            m_currentAttackCoroutine = StartCoroutine(m_theOneThirdFormAttacks.TentacleBlast());
+            if (!m_targetInfo.isCharacterGrounded)
+            {
+                yield return null;
+            }
+
+            m_currentAttackCoroutine = StartCoroutine(m_theOneThirdFormAttacks.TentacleBlastOne(m_targetInfo));
+            yield return new WaitForSeconds(cooldown);
+            //Temporary
+            m_attackDecider.hasDecidedOnAttack = false;
+            m_currentAttackCoroutine = null;
+            m_stateHandle.ApplyQueuedState();
+        }
+
+        private IEnumerator TentacleBlastTwo(float cooldown)
+        {
+            if (!m_targetInfo.isCharacterGrounded)
+            {
+                yield return null;
+            }
+
+            m_currentAttackCoroutine = StartCoroutine(m_theOneThirdFormAttacks.TentacleBlastTwo());
             yield return new WaitForSeconds(cooldown);
             //Temporary
             m_attackDecider.hasDecidedOnAttack = false;
@@ -780,6 +809,13 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator MouthBlastWall(float cooldown)
         {
+            var monolithPlatformsPresent = FindObjectOfType<ObstacleChecker>().monolithSlamObstacleList;
+
+            if (monolithPlatformsPresent != null)
+            {
+                yield return null;
+            }
+
             m_currentAttackCoroutine = StartCoroutine(m_theOneThirdFormAttacks.MouthBlastWall());
             yield return new WaitForSeconds(cooldown);
             //Temporary
@@ -788,8 +824,77 @@ namespace DChild.Gameplay.Characters.Enemies
             m_stateHandle.ApplyQueuedState();
         }
 
+        private IEnumerator TentacleCeiling(float cooldown)
+        {
+            if (!m_targetInfo.isCharacterGrounded)
+            {
+                yield return null;
+            }
 
+            m_currentAttackCoroutine = StartCoroutine(m_theOneThirdFormAttacks.TentacleCeilingAttack());
+            yield return new WaitForSeconds(cooldown);
+            //Temporary
+            m_attackDecider.hasDecidedOnAttack = false;
+            m_currentAttackCoroutine = null;
+            m_stateHandle.ApplyQueuedState();
+        }
+
+        private IEnumerator MovingTentacleGround(float cooldown)
+        {
+            m_currentAttackCoroutine = StartCoroutine(m_theOneThirdFormAttacks.MovingTentacleGround());
+            yield return new WaitForSeconds(cooldown);
+            //Temporary
+            m_attackDecider.hasDecidedOnAttack = false;
+            m_currentAttackCoroutine = null;
+            m_stateHandle.ApplyQueuedState();
+        }
+
+        private IEnumerator MouthBlastOne(float cooldown)
+        {
+            m_currentAttackCoroutine = StartCoroutine(FullMouthBlastOneSequence());
+            yield return new WaitForSeconds(cooldown);
+            //Temporary
+            m_attackDecider.hasDecidedOnAttack = false;
+            m_currentAttackCoroutine = null;
+            m_stateHandle.ApplyQueuedState();
+        }
+
+        private IEnumerator SlidingWall(float cooldown)
+        {
+            m_currentAttackCoroutine = StartCoroutine(m_theOneThirdFormAttacks.SlidingStoneWallAttack(m_targetInfo));
+            yield return new WaitForSeconds(cooldown);
+            //Temporary
+            m_attackDecider.hasDecidedOnAttack = false;
+            m_currentAttackCoroutine = null;
+            m_stateHandle.ApplyQueuedState();
+        }
+
+        private IEnumerator ScriptedGrab(float cooldown)
+        {
+            if (!m_targetInfo.isCharacterGrounded)
+            {
+                yield return null;
+            }
+
+            m_currentAttackCoroutine = StartCoroutine(m_theOneThirdFormAttacks.TentacleGrab());
+            yield return new WaitForSeconds(cooldown);
+            //Temporary
+            m_attackDecider.hasDecidedOnAttack = false;
+            m_currentAttackCoroutine = null;
+            m_stateHandle.ApplyQueuedState();
+        }
+
+        private IEnumerator BubbleImprison(float cooldown)
+        {
+            m_currentAttackCoroutine = StartCoroutine(m_theOneThirdFormAttacks.BubbleImprisonment(m_targetInfo));
+            yield return new WaitForSeconds(cooldown);
+            //Temporary
+            m_attackDecider.hasDecidedOnAttack = false;
+            m_currentAttackCoroutine = null;
+            m_stateHandle.ApplyQueuedState();
+        }
         #endregion
+
         void Update()
         { 
             m_phaseHandle.MonitorPhase();
@@ -851,7 +956,7 @@ namespace DChild.Gameplay.Characters.Enemies
                             Debug.Log("TENTACLE BLAST I ATTACK");
 
                             //m_currentAttackCoroutine = StartCoroutine(m_theOneThirdFormAttacks.TentacleBlast());
-                            StartCoroutine(TentacleBlast(m_info.phase1PatternCooldown[2]));
+                            //StartCoroutine(TentacleBlast(m_info.phase1PatternCooldown[2]));
                             //Temporary
                             //m_attackDecider.hasDecidedOnAttack = false;
                             //m_currentAttackCoroutine = null;
@@ -909,7 +1014,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
                             Debug.Log("TENTACLE BLAST II ATTACK");
 
-                            m_currentAttackCoroutine = StartCoroutine(m_theOneThirdFormAttacks.TentacleBlast());
+                            m_currentAttackCoroutine = StartCoroutine(m_theOneThirdFormAttacks.TentacleBlastTwo());
 
                             //Temporary
                             m_attackDecider.hasDecidedOnAttack = false;
@@ -988,7 +1093,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
                             Debug.Log("TENTACLE BLAST I/II ATTACK");
 
-                            m_currentAttackCoroutine = StartCoroutine(m_theOneThirdFormAttacks.TentacleBlast());
+                            m_currentAttackCoroutine = StartCoroutine(m_theOneThirdFormAttacks.TentacleBlastTwo());
 
                             //Temporary
                             m_attackDecider.hasDecidedOnAttack = false;
@@ -1081,7 +1186,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
                             Debug.Log("TENTACLE BLAST II ATTACK");
 
-                            m_currentAttackCoroutine = StartCoroutine(m_theOneThirdFormAttacks.TentacleBlast());
+                            m_currentAttackCoroutine = StartCoroutine(m_theOneThirdFormAttacks.TentacleBlastTwo());
 
                             //Temporary
                             m_attackDecider.hasDecidedOnAttack = false;
@@ -1193,7 +1298,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
                             Debug.Log("TENTACLE BLAST I/II ATTACK");
 
-                            m_currentAttackCoroutine = StartCoroutine(m_theOneThirdFormAttacks.TentacleBlast());
+                            m_currentAttackCoroutine = StartCoroutine(m_theOneThirdFormAttacks.TentacleBlastTwo());
 
                             //Temporary
                             m_attackDecider.hasDecidedOnAttack = false;

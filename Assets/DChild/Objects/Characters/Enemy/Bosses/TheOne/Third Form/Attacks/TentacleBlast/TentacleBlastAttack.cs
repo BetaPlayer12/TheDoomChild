@@ -11,28 +11,14 @@ namespace DChild.Gameplay.Characters.Enemies
         private TentacleBlast m_leftTentacleBlast;
         [SerializeField]
         private TentacleBlast m_rightTentacleBlast;
+        [SerializeField]
+        private Transform m_arenaCenter;
 
         public IEnumerator ExecuteAttack()
         {
-            int rollSide = Random.Range(0, 3);
-            switch (rollSide)
-            {
-                case 0:
-                    yield return m_leftTentacleBlast.TentacleBlastAttack();
-                    break;
-                case 1:
-                    yield return m_rightTentacleBlast.TentacleBlastAttack();
-                    break;
-                case 2:
-                    StartCoroutine(m_leftTentacleBlast.TentacleBlastAttack());
-                    StartCoroutine(m_rightTentacleBlast.TentacleBlastAttack());
-                    break;
-                default:
-                    yield return m_leftTentacleBlast.TentacleBlastAttack();
-                    break;
-
-            }
-            
+            StartCoroutine(m_leftTentacleBlast.TentacleBlastAttack());
+            StartCoroutine(m_rightTentacleBlast.TentacleBlastAttack());
+            yield return null;
         }
 
         public IEnumerator ExecuteAttack(Vector2 PlayerPosition)
@@ -42,19 +28,10 @@ namespace DChild.Gameplay.Characters.Enemies
 
         public IEnumerator ExecuteAttack(AITargetInfo Target)
         {
-            throw new System.NotImplementedException();
-        }
-
-        // Start is called before the first frame update
-        void Start()
-        {
-
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-
+            if (Target.position.x < m_arenaCenter.position.x)
+                yield return m_leftTentacleBlast.TentacleBlastAttack();
+            else
+                yield return m_rightTentacleBlast.TentacleBlastAttack();
         }
     }
 }

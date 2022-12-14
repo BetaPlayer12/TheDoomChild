@@ -37,11 +37,14 @@ namespace DChild.Gameplay.Characters.Enemies
         public IEnumerator ExecuteAttack(AITargetInfo Target)
         {
             int counter = 0;
-            while(counter < m_numOfMonoliths)
+
+            m_monolithsSpawned.Clear();
+
+            while (counter < m_numOfMonoliths)
             {
                 yield return SetUpMonoliths(Target);
                 counter++;
-            }            
+            }
 
             if (m_leftToRightSequence)
                 OrganizeMonolithsSpawnedInDescendingOrder();
