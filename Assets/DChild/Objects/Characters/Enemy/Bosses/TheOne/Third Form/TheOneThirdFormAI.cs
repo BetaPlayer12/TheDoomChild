@@ -869,7 +869,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_stateHandle.ApplyQueuedState();
         }
 
-        private IEnumerator ScriptedGrab(float cooldown)
+        private IEnumerator ScriptedTentacleGrab(float cooldown)
         {
             if (!m_targetInfo.isCharacterGrounded)
             {
@@ -884,7 +884,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_stateHandle.ApplyQueuedState();
         }
 
-        private IEnumerator BubbleImprison(float cooldown)
+        private IEnumerator BubbleImprisonment(float cooldown)
         {
             m_currentAttackCoroutine = StartCoroutine(m_theOneThirdFormAttacks.BubbleImprisonment(m_targetInfo));
             yield return new WaitForSeconds(cooldown);
@@ -927,328 +927,222 @@ namespace DChild.Gameplay.Characters.Enemies
 
                             Debug.Log("Tentacle Stab Attack");
 
-                            //m_currentAttackCoroutine = StartCoroutine(m_theOneThirdFormAttacks.TentacleGroundStab(m_targetInfo));
                             StartCoroutine(TentacleGroundStab(m_info.phase1PatternCooldown[0]));
 
-                            //Temporary
-                            //m_attackDecider.hasDecidedOnAttack = false;
-                            //m_currentAttackCoroutine = null;
-                            //m_stateHandle.ApplyQueuedState();
-                            
-                            //Temporary
                             break;
                         case Attack.Phase1Pattern2:
                             m_pickedCooldown = m_currentFullCooldown[1];
 
                             Debug.Log("Chasing Ground Tentacle");
 
-                            //m_currentAttackCoroutine = StartCoroutine(m_theOneThirdFormAttacks.ChasingGroundTentacle());
                             StartCoroutine(ChasingGroundTentacle(m_info.phase1PatternCooldown[1]));
-                            //Temporary
-                            //m_attackDecider.hasDecidedOnAttack = false;
-                            //m_currentAttackCoroutine = null;
-                            //m_stateHandle.ApplyQueuedState();
-                            //Temporary
+ 
                             break;
                         case Attack.Phase1Pattern3:
                             m_pickedCooldown = m_currentFullCooldown[2];
 
                             Debug.Log("TENTACLE BLAST I ATTACK");
 
-                            //m_currentAttackCoroutine = StartCoroutine(m_theOneThirdFormAttacks.TentacleBlast());
-                            //StartCoroutine(TentacleBlast(m_info.phase1PatternCooldown[2]));
-                            //Temporary
-                            //m_attackDecider.hasDecidedOnAttack = false;
-                            //m_currentAttackCoroutine = null;
-                            //m_stateHandle.ApplyQueuedState();
-                            //Temporary
+                            StartCoroutine(TentacleBlastOne(m_info.phase1PatternCooldown[2]));
+         
                             break;
                         case Attack.Phase1Pattern4:
                             m_pickedCooldown = m_currentFullCooldown[3];
 
                             Debug.Log("MONILITH SLAM ATTACK");
 
-                            //m_currentAttackCoroutine = StartCoroutine(m_theOneThirdFormAttacks.MonolithSlam(m_targetInfo));
                             StartCoroutine(MonolithSlam(m_info.phase1PatternCooldown[3]));
-                            //Temporary
-                            //m_attackDecider.hasDecidedOnAttack = false;
-                            //m_currentAttackCoroutine = null;
-                            //m_stateHandle.ApplyQueuedState();
-                            //Temporary
+
                             break;
                         case Attack.Phase1Pattern5:
                             m_pickedCooldown = m_currentFullCooldown[4];
 
-                            //m_currentAttackCoroutine = StartCoroutine(m_theOneThirdFormAttacks.MouthBlastWall());
+                            Debug.Log("MOUTH BLAST WALL");
+
                             StartCoroutine(MouthBlastWall(m_info.phase1PatternCooldown[4]));
-                            ////Temporary
-                            //m_attackDecider.hasDecidedOnAttack = false;
-                            //m_currentAttackCoroutine = null;
-                            //m_stateHandle.ApplyQueuedState();
-                            //Temporary
+
                             break;
                         case Attack.Phase2Pattern1:
                             m_pickedCooldown = m_currentFullCooldown[0];
 
-                            m_currentAttackCoroutine = StartCoroutine(m_theOneThirdFormAttacks.TentacleGroundStab(m_targetInfo));
+                            Debug.Log("TENTACLE GROUND STAB");
 
-                            //Temporary
-                            //m_attackDecider.hasDecidedOnAttack = false;
-                            //m_currentAttackCoroutine = null;
-                            m_stateHandle.ApplyQueuedState();
-                            //Temporary
+                            m_currentAttackCoroutine = StartCoroutine(TentacleGroundStab(m_info.phase2PatternCooldown[0]));
+
                             break;
                         case Attack.Phase2Pattern2:
                             m_pickedCooldown = m_currentFullCooldown[1];
-                            
-                            m_currentAttackCoroutine = StartCoroutine(m_theOneThirdFormAttacks.ChasingGroundTentacle());
 
-                            //Temporary
-                            //m_attackDecider.hasDecidedOnAttack = false;
-                            //m_currentAttackCoroutine = null;
-                            m_stateHandle.ApplyQueuedState();
-                            //Temporary
+                            Debug.Log("CHASING GROUND TENTACLE");
+
+                            m_currentAttackCoroutine = StartCoroutine(ChasingGroundTentacle(m_info.phase2PatternCooldown[1]));
+
                             break;
                         case Attack.Phase2Pattern3:
                             m_pickedCooldown = m_currentFullCooldown[2];
 
                             Debug.Log("TENTACLE BLAST II ATTACK");
 
-                            m_currentAttackCoroutine = StartCoroutine(m_theOneThirdFormAttacks.TentacleBlastTwo());
+                            m_currentAttackCoroutine = StartCoroutine(TentacleBlastTwo(m_info.phase2PatternCooldown[2]));
 
-                            //Temporary
-                            m_attackDecider.hasDecidedOnAttack = false;
-                            m_currentAttackCoroutine = null;
-                            m_stateHandle.ApplyQueuedState();
-                            //Temporary
                             break;
                         case Attack.Phase2Pattern4:
                             m_pickedCooldown = m_currentFullCooldown[3];
 
                             Debug.Log("MONOLITH SLAM ATTACK");
 
-                            m_currentAttackCoroutine = StartCoroutine(m_theOneThirdFormAttacks.MonolithSlam(m_targetInfo));
+                            m_currentAttackCoroutine = StartCoroutine(MonolithSlam(m_info.phase2PatternCooldown[3]));
 
-                            //Temporary
-                            //m_attackDecider.hasDecidedOnAttack = false;
-                            //m_currentAttackCoroutine = null;
-                            m_stateHandle.ApplyQueuedState();
-                            //Temporary
                             break;
                         case Attack.Phase2Pattern5:
                             m_pickedCooldown = m_currentFullCooldown[4];
 
-                            m_currentAttackCoroutine = StartCoroutine(m_theOneThirdFormAttacks.MouthBlastWall());
+                            Debug.Log("MOUTH BLAST WALL");
 
-                            //Temporary
-                            //m_attackDecider.hasDecidedOnAttack = false;
-                            //m_currentAttackCoroutine = null;
-                            m_stateHandle.ApplyQueuedState();
-                            //Temporary
+                            m_currentAttackCoroutine = StartCoroutine(MouthBlastWall(m_info.phase2PatternCooldown[4]));
+
                             break;
                         case Attack.Phase2Pattern6:
-                            m_pickedCooldown = m_currentFullCooldown[0];
+                            m_pickedCooldown = m_currentFullCooldown[5];
 
-                            Debug.Log("Tentacle Stab Attack");
+                            Debug.Log("TENTACLE CEILING");
 
-                            m_currentAttackCoroutine = StartCoroutine(m_theOneThirdFormAttacks.TentacleGroundStab(m_targetInfo));
+                            m_currentAttackCoroutine = StartCoroutine(TentacleCeiling(m_info.phase2PatternCooldown[5]));
 
-                            //Temporary
-                            //m_attackDecider.hasDecidedOnAttack = false;
-                            //m_currentAttackCoroutine = null;
-                            m_stateHandle.ApplyQueuedState();
-
-                            //Temporary
-                            //m_attackDecider.hasDecidedOnAttack = false;
-                            //m_currentAttackCoroutine = null;
-                            //m_stateHandle.ApplyQueuedState();
-                            //Temporary
                             break;
                         case Attack.Phase3Pattern1:
                             m_pickedCooldown = m_currentFullCooldown[0];
 
-                            m_currentAttackCoroutine = StartCoroutine(m_theOneThirdFormAttacks.TentacleGroundStab(m_targetInfo));
+                            Debug.Log("TENTACLE GROUND STAB");
 
-                            //Temporary
-                            //m_attackDecider.hasDecidedOnAttack = false;
-                            //m_currentAttackCoroutine = null;
-                            m_stateHandle.ApplyQueuedState();
-                            //Temporary
+                            m_currentAttackCoroutine = StartCoroutine(TentacleGroundStab(m_info.phase3PatternCooldown[0]));
+
                             break;
                         case Attack.Phase3Pattern2:
                             m_pickedCooldown = m_currentFullCooldown[1];
 
-                            Debug.Log("TENTACLE GARDEN / CHASING GROUND TENTACLE ATTACK");
+                            //Debug.Log("TENTACLE GARDEN / CHASING GROUND TENTACLE ATTACK");
 
-                            m_currentAttackCoroutine = StartCoroutine(m_theOneThirdFormAttacks.ChasingGroundTentacle());
-                            
-                            //Temporary
-                            //m_attackDecider.hasDecidedOnAttack = false;
-                            //m_currentAttackCoroutine = null;
+                            //m_currentAttackCoroutine = StartCoroutine(ChasingGroundTentacle(m_info.phase3PatternCooldown[0]));
+
+                            m_attackDecider.hasDecidedOnAttack = false;
+                            m_currentAttackCoroutine = null;
                             m_stateHandle.ApplyQueuedState();
-                            //Temporary
                             break;
                         case Attack.Phase3Pattern3:
                             m_pickedCooldown = m_currentFullCooldown[2];
 
-                            Debug.Log("TENTACLE BLAST I/II ATTACK");
+                            //Debug.Log("TENTACLE BLAST I/II ATTACK");
 
-                            m_currentAttackCoroutine = StartCoroutine(m_theOneThirdFormAttacks.TentacleBlastTwo());
+                            //int randomTentacleBlast = Random.Range(0, 2);
+                            //if(randomTentacleBlast == 0)
+                            //    m_currentAttackCoroutine = StartCoroutine(TentacleBlastOne(m_info.phase3PatternCooldown[2]));
+                            //else if(randomTentacleBlast == 1)
+                            //    m_currentAttackCoroutine = StartCoroutine(TentacleBlastTwo(m_info.phase3PatternCooldown[2]));
 
-                            //Temporary
                             m_attackDecider.hasDecidedOnAttack = false;
                             m_currentAttackCoroutine = null;
                             m_stateHandle.ApplyQueuedState();
-                            //Temporary
                             break;
                         case Attack.Phase3Pattern4:
                             m_pickedCooldown = m_currentFullCooldown[3];
 
-                            Debug.Log("MONILITH SLAM ATTACK");
+                            //Debug.Log("MONILITH SLAM ATTACK");
 
-                            m_currentAttackCoroutine = StartCoroutine(m_theOneThirdFormAttacks.MonolithSlam(m_targetInfo));
-                            //Temporary
-                            //m_attackDecider.hasDecidedOnAttack = false;
-                            //m_currentAttackCoroutine = null;
+                            //m_currentAttackCoroutine = StartCoroutine(MonolithSlam(m_info.phase3PatternCooldown[3]));
+
+                            m_attackDecider.hasDecidedOnAttack = false;
+                            m_currentAttackCoroutine = null;
                             m_stateHandle.ApplyQueuedState();
-                            //Temporary
                             break;
                         case Attack.Phase3Pattern5:
                             m_pickedCooldown = m_currentFullCooldown[4];
 
-                            m_currentAttackCoroutine = StartCoroutine(m_theOneThirdFormAttacks.MouthBlastWall());
+                            Debug.Log("MOUTH BLAST WALL");
 
-                            //Temporary
-                            //m_attackDecider.hasDecidedOnAttack = false;
-                            //m_currentAttackCoroutine = null;
-                            m_stateHandle.ApplyQueuedState();
-                            //Temporary
+                            m_currentAttackCoroutine = StartCoroutine(MouthBlastWall(m_info.phase3PatternCooldown[4]));
+
                             break;
                         case Attack.Phase3Pattern6:
-                            m_pickedCooldown = m_currentFullCooldown[0];
+                            m_pickedCooldown = m_currentFullCooldown[5];
 
-                            Debug.Log("Tentacle Stab Attack");
+                            Debug.Log("TENTACLE CEILING");
 
-                            m_currentAttackCoroutine = StartCoroutine(m_theOneThirdFormAttacks.TentacleGroundStab(m_targetInfo));
+                            m_currentAttackCoroutine = StartCoroutine(TentacleCeiling(m_info.phase3PatternCooldown[5]));
 
-                            //Temporary
-                            //m_attackDecider.hasDecidedOnAttack = false;
-                            //m_currentAttackCoroutine = null;
-                            m_stateHandle.ApplyQueuedState();
-
-                            //Temporary
-                            //m_attackDecider.hasDecidedOnAttack = false;
-                            //m_currentAttackCoroutine = null;
-                            //m_stateHandle.ApplyQueuedState();
-                            //Temporary
                             break;
                         case Attack.Phase3Pattern7:
                             m_pickedCooldown = m_currentFullCooldown[6];
 
                             Debug.Log("BUBBLE IMPRISONMENT ATTACK");
 
-                            m_currentAttackCoroutine = StartCoroutine(m_theOneThirdFormAttacks.BubbleImprisonment(m_targetInfo));
+                            m_currentAttackCoroutine = StartCoroutine(BubbleImprisonment(m_info.phase3PatternCooldown[6]));
 
-                            //Temporary
-                            m_attackDecider.hasDecidedOnAttack = false;
-                            m_currentAttackCoroutine = null;
-                            m_stateHandle.ApplyQueuedState();
-                            //Temporary
                             break;
                         case Attack.Phase4Pattern1:
                             m_pickedCooldown = m_currentFullCooldown[0];
 
                             Debug.Log("TENTACLE GROUND STAB ATTACK");
 
-                            m_currentAttackCoroutine = StartCoroutine(m_theOneThirdFormAttacks.TentacleGroundStab(m_targetInfo));
+                            //m_currentAttackCoroutine = StartCoroutine(TentacleGroundStab(m_info.phase4PatternCooldown[0]));
 
-                            //Temporary
                             m_attackDecider.hasDecidedOnAttack = false;
                             m_currentAttackCoroutine = null;
                             m_stateHandle.ApplyQueuedState();
-                            //Temporary
                             break;
                         case Attack.Phase4Pattern2:
                             m_pickedCooldown = m_currentFullCooldown[1];
 
                             Debug.Log("TENTACLE GARDEN / CHASING GROUND TENTACLE ATTACK");
 
-                            m_currentAttackCoroutine = StartCoroutine(m_theOneThirdFormAttacks.ChasingGroundTentacle());
+                            //m_currentAttackCoroutine = StartCoroutine(ChasingGroundTentacle(m_info.phase4PatternCooldown[1]));
 
-                            //Temporary
                             m_attackDecider.hasDecidedOnAttack = false;
                             m_currentAttackCoroutine = null;
                             m_stateHandle.ApplyQueuedState();
-                            //Temporary
                             break;
                         case Attack.Phase4Pattern3:
                             m_pickedCooldown = m_currentFullCooldown[2];
 
                             Debug.Log("TENTACLE BLAST II ATTACK");
 
-                            m_currentAttackCoroutine = StartCoroutine(m_theOneThirdFormAttacks.TentacleBlastTwo());
+                            m_currentAttackCoroutine = StartCoroutine(TentacleBlastTwo(m_info.phase4PatternCooldown[2]));
 
-                            //Temporary
-                            m_attackDecider.hasDecidedOnAttack = false;
-                            m_currentAttackCoroutine = null;
-                            m_stateHandle.ApplyQueuedState();
-                            //Temporary
                             break;
                         case Attack.Phase4Pattern4:
                             m_pickedCooldown = m_currentFullCooldown[3];
 
                             Debug.Log("MONOLITH SLAM ATTACK");
 
-                            m_currentAttackCoroutine = StartCoroutine(m_theOneThirdFormAttacks.MonolithSlam(m_targetInfo));
-                            //Temporary
-                            //m_attackDecider.hasDecidedOnAttack = false;
-                            //m_currentAttackCoroutine = null;
-                            m_stateHandle.ApplyQueuedState();
-                            //Temporary
+                            m_currentAttackCoroutine = StartCoroutine(MonolithSlam(m_info.phase4PatternCooldown[3]));
+                            
                             break;
                         case Attack.Phase4Pattern5:
                             m_pickedCooldown = m_currentFullCooldown[4];
 
                             Debug.Log("MOUTH BLAST II ATTACK");
 
-                            m_currentAttackCoroutine = StartCoroutine(m_theOneThirdFormAttacks.MouthBlastWall());
+                            //m_currentAttackCoroutine = StartCoroutine(MouthBlastWall(m_info.phase4PatternCooldown[4]));
 
-                            //Temporary
                             m_attackDecider.hasDecidedOnAttack = false;
                             m_currentAttackCoroutine = null;
                             m_stateHandle.ApplyQueuedState();
-                            //Temporary
                             break;
                         case Attack.Phase4Pattern6:
-                            m_pickedCooldown = m_currentFullCooldown[0];
+                            m_pickedCooldown = m_currentFullCooldown[5];
 
                             Debug.Log("Tentacle Stab Attack");
 
-                            m_currentAttackCoroutine = StartCoroutine(m_theOneThirdFormAttacks.TentacleGroundStab(m_targetInfo));
+                            m_currentAttackCoroutine = StartCoroutine(TentacleGroundStab(m_info.phase4PatternCooldown[5]));
 
-                            //Temporary
-                            //m_attackDecider.hasDecidedOnAttack = false;
-                            //m_currentAttackCoroutine = null;
-                            m_stateHandle.ApplyQueuedState();
-
-                            //Temporary
-                            //m_attackDecider.hasDecidedOnAttack = false;
-                            //m_currentAttackCoroutine = null;
-                            //m_stateHandle.ApplyQueuedState();
-                            //Temporary
                             break;
                         case Attack.Phase4Pattern7:
                             m_pickedCooldown = m_currentFullCooldown[6];
 
                             Debug.Log("BUBBLE IMPRISONMENT ATTACK");
 
-                            m_currentAttackCoroutine = StartCoroutine(m_theOneThirdFormAttacks.BubbleImprisonment(m_targetInfo));
+                            m_currentAttackCoroutine = StartCoroutine(BubbleImprisonment(m_info.phase4PatternCooldown[6]));
 
-                            //Temporary
-                            m_attackDecider.hasDecidedOnAttack = false;
-                            m_currentAttackCoroutine = null;
-                            m_stateHandle.ApplyQueuedState();
-                            //Temporary
                             break;
                         case Attack.Phase4Pattern8:
                             m_pickedCooldown = m_currentFullCooldown[7];
@@ -1268,116 +1162,72 @@ namespace DChild.Gameplay.Characters.Enemies
 
                             Debug.Log("Tentacle Stab Attack");
 
-                            m_currentAttackCoroutine = StartCoroutine(m_theOneThirdFormAttacks.TentacleGroundStab(m_targetInfo));
+                            m_currentAttackCoroutine = StartCoroutine(TentacleGroundStab(m_info.phase5PatternCooldown[0]));
 
-                            //Temporary
-                            //m_attackDecider.hasDecidedOnAttack = false;
-                            //m_currentAttackCoroutine = null;
-                            m_stateHandle.ApplyQueuedState();
-
-                            //Temporary
-                            //m_attackDecider.hasDecidedOnAttack = false;
-                            //m_currentAttackCoroutine = null;
-                            m_stateHandle.ApplyQueuedState();
-                            //Temporary
                             break;
                         case Attack.Phase5Pattern2:
                             m_pickedCooldown = m_currentFullCooldown[1];
 
                             Debug.Log("TENTACLE GARDEN / CHASING GROUND TENTACLE ATTACK");
 
-                            m_currentAttackCoroutine = StartCoroutine(m_theOneThirdFormAttacks.ChasingGroundTentacle());
-                            //Temporary
-                            //m_attackDecider.hasDecidedOnAttack = false;
-                            //m_currentAttackCoroutine = null;
+                            //m_currentAttackCoroutine = StartCoroutine(ChasingGroundTentacle(m_info.phase5PatternCooldown[1]));
+
+                            m_attackDecider.hasDecidedOnAttack = false;
+                            m_currentAttackCoroutine = null;
                             m_stateHandle.ApplyQueuedState();
-                            //Temporary
                             break;
                         case Attack.Phase5Pattern3:
                             m_pickedCooldown = m_currentFullCooldown[2];
 
-                            Debug.Log("TENTACLE BLAST I/II ATTACK");
+                            Debug.Log("TENTACLE BLAST II ATTACK");
 
-                            m_currentAttackCoroutine = StartCoroutine(m_theOneThirdFormAttacks.TentacleBlastTwo());
+                            m_currentAttackCoroutine = StartCoroutine(TentacleBlastTwo(m_info.phase5PatternCooldown[2]));
 
-                            //Temporary
-                            m_attackDecider.hasDecidedOnAttack = false;
-                            m_currentAttackCoroutine = null;
-                            m_stateHandle.ApplyQueuedState();
-                            //Temporary
                             break;
                         case Attack.Phase5Pattern4:
                             m_pickedCooldown = m_currentFullCooldown[3];
 
                             Debug.Log("MONOLITH SLAM ATTACK");
 
-                            m_currentAttackCoroutine = StartCoroutine(m_theOneThirdFormAttacks.MonolithSlam(m_targetInfo));
+                            m_currentAttackCoroutine = StartCoroutine(MonolithSlam(m_info.phase5PatternCooldown[3]));
 
-                            //Temporary
-                            m_attackDecider.hasDecidedOnAttack = false;
-                            m_currentAttackCoroutine = null;
-                            m_stateHandle.ApplyQueuedState();
-                            //Temporary
                             break;
                         case Attack.Phase5Pattern5:
                             m_pickedCooldown = m_currentFullCooldown[4];
 
                             Debug.Log("MOUTH BLAST ATTACK");
 
-                            m_currentAttackCoroutine = StartCoroutine(FullMouthBlastOneSequence());
+                            //m_currentAttackCoroutine = StartCoroutine(FullMouthBlastOneSequence());
 
-                            //Temporary
                             m_attackDecider.hasDecidedOnAttack = false;
                             m_currentAttackCoroutine = null;
                             m_stateHandle.ApplyQueuedState();
-                            //Temporary
                             break;
                         case Attack.Phase5Pattern6:
-                            m_pickedCooldown = m_currentFullCooldown[0];
+                            m_pickedCooldown = m_currentFullCooldown[5];
 
-                            Debug.Log("Tentacle Stab Attack");
+                            Debug.Log("TENTACLE CEILING");
 
-                            m_currentAttackCoroutine = StartCoroutine(m_theOneThirdFormAttacks.TentacleGroundStab(m_targetInfo));
+                            m_currentAttackCoroutine = StartCoroutine(TentacleCeiling(m_info.phase5PatternCooldown[5]));
 
-                            //Temporary
-                            //m_attackDecider.hasDecidedOnAttack = false;
-                            //m_currentAttackCoroutine = null;
-                            m_stateHandle.ApplyQueuedState();
-
-                            //Temporary
-                            //m_attackDecider.hasDecidedOnAttack = false;
-                            //m_currentAttackCoroutine = null;
-                            //m_stateHandle.ApplyQueuedState();
-                            //Temporary
                             break;
                         case Attack.Phase5Pattern7:
                             m_pickedCooldown = m_currentFullCooldown[6];
 
                             Debug.Log("BUBBLE IMPRISONMENT ATTACK");
 
-                            m_currentAttackCoroutine = StartCoroutine(m_theOneThirdFormAttacks.BubbleImprisonment(m_targetInfo));
+                            m_currentAttackCoroutine = StartCoroutine(BubbleImprisonment(m_info.phase5PatternCooldown[6]));
 
-                            //Temporary
-                            m_attackDecider.hasDecidedOnAttack = false;
-                            m_currentAttackCoroutine = null;
-                            m_stateHandle.ApplyQueuedState();
-                            //Temporary
                             break;
                         case Attack.Phase5Pattern8:
                             m_pickedCooldown = m_currentFullCooldown[7];
 
                             Debug.Log("GRABBER SWIPE + WALL SLAM ATTACK");
 
-                            m_currentAttackCoroutine = StartCoroutine(m_theOneThirdFormAttacks.TentacleGrab());
+                            m_currentAttackCoroutine = StartCoroutine(ScriptedTentacleGrab(m_info.phase5PatternCooldown[7]));
 
-                            //Temporary
-                            m_attackDecider.hasDecidedOnAttack = false;
-                            m_currentAttackCoroutine = null;
-                            m_stateHandle.ApplyQueuedState();
-                            //Temporary
                             break;
                     }
-
                     break;
 
                 case State.Cooldown:
