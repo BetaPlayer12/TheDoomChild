@@ -109,8 +109,15 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             var instance = GameSystem.poolManager.GetPool<PoolableObjectPool>().GetOrCreateItem(tentacle, gameObject.scene);
             instance.SpawnAt(spawnPosition, Quaternion.identity);
+
             instance.GetComponentInChildren<MeshRenderer>().sortingLayerID = sortingLayerID;
             instance.GetComponentInChildren<MeshRenderer>().sortingLayerName = sortingLayerName;
+
+            if(sortingLayerName == "PlayableGround")
+            {
+                instance.GetComponent<TentacleGroundStab>().isOnPlayableGround = true;
+            }
+
             Component[] spriteRenderers;
             spriteRenderers = instance.GetComponentsInChildren(typeof(SpriteRenderer), true);
             foreach(SpriteRenderer safeZone in spriteRenderers)

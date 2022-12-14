@@ -27,6 +27,9 @@ public class TheOneThirdFormAttacks : MonoBehaviour
     private TentacleGrabAttack m_tentacleGrabScriptedAttack;
     [SerializeField, BoxGroup("The One Third Form Attacks")]
     private BubbleImprisonmentAttack m_bubbleImprisonmentAttack;
+    [SerializeField, BoxGroup("The One Third Form Attacks")]
+    private MouthBlastIAttack m_mouthBlastOneAttack;
+    public MouthBlastIAttack mouthBlastOneAttack => m_mouthBlastOneAttack;
 
     private TheOneThirdFormAI m_targetInfo;
 
