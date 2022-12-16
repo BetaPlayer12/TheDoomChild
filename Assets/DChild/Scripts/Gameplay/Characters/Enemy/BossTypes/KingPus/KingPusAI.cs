@@ -897,6 +897,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
             StopAnimations();
             m_crawlFX.Stop();
+            m_stabSlashFX.Stop();
+            m_krakenFX.Stop();
             if (!m_groundSensor.isDetecting)
             {
                 m_animation.DisableRootMotion();
@@ -1027,6 +1029,8 @@ namespace DChild.Gameplay.Characters.Enemies
             m_rb2d.sharedMaterial = m_physicsMat;
             m_animation.DisableRootMotion();
             m_crawlFX.Stop();
+            m_stabSlashFX.Stop();
+            m_krakenFX.Stop();
             if (!m_groundSensor.isDetecting)
             {
                 m_character.physics.simulateGravity = true;
