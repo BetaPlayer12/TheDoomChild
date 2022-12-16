@@ -40,6 +40,7 @@ public class TentacleGrab : MonoBehaviour
     private Collider2D m_grabHitbox;
 
     private bool isAttackDone = false;
+    [SerializeField]
     private bool isPlayerGrabbed = false;
 
     [SerializeField]

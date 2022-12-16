@@ -60,7 +60,6 @@ namespace DChild.Gameplay.Characters.Enemies
 
         public IEnumerator EndMouthBlast()
         {
-            m_blackBloodFlood.isFlooding = false;
             m_launcher.SetBeam(false);
             yield return null;
         }
