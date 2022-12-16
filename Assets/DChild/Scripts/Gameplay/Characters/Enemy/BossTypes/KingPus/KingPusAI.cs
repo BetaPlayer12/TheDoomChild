@@ -1407,7 +1407,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator Phase1Pattern2AttackRoutine()
         {
             m_animation.EnableRootMotion(true, false);
-            m_animation.AddAnimation(0, m_info.idleAnimation, true, 0);
+            m_animation.SetAnimation(30, m_info.idleAnimation, true, 0);
             if (IsTargetInRange(m_info.spikeSpitterAttacks[0].range))
             {
                 for (int i = 0; i < m_info.spikeSpitterAttacks.Count; i++)
@@ -1425,6 +1425,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     //if (m_character.facing != HorizontalDirection.Right && i == 0)
                     //    CustomTurn();
                 }
+                m_animation.SetEmptyAnimation(30, 0);
                 m_animation.DisableRootMotion();
                 m_attackDecider.hasDecidedOnAttack = false;
                 m_currentAttackCoroutine = null;
@@ -1448,6 +1449,7 @@ namespace DChild.Gameplay.Characters.Enemies
             enabled = false;
             m_animation.EnableRootMotion(true, true);
             m_animation.SetAnimation(0, DynamicIdleAnimation(), true);
+            m_animation.SetAnimation(30, m_info.idleAnimation, true, 0);
             var id = spreadShot ? 1 : 0;
             for (int i = 0; i < m_info.spikeSpitCount; i++)
             {
@@ -1464,6 +1466,7 @@ namespace DChild.Gameplay.Characters.Enemies
             }
             m_animation.SetEmptyAnimation(3, 0);
             m_animation.SetEmptyAnimation(15, 0);
+            m_animation.SetEmptyAnimation(30, 0);
             m_animation.DisableRootMotion();
             m_animation.SetAnimation(0, m_info.bodySlamStart, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.bodySlamStart);
@@ -1545,6 +1548,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_animation.SetAnimation(30, heavyGroundStabAttackAnimation, false);
                 yield return new WaitForAnimationComplete(m_animation.animationState, heavyGroundStabAttackAnimation);
                 m_heavyGroundStabFX.Play();
+                m_stabHeadBone.transform.position = new Vector2(m_lastTargetPos.x, GroundPosition(m_lastTargetPos).y);
                 var heavyGroundStabStuckAnimation = m_lastTargetPos.x > transform.position.x ? m_info.heavyGroundStabLoopRightAnimation : m_info.heavyGroundStabLoopLeftAnimation;
                 m_animation.SetAnimation(30, heavyGroundStabStuckAnimation, true);
                 yield return new WaitForSeconds(m_info.groundStabStuckDuration);
@@ -1582,7 +1586,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator Phase3Pattern2AttackRoutine()
         {
             m_animation.EnableRootMotion(true, false);
-            m_animation.AddAnimation(0, m_info.idleAnimation, true, 0);
+            m_animation.SetAnimation(30, m_info.idleAnimation, true, 0);
             if (IsTargetInRange(m_info.spikeSpitterAttacks[0].range))
             {
                 for (int i = 0; i < m_info.spikeSpitterAttacks.Count; i++)
@@ -1600,6 +1604,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_animation.SetAnimation(0, m_info.spikeSpitterRetractAnimations[i], false);
                     yield return new WaitForAnimationComplete(m_animation.animationState, m_info.spikeSpitterRetractAnimations[i]);
                 }
+                m_animation.SetEmptyAnimation(30, 0);
                 m_animation.DisableRootMotion();
                 m_attackDecider.hasDecidedOnAttack = false;
                 m_currentAttackCoroutine = null;
@@ -1623,6 +1628,7 @@ namespace DChild.Gameplay.Characters.Enemies
             enabled = false;
             m_animation.EnableRootMotion(true, true);
             m_animation.SetAnimation(0, DynamicIdleAnimation(), true);
+            m_animation.SetAnimation(30, m_info.idleAnimation, true, 0);
             for (int i = 0; i < m_info.spikeSpitterAttacks.Count; i++)
             {
                 m_animation.SetAnimation(0, m_info.spikeSpitterExtendAnimations[i], false);
@@ -1640,6 +1646,7 @@ namespace DChild.Gameplay.Characters.Enemies
             }
             m_animation.SetEmptyAnimation(3, 0);
             m_animation.SetEmptyAnimation(15, 0);
+            m_animation.SetEmptyAnimation(30, 0);
             m_animation.DisableRootMotion();
             m_animation.SetAnimation(0, m_info.bodySlamStart, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.bodySlamStart);
