@@ -7,7 +7,8 @@ namespace DChild.Gameplay.Characters.Enemies
 {
     public class ObstacleChecker : MonoBehaviour
     {
-        public List<BlackBloodFlood> blackBloodFloodList = new List<BlackBloodFlood>();
+        public BlackBloodFlood blackBloodFlood;
+        public bool isFloodingBlackBlood => blackBloodFlood.isFlooding;
         public List<PoolableObject> monolithSlamObstacleList = new List<PoolableObject>();
         public List<GameObject> wallTentacles = new List<GameObject>();
         // Start is called before the first frame update
@@ -29,6 +30,11 @@ namespace DChild.Gameplay.Characters.Enemies
                 monolith.DestroyInstance();
             }
             monolithSlamObstacleList.Clear();
+        }
+
+        public void TurnOffFlood()
+        {
+            blackBloodFlood.isFlooding = false;
         }
     }
 }

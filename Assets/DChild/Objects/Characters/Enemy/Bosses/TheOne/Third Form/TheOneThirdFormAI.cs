@@ -295,6 +295,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private Hitbox m_hitbox;
         [SerializeField, TabGroup("Reference")]
         private GameObject m_model;
+        [SerializeField]
+        private SpineEventListener m_spineListener;
 
         [ShowInInspector]
         private StateHandle<State> m_stateHandle;
@@ -641,10 +643,10 @@ namespace DChild.Gameplay.Characters.Enemies
 
             m_hitbox.Disable();
             m_animation.EnableRootMotion(true, false);
-            //m_animation.SetAnimation(0, m_info.staggerAnimation, false);
-            //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.staggerAnimation);
-            //m_animation.SetAnimation(0, m_info.summonSwordsAnimation, false);
-            //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.summonSwordsAnimation);
+            m_animation.SetAnimation(0, m_info.eyeClosedAnimation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.eyeClosedAnimation);
+            m_animation.SetAnimation(0, m_info.eyeShakeAnimation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.eyeShakeAnimation);
             //m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_hitbox.Enable();
             m_hitbox.SetCanBlockDamageState(false);
@@ -760,6 +762,13 @@ namespace DChild.Gameplay.Characters.Enemies
                 yield return null;
             }
 
+            var blackBloodFloodPresent = FindObjectOfType<ObstacleChecker>().isFloodingBlackBlood;
+
+            if (blackBloodFloodPresent)
+            {
+                yield return null;
+            }
+
             m_currentAttackCoroutine = StartCoroutine(m_theOneThirdFormAttacks.ChasingGroundTentacle());
             yield return new WaitForSeconds(cooldown);
             //Temporary
@@ -800,6 +809,13 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator MonolithSlam(float cooldown)
         {
+            var blackBloodFloodPresent = FindObjectOfType<ObstacleChecker>().isFloodingBlackBlood;
+
+            if (blackBloodFloodPresent)
+            {
+                yield return null;
+            }
+
             m_currentAttackCoroutine = StartCoroutine(m_theOneThirdFormAttacks.MonolithSlam(m_targetInfo));
             yield return new WaitForSeconds(cooldown);
             m_attackDecider.hasDecidedOnAttack = false;
@@ -815,6 +831,8 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 yield return null;
             }
+
+            m_animation.SetAnimation(0, m_info.mouthBlastBodyLoopAnimation, true);
 
             m_currentAttackCoroutine = StartCoroutine(m_theOneThirdFormAttacks.MouthBlastWall());
             yield return new WaitForSeconds(cooldown);
@@ -861,6 +879,13 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator SlidingWall(float cooldown)
         {
+            var blackBloodFloodPresent = FindObjectOfType<ObstacleChecker>().isFloodingBlackBlood;
+
+            if (blackBloodFloodPresent)
+            {
+                yield return null;
+            }
+
             m_currentAttackCoroutine = StartCoroutine(m_theOneThirdFormAttacks.SlidingStoneWallAttack(m_targetInfo));
             yield return new WaitForSeconds(cooldown);
             //Temporary
