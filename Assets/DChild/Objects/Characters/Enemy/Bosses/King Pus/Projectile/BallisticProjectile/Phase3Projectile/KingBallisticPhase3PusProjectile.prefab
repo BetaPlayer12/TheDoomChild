@@ -14772,7 +14772,7 @@ GameObject:
   - component: {fileID: 7790584822064874498}
   - component: {fileID: 3848224627411940002}
   m_Layer: 14
-  m_Name: KingBallisticPusProjectile
+  m_Name: KingBallisticPhase3PusProjectile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -14791,7 +14791,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 518933077461019782}
-  - {fileID: 1139972202719672312}
+  - {fileID: 6728015245351161553}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -19612,7 +19612,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 1
+  m_Radius: 2
 --- !u!50 &1328884804122216444
 Rigidbody2D:
   serializedVersion: 4
@@ -19652,10 +19652,10 @@ MonoBehaviour:
   m_fXObjects:
     m_particleSystems:
     - {fileID: 8312844819398851496}
-    - {fileID: 2553531099008647332}
-    - {fileID: 1990693883546401820}
-    - {fileID: 6798348786328076533}
-    - {fileID: 6798348786999283540}
+    - {fileID: 8205769167692872077}
+    - {fileID: 5273456914165794101}
+    - {fileID: 925453053366532572}
+    - {fileID: 925453055111050877}
     m_originalSimulationSpeed:
     - 1
     - 1
@@ -19706,7 +19706,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 623e104f4ff08ec40895458e1d3ff0e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_poolableItemData: {fileID: 11400000, guid: a2a70576c197ffb44897ed05bc715741, type: 2}
+  m_poolableItemData: {fileID: 11400000, guid: c1e4cbfeb8d218d4f829ba25c9aa20f0, type: 2}
   m_waitForParticlesEnd: 0
   m_particleSystem: {fileID: 0}
   m_particleCallback: {fileID: 0}
@@ -19717,7 +19717,7 @@ MonoBehaviour:
   m_onReset:
     m_PersistentCalls:
       m_Calls: []
-  m_data: {fileID: 11400000, guid: adcdc8bcaa9e93248a7294ca0dcbb717, type: 2}
+  m_data: {fileID: 11400000, guid: 34af9cad06a25f94dbdfe09f25c7a812, type: 2}
   m_damageSource: 4
   m_attackDamageInfo:
     damage:
@@ -19776,7 +19776,7 @@ MonoBehaviour:
   m_damageUniqueHitboxesOnly: 0
   m_collisionRegistrator: {fileID: 0}
   m_ignoreColliderList: []
---- !u!1001 &6798348785846028248
+--- !u!1001 &925453053898981105
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -19785,28 +19785,28 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 600082221, guid: f5fdc64c3ed2be444be089a640fecce4, type: 3}
       propertyPath: ShapeModule.radius.value
-      value: 0.539
+      value: 1.078
       objectReference: {fileID: 0}
     - target: {fileID: 600082221, guid: f5fdc64c3ed2be444be089a640fecce4, type: 3}
       propertyPath: InitialModule.startSize.scalar
-      value: 1.05
+      value: 2.1
       objectReference: {fileID: 0}
     - target: {fileID: 1271089292, guid: f5fdc64c3ed2be444be089a640fecce4, type: 3}
       propertyPath: ShapeModule.radius.value
-      value: 0.539
+      value: 1.078
       objectReference: {fileID: 0}
     - target: {fileID: 1271089292, guid: f5fdc64c3ed2be444be089a640fecce4, type: 3}
       propertyPath: ShapeModule.radiusThickness
-      value: 0.35
+      value: 0.7
       objectReference: {fileID: 0}
     - target: {fileID: 1271089292, guid: f5fdc64c3ed2be444be089a640fecce4, type: 3}
       propertyPath: InitialModule.startSize.scalar
-      value: 4.83
+      value: 9.66
       objectReference: {fileID: 0}
     - target: {fileID: 5042003781204376516, guid: f5fdc64c3ed2be444be089a640fecce4,
         type: 3}
       propertyPath: InitialModule.startSize.scalar
-      value: 2.716
+      value: 5.432
       objectReference: {fileID: 0}
     - target: {fileID: 5875342217289363488, guid: f5fdc64c3ed2be444be089a640fecce4,
         type: 3}
@@ -19870,33 +19870,33 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f5fdc64c3ed2be444be089a640fecce4, type: 3}
---- !u!4 &1139972202719672312 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 5875342217289363488, guid: f5fdc64c3ed2be444be089a640fecce4,
-    type: 3}
-  m_PrefabInstance: {fileID: 6798348785846028248}
-  m_PrefabAsset: {fileID: 0}
---- !u!198 &1990693883546401820 stripped
-ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 5042003781204376516, guid: f5fdc64c3ed2be444be089a640fecce4,
-    type: 3}
-  m_PrefabInstance: {fileID: 6798348785846028248}
-  m_PrefabAsset: {fileID: 0}
---- !u!198 &2553531099008647332 stripped
-ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 9022787249206282108, guid: f5fdc64c3ed2be444be089a640fecce4,
-    type: 3}
-  m_PrefabInstance: {fileID: 6798348785846028248}
-  m_PrefabAsset: {fileID: 0}
---- !u!198 &6798348786328076533 stripped
+--- !u!198 &925453053366532572 stripped
 ParticleSystem:
   m_CorrespondingSourceObject: {fileID: 600082221, guid: f5fdc64c3ed2be444be089a640fecce4,
     type: 3}
-  m_PrefabInstance: {fileID: 6798348785846028248}
+  m_PrefabInstance: {fileID: 925453053898981105}
   m_PrefabAsset: {fileID: 0}
---- !u!198 &6798348786999283540 stripped
+--- !u!198 &925453055111050877 stripped
 ParticleSystem:
   m_CorrespondingSourceObject: {fileID: 1271089292, guid: f5fdc64c3ed2be444be089a640fecce4,
     type: 3}
-  m_PrefabInstance: {fileID: 6798348785846028248}
+  m_PrefabInstance: {fileID: 925453053898981105}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &5273456914165794101 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 5042003781204376516, guid: f5fdc64c3ed2be444be089a640fecce4,
+    type: 3}
+  m_PrefabInstance: {fileID: 925453053898981105}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &6728015245351161553 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5875342217289363488, guid: f5fdc64c3ed2be444be089a640fecce4,
+    type: 3}
+  m_PrefabInstance: {fileID: 925453053898981105}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &8205769167692872077 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 9022787249206282108, guid: f5fdc64c3ed2be444be089a640fecce4,
+    type: 3}
+  m_PrefabInstance: {fileID: 925453053898981105}
   m_PrefabAsset: {fileID: 0}

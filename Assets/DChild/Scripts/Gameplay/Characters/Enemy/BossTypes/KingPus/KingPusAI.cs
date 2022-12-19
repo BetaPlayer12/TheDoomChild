@@ -304,12 +304,24 @@ namespace DChild.Gameplay.Characters.Enemies
             public string bodySlamEnd => m_bodySlamEnd;
 
             [Title("Projectiles")]
-            [SerializeField]
+            [SerializeField, TitleGroup("Grounded")]
             private SimpleProjectileAttackInfo m_ballisticProjectile;
             public SimpleProjectileAttackInfo ballisticProjectile => m_ballisticProjectile;
-            [SerializeField]
+            [SerializeField, TitleGroup("Grounded")]
+            private SimpleProjectileAttackInfo m_ballisticPhase2Projectile;
+            public SimpleProjectileAttackInfo ballisticPhase2Projectile => m_ballisticPhase2Projectile;
+            [SerializeField, TitleGroup("Grounded")]
+            private SimpleProjectileAttackInfo m_ballisticPhase3Projectile;
+            public SimpleProjectileAttackInfo ballisticPhase3Projectile => m_ballisticPhase3Projectile;
+            [SerializeField, TitleGroup("MidAir")]
             private SimpleProjectileAttackInfo m_airProjectile;
             public SimpleProjectileAttackInfo airProjectile => m_airProjectile;
+            [SerializeField, TitleGroup("MidAir")]
+            private SimpleProjectileAttackInfo m_airPhase2Projectile;
+            public SimpleProjectileAttackInfo airPhase2Projectile => m_airPhase2Projectile;
+            [SerializeField, TitleGroup("MidAir")]
+            private SimpleProjectileAttackInfo m_airPhase3Projectile;
+            public SimpleProjectileAttackInfo airPhase3Projectile => m_airPhase3Projectile;
             [SerializeField]
             private float m_projectileGravityScale;
             public float projectileGravityScale => m_projectileGravityScale;
@@ -379,7 +391,11 @@ namespace DChild.Gameplay.Characters.Enemies
                 //m_bodySlamGroundNearAttack.SetData(m_skeletonDataAsset);
                 //m_bodySlamGroundFarAttack.SetData(m_skeletonDataAsset);
                 m_ballisticProjectile.SetData(m_skeletonDataAsset);
+                m_ballisticPhase2Projectile.SetData(m_skeletonDataAsset);
+                m_ballisticPhase3Projectile.SetData(m_skeletonDataAsset);
                 m_airProjectile.SetData(m_skeletonDataAsset);
+                m_airPhase2Projectile.SetData(m_skeletonDataAsset);
+                m_airPhase3Projectile.SetData(m_skeletonDataAsset);
 #endif
             }
         }
@@ -552,6 +568,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private List<ISummonedEnemy> m_summons;
 
         private BallisticProjectileLauncher m_projectileLauncher;
+        private ProjectileInfo m_airProjectileInfo;
+        private ProjectileInfo m_ballisticProjectileInfo;
 
         [SerializeField]
         private SpineEventListener m_spineListener;
@@ -642,6 +660,8 @@ namespace DChild.Gameplay.Characters.Enemies
                         AddToRangeCache(m_info.phase1Pattern1Range, m_info.phase1Pattern2Range, m_info.phase1Pattern3Range, m_info.phase1Pattern4Range);
                         for (int i = 0; i < m_info.phase1PatternCooldown.Count; i++)
                             m_patternCooldown.Add(m_info.phase1PatternCooldown[i]);
+                        m_airProjectileInfo = m_info.airProjectile.projectileInfo;
+                        m_ballisticProjectileInfo = m_info.ballisticProjectile.projectileInfo;
                     }
                     break;
                 case Phase.PhaseTwo:
@@ -663,6 +683,8 @@ namespace DChild.Gameplay.Characters.Enemies
                         AddToRangeCache(m_info.phase2Pattern1Range, m_info.phase2Pattern2Range, m_info.phase2Pattern3Range, m_info.phase2Pattern4Range, m_info.phase2Pattern5Range, m_info.phase2Pattern6Range);
                         for (int i = 0; i < m_info.phase2PatternCooldown.Count; i++)
                             m_patternCooldown.Add(m_info.phase2PatternCooldown[i]);
+                        m_airProjectileInfo = m_info.airPhase2Projectile.projectileInfo;
+                        m_ballisticProjectileInfo = m_info.ballisticPhase2Projectile.projectileInfo;
                     }
                     break;
                 case Phase.PhaseThree:
@@ -684,6 +706,8 @@ namespace DChild.Gameplay.Characters.Enemies
                         AddToRangeCache(m_info.phase3Pattern1Range, m_info.phase3Pattern2Range, m_info.phase3Pattern3Range, m_info.phase3Pattern4Range, m_info.phase3Pattern5Range, m_info.phase3Pattern6Range, m_info.phase3Pattern7Range);
                         for (int i = 0; i < m_info.phase3PatternCooldown.Count; i++)
                             m_patternCooldown.Add(m_info.phase3PatternCooldown[i]);
+                        m_airProjectileInfo = m_info.airPhase3Projectile.projectileInfo;
+                        m_ballisticProjectileInfo = m_info.ballisticPhase3Projectile.projectileInfo;
                     }
                     break;
             }
@@ -1353,8 +1377,19 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void LaunchSingleProjectile()
         {
-
-            var projectileInfo = m_willStickToWall ? m_info.airProjectile.projectileInfo : m_info.ballisticProjectile.projectileInfo;
+            var projectileInfo = m_willStickToWall ? m_airProjectileInfo : m_ballisticProjectileInfo;
+            //switch (m_phaseHandle.currentPhase)
+            //{
+            //    case Phase.PhaseOne:
+            //        projectileInfo = m_willStickToWall ? m_info.airProjectile.projectileInfo : m_info.ballisticProjectile.projectileInfo;
+            //        break;
+            //    case Phase.PhaseTwo:
+            //        projectileInfo = m_willStickToWall ? m_info.airPhase2Projectile.projectileInfo : m_info.ballisticPhase2Projectile.projectileInfo;
+            //        break;
+            //    case Phase.PhaseThree:
+            //        projectileInfo = m_willStickToWall ? m_info.airPhase3Projectile.projectileInfo : m_info.ballisticPhase3Projectile.projectileInfo;
+            //        break;
+            //}
             m_projectileLauncher = new BallisticProjectileLauncher(projectileInfo, m_spitterPositions[0], m_info.projectileGravityScale, projectileInfo.speed);
             m_projectileLauncher.AimAt(m_targetInfo.position);
             switch (m_willStickToWall)
@@ -1388,7 +1423,19 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void LaunchMultiProjectile()
         {
-            var projectileInfo = m_willStickToWall ? m_info.airProjectile.projectileInfo : m_info.ballisticProjectile.projectileInfo;
+            var projectileInfo = m_willStickToWall ? m_airProjectileInfo : m_ballisticProjectileInfo;
+            //switch (m_phaseHandle.currentPhase)
+            //{
+            //    case Phase.PhaseOne:
+            //        projectileInfo = m_willStickToWall ? m_info.airProjectile.projectileInfo : m_info.ballisticProjectile.projectileInfo;
+            //        break;
+            //    case Phase.PhaseTwo:
+            //        projectileInfo = m_willStickToWall ? m_info.airPhase2Projectile.projectileInfo : m_info.ballisticPhase2Projectile.projectileInfo;
+            //        break;
+            //    case Phase.PhaseThree:
+            //        projectileInfo = m_willStickToWall ? m_info.airPhase3Projectile.projectileInfo : m_info.ballisticPhase3Projectile.projectileInfo;
+            //        break;
+            //}
             for (int i = 0; i < m_spitterPositions.Count; i++)
             {
                 m_projectileLauncher = new BallisticProjectileLauncher(projectileInfo, m_spitterPositions[i], m_info.projectileGravityScale, projectileInfo.speed);
