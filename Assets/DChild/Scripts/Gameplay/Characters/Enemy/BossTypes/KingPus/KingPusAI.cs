@@ -316,6 +316,12 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField]
             private float m_launchDelay;
             public float launchDelay => m_launchDelay;
+            [SerializeField, TitleGroup("Spitter")]
+            private List<float> m_spittersRotationOffset;
+            public List<float> spittersRotationOffset => m_spittersRotationOffset;
+            [SerializeField, TitleGroup("Spitter"), MinMaxSlider(30, 150)]
+            private Vector2 m_spittersRotationWidth = new Vector2(30, 150);
+            public Vector2 spittersRotationWidth => m_spittersRotationWidth;
 
             [TitleGroup("FX")]
             //[SerializeField]
@@ -538,6 +544,8 @@ namespace DChild.Gameplay.Characters.Enemies
         #region Spitter
         [SerializeField, TabGroup("Spitter")]
         private List<Transform> m_spitterPositions;
+        [SerializeField, TabGroup("Spitter")]
+        private List<SkeletonUtilityBone> m_spitterBone;
         #endregion
         [SerializeField, TabGroup("Blob")]
         private List<GameObject> m_blobs;
@@ -571,6 +579,8 @@ namespace DChild.Gameplay.Characters.Enemies
         #region Attack Coroutines
         private Coroutine m_currentAttackCoroutine;
         private Coroutine m_stabCoroutine;
+        private Coroutine m_stabIKControlCoroutine;
+        private Coroutine m_projectilePositionCheckerCoroutine;
         #endregion
 
         #region OnDamageTaken Coroutines
@@ -881,6 +891,16 @@ namespace DChild.Gameplay.Characters.Enemies
                     Debug.Log("CURRENT ATACK OF KING PUS NOT NULL");
                     StopCoroutine(attackCoroutine);
                     attackCoroutine = null;
+                    if (m_stabIKControlCoroutine != null)
+                    {
+                        StopCoroutine(m_stabIKControlCoroutine);
+                        m_stabIKControlCoroutine = null;
+                    }
+                    if (m_projectilePositionCheckerCoroutine != null)
+                    {
+                        StopCoroutine(m_projectilePositionCheckerCoroutine);
+                        m_projectilePositionCheckerCoroutine = null;
+                    }
                     m_stateHandle.Wait(State.ReevaluateSituation);
                 }
                 yield return null;
@@ -1169,6 +1189,21 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_currentAttackCoroutine = null;
                 m_attackDecider.hasDecidedOnAttack = false;
             }
+            if (m_stabCoroutine != null)
+            {
+                StopCoroutine(m_stabCoroutine);
+                m_stabCoroutine = null;
+            }
+            if (m_stabIKControlCoroutine != null)
+            {
+                StopCoroutine(m_stabIKControlCoroutine);
+                m_stabIKControlCoroutine = null;
+            }
+            if (m_projectilePositionCheckerCoroutine != null)
+            {
+                StopCoroutine(m_projectilePositionCheckerCoroutine);
+                m_projectilePositionCheckerCoroutine = null;
+            }
             if (m_grappleCoroutine != null)
             {
                 StopCoroutine(m_grappleCoroutine);
@@ -1256,6 +1291,9 @@ namespace DChild.Gameplay.Characters.Enemies
 
             m_hitbox.Disable();
 
+            m_stabSlashFX.Stop();
+            m_krakenFX.Stop();
+
             m_animation.DisableRootMotion();
             m_character.physics.simulateGravity = true;
             m_grappleRetractCoroutine = StartCoroutine(GrappleRetractRoutine(m_info.wallGrappleRetractAnimations.Count - 1));
@@ -1315,6 +1353,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void LaunchSingleProjectile()
         {
+
             var projectileInfo = m_willStickToWall ? m_info.airProjectile.projectileInfo : m_info.ballisticProjectile.projectileInfo;
             m_projectileLauncher = new BallisticProjectileLauncher(projectileInfo, m_spitterPositions[0], m_info.projectileGravityScale, projectileInfo.speed);
             m_projectileLauncher.AimAt(m_targetInfo.position);
@@ -1329,6 +1368,22 @@ namespace DChild.Gameplay.Characters.Enemies
             }
 
             //StartCoroutine(DelayedProjectileLauncher(m_spitterPositions.Count, m_info.launchDelay));
+        }
+
+        private IEnumerator ProjectilePositionCheckerRoutine()
+        {
+            while (true)
+            {
+                for (int x = 0; x < m_spitterBone.Count; x++)
+                {
+                    //m_spitterBone[x].transform.rotation = Quaternion.Euler(0, 0, UnityEngine.Random.Range(m_info.spittersRotationWidth.x, m_info.spittersRotationWidth.y));
+                    Vector2 spitPos = m_spitterBone[0].transform.position;
+                    Vector3 v_diff = (m_targetInfo.position - spitPos);
+                    float atan2 = Mathf.Atan2(v_diff.y, v_diff.x);
+                    m_spitterBone[x].transform.rotation = Quaternion.Euler(0f, 0f, (atan2 * Mathf.Rad2Deg) + m_info.spittersRotationOffset[x]);
+                }
+                yield return null;
+            }
         }
 
         private void LaunchMultiProjectile()
@@ -1408,10 +1463,15 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_animation.EnableRootMotion(true, false);
             m_animation.SetAnimation(30, m_info.idleAnimation, true, 0);
+            for (int i = 0; i < m_spitterBone.Count; i++)
+            {
+                m_spitterBone[i].mode = SkeletonUtilityBone.Mode.Override;
+            }
             if (IsTargetInRange(m_info.spikeSpitterAttacks[0].range))
             {
                 for (int i = 0; i < m_info.spikeSpitterAttacks.Count; i++)
                 {
+                    m_projectilePositionCheckerCoroutine = StartCoroutine(ProjectilePositionCheckerRoutine());
                     //if (!IsFacingTarget() && i == 0)
                     //    CustomTurn();
                     m_lastTargetPos = m_targetInfo.position;
@@ -1424,6 +1484,10 @@ namespace DChild.Gameplay.Characters.Enemies
                     yield return new WaitForAnimationComplete(m_animation.animationState, m_info.spikeSpitterRetractAnimations[i]);
                     //if (m_character.facing != HorizontalDirection.Right && i == 0)
                     //    CustomTurn();
+                }
+                for (int i = 0; i < m_spitterBone.Count; i++)
+                {
+                    m_spitterBone[i].mode = SkeletonUtilityBone.Mode.Follow;
                 }
                 m_animation.SetEmptyAnimation(30, 0);
                 m_animation.DisableRootMotion();
@@ -1450,11 +1514,15 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.EnableRootMotion(true, true);
             m_animation.SetAnimation(0, DynamicIdleAnimation(), true);
             m_animation.SetAnimation(30, m_info.idleAnimation, true, 0);
+            for (int i = 0; i < m_spitterBone.Count; i++)
+            {
+                m_spitterBone[i].mode = SkeletonUtilityBone.Mode.Override;
+            }
             var id = spreadShot ? 1 : 0;
             for (int i = 0; i < m_info.spikeSpitCount; i++)
             {
-                //if (!IsFacingTarget())
-                //    CustomTurn();
+                m_projectilePositionCheckerCoroutine = StartCoroutine(ProjectilePositionCheckerRoutine());
+
                 m_lastTargetPos = m_targetInfo.position;
                 m_animation.SetAnimation(15, m_info.spikeSpitterExtendAnimations[id], false);
                 yield return new WaitForAnimationComplete(m_animation.animationState, m_info.spikeSpitterExtendAnimations[id]);
@@ -1470,6 +1538,10 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.DisableRootMotion();
             m_animation.SetAnimation(0, m_info.bodySlamStart, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.bodySlamStart);
+            for (int i = 0; i < m_spitterBone.Count; i++)
+            {
+                m_spitterBone[i].mode = SkeletonUtilityBone.Mode.Follow;
+            }
             while (!m_groundSensor.isDetecting)
             {
                 m_animation.SetAnimation(0, m_info.bodySlamLoop, true);
@@ -1499,7 +1571,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 }
                 while (timer <= m_info.crawlDuration && !IsTargetInRange(m_info.heavyGroundStabRightAttack.range))
                 {
-                    MoveToTarget(m_info.heavySpearStabRightAttack.range, true);
+                    MoveToTarget(m_info.heavyGroundStabRightAttack.range, true);
                     timer += Time.deltaTime;
                     yield return null;
                 }
@@ -1543,15 +1615,18 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_movement.Stop();
                 m_animation.SetAnimation(0, m_info.idleAnimation, true);
                 m_stabHeadBone.mode = SkeletonUtilityBone.Mode.Override;
-                m_stabHeadBone.transform.position = new Vector2(m_lastTargetPos.x, GroundPosition(m_lastTargetPos).y);
+                m_stabIKControlCoroutine = StartCoroutine(HeavyGroundStabIKControlRoutine());
+                //m_stabHeadBone.transform.position = new Vector2(m_lastTargetPos.x, GroundPosition(m_lastTargetPos).y);
                 var heavyGroundStabAttackAnimation = m_lastTargetPos.x > transform.position.x ? m_info.heavyGroundStabRightAttack.animation : m_info.heavyGroundStabLeftAttack.animation;
                 m_animation.SetAnimation(30, heavyGroundStabAttackAnimation, false);
                 yield return new WaitForAnimationComplete(m_animation.animationState, heavyGroundStabAttackAnimation);
                 m_heavyGroundStabFX.Play();
-                m_stabHeadBone.transform.position = new Vector2(m_lastTargetPos.x, GroundPosition(m_lastTargetPos).y);
+                //m_stabHeadBone.transform.position = new Vector2(m_lastTargetPos.x, GroundPosition(m_lastTargetPos).y);
                 var heavyGroundStabStuckAnimation = m_lastTargetPos.x > transform.position.x ? m_info.heavyGroundStabLoopRightAnimation : m_info.heavyGroundStabLoopLeftAnimation;
                 m_animation.SetAnimation(30, heavyGroundStabStuckAnimation, true);
                 yield return new WaitForSeconds(m_info.groundStabStuckDuration);
+                StopCoroutine(m_stabIKControlCoroutine);
+                m_stabIKControlCoroutine = null;
                 var heavyGroundStabReturnAnimation = m_lastTargetPos.x > transform.position.x ? m_info.heavyGroundStabReturnRightAnimation : m_info.heavyGroundStabReturnLeftAnimation;
                 m_animation.SetAnimation(30, heavyGroundStabReturnAnimation, false);
                 yield return new WaitForAnimationComplete(m_animation.animationState, heavyGroundStabReturnAnimation);
@@ -1564,6 +1639,15 @@ namespace DChild.Gameplay.Characters.Enemies
             m_stabCoroutine = null;
             m_stateHandle.ApplyQueuedState();
             yield return null;
+        }
+
+        private IEnumerator HeavyGroundStabIKControlRoutine()
+        {
+            while (true)
+            {
+                m_stabHeadBone.transform.position = new Vector2(m_lastTargetPos.x, GroundPosition(m_lastTargetPos).y);
+                yield return null;
+            }
         }
 
         private IEnumerator HeavySpearStabAttackRoutine()
@@ -1587,10 +1671,17 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_animation.EnableRootMotion(true, false);
             m_animation.SetAnimation(30, m_info.idleAnimation, true, 0);
+            for (int i = 0; i < m_spitterBone.Count; i++)
+            {
+                m_spitterBone[i].mode = SkeletonUtilityBone.Mode.Override;
+            }
+
             if (IsTargetInRange(m_info.spikeSpitterAttacks[0].range))
             {
                 for (int i = 0; i < m_info.spikeSpitterAttacks.Count; i++)
                 {
+                    m_projectilePositionCheckerCoroutine = StartCoroutine(ProjectilePositionCheckerRoutine());
+
                     m_animation.SetAnimation(0, m_info.spikeSpitterExtendAnimations[i], false);
                     yield return new WaitForAnimationComplete(m_animation.animationState, m_info.spikeSpitterExtendAnimations[i]);
                     m_lastTargetPos = m_targetInfo.position;
@@ -1603,6 +1694,10 @@ namespace DChild.Gameplay.Characters.Enemies
                     }
                     m_animation.SetAnimation(0, m_info.spikeSpitterRetractAnimations[i], false);
                     yield return new WaitForAnimationComplete(m_animation.animationState, m_info.spikeSpitterRetractAnimations[i]);
+                }
+                for (int i = 0; i < m_spitterBone.Count; i++)
+                {
+                    m_spitterBone[i].mode = SkeletonUtilityBone.Mode.Follow;
                 }
                 m_animation.SetEmptyAnimation(30, 0);
                 m_animation.DisableRootMotion();
@@ -1629,8 +1724,14 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.EnableRootMotion(true, true);
             m_animation.SetAnimation(0, DynamicIdleAnimation(), true);
             m_animation.SetAnimation(30, m_info.idleAnimation, true, 0);
+            for (int i = 0; i < m_spitterBone.Count; i++)
+            {
+                m_spitterBone[i].mode = SkeletonUtilityBone.Mode.Override;
+            }
             for (int i = 0; i < m_info.spikeSpitterAttacks.Count; i++)
             {
+                m_projectilePositionCheckerCoroutine = StartCoroutine(ProjectilePositionCheckerRoutine());
+
                 m_animation.SetAnimation(0, m_info.spikeSpitterExtendAnimations[i], false);
                 yield return new WaitForAnimationComplete(m_animation.animationState, m_info.spikeSpitterExtendAnimations[i]);
                 m_lastTargetPos = m_targetInfo.position;
@@ -1650,6 +1751,10 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.DisableRootMotion();
             m_animation.SetAnimation(0, m_info.bodySlamStart, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.bodySlamStart);
+            for (int i = 0; i < m_spitterBone.Count; i++)
+            {
+                m_spitterBone[i].mode = SkeletonUtilityBone.Mode.Follow;
+            }
             while (!m_groundSensor.isDetecting)
             {
                 m_animation.SetAnimation(0, m_info.bodySlamLoop, true);
