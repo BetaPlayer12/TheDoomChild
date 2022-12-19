@@ -1519,7 +1519,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 4269384282242660759}
   - {fileID: 550487795993790408}
   m_Father: {fileID: 4269384280951534902}
   m_RootOrder: 1
@@ -1549,7 +1548,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b91f4cccbfb14d4f90c8d2512647826, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_navigation: {fileID: 4269384282242660758}
+  m_navigation: {fileID: 0}
   m_movementHandle: {fileID: 4269384281896939973}
 --- !u!114 &4269384281896939972
 MonoBehaviour:
@@ -1689,53 +1688,6 @@ CapsuleCollider2D:
   m_Offset: {x: -0.037097853, y: 0.67934424}
   m_Size: {x: 24.32559, y: 19.342548}
   m_Direction: 1
---- !u!1 &4269384282242660756
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 4269384282242660759}
-  - component: {fileID: 4269384282242660758}
-  m_Layer: 13
-  m_Name: GameObject
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &4269384282242660759
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4269384282242660756}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 4269384281896939963}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4269384282242660758
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4269384282242660756}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5a6fd63998a5d1e419a9e1fee3c1b8d6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_destinationTolerance: 3
-  m_refreshPath: 0
-  m_refreshRate: 0
 --- !u!1 &4269384282387140663
 GameObject:
   m_ObjectHideFlags: 0
@@ -2432,7 +2384,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4269384281896939963}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &6841164725186695337
 MonoBehaviour:
@@ -2451,10 +2403,10 @@ MonoBehaviour:
   m_autoFlinch: 0
   m_enableMixFlinch: 1
   m_enableEmpytyIdle: 1
-  m_alphaBlendStrength: 0.5
-  m_mixDuration: 1
+  m_alphaBlendStrength: 0.229
+  m_mixDuration: 0.117
   m_skeletonAnimation: {fileID: 5957908220351474545}
-  m_animation: Eye_Closed
+  m_animation: Eye_WideOpen2
   m_idleAnimation: Idle
   m_enableFlinchColor: 0
   m_flinchColorAnimation: Eye_WideOpen
@@ -2853,6 +2805,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: TentacleBlastHead (Right)
+      objectReference: {fileID: 0}
+    - target: {fileID: 7640492986208964910, guid: d577e320477641044be7604a5c64996b,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: -4.33741
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d577e320477641044be7604a5c64996b, type: 3}
