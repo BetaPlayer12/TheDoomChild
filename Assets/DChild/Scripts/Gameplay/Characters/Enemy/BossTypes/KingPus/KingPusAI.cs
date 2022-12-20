@@ -2041,10 +2041,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 for (int x = 0; x < m_tentacleOverridePoints.Count; x++)
                 {
                     m_tentacleOverridePoints[i].position = RandomTentaclePointPosition(/*m_tentacleOverridePoints[i]*/);
-                    if (Vector2.Distance(m_tentacleOverridePoints[i].position, m_tentacleOverridePoints[x].position) < 25f)
-                    {
-                        m_tentacleOverridePoints[i].position = RandomTentaclePointPosition(/*m_tentacleOverridePoints[i]*/);
-                    }
+                    m_tentacleOverridePoints[i].position = new Vector2(m_tentacleOverridePoints[i].position.x + (UnityEngine.Random.Range(0, 2) == 1 ? 25 : -25), m_tentacleOverridePoints[i].position.y);
                 }
             }
         }
