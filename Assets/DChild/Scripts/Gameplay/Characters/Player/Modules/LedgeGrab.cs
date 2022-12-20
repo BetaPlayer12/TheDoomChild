@@ -27,6 +27,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private Collider2D m_playerHitbox;
 
         private int m_animation;
+        private int m_jumpParameter;
         private Character m_character;
         private Rigidbody2D m_rigidbody;
         private Animator m_animator;
@@ -42,6 +43,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_state = info.state;
             m_animator = info.animator;
             m_animation = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.LedgeGrab);
+            m_jumpParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.Jump);
         }
 
         public void SetConfiguration(LedgeGrabStatsInfo info)
@@ -105,6 +107,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
             m_state.waitForBehaviour = true;
             m_animator.SetTrigger(m_animation);
+            m_animator.SetBool(m_jumpParameter, false);
             m_rigidbody.velocity = Vector2.zero;
             m_rigidbody.constraints = RigidbodyConstraints2D.FreezePosition | RigidbodyConstraints2D.FreezeRotation;
             //Note: Animation Gitch is happening right now. Possible solution is to play animation first and on start teleport player.s
