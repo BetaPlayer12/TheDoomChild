@@ -31,7 +31,9 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField]
         private BoxCollider2D m_obstacleCollider;
         [SerializeField]
-        private RaySensor m_floorSensor;
+        private RaySensor m_playerSensor;
+        [SerializeField]
+        private bool m_playerHit;
 
         public bool keepMonolith;
         public bool smashMonolith;
@@ -53,8 +55,19 @@ namespace DChild.Gameplay.Characters.Enemies
             if (smashMonolith)
             {
                 StartCoroutine(Smash());
+
                 smashMonolith = false;
             }
+
+            if (m_playerHit)
+            {
+                DestroyMonolith();
+            }
+        }
+
+        private IEnumerator PlayerCrushed()
+        {
+            yield return DestroyMonolith();
         }
 
         private IEnumerator EmergeTentacle()
@@ -74,12 +87,20 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_animation.SetAnimation(0, m_attackDestroyAftermathAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_attackDestroyAftermathAnimation);
+            if (m_playerSensor.isDetecting)
+            {
+                m_playerHit = true;
+            }
         }
 
         private IEnumerator AttackWithKeepMonolith()
         {
             m_animation.SetAnimation(0, m_attackPlatformAftermathAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_attackPlatformAftermathAnimation);
+            if (m_playerSensor.isDetecting)
+            {
+                m_playerHit = true;
+            }
         }
 
         private IEnumerator DestroyMonolith()
