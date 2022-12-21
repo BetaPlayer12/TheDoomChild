@@ -1616,9 +1616,9 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_animation.SetAnimation(0, tentacipationAnimation, false);
                     yield return new WaitForAnimationComplete(m_animation.animationState, tentacipationAnimation);
                 }
-                while (timer <= m_info.crawlDuration && !IsTargetInRange(m_info.heavyGroundStabRightAttack.range))
+                while (timer <= m_info.crawlDuration && !IsTargetInRange(m_info.heavySpearStabRightAttack.range))
                 {
-                    MoveToTarget(m_info.heavyGroundStabRightAttack.range, true);
+                    MoveToTarget(m_info.heavySpearStabRightAttack.range, true);
                     timer += Time.deltaTime;
                     yield return null;
                 }
@@ -2041,10 +2041,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 for (int x = 0; x < m_tentacleOverridePoints.Count; x++)
                 {
                     m_tentacleOverridePoints[i].position = RandomTentaclePointPosition(/*m_tentacleOverridePoints[i]*/);
-                    if (Vector2.Distance(m_tentacleOverridePoints[i].position, m_tentacleOverridePoints[x].position) < 25f)
-                    {
-                        m_tentacleOverridePoints[i].position = RandomTentaclePointPosition(/*m_tentacleOverridePoints[i]*/);
-                    }
+                    m_tentacleOverridePoints[i].position = new Vector2(m_tentacleOverridePoints[i].position.x + (UnityEngine.Random.Range(0, 2) == 1 ? 25 : -25), m_tentacleOverridePoints[i].position.y);
                 }
             }
         }
@@ -2309,7 +2306,7 @@ namespace DChild.Gameplay.Characters.Enemies
                             break;
                         #region WIP ATTACK PATTERNS
                         case Attack.Phase3Pattern1:
-                            if (IsTargetInRange(m_info.heavyGroundStabRightAttack.range))
+                            if (IsTargetInRange(m_info.heavySpearStabRightAttack.range))
                             {
                                 m_currentAttackCoroutine = StartCoroutine(HeavySpearStabAttackRoutine());
                             }
