@@ -799,6 +799,13 @@ namespace DChild.Gameplay.Characters.Enemies
                 yield return null;
             }
 
+            var monolithPlatformsPresent = FindObjectOfType<ObstacleChecker>().monolithSlamObstacleList;
+
+            if (monolithPlatformsPresent != null)
+            {
+                yield return null;
+            }
+
             m_currentAttackCoroutine = StartCoroutine(m_theOneThirdFormAttacks.TentacleBlastTwo());
             yield return new WaitForSeconds(cooldown);
             //Temporary

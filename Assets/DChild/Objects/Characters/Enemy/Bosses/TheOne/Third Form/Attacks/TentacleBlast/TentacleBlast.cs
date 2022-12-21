@@ -21,19 +21,6 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, Spine.Unity.SpineAnimation(dataField = "m_skeletonAnimation")]
         private string m_spawnAnimation;
 
-        [SerializeField, TabGroup("Lazer")]
-        private LineRenderer m_lineRenderer;
-        [SerializeField, TabGroup("Lazer")]
-        private LineRenderer m_telegraphLineRenderer;
-        [SerializeField, TabGroup("Lazer")]
-        private EdgeCollider2D m_edgeCollider;
-        [SerializeField, TabGroup("Lazer")]
-        private GameObject m_muzzleFXGO;
-        [SerializeField, TabGroup("Lazer")]
-        private ParticleFX m_muzzleLoopFX;
-        [SerializeField, TabGroup("Lazer")]
-        private ParticleFX m_muzzleTelegraphFX;
-
         private GameObject m_tentacleBlastLaser;
 
         [SerializeField, BoxGroup("Laser")]

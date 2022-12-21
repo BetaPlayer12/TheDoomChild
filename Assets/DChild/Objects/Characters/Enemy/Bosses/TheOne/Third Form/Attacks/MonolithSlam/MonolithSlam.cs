@@ -46,6 +46,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_obstacleCollider.enabled = false;
             smashMonolith = false;
             keepMonolith = false;
+            m_playerHit = false;
             StartCoroutine(EmergeTentacle());
         }
 
@@ -59,9 +60,14 @@ namespace DChild.Gameplay.Characters.Enemies
                 smashMonolith = false;
             }
 
+            if (m_playerSensor.isDetecting)
+            {
+                m_playerHit = true;
+            }
+
             if (m_playerHit)
             {
-                DestroyMonolith();
+                StartCoroutine(DestroyMonolith());
             }
         }
 
@@ -87,20 +93,12 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_animation.SetAnimation(0, m_attackDestroyAftermathAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_attackDestroyAftermathAnimation);
-            if (m_playerSensor.isDetecting)
-            {
-                m_playerHit = true;
-            }
         }
 
         private IEnumerator AttackWithKeepMonolith()
         {
             m_animation.SetAnimation(0, m_attackPlatformAftermathAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_attackPlatformAftermathAnimation);
-            if (m_playerSensor.isDetecting)
-            {
-                m_playerHit = true;
-            }
         }
 
         private IEnumerator DestroyMonolith()
