@@ -22,8 +22,6 @@ namespace DChild.Gameplay.Characters.Enemies
         public Vector2 mouthBlastOneOriginalPosition => m_mouthBlastOneOriginalPosition;
         [SerializeField]
         private BlackBloodFlood m_blackBloodFlood;
-        [SerializeField]
-        private GameObject m_mouthOneBlastLaser;
 
         [SerializeField, BoxGroup("Laser")]
         private LaserLauncher m_launcher;

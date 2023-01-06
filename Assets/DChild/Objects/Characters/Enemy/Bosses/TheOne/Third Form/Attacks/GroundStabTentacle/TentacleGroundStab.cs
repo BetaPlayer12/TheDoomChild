@@ -46,7 +46,8 @@ namespace DChild.Gameplay.Projectiles
 
             yield return new WaitForAnimationComplete(m_animation.animationState, m_attackAnimation);
 
-            FindObjectOfType<ObstacleChecker>().ClearMonoliths();
+            if(FindObjectOfType<ObstacleChecker>().monolithSlamObstacleList != null)
+                FindObjectOfType<ObstacleChecker>().ClearMonoliths();
 
             yield return TentacleStay();
         }

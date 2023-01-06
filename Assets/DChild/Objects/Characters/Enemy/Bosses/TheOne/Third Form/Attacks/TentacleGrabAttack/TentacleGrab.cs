@@ -39,24 +39,13 @@ public class TentacleGrab : MonoBehaviour
     [SerializeField]
     private Collider2D m_grabHitbox;
 
+    [SerializeField]
     private bool isAttackDone = false;
     [SerializeField]
     private bool isPlayerGrabbed = false;
 
     [SerializeField]
     private PlayableDirector m_groundSlamTimelineCall;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 
     [Button]
     public void GroundSlamAttack()
@@ -176,7 +165,11 @@ public class TentacleGrab : MonoBehaviour
 
     public void SetAttackDone()
     {
+        Debug.Log("Grab Done");
         isAttackDone = true;
+
+        GameplaySystem.playerManager.player.gameObject.SetActive(true);
+        GameplaySystem.playerManager.player.character.gameObject.SetActive(true);
     }
 
     public void GrabbedPlayer()

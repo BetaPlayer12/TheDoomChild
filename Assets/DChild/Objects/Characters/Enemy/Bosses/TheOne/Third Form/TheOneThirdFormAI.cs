@@ -671,6 +671,8 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_info.eyeMouthBlastAnticipationAnimation, true);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.eyeMouthBlastAnticipationAnimation);
 
+            StartCoroutine(m_theOneThirdFormAttacks.mouthBlastOneAttack.ExecuteAttack());
+
             yield return SetPositionForMouthBlast();
         }
 
@@ -733,12 +735,6 @@ namespace DChild.Gameplay.Characters.Enemies
             Vector2 originalPosition = m_model.transform.position;
             yield return MouthBlastOneStart();
             yield return MouthBlastEnd(originalPosition);
-        }
-
-        [Button]
-        private void TestMouthBlastI()
-        {
-            StartCoroutine(FullMouthBlastOneSequence());
         }
         #endregion
 
@@ -924,6 +920,92 @@ namespace DChild.Gameplay.Characters.Enemies
             m_attackDecider.hasDecidedOnAttack = false;
             m_currentAttackCoroutine = null;
             m_stateHandle.ApplyQueuedState();
+        }
+        #endregion
+
+        #region AttackButtons
+        [Button, FoldoutGroup("Trigger Attacks")]
+        [HideInEditorMode]
+        private void TriggerMouthBlastI()
+        {
+            StartCoroutine(FullMouthBlastOneSequence());
+        }
+
+        [Button, FoldoutGroup("Trigger Attacks")]
+        [HideInEditorMode]
+        private void TriggerTentacleGroundStab()
+        {
+            StartCoroutine(TentacleGroundStab(3f));
+        }
+
+        [Button, FoldoutGroup("Trigger Attacks")]
+        [HideInEditorMode]
+        private void TriggerTentacleCeiling()
+        {
+            StartCoroutine(TentacleCeiling(3f));
+        }
+
+        [Button, FoldoutGroup("Trigger Attacks")]
+        [HideInEditorMode]
+        private void TriggerMovingTentacleGround()
+        {
+            StartCoroutine(MovingTentacleGround(3f));
+        }
+
+        [Button, FoldoutGroup("Trigger Attacks")]
+        [HideInEditorMode]
+        private void TriggerChasingGroundTentacle()
+        {
+            StartCoroutine(ChasingGroundTentacle(3f));
+        }
+
+        [Button, FoldoutGroup("Trigger Attacks")]
+        [HideInEditorMode]
+        private void TriggerMouthBlastWall()
+        {
+            StartCoroutine(MouthBlastWall(3f));
+        }
+
+        [Button, FoldoutGroup("Trigger Attacks")]
+        [HideInEditorMode]
+        private void TriggerSlidingWall()
+        {
+            StartCoroutine(SlidingWall(3f));
+        }
+
+        [Button, FoldoutGroup("Trigger Attacks")]
+        [HideInEditorMode]
+        private void TriggerMonolithSlam()
+        {
+            StartCoroutine(MonolithSlam(3f));
+        }
+
+        [Button, FoldoutGroup("Trigger Attacks")]
+        [HideInEditorMode]
+        private void TriggerTentacleBlastOne()
+        {
+            StartCoroutine(TentacleBlastOne(3f));
+        }
+
+        [Button, FoldoutGroup("Trigger Attacks")]
+        [HideInEditorMode]
+        private void TriggerTentacleBlastTwo()
+        {
+            StartCoroutine(TentacleBlastTwo(3f));
+        }
+
+        [Button, FoldoutGroup("Trigger Attacks")]
+        [HideInEditorMode]
+        private void TriggerScriptedGrab()
+        {
+            StartCoroutine(ScriptedTentacleGrab(3f));
+        }
+
+        [Button, FoldoutGroup("Trigger Attacks")]
+        [HideInEditorMode]
+        private void TriggerBubbleImprisonment()
+        {
+            StartCoroutine(BubbleImprisonment(3f));
         }
         #endregion
 

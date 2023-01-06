@@ -36,6 +36,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         public IEnumerator ExecuteAttack(AITargetInfo Target)
         {
+            //Initialize monoliths to spawn and clear spawned monoliths 
             int counter = 0;
 
             m_monolithsSpawned.Clear();
@@ -46,11 +47,13 @@ namespace DChild.Gameplay.Characters.Enemies
                 counter++;
             }
 
+            //Organize Monoliths to drop in correct order of left to right or right to left
             if (m_leftToRightSequence)
                 OrganizeMonolithsSpawnedInDescendingOrder();
             else
                 OrganizeMonolithsSpawnedInAscendingOrder();
 
+            //Pick a monolith to keep as platform
             if (m_monolithsSpawned.Count > 1)
             {
                 int rollMonolithToKeep = Random.Range(0, m_monolithsSpawned.Count);
@@ -59,8 +62,10 @@ namespace DChild.Gameplay.Characters.Enemies
                 FindObjectOfType<ObstacleChecker>().monolithSlamObstacleList.Add(m_monolithsSpawned[rollMonolithToKeep]);
             }
 
+            //Anticipation time before smashing monoliths
             yield return new WaitForSeconds(2f);
 
+            //Set smashMonolith true in each monolith to trigger smash
             foreach (PoolableObject monolith in m_monolithsSpawned)
             {
                 monolith.GetComponent<MonolithSlam>().smashMonolith = true;
