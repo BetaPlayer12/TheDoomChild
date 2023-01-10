@@ -33,6 +33,7 @@ MonoBehaviour:
     bold: 0
     italic: 0
     underline: 0
+  baseID: 1
   actors:
   - id: 1
     fields:
@@ -60,7 +61,7 @@ MonoBehaviour:
     spritePortrait: {fileID: 21300000, guid: bc389d75286c01049be8bcfceb2bee80, type: 3}
     alternatePortraits: []
     spritePortraits: []
-  - id: 3
+  - id: 30
     fields:
     - title: Name
       value: Skeleton
@@ -86,7 +87,7 @@ MonoBehaviour:
     spritePortrait: {fileID: 21300000, guid: e02639f95ff6d6e448fb362584ee5e7e, type: 3}
     alternatePortraits: []
     spritePortraits: []
-  - id: 2
+  - id: 3
     fields:
     - title: Name
       value: Albin
@@ -112,7 +113,7 @@ MonoBehaviour:
     spritePortrait: {fileID: 21300000, guid: dd80db3a748edcd43a45e7a9538a0f77, type: 3}
     alternatePortraits: []
     spritePortraits: []
-  - id: 5
+  - id: 31
     fields:
     - title: Name
       value: NPC
@@ -135,7 +136,7 @@ MonoBehaviour:
     alternatePortraits: []
     spritePortraits: []
   items:
-  - id: 2
+  - id: 34
     fields:
     - title: Name
       value: RescueAlbin
@@ -179,7 +180,7 @@ MonoBehaviour:
       typeString: CustomFieldType_Text
   locations: []
   variables:
-  - id: 1
+  - id: 4
     fields:
     - title: Name
       value: Alert
@@ -194,7 +195,7 @@ MonoBehaviour:
       type: 0
       typeString: 
   conversations:
-  - id: 6
+  - id: 93
     fields:
     - title: Title
       value: Quest/RescueAlbin/Albin
@@ -234,6 +235,14 @@ MonoBehaviour:
       alwaysForceResponseMenu: 1
       includeInvalidEntries: 0
       responseTimeout: 0
+      emTagForOldResponses: 0
+      emTagForInvalidResponses: 0
+      cancelSubtitle:
+        key: 27
+        buttonName: 
+      cancelConversation:
+        key: 27
+        buttonName: 
     nodeColor: 
     dialogueEntries:
     - id: 0
@@ -282,7 +291,7 @@ MonoBehaviour:
         value: None()
         type: 0
         typeString: 
-      conversationID: 6
+      conversationID: 93
       isRoot: 0
       isGroup: 0
       nodeColor: 
@@ -290,9 +299,9 @@ MonoBehaviour:
       falseConditionAction: Block
       conditionPriority: 2
       outgoingLinks:
-      - originConversationID: 6
+      - originConversationID: 93
         originDialogueID: 0
-        destinationConversationID: 6
+        destinationConversationID: 93
         destinationDialogueID: 1
         isConnector: 0
         priority: 2
@@ -353,7 +362,7 @@ MonoBehaviour:
         value: 
         type: 0
         typeString: 
-      conversationID: 6
+      conversationID: 93
       isRoot: 0
       isGroup: 0
       nodeColor: 
@@ -361,9 +370,9 @@ MonoBehaviour:
       falseConditionAction: Block
       conditionPriority: 2
       outgoingLinks:
-      - originConversationID: 6
+      - originConversationID: 93
         originDialogueID: 1
-        destinationConversationID: 6
+        destinationConversationID: 93
         destinationDialogueID: 2
         isConnector: 0
         priority: 2
@@ -424,7 +433,7 @@ MonoBehaviour:
         value: SetActive(Albin,False) @1
         type: 0
         typeString: 
-      conversationID: 6
+      conversationID: 93
       isRoot: 0
       isGroup: 0
       nodeColor: 
@@ -432,9 +441,9 @@ MonoBehaviour:
       falseConditionAction: Block
       conditionPriority: 2
       outgoingLinks:
-      - originConversationID: 6
+      - originConversationID: 93
         originDialogueID: 2
-        destinationConversationID: 6
+        destinationConversationID: 93
         destinationDialogueID: 3
         isConnector: 0
         priority: 2
@@ -495,7 +504,7 @@ MonoBehaviour:
         value: 
         type: 0
         typeString: 
-      conversationID: 6
+      conversationID: 93
       isRoot: 0
       isGroup: 0
       nodeColor: 
@@ -514,9 +523,10 @@ MonoBehaviour:
         y: 180
         width: 160
         height: 30
+    entryGroups: []
     canvasScrollPosition: {x: 0, y: 0}
     canvasZoom: 1.1199999
-  - id: 7
+  - id: 94
     fields:
     - title: Title
       value: Quest/RescueAlbin/CallForHelp
@@ -556,6 +566,14 @@ MonoBehaviour:
       alwaysForceResponseMenu: 1
       includeInvalidEntries: 0
       responseTimeout: 0
+      emTagForOldResponses: 0
+      emTagForInvalidResponses: 0
+      cancelSubtitle:
+        key: 27
+        buttonName: 
+      cancelConversation:
+        key: 27
+        buttonName: 
     nodeColor: 
     dialogueEntries:
     - id: 0
@@ -604,7 +622,7 @@ MonoBehaviour:
         value: None()
         type: 0
         typeString: 
-      conversationID: 7
+      conversationID: 94
       isRoot: 0
       isGroup: 0
       nodeColor: 
@@ -612,27 +630,27 @@ MonoBehaviour:
       falseConditionAction: Block
       conditionPriority: 2
       outgoingLinks:
-      - originConversationID: 7
+      - originConversationID: 94
         originDialogueID: 0
-        destinationConversationID: 7
+        destinationConversationID: 94
         destinationDialogueID: 1
         isConnector: 0
         priority: 2
-      - originConversationID: 7
+      - originConversationID: 94
         originDialogueID: 0
-        destinationConversationID: 7
+        destinationConversationID: 94
         destinationDialogueID: 2
         isConnector: 0
         priority: 2
-      - originConversationID: 7
+      - originConversationID: 94
         originDialogueID: 0
-        destinationConversationID: 7
+        destinationConversationID: 94
         destinationDialogueID: 3
         isConnector: 0
         priority: 2
-      - originConversationID: 7
+      - originConversationID: 94
         originDialogueID: 0
-        destinationConversationID: 7
+        destinationConversationID: 94
         destinationDialogueID: 4
         isConnector: 0
         priority: 2
@@ -693,7 +711,7 @@ MonoBehaviour:
         value: 
         type: 0
         typeString: 
-      conversationID: 7
+      conversationID: 94
       isRoot: 0
       isGroup: 0
       nodeColor: 
@@ -758,7 +776,7 @@ MonoBehaviour:
         value: 
         type: 0
         typeString: 
-      conversationID: 7
+      conversationID: 94
       isRoot: 0
       isGroup: 0
       nodeColor: 
@@ -823,7 +841,7 @@ MonoBehaviour:
         value: 
         type: 0
         typeString: 
-      conversationID: 7
+      conversationID: 94
       isRoot: 0
       isGroup: 0
       nodeColor: 
@@ -888,7 +906,7 @@ MonoBehaviour:
         value: 
         type: 0
         typeString: 
-      conversationID: 7
+      conversationID: 94
       isRoot: 0
       isGroup: 0
       nodeColor: 
@@ -907,6 +925,7 @@ MonoBehaviour:
         y: 246
         width: 160
         height: 30
+    entryGroups: []
     canvasScrollPosition: {x: 0, y: 1}
     canvasZoom: 1
   syncInfo:

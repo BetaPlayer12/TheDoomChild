@@ -61,7 +61,7 @@ MonoBehaviour:
     spritePortrait: {fileID: 0}
     alternatePortraits: []
     spritePortraits: []
-  - id: 2
+  - id: 7
     fields:
     - title: Name
       value: Gladiator
@@ -84,12 +84,12 @@ MonoBehaviour:
     alternatePortraits: []
     spritePortraits: []
   items:
-  - id: 1
+  - id: 31
     fields:
     - title: Name
       value: FindGravestone
       type: 0
-      typeString: 
+      typeString: CustomFieldType_Text
     - title: Pictures
       value: '[]'
       type: 3
@@ -97,24 +97,52 @@ MonoBehaviour:
     - title: Description
       value: find gladiators resting place
       type: 0
-      typeString: 
+      typeString: CustomFieldType_Text
     - title: Success Description
       value: 
       type: 0
-      typeString: 
+      typeString: CustomFieldType_Text
     - title: Failure Description
       value: 
       type: 0
-      typeString: 
+      typeString: CustomFieldType_Text
     - title: State
       value: unassigned
       type: 0
-      typeString: 
+      typeString: CustomFieldType_QuestState
     - title: Is Item
       value: False
       type: 2
       typeString: CustomFieldType_Boolean
-  - id: 2
+    - title: Entry Count
+      value: 3
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Entry 1 State
+      value: unassigned
+      type: 0
+      typeString: 
+    - title: Entry 1
+      value: statue
+      type: 0
+      typeString: 
+    - title: Entry 2 State
+      value: unassigned
+      type: 0
+      typeString: 
+    - title: Entry 2
+      value: shrine
+      type: 0
+      typeString: 
+    - title: Entry 3 State
+      value: unassigned
+      type: 0
+      typeString: 
+    - title: Entry 3
+      value: restingplace
+      type: 0
+      typeString: 
+  - id: 32
     fields:
     - title: Name
       value: BrokenGladiatorSword
@@ -145,7 +173,7 @@ MonoBehaviour:
       type: 0
       typeString: CustomFieldType_QuestState
   locations:
-  - id: 1
+  - id: 4
     fields:
     - title: Name
       value: Location #1
@@ -159,7 +187,7 @@ MonoBehaviour:
       value: "Graveyard\u2019s scene1 - the area near the undead general\u2019s Statue."
       type: 0
       typeString: CustomFieldType_Text
-  - id: 2
+  - id: 5
     fields:
     - title: Name
       value: Location #2
@@ -190,7 +218,7 @@ MonoBehaviour:
       type: 0
       typeString: CustomFieldType_Text
   variables:
-  - id: 1
+  - id: 56
     fields:
     - title: Name
       value: TheStatue
@@ -204,7 +232,7 @@ MonoBehaviour:
       value: FirstArea
       type: 0
       typeString: CustomFieldType_Text
-  - id: 2
+  - id: 57
     fields:
     - title: Name
       value: TheShrine
@@ -218,7 +246,7 @@ MonoBehaviour:
       value: SecondArea
       type: 0
       typeString: CustomFieldType_Text
-  - id: 3
+  - id: 58
     fields:
     - title: Name
       value: TheRestingPlace
@@ -233,7 +261,7 @@ MonoBehaviour:
       type: 0
       typeString: CustomFieldType_Text
   conversations:
-  - id: 1
+  - id: 87
     fields:
     - title: Title
       value: The Statue Conversation
@@ -252,7 +280,7 @@ MonoBehaviour:
       type: 5
       typeString: CustomFieldType_Actor
     - title: Conversant
-      value: 2
+      value: 7
       type: 5
       typeString: CustomFieldType_Actor
     - title: IsBanter
@@ -306,7 +334,7 @@ MonoBehaviour:
         type: 5
         typeString: CustomFieldType_Actor
       - title: Conversant
-        value: 2
+        value: 7
         type: 5
         typeString: CustomFieldType_Actor
       - title: Menu Text
@@ -333,7 +361,7 @@ MonoBehaviour:
         value: None()
         type: 0
         typeString: 
-      conversationID: 1
+      conversationID: 87
       isRoot: 0
       isGroup: 0
       nodeColor: 
@@ -341,9 +369,9 @@ MonoBehaviour:
       falseConditionAction: Block
       conditionPriority: 2
       outgoingLinks:
-      - originConversationID: 1
+      - originConversationID: 87
         originDialogueID: 0
-        destinationConversationID: 1
+        destinationConversationID: 87
         destinationDialogueID: 3
         isConnector: 0
         priority: 2
@@ -373,7 +401,7 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Actor
-        value: 2
+        value: 7
         type: 5
         typeString: CustomFieldType_Actor
       - title: Conversant
@@ -404,7 +432,7 @@ MonoBehaviour:
         value: 
         type: 0
         typeString: 
-      conversationID: 1
+      conversationID: 87
       isRoot: 0
       isGroup: 0
       nodeColor: 
@@ -412,9 +440,9 @@ MonoBehaviour:
       falseConditionAction: Block
       conditionPriority: 2
       outgoingLinks:
-      - originConversationID: 1
+      - originConversationID: 87
         originDialogueID: 3
-        destinationConversationID: 1
+        destinationConversationID: 87
         destinationDialogueID: 4
         isConnector: 0
         priority: 2
@@ -448,7 +476,7 @@ MonoBehaviour:
         type: 5
         typeString: CustomFieldType_Actor
       - title: Conversant
-        value: 2
+        value: 7
         type: 5
         typeString: CustomFieldType_Actor
       - title: Menu Text
@@ -475,7 +503,7 @@ MonoBehaviour:
         value: 
         type: 0
         typeString: 
-      conversationID: 1
+      conversationID: 87
       isRoot: 0
       isGroup: 0
       nodeColor: 
@@ -483,9 +511,9 @@ MonoBehaviour:
       falseConditionAction: Block
       conditionPriority: 2
       outgoingLinks:
-      - originConversationID: 1
+      - originConversationID: 87
         originDialogueID: 4
-        destinationConversationID: 1
+        destinationConversationID: 87
         destinationDialogueID: 5
         isConnector: 0
         priority: 2
@@ -515,7 +543,7 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Actor
-        value: 2
+        value: 7
         type: 5
         typeString: CustomFieldType_Actor
       - title: Conversant
@@ -546,7 +574,7 @@ MonoBehaviour:
         value: 
         type: 0
         typeString: 
-      conversationID: 1
+      conversationID: 87
       isRoot: 0
       isGroup: 0
       nodeColor: 
@@ -568,7 +596,7 @@ MonoBehaviour:
     entryGroups: []
     canvasScrollPosition: {x: 0, y: 0}
     canvasZoom: 1
-  - id: 2
+  - id: 88
     fields:
     - title: Title
       value: The Shrine Conversation
@@ -587,7 +615,7 @@ MonoBehaviour:
       type: 5
       typeString: CustomFieldType_Actor
     - title: Conversant
-      value: 2
+      value: 7
       type: 5
       typeString: CustomFieldType_Actor
     - title: IsBanter
@@ -641,7 +669,7 @@ MonoBehaviour:
         type: 5
         typeString: CustomFieldType_Actor
       - title: Conversant
-        value: 2
+        value: 7
         type: 5
         typeString: CustomFieldType_Actor
       - title: Menu Text
@@ -668,7 +696,7 @@ MonoBehaviour:
         value: None()
         type: 0
         typeString: 
-      conversationID: 2
+      conversationID: 88
       isRoot: 0
       isGroup: 0
       nodeColor: 
@@ -676,9 +704,9 @@ MonoBehaviour:
       falseConditionAction: Block
       conditionPriority: 2
       outgoingLinks:
-      - originConversationID: 2
+      - originConversationID: 88
         originDialogueID: 0
-        destinationConversationID: 2
+        destinationConversationID: 88
         destinationDialogueID: 1
         isConnector: 0
         priority: 2
@@ -708,7 +736,7 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Actor
-        value: 2
+        value: 7
         type: 5
         typeString: CustomFieldType_Actor
       - title: Conversant
@@ -739,7 +767,7 @@ MonoBehaviour:
         value: 
         type: 0
         typeString: 
-      conversationID: 2
+      conversationID: 88
       isRoot: 0
       isGroup: 0
       nodeColor: 
@@ -747,9 +775,9 @@ MonoBehaviour:
       falseConditionAction: Block
       conditionPriority: 2
       outgoingLinks:
-      - originConversationID: 2
+      - originConversationID: 88
         originDialogueID: 1
-        destinationConversationID: 2
+        destinationConversationID: 88
         destinationDialogueID: 2
         isConnector: 0
         priority: 2
@@ -783,7 +811,7 @@ MonoBehaviour:
         type: 5
         typeString: CustomFieldType_Actor
       - title: Conversant
-        value: 2
+        value: 7
         type: 5
         typeString: CustomFieldType_Actor
       - title: Menu Text
@@ -810,7 +838,7 @@ MonoBehaviour:
         value: 
         type: 0
         typeString: 
-      conversationID: 2
+      conversationID: 88
       isRoot: 0
       isGroup: 0
       nodeColor: 
@@ -818,9 +846,9 @@ MonoBehaviour:
       falseConditionAction: Block
       conditionPriority: 2
       outgoingLinks:
-      - originConversationID: 2
+      - originConversationID: 88
         originDialogueID: 2
-        destinationConversationID: 2
+        destinationConversationID: 88
         destinationDialogueID: 3
         isConnector: 0
         priority: 2
@@ -850,7 +878,7 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Actor
-        value: 2
+        value: 7
         type: 5
         typeString: CustomFieldType_Actor
       - title: Conversant
@@ -881,7 +909,7 @@ MonoBehaviour:
         value: 
         type: 0
         typeString: 
-      conversationID: 2
+      conversationID: 88
       isRoot: 0
       isGroup: 0
       nodeColor: 
@@ -903,7 +931,7 @@ MonoBehaviour:
     entryGroups: []
     canvasScrollPosition: {x: 0, y: 0}
     canvasZoom: 1
-  - id: 3
+  - id: 89
     fields:
     - title: Title
       value: The Resting Place Conversation
@@ -922,7 +950,7 @@ MonoBehaviour:
       type: 5
       typeString: CustomFieldType_Actor
     - title: Conversant
-      value: 2
+      value: 7
       type: 5
       typeString: CustomFieldType_Actor
     - title: IsBanter
@@ -976,7 +1004,7 @@ MonoBehaviour:
         type: 5
         typeString: CustomFieldType_Actor
       - title: Conversant
-        value: 2
+        value: 7
         type: 5
         typeString: CustomFieldType_Actor
       - title: Menu Text
@@ -1003,7 +1031,7 @@ MonoBehaviour:
         value: None()
         type: 0
         typeString: 
-      conversationID: 3
+      conversationID: 89
       isRoot: 0
       isGroup: 0
       nodeColor: 
@@ -1011,9 +1039,9 @@ MonoBehaviour:
       falseConditionAction: Block
       conditionPriority: 2
       outgoingLinks:
-      - originConversationID: 3
+      - originConversationID: 89
         originDialogueID: 0
-        destinationConversationID: 3
+        destinationConversationID: 89
         destinationDialogueID: 1
         isConnector: 0
         priority: 2
@@ -1043,7 +1071,7 @@ MonoBehaviour:
         type: 0
         typeString: CustomFieldType_Text
       - title: Actor
-        value: 2
+        value: 7
         type: 5
         typeString: CustomFieldType_Actor
       - title: Conversant
@@ -1074,7 +1102,7 @@ MonoBehaviour:
         value: 
         type: 0
         typeString: CustomFieldType_Text
-      conversationID: 3
+      conversationID: 89
       isRoot: 0
       isGroup: 0
       nodeColor: 
@@ -1082,9 +1110,9 @@ MonoBehaviour:
       falseConditionAction: Block
       conditionPriority: 2
       outgoingLinks:
-      - originConversationID: 3
+      - originConversationID: 89
         originDialogueID: 1
-        destinationConversationID: 3
+        destinationConversationID: 89
         destinationDialogueID: 2
         isConnector: 0
         priority: 2
@@ -1114,7 +1142,7 @@ MonoBehaviour:
         type: 0
         typeString: CustomFieldType_Text
       - title: Actor
-        value: 2
+        value: 7
         type: 5
         typeString: CustomFieldType_Actor
       - title: Conversant
@@ -1145,7 +1173,7 @@ MonoBehaviour:
         value: 
         type: 0
         typeString: CustomFieldType_Text
-      conversationID: 3
+      conversationID: 89
       isRoot: 0
       isGroup: 0
       nodeColor: 
