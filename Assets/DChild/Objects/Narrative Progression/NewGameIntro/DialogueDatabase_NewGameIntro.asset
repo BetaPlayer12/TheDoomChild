@@ -106,7 +106,7 @@ MonoBehaviour:
     alternatePortraits: []
     spritePortraits:
     - {fileID: 21300000, guid: ed103a6bfbc9fe646bfb4596953f12ca, type: 3}
-  - id: 17
+  - id: 34
     fields:
     - title: Name
       value: System
@@ -145,7 +145,7 @@ MonoBehaviour:
       value: 
       type: 0
       typeString: 
-  - id: 49
+  - id: 65
     fields:
     - title: Name
       value: IsStoreWithPlayer
@@ -159,7 +159,7 @@ MonoBehaviour:
       value: 
       type: 0
       typeString: CustomFieldType_Text
-  - id: 47
+  - id: 66
     fields:
     - title: Name
       value: HasPickupStore
@@ -173,7 +173,7 @@ MonoBehaviour:
       value: 
       type: 0
       typeString: 
-  - id: 48
+  - id: 67
     fields:
     - title: Name
       value: StoreBlackBloodWarningIndex
@@ -187,7 +187,7 @@ MonoBehaviour:
       value: Used to randomized Stores Response to the player
       type: 0
       typeString: 
-  - id: 50
+  - id: 68
     fields:
     - title: Name
       value: TriedToNotPickupStore
@@ -211,6 +211,20 @@ MonoBehaviour:
       value: 0
       type: 1
       typeString: CustomFieldType_Number
+    - title: Description
+      value: 
+      type: 0
+      typeString: CustomFieldType_Text
+  - id: 69
+    fields:
+    - title: Name
+      value: PlayerJumpsIntoBlackBlood
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Initial Value
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
     - title: Description
       value: 
       type: 0
@@ -1069,7 +1083,7 @@ MonoBehaviour:
     entryGroups: []
     canvasScrollPosition: {x: 0, y: 0}
     canvasZoom: 0.8500001
-  - id: 59
+  - id: 71
     fields:
     - title: Title
       value: Intro/Banter/Store Complains about Player not Picking him up
@@ -1169,7 +1183,7 @@ MonoBehaviour:
         value: None()
         type: 0
         typeString: 
-      conversationID: 59
+      conversationID: 71
       isRoot: 0
       isGroup: 0
       nodeColor: 
@@ -1177,9 +1191,9 @@ MonoBehaviour:
       falseConditionAction: Block
       conditionPriority: 2
       outgoingLinks:
-      - originConversationID: 59
+      - originConversationID: 71
         originDialogueID: 0
-        destinationConversationID: 59
+        destinationConversationID: 71
         destinationDialogueID: 1
         isConnector: 0
         priority: 2
@@ -1209,7 +1223,7 @@ MonoBehaviour:
         type: 0
         typeString: CustomFieldType_Text
       - title: Actor
-        value: 17
+        value: 34
         type: 5
         typeString: CustomFieldType_Actor
       - title: Conversant
@@ -1244,7 +1258,7 @@ MonoBehaviour:
         value: 
         type: 0
         typeString: 
-      conversationID: 59
+      conversationID: 71
       isRoot: 0
       isGroup: 0
       nodeColor: 
@@ -1267,7 +1281,7 @@ MonoBehaviour:
     entryGroups: []
     canvasScrollPosition: {x: 0, y: 0}
     canvasZoom: 0.85000014
-  - id: 60
+  - id: 72
     fields:
     - title: Title
       value: Intro/Banter/Player Jumps Into Black Blood
@@ -1282,7 +1296,7 @@ MonoBehaviour:
       type: 0
       typeString: CustomFieldType_Text
     - title: Actor
-      value: 17
+      value: 34
       type: 5
       typeString: CustomFieldType_Actor
     - title: Conversant
@@ -1336,7 +1350,7 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Actor
-        value: 17
+        value: 34
         type: 5
         typeString: CustomFieldType_Actor
       - title: Conversant
@@ -1367,7 +1381,7 @@ MonoBehaviour:
         value: None()
         type: 0
         typeString: 
-      conversationID: 60
+      conversationID: 72
       isRoot: 0
       isGroup: 0
       nodeColor: 
@@ -1375,33 +1389,21 @@ MonoBehaviour:
       falseConditionAction: Block
       conditionPriority: 2
       outgoingLinks:
-      - originConversationID: 60
+      - originConversationID: 72
         originDialogueID: 0
-        destinationConversationID: 60
-        destinationDialogueID: 1
-        isConnector: 0
-        priority: 2
-      - originConversationID: 60
-        originDialogueID: 0
-        destinationConversationID: 60
-        destinationDialogueID: 2
-        isConnector: 0
-        priority: 2
-      - originConversationID: 60
-        originDialogueID: 0
-        destinationConversationID: 60
-        destinationDialogueID: 3
+        destinationConversationID: 72
+        destinationDialogueID: 4
         isConnector: 0
         priority: 2
       conditionsString: 
-      userScript: Variable["StoreBlackBloodWarningIndex"] = math.random()
+      userScript: Variable["StoreBlackBloodWarningIndex"] = math.random(3)
       onExecute:
         m_PersistentCalls:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 251
-        y: 51
+        x: 253
+        y: 50
         width: 160
         height: 30
     - id: 1
@@ -1419,7 +1421,7 @@ MonoBehaviour:
         type: 0
         typeString: CustomFieldType_Text
       - title: Actor
-        value: 17
+        value: 34
         type: 5
         typeString: CustomFieldType_Actor
       - title: Conversant
@@ -1450,7 +1452,7 @@ MonoBehaviour:
         value: 
         type: 0
         typeString: CustomFieldType_Text
-      conversationID: 60
+      conversationID: 72
       isRoot: 0
       isGroup: 0
       nodeColor: 
@@ -1465,8 +1467,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 287
-        y: 124
+        x: 272
+        y: 200
         width: 160
         height: 30
     - id: 2
@@ -1484,7 +1486,7 @@ MonoBehaviour:
         type: 0
         typeString: CustomFieldType_Text
       - title: Actor
-        value: 17
+        value: 34
         type: 5
         typeString: CustomFieldType_Actor
       - title: Conversant
@@ -1515,7 +1517,7 @@ MonoBehaviour:
         value: 
         type: 0
         typeString: CustomFieldType_Text
-      conversationID: 60
+      conversationID: 72
       isRoot: 0
       isGroup: 0
       nodeColor: 
@@ -1530,8 +1532,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 487
-        y: 124
+        x: 462
+        y: 194
         width: 160
         height: 30
     - id: 3
@@ -1549,7 +1551,7 @@ MonoBehaviour:
         type: 0
         typeString: CustomFieldType_Text
       - title: Actor
-        value: 17
+        value: 34
         type: 5
         typeString: CustomFieldType_Actor
       - title: Conversant
@@ -1580,7 +1582,7 @@ MonoBehaviour:
         value: 
         type: 0
         typeString: CustomFieldType_Text
-      conversationID: 60
+      conversationID: 72
       isRoot: 0
       isGroup: 0
       nodeColor: 
@@ -1595,8 +1597,91 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 90
-        y: 124
+        x: 71
+        y: 200
+        width: 160
+        height: 30
+    - id: 4
+      fields:
+      - title: Title
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Pictures
+        value: '[]'
+        type: 3
+        typeString: CustomFieldType_Files
+      - title: Description
+        value: Random Decider
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 16
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 34
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Parenthetical
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Audio Files
+        value: '[]'
+        type: 3
+        typeString: CustomFieldType_Files
+      - title: Video File
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: None()
+        type: 0
+        typeString: CustomFieldType_Text
+      conversationID: 72
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 72
+        originDialogueID: 4
+        destinationConversationID: 72
+        destinationDialogueID: 1
+        isConnector: 0
+        priority: 2
+      - originConversationID: 72
+        originDialogueID: 4
+        destinationConversationID: 72
+        destinationDialogueID: 2
+        isConnector: 0
+        priority: 2
+      - originConversationID: 72
+        originDialogueID: 4
+        destinationConversationID: 72
+        destinationDialogueID: 3
+        isConnector: 0
+        priority: 2
+      conditionsString: 
+      userScript: 
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 249
+        y: 117
         width: 160
         height: 30
     entryGroups: []
