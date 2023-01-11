@@ -34,8 +34,25 @@ public class TheOneThirdFormAttacks : MonoBehaviour
     public MouthBlastIAttack mouthBlastOneAttack => m_mouthBlastOneAttack;
 
     private TheOneThirdFormAI m_targetInfo;
-    
+
     public event EventAction<EventActionArgs> AttackDone;
+    //{
+    //    add
+    //    {
+    //        m_tentacleGroundStabAttack.AttackDone += value;
+
+
+
+
+
+
+    //    }
+
+    //    remove
+    //    {
+    //        m_tentacleGroundStabAttack.AttackDone -= value;
+    //    }
+    //}
 
     private void Awake()
     {

@@ -41,15 +41,21 @@ public class TentacleGrab : MonoBehaviour
     private Collider2D m_grabHitbox;
 
     [SerializeField]
-    private bool isAttackDone = false;
+    private bool isAttackDone;
     [SerializeField]
-    private bool isPlayerGrabbed = false;
+    private bool isPlayerGrabbed;
 
     [SerializeField]
     private PlayableDirector m_groundSlamTimelineCall;
 
     public event EventAction<EventActionArgs> AttackStart;
     public event EventAction<EventActionArgs> AttackDone;
+
+    private void Start()
+    {
+        m_grabHitbox.enabled = false;
+        isPlayerGrabbed = false;
+    }
 
     [Button]
     public void GroundSlamAttack()
@@ -75,6 +81,7 @@ public class TentacleGrab : MonoBehaviour
 
     private IEnumerator Grab()
     {
+        m_grabHitbox.enabled = true;
         m_animation.SetAnimation(0, m_grabAnimation, false);
         yield return new WaitForAnimationComplete(m_animation.animationState, m_grabAnimation);
         yield return null;
