@@ -7,17 +7,18 @@ namespace DChild.Gameplay.ArmyBattle
     [CreateAssetMenu(fileName = "ArmyCharacter", menuName = "DChild/Gameplay/Army/Character")]
     public class ArmyCharacter : ScriptableObject
     {
-        [SerializeField]
-        private string m_name;
-        [SerializeField]
+        [HorizontalGroup("Line")]
+        [SerializeField, DisableInInlineEditors, LabelWidth(57)]
         private Sprite m_image;
-        [SerializeField,DisableInInlineEditors]
+        [SerializeField, DisableInInlineEditors, VerticalGroup("Line/Vert")]
+        private string m_name;
+        [SerializeField, HideInTables, DisableInInlineEditors, VerticalGroup("Line/Vert")]
         private UnitType m_unitType;
-        [SerializeField]
+        [SerializeField, DisableInInlineEditors, VerticalGroup("Line/Vert")]
         private int m_power;
 
-        public string name => m_name;
         public Sprite image => m_image;
+        public string name => m_name;
         public UnitType unitType => m_unitType;
         public int power => m_power;
     }

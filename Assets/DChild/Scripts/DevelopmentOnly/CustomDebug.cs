@@ -10,7 +10,8 @@ namespace DChildDebug
         {
             System_Intialize,
             Scene_Load,
-            Build_PostProcessScene
+            Build_PostProcessScene,
+            System_ArmyBattle
         }
 
         private const string MAIN_TAG = "DCHILD_";
@@ -27,7 +28,7 @@ namespace DChildDebug
 
         private static string GetTag(LogType logType)
         {
-            return $"[{MAIN_TAG}{logType.ToString()} ";
+            return $"[{MAIN_TAG}{logType.ToString()}]";
         }
     }
 
