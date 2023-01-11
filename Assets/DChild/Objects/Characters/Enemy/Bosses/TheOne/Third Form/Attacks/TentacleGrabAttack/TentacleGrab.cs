@@ -1,6 +1,7 @@
 using DChild;
 using DChild.Gameplay;
 using DChild.Gameplay.Characters;
+using Holysoft.Event;
 using Sirenix.OdinInspector;
 using Spine.Unity;
 using System.Collections;
@@ -47,6 +48,9 @@ public class TentacleGrab : MonoBehaviour
     [SerializeField]
     private PlayableDirector m_groundSlamTimelineCall;
 
+    public event EventAction<EventActionArgs> AttackStart;
+    public event EventAction<EventActionArgs> AttackDone;
+
     [Button]
     public void GroundSlamAttack()
     {        
@@ -71,7 +75,6 @@ public class TentacleGrab : MonoBehaviour
 
     private IEnumerator Grab()
     {
-        m_grabHitbox.enabled = true;
         m_animation.SetAnimation(0, m_grabAnimation, false);
         yield return new WaitForAnimationComplete(m_animation.animationState, m_grabAnimation);
         yield return null;
@@ -96,6 +99,8 @@ public class TentacleGrab : MonoBehaviour
 
     private IEnumerator GroundSlam()
     {
+        AttackStart?.Invoke(this, EventActionArgs.Empty);
+
         yield return Emerge();
 
         yield return new WaitForSeconds(2f); //somehow make time tentacle grabs random interval?
@@ -125,6 +130,8 @@ public class TentacleGrab : MonoBehaviour
         }
 
         isPlayerGrabbed = false;
+
+        AttackDone?.Invoke(this, EventActionArgs.Empty);
     }
 
     private IEnumerator TimelineGroundSlamSequence()
@@ -167,6 +174,7 @@ public class TentacleGrab : MonoBehaviour
     {
         Debug.Log("Grab Done");
         isAttackDone = true;
+        isPlayerGrabbed = false;
 
         GameplaySystem.playerManager.player.gameObject.SetActive(true);
         GameplaySystem.playerManager.player.character.gameObject.SetActive(true);
@@ -175,5 +183,15 @@ public class TentacleGrab : MonoBehaviour
     public void GrabbedPlayer()
     {
         isPlayerGrabbed = true;
+    }
+
+    public void PlayerOutOfGrab()
+    {
+        isPlayerGrabbed = false;
+    }
+
+    public void OnGrabCollider()
+    {
+        m_grabHitbox.enabled = true;
     }
 }

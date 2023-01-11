@@ -1,4 +1,5 @@
-﻿using Sirenix.OdinInspector;
+﻿using Holysoft.Event;
+using Sirenix.OdinInspector;
 using Spine.Unity;
 using System.Collections;
 using System.Collections.Generic;
@@ -26,6 +27,9 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, BoxGroup("Laser")]
         private LaserLauncher m_launcher;
 
+        public event EventAction<EventActionArgs> AttackStart;
+        public event EventAction<EventActionArgs> AttackDone;
+
         private IEnumerator EmergeTentacle()
         {
             m_animation.SetAnimation(0, m_spawnAnimation, false);
@@ -39,7 +43,6 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_animation.SetAnimation(0, m_despawnAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_despawnAnimation);
-
         }
 
         private IEnumerator ShootTentacleBeam()
@@ -52,9 +55,11 @@ namespace DChild.Gameplay.Characters.Enemies
 
         public IEnumerator TentacleBlastAttack()
         {
+            AttackStart?.Invoke(this, EventActionArgs.Empty);
             yield return EmergeTentacle();
             yield return ShootTentacleBeam();
             yield return DespawnTentacle();
+            AttackDone?.Invoke(this, EventActionArgs.Empty);
         }
 
         // Start is called before the first frame update

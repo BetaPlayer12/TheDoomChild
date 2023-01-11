@@ -5,6 +5,8 @@ using DChild.Gameplay.Pooling;
 using Sirenix.OdinInspector;
 using Spine.Unity;
 using DChild.Gameplay.Characters.AI;
+using Holysoft.Event;
+using System;
 
 namespace DChild.Gameplay.Characters.Enemies
 {
@@ -18,14 +20,33 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField]
         private float m_ceilingDuration;
 
+        public event EventAction<EventActionArgs> AttackStart;
+        public event EventAction<EventActionArgs> AttackDone;
+
+        private void Awake()
+        {
+            m_leftTentacle.AttackDone += OnLeftTentacleCeilingDone;
+            m_rightTentacle.AttackDone += OnRightTentacleCeilingDone;
+        }
+
+        private void OnRightTentacleCeilingDone(object sender, EventActionArgs eventArgs)
+        {
+            AttackDone?.Invoke(this, EventActionArgs.Empty);
+        }
+
+        private void OnLeftTentacleCeilingDone(object sender, EventActionArgs eventArgs)
+        {
+            AttackDone?.Invoke(this, EventActionArgs.Empty);
+        }
+
         public IEnumerator ExecuteAttack()
         {
-            var rollOdds = Random.Range(1, 3);
+            var rollOdds = UnityEngine.Random.Range(1, 3);
 
             //Decide whether to use one or two tentacles to create ceiling
             if(rollOdds == 1)
             {
-                var rollSide = Random.Range(1, 3);
+                var rollSide = UnityEngine.Random.Range(1, 3);
 
                 if(rollSide == 1)
                 {

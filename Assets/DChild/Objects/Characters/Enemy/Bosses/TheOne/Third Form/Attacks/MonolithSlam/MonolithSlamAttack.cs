@@ -4,6 +4,7 @@ using UnityEngine;
 using DChild.Gameplay.Pooling;
 using System.Linq;
 using DChild.Gameplay.Characters.AI;
+using Holysoft.Event;
 
 namespace DChild.Gameplay.Characters.Enemies
 {
@@ -24,6 +25,9 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private bool m_leftToRightSequence;
 
+        public event EventAction<EventActionArgs> AttackStart;
+        public event EventAction<EventActionArgs> AttackDone;
+
         public IEnumerator ExecuteAttack()
         {
             throw new System.NotImplementedException();
@@ -36,6 +40,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         public IEnumerator ExecuteAttack(AITargetInfo Target)
         {
+            AttackStart?.Invoke(this, EventActionArgs.Empty);
             //Initialize monoliths to spawn and clear spawned monoliths 
             int counter = 0;
 
@@ -68,9 +73,12 @@ namespace DChild.Gameplay.Characters.Enemies
             //Set smashMonolith true in each monolith to trigger smash
             foreach (PoolableObject monolith in m_monolithsSpawned)
             {
-                monolith.GetComponent<MonolithSlam>().smashMonolith = true;
+                if(monolith != null)
+                    monolith.GetComponent<MonolithSlam>().TriggerSmash();
                 yield return new WaitForSeconds(m_timeBeforeSmash);
             }
+
+            AttackDone?.Invoke(this, EventActionArgs.Empty);
         }
 
         public IEnumerator SetUpMonoliths(AITargetInfo Target)

@@ -420,6 +420,8 @@ GameObject:
   - component: {fileID: 582261833262735488}
   - component: {fileID: 582261833262735489}
   - component: {fileID: 582261833262735494}
+  - component: {fileID: 1514372174090250827}
+  - component: {fileID: 1643339484069136699}
   m_Layer: 0
   m_Name: TentacleGrabAttack
   m_TagString: Untagged
@@ -498,6 +500,48 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_tentacleGrab: {fileID: 582261833262735489}
+--- !u!114 &1514372174090250827
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 582261832141324827}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1dd8599297ea1c84ba2f23b8f6c74e50, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_animation: {fileID: 582261831933705815}
+--- !u!114 &1643339484069136699
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 582261832141324827}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90293750f472d3340b452cec6fea2606, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  events:
+  - spineEvent: impactFX
+    unityHandler:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 582261833262735489}
+          m_TargetAssemblyTypeName: TentacleGrab, Assembly-CSharp
+          m_MethodName: GrabbedPlayer
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &582261832142610379
 GameObject:
   m_ObjectHideFlags: 0

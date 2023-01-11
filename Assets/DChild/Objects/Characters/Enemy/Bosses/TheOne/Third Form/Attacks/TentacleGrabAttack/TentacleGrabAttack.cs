@@ -1,5 +1,7 @@
 using DChild.Gameplay.Characters.AI;
 using DChild.Gameplay.Characters.Enemies;
+using Holysoft.Event;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,12 +9,25 @@ using UnityEngine;
 public class TentacleGrabAttack : MonoBehaviour, IEyeBossAttacks
 {
     [SerializeField]
-    private TentacleGrab m_tentacleGrab;
+    public TentacleGrab tentacleGrab;
+
+    public event EventAction<EventActionArgs> AttackStart;
+    public event EventAction<EventActionArgs> AttackDone;
+
+    private void Awake()
+    {
+        tentacleGrab.AttackDone += OnGrabAttackDone;
+    }
+
+    private void OnGrabAttackDone(object sender, EventActionArgs eventArgs)
+    {
+        AttackDone?.Invoke(this, EventActionArgs.Empty);
+    }
 
     public IEnumerator ExecuteAttack()
     {
         //Make it so different types of grab attacks can happen later
-        m_tentacleGrab.GroundSlamAttack();
+        tentacleGrab.GroundSlamAttack();
         yield return null;
     }
 

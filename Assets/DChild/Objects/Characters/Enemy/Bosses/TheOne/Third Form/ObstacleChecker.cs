@@ -29,7 +29,6 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 monolith.DestroyInstance();
             }
-            monolithSlamObstacleList.Clear();
         }
 
         public void TurnOffFlood()

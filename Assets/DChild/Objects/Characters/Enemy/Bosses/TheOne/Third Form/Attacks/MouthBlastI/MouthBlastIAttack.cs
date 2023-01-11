@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using DChild.Gameplay.Characters.AI;
+using Holysoft.Event;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -26,9 +27,16 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, BoxGroup("Laser")]
         private LaserLauncher m_launcher;
 
+        public event EventAction<EventActionArgs> AttackStart;
+        public event EventAction<EventActionArgs> AttackDone;
+
         public IEnumerator ExecuteAttack()
         {
+            AttackStart?.Invoke(this, EventActionArgs.Empty);
+
             yield return ChargeBeam();
+
+            AttackDone?.Invoke(this, EventActionArgs.Empty);
         }
 
         public IEnumerator ExecuteAttack(Vector2 PlayerPosition)
