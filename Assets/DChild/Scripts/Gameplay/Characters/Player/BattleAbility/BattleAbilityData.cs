@@ -58,7 +58,7 @@ namespace DChild.Gameplay.Characters.Players
 
                 m_configurations = newConfiguration;
             }
-        } 
+        }
 #endif
     }
 }
