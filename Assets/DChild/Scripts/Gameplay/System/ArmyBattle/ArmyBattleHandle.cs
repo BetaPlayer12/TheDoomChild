@@ -36,10 +36,6 @@ namespace DChild.Gameplay.ArmyBattle
             m_visuals.InitializeArmyVisuals(m_player, m_enemy);
         }
 
-
-
-
-
         //Temporary Function for Testing Only
         [ContextMenu("Initialize Battle")]
         public void InitializeBattle()

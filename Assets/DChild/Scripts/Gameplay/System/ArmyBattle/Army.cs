@@ -19,12 +19,17 @@ namespace DChild.Gameplay.ArmyBattle
 
         public int GetPower(UnitType unitType) => m_composition.GetTotalUnitPower(unitType);
 
-        public void RemoveRandomCharacter(UnitType unitType) => m_composition.RemoveCharacter(unitType, Random.Range(0, m_composition.GetNumberOfCharacter(unitType)));
+        public ArmyCharacter RemoveRandomCharacter(UnitType unitType) => m_composition.RemoveCharacter(unitType, Random.Range(0, m_composition.GetNumberOfCharacter(unitType)));
 
         public void SetArmyComposition(ArmyComposition armyComposition)
         {
             m_composition = armyComposition;
             SetTroopCount(m_composition.troopCount);
+        }
+
+        public void RecordArmyCompositionTo(ref ArmyComposition armyComposition)
+        {
+            armyComposition.CopyComposition(m_composition);
         }
 
         public void SetTroopCount(int troopCount)

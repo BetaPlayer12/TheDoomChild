@@ -55,6 +55,18 @@ namespace DChild.Gameplay.ArmyBattle
 
         public string name => m_name;
 
+        public void CopyComposition(ArmyComposition reference)
+        {
+            m_name = reference.name;
+            m_troopCount = reference.troopCount;
+            m_rockCharacters.Clear();
+            m_rockCharacters.AddRange(reference.GetCharactersOfUnityType(UnitType.Rock));
+            m_paperCharacters.Clear();
+            m_paperCharacters.AddRange(reference.GetCharactersOfUnityType(UnitType.Paper));
+            m_scissorCharacters.Clear();
+            m_scissorCharacters.AddRange(reference.GetCharactersOfUnityType(UnitType.Scissors));
+        }
+
         public void AddCharacter(ArmyCharacter character)
         {
             GetCharactersOfUnityType(character.unitType).Add(character);
@@ -65,17 +77,19 @@ namespace DChild.Gameplay.ArmyBattle
             GetCharactersOfUnityType(character.unitType).Remove(character);
         }
 
-        public void RemoveCharacter(UnitType unitType, int index)
+        public ArmyCharacter RemoveCharacter(UnitType unitType, int index)
         {
             if (index < 0)
-                return;
+                return null;
 
             var characters = GetCharactersOfUnityType(unitType);
 
             if (index >= characters.Count)
-                return;
+                return null;
 
+            var toRemove = characters[index];
             characters.RemoveAt(index);
+            return toRemove;
         }
 
         public void SetCharacters(params ArmyCharacter[] armyCharacters)
