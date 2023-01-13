@@ -242,6 +242,42 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""AirLungeSlash"",
+                    ""type"": ""Button"",
+                    ""id"": ""bbc6a2a8-7fee-40d5-9914-5e1295c34e78"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""FireFist"",
+                    ""type"": ""Button"",
+                    ""id"": ""d7fb5865-5e82-4bc4-b80b-737d0db7af6a"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ReaperHarvest"",
+                    ""type"": ""Button"",
+                    ""id"": ""f685cbfa-6500-46d4-ab03-7d9a8628765f"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""KrakenRage"",
+                    ""type"": ""Button"",
+                    ""id"": ""95f8fa15-1695-4820-8419-ec67b85004d5"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -1190,6 +1226,204 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""action"": ""MouseDelta"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""Two Modifiers"",
+                    ""id"": ""543eb0c8-3a13-400e-be63-fa6704b4cc68"",
+                    ""path"": ""TwoModifiers"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AirLungeSlash"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""modifier1"",
+                    ""id"": ""8fca0abb-69b5-409b-8eae-3711b7b643d1"",
+                    ""path"": ""<Keyboard>/leftShift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""AirLungeSlash"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""modifier2"",
+                    ""id"": ""ddab2703-5690-4a9a-9d2a-843c3580ddd7"",
+                    ""path"": ""<Keyboard>/w"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""AirLungeSlash"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""binding"",
+                    ""id"": ""c6ea8096-49fb-47cf-9f4d-44f8fcc82369"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""AirLungeSlash"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""One Modifier"",
+                    ""id"": ""7ac818b5-1c2f-4098-ac9e-de64d222afca"",
+                    ""path"": ""OneModifier"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""FireFist"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""modifier"",
+                    ""id"": ""b6e9e3a3-1aab-477c-86cd-371040d6c9fe"",
+                    ""path"": ""<Keyboard>/leftShift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""FireFist"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""binding"",
+                    ""id"": ""8bb6ddfc-0ce7-43d3-a117-254a001ece63"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""FireFist"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Two Modifiers"",
+                    ""id"": ""c23f8877-bd5b-4bf8-b8bc-3af9260b1f54"",
+                    ""path"": ""TwoModifiers"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ReaperHarvest"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""modifier1"",
+                    ""id"": ""a2998abc-7de8-4e59-aced-daa98221ed8c"",
+                    ""path"": ""<Keyboard>/leftShift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""ReaperHarvest"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""modifier2"",
+                    ""id"": ""6c02254f-d8ff-4fee-b796-a202bdcd64d9"",
+                    ""path"": ""<Keyboard>/a"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""ReaperHarvest"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""binding"",
+                    ""id"": ""1ad8e3d9-72de-4c82-bdf2-1e8d5b7beb4c"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""ReaperHarvest"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Two Modifiers"",
+                    ""id"": ""5df0e3d8-e299-4131-a200-0c91179e945a"",
+                    ""path"": ""TwoModifiers"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ReaperHarvest"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""modifier1"",
+                    ""id"": ""c685fb86-229b-455f-ab65-33b0783f323e"",
+                    ""path"": ""<Keyboard>/leftShift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""ReaperHarvest"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""modifier2"",
+                    ""id"": ""015e5cbe-bafb-462b-afc5-5b08c3c865e9"",
+                    ""path"": ""<Keyboard>/d"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""ReaperHarvest"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""binding"",
+                    ""id"": ""ea0702a3-f171-42be-972e-88072ef3ce45"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""ReaperHarvest"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""One Modifier"",
+                    ""id"": ""3edfbdc8-6e2c-41bd-b62e-a734809a8ec4"",
+                    ""path"": ""OneModifier"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""KrakenRage"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""modifier"",
+                    ""id"": ""30c4fa72-2c60-462b-a8c4-bb757530a698"",
+                    ""path"": ""<Keyboard>/leftShift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""KrakenRage"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""binding"",
+                    ""id"": ""e2ca704a-0940-4765-baad-6fe618766cb4"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""KrakenRage"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
                 }
             ]
         },
@@ -2369,6 +2603,10 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         m_Gameplay_Pause = m_Gameplay.FindAction("Pause", throwIfNotFound: true);
         m_Gameplay_Store = m_Gameplay.FindAction("Store", throwIfNotFound: true);
         m_Gameplay_MouseDelta = m_Gameplay.FindAction("MouseDelta", throwIfNotFound: true);
+        m_Gameplay_AirLungeSlash = m_Gameplay.FindAction("AirLungeSlash", throwIfNotFound: true);
+        m_Gameplay_FireFist = m_Gameplay.FindAction("FireFist", throwIfNotFound: true);
+        m_Gameplay_ReaperHarvest = m_Gameplay.FindAction("ReaperHarvest", throwIfNotFound: true);
+        m_Gameplay_KrakenRage = m_Gameplay.FindAction("KrakenRage", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -2474,6 +2712,10 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
     private readonly InputAction m_Gameplay_Pause;
     private readonly InputAction m_Gameplay_Store;
     private readonly InputAction m_Gameplay_MouseDelta;
+    private readonly InputAction m_Gameplay_AirLungeSlash;
+    private readonly InputAction m_Gameplay_FireFist;
+    private readonly InputAction m_Gameplay_ReaperHarvest;
+    private readonly InputAction m_Gameplay_KrakenRage;
     public struct GameplayActions
     {
         private @PlayerControls m_Wrapper;
@@ -2502,6 +2744,10 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         public InputAction @Pause => m_Wrapper.m_Gameplay_Pause;
         public InputAction @Store => m_Wrapper.m_Gameplay_Store;
         public InputAction @MouseDelta => m_Wrapper.m_Gameplay_MouseDelta;
+        public InputAction @AirLungeSlash => m_Wrapper.m_Gameplay_AirLungeSlash;
+        public InputAction @FireFist => m_Wrapper.m_Gameplay_FireFist;
+        public InputAction @ReaperHarvest => m_Wrapper.m_Gameplay_ReaperHarvest;
+        public InputAction @KrakenRage => m_Wrapper.m_Gameplay_KrakenRage;
         public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -2583,6 +2829,18 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @MouseDelta.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnMouseDelta;
                 @MouseDelta.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnMouseDelta;
                 @MouseDelta.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnMouseDelta;
+                @AirLungeSlash.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnAirLungeSlash;
+                @AirLungeSlash.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnAirLungeSlash;
+                @AirLungeSlash.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnAirLungeSlash;
+                @FireFist.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnFireFist;
+                @FireFist.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnFireFist;
+                @FireFist.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnFireFist;
+                @ReaperHarvest.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnReaperHarvest;
+                @ReaperHarvest.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnReaperHarvest;
+                @ReaperHarvest.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnReaperHarvest;
+                @KrakenRage.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnKrakenRage;
+                @KrakenRage.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnKrakenRage;
+                @KrakenRage.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnKrakenRage;
             }
             m_Wrapper.m_GameplayActionsCallbackInterface = instance;
             if (instance != null)
@@ -2659,6 +2917,18 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @MouseDelta.started += instance.OnMouseDelta;
                 @MouseDelta.performed += instance.OnMouseDelta;
                 @MouseDelta.canceled += instance.OnMouseDelta;
+                @AirLungeSlash.started += instance.OnAirLungeSlash;
+                @AirLungeSlash.performed += instance.OnAirLungeSlash;
+                @AirLungeSlash.canceled += instance.OnAirLungeSlash;
+                @FireFist.started += instance.OnFireFist;
+                @FireFist.performed += instance.OnFireFist;
+                @FireFist.canceled += instance.OnFireFist;
+                @ReaperHarvest.started += instance.OnReaperHarvest;
+                @ReaperHarvest.performed += instance.OnReaperHarvest;
+                @ReaperHarvest.canceled += instance.OnReaperHarvest;
+                @KrakenRage.started += instance.OnKrakenRage;
+                @KrakenRage.performed += instance.OnKrakenRage;
+                @KrakenRage.canceled += instance.OnKrakenRage;
             }
         }
     }
@@ -2919,6 +3189,10 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         void OnPause(InputAction.CallbackContext context);
         void OnStore(InputAction.CallbackContext context);
         void OnMouseDelta(InputAction.CallbackContext context);
+        void OnAirLungeSlash(InputAction.CallbackContext context);
+        void OnFireFist(InputAction.CallbackContext context);
+        void OnReaperHarvest(InputAction.CallbackContext context);
+        void OnKrakenRage(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

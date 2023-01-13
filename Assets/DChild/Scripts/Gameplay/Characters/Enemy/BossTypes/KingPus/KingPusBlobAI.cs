@@ -260,6 +260,11 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return null;
         }
 
+        public void Explode()
+        {
+            StartCoroutine(ExplodeRoutine(false));
+        }
+
         private IEnumerator ExplodeRoutine(bool willHeal)
         {
             enabled = false;

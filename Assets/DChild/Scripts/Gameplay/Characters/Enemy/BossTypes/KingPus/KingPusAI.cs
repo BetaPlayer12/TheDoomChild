@@ -1294,6 +1294,12 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             enabled = false;
 
+            for (int z = 0; z < m_blobCounts; z++)
+            {
+                if (m_blobs[z].activeSelf)
+                    m_blobs[z].GetComponent<KingPusBlobAI>().Explode();
+            }
+
             //m_allCoroutineStopper = StartCoroutine(AllCoroutinesStopper());
             //StopCurrentBehaviorRoutine();
             //ResetCounterCounts();
@@ -1857,6 +1863,13 @@ namespace DChild.Gameplay.Characters.Enemies
             m_character.physics.simulateGravity = true;
             m_crawlFX.Stop();
             m_krakenFX.Stop();
+
+            for (int z = 0; z < m_blobCounts; z++)
+            {
+                if (m_blobs[z].activeSelf)
+                    m_blobs[z].GetComponent<KingPusBlobAI>().Explode();
+            }
+
             StartCoroutine(DeathRoutine());
         }
 

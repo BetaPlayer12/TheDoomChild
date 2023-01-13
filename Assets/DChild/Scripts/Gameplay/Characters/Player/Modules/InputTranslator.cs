@@ -35,6 +35,13 @@ namespace DChild.Gameplay.Characters.Players.Modules
         public bool projectileThrowReleased;
         public bool projectileThrowHeld;
 
+        #region BattleAbilities Inputs
+        public bool airLungeSlashPressed;
+        public bool fireFistPressed;
+        public bool reaperHarvestPressed;
+        public bool krakenRagePressed;
+        #endregion
+
         private PlayerInput m_input;
         private InputActionMap m_gameplayActionMap;
 
@@ -159,6 +166,39 @@ namespace DChild.Gameplay.Characters.Players.Modules
             }
         }
 
+        private void OnAirLungeSlash(InputValue value)
+        {
+            if (enabled == true)
+            {
+                airLungeSlashPressed = value.Get<float>() == 1;
+            }
+        }
+
+        private void OnFireFist(InputValue value)
+        {
+            if (enabled == true)
+            {
+                fireFistPressed = value.Get<float>() == 1;
+            }
+        }
+
+        private void OnReaperHarvest(InputValue value)
+        {
+            if (enabled == true)
+            {
+                reaperHarvestPressed = value.Get<float>() == 1;
+            }
+        }
+
+        private void OnKrakenRage(InputValue value)
+        {
+            if (enabled == true)
+            {
+                krakenRagePressed = value.Get<float>() == 1;
+                Debug.Log("Kraken Rage is Pressed " + krakenRagePressed);
+            }
+        }
+
         private void OnSlashHeld(InputValue value)
         {
             if (enabled == true)
@@ -278,6 +318,11 @@ namespace DChild.Gameplay.Characters.Players.Modules
             whipPressed = false;
             projectileThrowPressed = false;
             projectileThrowReleased = false;
+
+            airLungeSlashPressed = false;
+            fireFistPressed = false;
+            reaperHarvestPressed = false;
+            krakenRagePressed = false;
         }
 
         private void Reset()
@@ -303,6 +348,11 @@ namespace DChild.Gameplay.Characters.Players.Modules
             projectileThrowPressed = false;
             projectileThrowHeld = false;
             projectileThrowReleased = false;
+
+            airLungeSlashPressed = false;
+            fireFistPressed = false;
+            reaperHarvestPressed = false;
+            krakenRagePressed = false;
         }
     }
 }
