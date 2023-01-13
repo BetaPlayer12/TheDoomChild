@@ -4,6 +4,7 @@ using UnityEngine;
 using DChild.Gameplay.Pooling;
 using DChild.Gameplay.Characters.AI;
 using Sirenix.OdinInspector;
+using Holysoft.Event;
 
 namespace DChild.Gameplay.Characters.Enemies
 {
@@ -21,6 +22,9 @@ namespace DChild.Gameplay.Characters.Enemies
         [ShowInInspector]
         private StateHandle<AttackStyle> m_currentAttackState;
 
+        public event EventAction<EventActionArgs> AttackStart;
+        public event EventAction<EventActionArgs> AttackDone;
+
         private enum AttackStyle
         {
             Chase,
@@ -30,6 +34,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         public IEnumerator ExecuteAttack()
         {
+            AttackStart?.Invoke(this, EventActionArgs.Empty);
             var rollAttack = Random.Range(1, 4);
 
             switch (rollAttack)
@@ -85,7 +90,9 @@ namespace DChild.Gameplay.Characters.Enemies
                     break;
                 default:
                     break;
-            }           
+            }
+
+            AttackDone?.Invoke(this, EventActionArgs.Empty);
         }
 
         public IEnumerator ExecuteAttack(Vector2 PlayerPosition)

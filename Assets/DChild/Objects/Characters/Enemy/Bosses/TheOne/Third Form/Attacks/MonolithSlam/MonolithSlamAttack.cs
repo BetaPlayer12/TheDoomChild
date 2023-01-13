@@ -4,6 +4,7 @@ using UnityEngine;
 using DChild.Gameplay.Pooling;
 using System.Linq;
 using DChild.Gameplay.Characters.AI;
+using Holysoft.Event;
 
 namespace DChild.Gameplay.Characters.Enemies
 {
@@ -24,6 +25,9 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private bool m_leftToRightSequence;
 
+        public event EventAction<EventActionArgs> AttackStart;
+        public event EventAction<EventActionArgs> AttackDone;
+
         public IEnumerator ExecuteAttack()
         {
             throw new System.NotImplementedException();
@@ -36,6 +40,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
         public IEnumerator ExecuteAttack(AITargetInfo Target)
         {
+            AttackStart?.Invoke(this, EventActionArgs.Empty);
+            //Initialize monoliths to spawn and clear spawned monoliths 
             int counter = 0;
 
             m_monolithsSpawned.Clear();
@@ -46,11 +52,13 @@ namespace DChild.Gameplay.Characters.Enemies
                 counter++;
             }
 
+            //Organize Monoliths to drop in correct order of left to right or right to left
             if (m_leftToRightSequence)
                 OrganizeMonolithsSpawnedInDescendingOrder();
             else
                 OrganizeMonolithsSpawnedInAscendingOrder();
 
+            //Pick a monolith to keep as platform
             if (m_monolithsSpawned.Count > 1)
             {
                 int rollMonolithToKeep = Random.Range(0, m_monolithsSpawned.Count);
@@ -59,13 +67,18 @@ namespace DChild.Gameplay.Characters.Enemies
                 FindObjectOfType<ObstacleChecker>().monolithSlamObstacleList.Add(m_monolithsSpawned[rollMonolithToKeep]);
             }
 
+            //Anticipation time before smashing monoliths
             yield return new WaitForSeconds(2f);
 
+            //Set smashMonolith true in each monolith to trigger smash
             foreach (PoolableObject monolith in m_monolithsSpawned)
             {
-                monolith.GetComponent<MonolithSlam>().smashMonolith = true;
+                if(monolith != null)
+                    monolith.GetComponent<MonolithSlam>().TriggerSmash();
                 yield return new WaitForSeconds(m_timeBeforeSmash);
             }
+
+            AttackDone?.Invoke(this, EventActionArgs.Empty);
         }
 
         public IEnumerator SetUpMonoliths(AITargetInfo Target)

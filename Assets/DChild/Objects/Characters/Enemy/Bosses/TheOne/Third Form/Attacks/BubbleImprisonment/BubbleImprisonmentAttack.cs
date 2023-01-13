@@ -1,7 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using DChild.Gameplay.Characters.AI;
 using DChild.Gameplay.Pooling;
+using Holysoft.Event;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -19,6 +21,19 @@ namespace DChild.Gameplay.Characters.Enemies
         private float m_timeBetweenBubbleSpawn;
         private int m_bubbleCounter;
 
+        public event EventAction<EventActionArgs> AttackStart;
+        public event EventAction<EventActionArgs> AttackDone;
+
+        private void Awake()
+        {
+            AttackDone += OnAttackDone;
+        }
+
+        private void OnAttackDone(object sender, EventActionArgs eventArgs)
+        {
+            Debug.Log("Attack Done Invoked");
+        }
+
         public IEnumerator ExecuteAttack()
         {
             throw new System.NotImplementedException();
@@ -31,6 +46,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
         public IEnumerator ExecuteAttack(AITargetInfo Target)
         {
+            AttackStart?.Invoke(this, EventActionArgs.Empty);
+
             m_bubbleCounter = 0;
 
             while (m_bubbleCounter < m_maxNumberOfBubblesToSpawn)
@@ -38,7 +55,11 @@ namespace DChild.Gameplay.Characters.Enemies
                 InstantiateBubble(new Vector2(Target.position.x, Target.position.y), m_bubbleImprisonment.gameObject);
                 m_bubbleCounter++;
                 yield return new WaitForSeconds(m_timeBetweenBubbleSpawn);
+                Debug.Log("Bubbles Spawned: " + m_bubbleCounter);
+                yield return null;
             }
+            Debug.Log("Bubbles Done Spawning");
+            AttackDone?.Invoke(this, EventActionArgs.Empty);
             yield return null;
         }
 

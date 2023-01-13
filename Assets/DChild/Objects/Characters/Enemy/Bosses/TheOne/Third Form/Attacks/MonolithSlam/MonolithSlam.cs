@@ -36,7 +36,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private bool m_playerHit;
 
         public bool keepMonolith;
-        public bool smashMonolith;
+        private bool m_smashMonolith;
         public bool monolithGrounded;
 
         // Start is called before the first frame update
@@ -44,40 +44,42 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_impactCollider.enabled = true;
             m_obstacleCollider.enabled = false;
-            smashMonolith = false;
+            m_smashMonolith = false;
             keepMonolith = false;
             m_playerHit = false;
+            m_playerSensor.enabled = false;
             StartCoroutine(EmergeTentacle());
         }
 
         // Update is called once per frame
         void Update()
         {
-            if (smashMonolith)
+            if (m_smashMonolith)
             {
                 StartCoroutine(Smash());
-
-                smashMonolith = false;
+                m_smashMonolith = false;
             }
 
-            if (m_playerSensor.isDetecting)
+            if (!monolithGrounded)
             {
-                m_playerHit = true;
-            }
+                if (keepMonolith)
+                {
+                    if (m_playerSensor.isDetecting)
+                    {
+                        m_playerHit = true;
+                    }
 
-            if (m_playerHit)
-            {
-                StartCoroutine(DestroyMonolith());
-            }
-        }
-
-        private IEnumerator PlayerCrushed()
-        {
-            yield return DestroyMonolith();
+                    if (m_playerHit)
+                    {
+                        StartCoroutine(DestroyMonolith());
+                    }
+                }
+            }            
         }
 
         private IEnumerator EmergeTentacle()
         {
+            m_impactCollider.enabled = false;
             m_animation.SetAnimation(0, m_emergeAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_emergeAnimation);
             yield return AnticipationLoop();
@@ -87,18 +89,6 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_animation.SetAnimation(0, m_anticipationLoopAnimation, true);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_anticipationLoopAnimation);
-        }
-
-        private IEnumerator AttackWithDestroyMonolith()
-        {
-            m_animation.SetAnimation(0, m_attackDestroyAftermathAnimation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_attackDestroyAftermathAnimation);
-        }
-
-        private IEnumerator AttackWithKeepMonolith()
-        {
-            m_animation.SetAnimation(0, m_attackPlatformAftermathAnimation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_attackPlatformAftermathAnimation);
         }
 
         private IEnumerator DestroyMonolith()
@@ -111,8 +101,11 @@ namespace DChild.Gameplay.Characters.Enemies
             DestroyInstance();
         }
 
-        private IEnumerator MonolithPersist()
+        private IEnumerator DoAttackWithMonolithPersist()
         {
+            m_animation.SetAnimation(0, m_attackPlatformAftermathAnimation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_attackPlatformAftermathAnimation);
+
             m_impactCollider.enabled = false;
             m_obstacleCollider.enabled = true;
             m_animation.SetAnimation(0, m_platformPersistAnimation, false);
@@ -120,41 +113,52 @@ namespace DChild.Gameplay.Characters.Enemies
             monolithGrounded = true;
         }
 
-        private IEnumerator DoAttackWithMonolithPersist()
-        {
-            yield return AttackWithKeepMonolith();
-            yield return MonolithPersist();
-        }
-
         private IEnumerator DoAttackWithoutMonolithPersist()
         {
-            yield return AttackWithDestroyMonolith();
+            m_animation.SetAnimation(0, m_attackDestroyAftermathAnimation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_attackDestroyAftermathAnimation);
+
             yield return DestroyMonolith();
         }
 
         [Button]
-        private void AttackWithMonolith()
+        private void AttackKeepMonolith()
         {
+            Debug.Log("KEPT MONOLITH");
             StartCoroutine(DoAttackWithMonolithPersist());
         }
 
         [Button]
         private void AttackDestroyMonolith()
         {
+            Debug.Log("Destroy MONOLITH");
             StartCoroutine(DoAttackWithoutMonolithPersist());
         }
 
         private IEnumerator Smash()
         {
+            m_playerSensor.enabled = true;
+            m_impactCollider.enabled = true;
             if (keepMonolith)
             {
-                AttackWithMonolith();
+                AttackKeepMonolith();
             }
-            else
+            else if(!keepMonolith)
             {
                 AttackDestroyMonolith();
             }
             yield return null;
+        }
+
+        private void OnDestroy()
+        {
+            if (FindObjectOfType<ObstacleChecker>().monolithSlamObstacleList != null)
+                FindObjectOfType<ObstacleChecker>().monolithSlamObstacleList.Remove(this);
+        }
+
+        public void TriggerSmash()
+        {
+            m_smashMonolith = true;
         }
     }
 }
