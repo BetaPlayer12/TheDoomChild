@@ -58,13 +58,13 @@ MonoBehaviour:
       type: 0
       typeString: CustomFieldType_Text
     portrait: {fileID: 0}
-    spritePortrait: {fileID: 0}
+    spritePortrait: {fileID: 21300000, guid: 56386befa9a8e4c42ad46460218563a3, type: 3}
     alternatePortraits: []
     spritePortraits: []
   - id: 7
     fields:
     - title: Name
-      value: Gladiator
+      value: GladiatorGhost
       type: 0
       typeString: 
     - title: Pictures
@@ -80,7 +80,7 @@ MonoBehaviour:
       type: 2
       typeString: CustomFieldType_Boolean
     portrait: {fileID: 0}
-    spritePortrait: {fileID: 0}
+    spritePortrait: {fileID: 21300000, guid: ac246e3bfc0c2834fadb6d7e507a5419, type: 3}
     alternatePortraits: []
     spritePortraits: []
   items:
@@ -89,7 +89,7 @@ MonoBehaviour:
     - title: Name
       value: FindGravestone
       type: 0
-      typeString: 
+      typeString: CustomFieldType_Text
     - title: Pictures
       value: '[]'
       type: 3
@@ -97,23 +97,51 @@ MonoBehaviour:
     - title: Description
       value: find gladiators resting place
       type: 0
-      typeString: 
+      typeString: CustomFieldType_Text
     - title: Success Description
       value: 
       type: 0
-      typeString: 
+      typeString: CustomFieldType_Text
     - title: Failure Description
       value: 
       type: 0
-      typeString: 
+      typeString: CustomFieldType_Text
     - title: State
       value: unassigned
       type: 0
-      typeString: 
+      typeString: CustomFieldType_QuestState
     - title: Is Item
       value: False
       type: 2
       typeString: CustomFieldType_Boolean
+    - title: Entry Count
+      value: 3
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Entry 1 State
+      value: unassigned
+      type: 0
+      typeString: 
+    - title: Entry 1
+      value: statue
+      type: 0
+      typeString: 
+    - title: Entry 2 State
+      value: unassigned
+      type: 0
+      typeString: 
+    - title: Entry 2
+      value: shrine
+      type: 0
+      typeString: 
+    - title: Entry 3 State
+      value: unassigned
+      type: 0
+      typeString: 
+    - title: Entry 3
+      value: restingplace
+      type: 0
+      typeString: 
   - id: 32
     fields:
     - title: Name
@@ -144,7 +172,51 @@ MonoBehaviour:
       value: (None)
       type: 0
       typeString: CustomFieldType_QuestState
-  locations: []
+  locations:
+  - id: 4
+    fields:
+    - title: Name
+      value: Location #1
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Pictures
+      value: '[]'
+      type: 3
+      typeString: CustomFieldType_Files
+    - title: Description
+      value: "Graveyard\u2019s scene1 - the area near the undead general\u2019s Statue."
+      type: 0
+      typeString: CustomFieldType_Text
+  - id: 5
+    fields:
+    - title: Name
+      value: Location #2
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Pictures
+      value: '[]'
+      type: 3
+      typeString: CustomFieldType_Files
+    - title: Description
+      value: "Graveyard\u2019s scene 3 - the lowest secret area below the Shadow
+        Morph\u2019s skill shrine."
+      type: 0
+      typeString: CustomFieldType_Text
+  - id: 3
+    fields:
+    - title: Name
+      value: Location #3
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Pictures
+      value: '[]'
+      type: 3
+      typeString: CustomFieldType_Files
+    - title: Description
+      value: "Graveyard\u2019s scene 3 - the area just below the spiked level going
+        to the Abysmal Keystone shard (beside a boulder dropper)."
+      type: 0
+      typeString: CustomFieldType_Text
   variables:
   - id: 56
     fields:
@@ -189,7 +261,7 @@ MonoBehaviour:
       type: 0
       typeString: CustomFieldType_Text
   conversations:
-  - id: 84
+  - id: 97
     fields:
     - title: Title
       value: The Statue Conversation
@@ -289,7 +361,7 @@ MonoBehaviour:
         value: None()
         type: 0
         typeString: 
-      conversationID: 84
+      conversationID: 97
       isRoot: 0
       isGroup: 0
       nodeColor: 
@@ -297,9 +369,9 @@ MonoBehaviour:
       falseConditionAction: Block
       conditionPriority: 2
       outgoingLinks:
-      - originConversationID: 84
+      - originConversationID: 97
         originDialogueID: 0
-        destinationConversationID: 84
+        destinationConversationID: 97
         destinationDialogueID: 3
         isConnector: 0
         priority: 2
@@ -360,7 +432,7 @@ MonoBehaviour:
         value: 
         type: 0
         typeString: 
-      conversationID: 84
+      conversationID: 97
       isRoot: 0
       isGroup: 0
       nodeColor: 
@@ -368,9 +440,9 @@ MonoBehaviour:
       falseConditionAction: Block
       conditionPriority: 2
       outgoingLinks:
-      - originConversationID: 84
+      - originConversationID: 97
         originDialogueID: 3
-        destinationConversationID: 84
+        destinationConversationID: 97
         destinationDialogueID: 4
         isConnector: 0
         priority: 2
@@ -431,7 +503,7 @@ MonoBehaviour:
         value: 
         type: 0
         typeString: 
-      conversationID: 84
+      conversationID: 97
       isRoot: 0
       isGroup: 0
       nodeColor: 
@@ -439,9 +511,9 @@ MonoBehaviour:
       falseConditionAction: Block
       conditionPriority: 2
       outgoingLinks:
-      - originConversationID: 84
+      - originConversationID: 97
         originDialogueID: 4
-        destinationConversationID: 84
+        destinationConversationID: 97
         destinationDialogueID: 5
         isConnector: 0
         priority: 2
@@ -502,7 +574,7 @@ MonoBehaviour:
         value: 
         type: 0
         typeString: 
-      conversationID: 84
+      conversationID: 97
       isRoot: 0
       isGroup: 0
       nodeColor: 
@@ -524,7 +596,7 @@ MonoBehaviour:
     entryGroups: []
     canvasScrollPosition: {x: 0, y: 0}
     canvasZoom: 1
-  - id: 85
+  - id: 98
     fields:
     - title: Title
       value: The Shrine Conversation
@@ -624,7 +696,7 @@ MonoBehaviour:
         value: None()
         type: 0
         typeString: 
-      conversationID: 85
+      conversationID: 98
       isRoot: 0
       isGroup: 0
       nodeColor: 
@@ -632,9 +704,9 @@ MonoBehaviour:
       falseConditionAction: Block
       conditionPriority: 2
       outgoingLinks:
-      - originConversationID: 85
+      - originConversationID: 98
         originDialogueID: 0
-        destinationConversationID: 85
+        destinationConversationID: 98
         destinationDialogueID: 1
         isConnector: 0
         priority: 2
@@ -695,7 +767,7 @@ MonoBehaviour:
         value: 
         type: 0
         typeString: 
-      conversationID: 85
+      conversationID: 98
       isRoot: 0
       isGroup: 0
       nodeColor: 
@@ -703,9 +775,9 @@ MonoBehaviour:
       falseConditionAction: Block
       conditionPriority: 2
       outgoingLinks:
-      - originConversationID: 85
+      - originConversationID: 98
         originDialogueID: 1
-        destinationConversationID: 85
+        destinationConversationID: 98
         destinationDialogueID: 2
         isConnector: 0
         priority: 2
@@ -766,7 +838,7 @@ MonoBehaviour:
         value: 
         type: 0
         typeString: 
-      conversationID: 85
+      conversationID: 98
       isRoot: 0
       isGroup: 0
       nodeColor: 
@@ -774,9 +846,9 @@ MonoBehaviour:
       falseConditionAction: Block
       conditionPriority: 2
       outgoingLinks:
-      - originConversationID: 85
+      - originConversationID: 98
         originDialogueID: 2
-        destinationConversationID: 85
+        destinationConversationID: 98
         destinationDialogueID: 3
         isConnector: 0
         priority: 2
@@ -837,7 +909,7 @@ MonoBehaviour:
         value: 
         type: 0
         typeString: 
-      conversationID: 85
+      conversationID: 98
       isRoot: 0
       isGroup: 0
       nodeColor: 
@@ -859,7 +931,7 @@ MonoBehaviour:
     entryGroups: []
     canvasScrollPosition: {x: 0, y: 0}
     canvasZoom: 1
-  - id: 86
+  - id: 99
     fields:
     - title: Title
       value: The Resting Place Conversation
@@ -959,7 +1031,7 @@ MonoBehaviour:
         value: None()
         type: 0
         typeString: 
-      conversationID: 86
+      conversationID: 99
       isRoot: 0
       isGroup: 0
       nodeColor: 
@@ -967,9 +1039,9 @@ MonoBehaviour:
       falseConditionAction: Block
       conditionPriority: 2
       outgoingLinks:
-      - originConversationID: 86
+      - originConversationID: 99
         originDialogueID: 0
-        destinationConversationID: 86
+        destinationConversationID: 99
         destinationDialogueID: 1
         isConnector: 0
         priority: 2
@@ -1030,7 +1102,7 @@ MonoBehaviour:
         value: 
         type: 0
         typeString: CustomFieldType_Text
-      conversationID: 86
+      conversationID: 99
       isRoot: 0
       isGroup: 0
       nodeColor: 
@@ -1038,9 +1110,9 @@ MonoBehaviour:
       falseConditionAction: Block
       conditionPriority: 2
       outgoingLinks:
-      - originConversationID: 86
+      - originConversationID: 99
         originDialogueID: 1
-        destinationConversationID: 86
+        destinationConversationID: 99
         destinationDialogueID: 2
         isConnector: 0
         priority: 2
@@ -1101,7 +1173,7 @@ MonoBehaviour:
         value: 
         type: 0
         typeString: CustomFieldType_Text
-      conversationID: 86
+      conversationID: 99
       isRoot: 0
       isGroup: 0
       nodeColor: 
