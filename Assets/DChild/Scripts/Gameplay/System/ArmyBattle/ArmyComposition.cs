@@ -12,26 +12,32 @@ namespace DChild.Gameplay.ArmyBattle
         [SerializeField]
         private string m_name;
 
+        [SerializeField, MinValue(1)]
+        private int m_troopCount = 1;
         [FoldoutGroup("Characters")]
 
-        [SerializeField, TabGroup("Characters/Tab", "Rock"), ListDrawerSettings(HideAddButton = true), PropertyOrder(4), InlineEditor(InlineEditorObjectFieldModes.Foldout, Expanded = true), TableList]
+        [SerializeField, TabGroup("Characters/Tab", "Rock"), ListDrawerSettings(HideAddButton = true), PropertyOrder(4), InlineEditor(InlineEditorObjectFieldModes.Foldout, Expanded = true)]
         private List<ArmyCharacter> m_rockCharacters;
         [SerializeField, TabGroup("Characters/Tab", "Paper"), ListDrawerSettings(HideAddButton = true), PropertyOrder(4), InlineEditor(InlineEditorObjectFieldModes.Foldout, Expanded = true)]
         private List<ArmyCharacter> m_paperCharacters;
         [SerializeField, TabGroup("Characters/Tab", "Scissors"), ListDrawerSettings(HideAddButton = true), PropertyOrder(4), InlineEditor(InlineEditorObjectFieldModes.Foldout, Expanded = true)]
         private List<ArmyCharacter> m_scissorCharacters;
 
+        public int troopCount => m_troopCount;
+
         public ArmyComposition()
         {
             m_name = "Battalion";
+            m_troopCount = 1;
             m_rockCharacters = new List<ArmyCharacter>();
             m_paperCharacters = new List<ArmyCharacter>();
             m_scissorCharacters = new List<ArmyCharacter>();
         }
 
-        public ArmyComposition(string name, params ArmyCharacter[] armyCharacters)
+        public ArmyComposition(string name, int troopCount, params ArmyCharacter[] armyCharacters)
         {
             m_name = name;
+            m_troopCount = troopCount;
             m_rockCharacters = new List<ArmyCharacter>();
             m_paperCharacters = new List<ArmyCharacter>();
             m_scissorCharacters = new List<ArmyCharacter>();
@@ -41,12 +47,25 @@ namespace DChild.Gameplay.ArmyBattle
         public ArmyComposition(ArmyComposition reference)
         {
             m_name = reference.name;
+            m_troopCount = reference.troopCount;
             m_rockCharacters = new List<ArmyCharacter>(reference.GetCharactersOfUnityType(UnitType.Rock));
             m_paperCharacters = new List<ArmyCharacter>(reference.GetCharactersOfUnityType(UnitType.Paper));
             m_scissorCharacters = new List<ArmyCharacter>(reference.GetCharactersOfUnityType(UnitType.Scissors));
         }
 
         public string name => m_name;
+
+        public void CopyComposition(ArmyComposition reference)
+        {
+            m_name = reference.name;
+            m_troopCount = reference.troopCount;
+            m_rockCharacters.Clear();
+            m_rockCharacters.AddRange(reference.GetCharactersOfUnityType(UnitType.Rock));
+            m_paperCharacters.Clear();
+            m_paperCharacters.AddRange(reference.GetCharactersOfUnityType(UnitType.Paper));
+            m_scissorCharacters.Clear();
+            m_scissorCharacters.AddRange(reference.GetCharactersOfUnityType(UnitType.Scissors));
+        }
 
         public void AddCharacter(ArmyCharacter character)
         {
@@ -58,17 +77,19 @@ namespace DChild.Gameplay.ArmyBattle
             GetCharactersOfUnityType(character.unitType).Remove(character);
         }
 
-        public void RemoveCharacter(UnitType unitType, int index)
+        public ArmyCharacter RemoveCharacter(UnitType unitType, int index)
         {
             if (index < 0)
-                return;
+                return null;
 
             var characters = GetCharactersOfUnityType(unitType);
 
             if (index >= characters.Count)
-                return;
+                return null;
 
+            var toRemove = characters[index];
             characters.RemoveAt(index);
+            return toRemove;
         }
 
         public void SetCharacters(params ArmyCharacter[] armyCharacters)
@@ -87,7 +108,9 @@ namespace DChild.Gameplay.ArmyBattle
             m_scissorCharacters.Clear();
         }
 
-        public void GetTotalUnitPower(UnitType unitType) => GetTotalPower(GetCharactersOfUnityType(unitType));
+        public int GetTotalUnitPower(UnitType unitType) => GetTotalPower(GetCharactersOfUnityType(unitType));
+
+        public int GetNumberOfCharacter(UnitType unitType) => GetCharactersOfUnityType(unitType).Count;
 
         private int GetTotalPower(List<ArmyCharacter> armyCharacters)
         {
