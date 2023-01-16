@@ -193,6 +193,7 @@ namespace DChild.Gameplay.Characters.Enemies
         //Patience Handler
         private void Patience()
         {
+            enabled = false;
             StopAllCoroutines();
             if (m_executeMoveCoroutine != null)
             {
@@ -204,6 +205,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_targetInfo.Set(null, null);
             m_isDetecting = false;
+            enabled = true;
         }
 
         public override void ApplyData()
@@ -390,17 +392,25 @@ namespace DChild.Gameplay.Characters.Enemies
                 case State.ReturnToPatrol:
                     if (Vector2.Distance(m_startPos, transform.position) > 10f)
                     {
-                        var rb2d = GetComponent<Rigidbody2D>();
-                        m_bodycollider.enabled = false;
-                        m_agent.Stop();
-                        Vector3 dir = (m_startPos - (Vector2)rb2d.transform.position).normalized;
-                        rb2d.MovePosition(rb2d.transform.position + dir * m_info.move.speed * Time.fixedDeltaTime);
-                        m_animation.SetAnimation(0, m_info.patrol.animation, true);
+                        DynamicMovement(m_startPos, m_info.move.speed);
                     }
                     else
                     {
                         m_stateHandle.OverrideState(State.Patrol);
                     }
+                    //if (Vector2.Distance(m_startPos, transform.position) > 10f)
+                    //{
+                    //    var rb2d = GetComponent<Rigidbody2D>();
+                    //    m_bodycollider.enabled = false;
+                    //    m_agent.Stop();
+                    //    Vector3 dir = (m_startPos - (Vector2)rb2d.transform.position).normalized;
+                    //    rb2d.MovePosition(rb2d.transform.position + dir * m_info.move.speed * Time.fixedDeltaTime);
+                    //    m_animation.SetAnimation(0, m_info.patrol.animation, true);
+                    //}
+                    //else
+                    //{
+                    //    m_stateHandle.OverrideState(State.Patrol);
+                    //}
                     break;
 
                 case State.Patrol:

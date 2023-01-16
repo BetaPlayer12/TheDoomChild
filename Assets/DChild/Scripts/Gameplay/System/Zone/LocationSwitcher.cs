@@ -70,7 +70,7 @@ namespace DChild.Gameplay.Systems
                 LoadingHandle.SetLoadType(LoadingHandle.LoadType.Smart);
                 Cache<LoadZoneFunctionHandle> cacheLoadZoneHandle = Cache<LoadZoneFunctionHandle>.Claim();
                 cacheLoadZoneHandle.Value.Initialize(m_destination, character, cacheLoadZoneHandle);
-                GameSystem.LoadZone(m_destination.scene, true, cacheLoadZoneHandle.Value.CallLocationArriveEvent);
+                GameSystem.LoadZone(m_destination.sceneInfo, true, cacheLoadZoneHandle.Value.CallLocationArriveEvent);
                 GameplaySystem.ClearCaches();
 
             }

@@ -16,16 +16,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
             Push
         }
 
-        [SerializeField]
-        private float m_jogSpeed;
-        [SerializeField]
-        private float m_crouchSpeed;
-        [SerializeField]
-        private float m_midAirSpeed;
-        [SerializeField]
-        private float m_pullSpeed;
-        [SerializeField]
-        private float m_pushSpeed;
+        [SerializeField, HideLabel]
+        private MovementStatsInfo m_configuration;
 
         private float m_currentSpeed;
         private IPlayerModifer m_modifier;
@@ -33,9 +25,13 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private Character m_character;
         private Animator m_animator;
         private int m_speedAnimationParameter;
+        private int m_xInputAnimationParameter;
+        private bool m_isTurning;
 
-        [ShowInInspector, ReadOnly, HideInEditorMode]
-        protected float speed => m_currentSpeed * m_modifier.Get(PlayerModifier.MoveSpeed);
+        [HideInEditorMode, ShowInInspector, ReadOnly]
+        protected float speed => m_currentSpeed * m_modifier?.Get(PlayerModifier.MoveSpeed) ?? 1;
+
+        public bool isTurning => m_isTurning;
 
         public void Initialize(ComplexCharacterInfo info)
         {
@@ -45,6 +41,12 @@ namespace DChild.Gameplay.Characters.Players.Modules
             SwitchConfigTo(Type.Jog);
             m_animator = info.animator;
             m_speedAnimationParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.SpeedX);
+            m_xInputAnimationParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.XInput);
+        }
+
+        public void SetConfiguration(MovementStatsInfo info)
+        {
+            m_configuration.CopyInfo(info);
         }
 
         public void Cancel()
@@ -58,30 +60,32 @@ namespace DChild.Gameplay.Characters.Players.Modules
             switch (type)
             {
                 case Type.Crouch:
-                    m_currentSpeed = m_crouchSpeed;
+                    m_currentSpeed = m_configuration.crouchSpeed;
                     break;
                 case Type.Jog:
-                    m_currentSpeed = m_jogSpeed;
+                    m_currentSpeed = m_configuration.jogSpeed;
                     break;
                 case Type.MidAir:
-                    m_currentSpeed = m_midAirSpeed;
+                    m_currentSpeed = m_configuration.midAirSpeed;
                     break;
                 case Type.Pull:
-                    m_currentSpeed = m_pullSpeed;
+                    m_currentSpeed = m_configuration.pullSpeed;
                     break;
                 case Type.Push:
-                    m_currentSpeed = m_pushSpeed;
+                    m_currentSpeed = m_configuration.pushSpeed;
                     break;
             }
         }
 
         public void UpdateFaceDirection(float direction)
         {
+            m_isTurning = true;
             if (Mathf.Sign(direction) != (int)m_character.facing)
             {
                 var otherFacing = m_character.facing == HorizontalDirection.Right ? HorizontalDirection.Left : HorizontalDirection.Right;
                 m_character.SetFacing(otherFacing);
             }
+            m_isTurning = false;
         }
 
         public void Move(float direction, bool faceDirection)
@@ -89,6 +93,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             if (direction == 0)
             {
                 m_animator.SetFloat(m_speedAnimationParameter, 0);
+                m_animator.SetInteger(m_xInputAnimationParameter, 0);
             }
             else
             {
@@ -98,6 +103,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 }
 
                 m_animator.SetFloat(m_speedAnimationParameter, 1);
+                m_animator.SetInteger(m_xInputAnimationParameter, direction > 0 ? 1 : -1);
             }
             var xVelocity = speed * direction;
             m_rigidbody.velocity = new Vector2(xVelocity, m_rigidbody.velocity.y);

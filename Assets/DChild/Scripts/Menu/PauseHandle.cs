@@ -6,6 +6,9 @@ namespace DChild.Menu
 {
     public class PauseHandle : MonoBehaviour
     {
+        [SerializeField]
+        private ConfirmationRequestHandle m_returnToMainMenuRequest;
+
         public void PauseGame()
         {
             GameplaySystem.PauseGame();
@@ -18,12 +21,7 @@ namespace DChild.Menu
 
         public void BackToMainMenu()
         {
-            if (GameSystem.RequestConfirmation(OnMainMenuConfirm, "Do you want to return to main menu") == false)
-            {
-                LoadingHandle.SetLoadType(LoadingHandle.LoadType.Force);
-                GameSystem.LoadMainMenu();
-            }
-            //GameSystem.LoadMainMenu();
+            m_returnToMainMenuRequest.Execute(OnMainMenuConfirm);
         }
 
         private void OnMainMenuConfirm(object sender, EventActionArgs eventArgs)
