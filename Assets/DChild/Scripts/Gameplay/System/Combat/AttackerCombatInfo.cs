@@ -38,6 +38,5 @@ namespace DChild.Gameplay.Combat
             this.hitCollider = hitCollider;
             this.damageFX = damageFX;
         }
-
     }
 }

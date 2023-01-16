@@ -360,7 +360,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     {
                         m_stateHandle.OverrideState(State.Intro);
                     }
-                    GameEventMessage.SendEvent("Boss Encounter");
+                    //GameEventMessage.SendEvent("Boss Encounter");
                 }
             }
         }

@@ -356,6 +356,8 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 StopCoroutine(m_sneerRoutine);
             }
+            m_dustBackFX.Stop();
+            m_dustFrontFX.Stop();
             m_animation.SetEmptyAnimation(0, 0);
             m_animation.SetAnimation(0, m_info.deathAnimation, false);
             m_character.physics.UseStepClimb(true);
