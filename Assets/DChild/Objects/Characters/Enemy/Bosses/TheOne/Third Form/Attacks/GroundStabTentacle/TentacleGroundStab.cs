@@ -74,7 +74,8 @@ namespace DChild.Gameplay.Projectiles
         {
             int randomSafeZone = Random.Range(0, safeZones.Length);
 
-            safeZones[randomSafeZone].SetActive(true);
+            GameObject safezone = safeZones[randomSafeZone];
+            safezone.SetActive(true);
         }
 
         private void RemoveSafeZones()
