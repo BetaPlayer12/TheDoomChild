@@ -11,6 +11,9 @@ namespace DChild.Menu.MainMenu
         [SerializeField]
         private SignalSender m_hideNavigationMenuSignal;
 
+        [SerializeField]
+        private ConfirmationRequestHandle m_applicationQuitRequest;
+
         public void TransistionToCampaignSelect()
         {
             m_backgroundVideo.PlayEnd();
@@ -18,7 +21,7 @@ namespace DChild.Menu.MainMenu
         }
         public void RequestToExitGame()
         {
-            GameSystem.RequestConfirmation(OnAffirmation, "Would you like to Quit the Game?");
+            m_applicationQuitRequest.Execute(OnAffirmation);
         }
 
         private void OnTransistionVideoEnd(object sender, EventActionArgs eventArgs)
@@ -26,8 +29,6 @@ namespace DChild.Menu.MainMenu
             m_hideNavigationMenuSignal.SendSignal();
             m_backgroundVideo.OnVideoEnd -= OnTransistionVideoEnd;
         }
-
-
         private void OnAffirmation(object sender, EventActionArgs eventArgs)
         {
             Debug.Log("Quitting");
