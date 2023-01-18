@@ -35,6 +35,8 @@ namespace DChild.UI
         public static bool dialogueActive;
         private bool m_skipUIShown;
 
+        public static bool currentConverstionIsABanter { get; private set; }
+
         public override void Open()
         {
             var conversation = DialogueManager.MasterDatabase.GetConversation(DialogueManager.lastConversationStarted);
@@ -54,7 +56,7 @@ namespace DChild.UI
                         m_currentDialogueType = DialogueType.Banter;
                     }
 
-
+                    currentConverstionIsABanter = true;
                 }
                 else
                 {
@@ -84,6 +86,8 @@ namespace DChild.UI
                     {
                         CombatAIManager.instance?.ForbidAllFromAttackTarget(true);
                     }
+
+                    currentConverstionIsABanter = false;
                 }
 
             }
