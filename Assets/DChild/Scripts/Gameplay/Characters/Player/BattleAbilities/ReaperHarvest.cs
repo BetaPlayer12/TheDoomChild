@@ -17,6 +17,8 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
         [SerializeField]
         private float m_reaperHarvestMovementCooldown;
         [SerializeField]
+        private float m_dashDuration;
+        [SerializeField]
         private Info m_reaperHarvestInfo;
         //TEST
         [SerializeField, BoxGroup("Physics")]
@@ -75,6 +77,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
         public void Execute()
         {
             //m_state.waitForBehaviour = true;
+            StopAllCoroutines();
             m_state.isAttacking = true;
             m_state.canAttack = false;
             m_canReaperHarvest = false;
@@ -88,11 +91,11 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
         public void EndExecution()
         {
+            //m_state.waitForBehaviour = false;
             base.AttackOver();
             m_reaperHarvestInfo.ShowCollider(false);
             //m_canReaperHarvest = true;
             //m_canMove = true;
-            //m_state.waitForBehaviour = false;
             m_animator.SetBool(m_reaperHarvestStateAnimationParameter, false);
         }
 
@@ -101,6 +104,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             base.Cancel();
             m_reaperHarvestInfo.ShowCollider(false);
             m_fxAnimator.Play("Buffer");
+            StopAllCoroutines();
         }
 
         public void EnableCollision(bool value)
@@ -109,19 +113,19 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             m_reaperHarvestInfo.ShowCollider(value);
             m_attackFX.transform.position = m_reaperHarvestInfo.fxPosition.position;
 
+            StartCoroutine(DashRoutine());
             //TEST
-            m_enemySensor.Cast();
-            m_wallSensor.Cast();
-            m_edgeSensor.Cast();
-            if (!m_enemySensor.isDetecting && !m_wallSensor.allRaysDetecting && m_edgeSensor.isDetecting && value)
-            {
-                m_physics.velocity = new Vector2(0, m_physics.velocity.y);
-                m_physics.AddForce(new Vector2(m_character.facing == HorizontalDirection.Right ? m_pushForce.x : -m_pushForce.x, m_pushForce.y), ForceMode2D.Impulse);
-            }
-            else if (!value)
-            {
-                m_physics.velocity = new Vector2(0, m_physics.velocity.y);
-            }
+            //m_enemySensor.Cast();
+            //m_wallSensor.Cast();
+            //m_edgeSensor.Cast();
+            //if (!m_enemySensor.isDetecting && !m_wallSensor.allRaysDetecting && m_edgeSensor.isDetecting && value)
+            //{
+            //    m_physics.AddForce(new Vector2(m_character.facing == HorizontalDirection.Right ? m_pushForce.x : -m_pushForce.x, m_pushForce.y), ForceMode2D.Impulse);
+            //}
+            //else if (!value)
+            //{
+            //    m_physics.velocity = new Vector2(0, m_physics.velocity.y);
+            //}
         }
 
         public void HandleAttackTimer()
@@ -152,6 +156,25 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
                 m_reaperHarvestMovementCooldownTimer = m_reaperHarvestMovementCooldown;
                 m_canMove = true;
             }
+        }
+
+        private IEnumerator DashRoutine()
+        {
+            //m_physics.AddForce(new Vector2(m_character.facing == HorizontalDirection.Right ? m_pushForce.x : -m_pushForce.x, m_pushForce.y), ForceMode2D.Impulse);
+            var timer = m_dashDuration;
+            m_wallSensor.Cast();
+            m_edgeSensor.Cast();
+            while (timer >= 0 && !m_wallSensor.allRaysDetecting && m_edgeSensor.isDetecting)
+            {
+                m_wallSensor.Cast();
+                m_edgeSensor.Cast();
+                m_physics.velocity = new Vector2(m_character.facing == HorizontalDirection.Right ? m_pushForce.x : -m_pushForce.x, m_physics.velocity.y);
+                timer -= Time.deltaTime;
+                yield return null;
+            }
+            //yield return new WaitForSeconds(m_dashDuration);
+            m_physics.velocity = new Vector2(0, m_physics.velocity.y);
+            yield return null;
         }
     }
 }

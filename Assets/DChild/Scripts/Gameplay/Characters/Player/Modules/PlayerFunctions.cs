@@ -22,6 +22,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private FireFist m_fireFist;
         private ReaperHarvest m_reaperHarvest;
         private KrakenRage m_krakenRage;
+        private FinalSlash m_finalSlash;
+        private AirSlashCombo m_airSlashCombo;
         #endregion
 
         public void IdleStateFinished()
@@ -143,6 +145,28 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_whipCombo?.ComboEnd();
         }
 
+        public void AirSlashCombo()
+        {
+            //m_slashCombo?.PlayFX(true);
+            m_airSlashCombo?.EnableCollision(true);
+        }
+
+        public void ContinueAirSlashCombo()
+        {
+            m_airSlashCombo?.PlayFX(true);
+            m_airSlashCombo?.EnableCollision(true);
+        }
+
+        public void AirComboAttackEnd()
+        {
+            m_airSlashCombo?.AttackOver();
+        }
+
+        public void AirComboEnd()
+        {
+            m_airSlashCombo?.ComboEnd();
+        }
+
         public void ResetWhipComboGravity()
         {
             //Debug.Log("ComboWhipEnd");
@@ -234,6 +258,36 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_reaperHarvest.EndExecution();
         }
 
+        public void FinalSlashEnableDash()
+        {
+            m_finalSlash.EnableDash(true);
+        }
+
+        public void FinalSlashDisableDash()
+        {
+            m_finalSlash.EnableDash(false);
+        }
+
+        public void FinalSlashDash()
+        {
+            m_finalSlash.ExecuteDash();
+        }
+
+        public void FinalSlashEnableCollision()
+        {
+            m_finalSlash.EnableCollision(true);
+        }
+
+        public void FinalSlashDisableCollision()
+        {
+            m_finalSlash.EnableCollision(false);
+        }
+
+        public void FinalSlashEnd()
+        {
+            m_finalSlash.EndExecution();
+        }
+
         public void KrakenRageEnableCollision()
         {
             m_krakenRage.EnableCollision(true);
@@ -308,6 +362,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_fireFist = character.GetComponentInChildren<FireFist>();
             m_reaperHarvest = character.GetComponentInChildren<ReaperHarvest>();
             m_krakenRage = character.GetComponentInChildren<KrakenRage>();
+            m_finalSlash = character.GetComponentInChildren<FinalSlash>();
+            m_airSlashCombo = character.GetComponentInChildren<AirSlashCombo>();
         }
 
         #region TESTING

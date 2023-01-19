@@ -23,7 +23,9 @@ namespace DChild.Gameplay.Characters.Players
             EndAirLunge,
             EndFireFist,
             EndReaperHarvest,
-            EndKrakenRage
+            EndKrakenRage,
+            EndAirComboAttack,
+            EndAirCombo
         }
 
         [SerializeField]
@@ -80,6 +82,12 @@ namespace DChild.Gameplay.Characters.Players
                         break;
                     case Command.EndKrakenRage:
                         player.KrakenRageEnd();
+                        break;
+                    case Command.EndAirComboAttack:
+                        player.AirComboAttackEnd();
+                        break;
+                    case Command.EndAirCombo:
+                        player.AirComboEnd();
                         break;
                 }
             }

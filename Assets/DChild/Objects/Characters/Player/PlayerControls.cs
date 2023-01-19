@@ -278,6 +278,33 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""FinalSlash"",
+                    ""type"": ""Button"",
+                    ""id"": ""8b615416-09f5-4e32-bc0a-86d1d0b57618"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""FinalSlashReleased"",
+                    ""type"": ""Button"",
+                    ""id"": ""861d417d-a219-4937-8ab1-33f44ebb56cd"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""AirSlashCombo"",
+                    ""type"": ""Button"",
+                    ""id"": ""e0284d41-3608-46e9-816d-08b866d2fa21"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -1422,6 +1449,105 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": ""Keyboard"",
                     ""action"": ""KrakenRage"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""One Modifier"",
+                    ""id"": ""96867261-e3e2-4044-9a1f-fddc5d9bec86"",
+                    ""path"": ""OneModifier"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""FinalSlash"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""modifier"",
+                    ""id"": ""34ae41f0-2dbf-4fa6-9d14-061b45215359"",
+                    ""path"": ""<Keyboard>/leftShift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""FinalSlash"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""binding"",
+                    ""id"": ""f41df86a-1448-4add-bfb3-1483f1a02e12"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""FinalSlash"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""One Modifier"",
+                    ""id"": ""aa1a13a7-2a6c-4eee-81fe-ace8334523ab"",
+                    ""path"": ""OneModifier"",
+                    ""interactions"": ""Press(behavior=1)"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""FinalSlashReleased"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""modifier"",
+                    ""id"": ""11ec9c37-183d-4734-ad49-68c05290eddb"",
+                    ""path"": ""<Keyboard>/leftShift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""FinalSlashReleased"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""binding"",
+                    ""id"": ""4bb57938-563b-4d1f-be35-61969d8d8dfd"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""FinalSlashReleased"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""One Modifier"",
+                    ""id"": ""0e935e7a-410e-44a2-8e51-e27abfc5dfee"",
+                    ""path"": ""OneModifier"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AirSlashCombo"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""modifier"",
+                    ""id"": ""ef814eb8-0ec0-41b7-827e-3ec7a88a5aed"",
+                    ""path"": ""<Keyboard>/leftShift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""AirSlashCombo"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""binding"",
+                    ""id"": ""cf6703bc-e095-46d9-b7da-3ff6393b1bfa"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""AirSlashCombo"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 }
@@ -2607,6 +2733,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         m_Gameplay_FireFist = m_Gameplay.FindAction("FireFist", throwIfNotFound: true);
         m_Gameplay_ReaperHarvest = m_Gameplay.FindAction("ReaperHarvest", throwIfNotFound: true);
         m_Gameplay_KrakenRage = m_Gameplay.FindAction("KrakenRage", throwIfNotFound: true);
+        m_Gameplay_FinalSlash = m_Gameplay.FindAction("FinalSlash", throwIfNotFound: true);
+        m_Gameplay_FinalSlashReleased = m_Gameplay.FindAction("FinalSlashReleased", throwIfNotFound: true);
+        m_Gameplay_AirSlashCombo = m_Gameplay.FindAction("AirSlashCombo", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -2716,6 +2845,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
     private readonly InputAction m_Gameplay_FireFist;
     private readonly InputAction m_Gameplay_ReaperHarvest;
     private readonly InputAction m_Gameplay_KrakenRage;
+    private readonly InputAction m_Gameplay_FinalSlash;
+    private readonly InputAction m_Gameplay_FinalSlashReleased;
+    private readonly InputAction m_Gameplay_AirSlashCombo;
     public struct GameplayActions
     {
         private @PlayerControls m_Wrapper;
@@ -2748,6 +2880,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         public InputAction @FireFist => m_Wrapper.m_Gameplay_FireFist;
         public InputAction @ReaperHarvest => m_Wrapper.m_Gameplay_ReaperHarvest;
         public InputAction @KrakenRage => m_Wrapper.m_Gameplay_KrakenRage;
+        public InputAction @FinalSlash => m_Wrapper.m_Gameplay_FinalSlash;
+        public InputAction @FinalSlashReleased => m_Wrapper.m_Gameplay_FinalSlashReleased;
+        public InputAction @AirSlashCombo => m_Wrapper.m_Gameplay_AirSlashCombo;
         public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -2841,6 +2976,15 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @KrakenRage.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnKrakenRage;
                 @KrakenRage.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnKrakenRage;
                 @KrakenRage.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnKrakenRage;
+                @FinalSlash.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnFinalSlash;
+                @FinalSlash.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnFinalSlash;
+                @FinalSlash.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnFinalSlash;
+                @FinalSlashReleased.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnFinalSlashReleased;
+                @FinalSlashReleased.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnFinalSlashReleased;
+                @FinalSlashReleased.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnFinalSlashReleased;
+                @AirSlashCombo.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnAirSlashCombo;
+                @AirSlashCombo.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnAirSlashCombo;
+                @AirSlashCombo.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnAirSlashCombo;
             }
             m_Wrapper.m_GameplayActionsCallbackInterface = instance;
             if (instance != null)
@@ -2929,6 +3073,15 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @KrakenRage.started += instance.OnKrakenRage;
                 @KrakenRage.performed += instance.OnKrakenRage;
                 @KrakenRage.canceled += instance.OnKrakenRage;
+                @FinalSlash.started += instance.OnFinalSlash;
+                @FinalSlash.performed += instance.OnFinalSlash;
+                @FinalSlash.canceled += instance.OnFinalSlash;
+                @FinalSlashReleased.started += instance.OnFinalSlashReleased;
+                @FinalSlashReleased.performed += instance.OnFinalSlashReleased;
+                @FinalSlashReleased.canceled += instance.OnFinalSlashReleased;
+                @AirSlashCombo.started += instance.OnAirSlashCombo;
+                @AirSlashCombo.performed += instance.OnAirSlashCombo;
+                @AirSlashCombo.canceled += instance.OnAirSlashCombo;
             }
         }
     }
@@ -3193,6 +3346,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         void OnFireFist(InputAction.CallbackContext context);
         void OnReaperHarvest(InputAction.CallbackContext context);
         void OnKrakenRage(InputAction.CallbackContext context);
+        void OnFinalSlash(InputAction.CallbackContext context);
+        void OnFinalSlashReleased(InputAction.CallbackContext context);
+        void OnAirSlashCombo(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {
