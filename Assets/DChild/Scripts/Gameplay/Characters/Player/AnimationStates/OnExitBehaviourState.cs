@@ -19,7 +19,13 @@ namespace DChild.Gameplay.Characters.Players
             EndWhipComboAttack,
             EndWhipCombo,
             ResetWhipComboGravity,
-            EndSwordThrust
+            EndSwordThrust,
+            EndAirLunge,
+            EndFireFist,
+            EndReaperHarvest,
+            EndKrakenRage,
+            EndAirComboAttack,
+            EndAirCombo
         }
 
         [SerializeField]
@@ -64,6 +70,24 @@ namespace DChild.Gameplay.Characters.Players
                         break;
                     case Command.EndSwordThrust:
                         player.SwordThrustEnd();
+                        break;
+                    case Command.EndAirLunge:
+                        player.AirLungeEnd();
+                        break;
+                    case Command.EndFireFist:
+                        player.FireFistEnd();
+                        break;
+                    case Command.EndReaperHarvest:
+                        player.ReaperHarvestEnd();
+                        break;
+                    case Command.EndKrakenRage:
+                        player.KrakenRageEnd();
+                        break;
+                    case Command.EndAirComboAttack:
+                        player.AirComboAttackEnd();
+                        break;
+                    case Command.EndAirCombo:
+                        player.AirComboEnd();
                         break;
                 }
             }

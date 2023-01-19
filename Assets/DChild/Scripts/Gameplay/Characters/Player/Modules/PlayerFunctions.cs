@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using DChild.Gameplay.Characters.Players.BattleAbilityModule;
+using UnityEngine;
 
 namespace DChild.Gameplay.Characters.Players.Modules
 {
@@ -15,6 +16,15 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private LedgeGrab m_ledgeGrab;
         private ShadowMorph m_shadowMorph;
         private ShadowGaugeRegen m_shadowGaugeRegen;
+
+        #region Battle Abilities
+        private AirLunge m_airLunge;
+        private FireFist m_fireFist;
+        private ReaperHarvest m_reaperHarvest;
+        private KrakenRage m_krakenRage;
+        private FinalSlash m_finalSlash;
+        private AirSlashCombo m_airSlashCombo;
+        #endregion
 
         public void IdleStateFinished()
         {
@@ -135,6 +145,28 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_whipCombo?.ComboEnd();
         }
 
+        public void AirSlashCombo()
+        {
+            //m_slashCombo?.PlayFX(true);
+            m_airSlashCombo?.EnableCollision(true);
+        }
+
+        public void ContinueAirSlashCombo()
+        {
+            m_airSlashCombo?.PlayFX(true);
+            m_airSlashCombo?.EnableCollision(true);
+        }
+
+        public void AirComboAttackEnd()
+        {
+            m_airSlashCombo?.AttackOver();
+        }
+
+        public void AirComboEnd()
+        {
+            m_airSlashCombo?.ComboEnd();
+        }
+
         public void ResetWhipComboGravity()
         {
             //Debug.Log("ComboWhipEnd");
@@ -177,6 +209,108 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_swordThrust?.Push();
         }
 
+        #region BattleAbilities
+
+        public void AirLungeEnableCollision()
+        {
+            m_airLunge.EnableCollision(true);
+        }
+
+        public void AirLungeDisableCollision()
+        {
+            m_airLunge.EnableCollision(false);
+        }
+
+        public void AirLungeEnd()
+        {
+            m_airLunge?.AttackOver();
+            m_airLunge.EndExecution();
+        }
+
+        public void FireFistSummon()
+        {
+            m_fireFist.Summon();
+        }
+
+        public void FireFistEnableCollision()
+        {
+            m_fireFist.EnableCollision(true);
+        }
+
+        public void FireFistDisableCollision()
+        {
+            m_fireFist.EnableCollision(false);
+        }
+
+        public void ReaperHarvestEnableCollision()
+        {
+            m_reaperHarvest.EnableCollision(true);
+        }
+
+        public void ReaperHarvestDisableCollision()
+        {
+            m_reaperHarvest.EnableCollision(false);
+        }
+
+        public void ReaperHarvestEnd()
+        {
+            m_reaperHarvest?.AttackOver();
+            m_reaperHarvest.EndExecution();
+        }
+
+        public void FinalSlashEnableDash()
+        {
+            m_finalSlash.EnableDash(true);
+        }
+
+        public void FinalSlashDisableDash()
+        {
+            m_finalSlash.EnableDash(false);
+        }
+
+        public void FinalSlashDash()
+        {
+            m_finalSlash.ExecuteDash();
+        }
+
+        public void FinalSlashEnableCollision()
+        {
+            m_finalSlash.EnableCollision(true);
+        }
+
+        public void FinalSlashDisableCollision()
+        {
+            m_finalSlash.EnableCollision(false);
+        }
+
+        public void FinalSlashEnd()
+        {
+            m_finalSlash.EndExecution();
+        }
+
+        public void KrakenRageEnableCollision()
+        {
+            m_krakenRage.EnableCollision(true);
+        }
+
+        public void KrakenRageDisableCollision()
+        {
+            m_krakenRage.EnableCollision(false);
+        }
+
+        public void KrakenRageEnd()
+        {
+            m_krakenRage?.AttackOver();
+            m_krakenRage.EndExecution();
+        }
+
+        public void FireFistEnd()
+        {
+            m_fireFist?.AttackOver();
+            m_fireFist.EndExecution();
+        }
+        #endregion
+
         public void SkullThrowSpawnProjectile()
         {
             m_projectileThrow?.ThrowProjectile();
@@ -208,6 +342,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_ledgeGrab?.EnableHitbox();
         }
 
+        public void Null() { }
+
         public void Initialize(ComplexCharacterInfo info)
         {
             var character = info.character;
@@ -222,6 +358,12 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_ledgeGrab = character.GetComponentInChildren<LedgeGrab>();
             m_shadowMorph = character.GetComponentInChildren<ShadowMorph>();
             m_shadowGaugeRegen = character.GetComponentInChildren<ShadowGaugeRegen>();
+            m_airLunge = character.GetComponentInChildren<AirLunge>();
+            m_fireFist = character.GetComponentInChildren<FireFist>();
+            m_reaperHarvest = character.GetComponentInChildren<ReaperHarvest>();
+            m_krakenRage = character.GetComponentInChildren<KrakenRage>();
+            m_finalSlash = character.GetComponentInChildren<FinalSlash>();
+            m_airSlashCombo = character.GetComponentInChildren<AirSlashCombo>();
         }
 
         #region TESTING

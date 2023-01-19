@@ -45,7 +45,15 @@ namespace DChild.Gameplay.Characters.Players
             DoubleJump,
             WallJump,
             WhipState,
-            XInput
+            XInput,
+            AirLunge,
+            FireFist,
+            ReaperHarvest,
+            KrakenRage,
+            FinalSlash,
+            FinalSlashDash,
+            AirSlashCombo,
+            AirSlashState,
         }
 
         [SerializeField]
