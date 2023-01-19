@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using DChild.Gameplay.Characters.AI;
 using Holysoft;
@@ -21,10 +22,20 @@ namespace DChild.Gameplay.Characters.Enemies
         public event EventAction<EventActionArgs> AttackStart;
         public event EventAction<EventActionArgs> AttackDone;
 
+        private void Awake()
+        {
+            m_leftTentacle.AttackDone += OnAttackDone;
+            m_rightTentacle.AttackDone += OnAttackDone;
+        }
+
+        private void OnAttackDone(object sender, EventActionArgs eventArgs)
+        {
+            AttackDone?.Invoke(this, EventActionArgs.Empty);
+        }
+
         public IEnumerator ExecuteAttack()
         {
-            AttackStart?.Invoke(this, EventActionArgs.Empty);
-            var rollTentacle = Random.Range(0, 2);
+            var rollTentacle = UnityEngine.Random.Range(0, 2);
 
             if(rollTentacle == 0)
             {
@@ -35,7 +46,6 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_rightTentacle.StartAttack();
             }
 
-            AttackDone?.Invoke(this, EventActionArgs.Empty);
             yield return null;
         }
 

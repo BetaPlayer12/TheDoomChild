@@ -6,6 +6,7 @@ using Sirenix.OdinInspector;
 using DChild.Gameplay.Characters;
 using Spine.Unity;
 using DChild.Gameplay.Characters.Enemies;
+using Holysoft.Event;
 
 namespace DChild.Gameplay.Projectiles
 {
@@ -65,7 +66,7 @@ namespace DChild.Gameplay.Projectiles
             RemoveSafeZones();
             m_animation.SetAnimation(0, m_retractAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_retractAnimation);
-            
+
             DestroyInstance();
         }
 

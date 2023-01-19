@@ -59,7 +59,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator ShootBlast()
         {
             StartCoroutine(m_launcher.LazerBeamRoutine());
-            m_blackBloodFlood.isFlooding = true;
+            m_blackBloodFlood.StartFlooding();
             yield return new WaitForSeconds(10f);
             yield return null;
         }

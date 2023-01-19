@@ -22,6 +22,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private float m_spawnIntervalForMonoliths;
 
         private List<PoolableObject> m_monolithsSpawned = new List<PoolableObject>();
+        private ObstacleChecker m_obstacleChecker;
 
         private bool m_leftToRightSequence;
 
@@ -64,7 +65,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 int rollMonolithToKeep = Random.Range(0, m_monolithsSpawned.Count);
 
                 m_monolithsSpawned[rollMonolithToKeep].gameObject.GetComponent<MonolithSlam>().keepMonolith = true;
-                FindObjectOfType<ObstacleChecker>().monolithSlamObstacleList.Add(m_monolithsSpawned[rollMonolithToKeep]);
+                m_obstacleChecker.AddMonolithToList(m_monolithsSpawned[rollMonolithToKeep]);
             }
 
             //Anticipation time before smashing monoliths
@@ -79,6 +80,11 @@ namespace DChild.Gameplay.Characters.Enemies
             }
 
             AttackDone?.Invoke(this, EventActionArgs.Empty);
+        }
+
+        private void Awake()
+        {
+            m_obstacleChecker = FindObjectOfType<ObstacleChecker>();
         }
 
         public IEnumerator SetUpMonoliths(AITargetInfo Target)

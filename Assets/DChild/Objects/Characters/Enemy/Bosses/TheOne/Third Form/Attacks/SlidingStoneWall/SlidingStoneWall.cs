@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DChild.Gameplay.Pooling;
 using Spine.Unity;
+using Holysoft.Event;
 
 namespace DChild.Gameplay.Characters.Enemies
 {
@@ -33,6 +34,9 @@ namespace DChild.Gameplay.Characters.Enemies
         private GameObject m_wallSlamCollider;
         [SerializeField, TabGroup("Colliders")]
         private GameObject m_wallCollider;
+
+        public event EventAction<EventActionArgs> AttackStart;
+        public event EventAction<EventActionArgs> AttackDone;
 
         // Start is called before the first frame update
         void Start()
@@ -80,11 +84,13 @@ namespace DChild.Gameplay.Characters.Enemies
             m_wallSlamCollider.SetActive(false);
         }
 
-        private IEnumerator CompleteSlidingWallAttackSequence()
+        public IEnumerator CompleteSlidingWallAttackSequence()
         {
+            AttackStart?.Invoke(this, EventActionArgs.Empty);
             yield return EmergeTentacle();
             yield return AttackTentacle();
             yield return RetractTentacle();
+            AttackDone?.Invoke(this, EventActionArgs.Empty);
         }
 
         public void GroundSmashEffect()

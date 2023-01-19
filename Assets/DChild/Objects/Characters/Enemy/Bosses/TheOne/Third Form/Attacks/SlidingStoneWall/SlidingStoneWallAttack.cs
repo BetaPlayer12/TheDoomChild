@@ -1,6 +1,7 @@
 ﻿using DChild.Gameplay.Characters.AI;
 using DChild.Gameplay.Pooling;
 using Holysoft.Event;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -13,15 +14,23 @@ namespace DChild.Gameplay.Characters.Enemies
         private SlidingStoneWall m_monolithWallLeft;
         [SerializeField]
         private SlidingStoneWall m_monolithWallRight;
-        //[SerializeField]
-        //private Transform m_leftSpawnPoint;
-        //[SerializeField]
-        //private Transform m_rightSpawnPoint;
+
         [SerializeField]
         private Transform m_arenaCenter;
 
         public event EventAction<EventActionArgs> AttackStart;
         public event EventAction<EventActionArgs> AttackDone;
+
+        private void Awake()
+        {
+            m_monolithWallLeft.AttackDone += OnAttackDone;
+            m_monolithWallRight.AttackDone += OnAttackDone;
+        }
+
+        private void OnAttackDone(object sender, EventActionArgs eventArgs)
+        {
+            AttackDone?.Invoke(this, EventActionArgs.Empty);
+        }
 
         public IEnumerator ExecuteAttack()
         {
@@ -35,14 +44,11 @@ namespace DChild.Gameplay.Characters.Enemies
 
         public IEnumerator ExecuteAttack(AITargetInfo Target)
         {
-            AttackStart?.Invoke(this, EventActionArgs.Empty);
-
             if (Target.position.x < m_arenaCenter.position.x)
-                m_monolithWallRight.SlidingStoneWallAttack();
+                yield return m_monolithWallRight.CompleteSlidingWallAttackSequence();
             else
-                m_monolithWallLeft.SlidingStoneWallAttack();
+                yield return m_monolithWallLeft.CompleteSlidingWallAttackSequence();
 
-            AttackDone?.Invoke(this, EventActionArgs.Empty);
             yield return null;
         }
     }
