@@ -18,6 +18,13 @@ namespace PixelCrushers
 
 #if !(UNITY_WEBGL || UNITY_WSA)
 
+        public enum BasePath { PersistentDataPath, DataPath, Custom }
+
+        [Tooltip("Persistent Data Path: Usual location where Unity stores data to be kept between runs.\nData Path: Game data folder on target device.\nCustom: Set below.")]
+        public BasePath storeSaveFilesIn = BasePath.PersistentDataPath;
+
+        public string customPath;
+
         [Tooltip("Encrypt saved game files.")]
         public bool encrypt = true;
 
@@ -28,7 +35,7 @@ namespace PixelCrushers
         [SerializeField]
         private bool m_debug;
 
-        private class SavedGameInfo
+        protected class SavedGameInfo
         {
             public string sceneName;
 
@@ -38,7 +45,16 @@ namespace PixelCrushers
             }
         }
 
-        private List<SavedGameInfo> m_savedGameInfo = new List<SavedGameInfo>();
+        protected List<SavedGameInfo> m_savedGameInfo = null;
+
+        protected List<SavedGameInfo> savedGameInfo
+        {
+            get
+            {
+                if (m_savedGameInfo == null) LoadSavedGameInfoFromFile();
+                return m_savedGameInfo;
+            }
+        }
 
         public bool debug
         {
@@ -51,26 +67,40 @@ namespace PixelCrushers
             LoadSavedGameInfoFromFile();
         }
 
+        protected virtual string GetBasePath()
+        {
+            switch (storeSaveFilesIn)
+            {
+                default:
+                case BasePath.PersistentDataPath:
+                    return Application.persistentDataPath;
+                case BasePath.DataPath:
+                    return Application.dataPath;
+                case BasePath.Custom:
+                    return customPath;
+            }
+        }
+
         public virtual string GetSaveGameFilename(int slotNumber)
         {
-            return Application.persistentDataPath + "/save_" + slotNumber + ".dat";
+            return GetBasePath() + "/save_" + slotNumber + ".dat";
         }
 
         public virtual string GetSavedGameInfoFilename()
         {
-            return Application.persistentDataPath + "/saveinfo.dat";
+            return GetBasePath() + "/saveinfo.dat";
         }
 
         public virtual void LoadSavedGameInfoFromFile()
         {
+            m_savedGameInfo = new List<SavedGameInfo>();
             var filename = GetSavedGameInfoFilename();
-            if (string.IsNullOrEmpty(filename) || !File.Exists(filename)) return;
+            if (!VerifySavedGameInfoFile(filename)) return;
             if (debug) Debug.Log("Save System: DiskSavedGameDataStorer loading " + filename);
             try
             {
                 using (StreamReader streamReader = new StreamReader(filename))
                 {
-                    m_savedGameInfo.Clear();
                     int safeguard = 0;
                     while (!streamReader.EndOfStream && safeguard < 999)
                     {
@@ -86,36 +116,75 @@ namespace PixelCrushers
             }
         }
 
+        protected virtual bool VerifySavedGameInfoFile(string saveInfoFilename)
+        {
+            if (string.IsNullOrEmpty(saveInfoFilename) || !File.Exists(saveInfoFilename))
+            {
+                // If saved game info file doesn't exist, recreate it from existing save_#.dat files:
+                var path = Path.GetDirectoryName(saveInfoFilename);
+                if (!Directory.Exists(path)) return false;
+
+                // Find the highest-numbered save file:
+                int highestSave = 0;
+                const int MaxSaveSlot = 100;
+                for (int i = 0; i <= MaxSaveSlot; i++)
+                {
+                    var saveGameFilename = GetSaveGameFilename(i);
+                    if (File.Exists(saveGameFilename)) highestSave = i;
+                }
+
+                // Initialize savedGameInfo and write to save info file:
+                savedGameInfo.Clear();
+                for (int i = 0; i <= highestSave; i++)
+                {
+                    savedGameInfo.Add(new SavedGameInfo(string.Empty));
+                }
+                WriteSavedGameInfoToDisk();
+            }
+            return true;
+        }
+
         public virtual void UpdateSavedGameInfoToFile(int slotNumber, SavedGameData savedGameData)
         {
             var slotIndex = slotNumber;
-            for (int i = m_savedGameInfo.Count; i <= slotIndex; i++)
+
+            // Add any missing info elements for slots preceding specified slotNumber:
+            for (int i = savedGameInfo.Count; i <= slotIndex; i++)
             {
-                m_savedGameInfo.Add(new SavedGameInfo(string.Empty));
+                savedGameInfo.Add(new SavedGameInfo(string.Empty));
             }
-            m_savedGameInfo[slotIndex].sceneName = (savedGameData != null) ? savedGameData.sceneName : string.Empty;
+
+            savedGameInfo[slotIndex].sceneName = (savedGameData != null) ? savedGameData.sceneName : string.Empty;
+            WriteSavedGameInfoToDisk();
+        }
+
+        protected virtual void WriteSavedGameInfoToDisk()
+        {
             var filename = GetSavedGameInfoFilename();
             if (debug) Debug.Log("Save System: DiskSavedGameDataStorer updating " + filename);
             try
             {
                 using (StreamWriter streamWriter = new StreamWriter(filename))
                 {
-                    for (int i = 0; i < m_savedGameInfo.Count; i++)
+                    for (int i = 0; i < savedGameInfo.Count; i++)
                     {
-                        streamWriter.WriteLine(m_savedGameInfo[i].sceneName.Replace("\n", "<cr>"));
+                        streamWriter.WriteLine(savedGameInfo[i].sceneName.Replace("\n", "<cr>"));
                     }
                 }
             }
-            catch (System.Exception)
+            catch (System.Exception e)
             {
                 Debug.LogError("Save System: DiskSavedGameDataStorer - Can't create file: " + filename);
+                throw e;
             }
         }
 
         public override bool HasDataInSlot(int slotNumber)
         {
             var slotIndex = slotNumber;
-            return 0 <= slotIndex && slotIndex < m_savedGameInfo.Count && !string.IsNullOrEmpty(m_savedGameInfo[slotIndex].sceneName);
+            return 0 <= slotIndex && slotIndex < savedGameInfo.Count && 
+                !string.IsNullOrEmpty(savedGameInfo[slotIndex].sceneName) && 
+                File.Exists(GetSaveGameFilename(slotNumber));
         }
 
         public override void StoreSavedGameData(int slotNumber, SavedGameData savedGameData)
@@ -129,6 +198,7 @@ namespace PixelCrushers
         public override SavedGameData RetrieveSavedGameData(int slotNumber)
         {
             var s = ReadStringFromFile(GetSaveGameFilename(slotNumber));
+            if (string.IsNullOrEmpty(s)) return null;
             if (encrypt)
             {
                 string plainText;
@@ -155,19 +225,28 @@ namespace PixelCrushers
         {
             try
             {
-                using (StreamWriter streamWriter = new StreamWriter(filename))
+                // Write to temp file. If successful, overwrite save file:
+                var tmpFilename = filename + ".tmp";
+                using (StreamWriter streamWriter = new StreamWriter(tmpFilename))
                 {
                     streamWriter.WriteLine(data);
                 }
+                if (File.Exists(filename))
+                {
+                    File.Delete(filename);
+                }
+                File.Move(tmpFilename, filename);
             }
-            catch (System.Exception)
+            catch (System.Exception e)
             {
-                Debug.LogError("Save System: Can't create file: " + filename);
+                Debug.LogError("Save System: Can't create saved game file: " + filename);
+                throw e;
             }
         }
 
         public static string ReadStringFromFile(string filename)
         {
+            if (!File.Exists(filename)) return string.Empty;
             try
             {
                 using (StreamReader streamReader = new StreamReader(filename))

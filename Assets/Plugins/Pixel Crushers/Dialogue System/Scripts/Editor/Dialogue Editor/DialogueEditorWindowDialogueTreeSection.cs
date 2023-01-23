@@ -47,7 +47,10 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
         private bool orphansFoldout = false;
         private Dictionary<int, string> dialogueEntryText = new Dictionary<int, string>();
         private Dictionary<int, string> dialogueEntryNodeText = new Dictionary<int, string>();
+        private Dictionary<int, GUIContent> dialogueEntryNodeDescription = new Dictionary<int, GUIContent>();
+        private Dictionary<int, bool> dialogueEntryNodeHasSequence = new Dictionary<int, bool>();
         private Dictionary<int, bool> dialogueEntryFoldouts = new Dictionary<int, bool>();
+        private Dictionary<int, bool> dialogueEntryHasEvent = new Dictionary<int, bool>();
         private DialogueNode dialogueTree = null;
         private List<DialogueNode> orphans = new List<DialogueNode>();
         private Field currentEntryActor = null;
@@ -55,6 +58,10 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
         private bool entryEventFoldout = false;
         private bool entryFieldsFoldout = false;
         private SequenceSyntaxState sequenceSyntaxState = SequenceSyntaxState.Unchecked;
+        private GUIContent[] linkToDestinations = new GUIContent[0];
+        private DialogueEntry linkToDestinationsFromEntry = null;
+
+        public static bool linkToDebug = false;
 
         private DialogueEntry _currentEntry = null;
         [SerializeField]
@@ -73,6 +80,10 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
                 {
                     currentEntryID = value.id;
                     if (value.fields != null) BuildLanguageListFromFields(value.fields);
+                }
+                else
+                {
+                    CloseQuickDialogueTextEntry();
                 }
                 if (verboseDebug && value != null) Debug.Log("<color=magenta>Set current entry ID to " + currentEntryID + "</color>");
             }
@@ -113,6 +124,9 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
         {
             dialogueEntryText.Clear();
             dialogueEntryNodeText.Clear();
+            dialogueEntryNodeDescription.Clear();
+            dialogueEntryHasEvent.Clear();
+            dialogueEntryNodeHasSequence.Clear();
         }
 
         public void ResetDialogueEntryText(DialogueEntry entry)
@@ -120,6 +134,7 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             if (entry == null) return;
             if (dialogueEntryText.ContainsKey(entry.id)) dialogueEntryText[entry.id] = null;
             if (dialogueEntryNodeText.ContainsKey(entry.id)) dialogueEntryNodeText[entry.id] = null;
+            dialogueEntryHasEvent[entry.id] = FullCheckDoesDialogueEntryHaveEvent(entry);
         }
 
         private void ResetDialogueTreeCurrentEntryParticipants()
@@ -283,7 +298,7 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             return ((database != null) && (entry != null) && database.IsPlayerID(entry.ActorID)) ? pcLinkButtonGUIStyle : npcLinkButtonGUIStyle;
         }
 
-        private string GetDialogueEntryText(DialogueEntry entry)
+    private string GetDialogueEntryText(DialogueEntry entry)
         {
             if (entry == null) return string.Empty;
             if (!dialogueEntryText.ContainsKey(entry.id) || (dialogueEntryText[entry.id] == null))
@@ -302,19 +317,26 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             if (text.Contains("\n")) text = text.Replace("\n", string.Empty);
             string speaker = GetActorNameByID(entry.ActorID);
             text = string.Format("[{0}] {1}: {2}", entry.id, speaker, text);
-            if (!string.IsNullOrEmpty(entry.conditionsString)) text += " [condition]";
-            if (!string.IsNullOrEmpty(entry.userScript)) text += " {script}";
+            if (!showNodeEditor)
+            { // Only show for Outline editor. For node editor, we draw small icons on node.
+                if (!string.IsNullOrEmpty(entry.conditionsString)) text += " [condition]";
+                if (!string.IsNullOrEmpty(entry.userScript)) text += " {script}";
+            }
             if ((entry.outgoingLinks == null) || (entry.outgoingLinks.Count == 0)) text += " [END]";
             return text;
         }
 
         private string GetDialogueEntryNodeText(DialogueEntry entry)
         {
-            if (!dialogueEntryNodeText.ContainsKey(entry.id) || (dialogueEntryNodeText[entry.id] == null))
+            if (entry == null) return string.Empty;
+            string text;
+            if (!dialogueEntryNodeText.TryGetValue(entry.id, out text) || text == null)
             {
-                dialogueEntryNodeText[entry.id] = BuildDialogueEntryNodeText(entry);
+                text = BuildDialogueEntryNodeText(entry);
+                if (text == null) text = string.Empty;
+                dialogueEntryNodeText[entry.id] = text;
             }
-            return dialogueEntryNodeText[entry.id];
+            return text;
         }
 
         private string BuildDialogueEntryNodeText(DialogueEntry entry)
@@ -345,10 +367,65 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             {
                 text = "[" + entry.id + "] " + text;
             }
-            if (!string.IsNullOrEmpty(entry.conditionsString)) text += " [condition]";
-            if (!string.IsNullOrEmpty(entry.userScript)) text += " {script}";
+            if (!showNodeEditor)
+            {
+                if (!string.IsNullOrEmpty(entry.conditionsString)) text += " [condition]";
+                if (!string.IsNullOrEmpty(entry.userScript)) text += " {script}";
+            }
             if ((entry.outgoingLinks == null) || (entry.outgoingLinks.Count == 0)) text += " [END]";
             return text.Substring(0, Mathf.Min(text.Length, canvasRectWidthMultiplier * MaxNodeTextLength + extraLength));
+        }
+
+        private GUIContent GetDialogueEntryNodeDescription(DialogueEntry entry)
+        {
+            if (entry == null) return null;
+            GUIContent description;
+            if (!dialogueEntryNodeDescription.TryGetValue(entry.id, out description) || description == null)
+            {
+                var descriptionText = Field.LookupValue(entry.fields, "Description");
+                if (descriptionText == null) descriptionText = string.Empty;
+                dialogueEntryNodeDescription[entry.id] = !string.IsNullOrEmpty(descriptionText) ? new GUIContent(descriptionText) : null;
+            }
+            return description;
+        }
+
+        private void ResetDialogueEntryNodeDescription(DialogueEntry entry)
+        {
+            dialogueEntryNodeDescription[entry.id] = null;
+        }
+
+        private bool DoesDialogueEntryHaveSequence(DialogueEntry entry)
+        {
+            if (entry == null) return false;
+            bool value;
+            if (!dialogueEntryNodeHasSequence.TryGetValue(entry.id, out value))
+            {
+                var sequence = entry.Sequence;
+                value = !string.IsNullOrEmpty(sequence) && 
+                    !(entry.id == 0 && (sequence == "None()" || sequence == "Continue()"));
+                dialogueEntryNodeHasSequence[entry.id] = value;
+            }
+            return value;
+        }
+
+        private bool DoesDialogueEntryHaveEvent(DialogueEntry entry)
+        {
+            if (entry == null) return false;
+            bool value;
+            if (!dialogueEntryHasEvent.TryGetValue(entry.id, out value))
+            {
+                value = FullCheckDoesDialogueEntryHaveEvent(entry);
+                dialogueEntryHasEvent[entry.id] = value;
+            }
+            return value;
+        }
+
+        private bool FullCheckDoesDialogueEntryHaveEvent(DialogueEntry entry)
+        {
+            if (entry == null) return false;
+            if (entry.onExecute != null && entry.onExecute.GetPersistentEventCount() > 0) return true;
+            if (!string.IsNullOrEmpty(entry.sceneEventGuid)) return true;
+            return false;
         }
 
         private void DrawDialogueTree()
@@ -562,7 +639,12 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             if (description != null)
             {
                 EditorGUILayout.LabelField(new GUIContent("Description", "Description of this entry; notes for the author"));
+                EditorGUI.BeginChangeCheck();
                 description.value = EditorGUILayout.TextArea(description.value);
+                if (EditorGUI.EndChangeCheck())
+                {
+                    ResetDialogueEntryNodeDescription(entry);
+                }
             }
 
             // Actor & conversant:
@@ -573,6 +655,7 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
 
             if (!entry.isGroup)
             {
+                EditorWindowTools.EditorGUILayoutBeginGroup();
 
                 EditorGUI.BeginChangeCheck();
 
@@ -595,9 +678,13 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
                     if (string.Equals(entry.Title, "New Dialogue Entry")) entry.Title = string.Empty;
                 }
 
+                EditorWindowTools.EditorGUILayoutEndGroup();
+
                 // Sequence (including localized if defined):
+                EditorWindowTools.EditorGUILayoutBeginGroup();
+
                 entry.Sequence = SequenceEditorTools.DrawLayout(new GUIContent("Sequence", "Cutscene played when speaking this entry. If set, overrides Dialogue Manager's Default Sequence. Drag audio clips to add AudioWait() commands."), entry.Sequence, ref sequenceRect, ref sequenceSyntaxState);
-                DrawLocalizedVersions(entry.fields, "Sequence {0}", false, FieldType.Text);
+                DrawLocalizedVersions(entry.fields, "Sequence {0}", false, FieldType.Text, true);
 
                 // Response Menu Sequence:
                 bool hasResponseMenuSequence = entry.HasResponseMenuSequence();
@@ -612,19 +699,23 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
                     hasResponseMenuSequence = EditorGUILayout.ToggleLeft(new GUIContent("Add Response Menu Sequence", "Tick to add a cutscene that plays during the response menu that follows this entry."), false);
                     if (hasResponseMenuSequence) entry.ResponseMenuSequence = string.Empty;
                 }
+
+                EditorWindowTools.EditorGUILayoutEndGroup();
             }
 
-            // Conditions and Script:
-            int falseConditionIndex = EditorGUILayout.Popup("False Condition Action", GetFalseConditionIndex(entry.falseConditionAction), falseConditionActionStrings);
-            entry.falseConditionAction = falseConditionActionStrings[falseConditionIndex];
-
             // Conditions:
+            EditorWindowTools.EditorGUILayoutBeginGroup();
             luaConditionWizard.database = database;
             entry.conditionsString = luaConditionWizard.Draw(new GUIContent("Conditions", "Optional Lua statement that must be true to use this entry."), entry.conditionsString);
+            int falseConditionIndex = EditorGUILayout.Popup("False Condition Action", GetFalseConditionIndex(entry.falseConditionAction), falseConditionActionStrings);
+            entry.falseConditionAction = falseConditionActionStrings[falseConditionIndex];
+            EditorWindowTools.EditorGUILayoutEndGroup();
 
             // Script:
+            EditorWindowTools.EditorGUILayoutBeginGroup();
             luaScriptWizard.database = database;
             entry.userScript = luaScriptWizard.Draw(new GUIContent("Script", "Optional Lua code to run when entry is spoken."), entry.userScript);
+            EditorWindowTools.EditorGUILayoutEndGroup();
 
             // Other primary fields defined in template:
             DrawOtherDialogueEntryPrimaryFields(entry);
@@ -633,12 +724,18 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             entryEventFoldout = EditorGUILayout.Foldout(entryEventFoldout, "Events");
             if (entryEventFoldout) DrawUnityEvents();
 
-            // Notes:
+            // Notes: (special handling to use TextArea)
             Field notes = Field.Lookup(entry.fields, "Notes");
             if (notes != null)
             {
                 EditorGUILayout.LabelField("Notes");
                 notes.value = EditorGUILayout.TextArea(notes.value);
+            }
+
+            // Custom inspector code hook:
+            if (customDrawDialogueEntryInspector != null)
+            {
+                customDrawDialogueEntryInspector(database, entry);
             }
 
             // All Fields foldout:
@@ -651,7 +748,7 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
                 if (entryFieldsFoldout)
                 {
                     GUILayout.FlexibleSpace();
-                    if (GUILayout.Button(new GUIContent("Template", "Add any missing fields from the template."), EditorStyles.miniButton, GUILayout.Width(60)))
+                    if (GUILayout.Button(new GUIContent("Template", "Add any missing fields from the template."), EditorStyles.miniButton, GUILayout.Width(68)))
                     {
                         ApplyDialogueEntryTemplate(entry.fields);
                     }
@@ -843,14 +940,14 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
                 if (!template.dialogueEntryPrimaryFieldTitles.Contains(field.title)) continue;
                 if (dialogueEntryBuiltInFieldTitles.Contains(fieldTitle)) continue;
                 if (fieldTitle.StartsWith("Menu Text") || fieldTitle.StartsWith("Sequence") || fieldTitle.StartsWith("Response Menu Sequence")) continue;
-                EditorGUILayout.BeginHorizontal();
-                DrawField(field, false, false);
-                EditorGUILayout.EndHorizontal();
+                DrawMainSectionField(field);
             }
         }
 
         private DialogueEntry serializedObjectCurrentEntry = null;
         private SerializedProperty onExecuteProperty = null;
+        private DialogueSystemSceneEvents dialogueSystemSceneEvents = null;
+        private SerializedObject dialogueSystemSceneEventsSerializedObject = null;
 
         private void ResetUnityEventSection()
         {
@@ -860,6 +957,8 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
 
         private void DrawUnityEvents()
         {
+            // Draw scene-independent OnExecute() event:
+            EditorGUILayout.LabelField(new GUIContent("Scene-Independent Event", "This UnityEvent cannot point to scene objects. It can point to assets and prefabs."), EditorStyles.boldLabel);
             if (serializedObject == null)
             {
                 EditorGUILayout.LabelField("Error displaying UnityEvent. Please report to developer.");
@@ -902,6 +1001,78 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
                 EditorGUI.BeginChangeCheck();
                 EditorGUILayout.PropertyField(onExecuteProperty);
                 if (EditorGUI.EndChangeCheck()) serializedObject.ApplyModifiedProperties();
+            }
+
+            // Draw scene-specific event:
+            var sceneEventGuid = currentEntry.sceneEventGuid;
+            int sceneEventIndex = -1;
+            if (string.IsNullOrEmpty(sceneEventGuid))
+            {
+                // If this entry is not associated with a scene event, show Add button:
+                if (GUILayout.Button(new GUIContent("Add Scene Event", "Add a UnityEvent that operates on GameObjects in the currently-open scene.")))
+                {
+                    MakeSureDialogueSystemSceneEventsExists();
+                    sceneEventIndex = DialogueSystemSceneEvents.AddNewDialogueEntrySceneEvent(out sceneEventGuid);
+                    currentEntry.sceneEventGuid = sceneEventGuid;
+                }
+            }
+            else
+            {
+                // Otherwise check if the entry's scene event is defined in this scene:
+                sceneEventIndex = DialogueSystemSceneEvents.GetDialogueEntrySceneEventIndex(sceneEventGuid);
+            }
+            if (sceneEventIndex == -1 && !string.IsNullOrEmpty(sceneEventGuid))
+            {
+                // If scene event is assigned but not in this scene, show Delete button:
+                GUILayout.Label("Scene Event operates in another scene.");
+                if (GUILayout.Button("Delete Scene Event"))
+                {
+                    currentEntry.sceneEventGuid = string.Empty;
+                }
+            }
+            if (sceneEventIndex != -1)
+            {
+                // Make sure our serialized object points to this scene's DialogueSystemSceneEvents:
+                if (dialogueSystemSceneEvents != DialogueSystemSceneEvents.sceneInstance || dialogueSystemSceneEventsSerializedObject == null)
+                {
+                    dialogueSystemSceneEvents = DialogueSystemSceneEvents.sceneInstance;
+                    dialogueSystemSceneEventsSerializedObject = new SerializedObject(dialogueSystemSceneEvents);
+                }
+            }
+            if (sceneEventIndex != -1 && dialogueSystemSceneEventsSerializedObject != null)
+            {
+                // Scene event is in this scene. Draw it:
+                dialogueSystemSceneEventsSerializedObject.Update();
+                var sceneEventsListProperty = dialogueSystemSceneEventsSerializedObject.FindProperty("dialogueEntrySceneEvents");
+                if (sceneEventsListProperty != null && 0 <= sceneEventIndex && sceneEventIndex < sceneEventsListProperty.arraySize)
+                {
+                    var sceneEventProperty = sceneEventsListProperty.GetArrayElementAtIndex(sceneEventIndex);
+                    EditorGUILayout.LabelField("Scene Event", EditorStyles.boldLabel);
+                    EditorGUI.BeginDisabledGroup(true);
+                    EditorGUILayout.PropertyField(sceneEventProperty.FindPropertyRelative("guid"), true);
+                    EditorGUI.EndDisabledGroup();
+                    if (sceneEventProperty != null)
+                    {
+                        EditorGUILayout.PropertyField(sceneEventProperty.FindPropertyRelative("onExecute"), true);
+                    }
+                }
+                dialogueSystemSceneEventsSerializedObject.ApplyModifiedProperties();
+                if (GUILayout.Button("Delete Scene Event"))
+                {
+                    DialogueSystemSceneEvents.RemoveDialogueEntrySceneEvent(sceneEventGuid);
+                    currentEntry.sceneEventGuid = string.Empty;
+                }
+            }
+        }
+
+        private void MakeSureDialogueSystemSceneEventsExists()
+        {
+            if (DialogueSystemSceneEvents.sceneInstance == null)
+            {
+                var go = new GameObject("Dialogue System Scene Events");
+                DialogueSystemSceneEvents.sceneInstance = go.AddComponent(PixelCrushers.TypeUtility.GetWrapperType(typeof(DialogueSystemSceneEvents))) as DialogueSystemSceneEvents;
+                UnityEditor.SceneManagement.EditorSceneManager.MarkSceneDirty(UnityEditor.SceneManagement.EditorSceneManager.GetActiveScene());
+                dialogueSystemSceneEvents = null;
             }
         }
 
@@ -960,9 +1131,9 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             VerifyParticipantField(entry, "Actor", ref currentEntryActor);
             VerifyParticipantField(entry, "Conversant", ref currentEntryConversant);
 
-            // If actor and conversant are unassigned, use conversation's values:
+            // If actor is unassigned, use conversation's values: (conversant may be set to None)
             if (IsActorIDUnassigned(currentEntryActor)) currentEntryActor.value = currentConversation.ActorID.ToString();
-            if (IsActorIDUnassigned(currentEntryConversant)) currentEntryConversant.value = currentConversation.ConversantID.ToString(); ;
+            //if (IsActorIDUnassigned(currentEntryConversant)) currentEntryConversant.value = currentConversation.ConversantID.ToString(); ;
 
             // Participant IDs:
             EditorGUILayout.BeginHorizontal();
@@ -989,7 +1160,7 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
 
         private bool IsActorIDUnassigned(Field field)
         {
-            return (field == null) || string.IsNullOrEmpty(field.value) || string.Equals(field.value, "0");
+            return (field == null) || string.IsNullOrEmpty(field.value) || string.Equals(field.value, "-1");
         }
 
         private void DrawParticipantField(Field participantField, string tooltipText)
@@ -1023,6 +1194,34 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             return 0;
         }
 
+        private void PrepareLinkToDestinations(DialogueEntry entry)
+        {
+            List<GUIContent> destinationList = new List<GUIContent>();
+            destinationList.Add(new GUIContent("(Link To)", string.Empty));
+            destinationList.Add(new GUIContent("(Another Conversation)", string.Empty));
+            destinationList.Add(new GUIContent("(New Entry)", string.Empty));
+            for (int i = 0; i < currentConversation.dialogueEntries.Count; i++)
+            {
+                var destinationEntry = currentConversation.dialogueEntries[i];
+                if (destinationEntry != entry)
+                {
+                    if (linkToDebug)
+                    {
+                        destinationList.Add(new GUIContent("[" + destinationEntry.id + "]"));
+                    }
+                    else
+                    {
+                        var text = (prefs.preferTitlesForLinksTo && !string.IsNullOrEmpty(destinationEntry.Title))
+                            ? ("<" + destinationEntry.Title + ">")
+                            : GetDialogueEntryText(destinationEntry);
+                        destinationList.Add(new GUIContent(Tools.StripRichTextCodes(text)));
+                    }
+                }
+            }
+            linkToDestinations = destinationList.ToArray();
+            linkToDestinationsFromEntry = entry;
+        }
+
         private bool DrawDialogueEntryLinks(
             DialogueEntry entry,
             ref Link linkToDelete,
@@ -1037,17 +1236,17 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             try
             {
                 EditorGUI.BeginChangeCheck();
-
-                List<GUIContent> destinationList = new List<GUIContent>();
-                destinationList.Add(new GUIContent("(Link To)", string.Empty));
-                destinationList.Add(new GUIContent("(Another Conversation)", string.Empty));
-                destinationList.Add(new GUIContent("(New Entry)", string.Empty));
-                for (int i = 0; i < currentConversation.dialogueEntries.Count; i++)
+#if UNITY_EDITOR_OSX
+                linkToDebug = EditorGUILayout.Toggle(new GUIContent("Hide Link Text", "In Unity 2019.2-2019.3, a bug in Unity for Mac can hang the editor when link text contains characters that the editor handles improperly. If Unity hangs when opening the Links To dropdown, tick this."), linkToDebug);
+#endif
+                if (EditorGUI.EndChangeCheck() || linkToDestinationsFromEntry != entry)
                 {
-                    var destinationEntry = currentConversation.dialogueEntries[i];
-                    if (destinationEntry != entry) destinationList.Add(new GUIContent(Tools.StripRichTextCodes(GetDialogueEntryText(destinationEntry)), string.Empty));
+                    PrepareLinkToDestinations(entry);
                 }
-                int destinationIndex = EditorGUILayout.Popup(new GUIContent("Links To:", "Add a link to another entry. Select (New Entry) to create and link to a new entry."), 0, destinationList.ToArray());
+
+                EditorGUI.BeginChangeCheck();
+
+                int destinationIndex = EditorGUILayout.Popup(new GUIContent("Links To:", "Add a link to another entry. Select (New Entry) to create and link to a new entry."), 0, linkToDestinations);
                 if (destinationIndex > 0)
                 {
                     entryToLinkFrom = entry;
@@ -1063,7 +1262,7 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
                     }
                     else
                     {
-                        int destinationID = AssetListIndexToID(destinationIndex, destinationList.ToArray());
+                        int destinationID = AssetListIndexToID(destinationIndex, linkToDestinations);
                         entryToLinkTo = currentConversation.dialogueEntries.Find(e => e.id == destinationID);
                         if (entryToLinkTo == null)
                         {
@@ -1094,7 +1293,11 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
                             {
                                 string linkText = (linkEntry == null) ? string.Empty
                                     : (linkEntry.isGroup ? GetDialogueEntryText(linkEntry) : linkEntry.responseButtonText);
-                                if (string.IsNullOrEmpty(linkText)) linkText = "<" + linkEntry.Title + ">";
+                                if (string.IsNullOrEmpty(linkText) ||
+                                    (prefs.preferTitlesForLinksTo && linkEntry != null && !string.IsNullOrEmpty(linkEntry.Title)))
+                                {
+                                    linkText = "<" + linkEntry.Title + ">";
+                                }
                                 GUIStyle linkButtonStyle = GetLinkButtonStyle(linkEntry);
                                 if (GUILayout.Button(linkText, linkButtonStyle))
                                 {
@@ -1289,7 +1492,7 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
         {
             if (source != null)
             {
-                DialogueEntry newEntry = CreateNewDialogueEntry("New Dialogue Entry");
+                DialogueEntry newEntry = CreateNewDialogueEntry(string.Empty);
                 if (useSameActorAssignments)
                 {
                     newEntry.ActorID = (source.ActorID == source.ConversantID) ? database.playerID : source.ActorID;

@@ -86,7 +86,7 @@ namespace PixelCrushers.DialogueSystem
         /// The current conversation ID. When this changes (in GotoState), the Lua environment
         /// needs to set the Dialog[] table to the new conversation's table.
         /// </summary>
-        private int m_currentConversationID = -1;
+        private int m_currentDialogTableConversationID = -1;
 
         /// <summary>
         /// Initializes a new ConversationModel.
@@ -107,20 +107,33 @@ namespace PixelCrushers.DialogueSystem
             this.m_allowLuaExceptions = allowLuaExceptions;
             this.m_database = database;
             this.isDialogueEntryValid = isDialogueEntryValid;
-            DisplaySettings displaySettings = DialogueManager.displaySettings;
-            if (displaySettings != null)
-            {
-                if (displaySettings.cameraSettings != null) m_entrytagFormat = displaySettings.cameraSettings.entrytagFormat;
-                if (displaySettings.inputSettings != null)
-                {
-                    m_emTagForOldResponses = displaySettings.inputSettings.emTagForOldResponses;
-                    m_emTagForInvalidResponses = displaySettings.inputSettings.emTagForInvalidResponses;
-                    m_includeInvalidEntries = displaySettings.GetIncludeInvalidEntries();
-                }
-            }
             Conversation conversation = database.GetConversation(title);
             if (conversation != null)
             {
+                DisplaySettings displaySettings = DialogueManager.displaySettings;
+                if (displaySettings != null)
+                {
+                    if (displaySettings.cameraSettings != null)
+                    {
+                        m_entrytagFormat = displaySettings.cameraSettings.entrytagFormat;
+                    }
+                    if (displaySettings.inputSettings != null)
+                    {
+                        m_emTagForOldResponses = displaySettings.inputSettings.emTagForOldResponses;
+                        m_emTagForInvalidResponses = displaySettings.inputSettings.emTagForInvalidResponses;
+                        m_includeInvalidEntries = displaySettings.inputSettings.includeInvalidEntries;
+                    }
+                }
+                if (conversation.overrideSettings != null)
+                {
+                    if (conversation.overrideSettings.overrideInputSettings)
+                    {
+                        m_emTagForOldResponses = conversation.overrideSettings.emTagForOldResponses;
+                        m_emTagForInvalidResponses = conversation.overrideSettings.emTagForInvalidResponses;
+                        m_includeInvalidEntries = conversation.overrideSettings.includeInvalidEntries;
+                    }
+                }
+
                 SetParticipants(conversation, actor, conversant);
                 if (initialDialogueEntryID == -1)
                 {
@@ -185,6 +198,7 @@ namespace PixelCrushers.DialogueSystem
         /// </param>
         public void InformParticipants(string message, bool informDialogueManager = false)
         {
+            if (DialogueSystemController.isWarmingUp) return; // If warming up, don't send messages.
             Transform actor = (m_actorInfo == null) ? null : m_actorInfo.transform;
             Transform conversant = (m_conversantInfo == null) ? null : m_conversantInfo.transform;
             Transform target = null;
@@ -235,6 +249,12 @@ namespace PixelCrushers.DialogueSystem
                 }
                 CharacterInfo actorInfo = GetCharacterInfo(entry.ActorID);
                 CharacterInfo listenerInfo = GetCharacterInfo(entry.ConversantID);
+                if (!skipExecution)
+                {
+                    var sceneEvent = DialogueSystemSceneEvents.GetDialogueEntrySceneEvent(entry.sceneEventGuid);
+                    var eventGameObject = (actorInfo.transform != null) ? actorInfo.transform.gameObject : DialogueManager.instance.gameObject;
+                    if (sceneEvent != null) sceneEvent.onExecute.Invoke(eventGameObject);
+                }
                 FormattedText formattedText = FormattedText.Parse(entry.subtitleText, m_database.emphasisSettings);
                 CheckSequenceField(entry);
                 string entrytag = m_database.GetEntrytag(entry.conversationID, entry.id, m_entrytagFormat);
@@ -312,9 +332,9 @@ namespace PixelCrushers.DialogueSystem
 
         private void SetDialogTable(int newConversationID)
         {
-            if (m_currentConversationID != newConversationID)
+            if (m_currentDialogTableConversationID != newConversationID)
             {
-                m_currentConversationID = newConversationID;
+                m_currentDialogTableConversationID = newConversationID;
                 Lua.Run(string.Format("Dialog = Conversation[{0}].Dialog", new System.Object[] { newConversationID }));
             }
         }
@@ -385,14 +405,19 @@ namespace PixelCrushers.DialogueSystem
                             {
 
                                 // For groups, evaluate their links (after running the group node's Lua code and OnExecute() event):
-                                if (DialogueDebug.logInfo) Debug.Log(string.Format("{0}: Add Group ({1}): ID={2}:{3} '{4}' ({5})", new System.Object[] { DialogueDebug.Prefix, GetActorName(m_database.GetActor(destinationEntry.ActorID)), link.destinationConversationID, link.destinationDialogueID, destinationEntry.Title, isValid }));
+                                if (DialogueDebug.logInfo) Debug.Log(string.Format("{0}: Evaluate Group ({1}): ID={2}:{3} '{4}' ({5})", new System.Object[] { DialogueDebug.Prefix, GetActorName(m_database.GetActor(destinationEntry.ActorID)), link.destinationConversationID, link.destinationDialogueID, destinationEntry.Title, isValid }));
                                 Lua.Run(destinationEntry.userScript, DialogueDebug.logInfo, m_allowLuaExceptions);
                                 destinationEntry.onExecute.Invoke();
+                                isValid = false; // Assume invalid until at least one group's child is true.
                                 for (int i = (int)ConditionPriority.High; i >= 0; i--)
                                 {
-                                    int originalResponseCount = npcResponses.Count + pcResponses.Count; ;
+                                    int originalResponseCount = npcResponses.Count + pcResponses.Count;
                                     EvaluateLinksAtPriority((ConditionPriority)i, destinationEntry, npcResponses, pcResponses, visited);
-                                    if ((npcResponses.Count + pcResponses.Count) > originalResponseCount) break;
+                                    if ((npcResponses.Count + pcResponses.Count) > originalResponseCount)
+                                    {
+                                        isValid = true;
+                                        break;
+                                    }
                                 }
                             }
                             else
@@ -415,17 +440,31 @@ namespace PixelCrushers.DialogueSystem
                                     {
                                         string simStatus = Lua.Run(string.Format("return Conversation[{0}].Dialog[{1}].SimStatus", new System.Object[] { destinationEntry.conversationID, destinationEntry.id })).asString;
                                         bool isOldResponse = string.Equals(simStatus, DialogueLua.WasDisplayed);
-                                        if (isOldResponse) text = string.Format("[em{0}]{1}[/em{0}]", (int)m_emTagForOldResponses, text);
+                                        if (isOldResponse)
+                                        {
+                                            text = UITools.StripEmTags(text);
+                                            text = string.Format("[em{0}]{1}[/em{0}]", (int)m_emTagForOldResponses, text);
+                                        }
                                     }
                                     if (m_emTagForInvalidResponses != EmTag.None)
                                     {
-                                        if (!isValid) text = string.Format("[em{0}]{1}[/em{0}]", (int)m_emTagForInvalidResponses, text);
+                                        if (!isValid)
+                                        {
+                                            text = UITools.StripEmTags(text);
+                                            text = string.Format("[em{0}]{1}[/em{0}]", (int)m_emTagForInvalidResponses, text);
+                                        }
                                     }
-                                    pcResponses.Add(new Response(FormattedText.Parse(text, m_database.emphasisSettings), destinationEntry, isValid));
+                                    var formattedText = FormattedText.Parse(text, m_database.emphasisSettings);
+                                    if (!isValid)
+                                    {
+                                        formattedText.forceAuto = false;
+                                        formattedText.forceMenu = false;
+                                    }
+                                    pcResponses.Add(new Response(formattedText, destinationEntry, isValid));
                                     DialogueLua.MarkDialogueEntryOffered(destinationEntry);
                                 }
                             }
-                            if (stopAtFirstValid) return;
+                            if (isValid && stopAtFirstValid) return;
 
                         }
                         else
@@ -511,7 +550,7 @@ namespace PixelCrushers.DialogueSystem
             {
                 pcPortraitName = m_actorInfo.Name;
                 pcPortraitSprite = m_actorInfo.portrait;
-            } 
+            }
             else if (m_conversantInfo.isPlayer)
             {
                 pcPortraitName = m_conversantInfo.Name;
@@ -526,7 +565,8 @@ namespace PixelCrushers.DialogueSystem
                     if (entryActor != null && entryActor.IsPlayer)
                     {
                         pcPortraitName = entryActor.Name;
-                        pcPortraitSprite = entryActor.GetPortraitSprite();
+                        //pcPortraitSprite = entryActor.GetPortraitSprite();
+                        entryActor.AssignPortraitSprite((sprite) => { pcPortraitSprite = sprite; });
                         break;
                     }
                 }
@@ -556,9 +596,23 @@ namespace PixelCrushers.DialogueSystem
                     actor = m_database.GetActor(dialogueActor.actor);
                 }
                 if (actor == null) actor = m_database.GetActor(id);
-                string nameInDatabase = (actor != null) ? actor.Name : string.Empty;
+                string nameInDatabase = (dialogueActor != null) ? dialogueActor.actor : string.Empty;
+                if (string.IsNullOrEmpty(nameInDatabase) && actor != null) nameInDatabase = actor.Name;
+                if (character == null && !string.IsNullOrEmpty(nameInDatabase))
+                {
+                    character = CharacterInfo.GetRegisteredActorTransform(nameInDatabase);
+                }
                 var actorID = (actor != null) ? actor.id : id;
-                CharacterInfo characterInfo = new CharacterInfo(actorID, nameInDatabase, character, m_database.GetCharacterType(id), GetPortrait(character, actor));
+                var portrait = (dialogueActor != null) ? dialogueActor.GetPortraitSprite() : null;
+                if (portrait == null) portrait = GetPortrait(character, actor);
+                CharacterInfo characterInfo = new CharacterInfo(actorID, nameInDatabase, character, m_database.GetCharacterType(id), portrait);
+                if (characterInfo.portrait == null && actor != null)
+                {
+                    actor.AssignPortraitSprite((sprite) => { characterInfo.portrait = sprite; });
+                }
+                // Don't cache null actor ID -1:
+                if (id == -1) return characterInfo;
+                // Otherwise cache to speed up lookups:
                 m_characterInfoCache.Add(id, characterInfo);
             }
             return m_characterInfoCache[id];
@@ -590,6 +644,7 @@ namespace PixelCrushers.DialogueSystem
             }
         }
 
+        // Handles the easy cases (without Addressables). May return null.
         private Sprite GetPortrait(Transform character, Actor actor)
         {
             Sprite portrait = null;
@@ -614,7 +669,7 @@ namespace PixelCrushers.DialogueSystem
             DialogueDebug.level = originalDebugLevel;
             if (string.IsNullOrEmpty(imageName))
             {
-                return (actor != null) ? actor.GetPortraitSprite(): null;
+                return (actor != null) ? actor.GetPortraitSprite() : null;
             }
             else if (imageName.StartsWith("pic="))
             {
@@ -629,7 +684,10 @@ namespace PixelCrushers.DialogueSystem
             }
             else
             {
-                return UITools.CreateSprite(DialogueManager.LoadAsset(imageName) as Texture2D);
+                // Check if named image is already assigned to actor. Otherwise load as asset.
+                var sprite = actor.GetPortraitSprite(imageName);
+                return (sprite != null) ? sprite
+                    : UITools.CreateSprite(DialogueManager.LoadAsset(imageName) as Texture2D);
             }
         }
 

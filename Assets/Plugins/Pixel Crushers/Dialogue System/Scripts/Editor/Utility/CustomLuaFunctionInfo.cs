@@ -2,8 +2,7 @@
 using UnityEngine;
 
 namespace PixelCrushers.DialogueSystem
-{
-    [CreateAssetMenu(menuName = "Pixel Crushers/Dialogue System/Custom Lua Function Info")]
+{    
     public class CustomLuaFunctionInfo : ScriptableObject
     {
         [HelpBox("If you want your own custom Lua functions to appear in Conditions and Script dropdowns, add their info to this asset.", HelpBoxMessageType.None)]
@@ -14,11 +13,12 @@ namespace PixelCrushers.DialogueSystem
     [Serializable]
     public class CustomLuaFunctionInfoRecord
     {
+        [Tooltip("Use forward slashes to group into submenus.")]
         public string functionName;
         public CustomLuaParameterType[] parameters;
         public CustomLuaReturnType returnValue = CustomLuaReturnType.None;
     }
 
-    public enum CustomLuaParameterType { Bool, Double, String, Actor, Quest, QuestEntry, Variable, None }
+    public enum CustomLuaParameterType { Bool, Double, String, Actor, Quest, QuestEntry, Variable, None, Item, QuestState }
     public enum CustomLuaReturnType { None, Bool, Double, String }
 }

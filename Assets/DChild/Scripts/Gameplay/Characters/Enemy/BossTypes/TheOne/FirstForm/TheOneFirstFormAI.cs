@@ -12,7 +12,7 @@ using System.Collections;
 using System.Collections.Generic;
 using DChild;
 using DChild.Gameplay.Characters.Enemies;
-using Doozy.Engine;
+using DChild.Temp;
 using Spine.Unity.Modules;
 using Spine.Unity.Examples;
 using DChild.Gameplay.Pooling;
@@ -520,6 +520,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private int m_drillDashComboCount;
         #endregion
 
+        private bool m_isDetecting;
+
         #region Animation
         private string m_idleAnimation;
         private string m_blinkAppearAnimation;
@@ -582,9 +584,13 @@ namespace DChild.Gameplay.Characters.Enemies
             if (damageable != null)
             {
                 base.SetTarget(damageable, m_target);
-                m_alterBladeMonitorCoroutine = StartCoroutine(AlterBladeMonitorRoutine());
-                m_stateHandle.OverrideState(State.Intro);
-                GameEventMessage.SendEvent("Boss Encounter");
+                if (!m_isDetecting)
+                {
+                    m_isDetecting = true;
+                    m_alterBladeMonitorCoroutine = StartCoroutine(AlterBladeMonitorRoutine());
+                    m_stateHandle.OverrideState(State.Intro);
+                    GameEventMessage.SendEvent("Boss Encounter");
+                }
             }
         }
 
@@ -681,6 +687,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator StaggerRoutine()
         {
+            enabled = false;
             m_hitbox.Disable();
             if (!m_groundSensor.isDetecting)
             {
@@ -702,10 +709,12 @@ namespace DChild.Gameplay.Characters.Enemies
             if (m_alterBladeCoroutine == null)
                 m_stateHandle.ApplyQueuedState();
             yield return null;
+            enabled = true;
         }
 
         private IEnumerator DrillDashCounterRoutine()
         {
+            enabled = false;
             var drillCount = 0;
             if (!m_groundSensor.isDetecting)
             {
@@ -743,6 +752,7 @@ namespace DChild.Gameplay.Characters.Enemies
             if (m_alterBladeCoroutine == null)
                 m_stateHandle.ApplyQueuedState();
             yield return null;
+            enabled = true;
         }
 
         private IEnumerator IntroRoutine()
@@ -965,7 +975,6 @@ namespace DChild.Gameplay.Characters.Enemies
                         if (m_blinkCoroutine != null)
                             yield return new WaitUntil(() => m_blinkCoroutine == null);
 
-                        //m_animation.SetAnimation(0, m_info.idleAnimation, true);
                         m_blinkCoroutine = StartCoroutine(BlinkRoutine(BlinkState.DisappearBackward, BlinkState.AppearBackward, 50, 0, State.Chasing, true, false, false));
                         break;
                     case 1:
@@ -982,6 +991,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator DrillDash2Routine()
         {
+            enabled = false;
             if (IsTargetInRange(m_info.drillDash1Attack.range))
             {
                 //if (!m_groundSensor.isDetecting)
@@ -1032,10 +1042,12 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_blinkCoroutine = StartCoroutine(BlinkRoutine(BlinkState.DisappearBackward, BlinkState.AppearBackward, 50, 0, State.Chasing, false, false, false));
             }
             yield return null;
+            enabled = true;
         }
         
         private IEnumerator DrillDashComboRoutine()
         {
+            enabled = false;
             switch (m_drillDashComboCount)
             {
                 case 0:
@@ -1118,6 +1130,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     break;
             }
             yield return null;
+            enabled = true;
         }
 
         private IEnumerator Phase1Pattern1AttackRoutine()
@@ -1479,6 +1492,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_info.defeated3Animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.defeated3Animation);
             m_animation.SetAnimation(0, m_info.blinkDisappearBackwardAnimation, false);
+            m_isDetecting = false;
             enabled = false;
             yield return null;
         }

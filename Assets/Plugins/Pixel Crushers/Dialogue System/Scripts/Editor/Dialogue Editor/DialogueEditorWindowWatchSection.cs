@@ -123,12 +123,15 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
 
         private void AddRuntimeVariableWatch()
         {
+            RefreshWatchableVariableList();
+            CatalogueWatchableVariableNames();
             watches.Add(new Watch(WatchType.Variable));
             watchableVariableNames = null;
         }
 
         private void AddAllRuntimeVariableWatches()
         {
+            RefreshWatchableVariableList();
             CatalogueWatchableVariableNames();
             for (int i = 0; i < watchableVariableNames.Length; i++)
             {
@@ -457,7 +460,7 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             if (database == null) return;
             if (watchableQuestNames == null || watchableQuestNames.Length == 0)
             {
-                List<string> questNames = new List<string>(QuestLog.GetAllQuests(QuestState.Abandoned | QuestState.Active | QuestState.Failure | QuestState.Success | QuestState.Unassigned));
+                List<string> questNames = new List<string>(QuestLog.GetAllQuests(QuestState.Abandoned | QuestState.Active | QuestState.Failure | QuestState.Success | QuestState.Grantable | QuestState.Unassigned));
                 questNames.Sort();
                 watchableQuestNames = questNames.ToArray();
             }
@@ -521,7 +524,7 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
                 luaCommand = string.Empty;
                 GUI.FocusControl("LuaEmptyLabel"); // Need to deselect field to clear text field's display.
             }
-            if (GUILayout.Button("Run", EditorStyles.miniButton, GUILayout.Width(32)))
+            if (GUILayout.Button("Run", EditorStyles.miniButton, GUILayout.Width(48)))
             {
                 Debug.Log("Running: " + luaCommand);
                 Lua.Run(luaCommand, true);

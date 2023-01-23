@@ -1,7 +1,8 @@
 ﻿using Cinemachine;
 using DChild.Gameplay.Cinematics;
 using DChild.Serialization;
-using Doozy.Engine;
+using DChild.Temp;
+using Doozy.Runtime.UIManager.Containers;
 using PixelCrushers.DialogueSystem;
 using Spine.Unity;
 using System;
@@ -40,6 +41,8 @@ namespace DChild.Gameplay.Narrative
         [SerializeField]
         private CinemachineVirtualCamera m_cameraToDisable;
         [SerializeField]
+        private UIContainer m_wakeUpPrompt;
+        [SerializeField]
         private AnimationReferenceAsset m_playerStandAnimation;
         [SerializeField]
         private DialogueSystemTrigger m_afterWakeupDialogue;
@@ -47,8 +50,16 @@ namespace DChild.Gameplay.Narrative
         private GameObject m_storePickupSequence;
         [SerializeField]
         private ExtraDatabases m_database;
+        [SerializeField]
+        private InputActionReference m_wakeUpInput;
 
         private bool m_isDone;
+        bool hasPressedPrompt = false;
+
+        private void OnInputPerformed(InputAction.CallbackContext context)
+        {
+            hasPressedPrompt = true;
+        }
 
         public ISaveData Save()
         {
@@ -96,20 +107,11 @@ namespace DChild.Gameplay.Narrative
         private IEnumerator PromptPlayerToStandRoutine()
         {
             GameplaySystem.playerManager.OverrideCharacterControls();
+            GameplaySystem.playerManager.player.GetComponentInChildren<PlayerInput>().actions.FindActionMap("Gameplay").Enable();
             var skeleton = GameplaySystem.playerManager.player.character.GetComponentInChildren<SkeletonAnimation>();
+            m_wakeUpPrompt.Show();
 
-            GameEventMessage.SendEvent("Prompt_Wakeup_Start");
-            bool hasPressedPrompt = false;
-            while (hasPressedPrompt == false)
-            {
-                if (Input.GetKeyDown(KeyCode.W))
-                {
-                    hasPressedPrompt = true;
-                }
-                yield return null;
-            }
-            m_cameraToDisable.enabled = false;
-            GameEventMessage.SendEvent("Prompt_Wakeup_Done");
+            yield return WakeupPromptRoutine();
 
             var standAnimation = skeleton.state.SetAnimation(0, m_playerStandAnimation, false);
             while (standAnimation.IsComplete == false)
@@ -125,5 +127,18 @@ namespace DChild.Gameplay.Narrative
             SetStorePickupSequence(true);
             yield return null;
         }
-    }
+
+        private IEnumerator WakeupPromptRoutine()
+        {
+            hasPressedPrompt = false;
+            m_wakeUpInput.action.performed += OnInputPerformed;
+            while (hasPressedPrompt == false)
+            {
+                yield return null;
+            }
+            m_wakeUpInput.action.performed -= OnInputPerformed;
+            m_wakeUpPrompt.Hide();
+            m_cameraToDisable.enabled = false;
+        }
+    } 
 }

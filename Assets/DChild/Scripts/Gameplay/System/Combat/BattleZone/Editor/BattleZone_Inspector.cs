@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using DChild.Gameplay.Combat.BattleZoneComponents;
-using UnityEditor.Experimental.SceneManagement;
+
 
 namespace DChildEditor.Gameplay.Combat
 {
@@ -13,7 +13,7 @@ namespace DChildEditor.Gameplay.Combat
     {
         private void OnSceneGUI()
         {
-            if (PrefabStageUtility.GetCurrentPrefabStage() == null)
+            if (UnityEditor.SceneManagement.PrefabStageUtility.GetCurrentPrefabStage() == null)
             {
                 var wavesProp = Tree.GetPropertyAtUnityPath("m_waves");
                 var waveEntry = (WaveInfo[])(IList<WaveInfo>)wavesProp.ValueEntry.WeakSmartValue;

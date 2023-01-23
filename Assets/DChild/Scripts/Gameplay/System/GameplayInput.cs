@@ -1,28 +1,31 @@
-﻿using Doozy.Engine;
+﻿using DChild.Temp;
+using Doozy.Runtime.Signals;
 using Sirenix.OdinInspector;
+using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.UI;
 
 namespace DChild.Gameplay.Systems
 {
+
     public class GameplayInput : MonoBehaviour
     {
         [SerializeField]
-        private KeyCode m_pause;
+        private InputSystemUIInputModule m_uiInput;
         [SerializeField]
-        private KeyCode m_storeOpen;
+        private InputActionReference m_storeToggleAction;
+        [SerializeField]
+        private bool m_actionIsCloseStore;
 
         private bool m_enableStoreInput;
         private bool m_inputOverridden;
+        private InputActionReference m_uiMoveInput;
 
-        public void Disable()
+        public void ToggleUINavigationInput(bool On)
         {
-            enabled = false;
-        }
-
-        public void Enable()
-        {
-            enabled = true;
+            //m_uiInput.move = On ? m_uiMoveInput : null;
         }
 
         public void OverrideNewInfoNotif(float duration)
@@ -43,36 +46,43 @@ namespace DChild.Gameplay.Systems
             m_inputOverridden = false;
         }
 
-        private void Awake()
+        public void SetStoreToggleAction(bool closeStoreOnAction)
         {
-            m_enableStoreInput = true;
+            m_actionIsCloseStore = closeStoreOnAction;
         }
 
-        private void Update()
+        private void OnOpenStoreAction(InputAction.CallbackContext obj)
         {
-            if (Input.GetKeyDown(m_pause))
+            if (m_actionIsCloseStore)
             {
-                GameplaySystem.PauseGame();
-                GameplaySystem.gamplayUIHandle.ShowPauseMenu(true);
+                //GameplaySystem.gamplayUIHandle.CloseStorePage();
             }
-            else if (m_enableStoreInput == true)
+            else
             {
-                if (Input.GetKeyDown(m_storeOpen))
+                if (m_inputOverridden)
                 {
-                    if (m_inputOverridden)
-                    {
-                        GameplaySystem.gamplayUIHandle.PromptJournalUpdateNotification();
-                    }
-                    else
-                    {
-                        GameplaySystem.gamplayUIHandle.OpenStorePage();
-                    }
+                    GameplaySystem.gamplayUIHandle.PromptJournalUpdateNotification();
+                }
+                else
+                {
+                    GameplaySystem.gamplayUIHandle.OpenStore();
                 }
             }
         }
 
+
+        private void Awake()
+        {
+            m_storeToggleAction.action.performed += OnOpenStoreAction;
+            m_uiMoveInput = m_uiInput.move;
+
+            //Unity Input 1.4.X has a very weird bug This is a fix as advised by https://forum.unity.com/threads/input-system-1-4-1-released.1306062/
+            InputSystem.settings.SetInternalFeatureFlag("DISABLE_SHORTCUT_SUPPORT", true);
+        }
+
+
 #if UNITY_EDITOR
-        [Button,HideInEditorMode]
+        [Button, HideInEditorMode]
         private void SimulateOverride()
         {
             GameplaySystem.gamplayUIHandle.ShowJournalNotificationPrompt(3);

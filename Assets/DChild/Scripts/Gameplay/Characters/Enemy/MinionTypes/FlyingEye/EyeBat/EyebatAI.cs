@@ -121,6 +121,8 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Reference")]
         private GameObject m_selfCollider;
         [SerializeField, TabGroup("Reference")]
+        private Collider2D m_environmentCollider;
+        [SerializeField, TabGroup("Reference")]
         private Collider2D m_bodycollider;
         [SerializeField, TabGroup("Modules")]
         private TransformTurnHandle m_turnHandle;
@@ -283,6 +285,7 @@ namespace DChild.Gameplay.Characters.Enemies
         //Patience Handler
         private void Patience()
         {
+            enabled = false;
             StopAllCoroutines();
             if (m_executeMoveCoroutine != null)
             {
@@ -291,10 +294,11 @@ namespace DChild.Gameplay.Characters.Enemies
             }
             ResetLaser();
             m_agent.Stop();
-            m_stateHandle.SetState(State.ReturnToPatrol);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_targetInfo.Set(null, null);
             m_isDetecting = false;
+            m_stateHandle.SetState(State.ReturnToPatrol);
+            enabled = true;
         }
 
         public override void ApplyData()
@@ -496,7 +500,7 @@ namespace DChild.Gameplay.Characters.Enemies
             bool inRange = false;
             /*Vector2.Distance(transform.position, target) > m_info.spearMeleeAttack.range*/ //old target in range condition
             var moveSpeed = m_info.move.speed - UnityEngine.Random.Range(0, 3);
-            while (!inRange || TargetBlocked())
+            while (!inRange || TargetBlocked() || m_environmentCollider.IsTouchingLayers(DChildUtility.GetEnvironmentMask()))
             {
 
                 bool xTargetInRange = Mathf.Abs(m_targetInfo.position.x - transform.position.x) < attackRange ? true : false;
@@ -787,11 +791,12 @@ namespace DChild.Gameplay.Characters.Enemies
                     {
                         if (Vector2.Distance(m_startPos, transform.position) > 10f)
                         {
-                            var rb2d = GetComponent<Rigidbody2D>();
+                            //var rb2d = GetComponent<Rigidbody2D>();
                             m_bodycollider.enabled = false;
                             m_agent.Stop();
-                            Vector3 dir = (m_startPos - (Vector2)rb2d.transform.position).normalized;
-                            rb2d.MovePosition(rb2d.transform.position + dir * m_info.move.speed * Time.fixedDeltaTime);
+                            Vector3 dir = (m_startPos - (Vector2)m_rigidbody2D.transform.position).normalized;
+                            Debug.Log("Return to Patrol Direction: " + dir);
+                            m_rigidbody2D.MovePosition(m_rigidbody2D.transform.position + dir * m_info.move.speed * Time.fixedDeltaTime);
                             m_animation.SetAnimation(0, m_info.patrol.animation, true);
                         }
                         else

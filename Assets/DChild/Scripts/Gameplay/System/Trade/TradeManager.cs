@@ -75,7 +75,7 @@ namespace DChild.Gameplay.Trade
             InitializeTradeUI();
         }
 
-        private void InitializeTradeUI()
+        public void InitializeTradeUI()
         {
             m_listUI.Reset();
             m_listUI.SetInventoryReference(m_tradeHandle.currentSeller);

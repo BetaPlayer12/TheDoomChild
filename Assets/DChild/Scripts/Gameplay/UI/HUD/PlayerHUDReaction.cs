@@ -1,7 +1,7 @@
 ﻿using DChild.Gameplay.Characters.Players.Modules;
 using DChild.Gameplay.Characters.Players.State;
 using DChild.Gameplay.Combat;
-using Doozy.Engine.UI;
+using Doozy.Runtime.UIManager.Containers;
 using Holysoft.Event;
 using Sirenix.OdinInspector;
 using System;
@@ -17,7 +17,7 @@ namespace DChild.Gameplay.UI
         [SerializeField]
         private PlayerHUDReactionFX m_fx;
         [SerializeField]
-        private UIView m_screenDamageFX;
+        private UIContainer m_screenDamageFX;
 
         private Characters.Players.Modules.CharacterState m_state;
         private int m_shadowExecutionCount;
@@ -42,7 +42,7 @@ namespace DChild.Gameplay.UI
             m_screenDamageFX.InstantHide();
             m_screenDamageFX.Show();
 
-            while (m_screenDamageFX.IsShowing)
+            while (m_screenDamageFX.isShowing)
             {
                 yield return null;
             }

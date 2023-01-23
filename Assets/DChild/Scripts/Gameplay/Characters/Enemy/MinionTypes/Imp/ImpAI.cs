@@ -201,12 +201,6 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnTurnRequest(object sender, EventActionArgs eventArgs) => m_stateHandle.OverrideState(State.Turning);
 
-        private void CustomTurn()
-        {
-            transform.localScale = new Vector3(-transform.localScale.x, 1, 1);
-            m_character.SetFacing(transform.localScale.x == 1 ? HorizontalDirection.Right : HorizontalDirection.Left);
-        }
-
         public override void SetTarget(IDamageable damageable, Character m_target = null)
         {
             if (damageable != null)
@@ -221,16 +215,6 @@ namespace DChild.Gameplay.Characters.Enemies
                 //var patienceRoutine = PatienceRoutine();
                 //StopCoroutine(patienceRoutine);
             }
-        }
-
-        private bool TargetBlocked()
-        {
-            Vector2 wat = m_character.centerMass.position;
-            RaycastHit2D hit = Physics2D.Raycast(/*m_projectilePoint.position*/wat, m_targetInfo.position - wat, 1000, LayerMask.GetMask("Player") + DChildUtility.GetEnvironmentMask());
-            var eh = hit.transform.gameObject.layer == LayerMask.NameToLayer("Player") ? false : true;
-            Debug.DrawRay(wat, m_targetInfo.position - wat);
-            Debug.Log("Shot is " + eh + " by " + LayerMask.LayerToName(hit.transform.gameObject.layer));
-            return hit.transform.gameObject.layer == LayerMask.NameToLayer("Player") ? false : true;
         }
 
         private void OnTurnDone(object sender, FacingEventArgs eventArgs)
@@ -392,6 +376,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator DetectRoutine()
         {
+            m_hitbox.Disable();
             m_skeletomAnimation.maskInteraction = SpriteMaskInteraction.None;
             m_spriteMask.SetActive(false);
             var reappearAnim = UnityEngine.Random.Range(0, 2) == 0 ? m_info.reappearing1Animation : m_info.reappearing2Animation;

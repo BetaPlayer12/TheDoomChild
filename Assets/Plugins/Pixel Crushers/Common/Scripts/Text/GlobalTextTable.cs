@@ -18,7 +18,7 @@ namespace PixelCrushers
 
         protected static GlobalTextTable s_instance = null;
 
-#if UNITY_2019_3_OR_NEWER
+#if UNITY_2019_3_OR_NEWER && UNITY_EDITOR
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         static void InitStaticVariables()
         {
@@ -28,12 +28,12 @@ namespace PixelCrushers
 
         protected virtual void Awake()
         {
-            s_instance = this;
+            if (s_instance == null) s_instance = this;
         }
 
         protected virtual void OnDestroy()
         {
-            s_instance = null;
+            if (s_instance == this) s_instance = null;
         }
 
         /// <summary>
@@ -65,8 +65,8 @@ namespace PixelCrushers
         /// </summary>
         public static string currentLanguage
         {
-            get { return UILocalizationManager.instance.currentLanguage; }
-            set { UILocalizationManager.instance.currentLanguage = value; }
+            get { return (UILocalizationManager.instance != null) ? UILocalizationManager.instance.currentLanguage : string.Empty; }
+            set { if (UILocalizationManager.instance != null) UILocalizationManager.instance.currentLanguage = value; }
         }
 
         /// <summary>

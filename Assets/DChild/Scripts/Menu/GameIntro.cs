@@ -2,7 +2,8 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Video;
-using Doozy.Engine;
+using DChild.Temp;
+using Doozy.Runtime.Signals;
 
 namespace DChild
 {
@@ -12,6 +13,8 @@ namespace DChild
         private VideoPlayer m_intro;
         [SerializeField]
         private SceneInfo m_mainMenu;
+        [SerializeField]
+        private SignalSender m_stopIntro;
 
         private AsyncOperation m_toMainMenu;
         private bool m_unloadScene;
@@ -44,7 +47,7 @@ namespace DChild
 
         private void OnIntroEnd(VideoPlayer source)
         {
-            GameEventMessage.SendEvent("Stop Intro");
+            m_stopIntro.SendSignal();
         }
 
         private void Update()

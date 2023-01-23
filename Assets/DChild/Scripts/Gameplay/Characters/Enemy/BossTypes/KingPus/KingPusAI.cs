@@ -12,7 +12,7 @@ using System.Collections;
 using System.Collections.Generic;
 using DChild;
 using DChild.Gameplay.Characters.Enemies;
-using Doozy.Engine;
+using DChild.Temp;
 using Spine.Unity.Modules;
 using Spine.Unity.Examples;
 using DChild.Gameplay.Pooling;
@@ -544,7 +544,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private List<string> m_wallGrappleAnimations;
         private List<string> m_wallGrappleExtendAnimations;
         private List<string> m_wallGrappleRetractAnimations;
-        #endregion  
+        #endregion
+        private bool m_isDetecting;
 
         private void ApplyPhaseData(PhaseInfo obj)
         {
@@ -615,8 +616,12 @@ namespace DChild.Gameplay.Characters.Enemies
             if (damageable != null)
             {
                 base.SetTarget(damageable, m_target);
-                m_stateHandle.OverrideState(State.Intro);
-                GameEventMessage.SendEvent("Boss Encounter");
+                if (!m_isDetecting)
+                {
+                    m_isDetecting = true;
+                    m_stateHandle.OverrideState(State.Intro);
+                    GameEventMessage.SendEvent("Boss Encounter");
+                }
             }
         }
 
@@ -1457,6 +1462,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_selfDestructBB.enabled = false;
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.deathSelfDestructAnimation);
             m_animation.SetAnimation(0, m_info.deathAnimation, true);
+            m_isDetecting = false;
             enabled = false;
             yield return null;
         }
@@ -1483,7 +1489,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_animation.DisableRootMotion();
             //m_movement.MoveTowards(Vector2.one * transform.localScale.x, m_targetInfo.position.x > transform.position.x ? m_info.tentaSpearRightCrawl.speed : -m_info.tentaSpearRightCrawl.speed);
-            m_rb2d.AddForce(new Vector2(m_targetInfo.position.x > transform.position.x ? m_info.tentaSpearRightCrawl.speed : -m_info.tentaSpearRightCrawl.speed, transform.position.y), ForceMode2D.Impulse);
+            m_rb2d.AddForce(new Vector2(m_targetInfo.position.x > transform.position.x ? m_info.tentaSpearRightCrawl.speed : -m_info.tentaSpearRightCrawl.speed, m_character.physics.velocity.y), ForceMode2D.Impulse);
         }
 
         private void EventStop()

@@ -253,7 +253,7 @@ namespace PixelCrushers.DialogueSystem.SequencerCommands
         /// </returns>
         protected string GetParameters()
         {
-            return string.Join(",", parameters);
+            return (parameters != null) ? string.Join(",", parameters) : string.Empty;
         }
 
         /// <summary>

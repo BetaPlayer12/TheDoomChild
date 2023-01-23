@@ -12,7 +12,7 @@ using System.Collections;
 using System.Collections.Generic;
 using DChild;
 using DChild.Gameplay.Characters.Enemies;
-using Doozy.Engine;
+using DChild.Temp;
 using Spine.Unity.Modules;
 using Spine.Unity.Examples;
 using DChild.Gameplay.Pooling;
@@ -379,6 +379,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private bool m_canBlockCounter;
         private Collider2D m_currentHurtbox;
         private List<float> m_currentFullCD;
+        private bool m_isDetecting;
 
         private void ApplyPhaseData(PhaseInfo obj)
         {
@@ -456,8 +457,12 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 Debug.Log("UG Ecnountered Player");
                 base.SetTarget(damageable, m_target);
-                m_stateHandle.OverrideState(State.Intro);
-                GameEventMessage.SendEvent("Boss Encounter");
+                if (!m_isDetecting)
+                {
+                    m_isDetecting = true;
+                    m_stateHandle.OverrideState(State.Intro);
+                    GameEventMessage.SendEvent("Boss Encounter");
+                }
             }
         }
 
@@ -516,12 +521,6 @@ namespace DChild.Gameplay.Characters.Enemies
             }
         }
 
-        private void CustomTurn()
-        {
-            transform.localScale = new Vector3(-transform.localScale.x, 1, 1);
-            m_character.SetFacing(transform.localScale.x == 1 ? HorizontalDirection.Right : HorizontalDirection.Left);
-        }
-
         private IEnumerator IntroRoutine()
         {
             m_stateHandle.Wait(State.Chasing);
@@ -574,6 +573,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator ChangePhaseRoutine()
         {
             //m_stateHandle.Wait(State.ReevaluateSituation);
+            enabled = false;
             m_hitbox.Disable();
             m_trailFX.Stop();
             m_animation.EnableRootMotion(true, false);
@@ -601,6 +601,7 @@ namespace DChild.Gameplay.Characters.Enemies
             }
             m_stateHandle.OverrideState(State.Attacking);
             yield return null;
+            enabled = true;
         }
         #region Attacks
 
@@ -920,6 +921,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_info.defeatStartAnimation, false).MixDuration = 0;
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.moveFastAnticipationAnimation);
             m_animation.SetAnimation(0, m_info.defeatLoopAnimation, true);
+            m_isDetecting = false;
             enabled = false;
             yield return null;
         }

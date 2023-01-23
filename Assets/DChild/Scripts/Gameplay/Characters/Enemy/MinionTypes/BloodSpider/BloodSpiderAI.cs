@@ -93,6 +93,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private enum State
         {
             Patrol,
+            Idle,
             Detect,
             Turning,
             Attacking,
@@ -140,6 +141,8 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_edgeSensor;
 
+        [SerializeField]
+        private bool m_willPatrol = true;
         [SerializeField, TabGroup("FX")]
         private ParticleSystem m_muzzleFX;
         
@@ -175,6 +178,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private float m_currentTimeScale;
         private Vector2 m_targetLastPos;
         private Vector2 m_startPoint;
+        private Coroutine m_randomTurnRoutine;
 
         protected override void Start()
         {
@@ -182,8 +186,12 @@ namespace DChild.Gameplay.Characters.Enemies
             m_currentTimeScale = UnityEngine.Random.Range(1.0f, 2.0f);
             m_currentFullCD = UnityEngine.Random.Range(m_info.attackCD * .5f, m_info.attackCD * 2f);
 
-            //m_spineEventListener.Subscribe(m_info.spitAttackEvent, SpitProjectile);
-            m_spineEventListener.Subscribe(m_info.projectile.launchOnEvent, SpitProjectile);
+            
+            m_randomTurnRoutine = StartCoroutine(RandomTurnRoutine());
+            if (m_willPatrol)
+            {
+                StopCoroutine(m_randomTurnRoutine);
+            }
             m_startPoint = transform.position;
         }
 
@@ -312,7 +320,7 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 StopAllCoroutines();
                 m_selfCollider.enabled = false;
-                m_targetInfo.Set(null, null);
+               // m_targetInfo.Set(null, null);
                 m_flinchHandle.m_autoFlinch = true;
                 m_isDetecting = false;
                 m_enablePatience = false;
@@ -344,16 +352,37 @@ namespace DChild.Gameplay.Characters.Enemies
             m_stateHandle.ApplyQueuedState();
             yield return null;
         }
+        private IEnumerator RandomTurnRoutine()
+        {
+            while (true)
+            {
+                var timer = UnityEngine.Random.Range(5, 10);
+                var currentTimer = 0f;
+                while (currentTimer < timer)
+                {
+                    currentTimer += Time.deltaTime;
+                    yield return null;
+                }
+                m_turnState = State.Idle;
+                if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
+                    m_stateHandle.SetState(State.Turning);
+                yield return null;
+            }
+        }
 
         private IEnumerator ProjectileRoutine()
         {
             m_movement.Stop();
             m_targetLastPos = m_targetInfo.transform.GetComponent<Character>().centerMass.position;
-            m_animation.SetAnimation(0, m_info.spitAttack.animation, false).MixDuration = 0;
+            m_animation.SetAnimation(0, m_info.spitAttack.animation, false).MixDuration = 0;           
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.spitAttack.animation);
+            SpitProjectile();
+            m_animation.EnableRootMotion(true, false);
+            m_animation.SetAnimation(0, m_info.move.animation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.move.animation);
+            m_animation.EnableRootMotion(false, false);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_flinchHandle.m_autoFlinch = true;
-            yield return new WaitForSeconds(2f);
             m_stateHandle.ApplyQueuedState();
             yield return null;
         }
@@ -414,7 +443,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_deathHandle.SetAnimation(m_info.deathAnimation);
             m_flinchHandle.FlinchStart += OnFlinchStart;
             m_flinchHandle.FlinchEnd += OnFlinchEnd;
-            m_stateHandle = new StateHandle<State>(State.Patrol, State.WaitBehaviourEnd);
+            m_stateHandle = new StateHandle<State>(m_willPatrol ? State.Patrol : State.Idle, State.WaitBehaviourEnd);
             m_attackDecider = new RandomAttackDecider<Attack>();
             //m_projectileLauncher = new ProjectileLauncher(m_info.projectile.projectileInfo, m_throwPoint);
             UpdateAttackDeciderList();
@@ -429,6 +458,7 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 case State.Detect:
                     m_movement.Stop();
+                    StopCoroutine(m_randomTurnRoutine);
                     if (IsFacingTarget())
                     {
                         m_stateHandle.Wait(State.ReevaluateSituation);
@@ -441,6 +471,14 @@ namespace DChild.Gameplay.Characters.Enemies
                         if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
                             m_stateHandle.SetState(State.Turning);
                     }
+                    break;
+                case State.Idle:
+                    if (m_animation.GetCurrentAnimation(0).ToString() != m_info.idleAnimation)
+                    {
+                        m_movement.Stop();
+                        m_animation.EnableRootMotion(true, true);
+                    }
+                    m_animation.SetAnimation(0, m_info.idleAnimation, true);
                     break;
                 case State.Patrol:
                     if (!m_wallSensor.isDetecting && m_groundSensor.isDetecting)
@@ -533,7 +571,7 @@ namespace DChild.Gameplay.Characters.Enemies
                                 {
                                     m_animation.EnableRootMotion(true, false);
                                     m_selfCollider.enabled = false;
-                                    m_animation.SetAnimation(0, m_info.move.animation, true).TimeScale = m_currentTimeScale;
+                                    m_animation.SetAnimation(0, m_info.patrol.animation, true).TimeScale = m_currentTimeScale;
                                 }
                                 else
                                 {

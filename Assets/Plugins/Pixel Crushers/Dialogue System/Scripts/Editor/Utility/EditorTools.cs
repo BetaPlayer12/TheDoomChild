@@ -6,11 +6,15 @@ using UnityEngine;
 namespace PixelCrushers.DialogueSystem
 {
 
+    /// <summary>
+    /// Utility functions used by the Dialogue System's custom editors.
+    /// </summary>
     public static class EditorTools
     {
 
         public static DialogueDatabase selectedDatabase = null;
 
+        private static GUIStyle m_textAreaGuiStyle = null;
         public static GUIStyle textAreaGuiStyle
         {
             get
@@ -26,7 +30,65 @@ namespace PixelCrushers.DialogueSystem
             }
         }
 
-        private static GUIStyle m_textAreaGuiStyle = null;
+        private static GUIStyle m_dropDownGuiStyle = null;
+        public static GUIStyle dropDownGuiStyle
+        {
+            get
+            {
+                if (m_dropDownGuiStyle == null)
+                {
+                    m_dropDownGuiStyle = GUI.skin.GetStyle("DropDown");
+                    if (m_dropDownGuiStyle == null) m_dropDownGuiStyle = GUI.skin.label;
+                }
+                return m_dropDownGuiStyle;
+            }
+        }
+        public static float GetPopupWidth(GUIContent guiContent)
+        {
+            var size = dropDownGuiStyle.CalcSize(guiContent);
+            return (dropDownGuiStyle == GUI.skin.label) ? (size.x + 16) : size.x;
+        }
+        public static float GetPopupWidth(string text)
+        {
+            return GetPopupWidth(new GUIContent(text));
+        }
+        public static GUILayoutOption GUILayoutPopupWidth(object obj)
+        {            
+            return GUILayout.Width(GetPopupWidth(new GUIContent(obj.ToString())));
+        }
+
+
+        public static GUILayoutOption GUILayoutStyleWidth(GUIStyle style, GUIContent guiContent)
+        {
+            if (style == null) return GUILayout.Width(60);
+            var size = style.CalcSize(guiContent);
+            return GUILayout.Width(size.x);
+        }
+        public static GUILayoutOption GUILayoutStyleWidth(GUIStyle style, string s)
+        {
+            return GUILayoutStyleWidth(style, new GUIContent(s));
+        }
+
+        public static GUILayoutOption GUILayoutLabelWidth(string s)
+        {
+            return GUILayoutStyleWidth(GUI.skin.label, s);
+        }
+        public static GUILayoutOption GUILayoutButtonWidth(GUIContent guiContent)
+        {
+            return GUILayoutStyleWidth(GUI.skin.button, guiContent);
+        }
+        public static GUILayoutOption GUILayoutButtonWidth(string s)
+        {
+            return GUILayoutButtonWidth(new GUIContent(s));
+        }
+        public static GUILayoutOption GUILayoutToggleWidth(GUIContent guiContent)
+        {
+            return GUILayoutStyleWidth(GUI.skin.toggle, guiContent);
+        }
+        public static GUILayoutOption GUILayoutToggleWidth(string s)
+        {
+            return GUILayoutStyleWidth(GUI.skin.toggle, new GUIContent(s));
+        }
 
         public static DialogueDatabase FindInitialDatabase()
         {
@@ -97,11 +159,19 @@ namespace PixelCrushers.DialogueSystem
         //};
 
         // Node style colors:
+#if UNITY_2019_3_OR_NEWER // Use lighter colors for Pro in 2019.3+:
+        public static Color NodeColor_Orange_Dark = new Color(1f, 0.5f, 0);
+        public static Color NodeColor_Gray_Dark = new Color(0.9f, 0.9f, 0.9f);
+        public static Color NodeColor_Blue_Dark = new Color(0.4f, 0.6f, 1f);
+        public static Color NodeColor_Green_Dark = new Color(0, 1f, 0);
+        public static Color NodeColor_Red_Dark = new Color(1f, 0.1f, 0.1f);
+#else
         public static Color NodeColor_Orange_Dark = new Color(0.875f, 0.475f, 0);
         public static Color NodeColor_Gray_Dark = new Color(0.33f, 0.33f, 0.33f);
         public static Color NodeColor_Blue_Dark = new Color(0.22f, 0.38f, 0.64f);
         public static Color NodeColor_Green_Dark = new Color(0, 0.6f, 0);
         public static Color NodeColor_Red_Dark = new Color(0.7f, 0.1f, 0.1f);
+#endif
 
         public static Color NodeColor_Orange_Light = new Color(1f, 0.7f, 0.4f);
         public static Color NodeColor_Gray_Light = new Color(0.7f, 0.7f, 0.7f);
@@ -135,6 +205,20 @@ namespace PixelCrushers.DialogueSystem
             Debug.Log("Recompiled scripts with updated options. If options are not working, please right-click on the Dialogue System's Scripts and Wrappers folders and select Reimport.");
             AssetDatabase.ImportAsset("Assets/Plugins/Pixel Crushers/Dialogue System/Scripts");
             AssetDatabase.ImportAsset("Assets/Plugins/Pixel Crushers/Dialogue System/Wrappers");
+        }
+
+        public static string GetAssetName(Asset asset)
+        {
+            if (asset == null) return string.Empty;
+            return (asset is Conversation) ? (asset as Conversation).Title : asset.Name;
+        }
+
+        public static bool IsAssetInFilter(Asset asset, string filter)
+        {
+
+            if (asset == null || string.IsNullOrEmpty(filter)) return true;
+            var assetName = asset.Name;
+            return string.IsNullOrEmpty(assetName) ? false : (assetName.IndexOf(filter, System.StringComparison.OrdinalIgnoreCase) >= 0);
         }
 
     }

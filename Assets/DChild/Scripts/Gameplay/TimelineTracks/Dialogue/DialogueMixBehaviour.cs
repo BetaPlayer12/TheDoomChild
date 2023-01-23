@@ -7,7 +7,7 @@
 
 using DChild.UI;
 using DChildDebug.Cutscene;
-using Doozy.Engine;
+using DChild.Temp;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -155,7 +155,8 @@ namespace PixelCrushers.DialogueSystem
         {
             base.OnGraphStart(playable);
             m_director = (playable.GetGraph().GetResolver() as PlayableDirector);
-            Message.AddListener<GameEventMessage>(OnContinueDiag);
+            //Message.AddListener<GameEventMessage>(OnContinueDiag);
+            GameEventMessage.Send();
             m_played.Clear();
             m_behaviours.Clear();
             DChildStandardDialogueUI.isInCutscene = true;
@@ -167,7 +168,8 @@ namespace PixelCrushers.DialogueSystem
         public override void OnGraphStop(Playable playable)
         {
             base.OnGraphStop(playable);
-            Message.RemoveListener<GameEventMessage>(OnContinueDiag);
+            //Message.RemoveListener<GameEventMessage>(OnContinueDiag);
+            GameEventMessage.Send();
             m_played.Clear();
             m_behaviours.Clear();
             DChildStandardDialogueUI.isInCutscene = false;

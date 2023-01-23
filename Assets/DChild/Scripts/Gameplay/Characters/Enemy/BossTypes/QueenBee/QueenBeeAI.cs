@@ -12,7 +12,7 @@ using System.Collections;
 using System.Collections.Generic;
 using DChild;
 using DChild.Gameplay.Characters.Enemies;
-using Doozy.Engine;
+using DChild.Temp;
 using Spine.Unity.Modules;
 
 namespace DChild.Gameplay.Characters.Enemies
@@ -345,6 +345,7 @@ namespace DChild.Gameplay.Characters.Enemies
         //private float m_currentDroneSummonSpeed;
         float m_currentRecoverTime;
         bool m_isFinalPhase;
+        private bool m_isDetecting;
 
         private void ApplyPhaseData(PhaseInfo obj)
         {
@@ -406,9 +407,13 @@ namespace DChild.Gameplay.Characters.Enemies
             if (damageable != null)
             {
                 base.SetTarget(damageable, m_target);
-                m_stateHandle.OverrideState(State.Intro);
-                //m_stateHandle.OverrideState(State.ReevaluateSituation);
-                GameEventMessage.SendEvent("Boss Encounter");
+                if (!m_isDetecting)
+                {
+                    m_isDetecting = true;
+                    m_stateHandle.OverrideState(State.Intro);
+                    //m_stateHandle.OverrideState(State.ReevaluateSituation);
+                    GameEventMessage.SendEvent("Boss Encounter");
+                }
             }
         }
 
@@ -843,6 +848,7 @@ namespace DChild.Gameplay.Characters.Enemies
             base.OnDestroyed(sender, eventArgs);
             m_colliderDamageGO.SetActive(false);
             m_agent.Stop();
+            m_isDetecting = false;
         }
 
         private void LaunchBeeProjectile()

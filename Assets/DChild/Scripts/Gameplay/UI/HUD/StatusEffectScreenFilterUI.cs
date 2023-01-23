@@ -1,4 +1,5 @@
-﻿using Sirenix.OdinInspector;
+﻿using Doozy.Runtime.UIManager.Containers;
+using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,17 +10,13 @@ namespace DChild.Gameplay.Combat.StatusAilment.UI
     public class StatusEffectScreenFilterUI : SerializedMonoBehaviour
     {
         [SerializeField]
+        private UIContainer m_container;
+        [SerializeField]
         private Image m_filter;
-        [SerializeField, MinValue(0)]
-        private float m_fadeInDuration;
-        [SerializeField, MinValue(0)]
-        private float m_fadeOutDuration;
         [SerializeField]
         private Dictionary<StatusEffectType, Material> m_filterPair;
 
         private StatusEffectType m_currentFilter = StatusEffectType._COUNT;
-        private bool m_isFilterShown;
-        private float m_currentFilterFadeLerp = 0;
 
         public void ShowFilter(StatusEffectType type)
         {
@@ -29,23 +26,7 @@ namespace DChild.Gameplay.Combat.StatusAilment.UI
                 m_filter.material = material;
                 m_currentFilter = type;
 
-                if (m_isFilterShown == false)
-                {
-                    if (m_currentFilterFadeLerp > 0)
-                    {
-                        m_currentFilterFadeLerp = Mathf.Abs(m_currentFilterFadeLerp - 1);
-                    }
-
-                    StopAllCoroutines();
-                    m_currentFilterFadeLerp = 0;
-                    StartCoroutine(FadeRoutine(0, 1, m_fadeInDuration));
-                    m_isFilterShown = true;
-                }
-                else
-                {
-                    var fadeValue = Mathf.Lerp(0, 1, m_currentFilterFadeLerp);
-                    SetFadeValue(m_filter, fadeValue);
-                }
+                m_container.Show();
             }
         }
 
@@ -56,36 +37,8 @@ namespace DChild.Gameplay.Combat.StatusAilment.UI
                 //m_filter.enabled = false;
                 //m_filter.material = null;
 
-                if (m_isFilterShown)
-                {
-                    if (m_currentFilterFadeLerp > 0)
-                    {
-                        m_currentFilterFadeLerp = Mathf.Abs(m_currentFilterFadeLerp - 1);
-                    }
-
-                    StopAllCoroutines();
-                    m_currentFilterFadeLerp = 0;
-                    StartCoroutine(FadeRoutine(1, 0, m_fadeOutDuration));
-                    m_isFilterShown = false;
-                }
+                m_container.Hide();
             }
-        }
-
-        private IEnumerator FadeRoutine(float from, float to, float duration)
-        {
-            var speed = Mathf.Abs(to - from) / duration;
-            var fadeValue = Mathf.Lerp(from, to, m_currentFilterFadeLerp);
-            SetFadeValue(m_filter, fadeValue);
-            yield return null;
-            do
-            {
-                m_currentFilterFadeLerp += speed * Time.deltaTime;
-                fadeValue = Mathf.Lerp(from, to, m_currentFilterFadeLerp);
-                SetFadeValue(m_filter, fadeValue);
-                yield return null;
-            } while (m_currentFilterFadeLerp < 1);
-
-            m_filter.enabled = to == 1;
         }
 
         private void SetFadeValue(Image image, float value)

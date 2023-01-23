@@ -1,7 +1,8 @@
 // Copyright (c) Pixel Crushers. All rights reserved.
 
-using UnityEngine;
 using System;
+using System.Collections;
+using UnityEngine;
 
 namespace PixelCrushers.DialogueSystem
 {
@@ -17,6 +18,12 @@ namespace PixelCrushers.DialogueSystem
 
         [Tooltip("Main panel for conversation UI (optional).")]
         public UIPanel mainPanel;
+
+        [Tooltip("Never deactivate Main Panel. Will still play show & hide animations if specified.")]
+        public bool dontDeactivateMainPanel = false;
+
+        [Tooltip("When starting conversation, wait until main panel is open before showing subtitle or menu.")]
+        public bool waitForMainPanelOpen = false;
 
         public StandardUISubtitlePanel[] subtitlePanels;
 
@@ -34,8 +41,11 @@ namespace PixelCrushers.DialogueSystem
         [Tooltip("Default panel for response menus.")]
         public StandardUIMenuPanel defaultMenuPanel;
 
-        [Tooltip("When showing response menu, use portrait info of player actor assigned to first response.")]
+        [Tooltip("When showing response menu, use portrait info of player actor assigned to first response. Also use that actor's menu panel if using multiple menu panels.")]
         public bool useFirstResponseForMenuPortrait;
+
+        [Tooltip("When closing, wait for all subtitle panels and menu panels to close.")]
+        public bool waitForClose = true;
 
         #endregion
 
@@ -50,6 +60,7 @@ namespace PixelCrushers.DialogueSystem
         public override AbstractUIResponseMenuControls responseMenuControls { get { return m_standardMenuControls; } }
 
         private bool m_initializedAnimator = false;
+        private Coroutine closeCoroutine = null;
 
         #endregion
 
@@ -72,6 +83,11 @@ namespace PixelCrushers.DialogueSystem
 
         public override void ShowPanel()
         {
+            if (closeCoroutine != null)
+            {
+                if (mainPanel != null) mainPanel.StopCoroutine(closeCoroutine);
+                closeCoroutine = null;
+            }
             m_initializedAnimator = true;
             if (mainPanel != null) mainPanel.Open();
             standardSubtitleControls.ApplyQueuedActorPanelCache();
@@ -88,15 +104,54 @@ namespace PixelCrushers.DialogueSystem
             {
                 standardSubtitleControls.Close();
                 standardMenuControls.Close();
-                if (mainPanel != null) mainPanel.Close();
+                if (mainPanel != null && !dontDeactivateMainPanel)
+                {
+                    if (waitForClose)
+                    {
+                        closeCoroutine = mainPanel.StartCoroutine(CloseAfterPanelsAreClosed());
+                    }
+                    else
+                    {
+                        mainPanel.Close();
+                    }
+                }
             }
+        }
+
+        public void ClosePanels()
+        {
+            standardSubtitleControls.Close();
+            standardMenuControls.Close();
+        }
+
+        private IEnumerator CloseAfterPanelsAreClosed()
+        {
+            while (AreAnyPanelsClosing(null))
+            {
+                yield return null;
+            }
+            mainPanel.Close();
+        }
+
+        // extraSubtitlePanel may be a custom (e.g., bubble) panel that isn't part of the dialogue UI's regular list.
+        public bool AreAnyPanelsClosing(StandardUISubtitlePanel extraSubtitlePanel = null)
+        {
+            if (extraSubtitlePanel != null && extraSubtitlePanel.panelState == UIPanel.PanelState.Closing) return true;
+            if (standardSubtitleControls.AreAnyPanelsClosing()) return true;
+            if (standardMenuControls.AreAnyPanelsClosing()) return true;
+            if (mainPanel != null && mainPanel.panelState == UIPanel.PanelState.Closing) return true;
+            return false;
         }
 
         public void HideImmediate()
         {
             HideSubtitlePanelsImmediate();
             HideMenuPanelsImmediate();
-            if (mainPanel != null) { mainPanel.gameObject.SetActive(false); mainPanel.panelState = UIPanel.PanelState.Closed; }
+            if (mainPanel != null && !dontDeactivateMainPanel)
+            {
+                mainPanel.gameObject.SetActive(false);
+                mainPanel.panelState = UIPanel.PanelState.Closed;
+            }
         }
 
         private void HideSubtitlePanelsImmediate()
@@ -117,9 +172,28 @@ namespace PixelCrushers.DialogueSystem
             }
         }
 
-        public void OpenSubtitlePanelsOnStart()
+        public void OpenSubtitlePanelsOnStart(StandardDialogueUI ui)
         {
-            if (allowOpenSubtitlePanelsOnStartConversation) standardSubtitleControls.OpenSubtitlePanelsOnStartConversation();
+            if (allowOpenSubtitlePanelsOnStartConversation) standardSubtitleControls.OpenSubtitlePanelsOnStartConversation(ui);
+        }
+
+        public void ClearCaches()
+        {
+            standardSubtitleControls.ClearCache();
+            standardMenuControls.ClearCache();
+        }
+
+        public virtual void ClearAllSubtitleText()
+        {
+            // Clear all built-in panels:
+            for (int i = 0; i < subtitlePanels.Length; i++)
+            {
+                if (subtitlePanels[i] == null) continue;
+                subtitlePanels[i].ClearText();
+            }
+
+            // Clear any custom panels:
+            standardSubtitleControls.ClearSubtitlesOnCustomPanels();
         }
 
         #endregion
