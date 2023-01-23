@@ -356,9 +356,11 @@ namespace DChild.Gameplay.Characters.Enemies
         private Coroutine m_currentAttackCoroutine;
         #endregion
 
+        [SerializeField]
         private bool m_areMonolithsSpawned = false;
         private bool m_areTentacleWallsPresent = false;
         private bool m_isBlackBloodFloodPresent = false;
+        [SerializeField]
         private bool m_areObstaclesPresent = false;
 
         public event EventAction<EventActionArgs> AttackDone;
@@ -431,10 +433,9 @@ namespace DChild.Gameplay.Characters.Enemies
             switch (m_phaseHandle.currentPhase)
             {
                 case Phase.PhaseOne:
-                    Debug.Log("Obstacles Present: " + m_areObstaclesPresent);
+                    Debug.Log("Current Phase: " + m_phaseHandle.currentPhase);
                     if (m_areObstaclesPresent)
                     {
-                        Debug.Log("Monoliths Present: " + m_areMonolithsSpawned + "\nBlack Blood Flood Present: " + m_isBlackBloodFloodPresent);
                         if (m_areMonolithsSpawned)
                         {
                             m_attackDecider.DecideOnAttack(Attack.Phase1Pattern1, Attack.Phase1Pattern3, Attack.Phase1Pattern6);
@@ -454,6 +455,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     }
                     break;
                 case Phase.PhaseTwo:
+                    Debug.Log("Current Phase: " + m_phaseHandle.currentPhase);
                     if (m_areObstaclesPresent)
                     {
                         if (m_areMonolithsSpawned)
@@ -471,10 +473,12 @@ namespace DChild.Gameplay.Characters.Enemies
                     }
                     else
                     {
+                        Debug.Log("Deciding on Phase 2 attacks");
                         m_attackDecider.DecideOnAttack(Attack.Phase2Pattern1, Attack.Phase2Pattern2, Attack.Phase2Pattern3, Attack.Phase2Pattern4, Attack.Phase2Pattern5, Attack.Phase2Pattern6, Attack.Phase2Pattern7);
                     }
                     break;
                 case Phase.PhaseThree:
+                    Debug.Log("Current Phase: " + m_phaseHandle.currentPhase);
                     if (m_areObstaclesPresent)
                     {
                         if (m_areMonolithsSpawned)
@@ -496,6 +500,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     }
                     break;
                 case Phase.PhaseFour:
+                    Debug.Log("Current Phase: " + m_phaseHandle.currentPhase);
                     if (m_areObstaclesPresent)
                     {
                         if (m_areMonolithsSpawned)
@@ -517,6 +522,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     }
                     break;
                 case Phase.PhaseFive:
+                    Debug.Log("Current Phase: " + m_phaseHandle.currentPhase);
                     if (m_areObstaclesPresent)
                     {
                         if (m_areMonolithsSpawned)
@@ -701,7 +707,7 @@ namespace DChild.Gameplay.Characters.Enemies
             ObstaclesAdded += OnObstaclesAdded;
             ObstaclesCleared += OnObstaclesEmptied;
             m_obstacleChecker.ObstacleAdded += OnObstaclesAdded;
-            m_obstacleChecker.ObstaclesCleared += ObstaclesCleared;
+            m_obstacleChecker.ObstaclesCleared += OnObstaclesEmptied;
             m_obstacleChecker.MonolithAdded += OnMonolithAdded;
             m_obstacleChecker.MonolithEmptied += OnMonolithEmptied;
 
@@ -781,6 +787,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_attackDecider.hasDecidedOnAttack = false;
             m_currentAttackCoroutine = null;
             m_stateHandle.OverrideState(State.ReevaluateSituation);
+            Debug.Log("Attack Done");
         }
 
         public override void SetTarget(IDamageable damageable, Character m_target = null)
