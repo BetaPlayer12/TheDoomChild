@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Holysoft.Event;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -17,7 +18,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private float m_floodDuration;
         private float m_floodDurationValue;
 
-
+        public event EventAction<EventActionArgs> FloodStarted;
+        public event EventAction<EventActionArgs> FloodDone;
         private void Start()
         {
             m_originalPosition = transform.position;
@@ -33,17 +35,24 @@ namespace DChild.Gameplay.Characters.Enemies
                 transform.position = Vector2.MoveTowards(transform.position, m_floodHeight.position, m_floodSpeed);
 
                 if (m_floodDuration < 0)
-                {
-                    transform.position = Vector2.MoveTowards(transform.position, m_originalPosition, m_floodSpeed);
+                {  
                     isFlooding = false;
+                    FloodDone?.Invoke(this, EventActionArgs.Empty);
                     m_floodDuration = m_floodDurationValue;
                 }
             }
-
+            if(transform.position != new Vector3(m_originalPosition.x, m_originalPosition.y, 0) && !isFlooding)
+            {
+                transform.position = Vector2.MoveTowards(transform.position, m_originalPosition, m_floodSpeed);
+            }
 
         }
 
-
+        public void StartFlooding()
+        {
+            isFlooding = true;
+            FloodStarted?.Invoke(this, EventActionArgs.Empty);
+        }
     }
 
 }

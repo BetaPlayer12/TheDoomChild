@@ -16,6 +16,7 @@ using Spine.Unity.Examples;
 using DChild.Gameplay.Pooling;
 using UnityEngine.Playables;
 using DChild.Temp;
+using System;
 
 namespace DChild.Gameplay.Characters.Enemies
 {
@@ -54,6 +55,9 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField, BoxGroup("Phase 1")]
             private float m_phase1Pattern5Range;
             public float phase1Pattern5Range => m_phase1Pattern5Range;
+            [SerializeField, BoxGroup("Phase 1")]
+            private float m_phase1Pattern6Range;
+            public float phase1Pattern6Range => m_phase1Pattern6Range;
             [SerializeField, BoxGroup("Phase 2")]
             private float m_phase2Pattern1Range;
             public float phase2Pattern1Range => m_phase2Pattern1Range;
@@ -72,6 +76,9 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField, BoxGroup("Phase 2")]
             private float m_phase2Pattern6Range;
             public float phase2Pattern6Range => m_phase2Pattern6Range;
+            [SerializeField, BoxGroup("Phase 2")]
+            private float m_phase2Pattern7Range;
+            public float phase2Pattern7Range => m_phase2Pattern7Range;
             [SerializeField, BoxGroup("Phase 3")]
             private float m_phase3Pattern1Range;
             public float phase3Pattern1Range => m_phase3Pattern1Range;
@@ -117,6 +124,15 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField, BoxGroup("Phase 4")]
             private float m_phase4Pattern8Range;
             public float phase4Pattern8Range => m_phase4Pattern8Range;
+            [SerializeField, BoxGroup("Phase 4")]
+            private float m_phase4Pattern9Range;
+            public float phase4Pattern9Range => m_phase4Pattern9Range;
+            [SerializeField, BoxGroup("Phase 4")]
+            private float m_phase4Pattern10Range;
+            public float phase4Pattern10Range => m_phase4Pattern10Range;
+            [SerializeField, BoxGroup("Phase 4")]
+            private float m_phase4Pattern11Range;
+            public float phase4Pattern11Range => m_phase4Pattern11Range;
             [SerializeField, BoxGroup("Phase 5")]
             private float m_phase5Pattern1Range;
             public float phase5Pattern1Range => m_phase5Pattern1Range;
@@ -141,6 +157,15 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField, BoxGroup("Phase 5")]
             private float m_phase5Pattern8Range;
             public float phase5Pattern8Range => m_phase5Pattern8Range;
+            [SerializeField, BoxGroup("Phase 5")]
+            private float m_phase5Pattern9Range;
+            public float phase5Pattern9Range => m_phase5Pattern9Range;
+            [SerializeField, BoxGroup("Phase 5")]
+            private float m_phase5Pattern10Range;
+            public float phase5Pattern10Range => m_phase5Pattern10Range;
+            [SerializeField, BoxGroup("Phase 5")]
+            private float m_phase5Pattern11Range;
+            public float phase5Pattern11Range => m_phase5Pattern11Range;
 
             [TitleGroup("Attack Pattern Cooldown States")]
             [SerializeField, MinValue(0)]
@@ -213,8 +238,6 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 
             }
-
-
         }
 
         [System.Serializable]
@@ -247,12 +270,14 @@ namespace DChild.Gameplay.Characters.Enemies
             Phase1Pattern3,
             Phase1Pattern4,
             Phase1Pattern5,
+            Phase1Pattern6,
             Phase2Pattern1,
             Phase2Pattern2,
             Phase2Pattern3,
             Phase2Pattern4,
             Phase2Pattern5,
             Phase2Pattern6,
+            Phase2Pattern7,
             Phase3Pattern1,
             Phase3Pattern2,
             Phase3Pattern3,
@@ -268,6 +293,9 @@ namespace DChild.Gameplay.Characters.Enemies
             Phase4Pattern6,
             Phase4Pattern7,
             Phase4Pattern8,
+            Phase4Pattern9,
+            Phase4Pattern10,
+            Phase4Pattern11,
             Phase5Pattern1,
             Phase5Pattern2,
             Phase5Pattern3,
@@ -276,6 +304,9 @@ namespace DChild.Gameplay.Characters.Enemies
             Phase5Pattern6,
             Phase5Pattern7,
             Phase5Pattern8,
+            Phase5Pattern9,
+            Phase5Pattern10,
+            Phase5Pattern11,
             WaitAttackEnd,
         }
 
@@ -295,6 +326,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private Hitbox m_hitbox;
         [SerializeField, TabGroup("Reference")]
         private GameObject m_model;
+        [SerializeField, TabGroup("Reference")]
+        private ObstacleChecker m_obstacleChecker;
         [SerializeField]
         private SpineEventListener m_spineListener;
 
@@ -323,6 +356,15 @@ namespace DChild.Gameplay.Characters.Enemies
         private Coroutine m_currentAttackCoroutine;
         #endregion
 
+        private bool m_areMonolithsSpawned = false;
+        private bool m_areTentacleWallsPresent = false;
+        private bool m_isBlackBloodFloodPresent = false;
+        private bool m_areObstaclesPresent = false;
+
+        public event EventAction<EventActionArgs> AttackDone;
+        public event EventAction<EventActionArgs> ObstaclesAdded;
+        public event EventAction<EventActionArgs> ObstaclesCleared;
+
         private void UpdateAttackDeciderList()
         {
             m_attackDecider.SetList(new AttackInfo<Attack>(Attack.Phase1Pattern1, m_info.phase1Pattern1Range)
@@ -330,12 +372,14 @@ namespace DChild.Gameplay.Characters.Enemies
                                     , new AttackInfo<Attack>(Attack.Phase1Pattern3, m_info.phase1Pattern3Range)
                                     , new AttackInfo<Attack>(Attack.Phase1Pattern4, m_info.phase1Pattern4Range)
                                     , new AttackInfo<Attack>(Attack.Phase1Pattern5, m_info.phase1Pattern5Range)
+                                    , new AttackInfo<Attack>(Attack.Phase1Pattern6, m_info.phase1Pattern6Range)
                                     , new AttackInfo<Attack>(Attack.Phase2Pattern1, m_info.phase2Pattern1Range)
                                     , new AttackInfo<Attack>(Attack.Phase2Pattern2, m_info.phase2Pattern2Range)
                                     , new AttackInfo<Attack>(Attack.Phase2Pattern3, m_info.phase2Pattern3Range)
                                     , new AttackInfo<Attack>(Attack.Phase2Pattern4, m_info.phase2Pattern4Range)
                                     , new AttackInfo<Attack>(Attack.Phase2Pattern5, m_info.phase2Pattern5Range)
                                     , new AttackInfo<Attack>(Attack.Phase2Pattern6, m_info.phase2Pattern6Range)
+                                    , new AttackInfo<Attack>(Attack.Phase2Pattern7, m_info.phase2Pattern7Range)
                                     , new AttackInfo<Attack>(Attack.Phase3Pattern1, m_info.phase3Pattern1Range)
                                     , new AttackInfo<Attack>(Attack.Phase3Pattern2, m_info.phase3Pattern2Range)
                                     , new AttackInfo<Attack>(Attack.Phase3Pattern3, m_info.phase3Pattern3Range)
@@ -351,6 +395,9 @@ namespace DChild.Gameplay.Characters.Enemies
                                     , new AttackInfo<Attack>(Attack.Phase4Pattern6, m_info.phase4Pattern6Range)
                                     , new AttackInfo<Attack>(Attack.Phase4Pattern7, m_info.phase4Pattern7Range)
                                     , new AttackInfo<Attack>(Attack.Phase4Pattern8, m_info.phase4Pattern8Range)
+                                    , new AttackInfo<Attack>(Attack.Phase4Pattern9, m_info.phase4Pattern9Range)
+                                    , new AttackInfo<Attack>(Attack.Phase4Pattern10, m_info.phase4Pattern10Range)
+                                    , new AttackInfo<Attack>(Attack.Phase4Pattern11, m_info.phase4Pattern11Range)
                                     , new AttackInfo<Attack>(Attack.Phase5Pattern1, m_info.phase5Pattern1Range)
                                     , new AttackInfo<Attack>(Attack.Phase5Pattern2, m_info.phase5Pattern2Range)
                                     , new AttackInfo<Attack>(Attack.Phase5Pattern3, m_info.phase5Pattern3Range)
@@ -358,7 +405,10 @@ namespace DChild.Gameplay.Characters.Enemies
                                     , new AttackInfo<Attack>(Attack.Phase5Pattern5, m_info.phase5Pattern5Range)
                                     , new AttackInfo<Attack>(Attack.Phase5Pattern6, m_info.phase5Pattern6Range)
                                     , new AttackInfo<Attack>(Attack.Phase5Pattern7, m_info.phase5Pattern7Range)
-                                    , new AttackInfo<Attack>(Attack.Phase5Pattern8, m_info.phase5Pattern8Range));
+                                    , new AttackInfo<Attack>(Attack.Phase5Pattern8, m_info.phase5Pattern8Range)
+                                    , new AttackInfo<Attack>(Attack.Phase5Pattern9, m_info.phase5Pattern9Range)
+                                    , new AttackInfo<Attack>(Attack.Phase5Pattern10, m_info.phase5Pattern10Range)
+                                    , new AttackInfo<Attack>(Attack.Phase5Pattern11, m_info.phase5Pattern11Range));
             m_attackDecider.hasDecidedOnAttack = false;
         }
 
@@ -376,21 +426,145 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void ChooseAttack()
         {
-            if (!m_attackDecider.hasDecidedOnAttack)
+            //m_attackDecider.DecideOnAttack();
+
+            switch (m_phaseHandle.currentPhase)
             {
-                IsAllAttackComplete();
-                for (int i = 0; i < m_attackCache.Count; i++)
-                {
-                    m_attackDecider.DecideOnAttack();
-                    if (m_attackCache[i] != m_currentAttack && !m_attackUsed[i])
+                case Phase.PhaseOne:
+                    Debug.Log("Obstacles Present: " + m_areObstaclesPresent);
+                    if (m_areObstaclesPresent)
                     {
-                        m_attackUsed[i] = true;
-                        m_currentAttack = m_attackCache[i];
-                        m_currentAttackRange = m_attackRangeCache[i];
-                        return;
+                        Debug.Log("Monoliths Present: " + m_areMonolithsSpawned + "\nBlack Blood Flood Present: " + m_isBlackBloodFloodPresent);
+                        if (m_areMonolithsSpawned)
+                        {
+                            m_attackDecider.DecideOnAttack(Attack.Phase1Pattern1, Attack.Phase1Pattern3, Attack.Phase1Pattern6);
+                        }
+                        if (m_isBlackBloodFloodPresent)
+                        {
+                            m_attackDecider.DecideOnAttack(Attack.Phase1Pattern1, Attack.Phase1Pattern3, Attack.Phase1Pattern6);
+                        }
+                        if (m_areTentacleWallsPresent)
+                        {
+                            m_attackDecider.DecideOnAttack(Attack.Phase1Pattern1, Attack.Phase1Pattern3);
+                        }
                     }
-                }
+                    else
+                    {
+                        m_attackDecider.DecideOnAttack(Attack.Phase1Pattern1, Attack.Phase1Pattern2, Attack.Phase1Pattern3, Attack.Phase1Pattern4, Attack.Phase1Pattern5, Attack.Phase1Pattern6);
+                    }
+                    break;
+                case Phase.PhaseTwo:
+                    if (m_areObstaclesPresent)
+                    {
+                        if (m_areMonolithsSpawned)
+                        {
+                            m_attackDecider.DecideOnAttack(Attack.Phase2Pattern1, Attack.Phase2Pattern3, Attack.Phase2Pattern4, Attack.Phase2Pattern5, Attack.Phase2Pattern6);
+                        }
+                        if (m_isBlackBloodFloodPresent)
+                        {
+                            m_attackDecider.DecideOnAttack(Attack.Phase2Pattern1, Attack.Phase2Pattern3, Attack.Phase2Pattern5, Attack.Phase2Pattern6, Attack.Phase2Pattern7);
+                        }
+                        if (m_areTentacleWallsPresent)
+                        {
+                            m_attackDecider.DecideOnAttack(Attack.Phase2Pattern1, Attack.Phase2Pattern2, Attack.Phase2Pattern3, Attack.Phase2Pattern5, Attack.Phase2Pattern6);
+                        }
+                    }
+                    else
+                    {
+                        m_attackDecider.DecideOnAttack(Attack.Phase2Pattern1, Attack.Phase2Pattern2, Attack.Phase2Pattern3, Attack.Phase2Pattern4, Attack.Phase2Pattern5, Attack.Phase2Pattern6, Attack.Phase2Pattern7);
+                    }
+                    break;
+                case Phase.PhaseThree:
+                    if (m_areObstaclesPresent)
+                    {
+                        if (m_areMonolithsSpawned)
+                        {
+                            m_attackDecider.DecideOnAttack(Attack.Phase3Pattern1, Attack.Phase3Pattern2, Attack.Phase3Pattern3, Attack.Phase3Pattern4, Attack.Phase3Pattern6, Attack.Phase3Pattern7);
+                        }
+                        if (m_isBlackBloodFloodPresent)
+                        {
+                            m_attackDecider.DecideOnAttack(Attack.Phase3Pattern1, Attack.Phase3Pattern2, Attack.Phase3Pattern4, Attack.Phase3Pattern5, Attack.Phase3Pattern6, Attack.Phase3Pattern7);
+                        }
+                        if (m_areTentacleWallsPresent)
+                        {
+                            m_attackDecider.DecideOnAttack(Attack.Phase3Pattern1, Attack.Phase3Pattern2, Attack.Phase3Pattern4, Attack.Phase3Pattern6, Attack.Phase3Pattern7);
+                        }
+                    }
+                    else
+                    {
+                        m_attackDecider.DecideOnAttack(Attack.Phase3Pattern1, Attack.Phase3Pattern2, Attack.Phase3Pattern3, Attack.Phase3Pattern4, Attack.Phase3Pattern5, Attack.Phase3Pattern6, Attack.Phase3Pattern7);
+                    }
+                    break;
+                case Phase.PhaseFour:
+                    if (m_areObstaclesPresent)
+                    {
+                        if (m_areMonolithsSpawned)
+                        {
+                            m_attackDecider.DecideOnAttack(Attack.Phase4Pattern2, Attack.Phase4Pattern3, Attack.Phase4Pattern4, Attack.Phase4Pattern6, Attack.Phase4Pattern7, Attack.Phase4Pattern8, Attack.Phase4Pattern9, Attack.Phase4Pattern11);
+                        }
+                        if (m_isBlackBloodFloodPresent)
+                        {
+                            m_attackDecider.DecideOnAttack(Attack.Phase4Pattern2, Attack.Phase4Pattern3, Attack.Phase4Pattern6, Attack.Phase4Pattern7, Attack.Phase4Pattern8, Attack.Phase4Pattern11);
+                        }
+                        if (m_areTentacleWallsPresent)
+                        {
+                            m_attackDecider.DecideOnAttack(Attack.Phase4Pattern2, Attack.Phase4Pattern3, Attack.Phase4Pattern6, Attack.Phase4Pattern7, Attack.Phase4Pattern8, Attack.Phase4Pattern11);
+                        }
+                    }
+                    else
+                    {
+                        m_attackDecider.DecideOnAttack(Attack.Phase4Pattern2, Attack.Phase4Pattern3, Attack.Phase4Pattern4, Attack.Phase4Pattern6, Attack.Phase4Pattern7, Attack.Phase4Pattern8, Attack.Phase4Pattern9, Attack.Phase4Pattern11);
+                    }
+                    break;
+                case Phase.PhaseFive:
+                    if (m_areObstaclesPresent)
+                    {
+                        if (m_areMonolithsSpawned)
+                        {
+                            m_attackDecider.DecideOnAttack(Attack.Phase5Pattern1, Attack.Phase5Pattern3, Attack.Phase5Pattern4, Attack.Phase5Pattern6, Attack.Phase5Pattern7, Attack.Phase5Pattern8, Attack.Phase5Pattern9, Attack.Phase5Pattern10, Attack.Phase5Pattern11);
+                        }
+                        if (m_isBlackBloodFloodPresent)
+                        {
+                            m_attackDecider.DecideOnAttack(Attack.Phase5Pattern1, Attack.Phase5Pattern3, Attack.Phase5Pattern6, Attack.Phase5Pattern7, Attack.Phase5Pattern8, Attack.Phase5Pattern10, Attack.Phase5Pattern11);
+                        }
+                        if (m_areTentacleWallsPresent)
+                        {
+                            m_attackDecider.DecideOnAttack(Attack.Phase5Pattern1, Attack.Phase5Pattern3, Attack.Phase5Pattern6, Attack.Phase5Pattern7, Attack.Phase5Pattern8, Attack.Phase5Pattern10, Attack.Phase5Pattern11);
+                        }
+                    }
+                    else
+                    {
+                        m_attackDecider.DecideOnAttack(Attack.Phase5Pattern1, Attack.Phase5Pattern3, Attack.Phase5Pattern4, Attack.Phase5Pattern6, Attack.Phase5Pattern7, Attack.Phase5Pattern8, Attack.Phase5Pattern9, Attack.Phase5Pattern10, Attack.Phase5Pattern11);
+                    }
+                    break;
+                case Phase.Wait:
+                    break;
             }
+
+            m_currentAttack = m_attackDecider.chosenAttack.attack;
+
+            //if (!m_attackDecider.hasDecidedOnAttack)
+            //{
+            //    IsAllAttackComplete();
+            //    for (int i = 0; i < m_attackCache.Count; i++)
+            //    {
+            //        if (areMonolithsSpawned)
+            //        {
+            //            m_attackDecider.DecideOnAttack(Attack.Phase1Pattern1, Attack.Phase1Pattern2, Attack.Phase1Pattern3, Attack.Phase1Pattern4, Attack.Phase1Pattern6);
+            //        }
+            //        else
+            //        {
+            //            m_attackDecider.DecideOnAttack();
+            //        }
+            //        if (m_attackCache[i] != m_currentAttack && !m_attackUsed[i])
+            //        {
+            //            m_attackUsed[i] = true;
+            //            m_currentAttack = m_attackCache[i];
+            //            m_currentAttackRange = m_attackRangeCache[i];
+            //            return;
+            //        }
+            //    }
+            //}
         }
 
         private void IsAllAttackComplete()
@@ -440,6 +614,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 , Attack.Phase1Pattern3
                 , Attack.Phase1Pattern4
                 , Attack.Phase1Pattern5
+                , Attack.Phase1Pattern6
                 , Attack.Phase2Pattern1
                 , Attack.Phase2Pattern2
                 , Attack.Phase2Pattern3
@@ -461,6 +636,9 @@ namespace DChild.Gameplay.Characters.Enemies
                 , Attack.Phase4Pattern6
                 , Attack.Phase4Pattern7
                 , Attack.Phase4Pattern8
+                , Attack.Phase4Pattern9
+                , Attack.Phase4Pattern10
+                , Attack.Phase4Pattern11
                 , Attack.Phase5Pattern1
                 , Attack.Phase5Pattern2
                 , Attack.Phase5Pattern3
@@ -468,7 +646,10 @@ namespace DChild.Gameplay.Characters.Enemies
                 , Attack.Phase5Pattern5
                 , Attack.Phase5Pattern6
                 , Attack.Phase5Pattern7
-                , Attack.Phase5Pattern8);
+                , Attack.Phase5Pattern8
+                , Attack.Phase5Pattern9
+                , Attack.Phase5Pattern10
+                , Attack.Phase5Pattern11);
             m_attackRangeCache = new List<float>();
             AddToRangeCache(
                   m_info.phase1Pattern1Range
@@ -476,6 +657,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 , m_info.phase1Pattern3Range
                 , m_info.phase1Pattern4Range
                 , m_info.phase1Pattern5Range
+                , m_info.phase1Pattern6Range
                 , m_info.phase2Pattern1Range
                 , m_info.phase2Pattern2Range
                 , m_info.phase2Pattern3Range
@@ -504,13 +686,48 @@ namespace DChild.Gameplay.Characters.Enemies
                 , m_info.phase5Pattern5Range
                 , m_info.phase5Pattern6Range
                 , m_info.phase5Pattern7Range
-                , m_info.phase5Pattern8Range);
+                , m_info.phase5Pattern8Range
+                , m_info.phase5Pattern9Range
+                , m_info.phase5Pattern10Range
+                , m_info.phase5Pattern11Range);
             m_attackUsed = new bool[m_attackCache.Count];
             m_currentFullCooldown = new List<float>();
             m_patternCooldown = new List<float>();
 
             //m_theOneThirdFormAttacks.AttackStart += OnAttackStart;
             m_theOneThirdFormAttacks.AttackDone += OnAttackDone;
+            AttackDone += OnAttackDone;
+            
+            ObstaclesAdded += OnObstaclesAdded;
+            ObstaclesCleared += OnObstaclesEmptied;
+            m_obstacleChecker.ObstacleAdded += OnObstaclesAdded;
+            m_obstacleChecker.ObstaclesCleared += ObstaclesCleared;
+            m_obstacleChecker.MonolithAdded += OnMonolithAdded;
+            m_obstacleChecker.MonolithEmptied += OnMonolithEmptied;
+
+            //m_areMonolithsSpawned = FindObjectOfType<ObstacleChecker>().isMonolithSlamObstaclePresent;
+            m_areTentacleWallsPresent = FindObjectOfType<ObstacleChecker>().isWallTentaclesPresent;
+            m_isBlackBloodFloodPresent = FindObjectOfType<ObstacleChecker>().isFloodingBlackBlood;
+        }
+
+        private void OnMonolithEmptied(object sender, EventActionArgs eventArgs)
+        {
+            m_areMonolithsSpawned = false;
+        }
+
+        private void OnMonolithAdded(object sender, EventActionArgs eventArgs)
+        {
+            m_areMonolithsSpawned = true;
+        }
+
+        private void OnObstaclesEmptied(object sender, EventActionArgs eventArgs)
+        {
+            m_areObstaclesPresent = false;
+        }
+
+        private void OnObstaclesAdded(object sender, EventActionArgs eventArgs)
+        {
+            m_areObstaclesPresent = true;
         }
 
         protected override void Start()
@@ -561,7 +778,6 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnAttackDone(object sender, EventActionArgs eventArgs)
         {
-            Debug.Log("Attack Done from AI");
             m_attackDecider.hasDecidedOnAttack = false;
             m_currentAttackCoroutine = null;
             m_stateHandle.OverrideState(State.ReevaluateSituation);
@@ -595,7 +811,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 case Phase.PhaseOne:
                     //m_idleAnimation = m_info.idleCombatAnimation;
                     AddToAttackCache(Attack.Phase1Pattern1, Attack.Phase1Pattern2, Attack.Phase1Pattern3, Attack.Phase1Pattern4, Attack.Phase1Pattern5);
-                    AddToRangeCache(m_info.phase1Pattern1Range, m_info.phase1Pattern2Range, m_info.phase1Pattern3Range, m_info.phase1Pattern4Range, m_info.phase1Pattern5Range);
+                    AddToRangeCache(m_info.phase1Pattern1Range, m_info.phase1Pattern2Range, m_info.phase1Pattern3Range, m_info.phase1Pattern4Range, m_info.phase1Pattern5Range, m_info.phase1Pattern6Range);
                     for (int i = 0; i < m_info.phase1PatternCooldown.Count; i++)
                         m_patternCooldown.Add(m_info.phase1PatternCooldown[i]);
                     break;
@@ -615,15 +831,15 @@ namespace DChild.Gameplay.Characters.Enemies
                     break;
                 case Phase.PhaseFour:
                     //m_idleAnimation = m_info.idleCombatAnimation;
-                    AddToAttackCache(Attack.Phase4Pattern1, Attack.Phase4Pattern2, Attack.Phase4Pattern3, Attack.Phase4Pattern4, Attack.Phase4Pattern5, Attack.Phase4Pattern6, Attack.Phase4Pattern7, Attack.Phase4Pattern8);
-                    AddToRangeCache(m_info.phase4Pattern1Range, m_info.phase4Pattern2Range, m_info.phase4Pattern3Range, m_info.phase4Pattern4Range, m_info.phase4Pattern5Range, m_info.phase4Pattern6Range, m_info.phase4Pattern7Range, m_info.phase4Pattern8Range);
+                    AddToAttackCache(Attack.Phase4Pattern1, Attack.Phase4Pattern2, Attack.Phase4Pattern3, Attack.Phase4Pattern4, Attack.Phase4Pattern5, Attack.Phase4Pattern6, Attack.Phase4Pattern7, Attack.Phase4Pattern8, Attack.Phase4Pattern9, Attack.Phase4Pattern10, Attack.Phase4Pattern11);
+                    AddToRangeCache(m_info.phase4Pattern1Range, m_info.phase4Pattern2Range, m_info.phase4Pattern3Range, m_info.phase4Pattern4Range, m_info.phase4Pattern5Range, m_info.phase4Pattern6Range, m_info.phase4Pattern7Range, m_info.phase4Pattern8Range, m_info.phase4Pattern9Range, m_info.phase4Pattern10Range, m_info.phase4Pattern11Range);
                     for (int i = 0; i < m_info.phase4PatternCooldown.Count; i++)
                         m_patternCooldown.Add(m_info.phase4PatternCooldown[i]);
                     break;
                 case Phase.PhaseFive:
                     //m_idleAnimation = m_info.idleCombatAnimation;
-                    AddToAttackCache(Attack.Phase5Pattern1, Attack.Phase5Pattern2, Attack.Phase5Pattern3, Attack.Phase5Pattern4, Attack.Phase5Pattern5, Attack.Phase5Pattern6, Attack.Phase5Pattern7, Attack.Phase5Pattern8);
-                    AddToRangeCache(m_info.phase5Pattern1Range, m_info.phase5Pattern2Range, m_info.phase5Pattern3Range, m_info.phase5Pattern4Range, m_info.phase5Pattern5Range, m_info.phase5Pattern6Range, m_info.phase5Pattern7Range, m_info.phase5Pattern8Range);
+                    AddToAttackCache(Attack.Phase5Pattern1, Attack.Phase5Pattern2, Attack.Phase5Pattern3, Attack.Phase5Pattern4, Attack.Phase5Pattern5, Attack.Phase5Pattern6, Attack.Phase5Pattern7, Attack.Phase5Pattern8, Attack.Phase5Pattern9, Attack.Phase5Pattern10, Attack.Phase5Pattern11);
+                    AddToRangeCache(m_info.phase5Pattern1Range, m_info.phase5Pattern2Range, m_info.phase5Pattern3Range, m_info.phase5Pattern4Range, m_info.phase5Pattern5Range, m_info.phase5Pattern6Range, m_info.phase5Pattern7Range, m_info.phase5Pattern8Range, m_info.phase5Pattern9Range, m_info.phase5Pattern10Range, m_info.phase5Pattern11Range);
                     for (int i = 0; i < m_info.phase5PatternCooldown.Count; i++)
                         m_patternCooldown.Add(m_info.phase5PatternCooldown[i]);
                     break;
@@ -693,7 +909,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator SetPositionForMouthBlast()
         {
-            int side = Random.Range(0, 2);
+            int side = UnityEngine.Random.Range(0, 2);
             if (side == 0)
             {
                 m_model.transform.position = new Vector2(m_theOneThirdFormAttacks.mouthBlastOneAttack.mouthBlastOneLeftSide.position.x, m_model.transform.position.y);
@@ -750,6 +966,7 @@ namespace DChild.Gameplay.Characters.Enemies
             Vector2 originalPosition = m_model.transform.position;
             yield return MouthBlastOneStart();
             yield return MouthBlastEnd(originalPosition);
+            AttackDone?.Invoke(this, EventActionArgs.Empty);
         }
         #endregion
 
@@ -1023,7 +1240,7 @@ namespace DChild.Gameplay.Characters.Enemies
         #endregion
 
         void Update()
-        { 
+        {
             m_phaseHandle.MonitorPhase();
 
             switch (m_stateHandle.currentState)
@@ -1085,6 +1302,13 @@ namespace DChild.Gameplay.Characters.Enemies
                             m_currentAttackCoroutine = StartCoroutine(m_theOneThirdFormAttacks.MouthBlastWall());
 
                             break;
+                        case Attack.Phase1Pattern6:
+
+                            Debug.Log("Sliding Stone Wall");
+
+                            m_currentAttackCoroutine = StartCoroutine(m_theOneThirdFormAttacks.SlidingStoneWallAttack(m_targetInfo));
+
+                            break;
                         case Attack.Phase2Pattern1:
 
                             Debug.Log("TENTACLE GROUND STAB");
@@ -1111,13 +1335,13 @@ namespace DChild.Gameplay.Characters.Enemies
                             Debug.Log("MONOLITH SLAM ATTACK");
 
                             m_currentAttackCoroutine = StartCoroutine(m_theOneThirdFormAttacks.MonolithSlam(m_targetInfo));
-
+ 
                             break;
                         case Attack.Phase2Pattern5:
 
-                            Debug.Log("MOUTH BLAST WALL");
+                            Debug.Log("Ground Tentacle Attack");
 
-                            m_currentAttackCoroutine = StartCoroutine(m_theOneThirdFormAttacks.MouthBlastWall());
+                            m_currentAttackCoroutine = StartCoroutine(m_theOneThirdFormAttacks.MovingTentacleGround());
 
                             break;
                         case Attack.Phase2Pattern6:
@@ -1125,6 +1349,13 @@ namespace DChild.Gameplay.Characters.Enemies
                             Debug.Log("TENTACLE CEILING");
 
                             m_currentAttackCoroutine = StartCoroutine(m_theOneThirdFormAttacks.TentacleCeilingAttack());
+
+                            break;
+                        case Attack.Phase2Pattern7:
+
+                            Debug.Log("MOUTH BLAST WALL");
+
+                            m_currentAttackCoroutine = StartCoroutine(m_theOneThirdFormAttacks.MouthBlastWall());
 
                             break;
                         case Attack.Phase3Pattern1:
@@ -1136,36 +1367,23 @@ namespace DChild.Gameplay.Characters.Enemies
                             break;
                         case Attack.Phase3Pattern2:
 
-                            //Debug.Log("TENTACLE GARDEN / CHASING GROUND TENTACLE ATTACK");
+                            Debug.Log("Ground Tentacle Attack");
 
-                            //m_currentAttackCoroutine = StartCoroutine(m_theOneThirdFormAttacks.ChasingGroundTentacle());
+                            m_currentAttackCoroutine = StartCoroutine(m_theOneThirdFormAttacks.ChasingGroundTentacle());
 
-                            m_attackDecider.hasDecidedOnAttack = false;
-                            m_currentAttackCoroutine = null;
-                            m_stateHandle.ApplyQueuedState();
                             break;
                         case Attack.Phase3Pattern3:
 
-                            //Debug.Log("TENTACLE BLAST I/II ATTACK");
+                            Debug.Log("Sliding Stone Wall");
 
-                            //int randomTentacleBlast = Random.Range(0, 2);
-                            //if(randomTentacleBlast == 0)
-                            //   m_currentAttackCoroutine = m_currentAttackCoroutine = StartCoroutine(m_theOneThirdFormAttacks.TentacleBlastTwo());
-                            //else if(randomTentacleBlast == 1)
-                            //    m_currentAttackCoroutine = m_currentAttackCoroutine = StartCoroutine(m_theOneThirdFormAttacks.TentacleBlastTwo());
+                            m_currentAttackCoroutine = StartCoroutine(m_theOneThirdFormAttacks.SlidingStoneWallAttack(m_targetInfo));
 
-                            m_attackDecider.hasDecidedOnAttack = false;
-                            m_currentAttackCoroutine = null;
-                            m_stateHandle.ApplyQueuedState();
                             break;
                         case Attack.Phase3Pattern4:
-                            //Debug.Log("MONILITH SLAM ATTACK");
+                            Debug.Log("Mouth Blast I");
 
-                            //m_currentAttackCoroutine = StartCoroutine(m_theOneThirdFormAttacks.MonolithSlam(m_targetInfo));
+                            m_currentAttackCoroutine = StartCoroutine(FullMouthBlastOneSequence());
 
-                            m_attackDecider.hasDecidedOnAttack = false;
-                            m_currentAttackCoroutine = null;
-                            m_stateHandle.ApplyQueuedState();
                             break;
                         case Attack.Phase3Pattern5:
 
@@ -1200,13 +1418,10 @@ namespace DChild.Gameplay.Characters.Enemies
                             break;
                         case Attack.Phase4Pattern2:
 
-                            Debug.Log("TENTACLE GARDEN / CHASING GROUND TENTACLE ATTACK");
+                            Debug.Log("Ground Tentacle Attack");
 
-                            //m_currentAttackCoroutine = StartCoroutine(m_theOneThirdFormAttacks.ChasingGroundTentacle());
-
-                            m_attackDecider.hasDecidedOnAttack = false;
-                            m_currentAttackCoroutine = null;
-                            m_stateHandle.ApplyQueuedState();
+                            m_currentAttackCoroutine = StartCoroutine(m_theOneThirdFormAttacks.ChasingGroundTentacle());
+        
                             break;
                         case Attack.Phase4Pattern3:
 
@@ -1220,7 +1435,7 @@ namespace DChild.Gameplay.Characters.Enemies
                             Debug.Log("MONOLITH SLAM ATTACK");
 
                             m_currentAttackCoroutine = StartCoroutine(m_theOneThirdFormAttacks.MonolithSlam(m_targetInfo));
-
+       
                             break;
                         case Attack.Phase4Pattern5:
 
@@ -1253,6 +1468,30 @@ namespace DChild.Gameplay.Characters.Enemies
                             m_currentAttackCoroutine = StartCoroutine(m_theOneThirdFormAttacks.TentacleGrab());
 
                             break;
+                        case Attack.Phase4Pattern9:
+
+                            Debug.Log("Sliding Stone Wall");
+
+                            m_currentAttackCoroutine = StartCoroutine(m_theOneThirdFormAttacks.SlidingStoneWallAttack(m_targetInfo));
+    
+                            break;
+                        case Attack.Phase4Pattern10:
+
+                            Debug.Log("Ground Tentacle Attack");
+
+                            //m_currentAttackCoroutine = StartCoroutine(m_theOneThirdFormAttacks.MovingTentacleGround());
+
+                            m_attackDecider.hasDecidedOnAttack = false;
+                            m_currentAttackCoroutine = null;
+                            m_stateHandle.ApplyQueuedState();
+                            break;
+                        case Attack.Phase4Pattern11:
+
+                            Debug.Log("Mouth Blast I");
+
+                            m_currentAttackCoroutine = StartCoroutine(FullMouthBlastOneSequence());
+
+                            break;
                         case Attack.Phase5Pattern1:
 
                             Debug.Log("Tentacle Stab Attack");
@@ -1278,7 +1517,6 @@ namespace DChild.Gameplay.Characters.Enemies
 
                             break;
                         case Attack.Phase5Pattern4:
-                            m_pickedCooldown = m_currentFullCooldown[3];
 
                             Debug.Log("MONOLITH SLAM ATTACK");
 
@@ -1316,6 +1554,36 @@ namespace DChild.Gameplay.Characters.Enemies
                             m_currentAttackCoroutine = StartCoroutine(m_theOneThirdFormAttacks.TentacleGrab());
 
                             break;
+                        case Attack.Phase5Pattern9:
+
+                            Debug.Log("Sliding Stone Wall");
+
+                            m_currentAttackCoroutine = StartCoroutine(m_theOneThirdFormAttacks.SlidingStoneWallAttack(m_targetInfo));
+ 
+                            //m_attackDecider.hasDecidedOnAttack = false;
+                            //m_currentAttackCoroutine = null;
+                            //m_stateHandle.ApplyQueuedState();
+                            break;
+                        case Attack.Phase5Pattern10:
+
+                            Debug.Log("Ground Tentacle Attack");
+
+                            m_currentAttackCoroutine = StartCoroutine(m_theOneThirdFormAttacks.MovingTentacleGround());
+
+                            //m_attackDecider.hasDecidedOnAttack = false;
+                            //m_currentAttackCoroutine = null;
+                            //m_stateHandle.ApplyQueuedState();
+                            break;
+                        case Attack.Phase5Pattern11:
+
+                            Debug.Log("Mouth Blast I");
+
+                            m_currentAttackCoroutine = StartCoroutine(FullMouthBlastOneSequence());
+
+                            //m_attackDecider.hasDecidedOnAttack = false;
+                            //m_currentAttackCoroutine = null;
+                            //m_stateHandle.ApplyQueuedState();
+                            break;
                     }
                     break;
 
@@ -1341,7 +1609,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     if (!m_hitbox.canBlockDamage)
                     {
                         ChooseAttack();
-                        if (IsTargetInRange(m_currentAttackRange) && m_currentAttackCoroutine == null)
+                        if (/*IsTargetInRange(m_currentAttackRange) &&*/ m_currentAttackCoroutine == null)
                         {
                             m_stateHandle.SetState(State.Attacking);
                         }
