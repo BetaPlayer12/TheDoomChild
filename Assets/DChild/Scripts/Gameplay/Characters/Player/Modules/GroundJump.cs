@@ -16,6 +16,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         //private float m_cutOffPower;
         //[SerializeField, MinValue(0f)]
         //private float m_allowCutoffAfterDuration;
+        private IPlayerModifer m_modifier;
 
         private Rigidbody2D m_rigidbody;
         private IHighJumpState m_state;
@@ -31,6 +32,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_rigidbody = info.rigidbody;
             m_state = info.state;
             m_animator = info.animator;
+            m_modifier = info.modifier;
             m_animationParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.Jump);
         }
 
@@ -70,7 +72,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         {
             m_state.isHighJumping = true;
             m_animator.SetBool(m_animationParameter, true);
-            m_rigidbody.velocity = new Vector2(m_rigidbody.velocity.x, m_configuration.jumpPower);
+            m_rigidbody.velocity = new Vector2(m_rigidbody.velocity.x, m_configuration.jumpPower * m_modifier.Get(PlayerModifier.Jump_Power));
             m_animator.Play("Jump Entry");
             //m_rigidbody.sharedMaterial.friction = 0f;
             m_timer = m_configuration.allowCutoffAfterDuration;

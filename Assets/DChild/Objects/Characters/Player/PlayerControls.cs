@@ -305,6 +305,15 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SovereignImpale"",
+                    ""type"": ""Button"",
+                    ""id"": ""6a3e8403-a8ae-41bb-8f87-c92751cbe68a"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -1550,6 +1559,50 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""action"": ""AirSlashCombo"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Two Modifiers"",
+                    ""id"": ""1b9a2535-64ef-4d7c-929d-4328ef07dd27"",
+                    ""path"": ""TwoModifiers"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SovereignImpale"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""modifier1"",
+                    ""id"": ""6e96bc20-674f-4c9d-9354-d5fce2137384"",
+                    ""path"": ""<Keyboard>/leftShift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""SovereignImpale"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""modifier2"",
+                    ""id"": ""70955e99-24a7-4570-8067-f905afc61de9"",
+                    ""path"": ""<Keyboard>/s"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""SovereignImpale"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""binding"",
+                    ""id"": ""a3b3c8f6-edee-4c4c-a729-2c3675263175"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""SovereignImpale"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
                 }
             ]
         },
@@ -2736,6 +2789,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         m_Gameplay_FinalSlash = m_Gameplay.FindAction("FinalSlash", throwIfNotFound: true);
         m_Gameplay_FinalSlashReleased = m_Gameplay.FindAction("FinalSlashReleased", throwIfNotFound: true);
         m_Gameplay_AirSlashCombo = m_Gameplay.FindAction("AirSlashCombo", throwIfNotFound: true);
+        m_Gameplay_SovereignImpale = m_Gameplay.FindAction("SovereignImpale", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -2848,6 +2902,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
     private readonly InputAction m_Gameplay_FinalSlash;
     private readonly InputAction m_Gameplay_FinalSlashReleased;
     private readonly InputAction m_Gameplay_AirSlashCombo;
+    private readonly InputAction m_Gameplay_SovereignImpale;
     public struct GameplayActions
     {
         private @PlayerControls m_Wrapper;
@@ -2883,6 +2938,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         public InputAction @FinalSlash => m_Wrapper.m_Gameplay_FinalSlash;
         public InputAction @FinalSlashReleased => m_Wrapper.m_Gameplay_FinalSlashReleased;
         public InputAction @AirSlashCombo => m_Wrapper.m_Gameplay_AirSlashCombo;
+        public InputAction @SovereignImpale => m_Wrapper.m_Gameplay_SovereignImpale;
         public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -2985,6 +3041,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @AirSlashCombo.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnAirSlashCombo;
                 @AirSlashCombo.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnAirSlashCombo;
                 @AirSlashCombo.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnAirSlashCombo;
+                @SovereignImpale.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnSovereignImpale;
+                @SovereignImpale.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnSovereignImpale;
+                @SovereignImpale.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnSovereignImpale;
             }
             m_Wrapper.m_GameplayActionsCallbackInterface = instance;
             if (instance != null)
@@ -3082,6 +3141,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @AirSlashCombo.started += instance.OnAirSlashCombo;
                 @AirSlashCombo.performed += instance.OnAirSlashCombo;
                 @AirSlashCombo.canceled += instance.OnAirSlashCombo;
+                @SovereignImpale.started += instance.OnSovereignImpale;
+                @SovereignImpale.performed += instance.OnSovereignImpale;
+                @SovereignImpale.canceled += instance.OnSovereignImpale;
             }
         }
     }
@@ -3349,6 +3411,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         void OnFinalSlash(InputAction.CallbackContext context);
         void OnFinalSlashReleased(InputAction.CallbackContext context);
         void OnAirSlashCombo(InputAction.CallbackContext context);
+        void OnSovereignImpale(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

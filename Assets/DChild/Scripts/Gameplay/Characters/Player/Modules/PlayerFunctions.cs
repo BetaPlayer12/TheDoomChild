@@ -24,6 +24,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private KrakenRage m_krakenRage;
         private FinalSlash m_finalSlash;
         private AirSlashCombo m_airSlashCombo;
+        private SovereignImpale m_sovereignImpale;
         #endregion
 
         public void IdleStateFinished()
@@ -309,6 +310,17 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_fireFist?.AttackOver();
             m_fireFist.EndExecution();
         }
+
+        public void SovereignImpaleSummon()
+        {
+            m_sovereignImpale.Summon();
+        }
+
+        public void SovereignImpaleEnd()
+        {
+            m_sovereignImpale?.AttackOver();
+            m_sovereignImpale.EndExecution();
+        }
         #endregion
 
         public void SkullThrowSpawnProjectile()
@@ -364,6 +376,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_krakenRage = character.GetComponentInChildren<KrakenRage>();
             m_finalSlash = character.GetComponentInChildren<FinalSlash>();
             m_airSlashCombo = character.GetComponentInChildren<AirSlashCombo>();
+            m_sovereignImpale = character.GetComponentInChildren<SovereignImpale>();
         }
 
         #region TESTING

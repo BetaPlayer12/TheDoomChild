@@ -44,6 +44,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         //public bool finalSlashHeld;
         public bool finalSlashReleased;
         public bool airSlashComboPressed;
+        public bool sovereignImpalePressed;
         #endregion
 
         private PlayerInput m_input;
@@ -225,7 +226,15 @@ namespace DChild.Gameplay.Characters.Players.Modules
             if (enabled == true)
             {
                 airSlashComboPressed = value.Get<float>() == 1;
-                Debug.Log("Air Slash Combo Pressed " + airSlashComboPressed);
+            }
+        }
+
+        private void OnSovereignImpale(InputValue value)
+        {
+            if (enabled == true)
+            {
+                sovereignImpalePressed = value.Get<float>() == 1;
+                Debug.Log("Soveregin Impale Pressed " + sovereignImpalePressed);
             }
         }
 
@@ -356,6 +365,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             finalSlashPressed = false;
             finalSlashReleased = false;
             airSlashComboPressed = false;
+            sovereignImpalePressed = false;
         }
 
         private void Reset()
@@ -389,6 +399,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             finalSlashPressed = false;
             finalSlashReleased = false;
             airSlashComboPressed = false;
+            sovereignImpalePressed = false;
         }
     }
 }
