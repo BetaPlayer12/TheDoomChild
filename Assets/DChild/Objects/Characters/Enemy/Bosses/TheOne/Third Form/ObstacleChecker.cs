@@ -10,7 +10,8 @@ namespace DChild.Gameplay.Characters.Enemies
     public class ObstacleChecker : MonoBehaviour
     {
         public BlackBloodFlood blackBloodFlood;
-        public bool isFloodingBlackBlood => blackBloodFlood.isFlooding;
+        [SerializeField]
+        public bool isFloodingBlackBlood;
         public List<PoolableObject> monolithSlamObstacleList = new List<PoolableObject>();
         public List<GameObject> wallTentaclesList = new List<GameObject>();
 
@@ -48,18 +49,10 @@ namespace DChild.Gameplay.Characters.Enemies
         // Update is called once per frame
         void Update()
         {
-            if (monolithSlamObstacleList.Count < 0 && !isFloodingBlackBlood && wallTentaclesList.Count < 0)
+            if (!isMonolithSlamObstaclePresent && !isFloodingBlackBlood && !isWallTentaclesPresent)
             {
                 ObstaclesCleared?.Invoke(this, EventActionArgs.Empty);
-            }
-
-            if (monolithSlamObstacleList.Count > 0)
-            {
-                isMonolithSlamObstaclePresent = true;
-            }
-            else
-            {
-                isMonolithSlamObstaclePresent = false;
+                Debug.Log("Obstacles CLeared");
             }
 
             if(wallTentaclesList.Count > 0)
@@ -75,6 +68,7 @@ namespace DChild.Gameplay.Characters.Enemies
         public void AddMonolithToList(PoolableObject monolith)
         {
             monolithSlamObstacleList.Add(monolith);
+            isMonolithSlamObstaclePresent = true;
             MonolithAdded?.Invoke(this, EventActionArgs.Empty);
             ObstacleAdded?.Invoke(this, EventActionArgs.Empty);
         }
@@ -85,6 +79,8 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 monolith.DestroyInstance();
             }
+
+            isMonolithSlamObstaclePresent = false;
 
             MonolithEmptied?.Invoke(this, EventActionArgs.Empty);
         }
