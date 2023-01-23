@@ -13,18 +13,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
 {
     public class PlayerFlinch : MonoBehaviour, IFlinch, IComplexCharacterModule
     {
-        [SerializeField]
-        private int m_numberOfFlinchStates;
-        [SerializeField, MinValue(0)]
-        private float m_XknockBackPower;
-        [SerializeField, MinValue(0)]
-        private float m_YknockbackPower;
-        [SerializeField]
-        private float m_aerialKnockBackMultiplier;
-        [SerializeField]
-        private float m_flinchDuration;
-        [SerializeField]
-        private float m_flinchGravityScale;
+        [SerializeField, HideLabel]
+        private FlinchStatsInfo m_configuration;
 
         private CharacterState m_state;
         private Animator m_animator;
@@ -48,6 +38,11 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
             playerGravityScale = m_rigidBody.gravityScale;
             m_defaultLinearDrag = m_rigidBody.drag;
+        }
+
+        public void SetConfiguration(FlinchStatsInfo info)
+        {
+            m_configuration.CopyInfo(info);
         }
 
         public void Flinch(Vector2 directionToSource, RelativeDirection damageSource, AttackSummaryInfo damageTypeRecieved)
@@ -80,17 +75,17 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         private IEnumerator FlinchRoutine(Vector2 direction, bool isAerialKnockBack)
         {
-            float knockBackPower = m_XknockBackPower;
-            float aerialKnockBackPower = m_YknockbackPower;
-            int flinchState = Random.Range(1, m_numberOfFlinchStates + 1);
+            float knockBackPower = m_configuration.xKnockBackPower;
+            float aerialKnockBackPower = m_configuration.yKnockBackPower;
+            int flinchState = Random.Range(1, m_configuration.numberOfFlinchStates + 1);
 
             m_state.waitForBehaviour = true;
-            m_rigidBody.gravityScale = m_flinchGravityScale;
+            m_rigidBody.gravityScale = m_configuration.flinchGravityScale;
             m_rigidBody.drag = m_defaultLinearDrag;
 
             if (isAerialKnockBack == true)
             {
-                aerialKnockBackPower = m_YknockbackPower * m_aerialKnockBackMultiplier;
+                aerialKnockBackPower = m_configuration.yKnockBackPower * m_configuration.aerialKnockBackMultiplier;
             }
 
             m_rigidBody.velocity = Vector2.zero;
@@ -98,7 +93,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_animator.SetBool(m_animationParameter, true);
             m_animator.SetInteger(m_flinchStateAnimationParameter, flinchState);
 
-            yield return new WaitForSeconds(m_flinchDuration);
+            yield return new WaitForSeconds(m_configuration.flinchDuration);
             m_animator.SetBool(m_animationParameter, false);
             m_state.waitForBehaviour = false;
             m_rigidBody.gravityScale = playerGravityScale;

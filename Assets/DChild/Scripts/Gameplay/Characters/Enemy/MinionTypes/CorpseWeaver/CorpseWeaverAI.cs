@@ -112,7 +112,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private enum Attack
         {
             Spit,
-            Stomp,
+            Bite,
             [HideInInspector]
             _COUNT
         }
@@ -162,6 +162,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private float m_velOffset;
         [SerializeField, TabGroup("Cannon Values")]
         private Vector2 m_targetOffset;
+        [SerializeField, TabGroup("Cannon Values")]
+        private ShadowDrain m_shadowDrain;
 
         private float m_targetDistance;
 
@@ -184,6 +186,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private Vector2 m_targetLastPos;
         private Vector2 m_startPoint;
         private Coroutine m_randomTurnRoutine;
+        private bool m_isBiting = false;
 
         protected override void Start()
         {
@@ -197,6 +200,7 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 StopCoroutine(m_randomTurnRoutine);
             }
+            m_spineEventListener.Subscribe(m_info.projectile.launchOnEvent, SpitProjectile);
             m_startPoint = transform.position;
         }
 
@@ -349,7 +353,22 @@ namespace DChild.Gameplay.Characters.Enemies
             m_movement.Stop();
             m_selfCollider.enabled = false;
         }
-
+        public void ActivateShadowDrain()
+        {
+            m_shadowDrain.ActivateShadowDrain();
+        }
+        public void DeActivateShadowDrain()
+        {
+        }
+        public void ActivateBite()
+        {
+            if (m_isBiting == false)
+            {
+                m_isBiting = true;
+                StopAllCoroutines();
+                m_stateHandle.SetState(State.Chasing);
+            }
+        }
         private IEnumerator DetectRoutine()
         {
             m_animation.SetAnimation(0, m_info.idleAnimation, true)/*.MixDuration = 0*/;
@@ -380,7 +399,6 @@ namespace DChild.Gameplay.Characters.Enemies
             m_targetLastPos = m_targetInfo.transform.GetComponent<Character>().centerMass.position;
             m_animation.SetAnimation(0, m_info.spitAttack.animation, false).MixDuration = 0;
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.spitAttack.animation);
-            SpitProjectile();
             m_animation.EnableRootMotion(true, false);
             m_animation.SetAnimation(0, m_info.move.animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.move.animation);
@@ -408,6 +426,17 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_flinchHandle.m_autoFlinch = true;
             m_stateHandle.ApplyQueuedState();
+            yield return null;
+        }
+        private IEnumerator BiteRoutine()
+        {
+            m_movement.Stop();
+            m_animation.SetAnimation(0, m_info.biteAttack.animation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.biteAttack.animation);
+            m_animation.SetAnimation(0, m_info.idleAnimation, true);
+            m_flinchHandle.m_autoFlinch = true;
+            m_stateHandle.ApplyQueuedState();
+            m_isBiting = false;
             yield return null;
         }
 
@@ -497,23 +526,26 @@ namespace DChild.Gameplay.Characters.Enemies
                     if (!m_wallSensor.isDetecting && m_groundSensor.isDetecting)
                     {
                         m_turnState = State.ReevaluateSituation;
-                        m_animation.EnableRootMotion(true, transform.localRotation.z != 0 ? true : false);
-                        m_animation.SetAnimation(0, m_info.patrol.animation, true).TimeScale = 1f;
-                        m_animation.animationState.GetCurrent(0).MixDuration = 0;
+                        m_animation.EnableRootMotion(false, false);
+                        m_animation.SetAnimation(0, m_info.patrol.animation, true);
                         var characterInfo = new PatrolHandle.CharacterInfo(m_character.centerMass.position, m_character.facing);
                         m_patrolHandle.Patrol(m_movement, m_info.patrol.speed, characterInfo);
                     }
                     else
                     {
-                        m_movement.Stop();
-                        m_animation.SetAnimation(0, m_info.idleAnimation, true).MixDuration = 0;
+                        if (m_animation.GetCurrentAnimation(0).ToString() != m_info.idleAnimation)
+                        {
+                            m_movement.Stop();
+                            m_animation.EnableRootMotion(true, true);
+                        }
+                        m_animation.SetAnimation(0, m_info.idleAnimation, true);
                     }
                     break;
 
                 case State.Turning:
                     m_stateHandle.Wait(m_turnState);
                     StopAllCoroutines();
-                    
+
                     m_animation.SetAnimation(0, m_info.idleAnimation, true);
                     m_turnHandle.Execute();
                     break;
@@ -527,19 +559,26 @@ namespace DChild.Gameplay.Characters.Enemies
 
                         case Attack.Spit:
                             m_animation.EnableRootMotion(false, false);
-                            if (IsTargetInRange(m_info.clawAttack.range))
+                            if (m_isBiting == true)
                             {
-                                StartCoroutine(ClawRoutine());
+                                StartCoroutine(BiteRoutine());
                             }
                             else
                             {
-                                if (IsTargetInRange(m_info.jumpAttack.range))
+                                if (IsTargetInRange(m_info.clawAttack.range))
                                 {
-                                    StartCoroutine(JumpRoutine());
+                                    StartCoroutine(ClawRoutine());
                                 }
                                 else
                                 {
-                                    StartCoroutine(ProjectileRoutine());
+                                    if (IsTargetInRange(m_info.jumpAttack.range))
+                                    {
+                                        StartCoroutine(JumpRoutine());
+                                    }
+                                    else
+                                    {
+                                        StartCoroutine(ProjectileRoutine());
+                                    }
                                 }
                             }
                             break;
@@ -577,7 +616,39 @@ namespace DChild.Gameplay.Characters.Enemies
                     break;
                 case State.Chasing:
                     {
+                        var m_currentMoveSpeed = UnityEngine.Random.Range(m_info.move.speed * .75f, m_info.move.speed * 1.25f);
+                        var toTarget = m_targetInfo.position - (Vector2)m_character.centerMass.position;
                         if (IsFacingTarget())
+                        {
+                            if (m_isBiting == true) {
+                                m_attackDecider.DecideOnAttack();
+                                if (m_attackDecider.hasDecidedOnAttack && IsTargetInRange(m_info.biteAttack.range) && !m_wallSensor.allRaysDetecting)
+                                {
+                                    m_movement.Stop();
+                                    m_selfCollider.enabled = true;
+                                    //m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                                    m_stateHandle.SetState(State.Attacking);
+                                }
+                                else
+                                {
+                                    if (!m_wallSensor.isDetecting && m_groundSensor.isDetecting /*&& m_edgeSensor.isDetecting*/)
+                                    {
+                                        m_animation.EnableRootMotion(false, false);
+                                        m_selfCollider.enabled = false;
+                                        m_animation.SetAnimation(0, m_info.move.animation, true);
+                                        m_character.physics.SetVelocity(toTarget.normalized.x * m_currentMoveSpeed, m_character.physics.velocity.y);
+                                    }
+                                    else
+                                    {
+                                        m_attackDecider.hasDecidedOnAttack = false;
+                                        m_movement.Stop();
+                                        m_selfCollider.enabled = true;
+                                        m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                                    }
+                                }
+                            }
+                        
+                        else
                         {
                             m_attackDecider.DecideOnAttack();
                             if (m_attackDecider.hasDecidedOnAttack && IsTargetInRange(m_attackDecider.chosenAttack.range) && !m_wallSensor.allRaysDetecting)
@@ -591,9 +662,10 @@ namespace DChild.Gameplay.Characters.Enemies
                             {
                                 if (!m_wallSensor.isDetecting && m_groundSensor.isDetecting /*&& m_edgeSensor.isDetecting*/)
                                 {
-                                    m_animation.EnableRootMotion(true, false);
+                                    m_animation.EnableRootMotion(false, false);
                                     m_selfCollider.enabled = false;
-                                    m_animation.SetAnimation(0, m_info.patrol.animation, true).TimeScale = m_currentTimeScale;
+                                    m_animation.SetAnimation(0, m_info.move.animation, true);
+                                    m_character.physics.SetVelocity(toTarget.normalized.x * m_currentMoveSpeed, m_character.physics.velocity.y);
                                 }
                                 else
                                 {
@@ -604,13 +676,16 @@ namespace DChild.Gameplay.Characters.Enemies
                                 }
                             }
                         }
+                    }
+            
                         else
                         {
-                            m_turnState = State.ReevaluateSituation;
-                            m_stateHandle.SetState(State.Turning);
-                        }
+                        m_turnState = State.ReevaluateSituation;
+                        m_stateHandle.SetState(State.Turning);
                     }
-                    break;
+            }
+            break;
+        
 
                 case State.ReevaluateSituation:
                     //How far is target, is it worth it to chase or go back to patrol

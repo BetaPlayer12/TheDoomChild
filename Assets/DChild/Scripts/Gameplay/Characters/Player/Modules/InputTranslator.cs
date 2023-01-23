@@ -255,7 +255,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private void Update()
         {
             var mousePosition = Mouse.current.position.ReadValue();
-            //m_mouseDelta = mousePosition - m_mousePosition;
             m_mouseDelta = Mouse.current.delta.ReadValue();
             m_mousePosition = mousePosition;
             m_mousePosition += new Vector2(controllerCursorHorizontalInput, controllerCursorVerticalInput).normalized;
