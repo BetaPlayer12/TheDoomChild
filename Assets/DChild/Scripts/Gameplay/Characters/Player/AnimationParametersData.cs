@@ -54,6 +54,7 @@ namespace DChild.Gameplay.Characters.Players
             FinalSlashDash,
             AirSlashCombo,
             AirSlashState,
+            SovereignImpale,
         }
 
         [SerializeField]

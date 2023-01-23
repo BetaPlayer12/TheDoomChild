@@ -114,6 +114,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_attacker.SetDamageModifier(m_airSlashComboInfo[m_currentAirSlashState].damageModifier * m_modifier.Get(PlayerModifier.AttackDamage));
             m_currentVisualAirSlashState = m_currentAirSlashState;
             m_currentAirSlashState++;
+            m_physics.gravityScale = 0;
 
             m_comboResetDelayTimer = m_airSlashComboInfo[m_currentAirSlashState].nextAttackDelay;
             m_airSlashMovementCooldownTimer = /*m_slashMovementCooldown*/m_airlashMovementCooldown;
@@ -124,6 +125,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             base.Cancel();
 
             m_state.isDoingCombo = false;
+            m_physics.gravityScale = m_cacheGravity;
             m_fxAnimator.Play("Buffer");
         }
 
@@ -159,7 +161,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_edgeSensor.Cast();
             if (!m_enemySensor.isDetecting /*&& !m_wallSensor.allRaysDetecting && m_edgeSensor.isDetecting*/)
             {
-                m_physics.gravityScale = 0;
                 m_physics.AddForce(m_character.facing == HorizontalDirection.Right ? m_pushForce[m_currentVisualAirSlashState] : -m_pushForce[m_currentVisualAirSlashState], ForceMode2D.Impulse);
             }
         }

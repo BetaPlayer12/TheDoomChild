@@ -263,6 +263,7 @@ GameObject:
   - component: {fileID: 3460269677709168687}
   - component: {fileID: 166350622856161794}
   - component: {fileID: 7995518849444336229}
+  - component: {fileID: 1040944289508839555}
   m_Layer: 8
   m_Name: Ground
   m_TagString: Untagged
@@ -283,6 +284,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 473175791385714083}
+  - {fileID: 1386867835978424746}
   m_Father: {fileID: 1861663316882787807}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -400,6 +402,36 @@ MonoBehaviour:
   m_wallSensor: {fileID: 2702825902955571488}
   m_edgeSensor: {fileID: 8774030571759925288}
   m_pushForce: {x: 100, y: 0}
+--- !u!114 &1040944289508839555
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 181148360470848333}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a4275a59145eb64abdc11b6aa13906c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_attackFX: {fileID: 4713603853206080501}
+  m_sovereignImpaleCooldown: 1.25
+  m_sovereignImpaleMovementCooldown: 2
+  m_sovereignImpaleInfo:
+    m_fx: {fileID: 0}
+    m_fxPosition: {fileID: 4294471023827248790}
+    m_collider: {fileID: 0}
+    m_damageModifier: 1
+    m_nextAttackDelay: 0
+  m_character: {fileID: 4294471023827248791}
+  m_physics: {fileID: 4294471023827248786}
+  m_enemySensor: {fileID: 597543835302893038}
+  m_wallSensor: {fileID: 2702825902955571488}
+  m_edgeSensor: {fileID: 5278705171298107251}
+  m_pushForce: {x: 25, y: 0}
+  m_startPoint: {fileID: 1386867835978424746}
+  m_spikeDuration: 2
+  m_spike: {fileID: 3795262486986069922, guid: 01575716672639a4ba2fee8facbce522, type: 3}
 --- !u!1 &184704957041285301
 GameObject:
   m_ObjectHideFlags: 0
@@ -40848,7 +40880,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_airSlashStateAmount: 3
-  m_airSlashComboCooldown: 0.2
   m_airlashMovementCooldown: 0.1
   m_attackFX: {fileID: 4713603853206080501}
   m_airSlashComboInfo:
@@ -58398,6 +58429,37 @@ MonoBehaviour:
   zPosition: 1
   overrideAlpha: 1
   hierarchy: {fileID: 4966587747696342843}
+--- !u!1 &7288924434896532186
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1386867835978424746}
+  m_Layer: 8
+  m_Name: SovereignImpaleStartPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1386867835978424746
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7288924434896532186}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 15.2, y: 4.8, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7730022515954066503}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7321267778692530363
 GameObject:
   m_ObjectHideFlags: 0
