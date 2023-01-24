@@ -7,6 +7,7 @@ using Spine.Unity;
 using Sirenix.OdinInspector;
 using DChild.Gameplay.Characters.AI;
 using Holysoft.Event;
+using System;
 
 namespace DChild.Gameplay.Characters.Enemies
 {

@@ -40,6 +40,11 @@ namespace DChild.Gameplay.Characters.Players.Modules
         public bool fireFistPressed;
         public bool reaperHarvestPressed;
         public bool krakenRagePressed;
+        public bool finalSlashPressed;
+        //public bool finalSlashHeld;
+        public bool finalSlashReleased;
+        public bool airSlashComboPressed;
+        public bool sovereignImpalePressed;
         #endregion
 
         private PlayerInput m_input;
@@ -195,7 +200,41 @@ namespace DChild.Gameplay.Characters.Players.Modules
             if (enabled == true)
             {
                 krakenRagePressed = value.Get<float>() == 1;
-                Debug.Log("Kraken Rage is Pressed " + krakenRagePressed);
+            }
+        }
+
+        private void OnFinalSlash(InputValue value)
+        {
+            if (enabled == true)
+            {
+                var inputValue = value.Get<float>() == 1;
+                finalSlashPressed = inputValue;
+            }
+        }
+
+        private void OnFinalSlashReleased(InputValue value)
+        {
+            if (enabled == true)
+            {
+                finalSlashReleased = value.Get<float>() == 1;
+                finalSlashReleased = !finalSlashReleased;
+            }
+        }
+
+        private void OnAirSlashCombo(InputValue value)
+        {
+            if (enabled == true)
+            {
+                airSlashComboPressed = value.Get<float>() == 1;
+            }
+        }
+
+        private void OnSovereignImpale(InputValue value)
+        {
+            if (enabled == true)
+            {
+                sovereignImpalePressed = value.Get<float>() == 1;
+                Debug.Log("Soveregin Impale Pressed " + sovereignImpalePressed);
             }
         }
 
@@ -323,6 +362,10 @@ namespace DChild.Gameplay.Characters.Players.Modules
             fireFistPressed = false;
             reaperHarvestPressed = false;
             krakenRagePressed = false;
+            finalSlashPressed = false;
+            finalSlashReleased = false;
+            airSlashComboPressed = false;
+            sovereignImpalePressed = false;
         }
 
         private void Reset()
@@ -353,6 +396,10 @@ namespace DChild.Gameplay.Characters.Players.Modules
             fireFistPressed = false;
             reaperHarvestPressed = false;
             krakenRagePressed = false;
+            finalSlashPressed = false;
+            finalSlashReleased = false;
+            airSlashComboPressed = false;
+            sovereignImpalePressed = false;
         }
     }
 }

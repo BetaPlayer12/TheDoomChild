@@ -50,6 +50,11 @@ namespace DChild.Gameplay.Characters.Players
             FireFist,
             ReaperHarvest,
             KrakenRage,
+            FinalSlash,
+            FinalSlashDash,
+            AirSlashCombo,
+            AirSlashState,
+            SovereignImpale,
         }
 
         [SerializeField]

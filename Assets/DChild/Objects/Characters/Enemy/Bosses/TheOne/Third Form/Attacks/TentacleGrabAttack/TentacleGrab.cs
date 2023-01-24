@@ -179,9 +179,9 @@ public class TentacleGrab : MonoBehaviour
 
     public void SetAttackDone()
     {
-        Debug.Log("Grab Done");
         isAttackDone = true;
         isPlayerGrabbed = false;
+        m_grabHitbox.enabled = false;
 
         GameplaySystem.playerManager.player.gameObject.SetActive(true);
         GameplaySystem.playerManager.player.character.gameObject.SetActive(true);
@@ -200,5 +200,10 @@ public class TentacleGrab : MonoBehaviour
     public void OnGrabCollider()
     {
         m_grabHitbox.enabled = true;
+    }
+
+    public void OffGrabCollider()
+    {
+        m_grabHitbox.enabled = false;
     }
 }

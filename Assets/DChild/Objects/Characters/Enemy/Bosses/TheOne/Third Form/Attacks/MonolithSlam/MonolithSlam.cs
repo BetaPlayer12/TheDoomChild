@@ -110,6 +110,13 @@ namespace DChild.Gameplay.Characters.Enemies
             m_obstacleCollider.enabled = true;
             m_animation.SetAnimation(0, m_platformPersistAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_platformPersistAnimation);
+
+            if (keepMonolith)
+            {
+                if (FindObjectOfType<ObstacleChecker>().monolithSlamObstacleList != null)
+                    FindObjectOfType<ObstacleChecker>().ClearMonoliths();
+            }
+
             monolithGrounded = true;
         }
 

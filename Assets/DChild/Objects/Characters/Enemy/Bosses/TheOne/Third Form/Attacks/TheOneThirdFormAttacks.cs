@@ -57,6 +57,7 @@ public class TheOneThirdFormAttacks : MonoBehaviour
     private void Awake()
     {
         AttackDone += OnAttackDone;
+        m_tentacleGrabScriptedAttack.AttackDone += OnGrabAttackDone;
         m_tentacleGroundStabAttack.AttackDone += OnGroundStabDone;
         m_mouthBlastIIAttack.AttackDone += OnMouthBlastWallDone;
         m_movingTentacleGroundAttack.AttackDone += OnMovingTentacleGroundDone;
@@ -65,7 +66,7 @@ public class TheOneThirdFormAttacks : MonoBehaviour
         m_slidingWallAttack.AttackDone += OnSlidingWallDone;
         m_tentacleBlastAttack.AttackDone += OnTentacleBlastDone;
         m_tentacleCeilingAttack.AttackDone += OnTentacleCeilingDone;
-        m_tentacleGrabScriptedAttack.AttackDone += OnGrabAttackDone;
+
         m_bubbleImprisonmentAttack.AttackDone += OnBubbleImprisonmentDone;
         m_mouthBlastOneAttack.AttackDone += OnMouthBlastOneDone;
     }
@@ -89,7 +90,7 @@ public class TheOneThirdFormAttacks : MonoBehaviour
 
     private void OnGrabAttackDone(object sender, EventActionArgs eventArgs)
     {
-        Debug.Log("Grab Attack Done");
+        Debug.Log("Grab Attack Done from Third Form Attacks");
         AttackDone?.Invoke(this, new EventActionArgs());
     }
 
