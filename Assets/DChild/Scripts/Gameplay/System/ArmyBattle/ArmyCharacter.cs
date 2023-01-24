@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace DChild.Gameplay.ArmyBattle
 {
+
     [CreateAssetMenu(fileName = "ArmyCharacter", menuName = "DChild/Gameplay/Army/Character")]
     public class ArmyCharacter : ScriptableObject
     {
