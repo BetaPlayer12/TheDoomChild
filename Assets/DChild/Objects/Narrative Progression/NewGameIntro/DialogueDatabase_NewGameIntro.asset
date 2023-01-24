@@ -1083,7 +1083,7 @@ MonoBehaviour:
     entryGroups: []
     canvasScrollPosition: {x: 0, y: 0}
     canvasZoom: 0.8500001
-  - id: 71
+  - id: 112
     fields:
     - title: Title
       value: Intro/Banter/Store Complains about Player not Picking him up
@@ -1183,7 +1183,7 @@ MonoBehaviour:
         value: None()
         type: 0
         typeString: 
-      conversationID: 71
+      conversationID: 112
       isRoot: 0
       isGroup: 0
       nodeColor: 
@@ -1191,9 +1191,9 @@ MonoBehaviour:
       falseConditionAction: Block
       conditionPriority: 2
       outgoingLinks:
-      - originConversationID: 71
+      - originConversationID: 112
         originDialogueID: 0
-        destinationConversationID: 71
+        destinationConversationID: 112
         destinationDialogueID: 1
         isConnector: 0
         priority: 2
@@ -1235,7 +1235,7 @@ MonoBehaviour:
         type: 0
         typeString: CustomFieldType_Text
       - title: Dialogue Text
-        value: "Feigning ignorance or blatantly unaware? I\u2019m confident you acknowledge
+        value: "Playing stupid or genuinely unaware? I\u2019m confident you acknowledge
           the fact that I\u2019m worth more than being left on the ground."
         type: 0
         typeString: CustomFieldType_Text
@@ -1259,7 +1259,7 @@ MonoBehaviour:
         value: 
         type: 0
         typeString: 
-      conversationID: 71
+      conversationID: 112
       isRoot: 0
       isGroup: 0
       nodeColor: 
@@ -1397,14 +1397,14 @@ MonoBehaviour:
         isConnector: 0
         priority: 2
       conditionsString: 
-      userScript: Variable["StoreBlackBloodWarningIndex"] = math.random(3)
+      userScript: Variable["StoreBlackBloodWarningIndex"] = math.random(4)
       onExecute:
         m_PersistentCalls:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
         x: 253
-        y: 50
+        y: 49
         width: 160
         height: 30
     - id: 1
@@ -1461,7 +1461,7 @@ MonoBehaviour:
       falseConditionAction: Block
       conditionPriority: 2
       outgoingLinks: []
-      conditionsString: Variable["StoreBlackBloodWarningIndex"] == 1
+      conditionsString: Variable["StoreBlackBloodWarningIndex"] == 2
       userScript: 
       onExecute:
         m_PersistentCalls:
@@ -1526,7 +1526,7 @@ MonoBehaviour:
       falseConditionAction: Block
       conditionPriority: 2
       outgoingLinks: []
-      conditionsString: Variable["StoreBlackBloodWarningIndex"] == 2
+      conditionsString: Variable["StoreBlackBloodWarningIndex"] == 3
       userScript: 
       onExecute:
         m_PersistentCalls:
@@ -1534,7 +1534,7 @@ MonoBehaviour:
       canvasRect:
         serializedVersion: 2
         x: 462
-        y: 199
+        y: 200
         width: 160
         height: 30
     - id: 3
@@ -1564,7 +1564,7 @@ MonoBehaviour:
         type: 0
         typeString: CustomFieldType_Text
       - title: Dialogue Text
-        value: "Saw that one coming, don\u2019t know about you though. "
+        value: "Saw that one coming, don\u2019t know about you. "
         type: 0
         typeString: CustomFieldType_Text
       - title: Parenthetical
@@ -1591,7 +1591,7 @@ MonoBehaviour:
       falseConditionAction: Block
       conditionPriority: 2
       outgoingLinks: []
-      conditionsString: Variable["StoreBlackBloodWarningIndex"] == 0
+      conditionsString: Variable["StoreBlackBloodWarningIndex"] == 1
       userScript: 
       onExecute:
         m_PersistentCalls:
@@ -1674,6 +1674,12 @@ MonoBehaviour:
         destinationDialogueID: 3
         isConnector: 0
         priority: 2
+      - originConversationID: 72
+        originDialogueID: 4
+        destinationConversationID: 72
+        destinationDialogueID: 5
+        isConnector: 0
+        priority: 2
       conditionsString: 
       userScript: 
       onExecute:
@@ -1683,6 +1689,71 @@ MonoBehaviour:
         serializedVersion: 2
         x: 249
         y: 117
+        width: 160
+        height: 30
+    - id: 5
+      fields:
+      - title: Title
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Pictures
+        value: '[]'
+        type: 3
+        typeString: CustomFieldType_Files
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 2
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 34
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: A hopeless disappointment you are.
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Parenthetical
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Audio Files
+        value: '[]'
+        type: 3
+        typeString: CustomFieldType_Files
+      - title: Video File
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      conversationID: 72
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks: []
+      conditionsString: Variable["StoreBlackBloodWarningIndex"] == 4
+      userScript: 
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 659
+        y: 202
         width: 160
         height: 30
     entryGroups: []
@@ -1840,8 +1911,8 @@ MonoBehaviour:
         type: 0
         typeString: CustomFieldType_Text
       - title: Dialogue Text
-        value: Wise choice, solidarity never helped anyone! You shall refer to me
-          as Store as I accompany you on your bagatelle journey.
+        value: Wise choice, being alone never helped anyone! You shall refer to me
+          as Store as I accompany you on your trivial journey.
         type: 0
         typeString: CustomFieldType_Text
       - title: Parenthetical

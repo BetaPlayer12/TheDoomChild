@@ -79,7 +79,7 @@ MonoBehaviour:
     spritePortrait: {fileID: 0}
     alternatePortraits: []
     spritePortraits: []
-  - id: 34
+  - id: 17
     fields:
     - title: Name
       value: System
@@ -118,7 +118,7 @@ MonoBehaviour:
       value: 
       type: 0
       typeString: 
-  - id: 59
+  - id: 72
     fields:
     - title: Name
       value: HasSeenLockedDoor
@@ -132,7 +132,7 @@ MonoBehaviour:
       value: 
       type: 0
       typeString: 
-  - id: 60
+  - id: 73
     fields:
     - title: Name
       value: PlayerNormalJumpCount
@@ -146,7 +146,7 @@ MonoBehaviour:
       value: 
       type: 0
       typeString: CustomFieldType_Text
-  - id: 70
+  - id: 74
     fields:
     - title: Name
       value: StoreTellsPlayerAboutHisWeakJump
@@ -160,8 +160,22 @@ MonoBehaviour:
       value: 
       type: 0
       typeString: CustomFieldType_Text
+  - id: 79
+    fields:
+    - title: Name
+      value: PlayerPassedByCollider
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Initial Value
+      value: 0
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Description
+      value: 
+      type: 0
+      typeString: CustomFieldType_Text
   conversations:
-  - id: 1
+  - id: 4
     fields:
     - title: Title
       value: Store calls Player a Pacifist
@@ -241,7 +255,7 @@ MonoBehaviour:
         value: 
         type: 0
         typeString: CustomFieldType_Text
-      conversationID: 1
+      conversationID: 4
       isRoot: 0
       isGroup: 0
       nodeColor: 
@@ -249,9 +263,9 @@ MonoBehaviour:
       falseConditionAction: Block
       conditionPriority: 2
       outgoingLinks:
-      - originConversationID: 1
+      - originConversationID: 4
         originDialogueID: 0
-        destinationConversationID: 1
+        destinationConversationID: 4
         destinationDialogueID: 4
         isConnector: 0
         priority: 2
@@ -262,8 +276,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 319
-        y: 34
+        x: 321.12766
+        y: 36.12767
         width: 160
         height: 30
     - id: 1
@@ -289,15 +303,14 @@ MonoBehaviour:
         type: 0
         typeString: CustomFieldType_Text
       - title: Dialogue Text
-        value: 'Give an ignoramus a weapon and the ignoramus does what an ignoramus
-          does best. '
+        value: 'The fool with a weapon does what a fool does best. '
         type: 0
         typeString: CustomFieldType_Text
       - title: Sequence
         value: 
         type: 0
         typeString: CustomFieldType_Text
-      conversationID: 1
+      conversationID: 4
       isRoot: 0
       isGroup: 0
       nodeColor: 
@@ -305,15 +318,15 @@ MonoBehaviour:
       falseConditionAction: Block
       conditionPriority: 2
       outgoingLinks: []
-      conditionsString: randomValue == 0
+      conditionsString: randomValue == 1
       userScript: 
       onExecute:
         m_PersistentCalls:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 78
-        y: 264
+        x: 77
+        y: 265
         width: 160
         height: 30
     - id: 2
@@ -339,14 +352,14 @@ MonoBehaviour:
         type: 0
         typeString: CustomFieldType_Text
       - title: Dialogue Text
-        value: "Seriously? What\u2019s next, consociation followed by friendly conversation?"
+        value: "Seriously? What\u2019s next, friendship?"
         type: 0
         typeString: CustomFieldType_Text
       - title: Sequence
         value: 
         type: 0
         typeString: CustomFieldType_Text
-      conversationID: 1
+      conversationID: 4
       isRoot: 0
       isGroup: 0
       nodeColor: 
@@ -354,15 +367,15 @@ MonoBehaviour:
       falseConditionAction: Block
       conditionPriority: 2
       outgoingLinks: []
-      conditionsString: randomValue == 1
+      conditionsString: randomValue == 2
       userScript: 
       onExecute:
         m_PersistentCalls:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 317
-        y: 266
+        x: 316
+        y: 267
         width: 160
         height: 30
     - id: 3
@@ -388,14 +401,14 @@ MonoBehaviour:
         type: 0
         typeString: CustomFieldType_Text
       - title: Dialogue Text
-        value: ' I did not have you pick me up just to play nice by the way.'
+        value: You did not pick me up just to be nice, right?
         type: 0
         typeString: CustomFieldType_Text
       - title: Sequence
         value: 
         type: 0
         typeString: CustomFieldType_Text
-      conversationID: 1
+      conversationID: 4
       isRoot: 0
       isGroup: 0
       nodeColor: 
@@ -403,14 +416,14 @@ MonoBehaviour:
       falseConditionAction: Block
       conditionPriority: 2
       outgoingLinks: []
-      conditionsString: randomValue == 2
+      conditionsString: randomValue == 3
       userScript: 
       onExecute:
         m_PersistentCalls:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 545
+        x: 541.8085
         y: 265
         width: 160
         height: 30
@@ -447,8 +460,8 @@ MonoBehaviour:
       - title: Response Menu Sequence
         value: 
         type: 0
-        typeString: 
-      conversationID: 1
+        typeString: CustomFieldType_Text
+      conversationID: 4
       isRoot: 0
       isGroup: 0
       nodeColor: 
@@ -456,21 +469,21 @@ MonoBehaviour:
       falseConditionAction: Block
       conditionPriority: 2
       outgoingLinks:
-      - originConversationID: 1
+      - originConversationID: 4
         originDialogueID: 4
-        destinationConversationID: 1
+        destinationConversationID: 4
         destinationDialogueID: 1
         isConnector: 0
         priority: 2
-      - originConversationID: 1
+      - originConversationID: 4
         originDialogueID: 4
-        destinationConversationID: 1
+        destinationConversationID: 4
         destinationDialogueID: 2
         isConnector: 0
         priority: 2
-      - originConversationID: 1
+      - originConversationID: 4
         originDialogueID: 4
-        destinationConversationID: 1
+        destinationConversationID: 4
         destinationDialogueID: 3
         isConnector: 0
         priority: 2
@@ -487,8 +500,8 @@ MonoBehaviour:
         height: 30
     entryGroups: []
     canvasScrollPosition: {x: 0, y: 0}
-    canvasZoom: 1
-  - id: 2
+    canvasZoom: 1.38
+  - id: 110
     fields:
     - title: Title
       value: Store hints Player to Find a Lever
@@ -568,7 +581,7 @@ MonoBehaviour:
         value: 
         type: 0
         typeString: CustomFieldType_Text
-      conversationID: 2
+      conversationID: 110
       isRoot: 0
       isGroup: 0
       nodeColor: 
@@ -576,9 +589,9 @@ MonoBehaviour:
       falseConditionAction: Block
       conditionPriority: 2
       outgoingLinks:
-      - originConversationID: 2
+      - originConversationID: 110
         originDialogueID: 0
-        destinationConversationID: 2
+        destinationConversationID: 110
         destinationDialogueID: 2
         isConnector: 0
         priority: 2
@@ -596,7 +609,7 @@ MonoBehaviour:
     - id: 1
       fields:
       - title: Title
-        value: 0
+        value: 1
         type: 0
         typeString: CustomFieldType_Text
       - title: Description
@@ -616,15 +629,15 @@ MonoBehaviour:
         type: 0
         typeString: CustomFieldType_Text
       - title: Dialogue Text
-        value: "Oh no! It\u2019s locked?!? Almost like something out there\u2019ll
-          open it! You know what to do."
+        value: For every lock there exists a key, if anything, the same goes for
+          the doorways we meet along the way.
         type: 0
         typeString: CustomFieldType_Text
       - title: Sequence
         value: 
         type: 0
         typeString: CustomFieldType_Text
-      conversationID: 2
+      conversationID: 110
       isRoot: 0
       isGroup: 0
       nodeColor: 
@@ -632,15 +645,15 @@ MonoBehaviour:
       falseConditionAction: Block
       conditionPriority: 2
       outgoingLinks: []
-      conditionsString: randomValue == 0
+      conditionsString: randomValue == 1
       userScript: 
       onExecute:
         m_PersistentCalls:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 144
-        y: 218
+        x: 143
+        y: 220
         width: 160
         height: 30
     - id: 2
@@ -673,7 +686,7 @@ MonoBehaviour:
         value: None()
         type: 0
         typeString: CustomFieldType_Text
-      conversationID: 2
+      conversationID: 110
       isRoot: 0
       isGroup: 0
       nodeColor: 
@@ -681,15 +694,15 @@ MonoBehaviour:
       falseConditionAction: Block
       conditionPriority: 2
       outgoingLinks:
-      - originConversationID: 2
+      - originConversationID: 110
         originDialogueID: 2
-        destinationConversationID: 2
+        destinationConversationID: 110
         destinationDialogueID: 1
         isConnector: 0
         priority: 2
-      - originConversationID: 2
+      - originConversationID: 110
         originDialogueID: 2
-        destinationConversationID: 2
+        destinationConversationID: 110
         destinationDialogueID: 3
         isConnector: 0
         priority: 2
@@ -707,7 +720,7 @@ MonoBehaviour:
     - id: 3
       fields:
       - title: Title
-        value: 
+        value: 2
         type: 0
         typeString: CustomFieldType_Text
       - title: Description
@@ -727,15 +740,15 @@ MonoBehaviour:
         type: 0
         typeString: CustomFieldType_Text
       - title: Dialogue Text
-        value: For every lock there exists a key, if anything, the same goes for
-          the doorways we meet along the way.
+        value: "Oh no! It\u2019s locked?!? Almost like something out there\u2019ll
+          open it! You know what to do."
         type: 0
         typeString: CustomFieldType_Text
       - title: Sequence
         value: 
         type: 0
         typeString: CustomFieldType_Text
-      conversationID: 2
+      conversationID: 110
       isRoot: 0
       isGroup: 0
       nodeColor: 
@@ -743,15 +756,15 @@ MonoBehaviour:
       falseConditionAction: Block
       conditionPriority: 2
       outgoingLinks: []
-      conditionsString: randomValue == 1
+      conditionsString: randomValue == 2
       userScript: 
       onExecute:
         m_PersistentCalls:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 427
-        y: 226
+        x: 421
+        y: 224
         width: 160
         height: 30
     entryGroups: []
@@ -891,8 +904,8 @@ MonoBehaviour:
         type: 0
         typeString: CustomFieldType_Text
       - title: Dialogue Text
-        value: "You\u2019re attempting to perform what you aren\u2019t capable of
-          performing yet, obstinate one."
+        value: "You\u2019re attempting to perform what you can\u2019t perform yet,
+          stubborn one."
         type: 0
         typeString: CustomFieldType_Text
       - title: Sequence
@@ -948,7 +961,7 @@ MonoBehaviour:
         type: 0
         typeString: CustomFieldType_Text
       - title: Dialogue Text
-        value: Quite the ambitious one, huh dreamer? You have to learn to do it first.
+        value: Quite the ambitious one, huh dreamer? Gotta learn it first.
         type: 0
         typeString: CustomFieldType_Text
       - title: Sequence
