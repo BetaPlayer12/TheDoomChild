@@ -76,6 +76,9 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private FinalSlash m_finalSlash;
         private AirSlashCombo m_airSlashCombo;
         private SovereignImpale m_sovereignImpale;
+        private HellTrident m_hellTrident;
+        private FoolsVerdict m_foolsVerdict;
+        private SoulFireBlast m_soulFireBlast;
         #endregion
         #endregion
 
@@ -111,6 +114,9 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_finalSlash?.Cancel();
             m_airSlashCombo?.Cancel();
             m_sovereignImpale?.Cancel();
+            m_hellTrident?.Cancel();
+            m_foolsVerdict?.Cancel();
+            m_soulFireBlast?.Cancel();
 
             if (m_state.isGrounded)
             {
@@ -211,6 +217,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
                         m_reaperHarvest?.Cancel();
                         m_finalSlash?.Cancel();
                         m_sovereignImpale?.Cancel();
+                        m_hellTrident?.Cancel();
+                        m_foolsVerdict?.Cancel();
                     }
                 }
 
@@ -277,6 +285,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
                 m_devilWings?.Cancel();
                 m_krakenRage?.Cancel();
+                m_soulFireBlast?.Cancel();
             }
         }
 
@@ -353,6 +362,9 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_finalSlash = m_character.GetComponentInChildren<FinalSlash>();
             m_airSlashCombo = m_character.GetComponentInChildren<AirSlashCombo>();
             m_sovereignImpale = m_character.GetComponentInChildren<SovereignImpale>();
+            m_hellTrident = m_character.GetComponentInChildren<HellTrident>();
+            m_foolsVerdict = m_character.GetComponentInChildren<FoolsVerdict>();
+            m_soulFireBlast = m_character.GetComponentInChildren<SoulFireBlast>();
 
             //Intro Controller
             m_introController = GetComponent<PlayerIntroControlsController>();
@@ -567,6 +579,26 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 m_sovereignImpale.HandleMovementTimer();
             }
 
+            if (m_hellTrident.CanHellTrident() == false)
+            {
+                m_hellTrident.HandleAttackTimer();
+            }
+
+            if (m_hellTrident.CanMove() == false)
+            {
+                m_hellTrident.HandleMovementTimer();
+            }
+
+            if (m_foolsVerdict.CanFoolsVerdict() == false)
+            {
+                m_foolsVerdict.HandleAttackTimer();
+            }
+
+            if (m_foolsVerdict.CanMove() == false)
+            {
+                m_foolsVerdict.HandleMovementTimer();
+            }
+
             if (m_state.canAttack == true)
             {
                 m_slashCombo.HandleComboResetTimer();
@@ -778,7 +810,9 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     }
                     else if (m_input.airSlashComboPressed && m_airSlashCombo.CanAirSlashCombo())
                     {
-                        m_whip.Cancel();
+                        m_basicSlashes?.Cancel();
+                        m_whip?.Cancel();
+
                         if (m_state.isInShadowMode == true)
                         {
                             if (m_shadowMorph.IsAttackAllowed() == true)
@@ -814,6 +848,13 @@ namespace DChild.Gameplay.Characters.Players.Modules
                         }
 
                         return;
+                    }
+                    else if (m_input.soulFireBlastPressed && !m_input.krakenRagePressed)
+                    {
+                        PrepareForMidairAttack();
+                        m_devilWings?.Cancel();
+                        m_extraJump?.Cancel();
+                        m_soulFireBlast.Execute();
                     }
                     else if (m_input.krakenRagePressed)
                     {
@@ -1320,7 +1361,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
                         return;
                     }
-                    else if (m_input.airLungeSlashPressed)
+                    else if (m_input.airLungeSlashPressed && m_airLunge.CanAirLunge())
                     {
                         if (m_state.isInShadowMode == false)
                         {
@@ -1372,7 +1413,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                         }
                         return;
                     }
-                    else if (m_input.fireFistPressed)
+                    else if (m_input.fireFistPressed && !m_input.hellTridentPressed && !m_input.foolsVerdictPressed)
                     {
                         if (m_state.isInShadowMode == false)
                         {
@@ -1380,6 +1421,34 @@ namespace DChild.Gameplay.Characters.Players.Modules
                             if (IsFacingInput())
                             {
                                 m_fireFist.Execute();
+                            }
+                            return;
+                        }
+
+                        return;
+                    }
+                    else if (m_input.hellTridentPressed)
+                    {
+                        if (m_state.isInShadowMode == false)
+                        {
+                            PrepareForGroundAttack();
+                            if (IsFacingInput())
+                            {
+                                m_hellTrident.Execute();
+                            }
+                            return;
+                        }
+
+                        return;
+                    }
+                    else if (m_input.foolsVerdictPressed)
+                    {
+                        if (m_state.isInShadowMode == false)
+                        {
+                            PrepareForGroundAttack();
+                            if (IsFacingInput())
+                            {
+                                m_foolsVerdict.Execute();
                             }
                             return;
                         }
@@ -1702,7 +1771,9 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     && m_reaperHarvest.CanMove()
                     && m_finalSlash.CanMove()
                     && m_airSlashCombo.CanMove()
-                    && m_sovereignImpale.CanMove();
+                    && m_sovereignImpale.CanMove()
+                    && m_hellTrident.CanMove()
+                    && m_foolsVerdict.CanMove();
         }
 
         private bool IsFacingInput()

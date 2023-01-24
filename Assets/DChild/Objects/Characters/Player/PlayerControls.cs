@@ -314,6 +314,33 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""HellTrident"",
+                    ""type"": ""Button"",
+                    ""id"": ""89e1049e-7b63-44dd-82e7-335d3087c10a"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""FoolsVerdict"",
+                    ""type"": ""Button"",
+                    ""id"": ""2de701a8-2584-4404-86c0-225a9b4aa35f"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SoulFireBlast"",
+                    ""type"": ""Button"",
+                    ""id"": ""5cb6f705-6359-48e0-b391-f553a10cac83"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -1429,9 +1456,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""name"": ""One Modifier"",
-                    ""id"": ""3edfbdc8-6e2c-41bd-b62e-a734809a8ec4"",
-                    ""path"": ""OneModifier"",
+                    ""name"": ""Two Modifiers"",
+                    ""id"": ""1ba60930-3d4d-4d51-811e-87a2a19e14aa"",
+                    ""path"": ""TwoModifiers"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -1440,8 +1467,8 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""name"": ""modifier"",
-                    ""id"": ""30c4fa72-2c60-462b-a8c4-bb757530a698"",
+                    ""name"": ""modifier1"",
+                    ""id"": ""241591c6-e372-4799-8846-da6baa958067"",
                     ""path"": ""<Keyboard>/leftShift"",
                     ""interactions"": """",
                     ""processors"": """",
@@ -1451,8 +1478,19 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": true
                 },
                 {
+                    ""name"": ""modifier2"",
+                    ""id"": ""27e48ac7-67eb-40c4-b60e-91ce08959d6b"",
+                    ""path"": ""<Keyboard>/w"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""KrakenRage"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
                     ""name"": ""binding"",
-                    ""id"": ""e2ca704a-0940-4765-baad-6fe618766cb4"",
+                    ""id"": ""4698f9e6-2ef4-4050-9b3f-18828e0d02c1"",
                     ""path"": ""<Keyboard>/f"",
                     ""interactions"": """",
                     ""processors"": """",
@@ -1601,6 +1639,171 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": ""Keyboard"",
                     ""action"": ""SovereignImpale"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Two Modifier 1"",
+                    ""id"": ""8fc059ef-1f72-429b-a0a4-9be5644a7096"",
+                    ""path"": ""TwoModifiers"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""HellTrident"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""modifier1"",
+                    ""id"": ""158137de-3d3f-4e03-a65b-bf28024bd123"",
+                    ""path"": ""<Keyboard>/leftShift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""HellTrident"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""modifier2"",
+                    ""id"": ""34c45e73-629e-4aee-9b54-288eefc518e4"",
+                    ""path"": ""<Keyboard>/a"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""HellTrident"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""binding"",
+                    ""id"": ""050b76b6-5db2-482e-9caa-bead9032dee4"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""HellTrident"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Two Modifier 2"",
+                    ""id"": ""56c26681-fa83-49bc-924b-d13422a9c1e8"",
+                    ""path"": ""TwoModifiers"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""HellTrident"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""modifier1"",
+                    ""id"": ""ee7482fa-3b24-42ed-a024-a3bb2a769a10"",
+                    ""path"": ""<Keyboard>/leftShift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""HellTrident"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""modifier2"",
+                    ""id"": ""210b8431-e27f-4b11-a3f5-db3d10277fe0"",
+                    ""path"": ""<Keyboard>/d"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""HellTrident"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""binding"",
+                    ""id"": ""cb18f212-3b02-42cf-99d4-8cfcc2703ae0"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""HellTrident"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Two Modifiers"",
+                    ""id"": ""9ec76ff7-85b5-4dae-9f18-b42c3227faef"",
+                    ""path"": ""TwoModifiers"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""FoolsVerdict"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""modifier1"",
+                    ""id"": ""0e5ed0c0-a9a1-4fa6-9ae8-cb9e5abd3581"",
+                    ""path"": ""<Keyboard>/leftShift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""FoolsVerdict"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""modifier2"",
+                    ""id"": ""04e5377f-4427-4426-b6d1-8bba3a6d2e17"",
+                    ""path"": ""<Keyboard>/w"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""FoolsVerdict"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""binding"",
+                    ""id"": ""b6be8f61-4bde-426d-9314-e39b4008e8b8"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""FoolsVerdict"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""One Modifier"",
+                    ""id"": ""59697261-1d58-4c0c-8b19-f9236b289a37"",
+                    ""path"": ""OneModifier"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SoulFireBlast"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""modifier"",
+                    ""id"": ""8b0d1af1-cb5b-492c-8751-d1987791f73a"",
+                    ""path"": ""<Keyboard>/leftShift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""SoulFireBlast"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""binding"",
+                    ""id"": ""0ce0dc78-4e1a-46be-a4eb-34be5ef4f190"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""SoulFireBlast"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 }
@@ -2790,6 +2993,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         m_Gameplay_FinalSlashReleased = m_Gameplay.FindAction("FinalSlashReleased", throwIfNotFound: true);
         m_Gameplay_AirSlashCombo = m_Gameplay.FindAction("AirSlashCombo", throwIfNotFound: true);
         m_Gameplay_SovereignImpale = m_Gameplay.FindAction("SovereignImpale", throwIfNotFound: true);
+        m_Gameplay_HellTrident = m_Gameplay.FindAction("HellTrident", throwIfNotFound: true);
+        m_Gameplay_FoolsVerdict = m_Gameplay.FindAction("FoolsVerdict", throwIfNotFound: true);
+        m_Gameplay_SoulFireBlast = m_Gameplay.FindAction("SoulFireBlast", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -2903,6 +3109,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
     private readonly InputAction m_Gameplay_FinalSlashReleased;
     private readonly InputAction m_Gameplay_AirSlashCombo;
     private readonly InputAction m_Gameplay_SovereignImpale;
+    private readonly InputAction m_Gameplay_HellTrident;
+    private readonly InputAction m_Gameplay_FoolsVerdict;
+    private readonly InputAction m_Gameplay_SoulFireBlast;
     public struct GameplayActions
     {
         private @PlayerControls m_Wrapper;
@@ -2939,6 +3148,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         public InputAction @FinalSlashReleased => m_Wrapper.m_Gameplay_FinalSlashReleased;
         public InputAction @AirSlashCombo => m_Wrapper.m_Gameplay_AirSlashCombo;
         public InputAction @SovereignImpale => m_Wrapper.m_Gameplay_SovereignImpale;
+        public InputAction @HellTrident => m_Wrapper.m_Gameplay_HellTrident;
+        public InputAction @FoolsVerdict => m_Wrapper.m_Gameplay_FoolsVerdict;
+        public InputAction @SoulFireBlast => m_Wrapper.m_Gameplay_SoulFireBlast;
         public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -3044,6 +3256,15 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @SovereignImpale.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnSovereignImpale;
                 @SovereignImpale.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnSovereignImpale;
                 @SovereignImpale.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnSovereignImpale;
+                @HellTrident.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnHellTrident;
+                @HellTrident.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnHellTrident;
+                @HellTrident.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnHellTrident;
+                @FoolsVerdict.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnFoolsVerdict;
+                @FoolsVerdict.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnFoolsVerdict;
+                @FoolsVerdict.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnFoolsVerdict;
+                @SoulFireBlast.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnSoulFireBlast;
+                @SoulFireBlast.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnSoulFireBlast;
+                @SoulFireBlast.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnSoulFireBlast;
             }
             m_Wrapper.m_GameplayActionsCallbackInterface = instance;
             if (instance != null)
@@ -3144,6 +3365,15 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @SovereignImpale.started += instance.OnSovereignImpale;
                 @SovereignImpale.performed += instance.OnSovereignImpale;
                 @SovereignImpale.canceled += instance.OnSovereignImpale;
+                @HellTrident.started += instance.OnHellTrident;
+                @HellTrident.performed += instance.OnHellTrident;
+                @HellTrident.canceled += instance.OnHellTrident;
+                @FoolsVerdict.started += instance.OnFoolsVerdict;
+                @FoolsVerdict.performed += instance.OnFoolsVerdict;
+                @FoolsVerdict.canceled += instance.OnFoolsVerdict;
+                @SoulFireBlast.started += instance.OnSoulFireBlast;
+                @SoulFireBlast.performed += instance.OnSoulFireBlast;
+                @SoulFireBlast.canceled += instance.OnSoulFireBlast;
             }
         }
     }
@@ -3412,6 +3642,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         void OnFinalSlashReleased(InputAction.CallbackContext context);
         void OnAirSlashCombo(InputAction.CallbackContext context);
         void OnSovereignImpale(InputAction.CallbackContext context);
+        void OnHellTrident(InputAction.CallbackContext context);
+        void OnFoolsVerdict(InputAction.CallbackContext context);
+        void OnSoulFireBlast(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

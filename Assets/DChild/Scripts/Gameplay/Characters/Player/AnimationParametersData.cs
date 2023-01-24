@@ -55,6 +55,9 @@ namespace DChild.Gameplay.Characters.Players
             AirSlashCombo,
             AirSlashState,
             SovereignImpale,
+            HellTrident,
+            FoolsVerdict,
+            SoulFireBlast,
         }
 
         [SerializeField]

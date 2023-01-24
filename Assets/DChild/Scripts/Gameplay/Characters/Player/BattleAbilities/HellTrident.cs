@@ -7,17 +7,17 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 {
-    public class AirLunge : AttackBehaviour
+    public class HellTrident : AttackBehaviour
     {
         [SerializeField]
         private SkeletonAnimation m_attackFX;
 
         [SerializeField]
-        private float m_airLungeCooldown;
+        private float m_hellTridentCooldown;
         [SerializeField]
-        private float m_airLungeMovementCooldown;
+        private float m_hellTridentMovementCooldown;
         [SerializeField]
-        private Info m_airLungeInfo;
+        private Info m_hellTridentInfo;
         //TEST
         [SerializeField, BoxGroup("Physics")]
         private Character m_character;
@@ -30,20 +30,29 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
         [SerializeField, BoxGroup("Sensors")]
         private RaySensor m_edgeSensor;
 
+        [SerializeField, BoxGroup("HellTrident")]
+        private Transform m_startPoint;
+        [SerializeField, BoxGroup("HellTrident")]
+        private SpineFX m_hellTridentStartAnimation;
+        [SerializeField, BoxGroup("HellTrident")]
+        private ProjectileInfo m_projectileInfo;
+
         [SerializeField]
         private Vector2 m_pushForce;
 
-        private bool m_canAirLunge;
+        private ProjectileLauncher m_launcher;
+
+        private bool m_canHellTrident;
         private bool m_canMove;
         private IPlayerModifer m_modifier;
-        private int m_airLungeStateAnimationParameter;
-        private float m_airLungeCooldownTimer;
-        private float m_airLungeMovementCooldownTimer;
+        private int m_hellTridentStateAnimationParameter;
+        private float m_hellTridentCooldownTimer;
+        private float m_hellTridentMovementCooldownTimer;
 
         private Animator m_fxAnimator;
         private SkeletonAnimation m_skeletonAnimation;
 
-        public bool CanAirLunge() => m_canAirLunge;
+        public bool CanHellTrident() => m_canHellTrident;
         public bool CanMove() => m_canMove;
 
         public override void Initialize(ComplexCharacterInfo info)
@@ -51,13 +60,15 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             base.Initialize(info);
 
             m_modifier = info.modifier;
-            m_airLungeStateAnimationParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.AirLunge);
-            m_canAirLunge = true;
+            m_hellTridentStateAnimationParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.HellTrident);
+            m_canHellTrident = true;
             m_canMove = true;
-            m_airLungeMovementCooldownTimer = m_airLungeMovementCooldown;
+            m_hellTridentMovementCooldownTimer = m_hellTridentMovementCooldown;
 
             m_fxAnimator = m_attackFX.gameObject.GetComponentInChildren<Animator>();
             m_skeletonAnimation = m_attackFX.gameObject.GetComponent<SkeletonAnimation>();
+
+            m_launcher = new ProjectileLauncher(m_projectileInfo, m_startPoint);
         }
 
         //public void SetConfiguration(SlashComboStatsInfo info)
@@ -68,8 +79,9 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
         public override void Reset()
         {
             base.Reset();
-            m_airLungeInfo.ShowCollider(false);
-            m_animator.SetBool(m_airLungeStateAnimationParameter, false);
+            //m_hellTridentInfo.ShowCollider(false);
+            m_animator.SetBool(m_hellTridentStateAnimationParameter, false);
+            m_hellTridentStartAnimation.Stop();
         }
 
         public void Execute()
@@ -77,37 +89,40 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             //m_state.waitForBehaviour = true;
             m_state.isAttacking = true;
             m_state.canAttack = false;
-            m_canAirLunge = false;
+            m_canHellTrident = false;
             m_canMove = false;
             m_animator.SetBool(m_animationParameter, true);
-            m_animator.SetBool(m_airLungeStateAnimationParameter, true);
-            m_airLungeCooldownTimer = m_airLungeCooldown;
-            m_airLungeMovementCooldownTimer = m_airLungeMovementCooldown;
+            m_animator.SetBool(m_hellTridentStateAnimationParameter, true);
+            m_hellTridentCooldownTimer = m_hellTridentCooldown;
+            m_hellTridentMovementCooldownTimer = m_hellTridentMovementCooldown;
+            m_hellTridentStartAnimation.Play();
             //m_attacker.SetDamageModifier(m_slashComboInfo[m_currentSlashState].damageModifier * m_modifier.Get(PlayerModifier.AttackDamage));
         }
 
         public void EndExecution()
         {
             base.AttackOver();
-            m_airLungeInfo.ShowCollider(false);
-            //m_canAirLunge = true;
+            //m_hellTridentInfo.ShowCollider(false);
+            m_canHellTrident = true;
             m_canMove = true;
             //m_state.waitForBehaviour = false;
-            m_animator.SetBool(m_airLungeStateAnimationParameter, false);
+            m_animator.SetBool(m_hellTridentStateAnimationParameter, false);
+            m_hellTridentStartAnimation.Stop();
         }
 
         public override void Cancel()
         {
             base.Cancel();
-            m_airLungeInfo.ShowCollider(false);
+            //m_hellTridentInfo.ShowCollider(false);
             m_fxAnimator.Play("Buffer");
+            m_hellTridentStartAnimation.Stop();
         }
 
         public void EnableCollision(bool value)
         {
             m_rigidBody.WakeUp();
-            m_airLungeInfo.ShowCollider(value);
-            m_attackFX.transform.position = m_airLungeInfo.fxPosition.position;
+            m_hellTridentInfo.ShowCollider(value);
+            m_attackFX.transform.position = m_hellTridentInfo.fxPosition.position;
 
             //TEST
             m_enemySensor.Cast();
@@ -121,32 +136,39 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
         public void HandleAttackTimer()
         {
-            if (m_airLungeCooldownTimer > 0)
+            if (m_hellTridentCooldownTimer > 0)
             {
-                m_airLungeCooldownTimer -= GameplaySystem.time.deltaTime;
-                m_canAirLunge = false;
+                m_hellTridentCooldownTimer -= GameplaySystem.time.deltaTime;
+                m_canHellTrident = false;
             }
             else
             {
-                m_airLungeCooldownTimer = m_airLungeCooldown;
+                m_hellTridentCooldownTimer = m_hellTridentCooldown;
                 m_state.isAttacking = false;
-                m_canAirLunge = true;
+                m_canHellTrident = true;
             }
         }
 
         public void HandleMovementTimer()
         {
-            if (m_airLungeMovementCooldownTimer > 0)
+            if (m_hellTridentMovementCooldownTimer > 0)
             {
-                m_airLungeMovementCooldownTimer -= GameplaySystem.time.deltaTime;
+                m_hellTridentMovementCooldownTimer -= GameplaySystem.time.deltaTime;
                 m_canMove = false;
             }
             else
             {
                 //Debug.Log("Can Move");
-                m_airLungeMovementCooldownTimer = m_airLungeMovementCooldown;
+                m_hellTridentMovementCooldownTimer = m_hellTridentMovementCooldown;
                 m_canMove = true;
             }
+        }
+
+        public void Summon()
+        {
+            //LaunchSpike(PuedisYnnusSpike.SkinType.Big, false, Quaternion.identity, true);
+            m_launcher.AimAt(new Vector2(m_startPoint.position.x + (m_character.facing == HorizontalDirection.Right ? 10 : -10), m_startPoint.position.y));
+            m_launcher.LaunchProjectile();
         }
     }
 }

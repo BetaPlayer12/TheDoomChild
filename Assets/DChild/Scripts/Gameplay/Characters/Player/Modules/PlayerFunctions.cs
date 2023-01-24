@@ -25,6 +25,9 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private FinalSlash m_finalSlash;
         private AirSlashCombo m_airSlashCombo;
         private SovereignImpale m_sovereignImpale;
+        private HellTrident m_hellTrident;
+        private FoolsVerdict m_foolsVerdict;
+        private SoulFireBlast m_soulFireBlast;
         #endregion
 
         public void IdleStateFinished()
@@ -321,6 +324,39 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_sovereignImpale?.AttackOver();
             m_sovereignImpale.EndExecution();
         }
+
+        public void HellTridentSummon()
+        {
+            m_hellTrident.Summon();
+        }
+
+        public void HellTridentEnd()
+        {
+            m_hellTrident?.AttackOver();
+            m_hellTrident.EndExecution();
+        }
+
+        public void FoolsVerdictSummon()
+        {
+            m_foolsVerdict.Summon();
+        }
+
+        public void FoolsVerdictEnd()
+        {
+            m_foolsVerdict?.AttackOver();
+            m_foolsVerdict.EndExecution();
+        }
+
+        public void SoulFireBlastSummon()
+        {
+            m_soulFireBlast.Summon();
+        }
+
+        public void SoulFireBlastEnd()
+        {
+            m_soulFireBlast?.AttackOver();
+            m_soulFireBlast.EndExecution();
+        }
         #endregion
 
         public void SkullThrowSpawnProjectile()
@@ -377,6 +413,9 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_finalSlash = character.GetComponentInChildren<FinalSlash>();
             m_airSlashCombo = character.GetComponentInChildren<AirSlashCombo>();
             m_sovereignImpale = character.GetComponentInChildren<SovereignImpale>();
+            m_hellTrident = character.GetComponentInChildren<HellTrident>();
+            m_foolsVerdict = character.GetComponentInChildren<FoolsVerdict>();
+            m_soulFireBlast = character.GetComponentInChildren<SoulFireBlast>();
         }
 
         #region TESTING

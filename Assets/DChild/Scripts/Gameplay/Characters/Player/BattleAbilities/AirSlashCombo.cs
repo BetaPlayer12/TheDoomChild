@@ -72,7 +72,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_modifier = info.modifier;
             m_airSlashComboStateAnimationParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.AirSlashCombo);
             m_airSlashStateAnimationParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.AirSlashState);
-            m_currentAirSlashState = 0;
+            m_currentAirSlashState = -1;
             m_currentVisualAirSlashState = 0;
             m_comboAttackDelayTimer = -1;
             m_comboResetDelayTimer = -1;
@@ -83,6 +83,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_fxAnimator = m_attackFX.gameObject.GetComponentInChildren<Animator>();
             m_skeletonAnimation = m_attackFX.gameObject.GetComponent<SkeletonAnimation>();
             m_cacheGravity = m_physics.gravityScale;
+
+            m_animator.SetInteger(m_airSlashStateAnimationParameter, m_currentAirSlashState);
         }
 
         //public void SetConfiguration(SlashComboStatsInfo info)
@@ -94,7 +96,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         {
             base.Reset();
 
-            m_currentAirSlashState = 0;
+            m_currentAirSlashState = -1;
             m_currentVisualAirSlashState = 0;
             m_animator.SetBool(m_airSlashComboStateAnimationParameter, false);
             m_animator.SetInteger(m_airSlashStateAnimationParameter, m_currentAirSlashState);
@@ -108,12 +110,12 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_state.isAttacking = true;
             m_state.canAttack = false;
             m_canMove = false;
+            m_currentAirSlashState += m_currentAirSlashState >= m_airSlashStateAmount - 1 ? 0 : 1;
             m_animator.SetBool(m_animationParameter, true);
             m_animator.SetBool(m_airSlashComboStateAnimationParameter, true);
             m_animator.SetInteger(m_airSlashStateAnimationParameter, m_currentAirSlashState);
             m_attacker.SetDamageModifier(m_airSlashComboInfo[m_currentAirSlashState].damageModifier * m_modifier.Get(PlayerModifier.AttackDamage));
             m_currentVisualAirSlashState = m_currentAirSlashState;
-            m_currentAirSlashState++;
             m_physics.gravityScale = 0;
 
             m_comboResetDelayTimer = m_airSlashComboInfo[m_currentAirSlashState].nextAttackDelay;
@@ -199,6 +201,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 m_canAirSlashCombo = false;
                 m_currentAirSlashState = 0;
                 m_currentVisualAirSlashState = 0;
+                m_physics.gravityScale = m_cacheGravity;
                 //m_animator.SetBool(m_airSlashComboStateAnimationParameter, false);
                 m_animator.SetInteger(m_airSlashStateAnimationParameter, m_currentAirSlashState);
             }
