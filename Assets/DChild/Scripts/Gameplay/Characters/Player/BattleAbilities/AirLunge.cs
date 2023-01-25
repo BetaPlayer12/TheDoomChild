@@ -113,11 +113,10 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             m_enemySensor.Cast();
             m_wallSensor.Cast();
             m_edgeSensor.Cast();
-            //if (!m_enemySensor.isDetecting && !m_wallSensor.allRaysDetecting && m_edgeSensor.isDetecting && value)
-            //{
-            //    m_physics.AddForce(new Vector2(m_character.facing == HorizontalDirection.Right ? m_pushForce.x : -m_pushForce.x, m_pushForce.y), ForceMode2D.Impulse);
-            //}
-            m_physics.AddForce(new Vector2(m_character.facing == HorizontalDirection.Right ? m_pushForce.x : -m_pushForce.x, m_pushForce.y), ForceMode2D.Impulse);
+            if (/*!m_enemySensor.isDetecting && !m_wallSensor.allRaysDetecting && */m_edgeSensor.isDetecting && value)
+            {
+                m_physics.AddForce(new Vector2(m_character.facing == HorizontalDirection.Right ? m_pushForce.x : -m_pushForce.x, m_pushForce.y), ForceMode2D.Impulse);
+            }
         }
 
         public void HandleAttackTimer()
