@@ -80,6 +80,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private FoolsVerdict m_foolsVerdict;
         private SoulFireBlast m_soulFireBlast;
         private EdgedFury m_edgedFury;
+        private NinthCircleSanction m_ninthCircleSanction;
         #endregion
         #endregion
 
@@ -119,6 +120,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_foolsVerdict?.Cancel();
             m_soulFireBlast?.Cancel();
             m_edgedFury?.Cancel();
+            m_ninthCircleSanction?.Cancel();
 
             if (m_state.isGrounded)
             {
@@ -221,6 +223,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                         m_sovereignImpale?.Cancel();
                         m_hellTrident?.Cancel();
                         m_foolsVerdict?.Cancel();
+                        m_ninthCircleSanction.Cancel();
                     }
                 }
 
@@ -369,6 +372,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_foolsVerdict = m_character.GetComponentInChildren<FoolsVerdict>();
             m_soulFireBlast = m_character.GetComponentInChildren<SoulFireBlast>();
             m_edgedFury = m_character.GetComponentInChildren<EdgedFury>();
+            m_ninthCircleSanction = m_character.GetComponentInChildren<NinthCircleSanction>();
 
             //Intro Controller
             m_introController = GetComponent<PlayerIntroControlsController>();
@@ -601,6 +605,16 @@ namespace DChild.Gameplay.Characters.Players.Modules
             if (m_foolsVerdict.CanMove() == false)
             {
                 m_foolsVerdict.HandleMovementTimer();
+            }
+
+            if (m_ninthCircleSanction.CanNinthCircleSanction() == false)
+            {
+                m_ninthCircleSanction.HandleAttackTimer();
+            }
+
+            if (m_ninthCircleSanction.CanMove() == false)
+            {
+                m_ninthCircleSanction.HandleMovementTimer();
             }
 
             if (m_state.canAttack == true)
@@ -1089,7 +1103,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             {
                 if (m_state.canAttack)
                 {
-                    if (m_input.slashPressed && !m_input.sovereignImpalePressed)
+                    if (m_input.slashPressed && !m_input.sovereignImpalePressed && !m_input.ninthCircleSanctionPressed)
                     {
                         if (m_state.isInShadowMode == true)
                         {
@@ -1141,6 +1155,20 @@ namespace DChild.Gameplay.Characters.Players.Modules
                             if (IsFacingInput())
                             {
                                 m_sovereignImpale.Execute();
+                            }
+                            return;
+                        }
+
+                        return;
+                    }
+                    else if (m_input.ninthCircleSanctionPressed)
+                    {
+                        if (m_state.isInShadowMode == false)
+                        {
+                            PrepareForGroundAttack();
+                            if (IsFacingInput())
+                            {
+                                m_ninthCircleSanction.Execute();
                             }
                             return;
                         }

@@ -359,6 +359,15 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""NinthCircleSanction"",
+                    ""type"": ""Button"",
+                    ""id"": ""720d84e3-a098-43fc-884e-7af06fdd0025"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -1890,6 +1899,50 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""action"": ""EdgedFuryReleased"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Two Modifiers"",
+                    ""id"": ""810b0e23-620b-4567-a3b4-ecdf07738b97"",
+                    ""path"": ""TwoModifiers"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""NinthCircleSanction"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""modifier1"",
+                    ""id"": ""b32eb127-64be-4da3-89ef-76a299c64ad0"",
+                    ""path"": ""<Keyboard>/leftShift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""NinthCircleSanction"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""modifier2"",
+                    ""id"": ""7986fb70-e37e-46d1-8f6e-260c2c12d2ff"",
+                    ""path"": ""<Keyboard>/s"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""NinthCircleSanction"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""binding"",
+                    ""id"": ""1e0d531b-7113-40b5-8fe6-05aad7bfd7e6"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""NinthCircleSanction"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
                 }
             ]
         },
@@ -3082,6 +3135,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         m_Gameplay_SoulFireBlast = m_Gameplay.FindAction("SoulFireBlast", throwIfNotFound: true);
         m_Gameplay_EdgedFury = m_Gameplay.FindAction("EdgedFury", throwIfNotFound: true);
         m_Gameplay_EdgedFuryReleased = m_Gameplay.FindAction("EdgedFuryReleased", throwIfNotFound: true);
+        m_Gameplay_NinthCircleSanction = m_Gameplay.FindAction("NinthCircleSanction", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -3200,6 +3254,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
     private readonly InputAction m_Gameplay_SoulFireBlast;
     private readonly InputAction m_Gameplay_EdgedFury;
     private readonly InputAction m_Gameplay_EdgedFuryReleased;
+    private readonly InputAction m_Gameplay_NinthCircleSanction;
     public struct GameplayActions
     {
         private @PlayerControls m_Wrapper;
@@ -3241,6 +3296,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         public InputAction @SoulFireBlast => m_Wrapper.m_Gameplay_SoulFireBlast;
         public InputAction @EdgedFury => m_Wrapper.m_Gameplay_EdgedFury;
         public InputAction @EdgedFuryReleased => m_Wrapper.m_Gameplay_EdgedFuryReleased;
+        public InputAction @NinthCircleSanction => m_Wrapper.m_Gameplay_NinthCircleSanction;
         public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -3361,6 +3417,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @EdgedFuryReleased.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnEdgedFuryReleased;
                 @EdgedFuryReleased.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnEdgedFuryReleased;
                 @EdgedFuryReleased.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnEdgedFuryReleased;
+                @NinthCircleSanction.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnNinthCircleSanction;
+                @NinthCircleSanction.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnNinthCircleSanction;
+                @NinthCircleSanction.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnNinthCircleSanction;
             }
             m_Wrapper.m_GameplayActionsCallbackInterface = instance;
             if (instance != null)
@@ -3476,6 +3535,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @EdgedFuryReleased.started += instance.OnEdgedFuryReleased;
                 @EdgedFuryReleased.performed += instance.OnEdgedFuryReleased;
                 @EdgedFuryReleased.canceled += instance.OnEdgedFuryReleased;
+                @NinthCircleSanction.started += instance.OnNinthCircleSanction;
+                @NinthCircleSanction.performed += instance.OnNinthCircleSanction;
+                @NinthCircleSanction.canceled += instance.OnNinthCircleSanction;
             }
         }
     }
@@ -3749,6 +3811,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         void OnSoulFireBlast(InputAction.CallbackContext context);
         void OnEdgedFury(InputAction.CallbackContext context);
         void OnEdgedFuryReleased(InputAction.CallbackContext context);
+        void OnNinthCircleSanction(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

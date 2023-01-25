@@ -31,6 +31,7 @@ namespace DChild.Gameplay.Characters.Players
             EndFoolsVerdict,
             EndSoulFireBlast,
             EndEdgedFury,
+            EndNinthCircleSanction,
         }
 
         [SerializeField]
@@ -108,6 +109,9 @@ namespace DChild.Gameplay.Characters.Players
                         break;
                     case Command.EndEdgedFury:
                         player.EdgedFuryEnd();
+                        break;
+                    case Command.EndNinthCircleSanction:
+                        player.NinthCircleSanctionEnd();
                         break;
                 }
             }

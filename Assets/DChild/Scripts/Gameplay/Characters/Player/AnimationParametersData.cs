@@ -59,6 +59,7 @@ namespace DChild.Gameplay.Characters.Players
             FoolsVerdict,
             SoulFireBlast,
             EdgedFury,
+            NinthCircleSanction,
         }
 
         [SerializeField]

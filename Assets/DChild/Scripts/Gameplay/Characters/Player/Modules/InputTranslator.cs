@@ -50,6 +50,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         public bool soulFireBlastPressed;
         public bool edgedFuryPressed;
         public bool edgedFuryReleased;
+        public bool ninthCircleSanctionPressed;
         #endregion
 
         private PlayerInput m_input;
@@ -284,6 +285,14 @@ namespace DChild.Gameplay.Characters.Players.Modules
             }
         }
 
+        private void OnNinthCircleSanction(InputValue value)
+        {
+            if (enabled == true)
+            {
+                ninthCircleSanctionPressed = value.Get<float>() == 1;
+            }
+        }
+
         private void OnSlashHeld(InputValue value)
         {
             if (enabled == true)
@@ -417,6 +426,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             soulFireBlastPressed = false;
             edgedFuryPressed = false;
             edgedFuryReleased = false;
+            ninthCircleSanctionPressed = false;
         }
 
         private void Reset()
@@ -456,6 +466,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             soulFireBlastPressed = false;
             edgedFuryPressed = false;
             edgedFuryReleased = false;
+            ninthCircleSanctionPressed = false;
         }
     }
 }
