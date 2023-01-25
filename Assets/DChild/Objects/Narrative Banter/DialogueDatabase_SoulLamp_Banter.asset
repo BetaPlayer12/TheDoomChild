@@ -79,7 +79,7 @@ MonoBehaviour:
     spritePortrait: {fileID: 0}
     alternatePortraits: []
     spritePortraits: []
-  - id: 5
+  - id: 17
     fields:
     - title: Name
       value: System
@@ -104,7 +104,7 @@ MonoBehaviour:
   items: []
   locations: []
   variables:
-  - id: 54
+  - id: 71
     fields:
     - title: Name
       value: SoulLampsDestroyedCount
@@ -180,7 +180,7 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Actor
-        value: 5
+        value: 17
         type: 5
         typeString: CustomFieldType_Actor
       - title: Conversant
@@ -196,7 +196,7 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Sequence
-        value: None()
+        value: 
         type: 0
         typeString: 
       conversationID: 2
@@ -214,14 +214,14 @@ MonoBehaviour:
         isConnector: 0
         priority: 2
       conditionsString: 
-      userScript: 
+      userScript: randomValue = math.random(2)
       onExecute:
         m_PersistentCalls:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 243
-        y: 19
+        x: 244.0401
+        y: 15.687172
         width: 160
         height: 30
     - id: 1
@@ -247,7 +247,7 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Dialogue Text
-        value: <Player is sorry for the Souls in the Lamp>
+        value: 
         type: 0
         typeString: 
       - title: Sequence
@@ -274,15 +274,15 @@ MonoBehaviour:
         destinationDialogueID: 4
         isConnector: 0
         priority: 2
-      conditionsString: (Variable["SoulLampsDestroyedCount"] == 3)
-      userScript: randomIndex = math.random(2)
+      conditionsString: Variable["SoulLampsDestroyedCount"] == 3
+      userScript: 
       onExecute:
         m_PersistentCalls:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 243
-        y: 104
+        x: 246.3346
+        y: 101
         width: 160
         height: 30
     - id: 2
@@ -308,7 +308,7 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Dialogue Text
-        value: 'I sympathize with the lost and forgotten souls. '
+        value: I pity the lost and forgotten souls.
         type: 0
         typeString: 
       - title: Sequence
@@ -329,15 +329,15 @@ MonoBehaviour:
         destinationDialogueID: 3
         isConnector: 0
         priority: 2
-      conditionsString: randomIndex == 0
+      conditionsString: randomValue==1
       userScript: 
       onExecute:
         m_PersistentCalls:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 125
-        y: 189
+        x: 120.10957
+        y: 226.23407
         width: 160
         height: 30
     - id: 3
@@ -363,8 +363,7 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Dialogue Text
-        value: "As if it\u2019s your problem, they\u2019re only what they are for
-          what they have done."
+        value: "So what? They\u2019re only what they are for what they have done."
         type: 0
         typeString: 
       - title: Sequence
@@ -386,8 +385,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 124
-        y: 281
+        x: 115.617035
+        y: 318.23407
         width: 160
         height: 30
     - id: 4
@@ -434,15 +433,15 @@ MonoBehaviour:
         destinationDialogueID: 5
         isConnector: 0
         priority: 2
-      conditionsString: randomIndex == 1
+      conditionsString: randomValue==2
       userScript: 
       onExecute:
         m_PersistentCalls:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 340
-        y: 187
+        x: 333.61682
+        y: 224.23407
         width: 160
         height: 30
     - id: 5
@@ -490,13 +489,13 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 342
-        y: 282
+        x: 337.10938
+        y: 319.23407
         width: 160
         height: 30
     entryGroups: []
     canvasScrollPosition: {x: 0, y: 0}
-    canvasZoom: 1
+    canvasZoom: 0.6700003
   syncInfo:
     syncActors: 0
     syncItems: 0
