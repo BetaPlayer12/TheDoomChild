@@ -105,7 +105,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             //m_ninthCircleSanctionInfo.ShowCollider(false);
             m_animator.SetBool(m_ninthCircleSanctionStateAnimationParameter, false);
             m_canNinthCircleSanction = true;
-            m_canMove = true;
+            //m_canMove = true;
             //m_state.waitForBehaviour = false;
         }
 

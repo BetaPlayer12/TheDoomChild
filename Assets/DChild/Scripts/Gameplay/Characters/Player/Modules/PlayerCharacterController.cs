@@ -1819,7 +1819,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     && m_airSlashCombo.CanMove()
                     && m_sovereignImpale.CanMove()
                     && m_hellTrident.CanMove()
-                    && m_foolsVerdict.CanMove();
+                    && m_foolsVerdict.CanMove()
+                    && m_ninthCircleSanction.CanMove();
         }
 
         private bool IsFacingInput()
