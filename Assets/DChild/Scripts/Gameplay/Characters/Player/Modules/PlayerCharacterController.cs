@@ -817,7 +817,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                         }
                         return;
                     }
-                    else if (m_input.airSlashComboPressed && m_airSlashCombo.CanAirSlashCombo() && !m_input.edgedFuryPressed)
+                    else if (m_input.airSlashComboPressed && m_airSlashCombo.CanAirSlashCombo())
                     {
                         m_basicSlashes?.Cancel();
                         m_whip?.Cancel();
@@ -838,16 +838,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                             return;
                         }
                     }
-                    else if (m_input.edgedFuryPressed)
-                    {
-                        PrepareForMidairAttack();
-                        m_devilWings?.Cancel();
-                        m_extraJump?.Cancel();
-                        m_airSlashCombo?.Cancel();
-                        m_soulFireBlast?.Cancel();
-                        m_edgedFury.Execute();
-                    }
-                    else if (m_input.whipPressed && m_whip.CanAirWhip())
+                    else if (m_input.whipPressed && m_whip.CanAirWhip() && !m_input.edgedFuryPressed)
                     {
                         if (m_skills.IsModuleActive(PrimarySkill.Whip))
                         {
@@ -866,6 +857,15 @@ namespace DChild.Gameplay.Characters.Players.Modules
                         }
 
                         return;
+                    }
+                    else if (m_input.edgedFuryPressed)
+                    {
+                        PrepareForMidairAttack();
+                        m_devilWings?.Cancel();
+                        m_extraJump?.Cancel();
+                        m_airSlashCombo?.Cancel();
+                        m_soulFireBlast?.Cancel();
+                        m_edgedFury.Execute();
                     }
                     else if (m_input.soulFireBlastPressed && !m_input.krakenRagePressed)
                     {

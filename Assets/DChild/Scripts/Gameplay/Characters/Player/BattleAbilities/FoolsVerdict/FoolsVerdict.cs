@@ -31,6 +31,8 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
         private RaySensor m_edgeSensor;
 
         [SerializeField, BoxGroup("FoolsVerdict")]
+        private GameObject m_foolsVerdictGO;
+        [SerializeField, BoxGroup("FoolsVerdict")]
         private Transform m_foolsVerdictTF;
         [SerializeField, BoxGroup("FoolsVerdict")]
         private SpineFX m_foolsVerdictStartAnimation;
@@ -77,6 +79,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             base.Reset();
             //m_foolsVerdictInfo.ShowCollider(false);
             m_animator.SetBool(m_foolsVerdictStateAnimationParameter, false);
+            m_foolsVerdictGO.SetActive(false);
             m_foolsVerdictStartAnimation.Stop();
         }
 
@@ -91,6 +94,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             m_animator.SetBool(m_foolsVerdictStateAnimationParameter, true);
             m_foolsVerdictCooldownTimer = m_foolsVerdictCooldown;
             m_foolsVerdictMovementCooldownTimer = m_foolsVerdictMovementCooldown;
+            m_foolsVerdictGO.SetActive(true);
             m_foolsVerdictStartAnimation.Play();
             //m_attacker.SetDamageModifier(m_slashComboInfo[m_currentSlashState].damageModifier * m_modifier.Get(PlayerModifier.AttackDamage));
         }
@@ -103,6 +107,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             m_canMove = true;
             //m_state.waitForBehaviour = false;
             m_animator.SetBool(m_foolsVerdictStateAnimationParameter, false);
+            m_foolsVerdictGO.SetActive(false);
             m_foolsVerdictStartAnimation.Stop();
         }
 
@@ -111,6 +116,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             base.Cancel();
             //m_foolsVerdictInfo.ShowCollider(false);
             m_fxAnimator.Play("Buffer");
+            m_foolsVerdictGO.SetActive(false);
             m_foolsVerdictStartAnimation.Stop();
         }
 
@@ -162,11 +168,11 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
         public void Summon()
         {
-            StartCoroutine(SkeletalArmRoutine());
+            StartCoroutine(HammerRoutine());
         }
 
 
-        private IEnumerator SkeletalArmRoutine()
+        private IEnumerator HammerRoutine()
         {
             //Reset
             m_foolsVerdictTF.SetParent(this.transform);
@@ -175,6 +181,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             m_foolsVerdictTF.SetParent(null);
             m_foolsVerdictTF.gameObject.SetActive(true);
 
+            m_foolsVerdictGO.SetActive(true);
             yield return new WaitForSeconds(.1f);
             m_foolsVerdictStartAnimation.Play();
             m_foolsVerdictTF.localScale = new Vector3(m_character.facing == HorizontalDirection.Right ? -1 : 1, 1, 1);

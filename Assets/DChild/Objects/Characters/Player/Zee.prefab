@@ -462,6 +462,7 @@ MonoBehaviour:
   m_enemySensor: {fileID: 6685095848874862076}
   m_wallSensor: {fileID: 2702825902955571488}
   m_edgeSensor: {fileID: 8774030571759925288}
+  m_hellTridentGO: {fileID: 593376641113915028}
   m_startPoint: {fileID: 856444445734077892}
   m_hellTridentStartAnimation: {fileID: 4857545860938001575}
   m_projectileInfo:
@@ -495,6 +496,7 @@ MonoBehaviour:
   m_enemySensor: {fileID: 6685095848874862076}
   m_wallSensor: {fileID: 2702825902955571488}
   m_edgeSensor: {fileID: 8774030571759925288}
+  m_foolsVerdictGO: {fileID: 3826497034452106879}
   m_foolsVerdictTF: {fileID: 1230656736517069388}
   m_foolsVerdictStartAnimation: {fileID: 6607468944784263796}
   m_pushForce: {x: 0, y: 0}
@@ -5979,7 +5981,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2905992412887156098
 Transform:
   m_ObjectHideFlags: 0
@@ -24939,22 +24941,15 @@ MonoBehaviour:
     - 5
   m_spineObjects:
     m_skeletonAnimations:
-    - {fileID: 2167840398261059326}
-    - {fileID: 5880470338578597836}
     - {fileID: 4084513133358244869}
     - {fileID: 4713603853206080501}
     m_baseTimeScale:
     - 1
     - 1
-    - 1
-    - 1
   m_physicsObjects:
     m_rigidbody2Ds:
     - {fileID: 4294471023827248786}
-    - {fileID: 3166954576439649871}
     m_physicsTimeObjectInfo:
-    - m_mass: 1
-      m_actualVelocity: {x: 0, y: 0}
     - m_mass: 1
       m_actualVelocity: {x: 0, y: 0}
   m_materials: []
@@ -80723,6 +80718,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: ZeeFoolsVerdict
       objectReference: {fileID: 0}
+    - target: {fileID: 4488553554639119014, guid: cf57c249520aa1c4f83837498a398c08,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7539295897979616110, guid: cf57c249520aa1c4f83837498a398c08,
         type: 3}
       propertyPath: m_LocalScale.x
@@ -80736,21 +80736,9 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 815425767475158233}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &2167840398261059326 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1532717220803240487, guid: cf57c249520aa1c4f83837498a398c08,
-    type: 3}
-  m_PrefabInstance: {fileID: 815425767475158233}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d247ba06193faa74d9335f5481b2b56c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!50 &3166954576439649871 stripped
-Rigidbody2D:
-  m_CorrespondingSourceObject: {fileID: 2351918053630229142, guid: cf57c249520aa1c4f83837498a398c08,
+--- !u!1 &3826497034452106879 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4488553554639119014, guid: cf57c249520aa1c4f83837498a398c08,
     type: 3}
   m_PrefabInstance: {fileID: 815425767475158233}
   m_PrefabAsset: {fileID: 0}

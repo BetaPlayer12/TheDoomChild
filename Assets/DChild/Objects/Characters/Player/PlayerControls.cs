@@ -1826,9 +1826,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""name"": ""Two Modifiers"",
-                    ""id"": ""19b06598-8de0-4f5e-845a-d1745bcc01a7"",
-                    ""path"": ""TwoModifiers"",
+                    ""name"": ""One Modifier"",
+                    ""id"": ""336423da-496c-44f4-bdf2-bcec814a002c"",
+                    ""path"": ""OneModifier"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -1837,8 +1837,8 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""name"": ""modifier1"",
-                    ""id"": ""b8611ffc-8c6a-4c85-bd9a-a4f6804e0ca0"",
+                    ""name"": ""modifier"",
+                    ""id"": ""79def497-82fd-44da-add0-245a5cac9bb3"",
                     ""path"": ""<Keyboard>/leftShift"",
                     ""interactions"": """",
                     ""processors"": """",
@@ -1848,20 +1848,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""name"": ""modifier2"",
-                    ""id"": ""097de5bf-a782-4db5-aa3e-8bcbaa7d7143"",
-                    ""path"": ""<Keyboard>/s"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard"",
-                    ""action"": ""EdgedFury"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
                     ""name"": ""binding"",
-                    ""id"": ""7b44ec76-cb50-41a3-a072-482b71631f43"",
-                    ""path"": ""<Mouse>/leftButton"",
+                    ""id"": ""ffbd11fc-30f2-4f03-a57b-305c93b84e7b"",
+                    ""path"": ""<Mouse>/rightButton"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard"",
@@ -1870,9 +1859,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""name"": ""Two Modifiers"",
-                    ""id"": ""094cb6c3-146f-40f0-bea0-7bf16c428a47"",
-                    ""path"": ""TwoModifiers"",
+                    ""name"": ""One Modifier"",
+                    ""id"": ""1e0b212d-cafd-4842-be08-c12f97a5d00f"",
+                    ""path"": ""OneModifier"",
                     ""interactions"": ""Press(behavior=1)"",
                     ""processors"": """",
                     ""groups"": """",
@@ -1881,8 +1870,8 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""name"": ""modifier1"",
-                    ""id"": ""fd81a438-39e4-4363-9d83-213df8fa76eb"",
+                    ""name"": ""modifier"",
+                    ""id"": ""ab5f4770-3c5a-47bb-add2-ebbcdf958edd"",
                     ""path"": ""<Keyboard>/leftShift"",
                     ""interactions"": """",
                     ""processors"": """",
@@ -1892,20 +1881,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""name"": ""modifier2"",
-                    ""id"": ""428ca88a-1b68-49be-a29d-66f6a89a7764"",
-                    ""path"": ""<Keyboard>/s"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard"",
-                    ""action"": ""EdgedFuryReleased"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
                     ""name"": ""binding"",
-                    ""id"": ""cfdbd717-e573-4b09-8fe3-def81526793c"",
-                    ""path"": ""<Mouse>/leftButton"",
+                    ""id"": ""2c111f3b-3b8f-432e-9fc5-ce59fdfb794c"",
+                    ""path"": ""<Mouse>/rightButton"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard"",

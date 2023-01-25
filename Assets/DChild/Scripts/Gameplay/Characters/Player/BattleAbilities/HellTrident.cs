@@ -31,6 +31,8 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
         private RaySensor m_edgeSensor;
 
         [SerializeField, BoxGroup("HellTrident")]
+        private GameObject m_hellTridentGO;
+        [SerializeField, BoxGroup("HellTrident")]
         private Transform m_startPoint;
         [SerializeField, BoxGroup("HellTrident")]
         private SpineFX m_hellTridentStartAnimation;
@@ -81,6 +83,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             base.Reset();
             //m_hellTridentInfo.ShowCollider(false);
             m_animator.SetBool(m_hellTridentStateAnimationParameter, false);
+            m_hellTridentGO.SetActive(false);
             m_hellTridentStartAnimation.Stop();
         }
 
@@ -95,6 +98,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             m_animator.SetBool(m_hellTridentStateAnimationParameter, true);
             m_hellTridentCooldownTimer = m_hellTridentCooldown;
             m_hellTridentMovementCooldownTimer = m_hellTridentMovementCooldown;
+            m_hellTridentGO.SetActive(true);
             m_hellTridentStartAnimation.Play();
             //m_attacker.SetDamageModifier(m_slashComboInfo[m_currentSlashState].damageModifier * m_modifier.Get(PlayerModifier.AttackDamage));
         }
@@ -107,6 +111,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             m_canMove = true;
             //m_state.waitForBehaviour = false;
             m_animator.SetBool(m_hellTridentStateAnimationParameter, false);
+            m_hellTridentGO.SetActive(false);
             m_hellTridentStartAnimation.Stop();
         }
 
@@ -115,6 +120,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             base.Cancel();
             //m_hellTridentInfo.ShowCollider(false);
             m_fxAnimator.Play("Buffer");
+            m_hellTridentGO.SetActive(false);
             m_hellTridentStartAnimation.Stop();
         }
 
