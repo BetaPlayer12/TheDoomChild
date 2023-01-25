@@ -57,7 +57,7 @@ MonoBehaviour:
     spritePortrait: {fileID: 0}
     alternatePortraits: []
     spritePortraits: []
-  - id: 5
+  - id: 17
     fields:
     - title: Name
       value: System
@@ -101,7 +101,7 @@ MonoBehaviour:
     spritePortrait: {fileID: 0}
     alternatePortraits: []
     spritePortraits: []
-  - id: 4
+  - id: 41
     fields:
     - title: Name
       value: Necro
@@ -126,14 +126,14 @@ MonoBehaviour:
   items: []
   locations: []
   variables:
-  - id: 53
+  - id: 65
     fields:
     - title: Name
       value: IsStoreWithPlayer
       type: 0
       typeString: CustomFieldType_Text
     - title: Initial Value
-      value: False
+      value: True
       type: 2
       typeString: CustomFieldType_Boolean
     - title: Description
@@ -218,7 +218,7 @@ MonoBehaviour:
         type: 0
         typeString: CustomFieldType_Text
       - title: Sequence
-        value: None()
+        value: 
         type: 0
         typeString: CustomFieldType_Text
       conversationID: 1
@@ -232,30 +232,30 @@ MonoBehaviour:
       - originConversationID: 1
         originDialogueID: 0
         destinationConversationID: 1
-        destinationDialogueID: 1
+        destinationDialogueID: 2
         isConnector: 0
         priority: 2
       - originConversationID: 1
         originDialogueID: 0
         destinationConversationID: 1
-        destinationDialogueID: 2
+        destinationDialogueID: 3
         isConnector: 0
         priority: 2
       conditionsString: 
-      userScript: 
+      userScript: randomValue = math.random(3)
       onExecute:
         m_PersistentCalls:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 230.76335
-        y: 23.816803
+        x: 487.52005
+        y: 48.368042
         width: 160
         height: 30
     - id: 1
       fields:
       - title: Title
-        value: 
+        value: 1
         type: 0
         typeString: CustomFieldType_Text
       - title: Description
@@ -263,7 +263,7 @@ MonoBehaviour:
         type: 0
         typeString: CustomFieldType_Text
       - title: Actor
-        value: 5
+        value: 2
         type: 5
         typeString: CustomFieldType_Actor
       - title: Conversant
@@ -275,7 +275,7 @@ MonoBehaviour:
         type: 0
         typeString: CustomFieldType_Text
       - title: Dialogue Text
-        value: <Store tells Player to pick Lore Note up>
+        value: Hurr Durr! Lookie there! Big shiny! Get get!
         type: 0
         typeString: CustomFieldType_Text
       - title: Sequence
@@ -290,15 +290,15 @@ MonoBehaviour:
       falseConditionAction: Block
       conditionPriority: 2
       outgoingLinks: []
-      conditionsString: Variable["IsStoreWithPlayer"] == true
+      conditionsString: randomValue == 2
       userScript: 
       onExecute:
         m_PersistentCalls:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 134.58017
-        y: 99.770996
+        x: 317.73193
+        y: 264.72876
         width: 160
         height: 30
     - id: 2
@@ -312,7 +312,7 @@ MonoBehaviour:
         type: 0
         typeString: CustomFieldType_Text
       - title: Actor
-        value: 5
+        value: 41
         type: 5
         typeString: CustomFieldType_Actor
       - title: Conversant
@@ -346,13 +346,178 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 323.1298
-        y: 100.53436
+        x: 670.39594
+        y: 192.20963
+        width: 160
+        height: 30
+    - id: 3
+      fields:
+      - title: Title
+        value: Store-Based Dialogues
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 2
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 5
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: None()
+        type: 0
+        typeString: CustomFieldType_Text
+      conversationID: 1
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 1
+        originDialogueID: 3
+        destinationConversationID: 1
+        destinationDialogueID: 4
+        isConnector: 0
+        priority: 2
+      - originConversationID: 1
+        originDialogueID: 3
+        destinationConversationID: 1
+        destinationDialogueID: 5
+        isConnector: 0
+        priority: 2
+      - originConversationID: 1
+        originDialogueID: 3
+        destinationConversationID: 1
+        destinationDialogueID: 1
+        isConnector: 0
+        priority: 2
+      conditionsString: Variable["IsStoreWithPlayer"] == true
+      userScript: 
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 410.26602
+        y: 140.22719
+        width: 160
+        height: 30
+    - id: 4
+      fields:
+      - title: Title
+        value: 0
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 2
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 1
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: "That\u2019s one way to attract the clueless, go pick that up."
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      conversationID: 1
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks: []
+      conditionsString: randomValue == 1
+      userScript: 
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 217.73189
+        y: 203.27832
+        width: 160
+        height: 30
+    - id: 5
+      fields:
+      - title: Title
+        value: 2
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 2
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 5
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: Considering your ignorance, allow me, please pick that up.
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      conversationID: 1
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks: []
+      conditionsString: randomValue == 3
+      userScript: 
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 453.60214
+        y: 319.30884
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 0, y: 0}
-    canvasZoom: 1.31
+    canvasScrollPosition: {x: 133.37814, y: 30.187464}
+    canvasZoom: 0.74000037
   syncInfo:
     syncActors: 0
     syncItems: 0
