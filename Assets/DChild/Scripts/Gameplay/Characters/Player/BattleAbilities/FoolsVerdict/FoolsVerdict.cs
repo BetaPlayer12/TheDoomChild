@@ -79,8 +79,9 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             base.Reset();
             //m_foolsVerdictInfo.ShowCollider(false);
             m_animator.SetBool(m_foolsVerdictStateAnimationParameter, false);
+            if (m_foolsVerdictGO.activeSelf)
+                m_foolsVerdictStartAnimation.Stop();
             m_foolsVerdictGO.SetActive(false);
-            m_foolsVerdictStartAnimation.Stop();
         }
 
         public void Execute()
@@ -107,8 +108,9 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             m_canMove = true;
             //m_state.waitForBehaviour = false;
             m_animator.SetBool(m_foolsVerdictStateAnimationParameter, false);
+            if (m_foolsVerdictGO.activeSelf)
+                m_foolsVerdictStartAnimation.Stop();
             m_foolsVerdictGO.SetActive(false);
-            m_foolsVerdictStartAnimation.Stop();
         }
 
         public override void Cancel()
@@ -116,8 +118,9 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             base.Cancel();
             //m_foolsVerdictInfo.ShowCollider(false);
             m_fxAnimator.Play("Buffer");
+            if (m_foolsVerdictGO.activeSelf)
+                m_foolsVerdictStartAnimation.Stop();
             m_foolsVerdictGO.SetActive(false);
-            m_foolsVerdictStartAnimation.Stop();
         }
 
         public void EnableCollision(bool value)

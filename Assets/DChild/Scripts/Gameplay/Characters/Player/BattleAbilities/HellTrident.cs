@@ -83,8 +83,9 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             base.Reset();
             //m_hellTridentInfo.ShowCollider(false);
             m_animator.SetBool(m_hellTridentStateAnimationParameter, false);
+            if (m_hellTridentGO.activeSelf)
+                m_hellTridentStartAnimation.Stop();
             m_hellTridentGO.SetActive(false);
-            m_hellTridentStartAnimation.Stop();
         }
 
         public void Execute()
@@ -111,8 +112,9 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             m_canMove = true;
             //m_state.waitForBehaviour = false;
             m_animator.SetBool(m_hellTridentStateAnimationParameter, false);
+            if (m_hellTridentGO.activeSelf)
+                m_hellTridentStartAnimation.Stop();
             m_hellTridentGO.SetActive(false);
-            m_hellTridentStartAnimation.Stop();
         }
 
         public override void Cancel()
@@ -120,8 +122,9 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             base.Cancel();
             //m_hellTridentInfo.ShowCollider(false);
             m_fxAnimator.Play("Buffer");
+            if (m_hellTridentGO.activeSelf)
+                m_hellTridentStartAnimation.Stop();
             m_hellTridentGO.SetActive(false);
-            m_hellTridentStartAnimation.Stop();
         }
 
         public void EnableCollision(bool value)
