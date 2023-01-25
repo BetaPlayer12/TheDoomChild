@@ -341,6 +341,24 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""EdgedFury"",
+                    ""type"": ""Button"",
+                    ""id"": ""c4afc068-fd30-4d7a-ab4e-3fcfd1e43b13"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""EdgedFuryReleased"",
+                    ""type"": ""Button"",
+                    ""id"": ""0a9086a0-9739-4972-8ee2-84dc870529c2"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -1806,6 +1824,94 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""action"": ""SoulFireBlast"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Two Modifiers"",
+                    ""id"": ""19b06598-8de0-4f5e-845a-d1745bcc01a7"",
+                    ""path"": ""TwoModifiers"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""EdgedFury"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""modifier1"",
+                    ""id"": ""b8611ffc-8c6a-4c85-bd9a-a4f6804e0ca0"",
+                    ""path"": ""<Keyboard>/leftShift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""EdgedFury"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""modifier2"",
+                    ""id"": ""097de5bf-a782-4db5-aa3e-8bcbaa7d7143"",
+                    ""path"": ""<Keyboard>/s"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""EdgedFury"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""binding"",
+                    ""id"": ""7b44ec76-cb50-41a3-a072-482b71631f43"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""EdgedFury"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Two Modifiers"",
+                    ""id"": ""094cb6c3-146f-40f0-bea0-7bf16c428a47"",
+                    ""path"": ""TwoModifiers"",
+                    ""interactions"": ""Press(behavior=1)"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""EdgedFuryReleased"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""modifier1"",
+                    ""id"": ""fd81a438-39e4-4363-9d83-213df8fa76eb"",
+                    ""path"": ""<Keyboard>/leftShift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""EdgedFuryReleased"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""modifier2"",
+                    ""id"": ""428ca88a-1b68-49be-a29d-66f6a89a7764"",
+                    ""path"": ""<Keyboard>/s"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""EdgedFuryReleased"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""binding"",
+                    ""id"": ""cfdbd717-e573-4b09-8fe3-def81526793c"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""EdgedFuryReleased"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
                 }
             ]
         },
@@ -2996,6 +3102,8 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         m_Gameplay_HellTrident = m_Gameplay.FindAction("HellTrident", throwIfNotFound: true);
         m_Gameplay_FoolsVerdict = m_Gameplay.FindAction("FoolsVerdict", throwIfNotFound: true);
         m_Gameplay_SoulFireBlast = m_Gameplay.FindAction("SoulFireBlast", throwIfNotFound: true);
+        m_Gameplay_EdgedFury = m_Gameplay.FindAction("EdgedFury", throwIfNotFound: true);
+        m_Gameplay_EdgedFuryReleased = m_Gameplay.FindAction("EdgedFuryReleased", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -3112,6 +3220,8 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
     private readonly InputAction m_Gameplay_HellTrident;
     private readonly InputAction m_Gameplay_FoolsVerdict;
     private readonly InputAction m_Gameplay_SoulFireBlast;
+    private readonly InputAction m_Gameplay_EdgedFury;
+    private readonly InputAction m_Gameplay_EdgedFuryReleased;
     public struct GameplayActions
     {
         private @PlayerControls m_Wrapper;
@@ -3151,6 +3261,8 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         public InputAction @HellTrident => m_Wrapper.m_Gameplay_HellTrident;
         public InputAction @FoolsVerdict => m_Wrapper.m_Gameplay_FoolsVerdict;
         public InputAction @SoulFireBlast => m_Wrapper.m_Gameplay_SoulFireBlast;
+        public InputAction @EdgedFury => m_Wrapper.m_Gameplay_EdgedFury;
+        public InputAction @EdgedFuryReleased => m_Wrapper.m_Gameplay_EdgedFuryReleased;
         public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -3265,6 +3377,12 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @SoulFireBlast.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnSoulFireBlast;
                 @SoulFireBlast.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnSoulFireBlast;
                 @SoulFireBlast.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnSoulFireBlast;
+                @EdgedFury.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnEdgedFury;
+                @EdgedFury.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnEdgedFury;
+                @EdgedFury.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnEdgedFury;
+                @EdgedFuryReleased.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnEdgedFuryReleased;
+                @EdgedFuryReleased.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnEdgedFuryReleased;
+                @EdgedFuryReleased.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnEdgedFuryReleased;
             }
             m_Wrapper.m_GameplayActionsCallbackInterface = instance;
             if (instance != null)
@@ -3374,6 +3492,12 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @SoulFireBlast.started += instance.OnSoulFireBlast;
                 @SoulFireBlast.performed += instance.OnSoulFireBlast;
                 @SoulFireBlast.canceled += instance.OnSoulFireBlast;
+                @EdgedFury.started += instance.OnEdgedFury;
+                @EdgedFury.performed += instance.OnEdgedFury;
+                @EdgedFury.canceled += instance.OnEdgedFury;
+                @EdgedFuryReleased.started += instance.OnEdgedFuryReleased;
+                @EdgedFuryReleased.performed += instance.OnEdgedFuryReleased;
+                @EdgedFuryReleased.canceled += instance.OnEdgedFuryReleased;
             }
         }
     }
@@ -3645,6 +3769,8 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         void OnHellTrident(InputAction.CallbackContext context);
         void OnFoolsVerdict(InputAction.CallbackContext context);
         void OnSoulFireBlast(InputAction.CallbackContext context);
+        void OnEdgedFury(InputAction.CallbackContext context);
+        void OnEdgedFuryReleased(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

@@ -305,7 +305,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_attackFX: {fileID: 4713603853206080501}
-  m_airLungeCooldown: 1
+  m_airLungeCooldown: 0.25
   m_airLungeMovementCooldown: 0.5
   m_airLungeInfo:
     m_fx: {fileID: 0}
@@ -40962,6 +40962,7 @@ GameObject:
   - component: {fileID: 777860621005579296}
   - component: {fileID: 3957046552937352992}
   - component: {fileID: 7268613866703741952}
+  - component: {fileID: 774832679648016217}
   m_Layer: 8
   m_Name: Air
   m_TagString: Untagged
@@ -41075,6 +41076,28 @@ MonoBehaviour:
       type: 3}
     m_speed: 100
   m_pushForce: {x: -50, y: 0}
+--- !u!114 &774832679648016217
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5161387136065631731}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a6093cb85e8d81242a954a0d47ab64e9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_attackFX: {fileID: 4713603853206080501}
+  m_edgedFuryInfo:
+    m_fx: {fileID: 0}
+    m_fxPosition: {fileID: 4294471023827248790}
+    m_collider: {fileID: 6145049388988119862}
+    m_damageModifier: 1
+    m_nextAttackDelay: 0
+  m_character: {fileID: 4294471023827248791}
+  m_physics: {fileID: 4294471023827248786}
+  m_pushForce: {x: 100, y: 0}
 --- !u!1 &5171488606739919155
 GameObject:
   m_ObjectHideFlags: 0
@@ -82570,6 +82593,11 @@ PrefabInstance:
       propertyPath: m_collisionRegistrator
       value: 
       objectReference: {fileID: 4758750335836346757}
+    - target: {fileID: 7390474940248598934, guid: f12efcbc77240e7449cca360a383e925,
+        type: 3}
+      propertyPath: m_collisionRegistrator
+      value: 
+      objectReference: {fileID: 4758750335836346757}
     - target: {fileID: 7507635735598562594, guid: f12efcbc77240e7449cca360a383e925,
         type: 3}
       propertyPath: m_collisionRegistrator
@@ -83450,6 +83478,12 @@ Transform:
 --- !u!4 &6049820600626866161 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 170796641525044674, guid: f12efcbc77240e7449cca360a383e925,
+    type: 3}
+  m_PrefabInstance: {fileID: 5884952831304823347}
+  m_PrefabAsset: {fileID: 0}
+--- !u!61 &6145049388988119862 stripped
+BoxCollider2D:
+  m_CorrespondingSourceObject: {fileID: 354681247135713541, guid: f12efcbc77240e7449cca360a383e925,
     type: 3}
   m_PrefabInstance: {fileID: 5884952831304823347}
   m_PrefabAsset: {fileID: 0}

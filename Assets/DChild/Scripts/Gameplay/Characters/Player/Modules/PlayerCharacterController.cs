@@ -79,6 +79,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private HellTrident m_hellTrident;
         private FoolsVerdict m_foolsVerdict;
         private SoulFireBlast m_soulFireBlast;
+        private EdgedFury m_edgedFury;
         #endregion
         #endregion
 
@@ -117,6 +118,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_hellTrident?.Cancel();
             m_foolsVerdict?.Cancel();
             m_soulFireBlast?.Cancel();
+            m_edgedFury?.Cancel();
 
             if (m_state.isGrounded)
             {
@@ -286,6 +288,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 m_devilWings?.Cancel();
                 m_krakenRage?.Cancel();
                 m_soulFireBlast?.Cancel();
+                m_edgedFury?.Cancel();
             }
         }
 
@@ -365,6 +368,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_hellTrident = m_character.GetComponentInChildren<HellTrident>();
             m_foolsVerdict = m_character.GetComponentInChildren<FoolsVerdict>();
             m_soulFireBlast = m_character.GetComponentInChildren<SoulFireBlast>();
+            m_edgedFury = m_character.GetComponentInChildren<EdgedFury>();
 
             //Intro Controller
             m_introController = GetComponent<PlayerIntroControlsController>();
@@ -646,6 +650,11 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 {
                     m_groundedness?.Evaluate();
                 }
+                if (m_input.edgedFuryReleased)
+                {
+                    m_edgedFury?.Cancel();
+                    m_edgedFury?.EndExecution();
+                }
             }
             else if (m_state.isStickingToWall)
             {
@@ -808,7 +817,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                         }
                         return;
                     }
-                    else if (m_input.airSlashComboPressed && m_airSlashCombo.CanAirSlashCombo())
+                    else if (m_input.airSlashComboPressed && m_airSlashCombo.CanAirSlashCombo() && !m_input.edgedFuryPressed)
                     {
                         m_basicSlashes?.Cancel();
                         m_whip?.Cancel();
@@ -828,6 +837,15 @@ namespace DChild.Gameplay.Characters.Players.Modules
                             m_airSlashCombo.Execute();
                             return;
                         }
+                    }
+                    else if (m_input.edgedFuryPressed)
+                    {
+                        PrepareForMidairAttack();
+                        m_devilWings?.Cancel();
+                        m_extraJump?.Cancel();
+                        m_airSlashCombo?.Cancel();
+                        m_soulFireBlast?.Cancel();
+                        m_edgedFury.Execute();
                     }
                     else if (m_input.whipPressed && m_whip.CanAirWhip())
                     {

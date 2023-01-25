@@ -28,6 +28,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private HellTrident m_hellTrident;
         private FoolsVerdict m_foolsVerdict;
         private SoulFireBlast m_soulFireBlast;
+        private EdgedFury m_edgedFury;
         #endregion
 
         public void IdleStateFinished()
@@ -357,6 +358,22 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_soulFireBlast?.AttackOver();
             m_soulFireBlast.EndExecution();
         }
+
+        public void EdgedFuryEnableCollision()
+        {
+            m_edgedFury.EnableCollision(true);
+        }
+
+        public void EdgedFuryDisableCollision()
+        {
+            m_edgedFury.EnableCollision(false);
+        }
+
+        public void EdgedFuryEnd()
+        {
+            m_edgedFury?.AttackOver();
+            m_edgedFury.EndExecution();
+        }
         #endregion
 
         public void SkullThrowSpawnProjectile()
@@ -416,6 +433,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_hellTrident = character.GetComponentInChildren<HellTrident>();
             m_foolsVerdict = character.GetComponentInChildren<FoolsVerdict>();
             m_soulFireBlast = character.GetComponentInChildren<SoulFireBlast>();
+            m_edgedFury = character.GetComponentInChildren<EdgedFury>();
         }
 
         #region TESTING

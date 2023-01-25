@@ -48,6 +48,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
         public bool hellTridentPressed;
         public bool foolsVerdictPressed;
         public bool soulFireBlastPressed;
+        public bool edgedFuryPressed;
+        public bool edgedFuryReleased;
         #endregion
 
         private PlayerInput m_input;
@@ -261,7 +263,24 @@ namespace DChild.Gameplay.Characters.Players.Modules
             if (enabled == true)
             {
                 soulFireBlastPressed = value.Get<float>() == 1;
-                Debug.Log("SoulFireBlast Pressed " + soulFireBlastPressed);
+            }
+        }
+
+        private void OnEdgedFury(InputValue value)
+        {
+            if (enabled == true)
+            {
+                edgedFuryPressed = value.Get<float>() == 1;
+            }
+        }
+
+        private void OnEdgedFuryReleased(InputValue value)
+        {
+            if (enabled == true)
+            {
+                edgedFuryReleased = value.Get<float>() == 1;
+                edgedFuryReleased = !edgedFuryReleased;
+                Debug.Log("Edged Fury Released " + edgedFuryReleased);
             }
         }
 
@@ -396,6 +415,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
             hellTridentPressed = false;
             foolsVerdictPressed = false;
             soulFireBlastPressed = false;
+            edgedFuryPressed = false;
+            edgedFuryReleased = false;
         }
 
         private void Reset()
@@ -433,6 +454,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
             hellTridentPressed = false;
             foolsVerdictPressed = false;
             soulFireBlastPressed = false;
+            edgedFuryPressed = false;
+            edgedFuryReleased = false;
         }
     }
 }

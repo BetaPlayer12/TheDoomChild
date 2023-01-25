@@ -58,6 +58,7 @@ namespace DChild.Gameplay.Characters.Players
             HellTrident,
             FoolsVerdict,
             SoulFireBlast,
+            EdgedFury,
         }
 
         [SerializeField]

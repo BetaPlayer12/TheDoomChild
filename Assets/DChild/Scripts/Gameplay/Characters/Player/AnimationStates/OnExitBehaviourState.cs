@@ -30,6 +30,7 @@ namespace DChild.Gameplay.Characters.Players
             EndHellTrident,
             EndFoolsVerdict,
             EndSoulFireBlast,
+            EndEdgedFury,
         }
 
         [SerializeField]
@@ -104,6 +105,9 @@ namespace DChild.Gameplay.Characters.Players
                         break;
                     case Command.EndSoulFireBlast:
                         player.FoolsVerdictEnd();
+                        break;
+                    case Command.EndEdgedFury:
+                        player.EdgedFuryEnd();
                         break;
                 }
             }
