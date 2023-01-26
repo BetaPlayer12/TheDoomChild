@@ -27,6 +27,11 @@ namespace DChild.Gameplay.Characters.Players
             EndAirComboAttack,
             EndAirCombo,
             EndSovereignImpale,
+            EndHellTrident,
+            EndFoolsVerdict,
+            EndSoulFireBlast,
+            EndEdgedFury,
+            EndNinthCircleSanction,
         }
 
         [SerializeField]
@@ -92,6 +97,21 @@ namespace DChild.Gameplay.Characters.Players
                         break;
                     case Command.EndSovereignImpale:
                         player.SovereignImpaleEnd();
+                        break;
+                    case Command.EndHellTrident:
+                        player.HellTridentEnd();
+                        break;
+                    case Command.EndFoolsVerdict:
+                        player.FoolsVerdictEnd();
+                        break;
+                    case Command.EndSoulFireBlast:
+                        player.FoolsVerdictEnd();
+                        break;
+                    case Command.EndEdgedFury:
+                        player.EdgedFuryEnd();
+                        break;
+                    case Command.EndNinthCircleSanction:
+                        player.NinthCircleSanctionEnd();
                         break;
                 }
             }

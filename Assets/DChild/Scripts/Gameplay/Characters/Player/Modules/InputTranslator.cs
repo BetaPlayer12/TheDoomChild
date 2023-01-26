@@ -45,6 +45,12 @@ namespace DChild.Gameplay.Characters.Players.Modules
         public bool finalSlashReleased;
         public bool airSlashComboPressed;
         public bool sovereignImpalePressed;
+        public bool hellTridentPressed;
+        public bool foolsVerdictPressed;
+        public bool soulFireBlastPressed;
+        public bool edgedFuryPressed;
+        public bool edgedFuryReleased;
+        public bool ninthCircleSanctionPressed;
         #endregion
 
         private PlayerInput m_input;
@@ -234,7 +240,56 @@ namespace DChild.Gameplay.Characters.Players.Modules
             if (enabled == true)
             {
                 sovereignImpalePressed = value.Get<float>() == 1;
-                Debug.Log("Soveregin Impale Pressed " + sovereignImpalePressed);
+            }
+        }
+
+        private void OnHellTrident(InputValue value)
+        {
+            if (enabled == true)
+            {
+                hellTridentPressed = value.Get<float>() == 1;
+            }
+        }
+
+        private void OnFoolsVerdict(InputValue value)
+        {
+            if (enabled == true)
+            {
+                foolsVerdictPressed = value.Get<float>() == 1;
+            }
+        }
+
+        private void OnSoulFireBlast(InputValue value)
+        {
+            if (enabled == true)
+            {
+                soulFireBlastPressed = value.Get<float>() == 1;
+            }
+        }
+
+        private void OnEdgedFury(InputValue value)
+        {
+            if (enabled == true)
+            {
+                edgedFuryPressed = value.Get<float>() == 1;
+            }
+        }
+
+        private void OnEdgedFuryReleased(InputValue value)
+        {
+            if (enabled == true)
+            {
+                edgedFuryReleased = value.Get<float>() == 1;
+                edgedFuryReleased = !edgedFuryReleased;
+                Debug.Log("Edged Fury Released " + edgedFuryReleased);
+            }
+        }
+
+        private void OnNinthCircleSanction(InputValue value)
+        {
+            if (enabled == true)
+            {
+                ninthCircleSanctionPressed = value.Get<float>() == 1;
             }
         }
 
@@ -366,6 +421,12 @@ namespace DChild.Gameplay.Characters.Players.Modules
             finalSlashReleased = false;
             airSlashComboPressed = false;
             sovereignImpalePressed = false;
+            hellTridentPressed = false;
+            foolsVerdictPressed = false;
+            soulFireBlastPressed = false;
+            edgedFuryPressed = false;
+            edgedFuryReleased = false;
+            ninthCircleSanctionPressed = false;
         }
 
         private void Reset()
@@ -400,6 +461,12 @@ namespace DChild.Gameplay.Characters.Players.Modules
             finalSlashReleased = false;
             airSlashComboPressed = false;
             sovereignImpalePressed = false;
+            hellTridentPressed = false;
+            foolsVerdictPressed = false;
+            soulFireBlastPressed = false;
+            edgedFuryPressed = false;
+            edgedFuryReleased = false;
+            ninthCircleSanctionPressed = false;
         }
     }
 }

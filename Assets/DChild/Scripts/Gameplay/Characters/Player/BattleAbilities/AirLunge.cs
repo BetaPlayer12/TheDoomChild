@@ -13,7 +13,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
         private SkeletonAnimation m_attackFX;
 
         [SerializeField]
-        private float m_airLungeComboCooldown;
+        private float m_airLungeCooldown;
         [SerializeField]
         private float m_airLungeMovementCooldown;
         [SerializeField]
@@ -37,7 +37,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
         private bool m_canMove;
         private IPlayerModifer m_modifier;
         private int m_airLungeStateAnimationParameter;
-        private float m_airLungeComboCooldownTimer;
+        private float m_airLungeCooldownTimer;
         private float m_airLungeMovementCooldownTimer;
 
         private Animator m_fxAnimator;
@@ -81,7 +81,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             m_canMove = false;
             m_animator.SetBool(m_animationParameter, true);
             m_animator.SetBool(m_airLungeStateAnimationParameter, true);
-            m_airLungeComboCooldownTimer = m_airLungeComboCooldown;
+            m_airLungeCooldownTimer = m_airLungeCooldown;
             m_airLungeMovementCooldownTimer = m_airLungeMovementCooldown;
             //m_attacker.SetDamageModifier(m_slashComboInfo[m_currentSlashState].damageModifier * m_modifier.Get(PlayerModifier.AttackDamage));
         }
@@ -90,7 +90,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
         {
             base.AttackOver();
             m_airLungeInfo.ShowCollider(false);
-            m_canAirLunge = true;
+            //m_canAirLunge = true;
             m_canMove = true;
             //m_state.waitForBehaviour = false;
             m_animator.SetBool(m_airLungeStateAnimationParameter, false);
@@ -113,7 +113,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             m_enemySensor.Cast();
             m_wallSensor.Cast();
             m_edgeSensor.Cast();
-            if (!m_enemySensor.isDetecting && !m_wallSensor.allRaysDetecting && m_edgeSensor.isDetecting && value)
+            if (/*!m_enemySensor.isDetecting && !m_wallSensor.allRaysDetecting && */m_edgeSensor.isDetecting && value)
             {
                 m_physics.AddForce(new Vector2(m_character.facing == HorizontalDirection.Right ? m_pushForce.x : -m_pushForce.x, m_pushForce.y), ForceMode2D.Impulse);
             }
@@ -121,14 +121,14 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
         public void HandleAttackTimer()
         {
-            if (m_airLungeComboCooldownTimer > 0)
+            if (m_airLungeCooldownTimer > 0)
             {
-                m_airLungeComboCooldownTimer -= GameplaySystem.time.deltaTime;
+                m_airLungeCooldownTimer -= GameplaySystem.time.deltaTime;
                 m_canAirLunge = false;
             }
             else
             {
-                m_airLungeComboCooldownTimer = m_airLungeComboCooldown;
+                m_airLungeCooldownTimer = m_airLungeCooldown;
                 m_state.isAttacking = false;
                 m_canAirLunge = true;
             }
