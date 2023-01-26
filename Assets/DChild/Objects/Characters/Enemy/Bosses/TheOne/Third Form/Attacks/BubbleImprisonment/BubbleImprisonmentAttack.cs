@@ -14,6 +14,8 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField]
         private BubbleImprisonment m_bubbleImprisonment;
         [SerializeField]
+        private Transform m_groundHeight;
+        [SerializeField]
         private int m_maxNumberOfBubblesToSpawn;
         [SerializeField]
         private float m_timeBetweenAnimations;
@@ -52,7 +54,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
             while (m_bubbleCounter < m_maxNumberOfBubblesToSpawn)
             {
-                InstantiateBubble(new Vector2(Target.position.x, Target.position.y), m_bubbleImprisonment.gameObject);
+                InstantiateBubble(new Vector2(Target.position.x, m_groundHeight.position.y), m_bubbleImprisonment.gameObject);
                 m_bubbleCounter++;
                 yield return new WaitForSeconds(m_timeBetweenBubbleSpawn);
                 Debug.Log("Bubbles Spawned: " + m_bubbleCounter);

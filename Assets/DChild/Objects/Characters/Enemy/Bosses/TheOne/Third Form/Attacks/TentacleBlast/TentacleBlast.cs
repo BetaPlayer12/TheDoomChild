@@ -66,7 +66,7 @@ namespace DChild.Gameplay.Characters.Enemies
         void Start()
         {
             //m_tentacleOriginalPosition = m_tentacleEntity.transform.position;
-            m_tentacleBlastLaser.SetActive(false);
+            //m_tentacleBlastLaser.SetActive(false);
         }
 
         // Update is called once per frame

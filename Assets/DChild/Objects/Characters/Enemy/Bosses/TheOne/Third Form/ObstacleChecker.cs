@@ -84,6 +84,11 @@ namespace DChild.Gameplay.Characters.Enemies
 
             MonolithEmptied?.Invoke(this, EventActionArgs.Empty);
         }
+
+        public void RemoveMonolithAtIndex(int index)
+        {
+            monolithSlamObstacleList[index].DestroyInstance();
+        }
     }
 }
 

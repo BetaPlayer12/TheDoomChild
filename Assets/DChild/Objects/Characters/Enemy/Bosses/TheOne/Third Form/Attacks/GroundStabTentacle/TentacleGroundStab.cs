@@ -19,6 +19,8 @@ namespace DChild.Gameplay.Projectiles
         private GameObject[] safeZones;
         [SerializeField]
         private Collider2D m_hitbox;
+        [SerializeField]
+        private float m_tentacleStabAnimationSpeedMultiplier;
 
         [SerializeField, TabGroup("Reference")]
         protected SpineRootAnimation m_animation;
@@ -37,10 +39,10 @@ namespace DChild.Gameplay.Projectiles
 
         public IEnumerator StabRoutine()
         {
-            m_animation.SetAnimation(0, m_anticipationStartAnimation, false);
+            m_animation.SetAnimation(0, m_anticipationStartAnimation, false).TimeScale = m_tentacleStabAnimationSpeedMultiplier;
             yield return new WaitForAnimationComplete(m_animation.animationState, m_anticipationStartAnimation);
 
-            m_animation.SetAnimation(0, m_attackAnimation, false);
+            m_animation.SetAnimation(0, m_attackAnimation, false).TimeScale = m_tentacleStabAnimationSpeedMultiplier;
 
             if(isOnPlayableGround)
                 m_hitbox.enabled = true;
@@ -85,10 +87,13 @@ namespace DChild.Gameplay.Projectiles
 
         private void InitializeSafeZone()
         {
-            int randomSafeZone = Random.Range(0, safeZones.Length);
+            if (isOnPlayableGround)
+            {
+                int randomSafeZone = Random.Range(0, safeZones.Length);
 
-            GameObject safezone = safeZones[randomSafeZone];
-            safezone.SetActive(true);
+                GameObject safezone = safeZones[randomSafeZone];
+                safezone.SetActive(true);
+            }
         }
 
         private void RemoveSafeZones()

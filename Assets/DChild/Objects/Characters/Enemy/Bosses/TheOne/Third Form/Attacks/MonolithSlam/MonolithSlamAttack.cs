@@ -59,12 +59,17 @@ namespace DChild.Gameplay.Characters.Enemies
             else
                 OrganizeMonolithsSpawnedInAscendingOrder();
 
+
             //Pick a monolith to keep as platform
             if (m_monolithsSpawned.Count > 1)
             {
                 int rollMonolithToKeep = Random.Range(0, m_monolithsSpawned.Count);
 
                 m_monolithsSpawned[rollMonolithToKeep].gameObject.GetComponent<MonolithSlam>().keepMonolith = true;
+
+                //if (FindObjectOfType<ObstacleChecker>().monolithSlamObstacleList.Count > 1)
+                //    m_monolithsSpawned[rollMonolithToKeep].gameObject.GetComponent<MonolithSlam>().removeMonolithOnGround = true;
+
                 m_obstacleChecker.AddMonolithToList(m_monolithsSpawned[rollMonolithToKeep]);
             }
 

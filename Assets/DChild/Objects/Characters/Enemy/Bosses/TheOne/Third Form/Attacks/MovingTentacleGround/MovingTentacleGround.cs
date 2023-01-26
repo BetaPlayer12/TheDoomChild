@@ -73,6 +73,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
         public void StartAttack()
         {
+            if (FindObjectOfType<ObstacleChecker>().monolithSlamObstacleList != null)
+                FindObjectOfType<ObstacleChecker>().ClearMonoliths();
             m_startAttack = true;
         }
 

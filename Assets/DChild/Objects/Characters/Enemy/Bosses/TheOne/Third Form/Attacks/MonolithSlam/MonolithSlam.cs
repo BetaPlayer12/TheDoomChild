@@ -35,8 +35,9 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField]
         private bool m_playerHit;
 
-        public bool keepMonolith;
         private bool m_smashMonolith;
+        public bool removeMonolithOnGround;
+        public bool keepMonolith;
         public bool monolithGrounded;
 
         // Start is called before the first frame update
@@ -106,18 +107,14 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_attackPlatformAftermathAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_attackPlatformAftermathAnimation);
 
+            //FindObjectOfType<ObstacleChecker>().RemoveMonolithAtIndex(0);
+
             m_impactCollider.enabled = false;
             m_obstacleCollider.enabled = true;
             m_animation.SetAnimation(0, m_platformPersistAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_platformPersistAnimation);
 
-            if (keepMonolith)
-            {
-                if (FindObjectOfType<ObstacleChecker>().monolithSlamObstacleList != null)
-                    FindObjectOfType<ObstacleChecker>().ClearMonoliths();
-            }
-
-            monolithGrounded = true;
+            monolithGrounded = true;     
         }
 
         private IEnumerator DoAttackWithoutMonolithPersist()

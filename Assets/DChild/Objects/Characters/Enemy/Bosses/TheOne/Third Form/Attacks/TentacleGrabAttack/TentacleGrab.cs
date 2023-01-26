@@ -1,6 +1,7 @@
 using DChild;
 using DChild.Gameplay;
 using DChild.Gameplay.Characters;
+using DChild.Gameplay.Characters.Enemies;
 using Holysoft.Event;
 using Sirenix.OdinInspector;
 using Spine.Unity;
@@ -84,6 +85,8 @@ public class TentacleGrab : MonoBehaviour
         m_grabHitbox.enabled = true;
         m_animation.SetAnimation(0, m_grabAnimation, false);
         yield return new WaitForAnimationComplete(m_animation.animationState, m_grabAnimation);
+        if (FindObjectOfType<ObstacleChecker>().monolithSlamObstacleList != null)
+            FindObjectOfType<ObstacleChecker>().ClearMonoliths();
         yield return null;
     }
 

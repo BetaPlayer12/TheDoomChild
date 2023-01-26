@@ -54,7 +54,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator AttackTentacle()
         {
-            m_animation.SetAnimation(0, m_attackAnimation, false); //use timescale to adjust tentacle attack speed
+            m_animation.SetAnimation(0, m_attackAnimation, false).TimeScale = 0.25f; //use timescale to adjust tentacle attack speed
             yield return new WaitForAnimationComplete(m_animation.animationState, m_attackAnimation);
         }
 
