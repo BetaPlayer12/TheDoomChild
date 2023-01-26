@@ -327,6 +327,16 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_sovereignImpale.EndExecution();
         }
 
+        public void HellTridentEnableCollision()
+        {
+            m_hellTrident.EnableCollision(true);
+        }
+
+        public void HellTridentDisableCollision()
+        {
+            m_hellTrident.EnableCollision(false);
+        }
+
         public void HellTridentSummon()
         {
             m_hellTrident.Summon();

@@ -108,6 +108,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             m_physics.velocity = Vector2.zero;
             m_edgedFuryInfo.ShowCollider(false);
             m_fxAnimator.Play("Buffer");
+            m_animator.SetBool(m_edgedFuryStateAnimationParameter, false);
         }
 
         public void EnableCollision(bool value)

@@ -81,7 +81,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
         public override void Reset()
         {
             base.Reset();
-            //m_hellTridentInfo.ShowCollider(false);
+            m_hellTridentInfo.ShowCollider(false);
             m_animator.SetBool(m_hellTridentStateAnimationParameter, false);
             if (m_hellTridentGO.activeSelf)
                 m_hellTridentStartAnimation.Stop();
@@ -107,7 +107,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
         public void EndExecution()
         {
             base.AttackOver();
-            //m_hellTridentInfo.ShowCollider(false);
+            m_hellTridentInfo.ShowCollider(false);
             m_canHellTrident = true;
             m_canMove = true;
             //m_state.waitForBehaviour = false;
@@ -120,7 +120,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
         public override void Cancel()
         {
             base.Cancel();
-            //m_hellTridentInfo.ShowCollider(false);
+            m_hellTridentInfo.ShowCollider(false);
             m_fxAnimator.Play("Buffer");
             if (m_hellTridentGO.activeSelf)
                 m_hellTridentStartAnimation.Stop();
