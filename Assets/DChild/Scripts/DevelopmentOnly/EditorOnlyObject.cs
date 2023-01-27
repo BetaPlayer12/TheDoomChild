@@ -1,4 +1,6 @@
 ﻿using UnityEngine;
+using DChild;
+using UnityEngine.SceneManagement;
 #if UNITY_EDITOR
 using UnityEditor.Callbacks;
 #endif
@@ -28,6 +30,9 @@ namespace DChildDebug
 
         public void DeleteInstance()
         {
+            if (gameObject.scene == SceneManager.GetActiveScene())
+                return;
+
             if (someTransform)
             {
                 Object.DestroyImmediate(someTransform);

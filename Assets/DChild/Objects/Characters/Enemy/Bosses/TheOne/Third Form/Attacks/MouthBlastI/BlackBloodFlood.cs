@@ -6,7 +6,7 @@ namespace DChild.Gameplay.Characters.Enemies
 {
     public class BlackBloodFlood : MonoBehaviour
     {
-        public bool m_isFlooding;
+        public bool isFlooding;
 
         [SerializeField]
         private Transform m_floodHeight;
@@ -22,7 +22,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void Update()
         {
-            if (m_isFlooding)
+            if (isFlooding)
             {
                 transform.position = Vector2.MoveTowards(transform.position, m_floodHeight.position, m_floodSpeed);
             }

@@ -1354,14 +1354,14 @@ namespace DChild.Gameplay.Characters.Players.Modules
             {
                 if (m_activeSlide?.IsSlideDurationOver() ?? true)
                 {
-                    if (m_crouch.IsThereNoCeiling())
+                    if (m_crouch.IsThereNoCeiling() || !m_slide.HasGroundToSlideOn() || !m_shadowSlide.HasGroundToSlideOn())
                     {
                         m_activeSlide?.Cancel();
                         m_activeSlide?.ResetCooldownTimer();
                     }
                     else
                     {
-                        if (m_crouch.IsCrouchingPossible())
+                        if (m_crouch.IsCrouchingPossible() || !m_slide.HasGroundToSlideOn() || !m_shadowSlide.HasGroundToSlideOn())
                         {
                             m_activeSlide?.Cancel();
                             m_activeSlide?.ResetCooldownTimer();

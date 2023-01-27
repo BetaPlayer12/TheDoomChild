@@ -40,6 +40,16 @@ namespace DChild.Gameplay.Characters.Players.Modules
         public AutoStepClimbStatsInfo autoStepClimbStatsInfo => m_autoStepClimbInfo;
 
         [Header("Combat")]
+        [Title("Basic Slashes")]
+        [SerializeField, HideLabel]
+        private BasicSlashesStatsInfo m_basicSlashesStatsInfo;
+        public BasicSlashesStatsInfo basicSlashesStatsInfo => m_basicSlashesStatsInfo;
+
+        [Title("Slash Combo")]
+        [SerializeField, HideLabel]
+        private SlashComboStatsInfo m_slashComboStatsInfo;
+        public SlashComboStatsInfo slashComboStatsInfo => m_slashComboStatsInfo;
+
         [Title("Player Flinch")]
         [SerializeField, HideLabel]
         private FlinchStatsInfo m_flinchStatsInfo;
@@ -110,6 +120,10 @@ namespace DChild.Gameplay.Characters.Players.Modules
         [SerializeField, HideLabel]
         private WhipAttackStatsInfo m_whipAttackStatsInfo;
         public WhipAttackStatsInfo whipAttackInfo => m_whipAttackStatsInfo;
+        [Title("Whip Attack Combo")]
+        [SerializeField, HideLabel]
+        private WhipAttackComboStatsInfo m_whipAttackComboStatsInfo;
+        public WhipAttackComboStatsInfo whipAttackComboInfo => m_whipAttackComboStatsInfo;
         [Title("Projectile Throw")]
         [SerializeField, HideLabel]
         private ProjectileThrowStatsInfo m_projectileThrowStatsInfo;
