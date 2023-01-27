@@ -49,7 +49,7 @@ namespace DChild.Gameplay.Characters
             target = new Vector2(target.x, Mathf.Abs(target.x - m_spawnPoint.position.x) < 10 ? yOffset : target.y);
             var dir = (target - (Vector2)m_spawnPoint.position);
             //dir = new Vector2(dir.x, dir.y + (Mathf.Abs(target.y - m_spawnPoint.position.y) * 0.5f));
-            Debug.Log("Ballistic Direction " + dir);
+            //Debug.Log("Ballistic Direction " + dir);
             var h = dir.y;
             dir.y = 0;
             var dist = dir.magnitude;
@@ -60,9 +60,9 @@ namespace DChild.Gameplay.Characters
             //var currentSpeed = Vector2.Distance(target, m_spawnPoint.position) < 10 ? m_speed : 1;
 
             var vel = ( Mathf.Sqrt(dist * m_projectileInfo.projectile.GetComponent<IsolatedObjectPhysics2D>().gravity.gravityScale)) /** currentSpeed*/;
-            Debug.Log("Velocity " + vel);
+            //Debug.Log("Velocity " + vel);
             var ballisticVel = (vel * new Vector2(dir.x * m_posOffset.x, dir.y * m_posOffset.y).normalized) * m_targetOffset.sqrMagnitude; //closest to accurate
-            Debug.Log("Ballistic Velocity " + ballisticVel);
+            //Debug.Log("Ballistic Velocity " + ballisticVel);
             return ballisticVel;
         }
 
