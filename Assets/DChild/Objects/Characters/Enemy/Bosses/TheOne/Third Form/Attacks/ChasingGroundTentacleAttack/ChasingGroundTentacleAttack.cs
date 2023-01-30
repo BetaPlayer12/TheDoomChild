@@ -18,12 +18,29 @@ namespace DChild.Gameplay.Characters.Enemies
         private float m_tentacleEmergeInterval;
         [SerializeField]
         private float m_timeBeforeTentacleRetract;
+        [SerializeField]
+        private float m_chasingGroundTentacleAnimationSpeedMultiplier;
 
         [ShowInInspector]
         private StateHandle<AttackStyle> m_currentAttackState;
 
         public event EventAction<EventActionArgs> AttackStart;
         public event EventAction<EventActionArgs> AttackDone;
+
+        private void Start()
+        {
+            for(int i = 0; i < m_groundChaseTentaclesOne.transform.childCount; i++)
+            {
+                GameObject spawnPoint = m_groundChaseTentaclesOne.transform.GetChild(i).gameObject;
+                spawnPoint.transform.GetChild(0).GetComponent<ChasingGroundTentacle>().chasingGroundTentacleAnimationSpeedMultiplier = m_chasingGroundTentacleAnimationSpeedMultiplier;
+            }
+
+            for (int i = 0; i < m_groundChaseTentaclesTwo.transform.childCount; i++)
+            {
+                GameObject spawnPoint = m_groundChaseTentaclesTwo.transform.GetChild(i).gameObject;
+                spawnPoint.transform.GetChild(0).GetComponent<ChasingGroundTentacle>().chasingGroundTentacleAnimationSpeedMultiplier = m_chasingGroundTentacleAnimationSpeedMultiplier;
+            }
+        }
 
         private enum AttackStyle
         {
@@ -74,7 +91,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     break;
                 case 3:
                     m_currentAttackState.SetState(AttackStyle.GardenVariationTwo);
-                    for (int i = 0; i < m_groundChaseTentaclesTwo.transform.childCount; i++)
+                    for (int i = 0; i < m_groundChaseTentaclesTwo.transform.childCount-1; i++)
                     {
                         GameObject spawnPoint = m_groundChaseTentaclesOne.transform.GetChild(i).gameObject;
                         spawnPoint.transform.GetChild(0).GetComponent<ChasingGroundTentacle>().ErectTentacle();
@@ -82,7 +99,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
                     yield return new WaitForSeconds(m_timeBeforeTentacleRetract);
 
-                    for (int c = 0; c < m_groundChaseTentaclesOne.transform.childCount; c++)
+                    for (int c = 0; c < m_groundChaseTentaclesOne.transform.childCount-1; c++)
                     {
                         GameObject spawnPoint = m_groundChaseTentaclesOne.transform.GetChild(c).gameObject;
                         spawnPoint.transform.GetChild(0).GetComponent<ChasingGroundTentacle>().RetractTentacle();

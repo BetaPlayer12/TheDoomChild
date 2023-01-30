@@ -460,7 +460,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     {
                         if (m_areMonolithsSpawned)
                         {
-                            m_attackDecider.DecideOnAttack(Attack.Phase2Pattern1, Attack.Phase2Pattern3, Attack.Phase2Pattern4, Attack.Phase2Pattern5, Attack.Phase2Pattern6);
+                            m_attackDecider.DecideOnAttack(Attack.Phase2Pattern1, Attack.Phase2Pattern3, Attack.Phase2Pattern5, Attack.Phase2Pattern6);
                         }
                         if (m_isBlackBloodFloodPresent)
                         {
@@ -505,7 +505,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     {
                         if (m_areMonolithsSpawned)
                         {
-                            m_attackDecider.DecideOnAttack(Attack.Phase4Pattern2, Attack.Phase4Pattern3, Attack.Phase4Pattern4, Attack.Phase4Pattern6, Attack.Phase4Pattern7, Attack.Phase4Pattern8, Attack.Phase4Pattern9, Attack.Phase4Pattern11);
+                            m_attackDecider.DecideOnAttack(Attack.Phase4Pattern2, Attack.Phase4Pattern3, Attack.Phase4Pattern6, Attack.Phase4Pattern7, Attack.Phase4Pattern8, Attack.Phase4Pattern9, Attack.Phase4Pattern11);
                         }
                         if (m_isBlackBloodFloodPresent)
                         {
@@ -527,7 +527,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     {
                         if (m_areMonolithsSpawned)
                         {
-                            m_attackDecider.DecideOnAttack(Attack.Phase5Pattern1, Attack.Phase5Pattern3, Attack.Phase5Pattern4, Attack.Phase5Pattern6, Attack.Phase5Pattern7, Attack.Phase5Pattern8, Attack.Phase5Pattern9, Attack.Phase5Pattern10, Attack.Phase5Pattern11);
+                            m_attackDecider.DecideOnAttack(Attack.Phase5Pattern1, Attack.Phase5Pattern3, Attack.Phase5Pattern6, Attack.Phase5Pattern7, Attack.Phase5Pattern8, Attack.Phase5Pattern9, Attack.Phase5Pattern10, Attack.Phase5Pattern11);
                         }
                         if (m_isBlackBloodFloodPresent)
                         {
@@ -973,7 +973,7 @@ namespace DChild.Gameplay.Characters.Enemies
             Vector2 originalPosition = m_model.transform.position;
             yield return MouthBlastOneStart();
             yield return MouthBlastEnd(originalPosition);
-            AttackDone?.Invoke(this, EventActionArgs.Empty);
+            //AttackDone?.Invoke(this, EventActionArgs.Empty);
         }
         #endregion
 
@@ -1172,7 +1172,13 @@ namespace DChild.Gameplay.Characters.Enemies
         [HideInEditorMode]
         private void TriggerTentacleGroundStab()
         {
-            StartCoroutine(TentacleGroundStab(3f));
+            if (m_stateHandle.currentState == State.Attacking)
+            {
+                if (m_currentAttackCoroutine != null)
+                    StopCoroutine(m_currentAttackCoroutine);
+
+                m_currentAttackCoroutine = StartCoroutine(m_theOneThirdFormAttacks.TentacleGroundStab(m_targetInfo));
+            }
         }
 
         [Button, FoldoutGroup("Trigger Attacks")]
