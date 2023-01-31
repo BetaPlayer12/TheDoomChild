@@ -18,6 +18,9 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField]
         private Transform m_arenaCenter;
 
+        [SerializeField]
+        public float attackAnimationSpeedMultiplier = 1f;
+
         public event EventAction<EventActionArgs> AttackStart;
         public event EventAction<EventActionArgs> AttackDone;
 

@@ -35,6 +35,12 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Colliders")]
         private GameObject m_wallCollider;
 
+        [SerializeField]
+        private SlidingStoneWallAttack m_slidingStoneWallAttack;
+        [SerializeField]
+        private float m_attackAnimationSpeedMultiplier => m_slidingStoneWallAttack.attackAnimationSpeedMultiplier;
+
+
         public event EventAction<EventActionArgs> AttackStart;
         public event EventAction<EventActionArgs> AttackDone;
 
@@ -54,7 +60,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator AttackTentacle()
         {
-            m_animation.SetAnimation(0, m_attackAnimation, false).TimeScale = 0.25f; //use timescale to adjust tentacle attack speed
+            m_animation.SetAnimation(0, m_attackAnimation, false).TimeScale = m_attackAnimationSpeedMultiplier; //use timescale to adjust tentacle attack speed
             yield return new WaitForAnimationComplete(m_animation.animationState, m_attackAnimation);
         }
 
