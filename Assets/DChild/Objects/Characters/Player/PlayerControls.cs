@@ -368,6 +368,24 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""DoomsdayKong"",
+                    ""type"": ""Button"",
+                    ""id"": ""9c35d31f-371e-4f96-9601-4c02fd7423a1"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""BackDiver"",
+                    ""type"": ""Button"",
+                    ""id"": ""cd863b72-c9f3-49b7-a81b-135ee848ccf1"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -1943,6 +1961,50 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""action"": ""NinthCircleSanction"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""29976d38-c9b8-459b-bbfa-359859c7c231"",
+                    ""path"": ""<Keyboard>/1"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""DoomsdayKong"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""One Modifier"",
+                    ""id"": ""1565c338-a8c9-4c4e-83ee-1a13b3f183fa"",
+                    ""path"": ""OneModifier"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""BackDiver"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""modifier"",
+                    ""id"": ""1bb0898b-b0bc-453f-953f-46615e676562"",
+                    ""path"": ""<Keyboard>/leftShift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""BackDiver"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""binding"",
+                    ""id"": ""75c7f722-eae1-4687-af47-5579a89b9a31"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""BackDiver"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
                 }
             ]
         },
@@ -3136,6 +3198,8 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         m_Gameplay_EdgedFury = m_Gameplay.FindAction("EdgedFury", throwIfNotFound: true);
         m_Gameplay_EdgedFuryReleased = m_Gameplay.FindAction("EdgedFuryReleased", throwIfNotFound: true);
         m_Gameplay_NinthCircleSanction = m_Gameplay.FindAction("NinthCircleSanction", throwIfNotFound: true);
+        m_Gameplay_DoomsdayKong = m_Gameplay.FindAction("DoomsdayKong", throwIfNotFound: true);
+        m_Gameplay_BackDiver = m_Gameplay.FindAction("BackDiver", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -3255,6 +3319,8 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
     private readonly InputAction m_Gameplay_EdgedFury;
     private readonly InputAction m_Gameplay_EdgedFuryReleased;
     private readonly InputAction m_Gameplay_NinthCircleSanction;
+    private readonly InputAction m_Gameplay_DoomsdayKong;
+    private readonly InputAction m_Gameplay_BackDiver;
     public struct GameplayActions
     {
         private @PlayerControls m_Wrapper;
@@ -3297,6 +3363,8 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         public InputAction @EdgedFury => m_Wrapper.m_Gameplay_EdgedFury;
         public InputAction @EdgedFuryReleased => m_Wrapper.m_Gameplay_EdgedFuryReleased;
         public InputAction @NinthCircleSanction => m_Wrapper.m_Gameplay_NinthCircleSanction;
+        public InputAction @DoomsdayKong => m_Wrapper.m_Gameplay_DoomsdayKong;
+        public InputAction @BackDiver => m_Wrapper.m_Gameplay_BackDiver;
         public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -3420,6 +3488,12 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @NinthCircleSanction.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnNinthCircleSanction;
                 @NinthCircleSanction.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnNinthCircleSanction;
                 @NinthCircleSanction.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnNinthCircleSanction;
+                @DoomsdayKong.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnDoomsdayKong;
+                @DoomsdayKong.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnDoomsdayKong;
+                @DoomsdayKong.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnDoomsdayKong;
+                @BackDiver.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnBackDiver;
+                @BackDiver.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnBackDiver;
+                @BackDiver.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnBackDiver;
             }
             m_Wrapper.m_GameplayActionsCallbackInterface = instance;
             if (instance != null)
@@ -3538,6 +3612,12 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @NinthCircleSanction.started += instance.OnNinthCircleSanction;
                 @NinthCircleSanction.performed += instance.OnNinthCircleSanction;
                 @NinthCircleSanction.canceled += instance.OnNinthCircleSanction;
+                @DoomsdayKong.started += instance.OnDoomsdayKong;
+                @DoomsdayKong.performed += instance.OnDoomsdayKong;
+                @DoomsdayKong.canceled += instance.OnDoomsdayKong;
+                @BackDiver.started += instance.OnBackDiver;
+                @BackDiver.performed += instance.OnBackDiver;
+                @BackDiver.canceled += instance.OnBackDiver;
             }
         }
     }
@@ -3812,6 +3892,8 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         void OnEdgedFury(InputAction.CallbackContext context);
         void OnEdgedFuryReleased(InputAction.CallbackContext context);
         void OnNinthCircleSanction(InputAction.CallbackContext context);
+        void OnDoomsdayKong(InputAction.CallbackContext context);
+        void OnBackDiver(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

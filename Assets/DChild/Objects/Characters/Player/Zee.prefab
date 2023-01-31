@@ -267,6 +267,8 @@ GameObject:
   - component: {fileID: 5518143894702561810}
   - component: {fileID: 8271733867191567639}
   - component: {fileID: 6140598295339655032}
+  - component: {fileID: 7247373814621090458}
+  - component: {fileID: 1193966242743067210}
   m_Layer: 8
   m_Name: Ground
   m_TagString: Untagged
@@ -291,6 +293,8 @@ Transform:
   - {fileID: 1386867835978424746}
   - {fileID: 2905992412887156098}
   - {fileID: 5935677527356227265}
+  - {fileID: 6585369894670405630}
+  - {fileID: 2050889991724354459}
   m_Father: {fileID: 1861663316882787807}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -534,6 +538,64 @@ MonoBehaviour:
     m_projectile: {fileID: 4791238810572298706, guid: dfc2b8ecab2ad114c81e02c742bf074c,
       type: 3}
     m_speed: 100
+--- !u!114 &7247373814621090458
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 181148360470848333}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dddb0c2d3a7ec06469e074715bd7df04, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_attackFX: {fileID: 4713603853206080501}
+  m_doomsdayKongCooldown: 0.25
+  m_doomsdayKongMovementCooldown: 0.5
+  m_doomsdayKongInfo:
+    m_fx: {fileID: 0}
+    m_fxPosition: {fileID: 4294471023827248790}
+    m_collider: {fileID: 0}
+    m_damageModifier: 1
+    m_nextAttackDelay: 0
+  m_character: {fileID: 4294471023827248791}
+  m_physics: {fileID: 4294471023827248786}
+  m_enemySensor: {fileID: 4574040781148070988}
+  m_wallSensor: {fileID: 2702825902955571488}
+  m_edgeSensor: {fileID: 8774030571759925288}
+  m_pushForce: {x: 0, y: 0}
+  m_startPoint: {fileID: 6585369894670405630}
+  m_endPoint: {fileID: 2050889991724354459}
+  m_projectileInfo:
+    m_projectile: {fileID: 8812716407408811161, guid: 6bebec76198b7864698515db87447705,
+      type: 3}
+    m_speed: 3
+  m_projectileGravity: 3
+--- !u!114 &1193966242743067210
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 181148360470848333}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ead04ce618b0fdb4681b711caa26eaf6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_attackFX: {fileID: 4713603853206080501}
+  m_backDiverCooldown: 0.5
+  m_backDiverMovementCooldown: 0.5
+  m_backDiverInfo:
+    m_fx: {fileID: 0}
+    m_fxPosition: {fileID: 4294471023827248790}
+    m_collider: {fileID: 0}
+    m_damageModifier: 1
+    m_nextAttackDelay: 0
+  m_character: {fileID: 4294471023827248791}
+  m_physics: {fileID: 4294471023827248786}
+  m_pushForce: {x: 50, y: 50}
 --- !u!1 &184704957041285301
 GameObject:
   m_ObjectHideFlags: 0
@@ -15919,7 +15981,7 @@ MonoBehaviour:
   m_collisionLayer:
     serializedVersion: 2
     m_Bits: 133120
-  m_coyoteTime: 0.1
+  m_coyoteTime: 0.01
   boxSize: {x: 3.4, y: 1.7}
   angle: 0
   m_groundCheckOffset: 5
@@ -48184,6 +48246,37 @@ MonoBehaviour:
   zPosition: 1
   overrideAlpha: 1
   hierarchy: {fileID: 4966587747696342843}
+--- !u!1 &6567818910553996881
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2050889991724354459}
+  m_Layer: 8
+  m_Name: DoomsdayKongEndPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2050889991724354459
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6567818910553996881}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 25, y: 5, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7730022515954066503}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6583441994056257696
 GameObject:
   m_ObjectHideFlags: 0
@@ -64046,6 +64139,37 @@ MonoBehaviour:
   zPosition: 1
   overrideAlpha: 1
   hierarchy: {fileID: 4966587747696342843}
+--- !u!1 &7570140825342785115
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6585369894670405630}
+  m_Layer: 8
+  m_Name: DoomsdayKongStartPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6585369894670405630
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7570140825342785115}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 5, y: 10, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7730022515954066503}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7622733840248381336
 GameObject:
   m_ObjectHideFlags: 0

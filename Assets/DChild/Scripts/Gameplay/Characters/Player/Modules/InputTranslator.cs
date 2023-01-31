@@ -51,6 +51,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
         public bool edgedFuryPressed;
         public bool edgedFuryReleased;
         public bool ninthCircleSanctionPressed;
+        public bool doomsdayKongPressed;
+        public bool backDiverPressed;
         #endregion
 
         private PlayerInput m_input;
@@ -293,6 +295,22 @@ namespace DChild.Gameplay.Characters.Players.Modules
             }
         }
 
+        private void OnDoomsdayKong(InputValue value)
+        {
+            if (enabled == true)
+            {
+                doomsdayKongPressed = value.Get<float>() == 1;
+            }
+        }
+
+        private void OnBackDiver(InputValue value)
+        {
+            if (enabled == true)
+            {
+                backDiverPressed = value.Get<float>() == 1;
+            }
+        }
+
         private void OnSlashHeld(InputValue value)
         {
             if (enabled == true)
@@ -427,6 +445,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
             edgedFuryPressed = false;
             edgedFuryReleased = false;
             ninthCircleSanctionPressed = false;
+            doomsdayKongPressed = false;
+            backDiverPressed = false;
         }
 
         private void Reset()
@@ -467,6 +487,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
             edgedFuryPressed = false;
             edgedFuryReleased = false;
             ninthCircleSanctionPressed = false;
+            doomsdayKongPressed = false;
+            backDiverPressed = false;
         }
     }
 }

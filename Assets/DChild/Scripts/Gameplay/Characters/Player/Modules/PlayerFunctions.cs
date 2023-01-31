@@ -30,6 +30,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private SoulFireBlast m_soulFireBlast;
         private EdgedFury m_edgedFury;
         private NinthCircleSanction m_ninthCircleSanction;
+        private DoomsdayKong m_doomsdayKong;
+        private BackDiver m_backDiver;
         #endregion
 
         public void IdleStateFinished()
@@ -396,6 +398,24 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_ninthCircleSanction?.AttackOver();
             m_ninthCircleSanction.EndExecution();
         }
+
+        public void DoomsdayKongSummon()
+        {
+            m_doomsdayKong.Summon();
+        }
+
+        public void DoomsdayKongEnd()
+        {
+            m_doomsdayKong?.AttackOver();
+            m_doomsdayKong.EndExecution();
+        }
+
+        public void BackDiverEnd()
+        {
+            Debug.Log("End Back Diver");
+            m_backDiver?.AttackOver();
+            m_backDiver.EndExecution();
+        }
         #endregion
 
         public void SkullThrowSpawnProjectile()
@@ -457,6 +477,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_soulFireBlast = character.GetComponentInChildren<SoulFireBlast>();
             m_edgedFury = character.GetComponentInChildren<EdgedFury>();
             m_ninthCircleSanction = character.GetComponentInChildren<NinthCircleSanction>();
+            m_doomsdayKong = character.GetComponentInChildren<DoomsdayKong>();
+            m_backDiver = character.GetComponentInChildren<BackDiver>();
         }
 
         #region TESTING

@@ -110,6 +110,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
             m_state.isDoingCombo = false;
             m_fxAnimator.Play("Buffer");
+
+            m_canSlashCombo = false;
         }
 
         public void PlayFX(bool value)
