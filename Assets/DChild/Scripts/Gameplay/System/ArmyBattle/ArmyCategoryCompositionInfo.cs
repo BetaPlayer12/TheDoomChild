@@ -11,6 +11,8 @@ namespace DChild.Gameplay.ArmyBattle
         [SerializeField, MinValue(1)]
         public int characterCount;
 
+        public ArmyCharacterCategory characterCategory => m_characterCategory;
+
         public ArmyCategoryCompositionInfo(ArmyCharacterCategory characterCategory, int characterCount = 1)
         {
             m_characterCategory = characterCategory;
