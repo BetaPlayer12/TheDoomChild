@@ -635,10 +635,10 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 m_doomsdayKong.HandleMovementTimer();
             }
 
-            if (m_backDiver.CanMove() == false)
-            {
-                m_backDiver.HandleMovementTimer();
-            }
+            //if (m_backDiver.CanMove() == false)
+            //{
+            //    m_backDiver.HandleMovementTimer();
+            //}
 
             if (m_state.canAttack == true)
             {
@@ -669,11 +669,12 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 m_devilWings?.EnableLevitate();
                 m_airSlashCombo?.ResetAirSlashCombo();
                 #region Back Diver Timers
-                m_backDiver?.ResetBackDiver();
+                //m_backDiver?.ResetBackDiver();
                 if (m_backDiver.CanBackDiver() == false)
                 {
                     m_backDiver.HandleAttackTimer();
                 }
+
                 #endregion
             }
             else
@@ -1704,7 +1705,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                         }
                     }
                 }
-                else if (m_input.jumpPressed && !m_input.backDiverPressed /*&& m_backDiver.CanBackDiver()*/ && m_earthShaker.CanEarthShaker())
+                else if (m_input.jumpPressed && m_earthShaker.CanEarthShaker() && !m_input.backDiverPressed)
                 {
                     if (m_state.isInShadowMode == false)
                     {
@@ -1922,8 +1923,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     && m_hellTrident.CanMove()
                     && m_foolsVerdict.CanMove()
                     && m_ninthCircleSanction.CanMove()
-                    && m_doomsdayKong.CanMove()
-                    && m_backDiver.CanMove();
+                    && m_doomsdayKong.CanMove();
         }
 
         private bool IsFacingInput()

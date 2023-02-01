@@ -1,4 +1,5 @@
 using DChild.Gameplay.Characters.Players.Modules;
+using DChild.Gameplay.Combat;
 using DChild.Gameplay.Projectiles;
 using Sirenix.OdinInspector;
 using Spine.Unity;
@@ -30,6 +31,10 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
         //private RaySensor m_wallSensor;
         //[SerializeField, BoxGroup("Sensors")]
         //private RaySensor m_edgeSensor;
+        [SerializeField]
+        private Hitbox m_hitbox;
+        [SerializeField]
+        private float m_hitboxDuration;
 
         [SerializeField]
         private Vector2 m_pushForce;
@@ -46,7 +51,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
         private SkeletonAnimation m_skeletonAnimation;
 
         public bool CanBackDiver() => m_canBackDiver;
-        public bool CanMove() => m_canMove;
+        //public bool CanMove() => m_canMove;
 
         public override void Initialize(ComplexCharacterInfo info)
         {
@@ -76,7 +81,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
         public void Execute()
         {
-            //m_state.waitForBehaviour = true;
+            m_state.waitForBehaviour = true;
             m_state.isAttacking = true;
             m_state.canAttack = false;
             m_canBackDiver = false;
@@ -87,16 +92,18 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             m_backDiverMovementCooldownTimer = m_backDiverMovementCooldown;
             //m_attacker.SetDamageModifier(m_slashComboInfo[m_currentSlashState].damageModifier * m_modifier.Get(PlayerModifier.AttackDamage));
             m_physics.AddForce(new Vector2(m_character.facing == HorizontalDirection.Left ? m_pushForce.x : -m_pushForce.x, m_pushForce.y), ForceMode2D.Impulse);
+            StartCoroutine(HitboxRoutine());
         }
 
         public void EndExecution()
         {
             base.AttackOver();
             //m_backDiverInfo.ShowCollider(false);
+            //m_hitbox.Enable();
             m_animator.SetBool(m_backDiverStateAnimationParameter, false);
             //m_canBackDiver = true;
             //m_canMove = true;
-            //m_state.waitForBehaviour = false;
+            m_state.waitForBehaviour = false;
         }
 
         public override void Cancel()
@@ -104,6 +111,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             base.Cancel();
             //m_backDiverInfo.ShowCollider(false);
             m_fxAnimator.Play("Buffer");
+            m_hitbox.Enable();
         }
 
         public void EnableCollision(bool value)
@@ -142,19 +150,27 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             }
         }
 
-        public void HandleMovementTimer()
+        //public void HandleMovementTimer()
+        //{
+        //    if (m_backDiverMovementCooldownTimer > 0)
+        //    {
+        //        m_backDiverMovementCooldownTimer -= GameplaySystem.time.deltaTime;
+        //        m_canMove = false;
+        //    }
+        //    else
+        //    {
+        //        //Debug.Log("Can Move");
+        //        m_backDiverMovementCooldownTimer = m_backDiverMovementCooldown;
+        //        m_canMove = true;
+        //    }
+        //}
+
+        private IEnumerator HitboxRoutine()
         {
-            if (m_backDiverMovementCooldownTimer > 0)
-            {
-                m_backDiverMovementCooldownTimer -= GameplaySystem.time.deltaTime;
-                m_canMove = false;
-            }
-            else
-            {
-                //Debug.Log("Can Move");
-                m_backDiverMovementCooldownTimer = m_backDiverMovementCooldown;
-                m_canMove = true;
-            }
+            m_hitbox.Disable();
+            yield return new WaitForSeconds(m_hitboxDuration);
+            m_hitbox.Enable();
+            yield return null;
         }
     }
 }
