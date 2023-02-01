@@ -108,7 +108,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             base.AttackOver();
             //m_doomsdayKongInfo.ShowCollider(false);
             m_animator.SetBool(m_doomsdayKongStateAnimationParameter, false);
-            m_canDoomsdayKong = true;
+            //m_canDoomsdayKong = true;
             //m_canMove = true;
             //m_state.waitForBehaviour = false;
         }

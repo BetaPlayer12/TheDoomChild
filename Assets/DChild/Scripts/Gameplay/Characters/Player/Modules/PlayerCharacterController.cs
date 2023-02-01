@@ -999,7 +999,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                         }
                     }
                 }
-                else if (m_input.backDiverPressed && m_backDiver.CanBackDiver())
+                else if (m_input.backDiverPressed && m_backDiver.CanBackDiver() && m_earthShaker.CanEarthShaker())
                 {
                     if (m_state.isInShadowMode == false)
                     {
@@ -1008,6 +1008,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                         m_slashCombo?.Reset();
                         m_whip?.Cancel();
                         m_whipCombo?.Cancel();
+
                         PrepareForGroundAttack();
                         if (IsFacingInput())
                         {
@@ -1225,7 +1226,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
                         return;
                     }
-                    else if (m_input.backDiverPressed && m_backDiver.CanBackDiver())
+                    else if (m_input.backDiverPressed && m_backDiver.CanBackDiver() && m_earthShaker.CanEarthShaker())
                     {
                         if (m_state.isInShadowMode == false)
                         {
@@ -1234,6 +1235,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                             m_slashCombo?.Reset();
                             m_whip?.Cancel();
                             m_whipCombo?.Cancel();
+
                             PrepareForGroundAttack();
                             if (IsFacingInput())
                             {
@@ -1570,7 +1572,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
                         return;
                     }
-                    else if (m_input.doomsdayKongPressed)
+                    else if (m_input.doomsdayKongPressed && m_doomsdayKong.CanDoomsdayKong())
                     {
                         if (m_state.isInShadowMode == false)
                         {
@@ -1584,7 +1586,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
                         return;
                     }
-                    else if (m_input.backDiverPressed && m_backDiver.CanBackDiver())
+                    else if (m_input.backDiverPressed && m_backDiver.CanBackDiver() && m_earthShaker.CanEarthShaker())
                     {
                         if (m_state.isInShadowMode == false)
                         {
@@ -1593,6 +1595,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                             m_slashCombo?.Reset();
                             m_whip?.Cancel();
                             m_whipCombo?.Cancel();
+
                             PrepareForGroundAttack();
                             if (IsFacingInput())
                             {
