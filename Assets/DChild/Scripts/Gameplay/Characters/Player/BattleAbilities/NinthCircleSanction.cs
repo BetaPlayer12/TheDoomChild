@@ -217,14 +217,8 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             m_enemySensor.Cast();
             var hits = m_enemySensor.GetHits();
             m_startPoint.position = hits[0].point;
-            var target = /*EnemyPosition(m_startPoint.position)*/hits[0].point;
-            Debug.Log("Ninth Circle Sanction Target " + target);
+            var target = hits[0].point;
             m_launcher.AimAt(target);
-            //if (m_canShoot)
-            //{
-            //    m_canShoot = false;
-            //    m_launcher.LaunchProjectile();
-            //}
             if (target != Vector2.zero)
                 m_launcher.LaunchProjectile();
             m_startPoint.localPosition = m_startPointCache;

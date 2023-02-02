@@ -32,6 +32,9 @@ namespace DChild.Gameplay.Characters.Players
             EndSoulFireBlast,
             EndEdgedFury,
             EndNinthCircleSanction,
+            EndDoomsdayKong,
+            EndBackDiver,
+            EndBarrier,
         }
 
         [SerializeField]
@@ -112,6 +115,15 @@ namespace DChild.Gameplay.Characters.Players
                         break;
                     case Command.EndNinthCircleSanction:
                         player.NinthCircleSanctionEnd();
+                        break;
+                    case Command.EndDoomsdayKong:
+                        player.DoomsdayKongEnd();
+                        break;
+                    case Command.EndBackDiver:
+                        player.BackDiverEnd();
+                        break;
+                    case Command.EndBarrier:
+                        player.BarrierEnd();
                         break;
                 }
             }

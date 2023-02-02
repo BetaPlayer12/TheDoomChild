@@ -30,6 +30,9 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private SoulFireBlast m_soulFireBlast;
         private EdgedFury m_edgedFury;
         private NinthCircleSanction m_ninthCircleSanction;
+        private DoomsdayKong m_doomsdayKong;
+        private BackDiver m_backDiver;
+        private Barrier m_barrier;
         #endregion
 
         public void IdleStateFinished()
@@ -396,6 +399,39 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_ninthCircleSanction?.AttackOver();
             m_ninthCircleSanction.EndExecution();
         }
+
+        public void DoomsdayKongSummon()
+        {
+            m_doomsdayKong.Summon();
+        }
+
+        public void DoomsdayKongEnd()
+        {
+            m_doomsdayKong?.AttackOver();
+            m_doomsdayKong.EndExecution();
+        }
+
+        public void BackDiverEnd()
+        {
+            m_backDiver?.AttackOver();
+            m_backDiver.EndExecution();
+        }
+
+        public void BarrierEnableShield()
+        {
+            m_barrier.EnableShield(true);
+        }
+
+        public void BarrierDisableShield()
+        {
+            m_barrier.EnableShield(false);
+        }
+
+        public void BarrierEnd()
+        {
+            m_barrier?.AttackOver();
+            m_barrier.EndExecution();
+        }
         #endregion
 
         public void SkullThrowSpawnProjectile()
@@ -457,6 +493,9 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_soulFireBlast = character.GetComponentInChildren<SoulFireBlast>();
             m_edgedFury = character.GetComponentInChildren<EdgedFury>();
             m_ninthCircleSanction = character.GetComponentInChildren<NinthCircleSanction>();
+            m_doomsdayKong = character.GetComponentInChildren<DoomsdayKong>();
+            m_backDiver = character.GetComponentInChildren<BackDiver>();
+            m_barrier = character.GetComponentInChildren<Barrier>();
         }
 
         #region TESTING

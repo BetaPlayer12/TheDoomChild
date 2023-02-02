@@ -60,6 +60,9 @@ namespace DChild.Gameplay.Characters.Players
             SoulFireBlast,
             EdgedFury,
             NinthCircleSanction,
+            DoomsdayKong,
+            BackDiver,
+            Barrier,
         }
 
         [SerializeField]
