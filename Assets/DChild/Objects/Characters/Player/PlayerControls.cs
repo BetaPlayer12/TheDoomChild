@@ -386,6 +386,24 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Barrier"",
+                    ""type"": ""Button"",
+                    ""id"": ""307688b1-3ada-417c-96d6-b7e54ecab752"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""BarrierReleased"",
+                    ""type"": ""Button"",
+                    ""id"": ""70a1bd18-f335-492c-804e-192b1ba31777"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -2005,6 +2023,94 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""action"": ""BackDiver"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""One Modifier"",
+                    ""id"": ""703e98b5-5539-4261-9a84-2812717d1915"",
+                    ""path"": ""OneModifier"",
+                    ""interactions"": ""Press(behavior=1)"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""BarrierReleased"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""modifier"",
+                    ""id"": ""2f3207ae-2cd3-4cc6-94cd-c119f90ee2f8"",
+                    ""path"": ""<Keyboard>/leftShift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""BarrierReleased"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""binding"",
+                    ""id"": ""4f1bf957-79e7-43e4-8ff8-f38f570c0302"",
+                    ""path"": ""<Keyboard>/z"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""BarrierReleased"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0e85cc02-7477-48a0-a4c6-1fd4fa53f6a2"",
+                    ""path"": ""<Keyboard>/z"",
+                    ""interactions"": ""Press(behavior=1)"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""BarrierReleased"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""One Modifier"",
+                    ""id"": ""3ac633d8-0f9c-4494-bd1d-0b039e888b0b"",
+                    ""path"": ""OneModifier"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Barrier"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""modifier"",
+                    ""id"": ""7336ffee-2a57-498f-9074-5242d41a4727"",
+                    ""path"": ""<Keyboard>/leftShift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""Barrier"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""binding"",
+                    ""id"": ""2fc54e0e-01cf-41cc-809e-dd92c6b3767c"",
+                    ""path"": ""<Keyboard>/z"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""Barrier"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a0e02116-64fc-4671-99f4-0cb19259d581"",
+                    ""path"": ""<Keyboard>/z"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""Barrier"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -3200,6 +3306,8 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         m_Gameplay_NinthCircleSanction = m_Gameplay.FindAction("NinthCircleSanction", throwIfNotFound: true);
         m_Gameplay_DoomsdayKong = m_Gameplay.FindAction("DoomsdayKong", throwIfNotFound: true);
         m_Gameplay_BackDiver = m_Gameplay.FindAction("BackDiver", throwIfNotFound: true);
+        m_Gameplay_Barrier = m_Gameplay.FindAction("Barrier", throwIfNotFound: true);
+        m_Gameplay_BarrierReleased = m_Gameplay.FindAction("BarrierReleased", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -3321,6 +3429,8 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
     private readonly InputAction m_Gameplay_NinthCircleSanction;
     private readonly InputAction m_Gameplay_DoomsdayKong;
     private readonly InputAction m_Gameplay_BackDiver;
+    private readonly InputAction m_Gameplay_Barrier;
+    private readonly InputAction m_Gameplay_BarrierReleased;
     public struct GameplayActions
     {
         private @PlayerControls m_Wrapper;
@@ -3365,6 +3475,8 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         public InputAction @NinthCircleSanction => m_Wrapper.m_Gameplay_NinthCircleSanction;
         public InputAction @DoomsdayKong => m_Wrapper.m_Gameplay_DoomsdayKong;
         public InputAction @BackDiver => m_Wrapper.m_Gameplay_BackDiver;
+        public InputAction @Barrier => m_Wrapper.m_Gameplay_Barrier;
+        public InputAction @BarrierReleased => m_Wrapper.m_Gameplay_BarrierReleased;
         public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -3494,6 +3606,12 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @BackDiver.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnBackDiver;
                 @BackDiver.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnBackDiver;
                 @BackDiver.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnBackDiver;
+                @Barrier.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnBarrier;
+                @Barrier.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnBarrier;
+                @Barrier.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnBarrier;
+                @BarrierReleased.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnBarrierReleased;
+                @BarrierReleased.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnBarrierReleased;
+                @BarrierReleased.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnBarrierReleased;
             }
             m_Wrapper.m_GameplayActionsCallbackInterface = instance;
             if (instance != null)
@@ -3618,6 +3736,12 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @BackDiver.started += instance.OnBackDiver;
                 @BackDiver.performed += instance.OnBackDiver;
                 @BackDiver.canceled += instance.OnBackDiver;
+                @Barrier.started += instance.OnBarrier;
+                @Barrier.performed += instance.OnBarrier;
+                @Barrier.canceled += instance.OnBarrier;
+                @BarrierReleased.started += instance.OnBarrierReleased;
+                @BarrierReleased.performed += instance.OnBarrierReleased;
+                @BarrierReleased.canceled += instance.OnBarrierReleased;
             }
         }
     }
@@ -3894,6 +4018,8 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         void OnNinthCircleSanction(InputAction.CallbackContext context);
         void OnDoomsdayKong(InputAction.CallbackContext context);
         void OnBackDiver(InputAction.CallbackContext context);
+        void OnBarrier(InputAction.CallbackContext context);
+        void OnBarrierReleased(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

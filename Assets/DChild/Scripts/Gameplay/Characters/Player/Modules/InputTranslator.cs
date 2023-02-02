@@ -53,6 +53,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
         public bool ninthCircleSanctionPressed;
         public bool doomsdayKongPressed;
         public bool backDiverPressed;
+        public bool barrierPressed;
+        public bool barrierReleased;
         #endregion
 
         private PlayerInput m_input;
@@ -283,7 +285,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
             {
                 edgedFuryReleased = value.Get<float>() == 1;
                 edgedFuryReleased = !edgedFuryReleased;
-                Debug.Log("Edged Fury Released " + edgedFuryReleased);
             }
         }
 
@@ -308,6 +309,23 @@ namespace DChild.Gameplay.Characters.Players.Modules
             if (enabled == true)
             {
                 backDiverPressed = value.Get<float>() == 1;
+            }
+        }
+
+        private void OnBarrier(InputValue value)
+        {
+            if (enabled == true)
+            {
+                barrierPressed = value.Get<float>() == 1;
+            }
+        }
+
+        private void OnBarrierReleased(InputValue value)
+        {
+            if (enabled == true)
+            {
+                barrierReleased = value.Get<float>() == 1;
+                barrierReleased = !barrierReleased;
             }
         }
 
@@ -447,6 +465,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
             ninthCircleSanctionPressed = false;
             doomsdayKongPressed = false;
             backDiverPressed = false;
+            barrierPressed = false;
+            barrierReleased = false;
         }
 
         private void Reset()
@@ -489,6 +509,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
             ninthCircleSanctionPressed = false;
             doomsdayKongPressed = false;
             backDiverPressed = false;
+            barrierPressed = false;
+            barrierReleased = false;
         }
     }
 }

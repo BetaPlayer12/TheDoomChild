@@ -32,6 +32,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private NinthCircleSanction m_ninthCircleSanction;
         private DoomsdayKong m_doomsdayKong;
         private BackDiver m_backDiver;
+        private Barrier m_barrier;
         #endregion
 
         public void IdleStateFinished()
@@ -412,9 +413,24 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void BackDiverEnd()
         {
-            Debug.Log("End Back Diver");
             m_backDiver?.AttackOver();
             m_backDiver.EndExecution();
+        }
+
+        public void BarrierEnableShield()
+        {
+            m_barrier.EnableShield(true);
+        }
+
+        public void BarrierDisableShield()
+        {
+            m_barrier.EnableShield(false);
+        }
+
+        public void BarrierEnd()
+        {
+            m_barrier?.AttackOver();
+            m_barrier.EndExecution();
         }
         #endregion
 
@@ -479,6 +495,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_ninthCircleSanction = character.GetComponentInChildren<NinthCircleSanction>();
             m_doomsdayKong = character.GetComponentInChildren<DoomsdayKong>();
             m_backDiver = character.GetComponentInChildren<BackDiver>();
+            m_barrier = character.GetComponentInChildren<Barrier>();
         }
 
         #region TESTING

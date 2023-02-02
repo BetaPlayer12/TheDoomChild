@@ -34,6 +34,7 @@ namespace DChild.Gameplay.Characters.Players
             EndNinthCircleSanction,
             EndDoomsdayKong,
             EndBackDiver,
+            EndBarrier,
         }
 
         [SerializeField]
@@ -120,6 +121,9 @@ namespace DChild.Gameplay.Characters.Players
                         break;
                     case Command.EndBackDiver:
                         player.BackDiverEnd();
+                        break;
+                    case Command.EndBarrier:
+                        player.BarrierEnd();
                         break;
                 }
             }

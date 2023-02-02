@@ -62,6 +62,7 @@ namespace DChild.Gameplay.Characters.Players
             NinthCircleSanction,
             DoomsdayKong,
             BackDiver,
+            Barrier,
         }
 
         [SerializeField]

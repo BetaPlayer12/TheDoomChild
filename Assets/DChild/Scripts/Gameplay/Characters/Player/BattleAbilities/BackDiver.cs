@@ -29,8 +29,8 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
         //private RaySensor m_enemySensor;
         //[SerializeField, BoxGroup("Sensors")]
         //private RaySensor m_wallSensor;
-        //[SerializeField, BoxGroup("Sensors")]
-        //private RaySensor m_edgeSensor;
+        [SerializeField, BoxGroup("Sensors")]
+        private RaySensor m_backWallSensor;
         [SerializeField]
         private Hitbox m_hitbox;
         [SerializeField]
@@ -52,6 +52,11 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
         public bool CanBackDiver() => m_canBackDiver;
         //public bool CanMove() => m_canMove;
+        public bool HaveSpacetoExecute()
+        {
+            m_backWallSensor.Cast();
+            return !m_backWallSensor.isDetecting;
+        }
 
         public override void Initialize(ComplexCharacterInfo info)
         {
