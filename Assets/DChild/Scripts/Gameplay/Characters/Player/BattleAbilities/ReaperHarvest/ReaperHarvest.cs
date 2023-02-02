@@ -1,4 +1,5 @@
 using DChild.Gameplay.Characters.Players.Modules;
+using DChild.Gameplay.Combat;
 using Sirenix.OdinInspector;
 using Spine.Unity;
 using System.Collections;
@@ -25,12 +26,17 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
         private Character m_character;
         [SerializeField, BoxGroup("Physics")]
         private Rigidbody2D m_physics;
+        private float m_cacheGravity;
         [SerializeField, BoxGroup("Sensors")]
         private RaySensor m_enemySensor;
         [SerializeField, BoxGroup("Sensors")]
         private RaySensor m_wallSensor;
         [SerializeField, BoxGroup("Sensors")]
         private RaySensor m_edgeSensor;
+        [SerializeField, BoxGroup("Animations")]
+        private ReaperHarvestAnimation m_reaperHarvestAnimation;
+        [SerializeField]
+        private Hitbox m_hitbox;
 
         [SerializeField]
         private Vector2 m_pushForce;
@@ -48,6 +54,14 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
         public bool CanReaperHarvest() => m_canReaperHarvest;
         public bool CanMove() => m_canMove;
 
+        private ReaperHarvestState m_currentState;
+
+        public enum ReaperHarvestState
+        {
+            Grounded,
+            Midair,
+        }
+
         public override void Initialize(ComplexCharacterInfo info)
         {
             base.Initialize(info);
@@ -60,6 +74,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
             m_fxAnimator = m_attackFX.gameObject.GetComponentInChildren<Animator>();
             m_skeletonAnimation = m_attackFX.gameObject.GetComponent<SkeletonAnimation>();
+            m_cacheGravity = m_physics.gravityScale;
         }
 
         //public void SetConfiguration(SlashComboStatsInfo info)
@@ -74,9 +89,10 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             m_animator.SetBool(m_reaperHarvestStateAnimationParameter, false);
         }
 
-        public void Execute()
+        public void Execute(ReaperHarvestState state)
         {
-            //m_state.waitForBehaviour = true;
+            m_state.waitForBehaviour = true;
+            m_currentState = state;
             StopAllCoroutines();
             m_state.isAttacking = true;
             m_state.canAttack = false;
@@ -87,24 +103,44 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             m_reaperHarvestCooldownTimer = m_reaperHarvestCooldown;
             m_reaperHarvestMovementCooldownTimer = m_reaperHarvestMovementCooldown;
             //m_attacker.SetDamageModifier(m_slashComboInfo[m_currentSlashState].damageModifier * m_modifier.Get(PlayerModifier.AttackDamage));
+
+            m_physics.velocity = Vector2.zero;
+            m_reaperHarvestAnimation.gameObject.SetActive(true);
+            switch (m_currentState)
+            {
+                case ReaperHarvestState.Grounded:
+                    m_reaperHarvestAnimation.StartGrounded();
+                    break;
+                case ReaperHarvestState.Midair:
+                    m_cacheGravity = m_physics.gravityScale;
+                    m_physics.gravityScale = 0;
+                    m_reaperHarvestAnimation.StartMidair();
+                    break;
+            }
         }
 
         public void EndExecution()
         {
-            //m_state.waitForBehaviour = false;
             base.AttackOver();
             m_reaperHarvestInfo.ShowCollider(false);
             //m_canReaperHarvest = true;
-            //m_canMove = true;
+            m_canMove = true;
             m_animator.SetBool(m_reaperHarvestStateAnimationParameter, false);
+            m_reaperHarvestAnimation.gameObject.SetActive(false);
+            m_physics.gravityScale = m_cacheGravity;
+            m_hitbox.Enable();
         }
 
         public override void Cancel()
         {
             base.Cancel();
             m_reaperHarvestInfo.ShowCollider(false);
+            m_canMove = true;
             m_fxAnimator.Play("Buffer");
             StopAllCoroutines();
+            m_reaperHarvestAnimation.gameObject.SetActive(false);
+            m_physics.gravityScale = m_cacheGravity;
+            m_hitbox.Enable();
         }
 
         public void EnableCollision(bool value)
@@ -112,20 +148,11 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             m_rigidBody.WakeUp();
             m_reaperHarvestInfo.ShowCollider(value);
             m_attackFX.transform.position = m_reaperHarvestInfo.fxPosition.position;
+        }
 
+        public void StartDash()
+        {
             StartCoroutine(DashRoutine());
-            //TEST
-            //m_enemySensor.Cast();
-            //m_wallSensor.Cast();
-            //m_edgeSensor.Cast();
-            //if (!m_enemySensor.isDetecting && !m_wallSensor.allRaysDetecting && m_edgeSensor.isDetecting && value)
-            //{
-            //    m_physics.AddForce(new Vector2(m_character.facing == HorizontalDirection.Right ? m_pushForce.x : -m_pushForce.x, m_pushForce.y), ForceMode2D.Impulse);
-            //}
-            //else if (!value)
-            //{
-            //    m_physics.velocity = new Vector2(0, m_physics.velocity.y);
-            //}
         }
 
         public void HandleAttackTimer()
@@ -143,37 +170,58 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             }
         }
 
-        public void HandleMovementTimer()
-        {
-            if (m_reaperHarvestMovementCooldownTimer > 0)
-            {
-                m_reaperHarvestMovementCooldownTimer -= GameplaySystem.time.deltaTime;
-                m_canMove = false;
-            }
-            else
-            {
-                //Debug.Log("Can Move");
-                m_reaperHarvestMovementCooldownTimer = m_reaperHarvestMovementCooldown;
-                m_canMove = true;
-            }
-        }
+        //public void HandleMovementTimer()
+        //{
+        //    if (m_reaperHarvestMovementCooldownTimer > 0)
+        //    {
+        //        m_reaperHarvestMovementCooldownTimer -= GameplaySystem.time.deltaTime;
+        //        m_canMove = false;
+        //    }
+        //    else
+        //    {
+        //        //Debug.Log("Can Move");
+        //        m_reaperHarvestMovementCooldownTimer = m_reaperHarvestMovementCooldown;
+        //        m_canMove = true;
+        //    }
+        //}
 
         private IEnumerator DashRoutine()
         {
+            m_state.waitForBehaviour = true;
+            switch (m_currentState)
+            {
+                case ReaperHarvestState.Grounded:
+                    m_reaperHarvestAnimation.ImpactGrounded();
+                    break;
+                case ReaperHarvestState.Midair:
+                    m_reaperHarvestAnimation.ImpactMidair();
+                    break;
+            }
             //m_physics.AddForce(new Vector2(m_character.facing == HorizontalDirection.Right ? m_pushForce.x : -m_pushForce.x, m_pushForce.y), ForceMode2D.Impulse);
+            m_hitbox.Disable();
             var timer = m_dashDuration;
             m_wallSensor.Cast();
             m_edgeSensor.Cast();
-            while (timer >= 0 && !m_wallSensor.allRaysDetecting && m_edgeSensor.isDetecting)
+            while (timer >= 0 && !m_wallSensor.allRaysDetecting /*&& m_edgeSensor.isDetecting*/)
             {
                 m_wallSensor.Cast();
                 m_edgeSensor.Cast();
                 m_physics.velocity = new Vector2(m_character.facing == HorizontalDirection.Right ? m_pushForce.x : -m_pushForce.x, m_physics.velocity.y);
                 timer -= Time.deltaTime;
+                if (m_currentState == ReaperHarvestState.Grounded)
+                {
+                    if (!m_edgeSensor.isDetecting)
+                    {
+                        timer = 0;
+                    }
+                }
                 yield return null;
             }
             //yield return new WaitForSeconds(m_dashDuration);
+            m_hitbox.Enable();
             m_physics.velocity = new Vector2(0, m_physics.velocity.y);
+            m_reaperHarvestAnimation.gameObject.SetActive(false);
+            m_state.waitForBehaviour = false;
             yield return null;
         }
     }

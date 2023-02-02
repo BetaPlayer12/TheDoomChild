@@ -34,7 +34,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
         private Vector2 m_pushForce;
 
         private bool m_canAirLunge;
-        private bool m_canMove;
+        //private bool m_canMove;
         private IPlayerModifer m_modifier;
         private int m_airLungeStateAnimationParameter;
         private float m_airLungeCooldownTimer;
@@ -44,7 +44,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
         private SkeletonAnimation m_skeletonAnimation;
 
         public bool CanAirLunge() => m_canAirLunge;
-        public bool CanMove() => m_canMove;
+        //public bool CanMove() => m_canMove;
 
         public override void Initialize(ComplexCharacterInfo info)
         {
@@ -53,7 +53,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             m_modifier = info.modifier;
             m_airLungeStateAnimationParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.AirLunge);
             m_canAirLunge = true;
-            m_canMove = true;
+            //m_canMove = true;
             m_airLungeMovementCooldownTimer = m_airLungeMovementCooldown;
 
             m_fxAnimator = m_attackFX.gameObject.GetComponentInChildren<Animator>();
@@ -74,11 +74,11 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
         public void Execute()
         {
-            //m_state.waitForBehaviour = true;
+            m_state.waitForBehaviour = true;
             m_state.isAttacking = true;
             m_state.canAttack = false;
             m_canAirLunge = false;
-            m_canMove = false;
+            //m_canMove = false;
             m_animator.SetBool(m_animationParameter, true);
             m_animator.SetBool(m_airLungeStateAnimationParameter, true);
             m_airLungeCooldownTimer = m_airLungeCooldown;
@@ -91,8 +91,8 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             base.AttackOver();
             m_airLungeInfo.ShowCollider(false);
             //m_canAirLunge = true;
-            m_canMove = true;
-            //m_state.waitForBehaviour = false;
+            //m_canMove = true;
+            m_state.waitForBehaviour = false;
             m_animator.SetBool(m_airLungeStateAnimationParameter, false);
         }
 
@@ -134,19 +134,19 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             }
         }
 
-        public void HandleMovementTimer()
-        {
-            if (m_airLungeMovementCooldownTimer > 0)
-            {
-                m_airLungeMovementCooldownTimer -= GameplaySystem.time.deltaTime;
-                m_canMove = false;
-            }
-            else
-            {
-                //Debug.Log("Can Move");
-                m_airLungeMovementCooldownTimer = m_airLungeMovementCooldown;
-                m_canMove = true;
-            }
-        }
+        //public void HandleMovementTimer()
+        //{
+        //    if (m_airLungeMovementCooldownTimer > 0)
+        //    {
+        //        m_airLungeMovementCooldownTimer -= GameplaySystem.time.deltaTime;
+        //        m_canMove = false;
+        //    }
+        //    else
+        //    {
+        //        //Debug.Log("Can Move");
+        //        m_airLungeMovementCooldownTimer = m_airLungeMovementCooldown;
+        //        m_canMove = true;
+        //    }
+        //}
     }
 }

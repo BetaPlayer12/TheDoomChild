@@ -251,6 +251,11 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_fireFist.EnableCollision(false);
         }
 
+        public void ReaperHarvestStartDash()
+        {
+            m_reaperHarvest.StartDash();
+        }
+
         public void ReaperHarvestEnableCollision()
         {
             m_reaperHarvest.EnableCollision(true);
