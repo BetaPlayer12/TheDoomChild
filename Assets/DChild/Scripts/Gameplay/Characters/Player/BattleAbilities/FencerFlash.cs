@@ -122,8 +122,11 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             m_animator.SetBool(m_fencerFlashStateAnimationParameter, false);
             //m_fencerFlashAnimation.gameObject.SetActive(false);
             m_physics.gravityScale = m_cacheGravity;
-            m_fxParent.SetActive(false);
-            m_fx.Stop();
+            if (m_fxParent.activeSelf)
+            {
+                m_fxParent.SetActive(false);
+                m_fx.Stop();
+            }
         }
 
         public override void Cancel()
@@ -136,8 +139,11 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             m_animator.SetBool(m_fencerFlashStateAnimationParameter, false);
             //m_fencerFlashAnimation.gameObject.SetActive(false);
             m_physics.gravityScale = m_cacheGravity;
-            m_fxParent.SetActive(false);
-            m_fx.Stop();
+            if (m_fxParent.activeSelf)
+            {
+                m_fxParent.SetActive(false);
+                m_fx.Stop();
+            }
         }
 
         public void EnableCollision(bool value)
