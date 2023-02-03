@@ -1576,7 +1576,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
                         return;
                     }
-                    else if (m_input.finalSlashPressed /*|| (m_input.levitateHeld && m_input.slashHeld)*/&& m_state.isCombatReady)
+                    else if (m_input.finalSlashPressed /*|| (m_input.levitateHeld && m_input.slashHeld)*/&& m_state.isCombatReady && !m_input.airLungeSlashPressed)
                     {
                         if (m_state.isInShadowMode == false)
                         {
