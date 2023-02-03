@@ -210,7 +210,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
                 {
                     if (!m_edgeSensor.isDetecting)
                     {
-                        timer = 0;
+                        timer = -1;
                     }
                 }
                 yield return null;
