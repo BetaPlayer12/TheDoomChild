@@ -404,6 +404,15 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""FencerFlash"",
+                    ""type"": ""Button"",
+                    ""id"": ""9a1de22a-ebd8-421a-8055-4df435cb3a02"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -2111,6 +2120,94 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""action"": ""Barrier"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""Two Modifiers"",
+                    ""id"": ""bd2f67ef-f54e-474f-8386-dbd8edff2df2"",
+                    ""path"": ""TwoModifiers"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""FencerFlash"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""modifier1"",
+                    ""id"": ""4f84f957-c46b-49ab-bcd5-90c17e93d959"",
+                    ""path"": ""<Keyboard>/leftShift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""FencerFlash"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""modifier2"",
+                    ""id"": ""9b99bd41-b93e-44b7-a31f-6b879c2317a3"",
+                    ""path"": ""<Keyboard>/a"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""FencerFlash"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""binding"",
+                    ""id"": ""43ef0010-38cd-4cd5-85af-f28e2d2a8861"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""FencerFlash"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Two Modifiers"",
+                    ""id"": ""763d9d2f-7856-4749-8d07-1835540c1b9b"",
+                    ""path"": ""TwoModifiers"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""FencerFlash"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""modifier1"",
+                    ""id"": ""4021a978-3d68-4b10-b634-cf1913a6adca"",
+                    ""path"": ""<Keyboard>/leftShift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""FencerFlash"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""modifier2"",
+                    ""id"": ""5ce03429-232a-402b-9c15-274413636a47"",
+                    ""path"": ""<Keyboard>/d"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""FencerFlash"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""binding"",
+                    ""id"": ""b20f83b6-2df1-4dd9-bc4e-7da6063f5879"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""FencerFlash"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
                 }
             ]
         },
@@ -3308,6 +3405,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         m_Gameplay_BackDiver = m_Gameplay.FindAction("BackDiver", throwIfNotFound: true);
         m_Gameplay_Barrier = m_Gameplay.FindAction("Barrier", throwIfNotFound: true);
         m_Gameplay_BarrierReleased = m_Gameplay.FindAction("BarrierReleased", throwIfNotFound: true);
+        m_Gameplay_FencerFlash = m_Gameplay.FindAction("FencerFlash", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -3431,6 +3529,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
     private readonly InputAction m_Gameplay_BackDiver;
     private readonly InputAction m_Gameplay_Barrier;
     private readonly InputAction m_Gameplay_BarrierReleased;
+    private readonly InputAction m_Gameplay_FencerFlash;
     public struct GameplayActions
     {
         private @PlayerControls m_Wrapper;
@@ -3477,6 +3576,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         public InputAction @BackDiver => m_Wrapper.m_Gameplay_BackDiver;
         public InputAction @Barrier => m_Wrapper.m_Gameplay_Barrier;
         public InputAction @BarrierReleased => m_Wrapper.m_Gameplay_BarrierReleased;
+        public InputAction @FencerFlash => m_Wrapper.m_Gameplay_FencerFlash;
         public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -3612,6 +3712,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @BarrierReleased.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnBarrierReleased;
                 @BarrierReleased.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnBarrierReleased;
                 @BarrierReleased.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnBarrierReleased;
+                @FencerFlash.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnFencerFlash;
+                @FencerFlash.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnFencerFlash;
+                @FencerFlash.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnFencerFlash;
             }
             m_Wrapper.m_GameplayActionsCallbackInterface = instance;
             if (instance != null)
@@ -3742,6 +3845,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @BarrierReleased.started += instance.OnBarrierReleased;
                 @BarrierReleased.performed += instance.OnBarrierReleased;
                 @BarrierReleased.canceled += instance.OnBarrierReleased;
+                @FencerFlash.started += instance.OnFencerFlash;
+                @FencerFlash.performed += instance.OnFencerFlash;
+                @FencerFlash.canceled += instance.OnFencerFlash;
             }
         }
     }
@@ -4020,6 +4126,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         void OnBackDiver(InputAction.CallbackContext context);
         void OnBarrier(InputAction.CallbackContext context);
         void OnBarrierReleased(InputAction.CallbackContext context);
+        void OnFencerFlash(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

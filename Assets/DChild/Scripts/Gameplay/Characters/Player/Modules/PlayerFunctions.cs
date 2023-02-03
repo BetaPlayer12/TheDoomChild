@@ -33,6 +33,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private DoomsdayKong m_doomsdayKong;
         private BackDiver m_backDiver;
         private Barrier m_barrier;
+        private FencerFlash m_fencerFlash;
         #endregion
 
         public void IdleStateFinished()
@@ -437,6 +438,27 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_barrier?.AttackOver();
             m_barrier.EndExecution();
         }
+
+        public void FencerFlashStartDash()
+        {
+            m_fencerFlash.StartDash();
+        }
+
+        public void FencerFlashEnableCollision()
+        {
+            m_fencerFlash.EnableCollision(true);
+        }
+
+        public void FencerFlashDisableCollision()
+        {
+            m_fencerFlash.EnableCollision(false);
+        }
+
+        public void FencerFlashEnd()
+        {
+            m_fencerFlash?.AttackOver();
+            m_fencerFlash.EndExecution();
+        }
         #endregion
 
         public void SkullThrowSpawnProjectile()
@@ -501,6 +523,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_doomsdayKong = character.GetComponentInChildren<DoomsdayKong>();
             m_backDiver = character.GetComponentInChildren<BackDiver>();
             m_barrier = character.GetComponentInChildren<Barrier>();
+            m_fencerFlash = character.GetComponentInChildren<FencerFlash>();
         }
 
         #region TESTING

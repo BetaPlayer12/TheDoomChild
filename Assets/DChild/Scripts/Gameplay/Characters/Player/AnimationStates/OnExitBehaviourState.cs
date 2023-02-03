@@ -35,6 +35,8 @@ namespace DChild.Gameplay.Characters.Players
             EndDoomsdayKong,
             EndBackDiver,
             EndBarrier,
+            EndFinalSlash,
+            EndFencerFlash,
         }
 
         [SerializeField]
@@ -124,6 +126,12 @@ namespace DChild.Gameplay.Characters.Players
                         break;
                     case Command.EndBarrier:
                         player.BarrierEnd();
+                        break;
+                    case Command.EndFinalSlash:
+                        player.FinalSlashEnd();
+                        break;
+                    case Command.EndFencerFlash:
+                        player.FencerFlashEnd();
                         break;
                 }
             }

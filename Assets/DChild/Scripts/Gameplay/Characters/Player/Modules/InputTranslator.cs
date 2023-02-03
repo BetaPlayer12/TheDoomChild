@@ -55,6 +55,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         public bool backDiverPressed;
         public bool barrierPressed;
         public bool barrierReleased;
+        public bool fencerFlashPressed;
         #endregion
 
         private PlayerInput m_input;
@@ -329,6 +330,14 @@ namespace DChild.Gameplay.Characters.Players.Modules
             }
         }
 
+        private void OnFencerFlash(InputValue value)
+        {
+            if (enabled == true)
+            {
+                fencerFlashPressed = value.Get<float>() == 1;
+            }
+        }
+
         private void OnSlashHeld(InputValue value)
         {
             if (enabled == true)
@@ -467,6 +476,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             backDiverPressed = false;
             barrierPressed = false;
             barrierReleased = false;
+            fencerFlashPressed = false;
         }
 
         private void Reset()
@@ -511,6 +521,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             backDiverPressed = false;
             barrierPressed = false;
             barrierReleased = false;
+            fencerFlashPressed = false;
         }
     }
 }
