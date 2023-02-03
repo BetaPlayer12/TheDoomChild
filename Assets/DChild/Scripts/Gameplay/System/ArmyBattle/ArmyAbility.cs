@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace DChild.Gameplay.ArmyBattle
 {
-
+    [CreateAssetMenu(fileName = "ArmyAbilityData", menuName = "DChild/Gameplay/Army/Ability")]
     public class ArmyAbilityData : SerializedScriptableObject
     {
         [SerializeField]
