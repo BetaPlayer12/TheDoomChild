@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace DChild.Gameplay.ArmyBattle
 {
+
     public class Army : MonoBehaviour
     {
 #if UNITY_EDITOR
@@ -14,6 +15,8 @@ namespace DChild.Gameplay.ArmyBattle
         private Health m_troopCount;
         [SerializeField, HideInEditorMode]
         private ArmyComposition m_composition;
+
+        private ArmyUnitPowerModifier m_powerModifier;
 
         public Health troopCount => m_troopCount;
 
