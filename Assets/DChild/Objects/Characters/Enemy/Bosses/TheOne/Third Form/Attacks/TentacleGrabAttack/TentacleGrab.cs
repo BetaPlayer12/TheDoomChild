@@ -1,6 +1,8 @@
 using DChild;
 using DChild.Gameplay;
 using DChild.Gameplay.Characters;
+using DChild.Gameplay.Characters.Enemies;
+using Holysoft.Event;
 using Sirenix.OdinInspector;
 using Spine.Unity;
 using System.Collections;
@@ -39,22 +41,21 @@ public class TentacleGrab : MonoBehaviour
     [SerializeField]
     private Collider2D m_grabHitbox;
 
-    private bool isAttackDone = false;
-    private bool isPlayerGrabbed = false;
+    [SerializeField]
+    private bool isAttackDone;
+    [SerializeField]
+    private bool isPlayerGrabbed;
 
     [SerializeField]
     private PlayableDirector m_groundSlamTimelineCall;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public event EventAction<EventActionArgs> AttackStart;
+    public event EventAction<EventActionArgs> AttackDone;
 
-    // Update is called once per frame
-    void Update()
+    private void Start()
     {
-        
+        m_grabHitbox.enabled = false;
+        isPlayerGrabbed = false;
     }
 
     [Button]
@@ -84,6 +85,8 @@ public class TentacleGrab : MonoBehaviour
         m_grabHitbox.enabled = true;
         m_animation.SetAnimation(0, m_grabAnimation, false);
         yield return new WaitForAnimationComplete(m_animation.animationState, m_grabAnimation);
+        if (FindObjectOfType<ObstacleChecker>().monolithSlamObstacleList != null)
+            FindObjectOfType<ObstacleChecker>().ClearMonoliths();
         yield return null;
     }
 
@@ -106,6 +109,8 @@ public class TentacleGrab : MonoBehaviour
 
     private IEnumerator GroundSlam()
     {
+        AttackStart?.Invoke(this, EventActionArgs.Empty);
+
         yield return Emerge();
 
         yield return new WaitForSeconds(2f); //somehow make time tentacle grabs random interval?
@@ -135,6 +140,8 @@ public class TentacleGrab : MonoBehaviour
         }
 
         isPlayerGrabbed = false;
+
+        AttackDone?.Invoke(this, EventActionArgs.Empty);
     }
 
     private IEnumerator TimelineGroundSlamSequence()
@@ -176,10 +183,30 @@ public class TentacleGrab : MonoBehaviour
     public void SetAttackDone()
     {
         isAttackDone = true;
+        isPlayerGrabbed = false;
+        m_grabHitbox.enabled = false;
+
+        GameplaySystem.playerManager.player.gameObject.SetActive(true);
+        GameplaySystem.playerManager.player.character.gameObject.SetActive(true);
     }
 
     public void GrabbedPlayer()
     {
         isPlayerGrabbed = true;
+    }
+
+    public void PlayerOutOfGrab()
+    {
+        isPlayerGrabbed = false;
+    }
+
+    public void OnGrabCollider()
+    {
+        m_grabHitbox.enabled = true;
+    }
+
+    public void OffGrabCollider()
+    {
+        m_grabHitbox.enabled = false;
     }
 }
