@@ -34,6 +34,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private BackDiver m_backDiver;
         private Barrier m_barrier;
         private FencerFlash m_fencerFlash;
+        private DiagonalSwordDash m_diagonalSwordDash;
+        private ChampionsUprising m_championsUprising;
         #endregion
 
         public void IdleStateFinished()
@@ -459,6 +461,53 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_fencerFlash?.AttackOver();
             m_fencerFlash.EndExecution();
         }
+
+        public void DiagonalSwordDashStartDash()
+        {
+            m_diagonalSwordDash.StartDash();
+        }
+
+        public void DiagonalSwordDashEnableCollision()
+        {
+            m_diagonalSwordDash.EnableCollision(true);
+        }
+
+        public void DiagonalSwordDashDisableCollision()
+        {
+            m_diagonalSwordDash.EnableCollision(false);
+        }
+
+        public void DiagonalSwordDashEnd()
+        {
+            m_diagonalSwordDash?.AttackOver();
+            m_diagonalSwordDash.EndExecution();
+        }
+
+        public void ChampionsUprisingStartDash()
+        {
+            m_championsUprising.StartDash();
+        }
+
+        public void ChampionsUprisingStartUppercut()
+        {
+            m_championsUprising.StartUppercut();
+        }
+
+        public void ChampionsUprisingEnableCollision()
+        {
+            m_championsUprising.EnableCollision(true);
+        }
+
+        public void ChampionsUprisingDisableCollision()
+        {
+            m_championsUprising.EnableCollision(false);
+        }
+
+        public void ChampionsUprisingEnd()
+        {
+            m_championsUprising?.AttackOver();
+            m_championsUprising.EndExecution();
+        }
         #endregion
 
         public void SkullThrowSpawnProjectile()
@@ -524,6 +573,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_backDiver = character.GetComponentInChildren<BackDiver>();
             m_barrier = character.GetComponentInChildren<Barrier>();
             m_fencerFlash = character.GetComponentInChildren<FencerFlash>();
+            m_diagonalSwordDash = character.GetComponentInChildren<DiagonalSwordDash>();
+            m_championsUprising = character.GetComponentInChildren<ChampionsUprising>();
         }
 
         #region TESTING

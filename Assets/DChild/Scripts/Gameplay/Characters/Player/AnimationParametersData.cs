@@ -64,6 +64,8 @@ namespace DChild.Gameplay.Characters.Players
             BackDiver,
             Barrier,
             FencerFlash,
+            DiagonalSwordDash,
+            ChampionsUprising,
         }
 
         [SerializeField]

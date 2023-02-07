@@ -37,6 +37,8 @@ namespace DChild.Gameplay.Characters.Players
             EndBarrier,
             EndFinalSlash,
             EndFencerFlash,
+            EndDiagonalSwordDash,
+            EndChampionsUprising,
         }
 
         [SerializeField]
@@ -132,6 +134,12 @@ namespace DChild.Gameplay.Characters.Players
                         break;
                     case Command.EndFencerFlash:
                         player.FencerFlashEnd();
+                        break;
+                    case Command.EndDiagonalSwordDash:
+                        player.DiagonalSwordDashEnd();
+                        break;
+                    case Command.EndChampionsUprising:
+                        player.ChampionsUprisingEnd();
                         break;
                 }
             }
