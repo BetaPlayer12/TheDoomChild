@@ -10,6 +10,10 @@ namespace DChild.Gameplay.Inventories.QuickItem
         [SerializeField]
         private PlayerInput m_input;
         [SerializeField]
+        private InputActionReference m_itemUse;
+        [SerializeField]
+        private InputActionReference m_itemCycle;
+        [SerializeField]
         private QuickItemHandle m_handle;
 
         private bool m_allowCycle;
@@ -63,10 +67,10 @@ namespace DChild.Gameplay.Inventories.QuickItem
         private void Awake()
         {
             var actionMap = m_input.actions.FindActionMap("Gameplay");
-            var useAction = actionMap.FindAction("QuickItemUse");
-            useAction.performed += OnUseAction;
-            var cycleAction = actionMap.FindAction("QuickItemCycle");
-            cycleAction.performed += OnCycleAction;
+            var itemUse = m_itemUse.action;
+            var itemCycle = m_itemCycle.action;
+            actionMap.FindAction(itemUse.id).performed += OnUseAction;
+            actionMap.FindAction(itemCycle.id).performed+= OnCycleAction;
             m_allowCycle = true;
             m_isEnabled = true;
 
