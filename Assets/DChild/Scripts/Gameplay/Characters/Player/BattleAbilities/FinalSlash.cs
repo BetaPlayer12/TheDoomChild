@@ -147,6 +147,8 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             m_finalSlashInfo.ShowCollider(false);
             m_fxAnimator.Play("Buffer");
             StopAllCoroutines();
+            m_characterState.isChargingFinalSlash = false;
+            m_animator.SetBool(m_finalSlashStateAnimationParameter, false);
         }
 
         public void EnableCollision(bool value)
