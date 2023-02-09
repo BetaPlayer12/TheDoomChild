@@ -105,13 +105,12 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
         public void EndExecution()
         {
             m_hasExecuted = false;
-            base.AttackOver();
             //m_backDiverInfo.ShowCollider(false);
             //m_hitbox.Enable();
             m_animator.SetBool(m_backDiverStateAnimationParameter, false);
             //m_canBackDiver = true;
             //m_canMove = true;
-            m_state.waitForBehaviour = false;
+            base.AttackOver();
         }
 
         public override void Cancel()

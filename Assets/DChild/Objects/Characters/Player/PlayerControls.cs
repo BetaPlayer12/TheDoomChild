@@ -449,6 +449,24 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""LightningSpear"",
+                    ""type"": ""Button"",
+                    ""id"": ""ac85a422-db12-490f-96ce-bc7c679ce25d"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""LightningSpearReleased"",
+                    ""type"": ""Button"",
+                    ""id"": ""89836e12-4fef-49cd-aa96-b11fd946cb74"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -2343,6 +2361,94 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""action"": ""EelecktrickReleased"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""Two Modifiers"",
+                    ""id"": ""d342233b-24a0-4bcb-bfdb-96c4ee57c6eb"",
+                    ""path"": ""TwoModifiers"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LightningSpear"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""modifier1"",
+                    ""id"": ""8e5a0d34-8c54-42a9-b1e6-674cc0a77e9c"",
+                    ""path"": ""<Keyboard>/leftShift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""LightningSpear"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""modifier2"",
+                    ""id"": ""9fd59919-f1d7-4630-ba59-ba551f65f294"",
+                    ""path"": ""<Keyboard>/s"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""LightningSpear"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""binding"",
+                    ""id"": ""a0147a75-52ac-4372-b4fc-5140337ca465"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""LightningSpear"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Two Modifiers"",
+                    ""id"": ""4a78d1f7-9b1e-43ea-8e13-56076624e5b2"",
+                    ""path"": ""TwoModifiers"",
+                    ""interactions"": ""Press(behavior=1)"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LightningSpearReleased"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""modifier1"",
+                    ""id"": ""b495485a-b5aa-4c4a-9fe6-07dd3846d2d4"",
+                    ""path"": ""<Keyboard>/leftShift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""LightningSpearReleased"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""modifier2"",
+                    ""id"": ""c57b3086-5a4d-46ac-a19a-32db9d220bb3"",
+                    ""path"": ""<Keyboard>/s"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""LightningSpearReleased"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""binding"",
+                    ""id"": ""2959485a-7b03-4514-b1e2-6b96d6dad8e6"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""LightningSpearReleased"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
                 }
             ]
         },
@@ -3545,6 +3651,8 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         m_Gameplay_ChampionsUprising = m_Gameplay.FindAction("ChampionsUprising", throwIfNotFound: true);
         m_Gameplay_Eelecktrick = m_Gameplay.FindAction("Eelecktrick", throwIfNotFound: true);
         m_Gameplay_EelecktrickReleased = m_Gameplay.FindAction("EelecktrickReleased", throwIfNotFound: true);
+        m_Gameplay_LightningSpear = m_Gameplay.FindAction("LightningSpear", throwIfNotFound: true);
+        m_Gameplay_LightningSpearReleased = m_Gameplay.FindAction("LightningSpearReleased", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -3673,6 +3781,8 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
     private readonly InputAction m_Gameplay_ChampionsUprising;
     private readonly InputAction m_Gameplay_Eelecktrick;
     private readonly InputAction m_Gameplay_EelecktrickReleased;
+    private readonly InputAction m_Gameplay_LightningSpear;
+    private readonly InputAction m_Gameplay_LightningSpearReleased;
     public struct GameplayActions
     {
         private @PlayerControls m_Wrapper;
@@ -3724,6 +3834,8 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         public InputAction @ChampionsUprising => m_Wrapper.m_Gameplay_ChampionsUprising;
         public InputAction @Eelecktrick => m_Wrapper.m_Gameplay_Eelecktrick;
         public InputAction @EelecktrickReleased => m_Wrapper.m_Gameplay_EelecktrickReleased;
+        public InputAction @LightningSpear => m_Wrapper.m_Gameplay_LightningSpear;
+        public InputAction @LightningSpearReleased => m_Wrapper.m_Gameplay_LightningSpearReleased;
         public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -3874,6 +3986,12 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @EelecktrickReleased.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnEelecktrickReleased;
                 @EelecktrickReleased.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnEelecktrickReleased;
                 @EelecktrickReleased.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnEelecktrickReleased;
+                @LightningSpear.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnLightningSpear;
+                @LightningSpear.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnLightningSpear;
+                @LightningSpear.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnLightningSpear;
+                @LightningSpearReleased.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnLightningSpearReleased;
+                @LightningSpearReleased.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnLightningSpearReleased;
+                @LightningSpearReleased.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnLightningSpearReleased;
             }
             m_Wrapper.m_GameplayActionsCallbackInterface = instance;
             if (instance != null)
@@ -4019,6 +4137,12 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @EelecktrickReleased.started += instance.OnEelecktrickReleased;
                 @EelecktrickReleased.performed += instance.OnEelecktrickReleased;
                 @EelecktrickReleased.canceled += instance.OnEelecktrickReleased;
+                @LightningSpear.started += instance.OnLightningSpear;
+                @LightningSpear.performed += instance.OnLightningSpear;
+                @LightningSpear.canceled += instance.OnLightningSpear;
+                @LightningSpearReleased.started += instance.OnLightningSpearReleased;
+                @LightningSpearReleased.performed += instance.OnLightningSpearReleased;
+                @LightningSpearReleased.canceled += instance.OnLightningSpearReleased;
             }
         }
     }
@@ -4302,6 +4426,8 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         void OnChampionsUprising(InputAction.CallbackContext context);
         void OnEelecktrick(InputAction.CallbackContext context);
         void OnEelecktrickReleased(InputAction.CallbackContext context);
+        void OnLightningSpear(InputAction.CallbackContext context);
+        void OnLightningSpearReleased(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

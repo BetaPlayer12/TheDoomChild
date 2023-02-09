@@ -423,7 +423,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void BackDiverEnd()
         {
-            m_backDiver?.AttackOver();
             m_backDiver.EndExecution();
         }
 

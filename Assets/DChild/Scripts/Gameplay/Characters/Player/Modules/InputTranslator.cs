@@ -60,6 +60,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
         public bool championsUprisingPressed;
         public bool eelecktrickPressed;
         public bool eelecktrickReleased;
+        public bool lightningSpearPressed;
+        public bool lightningSpearReleased;
         #endregion
 
         private PlayerInput m_input;
@@ -364,7 +366,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
             {
                 var inputValue = value.Get<float>() == 1;
                 eelecktrickPressed = inputValue;
-                Debug.Log("Eelecktrick Pressed");
             }
         }
 
@@ -374,7 +375,24 @@ namespace DChild.Gameplay.Characters.Players.Modules
             {
                 eelecktrickReleased = value.Get<float>() == 1;
                 eelecktrickReleased = !eelecktrickReleased;
-                Debug.Log("Eelecktrick Released");
+            }
+        }
+
+        private void OnLightningSpear(InputValue value)
+        {
+            if (enabled == true)
+            {
+                var inputValue = value.Get<float>() == 1;
+                lightningSpearPressed = inputValue;
+            }
+        }
+
+        private void OnLightningSpearReleased(InputValue value)
+        {
+            if (enabled == true)
+            {
+                lightningSpearReleased = value.Get<float>() == 1;
+                lightningSpearReleased = !lightningSpearReleased;
             }
         }
 
@@ -521,6 +539,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
             championsUprisingPressed = false;
             eelecktrickPressed = false;
             eelecktrickReleased = false;
+            lightningSpearPressed = false;
+            lightningSpearReleased = false;
         }
 
         private void Reset()
@@ -570,6 +590,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
             championsUprisingPressed = false;
             eelecktrickPressed = false;
             eelecktrickReleased = false;
+            lightningSpearPressed = false;
+            lightningSpearReleased = false;
         }
     }
 }

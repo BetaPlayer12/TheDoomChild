@@ -111,6 +111,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
         public override void Cancel()
         {
             //m_ninthCircleSanctionInfo.ShowCollider(false);
+            m_animator.SetBool(m_ninthCircleSanctionStateAnimationParameter, false);
             m_fxAnimator.Play("Buffer");
             base.Cancel();
         }
@@ -160,56 +161,6 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
                 m_canMove = true;
             }
         }
-
-//        private Vector2 EnemyPosition(Vector2 startPoint)
-//        {
-//            int hitCount = 0;
-//            RaycastHit2D[] hit = Cast(startPoint, m_character.facing == HorizontalDirection.Right ? Vector2.right : Vector2.left, 100, false, out hitCount, true);
-//            Debug.DrawRay(startPoint, hit[0].point);
-//            if (hit[0])
-//                m_startPoint.position = hit[0].point;
-//            else
-//                m_startPoint.localPosition = m_startPointCache;
-
-//            return hit[0] ? hit[0].point : /*new Vector2(startPoint.x + (m_character.facing == HorizontalDirection.Right ? 10 : -10), startPoint.y)*/ Vector2.zero;
-//        }
-
-//        private static ContactFilter2D m_contactFilter;
-//        private static RaycastHit2D[] m_hitResults;
-//        private static bool m_isInitialized;
-
-//        protected static RaycastHit2D[] Cast(Vector2 origin, Vector2 direction, float distance, bool ignoreTriggers, out int hitCount, bool debugMode = false)
-//        {
-//            Initialize();
-//            m_contactFilter.useTriggers = !ignoreTriggers;
-//            Debug.Log("Detect Triggers " + m_contactFilter.useTriggers);
-//            hitCount = Physics2D.Raycast(origin, direction, m_contactFilter, m_hitResults, distance);
-//#if UNITY_EDITOR
-//            if (debugMode)
-//            {
-//                if (hitCount > 0)
-//                {
-//                    Debug.DrawRay(origin, direction * m_hitResults[0].distance, Color.cyan, 1f);
-//                }
-//                else
-//                {
-//                    Debug.DrawRay(origin, direction * distance, Color.cyan, 1f);
-//                }
-//            }
-//#endif
-//            return m_hitResults;
-//        }
-
-//        private static void Initialize()
-//        {
-//            if (m_isInitialized == false)
-//            {
-//                m_contactFilter.useLayerMask = true;
-//                m_contactFilter.SetLayerMask(LayerMask.NameToLayer("Enemy")/*DChildUtility.GetEnvironmentMask()*/);
-//                m_hitResults = new RaycastHit2D[16];
-//                m_isInitialized = true;
-//            }
-//        }
 
         public void Summon()
         {
