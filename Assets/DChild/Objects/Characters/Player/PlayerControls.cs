@@ -431,6 +431,24 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Eelecktrick"",
+                    ""type"": ""Button"",
+                    ""id"": ""19ddf923-99a8-4520-b776-665b9f67a546"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""EelecktrickReleased"",
+                    ""type"": ""Button"",
+                    ""id"": ""e1bd79f0-efa2-46a8-85d0-f4be538e6449"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -2303,6 +2321,28 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""action"": ""ChampionsUprising"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""dcc99350-c3b3-4a5a-804a-2c389d653e84"",
+                    ""path"": ""<Keyboard>/2"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""Eelecktrick"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""24dabaeb-ecd9-484f-b262-1c6cb66e14cf"",
+                    ""path"": ""<Keyboard>/2"",
+                    ""interactions"": ""Press(behavior=1)"",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""EelecktrickReleased"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -3503,6 +3543,8 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         m_Gameplay_FencerFlash = m_Gameplay.FindAction("FencerFlash", throwIfNotFound: true);
         m_Gameplay_DiagonalSwordDash = m_Gameplay.FindAction("DiagonalSwordDash", throwIfNotFound: true);
         m_Gameplay_ChampionsUprising = m_Gameplay.FindAction("ChampionsUprising", throwIfNotFound: true);
+        m_Gameplay_Eelecktrick = m_Gameplay.FindAction("Eelecktrick", throwIfNotFound: true);
+        m_Gameplay_EelecktrickReleased = m_Gameplay.FindAction("EelecktrickReleased", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -3629,6 +3671,8 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
     private readonly InputAction m_Gameplay_FencerFlash;
     private readonly InputAction m_Gameplay_DiagonalSwordDash;
     private readonly InputAction m_Gameplay_ChampionsUprising;
+    private readonly InputAction m_Gameplay_Eelecktrick;
+    private readonly InputAction m_Gameplay_EelecktrickReleased;
     public struct GameplayActions
     {
         private @PlayerControls m_Wrapper;
@@ -3678,6 +3722,8 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         public InputAction @FencerFlash => m_Wrapper.m_Gameplay_FencerFlash;
         public InputAction @DiagonalSwordDash => m_Wrapper.m_Gameplay_DiagonalSwordDash;
         public InputAction @ChampionsUprising => m_Wrapper.m_Gameplay_ChampionsUprising;
+        public InputAction @Eelecktrick => m_Wrapper.m_Gameplay_Eelecktrick;
+        public InputAction @EelecktrickReleased => m_Wrapper.m_Gameplay_EelecktrickReleased;
         public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -3822,6 +3868,12 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @ChampionsUprising.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnChampionsUprising;
                 @ChampionsUprising.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnChampionsUprising;
                 @ChampionsUprising.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnChampionsUprising;
+                @Eelecktrick.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnEelecktrick;
+                @Eelecktrick.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnEelecktrick;
+                @Eelecktrick.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnEelecktrick;
+                @EelecktrickReleased.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnEelecktrickReleased;
+                @EelecktrickReleased.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnEelecktrickReleased;
+                @EelecktrickReleased.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnEelecktrickReleased;
             }
             m_Wrapper.m_GameplayActionsCallbackInterface = instance;
             if (instance != null)
@@ -3961,6 +4013,12 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @ChampionsUprising.started += instance.OnChampionsUprising;
                 @ChampionsUprising.performed += instance.OnChampionsUprising;
                 @ChampionsUprising.canceled += instance.OnChampionsUprising;
+                @Eelecktrick.started += instance.OnEelecktrick;
+                @Eelecktrick.performed += instance.OnEelecktrick;
+                @Eelecktrick.canceled += instance.OnEelecktrick;
+                @EelecktrickReleased.started += instance.OnEelecktrickReleased;
+                @EelecktrickReleased.performed += instance.OnEelecktrickReleased;
+                @EelecktrickReleased.canceled += instance.OnEelecktrickReleased;
             }
         }
     }
@@ -4242,6 +4300,8 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         void OnFencerFlash(InputAction.CallbackContext context);
         void OnDiagonalSwordDash(InputAction.CallbackContext context);
         void OnChampionsUprising(InputAction.CallbackContext context);
+        void OnEelecktrick(InputAction.CallbackContext context);
+        void OnEelecktrickReleased(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

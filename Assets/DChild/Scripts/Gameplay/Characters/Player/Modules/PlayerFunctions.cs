@@ -36,6 +36,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private FencerFlash m_fencerFlash;
         private DiagonalSwordDash m_diagonalSwordDash;
         private ChampionsUprising m_championsUprising;
+        private Eelecktrick m_eelecktrick;
+        private LightningSpear m_lightningSpear;
         #endregion
 
         public void IdleStateFinished()
@@ -508,6 +510,26 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_championsUprising?.AttackOver();
             m_championsUprising.EndExecution();
         }
+
+        public void EelecktrickSummon()
+        {
+            m_eelecktrick.SummonWhip();
+        }
+
+        public void EelecktrickEnd()
+        {
+            m_eelecktrick.EndExecution();
+        }
+
+        public void LightningSummon()
+        {
+            m_lightningSpear.SummonLightning();
+        }
+
+        public void LightningSpearEnd()
+        {
+            m_lightningSpear.EndExecution();
+        }
         #endregion
 
         public void SkullThrowSpawnProjectile()
@@ -575,6 +597,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_fencerFlash = character.GetComponentInChildren<FencerFlash>();
             m_diagonalSwordDash = character.GetComponentInChildren<DiagonalSwordDash>();
             m_championsUprising = character.GetComponentInChildren<ChampionsUprising>();
+            m_eelecktrick = character.GetComponentInChildren<Eelecktrick>();
+            m_lightningSpear = character.GetComponentInChildren<LightningSpear>();
         }
 
         #region TESTING

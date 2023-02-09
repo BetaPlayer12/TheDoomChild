@@ -304,6 +304,7 @@ GameObject:
   - component: {fileID: 6680117199953300383}
   - component: {fileID: 4655362598892298022}
   - component: {fileID: 4726091039906868247}
+  - component: {fileID: 1356492223492032803}
   m_Layer: 8
   m_Name: Ground
   m_TagString: Untagged
@@ -332,6 +333,7 @@ Transform:
   - {fileID: 4976096053812573305}
   - {fileID: 4275075274852105760}
   - {fileID: 5715425542890857503}
+  - {fileID: 8374845437696981009}
   m_Father: {fileID: 1861663316882787807}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -405,7 +407,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_attackFX: {fileID: 4713603853206080501}
-  m_reaperHarvestCooldown: 0.25
+  m_reaperHarvestCooldown: 1
   m_reaperHarvestMovementCooldown: 1.5
   m_dashDuration: 0.25
   m_reaperHarvestInfo:
@@ -464,7 +466,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_attackFX: {fileID: 4713603853206080501}
-  m_sovereignImpaleCooldown: 1.25
+  m_sovereignImpaleCooldown: 1
   m_sovereignImpaleMovementCooldown: 2
   m_sovereignImpaleInfo:
     m_fx: {fileID: 0}
@@ -560,7 +562,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_attackFX: {fileID: 4713603853206080501}
-  m_ninthCircleSanctionCooldown: 0.5
+  m_ninthCircleSanctionCooldown: 1
   m_ninthCircleSanctionMovementCooldown: 1
   m_ninthCircleSanctionInfo:
     m_fx: {fileID: 0}
@@ -723,6 +725,39 @@ MonoBehaviour:
   m_edgeSensor: {fileID: 8774030571759925288}
   m_dashForce: {x: 100, y: 0}
   m_impactForce: {x: 75, y: 75}
+--- !u!114 &1356492223492032803
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 181148360470848333}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 32e951492d02fb342a0552e70c811c50, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_attackFX: {fileID: 4713603853206080501}
+  m_eelecktrickCooldown: 1
+  m_eelecktrickMovementCooldown: 0.5
+  m_eelecktrickInfo:
+    m_fx: {fileID: 0}
+    m_fxPosition: {fileID: 4294471023827248790}
+    m_collider: {fileID: 0}
+    m_damageModifier: 1
+    m_nextAttackDelay: 0
+  m_characterState: {fileID: 4875321966015514855}
+  m_character: {fileID: 4294471023827248791}
+  m_physics: {fileID: 4294471023827248786}
+  m_enemySensor: {fileID: 6685095848874862076}
+  m_wallSensor: {fileID: 2702825902955571488}
+  m_edgeSensor: {fileID: 8774030571759925288}
+  m_startPoint: {fileID: 2706033333118213226}
+  m_projectileInfo:
+    m_projectile: {fileID: 4791238810572298706, guid: dfc2b8ecab2ad114c81e02c742bf074c,
+      type: 3}
+    m_speed: 200
+  m_pushForce: {x: 0, y: 0}
 --- !u!1 &184704957041285301
 GameObject:
   m_ObjectHideFlags: 0
@@ -12591,6 +12626,37 @@ MonoBehaviour:
   zPosition: 1
   overrideAlpha: 1
   hierarchy: {fileID: 4966587747696342843}
+--- !u!1 &1371409147843019054
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2706033333118213226}
+  m_Layer: 8
+  m_Name: EelecktrickStartPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2706033333118213226
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1371409147843019054}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 5, y: 5, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8374845437696981009}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1376226993062277078
 GameObject:
   m_ObjectHideFlags: 0
@@ -16231,6 +16297,8 @@ MonoBehaviour:
   m_isAttacking: 0
   m_isChargingAttack: 0
   m_isChargingFinalSlash: 0
+  m_isChargingEelecktrick: 0
+  m_isChargingLightningSpear: 0
   m_isGrabbing: 0
   m_isPulling: 0
   m_isPushing: 0
@@ -41530,6 +41598,7 @@ GameObject:
   - component: {fileID: 7268613866703741952}
   - component: {fileID: 774832679648016217}
   - component: {fileID: 5272644972440714597}
+  - component: {fileID: 8043828558952356061}
   m_Layer: 8
   m_Name: Air
   m_TagString: Untagged
@@ -41550,6 +41619,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1251351137888540688}
+  - {fileID: 2784132567260735106}
   m_Father: {fileID: 1861663316882787807}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -41627,7 +41697,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_attackFX: {fileID: 4713603853206080501}
-  m_soulFireBlastCooldown: 0.25
+  m_soulFireBlastCooldown: 1
   m_soulFireBlastMovementCooldown: 0.5
   m_soulFireBlastInfo:
     m_fx: {fileID: 0}
@@ -41693,6 +41763,36 @@ MonoBehaviour:
   m_groundSensor: {fileID: 9119439230376791099}
   m_pushForce: {x: 250, y: -250}
   m_backForce: {x: 25, y: 25}
+--- !u!114 &8043828558952356061
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5161387136065631731}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a417736cca5aef84fafc298b54912104, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_attackFX: {fileID: 4713603853206080501}
+  m_lightningSpearCooldown: 0.25
+  m_lightningSpearResetCooldown: 2
+  m_lightningSpearInfo:
+    m_fx: {fileID: 0}
+    m_fxPosition: {fileID: 4294471023827248790}
+    m_collider: {fileID: 0}
+    m_damageModifier: 1
+    m_nextAttackDelay: 0
+  m_characterState: {fileID: 4875321966015514855}
+  m_character: {fileID: 4294471023827248791}
+  m_physics: {fileID: 4294471023827248786}
+  m_startPoint: {fileID: 2784132567260735106}
+  m_projectileInfo:
+    m_projectile: {fileID: 4791238810572298706, guid: dfc2b8ecab2ad114c81e02c742bf074c,
+      type: 3}
+    m_speed: 200
+  m_pushForce: {x: -25, y: 25}
 --- !u!1 &5171488606739919155
 GameObject:
   m_ObjectHideFlags: 0
@@ -42690,6 +42790,37 @@ MonoBehaviour:
   zPosition: 1
   overrideAlpha: 1
   hierarchy: {fileID: 4966587747696342843}
+--- !u!1 &5750557334564248642
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2784132567260735106}
+  m_Layer: 8
+  m_Name: LightningSpearStartPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2784132567260735106
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5750557334564248642}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 6.4, y: 0.9, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6240829093313737462}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5789675075389260443
 GameObject:
   m_ObjectHideFlags: 0
@@ -75817,6 +75948,38 @@ MonoBehaviour:
   zPosition: 1
   overrideAlpha: 1
   hierarchy: {fileID: 4966587747696342843}
+--- !u!1 &8589713480871875785
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8374845437696981009}
+  m_Layer: 8
+  m_Name: Eelecktrick
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8374845437696981009
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8589713480871875785}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 2706033333118213226}
+  m_Father: {fileID: 7730022515954066503}
+  m_RootOrder: 9
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8600207126832064805
 GameObject:
   m_ObjectHideFlags: 0

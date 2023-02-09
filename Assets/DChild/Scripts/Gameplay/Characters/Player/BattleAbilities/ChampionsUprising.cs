@@ -103,13 +103,13 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
         public void EndExecution()
         {
-            base.AttackOver();
             m_championsUprisingInfo.ShowCollider(false);
             //m_canchampionsUprising = true;
             m_canMove = true;
-            m_animator.SetBool(m_championsUprisingStateAnimationParameter, false);
             //m_championsUprisingAnimation.gameObject.SetActive(false);
             m_physics.gravityScale = m_cacheGravity;
+            m_animator.SetBool(m_championsUprisingStateAnimationParameter, false);
+            base.AttackOver();
         }
 
         public override void Cancel()

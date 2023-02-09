@@ -101,7 +101,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             base.AttackOver();
             //m_sovereignImpaleInfo.ShowCollider(false);
             m_animator.SetBool(m_sovereignImpaleStateAnimationParameter, false);
-            m_canSovereignImpale = true;
+            //m_canSovereignImpale = true;
             m_canMove = true;
             //m_state.waitForBehaviour = false;
         }

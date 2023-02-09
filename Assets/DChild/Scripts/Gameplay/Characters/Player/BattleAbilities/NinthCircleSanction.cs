@@ -80,14 +80,14 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
         public override void Reset()
         {
-            base.Reset();
             //m_ninthCircleSanctionInfo.ShowCollider(false);
             m_animator.SetBool(m_ninthCircleSanctionStateAnimationParameter, false);
+            base.Reset();
         }
 
         public void Execute()
         {
-            //m_state.waitForBehaviour = true;
+            m_state.waitForBehaviour = true;
             m_state.isAttacking = true;
             m_state.canAttack = false;
             m_canNinthCircleSanction = false;
@@ -101,19 +101,18 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
         public void EndExecution()
         {
-            base.AttackOver();
             //m_ninthCircleSanctionInfo.ShowCollider(false);
             m_animator.SetBool(m_ninthCircleSanctionStateAnimationParameter, false);
-            m_canNinthCircleSanction = true;
+            //m_canNinthCircleSanction = true;
             //m_canMove = true;
-            //m_state.waitForBehaviour = false;
+            base.AttackOver();
         }
 
         public override void Cancel()
         {
-            base.Cancel();
             //m_ninthCircleSanctionInfo.ShowCollider(false);
             m_fxAnimator.Play("Buffer");
+            base.Cancel();
         }
 
         public void EnableCollision(bool value)

@@ -51,6 +51,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
         public bool CanFinalSlash() => m_canFinalSlash;
         public bool CanMove() => m_canMove;
+        private bool m_hasExecuted;
 
         public override void Initialize(ComplexCharacterInfo info)
         {
@@ -81,6 +82,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
         public void Execute()
         {
+            m_hasExecuted = true;
             //m_state.waitForBehaviour = true;
             //m_state.isAttacking = true;
             m_characterState.isChargingFinalSlash = true;
@@ -124,6 +126,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
         public void EndExecution()
         {
+            m_hasExecuted = false;
             m_animator.SetBool(m_finalSlashStateAnimationParameter, false);
             m_state.waitForBehaviour = false;
             m_state.canAttack = true;
@@ -143,12 +146,16 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
         public override void Cancel()
         {
-            base.Cancel();
-            m_finalSlashInfo.ShowCollider(false);
-            m_fxAnimator.Play("Buffer");
-            StopAllCoroutines();
-            m_characterState.isChargingFinalSlash = false;
-            m_animator.SetBool(m_finalSlashStateAnimationParameter, false);
+            if (m_hasExecuted)
+            {
+                m_hasExecuted = false;
+                base.Cancel();
+                m_finalSlashInfo.ShowCollider(false);
+                m_fxAnimator.Play("Buffer");
+                StopAllCoroutines();
+                m_characterState.isChargingFinalSlash = false;
+                m_animator.SetBool(m_finalSlashStateAnimationParameter, false);
+            }
         }
 
         public void EnableCollision(bool value)
@@ -200,7 +207,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             m_animator.SetBool(m_finalSlashDashAnimationParameter, true);
             while (timer >= 0 && !m_enemySensor.isDetecting && !m_wallSensor.allRaysDetecting && m_edgeSensor.isDetecting)
             {
-                Debug.Log("Final Slash Dashing!@#");
+                //Debug.Log("Final Slash Dashing!@#");
                 m_enemySensor.Cast();
                 m_wallSensor.Cast();
                 m_edgeSensor.Cast();

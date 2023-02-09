@@ -39,6 +39,8 @@ namespace DChild.Gameplay.Characters.Players
             EndFencerFlash,
             EndDiagonalSwordDash,
             EndChampionsUprising,
+            EndEelecktrick,
+            EndLightningSpear,
         }
 
         [SerializeField]
@@ -112,7 +114,7 @@ namespace DChild.Gameplay.Characters.Players
                         player.FoolsVerdictEnd();
                         break;
                     case Command.EndSoulFireBlast:
-                        player.FoolsVerdictEnd();
+                        player.SoulFireBlastEnd();
                         break;
                     case Command.EndEdgedFury:
                         player.EdgedFuryEnd();
@@ -140,6 +142,12 @@ namespace DChild.Gameplay.Characters.Players
                         break;
                     case Command.EndChampionsUprising:
                         player.ChampionsUprisingEnd();
+                        break;
+                    case Command.EndEelecktrick:
+                        player.EelecktrickEnd();
+                        break;
+                    case Command.EndLightningSpear:
+                        player.LightningSpearEnd();
                         break;
                 }
             }

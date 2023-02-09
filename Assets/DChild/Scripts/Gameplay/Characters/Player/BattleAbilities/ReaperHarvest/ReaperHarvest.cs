@@ -53,6 +53,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
         public bool CanReaperHarvest() => m_canReaperHarvest;
         public bool CanMove() => m_canMove;
+        private bool m_hasExecuted;
 
         private ReaperHarvestState m_currentState;
 
@@ -91,6 +92,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
         public void Execute(ReaperHarvestState state)
         {
+            m_hasExecuted = true;
             m_state.waitForBehaviour = true;
             m_currentState = state;
             StopAllCoroutines();
@@ -121,27 +123,32 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
         public void EndExecution()
         {
-            base.AttackOver();
+            m_hasExecuted = false;
             m_reaperHarvestInfo.ShowCollider(false);
             //m_canReaperHarvest = true;
             m_canMove = true;
-            m_animator.SetBool(m_reaperHarvestStateAnimationParameter, false);
             m_reaperHarvestAnimation.gameObject.SetActive(false);
             m_physics.gravityScale = m_cacheGravity;
             m_hitbox.Enable();
+            m_animator.SetBool(m_reaperHarvestStateAnimationParameter, false);
+            base.AttackOver();
         }
 
         public override void Cancel()
         {
-            base.Cancel();
-            m_reaperHarvestInfo.ShowCollider(false);
-            m_canMove = true;
-            m_fxAnimator.Play("Buffer");
-            StopAllCoroutines();
-            m_animator.SetBool(m_reaperHarvestStateAnimationParameter, false);
-            m_reaperHarvestAnimation.gameObject.SetActive(false);
-            m_physics.gravityScale = m_cacheGravity;
-            m_hitbox.Enable();
+            if (m_hasExecuted)
+            {
+                m_hasExecuted = false;
+                base.Cancel();
+                m_reaperHarvestInfo.ShowCollider(false);
+                m_canMove = true;
+                m_fxAnimator.Play("Buffer");
+                StopAllCoroutines();
+                m_animator.SetBool(m_reaperHarvestStateAnimationParameter, false);
+                m_reaperHarvestAnimation.gameObject.SetActive(false);
+                m_physics.gravityScale = m_cacheGravity;
+                m_hitbox.Enable();
+            }
         }
 
         public void EnableCollision(bool value)

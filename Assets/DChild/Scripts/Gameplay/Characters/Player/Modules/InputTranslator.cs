@@ -58,6 +58,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
         public bool fencerFlashPressed;
         public bool diagonalSwordDashPressed;
         public bool championsUprisingPressed;
+        public bool eelecktrickPressed;
+        public bool eelecktrickReleased;
         #endregion
 
         private PlayerInput m_input;
@@ -356,6 +358,26 @@ namespace DChild.Gameplay.Characters.Players.Modules
             }
         }
 
+        private void OnEelecktrick(InputValue value)
+        {
+            if (enabled == true)
+            {
+                var inputValue = value.Get<float>() == 1;
+                eelecktrickPressed = inputValue;
+                Debug.Log("Eelecktrick Pressed");
+            }
+        }
+
+        private void OnEelecktrickReleased(InputValue value)
+        {
+            if (enabled == true)
+            {
+                eelecktrickReleased = value.Get<float>() == 1;
+                eelecktrickReleased = !eelecktrickReleased;
+                Debug.Log("Eelecktrick Released");
+            }
+        }
+
         private void OnSlashHeld(InputValue value)
         {
             if (enabled == true)
@@ -497,6 +519,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
             fencerFlashPressed = false;
             diagonalSwordDashPressed = false;
             championsUprisingPressed = false;
+            eelecktrickPressed = false;
+            eelecktrickReleased = false;
         }
 
         private void Reset()
@@ -544,6 +568,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
             fencerFlashPressed = false;
             diagonalSwordDashPressed = false;
             championsUprisingPressed = false;
+            eelecktrickPressed = false;
+            eelecktrickReleased = false;
         }
     }
 }

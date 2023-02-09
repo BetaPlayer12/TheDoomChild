@@ -66,6 +66,8 @@ namespace DChild.Gameplay.Characters.Players
             FencerFlash,
             DiagonalSwordDash,
             ChampionsUprising,
+            Eelecktrick,
+            LightningSpear,
         }
 
         [SerializeField]
