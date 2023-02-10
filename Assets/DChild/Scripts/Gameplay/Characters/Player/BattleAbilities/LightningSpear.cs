@@ -88,6 +88,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
         {
             m_hasExecuted = true;
             //m_state.waitForBehaviour = true;
+            m_state.waitForBehaviour = false;
             //m_state.isAttacking = true;
             m_characterState.isChargingLightningSpear = true;
             //m_state.canAttack = false;

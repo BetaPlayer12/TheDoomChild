@@ -237,7 +237,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void AirLungeEnd()
         {
-            m_airLunge?.AttackOver();
+            //m_airLunge?.AttackOver();
             m_airLunge.EndExecution();
         }
 
@@ -273,7 +273,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void ReaperHarvestEnd()
         {
-            m_reaperHarvest?.AttackOver();
+            //m_reaperHarvest?.AttackOver();
             m_reaperHarvest.EndExecution();
         }
 
@@ -319,13 +319,13 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void KrakenRageEnd()
         {
-            m_krakenRage?.AttackOver();
+            //m_krakenRage?.AttackOver();
             m_krakenRage.EndExecution();
         }
 
         public void FireFistEnd()
         {
-            m_fireFist?.AttackOver();
+            //m_fireFist?.AttackOver();
             m_fireFist.EndExecution();
         }
 
@@ -336,7 +336,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void SovereignImpaleEnd()
         {
-            m_sovereignImpale?.AttackOver();
+            //m_sovereignImpale?.AttackOver();
             m_sovereignImpale.EndExecution();
         }
 
@@ -357,7 +357,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void HellTridentEnd()
         {
-            m_hellTrident?.AttackOver();
+            //m_hellTrident?.AttackOver();
             m_hellTrident.EndExecution();
         }
 
@@ -368,7 +368,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void FoolsVerdictEnd()
         {
-            m_foolsVerdict?.AttackOver();
+            //m_foolsVerdict?.AttackOver();
             m_foolsVerdict.EndExecution();
         }
 
@@ -379,7 +379,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void SoulFireBlastEnd()
         {
-            m_soulFireBlast?.AttackOver();
+            //m_soulFireBlast?.AttackOver();
             m_soulFireBlast.EndExecution();
         }
 
@@ -395,7 +395,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void EdgedFuryEnd()
         {
-            m_edgedFury?.AttackOver();
+            //m_edgedFury?.AttackOver();
             m_edgedFury.EndExecution();
         }
 
@@ -406,7 +406,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void NinthCircleSanctionEnd()
         {
-            m_ninthCircleSanction?.AttackOver();
+            //m_ninthCircleSanction?.AttackOver();
             m_ninthCircleSanction.EndExecution();
         }
 
@@ -417,7 +417,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void DoomsdayKongEnd()
         {
-            m_doomsdayKong?.AttackOver();
+            //m_doomsdayKong?.AttackOver();
             m_doomsdayKong.EndExecution();
         }
 
@@ -438,7 +438,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void BarrierEnd()
         {
-            m_barrier?.AttackOver();
+            //m_barrier?.AttackOver();
             m_barrier.EndExecution();
         }
 
@@ -459,7 +459,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void FencerFlashEnd()
         {
-            m_fencerFlash?.AttackOver();
+            //m_fencerFlash?.AttackOver();
             m_fencerFlash.EndExecution();
         }
 
@@ -480,7 +480,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void DiagonalSwordDashEnd()
         {
-            m_diagonalSwordDash?.AttackOver();
+            //m_diagonalSwordDash?.AttackOver();
             m_diagonalSwordDash.EndExecution();
         }
 
@@ -506,7 +506,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void ChampionsUprisingEnd()
         {
-            m_championsUprising?.AttackOver();
+            //m_championsUprising?.AttackOver();
             m_championsUprising.EndExecution();
         }
 

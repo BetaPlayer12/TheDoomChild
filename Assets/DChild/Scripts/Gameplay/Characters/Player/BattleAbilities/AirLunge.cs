@@ -88,12 +88,11 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
         public void EndExecution()
         {
-            base.AttackOver();
             m_airLungeInfo.ShowCollider(false);
             //m_canAirLunge = true;
             //m_canMove = true;
-            m_state.waitForBehaviour = false;
             m_animator.SetBool(m_airLungeStateAnimationParameter, false);
+            base.AttackOver();
         }
 
         public override void Cancel()

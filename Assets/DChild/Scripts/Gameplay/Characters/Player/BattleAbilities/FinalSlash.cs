@@ -83,7 +83,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
         public void Execute()
         {
             m_hasExecuted = true;
-            //m_state.waitForBehaviour = true;
+            m_state.waitForBehaviour = false;
             //m_state.isAttacking = true;
             m_characterState.isChargingFinalSlash = true;
             //m_state.canAttack = false;
@@ -127,16 +127,16 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
         public void EndExecution()
         {
             m_hasExecuted = false;
-            m_animator.SetBool(m_finalSlashStateAnimationParameter, false);
             m_state.waitForBehaviour = false;
             m_state.canAttack = true;
             m_state.isAttacking = false;
             m_characterState.isChargingFinalSlash = false;
-            base.AttackOver();
             //m_finalSlashInfo.ShowCollider(false);
             //m_canFinalSlash = true;
             //m_canMove = true;
             m_canDash = false;
+            m_animator.SetBool(m_finalSlashStateAnimationParameter, false);
+            base.AttackOver();
         }
 
         public void EnableDash(bool value)
@@ -149,12 +149,12 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             if (m_hasExecuted)
             {
                 m_hasExecuted = false;
-                base.Cancel();
                 m_finalSlashInfo.ShowCollider(false);
                 m_fxAnimator.Play("Buffer");
                 StopAllCoroutines();
                 m_characterState.isChargingFinalSlash = false;
                 m_animator.SetBool(m_finalSlashStateAnimationParameter, false);
+                base.Cancel();
             }
         }
 
@@ -216,12 +216,12 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
                 yield return null;
             }
             m_canDash = false;
-            m_animator.SetBool(m_finalSlashDashAnimationParameter, false);
             //m_animator.SetBool(m_finalSlashStateAnimationParameter, false);
             m_fxAnimator.Play("SlashCombo2");
             //yield return new WaitForSeconds(m_dashDuration);
             m_physics.velocity = new Vector2(0, m_physics.velocity.y);
-            //m_state.waitForBehaviour = false;
+            m_animator.SetBool(m_finalSlashDashAnimationParameter, false);
+            m_state.waitForBehaviour = false;
             yield return null;
         }
     }

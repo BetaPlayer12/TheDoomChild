@@ -84,7 +84,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
         public void Execute()
         {
-            //m_state.waitForBehaviour = true;
+            m_state.waitForBehaviour = true;
             m_state.isAttacking = true;
             m_state.canAttack = false;
             m_canSovereignImpale = false;
@@ -102,7 +102,6 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             m_animator.SetBool(m_sovereignImpaleStateAnimationParameter, false);
             //m_canSovereignImpale = true;
             m_canMove = true;
-            //m_state.waitForBehaviour = false;
             base.AttackOver();
         }
 
