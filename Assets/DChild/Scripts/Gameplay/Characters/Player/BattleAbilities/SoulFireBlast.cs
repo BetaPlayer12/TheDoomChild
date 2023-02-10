@@ -105,7 +105,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
         {
             //m_soulFireBlastInfo.ShowCollider(false);
             m_physics.gravityScale = m_cacheGravity;
-            m_canSoulFireBlast = true;
+            //m_canSoulFireBlast = true;
             m_canMove = true;
             m_animator.SetBool(m_soulFireBlastStateAnimationParameter, false);
             base.AttackOver();

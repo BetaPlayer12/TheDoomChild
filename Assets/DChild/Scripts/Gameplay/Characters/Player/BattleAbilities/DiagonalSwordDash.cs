@@ -97,22 +97,22 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
         public void EndExecution()
         {
-            base.AttackOver();
             m_diagonalSwordDashInfo.ShowCollider(false);
             m_canMove = true;
             m_animator.SetBool(m_diagonalSwordDashStateAnimationParameter, false);
             m_physics.gravityScale = m_cacheGravity;
+            base.AttackOver();
         }
 
         public override void Cancel()
         {
-            base.Cancel();
             m_diagonalSwordDashInfo.ShowCollider(false);
             m_canMove = true;
             m_fxAnimator.Play("Buffer");
             StopAllCoroutines();
             m_animator.SetBool(m_diagonalSwordDashStateAnimationParameter, false);
             m_physics.gravityScale = m_cacheGravity;
+            base.Cancel();
         }
 
         public void EnableCollision(bool value)
@@ -157,7 +157,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
                 yield return null;
             }
             m_animator.SetBool(m_diagonalSwordDashStateAnimationParameter, false);
-            Debug.Log("End Diagon Sword Dash");
+            //Debug.Log("End Diagon Sword Dash");
             m_physics.gravityScale = m_cacheGravity;
             m_physics.velocity = new Vector2(m_character.facing == HorizontalDirection.Right ? -m_backForce.x : m_backForce.x, m_backForce.y);
             //m_physics.velocity = Vector2.zero;

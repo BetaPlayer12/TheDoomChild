@@ -622,6 +622,11 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 m_foolsVerdict.HandleMovementTimer();
             }
 
+            if (m_soulFireBlast.CanSoulFireBlast() == false)
+            {
+                m_soulFireBlast.HandleAttackTimer();
+            }
+
             if (m_ninthCircleSanction.CanNinthCircleSanction() == false)
             {
                 m_ninthCircleSanction.HandleAttackTimer();
@@ -692,7 +697,12 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 {
                     m_doomsdayKong.HandleAttackTimer();
                 }
-                
+
+                if (m_diagonalSwordDash.CanDiagonalSwordDash() == false)
+                {
+                    m_diagonalSwordDash.HandleAttackTimer();
+                }
+
                 if (m_backDiver.CanBackDiver() == false)
                 {
                     m_backDiver.HandleAttackTimer();
@@ -929,6 +939,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
                             m_movement?.Cancel();
                             m_devilWings?.Cancel();
                             m_extraJump?.Cancel();
+                            m_airSlashCombo?.Cancel();
+                            m_airSlashCombo?.Reset();
                             m_fencerFlash?.Cancel();
 
                             if (IsFacingInput())
@@ -949,6 +961,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
                             m_movement?.Cancel();
                             m_devilWings?.Cancel();
                             m_extraJump?.Cancel();
+                            m_airSlashCombo?.Cancel();
+                            m_airSlashCombo?.Reset();
 
                             if (IsFacingInput())
                             {
@@ -990,11 +1004,14 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
                         return;
                     }
-                    else if (m_input.soulFireBlastPressed && !m_input.krakenRagePressed)
+                    else if (m_input.soulFireBlastPressed && !m_input.krakenRagePressed && m_soulFireBlast.CanSoulFireBlast())
                     {
                         PrepareForMidairAttack();
                         m_devilWings?.Cancel();
                         m_extraJump?.Cancel();
+                        m_airSlashCombo?.Cancel();
+                        m_airSlashCombo?.Reset();
+
                         m_soulFireBlast.Execute();
 
                         return;
@@ -1008,11 +1025,14 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
                         return;
                     }
-                    else if (m_input.diagonalSwordDashPressed)
+                    else if (m_input.diagonalSwordDashPressed && m_diagonalSwordDash.CanDiagonalSwordDash())
                     {
                         PrepareForMidairAttack();
                         m_devilWings?.Cancel();
                         m_extraJump?.Cancel();
+                        m_airSlashCombo?.Cancel();
+                        m_airSlashCombo?.Reset();
+
                         m_diagonalSwordDash.Execute();
 
                         return;

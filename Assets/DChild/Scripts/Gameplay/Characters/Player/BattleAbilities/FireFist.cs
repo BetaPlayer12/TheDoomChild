@@ -83,7 +83,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
         public void Execute()
         {
-            //m_state.waitForBehaviour = true;
+            m_state.waitForBehaviour = true;
             m_state.isAttacking = true;
             m_state.canAttack = false;
             m_canFireFist = false;
@@ -97,19 +97,18 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
         public void EndExecution()
         {
-            base.AttackOver();
             m_fireFistInfo.ShowCollider(false);
             m_animator.SetBool(m_fireFistStateAnimationParameter, false);
-            m_canFireFist = true;
+            //m_canFireFist = true;
             m_canMove = true;
-            //m_state.waitForBehaviour = false;
+            base.AttackOver();
         }
 
         public override void Cancel()
         {
-            base.Cancel();
             m_fireFistInfo.ShowCollider(false);
             m_fxAnimator.Play("Buffer");
+            base.Cancel();
         }
 
         public void EnableCollision(bool value)

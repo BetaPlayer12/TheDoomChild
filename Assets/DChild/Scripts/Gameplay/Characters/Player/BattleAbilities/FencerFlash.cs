@@ -105,7 +105,6 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             //m_attacker.SetDamageModifier(m_slashComboInfo[m_currentSlashState].damageModifier * m_modifier.Get(PlayerModifier.AttackDamage));
 
             m_physics.velocity = Vector2.zero;
-            //m_fxParent.SetActive(true);
             if (m_currentState == FencerFlashState.Midair)
             {
                 m_cacheGravity = m_physics.gravityScale;
@@ -115,7 +114,6 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
         public void EndExecution()
         {
-            base.AttackOver();
             m_fencerFlashInfo.ShowCollider(false);
             //m_canfencerFlash = true;
             m_canMove = true;
@@ -124,14 +122,14 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             m_physics.gravityScale = m_cacheGravity;
             if (m_fxParent.activeSelf)
             {
-                m_fxParent.SetActive(false);
                 m_fx.Stop();
+                m_fxParent.SetActive(false);
             }
+            base.AttackOver();
         }
 
         public override void Cancel()
         {
-            base.Cancel();
             m_fencerFlashInfo.ShowCollider(false);
             m_canMove = true;
             m_fxAnimator.Play("Buffer");
@@ -141,9 +139,10 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             m_physics.gravityScale = m_cacheGravity;
             if (m_fxParent.activeSelf)
             {
-                m_fxParent.SetActive(false);
                 m_fx.Stop();
+                m_fxParent.SetActive(false);
             }
+            base.Cancel();
         }
 
         public void EnableCollision(bool value)
@@ -229,7 +228,16 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             //m_state.waitForBehaviour = false;
             m_enemySensor.Cast();
             if (!m_enemySensor.isDetecting)
-                EndExecution();
+            {
+                m_fencerFlashInfo.ShowCollider(false);
+                m_animator.SetBool(m_fencerFlashStateAnimationParameter, false);
+                //m_physics.gravityScale = m_cacheGravity;
+                if (m_fxParent.activeSelf)
+                {
+                    m_fx.Stop();
+                    m_fxParent.SetActive(false);
+                }
+            }
             yield return null;
         }
     }
