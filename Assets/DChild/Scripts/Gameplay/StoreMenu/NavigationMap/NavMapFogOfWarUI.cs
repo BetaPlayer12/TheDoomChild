@@ -10,10 +10,12 @@ namespace DChild.Gameplay.NavigationMap
     {
 #if UNITY_EDITOR
         [SerializeField, HideInPlayMode]
-        private VariableToObjectEditorList<Image> m_editorList;
+        private VariableToObjectEditorList<NavMapFogOfWarGroup> m_editorList;
 #endif
         [SerializeField, HideInEditorMode]
-        private Dictionary<string, Image> m_list;
+        private Dictionary<string, NavMapFogOfWarGroup> m_list;
+
+
 
         public void UpdateUI()
         {
@@ -27,6 +29,7 @@ namespace DChild.Gameplay.NavigationMap
         public void SetUIState(string varName, bool isHidden)
         {
             m_list[varName].enabled = isHidden;
+            m_list[varName].RevealArea(isHidden);
         }
 
         private void OnValidate()

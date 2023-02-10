@@ -12,6 +12,7 @@ namespace DChild.Gameplay.NavigationMap
 
         private RectTransform m_currentMap;
         private NavMapFogOfWarUI m_fogOfWarUI;
+        [SerializeField]
         private bool m_mapNeedsCompleteUpdate = true;
 
         public void UpdateConfiguration(Location location, Transform inGameReference, Vector2 mapReferencePoint, Vector2 calculationOffset)
@@ -31,8 +32,10 @@ namespace DChild.Gameplay.NavigationMap
 
         public void OpenMap()
         {
+            Debug.LogError("Sulod");
             if (m_mapNeedsCompleteUpdate)
             {
+
                 m_fogOfWarUI?.UpdateUI();
                 m_mapNeedsCompleteUpdate = false;
             }
