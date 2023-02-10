@@ -72,13 +72,17 @@ namespace PixelCrushers.DialogueSystem
                 if (hideContinueButtonOnContinue && continueButton != null) continueButton.gameObject.SetActive(false);
                 if (runtimeDialogueUI != null)
                 {
-                    if (continueSubtitlePanel && continueAlertPanel) runtimeDialogueUI.OnContinue();
-                    else if (continueSubtitlePanel) runtimeDialogueUI.OnContinueConversation();
-                    else if (continueAlertPanel) runtimeDialogueUI.OnContinueAlert();
+                    ContinueConversation();
                 }
             }
         }
 
+        protected virtual void ContinueConversation()
+        {
+            if (continueSubtitlePanel && continueAlertPanel) runtimeDialogueUI.OnContinue();
+            else if (continueSubtitlePanel) runtimeDialogueUI.OnContinueConversation();
+            else if (continueAlertPanel) runtimeDialogueUI.OnContinueAlert();
+        }
     }
 
 }
