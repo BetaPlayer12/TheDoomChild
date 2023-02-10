@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using DChild.Gameplay.Combat;
+using DChild.Gameplay.Systems;
 using Holysoft.Gameplay;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -58,8 +59,10 @@ namespace DChild.Gameplay.Characters.Players.SoulSkills
                             timer = m_info.interval;
                         }
                     }
+                    //GameplaySystem.gamplayUIHandle.DeactivateHealthRegenEffect();
                     yield return null;
                 } while (true);
+                
             }
 
             private IEnumerator ShadowRegenRoutine(ICappedStat module)
@@ -76,6 +79,7 @@ namespace DChild.Gameplay.Characters.Players.SoulSkills
                             timer = m_info.interval;
                         }
                     }
+                   // GameplaySystem.gamplayUIHandle.DeactivateShadowRegenEffect();
                     yield return null;
                 } while (true);
             }
@@ -90,9 +94,11 @@ namespace DChild.Gameplay.Characters.Players.SoulSkills
                 switch (m_info.regenStat)
                 {
                     case Stat.Health:
+                       GameplaySystem.gamplayUIHandle.ActivateHealthRegenEffect();
                         m_coroutine = m_player.character.StartCoroutine(HPRegenRoutine(m_player.healableModule));
                         break;
                     case Stat.Shadow:
+                        GameplaySystem.gamplayUIHandle.ActivateShadowRegenEffect();
                         m_coroutine = m_player.character.StartCoroutine(ShadowRegenRoutine(m_player.magic));
                         break;
                 }

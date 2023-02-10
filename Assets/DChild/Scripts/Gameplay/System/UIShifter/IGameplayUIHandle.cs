@@ -45,5 +45,9 @@ namespace DChild.Gameplay.Systems
         void ShowLootChestItemAcquired(LootList lootList);
         void ShowNotification(StoreNotificationType storeNotificationType);
         void ShowSequenceSkip(bool willShow);
+        void ActivateHealthRegenEffect();
+        void DeactivateHealthRegenEffect();
+        void ActivateShadowRegenEffect();
+        void DeactivateShadowRegenEffect();
     }
 }
