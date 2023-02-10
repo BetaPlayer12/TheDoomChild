@@ -87,6 +87,8 @@ namespace DChild.Gameplay.Characters.Players.SoulSkills
             public override void Dispose()
             {
                 m_player.character.StopCoroutine(m_coroutine);
+                GameplaySystem.gamplayUIHandle.DeactivateHealthRegenEffect();
+                GameplaySystem.gamplayUIHandle.DeactivateShadowRegenEffect();
             }
 
             public override void Initialize()
