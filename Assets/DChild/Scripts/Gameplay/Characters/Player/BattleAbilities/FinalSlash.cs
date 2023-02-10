@@ -111,19 +111,6 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             //m_attacker.SetDamageModifier(m_slashComboInfo[m_currentSlashState].damageModifier * m_modifier.Get(PlayerModifier.AttackDamage));
         }
 
-        //public void Execute()
-        //{
-        //    StopAllCoroutines();
-        //    m_state.isAttacking = true;
-        //    m_state.canAttack = false;
-        //    m_canFinalSlash = false;
-        //    m_canMove = false;
-        //    m_animator.SetBool(m_animationParameter, true);
-        //    m_animator.SetBool(m_finalSlashStateAnimationParameter, true);
-        //    m_finalSlashCooldownTimer = m_finalSlashCooldown;
-        //    m_finalSlashMovementCooldownTimer = m_finalSlashMovementCooldown;
-        //}
-
         public void EndExecution()
         {
             m_hasExecuted = false;
@@ -221,7 +208,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             //yield return new WaitForSeconds(m_dashDuration);
             m_physics.velocity = new Vector2(0, m_physics.velocity.y);
             m_animator.SetBool(m_finalSlashDashAnimationParameter, false);
-            m_state.waitForBehaviour = false;
+            //m_state.waitForBehaviour = false;
             yield return null;
         }
     }

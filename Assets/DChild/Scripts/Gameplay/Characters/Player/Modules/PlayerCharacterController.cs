@@ -577,7 +577,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 m_fireFist.HandleMovementTimer();
             }
 
-            if (m_finalSlash.CanFinalSlash() == false)
+            if (m_finalSlash.CanFinalSlash() == false && !m_state.isChargingFinalSlash)
             {
                 m_finalSlash.HandleAttackTimer();
             }
@@ -1786,7 +1786,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     {
                         if (m_state.isChargingFinalSlash)
                         {
-                            if (/*!m_input.slashHeld &&*/ m_input.finalSlashReleased /*&& !(m_input.levitateHeld && m_input.slashHeld)*/)
+                            if (m_input.finalSlashReleased && !m_finalSlash.CanFinalSlash())
                             {
                                 m_finalSlash.ExecuteDash();
                             }
