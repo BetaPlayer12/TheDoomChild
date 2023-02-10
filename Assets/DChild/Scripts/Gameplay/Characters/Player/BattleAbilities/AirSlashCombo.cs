@@ -172,9 +172,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public override void AttackOver()
         {
-            base.AttackOver();
-            m_state.canAttack = true;
-
             for (int i = 0; i < m_airSlashComboInfo.Count; i++)
             {
                 m_airSlashComboInfo[i].ShowCollider(false);
@@ -187,6 +184,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 m_canMove = false;
                 m_physics.gravityScale = m_cacheGravity;
             }
+            m_physics.velocity = Vector2.zero;
+            base.AttackOver();
 
             //m_fxAnimator.Play("Buffer");
         }

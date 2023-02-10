@@ -744,7 +744,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 }
                 if (m_input.edgedFuryReleased)
                 {
-                    m_edgedFury?.Cancel();
                     m_edgedFury?.EndExecution();
                 }
             }
@@ -897,7 +896,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                         PrepareForMidairAttack();
                         m_devilWings?.EnableLevitate();
                         m_extraJump?.Cancel();
-                        m_airSlashCombo?.Cancel();
+                        //m_airSlashCombo?.Cancel();
 
                         if (m_input.verticalInput > 0)
                         {
@@ -939,9 +938,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
                             m_movement?.Cancel();
                             m_devilWings?.Cancel();
                             m_extraJump?.Cancel();
-                            m_airSlashCombo?.Cancel();
-                            m_airSlashCombo?.Reset();
-                            m_fencerFlash?.Cancel();
 
                             if (IsFacingInput())
                             {
@@ -961,8 +957,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
                             m_movement?.Cancel();
                             m_devilWings?.Cancel();
                             m_extraJump?.Cancel();
-                            m_airSlashCombo?.Cancel();
-                            m_airSlashCombo?.Reset();
 
                             if (IsFacingInput())
                             {
@@ -998,8 +992,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                         PrepareForMidairAttack();
                         m_devilWings?.Cancel();
                         m_extraJump?.Cancel();
-                        m_airSlashCombo?.Cancel();
-                        m_soulFireBlast?.Cancel();
+
                         m_edgedFury.Execute();
 
                         return;
@@ -1009,8 +1002,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
                         PrepareForMidairAttack();
                         m_devilWings?.Cancel();
                         m_extraJump?.Cancel();
-                        m_airSlashCombo?.Cancel();
-                        m_airSlashCombo?.Reset();
 
                         m_soulFireBlast.Execute();
 
@@ -1030,8 +1021,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
                         PrepareForMidairAttack();
                         m_devilWings?.Cancel();
                         m_extraJump?.Cancel();
-                        m_airSlashCombo?.Cancel();
-                        m_airSlashCombo?.Reset();
 
                         m_diagonalSwordDash.Execute();
 
@@ -1137,11 +1126,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 {
                     if (m_state.isInShadowMode == false)
                     {
-                        m_basicSlashes?.Cancel();
-                        m_airSlashCombo?.Cancel();
-                        m_airSlashCombo?.Reset();
-                        m_whip?.Cancel();
-                        m_whipCombo?.Cancel();
                         m_devilWings?.Cancel();
                         m_extraJump?.Cancel();
 
@@ -1256,7 +1240,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 }
                 if (m_input.barrierReleased)
                 {
-                    m_barrier?.Cancel();
                     m_barrier?.EndExecution();
                 }
             }
@@ -1369,21 +1352,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
                         return;
                     }
-                    //else if (m_input.backDiverPressed && m_backDiver.CanBackDiver() && m_backDiver.HaveSpacetoExecute() && m_earthShaker.CanEarthShaker())
-                    //{
-                    //    if (m_state.isInShadowMode == false)
-                    //    {
-
-                    //        PrepareForGroundAttack();
-                    //        if (IsFacingInput())
-                    //        {
-                    //            m_backDiver.Execute();
-                    //        }
-                    //        return;
-                    //    }
-
-                    //    return;
-                    //}
                 }
 
                 if (m_input.jumpPressed == true)
@@ -1620,10 +1588,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     {
                         if (m_state.isInShadowMode == false)
                         {
-                            m_swordThrust?.Cancel();
-                            m_earthShaker?.Cancel();
-                            m_finalSlash?.Cancel();
-                            m_reaperHarvest?.Cancel();
 
                             PrepareForGroundAttack();
                             if (IsFacingInput())
@@ -1641,7 +1605,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
                         {
                             m_idle?.Cancel();
                             m_movement?.Cancel();
-                            m_fencerFlash?.Cancel();
 
                             PrepareForGroundAttack();
                             if (IsFacingInput())
@@ -1691,7 +1654,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     {
                         if (m_state.isInShadowMode == false)
                         {
-                            m_finalSlash?.Cancel();
 
                             PrepareForGroundAttack();
                             if (IsFacingInput())
@@ -1707,14 +1669,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     {
                         if (m_state.isInShadowMode == false)
                         {
-                            m_basicSlashes?.Cancel();
-                            m_slashCombo?.Cancel();
-                            m_slashCombo?.Reset();
-                            m_whip?.Cancel();
-                            m_whipCombo?.Cancel();
-                            m_groundJump?.Cancel();
-                            m_finalSlash?.Cancel();
-                            m_eelecktrick?.Cancel();
 
                             PrepareForGroundAttack();
                             if (IsFacingInput())
@@ -1740,7 +1694,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     {
                         if (m_state.isInShadowMode == false)
                         {
-                            m_finalSlash?.Cancel();
 
                             PrepareForGroundAttack();
                             if (IsFacingInput())
@@ -1756,7 +1709,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     {
                         if (m_state.isInShadowMode == false)
                         {
-                            m_finalSlash?.Cancel();
 
                             PrepareForGroundAttack();
                             if (IsFacingInput())
@@ -1772,7 +1724,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     {
                         if (m_state.isInShadowMode == false)
                         {
-                            m_finalSlash?.Cancel();
 
                             PrepareForGroundAttack();
                             if (IsFacingInput())
@@ -1802,15 +1753,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     {
                         if (m_state.isInShadowMode == false)
                         {
-                            //m_basicSlashes?.Cancel();
-                            //m_slashCombo?.Cancel();
-                            //m_slashCombo?.Reset();
-                            //m_whip?.Cancel();
-                            //m_whipCombo?.Cancel();
-                            //m_groundJump?.Cancel();
-                            //m_finalSlash?.Cancel();
-                            //m_reaperHarvest?.Cancel();
-                            //m_fencerFlash?.Cancel();
 
                             PrepareForGroundAttack();
                             if (IsFacingInput())

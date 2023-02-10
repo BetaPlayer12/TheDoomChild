@@ -139,7 +139,6 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             if (m_hasExecuted)
             {
                 m_hasExecuted = false;
-                base.Cancel();
                 m_reaperHarvestInfo.ShowCollider(false);
                 m_canMove = true;
                 m_fxAnimator.Play("Buffer");
@@ -148,6 +147,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
                 m_reaperHarvestAnimation.gameObject.SetActive(false);
                 m_physics.gravityScale = m_cacheGravity;
                 m_hitbox.Enable();
+                base.Cancel();
             }
         }
 
