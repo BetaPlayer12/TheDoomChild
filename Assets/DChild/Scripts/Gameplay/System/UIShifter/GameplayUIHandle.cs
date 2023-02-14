@@ -47,6 +47,8 @@ namespace DChild.Gameplay.Systems
         private WorldMapHandler m_worldMap;
         [SerializeField]
         private NavigationMapManager m_navMap;
+        [SerializeField]
+        private RegenerationEffectsHandler m_regen;
 
 
         [FoldoutGroup("Side Notification")]
@@ -286,6 +288,22 @@ namespace DChild.Gameplay.Systems
                 case StoreNotificationType.Extras:
                     break;
             }
+        }
+        public void ActivateHealthRegenEffect()
+        {
+            m_regen.HealthRegenEffect(true);
+        }
+        public void DeactivateHealthRegenEffect()
+        {
+            m_regen.HealthRegenEffect(false);
+        }
+        public void ActivateShadowRegenEffect()
+        {
+            m_regen.ShadowRegenEffect(true);
+        }
+        public void DeactivateShadowRegenEffect()
+        {
+            m_regen.ShadowRegenEffect(false);
         }
     }
 }
