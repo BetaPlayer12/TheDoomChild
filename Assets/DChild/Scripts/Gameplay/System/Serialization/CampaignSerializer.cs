@@ -153,5 +153,10 @@ namespace DChild.Gameplay
             PersistentDataManager.ApplySaveData(m_slot.dialogueSaveData);
             ExtraDatabases.addedDatabases += OnDialogueDatabaseAdded;
         }
+
+        public void UpdateDialogueSaveData()
+        {
+            m_slot.UpdateDialogueSaveData();
+        }
     }
 }
