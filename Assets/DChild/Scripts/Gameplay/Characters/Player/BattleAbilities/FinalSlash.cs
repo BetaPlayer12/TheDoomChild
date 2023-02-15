@@ -82,6 +82,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
         public void Execute()
         {
+            StopAllCoroutines();
             m_hasExecuted = true;
             m_state.waitForBehaviour = false;
             //m_state.isAttacking = true;
@@ -113,10 +114,11 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
         public void EndExecution()
         {
+            StopAllCoroutines();
             m_hasExecuted = false;
-            m_state.waitForBehaviour = false;
-            m_state.canAttack = true;
-            m_state.isAttacking = false;
+            //m_state.waitForBehaviour = false;
+            //m_state.canAttack = true;
+            //m_state.isAttacking = false;
             m_characterState.isChargingFinalSlash = false;
             //m_finalSlashInfo.ShowCollider(false);
             //m_canFinalSlash = true;
@@ -188,15 +190,16 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             m_state.waitForBehaviour = true;
             m_characterState.isChargingFinalSlash = false;
             var timer = m_dashDuration;
-            m_wallSensor.Cast();
+            m_enemySensor.Cast();
+            //m_wallSensor.Cast();
             m_edgeSensor.Cast();
             //m_animator.SetBool(m_finalSlashStateAnimationParameter, true);
             m_animator.SetBool(m_finalSlashDashAnimationParameter, true);
-            while (timer >= 0 && !m_enemySensor.isDetecting && !m_wallSensor.allRaysDetecting && m_edgeSensor.isDetecting)
+            while (timer >= 0 && !m_enemySensor.isDetecting /*&& !m_wallSensor.allRaysDetecting*/ && m_edgeSensor.isDetecting)
             {
                 //Debug.Log("Final Slash Dashing!@#");
                 m_enemySensor.Cast();
-                m_wallSensor.Cast();
+                //m_wallSensor.Cast();
                 m_edgeSensor.Cast();
                 m_physics.velocity = new Vector2(m_character.facing == HorizontalDirection.Right ? m_pushForce.x : -m_pushForce.x, m_physics.velocity.y);
                 timer -= Time.deltaTime;

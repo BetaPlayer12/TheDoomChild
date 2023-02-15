@@ -1654,6 +1654,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     {
                         if (m_state.isInShadowMode == false)
                         {
+                            m_slashCombo?.Cancel();
+                            m_slashCombo?.Reset();
 
                             PrepareForGroundAttack();
                             if (IsFacingInput())

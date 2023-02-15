@@ -184,7 +184,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 m_currentSlashState = -1;
                 m_currentVisualSlashState = 0;
                 m_animator.SetInteger(m_slashStateAnimationParameter, m_currentSlashState);
-                base.AttackOver();
+                //base.AttackOver();
             }
         }
 

@@ -228,8 +228,8 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             //yield return new WaitForSeconds(m_dashDuration);
             m_hitbox.Enable();
             m_physics.velocity = Vector2.zero;
-            m_reaperHarvestAnimation.gameObject.SetActive(false);
-            m_state.waitForBehaviour = false;
+            //m_reaperHarvestAnimation.gameObject.SetActive(false);
+            //m_state.waitForBehaviour = false;
             yield return null;
         }
     }
