@@ -32,10 +32,8 @@ namespace DChild.Gameplay.NavigationMap
 
         public void OpenMap()
         {
-            Debug.LogError("Sulod");
             if (m_mapNeedsCompleteUpdate)
             {
-
                 m_fogOfWarUI?.UpdateUI();
                 m_mapNeedsCompleteUpdate = false;
             }
@@ -43,7 +41,10 @@ namespace DChild.Gameplay.NavigationMap
             {
                 var changes = NavigationMapSceneHandle.changes;
                 //Only update the ones that needs update
-
+                for (int i = 0; i < changes.fogOfWarChanges; i++)
+                {
+                    m_fogOfWarUI.SetUIState(changes.GetFogOfWarName(i), changes.GetFogOfWarState(i));
+                }
                 changes.Clear();
             }
 
