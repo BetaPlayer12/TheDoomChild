@@ -1,6 +1,7 @@
 ﻿
 using DChild.Gameplay.Characters.Enemies;
 using DChild.Gameplay.Characters.NPC;
+using DChild.Gameplay.Characters.Players.SoulSkills;
 using DChild.Gameplay.Combat.UI;
 using DChild.Gameplay.Environment;
 using DChild.Gameplay.Items;
@@ -165,7 +166,7 @@ namespace DChild.Gameplay.Systems
                 m_bossCombat.HideBossName();
             }
 
-            
+
         }
 
         public void RevealBossName()
@@ -289,8 +290,9 @@ namespace DChild.Gameplay.Systems
                     break;
             }
         }
-        public void ActivateHealthRegenEffect()
+        public void ActivateHealthRegenEffect(PassiveRegeneration.Handle handle)
         {
+            m_regen.SetHealthRegenReference(handle);
             m_regen.HealthRegenEffect(true);
         }
         public void DeactivateHealthRegenEffect()
