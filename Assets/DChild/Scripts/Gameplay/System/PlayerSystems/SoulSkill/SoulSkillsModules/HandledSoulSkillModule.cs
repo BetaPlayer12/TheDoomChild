@@ -53,7 +53,7 @@ namespace DChild.Gameplay.Characters.Players.SoulSkills
             }
         }
 
-        protected abstract class BaseHandle
+        public abstract class BaseHandle
         {
             private int m_ID;
             protected IPlayer m_player;
