@@ -140,5 +140,13 @@ namespace DChild.Gameplay.Narrative
             m_wakeUpPrompt.Hide();
             m_cameraToDisable.enabled = false;
         }
+        public IEnumerator PlayerActionChange(Action<PlayerInput> callBack)
+        {
+            var actionMap = m_wakeUpInput.action;
+            actionMap.performed += OnInputPerformed;
+
+            yield return null;
+        }
     } 
+
 }

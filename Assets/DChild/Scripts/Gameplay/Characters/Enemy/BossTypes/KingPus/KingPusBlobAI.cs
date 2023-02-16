@@ -113,6 +113,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private RaySensor m_groundSensor;
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_selfSensor;
+        [SerializeField, TabGroup("FX")]
+        private ParticleFX m_healFX;
 
         [SerializeField]
         private float m_rotateSpeed;
@@ -139,7 +141,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         public void SummonAt(Vector2 position, AITargetInfo target)
         {
-            Debug.Log("SUMMON KING PUS BLOB ");
+            //Debug.Log("SUMMON KING PUS BLOB ");
             enabled = false;
             m_targetInfo = target;
             transform.position = new Vector2(m_master.position.x, m_master.position.y + 15f);
@@ -258,6 +260,11 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return null;
         }
 
+        public void Explode()
+        {
+            StartCoroutine(ExplodeRoutine(false));
+        }
+
         private IEnumerator ExplodeRoutine(bool willHeal)
         {
             enabled = false;
@@ -267,6 +274,7 @@ namespace DChild.Gameplay.Characters.Enemies
             if (willHeal)
             {
                 yield return new WaitForSeconds(0.6f);
+                m_healFX.Play();
                 var healPercentage = (((float)m_health.currentValue / m_health.maxValue) + m_info.healPercentage);
                 //m_health.SetHealthPercentage(0f);
                 m_master.GetComponentInChildren<Health>().SetHealthPercentage(healPercentage);
