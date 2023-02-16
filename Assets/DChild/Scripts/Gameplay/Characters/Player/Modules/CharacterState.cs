@@ -63,6 +63,10 @@ namespace DChild.Gameplay.Characters.Players.Modules
         public bool isChargingAttack { get => m_isChargingAttack; set => m_isChargingAttack = value; }
 
         [SerializeField, ReadOnly]
+        private bool m_isChargingFinalSlash;
+        public bool isChargingFinalSlash { get => m_isChargingFinalSlash; set => m_isChargingFinalSlash = value; }
+
+        [SerializeField, ReadOnly]
         private bool m_isGrabbing;
         public bool isGrabbing { get => m_isGrabbing; set => m_isGrabbing = value; }
         [SerializeField, ReadOnly]

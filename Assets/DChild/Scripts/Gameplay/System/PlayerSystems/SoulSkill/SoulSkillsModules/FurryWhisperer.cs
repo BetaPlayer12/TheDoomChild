@@ -8,12 +8,12 @@ namespace DChild.Gameplay.Characters.Players.SoulSkills
     {
         public void AttachTo(int soulSkillInstanceID, IPlayer player)
         {
-            DialogueLua.SetVariable("FurryWhispererEquipped", true);
+            DialogueLua.SetVariable("whisper", true);
         }
 
         public void DetachFrom(int soulSkillInstanceID, IPlayer player)
         {
-            DialogueLua.SetVariable("FurryWhispererEquipped", false);
+            DialogueLua.SetVariable("whisper", false);
         }
     }
 }

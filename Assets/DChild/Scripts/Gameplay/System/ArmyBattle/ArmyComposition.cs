@@ -1,6 +1,7 @@
 ﻿using DChildEditor;
 using Sirenix.OdinInspector;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace DChild.Gameplay.ArmyBattle
@@ -9,6 +10,63 @@ namespace DChild.Gameplay.ArmyBattle
     [System.Serializable]
     public class ArmyComposition
     {
+        [System.Serializable]
+        public class SaveData
+        {
+            private int[] m_rockCharacterIDs;
+            private int[] m_paperCharacterIDs;
+            private int[] m_scissorsCharacterIDs;
+
+            public SaveData(IReadOnlyCollection<ArmyCharacter> rockCharacters, IReadOnlyCollection<ArmyCharacter> paperCharacters, IReadOnlyCollection<ArmyCharacter> scissorsCharacters)
+            {
+                m_rockCharacterIDs = CreateCharacterIDList(rockCharacters);
+                m_paperCharacterIDs = CreateCharacterIDList(paperCharacters);
+                m_scissorsCharacterIDs = CreateCharacterIDList(scissorsCharacters);
+            }
+
+            public int GetTotalCharacters(UnitType unitType)
+            {
+                switch (unitType)
+                {
+                    case UnitType.Rock:
+                        return m_rockCharacterIDs.Length;
+                    case UnitType.Paper:
+                        return m_paperCharacterIDs.Length;
+                    case UnitType.Scissors:
+                        return m_scissorsCharacterIDs.Length;
+                    default:
+                        return 0;
+                }
+            }
+
+            public int GetCharacterID(UnitType unitType, int index)
+            {
+                switch (unitType)
+                {
+                    case UnitType.Rock:
+                        return m_rockCharacterIDs[index];
+                    case UnitType.Paper:
+                        return m_paperCharacterIDs[index];
+                    case UnitType.Scissors:
+                        return m_scissorsCharacterIDs[index];
+                    default:
+                        return -1;
+                }
+            }
+
+            private int[] CreateCharacterIDList(IReadOnlyCollection<ArmyCharacter> characters)
+            {
+                var rockCharacterCount = characters.Count;
+                var characterIDs = new int[rockCharacterCount];
+                for (int i = 0; i < rockCharacterCount; i++)
+                {
+                    m_rockCharacterIDs[i] = characters.ElementAt(i).ID;
+                }
+
+                return characterIDs;
+            }
+        }
+
         [SerializeField]
         private string m_name;
 
@@ -23,6 +81,7 @@ namespace DChild.Gameplay.ArmyBattle
         [SerializeField, TabGroup("Characters/Tab", "Scissors"), ListDrawerSettings(HideAddButton = true), PropertyOrder(4), InlineEditor(InlineEditorObjectFieldModes.Foldout, Expanded = true)]
         private List<ArmyCharacter> m_scissorCharacters;
 
+        public string name => m_name;
         public int troopCount => m_troopCount;
 
         public ArmyComposition()
@@ -53,7 +112,6 @@ namespace DChild.Gameplay.ArmyBattle
             m_scissorCharacters = new List<ArmyCharacter>(reference.GetCharactersOfUnityType(UnitType.Scissors));
         }
 
-        public string name => m_name;
 
         public void CopyComposition(ArmyComposition reference)
         {

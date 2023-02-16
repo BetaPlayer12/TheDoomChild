@@ -18,7 +18,23 @@ namespace DChild.Gameplay.Characters.Players
             EndCombo,
             EndWhipComboAttack,
             EndWhipCombo,
-            EndSwordThrust
+            ResetWhipComboGravity,
+            EndSwordThrust,
+            EndAirLunge,
+            EndFireFist,
+            EndReaperHarvest,
+            EndKrakenRage,
+            EndAirComboAttack,
+            EndAirCombo,
+            EndSovereignImpale,
+            EndHellTrident,
+            EndFoolsVerdict,
+            EndSoulFireBlast,
+            EndEdgedFury,
+            EndNinthCircleSanction,
+            EndDoomsdayKong,
+            EndBackDiver,
+            EndBarrier,
         }
 
         [SerializeField]
@@ -58,8 +74,56 @@ namespace DChild.Gameplay.Characters.Players
                     case Command.EndWhipCombo:
                         player.ComboWhipEnd();
                         break;
+                    case Command.ResetWhipComboGravity:
+                        player.ResetWhipComboGravity();
+                        break;
                     case Command.EndSwordThrust:
                         player.SwordThrustEnd();
+                        break;
+                    case Command.EndAirLunge:
+                        player.AirLungeEnd();
+                        break;
+                    case Command.EndFireFist:
+                        player.FireFistEnd();
+                        break;
+                    case Command.EndReaperHarvest:
+                        player.ReaperHarvestEnd();
+                        break;
+                    case Command.EndKrakenRage:
+                        player.KrakenRageEnd();
+                        break;
+                    case Command.EndAirComboAttack:
+                        player.AirComboAttackEnd();
+                        break;
+                    case Command.EndAirCombo:
+                        player.AirComboEnd();
+                        break;
+                    case Command.EndSovereignImpale:
+                        player.SovereignImpaleEnd();
+                        break;
+                    case Command.EndHellTrident:
+                        player.HellTridentEnd();
+                        break;
+                    case Command.EndFoolsVerdict:
+                        player.FoolsVerdictEnd();
+                        break;
+                    case Command.EndSoulFireBlast:
+                        player.FoolsVerdictEnd();
+                        break;
+                    case Command.EndEdgedFury:
+                        player.EdgedFuryEnd();
+                        break;
+                    case Command.EndNinthCircleSanction:
+                        player.NinthCircleSanctionEnd();
+                        break;
+                    case Command.EndDoomsdayKong:
+                        player.DoomsdayKongEnd();
+                        break;
+                    case Command.EndBackDiver:
+                        player.BackDiverEnd();
+                        break;
+                    case Command.EndBarrier:
+                        player.BarrierEnd();
                         break;
                 }
             }

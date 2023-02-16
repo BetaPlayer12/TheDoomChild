@@ -9,6 +9,10 @@ namespace DChild.Gameplay.Characters.Enemies
 {
     public class ChasingGroundTentacle : PoolableObject
     {
+        [SerializeField]
+        private Collider2D m_hitbox;
+        [SerializeField]
+        public float chasingGroundTentacleAnimationSpeedMultiplier;
 
         [SerializeField, TabGroup("Reference")]
         protected SpineRootAnimation m_animation;
@@ -26,21 +30,25 @@ namespace DChild.Gameplay.Characters.Enemies
         // Start is called before the first frame update
         void Start()
         {
+            m_hitbox.enabled = false;
             StartCoroutine(WaitForInput());
         }
 
         private IEnumerator Anticipation()
         {
-            m_animation.SetAnimation(0, m_anticipationLoopAnimation, false);
+            m_animation.SetAnimation(0, m_anticipationLoopAnimation, false).TimeScale = chasingGroundTentacleAnimationSpeedMultiplier;
             yield return new WaitForAnimationComplete(m_animation.animationState, m_anticipationLoopAnimation);
-
-            StartCoroutine(Extended());
+            yield return Extended();
         }
 
         private IEnumerator Extended()
         {
+            m_hitbox.enabled = true;
             m_animation.SetAnimation(0, m_extendedAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_extendedAnimation);
+
+            if (FindObjectOfType<ObstacleChecker>().monolithSlamObstacleList != null)
+                FindObjectOfType<ObstacleChecker>().ClearMonoliths();
         }
 
         private IEnumerator Retract()
