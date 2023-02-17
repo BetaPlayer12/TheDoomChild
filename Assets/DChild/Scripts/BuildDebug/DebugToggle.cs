@@ -1,4 +1,5 @@
-﻿using Holysoft.UI;
+﻿using Doozy.Runtime.UIManager.Components;
+using Holysoft.UI;
 using Sirenix.OdinInspector;
 using System;
 using System.Collections;
@@ -11,6 +12,8 @@ namespace DChildDebug.Window
 
     public class DebugToggle : MonoBehaviour
     {
+        [SerializeField]
+        private UIToggle m_toggle;
         [SerializeField, TabGroup("True")]
         private UnityEvent OnTrue;
         [SerializeField, TabGroup("False")]
@@ -22,7 +25,12 @@ namespace DChildDebug.Window
         public void ToggleState()
         {
             m_isToggled = !m_isToggled;
-            if (m_isToggled)
+            SetState(m_isToggled);
+        }
+
+        public void SetState(bool isOn)
+        {
+            if (isOn)
             {
                 OnTrue?.Invoke();
             }
@@ -35,11 +43,13 @@ namespace DChildDebug.Window
         public void UpdateToggleHighlight()
         {
             m_isToggled = m_source.value;
+            m_toggle.SetIsOn(m_isToggled);
         }
         private void Start()
         {
             m_source = GetComponent<IToggleDebugBehaviour>();
             UpdateToggleHighlight();
+            m_toggle.OnValueChangedCallback.AddListener(SetState);
         }
 
 
