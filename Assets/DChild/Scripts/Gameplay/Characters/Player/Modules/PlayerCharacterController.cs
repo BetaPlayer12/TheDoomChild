@@ -68,6 +68,10 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private PlayerBlock m_block;
         private PlayerIntroControlsController m_introController;
 
+        #region Soul Skills
+        private ShadowbladeFX m_shadowBladeFX;
+        #endregion
+
         #region Battle Abilities
         private AirLunge m_airLunge;
         private FireFist m_fireFist;
@@ -387,6 +391,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_projectileThrow.ExecutionRequested += OnProjectileThrowRequest;
             m_block = m_character.GetComponentInChildren<PlayerBlock>();
 
+            m_shadowBladeFX = m_character.GetComponentInChildren<ShadowbladeFX>();
+
             m_airLunge = m_character.GetComponentInChildren<AirLunge>();
             m_fireFist = m_character.GetComponentInChildren<FireFist>();
             m_reaperHarvest = m_character.GetComponentInChildren<ReaperHarvest>();
@@ -464,6 +470,15 @@ namespace DChild.Gameplay.Characters.Players.Modules
                         }
 
                         return;
+                    }
+
+                    if (m_state.isShadowBlade && !m_shadowBladeFX.canShadowblade)
+                    {
+                        m_shadowBladeFX.EnableShadowblade();
+                    }
+                    else if (!m_state.isShadowBlade && m_shadowBladeFX.canShadowblade)
+                    {
+                        m_shadowBladeFX.DisableShadowblade();
                     }
 
                     if ((int)m_character.facing == m_input.horizontalInput /*&& m_earthShaker.CanEarthShaker()*/)
@@ -742,9 +757,18 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 {
                     m_groundedness?.Evaluate();
                 }
-                if (m_input.edgedFuryReleased)
+                if (m_state.isChargingLightningSpear && !m_lightningSpear.CanLightningSpear())
+                {
+                    if (m_input.lightningSpearReleased)
+                    {
+                        m_lightningSpear.ReleaseHold();
+                    }
+                    return;
+                }
+                if (m_input.edgedFuryReleased && !m_state.isChargingLightningSpear)
                 {
                     m_edgedFury?.EndExecution();
+                    return;
                 }
             }
             else if (m_state.isStickingToWall)
@@ -1041,14 +1065,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
                         return;
                     }
-                    else if (m_state.isChargingLightningSpear && !m_lightningSpear.CanLightningSpear())
-                    {
-                        if (m_input.lightningSpearReleased)
-                        {
-                            m_lightningSpear.ReleaseHold();
-                        }
-                        return;
-                    }
                     #endregion
                 }
 
@@ -1232,6 +1248,22 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 else if (m_state.isDoingSwordThrust && !m_state.isChargingFinalSlash)
                 {
                     HandleSwordThrust();
+                    return;
+                }
+                if (m_state.isChargingFinalSlash)
+                {
+                    if (m_input.finalSlashReleased && !m_finalSlash.CanFinalSlash() || m_input.slashPressed && !m_finalSlash.CanFinalSlash())
+                    {
+                        m_finalSlash.ExecuteDash();
+                    }
+                    return;
+                }
+                else if (m_state.isChargingEelecktrick && !m_eelecktrick.CanEelecktrick())
+                {
+                    if (m_input.eelecktrickReleased)
+                    {
+                        m_eelecktrick.ReleaseHold();
+                    }
                     return;
                 }
                 else
@@ -1654,8 +1686,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     {
                         if (m_state.isInShadowMode == false)
                         {
-                            m_slashCombo?.Cancel();
-                            m_slashCombo?.Reset();
+                            //m_slashCombo?.Cancel();
+                            //m_slashCombo?.Reset();
 
                             PrepareForGroundAttack();
                             if (IsFacingInput())
@@ -1786,23 +1818,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     }
                     else if (m_state.isInShadowMode == false)
                     {
-                        if (m_state.isChargingFinalSlash)
-                        {
-                            if (m_input.finalSlashReleased && !m_finalSlash.CanFinalSlash())
-                            {
-                                m_finalSlash.ExecuteDash();
-                            }
-                            return;
-                        }
-                        else if (m_state.isChargingEelecktrick && !m_eelecktrick.CanEelecktrick())
-                        {
-                            if (m_input.eelecktrickReleased)
-                            {
-                                m_eelecktrick.ReleaseHold();
-                            }
-                            return;
-                        }
-                        else if (!m_state.isChargingFinalSlash)
+                        /*else*/ if (!m_state.isChargingFinalSlash)
                         {
                             if (m_skills.IsModuleActive(PrimarySkill.SwordThrust))
                             {
