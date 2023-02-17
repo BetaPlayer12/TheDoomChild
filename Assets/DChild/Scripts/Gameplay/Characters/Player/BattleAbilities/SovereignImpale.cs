@@ -37,9 +37,9 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
         [SerializeField, BoxGroup("Projectile")]
         private Transform m_startPoint;
         [SerializeField, BoxGroup("Projectile")]
-        private float m_spikeDuration;
-        [SerializeField, BoxGroup("Projectile")]
-        private GameObject m_spike;
+        private ProjectileInfo m_projectileInfo;
+
+        private ProjectileLauncher m_launcher;
 
         private bool m_canSovereignImpale;
         private bool m_canMove;
@@ -66,6 +66,8 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
             m_fxAnimator = m_attackFX.gameObject.GetComponentInChildren<Animator>();
             m_skeletonAnimation = m_attackFX.gameObject.GetComponent<SkeletonAnimation>();
+
+            m_launcher = new ProjectileLauncher(m_projectileInfo, m_startPoint);
         }
 
         //public void SetConfiguration(SlashComboStatsInfo info)
@@ -82,7 +84,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
         public void Execute()
         {
-            //m_state.waitForBehaviour = true;
+            m_state.waitForBehaviour = true;
             m_state.isAttacking = true;
             m_state.canAttack = false;
             m_canSovereignImpale = false;
@@ -96,19 +98,19 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
         public void EndExecution()
         {
-            base.AttackOver();
             //m_sovereignImpaleInfo.ShowCollider(false);
             m_animator.SetBool(m_sovereignImpaleStateAnimationParameter, false);
-            m_canSovereignImpale = true;
+            //m_canSovereignImpale = true;
             m_canMove = true;
-            //m_state.waitForBehaviour = false;
+            base.AttackOver();
         }
 
         public override void Cancel()
         {
-            base.Cancel();
             //m_sovereignImpaleInfo.ShowCollider(false);
+            m_animator.SetBool(m_sovereignImpaleStateAnimationParameter, false);
             m_fxAnimator.Play("Buffer");
+            base.Cancel();
         }
 
         public void EnableCollision(bool value)
@@ -157,84 +159,10 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             }
         }
 
-        private Vector2 GroundPosition(Vector2 startPoint)
-        {
-            int hitCount = 0;
-            //RaycastHit2D hit = Physics2D.Raycast(m_projectilePoint.position, Vector2.down,  1000, DChildUtility.GetEnvironmentMask());
-            RaycastHit2D[] hit = Cast(startPoint, Vector2.down, 1000, true, out hitCount, true);
-            Debug.DrawRay(startPoint, hit[0].point);
-            //var hitPos = (new Vector2(m_projectilePoint.position.x, Vector2.down.y) * hit[0].distance);
-            //return hitPos;
-            return hit[0].point;
-        }
-
-        private static ContactFilter2D m_contactFilter;
-        private static RaycastHit2D[] m_hitResults;
-        private static bool m_isInitialized;
-
-        protected static RaycastHit2D[] Cast(Vector2 origin, Vector2 direction, float distance, bool ignoreTriggers, out int hitCount, bool debugMode = false)
-        {
-            Initialize();
-            m_contactFilter.useTriggers = !ignoreTriggers;
-            hitCount = Physics2D.Raycast(origin, direction, m_contactFilter, m_hitResults, distance);
-#if UNITY_EDITOR
-            if (debugMode)
-            {
-                if (hitCount > 0)
-                {
-                    Debug.DrawRay(origin, direction * m_hitResults[0].distance, Color.cyan, 1f);
-                }
-                else
-                {
-                    Debug.DrawRay(origin, direction * distance, Color.cyan, 1f);
-                }
-            }
-#endif
-            return m_hitResults;
-        }
-
-        private static void Initialize()
-        {
-            if (m_isInitialized == false)
-            {
-                m_contactFilter.useLayerMask = true;
-                m_contactFilter.SetLayerMask(DChildUtility.GetEnvironmentMask());
-                //m_contactFilter.SetLayerMask(Physics2D.GetLayerCollisionMask(DChildUtility.GetEnvironmentMask()));
-                m_hitResults = new RaycastHit2D[16];
-                m_isInitialized = true;
-            }
-        }
-
         public void Summon()
         {
-            LaunchSpike(PuedisYnnusSpike.SkinType.Big, false, Quaternion.identity, true);
-        }
-
-        private void LaunchSpike(PuedisYnnusSpike.SkinType spikeType, bool isRandom, Quaternion rotation, bool useOffset)
-        {
-            var randomOffsetX = UnityEngine.Random.Range(10, 20);
-            randomOffsetX = UnityEngine.Random.Range(0, 2) == 1 ? randomOffsetX : randomOffsetX * -1;
-            var targetPos = useOffset ? new Vector2(m_startPoint.position.x + randomOffsetX, GroundPosition(m_startPoint.position).y) : (Vector2)m_startPoint.position;
-
-            var component = Instantiate(m_spike, targetPos, Quaternion.identity);
-            component.GetComponent<PuedisYnnusSpike>().WillPool(false);
-            component.GetComponent<PuedisYnnusSpike>().RandomScale();
-            component.GetComponent<PuedisYnnusSpike>().SetSkin(spikeType, isRandom);
-
-            component.transform.rotation = rotation;
-            var middleSpawn = UnityEngine.Random.Range(0, 2) == 1 ? true : false;
-            if (middleSpawn)
-            {
-                component.transform.position = new Vector2(m_startPoint.position.x, GroundPosition(m_startPoint.position).y);
-                component.GetComponent<PuedisYnnusSpike>().MassiveSpikeSpawn(m_spikeDuration);
-            }
-            else
-            {
-                if (component.transform.position.x < m_startPoint.position.x)
-                    component.GetComponent<PuedisYnnusSpike>().RightSpikeSpawn(m_spikeDuration);
-                else
-                    component.GetComponent<PuedisYnnusSpike>().LeftSpikeSpawn(m_spikeDuration);
-            }
+            m_launcher.AimAt(new Vector2(m_startPoint.position.x + (m_character.facing == HorizontalDirection.Right ? 10 : -10), m_startPoint.position.y));
+            m_launcher.LaunchProjectile();
         }
     }
 }

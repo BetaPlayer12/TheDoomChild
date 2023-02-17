@@ -77,6 +77,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
         public void Execute()
         {
             //m_state.waitForBehaviour = true;
+            m_state.waitForBehaviour = false;
             m_state.isAttacking = true;
             m_state.canAttack = false;
             m_cacheGravity = m_physics.gravityScale;
@@ -94,7 +95,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
         public void EndExecution()
         {
             base.AttackOver();
-            //m_state.waitForBehaviour = false;
+            m_state.waitForBehaviour = false;
             m_edgedFuryInfo.ShowCollider(false);
             m_physics.gravityScale = m_cacheGravity;
             m_physics.velocity = Vector2.zero;
