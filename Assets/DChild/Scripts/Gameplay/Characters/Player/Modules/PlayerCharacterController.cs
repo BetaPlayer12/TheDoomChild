@@ -68,6 +68,10 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private PlayerBlock m_block;
         private PlayerIntroControlsController m_introController;
 
+        #region Soul Skills
+        private ShadowbladeFX m_shadowBladeFX;
+        #endregion
+
         #region Battle Abilities
         private AirLunge m_airLunge;
         private FireFist m_fireFist;
@@ -387,6 +391,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_projectileThrow.ExecutionRequested += OnProjectileThrowRequest;
             m_block = m_character.GetComponentInChildren<PlayerBlock>();
 
+            m_shadowBladeFX = m_character.GetComponentInChildren<ShadowbladeFX>();
+
             m_airLunge = m_character.GetComponentInChildren<AirLunge>();
             m_fireFist = m_character.GetComponentInChildren<FireFist>();
             m_reaperHarvest = m_character.GetComponentInChildren<ReaperHarvest>();
@@ -464,6 +470,15 @@ namespace DChild.Gameplay.Characters.Players.Modules
                         }
 
                         return;
+                    }
+
+                    if (m_state.isShadowBlade && !m_shadowBladeFX.canShadowblade)
+                    {
+                        m_shadowBladeFX.EnableShadowblade();
+                    }
+                    else if (!m_state.isShadowBlade && m_shadowBladeFX.canShadowblade)
+                    {
+                        m_shadowBladeFX.DisableShadowblade();
                     }
 
                     if ((int)m_character.facing == m_input.horizontalInput /*&& m_earthShaker.CanEarthShaker()*/)
