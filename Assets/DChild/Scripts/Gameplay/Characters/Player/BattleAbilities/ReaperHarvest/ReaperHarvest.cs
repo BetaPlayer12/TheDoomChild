@@ -208,8 +208,6 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             //m_physics.AddForce(new Vector2(m_character.facing == HorizontalDirection.Right ? m_pushForce.x : -m_pushForce.x, m_pushForce.y), ForceMode2D.Impulse);
             m_hitbox.Disable();
             var timer = m_dashDuration;
-            m_wallSensor.Cast();
-            m_edgeSensor.Cast();
             while (timer >= 0 && !m_wallSensor.allRaysDetecting /*&& m_edgeSensor.isDetecting*/)
             {
                 m_wallSensor.Cast();

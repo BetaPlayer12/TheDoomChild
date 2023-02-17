@@ -190,12 +190,8 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             m_state.waitForBehaviour = true;
             m_characterState.isChargingFinalSlash = false;
             var timer = m_dashDuration;
-            m_enemySensor.Cast();
-            //m_wallSensor.Cast();
-            m_edgeSensor.Cast();
-            //m_animator.SetBool(m_finalSlashStateAnimationParameter, true);
             m_animator.SetBool(m_finalSlashDashAnimationParameter, true);
-            while (timer >= 0 && !m_enemySensor.isDetecting /*&& !m_wallSensor.allRaysDetecting*/ && m_edgeSensor.isDetecting)
+            while (timer >= 0 /*&& !m_enemySensor.isDetecting*/ /*&& !m_wallSensor.allRaysDetecting*/)
             {
                 //Debug.Log("Final Slash Dashing!@#");
                 m_enemySensor.Cast();
@@ -203,6 +199,8 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
                 m_edgeSensor.Cast();
                 m_physics.velocity = new Vector2(m_character.facing == HorizontalDirection.Right ? m_pushForce.x : -m_pushForce.x, m_physics.velocity.y);
                 timer -= Time.deltaTime;
+                if (!m_edgeSensor.isDetecting || m_enemySensor.isDetecting)
+                    timer = -1;
                 yield return null;
             }
             m_canDash = false;

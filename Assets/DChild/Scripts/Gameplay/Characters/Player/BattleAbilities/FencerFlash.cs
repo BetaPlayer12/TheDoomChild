@@ -190,21 +190,8 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
         private IEnumerator DashRoutine()
         {
             m_state.waitForBehaviour = true;
-            //switch (m_currentState)
-            //{
-            //    case fencerFlashState.Grounded:
-            //        m_fencerFlashAnimation.ImpactGrounded();
-            //        break;
-            //    case fencerFlashState.Midair:
-            //        m_fencerFlashAnimation.ImpactMidair();
-            //        break;
-            //}
-            //m_physics.AddForce(new Vector2(m_character.facing == HorizontalDirection.Right ? m_pushForce.x : -m_pushForce.x, m_pushForce.y), ForceMode2D.Impulse);
             var timer = m_dashDuration;
-            m_wallSensor.Cast();
-            m_enemySensor.Cast();
-            m_edgeSensor.Cast();
-            while (timer >= 0 && !m_wallSensor.allRaysDetecting && !m_enemySensor.isDetecting)
+            while (timer >= 0 /*&& !m_wallSensor.allRaysDetecting && !m_enemySensor.isDetecting*/)
             {
                 m_wallSensor.Cast();
                 m_enemySensor.Cast();
@@ -213,7 +200,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
                 timer -= Time.deltaTime;
                 if (m_currentState == FencerFlashState.Grounded)
                 {
-                    if (!m_edgeSensor.isDetecting)
+                    if (!m_edgeSensor.isDetecting || m_enemySensor.isDetecting)
                     {
                         timer = -1;
                     }
