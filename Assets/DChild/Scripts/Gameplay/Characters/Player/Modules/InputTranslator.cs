@@ -51,6 +51,17 @@ namespace DChild.Gameplay.Characters.Players.Modules
         public bool edgedFuryPressed;
         public bool edgedFuryReleased;
         public bool ninthCircleSanctionPressed;
+        public bool doomsdayKongPressed;
+        public bool backDiverPressed;
+        public bool barrierPressed;
+        public bool barrierReleased;
+        public bool fencerFlashPressed;
+        public bool diagonalSwordDashPressed;
+        public bool championsUprisingPressed;
+        public bool eelecktrickPressed;
+        public bool eelecktrickReleased;
+        public bool lightningSpearPressed;
+        public bool lightningSpearReleased;
         #endregion
 
         private PlayerInput m_input;
@@ -281,7 +292,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
             {
                 edgedFuryReleased = value.Get<float>() == 1;
                 edgedFuryReleased = !edgedFuryReleased;
-                Debug.Log("Edged Fury Released " + edgedFuryReleased);
             }
         }
 
@@ -290,6 +300,99 @@ namespace DChild.Gameplay.Characters.Players.Modules
             if (enabled == true)
             {
                 ninthCircleSanctionPressed = value.Get<float>() == 1;
+            }
+        }
+
+        private void OnDoomsdayKong(InputValue value)
+        {
+            if (enabled == true)
+            {
+                doomsdayKongPressed = value.Get<float>() == 1;
+            }
+        }
+
+        private void OnBackDiver(InputValue value)
+        {
+            if (enabled == true)
+            {
+                backDiverPressed = value.Get<float>() == 1;
+            }
+        }
+
+        private void OnBarrier(InputValue value)
+        {
+            if (enabled == true)
+            {
+                barrierPressed = value.Get<float>() == 1;
+            }
+        }
+
+        private void OnBarrierReleased(InputValue value)
+        {
+            if (enabled == true)
+            {
+                barrierReleased = value.Get<float>() == 1;
+                barrierReleased = !barrierReleased;
+            }
+        }
+
+        private void OnFencerFlash(InputValue value)
+        {
+            if (enabled == true)
+            {
+                fencerFlashPressed = value.Get<float>() == 1;
+            }
+        }
+
+        private void OnDiagonalSwordDash(InputValue value)
+        {
+            if (enabled == true)
+            {
+                diagonalSwordDashPressed = value.Get<float>() == 1;
+            }
+        }
+
+        private void OnChampionsUprising(InputValue value)
+        {
+            if (enabled == true)
+            {
+                championsUprisingPressed = value.Get<float>() == 1;
+            }
+        }
+
+        private void OnEelecktrick(InputValue value)
+        {
+            if (enabled == true)
+            {
+                var inputValue = value.Get<float>() == 1;
+                eelecktrickPressed = inputValue;
+            }
+        }
+
+        private void OnEelecktrickReleased(InputValue value)
+        {
+            if (enabled == true)
+            {
+                eelecktrickReleased = value.Get<float>() == 1;
+                eelecktrickReleased = !eelecktrickReleased;
+            }
+        }
+
+        private void OnLightningSpear(InputValue value)
+        {
+            if (enabled == true)
+            {
+                var inputValue = value.Get<float>() == 1;
+                lightningSpearPressed = inputValue;
+            }
+        }
+
+        private void OnLightningSpearReleased(InputValue value)
+        {
+            if (enabled == true)
+            {
+                lightningSpearReleased = value.Get<float>() == 1;
+                lightningSpearReleased = !lightningSpearReleased;
             }
         }
 
@@ -427,6 +530,17 @@ namespace DChild.Gameplay.Characters.Players.Modules
             edgedFuryPressed = false;
             edgedFuryReleased = false;
             ninthCircleSanctionPressed = false;
+            doomsdayKongPressed = false;
+            backDiverPressed = false;
+            barrierPressed = false;
+            barrierReleased = false;
+            fencerFlashPressed = false;
+            diagonalSwordDashPressed = false;
+            championsUprisingPressed = false;
+            eelecktrickPressed = false;
+            eelecktrickReleased = false;
+            lightningSpearPressed = false;
+            lightningSpearReleased = false;
         }
 
         private void Reset()
@@ -467,6 +581,17 @@ namespace DChild.Gameplay.Characters.Players.Modules
             edgedFuryPressed = false;
             edgedFuryReleased = false;
             ninthCircleSanctionPressed = false;
+            doomsdayKongPressed = false;
+            backDiverPressed = false;
+            barrierPressed = false;
+            barrierReleased = false;
+            fencerFlashPressed = false;
+            diagonalSwordDashPressed = false;
+            championsUprisingPressed = false;
+            eelecktrickPressed = false;
+            eelecktrickReleased = false;
+            lightningSpearPressed = false;
+            lightningSpearReleased = false;
         }
     }
 }

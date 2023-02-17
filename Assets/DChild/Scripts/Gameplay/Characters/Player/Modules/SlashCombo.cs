@@ -81,11 +81,11 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public override void Reset()
         {
-            base.Reset();
 
             m_currentSlashState = -1;
             m_currentVisualSlashState = 0;
             m_animator.SetInteger(m_slashStateAnimationParameter, m_currentSlashState);
+            base.Reset();
         }
 
         public void Execute()
@@ -106,10 +106,12 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public override void Cancel()
         {
-            base.Cancel();
 
             m_state.isDoingCombo = false;
             m_fxAnimator.Play("Buffer");
+
+            m_canSlashCombo = false;
+            base.Cancel();
         }
 
         public void PlayFX(bool value)
@@ -150,7 +152,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public override void AttackOver()
         {
-            base.AttackOver();
             m_state.canAttack = true;
 
             for (int i = 0; i < m_slashComboInfo.Count; i++)
@@ -166,6 +167,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             }
 
             m_fxAnimator.Play("Buffer");
+            base.AttackOver();
         }
 
         public void ComboEnd()
@@ -177,13 +179,12 @@ namespace DChild.Gameplay.Characters.Players.Modules
             else
             {
                 //Debug.Log("Attack Over");
-                base.AttackOver();
-                m_state.canAttack = true;
                 //m_skeletonAnimation.state.SetEmptyAnimation(0, 0);
                 m_canSlashCombo = false;
                 m_currentSlashState = -1;
                 m_currentVisualSlashState = 0;
                 m_animator.SetInteger(m_slashStateAnimationParameter, m_currentSlashState);
+                //base.AttackOver();
             }
         }
 

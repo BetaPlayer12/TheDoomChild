@@ -32,6 +32,15 @@ namespace DChild.Gameplay.Characters.Players
             EndSoulFireBlast,
             EndEdgedFury,
             EndNinthCircleSanction,
+            EndDoomsdayKong,
+            EndBackDiver,
+            EndBarrier,
+            EndFinalSlash,
+            EndFencerFlash,
+            EndDiagonalSwordDash,
+            EndChampionsUprising,
+            EndEelecktrick,
+            EndLightningSpear,
         }
 
         [SerializeField]
@@ -105,13 +114,40 @@ namespace DChild.Gameplay.Characters.Players
                         player.FoolsVerdictEnd();
                         break;
                     case Command.EndSoulFireBlast:
-                        player.FoolsVerdictEnd();
+                        player.SoulFireBlastEnd();
                         break;
                     case Command.EndEdgedFury:
                         player.EdgedFuryEnd();
                         break;
                     case Command.EndNinthCircleSanction:
                         player.NinthCircleSanctionEnd();
+                        break;
+                    case Command.EndDoomsdayKong:
+                        player.DoomsdayKongEnd();
+                        break;
+                    case Command.EndBackDiver:
+                        player.BackDiverEnd();
+                        break;
+                    case Command.EndBarrier:
+                        player.BarrierEnd();
+                        break;
+                    case Command.EndFinalSlash:
+                        player.FinalSlashEnd();
+                        break;
+                    case Command.EndFencerFlash:
+                        player.FencerFlashEnd();
+                        break;
+                    case Command.EndDiagonalSwordDash:
+                        player.DiagonalSwordDashEnd();
+                        break;
+                    case Command.EndChampionsUprising:
+                        player.ChampionsUprisingEnd();
+                        break;
+                    case Command.EndEelecktrick:
+                        player.EelecktrickEnd();
+                        break;
+                    case Command.EndLightningSpear:
+                        player.LightningSpearEnd();
                         break;
                 }
             }

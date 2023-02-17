@@ -30,6 +30,14 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private SoulFireBlast m_soulFireBlast;
         private EdgedFury m_edgedFury;
         private NinthCircleSanction m_ninthCircleSanction;
+        private DoomsdayKong m_doomsdayKong;
+        private BackDiver m_backDiver;
+        private Barrier m_barrier;
+        private FencerFlash m_fencerFlash;
+        private DiagonalSwordDash m_diagonalSwordDash;
+        private ChampionsUprising m_championsUprising;
+        private Eelecktrick m_eelecktrick;
+        private LightningSpear m_lightningSpear;
         #endregion
 
         public void IdleStateFinished()
@@ -229,7 +237,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void AirLungeEnd()
         {
-            m_airLunge?.AttackOver();
+            //m_airLunge?.AttackOver();
             m_airLunge.EndExecution();
         }
 
@@ -248,6 +256,11 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_fireFist.EnableCollision(false);
         }
 
+        public void ReaperHarvestStartDash()
+        {
+            m_reaperHarvest.StartDash();
+        }
+
         public void ReaperHarvestEnableCollision()
         {
             m_reaperHarvest.EnableCollision(true);
@@ -260,7 +273,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void ReaperHarvestEnd()
         {
-            m_reaperHarvest?.AttackOver();
+            //m_reaperHarvest?.AttackOver();
             m_reaperHarvest.EndExecution();
         }
 
@@ -306,13 +319,13 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void KrakenRageEnd()
         {
-            m_krakenRage?.AttackOver();
+            //m_krakenRage?.AttackOver();
             m_krakenRage.EndExecution();
         }
 
         public void FireFistEnd()
         {
-            m_fireFist?.AttackOver();
+            //m_fireFist?.AttackOver();
             m_fireFist.EndExecution();
         }
 
@@ -323,7 +336,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void SovereignImpaleEnd()
         {
-            m_sovereignImpale?.AttackOver();
+            //m_sovereignImpale?.AttackOver();
             m_sovereignImpale.EndExecution();
         }
 
@@ -344,7 +357,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void HellTridentEnd()
         {
-            m_hellTrident?.AttackOver();
+            //m_hellTrident?.AttackOver();
             m_hellTrident.EndExecution();
         }
 
@@ -355,7 +368,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void FoolsVerdictEnd()
         {
-            m_foolsVerdict?.AttackOver();
+            //m_foolsVerdict?.AttackOver();
             m_foolsVerdict.EndExecution();
         }
 
@@ -366,7 +379,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void SoulFireBlastEnd()
         {
-            m_soulFireBlast?.AttackOver();
+            //m_soulFireBlast?.AttackOver();
             m_soulFireBlast.EndExecution();
         }
 
@@ -382,7 +395,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void EdgedFuryEnd()
         {
-            m_edgedFury?.AttackOver();
+            //m_edgedFury?.AttackOver();
             m_edgedFury.EndExecution();
         }
 
@@ -393,8 +406,128 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void NinthCircleSanctionEnd()
         {
-            m_ninthCircleSanction?.AttackOver();
+            //m_ninthCircleSanction?.AttackOver();
             m_ninthCircleSanction.EndExecution();
+        }
+
+        public void DoomsdayKongSummon()
+        {
+            m_doomsdayKong.Summon();
+        }
+
+        public void DoomsdayKongEnd()
+        {
+            //m_doomsdayKong?.AttackOver();
+            m_doomsdayKong.EndExecution();
+        }
+
+        public void BackDiverEnd()
+        {
+            m_backDiver.EndExecution();
+        }
+
+        public void BarrierEnableShield()
+        {
+            m_barrier.EnableShield(true);
+        }
+
+        public void BarrierDisableShield()
+        {
+            m_barrier.EnableShield(false);
+        }
+
+        public void BarrierEnd()
+        {
+            //m_barrier?.AttackOver();
+            m_barrier.EndExecution();
+        }
+
+        public void FencerFlashStartDash()
+        {
+            m_fencerFlash.StartDash();
+        }
+
+        public void FencerFlashEnableCollision()
+        {
+            m_fencerFlash.EnableCollision(true);
+        }
+
+        public void FencerFlashDisableCollision()
+        {
+            m_fencerFlash.EnableCollision(false);
+        }
+
+        public void FencerFlashEnd()
+        {
+            //m_fencerFlash?.AttackOver();
+            m_fencerFlash.EndExecution();
+        }
+
+        public void DiagonalSwordDashStartDash()
+        {
+            m_diagonalSwordDash.StartDash();
+        }
+
+        public void DiagonalSwordDashEnableCollision()
+        {
+            m_diagonalSwordDash.EnableCollision(true);
+        }
+
+        public void DiagonalSwordDashDisableCollision()
+        {
+            m_diagonalSwordDash.EnableCollision(false);
+        }
+
+        public void DiagonalSwordDashEnd()
+        {
+            //m_diagonalSwordDash?.AttackOver();
+            m_diagonalSwordDash.EndExecution();
+        }
+
+        public void ChampionsUprisingStartDash()
+        {
+            m_championsUprising.StartDash();
+        }
+
+        public void ChampionsUprisingStartUppercut()
+        {
+            m_championsUprising.StartUppercut();
+        }
+
+        public void ChampionsUprisingEnableCollision()
+        {
+            m_championsUprising.EnableCollision(true);
+        }
+
+        public void ChampionsUprisingDisableCollision()
+        {
+            m_championsUprising.EnableCollision(false);
+        }
+
+        public void ChampionsUprisingEnd()
+        {
+            //m_championsUprising?.AttackOver();
+            m_championsUprising.EndExecution();
+        }
+
+        public void EelecktrickSummon()
+        {
+            m_eelecktrick.SummonWhip();
+        }
+
+        public void EelecktrickEnd()
+        {
+            m_eelecktrick.EndExecution();
+        }
+
+        public void LightningSummon()
+        {
+            m_lightningSpear.SummonLightning();
+        }
+
+        public void LightningSpearEnd()
+        {
+            m_lightningSpear.EndExecution();
         }
         #endregion
 
@@ -457,6 +590,14 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_soulFireBlast = character.GetComponentInChildren<SoulFireBlast>();
             m_edgedFury = character.GetComponentInChildren<EdgedFury>();
             m_ninthCircleSanction = character.GetComponentInChildren<NinthCircleSanction>();
+            m_doomsdayKong = character.GetComponentInChildren<DoomsdayKong>();
+            m_backDiver = character.GetComponentInChildren<BackDiver>();
+            m_barrier = character.GetComponentInChildren<Barrier>();
+            m_fencerFlash = character.GetComponentInChildren<FencerFlash>();
+            m_diagonalSwordDash = character.GetComponentInChildren<DiagonalSwordDash>();
+            m_championsUprising = character.GetComponentInChildren<ChampionsUprising>();
+            m_eelecktrick = character.GetComponentInChildren<Eelecktrick>();
+            m_lightningSpear = character.GetComponentInChildren<LightningSpear>();
         }
 
         #region TESTING

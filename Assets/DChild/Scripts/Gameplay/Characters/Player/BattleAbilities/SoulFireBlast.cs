@@ -103,13 +103,13 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
         public void EndExecution()
         {
-            base.AttackOver();
             //m_soulFireBlastInfo.ShowCollider(false);
+            m_physics.velocity = Vector2.zero;
             m_physics.gravityScale = m_cacheGravity;
-            m_canSoulFireBlast = true;
+            //m_canSoulFireBlast = true;
             m_canMove = true;
-            m_state.waitForBehaviour = false;
             m_animator.SetBool(m_soulFireBlastStateAnimationParameter, false);
+            base.AttackOver();
         }
 
         public override void Cancel()

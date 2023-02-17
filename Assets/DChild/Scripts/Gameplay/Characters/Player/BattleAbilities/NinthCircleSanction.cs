@@ -80,14 +80,14 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
         public override void Reset()
         {
-            base.Reset();
             //m_ninthCircleSanctionInfo.ShowCollider(false);
             m_animator.SetBool(m_ninthCircleSanctionStateAnimationParameter, false);
+            base.Reset();
         }
 
         public void Execute()
         {
-            //m_state.waitForBehaviour = true;
+            m_state.waitForBehaviour = true;
             m_state.isAttacking = true;
             m_state.canAttack = false;
             m_canNinthCircleSanction = false;
@@ -101,19 +101,19 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
         public void EndExecution()
         {
-            base.AttackOver();
             //m_ninthCircleSanctionInfo.ShowCollider(false);
             m_animator.SetBool(m_ninthCircleSanctionStateAnimationParameter, false);
-            m_canNinthCircleSanction = true;
+            //m_canNinthCircleSanction = true;
             //m_canMove = true;
-            //m_state.waitForBehaviour = false;
+            base.AttackOver();
         }
 
         public override void Cancel()
         {
-            base.Cancel();
             //m_ninthCircleSanctionInfo.ShowCollider(false);
+            m_animator.SetBool(m_ninthCircleSanctionStateAnimationParameter, false);
             m_fxAnimator.Play("Buffer");
+            base.Cancel();
         }
 
         public void EnableCollision(bool value)
@@ -162,69 +162,13 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             }
         }
 
-//        private Vector2 EnemyPosition(Vector2 startPoint)
-//        {
-//            int hitCount = 0;
-//            RaycastHit2D[] hit = Cast(startPoint, m_character.facing == HorizontalDirection.Right ? Vector2.right : Vector2.left, 100, false, out hitCount, true);
-//            Debug.DrawRay(startPoint, hit[0].point);
-//            if (hit[0])
-//                m_startPoint.position = hit[0].point;
-//            else
-//                m_startPoint.localPosition = m_startPointCache;
-
-//            return hit[0] ? hit[0].point : /*new Vector2(startPoint.x + (m_character.facing == HorizontalDirection.Right ? 10 : -10), startPoint.y)*/ Vector2.zero;
-//        }
-
-//        private static ContactFilter2D m_contactFilter;
-//        private static RaycastHit2D[] m_hitResults;
-//        private static bool m_isInitialized;
-
-//        protected static RaycastHit2D[] Cast(Vector2 origin, Vector2 direction, float distance, bool ignoreTriggers, out int hitCount, bool debugMode = false)
-//        {
-//            Initialize();
-//            m_contactFilter.useTriggers = !ignoreTriggers;
-//            Debug.Log("Detect Triggers " + m_contactFilter.useTriggers);
-//            hitCount = Physics2D.Raycast(origin, direction, m_contactFilter, m_hitResults, distance);
-//#if UNITY_EDITOR
-//            if (debugMode)
-//            {
-//                if (hitCount > 0)
-//                {
-//                    Debug.DrawRay(origin, direction * m_hitResults[0].distance, Color.cyan, 1f);
-//                }
-//                else
-//                {
-//                    Debug.DrawRay(origin, direction * distance, Color.cyan, 1f);
-//                }
-//            }
-//#endif
-//            return m_hitResults;
-//        }
-
-//        private static void Initialize()
-//        {
-//            if (m_isInitialized == false)
-//            {
-//                m_contactFilter.useLayerMask = true;
-//                m_contactFilter.SetLayerMask(LayerMask.NameToLayer("Enemy")/*DChildUtility.GetEnvironmentMask()*/);
-//                m_hitResults = new RaycastHit2D[16];
-//                m_isInitialized = true;
-//            }
-//        }
-
         public void Summon()
         {
             m_enemySensor.Cast();
             var hits = m_enemySensor.GetHits();
             m_startPoint.position = hits[0].point;
-            var target = /*EnemyPosition(m_startPoint.position)*/hits[0].point;
-            Debug.Log("Ninth Circle Sanction Target " + target);
+            var target = hits[0].point;
             m_launcher.AimAt(target);
-            //if (m_canShoot)
-            //{
-            //    m_canShoot = false;
-            //    m_launcher.LaunchProjectile();
-            //}
             if (target != Vector2.zero)
                 m_launcher.LaunchProjectile();
             m_startPoint.localPosition = m_startPointCache;

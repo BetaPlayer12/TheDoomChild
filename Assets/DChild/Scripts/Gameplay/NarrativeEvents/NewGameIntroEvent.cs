@@ -52,6 +52,7 @@ namespace DChild.Gameplay.Narrative
         private ExtraDatabases m_database;
         [SerializeField]
         private InputActionReference m_wakeUpInput;
+        private PlayerInput m_playerInput;
 
         private bool m_isDone;
         bool hasPressedPrompt = false;
@@ -107,16 +108,10 @@ namespace DChild.Gameplay.Narrative
         private IEnumerator PromptPlayerToStandRoutine()
         {
             GameplaySystem.playerManager.OverrideCharacterControls();
-            var playerInput = GameplaySystem.playerManager.player.GetComponentInChildren<PlayerInput>();
-            var actionMap = playerInput.actions.FindActionMap("Gameplay");
-            playerInput.enabled = false;
-            yield return null;
-            actionMap.FindAction(m_wakeUpInput.action.id).performed += OnInputPerformed;
-            Debug.LogError(m_wakeUpInput.action.name);
-            playerInput.enabled = true;
-            yield return null;
-            playerInput.actions.FindActionMap("Gameplay").Enable();
             var skeleton = GameplaySystem.playerManager.player.character.GetComponentInChildren<SkeletonAnimation>();
+            yield return null;
+            yield return GameplaySystem.playerManager.PlayerActionChange(PlayerInputFindActionMap);
+            GameplaySystem.playerManager.player.GetComponentInChildren<PlayerInput>().actions.FindActionMap("Gameplay").Enable();
             m_wakeUpPrompt.Show();
 
             yield return WakeupPromptRoutine();
@@ -139,7 +134,6 @@ namespace DChild.Gameplay.Narrative
         private IEnumerator WakeupPromptRoutine()
         {
             hasPressedPrompt = false;
-            m_wakeUpInput.action.performed += OnInputPerformed;
             while (hasPressedPrompt == false)
             {
                 yield return null;
@@ -148,5 +142,12 @@ namespace DChild.Gameplay.Narrative
             m_wakeUpPrompt.Hide();
             m_cameraToDisable.enabled = false;
         }
+
+        private void PlayerInputFindActionMap(PlayerInput playerInput)
+        {
+            playerInput.actions.FindAction(m_wakeUpInput.action.name).performed += OnInputPerformed;
+        }
+
     }
+
 }

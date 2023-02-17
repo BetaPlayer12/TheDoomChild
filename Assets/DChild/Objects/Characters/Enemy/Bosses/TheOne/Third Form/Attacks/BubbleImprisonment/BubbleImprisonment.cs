@@ -39,14 +39,14 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator BubbleEmerge()
         {
+            m_animatorImplode.SetInteger("BubPool_State", 1);
             m_animatorPool.SetInteger("BubState", 1);
-            yield return new WaitForSeconds(timeBetweenAnimations);
-            m_animatorImplode.SetInteger("BubState", 1);
-            m_trapCollider.enabled = true;
+            yield return new WaitForSeconds(timeBetweenAnimations);     
         }
 
         private IEnumerator BubbleExplode()
         {
+            m_trapCollider.enabled = true;
             yield return new WaitForSeconds(timeBetweenAnimations);
             m_animatorImplode.SetInteger("BubState", 2);
             m_damageCollider.enabled = true;
