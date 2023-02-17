@@ -69,6 +69,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         {
             m_rigidbody.gravityScale = m_cacheGravity;
             m_adjustGravity = true;
+            m_canAirAttack = false;
 
             if (m_executedTypes.Count > 0)
             {
