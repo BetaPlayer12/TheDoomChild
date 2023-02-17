@@ -4,12 +4,13 @@ using UnityEngine;
 using DChild.Gameplay.Pooling;
 using Sirenix.OdinInspector;
 using Spine.Unity;
+using Holysoft.Event;
 
 namespace DChild.Gameplay.Characters.Enemies
 {
     public class TentacleCeiling : MonoBehaviour
     {
-        private BoxCollider2D m_tentacleHitBox;
+        //private BoxCollider2D m_tentacleHitBox;
 
         [SerializeField, TabGroup("Reference")]
         protected SpineRootAnimation m_animation;
@@ -28,6 +29,9 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, Spine.Unity.SpineAnimation(dataField = "m_skeletonAnimation")]
         private string m_waitForInputAnimation;
 
+        public event EventAction<EventActionArgs> AttackStart;
+        public event EventAction<EventActionArgs> AttackDone;
+
         public IEnumerator AnticipateAttack()
         {
             m_animation.SetAnimation(0, m_anticipationLoopAnimation, true);
@@ -36,6 +40,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         public IEnumerator Attack(float duration)
         {
+            AttackStart?.Invoke(this, EventActionArgs.Empty);
             m_animation.SetAnimation(0, m_attackAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_attackAnimation);
 
@@ -53,14 +58,16 @@ namespace DChild.Gameplay.Characters.Enemies
         public IEnumerator Retract()
         {
             m_animation.SetAnimation(0, m_retractAnimation, false);
-            m_tentacleHitBox.enabled = false;
+            //m_tentacleHitBox.enabled = false;
             yield return new WaitForAnimationComplete(m_animation.animationState, m_retractAnimation);
+
+            AttackDone?.Invoke(this, EventActionArgs.Empty);
         }
 
         private void Start()
         {
             m_animation.SetAnimation(0, m_waitForInputAnimation, true);
-            m_tentacleHitBox = this.GetComponent<BoxCollider2D>();
+            //m_tentacleHitBox = this.GetComponent<BoxCollider2D>();
         }
 
         [Button]
