@@ -1,6 +1,7 @@
 ﻿
 using DChild.Gameplay.Characters.Enemies;
 using DChild.Gameplay.Characters.NPC;
+using DChild.Gameplay.Characters.Players.SoulSkills;
 using DChild.Gameplay.Combat.UI;
 using DChild.Gameplay.Environment;
 using DChild.Gameplay.Items;
@@ -47,6 +48,8 @@ namespace DChild.Gameplay.Systems
         private WorldMapHandler m_worldMap;
         [SerializeField]
         private NavigationMapManager m_navMap;
+        [SerializeField]
+        private RegenerationEffectsHandler m_regen;
 
 
         [FoldoutGroup("Side Notification")]
@@ -163,7 +166,7 @@ namespace DChild.Gameplay.Systems
                 m_bossCombat.HideBossName();
             }
 
-            
+
         }
 
         public void RevealBossName()
@@ -286,6 +289,23 @@ namespace DChild.Gameplay.Systems
                 case StoreNotificationType.Extras:
                     break;
             }
+        }
+        public void ActivateHealthRegenEffect(PassiveRegeneration.Handle handle)
+        {
+            m_regen.SetHealthRegenReference(handle);
+            m_regen.HealthRegenEffect(true);
+        }
+        public void DeactivateHealthRegenEffect()
+        {
+            m_regen.HealthRegenEffect(false);
+        }
+        public void ActivateShadowRegenEffect()
+        {
+            m_regen.ShadowRegenEffect(true);
+        }
+        public void DeactivateShadowRegenEffect()
+        {
+            m_regen.ShadowRegenEffect(false);
         }
     }
 }

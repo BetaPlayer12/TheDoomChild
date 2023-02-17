@@ -10,8 +10,6 @@ public class FlowerEnvi : MonoBehaviour
 {
     [SerializeField]
     private SpineRootAnimation m_spine;
-    [SerializeField]
-    private bool m_autoFlinch;
 #if UNITY_EDITOR
     [SerializeField]
     private SkeletonAnimation m_skeletonFAnimation;

@@ -44,6 +44,7 @@ namespace DChild.Gameplay.Characters.NPC
 
         public Vector3 promptPosition => transform.position + m_promptOffset;
 
+        [Button]
         public void Interact(Character character)
         {
             m_trigger.OnUse(character.transform);
