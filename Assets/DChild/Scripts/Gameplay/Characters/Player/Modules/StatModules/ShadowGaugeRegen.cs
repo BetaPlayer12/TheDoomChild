@@ -1,4 +1,5 @@
-﻿using Holysoft.Gameplay;
+﻿using Holysoft.Event;
+using Holysoft.Gameplay;
 using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
@@ -19,12 +20,18 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private bool m_enableDelayedRegen;
         private int m_previousShadowGauge;
         private bool m_isEnabled;
+        private IPlayerModifer m_modifier;
 
         private bool shadowGaugeHasBeenReduced => m_previousShadowGauge > m_shadowGauge.currentValue;
+
+        public event EventAction<EventActionArgs> RegenDelayed;
+        public event EventAction<EventActionArgs> RegenStarted;
+        public event EventAction<EventActionArgs> RegenEnd;
 
         public void Initialize(ComplexCharacterInfo info)
         {
             m_shadowGauge = info.magic;
+            m_modifier = info.modifier;
             m_previousShadowGauge = m_shadowGauge.currentValue;
         }
 
@@ -34,6 +41,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
         }
 
         public bool CanRegen() => m_isEnabled && m_shadowGauge.currentValue < m_shadowGauge.maxValue;
+
+        public bool IsRegenerating() => m_enableDelayedRegen == false;
 
         public void Execute()
         {
@@ -51,6 +60,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     if (m_delayTimer <= 0)
                     {
                         m_enableDelayedRegen = false;
+                        RegenStarted?.Invoke(this, EventActionArgs.Empty);
                     }
                 }
             }
@@ -59,8 +69,9 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 m_delayTimer = m_delayBeforeRegenStart;
                 m_enableDelayedRegen = true;
                 m_stackingRegen = 0;
+                RegenDelayed?.Invoke(this, EventActionArgs.Empty);
             }
-            else
+            else if (CanRegen())
             {
                 RegenerateGauge(deltaTime);
             }
@@ -69,12 +80,19 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         private void RegenerateGauge(float deltaTime)
         {
-            m_stackingRegen += m_regenRate * deltaTime;
+            var modifiedRegen = m_regenRate * m_modifier.Get(PlayerModifier.ShadowMagicRegeneration);
+            m_stackingRegen += modifiedRegen * deltaTime;
             if (m_stackingRegen >= 1)
             {
                 var integer = Mathf.FloorToInt(m_stackingRegen);
                 m_stackingRegen -= integer;
                 m_shadowGauge.AddCurrentValue(integer);
+
+                if (CanRegen() == false)
+                {
+                    RegenEnd?.Invoke(this, EventActionArgs.Empty);
+                    m_stackingRegen = 0;
+                }
             }
         }
     }

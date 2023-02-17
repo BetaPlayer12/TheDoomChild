@@ -36,6 +36,8 @@ namespace DChild.Gameplay.Characters.Players.SoulSkills
 
         [SerializeField, LabelText("Stat")]
         private Stats m_toChange;
+        [SerializeField]
+        private bool m_isPercentage;
         [SerializeField, Wrap(1f, 100f), SuffixLabel("%", overlay: true)]
         private int m_value;
         [SerializeField, LabelText("Stat")]
@@ -46,9 +48,12 @@ namespace DChild.Gameplay.Characters.Players.SoulSkills
         private int m_connectedSoulSkillID;
         private List<ReferenceInfo> m_reference;
         private bool m_initialized;
+        private float m_maxhealth;
+        private float m_maxmagic;
 
         public void AttachTo(int soulSkillInstanceID, IPlayer player)
         {
+
             if (m_initialized == false)
             {
                 m_connectedSoulSkillID = soulSkillInstanceID;
@@ -57,8 +62,9 @@ namespace DChild.Gameplay.Characters.Players.SoulSkills
 
             if (m_toChange == Stats.HP)
             {
+                m_maxhealth = player.health.maxValue;
                 var referenceInfo = new ReferenceInfo(player, player.health);
-                if (IsValid((float)player.health.currentValue / player.health.maxValue))
+                if (IsValid(player.health.currentValue))
                 {
                     for (int i = 0; i < m_modules.Length; i++)
                     {
@@ -66,13 +72,15 @@ namespace DChild.Gameplay.Characters.Players.SoulSkills
                     }
                     referenceInfo.effectApplied = true;
                 }
+              
                 player.health.ValueChanged += OnStatChange;
                 m_reference.Add(referenceInfo);
             }
             else
             {
+                m_maxmagic = player.magic.maxValue;
                 var referenceInfo = new ReferenceInfo(player, player.magic);
-                if (IsValid((float)player.magic.currentValue / player.magic.maxValue))
+                if (IsValid(player.health.currentValue))
                 {
                     for (int i = 0; i < m_modules.Length; i++)
                     {
@@ -89,11 +97,32 @@ namespace DChild.Gameplay.Characters.Players.SoulSkills
         {
             if (m_toChange == Stats.HP)
             {
+                
+                var referenceInfo = new ReferenceInfo(player, player.health);
+                if (IsValid(player.health.currentValue))
+                {
+                    for (int i = 0; i < m_modules.Length; i++)
+                    {
+                        m_modules[i].DetachFrom(soulSkillInstanceID, player);
+                    }
+                    referenceInfo.effectApplied = true;
+                }
                 player.health.ValueChanged -= OnStatChange;
+                m_reference.Clear();
             }
             else
             {
+                var referenceInfo = new ReferenceInfo(player, player.health);
+                if (IsValid(player.health.currentValue))
+                {
+                    for (int i = 0; i < m_modules.Length; i++)
+                    {
+                        m_modules[i].DetachFrom(soulSkillInstanceID, player);
+                    }
+                    referenceInfo.effectApplied = true;
+                }
                 player.magic.ValueChanged -= OnStatChange;
+                m_reference.Clear();
             }
 
             for (int i = 0; i < m_reference.Count; i++)
@@ -104,17 +133,44 @@ namespace DChild.Gameplay.Characters.Players.SoulSkills
                     break;
                 }
             }
+
+          
+
         }
 
         private bool IsValid(float currentPercent)
         {
-            if (m_comparison == Comparison.Greater)
+            float maxvalue;
+            if (m_toChange == Stats.HP)
             {
+                 maxvalue = m_maxhealth;
+            }
+            else
+            {
+                 maxvalue = m_maxmagic;
+            }
+                if (m_comparison == Comparison.Greater)
+            {
+                if (m_isPercentage)
+                {
+                    maxvalue = maxvalue * (m_value / 100f);
+                    return currentPercent > maxvalue;
+                    
+                }
                 return currentPercent > m_value;
             }
             else
             {
+                if (m_isPercentage)
+                {
+                    maxvalue = maxvalue * (m_value / 100f);
+                    return currentPercent < maxvalue;
+
+                }
+
                 return currentPercent < m_value;
+                
+                
             }
         }
 
@@ -122,7 +178,7 @@ namespace DChild.Gameplay.Characters.Players.SoulSkills
         {
             var referenceInfo = GetReferenceInfo(sender);
 
-            if (IsValid(eventArgs.percentValue))
+            if (IsValid(referenceInfo.player.health.currentValue))
             {
                 if (referenceInfo.effectApplied == false)
                 {

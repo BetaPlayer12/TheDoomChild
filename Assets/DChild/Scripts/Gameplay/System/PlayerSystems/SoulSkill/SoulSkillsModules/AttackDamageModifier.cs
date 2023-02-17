@@ -1,5 +1,6 @@
 ﻿using DChild.Gameplay.Combat;
 using Sirenix.OdinInspector;
+using System;
 using UnityEngine;
 #if UNITY_EDITOR
 #endif
@@ -13,12 +14,15 @@ namespace DChild.Gameplay.Characters.Players.SoulSkills
 
         public void AttachTo(int soulSkillInstanceID, IPlayer player)
         {
-            player.weapon.SetAddedDamage(m_damageValue);
+            Damage temp = player.weapon.damage;
+            float damage = temp.value * (m_damageValue / 100f);
+            int Calculateddamage = (int)Math.Ceiling(damage);
+            player.weapon.SetAddedDamage(Calculateddamage);
         }
 
         public void DetachFrom(int soulSkillInstanceID, IPlayer player)
         {
-            player.weapon.SetAddedDamage(-m_damageValue);
+            player.weapon.SetAddedDamage(0);
         }
     }
 }
