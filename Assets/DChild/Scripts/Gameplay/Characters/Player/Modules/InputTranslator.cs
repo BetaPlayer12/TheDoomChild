@@ -55,6 +55,13 @@ namespace DChild.Gameplay.Characters.Players.Modules
         public bool backDiverPressed;
         public bool barrierPressed;
         public bool barrierReleased;
+        public bool fencerFlashPressed;
+        public bool diagonalSwordDashPressed;
+        public bool championsUprisingPressed;
+        public bool eelecktrickPressed;
+        public bool eelecktrickReleased;
+        public bool lightningSpearPressed;
+        public bool lightningSpearReleased;
         #endregion
 
         private PlayerInput m_input;
@@ -329,6 +336,66 @@ namespace DChild.Gameplay.Characters.Players.Modules
             }
         }
 
+        private void OnFencerFlash(InputValue value)
+        {
+            if (enabled == true)
+            {
+                fencerFlashPressed = value.Get<float>() == 1;
+            }
+        }
+
+        private void OnDiagonalSwordDash(InputValue value)
+        {
+            if (enabled == true)
+            {
+                diagonalSwordDashPressed = value.Get<float>() == 1;
+            }
+        }
+
+        private void OnChampionsUprising(InputValue value)
+        {
+            if (enabled == true)
+            {
+                championsUprisingPressed = value.Get<float>() == 1;
+            }
+        }
+
+        private void OnEelecktrick(InputValue value)
+        {
+            if (enabled == true)
+            {
+                var inputValue = value.Get<float>() == 1;
+                eelecktrickPressed = inputValue;
+            }
+        }
+
+        private void OnEelecktrickReleased(InputValue value)
+        {
+            if (enabled == true)
+            {
+                eelecktrickReleased = value.Get<float>() == 1;
+                eelecktrickReleased = !eelecktrickReleased;
+            }
+        }
+
+        private void OnLightningSpear(InputValue value)
+        {
+            if (enabled == true)
+            {
+                var inputValue = value.Get<float>() == 1;
+                lightningSpearPressed = inputValue;
+            }
+        }
+
+        private void OnLightningSpearReleased(InputValue value)
+        {
+            if (enabled == true)
+            {
+                lightningSpearReleased = value.Get<float>() == 1;
+                lightningSpearReleased = !lightningSpearReleased;
+            }
+        }
+
         private void OnSlashHeld(InputValue value)
         {
             if (enabled == true)
@@ -467,6 +534,13 @@ namespace DChild.Gameplay.Characters.Players.Modules
             backDiverPressed = false;
             barrierPressed = false;
             barrierReleased = false;
+            fencerFlashPressed = false;
+            diagonalSwordDashPressed = false;
+            championsUprisingPressed = false;
+            eelecktrickPressed = false;
+            eelecktrickReleased = false;
+            lightningSpearPressed = false;
+            lightningSpearReleased = false;
         }
 
         private void Reset()
@@ -511,6 +585,13 @@ namespace DChild.Gameplay.Characters.Players.Modules
             backDiverPressed = false;
             barrierPressed = false;
             barrierReleased = false;
+            fencerFlashPressed = false;
+            diagonalSwordDashPressed = false;
+            championsUprisingPressed = false;
+            eelecktrickPressed = false;
+            eelecktrickReleased = false;
+            lightningSpearPressed = false;
+            lightningSpearReleased = false;
         }
     }
 }

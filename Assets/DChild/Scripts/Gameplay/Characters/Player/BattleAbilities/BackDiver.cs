@@ -52,6 +52,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
         public bool CanBackDiver() => m_canBackDiver;
         //public bool CanMove() => m_canMove;
+        private bool m_hasExecuted;
         public bool HaveSpacetoExecute()
         {
             m_backWallSensor.Cast();
@@ -86,6 +87,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
         public void Execute()
         {
+            m_hasExecuted = true;
             m_state.waitForBehaviour = true;
             m_state.isAttacking = true;
             m_state.canAttack = false;
@@ -102,21 +104,25 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
         public void EndExecution()
         {
-            base.AttackOver();
+            m_hasExecuted = false;
             //m_backDiverInfo.ShowCollider(false);
             //m_hitbox.Enable();
             m_animator.SetBool(m_backDiverStateAnimationParameter, false);
             //m_canBackDiver = true;
             //m_canMove = true;
-            m_state.waitForBehaviour = false;
+            base.AttackOver();
         }
 
         public override void Cancel()
         {
-            base.Cancel();
-            //m_backDiverInfo.ShowCollider(false);
-            m_fxAnimator.Play("Buffer");
-            m_hitbox.Enable();
+            if (m_hasExecuted)
+            {
+                m_hasExecuted = false;
+                base.Cancel();
+                //m_backDiverInfo.ShowCollider(false);
+                m_fxAnimator.Play("Buffer");
+                m_hitbox.Enable();
+            }
         }
 
         public void EnableCollision(bool value)
@@ -124,15 +130,6 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             m_rigidBody.WakeUp();
             m_backDiverInfo.ShowCollider(value);
             m_attackFX.transform.position = m_backDiverInfo.fxPosition.position;
-
-            //TEST
-            //m_enemySensor.Cast();
-            //m_wallSensor.Cast();
-            //m_edgeSensor.Cast();
-            //if (!m_enemySensor.isDetecting && !m_wallSensor.allRaysDetecting && m_edgeSensor.isDetecting && value)
-            //{
-            //    m_physics.AddForce(new Vector2(m_character.facing == HorizontalDirection.Right ? m_pushForce.x : -m_pushForce.x, m_pushForce.y), ForceMode2D.Impulse);
-            //}
         }
 
         public void ResetBackDiver()
@@ -154,21 +151,6 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
                 m_canBackDiver = true;
             }
         }
-
-        //public void HandleMovementTimer()
-        //{
-        //    if (m_backDiverMovementCooldownTimer > 0)
-        //    {
-        //        m_backDiverMovementCooldownTimer -= GameplaySystem.time.deltaTime;
-        //        m_canMove = false;
-        //    }
-        //    else
-        //    {
-        //        //Debug.Log("Can Move");
-        //        m_backDiverMovementCooldownTimer = m_backDiverMovementCooldown;
-        //        m_canMove = true;
-        //    }
-        //}
 
         private IEnumerator HitboxRoutine()
         {

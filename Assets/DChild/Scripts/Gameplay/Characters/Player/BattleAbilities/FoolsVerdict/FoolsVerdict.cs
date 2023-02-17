@@ -86,7 +86,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
         public void Execute()
         {
-            //m_state.waitForBehaviour = true;
+            m_state.waitForBehaviour = true;
             m_state.isAttacking = true;
             m_state.canAttack = false;
             m_canFoolsVerdict = false;
@@ -102,15 +102,14 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
         public void EndExecution()
         {
-            base.AttackOver();
             //m_foolsVerdictInfo.ShowCollider(false);
-            m_canFoolsVerdict = true;
+            //m_canFoolsVerdict = true;
             m_canMove = true;
-            //m_state.waitForBehaviour = false;
             m_animator.SetBool(m_foolsVerdictStateAnimationParameter, false);
             if (m_foolsVerdictGO.activeSelf)
                 m_foolsVerdictStartAnimation.Stop();
             m_foolsVerdictGO.SetActive(false);
+            base.AttackOver();
         }
 
         public override void Cancel()
