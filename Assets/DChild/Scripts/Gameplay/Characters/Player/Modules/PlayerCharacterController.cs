@@ -757,9 +757,18 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 {
                     m_groundedness?.Evaluate();
                 }
-                if (m_input.edgedFuryReleased)
+                if (m_state.isChargingLightningSpear && !m_lightningSpear.CanLightningSpear())
+                {
+                    if (m_input.lightningSpearReleased)
+                    {
+                        m_lightningSpear.ReleaseHold();
+                    }
+                    return;
+                }
+                if (m_input.edgedFuryReleased && !m_state.isChargingLightningSpear)
                 {
                     m_edgedFury?.EndExecution();
+                    return;
                 }
             }
             else if (m_state.isStickingToWall)
@@ -1056,14 +1065,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
                         return;
                     }
-                    else if (m_state.isChargingLightningSpear && !m_lightningSpear.CanLightningSpear())
-                    {
-                        if (m_input.lightningSpearReleased)
-                        {
-                            m_lightningSpear.ReleaseHold();
-                        }
-                        return;
-                    }
                     #endregion
                 }
 
@@ -1251,7 +1252,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 }
                 if (m_state.isChargingFinalSlash)
                 {
-                    if (m_input.finalSlashReleased && !m_finalSlash.CanFinalSlash())
+                    if (m_input.finalSlashReleased && !m_finalSlash.CanFinalSlash() || m_input.slashPressed && !m_finalSlash.CanFinalSlash())
                     {
                         m_finalSlash.ExecuteDash();
                     }
