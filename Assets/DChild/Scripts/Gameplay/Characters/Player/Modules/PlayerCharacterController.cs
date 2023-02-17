@@ -1234,6 +1234,22 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     HandleSwordThrust();
                     return;
                 }
+                if (m_state.isChargingFinalSlash)
+                {
+                    if (m_input.finalSlashReleased && !m_finalSlash.CanFinalSlash())
+                    {
+                        m_finalSlash.ExecuteDash();
+                    }
+                    return;
+                }
+                else if (m_state.isChargingEelecktrick && !m_eelecktrick.CanEelecktrick())
+                {
+                    if (m_input.eelecktrickReleased)
+                    {
+                        m_eelecktrick.ReleaseHold();
+                    }
+                    return;
+                }
                 else
                 {
                     m_attackRegistrator?.ResetHitCache();
@@ -1654,8 +1670,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     {
                         if (m_state.isInShadowMode == false)
                         {
-                            m_slashCombo?.Cancel();
-                            m_slashCombo?.Reset();
+                            //m_slashCombo?.Cancel();
+                            //m_slashCombo?.Reset();
 
                             PrepareForGroundAttack();
                             if (IsFacingInput())
@@ -1786,23 +1802,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     }
                     else if (m_state.isInShadowMode == false)
                     {
-                        if (m_state.isChargingFinalSlash)
-                        {
-                            if (m_input.finalSlashReleased && !m_finalSlash.CanFinalSlash())
-                            {
-                                m_finalSlash.ExecuteDash();
-                            }
-                            return;
-                        }
-                        else if (m_state.isChargingEelecktrick && !m_eelecktrick.CanEelecktrick())
-                        {
-                            if (m_input.eelecktrickReleased)
-                            {
-                                m_eelecktrick.ReleaseHold();
-                            }
-                            return;
-                        }
-                        else if (!m_state.isChargingFinalSlash)
+                        /*else*/ if (!m_state.isChargingFinalSlash)
                         {
                             if (m_skills.IsModuleActive(PrimarySkill.SwordThrust))
                             {

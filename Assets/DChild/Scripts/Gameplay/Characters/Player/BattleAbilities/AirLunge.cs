@@ -29,6 +29,8 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
         private RaySensor m_wallSensor;
         [SerializeField, BoxGroup("Sensors")]
         private RaySensor m_edgeSensor;
+        [SerializeField, BoxGroup("Sensors")]
+        private RaySensor m_cielingSensor;
 
         [SerializeField]
         private Vector2 m_pushForce;
@@ -44,7 +46,8 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
         private SkeletonAnimation m_skeletonAnimation;
 
         public bool CanAirLunge() => m_canAirLunge;
-        //public bool CanMove() => m_canMove;
+
+        private Coroutine m_cielingCheckRoutine;
 
         public override void Initialize(ComplexCharacterInfo info)
         {
@@ -83,6 +86,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             m_animator.SetBool(m_airLungeStateAnimationParameter, true);
             m_airLungeCooldownTimer = m_airLungeCooldown;
             m_airLungeMovementCooldownTimer = m_airLungeMovementCooldown;
+            m_cielingCheckRoutine = StartCoroutine(CielingCheckRoutine());
             //m_attacker.SetDamageModifier(m_slashComboInfo[m_currentSlashState].damageModifier * m_modifier.Get(PlayerModifier.AttackDamage));
         }
 
@@ -91,15 +95,26 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             m_airLungeInfo.ShowCollider(false);
             //m_canAirLunge = true;
             //m_canMove = true;
+            if (m_cielingCheckRoutine != null)
+            {
+                StopCoroutine(m_cielingCheckRoutine);
+                m_cielingCheckRoutine = null;
+            }
             m_animator.SetBool(m_airLungeStateAnimationParameter, false);
             base.AttackOver();
         }
 
         public override void Cancel()
         {
-            base.Cancel();
+            if (m_cielingCheckRoutine != null)
+            {
+                StopCoroutine(m_cielingCheckRoutine);
+                m_cielingCheckRoutine = null;
+            }
             m_airLungeInfo.ShowCollider(false);
             m_fxAnimator.Play("Buffer");
+            base.Cancel();
+            m_animator.SetBool(m_airLungeStateAnimationParameter, false);
         }
 
         public void EnableCollision(bool value)
@@ -131,6 +146,17 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
                 m_state.isAttacking = false;
                 m_canAirLunge = true;
             }
+        }
+
+        private IEnumerator CielingCheckRoutine()
+        {
+            while (!m_cielingSensor.isDetecting)
+            {
+                m_cielingSensor.Cast();
+                yield return null;
+            }
+            m_animator.SetBool(m_airLungeStateAnimationParameter, false);
+            yield return null;
         }
 
         //public void HandleMovementTimer()

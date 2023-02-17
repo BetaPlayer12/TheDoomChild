@@ -86,8 +86,8 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
         public void Execute()
         {
             m_hasExecuted = true;
-            //m_state.waitForBehaviour = true;
-            //m_state.isAttacking = true;
+            m_state.waitForBehaviour = false;
+            m_state.isAttacking = true;
             m_characterState.isChargingEelecktrick = true;
             //m_state.canAttack = false;
             m_canEelecktrick = false;
@@ -121,11 +121,11 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
         public void EndExecution()
         {
             m_hasExecuted = false;
-            m_animator.SetBool(m_eelecktrickStateAnimationParameter, false);
             m_state.canAttack = true;
             m_state.isAttacking = false;
             m_characterState.isChargingEelecktrick = false;
             base.AttackOver();
+            m_animator.SetBool(m_eelecktrickStateAnimationParameter, false);
             //m_eelecktrickInfo.ShowCollider(false);
             //m_canEelecktrick = true;
             //m_canMove = true;
@@ -136,11 +136,11 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             if (m_hasExecuted)
             {
                 m_hasExecuted = false;
-                base.Cancel();
                 //m_eelecktrickInfo.ShowCollider(false);
                 m_fxAnimator.Play("Buffer");
                 StopAllCoroutines();
                 m_characterState.isChargingEelecktrick = false;
+                base.Cancel();
                 m_animator.SetBool(m_eelecktrickStateAnimationParameter, false);
             }
         }
