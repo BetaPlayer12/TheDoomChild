@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using DChild.Gameplay.Pooling;
+using Holysoft.Event;
 
 namespace DChild.Gameplay.Characters.Enemies
 {
@@ -24,10 +25,14 @@ namespace DChild.Gameplay.Characters.Enemies
 
         [SerializeField]
         private Renderer m_renderer;
+        private bool m_moveTentacle;
 
         public float moveSpeed;
         public float attackDuration;
         private float m_attackDurationValue;
+
+        public event EventAction<EventActionArgs> AttackStart;
+        public event EventAction<EventActionArgs> AttackDone;
 
         private void Start()
         {
@@ -43,6 +48,8 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 attackDuration -= GameplaySystem.time.deltaTime;
 
+                Debug.Log("Attack Duration: " + attackDuration);
+
                 if(attackDuration > 0)
                 {
                     if (m_isLeftTentacle)
@@ -50,14 +57,32 @@ namespace DChild.Gameplay.Characters.Enemies
                     else
                         transform.Translate(Vector2.left * moveSpeed * GameplaySystem.time.deltaTime);
                 }
-                else
+
+                if (attackDuration < 0)
                 {
                     if (m_renderer.isVisible)
                         transform.Translate(Vector2.down * moveSpeed * GameplaySystem.time.deltaTime);
-                    ResetTentacle();
-                    m_startAttack = false;
-                }                
-            }
+
+                    if (!m_renderer.isVisible)
+                        ResetTentacle();
+                }
+
+                AttackDone?.Invoke(this, EventActionArgs.Empty);
+            }           
+        }
+
+        public void StartAttack()
+        {
+            if (FindObjectOfType<ObstacleChecker>().monolithSlamObstacleList != null)
+                FindObjectOfType<ObstacleChecker>().ClearMonoliths();
+            m_startAttack = true;
+        }
+
+        public IEnumerator MoveTentacle()
+        {
+            m_startAttack = true;
+
+            yield return null;
         }
 
         private void ResetTentacle()
@@ -66,6 +91,7 @@ namespace DChild.Gameplay.Characters.Enemies
             transform.position = m_originalPosition;
             DestroyObstacleChildren();
             GenerateSpikesAndSafeZones();
+            m_startAttack = false;
         }
 
         private void GenerateSpikesAndSafeZones()
@@ -104,11 +130,6 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 m_tentacleObstaclesPositions[i].GetChild(0).GetComponent<PoolableObject>().DestroyInstance();
             }
-        }
-
-        public void StartAttack()
-        {
-            m_startAttack = true;
         }
     }
 }
