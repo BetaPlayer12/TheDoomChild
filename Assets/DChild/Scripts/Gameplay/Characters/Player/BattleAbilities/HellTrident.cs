@@ -90,7 +90,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
         public void Execute()
         {
-            //m_state.waitForBehaviour = true;
+            m_state.waitForBehaviour = true;
             m_state.isAttacking = true;
             m_state.canAttack = false;
             m_canHellTrident = false;
@@ -106,15 +106,14 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
         public void EndExecution()
         {
-            base.AttackOver();
             m_hellTridentInfo.ShowCollider(false);
-            m_canHellTrident = true;
+            //m_canHellTrident = true;
             m_canMove = true;
-            //m_state.waitForBehaviour = false;
             m_animator.SetBool(m_hellTridentStateAnimationParameter, false);
             if (m_hellTridentGO.activeSelf)
                 m_hellTridentStartAnimation.Stop();
             m_hellTridentGO.SetActive(false);
+            base.AttackOver();
         }
 
         public override void Cancel()

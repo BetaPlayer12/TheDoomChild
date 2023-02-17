@@ -91,7 +91,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
         public void Execute()
         {
-            //m_state.waitForBehaviour = true;
+            m_state.waitForBehaviour = true;
             m_state.isAttacking = true;
             m_state.canAttack = false;
             m_canDoomsdayKong = false;
@@ -105,12 +105,12 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
         public void EndExecution()
         {
+            m_state.waitForBehaviour = false;
             base.AttackOver();
             //m_doomsdayKongInfo.ShowCollider(false);
             m_animator.SetBool(m_doomsdayKongStateAnimationParameter, false);
             //m_canDoomsdayKong = true;
             //m_canMove = true;
-            //m_state.waitForBehaviour = false;
         }
 
         public override void Cancel()

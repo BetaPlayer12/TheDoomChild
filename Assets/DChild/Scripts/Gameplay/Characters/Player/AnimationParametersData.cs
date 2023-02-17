@@ -63,6 +63,11 @@ namespace DChild.Gameplay.Characters.Players
             DoomsdayKong,
             BackDiver,
             Barrier,
+            FencerFlash,
+            DiagonalSwordDash,
+            ChampionsUprising,
+            Eelecktrick,
+            LightningSpear,
         }
 
         [SerializeField]

@@ -53,6 +53,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
         public bool CanReaperHarvest() => m_canReaperHarvest;
         public bool CanMove() => m_canMove;
+        private bool m_hasExecuted;
 
         private ReaperHarvestState m_currentState;
 
@@ -91,6 +92,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
         public void Execute(ReaperHarvestState state)
         {
+            m_hasExecuted = true;
             m_state.waitForBehaviour = true;
             m_currentState = state;
             StopAllCoroutines();
@@ -121,26 +123,32 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
         public void EndExecution()
         {
-            base.AttackOver();
+            m_hasExecuted = false;
             m_reaperHarvestInfo.ShowCollider(false);
             //m_canReaperHarvest = true;
             m_canMove = true;
-            m_animator.SetBool(m_reaperHarvestStateAnimationParameter, false);
             m_reaperHarvestAnimation.gameObject.SetActive(false);
             m_physics.gravityScale = m_cacheGravity;
             m_hitbox.Enable();
+            m_animator.SetBool(m_reaperHarvestStateAnimationParameter, false);
+            base.AttackOver();
         }
 
         public override void Cancel()
         {
-            base.Cancel();
-            m_reaperHarvestInfo.ShowCollider(false);
-            m_canMove = true;
-            m_fxAnimator.Play("Buffer");
-            StopAllCoroutines();
-            m_reaperHarvestAnimation.gameObject.SetActive(false);
-            m_physics.gravityScale = m_cacheGravity;
-            m_hitbox.Enable();
+            if (m_hasExecuted)
+            {
+                m_hasExecuted = false;
+                m_reaperHarvestInfo.ShowCollider(false);
+                m_canMove = true;
+                m_fxAnimator.Play("Buffer");
+                StopAllCoroutines();
+                m_animator.SetBool(m_reaperHarvestStateAnimationParameter, false);
+                m_reaperHarvestAnimation.gameObject.SetActive(false);
+                m_physics.gravityScale = m_cacheGravity;
+                m_hitbox.Enable();
+                base.Cancel();
+            }
         }
 
         public void EnableCollision(bool value)
@@ -200,28 +208,26 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             //m_physics.AddForce(new Vector2(m_character.facing == HorizontalDirection.Right ? m_pushForce.x : -m_pushForce.x, m_pushForce.y), ForceMode2D.Impulse);
             m_hitbox.Disable();
             var timer = m_dashDuration;
-            m_wallSensor.Cast();
-            m_edgeSensor.Cast();
             while (timer >= 0 && !m_wallSensor.allRaysDetecting /*&& m_edgeSensor.isDetecting*/)
             {
                 m_wallSensor.Cast();
                 m_edgeSensor.Cast();
-                m_physics.velocity = new Vector2(m_character.facing == HorizontalDirection.Right ? m_pushForce.x : -m_pushForce.x, m_physics.velocity.y);
+                m_physics.velocity = new Vector2(m_character.facing == HorizontalDirection.Right ? m_pushForce.x : -m_pushForce.x, 0);
                 timer -= Time.deltaTime;
                 if (m_currentState == ReaperHarvestState.Grounded)
                 {
                     if (!m_edgeSensor.isDetecting)
                     {
-                        timer = 0;
+                        timer = -1;
                     }
                 }
                 yield return null;
             }
             //yield return new WaitForSeconds(m_dashDuration);
             m_hitbox.Enable();
-            m_physics.velocity = new Vector2(0, m_physics.velocity.y);
-            m_reaperHarvestAnimation.gameObject.SetActive(false);
-            m_state.waitForBehaviour = false;
+            m_physics.velocity = Vector2.zero;
+            //m_reaperHarvestAnimation.gameObject.SetActive(false);
+            //m_state.waitForBehaviour = false;
             yield return null;
         }
     }
