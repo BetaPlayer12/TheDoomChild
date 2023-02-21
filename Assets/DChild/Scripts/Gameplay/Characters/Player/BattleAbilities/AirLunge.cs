@@ -121,7 +121,6 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
         {
             m_rigidBody.WakeUp();
             m_airLungeInfo.ShowCollider(value);
-            m_attackFX.transform.position = m_airLungeInfo.fxPosition.position;
 
             //TEST
             m_enemySensor.Cast();
@@ -130,6 +129,11 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             if (/*!m_enemySensor.isDetecting && !m_wallSensor.allRaysDetecting && */m_edgeSensor.isDetecting && value)
             {
                 m_physics.AddForce(new Vector2(m_character.facing == HorizontalDirection.Right ? m_pushForce.x : -m_pushForce.x, m_pushForce.y), ForceMode2D.Impulse);
+            }
+            if (value)
+            {
+                m_airLungeInfo.fxPosition.localRotation = Quaternion.Euler(0, m_character.facing == HorizontalDirection.Right ? 180 : 0, 0);
+                m_airLungeInfo.PlayFX(true);
             }
         }
 
