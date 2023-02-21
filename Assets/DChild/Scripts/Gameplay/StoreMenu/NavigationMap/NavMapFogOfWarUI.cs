@@ -1,4 +1,5 @@
-﻿using PixelCrushers.DialogueSystem;
+﻿using Holysoft.Collections;
+using PixelCrushers.DialogueSystem;
 using Sirenix.OdinInspector;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,10 +11,10 @@ namespace DChild.Gameplay.NavigationMap
     {
 #if UNITY_EDITOR
         [SerializeField, HideInPlayMode]
-        private VariableToObjectEditorList<NavMapFogOfWarGroup> m_editorList;
+        private VariableToObjectEditorList<NavMapFogOfWarSegment> m_editorList;
 #endif
         [SerializeField, HideInEditorMode]
-        private Dictionary<string, NavMapFogOfWarGroup> m_list;
+        private Dictionary<string, NavMapFogOfWarSegment> m_list;
 
 
 
@@ -21,15 +22,14 @@ namespace DChild.Gameplay.NavigationMap
         {
             foreach (var varName in m_list.Keys)
             {
-                var isHidden = DialogueLua.GetVariable(varName).asBool;
-                SetUIState(varName, isHidden);
+                var state = DialogueLua.GetVariable(varName).asInt;
+                SetUIState(varName, (Flag)state);
             }
         }
 
-        public void SetUIState(string varName, bool isHidden)
+        public void SetUIState(string varName, Flag state)
         {
-            m_list[varName].enabled = isHidden;
-            m_list[varName].RevealArea(isHidden);
+            m_list[varName].SetUIState(state);
         }
 
         private void OnValidate()
