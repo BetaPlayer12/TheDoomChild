@@ -41,8 +41,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
         public bool reaperHarvestPressed;
         public bool krakenRagePressed;
         public bool finalSlashPressed;
-        //public bool finalSlashHeld;
-        public bool finalSlashReleased;
+        public bool finalSlashHeld;
+        //public bool finalSlashReleased;
         public bool airSlashComboPressed;
         public bool sovereignImpalePressed;
         public bool hellTridentPressed;
@@ -59,9 +59,9 @@ namespace DChild.Gameplay.Characters.Players.Modules
         public bool diagonalSwordDashPressed;
         public bool championsUprisingPressed;
         public bool eelecktrickPressed;
-        public bool eelecktrickReleased;
+        public bool eelecktrickHeld;
         public bool lightningSpearPressed;
-        public bool lightningSpearReleased;
+        public bool lightningSpearHeld;
         #endregion
 
         private PlayerInput m_input;
@@ -229,12 +229,19 @@ namespace DChild.Gameplay.Characters.Players.Modules
             }
         }
 
+        private void OnFinalSlashHeld(InputValue value)
+        {
+            if (enabled == true)
+            {
+                finalSlashHeld = value.Get<float>() == 1;
+            }
+        }
+
         private void OnFinalSlashReleased(InputValue value)
         {
             if (enabled == true)
             {
-                finalSlashReleased = value.Get<float>() == 1;
-                finalSlashReleased = !finalSlashReleased;
+                finalSlashHeld = false;
             }
         }
 
@@ -369,12 +376,19 @@ namespace DChild.Gameplay.Characters.Players.Modules
             }
         }
 
+        private void OnEelecktrickHeld(InputValue value)
+        {
+            if (enabled == true)
+            {
+                eelecktrickHeld = value.Get<float>() == 1;
+            }
+        }
+
         private void OnEelecktrickReleased(InputValue value)
         {
             if (enabled == true)
             {
-                eelecktrickReleased = value.Get<float>() == 1;
-                eelecktrickReleased = !eelecktrickReleased;
+                eelecktrickHeld = false;
             }
         }
 
@@ -387,12 +401,19 @@ namespace DChild.Gameplay.Characters.Players.Modules
             }
         }
 
+        private void OnLightningSpearHeld(InputValue value)
+        {
+            if (enabled == true)
+            {
+                lightningSpearHeld = value.Get<float>() == 1;
+            }
+        }
+
         private void OnLightningSpearReleased(InputValue value)
         {
             if (enabled == true)
             {
-                lightningSpearReleased = value.Get<float>() == 1;
-                lightningSpearReleased = !lightningSpearReleased;
+                lightningSpearHeld = false;
             }
         }
 
@@ -521,7 +542,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
             reaperHarvestPressed = false;
             krakenRagePressed = false;
             finalSlashPressed = false;
-            finalSlashReleased = false;
             airSlashComboPressed = false;
             sovereignImpalePressed = false;
             hellTridentPressed = false;
@@ -538,9 +558,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             diagonalSwordDashPressed = false;
             championsUprisingPressed = false;
             eelecktrickPressed = false;
-            eelecktrickReleased = false;
             lightningSpearPressed = false;
-            lightningSpearReleased = false;
         }
 
         private void Reset()
@@ -572,7 +590,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             reaperHarvestPressed = false;
             krakenRagePressed = false;
             finalSlashPressed = false;
-            finalSlashReleased = false;
+            finalSlashHeld = false;
             airSlashComboPressed = false;
             sovereignImpalePressed = false;
             hellTridentPressed = false;
@@ -589,9 +607,9 @@ namespace DChild.Gameplay.Characters.Players.Modules
             diagonalSwordDashPressed = false;
             championsUprisingPressed = false;
             eelecktrickPressed = false;
-            eelecktrickReleased = false;
+            eelecktrickHeld = false;
             lightningSpearPressed = false;
-            lightningSpearReleased = false;
+            lightningSpearHeld = false;
         }
     }
 }

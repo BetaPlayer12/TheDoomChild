@@ -150,6 +150,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
         private IEnumerator CielingCheckRoutine()
         {
+            m_cielingSensor.Cast();
             while (!m_cielingSensor.isDetecting)
             {
                 m_cielingSensor.Cast();

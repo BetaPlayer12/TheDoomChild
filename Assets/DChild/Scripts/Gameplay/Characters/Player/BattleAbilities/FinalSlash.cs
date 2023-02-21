@@ -235,6 +235,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             while (true)
             {
                 m_state.waitForBehaviour = false;
+                m_state.isAttacking = true;
                 yield return null;
             }
         }

@@ -55,6 +55,8 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
         public bool CanMove() => m_canMove;
         private bool m_hasExecuted;
 
+        private Coroutine m_eelecktrickChargingRoutine;
+
         public override void Initialize(ComplexCharacterInfo info)
         {
             base.Initialize(info);
@@ -86,6 +88,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
         public void Execute()
         {
             m_hasExecuted = true;
+            m_eelecktrickChargingRoutine = StartCoroutine(EelecktrickChargingRoutine());
             m_state.waitForBehaviour = false;
             m_state.isAttacking = true;
             m_characterState.isChargingEelecktrick = true;
@@ -101,6 +104,11 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
         public void ReleaseHold()
         {
+            if (m_eelecktrickChargingRoutine != null)
+            {
+                StopCoroutine(m_eelecktrickChargingRoutine);
+                m_eelecktrickChargingRoutine = null;
+            }
             m_state.waitForBehaviour = true;
             m_state.isAttacking = true;
             m_state.canAttack = false;
@@ -127,6 +135,11 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             //m_eelecktrickInfo.ShowCollider(false);
             //m_canEelecktrick = true;
             //m_canMove = true;
+            if (m_eelecktrickChargingRoutine != null)
+            {
+                StopCoroutine(m_eelecktrickChargingRoutine);
+                m_eelecktrickChargingRoutine = null;
+            }
             m_animator.SetBool(m_eelecktrickStateAnimationParameter, false);
             base.AttackOver();
         }
@@ -140,6 +153,11 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
                 m_fxAnimator.Play("Buffer");
                 StopAllCoroutines();
                 m_characterState.isChargingEelecktrick = false;
+                if (m_eelecktrickChargingRoutine != null)
+                {
+                    StopCoroutine(m_eelecktrickChargingRoutine);
+                    m_eelecktrickChargingRoutine = null;
+                }
                 m_animator.SetBool(m_eelecktrickStateAnimationParameter, false);
                 base.Cancel();
             }
@@ -180,6 +198,16 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             {
                 m_eelecktrickMovementCooldownTimer = m_eelecktrickMovementCooldown;
                 m_canMove = true;
+            }
+        }
+
+        private IEnumerator EelecktrickChargingRoutine()
+        {
+            while (true)
+            {
+                m_state.waitForBehaviour = false;
+                m_state.isAttacking = true;
+                yield return null;
             }
         }
     }
