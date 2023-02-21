@@ -254,6 +254,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_spawnedProjectile.GetComponent<Attacker>().SetParentAttacker(m_attacker);
 
             var scale = m_spawnedProjectile.transform.localScale;
+            scale.x = m_character.facing == HorizontalDirection.Right ? scale.x : -scale.x;
             scale.y = 1;
             m_spawnedProjectile.transform.localScale = scale;
 
