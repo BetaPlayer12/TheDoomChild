@@ -738,6 +738,11 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     m_fencerFlash.HandleAttackTimer();
                 }
 
+                if (m_edgedFury.CanEdgedFury() == false)
+                {
+                    m_edgedFury.HandleAttackTimer();
+                }
+
                 if (m_lightningSpear.CanLightningSpear() == false)
                 {
                     m_lightningSpear.HandleAttackTimer();
@@ -770,11 +775,11 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     }
                     return;
                 }
-                if (m_input.edgedFuryReleased && !m_state.isChargingLightningSpear)
-                {
-                    m_edgedFury?.EndExecution();
-                    return;
-                }
+                //if (m_input.edgedFuryReleased && !m_state.isChargingLightningSpear)
+                //{
+                //    m_edgedFury?.EndExecution();
+                //    return;
+                //}
             }
             else if (m_state.isStickingToWall)
             {
@@ -1016,7 +1021,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
                         return;
                     }
-                    else if (m_input.edgedFuryPressed && !m_input.fencerFlashPressed && !m_input.lightningSpearPressed)
+                    else if (m_input.edgedFuryPressed && m_edgedFury.CanEdgedFury() && !m_input.fencerFlashPressed && !m_input.lightningSpearPressed)
                     {
                         PrepareForMidairAttack();
                         m_devilWings?.Cancel();
@@ -1221,7 +1226,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
             if (m_state.isAttacking)
             {
-                if (m_state.isChargingAttack && !m_state.isChargingFinalSlash)
+                if (m_state.isChargingAttack)
                 {
                     m_chargeAttackHandle?.Execute();
                 }
@@ -1250,10 +1255,14 @@ namespace DChild.Gameplay.Characters.Players.Modules
                         GameplaySystem.cinema.ApplyCameraPeekMode(Cinematics.CameraPeekMode.None);
                     }
                 }
-                else if (m_state.isDoingSwordThrust && !m_state.isChargingFinalSlash)
+                else if (m_state.isDoingSwordThrust)
                 {
                     HandleSwordThrust();
                     return;
+                }
+                else
+                {
+                    m_attackRegistrator?.ResetHitCache();
                 }
                 if (m_state.isChargingFinalSlash)
                 {
@@ -1267,17 +1276,13 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     //}
                     return;
                 }
-                else if (m_state.isChargingEelecktrick )
+                else if (m_state.isChargingEelecktrick)
                 {
                     if (!m_input.eelecktrickHeld && m_eelecktrick.CanMove())
                     {
                         m_eelecktrick.ReleaseHold();
                     }
                     return;
-                }
-                else
-                {
-                    m_attackRegistrator?.ResetHitCache();
                 }
                 if (m_input.barrierReleased)
                 {
