@@ -15,6 +15,8 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
         [SerializeField]
         private float m_lightningSpearCooldown;
         [SerializeField]
+        private float m_lightningSpearMovementCooldown;
+        [SerializeField]
         private float m_lightningSpearResetCooldown;
         [SerializeField]
         private Info m_lightningSpearInfo;
@@ -43,18 +45,23 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
         private ProjectileLauncher m_launcher;
 
         private bool m_canLightningSpear;
+        private bool m_canMove;
         private bool m_canReset;
         private IPlayerModifer m_modifier;
         private int m_lightningSpearStateAnimationParameter;
         private float m_lightningSpearCooldownTimer;
+        private float m_lightningSpearMovementCooldownTimer;
         private float m_lightningSpearResetCooldownTimer;
 
         private Animator m_fxAnimator;
         private SkeletonAnimation m_skeletonAnimation;
 
         public bool CanLightningSpear() => m_canLightningSpear;
+        public bool CanMove() => m_canMove;
         public bool CanReset() => m_canReset;
         private bool m_hasExecuted;
+
+        private Coroutine m_lightningSpearChargingRoutine;
 
         public override void Initialize(ComplexCharacterInfo info)
         {
@@ -63,6 +70,8 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             m_modifier = info.modifier;
             m_lightningSpearStateAnimationParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.LightningSpear); ;
             m_canLightningSpear = true;
+            m_canMove = true;
+            m_lightningSpearMovementCooldownTimer = m_lightningSpearMovementCooldown;
             m_lightningSpearResetCooldownTimer = m_lightningSpearResetCooldown;
 
             m_fxAnimator = m_attackFX.gameObject.GetComponentInChildren<Animator>();
@@ -88,11 +97,13 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
         {
             m_hasExecuted = true;
             //m_state.waitForBehaviour = true;
+            m_lightningSpearChargingRoutine = StartCoroutine(LightningSpearChargingRoutine());
             m_state.waitForBehaviour = false;
             m_state.isAttacking = true;
             m_characterState.isChargingLightningSpear = true;
             //m_state.canAttack = false;
             m_canLightningSpear = false;
+            m_canMove = false;
             m_canReset = true;
             m_cacheGravity = m_physics.gravityScale;
             m_physics.gravityScale = 0;
@@ -100,12 +111,18 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             m_animator.SetBool(m_animationParameter, true);
             m_animator.SetBool(m_lightningSpearStateAnimationParameter, true);
             m_lightningSpearCooldownTimer = m_lightningSpearCooldown;
+            m_lightningSpearMovementCooldownTimer = m_lightningSpearMovementCooldown;
             m_lightningSpearResetCooldownTimer = m_lightningSpearResetCooldown;
             //m_attacker.SetDamageModifier(m_slashComboInfo[m_currentSlashState].damageModifier * m_modifier.Get(PlayerModifier.AttackDamage));
         }
 
         public void ReleaseHold()
         {
+            if (m_lightningSpearChargingRoutine != null)
+            {
+                StopCoroutine(m_lightningSpearChargingRoutine);
+                m_lightningSpearChargingRoutine = null;
+            }
             m_state.waitForBehaviour = true;
             m_characterState.isChargingLightningSpear = false;
             m_animator.SetBool(m_lightningSpearStateAnimationParameter, false);
@@ -133,6 +150,11 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             m_characterState.isChargingLightningSpear = false;
             //m_lightningSpearInfo.ShowCollider(false);
             //m_canMove = true;
+            if (m_lightningSpearChargingRoutine != null)
+            {
+                StopCoroutine(m_lightningSpearChargingRoutine);
+                m_lightningSpearChargingRoutine = null;
+            }
             m_animator.SetBool(m_lightningSpearStateAnimationParameter, false);
             base.AttackOver();
         }
@@ -147,6 +169,11 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
                 StopAllCoroutines();
                 m_physics.gravityScale = m_cacheGravity;
                 m_characterState.isChargingLightningSpear = false;
+                if (m_lightningSpearChargingRoutine != null)
+                {
+                    StopCoroutine(m_lightningSpearChargingRoutine);
+                    m_lightningSpearChargingRoutine = null;
+                }
                 m_animator.SetBool(m_lightningSpearStateAnimationParameter, false);
                 base.Cancel();
             }
@@ -176,6 +203,20 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             }
         }
 
+        public void HandleMovementTimer()
+        {
+            if (m_lightningSpearMovementCooldownTimer > 0)
+            {
+                m_lightningSpearMovementCooldownTimer -= GameplaySystem.time.deltaTime;
+                m_canMove = false;
+            }
+            else
+            {
+                m_lightningSpearMovementCooldownTimer = m_lightningSpearMovementCooldown;
+                m_canMove = true;
+            }
+        }
+
         public void HandleResetTimer()
         {
             if (m_lightningSpearResetCooldownTimer > 0)
@@ -188,6 +229,16 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
                 m_lightningSpearResetCooldownTimer = m_lightningSpearResetCooldown;
                 m_canReset = false;
                 EndExecution();
+            }
+        }
+
+        private IEnumerator LightningSpearChargingRoutine()
+        {
+            while (true)
+            {
+                m_state.waitForBehaviour = false;
+                m_state.isAttacking = true;
+                yield return null;
             }
         }
     }

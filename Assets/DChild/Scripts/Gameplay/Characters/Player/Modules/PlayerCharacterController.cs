@@ -676,6 +676,11 @@ namespace DChild.Gameplay.Characters.Players.Modules
             {
                 m_lightningSpear.HandleResetTimer();
             }
+
+            if (m_lightningSpear.CanMove() == false)
+            {
+                m_lightningSpear.HandleMovementTimer();
+            }
             #endregion
 
             if (m_state.canAttack == true)
@@ -757,9 +762,9 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 {
                     m_groundedness?.Evaluate();
                 }
-                if (m_state.isChargingLightningSpear && !m_lightningSpear.CanLightningSpear())
+                if (m_state.isChargingLightningSpear)
                 {
-                    if (m_input.lightningSpearReleased)
+                    if (!m_input.lightningSpearHeld && m_lightningSpear.CanMove())
                     {
                         m_lightningSpear.ReleaseHold();
                     }
@@ -1252,15 +1257,19 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 }
                 if (m_state.isChargingFinalSlash)
                 {
-                    if (m_input.finalSlashReleased && !m_finalSlash.CanFinalSlash() || m_input.slashPressed && !m_finalSlash.CanFinalSlash())
+                    if (!m_input.finalSlashHeld && m_finalSlash.CanMove() /*|| m_input.slashPressed && !m_finalSlash.CanFinalSlash()*/)
                     {
                         m_finalSlash.ExecuteDash();
                     }
+                    //if (m_input.finalSlashReleased && !m_finalSlash.CanFinalSlash() || m_input.slashPressed && !m_finalSlash.CanFinalSlash())
+                    //{
+                    //    m_finalSlash.ExecuteDash();
+                    //}
                     return;
                 }
-                else if (m_state.isChargingEelecktrick && !m_eelecktrick.CanEelecktrick())
+                else if (m_state.isChargingEelecktrick )
                 {
-                    if (m_input.eelecktrickReleased)
+                    if (!m_input.eelecktrickHeld && m_eelecktrick.CanMove())
                     {
                         m_eelecktrick.ReleaseHold();
                     }
@@ -1354,7 +1363,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
                         return;
                     }
-                    else if (m_input.sovereignImpalePressed && m_sovereignImpale.CanSovereignImpale() /*&& !m_state.isChargingFinalSlash*/)
+                    else if (m_input.sovereignImpalePressed && m_sovereignImpale.CanSovereignImpale())
                     {
                         if (m_state.isInShadowMode == false)
                         {
@@ -1454,7 +1463,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
                 if (m_state.canAttack)
                 {
-                    if (m_input.slashPressed && !m_input.airLungeSlashPressed && !m_input.reaperHarvestPressed && !m_input.finalSlashPressed/*!(m_input.levitateHeld && m_input.slashHeld)*/)
+                    if (m_input.slashPressed && !m_input.airLungeSlashPressed && !m_input.reaperHarvestPressed /*!(m_input.levitateHeld && m_input.slashHeld)*/)
                     {
                         m_activeDash?.Cancel();
 
@@ -1631,7 +1640,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
                         return;
                     }
-                    else if (m_input.reaperHarvestPressed && m_reaperHarvest.CanReaperHarvest() && !m_state.isChargingFinalSlash)
+                    else if (m_input.reaperHarvestPressed && m_reaperHarvest.CanReaperHarvest())
                     {
                         if (m_state.isInShadowMode == false)
                         {
@@ -1818,24 +1827,21 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     }
                     else if (m_state.isInShadowMode == false)
                     {
-                        /*else*/ if (!m_state.isChargingFinalSlash)
+                        if (m_skills.IsModuleActive(PrimarySkill.SwordThrust))
                         {
-                            if (m_skills.IsModuleActive(PrimarySkill.SwordThrust))
+                            if (m_input.slashHeld && !m_input.airLungeSlashPressed && !m_input.reaperHarvestPressed/*!(m_input.levitateHeld && m_input.slashHeld)*/)
                             {
-                                if (m_input.slashHeld && !m_input.airLungeSlashPressed && !m_input.reaperHarvestPressed && !m_input.finalSlashPressed/*!(m_input.levitateHeld && m_input.slashHeld)*/)
-                                {
-                                    PrepareForGroundAttack();
-                                    m_chargeAttackHandle.Set(m_swordThrust, () => m_input.slashHeld);
+                                PrepareForGroundAttack();
+                                m_chargeAttackHandle.Set(m_swordThrust, () => m_input.slashHeld);
 
-                                    //Start SwordThrust
-                                    m_swordThrust?.StartCharge();
+                                //Start SwordThrust
+                                m_swordThrust?.StartCharge();
 
-                                    return;
-                                }
-                                else
-                                {
-                                    m_swordThrust?.Cancel();
-                                }
+                                return;
+                            }
+                            else
+                            {
+                                m_swordThrust?.Cancel();
                             }
                         }
                     }

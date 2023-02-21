@@ -289,12 +289,21 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""FinalSlashReleased"",
+                    ""name"": ""FinalSlashHeld"",
                     ""type"": ""Button"",
                     ""id"": ""861d417d-a219-4937-8ab1-33f44ebb56cd"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
-                    ""interactions"": ""Press"",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""FinalSlashReleased"",
+                    ""type"": ""Button"",
+                    ""id"": ""f44f244c-fb8a-4b70-b4e9-b0ffee1aa7a9"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
                     ""initialStateCheck"": false
                 },
                 {
@@ -442,6 +451,15 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
+                    ""name"": ""EelecktrickHeld"",
+                    ""type"": ""Button"",
+                    ""id"": ""6a05cb88-875b-47f7-9b96-f936ac1086c1"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press"",
+                    ""initialStateCheck"": false
+                },
+                {
                     ""name"": ""EelecktrickReleased"",
                     ""type"": ""Button"",
                     ""id"": ""e1bd79f0-efa2-46a8-85d0-f4be538e6449"",
@@ -454,6 +472,15 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""name"": ""LightningSpear"",
                     ""type"": ""Button"",
                     ""id"": ""ac85a422-db12-490f-96ce-bc7c679ce25d"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press"",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""LightningSpearHeld"",
+                    ""type"": ""Button"",
+                    ""id"": ""084015d5-88f7-4576-9d85-5052920d60ac"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": ""Press"",
@@ -1662,10 +1689,10 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""name"": ""One Modifier"",
                     ""id"": ""aa1a13a7-2a6c-4eee-81fe-ace8334523ab"",
                     ""path"": ""OneModifier"",
-                    ""interactions"": ""Press(behavior=1)"",
+                    ""interactions"": ""Hold(duration=0.1,pressPoint=0.1)"",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""FinalSlashReleased"",
+                    ""action"": ""FinalSlashHeld"",
                     ""isComposite"": true,
                     ""isPartOfComposite"": false
                 },
@@ -1676,7 +1703,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard"",
-                    ""action"": ""FinalSlashReleased"",
+                    ""action"": ""FinalSlashHeld"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -1687,7 +1714,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard"",
-                    ""action"": ""FinalSlashReleased"",
+                    ""action"": ""FinalSlashHeld"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -2355,7 +2382,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""name"": """",
                     ""id"": ""24dabaeb-ecd9-484f-b262-1c6cb66e14cf"",
                     ""path"": ""<Keyboard>/2"",
-                    ""interactions"": ""Press(behavior=1)"",
+                    ""interactions"": ""Press(pressPoint=0.1,behavior=1)"",
                     ""processors"": """",
                     ""groups"": ""Keyboard"",
                     ""action"": ""EelecktrickReleased"",
@@ -2410,7 +2437,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""name"": ""Two Modifiers"",
                     ""id"": ""4a78d1f7-9b1e-43ea-8e13-56076624e5b2"",
                     ""path"": ""TwoModifiers"",
-                    ""interactions"": ""Press(behavior=1)"",
+                    ""interactions"": ""Press(pressPoint=0.1,behavior=1)"",
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""LightningSpearReleased"",
@@ -2447,6 +2474,94 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": ""Keyboard"",
                     ""action"": ""LightningSpearReleased"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""One Modifier"",
+                    ""id"": ""556dccbf-c0a9-4212-a18c-72b6a16cc6c7"",
+                    ""path"": ""OneModifier"",
+                    ""interactions"": ""Press(pressPoint=0.1,behavior=1)"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""FinalSlashReleased"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""modifier"",
+                    ""id"": ""06aacd37-69e8-4299-bf52-3ae8822b3bf6"",
+                    ""path"": ""<Keyboard>/leftShift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""FinalSlashReleased"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""binding"",
+                    ""id"": ""7cdba2e8-ad07-4542-a7a0-5ad94ac03e0d"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""FinalSlashReleased"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7f796c44-f904-4589-bac8-06cdab50cf56"",
+                    ""path"": ""<Keyboard>/2"",
+                    ""interactions"": ""Hold(duration=0.1,pressPoint=0.1)"",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""EelecktrickHeld"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""Two Modifiers"",
+                    ""id"": ""fb709d7d-40a8-48d9-bb1a-db73e075b568"",
+                    ""path"": ""TwoModifiers"",
+                    ""interactions"": ""Hold(duration=0.1,pressPoint=0.1)"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LightningSpearHeld"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""modifier1"",
+                    ""id"": ""4e1a6092-8cf5-490a-9774-1e3d40d5efc7"",
+                    ""path"": ""<Keyboard>/leftShift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""LightningSpearHeld"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""modifier2"",
+                    ""id"": ""18f00d7f-5dbb-42ac-b92d-68e229940bd1"",
+                    ""path"": ""<Keyboard>/s"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""LightningSpearHeld"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""binding"",
+                    ""id"": ""add625fa-b015-49c1-8237-09c0338c64c5"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""LightningSpearHeld"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 }
@@ -3633,6 +3748,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         m_Gameplay_ReaperHarvest = m_Gameplay.FindAction("ReaperHarvest", throwIfNotFound: true);
         m_Gameplay_KrakenRage = m_Gameplay.FindAction("KrakenRage", throwIfNotFound: true);
         m_Gameplay_FinalSlash = m_Gameplay.FindAction("FinalSlash", throwIfNotFound: true);
+        m_Gameplay_FinalSlashHeld = m_Gameplay.FindAction("FinalSlashHeld", throwIfNotFound: true);
         m_Gameplay_FinalSlashReleased = m_Gameplay.FindAction("FinalSlashReleased", throwIfNotFound: true);
         m_Gameplay_AirSlashCombo = m_Gameplay.FindAction("AirSlashCombo", throwIfNotFound: true);
         m_Gameplay_SovereignImpale = m_Gameplay.FindAction("SovereignImpale", throwIfNotFound: true);
@@ -3650,8 +3766,10 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         m_Gameplay_DiagonalSwordDash = m_Gameplay.FindAction("DiagonalSwordDash", throwIfNotFound: true);
         m_Gameplay_ChampionsUprising = m_Gameplay.FindAction("ChampionsUprising", throwIfNotFound: true);
         m_Gameplay_Eelecktrick = m_Gameplay.FindAction("Eelecktrick", throwIfNotFound: true);
+        m_Gameplay_EelecktrickHeld = m_Gameplay.FindAction("EelecktrickHeld", throwIfNotFound: true);
         m_Gameplay_EelecktrickReleased = m_Gameplay.FindAction("EelecktrickReleased", throwIfNotFound: true);
         m_Gameplay_LightningSpear = m_Gameplay.FindAction("LightningSpear", throwIfNotFound: true);
+        m_Gameplay_LightningSpearHeld = m_Gameplay.FindAction("LightningSpearHeld", throwIfNotFound: true);
         m_Gameplay_LightningSpearReleased = m_Gameplay.FindAction("LightningSpearReleased", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
@@ -3763,6 +3881,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
     private readonly InputAction m_Gameplay_ReaperHarvest;
     private readonly InputAction m_Gameplay_KrakenRage;
     private readonly InputAction m_Gameplay_FinalSlash;
+    private readonly InputAction m_Gameplay_FinalSlashHeld;
     private readonly InputAction m_Gameplay_FinalSlashReleased;
     private readonly InputAction m_Gameplay_AirSlashCombo;
     private readonly InputAction m_Gameplay_SovereignImpale;
@@ -3780,8 +3899,10 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
     private readonly InputAction m_Gameplay_DiagonalSwordDash;
     private readonly InputAction m_Gameplay_ChampionsUprising;
     private readonly InputAction m_Gameplay_Eelecktrick;
+    private readonly InputAction m_Gameplay_EelecktrickHeld;
     private readonly InputAction m_Gameplay_EelecktrickReleased;
     private readonly InputAction m_Gameplay_LightningSpear;
+    private readonly InputAction m_Gameplay_LightningSpearHeld;
     private readonly InputAction m_Gameplay_LightningSpearReleased;
     public struct GameplayActions
     {
@@ -3816,6 +3937,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         public InputAction @ReaperHarvest => m_Wrapper.m_Gameplay_ReaperHarvest;
         public InputAction @KrakenRage => m_Wrapper.m_Gameplay_KrakenRage;
         public InputAction @FinalSlash => m_Wrapper.m_Gameplay_FinalSlash;
+        public InputAction @FinalSlashHeld => m_Wrapper.m_Gameplay_FinalSlashHeld;
         public InputAction @FinalSlashReleased => m_Wrapper.m_Gameplay_FinalSlashReleased;
         public InputAction @AirSlashCombo => m_Wrapper.m_Gameplay_AirSlashCombo;
         public InputAction @SovereignImpale => m_Wrapper.m_Gameplay_SovereignImpale;
@@ -3833,8 +3955,10 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         public InputAction @DiagonalSwordDash => m_Wrapper.m_Gameplay_DiagonalSwordDash;
         public InputAction @ChampionsUprising => m_Wrapper.m_Gameplay_ChampionsUprising;
         public InputAction @Eelecktrick => m_Wrapper.m_Gameplay_Eelecktrick;
+        public InputAction @EelecktrickHeld => m_Wrapper.m_Gameplay_EelecktrickHeld;
         public InputAction @EelecktrickReleased => m_Wrapper.m_Gameplay_EelecktrickReleased;
         public InputAction @LightningSpear => m_Wrapper.m_Gameplay_LightningSpear;
+        public InputAction @LightningSpearHeld => m_Wrapper.m_Gameplay_LightningSpearHeld;
         public InputAction @LightningSpearReleased => m_Wrapper.m_Gameplay_LightningSpearReleased;
         public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
         public void Enable() { Get().Enable(); }
@@ -3932,6 +4056,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @FinalSlash.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnFinalSlash;
                 @FinalSlash.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnFinalSlash;
                 @FinalSlash.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnFinalSlash;
+                @FinalSlashHeld.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnFinalSlashHeld;
+                @FinalSlashHeld.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnFinalSlashHeld;
+                @FinalSlashHeld.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnFinalSlashHeld;
                 @FinalSlashReleased.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnFinalSlashReleased;
                 @FinalSlashReleased.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnFinalSlashReleased;
                 @FinalSlashReleased.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnFinalSlashReleased;
@@ -3983,12 +4110,18 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @Eelecktrick.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnEelecktrick;
                 @Eelecktrick.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnEelecktrick;
                 @Eelecktrick.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnEelecktrick;
+                @EelecktrickHeld.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnEelecktrickHeld;
+                @EelecktrickHeld.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnEelecktrickHeld;
+                @EelecktrickHeld.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnEelecktrickHeld;
                 @EelecktrickReleased.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnEelecktrickReleased;
                 @EelecktrickReleased.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnEelecktrickReleased;
                 @EelecktrickReleased.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnEelecktrickReleased;
                 @LightningSpear.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnLightningSpear;
                 @LightningSpear.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnLightningSpear;
                 @LightningSpear.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnLightningSpear;
+                @LightningSpearHeld.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnLightningSpearHeld;
+                @LightningSpearHeld.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnLightningSpearHeld;
+                @LightningSpearHeld.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnLightningSpearHeld;
                 @LightningSpearReleased.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnLightningSpearReleased;
                 @LightningSpearReleased.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnLightningSpearReleased;
                 @LightningSpearReleased.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnLightningSpearReleased;
@@ -4083,6 +4216,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @FinalSlash.started += instance.OnFinalSlash;
                 @FinalSlash.performed += instance.OnFinalSlash;
                 @FinalSlash.canceled += instance.OnFinalSlash;
+                @FinalSlashHeld.started += instance.OnFinalSlashHeld;
+                @FinalSlashHeld.performed += instance.OnFinalSlashHeld;
+                @FinalSlashHeld.canceled += instance.OnFinalSlashHeld;
                 @FinalSlashReleased.started += instance.OnFinalSlashReleased;
                 @FinalSlashReleased.performed += instance.OnFinalSlashReleased;
                 @FinalSlashReleased.canceled += instance.OnFinalSlashReleased;
@@ -4134,12 +4270,18 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @Eelecktrick.started += instance.OnEelecktrick;
                 @Eelecktrick.performed += instance.OnEelecktrick;
                 @Eelecktrick.canceled += instance.OnEelecktrick;
+                @EelecktrickHeld.started += instance.OnEelecktrickHeld;
+                @EelecktrickHeld.performed += instance.OnEelecktrickHeld;
+                @EelecktrickHeld.canceled += instance.OnEelecktrickHeld;
                 @EelecktrickReleased.started += instance.OnEelecktrickReleased;
                 @EelecktrickReleased.performed += instance.OnEelecktrickReleased;
                 @EelecktrickReleased.canceled += instance.OnEelecktrickReleased;
                 @LightningSpear.started += instance.OnLightningSpear;
                 @LightningSpear.performed += instance.OnLightningSpear;
                 @LightningSpear.canceled += instance.OnLightningSpear;
+                @LightningSpearHeld.started += instance.OnLightningSpearHeld;
+                @LightningSpearHeld.performed += instance.OnLightningSpearHeld;
+                @LightningSpearHeld.canceled += instance.OnLightningSpearHeld;
                 @LightningSpearReleased.started += instance.OnLightningSpearReleased;
                 @LightningSpearReleased.performed += instance.OnLightningSpearReleased;
                 @LightningSpearReleased.canceled += instance.OnLightningSpearReleased;
@@ -4408,6 +4550,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         void OnReaperHarvest(InputAction.CallbackContext context);
         void OnKrakenRage(InputAction.CallbackContext context);
         void OnFinalSlash(InputAction.CallbackContext context);
+        void OnFinalSlashHeld(InputAction.CallbackContext context);
         void OnFinalSlashReleased(InputAction.CallbackContext context);
         void OnAirSlashCombo(InputAction.CallbackContext context);
         void OnSovereignImpale(InputAction.CallbackContext context);
@@ -4425,8 +4568,10 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         void OnDiagonalSwordDash(InputAction.CallbackContext context);
         void OnChampionsUprising(InputAction.CallbackContext context);
         void OnEelecktrick(InputAction.CallbackContext context);
+        void OnEelecktrickHeld(InputAction.CallbackContext context);
         void OnEelecktrickReleased(InputAction.CallbackContext context);
         void OnLightningSpear(InputAction.CallbackContext context);
+        void OnLightningSpearHeld(InputAction.CallbackContext context);
         void OnLightningSpearReleased(InputAction.CallbackContext context);
     }
     public interface IUIActions
