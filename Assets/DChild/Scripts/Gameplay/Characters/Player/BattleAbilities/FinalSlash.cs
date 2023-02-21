@@ -126,7 +126,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             //m_state.canAttack = true;
             //m_state.isAttacking = false;
             m_characterState.isChargingFinalSlash = false;
-            //m_finalSlashInfo.ShowCollider(false);
+            m_finalSlashInfo.ShowCollider(false);
             //m_canFinalSlash = true;
             //m_canMove = true;
             m_canDash = false;
