@@ -124,11 +124,11 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             m_state.canAttack = true;
             m_state.isAttacking = false;
             m_characterState.isChargingEelecktrick = false;
-            base.AttackOver();
-            m_animator.SetBool(m_eelecktrickStateAnimationParameter, false);
             //m_eelecktrickInfo.ShowCollider(false);
             //m_canEelecktrick = true;
             //m_canMove = true;
+            m_animator.SetBool(m_eelecktrickStateAnimationParameter, false);
+            base.AttackOver();
         }
 
         public override void Cancel()
@@ -140,8 +140,8 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
                 m_fxAnimator.Play("Buffer");
                 StopAllCoroutines();
                 m_characterState.isChargingEelecktrick = false;
-                base.Cancel();
                 m_animator.SetBool(m_eelecktrickStateAnimationParameter, false);
+                base.Cancel();
             }
         }
 

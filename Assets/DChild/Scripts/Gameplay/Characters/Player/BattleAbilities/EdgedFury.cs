@@ -94,22 +94,22 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
         public void EndExecution()
         {
-            base.AttackOver();
             m_state.waitForBehaviour = false;
             m_edgedFuryInfo.ShowCollider(false);
             m_physics.gravityScale = m_cacheGravity;
             m_physics.velocity = Vector2.zero;
             m_animator.SetBool(m_edgedFuryStateAnimationParameter, false);
+            base.AttackOver();
         }
 
         public override void Cancel()
         {
-            base.Cancel();
             m_physics.gravityScale = m_cacheGravity;
             m_physics.velocity = Vector2.zero;
             m_edgedFuryInfo.ShowCollider(false);
             m_fxAnimator.Play("Buffer");
             m_animator.SetBool(m_edgedFuryStateAnimationParameter, false);
+            base.Cancel();
         }
 
         public void EnableCollision(bool value)

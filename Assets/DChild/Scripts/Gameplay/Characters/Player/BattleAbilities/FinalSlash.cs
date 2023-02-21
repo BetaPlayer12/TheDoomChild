@@ -136,8 +136,8 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
                 StopCoroutine(m_finalSlashChargingRoutine);
                 m_finalSlashChargingRoutine = null;
             }
-            base.AttackOver();
             m_animator.SetBool(m_finalSlashStateAnimationParameter, false);
+            base.AttackOver();
         }
 
         public void EnableDash(bool value)
@@ -159,8 +159,8 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
                     StopCoroutine(m_finalSlashChargingRoutine);
                     m_finalSlashChargingRoutine = null;
                 }
-                base.Cancel();
                 m_animator.SetBool(m_finalSlashStateAnimationParameter, false);
+                base.Cancel();
             }
         }
 

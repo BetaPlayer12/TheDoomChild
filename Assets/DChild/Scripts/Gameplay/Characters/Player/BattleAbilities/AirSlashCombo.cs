@@ -125,11 +125,11 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public override void Cancel()
         {
-            base.Cancel();
 
             m_state.isDoingCombo = false;
             m_physics.gravityScale = m_cacheGravity;
             m_fxAnimator.Play("Buffer");
+            base.Cancel();
         }
 
         public void PlayFX(bool value)

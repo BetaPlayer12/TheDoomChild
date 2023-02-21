@@ -120,7 +120,6 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             m_fencerFlashInfo.ShowCollider(false);
             //m_canfencerFlash = true;
             m_canMove = true;
-            m_animator.SetBool(m_fencerFlashStateAnimationParameter, false);
             //m_fencerFlashAnimation.gameObject.SetActive(false);
             m_physics.gravityScale = m_cacheGravity;
             StopAllCoroutines();
@@ -134,6 +133,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
                 m_fx.Stop();
                 m_fxParent.SetActive(false);
             }
+            m_animator.SetBool(m_fencerFlashStateAnimationParameter, false);
             base.AttackOver();
         }
 
@@ -148,7 +148,6 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
                 StopCoroutine(m_enemySensorRoutine);
                 m_enemySensorRoutine = null;
             }
-            m_animator.SetBool(m_fencerFlashStateAnimationParameter, false);
             //m_fencerFlashAnimation.gameObject.SetActive(false);
             m_physics.gravityScale = m_cacheGravity;
             if (m_fxParent.activeSelf)
@@ -156,6 +155,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
                 m_fx.Stop();
                 m_fxParent.SetActive(false);
             }
+            m_animator.SetBool(m_fencerFlashStateAnimationParameter, false);
             base.Cancel();
         }
 

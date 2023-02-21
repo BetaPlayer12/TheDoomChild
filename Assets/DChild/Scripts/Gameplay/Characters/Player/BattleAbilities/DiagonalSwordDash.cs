@@ -99,8 +99,8 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
         {
             m_diagonalSwordDashInfo.ShowCollider(false);
             m_canMove = true;
-            m_animator.SetBool(m_diagonalSwordDashStateAnimationParameter, false);
             m_physics.gravityScale = m_cacheGravity;
+            m_animator.SetBool(m_diagonalSwordDashStateAnimationParameter, false);
             base.AttackOver();
         }
 
@@ -110,8 +110,8 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             m_canMove = true;
             m_fxAnimator.Play("Buffer");
             StopAllCoroutines();
-            m_animator.SetBool(m_diagonalSwordDashStateAnimationParameter, false);
             m_physics.gravityScale = m_cacheGravity;
+            m_animator.SetBool(m_diagonalSwordDashStateAnimationParameter, false);
             base.Cancel();
         }
 

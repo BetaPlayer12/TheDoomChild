@@ -111,8 +111,8 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
         public override void Cancel()
         {
             //m_ninthCircleSanctionInfo.ShowCollider(false);
-            m_animator.SetBool(m_ninthCircleSanctionStateAnimationParameter, false);
             m_fxAnimator.Play("Buffer");
+            m_animator.SetBool(m_ninthCircleSanctionStateAnimationParameter, false);
             base.Cancel();
         }
 

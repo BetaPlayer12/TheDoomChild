@@ -106,18 +106,19 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
         public void EndExecution()
         {
             m_state.waitForBehaviour = false;
-            base.AttackOver();
             //m_doomsdayKongInfo.ShowCollider(false);
-            m_animator.SetBool(m_doomsdayKongStateAnimationParameter, false);
             //m_canDoomsdayKong = true;
             //m_canMove = true;
+            m_animator.SetBool(m_doomsdayKongStateAnimationParameter, false);
+            base.AttackOver();
         }
 
         public override void Cancel()
         {
-            base.Cancel();
             //m_doomsdayKongInfo.ShowCollider(false);
             m_fxAnimator.Play("Buffer");
+            m_animator.SetBool(m_doomsdayKongStateAnimationParameter, false);
+            base.Cancel();
         }
 
         public void EnableCollision(bool value)

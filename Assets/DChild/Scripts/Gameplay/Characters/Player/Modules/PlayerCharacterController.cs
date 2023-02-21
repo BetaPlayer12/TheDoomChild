@@ -1031,15 +1031,15 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
                         return;
                     }
-                    else if (m_input.krakenRagePressed)
-                    {
-                        PrepareForMidairAttack();
-                        m_devilWings?.Cancel();
-                        m_extraJump?.Cancel();
-                        m_krakenRage.Execute();
+                    //else if (m_input.krakenRagePressed)
+                    //{
+                    //    PrepareForMidairAttack();
+                    //    m_devilWings?.Cancel();
+                    //    m_extraJump?.Cancel();
+                    //    m_krakenRage.Execute();
 
-                        return;
-                    }
+                    //    return;
+                    //}
                     else if (m_input.diagonalSwordDashPressed && m_diagonalSwordDash.CanDiagonalSwordDash())
                     {
                         PrepareForMidairAttack();

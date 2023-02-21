@@ -105,21 +105,22 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             //m_foolsVerdictInfo.ShowCollider(false);
             //m_canFoolsVerdict = true;
             m_canMove = true;
-            m_animator.SetBool(m_foolsVerdictStateAnimationParameter, false);
             if (m_foolsVerdictGO.activeSelf)
                 m_foolsVerdictStartAnimation.Stop();
             m_foolsVerdictGO.SetActive(false);
+            m_animator.SetBool(m_foolsVerdictStateAnimationParameter, false);
             base.AttackOver();
         }
 
         public override void Cancel()
         {
-            base.Cancel();
             //m_foolsVerdictInfo.ShowCollider(false);
             m_fxAnimator.Play("Buffer");
             if (m_foolsVerdictGO.activeSelf)
                 m_foolsVerdictStartAnimation.Stop();
             m_foolsVerdictGO.SetActive(false);
+            m_animator.SetBool(m_foolsVerdictStateAnimationParameter, false);
+            base.Cancel();
         }
 
         public void EnableCollision(bool value)

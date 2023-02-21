@@ -143,10 +143,10 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
                 m_canMove = true;
                 m_fxAnimator.Play("Buffer");
                 StopAllCoroutines();
-                m_animator.SetBool(m_reaperHarvestStateAnimationParameter, false);
                 m_reaperHarvestAnimation.gameObject.SetActive(false);
                 m_physics.gravityScale = m_cacheGravity;
                 m_hitbox.Enable();
+                m_animator.SetBool(m_reaperHarvestStateAnimationParameter, false);
                 base.Cancel();
             }
         }

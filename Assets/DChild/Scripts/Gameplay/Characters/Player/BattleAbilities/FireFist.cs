@@ -98,9 +98,9 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
         public void EndExecution()
         {
             m_fireFistInfo.ShowCollider(false);
-            m_animator.SetBool(m_fireFistStateAnimationParameter, false);
             //m_canFireFist = true;
             m_canMove = true;
+            m_animator.SetBool(m_fireFistStateAnimationParameter, false);
             base.AttackOver();
         }
 
@@ -108,6 +108,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
         {
             m_fireFistInfo.ShowCollider(false);
             m_fxAnimator.Play("Buffer");
+            m_animator.SetBool(m_fireFistStateAnimationParameter, false);
             base.Cancel();
         }
 

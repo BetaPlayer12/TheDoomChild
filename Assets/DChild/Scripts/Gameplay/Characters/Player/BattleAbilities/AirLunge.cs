@@ -113,8 +113,8 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             }
             m_airLungeInfo.ShowCollider(false);
             m_fxAnimator.Play("Buffer");
-            base.Cancel();
             m_animator.SetBool(m_airLungeStateAnimationParameter, false);
+            base.Cancel();
         }
 
         public void EnableCollision(bool value)

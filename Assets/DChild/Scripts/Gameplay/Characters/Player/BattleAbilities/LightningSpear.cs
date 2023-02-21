@@ -127,14 +127,14 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
         public void EndExecution()
         {
             m_hasExecuted = false;
-            m_animator.SetBool(m_lightningSpearStateAnimationParameter, false);
             m_state.canAttack = true;
             m_state.isAttacking = false;
             m_physics.gravityScale = m_cacheGravity;
             m_characterState.isChargingLightningSpear = false;
-            base.AttackOver();
             //m_lightningSpearInfo.ShowCollider(false);
             //m_canMove = true;
+            m_animator.SetBool(m_lightningSpearStateAnimationParameter, false);
+            base.AttackOver();
         }
 
         public override void Cancel()
@@ -142,13 +142,13 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             if (m_hasExecuted)
             {
                 m_hasExecuted = false;
-                base.Cancel();
                 //m_lightningSpearInfo.ShowCollider(false);
                 m_fxAnimator.Play("Buffer");
                 StopAllCoroutines();
                 m_physics.gravityScale = m_cacheGravity;
                 m_characterState.isChargingLightningSpear = false;
                 m_animator.SetBool(m_lightningSpearStateAnimationParameter, false);
+                base.Cancel();
             }
         }
 

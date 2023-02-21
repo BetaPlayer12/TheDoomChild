@@ -114,14 +114,14 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
         public override void Cancel()
         {
-            base.Cancel();
             m_championsUprisingInfo.ShowCollider(false);
             m_canMove = true;
             m_fxAnimator.Play("Buffer");
             StopAllCoroutines();
-            m_animator.SetBool(m_championsUprisingStateAnimationParameter, false);
             //m_championsUprisingAnimation.gameObject.SetActive(false);
             m_physics.gravityScale = m_cacheGravity;
+            m_animator.SetBool(m_championsUprisingStateAnimationParameter, false);
+            base.Cancel();
         }
 
         public void EnableCollision(bool value)

@@ -114,10 +114,11 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
         public override void Cancel()
         {
-            base.Cancel();
             //m_soulFireBlastInfo.ShowCollider(false);
             m_physics.gravityScale = m_cacheGravity;
             m_fxAnimator.Play("Buffer");
+            m_animator.SetBool(m_soulFireBlastStateAnimationParameter, false);
+            base.Cancel();
         }
 
         public void EnableCollision(bool value)

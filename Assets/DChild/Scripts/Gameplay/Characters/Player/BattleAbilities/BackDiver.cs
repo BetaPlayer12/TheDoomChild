@@ -107,9 +107,9 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             m_hasExecuted = false;
             //m_backDiverInfo.ShowCollider(false);
             //m_hitbox.Enable();
-            m_animator.SetBool(m_backDiverStateAnimationParameter, false);
             //m_canBackDiver = true;
             //m_canMove = true;
+            m_animator.SetBool(m_backDiverStateAnimationParameter, false);
             base.AttackOver();
         }
 
@@ -118,10 +118,11 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             if (m_hasExecuted)
             {
                 m_hasExecuted = false;
-                base.Cancel();
                 //m_backDiverInfo.ShowCollider(false);
                 m_fxAnimator.Play("Buffer");
                 m_hitbox.Enable();
+                m_animator.SetBool(m_backDiverStateAnimationParameter, false);
+                base.Cancel();
             }
         }
 
