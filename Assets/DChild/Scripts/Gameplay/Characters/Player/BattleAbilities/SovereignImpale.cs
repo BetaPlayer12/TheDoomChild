@@ -84,9 +84,9 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
         public override void Reset()
         {
-            base.Reset();
             //m_sovereignImpaleInfo.ShowCollider(false);
             m_animator.SetBool(m_sovereignImpaleStateAnimationParameter, false);
+            base.Reset();
         }
 
         public void Execute()
@@ -106,9 +106,9 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
         public void EndExecution()
         {
             //m_sovereignImpaleInfo.ShowCollider(false);
-            m_animator.SetBool(m_sovereignImpaleStateAnimationParameter, false);
+            //m_canMove = true;
             //m_canSovereignImpale = true;
-            m_canMove = true;
+            m_animator.SetBool(m_sovereignImpaleStateAnimationParameter, false);
             base.AttackOver();
         }
 
@@ -116,24 +116,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
         {
             //m_sovereignImpaleInfo.ShowCollider(false);
             m_animator.SetBool(m_sovereignImpaleStateAnimationParameter, false);
-            m_fxAnimator.Play("Buffer");
             base.Cancel();
-        }
-
-        public void EnableCollision(bool value)
-        {
-            m_rigidBody.WakeUp();
-            m_sovereignImpaleInfo.ShowCollider(value);
-            m_attackFX.transform.position = m_sovereignImpaleInfo.fxPosition.position;
-
-            //TEST
-            m_enemySensor.Cast();
-            m_wallSensor.Cast();
-            m_edgeSensor.Cast();
-            if (!m_enemySensor.isDetecting && !m_wallSensor.allRaysDetecting && m_edgeSensor.isDetecting && value)
-            {
-                m_physics.AddForce(new Vector2(m_character.facing == HorizontalDirection.Right ? m_pushForce.x : -m_pushForce.x, m_pushForce.y), ForceMode2D.Impulse);
-            }
         }
 
         public void HandleAttackTimer()
