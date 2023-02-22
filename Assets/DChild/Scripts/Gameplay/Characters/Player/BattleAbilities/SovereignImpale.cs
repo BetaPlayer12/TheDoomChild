@@ -25,15 +25,6 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
         private Character m_character;
         [SerializeField, BoxGroup("Physics")]
         private Rigidbody2D m_physics;
-        [SerializeField, BoxGroup("Sensors")]
-        private RaySensor m_enemySensor;
-        [SerializeField, BoxGroup("Sensors")]
-        private RaySensor m_wallSensor;
-        [SerializeField, BoxGroup("Sensors")]
-        private RaySensor m_edgeSensor;
-
-        [SerializeField]
-        private Vector2 m_pushForce;
 
         [SerializeField, BoxGroup("Projectile")]
         private Transform m_startPoint;
