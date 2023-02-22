@@ -5,6 +5,7 @@ namespace Holysoft.Collections
     [Flags]
     public enum Flag
     {
+        None = 0,
         Index0 = 1 << 0,
         Index1 = 1 << 1,
         Index2 = 1 << 2,
@@ -37,5 +38,6 @@ namespace Holysoft.Collections
         Index29 = 1 << 29,
         Index30 = 1 << 30,
         Index31 = 1 << 31,
+        All = ~None
     }
 }
