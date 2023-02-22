@@ -84,7 +84,6 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
         public override void Reset()
         {
-            //m_sovereignImpaleInfo.ShowCollider(false);
             m_animator.SetBool(m_sovereignImpaleStateAnimationParameter, false);
             base.Reset();
         }
@@ -105,16 +104,12 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
         public void EndExecution()
         {
-            //m_sovereignImpaleInfo.ShowCollider(false);
-            //m_canMove = true;
-            //m_canSovereignImpale = true;
             m_animator.SetBool(m_sovereignImpaleStateAnimationParameter, false);
             base.AttackOver();
         }
 
         public override void Cancel()
         {
-            //m_sovereignImpaleInfo.ShowCollider(false);
             m_animator.SetBool(m_sovereignImpaleStateAnimationParameter, false);
             base.Cancel();
         }
