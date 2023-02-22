@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2424dbba250da3246b24833e2c1ddd9a, type: 3}
-  m_Name: AbysmalArmorSkill
+  m_Name: AbysmalArmorData
   m_EditorClassIdentifier: 
   serializationData:
     SerializedFormat: 2
@@ -29,23 +29,23 @@ MonoBehaviour:
       Data: 2
     - Name: 
       Entry: 7
-      Data: 1|DChild.Gameplay.Characters.Players.SoulSkills.ResistanceModifier, Assembly-CSharp
-    - Name: m_type
+      Data: 1|DChild.Gameplay.Characters.Players.SoulSkills.StatusEffectDurationModifier,
+        Assembly-CSharp
+    - Name: m_percentToAdd
       Entry: 3
-      Data: 1
-    - Name: m_addedResistance
-      Entry: 3
-      Data: 20
+      Data: -50
     - Name: 
       Entry: 8
       Data: 
     - Name: 
       Entry: 7
-      Data: 2|DChild.Gameplay.Characters.Players.SoulSkills.StatusEffectDurationModifier,
-        Assembly-CSharp
-    - Name: m_percentToAdd
+      Data: 2|DChild.Gameplay.Characters.Players.SoulSkills.ResistanceModifier, Assembly-CSharp
+    - Name: m_type
       Entry: 3
-      Data: -50
+      Data: 127
+    - Name: m_addedResistance
+      Entry: 3
+      Data: 20
     - Name: 
       Entry: 8
       Data: 
@@ -56,15 +56,13 @@ MonoBehaviour:
       Entry: 8
       Data: 
   m_ID: 1154094
-  m_name: None
+  m_name: AbysmalArmor
   m_connectToDatabase: 1
   m_databaseID: 1154094
-  m_customName: None
+  m_customName: AbysmalArmor
   m_initialized: 1
-  m_orbData: {fileID: 11400000, guid: 879a288df7d8a05409efdbd3aa15ad6c, type: 2}
+  m_orbData: {fileID: 11400000, guid: 5bc73cd96d95244419cad9e1799ff10f, type: 2}
   m_icon: {fileID: 21300000, guid: f1ab9bca6edf839478f72479ea094372, type: 3}
   m_capacity: 10
-  m_description: 'Grants the user to absorb 20% from Melee and Ranged Attacks. It
+  m_description: Grants the user to absorbs 20% from Melee and Ranged Attacks. It
     also shortens the duration time of all Status Ailments by half.
-
-'
