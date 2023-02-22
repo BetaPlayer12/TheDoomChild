@@ -1,4 +1,5 @@
 using DChild.Gameplay.Characters.Players.Modules;
+using DChild.Gameplay.Pooling;
 using DChild.Gameplay.Projectiles;
 using Sirenix.OdinInspector;
 using Spine.Unity;
@@ -38,6 +39,12 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
         private Transform m_startPoint;
         [SerializeField, BoxGroup("Projectile")]
         private ProjectileInfo m_projectileInfo;
+        [SerializeField, BoxGroup("Projectile")]
+        private float m_summonOffset;
+        [SerializeField, BoxGroup("Projectile")]
+        private float m_summonDelay;
+        [SerializeField, BoxGroup("Projectile")]
+        private List<Vector3> m_summonOffsetScales;
 
         private ProjectileLauncher m_launcher;
 
@@ -159,10 +166,91 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             }
         }
 
+        protected Vector2 GroundPosition(Vector2 startPoint)
+        {
+            int hitCount = 0;
+            //RaycastHit2D hit = Physics2D.Raycast(m_projectilePoint.position, Vector2.down,  1000, DChildUtility.GetEnvironmentMask());
+            RaycastHit2D[] hit = Cast(startPoint, Vector2.down, 1000, true, out hitCount, true);
+            Debug.DrawRay(startPoint, hit[0].point);
+            //var hitPos = (new Vector2(m_projectilePoint.position.x, Vector2.down.y) * hit[0].distance);
+            //return hitPos;
+            return hit[0].point;
+        }
+
+        private static ContactFilter2D m_contactFilter;
+        private static RaycastHit2D[] m_hitResults;
+        private static bool m_isInitialized;
+
+        private static void Initialize()
+        {
+            if (m_isInitialized == false)
+            {
+                m_contactFilter.useLayerMask = true;
+                m_contactFilter.SetLayerMask(DChildUtility.GetEnvironmentMask());
+                //m_contactFilter.SetLayerMask(Physics2D.GetLayerCollisionMask(DChildUtility.GetEnvironmentMask()));
+                m_hitResults = new RaycastHit2D[16];
+                m_isInitialized = true;
+            }
+        }
+
+        protected static RaycastHit2D[] Cast(Vector2 origin, Vector2 direction, float distance, bool ignoreTriggers, out int hitCount, bool debugMode = false)
+        {
+            Initialize();
+            m_contactFilter.useTriggers = !ignoreTriggers;
+            hitCount = Physics2D.Raycast(origin, direction, m_contactFilter, m_hitResults, distance);
+#if UNITY_EDITOR
+            if (debugMode)
+            {
+                if (hitCount > 0)
+                {
+                    Debug.DrawRay(origin, direction * m_hitResults[0].distance, Color.cyan, 1f);
+                }
+                else
+                {
+                    Debug.DrawRay(origin, direction * distance, Color.cyan, 1f);
+                }
+            }
+#endif
+            return m_hitResults;
+        }
+
         public void Summon()
         {
-            m_launcher.AimAt(new Vector2(m_startPoint.position.x + (m_character.facing == HorizontalDirection.Right ? 10 : -10), m_startPoint.position.y));
-            m_launcher.LaunchProjectile();
+            //float offset = 0f;
+            //var offsetLookPosition = m_character.facing == HorizontalDirection.Right ? 1 : -1;
+            //m_launcher.AimAt(new Vector2(m_startPoint.position.x + offsetLookPosition, m_startPoint.position.y));
+            //for (int i = 0; i < 3; i++)
+            //{
+            //    var instance = GameSystem.poolManager.GetPool<ProjectilePool>().GetOrCreateItem(m_projectileInfo.projectile);
+            //    instance.transform.position = new Vector2(m_startPoint.position.x + offset, GroundPosition(m_startPoint.position).y);
+            //    instance.transform.localScale = new Vector3(m_character.facing == HorizontalDirection.Right ? 1 : -1, 1, 1);
+            //    var component = instance.GetComponent<Projectile>();
+            //    component.ResetState();
+            //    offset += 10f * offsetLookPosition;
+            //}
+            StartCoroutine(SummonRoutine());
+        }
+
+        private IEnumerator SummonRoutine()
+        {
+            float offset = 0f;
+            var offsetLookPosition = m_character.facing == HorizontalDirection.Right ? 1 : -1;
+            m_launcher.AimAt(new Vector2(m_startPoint.position.x + offsetLookPosition, m_startPoint.position.y));
+            for (int i = 0; i < m_summonOffsetScales.Count; i++)
+            {
+                var summonPoint = new Vector2(m_startPoint.position.x + offset, m_startPoint.position.y);
+                if (Vector2.Distance(summonPoint, GroundPosition(summonPoint)) != 0)
+                {
+                    var instance = GameSystem.poolManager.GetPool<ProjectilePool>().GetOrCreateItem(m_projectileInfo.projectile);
+                    instance.transform.position = new Vector2(summonPoint.x, GroundPosition(summonPoint).y + (m_summonOffsetScales[i].y - 1));
+                    instance.transform.localScale = new Vector3(m_character.facing == HorizontalDirection.Right ? m_summonOffsetScales[i].x : -m_summonOffsetScales[i].x, m_summonOffsetScales[i].y, m_summonOffsetScales[i].z);
+                    var component = instance.GetComponent<Projectile>();
+                    component.ResetState();
+                    offset += m_summonOffset * offsetLookPosition;
+                    yield return new WaitForSeconds(m_summonDelay);
+                }
+            }
+            yield return null;
         }
     }
 }
