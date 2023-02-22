@@ -152,7 +152,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             else
             {
                 m_foolsVerdictCooldownTimer = m_foolsVerdictCooldown;
-                m_state.isAttacking = false;
+                //m_state.isAttacking = false;
                 m_canFoolsVerdict = true;
             }
         }

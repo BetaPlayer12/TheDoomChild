@@ -140,7 +140,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             else
             {
                 m_soulFireBlastCooldownTimer = m_soulFireBlastCooldown;
-                m_state.isAttacking = false;
+                //m_state.isAttacking = false;
                 m_canSoulFireBlast = true;
             }
         }

@@ -148,7 +148,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             else
             {
                 m_backDiverCooldownTimer = m_backDiverCooldown;
-                m_state.isAttacking = false;
+                //m_state.isAttacking = false;
                 m_canBackDiver = true;
             }
         }

@@ -115,7 +115,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             else
             {
                 m_sovereignImpaleCooldownTimer = m_sovereignImpaleCooldown;
-                m_state.isAttacking = false;
+                //m_state.isAttacking = false;
                 m_canSovereignImpale = true;
             }
         }

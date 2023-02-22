@@ -141,7 +141,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             else
             {
                 m_fireFistCooldownTimer = m_fireFistCooldown;
-                m_state.isAttacking = false;
+                //m_state.isAttacking = false;
                 m_canFireFist = true;
             }
         }

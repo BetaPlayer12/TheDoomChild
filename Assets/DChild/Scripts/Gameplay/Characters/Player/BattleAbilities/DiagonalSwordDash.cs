@@ -137,7 +137,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             else
             {
                 m_diagonalSwordDashCooldownTimer = m_diagonalSwordDashCooldown;
-                m_state.isAttacking = false;
+                //m_state.isAttacking = false;
                 m_canDiagonalSwordDash = true;
             }
         }

@@ -181,7 +181,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             else
             {
                 m_fencerFlashCooldownTimer = m_fencerFlashCooldown;
-                m_state.isAttacking = false;
+                //m_state.isAttacking = false;
                 m_canFencerFlash = true;
             }
         }

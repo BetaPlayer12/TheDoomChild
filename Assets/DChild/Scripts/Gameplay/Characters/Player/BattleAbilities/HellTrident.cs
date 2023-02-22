@@ -153,7 +153,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             else
             {
                 m_hellTridentCooldownTimer = m_hellTridentCooldown;
-                m_state.isAttacking = false;
+                //m_state.isAttacking = false;
                 m_canHellTrident = true;
             }
         }

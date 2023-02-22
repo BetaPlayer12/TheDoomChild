@@ -173,7 +173,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             else
             {
                 m_reaperHarvestCooldownTimer = m_reaperHarvestCooldown;
-                m_state.isAttacking = false;
+                //m_state.isAttacking = false;
                 m_canReaperHarvest = true;
             }
         }

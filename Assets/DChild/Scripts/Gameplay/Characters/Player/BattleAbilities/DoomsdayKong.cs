@@ -147,7 +147,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             else
             {
                 m_doomsdayKongCooldownTimer = m_doomsdayKongCooldown;
-                m_state.isAttacking = false;
+                //m_state.isAttacking = false;
                 m_canDoomsdayKong = true;
             }
         }

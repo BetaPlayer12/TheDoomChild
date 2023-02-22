@@ -151,7 +151,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             else
             {
                 m_championsUprisingCooldownTimer = m_championsUprisingCooldown;
-                m_state.isAttacking = false;
+                //m_state.isAttacking = false;
                 m_canChampionsUprising = true;
             }
         }

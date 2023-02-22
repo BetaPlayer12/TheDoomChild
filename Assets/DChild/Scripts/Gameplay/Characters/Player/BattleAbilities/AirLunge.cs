@@ -147,7 +147,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             else
             {
                 m_airLungeCooldownTimer = m_airLungeCooldown;
-                m_state.isAttacking = false;
+                //m_state.isAttacking = false;
                 m_canAirLunge = true;
             }
         }
