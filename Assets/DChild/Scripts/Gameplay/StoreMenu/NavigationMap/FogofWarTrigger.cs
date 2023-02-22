@@ -20,7 +20,7 @@ namespace DChild.Gameplay.NavigationMap
 
     public class FogofWarTrigger : MonoBehaviour
     {
-        [ShowInInspector, HideInPrefabAssets]
+        [ShowInInspector, HideInPrefabAssets, OnValueChanged("UpdateState")]
         private bool m_isRevealed = false;
         private Collider2D m_trigger;
 
@@ -50,6 +50,10 @@ namespace DChild.Gameplay.NavigationMap
         {
             SetStateAs(state.HasFlag(m_flagIndex));
         }
+        private void UpdateState()
+        {
+            SetState(m_isRevealed);
+        }
 
         private void Awake()
         {
@@ -67,5 +71,6 @@ namespace DChild.Gameplay.NavigationMap
                 SetState(true);
             }
         }
+
     }
 }
