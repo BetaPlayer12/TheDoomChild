@@ -33,12 +33,12 @@ namespace DChild.Gameplay.NavigationMap
         private bool isListExceedLimit => m_list.Length > 32;
 #endif
 
-        [SerializeField, VariablePopup(true), OnValueChanged("MatchGameObjectNameToVariable"), HideInPrefabAssets]
+        [SerializeField, VariablePopup(true), HideInPrefabAssets]
         private string m_varName;
-        [SerializeField, ListDrawerSettings(ShowIndexLabels = true, HideRemoveButton = true, HideAddButton = true)]
+        [SerializeField, ListDrawerSettings(ShowIndexLabels = true, HideRemoveButton = true, HideAddButton = true), TabGroup("Triggers")]
         private FogofWarTrigger[] m_list;
 
-        [SerializeField, DisableInPlayMode, HideInEditorMode]
+        [SerializeField, DisableInPlayMode, HideInEditorMode, EnumToggleButtons(), TabGroup("State")]
         private Flag m_currentState;
 
         public string varName => m_varName;
