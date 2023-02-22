@@ -1320,11 +1320,11 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     }
                 }
             }
-            else if (m_state.isCrouched && m_earthShaker.CanEarthShaker() && !m_input.backDiverPressed)
+            else if (m_state.isCrouched && m_earthShaker.CanEarthShaker() && !m_input.backDiverPressed && !m_input.sovereignImpalePressed && !m_input.ninthCircleSanctionPressed)
             {
                 if (m_state.canAttack)
                 {
-                    if (m_input.slashPressed && !m_input.sovereignImpalePressed && !m_input.ninthCircleSanctionPressed)
+                    if (m_input.slashPressed)
                     {
                         if (m_state.isInShadowMode == true)
                         {
@@ -1364,36 +1364,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
                                 m_whip.Execute(WhipAttack.Type.Crouch_Forward);
                                 return;
                             }
-                        }
-
-                        return;
-                    }
-                    else if (m_input.sovereignImpalePressed && m_sovereignImpale.CanSovereignImpale())
-                    {
-                        if (m_state.isInShadowMode == false)
-                        {
-
-                            PrepareForGroundAttack();
-                            if (IsFacingInput())
-                            {
-                                m_sovereignImpale.Execute();
-                            }
-                            return;
-                        }
-
-                        return;
-                    }
-                    else if (m_input.ninthCircleSanctionPressed && m_ninthCircleSanction.CanNinthCircleSanction())
-                    {
-                        if (m_state.isInShadowMode == false)
-                        {
-
-                            PrepareForGroundAttack();
-                            if (IsFacingInput())
-                            {
-                                m_ninthCircleSanction.Execute();
-                            }
-                            return;
                         }
 
                         return;
@@ -1696,7 +1666,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
                         return;
                     }
-                    else if (m_input.finalSlashPressed && m_finalSlash.CanFinalSlash() && !m_input.airLungeSlashPressed)
+                    else if (m_input.finalSlashPressed && m_finalSlash.CanFinalSlash() && !m_input.airLungeSlashPressed && !m_input.sovereignImpalePressed)
                     {
                         if (m_state.isInShadowMode == false)
                         {
@@ -1738,7 +1708,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                         }
                         return;
                     }
-                    else if (m_input.fireFistPressed && !m_input.hellTridentPressed && !m_input.foolsVerdictPressed)
+                    else if (m_input.fireFistPressed && !m_input.hellTridentPressed && !m_input.foolsVerdictPressed && !m_input.ninthCircleSanctionPressed)
                     {
                         if (m_state.isInShadowMode == false)
                         {
@@ -1806,6 +1776,36 @@ namespace DChild.Gameplay.Characters.Players.Modules
                             if (IsFacingInput())
                             {
                                 m_backDiver.Execute();
+                            }
+                            return;
+                        }
+
+                        return;
+                    }
+                    else if (m_input.sovereignImpalePressed && m_sovereignImpale.CanSovereignImpale())
+                    {
+                        if (m_state.isInShadowMode == false)
+                        {
+
+                            PrepareForGroundAttack();
+                            if (IsFacingInput())
+                            {
+                                m_sovereignImpale.Execute();
+                            }
+                            return;
+                        }
+
+                        return;
+                    }
+                    else if (m_input.ninthCircleSanctionPressed && m_ninthCircleSanction.CanNinthCircleSanction())
+                    {
+                        if (m_state.isInShadowMode == false)
+                        {
+
+                            PrepareForGroundAttack();
+                            if (IsFacingInput())
+                            {
+                                m_ninthCircleSanction.Execute();
                             }
                             return;
                         }
