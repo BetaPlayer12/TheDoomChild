@@ -96,15 +96,15 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
         public void Execute()
         {
             m_hasExecuted = true;
-            //m_state.waitForBehaviour = true;
-            m_lightningSpearChargingRoutine = StartCoroutine(LightningSpearChargingRoutine());
-            m_state.waitForBehaviour = false;
+            m_state.waitForBehaviour = true; // Temporary (Delete after)
+            //m_lightningSpearChargingRoutine = StartCoroutine(LightningSpearChargingRoutine()); //Temporary Disabled
+            //m_state.waitForBehaviour = false; //Temporary Disabled
             m_state.isAttacking = true;
-            m_characterState.isChargingLightningSpear = true;
-            //m_state.canAttack = false;
+            //m_characterState.isChargingLightningSpear = true; //Temporary Disabled
             m_canLightningSpear = false;
             m_canMove = false;
-            m_canReset = true;
+            //m_canReset = true; //Temporary Disabled
+            m_canReset = false; // Temporary (Delete after)
             m_cacheGravity = m_physics.gravityScale;
             m_physics.gravityScale = 0;
             m_physics.velocity = Vector2.zero;
@@ -113,7 +113,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             m_lightningSpearCooldownTimer = m_lightningSpearCooldown;
             m_lightningSpearMovementCooldownTimer = m_lightningSpearMovementCooldown;
             m_lightningSpearResetCooldownTimer = m_lightningSpearResetCooldown;
-            //m_attacker.SetDamageModifier(m_slashComboInfo[m_currentSlashState].damageModifier * m_modifier.Get(PlayerModifier.AttackDamage));
+            //m_attacker.SetDamageModifier(m_slashComboInfo[m_currentSlashState].damageModifier * m_modifier.Get(PlayerModifier.AttackDamage)); //Temporary Disabled
         }
 
         public void ReleaseHold()

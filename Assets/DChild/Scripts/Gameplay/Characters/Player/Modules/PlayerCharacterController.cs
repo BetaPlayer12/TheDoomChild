@@ -767,14 +767,14 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 {
                     m_groundedness?.Evaluate();
                 }
-                if (m_state.isChargingLightningSpear)
-                {
-                    if (!m_input.lightningSpearHeld && m_lightningSpear.CanMove())
-                    {
-                        m_lightningSpear.ReleaseHold();
-                    }
-                    return;
-                }
+                //if (m_state.isChargingLightningSpear)
+                //{
+                //    if (!m_input.lightningSpearHeld && m_lightningSpear.CanMove())
+                //    {
+                //        m_lightningSpear.ReleaseHold();
+                //    }
+                //    return;
+                //}
                 //if (m_input.edgedFuryReleased && !m_state.isChargingLightningSpear)
                 //{
                 //    m_edgedFury?.EndExecution();
