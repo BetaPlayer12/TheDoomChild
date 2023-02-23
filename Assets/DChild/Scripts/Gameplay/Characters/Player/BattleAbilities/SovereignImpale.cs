@@ -75,6 +75,10 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
         public override void Reset()
         {
+            m_state.waitForBehaviour = false;
+            m_state.isAttacking = false;
+            m_canSovereignImpale = true;
+            m_canMove = true;
             m_animator.SetBool(m_sovereignImpaleStateAnimationParameter, false);
             base.Reset();
         }

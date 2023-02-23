@@ -1801,7 +1801,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     {
                         if (m_state.isInShadowMode == false)
                         {
-                            m_sovereignImpale?.Cancel();
+                            m_sovereignImpale.Reset();
                             PrepareForGroundAttack();
                             if (IsFacingInput())
                             {
