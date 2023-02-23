@@ -55,6 +55,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
         public bool CanMove() => m_canMove;
 
         private Coroutine m_enemySensorRoutine;
+        private Coroutine m_dashRoutine;
 
         private FencerFlashState m_currentState;
 
@@ -86,9 +87,20 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
         public override void Reset()
         {
-            base.Reset();
+            StopAllCoroutines();
+            if (m_enemySensorRoutine != null)
+            {
+                StopCoroutine(m_enemySensorRoutine);
+                m_enemySensorRoutine = null;
+            }
+            if (m_dashRoutine != null)
+            {
+                StopCoroutine(m_dashRoutine);
+                m_dashRoutine = null;
+            }
             m_fencerFlashInfo.ShowCollider(false);
             m_animator.SetBool(m_fencerFlashStateAnimationParameter, false);
+            base.Reset();
         }
 
         public void Execute(FencerFlashState state)
@@ -117,17 +129,22 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
         public void EndExecution()
         {
-            m_fencerFlashInfo.ShowCollider(false);
-            //m_canfencerFlash = true;
-            m_canMove = true;
-            //m_fencerFlashAnimation.gameObject.SetActive(false);
-            m_physics.gravityScale = m_cacheGravity;
             StopAllCoroutines();
             if (m_enemySensorRoutine != null)
             {
                 StopCoroutine(m_enemySensorRoutine);
                 m_enemySensorRoutine = null;
             }
+            if (m_dashRoutine != null)
+            {
+                StopCoroutine(m_dashRoutine);
+                m_dashRoutine = null;
+            }
+            m_fencerFlashInfo.ShowCollider(false);
+            //m_canfencerFlash = true;
+            m_canMove = true;
+            //m_fencerFlashAnimation.gameObject.SetActive(false);
+            m_physics.gravityScale = m_cacheGravity;
             if (m_fxParent.activeSelf)
             {
                 m_fx.Stop();
@@ -139,15 +156,20 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
         public override void Cancel()
         {
-            m_fencerFlashInfo.ShowCollider(false);
-            m_canMove = true;
-            m_fxAnimator.Play("Buffer");
             StopAllCoroutines();
             if (m_enemySensorRoutine != null)
             {
                 StopCoroutine(m_enemySensorRoutine);
                 m_enemySensorRoutine = null;
             }
+            if (m_dashRoutine != null)
+            {
+                StopCoroutine(m_dashRoutine);
+                m_dashRoutine = null;
+            }
+            m_fencerFlashInfo.ShowCollider(false);
+            m_canMove = true;
+            m_fxAnimator.Play("Buffer");
             //m_fencerFlashAnimation.gameObject.SetActive(false);
             m_physics.gravityScale = m_cacheGravity;
             if (m_fxParent.activeSelf)
@@ -168,7 +190,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
         public void StartDash()
         {
-            StartCoroutine(DashRoutine());
+            m_dashRoutine = StartCoroutine(DashRoutine());
         }
 
         public void HandleAttackTimer()
