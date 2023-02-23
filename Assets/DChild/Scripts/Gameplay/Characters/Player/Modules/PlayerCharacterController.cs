@@ -1372,8 +1372,10 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     {
                         if (m_state.isInShadowMode == false)
                         {
-
+                            m_crouch?.Cancel();
+                            m_ninthCircleSanction.Reset();
                             PrepareForGroundAttack();
+                            m_movement?.SwitchConfigTo(Movement.Type.Jog);
                             if (IsFacingInput())
                             {
                                 m_ninthCircleSanction.Execute();

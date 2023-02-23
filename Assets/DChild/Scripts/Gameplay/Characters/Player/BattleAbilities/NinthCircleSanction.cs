@@ -80,6 +80,10 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
         public override void Reset()
         {
+            m_state.waitForBehaviour = false;
+            m_state.isAttacking = false;
+            m_canNinthCircleSanction = true;
+            m_canMove = true;
             //m_ninthCircleSanctionInfo.ShowCollider(false);
             m_animator.SetBool(m_ninthCircleSanctionStateAnimationParameter, false);
             base.Reset();
