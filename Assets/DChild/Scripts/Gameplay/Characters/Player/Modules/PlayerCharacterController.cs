@@ -1634,10 +1634,10 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     {
                         if (m_state.isInShadowMode == false)
                         {
-                            m_idle?.Cancel();
-                            m_movement?.Cancel();
-
+                            m_crouch?.Cancel();
+                            m_reaperHarvest?.Reset();
                             PrepareForGroundAttack();
+                            m_movement?.SwitchConfigTo(Movement.Type.Jog);
                             if (IsFacingInput())
                             {
                                 m_reaperHarvest.Execute(ReaperHarvest.ReaperHarvestState.Grounded);
@@ -1786,8 +1786,10 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     {
                         if (m_state.isInShadowMode == false)
                         {
-
+                            m_crouch?.Cancel();
+                            m_backDiver.Reset();
                             PrepareForGroundAttack();
+                            m_movement?.SwitchConfigTo(Movement.Type.Jog);
                             if (IsFacingInput())
                             {
                                 m_backDiver.Execute();

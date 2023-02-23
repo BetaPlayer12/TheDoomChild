@@ -85,9 +85,13 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
         public override void Reset()
         {
-            base.Reset();
+            m_state.waitForBehaviour = false;
+            m_state.isAttacking = false;
+            m_canReaperHarvest = true;
+            m_canMove = true;
             m_reaperHarvestInfo.ShowCollider(false);
             m_animator.SetBool(m_reaperHarvestStateAnimationParameter, false);
+            base.Reset();
         }
 
         public void Execute(ReaperHarvestState state)

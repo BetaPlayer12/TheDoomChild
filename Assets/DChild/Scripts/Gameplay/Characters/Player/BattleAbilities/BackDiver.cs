@@ -80,9 +80,13 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
         public override void Reset()
         {
-            base.Reset();
+            m_state.waitForBehaviour = false;
+            m_state.isAttacking = false;
+            m_canBackDiver = true;
+            m_canMove = true;
             //m_backDiverInfo.ShowCollider(false);
             m_animator.SetBool(m_backDiverStateAnimationParameter, false);
+            base.Reset();
         }
 
         public void Execute()
