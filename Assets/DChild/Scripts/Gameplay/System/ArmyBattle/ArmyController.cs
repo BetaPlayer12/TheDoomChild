@@ -33,9 +33,10 @@ namespace DChild.Gameplay.ArmyBattle
             ChooseAttack(UnitType.Paper);
         }
 
-        protected void ChooseAttack(UnitType unitType)
+        protected virtual void ChooseAttack(UnitType unitType)
         {
-            m_currentAttack = CreateAttack(unitType);
+            var chosenGroups = m_controlledArmy.GetAvailableAttackGroups(unitType);
+            m_currentAttack = CreateAttack(chosenGroups[Random.Range(0, chosenGroups.Count)]);
             SendAttackChosenEvent(CreateAttackEvent(m_currentAttack));
         }
 
@@ -44,7 +45,7 @@ namespace DChild.Gameplay.ArmyBattle
             AttackChosen?.Invoke(this, armyAttackEvent);
         }
 
-        private ArmyAttack CreateAttack(UnitType unitType) => new ArmyAttack(unitType, m_controlledArmy.GetPower(unitType));
+        private ArmyAttack CreateAttack(ArmyAttackGroup armyAttackGroup) => new ArmyAttack(armyAttackGroup.unitType, armyAttackGroup.GetTotalPower());
 
         private ArmyAttackEvent CreateAttackEvent(ArmyAttack armyAttack) => new ArmyAttackEvent(armyAttack);
     }
