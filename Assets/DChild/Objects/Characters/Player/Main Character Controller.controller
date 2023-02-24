@@ -747,7 +747,7 @@ AnimatorStateMachine:
   m_ChildStates:
   - serializedVersion: 1
     m_State: {fileID: -9165592929335287820}
-    m_Position: {x: 30, y: 340, z: 0}
+    m_Position: {x: 30, y: 320, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 6833094830297106156}
     m_Position: {x: 290, y: 340, z: 0}
@@ -2018,7 +2018,7 @@ AnimatorStateTransition:
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 2911339173337169825}
   m_Solo: 0
-  m_Mute: 0
+  m_Mute: 1
   m_IsExit: 0
   serializedVersion: 3
   m_TransitionDuration: 0
@@ -4306,12 +4306,6 @@ AnimatorStateTransition:
   - m_ConditionMode: 1
     m_ConditionEvent: WhipAttack
     m_EventTreshold: 0
-  - m_ConditionMode: 2
-    m_ConditionEvent: ProjectileThrow
-    m_EventTreshold: 0
-  - m_ConditionMode: 2
-    m_ConditionEvent: IsCrouching
-    m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 2151382898471220953}
   m_Solo: 0
@@ -6125,6 +6119,7 @@ AnimatorState:
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: -6357229158075671913}
+  - {fileID: -3795202573560791414}
   m_StateMachineBehaviours:
   - {fileID: 2099804739923838224}
   m_Position: {x: 50, y: 50, z: 0}
@@ -7713,6 +7708,31 @@ AnimatorStateTransition:
   m_InterruptionSource: 0
   m_OrderedInterruption: 1
   m_CanTransitionToSelf: 1
+--- !u!1101 &-3795202573560791414
+AnimatorStateTransition:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_Conditions:
+  - m_ConditionMode: 2
+    m_ConditionEvent: DiagonalSwordDash
+    m_EventTreshold: 0
+  m_DstStateMachine: {fileID: 0}
+  m_DstState: {fileID: 6504268399803520080}
+  m_Solo: 0
+  m_Mute: 0
+  m_IsExit: 0
+  serializedVersion: 3
+  m_TransitionDuration: 0
+  m_TransitionOffset: 0
+  m_ExitTime: 0.05
+  m_HasExitTime: 0
+  m_HasFixedDuration: 1
+  m_InterruptionSource: 0
+  m_OrderedInterruption: 1
+  m_CanTransitionToSelf: 1
 --- !u!114 &-3794898362150967393
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -8898,7 +8918,7 @@ AnimatorStateTransition:
   m_TransitionOffset: 0
   m_ExitTime: 0.05
   m_HasExitTime: 0
-  m_HasFixedDuration: 0
+  m_HasFixedDuration: 1
   m_InterruptionSource: 0
   m_OrderedInterruption: 1
   m_CanTransitionToSelf: 1
@@ -10520,12 +10540,6 @@ AnimatorStateTransition:
     m_EventTreshold: 2
   - m_ConditionMode: 1
     m_ConditionEvent: WhipAttack
-    m_EventTreshold: 0
-  - m_ConditionMode: 2
-    m_ConditionEvent: ProjectileThrow
-    m_EventTreshold: 0
-  - m_ConditionMode: 2
-    m_ConditionEvent: IsCrouching
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -6697921906360004699}
@@ -17811,9 +17825,6 @@ AnimatorStateTransition:
   - m_ConditionMode: 3
     m_ConditionEvent: YInput
     m_EventTreshold: -0.1
-  - m_ConditionMode: 2
-    m_ConditionEvent: IsCrouching
-    m_EventTreshold: 0
   - m_ConditionMode: 6
     m_ConditionEvent: WhipState
     m_EventTreshold: -1
@@ -26465,9 +26476,6 @@ AnimatorStateTransition:
   - m_ConditionMode: 3
     m_ConditionEvent: YInput
     m_EventTreshold: 0
-  - m_ConditionMode: 2
-    m_ConditionEvent: IsCrouching
-    m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 66075039290003218}
   m_Solo: 0
@@ -27478,12 +27486,6 @@ AnimatorStateTransition:
     m_EventTreshold: 0
   - m_ConditionMode: 1
     m_ConditionEvent: WhipAttack
-    m_EventTreshold: 0
-  - m_ConditionMode: 2
-    m_ConditionEvent: ProjectileThrow
-    m_EventTreshold: 0
-  - m_ConditionMode: 2
-    m_ConditionEvent: IsCrouching
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -3335643987637404945}

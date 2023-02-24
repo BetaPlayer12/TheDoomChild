@@ -70,9 +70,12 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
         public override void Reset()
         {
-            base.Reset();
+            m_state.waitForBehaviour = false;
+            m_state.isAttacking = false;
+            m_canAirLunge = true;
             m_airLungeInfo.ShowCollider(false);
             m_animator.SetBool(m_airLungeStateAnimationParameter, false);
+            base.Reset();
         }
 
         public void Execute()
