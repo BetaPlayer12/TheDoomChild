@@ -1,10 +1,10 @@
 ﻿using DChild.Temp;
 using PixelCrushers;
 using PixelCrushers.DialogueSystem;
-using UnityEngine;
 
 namespace DChild.UI
 {
+
     public class DoozyUIPanel : UIPanel
     {
         public override void Open()

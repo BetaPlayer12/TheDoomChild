@@ -12,22 +12,12 @@ namespace DChild.Gameplay.Characters.Players.Modules
 {
     public class ProjectileThrow : AttackBehaviour
     {
+        [SerializeField, HideLabel]
+        private ProjectileThrowStatsInfo m_configuration;
         [SerializeField]
         private ProjectileInfo m_projectile;
         [SerializeField]
         private Transform m_spawnPoint;
-        [SerializeField]
-        private float m_skullThrowCooldown;
-        [SerializeField, BoxGroup("Aim")]
-        private Vector2 m_defaultAim;
-        [SerializeField, BoxGroup("Aim")]
-        private RangeFloat m_horizontalThreshold;
-        [SerializeField, BoxGroup("Aim"), MinValue(0f)]
-        private float m_verticalThreshold;
-        [SerializeField, BoxGroup("Aim"), MinValue(0f)]
-        private float m_aimSensitivity = 1f;
-        [SerializeField]
-        private bool m_adjustableXSpeed;
         [SerializeField]
         private SkeletonAnimation m_skeletonAnimation;
 
@@ -55,11 +45,11 @@ namespace DChild.Gameplay.Characters.Players.Modules
         public void StartAim()
         {
             GameSystem.ResetCursorPosition(); //FOr Quality of Life thing
-            m_currentAim = m_defaultAim;
+            m_currentAim = m_configuration.defaultAim;
 
-            if (m_adjustableXSpeed == false)
+            if (m_configuration.adjustableXSpeed == false)
             {
-                m_currentAim.x = m_horizontalThreshold.max;
+                m_currentAim.x = m_configuration.horizontalThreshold.max;
             }
 
             if (m_updateProjectileInfo)
@@ -76,28 +66,28 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void MoveAim(Vector2 delta, Vector2 mousePosition)
         {
-            var relativeDelta = delta.normalized * m_aimSensitivity;
+            var relativeDelta = delta.normalized * m_configuration.aimSensitivity;
             relativeDelta.x *= (int)m_character.facing;
             var newAim = m_currentAim += relativeDelta;
 
-            if (newAim.x < m_horizontalThreshold.min)
+            if (newAim.x < m_configuration.horizontalThreshold.min)
             {
-                newAim.x = m_horizontalThreshold.min;
+                newAim.x = m_configuration.horizontalThreshold.min;
                 m_character.SetFacing(m_character.facing == HorizontalDirection.Left ? HorizontalDirection.Right : HorizontalDirection.Left);
             }
-            else if (newAim.x > m_horizontalThreshold.max)
+            else if (newAim.x > m_configuration.horizontalThreshold.max)
             {
-                newAim.x = m_horizontalThreshold.max;
+                newAim.x = m_configuration.horizontalThreshold.max;
             }
 
-            if (newAim.y < m_verticalThreshold * -1)
+            if (newAim.y < m_configuration.verticalThreshold * -1)
             {
-                newAim.y = m_verticalThreshold * -1;
+                newAim.y = m_configuration.verticalThreshold * -1;
                 m_reachedVerticalThreshold = false;
             }
-            else if (newAim.y > m_verticalThreshold)
+            else if (newAim.y > m_configuration.verticalThreshold)
             {
-                newAim.y = m_verticalThreshold;
+                newAim.y = m_configuration.verticalThreshold;
                 m_reachedVerticalThreshold = true;
             }
             m_currentAim = newAim;
@@ -136,19 +126,19 @@ namespace DChild.Gameplay.Characters.Players.Modules
         {
             var normalizedAim = Vector2.zero;
 
-            if (m_adjustableXSpeed)
+            if (m_configuration.adjustableXSpeed)
             {
                 normalizedAim = m_currentAim;
             }
             else
             {
                 normalizedAim = m_currentAim;
-                normalizedAim.x = m_horizontalThreshold.max;
+                normalizedAim.x = m_configuration.horizontalThreshold.max;
             }
 
-            normalizedAim.x = CalculateNormalizedValue(normalizedAim.x, m_horizontalThreshold.min, m_horizontalThreshold.max);
+            normalizedAim.x = CalculateNormalizedValue(normalizedAim.x, m_configuration.horizontalThreshold.min, m_configuration.horizontalThreshold.max);
             var ySign = Mathf.Sign(normalizedAim.y);
-            normalizedAim.y = Mathf.Abs(normalizedAim.y) / m_verticalThreshold * ySign;
+            normalizedAim.y = Mathf.Abs(normalizedAim.y) / m_configuration.verticalThreshold * ySign;
             return normalizedAim;
 
             float CalculateNormalizedValue(float value, float min, float max)
@@ -286,7 +276,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void Execute()
         {
-            m_timer = m_skullThrowCooldown;
+            m_timer = m_configuration.skullThrowCooldown;
             m_state.canAttack = false;
             m_state.isAttacking = true;
             m_animator.SetBool(m_skullThrowAnimationParameter, true);
@@ -335,6 +325,12 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_launcher.SetProjectile(m_projectile);
             m_launcher.SetSpawnPoint(m_spawnPoint);
             m_updateProjectileInfo = true;
+        }
+
+
+        public void SetConfiguration(ProjectileThrowStatsInfo info)
+        {
+            m_configuration.CopyInfo(info);
         }
     }
 }

@@ -97,6 +97,19 @@ namespace DChild.Serialization
             GameplaySystem.campaignSerializer.UpdateData(SerializationScope.Zone);
         }
 
+        public void RemoveNullInComponentSerializers()
+        {
+            List<ComponentSerializer> serializers = new List<ComponentSerializer>(m_componentSerializers);
+            for (int i = serializers.Count - 1; i >= 0; i--)
+            {
+                if (serializers[i] == null)
+                {
+                    serializers.RemoveAt(i);
+                }
+            }
+            m_componentSerializers = serializers.ToArray();
+        }
+
         private void OnPostDeserialization(object sender, CampaignSlotUpdateEventArgs eventArgs)
         {
             if (eventArgs.IsPartOfTheUpdate(SerializationScope.Zone))

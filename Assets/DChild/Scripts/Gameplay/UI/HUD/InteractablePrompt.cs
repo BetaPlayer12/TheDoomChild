@@ -33,17 +33,20 @@ namespace DChild.Gameplay.UI
             if (eventArgs.interactable?.showPrompt ?? false)
             {
                 m_newPromptPosition = eventArgs.interactable.promptPosition;
-                GameEventMessage.Send();
+                MoveToNewPromptPosition();
 
                 var move = m_animator.showAnimation.Move;
                 move.fromCustomValue = m_newPromptPosition + m_showStartPosition;
                 move.toCustomValue = m_newPromptPosition;
 
+                move.UpdateValues();
+                m_animator.showAnimation.UpdateValues();
+
                 m_validPrompt.enabled = eventArgs.showInteractionButton;
                 m_invalidPrompt.enabled = !eventArgs.showInteractionButton;
                 m_promptMessage.text = eventArgs.message;
                 m_requirementMessage.text = eventArgs.message;
-                GameplaySystem.gamplayUIHandle.ShowInteractionPrompt(true); 
+                GameplaySystem.gamplayUIHandle.ShowInteractionPrompt(true);
             }
         }
 
@@ -59,7 +62,6 @@ namespace DChild.Gameplay.UI
                 m_detector.InteractableDetected += OnInteractableDetected;
             }
             m_animator = m_prompt?.GetComponent<UIContainerUIAnimator>();
-            GameEventMessage.Send();
             m_showStartPosition = m_animator.showAnimation.Move.fromCustomValue;
         }
     }

@@ -69,6 +69,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public virtual void AttackOver()
         {
+            m_state.canAttack = true;
             m_animator.SetBool(m_animationParameter, false);
             m_state.isAttacking = false;
             m_state.waitForBehaviour = false;

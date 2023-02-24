@@ -1,13 +1,14 @@
 ﻿using DChild.Gameplay.Characters.Players.Behaviour;
 using DChild.Gameplay.Characters.Players.State;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace DChild.Gameplay.Characters.Players.Modules
 {
     public class PlayerBlock : MonoBehaviour, ICancellableBehaviour, IResettableBehaviour, IComplexCharacterModule
     {
-        [SerializeField]
-        private float m_blockDuration;
+        [SerializeField, HideLabel]
+        private BlockStatsInfo m_configuration;
 
         private IBlockingState m_state;
         private Animator m_animator;
@@ -19,6 +20,10 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_state = info.state;
             m_animator = info.animator;
             m_animationParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.IsBlocking);
+        }
+        public void SetConfiguration(BlockStatsInfo info)
+        {
+            m_configuration.CopyInfo(info);
         }
 
         public void Execute()

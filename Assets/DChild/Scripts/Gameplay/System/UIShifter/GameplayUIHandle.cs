@@ -1,6 +1,7 @@
 ﻿
 using DChild.Gameplay.Characters.Enemies;
 using DChild.Gameplay.Characters.NPC;
+using DChild.Gameplay.Characters.Players.SoulSkills;
 using DChild.Gameplay.Combat.UI;
 using DChild.Gameplay.Environment;
 using DChild.Gameplay.Items;
@@ -20,21 +21,23 @@ namespace DChild.Gameplay.Systems
 {
     public class GameplayUIHandle : SerializedMonoBehaviour, IGameplayUIHandle, IGameplaySystemModule
     {
-        [SerializeField]
+        [SerializeField, FoldoutGroup("Signals")]
         private SignalSender m_cinemaSignal;
+        [SerializeField, FoldoutGroup("Signals")]
+        private SignalSender m_gameOverSignal;
 
-        [SerializeField, BoxGroup("Full Screen Notifications")]
+        [SerializeField, FoldoutGroup("Full Screen Notifications")]
         private SignalSender m_fullScreenNotifSignal;
-        [SerializeField, BoxGroup("Full Screen Notifications")]
+        [SerializeField, FoldoutGroup("Full Screen Notifications")]
         private UIContainer m_primarySkillNotification;
-        [SerializeField, BoxGroup("Full Screen Notifications")]
+        [SerializeField, FoldoutGroup("Full Screen Notifications")]
         private LoreInfoUI m_loreNotification;
-        [SerializeField, BoxGroup("Full Screen Notifications")]
+        [SerializeField, FoldoutGroup("Full Screen Notifications")]
         private IItemNotificationUI[] m_itemNotifications;
 
-        [SerializeField, BoxGroup("Merchant UI")]
+        [SerializeField, FoldoutGroup("Merchant UI")]
         private SignalSender m_tradeWindowSignal;
-        [SerializeField, BoxGroup("Merchant UI")]
+        [SerializeField, FoldoutGroup("Merchant UI")]
         private TradeManager m_tradeManager;
 
         [SerializeField]
@@ -45,22 +48,24 @@ namespace DChild.Gameplay.Systems
         private WorldMapHandler m_worldMap;
         [SerializeField]
         private NavigationMapManager m_navMap;
+        [SerializeField]
+        private RegenerationEffectsHandler m_regen;
 
 
-        [BoxGroup("Side Notification")]
-        [SerializeField, BoxGroup("Side Notification")]
+        [FoldoutGroup("Side Notification")]
+        [SerializeField, FoldoutGroup("Side Notification")]
         private LootAcquiredUI m_lootAcquiredUI;
-        [SerializeField, BoxGroup("Side Notification")]
+        [SerializeField, FoldoutGroup("Side Notification")]
         private StoreNotificationHandle m_storeNotification;
-        [SerializeField, BoxGroup("Side Notification")]
+        [SerializeField, FoldoutGroup("Side Notification")]
         private UIContainer m_journalNotification;
 
         [SerializeField]
         private UIContainer m_skippableUI;
 
-        [SerializeField, BoxGroup("Object Prompt")]
+        [SerializeField, FoldoutGroup("Object Prompt")]
         private UIContainer m_interactablePrompt;
-        [SerializeField, BoxGroup("Object Prompt")]
+        [SerializeField, FoldoutGroup("Object Prompt")]
         private UIContainer m_movableObjectPrompt;
 
         public void ToggleCinematicMode(bool on)
@@ -145,16 +150,23 @@ namespace DChild.Gameplay.Systems
             //GameEventMessage.SendEvent("Notification");
         }
 
+        [Button]
         public void ToggleBossCombatUI(bool willshow)
         {
-            if (willshow == true)
+            Debug.Log("Boss UI will show: " + willshow);
+            if (willshow)
             {
-                m_bossCombat.Show();
+                Debug.Log("Will show is: " + willshow);
+                m_bossCombat.ShowBossName();
+                m_bossCombat.ShowBossHealth();
             }
             else
             {
-                m_bossCombat.Hide();
+                m_bossCombat.HideBossHealth();
+                m_bossCombat.HideBossName();
             }
+
+
         }
 
         public void RevealBossName()
@@ -198,16 +210,9 @@ namespace DChild.Gameplay.Systems
             }
         }
 
-        public void ShowGameOverScreen(bool willshow)
+        public void ShowGameOverScreen()
         {
-            if (willshow == true)
-            {
-                GameEventMessage.SendEvent("Game Over");
-            }
-            else
-            {
-
-            }
+            m_gameOverSignal.SendSignal();
         }
 
         public void ShowItemAcquired(bool willshow)
@@ -284,6 +289,23 @@ namespace DChild.Gameplay.Systems
                 case StoreNotificationType.Extras:
                     break;
             }
+        }
+        public void ActivateHealthRegenEffect(PassiveRegeneration.Handle handle)
+        {
+            m_regen.SetHealthRegenReference(handle);
+            m_regen.HealthRegenEffect(true);
+        }
+        public void DeactivateHealthRegenEffect()
+        {
+            m_regen.HealthRegenEffect(false);
+        }
+        public void ActivateShadowRegenEffect()
+        {
+            m_regen.ShadowRegenEffect(true);
+        }
+        public void DeactivateShadowRegenEffect()
+        {
+            m_regen.ShadowRegenEffect(false);
         }
     }
 }
