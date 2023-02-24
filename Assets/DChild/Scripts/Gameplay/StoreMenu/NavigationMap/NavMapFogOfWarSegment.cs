@@ -21,8 +21,12 @@ namespace DChild.Gameplay.NavigationMap
 
         public void SetUIState(Flag state)
         {
-            //m_list[varName].enabled = isHidden;
-            //m_list[varName].RevealArea(isHidden);
+            for (int i = 0; i < m_list.Length; i++)
+            {
+                var currentFlag = (Flag)(1 << i);
+                var isRevealed = state.HasFlag(currentFlag);
+                m_list[i].RevealArea(isRevealed);
+            }
         }
 
         [ContextMenu("Update List")]

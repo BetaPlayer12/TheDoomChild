@@ -55,11 +55,11 @@ namespace DChild.Gameplay.NavigationMap
             var flag = eventArgs.index;
             if (eventArgs.isRevealed)
             {
-                m_currentState &= flag;
+                m_currentState |= flag;
             }
             else
             {
-                m_currentState |= flag;
+                m_currentState &= flag;
             }
 
             SegmentUpdate?.Invoke(this, new FogOfWarSegmentChangeEvent(m_varName, m_currentState));
