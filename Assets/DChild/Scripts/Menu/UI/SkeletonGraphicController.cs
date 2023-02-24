@@ -8,6 +8,8 @@ namespace DChild.UI
     {
         [SerializeField, SpineAnimation]
         private string m_animationToPlay;
+        [SerializeField, Min(0)]
+        private float m_delay;
         [SerializeField]
         private bool m_loop;
         [SerializeField]
@@ -16,7 +18,8 @@ namespace DChild.UI
 
         public void Play()
         {
-            m_source.AnimationState.SetAnimation(0, m_animationToPlay, m_loop);
+            var track = m_source.AnimationState.SetAnimation(0, m_animationToPlay, m_loop);
+            track.Delay = m_delay;
         }
 
         public void Stop()
@@ -39,6 +42,7 @@ namespace DChild.UI
             m_source = GetComponent<SkeletonGraphic>();
             if (m_startAsFrozen)
             {
+                Play();
                 Freeze();
             }
         }
