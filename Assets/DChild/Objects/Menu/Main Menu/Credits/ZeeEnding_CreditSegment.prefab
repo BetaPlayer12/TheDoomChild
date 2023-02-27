@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 667381522}
   - component: {fileID: 667381521}
   - component: {fileID: 667381520}
+  - component: {fileID: 1423420409}
   m_Layer: 0
   m_Name: ZeeSide_SG
   m_TagString: Untagged
@@ -37,7 +38,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -1172, y: -352}
+  m_AnchoredPosition: {x: -183, y: -294}
   m_SizeDelta: {x: 4601.144, y: 3817.0396}
   m_Pivot: {x: 0.8059758, y: 0.1864518}
 --- !u!222 &667381523
@@ -73,7 +74,7 @@ MonoBehaviour:
   initialFlipX: 0
   initialFlipY: 0
   startingAnimation: EC_Side
-  startingLoop: 1
+  startingLoop: 0
   timeScale: 1
   freeze: 0
   unscaledTime: 0
@@ -152,7 +153,7 @@ MonoBehaviour:
           m_PostInfinity: 2
           m_RotationOrder: 4
         StartDelay: 3
-        Duration: 0.2
+        Duration: 0.05
         Loops: 0
         LoopDelay: 0
         UseRandomStartDelay: 0
@@ -180,11 +181,11 @@ MonoBehaviour:
       CurrentValue: {x: -183, y: -294, z: 0}
       Enabled: 1
       AnimationType: 0
-      StartPosition: {x: -1172, y: -352, z: 0}
+      StartPosition: {x: -183, y: -294, z: 0}
       FromReferenceValue: 0
       ToReferenceValue: 2
-      FromCustomValue: {x: -1172, y: -352, z: 0}
-      ToCustomValue: {x: -183, y: -294, z: 0}
+      FromCustomValue: {x: -2000, y: -352, z: 0}
+      ToCustomValue: {x: -200, y: -294, z: 0}
       FromOffset: {x: 0, y: 0, z: 0}
       ToOffset: {x: -154, y: -315, z: 0}
       FromDirection: 13
@@ -445,12 +446,12 @@ MonoBehaviour:
         Vibration: 8
         Elasticity: 1
         FadeOutShake: 0
-      FromValue: {x: -1172, y: -352, z: 0}
-      ToValue: {x: 1835.1249, y: -352, z: 0}
+      FromValue: {x: -183, y: -294, z: 0}
+      ToValue: {x: 1873.8455, y: -294, z: 0}
       CurrentValue: {x: 0, y: 0, z: 0}
       Enabled: 1
       AnimationType: 1
-      StartPosition: {x: -1172, y: -352, z: 0}
+      StartPosition: {x: -183, y: -294, z: 0}
       FromReferenceValue: 0
       ToReferenceValue: 0
       FromCustomValue: {x: 0, y: 0, z: 0}
@@ -651,6 +652,21 @@ MonoBehaviour:
       ToCustomValue: 1
       FromOffset: 0
       ToOffset: 0
+--- !u!114 &1423420409
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 667381518}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e552d27288fd0844b9072eba6d794df, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_animationToPlay: EC_Side
+  m_loop: 0
+  m_startAsFrozen: 1
 --- !u!1001 &4356962170395414594
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -666,17 +682,22 @@ PrefabInstance:
     - target: {fileID: 1958060634255556237, guid: e692284e4ffa07a4099f2ac5af64f07b,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5761452836607275915, guid: e692284e4ffa07a4099f2ac5af64f07b,
+        type: 3}
+      propertyPath: HideAnimation.Move.ToValue.x
+      value: 1997.3209
       objectReference: {fileID: 0}
     - target: {fileID: 5761452836607275915, guid: e692284e4ffa07a4099f2ac5af64f07b,
         type: 3}
       propertyPath: HideAnimation.Move.ToValue.y
-      value: 89.94093
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5761452836607275915, guid: e692284e4ffa07a4099f2ac5af64f07b,
         type: 3}
       propertyPath: HideAnimation.Move.FromValue.y
-      value: 89.94093
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5761452836607275915, guid: e692284e4ffa07a4099f2ac5af64f07b,
         type: 3}
@@ -691,17 +712,17 @@ PrefabInstance:
     - target: {fileID: 5761452836607275915, guid: e692284e4ffa07a4099f2ac5af64f07b,
         type: 3}
       propertyPath: ShowAnimation.Move.CurrentValue.y
-      value: 232.50633
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5761452836607275915, guid: e692284e4ffa07a4099f2ac5af64f07b,
         type: 3}
       propertyPath: HideAnimation.Move.StartPosition.y
-      value: 89.94093
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5761452836607275915, guid: e692284e4ffa07a4099f2ac5af64f07b,
         type: 3}
       propertyPath: ShowAnimation.Move.StartPosition.y
-      value: 89.94093
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5761452836607275915, guid: e692284e4ffa07a4099f2ac5af64f07b,
         type: 3}
@@ -710,8 +731,48 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5761452836607275915, guid: e692284e4ffa07a4099f2ac5af64f07b,
         type: 3}
+      propertyPath: ShowAnimation.Move.Settings.Duration
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 5761452836607275915, guid: e692284e4ffa07a4099f2ac5af64f07b,
+        type: 3}
       propertyPath: ShowAnimation.Move.Settings.StartDelay
       value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 5761452836607275915, guid: e692284e4ffa07a4099f2ac5af64f07b,
+        type: 3}
+      propertyPath: ShowAnimation.OnPlayCallback.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5761452836607275915, guid: e692284e4ffa07a4099f2ac5af64f07b,
+        type: 3}
+      propertyPath: ShowAnimation.OnPlayCallback.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5761452836607275915, guid: e692284e4ffa07a4099f2ac5af64f07b,
+        type: 3}
+      propertyPath: ShowAnimation.OnPlayCallback.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1423420409}
+    - target: {fileID: 5761452836607275915, guid: e692284e4ffa07a4099f2ac5af64f07b,
+        type: 3}
+      propertyPath: ShowAnimation.OnPlayCallback.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5761452836607275915, guid: e692284e4ffa07a4099f2ac5af64f07b,
+        type: 3}
+      propertyPath: ShowAnimation.OnPlayCallback.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: Unfreeze
+      objectReference: {fileID: 0}
+    - target: {fileID: 5761452836607275915, guid: e692284e4ffa07a4099f2ac5af64f07b,
+        type: 3}
+      propertyPath: ShowAnimation.OnPlayCallback.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: DChild.UI.SkeletonGraphicController, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 5761452836607275915, guid: e692284e4ffa07a4099f2ac5af64f07b,
+        type: 3}
+      propertyPath: ShowAnimation.OnPlayCallback.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 8894814018627455683, guid: e692284e4ffa07a4099f2ac5af64f07b,
         type: 3}
@@ -801,7 +862,7 @@ PrefabInstance:
     - target: {fileID: 8894814018627455683, guid: e692284e4ffa07a4099f2ac5af64f07b,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 89.94093
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8894814018627455683, guid: e692284e4ffa07a4099f2ac5af64f07b,
         type: 3}
