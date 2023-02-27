@@ -38,7 +38,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -183, y: -294}
+  m_AnchoredPosition: {x: -200, y: 139}
   m_SizeDelta: {x: 4601.144, y: 3817.0396}
   m_Pivot: {x: 0.8059758, y: 0.1864518}
 --- !u!222 &667381523
@@ -152,8 +152,8 @@ MonoBehaviour:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
-        StartDelay: 3
-        Duration: 0.05
+        StartDelay: 150
+        Duration: 0.15
         Loops: 0
         LoopDelay: 0
         UseRandomStartDelay: 0
@@ -176,16 +176,16 @@ MonoBehaviour:
         Vibration: 8
         Elasticity: 1
         FadeOutShake: 0
-      FromValue: {x: -1172, y: -352, z: 0}
-      ToValue: {x: -183, y: -294, z: 0}
-      CurrentValue: {x: -183, y: -294, z: 0}
+      FromValue: {x: -2000, y: -352, z: 0}
+      ToValue: {x: -200, y: 139, z: 0}
+      CurrentValue: {x: -2000, y: -352, z: 0}
       Enabled: 1
       AnimationType: 0
-      StartPosition: {x: -183, y: -294, z: 0}
+      StartPosition: {x: -200, y: 139, z: 0}
       FromReferenceValue: 0
       ToReferenceValue: 2
       FromCustomValue: {x: -2000, y: -352, z: 0}
-      ToCustomValue: {x: -200, y: -294, z: 0}
+      ToCustomValue: {x: -200, y: 139, z: 0}
       FromOffset: {x: 0, y: 0, z: 0}
       ToOffset: {x: -154, y: -315, z: 0}
       FromDirection: 13
@@ -446,12 +446,12 @@ MonoBehaviour:
         Vibration: 8
         Elasticity: 1
         FadeOutShake: 0
-      FromValue: {x: -183, y: -294, z: 0}
-      ToValue: {x: 1873.8455, y: -294, z: 0}
+      FromValue: {x: -200, y: 139, z: 0}
+      ToValue: {x: 1835.1249, y: 139, z: 0}
       CurrentValue: {x: 0, y: 0, z: 0}
       Enabled: 1
       AnimationType: 1
-      StartPosition: {x: -183, y: -294, z: 0}
+      StartPosition: {x: -200, y: 139, z: 0}
       FromReferenceValue: 0
       ToReferenceValue: 0
       FromCustomValue: {x: 0, y: 0, z: 0}
@@ -665,6 +665,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_animationToPlay: EC_Side
+  m_delay: 151
   m_loop: 0
   m_startAsFrozen: 1
 --- !u!1001 &4356962170395414594
@@ -686,58 +687,148 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5761452836607275915, guid: e692284e4ffa07a4099f2ac5af64f07b,
         type: 3}
+      propertyPath: HideAnimation.Fade.Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5761452836607275915, guid: e692284e4ffa07a4099f2ac5af64f07b,
+        type: 3}
+      propertyPath: HideAnimation.Move.Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5761452836607275915, guid: e692284e4ffa07a4099f2ac5af64f07b,
+        type: 3}
       propertyPath: HideAnimation.Move.ToValue.x
-      value: 1997.3209
+      value: -200
       objectReference: {fileID: 0}
     - target: {fileID: 5761452836607275915, guid: e692284e4ffa07a4099f2ac5af64f07b,
         type: 3}
       propertyPath: HideAnimation.Move.ToValue.y
-      value: 0
+      value: 2034
+      objectReference: {fileID: 0}
+    - target: {fileID: 5761452836607275915, guid: e692284e4ffa07a4099f2ac5af64f07b,
+        type: 3}
+      propertyPath: ShowAnimation.Move.ToValue.x
+      value: -200
+      objectReference: {fileID: 0}
+    - target: {fileID: 5761452836607275915, guid: e692284e4ffa07a4099f2ac5af64f07b,
+        type: 3}
+      propertyPath: HideAnimation.Move.ToOffset.x
+      value: -200
+      objectReference: {fileID: 0}
+    - target: {fileID: 5761452836607275915, guid: e692284e4ffa07a4099f2ac5af64f07b,
+        type: 3}
+      propertyPath: HideAnimation.Move.ToOffset.y
+      value: 2034
+      objectReference: {fileID: 0}
+    - target: {fileID: 5761452836607275915, guid: e692284e4ffa07a4099f2ac5af64f07b,
+        type: 3}
+      propertyPath: HideAnimation.Move.FromValue.x
+      value: -200
       objectReference: {fileID: 0}
     - target: {fileID: 5761452836607275915, guid: e692284e4ffa07a4099f2ac5af64f07b,
         type: 3}
       propertyPath: HideAnimation.Move.FromValue.y
-      value: 0
+      value: -294
+      objectReference: {fileID: 0}
+    - target: {fileID: 5761452836607275915, guid: e692284e4ffa07a4099f2ac5af64f07b,
+        type: 3}
+      propertyPath: HideAnimation.Move.ToDirection
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 5761452836607275915, guid: e692284e4ffa07a4099f2ac5af64f07b,
+        type: 3}
+      propertyPath: ShowAnimation.Move.FromValue.x
+      value: -200
       objectReference: {fileID: 0}
     - target: {fileID: 5761452836607275915, guid: e692284e4ffa07a4099f2ac5af64f07b,
         type: 3}
       propertyPath: ShowAnimation.Move.FromValue.y
-      value: 0
+      value: 139
+      objectReference: {fileID: 0}
+    - target: {fileID: 5761452836607275915, guid: e692284e4ffa07a4099f2ac5af64f07b,
+        type: 3}
+      propertyPath: HideAnimation.Fade.CurrentValue
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5761452836607275915, guid: e692284e4ffa07a4099f2ac5af64f07b,
+        type: 3}
+      propertyPath: HideAnimation.Move.CurrentValue.x
+      value: -200
       objectReference: {fileID: 0}
     - target: {fileID: 5761452836607275915, guid: e692284e4ffa07a4099f2ac5af64f07b,
         type: 3}
       propertyPath: HideAnimation.Move.CurrentValue.y
-      value: 89.94093
+      value: 2034
+      objectReference: {fileID: 0}
+    - target: {fileID: 5761452836607275915, guid: e692284e4ffa07a4099f2ac5af64f07b,
+        type: 3}
+      propertyPath: ShowAnimation.Move.CurrentValue.x
+      value: -200
       objectReference: {fileID: 0}
     - target: {fileID: 5761452836607275915, guid: e692284e4ffa07a4099f2ac5af64f07b,
         type: 3}
       propertyPath: ShowAnimation.Move.CurrentValue.y
-      value: 0
+      value: 139
+      objectReference: {fileID: 0}
+    - target: {fileID: 5761452836607275915, guid: e692284e4ffa07a4099f2ac5af64f07b,
+        type: 3}
+      propertyPath: HideAnimation.Move.StartPosition.x
+      value: -200
       objectReference: {fileID: 0}
     - target: {fileID: 5761452836607275915, guid: e692284e4ffa07a4099f2ac5af64f07b,
         type: 3}
       propertyPath: HideAnimation.Move.StartPosition.y
-      value: 0
+      value: -294
+      objectReference: {fileID: 0}
+    - target: {fileID: 5761452836607275915, guid: e692284e4ffa07a4099f2ac5af64f07b,
+        type: 3}
+      propertyPath: HideAnimation.Move.ToCustomValue.x
+      value: -200
+      objectReference: {fileID: 0}
+    - target: {fileID: 5761452836607275915, guid: e692284e4ffa07a4099f2ac5af64f07b,
+        type: 3}
+      propertyPath: HideAnimation.Move.ToCustomValue.y
+      value: 2034
+      objectReference: {fileID: 0}
+    - target: {fileID: 5761452836607275915, guid: e692284e4ffa07a4099f2ac5af64f07b,
+        type: 3}
+      propertyPath: ShowAnimation.Move.StartPosition.x
+      value: -200
       objectReference: {fileID: 0}
     - target: {fileID: 5761452836607275915, guid: e692284e4ffa07a4099f2ac5af64f07b,
         type: 3}
       propertyPath: ShowAnimation.Move.StartPosition.y
-      value: 0
+      value: -294
+      objectReference: {fileID: 0}
+    - target: {fileID: 5761452836607275915, guid: e692284e4ffa07a4099f2ac5af64f07b,
+        type: 3}
+      propertyPath: ShowAnimation.Move.ToCustomValue.x
+      value: -200
+      objectReference: {fileID: 0}
+    - target: {fileID: 5761452836607275915, guid: e692284e4ffa07a4099f2ac5af64f07b,
+        type: 3}
+      propertyPath: ShowAnimation.Move.FromCustomValue.x
+      value: -200
       objectReference: {fileID: 0}
     - target: {fileID: 5761452836607275915, guid: e692284e4ffa07a4099f2ac5af64f07b,
         type: 3}
       propertyPath: ShowAnimation.Move.FromCustomValue.y
-      value: 0
+      value: 139
       objectReference: {fileID: 0}
     - target: {fileID: 5761452836607275915, guid: e692284e4ffa07a4099f2ac5af64f07b,
         type: 3}
       propertyPath: ShowAnimation.Move.Settings.Duration
-      value: 100
+      value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: 5761452836607275915, guid: e692284e4ffa07a4099f2ac5af64f07b,
+        type: 3}
+      propertyPath: HideAnimation.Move.FromReferenceValue
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5761452836607275915, guid: e692284e4ffa07a4099f2ac5af64f07b,
         type: 3}
       propertyPath: ShowAnimation.Move.Settings.StartDelay
-      value: 10
+      value: 160
       objectReference: {fileID: 0}
     - target: {fileID: 5761452836607275915, guid: e692284e4ffa07a4099f2ac5af64f07b,
         type: 3}
@@ -857,12 +948,12 @@ PrefabInstance:
     - target: {fileID: 8894814018627455683, guid: e692284e4ffa07a4099f2ac5af64f07b,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: -200
       objectReference: {fileID: 0}
     - target: {fileID: 8894814018627455683, guid: e692284e4ffa07a4099f2ac5af64f07b,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -294
       objectReference: {fileID: 0}
     - target: {fileID: 8894814018627455683, guid: e692284e4ffa07a4099f2ac5af64f07b,
         type: 3}

@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 575689962}
   - component: {fileID: 575689965}
   - component: {fileID: 575689964}
+  - component: {fileID: 315697147}
   m_Layer: 5
   m_Name: ZeeFront_SkeletonGraphic
   m_TagString: Untagged
@@ -37,7 +38,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 59, y: 114}
+  m_AnchoredPosition: {x: 5, y: 114}
   m_SizeDelta: {x: 3466.014, y: 4544.9297}
   m_Pivot: {x: 0.56916356, y: 0.26299402}
 --- !u!222 &575689963
@@ -114,7 +115,19 @@ MonoBehaviour:
   ShowAnimation:
     OnPlayCallback:
       m_PersistentCalls:
-        m_Calls: []
+        m_Calls:
+        - m_Target: {fileID: 315697147}
+          m_TargetAssemblyTypeName: DChild.UI.SkeletonGraphicController, Assembly-CSharp
+          m_MethodName: Unfreeze
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
     OnStopCallback:
       m_PersistentCalls:
         m_Calls: []
@@ -152,7 +165,7 @@ MonoBehaviour:
           m_PostInfinity: 2
           m_RotationOrder: 4
         StartDelay: 4.5
-        Duration: 0.25
+        Duration: 0.06
         Loops: 0
         LoopDelay: 0
         UseRandomStartDelay: 0
@@ -175,16 +188,16 @@ MonoBehaviour:
         Vibration: 8
         Elasticity: 1
         FadeOutShake: 0
-      FromValue: {x: 59, y: 1517, z: 0}
-      ToValue: {x: 59, y: 114, z: 0}
-      CurrentValue: {x: 59, y: 1517, z: 0}
+      FromValue: {x: 5, y: 1517, z: 0}
+      ToValue: {x: 5, y: 114, z: 0}
+      CurrentValue: {x: 5, y: 114, z: 0}
       Enabled: 1
       AnimationType: 0
       StartPosition: {x: 59, y: 114, z: 0}
       FromReferenceValue: 0
       ToReferenceValue: 2
-      FromCustomValue: {x: 59, y: 1517, z: 0}
-      ToCustomValue: {x: 59, y: 114, z: 0}
+      FromCustomValue: {x: 5, y: 1517, z: 0}
+      ToCustomValue: {x: 5, y: 114, z: 0}
       FromOffset: {x: 0, y: 1245, z: 0}
       ToOffset: {x: 0, y: 600, z: 0}
       FromDirection: 13
@@ -447,7 +460,7 @@ MonoBehaviour:
         FadeOutShake: 0
       FromValue: {x: 59, y: 114, z: 0}
       ToValue: {x: 1532.0312, y: 114, z: 0}
-      CurrentValue: {x: 1532.0312, y: 114, z: 0}
+      CurrentValue: {x: 59, y: 114, z: 0}
       Enabled: 0
       AnimationType: 1
       StartPosition: {x: 59, y: 114, z: 0}
@@ -651,6 +664,22 @@ MonoBehaviour:
       ToCustomValue: 1
       FromOffset: 0
       ToOffset: 0
+--- !u!114 &315697147
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 575689960}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e552d27288fd0844b9072eba6d794df, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_animationToPlay: EC_DeathFront
+  m_delay: 4.5
+  m_loop: 0
+  m_startAsFrozen: 1
 --- !u!1001 &2321090887015439165
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -751,12 +780,12 @@ PrefabInstance:
     - target: {fileID: 5761452836607275915, guid: e692284e4ffa07a4099f2ac5af64f07b,
         type: 3}
       propertyPath: HideAnimation.Move.ToValue.x
-      value: 1919.8798
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5761452836607275915, guid: e692284e4ffa07a4099f2ac5af64f07b,
         type: 3}
       propertyPath: HideAnimation.Move.ToValue.y
-      value: 1723.5938
+      value: 3000
       objectReference: {fileID: 0}
     - target: {fileID: 5761452836607275915, guid: e692284e4ffa07a4099f2ac5af64f07b,
         type: 3}
@@ -871,7 +900,7 @@ PrefabInstance:
     - target: {fileID: 5761452836607275915, guid: e692284e4ffa07a4099f2ac5af64f07b,
         type: 3}
       propertyPath: ShowAnimation.Move.Settings.Duration
-      value: 80
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 5761452836607275915, guid: e692284e4ffa07a4099f2ac5af64f07b,
         type: 3}
@@ -881,7 +910,7 @@ PrefabInstance:
     - target: {fileID: 5761452836607275915, guid: e692284e4ffa07a4099f2ac5af64f07b,
         type: 3}
       propertyPath: ShowAnimation.Move.Settings.StartDelay
-      value: 11
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 8894814018627455683, guid: e692284e4ffa07a4099f2ac5af64f07b,
         type: 3}
@@ -971,7 +1000,7 @@ PrefabInstance:
     - target: {fileID: 8894814018627455683, guid: e692284e4ffa07a4099f2ac5af64f07b,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 1723.5938
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8894814018627455683, guid: e692284e4ffa07a4099f2ac5af64f07b,
         type: 3}
