@@ -1,5 +1,6 @@
 ﻿using DChild.Gameplay.Characters.Enemies;
 using DChild.Gameplay.Characters.NPC;
+using DChild.Gameplay.Characters.Players.SoulSkills;
 using DChild.Gameplay.Environment;
 using DChild.Gameplay.Items;
 using DChild.Gameplay.Systems.Lore;
@@ -45,7 +46,7 @@ namespace DChild.Gameplay.Systems
         void ShowLootChestItemAcquired(LootList lootList);
         void ShowNotification(StoreNotificationType storeNotificationType);
         void ShowSequenceSkip(bool willShow);
-        void ActivateHealthRegenEffect();
+        void ActivateHealthRegenEffect(PassiveRegeneration.Handle regenHandle);
         void DeactivateHealthRegenEffect();
         void ActivateShadowRegenEffect();
         void DeactivateShadowRegenEffect();
