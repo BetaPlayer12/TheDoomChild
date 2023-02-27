@@ -37,6 +37,13 @@ namespace DChild.UI
             m_source.freeze = false;
         }
 
+        public void Reset()
+        {
+            Stop();
+            Play();
+            Freeze();
+        }
+
         private void Awake()
         {
             m_source = GetComponent<SkeletonGraphic>();
