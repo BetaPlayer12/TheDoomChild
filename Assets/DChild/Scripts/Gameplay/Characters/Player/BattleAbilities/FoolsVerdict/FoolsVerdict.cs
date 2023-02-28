@@ -1,4 +1,5 @@
 using DChild.Gameplay.Characters.Players.Modules;
+using DChild.Gameplay.Combat;
 using Sirenix.OdinInspector;
 using Spine.Unity;
 using System.Collections;
@@ -98,6 +99,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             m_foolsVerdictMovementCooldownTimer = m_foolsVerdictMovementCooldown;
             m_foolsVerdictGO.SetActive(true);
             m_foolsVerdictStartAnimation.Play();
+            m_foolsVerdictGO.GetComponent<Attacker>().SetParentAttacker(m_attacker);
             //m_attacker.SetDamageModifier(m_slashComboInfo[m_currentSlashState].damageModifier * m_modifier.Get(PlayerModifier.AttackDamage));
         }
 

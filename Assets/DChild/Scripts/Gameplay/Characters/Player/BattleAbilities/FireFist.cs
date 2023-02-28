@@ -1,4 +1,5 @@
 using DChild.Gameplay.Characters.Players.Modules;
+using DChild.Gameplay.Combat;
 using Sirenix.OdinInspector;
 using Spine.Unity;
 using System.Collections;
@@ -67,6 +68,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             m_fxAnimator = m_attackFX.gameObject.GetComponentInChildren<Animator>();
             m_skeletonAnimation = m_attackFX.gameObject.GetComponent<SkeletonAnimation>();
             m_lichLordArmLocalPos = m_lichLordArmTF.localPosition;
+            m_lichLordArmTF.GetComponent<Attacker>().SetParentAttacker(m_attacker);
         }
 
         //public void SetConfiguration(SlashComboStatsInfo info)

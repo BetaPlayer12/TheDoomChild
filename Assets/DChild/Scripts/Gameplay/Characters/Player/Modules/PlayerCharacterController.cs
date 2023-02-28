@@ -1734,7 +1734,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                         m_teleportingSkull.TeleportToProjectile();
                         return;
                     }
-                    else if (m_input.projectileThrowPressed && !m_input.foolsVerdictPressed && !m_input.reaperHarvestPressed)
+                    else if (m_input.projectileThrowPressed && !m_input.foolsVerdictPressed && !m_input.hellTridentPressed)
                     {
                         if (m_input.teleportingSkullPressed)
                         {

@@ -1,4 +1,5 @@
 using DChild.Gameplay.Characters.Players.Modules;
+using DChild.Gameplay.Combat;
 using DChild.Gameplay.Pooling;
 using DChild.Gameplay.Projectiles;
 using Sirenix.OdinInspector;
@@ -217,6 +218,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
                     var instance = GameSystem.poolManager.GetPool<ProjectilePool>().GetOrCreateItem(m_projectileInfo.projectile);
                     instance.transform.position = new Vector2(summonPoint.x, GroundPosition(summonPoint).y + (m_summonOffsetScales[i].y - 1));
                     instance.transform.localScale = new Vector3(m_character.facing == HorizontalDirection.Right ? m_summonOffsetScales[i].x : -m_summonOffsetScales[i].x, m_summonOffsetScales[i].y, m_summonOffsetScales[i].z);
+                    instance.GetComponent<Attacker>().SetParentAttacker(m_attacker);
                     var component = instance.GetComponent<Projectile>();
                     component.ResetState();
                     offset += m_summonOffset * offsetLookPosition;
