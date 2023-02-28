@@ -503,6 +503,15 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""TeleportingSkull"",
+                    ""type"": ""Button"",
+                    ""id"": ""446fc841-ef8d-459d-ac52-5f9ef9a50fca"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -1497,9 +1506,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""name"": ""One Modifier"",
-                    ""id"": ""7ac818b5-1c2f-4098-ac9e-de64d222afca"",
-                    ""path"": ""OneModifier"",
+                    ""name"": ""Two Modifiers"",
+                    ""id"": ""7f4af3ca-10dd-42ce-9d85-e757f863cd02"",
+                    ""path"": ""TwoModifiers"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -1508,8 +1517,8 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""name"": ""modifier"",
-                    ""id"": ""b6e9e3a3-1aab-477c-86cd-371040d6c9fe"",
+                    ""name"": ""modifier1"",
+                    ""id"": ""5f2a6202-372e-4d2b-b285-aa057e8fd460"",
                     ""path"": ""<Keyboard>/leftShift"",
                     ""interactions"": """",
                     ""processors"": """",
@@ -1519,9 +1528,20 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": true
                 },
                 {
+                    ""name"": ""modifier2"",
+                    ""id"": ""beb936fe-7d22-4187-be90-dc2b01e3382a"",
+                    ""path"": ""<Keyboard>/w"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""FireFist"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
                     ""name"": ""binding"",
-                    ""id"": ""8bb6ddfc-0ce7-43d3-a117-254a001ece63"",
-                    ""path"": ""<Keyboard>/f"",
+                    ""id"": ""62fc9703-2f67-45a3-85e1-e5d118092ca2"",
+                    ""path"": ""<Mouse>/rightButton"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard"",
@@ -2604,6 +2624,39 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": ""Keyboard"",
                     ""action"": ""IcarusWings"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""One Modifier"",
+                    ""id"": ""1e4c07b4-6b33-4ab0-9c7f-ab62de320a06"",
+                    ""path"": ""OneModifier"",
+                    ""interactions"": ""Press(behavior=2)"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""TeleportingSkull"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""modifier"",
+                    ""id"": ""b9425eca-06fc-4a6f-8dd1-c93a1b5b4693"",
+                    ""path"": ""<Keyboard>/leftShift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""TeleportingSkull"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""binding"",
+                    ""id"": ""2206d3b2-30a2-4f9e-ac11-292350d16572"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""TeleportingSkull"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 }
@@ -3814,6 +3867,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         m_Gameplay_LightningSpearHeld = m_Gameplay.FindAction("LightningSpearHeld", throwIfNotFound: true);
         m_Gameplay_LightningSpearReleased = m_Gameplay.FindAction("LightningSpearReleased", throwIfNotFound: true);
         m_Gameplay_IcarusWings = m_Gameplay.FindAction("IcarusWings", throwIfNotFound: true);
+        m_Gameplay_TeleportingSkull = m_Gameplay.FindAction("TeleportingSkull", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -3948,6 +4002,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
     private readonly InputAction m_Gameplay_LightningSpearHeld;
     private readonly InputAction m_Gameplay_LightningSpearReleased;
     private readonly InputAction m_Gameplay_IcarusWings;
+    private readonly InputAction m_Gameplay_TeleportingSkull;
     public struct GameplayActions
     {
         private @PlayerControls m_Wrapper;
@@ -4005,6 +4060,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         public InputAction @LightningSpearHeld => m_Wrapper.m_Gameplay_LightningSpearHeld;
         public InputAction @LightningSpearReleased => m_Wrapper.m_Gameplay_LightningSpearReleased;
         public InputAction @IcarusWings => m_Wrapper.m_Gameplay_IcarusWings;
+        public InputAction @TeleportingSkull => m_Wrapper.m_Gameplay_TeleportingSkull;
         public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -4173,6 +4229,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @IcarusWings.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnIcarusWings;
                 @IcarusWings.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnIcarusWings;
                 @IcarusWings.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnIcarusWings;
+                @TeleportingSkull.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnTeleportingSkull;
+                @TeleportingSkull.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnTeleportingSkull;
+                @TeleportingSkull.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnTeleportingSkull;
             }
             m_Wrapper.m_GameplayActionsCallbackInterface = instance;
             if (instance != null)
@@ -4336,6 +4395,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @IcarusWings.started += instance.OnIcarusWings;
                 @IcarusWings.performed += instance.OnIcarusWings;
                 @IcarusWings.canceled += instance.OnIcarusWings;
+                @TeleportingSkull.started += instance.OnTeleportingSkull;
+                @TeleportingSkull.performed += instance.OnTeleportingSkull;
+                @TeleportingSkull.canceled += instance.OnTeleportingSkull;
             }
         }
     }
@@ -4625,6 +4687,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         void OnLightningSpearHeld(InputAction.CallbackContext context);
         void OnLightningSpearReleased(InputAction.CallbackContext context);
         void OnIcarusWings(InputAction.CallbackContext context);
+        void OnTeleportingSkull(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

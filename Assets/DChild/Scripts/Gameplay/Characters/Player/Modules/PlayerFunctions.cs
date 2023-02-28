@@ -39,6 +39,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private Eelecktrick m_eelecktrick;
         private LightningSpear m_lightningSpear;
         private IcarusWings m_icarusWings;
+        private TeleportingSkull m_teleportingSkull;
         #endregion
 
         public void IdleStateFinished()
@@ -552,6 +553,11 @@ namespace DChild.Gameplay.Characters.Players.Modules
         {
             m_icarusWings.EndExecution();
         }
+
+        public void TeleportingSkullGetProjectile()
+        {
+            m_teleportingSkull.GetSpawnedProjectile(m_projectileThrow.spawnedProjectile);
+        }
         #endregion
 
         public void SkullThrowSpawnProjectile()
@@ -622,6 +628,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_eelecktrick = character.GetComponentInChildren<Eelecktrick>();
             m_lightningSpear = character.GetComponentInChildren<LightningSpear>();
             m_icarusWings = character.GetComponentInChildren<IcarusWings>();
+            m_teleportingSkull = character.GetComponentInChildren<TeleportingSkull>();
         }
 
         #region TESTING

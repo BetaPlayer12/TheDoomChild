@@ -63,6 +63,9 @@ namespace DChild.Gameplay.Characters.Players.Modules
         public bool lightningSpearPressed;
         public bool lightningSpearHeld;
         public bool icarusWingsPressed;
+        public bool teleportingSkullPressed;
+        public bool teleportingSkullReleased;
+        public bool teleportingSkullHeld;
         #endregion
 
         private PlayerInput m_input;
@@ -427,6 +430,23 @@ namespace DChild.Gameplay.Characters.Players.Modules
             }
         }
 
+        private void OnTeleportingSkull(InputValue value)
+        {
+            if (enabled == true)
+            {
+                var inputValue = value.Get<float>() == 1;
+                if (inputValue == false)
+                {
+                    if (teleportingSkullHeld == true)
+                    {
+                        teleportingSkullReleased = true;
+                    }
+                }
+                teleportingSkullPressed = inputValue;
+                teleportingSkullHeld = inputValue;
+            }
+        }
+
         private void OnSlashHeld(InputValue value)
         {
             if (enabled == true)
@@ -570,6 +590,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
             eelecktrickPressed = false;
             lightningSpearPressed = false;
             icarusWingsPressed = false;
+            teleportingSkullPressed = false;
+            teleportingSkullReleased = false;
         }
 
         private void Reset()
@@ -622,6 +644,9 @@ namespace DChild.Gameplay.Characters.Players.Modules
             lightningSpearPressed = false;
             lightningSpearHeld = false;
             icarusWingsPressed = false;
+            teleportingSkullPressed = false;
+            teleportingSkullHeld = false;
+            teleportingSkullReleased = false;
         }
     }
 }

@@ -94,6 +94,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private Eelecktrick m_eelecktrick;
         private LightningSpear m_lightningSpear;
         private IcarusWings m_icarusWings;
+        private TeleportingSkull m_teleportingSkull;
         #endregion
         #endregion
 
@@ -417,6 +418,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_eelecktrick = m_character.GetComponentInChildren<Eelecktrick>();
             m_lightningSpear = m_character.GetComponentInChildren<LightningSpear>();
             m_icarusWings = m_character.GetComponentInChildren<IcarusWings>();
+            m_teleportingSkull = m_character.GetComponentInChildren<TeleportingSkull>();
 
             //Intro Controller
             m_introController = GetComponent<PlayerIntroControlsController>();
@@ -1661,7 +1663,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
                         return;
                     }
-                    else if (m_input.championsUprisingPressed && m_championsUprising.CanChampionsUprising() && !m_input.fencerFlashPressed)
+                    else if (m_input.championsUprisingPressed && m_championsUprising.CanChampionsUprising() && !m_input.fencerFlashPressed && !m_input.fireFistPressed)
                     {
                         if (m_state.isInShadowMode == false)
                         {
@@ -1727,8 +1729,21 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
                         return;
                     }
-                    else if (m_input.projectileThrowPressed && !m_input.fireFistPressed)
+                    else if (m_input.teleportingSkullPressed && m_teleportingSkull.canTeleport)
                     {
+                        m_teleportingSkull.TeleportToProjectile();
+                        return;
+                    }
+                    else if (m_input.projectileThrowPressed && !m_input.foolsVerdictPressed && !m_input.reaperHarvestPressed)
+                    {
+                        if (m_input.teleportingSkullPressed)
+                        {
+                            m_projectileThrow.SetProjectileInfo(m_teleportingSkull.projectile);
+                            m_teleportingSkull.Execute();
+                        }
+                        else if (!m_input.teleportingSkullPressed)
+                            m_projectileThrow.ResetProjectile();
+
                         if (m_skills.IsModuleActive(PrimarySkill.SkullThrow))
                         {
                             PrepareForGroundAttack();
@@ -1737,7 +1752,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                         }
                         return;
                     }
-                    else if (m_input.fireFistPressed && !m_input.hellTridentPressed && !m_input.foolsVerdictPressed)
+                    else if (m_input.fireFistPressed)
                     {
                         if (m_state.isInShadowMode == false)
                         {
