@@ -1,4 +1,6 @@
 using DChild.Gameplay.Characters.Players.Modules;
+using DChild.Gameplay.Combat;
+using DChild.Gameplay.Pooling;
 using DChild.Gameplay.Projectiles;
 using Sirenix.OdinInspector;
 using Spine.Unity;
@@ -169,11 +171,15 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
         public void Summon()
         {
+            var instance = GameSystem.poolManager.GetPool<ProjectilePool>().GetOrCreateItem(m_projectileInfo.projectile);
+            instance.transform.position = m_startPoint.position;
+            instance.GetComponent<Attacker>().SetParentAttacker(m_attacker);
+
             m_enemySensor.Cast();
             var hits = m_enemySensor.GetHits();
             var target = hits[0].point;
             m_launcher.AimAt(target != Vector2.zero ? target : (Vector2)m_endPoint.position);
-            m_launcher.LaunchBallisticProjectile(target != Vector2.zero ? target : (Vector2)m_endPoint.position);
+            m_launcher.LaunchBallisticProjectile(target != Vector2.zero ? target : (Vector2)m_endPoint.position, instance.gameObject);
         }
     }
 }
