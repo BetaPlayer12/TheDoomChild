@@ -52,7 +52,7 @@ namespace DChild.Gameplay.Inventories
         public void Load(TradableInventorySerialization serializedData)
         {
             m_inventory.ClearList();
-            
+
             if (serializedData == null)
             {
                 m_inventory.SetCurrency(0);
@@ -95,7 +95,7 @@ namespace DChild.Gameplay.Inventories
         {
             if (item.category == ItemCategory.SoulSkill)
             {
-                var eventArgs = new SoulSkillAcquiredEventArgs(((SoulSkillItem)item).soulSkill.id);
+                var eventArgs = new SoulSkillAcquiredEventArgs(((SoulSkillItem)item).soulSkill);
                 SoulSkillItemAcquired?.Invoke(this, eventArgs);
             }
             else

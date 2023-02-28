@@ -50,6 +50,8 @@ namespace DChild.Gameplay.ArmyBattle
                     break;
             }
 
+            enemy.currentAttackGroup.SetAvailability(false);
+            player.currentAttackGroup.SetAvailability(false);
             enemy.controlledArmy.troopCount.ReduceCurrentValue(playerDamage);
             player.controlledArmy.troopCount.ReduceCurrentValue(enemyDamage);
             CustomDebug.Log(CustomDebug.LogType.System_ArmyBattle, $"\n Player Dealt: {playerDamage} \n Enemy Dealt: {enemyDamage}");
