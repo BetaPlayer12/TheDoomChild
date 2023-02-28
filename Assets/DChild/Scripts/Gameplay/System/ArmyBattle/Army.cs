@@ -23,6 +23,20 @@ namespace DChild.Gameplay.ArmyBattle
 
         public Health troopCount => m_troopCount;
 
+        public bool HasAvailableAttackGroup(UnitType unitType)
+        {
+            var groups = m_composition.GetAttackGroupsOfUnityType(unitType);
+            for (int i = 0; i < groups.Count; i++)
+            {
+                if (groups[i].isAvailable)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         public List<ArmyAttackGroup> GetAvailableAttackGroups(UnitType unitType)
         {
             cacheAttackGroup.Clear();
@@ -64,7 +78,11 @@ namespace DChild.Gameplay.ArmyBattle
         {
 #if UNITY_EDITOR
             if (m_initialComposition != null)
+            {
                 m_composition = m_initialComposition.GenerateArmyCompositionInstance();
+                m_composition.ResetAvailability();
+            }
+
 #endif
             cacheAttackGroup = new List<ArmyAttackGroup>();
         }
