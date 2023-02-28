@@ -38,6 +38,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private ChampionsUprising m_championsUprising;
         private Eelecktrick m_eelecktrick;
         private LightningSpear m_lightningSpear;
+        private IcarusWings m_icarusWings;
         #endregion
 
         public void IdleStateFinished()
@@ -541,6 +542,16 @@ namespace DChild.Gameplay.Characters.Players.Modules
         {
             m_lightningSpear.EndExecution();
         }
+
+        public void IcarusWingsJump()
+        {
+            m_icarusWings.Jump();
+        }
+
+        public void IcarusWingsEnd()
+        {
+            m_icarusWings.EndExecution();
+        }
         #endregion
 
         public void SkullThrowSpawnProjectile()
@@ -610,6 +621,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_championsUprising = character.GetComponentInChildren<ChampionsUprising>();
             m_eelecktrick = character.GetComponentInChildren<Eelecktrick>();
             m_lightningSpear = character.GetComponentInChildren<LightningSpear>();
+            m_icarusWings = character.GetComponentInChildren<IcarusWings>();
         }
 
         #region TESTING

@@ -494,6 +494,15 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": ""Press"",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""IcarusWings"",
+                    ""type"": ""Button"",
+                    ""id"": ""6fd0d997-0772-4cac-87dc-d1cc564d0537"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -2564,6 +2573,39 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""action"": ""LightningSpearHeld"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""One Modifier"",
+                    ""id"": ""2384e690-67fa-4346-83fc-80589b0ed3b1"",
+                    ""path"": ""OneModifier"",
+                    ""interactions"": ""Press"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""IcarusWings"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""modifier"",
+                    ""id"": ""20bdfb92-14cd-492e-9e2d-eca03599b497"",
+                    ""path"": ""<Keyboard>/w"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""IcarusWings"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""binding"",
+                    ""id"": ""2fbc2fc5-da2b-4178-ab20-a2a9e0436010"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""IcarusWings"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
                 }
             ]
         },
@@ -3771,6 +3813,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         m_Gameplay_LightningSpear = m_Gameplay.FindAction("LightningSpear", throwIfNotFound: true);
         m_Gameplay_LightningSpearHeld = m_Gameplay.FindAction("LightningSpearHeld", throwIfNotFound: true);
         m_Gameplay_LightningSpearReleased = m_Gameplay.FindAction("LightningSpearReleased", throwIfNotFound: true);
+        m_Gameplay_IcarusWings = m_Gameplay.FindAction("IcarusWings", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -3904,6 +3947,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
     private readonly InputAction m_Gameplay_LightningSpear;
     private readonly InputAction m_Gameplay_LightningSpearHeld;
     private readonly InputAction m_Gameplay_LightningSpearReleased;
+    private readonly InputAction m_Gameplay_IcarusWings;
     public struct GameplayActions
     {
         private @PlayerControls m_Wrapper;
@@ -3960,6 +4004,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         public InputAction @LightningSpear => m_Wrapper.m_Gameplay_LightningSpear;
         public InputAction @LightningSpearHeld => m_Wrapper.m_Gameplay_LightningSpearHeld;
         public InputAction @LightningSpearReleased => m_Wrapper.m_Gameplay_LightningSpearReleased;
+        public InputAction @IcarusWings => m_Wrapper.m_Gameplay_IcarusWings;
         public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -4125,6 +4170,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @LightningSpearReleased.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnLightningSpearReleased;
                 @LightningSpearReleased.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnLightningSpearReleased;
                 @LightningSpearReleased.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnLightningSpearReleased;
+                @IcarusWings.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnIcarusWings;
+                @IcarusWings.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnIcarusWings;
+                @IcarusWings.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnIcarusWings;
             }
             m_Wrapper.m_GameplayActionsCallbackInterface = instance;
             if (instance != null)
@@ -4285,6 +4333,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @LightningSpearReleased.started += instance.OnLightningSpearReleased;
                 @LightningSpearReleased.performed += instance.OnLightningSpearReleased;
                 @LightningSpearReleased.canceled += instance.OnLightningSpearReleased;
+                @IcarusWings.started += instance.OnIcarusWings;
+                @IcarusWings.performed += instance.OnIcarusWings;
+                @IcarusWings.canceled += instance.OnIcarusWings;
             }
         }
     }
@@ -4573,6 +4624,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         void OnLightningSpear(InputAction.CallbackContext context);
         void OnLightningSpearHeld(InputAction.CallbackContext context);
         void OnLightningSpearReleased(InputAction.CallbackContext context);
+        void OnIcarusWings(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

@@ -62,6 +62,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         public bool eelecktrickHeld;
         public bool lightningSpearPressed;
         public bool lightningSpearHeld;
+        public bool icarusWingsPressed;
         #endregion
 
         private PlayerInput m_input;
@@ -417,6 +418,15 @@ namespace DChild.Gameplay.Characters.Players.Modules
             }
         }
 
+        private void OnIcarusWings(InputValue value)
+        {
+            if (enabled == true)
+            {
+                var inputValue = value.Get<float>() == 1;
+                icarusWingsPressed = inputValue;
+            }
+        }
+
         private void OnSlashHeld(InputValue value)
         {
             if (enabled == true)
@@ -559,6 +569,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             championsUprisingPressed = false;
             eelecktrickPressed = false;
             lightningSpearPressed = false;
+            icarusWingsPressed = false;
         }
 
         private void Reset()
@@ -610,6 +621,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             eelecktrickHeld = false;
             lightningSpearPressed = false;
             lightningSpearHeld = false;
+            icarusWingsPressed = false;
         }
     }
 }

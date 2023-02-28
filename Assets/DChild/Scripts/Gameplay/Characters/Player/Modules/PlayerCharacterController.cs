@@ -93,6 +93,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private ChampionsUprising m_championsUprising;
         private Eelecktrick m_eelecktrick;
         private LightningSpear m_lightningSpear;
+        private IcarusWings m_icarusWings;
         #endregion
         #endregion
 
@@ -141,6 +142,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_championsUprising?.Cancel();
             m_eelecktrick?.Cancel();
             m_lightningSpear?.Cancel();
+            m_icarusWings?.Cancel();
 
             if (m_state.isGrounded)
             {
@@ -250,6 +252,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                         m_fencerFlash?.Cancel();
                         m_championsUprising?.Cancel();
                         m_eelecktrick?.Cancel();
+                        m_icarusWings?.Cancel();
                     }
                 }
 
@@ -413,6 +416,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_championsUprising = m_character.GetComponentInChildren<ChampionsUprising>();
             m_eelecktrick = m_character.GetComponentInChildren<Eelecktrick>();
             m_lightningSpear = m_character.GetComponentInChildren<LightningSpear>();
+            m_icarusWings = m_character.GetComponentInChildren<IcarusWings>();
 
             //Intro Controller
             m_introController = GetComponent<PlayerIntroControlsController>();
@@ -680,6 +684,11 @@ namespace DChild.Gameplay.Characters.Players.Modules
             if (m_lightningSpear.CanMove() == false)
             {
                 m_lightningSpear.HandleMovementTimer();
+            }
+
+            if (m_icarusWings.CanIcarusWings() == false)
+            {
+                m_icarusWings.HandleAttackTimer();
             }
             #endregion
 
@@ -1537,7 +1546,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 if (m_state.canAttack)
                 {
                     #region Ground Attacks
-                    if (m_input.slashPressed && !m_input.airLungeSlashPressed && !m_input.reaperHarvestPressed && !m_input.finalSlashPressed /*&& !(m_input.levitateHeld && m_input.slashHeld)*/)
+                    if (m_input.slashPressed && !m_input.airLungeSlashPressed && !m_input.reaperHarvestPressed && !m_input.finalSlashPressed && !m_input.sovereignImpalePressed)
                     {
                         m_whip.Cancel();
                         m_whipCombo.Cancel();
@@ -1833,6 +1842,24 @@ namespace DChild.Gameplay.Characters.Players.Modules
                             if (IsFacingInput())
                             {
                                 m_barrier.Execute();
+                            }
+                            return;
+                        }
+
+                        return;
+                    }
+                    else if (m_input.icarusWingsPressed && m_icarusWings.CanIcarusWings())
+                    {
+                        if (m_state.isInShadowMode == false)
+                        {
+
+                            //m_crouch?.Cancel();
+                            m_icarusWings.Reset();
+                            PrepareForGroundAttack();
+                            //m_movement?.SwitchConfigTo(Movement.Type.Jog);
+                            if (IsFacingInput())
+                            {
+                                m_icarusWings.Execute();
                             }
                             return;
                         }
