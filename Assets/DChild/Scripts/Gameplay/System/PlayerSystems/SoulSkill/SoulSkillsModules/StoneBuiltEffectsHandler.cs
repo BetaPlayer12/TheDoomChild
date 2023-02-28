@@ -15,6 +15,7 @@ public class StoneBuiltEffectsHandler : MonoBehaviour
     private ParticleSystem m_effects;
     private void Start()
     {
+        m_effects.Stop();
         GameplaySystem.playerManager.player.health.ValueChanged += OnStatChange;
         this.transform.localPosition = new Vector3(0.0f, 8.0f, 0.0f);
     }
