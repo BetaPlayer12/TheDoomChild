@@ -1,7 +1,9 @@
 using DChild.Menu.Bestiary;
 using Sirenix.OdinInspector;
+#if UNITY_EDITOR
 using Sirenix.OdinInspector.Editor;
-using Sirenix.Utilities.Editor;
+using Sirenix.Utilities.Editor; 
+#endif
 using System;
 using System.Collections.Generic;
 using UnityEditor;
