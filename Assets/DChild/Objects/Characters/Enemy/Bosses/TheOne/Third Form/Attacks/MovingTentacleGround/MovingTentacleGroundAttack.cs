@@ -1,7 +1,9 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using DChild.Gameplay.Characters.AI;
 using Holysoft;
+using Holysoft.Event;
 using UnityEngine;
 
 namespace DChild.Gameplay.Characters.Enemies
@@ -17,9 +19,23 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField]
         private float m_tentacleAttackDuration;
 
+        public event EventAction<EventActionArgs> AttackStart;
+        public event EventAction<EventActionArgs> AttackDone;
+
+        private void Awake()
+        {
+            m_leftTentacle.AttackDone += OnAttackDone;
+            m_rightTentacle.AttackDone += OnAttackDone;
+        }
+
+        private void OnAttackDone(object sender, EventActionArgs eventArgs)
+        {
+            AttackDone?.Invoke(this, EventActionArgs.Empty);
+        }
+
         public IEnumerator ExecuteAttack()
         {
-            var rollTentacle = Random.Range(0, 2);
+            var rollTentacle = UnityEngine.Random.Range(0, 2);
 
             if(rollTentacle == 0)
             {

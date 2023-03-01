@@ -1,40 +1,43 @@
 ﻿using DChild.Gameplay.Characters.Players;
+using Holysoft.Collections;
 using Holysoft.Event;
 using Sirenix.OdinInspector;
 using UnityEngine;
-using PixelCrushers.DialogueSystem;
 
 namespace DChild.Gameplay.NavigationMap
 {
     public struct FogOfWarStateChangeEvent : IEventActionArgs
     {
-        public FogOfWarStateChangeEvent(string varName, bool isRevealed)
+        public FogOfWarStateChangeEvent(Flag index, bool isRevealed)
         {
-            this.varName = varName;
+            this.index = index;
             this.isRevealed = isRevealed;
         }
 
-        public string varName { get; }
+        public Flag index { get; }
         public bool isRevealed { get; }
     }
 
     public class FogofWarTrigger : MonoBehaviour
     {
-        [SerializeField,VariablePopup(true), OnValueChanged("MatchGameObjectNameToVariable"),HideInPrefabAssets]
-        private string m_varName;
-        [ShowInInspector, HideInPrefabAssets]
+        [ShowInInspector, HideInPrefabAssets, OnValueChanged("UpdateState")]
         private bool m_isRevealed = false;
         private Collider2D m_trigger;
 
-        public event EventAction<FogOfWarStateChangeEvent> RevealValueChange;
+        private Flag m_flagIndex;
 
-        public string varName => m_varName;
+        public event EventAction<FogOfWarStateChangeEvent> RevealValueChange;
         public bool isRevealed => m_isRevealed;
+
+        public void SetIndex(int index)
+        {
+            m_flagIndex = (Flag)(1 << index);
+        }
 
         public void SetState(bool isRevealed)
         {
             SetStateAs(isRevealed);
-            RevealValueChange?.Invoke(this, new FogOfWarStateChangeEvent(m_varName, m_isRevealed));
+            RevealValueChange?.Invoke(this, new FogOfWarStateChangeEvent(m_flagIndex, m_isRevealed));
         }
 
         public void SetStateAs(bool isRevealed)
@@ -43,9 +46,13 @@ namespace DChild.Gameplay.NavigationMap
             m_trigger.enabled = !isRevealed;
         }
 
-        private void MatchGameObjectNameToVariable()
+        public void SetStateAs(Flag state)
         {
-            gameObject.name = NavMapUtility.GetObjectNameFromFogOfWarVariable(m_varName);
+            SetStateAs(state.HasFlag(m_flagIndex));
+        }
+        private void UpdateState()
+        {
+            SetState(m_isRevealed);
         }
 
         private void Awake()
@@ -64,6 +71,6 @@ namespace DChild.Gameplay.NavigationMap
                 SetState(true);
             }
         }
-       
+
     }
 }

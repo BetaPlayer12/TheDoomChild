@@ -5,15 +5,22 @@ using DChild.Gameplay.Pooling;
 using Sirenix.OdinInspector;
 using DChild.Gameplay.Characters;
 using Spine.Unity;
+using DChild.Gameplay.Characters.Enemies;
+using Holysoft.Event;
 
 namespace DChild.Gameplay.Projectiles
 {
     public class TentacleGroundStab : PoolableObject
     {
-        public float m_lifespan;
+        public float lifespan;
+        public bool isOnPlayableGround = false;
 
         [SerializeField]
         private GameObject[] safeZones;
+        [SerializeField]
+        private Collider2D m_hitbox;
+        [SerializeField]
+        private float m_tentacleStabAnimationSpeedMultiplier;
 
         [SerializeField, TabGroup("Reference")]
         protected SpineRootAnimation m_animation;
@@ -32,11 +39,18 @@ namespace DChild.Gameplay.Projectiles
 
         public IEnumerator StabRoutine()
         {
-            m_animation.SetAnimation(0, m_anticipationStartAnimation, false);
+            m_animation.SetAnimation(0, m_anticipationStartAnimation, false).TimeScale = m_tentacleStabAnimationSpeedMultiplier;
             yield return new WaitForAnimationComplete(m_animation.animationState, m_anticipationStartAnimation);
 
-            m_animation.SetAnimation(0, m_attackAnimation, false);
+            m_animation.SetAnimation(0, m_attackAnimation, false).TimeScale = m_tentacleStabAnimationSpeedMultiplier;
+
+            if(isOnPlayableGround)
+                m_hitbox.enabled = true;
+
             yield return new WaitForAnimationComplete(m_animation.animationState, m_attackAnimation);
+
+            if(FindObjectOfType<ObstacleChecker>().monolithSlamObstacleList != null)
+                FindObjectOfType<ObstacleChecker>().ClearMonoliths();
 
             yield return TentacleStay();
         }
@@ -45,7 +59,7 @@ namespace DChild.Gameplay.Projectiles
         {
             InitializeSafeZone();
             m_animation.SetAnimation(0, m_stayAnimation, false);
-            yield return new WaitForSeconds(m_lifespan);
+            yield return new WaitForSeconds(lifespan);
             yield return Retract();
         }
 
@@ -54,13 +68,14 @@ namespace DChild.Gameplay.Projectiles
             RemoveSafeZones();
             m_animation.SetAnimation(0, m_retractAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_retractAnimation);
-            
+
             DestroyInstance();
         }
 
         // Start is called before the first frame update
         void Start()
         {
+            m_hitbox.enabled = false;
             StartCoroutine(StabRoutine());
         }
 
@@ -72,10 +87,13 @@ namespace DChild.Gameplay.Projectiles
 
         private void InitializeSafeZone()
         {
-            int randomSafeZone = Random.Range(0, safeZones.Length);
+            if (isOnPlayableGround)
+            {
+                int randomSafeZone = Random.Range(0, safeZones.Length);
 
-            GameObject safezone = safeZones[randomSafeZone];
-            safezone.SetActive(true);
+                GameObject safezone = safeZones[randomSafeZone];
+                safezone.SetActive(true);
+            }
         }
 
         private void RemoveSafeZones()

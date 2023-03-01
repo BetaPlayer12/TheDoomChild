@@ -1,25 +1,58 @@
 ﻿using DChild.Gameplay.Combat;
 using Sirenix.OdinInspector;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace DChild.Gameplay.ArmyBattle
 {
+
     public class Army : MonoBehaviour
     {
-#if UNITY_EDITOR
+        //#if UNITY_EDITOR
         [SerializeField, HideInPlayMode]
         private ArmyCompositionData m_initialComposition;
-#endif
+        //#endif
         [SerializeField]
         private Health m_troopCount;
-        [SerializeField, HideInEditorMode]
+        [SerializeField, HideInEditorMode, TabGroup("Composition")]
         private ArmyComposition m_composition;
+        [SerializeField, HideInEditorMode, TabGroup("Abilities")]
+        private ArmyAbilityList m_abilities;
+
+        private ArmyUnitPowerModifier m_powerModifier;
+
+        private List<ArmyAttackGroup> cacheAttackGroup;
 
         public Health troopCount => m_troopCount;
 
-        public int GetPower(UnitType unitType) => m_composition.GetTotalUnitPower(unitType);
+        public bool HasAvailableAttackGroup(UnitType unitType)
+        {
+            var groups = m_composition.GetAttackGroupsOfUnityType(unitType);
+            for (int i = 0; i < groups.Count; i++)
+            {
+                if (groups[i].isAvailable)
+                {
+                    return true;
+                }
+            }
 
-        public ArmyCharacter RemoveRandomCharacter(UnitType unitType) => m_composition.RemoveCharacter(unitType, Random.Range(0, m_composition.GetNumberOfCharacter(unitType)));
+            return false;
+        }
+
+        public List<ArmyAttackGroup> GetAvailableAttackGroups(UnitType unitType)
+        {
+            cacheAttackGroup.Clear();
+            var groups = m_composition.GetAttackGroupsOfUnityType(unitType);
+            for (int i = 0; i < groups.Count; i++)
+            {
+                var group = groups[i];
+                if (group.isAvailable)
+                {
+                    cacheAttackGroup.Add(group);
+                }
+            }
+            return cacheAttackGroup;
+        }
 
         public void SetArmyComposition(ArmyComposition armyComposition)
         {
@@ -41,14 +74,20 @@ namespace DChild.Gameplay.ArmyBattle
         public void Initialize()
         {
             SetTroopCount(m_composition.troopCount);
+            m_composition.ResetAvailability();
         }
 
         private void Awake()
         {
-#if UNITY_EDITOR
+            //#if UNITY_EDITOR
             if (m_initialComposition != null)
+            {
                 m_composition = m_initialComposition.GenerateArmyCompositionInstance();
-#endif
+                m_composition.ResetAvailability();
+            }
+
+            //#endif
+            cacheAttackGroup = new List<ArmyAttackGroup>();
         }
     }
 }

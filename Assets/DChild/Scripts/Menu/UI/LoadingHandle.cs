@@ -54,6 +54,8 @@ namespace DChild.Menu
         private bool m_unloadThis;
         private bool m_canTransferScene;
 
+        public static bool isLoading { get; private set; }
+
         public static void SetLoadType(LoadType value) => loadType = value;
 
         public static void LoadScenes(params SceneInfo[] scenes)
@@ -181,24 +183,68 @@ namespace DChild.Menu
 
         private IEnumerator ExecuteLoadUnloadScene()
         {
-            var time = 0f;
-            m_animation.PlayStart();
-            var endOfFrame = new WaitForEndOfFrame();
-
-            Debug.LogError("False Positive: Unloading Scenes Start");
-            //Wait for Unloading to Be done, Unload scenes one by one
-            m_unloadThis = false;
-            m_unloadOperations.Clear();
-            scenesToUnload?.RemoveAll(x => x == string.Empty);
-            AsyncOperation operation = null;
-            for (int i = 0; i < (scenesToUnload?.Count ?? 0); i++)
+            if (isLoading)
             {
-                Debug.LogError($"False Positive: \"{scenesToUnload[i]}\" Unload Start");
-                if (scenesToUnload[i] != "")
+                var time = 0f;
+                m_animation.PlayStart();
+                var endOfFrame = new WaitForEndOfFrame();
+
+                Debug.LogError("False Positive: Unloading Scenes Start");
+                //Wait for Unloading to Be done, Unload scenes one by one
+                m_unloadThis = false;
+                m_unloadOperations.Clear();
+                scenesToUnload?.RemoveAll(x => x == string.Empty);
+                AsyncOperation operation = null;
+                for (int i = 0; i < (scenesToUnload?.Count ?? 0); i++)
                 {
+                    Debug.LogError($"False Positive: \"{scenesToUnload[i]}\" Unload Start");
+                    if (scenesToUnload[i] != "")
+                    {
+                        try
+                        {
+                            operation = SceneManager.UnloadSceneAsync(scenesToUnload[i]);
+                        }
+                        catch (System.Exception)
+                        {
+                            operation = null;
+                        }
+
+                        if (operation != null)
+                        {
+                            while (operation.isDone == false)
+                            {
+                                yield return endOfFrame;
+                                time += Time.unscaledDeltaTime;
+                            }
+                        }
+                        else
+                        {
+                            Debug.LogError("Attempt to unload invalid scene: " + scenesToUnload[i]);
+                        }
+                    }
+                    Debug.LogError($"False Positive: \"{scenesToUnload[i]}\" Unload Done");
+                }
+                scenesToUnload?.Clear();
+                Debug.LogError("False Positive: Unloading Scenes Done");
+
+                ExecuteAddressableSceneUnloading();
+                yield return WaitForHandlingSceneOperations();
+                ExecuteAddressableSceneLoading();
+                yield return WaitForHandlingSceneOperations();
+                yield return ActivateLoadedAddressableScenes();
+
+
+                Debug.LogError("False Positive: Loading Scenes Start");
+                //Wait for Loading to Be done, Load scenes one by one
+                m_loadOperations.Clear();
+                scenesToLoad?.RemoveAll(x => x == string.Empty);
+                for (int i = 0; i < (scenesToLoad?.Count ?? 0); i++)
+                {
+                    Debug.LogError($"False Positive: \"{scenesToLoad[i]}\" Load Start");
+
                     try
                     {
-                        operation = SceneManager.UnloadSceneAsync(scenesToUnload[i]);
+                        operation = SceneManager.LoadSceneAsync(scenesToLoad[i], LoadSceneMode.Additive);
                     }
                     catch (System.Exception)
                     {
@@ -207,117 +253,77 @@ namespace DChild.Menu
 
                     if (operation != null)
                     {
-                        while (operation.isDone == false)
+                        m_loadOperations.Add(operation);
+                        operation.allowSceneActivation = false;
+                        while (operation.progress < 0.9f)
                         {
+                            Debug.LogError($"Progress Tracker: \"{scenesToLoad[i]}\" -- {operation.progress}");
                             yield return endOfFrame;
                             time += Time.unscaledDeltaTime;
                         }
+                        Debug.LogError($"False Positive: \"{scenesToLoad[i]}\" Load Done");
                     }
                     else
                     {
-                        Debug.LogError("Attempt to unload invalid scene: " + scenesToUnload[i]);
+                        Debug.LogError("Attempt to load invalid scene: " + scenesToLoad[i]);
                     }
                 }
-                Debug.LogError($"False Positive: \"{scenesToUnload[i]}\" Unload Done");
-            }
-            scenesToUnload?.Clear();
-            Debug.LogError("False Positive: Unloading Scenes Done");
+                scenesToLoad?.Clear();
+                Debug.LogError("False Positive: Loading Scenes Done");
+                m_animation.PlayEnd();
 
-            ExecuteAddressableSceneUnloading();
-            yield return WaitForHandlingSceneOperations();
-            ExecuteAddressableSceneLoading();
-            yield return WaitForHandlingSceneOperations();
-            yield return ActivateLoadedAddressableScenes();
-
-
-            Debug.LogError("False Positive: Loading Scenes Start");
-            //Wait for Loading to Be done, Load scenes one by one
-            m_loadOperations.Clear();
-            scenesToLoad?.RemoveAll(x => x == string.Empty);
-            for (int i = 0; i < (scenesToLoad?.Count ?? 0); i++)
-            {
-                Debug.LogError($"False Positive: \"{scenesToLoad[i]}\" Load Start");
-
-                try
+                if (loadType == LoadType.Force)
                 {
-                    operation = SceneManager.LoadSceneAsync(scenesToLoad[i], LoadSceneMode.Additive);
-                }
-                catch (System.Exception)
-                {
-                    operation = null;
+                    yield return new WaitForSeconds(2.25f);
+                    time += 2.25f;
                 }
 
-                if (operation != null)
-                {
-                    m_loadOperations.Add(operation);
-                    operation.allowSceneActivation = false;
-                    while (operation.progress < 0.9f)
-                    {
-                        Debug.LogError($"Progress Tracker: \"{scenesToLoad[i]}\" -- {operation.progress}");
-                        yield return endOfFrame;
-                        time += Time.unscaledDeltaTime;
-                    }
-                    Debug.LogError($"False Positive: \"{scenesToLoad[i]}\" Load Done");
-                }
-                else
-                {
-                    Debug.LogError("Attempt to load invalid scene: " + scenesToLoad[i]);
-                }
-            }
-            scenesToLoad?.Clear();
-            Debug.LogError("False Positive: Loading Scenes Done");
-            m_animation.PlayEnd();
-
-            if (loadType == LoadType.Force)
-            {
-                yield return new WaitForSeconds(2.25f);
-                time += 2.25f;
-            }
-
-            Debug.LogError("False Positive: Scene Activation Start");
-            for (int i = 0; i < m_loadOperations.Count; i++)
-            {
-                m_loadOperations[i].allowSceneActivation = true;
-            }
-
-            bool allScenesDoneLoading = false;
-            while (allScenesDoneLoading)
-            {
-                allScenesDoneLoading = true;
+                Debug.LogError("False Positive: Scene Activation Start");
                 for (int i = 0; i < m_loadOperations.Count; i++)
                 {
-                    if (m_loadOperations[i].isDone == false)
+                    m_loadOperations[i].allowSceneActivation = true;
+                }
+
+                bool allScenesDoneLoading = false;
+                while (allScenesDoneLoading)
+                {
+                    allScenesDoneLoading = true;
+                    for (int i = 0; i < m_loadOperations.Count; i++)
                     {
-                        allScenesDoneLoading = false;
-                        break;
+                        if (m_loadOperations[i].isDone == false)
+                        {
+                            allScenesDoneLoading = false;
+                            break;
+                        }
                     }
+                    yield return endOfFrame;
+                }
+
+                Debug.LogError("False Positive: Scene Activation Done");
+
+                yield return endOfFrame;
+                while (m_canTransferScene == false)
+                {
+                    time += Time.unscaledDeltaTime;
+                    yield return endOfFrame;
+                }
+
+                Debug.LogError("False Positive: Scene Done Event Sent");
+                SceneDone?.Invoke(this, EventActionArgs.Empty);
+                Debug.LogError("False Positive: Scene Done Reaction Done");
+                if (loadType == LoadType.Smart)
+                {
+                    m_loadDoneSignal.SendSignal();
+                    yield return new WaitForSeconds(1f);
+                    time += 1f;
                 }
                 yield return endOfFrame;
-            }
-
-            Debug.LogError("False Positive: Scene Activation Done");
-
-            yield return endOfFrame;
-            while (m_canTransferScene == false)
-            {
                 time += Time.unscaledDeltaTime;
-                yield return endOfFrame;
-            }
+                //Cant Call Unload Here for some reason, so i have to resort to using a flag to trigger the unloading
+                m_unloadThis = true;
+                Debug.Log($"Loading Time: {time}");
 
-            Debug.LogError("False Positive: Scene Done Event Sent");
-            SceneDone?.Invoke(this, EventActionArgs.Empty);
-            Debug.LogError("False Positive: Scene Done Reaction Done");
-            if (loadType == LoadType.Smart)
-            {
-                m_loadDoneSignal.SendSignal();
-                yield return new WaitForSeconds(1f);
-                time += 1f;
             }
-            yield return endOfFrame;
-            time += Time.unscaledDeltaTime;
-            //Cant Call Unload Here for some reason, so i have to resort to using a flag to trigger the unloading
-            m_unloadThis = true;
-            Debug.Log($"Loading Time: {time}");
         }
 
         private void Awake()
