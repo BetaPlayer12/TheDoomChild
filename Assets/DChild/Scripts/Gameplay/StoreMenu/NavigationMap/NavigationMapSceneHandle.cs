@@ -1,4 +1,5 @@
-﻿using Sirenix.OdinInspector;
+﻿using Holysoft.Collections;
+using Sirenix.OdinInspector;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,29 +11,37 @@ namespace DChild.Gameplay.NavigationMap
         {
             private Environment.Location m_location;
             private List<string> m_fogOfWarNames;
-            private List<bool> m_fogOfWarIsRevealed;
+            private List<Flag> m_fogOfWarStates;
 
             public int fogOfWarChanges => m_fogOfWarNames.Count;
 
             public ChangesInfo()
             {
                 m_fogOfWarNames = new List<string>();
-                m_fogOfWarIsRevealed = new List<bool>();
+                m_fogOfWarStates = new List<Flag>();
             }
 
-            public void AddFogOfWarChange(string varName, bool isRevealed)
+            public void AddFogOfWarChange(string varName, Flag state)
             {
-                m_fogOfWarNames.Add(varName);
-                m_fogOfWarIsRevealed.Add(isRevealed);
+                if (m_fogOfWarNames.Contains(varName))
+                {
+                    var index = m_fogOfWarNames.IndexOf(varName);
+                    m_fogOfWarStates[index] = state;
+                }
+                else
+                {
+                    m_fogOfWarNames.Add(varName);
+                    m_fogOfWarStates.Add(state);
+                }
             }
 
             public string GetFogOfWarName(int index) => m_fogOfWarNames[index];
-            public bool GetFogOfWarState(int index) => m_fogOfWarIsRevealed[index];
+            public Flag GetFogOfWarState(int index) => m_fogOfWarStates[index];
 
             public void Clear()
             {
                 m_fogOfWarNames.Clear();
-                m_fogOfWarIsRevealed.Clear();
+                m_fogOfWarStates.Clear();
             }
         }
 
@@ -50,14 +59,14 @@ namespace DChild.Gameplay.NavigationMap
         [SerializeField, TabGroup("Point Of Interest")]
         private MapPointOfInterestHandle m_pointOfInterest;
 
-        private void OnFogOfWarChange(object sender, FogOfWarStateChangeEvent eventArgs)
+        private void OnFogOfWarChange(object sender, FogOfWarSegmentChangeEvent eventArgs)
         {
-            changes.AddFogOfWarChange(eventArgs.varName, eventArgs.isRevealed);
+            changes.AddFogOfWarChange(eventArgs.varName, eventArgs.revealState);
         }
 
         private void Start()
         {
-            if(changes == null)
+            if (changes == null)
             {
                 changes = new ChangesInfo();
             }
@@ -67,7 +76,7 @@ namespace DChild.Gameplay.NavigationMap
             m_fogOfWarHandle.LoadStates();
 
             m_pointOfInterest.Initialize();
-             
+
             m_pointOfInterest.LoadStates();
 
             GameplaySystem.gamplayUIHandle.UpdateNavMapConfiguration(m_sceneLocation, m_configurator.inGameReferencePoint, m_configurator.mapReferencePoint, m_configurator.offset);
