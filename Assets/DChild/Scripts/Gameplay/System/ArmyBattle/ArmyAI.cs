@@ -6,7 +6,12 @@ namespace DChild.Gameplay.ArmyBattle
     {
         public void ChooseAttack()
         {
-            ChooseAttack((UnitType)Random.Range(0, 3));
+            UnitType chosenAttackType;
+            do
+            {
+                chosenAttackType = (UnitType)Random.Range(0, 3);
+            } while (controlledArmy.HasAvailableAttackGroup(chosenAttackType) == false);
+            ChooseAttack(chosenAttackType);
         }
     }
 }

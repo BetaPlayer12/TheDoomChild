@@ -10,6 +10,6 @@ public class GrabPlayerChecker : MonoBehaviour
     {
         if (collision.CompareTag("DamageCollider") || collision.CompareTag("Sensor"))
             m_tentacleGrab.GrabbedPlayer();
-            return;
+        return;
     }
 }
