@@ -1,5 +1,7 @@
 using DChild.Gameplay.Characters.Players.Modules;
 using DChild.Gameplay.Combat;
+using DChild.Gameplay.Pooling;
+using DChild.Gameplay.Projectiles;
 using Sirenix.OdinInspector;
 using Spine.Unity;
 using System.Collections;
@@ -31,13 +33,13 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
         [SerializeField, BoxGroup("Sensors")]
         private RaySensor m_edgeSensor;
 
-        [SerializeField, BoxGroup("FoolsVerdict")]
-        private GameObject m_foolsVerdictGO;
-        [SerializeField, BoxGroup("FoolsVerdict")]
-        private Transform m_foolsVerdictTF;
-        [SerializeField, BoxGroup("FoolsVerdict")]
-        private SpineFX m_foolsVerdictStartAnimation;
-        private Vector2 m_foolsVerdictLocalPos;
+
+        [SerializeField, BoxGroup("Projectile")]
+        private Transform m_startPoint;
+        [SerializeField, BoxGroup("Projectile")]
+        private ProjectileInfo m_projectileInfo;
+
+        private ProjectileLauncher m_launcher;
 
         [SerializeField]
         private Vector2 m_pushForce;
@@ -67,7 +69,8 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
             m_fxAnimator = m_attackFX.gameObject.GetComponentInChildren<Animator>();
             m_skeletonAnimation = m_attackFX.gameObject.GetComponent<SkeletonAnimation>();
-            m_foolsVerdictLocalPos = m_foolsVerdictTF.localPosition;
+
+            m_launcher = new ProjectileLauncher(m_projectileInfo, m_startPoint);
         }
 
         //public void SetConfiguration(SlashComboStatsInfo info)
@@ -81,9 +84,6 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             //m_foolsVerdictInfo.ShowCollider(false);
             StopAllCoroutines();
             m_animator.SetBool(m_foolsVerdictStateAnimationParameter, false);
-            if (m_foolsVerdictGO.activeSelf)
-                m_foolsVerdictStartAnimation.Stop();
-            m_foolsVerdictGO.SetActive(false);
         }
 
         public void Execute()
@@ -97,10 +97,8 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             m_animator.SetBool(m_foolsVerdictStateAnimationParameter, true);
             m_foolsVerdictCooldownTimer = m_foolsVerdictCooldown;
             m_foolsVerdictMovementCooldownTimer = m_foolsVerdictMovementCooldown;
-            m_foolsVerdictGO.SetActive(true);
-            m_foolsVerdictStartAnimation.Play();
-            m_foolsVerdictGO.GetComponent<Attacker>().SetParentAttacker(m_attacker);
             //m_attacker.SetDamageModifier(m_slashComboInfo[m_currentSlashState].damageModifier * m_modifier.Get(PlayerModifier.AttackDamage));
+            //Summon();
         }
 
         public void EndExecution()
@@ -109,9 +107,6 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             //m_canFoolsVerdict = true;
             m_canMove = true;
             StopAllCoroutines();
-            if (m_foolsVerdictGO.activeSelf)
-                m_foolsVerdictStartAnimation.Stop();
-            m_foolsVerdictGO.SetActive(false);
             m_animator.SetBool(m_foolsVerdictStateAnimationParameter, false);
             base.AttackOver();
         }
@@ -121,9 +116,6 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             //m_foolsVerdictInfo.ShowCollider(false);
             StopAllCoroutines();
             m_fxAnimator.Play("Buffer");
-            if (m_foolsVerdictGO.activeSelf)
-                m_foolsVerdictStartAnimation.Stop();
-            m_foolsVerdictGO.SetActive(false);
             m_animator.SetBool(m_foolsVerdictStateAnimationParameter, false);
             base.Cancel();
         }
@@ -176,29 +168,12 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
         public void Summon()
         {
-            StartCoroutine(HammerRoutine());
-        }
+            var instance = GameSystem.poolManager.GetPool<ProjectilePool>().GetOrCreateItem(m_projectileInfo.projectile);
+            instance.transform.position = m_startPoint.position;
+            instance.GetComponent<Attacker>().SetParentAttacker(m_attacker);
 
-
-        private IEnumerator HammerRoutine()
-        {
-            //Reset
-            m_foolsVerdictTF.SetParent(this.transform);
-            m_foolsVerdictTF.localPosition = m_foolsVerdictLocalPos;
-            //
-            m_foolsVerdictTF.SetParent(null);
-            m_foolsVerdictTF.gameObject.SetActive(true);
-
-            m_foolsVerdictGO.SetActive(true);
-            yield return new WaitForSeconds(.1f);
-            m_foolsVerdictStartAnimation.Play();
-            m_foolsVerdictTF.localScale = new Vector3(m_character.facing == HorizontalDirection.Right ? -1 : 1, 1, 1);
-            //m_lichLordArmHurtBox.gameObject.SetActive(true);
-            //m_foolsVerdictTF.GetComponentInChildren<SkeletonRenderer>().maskInteraction = SpriteMaskInteraction.None;
-            //yield return new WaitForAnimationComplete(m_lichLordArmTF.GetComponentInChildren<SkeletonAnimation>().state, m_lichLordArmTF.GetComponentInChildren<SkeletonAnimation>().state.GetCurrent(0).Animation.ToString());
-            //m_foolsVerdictTF.GetComponentInChildren<SkeletonRenderer>().maskInteraction = SpriteMaskInteraction.VisibleOutsideMask;
-            //m_foolsVerdictTF.gameObject.SetActive(false);
-            yield return null;
+            m_launcher.AimAt(new Vector2(m_startPoint.position.x + (m_character.facing == HorizontalDirection.Right ? 10 : -10), m_startPoint.position.y));
+            m_launcher.LaunchProjectile(m_startPoint.right, instance.gameObject);
         }
     }
 }
