@@ -1,8 +1,10 @@
 using DChild.Gameplay.Characters.Players.Modules;
 using DChild.Gameplay.Pooling;
 using DChild.Gameplay.Projectiles;
+using Holysoft.Event;
 using Sirenix.OdinInspector;
 using Spine.Unity;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -20,11 +22,18 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
         private bool m_canTeleport;
         public bool canTeleport => m_canTeleport;
 
+        private void DisableTeleport(object sender, EventActionArgs eventArgs)
+        {
+            m_canTeleport = false;
+            m_spawnedProjectile = null;
+        }
+
         public void GetSpawnedProjectile(Projectile spawnedProjectile)
         {
             if (spawnedProjectile != null)
             {
                 m_spawnedProjectile = spawnedProjectile;
+                m_spawnedProjectile.Impacted += DisableTeleport;
             }
         }
 
