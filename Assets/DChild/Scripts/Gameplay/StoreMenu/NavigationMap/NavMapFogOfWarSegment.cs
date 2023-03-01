@@ -29,16 +29,15 @@ namespace DChild.Gameplay.NavigationMap
             }
         }
 
+#if UNITY_EDITOR
         [ContextMenu("Update List")]
         private void UpdateList()
         {
             m_list = GetComponentsInChildren<NavMapFogOfWarGroup>(true);
-#if UNITY_EDITOR
             if (PrefabUtility.IsPartOfPrefabAsset(gameObject) == false)
             {
                 UpdateUINames();
             }
-#endif
         }
 
         [ContextMenu("Update UI Names")]
@@ -51,5 +50,6 @@ namespace DChild.Gameplay.NavigationMap
                 m_list[i].RenameGameObject(name, i);
             }
         }
+#endif
     }
 }
