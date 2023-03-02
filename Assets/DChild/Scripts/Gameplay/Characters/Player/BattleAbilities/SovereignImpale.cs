@@ -1,4 +1,6 @@
 using DChild.Gameplay.Characters.Players.Modules;
+using DChild.Gameplay.Combat;
+using DChild.Gameplay.Pooling;
 using DChild.Gameplay.Projectiles;
 using Sirenix.OdinInspector;
 using Spine.Unity;
@@ -24,22 +26,19 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
         private Character m_character;
         [SerializeField, BoxGroup("Physics")]
         private Rigidbody2D m_physics;
-        [SerializeField, BoxGroup("Sensors")]
-        private RaySensor m_enemySensor;
-        [SerializeField, BoxGroup("Sensors")]
-        private RaySensor m_wallSensor;
-        [SerializeField, BoxGroup("Sensors")]
-        private RaySensor m_edgeSensor;
-
-        [SerializeField]
-        private Vector2 m_pushForce;
 
         [SerializeField, BoxGroup("Projectile")]
         private Transform m_startPoint;
         [SerializeField, BoxGroup("Projectile")]
-        private float m_spikeDuration;
+        private ProjectileInfo m_projectileInfo;
         [SerializeField, BoxGroup("Projectile")]
-        private GameObject m_spike;
+        private float m_summonOffset;
+        [SerializeField, BoxGroup("Projectile")]
+        private float m_summonDelay;
+        [SerializeField, BoxGroup("Projectile")]
+        private List<Vector3> m_summonOffsetScales;
+
+        private ProjectileLauncher m_launcher;
 
         private bool m_canSovereignImpale;
         private bool m_canMove;
@@ -66,6 +65,8 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
             m_fxAnimator = m_attackFX.gameObject.GetComponentInChildren<Animator>();
             m_skeletonAnimation = m_attackFX.gameObject.GetComponent<SkeletonAnimation>();
+
+            m_launcher = new ProjectileLauncher(m_projectileInfo, m_startPoint);
         }
 
         //public void SetConfiguration(SlashComboStatsInfo info)
@@ -75,14 +76,17 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
         public override void Reset()
         {
-            base.Reset();
-            //m_sovereignImpaleInfo.ShowCollider(false);
+            m_state.waitForBehaviour = false;
+            m_state.isAttacking = false;
+            m_canSovereignImpale = true;
+            m_canMove = true;
             m_animator.SetBool(m_sovereignImpaleStateAnimationParameter, false);
+            base.Reset();
         }
 
         public void Execute()
         {
-            //m_state.waitForBehaviour = true;
+            m_state.waitForBehaviour = true;
             m_state.isAttacking = true;
             m_state.canAttack = false;
             m_canSovereignImpale = false;
@@ -96,35 +100,14 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
         public void EndExecution()
         {
-            base.AttackOver();
-            //m_sovereignImpaleInfo.ShowCollider(false);
             m_animator.SetBool(m_sovereignImpaleStateAnimationParameter, false);
-            m_canSovereignImpale = true;
-            m_canMove = true;
-            //m_state.waitForBehaviour = false;
+            base.AttackOver();
         }
 
         public override void Cancel()
         {
+            m_animator.SetBool(m_sovereignImpaleStateAnimationParameter, false);
             base.Cancel();
-            //m_sovereignImpaleInfo.ShowCollider(false);
-            m_fxAnimator.Play("Buffer");
-        }
-
-        public void EnableCollision(bool value)
-        {
-            m_rigidBody.WakeUp();
-            m_sovereignImpaleInfo.ShowCollider(value);
-            m_attackFX.transform.position = m_sovereignImpaleInfo.fxPosition.position;
-
-            //TEST
-            m_enemySensor.Cast();
-            m_wallSensor.Cast();
-            m_edgeSensor.Cast();
-            if (!m_enemySensor.isDetecting && !m_wallSensor.allRaysDetecting && m_edgeSensor.isDetecting && value)
-            {
-                m_physics.AddForce(new Vector2(m_character.facing == HorizontalDirection.Right ? m_pushForce.x : -m_pushForce.x, m_pushForce.y), ForceMode2D.Impulse);
-            }
         }
 
         public void HandleAttackTimer()
@@ -137,7 +120,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             else
             {
                 m_sovereignImpaleCooldownTimer = m_sovereignImpaleCooldown;
-                m_state.isAttacking = false;
+                //m_state.isAttacking = false;
                 m_canSovereignImpale = true;
             }
         }
@@ -157,7 +140,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             }
         }
 
-        private Vector2 GroundPosition(Vector2 startPoint)
+        protected Vector2 GroundPosition(Vector2 startPoint)
         {
             int hitCount = 0;
             //RaycastHit2D hit = Physics2D.Raycast(m_projectilePoint.position, Vector2.down,  1000, DChildUtility.GetEnvironmentMask());
@@ -171,6 +154,18 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
         private static ContactFilter2D m_contactFilter;
         private static RaycastHit2D[] m_hitResults;
         private static bool m_isInitialized;
+
+        private static void Initialize()
+        {
+            if (m_isInitialized == false)
+            {
+                m_contactFilter.useLayerMask = true;
+                m_contactFilter.SetLayerMask(DChildUtility.GetEnvironmentMask());
+                //m_contactFilter.SetLayerMask(Physics2D.GetLayerCollisionMask(DChildUtility.GetEnvironmentMask()));
+                m_hitResults = new RaycastHit2D[16];
+                m_isInitialized = true;
+            }
+        }
 
         protected static RaycastHit2D[] Cast(Vector2 origin, Vector2 direction, float distance, bool ignoreTriggers, out int hitCount, bool debugMode = false)
         {
@@ -193,48 +188,49 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             return m_hitResults;
         }
 
-        private static void Initialize()
-        {
-            if (m_isInitialized == false)
-            {
-                m_contactFilter.useLayerMask = true;
-                m_contactFilter.SetLayerMask(DChildUtility.GetEnvironmentMask());
-                //m_contactFilter.SetLayerMask(Physics2D.GetLayerCollisionMask(DChildUtility.GetEnvironmentMask()));
-                m_hitResults = new RaycastHit2D[16];
-                m_isInitialized = true;
-            }
-        }
-
         public void Summon()
         {
-            LaunchSpike(PuedisYnnusSpike.SkinType.Big, false, Quaternion.identity, true);
+            //float offset = 0f;
+            //var offsetLookPosition = m_character.facing == HorizontalDirection.Right ? 1 : -1;
+            //m_launcher.AimAt(new Vector2(m_startPoint.position.x + offsetLookPosition, m_startPoint.position.y));
+            //for (int i = 0; i < 3; i++)
+            //{
+            //    var instance = GameSystem.poolManager.GetPool<ProjectilePool>().GetOrCreateItem(m_projectileInfo.projectile);
+            //    instance.transform.position = new Vector2(m_startPoint.position.x + offset, GroundPosition(m_startPoint.position).y);
+            //    instance.transform.localScale = new Vector3(m_character.facing == HorizontalDirection.Right ? 1 : -1, 1, 1);
+            //    var component = instance.GetComponent<Projectile>();
+            //    component.ResetState();
+            //    offset += 10f * offsetLookPosition;
+            //}
+            StartCoroutine(SummonRoutine());
         }
 
-        private void LaunchSpike(PuedisYnnusSpike.SkinType spikeType, bool isRandom, Quaternion rotation, bool useOffset)
+        private IEnumerator SummonRoutine()
         {
-            var randomOffsetX = UnityEngine.Random.Range(10, 20);
-            randomOffsetX = UnityEngine.Random.Range(0, 2) == 1 ? randomOffsetX : randomOffsetX * -1;
-            var targetPos = useOffset ? new Vector2(m_startPoint.position.x + randomOffsetX, GroundPosition(m_startPoint.position).y) : (Vector2)m_startPoint.position;
-
-            var component = Instantiate(m_spike, targetPos, Quaternion.identity);
-            component.GetComponent<PuedisYnnusSpike>().WillPool(false);
-            component.GetComponent<PuedisYnnusSpike>().RandomScale();
-            component.GetComponent<PuedisYnnusSpike>().SetSkin(spikeType, isRandom);
-
-            component.transform.rotation = rotation;
-            var middleSpawn = UnityEngine.Random.Range(0, 2) == 1 ? true : false;
-            if (middleSpawn)
+            float offset = 0f;
+            var offsetLookPosition = m_character.facing == HorizontalDirection.Right ? 1 : -1;
+            m_launcher.AimAt(new Vector2(m_startPoint.position.x + offsetLookPosition, m_startPoint.position.y));
+            for (int i = 0; i < m_summonOffsetScales.Count; i++)
             {
-                component.transform.position = new Vector2(m_startPoint.position.x, GroundPosition(m_startPoint.position).y);
-                component.GetComponent<PuedisYnnusSpike>().MassiveSpikeSpawn(m_spikeDuration);
+                var summonPoint = new Vector2(m_startPoint.position.x + offset, m_startPoint.position.y);
+                if (Vector2.Distance(summonPoint, GroundPosition(summonPoint)) != 0)
+                {
+                    var instance = GameSystem.poolManager.GetPool<ProjectilePool>().GetOrCreateItem(m_projectileInfo.projectile);
+                    instance.transform.position = new Vector2(summonPoint.x, GroundPosition(summonPoint).y + (m_summonOffsetScales[i].y - 1));
+                    //instance.transform.localScale = new Vector3(m_character.facing == HorizontalDirection.Right ? m_summonOffsetScales[i].x : -m_summonOffsetScales[i].x, m_summonOffsetScales[i].y, m_summonOffsetScales[i].z);
+                    instance.GetComponent<Attacker>().SetParentAttacker(m_attacker);
+                    //var component = instance.GetComponent<Projectile>();
+                    //component.ResetState();
+
+                    m_launcher.AimAt(new Vector2(m_startPoint.position.x + (m_character.facing == HorizontalDirection.Right ? 10 : -10), m_startPoint.position.y));
+                    m_launcher.LaunchProjectile(m_startPoint.right, instance.gameObject);
+                    offset += m_summonOffset * offsetLookPosition;
+                    //yield return new WaitForSeconds(0.01f);
+                    instance.transform.localScale = Vector3.one;
+                    yield return new WaitForSeconds(m_summonDelay);
+                }
             }
-            else
-            {
-                if (component.transform.position.x < m_startPoint.position.x)
-                    component.GetComponent<PuedisYnnusSpike>().RightSpikeSpawn(m_spikeDuration);
-                else
-                    component.GetComponent<PuedisYnnusSpike>().LeftSpikeSpawn(m_spikeDuration);
-            }
+            yield return null;
         }
     }
 }

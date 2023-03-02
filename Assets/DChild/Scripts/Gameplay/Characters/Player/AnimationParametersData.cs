@@ -55,6 +55,20 @@ namespace DChild.Gameplay.Characters.Players
             AirSlashCombo,
             AirSlashState,
             SovereignImpale,
+            HellTrident,
+            FoolsVerdict,
+            SoulFireBlast,
+            EdgedFury,
+            NinthCircleSanction,
+            DoomsdayKong,
+            BackDiver,
+            Barrier,
+            FencerFlash,
+            DiagonalSwordDash,
+            ChampionsUprising,
+            Eelecktrick,
+            LightningSpear,
+            IcarusWings,
         }
 
         [SerializeField]

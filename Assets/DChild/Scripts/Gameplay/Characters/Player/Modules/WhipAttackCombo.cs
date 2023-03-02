@@ -94,7 +94,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         public void Execute()
         {
             //Debug.Log("Clicked Whip Combo Attack");
-            m_currentWhipState += m_currentWhipState >= /*m_whipStateAmount*/m_configuration.whipStateAmount - 1 ? 0 : 1;
+            m_currentWhipState += m_currentWhipState >= m_configuration.whipStateAmount - 1 ? 0 : 1;
             m_state.waitForBehaviour = true;
             m_state.isAttacking = true;
             m_state.canAttack = false;

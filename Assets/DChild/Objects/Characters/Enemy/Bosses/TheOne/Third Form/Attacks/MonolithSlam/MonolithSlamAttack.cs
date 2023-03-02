@@ -20,8 +20,13 @@ namespace DChild.Gameplay.Characters.Enemies
         private float m_timeBeforeSmash;
         [SerializeField]
         private float m_spawnIntervalForMonoliths;
+        [SerializeField]
+        private float m_spawnOffset;
 
+        [SerializeField]
         private List<PoolableObject> m_monolithsSpawned = new List<PoolableObject>();
+        [SerializeField]
+        private List<float> m_monolithsSpawnedXPositions = new List<float>();
         private ObstacleChecker m_obstacleChecker;
 
         private bool m_leftToRightSequence;
@@ -59,12 +64,14 @@ namespace DChild.Gameplay.Characters.Enemies
             else
                 OrganizeMonolithsSpawnedInAscendingOrder();
 
+
             //Pick a monolith to keep as platform
             if (m_monolithsSpawned.Count > 1)
             {
                 int rollMonolithToKeep = Random.Range(0, m_monolithsSpawned.Count);
 
                 m_monolithsSpawned[rollMonolithToKeep].gameObject.GetComponent<MonolithSlam>().keepMonolith = true;
+
                 m_obstacleChecker.AddMonolithToList(m_monolithsSpawned[rollMonolithToKeep]);
             }
 
@@ -79,6 +86,9 @@ namespace DChild.Gameplay.Characters.Enemies
                 yield return new WaitForSeconds(m_timeBeforeSmash);
             }
 
+            m_monolithsSpawned.Clear();
+            m_monolithsSpawnedXPositions.Clear();
+
             AttackDone?.Invoke(this, EventActionArgs.Empty);
         }
 
@@ -88,9 +98,25 @@ namespace DChild.Gameplay.Characters.Enemies
         }
 
         public IEnumerator SetUpMonoliths(AITargetInfo Target)
-        {
-            InstantiateMonolith(new Vector2(Target.position.x, Target.position.y), m_monolith.gameObject);
+        {          
+            if (m_monolithsSpawnedXPositions.Contains(Target.position.x))
+            {
+                int randomRoll = Random.Range(0, 2);
+                if (randomRoll == 0)
+                {
+                    InstantiateMonolith(new Vector2(m_monolithsSpawnedXPositions[m_monolithsSpawnedXPositions.Count - 1] + m_spawnOffset, Target.position.y), m_monolith.gameObject);
+                }
+                else
+                {
+                    InstantiateMonolith(new Vector2(m_monolithsSpawnedXPositions[m_monolithsSpawnedXPositions.Count - 1] + m_spawnOffset, Target.position.y), m_monolith.gameObject);
+                }
+            }
+            else
+            {
+                InstantiateMonolith(new Vector2(Target.position.x, Target.position.y), m_monolith.gameObject);
+            }
 
+            //InstantiateMonolith(new Vector2(Target.position.x, Target.position.y), m_monolith.gameObject);
             yield return new WaitForSeconds(m_spawnIntervalForMonoliths);
         }
 
@@ -98,6 +124,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             var instance = GameSystem.poolManager.GetPool<PoolableObjectPool>().GetOrCreateItem(monolith, gameObject.scene);
             instance.SpawnAt(new Vector2(spawnPosition.x, m_monolithSlamHeight.position.y), Quaternion.identity);
+            m_monolithsSpawnedXPositions.Add(instance.transform.position.x);
             m_monolithsSpawned.Add(instance); 
         }
 

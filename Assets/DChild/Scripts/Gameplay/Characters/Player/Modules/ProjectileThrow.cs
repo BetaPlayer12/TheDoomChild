@@ -16,6 +16,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private ProjectileThrowStatsInfo m_configuration;
         [SerializeField]
         private ProjectileInfo m_projectile;
+        public ProjectileInfo projectile => m_projectile;
+        private ProjectileInfo m_cacheProjectile;
         [SerializeField]
         private Transform m_spawnPoint;
         [SerializeField]
@@ -31,6 +33,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private int m_skullThrowVariantParameter;
         private bool m_updateProjectileInfo;
         private Projectile m_spawnedProjectile;
+        public Projectile spawnedProjectile => m_spawnedProjectile;
         private bool m_reachedVerticalThreshold = false;
 
         public event EventAction<EventActionArgs> ExecutionRequested;
@@ -180,6 +183,15 @@ namespace DChild.Gameplay.Characters.Players.Modules
             }
         }
 
+        public void ResetProjectile()
+        {
+            m_projectile = m_cacheProjectile;
+            m_launcher.SetProjectile(m_projectile);
+            var skullThrowVariantIndex = m_cacheProjectile.projectile.GetComponent<Projectile>().hasConstantSpeed ? 0 : 1;
+            m_animator.SetInteger(m_skullThrowVariantParameter, skullThrowVariantIndex);
+            m_updateProjectileInfo = true;
+        }
+
         public void HandleNextAttackDelay()
         {
             if (m_timer >= 0)
@@ -248,12 +260,9 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void SpawnIdleProjectile()
         {
-            m_spawnedProjectile = GameSystem.poolManager.GetPool<ProjectilePool>().GetOrCreateItem(m_projectile.projectile);
-            m_spawnedProjectile.transform.position = m_spawnPoint.position;
-            m_spawnedProjectile.transform.parent = transform;
-            m_spawnedProjectile.GetComponent<Attacker>().SetParentAttacker(m_attacker);
 
             var scale = m_spawnedProjectile.transform.localScale;
+            scale.x = m_character.facing == HorizontalDirection.Right ? scale.x : -scale.x;
             scale.y = 1;
             m_spawnedProjectile.transform.localScale = scale;
 
@@ -280,6 +289,11 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_state.canAttack = false;
             m_state.isAttacking = true;
             m_animator.SetBool(m_skullThrowAnimationParameter, true);
+
+            m_spawnedProjectile = GameSystem.poolManager.GetPool<ProjectilePool>().GetOrCreateItem(m_projectile.projectile);
+            m_spawnedProjectile.transform.position = m_spawnPoint.position;
+            m_spawnedProjectile.transform.parent = transform;
+            m_spawnedProjectile.GetComponent<Attacker>().SetParentAttacker(m_attacker);
         }
 
         public void StartThrow()
@@ -325,6 +339,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_launcher.SetProjectile(m_projectile);
             m_launcher.SetSpawnPoint(m_spawnPoint);
             m_updateProjectileInfo = true;
+            m_cacheProjectile = m_projectile;
         }
 
 

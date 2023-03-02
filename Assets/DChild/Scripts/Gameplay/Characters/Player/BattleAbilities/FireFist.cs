@@ -1,4 +1,5 @@
 using DChild.Gameplay.Characters.Players.Modules;
+using DChild.Gameplay.Combat;
 using Sirenix.OdinInspector;
 using Spine.Unity;
 using System.Collections;
@@ -67,6 +68,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             m_fxAnimator = m_attackFX.gameObject.GetComponentInChildren<Animator>();
             m_skeletonAnimation = m_attackFX.gameObject.GetComponent<SkeletonAnimation>();
             m_lichLordArmLocalPos = m_lichLordArmTF.localPosition;
+            m_lichLordArmTF.GetComponent<Attacker>().SetParentAttacker(m_attacker);
         }
 
         //public void SetConfiguration(SlashComboStatsInfo info)
@@ -77,13 +79,14 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
         public override void Reset()
         {
             base.Reset();
-            m_fireFistInfo.ShowCollider(false);
+            //m_fireFistInfo.ShowCollider(false);
+            StopAllCoroutines();
             m_animator.SetBool(m_fireFistStateAnimationParameter, false);
         }
 
         public void Execute()
         {
-            //m_state.waitForBehaviour = true;
+            m_state.waitForBehaviour = true;
             m_state.isAttacking = true;
             m_state.canAttack = false;
             m_canFireFist = false;
@@ -97,19 +100,21 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
         public void EndExecution()
         {
-            base.AttackOver();
-            m_fireFistInfo.ShowCollider(false);
-            m_animator.SetBool(m_fireFistStateAnimationParameter, false);
-            m_canFireFist = true;
+            //m_fireFistInfo.ShowCollider(false);
+            //m_canFireFist = true;
+            StopAllCoroutines();
             m_canMove = true;
-            //m_state.waitForBehaviour = false;
+            m_animator.SetBool(m_fireFistStateAnimationParameter, false);
+            base.AttackOver();
         }
 
         public override void Cancel()
         {
-            base.Cancel();
-            m_fireFistInfo.ShowCollider(false);
+            //m_fireFistInfo.ShowCollider(false);
+            StopAllCoroutines();
             m_fxAnimator.Play("Buffer");
+            m_animator.SetBool(m_fireFistStateAnimationParameter, false);
+            base.Cancel();
         }
 
         public void EnableCollision(bool value)
@@ -138,7 +143,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             else
             {
                 m_fireFistCooldownTimer = m_fireFistCooldown;
-                m_state.isAttacking = false;
+                //m_state.isAttacking = false;
                 m_canFireFist = true;
             }
         }

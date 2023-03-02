@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using DChild.Gameplay.Characters.AI;
 using Holysoft.Event;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace DChild.Gameplay.Characters.Enemies
@@ -58,6 +59,17 @@ namespace DChild.Gameplay.Characters.Enemies
                 yield return m_rightTentacleBlast.TentacleBlastAttack();
 
             AttackDone?.Invoke(this, EventActionArgs.Empty);
+        }
+
+        private IEnumerator DoTentacleBlast()
+        {
+            yield return m_leftTentacleBlast.TentacleBlastAttack();
+        }
+
+        [Button]
+        private void TentacleBlast()
+        {
+            StartCoroutine(DoTentacleBlast());
         }
     }
 }

@@ -27,6 +27,21 @@ namespace DChild.Gameplay.Characters.Players
             EndAirComboAttack,
             EndAirCombo,
             EndSovereignImpale,
+            EndHellTrident,
+            EndFoolsVerdict,
+            EndSoulFireBlast,
+            EndEdgedFury,
+            EndNinthCircleSanction,
+            EndDoomsdayKong,
+            EndBackDiver,
+            EndBarrier,
+            EndFinalSlash,
+            EndFencerFlash,
+            EndDiagonalSwordDash,
+            EndChampionsUprising,
+            EndEelecktrick,
+            EndLightningSpear,
+            EndIcarusWings,
         }
 
         [SerializeField]
@@ -92,6 +107,51 @@ namespace DChild.Gameplay.Characters.Players
                         break;
                     case Command.EndSovereignImpale:
                         player.SovereignImpaleEnd();
+                        break;
+                    case Command.EndHellTrident:
+                        player.HellTridentEnd();
+                        break;
+                    case Command.EndFoolsVerdict:
+                        player.FoolsVerdictEnd();
+                        break;
+                    case Command.EndSoulFireBlast:
+                        player.SoulFireBlastEnd();
+                        break;
+                    case Command.EndEdgedFury:
+                        player.EdgedFuryEnd();
+                        break;
+                    case Command.EndNinthCircleSanction:
+                        player.NinthCircleSanctionEnd();
+                        break;
+                    case Command.EndDoomsdayKong:
+                        player.DoomsdayKongEnd();
+                        break;
+                    case Command.EndBackDiver:
+                        player.BackDiverEnd();
+                        break;
+                    case Command.EndBarrier:
+                        player.BarrierEnd();
+                        break;
+                    case Command.EndFinalSlash:
+                        player.FinalSlashEnd();
+                        break;
+                    case Command.EndFencerFlash:
+                        player.FencerFlashEnd();
+                        break;
+                    case Command.EndDiagonalSwordDash:
+                        player.DiagonalSwordDashEnd();
+                        break;
+                    case Command.EndChampionsUprising:
+                        player.ChampionsUprisingEnd();
+                        break;
+                    case Command.EndEelecktrick:
+                        player.EelecktrickEnd();
+                        break;
+                    case Command.EndLightningSpear:
+                        player.LightningSpearEnd();
+                        break;
+                    case Command.EndIcarusWings:
+                        player.IcarusWingsEnd();
                         break;
                 }
             }

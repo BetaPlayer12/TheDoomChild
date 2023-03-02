@@ -51,6 +51,9 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
         public bool CanFinalSlash() => m_canFinalSlash;
         public bool CanMove() => m_canMove;
+        private bool m_hasExecuted;
+
+        private Coroutine m_finalSlashChargingRoutine;
 
         public override void Initialize(ComplexCharacterInfo info)
         {
@@ -81,8 +84,11 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
         public void Execute()
         {
-            //m_state.waitForBehaviour = true;
-            //m_state.isAttacking = true;
+            m_hasExecuted = true;
+            StopAllCoroutines();
+            m_finalSlashChargingRoutine = StartCoroutine(FinalSlashChargingRoutine());
+            m_state.waitForBehaviour = false;
+            m_state.isAttacking = true;
             m_characterState.isChargingFinalSlash = true;
             //m_state.canAttack = false;
             m_canFinalSlash = false;
@@ -96,10 +102,14 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
         public void ExecuteDash()
         {
-            //m_state.waitForBehaviour = true;
             if (m_canDash)
             {
                 StopAllCoroutines();
+                if (m_finalSlashChargingRoutine != null)
+                {
+                    StopCoroutine(m_finalSlashChargingRoutine);
+                    m_finalSlashChargingRoutine = null;
+                }
                 StartCoroutine(DashRoutine());
             }
             else
@@ -109,31 +119,25 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             //m_attacker.SetDamageModifier(m_slashComboInfo[m_currentSlashState].damageModifier * m_modifier.Get(PlayerModifier.AttackDamage));
         }
 
-        //public void Execute()
-        //{
-        //    StopAllCoroutines();
-        //    m_state.isAttacking = true;
-        //    m_state.canAttack = false;
-        //    m_canFinalSlash = false;
-        //    m_canMove = false;
-        //    m_animator.SetBool(m_animationParameter, true);
-        //    m_animator.SetBool(m_finalSlashStateAnimationParameter, true);
-        //    m_finalSlashCooldownTimer = m_finalSlashCooldown;
-        //    m_finalSlashMovementCooldownTimer = m_finalSlashMovementCooldown;
-        //}
-
         public void EndExecution()
         {
-            m_animator.SetBool(m_finalSlashStateAnimationParameter, false);
+            m_hasExecuted = false;
             m_state.waitForBehaviour = false;
-            m_state.canAttack = true;
-            m_state.isAttacking = false;
+            //m_state.canAttack = true;
+            //m_state.isAttacking = false;
             m_characterState.isChargingFinalSlash = false;
-            base.AttackOver();
-            //m_finalSlashInfo.ShowCollider(false);
+            m_finalSlashInfo.ShowCollider(false);
             //m_canFinalSlash = true;
             //m_canMove = true;
             m_canDash = false;
+            StopAllCoroutines();
+            if (m_finalSlashChargingRoutine != null)
+            {
+                StopCoroutine(m_finalSlashChargingRoutine);
+                m_finalSlashChargingRoutine = null;
+            }
+            m_animator.SetBool(m_finalSlashStateAnimationParameter, false);
+            base.AttackOver();
         }
 
         public void EnableDash(bool value)
@@ -143,10 +147,21 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
         public override void Cancel()
         {
-            base.Cancel();
-            m_finalSlashInfo.ShowCollider(false);
-            m_fxAnimator.Play("Buffer");
-            StopAllCoroutines();
+            if (m_hasExecuted)
+            {
+                m_hasExecuted = false;
+                m_finalSlashInfo.ShowCollider(false);
+                m_fxAnimator.Play("Buffer");
+                m_characterState.isChargingFinalSlash = false;
+                StopAllCoroutines();
+                if (m_finalSlashChargingRoutine != null)
+                {
+                    StopCoroutine(m_finalSlashChargingRoutine);
+                    m_finalSlashChargingRoutine = null;
+                }
+                m_animator.SetBool(m_finalSlashStateAnimationParameter, false);
+                base.Cancel();
+            }
         }
 
         public void EnableCollision(bool value)
@@ -192,28 +207,37 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             m_state.waitForBehaviour = true;
             m_characterState.isChargingFinalSlash = false;
             var timer = m_dashDuration;
-            m_wallSensor.Cast();
-            m_edgeSensor.Cast();
-            //m_animator.SetBool(m_finalSlashStateAnimationParameter, true);
             m_animator.SetBool(m_finalSlashDashAnimationParameter, true);
-            while (timer >= 0 && !m_enemySensor.isDetecting && !m_wallSensor.allRaysDetecting && m_edgeSensor.isDetecting)
+            while (timer >= 0 /*&& !m_enemySensor.isDetecting*/ /*&& !m_wallSensor.allRaysDetecting*/)
             {
-                Debug.Log("Final Slash Dashing!@#");
+                //Debug.Log("Final Slash Dashing!@#");
                 m_enemySensor.Cast();
-                m_wallSensor.Cast();
+                //m_wallSensor.Cast();
                 m_edgeSensor.Cast();
                 m_physics.velocity = new Vector2(m_character.facing == HorizontalDirection.Right ? m_pushForce.x : -m_pushForce.x, m_physics.velocity.y);
                 timer -= Time.deltaTime;
+                if (!m_edgeSensor.isDetecting || m_enemySensor.isDetecting)
+                    timer = -1;
                 yield return null;
             }
             m_canDash = false;
-            m_animator.SetBool(m_finalSlashDashAnimationParameter, false);
             //m_animator.SetBool(m_finalSlashStateAnimationParameter, false);
             m_fxAnimator.Play("SlashCombo2");
             //yield return new WaitForSeconds(m_dashDuration);
             m_physics.velocity = new Vector2(0, m_physics.velocity.y);
+            m_animator.SetBool(m_finalSlashDashAnimationParameter, false);
             //m_state.waitForBehaviour = false;
             yield return null;
+        }
+
+        private IEnumerator FinalSlashChargingRoutine()
+        {
+            while (true)
+            {
+                m_state.waitForBehaviour = false;
+                m_state.isAttacking = true;
+                yield return null;
+            }
         }
     }
 }

@@ -249,7 +249,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""id"": ""bbc6a2a8-7fee-40d5-9914-5e1295c34e78"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
-                    ""interactions"": """",
+                    ""interactions"": ""Press"",
                     ""initialStateCheck"": false
                 },
                 {
@@ -258,7 +258,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""id"": ""d7fb5865-5e82-4bc4-b80b-737d0db7af6a"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
-                    ""interactions"": """",
+                    ""interactions"": ""Press"",
                     ""initialStateCheck"": false
                 },
                 {
@@ -267,7 +267,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""id"": ""f685cbfa-6500-46d4-ab03-7d9a8628765f"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
-                    ""interactions"": """",
+                    ""interactions"": ""Press"",
                     ""initialStateCheck"": false
                 },
                 {
@@ -276,7 +276,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""id"": ""95f8fa15-1695-4820-8419-ec67b85004d5"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
-                    ""interactions"": """",
+                    ""interactions"": ""Press"",
                     ""initialStateCheck"": false
                 },
                 {
@@ -285,13 +285,22 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""id"": ""8b615416-09f5-4e32-bc0a-86d1d0b57618"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
+                    ""interactions"": ""Press"",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""FinalSlashHeld"",
+                    ""type"": ""Button"",
+                    ""id"": ""861d417d-a219-4937-8ab1-33f44ebb56cd"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
                 },
                 {
                     ""name"": ""FinalSlashReleased"",
                     ""type"": ""Button"",
-                    ""id"": ""861d417d-a219-4937-8ab1-33f44ebb56cd"",
+                    ""id"": ""f44f244c-fb8a-4b70-b4e9-b0ffee1aa7a9"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -303,13 +312,202 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""id"": ""e0284d41-3608-46e9-816d-08b866d2fa21"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
-                    ""interactions"": """",
+                    ""interactions"": ""Press"",
                     ""initialStateCheck"": false
                 },
                 {
                     ""name"": ""SovereignImpale"",
                     ""type"": ""Button"",
                     ""id"": ""6a3e8403-a8ae-41bb-8f87-c92751cbe68a"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press"",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""HellTrident"",
+                    ""type"": ""Button"",
+                    ""id"": ""89e1049e-7b63-44dd-82e7-335d3087c10a"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press"",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""FoolsVerdict"",
+                    ""type"": ""Button"",
+                    ""id"": ""2de701a8-2584-4404-86c0-225a9b4aa35f"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press"",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SoulFireBlast"",
+                    ""type"": ""Button"",
+                    ""id"": ""5cb6f705-6359-48e0-b391-f553a10cac83"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press"",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""EdgedFury"",
+                    ""type"": ""Button"",
+                    ""id"": ""c4afc068-fd30-4d7a-ab4e-3fcfd1e43b13"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press"",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""EdgedFuryReleased"",
+                    ""type"": ""Button"",
+                    ""id"": ""0a9086a0-9739-4972-8ee2-84dc870529c2"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press"",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""NinthCircleSanction"",
+                    ""type"": ""Button"",
+                    ""id"": ""720d84e3-a098-43fc-884e-7af06fdd0025"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press"",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""DoomsdayKong"",
+                    ""type"": ""Button"",
+                    ""id"": ""9c35d31f-371e-4f96-9601-4c02fd7423a1"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press"",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""BackDiver"",
+                    ""type"": ""Button"",
+                    ""id"": ""cd863b72-c9f3-49b7-a81b-135ee848ccf1"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press"",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Barrier"",
+                    ""type"": ""Button"",
+                    ""id"": ""307688b1-3ada-417c-96d6-b7e54ecab752"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press"",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""BarrierReleased"",
+                    ""type"": ""Button"",
+                    ""id"": ""70a1bd18-f335-492c-804e-192b1ba31777"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press"",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""FencerFlash"",
+                    ""type"": ""Button"",
+                    ""id"": ""9a1de22a-ebd8-421a-8055-4df435cb3a02"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press"",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""DiagonalSwordDash"",
+                    ""type"": ""Button"",
+                    ""id"": ""b9c769c7-b8a7-4d59-9f18-836853fd89e6"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press"",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ChampionsUprising"",
+                    ""type"": ""Button"",
+                    ""id"": ""7ea19d98-29d2-4e1f-bd67-2d482f4fe8d7"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press"",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Eelecktrick"",
+                    ""type"": ""Button"",
+                    ""id"": ""19ddf923-99a8-4520-b776-665b9f67a546"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press"",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""EelecktrickHeld"",
+                    ""type"": ""Button"",
+                    ""id"": ""6a05cb88-875b-47f7-9b96-f936ac1086c1"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press"",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""EelecktrickReleased"",
+                    ""type"": ""Button"",
+                    ""id"": ""e1bd79f0-efa2-46a8-85d0-f4be538e6449"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press"",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""LightningSpear"",
+                    ""type"": ""Button"",
+                    ""id"": ""ac85a422-db12-490f-96ce-bc7c679ce25d"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press"",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""LightningSpearHeld"",
+                    ""type"": ""Button"",
+                    ""id"": ""084015d5-88f7-4576-9d85-5052920d60ac"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press"",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""LightningSpearReleased"",
+                    ""type"": ""Button"",
+                    ""id"": ""89836e12-4fef-49cd-aa96-b11fd946cb74"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press"",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""IcarusWings"",
+                    ""type"": ""Button"",
+                    ""id"": ""6fd0d997-0772-4cac-87dc-d1cc564d0537"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""TeleportingSkull"",
+                    ""type"": ""Button"",
+                    ""id"": ""446fc841-ef8d-459d-ac52-5f9ef9a50fca"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -1308,9 +1506,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""name"": ""One Modifier"",
-                    ""id"": ""7ac818b5-1c2f-4098-ac9e-de64d222afca"",
-                    ""path"": ""OneModifier"",
+                    ""name"": ""Two Modifiers"",
+                    ""id"": ""7f4af3ca-10dd-42ce-9d85-e757f863cd02"",
+                    ""path"": ""TwoModifiers"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -1319,8 +1517,8 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""name"": ""modifier"",
-                    ""id"": ""b6e9e3a3-1aab-477c-86cd-371040d6c9fe"",
+                    ""name"": ""modifier1"",
+                    ""id"": ""5f2a6202-372e-4d2b-b285-aa057e8fd460"",
                     ""path"": ""<Keyboard>/leftShift"",
                     ""interactions"": """",
                     ""processors"": """",
@@ -1330,8 +1528,19 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": true
                 },
                 {
+                    ""name"": ""modifier2"",
+                    ""id"": ""beb936fe-7d22-4187-be90-dc2b01e3382a"",
+                    ""path"": ""<Keyboard>/s"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""FireFist"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
                     ""name"": ""binding"",
-                    ""id"": ""8bb6ddfc-0ce7-43d3-a117-254a001ece63"",
+                    ""id"": ""62fc9703-2f67-45a3-85e1-e5d118092ca2"",
                     ""path"": ""<Keyboard>/f"",
                     ""interactions"": """",
                     ""processors"": """",
@@ -1429,9 +1638,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""name"": ""One Modifier"",
-                    ""id"": ""3edfbdc8-6e2c-41bd-b62e-a734809a8ec4"",
-                    ""path"": ""OneModifier"",
+                    ""name"": ""Two Modifiers"",
+                    ""id"": ""1ba60930-3d4d-4d51-811e-87a2a19e14aa"",
+                    ""path"": ""TwoModifiers"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -1440,8 +1649,8 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""name"": ""modifier"",
-                    ""id"": ""30c4fa72-2c60-462b-a8c4-bb757530a698"",
+                    ""name"": ""modifier1"",
+                    ""id"": ""241591c6-e372-4799-8846-da6baa958067"",
                     ""path"": ""<Keyboard>/leftShift"",
                     ""interactions"": """",
                     ""processors"": """",
@@ -1451,8 +1660,19 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": true
                 },
                 {
+                    ""name"": ""modifier2"",
+                    ""id"": ""27e48ac7-67eb-40c4-b60e-91ce08959d6b"",
+                    ""path"": ""<Keyboard>/w"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""KrakenRage"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
                     ""name"": ""binding"",
-                    ""id"": ""e2ca704a-0940-4765-baad-6fe618766cb4"",
+                    ""id"": ""4698f9e6-2ef4-4050-9b3f-18828e0d02c1"",
                     ""path"": ""<Keyboard>/f"",
                     ""interactions"": """",
                     ""processors"": """",
@@ -1498,10 +1718,10 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""name"": ""One Modifier"",
                     ""id"": ""aa1a13a7-2a6c-4eee-81fe-ace8334523ab"",
                     ""path"": ""OneModifier"",
-                    ""interactions"": ""Press(behavior=1)"",
+                    ""interactions"": ""Hold(duration=0.1,pressPoint=0.1)"",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""FinalSlashReleased"",
+                    ""action"": ""FinalSlashHeld"",
                     ""isComposite"": true,
                     ""isPartOfComposite"": false
                 },
@@ -1512,7 +1732,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard"",
-                    ""action"": ""FinalSlashReleased"",
+                    ""action"": ""FinalSlashHeld"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -1523,7 +1743,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard"",
-                    ""action"": ""FinalSlashReleased"",
+                    ""action"": ""FinalSlashHeld"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -1601,6 +1821,842 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": ""Keyboard"",
                     ""action"": ""SovereignImpale"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Two Modifier 1"",
+                    ""id"": ""8fc059ef-1f72-429b-a0a4-9be5644a7096"",
+                    ""path"": ""TwoModifiers"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""HellTrident"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""modifier1"",
+                    ""id"": ""158137de-3d3f-4e03-a65b-bf28024bd123"",
+                    ""path"": ""<Keyboard>/leftShift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""HellTrident"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""modifier2"",
+                    ""id"": ""34c45e73-629e-4aee-9b54-288eefc518e4"",
+                    ""path"": ""<Keyboard>/a"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""HellTrident"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""binding"",
+                    ""id"": ""050b76b6-5db2-482e-9caa-bead9032dee4"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""HellTrident"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Two Modifier 2"",
+                    ""id"": ""56c26681-fa83-49bc-924b-d13422a9c1e8"",
+                    ""path"": ""TwoModifiers"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""HellTrident"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""modifier1"",
+                    ""id"": ""ee7482fa-3b24-42ed-a024-a3bb2a769a10"",
+                    ""path"": ""<Keyboard>/leftShift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""HellTrident"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""modifier2"",
+                    ""id"": ""210b8431-e27f-4b11-a3f5-db3d10277fe0"",
+                    ""path"": ""<Keyboard>/d"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""HellTrident"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""binding"",
+                    ""id"": ""cb18f212-3b02-42cf-99d4-8cfcc2703ae0"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""HellTrident"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Two Modifiers"",
+                    ""id"": ""9ec76ff7-85b5-4dae-9f18-b42c3227faef"",
+                    ""path"": ""TwoModifiers"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""FoolsVerdict"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""modifier1"",
+                    ""id"": ""0e5ed0c0-a9a1-4fa6-9ae8-cb9e5abd3581"",
+                    ""path"": ""<Keyboard>/leftShift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""FoolsVerdict"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""modifier2"",
+                    ""id"": ""04e5377f-4427-4426-b6d1-8bba3a6d2e17"",
+                    ""path"": ""<Keyboard>/w"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""FoolsVerdict"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""binding"",
+                    ""id"": ""b6be8f61-4bde-426d-9314-e39b4008e8b8"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""FoolsVerdict"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""One Modifier"",
+                    ""id"": ""59697261-1d58-4c0c-8b19-f9236b289a37"",
+                    ""path"": ""OneModifier"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SoulFireBlast"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""modifier"",
+                    ""id"": ""8b0d1af1-cb5b-492c-8751-d1987791f73a"",
+                    ""path"": ""<Keyboard>/leftShift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""SoulFireBlast"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""binding"",
+                    ""id"": ""0ce0dc78-4e1a-46be-a4eb-34be5ef4f190"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""SoulFireBlast"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""One Modifier"",
+                    ""id"": ""336423da-496c-44f4-bdf2-bcec814a002c"",
+                    ""path"": ""OneModifier"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""EdgedFury"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""modifier"",
+                    ""id"": ""79def497-82fd-44da-add0-245a5cac9bb3"",
+                    ""path"": ""<Keyboard>/leftShift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""EdgedFury"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""binding"",
+                    ""id"": ""ffbd11fc-30f2-4f03-a57b-305c93b84e7b"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""EdgedFury"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""One Modifier"",
+                    ""id"": ""1e0b212d-cafd-4842-be08-c12f97a5d00f"",
+                    ""path"": ""OneModifier"",
+                    ""interactions"": ""Press(behavior=1)"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""EdgedFuryReleased"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""modifier"",
+                    ""id"": ""ab5f4770-3c5a-47bb-add2-ebbcdf958edd"",
+                    ""path"": ""<Keyboard>/leftShift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""EdgedFuryReleased"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""binding"",
+                    ""id"": ""2c111f3b-3b8f-432e-9fc5-ce59fdfb794c"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""EdgedFuryReleased"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Two Modifiers"",
+                    ""id"": ""810b0e23-620b-4567-a3b4-ecdf07738b97"",
+                    ""path"": ""TwoModifiers"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""NinthCircleSanction"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""modifier1"",
+                    ""id"": ""b32eb127-64be-4da3-89ef-76a299c64ad0"",
+                    ""path"": ""<Keyboard>/leftShift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""NinthCircleSanction"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""modifier2"",
+                    ""id"": ""7986fb70-e37e-46d1-8f6e-260c2c12d2ff"",
+                    ""path"": ""<Keyboard>/s"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""NinthCircleSanction"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""binding"",
+                    ""id"": ""1e0d531b-7113-40b5-8fe6-05aad7bfd7e6"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""NinthCircleSanction"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""29976d38-c9b8-459b-bbfa-359859c7c231"",
+                    ""path"": ""<Keyboard>/1"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""DoomsdayKong"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""One Modifier"",
+                    ""id"": ""1565c338-a8c9-4c4e-83ee-1a13b3f183fa"",
+                    ""path"": ""OneModifier"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""BackDiver"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""modifier"",
+                    ""id"": ""1bb0898b-b0bc-453f-953f-46615e676562"",
+                    ""path"": ""<Keyboard>/leftShift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""BackDiver"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""binding"",
+                    ""id"": ""75c7f722-eae1-4687-af47-5579a89b9a31"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""BackDiver"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""One Modifier"",
+                    ""id"": ""703e98b5-5539-4261-9a84-2812717d1915"",
+                    ""path"": ""OneModifier"",
+                    ""interactions"": ""Press(behavior=1)"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""BarrierReleased"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""modifier"",
+                    ""id"": ""2f3207ae-2cd3-4cc6-94cd-c119f90ee2f8"",
+                    ""path"": ""<Keyboard>/leftShift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""BarrierReleased"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""binding"",
+                    ""id"": ""4f1bf957-79e7-43e4-8ff8-f38f570c0302"",
+                    ""path"": ""<Keyboard>/z"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""BarrierReleased"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0e85cc02-7477-48a0-a4c6-1fd4fa53f6a2"",
+                    ""path"": ""<Keyboard>/z"",
+                    ""interactions"": ""Press(behavior=1)"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""BarrierReleased"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""One Modifier"",
+                    ""id"": ""3ac633d8-0f9c-4494-bd1d-0b039e888b0b"",
+                    ""path"": ""OneModifier"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Barrier"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""modifier"",
+                    ""id"": ""7336ffee-2a57-498f-9074-5242d41a4727"",
+                    ""path"": ""<Keyboard>/leftShift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""Barrier"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""binding"",
+                    ""id"": ""2fc54e0e-01cf-41cc-809e-dd92c6b3767c"",
+                    ""path"": ""<Keyboard>/z"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""Barrier"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a0e02116-64fc-4671-99f4-0cb19259d581"",
+                    ""path"": ""<Keyboard>/z"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""Barrier"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""Two Modifiers"",
+                    ""id"": ""bd2f67ef-f54e-474f-8386-dbd8edff2df2"",
+                    ""path"": ""TwoModifiers"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""FencerFlash"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""modifier1"",
+                    ""id"": ""4f84f957-c46b-49ab-bcd5-90c17e93d959"",
+                    ""path"": ""<Keyboard>/leftShift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""FencerFlash"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""modifier2"",
+                    ""id"": ""9b99bd41-b93e-44b7-a31f-6b879c2317a3"",
+                    ""path"": ""<Keyboard>/a"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""FencerFlash"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""binding"",
+                    ""id"": ""43ef0010-38cd-4cd5-85af-f28e2d2a8861"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""FencerFlash"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Two Modifiers"",
+                    ""id"": ""763d9d2f-7856-4749-8d07-1835540c1b9b"",
+                    ""path"": ""TwoModifiers"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""FencerFlash"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""modifier1"",
+                    ""id"": ""4021a978-3d68-4b10-b634-cf1913a6adca"",
+                    ""path"": ""<Keyboard>/leftShift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""FencerFlash"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""modifier2"",
+                    ""id"": ""5ce03429-232a-402b-9c15-274413636a47"",
+                    ""path"": ""<Keyboard>/d"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""FencerFlash"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""binding"",
+                    ""id"": ""b20f83b6-2df1-4dd9-bc4e-7da6063f5879"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""FencerFlash"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Two Modifiers"",
+                    ""id"": ""63c3f676-9d1c-40c9-9cec-cc4cb7a760c0"",
+                    ""path"": ""TwoModifiers"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""DiagonalSwordDash"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""modifier1"",
+                    ""id"": ""6b23e079-058e-43e8-a075-aa8294fddc04"",
+                    ""path"": ""<Keyboard>/leftShift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""DiagonalSwordDash"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""modifier2"",
+                    ""id"": ""954b58fd-f385-4126-8217-49c3f3eb0dcb"",
+                    ""path"": ""<Keyboard>/s"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""DiagonalSwordDash"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""binding"",
+                    ""id"": ""a514351c-de4e-4d62-b98a-ccacef45efbd"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""DiagonalSwordDash"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""One Modifier"",
+                    ""id"": ""97052978-c23d-441e-8265-0f765310d5b9"",
+                    ""path"": ""OneModifier"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChampionsUprising"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""modifier"",
+                    ""id"": ""af6951d5-895f-4a5b-ae75-8f24ad4ec593"",
+                    ""path"": ""<Keyboard>/leftShift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""ChampionsUprising"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""binding"",
+                    ""id"": ""5ee638e7-d2aa-4ee0-a80e-2e61042d2e7c"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""ChampionsUprising"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""dcc99350-c3b3-4a5a-804a-2c389d653e84"",
+                    ""path"": ""<Keyboard>/2"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""Eelecktrick"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""24dabaeb-ecd9-484f-b262-1c6cb66e14cf"",
+                    ""path"": ""<Keyboard>/2"",
+                    ""interactions"": ""Press(pressPoint=0.1,behavior=1)"",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""EelecktrickReleased"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""Two Modifiers"",
+                    ""id"": ""d342233b-24a0-4bcb-bfdb-96c4ee57c6eb"",
+                    ""path"": ""TwoModifiers"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LightningSpear"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""modifier1"",
+                    ""id"": ""8e5a0d34-8c54-42a9-b1e6-674cc0a77e9c"",
+                    ""path"": ""<Keyboard>/leftShift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""LightningSpear"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""modifier2"",
+                    ""id"": ""9fd59919-f1d7-4630-ba59-ba551f65f294"",
+                    ""path"": ""<Keyboard>/s"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""LightningSpear"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""binding"",
+                    ""id"": ""a0147a75-52ac-4372-b4fc-5140337ca465"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""LightningSpear"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Two Modifiers"",
+                    ""id"": ""4a78d1f7-9b1e-43ea-8e13-56076624e5b2"",
+                    ""path"": ""TwoModifiers"",
+                    ""interactions"": ""Press(pressPoint=0.1,behavior=1)"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LightningSpearReleased"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""modifier1"",
+                    ""id"": ""b495485a-b5aa-4c4a-9fe6-07dd3846d2d4"",
+                    ""path"": ""<Keyboard>/leftShift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""LightningSpearReleased"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""modifier2"",
+                    ""id"": ""c57b3086-5a4d-46ac-a19a-32db9d220bb3"",
+                    ""path"": ""<Keyboard>/s"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""LightningSpearReleased"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""binding"",
+                    ""id"": ""2959485a-7b03-4514-b1e2-6b96d6dad8e6"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""LightningSpearReleased"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""One Modifier"",
+                    ""id"": ""556dccbf-c0a9-4212-a18c-72b6a16cc6c7"",
+                    ""path"": ""OneModifier"",
+                    ""interactions"": ""Press(pressPoint=0.1,behavior=1)"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""FinalSlashReleased"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""modifier"",
+                    ""id"": ""06aacd37-69e8-4299-bf52-3ae8822b3bf6"",
+                    ""path"": ""<Keyboard>/leftShift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""FinalSlashReleased"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""binding"",
+                    ""id"": ""7cdba2e8-ad07-4542-a7a0-5ad94ac03e0d"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""FinalSlashReleased"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7f796c44-f904-4589-bac8-06cdab50cf56"",
+                    ""path"": ""<Keyboard>/2"",
+                    ""interactions"": ""Hold(duration=0.1,pressPoint=0.1)"",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""EelecktrickHeld"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""Two Modifiers"",
+                    ""id"": ""fb709d7d-40a8-48d9-bb1a-db73e075b568"",
+                    ""path"": ""TwoModifiers"",
+                    ""interactions"": ""Hold(duration=0.1,pressPoint=0.1)"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LightningSpearHeld"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""modifier1"",
+                    ""id"": ""4e1a6092-8cf5-490a-9774-1e3d40d5efc7"",
+                    ""path"": ""<Keyboard>/leftShift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""LightningSpearHeld"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""modifier2"",
+                    ""id"": ""18f00d7f-5dbb-42ac-b92d-68e229940bd1"",
+                    ""path"": ""<Keyboard>/s"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""LightningSpearHeld"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""binding"",
+                    ""id"": ""add625fa-b015-49c1-8237-09c0338c64c5"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""LightningSpearHeld"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""One Modifier"",
+                    ""id"": ""2384e690-67fa-4346-83fc-80589b0ed3b1"",
+                    ""path"": ""OneModifier"",
+                    ""interactions"": ""Press"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""IcarusWings"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""modifier"",
+                    ""id"": ""20bdfb92-14cd-492e-9e2d-eca03599b497"",
+                    ""path"": ""<Keyboard>/w"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""IcarusWings"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""binding"",
+                    ""id"": ""2fbc2fc5-da2b-4178-ab20-a2a9e0436010"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""IcarusWings"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""One Modifier"",
+                    ""id"": ""1e4c07b4-6b33-4ab0-9c7f-ab62de320a06"",
+                    ""path"": ""OneModifier"",
+                    ""interactions"": ""Press(behavior=2)"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""TeleportingSkull"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""modifier"",
+                    ""id"": ""b9425eca-06fc-4a6f-8dd1-c93a1b5b4693"",
+                    ""path"": ""<Keyboard>/leftShift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""TeleportingSkull"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""binding"",
+                    ""id"": ""2206d3b2-30a2-4f9e-ac11-292350d16572"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""TeleportingSkull"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 }
@@ -2787,9 +3843,31 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         m_Gameplay_ReaperHarvest = m_Gameplay.FindAction("ReaperHarvest", throwIfNotFound: true);
         m_Gameplay_KrakenRage = m_Gameplay.FindAction("KrakenRage", throwIfNotFound: true);
         m_Gameplay_FinalSlash = m_Gameplay.FindAction("FinalSlash", throwIfNotFound: true);
+        m_Gameplay_FinalSlashHeld = m_Gameplay.FindAction("FinalSlashHeld", throwIfNotFound: true);
         m_Gameplay_FinalSlashReleased = m_Gameplay.FindAction("FinalSlashReleased", throwIfNotFound: true);
         m_Gameplay_AirSlashCombo = m_Gameplay.FindAction("AirSlashCombo", throwIfNotFound: true);
         m_Gameplay_SovereignImpale = m_Gameplay.FindAction("SovereignImpale", throwIfNotFound: true);
+        m_Gameplay_HellTrident = m_Gameplay.FindAction("HellTrident", throwIfNotFound: true);
+        m_Gameplay_FoolsVerdict = m_Gameplay.FindAction("FoolsVerdict", throwIfNotFound: true);
+        m_Gameplay_SoulFireBlast = m_Gameplay.FindAction("SoulFireBlast", throwIfNotFound: true);
+        m_Gameplay_EdgedFury = m_Gameplay.FindAction("EdgedFury", throwIfNotFound: true);
+        m_Gameplay_EdgedFuryReleased = m_Gameplay.FindAction("EdgedFuryReleased", throwIfNotFound: true);
+        m_Gameplay_NinthCircleSanction = m_Gameplay.FindAction("NinthCircleSanction", throwIfNotFound: true);
+        m_Gameplay_DoomsdayKong = m_Gameplay.FindAction("DoomsdayKong", throwIfNotFound: true);
+        m_Gameplay_BackDiver = m_Gameplay.FindAction("BackDiver", throwIfNotFound: true);
+        m_Gameplay_Barrier = m_Gameplay.FindAction("Barrier", throwIfNotFound: true);
+        m_Gameplay_BarrierReleased = m_Gameplay.FindAction("BarrierReleased", throwIfNotFound: true);
+        m_Gameplay_FencerFlash = m_Gameplay.FindAction("FencerFlash", throwIfNotFound: true);
+        m_Gameplay_DiagonalSwordDash = m_Gameplay.FindAction("DiagonalSwordDash", throwIfNotFound: true);
+        m_Gameplay_ChampionsUprising = m_Gameplay.FindAction("ChampionsUprising", throwIfNotFound: true);
+        m_Gameplay_Eelecktrick = m_Gameplay.FindAction("Eelecktrick", throwIfNotFound: true);
+        m_Gameplay_EelecktrickHeld = m_Gameplay.FindAction("EelecktrickHeld", throwIfNotFound: true);
+        m_Gameplay_EelecktrickReleased = m_Gameplay.FindAction("EelecktrickReleased", throwIfNotFound: true);
+        m_Gameplay_LightningSpear = m_Gameplay.FindAction("LightningSpear", throwIfNotFound: true);
+        m_Gameplay_LightningSpearHeld = m_Gameplay.FindAction("LightningSpearHeld", throwIfNotFound: true);
+        m_Gameplay_LightningSpearReleased = m_Gameplay.FindAction("LightningSpearReleased", throwIfNotFound: true);
+        m_Gameplay_IcarusWings = m_Gameplay.FindAction("IcarusWings", throwIfNotFound: true);
+        m_Gameplay_TeleportingSkull = m_Gameplay.FindAction("TeleportingSkull", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -2900,9 +3978,31 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
     private readonly InputAction m_Gameplay_ReaperHarvest;
     private readonly InputAction m_Gameplay_KrakenRage;
     private readonly InputAction m_Gameplay_FinalSlash;
+    private readonly InputAction m_Gameplay_FinalSlashHeld;
     private readonly InputAction m_Gameplay_FinalSlashReleased;
     private readonly InputAction m_Gameplay_AirSlashCombo;
     private readonly InputAction m_Gameplay_SovereignImpale;
+    private readonly InputAction m_Gameplay_HellTrident;
+    private readonly InputAction m_Gameplay_FoolsVerdict;
+    private readonly InputAction m_Gameplay_SoulFireBlast;
+    private readonly InputAction m_Gameplay_EdgedFury;
+    private readonly InputAction m_Gameplay_EdgedFuryReleased;
+    private readonly InputAction m_Gameplay_NinthCircleSanction;
+    private readonly InputAction m_Gameplay_DoomsdayKong;
+    private readonly InputAction m_Gameplay_BackDiver;
+    private readonly InputAction m_Gameplay_Barrier;
+    private readonly InputAction m_Gameplay_BarrierReleased;
+    private readonly InputAction m_Gameplay_FencerFlash;
+    private readonly InputAction m_Gameplay_DiagonalSwordDash;
+    private readonly InputAction m_Gameplay_ChampionsUprising;
+    private readonly InputAction m_Gameplay_Eelecktrick;
+    private readonly InputAction m_Gameplay_EelecktrickHeld;
+    private readonly InputAction m_Gameplay_EelecktrickReleased;
+    private readonly InputAction m_Gameplay_LightningSpear;
+    private readonly InputAction m_Gameplay_LightningSpearHeld;
+    private readonly InputAction m_Gameplay_LightningSpearReleased;
+    private readonly InputAction m_Gameplay_IcarusWings;
+    private readonly InputAction m_Gameplay_TeleportingSkull;
     public struct GameplayActions
     {
         private @PlayerControls m_Wrapper;
@@ -2936,9 +4036,31 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         public InputAction @ReaperHarvest => m_Wrapper.m_Gameplay_ReaperHarvest;
         public InputAction @KrakenRage => m_Wrapper.m_Gameplay_KrakenRage;
         public InputAction @FinalSlash => m_Wrapper.m_Gameplay_FinalSlash;
+        public InputAction @FinalSlashHeld => m_Wrapper.m_Gameplay_FinalSlashHeld;
         public InputAction @FinalSlashReleased => m_Wrapper.m_Gameplay_FinalSlashReleased;
         public InputAction @AirSlashCombo => m_Wrapper.m_Gameplay_AirSlashCombo;
         public InputAction @SovereignImpale => m_Wrapper.m_Gameplay_SovereignImpale;
+        public InputAction @HellTrident => m_Wrapper.m_Gameplay_HellTrident;
+        public InputAction @FoolsVerdict => m_Wrapper.m_Gameplay_FoolsVerdict;
+        public InputAction @SoulFireBlast => m_Wrapper.m_Gameplay_SoulFireBlast;
+        public InputAction @EdgedFury => m_Wrapper.m_Gameplay_EdgedFury;
+        public InputAction @EdgedFuryReleased => m_Wrapper.m_Gameplay_EdgedFuryReleased;
+        public InputAction @NinthCircleSanction => m_Wrapper.m_Gameplay_NinthCircleSanction;
+        public InputAction @DoomsdayKong => m_Wrapper.m_Gameplay_DoomsdayKong;
+        public InputAction @BackDiver => m_Wrapper.m_Gameplay_BackDiver;
+        public InputAction @Barrier => m_Wrapper.m_Gameplay_Barrier;
+        public InputAction @BarrierReleased => m_Wrapper.m_Gameplay_BarrierReleased;
+        public InputAction @FencerFlash => m_Wrapper.m_Gameplay_FencerFlash;
+        public InputAction @DiagonalSwordDash => m_Wrapper.m_Gameplay_DiagonalSwordDash;
+        public InputAction @ChampionsUprising => m_Wrapper.m_Gameplay_ChampionsUprising;
+        public InputAction @Eelecktrick => m_Wrapper.m_Gameplay_Eelecktrick;
+        public InputAction @EelecktrickHeld => m_Wrapper.m_Gameplay_EelecktrickHeld;
+        public InputAction @EelecktrickReleased => m_Wrapper.m_Gameplay_EelecktrickReleased;
+        public InputAction @LightningSpear => m_Wrapper.m_Gameplay_LightningSpear;
+        public InputAction @LightningSpearHeld => m_Wrapper.m_Gameplay_LightningSpearHeld;
+        public InputAction @LightningSpearReleased => m_Wrapper.m_Gameplay_LightningSpearReleased;
+        public InputAction @IcarusWings => m_Wrapper.m_Gameplay_IcarusWings;
+        public InputAction @TeleportingSkull => m_Wrapper.m_Gameplay_TeleportingSkull;
         public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -3035,6 +4157,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @FinalSlash.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnFinalSlash;
                 @FinalSlash.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnFinalSlash;
                 @FinalSlash.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnFinalSlash;
+                @FinalSlashHeld.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnFinalSlashHeld;
+                @FinalSlashHeld.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnFinalSlashHeld;
+                @FinalSlashHeld.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnFinalSlashHeld;
                 @FinalSlashReleased.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnFinalSlashReleased;
                 @FinalSlashReleased.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnFinalSlashReleased;
                 @FinalSlashReleased.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnFinalSlashReleased;
@@ -3044,6 +4169,69 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @SovereignImpale.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnSovereignImpale;
                 @SovereignImpale.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnSovereignImpale;
                 @SovereignImpale.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnSovereignImpale;
+                @HellTrident.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnHellTrident;
+                @HellTrident.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnHellTrident;
+                @HellTrident.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnHellTrident;
+                @FoolsVerdict.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnFoolsVerdict;
+                @FoolsVerdict.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnFoolsVerdict;
+                @FoolsVerdict.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnFoolsVerdict;
+                @SoulFireBlast.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnSoulFireBlast;
+                @SoulFireBlast.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnSoulFireBlast;
+                @SoulFireBlast.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnSoulFireBlast;
+                @EdgedFury.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnEdgedFury;
+                @EdgedFury.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnEdgedFury;
+                @EdgedFury.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnEdgedFury;
+                @EdgedFuryReleased.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnEdgedFuryReleased;
+                @EdgedFuryReleased.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnEdgedFuryReleased;
+                @EdgedFuryReleased.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnEdgedFuryReleased;
+                @NinthCircleSanction.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnNinthCircleSanction;
+                @NinthCircleSanction.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnNinthCircleSanction;
+                @NinthCircleSanction.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnNinthCircleSanction;
+                @DoomsdayKong.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnDoomsdayKong;
+                @DoomsdayKong.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnDoomsdayKong;
+                @DoomsdayKong.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnDoomsdayKong;
+                @BackDiver.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnBackDiver;
+                @BackDiver.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnBackDiver;
+                @BackDiver.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnBackDiver;
+                @Barrier.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnBarrier;
+                @Barrier.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnBarrier;
+                @Barrier.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnBarrier;
+                @BarrierReleased.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnBarrierReleased;
+                @BarrierReleased.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnBarrierReleased;
+                @BarrierReleased.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnBarrierReleased;
+                @FencerFlash.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnFencerFlash;
+                @FencerFlash.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnFencerFlash;
+                @FencerFlash.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnFencerFlash;
+                @DiagonalSwordDash.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnDiagonalSwordDash;
+                @DiagonalSwordDash.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnDiagonalSwordDash;
+                @DiagonalSwordDash.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnDiagonalSwordDash;
+                @ChampionsUprising.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnChampionsUprising;
+                @ChampionsUprising.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnChampionsUprising;
+                @ChampionsUprising.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnChampionsUprising;
+                @Eelecktrick.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnEelecktrick;
+                @Eelecktrick.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnEelecktrick;
+                @Eelecktrick.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnEelecktrick;
+                @EelecktrickHeld.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnEelecktrickHeld;
+                @EelecktrickHeld.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnEelecktrickHeld;
+                @EelecktrickHeld.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnEelecktrickHeld;
+                @EelecktrickReleased.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnEelecktrickReleased;
+                @EelecktrickReleased.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnEelecktrickReleased;
+                @EelecktrickReleased.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnEelecktrickReleased;
+                @LightningSpear.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnLightningSpear;
+                @LightningSpear.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnLightningSpear;
+                @LightningSpear.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnLightningSpear;
+                @LightningSpearHeld.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnLightningSpearHeld;
+                @LightningSpearHeld.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnLightningSpearHeld;
+                @LightningSpearHeld.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnLightningSpearHeld;
+                @LightningSpearReleased.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnLightningSpearReleased;
+                @LightningSpearReleased.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnLightningSpearReleased;
+                @LightningSpearReleased.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnLightningSpearReleased;
+                @IcarusWings.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnIcarusWings;
+                @IcarusWings.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnIcarusWings;
+                @IcarusWings.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnIcarusWings;
+                @TeleportingSkull.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnTeleportingSkull;
+                @TeleportingSkull.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnTeleportingSkull;
+                @TeleportingSkull.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnTeleportingSkull;
             }
             m_Wrapper.m_GameplayActionsCallbackInterface = instance;
             if (instance != null)
@@ -3135,6 +4323,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @FinalSlash.started += instance.OnFinalSlash;
                 @FinalSlash.performed += instance.OnFinalSlash;
                 @FinalSlash.canceled += instance.OnFinalSlash;
+                @FinalSlashHeld.started += instance.OnFinalSlashHeld;
+                @FinalSlashHeld.performed += instance.OnFinalSlashHeld;
+                @FinalSlashHeld.canceled += instance.OnFinalSlashHeld;
                 @FinalSlashReleased.started += instance.OnFinalSlashReleased;
                 @FinalSlashReleased.performed += instance.OnFinalSlashReleased;
                 @FinalSlashReleased.canceled += instance.OnFinalSlashReleased;
@@ -3144,6 +4335,69 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @SovereignImpale.started += instance.OnSovereignImpale;
                 @SovereignImpale.performed += instance.OnSovereignImpale;
                 @SovereignImpale.canceled += instance.OnSovereignImpale;
+                @HellTrident.started += instance.OnHellTrident;
+                @HellTrident.performed += instance.OnHellTrident;
+                @HellTrident.canceled += instance.OnHellTrident;
+                @FoolsVerdict.started += instance.OnFoolsVerdict;
+                @FoolsVerdict.performed += instance.OnFoolsVerdict;
+                @FoolsVerdict.canceled += instance.OnFoolsVerdict;
+                @SoulFireBlast.started += instance.OnSoulFireBlast;
+                @SoulFireBlast.performed += instance.OnSoulFireBlast;
+                @SoulFireBlast.canceled += instance.OnSoulFireBlast;
+                @EdgedFury.started += instance.OnEdgedFury;
+                @EdgedFury.performed += instance.OnEdgedFury;
+                @EdgedFury.canceled += instance.OnEdgedFury;
+                @EdgedFuryReleased.started += instance.OnEdgedFuryReleased;
+                @EdgedFuryReleased.performed += instance.OnEdgedFuryReleased;
+                @EdgedFuryReleased.canceled += instance.OnEdgedFuryReleased;
+                @NinthCircleSanction.started += instance.OnNinthCircleSanction;
+                @NinthCircleSanction.performed += instance.OnNinthCircleSanction;
+                @NinthCircleSanction.canceled += instance.OnNinthCircleSanction;
+                @DoomsdayKong.started += instance.OnDoomsdayKong;
+                @DoomsdayKong.performed += instance.OnDoomsdayKong;
+                @DoomsdayKong.canceled += instance.OnDoomsdayKong;
+                @BackDiver.started += instance.OnBackDiver;
+                @BackDiver.performed += instance.OnBackDiver;
+                @BackDiver.canceled += instance.OnBackDiver;
+                @Barrier.started += instance.OnBarrier;
+                @Barrier.performed += instance.OnBarrier;
+                @Barrier.canceled += instance.OnBarrier;
+                @BarrierReleased.started += instance.OnBarrierReleased;
+                @BarrierReleased.performed += instance.OnBarrierReleased;
+                @BarrierReleased.canceled += instance.OnBarrierReleased;
+                @FencerFlash.started += instance.OnFencerFlash;
+                @FencerFlash.performed += instance.OnFencerFlash;
+                @FencerFlash.canceled += instance.OnFencerFlash;
+                @DiagonalSwordDash.started += instance.OnDiagonalSwordDash;
+                @DiagonalSwordDash.performed += instance.OnDiagonalSwordDash;
+                @DiagonalSwordDash.canceled += instance.OnDiagonalSwordDash;
+                @ChampionsUprising.started += instance.OnChampionsUprising;
+                @ChampionsUprising.performed += instance.OnChampionsUprising;
+                @ChampionsUprising.canceled += instance.OnChampionsUprising;
+                @Eelecktrick.started += instance.OnEelecktrick;
+                @Eelecktrick.performed += instance.OnEelecktrick;
+                @Eelecktrick.canceled += instance.OnEelecktrick;
+                @EelecktrickHeld.started += instance.OnEelecktrickHeld;
+                @EelecktrickHeld.performed += instance.OnEelecktrickHeld;
+                @EelecktrickHeld.canceled += instance.OnEelecktrickHeld;
+                @EelecktrickReleased.started += instance.OnEelecktrickReleased;
+                @EelecktrickReleased.performed += instance.OnEelecktrickReleased;
+                @EelecktrickReleased.canceled += instance.OnEelecktrickReleased;
+                @LightningSpear.started += instance.OnLightningSpear;
+                @LightningSpear.performed += instance.OnLightningSpear;
+                @LightningSpear.canceled += instance.OnLightningSpear;
+                @LightningSpearHeld.started += instance.OnLightningSpearHeld;
+                @LightningSpearHeld.performed += instance.OnLightningSpearHeld;
+                @LightningSpearHeld.canceled += instance.OnLightningSpearHeld;
+                @LightningSpearReleased.started += instance.OnLightningSpearReleased;
+                @LightningSpearReleased.performed += instance.OnLightningSpearReleased;
+                @LightningSpearReleased.canceled += instance.OnLightningSpearReleased;
+                @IcarusWings.started += instance.OnIcarusWings;
+                @IcarusWings.performed += instance.OnIcarusWings;
+                @IcarusWings.canceled += instance.OnIcarusWings;
+                @TeleportingSkull.started += instance.OnTeleportingSkull;
+                @TeleportingSkull.performed += instance.OnTeleportingSkull;
+                @TeleportingSkull.canceled += instance.OnTeleportingSkull;
             }
         }
     }
@@ -3409,9 +4663,31 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         void OnReaperHarvest(InputAction.CallbackContext context);
         void OnKrakenRage(InputAction.CallbackContext context);
         void OnFinalSlash(InputAction.CallbackContext context);
+        void OnFinalSlashHeld(InputAction.CallbackContext context);
         void OnFinalSlashReleased(InputAction.CallbackContext context);
         void OnAirSlashCombo(InputAction.CallbackContext context);
         void OnSovereignImpale(InputAction.CallbackContext context);
+        void OnHellTrident(InputAction.CallbackContext context);
+        void OnFoolsVerdict(InputAction.CallbackContext context);
+        void OnSoulFireBlast(InputAction.CallbackContext context);
+        void OnEdgedFury(InputAction.CallbackContext context);
+        void OnEdgedFuryReleased(InputAction.CallbackContext context);
+        void OnNinthCircleSanction(InputAction.CallbackContext context);
+        void OnDoomsdayKong(InputAction.CallbackContext context);
+        void OnBackDiver(InputAction.CallbackContext context);
+        void OnBarrier(InputAction.CallbackContext context);
+        void OnBarrierReleased(InputAction.CallbackContext context);
+        void OnFencerFlash(InputAction.CallbackContext context);
+        void OnDiagonalSwordDash(InputAction.CallbackContext context);
+        void OnChampionsUprising(InputAction.CallbackContext context);
+        void OnEelecktrick(InputAction.CallbackContext context);
+        void OnEelecktrickHeld(InputAction.CallbackContext context);
+        void OnEelecktrickReleased(InputAction.CallbackContext context);
+        void OnLightningSpear(InputAction.CallbackContext context);
+        void OnLightningSpearHeld(InputAction.CallbackContext context);
+        void OnLightningSpearReleased(InputAction.CallbackContext context);
+        void OnIcarusWings(InputAction.CallbackContext context);
+        void OnTeleportingSkull(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {
