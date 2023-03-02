@@ -1,6 +1,9 @@
-﻿using DChild.Gameplay.Combat;
+﻿using DChild.Gameplay.Characters.Enemies;
+using DChild.Gameplay.Combat;
 using Sirenix.OdinInspector;
 using UnityEngine;
+#if UNITY_EDITOR
+#endif
 
 namespace DChild.Gameplay.Characters.Players.SoulSkills
 {
@@ -10,9 +13,9 @@ namespace DChild.Gameplay.Characters.Players.SoulSkills
         {
             private int m_healValue;
 
-            public Handle(IPlayer m_reference, int m_healValue) : base(m_reference)
+            public Handle(IPlayer m_reference, int healValue) : base(m_reference)
             {
-                this.m_healValue = m_healValue;
+                m_healValue = healValue;
             }
 
             public override void Dispose()
@@ -40,9 +43,6 @@ namespace DChild.Gameplay.Characters.Players.SoulSkills
         [SerializeField, MinValue(1)]
         private int m_healValue;
 
-        protected override BaseHandle CreateHandle(IPlayer player)
-        {
-            return new Handle(player, m_healValue);
-        }
+        protected override BaseHandle CreateHandle(IPlayer player) => new Handle(player, m_healValue);
     }
 }

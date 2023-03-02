@@ -8,14 +8,17 @@ namespace DChild.Gameplay.Characters.Players.Modules
 {
     public class SlashCombo : AttackBehaviour
     {
+        [SerializeField, HideLabel]
+        private SlashComboStatsInfo m_configuration;
+
         [SerializeField]
         private SkeletonAnimation m_attackFX;
-        [SerializeField]
-        private int m_slashStateAmount;
-        [SerializeField]
-        private float m_slashComboCooldown;
-        [SerializeField]
-        private float m_slashMovementCooldown;
+        //[SerializeField]
+        //private int m_slashStateAmount;
+        //[SerializeField]
+        //private float m_slashComboCooldown;
+        //[SerializeField]
+        //private float m_slashMovementCooldown;
         [SerializeField]
         private List<Info> m_slashComboInfo;
 
@@ -24,8 +27,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private Character m_character;
         [SerializeField, BoxGroup("Physics")]
         private Rigidbody2D m_physics;
-        [SerializeField, BoxGroup("Physics")]
-        private List<Vector2> m_pushForce;
+        //[SerializeField, BoxGroup("Physics")]
+        //private List<Vector2> m_pushForce;
         [SerializeField, BoxGroup("Sensors")]
         private RaySensor m_enemySensor;
         [SerializeField, BoxGroup("Sensors")]
@@ -57,25 +60,32 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
             m_modifier = info.modifier;
             m_slashStateAnimationParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.SlashState);
-            m_currentSlashState = 0;
+            m_currentSlashState = -1;
             m_currentVisualSlashState = 0;
             m_comboAttackDelayTimer = -1;
             m_comboResetDelayTimer = -1;
-            m_slashComboCooldownTimer = m_slashComboCooldown;
+            m_slashComboCooldownTimer = /*m_slashComboCooldown*/m_configuration.slashComboCooldown;
             m_allowAttackDelayHandling = true;
             m_canSlashCombo = true;
 
             m_fxAnimator = m_attackFX.gameObject.GetComponentInChildren<Animator>();
             m_skeletonAnimation = m_attackFX.gameObject.GetComponent<SkeletonAnimation>();
+
+            m_animator.SetInteger(m_slashStateAnimationParameter, m_currentSlashState);
+        }
+
+        public void SetConfiguration(SlashComboStatsInfo info)
+        {
+            m_configuration.CopyInfo(info);
         }
 
         public override void Reset()
         {
-            base.Reset();
 
-            m_currentSlashState = 0;
+            m_currentSlashState = -1;
             m_currentVisualSlashState = 0;
             m_animator.SetInteger(m_slashStateAnimationParameter, m_currentSlashState);
+            base.Reset();
         }
 
         public void Execute()
@@ -85,21 +95,23 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_state.canAttack = false;
             m_canMove = false;
             m_animator.SetBool(m_animationParameter, true);
+            m_currentSlashState += m_currentSlashState >= m_configuration.slashStateAmount - 1 ? 0 : 1;
             m_animator.SetInteger(m_slashStateAnimationParameter, m_currentSlashState);
             m_attacker.SetDamageModifier(m_slashComboInfo[m_currentSlashState].damageModifier * m_modifier.Get(PlayerModifier.AttackDamage));
             m_currentVisualSlashState = m_currentSlashState;
-            m_currentSlashState++;
 
             m_comboResetDelayTimer = m_slashComboInfo[m_currentSlashState].nextAttackDelay;
-            m_slashMovementCooldownTimer = m_slashMovementCooldown;
+            m_slashMovementCooldownTimer = /*m_slashMovementCooldown*/m_configuration.slashMovementCooldown;
         }
 
         public override void Cancel()
         {
-            base.Cancel();
 
             m_state.isDoingCombo = false;
             m_fxAnimator.Play("Buffer");
+
+            m_canSlashCombo = false;
+            base.Cancel();
         }
 
         public void PlayFX(bool value)
@@ -134,13 +146,12 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_edgeSensor.Cast();
             if (!m_enemySensor.isDetecting && !m_wallSensor.allRaysDetecting && m_edgeSensor.isDetecting)
             {
-                m_physics.AddForce(m_character.facing == HorizontalDirection.Right ? m_pushForce[m_currentVisualSlashState] : -m_pushForce[m_currentVisualSlashState], ForceMode2D.Impulse);
+                m_physics.AddForce(m_character.facing == HorizontalDirection.Right ? m_configuration.pushForce[m_currentVisualSlashState] : -m_configuration.pushForce[m_currentVisualSlashState], ForceMode2D.Impulse);
             }
         }
 
         public override void AttackOver()
         {
-            base.AttackOver();
             m_state.canAttack = true;
 
             for (int i = 0; i < m_slashComboInfo.Count; i++)
@@ -148,14 +159,15 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 m_slashComboInfo[i].ShowCollider(false);
             }
 
-            if (m_currentSlashState >= m_slashStateAmount)
+            if (m_currentSlashState >= m_configuration.slashStateAmount)
             {
-                m_currentSlashState = 0;
+                m_currentSlashState = -1;
                 m_canSlashCombo = false;
                 m_canMove = false;
             }
 
             m_fxAnimator.Play("Buffer");
+            base.AttackOver();
         }
 
         public void ComboEnd()
@@ -167,13 +179,12 @@ namespace DChild.Gameplay.Characters.Players.Modules
             else
             {
                 //Debug.Log("Attack Over");
-                base.AttackOver();
-                m_state.canAttack = true;
                 //m_skeletonAnimation.state.SetEmptyAnimation(0, 0);
                 m_canSlashCombo = false;
-                m_currentSlashState = 0;
+                m_currentSlashState = -1;
                 m_currentVisualSlashState = 0;
                 m_animator.SetInteger(m_slashStateAnimationParameter, m_currentSlashState);
+                //base.AttackOver();
             }
         }
 
@@ -219,7 +230,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             }
             else
             {
-                m_slashComboCooldownTimer = m_slashComboCooldown;
+                m_slashComboCooldownTimer = m_configuration.slashComboCooldown;
                 m_canSlashCombo = true;
             }
         }
@@ -234,7 +245,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             else
             {
                 //Debug.Log("Can Move");
-                m_slashMovementCooldownTimer = m_slashMovementCooldown;
+                m_slashMovementCooldownTimer = m_configuration.slashMovementCooldown;
                 m_canMove = true;
             }
         }

@@ -4,6 +4,8 @@ using System.Collections;
 using System.Collections.Generic;
 using DChild.Gameplay.Characters.AI;
 using UnityEngine;
+using Holysoft.Event;
+using System;
 
 public class TheOneThirdFormAttacks : MonoBehaviour
 {
@@ -27,24 +29,118 @@ public class TheOneThirdFormAttacks : MonoBehaviour
     private TentacleGrabAttack m_tentacleGrabScriptedAttack;
     [SerializeField, BoxGroup("The One Third Form Attacks")]
     private BubbleImprisonmentAttack m_bubbleImprisonmentAttack;
-
-    [SerializeField, BoxGroup("Mouth Blast I Stuff")]
-    private GameObject m_mouthBlastOneLaser;
-    [SerializeField, BoxGroup("Mouth Blast I Stuff")]
-    private Transform m_mouthBlastLeftSide;
-    [SerializeField, BoxGroup("Mouth Blast I Stuff")]
-    private Transform m_mouthBlastRightSide;
-    [SerializeField, BoxGroup("Mouth Blast I Stuff")]
-    private float m_mouthBlastMoveSpeed;
-    [SerializeField, BoxGroup("Mouth Blast I Stuff")]
-    private Vector2 m_mouthBlastOriginalPosition;
-    [SerializeField, BoxGroup("Mouth Blast I Stuff")]
-    private BlackBloodFlood m_blackBloodFlood;
-    private bool m_doMouthBlastIAttack;
-    private bool m_moveMouth;
-    private int m_SideToStart;
+    [SerializeField, BoxGroup("The One Third Form Attacks")]
+    private MouthBlastIAttack m_mouthBlastOneAttack;
+    public MouthBlastIAttack mouthBlastOneAttack => m_mouthBlastOneAttack;
 
     private TheOneThirdFormAI m_targetInfo;
+
+    public event EventAction<EventActionArgs> AttackDone;
+    //{
+    //    add
+    //    {
+    //        m_tentacleGroundStabAttack.AttackDone += value;
+
+
+
+
+
+
+    //    }
+
+    //    remove
+    //    {
+    //        m_tentacleGroundStabAttack.AttackDone -= value;
+    //    }
+    //}
+
+    private void Awake()
+    {
+        AttackDone += OnAttackDone;
+        m_tentacleGrabScriptedAttack.AttackDone += OnGrabAttackDone;
+        m_tentacleGroundStabAttack.AttackDone += OnGroundStabDone;
+        m_mouthBlastIIAttack.AttackDone += OnMouthBlastWallDone;
+        m_movingTentacleGroundAttack.AttackDone += OnMovingTentacleGroundDone;
+        m_monolithSlamAttack.AttackDone += OnMonolithSlamDone;
+        m_chasingGroundTentacleAttack.AttackDone += OnChasingGroundTentacleDone;
+        m_slidingWallAttack.AttackDone += OnSlidingWallDone;
+        m_tentacleBlastAttack.AttackDone += OnTentacleBlastDone;
+        m_tentacleCeilingAttack.AttackDone += OnTentacleCeilingDone;
+
+        m_bubbleImprisonmentAttack.AttackDone += OnBubbleImprisonmentDone;
+        m_mouthBlastOneAttack.AttackDone += OnMouthBlastOneDone;
+    }
+
+    private void OnAttackDone(object sender, EventActionArgs eventArgs)
+    {
+        Debug.Log("Attack Done from Third Form Attacks");
+    }
+
+    private void OnMouthBlastOneDone(object sender, EventActionArgs eventArgs)
+    {
+        Debug.Log("Mouth Blast One Done");
+        AttackDone?.Invoke(this, new EventActionArgs());
+    }
+
+    private void OnBubbleImprisonmentDone(object sender, EventActionArgs eventArgs)
+    {
+        Debug.Log("Bubble Imprisonment Done");
+        AttackDone?.Invoke(this, new EventActionArgs());
+    }
+
+    private void OnGrabAttackDone(object sender, EventActionArgs eventArgs)
+    {
+        Debug.Log("Grab Attack Done from Third Form Attacks");
+        AttackDone?.Invoke(this, new EventActionArgs());
+    }
+
+    private void OnTentacleCeilingDone(object sender, EventActionArgs eventArgs)
+    {
+        Debug.Log("Tentacle Ceiling Done");
+        AttackDone?.Invoke(this, new EventActionArgs());
+    }
+
+    private void OnTentacleBlastDone(object sender, EventActionArgs eventArgs)
+    {
+        Debug.Log("Tentacle Blast Done");
+        AttackDone?.Invoke(this, new EventActionArgs());
+    }
+
+    private void OnSlidingWallDone(object sender, EventActionArgs eventArgs)
+    {
+        Debug.Log("Sliding Wall Done");
+        AttackDone?.Invoke(this, new EventActionArgs());
+    }
+
+    private void OnChasingGroundTentacleDone(object sender, EventActionArgs eventArgs)
+    {
+        Debug.Log("Chasing Ground Tentacle Done");
+        AttackDone?.Invoke(this, new EventActionArgs());
+    }
+
+    private void OnMonolithSlamDone(object sender, EventActionArgs eventArgs)
+    {
+        Debug.Log("Monolith Slam Done");
+        AttackDone?.Invoke(this, new EventActionArgs());
+    }
+
+    private void OnMovingTentacleGroundDone(object sender, EventActionArgs eventArgs)
+    {
+        Debug.Log("Moving Tentacle Ground Done");
+        AttackDone?.Invoke(this, new EventActionArgs());
+    }
+
+    private void OnMouthBlastWallDone(object sender, EventActionArgs eventArgs)
+    {
+        Debug.Log("Mouth Blast Wall Done");
+        AttackDone?.Invoke(this, new EventActionArgs());
+    }
+
+    private void OnGroundStabDone(object sender, EventActionArgs eventArgs)
+    {
+        Debug.Log("Ground Stab Done");
+        AttackDone?.Invoke(this, new EventActionArgs());
+    }
 
     //Attacks
     public IEnumerator TentacleCeilingAttack()
@@ -89,7 +185,13 @@ public class TheOneThirdFormAttacks : MonoBehaviour
         yield return null;
     }
 
-    public IEnumerator TentacleBlast()
+    public IEnumerator TentacleBlastOne(AITargetInfo Target)
+    {
+        StartCoroutine(m_tentacleBlastAttack.ExecuteAttack(Target));
+        yield return null;
+    }
+
+    public IEnumerator TentacleBlastTwo()
     {
         StartCoroutine(m_tentacleBlastAttack.ExecuteAttack());
         yield return null;

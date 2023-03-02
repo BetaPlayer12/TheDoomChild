@@ -82,8 +82,10 @@ namespace DChild.Gameplay.Characters.AI
                 do
                 {
                     var index = UnityEngine.Random.Range(0, list.Length - 1);
+                    //chosenAttack = attackList[index];
                     var enumIndex = Convert.ToInt32(list[index]);
                     sameAttack = m_previousChosenAttack == enumIndex;
+                    chosenAttackIndex = enumIndex;
                 } while (m_maxSameAttackCount > 0 && sameAttack && m_maxSameAttackCount == m_sameAttackCount);
 
                 for (int i = 0; i < attackList.Count; i++)

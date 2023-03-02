@@ -55,12 +55,14 @@ namespace DChild.Gameplay.NavigationMap
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
+            Debug.LogError("It went IN");
             if (m_isRevealed)
                 return;
 
             var playerObject = collision.gameObject.GetComponentInParent<PlayerControlledObject>();
             if (playerObject != null && collision.tag != "Sensor")
             {
+                Debug.LogError("The thing did it");
                 SetState(true);
             }
         }

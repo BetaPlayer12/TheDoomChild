@@ -12,13 +12,16 @@ namespace DChild.Gameplay.Characters.Players
         private BattleAbility m_ability;
         [SerializeField]
         private string m_name;
+#if UNITY_EDITOR
         [SerializeField, ValueDropdown("GetBattleAbilityConfigrationClasses")]
-        private string m_configurationType;
+        private string m_configurationType; 
+#endif
         [SerializeField, MinValue(1)]
         private int m_maxLevel = 1;
         [SerializeField]
         private IBatttleAbilityScalableConfiguration[] m_configurations;
 
+#if UNITY_EDITOR
         private IEnumerable GetBattleAbilityConfigrationClasses()
         {
             return DChildUtility.GetDerivedInterfacesNames<IBatttleAbilityScalableConfiguration>();
@@ -56,5 +59,6 @@ namespace DChild.Gameplay.Characters.Players
                 m_configurations = newConfiguration;
             }
         }
+#endif
     }
 }

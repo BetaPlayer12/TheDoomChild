@@ -6,6 +6,7 @@ using DChild.Gameplay.Characters;
 using Sirenix.OdinInspector;
 using Spine.Unity;
 using DChild.Gameplay.Characters.AI;
+using Holysoft.Event;
 
 namespace DChild.Gameplay.Characters.Enemies
 {
@@ -32,13 +33,24 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField]
         private float m_blastDuration;
 
+        public event EventAction<EventActionArgs> AttackStart;
+        public event EventAction<EventActionArgs> AttackDone;
+
         public IEnumerator ExecuteAttack()
         {
-            ShootMouthBlast();
+            AttackStart?.Invoke(this, EventActionArgs.Empty);
+            yield return GrowMouth();
+
+            AttackDone?.Invoke(this, EventActionArgs.Empty);
             yield return null;
         }
 
         public IEnumerator ExecuteAttack(Vector2 PlayerPosition)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public IEnumerator ExecuteAttack(AITargetInfo Target)
         {
             throw new System.NotImplementedException();
         }
@@ -83,11 +95,6 @@ namespace DChild.Gameplay.Characters.Enemies
         private void Start()
         {
             m_animation.SetAnimation(0, m_waitForInitializeAnimation, false);
-        }
-
-        public IEnumerator ExecuteAttack(AITargetInfo Target)
-        {
-            throw new System.NotImplementedException();
         }
     }
 }
