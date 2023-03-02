@@ -9,26 +9,24 @@ using UnityEngine;
 public class GameplaySystemSceneLoadGuard : MonoBehaviour
 {
     [SerializeField]
-    private SignalSender m_UIGuardSignal;
-    [SerializeField]
-    private SignalSender m_UIOffenseSignal;
+    private SignalSender m_UIInitializeSignal;
 
     void Awake()
     {
         if (LoadingHandle.isLoading)
         {
-            m_UIGuardSignal.SendSignal();
+            Debug.LogError("Wait for Loading to Be done");
             LoadingHandle.LoadingDone += OnLoadingDone;
         }
         else
         {
-            m_UIOffenseSignal.SendSignal();
+            m_UIInitializeSignal.SendSignal();
         }
     }
 
     private void OnLoadingDone(object sender, EventActionArgs eventArgs)
     {
-        m_UIOffenseSignal.SendSignal();
+        m_UIInitializeSignal.SendSignal();
         LoadingHandle.LoadingDone -= OnLoadingDone;
     }
 
