@@ -6,8 +6,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
 {
     public class WallSlide : MonoBehaviour, ICancellableBehaviour, IComplexCharacterModule
     {
-        [SerializeField, MinValue(0f)]
-        private float m_speed;
+        [SerializeField, HideLabel]
+        private WallSlideStatsInfo m_configuration;
         [SerializeField]
         private RaySensor m_bodySensor;
 
@@ -16,6 +16,11 @@ namespace DChild.Gameplay.Characters.Players.Modules
         public void Initialize(ComplexCharacterInfo info)
         {
             m_rigibody = info.rigidbody;
+        }
+
+        public void SetConfiguration(WallSlideStatsInfo info)
+        {
+            m_configuration.CopyInfo(info);
         }
 
         public bool IsThereAWall()
@@ -31,7 +36,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void Execute()
         {
-            m_rigibody.velocity = new Vector2(m_rigibody.velocity.x, m_speed * -1);
+            m_rigibody.velocity = new Vector2(m_rigibody.velocity.x, m_configuration.speed * -1);
         }
     }
 }

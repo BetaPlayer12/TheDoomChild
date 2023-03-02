@@ -36,7 +36,7 @@ namespace DChild.Gameplay.NavigationMap
             }
         }
 
-        public static ChangesInfo changes { get; } = new ChangesInfo();
+        public static ChangesInfo changes { get; private set; }
 
         [SerializeField, BoxGroup("Scene Details")]
         private Environment.Location m_sceneLocation;
@@ -57,6 +57,11 @@ namespace DChild.Gameplay.NavigationMap
 
         private void Start()
         {
+            if(changes == null)
+            {
+                changes = new ChangesInfo();
+            }
+
             m_fogOfWarHandle.Initialize();
             m_fogOfWarHandle.TriggerValueChanged += OnFogOfWarChange;
             m_fogOfWarHandle.LoadStates();

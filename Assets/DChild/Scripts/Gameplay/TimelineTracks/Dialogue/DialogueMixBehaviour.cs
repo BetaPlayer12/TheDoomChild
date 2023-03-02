@@ -12,9 +12,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Playables;
-using Doozy;
 using Doozy.Runtime.Signals;
-using UnityEngine.Events;
 
 namespace PixelCrushers.DialogueSystem
 {
@@ -26,12 +24,6 @@ namespace PixelCrushers.DialogueSystem
 
         private bool m_typeWriterEffectIsPlaying;
         private bool m_isCutsceneSkipped;
-
-        private SignalReceiver m_continueReceiver;
-        private SignalReceiver m_skipReceiver;
-
-        private SignalStream m_continueStream;
-        private SignalStream m_skipStream;
 
         public override void ProcessFrame(Playable playable, FrameData info, object playerData)
         {
@@ -93,7 +85,7 @@ namespace PixelCrushers.DialogueSystem
             m_typeWriterEffectIsPlaying = DChildStandardUIContinueButtonFastForward.currentTypewriterEffect?.isPlaying ?? false;
         }
 
-        private void OnContinueDialogue(Signal arg0)
+        private void OnContinueDiag(Signal obj)
         {
             foreach (var input in m_behaviours)
             {
@@ -106,27 +98,14 @@ namespace PixelCrushers.DialogueSystem
                 }
                 else
                 {
-                    ExecuteDialogueBehaviourEnd(input);
+                    m_director.time = input.end;
+                    input.isDone = true;
+                    m_behaviours.Remove(input);
+                    PlaySequence(input.GetEndBehaviourSequence());
+                    input.isWaitingForInput = false;
+                    break;
                 }
             }
-        }
-
-        private void OnSkipDialogue(Signal arg0)
-        {
-            foreach (var input in m_behaviours)
-            {
-                ExecuteDialogueBehaviourEnd(input);
-                break;
-            }
-        }
-
-        private void ExecuteDialogueBehaviourEnd(DialogueBehaviour input)
-        {
-            m_director.time = input.end;
-            input.isDone = true;
-            m_behaviours.Remove(input);
-            PlaySequence(input.GetEndBehaviourSequence());
-            input.isWaitingForInput = false;
         }
 
         private void PlaySequence(string sequence)
@@ -170,37 +149,12 @@ namespace PixelCrushers.DialogueSystem
             }
         }
 
-        private void ListenToDialogueSignals()
-        {
-            ListenToDoozySignals(m_continueReceiver, m_continueStream, "Continue", OnContinueDialogue);
-            ListenToDoozySignals(m_skipReceiver, m_skipStream, "Skip", OnSkipDialogue);
-        }
-
-        private void ListenToDoozySignals(SignalReceiver receiver, SignalStream stream, string streamName, UnityAction<Signal> signalCallback)
-        {
-            receiver = new SignalReceiver();
-            receiver.SetOnSignalCallback(signalCallback);
-
-            stream = SignalsService.FindStream("Dialogue", streamName);
-
-            if(stream == null)
-            {
-
-            }
-
-            stream.ConnectReceiver(receiver);
-        }
-
-        private void UnlistenToDialogueSignals()
-        {
-            m_continueStream.DisconnectReceiver(m_continueReceiver);
-        }
-
         public override void OnGraphStart(Playable playable)
         {
             base.OnGraphStart(playable);
+            DialogueManager.StopAllConversations();
             m_director = (playable.GetGraph().GetResolver() as PlayableDirector);
-            ListenToDialogueSignals();
+            SignalStream.Get("Dialogue", "Continue").OnSignal += OnContinueDiag;
             m_played.Clear();
             m_behaviours.Clear();
             DChildStandardDialogueUI.isInCutscene = true;
@@ -212,7 +166,7 @@ namespace PixelCrushers.DialogueSystem
         public override void OnGraphStop(Playable playable)
         {
             base.OnGraphStop(playable);
-            UnlistenToDialogueSignals();
+            SignalStream.Get("Dialogue", "Continue").OnSignal -= OnContinueDiag;
             m_played.Clear();
             m_behaviours.Clear();
             DChildStandardDialogueUI.isInCutscene = false;

@@ -81,6 +81,7 @@ namespace DChild.Gameplay.UI
 
         private void OnAmountSet(object sender, CurrencyUpdateEventArgs eventArgs)
         {
+
             m_currentAmountText.text = eventArgs.amount.ToString();
             m_currentAmount = eventArgs.amount;
         }

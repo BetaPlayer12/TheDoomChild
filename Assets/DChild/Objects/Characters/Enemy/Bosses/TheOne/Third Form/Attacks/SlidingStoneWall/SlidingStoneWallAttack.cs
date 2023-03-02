@@ -1,4 +1,7 @@
-﻿using DChild.Gameplay.Pooling;
+﻿using DChild.Gameplay.Characters.AI;
+using DChild.Gameplay.Pooling;
+using Holysoft.Event;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,13 +11,29 @@ namespace DChild.Gameplay.Characters.Enemies
     public class SlidingStoneWallAttack : MonoBehaviour, IEyeBossAttacks
     {
         [SerializeField]
-        private SlidingStoneWall m_monolithWall;
+        private SlidingStoneWall m_monolithWallLeft;
         [SerializeField]
-        private Transform m_leftSpawnPoint;
-        [SerializeField]
-        private Transform m_rightSpawnPoint;
+        private SlidingStoneWall m_monolithWallRight;
+
         [SerializeField]
         private Transform m_arenaCenter;
+
+        [SerializeField]
+        public float attackAnimationSpeedMultiplier = 1f;
+
+        public event EventAction<EventActionArgs> AttackStart;
+        public event EventAction<EventActionArgs> AttackDone;
+
+        private void Awake()
+        {
+            m_monolithWallLeft.AttackDone += OnAttackDone;
+            m_monolithWallRight.AttackDone += OnAttackDone;
+        }
+
+        private void OnAttackDone(object sender, EventActionArgs eventArgs)
+        {
+            AttackDone?.Invoke(this, EventActionArgs.Empty);
+        }
 
         public IEnumerator ExecuteAttack()
         {
@@ -23,50 +42,17 @@ namespace DChild.Gameplay.Characters.Enemies
 
         public IEnumerator ExecuteAttack(Vector2 PlayerPosition)
         {
-            if(PlayerPosition.x < m_arenaCenter.position.x)
-                InstantiateWall(m_rightSpawnPoint.position, m_monolithWall.gameObject, PlayerPosition);
+            throw new System.NotImplementedException();
+        }
+
+        public IEnumerator ExecuteAttack(AITargetInfo Target)
+        {
+            if (Target.position.x < m_arenaCenter.position.x)
+                yield return m_monolithWallRight.CompleteSlidingWallAttackSequence();
             else
-                InstantiateWall(m_leftSpawnPoint.position, m_monolithWall.gameObject, PlayerPosition);              
-            
+                yield return m_monolithWallLeft.CompleteSlidingWallAttackSequence();
+
             yield return null;
-        }
-
-        private void InstantiateWall(Vector2 spawnPosition, GameObject wall, Vector2 PlayerPosition)
-        {
-            var instance = GameSystem.poolManager.GetPool<PoolableObjectPool>().GetOrCreateItem(wall, gameObject.scene);
-
-            if(PlayerPosition.x < m_arenaCenter.position.x)
-            {
-                instance.GetComponent<SlidingStoneWall>().slideRight = false;
-                instance.GetComponent<SlidingStoneWall>().executeAttack = true;
-            }
-            else
-            {
-                instance.GetComponent<SlidingStoneWall>().executeAttack = true;
-                instance.GetComponent<SlidingStoneWall>().slideRight = true;
-            }
-            
-            instance.SpawnAt(spawnPosition, Quaternion.identity);           
-        }
-
-        private void InstantiateRightWall(Vector2 spawnPosition, GameObject wall)
-        {
-            var instance = GameSystem.poolManager.GetPool<PoolableObjectPool>().GetOrCreateItem(wall, gameObject.scene);
-            instance.GetComponent<SlidingStoneWall>().slideRight = false;
-            instance.GetComponent<SlidingStoneWall>().executeAttack = true;
-            instance.SpawnAt(spawnPosition, Quaternion.identity);
-        }
-
-        // Start is called before the first frame update
-        void Start()
-        {
-
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-
         }
     }
 

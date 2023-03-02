@@ -35,6 +35,35 @@ namespace DChild.Gameplay.Characters.Players.Modules
         public bool projectileThrowReleased;
         public bool projectileThrowHeld;
 
+        #region BattleAbilities Inputs
+        public bool airLungeSlashPressed;
+        public bool fireFistPressed;
+        public bool reaperHarvestPressed;
+        public bool krakenRagePressed;
+        public bool finalSlashPressed;
+        //public bool finalSlashHeld;
+        public bool finalSlashReleased;
+        public bool airSlashComboPressed;
+        public bool sovereignImpalePressed;
+        public bool hellTridentPressed;
+        public bool foolsVerdictPressed;
+        public bool soulFireBlastPressed;
+        public bool edgedFuryPressed;
+        public bool edgedFuryReleased;
+        public bool ninthCircleSanctionPressed;
+        public bool doomsdayKongPressed;
+        public bool backDiverPressed;
+        public bool barrierPressed;
+        public bool barrierReleased;
+        public bool fencerFlashPressed;
+        public bool diagonalSwordDashPressed;
+        public bool championsUprisingPressed;
+        public bool eelecktrickPressed;
+        public bool eelecktrickReleased;
+        public bool lightningSpearPressed;
+        public bool lightningSpearReleased;
+        #endregion
+
         private PlayerInput m_input;
         private InputActionMap m_gameplayActionMap;
 
@@ -159,6 +188,214 @@ namespace DChild.Gameplay.Characters.Players.Modules
             }
         }
 
+        private void OnAirLungeSlash(InputValue value)
+        {
+            if (enabled == true)
+            {
+                airLungeSlashPressed = value.Get<float>() == 1;
+            }
+        }
+
+        private void OnFireFist(InputValue value)
+        {
+            if (enabled == true)
+            {
+                fireFistPressed = value.Get<float>() == 1;
+            }
+        }
+
+        private void OnReaperHarvest(InputValue value)
+        {
+            if (enabled == true)
+            {
+                reaperHarvestPressed = value.Get<float>() == 1;
+            }
+        }
+
+        private void OnKrakenRage(InputValue value)
+        {
+            if (enabled == true)
+            {
+                krakenRagePressed = value.Get<float>() == 1;
+            }
+        }
+
+        private void OnFinalSlash(InputValue value)
+        {
+            if (enabled == true)
+            {
+                var inputValue = value.Get<float>() == 1;
+                finalSlashPressed = inputValue;
+            }
+        }
+
+        private void OnFinalSlashReleased(InputValue value)
+        {
+            if (enabled == true)
+            {
+                finalSlashReleased = value.Get<float>() == 1;
+                finalSlashReleased = !finalSlashReleased;
+            }
+        }
+
+        private void OnAirSlashCombo(InputValue value)
+        {
+            if (enabled == true)
+            {
+                airSlashComboPressed = value.Get<float>() == 1;
+            }
+        }
+
+        private void OnSovereignImpale(InputValue value)
+        {
+            if (enabled == true)
+            {
+                sovereignImpalePressed = value.Get<float>() == 1;
+            }
+        }
+
+        private void OnHellTrident(InputValue value)
+        {
+            if (enabled == true)
+            {
+                hellTridentPressed = value.Get<float>() == 1;
+            }
+        }
+
+        private void OnFoolsVerdict(InputValue value)
+        {
+            if (enabled == true)
+            {
+                foolsVerdictPressed = value.Get<float>() == 1;
+            }
+        }
+
+        private void OnSoulFireBlast(InputValue value)
+        {
+            if (enabled == true)
+            {
+                soulFireBlastPressed = value.Get<float>() == 1;
+            }
+        }
+
+        private void OnEdgedFury(InputValue value)
+        {
+            if (enabled == true)
+            {
+                edgedFuryPressed = value.Get<float>() == 1;
+            }
+        }
+
+        private void OnEdgedFuryReleased(InputValue value)
+        {
+            if (enabled == true)
+            {
+                edgedFuryReleased = value.Get<float>() == 1;
+                edgedFuryReleased = !edgedFuryReleased;
+            }
+        }
+
+        private void OnNinthCircleSanction(InputValue value)
+        {
+            if (enabled == true)
+            {
+                ninthCircleSanctionPressed = value.Get<float>() == 1;
+            }
+        }
+
+        private void OnDoomsdayKong(InputValue value)
+        {
+            if (enabled == true)
+            {
+                doomsdayKongPressed = value.Get<float>() == 1;
+            }
+        }
+
+        private void OnBackDiver(InputValue value)
+        {
+            if (enabled == true)
+            {
+                backDiverPressed = value.Get<float>() == 1;
+            }
+        }
+
+        private void OnBarrier(InputValue value)
+        {
+            if (enabled == true)
+            {
+                barrierPressed = value.Get<float>() == 1;
+            }
+        }
+
+        private void OnBarrierReleased(InputValue value)
+        {
+            if (enabled == true)
+            {
+                barrierReleased = value.Get<float>() == 1;
+                barrierReleased = !barrierReleased;
+            }
+        }
+
+        private void OnFencerFlash(InputValue value)
+        {
+            if (enabled == true)
+            {
+                fencerFlashPressed = value.Get<float>() == 1;
+            }
+        }
+
+        private void OnDiagonalSwordDash(InputValue value)
+        {
+            if (enabled == true)
+            {
+                diagonalSwordDashPressed = value.Get<float>() == 1;
+            }
+        }
+
+        private void OnChampionsUprising(InputValue value)
+        {
+            if (enabled == true)
+            {
+                championsUprisingPressed = value.Get<float>() == 1;
+            }
+        }
+
+        private void OnEelecktrick(InputValue value)
+        {
+            if (enabled == true)
+            {
+                var inputValue = value.Get<float>() == 1;
+                eelecktrickPressed = inputValue;
+            }
+        }
+
+        private void OnEelecktrickReleased(InputValue value)
+        {
+            if (enabled == true)
+            {
+                eelecktrickReleased = value.Get<float>() == 1;
+                eelecktrickReleased = !eelecktrickReleased;
+            }
+        }
+
+        private void OnLightningSpear(InputValue value)
+        {
+            if (enabled == true)
+            {
+                var inputValue = value.Get<float>() == 1;
+                lightningSpearPressed = inputValue;
+            }
+        }
+
+        private void OnLightningSpearReleased(InputValue value)
+        {
+            if (enabled == true)
+            {
+                lightningSpearReleased = value.Get<float>() == 1;
+                lightningSpearReleased = !lightningSpearReleased;
+            }
+        }
+
         private void OnSlashHeld(InputValue value)
         {
             if (enabled == true)
@@ -255,7 +492,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private void Update()
         {
             var mousePosition = Mouse.current.position.ReadValue();
-            //m_mouseDelta = mousePosition - m_mousePosition;
             m_mouseDelta = Mouse.current.delta.ReadValue();
             m_mousePosition = mousePosition;
             m_mousePosition += new Vector2(controllerCursorHorizontalInput, controllerCursorVerticalInput).normalized;
@@ -279,6 +515,32 @@ namespace DChild.Gameplay.Characters.Players.Modules
             whipPressed = false;
             projectileThrowPressed = false;
             projectileThrowReleased = false;
+
+            airLungeSlashPressed = false;
+            fireFistPressed = false;
+            reaperHarvestPressed = false;
+            krakenRagePressed = false;
+            finalSlashPressed = false;
+            finalSlashReleased = false;
+            airSlashComboPressed = false;
+            sovereignImpalePressed = false;
+            hellTridentPressed = false;
+            foolsVerdictPressed = false;
+            soulFireBlastPressed = false;
+            edgedFuryPressed = false;
+            edgedFuryReleased = false;
+            ninthCircleSanctionPressed = false;
+            doomsdayKongPressed = false;
+            backDiverPressed = false;
+            barrierPressed = false;
+            barrierReleased = false;
+            fencerFlashPressed = false;
+            diagonalSwordDashPressed = false;
+            championsUprisingPressed = false;
+            eelecktrickPressed = false;
+            eelecktrickReleased = false;
+            lightningSpearPressed = false;
+            lightningSpearReleased = false;
         }
 
         private void Reset()
@@ -304,6 +566,32 @@ namespace DChild.Gameplay.Characters.Players.Modules
             projectileThrowPressed = false;
             projectileThrowHeld = false;
             projectileThrowReleased = false;
+
+            airLungeSlashPressed = false;
+            fireFistPressed = false;
+            reaperHarvestPressed = false;
+            krakenRagePressed = false;
+            finalSlashPressed = false;
+            finalSlashReleased = false;
+            airSlashComboPressed = false;
+            sovereignImpalePressed = false;
+            hellTridentPressed = false;
+            foolsVerdictPressed = false;
+            soulFireBlastPressed = false;
+            edgedFuryPressed = false;
+            edgedFuryReleased = false;
+            ninthCircleSanctionPressed = false;
+            doomsdayKongPressed = false;
+            backDiverPressed = false;
+            barrierPressed = false;
+            barrierReleased = false;
+            fencerFlashPressed = false;
+            diagonalSwordDashPressed = false;
+            championsUprisingPressed = false;
+            eelecktrickPressed = false;
+            eelecktrickReleased = false;
+            lightningSpearPressed = false;
+            lightningSpearReleased = false;
         }
     }
 }

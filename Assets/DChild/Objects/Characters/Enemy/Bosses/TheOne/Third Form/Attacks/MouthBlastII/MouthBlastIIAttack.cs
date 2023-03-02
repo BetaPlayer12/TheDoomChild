@@ -4,50 +4,45 @@ using UnityEngine;
 using DChild.Gameplay.Pooling;
 using DChild.Gameplay.Characters;
 using Sirenix.OdinInspector;
+using Spine.Unity;
+using DChild.Gameplay.Characters.AI;
+using Holysoft.Event;
 
 namespace DChild.Gameplay.Characters.Enemies
 {
     public class MouthBlastIIAttack : MonoBehaviour, IEyeBossAttacks
     {
+        [SerializeField, TabGroup("Reference")]
+        protected SpineRootAnimation m_animation;
         [SerializeField]
-        private GameObject m_mouthBlastEntity;
-        [SerializeField]
-        private GameObject m_mouthBlastLaser;
-        [SerializeField]
-        private Transform m_wallPosition;
-        [SerializeField]
-        private Vector2 m_originalEntityPosition;
-
-        //Temporary - to be replaced with animation and waitforanimationEnd
-        [SerializeField]
-        private float m_mouthEntityEmergeTime;
-        [SerializeField]
-        private float m_anticipationTime;
-        [SerializeField]
-        private float m_blastDurationTime;
-
-        [SerializeField]
-        private float m_emergeSpeed;
+        private SkeletonAnimation m_skeletonAnimation;
+        [SerializeField, Spine.Unity.SpineAnimation(dataField = "m_skeletonAnimation")]
+        private string m_waitForInitializeAnimation;
+        [SerializeField, Spine.Unity.SpineAnimation(dataField = "m_skeletonAnimation")]
+        private string m_attackLoopAnimation;
+        [SerializeField, Spine.Unity.SpineAnimation(dataField = "m_skeletonAnimation")]
+        private string m_attackChargeAnimation;
+        [SerializeField, Spine.Unity.SpineAnimation(dataField = "m_skeletonAnimation")]
+        private string m_toGrowAnimation;
+        [SerializeField, Spine.Unity.SpineAnimation(dataField = "m_skeletonAnimation")]
+        private string m_afterAttackAnimation;
 
         [SerializeField, BoxGroup("Laser")]
         private LaserLauncher m_launcher;
 
+        [SerializeField]
+        private float m_blastDuration;
+
+        public event EventAction<EventActionArgs> AttackStart;
+        public event EventAction<EventActionArgs> AttackDone;
+
         public IEnumerator ExecuteAttack()
         {
-            //Emerge
-            m_mouthBlastEntity.transform.position = m_wallPosition.transform.position;
-            yield return new WaitForSeconds(m_mouthEntityEmergeTime);
-            //Anticipation
-            m_launcher.SetBeam(true);
-            m_launcher.SetAim(false);
-            yield return new WaitForSeconds(m_anticipationTime);
-            //Attack
-            StartCoroutine(m_launcher.LazerBeamRoutine());
-            m_mouthBlastLaser.SetActive(true);
-            yield return new WaitForSeconds(m_blastDurationTime);
-            m_launcher.SetBeam(false);
-            m_mouthBlastLaser.SetActive(false);
-            m_mouthBlastEntity.transform.position = m_originalEntityPosition;
+            AttackStart?.Invoke(this, EventActionArgs.Empty);
+            yield return GrowMouth();
+
+            AttackDone?.Invoke(this, EventActionArgs.Empty);
+            yield return null;
         }
 
         public IEnumerator ExecuteAttack(Vector2 PlayerPosition)
@@ -55,10 +50,51 @@ namespace DChild.Gameplay.Characters.Enemies
             throw new System.NotImplementedException();
         }
 
+        public IEnumerator ExecuteAttack(AITargetInfo Target)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        [Button]
+        private void ShootMouthBlast()
+        {
+            StartCoroutine(GrowMouth());
+        }
+
+        private IEnumerator GrowMouth()
+        {
+            m_animation.SetAnimation(0, m_toGrowAnimation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_toGrowAnimation);
+            yield return ChargeBeam();
+        }
+
+        private IEnumerator ChargeBeam()
+        {
+            m_launcher.SetBeam(true);
+            m_launcher.SetAim(false);
+            m_animation.SetAnimation(0, m_attackChargeAnimation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_attackChargeAnimation);
+            yield return ShootBlast();
+        }
+
+        private IEnumerator ShootBlast()
+        {
+            StartCoroutine(m_launcher.LazerBeamRoutine());
+            m_animation.SetAnimation(0, m_attackLoopAnimation, true);
+            yield return new WaitForSeconds(m_blastDuration);
+            m_launcher.SetBeam(false);
+            yield return RetractMouth();
+        }
+
+        private IEnumerator RetractMouth()
+        {
+            m_animation.SetAnimation(0, m_afterAttackAnimation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_afterAttackAnimation);
+        }
+
         private void Start()
         {
-            m_mouthBlastLaser.SetActive(false);
-            m_originalEntityPosition = m_mouthBlastEntity.transform.position;
+            m_animation.SetAnimation(0, m_waitForInitializeAnimation, false);
         }
     }
 }

@@ -4,12 +4,13 @@ using UnityEngine;
 using DChild.Gameplay.Pooling;
 using Sirenix.OdinInspector;
 using Spine.Unity;
+using Holysoft.Event;
 
 namespace DChild.Gameplay.Characters.Enemies
 {
     public class TentacleCeiling : MonoBehaviour
     {
-        private BoxCollider2D m_tentacleHitBox;
+        //private BoxCollider2D m_tentacleHitBox;
 
         [SerializeField, TabGroup("Reference")]
         protected SpineRootAnimation m_animation;
@@ -28,48 +29,52 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, Spine.Unity.SpineAnimation(dataField = "m_skeletonAnimation")]
         private string m_waitForInputAnimation;
 
+        public event EventAction<EventActionArgs> AttackStart;
+        public event EventAction<EventActionArgs> AttackDone;
+
         public IEnumerator AnticipateAttack()
         {
             m_animation.SetAnimation(0, m_anticipationLoopAnimation, true);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_anticipationLoopAnimation);
         }
 
-        public IEnumerator Attack()
+        public IEnumerator Attack(float duration)
         {
+            AttackStart?.Invoke(this, EventActionArgs.Empty);
             m_animation.SetAnimation(0, m_attackAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_attackAnimation);
 
-            StartCoroutine(Extended());
+            yield return Extended(duration);
         }
 
-        public IEnumerator Extended()
+        public IEnumerator Extended(float duration)
         {
-            m_tentacleHitBox.enabled = true;
             m_animation.SetAnimation(0, m_extendedAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_extendedAnimation);
-            yield return new WaitForSeconds(2f);
+            yield return new WaitForSeconds(duration);
+            yield return Retract();
         }
 
         public IEnumerator Retract()
         {
             m_animation.SetAnimation(0, m_retractAnimation, false);
-            m_tentacleHitBox.enabled = false;
+            //m_tentacleHitBox.enabled = false;
             yield return new WaitForAnimationComplete(m_animation.animationState, m_retractAnimation);
+
+            AttackDone?.Invoke(this, EventActionArgs.Empty);
         }
 
         private void Start()
         {
-            StartCoroutine(AnticipateAttack());
-            m_tentacleHitBox = this.GetComponent<BoxCollider2D>();
-            m_tentacleHitBox.enabled = false;
+            m_animation.SetAnimation(0, m_waitForInputAnimation, true);
+            //m_tentacleHitBox = this.GetComponent<BoxCollider2D>();
         }
 
         [Button]
         private void DoAttack()
         {
-            StartCoroutine(Attack());
-            StartCoroutine(Extended());
-            StartCoroutine(Retract());
+            StartCoroutine(Attack(3.5f));
+            //StartCoroutine(Retract());
         }
     }
 }

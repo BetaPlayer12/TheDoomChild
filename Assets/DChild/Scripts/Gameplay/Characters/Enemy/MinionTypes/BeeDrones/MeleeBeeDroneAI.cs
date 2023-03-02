@@ -202,6 +202,7 @@ namespace DChild.Gameplay.Characters.Enemies
         //Patience Handler
         private void Patience()
         {
+            enabled = false;
             if (m_executeMoveCoroutine != null)
             {
                 StopCoroutine(m_executeMoveCoroutine);
@@ -209,6 +210,7 @@ namespace DChild.Gameplay.Characters.Enemies
             }
             m_stateHandle.SetState(State.ReturnToPatrol);
             m_targetInfo.Set(null, null);
+            enabled = true;
         }
 
         private IEnumerator AttackRoutine()
@@ -241,6 +243,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 {
                     inRange = true;
                 }
+                m_turnState = State.ReevaluateSituation;
                 DynamicMovement(newPos, moveSpeed);
                 yield return null;
             }
@@ -257,7 +260,7 @@ namespace DChild.Gameplay.Characters.Enemies
             var rb2d = GetComponent<Rigidbody2D>();
             m_agent.SetDestination(target);
 
-            if (IsFacing(m_agent.hasPath && TargetBlocked() && !m_floorSensor.allRaysDetecting && !m_roofSensor.allRaysDetecting ? m_agent.segmentDestination : target))
+            if (IsFacing(m_agent.hasPath && (m_targetInfo.isCharacter ? TargetBlocked() && !m_floorSensor.allRaysDetecting : !m_floorSensor.allRaysDetecting) && !m_roofSensor.allRaysDetecting ? m_agent.segmentDestination : target))
             {
                 if (!m_wallSensor.allRaysDetecting && (m_floorSensor.allRaysDetecting || m_roofSensor.allRaysDetecting))
                 {
@@ -282,7 +285,7 @@ namespace DChild.Gameplay.Characters.Enemies
             }
             else
             {
-                m_turnState = State.ReevaluateSituation;
+                //m_turnState = State.ReevaluateSituation;
                 m_stateHandle.OverrideState(State.Turning);
             }
         }
@@ -364,26 +367,14 @@ namespace DChild.Gameplay.Characters.Enemies
                     break;
 
                 case State.ReturnToPatrol:
-                    if (IsFacing(m_startPos))
+                    if (Vector2.Distance(m_startPos, transform.position) > 10f)
                     {
-                        if (Vector2.Distance(m_startPos, transform.position) > 5f)
-                        {
-                            var rb2d = GetComponent<Rigidbody2D>();
-                            m_bodyCollider.enabled = false;
-                            m_agent.Stop();
-                            Vector3 dir = (m_startPos - (Vector2)rb2d.transform.position).normalized;
-                            rb2d.MovePosition(rb2d.transform.position + dir * m_info.move.speed * Time.fixedDeltaTime);
-                            m_animation.SetAnimation(0, m_info.patrol.animation, true);
-                        }
-                        else
-                        {
-                            m_stateHandle.OverrideState(State.Patrol);
-                        }
+                        m_turnState = State.ReturnToPatrol;
+                        DynamicMovement(m_startPos, m_info.move.speed);
                     }
                     else
                     {
-                        m_turnState = State.ReturnToPatrol;
-                        m_stateHandle.SetState(State.Turning);
+                        m_stateHandle.OverrideState(State.Patrol);
                     }
                     break;
 

@@ -551,7 +551,9 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_selfCollider.enabled = false;
                     m_animation.EnableRootMotion(true, false);
 
-                    m_attackRoutine = StartCoroutine(AttackRoutine());
+                    //m_attackRoutine = StartCoroutine(AttackRoutine()); //commented this out in favor of using attack handle to work with timescale 2
+
+                    m_attackHandle.ExecuteAttack(m_info.idleToAttackAnimation, m_info.idleAnimation);
 
                     break;
 

@@ -12,6 +12,9 @@ namespace DChild.Gameplay.Characters.Players
     [AddComponentMenu("DChild/Gameplay/Player/Player Weapon")]
     public class PlayerWeapon : MonoBehaviour
     {
+        [SerializeField]
+        private WeaponBaseStatsData m_defaultWeaponStatsData;
+
         [HorizontalGroup("Split")]
 
         [SerializeField, OnValueChanged("UpdateDamage", true), BoxGroup("Split/Base"), HideLabel]
@@ -32,11 +35,13 @@ namespace DChild.Gameplay.Characters.Players
         public event EventAction<EventActionArgs> StatusInflictionUpdate;
 
         public void Initialize()
-        {
+        {          
             if (m_isInitialized == false)
             {
+                m_baseDamage = m_defaultWeaponStatsData.damage;
+
                 CalculateTotalDamage();
-                m_statusInflictions = new List<StatusEffectChance>();
+                m_statusInflictions = new List<StatusEffectChance>(m_defaultWeaponStatsData.statusInflictions);
                 m_isInitialized = true;
             }
         }
