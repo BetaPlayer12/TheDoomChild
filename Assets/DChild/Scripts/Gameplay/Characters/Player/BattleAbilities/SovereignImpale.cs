@@ -217,11 +217,16 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
                 {
                     var instance = GameSystem.poolManager.GetPool<ProjectilePool>().GetOrCreateItem(m_projectileInfo.projectile);
                     instance.transform.position = new Vector2(summonPoint.x, GroundPosition(summonPoint).y + (m_summonOffsetScales[i].y - 1));
-                    instance.transform.localScale = new Vector3(m_character.facing == HorizontalDirection.Right ? m_summonOffsetScales[i].x : -m_summonOffsetScales[i].x, m_summonOffsetScales[i].y, m_summonOffsetScales[i].z);
+                    //instance.transform.localScale = new Vector3(m_character.facing == HorizontalDirection.Right ? m_summonOffsetScales[i].x : -m_summonOffsetScales[i].x, m_summonOffsetScales[i].y, m_summonOffsetScales[i].z);
                     instance.GetComponent<Attacker>().SetParentAttacker(m_attacker);
-                    var component = instance.GetComponent<Projectile>();
-                    component.ResetState();
+                    //var component = instance.GetComponent<Projectile>();
+                    //component.ResetState();
+
+                    m_launcher.AimAt(new Vector2(m_startPoint.position.x + (m_character.facing == HorizontalDirection.Right ? 10 : -10), m_startPoint.position.y));
+                    m_launcher.LaunchProjectile(m_startPoint.right, instance.gameObject);
                     offset += m_summonOffset * offsetLookPosition;
+                    //yield return new WaitForSeconds(0.01f);
+                    instance.transform.localScale = Vector3.one;
                     yield return new WaitForSeconds(m_summonDelay);
                 }
             }
