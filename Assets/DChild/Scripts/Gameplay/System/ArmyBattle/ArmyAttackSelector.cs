@@ -1,5 +1,4 @@
-﻿using Holysoft.Event;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,15 +7,17 @@ namespace DChild.Gameplay.ArmyBattle.UI
     public class ArmyAttackSelector : MonoBehaviour
     {
         [SerializeField]
-        private ArmyBattleHandle m_battleHandle;
-        [SerializeField]
-        private PlayerArmyController m_something;
-        [SerializeField]
         private ArmyAttackGroupUI m_display;
 
+        private PlayerArmyController m_source;
         private List<ArmyAttackGroup> m_choices;
         private ArmyAttackGroup m_currentChoice;
         private int m_currentChoiceIndex;
+
+        public void Initialize(PlayerArmyController controller)
+        {
+            m_source = controller;
+        }
 
         public void Next()
         {
@@ -42,7 +43,7 @@ namespace DChild.Gameplay.ArmyBattle.UI
 
         public void SelectCurrentAttack()
         {
-            m_something.ChooseAttack(m_currentChoice);
+            m_source.ChooseAttack(m_currentChoice);
         }
 
         public void UpdateChoices(List<ArmyAttackGroup> choices)
@@ -66,21 +67,16 @@ namespace DChild.Gameplay.ArmyBattle.UI
             m_display.Display(m_currentChoice);
         }
 
-        private void OnRoundStart(object sender, EventActionArgs eventArgs)
+        private void Awake()
+        {
+            m_choices = new List<ArmyAttackGroup>();
+        }
+
+        public void Reset()
         {
             m_currentChoice = null;
             m_currentChoiceIndex = 0;
             UpdateDisplay();
         }
-
-        private void Awake()
-        {
-            m_battleHandle.RoundStart += OnRoundStart;
-
-            m_choices = new List<ArmyAttackGroup>();
-            m_something.AttackTypeChosen += UpdateChoices;
-        }
-
-
     }
 }

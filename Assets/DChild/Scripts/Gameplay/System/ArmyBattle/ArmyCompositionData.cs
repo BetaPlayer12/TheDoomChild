@@ -26,7 +26,12 @@ namespace DChild.Gameplay.ArmyBattle
 
         public ArmyComposition GenerateArmyCompositionInstance()
         {
-            return new ArmyComposition(m_name, m_troopCount);
+            var armyAttackGroup = new ArmyAttackGroup[m_attackGroups.Length];
+            for (int i = 0; i < m_attackGroups.Length; i++)
+            {
+                armyAttackGroup[i] = new ArmyAttackGroup(m_attackGroups[i]);
+            }
+            return new ArmyComposition(m_name, m_troopCount, armyAttackGroup);
         }
 
 #if UNITY_EDITOR
