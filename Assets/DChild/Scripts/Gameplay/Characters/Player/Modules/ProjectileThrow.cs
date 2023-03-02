@@ -7,6 +7,7 @@ using UnityEngine;
 using Spine.Unity;
 using DChild.Gameplay.Pooling;
 using DChild.Gameplay.Combat;
+using UnityEngine.InputSystem;
 
 namespace DChild.Gameplay.Characters.Players.Modules
 {
@@ -22,6 +23,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private Transform m_spawnPoint;
         [SerializeField]
         private SkeletonAnimation m_skeletonAnimation;
+        [SerializeField]
+        private Vector2 m_aimOffset;
 
         private Vector2 m_currentAim; //Relative to Character Facing
 
@@ -94,6 +97,9 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 m_reachedVerticalThreshold = true;
             }
             m_currentAim = newAim;
+            var worldPosition = m_character.centerMass.position + (new Vector3(m_character.facing == HorizontalDirection.Right ? m_aimOffset.x : -m_aimOffset.x, m_aimOffset.y));
+            var screenPosition = Camera.main.WorldToScreenPoint(worldPosition);
+            Mouse.current.WarpCursorPosition(screenPosition);
             UpdateTrajectorySimulation();
         }
 
