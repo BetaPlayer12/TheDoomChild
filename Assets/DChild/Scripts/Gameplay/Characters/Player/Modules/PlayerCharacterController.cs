@@ -1300,9 +1300,12 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     }
                     return;
                 }
-                if (!m_input.barrierHeld && m_barrier.CanMove())
+                if (m_barrier.IsDoingBarrier())
                 {
-                    m_barrier?.EndExecution();
+                    if (!m_input.barrierHeld && m_barrier.CanMove())
+                    {
+                        m_barrier?.EndExecution();
+                    }
                 }
             }
             else if (m_state.isBlocking && m_earthShaker.CanEarthShaker())

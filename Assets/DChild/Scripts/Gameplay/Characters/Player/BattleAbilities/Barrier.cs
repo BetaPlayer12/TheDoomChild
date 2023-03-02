@@ -41,6 +41,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
         private Vector2 m_pushForce;
 
         //private bool m_canbarrier;
+        private bool m_isDoingBarrier;
         private bool m_canMove;
         private IPlayerModifer m_modifier;
         private int m_barrierStateAnimationParameter;
@@ -52,6 +53,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
         //public bool Canbarrier() => m_canbarrier;
         public bool CanMove() => m_canMove;
+        public bool IsDoingBarrier() => m_isDoingBarrier;
 
         private Coroutine m_barrierHoldRoutine;
 
@@ -96,6 +98,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             m_animator.SetBool(m_barrierStateAnimationParameter, true);
             //m_barrierCooldownTimer = m_barrierCooldown;
             m_barrierMovementCooldownTimer = m_barrierMovementCooldown;
+            m_isDoingBarrier = true;
             //m_attacker.SetDamageModifier(m_slashComboInfo[m_currentSlashState].damageModifier * m_modifier.Get(PlayerModifier.AttackDamage));
         }
 
@@ -112,6 +115,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             m_fx.Clear();
             m_fx.Stop();
             m_endFx.Play();
+            m_isDoingBarrier = false;
             m_animator.SetBool(m_barrierStateAnimationParameter, false);
             base.AttackOver();
         }
@@ -133,6 +137,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
                 m_fx.Stop();
                 m_endFx.Play();
             }
+            m_isDoingBarrier = false;
             m_animator.SetBool(m_barrierStateAnimationParameter, false);
             base.Cancel();
         }
