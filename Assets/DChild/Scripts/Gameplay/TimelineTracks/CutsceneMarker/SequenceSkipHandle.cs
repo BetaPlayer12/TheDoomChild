@@ -50,6 +50,7 @@ namespace DChildDebug.Cutscene
         {
             Debug.Log("Skip Routine Canceled");
             StopAllCoroutines();
+            m_ui.SetProgression(0);
         }
 
         private IEnumerator SkipRoutine()

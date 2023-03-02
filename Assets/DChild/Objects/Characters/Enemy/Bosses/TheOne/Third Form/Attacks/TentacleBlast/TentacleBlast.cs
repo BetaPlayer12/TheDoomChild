@@ -1,4 +1,5 @@
-﻿using Sirenix.OdinInspector;
+﻿using Holysoft.Event;
+using Sirenix.OdinInspector;
 using Spine.Unity;
 using System.Collections;
 using System.Collections.Generic;
@@ -21,23 +22,13 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, Spine.Unity.SpineAnimation(dataField = "m_skeletonAnimation")]
         private string m_spawnAnimation;
 
-        [SerializeField, TabGroup("Lazer")]
-        private LineRenderer m_lineRenderer;
-        [SerializeField, TabGroup("Lazer")]
-        private LineRenderer m_telegraphLineRenderer;
-        [SerializeField, TabGroup("Lazer")]
-        private EdgeCollider2D m_edgeCollider;
-        [SerializeField, TabGroup("Lazer")]
-        private GameObject m_muzzleFXGO;
-        [SerializeField, TabGroup("Lazer")]
-        private ParticleFX m_muzzleLoopFX;
-        [SerializeField, TabGroup("Lazer")]
-        private ParticleFX m_muzzleTelegraphFX;
-
         private GameObject m_tentacleBlastLaser;
 
         [SerializeField, BoxGroup("Laser")]
         private LaserLauncher m_launcher;
+
+        public event EventAction<EventActionArgs> AttackStart;
+        public event EventAction<EventActionArgs> AttackDone;
 
         private IEnumerator EmergeTentacle()
         {
@@ -52,7 +43,6 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_animation.SetAnimation(0, m_despawnAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_despawnAnimation);
-
         }
 
         private IEnumerator ShootTentacleBeam()
@@ -65,16 +55,18 @@ namespace DChild.Gameplay.Characters.Enemies
 
         public IEnumerator TentacleBlastAttack()
         {
+            AttackStart?.Invoke(this, EventActionArgs.Empty);
             yield return EmergeTentacle();
             yield return ShootTentacleBeam();
             yield return DespawnTentacle();
+            AttackDone?.Invoke(this, EventActionArgs.Empty);
         }
 
         // Start is called before the first frame update
         void Start()
         {
             //m_tentacleOriginalPosition = m_tentacleEntity.transform.position;
-            m_tentacleBlastLaser.SetActive(false);
+            //m_tentacleBlastLaser.SetActive(false);
         }
 
         // Update is called once per frame
