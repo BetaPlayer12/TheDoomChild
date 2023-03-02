@@ -12,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Playables;
+using Doozy.Runtime.Signals;
 
 namespace PixelCrushers.DialogueSystem
 {
@@ -84,28 +85,25 @@ namespace PixelCrushers.DialogueSystem
             m_typeWriterEffectIsPlaying = DChildStandardUIContinueButtonFastForward.currentTypewriterEffect?.isPlaying ?? false;
         }
 
-        private void OnContinueDiag(GameEventMessage obj)
+        private void OnContinueDiag(Signal obj)
         {
-            if (obj.HasGameEvent && obj.EventName == "ContinueDiag")
+            foreach (var input in m_behaviours)
             {
-                foreach (var input in m_behaviours)
+                if (m_typeWriterEffectIsPlaying && input.isWaitingForInput == false)
                 {
-                    if (m_typeWriterEffectIsPlaying && input.isWaitingForInput == false)
-                    {
-                        m_director.time = input.end - input.waitForInput;
-                        PlaySequence(input.GetWaitForInputSequence());
-                        input.isWaitingForInput = true;
-                        break;
-                    }
-                    else
-                    {
-                        m_director.time = input.end;
-                        input.isDone = true;
-                        m_behaviours.Remove(input);
-                        PlaySequence(input.GetEndBehaviourSequence());
-                        input.isWaitingForInput = false;
-                        break;
-                    }
+                    m_director.time = input.end - input.waitForInput;
+                    PlaySequence(input.GetWaitForInputSequence());
+                    input.isWaitingForInput = true;
+                    break;
+                }
+                else
+                {
+                    m_director.time = input.end;
+                    input.isDone = true;
+                    m_behaviours.Remove(input);
+                    PlaySequence(input.GetEndBehaviourSequence());
+                    input.isWaitingForInput = false;
+                    break;
                 }
             }
         }
@@ -154,9 +152,9 @@ namespace PixelCrushers.DialogueSystem
         public override void OnGraphStart(Playable playable)
         {
             base.OnGraphStart(playable);
+            DialogueManager.StopAllConversations();
             m_director = (playable.GetGraph().GetResolver() as PlayableDirector);
-            //Message.AddListener<GameEventMessage>(OnContinueDiag);
-            GameEventMessage.Send();
+            SignalStream.Get("Dialogue", "Continue").OnSignal += OnContinueDiag;
             m_played.Clear();
             m_behaviours.Clear();
             DChildStandardDialogueUI.isInCutscene = true;
@@ -168,8 +166,7 @@ namespace PixelCrushers.DialogueSystem
         public override void OnGraphStop(Playable playable)
         {
             base.OnGraphStop(playable);
-            //Message.RemoveListener<GameEventMessage>(OnContinueDiag);
-            GameEventMessage.Send();
+            SignalStream.Get("Dialogue", "Continue").OnSignal -= OnContinueDiag;
             m_played.Clear();
             m_behaviours.Clear();
             DChildStandardDialogueUI.isInCutscene = false;

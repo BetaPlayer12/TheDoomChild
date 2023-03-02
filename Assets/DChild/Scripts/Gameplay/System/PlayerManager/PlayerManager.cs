@@ -13,6 +13,7 @@ using Holysoft.Event;
 using PlayerNew;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace DChild.Gameplay.Systems
 {
@@ -32,6 +33,7 @@ namespace DChild.Gameplay.Systems
         void DisableIntroControls();
         void EnableIntroAction(List<IntroActions> action);
         void SyncVisualsWith(SpineSyncer spineSyncer);
+        IEnumerator PlayerActionChange(Action<PlayerInput> Callback);
     }
 
     public class PlayerManager : MonoBehaviour, IGameplaySystemModule, IGameplayInitializable, IPlayerManager
@@ -47,6 +49,7 @@ namespace DChild.Gameplay.Systems
         [SerializeField]
         private CountdownTimer m_respawnDelay;
         private bool m_playerIsDead;
+        private PlayerInput m_playerInput;
 
         [SerializeField]
         private AutoReflexHandler m_autoReflex;
@@ -197,7 +200,7 @@ namespace DChild.Gameplay.Systems
         }
         private void OnPlayerDeath(object sender, EventActionArgs eventArgs)
         {
-            GameplaySystem.gamplayUIHandle.ShowGameOverScreen(true);
+            GameplaySystem.gamplayUIHandle.ShowGameOverScreen();
             // m_input.Disable();
             //  m_player.controller.Disable();
             m_playerIsDead = true;
@@ -212,6 +215,16 @@ namespace DChild.Gameplay.Systems
             //GameplaySystem.campaignSerializer.Load(true);
             m_playerIsDead = false;
         }
+        public IEnumerator PlayerActionChange(Action<PlayerInput> CallBack)
+        {
+            
+            m_playerInput.enabled = false;
+            yield return null;
+            CallBack(m_playerInput);
+            m_playerInput.enabled = true;
+            yield return null;
+            
+        }
 
         private void Start()
         {
@@ -225,6 +238,7 @@ namespace DChild.Gameplay.Systems
 
         private void Update()
         {
+            m_playerInput = m_characterInput.GetComponent<PlayerInput>();
             //m_autoReflex.Update(Time.deltaTime);
             if (m_playerIsDead)
             {

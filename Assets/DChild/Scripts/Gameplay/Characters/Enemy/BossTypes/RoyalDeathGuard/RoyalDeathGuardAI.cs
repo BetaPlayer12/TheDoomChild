@@ -286,7 +286,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 {
                     m_isDetecting = true;
                     m_stateHandle.OverrideState(State.Chasing);
-                    GameEventMessage.SendEvent("Boss Encounter");
+                    //GameEventMessage.SendEvent("Boss Encounter");
                 }
             }
         }

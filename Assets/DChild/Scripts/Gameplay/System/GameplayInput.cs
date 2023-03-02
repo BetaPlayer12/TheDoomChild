@@ -73,7 +73,10 @@ namespace DChild.Gameplay.Systems
 
         private void Awake()
         {
-            m_storeToggleAction.action.performed += OnOpenStoreAction;
+            if (m_storeToggleAction.action != null)
+            {
+                m_storeToggleAction.action.performed += OnOpenStoreAction;
+            }
             m_uiMoveInput = m_uiInput.move;
 
             //Unity Input 1.4.X has a very weird bug This is a fix as advised by https://forum.unity.com/threads/input-system-1-4-1-released.1306062/

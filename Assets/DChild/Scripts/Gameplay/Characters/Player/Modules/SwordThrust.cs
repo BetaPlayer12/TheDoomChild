@@ -5,20 +5,15 @@ namespace DChild.Gameplay.Characters.Players.Modules
 {
     public class SwordThrust : AttackBehaviour, IChargeAttackBehaviour
     {
+        [SerializeField, HideLabel]
+        private SwordThrustStatsInfo m_configuration;
         [SerializeField]
         private ParticleSystem m_chargeFX;
         [SerializeField]
         private ParticleSystem m_finishedChargeFX;
-        [SerializeField, MinValue(0.1f)]
-        private float m_chargeDuration;
         [SerializeField]
         private Info m_thrust;
-        [SerializeField, MinValue(0)]
-        private float m_thrustVelocity;
-        [SerializeField, MinValue(0)]
-        private float m_duration;
-        [SerializeField, MinValue(0)]
-        private float m_cooldown;
+
 
         private float m_cooldownTimer;
         private float m_durationTimer;
@@ -36,20 +31,25 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_modifier = info.modifier;
             m_swordThrustAnimationParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.SwordTrust);
             m_chargingAnimationParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.IsCharging);
-            m_durationTimer = m_duration;
+            m_durationTimer = m_configuration.duration;
         }
 
-        public void ResetCooldownTimer() => m_cooldownTimer = m_cooldown * m_modifier.Get(PlayerModifier.Cooldown_Dash);
+        public void SetConfiguration(SwordThrustStatsInfo info)
+        {
+            m_configuration.CopyInfo(info);
+        }
+
+        public void ResetCooldownTimer() => m_cooldownTimer = m_configuration.cooldown * m_modifier.Get(PlayerModifier.Cooldown_Dash);
 
         public void HandleDurationTimer() => m_durationTimer -= GameplaySystem.time.deltaTime;
 
-        public void ResetDurationTimer() => m_durationTimer = m_duration;
+        public void ResetDurationTimer() => m_durationTimer = m_configuration.duration;
 
         public bool IsSwordThrustDurationOver() => m_durationTimer <= 0;
 
         public void StartCharge()
         {
-            m_chargeTimer = m_chargeDuration;
+            m_chargeTimer = m_configuration.chargeDuration;
             m_chargeFX?.Play(true);
             m_state.isAttacking = true;
             m_state.isChargingAttack = true;
@@ -111,7 +111,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
             var direction = (float)m_character.facing;
             m_rigidBody.velocity = Vector2.zero;
-            m_rigidBody.velocity = new Vector2(direction * m_thrustVelocity * m_modifier.Get(PlayerModifier.Dash_Distance), 0);
+            m_rigidBody.velocity = new Vector2(direction * m_configuration.thrustVelocity * m_modifier.Get(PlayerModifier.Dash_Distance), 0);
         }
 
         public void EndSwordThrust()
@@ -150,7 +150,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         {
             var direction = (float)m_character.facing;
             m_rigidBody.velocity = Vector2.zero;
-            m_rigidBody.velocity = new Vector2(direction * m_thrustVelocity * m_modifier.Get(PlayerModifier.Dash_Distance), 0);
+            m_rigidBody.velocity = new Vector2(direction * m_configuration.thrustVelocity * m_modifier.Get(PlayerModifier.Dash_Distance), 0);
         }
     }
 }

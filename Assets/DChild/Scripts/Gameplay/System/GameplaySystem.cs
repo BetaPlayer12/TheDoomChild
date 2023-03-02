@@ -133,7 +133,7 @@ namespace DChild.Gameplay
             PersistentDataManager.ApplySaveData(campaignSlot.dialogueSaveData, DatabaseResetOptions.KeepAllLoaded);
             m_healthTracker?.RemoveAllTrackers();
             LoadingHandle.SetLoadType(loadType);
-            GameSystem.LoadZone(m_campaignToLoad.sceneToLoad.sceneName, true);
+            GameSystem.LoadZone(m_campaignToLoad.sceneToLoad, true);
             //Reload Items
             LoadingHandle.SceneDone += LoadGameDone;
         }
