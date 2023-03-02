@@ -28,7 +28,7 @@ namespace DChild.Gameplay.Systems
         void ResetGameplayUI();
 
         void ShowItemNotification(ItemData itemData);
-
+        void PromptPrimarySkillNotification();
         void PromptSoulSkillNotification();
         void PromptKeystoneFragmentNotification();
         void PromptBestiaryNotification();
