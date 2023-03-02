@@ -29,7 +29,7 @@ namespace DChild.Gameplay.Systems
 
         void ShowItemNotification(ItemData itemData);
 
-        void PromptPrimarySkillNotification();
+        void PromptSoulSkillNotification();
         void PromptKeystoneFragmentNotification();
         void PromptBestiaryNotification();
 

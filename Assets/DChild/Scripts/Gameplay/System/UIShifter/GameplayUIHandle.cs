@@ -31,6 +31,8 @@ namespace DChild.Gameplay.Systems
         [SerializeField, FoldoutGroup("Full Screen Notifications")]
         private UIContainer m_primarySkillNotification;
         [SerializeField, FoldoutGroup("Full Screen Notifications")]
+        private UIContainer m_soulSkillNotification;
+        [SerializeField, FoldoutGroup("Full Screen Notifications")]
         private LoreInfoUI m_loreNotification;
         [SerializeField, FoldoutGroup("Full Screen Notifications")]
         private IItemNotificationUI[] m_itemNotifications;
@@ -125,6 +127,12 @@ namespace DChild.Gameplay.Systems
         {
             m_fullScreenNotifSignal.SendSignal();
             m_primarySkillNotification.Show(true);
+        }
+        [ContextMenu("Prompt/Soul Skill")]
+        public void PromptSoulSkillNotification()
+        {
+            m_fullScreenNotifSignal.SendSignal();
+            m_soulSkillNotification.Show(true);
         }
 
         public void ShowItemNotification(ItemData itemData)
