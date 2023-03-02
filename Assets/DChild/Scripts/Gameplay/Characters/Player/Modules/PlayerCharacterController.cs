@@ -1331,7 +1331,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     }
                 }
             }
-            else if (m_state.isCrouched && m_earthShaker.CanEarthShaker() && !m_input.backDiverPressed && !m_input.sovereignImpalePressed)
+            else if (m_state.isCrouched && m_earthShaker.CanEarthShaker() && !m_input.backDiverPressed && !m_input.sovereignImpalePressed && !m_input.fireFistPressed)
             {
                 if (m_state.canAttack)
                 {
@@ -1353,7 +1353,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                             return;
                         }
                     }
-                    else if (m_input.whipPressed)
+                    else if (m_input.whipPressed && !m_input.ninthCircleSanctionPressed)
                     {
                         if (m_state.isInShadowMode == true)
                         {
@@ -1663,7 +1663,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
                         return;
                     }
-                    else if (m_input.championsUprisingPressed && m_championsUprising.CanChampionsUprising() && !m_input.fencerFlashPressed && !m_input.fireFistPressed)
+                    else if (m_input.championsUprisingPressed && m_championsUprising.CanChampionsUprising() && !m_input.fencerFlashPressed)
                     {
                         if (m_state.isInShadowMode == false)
                         {
@@ -1734,7 +1734,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                         m_teleportingSkull.TeleportToProjectile();
                         return;
                     }
-                    else if (m_input.projectileThrowPressed && !m_input.foolsVerdictPressed && !m_input.hellTridentPressed)
+                    else if (m_input.projectileThrowPressed && !m_input.foolsVerdictPressed && !m_input.hellTridentPressed && !m_input.fireFistPressed)
                     {
                         if (m_input.teleportingSkullPressed)
                         {
