@@ -21,7 +21,11 @@ MonoBehaviour:
     - {fileID: 11400000, guid: 2ee415d09f4ee074c8fe273f795bf727, type: 2}
     - {fileID: 11400000, guid: bd667643329d18e4b9095204517092c6, type: 2}
     - {fileID: 8812716407408811161, guid: 4540085e516ceee4e99278738e94f821, type: 3}
+    - {fileID: 8812716407408811161, guid: f07b06ae48928264d9e81c3fb6cc5769, type: 3}
+    - {fileID: 8812716407408811161, guid: e893d892b8ad51448b9e20d7117b459a, type: 3}
     - {fileID: 8812716407408811161, guid: cdee02e0c5a3bea46b10672149e384de, type: 3}
+    - {fileID: 8812716407408811161, guid: c0604a0a2f3386047986d53046dd3446, type: 3}
+    - {fileID: 8812716407408811161, guid: 4fb7c6a3ec825d74aa48f0d19c985bd2, type: 3}
     SerializedBytesString: 
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
@@ -462,7 +466,7 @@ MonoBehaviour:
       Data: 
     - Name: m_targetDistanceTolerance
       Entry: 4
-      Data: 200
+      Data: 0
     - Name: m_phase1Pattern1Range
       Entry: 4
       Data: 50
@@ -794,9 +798,65 @@ MonoBehaviour:
     - Name: 
       Entry: 8
       Data: 
-    - Name: m_airProjectile
+    - Name: m_ballisticPhase2Projectile
       Entry: 7
       Data: 30|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleProjectileAttackInfo[[DChild.Gameplay.Characters.Enemies.KingPusAI+Info,
+        Assembly-CSharp]], Assembly-CSharp
+    - Name: m_animation
+      Entry: 6
+      Data: 
+    - Name: m_launchOnEvent
+      Entry: 1
+      Data: Multiple spitter projectile spawn
+    - Name: m_range
+      Entry: 4
+      Data: 200
+    - Name: m_projectileInfo
+      Entry: 7
+      Data: 31|DChild.Gameplay.Characters.ProjectileInfo, Assembly-CSharp
+    - Name: m_projectile
+      Entry: 10
+      Data: 5
+    - Name: m_speed
+      Entry: 4
+      Data: 3
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: m_ballisticPhase3Projectile
+      Entry: 7
+      Data: 32|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleProjectileAttackInfo[[DChild.Gameplay.Characters.Enemies.KingPusAI+Info,
+        Assembly-CSharp]], Assembly-CSharp
+    - Name: m_animation
+      Entry: 6
+      Data: 
+    - Name: m_launchOnEvent
+      Entry: 1
+      Data: Multiple spitter projectile spawn
+    - Name: m_range
+      Entry: 4
+      Data: 200
+    - Name: m_projectileInfo
+      Entry: 7
+      Data: 33|DChild.Gameplay.Characters.ProjectileInfo, Assembly-CSharp
+    - Name: m_projectile
+      Entry: 10
+      Data: 6
+    - Name: m_speed
+      Entry: 4
+      Data: 3
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: m_airProjectile
+      Entry: 7
+      Data: 34|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleProjectileAttackInfo[[DChild.Gameplay.Characters.Enemies.KingPusAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 6
@@ -809,10 +869,66 @@ MonoBehaviour:
       Data: 200
     - Name: m_projectileInfo
       Entry: 7
-      Data: 31|DChild.Gameplay.Characters.ProjectileInfo, Assembly-CSharp
+      Data: 35|DChild.Gameplay.Characters.ProjectileInfo, Assembly-CSharp
     - Name: m_projectile
       Entry: 10
-      Data: 5
+      Data: 7
+    - Name: m_speed
+      Entry: 4
+      Data: 100
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: m_airPhase2Projectile
+      Entry: 7
+      Data: 36|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleProjectileAttackInfo[[DChild.Gameplay.Characters.Enemies.KingPusAI+Info,
+        Assembly-CSharp]], Assembly-CSharp
+    - Name: m_animation
+      Entry: 6
+      Data: 
+    - Name: m_launchOnEvent
+      Entry: 1
+      Data: Spitter porjectile spawn
+    - Name: m_range
+      Entry: 4
+      Data: 200
+    - Name: m_projectileInfo
+      Entry: 7
+      Data: 37|DChild.Gameplay.Characters.ProjectileInfo, Assembly-CSharp
+    - Name: m_projectile
+      Entry: 10
+      Data: 8
+    - Name: m_speed
+      Entry: 4
+      Data: 100
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: m_airPhase3Projectile
+      Entry: 7
+      Data: 38|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleProjectileAttackInfo[[DChild.Gameplay.Characters.Enemies.KingPusAI+Info,
+        Assembly-CSharp]], Assembly-CSharp
+    - Name: m_animation
+      Entry: 6
+      Data: 
+    - Name: m_launchOnEvent
+      Entry: 1
+      Data: Spitter porjectile spawn
+    - Name: m_range
+      Entry: 4
+      Data: 200
+    - Name: m_projectileInfo
+      Entry: 7
+      Data: 39|DChild.Gameplay.Characters.ProjectileInfo, Assembly-CSharp
+    - Name: m_projectile
+      Entry: 10
+      Data: 9
     - Name: m_speed
       Entry: 4
       Data: 100
@@ -828,7 +944,64 @@ MonoBehaviour:
     - Name: m_launchDelay
       Entry: 4
       Data: 0.5
-    - Name: m_fx
+    - Name: m_spittersRotationOffset
+      Entry: 7
+      Data: 40|System.Collections.Generic.List`1[[System.Single, mscorlib]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 4
+    - Name: 
+      Entry: 4
+      Data: 30
+    - Name: 
+      Entry: 4
+      Data: 10
+    - Name: 
+      Entry: 4
+      Data: 50
+    - Name: 
+      Entry: 4
+      Data: -30
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: m_spittersRotationWidth
+      Entry: 7
+      Data: UnityEngine.Vector2, UnityEngine.CoreModule
+    - Name: 
+      Entry: 4
+      Data: 30
+    - Name: 
+      Entry: 4
+      Data: 150
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: m_crawlFX
+      Entry: 6
+      Data: 
+    - Name: m_tentaSpearCrawlFX
+      Entry: 6
+      Data: 
+    - Name: m_heavyGroundStabFX
+      Entry: 6
+      Data: 
+    - Name: m_stabSlashFX
+      Entry: 6
+      Data: 
+    - Name: m_krakenFX
+      Entry: 6
+      Data: 
+    - Name: m_bodySlamFX
+      Entry: 6
+      Data: 
+    - Name: m_healFX
+      Entry: 6
+      Data: 
+    - Name: m_deathFX
       Entry: 6
       Data: 
     - Name: m_moveEvent

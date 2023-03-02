@@ -99,7 +99,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         public void Execute()
         {
             m_animator.SetBool(m_animationParameter, true);
-            m_animator.Play(m_animationName);
+            //m_animator.Play(m_animationName);
             m_state.isCrouched = true;
         }
     }

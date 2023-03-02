@@ -1,5 +1,7 @@
 ﻿using DChild.Gameplay.Characters.AI;
 using DChild.Gameplay.Pooling;
+using Holysoft.Event;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,12 +14,26 @@ namespace DChild.Gameplay.Characters.Enemies
         private SlidingStoneWall m_monolithWallLeft;
         [SerializeField]
         private SlidingStoneWall m_monolithWallRight;
-        //[SerializeField]
-        //private Transform m_leftSpawnPoint;
-        //[SerializeField]
-        //private Transform m_rightSpawnPoint;
+
         [SerializeField]
         private Transform m_arenaCenter;
+
+        [SerializeField]
+        public float attackAnimationSpeedMultiplier = 1f;
+
+        public event EventAction<EventActionArgs> AttackStart;
+        public event EventAction<EventActionArgs> AttackDone;
+
+        private void Awake()
+        {
+            m_monolithWallLeft.AttackDone += OnAttackDone;
+            m_monolithWallRight.AttackDone += OnAttackDone;
+        }
+
+        private void OnAttackDone(object sender, EventActionArgs eventArgs)
+        {
+            AttackDone?.Invoke(this, EventActionArgs.Empty);
+        }
 
         public IEnumerator ExecuteAttack()
         {
@@ -29,24 +45,12 @@ namespace DChild.Gameplay.Characters.Enemies
             throw new System.NotImplementedException();
         }
 
-        // Start is called before the first frame update
-        void Start()
-        {
-
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-
-        }
-
         public IEnumerator ExecuteAttack(AITargetInfo Target)
         {
             if (Target.position.x < m_arenaCenter.position.x)
-                m_monolithWallRight.SlidingStoneWallAttack();
+                yield return m_monolithWallRight.CompleteSlidingWallAttackSequence();
             else
-                m_monolithWallLeft.SlidingStoneWallAttack();
+                yield return m_monolithWallLeft.CompleteSlidingWallAttackSequence();
 
             yield return null;
         }

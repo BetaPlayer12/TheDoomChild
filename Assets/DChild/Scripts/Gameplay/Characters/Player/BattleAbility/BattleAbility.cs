@@ -6,8 +6,8 @@ namespace DChild.Gameplay.Characters.Players
 {
     public enum BattleAbility
     {
-        Ability1,
-        Ability2,
+        AirLunge,
+        FireFist,
         Ability3,
         Ability4,
         Ability5,
