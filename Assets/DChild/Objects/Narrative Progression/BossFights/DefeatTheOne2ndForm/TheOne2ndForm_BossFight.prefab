@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2420401869850669170}
-  - component: {fileID: 8716392434831824498}
+  - component: {fileID: 6341034860629897895}
   m_Layer: 0
   m_Name: OnBossDefeat
   m_TagString: Untagged
@@ -32,7 +32,7 @@ Transform:
   m_Father: {fileID: 6539109530838100750}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8716392434831824498
+--- !u!114 &6341034860629897895
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -53,7 +53,7 @@ MonoBehaviour:
     luaWizardIndex: -1
     lastEvaluationValue: 0
   setQuestState: 1
-  questName: Defeat The One 1
+  questName: Defeat The One 2
   questState: 4
   setQuestEntryState: 0
   questEntryNumber: 1
@@ -293,7 +293,19 @@ MonoBehaviour:
     indicatorLevel: 1
     onEnterState:
       m_PersistentCalls:
-        m_Calls: []
+        m_Calls:
+        - m_Target: {fileID: 4169952947617606479}
+          m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+          m_MethodName: SetActive
+          m_Mode: 6
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
   - updateOnStartOnly: 1
     questState: 4
     condition:
@@ -306,7 +318,19 @@ MonoBehaviour:
     indicatorLevel: 0
     onEnterState:
       m_PersistentCalls:
-        m_Calls: []
+        m_Calls:
+        - m_Target: {fileID: 4169952947617606479}
+          m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+          m_MethodName: SetActive
+          m_Mode: 6
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
   questEntryStateIndicatorLevels: []
   suppressOnEnterStateEventsOnStart: 0
 --- !u!114 &7929616379829099981
@@ -323,7 +347,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   indicators:
   - {fileID: 0}
-  - {fileID: 7929616379829100019}
+  - {fileID: 8910328694871463566}
 --- !u!114 &7929616379829099983
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1436,6 +1460,34 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 7929616379419058978}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &7929616380128963700
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7484343389349492772}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 09352e9564b46104896226477f31b5b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_animationTracks: []
+  m_skeletonAnimation: {fileID: 5342893048962633617}
+--- !u!114 &7929616380128963701
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7484343389349492772}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e809b506251fb743a8d7942c14ba4fd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_animation: {fileID: 7929616380128963700}
+  m_skeleton: {fileID: 5342893048962633617}
 --- !u!114 &7929616380128963707
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1466,34 +1518,6 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
---- !u!114 &7929616380128963700
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7484343389349492772}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 09352e9564b46104896226477f31b5b0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_animationTracks: []
-  m_skeletonAnimation: {fileID: 5342893048962633617}
---- !u!114 &7929616380128963701
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7484343389349492772}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5e809b506251fb743a8d7942c14ba4fd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_animation: {fileID: 7929616380128963700}
-  m_skeleton: {fileID: 5342893048962633617}
 --- !u!1001 &7929616379675690721
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2146,6 +2170,20 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &7929616380879013732
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6730978778493650664}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e809b506251fb743a8d7942c14ba4fd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_animation: {fileID: 5114695707442686003}
+  m_skeleton: {fileID: 7118931840285352808}
 --- !u!114 &7929616380879013739
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2176,20 +2214,6 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
---- !u!114 &7929616380879013732
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6730978778493650664}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5e809b506251fb743a8d7942c14ba4fd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_animation: {fileID: 5114695707442686003}
-  m_skeleton: {fileID: 7118931840285352808}
 --- !u!114 &7118931840285352808 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 918785860368520020, guid: 69e66e8d54c002a4ab0ab96accec8836,
@@ -2253,7 +2277,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_onDefeat.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
-      objectReference: {fileID: 8716392434831824498}
+      objectReference: {fileID: 6341034860629897895}
     - target: {fileID: 920715635346599692, guid: dcd6b858842dd2741866a5a9a3db829e,
         type: 3}
       propertyPath: m_onDefeat.m_PersistentCalls.m_Calls.Array.data[2].m_Target
