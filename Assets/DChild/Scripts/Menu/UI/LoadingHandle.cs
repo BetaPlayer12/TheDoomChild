@@ -183,7 +183,7 @@ namespace DChild.Menu
 
         private IEnumerator ExecuteLoadUnloadScene()
         {
-            isLoading = true;
+
             var time = 0f;
             m_animation.PlayStart();
             var endOfFrame = new WaitForEndOfFrame();
@@ -322,11 +322,12 @@ namespace DChild.Menu
             m_unloadThis = true;
             Debug.Log($"Loading Time: {time}");
 
-            isLoading = false;
+
         }
 
         private void Awake()
         {
+            isLoading = true;
             m_loadingImages.sprite = m_loadingSceneImages[UnityEngine.Random.Range(0, m_loadingSceneImages.Length)];
 
             if (m_isInitialized == false)
@@ -368,6 +369,7 @@ namespace DChild.Menu
             LoadingDone?.Invoke(this, EventActionArgs.Empty);
             GameplaySystem.SetInputActive(true);
             Debug.Log("Loading Scene Destroyed");
+            isLoading = false;
         }
     }
 }
