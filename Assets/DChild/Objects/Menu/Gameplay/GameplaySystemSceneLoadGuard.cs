@@ -20,6 +20,7 @@ public class GameplaySystemSceneLoadGuard : MonoBehaviour
         }
         else
         {
+            Debug.LogError("No Wait for Loading to Be done");
             m_UIInitializeSignal.SendSignal();
         }
     }
