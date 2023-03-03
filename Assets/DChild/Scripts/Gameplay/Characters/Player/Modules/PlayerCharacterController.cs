@@ -1339,7 +1339,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     }
                 }
             }
-            else if (m_state.isCrouched && m_earthShaker.CanEarthShaker() && !m_input.backDiverPressed && !m_input.sovereignImpalePressed && !m_input.fireFistPressed)
+            else if (m_state.isCrouched && m_earthShaker.CanEarthShaker() && !m_input.backDiverPressed && !m_input.sovereignImpalePressed && !m_input.fireFistPressed && !m_input.projectileThrowPressed)
             {
                 if (m_state.canAttack)
                 {
@@ -1754,6 +1754,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
                         if (m_skills.IsModuleActive(PrimarySkill.SkullThrow))
                         {
+                            m_crouch?.Cancel();
+                            m_movement?.SwitchConfigTo(Movement.Type.Jog);
                             PrepareForGroundAttack();
                             m_projectileThrow.StartAim();
                             m_projectileThrow.Execute();
