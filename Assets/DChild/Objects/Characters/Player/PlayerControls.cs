@@ -406,6 +406,15 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
+                    ""name"": ""BarrierHeld"",
+                    ""type"": ""Button"",
+                    ""id"": ""a97246d0-7bcb-4b06-aafc-3b9e0e983296"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press"",
+                    ""initialStateCheck"": false
+                },
+                {
                     ""name"": ""BarrierReleased"",
                     ""type"": ""Button"",
                     ""id"": ""70a1bd18-f335-492c-804e-192b1ba31777"",
@@ -2111,9 +2120,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""name"": ""One Modifier"",
-                    ""id"": ""1565c338-a8c9-4c4e-83ee-1a13b3f183fa"",
-                    ""path"": ""OneModifier"",
+                    ""name"": ""Two Modifiers"",
+                    ""id"": ""af838ae2-f117-4c2c-b1ee-53479311330c"",
+                    ""path"": ""TwoModifiers"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -2122,8 +2131,8 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""name"": ""modifier"",
-                    ""id"": ""1bb0898b-b0bc-453f-953f-46615e676562"",
+                    ""name"": ""modifier1"",
+                    ""id"": ""fc39733e-5cbe-471f-8874-fa1c58bd6167"",
                     ""path"": ""<Keyboard>/leftShift"",
                     ""interactions"": """",
                     ""processors"": """",
@@ -2133,8 +2142,19 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": true
                 },
                 {
+                    ""name"": ""modifier2"",
+                    ""id"": ""1205bb08-95c3-4e27-8f2f-1b43f36ec034"",
+                    ""path"": ""<Keyboard>/s"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""BackDiver"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
                     ""name"": ""binding"",
-                    ""id"": ""75c7f722-eae1-4687-af47-5579a89b9a31"",
+                    ""id"": ""4679ebb2-a917-4bdf-8ed2-a5663bd4c578"",
                     ""path"": ""<Keyboard>/space"",
                     ""interactions"": """",
                     ""processors"": """",
@@ -2147,7 +2167,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""name"": ""One Modifier"",
                     ""id"": ""703e98b5-5539-4261-9a84-2812717d1915"",
                     ""path"": ""OneModifier"",
-                    ""interactions"": ""Press(behavior=1)"",
+                    ""interactions"": ""Press(pressPoint=0.1,behavior=1)"",
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""BarrierReleased"",
@@ -2180,45 +2200,12 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""name"": """",
                     ""id"": ""0e85cc02-7477-48a0-a4c6-1fd4fa53f6a2"",
                     ""path"": ""<Keyboard>/z"",
-                    ""interactions"": ""Press(behavior=1)"",
+                    ""interactions"": ""Press(pressPoint=0.1,behavior=1)"",
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""BarrierReleased"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": ""One Modifier"",
-                    ""id"": ""3ac633d8-0f9c-4494-bd1d-0b039e888b0b"",
-                    ""path"": ""OneModifier"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Barrier"",
-                    ""isComposite"": true,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": ""modifier"",
-                    ""id"": ""7336ffee-2a57-498f-9074-5242d41a4727"",
-                    ""path"": ""<Keyboard>/leftShift"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard"",
-                    ""action"": ""Barrier"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""binding"",
-                    ""id"": ""2fc54e0e-01cf-41cc-809e-dd92c6b3767c"",
-                    ""path"": ""<Keyboard>/z"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard"",
-                    ""action"": ""Barrier"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
                 },
                 {
                     ""name"": """",
@@ -2659,6 +2646,17 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""action"": ""TeleportingSkull"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b4f2bea8-e085-41b3-81b0-6fac3f78bed1"",
+                    ""path"": ""<Keyboard>/z"",
+                    ""interactions"": ""Hold(duration=0.1,pressPoint=0.1)"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""BarrierHeld"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -3856,6 +3854,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         m_Gameplay_DoomsdayKong = m_Gameplay.FindAction("DoomsdayKong", throwIfNotFound: true);
         m_Gameplay_BackDiver = m_Gameplay.FindAction("BackDiver", throwIfNotFound: true);
         m_Gameplay_Barrier = m_Gameplay.FindAction("Barrier", throwIfNotFound: true);
+        m_Gameplay_BarrierHeld = m_Gameplay.FindAction("BarrierHeld", throwIfNotFound: true);
         m_Gameplay_BarrierReleased = m_Gameplay.FindAction("BarrierReleased", throwIfNotFound: true);
         m_Gameplay_FencerFlash = m_Gameplay.FindAction("FencerFlash", throwIfNotFound: true);
         m_Gameplay_DiagonalSwordDash = m_Gameplay.FindAction("DiagonalSwordDash", throwIfNotFound: true);
@@ -3991,6 +3990,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
     private readonly InputAction m_Gameplay_DoomsdayKong;
     private readonly InputAction m_Gameplay_BackDiver;
     private readonly InputAction m_Gameplay_Barrier;
+    private readonly InputAction m_Gameplay_BarrierHeld;
     private readonly InputAction m_Gameplay_BarrierReleased;
     private readonly InputAction m_Gameplay_FencerFlash;
     private readonly InputAction m_Gameplay_DiagonalSwordDash;
@@ -4049,6 +4049,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         public InputAction @DoomsdayKong => m_Wrapper.m_Gameplay_DoomsdayKong;
         public InputAction @BackDiver => m_Wrapper.m_Gameplay_BackDiver;
         public InputAction @Barrier => m_Wrapper.m_Gameplay_Barrier;
+        public InputAction @BarrierHeld => m_Wrapper.m_Gameplay_BarrierHeld;
         public InputAction @BarrierReleased => m_Wrapper.m_Gameplay_BarrierReleased;
         public InputAction @FencerFlash => m_Wrapper.m_Gameplay_FencerFlash;
         public InputAction @DiagonalSwordDash => m_Wrapper.m_Gameplay_DiagonalSwordDash;
@@ -4196,6 +4197,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @Barrier.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnBarrier;
                 @Barrier.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnBarrier;
                 @Barrier.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnBarrier;
+                @BarrierHeld.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnBarrierHeld;
+                @BarrierHeld.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnBarrierHeld;
+                @BarrierHeld.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnBarrierHeld;
                 @BarrierReleased.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnBarrierReleased;
                 @BarrierReleased.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnBarrierReleased;
                 @BarrierReleased.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnBarrierReleased;
@@ -4362,6 +4366,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @Barrier.started += instance.OnBarrier;
                 @Barrier.performed += instance.OnBarrier;
                 @Barrier.canceled += instance.OnBarrier;
+                @BarrierHeld.started += instance.OnBarrierHeld;
+                @BarrierHeld.performed += instance.OnBarrierHeld;
+                @BarrierHeld.canceled += instance.OnBarrierHeld;
                 @BarrierReleased.started += instance.OnBarrierReleased;
                 @BarrierReleased.performed += instance.OnBarrierReleased;
                 @BarrierReleased.canceled += instance.OnBarrierReleased;
@@ -4676,6 +4683,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         void OnDoomsdayKong(InputAction.CallbackContext context);
         void OnBackDiver(InputAction.CallbackContext context);
         void OnBarrier(InputAction.CallbackContext context);
+        void OnBarrierHeld(InputAction.CallbackContext context);
         void OnBarrierReleased(InputAction.CallbackContext context);
         void OnFencerFlash(InputAction.CallbackContext context);
         void OnDiagonalSwordDash(InputAction.CallbackContext context);

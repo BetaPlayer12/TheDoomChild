@@ -54,7 +54,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         public bool doomsdayKongPressed;
         public bool backDiverPressed;
         public bool barrierPressed;
-        public bool barrierReleased;
+        public bool barrierHeld;
         public bool fencerFlashPressed;
         public bool diagonalSwordDashPressed;
         public bool championsUprisingPressed;
@@ -338,12 +338,19 @@ namespace DChild.Gameplay.Characters.Players.Modules
             }
         }
 
+        private void OnBarrierHeld(InputValue value)
+        {
+            if (enabled == true)
+            {
+                barrierHeld = value.Get<float>() == 1;
+            }
+        }
+
         private void OnBarrierReleased(InputValue value)
         {
             if (enabled == true)
             {
-                barrierReleased = value.Get<float>() == 1;
-                barrierReleased = !barrierReleased;
+                barrierHeld = false;
             }
         }
 
@@ -583,7 +590,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
             doomsdayKongPressed = false;
             backDiverPressed = false;
             barrierPressed = false;
-            barrierReleased = false;
             fencerFlashPressed = false;
             diagonalSwordDashPressed = false;
             championsUprisingPressed = false;
@@ -635,7 +641,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             doomsdayKongPressed = false;
             backDiverPressed = false;
             barrierPressed = false;
-            barrierReleased = false;
+            barrierHeld = false;
             fencerFlashPressed = false;
             diagonalSwordDashPressed = false;
             championsUprisingPressed = false;

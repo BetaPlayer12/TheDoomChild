@@ -668,6 +668,11 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 m_championsUprising.HandleAttackTimer();
             }
 
+            if (m_barrier.CanMove() == false)
+            {
+                m_barrier.HandleMovementTimer();
+            }
+
             if (m_eelecktrick.CanEelecktrick() == false)
             {
                 m_eelecktrick.HandleAttackTimer();
@@ -1295,9 +1300,12 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     }
                     return;
                 }
-                if (m_input.barrierReleased)
+                if (m_barrier.IsDoingBarrier())
                 {
-                    m_barrier?.EndExecution();
+                    if (!m_input.barrierHeld && m_barrier.CanMove())
+                    {
+                        m_barrier?.EndExecution();
+                    }
                 }
             }
             else if (m_state.isBlocking && m_earthShaker.CanEarthShaker())
@@ -1849,9 +1857,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     {
                         if (m_state.isInShadowMode == false)
                         {
-                            m_idle?.Cancel();
-                            m_movement?.Cancel();
-                            m_objectManipulation?.Cancel();
 
                             PrepareForGroundAttack();
                             if (IsFacingInput())
@@ -2192,6 +2197,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     && m_ninthCircleSanction.CanMove()
                     && m_doomsdayKong.CanMove()
                     && m_fencerFlash.CanMove()
+                    && m_barrier.CanMove()
                     && m_eelecktrick.CanMove();
         }
 
