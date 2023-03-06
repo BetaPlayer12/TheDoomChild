@@ -65,16 +65,15 @@ namespace DChild.Gameplay.NavigationMap
             SegmentUpdate?.Invoke(this, new FogOfWarSegmentChangeEvent(m_varName, m_currentState));
         }
 
+#if UNITY_EDITOR
         [ContextMenu("Update List")]
         private void UpdateList()
         {
             m_list = GetComponentsInChildren<FogofWarTrigger>(true);
-#if UNITY_EDITOR
             if (PrefabUtility.IsPartOfPrefabAsset(gameObject) == false)
             {
                 UpdateUINames();
             }
-#endif
         }
 
         [ContextMenu("Update UI Names")]
@@ -87,6 +86,7 @@ namespace DChild.Gameplay.NavigationMap
                 m_list[i].gameObject.name = name + i;
             }
         }
+#endif
 
         private void Awake()
         {

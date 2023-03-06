@@ -1,23 +1,73 @@
-﻿using Sirenix.OdinInspector;
-using UnityEngine;
+﻿using DChild.Gameplay.ArmyBattle;
+using Sirenix.OdinInspector;
+using System.Collections.Generic;
 
 namespace DChild.Gameplay.ArmyBattle
 {
-    [CreateAssetMenu(fileName = "ArmyAbilityData", menuName = "DChild/Gameplay/Army/Ability")]
-    public class ArmyAbilityData : SerializedScriptableObject
+
+    [System.Serializable]
+    public class ArmyAbility
     {
-        [SerializeField]
-        private ArmyCategoryCompositionInfo m_requirement;
-        [SerializeField]
-        private IArmyAbilityEffect[] m_effects;
+        private ArmyAbilityData m_reference;
+        private List<ArmyCharacter> m_availableMembers;
+        [ShowInInspector]
+        private int m_useCountLeft;
 
-        public ArmyCategoryCompositionInfo requirement => m_requirement;
+        public ArmyAbilityData reference => m_reference;
 
-        public void ApplyEffect(Army owner, Army opponent)
+        [ShowInInspector, PropertyOrder(0)]
+        public string abilityName => m_reference.abilityName;
+
+        [ShowInInspector, PropertyOrder(0)]
+        public string description => m_reference.description;
+        public int availableMemberCount => m_availableMembers.Count;
+        public bool isAvailable => m_useCountLeft > 0;
+
+        public ArmyAbility(ArmyAbilityData data)
         {
-            for (int i = 0; i < m_effects.Length; i++)
+            m_reference = data;
+            m_availableMembers = new List<ArmyCharacter>();
+            for (int i = 0; i < data.membersCount; i++)
             {
-                m_effects[i].ApplyEffect(owner, opponent);
+                m_availableMembers.Add(data.GetMember(i));
+            }
+            ResetUseCount();
+        }
+
+        public void SetMemberAvailability(params bool[] memberAvailability)
+        {
+            m_availableMembers.Clear();
+            for (int i = 0; i < m_reference.membersCount; i++)
+            {
+                if (i >= memberAvailability.Length)
+                {
+                    break;
+                }
+                else if (memberAvailability[i])
+                {
+                    m_availableMembers.Add(reference.GetMember(i));
+                }
+            }
+        }
+
+        public ArmyCharacter GetAvailableMember(int index) => m_availableMembers[index];
+
+        public void UseAbility(Army owner, Army enemy)
+        {
+            m_reference.ApplyEffect(owner, enemy);
+        }
+
+        public void ReduceUseCount() => m_useCountLeft--;
+
+        public void ResetUseCount()
+        {
+            if (m_reference.useCharactersForUseCount)
+            {
+                m_useCountLeft = m_availableMembers.Count;
+            }
+            else
+            {
+                m_useCountLeft = 1;
             }
         }
     }
