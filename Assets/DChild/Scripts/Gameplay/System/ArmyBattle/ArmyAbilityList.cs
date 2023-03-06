@@ -1,36 +1,26 @@
-﻿using Sirenix.OdinInspector;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace DChild.Gameplay.ArmyBattle
 {
-    [CreateAssetMenu(fileName = "ArmyAbilityList", menuName = "DChild/Gameplay/Army/Ability List")]
-    public class ArmyAbilityList : SerializedScriptableObject
+    [System.Serializable]
+    public class ArmyAbilityList
     {
-        [SerializeField, AssetSelector(IsUniqueList = true)]
-        private ArmyAbilityData[] m_armyAbilities;
+        [SerializeField]
+        private ArmyAbility[] m_abilities;
 
-        public ArmyAbilityData[] GetValidAbilities(params ArmyCategoryCompositionInfo[] categoryCompositionList)
+        public ArmyAbilityList(params ArmyAbility[] abilities)
         {
-            List<ArmyAbilityData> validAbilities = new List<ArmyAbilityData>();
-            for (int i = 0; i < categoryCompositionList.Length; i++)
+            m_abilities = abilities;
+        }
+
+        public ArmyAbility[] abilities => m_abilities;
+
+        public void ResetAbilities()
+        {
+            for (int i = 0; i < m_abilities.Length; i++)
             {
-                var categoryComposition = categoryCompositionList[i];
-                for (int k = 0; k < m_armyAbilities.Length; k++)
-                {
-                    var ability = m_armyAbilities[k];
-                    var requirement = ability.requirement;
-                    if (categoryComposition.characterCategory == requirement.characterCategory && categoryComposition.characterCount >= requirement.characterCount)
-                    {
-                        validAbilities.Add(ability);
-                    }
-                }
+                m_abilities[i].ResetUseCount();
             }
-
-            if (validAbilities.Count == 0)
-                return null;
-
-            return validAbilities.ToArray();
         }
     }
 }
