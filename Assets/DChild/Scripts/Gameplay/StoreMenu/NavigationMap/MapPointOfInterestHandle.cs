@@ -32,10 +32,10 @@ namespace DChild.Gameplay.NavigationMap
             }
         }
 
-        private void OnValueChanged(object sender, FogOfWarStateChangeEvent eventArgs)
-        {
-            DialogueLua.SetVariable(eventArgs.varName, eventArgs.isRevealed);
-            //TriggerValueChanged?.Invoke(this, eventArgs);
-        }
+        //private void OnValueChanged(object sender, FogOfWarStateChangeEvent eventArgs)
+        //{
+        //    DialogueLua.SetVariable(eventArgs.varName, eventArgs.isRevealed);
+        //    //TriggerValueChanged?.Invoke(this, eventArgs);
+        //}
     }
 }

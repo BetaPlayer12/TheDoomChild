@@ -4,6 +4,7 @@ using DChild.Gameplay.Characters.Enemies;
 using DChild.Gameplay.Combat.StatusAilment;
 using DChild.Gameplay.Combat.UI;
 using DChild.Gameplay.Systems;
+using DChildDebug;
 using Sirenix.OdinInspector;
 using Sirenix.Serialization;
 using Sirenix.Utilities;
@@ -85,14 +86,29 @@ namespace DChild.Gameplay.Combat
                     }
 
                     var combatBrain = targetInfo.instance.transform.GetComponent<ICombatAIBrain>();
-                    if(combatBrain!= null)
+                    if (combatBrain != null)
                     {
                         combatBrain.ReactToConflict(attacker);
                     }
                 }
             }
 
+            CustomDebug.Log(CustomDebug.LogType.System_Combat, GenerateDebugMessage);
+
             return summary;
+
+            string GenerateDebugMessage()
+            {
+                var attackType = attacker.attackInfo.damage.type;
+                var critInfo = attacker.attackInfo.criticalDamageInfo;
+
+                return $"Attacker: {attacker.instance.name} || Target:{targetInfo.instance.transform.name}\n" +
+                           $"Attacks With: {attacker.attackInfo.damage.value} {attackType.ToString()} ({critInfo.chance}% x{critInfo.damageModifier} Crit) [Ignores Invul Level: {attacker.attackInfo.ignoreInvulnerability.ToString()}] {(attacker.attackInfo.ignoresBlock ? "[Ignores Block]" : "")}\n" +
+                           $"Target Defends With: {targetInfo.instance.attackResistance.GetResistance(attackType) * 100}% attackType Resistance\n" +
+                           $"Calculated Damage: {summary.damageDealt} {(summary.isCrit ? "Critical " : "")}{summary.damageInfo.damage.type.ToString()} Damage {(summary.wasBlocked ? "[Blocked]" : "")}\n" +
+                           $"Target Health: {targetInfo.instance.health.currentValue}\n" +
+                           $"=========================================================";
+            }
         }
 
         public void Inflict(StatusEffectReciever reciever, StatusEffectType statusEffect)

@@ -148,5 +148,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
         [SerializeField, ReadOnly]
         private bool m_canWallCrawl;
         public bool canWallCrawl { get => m_canWallCrawl; set => m_canWallCrawl = value; }
+        [SerializeField, ReadOnly]
+        private bool m_isShadowBlade;
+        public bool isShadowBlade { get => m_isShadowBlade; set => m_isShadowBlade = value; }
     }
 }
