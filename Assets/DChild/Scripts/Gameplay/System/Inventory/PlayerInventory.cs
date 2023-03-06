@@ -96,6 +96,7 @@ namespace DChild.Gameplay.Inventories
             if (item.category == ItemCategory.SoulSkill)
             {
                 var eventArgs = new SoulSkillAcquiredEventArgs(((SoulSkillItem)item).soulSkill);
+
                 SoulSkillItemAcquired?.Invoke(this, eventArgs);
             }
             else
