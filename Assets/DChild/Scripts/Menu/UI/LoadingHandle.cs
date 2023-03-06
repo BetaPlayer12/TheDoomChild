@@ -54,6 +54,8 @@ namespace DChild.Menu
         private bool m_unloadThis;
         private bool m_canTransferScene;
 
+        public static bool isLoading { get; private set; }
+
         public static void SetLoadType(LoadType value) => loadType = value;
 
         public static void LoadScenes(params SceneInfo[] scenes)
@@ -181,6 +183,7 @@ namespace DChild.Menu
 
         private IEnumerator ExecuteLoadUnloadScene()
         {
+
             var time = 0f;
             m_animation.PlayStart();
             var endOfFrame = new WaitForEndOfFrame();
@@ -318,10 +321,13 @@ namespace DChild.Menu
             //Cant Call Unload Here for some reason, so i have to resort to using a flag to trigger the unloading
             m_unloadThis = true;
             Debug.Log($"Loading Time: {time}");
+
+
         }
 
         private void Awake()
         {
+            isLoading = true;
             m_loadingImages.sprite = m_loadingSceneImages[UnityEngine.Random.Range(0, m_loadingSceneImages.Length)];
 
             if (m_isInitialized == false)
@@ -363,6 +369,7 @@ namespace DChild.Menu
             LoadingDone?.Invoke(this, EventActionArgs.Empty);
             GameplaySystem.SetInputActive(true);
             Debug.Log("Loading Scene Destroyed");
+            isLoading = false;
         }
     }
 }

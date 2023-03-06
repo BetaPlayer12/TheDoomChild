@@ -19,6 +19,7 @@ namespace DChildDebug.Window
             m_detachable = GameplaySystem.cinema.mainCamera;
             m_detachable.GetComponent<CinemachineBrain>().enabled = false;
             GameplaySystem.playerManager.OverrideCharacterControls();
+            m_controller.ActivateControls();
             m_controller.enabled = true;
         }
 
@@ -28,6 +29,7 @@ namespace DChildDebug.Window
             m_detachable = GameplaySystem.cinema.mainCamera;
             m_detachable.GetComponent<CinemachineBrain>().enabled = true;
             GameplaySystem.playerManager.StopCharacterControlOverride();
+            m_controller.DeactivateControls();
             m_controller.enabled = false;
         }
     }

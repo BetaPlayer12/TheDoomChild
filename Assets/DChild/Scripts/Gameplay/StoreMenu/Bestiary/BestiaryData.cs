@@ -92,6 +92,10 @@ namespace DChild.Menu.Bestiary
         {
             m_hunterNotes = hunterNotes;
         }
+        public void SetInfoImage(Sprite infoImage)
+        {
+            m_infoImage = infoImage;
+        }
 
 #endif
         #endregion

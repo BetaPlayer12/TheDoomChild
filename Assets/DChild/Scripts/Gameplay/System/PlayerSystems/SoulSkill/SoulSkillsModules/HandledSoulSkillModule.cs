@@ -1,6 +1,8 @@
 ﻿using Sirenix.Utilities;
 using Spine.Unity;
 using System.Collections.Generic;
+using Sirenix.OdinInspector;
+using UnityEngine;
 #if UNITY_EDITOR
 #endif
 
@@ -51,7 +53,7 @@ namespace DChild.Gameplay.Characters.Players.SoulSkills
             }
         }
 
-        protected abstract class BaseHandle
+        public abstract class BaseHandle
         {
             private int m_ID;
             protected IPlayer m_player;
@@ -76,6 +78,7 @@ namespace DChild.Gameplay.Characters.Players.SoulSkills
             var handle = CreateHandle(player);
             var reference = new ModuleReference(soulSkillInstanceID, handle.ID, player.GetInstanceID());
             SoulSkillHandleManager.AddHandle(reference, handle);
+            Debug.Log("worked attach");
             if (m_initialized == false)
             {
                 m_referenceList = Cache<List<ModuleReference>>.Claim();

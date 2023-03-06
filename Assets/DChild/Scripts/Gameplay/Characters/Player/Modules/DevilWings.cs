@@ -78,7 +78,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             //m_source.ReduceCurrentValue(m_configuration.sourceRequiredAmount);
             m_wingsFX.Play();
             m_state.isLevitating = true;
-            m_cacheGravity = m_rigidbody.gravityScale;
+            //m_cacheGravity = m_rigidbody.gravityScale;
             m_rigidbody.gravityScale = 0;
             m_rigidbody.velocity = /*Vector2.zero*/new Vector2(m_rigidbody.velocity.x * m_momentumVelocity.x, m_rigidbody.velocity.y * m_momentumVelocity.y);
             m_animator.SetBool(m_animationParameter, true);
@@ -88,6 +88,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void MaintainHeight()
         {
+            m_rigidbody.gravityScale = 0;
             m_rigidbody.velocity = new Vector2(m_rigidbody.velocity.x, 0);
         }
 
