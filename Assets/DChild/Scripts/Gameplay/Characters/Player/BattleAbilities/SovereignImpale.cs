@@ -36,6 +36,8 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
         [SerializeField, BoxGroup("Projectile")]
         private float m_summonDelay;
         [SerializeField, BoxGroup("Projectile")]
+        private float m_summonRange;
+        [SerializeField, BoxGroup("Projectile")]
         private List<Vector3> m_summonOffsetScales;
 
         private ProjectileLauncher m_launcher;
@@ -140,15 +142,34 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             }
         }
 
+        protected Vector2 WallPosition(Vector2 startPoint)
+        {
+            int hitCount = 0;
+            //RaycastHit2D hit = Physics2D.Raycast(m_projectilePoint.position, Vector2.down,  1000, DChildUtility.GetEnvironmentMask());
+            RaycastHit2D[] hit = Cast(startPoint, m_character.facing == HorizontalDirection.Right ? -Vector2.right : Vector2.right, Vector2.Distance(startPoint, m_character.centerMass.position), true, out hitCount, true);
+            if (hit != null)
+            {
+                Debug.DrawRay(startPoint, hit[0].point);
+                return hit[0].point;
+            }
+            return Vector2.zero;
+            //var hitPos = (new Vector2(m_projectilePoint.position.x, Vector2.down.y) * hit[0].distance);
+            //return hitPos;
+        }
+
         protected Vector2 GroundPosition(Vector2 startPoint)
         {
             int hitCount = 0;
             //RaycastHit2D hit = Physics2D.Raycast(m_projectilePoint.position, Vector2.down,  1000, DChildUtility.GetEnvironmentMask());
-            RaycastHit2D[] hit = Cast(startPoint, Vector2.down, 1000, true, out hitCount, true);
-            Debug.DrawRay(startPoint, hit[0].point);
+            RaycastHit2D[] hit = Cast(startPoint, Vector2.down, m_summonRange, true, out hitCount, true);
+            if (hit != null)
+            {
+                Debug.DrawRay(startPoint, hit[0].point);
+                return hit[0].point;
+            }
+            return Vector2.zero;
             //var hitPos = (new Vector2(m_projectilePoint.position.x, Vector2.down.y) * hit[0].distance);
             //return hitPos;
-            return hit[0].point;
         }
 
         private static ContactFilter2D m_contactFilter;
@@ -185,7 +206,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
                 }
             }
 #endif
-            return m_hitResults;
+            return hitCount == 0 ? null : m_hitResults;
         }
 
         public void Summon()
@@ -213,7 +234,8 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             for (int i = 0; i < m_summonOffsetScales.Count; i++)
             {
                 var summonPoint = new Vector2(m_startPoint.position.x + offset, m_startPoint.position.y);
-                if (Vector2.Distance(summonPoint, GroundPosition(summonPoint)) != 0)
+                //Debug.Log("Wall Positon " + WallPosition(summonPoint) + "Ground Position " + GroundPosition(summonPoint));
+                if (Vector2.Distance(summonPoint, GroundPosition(summonPoint)) != 0 && GroundPosition(summonPoint) != Vector2.zero && WallPosition(summonPoint) == Vector2.zero)
                 {
                     var instance = GameSystem.poolManager.GetPool<ProjectilePool>().GetOrCreateItem(m_projectileInfo.projectile);
                     instance.transform.position = new Vector2(summonPoint.x, GroundPosition(summonPoint).y + (m_summonOffsetScales[i].y - 1));
