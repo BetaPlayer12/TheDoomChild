@@ -1,4 +1,6 @@
-﻿using DChild.Gameplay.Characters.Players.SoulSkills;
+﻿using DChild.Gameplay.Characters.Players;
+using DChild.Gameplay.Characters.Players.SoulSkills;
+using DChild.Gameplay.SoulSkills;
 using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
@@ -29,25 +31,21 @@ namespace DChild.Gameplay
             m_description.text = skill.description;
         }
 
-#if UNITY_EDITOR
-        private void UpdateNotification()
+
+        private void UpdateNotification(object sender, SoulSkillAcquiredEventArgs eventArgs)
         {
-            if (Application.isPlaying)
-            {
-                if (m_notifiedSkill == null)
-                {
-                    m_icon.sprite = null;
-                    m_skillName.text = "No Skill";
-                    m_description.text = "No Description";
-                }
-                else
-                {
-                    m_icon.sprite = m_notifiedSkill.icon;
-                    m_skillName.text = m_notifiedSkill.name;
-                    m_description.text = m_notifiedSkill.description;
-                }
-            }
+            SoulSkill skill = eventArgs.SoulSKill;
+            SetNotifiedSkill(skill);
+            m_icon.sprite = m_notifiedSkill.icon;
+            m_skillName.text = m_notifiedSkill.name;
+            m_description.text = m_notifiedSkill.description;
+             
         }
-#endif
+
+
+        private void Start()
+        {
+            GameplaySystem.playerManager.player.inventory.SoulSkillItemAcquired += UpdateNotification;
+        }
     }
 }
