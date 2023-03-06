@@ -12,6 +12,7 @@ namespace DChild.Gameplay.NavigationMap
 
         private RectTransform m_currentMap;
         private NavMapFogOfWarUI m_fogOfWarUI;
+        [SerializeField]
         private bool m_mapNeedsCompleteUpdate = true;
 
         public void UpdateConfiguration(Location location, Transform inGameReference, Vector2 mapReferencePoint, Vector2 calculationOffset)
@@ -40,7 +41,10 @@ namespace DChild.Gameplay.NavigationMap
             {
                 var changes = NavigationMapSceneHandle.changes;
                 //Only update the ones that needs update
-
+                for (int i = 0; i < changes.fogOfWarChanges; i++)
+                {
+                    m_fogOfWarUI.SetUIState(changes.GetFogOfWarName(i), changes.GetFogOfWarState(i));
+                }
                 changes.Clear();
             }
 

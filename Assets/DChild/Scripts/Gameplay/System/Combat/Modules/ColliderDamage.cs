@@ -119,9 +119,9 @@ namespace DChild.Gameplay.Combat
         protected virtual void OnValidCollider(Collider2D collision, Hitbox hitbox)
         {
             DealDamage(collision, hitbox);
-#if UNITY_EDITOR
-            Debug.Log($"Deal Damage to: {hitbox} via {collision.name}", this);
-#endif
+//#if UNITY_EDITOR
+//            Debug.Log($"Deal Damage to: {hitbox} via {collision.name}", this);
+//#endif
         }
 
         protected virtual void HandleDamageUniqueHitboxes(Collider2D collider2D)

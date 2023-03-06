@@ -3,6 +3,7 @@ using System.Collections;
 using DChild.Gameplay.Characters.Enemies;
 using DChild.Serialization;
 using Holysoft.Event;
+using PixelCrushers.DialogueSystem;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Events;
@@ -152,6 +153,9 @@ namespace DChild.Gameplay.Combat
             }
         }
 
-
+        public void UpdateDialogueSaveData()
+        {
+            GameplaySystem.campaignSerializer.UpdateDialogueSaveData();
+        }
     }
 }

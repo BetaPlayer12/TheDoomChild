@@ -16,7 +16,7 @@ namespace DChild.Gameplay
         [SerializeField]
         private bool m_isLooping;
         private SkeletonAnimation m_spine;
-
+        [SerializeField]
         private bool m_shouldReplay;
 
         [Button("Play")]
@@ -53,7 +53,7 @@ namespace DChild.Gameplay
         private void Awake()
         {
             m_spine = GetComponentInChildren<SkeletonAnimation>();
-            m_shouldReplay = false;
+            //m_shouldReplay = false;
         }
 
         private void Start()

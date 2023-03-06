@@ -198,10 +198,9 @@ GameObject:
   - component: {fileID: 266460043}
   - component: {fileID: 266460042}
   - component: {fileID: 266460041}
-  - component: {fileID: 266460040}
   - component: {fileID: 266460039}
   - component: {fileID: 266460038}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: View - Smart Load Anim
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -266,18 +265,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 266460036}
   m_CullTransparentMesh: 0
---- !u!114 &266460040
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 266460036}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 314affd16bceddb4c99fbaa07de901d9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!225 &266460041
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -434,7 +421,7 @@ GameObject:
   - component: {fileID: 666196782}
   - component: {fileID: 666196784}
   - component: {fileID: 666196783}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: View - Force Load Main
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1237,7 +1224,7 @@ GameObject:
   - component: {fileID: 679248867}
   - component: {fileID: 679248866}
   - component: {fileID: 679248865}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Canvas - Loading
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1341,7 +1328,7 @@ GameObject:
   - component: {fileID: 756830163}
   - component: {fileID: 756830162}
   - component: {fileID: 756830165}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Progressor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1475,7 +1462,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DontDestroyOnSceneChange: 0
   Flow: {fileID: 11400000, guid: fa9dfffd7b6de99438c3860cb9365040, type: 2}
-  FlowType: 0
+  FlowType: 1
   OnStart:
     m_PersistentCalls:
       m_Calls: []
@@ -1597,6 +1584,7 @@ MonoBehaviour:
   m_loadingScene:
     m_sceneName: _Scene Loading
     m_scenePath: Assets/DChild/Scenes/_Scene Loading.unity
+    m_isAddressables: 0
   m_loadingImages: {fileID: 666196776}
   m_loadingSceneImages:
   - {fileID: 21300000, guid: da51de0fd1f17b749b9703112aab487f, type: 3}
@@ -1613,7 +1601,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6be69809be9f8346b5f175601c0f163, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_makeCursorVisisble: 0
+  m_makeCursorVisisbleOnStart: 0
 --- !u!4 &1115089278
 Transform:
   m_ObjectHideFlags: 0
@@ -1647,7 +1635,7 @@ GameObject:
   - component: {fileID: 1215314393}
   - component: {fileID: 1215314395}
   - component: {fileID: 1215314394}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: View - Force Load Anim
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2395,7 +2383,7 @@ GameObject:
   - component: {fileID: 1795778297}
   - component: {fileID: 1795778304}
   - component: {fileID: 1795778303}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: View - Smart Load Main
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2439,7 +2427,7 @@ MonoBehaviour:
   m_Color: {r: 0, g: 0, b: 0, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
+  m_Maskable: 0
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []

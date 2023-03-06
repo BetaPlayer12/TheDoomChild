@@ -9,6 +9,10 @@ namespace DChild.Gameplay.Characters.Enemies
 {
     public class ChasingGroundTentacle : PoolableObject
     {
+        [SerializeField]
+        private Collider2D m_hitbox;
+        [SerializeField]
+        public float chasingGroundTentacleAnimationSpeedMultiplier;
 
         [SerializeField, TabGroup("Reference")]
         protected SpineRootAnimation m_animation;
@@ -20,48 +24,65 @@ namespace DChild.Gameplay.Characters.Enemies
         private string m_extendedAnimation;
         [SerializeField, Spine.Unity.SpineAnimation(dataField = "m_skeletonAnimation")]
         private string m_retractAnimation;
+        [SerializeField, Spine.Unity.SpineAnimation(dataField = "m_skeletonAnimation")]
+        private string m_waitForInputAnimation;
 
-        public float m_timer;
-
-        private CapsuleCollider2D m_capsuleCollider2D;
         // Start is called before the first frame update
         void Start()
         {
-            m_capsuleCollider2D.enabled = false;
-            StartCoroutine(Anticipation());
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-            m_timer -= GameplaySystem.time.deltaTime;
-
-            if (m_timer < 0)
-            {
-                StartCoroutine(Retract());
-                DestroyInstance();
-            }
+            m_hitbox.enabled = false;
+            StartCoroutine(WaitForInput());
         }
 
         private IEnumerator Anticipation()
         {
-            m_animation.SetAnimation(0, m_anticipationLoopAnimation, false);
+            m_animation.SetAnimation(0, m_anticipationLoopAnimation, false).TimeScale = chasingGroundTentacleAnimationSpeedMultiplier;
             yield return new WaitForAnimationComplete(m_animation.animationState, m_anticipationLoopAnimation);
-
-            StartCoroutine(Extended());
+            yield return Extended();
         }
 
         private IEnumerator Extended()
         {
-            m_capsuleCollider2D.enabled = true;
+            m_hitbox.enabled = true;
             m_animation.SetAnimation(0, m_extendedAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_extendedAnimation);
+
+            if (FindObjectOfType<ObstacleChecker>().monolithSlamObstacleList != null)
+                FindObjectOfType<ObstacleChecker>().ClearMonoliths();
         }
 
         private IEnumerator Retract()
         {
             m_animation.SetAnimation(0, m_retractAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_retractAnimation);
+        }
+
+        private IEnumerator WaitForInput()
+        {
+            m_animation.SetAnimation(0, m_waitForInputAnimation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_waitForInputAnimation);
+        }
+
+        public void ErectTentacle()
+        {
+            StartCoroutine(Anticipation());
+        }
+
+        public void RetractTentacle()
+        {
+            StartCoroutine(Retract());
+        }
+
+        [Button]
+        private void Attack()
+        {
+            ErectTentacle();
+        }
+
+        [Button]
+        private void UnAttack()
+        {
+            RetractTentacle();
         }
     }
 }

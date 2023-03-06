@@ -1,0 +1,1464 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1712439853226630779
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7703412969340909560}
+  - component: {fileID: 8218535445052815885}
+  - component: {fileID: 4196395517478366133}
+  - component: {fileID: 1761161523124542505}
+  m_Layer: 11
+  m_Name: FakeMedicineGiver
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7703412969340909560
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1712439853226630779}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 289.28, y: 37.660004, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1071368847590331919}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8218535445052815885
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1712439853226630779}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c593457cd8105e148906690e1707c592, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  trigger: 32
+  condition:
+    luaConditions: []
+    questConditions: []
+    acceptedTags: []
+    acceptedGameObjects: []
+    luaWizardIndex: -1
+    lastEvaluationValue: 0
+  setQuestState: 0
+  questName: HealMe
+  questState: 0
+  setQuestEntryState: 1
+  questEntryNumber: 2
+  questEntryState: 4
+  setAnotherQuestEntryState: 1
+  anotherQuestEntryNumber: 3
+  anotherQuestEntryState: 2
+  luaCode: Variable["Medicine1"] = true
+  sequence: 
+  sequenceSpeaker: {fileID: 0}
+  sequenceListener: {fileID: 0}
+  waitOneFrameOnStartOrEnable: 1
+  alertMessage: 
+  textTable: {fileID: 0}
+  alertDuration: 0
+  sendMessages: []
+  barkSource: 0
+  barkConversation: 
+  barkText: 
+  barkTextSequence: 
+  barker: {fileID: 0}
+  barkTarget: {fileID: 0}
+  barkOrder: 0
+  allowBarksDuringConversations: 0
+  skipBarkIfNoValidEntries: 0
+  cacheBarkLines: 0
+  conversation: Buy fake Meds
+  conversationConversant: {fileID: 0}
+  conversationActor: {fileID: 1071368847590331919}
+  startConversationEntryID: -1
+  exclusive: 0
+  replace: 0
+  skipIfNoValidEntries: 1
+  preventRestartOnSameFrameEnded: 0
+  stopConversationOnTriggerExit: 0
+  stopConversationIfTooFar: 0
+  maxConversationDistance: 5
+  monitorConversationDistanceFrequency: 1
+  showCursorDuringConversation: 0
+  pauseGameDuringConversation: 0
+  setActiveActions: []
+  setEnabledActions: []
+  setAnimatorStateActions: []
+  onExecute:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4196395517478366133}
+        m_TargetAssemblyTypeName: DChild.Gameplay.Items.ItemGiver, Assembly-CSharp
+        m_MethodName: GiveItem
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  useConversationTitlePicker: 1
+  useBarkTitlePicker: 1
+  useQuestNamePicker: 1
+  selectedDatabase: {fileID: 11400000, guid: b233c2851f478b94880c30dcd08a841e, type: 2}
+--- !u!114 &4196395517478366133
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1712439853226630779}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d1c9b502fa3de6f4d82debffed6f8d24, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_data: {fileID: 11400000, guid: 34a21af3d74b3bf4c85f34da3e2b3cfc, type: 2}
+--- !u!114 &1761161523124542505
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1712439853226630779}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a64578247383140469c45370654a984a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  actor: Daslec
+  persistentDataName: 
+  portrait: {fileID: 0}
+  spritePortrait: {fileID: 21300000, guid: 25aa9737905c2b24aa1152a55158a73d, type: 3}
+  barkUISettings:
+    barkUI: {fileID: 0}
+    barkUIOffset: {x: 0, y: 2, z: 0}
+  standardDialogueUISettings:
+    subtitlePanelNumber: 0
+    customSubtitlePanel: {fileID: 0}
+    customSubtitlePanelOffset: {x: 0, y: 0, z: 0}
+    menuPanelNumber: 0
+    customMenuPanel: {fileID: 0}
+    customMenuPanelOffset: {x: 0, y: 0, z: 0}
+    useMenuPanelFor: 0
+    portraitAnimatorController: {fileID: 0}
+    setSubtitleColor: 0
+    applyColorToPrependedName: 0
+    prependActorNameSeparator: ': '
+    prependActorNameFormat: '{0}{1}'
+    subtitleColor: {r: 1, g: 1, b: 1, a: 1}
+--- !u!1 &4439679945407915654
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5882220240486079469}
+  - component: {fileID: 3077824760485324580}
+  - component: {fileID: 6307076567813602880}
+  m_Layer: 11
+  m_Name: BuyFakeMedicine
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5882220240486079469
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4439679945407915654}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1071368847590331919}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!61 &3077824760485324580
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4439679945407915654}
+  m_Enabled: 0
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0.80685425, y: -0.5076904}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 9.349182, y: 0.8265686}
+  m_EdgeRadius: 0
+--- !u!114 &6307076567813602880
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4439679945407915654}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f566cf66b7f50ee4ea70dafaab08ea02, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_amountRequired: 500
+  m_currentAmount: 0
+  m_promptOffset: {x: 0, y: 15, z: 0}
+  m_onComplete:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 8218535445052815885}
+        m_TargetAssemblyTypeName: PixelCrushers.DialogueSystem.DialogueSystemTrigger,
+          Assembly-CSharp-firstpass
+        m_MethodName: OnUse
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!1 &6776140477771948546
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3740177607971801405}
+  - component: {fileID: 5468402038323888098}
+  - component: {fileID: 6523060267791463628}
+  m_Layer: 11
+  m_Name: RealMedicineGiver
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3740177607971801405
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6776140477771948546}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 289.28, y: 37.660004, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2476507951293764263}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5468402038323888098
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6776140477771948546}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c593457cd8105e148906690e1707c592, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  trigger: 32
+  condition:
+    luaConditions: []
+    questConditions: []
+    acceptedTags: []
+    acceptedGameObjects: []
+    luaWizardIndex: -1
+    lastEvaluationValue: 0
+  setQuestState: 1
+  questName: 
+  questState: 0
+  setQuestEntryState: 0
+  questEntryNumber: 1
+  questEntryState: 0
+  setAnotherQuestEntryState: 0
+  anotherQuestEntryNumber: 1
+  anotherQuestEntryState: 0
+  luaCode: 
+  sequence: 
+  sequenceSpeaker: {fileID: 0}
+  sequenceListener: {fileID: 0}
+  waitOneFrameOnStartOrEnable: 1
+  alertMessage: 
+  textTable: {fileID: 0}
+  alertDuration: 0
+  sendMessages: []
+  barkSource: 0
+  barkConversation: 
+  barkText: 
+  barkTextSequence: 
+  barker: {fileID: 0}
+  barkTarget: {fileID: 0}
+  barkOrder: 0
+  allowBarksDuringConversations: 0
+  skipBarkIfNoValidEntries: 0
+  cacheBarkLines: 0
+  conversation: 
+  conversationConversant: {fileID: 0}
+  conversationActor: {fileID: 0}
+  startConversationEntryID: -1
+  exclusive: 0
+  replace: 0
+  skipIfNoValidEntries: 0
+  preventRestartOnSameFrameEnded: 0
+  stopConversationOnTriggerExit: 0
+  stopConversationIfTooFar: 0
+  maxConversationDistance: 5
+  monitorConversationDistanceFrequency: 1
+  showCursorDuringConversation: 0
+  pauseGameDuringConversation: 0
+  setActiveActions: []
+  setEnabledActions: []
+  setAnimatorStateActions: []
+  onExecute:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 6523060267791463628}
+        m_TargetAssemblyTypeName: DChild.Gameplay.Items.ItemGiver, Assembly-CSharp
+        m_MethodName: GiveItem
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  useConversationTitlePicker: 1
+  useBarkTitlePicker: 1
+  useQuestNamePicker: 1
+  selectedDatabase: {fileID: 11400000, guid: b233c2851f478b94880c30dcd08a841e, type: 2}
+--- !u!114 &6523060267791463628
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6776140477771948546}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d1c9b502fa3de6f4d82debffed6f8d24, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_data: {fileID: 11400000, guid: 2cc63bafe50aff54a86e456f7f907e01, type: 2}
+--- !u!1 &7611245824961438824
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4742706270035415937}
+  - component: {fileID: 1329005085980507724}
+  - component: {fileID: 4073514616904500154}
+  - component: {fileID: 8417070177946791810}
+  m_Layer: 0
+  m_Name: Quest_HealMe(COD1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4742706270035415937
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7611245824961438824}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 2476507951293764263}
+  - {fileID: 5469034705915372392}
+  - {fileID: 1071368847590331919}
+  - {fileID: 5949291503357898356}
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1329005085980507724
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7611245824961438824}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba2e3066672a3834182d094e4029952d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  questName: HealMe
+  questStateIndicatorLevels: []
+  questEntryStateIndicatorLevels:
+  - entryNumber: 2
+    questState: 2
+    condition:
+      luaConditions: []
+      questConditions: []
+      acceptedTags: []
+      acceptedGameObjects: []
+      luaWizardIndex: -1
+      lastEvaluationValue: 0
+    indicatorLevel: 1
+    onEnterState:
+      m_PersistentCalls:
+        m_Calls: []
+  - entryNumber: 3
+    questState: 2
+    condition:
+      luaConditions: []
+      questConditions: []
+      acceptedTags: []
+      acceptedGameObjects: []
+      luaWizardIndex: -1
+      lastEvaluationValue: 0
+    indicatorLevel: 2
+    onEnterState:
+      m_PersistentCalls:
+        m_Calls: []
+  - entryNumber: 4
+    questState: 2
+    condition:
+      luaConditions: []
+      questConditions: []
+      acceptedTags: []
+      acceptedGameObjects: []
+      luaWizardIndex: -1
+      lastEvaluationValue: 0
+    indicatorLevel: 3
+    onEnterState:
+      m_PersistentCalls:
+        m_Calls: []
+  - entryNumber: 5
+    questState: 2
+    condition:
+      luaConditions: []
+      questConditions: []
+      acceptedTags: []
+      acceptedGameObjects: []
+      luaWizardIndex: -1
+      lastEvaluationValue: 0
+    indicatorLevel: 4
+    onEnterState:
+      m_PersistentCalls:
+        m_Calls: []
+  - entryNumber: 1
+    questState: 1
+    condition:
+      luaConditions: []
+      questConditions: []
+      acceptedTags: []
+      acceptedGameObjects: []
+      luaWizardIndex: -1
+      lastEvaluationValue: 0
+    indicatorLevel: 0
+    onEnterState:
+      m_PersistentCalls:
+        m_Calls: []
+  - entryNumber: 5
+    questState: 4
+    condition:
+      luaConditions: []
+      questConditions: []
+      acceptedTags: []
+      acceptedGameObjects: []
+      luaWizardIndex: -1
+      lastEvaluationValue: 0
+    indicatorLevel: 0
+    onEnterState:
+      m_PersistentCalls:
+        m_Calls: []
+  suppressOnEnterStateEventsOnStart: 0
+--- !u!114 &4073514616904500154
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7611245824961438824}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9788c61928f1bb24a8559f5d6aaed894, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  indicators:
+  - {fileID: 0}
+  - {fileID: 6229204087144789781}
+  - {fileID: 737729753829740398}
+  - {fileID: 8859286951575696317}
+  - {fileID: 1389706014390600306}
+--- !u!114 &8417070177946791810
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7611245824961438824}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6546d1f34e0077748a93d4c356aa9411, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  addTrigger: 16
+  removeTrigger: 1024
+  databases:
+  - {fileID: 11400000, guid: b233c2851f478b94880c30dcd08a841e, type: 2}
+  condition:
+    luaConditions: []
+    questConditions: []
+    acceptedTags: []
+    acceptedGameObjects: []
+    luaWizardIndex: -1
+    lastEvaluationValue: 0
+  once: 0
+  onePerFrame: 0
+--- !u!1001 &195336225849949873
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 4742706270035415937}
+    m_Modifications:
+    - target: {fileID: 254398696670144174, guid: a62a057707fb2574d907631cd7d8ae79,
+        type: 3}
+      propertyPath: luaCode
+      value: Variable["Medicine3"] = true
+      objectReference: {fileID: 0}
+    - target: {fileID: 254398696670144174, guid: a62a057707fb2574d907631cd7d8ae79,
+        type: 3}
+      propertyPath: questName
+      value: HealMe
+      objectReference: {fileID: 0}
+    - target: {fileID: 254398696670144174, guid: a62a057707fb2574d907631cd7d8ae79,
+        type: 3}
+      propertyPath: conversation
+      value: Medicine3
+      objectReference: {fileID: 0}
+    - target: {fileID: 254398696670144174, guid: a62a057707fb2574d907631cd7d8ae79,
+        type: 3}
+      propertyPath: setQuestState
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 254398696670144174, guid: a62a057707fb2574d907631cd7d8ae79,
+        type: 3}
+      propertyPath: questEntryState
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 254398696670144174, guid: a62a057707fb2574d907631cd7d8ae79,
+        type: 3}
+      propertyPath: questEntryNumber
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 254398696670144174, guid: a62a057707fb2574d907631cd7d8ae79,
+        type: 3}
+      propertyPath: selectedDatabase
+      value: 
+      objectReference: {fileID: 11400000, guid: b233c2851f478b94880c30dcd08a841e,
+        type: 2}
+    - target: {fileID: 254398696670144174, guid: a62a057707fb2574d907631cd7d8ae79,
+        type: 3}
+      propertyPath: conversationActor
+      value: 
+      objectReference: {fileID: 2476507951293764263}
+    - target: {fileID: 254398696670144174, guid: a62a057707fb2574d907631cd7d8ae79,
+        type: 3}
+      propertyPath: setQuestEntryState
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 254398696670144174, guid: a62a057707fb2574d907631cd7d8ae79,
+        type: 3}
+      propertyPath: anotherQuestEntryState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 254398696670144174, guid: a62a057707fb2574d907631cd7d8ae79,
+        type: 3}
+      propertyPath: anotherQuestEntryNumber
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 254398696670144174, guid: a62a057707fb2574d907631cd7d8ae79,
+        type: 3}
+      propertyPath: setAnotherQuestEntryState
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 254398696670144174, guid: a62a057707fb2574d907631cd7d8ae79,
+        type: 3}
+      propertyPath: onExecute.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 254398696670144174, guid: a62a057707fb2574d907631cd7d8ae79,
+        type: 3}
+      propertyPath: onExecute.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 254398696670144174, guid: a62a057707fb2574d907631cd7d8ae79,
+        type: 3}
+      propertyPath: onExecute.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 5468402038323888098}
+    - target: {fileID: 254398696670144174, guid: a62a057707fb2574d907631cd7d8ae79,
+        type: 3}
+      propertyPath: onExecute.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 254398696670144174, guid: a62a057707fb2574d907631cd7d8ae79,
+        type: 3}
+      propertyPath: onExecute.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnUse
+      objectReference: {fileID: 0}
+    - target: {fileID: 254398696670144174, guid: a62a057707fb2574d907631cd7d8ae79,
+        type: 3}
+      propertyPath: onExecute.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: PixelCrushers.DialogueSystem.DialogueSystemTrigger, Assembly-CSharp-firstpass
+      objectReference: {fileID: 0}
+    - target: {fileID: 254398696670144174, guid: a62a057707fb2574d907631cd7d8ae79,
+        type: 3}
+      propertyPath: onExecute.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 2372178329769258006, guid: a62a057707fb2574d907631cd7d8ae79,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2372178329769258006, guid: a62a057707fb2574d907631cd7d8ae79,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 3.24
+      objectReference: {fileID: 0}
+    - target: {fileID: 2372178329769258006, guid: a62a057707fb2574d907631cd7d8ae79,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.22
+      objectReference: {fileID: 0}
+    - target: {fileID: 2372178329769258006, guid: a62a057707fb2574d907631cd7d8ae79,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2372178329769258006, guid: a62a057707fb2574d907631cd7d8ae79,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2372178329769258006, guid: a62a057707fb2574d907631cd7d8ae79,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2372178329769258006, guid: a62a057707fb2574d907631cd7d8ae79,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2372178329769258006, guid: a62a057707fb2574d907631cd7d8ae79,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2372178329769258006, guid: a62a057707fb2574d907631cd7d8ae79,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2372178329769258006, guid: a62a057707fb2574d907631cd7d8ae79,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2372178329769258006, guid: a62a057707fb2574d907631cd7d8ae79,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2837912430755290695, guid: a62a057707fb2574d907631cd7d8ae79,
+        type: 3}
+      propertyPath: m_Size.x
+      value: 9.349182
+      objectReference: {fileID: 0}
+    - target: {fileID: 2837912430755290695, guid: a62a057707fb2574d907631cd7d8ae79,
+        type: 3}
+      propertyPath: m_Size.y
+      value: 0.8265686
+      objectReference: {fileID: 0}
+    - target: {fileID: 2837912430755290695, guid: a62a057707fb2574d907631cd7d8ae79,
+        type: 3}
+      propertyPath: m_Offset.x
+      value: 0.80685425
+      objectReference: {fileID: 0}
+    - target: {fileID: 2837912430755290695, guid: a62a057707fb2574d907631cd7d8ae79,
+        type: 3}
+      propertyPath: m_Offset.y
+      value: -0.5076904
+      objectReference: {fileID: 0}
+    - target: {fileID: 4220707520816927437, guid: a62a057707fb2574d907631cd7d8ae79,
+        type: 3}
+      propertyPath: m_promptOffset.y
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 5350381358703550942, guid: a62a057707fb2574d907631cd7d8ae79,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 2.0889142
+      objectReference: {fileID: 0}
+    - target: {fileID: 5350381358703550942, guid: a62a057707fb2574d907631cd7d8ae79,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 2.4680548
+      objectReference: {fileID: 0}
+    - target: {fileID: 5350381358703550942, guid: a62a057707fb2574d907631cd7d8ae79,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.3343
+      objectReference: {fileID: 0}
+    - target: {fileID: 5350381358703550942, guid: a62a057707fb2574d907631cd7d8ae79,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 6.8986
+      objectReference: {fileID: 0}
+    - target: {fileID: 8667032107062725900, guid: a62a057707fb2574d907631cd7d8ae79,
+        type: 3}
+      propertyPath: m_Name
+      value: DaclesNPC
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: a62a057707fb2574d907631cd7d8ae79, type: 3}
+--- !u!4 &2476507951293764263 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2372178329769258006, guid: a62a057707fb2574d907631cd7d8ae79,
+    type: 3}
+  m_PrefabInstance: {fileID: 195336225849949873}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &8859286951575696317 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8667032107062725900, guid: a62a057707fb2574d907631cd7d8ae79,
+    type: 3}
+  m_PrefabInstance: {fileID: 195336225849949873}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1702794667237607840
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8859286951575696317}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a64578247383140469c45370654a984a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  actor: Dacles
+  persistentDataName: 
+  portrait: {fileID: 0}
+  spritePortrait: {fileID: 21300000, guid: f824dec39f9482247b64c2cf82ffd0cc, type: 3}
+  barkUISettings:
+    barkUI: {fileID: 0}
+    barkUIOffset: {x: 0, y: 2, z: 0}
+  standardDialogueUISettings:
+    subtitlePanelNumber: 0
+    customSubtitlePanel: {fileID: 0}
+    customSubtitlePanelOffset: {x: 0, y: 0, z: 0}
+    menuPanelNumber: 0
+    customMenuPanel: {fileID: 0}
+    customMenuPanelOffset: {x: 0, y: 0, z: 0}
+    useMenuPanelFor: 0
+    portraitAnimatorController: {fileID: 0}
+    setSubtitleColor: 0
+    applyColorToPrependedName: 0
+    prependActorNameSeparator: ': '
+    prependActorNameFormat: '{0}{1}'
+    subtitleColor: {r: 1, g: 1, b: 1, a: 1}
+--- !u!1001 &3178654256389424214
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 4742706270035415937}
+    m_Modifications:
+    - target: {fileID: 2504737507664106073, guid: 08ef784e610df7c4e9c93b3ea864b640,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2504737507664106073, guid: 08ef784e610df7c4e9c93b3ea864b640,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 3.24
+      objectReference: {fileID: 0}
+    - target: {fileID: 2504737507664106073, guid: 08ef784e610df7c4e9c93b3ea864b640,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.22
+      objectReference: {fileID: 0}
+    - target: {fileID: 2504737507664106073, guid: 08ef784e610df7c4e9c93b3ea864b640,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2504737507664106073, guid: 08ef784e610df7c4e9c93b3ea864b640,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2504737507664106073, guid: 08ef784e610df7c4e9c93b3ea864b640,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2504737507664106073, guid: 08ef784e610df7c4e9c93b3ea864b640,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2504737507664106073, guid: 08ef784e610df7c4e9c93b3ea864b640,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2504737507664106073, guid: 08ef784e610df7c4e9c93b3ea864b640,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2504737507664106073, guid: 08ef784e610df7c4e9c93b3ea864b640,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2504737507664106073, guid: 08ef784e610df7c4e9c93b3ea864b640,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5240805783634987544, guid: 08ef784e610df7c4e9c93b3ea864b640,
+        type: 3}
+      propertyPath: m_Size.x
+      value: 9.349182
+      objectReference: {fileID: 0}
+    - target: {fileID: 5240805783634987544, guid: 08ef784e610df7c4e9c93b3ea864b640,
+        type: 3}
+      propertyPath: m_Size.y
+      value: 0.8265686
+      objectReference: {fileID: 0}
+    - target: {fileID: 5240805783634987544, guid: 08ef784e610df7c4e9c93b3ea864b640,
+        type: 3}
+      propertyPath: m_Offset.x
+      value: 0.80685425
+      objectReference: {fileID: 0}
+    - target: {fileID: 5240805783634987544, guid: 08ef784e610df7c4e9c93b3ea864b640,
+        type: 3}
+      propertyPath: m_Offset.y
+      value: -0.5076904
+      objectReference: {fileID: 0}
+    - target: {fileID: 6146191274726196882, guid: 08ef784e610df7c4e9c93b3ea864b640,
+        type: 3}
+      propertyPath: m_promptOffset.y
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 7808838243678253809, guid: 08ef784e610df7c4e9c93b3ea864b640,
+        type: 3}
+      propertyPath: luaCode
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 7808838243678253809, guid: 08ef784e610df7c4e9c93b3ea864b640,
+        type: 3}
+      propertyPath: questName
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 7808838243678253809, guid: 08ef784e610df7c4e9c93b3ea864b640,
+        type: 3}
+      propertyPath: conversation
+      value: Medicine1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7808838243678253809, guid: 08ef784e610df7c4e9c93b3ea864b640,
+        type: 3}
+      propertyPath: setQuestState
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7808838243678253809, guid: 08ef784e610df7c4e9c93b3ea864b640,
+        type: 3}
+      propertyPath: questEntryState
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7808838243678253809, guid: 08ef784e610df7c4e9c93b3ea864b640,
+        type: 3}
+      propertyPath: questEntryNumber
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7808838243678253809, guid: 08ef784e610df7c4e9c93b3ea864b640,
+        type: 3}
+      propertyPath: selectedDatabase
+      value: 
+      objectReference: {fileID: 11400000, guid: b233c2851f478b94880c30dcd08a841e,
+        type: 2}
+    - target: {fileID: 7808838243678253809, guid: 08ef784e610df7c4e9c93b3ea864b640,
+        type: 3}
+      propertyPath: conversationActor
+      value: 
+      objectReference: {fileID: 1071368847590331919}
+    - target: {fileID: 7808838243678253809, guid: 08ef784e610df7c4e9c93b3ea864b640,
+        type: 3}
+      propertyPath: setQuestEntryState
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7808838243678253809, guid: 08ef784e610df7c4e9c93b3ea864b640,
+        type: 3}
+      propertyPath: anotherQuestEntryState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7808838243678253809, guid: 08ef784e610df7c4e9c93b3ea864b640,
+        type: 3}
+      propertyPath: anotherQuestEntryNumber
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7808838243678253809, guid: 08ef784e610df7c4e9c93b3ea864b640,
+        type: 3}
+      propertyPath: setAnotherQuestEntryState
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7808838243678253809, guid: 08ef784e610df7c4e9c93b3ea864b640,
+        type: 3}
+      propertyPath: onExecute.m_PersistentCalls.m_Calls.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7808838243678253809, guid: 08ef784e610df7c4e9c93b3ea864b640,
+        type: 3}
+      propertyPath: onExecute.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 7808838243678253809, guid: 08ef784e610df7c4e9c93b3ea864b640,
+        type: 3}
+      propertyPath: onExecute.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 7808838243678253809, guid: 08ef784e610df7c4e9c93b3ea864b640,
+        type: 3}
+      propertyPath: onExecute.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 7252990178443152974}
+    - target: {fileID: 7808838243678253809, guid: 08ef784e610df7c4e9c93b3ea864b640,
+        type: 3}
+      propertyPath: onExecute.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 3077824760485324580}
+    - target: {fileID: 7808838243678253809, guid: 08ef784e610df7c4e9c93b3ea864b640,
+        type: 3}
+      propertyPath: onExecute.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7808838243678253809, guid: 08ef784e610df7c4e9c93b3ea864b640,
+        type: 3}
+      propertyPath: onExecute.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7808838243678253809, guid: 08ef784e610df7c4e9c93b3ea864b640,
+        type: 3}
+      propertyPath: onExecute.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: set_enabled
+      objectReference: {fileID: 0}
+    - target: {fileID: 7808838243678253809, guid: 08ef784e610df7c4e9c93b3ea864b640,
+        type: 3}
+      propertyPath: onExecute.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: set_enabled
+      objectReference: {fileID: 0}
+    - target: {fileID: 7808838243678253809, guid: 08ef784e610df7c4e9c93b3ea864b640,
+        type: 3}
+      propertyPath: onExecute.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: UnityEngine.Behaviour, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 7808838243678253809, guid: 08ef784e610df7c4e9c93b3ea864b640,
+        type: 3}
+      propertyPath: onExecute.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
+      value: UnityEngine.Behaviour, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 7808838243678253809, guid: 08ef784e610df7c4e9c93b3ea864b640,
+        type: 3}
+      propertyPath: onExecute.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_BoolArgument
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7808838243678253809, guid: 08ef784e610df7c4e9c93b3ea864b640,
+        type: 3}
+      propertyPath: onExecute.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 7808838243678253809, guid: 08ef784e610df7c4e9c93b3ea864b640,
+        type: 3}
+      propertyPath: onExecute.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 8822073560572703555, guid: 08ef784e610df7c4e9c93b3ea864b640,
+        type: 3}
+      propertyPath: m_Name
+      value: FakeDoctorNPC
+      objectReference: {fileID: 0}
+    - target: {fileID: 9153512838308436090, guid: 08ef784e610df7c4e9c93b3ea864b640,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 2.0889142
+      objectReference: {fileID: 0}
+    - target: {fileID: 9153512838308436090, guid: 08ef784e610df7c4e9c93b3ea864b640,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 2.4680548
+      objectReference: {fileID: 0}
+    - target: {fileID: 9153512838308436090, guid: 08ef784e610df7c4e9c93b3ea864b640,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.3343
+      objectReference: {fileID: 0}
+    - target: {fileID: 9153512838308436090, guid: 08ef784e610df7c4e9c93b3ea864b640,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 6.8986
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 2797754652147379125, guid: 08ef784e610df7c4e9c93b3ea864b640, type: 3}
+  m_SourcePrefab: {fileID: 100100000, guid: 08ef784e610df7c4e9c93b3ea864b640, type: 3}
+--- !u!4 &1071368847590331919 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2504737507664106073, guid: 08ef784e610df7c4e9c93b3ea864b640,
+    type: 3}
+  m_PrefabInstance: {fileID: 3178654256389424214}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &6229204087144789781 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8822073560572703555, guid: 08ef784e610df7c4e9c93b3ea864b640,
+    type: 3}
+  m_PrefabInstance: {fileID: 3178654256389424214}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &5407163159104579446
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6229204087144789781}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a64578247383140469c45370654a984a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  actor: Daslec
+  persistentDataName: 
+  portrait: {fileID: 0}
+  spritePortrait: {fileID: 21300000, guid: 27d9bd5b032e761428b2e8d24823cf57, type: 3}
+  barkUISettings:
+    barkUI: {fileID: 0}
+    barkUIOffset: {x: 0, y: 2, z: 0}
+  standardDialogueUISettings:
+    subtitlePanelNumber: 0
+    customSubtitlePanel: {fileID: 0}
+    customSubtitlePanelOffset: {x: 0, y: 0, z: 0}
+    menuPanelNumber: 0
+    customMenuPanel: {fileID: 0}
+    customMenuPanelOffset: {x: 0, y: 0, z: 0}
+    useMenuPanelFor: 0
+    portraitAnimatorController: {fileID: 0}
+    setSubtitleColor: 0
+    applyColorToPrependedName: 0
+    prependActorNameSeparator: ': '
+    prependActorNameFormat: '{0}{1}'
+    subtitleColor: {r: 1, g: 1, b: 1, a: 1}
+--- !u!61 &7252990178443152974 stripped
+BoxCollider2D:
+  m_CorrespondingSourceObject: {fileID: 5240805783634987544, guid: 08ef784e610df7c4e9c93b3ea864b640,
+    type: 3}
+  m_PrefabInstance: {fileID: 3178654256389424214}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &7714175272149897086
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 4742706270035415937}
+    m_Modifications:
+    - target: {fileID: 254398696670144174, guid: a62a057707fb2574d907631cd7d8ae79,
+        type: 3}
+      propertyPath: conversation
+      value: Medicine3Active
+      objectReference: {fileID: 0}
+    - target: {fileID: 254398696670144174, guid: a62a057707fb2574d907631cd7d8ae79,
+        type: 3}
+      propertyPath: selectedDatabase
+      value: 
+      objectReference: {fileID: 11400000, guid: b233c2851f478b94880c30dcd08a841e,
+        type: 2}
+    - target: {fileID: 254398696670144174, guid: a62a057707fb2574d907631cd7d8ae79,
+        type: 3}
+      propertyPath: conversationActor
+      value: 
+      objectReference: {fileID: 5469034705915372392}
+    - target: {fileID: 2372178329769258006, guid: a62a057707fb2574d907631cd7d8ae79,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2372178329769258006, guid: a62a057707fb2574d907631cd7d8ae79,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 3.24
+      objectReference: {fileID: 0}
+    - target: {fileID: 2372178329769258006, guid: a62a057707fb2574d907631cd7d8ae79,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.22
+      objectReference: {fileID: 0}
+    - target: {fileID: 2372178329769258006, guid: a62a057707fb2574d907631cd7d8ae79,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2372178329769258006, guid: a62a057707fb2574d907631cd7d8ae79,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2372178329769258006, guid: a62a057707fb2574d907631cd7d8ae79,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2372178329769258006, guid: a62a057707fb2574d907631cd7d8ae79,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2372178329769258006, guid: a62a057707fb2574d907631cd7d8ae79,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2372178329769258006, guid: a62a057707fb2574d907631cd7d8ae79,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2372178329769258006, guid: a62a057707fb2574d907631cd7d8ae79,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2372178329769258006, guid: a62a057707fb2574d907631cd7d8ae79,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2837912430755290695, guid: a62a057707fb2574d907631cd7d8ae79,
+        type: 3}
+      propertyPath: m_Size.x
+      value: 9.349182
+      objectReference: {fileID: 0}
+    - target: {fileID: 2837912430755290695, guid: a62a057707fb2574d907631cd7d8ae79,
+        type: 3}
+      propertyPath: m_Size.y
+      value: 0.8265686
+      objectReference: {fileID: 0}
+    - target: {fileID: 2837912430755290695, guid: a62a057707fb2574d907631cd7d8ae79,
+        type: 3}
+      propertyPath: m_Offset.x
+      value: 0.80685425
+      objectReference: {fileID: 0}
+    - target: {fileID: 2837912430755290695, guid: a62a057707fb2574d907631cd7d8ae79,
+        type: 3}
+      propertyPath: m_Offset.y
+      value: -0.5076904
+      objectReference: {fileID: 0}
+    - target: {fileID: 4220707520816927437, guid: a62a057707fb2574d907631cd7d8ae79,
+        type: 3}
+      propertyPath: m_promptOffset.y
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 5350381358703550942, guid: a62a057707fb2574d907631cd7d8ae79,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 2.0889142
+      objectReference: {fileID: 0}
+    - target: {fileID: 5350381358703550942, guid: a62a057707fb2574d907631cd7d8ae79,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 2.4680548
+      objectReference: {fileID: 0}
+    - target: {fileID: 5350381358703550942, guid: a62a057707fb2574d907631cd7d8ae79,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.3343
+      objectReference: {fileID: 0}
+    - target: {fileID: 5350381358703550942, guid: a62a057707fb2574d907631cd7d8ae79,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 6.8986
+      objectReference: {fileID: 0}
+    - target: {fileID: 8667032107062725900, guid: a62a057707fb2574d907631cd7d8ae79,
+        type: 3}
+      propertyPath: m_Name
+      value: DaclesNPC_after
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: a62a057707fb2574d907631cd7d8ae79, type: 3}
+--- !u!1 &1389706014390600306 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8667032107062725900, guid: a62a057707fb2574d907631cd7d8ae79,
+    type: 3}
+  m_PrefabInstance: {fileID: 7714175272149897086}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &888464040075312850
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1389706014390600306}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a64578247383140469c45370654a984a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  actor: Dacles
+  persistentDataName: 
+  portrait: {fileID: 2800000, guid: 2e4facad828b9794ab42d303fab9e548, type: 3}
+  spritePortrait: {fileID: 0}
+  barkUISettings:
+    barkUI: {fileID: 0}
+    barkUIOffset: {x: 0, y: 2, z: 0}
+  standardDialogueUISettings:
+    subtitlePanelNumber: 0
+    customSubtitlePanel: {fileID: 0}
+    customSubtitlePanelOffset: {x: 0, y: 0, z: 0}
+    menuPanelNumber: 0
+    customMenuPanel: {fileID: 0}
+    customMenuPanelOffset: {x: 0, y: 0, z: 0}
+    useMenuPanelFor: 0
+    portraitAnimatorController: {fileID: 0}
+    setSubtitleColor: 0
+    applyColorToPrependedName: 0
+    prependActorNameSeparator: ': '
+    prependActorNameFormat: '{0}{1}'
+    subtitleColor: {r: 1, g: 1, b: 1, a: 1}
+--- !u!4 &5469034705915372392 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2372178329769258006, guid: a62a057707fb2574d907631cd7d8ae79,
+    type: 3}
+  m_PrefabInstance: {fileID: 7714175272149897086}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &8093738618374274093
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 4742706270035415937}
+    m_Modifications:
+    - target: {fileID: 2504737507664106073, guid: 08ef784e610df7c4e9c93b3ea864b640,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2504737507664106073, guid: 08ef784e610df7c4e9c93b3ea864b640,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 3.24
+      objectReference: {fileID: 0}
+    - target: {fileID: 2504737507664106073, guid: 08ef784e610df7c4e9c93b3ea864b640,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.22
+      objectReference: {fileID: 0}
+    - target: {fileID: 2504737507664106073, guid: 08ef784e610df7c4e9c93b3ea864b640,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2504737507664106073, guid: 08ef784e610df7c4e9c93b3ea864b640,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2504737507664106073, guid: 08ef784e610df7c4e9c93b3ea864b640,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2504737507664106073, guid: 08ef784e610df7c4e9c93b3ea864b640,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2504737507664106073, guid: 08ef784e610df7c4e9c93b3ea864b640,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2504737507664106073, guid: 08ef784e610df7c4e9c93b3ea864b640,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2504737507664106073, guid: 08ef784e610df7c4e9c93b3ea864b640,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2504737507664106073, guid: 08ef784e610df7c4e9c93b3ea864b640,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5240805783634987544, guid: 08ef784e610df7c4e9c93b3ea864b640,
+        type: 3}
+      propertyPath: m_Size.x
+      value: 9.349182
+      objectReference: {fileID: 0}
+    - target: {fileID: 5240805783634987544, guid: 08ef784e610df7c4e9c93b3ea864b640,
+        type: 3}
+      propertyPath: m_Size.y
+      value: 0.8265686
+      objectReference: {fileID: 0}
+    - target: {fileID: 5240805783634987544, guid: 08ef784e610df7c4e9c93b3ea864b640,
+        type: 3}
+      propertyPath: m_Offset.x
+      value: 0.80685425
+      objectReference: {fileID: 0}
+    - target: {fileID: 5240805783634987544, guid: 08ef784e610df7c4e9c93b3ea864b640,
+        type: 3}
+      propertyPath: m_Offset.y
+      value: -0.5076904
+      objectReference: {fileID: 0}
+    - target: {fileID: 6146191274726196882, guid: 08ef784e610df7c4e9c93b3ea864b640,
+        type: 3}
+      propertyPath: m_promptOffset.y
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 7808838243678253809, guid: 08ef784e610df7c4e9c93b3ea864b640,
+        type: 3}
+      propertyPath: conversation
+      value: Medicine1Active
+      objectReference: {fileID: 0}
+    - target: {fileID: 7808838243678253809, guid: 08ef784e610df7c4e9c93b3ea864b640,
+        type: 3}
+      propertyPath: selectedDatabase
+      value: 
+      objectReference: {fileID: 11400000, guid: b233c2851f478b94880c30dcd08a841e,
+        type: 2}
+    - target: {fileID: 7808838243678253809, guid: 08ef784e610df7c4e9c93b3ea864b640,
+        type: 3}
+      propertyPath: conversationActor
+      value: 
+      objectReference: {fileID: 5949291503357898356}
+    - target: {fileID: 8822073560572703555, guid: 08ef784e610df7c4e9c93b3ea864b640,
+        type: 3}
+      propertyPath: m_Name
+      value: FakeDoctorNPC_after
+      objectReference: {fileID: 0}
+    - target: {fileID: 9153512838308436090, guid: 08ef784e610df7c4e9c93b3ea864b640,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 2.0889142
+      objectReference: {fileID: 0}
+    - target: {fileID: 9153512838308436090, guid: 08ef784e610df7c4e9c93b3ea864b640,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 2.4680548
+      objectReference: {fileID: 0}
+    - target: {fileID: 9153512838308436090, guid: 08ef784e610df7c4e9c93b3ea864b640,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.3343
+      objectReference: {fileID: 0}
+    - target: {fileID: 9153512838308436090, guid: 08ef784e610df7c4e9c93b3ea864b640,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 6.8986
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 2797754652147379125, guid: 08ef784e610df7c4e9c93b3ea864b640, type: 3}
+  m_SourcePrefab: {fileID: 100100000, guid: 08ef784e610df7c4e9c93b3ea864b640, type: 3}
+--- !u!1 &737729753829740398 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8822073560572703555, guid: 08ef784e610df7c4e9c93b3ea864b640,
+    type: 3}
+  m_PrefabInstance: {fileID: 8093738618374274093}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &202883285703877859
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 737729753829740398}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a64578247383140469c45370654a984a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  actor: Daslec
+  persistentDataName: 
+  portrait: {fileID: 0}
+  spritePortrait: {fileID: 21300000, guid: 25aa9737905c2b24aa1152a55158a73d, type: 3}
+  barkUISettings:
+    barkUI: {fileID: 0}
+    barkUIOffset: {x: 0, y: 2, z: 0}
+  standardDialogueUISettings:
+    subtitlePanelNumber: 0
+    customSubtitlePanel: {fileID: 0}
+    customSubtitlePanelOffset: {x: 0, y: 0, z: 0}
+    menuPanelNumber: 0
+    customMenuPanel: {fileID: 0}
+    customMenuPanelOffset: {x: 0, y: 0, z: 0}
+    useMenuPanelFor: 0
+    portraitAnimatorController: {fileID: 0}
+    setSubtitleColor: 0
+    applyColorToPrependedName: 0
+    prependActorNameSeparator: ': '
+    prependActorNameFormat: '{0}{1}'
+    subtitleColor: {r: 1, g: 1, b: 1, a: 1}
+--- !u!4 &5949291503357898356 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2504737507664106073, guid: 08ef784e610df7c4e9c93b3ea864b640,
+    type: 3}
+  m_PrefabInstance: {fileID: 8093738618374274093}
+  m_PrefabAsset: {fileID: 0}
