@@ -234,13 +234,13 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             for (int i = 0; i < m_summonOffsetScales.Count; i++)
             {
                 var summonPoint = new Vector2(m_startPoint.position.x + offset, m_startPoint.position.y);
-                //Debug.Log("Wall Positon " + WallPosition(summonPoint) + "Ground Position " + GroundPosition(summonPoint));
                 if (Vector2.Distance(summonPoint, GroundPosition(summonPoint)) != 0 && GroundPosition(summonPoint) != Vector2.zero && WallPosition(summonPoint) == Vector2.zero)
                 {
                     var instance = GameSystem.poolManager.GetPool<ProjectilePool>().GetOrCreateItem(m_projectileInfo.projectile);
                     instance.transform.position = new Vector2(summonPoint.x, GroundPosition(summonPoint).y + (m_summonOffsetScales[i].y - 1));
-                    //instance.transform.localScale = new Vector3(m_character.facing == HorizontalDirection.Right ? m_summonOffsetScales[i].x : -m_summonOffsetScales[i].x, m_summonOffsetScales[i].y, m_summonOffsetScales[i].z);
+                    instance.transform.localScale = new Vector3(m_character.facing == HorizontalDirection.Right ? m_summonOffsetScales[i].x : -m_summonOffsetScales[i].x, m_summonOffsetScales[i].y, m_summonOffsetScales[i].z);
                     instance.GetComponent<Attacker>().SetParentAttacker(m_attacker);
+                    //Debug.Log("Wall Positon " + WallPosition(summonPoint) + "Ground Position " + GroundPosition(summonPoint));
                     //var component = instance.GetComponent<Projectile>();
                     //component.ResetState();
 
@@ -248,7 +248,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
                     m_launcher.LaunchProjectile(m_startPoint.right, instance.gameObject);
                     offset += m_summonOffset * offsetLookPosition;
                     //yield return new WaitForSeconds(0.01f);
-                    instance.transform.localScale = Vector3.one;
+                    instance.transform.localScale = m_character.facing == HorizontalDirection.Right ? instance.transform.localScale : -instance.transform.localScale;
                     yield return new WaitForSeconds(m_summonDelay);
                 }
             }
