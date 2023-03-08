@@ -32,6 +32,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6161509537385949920}
+  - {fileID: 8655278916335778763}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -48,12 +49,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   questName: whisper
-  questStateIndicatorLevels: []
-  questEntryStateIndicatorLevels:
-  - entryNumber: 0
+  questStateIndicatorLevels:
+  - updateOnStartOnly: 0
     questState: 1
     condition:
-      luaConditions: []
+      luaConditions:
+      - Variable["whisper"] == false
       questConditions: []
       acceptedTags: []
       acceptedGameObjects: []
@@ -62,7 +63,46 @@ MonoBehaviour:
     indicatorLevel: 0
     onEnterState:
       m_PersistentCalls:
-        m_Calls: []
+        m_Calls:
+        - m_Target: {fileID: 907649963960488575}
+          m_TargetAssemblyTypeName: UnityEngine.VFX.VisualEffect, UnityEngine
+          m_MethodName: Stop
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - updateOnStartOnly: 0
+    questState: 1
+    condition:
+      luaConditions:
+      - Variable["whisper"] == true
+      questConditions: []
+      acceptedTags: []
+      acceptedGameObjects: []
+      luaWizardIndex: -1
+      lastEvaluationValue: 0
+    indicatorLevel: 0
+    onEnterState:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 907649963960488575}
+          m_TargetAssemblyTypeName: UnityEngine.VFX.VisualEffect, UnityEngine
+          m_MethodName: Play
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  questEntryStateIndicatorLevels: []
   suppressOnEnterStateEventsOnStart: 0
 --- !u!114 &1534869351348046486
 MonoBehaviour:
@@ -103,6 +143,102 @@ MonoBehaviour:
     lastEvaluationValue: 0
   once: 0
   onePerFrame: 0
+--- !u!1001 &5555407265981808546
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 2660901106847072596}
+    m_Modifications:
+    - target: {fileID: 2062550152900449340, guid: bb905cfd6cac7304a95febda002ec65c,
+        type: 3}
+      propertyPath: m_Name
+      value: Whisperer
+      objectReference: {fileID: 0}
+    - target: {fileID: 3820599670403957865, guid: bb905cfd6cac7304a95febda002ec65c,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3820599670403957865, guid: bb905cfd6cac7304a95febda002ec65c,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 4.91
+      objectReference: {fileID: 0}
+    - target: {fileID: 3820599670403957865, guid: bb905cfd6cac7304a95febda002ec65c,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 15.26
+      objectReference: {fileID: 0}
+    - target: {fileID: 3820599670403957865, guid: bb905cfd6cac7304a95febda002ec65c,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3820599670403957865, guid: bb905cfd6cac7304a95febda002ec65c,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3820599670403957865, guid: bb905cfd6cac7304a95febda002ec65c,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3820599670403957865, guid: bb905cfd6cac7304a95febda002ec65c,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3820599670403957865, guid: bb905cfd6cac7304a95febda002ec65c,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3820599670403957865, guid: bb905cfd6cac7304a95febda002ec65c,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3820599670403957865, guid: bb905cfd6cac7304a95febda002ec65c,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3820599670403957865, guid: bb905cfd6cac7304a95febda002ec65c,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5307290021083773316, guid: bb905cfd6cac7304a95febda002ec65c,
+        type: 3}
+      propertyPath: m_SortingLayer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5307290021083773316, guid: bb905cfd6cac7304a95febda002ec65c,
+        type: 3}
+      propertyPath: m_SortingOrder
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 5307290021083773316, guid: bb905cfd6cac7304a95febda002ec65c,
+        type: 3}
+      propertyPath: m_SortingLayerID
+      value: 2073808055
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: bb905cfd6cac7304a95febda002ec65c, type: 3}
+--- !u!2083052967 &907649963960488575 stripped
+VisualEffect:
+  m_CorrespondingSourceObject: {fileID: 4719873204535619037, guid: bb905cfd6cac7304a95febda002ec65c,
+    type: 3}
+  m_PrefabInstance: {fileID: 5555407265981808546}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &8655278916335778763 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3820599670403957865, guid: bb905cfd6cac7304a95febda002ec65c,
+    type: 3}
+  m_PrefabInstance: {fileID: 5555407265981808546}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &7739741355538231840
 PrefabInstance:
   m_ObjectHideFlags: 0
