@@ -27,7 +27,7 @@ namespace DChild.Menu.Inputs
             }
         }
 
-        private void Awake()
+        private void Start()
         {
             InputIconHandle.UpdateInputIcons += UpdateInputIcons;
             UpdateInputIcons(InputIconHandle.GetCurrentInputIcon());

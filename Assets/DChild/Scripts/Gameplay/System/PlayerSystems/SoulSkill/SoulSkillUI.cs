@@ -14,7 +14,9 @@ namespace DChild.Gameplay.SoulSkills.UI
         private Image m_glow;
 
 
+        public Material orbMaterial => m_orb.material;
         public Sprite soulSkillIcon => m_icon.sprite;
+        public Material glowMaterial => m_glow.material;
         public int soulSkillID { get; private set; }
 
         public void DisplayAs(SoulSkill soulSkill)
@@ -48,6 +50,8 @@ namespace DChild.Gameplay.SoulSkills.UI
         {
             soulSkillID = reference.soulSkillID;
             m_icon.sprite = reference.soulSkillIcon;
+            m_orb.material = reference.orbMaterial;
+            m_glow.material = reference.glowMaterial;
         }
 
         public virtual void Show(bool immidiate)
