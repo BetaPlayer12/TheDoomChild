@@ -290,9 +290,10 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public override void AttackOver()
         {
-            m_state.isAttacking = false;
+            //m_state.isAttacking = false;
             m_reachedVerticalThreshold = false;
             m_animator.SetBool(m_skullThrowAnimationParameter, false);
+            base.AttackOver();
         }
 
         public void Execute()
@@ -324,16 +325,16 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public override void Cancel()
         {
-            base.Cancel();
             m_reachedVerticalThreshold = false;
             EndAim();
-            m_animator.SetBool(m_skullThrowAnimationParameter, false);
             m_skeletonAnimation.state.Complete -= State_Complete;
 
             if (m_spawnedProjectile != null)
             {
                 Destroy(m_spawnedProjectile.gameObject);
             }
+            m_animator.SetBool(m_skullThrowAnimationParameter, false);
+            base.Cancel();
         }
 
         public override void Reset()

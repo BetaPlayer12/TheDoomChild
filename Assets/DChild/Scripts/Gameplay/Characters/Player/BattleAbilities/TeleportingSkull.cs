@@ -42,6 +42,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             m_canTeleport = false;
             m_character.transform.position = m_spawnedProjectile.transform.position;
             m_spawnedProjectile.CallPoolRequest();
+            base.AttackOver();
         }
 
         public void Execute()
