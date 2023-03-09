@@ -193,7 +193,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
                 m_wallSensor.Cast();
                 m_enemySensor.Cast();
                 m_edgeSensor.Cast();
-                m_physics.velocity = new Vector2(m_character.facing == HorizontalDirection.Right ? m_dashForce.x : -m_dashForce.x, m_physics.velocity.y);
+                m_physics.velocity = new Vector2(m_character.facing == HorizontalDirection.Right ? m_dashForce.x : -m_dashForce.x, -m_physics.velocity.y);
                 timer -= Time.deltaTime;
                 if (!m_edgeSensor.isDetecting)
                 {
