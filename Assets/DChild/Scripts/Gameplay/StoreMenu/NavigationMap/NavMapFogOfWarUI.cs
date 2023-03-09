@@ -7,6 +7,7 @@ using UnityEngine.UI;
 
 namespace DChild.Gameplay.NavigationMap
 {
+
     public class NavMapFogOfWarUI : SerializedMonoBehaviour
     {
 #if UNITY_EDITOR

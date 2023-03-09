@@ -1,5 +1,7 @@
 ﻿using DChild.Gameplay.SoulSkills.UI;
+using Doozy.Runtime.UIManager.Containers;
 using Holysoft.Event;
+using PixelCrushers.DialogueSystem;
 using System;
 using System.Collections;
 using UnityEngine;
@@ -17,6 +19,7 @@ namespace DChild.Gameplay.SoulSkills
         private GameObject m_activatedListUI;
         [SerializeField]
         private RectTransform m_highlight;
+        private UIContainer m_highlightContainer;
 
         private SoulSkillButton m_currentSelectedSoulSkill;
 
@@ -24,6 +27,8 @@ namespace DChild.Gameplay.SoulSkills
         public event EventAction<SoulSkillSelected> OnActionRequired;
 
         private bool m_doNotAcceptClickOnMouseRelease;
+        private bool m_skillWasSelectedThisFrame;
+
 
         public void Reset()
         {
@@ -43,10 +48,10 @@ namespace DChild.Gameplay.SoulSkills
                 if (Mouse.current?.leftButton.wasPressedThisFrame ?? false)
                 {
                     m_doNotAcceptClickOnMouseRelease = true;
-                    enabled = true;
                 }
+                m_skillWasSelectedThisFrame = true;
+                enabled = true;
             }
-
         }
 
         private void SetHighlightTo(SoulSkillButton soulskillUI)
@@ -54,6 +59,9 @@ namespace DChild.Gameplay.SoulSkills
             m_highlight.SetParent(soulskillUI.transform);
             m_highlight.offsetMin = Vector2.zero;
             m_highlight.offsetMax = Vector2.zero;
+
+            m_highlightContainer.InstantHide();
+            m_highlightContainer.Show();
         }
 
         private void OnSkillClicked(object sender, SoulSkillSelected eventArgs)
@@ -62,10 +70,11 @@ namespace DChild.Gameplay.SoulSkills
                 return;
 
             var skillUI = eventArgs.soulskillUI;
-            if (m_currentSelectedSoulSkill == skillUI)
+            if (m_skillWasSelectedThisFrame == false && m_currentSelectedSoulSkill == skillUI)
             {
                 OnActionRequired?.Invoke(this, eventArgs);
             }
+
         }
 
         private void Awake()
@@ -86,6 +95,8 @@ namespace DChild.Gameplay.SoulSkills
                 soulSkillUI.OnClick += OnSkillClicked;
             }
 
+            m_highlightContainer = m_highlight.GetComponent<UIContainer>();
+
             enabled = false;
         }
 
@@ -100,6 +111,7 @@ namespace DChild.Gameplay.SoulSkills
                     EventSystem.current.SetSelectedGameObject(m_currentSelectedSoulSkill.gameObject); //Force Event System to recognize last GameObject
                 }
             }
+            m_skillWasSelectedThisFrame = false;
         }
     }
 }

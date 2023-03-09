@@ -76,9 +76,9 @@ namespace DChild.Gameplay.Systems
             m_cinemaSignal.SendSignal();
         }
 
-        public void UpdateNavMapConfiguration(Location location, Transform inGameReference, Vector2 mapReferencePoint, Vector2 calculationOffset)
+        public void UpdateNavMapConfiguration(Location location, int sceneIndex, Transform inGameReference, Vector2 mapReferencePoint, Vector2 calculationOffset)
         {
-            m_navMap.UpdateConfiguration(location, inGameReference, mapReferencePoint, calculationOffset);
+            m_navMap.UpdateConfiguration(location, sceneIndex, inGameReference, mapReferencePoint, calculationOffset);
         }
 
         public void OpenTradeWindow(NPCProfile merchantData, ITradeInventory merchantInventory, TradeAskingPrice merchantBuyingPriceRate)
