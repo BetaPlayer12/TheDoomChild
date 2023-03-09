@@ -15,15 +15,16 @@ namespace DChild.Gameplay.NavigationMap
         [SerializeField]
         private bool m_mapNeedsCompleteUpdate = true;
 
-        public void UpdateConfiguration(Location location, Transform inGameReference, Vector2 mapReferencePoint, Vector2 calculationOffset)
+        public void UpdateConfiguration(Location location, int sceneIndex, Transform inGameReference, Vector2 mapReferencePoint, Vector2 calculationOffset)
         {
             if (m_instantiator.currentMap != location)
             {
                 m_tracker.RemoveUIReferencesFromCurrentMap();
                 m_currentMap = m_instantiator.LoadMapFor(location);
-                m_fogOfWarUI = GetComponentInChildren<NavMapFogOfWarUI>();
                 m_mapNeedsCompleteUpdate = true;
             }
+            var instance = m_currentMap.GetComponentInChildren<NavigationMapInstance>();
+            m_fogOfWarUI = instance.GetFogOfWarOfScene(sceneIndex);
 
             m_tracker.SetReferencePointPosition(m_currentMap, mapReferencePoint);
             m_tracker.SetInGameTrackReferencePoint(inGameReference);
