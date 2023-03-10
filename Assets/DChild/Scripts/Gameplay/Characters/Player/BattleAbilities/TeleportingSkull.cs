@@ -30,7 +30,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
         public void GetSpawnedProjectile(Projectile spawnedProjectile)
         {
-            if (m_spawnedProjectile == null)
+            if (m_spawnedProjectile == null && m_canTeleport)
             {
                 m_spawnedProjectile = spawnedProjectile;
                 m_spawnedProjectile.Impacted += DisableTeleport;
