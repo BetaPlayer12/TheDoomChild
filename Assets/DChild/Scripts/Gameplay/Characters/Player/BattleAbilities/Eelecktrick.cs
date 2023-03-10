@@ -1,4 +1,6 @@
 using DChild.Gameplay.Characters.Players.Modules;
+using DChild.Gameplay.Combat;
+using DChild.Gameplay.Pooling;
 using Sirenix.OdinInspector;
 using Spine.Unity;
 using System.Collections;
@@ -55,6 +57,8 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
         public bool CanMove() => m_canMove;
         private bool m_hasExecuted;
 
+        private Coroutine m_eelecktrickChargingRoutine;
+
         public override void Initialize(ComplexCharacterInfo info)
         {
             base.Initialize(info);
@@ -86,6 +90,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
         public void Execute()
         {
             m_hasExecuted = true;
+            m_eelecktrickChargingRoutine = StartCoroutine(EelecktrickChargingRoutine());
             m_state.waitForBehaviour = false;
             m_state.isAttacking = true;
             m_characterState.isChargingEelecktrick = true;
@@ -101,6 +106,11 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
         public void ReleaseHold()
         {
+            if (m_eelecktrickChargingRoutine != null)
+            {
+                StopCoroutine(m_eelecktrickChargingRoutine);
+                m_eelecktrickChargingRoutine = null;
+            }
             m_state.waitForBehaviour = true;
             m_state.isAttacking = true;
             m_state.canAttack = false;
@@ -111,11 +121,15 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
         public void SummonWhip()
         {
+            var instance = GameSystem.poolManager.GetPool<ProjectilePool>().GetOrCreateItem(m_projectileInfo.projectile);
+            instance.transform.position = m_startPoint.position;
+            instance.GetComponent<Attacker>().SetParentAttacker(m_attacker);
+
             m_physics.velocity = Vector2.zero;
             m_physics.AddForce(new Vector2(m_character.facing == HorizontalDirection.Right ? m_pushForce.x : -m_pushForce.x, m_pushForce.y), ForceMode2D.Impulse);
-            //LaunchSpike(PuedisYnnusSpike.SkinType.Big, false, Quaternion.identity, true);
+
             m_launcher.AimAt(new Vector2(m_startPoint.position.x + (m_character.facing == HorizontalDirection.Right ? 10 : -10), m_startPoint.position.y));
-            m_launcher.LaunchProjectile();
+            m_launcher.LaunchProjectile(m_startPoint.right, instance.gameObject);
         }
 
         public void EndExecution()
@@ -124,11 +138,16 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             m_state.canAttack = true;
             m_state.isAttacking = false;
             m_characterState.isChargingEelecktrick = false;
-            base.AttackOver();
-            m_animator.SetBool(m_eelecktrickStateAnimationParameter, false);
             //m_eelecktrickInfo.ShowCollider(false);
             //m_canEelecktrick = true;
             //m_canMove = true;
+            if (m_eelecktrickChargingRoutine != null)
+            {
+                StopCoroutine(m_eelecktrickChargingRoutine);
+                m_eelecktrickChargingRoutine = null;
+            }
+            m_animator.SetBool(m_eelecktrickStateAnimationParameter, false);
+            base.AttackOver();
         }
 
         public override void Cancel()
@@ -140,8 +159,13 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
                 m_fxAnimator.Play("Buffer");
                 StopAllCoroutines();
                 m_characterState.isChargingEelecktrick = false;
-                base.Cancel();
+                if (m_eelecktrickChargingRoutine != null)
+                {
+                    StopCoroutine(m_eelecktrickChargingRoutine);
+                    m_eelecktrickChargingRoutine = null;
+                }
                 m_animator.SetBool(m_eelecktrickStateAnimationParameter, false);
+                base.Cancel();
             }
         }
 
@@ -180,6 +204,16 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             {
                 m_eelecktrickMovementCooldownTimer = m_eelecktrickMovementCooldown;
                 m_canMove = true;
+            }
+        }
+
+        private IEnumerator EelecktrickChargingRoutine()
+        {
+            while (true)
+            {
+                m_state.waitForBehaviour = false;
+                m_state.isAttacking = true;
+                yield return null;
             }
         }
     }

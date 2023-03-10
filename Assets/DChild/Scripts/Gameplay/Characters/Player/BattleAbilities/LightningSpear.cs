@@ -1,4 +1,6 @@
 using DChild.Gameplay.Characters.Players.Modules;
+using DChild.Gameplay.Combat;
+using DChild.Gameplay.Pooling;
 using Sirenix.OdinInspector;
 using Spine.Unity;
 using System.Collections;
@@ -14,6 +16,8 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
         [SerializeField]
         private float m_lightningSpearCooldown;
+        [SerializeField]
+        private float m_lightningSpearMovementCooldown;
         [SerializeField]
         private float m_lightningSpearResetCooldown;
         [SerializeField]
@@ -43,18 +47,23 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
         private ProjectileLauncher m_launcher;
 
         private bool m_canLightningSpear;
+        private bool m_canMove;
         private bool m_canReset;
         private IPlayerModifer m_modifier;
         private int m_lightningSpearStateAnimationParameter;
         private float m_lightningSpearCooldownTimer;
+        private float m_lightningSpearMovementCooldownTimer;
         private float m_lightningSpearResetCooldownTimer;
 
         private Animator m_fxAnimator;
         private SkeletonAnimation m_skeletonAnimation;
 
         public bool CanLightningSpear() => m_canLightningSpear;
+        public bool CanMove() => m_canMove;
         public bool CanReset() => m_canReset;
         private bool m_hasExecuted;
+
+        private Coroutine m_lightningSpearChargingRoutine;
 
         public override void Initialize(ComplexCharacterInfo info)
         {
@@ -63,6 +72,8 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             m_modifier = info.modifier;
             m_lightningSpearStateAnimationParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.LightningSpear); ;
             m_canLightningSpear = true;
+            m_canMove = true;
+            m_lightningSpearMovementCooldownTimer = m_lightningSpearMovementCooldown;
             m_lightningSpearResetCooldownTimer = m_lightningSpearResetCooldown;
 
             m_fxAnimator = m_attackFX.gameObject.GetComponentInChildren<Animator>();
@@ -87,25 +98,33 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
         public void Execute()
         {
             m_hasExecuted = true;
-            //m_state.waitForBehaviour = true;
-            m_state.waitForBehaviour = false;
+            m_state.waitForBehaviour = true; // Temporary (Delete after)
+            //m_lightningSpearChargingRoutine = StartCoroutine(LightningSpearChargingRoutine()); //Temporary Disabled
+            //m_state.waitForBehaviour = false; //Temporary Disabled
             m_state.isAttacking = true;
-            m_characterState.isChargingLightningSpear = true;
-            //m_state.canAttack = false;
+            //m_characterState.isChargingLightningSpear = true; //Temporary Disabled
             m_canLightningSpear = false;
-            m_canReset = true;
+            m_canMove = false;
+            //m_canReset = true; //Temporary Disabled
+            m_canReset = false; // Temporary (Delete after)
             m_cacheGravity = m_physics.gravityScale;
             m_physics.gravityScale = 0;
             m_physics.velocity = Vector2.zero;
             m_animator.SetBool(m_animationParameter, true);
             m_animator.SetBool(m_lightningSpearStateAnimationParameter, true);
             m_lightningSpearCooldownTimer = m_lightningSpearCooldown;
+            m_lightningSpearMovementCooldownTimer = m_lightningSpearMovementCooldown;
             m_lightningSpearResetCooldownTimer = m_lightningSpearResetCooldown;
-            //m_attacker.SetDamageModifier(m_slashComboInfo[m_currentSlashState].damageModifier * m_modifier.Get(PlayerModifier.AttackDamage));
+            //m_attacker.SetDamageModifier(m_slashComboInfo[m_currentSlashState].damageModifier * m_modifier.Get(PlayerModifier.AttackDamage)); //Temporary Disabled
         }
 
         public void ReleaseHold()
         {
+            if (m_lightningSpearChargingRoutine != null)
+            {
+                StopCoroutine(m_lightningSpearChargingRoutine);
+                m_lightningSpearChargingRoutine = null;
+            }
             m_state.waitForBehaviour = true;
             m_characterState.isChargingLightningSpear = false;
             m_animator.SetBool(m_lightningSpearStateAnimationParameter, false);
@@ -116,25 +135,34 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
         public void SummonLightning()
         {
+            var instance = GameSystem.poolManager.GetPool<ProjectilePool>().GetOrCreateItem(m_projectileInfo.projectile);
+            instance.transform.position = m_startPoint.position;
+            instance.GetComponent<Attacker>().SetParentAttacker(m_attacker);
+
             m_physics.velocity = Vector2.zero;
             m_physics.AddForce(new Vector2(m_character.facing == HorizontalDirection.Right ? m_pushForce.x : -m_pushForce.x, m_pushForce.y), ForceMode2D.Impulse);
             m_physics.gravityScale = m_cacheGravity;
-            //LaunchSpike(PuedisYnnusSpike.SkinType.Big, false, Quaternion.identity, true);
+
             m_launcher.AimAt(new Vector2(m_startPoint.position.x + (m_character.facing == HorizontalDirection.Right ? 10 : -10), m_startPoint.position.y - 10));
-            m_launcher.LaunchProjectile();
+            m_launcher.LaunchProjectile(m_startPoint.right, instance.gameObject);
         }
 
         public void EndExecution()
         {
             m_hasExecuted = false;
-            m_animator.SetBool(m_lightningSpearStateAnimationParameter, false);
             m_state.canAttack = true;
             m_state.isAttacking = false;
             m_physics.gravityScale = m_cacheGravity;
             m_characterState.isChargingLightningSpear = false;
-            base.AttackOver();
             //m_lightningSpearInfo.ShowCollider(false);
             //m_canMove = true;
+            if (m_lightningSpearChargingRoutine != null)
+            {
+                StopCoroutine(m_lightningSpearChargingRoutine);
+                m_lightningSpearChargingRoutine = null;
+            }
+            m_animator.SetBool(m_lightningSpearStateAnimationParameter, false);
+            base.AttackOver();
         }
 
         public override void Cancel()
@@ -142,13 +170,18 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             if (m_hasExecuted)
             {
                 m_hasExecuted = false;
-                base.Cancel();
                 //m_lightningSpearInfo.ShowCollider(false);
                 m_fxAnimator.Play("Buffer");
                 StopAllCoroutines();
                 m_physics.gravityScale = m_cacheGravity;
                 m_characterState.isChargingLightningSpear = false;
+                if (m_lightningSpearChargingRoutine != null)
+                {
+                    StopCoroutine(m_lightningSpearChargingRoutine);
+                    m_lightningSpearChargingRoutine = null;
+                }
                 m_animator.SetBool(m_lightningSpearStateAnimationParameter, false);
+                base.Cancel();
             }
         }
 
@@ -176,6 +209,20 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             }
         }
 
+        public void HandleMovementTimer()
+        {
+            if (m_lightningSpearMovementCooldownTimer > 0)
+            {
+                m_lightningSpearMovementCooldownTimer -= GameplaySystem.time.deltaTime;
+                m_canMove = false;
+            }
+            else
+            {
+                m_lightningSpearMovementCooldownTimer = m_lightningSpearMovementCooldown;
+                m_canMove = true;
+            }
+        }
+
         public void HandleResetTimer()
         {
             if (m_lightningSpearResetCooldownTimer > 0)
@@ -188,6 +235,16 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
                 m_lightningSpearResetCooldownTimer = m_lightningSpearResetCooldown;
                 m_canReset = false;
                 EndExecution();
+            }
+        }
+
+        private IEnumerator LightningSpearChargingRoutine()
+        {
+            while (true)
+            {
+                m_state.waitForBehaviour = false;
+                m_state.isAttacking = true;
+                yield return null;
             }
         }
     }

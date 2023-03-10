@@ -12,8 +12,8 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
         [SerializeField]
         private SkeletonAnimation m_attackFX;
 
-        //[SerializeField]
-        //private float m_edgedFuryCooldown;
+        [SerializeField]
+        private float m_edgedFuryCooldown;
         //[SerializeField]
         //private float m_edgedFuryMovementCooldown;
         [SerializeField]
@@ -34,17 +34,17 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
         [SerializeField]
         private Vector2 m_pushForce;
 
-        //private bool m_canEdgedFury;
+        private bool m_canEdgedFury;
         //private bool m_canMove;
         private IPlayerModifer m_modifier;
         private int m_edgedFuryStateAnimationParameter;
-        //private float m_edgedFuryCooldownTimer;
+        private float m_edgedFuryCooldownTimer;
         //private float m_edgedFuryMovementCooldownTimer;
 
         private Animator m_fxAnimator;
         private SkeletonAnimation m_skeletonAnimation;
 
-        //public bool CanEdgedFury() => m_canEdgedFury;
+        public bool CanEdgedFury() => m_canEdgedFury;
         //public bool CanMove() => m_canMove;
 
         public override void Initialize(ComplexCharacterInfo info)
@@ -53,7 +53,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
             m_modifier = info.modifier;
             m_edgedFuryStateAnimationParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.EdgedFury);
-            //m_canedgedFury = true;
+            m_canEdgedFury = true;
             //m_canMove = true;
             //m_edgedFuryMovementCooldownTimer = m_edgedFuryMovementCooldown;
             m_cacheGravity = m_physics.gravityScale;
@@ -76,14 +76,13 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
         public void Execute()
         {
-            //m_state.waitForBehaviour = true;
-            m_state.waitForBehaviour = false;
+            m_state.waitForBehaviour = true;
             m_state.isAttacking = true;
             m_state.canAttack = false;
             m_cacheGravity = m_physics.gravityScale;
             m_physics.gravityScale = 0;
             //m_physics.velocity = Vector2.zero;
-            //m_canedgedFury = false;
+            m_canEdgedFury = false;
             //m_canMove = false;
             m_animator.SetBool(m_animationParameter, true);
             m_animator.SetBool(m_edgedFuryStateAnimationParameter, true);
@@ -94,22 +93,21 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
         public void EndExecution()
         {
-            base.AttackOver();
-            m_state.waitForBehaviour = false;
             m_edgedFuryInfo.ShowCollider(false);
             m_physics.gravityScale = m_cacheGravity;
             m_physics.velocity = Vector2.zero;
             m_animator.SetBool(m_edgedFuryStateAnimationParameter, false);
+            base.AttackOver();
         }
 
         public override void Cancel()
         {
-            base.Cancel();
             m_physics.gravityScale = m_cacheGravity;
             m_physics.velocity = Vector2.zero;
             m_edgedFuryInfo.ShowCollider(false);
             m_fxAnimator.Play("Buffer");
             m_animator.SetBool(m_edgedFuryStateAnimationParameter, false);
+            base.Cancel();
         }
 
         public void EnableCollision(bool value)
@@ -134,20 +132,20 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             //}
         }
 
-        //public void HandleAttackTimer()
-        //{
-        //    if (m_edgedFuryCooldownTimer > 0)
-        //    {
-        //        m_edgedFuryCooldownTimer -= GameplaySystem.time.deltaTime;
-        //        m_canedgedFury = false;
-        //    }
-        //    else
-        //    {
-        //        m_edgedFuryCooldownTimer = m_edgedFuryCooldown;
-        //        m_state.isAttacking = false;
-        //        m_canedgedFury = true;
-        //    }
-        //}
+        public void HandleAttackTimer()
+        {
+            if (m_edgedFuryCooldownTimer > 0)
+            {
+                m_edgedFuryCooldownTimer -= GameplaySystem.time.deltaTime;
+                m_canEdgedFury = false;
+            }
+            else
+            {
+                m_edgedFuryCooldownTimer = m_edgedFuryCooldown;
+                //m_state.isAttacking = false;
+                m_canEdgedFury = true;
+            }
+        }
 
         //public void HandleMovementTimer()
         //{

@@ -70,9 +70,12 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
         public override void Reset()
         {
-            base.Reset();
+            m_state.waitForBehaviour = false;
+            m_state.isAttacking = false;
+            m_canAirLunge = true;
             m_airLungeInfo.ShowCollider(false);
             m_animator.SetBool(m_airLungeStateAnimationParameter, false);
+            base.Reset();
         }
 
         public void Execute()
@@ -113,15 +116,14 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             }
             m_airLungeInfo.ShowCollider(false);
             m_fxAnimator.Play("Buffer");
-            base.Cancel();
             m_animator.SetBool(m_airLungeStateAnimationParameter, false);
+            base.Cancel();
         }
 
         public void EnableCollision(bool value)
         {
             m_rigidBody.WakeUp();
             m_airLungeInfo.ShowCollider(value);
-            m_attackFX.transform.position = m_airLungeInfo.fxPosition.position;
 
             //TEST
             m_enemySensor.Cast();
@@ -130,6 +132,11 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             if (/*!m_enemySensor.isDetecting && !m_wallSensor.allRaysDetecting && */m_edgeSensor.isDetecting && value)
             {
                 m_physics.AddForce(new Vector2(m_character.facing == HorizontalDirection.Right ? m_pushForce.x : -m_pushForce.x, m_pushForce.y), ForceMode2D.Impulse);
+            }
+            if (value)
+            {
+                m_airLungeInfo.fxPosition.localRotation = Quaternion.Euler(0, m_character.facing == HorizontalDirection.Right ? 180 : 0, 0);
+                m_airLungeInfo.PlayFX(true);
             }
         }
 
@@ -143,13 +150,14 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             else
             {
                 m_airLungeCooldownTimer = m_airLungeCooldown;
-                m_state.isAttacking = false;
+                //m_state.isAttacking = false;
                 m_canAirLunge = true;
             }
         }
 
         private IEnumerator CielingCheckRoutine()
         {
+            m_cielingSensor.Cast();
             while (!m_cielingSensor.isDetecting)
             {
                 m_cielingSensor.Cast();

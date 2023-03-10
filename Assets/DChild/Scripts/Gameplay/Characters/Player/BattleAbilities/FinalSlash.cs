@@ -126,7 +126,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             //m_state.canAttack = true;
             //m_state.isAttacking = false;
             m_characterState.isChargingFinalSlash = false;
-            //m_finalSlashInfo.ShowCollider(false);
+            m_finalSlashInfo.ShowCollider(false);
             //m_canFinalSlash = true;
             //m_canMove = true;
             m_canDash = false;
@@ -136,8 +136,8 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
                 StopCoroutine(m_finalSlashChargingRoutine);
                 m_finalSlashChargingRoutine = null;
             }
-            base.AttackOver();
             m_animator.SetBool(m_finalSlashStateAnimationParameter, false);
+            base.AttackOver();
         }
 
         public void EnableDash(bool value)
@@ -159,8 +159,8 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
                     StopCoroutine(m_finalSlashChargingRoutine);
                     m_finalSlashChargingRoutine = null;
                 }
-                base.Cancel();
                 m_animator.SetBool(m_finalSlashStateAnimationParameter, false);
+                base.Cancel();
             }
         }
 
@@ -214,7 +214,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
                 m_enemySensor.Cast();
                 //m_wallSensor.Cast();
                 m_edgeSensor.Cast();
-                m_physics.velocity = new Vector2(m_character.facing == HorizontalDirection.Right ? m_pushForce.x : -m_pushForce.x, m_physics.velocity.y);
+                m_physics.velocity = new Vector2(m_character.facing == HorizontalDirection.Right ? m_pushForce.x : -m_pushForce.x, -m_physics.velocity.y);
                 timer -= Time.deltaTime;
                 if (!m_edgeSensor.isDetecting || m_enemySensor.isDetecting)
                     timer = -1;
@@ -235,6 +235,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             while (true)
             {
                 m_state.waitForBehaviour = false;
+                m_state.isAttacking = true;
                 yield return null;
             }
         }
