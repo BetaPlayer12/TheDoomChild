@@ -7,6 +7,7 @@ using UnityEngine.UI;
 
 namespace DChild.Gameplay.NavigationMap
 {
+
     public class NavMapFogOfWarUI : SerializedMonoBehaviour
     {
 #if UNITY_EDITOR
@@ -30,6 +31,11 @@ namespace DChild.Gameplay.NavigationMap
         public void SetUIState(string varName, Flag state)
         {
             m_list[varName].SetUIState(state);
+        }
+
+        public bool HasID(string varName)
+        {
+            return m_list.ContainsKey(varName);
         }
 
         private void OnValidate()
