@@ -1,14 +1,17 @@
-﻿using Holysoft.Event;
+﻿using DChild.Gameplay.Characters.Players.SoulSkills;
+using Holysoft.Event;
 
 namespace DChild.Gameplay.SoulSkills
 {
     public struct SoulSkillAcquiredEventArgs : IEventActionArgs
     {
-        public SoulSkillAcquiredEventArgs(int ID) : this()
+        public SoulSkillAcquiredEventArgs(SoulSkill skill) : this()
         {
-            this.ID = ID;
+            this.SoulSKill = skill;
         }
 
-        public int ID { get; }
+        public SoulSkill SoulSKill { get; }
+
+        public int ID => SoulSKill.id;
     }
 }

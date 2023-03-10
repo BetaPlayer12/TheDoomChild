@@ -43,7 +43,7 @@ public class RegenerationEffectsHandler : MonoBehaviour
         }
     }
 
-    private void Awake()
+    private void Start()
     {
         HealthRegenEffect(false);
         ShadowRegenEffect(false);
