@@ -1762,7 +1762,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                         }
                         return;
                     }
-                    else if (m_input.fireFistPressed)
+                    else if (m_input.fireFistPressed && m_fireFist.CanFireFist())
                     {
                         if (m_state.isInShadowMode == false)
                         {

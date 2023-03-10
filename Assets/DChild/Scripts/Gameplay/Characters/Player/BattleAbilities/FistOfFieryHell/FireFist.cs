@@ -1,5 +1,6 @@
 using DChild.Gameplay.Characters.Players.Modules;
 using DChild.Gameplay.Combat;
+using DChild.Gameplay.Pooling;
 using Sirenix.OdinInspector;
 using Spine.Unity;
 using System.Collections;
@@ -33,14 +34,21 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
         [SerializeField]
         private Vector2 m_pushForce;
+        
+        [SerializeField, BoxGroup("Projectile")]
+        private Transform m_startPoint;
+        [SerializeField, BoxGroup("Projectile")]
+        private ProjectileInfo m_projectileInfo;
 
-        [SerializeField, BoxGroup("Temporary")]
-        private Transform m_lichLordArmTF;
-        [SerializeField, BoxGroup("Temporary")]
-        private Transform m_lichLordArmHurtBox;
-        [SerializeField, TabGroup("Temporary")]
-        private ParticleSystem m_lichArmGroundFX;
-        private Vector2 m_lichLordArmLocalPos;
+        private ProjectileLauncher m_launcher;
+
+        //[SerializeField, BoxGroup("Temporary")]
+        //private Transform m_lichLordArmTF;
+        //[SerializeField, BoxGroup("Temporary")]
+        //private Transform m_lichLordArmHurtBox;
+        //[SerializeField, TabGroup("Temporary")]
+        //private ParticleSystem m_lichArmGroundFX;
+        //private Vector2 m_lichLordArmLocalPos;
 
         private bool m_canFireFist;
         private bool m_canMove;
@@ -67,8 +75,10 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
             m_fxAnimator = m_attackFX.gameObject.GetComponentInChildren<Animator>();
             m_skeletonAnimation = m_attackFX.gameObject.GetComponent<SkeletonAnimation>();
-            m_lichLordArmLocalPos = m_lichLordArmTF.localPosition;
-            m_lichLordArmTF.GetComponent<Attacker>().SetParentAttacker(m_attacker);
+            //m_lichLordArmLocalPos = m_lichLordArmTF.localPosition;
+            //m_lichLordArmTF.GetComponent<Attacker>().SetParentAttacker(m_attacker);
+
+            m_launcher = new ProjectileLauncher(m_projectileInfo, m_startPoint);
         }
 
         //public void SetConfiguration(SlashComboStatsInfo info)
@@ -165,31 +175,36 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
         public void Summon()
         {
-            StartCoroutine(SkeletalArmRoutine());
+            var instance = GameSystem.poolManager.GetPool<ProjectilePool>().GetOrCreateItem(m_projectileInfo.projectile);
+            instance.transform.position = m_startPoint.position;
+            instance.GetComponent<Attacker>().SetParentAttacker(m_attacker);
+
+            m_launcher.AimAt(new Vector2(m_startPoint.position.x + (m_character.facing == HorizontalDirection.Right ? 10 : -10), m_startPoint.position.y));
+            m_launcher.LaunchProjectile(m_startPoint.right, instance.gameObject);
         }
 
 
-        private IEnumerator SkeletalArmRoutine()
-        {
-            //Reset
-            m_lichLordArmTF.SetParent(this.transform);
-            m_lichLordArmTF.localPosition = m_lichLordArmLocalPos;
-            m_lichArmGroundFX.Stop();
-            //
-            m_lichLordArmTF.SetParent(null);
-            m_lichLordArmTF.gameObject.SetActive(true);
-            m_lichLordArmTF.GetComponentInChildren<SkeletonAnimation>().state.SetAnimation(0, "Phase_1_Arm_Attack", false).MixDuration = 0;
-            m_lichLordArmTF.localScale = new Vector3(m_character.facing == HorizontalDirection.Right ? 1 : -1, 1, 1);
-            m_lichArmGroundFX.Play();
-            yield return new WaitForSeconds(.1f);
-            m_lichLordArmHurtBox.gameObject.SetActive(true);
-            m_lichLordArmTF.GetComponentInChildren<SkeletonRenderer>().maskInteraction = SpriteMaskInteraction.None;
-            yield return new WaitForAnimationComplete(m_lichLordArmTF.GetComponentInChildren<SkeletonAnimation>().state, m_lichLordArmTF.GetComponentInChildren<SkeletonAnimation>().state.GetCurrent(0).Animation.ToString());
-            //yield return new WaitForSeconds(5f);
-            //m_lichLordArmTF.gameObject.SetActive(false);
-            m_lichLordArmTF.GetComponentInChildren<SkeletonRenderer>().maskInteraction = SpriteMaskInteraction.VisibleOutsideMask;
-            m_lichLordArmHurtBox.gameObject.SetActive(false);
-            yield return null;
-        }
+        //private IEnumerator SkeletalArmRoutine()
+        //{
+        //    //Reset
+        //    m_lichLordArmTF.SetParent(this.transform);
+        //    m_lichLordArmTF.localPosition = m_lichLordArmLocalPos;
+        //    m_lichArmGroundFX.Stop();
+        //    //
+        //    m_lichLordArmTF.SetParent(null);
+        //    m_lichLordArmTF.gameObject.SetActive(true);
+        //    m_lichLordArmTF.GetComponentInChildren<SkeletonAnimation>().state.SetAnimation(0, "Phase_1_Arm_Attack", false).MixDuration = 0;
+        //    m_lichLordArmTF.localScale = new Vector3(m_character.facing == HorizontalDirection.Right ? 1 : -1, 1, 1);
+        //    m_lichArmGroundFX.Play();
+        //    yield return new WaitForSeconds(.1f);
+        //    m_lichLordArmHurtBox.gameObject.SetActive(true);
+        //    m_lichLordArmTF.GetComponentInChildren<SkeletonRenderer>().maskInteraction = SpriteMaskInteraction.None;
+        //    yield return new WaitForAnimationComplete(m_lichLordArmTF.GetComponentInChildren<SkeletonAnimation>().state, m_lichLordArmTF.GetComponentInChildren<SkeletonAnimation>().state.GetCurrent(0).Animation.ToString());
+        //    //yield return new WaitForSeconds(5f);
+        //    //m_lichLordArmTF.gameObject.SetActive(false);
+        //    m_lichLordArmTF.GetComponentInChildren<SkeletonRenderer>().maskInteraction = SpriteMaskInteraction.VisibleOutsideMask;
+        //    m_lichLordArmHurtBox.gameObject.SetActive(false);
+        //    yield return null;
+        //}
     }
 }
