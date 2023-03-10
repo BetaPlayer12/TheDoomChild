@@ -38,11 +38,11 @@ namespace DChild.Gameplay.ArmyBattle
                     playerDamage = CalculateDamageDealt(initialPlayerDamage, Outcome.Lose);
                     enemyDamage = CalculateDamageDealt(initialEnemyDamage, Outcome.Win);
 
-                    if (Random.Range(0f, 1f) <= m_data.chanceToLoseACharacter)
-                    {
-                        var removedCharacter = player.controlledArmy.RemoveRandomCharacter(player.currentAttack.type);
-                        CustomDebug.Log(CustomDebug.LogType.System_ArmyBattle, $"\n Player Lost {removedCharacter.name}");
-                    }
+                    //if (Random.Range(0f, 1f) <= m_data.chanceToLoseACharacter)
+                    //{
+                    //    var removedCharacter = player.controlledArmy.RemoveRandomCharacter(player.currentAttack.type);
+                    //    CustomDebug.Log(CustomDebug.LogType.System_ArmyBattle, $"\n Player Lost {removedCharacter.name}");
+                    //}
                     break;
                 case Outcome.Draw:
                     playerDamage = CalculateDamageDealt(initialPlayerDamage, Outcome.Draw);
@@ -50,6 +50,8 @@ namespace DChild.Gameplay.ArmyBattle
                     break;
             }
 
+            enemy.currentAttackGroup.SetAvailability(false);
+            player.currentAttackGroup.SetAvailability(false);
             enemy.controlledArmy.troopCount.ReduceCurrentValue(playerDamage);
             player.controlledArmy.troopCount.ReduceCurrentValue(enemyDamage);
             CustomDebug.Log(CustomDebug.LogType.System_ArmyBattle, $"\n Player Dealt: {playerDamage} \n Enemy Dealt: {enemyDamage}");

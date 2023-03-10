@@ -48,18 +48,6 @@ public class DetachCameraControls : MonoBehaviour
     {
         horizontalMovement = obj.ReadValue<float>();
 
-        //if (obj.ReadValue<float>() == -1)
-        //{
-        //    Vector3 position = detachable.transform.position;
-        //    position.x--;
-        //    detachable.transform.position = position;
-        //}
-        //if (obj.ReadValue<float>() == 1)
-        //{
-        //    Vector3 position = detachable.transform.position;
-        //    position.x++;
-        //    detachable.transform.position = position;
-        //}
     }
     public void onCameraMoveVertical(InputAction.CallbackContext obj)
     {
@@ -88,67 +76,5 @@ public class DetachCameraControls : MonoBehaviour
         position.y += verticalMovement;
         position.z += mouseMovement;
         detachable.transform.position = position;
-
-
-        //if (m_inputTranslator.horizontalInput == -1)
-        //{
-        //    Vector3 position = detachable.transform.position;
-        //    position.x--;
-        //    detachable.transform.position = position;
-        //}
-        //if (m_inputTranslator.horizontalInput == 1)
-        //{
-        //    Vector3 position = detachable.transform.position;
-        //    position.x++;
-        //    detachable.transform.position = position;
-        //}
-        //if (m_inputTranslator.verticalInput == -1)
-        //{
-        //    Vector3 position = detachable.transform.position;
-        //    position.y--;
-        //    detachable.transform.position = position;
-        //}
-        //if (m_inputTranslator.verticalInput == 1)
-        //{
-        //    Vector3 position = detachable.transform.position;
-        //    position.y++;
-        //    detachable.transform.position = position;
-        //}
-
-        //if (m_input.actions["Camera_Horizontal"].ReadValue<Vector3>().x == 1)
-        //{
-        //    Vector3 position = detachable.transform.position;
-        //    position.x++;
-        //    detachable.transform.position = position;
-        //}
-
-        //if (m_input.actions["Camera_Vertical"].ReadValue<Vector3>().y == -1)
-        //{
-        //    Vector3 position = detachable.transform.position;
-        //    position.y++;
-        //    detachable.transform.position = position;
-        //}
-
-        //if (m_input.actions["Camera_Vertical"].ReadValue<Vector3>().y == 1)
-        //{
-        //    Vector3 position = detachable.transform.position;
-        //    position.y--;
-        //    detachable.transform.position = position;
-        //}
-        //if (Input.GetKey(KeyCode.Mouse0))
-        //{
-        //    Vector3 position = detachable.transform.position;
-        //    position.z++;
-        //    detachable.transform.position = position;
-        //}
-
-        //if (Input.GetKey(KeyCode.Mouse1))
-        //{
-        //    Vector3 position = detachable.transform.position;
-        //    position.z--;
-        //    detachable.transform.position = position;
-        //}
-
-
     }
 }

@@ -15,7 +15,8 @@ MonoBehaviour:
   serializationData:
     SerializedFormat: 2
     SerializedBytes: 
-    ReferencedUnityObjects: []
+    ReferencedUnityObjects:
+    - {fileID: 5822141453945479576, guid: 5b35d0255834d154c86cb21f8d7eba80, type: 3}
     SerializedBytesString: 
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
@@ -26,13 +27,23 @@ MonoBehaviour:
       Data: 0|DChild.Gameplay.Characters.Players.SoulSkills.ISoulSkillModule[], Assembly-CSharp
     - Name: 
       Entry: 12
-      Data: 2
+      Data: 3
     - Name: 
       Entry: 7
-      Data: 1|DChild.Gameplay.Characters.Players.SoulSkills.ResistanceModifier, Assembly-CSharp
+      Data: 1|DChild.Gameplay.Characters.Players.SoulSkills.StatusEffectDurationModifier,
+        Assembly-CSharp
+    - Name: m_percentToAdd
+      Entry: 3
+      Data: -50
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 2|DChild.Gameplay.Characters.Players.SoulSkills.ResistanceModifier, Assembly-CSharp
     - Name: m_type
       Entry: 3
-      Data: 1
+      Data: 127
     - Name: m_addedResistance
       Entry: 3
       Data: 20
@@ -41,11 +52,13 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 2|DChild.Gameplay.Characters.Players.SoulSkills.StatusEffectDurationModifier,
-        Assembly-CSharp
-    - Name: m_percentToAdd
-      Entry: 3
-      Data: -50
+      Data: 3|DChild.Gameplay.Characters.Players.SoulSkills.ObjectCreator, Assembly-CSharp
+    - Name: m_toCreate
+      Entry: 10
+      Data: 0
+    - Name: m_bindToPlayer
+      Entry: 5
+      Data: true
     - Name: 
       Entry: 8
       Data: 
@@ -61,10 +74,8 @@ MonoBehaviour:
   m_databaseID: 1154094
   m_customName: AbysmalArmor
   m_initialized: 1
-  m_orbData: {fileID: 11400000, guid: 879a288df7d8a05409efdbd3aa15ad6c, type: 2}
+  m_orbData: {fileID: 11400000, guid: 5bc73cd96d95244419cad9e1799ff10f, type: 2}
   m_icon: {fileID: 21300000, guid: f1ab9bca6edf839478f72479ea094372, type: 3}
   m_capacity: 10
-  m_description: 'Grants the user to absorb 20% from Melee and Ranged Attacks. It
+  m_description: Grants the user to absorbs 20% from Melee and Ranged Attacks. It
     also shortens the duration time of all Status Ailments by half.
-
-'
