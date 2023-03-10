@@ -2217,6 +2217,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_movement?.Cancel();
             m_objectManipulation?.Cancel();
             m_attackRegistrator?.ResetHitCache();
+            m_projectileThrow?.Cancel(); //fix for projectile throw delay WIP
         }
 
         private void PrepareForMidairAttack()
