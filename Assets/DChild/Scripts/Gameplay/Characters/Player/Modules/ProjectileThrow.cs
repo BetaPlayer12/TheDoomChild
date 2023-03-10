@@ -307,10 +307,10 @@ namespace DChild.Gameplay.Characters.Players.Modules
             //m_spawnedProjectile.transform.position = m_spawnPoint.position;
             //m_spawnedProjectile.transform.parent = transform;
             //m_spawnedProjectile.GetComponent<Attacker>().SetParentAttacker(m_attacker);
-            if (m_spawnedProjectile.TryGetComponent(out IsolatedObjectPhysics2D physics))
-            {
-                physics.Disable();
-            }
+            //if (m_spawnedProjectile.TryGetComponent(out IsolatedObjectPhysics2D physics))
+            //{
+            //    physics.Disable();
+            //}
         }
 
         public void StartThrow()

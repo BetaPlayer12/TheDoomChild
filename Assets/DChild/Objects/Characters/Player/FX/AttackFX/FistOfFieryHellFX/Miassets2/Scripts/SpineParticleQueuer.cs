@@ -16,7 +16,10 @@ public class SpineParticleQueuer : MonoBehaviour
     {
         for (int i = 0; i < skeletonAnimations.Length; i++)
         {
-            skeletonAnimations[i].state.Event += State_Event;
+            if (skeletonAnimations[i] != null)
+            {
+                skeletonAnimations[i].state.Event += State_Event;
+            }
         }
     }
 
@@ -26,7 +29,10 @@ public class SpineParticleQueuer : MonoBehaviour
         {
             for (int i = 0; i < particleSystems.Length; i++)
             {
-                particleSystems[i].Play();
+                if (particleSystems[i] != null)
+                {
+                    particleSystems[i].Play();
+                }
             }
             isPlaying = true;
         }
