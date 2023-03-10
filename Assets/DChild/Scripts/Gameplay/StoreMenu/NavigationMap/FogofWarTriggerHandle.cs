@@ -1,4 +1,5 @@
-﻿using Holysoft.Event;
+﻿using Holysoft.Collections;
+using Holysoft.Event;
 using PixelCrushers.DialogueSystem;
 using System;
 using System.Collections;
@@ -11,33 +12,32 @@ namespace DChild.Gameplay.NavigationMap
     public class FogofWarTriggerHandle
     {
         [SerializeField]
-        private FogofWarTrigger[] m_fogOfWarList;
+        private FogOfWarSegment[] m_segmentList;
 
-        public event EventAction<FogOfWarStateChangeEvent> TriggerValueChanged;
+        public event EventAction<FogOfWarSegmentChangeEvent> TriggerValueChanged;
 
         public void Initialize()
         {
-
-            for (int i = 0; i < m_fogOfWarList.Length; i++)
+            for (int i = 0; i < m_segmentList.Length; i++)
             {
-                var fogOfWar = m_fogOfWarList[i];
-                fogOfWar.RevealValueChange += OnValueChanged;
+                var fogOfWar = m_segmentList[i];
+                fogOfWar.SegmentUpdate += OnSegmentUpdate;
             }
         }
+
 
         public void LoadStates()
         {
-            for (int i = 0; i < m_fogOfWarList.Length; i++)
+            for (int i = 0; i < m_segmentList.Length; i++)
             {
-                var fogOfWar = m_fogOfWarList[i];
-                var isRevealed = DialogueLua.GetVariable(fogOfWar.varName).asBool;
-                fogOfWar.SetStateAs(isRevealed);
+                var fogOfWar = m_segmentList[i];
+                var revealState = DialogueLua.GetVariable(fogOfWar.varName).asInt;
+                fogOfWar.SetStateAs((Flag)revealState);
             }
         }
-
-        private void OnValueChanged(object sender, FogOfWarStateChangeEvent eventArgs)
+        private void OnSegmentUpdate(object sender, FogOfWarSegmentChangeEvent eventArgs)
         {
-            DialogueLua.SetVariable(eventArgs.varName, eventArgs.isRevealed);
+            DialogueLua.SetVariable(eventArgs.varName, (int)eventArgs.revealState);
             TriggerValueChanged?.Invoke(this, eventArgs);
         }
     }
