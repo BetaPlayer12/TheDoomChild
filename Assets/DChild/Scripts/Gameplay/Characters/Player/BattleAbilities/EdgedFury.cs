@@ -69,9 +69,10 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
         public override void Reset()
         {
-            base.Reset();
+            m_edgedFuryInfo.PlayFX(false);
             m_edgedFuryInfo.ShowCollider(false);
             m_animator.SetBool(m_edgedFuryStateAnimationParameter, false);
+            base.Reset();
         }
 
         public void Execute()
@@ -86,6 +87,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             //m_canMove = false;
             m_animator.SetBool(m_animationParameter, true);
             m_animator.SetBool(m_edgedFuryStateAnimationParameter, true);
+            m_edgedFuryInfo.PlayFX(true);
             //m_edgedFuryCooldownTimer = m_edgedFuryCooldown;
             //m_edgedFuryMovementCooldownTimer = m_edgedFuryMovementCooldown;
             //m_attacker.SetDamageModifier(m_slashComboInfo[m_currentSlashState].damageModifier * m_modifier.Get(PlayerModifier.AttackDamage));
@@ -102,6 +104,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
         public override void Cancel()
         {
+            m_edgedFuryInfo.PlayFX(false);
             m_physics.gravityScale = m_cacheGravity;
             m_physics.velocity = Vector2.zero;
             m_edgedFuryInfo.ShowCollider(false);
