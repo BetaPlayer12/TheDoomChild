@@ -79,7 +79,7 @@ namespace DChild.Gameplay.NavigationMap
 
             m_pointOfInterest.LoadStates();
 
-            GameplaySystem.gamplayUIHandle.UpdateNavMapConfiguration(m_sceneLocation, m_configurator.inGameReferencePoint, m_configurator.mapReferencePoint, m_configurator.offset);
+            GameplaySystem.gamplayUIHandle.UpdateNavMapConfiguration(m_sceneLocation, m_sceneIndex - 1, m_configurator.inGameReferencePoint, m_configurator.mapReferencePoint, m_configurator.offset);
         }
     }
 }
