@@ -11,7 +11,7 @@ namespace DChild.Gameplay.NavigationMap
         private NavMapTracker m_tracker;
 
         private RectTransform m_currentMap;
-        private NavMapFogOfWarUI m_fogOfWarUI;
+        private NavigationMapInstance m_mapInstance;
         [SerializeField]
         private bool m_mapNeedsCompleteUpdate = true;
 
@@ -19,12 +19,12 @@ namespace DChild.Gameplay.NavigationMap
         {
             if (m_instantiator.currentMap != location)
             {
+                NavigationMapSceneHandle.changes.Clear();
                 m_tracker.RemoveUIReferencesFromCurrentMap();
                 m_currentMap = m_instantiator.LoadMapFor(location);
                 m_mapNeedsCompleteUpdate = true;
+                m_mapInstance = m_currentMap.GetComponentInChildren<NavigationMapInstance>();
             }
-            var instance = m_currentMap.GetComponentInChildren<NavigationMapInstance>();
-            m_fogOfWarUI = instance.GetFogOfWarOfScene(sceneIndex);
 
             m_tracker.SetReferencePointPosition(m_currentMap, mapReferencePoint);
             m_tracker.SetInGameTrackReferencePoint(inGameReference);
@@ -35,7 +35,7 @@ namespace DChild.Gameplay.NavigationMap
         {
             if (m_mapNeedsCompleteUpdate)
             {
-                m_fogOfWarUI?.UpdateUI();
+                m_mapInstance?.UpdateFogOfWar();
                 m_mapNeedsCompleteUpdate = false;
             }
             else
@@ -44,7 +44,7 @@ namespace DChild.Gameplay.NavigationMap
                 //Only update the ones that needs update
                 for (int i = 0; i < changes.fogOfWarChanges; i++)
                 {
-                    m_fogOfWarUI.SetUIState(changes.GetFogOfWarName(i), changes.GetFogOfWarState(i));
+                    m_mapInstance.SetFogOfwarState(changes.GetFogOfWarName(i), changes.GetFogOfWarState(i));
                 }
                 changes.Clear();
             }
