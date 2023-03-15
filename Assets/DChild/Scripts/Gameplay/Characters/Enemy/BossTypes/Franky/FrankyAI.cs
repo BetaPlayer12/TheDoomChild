@@ -252,8 +252,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private MovementHandle2D m_movement;
         [SerializeField, TabGroup("Modules")]
         private DeathHandle m_deathHandle;
-        [SerializeField, TabGroup("Cinematic")]
-        private BlackDeathCinematicPlayah m_cinematic;
+        //[SerializeField, TabGroup("Cinematic")]
+        //private BlackDeathCinematicPlayah m_cinematic;
         //[SerializeField, TabGroup("Cinematic")]
         //private PlayableDirector m_director;
         //[SerializeField, TabGroup("Cinematic")]
@@ -388,7 +388,8 @@ namespace DChild.Gameplay.Characters.Enemies
             m_stateHandle.Wait(State.Chasing);
             m_movement.Stop();
             m_hitbox.SetInvulnerability(Invulnerability.MAX);
-            m_cinematic.PlayCinematic(1, false);
+            //Removed Cinematic for hack solution with broken quest
+            //m_cinematic.PlayCinematic(1, false);
             m_animation.animationState.TimeScale = 1;
             ////m_animation.SetEmptyAnimation(0, 0);
             ////m_animation.SetAnimation(0, m_info.introAnimation, false).AnimationStart = 0.2f;

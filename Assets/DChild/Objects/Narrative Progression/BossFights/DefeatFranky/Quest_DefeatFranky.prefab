@@ -166,6 +166,68 @@ Transform:
   m_Father: {fileID: 260029562472193373}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &4319628003102270872
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3488656634508439327}
+  - component: {fileID: 2000613720395447313}
+  m_Layer: 0
+  m_Name: Hack Franky Intro Cutscene End
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3488656634508439327
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4319628003102270872}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7399641792595377800}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2000613720395447313
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4319628003102270872}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e52de21a22b6dd44c9cc19f810c65059, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Events:
+    m_Signals:
+    - {fileID: 11400000, guid: e3b3b9acb6456814db9e89f2b0d38ad5, type: 2}
+    m_Events:
+    - m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 579887090437427850}
+          m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+          m_MethodName: SetActive
+          m_Mode: 6
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 1
+          m_CallState: 2
 --- !u!1 &6978997799557090985
 GameObject:
   m_ObjectHideFlags: 0
@@ -5491,6 +5553,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7399641791327015159}
+  - {fileID: 3488656634508439327}
   m_Father: {fileID: 4624159880298569850}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -5545,6 +5608,8 @@ PlayableDirector:
     value: {fileID: 6537190296804887580}
   - key: {fileID: 0}
     value: {fileID: 7399641791234367239}
+  - key: {fileID: 1558564731175522333, guid: 9030c39f88ba3664ba816db72a66079a, type: 2}
+    value: {fileID: 2000613720395447313}
   m_ExposedReferences:
     m_References: []
 --- !u!95 &7399641792595377803
@@ -20533,7 +20598,31 @@ MonoBehaviour:
     indicatorLevel: 1
     onEnterState:
       m_PersistentCalls:
-        m_Calls: []
+        m_Calls:
+        - m_Target: {fileID: 9157515910057884819}
+          m_TargetAssemblyTypeName: DChild.Gameplay.Characters.Enemies.Boss, Assembly-CSharp
+          m_MethodName: Disable
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+        - m_Target: {fileID: 579887090437427850}
+          m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+          m_MethodName: SetActive
+          m_Mode: 6
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
   - updateOnStartOnly: 1
     questState: 4
     condition:
@@ -32296,7 +32385,7 @@ PrefabInstance:
     - target: {fileID: 523316656632876563, guid: 94a5e064c11652e4baccb75190f66c25,
         type: 3}
       propertyPath: m_LocalScale.y
-      value: 1
+      value: 0.9999999
       objectReference: {fileID: 0}
     - target: {fileID: 523316656632876563, guid: 94a5e064c11652e4baccb75190f66c25,
         type: 3}
@@ -32521,7 +32610,7 @@ PrefabInstance:
     - target: {fileID: 4201187797050728104, guid: 94a5e064c11652e4baccb75190f66c25,
         type: 3}
       propertyPath: m_LocalScale.x
-      value: 1.4721726
+      value: 1.4721725
       objectReference: {fileID: 0}
     - target: {fileID: 4201187797050728104, guid: 94a5e064c11652e4baccb75190f66c25,
         type: 3}
@@ -32546,7 +32635,7 @@ PrefabInstance:
     - target: {fileID: 4201187797050728104, guid: 94a5e064c11652e4baccb75190f66c25,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.04781837
+      value: 0.047818378
       objectReference: {fileID: 0}
     - target: {fileID: 4828360354959302240, guid: 94a5e064c11652e4baccb75190f66c25,
         type: 3}
@@ -33141,7 +33230,7 @@ PrefabInstance:
     - target: {fileID: 9030232279468334852, guid: 94a5e064c11652e4baccb75190f66c25,
         type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.83868134
+      value: 0.8386813
       objectReference: {fileID: 0}
     - target: {fileID: 9030232279468334852, guid: 94a5e064c11652e4baccb75190f66c25,
         type: 3}
@@ -33160,6 +33249,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 94a5e064c11652e4baccb75190f66c25, type: 3}
+--- !u!1 &579887090437427850 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 9175405728885347214, guid: 94a5e064c11652e4baccb75190f66c25,
+    type: 3}
+  m_PrefabInstance: {fileID: 8600110405266702596}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &7389585133861443448 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1284843513166534268, guid: 94a5e064c11652e4baccb75190f66c25,
@@ -33172,7 +33267,7 @@ MonoBehaviour:
     type: 3}
   m_PrefabInstance: {fileID: 8600110405266702596}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 579887090437427850}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a4f98d48509856d43946b8a85c3080ad, type: 3}

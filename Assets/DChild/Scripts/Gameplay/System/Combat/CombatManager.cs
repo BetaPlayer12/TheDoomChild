@@ -102,7 +102,7 @@ namespace DChild.Gameplay.Combat
                 var attackType = attacker.attackInfo.damage.type;
                 var critInfo = attacker.attackInfo.criticalDamageInfo;
 
-                return $"Attacker: {attacker.instance.name} || Target:{targetInfo.instance.transform.name}\n" +
+                return $"Attacker: {attacker.instance.name}[{(attacker.hitCollider?.name ?? "")}] || Target:{targetInfo.instance.transform.name}[{(targetInfo.hitCollider?.name ??"")}]\n" +
                            $"Attacks With: {attacker.attackInfo.damage.value} {attackType.ToString()} ({critInfo.chance}% x{critInfo.damageModifier} Crit) [Ignores Invul Level: {attacker.attackInfo.ignoreInvulnerability.ToString()}] {(attacker.attackInfo.ignoresBlock ? "[Ignores Block]" : "")}\n" +
                            $"Target Defends With: {targetInfo.instance.attackResistance.GetResistance(attackType) * 100}% attackType Resistance\n" +
                            $"Calculated Damage: {summary.damageDealt} {(summary.isCrit ? "Critical " : "")}{summary.damageInfo.damage.type.ToString()} Damage {(summary.wasBlocked ? "[Blocked]" : "")}\n" +

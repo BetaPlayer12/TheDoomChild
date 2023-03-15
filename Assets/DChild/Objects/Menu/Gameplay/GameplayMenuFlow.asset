@@ -1574,8 +1574,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02761efe598a45c98fa1baf4d446c6a7, type: 3}
   m_Name: GameplayMenuFlow
   m_EditorClassIdentifier: 
-  EditorPosition: {x: 69, y: 782, z: 0}
-  EditorScale: {x: 0.43232757, y: 0.43232757, z: 1}
+  EditorPosition: {x: -24, y: 1005, z: 0}
+  EditorScale: {x: 0.49717674, y: 0.49717674, z: 1}
   Id: cc4022c0-bbcf-4ff3-b644-de466cf85d32
   GraphName: Flow Graph
   GraphDescription: 
@@ -1829,7 +1829,12 @@ MonoBehaviour:
     Mode: 1
   OnEnterHideViews: []
   OnExitShowViews: []
-  OnExitHideViews: []
+  OnExitHideViews:
+  - Id:
+      Category: Merchant
+      Name: PurchaseConfirmation
+      Custom: 0
+    Mode: 0
   OnEnterHideAllViews: 0
   OnExitHideAllViews: 0
 --- !u!114 &693728411183028812
@@ -2885,8 +2890,7 @@ MonoBehaviour:
     PortId: fd9f2f55-ecf8-42fc-94b3-dedca6ed36de
     Direction: 0
     Capacity: 1
-    Connections:
-    - eee18b57-8914-4ac0-9a21-1e14fd5efb4d
+    Connections: []
     Value: '{"CanGoBack":false}'
     ValueTypeQualifiedName: Doozy.Runtime.UIManager.Nodes.PortData.GoBackInputPortData,
       Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
@@ -3335,7 +3339,7 @@ MonoBehaviour:
     Connections:
     - f24175dd-e6bb-4632-81f1-e9dbfd125bae
     - a28c6a1c-5f87-4c0b-95cb-c1a6689b2e22
-    Value: '{"CanGoBack":false}'
+    Value: '{"CanGoBack":true}'
     ValueTypeQualifiedName: Doozy.Runtime.UIManager.Nodes.PortData.GoBackInputPortData,
       Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
     CanBeDeleted: 0
@@ -3345,8 +3349,7 @@ MonoBehaviour:
     PortId: eee18b57-8914-4ac0-9a21-1e14fd5efb4d
     Direction: 1
     Capacity: 0
-    Connections:
-    - fd9f2f55-ecf8-42fc-94b3-dedca6ed36de
+    Connections: []
     Value: '{"Trigger":2,"TimeDelay":3.0,"SignalPayload":{"StreamId":{"Category":"General","Name":"SimulateBack","Custom":false},"SignalValueType":0,"IntegerValue":0,"BooleanValue":false,"FloatValue":0.0,"StringValue":"","ColorValue":{"r":0.0,"g":0.0,"b":0.0,"a":0.0},"Vector2Value":{"x":0.0,"y":0.0},"Vector3Value":{"x":0.0,"y":0.0,"z":0.0},"Vector4Value":{"x":0.0,"y":0.0,"z":0.0,"w":0.0}},"ButtonId":{"Category":"General","Name":"Back","Custom":false},"ToggleId":{"Category":"None","Name":"None","Custom":false},"CommandToggle":2,"ViewId":{"Category":"None","Name":"None","Custom":false},"CommandShowHide":0}'
     ValueTypeQualifiedName: Doozy.Runtime.UIManager.Nodes.PortData.UIOutputPortData,
       Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
