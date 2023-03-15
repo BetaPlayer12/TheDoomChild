@@ -203,6 +203,7 @@ namespace DChild.Gameplay.Systems
             GameplaySystem.gamplayUIHandle.ShowGameOverScreen();
             // m_input.Disable();
             //  m_player.controller.Disable();
+            player.statusEffectReciever.RemoveAllActiveStatusEffects();
             m_playerIsDead = true;
             m_respawnDelay.Reset();
         }
@@ -217,13 +218,13 @@ namespace DChild.Gameplay.Systems
         }
         public IEnumerator PlayerActionChange(Action<PlayerInput> CallBack)
         {
-            
+
             m_playerInput.enabled = false;
             yield return null;
             CallBack(m_playerInput);
             m_playerInput.enabled = true;
             yield return null;
-            
+
         }
 
         private void Start()
