@@ -16,7 +16,7 @@ namespace Pathfinding.Examples {
 	/// See: Pathfinding.FloodPath
 	/// See: Pathfinding.FloodPathTracer
 	/// </summary>
-	[HelpURL("http://arongranberg.com/astar/docs/class_pathfinding_1_1_examples_1_1_path_types_demo.php")]
+	[HelpURL("http://arongranberg.com/astar/documentation/stable/class_pathfinding_1_1_examples_1_1_path_types_demo.php")]
 	public class PathTypesDemo : MonoBehaviour {
 		public DemoMode activeDemo = DemoMode.ABPath;
 
@@ -111,7 +111,7 @@ namespace Pathfinding.Examples {
 
 			GUILayout.Space(5);
 
-			GUILayout.Label("Note that the paths are rendered without ANY post-processing applied, so they might look a bit edgy");
+			GUILayout.Label("Note that the paths are rendered without ANY post-processing applied, so they might look a bit jagged");
 
 			GUILayout.Space(5);
 
@@ -307,27 +307,6 @@ namespace Pathfinding.Examples {
 			List<Vector3> verts = new List<Vector3>();
 
 
-			#if FALSE
-			// Just some debugging code which selects random points on the nodes
-			List<Vector3> pts = Pathfinding.PathUtilities.GetPointsOnNodes(nodes, 20, 0);
-			Vector3 avg = Vector3.zero;
-			for (int i = 0; i < pts.Count; i++) {
-				Debug.DrawRay(pts[i], Vector3.up*5, Color.red, 3);
-				avg += pts[i];
-			}
-
-			if (pts.Count > 0) avg /= pts.Count;
-
-			for (int i = 0; i < pts.Count; i++) {
-				pts[i] -= avg;
-			}
-
-			Pathfinding.PathUtilities.GetPointsAroundPoint(start.position, AstarPath.active.data.graphs[0] as IRaycastableGraph, pts, 0, 1);
-
-			for (int i = 0; i < pts.Count; i++) {
-				Debug.DrawRay(pts[i], Vector3.up*5, Color.blue, 3);
-			}
-			#endif
 
 			bool drawRaysInstead = false;
 			// This will loop through the nodes from furthest away to nearest, not really necessary... but why not :D
