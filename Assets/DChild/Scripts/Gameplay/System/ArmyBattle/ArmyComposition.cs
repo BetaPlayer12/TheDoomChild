@@ -10,63 +10,6 @@ namespace DChild.Gameplay.ArmyBattle
     [System.Serializable]
     public class ArmyComposition
     {
-        [System.Serializable]
-        public class SaveData
-        {
-            private int[] m_rockCharacterIDs;
-            private int[] m_paperCharacterIDs;
-            private int[] m_scissorsCharacterIDs;
-
-            public SaveData(IReadOnlyCollection<ArmyCharacter> rockCharacters, IReadOnlyCollection<ArmyCharacter> paperCharacters, IReadOnlyCollection<ArmyCharacter> scissorsCharacters)
-            {
-                m_rockCharacterIDs = CreateCharacterIDList(rockCharacters);
-                m_paperCharacterIDs = CreateCharacterIDList(paperCharacters);
-                m_scissorsCharacterIDs = CreateCharacterIDList(scissorsCharacters);
-            }
-
-            public int GetTotalCharacters(UnitType unitType)
-            {
-                switch (unitType)
-                {
-                    case UnitType.Rock:
-                        return m_rockCharacterIDs.Length;
-                    case UnitType.Paper:
-                        return m_paperCharacterIDs.Length;
-                    case UnitType.Scissors:
-                        return m_scissorsCharacterIDs.Length;
-                    default:
-                        return 0;
-                }
-            }
-
-            public int GetCharacterID(UnitType unitType, int index)
-            {
-                switch (unitType)
-                {
-                    case UnitType.Rock:
-                        return m_rockCharacterIDs[index];
-                    case UnitType.Paper:
-                        return m_paperCharacterIDs[index];
-                    case UnitType.Scissors:
-                        return m_scissorsCharacterIDs[index];
-                    default:
-                        return -1;
-                }
-            }
-
-            private int[] CreateCharacterIDList(IReadOnlyCollection<ArmyCharacter> characters)
-            {
-                var rockCharacterCount = characters.Count;
-                var characterIDs = new int[rockCharacterCount];
-                for (int i = 0; i < rockCharacterCount; i++)
-                {
-                    m_rockCharacterIDs[i] = characters.ElementAt(i).ID;
-                }
-
-                return characterIDs;
-            }
-        }
-
         [SerializeField]
         private string m_name;
 
@@ -74,11 +17,11 @@ namespace DChild.Gameplay.ArmyBattle
         private int m_troopCount = 1;
         [FoldoutGroup("Attack Group")]
 
-        [SerializeField, TabGroup("Attack Group/Tab", "Rock"), ListDrawerSettings(HideAddButton = true), PropertyOrder(4), InlineEditor(InlineEditorObjectFieldModes.Foldout, Expanded = true)]
+        [SerializeField, TabGroup("Attack Group/Tab", "Rock"), ListDrawerSettings(HideAddButton = true), PropertyOrder(4)]
         private List<ArmyAttackGroup> m_rockAttackers;
-        [SerializeField, TabGroup("Attack Group/Tab", "Paper"), ListDrawerSettings(HideAddButton = true), PropertyOrder(4), InlineEditor(InlineEditorObjectFieldModes.Foldout, Expanded = true)]
+        [SerializeField, TabGroup("Attack Group/Tab", "Paper"), ListDrawerSettings(HideAddButton = true), PropertyOrder(4)]
         private List<ArmyAttackGroup> m_paperAttackers;
-        [SerializeField, TabGroup("Attack Group/Tab", "Scissors"), ListDrawerSettings(HideAddButton = true), PropertyOrder(4), InlineEditor(InlineEditorObjectFieldModes.Foldout, Expanded = true)]
+        [SerializeField, TabGroup("Attack Group/Tab", "Scissors"), ListDrawerSettings(HideAddButton = true), PropertyOrder(4)]
         private List<ArmyAttackGroup> m_scissorAttackers;
 
         public string name => m_name;
@@ -107,9 +50,10 @@ namespace DChild.Gameplay.ArmyBattle
         {
             m_name = reference.name;
             m_troopCount = reference.troopCount;
-            m_rockAttackers = new List<ArmyAttackGroup>(reference.GetAttackGroupsOfUnityType(UnitType.Rock));
-            m_paperAttackers = new List<ArmyAttackGroup>(reference.GetAttackGroupsOfUnityType(UnitType.Paper));
-            m_scissorAttackers = new List<ArmyAttackGroup>(reference.GetAttackGroupsOfUnityType(UnitType.Scissors));
+            m_rockAttackers = new List<ArmyAttackGroup>();
+            m_paperAttackers = new List<ArmyAttackGroup>();
+            m_scissorAttackers = new List<ArmyAttackGroup>();
+            GenerateCopiesOfArmyAttackGroup(reference);
         }
 
 
@@ -117,12 +61,7 @@ namespace DChild.Gameplay.ArmyBattle
         {
             m_name = reference.name;
             m_troopCount = reference.troopCount;
-            m_rockAttackers.Clear();
-            m_rockAttackers.AddRange(reference.GetAttackGroupsOfUnityType(UnitType.Rock));
-            m_paperAttackers.Clear();
-            m_paperAttackers.AddRange(reference.GetAttackGroupsOfUnityType(UnitType.Paper));
-            m_scissorAttackers.Clear();
-            m_scissorAttackers.AddRange(reference.GetAttackGroupsOfUnityType(UnitType.Scissors));
+            GenerateCopiesOfArmyAttackGroup(reference);
         }
 
         public void AddAttackGroup(ArmyAttackGroup armyAttackGroup)
@@ -158,14 +97,14 @@ namespace DChild.Gameplay.ArmyBattle
 
         public void SetAttackGroups(params ArmyAttackGroup[] armyCharacters)
         {
-            ClearCharacters();
+            ClearAttackGroups();
             for (int i = 0; i < armyCharacters.Length; i++)
             {
                 AddAttackGroup(armyCharacters[i]);
             }
         }
 
-        public void ClearCharacters()
+        public void ClearAttackGroups()
         {
             m_rockAttackers.Clear();
             m_paperAttackers.Clear();
@@ -184,6 +123,36 @@ namespace DChild.Gameplay.ArmyBattle
                     return m_scissorAttackers;
                 default:
                     return null;
+            }
+        }
+
+        public void ResetAvailability()
+        {
+            ResetAvailability(GetAttackGroupsOfUnityType(UnitType.Rock));
+            ResetAvailability(GetAttackGroupsOfUnityType(UnitType.Paper));
+            ResetAvailability(GetAttackGroupsOfUnityType(UnitType.Scissors));
+
+            void ResetAvailability(List<ArmyAttackGroup> groups)
+            {
+                for (int i = 0; i < groups.Count; i++)
+                {
+                    groups[i].SetAvailability(true);
+                }
+            }
+        }
+
+        private void GenerateCopiesOfArmyAttackGroup(ArmyComposition reference)
+        {
+            GenerateCopyOf(reference.GetAttackGroupsOfUnityType(UnitType.Rock), GetAttackGroupsOfUnityType(UnitType.Rock));
+            GenerateCopyOf(reference.GetAttackGroupsOfUnityType(UnitType.Paper), GetAttackGroupsOfUnityType(UnitType.Paper));
+            GenerateCopyOf(reference.GetAttackGroupsOfUnityType(UnitType.Scissors), GetAttackGroupsOfUnityType(UnitType.Scissors));
+            void GenerateCopyOf(List<ArmyAttackGroup> reference, List<ArmyAttackGroup> destination)
+            {
+                destination.Clear();
+                for (int i = 0; i < reference.Count; i++)
+                {
+                    destination.Add(new ArmyAttackGroup(reference[i].reference));
+                }
             }
         }
 

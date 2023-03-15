@@ -8,27 +8,54 @@ namespace DChild.Gameplay.ArmyBattle
     {
         [SerializeField]
         private string m_groupName;
-        [SerializeField]
+        [SerializeField, DisableInInlineEditors]
         private UnitType m_unitType;
+        [SerializeField, OnValueChanged("ClearMembers")]
+        private bool m_useCharactersForPower;
+        [SerializeField, MinValue(1), HideIf("m_useCharactersForPower")]
+        private int m_power = 1;
 #if UNITY_EDITOR
-        [InfoBox("@\"Total Power: \" + GetTotalPower()", InfoMessageType = InfoMessageType.None)]
+        [InfoBox("@\"Total Power: \" + GetTotalPower()", InfoMessageType = InfoMessageType.None), ShowIf("m_useCharactersForPower")]
 #endif
-        [SerializeField, InlineEditor(Expanded = true)]
+        [SerializeField, InlineEditor(Expanded = true), ShowIf("m_useCharactersForPower")]
         private ArmyCharacter[] m_members;
 
         public string groupName => m_groupName;
+        public bool isUsingCharactersForPower => m_useCharactersForPower;
         public int memberCount => m_members.Length;
         public UnitType unitType => m_unitType;
-        public ArmyCharacter GetMember(int index) => m_members[index];
-
-        private int GetTotalPower()
+        public ArmyCharacter GetMember(int index)
         {
-            var power = 0;
-            for (int i = 0; i < m_members.Length; i++)
+            if (m_useCharactersForPower)
             {
-                power += m_members[i].power;
+                return m_members[index];
             }
-            return power;
+            else
+            {
+                return null;
+            }
+        }
+
+        public int GetTotalPower()
+        {
+            if (m_useCharactersForPower)
+            {
+                var power = 0;
+                for (int i = 0; i < m_members.Length; i++)
+                {
+                    power += m_members[i]?.power ?? 0;
+                }
+                return power;
+            }
+            else
+            {
+                return m_power;
+            }
+        }
+
+        private void ClearMembers()
+        {
+            m_members = new ArmyCharacter[0];
         }
     }
 }

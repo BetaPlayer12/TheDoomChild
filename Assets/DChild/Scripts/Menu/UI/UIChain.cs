@@ -5,15 +5,16 @@ using UnityEngine;
 
 namespace DChild.UI
 {
-    [ExecuteInEditMode]
     public class UIChain : MonoBehaviour
     {
         [SerializeField]
-        private Transform m_from;
+        private Canvas m_canvas;
+        [SerializeField]
+        private RectTransform m_from;
         [SerializeField]
         private Vector3 m_fromOffset;
         [SerializeField]
-        private Transform m_to;
+        private RectTransform m_to;
         [SerializeField]
         private float m_lengthOffset;
 
@@ -23,6 +24,31 @@ namespace DChild.UI
         [SerializeField, ReadOnly]
         private Vector3 m_lastToPosition;
 
+        [ContextMenu("Update Chain")]
+        private void UpdateChain()
+        {
+            if (m_rectTransform == null)
+            {
+                Start();
+            }
+
+            var position = m_from.position + m_fromOffset;
+
+            transform.position = position;
+
+            var direction = m_canvas.transform.InverseTransformVector(m_to.position) - m_canvas.transform.InverseTransformVector(position);
+            var angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+            transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+
+            var sizeDelta = m_rectTransform.sizeDelta;
+            sizeDelta.x = (direction.magnitude + m_lengthOffset);
+
+            m_rectTransform.sizeDelta = sizeDelta;
+
+            m_lastFromPosition = position;
+            m_lastToPosition = m_to.position;
+        }
+
         private void Start()
         {
             m_rectTransform = GetComponent<RectTransform>();
@@ -30,27 +56,16 @@ namespace DChild.UI
             m_lastToPosition = m_to.position;
         }
 
-        [ContextMenu("Update Chain")]
+
         void Update()
         {
             var position = m_from.position + m_fromOffset;
             if (m_lastFromPosition != position || m_lastToPosition != m_to.position)
             {
-                transform.position = position;
-
-                var direction = m_to.position - position;
-                var angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-                transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
-
-                var sizeDelta = m_rectTransform.sizeDelta;
-                sizeDelta.x = (direction.magnitude + m_lengthOffset);
-
-                m_rectTransform.sizeDelta = sizeDelta;
-
-                m_lastFromPosition = position;
-                m_lastToPosition = m_to.position;
+                UpdateChain();
             }
         }
+
     }
 
 }

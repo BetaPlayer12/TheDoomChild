@@ -34,6 +34,7 @@ Transform:
   - {fileID: 12425}
   - {fileID: 6764276232094355281}
   - {fileID: 5460764266255543889}
+  - {fileID: 569177245560919124}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -55,6 +56,7 @@ MonoBehaviour:
     m_introScene:
       m_sceneName: _Scene Intro
       m_scenePath: Assets/DChild/Scenes/_Scene Intro.unity
+      m_isAddressables: 0
     m_hasPlayedIntro: 0
 --- !u!114 &1849424553460633975
 MonoBehaviour:
@@ -152,12 +154,15 @@ MonoBehaviour:
   m_loadingScene:
     m_sceneName: _Scene Loading
     m_scenePath: Assets/DChild/Scenes/_Scene Loading.unity
+    m_isAddressables: 0
   m_gameplayScene:
     m_sceneName: _Scene GameplaySystem
     m_scenePath: Assets/DChild/Scenes/_Scene GameplaySystem.unity
+    m_isAddressables: 0
   m_mainMenu:
     m_sceneName: _Scene MainMenuUI
     m_scenePath: Assets/DChild/Scenes/_Scene MainMenuUI.unity
+    m_isAddressables: 0
   m_gameplaySceneActive: 0
 --- !u!1 &2579
 GameObject:
@@ -650,6 +655,50 @@ MonoBehaviour:
   m_xboxIconData: {fileID: 11400000, guid: ad56a7c4b81c34d4eb11ac4d414501b9, type: 2}
   m_ps4IconData: {fileID: 11400000, guid: f794c45b2920cb641b312ed46079464d, type: 2}
   m_inputControlsDetector: {fileID: 5572768359036781502}
+--- !u!1 &6910826469907507021
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 569177245560919124}
+  - component: {fileID: 8183878281990682335}
+  m_Layer: 0
+  m_Name: VisualSystem
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &569177245560919124
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6910826469907507021}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 12426}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8183878281990682335
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6910826469907507021}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ef656bde2ed38d4baf4c9cd88f49661, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &9167446486346896484
 PrefabInstance:
   m_ObjectHideFlags: 0
