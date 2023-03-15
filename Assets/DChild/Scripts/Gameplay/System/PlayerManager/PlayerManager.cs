@@ -203,6 +203,7 @@ namespace DChild.Gameplay.Systems
             GameplaySystem.gamplayUIHandle.ShowGameOverScreen();
             // m_input.Disable();
             //  m_player.controller.Disable();
+            m_player.statusEffectReciever.RemoveAllActiveStatusEffects();
             m_playerIsDead = true;
             m_respawnDelay.Reset();
         }

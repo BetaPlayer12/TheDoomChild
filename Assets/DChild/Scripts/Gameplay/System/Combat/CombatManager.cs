@@ -104,7 +104,7 @@ namespace DChild.Gameplay.Combat
 
                 return $"Attacker: {attacker.instance.name}[{(attacker.hitCollider?.name ?? "")}] || Target:{targetInfo.instance.transform.name}[{(targetInfo.hitCollider?.name ??"")}]\n" +
                            $"Attacks With: {attacker.attackInfo.damage.value} {attackType.ToString()} ({critInfo.chance}% x{critInfo.damageModifier} Crit) [Ignores Invul Level: {attacker.attackInfo.ignoreInvulnerability.ToString()}] {(attacker.attackInfo.ignoresBlock ? "[Ignores Block]" : "")}\n" +
-                           $"Target Defends With: {targetInfo.instance.attackResistance.GetResistance(attackType) * 100}% attackType Resistance\n" +
+                           $"Target Defends With: {(targetInfo.instance.attackResistance?.GetResistance(attackType) ?? 0) * 100}% {attackType.ToString()} Resistance\n" +
                            $"Calculated Damage: {summary.damageDealt} {(summary.isCrit ? "Critical " : "")}{summary.damageInfo.damage.type.ToString()} Damage {(summary.wasBlocked ? "[Blocked]" : "")}\n" +
                            $"Target Health: {targetInfo.instance.health.currentValue}\n" +
                            $"=========================================================";

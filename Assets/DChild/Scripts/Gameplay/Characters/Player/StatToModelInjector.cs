@@ -60,6 +60,7 @@ namespace DChild.Gameplay.Characters.Players
             m_health.ResetValueToMax();
             m_magic.SetMaxValue(m_stats.GetTotalStat(PlayerStat.Magic));
             m_magic.ResetValueToMax();
+            m_attacker.SetDamageModifier(1);
             m_attacker.SetDamage(CalculateDamage());
             m_statusInflictor.SetInflictionList(m_weapon.statusInflictions);
             UpdateAttackResistance();
