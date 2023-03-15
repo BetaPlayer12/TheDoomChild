@@ -30,6 +30,8 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
         private ParticleSystem m_fx;
         [SerializeField, BoxGroup("FX")]
         private ParticleSystem m_endFx;
+        [SerializeField, BoxGroup("FX")]
+        private GameObject m_barrierFX;
         //[SerializeField, BoxGroup("Sensors")]
         //private RaySensor m_enemySensor;
         //[SerializeField, BoxGroup("Sensors")]
@@ -112,9 +114,11 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             Debug.Log("Barrier End");
             //m_state.waitForBehaviour = false;
             //m_barrierInfo.ShowCollider(false);
-            m_fx.Clear();
-            m_fx.Stop();
-            m_endFx.Play();
+
+            //m_fx.Clear();
+            //m_fx.Stop();
+            //m_endFx.Play();
+            m_barrierFX.SetActive(false);
             m_isDoingBarrier = false;
             m_animator.SetBool(m_barrierStateAnimationParameter, false);
             base.AttackOver();
@@ -132,10 +136,11 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
             if (m_fx.isPlaying)
             {
-                m_fxAnimator.Play("Buffer");
-                m_fx.Clear();
-                m_fx.Stop();
+                //m_fxAnimator.Play("Buffer");
+                //m_fx.Clear();
+                //m_fx.Stop();
                 m_endFx.Play();
+                m_barrierFX.SetActive(false);
             }
             m_isDoingBarrier = false;
             m_animator.SetBool(m_barrierStateAnimationParameter, false);
@@ -151,7 +156,10 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
             m_hitbox.SetCanBlockDamageState(value);
             if (value)
-                m_fx.Play();
+            {
+                //m_fx.Play();
+                m_barrierFX.SetActive(true);
+            }
 
             m_physics.AddForce(new Vector2(m_character.facing == HorizontalDirection.Right ? m_pushForce.x : -m_pushForce.x, m_pushForce.y), ForceMode2D.Impulse);
             //TEST
