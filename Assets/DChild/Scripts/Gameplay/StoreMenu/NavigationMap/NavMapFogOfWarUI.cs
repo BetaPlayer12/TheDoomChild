@@ -35,6 +35,11 @@ namespace DChild.Gameplay.NavigationMap
             m_list[varName].SetUIState(state);
         }
 
+        public bool HasID(string varName)
+        {
+            return m_list.ContainsKey(varName);
+        }
+
         private void OnValidate()
         {
 #if UNITY_EDITOR
