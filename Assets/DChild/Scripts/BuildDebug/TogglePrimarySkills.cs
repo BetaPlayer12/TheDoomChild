@@ -1,5 +1,6 @@
 ﻿using DChild.Gameplay;
 using DChild.Gameplay.Characters.Players;
+using DChild.Gameplay.SoulSkills;
 using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
@@ -7,6 +8,7 @@ using UnityEngine;
 
 namespace DChildDebug.Window
 {
+
     public class TogglePrimarySkills : MonoBehaviour, IToggleDebugBehaviour
     {
         [SerializeField]
@@ -21,7 +23,7 @@ namespace DChildDebug.Window
             GameplaySystem.playerManager.player.skills.SetSkillStatus(m_skill, true);
         }
 
-        
+
         [Button]
         public void ToggleOff()
         {

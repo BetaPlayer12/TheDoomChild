@@ -37,7 +37,7 @@ namespace DChild.Gameplay.SoulSkills.UI
 
         protected override void SetOrb(SoulSkillOrbData orbData)
         {
-            m_orb.sprite = orbData?.availableOrb ?? null;
+            SetOrb(orbData.availableOrb);
         }
     }
 }

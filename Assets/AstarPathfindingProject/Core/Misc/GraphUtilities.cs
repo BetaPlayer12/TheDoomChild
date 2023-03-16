@@ -11,8 +11,6 @@ namespace Pathfinding {
 	/// See: <see cref="AstarPath.GetNearest"/>
 	/// See: <see cref="Pathfinding.GraphUpdateUtilities"/>
 	/// See: <see cref="Pathfinding.PathUtilities"/>
-	///
-	/// \ingroup utils
 	/// </summary>
 	public static class GraphUtilities {
 		/// <summary>
@@ -45,6 +43,7 @@ namespace Pathfinding {
 		/// </summary>
 		public static List<Vector3> GetContours (NavGraph graph) {
 			List<Vector3> result = ListPool<Vector3>.Claim();
+
 			if (graph is INavmesh) {
 				GetContours(graph as INavmesh, (vertices, cycle) => {
 					for (int j = cycle ? vertices.Count - 1 : 0, i = 0; i < vertices.Count; j = i, i++) {
@@ -91,21 +90,16 @@ namespace Pathfinding {
 				uses[0] = uses[1] = uses[2] = false;
 
 				if (node != null) {
-				    // Find out which edges are shared with other nodes
+					// Find out which edges are shared with other nodes
 					for (int j = 0; j < node.connections.Length; j++) {
-						var other = node.connections[j].node as TriangleMeshNode;
-
-				        // Not necessarily a TriangleMeshNode
-						if (other != null) {
-							int a = node.SharedEdge(other);
-							if (a != -1) uses[a] = true;
-						}
+						var conn = node.connections[j];
+						if (conn.shapeEdge != Connection.NoSharedEdge) uses[conn.shapeEdge] = true;
 					}
 
-				    // Loop through all edges on the node
+					// Loop through all edges on the node
 					for (int j = 0; j < 3; j++) {
-				        // The edge is not shared with any other node
-				        // I.e it is an exterior edge on the mesh
+						// The edge is not shared with any other node
+						// I.e it is an exterior edge on the mesh
 						if (!uses[j]) {
 							var i1 = j;
 							var i2 = (j+1) % node.GetVertexCount();
@@ -159,8 +153,9 @@ namespace Pathfinding {
 		public static void GetContours (GridGraph grid, System.Action<Vector3[]> callback, float yMergeThreshold, GridNodeBase[] nodes = null) {
 			// Set of all allowed nodes or null if all nodes are allowed
 			HashSet<GridNodeBase> nodeSet = nodes != null ? new HashSet<GridNodeBase>(nodes) : null;
+
 			// Use all nodes if the nodes parameter is null
-			if (grid is LayerGridGraph) nodes = nodes ?? (grid as LayerGridGraph).nodes;
+			if (grid is LayerGridGraph lgraph) nodes = nodes ?? lgraph.nodes;
 			nodes = nodes ?? grid.nodes;
 			int[] neighbourXOffsets = grid.neighbourXOffsets;
 			int[] neighbourZOffsets = grid.neighbourZOffsets;

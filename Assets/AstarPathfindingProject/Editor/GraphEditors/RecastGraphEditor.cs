@@ -49,13 +49,13 @@ namespace Pathfinding {
 			if (graph.useTiles) {
 				EditorGUI.indentLevel++;
 				graph.editorTileSize = EditorGUILayout.IntField(new GUIContent("Tile Size", "Size in voxels of a single tile.\n" +
-						"This is the width of the tile.\n" +
-						"\n" +
-						"A large tile size can be faster to initially scan (but beware of out of memory issues if you try with a too large tile size in a large world)\n" +
-						"smaller tile sizes are (much) faster to update.\n" +
-						"\n" +
-						"Different tile sizes can affect the quality of paths. It is often good to split up huge open areas into several tiles for\n" +
-						"better quality paths, but too small tiles can lead to effects looking like invisible obstacles."), graph.editorTileSize);
+					"This is the width of the tile.\n" +
+					"\n" +
+					"A large tile size can be faster to initially scan (but beware of out of memory issues if you try with a too large tile size in a large world)\n" +
+					"smaller tile sizes are (much) faster to update.\n" +
+					"\n" +
+					"Different tile sizes can affect the quality of paths. It is often good to split up huge open areas into several tiles for\n" +
+					"better quality paths, but too small tiles can lead to effects looking like invisible obstacles."), graph.editorTileSize);
 				EditorGUI.indentLevel--;
 			}
 
@@ -92,15 +92,15 @@ namespace Pathfinding {
 			if (graph.rasterizeTerrain) {
 				EditorGUI.indentLevel++;
 				graph.rasterizeTrees = EditorGUILayout.Toggle(new GUIContent("Rasterize Trees", "Rasterize tree colliders on terrains. " +
-						"If the tree prefab has a collider, that collider will be rasterized. " +
-						"Otherwise a simple box collider will be used and the script will " +
-						"try to adjust it to the tree's scale, it might not do a very good job though so " +
-						"an attached collider is preferable."), graph.rasterizeTrees);
+					"If the tree prefab has a collider, that collider will be rasterized. " +
+					"Otherwise a simple box collider will be used and the script will " +
+					"try to adjust it to the tree's scale, it might not do a very good job though so " +
+					"an attached collider is preferable."), graph.rasterizeTrees);
 				if (graph.rasterizeTrees) {
 					EditorGUI.indentLevel++;
 					graph.colliderRasterizeDetail = EditorGUILayout.FloatField(new GUIContent("Collider Detail", "Controls the detail of the generated collider meshes. "+
-							"Increasing does not necessarily yield better navmeshes, but lowering will speed up scan.\n"+
-							"Spheres and capsule colliders will be converted to meshes in order to be able to rasterize them, a higher value will increase the number of triangles in those meshes."), graph.colliderRasterizeDetail);
+						"Increasing does not necessarily yield better navmeshes, but lowering will speed up scan.\n"+
+						"Spheres and capsule colliders will be converted to meshes in order to be able to rasterize them, a higher value will increase the number of triangles in those meshes."), graph.colliderRasterizeDetail);
 					EditorGUI.indentLevel--;
 				}
 
@@ -114,8 +114,8 @@ namespace Pathfinding {
 			if (graph.rasterizeColliders) {
 				EditorGUI.indentLevel++;
 				graph.colliderRasterizeDetail = EditorGUILayout.FloatField(new GUIContent("Collider Detail", "Controls the detail of the generated collider meshes. "+
-						"Increasing does not necessarily yield better navmeshes, but lowering will speed up scan.\n"+
-						"Spheres and capsule colliders will be converted to meshes in order to be able to rasterize them, a higher value will increase the number of triangles in those meshes."), graph.colliderRasterizeDetail);
+					"Increasing does not necessarily yield better navmeshes, but lowering will speed up scan.\n"+
+					"Spheres and capsule colliders will be converted to meshes in order to be able to rasterize them, a higher value will increase the number of triangles in those meshes."), graph.colliderRasterizeDetail);
 				EditorGUI.indentLevel--;
 			}
 
@@ -132,7 +132,7 @@ namespace Pathfinding {
 			graph.forcedBoundsSize = Vector3.Max(graph.forcedBoundsSize, Vector3.one * 0.001f);
 			graph.rotation = EditorGUILayout.Vector3Field("Rotation", graph.rotation);
 
-			if (GUILayout.Button(new GUIContent("Snap bounds to scene", "Will snap the bounds of the graph to exactly contain all meshes that the bounds currently touches"))) {
+			if (GUILayout.Button(new GUIContent("Snap bounds to scene", "Will snap the bounds of the graph to exactly contain all meshes in the scene that matches the masks."))) {
 				graph.SnapForceBoundsToScene();
 				GUI.changed = true;
 			}
@@ -163,26 +163,26 @@ namespace Pathfinding {
 			}
 
 			graph.relevantGraphSurfaceMode = (RecastGraph.RelevantGraphSurfaceMode)EditorGUILayout.EnumPopup(new GUIContent("Relevant Graph Surface Mode",
-					"Require every region to have a RelevantGraphSurface component inside it.\n" +
-					"A RelevantGraphSurface component placed in the scene specifies that\n" +
-					"the navmesh region it is inside should be included in the navmesh.\n\n" +
-					"If this is set to OnlyForCompletelyInsideTile\n" +
-					"a navmesh region is included in the navmesh if it\n" +
-					"has a RelevantGraphSurface inside it, or if it\n" +
-					"is adjacent to a tile border. This can leave some small regions\n" +
-					"which you didn't want to have included because they are adjacent\n" +
-					"to tile borders, but it removes the need to place a component\n" +
-					"in every single tile, which can be tedious (see below).\n\n" +
-					"If this is set to RequireForAll\n" +
-					"a navmesh region is included only if it has a RelevantGraphSurface\n" +
-					"inside it. Note that even though the navmesh\n" +
-					"looks continous between tiles, the tiles are computed individually\n" +
-					"and therefore you need a RelevantGraphSurface component for each\n" +
-					"region and for each tile."),
+				"Require every region to have a RelevantGraphSurface component inside it.\n" +
+				"A RelevantGraphSurface component placed in the scene specifies that\n" +
+				"the navmesh region it is inside should be included in the navmesh.\n\n" +
+				"If this is set to OnlyForCompletelyInsideTile\n" +
+				"a navmesh region is included in the navmesh if it\n" +
+				"has a RelevantGraphSurface inside it, or if it\n" +
+				"is adjacent to a tile border. This can leave some small regions\n" +
+				"which you didn't want to have included because they are adjacent\n" +
+				"to tile borders, but it removes the need to place a component\n" +
+				"in every single tile, which can be tedious (see below).\n\n" +
+				"If this is set to RequireForAll\n" +
+				"a navmesh region is included only if it has a RelevantGraphSurface\n" +
+				"inside it. Note that even though the navmesh\n" +
+				"looks continous between tiles, the tiles are computed individually\n" +
+				"and therefore you need a RelevantGraphSurface component for each\n" +
+				"region and for each tile."),
 				graph.relevantGraphSurfaceMode);
 
 			graph.nearestSearchOnlyXZ = EditorGUILayout.Toggle(new GUIContent("Nearest node queries in XZ space",
-					"Recomended for single-layered environments.\nFaster but can be inacurate esp. in multilayered contexts."), graph.nearestSearchOnlyXZ);
+				"Recomended for single-layered environments.\nFaster but can be inacurate esp. in multilayered contexts."), graph.nearestSearchOnlyXZ);
 
 			if (graph.nearestSearchOnlyXZ && (Mathf.Abs(graph.rotation.x) > 1 || Mathf.Abs(graph.rotation.z) > 1)) {
 				EditorGUILayout.HelpBox("Nearest node queries in XZ space is not recommended for rotated graphs since XZ space no longer corresponds to the ground plane", MessageType.Warning);
