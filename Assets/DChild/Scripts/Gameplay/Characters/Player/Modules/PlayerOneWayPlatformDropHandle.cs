@@ -57,43 +57,39 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
                 for (int i = 0; i < hitsList.Count; i++)
                 {
-                    if (hitsList[i] != null)
-                    {
-                        for (int c = 0; c < hitsList[i].Length; c++)
-                        {
-                            if (hitsList[i][c].collider != null)
-                            {
-                                m_cacheCollider = hitsList[i][c].collider;
-                            }
+                    var hitBuffer = hitsList[i];
 
-                            if (m_cacheCollider != null)
+                    if (hitBuffer.collider != null)
+                    {
+                        m_cacheCollider = hitBuffer.collider;
+                    }
+
+                    if (m_cacheCollider != null)
+                    {
+                        if (m_cacheCollider.isTrigger)
+                        {
+                            return false;
+                        }
+                        else
+                        {
+                            if (m_cacheCollider.CompareTag("InvisibleWall") == false)
                             {
-                                if (m_cacheCollider.isTrigger)
+                                if (m_cacheCollider.CompareTag("Droppable") == true)
                                 {
-                                    return false;
+                                    if (colliderHit == true && isValid == false)
+                                    {
+                                        isValid = false;
+                                    }
+                                    else
+                                    {
+                                        isValid = true;
+                                        colliderHit = true;
+                                    }
                                 }
                                 else
                                 {
-                                    if (m_cacheCollider.CompareTag("InvisibleWall") == false)
-                                    {
-                                        if (m_cacheCollider.CompareTag("Droppable") == true)
-                                        {
-                                            if (colliderHit == true && isValid == false)
-                                            {
-                                                isValid = false;
-                                            }
-                                            else
-                                            {
-                                                isValid = true;
-                                                colliderHit = true;
-                                            }
-                                        }
-                                        else
-                                        {
-                                            isValid = false;
-                                            colliderHit = true;
-                                        }
-                                    }
+                                    isValid = false;
+                                    colliderHit = true;
                                 }
                             }
                         }

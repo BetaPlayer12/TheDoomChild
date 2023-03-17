@@ -7,8 +7,10 @@ namespace DChild.Gameplay
     public static class Raycaster
     {
         private static ContactFilter2D m_contactFilter;
-        private static RaycastHit2D[] m_hitResults;
+        private static RaycastHit2D[] m_hitResults = new RaycastHit2D[MAXHITRESULTCOUNT];
         private static bool m_isInitialized;
+
+        private const int MAXHITRESULTCOUNT = 16;
 
         private static void Initialize()
         {
@@ -36,7 +38,6 @@ namespace DChild.Gameplay
         public static RaycastHit2D[] Cast(Vector2 origin, Vector2 direction, float distance, bool ignoreTriggers, out int hitCount, bool debugMode = false)
         {
             Initialize();
-            m_hitResults = new RaycastHit2D[16];
             m_contactFilter.useTriggers = !ignoreTriggers;
             hitCount = Physics2D.Raycast(origin, direction, m_contactFilter, m_hitResults, distance);
 #if UNITY_EDITOR
