@@ -62,6 +62,8 @@ namespace DChild.Gameplay.Systems
                 if (m_inputOverridden)
                 {
                     GameplaySystem.gamplayUIHandle.PromptJournalUpdateNotification();
+                    StopAllCoroutines();
+                    m_inputOverridden = false;
                 }
                 else
                 {

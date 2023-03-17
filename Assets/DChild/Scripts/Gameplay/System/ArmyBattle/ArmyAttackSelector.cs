@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace DChild.Gameplay.ArmyBattle.UI
@@ -6,13 +7,17 @@ namespace DChild.Gameplay.ArmyBattle.UI
     public class ArmyAttackSelector : MonoBehaviour
     {
         [SerializeField]
-        private PlayerArmyController m_something;
-        [SerializeField]
         private ArmyAttackGroupUI m_display;
 
+        private PlayerArmyController m_source;
         private List<ArmyAttackGroup> m_choices;
         private ArmyAttackGroup m_currentChoice;
         private int m_currentChoiceIndex;
+
+        public void Initialize(PlayerArmyController controller)
+        {
+            m_source = controller;
+        }
 
         public void Next()
         {
@@ -21,6 +26,7 @@ namespace DChild.Gameplay.ArmyBattle.UI
             {
                 m_currentChoiceIndex = 0;
             }
+            m_currentChoice = m_choices[m_currentChoiceIndex];
             UpdateDisplay();
         }
 
@@ -31,19 +37,46 @@ namespace DChild.Gameplay.ArmyBattle.UI
             {
                 m_currentChoiceIndex = m_choices.Count - 1;
             }
+            m_currentChoice = m_choices[m_currentChoiceIndex];
             UpdateDisplay();
+        }
+
+        public void SelectCurrentAttack()
+        {
+            m_source.ChooseAttack(m_currentChoice);
         }
 
         public void UpdateChoices(List<ArmyAttackGroup> choices)
         {
-            m_choices = new List<ArmyAttackGroup>();
+            m_choices.Clear();
+            m_choices.AddRange(choices);
             m_currentChoiceIndex = 0;
+            if (m_choices.Count > 0)
+            {
+                m_currentChoice = m_choices[m_currentChoiceIndex];
+            }
+            else
+            {
+                m_currentChoice = null;
+            }
             UpdateDisplay();
         }
 
         private void UpdateDisplay()
         {
-            m_display.Display(m_choices[m_currentChoiceIndex]);
+            m_display.Display(m_currentChoice);
+        }
+
+        private void Awake()
+        {
+            m_choices = new List<ArmyAttackGroup>();
+        }
+
+        public void Reset()
+        {
+            m_currentChoice = null;
+            m_currentChoiceIndex = 0;
+            UpdateDisplay();
         }
     }
 }

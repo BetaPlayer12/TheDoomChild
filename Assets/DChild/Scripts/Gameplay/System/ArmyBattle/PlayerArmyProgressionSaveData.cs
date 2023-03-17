@@ -7,7 +7,5 @@ namespace DChild.Gameplay.ArmyBattle
     {
         [SerializeField]
         private int[] m_unlockedCharacters;
-        [SerializeField]
-        private ArmyComposition.SaveData m_composition;
     }
 }

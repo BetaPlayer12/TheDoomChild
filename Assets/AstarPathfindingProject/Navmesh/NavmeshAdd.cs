@@ -24,7 +24,7 @@ namespace Pathfinding {
 	/// cut away the NavmeshAdd object.
 	/// Then you can add links between the added geometry and the rest of the world, preferably using NodeLink3.
 	/// </summary>
-	[HelpURL("http://arongranberg.com/astar/docs/class_pathfinding_1_1_navmesh_add.php")]
+	[HelpURL("http://arongranberg.com/astar/documentation/stable/class_pathfinding_1_1_navmesh_add.php")]
 	public class NavmeshAdd : NavmeshClipper {
 		public enum MeshType {
 			Rectangle,
@@ -156,9 +156,9 @@ namespace Pathfinding {
 		/// The transformation will typically transform the vertices to graph space and this is used to
 		/// figure out which tiles the add intersects.
 		/// </summary>
-		internal override Rect GetBounds (Pathfinding.Util.GraphTransform inverseTransform) {
+		public override Rect GetBounds (Pathfinding.Util.GraphTransform inverseTransform) {
 			if (this.verts == null) RebuildMesh();
-			var verts = Pathfinding.Util.ArrayPool<Int3>.Claim(this.verts != null ? this.verts.Length : 0);
+			var verts = Pathfinding.Util.ArrayPool<Int3>.Claim(this.verts != null? this.verts.Length : 0);
 			int[] tris;
 			GetMesh(ref verts, out tris, inverseTransform);
 
@@ -218,9 +218,9 @@ namespace Pathfinding {
 			}
 		}
 
-		public static readonly Color GizmoColor = new Color(94.0f/255, 239.0f/255, 37.0f/255);
+		public static readonly Color GizmoColor = new Color(154.0f/255, 35.0f/255, 239.0f/255);
 
-	#if UNITY_EDITOR
+#if UNITY_EDITOR
 		public static Int3[] gizmoBuffer;
 
 		public void OnDrawGizmos () {
@@ -242,6 +242,6 @@ namespace Pathfinding {
 				Gizmos.DrawLine(v3, v1);
 			}
 		}
-	#endif
+#endif
 	}
 }
