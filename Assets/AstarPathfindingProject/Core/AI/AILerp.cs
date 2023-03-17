@@ -39,6 +39,9 @@ namespace Pathfinding {
 	[AddComponentMenu("Pathfinding/AI/AILerp (2D,3D)")]
 	[HelpURL("http://arongranberg.com/astar/documentation/stable/class_pathfinding_1_1_a_i_lerp.php")]
 	public class AILerp : VersionedMonoBehaviour, IAstarAI {
+		[SerializeField]
+		private Transform m_agent;
+
 		/// <summary>
 		/// Determines how often it will search for new paths.
 		/// If you have fast moving targets or AIs, you might want to set it to a lower value.
@@ -355,7 +358,7 @@ namespace Pathfinding {
 		protected override void Awake () {
 			base.Awake();
 			//This is a simple optimization, cache the transform component lookup
-			tr = transform;
+			tr = m_agent;
 
 			seeker = GetComponent<Seeker>();
 
@@ -708,8 +711,14 @@ namespace Pathfinding {
 		}
 
 		public virtual void OnDrawGizmos () {
-			tr = transform;
+			tr = m_agent;
 			autoRepath.DrawGizmos(this.position, 0.0f);
 		}
-	}
+
+        public void SetAgent(Transform agent)
+        {
+			m_agent = agent;
+			tr = m_agent;
+        }
+    }
 }
