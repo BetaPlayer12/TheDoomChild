@@ -6,6 +6,7 @@ namespace Pathfinding {
 	[CanEditMultipleObjects]
 	public class AILerpEditor : BaseAIEditor {
 		protected override void Inspector () {
+			PropertyField("m_agent");
 			Section("Pathfinding");
 			AutoRepathInspector();
 
