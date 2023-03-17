@@ -22,7 +22,7 @@ namespace DChild.Gameplay
         public bool isDetecting { get; private set; }
         public bool areAllRaysDetecting { get; private set; }
         public RaycastHit2D[] hits { get; set; }
-        public List<RaycastHit2D[]> hitsList { get; set; }
+        public List<RaycastHit2D> hitsList { get; set; }
         public int count => m_count;
 
         public void Initialize()
@@ -33,7 +33,7 @@ namespace DChild.Gameplay
             m_mask = m_config.mask;
             m_ignoreTrigger = m_config.ignoreTrigger;
             hits = new RaycastHit2D[m_count];
-            hitsList = new List<RaycastHit2D[]>();
+            hitsList = new List<RaycastHit2D>();
         }
 
         public void Set(int rayCount, float castWidth, float castLength)
@@ -64,7 +64,7 @@ namespace DChild.Gameplay
             m_mask = m_config.mask;
             m_ignoreTrigger = m_config.ignoreTrigger;
             hits = new RaycastHit2D[m_count];
-            hitsList = new List<RaycastHit2D[]>();
+            hitsList = new List<RaycastHit2D>();
         }
 
         public void Cast(Vector2 origin, Vector2 direction, bool debugMode = false)
@@ -83,10 +83,14 @@ namespace DChild.Gameplay
                 var position = origin + (offsetDirection * m_offsets[i]);
                 hitBuffers = Raycaster.Cast(position, direction, m_castDistance, m_ignoreTrigger, out hitCount, debugMode);
                 hits[i] = hitBuffers[0];
-                hitsList.Add(hitBuffers);
 
                 if (hitCount > 0)
                 {
+                    for (int k = 0; k < hitCount; k++)
+                    {
+                        hitsList.Add(hitBuffers[k]);
+                    }
+                   
                     if (isDetecting == false)
                     {
                         isDetecting = true;

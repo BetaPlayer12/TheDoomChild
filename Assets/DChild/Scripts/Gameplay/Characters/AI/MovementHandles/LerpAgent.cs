@@ -56,6 +56,11 @@ namespace DChild.Gameplay
             m_ai.canMove = false;
         }
 
+        private void Awake()
+        {
+            m_ai.SetAgent(m_positionReference);
+        }
+
         private void Update()
         {
             m_ai.destination = m_destination;
@@ -65,6 +70,8 @@ namespace DChild.Gameplay
         {
             m_ai.onSearchPath += Update;
         }
+
+
 
         private void OnDisable()
         {
