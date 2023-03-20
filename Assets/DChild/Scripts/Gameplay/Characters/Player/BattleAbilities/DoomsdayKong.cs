@@ -177,7 +177,8 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
             m_enemySensor.Cast();
             var hits = m_enemySensor.GetHits();
-            var target = hits[0].point;
+            var target = m_enemySensor.isDetecting ? hits[0].point : Vector2.zero;
+            //Debug.Log("Target is " + target);
             m_launcher.AimAt(target != Vector2.zero ? target : (Vector2)m_endPoint.position);
             m_launcher.LaunchBallisticProjectile(target != Vector2.zero ? target : (Vector2)m_endPoint.position, instance.gameObject);
         }
