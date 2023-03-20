@@ -1,38 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &363413251491357696
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 662341734655251023}
-  m_Layer: 0
-  m_Name: DefeatLichLord_Sequences
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &662341734655251023
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 363413251491357696}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 8558938448257077163}
-  - {fileID: 8558938446628692669}
-  m_Father: {fileID: 8523025131051248574}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &420377501635942774
 GameObject:
   m_ObjectHideFlags: 0
@@ -643,7 +610,7 @@ GameObject:
   - component: {fileID: 4948026137891389991}
   - component: {fileID: 8522081454193447440}
   m_Layer: 0
-  m_Name: LichLordAdbuctsPlayer_Timeline
+  m_Name: BossEncounter_Timeline
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -665,8 +632,8 @@ Transform:
   - {fileID: 6818343292696259811}
   - {fileID: 1545676588155089791}
   - {fileID: 6442162631113488159}
-  m_Father: {fileID: 327873951665808875}
-  m_RootOrder: 1
+  m_Father: {fileID: 8558938448529067250}
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!320 &4948026137891389991
 PlayableDirector:
@@ -704,7 +671,7 @@ PlayableDirector:
   - key: {fileID: 7322254361259167591, guid: a9418f06eb7da394da8b4fb813d5192c, type: 2}
     value: {fileID: 436869591746617}
   - key: {fileID: 5909376890962258758, guid: a9418f06eb7da394da8b4fb813d5192c, type: 2}
-    value: {fileID: 0}
+    value: {fileID: 8558938448257077159}
   - key: {fileID: -5646679142657136663, guid: a9418f06eb7da394da8b4fb813d5192c, type: 2}
     value: {fileID: 8679500377199390953}
   m_ExposedReferences:
@@ -5561,6 +5528,7 @@ ParticleSystemRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: 83e38df970e6bb348a3efccecfc6a2d2, type: 2}
+  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -5815,39 +5783,6 @@ CapsuleCollider2D:
   m_Offset: {x: -0.021151256, y: 0}
   m_Size: {x: 2.3910906, y: 4.8399987}
   m_Direction: 0
---- !u!1 &2168472793672449570
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 8523025131051248574}
-  m_Layer: 0
-  m_Name: DefeatLichLord_QuestElements
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &8523025131051248574
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2168472793672449570}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 662341734655251023}
-  - {fileID: 327873951665808875}
-  m_Father: {fileID: 8558938448529067250}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2563652529036204949
 GameObject:
   m_ObjectHideFlags: 0
@@ -10679,6 +10614,7 @@ ParticleSystemRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
+  - {fileID: 2100000, guid: f61eeb8bf1abaaa429078268988a0a00, type: 2}
   - {fileID: 2100000, guid: f61eeb8bf1abaaa429078268988a0a00, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
@@ -15732,6 +15668,7 @@ ParticleSystemRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: 68b917bfa16eb924eb5713046323d778, type: 2}
+  - {fileID: 2100000, guid: 68b917bfa16eb924eb5713046323d778, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -15907,39 +15844,6 @@ CapsuleCollider2D:
   m_Offset: {x: -0.021696674, y: 0}
   m_Size: {x: 2.4428658, y: 4.8399987}
   m_Direction: 0
---- !u!1 &4255748341253433364
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 327873951665808875}
-  m_Layer: 0
-  m_Name: DefeatLichLord_Cinematics
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &327873951665808875
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4255748341253433364}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 426036935962278361}
-  - {fileID: 3465765090254403838}
-  m_Father: {fileID: 8523025131051248574}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4604220627606984627
 GameObject:
   m_ObjectHideFlags: 0
@@ -20977,6 +20881,7 @@ ParticleSystemRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: 70a9c018ec3f5984aba72a6326775d88, type: 2}
+  - {fileID: 2100000, guid: 70a9c018ec3f5984aba72a6326775d88, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -21053,13 +20958,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5498401565275950693}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 50.049988, y: 27.340004, z: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 56.3468, y: 42.12558, z: 7.5138826}
   m_LocalScale: {x: 2.5858781, y: 3.2671523, z: 3.7534049}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3626929122499071070}
-  m_Father: {fileID: 600132499215985444}
+  m_Father: {fileID: 6818343292696259811}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -722.607}
 --- !u!212 &6250509545290478404
@@ -25985,6 +25890,7 @@ ParticleSystemRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
+  - {fileID: 2100000, guid: d147e707413ca604488e9d6aadb5122c, type: 2}
   - {fileID: 2100000, guid: d147e707413ca604488e9d6aadb5122c, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
@@ -31309,6 +31215,7 @@ ParticleSystemRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 10308, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -31626,13 +31533,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6939440593050667141}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 26.169006, y: 29.220001, z: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 32.46582, y: 44.005577, z: 7.5138826}
   m_LocalScale: {x: 2.4489007, y: 2.2361147, z: 3.7534049}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8581333509346240196}
-  m_Father: {fileID: 600132499215985444}
+  m_Father: {fileID: 6818343292696259811}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -357.618}
 --- !u!212 &1307638653065329292
@@ -36577,6 +36484,7 @@ ParticleSystemRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: 1f1ce62e863410b458d648c038517ca9, type: 2}
+  - {fileID: 2100000, guid: 1f1ce62e863410b458d648c038517ca9, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -41477,6 +41385,7 @@ ParticleSystemRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: d0b0a7a5f2de07a44a24d2bbd3926075, type: 2}
+  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -46443,6 +46352,7 @@ ParticleSystemRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: 5c4aef982db53ac42b967f27a1e98e83, type: 2}
+  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -46682,13 +46592,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8302172391819063268}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -47.070007, y: 28.150002, z: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -40.773193, y: 42.935577, z: 7.5138826}
   m_LocalScale: {x: 2.5858777, y: 3.2671523, z: 3.7534049}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5629705669308264001}
-  m_Father: {fileID: 600132499215985444}
+  m_Father: {fileID: 6818343292696259811}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -716.205}
 --- !u!212 &4354657181597487300
@@ -46891,13 +46801,12 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8558938446628692668}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 227.25, y: -41.64, z: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 8558938448418326770}
-  m_Father: {fileID: 662341734655251023}
+  m_Children: []
+  m_Father: {fileID: 8558938448418326770}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &8558938446628692666
@@ -46990,6 +46899,196 @@ MonoBehaviour:
   useBarkTitlePicker: 1
   useQuestNamePicker: 1
   selectedDatabase: {fileID: 11400000, guid: 0261f9a557275204180e4259492917ad, type: 2}
+--- !u!1 &8558938446965905963
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8558938446965905960}
+  - component: {fileID: 8558938446965905956}
+  - component: {fileID: 8558938446965905959}
+  - component: {fileID: 8558938446965905958}
+  - component: {fileID: 8558938446965905961}
+  m_Layer: 0
+  m_Name: Note
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!224 &8558938446965905960
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8558938446965905963}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8558938448529067250}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -0.2, y: 3.5}
+  m_SizeDelta: {x: 35.75, y: 18.65}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!23 &8558938446965905956
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8558938446965905963}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!33 &8558938446965905959
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8558938446965905963}
+  m_Mesh: {fileID: 0}
+--- !u!222 &8558938446965905958
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8558938446965905963}
+  m_CullTransparentMesh: 0
+--- !u!114 &8558938446965905961
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8558938446965905963}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_text: Lich Lord appears and abducts the player
+  m_isRightToLeft: 0
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontSharedMaterials: []
+  m_fontMaterial: {fileID: 0}
+  m_fontMaterials: []
+  m_fontColor32:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+  m_enableVertexGradient: 0
+  m_colorMode: 3
+  m_fontColorGradient:
+    topLeft: {r: 1, g: 1, b: 1, a: 1}
+    topRight: {r: 1, g: 1, b: 1, a: 1}
+    bottomLeft: {r: 1, g: 1, b: 1, a: 1}
+    bottomRight: {r: 1, g: 1, b: 1, a: 1}
+  m_fontColorGradientPreset: {fileID: 0}
+  m_spriteAsset: {fileID: 0}
+  m_tintAllSprites: 0
+  m_StyleSheet: {fileID: 0}
+  m_TextStyleHashCode: 0
+  m_overrideHtmlColors: 0
+  m_faceColor:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_fontSize: 36
+  m_fontSizeBase: 36
+  m_fontWeight: 400
+  m_enableAutoSizing: 0
+  m_fontSizeMin: 18
+  m_fontSizeMax: 72
+  m_fontStyle: 0
+  m_HorizontalAlignment: 1
+  m_VerticalAlignment: 256
+  m_textAlignment: 257
+  m_characterSpacing: 0
+  m_wordSpacing: 0
+  m_lineSpacing: 0
+  m_lineSpacingMax: 0
+  m_paragraphSpacing: 0
+  m_charWidthMaxAdj: 0
+  m_enableWordWrapping: 1
+  m_wordWrappingRatios: 0.4
+  m_overflowMode: 0
+  m_linkedTextComponent: {fileID: 0}
+  parentLinkedComponent: {fileID: 0}
+  m_enableKerning: 1
+  m_enableExtraPadding: 0
+  checkPaddingRequired: 0
+  m_isRichText: 1
+  m_parseCtrlCharacters: 1
+  m_isOrthographic: 0
+  m_isCullingEnabled: 0
+  m_horizontalMapping: 0
+  m_verticalMapping: 0
+  m_uvLineOffset: 0
+  m_geometrySortingOrder: 0
+  m_IsTextObjectScaleStatic: 0
+  m_VertexBufferAutoSizeReduction: 1
+  m_useMaxVisibleDescender: 1
+  m_pageToDisplay: 1
+  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_isUsingLegacyAnimationComponent: 0
+  m_isVolumetricText: 0
+  _SortingLayer: 0
+  _SortingLayerID: 0
+  _SortingOrder: 0
+  m_hasFontAssetChanged: 0
+  m_renderer: {fileID: 8558938446965905956}
+  m_maskType: 0
 --- !u!1 &8558938448257077162
 GameObject:
   m_ObjectHideFlags: 0
@@ -47004,7 +47103,7 @@ GameObject:
   - component: {fileID: 8558938448257077160}
   - component: {fileID: 8558938448257077159}
   m_Layer: 11
-  m_Name: Sequence_LichLordAbductsPlayer
+  m_Name: BossFightTrigger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -47017,12 +47116,12 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8558938448257077162}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1.789978, y: -24.699997, z: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -1.79, y: -24.7, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 662341734655251023}
+  m_Father: {fileID: 8558938448529067250}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!320 &8558938448257077158
@@ -47043,7 +47142,7 @@ PlayableDirector:
   - key: {fileID: 4068176297969339576, guid: a5e12f8413a23594488cc99ffb7ea47e, type: 2}
     value: {fileID: 0}
   - key: {fileID: 1359016019995962148, guid: a5e12f8413a23594488cc99ffb7ea47e, type: 2}
-    value: {fileID: 7924214599643817685}
+    value: {fileID: 0}
   - key: {fileID: -2282421184719419811, guid: a5e12f8413a23594488cc99ffb7ea47e, type: 2}
     value: {fileID: 8558938448257077159}
   m_ExposedReferences:
@@ -47149,7 +47248,7 @@ MonoBehaviour:
         m_Calls:
         - m_Target: {fileID: 3743359361965326312}
           m_TargetAssemblyTypeName: DChild.Gameplay.GameplaySignalHandle, Assembly-CSharp
-          m_MethodName: TransferPlayerTo
+          m_MethodName: SmartTransferPlayerTo
           m_Mode: 2
           m_Arguments:
             m_ObjectArgument: {fileID: 11400000, guid: 21a018db56c001e409a6945077de9887,
@@ -47185,14 +47284,15 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8558938448418326773}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 227.25, y: -41.64, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1442741378620754387}
-  m_Father: {fileID: 8558938446628692669}
-  m_RootOrder: 0
+  - {fileID: 8558938446628692669}
+  m_Father: {fileID: 8558938448529067250}
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &8558938448418326771
 MonoBehaviour:
@@ -47220,8 +47320,8 @@ MonoBehaviour:
     acceptedGameObjects: []
     luaWizardIndex: -1
     lastEvaluationValue: 0
-  setQuestState: 1
-  questName: 
+  setQuestState: 0
+  questName: Defeat Lich Lord
   questState: 4
   setQuestEntryState: 0
   questEntryNumber: 1
@@ -47282,8 +47382,8 @@ MonoBehaviour:
         m_CallState: 2
   useConversationTitlePicker: 1
   useBarkTitlePicker: 1
-  useQuestNamePicker: 1
-  selectedDatabase: {fileID: 11400000, guid: 9c18a288b00d48447ba0c0c4719756fb, type: 2}
+  useQuestNamePicker: 0
+  selectedDatabase: {fileID: 11400000, guid: 0261f9a557275204180e4259492917ad, type: 2}
 --- !u!1 &8558938448529067253
 GameObject:
   m_ObjectHideFlags: 0
@@ -47294,7 +47394,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8558938448529067250}
   - component: {fileID: 8558938448529067251}
-  - component: {fileID: 5457130308308835488}
+  - component: {fileID: 8558938448529067248}
   m_Layer: 0
   m_Name: Quest_DefeatLichLord (GY3)
   m_TagString: Untagged
@@ -47314,8 +47414,11 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 8523025131051248574}
-  - {fileID: 600132499215985444}
+  - {fileID: 8558938448257077163}
+  - {fileID: 8558938448418326770}
+  - {fileID: 426036935962278361}
+  - {fileID: 3465765090254403838}
+  - {fileID: 8558938446965905960}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -47359,7 +47462,7 @@ MonoBehaviour:
             m_BoolArgument: 1
           m_CallState: 2
         - m_Target: {fileID: 0}
-          m_TargetAssemblyTypeName: UnityEngine.Behaviour, UnityEngine
+          m_TargetAssemblyTypeName: 
           m_MethodName: set_enabled
           m_Mode: 6
           m_Arguments:
@@ -47370,8 +47473,8 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
-        - m_Target: {fileID: 0}
-          m_TargetAssemblyTypeName: DChild.GameEventSender, Assembly-CSharp
+        - m_Target: {fileID: 8558938448529067248}
+          m_TargetAssemblyTypeName: 
           m_MethodName: SendSavedEvent
           m_Mode: 1
           m_Arguments:
@@ -47409,7 +47512,7 @@ MonoBehaviour:
             m_BoolArgument: 0
           m_CallState: 2
         - m_Target: {fileID: 0}
-          m_TargetAssemblyTypeName: UnityEngine.Behaviour, UnityEngine
+          m_TargetAssemblyTypeName: 
           m_MethodName: set_enabled
           m_Mode: 6
           m_Arguments:
@@ -47420,8 +47523,8 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 1
           m_CallState: 2
-        - m_Target: {fileID: 0}
-          m_TargetAssemblyTypeName: DChild.GameEventSender, Assembly-CSharp
+        - m_Target: {fileID: 8558938448529067248}
+          m_TargetAssemblyTypeName: 
           m_MethodName: SendSavedEvent
           m_Mode: 1
           m_Arguments:
@@ -47434,7 +47537,7 @@ MonoBehaviour:
           m_CallState: 2
   questEntryStateIndicatorLevels: []
   suppressOnEnterStateEventsOnStart: 0
---- !u!114 &5457130308308835488
+--- !u!114 &8558938448529067248
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -47443,22 +47546,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 8558938448529067253}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6546d1f34e0077748a93d4c356aa9411, type: 3}
+  m_Script: {fileID: 11500000, guid: 95ea9eff009fbb642bcdd025d86ddc90, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  addTrigger: 16
-  removeTrigger: 1024
-  databases:
-  - {fileID: 11400000, guid: 9c18a288b00d48447ba0c0c4719756fb, type: 2}
-  condition:
-    luaConditions: []
-    questConditions: []
-    acceptedTags: []
-    acceptedGameObjects: []
-    luaWizardIndex: -1
-    lastEvaluationValue: 0
-  once: 0
-  onePerFrame: 0
+  m_event: Boss Gone
+  m_systemToSendTo: 0
+  m_doozyEvent: {fileID: 0}
+  m_masterAudioEvent: 
+  m_dialogueSystemMessage: 
 --- !u!1 &8597148075780929743
 GameObject:
   m_ObjectHideFlags: 0
@@ -47486,7 +47581,11 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1453265644731325429}
+  - {fileID: 2928094373139893783}
+  - {fileID: 672173922881726410}
+  - {fileID: 3472855757864925622}
   m_Father: {fileID: 3465765090254403838}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -47516,13 +47615,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8607124092024388907}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -33.549988, y: 28.32, z: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -27.253174, y: 43.105576, z: 7.5138826}
   m_LocalScale: {x: 2.5858781, y: 3.2671528, z: 3.7534049}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8016787341889007022}
-  m_Father: {fileID: 600132499215985444}
+  m_Father: {fileID: 6818343292696259811}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -720.026}
 --- !u!212 &8172965812315989689
@@ -47617,41 +47716,6 @@ DistanceJoint2D:
   m_AutoConfigureDistance: 1
   m_Distance: 18.709541
   m_MaxDistanceOnly: 0
---- !u!1 &8830164829314679394
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 600132499215985444}
-  m_Layer: 0
-  m_Name: DefeatLichLord_Environment
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &600132499215985444
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8830164829314679394}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1453265644731325429}
-  - {fileID: 2928094373139893783}
-  - {fileID: 672173922881726410}
-  - {fileID: 3472855757864925622}
-  m_Father: {fileID: 8558938448529067250}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &9086002992729028575
 GameObject:
   m_ObjectHideFlags: 0
@@ -47741,7 +47805,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    m_TransformParent: {fileID: 327873951665808875}
+    m_TransformParent: {fileID: 8558938448529067250}
     m_Modifications:
     - target: {fileID: 4341953820339255750, guid: 56eb428e38177b84e9d06d5b9d5bdd30,
         type: 3}
@@ -48016,7 +48080,7 @@ PrefabInstance:
     - target: {fileID: 6075451112972445386, guid: 56eb428e38177b84e9d06d5b9d5bdd30,
         type: 3}
       propertyPath: m_RootOrder
-      value: 0
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 6075451112972445386, guid: 56eb428e38177b84e9d06d5b9d5bdd30,
         type: 3}
@@ -48141,12 +48205,12 @@ PrefabInstance:
     - target: {fileID: 7116479645023515046, guid: 69eb62c1a2e826a4db0de39a6f876fe6,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.4199829
+      value: -0.42
       objectReference: {fileID: 0}
     - target: {fileID: 7116479645023515046, guid: 69eb62c1a2e826a4db0de39a6f876fe6,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.6100006
+      value: -0.61
       objectReference: {fileID: 0}
     - target: {fileID: 7116479645023515046, guid: 69eb62c1a2e826a4db0de39a6f876fe6,
         type: 3}
@@ -48161,17 +48225,17 @@ PrefabInstance:
     - target: {fileID: 7116479645023515046, guid: 69eb62c1a2e826a4db0de39a6f876fe6,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7116479645023515046, guid: 69eb62c1a2e826a4db0de39a6f876fe6,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7116479645023515046, guid: 69eb62c1a2e826a4db0de39a6f876fe6,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7116479645023515046, guid: 69eb62c1a2e826a4db0de39a6f876fe6,
         type: 3}

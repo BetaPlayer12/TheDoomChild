@@ -17,10 +17,10 @@ namespace DChild.Gameplay.ArmyBattle
 
         public void AddCharacter(ArmyCharacter character)
         {
-            if(m_composition.GetNumberOfCharacter(character.unitType) < m_maxCharacterPerType)
-            {
-                m_composition.AddCharacter(character);
-            }
+            //if(m_composition.GetNumberOfCharacter(character.unitType) < m_maxCharacterPerType)
+            //{
+            //   // m_composition.AddCharacter(character);
+            //}
         }
 
         public void RemoveCharacter(ArmyCharacter character)
