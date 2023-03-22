@@ -13,7 +13,7 @@ namespace Pathfinding {
 	/// See: TurnBasedAI
 	/// See: turnbased (view in online documentation for working links)
 	/// </summary>
-	[HelpURL("http://arongranberg.com/astar/docs/class_pathfinding_1_1_block_manager.php")]
+	[HelpURL("http://arongranberg.com/astar/documentation/stable/class_pathfinding_1_1_block_manager.php")]
 	public class BlockManager : VersionedMonoBehaviour {
 		/// <summary>Contains info on which SingleNodeBlocker objects have blocked a particular node</summary>
 		Dictionary<GraphNode, List<SingleNodeBlocker> > blocked = new Dictionary<GraphNode, List<SingleNodeBlocker> >();
@@ -82,6 +82,7 @@ namespace Pathfinding {
 		/// <summary>True if the node contains any blocker which is included in the selector list</summary>
 		public bool NodeContainsAnyOf (GraphNode node, List<SingleNodeBlocker> selector) {
 			List<SingleNodeBlocker> blockersInNode;
+
 			if (!blocked.TryGetValue(node, out blockersInNode)) {
 				return false;
 			}
@@ -102,6 +103,7 @@ namespace Pathfinding {
 		/// <summary>True if the node contains any blocker which is not included in the selector list</summary>
 		public bool NodeContainsAnyExcept (GraphNode node, List<SingleNodeBlocker> selector) {
 			List<SingleNodeBlocker> blockersInNode;
+
 			if (!blocked.TryGetValue(node, out blockersInNode)) {
 				return false;
 			}

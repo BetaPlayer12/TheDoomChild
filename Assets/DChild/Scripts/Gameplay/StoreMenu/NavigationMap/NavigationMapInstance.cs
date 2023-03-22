@@ -1,35 +1,51 @@
-﻿using System;
-using Holysoft.Collections;
+﻿using Holysoft.Collections;
+using PixelCrushers.DialogueSystem;
+using Sirenix.OdinInspector;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace DChild.Gameplay.NavigationMap
 {
-    public class NavigationMapInstance : MonoBehaviour
+    public class NavigationMapInstance : SerializedMonoBehaviour
     {
-        [SerializeField]
+        [SerializeField, HideInPlayMode]
         private NavMapFogOfWarUI[] m_sceneFogOFWars;
+        [SerializeField, HideInEditorMode]
+        private Dictionary<string, NavMapFogOfWarSegment> m_fogOfWarSegments;
 
-        public NavMapFogOfWarUI GetFogOfWarOfScene(int index) => m_sceneFogOFWars[index];
-
-        public void UpdateUI()
+        public void UpdateFogOfWar()
         {
-            for (int i = 0; i < m_sceneFogOFWars.Length; i++)
+            foreach (var varName in m_fogOfWarSegments.Keys)
             {
-                m_sceneFogOFWars[i].UpdateUI();
+                var state = DialogueLua.GetVariable(varName).asInt;
+                SetFogOfwarState(varName, (Flag)state);
             }
         }
 
-        public void SetUIState(string fogOfWarName, Flag flag)
+        public void SetFogOfwarState(string varName, Flag state)
         {
+            m_fogOfWarSegments[varName].SetUIState(state);
+        }
+
+        public NavMapFogOfWarUI GetFogOfWarOfScene(int index) => m_sceneFogOFWars[index];
+
+        private void OnValidate()
+        {
+#if UNITY_EDITOR
+            m_fogOfWarSegments = new Dictionary<string, NavMapFogOfWarSegment>();
             for (int i = 0; i < m_sceneFogOFWars.Length; i++)
             {
-                var fogOfWar = m_sceneFogOFWars[i];
-                if (fogOfWar.HasID(fogOfWarName))
+                AddSegmentToDictionary(m_sceneFogOFWars[i].GetSegments());
+            }
+
+            void AddSegmentToDictionary(Dictionary<string, NavMapFogOfWarSegment> toAdd)
+            {
+                foreach (var key in toAdd.Keys)
                 {
-                    fogOfWar.SetUIState(fogOfWarName, flag);
-                    return;
+                    m_fogOfWarSegments.Add(key, toAdd[key]);
                 }
             }
+#endif
         }
     }
 }
