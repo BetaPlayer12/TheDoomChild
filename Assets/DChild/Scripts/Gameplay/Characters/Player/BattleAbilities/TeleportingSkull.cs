@@ -19,6 +19,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
         private ProjectileInfo m_projectile;
         public ProjectileInfo projectile => m_projectile;
         private Projectile m_spawnedProjectile;
+        public Projectile spawnedProjectile => m_spawnedProjectile;
         private bool m_canTeleport;
         public bool canTeleport => m_canTeleport;
 

@@ -371,6 +371,7 @@ Transform:
   - {fileID: 4275075274852105760}
   - {fileID: 5715425542890857503}
   - {fileID: 8374845437696981009}
+  - {fileID: 7316123436207495450}
   m_Father: {fileID: 1861663316882787807}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -415,7 +416,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_attackFX: {fileID: 4713603853206080501}
-  m_fireFistCooldown: 3
+  m_fireFistCooldown: 1.5
   m_fireFistMovementCooldown: 0.5
   m_fireFistInfo:
     m_fx: {fileID: 0}
@@ -575,7 +576,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_attackFX: {fileID: 4713603853206080501}
-  m_foolsVerdictCooldown: 3
+  m_foolsVerdictCooldown: 1.5
   m_foolsVerdictMovementCooldown: 1.7
   m_foolsVerdictInfo:
     m_fx: {fileID: 0}
@@ -687,6 +688,12 @@ MonoBehaviour:
   m_hitbox: {fileID: 3251923929896925042}
   m_hitboxDuration: 0.5
   m_pushForce: {x: 50, y: 50}
+  m_startPoint: {fileID: 7367653493634234885}
+  m_projectileInfo:
+    m_projectile: {fileID: 543959659078774030, guid: 0a92f9277bb52e041860762275a3b6ce,
+      type: 3}
+    m_speed: 100
+  m_targetOffset: {x: 10, y: -25}
 --- !u!114 &6680117199953300383
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12800,6 +12807,38 @@ MonoBehaviour:
   zPosition: 1
   overrideAlpha: 1
   hierarchy: {fileID: 4966587747696342843}
+--- !u!1 &1440387177882471187
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7316123436207495450}
+  m_Layer: 8
+  m_Name: BackDiver
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7316123436207495450
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1440387177882471187}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 7367653493634234885}
+  m_Father: {fileID: 7730022515954066503}
+  m_RootOrder: 11
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1462150734257410400
 GameObject:
   m_ObjectHideFlags: 0
@@ -47498,6 +47537,37 @@ MonoBehaviour:
   zPosition: 1
   overrideAlpha: 1
   hierarchy: {fileID: 4966587747696342843}
+--- !u!1 &5570449550414316083
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7367653493634234885}
+  m_Layer: 8
+  m_Name: BackDiverStartPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7367653493634234885
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5570449550414316083}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 3, y: 5, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7316123436207495450}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5571711287960227416
 GameObject:
   m_ObjectHideFlags: 0
@@ -99636,22 +99706,22 @@ PrefabInstance:
     - target: {fileID: 102887550663880699, guid: f28503f5dacc9cd4a8fe73c5494c5d00,
         type: 3}
       propertyPath: startColor.m_ColorMin.a
-      value: 2.65e-43
+      value: 7.7e-44
       objectReference: {fileID: 0}
     - target: {fileID: 102887550663880699, guid: f28503f5dacc9cd4a8fe73c5494c5d00,
         type: 3}
       propertyPath: startColor.m_ColorMin.b
-      value: 0.07269436
+      value: -3.5251025e+22
       objectReference: {fileID: 0}
     - target: {fileID: 102887550663880699, guid: f28503f5dacc9cd4a8fe73c5494c5d00,
         type: 3}
       propertyPath: startColor.m_ColorMin.g
-      value: 2.65e-43
+      value: 7.7e-44
       objectReference: {fileID: 0}
     - target: {fileID: 102887550663880699, guid: f28503f5dacc9cd4a8fe73c5494c5d00,
         type: 3}
       propertyPath: startColor.m_ColorMin.r
-      value: 0.07269573
+      value: -3.525144e+22
       objectReference: {fileID: 0}
     - target: {fileID: 102887550686315782, guid: f28503f5dacc9cd4a8fe73c5494c5d00,
         type: 3}

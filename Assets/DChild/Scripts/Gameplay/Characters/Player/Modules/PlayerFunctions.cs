@@ -435,6 +435,18 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_doomsdayKong.EndExecution();
         }
 
+        public void BackDiverSummon()
+        {
+            if (m_teleportingSkull.spawnedProjectile == null)
+                m_backDiver.Summon();
+        }
+
+        public void BackDiverGetProjectile()
+        {
+            m_teleportingSkull.Execute();
+            m_teleportingSkull.GetSpawnedProjectile(m_backDiver.spawnedProjectile);
+        }
+
         public void BackDiverEnd()
         {
             m_backDiver.EndExecution();
