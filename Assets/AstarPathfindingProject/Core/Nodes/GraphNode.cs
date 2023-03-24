@@ -20,7 +20,7 @@ namespace Pathfinding {
 		/// Side of the node shape which this connection uses.
 		/// Used for mesh nodes.
 		/// A value of 0 corresponds to using the side for vertex 0 and vertex 1 on the node. 1 corresponds to vertex 1 and 2, etc.
-		/// A negative value means that this connection does not use any side at all (this is mostly used for off-mesh links).
+		/// A value of <see cref="NoSharedEdge"/> means that this connection does not use any side at all (this is mostly used for off-mesh links).
 		///
 		/// Note: Due to alignment, the <see cref="node"/> and <see cref="cost"/> fields use 12 bytes which will be padded
 		/// to 16 bytes when used in an array even if this field would be removed.
@@ -31,7 +31,9 @@ namespace Pathfinding {
 		/// </summary>
 		public byte shapeEdge;
 
-		public Connection (GraphNode node, uint cost, byte shapeEdge = 0xFF) {
+		public const byte NoSharedEdge = 0xFF;
+
+		public Connection (GraphNode node, uint cost, byte shapeEdge = NoSharedEdge) {
 			this.node = node;
 			this.cost = cost;
 			this.shapeEdge = shapeEdge;
@@ -378,7 +380,7 @@ namespace Pathfinding {
 		/// node.GetConnections(connections.Add);
 		/// </code>
 		/// </summary>
-		public abstract void GetConnections (System.Action<GraphNode> action);
+		public abstract void GetConnections(System.Action<GraphNode> action);
 
 		/// <summary>
 		/// Add a connection from this node to the specified node.
@@ -404,7 +406,7 @@ namespace Pathfinding {
 		/// }));
 		/// </code>
 		/// </summary>
-		public abstract void AddConnection (GraphNode node, uint cost);
+		public abstract void AddConnection(GraphNode node, uint cost);
 
 		/// <summary>
 		/// Removes any connection from this node to the specified node.
@@ -430,11 +432,11 @@ namespace Pathfinding {
 		/// }));
 		/// </code>
 		/// </summary>
-		public abstract void RemoveConnection (GraphNode node);
+		public abstract void RemoveConnection(GraphNode node);
 
 		/// <summary>Remove all connections from this node.</summary>
 		/// <param name="alsoReverse">if true, neighbours will be requested to remove connections to this node.</param>
-		public abstract void ClearConnections (bool alsoReverse);
+		public abstract void ClearConnections(bool alsoReverse);
 
 		/// <summary>
 		/// Checks if this node has a connection to the specified node.
@@ -493,7 +495,7 @@ namespace Pathfinding {
 		/// Open the node.
 		/// Used internally for the A* algorithm.
 		/// </summary>
-		public abstract void Open (Path path, PathNode pathNode, PathHandler handler);
+		public abstract void Open(Path path, PathNode pathNode, PathHandler handler);
 
 		/// <summary>The surface area of the node in square world units</summary>
 		public virtual float SurfaceArea () {
@@ -507,6 +509,9 @@ namespace Pathfinding {
 		public virtual Vector3 RandomPointOnSurface () {
 			return (Vector3)position;
 		}
+
+		/// <summary>Closest point on the surface of this node to the point p</summary>
+		public abstract Vector3 ClosestPointOnNode(Vector3 p);
 
 		/// <summary>
 		/// Hash code used for checking if the gizmos need to be updated.
@@ -578,16 +583,13 @@ namespace Pathfinding {
 
 		/// <summary>Get a vertex of this node.</summary>
 		/// <param name="i">vertex index. Must be between 0 and #GetVertexCount (exclusive).</param>
-		public abstract Int3 GetVertex (int i);
+		public abstract Int3 GetVertex(int i);
 
 		/// <summary>
 		/// Number of corner vertices that this node has.
 		/// For example for a triangle node this will return 3.
 		/// </summary>
-		public abstract int GetVertexCount ();
-
-		/// <summary>Closest point on the surface of this node to the point p</summary>
-		public abstract Vector3 ClosestPointOnNode (Vector3 p);
+		public abstract int GetVertexCount();
 
 		/// <summary>
 		/// Closest point on the surface of this node when seen from above.
@@ -595,7 +597,7 @@ namespace Pathfinding {
 		/// [Open online documentation to see images]
 		/// When the blue point in the above image is used as an argument this method call will return the green point while the <see cref="ClosestPointOnNode"/> method will return the red point.
 		/// </summary>
-		public abstract Vector3 ClosestPointOnNodeXZ (Vector3 p);
+		public abstract Vector3 ClosestPointOnNodeXZ(Vector3 p);
 
 		public override void ClearConnections (bool alsoReverse) {
 			// Remove all connections to this node from our neighbours
@@ -650,7 +652,7 @@ namespace Pathfinding {
 		/// <param name="node">Node to add a connection to</param>
 		/// <param name="cost">Cost of traversing the connection. A cost of 1000 corresponds approximately to the cost of moving 1 world unit.</param>
 		public override void AddConnection (GraphNode node, uint cost) {
-			AddConnection(node, cost, -1);
+			AddConnection(node, cost, Connection.NoSharedEdge);
 		}
 
 		/// <summary>
@@ -665,8 +667,8 @@ namespace Pathfinding {
 		/// </summary>
 		/// <param name="node">Node to add a connection to</param>
 		/// <param name="cost">Cost of traversing the connection. A cost of 1000 corresponds approximately to the cost of moving 1 world unit.</param>
-		/// <param name="shapeEdge">Which edge on the shape of this node to use or -1 if no edge is used.</param>
-		public void AddConnection (GraphNode node, uint cost, int shapeEdge) {
+		/// <param name="shapeEdge">Which edge on the shape of this node to use or #Connection.NoSharedEdge if no edge is used.</param>
+		public void AddConnection (GraphNode node, uint cost, byte shapeEdge) {
 			if (node == null) throw new System.ArgumentNullException();
 
 			// Check if we already have a connection to the node
@@ -678,7 +680,7 @@ namespace Pathfinding {
 						// Update edge only if it was a definite edge, otherwise reuse the existing one
 						// This makes it possible to use the AddConnection(node,cost) overload to only update the cost
 						// without changing the edge which is required for backwards compatibility.
-						connections[i].shapeEdge = shapeEdge >= 0 ? (byte)shapeEdge : connections[i].shapeEdge;
+						connections[i].shapeEdge = shapeEdge != Connection.NoSharedEdge ? shapeEdge : connections[i].shapeEdge;
 						return;
 					}
 				}
@@ -756,7 +758,7 @@ namespace Pathfinding {
 		/// node.ContainsPointInGraphSpace(p);
 		/// </code>
 		/// </summary>
-		public abstract bool ContainsPoint (Vector3 point);
+		public abstract bool ContainsPoint(Vector3 point);
 
 		/// <summary>
 		/// Checks if point is inside the node in graph space.
@@ -764,7 +766,7 @@ namespace Pathfinding {
 		/// In graph space the up direction is always the Y axis so in principle
 		/// we project the triangle down on the XZ plane and check if the point is inside the 2D triangle there.
 		/// </summary>
-		public abstract bool ContainsPointInGraphSpace (Int3 point);
+		public abstract bool ContainsPointInGraphSpace(Int3 point);
 
 		public override int GetGizmoHashCode () {
 			var hash = base.GetGizmoHashCode();

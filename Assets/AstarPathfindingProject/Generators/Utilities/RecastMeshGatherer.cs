@@ -90,7 +90,7 @@ namespace Pathfinding.Recast {
 							"One way to solve this problem is to use cached startup (Save & Load tab in the inspector) to only calculate the graph when the game is not playing.");
 				}
 
-				#if ASTARDEBUG
+#if ASTARDEBUG
 				int y = 0;
 				foreach (RasterizationMesh smesh in meshes) {
 					y++;
@@ -107,7 +107,7 @@ namespace Pathfinding.Recast {
 						Debug.DrawLine(p3, p1, Color.red, 1);
 					}
 				}
-				#endif
+#endif
 			}
 		}
 
@@ -125,7 +125,7 @@ namespace Pathfinding.Recast {
 			// for each RecastMeshObj
 			for (int i = 0; i < buffer2.Count; i++) {
 				MeshFilter filter = buffer2[i].GetMeshFilter();
-				Renderer rend = filter != null ? filter.GetComponent<Renderer>() : null;
+				Renderer rend = filter != null? filter.GetComponent<Renderer>() : null;
 
 				if (filter != null && rend != null && filter.sharedMesh != null) {
 					Mesh mesh = filter.sharedMesh;
@@ -205,8 +205,14 @@ namespace Pathfinding.Recast {
 				return;
 
 			// Original heightmap size
+#if UNITY_2019_3_OR_NEWER
 			int heightmapWidth = terrainData.heightmapResolution;
 			int heightmapDepth = terrainData.heightmapResolution;
+#else
+			int heightmapWidth = terrainData.heightmapWidth;
+			int heightmapDepth = terrainData.heightmapHeight;
+#endif
+
 
 			// Sample the terrain heightmap
 			float[, ] heights = terrainData.GetHeights(0, 0, heightmapWidth, heightmapDepth);
@@ -463,13 +469,13 @@ namespace Pathfinding.Recast {
 				}
 			}
 
-			#if ASTARDEBUG
+#if ASTARDEBUG
 			for (int i = 0; i < result.triangles.Length; i += 3) {
 				Debug.DrawLine(result.matrix.MultiplyPoint3x4(result.vertices[result.triangles[i]]), result.matrix.MultiplyPoint3x4(result.vertices[result.triangles[i+1]]), Color.yellow);
 				Debug.DrawLine(result.matrix.MultiplyPoint3x4(result.vertices[result.triangles[i+2]]), result.matrix.MultiplyPoint3x4(result.vertices[result.triangles[i+1]]), Color.yellow);
 				Debug.DrawLine(result.matrix.MultiplyPoint3x4(result.vertices[result.triangles[i]]), result.matrix.MultiplyPoint3x4(result.vertices[result.triangles[i+2]]), Color.yellow);
 			}
-			#endif
+#endif
 
 			return result;
 		}

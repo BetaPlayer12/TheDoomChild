@@ -8,6 +8,9 @@ namespace Pathfinding {
 
 	/// <summary>
 	/// AI for following paths.
+	///
+	/// [Open online documentation to see images]
+	///
 	/// This AI is the default movement script which comes with the A* Pathfinding Project.
 	/// It is in no way required by the rest of the system, so feel free to write your own. But I hope this script will make it easier
 	/// to set up movement for the characters in your game.
@@ -181,7 +184,7 @@ namespace Pathfinding {
 		public bool reachedDestination {
 			get {
 				if (!reachedEndOfPath) return false;
-				if (remainingDistance + movementPlane.ToPlane(destination - interpolator.endPoint).magnitude > endReachedDistance) return false;
+				if (!interpolator.valid || remainingDistance + movementPlane.ToPlane(destination - interpolator.endPoint).magnitude > endReachedDistance) return false;
 
 				// Don't do height checks in 2D mode
 				if (orientation != OrientationMode.YAxisForward) {
@@ -237,6 +240,19 @@ namespace Pathfinding {
 
 		#endregion
 
+		/// <summary>\copydoc Pathfinding::IAstarAI::GetRemainingPath</summary>
+		public void GetRemainingPath (List<Vector3> buffer, out bool stale) {
+			buffer.Clear();
+			buffer.Add(position);
+			if (!interpolator.valid) {
+				stale = true;
+				return;
+			}
+
+			stale = false;
+			interpolator.GetRemainingPath(buffer);
+		}
+
 		protected override void OnDisable () {
 			base.OnDisable();
 
@@ -244,6 +260,7 @@ namespace Pathfinding {
 			if (path != null) path.Release(this);
 			path = null;
 			interpolator.SetPath(null);
+			reachedEndOfPath = false;
 		}
 
 		/// <summary>
@@ -277,6 +294,7 @@ namespace Pathfinding {
 			// More info in p.errorLog (debug string)
 			if (p.error) {
 				p.Release(this);
+				SetPath(null);
 				return;
 			}
 
@@ -285,6 +303,15 @@ namespace Pathfinding {
 
 			// Replace the old path
 			path = p;
+
+			// The RandomPath and MultiTargetPath do not have a well defined destination that could have been
+			// set before the paths were calculated. So we instead set the destination here so that some properties
+			// like #reachedDestination and #remainingDistance work correctly.
+			if (path is RandomPath rpath) {
+				destination = rpath.originalEndPoint;
+			} else if (path is MultiTargetPath mpath) {
+				destination = mpath.originalEndPoint;
+			}
 
 			// Make sure the path contains at least 2 points
 			if (path.vectorPath.Count == 1) path.vectorPath.Add(path.vectorPath[0]);
@@ -318,6 +345,8 @@ namespace Pathfinding {
 
 		protected override void ClearPath () {
 			CancelCurrentPathRequest();
+			if (path != null) path.Release(this);
+			path = null;
 			interpolator.SetPath(null);
 			reachedEndOfPath = false;
 		}
@@ -355,11 +384,12 @@ namespace Pathfinding {
 			var forwards = movementPlane.ToPlane(simulatedRotation * (orientation == OrientationMode.YAxisForward ? Vector3.up : Vector3.forward));
 
 			// Check if we have a valid path to follow and some other script has not stopped the character
-			if (interpolator.valid && !isStopped) {
+			bool stopped = isStopped || (reachedDestination && whenCloseToDestination == CloseToDestinationMode.Stop);
+			if (interpolator.valid && !stopped) {
 				// How fast to move depending on the distance to the destination.
 				// Move slower as the character gets closer to the destination.
 				// This is always a value between 0 and 1.
-				slowdown = distanceToEnd < slowdownDistance ? Mathf.Sqrt(distanceToEnd / slowdownDistance) : 1;
+				slowdown = distanceToEnd < slowdownDistance? Mathf.Sqrt(distanceToEnd / slowdownDistance) : 1;
 
 				if (reachedEndOfPath && whenCloseToDestination == CloseToDestinationMode.Stop) {
 					// Slow down as quickly as possible
@@ -454,7 +484,7 @@ namespace Pathfinding {
 			return position;
 		}
 
-	#if UNITY_EDITOR
+#if UNITY_EDITOR
 		[System.NonSerialized]
 		int gizmoHash = 0;
 
@@ -490,13 +520,12 @@ namespace Pathfinding {
 				Draw.Gizmos.CircleXZ(Vector3.zero, endReachedDistance, Color.Lerp(GizmoColor, Color.red, 0.8f) * new Color(1, 1, 1, alpha));
 			}
 		}
-	#endif
+#endif
 
 		protected override int OnUpgradeSerializedData (int version, bool unityThread) {
-			base.OnUpgradeSerializedData(version, unityThread);
 			// Approximately convert from a damping value to a degrees per second value.
 			if (version < 1) rotationSpeed *= 90;
-			return 2;
+			return base.OnUpgradeSerializedData(version, unityThread);
 		}
 	}
 }

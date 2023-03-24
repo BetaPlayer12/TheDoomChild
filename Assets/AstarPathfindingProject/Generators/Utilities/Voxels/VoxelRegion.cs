@@ -182,14 +182,6 @@ namespace Pathfinding.Voxels {
 								//This line is the one where the differ most
 
 								nc++;
-#if FALSE
-								if (area == voxelArea.areaTypes[ni]) {
-									nc++;
-								} else {
-									//No way we can reach 4
-									break;
-								}
-#endif
 							} else {
 								break;
 							}
