@@ -1047,6 +1047,11 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
                         return;
                     }
+                    else if (m_input.teleportingSkullPressed && m_teleportingSkull.canTeleport)
+                    {
+                        m_teleportingSkull.TeleportToProjectile();
+                        return;
+                    }
                     else if (m_input.soulFireBlastPressed && !m_input.krakenRagePressed && m_soulFireBlast.CanSoulFireBlast())
                     {
                         PrepareForMidairAttack();
@@ -1737,7 +1742,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
                         return;
                     }
-                    else if (m_input.teleportingSkullPressed && m_teleportingSkull.canTeleport)
+                    else if (m_input.teleportingSkullPressed && m_teleportingSkull.canTeleport && !m_input.foolsVerdictPressed && !m_input.fireFistPressed && !m_input.hellTridentPressed)
                     {
                         m_teleportingSkull.TeleportToProjectile();
                         return;

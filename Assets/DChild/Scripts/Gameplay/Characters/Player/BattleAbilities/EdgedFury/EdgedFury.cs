@@ -33,6 +33,8 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
         [SerializeField]
         private Vector2 m_pushForce;
+        [SerializeField]
+        private EdgedFuryCamera m_edgedFuryCamera;
 
         private bool m_canEdgedFury;
         //private bool m_canMove;
@@ -77,6 +79,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
         public void Execute()
         {
+            m_edgedFuryCamera.ActivateCullingMask();
             m_state.waitForBehaviour = true;
             m_state.isAttacking = true;
             m_state.canAttack = false;
