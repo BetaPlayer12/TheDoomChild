@@ -8,21 +8,23 @@ public class EdgedFuryCamera : MonoBehaviour
     private Camera m_camera;
     [SerializeField]
     private LayerMask m_mask;
+    [SerializeField]
+    private ParticleSystem m_fx;
 
-    private void Start()
+    public void ActivateCullingMask()
     {
-        StartCoroutine(CullingCameraRoutine());
+        m_camera.cullingMask = m_mask;
     }
 
-    private IEnumerator CullingCameraRoutine()
-    {
-        var time = 5f;
-        while (time > 0)
-        {
-            m_camera.cullingMask = m_mask;
-            time -= Time.deltaTime;
-            yield return null;
-        }
-        yield return null;
-    }
+    //private IEnumerator CullingCameraRoutine()
+    //{
+    //    var time = 5f;
+    //    while (time > 0)
+    //    {
+    //        m_camera.cullingMask = m_mask;
+    //        time -= Time.deltaTime;
+    //        yield return null;
+    //    }
+    //    yield return null;
+    //}
 }
