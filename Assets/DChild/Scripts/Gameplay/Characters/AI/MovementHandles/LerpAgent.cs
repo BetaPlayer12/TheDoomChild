@@ -12,8 +12,11 @@ namespace DChild.Gameplay
         private AILerp m_ai;
         [SerializeField]
         private Transform m_positionReference;
+        [SerializeField]
+        private float m_distanceTolerance; 
 
         private Vector2 m_destination;
+        private bool hasReachedDestination;
 
         public override Vector2 segmentDestination => /*m_ai.interpolator.GetSegment(m_ai.interpolator.segmentIndex + 1)*/ m_positionReference.position + m_ai.interpolator.tangent.normalized;
 
@@ -25,6 +28,21 @@ namespace DChild.Gameplay
             if (m_ai.canMove == false)
             {
                 ResetAILerp();
+            }
+
+            if (hasReachedDestination == false)
+            {
+                //if (m_positionReference.position == m_ai.destination)
+                //{
+                //    hasReachedDestination = true;
+                //    SendDestionationReachedEvent();
+                //}
+
+                if (Vector3.Distance(m_positionReference.position, m_ai.destination) <= m_distanceTolerance)
+                {
+                    hasReachedDestination = true;
+                    SendDestionationReachedEvent();
+                }
             }
         }
 
@@ -49,6 +67,7 @@ namespace DChild.Gameplay
         public override void SetDestination(Vector2 position)
         {
             m_destination = position;
+            hasReachedDestination = false;
         }
 
         public override void Stop()
@@ -59,6 +78,7 @@ namespace DChild.Gameplay
         private void Awake()
         {
             m_ai.SetAgent(m_positionReference);
+
         }
 
         private void Update()
