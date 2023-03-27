@@ -13,7 +13,7 @@ namespace DChild.Gameplay
         [SerializeField]
         private Transform m_positionReference;
         [SerializeField]
-        private float m_distanceTolerance; 
+        private float m_distanceTolerance = 0.01f;
 
         private Vector2 m_destination;
         private bool hasReachedDestination;
