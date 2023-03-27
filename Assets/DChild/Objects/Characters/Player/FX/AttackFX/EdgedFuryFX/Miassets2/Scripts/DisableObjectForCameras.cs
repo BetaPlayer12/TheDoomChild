@@ -22,14 +22,16 @@ public class DisableObjectForCameras : MonoBehaviour
         }
     }
 
-    //private void OnDestroy()
-    //{
-    //    foreach (var camera in allCameras)
-    //    {
-    //        if (camera != outputCamera)
-    //        {
-    //            camera.cullingMask |= 1 << gameObject.layer;
-    //        }
-    //    }
-    //}
+    /*private void OnDestroy()
+    {
+        // Re-enable rendering of this object for each camera in the scene
+        foreach (var camera in allCameras)
+        {
+            // Check if the camera is not destroyed before accessing it
+            if (camera != null && camera != outputCamera)
+            {
+                camera.cullingMask |= 1 << gameObject.layer;
+            }
+        }
+    } */
 }

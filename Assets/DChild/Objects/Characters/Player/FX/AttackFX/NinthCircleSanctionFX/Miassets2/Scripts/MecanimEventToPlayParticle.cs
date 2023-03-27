@@ -4,11 +4,12 @@ using UnityEngine;
 
 public class MecanimEventToPlayParticle : MonoBehaviour
 {
-    [SerializeField] private ParticleSystem particleSystem; // Make the variable serializable
+    [SerializeField] private ParticleSystem[] particleSystems; // Make the variable serializable
     public float particleDuration = 2f;
 
     private float particleTimer = 0f;
     private bool particlePlaying = false;
+    private int currentParticleSystemIndex = 0;
 
     void Update()
     {
@@ -17,16 +18,20 @@ public class MecanimEventToPlayParticle : MonoBehaviour
             particleTimer += Time.deltaTime;
             if (particleTimer >= particleDuration)
             {
-                particleSystem.Stop();
+                particleSystems[currentParticleSystemIndex].Stop();
                 particlePlaying = false;
             }
         }
     }
 
-    void OnMecanimEvent()
+    void OnMecanimEvent(int particleSystemIndex)
     {
-        particleSystem.Play();
-        particlePlaying = true;
-        particleTimer = 0f;
+        if (particleSystemIndex >= 0 && particleSystemIndex < particleSystems.Length)
+        {
+            currentParticleSystemIndex = particleSystemIndex;
+            particleSystems[currentParticleSystemIndex].Play();
+            particlePlaying = true;
+            particleTimer = 0f;
+        }
     }
 }
