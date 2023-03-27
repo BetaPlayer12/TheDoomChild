@@ -116,7 +116,7 @@ namespace Pathfinding.Voxels {
 
 						contours.Add(contour);
 
-						#if ASTARDEBUG
+#if ASTARDEBUG
 						for (int q = 0, j = (simplified.Count/4)-1; q < (simplified.Count/4); j = q, q++) {
 							int i4 = q*4;
 							int j4 = j*4;
@@ -146,7 +146,7 @@ namespace Pathfinding.Voxels {
 								Debug.DrawLine(p1, p2, Color.red);
 							}
 						}
-						#endif
+#endif
 					}
 				}
 			}
@@ -226,7 +226,7 @@ namespace Pathfinding.Voxels {
 						contours[mergeIdx] = mcont;
 						contours[i] = cont;
 
-						#if ASTARDEBUG
+#if ASTARDEBUG
 						Debug.Log(mcont.nverts);
 
 						for (int q = 0, j = (mcont.nverts)-1; q < (mcont.nverts); j = q, q++) {
@@ -254,7 +254,7 @@ namespace Pathfinding.Voxels {
 							Debug.DrawLine(p1, p2, Color.red);
 							//}
 						}
-						#endif
+#endif
 					}
 				}
 			}
@@ -431,7 +431,7 @@ namespace Pathfinding.Voxels {
 			//Use the max squared error instead
 			maxError *= maxError;
 
-			for (int i = 0; i < simplified.Count/4; ) {
+			for (int i = 0; i < simplified.Count/4;) {
 				int ii = (i+1) % (simplified.Count/4);
 
 				int ax = simplified[i*4+0];
@@ -511,7 +511,7 @@ namespace Pathfinding.Voxels {
 			float maxEdgeLen = maxEdgeLength / cellSize;
 
 			if (maxEdgeLen > 0 && (buildFlags & (RC_CONTOUR_TESS_WALL_EDGES|RC_CONTOUR_TESS_AREA_EDGES|RC_CONTOUR_TESS_TILE_EDGES)) != 0) {
-				for (int i = 0; i < simplified.Count/4; ) {
+				for (int i = 0; i < simplified.Count/4;) {
 					if (simplified.Count/4 > 200) {
 						break;
 					}
@@ -612,7 +612,7 @@ namespace Pathfinding.Voxels {
 
 			int iter = 0;
 
-			#if ASTARDEBUG
+#if ASTARDEBUG
 			Vector3 previousPos;
 			Vector3 currentPos;
 
@@ -627,12 +627,12 @@ namespace Pathfinding.Voxels {
 				0,
 				z
 				);
-			#endif
+#endif
 
 			while (iter++ < 40000) {
 				//Are we facing a region edge
 				if ((flags[i] & (ushort)(1 << dir)) != 0) {
-					#if ASTARDEBUG
+#if ASTARDEBUG
 					Vector3 pos = ConvertPos(x, 0, z)+new Vector3((voxelArea.DirectionX[dir] != 0) ? Mathf.Sign(voxelArea.DirectionX[dir]) : 0, 0, (voxelArea.DirectionZ[dir]) != 0 ? Mathf.Sign(voxelArea.DirectionZ[dir]) : 0)*0.6F;
 					//int dir2 = (dir+1) & 0x3;
 					//pos += new Vector3 ((voxelArea.DirectionX[dir2] != 0) ? Mathf.Sign(voxelArea.DirectionX[dir2]) : 0,0,(voxelArea.DirectionZ[dir2]) != 0 ? Mathf.Sign(voxelArea.DirectionZ[dir2]) : 0)*1.2F;
@@ -640,7 +640,7 @@ namespace Pathfinding.Voxels {
 					//Debug.DrawLine (ConvertPos (x,0,z),pos,Color.cyan);
 					Debug.DrawLine(previousPos2, pos, Color.blue);
 					previousPos2 = pos;
-					#endif
+#endif
 
 					//Choose the edge corner
 					bool isBorderVertex = false;
@@ -716,7 +716,7 @@ namespace Pathfinding.Voxels {
 					// & 0x3 is the same as % 4 (modulo 4)
 					dir = (dir+3) & 0x3;    // Rotate CCW
 
-					#if ASTARDEBUG
+#if ASTARDEBUG
 					currentPos = ConvertPos(
 						x,
 						0,
@@ -725,7 +725,7 @@ namespace Pathfinding.Voxels {
 
 					Debug.DrawLine(previousPos+Vector3.up*0, currentPos, Color.blue);
 					previousPos = currentPos;
-					#endif
+#endif
 				}
 
 				if (startI == i && startDir == dir) {
@@ -733,7 +733,7 @@ namespace Pathfinding.Voxels {
 				}
 			}
 
-			#if ASTARDEBUG
+#if ASTARDEBUG
 			Color col = new Color(Random.value, Random.value, Random.value);
 
 			for (int q = 0, j = (verts.Count/4)-1; q < (verts.Count/4); j = q, q++) {
@@ -754,7 +754,7 @@ namespace Pathfinding.Voxels {
 
 				Debug.DrawLine(p1, p2, col);
 			}
-			#endif
+#endif
 		}
 
 		public int GetCornerHeight (int x, int z, int i, int dir, ref bool isBorderVertex) {

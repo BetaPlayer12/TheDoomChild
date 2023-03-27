@@ -83,12 +83,16 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public override void Reset()
         {
-            base.Reset();
+            for (int i = 0; i < m_whipComboInfo.Count; i++)
+            {
+                m_whipComboInfo[i].ShowCollider(false);
+            }
 
             //Debug.Log("Whip Combo State Reset");
             m_currentWhipState = -1;
             m_currentVisualWhipState = 0;
             m_animator.SetInteger(m_whipStateAnimationParameter, m_currentWhipState);
+            base.Reset();
         }
 
         public void Execute()
@@ -110,13 +114,17 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public override void Cancel()
         {
-            base.Cancel();
+            for (int i = 0; i < m_whipComboInfo.Count; i++)
+            {
+                m_whipComboInfo[i].ShowCollider(false);
+            }
 
             if (m_state.isAttacking)
                 m_animator.SetBool(m_whipAttackAnimationParameter, false);
 
             m_state.isDoingCombo = false;
             m_fxAnimator.Play("Buffer");
+            base.Cancel();
         }
 
         public void PlayFX(bool value)

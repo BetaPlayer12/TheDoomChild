@@ -4,9 +4,19 @@ namespace DChild.Visuals
 {
     public class GlobalShaderPropertiesManager : MonoBehaviour
     {
+        private static GlobalShaderPropertiesManager instance;
+
         private void Start()
         {
-            Shader.SetGlobalInteger("_IsApplicationPlaying", 1);
+            if (instance == null)
+            {
+                Shader.SetGlobalInteger("_IsApplicationPlaying", 1);
+                instance = this;
+            }
+            else
+            {
+                Destroy(this);
+            }
         }
 
         private void Update()
@@ -20,7 +30,11 @@ namespace DChild.Visuals
 
         private void OnDestroy()
         {
-            Shader.SetGlobalInteger("_IsApplicationPlaying", 0);
+            if (instance == this)
+            {
+                Shader.SetGlobalInteger("_IsApplicationPlaying", 0);
+                instance = null;
+            }
         }
     }
 

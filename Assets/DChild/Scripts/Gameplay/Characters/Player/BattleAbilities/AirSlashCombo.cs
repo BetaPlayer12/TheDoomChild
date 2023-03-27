@@ -125,11 +125,15 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public override void Cancel()
         {
-            base.Cancel();
 
             m_state.isDoingCombo = false;
+            for (int i = 0; i < m_airSlashComboInfo.Count; i++)
+            {
+                m_airSlashComboInfo[i].ShowCollider(false);
+            }
             m_physics.gravityScale = m_cacheGravity;
             m_fxAnimator.Play("Buffer");
+            base.Cancel();
         }
 
         public void PlayFX(bool value)
