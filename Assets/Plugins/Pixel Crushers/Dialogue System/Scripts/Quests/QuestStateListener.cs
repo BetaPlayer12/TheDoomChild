@@ -41,6 +41,7 @@ namespace PixelCrushers.DialogueSystem
         [Serializable]
         public class QuestEntryStateIndicatorLevel
         {
+            public bool updateOnStartOnly;
             [Tooltip("Quest entry number.")]
             public int entryNumber;
 
@@ -183,6 +184,9 @@ namespace PixelCrushers.DialogueSystem
             {
                 var questEntryStateIndicatorLevel = questEntryStateIndicatorLevels[i];
                 var questEntryState = QuestLog.GetQuestEntryState(questName, questEntryStateIndicatorLevel.entryNumber);
+                if (isOnStart == false && questEntryStateIndicatorLevel.updateOnStartOnly)
+                    continue;
+
                 if (questEntryStateIndicatorLevel.questState.HasFlag(questEntryState) && questEntryStateIndicatorLevel.condition.IsTrue(null))
                 {
                     if (DialogueDebug.logInfo) Debug.Log("Dialogue System: " + name + ": Quest '" + questName + "' entry " + questEntryStateIndicatorLevel.entryNumber + " changed to state " + questEntryState + ".", this);

@@ -468,7 +468,6 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetEmptyAnimation(0, 0);
             m_bodyCollider.SetActive(false);
             m_damageable.SetHitboxActive(true);
-            m_character.physics.simulateGravity = false;
             m_selfCollider.SetActive(false);
             m_targetInfo.Set(null, null);
             m_isDetecting = false;
