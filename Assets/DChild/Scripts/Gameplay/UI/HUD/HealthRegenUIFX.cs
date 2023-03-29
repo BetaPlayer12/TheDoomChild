@@ -49,8 +49,8 @@ namespace DChild.Gameplay.UI
             if (m_handle != null)
             {
                 UnsubscribeToRegenEvents();
-                HideFX();
             }
+            HideFX();
         }
 
         private void UnsubscribeToRegenEvents()

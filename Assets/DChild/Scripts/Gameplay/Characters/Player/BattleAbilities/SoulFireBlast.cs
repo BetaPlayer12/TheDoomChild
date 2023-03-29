@@ -1,4 +1,6 @@
 using DChild.Gameplay.Characters.Players.Modules;
+using DChild.Gameplay.Combat;
+using DChild.Gameplay.Pooling;
 using Sirenix.OdinInspector;
 using Spine.Unity;
 using System.Collections;
@@ -114,10 +116,11 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
         public override void Cancel()
         {
-            base.Cancel();
             //m_soulFireBlastInfo.ShowCollider(false);
             m_physics.gravityScale = m_cacheGravity;
             m_fxAnimator.Play("Buffer");
+            m_animator.SetBool(m_soulFireBlastStateAnimationParameter, false);
+            base.Cancel();
         }
 
         public void EnableCollision(bool value)
@@ -139,7 +142,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             else
             {
                 m_soulFireBlastCooldownTimer = m_soulFireBlastCooldown;
-                m_state.isAttacking = false;
+                //m_state.isAttacking = false;
                 m_canSoulFireBlast = true;
             }
         }
@@ -161,11 +164,15 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
         public void Summon()
         {
+            var instance = GameSystem.poolManager.GetPool<ProjectilePool>().GetOrCreateItem(m_projectileInfo.projectile);
+            instance.transform.position = m_startPoint.position;
+            instance.GetComponent<Attacker>().SetParentAttacker(m_attacker);
+
             m_physics.velocity = Vector2.zero;
             m_physics.AddForce(new Vector2(m_character.facing == HorizontalDirection.Right ? m_pushForce.x : -m_pushForce.x, m_pushForce.y), ForceMode2D.Impulse);
-            //LaunchSpike(PuedisYnnusSpike.SkinType.Big, false, Quaternion.identity, true);
+
             m_launcher.AimAt(new Vector2(m_startPoint.position.x + (m_character.facing == HorizontalDirection.Right ? 10 : -10), m_startPoint.position.y));
-            m_launcher.LaunchProjectile();
+            m_launcher.LaunchProjectile(m_startPoint.right, instance.gameObject);
         }
     }
 }

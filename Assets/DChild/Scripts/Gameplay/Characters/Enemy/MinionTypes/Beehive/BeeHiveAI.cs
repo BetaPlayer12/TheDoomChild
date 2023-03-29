@@ -12,6 +12,10 @@ public class BeeHiveAI : MonoBehaviour
     private Transform m_spawnPoint;
     [SerializeField]
     private float m_spawnStartDelay;
+    [SerializeField]
+    private Damageable m_health;
+    [SerializeField]
+    private GameObject m_SpawnZone;
     private bool m_spawn=false;
     [SerializeField, TabGroup("Summons")]
     private List<GameObject> m_minions;
@@ -55,10 +59,14 @@ public class BeeHiveAI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (m_health.health.currentValue == 0)
+        {
+            m_SpawnZone.SetActive(false);
+            StopSpawn();
+        }
         if (m_spawn == true)
         {
             StartCoroutine(SpawnRoutine());
         }
-        
     }
 }

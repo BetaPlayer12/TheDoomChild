@@ -82,6 +82,10 @@ namespace DChild.Gameplay.Characters.Players.Modules
         public override void Reset()
         {
 
+            for (int i = 0; i < m_slashComboInfo.Count; i++)
+            {
+                m_slashComboInfo[i].ShowCollider(false);
+            }
             m_currentSlashState = -1;
             m_currentVisualSlashState = 0;
             m_animator.SetInteger(m_slashStateAnimationParameter, m_currentSlashState);
@@ -109,6 +113,11 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
             m_state.isDoingCombo = false;
             m_fxAnimator.Play("Buffer");
+
+            for (int i = 0; i < m_slashComboInfo.Count; i++)
+            {
+                m_slashComboInfo[i].ShowCollider(false);
+            }
 
             m_canSlashCombo = false;
             base.Cancel();

@@ -1,11 +1,8 @@
-
 using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Pathfinding.ClipperLib;
-#if UNITY_5_5_OR_NEWER
 using UnityEngine.Profiling;
-#endif
 
 namespace Pathfinding.Util {
 	using Pathfinding;
@@ -1070,8 +1067,8 @@ namespace Pathfinding.Util {
 				activeTileTypes[x + z*tileXCount] = null;
 
 				if (!isBatching) {
-				    // Trigger post update event
-				    // This can trigger for example recalculation of navmesh links
+					// Trigger post update event
+					// This can trigger for example recalculation of navmesh links
 					context.SetGraphDirty(graph);
 				}
 
@@ -1109,39 +1106,6 @@ namespace Pathfinding.Util {
 			if (activeTileTypes[index] != null) LoadTile(activeTileTypes[index], x, z, activeTileRotations[index], activeTileOffsets[index]);
 		}
 
-#if FALSE
-		public void CutShapeWithTile (int x, int z, Int3[] shape, ref Int3[] verts, ref int[] tris, out int vCount, out int tCount) {
-			if (isBatching) {
-				throw new Exception("Cannot cut with shape when batching. Please stop batching first.");
-			}
-
-			int index = x + z*tileXCount;
-
-			if (x < 0 || z < 0 || x >= tileXCount || z >= tileZCount || activeTileTypes[index] == null) {
-				verts = new Int3[0];
-				tris = new int[0];
-				vCount = 0;
-				tCount = 0;
-				return;
-			}
-
-			Int3[] tverts;
-			int[] ttris;
-
-			activeTileTypes[index].Load(out tverts, out ttris, activeTileRotations[index], activeTileOffsets[index]);
-
-			//Calculate tile bounds so that the correct cutting offset can be used
-			//The tile will be cut in local space (i.e it is at the world origin) so cuts need to be translated
-			//to that point from their world space coordinates
-			Bounds r = graph.GetTileBounds(x, z);
-			var cutOffset = (Int3)r.min;
-			cutOffset = -cutOffset;
-
-			CutPoly(tverts, ttris, ref verts, ref tris, out vCount, out tCount, shape, cutOffset, r, CutMode.CutExtra);
-
-			for (int i = 0; i < verts.Length; i++) verts[i] -= cutOffset;
-		}
-#endif
 
 		/// <summary>Load a tile at tile coordinate x, z.</summary>
 		/// <param name="tile">Tile type to load</param>
@@ -1211,9 +1175,9 @@ namespace Pathfinding.Util {
 				Profiler.EndSample();
 
 				if (!isBatching) {
-				    // Trigger post update event
-				    // This can trigger for example recalculation of navmesh links
-				    // TODO: Does this need to be inside an if statement?
+					// Trigger post update event
+					// This can trigger for example recalculation of navmesh links
+					// TODO: Does this need to be inside an if statement?
 					context.SetGraphDirty(graph);
 				}
 
