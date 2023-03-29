@@ -1,3 +1,4 @@
+using DChild;
 using DChild.Gameplay;
 using DChild.Gameplay.Characters;
 using Sirenix.OdinInspector;
@@ -9,7 +10,17 @@ using UnityEngine;
 public class FoolsVerdictHammer : MonoBehaviour
 {
     [SerializeField]
+    private SpineFX m_animationFX;
+    [SerializeField]
     private Collider2D m_hurtbox;
+    [SerializeField, BoxGroup("FX")]
+    private GameObject m_impactFX;
+    [SerializeField, BoxGroup("FX")]
+    private GameObject m_groundFX;
+    [SerializeField]
+    private Transform m_impactStartPoint;
+    [SerializeField]
+    private Transform m_groundStartPoint;
 
     [SerializeField, ValueDropdown("GetEvents")]
     private string m_enableColliderEvent;
@@ -21,8 +32,14 @@ public class FoolsVerdictHammer : MonoBehaviour
     // Start is called before the first frame update
     private void Start()
     {
+        transform.localScale = Vector3.one;
         m_spineListener.Subscribe(m_enableColliderEvent, EnableCollider);
+        m_spineListener.Subscribe(m_enableColliderEvent, ImpactFX);
+        m_spineListener.Subscribe(m_enableColliderEvent, GroundFX);
         m_spineListener.Subscribe(m_disableColliderEvent, DisableCollider);
+
+        m_animationFX.Stop();
+        m_animationFX.Play();
     }
 
     private void EnableCollider()
@@ -33,6 +50,18 @@ public class FoolsVerdictHammer : MonoBehaviour
     private void DisableCollider()
     {
         m_hurtbox.enabled = false;
+    }
+
+    private void ImpactFX()
+    {
+        var instance = GameSystem.poolManager.GetPool<FXPool>().GetOrCreateItem(m_impactFX);
+        instance.transform.position = m_impactStartPoint.position;
+    }
+
+    private void GroundFX()
+    {
+        var instance = GameSystem.poolManager.GetPool<FXPool>().GetOrCreateItem(m_groundFX);
+        instance.transform.position = m_groundStartPoint.position;
     }
 
     [SerializeField, PreviewField, OnValueChanged("Initialize")]

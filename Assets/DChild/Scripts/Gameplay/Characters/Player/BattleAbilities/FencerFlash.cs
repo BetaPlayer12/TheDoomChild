@@ -54,6 +54,9 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
         public bool CanFencerFlash() => m_canFencerFlash;
         public bool CanMove() => m_canMove;
 
+        private Coroutine m_enemySensorRoutine;
+        private Coroutine m_dashRoutine;
+
         private FencerFlashState m_currentState;
 
         public enum FencerFlashState
@@ -84,9 +87,20 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
         public override void Reset()
         {
-            base.Reset();
+            StopAllCoroutines();
+            if (m_enemySensorRoutine != null)
+            {
+                StopCoroutine(m_enemySensorRoutine);
+                m_enemySensorRoutine = null;
+            }
+            if (m_dashRoutine != null)
+            {
+                StopCoroutine(m_dashRoutine);
+                m_dashRoutine = null;
+            }
             m_fencerFlashInfo.ShowCollider(false);
             m_animator.SetBool(m_fencerFlashStateAnimationParameter, false);
+            base.Reset();
         }
 
         public void Execute(FencerFlashState state)
@@ -94,6 +108,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             m_state.waitForBehaviour = true;
             m_currentState = state;
             StopAllCoroutines();
+            m_enemySensorRoutine = StartCoroutine(EnemySensorRoutine());
             m_state.isAttacking = true;
             m_state.canAttack = false;
             m_canFencerFlash = false;
@@ -114,10 +129,20 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
         public void EndExecution()
         {
+            StopAllCoroutines();
+            if (m_enemySensorRoutine != null)
+            {
+                StopCoroutine(m_enemySensorRoutine);
+                m_enemySensorRoutine = null;
+            }
+            if (m_dashRoutine != null)
+            {
+                StopCoroutine(m_dashRoutine);
+                m_dashRoutine = null;
+            }
             m_fencerFlashInfo.ShowCollider(false);
             //m_canfencerFlash = true;
             m_canMove = true;
-            m_animator.SetBool(m_fencerFlashStateAnimationParameter, false);
             //m_fencerFlashAnimation.gameObject.SetActive(false);
             m_physics.gravityScale = m_cacheGravity;
             if (m_fxParent.activeSelf)
@@ -125,16 +150,26 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
                 m_fx.Stop();
                 m_fxParent.SetActive(false);
             }
+            m_animator.SetBool(m_fencerFlashStateAnimationParameter, false);
             base.AttackOver();
         }
 
         public override void Cancel()
         {
+            StopAllCoroutines();
+            if (m_enemySensorRoutine != null)
+            {
+                StopCoroutine(m_enemySensorRoutine);
+                m_enemySensorRoutine = null;
+            }
+            if (m_dashRoutine != null)
+            {
+                StopCoroutine(m_dashRoutine);
+                m_dashRoutine = null;
+            }
             m_fencerFlashInfo.ShowCollider(false);
             m_canMove = true;
             m_fxAnimator.Play("Buffer");
-            StopAllCoroutines();
-            m_animator.SetBool(m_fencerFlashStateAnimationParameter, false);
             //m_fencerFlashAnimation.gameObject.SetActive(false);
             m_physics.gravityScale = m_cacheGravity;
             if (m_fxParent.activeSelf)
@@ -142,6 +177,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
                 m_fx.Stop();
                 m_fxParent.SetActive(false);
             }
+            m_animator.SetBool(m_fencerFlashStateAnimationParameter, false);
             base.Cancel();
         }
 
@@ -154,7 +190,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
         public void StartDash()
         {
-            StartCoroutine(DashRoutine());
+            m_dashRoutine = StartCoroutine(DashRoutine());
         }
 
         public void HandleAttackTimer()
@@ -167,7 +203,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             else
             {
                 m_fencerFlashCooldownTimer = m_fencerFlashCooldown;
-                m_state.isAttacking = false;
+                //m_state.isAttacking = false;
                 m_canFencerFlash = true;
             }
         }
@@ -187,14 +223,23 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
         //    }
         //}
 
+        private IEnumerator EnemySensorRoutine()
+        {
+            while (true)
+            {
+                m_enemySensor.Cast();
+                yield return null;
+            }
+        }
+
         private IEnumerator DashRoutine()
         {
             m_state.waitForBehaviour = true;
             var timer = m_dashDuration;
-            while (timer >= 0 /*&& !m_wallSensor.allRaysDetecting && !m_enemySensor.isDetecting*/)
+            while (timer >= 0 /*&& !m_wallSensor.allRaysDetecting && !m_enemySensor.isDetecting*/&& !m_enemySensor.isDetecting)
             {
                 m_wallSensor.Cast();
-                m_enemySensor.Cast();
+                //m_enemySensor.Cast();
                 m_edgeSensor.Cast();
                 m_physics.velocity = new Vector2(m_character.facing == HorizontalDirection.Right ? m_pushForce.x : -m_pushForce.x, 0);
                 timer -= Time.deltaTime;
@@ -213,7 +258,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             m_physics.velocity = Vector2.zero;
             //m_fencerFlashAnimation.gameObject.SetActive(false);
             //m_state.waitForBehaviour = false;
-            m_enemySensor.Cast();
+            //m_enemySensor.Cast();
             if (!m_enemySensor.isDetecting)
             {
                 m_fencerFlashInfo.ShowCollider(false);
@@ -224,6 +269,11 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
                     m_fx.Stop();
                     m_fxParent.SetActive(false);
                 }
+            }
+            if (m_enemySensorRoutine != null)
+            {
+                StopCoroutine(m_enemySensorRoutine);
+                m_enemySensorRoutine = null;
             }
             yield return null;
         }
