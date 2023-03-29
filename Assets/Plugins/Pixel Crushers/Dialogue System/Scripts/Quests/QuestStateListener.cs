@@ -177,6 +177,7 @@ namespace PixelCrushers.DialogueSystem
                         questStateIndicatorLevel.onEnterState.Invoke();
                     }
                 }
+
             }
 
             // Check quest entry states:

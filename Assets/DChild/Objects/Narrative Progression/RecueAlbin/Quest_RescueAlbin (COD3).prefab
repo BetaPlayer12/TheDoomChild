@@ -187,7 +187,7 @@ GameObject:
   - component: {fileID: 704687853594275150}
   - component: {fileID: 704687853594275145}
   m_Layer: 9
-  m_Name: Quest_RescueAlbinStarter
+  m_Name: Sequence_StartQuest
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1880,136 +1880,6 @@ Transform:
   m_Father: {fileID: 704687853850842712}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &704687853755978565
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 704687853755978566}
-  - component: {fileID: 704687853755978564}
-  - component: {fileID: 704687853755978567}
-  m_Layer: 11
-  m_Name: SilverKeyGiver
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &704687853755978566
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 704687853755978565}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 704687853776780052}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &704687853755978564
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 704687853755978565}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c593457cd8105e148906690e1707c592, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  trigger: 32
-  condition:
-    luaConditions: []
-    questConditions: []
-    acceptedTags: []
-    acceptedGameObjects: []
-    luaWizardIndex: -1
-    lastEvaluationValue: 0
-  setQuestState: 0
-  questName: Rescue Albin
-  questState: 2
-  setQuestEntryState: 1
-  questEntryNumber: 2
-  questEntryState: 2
-  setAnotherQuestEntryState: 0
-  anotherQuestEntryNumber: 1
-  anotherQuestEntryState: 0
-  luaCode: 
-  sequence: 
-  sequenceSpeaker: {fileID: 0}
-  sequenceListener: {fileID: 0}
-  waitOneFrameOnStartOrEnable: 1
-  alertMessage: 
-  textTable: {fileID: 0}
-  alertDuration: 0
-  sendMessages: []
-  barkSource: 0
-  barkConversation: 
-  barkText: 
-  barkTextSequence: 
-  barker: {fileID: 0}
-  barkTarget: {fileID: 0}
-  barkOrder: 0
-  allowBarksDuringConversations: 0
-  skipBarkIfNoValidEntries: 0
-  cacheBarkLines: 0
-  conversation: 
-  conversationConversant: {fileID: 0}
-  conversationActor: {fileID: 0}
-  startConversationEntryID: -1
-  exclusive: 0
-  replace: 0
-  skipIfNoValidEntries: 1
-  preventRestartOnSameFrameEnded: 0
-  stopConversationOnTriggerExit: 0
-  stopConversationIfTooFar: 0
-  maxConversationDistance: 5
-  monitorConversationDistanceFrequency: 1
-  showCursorDuringConversation: 0
-  pauseGameDuringConversation: 0
-  setActiveActions: []
-  setEnabledActions: []
-  setAnimatorStateActions: []
-  onExecute:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 704687853755978567}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: GiveItem
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  useConversationTitlePicker: 1
-  useBarkTitlePicker: 1
-  useQuestNamePicker: 1
-  selectedDatabase: {fileID: 11400000, guid: 0261f9a557275204180e4259492917ad, type: 2}
---- !u!114 &704687853755978567
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 704687853755978565}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d1c9b502fa3de6f4d82debffed6f8d24, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_data: {fileID: 11400000, guid: 983de31ff8a80f84d8f4da4e3b653d97, type: 2}
 --- !u!1 &704687853776780058
 GameObject:
   m_ObjectHideFlags: 0
@@ -2020,8 +1890,9 @@ GameObject:
   m_Component:
   - component: {fileID: 704687853776780052}
   - component: {fileID: 704687853776780053}
+  - component: {fileID: 9168092951979918943}
   m_Layer: 11
-  m_Name: Gratitude_ConversationEnd
+  m_Name: Sequence_GiveSilverKey
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2038,8 +1909,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 704687853755978566}
+  m_Children: []
   m_Father: {fileID: 6845174949439897969}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2069,9 +1939,9 @@ MonoBehaviour:
   setQuestEntryState: 1
   questEntryNumber: 1
   questEntryState: 4
-  setAnotherQuestEntryState: 0
-  anotherQuestEntryNumber: 1
-  anotherQuestEntryState: 0
+  setAnotherQuestEntryState: 1
+  anotherQuestEntryNumber: 2
+  anotherQuestEntryState: 2
   luaCode: 
   sequence: 
   sequenceSpeaker: {fileID: 0}
@@ -2111,9 +1981,9 @@ MonoBehaviour:
   onExecute:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 704687853755978564}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: OnUse
+      - m_Target: {fileID: 9168092951979918943}
+        m_TargetAssemblyTypeName: DChild.Gameplay.Items.ItemGiver, Assembly-CSharp
+        m_MethodName: GiveItem
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2127,6 +1997,19 @@ MonoBehaviour:
   useBarkTitlePicker: 1
   useQuestNamePicker: 1
   selectedDatabase: {fileID: 11400000, guid: 0261f9a557275204180e4259492917ad, type: 2}
+--- !u!114 &9168092951979918943
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 704687853776780058}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d1c9b502fa3de6f4d82debffed6f8d24, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_data: {fileID: 11400000, guid: 983de31ff8a80f84d8f4da4e3b653d97, type: 2}
 --- !u!1 &704687853804531594
 GameObject:
   m_ObjectHideFlags: 0
@@ -5628,6 +5511,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_runLua: 1
+  m_sendVariableChangeEvent: 1
   m_script: Variable["Killed_All_Zombie_Mobs"] = true
   m_changeQuestState: 0
   questName: Rescue Albin
@@ -7267,7 +7151,7 @@ GameObject:
   - component: {fileID: 704687854639418157}
   - component: {fileID: 704687854639418156}
   m_Layer: 0
-  m_Name: Sequence_Albin_PreRescue
+  m_Name: QuestEntry_RescueOldMan
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7362,6 +7246,31 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   questName: Rescue Albin
   questStateIndicatorLevels:
+  - updateOnStartOnly: 1
+    questState: 3
+    condition:
+      luaConditions: []
+      questConditions: []
+      acceptedTags: []
+      acceptedGameObjects: []
+      luaWizardIndex: -1
+      lastEvaluationValue: 0
+    indicatorLevel: 1
+    onEnterState:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 704687854708741167}
+          m_TargetAssemblyTypeName: 
+          m_MethodName: OnUse
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
   - updateOnStartOnly: 0
     questState: 1
     condition:
@@ -7375,18 +7284,6 @@ MonoBehaviour:
     onEnterState:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 704687854708741167}
-          m_TargetAssemblyTypeName: 
-          m_MethodName: OnUse
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
         - m_Target: {fileID: 704687853850842713}
           m_TargetAssemblyTypeName: 
           m_MethodName: SetActive
@@ -7398,43 +7295,6 @@ MonoBehaviour:
             m_FloatArgument: 0
             m_StringArgument: 
             m_BoolArgument: 1
-          m_CallState: 2
-        - m_Target: {fileID: 0}
-          m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-          m_MethodName: SetActive
-          m_Mode: 6
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 1
-          m_CallState: 2
-  - updateOnStartOnly: 0
-    questState: 2
-    condition:
-      luaConditions: []
-      questConditions: []
-      acceptedTags: []
-      acceptedGameObjects: []
-      luaWizardIndex: -1
-      lastEvaluationValue: 0
-    indicatorLevel: 1
-    onEnterState:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 704687854708741167}
-          m_TargetAssemblyTypeName: 
-          m_MethodName: OnUse
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
           m_CallState: 2
   - updateOnStartOnly: 0
     questState: 4
@@ -7461,21 +7321,10 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 1
           m_CallState: 2
-        - m_Target: {fileID: 0}
-          m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-          m_MethodName: SetActive
-          m_Mode: 6
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
   questEntryStateIndicatorLevels:
-  - entryNumber: 1
-    questState: 1
+  - updateOnStartOnly: 0
+    entryNumber: 1
+    questState: 3
     condition:
       luaConditions: []
       questConditions: []
@@ -7499,32 +7348,8 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 1
           m_CallState: 2
-  - entryNumber: 1
-    questState: 2
-    condition:
-      luaConditions: []
-      questConditions: []
-      acceptedTags: []
-      acceptedGameObjects: []
-      luaWizardIndex: -1
-      lastEvaluationValue: 0
-    indicatorLevel: 1
-    onEnterState:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 704687854536281174}
-          m_TargetAssemblyTypeName: 
-          m_MethodName: SetActive
-          m_Mode: 6
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 1
-          m_CallState: 2
-  - entryNumber: 1
+  - updateOnStartOnly: 0
+    entryNumber: 1
     questState: 2
     condition:
       luaConditions:
@@ -7550,7 +7375,34 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 1
           m_CallState: 2
-  - entryNumber: 3
+  - updateOnStartOnly: 1
+    entryNumber: 2
+    questState: 2
+    condition:
+      luaConditions: []
+      questConditions: []
+      acceptedTags: []
+      acceptedGameObjects: []
+      luaWizardIndex: -1
+      lastEvaluationValue: 0
+    indicatorLevel: 0
+    onEnterState:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 6392124175759278157}
+          m_TargetAssemblyTypeName: UnityEngine.Behaviour, UnityEngine
+          m_MethodName: set_enabled
+          m_Mode: 6
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - updateOnStartOnly: 1
+    entryNumber: 3
     questState: 2
     condition:
       luaConditions: []
@@ -7587,19 +7439,6 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 1
           m_CallState: 2
-  - entryNumber: 1
-    questState: 4
-    condition:
-      luaConditions: []
-      questConditions: []
-      acceptedTags: []
-      acceptedGameObjects: []
-      luaWizardIndex: -1
-      lastEvaluationValue: 0
-    indicatorLevel: 0
-    onEnterState:
-      m_PersistentCalls:
-        m_Calls: []
   suppressOnEnterStateEventsOnStart: 0
 --- !u!114 &704687854708741164
 MonoBehaviour:
@@ -11365,7 +11204,7 @@ GameObject:
   - component: {fileID: 704687855298279843}
   - component: {fileID: 704687855298279842}
   m_Layer: 0
-  m_Name: Sequence_Albin_PostRescue
+  m_Name: QuestEntry_Albin_PostRescue
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -11484,7 +11323,7 @@ GameObject:
   - component: {fileID: 704687855395270198}
   - component: {fileID: 704687855395270193}
   m_Layer: 11
-  m_Name: AlbinGratitude_ConversationEnd
+  m_Name: Sequence_EndQuest
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -11806,6 +11645,119 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 54.480804, y: 21.07985}
   m_EdgeRadius: 0
+--- !u!1 &2650536910800503872
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4676095944564086588}
+  - component: {fileID: 8034893696527930827}
+  m_Layer: 11
+  m_Name: AlbinReactionToZombieHorde
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4676095944564086588
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2650536910800503872}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6845174949439897969}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8034893696527930827
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2650536910800503872}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 04bc38f47cc7b1e43830c7b35b18658f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_reactions:
+  - m_frequency: 3
+    m_condition: Variable["Killed_All_Zombie_Mobs"] = false
+    m_script: 
+    m_event:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 6386039184840413712}
+          m_TargetAssemblyTypeName: DChild.Gameplay.Characters.SpineAnimationCaller,
+            Assembly-CSharp
+          m_MethodName: SetLoop
+          m_Mode: 6
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 1
+          m_CallState: 2
+        - m_Target: {fileID: 6386039184840413712}
+          m_TargetAssemblyTypeName: DChild.Gameplay.Characters.SpineAnimationCaller,
+            Assembly-CSharp
+          m_MethodName: SetAnimation
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 11400000, guid: c7266930e92e8914897a54d921856257,
+              type: 2}
+            m_ObjectArgumentAssemblyTypeName: Spine.Unity.AnimationReferenceAsset,
+              spine-unity
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - m_frequency: 3
+    m_condition: Variable["Killed_All_Zombie_Mobs"] = false
+    m_script: 
+    m_event:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 6386039184840413712}
+          m_TargetAssemblyTypeName: DChild.Gameplay.Characters.SpineAnimationCaller,
+            Assembly-CSharp
+          m_MethodName: SetLoop
+          m_Mode: 6
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 1
+          m_CallState: 2
+        - m_Target: {fileID: 6386039184840413712}
+          m_TargetAssemblyTypeName: DChild.Gameplay.Characters.SpineAnimationCaller,
+            Assembly-CSharp
+          m_MethodName: SetAnimation
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 11400000, guid: 189a8ae1326b6644b9755756e00a15a6,
+              type: 2}
+            m_ObjectArgumentAssemblyTypeName: Spine.Unity.AnimationReferenceAsset,
+              spine-unity
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &6200453243330046826
 GameObject:
   m_ObjectHideFlags: 0
@@ -12494,6 +12446,18 @@ MonoBehaviour:
   RuntimeFollower: {fileID: 0}
   colliderMaxDistance: 0
   lastTimeMaxDistanceCalced: 638060189899839287
+--- !u!114 &6386039184840413712 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6892492562823959514, guid: fa545183616353140bb70b940dc28cdf,
+    type: 3}
+  m_PrefabInstance: {fileID: 520387557763547594}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1461635001918689443}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 561d1f19bc239fb4a9bd0d0764b668cd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &6845174949439897969 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6468923762531303611, guid: fa545183616353140bb70b940dc28cdf,
@@ -13945,6 +13909,7 @@ PrefabInstance:
     - {fileID: 4891312817206405900, guid: d8262e6a25c86064b9008484a3f1965b, type: 3}
     - {fileID: 5716916159254995038, guid: d8262e6a25c86064b9008484a3f1965b, type: 3}
     - {fileID: 5559322199678762355, guid: d8262e6a25c86064b9008484a3f1965b, type: 3}
+    - {fileID: 7603960582005235022, guid: d8262e6a25c86064b9008484a3f1965b, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: d8262e6a25c86064b9008484a3f1965b, type: 3}
 --- !u!4 &5057511854186908791 stripped
 Transform:
@@ -13958,7 +13923,7 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 704687853896679375}
   m_PrefabAsset: {fileID: 0}
---- !u!60 &8101411639893887692
+--- !u!60 &7724771985598633884
 PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -14713,6 +14678,8 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 5126618220715139360, guid: 4461b4e2be150244a813fd2665f737ab, type: 3}
+    - {fileID: 8940854513664130443, guid: 4461b4e2be150244a813fd2665f737ab, type: 3}
+    - {fileID: 5435028490584170354, guid: 4461b4e2be150244a813fd2665f737ab, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 4461b4e2be150244a813fd2665f737ab, type: 3}
 --- !u!1 &1416759528864723466 stripped
 GameObject:
@@ -14720,7 +14687,7 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 704687854201101853}
   m_PrefabAsset: {fileID: 0}
---- !u!60 &2719737935521521654
+--- !u!60 &2230519288090957729
 PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
