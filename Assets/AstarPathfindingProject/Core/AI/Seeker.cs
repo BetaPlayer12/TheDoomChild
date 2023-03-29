@@ -1,13 +1,11 @@
 using UnityEngine;
 using System.Collections.Generic;
-#if UNITY_5_5_OR_NEWER
 using UnityEngine.Profiling;
-#endif
 
 namespace Pathfinding {
 	/// <summary>
 	/// Handles path calls for a single unit.
-	/// \ingroup relevant
+	///
 	/// This is a component which is meant to be attached to a single unit (AI, Robot, Player, whatever) to handle its pathfinding calls.
 	/// It also handles post-processing of paths using modifiers.
 	///
@@ -17,7 +15,7 @@ namespace Pathfinding {
 	/// See: modifiers (view in online documentation for working links)
 	/// </summary>
 	[AddComponentMenu("Pathfinding/Seeker")]
-	[HelpURL("http://arongranberg.com/astar/docs/class_pathfinding_1_1_seeker.php")]
+	[HelpURL("http://arongranberg.com/astar/documentation/stable/class_pathfinding_1_1_seeker.php")]
 	public class Seeker : VersionedMonoBehaviour {
 		/// <summary>
 		/// Enables drawing of the last calculated path using Gizmos.
@@ -107,7 +105,7 @@ namespace Pathfinding {
 
 		/// <summary>
 		/// Callback for when a path is completed.
-		/// Movement scripts should register to this delegate.\n
+		/// Movement scripts should register to this delegate.
 		/// A temporary callback can also be set when calling StartPath, but that delegate will only be called for that path
 		/// </summary>
 		public OnPathDelegate pathCallback;
@@ -204,8 +202,8 @@ namespace Pathfinding {
 		/// Releases any eventually claimed paths.
 		/// Calls OnDestroy on the <see cref="startEndModifier"/>.
 		///
-		/// See: ReleaseClaimedPath
-		/// See: startEndModifier
+		/// See: <see cref="ReleaseClaimedPath"/>
+		/// See: <see cref="startEndModifier"/>
 		/// </summary>
 		public void OnDestroy () {
 			ReleaseClaimedPath();
@@ -222,7 +220,7 @@ namespace Pathfinding {
 		///
 		/// See: pooling (view in online documentation for working links)
 		/// </summary>
-		public void ReleaseClaimedPath () {
+		void ReleaseClaimedPath () {
 			if (prevPath != null) {
 				prevPath.Release(this, true);
 				prevPath = null;
@@ -247,7 +245,7 @@ namespace Pathfinding {
 		/// This will run any modifiers attached to this GameObject on the path.
 		/// This is identical to calling RunModifiers(ModifierPass.PostProcess, path)
 		/// See: RunModifiers
-		/// \since Added in 3.2
+		/// Since: Added in 3.2
 		/// </summary>
 		public void PostProcess (Path path) {
 			RunModifiers(ModifierPass.PostProcess, path);
@@ -277,7 +275,7 @@ namespace Pathfinding {
 		/// Note: Do not confuse this with Pathfinding.Path.IsDone. They usually return the same value, but not always
 		/// since the path might be completely calculated, but it has not yet been processed by the Seeker.
 		///
-		/// \since Added in 3.0.8
+		/// Since: Added in 3.0.8
 		/// Version: Behaviour changed in 3.2
 		/// </summary>
 		public bool IsDone () {
@@ -326,16 +324,19 @@ namespace Pathfinding {
 					pathCallback(p);
 				}
 
+				// Note: it is important that #prevPath is kept alive (i.e. not pooled)
+				// if we are drawing gizmos.
+				// It is also important that #path is kept alive since it can be returned
+				// from the GetCurrentPath method.
+				// Since #path will be copied to #prevPath it is sufficient that #prevPath
+				// is kept alive until it is replaced.
+
 				// Recycle the previous path to reduce the load on the GC
 				if (prevPath != null) {
 					prevPath.Release(this, true);
 				}
 
 				prevPath = p;
-
-				// If not drawing gizmos, then storing prevPath is quite unecessary
-				// So clear it and set prevPath to null
-				if (!drawGizmos) ReleaseClaimedPath();
 			}
 		}
 
@@ -354,7 +355,7 @@ namespace Pathfinding {
 
 		/// <summary>
 		/// Returns a new path instance.
-		/// The path will be taken from the path pool if path recycling is turned on.\n
+		/// The path will be taken from the path pool if path recycling is turned on.
 		/// This path can be sent to <see cref="StartPath(Path,OnPathDelegate,int)"/> with no change, but if no change is required <see cref="StartPath(Vector3,Vector3,OnPathDelegate)"/> does just that.
 		/// <code>
 		/// var seeker = GetComponent<Seeker>();
@@ -384,7 +385,7 @@ namespace Pathfinding {
 		/// <summary>
 		/// Call this function to start calculating a path.
 		///
-		/// callback will be called when the path has completed.
+		/// The callback will be called when the path has been calculated (which may be several frames into the future).
 		/// Callback will not be called if the path is canceled (e.g when a new path is requested before the previous one has completed)
 		/// </summary>
 		/// <param name="start">The start point of the path</param>
@@ -397,7 +398,7 @@ namespace Pathfinding {
 		/// <summary>
 		/// Call this function to start calculating a path.
 		///
-		/// callback will be called when the path has completed.
+		/// The callback will be called when the path has been calculated (which may be several frames into the future).
 		/// Callback will not be called if the path is canceled (e.g when a new path is requested before the previous one has completed)
 		/// </summary>
 		/// <param name="start">The start point of the path</param>
@@ -453,7 +454,6 @@ namespace Pathfinding {
 		/// <summary>Internal method to start a path and mark it as the currently active path</summary>
 		void StartPathInternal (Path p, OnPathDelegate callback) {
 			var mtp = p as MultiTargetPath;
-
 			if (mtp != null) {
 				// TODO: Allocation, cache
 				var callbacks = new OnPathDelegate[mtp.targetPoints.Length];
@@ -497,7 +497,7 @@ namespace Pathfinding {
 
 		/// <summary>
 		/// Starts a Multi Target Path from one start point to multiple end points.
-		/// A Multi Target Path will search for all the end points in one search and will return all paths if pathsForAll is true, or only the shortest one if pathsForAll is false.\n
+		/// A Multi Target Path will search for all the end points in one search and will return all paths if pathsForAll is true, or only the shortest one if pathsForAll is false.
 		///
 		/// callback and <see cref="pathCallback"/> will be called when the path has completed. Callback will not be called if the path is canceled (e.g when a new path is requested before the previous one has completed)
 		///
@@ -519,7 +519,7 @@ namespace Pathfinding {
 
 		/// <summary>
 		/// Starts a Multi Target Path from multiple start points to a single target point.
-		/// A Multi Target Path will search from all start points to the target point in one search and will return all paths if pathsForAll is true, or only the shortest one if pathsForAll is false.\n
+		/// A Multi Target Path will search from all start points to the target point in one search and will return all paths if pathsForAll is true, or only the shortest one if pathsForAll is false.
 		///
 		/// callback and <see cref="pathCallback"/> will be called when the path has completed. Callback will not be called if the path is canceled (e.g when a new path is requested before the previous one has completed)
 		///
@@ -541,7 +541,7 @@ namespace Pathfinding {
 
 		/// <summary>
 		/// Starts a Multi Target Path.
-		/// Takes a MultiTargetPath and wires everything up for it to send callbacks to the seeker for post-processing.\n
+		/// Takes a MultiTargetPath and wires everything up for it to send callbacks to the seeker for post-processing.
 		///
 		/// callback and <see cref="pathCallback"/> will be called when the path has completed. Callback will not be called if the path is canceled (e.g when a new path is requested before the previous one has completed)
 		///

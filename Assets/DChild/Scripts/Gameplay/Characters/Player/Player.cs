@@ -65,6 +65,8 @@ namespace DChild.Gameplay.Characters.Players
         [SerializeField]
         private PlayerSoulSkillHandle m_soulSkills;
         [SerializeField]
+        private BattleAbilities m_combatArts;
+        [SerializeField]
         private PlayerCharacterController m_controller;
         [SerializeField]
         private PlayerIntroControlsController m_introController;
@@ -113,6 +115,7 @@ namespace DChild.Gameplay.Characters.Players
         public PlayerModuleActivator behaviourModule => m_behaviourModule;
         public PlayerSkills skills => m_skills;
         public PlayerSoulSkillHandle soulSkills => m_soulSkills;
+        public BattleAbilities combatArts => m_combatArts;
         public PlayerWeapon weapon => m_weapon;
         public ExtendedAttackResistance attackResistance => m_attackResistance;
         public PlayerInventory inventory => m_inventory;
@@ -151,7 +154,7 @@ namespace DChild.Gameplay.Characters.Players
             m_attackResistance.Initialize();
             m_statusResistance.Initialize();
             m_modifiers.Initialize();
-            m_soulSkills.Initialize();            
+            m_soulSkills.Initialize();
         }
 
         private void Awake()
@@ -176,7 +179,7 @@ namespace DChild.Gameplay.Characters.Players
             healableModule.Heal(9999999);
             health.ResetValueToMax();
             magic.ResetValueToMax();
-           
+
             //Stop Coroutines for items
         }
 
