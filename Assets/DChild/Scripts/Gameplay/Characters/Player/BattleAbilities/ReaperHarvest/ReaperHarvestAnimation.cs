@@ -35,6 +35,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
         public void StartGrounded()
         {
+            StopAllCoroutines();
             m_spine.SetAnimation(0, m_startGroundedAnimation, false);
         }
 
@@ -45,6 +46,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
         public void StartMidair()
         {
+            StopAllCoroutines();
             m_spine.SetAnimation(0, m_startMidairAnimation, false);
         }
 
