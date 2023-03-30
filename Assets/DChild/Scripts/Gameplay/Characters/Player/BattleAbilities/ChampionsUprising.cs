@@ -114,14 +114,14 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
         public override void Cancel()
         {
-            base.Cancel();
             m_championsUprisingInfo.ShowCollider(false);
             m_canMove = true;
             m_fxAnimator.Play("Buffer");
             StopAllCoroutines();
-            m_animator.SetBool(m_championsUprisingStateAnimationParameter, false);
             //m_championsUprisingAnimation.gameObject.SetActive(false);
             m_physics.gravityScale = m_cacheGravity;
+            m_animator.SetBool(m_championsUprisingStateAnimationParameter, false);
+            base.Cancel();
         }
 
         public void EnableCollision(bool value)
@@ -151,7 +151,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             else
             {
                 m_championsUprisingCooldownTimer = m_championsUprisingCooldown;
-                m_state.isAttacking = false;
+                //m_state.isAttacking = false;
                 m_canChampionsUprising = true;
             }
         }
@@ -193,7 +193,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
                 m_wallSensor.Cast();
                 m_enemySensor.Cast();
                 m_edgeSensor.Cast();
-                m_physics.velocity = new Vector2(m_character.facing == HorizontalDirection.Right ? m_dashForce.x : -m_dashForce.x, m_physics.velocity.y);
+                m_physics.velocity = new Vector2(m_character.facing == HorizontalDirection.Right ? m_dashForce.x : -m_dashForce.x, -m_physics.velocity.y);
                 timer -= Time.deltaTime;
                 if (!m_edgeSensor.isDetecting)
                 {

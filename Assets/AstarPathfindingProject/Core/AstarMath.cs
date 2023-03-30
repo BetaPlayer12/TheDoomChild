@@ -5,11 +5,8 @@ using System;
 namespace Pathfinding {
 	using Pathfinding.Util;
 
-	/// <summary>
-	/// Contains various spline functions.
-	/// \ingroup utils
-	/// </summary>
-	static class AstarSplines {
+	/// <summary>Contains various spline functions.</summary>
+	public static class AstarSplines {
 		public static Vector3 CatmullRom (Vector3 previous, Vector3 start, Vector3 end, Vector3 next, float elapsedTime) {
 			// References used:
 			// p.266 GemsV1
@@ -75,8 +72,6 @@ namespace Pathfinding {
 	///
 	/// Note the difference between segments and lines. Lines are infinitely
 	/// long but segments have only a finite length.
-	///
-	/// \ingroup utils
 	/// </summary>
 	public static class VectorMath {
 		/// <summary>
@@ -143,7 +138,7 @@ namespace Pathfinding {
 			var lineDirection = lineEnd - lineStart;
 			float magn = lineDirection.sqrMagnitude;
 
-			float closestPoint = Int3.Dot((point - lineStart), lineDirection);
+			float closestPoint = (float)Int3.DotLong(point - lineStart, lineDirection);
 
 			if (magn != 0) closestPoint /= magn;
 
@@ -276,17 +271,18 @@ namespace Pathfinding {
 			Vector3 u = e1 - s1;
 			Vector3 v = e2 - s2;
 			Vector3 w = s1 - s2;
-			float a = Vector3.Dot(u, u);           // always >= 0
-			float b = Vector3.Dot(u, v);
-			float c = Vector3.Dot(v, v);           // always >= 0
-			float d = Vector3.Dot(u, w);
-			float e = Vector3.Dot(v, w);
-			float D = a*c - b*b;           // always >= 0
-			float sc, sN, sD = D;          // sc = sN / sD, default sD = D >= 0
-			float tc, tN, tD = D;          // tc = tN / tD, default tD = D >= 0
+			double a = Vector3.Dot(u, u);           // always >= 0
+			double b = Vector3.Dot(u, v);
+			double c = Vector3.Dot(v, v);           // always >= 0
+			double d = Vector3.Dot(u, w);
+			double e = Vector3.Dot(v, w);
+			double D = a*c - b*b;           // always >= 0
+			double sc, sN, sD = D;          // sc = sN / sD, default sD = D >= 0
+			double tc, tN, tD = D;          // tc = tN / tD, default tD = D >= 0
 
 			// compute the line parameters of the two closest points
-			if (D < 0.000001f) { // the lines are almost parallel
+			// D is approximately |v|^2|u|^2*(1-cos alpha), where alpha is the angle between the lines
+			if (D < 0.00001) { // the lines are almost parallel
 				sN = 0.0f;         // force using point P0 on segment S1
 				sD = 1.0f;         // to prevent possible division by 0.0 later
 				tN = e;
@@ -294,8 +290,8 @@ namespace Pathfinding {
 			} else {               // get the closest points on the infinite lines
 				sN = (b*e - c*d);
 				tN = (a*e - b*d);
-				if (sN < 0.0f) {        // sc < 0 => the s=0 edge is visible
-					sN = 0.0f;
+				if (sN < 0.0) {        // sc < 0 => the s=0 edge is visible
+					sN = 0.0;
 					tN = e;
 					tD = c;
 				} else if (sN > sD) { // sc > 1  => the s=1 edge is visible
@@ -305,8 +301,8 @@ namespace Pathfinding {
 				}
 			}
 
-			if (tN < 0.0f) {            // tc < 0 => the t=0 edge is visible
-				tN = 0.0f;
+			if (tN < 0.0) {            // tc < 0 => the t=0 edge is visible
+				tN = 0.0;
 				// recompute sc for this edge
 				if (-d < 0.0f)
 					sN = 0.0f;
@@ -328,12 +324,13 @@ namespace Pathfinding {
 					sD = a;
 				}
 			}
+
 			// finally do the division to get sc and tc
-			sc = (Math.Abs(sN) < 0.000001f ? 0.0f : sN / sD);
-			tc = (Math.Abs(tN) < 0.000001f ? 0.0f : tN / tD);
+			sc = (Math.Abs(sN) < 0.00001f ? 0.0 : sN / sD);
+			tc = (Math.Abs(tN) < 0.00001f ? 0.0 : tN / tD);
 
 			// get the difference of the two closest points
-			Vector3 dP = w + (sc * u) - (tc * v);  // =  S1(sc) - S2(tc)
+			Vector3 dP = w + ((float)sc * u) - ((float)tc * v);  // =  S1(sc) - S2(tc)
 
 			return dP.sqrMagnitude;   // return the closest distance
 		}
@@ -460,7 +457,7 @@ namespace Pathfinding {
 			float v = x*x + y*y + z*z;
 
 			// Epsilon not chosen with much thought, just that float.Epsilon was a bit too small.
-			return v <= 0.0000001f;
+			return v <= 0.0001f;
 		}
 
 		/// <summary>Returns if the points are colinear (lie on a straight line)</summary>
@@ -468,7 +465,7 @@ namespace Pathfinding {
 			float v = (b.x-a.x)*(c.y-a.y)-(c.x-a.x)*(b.y-a.y);
 
 			// Epsilon not chosen with much thought, just that float.Epsilon was a bit too small.
-			return v <= 0.0000001f && v >= -0.0000001f;
+			return v <= 0.0001f && v >= -0.0001f;
 		}
 
 		/// <summary>Returns if the points are colinear (lie on a straight line)</summary>
@@ -532,6 +529,23 @@ namespace Pathfinding {
 				return false;
 			}
 
+			return true;
+		}
+
+		/// <summary>
+		/// Calculates the point start1 + dir1*t where the two infinite lines intersect.
+		/// Returns false if the lines are close to parallel.
+		/// </summary>
+		public static bool LineLineIntersectionFactor (Vector2 start1, Vector2 dir1, Vector2 start2, Vector2 dir2, out float t) {
+			float den = dir2.y*dir1.x - dir2.x * dir1.y;
+
+			if (Mathf.Abs(den) < 0.0001f) {
+				t = 0;
+				return false;
+			}
+
+			float nom = dir2.x*(start1.y-start2.y) - dir2.y*(start1.x-start2.x);
+			t = nom/den;
 			return true;
 		}
 
@@ -617,10 +631,10 @@ namespace Pathfinding {
 		}
 
 		/// <summary>
-		/// Returns the intersection factors for line 1 and line 2. The intersection factors is a distance along the line start - end where the other line intersects it.\n
+		/// Returns the intersection factors for line 1 and line 2. The intersection factors is a distance along the line start - end where the other line intersects it.
 		/// <code> intersectionPoint = start1 + factor1 * (end1-start1) </code>
 		/// <code> intersectionPoint2 = start2 + factor2 * (end2-start2) </code>
-		/// Lines are treated as infinite.\n
+		/// Lines are treated as infinite.
 		/// false is returned if the lines are parallel and true if they are not.
 		/// Only the XZ coordinates are used.
 		/// </summary>
@@ -646,10 +660,10 @@ namespace Pathfinding {
 		}
 
 		/// <summary>
-		/// Returns the intersection factors for line 1 and line 2. The intersection factors is a distance along the line start - end where the other line intersects it.\n
+		/// Returns the intersection factors for line 1 and line 2. The intersection factors is a distance along the line start - end where the other line intersects it.
 		/// <code> intersectionPoint = start1 + factor1 * (end1-start1) </code>
 		/// <code> intersectionPoint2 = start2 + factor2 * (end2-start2) </code>
-		/// Lines are treated as infinite.\n
+		/// Lines are treated as infinite.
 		/// false is returned if the lines are parallel and true if they are not.
 		/// Only the XZ coordinates are used.
 		/// </summary>
@@ -679,9 +693,9 @@ namespace Pathfinding {
 
 		/// <summary>
 		/// Returns the intersection factor for line 1 with ray 2.
-		/// The intersection factors is a factor distance along the line start - end where the other line intersects it.\n
+		/// The intersection factors is a factor distance along the line start - end where the other line intersects it.
 		/// <code> intersectionPoint = start1 + factor * (end1-start1) </code>
-		/// Lines are treated as infinite.\n
+		/// Lines are treated as infinite.
 		///
 		/// The second "line" is treated as a ray, meaning only matches on start2 or forwards towards end2 (and beyond) will be returned
 		/// If the point lies on the wrong side of the ray start, Nan will be returned.
@@ -709,9 +723,9 @@ namespace Pathfinding {
 
 		/// <summary>
 		/// Returns the intersection factor for line 1 with line 2.
-		/// The intersection factor is a distance along the line start1 - end1 where the line start2 - end2 intersects it.\n
+		/// The intersection factor is a distance along the line start1 - end1 where the line start2 - end2 intersects it.
 		/// <code> intersectionPoint = start1 + intersectionFactor * (end1-start1) </code>.
-		/// Lines are treated as infinite.\n
+		/// Lines are treated as infinite.
 		/// -1 is returned if the lines are parallel (note that this is a valid return value if they are not parallel too)
 		/// </summary>
 		public static float LineIntersectionFactorXZ (Vector3 start1, Vector3 end1, Vector3 start2, Vector3 end2) {
@@ -984,7 +998,7 @@ namespace Pathfinding {
 
 	/// <summary>
 	/// Utility functions for working with numbers and strings.
-	/// \ingroup utils
+	///
 	/// See: Polygon
 	/// See: VectorMath
 	/// </summary>
@@ -1083,8 +1097,6 @@ namespace Pathfinding {
 	/// coordinate system now instead of sometimes using a left handed one and sometimes
 	/// using a right handed one. This is why the 'Left' methods redirect to methods
 	/// named 'Right'. The functionality is exactly the same.
-	///
-	/// \ingroup utils
 	/// </summary>
 	public static class Polygon {
 		/// <summary>
@@ -1420,6 +1432,7 @@ namespace Pathfinding {
 		/// <param name="outTriangles">Triangles of the output mesh.</param>
 		public static void CompressMesh (List<Int3> vertices, List<int> triangles, out Int3[] outVertices, out int[] outTriangles) {
 			Dictionary<Int3, int> firstVerts = cached_Int3_int_dict;
+
 			firstVerts.Clear();
 
 			// Use cached array to reduce memory allocations
