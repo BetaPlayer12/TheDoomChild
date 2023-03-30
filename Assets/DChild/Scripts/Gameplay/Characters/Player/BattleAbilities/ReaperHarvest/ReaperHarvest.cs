@@ -85,9 +85,13 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
         public override void Reset()
         {
-            base.Reset();
+            m_state.waitForBehaviour = false;
+            m_state.isAttacking = false;
+            m_canReaperHarvest = true;
+            m_canMove = true;
             m_reaperHarvestInfo.ShowCollider(false);
             m_animator.SetBool(m_reaperHarvestStateAnimationParameter, false);
+            base.Reset();
         }
 
         public void Execute(ReaperHarvestState state)
@@ -143,10 +147,10 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
                 m_canMove = true;
                 m_fxAnimator.Play("Buffer");
                 StopAllCoroutines();
-                m_animator.SetBool(m_reaperHarvestStateAnimationParameter, false);
                 m_reaperHarvestAnimation.gameObject.SetActive(false);
                 m_physics.gravityScale = m_cacheGravity;
                 m_hitbox.Enable();
+                m_animator.SetBool(m_reaperHarvestStateAnimationParameter, false);
                 base.Cancel();
             }
         }
@@ -173,7 +177,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             else
             {
                 m_reaperHarvestCooldownTimer = m_reaperHarvestCooldown;
-                m_state.isAttacking = false;
+                //m_state.isAttacking = false;
                 m_canReaperHarvest = true;
             }
         }
