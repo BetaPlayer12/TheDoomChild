@@ -51,6 +51,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private enum State
         {
+            Idle,
             Patrol,
             Panic,
             Turning,
@@ -93,11 +94,16 @@ namespace DChild.Gameplay.Characters.Enemies
         private Coroutine m_executeMoveCoroutine;
 
         [SerializeField]
+        private bool m_patrols;
+
+        [SerializeField]
         private float m_waitToReturnToPatrolTime;
 
         [SerializeField]
         private bool m_isRetreating;
         private Vector2 m_currentRetreatPoint;
+        [SerializeField]
+        private bool m_isReturningToIdle;
 
         private void OnTurnRequest(object sender, EventActionArgs eventArgs) => m_stateHandle.OverrideState(State.Turning);
 
@@ -195,7 +201,6 @@ namespace DChild.Gameplay.Characters.Enemies
         protected override void Start()
         {
             base.Start();
-            m_animation.SetAnimation(0, m_info.patrol.animation, true);
             //m_animation.DisableRootMotion();
             m_bodyCollider.enabled = false;
             m_startPos = transform.position;
@@ -203,6 +208,11 @@ namespace DChild.Gameplay.Characters.Enemies
             for (int i = 0; i < m_retreatPoints.retreatPoints.Length; i++)
             {
                 m_panicPoints.Add(m_retreatPoints.retreatPoints[i]);
+            }
+
+            if (!m_patrols)
+            {
+                m_agent.Stop();
             }
         }
 
@@ -217,21 +227,41 @@ namespace DChild.Gameplay.Characters.Enemies
             m_hitbox.damageable.DamageTaken += OnTakesDamage;
 
             //m_deathHandle?.SetAnimation(m_info.deathStartAnimation);
-            m_stateHandle = new StateHandle<State>(State.Patrol, State.WaitBehaviourEnd);
+            m_stateHandle = new StateHandle<State>(State.Idle, State.WaitBehaviourEnd);
         }
 
         private void Update()
         {
             switch (m_stateHandle.currentState)
             {
+                case State.Idle:
+                    m_turnState = State.ReevaluateSituation;
+
+                    if (m_patrols)
+                    {
+                        m_stateHandle.OverrideState(State.Patrol);
+                    }
+                    else
+                    {
+                        m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                    }
+
+                    break;
                 case State.Patrol:
                     m_turnState = State.ReevaluateSituation;
                     m_isRetreating = false;
 
-                    m_animation.SetAnimation(0, m_info.movingAnimation, true);
+                    if (m_patrols)
+                    {
+                        m_animation.SetAnimation(0, m_info.movingAnimation, true);
 
-                    var characterInfo = new PatrolHandle.CharacterInfo(m_character.centerMass.position, m_character.facing);
-                    m_patrolHandle.Patrol(m_agent, m_info.patrol.speed, characterInfo);
+                        var characterInfo = new PatrolHandle.CharacterInfo(m_character.centerMass.position, m_character.facing);
+                        m_patrolHandle.Patrol(m_agent, m_info.patrol.speed, characterInfo);
+                    }
+                    else
+                    {
+                        m_stateHandle.OverrideState(State.Idle);
+                    }
                     break;
 
                 case State.Turning:
@@ -266,12 +296,26 @@ namespace DChild.Gameplay.Characters.Enemies
                         }
                         else
                         {
-                            m_stateHandle.SetState(State.Patrol);
+                            if (m_patrols)
+                            {
+                                m_stateHandle.SetState(State.Patrol);
+                            }
+                            else
+                            {
+                                m_stateHandle.SetState(State.Idle);
+                            }
                         }
                     }
                     else
                     {
-                        m_stateHandle.SetState(State.Patrol);
+                        if (m_patrols)
+                        {
+                            m_stateHandle.SetState(State.Patrol);
+                        }
+                        else
+                        {
+                            m_stateHandle.SetState(State.Idle);
+                        }
                     }
                     break;
 
@@ -294,14 +338,22 @@ namespace DChild.Gameplay.Characters.Enemies
 
             m_agent.OnDestinationReached -= OnPanicPointReach;
 
+            m_animation.SetAnimation(0, m_info.idleAnimation, true);
+            if (m_patrols)
+            {
+                StartCoroutine(ReturnToPatrolPathRoutine());
+            }
+            else
+            {
+                StartCoroutine(WaitBeforeReturningToIdle());
+            }
+
             yield return null;
 
             void OnPanicPointReach(object sender, EventActionArgs eventArgs)
             {
-                Debug.Log("Panic Point Reached");
                 m_isRetreating = false;
-                m_animation.SetAnimation(0, m_info.idleAnimation, true);
-                StartCoroutine(ReturnToPatrolPathRoutine());
+               
             }
         }
         
@@ -327,6 +379,53 @@ namespace DChild.Gameplay.Characters.Enemies
             if (!canPanic)
             {
                 m_stateHandle.OverrideState(State.ReevaluateSituation);
+            }
+        }
+
+        private IEnumerator WaitBeforeReturningToIdle()
+        {
+            bool canPanic = true;
+
+            for (int i = 0; i < m_waitToReturnToPatrolTime; i++)
+            {
+                yield return new WaitForSeconds(1f);
+
+                if (canPanic)
+                {
+                    if (m_targetInfo.isValid)
+                    {
+                        m_stateHandle.SetState(State.Panic);
+                    }
+                }
+            }
+
+            canPanic = false;
+
+            if (!canPanic)
+            {
+                yield return ReturnToIdlePositionRoutine();
+            }
+        }
+
+        private IEnumerator ReturnToIdlePositionRoutine()
+        {
+            m_agent.OnDestinationReached += OnIdlePositionReached;
+            m_agent.SetDestination(m_startPos);
+            m_isReturningToIdle = true;
+
+            while (m_isReturningToIdle)
+            {
+                m_agent.Move(m_info.patrol.speed);
+                yield return null;
+            }
+
+            m_agent.OnDestinationReached -= OnIdlePositionReached;
+
+            m_stateHandle.OverrideState(State.ReevaluateSituation);
+
+            void OnIdlePositionReached(object sender, EventActionArgs eventArgs)
+            {
+                m_isReturningToIdle = false;
             }
         }
 
