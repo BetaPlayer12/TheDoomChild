@@ -41,6 +41,8 @@ namespace DChild.Gameplay.Characters.Players
             EndChampionsUprising,
             EndEelecktrick,
             EndLightningSpear,
+            EndIcarusWings,
+            EndProjectileThrow,
         }
 
         [SerializeField]
@@ -148,6 +150,12 @@ namespace DChild.Gameplay.Characters.Players
                         break;
                     case Command.EndLightningSpear:
                         player.LightningSpearEnd();
+                        break;
+                    case Command.EndIcarusWings:
+                        player.IcarusWingsEnd();
+                        break;
+                    case Command.EndProjectileThrow:
+                        player.FinishProjectileThrow();
                         break;
                 }
             }

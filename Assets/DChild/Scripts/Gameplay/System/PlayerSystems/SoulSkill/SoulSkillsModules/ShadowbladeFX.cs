@@ -14,6 +14,7 @@ public class ShadowbladeFX : MonoBehaviour
     private int m_trackNumber;
     [SerializeField]
     private bool m_canShadowblade;
+    public bool canShadowblade => m_canShadowblade;
 
 
     //void Start()
@@ -22,7 +23,7 @@ public class ShadowbladeFX : MonoBehaviour
     //        m_animation.state.SetAnimation(m_trackNumber, m_shadowBladeMixAnimation, true);
     //}
 
-    private void FixedUpdate()
+    private void Update()
     {
         if (m_canShadowblade)
             m_animation.state.SetAnimation(m_trackNumber, m_shadowBladeMixAnimation, true);
@@ -30,11 +31,13 @@ public class ShadowbladeFX : MonoBehaviour
 
     public void EnableShadowblade()
     {
-        m_animation.state.SetAnimation(m_trackNumber, m_shadowBladeMixAnimation, true);
+        m_canShadowblade = true;
+        //m_animation.state.SetAnimation(m_trackNumber, m_shadowBladeMixAnimation, true);
     }
 
     public void DisableShadowblade()
     {
+        m_canShadowblade = false;
         m_animation.state.SetEmptyAnimation(m_trackNumber, 0);
     }
 }
