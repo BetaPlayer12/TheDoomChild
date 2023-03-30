@@ -68,6 +68,7 @@ namespace DChild.Gameplay.Characters.Players
             ChampionsUprising,
             Eelecktrick,
             LightningSpear,
+            IcarusWings,
         }
 
         [SerializeField]

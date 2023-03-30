@@ -9,7 +9,7 @@ namespace DChild.Gameplay.Pathfinding
 {
     public class NavigationTracker : MonoBehaviour
     {
-        public event EventAction<EventActionArgs> DestinationReached;
+        public event EventAction<EventActionArgs> DestinationReached; 
 
         [InfoBox("Make Sure there is a SEEKER component in parent gameObject")]
         [SerializeField, MinValue(0.1f)]
@@ -179,6 +179,11 @@ namespace DChild.Gameplay.Pathfinding
             m_seeker.startEndModifier.adjustStartPoint = () => transform.position;
             m_seeker.pathCallback += OnSetPathReturn;
             m_canSearchPath = true;
+        }
+
+        private void Start()
+        {
+            enabled = true;
         }
 
         private void Update()
