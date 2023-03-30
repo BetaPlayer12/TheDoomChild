@@ -129,6 +129,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private bool m_enablePatience;
 
         [SerializeField, TabGroup("Reference")]
+        private GameObject m_legsForStompAttack;
+        [SerializeField, TabGroup("Reference")]
         private SpineEventListener m_spineEventListener;
         [SerializeField, TabGroup("Reference")]
         private IsolatedCharacterPhysics2D m_charcterPhysics;
@@ -194,6 +196,7 @@ namespace DChild.Gameplay.Characters.Enemies
             }
             m_spineEventListener.Subscribe(m_info.projectile.launchOnEvent, SpitProjectile);
             m_startPoint = transform.position;
+            m_legsForStompAttack.SetActive(false);
         }
 
         private Vector2 BallisticVel()
@@ -388,12 +391,15 @@ namespace DChild.Gameplay.Characters.Enemies
         }
         private IEnumerator StompRoutine()
         {
+            m_legsForStompAttack.SetActive(true);
             m_movement.Stop();
             m_animation.SetAnimation(0, m_info.stompAttack.animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.stompAttack.animation);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_flinchHandle.m_autoFlinch = true;
             m_stateHandle.ApplyQueuedState();
+
+            m_legsForStompAttack.SetActive(false);
             yield return null;
         }
 
@@ -521,6 +527,7 @@ namespace DChild.Gameplay.Characters.Enemies
                             }
                             break;
                     }
+
                     m_attackDecider.hasDecidedOnAttack = false;
 
                     break;

@@ -57,7 +57,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public override void Cancel()
         {
-            base.Cancel();
             m_chargeFX?.Stop(true);
             m_preLoopFX?.Stop(true);
             m_fallLoopFX?.Stop(true);
@@ -69,10 +68,12 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_rigidbody.velocity = Vector2.zero;
             m_canEarthShaker = true;
             m_animator.SetBool(m_earthShakerAnimationParameter, !m_canEarthShaker);
+            base.Cancel();
         }
 
         public void Impact()
         {
+            //m_state.waitForBehaviour = true;
             m_attacker.SetDamageModifier(/*m_impactDamageModifier*/m_configuration.impactDamageModifier  * m_modifier.Get(PlayerModifier.AttackDamage));
             m_rigidBody.WakeUp();
             m_fallLoopFX?.Stop(true);
@@ -81,7 +82,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_impactCollider.enabled = true;
             m_rigidbody.velocity = Vector2.zero;
             //m_animator.SetBool(m_earthShakerAnimationParameter, false);
-            //m_state.waitForBehaviour = true;
         }
 
         public void HandlePreFall()
@@ -123,14 +123,15 @@ namespace DChild.Gameplay.Characters.Players.Modules
         {
             m_damageable.SetInvulnerability(Invulnerability.None);
             m_impactFX?.Stop(true);
-            m_animator.SetBool(m_animationParameter, false);
+            //m_animator.SetBool(m_animationParameter, false);
             m_canEarthShaker = true;
-            m_animator.SetBool(m_earthShakerAnimationParameter, !m_canEarthShaker);
             m_impactCollider.enabled = false;
-            m_state.waitForBehaviour = false;
-            m_state.canAttack = true;
-            m_state.isAttacking = false;
+            //m_state.waitForBehaviour = false;
+            //m_state.canAttack = true;
+            //m_state.isAttacking = false;
             m_rigidbody.gravityScale = m_originalGravity;
+            m_animator.SetBool(m_earthShakerAnimationParameter, !m_canEarthShaker);
+            base.AttackOver();
         }
     }
 }

@@ -2,9 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
-#if UNITY_5_5_OR_NEWER
 using UnityEngine.Profiling;
-#endif
 
 namespace Pathfinding {
 #if NETFX_CORE
@@ -128,7 +126,9 @@ namespace Pathfinding {
 
 			public GraphUpdateLock (PathProcessor pathProcessor, bool block) {
 				this.pathProcessor = pathProcessor;
+				Profiler.BeginSample("Pausing pathfinding");
 				id = pathProcessor.Lock(block);
+				Profiler.EndSample();
 			}
 
 			/// <summary>
@@ -137,7 +137,7 @@ namespace Pathfinding {
 			/// </summary>
 			public bool Held {
 				get {
-					return pathProcessor != null && pathProcessor.locks.Contains (id);
+					return pathProcessor != null && pathProcessor.locks.Contains(id);
 				}
 			}
 
@@ -541,9 +541,9 @@ namespace Pathfinding {
 					totalTicks += System.DateTime.UtcNow.Ticks-startTicks;
 					p.duration = totalTicks*0.0001F;
 
-					#if ProfileAstar
+#if ProfileAstar
 					System.Threading.Interlocked.Increment(ref AstarPath.PathsCompleted);
-					#endif
+#endif
 				}
 
 				// Cleans up node tagging and other things
