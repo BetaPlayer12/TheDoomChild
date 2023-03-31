@@ -7,6 +7,7 @@ using UnityEngine;
 using Spine.Unity;
 using DChild.Gameplay.Pooling;
 using DChild.Gameplay.Combat;
+using UnityEngine.InputSystem;
 
 namespace DChild.Gameplay.Characters.Players.Modules
 {
@@ -16,10 +17,14 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private ProjectileThrowStatsInfo m_configuration;
         [SerializeField]
         private ProjectileInfo m_projectile;
+        public ProjectileInfo projectile => m_projectile;
+        private ProjectileInfo m_cacheProjectile;
         [SerializeField]
         private Transform m_spawnPoint;
         [SerializeField]
         private SkeletonAnimation m_skeletonAnimation;
+        [SerializeField]
+        private Vector2 m_aimOffset;
 
         private Vector2 m_currentAim; //Relative to Character Facing
 
@@ -31,6 +36,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private int m_skullThrowVariantParameter;
         private bool m_updateProjectileInfo;
         private Projectile m_spawnedProjectile;
+        public Projectile spawnedProjectile => m_spawnedProjectile;
         private bool m_reachedVerticalThreshold = false;
 
         public event EventAction<EventActionArgs> ExecutionRequested;
@@ -91,6 +97,9 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 m_reachedVerticalThreshold = true;
             }
             m_currentAim = newAim;
+            var worldPosition = m_character.centerMass.position + (new Vector3(m_character.facing == HorizontalDirection.Right ? m_aimOffset.x : -m_aimOffset.x, m_aimOffset.y));
+            var screenPosition = Camera.main.WorldToScreenPoint(worldPosition);
+            Mouse.current.WarpCursorPosition(screenPosition);
             UpdateTrajectorySimulation();
         }
 
@@ -180,6 +189,15 @@ namespace DChild.Gameplay.Characters.Players.Modules
             }
         }
 
+        public void ResetProjectile()
+        {
+            m_projectile = m_cacheProjectile;
+            m_launcher.SetProjectile(m_projectile);
+            var skullThrowVariantIndex = m_cacheProjectile.projectile.GetComponent<Projectile>().hasConstantSpeed ? 0 : 1;
+            m_animator.SetInteger(m_skullThrowVariantParameter, skullThrowVariantIndex);
+            m_updateProjectileInfo = true;
+        }
+
         public void HandleNextAttackDelay()
         {
             if (m_timer >= 0)
@@ -248,12 +266,15 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void SpawnIdleProjectile()
         {
+            //TEST
             m_spawnedProjectile = GameSystem.poolManager.GetPool<ProjectilePool>().GetOrCreateItem(m_projectile.projectile);
             m_spawnedProjectile.transform.position = m_spawnPoint.position;
             m_spawnedProjectile.transform.parent = transform;
             m_spawnedProjectile.GetComponent<Attacker>().SetParentAttacker(m_attacker);
+            //TEST
 
             var scale = m_spawnedProjectile.transform.localScale;
+            scale.x = m_character.facing == HorizontalDirection.Right ? scale.x : -scale.x;
             scale.y = 1;
             m_spawnedProjectile.transform.localScale = scale;
 
@@ -269,9 +290,10 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public override void AttackOver()
         {
-            m_state.isAttacking = false;
+            //m_state.isAttacking = false;
             m_reachedVerticalThreshold = false;
             m_animator.SetBool(m_skullThrowAnimationParameter, false);
+            base.AttackOver();
         }
 
         public void Execute()
@@ -280,6 +302,15 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_state.canAttack = false;
             m_state.isAttacking = true;
             m_animator.SetBool(m_skullThrowAnimationParameter, true);
+
+            //m_spawnedProjectile = GameSystem.poolManager.GetPool<ProjectilePool>().GetOrCreateItem(m_projectile.projectile);
+            //m_spawnedProjectile.transform.position = m_spawnPoint.position;
+            //m_spawnedProjectile.transform.parent = transform;
+            //m_spawnedProjectile.GetComponent<Attacker>().SetParentAttacker(m_attacker);
+            //if (m_spawnedProjectile.TryGetComponent(out IsolatedObjectPhysics2D physics))
+            //{
+            //    physics.Disable();
+            //}
         }
 
         public void StartThrow()
@@ -294,16 +325,16 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public override void Cancel()
         {
-            base.Cancel();
             m_reachedVerticalThreshold = false;
             EndAim();
-            m_animator.SetBool(m_skullThrowAnimationParameter, false);
             m_skeletonAnimation.state.Complete -= State_Complete;
 
             if (m_spawnedProjectile != null)
             {
                 Destroy(m_spawnedProjectile.gameObject);
             }
+            m_animator.SetBool(m_skullThrowAnimationParameter, false);
+            base.Cancel();
         }
 
         public override void Reset()
@@ -325,6 +356,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_launcher.SetProjectile(m_projectile);
             m_launcher.SetSpawnPoint(m_spawnPoint);
             m_updateProjectileInfo = true;
+            m_cacheProjectile = m_projectile;
         }
 
 

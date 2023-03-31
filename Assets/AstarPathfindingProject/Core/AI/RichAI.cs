@@ -7,7 +7,13 @@ namespace Pathfinding {
 	using Pathfinding.Util;
 
 	[AddComponentMenu("Pathfinding/AI/RichAI (3D, for navmesh)")]
-	/// <summary>Advanced AI for navmesh based graphs.</summary>
+	/// <summary>
+	/// Advanced AI for navmesh based graphs.
+	///
+	/// [Open online documentation to see images]
+	///
+	/// See: movementscripts (view in online documentation for working links)
+	/// </summary>
 	public partial class RichAI : AIBase, IAstarAI {
 		/// <summary>
 		/// Max acceleration of the agent.
@@ -220,7 +226,7 @@ namespace Pathfinding {
 		/// </summary>
 		public override void Teleport (Vector3 newPosition, bool clearPath = true) {
 			// Clamp the new position to the navmesh
-			var nearest = AstarPath.active != null ? AstarPath.active.GetNearest(newPosition) : new NNInfo();
+			var nearest = AstarPath.active != null? AstarPath.active.GetNearest(newPosition) : new NNInfo();
 			float elevation;
 
 			movementPlane.ToPlane(newPosition, out elevation);
@@ -265,6 +271,15 @@ namespace Pathfinding {
 			if (traversingOffMeshLink) {
 				delayUpdatePath = true;
 			} else {
+				// The RandomPath and MultiTargetPath do not have a well defined destination that could have been
+				// set before the paths were calculated. So we instead set the destination here so that some properties
+				// like #reachedDestination and #remainingDistance work correctly.
+				if (p is RandomPath rpath) {
+					destination = rpath.originalEndPoint;
+				} else if (p is MultiTargetPath mpath) {
+					destination = mpath.originalEndPoint;
+				}
+
 				richPath.Initialize(seeker, p, true, funnelSimplification);
 
 				// Check if we have already reached the end of the path
@@ -312,6 +327,11 @@ namespace Pathfinding {
 			}
 		}
 
+		/// <summary>\copydoc Pathfinding::IAstarAI::GetRemainingPath</summary>
+		public void GetRemainingPath (List<Vector3> buffer, out bool stale) {
+			richPath.GetRemainingPath(buffer, simulatedPosition, out stale);
+		}
+
 		/// <summary>Called when the end of the path is reached</summary>
 		protected virtual void OnTargetReached () {
 		}
@@ -341,7 +361,8 @@ namespace Pathfinding {
 			RichPathPart currentPart = richPath.GetCurrentPart();
 
 			if (currentPart is RichSpecial) {
-				if (!traversingOffMeshLink) {
+				// Start traversing the off mesh link if we haven't done it yet
+				if (!traversingOffMeshLink && !richPath.CompletedAllParts) {
 					StartCoroutine(TraverseSpecial(currentPart as RichSpecial));
 				}
 
@@ -349,6 +370,8 @@ namespace Pathfinding {
 				nextRotation = rotation;
 			} else {
 				var funnel = currentPart as RichFunnel;
+
+				// Check if we have a valid path to follow and some other script has not stopped the character
 				if (funnel != null && !isStopped) {
 					TraverseFunnel(funnel, deltaTime, out nextPosition, out nextRotation);
 				} else {
@@ -410,7 +433,7 @@ namespace Pathfinding {
 
 			// Distance to the end of the path (almost as the crow flies)
 			var distanceToEndOfPath = distanceToSteeringTarget + Vector3.Distance(steeringTarget, fn.exactEnd);
-			var slowdownFactor = distanceToEndOfPath < maxSpeed * slowdownTime ? Mathf.Sqrt(distanceToEndOfPath / (maxSpeed * slowdownTime)) : 1;
+			var slowdownFactor = distanceToEndOfPath < maxSpeed * slowdownTime? Mathf.Sqrt(distanceToEndOfPath / (maxSpeed * slowdownTime)) : 1;
 			FinalMovement(position3D, deltaTime, distanceToEndOfPath, slowdownFactor, out nextPosition, out nextRotation);
 		}
 
@@ -511,7 +534,7 @@ namespace Pathfinding {
 			// The current path part is a special part, for example a link
 			// Movement during this part of the path is handled by the TraverseSpecial coroutine
 			velocity2D = Vector3.zero;
-			var offMeshLinkCoroutine = onTraverseOffMeshLink != null ? onTraverseOffMeshLink(link) : TraverseOffMeshLinkFallback(link);
+			var offMeshLinkCoroutine = onTraverseOffMeshLink != null? onTraverseOffMeshLink(link) : TraverseOffMeshLinkFallback(link);
 			yield return StartCoroutine(offMeshLinkCoroutine);
 
 			// Off-mesh link traversal completed

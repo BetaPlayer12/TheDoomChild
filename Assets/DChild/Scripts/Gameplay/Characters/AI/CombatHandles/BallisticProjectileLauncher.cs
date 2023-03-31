@@ -40,6 +40,16 @@ namespace DChild.Gameplay.Characters
             component.GetComponent<IsolatedObjectPhysics2D>().SetVelocity(BallisticVelocity(target));
         }
 
+        public void LaunchBallisticProjectile(Vector2 target, GameObject projectile)
+        {
+            target = new Vector2(target.x, target.y);
+            
+            projectile.transform.position = m_spawnPoint.position;
+            var component = projectile.GetComponent<Projectile>();
+            component.ResetState();
+            component.GetComponent<IsolatedObjectPhysics2D>().SetVelocity(BallisticVelocity(target));
+        }
+
         public Vector2 BallisticVelocity(Vector2 target)
         {
             m_projectileInfo.projectile.GetComponent<IsolatedObjectPhysics2D>().simulateGravity = true;
