@@ -6,7 +6,7 @@ namespace DChild.Gameplay
 {
     public abstract class PathFinderAgent : MonoBehaviour
     {
-        public event EventAction<EventActionArgs> OnDestinationReached; 
+        public event EventAction<EventActionArgs> OnDestinationReached;
 
         public abstract Vector2 segmentDestination { get; }
         public abstract bool hasPath { get; }
