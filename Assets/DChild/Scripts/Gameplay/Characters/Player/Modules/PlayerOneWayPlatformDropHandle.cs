@@ -57,39 +57,38 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
                 for (int i = 0; i < hitsList.Count; i++)
                 {
-                    var hitBuffer = hitsList[i];
-
-                    if (hitBuffer.collider != null)
+                    var hitbuffer = hitsList[i];
+                    if (hitbuffer.collider != null)
                     {
-                        m_cacheCollider = hitBuffer.collider;
-                    }
+                        m_cacheCollider = hitbuffer.collider;
 
-                    if (m_cacheCollider != null)
-                    {
-                        if (m_cacheCollider.isTrigger)
+                        if (m_cacheCollider != null)
                         {
-                            return false;
-                        }
-                        else
-                        {
-                            if (m_cacheCollider.CompareTag("InvisibleWall") == false)
+                            if (m_cacheCollider.isTrigger)
                             {
-                                if (m_cacheCollider.CompareTag("Droppable") == true)
+                                return false;
+                            }
+                            else
+                            {
+                                if (m_cacheCollider.CompareTag("InvisibleWall") == false)
                                 {
-                                    if (colliderHit == true && isValid == false)
+                                    if (m_cacheCollider.CompareTag("Droppable") == true)
                                     {
-                                        isValid = false;
+                                        if (colliderHit == true && isValid == false)
+                                        {
+                                            isValid = false;
+                                        }
+                                        else
+                                        {
+                                            isValid = true;
+                                            colliderHit = true;
+                                        }
                                     }
                                     else
                                     {
-                                        isValid = true;
+                                        isValid = false;
                                         colliderHit = true;
                                     }
-                                }
-                                else
-                                {
-                                    isValid = false;
-                                    colliderHit = true;
                                 }
                             }
                         }

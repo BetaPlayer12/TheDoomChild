@@ -37,7 +37,7 @@ namespace Pathfinding.RVO {
 	/// See: local-avoidance (view in online documentation for working links)
 	/// </summary>
 	[AddComponentMenu("Pathfinding/Local Avoidance/RVO Controller")]
-	[HelpURL("http://arongranberg.com/astar/docs/class_pathfinding_1_1_r_v_o_1_1_r_v_o_controller.php")]
+	[HelpURL("http://arongranberg.com/astar/documentation/stable/class_pathfinding_1_1_r_v_o_1_1_r_v_o_controller.php")]
 	public class RVOController : VersionedMonoBehaviour {
 		[SerializeField][FormerlySerializedAs("radius")]
 		internal float radiusBackingField = 0.5f;
@@ -105,7 +105,7 @@ namespace Pathfinding.RVO {
 		/// A smaller value can reduce CPU load, a higher value can lead to better local avoidance quality.
 		/// </summary>
 		[Tooltip("Max number of other agents to take into account.\n" +
-			 "A smaller value can reduce CPU load, a higher value can lead to better local avoidance quality.")]
+			"A smaller value can reduce CPU load, a higher value can lead to better local avoidance quality.")]
 		public int maxNeighbours = 10;
 
 		/// <summary>
@@ -449,8 +449,8 @@ namespace Pathfinding.RVO {
 		/// <param name="pos">Point in world space to move towards.</param>
 		/// <param name="speed">Desired speed in world units per second.</param>
 		/// <param name="maxSpeed">Maximum speed in world units per second.
-		///     The agent will use this speed if it is necessary to avoid collisions with other agents.
-		///     Should be at least as high as speed, but it is recommended to use a slightly higher value than speed (for example speed*1.2).</param>
+		/// 	The agent will use this speed if it is necessary to avoid collisions with other agents.
+		/// 	Should be at least as high as speed, but it is recommended to use a slightly higher value than speed (for example speed*1.2).</param>
 		public void SetTarget (Vector3 pos, float speed, float maxSpeed) {
 			if (simulator == null) return;
 

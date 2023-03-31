@@ -66,7 +66,7 @@ namespace Pathfinding {
 		 */
 		uint rval;
 
-		System.Object lockObj = new object ();
+		System.Object lockObj = new object();
 
 		/// <summary>
 		/// Simple linear congruential generator.
@@ -186,7 +186,7 @@ namespace Pathfinding {
 			switch (mode) {
 			case HeuristicOptimizationMode.Custom:
 				if (pivotPointRoot == null) throw new System.Exception("heuristicOptimizationMode is HeuristicOptimizationMode.Custom, " +
-						"but no 'customHeuristicOptimizationPivotsRoot' is set");
+					"but no 'customHeuristicOptimizationPivotsRoot' is set");
 
 				GetClosestWalkableNodesToChildrenRecursively(pivotPointRoot, pivotList);
 				break;

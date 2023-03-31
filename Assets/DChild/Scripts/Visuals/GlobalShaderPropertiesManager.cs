@@ -13,7 +13,7 @@ namespace DChild.Visuals
                 Shader.SetGlobalInteger("_IsApplicationPlaying", 1);
                 instance = this;
             }
-            else if (instance != this)
+            else
             {
                 Destroy(this);
             }
@@ -30,7 +30,7 @@ namespace DChild.Visuals
 
         private void OnDestroy()
         {
-            if (this == instance)
+            if (instance == this)
             {
                 Shader.SetGlobalInteger("_IsApplicationPlaying", 0);
                 instance = null;

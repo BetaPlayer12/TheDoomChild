@@ -86,6 +86,11 @@ namespace DChild.Gameplay
 
                 if (hitCount > 0)
                 {
+                    for (int k = 0; k < hitCount; k++)
+                    {
+                        hitsList.Add(hitBuffers[k]);
+                    }
+                   
                     if (isDetecting == false)
                     {
                         isDetecting = true;

@@ -1,9 +1,13 @@
-﻿using UnityEngine;
+﻿
+using Holysoft.Event;
+using UnityEngine;
 
 namespace DChild.Gameplay
 {
     public abstract class PathFinderAgent : MonoBehaviour
     {
+        public event EventAction<EventActionArgs> OnDestinationReached; 
+
         public abstract Vector2 segmentDestination { get; }
         public abstract bool hasPath { get; }
 
@@ -14,5 +18,7 @@ namespace DChild.Gameplay
         public abstract void MoveTowardsForced(Vector2 direction, float speed);
 
         public abstract void Stop();
+
+        protected void SendDestionationReachedEvent() => OnDestinationReached?.Invoke(this, EventActionArgs.Empty);
     }
 }

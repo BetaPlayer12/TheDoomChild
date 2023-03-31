@@ -8,7 +8,7 @@ using UnityEngine.UI;
 namespace DChild.Gameplay.NavigationMap
 {
 
-    public class NavMapFogOfWarUI : SerializedMonoBehaviour
+    public class NavMapFogOfWarUI : MonoBehaviour
     {
 #if UNITY_EDITOR
         [SerializeField, HideInPlayMode]
@@ -17,7 +17,9 @@ namespace DChild.Gameplay.NavigationMap
         [SerializeField, HideInEditorMode]
         private Dictionary<string, NavMapFogOfWarSegment> m_list;
 
-
+#if UNITY_EDITOR
+        public Dictionary<string, NavMapFogOfWarSegment> GetSegments() => m_editorList.ToDictionary();
+#endif
 
         public void UpdateUI()
         {
