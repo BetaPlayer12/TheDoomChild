@@ -6,10 +6,13 @@ using Sirenix.OdinInspector;
 
 namespace DChild.Gameplay.Quests
 {
+
     public abstract class QuestAdvancer : MonoBehaviour
     {
         [SerializeField, ToggleGroup("m_runLua", "Run Lua")]
         private bool m_runLua;
+        [SerializeField]
+        private bool m_sendVariableChangeEvent;
         [SerializeField,LuaScriptWizard, Indent,ToggleGroup("m_runLua","Run Lua")]
         private string m_script;
 
@@ -31,6 +34,10 @@ namespace DChild.Gameplay.Quests
             if (m_runLua)
             {
                 Lua.Run(m_script);
+                if (m_sendVariableChangeEvent)
+                {
+                    DialogueVariableUtility.SendVariableChangeEvent(this);
+                }
             }
 
             if (m_changeQuestState)
