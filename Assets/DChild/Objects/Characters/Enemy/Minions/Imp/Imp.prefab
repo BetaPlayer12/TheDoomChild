@@ -239,6 +239,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_ai: {fileID: 6103959787482838146}
   m_positionReference: {fileID: 4796962487453610794}
+  m_distanceTolerance: 0
 --- !u!114 &6103959787482838146
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -251,9 +252,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 847a14d4dc9cc43679ab34fc78e0182f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  version: 2
-  repathRate: 0.5
-  canSearch: 1
+  version: 4
+  m_agent: {fileID: 0}
+  autoRepath:
+    mode: 1
+    period: 0.5
+    sensitivity: 10
+    maximumPeriod: 2
+    visualizeSensitivity: 0
   canMove: 1
   speed: 3
   orientation: 1
@@ -261,8 +267,9 @@ MonoBehaviour:
   rotationSpeed: 10
   interpolatePathSwitches: 1
   switchPathInterpolationSpeed: 5
-  tr: {fileID: 4796962487453610794}
   targetCompatibility: {fileID: 0}
+  repathRateCompatibility: 0.5
+  canSearchCompability: 1
 --- !u!1 &8479253365467983209
 GameObject:
   m_ObjectHideFlags: 0
@@ -715,7 +722,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   serializationData:
-    SerializedFormat: 2
+    SerializedFormat: 0
     SerializedBytes: 
     ReferencedUnityObjects: []
     SerializedBytesString: 

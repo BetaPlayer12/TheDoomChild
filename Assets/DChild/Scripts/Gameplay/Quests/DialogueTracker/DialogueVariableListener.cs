@@ -42,11 +42,15 @@ namespace DChild.Gameplay.Narrative
                 {
                     if (Lua.IsTrue(m_condition) == false)
                     {
+#if UNITY_EDITOR
                         m_lastCheck = false;
+#endif
                         return;
                     }
                 }
+#if UNITY_EDITOR
                 m_lastCheck = true;
+#endif
                 if (string.IsNullOrEmpty(m_script) == false)
                 {
                     Lua.Run(m_script);

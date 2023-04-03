@@ -33,7 +33,7 @@ namespace DChild.Gameplay.Essence
         {
             base.PickUp(player);
             m_hasBeenPickUp = true;
-            m_collision.enabled = false;
+            m_collision.isTrigger = true;
         }
 
 
@@ -107,6 +107,7 @@ namespace DChild.Gameplay.Essence
                         m_hasFallen = true;
                         m_rigidbody.gravityScale = m_fallGravity;
                         m_collision.enabled = true;
+                        m_collision.isTrigger = false;
                     }
                 }
                 else if (m_isFading)
@@ -127,7 +128,7 @@ namespace DChild.Gameplay.Essence
                 m_isFading = true;
                 m_timer = m_fadeAfterRestingDuration;
             }
-            
+
         }
     }
 }

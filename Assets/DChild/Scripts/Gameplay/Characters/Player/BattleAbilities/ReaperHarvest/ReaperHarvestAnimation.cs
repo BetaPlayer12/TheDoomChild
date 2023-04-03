@@ -16,6 +16,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 #if UNITY_EDITOR
         [SerializeField]
         private SkeletonAnimation m_skeletonAnimation;
+#endif
         [SerializeField]
         private float m_lifetime;
 
@@ -23,7 +24,6 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
         {
             m_spine = spineRoot;
         }
-#endif
         [SerializeField, Spine.Unity.SpineAnimation(dataField = "m_skeletonAnimation"), BoxGroup("Grounded")]
         private string m_startGroundedAnimation;
         [SerializeField, Spine.Unity.SpineAnimation(dataField = "m_skeletonAnimation"), BoxGroup("Grounded")]
@@ -59,7 +59,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
         {
             StartCoroutine(DisableRoutine());
         }
-        
+
         private IEnumerator DisableRoutine()
         {
             yield return new WaitForSeconds(m_lifetime);

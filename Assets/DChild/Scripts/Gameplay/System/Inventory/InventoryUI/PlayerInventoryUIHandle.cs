@@ -22,7 +22,7 @@ namespace DChild.Gameplay.Inventories.UI
         public void Select(ItemUI itemUI)
         {
             m_detailedUI.ShowDetails(itemUI.reference);
-            if (itemUI == null || itemUI.reference.data.category != ItemCategory.Consumable)
+            if ((itemUI?.reference?.data ?? null) == null || itemUI.reference.data.category != ItemCategory.Consumable)
             {
                 m_usableInventoryItemHandle.Hide();
             }
