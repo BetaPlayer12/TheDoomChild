@@ -204,6 +204,7 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_animation.DisableRootMotion();
             m_bodyCollider.enabled = false;
             m_startPos = transform.position;
+            m_hitbox.damageable.DamageTaken += OnTakesDamage;
 
             for (int i = 0; i < m_retreatPoints.retreatPoints.Length; i++)
             {
@@ -224,7 +225,6 @@ namespace DChild.Gameplay.Characters.Enemies
             m_flinchHandle.FlinchStart += OnFlinchStart;
             m_flinchHandle.FlinchEnd += OnFlinchEnd;
             m_turnHandle.TurnDone += OnTurnDone;
-            m_hitbox.damageable.DamageTaken += OnTakesDamage;
 
             //m_deathHandle?.SetAnimation(m_info.deathStartAnimation);
             m_stateHandle = new StateHandle<State>(State.Idle, State.WaitBehaviourEnd);
