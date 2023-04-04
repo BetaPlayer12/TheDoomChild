@@ -200,6 +200,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_ai: {fileID: 7753902791197925706}
   m_positionReference: {fileID: 7366053968408864181}
+  m_distanceTolerance: 0.01
 --- !u!114 &7753902791197925706
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -212,9 +213,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 847a14d4dc9cc43679ab34fc78e0182f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  version: 2
-  repathRate: 0.5
-  canSearch: 1
+  version: 4
+  m_agent: {fileID: 0}
+  autoRepath:
+    mode: 1
+    period: 0.5
+    sensitivity: 10
+    maximumPeriod: 2
+    visualizeSensitivity: 0
   canMove: 1
   speed: 3
   orientation: 1
@@ -222,8 +228,9 @@ MonoBehaviour:
   rotationSpeed: 10
   interpolatePathSwitches: 1
   switchPathInterpolationSpeed: 5
-  tr: {fileID: 7366053968408864181}
   targetCompatibility: {fileID: 0}
+  repathRateCompatibility: 0.5
+  canSearchCompability: 1
 --- !u!1 &1538474021877686887
 GameObject:
   m_ObjectHideFlags: 0

@@ -2912,6 +2912,7 @@ GameObject:
   - component: {fileID: 7812589514554589602}
   - component: {fileID: 7812589514554589603}
   - component: {fileID: 7812589514554589604}
+  - component: {fileID: 955367477242892729}
   - component: {fileID: 7812589514554589605}
   m_Layer: 0
   m_Name: Quest_RescueAlbin (COD2)
@@ -2965,7 +2966,7 @@ MonoBehaviour:
     onEnterState:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 2165997614464568050}
+        - m_Target: {fileID: 7776581049074895236}
           m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
           m_MethodName: SetActive
           m_Mode: 6
@@ -3013,7 +3014,7 @@ MonoBehaviour:
             m_IntArgument: 0
             m_FloatArgument: 0
             m_StringArgument: 
-            m_BoolArgument: 0
+            m_BoolArgument: 1
           m_CallState: 2
         - m_Target: {fileID: 7812589514408433832}
           m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
@@ -3075,7 +3076,7 @@ MonoBehaviour:
             m_IntArgument: 0
             m_FloatArgument: 0
             m_StringArgument: 
-            m_BoolArgument: 1
+            m_BoolArgument: 0
           m_CallState: 2
         - m_Target: {fileID: 7812589514408433832}
           m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
@@ -3102,7 +3103,32 @@ MonoBehaviour:
     onEnterState:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 2165997614464568050}
+        - m_Target: {fileID: 2088828136004434487}
+          m_TargetAssemblyTypeName: UnityEngine.Behaviour, UnityEngine
+          m_MethodName: set_enabled
+          m_Mode: 6
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+        - m_Target: {fileID: 632929161363033415}
+          m_TargetAssemblyTypeName: DChild.Gameplay.Environment.Interractables.Door,
+            Assembly-CSharp
+          m_MethodName: SetAsOpen
+          m_Mode: 6
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 1
+          m_CallState: 2
+        - m_Target: {fileID: 7776581049074895236}
           m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
           m_MethodName: SetActive
           m_Mode: 6
@@ -3143,7 +3169,32 @@ MonoBehaviour:
     onEnterState:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 2165997614464568050}
+        - m_Target: {fileID: 2088828136004434487}
+          m_TargetAssemblyTypeName: UnityEngine.Behaviour, UnityEngine
+          m_MethodName: set_enabled
+          m_Mode: 6
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+        - m_Target: {fileID: 632929161363033415}
+          m_TargetAssemblyTypeName: DChild.Gameplay.Environment.Interractables.Door,
+            Assembly-CSharp
+          m_MethodName: SetAsOpen
+          m_Mode: 6
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 1
+          m_CallState: 2
+        - m_Target: {fileID: 7776581049074895236}
           m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
           m_MethodName: SetActive
           m_Mode: 6
@@ -3172,6 +3223,21 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 7812589514704753890}
   - {fileID: 7812589514497339281}
+--- !u!114 &955367477242892729
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7812589514554589601}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7819787aa5c5c88429445bb9bfa3c544, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_toInitialize:
+  - {fileID: 7812589514758807063}
+  - {fileID: 7776581049074895236}
 --- !u!114 &7812589514554589605
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3456,7 +3522,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7812589514704753891}
-  - component: {fileID: 7812589514704753892}
   m_Layer: 0
   m_Name: QuestEntry_Pre_RescueAlbin
   m_TagString: Untagged
@@ -3481,22 +3546,6 @@ Transform:
   m_Father: {fileID: 7812589514554589602}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7812589514704753892
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7812589514704753890}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7819787aa5c5c88429445bb9bfa3c544, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_toInitialize:
-  - {fileID: 7812589514758807063}
-  - {fileID: 0}
-  - {fileID: 7776581049074895236}
 --- !u!1 &7812589514749658399
 GameObject:
   m_ObjectHideFlags: 0
