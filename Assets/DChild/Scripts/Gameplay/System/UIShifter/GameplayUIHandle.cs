@@ -31,6 +31,10 @@ namespace DChild.Gameplay.Systems
         [SerializeField, FoldoutGroup("Full Screen Notifications")]
         private UIContainer m_primarySkillNotification;
         [SerializeField, FoldoutGroup("Full Screen Notifications")]
+        private UIContainer m_soulSkillNotification;
+        [SerializeField, FoldoutGroup("Full Screen Notifications")]
+        private UIContainer m_journalDetailedNotification;
+        [SerializeField, FoldoutGroup("Full Screen Notifications")]
         private LoreInfoUI m_loreNotification;
         [SerializeField, FoldoutGroup("Full Screen Notifications")]
         private IItemNotificationUI[] m_itemNotifications;
@@ -61,6 +65,8 @@ namespace DChild.Gameplay.Systems
         private UIContainer m_journalNotification;
 
         [SerializeField]
+        private UIContainer m_playerHUD;
+        [SerializeField]
         private UIContainer m_skippableUI;
 
         [SerializeField, FoldoutGroup("Object Prompt")]
@@ -68,15 +74,19 @@ namespace DChild.Gameplay.Systems
         [SerializeField, FoldoutGroup("Object Prompt")]
         private UIContainer m_movableObjectPrompt;
 
-        public void ToggleCinematicMode(bool on)
+        public void ToggleCinematicMode(bool on, bool instant)
         {
             m_cinemaSignal.Payload.booleanValue = on;
             m_cinemaSignal.SendSignal();
+            if (on && instant)
+            {
+                m_playerHUD.InstantHide();
+            }
         }
 
-        public void UpdateNavMapConfiguration(Location location, Transform inGameReference, Vector2 mapReferencePoint, Vector2 calculationOffset)
+        public void UpdateNavMapConfiguration(Location location, int sceneIndex, Transform inGameReference, Vector2 mapReferencePoint, Vector2 calculationOffset)
         {
-            m_navMap.UpdateConfiguration(location, inGameReference, mapReferencePoint, calculationOffset);
+            m_navMap.UpdateConfiguration(location, sceneIndex, inGameReference, mapReferencePoint, calculationOffset);
         }
 
         public void OpenTradeWindow(NPCProfile merchantData, ITradeInventory merchantInventory, TradeAskingPrice merchantBuyingPriceRate)
@@ -126,6 +136,12 @@ namespace DChild.Gameplay.Systems
             m_fullScreenNotifSignal.SendSignal();
             m_primarySkillNotification.Show(true);
         }
+        [ContextMenu("Prompt/Soul Skill")]
+        public void PromptSoulSkillNotification()
+        {
+            m_fullScreenNotifSignal.SendSignal();
+            m_soulSkillNotification.Show(true);
+        }
 
         public void ShowItemNotification(ItemData itemData)
         {
@@ -138,6 +154,13 @@ namespace DChild.Gameplay.Systems
                     notification.ShowNotificationFor(itemData);
                 }
             }
+        }
+
+        public void PromptJournalUpdateNotification()
+        {
+            m_fullScreenNotifSignal.SendSignal();
+            m_journalDetailedNotification.Show(true);
+            m_journalNotification.Hide();
         }
 
         public void PromptKeystoneFragmentNotification()
@@ -253,10 +276,7 @@ namespace DChild.Gameplay.Systems
             m_loreNotification.Show();
         }
 
-        public void PromptJournalUpdateNotification()
-        {
-            GameEventMessage.SendEvent("Show JournalInfo");
-        }
+
 
         public void ShowLootChestItemAcquired(LootList lootList)
         {

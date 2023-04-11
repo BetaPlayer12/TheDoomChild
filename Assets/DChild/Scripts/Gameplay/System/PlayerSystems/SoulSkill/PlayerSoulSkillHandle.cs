@@ -59,7 +59,7 @@ namespace DChild.Gameplay.SoulSkills
                     m_activatedSkillsID.Add(data.activatedSoulSkills[i]);
                 }
 
-                m_currentSoulCapacity =  Mathf.Clamp(data.currentSoulCapacity, 0, m_maxSoulCapacity);
+                m_currentSoulCapacity = Mathf.Clamp(data.currentSoulCapacity, 0, m_maxSoulCapacity);
             }
 
             SaveDataLoaded?.Invoke(this, EventActionArgs.Empty);
@@ -85,6 +85,17 @@ namespace DChild.Gameplay.SoulSkills
                 return true;
             }
             return m_maxActivatedSoulSkill >= m_activatedSkillsID.Count + 1 && (m_currentSoulCapacity - soulSkill.capacity) >= 0;
+        }
+
+        public bool HasAcquired(SoulSkill soulSkill)
+        {
+            if (m_acquiredSkills == null)
+            {
+                //Temporary For Testing
+                return true;
+            }
+
+            return m_acquiredSkills.Contains(soulSkill.id);
         }
 
         public void AddAsActivated(SoulSkill soulSkill)

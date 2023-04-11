@@ -15,7 +15,7 @@ namespace Pathfinding {
 	/// See: editing-graphs (view in online documentation for working links)
 	/// </summary>
 	[AddComponentMenu("Pathfinding/Link")]
-	[HelpURL("http://arongranberg.com/astar/docs/class_pathfinding_1_1_node_link.php")]
+	[HelpURL("http://arongranberg.com/astar/documentation/stable/class_pathfinding_1_1_node_link.php")]
 	public class NodeLink : GraphModifier {
 		/// <summary>End position of the link</summary>
 		public Transform end;
@@ -93,7 +93,7 @@ namespace Pathfinding {
 			Draw.Gizmos.Bezier(Start.position, End.position, deleteConnection ? Color.red : Color.green);
 		}
 
-	#if UNITY_EDITOR
+#if UNITY_EDITOR
 		[UnityEditor.MenuItem("Edit/Pathfinding/Link Pair %&l")]
 		public static void LinkObjects () {
 			Transform[] tfs = Selection.transforms;
@@ -152,6 +152,6 @@ namespace Pathfinding {
 				}
 			}
 		}
-	#endif
+#endif
 	}
 }

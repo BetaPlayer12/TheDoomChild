@@ -7,11 +7,11 @@ namespace DChild.Gameplay.SoulSkills
     {
         public SoulSkillAcquiredEventArgs(SoulSkill skill) : this()
         {
-            this.skill = skill;
+            this.SoulSKill = skill;
         }
 
-        private SoulSkill skill { get; }
+        public SoulSkill SoulSKill { get; }
 
-        public int ID => skill.id;
+        public int ID => SoulSKill.id;
     }
 }

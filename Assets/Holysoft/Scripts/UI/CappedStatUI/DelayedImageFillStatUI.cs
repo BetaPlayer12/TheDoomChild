@@ -8,7 +8,7 @@ namespace Holysoft.Gameplay.UI
     public class DelayedImageFillStatUI : CappedStatUI
     {
         [SerializeField]
-        private Image m_stat;
+        private Image m_statImage;
         [SerializeField, MinValue(0)]
         private float m_syncDelay;
         [SerializeField, MinValue(0)]
@@ -25,13 +25,13 @@ namespace Holysoft.Gameplay.UI
                 StopAllCoroutines();
                 var uiValue = value / m_maxValue;
                 uiValue = float.IsNaN(uiValue) ? 0 : uiValue;
-                if (uiValue >= m_stat.fillAmount)
+                if (uiValue >= m_statImage.fillAmount)
                 {
-                    m_stat.fillAmount = uiValue;
+                    m_statImage.fillAmount = uiValue;
                 }
                 else
                 {
-                    StartCoroutine(SyncUIRoutine(m_stat.fillAmount, uiValue));
+                    StartCoroutine(SyncUIRoutine(m_statImage.fillAmount, uiValue));
                 }
                 previousCurrent = value;
             }
@@ -45,7 +45,7 @@ namespace Holysoft.Gameplay.UI
             do
             {
                 lerpValue += lerpSpeed * Time.unscaledDeltaTime;
-                m_stat.fillAmount = Mathf.Lerp(previousValue, currentValue, Mathf.Clamp01(lerpValue));
+                m_statImage.fillAmount = Mathf.Lerp(previousValue, currentValue, Mathf.Clamp01(lerpValue));
                 yield return null;
             } while (lerpValue < 1);
         }

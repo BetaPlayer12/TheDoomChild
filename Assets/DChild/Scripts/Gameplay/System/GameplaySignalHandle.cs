@@ -20,6 +20,11 @@ namespace DChild.Gameplay
             GameplaySystem.gamplayUIHandle.ToggleCinematicMode(value);
         }
 
+        public void ForceCinematicUIMode()
+        {
+            GameplaySystem.gamplayUIHandle.ToggleCinematicMode(true, true);
+        }
+
         public void ToggleBossCombatUI(bool value)
         {
             GameplaySystem.gamplayUIHandle.ToggleBossCombatUI(value);
@@ -61,7 +66,17 @@ namespace DChild.Gameplay
             CombatAIManager.instance?.ForbidAllFromAttackTarget(arePassive);
         }
 
-        public void TransferPlayerTo(LocationData locationData)
+        public void SmartTransferPlayerTo(LocationData locationData)
+        {
+            TransferPlayerTo(locationData, LoadingHandle.LoadType.Smart);
+        }
+
+        public void ForceTransferPlayerTo(LocationData locationData)
+        {
+            TransferPlayerTo(locationData, LoadingHandle.LoadType.Force);
+        }
+
+        private void TransferPlayerTo(LocationData locationData, LoadingHandle.LoadType loadType)
         {
             var playerManager = GameplaySystem.playerManager;
             var character = playerManager.player.character;
@@ -75,7 +90,7 @@ namespace DChild.Gameplay
             collisionState.forcedCurrentGroundedness = true;
 
 
-            LoadingHandle.SetLoadType(LoadingHandle.LoadType.Force);
+            LoadingHandle.SetLoadType(loadType);
             GameplaySystem.ResumeGame();
             GameSystem.LoadZone(locationData.sceneInfo, true, OnTransferPlayerDone);
         }

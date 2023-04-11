@@ -67,7 +67,7 @@ namespace Pathfinding.Voxels {
 
 			linkedSpanCount = width*depth;
 			LinkedVoxelSpan df = new LinkedVoxelSpan(InvalidSpanValue, InvalidSpanValue, -1, -1);
-			for (int i = 0; i < len; ) {
+			for (int i = 0; i < len;) {
 				// 16x unrolling, actually improves performance
 				linkedSpans[i] = df; i++;
 				linkedSpans[i] = df; i++;
