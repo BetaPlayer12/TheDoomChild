@@ -30,6 +30,11 @@ namespace DChild.Gameplay
             GameplaySystem.gamplayUIHandle.ToggleBossCombatUI(value);
         }
 
+        public void ToggleFadeUI(bool value)
+        {
+            GameplaySystem.gamplayUIHandle.ToggleFadeUI(value);
+        }
+
         public void MoveAudioListenerToPlayer()
         {
             GameplaySystem.audioListener.AttachToPlayer();
