@@ -28,11 +28,11 @@ namespace DChild.Gameplay.Inventories.QuickItem
         {
             if (obj.ReadValue<float>() == 1)
             {
-                if (GameplaySystem.isGamePaused == false && m_handle.hideUI == false && m_playerDamageable.isAlive)
+                if (m_isEnabled)
                 {
-                    m_allowCycle = false;
-                    if (m_isEnabled)
+                    if (GameplaySystem.isGamePaused == false && m_handle.hideUI == false && m_playerDamageable.isAlive)
                     {
+                        m_allowCycle = false;
                         m_handle.UseCurrentItem();
                     }
                 }
@@ -70,7 +70,7 @@ namespace DChild.Gameplay.Inventories.QuickItem
             var itemUse = m_itemUse.action;
             var itemCycle = m_itemCycle.action;
             actionMap.FindAction(itemUse.id).performed += OnUseAction;
-            actionMap.FindAction(itemCycle.id).performed+= OnCycleAction;
+            actionMap.FindAction(itemCycle.id).performed += OnCycleAction;
             m_allowCycle = true;
             m_isEnabled = true;
 
