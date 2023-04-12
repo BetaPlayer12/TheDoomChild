@@ -23,7 +23,7 @@ namespace DChild.Gameplay.Combat
             {
                 m_isTriggered = isTriggered;
             }
-           
+
 
             public bool isTriggered => m_isTriggered;
 
@@ -98,6 +98,7 @@ namespace DChild.Gameplay.Combat
 
         private void OnBossKilled(object sender, EventActionArgs eventArgs)
         {
+            GameplaySystem.gamplayUIHandle.ToggleBossCombatUI(false);
             m_onDefeat?.Invoke();
         }
 
