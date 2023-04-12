@@ -253,6 +253,10 @@ namespace DChild.Gameplay.Characters.Enemies
                     StartCoroutine(FlinchRoutine());
                 }
             }
+            else
+            {
+                m_stateHandle.ApplyQueuedState();
+            }
         }
 
         private IEnumerator FlinchRoutine()
@@ -432,10 +436,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     }
                     else
                     {
-                        if (m_animation.animationState.GetCurrent(0).IsComplete)
-                        {
-                            m_animation.SetAnimation(0, m_info.idleAnimation, true);
-                        }
+                        m_animation.SetAnimation(0, m_info.idleAnimation, true);
                     }
 
                     if (m_currentCD <= m_currentFullCD)
