@@ -257,6 +257,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator FlinchRoutine()
         {
+            m_animation.SetEmptyAnimation(0, 0);
             m_animation.SetAnimation(0, m_info.flinchAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.flinchAnimation);
             //m_animation.SetAnimation(0, m_info.idleAnimation, true);
