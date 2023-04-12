@@ -21059,6 +21059,68 @@ DistanceJoint2D:
   m_AutoConfigureDistance: 1
   m_Distance: 23.432592
   m_MaxDistanceOnly: 0
+--- !u!1 &5583211938920344943
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1127263008980526320}
+  - component: {fileID: 7151445657799699122}
+  m_Layer: 0
+  m_Name: DelayedEvent
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1127263008980526320
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5583211938920344943}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8558938448418326770}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7151445657799699122
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5583211938920344943}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b27a2c9621250448b4c59cc696a2970, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_delay:
+    m_startTime: 1
+  m_startOnAwake: 0
+  m_event:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 3445507811490755335}
+        m_TargetAssemblyTypeName: DChild.Gameplay.SavePoint, Assembly-CSharp
+        m_MethodName: SaveGame
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &5696201915264001247
 GameObject:
   m_ObjectHideFlags: 0
@@ -47142,7 +47204,7 @@ PlayableDirector:
   - key: {fileID: 4068176297969339576, guid: a5e12f8413a23594488cc99ffb7ea47e, type: 2}
     value: {fileID: 0}
   - key: {fileID: 1359016019995962148, guid: a5e12f8413a23594488cc99ffb7ea47e, type: 2}
-    value: {fileID: 0}
+    value: {fileID: 7924214599643817685}
   - key: {fileID: -2282421184719419811, guid: a5e12f8413a23594488cc99ffb7ea47e, type: 2}
     value: {fileID: 8558938448257077159}
   m_ExposedReferences:
@@ -47291,6 +47353,7 @@ Transform:
   m_Children:
   - {fileID: 1442741378620754387}
   - {fileID: 8558938446628692669}
+  - {fileID: 1127263008980526320}
   m_Father: {fileID: 8558938448529067250}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -47368,9 +47431,9 @@ MonoBehaviour:
   onExecute:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 3445507811490755335}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: SaveGame
+      - m_Target: {fileID: 7151445657799699122}
+        m_TargetAssemblyTypeName: Holysoft.DelayedEvent, HolysoftEditor
+        m_MethodName: StartEvent
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -47462,7 +47525,7 @@ MonoBehaviour:
             m_BoolArgument: 1
           m_CallState: 2
         - m_Target: {fileID: 0}
-          m_TargetAssemblyTypeName: 
+          m_TargetAssemblyTypeName: UnityEngine.Behaviour, UnityEngine
           m_MethodName: set_enabled
           m_Mode: 6
           m_Arguments:
@@ -47512,7 +47575,7 @@ MonoBehaviour:
             m_BoolArgument: 0
           m_CallState: 2
         - m_Target: {fileID: 0}
-          m_TargetAssemblyTypeName: 
+          m_TargetAssemblyTypeName: UnityEngine.Behaviour, UnityEngine
           m_MethodName: set_enabled
           m_Mode: 6
           m_Arguments:
