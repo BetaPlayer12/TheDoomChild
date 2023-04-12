@@ -245,7 +245,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 if (!IsFacingTarget())
                 {
                     if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
-                        m_stateHandle.SetState(State.Turning);
+                        CustomTurn();
                 }
 
                 else
@@ -259,7 +259,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_animation.SetAnimation(0, m_info.flinchAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.flinchAnimation);
-            m_animation.SetAnimation(0, m_info.idleAnimation, true);
+            //m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_stateHandle.ApplyQueuedState();
             yield return null;
         }
