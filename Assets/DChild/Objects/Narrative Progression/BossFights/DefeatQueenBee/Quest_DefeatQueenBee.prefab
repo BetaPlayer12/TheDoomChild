@@ -221,7 +221,7 @@ MonoBehaviour:
   useConversationTitlePicker: 1
   useBarkTitlePicker: 1
   useQuestNamePicker: 1
-  selectedDatabase: {fileID: 11400000, guid: f3fd31c06f9838f4f9d6d9a229755bd9, type: 2}
+  selectedDatabase: {fileID: 11400000, guid: 9b87b5385da1c804dadd6c0943501309, type: 2}
 --- !u!1 &7714922638839659396
 GameObject:
   m_ObjectHideFlags: 0
@@ -443,15 +443,15 @@ MonoBehaviour:
         m_Calls:
         - m_Target: {fileID: 0}
           m_TargetAssemblyTypeName: 
-          m_MethodName: set_enabled
-          m_Mode: 6
+          m_MethodName: 
+          m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_ObjectArgumentAssemblyTypeName: 
             m_IntArgument: 0
             m_FloatArgument: 0
             m_StringArgument: 
-            m_BoolArgument: 1
+            m_BoolArgument: 0
           m_CallState: 2
 --- !u!1 &9113494023995616644
 GameObject:
@@ -2395,6 +2395,7 @@ GameObject:
   - component: {fileID: 9113494025713086910}
   - component: {fileID: 9113494025713086909}
   - component: {fileID: 9113494025713086908}
+  - component: {fileID: 699250690}
   m_Layer: 0
   m_Name: QueenBee_Timeline_Model
   m_TagString: Untagged
@@ -2504,6 +2505,20 @@ MonoBehaviour:
   loop: 0
   timeScale: 1
   m_alwaysUpdateMesh: 1
+--- !u!114 &699250690
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9113494025713086906}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e809b506251fb743a8d7942c14ba4fd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_animation: {fileID: 0}
+  m_skeleton: {fileID: 9113494025713086908}
 --- !u!1 &9113494025781175054
 GameObject:
   m_ObjectHideFlags: 0
@@ -2742,6 +2757,8 @@ PlayableDirector:
     value: {fileID: 5489761297173495017}
   - key: {fileID: 3711338297675402997, guid: 3d25fe6031bc59e4d86ee39dac9871c4, type: 2}
     value: {fileID: 9113494025713086906}
+  - key: {fileID: 9062942956746191280, guid: 3d25fe6031bc59e4d86ee39dac9871c4, type: 2}
+    value: {fileID: 4771587415913062429}
   m_ExposedReferences:
     m_References:
     - f761153fb32c17942a4dbbd3443a88a3: {fileID: 9113494025538349765}
@@ -5287,6 +5304,18 @@ PrefabInstance:
     - {fileID: 4783231182232349421, guid: 92716628d8935d341a585446fb5a83ba, type: 3}
     - {fileID: 5682695945109939822, guid: 92716628d8935d341a585446fb5a83ba, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 92716628d8935d341a585446fb5a83ba, type: 3}
+--- !u!114 &196959813201210780 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8989782371823439030, guid: 92716628d8935d341a585446fb5a83ba,
+    type: 3}
+  m_PrefabInstance: {fileID: 9113494025498288426}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d247ba06193faa74d9335f5481b2b56c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!61 &726163160540910113 stripped
 BoxCollider2D:
   m_CorrespondingSourceObject: {fileID: 8388652547224400651, guid: 92716628d8935d341a585446fb5a83ba,
@@ -5299,6 +5328,18 @@ BoxCollider2D:
     type: 3}
   m_PrefabInstance: {fileID: 9113494025498288426}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &2422595864417731756 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6910607179033306502, guid: 92716628d8935d341a585446fb5a83ba,
+    type: 3}
+  m_PrefabInstance: {fileID: 9113494025498288426}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5489761297173495017}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 09352e9564b46104896226477f31b5b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &2499133218611837211 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6689840975319455793, guid: 92716628d8935d341a585446fb5a83ba,
@@ -5311,7 +5352,7 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 9113494025498288426}
   m_PrefabAsset: {fileID: 0}
---- !u!60 &4556395194850221276
+--- !u!60 &1413234901
 PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -5336,81 +5377,11 @@ PolygonCollider2D:
   m_AutoTiling: 0
   m_Points:
     m_Paths:
-    - - {x: 5.6647997, y: 5.7008}
-      - {x: 1.5136, y: 11.530799}
-      - {x: -11.8268, y: 5.5682}
-      - {x: -12.8073, y: 4.8427997}
-      - {x: -11.8284, y: 4.2290998}
-      - {x: 1.2729, y: -0.039}
-      - {x: 5.7027, y: 4.3545}
-      - {x: 6.3011, y: 4.8198}
---- !u!60 &8197660991991387314
-PolygonCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3409362861304935184}
-  m_Enabled: 0
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0, y: 0}
-    oldSize: {x: 0, y: 0}
-    newSize: {x: 0, y: 0}
-    adaptiveTilingThreshold: 0
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  m_Points:
-    m_Paths:
-    - - {x: -3.8585997, y: 3.3114002}
-      - {x: -11.6714, y: 3.3610997}
-      - {x: -14.495501, y: 3.4380999}
-      - {x: -17.1367, y: 3.6266}
-      - {x: -15.992099, y: 1.2405}
-      - {x: -10.9139, y: -5.0515}
-      - {x: 0.086799994, y: -7.2715}
-      - {x: -0.036199994, y: 5.8905997}
---- !u!60 &6587494349383152248
-PolygonCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3409362861304935184}
-  m_Enabled: 0
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0, y: 0}
-    oldSize: {x: 0, y: 0}
-    newSize: {x: 0, y: 0}
-    adaptiveTilingThreshold: 0
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  m_Points:
-    m_Paths:
-    - - {x: -15.053599, y: 6.0466995}
-      - {x: -15.5404005, y: 6.0371003}
-      - {x: -16.209, y: 5.5763}
-      - {x: -15.5404005, y: 5.0506}
-      - {x: -15.0601, y: 5.0506}
-      - {x: -5.2205997, y: 2.238}
-      - {x: -1.9489, y: 5.5568}
-      - {x: -5.2205997, y: 8.8691}
---- !u!60 &19259597318055102
+    - - {x: -8.6684, y: 2.852}
+      - {x: -8.6689, y: -0.4597}
+      - {x: 8.876699, y: -0.517}
+      - {x: 8.8971, y: 2.8013}
+--- !u!60 &1413234902
 PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -5443,7 +5414,7 @@ PolygonCollider2D:
       - {x: 0.92199993, y: 0.40060002}
       - {x: 2.7660997, y: 3.8917}
       - {x: 2.8079, y: 12.7417}
---- !u!60 &8077922044991636676
+--- !u!60 &1413234903
 PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -5468,10 +5439,80 @@ PolygonCollider2D:
   m_AutoTiling: 0
   m_Points:
     m_Paths:
-    - - {x: -8.6684, y: 2.852}
-      - {x: -8.6689, y: -0.4597}
-      - {x: 8.876699, y: -0.517}
-      - {x: 8.8971, y: 2.8013}
+    - - {x: -15.053599, y: 6.0466995}
+      - {x: -15.5404005, y: 6.0371003}
+      - {x: -16.209, y: 5.5763}
+      - {x: -15.5404005, y: 5.0506}
+      - {x: -15.0601, y: 5.0506}
+      - {x: -5.2205997, y: 2.238}
+      - {x: -1.9489, y: 5.5568}
+      - {x: -5.2205997, y: 8.8691}
+--- !u!60 &1413234904
+PolygonCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3409362861304935184}
+  m_Enabled: 0
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Points:
+    m_Paths:
+    - - {x: -3.8585997, y: 3.3114002}
+      - {x: -11.6714, y: 3.3610997}
+      - {x: -14.495501, y: 3.4380999}
+      - {x: -17.1367, y: 3.6266}
+      - {x: -15.992099, y: 1.2405}
+      - {x: -10.9139, y: -5.0515}
+      - {x: 0.086799994, y: -7.2715}
+      - {x: -0.036199994, y: 5.8905997}
+--- !u!60 &1413234905
+PolygonCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3409362861304935184}
+  m_Enabled: 0
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Points:
+    m_Paths:
+    - - {x: 5.6647997, y: 5.7008}
+      - {x: 1.5136, y: 11.530799}
+      - {x: -11.8268, y: 5.5682}
+      - {x: -12.8073, y: 4.8427997}
+      - {x: -11.8284, y: 4.2290998}
+      - {x: 1.2729, y: -0.039}
+      - {x: 5.7027, y: 4.3545}
+      - {x: 6.3011, y: 4.8198}
 --- !u!61 &4251968515762292343 stripped
 BoxCollider2D:
   m_CorrespondingSourceObject: {fileID: 5006776081610467165, guid: 92716628d8935d341a585446fb5a83ba,
@@ -5484,6 +5525,20 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 9113494025498288426}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &693240569
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5489761297173495017}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e809b506251fb743a8d7942c14ba4fd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_animation: {fileID: 2422595864417731756}
+  m_skeleton: {fileID: 196959813201210780}
 --- !u!61 &5725028214051099089 stripped
 BoxCollider2D:
   m_CorrespondingSourceObject: {fileID: 3533848324230787323, guid: 92716628d8935d341a585446fb5a83ba,
@@ -5536,18 +5591,24 @@ PrefabInstance:
     - target: {fileID: 4341953820339255750, guid: 56eb428e38177b84e9d06d5b9d5bdd30,
         type: 3}
       propertyPath: m_Events.m_Events.Array.size
-      value: 6
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 4341953820339255750, guid: 56eb428e38177b84e9d06d5b9d5bdd30,
         type: 3}
       propertyPath: m_Events.m_Signals.Array.size
-      value: 6
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 4341953820339255750, guid: 56eb428e38177b84e9d06d5b9d5bdd30,
         type: 3}
       propertyPath: m_Events.m_Signals.Array.data[5]
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 4341953820339255750, guid: 56eb428e38177b84e9d06d5b9d5bdd30,
+        type: 3}
+      propertyPath: m_Events.m_Signals.Array.data[6]
+      value: 
+      objectReference: {fileID: 11400000, guid: 3bbc12e5460c3ee4b84b1da3923d7f2b,
+        type: 2}
     - target: {fileID: 4341953820339255750, guid: 56eb428e38177b84e9d06d5b9d5bdd30,
         type: 3}
       propertyPath: m_Events.m_Events.Array.data[0].m_PersistentCalls.m_Calls.Array.size
@@ -5645,6 +5706,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4341953820339255750, guid: 56eb428e38177b84e9d06d5b9d5bdd30,
         type: 3}
+      propertyPath: m_Events.m_Events.Array.data[6].m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4341953820339255750, guid: 56eb428e38177b84e9d06d5b9d5bdd30,
+        type: 3}
       propertyPath: m_Events.m_Events.Array.data[0].m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
       objectReference: {fileID: 2032099563372837152}
@@ -5713,6 +5779,11 @@ PrefabInstance:
       propertyPath: m_Events.m_Events.Array.data[5].m_PersistentCalls.m_Calls.Array.data[2].m_Target
       value: 
       objectReference: {fileID: 207854583110021443}
+    - target: {fileID: 4341953820339255750, guid: 56eb428e38177b84e9d06d5b9d5bdd30,
+        type: 3}
+      propertyPath: m_Events.m_Events.Array.data[6].m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 699250690}
     - target: {fileID: 4341953820339255750, guid: 56eb428e38177b84e9d06d5b9d5bdd30,
         type: 3}
       propertyPath: m_Events.m_Events.Array.data[0].m_PersistentCalls.m_Calls.Array.data[1].m_CallState
@@ -5845,6 +5916,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4341953820339255750, guid: 56eb428e38177b84e9d06d5b9d5bdd30,
         type: 3}
+      propertyPath: m_Events.m_Events.Array.data[6].m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: SyncWith
+      objectReference: {fileID: 0}
+    - target: {fileID: 4341953820339255750, guid: 56eb428e38177b84e9d06d5b9d5bdd30,
+        type: 3}
+      propertyPath: m_Events.m_Events.Array.data[6].m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: DChild.Visuals.SpineSyncer, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 4341953820339255750, guid: 56eb428e38177b84e9d06d5b9d5bdd30,
+        type: 3}
       propertyPath: m_Events.m_Events.Array.data[0].m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_BoolArgument
       value: 1
       objectReference: {fileID: 0}
@@ -5905,6 +5986,21 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4341953820339255750, guid: 56eb428e38177b84e9d06d5b9d5bdd30,
         type: 3}
+      propertyPath: m_Events.m_Events.Array.data[6].m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_BoolArgument
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4341953820339255750, guid: 56eb428e38177b84e9d06d5b9d5bdd30,
+        type: 3}
+      propertyPath: m_Events.m_Events.Array.data[6].m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgument
+      value: 
+      objectReference: {fileID: 693240569}
+    - target: {fileID: 4341953820339255750, guid: 56eb428e38177b84e9d06d5b9d5bdd30,
+        type: 3}
+      propertyPath: m_Events.m_Events.Array.data[6].m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_StringArgument
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4341953820339255750, guid: 56eb428e38177b84e9d06d5b9d5bdd30,
+        type: 3}
       propertyPath: m_Events.m_Events.Array.data[0].m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
@@ -5962,6 +6058,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Events.m_Events.Array.data[5].m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 4341953820339255750, guid: 56eb428e38177b84e9d06d5b9d5bdd30,
+        type: 3}
+      propertyPath: m_Events.m_Events.Array.data[6].m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: DChild.Visuals.SpineSyncer, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 6075451112972445386, guid: 56eb428e38177b84e9d06d5b9d5bdd30,
         type: 3}
