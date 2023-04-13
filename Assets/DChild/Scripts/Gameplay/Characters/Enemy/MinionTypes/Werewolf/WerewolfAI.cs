@@ -119,6 +119,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private float m_currentPatience;
         private bool m_enablePatience;
         private bool m_isDetecting;
+        private bool m_isAttacking;
         private float m_currentCD;
         private float m_currentFullCD;
         private float m_currentMoveSpeed;
@@ -151,6 +152,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.DisableRootMotion();
             m_flinchHandle.m_autoFlinch = true;
             m_flinchHandle.m_enableMixFlinch = true;
+            m_isAttacking = false;
             m_stateHandle.ApplyQueuedState();
         }
 
@@ -238,35 +240,27 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnFlinchStart(object sender, EventActionArgs eventArgs)
         {
-            StopAllCoroutines();
-            m_stateHandle.Wait(m_targetInfo.isValid ? State.Cooldown : State.ReevaluateSituation);
-            if (m_targetInfo.isValid)
+            if (!m_isAttacking && m_stateHandle.currentState != State.Chasing)
             {
-                if (!IsFacingTarget())
+                m_stateHandle.Wait(m_targetInfo.isValid ? State.Cooldown : State.ReevaluateSituation);
+                if (m_targetInfo.isValid)
                 {
-                    if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
+                    if (!IsFacingTarget())
+                    {
                         CustomTurn();
+                    }
                 }
-
-                else
-                {
-                    StartCoroutine(FlinchRoutine());
-                }
-            }
-            else
-            {
-                m_stateHandle.ApplyQueuedState();
             }
         }
 
-        private IEnumerator FlinchRoutine()
+        private void OnFlinchEnd(object sender, EventActionArgs eventArgs)
         {
-            m_animation.SetEmptyAnimation(0, 0);
-            m_animation.SetAnimation(0, m_info.flinchAnimation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.flinchAnimation);
-            //m_animation.SetAnimation(0, m_info.idleAnimation, true);
-            m_stateHandle.ApplyQueuedState();
-            yield return null;
+            if (!m_isAttacking && m_stateHandle.currentState != State.Chasing )
+            {
+                m_isAttacking = false;
+                m_animation.SetEmptyAnimation(0, 0);
+                m_stateHandle.ApplyQueuedState();
+            }
         }
 
         public override void ApplyData()
@@ -287,8 +281,10 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator DetectRoutine()
         {
+            m_isAttacking = true;
             m_animation.SetAnimation(0, m_info.detectAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.detectAnimation);
+            m_isAttacking = false;
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_stateHandle.OverrideState(State.ReevaluateSituation);
             yield return null;
@@ -356,11 +352,11 @@ namespace DChild.Gameplay.Characters.Enemies
             m_turnHandle.TurnDone += OnTurnDone;
             m_deathHandle.SetAnimation(m_info.deathAnimation);
             m_flinchHandle.FlinchStart += OnFlinchStart;
+            m_flinchHandle.FlinchEnd += OnFlinchEnd;
             m_stateHandle = new StateHandle<State>(State.Patrol, State.WaitBehaviourEnd);
             m_attackDecider = new RandomAttackDecider<Attack>();
             UpdateAttackDeciderList();
         }
-
 
         private void Update()
         {
@@ -408,7 +404,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
                 case State.Attacking:
                     m_stateHandle.Wait(State.Cooldown);
-                    m_flinchHandle.m_enableMixFlinch = false;
+                    //m_flinchHandle.m_enableMixFlinch = false;
+                    m_isAttacking = true;
 
                     switch (m_attackDecider.chosenAttack.attack)
                     {
@@ -564,6 +561,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             //enabled = false;
             //m_flinchHandle.m_autoFlinch = false;
+            m_isAttacking = false;
             m_animation.DisableRootMotion();
             m_characterPhysics.UseStepClimb(false);
             if (m_animation.GetCurrentAnimation(0).ToString() != m_info.deathAnimation)
