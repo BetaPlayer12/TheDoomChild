@@ -1,7 +1,5 @@
 using UnityEngine;
-#if UNITY_5_5_OR_NEWER
 using UnityEngine.Profiling;
-#endif
 
 namespace Pathfinding.RVO {
 	using Pathfinding.Util;
@@ -23,7 +21,7 @@ namespace Pathfinding.RVO {
 	/// </summary>
 	[ExecuteInEditMode]
 	[AddComponentMenu("Pathfinding/Local Avoidance/RVO Simulator")]
-	[HelpURL("http://arongranberg.com/astar/docs/class_pathfinding_1_1_r_v_o_1_1_r_v_o_simulator.php")]
+	[HelpURL("http://arongranberg.com/astar/documentation/stable/class_pathfinding_1_1_r_v_o_1_1_r_v_o_simulator.php")]
 	public class RVOSimulator : VersionedMonoBehaviour {
 		/// <summary>First RVOSimulator in the scene (usually there is only one)</summary>
 		public static RVOSimulator active { get; private set; }
@@ -35,8 +33,8 @@ namespace Pathfinding.RVO {
 		/// The rvo simulation will never run at a higher fps than the game
 		/// </summary>
 		[Tooltip("Desired FPS for rvo simulation. It is usually not necessary to run a crowd simulation at a very high fps.\n" +
-			 "Usually 10-30 fps is enough, but can be increased for better quality.\n"+
-			 "The rvo simulation will never run at a higher fps than the game")]
+			"Usually 10-30 fps is enough, but can be increased for better quality.\n"+
+			"The rvo simulation will never run at a higher fps than the game")]
 		public int desiredSimulationFPS = 20;
 
 		/// <summary>
@@ -57,16 +55,16 @@ namespace Pathfinding.RVO {
 		/// See: Pathfinding.RVO.Simulator.DoubleBuffering
 		/// </summary>
 		[Tooltip("Calculate local avoidance in between frames.\nThis can increase jitter in the agents' movement so use it only if you really need the performance boost. " +
-			 "It will also reduce the responsiveness of the agents to the commands you send to them.")]
+			"It will also reduce the responsiveness of the agents to the commands you send to them.")]
 		public bool doubleBuffering;
 
 		/// <summary>\copydoc Pathfinding::RVO::Simulator::symmetryBreakingBias</summary>
 		[Tooltip("Bias agents to pass each other on the right side.\n" +
-			 "If the desired velocity of an agent puts it on a collision course with another agent or an obstacle " +
-			 "its desired velocity will be rotated this number of radians (1 radian is approximately 57°) to the right. " +
-			 "This helps to break up symmetries and makes it possible to resolve some situations much faster.\n\n" +
-			 "When many agents have the same goal this can however have the side effect that the group " +
-			 "clustered around the target point may as a whole start to spin around the target point.")]
+			"If the desired velocity of an agent puts it on a collision course with another agent or an obstacle " +
+			"its desired velocity will be rotated this number of radians (1 radian is approximately 57°) to the right. " +
+			"This helps to break up symmetries and makes it possible to resolve some situations much faster.\n\n" +
+			"When many agents have the same goal this can however have the side effect that the group " +
+			"clustered around the target point may as a whole start to spin around the target point.")]
 		[Range(0, 0.2f)]
 		public float symmetryBreakingBias = 0.1f;
 
@@ -105,6 +103,9 @@ namespace Pathfinding.RVO {
 
 		protected override void Awake () {
 			base.Awake();
+			// We need to set active during Awake as well to ensure it is set when graphs are being scanned.
+			// That is important if the RVONavmesh component is being used.
+			active = this;
 			if (simulator == null && Application.isPlaying) {
 				int threadCount = AstarPath.CalculateThreadCount(workerThreads);
 				simulator = new Pathfinding.RVO.Simulator(threadCount, doubleBuffering, movementPlane);
