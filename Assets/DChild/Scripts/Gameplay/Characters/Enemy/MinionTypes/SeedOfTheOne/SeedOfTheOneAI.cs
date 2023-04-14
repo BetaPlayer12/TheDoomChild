@@ -128,10 +128,6 @@ namespace DChild.Gameplay.Characters.Enemies
             m_rigidbody2D.constraints = RigidbodyConstraints2D.FreezeRotation;
             m_stateHandle.Wait(State.ReevaluateSituation);
             StopAllCoroutines();
-            //if (m_animation.GetCurrentAnimation(0).ToString() == m_info.idleAnimation)
-            //{
-            //    //m_animation.SetAnimation(0, m_info.flinchAnimation, false);
-            //}
         }
 
         private void OnFlinchEnd(object sender, EventActionArgs eventArgs)
@@ -204,6 +200,7 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_animation.DisableRootMotion();
             m_bodyCollider.enabled = false;
             m_startPos = transform.position;
+            m_hitbox.damageable.DamageTaken += OnTakesDamage;
 
             for (int i = 0; i < m_retreatPoints.retreatPoints.Length; i++)
             {
@@ -224,7 +221,6 @@ namespace DChild.Gameplay.Characters.Enemies
             m_flinchHandle.FlinchStart += OnFlinchStart;
             m_flinchHandle.FlinchEnd += OnFlinchEnd;
             m_turnHandle.TurnDone += OnTurnDone;
-            m_hitbox.damageable.DamageTaken += OnTakesDamage;
 
             //m_deathHandle?.SetAnimation(m_info.deathStartAnimation);
             m_stateHandle = new StateHandle<State>(State.Idle, State.WaitBehaviourEnd);
@@ -330,9 +326,10 @@ namespace DChild.Gameplay.Characters.Enemies
             m_agent.SetDestination(retreatPoint);
             m_isRetreating = true;
 
-            while (m_isRetreating)
+            while(m_isRetreating)
             {
                 m_agent.Move(m_info.panic.speed);
+
                 yield return null;
             }
 

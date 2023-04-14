@@ -125,14 +125,6 @@ namespace DChild.Gameplay.Characters.Enemies
         private DeathHandle m_deathHandle;
         [SerializeField, TabGroup("Modules")]
         private FlinchHandler m_flinchHandle;
-        [SerializeField, TabGroup("Sensors")]
-        private RaySensor m_selfSensor;
-        [SerializeField, TabGroup("Sensors")]
-        private RaySensor m_floorSensor;
-        [SerializeField, TabGroup("Sensors")]
-        private RaySensor m_roofSensor;
-        [SerializeField, TabGroup("Sensors")]
-        private RaySensor m_wallSensor;
 
         [SerializeField]
         private bool m_willPatrol;
@@ -468,69 +460,20 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return null;
         }
 
-        private void DynamicMovement(Vector2 target, float movespeed)
+        private void DynamicMovement(Vector2 target, float moveSpeed)
         {
             var rb2d = GetComponent<Rigidbody2D>();
             m_agent.SetDestination(target);
-
-            if (/*m_wallSensor.allRaysDetecting ||*/ m_selfSensor.isDetecting)
+            if (IsFacing(target))
             {
-                if (!IsFacingTarget())
-                {
-                    CustomTurn();
-                }
-                //m_bodyCollider.SetActive(true);
-                m_agent.Stop();
-                rb2d.isKinematic = false;
-                m_animation.SetAnimation(0, m_info.idleAnimation, true);
-                return;
-            }
-
-            if (IsFacing(m_agent.hasPath && TargetBlocked() && !m_floorSensor.allRaysDetecting && !m_roofSensor.allRaysDetecting ? m_agent.segmentDestination : m_targetInfo.position))
-            {
-                if (!m_wallSensor.allRaysDetecting && (m_floorSensor.allRaysDetecting || m_roofSensor.allRaysDetecting))
-                {
-                    m_bodyCollider.enabled = false;
-                    m_agent.Stop();
-                    Vector3 dir = (target - (Vector2)rb2d.transform.position).normalized;
-                    rb2d.MovePosition(rb2d.transform.position + dir * movespeed * Time.fixedDeltaTime);
-
-                    m_animation.SetAnimation(0, m_info.move.animation, true);
-                    return;
-                }
-                
-                m_bodyCollider.enabled = true;
-                var velocityX = GetComponent<IsolatedPhysics2D>().velocity.x;
-                var velocityY = GetComponent<IsolatedPhysics2D>().velocity.y;
-                m_agent.SetDestination(target);
-                m_agent.Move(movespeed);
-
-                m_animation.SetAnimation(0, m_info.move.animation, true);
+                m_agent.Move(moveSpeed);
             }
             else
             {
-                m_turnState = State.ReevaluateSituation;
                 m_stateHandle.OverrideState(State.Turning);
             }
+
         }
-
-        //private void DynamicMovement(Vector2 target)
-        //{
-        //    if (IsFacingTarget())
-        //    {
-        //        var velocityX = GetComponent<IsolatedPhysics2D>().velocity.x;
-        //        var velocityY = GetComponent<IsolatedPhysics2D>().velocity.y;
-        //        m_agent.SetDestination(target);
-        //        m_agent.Move(m_info.move.speed);
-
-        //        m_animation.SetAnimation(0, m_info.move.animation, true);
-        //    }
-        //    else
-        //    {
-        //        m_turnState = State.Attacking;
-        //        m_stateHandle.OverrideState(State.Turning);
-        //    }
-        //}
         #endregion
 
         protected override void Start()
