@@ -65,17 +65,25 @@ namespace DChild.Gameplay.Systems
         private UIContainer m_journalNotification;
 
         [SerializeField]
+        private UIContainer m_playerHUD;
+        [SerializeField]
         private UIContainer m_skippableUI;
+        [SerializeField]
+        private UIContainer m_fadeUI;
 
         [SerializeField, FoldoutGroup("Object Prompt")]
         private UIContainer m_interactablePrompt;
         [SerializeField, FoldoutGroup("Object Prompt")]
         private UIContainer m_movableObjectPrompt;
 
-        public void ToggleCinematicMode(bool on)
+        public void ToggleCinematicMode(bool on, bool instant)
         {
             m_cinemaSignal.Payload.booleanValue = on;
             m_cinemaSignal.SendSignal();
+            if (on && instant)
+            {
+                m_playerHUD.InstantHide();
+            }
         }
 
         public void UpdateNavMapConfiguration(Location location, int sceneIndex, Transform inGameReference, Vector2 mapReferencePoint, Vector2 calculationOffset)
@@ -182,8 +190,18 @@ namespace DChild.Gameplay.Systems
                 m_bossCombat.HideBossHealth();
                 m_bossCombat.HideBossName();
             }
+        }
 
-
+        public void ToggleFadeUI(bool willshow)
+        {
+            if (willshow)
+            {
+                m_fadeUI.Show();
+            }
+            else
+            {
+                m_fadeUI.Hide();
+            }
         }
 
         public void RevealBossName()
@@ -321,5 +339,7 @@ namespace DChild.Gameplay.Systems
         {
             m_regen.ShadowRegenEffect(false);
         }
+
+
     }
 }
