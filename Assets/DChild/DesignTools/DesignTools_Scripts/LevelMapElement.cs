@@ -13,9 +13,12 @@ namespace DChildEditor.DesignTool.LevelMap
         private bool m_lockIndex;
         [SerializeField, ShowIf("lockIndex"), FoldoutGroup("Configuration")]
         private int m_index;
+        [SerializeField, ReadOnly]
+        private string m_elementName;
 
         public bool lockIndex => m_lockIndex;
         public int index => m_index;
+        public string elementName => m_elementName;
 
         public void SetDisplay(string prefix, int index)
         {
@@ -27,9 +30,10 @@ namespace DChildEditor.DesignTool.LevelMap
             }
             name += m_index;
 
-            gameObject.name = name;
-            m_label.text = name;
-            m_label.gameObject.name = name + "(Label)";
+            m_elementName = name;
+            gameObject.name = m_elementName;
+            m_label.text = m_elementName;
+            m_label.gameObject.name = m_elementName + "(Label)";
         }
 
         public void SetLockIndex(bool lockIndex)

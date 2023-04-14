@@ -1,19 +1,24 @@
 ﻿using UnityEngine;
 using Sirenix.OdinInspector;
+using DChildEditor.DesignTool.LevelMap;
 
-public class ScreenshotContentManager : MonoBehaviour
+namespace DChildEditor.DesignTool.LevelMap.Screenshot
 {
-    [SerializeField, ChildGameObjectsOnly]
-    private Transform[] m_contents;
-
-    public void InitializeContent()
+    public class ScreenshotContentManager : MonoBehaviour
     {
-        transform.parent?.GetComponentInParent<ScreenshotContentManager>()?.InitializeContent();
-        for (int i = 0; i < m_contents.Length; i++)
-        {
-            m_contents[i].gameObject.SetActive(false);
-        }
+        [SerializeField, ChildGameObjectsOnly]
+        private Transform[] m_contents;
 
-        gameObject.SetActive(true);
+        public void InitializeContent()
+        {
+            transform.parent?.GetComponentInParent<ScreenshotContentManager>()?.InitializeContent();
+            for (int i = 0; i < m_contents.Length; i++)
+            {
+                m_contents[i].gameObject.SetActive(false);
+            }
+
+            gameObject.SetActive(true);
+        }
     }
+
 }

@@ -2,44 +2,47 @@
 using UnityEngine;
 using Sirenix.OdinInspector;
 
-public class ScreenShotHandle : MonoBehaviour
+namespace DChildEditor.DesignTool.LevelMap.Screenshot
 {
-    [SerializeField]
-    private GameObject m_content;
-    [SerializeField]
-    private Vector2Int m_resolution;
-    [SerializeField, FolderPath]
-    private string m_filePathDestination;
-    [SerializeField]
-    private string m_fileName;
-
-    private const string displayName = "Map";
-
-    [Button]
-    public void SetForScreenshot()
+    public class ScreenShotHandle : MonoBehaviour
     {
-        m_content.GetComponentInParent<ScreenshotContentManager>().InitializeContent();
-        m_content.SetActive(true);
+        [SerializeField]
+        private GameObject m_content;
+        [SerializeField]
+        private Vector2Int m_resolution;
+        [SerializeField, FolderPath]
+        private string m_filePathDestination;
+        [SerializeField]
+        private string m_fileName;
 
-        var existingSizeIndex = GameViewUtils.FindSize(GameViewSizeGroupType.Standalone, m_resolution.x, m_resolution.y);
-        if (existingSizeIndex != -1)
+        private const string displayName = "Map";
+
+        [Button]
+        public void SetForScreenshot()
         {
-            GameViewUtils.SetSize(existingSizeIndex);
-            return;
+            m_content.GetComponentInParent<ScreenshotContentManager>().InitializeContent();
+            m_content.SetActive(true);
+
+            var existingSizeIndex = GameViewUtils.FindSize(GameViewSizeGroupType.Standalone, m_resolution.x, m_resolution.y);
+            if (existingSizeIndex != -1)
+            {
+                GameViewUtils.SetSize(existingSizeIndex);
+                return;
+            }
+
+            existingSizeIndex = GameViewUtils.FindSize(GameViewSizeGroupType.Standalone, displayName);
+            if (existingSizeIndex != -1)
+            {
+                GameViewUtils.RemoveCustomSize(GameViewSizeGroupType.Standalone, displayName);
+            }
+            GameViewUtils.AddAndSelectCustomSize(GameViewUtils.GameViewSizeType.FixedResolution, GameViewSizeGroupType.Standalone, m_resolution.x, m_resolution.y, displayName);
         }
 
-        existingSizeIndex = GameViewUtils.FindSize(GameViewSizeGroupType.Standalone, displayName);
-        if (existingSizeIndex != -1)
+        [Button]
+        public void CaptureScreen()
         {
-            GameViewUtils.RemoveCustomSize(GameViewSizeGroupType.Standalone, displayName);
+            SetForScreenshot();
+            ScreenCapture.CaptureScreenshot($"{m_filePathDestination}/{m_fileName}.png");
         }
-        GameViewUtils.AddAndSelectCustomSize(GameViewUtils.GameViewSizeType.FixedResolution, GameViewSizeGroupType.Standalone, m_resolution.x, m_resolution.y, displayName);
-    }
-
-    [Button]
-    public void CaptureScreen()
-    {
-        SetForScreenshot();
-        ScreenCapture.CaptureScreenshot($"{m_filePathDestination}/{m_fileName}.png");
-    }
+    } 
 }
