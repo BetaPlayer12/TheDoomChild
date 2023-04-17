@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using DChild;
 using DChild.Gameplay.Characters.Enemies;
 using DChild.Gameplay.Environment;
+using UnityEngine.Rendering.Universal;
 
 namespace DChild.Gameplay.Characters.Enemies
 {
@@ -138,6 +139,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private Hitbox m_hitbox;
         [SerializeField, TabGroup("Reference")]
         private Collider2D m_selfCollider;
+        [SerializeField, TabGroup("Reference")]
+        private Light2D m_pointLight;
         [SerializeField, TabGroup("Modules")]
         private AnimatedTurnHandle m_turnHandle;
         [SerializeField, TabGroup("Modules")]
@@ -324,6 +327,7 @@ namespace DChild.Gameplay.Characters.Enemies
             if (m_animation.GetCurrentAnimation(0).ToString() != m_info.idleAnimation)
                 m_movement.Stop();
 
+            m_pointLight.enabled = false;
             m_flinchHandle.gameObject.SetActive(false);
             m_animation.SetEmptyAnimation(0, 0);
             m_animation.SetEmptyAnimation(1, 0);
@@ -345,6 +349,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_health.SetHealthPercentage(1f);
             m_hitbox.Enable();
             enabled = true;
+            m_pointLight.enabled = true;
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_stateHandle.OverrideState(m_targetInfo.isValid ? State.Detect : State.Mining);
             yield return null;

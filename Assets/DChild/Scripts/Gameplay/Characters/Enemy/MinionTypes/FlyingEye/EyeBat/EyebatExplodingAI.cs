@@ -114,14 +114,6 @@ namespace DChild.Gameplay.Characters.Enemies
         private PatrolHandle m_patrolHandle;
         [SerializeField, TabGroup("Modules")]
         private FlinchHandler m_flinchHandle;
-        [SerializeField, TabGroup("Sensors")]
-        private RaySensor m_groundSensor;
-        [SerializeField, TabGroup("Sensors")]
-        private RaySensor m_wallSensor;
-        [SerializeField, TabGroup("Sensors")]
-        private RaySensor m_roofSensor;
-        [SerializeField, TabGroup("Sensors")]
-        private RaySensor m_selfSensor;
         [SerializeField, TabGroup("Hurtbox")]
         private Collider2D m_explodeBB;
 
@@ -369,54 +361,12 @@ namespace DChild.Gameplay.Characters.Enemies
         private void DynamicMovement(Vector2 target, float moveSpeed)
         {
             m_agent.SetDestination(target);
-
-            if (/*m_wallSensor.allRaysDetecting ||*/ m_selfSensor.isDetecting)
+            if (IsFacing(target))
             {
-                if (!IsFacingTarget())
-                {
-                    CustomTurn();
-                }
-                //m_bodyCollider.SetActive(true);
-                m_agent.Stop();
-                m_animation.SetAnimation(0, m_info.idleAnimation, true);
-                return;
-            }
-
-            if (IsFacing(m_agent.hasPath && TargetBlocked() && !m_groundSensor.allRaysDetecting && !m_roofSensor.allRaysDetecting ? m_agent.segmentDestination : target))
-            {
-                if (m_animation.animationState.GetCurrent(0).IsComplete)
-                {
-                    var chosenMoveAnim = UnityEngine.Random.Range(0, 50) > 10 ? m_info.idleAnimation : m_info.move.animation;
-                    m_animation.SetAnimation(0, chosenMoveAnim, true);
-                }
-
-                if (!m_wallSensor.allRaysDetecting && (m_groundSensor.allRaysDetecting || m_roofSensor.allRaysDetecting))
-                {
-                    //if (m_executeMoveCoroutine != null)
-                    //{
-                    //    StopCoroutine(m_executeMoveCoroutine);
-                    //    m_executeMoveCoroutine = null;
-                    //}
-                    //StartCoroutine(DespawnRoutine());
-                    //Vector3.MoveTowards(transform.position, m_targetInfo.position, m_info.move.speed);
-                    m_bodycollider.enabled = false;
-                    m_agent.Stop();
-                    Vector3 dir = (target - (Vector2)m_rigidbody2D.transform.position).normalized;
-                    m_rigidbody2D.MovePosition(m_rigidbody2D.transform.position + dir * moveSpeed * Time.fixedDeltaTime);
-
-                    m_animation.SetAnimation(0, m_info.move.animation, true);
-                    return;
-                }
-
-                m_bodycollider.enabled = true;
-                var velocityX = GetComponent<IsolatedPhysics2D>().velocity.x;
-                var velocityY = GetComponent<IsolatedPhysics2D>().velocity.y;
-                m_agent.SetDestination(target);
                 m_agent.Move(moveSpeed);
             }
             else
             {
-                m_turnState = State.ReevaluateSituation;
                 m_stateHandle.OverrideState(State.Turning);
             }
         }
@@ -430,26 +380,6 @@ namespace DChild.Gameplay.Characters.Enemies
         private Vector2 RoofPosition()
         {
             RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.up, 1000, DChildUtility.GetEnvironmentMask());
-            return hit.point;
-        }
-
-        private bool ShotBlocked()
-        {
-            Vector2 wat = m_selfSensor.transform.position;
-            RaycastHit2D hit = Physics2D.Raycast(/*m_projectilePoint.position*/wat, m_targetInfo.position - wat, 1000, LayerMask.GetMask("Player") + DChildUtility.GetEnvironmentMask());
-            var eh = hit.transform.gameObject.layer == LayerMask.NameToLayer("Player") ? false : true;
-            Debug.DrawRay(wat, m_targetInfo.position - wat);
-            Debug.Log("Shot is " + eh + " by " + LayerMask.LayerToName(hit.transform.gameObject.layer));
-            return hit.transform.gameObject.layer == LayerMask.NameToLayer("Player") ? false : true;
-        }
-
-        private Vector2 ShotPosition()
-        {
-            Vector2 startPoint = m_selfSensor.transform.position;
-            Vector2 direction = (m_targetInfo.position - startPoint).normalized;
-
-            RaycastHit2D hit = Physics2D.Raycast(/*m_projectilePoint.position*/startPoint, direction, 1000, DChildUtility.GetEnvironmentMask());
-            Debug.DrawRay(startPoint, direction);
             return hit.point;
         }
         #endregion
