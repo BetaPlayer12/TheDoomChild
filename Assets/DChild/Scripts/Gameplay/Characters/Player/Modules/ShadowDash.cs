@@ -16,6 +16,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private ShadowDashStatsInfo m_configuration;
         [SerializeField]
         private ParticleSystem m_shadowFX;
+        [SerializeField]
+        private Hitbox m_hitbox;
 
         private ICappedStat m_source;
         private IPlayerModifer m_modifier;
@@ -51,6 +53,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_dash.Cancel();
             GameplaySystem.world.SetShadowColliders(false);
             m_damageable.SetInvulnerability(Invulnerability.None);
+            m_hitbox.Enable();
             m_wasUsed = false;
 
             if (m_shadowFX != null)
@@ -89,6 +92,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             {
                 GameplaySystem.world.SetShadowColliders(true);
                 m_damageable.SetInvulnerability(Invulnerability.Level_2);
+                m_hitbox.Disable();
                 m_wasUsed = true;
 
                 if (m_shadowFX != null)

@@ -16,6 +16,8 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 #if UNITY_EDITOR
         [SerializeField]
         private SkeletonAnimation m_skeletonAnimation;
+        [SerializeField]
+        private float m_lifetime;
 
         public void InitializeField(SpineRootAnimation spineRoot)
         {
@@ -33,6 +35,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
         public void StartGrounded()
         {
+            StopAllCoroutines();
             m_spine.SetAnimation(0, m_startGroundedAnimation, false);
         }
 
@@ -43,12 +46,25 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
         public void StartMidair()
         {
+            StopAllCoroutines();
             m_spine.SetAnimation(0, m_startMidairAnimation, false);
         }
 
         public void ImpactMidair()
         {
             m_spine.SetAnimation(0, m_impactMidairAnimation, false);
+        }
+
+        public void Disable()
+        {
+            StartCoroutine(DisableRoutine());
+        }
+        
+        private IEnumerator DisableRoutine()
+        {
+            yield return new WaitForSeconds(m_lifetime);
+            this.gameObject.SetActive(false);
+            yield return null;
         }
     }
 }

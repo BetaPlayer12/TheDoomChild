@@ -1,4 +1,5 @@
-﻿using DChild.Gameplay.Characters.Players.Modules;
+﻿using DChild.Gameplay.Characters.Players;
+using DChild.Gameplay.Characters.Players.Modules;
 using DChild.Gameplay.Characters.Players.State;
 using DChild.Serialization;
 using Sirenix.OdinInspector;
@@ -100,9 +101,10 @@ namespace DChild.Gameplay
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
-       
 
-            if (collision.CompareTag("Hitbox"))
+
+            var playerObject = collision.gameObject.GetComponentInParent<PlayerControlledObject>();
+            if (playerObject != null && collision.tag != "Sensor")
             {
                 if ((m_oneTimeOnly && !m_wasTriggered) || !m_oneTimeOnly)
                 {
@@ -132,24 +134,35 @@ namespace DChild.Gameplay
         {
             if (m_oneTimeOnly == false)
             {
-                if (collision.CompareTag("Hitbox"))
+                var playerObject = collision.gameObject.GetComponentInParent<PlayerControlledObject>();
+                if (playerObject != null && collision.tag != "Sensor")
                 {
-                    if (m_waitForPlayerToBeGrounded)
-                    {
-                        if (m_enterEventRoutine != null)
-                        {
-                            StopCoroutine(m_enterEventRoutine);
-                            m_enterEventRoutine = null;
-                        }
+                    Collider2D collider = GetComponent<Collider2D>(); 
+                    Transform transformToCheck = playerObject.transform; 
 
-                        if (m_exitEventRoutine == null)
-                        {
-                            m_exitEventRoutine = StartCoroutine(ExecuteExitWhenPlayerIsGrounded());
-                        }
-                    }
-                    else
+                    if (collider.OverlapPoint(transformToCheck.position))
                     {
-                        TriggerExitEvent();
+
+                   }
+                   else
+                   {
+                        if (m_waitForPlayerToBeGrounded)
+                        {
+                            if (m_enterEventRoutine != null)
+                            {
+                                StopCoroutine(m_enterEventRoutine);
+                                m_enterEventRoutine = null;
+                            }
+
+                            if (m_exitEventRoutine == null)
+                            {
+                                m_exitEventRoutine = StartCoroutine(ExecuteExitWhenPlayerIsGrounded());
+                            }
+                        }
+                        else
+                        {
+                            TriggerExitEvent();
+                        }
                     }
                 }
             }
