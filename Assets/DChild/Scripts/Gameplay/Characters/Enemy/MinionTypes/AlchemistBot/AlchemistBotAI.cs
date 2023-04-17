@@ -404,7 +404,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_agent.Stop();
             StartCoroutine(AttackBBSize());
-            m_character.physics.SetVelocity(Vector2.zero);
+            //m_character.physics.SetVelocity(Vector2.zero);
             m_bodyCollider.enabled = true;
             //m_selfCollider.SetActive(true);
             m_rigidbody2D.constraints = RigidbodyConstraints2D.FreezePositionY | RigidbodyConstraints2D.FreezeRotation;
@@ -766,7 +766,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
                     //m_animation.EnableRootMotion(true, true);
                     m_agent.Stop();
-                    m_character.physics.SetVelocity(Vector2.zero);
+                    //m_character.physics.SetVelocity(Vector2.zero);
                     m_executeMoveCoroutine = StartCoroutine(ExecuteMove(m_attackDecider.chosenAttack.range, m_chosenAttack));
                     m_attackDecider.hasDecidedOnAttack = false;
 
