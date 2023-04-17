@@ -131,7 +131,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             m_reaperHarvestInfo.ShowCollider(false);
             //m_canReaperHarvest = true;
             m_canMove = true;
-            m_reaperHarvestAnimation.gameObject.SetActive(false);
+            m_reaperHarvestAnimation.Disable();
             m_physics.gravityScale = m_cacheGravity;
             m_hitbox.Enable();
             m_animator.SetBool(m_reaperHarvestStateAnimationParameter, false);
@@ -147,7 +147,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
                 m_canMove = true;
                 m_fxAnimator.Play("Buffer");
                 StopAllCoroutines();
-                m_reaperHarvestAnimation.gameObject.SetActive(false);
+                m_reaperHarvestAnimation.Disable();
                 m_physics.gravityScale = m_cacheGravity;
                 m_hitbox.Enable();
                 m_animator.SetBool(m_reaperHarvestStateAnimationParameter, false);
@@ -230,7 +230,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             //yield return new WaitForSeconds(m_dashDuration);
             m_hitbox.Enable();
             m_physics.velocity = Vector2.zero;
-            //m_reaperHarvestAnimation.gameObject.SetActive(false);
+            //m_reaperHarvestAnimation.Disable();
             //m_state.waitForBehaviour = false;
             yield return null;
         }

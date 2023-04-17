@@ -292,9 +292,6 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Spawn Points")]
         private Transform m_seedSpawnPoint;
 
-        [SerializeField, TabGroup("Timeline")]
-        private Transform m_timelineModel;
-
         private float m_groundPosition;
         private List<Vector2> m_targetPositions;
 
@@ -337,11 +334,6 @@ namespace DChild.Gameplay.Characters.Enemies
             m_currentPhaseIndex = obj.phaseIndex;
             m_currentPetalAmount = obj.petalAmount;
             m_currentCooldownSpeed = obj.cooldownSpeed;
-        }
-
-        public void SyncWithTimelineModel()
-        {
-            transform.position = m_timelineModel.position;
         }
 
         private void ChangeState()
