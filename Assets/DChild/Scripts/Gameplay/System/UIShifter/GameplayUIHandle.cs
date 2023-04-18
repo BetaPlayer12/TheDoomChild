@@ -68,6 +68,8 @@ namespace DChild.Gameplay.Systems
         private UIContainer m_playerHUD;
         [SerializeField]
         private UIContainer m_skippableUI;
+        [SerializeField]
+        private UIContainer m_fadeUI;
 
         [SerializeField, FoldoutGroup("Object Prompt")]
         private UIContainer m_interactablePrompt;
@@ -188,8 +190,18 @@ namespace DChild.Gameplay.Systems
                 m_bossCombat.HideBossHealth();
                 m_bossCombat.HideBossName();
             }
+        }
 
-
+        public void ToggleFadeUI(bool willshow)
+        {
+            if (willshow)
+            {
+                m_fadeUI.Show();
+            }
+            else
+            {
+                m_fadeUI.Hide();
+            }
         }
 
         public void RevealBossName()
@@ -327,5 +339,7 @@ namespace DChild.Gameplay.Systems
         {
             m_regen.ShadowRegenEffect(false);
         }
+
+
     }
 }

@@ -36,6 +36,7 @@ namespace DChild.Gameplay.Systems
         void ShowJournalNotificationPrompt(float duration);
         void PromptJournalUpdateNotification();
         void ToggleBossCombatUI(bool willshow);
+        void ToggleFadeUI(bool willshow);
         void RevealBossName();
         void ShowInteractionPrompt(bool willshow);
         void ShowMovableObjectPrompt(bool willshow);
