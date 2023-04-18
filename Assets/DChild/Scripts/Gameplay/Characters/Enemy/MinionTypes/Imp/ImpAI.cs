@@ -136,6 +136,8 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Reference")]
         private SkeletonAnimation m_skeletomAnimation;
         [SerializeField, TabGroup("Reference")]
+        private IsolatedObjectPhysics2D m_objectPhysics2D;
+        [SerializeField, TabGroup("Reference")]
         private GameObject m_spriteMask;
         [SerializeField, TabGroup("Reference")]
         private GameObject m_selfCollider;
@@ -486,8 +488,10 @@ namespace DChild.Gameplay.Characters.Enemies
             Debug.Log("DIE HERE");
             m_animation.SetAnimation(0, m_info.deathBeginAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.deathBeginAnimation);
-            m_character.physics.simulateGravity = true;
+            m_objectPhysics2D.simulateGravity = true;
             m_animation.SetAnimation(0, m_info.deathFallLoopAnimation, true);
+            m_bodyCollider.enabled = true;
+            yield return new WaitUntil(() => m_bodyCollider.IsTouchingLayers(DChildUtility.GetEnvironmentMask()));
             m_animation.SetAnimation(0, m_info.deathHitFloorAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.deathHitFloorAnimation);
             enabled = false;
