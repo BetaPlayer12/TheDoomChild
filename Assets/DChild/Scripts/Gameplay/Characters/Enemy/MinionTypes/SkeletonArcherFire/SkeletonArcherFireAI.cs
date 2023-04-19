@@ -259,6 +259,7 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_Audiosource.Play();
             StopAllCoroutines();
             base.OnDestroyed(sender, eventArgs);
+            GameplaySystem.MinionManager.Unregister(GetComponent<ICombatAIBrain>());
             m_targetPointIK.mode = SkeletonUtilityBone.Mode.Follow;
             m_movement.Stop();
 
@@ -376,6 +377,7 @@ namespace DChild.Gameplay.Characters.Enemies
         protected override void Awake()
         {
             base.Awake();
+            GameplaySystem.MinionManager.Register(GetComponent<ICombatAIBrain>());
             m_patrolHandle.TurnRequest += OnTurnRequest;
             m_attackHandle.AttackDone += OnAttackDone;
             m_turnHandle.TurnDone += OnTurnDone;
