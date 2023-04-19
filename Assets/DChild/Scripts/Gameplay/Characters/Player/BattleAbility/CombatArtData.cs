@@ -5,15 +5,15 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Characters.Players
 {
-    [CreateAssetMenu(fileName = "BattleAbilityData", menuName = "DChild/Database/Battle Ability Data")]
-    public class BattleAbilityData : SerializedScriptableObject
+    [CreateAssetMenu(fileName = "CombatArtData", menuName = "DChild/Database/Combat Art Data")]
+    public class CombatArtData : SerializedScriptableObject
     {
         [SerializeField]
         private BattleAbility m_ability;
         [SerializeField]
         private string m_name;
 #if UNITY_EDITOR
-        [SerializeField, ValueDropdown("GetBattleAbilityConfigrationClasses")]
+        [SerializeField, ValueDropdown("GetCombatArtConfigrationClasses")]
         private string m_configurationType; 
 #endif
         [SerializeField, MinValue(1)]
@@ -22,7 +22,7 @@ namespace DChild.Gameplay.Characters.Players
         private IBatttleAbilityScalableConfiguration[] m_configurations;
 
 #if UNITY_EDITOR
-        private IEnumerable GetBattleAbilityConfigrationClasses()
+        private IEnumerable GetCombatArtConfigrationClasses()
         {
             return DChildUtility.GetDerivedInterfacesNames<IBatttleAbilityScalableConfiguration>();
         }
