@@ -132,6 +132,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             StopAllCoroutines();
             base.OnDestroyed(sender, eventArgs);
+            GameplaySystem.MinionManager.Unregister(GetComponent<ICombatAIBrain>());
             m_character.physics.UseStepClimb(true);
             if (m_animation.GetCurrentAnimation(0).ToString() != m_info.idleAnimation)
                 m_movement.Stop();
@@ -186,6 +187,7 @@ namespace DChild.Gameplay.Characters.Enemies
         protected override void Awake()
         {
             base.Awake();
+            GameplaySystem.MinionManager.Register(GetComponent<ICombatAIBrain>());
             m_patrolHandle.TurnRequest += OnTurnRequest;
             m_turnHandle.TurnDone += OnTurnDone;
             m_flinchHandle.FlinchStart += OnFlinchStart;
