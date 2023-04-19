@@ -1,6 +1,7 @@
 ﻿using DChild.Gameplay.Characters.Players;
 using Doozy.Runtime.UIManager.Components;
 using UnityEngine;
+using Sirenix.OdinInspector;
 
 namespace DChild.Gameplay.UI.CombatArts
 {
@@ -13,12 +14,15 @@ namespace DChild.Gameplay.UI.CombatArts
             Unlocked
         }
 
-        [SerializeField]
+        [SerializeField, HideInPrefabAssets, OnValueChanged("OnConfigurationChanged")]
         private BattleAbility m_toUnlock;
+        [SerializeField, HideInPrefabAssets, OnValueChanged("OnConfigurationChanged"), MinValue(1)]
+        private int m_unlockLevel = 1;
         private State m_currentState = State.Unlocked;
         private UIToggle m_toggle;
 
         public BattleAbility skillUnlock => m_toUnlock;
+        public int unlockLevel => m_unlockLevel;
         public State currentState => m_currentState;
 
         public void SetState(State state)
@@ -33,6 +37,13 @@ namespace DChild.Gameplay.UI.CombatArts
                 m_toggle.SetIsOn(false);
             }
         }
+
+#if UNITY_EDITOR
+        private void OnConfigurationChanged()
+        {
+            gameObject.name = "CombatArtSelectable_" + m_toUnlock.ToString().Replace(" ", "") + m_unlockLevel.ToString();
+        }
+#endif
     }
 
 }

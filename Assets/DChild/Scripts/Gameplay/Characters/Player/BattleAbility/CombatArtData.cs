@@ -1,25 +1,41 @@
 ﻿using Sirenix.OdinInspector;
 using System;
 using System.Collections;
+
 using UnityEngine;
+
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 namespace DChild.Gameplay.Characters.Players
 {
     [CreateAssetMenu(fileName = "CombatArtData", menuName = "DChild/Database/Combat Art Data")]
     public class CombatArtData : SerializedScriptableObject
     {
-        [SerializeField]
+        [SerializeField, OnValueChanged("RenameFilename")]
         private BattleAbility m_ability;
         [SerializeField]
         private string m_name;
 #if UNITY_EDITOR
         [SerializeField, ValueDropdown("GetCombatArtConfigrationClasses")]
-        private string m_configurationType; 
+        private string m_configurationType;
 #endif
         [SerializeField, MinValue(1)]
         private int m_maxLevel = 1;
         [SerializeField]
         private IBatttleAbilityScalableConfiguration[] m_configurations;
+
+        private void RenameFilename()
+
+        {
+
+#if UNITY_EDITOR
+            var assetPath = AssetDatabase.GetAssetPath(this);
+            var name = m_ability.ToString().Replace(" ", "");
+            AssetDatabase.RenameAsset(assetPath, $"{name}CombatArtData");
+#endif
+        }
 
 #if UNITY_EDITOR
         private IEnumerable GetCombatArtConfigrationClasses()
