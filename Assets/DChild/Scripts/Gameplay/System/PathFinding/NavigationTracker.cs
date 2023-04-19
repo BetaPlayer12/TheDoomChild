@@ -181,6 +181,11 @@ namespace DChild.Gameplay.Pathfinding
             m_canSearchPath = true;
         }
 
+        private void Start()
+        {
+            enabled = true;
+        }
+
         private void Update()
         {
             if (m_lastPathHasError)

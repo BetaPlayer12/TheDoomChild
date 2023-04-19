@@ -132,9 +132,9 @@ namespace DChild.Gameplay.Characters.Players.Modules
             switch (type)
             {
                 case Type.Ground_Forward:
-                    m_state.canAttack = true;
-                    m_state.isAttacking = false;
-                    m_state.waitForBehaviour = false;
+                    //m_state.canAttack = true;
+                    //m_state.isAttacking = false;
+                    //m_state.waitForBehaviour = false;
                     m_timer = m_groundForward.nextAttackDelay;
                     m_attacker.SetDamageModifier(m_groundForward.damageModifier * m_modifier.Get(PlayerModifier.AttackDamage));
                     break;
