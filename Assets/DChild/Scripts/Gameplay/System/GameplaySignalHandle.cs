@@ -30,6 +30,11 @@ namespace DChild.Gameplay
             GameplaySystem.gamplayUIHandle.ToggleBossCombatUI(value);
         }
 
+        public void ToggleFadeUI(bool value)
+        {
+            GameplaySystem.gamplayUIHandle.ToggleFadeUI(value);
+        }
+
         public void MoveAudioListenerToPlayer()
         {
             GameplaySystem.audioListener.AttachToPlayer();
@@ -63,7 +68,9 @@ namespace DChild.Gameplay
 
         public void MakeAllEnemiesPassive(bool arePassive)
         {
-            CombatAIManager.instance?.ForbidAllFromAttackTarget(arePassive);
+            //CombatAIManager.instance?.ForbidAllFromAttackTarget(arePassive);
+            GameplaySystem.minionManager.ForcePassiveIdle(arePassive);
+            Debug.Log("enemies passive");
         }
 
         public void SmartTransferPlayerTo(LocationData locationData)

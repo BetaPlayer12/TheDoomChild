@@ -16,12 +16,15 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private ShadowDashStatsInfo m_configuration;
         [SerializeField]
         private ParticleSystem m_shadowFX;
+        [SerializeField]
+        private Hitbox m_hitbox;
 
         private ICappedStat m_source;
         private IPlayerModifer m_modifier;
         private Damageable m_damageable;
         private Animator m_animator;
         private bool m_wasUsed;
+        private bool m_hasExecuted;
         private int m_animationParameter;
         private SkeletonGhost m_skeletonGhost;
 
@@ -48,20 +51,25 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void Cancel()
         {
-            m_dash.Cancel();
-            GameplaySystem.world.SetShadowColliders(false);
-            m_damageable.SetInvulnerability(Invulnerability.None);
-            m_wasUsed = false;
-
-            if (m_shadowFX != null)
+            if (m_hasExecuted)
             {
-                m_shadowFX?.Stop(true);
+                m_hasExecuted = false;
+                m_dash.Cancel();
+                GameplaySystem.world.SetShadowColliders(false);
+                m_damageable.SetInvulnerability(Invulnerability.None);
+                m_hitbox.Enable();
+                m_wasUsed = false;
+
+                if (m_shadowFX != null)
+                {
+                    m_shadowFX?.Stop(true);
+                }
+
+                m_animator.SetBool(m_animationParameter, false);
+                //m_skeletonGhost.enabled = false;
+
+                End?.Invoke(this, EventActionArgs.Empty);
             }
-
-            m_animator.SetBool(m_animationParameter, false);
-            //m_skeletonGhost.enabled = false;
-
-            End?.Invoke(this, EventActionArgs.Empty);
         }
 
         public bool HaveEnoughSourceForExecution() => GetSourceRequiredAmount() <= m_source.currentValue;
@@ -87,8 +95,10 @@ namespace DChild.Gameplay.Characters.Players.Modules
         {
             if (m_wasUsed == false)
             {
+                m_hasExecuted = true;
                 GameplaySystem.world.SetShadowColliders(true);
                 m_damageable.SetInvulnerability(Invulnerability.Level_2);
+                m_hitbox.Disable();
                 m_wasUsed = true;
 
                 if (m_shadowFX != null)

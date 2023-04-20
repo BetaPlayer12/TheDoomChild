@@ -47,6 +47,7 @@ namespace DChild.Gameplay.Essence
             m_hasBeenPickUp = false;
             m_timer = 0;
             m_collision.enabled = false;
+            m_collision.isTrigger = false;
         }
 
         protected override void ExecutePop(float delta)
