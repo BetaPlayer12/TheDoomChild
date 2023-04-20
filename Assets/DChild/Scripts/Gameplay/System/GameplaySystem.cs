@@ -85,7 +85,7 @@ namespace DChild.Gameplay
         public static IHealthTracker healthTracker => m_healthTracker;
         public static IGameplayUIHandle gamplayUIHandle => m_gameplayUIHandle;
         public static ISoulSkillManager soulSkillManager => m_soulSkillManager;
-        public static IMinionManager MinionManager => m_minionManager;
+        public static IMinionManager minionManager => m_minionManager;
         public static CampaignSerializer campaignSerializer => m_campaignSerializer;
         #endregion
         public static bool isGamePaused { get; private set; }

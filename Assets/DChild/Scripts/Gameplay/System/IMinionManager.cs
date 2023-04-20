@@ -8,4 +8,10 @@ public interface IMinionManager
     void Register(ICombatAIBrain minion);
 
     void Unregister(ICombatAIBrain minion);
+
+    void ForbidAllFromAttackingTarget(bool willAttackTarget);
+    void IgnoreAllTargets(bool willIgnoreTarget);
+    void IgnoreCurrentTarget();
+
+    void ForcePassiveIdle(bool willForcePassive);
 }
