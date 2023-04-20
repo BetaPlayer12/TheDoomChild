@@ -138,6 +138,8 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Reference")]
         private Rigidbody2D m_rigidbody2D;
         [SerializeField, TabGroup("Reference")]
+        private IsolatedObjectPhysics2D m_objectPhysics2D;
+        [SerializeField, TabGroup("Reference")]
         private Hitbox m_hitbox;
         [SerializeField, TabGroup("Reference")]
         private Transform m_projectilePoint;
@@ -404,7 +406,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_agent.Stop();
             StartCoroutine(AttackBBSize());
-            m_character.physics.SetVelocity(Vector2.zero);
+            //m_character.physics.SetVelocity(Vector2.zero);
             m_bodyCollider.enabled = true;
             //m_selfCollider.SetActive(true);
             m_rigidbody2D.constraints = RigidbodyConstraints2D.FreezePositionY | RigidbodyConstraints2D.FreezeRotation;
@@ -472,10 +474,10 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return new WaitForSeconds(1.6f);
             m_rigidbody2D.constraints = RigidbodyConstraints2D.FreezeRotation;
             //m_animation.DisableRootMotion();
-            m_character.physics.simulateGravity = true;
+            m_objectPhysics2D.simulateGravity = true;
             m_animation.SetAnimation(0, m_info.deathFallLoopAnimation, true);
             m_bodyCollider.enabled = true;
-            //yield return new WaitUntil(() => m_groundSensor.isDetecting);
+            yield return new WaitUntil(() => m_bodyCollider.IsTouchingLayers(DChildUtility.GetEnvironmentMask()));
             var animation = UnityEngine.Random.Range(0, 2) == 1 ? m_info.deathFallImpact1Animation : m_info.deathFallImpact2Animation;
             m_animation.SetAnimation(0, animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, animation);
@@ -766,7 +768,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
                     //m_animation.EnableRootMotion(true, true);
                     m_agent.Stop();
-                    m_character.physics.SetVelocity(Vector2.zero);
+                    //m_character.physics.SetVelocity(Vector2.zero);
                     m_executeMoveCoroutine = StartCoroutine(ExecuteMove(m_attackDecider.chosenAttack.range, m_chosenAttack));
                     m_attackDecider.hasDecidedOnAttack = false;
 
