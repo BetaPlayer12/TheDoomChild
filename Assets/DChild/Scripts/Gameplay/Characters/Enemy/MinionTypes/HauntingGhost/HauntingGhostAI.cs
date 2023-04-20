@@ -260,6 +260,7 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_Audiosource.clip = m_DeadClip;
             //m_Audiosource.Play();
             base.OnDestroyed(sender, eventArgs);
+            GameplaySystem.MinionManager.Unregister(GetComponent<ICombatAIBrain>());
             m_bodyCollider.SetActive(true);
             m_agent.Stop();
         }
@@ -337,6 +338,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             Debug.Log(m_info);
             base.Awake();
+            GameplaySystem.MinionManager.Register(GetComponent<ICombatAIBrain>());
             m_patrolHandle.TurnRequest += OnTurnRequest;
             m_attackHandle.AttackDone += OnAttackDone;
             m_flinchHandle.FlinchStart += OnFlinchStart;

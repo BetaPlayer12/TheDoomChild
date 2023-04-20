@@ -174,12 +174,6 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnTurnRequest(object sender, EventActionArgs eventArgs) => m_stateHandle.OverrideState(State.Turning);
 
-        private void CustomTurn()
-        {
-            transform.localScale = new Vector3(-transform.localScale.x, 1, 1);
-            m_character.SetFacing(transform.localScale.x == 1 ? HorizontalDirection.Right : HorizontalDirection.Left);
-        }
-
         public override void SetTarget(IDamageable damageable, Character m_target = null)
         {
             if (damageable != null)
@@ -314,6 +308,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_stateHandle.Wait(State.WaitBehaviourEnd);
             StopAllCoroutines();
             base.OnDestroyed(sender, eventArgs);
+            GameplaySystem.MinionManager.Unregister(GetComponent<ICombatAIBrain>());
             if (m_executeMoveCoroutine != null)
             {
                 StopCoroutine(m_executeMoveCoroutine);
@@ -519,6 +514,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             Debug.Log(m_info);
             base.Awake();
+            GameplaySystem.MinionManager.Register(GetComponent<ICombatAIBrain>());
             m_patrolHandle.TurnRequest += OnTurnRequest;
             m_attackHandle.AttackDone += OnAttackDone;
             m_flinchHandle.FlinchStart += OnFlinchStart;
