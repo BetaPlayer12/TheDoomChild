@@ -36,6 +36,7 @@ namespace DChild
 
         private void UpdateGraph()
         {
+
             if (m_canUpdatePathfindingGraph)
             {
                 for (int i = 0; i < m_objectList.Length; i++)
