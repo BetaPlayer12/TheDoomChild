@@ -42,11 +42,14 @@ namespace DChild.Gameplay.NavigationMap
             {
                 var changes = NavigationMapSceneHandle.changes;
                 //Only update the ones that needs update
-                for (int i = 0; i < changes.fogOfWarChanges; i++)
+                if (changes != null)
                 {
-                    m_mapInstance.SetFogOfwarState(changes.GetFogOfWarName(i), changes.GetFogOfWarState(i));
+                    for (int i = 0; i < changes.fogOfWarChanges; i++)
+                    {
+                        m_mapInstance.SetFogOfwarState(changes.GetFogOfWarName(i), changes.GetFogOfWarState(i));
+                    }
+                    changes.Clear();
                 }
-                changes.Clear();
             }
 
             m_tracker.UpdateTrackerPosition();
