@@ -260,7 +260,7 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_Audiosource.Play();
             StopAllCoroutines();
             base.OnDestroyed(sender, eventArgs);
-            GameplaySystem.MinionManager.Unregister(GetComponent<ICombatAIBrain>());
+            GameplaySystem.minionManager.Unregister(GetComponent<ICombatAIBrain>());
             m_hitbox.Disable();
             m_animation.EnableRootMotion(true, false);
             LightningShieldDeactivate();
@@ -518,7 +518,7 @@ namespace DChild.Gameplay.Characters.Enemies
         protected override void Awake()
         {
             base.Awake();
-            GameplaySystem.MinionManager.Register(GetComponent<ICombatAIBrain>());
+            GameplaySystem.minionManager.Register(GetComponent<ICombatAIBrain>());
             m_patrolHandle.Initialize();
             m_patrolHandle.TurnRequest += OnTurnRequest;
             m_stateHandle = new StateHandle<State>(!enabled ? State.Dormant : State.Patrol, State.WaitForBehaviour);

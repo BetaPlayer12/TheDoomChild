@@ -423,7 +423,7 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_Audiosource.Play();
             StopAllCoroutines();
             base.OnDestroyed(sender, eventArgs);
-            GameplaySystem.MinionManager.Unregister(GetComponent<ICombatAIBrain>());
+            GameplaySystem.minionManager.Unregister(GetComponent<ICombatAIBrain>());
             if (m_executeMoveCoroutine != null)
             {
                 StopCoroutine(m_executeMoveCoroutine);
@@ -557,7 +557,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             Debug.Log(m_info);
             base.Awake();
-            GameplaySystem.MinionManager.Register(GetComponent<ICombatAIBrain>());
+            GameplaySystem.minionManager.Register(GetComponent<ICombatAIBrain>());
             m_patrolHandle.TurnRequest += OnTurnRequest;
             m_flinchHandle.FlinchStart += OnFlinchStart;
             m_flinchHandle.FlinchEnd += OnFlinchEnd;

@@ -422,7 +422,7 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_Audiosource.Play();
             StopAllCoroutines();
             base.OnDestroyed(sender, eventArgs);
-            GameplaySystem.MinionManager.Unregister(GetComponent<ICombatAIBrain>());
+            GameplaySystem.minionManager.Unregister(GetComponent<ICombatAIBrain>());
             m_animation.EnableRootMotion(true, false);
             if (m_currentAttackCoroutine != null)
             {
@@ -662,7 +662,7 @@ namespace DChild.Gameplay.Characters.Enemies
         protected override void Awake()
         {
             base.Awake();
-            GameplaySystem.MinionManager.Register(GetComponent<ICombatAIBrain>());
+            GameplaySystem.minionManager.Register(GetComponent<ICombatAIBrain>());
             m_phaseHandle = new PhaseHandle<Phase, PhaseInfo>();
             m_phaseHandle.Initialize(Phase.BothAlive, m_info.phaseInfo, m_character, ChangeState, ApplyPhaseData);
             m_phaseHandle.ApplyChange();

@@ -233,7 +233,7 @@ namespace DChild.Gameplay.Characters.Enemies
         protected override void OnDestroyed(object sender, EventActionArgs eventArgs)
         {
             base.OnDestroyed(sender, eventArgs);
-            GameplaySystem.MinionManager.Unregister(GetComponent<ICombatAIBrain>());
+            GameplaySystem.minionManager.Unregister(GetComponent<ICombatAIBrain>());
             StopAllCoroutines();
             if (m_executeMoveCoroutine != null)
             {
@@ -332,7 +332,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             Debug.Log(m_info);
             base.Awake();
-            GameplaySystem.MinionManager.Register(GetComponent<ICombatAIBrain>());
+            GameplaySystem.minionManager.Register(GetComponent<ICombatAIBrain>());
             m_attackHandle.AttackDone += OnAttackDone;
             m_flinchHandle.FlinchStart += OnFlinchStart;
             m_flinchHandle.FlinchEnd += OnFlinchEnd;

@@ -241,7 +241,7 @@ namespace DChild.Gameplay.Characters.Enemies
             GetComponentInChildren<Hitbox>().gameObject.SetActive(false);
             m_boundBoxGO.SetActive(false);
             base.OnDestroyed(sender, eventArgs);
-            GameplaySystem.MinionManager.Unregister(GetComponent<ICombatAIBrain>());
+            GameplaySystem.minionManager.Unregister(GetComponent<ICombatAIBrain>());
             m_movement.Stop();
             StartCoroutine(DeathRoutine());
         }
@@ -421,7 +421,7 @@ namespace DChild.Gameplay.Characters.Enemies
         protected override void Awake()
         {
             base.Awake();
-            GameplaySystem.MinionManager.Register(GetComponent<ICombatAIBrain>());
+            GameplaySystem.minionManager.Register(GetComponent<ICombatAIBrain>());
             m_attackHandle.AttackDone += OnAttackDone;
             m_deathHandle.SetAnimation(m_info.deathAnimation);
             m_flinchHandle.FlinchStart += OnFlinchStart;
