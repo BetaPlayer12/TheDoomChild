@@ -7,27 +7,26 @@ namespace DChild.Gameplay.Characters.Players
     {
         private int[] m_abilityLevels;
 
-        public bool IsAbilityActivated(BattleAbility battleAbility)
+        public bool IsAbilityActivated(CombatArt battleAbility)
         {
-            // return GetAbilityLevel(battleAbility) > 0;
-            return true; //Temporary Setup
+            return GetAbilityLevel(battleAbility) > 0;
         }
 
-        public int GetAbilityLevel(BattleAbility battleAbility)
+        public int GetAbilityLevel(CombatArt battleAbility)
         {
             return m_abilityLevels[(int)battleAbility];
         }
 
-        public void SetAbilityLevel(BattleAbility battleAbility, int level)
+        public void SetAbilityLevel(CombatArt battleAbility, int level)
         {
-            m_abilityLevels[(int)battleAbility] = Mathf.Min(0, level);
+            m_abilityLevels[(int)battleAbility] = Mathf.Max(0, level);
         }
 
         private void Awake()
         {
             if (m_abilityLevels == null)
             {
-                m_abilityLevels = new int[(int)BattleAbility._Count];
+                m_abilityLevels = new int[(int)CombatArt._Count];
             }
         }
     }
