@@ -139,6 +139,9 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private State m_turnState;
 
+        [SerializeField]
+        private bool m_canAttack;
+
 
         //[SerializeField]
         //private AudioSource m_Audiosource;
@@ -232,6 +235,7 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_Audiosource.Play();
             enabled = false;
             base.OnDestroyed(sender, eventArgs);
+            GameplaySystem.minionManager.Unregister(this);
             m_stateHandle.OverrideState(State.WaitBehaviourEnd);
             StopAllCoroutines();
             m_movement.Stop();
@@ -300,6 +304,18 @@ namespace DChild.Gameplay.Characters.Enemies
             return hit[0].point;
         }
 
+        public void ForbidAttack()
+        {
+            m_stateHandle.OverrideState(State.Chasing);
+            m_canAttack = false;
+        }
+
+        public void AllowAttack()
+        {
+            m_stateHandle.OverrideState(State.Chasing);
+            m_canAttack = true;
+        }
+
         private static ContactFilter2D m_contactFilter;
         private static RaycastHit2D[] m_hitResults;
         private static bool m_isInitialized;
@@ -347,6 +363,7 @@ namespace DChild.Gameplay.Characters.Enemies
         protected override void Awake()
         {
             base.Awake();
+            GameplaySystem.minionManager.Register(this);
             m_patrolHandle.TurnRequest += OnTurnRequest;
             m_attackHandle.AttackDone += OnAttackDone;
             m_turnHandle.TurnDone += OnTurnDone;
