@@ -10,8 +10,8 @@ namespace Pathfinding {
 	/// See: turnbased (view in online documentation for working links)
 	/// </summary>
 	public interface ITraversalProvider {
-		bool CanTraverse (Path path, GraphNode node);
-		uint GetTraversalCost (Path path, GraphNode node);
+		bool CanTraverse(Path path, GraphNode node);
+		uint GetTraversalCost(Path path, GraphNode node);
 	}
 
 	/// <summary>Convenience class to access the default implementation of the ITraversalProvider</summary>
@@ -64,7 +64,7 @@ namespace Pathfinding {
 
 		/// <summary>Returns the state of the path in the pathfinding pipeline</summary>
 		public PathState PipelineState { get; private set; }
-		System.Object stateLock = new object ();
+		System.Object stateLock = new object();
 
 		/// <summary>
 		/// Provides additional traversal information to a path request.
@@ -78,7 +78,7 @@ namespace Pathfinding {
 
 		/// <summary>
 		/// Current state of the path.
-		/// \bug This may currently be set to Complete before the path has actually been fully calculated. In particular the vectorPath and path lists may not have been fully constructed.
+		/// Bug: This may currently be set to Complete before the path has actually been fully calculated. In particular the vectorPath and path lists may not have been fully constructed.
 		/// This can lead to race conditions when using multithreading. Try to avoid using this method to check for if the path is calculated right now, use <see cref="IsDone"/> instead.
 		/// </summary>
 		public PathCompleteState CompleteState {
@@ -123,7 +123,7 @@ namespace Pathfinding {
 		public float duration;
 
 		/// <summary>Number of nodes this path has searched</summary>
-		internal int searchedNodes;
+		public int searchedNodes { get; protected set; }
 
 		/// <summary>
 		/// True if the path is currently pooled.
@@ -242,7 +242,7 @@ namespace Pathfinding {
 		/// This disables Jump Point Search when that is enabled to prevent e.g ConstantPath and FloodPath
 		/// to become completely useless.
 		/// </summary>
-		internal virtual bool FloodingPath {
+		public virtual bool FloodingPath {
 			get {
 				return false;
 			}
@@ -275,7 +275,7 @@ namespace Pathfinding {
 		/// Note: Do not confuse this with AstarPath.WaitForPath. This one will wait using yield until it has been calculated
 		/// while AstarPath.WaitForPath will halt all operations until the path has been calculated.
 		///
-		/// \throws System.InvalidOperationException if the path is not started. Send the path to Seeker.StartPath or AstarPath.StartPath before calling this function.
+		/// Throws: System.InvalidOperationException if the path is not started. Send the path to Seeker.StartPath or AstarPath.StartPath before calling this function.
 		///
 		/// See: <see cref="BlockUntilCalculated"/>
 		/// See: https://docs.unity3d.com/Manual/Coroutines.html
@@ -358,7 +358,7 @@ namespace Pathfinding {
 			return (uint)internalTagPenalties[tag];
 		}
 
-		internal Int3 GetHTarget () {
+		protected Int3 GetHTarget () {
 			return hTarget;
 		}
 
@@ -366,7 +366,7 @@ namespace Pathfinding {
 		/// Returns if the node can be traversed.
 		/// This per default equals to if the node is walkable and if the node's tag is included in <see cref="enabledTags"/>
 		/// </summary>
-		internal bool CanTraverse (GraphNode node) {
+		public bool CanTraverse (GraphNode node) {
 			// Use traversal provider if set, otherwise fall back on default behaviour
 			// This method is hot, but this branch is extremely well predicted so it
 			// doesn't affect performance much (profiling indicates it is just above
@@ -374,10 +374,12 @@ namespace Pathfinding {
 			if (traversalProvider != null)
 				return traversalProvider.CanTraverse(this, node);
 
+			// Manually inlined code from DefaultITraversalProvider
 			unchecked { return node.Walkable && (enabledTags >> (int)node.Tag & 0x1) != 0; }
 		}
 
-		internal uint GetTraversalCost (GraphNode node) {
+		/// <summary>Returns the cost of traversing the given node</summary>
+		public uint GetTraversalCost (GraphNode node) {
 #if ASTAR_NO_TRAVERSAL_COST
 			return 0;
 #else
@@ -406,18 +408,18 @@ namespace Pathfinding {
 		/// <param name="a">Moving from this node</param>
 		/// <param name="b">Moving to this node</param>
 		/// <param name="currentCost">The cost of moving between the nodes. Return this value if there is no meaningful special cost to return.</param>
-		internal virtual uint GetConnectionSpecialCost (GraphNode a, GraphNode b, uint currentCost) {
+		public virtual uint GetConnectionSpecialCost (GraphNode a, GraphNode b, uint currentCost) {
 			return currentCost;
 		}
 
 		/// <summary>
-		/// Returns if this path is done calculating.
+		/// True if this path is done calculating.
 		///
 		/// Note: The callback for the path might not have been called yet.
 		///
-		/// \since Added in 3.0.8
+		/// Since: Added in 3.0.8
 		///
-		/// See: <see cref="Seeker.IsDone"/> which also takes into account if the %path %callback has been called and had modifiers applied.
+		/// See: <see cref="Seeker.IsDone"/> which also takes into account if the path callback has been called and had modifiers applied.
 		/// </summary>
 		public bool IsDone () {
 			return PipelineState > PathState.Processing;
@@ -431,7 +433,7 @@ namespace Pathfinding {
 		}
 
 		/// <summary>
-		/// Returns the state of the path in the pathfinding pipeline.
+		/// State of the path in the pathfinding pipeline.
 		/// Deprecated: Use the <see cref="Pathfinding.Path.PipelineState"/> property instead
 		/// </summary>
 		[System.Obsolete("Use the 'PipelineState' property instead")]
@@ -440,7 +442,7 @@ namespace Pathfinding {
 		}
 
 		/// <summary>Causes the path to fail and sets <see cref="errorLog"/> to msg</summary>
-		internal void FailWithError (string msg) {
+		public void FailWithError (string msg) {
 			Error();
 			if (errorLog != "") errorLog += "\n" + msg;
 			else errorLog = msg;
@@ -451,7 +453,7 @@ namespace Pathfinding {
 		/// Deprecated: Use <see cref="FailWithError"/> instead
 		/// </summary>
 		[System.Obsolete("Use FailWithError instead")]
-		internal void LogError (string msg) {
+		protected void LogError (string msg) {
 			Log(msg);
 		}
 
@@ -464,7 +466,7 @@ namespace Pathfinding {
 		/// Deprecated: Use <see cref="FailWithError"/> instead
 		/// </summary>
 		[System.Obsolete("Use FailWithError instead")]
-		internal void Log (string msg) {
+		protected void Log (string msg) {
 			errorLog += msg;
 		}
 
@@ -506,6 +508,7 @@ namespace Pathfinding {
 			callback = null;
 			immediateCallback = null;
 			traversalProvider = null;
+			pathHandler = null;
 		}
 
 		/// <summary>
@@ -674,8 +677,8 @@ namespace Pathfinding {
 			while (c != null) {
 				c = c.parent;
 				count++;
-				if (count > 2048) {
-					Debug.LogWarning("Infinite loop? >2048 node path. Remove this message if you really have that long paths (Path.cs, Trace method)");
+				if (count > 16384) {
+					Debug.LogWarning("Infinite loop? >16384 node path. Remove this message if you really have that long paths (Path.cs, Trace method)");
 					break;
 				}
 			}
@@ -751,7 +754,7 @@ namespace Pathfinding {
 		/// An empty string is returned if logMode == None
 		/// or logMode == OnlyErrors and this path did not fail.
 		/// </summary>
-		internal virtual string DebugString (PathLog logMode) {
+		protected virtual string DebugString (PathLog logMode) {
 			if (logMode == PathLog.None || (!error && logMode == PathLog.OnlyErrors)) {
 				return "";
 			}
@@ -805,7 +808,7 @@ namespace Pathfinding {
 		/// Called before the path is started.
 		/// Called right before Initialize
 		/// </summary>
-		protected abstract void Prepare ();
+		protected abstract void Prepare();
 
 		/// <summary>
 		/// Always called after the path has been calculated.
@@ -819,10 +822,10 @@ namespace Pathfinding {
 		/// Initializes the path.
 		/// Sets up the open list and adds the first node to it
 		/// </summary>
-		protected abstract void Initialize ();
+		protected abstract void Initialize();
 
 		/// <summary>Calculates the until it is complete or the time has progressed past targetTick</summary>
-		protected abstract void CalculateStep (long targetTick);
+		protected abstract void CalculateStep(long targetTick);
 
 		PathHandler IPathInternals.PathHandler { get { return pathHandler; } }
 		void IPathInternals.OnEnterPool () { OnEnterPool(); }
@@ -833,20 +836,22 @@ namespace Pathfinding {
 		void IPathInternals.Cleanup () { Cleanup(); }
 		void IPathInternals.Initialize () { Initialize(); }
 		void IPathInternals.CalculateStep (long targetTick) { CalculateStep(targetTick); }
+		string IPathInternals.DebugString (PathLog logMode) { return DebugString(logMode); }
 	}
 
 	/// <summary>Used for hiding internal methods of the Path class</summary>
 	internal interface IPathInternals {
 		PathHandler PathHandler { get; }
 		bool Pooled { get; set; }
-		void AdvanceState (PathState s);
-		void OnEnterPool ();
-		void Reset ();
-		void ReturnPath ();
-		void PrepareBase (PathHandler handler);
-		void Prepare ();
-		void Initialize ();
-		void Cleanup ();
-		void CalculateStep (long targetTick);
+		void AdvanceState(PathState s);
+		void OnEnterPool();
+		void Reset();
+		void ReturnPath();
+		void PrepareBase(PathHandler handler);
+		void Prepare();
+		void Initialize();
+		void Cleanup();
+		void CalculateStep(long targetTick);
+		string DebugString(PathLog logMode);
 	}
 }

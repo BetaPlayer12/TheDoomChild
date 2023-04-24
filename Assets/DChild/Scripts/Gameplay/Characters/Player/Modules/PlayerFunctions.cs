@@ -38,6 +38,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private ChampionsUprising m_championsUprising;
         private Eelecktrick m_eelecktrick;
         private LightningSpear m_lightningSpear;
+        private IcarusWings m_icarusWings;
+        private TeleportingSkull m_teleportingSkull;
         #endregion
 
         public void IdleStateFinished()
@@ -58,18 +60,30 @@ namespace DChild.Gameplay.Characters.Players.Modules
         {
             m_basicSlashes?.PlayFXFor(BasicSlashes.Type.MidAir_Overhead, true);
         }
+
         public void SwordJumpUpSlashEnableCollision()
         {
             m_basicSlashes?.EnableCollision(BasicSlashes.Type.MidAir_Overhead, true);
+        }
+
+        public void SwordJumpUpSlashDisableCollision()
+        {
+            m_basicSlashes?.EnableCollision(BasicSlashes.Type.MidAir_Overhead, false);
         }
 
         public void SwordUpSlashFX()
         {
             m_basicSlashes?.PlayFXFor(BasicSlashes.Type.Ground_Overhead, true);
         }
+
         public void SwordUpSlashEnableCollision()
         {
             m_basicSlashes?.EnableCollision(BasicSlashes.Type.Ground_Overhead, true);
+        }
+
+        public void SwordUpSlashDisableCollision()
+        {
+            m_basicSlashes?.EnableCollision(BasicSlashes.Type.Ground_Overhead, false);
         }
 
         public void CrouchSlashFX()
@@ -421,6 +435,18 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_doomsdayKong.EndExecution();
         }
 
+        public void BackDiverSummon()
+        {
+            if (m_teleportingSkull.spawnedProjectile == null)
+                m_backDiver.Summon();
+        }
+
+        public void BackDiverGetProjectile()
+        {
+            m_teleportingSkull.Execute();
+            m_teleportingSkull.GetSpawnedProjectile(m_backDiver.spawnedProjectile);
+        }
+
         public void BackDiverEnd()
         {
             m_backDiver.EndExecution();
@@ -529,6 +555,21 @@ namespace DChild.Gameplay.Characters.Players.Modules
         {
             m_lightningSpear.EndExecution();
         }
+
+        public void IcarusWingsJump()
+        {
+            m_icarusWings.Jump();
+        }
+
+        public void IcarusWingsEnd()
+        {
+            m_icarusWings.EndExecution();
+        }
+
+        public void TeleportingSkullGetProjectile()
+        {
+            m_teleportingSkull.GetSpawnedProjectile(m_projectileThrow.spawnedProjectile);
+        }
         #endregion
 
         public void SkullThrowSpawnProjectile()
@@ -598,6 +639,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_championsUprising = character.GetComponentInChildren<ChampionsUprising>();
             m_eelecktrick = character.GetComponentInChildren<Eelecktrick>();
             m_lightningSpear = character.GetComponentInChildren<LightningSpear>();
+            m_icarusWings = character.GetComponentInChildren<IcarusWings>();
+            m_teleportingSkull = character.GetComponentInChildren<TeleportingSkull>();
         }
 
         #region TESTING

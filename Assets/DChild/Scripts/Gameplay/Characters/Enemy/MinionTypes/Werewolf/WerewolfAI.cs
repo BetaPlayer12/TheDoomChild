@@ -119,6 +119,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private float m_currentPatience;
         private bool m_enablePatience;
         private bool m_isDetecting;
+        private bool m_isAttacking;
         private float m_currentCD;
         private float m_currentFullCD;
         private float m_currentMoveSpeed;
@@ -138,6 +139,9 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private State m_turnState;
 
+        [SerializeField]
+        private bool m_canAttack;
+
 
         //[SerializeField]
         //private AudioSource m_Audiosource;
@@ -151,6 +155,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.DisableRootMotion();
             m_flinchHandle.m_autoFlinch = true;
             m_flinchHandle.m_enableMixFlinch = true;
+            m_isAttacking = false;
             m_stateHandle.ApplyQueuedState();
         }
 
@@ -230,6 +235,7 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_Audiosource.Play();
             enabled = false;
             base.OnDestroyed(sender, eventArgs);
+            GameplaySystem.minionManager.Unregister(this);
             m_stateHandle.OverrideState(State.WaitBehaviourEnd);
             StopAllCoroutines();
             m_movement.Stop();
@@ -238,30 +244,27 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnFlinchStart(object sender, EventActionArgs eventArgs)
         {
-            StopAllCoroutines();
-            m_stateHandle.Wait(m_targetInfo.isValid ? State.Cooldown : State.ReevaluateSituation);
-            if (m_targetInfo.isValid)
+            if (!m_isAttacking && m_stateHandle.currentState != State.Chasing)
             {
-                if (!IsFacingTarget())
+                m_stateHandle.Wait(m_targetInfo.isValid ? State.Cooldown : State.ReevaluateSituation);
+                if (m_targetInfo.isValid)
                 {
-                    if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
-                        m_stateHandle.SetState(State.Turning);
-                }
-
-                else
-                {
-                    StartCoroutine(FlinchRoutine());
+                    if (!IsFacingTarget())
+                    {
+                        CustomTurn();
+                    }
                 }
             }
         }
 
-        private IEnumerator FlinchRoutine()
+        private void OnFlinchEnd(object sender, EventActionArgs eventArgs)
         {
-            m_animation.SetAnimation(0, m_info.flinchAnimation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.flinchAnimation);
-            m_animation.SetAnimation(0, m_info.idleAnimation, true);
-            m_stateHandle.ApplyQueuedState();
-            yield return null;
+            if (!m_isAttacking && m_stateHandle.currentState != State.Chasing )
+            {
+                m_isAttacking = false;
+                m_animation.SetEmptyAnimation(0, 0);
+                m_stateHandle.ApplyQueuedState();
+            }
         }
 
         public override void ApplyData()
@@ -282,8 +285,10 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator DetectRoutine()
         {
+            m_isAttacking = true;
             m_animation.SetAnimation(0, m_info.detectAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.detectAnimation);
+            m_isAttacking = false;
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_stateHandle.OverrideState(State.ReevaluateSituation);
             yield return null;
@@ -297,6 +302,18 @@ namespace DChild.Gameplay.Characters.Enemies
             //var hitPos = (new Vector2(m_projectilePoint.position.x, Vector2.down.y) * hit[0].distance);
             //return hitPos;
             return hit[0].point;
+        }
+
+        public void ForbidAttack()
+        {
+            m_stateHandle.OverrideState(State.Chasing);
+            m_canAttack = false;
+        }
+
+        public void AllowAttack()
+        {
+            m_stateHandle.OverrideState(State.Chasing);
+            m_canAttack = true;
         }
 
         private static ContactFilter2D m_contactFilter;
@@ -346,16 +363,17 @@ namespace DChild.Gameplay.Characters.Enemies
         protected override void Awake()
         {
             base.Awake();
+            GameplaySystem.minionManager.Register(this);
             m_patrolHandle.TurnRequest += OnTurnRequest;
             m_attackHandle.AttackDone += OnAttackDone;
             m_turnHandle.TurnDone += OnTurnDone;
             m_deathHandle.SetAnimation(m_info.deathAnimation);
             m_flinchHandle.FlinchStart += OnFlinchStart;
+            m_flinchHandle.FlinchEnd += OnFlinchEnd;
             m_stateHandle = new StateHandle<State>(State.Patrol, State.WaitBehaviourEnd);
             m_attackDecider = new RandomAttackDecider<Attack>();
             UpdateAttackDeciderList();
         }
-
 
         private void Update()
         {
@@ -403,7 +421,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
                 case State.Attacking:
                     m_stateHandle.Wait(State.Cooldown);
-                    m_flinchHandle.m_enableMixFlinch = false;
+                    //m_flinchHandle.m_enableMixFlinch = false;
+                    m_isAttacking = true;
 
                     switch (m_attackDecider.chosenAttack.attack)
                     {
@@ -431,10 +450,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     }
                     else
                     {
-                        if (m_animation.animationState.GetCurrent(0).IsComplete)
-                        {
-                            m_animation.SetAnimation(0, m_info.idleAnimation, true);
-                        }
+                        m_animation.SetAnimation(0, m_info.idleAnimation, true);
                     }
 
                     if (m_currentCD <= m_currentFullCD)
@@ -562,6 +578,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             //enabled = false;
             //m_flinchHandle.m_autoFlinch = false;
+            m_isAttacking = false;
             m_animation.DisableRootMotion();
             m_characterPhysics.UseStepClimb(false);
             if (m_animation.GetCurrentAnimation(0).ToString() != m_info.deathAnimation)

@@ -5,7 +5,6 @@ using System.Collections.Generic;
 namespace Pathfinding {
 	/// <summary>
 	/// Radius path modifier for offsetting paths.
-	/// \ingroup modifiers
 	///
 	/// The radius modifier will offset the path to create the effect
 	/// of adjusting it to the characters radius.
@@ -26,17 +25,17 @@ namespace Pathfinding {
 	///
 	/// Also check out the howto page "Using Modifiers".
 	///
-	/// \since Added in 3.2.6
+	/// Since: Added in 3.2.6
 	/// </summary>
 	[AddComponentMenu("Pathfinding/Modifiers/Radius Offset")]
-	[HelpURL("http://arongranberg.com/astar/docs/class_pathfinding_1_1_radius_modifier.php")]
+	[HelpURL("http://arongranberg.com/astar/documentation/stable/class_pathfinding_1_1_radius_modifier.php")]
 	public class RadiusModifier : MonoModifier {
-		#if UNITY_EDITOR
+#if UNITY_EDITOR
 		[UnityEditor.MenuItem("CONTEXT/Seeker/Add Radius Modifier")]
 		public static void AddComp (UnityEditor.MenuCommand command) {
 			(command.context as Component).gameObject.AddComponent(typeof(RadiusModifier));
 		}
-		#endif
+#endif
 
 		public override int Order { get { return 41; } }
 

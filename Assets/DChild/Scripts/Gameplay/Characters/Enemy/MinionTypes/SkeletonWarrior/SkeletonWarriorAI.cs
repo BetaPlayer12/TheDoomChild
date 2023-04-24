@@ -54,6 +54,9 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField, MinValue(0)]
             private float m_attackAllowanceRange;
             public float attackAllowanceRange => m_attackAllowanceRange;
+            [SerializeField, MinValue(0)]
+            private float m_verticalMaxRange;
+            public float verticalMaxRange => m_verticalMaxRange;
             //
             [SerializeField, MinValue(0)]
             private float m_patience;
@@ -275,6 +278,7 @@ namespace DChild.Gameplay.Characters.Enemies
             GetComponentInChildren<Hitbox>().gameObject.SetActive(false);
             m_boundBoxGO.SetActive(false);
             base.OnDestroyed(sender, eventArgs);
+            GameplaySystem.minionManager.Unregister(this);
             m_movement.Stop();
             m_footRightBB.SetActive(false);
             m_footLeftBB.SetActive(false);
@@ -492,6 +496,7 @@ namespace DChild.Gameplay.Characters.Enemies
         protected override void Awake()
         {
             base.Awake();
+            GameplaySystem.minionManager.Register(this);
             m_patrolHandle.TurnRequest += OnTurnRequest;
             m_attackHandle.AttackDone += OnAttackDone;
             m_turnHandle.TurnDone += OnTurnDone;
@@ -570,12 +575,13 @@ namespace DChild.Gameplay.Characters.Enemies
                     break;
 
                 case State.Attacking:
+                    Debug.Log("Vertical Distance to Target: " + Mathf.Abs(m_character.centerMass.position.y - m_currentTargetPos.y) + "Max Vertical Range" + m_info.verticalMaxRange);
                     if (!m_isInAttackrange)
                     {
                         m_currentTargetPos = m_targetInfo.position;
-                        if (IsTargetInRange(m_chaseAttackRange))
+                        if (IsTargetInRange(m_chaseAttackRange) && Mathf.Abs(m_character.centerMass.position.y - m_currentTargetPos.y) <= m_info.verticalMaxRange)
                         {
-                            m_currentTargetPos = new Vector2(m_targetInfo.position.x, GroundPosition().y);
+                            //m_currentTargetPos = new Vector2(m_targetInfo.position.x, GroundPosition().y);
                             m_isInAttackrange = true;
                         }
                     }
@@ -628,8 +634,8 @@ namespace DChild.Gameplay.Characters.Enemies
                         }
                         else
                         {
-                            if (!m_wallSensor.isDetecting && m_groundSensor.isDetecting && m_edgeSensor.isDetecting 
-                                && (!TargetBlocked()))
+                            if (!m_wallSensor.isDetecting && m_groundSensor.isDetecting && m_edgeSensor.isDetecting
+                                && (!TargetBlocked()) && Mathf.Abs(m_character.centerMass.position.y - m_currentTargetPos.y) <= m_info.verticalMaxRange)
                             {
                                 m_animation.EnableRootMotion(false, false);
                                 m_selfCollider.enabled = false;
@@ -645,7 +651,14 @@ namespace DChild.Gameplay.Characters.Enemies
                                 }
                                 m_animation.EnableRootMotion(true, m_groundSensor.isDetecting ? true : false);
 
-                                m_selfCollider.enabled = true;
+                                if (m_wallSensor.isDetecting || !m_groundSensor.isDetecting || !m_edgeSensor.isDetecting)
+                                {
+                                    m_selfCollider.enabled = false;
+                                }
+                                else
+                                {
+                                    m_selfCollider.enabled = true;
+                                }
                                 m_animation.SetAnimation(0, m_info.idleAnimation, true);
                             }
                         }

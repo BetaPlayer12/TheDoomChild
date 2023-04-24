@@ -13,9 +13,9 @@ namespace DChild.Gameplay.Systems
 {
     public interface IGameplayUIHandle
     {
-        void ToggleCinematicMode(bool on);
+        void ToggleCinematicMode(bool on, bool instant = false);
 
-        void UpdateNavMapConfiguration(Location location, Transform inGameReference, Vector2 mapReferencePoint, Vector2 calculationOffset);
+        void UpdateNavMapConfiguration(Location location, int sceneIndex, Transform inGameReference, Vector2 mapReferencePoint, Vector2 calculationOffset);
         void OpenTradeWindow(NPCProfile merchantData, ITradeInventory merchantInventory, TradeAskingPrice merchantBuyingPriceRate);
         void ShowLoreNote(LoreData m_data);
         void OpenStorePage(StorePage storePage);
@@ -36,6 +36,7 @@ namespace DChild.Gameplay.Systems
         void ShowJournalNotificationPrompt(float duration);
         void PromptJournalUpdateNotification();
         void ToggleBossCombatUI(bool willshow);
+        void ToggleFadeUI(bool willshow);
         void RevealBossName();
         void ShowInteractionPrompt(bool willshow);
         void ShowMovableObjectPrompt(bool willshow);
