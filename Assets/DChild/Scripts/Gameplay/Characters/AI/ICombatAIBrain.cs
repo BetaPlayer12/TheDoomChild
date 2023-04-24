@@ -14,6 +14,8 @@ namespace DChild.Gameplay.Characters.AI
         void ReactToConflict(IAttackerConflictInfo info);
         void ForbidFromAttackTarget(bool value);
         void IgnoreCurrentTarget();
+        void ForcePassiveIdle(bool value);
+
         void IgnoreAllTargets(bool value);
         void ReturnToSpawnPoint();
 
