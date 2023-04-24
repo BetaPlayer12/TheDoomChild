@@ -233,6 +233,7 @@ namespace DChild.Gameplay.Characters.Enemies
         protected override void OnDestroyed(object sender, EventActionArgs eventArgs)
         {
             base.OnDestroyed(sender, eventArgs);
+            GameplaySystem.minionManager.Unregister(this);
             StopAllCoroutines();
             if (m_executeMoveCoroutine != null)
             {
@@ -331,6 +332,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             Debug.Log(m_info);
             base.Awake();
+            GameplaySystem.minionManager.Register(this);
             m_attackHandle.AttackDone += OnAttackDone;
             m_flinchHandle.FlinchStart += OnFlinchStart;
             m_flinchHandle.FlinchEnd += OnFlinchEnd;

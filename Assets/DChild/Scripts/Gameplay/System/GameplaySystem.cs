@@ -57,6 +57,7 @@ namespace DChild.Gameplay
         private static HealthTracker m_healthTracker;
         private static GameplayUIHandle m_gameplayUIHandle;
         private static SoulSkillManager m_soulSkillManager;
+        private static MinionManager m_minionManager;
 
 
         public static ICombatManager combatManager => m_combatManager;
@@ -84,6 +85,7 @@ namespace DChild.Gameplay
         public static IHealthTracker healthTracker => m_healthTracker;
         public static IGameplayUIHandle gamplayUIHandle => m_gameplayUIHandle;
         public static ISoulSkillManager soulSkillManager => m_soulSkillManager;
+        public static IMinionManager minionManager => m_minionManager;
         public static CampaignSerializer campaignSerializer => m_campaignSerializer;
         #endregion
         public static bool isGamePaused { get; private set; }
@@ -216,6 +218,8 @@ namespace DChild.Gameplay
             AssignModule(out m_healthTracker);
             AssignModule(out m_gameplayUIHandle);
             AssignModule(out m_soulSkillManager);
+            AssignModule(out m_minionManager);
+
         }
 
         private void AssignModule<T>(out T module) where T : MonoBehaviour, IGameplaySystemModule => module = GetComponentInChildren<T>();
