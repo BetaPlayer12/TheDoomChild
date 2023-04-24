@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace DChild.Gameplay.Characters.Players
 {
-    public enum BattleAbility
+    public enum CombatArt
     {
         AirLunge,
         FireFist,

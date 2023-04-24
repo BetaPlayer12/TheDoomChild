@@ -10,40 +10,6 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Characters.AI
 {
-    public class CombatAIBrainManager : SerializedMonoBehaviour
-    {
-        [SerializeField]
-        private List<ICombatAIBrain> m_combatAI;
-        private bool m_allArePassive;
-
-        public void Add(ICombatAIBrain instance)
-        {
-            if (m_combatAI.Contains(instance) == false)
-            {
-                m_combatAI.Add(instance);
-                instance.ForbidFromAttackTarget(m_allArePassive);
-            }
-        }
-
-        public void Remove(ICombatAIBrain instance)
-        {
-            if (m_combatAI.Contains(instance))
-            {
-                m_combatAI.Remove(instance);
-                instance.ForbidFromAttackTarget(false);
-            }
-        }
-
-        public void MakeAllPassive(bool value)
-        {
-            m_allArePassive = value;
-            for (int i = 0; i < m_combatAI.Count; i++)
-            {
-                m_combatAI[i].ForbidFromAttackTarget(m_allArePassive);
-            }
-        }
-    }
-
     public abstract class CombatAIBrain<T> : AIBrain<T>, ICombatAIBrain, IController where T : IAIInfo
     {
         [Flags]
@@ -71,6 +37,9 @@ namespace DChild.Gameplay.Characters.AI
 
         protected Restriction m_currentRestrictions;
 
+        public virtual void ForcePassiveIdle(bool value) {
+        }
+
         public virtual void SetTarget(IDamageable damageable, Character m_target = null)
         {
             if (m_targetInfo == null)
@@ -86,6 +55,11 @@ namespace DChild.Gameplay.Characters.AI
             {
                 SetTarget(info.instance.GetComponent<IDamageable>(), info.instance.GetComponent<Character>());
             }
+        }
+
+        protected virtual void OnIgnoreAllTargets()
+        {
+
         }
 
         public virtual void Enable()
@@ -159,6 +133,8 @@ namespace DChild.Gameplay.Characters.AI
                 m_currentRestrictions &= ~Restriction.IgnoreTarget;
             }
         }
+
+       
 
         protected void CustomTurn()
         {
@@ -249,7 +225,7 @@ namespace DChild.Gameplay.Characters.AI
         /// <summary>
         /// When its told that it cant attack target
         /// </summary>
-        protected abstract void OnForbidFromAttackTarget();
+        protected virtual void OnForbidFromAttackTarget() { }
 
         protected bool HasRestriction(Restriction restriction) => m_currentRestrictions.HasFlag(restriction);
 
@@ -314,6 +290,7 @@ namespace DChild.Gameplay.Characters.AI
         }
 
         protected abstract void OnTargetDisappeared();
+    
 
 #if UNITY_EDITOR
         public Type aiDataType => m_data.GetType();
@@ -326,6 +303,7 @@ namespace DChild.Gameplay.Characters.AI
             m_damageable = damageable;
             m_centerMass = centerMass;
         }
+
 #endif
     }
 }
