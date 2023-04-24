@@ -110,6 +110,8 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Reference")]
         private SpineEventListener m_spineEventListener;
         [SerializeField, TabGroup("Reference")]
+        private IsolatedObjectPhysics2D m_objectPhysics2D;
+        [SerializeField, TabGroup("Reference")]
         private GameObject m_selfCollider;
         [SerializeField, TabGroup("Reference")]
         private Collider2D m_bodyCollider;
@@ -347,6 +349,7 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_Audiosource.Play();
             StopAllCoroutines();
             base.OnDestroyed(sender, eventArgs);
+            GameplaySystem.minionManager.Unregister(this);
             if (m_executeMoveCoroutine != null)
             {
                 StopCoroutine(m_executeMoveCoroutine);
@@ -355,7 +358,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_bodyCollider.enabled = true;
             m_agent.Stop();
             var rb2d = GetComponent<Rigidbody2D>();
-            m_character.physics.simulateGravity = true;
+            m_objectPhysics2D.simulateGravity = true;
         }
 
         private void ChooseAttack()
@@ -488,6 +491,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             Debug.Log(m_info);
             base.Awake();
+            GameplaySystem.minionManager.Register(this);
             m_patrolHandle.TurnRequest += OnTurnRequest;
             m_flinchHandle.FlinchStart += OnFlinchStart;
             m_flinchHandle.FlinchEnd += OnFlinchEnd;

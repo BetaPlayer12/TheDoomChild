@@ -7,7 +7,7 @@ namespace DChildDebug.Window
     public class ToggleCombatArts : MonoBehaviour, IToggleDebugBehaviour
     {
         [SerializeField]
-        private BattleAbility m_ability;
+        private CombatArt m_ability;
         public bool value => false;
 
         [Button]
