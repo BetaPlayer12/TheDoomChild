@@ -2,40 +2,37 @@
 using Doozy.Runtime.UIManager.Components;
 using UnityEngine;
 using Sirenix.OdinInspector;
+using static DChild.Gameplay.UI.CombatArts.CombatArtSelectButton;
+using System;
 
 namespace DChild.Gameplay.UI.CombatArts
 {
     public class CombatArtSelectButton : MonoBehaviour
     {
-        public enum State
-        {
-            Locked,
-            Unlockable,
-            Unlocked
-        }
-
         [SerializeField, HideInPrefabAssets, OnValueChanged("OnConfigurationChanged")]
-        private BattleAbility m_toUnlock;
+        private CombatArt m_toUnlock;
         [SerializeField, HideInPrefabAssets, OnValueChanged("OnConfigurationChanged"), MinValue(1)]
         private int m_unlockLevel = 1;
-        private State m_currentState = State.Unlocked;
-        private UIToggle m_toggle;
+        [ShowInInspector, ReadOnly]
+        private CombatArtUnlockState m_currentState = CombatArtUnlockState.Unlockable;
+        [SerializeField]
+        private CombatArtSelectButtonVisual m_visuals;
 
-        public BattleAbility skillUnlock => m_toUnlock;
+        public event Action<CombatArtSelectButton> Selected;
+
+        public CombatArt skillUnlock => m_toUnlock;
         public int unlockLevel => m_unlockLevel;
-        public State currentState => m_currentState;
+        public CombatArtUnlockState currentState => m_currentState;
 
-        public void SetState(State state)
+        public void SetState(CombatArtUnlockState state)
         {
             m_currentState = state;
-            if (state == State.Unlocked)
-            {
-                m_toggle.SetIsOn(true);
-            }
-            else
-            {
-                m_toggle.SetIsOn(false);
-            }
+            m_visuals.SetState(state);
+        }
+
+        public void Select()
+        {
+            Selected?.Invoke(this);
         }
 
 #if UNITY_EDITOR

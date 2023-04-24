@@ -13,14 +13,14 @@ namespace DChild.Gameplay.UI.CombatArts
         {
             if (AreRequiredArtsUnlocked())
             {
-                if (m_button.currentState != CombatArtSelectButton.State.Unlocked)
+                if (m_button.currentState != CombatArtUnlockState.Unlocked)
                 {
-                    m_button.SetState(CombatArtSelectButton.State.Unlockable);
+                    m_button.SetState(CombatArtUnlockState.Unlockable);
                 }
             }
             else
             {
-                m_button.SetState(CombatArtSelectButton.State.Locked);
+                m_button.SetState(CombatArtUnlockState.Locked);
             }
         }
 
@@ -28,7 +28,7 @@ namespace DChild.Gameplay.UI.CombatArts
         {
             for (int i = 0; i < m_requirements.Length; i++)
             {
-                if (m_requirements[i].currentState != CombatArtSelectButton.State.Unlocked)
+                if (m_requirements[i].currentState != CombatArtUnlockState.Unlocked)
                 {
                     return false;
                 }
