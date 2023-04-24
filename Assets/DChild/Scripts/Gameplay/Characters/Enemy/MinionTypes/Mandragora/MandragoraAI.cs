@@ -234,6 +234,7 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_Audiosource.clip = m_DeadClip;
             //m_Audiosource.Play();
             base.OnDestroyed(sender, eventArgs);
+            GameplaySystem.minionManager.Unregister(this);
             m_animation.EnableRootMotion(true, false);
             m_movement.Stop();
             m_characterPhysics.UseStepClimb(false);
@@ -278,6 +279,7 @@ namespace DChild.Gameplay.Characters.Enemies
         protected override void Awake()
         {
             base.Awake();
+            GameplaySystem.minionManager.Register(this);
             m_attackHandle.AttackDone += OnAttackDone;
             m_turnHandle.TurnDone += OnTurnDone;
             m_deathHandle.SetAnimation(m_targetInfo.isValid ? m_info.deathBurrowedAnimation : m_info.deathAnimation);

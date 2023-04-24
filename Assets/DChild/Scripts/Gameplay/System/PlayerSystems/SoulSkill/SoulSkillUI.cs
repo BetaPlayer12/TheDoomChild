@@ -10,7 +10,13 @@ namespace DChild.Gameplay.SoulSkills.UI
         protected Image m_orb;
         [SerializeField]
         protected Image m_icon;
+        [SerializeField]
+        private Image m_glow;
+
+
+        public Material orbMaterial => m_orb.material;
         public Sprite soulSkillIcon => m_icon.sprite;
+        public Material glowMaterial => m_glow.material;
         public int soulSkillID { get; private set; }
 
         public void DisplayAs(SoulSkill soulSkill)
@@ -29,13 +35,23 @@ namespace DChild.Gameplay.SoulSkills.UI
 
         protected virtual void SetOrb(SoulSkillOrbData orbData)
         {
-            m_orb.sprite = orbData.activatedOrb;
+            SetOrb(orbData.activatedOrb);
+        }
+
+        protected void SetOrb(SoulSkillOrbData.OrbInfo info)
+        {
+            //m_orb.sprite = info.orbSprite;
+            m_orb.material = info.orbMaterial ?? null;
+            if (m_glow != null)
+                m_glow.material = info.glowMaterial ?? null;
         }
 
         public virtual void CopyUI(SoulSkillButton reference)
         {
             soulSkillID = reference.soulSkillID;
             m_icon.sprite = reference.soulSkillIcon;
+            m_orb.material = reference.orbMaterial;
+            m_glow.material = reference.glowMaterial;
         }
 
         public virtual void Show(bool immidiate)

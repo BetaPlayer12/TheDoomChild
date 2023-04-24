@@ -250,6 +250,7 @@ namespace DChild.Gameplay.Characters.Enemies
             StopAllCoroutines();
             m_hitbox.Disable();
             base.OnDestroyed(sender, eventArgs);
+            GameplaySystem.minionManager.Unregister(this);
             m_movement.Stop();
             m_selfCollider.enabled = false;
         }
@@ -420,6 +421,7 @@ namespace DChild.Gameplay.Characters.Enemies
         protected override void Awake()
         {
             base.Awake();
+            GameplaySystem.minionManager.Register(this);
             m_patrolHandle.TurnRequest += OnTurnRequest;
             m_attackHandle.AttackDone += OnAttackDone;
             m_turnHandle.TurnDone += OnTurnDone;

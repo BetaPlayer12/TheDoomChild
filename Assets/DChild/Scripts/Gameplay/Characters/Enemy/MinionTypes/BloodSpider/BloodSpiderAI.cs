@@ -36,6 +36,9 @@ namespace DChild.Gameplay.Characters.Enemies
             private float m_attackCD;
             public float attackCD => m_attackCD;
             [SerializeField]
+            private Vector2 m_targetOffset;
+            public Vector2 targetOffset => m_targetOffset;
+            [SerializeField]
             private SimpleAttackInfo m_stompAttack = new SimpleAttackInfo();
             public SimpleAttackInfo stompAttack => m_stompAttack;
             [SerializeField]
@@ -129,6 +132,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private bool m_enablePatience;
 
         [SerializeField, TabGroup("Reference")]
+        private GameObject m_legsForStompAttack;
+        [SerializeField, TabGroup("Reference")]
         private SpineEventListener m_spineEventListener;
         [SerializeField, TabGroup("Reference")]
         private IsolatedCharacterPhysics2D m_charcterPhysics;
@@ -140,6 +145,9 @@ namespace DChild.Gameplay.Characters.Enemies
         private RaySensor m_groundSensor;
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_edgeSensor;
+
+        [SerializeField, TabGroup("BoundingBox")]
+        private BoundingBoxFollower m_attackBB;
 
         [SerializeField]
         private bool m_willPatrol = true;
@@ -192,8 +200,9 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 StopCoroutine(m_randomTurnRoutine);
             }
-            m_spineEventListener.Subscribe(m_info.projectile.launchOnEvent, SpitProjectile);
+            //m_spineEventListener.Subscribe(m_info.projectile.launchOnEvent, SpitProjectile);
             m_startPoint = transform.position;
+            m_legsForStompAttack.SetActive(false);
         }
 
         private Vector2 BallisticVel()
@@ -224,12 +233,6 @@ namespace DChild.Gameplay.Characters.Enemies
             }
 
             return 0;
-        }
-
-        private void CustomTurn()
-        {
-            transform.localScale = new Vector3(-transform.localScale.x, 1, 1);
-            m_character.SetFacing(transform.localScale.x == 1 ? HorizontalDirection.Right : HorizontalDirection.Left);
         }
 
         private void SpitProjectile()
@@ -342,6 +345,7 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_Audiosource.Play();
             StopAllCoroutines();
             base.OnDestroyed(sender, eventArgs);
+            GameplaySystem.minionManager.Unregister(this);
             m_movement.Stop();
             m_selfCollider.enabled = false;
         }
@@ -374,8 +378,10 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator ProjectileRoutine()
         {
             m_movement.Stop();
-            m_targetLastPos = m_targetInfo.transform.GetComponent<Character>().centerMass.position;
-            m_animation.SetAnimation(0, m_info.spitAttack.animation, false).MixDuration = 0;           
+            m_targetLastPos = m_targetInfo.position - m_info.targetOffset;
+            m_animation.SetAnimation(0, m_info.spitAttack.animation, false).MixDuration = 0;
+            yield return new WaitUntil(() => m_attackBB.CurrentCollider != null);
+            SpitProjectile();
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.spitAttack.animation);
             m_animation.EnableRootMotion(true, false);
             m_animation.SetAnimation(0, m_info.move.animation, false);
@@ -388,12 +394,15 @@ namespace DChild.Gameplay.Characters.Enemies
         }
         private IEnumerator StompRoutine()
         {
+            m_legsForStompAttack.SetActive(true);
             m_movement.Stop();
             m_animation.SetAnimation(0, m_info.stompAttack.animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.stompAttack.animation);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_flinchHandle.m_autoFlinch = true;
             m_stateHandle.ApplyQueuedState();
+
+            m_legsForStompAttack.SetActive(false);
             yield return null;
         }
 
@@ -437,6 +446,7 @@ namespace DChild.Gameplay.Characters.Enemies
         protected override void Awake()
         {
             base.Awake();
+            GameplaySystem.minionManager.Register(this);
             m_patrolHandle.TurnRequest += OnTurnRequest;
             m_attackHandle.AttackDone += OnAttackDone;
             m_turnHandle.TurnDone += OnTurnDone;
@@ -521,6 +531,7 @@ namespace DChild.Gameplay.Characters.Enemies
                             }
                             break;
                     }
+
                     m_attackDecider.hasDecidedOnAttack = false;
 
                     break;

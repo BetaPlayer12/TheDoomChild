@@ -138,6 +138,8 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Reference")]
         private Rigidbody2D m_rigidbody2D;
         [SerializeField, TabGroup("Reference")]
+        private IsolatedObjectPhysics2D m_objectPhysics2D;
+        [SerializeField, TabGroup("Reference")]
         private Hitbox m_hitbox;
         [SerializeField, TabGroup("Reference")]
         private Transform m_projectilePoint;
@@ -159,20 +161,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private PatrolHandle m_patrolHandle;
         [SerializeField, TabGroup("Modules")]
         private AttackHandle m_attackHandle;
-        //[SerializeField, TabGroup("Modules")]
-        //private DeathHandle m_deathHandle;
         [SerializeField, TabGroup("Modules")]
         private FlinchHandler m_flinchHandle;
-        [SerializeField, TabGroup("Sensors")]
-        private RaySensor m_groundSensor;
-        [SerializeField, TabGroup("Sensors")]
-        private RaySensor m_selfSensor;
-        [SerializeField, TabGroup("Sensors")]
-        private RaySensor m_wallSensor;
-        [SerializeField, TabGroup("Sensors")]
-        private RaySensor m_roofSensor;
-        [SerializeField, TabGroup("Sensors")]
-        private RaySensor m_playerSensor;
         [SerializeField, TabGroup("FX")]
         private ParticleFX m_bodylightningFX;
         [SerializeField, TabGroup("FX")]
@@ -416,7 +406,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_agent.Stop();
             StartCoroutine(AttackBBSize());
-            m_character.physics.SetVelocity(Vector2.zero);
+            //m_character.physics.SetVelocity(Vector2.zero);
             m_bodyCollider.enabled = true;
             //m_selfCollider.SetActive(true);
             m_rigidbody2D.constraints = RigidbodyConstraints2D.FreezePositionY | RigidbodyConstraints2D.FreezeRotation;
@@ -484,10 +474,10 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return new WaitForSeconds(1.6f);
             m_rigidbody2D.constraints = RigidbodyConstraints2D.FreezeRotation;
             //m_animation.DisableRootMotion();
-            m_character.physics.simulateGravity = true;
+            m_objectPhysics2D.simulateGravity = true;
             m_animation.SetAnimation(0, m_info.deathFallLoopAnimation, true);
             m_bodyCollider.enabled = true;
-            yield return new WaitUntil(() => m_groundSensor.isDetecting);
+            yield return new WaitUntil(() => m_bodyCollider.IsTouchingLayers(DChildUtility.GetEnvironmentMask()));
             var animation = UnityEngine.Random.Range(0, 2) == 1 ? m_info.deathFallImpact1Animation : m_info.deathFallImpact2Animation;
             m_animation.SetAnimation(0, animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, animation);
@@ -598,43 +588,12 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return null;
         }
 
-        private void DynamicMovement(Vector2 target, float movespeed)
-        {
-            //var rb2d = GetComponent<Rigidbody2D>();
+        private void DynamicMovement(Vector2 target, float moveSpeed)
+        {;
             m_agent.SetDestination(target);
-
-            if (/*m_wallSensor.allRaysDetecting ||*/ m_selfSensor.isDetecting)
+            if (IsFacing(target))
             {
-                if (!IsFacingTarget())
-                {
-                    CustomTurn();
-                }
-                //m_bodyCollider.SetActive(true);
-                m_agent.Stop();
-                m_animation.SetAnimation(0, m_info.idleAnimation, true);
-                return;
-            }
-
-            if (IsFacing(m_agent.hasPath && (m_targetInfo.isValid ? TargetBlocked() && !m_groundSensor.allRaysDetecting : !m_groundSensor.allRaysDetecting) && !m_roofSensor.allRaysDetecting ? m_agent.segmentDestination : target))
-            {
-                if (!m_wallSensor.allRaysDetecting && (m_groundSensor.allRaysDetecting || m_roofSensor.allRaysDetecting))
-                {
-                    m_bodyCollider.enabled = false;
-                    m_agent.Stop();
-                    Vector3 dir = (target - (Vector2)m_rigidbody2D.transform.position).normalized;
-                    m_rigidbody2D.MovePosition(m_rigidbody2D.transform.position + dir * movespeed * Time.fixedDeltaTime);
-
-                    m_animation.SetAnimation(0, m_info.move.animation, true);
-                    return;
-                }
-                
-                m_bodyCollider.enabled = true;
-                var velocityX = GetComponent<IsolatedPhysics2D>().velocity.x;
-                var velocityY = GetComponent<IsolatedPhysics2D>().velocity.y;
-                m_agent.SetDestination(target);
-                m_agent.Move(movespeed);
-
-                m_animation.SetAnimation(0, m_info.move.animation, true);
+                m_agent.Move(moveSpeed);
             }
             else
             {
@@ -649,6 +608,7 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_Audiosource.Play();
             StopAllCoroutines();
             base.OnDestroyed(sender, eventArgs);
+            GameplaySystem.minionManager.Unregister(this);
             m_stateHandle.OverrideState(State.WaitBehaviourEnd);
             if (m_bodylightningCoroutine != null)
             {
@@ -714,9 +674,10 @@ namespace DChild.Gameplay.Characters.Enemies
 
         protected override void Awake()
         {
-            Debug.Log(m_info);
+            //Debug.Log(m_info);
             base.Awake();
-            Debug.Log("ALCHEMIST BOT BASE AWAKE");
+            GameplaySystem.minionManager.Register(this);
+            //Debug.Log("ALCHEMIST BOT BASE AWAKE");
             m_patrolHandle.TurnRequest += OnTurnRequest;
             //m_flinchHandle.FlinchStart += OnFlinchStart;
             //m_flinchHandle.FlinchEnd += OnFlinchEnd;
@@ -809,7 +770,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
                     //m_animation.EnableRootMotion(true, true);
                     m_agent.Stop();
-                    m_character.physics.SetVelocity(Vector2.zero);
+                    //m_character.physics.SetVelocity(Vector2.zero);
                     m_executeMoveCoroutine = StartCoroutine(ExecuteMove(m_attackDecider.chosenAttack.range, m_chosenAttack));
                     m_attackDecider.hasDecidedOnAttack = false;
 

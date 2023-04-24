@@ -107,13 +107,6 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Modules")]
         private FlinchHandler m_flinchHandle;
 
-        [SerializeField, TabGroup("Sensors")]
-        private RaySensor m_floorSensor;
-        [SerializeField, TabGroup("Sensors")]
-        private RaySensor m_roofSensor;
-        [SerializeField, TabGroup("Sensors")]
-        private RaySensor m_wallSensor;
-
         [ShowInInspector]
         private StateHandle<State> m_stateHandle;
         private State m_turnState;
@@ -258,34 +251,14 @@ namespace DChild.Gameplay.Characters.Enemies
         private void DynamicMovement(Vector2 target, float movespeed)
         {
             var rb2d = GetComponent<Rigidbody2D>();
-            m_agent.SetDestination(target);
+            m_agent.SetDestination(target);           
 
-            if (IsFacing(m_agent.hasPath && (m_targetInfo.isCharacter ? TargetBlocked() && !m_floorSensor.allRaysDetecting : !m_floorSensor.allRaysDetecting) && !m_roofSensor.allRaysDetecting ? m_agent.segmentDestination : target))
+            if (IsFacing(target))
             {
-                if (!m_wallSensor.allRaysDetecting && (m_floorSensor.allRaysDetecting || m_roofSensor.allRaysDetecting))
-                {
-                    m_bodyCollider.enabled = false;
-                    m_agent.Stop();
-                    rb2d.isKinematic = false;
-                    Vector3 dir = (target - (Vector2)rb2d.transform.position).normalized;
-                    rb2d.MovePosition(rb2d.transform.position + dir * movespeed * Time.fixedDeltaTime);
-
-                    m_animation.SetAnimation(0, m_info.move.animation, true);
-                    return;
-                }
-
-                rb2d.isKinematic = true;
-                m_bodyCollider.enabled = true;
-                var velocityX = GetComponent<IsolatedPhysics2D>().velocity.x;
-                var velocityY = GetComponent<IsolatedPhysics2D>().velocity.y;
-                m_agent.SetDestination(target);
                 m_agent.Move(movespeed);
-
-                m_animation.SetAnimation(0, m_info.move.animation, true);
             }
             else
             {
-                //m_turnState = State.ReevaluateSituation;
                 m_stateHandle.OverrideState(State.Turning);
             }
         }
@@ -296,6 +269,7 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_Audiosource.clip = m_DeadClip;
             //m_Audiosource.Play();
             base.OnDestroyed(sender, eventArgs);
+            GameplaySystem.minionManager.Unregister(this);
             if (m_executeMoveCoroutine != null)
             {
                 StopCoroutine(m_executeMoveCoroutine);
@@ -315,6 +289,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             Debug.Log(m_info);
             base.Awake();
+            GameplaySystem.minionManager.Register(this);
             m_patrolHandle.TurnRequest += OnTurnRequest;
             m_flinchHandle.FlinchStart += OnFlinchStart;
             m_flinchHandle.FlinchEnd += OnFlinchEnd;
