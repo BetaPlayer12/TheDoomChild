@@ -237,6 +237,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                         m_basicSlashes?.Cancel();
                         m_whip?.Cancel();
                         m_slashCombo?.Cancel();
+                        m_slashCombo?.Reset();
                         m_whipCombo?.Cancel();
                         m_whipCombo?.Reset();
                         m_airLunge?.Cancel();
@@ -340,6 +341,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_character.SetFacing(oppositeFacing);
             m_basicSlashes.Cancel();
             m_slashCombo.Cancel();
+            m_slashCombo.Reset();
             m_whip.Cancel();
             m_whipCombo.Cancel();
             m_whipCombo.Reset();
