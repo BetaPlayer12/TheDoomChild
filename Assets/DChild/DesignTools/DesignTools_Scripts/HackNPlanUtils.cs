@@ -31,6 +31,7 @@ namespace DChildEditor.DesignTool.LevelMap.HackNPlan
                     builder.Append(",");
                 }
             }
+            EmphasizeGuideIDs(builder);
         }
 
         public static string EmphasizeGuideIDs(params LevelMapElement[] elements)

@@ -53,21 +53,62 @@ namespace DChildEditor.DesignTool.LevelMap.HackNPlan
         {
             if (m_shortenIDListing)
             {
+                elements.OrderBy(x => x.index);
                 var elementIndexesList = elements.Select(x => x.index).ToList();
                 var elementIndexes = elementIndexesList.ToArray();
 
-                var smallest = Mathf.Min(elementIndexes);
-                var smallestIndex = elementIndexesList.FindIndex(x => x == smallest);
-                LogBuilder.Append($"{elements[smallest].elementName} to ");
+                var startingElementIndex = 0;
+                var currentIndex = elements[startingElementIndex].index;
+                currentIndex++;
 
-                var largest = Mathf.Max(elementIndexes);
-                var largesttIndex = elementIndexesList.FindIndex(x => x == largest);
-                LogBuilder.Append(elements[largesttIndex].elementName);
-                HackNPlanUtils.EmphasizeGuideIDs(LogBuilder);
+                for (int i = 1; i < elements.Length; i++)
+                {
+                    var element = elements[i];
+                    if (i == elements.Length - 1)
+                    {
+                        if (currentIndex != element.index)
+                        {
+                            CreateShortenedIDList(elements[startingElementIndex], elements[i - 1]);
+                            LogBuilder.Append(" and ");
+                            LogBuilder.Append(HackNPlanUtils.EmphasizeGuideIDs($"{elements[i].elementName}"));
+                        }
+                        else
+                        {
+                            CreateShortenedIDList(elements[startingElementIndex], elements[i]);
+                        }
+                    }
+                    else
+                    {
+                        if (currentIndex != element.index)
+                        {
+                            CreateShortenedIDList(elements[startingElementIndex], elements[i - 1]);
+                            LogBuilder.Append(" and ");
+
+                            startingElementIndex = i;
+                            currentIndex = element.index;
+                        }
+                    }
+
+                    currentIndex++;
+                }
+
+                //var smallest = Mathf.Min(elementIndexes);
+                //var smallestIndex = elementIndexesList.FindIndex(x => x == smallest);
+                //LogBuilder.Append($"{elements[smallestIndex].elementName} to ");
+
+                //var largest = Mathf.Max(elementIndexes);
+                //var largesttIndex = elementIndexesList.FindIndex(x => x == largest);
+                //LogBuilder.Append(elements[largesttIndex].elementName);
+                //HackNPlanUtils.EmphasizeGuideIDs(LogBuilder);
             }
             else
             {
                 HackNPlanUtils.EmphasizeGuideIDs(LogBuilder, elements);
+            }
+
+            void CreateShortenedIDList(LevelMapElement startingElement, LevelMapElement endElement)
+            {
+                LogBuilder.Append(HackNPlanUtils.EmphasizeGuideIDs($"{startingElement.elementName} to {endElement.elementName}"));
             }
         }
     }
