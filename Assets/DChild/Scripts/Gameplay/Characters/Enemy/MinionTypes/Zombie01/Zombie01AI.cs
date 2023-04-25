@@ -259,7 +259,7 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_Audiosource.clip = m_DeadClip;
             //m_Audiosource.Play();
             base.OnDestroyed(sender, eventArgs);
-            GameplaySystem.minionManager.Unregister(GetComponent<ICombatAIBrain>());
+            GameplaySystem.minionManager.Unregister(this);
             m_selfCollider.SetActive(false);
             m_hitBox.Disable();
             m_stateHandle.OverrideState(State.WaitBehaviourEnd);
@@ -374,7 +374,7 @@ namespace DChild.Gameplay.Characters.Enemies
         protected override void Awake()
         {
             base.Awake();
-            GameplaySystem.minionManager.Register(GetComponent<ICombatAIBrain>());
+            GameplaySystem.minionManager.Register(this);
             m_patrolHandle.TurnRequest += OnTurnRequest;
             m_attackHandle.AttackDone += OnAttackDone;
             m_turnHandle.TurnDone += OnTurnDone;

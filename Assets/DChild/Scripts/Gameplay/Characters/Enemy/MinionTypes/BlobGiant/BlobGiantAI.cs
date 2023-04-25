@@ -143,7 +143,7 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_Audiosource.Play();
             StopAllCoroutines();
             base.OnDestroyed(sender, eventArgs);
-            GameplaySystem.minionManager.Unregister(GetComponent<ICombatAIBrain>());
+            GameplaySystem.minionManager.Unregister(this);
             m_stateHandle.OverrideState(State.WaitBehaviourEnd);
             if (m_sneerRoutine != null)
             {
@@ -210,7 +210,7 @@ namespace DChild.Gameplay.Characters.Enemies
         protected override void Awake()
         {
             base.Awake();
-            GameplaySystem.minionManager.Register(GetComponent<ICombatAIBrain>());
+            GameplaySystem.minionManager.Register(this);
             m_patrolHandle.TurnRequest += OnTurnRequest;
             m_turnHandle.TurnDone += OnTurnDone;
             //m_flinchHandle.FlinchStart += OnFlinchStart;

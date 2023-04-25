@@ -260,7 +260,7 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_Audiosource.clip = m_DeadClip;
             //m_Audiosource.Play();
             base.OnDestroyed(sender, eventArgs);
-            GameplaySystem.minionManager.Unregister(GetComponent<ICombatAIBrain>());
+            GameplaySystem.minionManager.Unregister(this);
             m_bodyCollider.SetActive(true);
             m_agent.Stop();
         }
@@ -338,7 +338,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             Debug.Log(m_info);
             base.Awake();
-            GameplaySystem.minionManager.Register(GetComponent<ICombatAIBrain>());
+            GameplaySystem.minionManager.Register(this);
             m_patrolHandle.TurnRequest += OnTurnRequest;
             m_attackHandle.AttackDone += OnAttackDone;
             m_flinchHandle.FlinchStart += OnFlinchStart;
@@ -470,6 +470,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetEmptyAnimation(0, 0);
             m_bodyCollider.SetActive(false);
             m_damageable.SetHitboxActive(true);
+            m_character.physics.simulateGravity = false;
             m_selfCollider.SetActive(false);
             m_targetInfo.Set(null, null);
             m_isDetecting = false;
