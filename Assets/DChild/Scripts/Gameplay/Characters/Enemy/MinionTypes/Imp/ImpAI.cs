@@ -136,6 +136,8 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Reference")]
         private SkeletonAnimation m_skeletomAnimation;
         [SerializeField, TabGroup("Reference")]
+        private IsolatedObjectPhysics2D m_objectPhysics2D;
+        [SerializeField, TabGroup("Reference")]
         private GameObject m_spriteMask;
         [SerializeField, TabGroup("Reference")]
         private GameObject m_selfCollider;
@@ -155,16 +157,6 @@ namespace DChild.Gameplay.Characters.Enemies
         private DeathHandle m_deathHandle;
         [SerializeField, TabGroup("Modules")]
         private FlinchHandler m_flinchHandle;
-        [SerializeField, TabGroup("Sensors")]
-        private RaySensor m_groundSensor;
-        [SerializeField, TabGroup("Sensors")]
-        private RaySensor m_floorSensor;
-        [SerializeField, TabGroup("Sensors")]
-        private RaySensor m_selfSensor;
-        [SerializeField, TabGroup("Sensors")]
-        private RaySensor m_roofSensor;
-        [SerializeField, TabGroup("Sensors")]
-        private RaySensor m_wallSensor;
         [SerializeField, TabGroup("Spawn Points")]
         private Collider2D m_randomSpawnCollider;
 
@@ -496,9 +488,10 @@ namespace DChild.Gameplay.Characters.Enemies
             Debug.Log("DIE HERE");
             m_animation.SetAnimation(0, m_info.deathBeginAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.deathBeginAnimation);
-            m_character.physics.simulateGravity = true;
+            m_objectPhysics2D.simulateGravity = true;
             m_animation.SetAnimation(0, m_info.deathFallLoopAnimation, true);
-            yield return new WaitUntil(() => m_groundSensor.isDetecting);
+            m_bodyCollider.enabled = true;
+            yield return new WaitUntil(() => m_bodyCollider.IsTouchingLayers(DChildUtility.GetEnvironmentMask()));
             m_animation.SetAnimation(0, m_info.deathHitFloorAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.deathHitFloorAnimation);
             enabled = false;
@@ -551,63 +544,12 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             var rb2d = GetComponent<Rigidbody2D>();
             m_agent.SetDestination(target);
-
-            if (/*m_wallSensor.allRaysDetecting ||*/ m_selfSensor.isDetecting)
+            if (IsFacing(target))
             {
-                if (!IsFacingTarget())
-                {
-                    CustomTurn();
-                }
-                //m_bodyCollider.SetActive(true);
-                m_agent.Stop();
-                rb2d.isKinematic = false;
-                if (m_animation.animationState.GetCurrent(0).IsComplete)
-                {
-                    var chosenMoveAnim = UnityEngine.Random.Range(0, 100) < 25 ? m_info.idle1Animation : m_info.idle2Animation;
-                    m_animation.SetAnimation(0, chosenMoveAnim, true);
-                }
-                return;
-            }
-
-            if (IsFacing(m_agent.hasPath && (m_targetInfo.isValid ? TargetBlocked() && !m_floorSensor.allRaysDetecting : !m_floorSensor.allRaysDetecting) && !m_roofSensor.allRaysDetecting ? m_agent.segmentDestination : target))
-            {
-                if (m_animation.animationState.GetCurrent(0).IsComplete)
-                {
-                    var chosenMoveAnim = UnityEngine.Random.Range(0, 50) < 10 ? m_info.idle2Animation : m_info.move.animation;
-                    m_animation.SetAnimation(0, chosenMoveAnim, true);
-                }
-
-                if (!m_wallSensor.allRaysDetecting && (m_floorSensor.allRaysDetecting || m_roofSensor.allRaysDetecting))
-                {
-                    //if (m_executeMoveCoroutine != null)
-                    //{
-                    //    StopCoroutine(m_executeMoveCoroutine);
-                    //    m_executeMoveCoroutine = null;
-                    //}
-                    //StartCoroutine(DespawnRoutine());
-                    //Vector3.MoveTowards(transform.position, m_targetInfo.position, m_info.move.speed);
-                    m_bodyCollider.enabled = false;
-                    m_agent.Stop();
-                    rb2d.isKinematic = false;
-                    Vector3 dir = (target - (Vector2)rb2d.transform.position).normalized;
-                    rb2d.MovePosition(rb2d.transform.position + dir * movespeed * Time.fixedDeltaTime);
-
-                    m_animation.SetAnimation(0, m_info.move.animation, true);
-                    return;
-                }
-
-                rb2d.isKinematic = true;
-                m_bodyCollider.enabled = true;
-                var velocityX = GetComponent<IsolatedPhysics2D>().velocity.x;
-                var velocityY = GetComponent<IsolatedPhysics2D>().velocity.y;
-                m_agent.SetDestination(target);
                 m_agent.Move(movespeed);
-
-                m_animation.SetAnimation(0, m_info.move.animation, true);
             }
             else
             {
-                m_turnState = State.ReevaluateSituation;
                 m_stateHandle.OverrideState(State.Turning);
             }
         }
