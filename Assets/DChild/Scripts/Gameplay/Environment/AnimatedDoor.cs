@@ -119,7 +119,7 @@ namespace DChild.Gameplay.Environment.Interractables
             m_isOpen = open;
         }
 
-        private void Awake()
+        private void Start()
         {
             SetAsOpen(m_isOpen);
         }

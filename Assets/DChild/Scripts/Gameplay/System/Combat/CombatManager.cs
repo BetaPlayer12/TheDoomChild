@@ -93,7 +93,7 @@ namespace DChild.Gameplay.Combat
                 }
             }
 
-            CustomDebug.Log(CustomDebug.LogType.System_Combat, GenerateDebugMessage);
+            //CustomDebug.Log(CustomDebug.LogType.System_Combat, GenerateDebugMessage);
 
             return summary;
 

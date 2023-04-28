@@ -1,5 +1,6 @@
 ﻿using DChild.Serialization;
 using Holysoft.Event;
+using Sirenix.OdinInspector;
 using System;
 using UnityEngine;
 
@@ -8,6 +9,9 @@ namespace DChild.Gameplay.Environment.Interractables
 
     public class MultiLockDoor : MonoBehaviour, ISerializableComponent
     {
+
+    
+
         [System.Serializable]
         public struct SaveData : ISaveData
         {
@@ -43,6 +47,7 @@ namespace DChild.Gameplay.Environment.Interractables
         [SerializeField]
         private int m_maxLockCount;
 
+        [SerializeField]
         private int m_currentUnlockCount;
         private Collider2D m_collider;
 
@@ -83,6 +88,7 @@ namespace DChild.Gameplay.Environment.Interractables
         private void Awake()
         {
             Initialize();
+            Debug.Log("Door Awake" + "Door Unlocked Count: " + m_currentUnlockCount);
         }
     }
 
