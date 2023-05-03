@@ -46,7 +46,7 @@ namespace DChild.Gameplay.Combat
         private Collider2DInfo[] m_ignoreColliderList;
 
 
-        private Collider2D[] m_colliders;
+        protected Collider2D[] m_colliders;
         private Collider2D m_triggeredCollider;
         private IDamageDealer m_damageDealer;
         private static RaycastHit2D[] m_blockHitBuffer;
