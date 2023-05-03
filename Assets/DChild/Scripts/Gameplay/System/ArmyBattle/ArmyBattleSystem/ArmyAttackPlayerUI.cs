@@ -1,4 +1,5 @@
 ﻿using Holysoft.Event;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -12,9 +13,13 @@ namespace DChild.Gameplay.ArmyBattle.UI
         private PlayerArmyController m_source;
 
         [SerializeField]
-        private ArmyAttackOptionsUI m_options;
+        private ArmyAttackOptionsUI m_attackOptions;
         [SerializeField]
         private ArmyAttackSelector m_attackSelector;
+        [SerializeField]
+        private ArmyAbilityOptionsUI m_abilityOptions;
+        [SerializeField]
+        private ArmyAbilitySelector m_abilitySelector;
 
         private void OnPlayerAttackTypeChosen(List<ArmyAttackGroup> obj)
         {
@@ -23,16 +28,28 @@ namespace DChild.Gameplay.ArmyBattle.UI
 
         private void OnRoundStart(object sender, EventActionArgs eventArgs)
         {
-            m_options.UpdateOptions();
+            m_attackOptions.UpdateOptions();
             m_attackSelector.Reset();
+            m_abilityOptions.UpdateOptions();
+            m_abilitySelector.Reset();
+        }
+
+        private void OnPlayerAbilityTypeChosen(List<ArmyAbilityGroup> obj)
+        {
+            m_abilitySelector.UpdateChoices(obj);
         }
 
         private void Awake()
         {
             m_battleHandle.RoundStart += OnRoundStart;
             m_source.AttackTypeChosen += OnPlayerAttackTypeChosen;
-            m_options.Initialize(m_source);
+            m_source.AbilityTypeChosen += OnPlayerAbilityTypeChosen;
+            m_attackOptions.Initialize(m_source);
             m_attackSelector.Initialize(m_source);
+            m_abilityOptions.Initialize(m_source);
+            m_abilitySelector.Initialize(m_source);
         }
+
+
     }
 }

@@ -1,50 +1,33 @@
 ﻿using Sirenix.OdinInspector;
-using System.Collections.Generic;
+using UnityEngine;
 
 namespace DChild.Gameplay.ArmyBattle
 {
+
     [System.Serializable]
-    public class ArmyAttackGroup
+    public class ArmyAttackGroup : ArmyGroup
     {
-        private ArmyAttackGroupData m_reference;
+        
 
-        private List<ArmyCharacter> m_availableMembers;
-        [ShowInInspector]
-        private bool m_isAvailable;
+        private IArmyAttackInfo m_reference;
 
-        public ArmyAttackGroup(ArmyAttackGroupData data)
+        public ArmyAttackGroup(IArmyAttackInfo data) : base()
         {
             m_reference = data;
-            m_availableMembers = new List<ArmyCharacter>();
-            for (int i = 0; i < data.memberCount; i++)
-            {
-                m_availableMembers.Add(data.GetMember(i));
-            }
-            m_isAvailable = true;
         }
 
-        public ArmyAttackGroup(ArmyAttackGroup reference)
+        public ArmyAttackGroup(ArmyAttackGroup reference) : base(reference)
         {
             m_reference = reference.reference;
-            m_availableMembers = new List<ArmyCharacter>();
-            for (int i = 0; i < reference.availableMemberCount; i++)
-            {
-                m_availableMembers.Add(reference.GetAvailableMember(i));
-            }
-            m_isAvailable = true;
         }
 
-        public ArmyAttackGroupData reference => m_reference;
-
-        [ShowInInspector, PropertyOrder(0)]
-        public string groupName => m_reference.groupName;
-        public UnitType unitType => m_reference.unitType;
-
-        public int availableMemberCount => m_availableMembers.Count;
-        public bool isAvailable => m_isAvailable;
+        public IArmyAttackInfo reference => m_reference;
+        public UnitType unitType => m_reference.attackType;
 
         [ShowInInspector, PropertyOrder(0)]
         private int totalPower => GetTotalPower();
+
+        public override string groupName => m_reference.groupName;
 
         public void SetMemberAvailability(params bool[] memberAvailability)
         {
@@ -62,8 +45,6 @@ namespace DChild.Gameplay.ArmyBattle
             }
         }
 
-        public ArmyCharacter GetAvailableMember(int index) => m_availableMembers[index];
-
         public int GetTotalPower()
         {
             var power = 0;
@@ -76,14 +57,9 @@ namespace DChild.Gameplay.ArmyBattle
             }
             else
             {
-                power = m_reference.GetTotalPower();
+                power = m_reference.GetTotalAttackPower();
             }
             return power;
-        }
-
-        public void SetAvailability(bool isAvailable)
-        {
-            m_isAvailable = isAvailable;
         }
     }
 }

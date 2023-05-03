@@ -17,13 +17,13 @@ namespace DChild.Gameplay.ArmyBattle
         [SerializeField]
         private ArmyBattleResolverData m_data;
 
-        public void ResolveBattle(ArmyController player, ArmyController enemy)
+        public void ResolveBattle(IArmyCombatInfo player, IArmyCombatInfo enemy)
         {
-            var battleResult = GetBattleResult(player.currentAttack.type, enemy.currentAttack.type);
-            CustomDebug.Log(CustomDebug.LogType.System_ArmyBattle, $"Player's <{player.currentAttack.type.ToString()}> vs Enemy's <{enemy.currentAttack.type.ToString()}>:: Result: <{battleResult.ToString()}>");
+            var battleResult = GetBattleResult(player.attackInfo.type, enemy.attackInfo.type);
+            CustomDebug.Log(CustomDebug.LogType.System_ArmyBattle, $"Player's <{player.attackInfo.type.ToString()}> vs Enemy's <{enemy.attackInfo.type.ToString()}>:: Result: <{battleResult.ToString()}>");
 
-            var initialPlayerDamage = player.currentAttack.value;
-            var initialEnemyDamage = enemy.currentAttack.value;
+            var initialPlayerDamage = player.attackInfo.value;
+            var initialEnemyDamage = enemy.attackInfo.value;
 
             var playerDamage = 0;
             var enemyDamage = 0;
@@ -50,15 +50,19 @@ namespace DChild.Gameplay.ArmyBattle
                     break;
             }
 
-            enemy.currentAttackGroup.SetAvailability(false);
-            player.currentAttackGroup.SetAvailability(false);
-            enemy.controlledArmy.troopCount.ReduceCurrentValue(playerDamage);
-            player.controlledArmy.troopCount.ReduceCurrentValue(enemyDamage);
+            playerDamage -= CalculateDamageReduction(playerDamage, player.attackInfo.type, enemy.damageReductionModifier);
+            enemy.troopCount.ReduceCurrentValue(playerDamage);
+
+            enemyDamage -= CalculateDamageReduction(enemyDamage, enemy.attackInfo.type, player.damageReductionModifier);
+            player.troopCount.ReduceCurrentValue(enemyDamage);
+
             CustomDebug.Log(CustomDebug.LogType.System_ArmyBattle, $"\n Player Dealt: {playerDamage} \n Enemy Dealt: {enemyDamage}");
-            CustomDebug.Log(CustomDebug.LogType.System_ArmyBattle, $"\n Player Troops: {player.controlledArmy.troopCount.currentValue} \n Enemy Troops: {enemy.controlledArmy.troopCount.currentValue}");
+            CustomDebug.Log(CustomDebug.LogType.System_ArmyBattle, $"\n Player Troops: {player.troopCount.currentValue} \n Enemy Troops: {enemy.troopCount.currentValue}");
         }
 
         private int CalculateDamageDealt(int power, Outcome battleResult) => m_data.baseDamageValue + Mathf.FloorToInt(power * GetOutcomeDamageModifier(battleResult));
+
+        private int CalculateDamageReduction(int damage, UnitType type, ArmyUnitModifier modifier) => Mathf.CeilToInt(modifier.GetModifier(type) * damage);
 
         private float GetOutcomeDamageModifier(Outcome battleResult)
         {
