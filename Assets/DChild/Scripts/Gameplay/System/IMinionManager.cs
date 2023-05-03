@@ -14,4 +14,8 @@ public interface IMinionManager
     void IgnoreCurrentTarget();
 
     void ForcePassiveIdle(bool willForcePassive);
+
+    void IgnorePlayer(bool willIgnoreTargets);
+    void SettoPassive();
+    void SettoActive();
 }
