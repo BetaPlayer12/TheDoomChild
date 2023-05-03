@@ -12,8 +12,6 @@ namespace DChild
         [SerializeField, ValueDropdown("GetColliders", IsUniqueList = true)]
         private Collider2D[] m_colliders;
 
-        private GraphUpdateObject[] m_objectList;
-
         public void EnableColliders()
         {
             SetColliderEnable(true);
@@ -36,30 +34,17 @@ namespace DChild
 
         private void UpdateGraph()
         {
-
             if (m_canUpdatePathfindingGraph)
             {
-                for (int i = 0; i < m_objectList.Length; i++)
+                for (int i = 0; i < m_colliders.Length; i++)
                 {
-                    AstarPath.active?.UpdateGraphs(m_objectList[i]);
+                    var graphUpdate = new GraphUpdateObject(m_colliders[i].bounds);
+                    AstarPath.active?.UpdateGraphs(graphUpdate);
                 }
             }
         }
 
         private IEnumerable GetColliders() => GetComponentsInChildren<Collider2D>();
-
-
-        private void Awake()
-        {
-            if (m_canUpdatePathfindingGraph)
-            {
-                m_objectList = new GraphUpdateObject[m_colliders.Length];
-                for (int i = 0; i < m_objectList.Length; i++)
-                {
-                    m_objectList[i] = new GraphUpdateObject(m_colliders[i].bounds);
-                }
-            }
-        }
     }
 
 }
