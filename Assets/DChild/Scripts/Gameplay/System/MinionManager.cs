@@ -48,15 +48,15 @@ namespace DChild.Gameplay
         //        m_registeredMinions[i].IgnoreCurrentTarget();
         //    }
         //}
-        [Button]
-       public void ForcePassiveIdle(bool willForcePassive)
-        {
-           for (int i = 0; i < m_registeredMinions.Count; i++)
-            {
-               m_registeredMinions[i].ForcePassiveIdle(willForcePassive);
-            }
+        ////[Button]
+        ////public void ForcePassiveIdle(bool willForcePassive)
+        ////{
+        ////    for (int i = 0; i < m_registeredMinions.Count; i++)
+        ////    {
+        ////        m_registeredMinions[i].ForcePassiveIdle(willForcePassive);
+        ////    }
 
-        }
+        ////}
         //[Button]
         //public void IgnorePlayer(bool willIgnoreTargets)
         //{

@@ -72,13 +72,15 @@ namespace DChild.Gameplay
             if (arePassive == true)
             {
                 GameplaySystem.minionManager.SettoPassive();
+                Debug.Log("enemies passive");
             }
             else
             {
                 GameplaySystem.minionManager.SettoActive();
+                Debug.Log("enemies active");
             }
             //GameplaySystem.minionManager.ForcePassiveIdle(arePassive);
-            Debug.Log("enemies passive");
+            
         }
 
         public void SmartTransferPlayerTo(LocationData locationData)
