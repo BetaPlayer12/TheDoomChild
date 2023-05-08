@@ -9,13 +9,13 @@ public interface IMinionManager
 
     void Unregister(ICombatAIBrain minion);
 
-    void ForbidAllFromAttackingTarget(bool willAttackTarget);
-    void IgnoreAllTargets(bool willIgnoreTarget);
-    void IgnoreCurrentTarget();
+    //void ForbidAllFromAttackingTarget(bool willAttackTarget);
+    //void IgnoreAllTargets(bool willIgnoreTarget);
+    //void IgnoreCurrentTarget();
 
-    void ForcePassiveIdle(bool willForcePassive);
+    //void ForcePassiveIdle(bool willForcePassive);
 
-    void IgnorePlayer(bool willIgnoreTargets);
+    //void IgnorePlayer(bool willIgnoreTargets);
     void SettoPassive();
     void SettoActive();
 }
