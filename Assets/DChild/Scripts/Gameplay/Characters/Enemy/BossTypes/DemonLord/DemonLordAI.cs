@@ -187,6 +187,12 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField, BoxGroup("FireBallProjectile")]
             private float m_fireBallDelay;
             public float fireBallDelay => m_fireBallDelay;
+            [SerializeField, BoxGroup("IceBombProjectile")]
+            private SimpleProjectileAttackInfo m_iceBombProjectile;
+            public SimpleProjectileAttackInfo iceBombProjectile => m_iceBombProjectile;
+            [SerializeField, BoxGroup("IceBombProjectile")]
+            private float m_iceBombDelay;
+            public float iceBombDelay => m_iceBombDelay;
 
             //[Title("Events")]
             //[SerializeField, ValueDropdown("GetEvents")]
@@ -211,6 +217,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_electricOrbAttack.SetData(m_skeletonDataAsset);
                 m_lightningGroundAttack.SetData(m_skeletonDataAsset);
                 m_fireBallProjectile.SetData(m_skeletonDataAsset);
+                m_iceBombProjectile.SetData(m_skeletonDataAsset);
 #endif
             }
         }
@@ -298,6 +305,14 @@ namespace DChild.Gameplay.Characters.Enemies
         private Boss m_boss;
         [SerializeField, TabGroup("Reference")]
         private Hitbox m_hitbox;
+        //[SerializeField, TabGroup("Reference")]
+        //private DemonLordEphemeralArms m_ephemeralArms;
+        [SerializeField, TabGroup("Reference")]
+        private DemonLordEphemeralArms m_ephemeralArmsFront;
+        [SerializeField, TabGroup("Reference")]
+        private DemonLordEphemeralArms m_ephemeralArmsBack;
+        [SerializeField, TabGroup("Reference")]
+        private DemonLordBook m_book;
 
         [SerializeField, TabGroup("Modules")]
         private AnimatedTurnHandle m_turnHandle;
@@ -305,6 +320,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private PathFinderAgent m_agent;
         [SerializeField, TabGroup("Modules")]
         private DeathHandle m_deathHandle;
+        [SerializeField, TabGroup("Modules")]
+        private FlinchHandler m_flinchHandler;
 
         [SerializeField]
         private SpineEventListener m_spineListener;
@@ -323,12 +340,17 @@ namespace DChild.Gameplay.Characters.Enemies
 
         #region ProjectileLaunchers
         private ProjectileLauncher m_fireBallProjectileLauncher;
+        private ProjectileLauncher m_iceBombProjectileLauncher;
         #endregion
 
         [SerializeField, TabGroup("Spawn Points")]
         private Transform m_fireBallSpawnPoint;
+        [SerializeField, TabGroup("Spawn Points")]
+        private Transform m_iceBombSpawnPoint;
         [SerializeField, TabGroup("Target Points")]
         private Transform m_fireBallTargetPoint;
+        [SerializeField, TabGroup("Target Points")]
+        private List<Transform> m_iceBombTargetPoints;
 
         private Vector2 m_lastTargetPos;
         private float m_currentCooldown;
@@ -424,6 +446,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             if (m_stateHandle.currentState != State.Phasing)
             {
+                m_book.Idle(true);
                 m_animation.animationState.TimeScale = 1f;
                 m_stateHandle.ApplyQueuedState();
             }
@@ -438,8 +461,13 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_info.move.animation, true);
             yield return new WaitForSeconds(5);
             //GetComponentInChildren<MeshRenderer>().sortingOrder = 99;
+            m_book.EphemeralArmsSmash(false);
+            //m_ephemeralArms.EphemeralArmsSmash(false);
+            m_ephemeralArmsFront.EphemeralArmsSmash(false);
+            m_ephemeralArmsBack.EphemeralArmsSmash(false);
             m_animation.SetAnimation(0, m_info.ephemeralArmsSmashAttack.animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.ephemeralArmsSmashAttack.animation);
+            m_book.Idle(true);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_hitbox.SetInvulnerability(Invulnerability.None);
             m_stateHandle.ApplyQueuedState();
@@ -465,9 +493,20 @@ namespace DChild.Gameplay.Characters.Enemies
             enabled = true;
         }
 
+        private void OnFlinchEnd(object sender, EventActionArgs eventArgs)
+        {
+            m_book.Flinch(false);
+        }
+
+        private void OnFlinchStart(object sender, EventActionArgs eventArgs)
+        {
+            m_book.Idle(true);
+        }
+
         protected override void OnDestroyed(object sender, EventActionArgs eventArgs)
         {
             base.OnDestroyed(sender, eventArgs);
+            m_book.Death(false);
             StopAllCoroutines();
             m_agent.Stop();
             m_isDetecting = false;
@@ -477,9 +516,12 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator EphemeralArmsSmashAttackRoutine(FollowUpAttack attack)
         {
+            m_book.EphemeralArmsSmash(false);
+            //m_ephemeralArms.EphemeralArmsSmash(false);
+            m_ephemeralArmsFront.EphemeralArmsSmash(false);
+            m_ephemeralArmsBack.EphemeralArmsSmash(false);
             m_animation.SetAnimation(0, m_info.ephemeralArmsSmashAttack.animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.ephemeralArmsSmashAttack.animation);
-            //m_animation.SetAnimation(0, m_info.idleAnimation, true);
             //m_attackDecider.hasDecidedOnAttack = false;
             m_currentAttackCoroutine = null;
             //m_stateHandle.ApplyQueuedState();
@@ -529,8 +571,13 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator EphemeralArmsComboAttackRoutine()
         {
+            m_book.EphemeralArmsCombo(false);
+            //m_ephemeralArms.EphemeralArmsCombo(false);
+            m_ephemeralArmsFront.EphemeralArmsCombo(false);
+            m_ephemeralArmsBack.EphemeralArmsCombo(false);
             m_animation.SetAnimation(0, m_info.ephemeralArmsComboAttack.animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.ephemeralArmsComboAttack.animation);
+            m_book.Idle(true);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_attackDecider.hasDecidedOnAttack = false;
             m_currentAttackCoroutine = null;
@@ -540,17 +587,26 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator ThreeFireBallsAttackRoutine()
         {
+            m_book.ThreeFireBallsPre(false);
+            //m_ephemeralArms.ThreeFireBallsPre(false);
+            m_ephemeralArmsFront.ThreeFireBallsPre(false);
+            m_ephemeralArmsBack.ThreeFireBallsPre(false);
             m_animation.SetAnimation(0, m_info.threeFireBallsPreAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.threeFireBallsPreAnimation);
+            m_book.ThreeFireBallsFire(false);
+            //m_ephemeralArms.ThreeFireBallsFire(false);
+            m_ephemeralArmsFront.ThreeFireBallsFire(false);
+            m_ephemeralArmsBack.ThreeFireBallsFire(false);
             m_animation.SetAnimation(0, m_info.threeFireBallsFireAnimation, false);
-            m_fireBallProjectileLauncher.AimAt(m_fireBallTargetPoint.position);
             for (int i = 0; i < m_info.threeFireBallsCycle; i++)
             {
+                m_fireBallProjectileLauncher.AimAt(m_targetInfo.position);
                 yield return new WaitForSeconds(m_info.fireBallDelay);
                 m_fireBallProjectileLauncher.LaunchProjectile();
                 yield return null;
             }
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.threeFireBallsFireAnimation);
+            m_book.Idle(true);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_attackDecider.hasDecidedOnAttack = false;
             m_currentAttackCoroutine = null;
@@ -560,8 +616,10 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator FlameWaveAttackRoutine()
         {
+            m_book.FlameWave(false);
             m_animation.SetAnimation(0, m_info.flameWaveAttack.animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.flameWaveAttack.animation);
+            m_book.Idle(true);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_attackDecider.hasDecidedOnAttack = false;
             m_currentAttackCoroutine = null;
@@ -571,14 +629,34 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator RayOfFrostAttackRoutine()
         {
+            m_book.LightningMidair(false);
             m_animation.SetAnimation(0, m_info.lightningStepMidair.animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.lightningStepMidair.animation);
+            m_book.RayOfFrost(false);
+            //m_ephemeralArms.RayOfFrost(false);
+            m_ephemeralArmsFront.RayOfFrost(false);
+            m_ephemeralArmsBack.RayOfFrost(false);
             m_animation.SetAnimation(0, m_info.rayOfFrostAttack.animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.rayOfFrostAttack.animation);
+            m_book.RayOfFrostCharge(true);
+            //m_ephemeralArms.RayOfFrostCharge(true);
+            m_ephemeralArmsFront.RayOfFrostCharge(true);
+            m_ephemeralArmsBack.RayOfFrostCharge(true);
             m_animation.SetAnimation(0, m_info.rayOfFrostChargeAnimation, true);
             yield return new WaitForSeconds(m_info.rayOfFrostChargeDuration);
+            m_book.RayOfFrostFire(false);
+            //m_ephemeralArms.RayOfFrostFire(false);
+            m_ephemeralArmsFront.RayOfFrostFire(false);
+            m_ephemeralArmsBack.RayOfFrostFire(false);
             m_animation.SetAnimation(0, m_info.rayOfFrostFireAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.rayOfFrostFireAnimation);
+            m_book.RayOfFrostFireToIdle(false);
+            //m_ephemeralArms.RayOfFrostFireToIdle(false);
+            m_ephemeralArmsFront.RayOfFrostFireToIdle(false);
+            m_ephemeralArmsBack.RayOfFrostFireToIdle(false);
+            m_animation.SetAnimation(0, m_info.rayOfFrostFireToIdleAnimation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.rayOfFrostFireToIdleAnimation);
+            m_book.Idle(true);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_attackDecider.hasDecidedOnAttack = false;
             m_currentAttackCoroutine = null;
@@ -588,10 +666,29 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator IceBombAttackRoutine()
         {
+            m_book.IceBomb(false);
+            //m_ephemeralArms.IceBomb(false);
+            m_ephemeralArmsFront.IceBomb(false);
+            m_ephemeralArmsBack.IceBomb(false);
             m_animation.SetAnimation(0, m_info.iceBombAttack.animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.iceBombAttack.animation);
+            m_book.IceBombThrow(false);
+            //m_ephemeralArms.IceBombThrow(false);
+            m_ephemeralArmsFront.IceBombThrow(false);
+            m_ephemeralArmsBack.IceBombThrow(false);
             m_animation.SetAnimation(0, m_info.IceBombThrowAnimation, false);
+            yield return new WaitForSeconds(m_info.iceBombDelay);
+            for (int i = 0; i < m_iceBombTargetPoints.Count; i++)
+            {
+                var instance = GameSystem.poolManager.GetPool<ProjectilePool>().GetOrCreateItem(m_info.iceBombProjectile.projectileInfo.projectile);
+                instance.transform.position = m_iceBombSpawnPoint.position;
+                instance.GetComponent<DemonLordIceBomb>().SetTarget(m_iceBombTargetPoints[i]);
+
+                m_iceBombProjectileLauncher.AimAt(m_iceBombTargetPoints[i].position);
+                m_iceBombProjectileLauncher.LaunchProjectile(m_iceBombSpawnPoint.right, instance.gameObject);
+            }
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.IceBombThrowAnimation);
+            m_book.Idle(true);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_attackDecider.hasDecidedOnAttack = false;
             m_currentAttackCoroutine = null;
@@ -601,8 +698,15 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator ElectricOrbAttackRoutine()
         {
+            //m_ephemeralArms.ThreeFireBallsPre(false);
+            m_ephemeralArmsFront.ThreeFireBallsPre(false);
+            m_ephemeralArmsBack.ThreeFireBallsPre(false);
             m_animation.SetAnimation(0, m_info.electricOrbAttack.animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.electricOrbAttack.animation);
+            //m_ephemeralArms.EmptyAnimation();
+            m_ephemeralArmsFront.EmptyAnimation();
+            m_ephemeralArmsBack.EmptyAnimation();
+            m_book.Idle(true);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_attackDecider.hasDecidedOnAttack = false;
             m_currentAttackCoroutine = null;
@@ -612,8 +716,13 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator LightningGroundAttackRoutine()
         {
+            m_book.LightningGround(false);
+            //m_ephemeralArms.LightningGround(false);
+            m_ephemeralArmsFront.LightningGround(false);
+            m_ephemeralArmsBack.LightningGround(false);
             m_animation.SetAnimation(0, m_info.lightningGroundAttack.animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.lightningGroundAttack.animation);
+            m_book.Idle(true);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_attackDecider.hasDecidedOnAttack = false;
             m_currentAttackCoroutine = null;
@@ -738,7 +847,10 @@ namespace DChild.Gameplay.Characters.Enemies
             m_turnHandle.TurnDone += OnTurnDone;
             //m_hitDetector.PlayerHit += AddHitCount;
             m_deathHandle.SetAnimation(m_info.deathAnimation);
+            m_flinchHandler.FlinchStart += OnFlinchStart;
+            m_flinchHandler.FlinchEnd += OnFlinchEnd;
             m_fireBallProjectileLauncher = new ProjectileLauncher(m_info.fireBallProjectile.projectileInfo, m_fireBallSpawnPoint);
+            m_iceBombProjectileLauncher = new ProjectileLauncher(m_info.iceBombProjectile.projectileInfo, m_iceBombSpawnPoint);
             m_patternAttackCount = new int[2];
             //m_patternDecider = new RandomAttackDecider<Pattern>();
             m_attackDecider = new RandomAttackDecider<Attack>();
@@ -780,6 +892,7 @@ namespace DChild.Gameplay.Characters.Enemies
             switch (m_stateHandle.currentState)
             {
                 case State.Idle:
+                    m_book.Idle(true);
                     m_animation.SetAnimation(0, m_info.idleAnimation, true);
                     break;
                 case State.Intro:
@@ -803,6 +916,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     Debug.Log("Turning Steet");
                     m_stateHandle.Wait(m_turnState);
                     StopAllCoroutines();
+                    m_book.Turn(false);
                     m_turnHandle.Execute(m_info.turnAnimation, m_info.idleAnimation);
                     m_agent.Stop();
                     break;
@@ -953,6 +1067,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     }
                     else
                     {
+                        m_book.Idle(true);
                         m_animation.SetAnimation(0, m_info.idleAnimation, true);
                     }
 
