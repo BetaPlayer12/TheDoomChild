@@ -2,8 +2,9 @@
 
 namespace DChild.Gameplay.ArmyBattle
 {
+
     [SerializeField]
-    public struct ArmyUnitModifier
+    public struct ArmyUnitModifier : IArmyUnitModifier
     {
         [SerializeField]
         private float m_rockModifier;

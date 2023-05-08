@@ -62,7 +62,7 @@ namespace DChild.Gameplay.ArmyBattle
 
         private int CalculateDamageDealt(int power, Outcome battleResult) => m_data.baseDamageValue + Mathf.FloorToInt(power * GetOutcomeDamageModifier(battleResult));
 
-        private int CalculateDamageReduction(int damage, UnitType type, ArmyUnitModifier modifier) => Mathf.CeilToInt(modifier.GetModifier(type) * damage);
+        private int CalculateDamageReduction(int damage, UnitType type, IArmyUnitModifier modifier) => Mathf.CeilToInt(modifier.GetModifier(type) * damage);
 
         private float GetOutcomeDamageModifier(Outcome battleResult)
         {

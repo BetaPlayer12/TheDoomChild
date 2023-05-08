@@ -7,8 +7,6 @@ namespace DChild.Gameplay.ArmyBattle
     [System.Serializable]
     public class ArmyAttackGroup : ArmyGroup
     {
-        
-
         private IArmyAttackInfo m_reference;
 
         public ArmyAttackGroup(IArmyAttackInfo data) : base()
