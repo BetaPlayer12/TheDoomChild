@@ -31,7 +31,6 @@ Transform:
   m_Children:
   - {fileID: 5663731097696986874}
   - {fileID: 5663731096886069236}
-  - {fileID: 5663731097460584464}
   m_Father: {fileID: 5663731097791569010}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -569,7 +568,7 @@ MonoBehaviour:
   m_acceptableWalkableAngle:
     m_min: 0
     m_max: 0
-  m_legCollision: {fileID: 5663731097460584466}
+  m_legCollision: {fileID: 0}
   m_legCollider: {fileID: 5663731097696986875}
   m_legColliderLayerMask:
     serializedVersion: 2
@@ -747,88 +746,6 @@ MonoBehaviour:
   followLocalScale: 0
   initializeOnAwake: 1
   m_updateOnFixedUpdate: 0
---- !u!1 &5663731097460584471
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 5663731097460584464}
-  - component: {fileID: 5663731097460584467}
-  - component: {fileID: 5663731097460584466}
-  - component: {fileID: 5663731097460584465}
-  m_Layer: 13
-  m_Name: LegCollider
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!4 &5663731097460584464
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5663731097460584471}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 5663731095896816217}
-  m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!70 &5663731097460584467
-CapsuleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5663731097460584471}
-  m_Enabled: 0
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0.058227353, y: -1.6304657}
-  m_Size: {x: 2.746939, y: 1.000002}
-  m_Direction: 1
---- !u!114 &5663731097460584466
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5663731097460584471}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 71b97b91669afc14aa205ed93d651be5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_collisionMask:
-    serializedVersion: 2
-    m_Bits: 2048
-  m_collider: {fileID: 5663731097460584467}
-  m_recordsContactPoints: 1
---- !u!114 &5663731097460584465
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5663731097460584471}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ea39aaa929f53d64b9a05becc48c1d8e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_mask:
-    serializedVersion: 2
-    m_Bits: 2048
 --- !u!1 &5663731097696986873
 GameObject:
   m_ObjectHideFlags: 0
@@ -948,6 +865,7 @@ GameObject:
   - component: {fileID: 8250877664138794611}
   - component: {fileID: 4637246065236260469}
   - component: {fileID: 6668588696781853434}
+  - component: {fileID: 5287392450033126959}
   m_Layer: 13
   m_Name: SeedOfTheOneModel
   m_TagString: Untagged
@@ -1103,6 +1021,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_animation: {fileID: 3361796259712592293}
+--- !u!114 &5287392450033126959
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5663731097791569009}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab6a2e545a980c74b97fa2444c15f4ba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sourceBoneName: root
+  useX: 1
+  useY: 0
+  rb: {fileID: 0}
+  siblingBoneNames: []
 --- !u!1 &5663731097864245862
 GameObject:
   m_ObjectHideFlags: 0
@@ -1174,7 +1109,7 @@ MonoBehaviour:
   m_collider2Ds:
   - {fileID: 5663731097864245858}
   m_damageFXInfo:
-    m_fx: {fileID: 5663731097083920060}
+    m_fx: {fileID: 0}
     m_overrideColor: 0
     m_colorToUse: {r: 0, g: 0, b: 0, a: 0}
     m_overrideScale: 0
