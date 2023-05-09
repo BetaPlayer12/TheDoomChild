@@ -77,9 +77,9 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField, ValueDropdown("GetAnimations")]
             private string m_deathFallImpact2Animation;
             public string deathFallImpact2Animation => m_deathFallImpact2Animation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_flinchAnimation;
-            public string flinchAnimation => m_flinchAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_flinchAnimation = new BasicAnimationInfo();
+            public BasicAnimationInfo flinchAnimation => m_flinchAnimation;
             [SerializeField, ValueDropdown("GetAnimations")]
             private string m_awakenAnimation;
             public string awakenAnimation => m_awakenAnimation;
@@ -107,6 +107,8 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_attack1.SetData(m_skeletonDataAsset);
                 m_attack2.SetData(m_skeletonDataAsset);
 
+
+                m_flinchAnimation.SetData(m_skeletonDataAsset);
 #endif
             }
         }
@@ -495,7 +497,7 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 var distance = Vector2.Distance(m_projectilePoint.position, GroundPosition());
                 m_attackBB.enabled = true;
-                m_attackBB.offset = new Vector2(0,(-distance * 0.5f));
+                m_attackBB.offset = new Vector2(0, (-distance * 0.5f));
                 m_attackBB.size = new Vector2(.25f, distance);
             }
             else
@@ -589,7 +591,8 @@ namespace DChild.Gameplay.Characters.Enemies
         }
 
         private void DynamicMovement(Vector2 target, float moveSpeed)
-        {;
+        {
+            ;
             m_agent.SetDestination(target);
             if (IsFacing(target))
             {
