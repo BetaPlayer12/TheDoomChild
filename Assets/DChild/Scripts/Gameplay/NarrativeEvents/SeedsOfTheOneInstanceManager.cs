@@ -53,17 +53,6 @@ public class SeedsOfTheOneInstanceManager : MonoBehaviour
         DialogueLua.SetVariable(m_connectedVariable, (int)instanceTracker);
     }
 
-    private void OnSeedDies(object sender, Damageable.DamageEventArgs eventArgs)
-    {
-        for (int i = 0; i < m_SeedsOfTheOne.Count; i++)
-        {
-            if (!m_SeedsOfTheOne[i].isAlive)
-            {
-                AddSeedFlag();
-            }
-        }
-    }
-
     private void OnSeedDies(object sender, EventActionArgs eventArgs)
     {
         AddSeedFlag();
