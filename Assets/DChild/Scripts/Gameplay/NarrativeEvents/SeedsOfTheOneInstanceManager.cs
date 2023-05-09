@@ -12,15 +12,22 @@ public class SeedsOfTheOneInstanceManager : MonoBehaviour
 {
     [SerializeField,VariablePopup(true)]
     private string m_connectedVariable;
+    [SerializeField] 
+    private DialogueSystemTrigger m_seedsQuestStartDialogueSystemTrigger;
+    [SerializeField]
+    private DialogueSystemTrigger m_seedsQuestEndDialogueSystemTrigger;
     [SerializeField]
     private Flag instanceTracker;
-    [SerializeField] 
-    private DialogueSystemTrigger m_dialogueSystemTrigger;
-    [SerializeField]
-    private DialogueSystemTrigger m_questEndDialogueSystemTrigger;
-
     [SerializeField]
     private List<Damageable> m_SeedsOfTheOne;
+
+    private void Awake()
+    {
+        for( int i = 0; i < m_SeedsOfTheOne.Count; i++)
+        {
+            m_SeedsOfTheOne[i].Destroyed += OnSeedDies;
+        }
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -41,8 +48,6 @@ public class SeedsOfTheOneInstanceManager : MonoBehaviour
             {
                 m_SeedsOfTheOne[i].gameObject.SetActive(false);
             }
-
-            m_SeedsOfTheOne[i].DamageTaken += OnSeedDies;
         }
 
         DialogueLua.SetVariable(m_connectedVariable, (int)instanceTracker);
@@ -88,17 +93,19 @@ public class SeedsOfTheOneInstanceManager : MonoBehaviour
             }
         }
 
-        if(DialogueLua.GetVariable("Seed_Dead_Count").AsInt < 1)
-        {
-            m_dialogueSystemTrigger.OnUse();
-        }
-
-        if(DialogueLua.GetVariable("Seed_Dead_Count").AsInt >= DialogueLua.GetVariable("Total_Seed_Instances").AsInt)
-        {
-            m_questEndDialogueSystemTrigger.OnUse();
-        }
-
         DialogueLua.SetVariable(m_connectedVariable, (int)instanceTracker);
         DialogueLua.SetVariable("Seed_Dead_Count", DialogueLua.GetVariable("Seed_Dead_Count").AsInt + 1);
+
+        //Set Seeds Quest active if Seeds count is less than 1
+        if (DialogueLua.GetVariable("Seed_Dead_Count").AsInt >= 1)
+        {
+            m_seedsQuestStartDialogueSystemTrigger.OnUse();
+        }
+
+        //Set Seeds Quest as success when dead seeds is equal to total seeds and set Desecrate Statue Quest as active
+        if (DialogueLua.GetVariable("Seed_Dead_Count").AsInt >= DialogueLua.GetVariable("Total_Seed_Instances").AsInt)
+        {
+            m_seedsQuestEndDialogueSystemTrigger.OnUse();
+        }
     }
 }

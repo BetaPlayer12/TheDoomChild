@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 8042932553020157306}
   - component: {fileID: 8955700787201009209}
   m_Layer: 0
-  m_Name: Quest_TheSeedsOfTheOne
+  m_Name: QuestEntry_KillAllSeeds
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -48,13 +48,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_connectedVariable: 
+  m_seedsQuestStartDialogueSystemTrigger: {fileID: 8042932553020157306}
+  m_seedsQuestEndDialogueSystemTrigger: {fileID: 8210178877818698058}
+  m_desecrateQuestStartDialogueSystemTrigger: {fileID: 0}
   instanceTracker: 0
-  m_dialogueSystemTrigger: {fileID: 8042932553020157306}
-  m_questEndDialogueSystemTrigger: {fileID: 8210178877818698058}
   m_SeedsOfTheOne:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+  m_seedsDeadCount: 0
 --- !u!114 &8042932553020157306
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -76,11 +78,11 @@ MonoBehaviour:
     luaWizardIndex: -1
     lastEvaluationValue: 0
   setQuestState: 1
-  questName: Kill All The Seeds
+  questName: The Seeds Of The One
   questState: 2
-  setQuestEntryState: 0
+  setQuestEntryState: 1
   questEntryNumber: 1
-  questEntryState: 0
+  questEntryState: 2
   setAnotherQuestEntryState: 0
   anotherQuestEntryNumber: 1
   anotherQuestEntryState: 0
@@ -163,7 +165,7 @@ GameObject:
   - component: {fileID: 8478479952030660716}
   - component: {fileID: 8210178877818698058}
   m_Layer: 0
-  m_Name: 'DialogueSystemTrigger_EndQuest '
+  m_Name: DialogueSystemTrigger_QuestUpdate
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -204,15 +206,15 @@ MonoBehaviour:
     acceptedGameObjects: []
     luaWizardIndex: -1
     lastEvaluationValue: 0
-  setQuestState: 1
-  questName: Kill All The Seeds
-  questState: 4
-  setQuestEntryState: 0
+  setQuestState: 0
+  questName: The Seeds Of The One
+  questState: 2
+  setQuestEntryState: 1
   questEntryNumber: 1
-  questEntryState: 0
-  setAnotherQuestEntryState: 0
-  anotherQuestEntryNumber: 1
-  anotherQuestEntryState: 0
+  questEntryState: 4
+  setAnotherQuestEntryState: 1
+  anotherQuestEntryNumber: 2
+  anotherQuestEntryState: 2
   luaCode: 
   sequence: 
   sequenceSpeaker: {fileID: 0}
