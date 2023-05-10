@@ -6,7 +6,6 @@ using UnityEngine;
 
 namespace DChild.Gameplay.UI.CombatArts
 {
-
     public class CombatArtUIManager : MonoBehaviour
     {
         [SerializeField]
@@ -26,7 +25,9 @@ namespace DChild.Gameplay.UI.CombatArts
 
         public void Initialize()
         {
+            m_unlockArtHandler.UnlockSuccessful += OnUnlockSuccessFull;
             m_unlockArtHandler.InitializeReferences(m_progressionReference, m_referenceList);
+            m_unlockArtHandler.ResetUnlockProgress();
             InitializeButtonStates();
             ValidateButtonStates();
         }
@@ -42,12 +43,18 @@ namespace DChild.Gameplay.UI.CombatArts
             m_unlockArtHandler.VerifyUnlockFunction(m_currentSelectedButton);
         }
 
-        public void UnlockSelectedCombatArt()
+        public void StartUnlockSelectedCombatArt()
         {
             if (m_currentSelectedButton.currentState != CombatArtUnlockState.Unlockable)
                 return;
 
-            m_unlockArtHandler.UnlockCombatArt(m_currentSelectedButton.skillUnlock, m_currentSelectedButton.unlockLevel);
+            m_unlockArtHandler.StartUnlockProgress();
+        }
+
+        public void ResetUnlock() => m_unlockArtHandler.ResetUnlockProgress();
+
+        private void OnUnlockSuccessFull()
+        {
             m_unlockArtHandler.DisableUnlockFunction();
             m_currentSelectedButton.SetState(CombatArtUnlockState.Unlocked);
             ValidateButtonStates();
@@ -118,6 +125,20 @@ namespace DChild.Gameplay.UI.CombatArts
                 }
             }
         }
+
+#if UNITY_EDITOR
+        [ContextMenu("Editor/Update SelectButtonVisuals")]
+        private void UpdateSelectButtonVisuals()
+        {
+            var buttons = GetComponentsInChildren<CombatArtSelectButton>();
+            foreach (var button in buttons)
+            {
+                var data = m_referenceList.GetCombatArtData(button.skillUnlock);
+                var levelData = data.GetCombatArtLevelData(button.unlockLevel);
+                button.DisplayAs(levelData);
+            }
+        }
+#endif
 
         private void Awake()
         {
