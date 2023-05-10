@@ -12,5 +12,12 @@ namespace DChild.Gameplay.Characters.AI
             track.TimeScale = animationInfo.animationTimeScale;
             return track;
         }
+
+        public static TrackEntry AddAnimation(this SpineRootAnimation animation, int index, IAIAnimationInfo animationInfo, bool loop,float delay)
+        {
+            var track = animation.AddAnimation(index, animationInfo.animation, loop, delay);
+            track.TimeScale = animationInfo.animationTimeScale;
+            return track;
+        }
     }
 }
