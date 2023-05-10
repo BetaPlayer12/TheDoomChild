@@ -3,24 +3,24 @@ using UnityEngine;
 
 namespace DChild.Gameplay.ArmyBattle.UI
 {
-    public class ArmyAttackGroupUI : MonoBehaviour
+    public class ArmyAbilityGroupUI : MonoBehaviour
     {
         [SerializeField]
         private TextMeshProUGUI m_groupLabel;
         [SerializeField]
-        private TextMeshProUGUI m_powerLabel;
+        private TextMeshProUGUI m_descriptionLabel;
 
-        public void Display(ArmyAttackGroup group)
+        public void Display(ArmyAbilityGroup group)
         {
             if (group != null)
             {
                 UpdateText(m_groupLabel, group.groupName);
-                UpdateText(m_powerLabel, group.GetTotalPower().ToString());
+                UpdateText(m_descriptionLabel, group.description);
             }
             else
             {
                 UpdateText(m_groupLabel, "Name Of Group");
-                UpdateText(m_powerLabel, "Power:");
+                UpdateText(m_descriptionLabel, "Description:");
             }
         }
 
