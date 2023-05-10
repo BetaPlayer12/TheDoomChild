@@ -57,45 +57,45 @@ namespace DChild.Gameplay.Characters.Enemies
 
 
             //Animations
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_idleAnimation;
-            public string idleAnimation => m_idleAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_idleSoloAnimation;
-            public string idleSoloAnimation => m_idleSoloAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_cartStopAnimation;
-            public string cartStopAnimation => m_cartStopAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_getOffAnimation;
-            public string getOffAnimation => m_getOffAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_impactAnimation;
-            public string impactAnimation => m_impactAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_anticipationAnimation;
-            public string anticipationAnimation => m_anticipationAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_detectAnimation;
-            public string detectAnimation => m_detectAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_flinchAnimation;
-            public string flinchAnimation => m_flinchAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_flinchBothAnimation;
-            public string flinchBothAnimation => m_flinchBothAnimation;
-            //[SerializeField, ValueDropdown("GetAnimations")]
-            //private string m_turnAnimation;
-            //public string turnAnimation => m_turnAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_deathAnimation;
-            public string deathAnimation => m_deathAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_deathWithCartAnimation;
-            public string deathWithCartAnimation => m_deathWithCartAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_deathCartOnlyAnimation;
-            public string deathCartOnlyAnimation => m_deathCartOnlyAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_idleAnimation;
+            public BasicAnimationInfo idleAnimation => m_idleAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_idleSoloAnimation;
+            public BasicAnimationInfo idleSoloAnimation => m_idleSoloAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_cartStopAnimation;
+            public BasicAnimationInfo cartStopAnimation => m_cartStopAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_getOffAnimation;
+            public BasicAnimationInfo getOffAnimation => m_getOffAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_impactAnimation;
+            public BasicAnimationInfo impactAnimation => m_impactAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_anticipationAnimation;
+            public BasicAnimationInfo anticipationAnimation => m_anticipationAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_detectAnimation;
+            public BasicAnimationInfo detectAnimation => m_detectAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_flinchAnimation;
+            public BasicAnimationInfo flinchAnimation => m_flinchAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_flinchBothAnimation;
+            public BasicAnimationInfo flinchBothAnimation => m_flinchBothAnimation;
+            //[SerializeField]
+            //private BasicAnimationInfo m_turnAnimation;
+            //public BasicAnimationInfo turnAnimation => m_turnAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_deathAnimation;
+            public BasicAnimationInfo deathAnimation => m_deathAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_deathWithCartAnimation;
+            public BasicAnimationInfo deathWithCartAnimation => m_deathWithCartAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_deathCartOnlyAnimation;
+            public BasicAnimationInfo deathCartOnlyAnimation => m_deathCartOnlyAnimation;
 
             public override void Initialize()
             {
@@ -105,6 +105,19 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_moveBackwards.SetData(m_skeletonDataAsset);
                 m_attack.SetData(m_skeletonDataAsset);
                 m_chargeAttack.SetData(m_skeletonDataAsset);
+
+                m_idleAnimation.SetData(m_skeletonDataAsset);
+                m_idleSoloAnimation.SetData(m_skeletonDataAsset);
+                m_cartStopAnimation.SetData(m_skeletonDataAsset);
+                m_getOffAnimation.SetData(m_skeletonDataAsset);
+                m_impactAnimation.SetData(m_skeletonDataAsset);
+                m_anticipationAnimation.SetData(m_skeletonDataAsset);
+                m_detectAnimation.SetData(m_skeletonDataAsset);
+                m_flinchAnimation.SetData(m_skeletonDataAsset);
+                m_flinchBothAnimation.SetData(m_skeletonDataAsset);
+                m_deathAnimation.SetData(m_skeletonDataAsset);
+                m_deathWithCartAnimation.SetData(m_skeletonDataAsset);
+                m_deathCartOnlyAnimation.SetData(m_skeletonDataAsset);
 #endif
             }
         }
@@ -526,7 +539,7 @@ namespace DChild.Gameplay.Characters.Enemies
             base.Awake();
             m_patrolHandle.TurnRequest += OnTurnRequest;
             //m_turnHandle.TurnDone += OnTurnDone;
-            m_deathHandle.SetAnimation(m_info.deathAnimation);
+            m_deathHandle.SetAnimation(m_info.deathAnimation.animation);
             m_flinchHandle.FlinchStart += OnFlinchStart;
             m_flinchHandle.FlinchEnd += OnFlinchEnd;
             m_cartAI.IsDead += CartIsDead;
