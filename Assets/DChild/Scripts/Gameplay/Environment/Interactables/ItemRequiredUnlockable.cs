@@ -75,7 +75,12 @@ namespace DChild.Gameplay.Environment
 
         public void Load(ISaveData data)
         {
-            m_isUnlocked = ((SaveData)data).isUnlocked;
+            SetAsUnlocked(((SaveData)data).isUnlocked);
+        }
+
+        public void SetAsUnlocked(bool isUnlock)
+        {
+            m_isUnlocked = isUnlock;
             if (m_isUnlocked)
             {
                 m_alreadyUnlocked?.Invoke();
@@ -85,11 +90,12 @@ namespace DChild.Gameplay.Environment
                 m_alreadyLocked?.Invoke();
             }
         }
+
         public void Initialize()
         {
-            m_isUnlocked = false;
-            m_alreadyLocked?.Invoke();
+            SetAsUnlocked(false);
         }
+
         public ISaveData Save() => new SaveData(m_isUnlocked);
 
         private void OnDrawGizmosSelected()
