@@ -53,42 +53,42 @@ namespace DChild.Gameplay.Characters.Enemies
 
 
             //Animations
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_idleWithoutBookAnimation;
-            public string idleWithoutBookAnimation => m_idleWithoutBookAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_idleWithBookAnimation;
-            public string idleWithBookAnimation => m_idleWithBookAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_flinchWithoutBookAnimation;
-            public string flinchWithoutBookAnimation => m_flinchWithoutBookAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_flinchWithBookAnimation;
-            public string flinchWithBookAnimation => m_flinchWithBookAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_teleportFromSideAnimation;
-            public string teleportFromSideAnimation => m_teleportFromSideAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_teleportFromBelowAnimation;
-            public string teleportFromBelowAnimation => m_teleportFromBelowAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_teleportDisappearAnimation;
-            public string teleportDisappearAnimation => m_teleportDisappearAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_turnWithoutBookAnimation;
-            public string turnWithoutBookAnimation => m_turnWithoutBookAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_turnWithBookAnimation;
-            public string turnWithBookAnimation => m_turnWithBookAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_bookSummonAnimation;
-            public string bookSummonAnimation => m_bookSummonAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_healAnimation;
-            public string healAnimation => m_healAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_deathAnimation;
-            public string deathAnimation => m_deathAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_idleWithoutBookAnimation;
+            public BasicAnimationInfo idleWithoutBookAnimation => m_idleWithoutBookAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_idleWithBookAnimation;
+            public BasicAnimationInfo idleWithBookAnimation => m_idleWithBookAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_flinchWithoutBookAnimation;
+            public BasicAnimationInfo flinchWithoutBookAnimation => m_flinchWithoutBookAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_flinchWithBookAnimation;
+            public BasicAnimationInfo flinchWithBookAnimation => m_flinchWithBookAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_teleportFromSideAnimation;
+            public BasicAnimationInfo teleportFromSideAnimation => m_teleportFromSideAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_teleportFromBelowAnimation;
+            public BasicAnimationInfo teleportFromBelowAnimation => m_teleportFromBelowAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_teleportDisappearAnimation;
+            public BasicAnimationInfo teleportDisappearAnimation => m_teleportDisappearAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_turnWithoutBookAnimation;
+            public BasicAnimationInfo turnWithoutBookAnimation => m_turnWithoutBookAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_turnWithBookAnimation;
+            public BasicAnimationInfo turnWithBookAnimation => m_turnWithBookAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_bookSummonAnimation;
+            public BasicAnimationInfo bookSummonAnimation => m_bookSummonAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_healAnimation;
+            public BasicAnimationInfo healAnimation => m_healAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_deathAnimation;
+            public BasicAnimationInfo deathAnimation => m_deathAnimation;
 
             [Title("Events")]
             [SerializeField, ValueDropdown("GetEvents")]
@@ -102,6 +102,19 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_moveWithBook.SetData(m_skeletonDataAsset);
                 m_attackCastingSpell.SetData(m_skeletonDataAsset);
                 m_attackConjureBooks.SetData(m_skeletonDataAsset);
+
+                m_idleWithoutBookAnimation.SetData(m_skeletonDataAsset);
+                m_idleWithBookAnimation.SetData(m_skeletonDataAsset);
+                m_flinchWithoutBookAnimation.SetData(m_skeletonDataAsset);
+                m_flinchWithBookAnimation.SetData(m_skeletonDataAsset);
+                m_teleportFromSideAnimation.SetData(m_skeletonDataAsset);
+                m_teleportFromBelowAnimation.SetData(m_skeletonDataAsset);
+                m_teleportDisappearAnimation.SetData(m_skeletonDataAsset);
+                m_turnWithoutBookAnimation.SetData(m_skeletonDataAsset);
+                m_turnWithBookAnimation.SetData(m_skeletonDataAsset);
+                m_bookSummonAnimation.SetData(m_skeletonDataAsset);
+                m_healAnimation.SetData(m_skeletonDataAsset);
+                m_deathAnimation.SetData(m_skeletonDataAsset);
 #endif
             }
         }
@@ -451,19 +464,19 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 case BookState.WithoutBook:
                     m_bookState = BookState.WithoutBook;
-                    m_currentIdleAnimation = m_info.idleWithoutBookAnimation;
+                    m_currentIdleAnimation = m_info.idleWithoutBookAnimation.animation;
                     m_currentMoveAnimation = m_info.moveWithoutBook.animation;
                     m_currentMoveSpeed = UnityEngine.Random.Range(m_info.moveWithoutBook.speed * .75f, m_info.moveWithoutBook.speed * 1.25f);
-                    m_currentTurnAnimation = m_info.turnWithoutBookAnimation;
-                    m_currentFlinchAnimation = m_info.flinchWithoutBookAnimation;
+                    m_currentTurnAnimation = m_info.turnWithoutBookAnimation.animation;
+                    m_currentFlinchAnimation = m_info.flinchWithoutBookAnimation.animation;
                     break;
                 case BookState.WithBook:
                     m_bookState = BookState.WithBook;
-                    m_currentIdleAnimation = m_info.idleWithBookAnimation;
+                    m_currentIdleAnimation = m_info.idleWithBookAnimation.animation;
                     m_currentMoveAnimation = m_info.moveWithBook.animation;
                     m_currentMoveSpeed = UnityEngine.Random.Range(m_info.moveWithBook.speed * .75f, m_info.moveWithBook.speed * 1.25f);
-                    m_currentTurnAnimation = m_info.turnWithBookAnimation;
-                    m_currentFlinchAnimation = m_info.flinchWithBookAnimation;
+                    m_currentTurnAnimation = m_info.turnWithBookAnimation.animation;
+                    m_currentFlinchAnimation = m_info.flinchWithBookAnimation.animation;
                     break;
             }
             m_flinchHandleWithoutBook.gameObject.SetActive(m_bookState == BookState.WithoutBook ? true : false);
@@ -602,7 +615,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_patrolHandle.TurnRequest += OnTurnRequest;
             m_attackHandle.AttackDone += OnAttackDone;
             m_turnHandle.TurnDone += OnTurnDone;
-            m_deathHandle.SetAnimation(m_info.deathAnimation);
+            m_deathHandle.SetAnimation(m_info.deathAnimation.animation);
             m_flinchHandleWithoutBook.FlinchStart += OnFlinchStart;
             m_flinchHandleWithBook.FlinchStart += OnFlinchStart;
             m_stateHandle = new StateHandle<State>(m_willPatrol ? State.Patrol : State.Idle, State.WaitBehaviourEnd);
