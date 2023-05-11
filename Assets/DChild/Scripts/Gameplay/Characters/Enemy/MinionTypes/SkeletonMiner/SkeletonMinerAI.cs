@@ -51,57 +51,57 @@ namespace DChild.Gameplay.Characters.Enemies
 
 
             //Animations
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_idleAnimation;
-            public string idleAnimation => m_idleAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_idleOnGroundAnimation;
-            public string idleOnGroundAnimation => m_idleOnGroundAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_walkToIdleAnimation;
-            public string walkToIdleAnimation => m_walkToIdleAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_walkToIdleMiningGroundAnimation;
-            public string walkToIdleMiningGroundAnimation => m_walkToIdleMiningGroundAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_walkToIdleMiningWallAnimation;
-            public string walkToIdleMiningWallAnimation => m_walkToIdleMiningWallAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_idleToWalkAnimation;
-            public string idleToWalkAnimation => m_idleToWalkAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_idleMiningGroundAnimation;
-            public string idleMiningGroundAnimation => m_idleMiningGroundAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_idleToMiningGroundAnimation;
-            public string idleToMiningGroundAnimation => m_idleToMiningGroundAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_idleMiningWallAnimation;
-            public string idleMiningWallAnimation => m_idleMiningWallAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_idleToMiningWallAnimation;
-            public string idleToMiningWallAnimation => m_idleToMiningWallAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_idleToAttackAnimation;
-            public string idleToAttackAnimation => m_idleToAttackAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_deathAnimation;
-            public string deathAnimation => m_deathAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_resurrectAnimation;
-            public string resurrectAnimation => m_resurrectAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_detectAnimation;
-            public string detectAnimation => m_detectAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_detectToWalkAnimation;
-            public string detectToWalkAnimation => m_detectToWalkAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_flinchAnimation;
-            public string flinchAnimation => m_flinchAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_turnAnimation;
-            public string turnAnimation => m_turnAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_idleAnimation;
+            public BasicAnimationInfo idleAnimation => m_idleAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_idleOnGroundAnimation;
+            public BasicAnimationInfo idleOnGroundAnimation => m_idleOnGroundAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_walkToIdleAnimation;
+            public BasicAnimationInfo walkToIdleAnimation => m_walkToIdleAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_walkToIdleMiningGroundAnimation;
+            public BasicAnimationInfo walkToIdleMiningGroundAnimation => m_walkToIdleMiningGroundAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_walkToIdleMiningWallAnimation;
+            public BasicAnimationInfo walkToIdleMiningWallAnimation => m_walkToIdleMiningWallAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_idleToWalkAnimation;
+            public BasicAnimationInfo idleToWalkAnimation => m_idleToWalkAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_idleMiningGroundAnimation;
+            public BasicAnimationInfo idleMiningGroundAnimation => m_idleMiningGroundAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_idleToMiningGroundAnimation;
+            public BasicAnimationInfo idleToMiningGroundAnimation => m_idleToMiningGroundAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_idleMiningWallAnimation;
+            public BasicAnimationInfo idleMiningWallAnimation => m_idleMiningWallAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_idleToMiningWallAnimation;
+            public BasicAnimationInfo idleToMiningWallAnimation => m_idleToMiningWallAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_idleToAttackAnimation;
+            public BasicAnimationInfo idleToAttackAnimation => m_idleToAttackAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_deathAnimation;
+            public BasicAnimationInfo deathAnimation => m_deathAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_resurrectAnimation;
+            public BasicAnimationInfo resurrectAnimation => m_resurrectAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_detectAnimation;
+            public BasicAnimationInfo detectAnimation => m_detectAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_detectToWalkAnimation;
+            public BasicAnimationInfo detectToWalkAnimation => m_detectToWalkAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_flinchAnimation;
+            public BasicAnimationInfo flinchAnimation => m_flinchAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_turnAnimation;
+            public BasicAnimationInfo turnAnimation => m_turnAnimation;
 
             public override void Initialize()
             {
@@ -109,6 +109,24 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_walkMiner.SetData(m_skeletonDataAsset);
                 m_walkNormal.SetData(m_skeletonDataAsset);
                 m_attack.SetData(m_skeletonDataAsset);
+
+                m_idleAnimation.SetData(m_skeletonDataAsset);
+                m_idleOnGroundAnimation.SetData(m_skeletonDataAsset);
+                m_walkToIdleAnimation.SetData(m_skeletonDataAsset);
+                m_walkToIdleMiningGroundAnimation.SetData(m_skeletonDataAsset);
+                m_walkToIdleMiningWallAnimation.SetData(m_skeletonDataAsset);
+                m_idleToWalkAnimation.SetData(m_skeletonDataAsset);
+                m_idleMiningGroundAnimation.SetData(m_skeletonDataAsset);
+                m_idleToMiningGroundAnimation.SetData(m_skeletonDataAsset);
+                m_idleMiningWallAnimation.SetData(m_skeletonDataAsset);
+                m_idleToMiningWallAnimation.SetData(m_skeletonDataAsset);
+                m_idleToAttackAnimation.SetData(m_skeletonDataAsset);
+                m_deathAnimation.SetData(m_skeletonDataAsset);
+                m_resurrectAnimation.SetData(m_skeletonDataAsset);
+                m_detectAnimation.SetData(m_skeletonDataAsset);
+                m_detectToWalkAnimation.SetData(m_skeletonDataAsset);
+                m_flinchAnimation.SetData(m_skeletonDataAsset);
+                m_turnAnimation.SetData(m_skeletonDataAsset);
 #endif
             }
         }
@@ -265,7 +283,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     }
                     //m_enablePatience = false;
                     m_turnState = State.WaitBehaviourEnd;
-                    if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
+                    if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation.animation)
                         m_stateHandle.SetState(State.Turning);
                 }
             }
@@ -325,7 +343,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 StopCoroutine(m_sneerRoutine);
             }
             m_character.physics.UseStepClimb(true);
-            if (m_animation.GetCurrentAnimation(0).ToString() != m_info.idleAnimation)
+            if (m_animation.GetCurrentAnimation(0).ToString() != m_info.idleAnimation.animation)
                 m_movement.Stop();
 
             m_pointLight.enabled = false;
@@ -358,7 +376,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnFlinchStart(object sender, EventActionArgs eventArgs)
         {
-            if (m_animation.GetCurrentAnimation(0).ToString() == m_info.idleAnimation)
+            if (m_animation.GetCurrentAnimation(0).ToString() == m_info.idleAnimation.animation)
             {
                 m_flinchHandle.m_autoFlinch = true;
                 StopAllCoroutines();
@@ -410,15 +428,15 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator MiningRoutine()
         {
             m_stateHandle.Wait(State.ReevaluateSituation);
-            if (m_animation.GetCurrentAnimation(0).ToString() == m_info.idleAnimation)
+            if (m_animation.GetCurrentAnimation(0).ToString() == m_info.idleAnimation.animation)
             {
-                var idleToMiningAnim = m_miningAnimation == m_info.idleMiningGroundAnimation ? m_info.idleToMiningGroundAnimation : m_info.idleToMiningWallAnimation;
+                var idleToMiningAnim = m_miningAnimation == m_info.idleMiningGroundAnimation.animation ? m_info.idleToMiningGroundAnimation : m_info.idleToMiningWallAnimation;
                 m_animation.SetAnimation(0, idleToMiningAnim, false);
                 yield return new WaitForAnimationComplete(m_animation.animationState, idleToMiningAnim);
             }
             else if (m_animation.GetCurrentAnimation(0).ToString() == m_info.walkMiner.animation)
             {
-                var walkToMiningAnim = m_miningAnimation == m_info.idleMiningGroundAnimation ? m_info.walkToIdleMiningGroundAnimation : m_info.walkToIdleMiningWallAnimation;
+                var walkToMiningAnim = m_miningAnimation == m_info.idleMiningGroundAnimation.animation ? m_info.walkToIdleMiningGroundAnimation : m_info.walkToIdleMiningWallAnimation;
                 m_animation.SetAnimation(0, walkToMiningAnim, false);
                 yield return new WaitForAnimationComplete(m_animation.animationState, walkToMiningAnim);
             }
@@ -445,7 +463,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator SneerRoutine()
         {
             m_stateHandle.Wait(State.ReevaluateSituation);
-            if (m_animation.GetCurrentAnimation(0).ToString() != m_info.idleAnimation)
+            if (m_animation.GetCurrentAnimation(0).ToString() != m_info.idleAnimation.animation)
                 m_movement.Stop();
 
             while (true)
@@ -487,7 +505,7 @@ namespace DChild.Gameplay.Characters.Enemies
             switch (m_stateHandle.currentState)
             {
                 case State.Detect:
-                    if (m_animation.GetCurrentAnimation(0).ToString() != m_info.idleAnimation)
+                    if (m_animation.GetCurrentAnimation(0).ToString() != m_info.idleAnimation.animation)
                         m_movement.Stop();
 
                     m_movement.Stop();
@@ -500,7 +518,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     else
                     {
                         m_turnState = State.Detect;
-                        if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
+                        if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation.animation)
                             m_stateHandle.SetState(State.Turning);
                     }
                     break;
@@ -510,7 +528,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     {
                         if (Vector2.Distance(m_startpoint, transform.position) < 5f && !m_wallSensor.allRaysDetecting)
                         {
-                            if (m_animation.GetCurrentAnimation(0).ToString() != m_info.idleAnimation)
+                            if (m_animation.GetCurrentAnimation(0).ToString() != m_info.idleAnimation.animation)
                                 m_movement.Stop();
 
                             m_selfCollider.enabled = true;
@@ -527,7 +545,7 @@ namespace DChild.Gameplay.Characters.Enemies
                             }
                             else
                             {
-                                if (m_animation.GetCurrentAnimation(0).ToString() != m_info.idleAnimation)
+                                if (m_animation.GetCurrentAnimation(0).ToString() != m_info.idleAnimation.animation)
                                     m_movement.Stop();
 
                                 m_selfCollider.enabled = true;
@@ -538,7 +556,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     else
                     {
                         m_turnState = State.ReevaluateSituation;
-                        if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
+                        if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation.animation)
                             m_stateHandle.SetState(State.Turning);
                     }
                     break;
@@ -549,7 +567,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
                 case State.Turning:
                     m_stateHandle.Wait(m_turnState);
-                    m_turnHandle.Execute(m_info.turnAnimation, m_info.idleAnimation);
+                    m_turnHandle.Execute(m_info.turnAnimation.animation, m_info.idleAnimation.animation);
                     break;
 
                 case State.Attacking:
@@ -560,7 +578,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
                     //m_attackRoutine = StartCoroutine(AttackRoutine()); //commented this out in favor of using attack handle to work with timescale 2
 
-                    m_attackHandle.ExecuteAttack(m_info.idleToAttackAnimation, m_info.idleAnimation);
+                    m_attackHandle.ExecuteAttack(m_info.idleToAttackAnimation.animation, m_info.idleAnimation.animation);
 
                     break;
 
@@ -569,7 +587,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     if (!IsFacingTarget())
                     {
                         m_turnState = State.Cooldown;
-                        if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
+                        if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation.animation)
                             m_stateHandle.SetState(State.Turning);
                     }
                     else
@@ -595,7 +613,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         {
                             if (IsTargetInRange(m_info.attack.range) && !m_wallSensor.allRaysDetecting)
                             {
-                                if (m_animation.GetCurrentAnimation(0).ToString() != m_info.idleAnimation)
+                                if (m_animation.GetCurrentAnimation(0).ToString() != m_info.idleAnimation.animation)
                                     m_movement.Stop();
 
                                 m_selfCollider.enabled = true;
@@ -607,7 +625,7 @@ namespace DChild.Gameplay.Characters.Enemies
                                 if (!m_wallSensor.isDetecting && m_groundSensor.isDetecting && m_edgeSensor.isDetecting)
                                 {
                                     m_selfCollider.enabled = false;
-                                    if (m_animation.GetCurrentAnimation(0).ToString() == m_info.idleAnimation)
+                                    if (m_animation.GetCurrentAnimation(0).ToString() == m_info.idleAnimation.animation)
                                     {
                                         m_animation.SetAnimation(0, m_info.idleToWalkAnimation, false);
                                     }
@@ -616,7 +634,7 @@ namespace DChild.Gameplay.Characters.Enemies
                                 }
                                 else
                                 {
-                                    if (m_animation.GetCurrentAnimation(0).ToString() != m_info.idleAnimation)
+                                    if (m_animation.GetCurrentAnimation(0).ToString() != m_info.idleAnimation.animation)
                                         m_movement.Stop();
 
                                     m_selfCollider.enabled = true;
@@ -624,14 +642,14 @@ namespace DChild.Gameplay.Characters.Enemies
                                     {
                                         m_animation.SetAnimation(0, m_info.walkToIdleAnimation, false);
                                     }
-                                    m_animation.AddAnimation(0, m_info.idleAnimation, true, 0);
+                                    m_animation.AddAnimation(0, m_info.idleAnimation.animation, true, 0);
                                 }
                             }
                         }
                         else
                         {
                             m_turnState = State.ReevaluateSituation;
-                            if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
+                            if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation.animation)
                                 m_stateHandle.SetState(State.Turning);
                         }
                     }
@@ -731,7 +749,7 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.flinchAnimation);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             yield return new WaitForSeconds(timer);
-            if (m_animation.GetCurrentAnimation(0).ToString() != m_info.idleAnimation)
+            if (m_animation.GetCurrentAnimation(0).ToString() != m_info.idleAnimation.animation)
                 m_movement.Stop();
 
             //enabled = true;
