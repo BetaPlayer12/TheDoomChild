@@ -6,6 +6,7 @@ using UnityEngine;
 
 namespace DChild.Gameplay.UI.CombatArts
 {
+
     public class CombatArtUIManager : MonoBehaviour
     {
         [SerializeField]
@@ -16,6 +17,8 @@ namespace DChild.Gameplay.UI.CombatArts
         [SerializeField]
         private CombatArtUIDetail m_uiDetail;
         [SerializeField]
+        private CombatArtSelectorHighlight m_selectorHighlight;
+        [SerializeField]
         private CombatArtUnlockHandle m_unlockArtHandler;
 
         private Dictionary<CombatArt, CombatArtSelectButton[]> m_abilityButtonPair;
@@ -25,6 +28,7 @@ namespace DChild.Gameplay.UI.CombatArts
 
         public void Initialize()
         {
+            m_selectorHighlight.Initialize();
             m_unlockArtHandler.UnlockSuccessful += OnUnlockSuccessFull;
             m_unlockArtHandler.InitializeReferences(m_progressionReference, m_referenceList);
             m_unlockArtHandler.ResetUnlockProgress();
@@ -39,8 +43,10 @@ namespace DChild.Gameplay.UI.CombatArts
 
             m_currentSelectedButton = button;
             m_uiDetail.Display(m_referenceList.GetCombatArtData(m_currentSelectedButton.skillUnlock), m_currentSelectedButton.unlockLevel);
+            m_selectorHighlight.Highlight(button);
 
             m_unlockArtHandler.VerifyUnlockFunction(m_currentSelectedButton);
+            m_unlockArtHandler.ResetUnlockProgress();
         }
 
         public void StartUnlockSelectedCombatArt()
