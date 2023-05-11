@@ -68,78 +68,78 @@ namespace DChild.Gameplay.Characters.Enemies
             //
 
             //Animations
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_afterMoveForwardAnimation;
-            public string afterMoveForwardAnimation => m_afterMoveForwardAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_deathAnimation;
-            public string deathAnimation => m_deathAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_fallRecoverAnimation;
-            public string fallRecoverAnimation => m_fallRecoverAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_flinchBackwardAnimation;
-            public string flinchBackwardAnimation => m_flinchBackwardAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_flinchFallLoopAnimation;
-            public string flinchFallLoopAnimation => m_flinchFallLoopAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_flinchFallStartAnimation;
-            public string flinchFallStartAnimation => m_flinchFallStartAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_flinchForwardAnimation;
-            public string flinchForwardAnimation => m_flinchForwardAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_idleAnimation;
-            public string idleAnimation => m_idleAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_introAnimation;
-            public string introAnimation => m_introAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_orderDroneAttackAnimation;
-            public string orderDroneAttackAnimation => m_orderDroneAttackAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_orderDroneAttackLoopAnimation;
-            public string orderDroneAttackLoopAnimation => m_orderDroneAttackLoopAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_phase1AtkMeleeAnimation;
-            public string phase1AtkMeleeAnimation => m_phase1AtkMeleeAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_phase2AtkChargeLoopAnimation;
-            public string phase2AtkChargeLoopAnimation => m_phase2AtkChargeLoopAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_phase2AtkChargeStartAnimation;
-            public string phase2AtkChargeStartAnimation => m_phase2AtkChargeStartAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_phase3AtkSpearThrowAnimation;
-            public string phase3AtkSpearThrowAnimation => m_phase3AtkSpearThrowAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_phase4AtkStingerImpactAnimation;
-            public string phase4AtkStingerImpactAnimation => m_phase4AtkStingerImpactAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_phase4AtkStingerLoopAnimation;
-            public string phase4AtkStingerLoopAnimation => m_phase4AtkStingerLoopAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_phase4TransitionAnimation;
-            public string phase4TransitionAnimation => m_phase4TransitionAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_stuckRecoverAnimation;
-            public string stuckRecoverAnimation => m_stuckRecoverAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_stuckStateAnimation;
-            public string stuckStateAnimation => m_stuckStateAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_stuckStateFlinchBackwardAnimation;
-            public string stuckStateFlinchBackwardAnimation => m_stuckStateFlinchBackwardAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_stuckStateFlinchForwardAnimation;
-            public string stuckStateFlinchForwardAnimation => m_stuckStateFlinchForwardAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_summonDroneAnimation;
-            public string summonDroneAnimation => m_summonDroneAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_turnAnimation;
-            public string turnAnimation => m_turnAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_afterMoveForwardAnimation;
+            public BasicAnimationInfo afterMoveForwardAnimation => m_afterMoveForwardAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_deathAnimation;
+            public BasicAnimationInfo deathAnimation => m_deathAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_fallRecoverAnimation;
+            public BasicAnimationInfo fallRecoverAnimation => m_fallRecoverAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_flinchBackwardAnimation;
+            public BasicAnimationInfo flinchBackwardAnimation => m_flinchBackwardAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_flinchFallLoopAnimation;
+            public BasicAnimationInfo flinchFallLoopAnimation => m_flinchFallLoopAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_flinchFallStartAnimation;
+            public BasicAnimationInfo flinchFallStartAnimation => m_flinchFallStartAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_flinchForwardAnimation;
+            public BasicAnimationInfo flinchForwardAnimation => m_flinchForwardAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_idleAnimation;
+            public BasicAnimationInfo idleAnimation => m_idleAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_introAnimation;
+            public BasicAnimationInfo introAnimation => m_introAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_orderDroneAttackAnimation;
+            public BasicAnimationInfo orderDroneAttackAnimation => m_orderDroneAttackAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_orderDroneAttackLoopAnimation;
+            public BasicAnimationInfo orderDroneAttackLoopAnimation => m_orderDroneAttackLoopAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_phase1AtkMeleeAnimation;
+            public BasicAnimationInfo phase1AtkMeleeAnimation => m_phase1AtkMeleeAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_phase2AtkChargeLoopAnimation;
+            public BasicAnimationInfo phase2AtkChargeLoopAnimation => m_phase2AtkChargeLoopAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_phase2AtkChargeStartAnimation;
+            public BasicAnimationInfo phase2AtkChargeStartAnimation => m_phase2AtkChargeStartAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_phase3AtkSpearThrowAnimation;
+            public BasicAnimationInfo phase3AtkSpearThrowAnimation => m_phase3AtkSpearThrowAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_phase4AtkStingerImpactAnimation;
+            public BasicAnimationInfo phase4AtkStingerImpactAnimation => m_phase4AtkStingerImpactAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_phase4AtkStingerLoopAnimation;
+            public BasicAnimationInfo phase4AtkStingerLoopAnimation => m_phase4AtkStingerLoopAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_phase4TransitionAnimation;
+            public BasicAnimationInfo phase4TransitionAnimation => m_phase4TransitionAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_stuckRecoverAnimation;
+            public BasicAnimationInfo stuckRecoverAnimation => m_stuckRecoverAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_stuckStateAnimation;
+            public BasicAnimationInfo stuckStateAnimation => m_stuckStateAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_stuckStateFlinchBackwardAnimation;
+            public BasicAnimationInfo stuckStateFlinchBackwardAnimation => m_stuckStateFlinchBackwardAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_stuckStateFlinchForwardAnimation;
+            public BasicAnimationInfo stuckStateFlinchForwardAnimation => m_stuckStateFlinchForwardAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_summonDroneAnimation;
+            public BasicAnimationInfo summonDroneAnimation => m_summonDroneAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_turnAnimation;
+            public BasicAnimationInfo turnAnimation => m_turnAnimation;
 
             [SerializeField]
             private SimpleProjectileAttackInfo m_spearProjectile;
@@ -172,6 +172,31 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_spearChargeAttack.SetData(m_skeletonDataAsset);
                 m_spearMeleeAttack.SetData(m_skeletonDataAsset);
                 m_spearThrowAttack.SetData(m_skeletonDataAsset);
+
+                m_afterMoveForwardAnimation.SetData(m_skeletonDataAsset);
+                m_deathAnimation.SetData(m_skeletonDataAsset);
+                m_fallRecoverAnimation.SetData(m_skeletonDataAsset);
+                m_flinchBackwardAnimation.SetData(m_skeletonDataAsset);
+                m_flinchFallLoopAnimation.SetData(m_skeletonDataAsset);
+                m_flinchFallStartAnimation.SetData(m_skeletonDataAsset);
+                m_flinchForwardAnimation.SetData(m_skeletonDataAsset);
+                m_idleAnimation.SetData(m_skeletonDataAsset);
+                m_introAnimation.SetData(m_skeletonDataAsset);
+                m_orderDroneAttackAnimation.SetData(m_skeletonDataAsset);
+                m_orderDroneAttackLoopAnimation.SetData(m_skeletonDataAsset);
+                m_phase1AtkMeleeAnimation.SetData(m_skeletonDataAsset);
+                m_phase2AtkChargeLoopAnimation.SetData(m_skeletonDataAsset);
+                m_phase2AtkChargeStartAnimation.SetData(m_skeletonDataAsset);
+                m_phase3AtkSpearThrowAnimation.SetData(m_skeletonDataAsset);
+                m_phase4AtkStingerImpactAnimation.SetData(m_skeletonDataAsset);
+                m_phase4AtkStingerLoopAnimation.SetData(m_skeletonDataAsset);
+                m_phase4TransitionAnimation.SetData(m_skeletonDataAsset);
+                m_stuckRecoverAnimation.SetData(m_skeletonDataAsset);
+                m_stuckStateAnimation.SetData(m_skeletonDataAsset);
+                m_stuckStateFlinchBackwardAnimation.SetData(m_skeletonDataAsset);
+                m_stuckStateFlinchForwardAnimation.SetData(m_skeletonDataAsset);
+                m_summonDroneAnimation.SetData(m_skeletonDataAsset);
+                m_turnAnimation.SetData(m_skeletonDataAsset);
 #endif
             }
         }
@@ -517,7 +542,7 @@ namespace DChild.Gameplay.Characters.Enemies
             }
             else
             {
-                if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation && GetComponent<IsolatedPhysics2D>().velocity.y <= 0 && m_stateHandle.currentState != State.Phasing)
+                if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation.animation && GetComponent<IsolatedPhysics2D>().velocity.y <= 0 && m_stateHandle.currentState != State.Phasing)
                 {
                     m_turnState = State.Attacking;
                     m_stateHandle.OverrideState(State.Turning);
@@ -1000,7 +1025,7 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_flinchHandle.FlinchEnd += OnFlinchEnd;
             m_attackHandle.AttackDone += OnAttackDone;
             m_turnHandle.TurnDone += OnTurnDone;
-            m_deathHandle.SetAnimation(m_info.deathAnimation);
+            m_deathHandle.SetAnimation(m_info.deathAnimation.animation);
             m_attackDecider = new RandomAttackDecider<Attack>();
             UpdateAttackDeciderList();
             m_stateHandle = new StateHandle<State>(State.Patrol, State.WaitBehaviourEnd);
@@ -1080,7 +1105,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 case State.Turning:
                     m_stateHandle.Wait(m_turnState);
                     m_animation.animationState.TimeScale = 2f;
-                    m_turnHandle.Execute(m_info.turnAnimation, m_info.idleAnimation);
+                    m_turnHandle.Execute(m_info.turnAnimation.animation, m_info.idleAnimation.animation);
                     m_agent.Stop();
                     break;
                 case State.Attacking:
