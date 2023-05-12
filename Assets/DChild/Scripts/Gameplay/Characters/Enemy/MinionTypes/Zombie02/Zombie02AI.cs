@@ -53,36 +53,36 @@ namespace DChild.Gameplay.Characters.Enemies
 
 
             //Animations
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_idleAnimation;
-            public string idleAnimation => m_idleAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_detectAnimation;
-            public string detectAnimation => m_detectAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_flinchAnimation;
-            public string flinchAnimation => m_flinchAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_counterFlinchAnimation;
-            public string counterFlinchAnimation => m_counterFlinchAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_turnAnimation;
-            public string turnAnimation => m_turnAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_deathAnimation;
-            public string deathAnimation => m_deathAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_spawn1Animation;
-            public string spawn1Animation => m_spawn1Animation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_spawn2Animation;
-            public string spawn2Animation => m_spawn2Animation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_spawn3Animation;
-            public string spawn3Animation => m_spawn3Animation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_vomitAnimation;
-            public string vomitAnimation => m_vomitAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_idleAnimation;
+            public BasicAnimationInfo idleAnimation => m_idleAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_detectAnimation;
+            public BasicAnimationInfo detectAnimation => m_detectAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_flinchAnimation;
+            public BasicAnimationInfo flinchAnimation => m_flinchAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_counterFlinchAnimation;
+            public BasicAnimationInfo counterFlinchAnimation => m_counterFlinchAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_turnAnimation;
+            public BasicAnimationInfo turnAnimation => m_turnAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_deathAnimation;
+            public BasicAnimationInfo deathAnimation => m_deathAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_spawn1Animation;
+            public BasicAnimationInfo spawn1Animation => m_spawn1Animation;
+            [SerializeField]
+            private BasicAnimationInfo m_spawn2Animation;
+            public BasicAnimationInfo spawn2Animation => m_spawn2Animation;
+            [SerializeField]
+            private BasicAnimationInfo m_spawn3Animation;
+            public BasicAnimationInfo spawn3Animation => m_spawn3Animation;
+            [SerializeField]
+            private BasicAnimationInfo m_vomitAnimation;
+            public BasicAnimationInfo vomitAnimation => m_vomitAnimation;
 
             [SerializeField]
             private SimpleProjectileAttackInfo m_projectile;
@@ -97,6 +97,17 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_attack1.SetData(m_skeletonDataAsset);
                 m_attack2.SetData(m_skeletonDataAsset);
                 m_projectile.SetData(m_skeletonDataAsset);
+
+                m_idleAnimation.SetData(m_skeletonDataAsset);
+                m_detectAnimation.SetData(m_skeletonDataAsset);
+                m_flinchAnimation.SetData(m_skeletonDataAsset);
+                m_counterFlinchAnimation.SetData(m_skeletonDataAsset);
+                m_turnAnimation.SetData(m_skeletonDataAsset);
+                m_deathAnimation.SetData(m_skeletonDataAsset);
+                m_spawn1Animation.SetData(m_skeletonDataAsset);
+                m_spawn2Animation.SetData(m_skeletonDataAsset);
+                m_spawn3Animation.SetData(m_skeletonDataAsset);
+                m_vomitAnimation.SetData(m_skeletonDataAsset);
 #endif
             }
         }
@@ -330,7 +341,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             if (m_flinchHandle.m_autoFlinch)
             {
-                if (m_animation.GetCurrentAnimation(0).ToString() != m_info.deathAnimation)
+                if (m_animation.GetCurrentAnimation(0).ToString() != m_info.deathAnimation.animation)
                     m_animation.SetAnimation(0, m_info.idleAnimation, false);
                 m_stateHandle.ApplyQueuedState();
             }
@@ -415,12 +426,6 @@ namespace DChild.Gameplay.Characters.Enemies
             return 0;
         }
 
-        private void CustomTurn()
-        {
-            transform.localScale = new Vector3(-transform.localScale.x, 1, 1);
-            m_character.SetFacing(transform.localScale.x == 1 ? HorizontalDirection.Right : HorizontalDirection.Left);
-        }
-
         private void SpitProjectile()
         {
             if (m_targetInfo.isValid)
@@ -478,7 +483,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_patrolHandle.TurnRequest += OnTurnRequest;
             m_attackHandle.AttackDone += OnAttackDone;
             m_turnHandle.TurnDone += OnTurnDone;
-            m_deathHandle.SetAnimation(m_info.deathAnimation);
+            m_deathHandle.SetAnimation(m_info.deathAnimation.animation);
             m_flinchHandle.FlinchStart += OnFlinchStart;
             m_flinchHandle.FlinchEnd += OnFlinchEnd;
             m_stateHandle = new StateHandle<State>(m_willPatrol ? State.Patrol : State.Idle, State.WaitBehaviourEnd);
@@ -510,7 +515,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     else
                     {
                         m_turnState = State.Detect;
-                        if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
+                        if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation.animation)
                             m_stateHandle.SetState(State.Turning);
                     }
                     break;
@@ -530,7 +535,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     }
                     else
                     {
-                        if (m_animation.GetCurrentAnimation(0).ToString() != m_info.idleAnimation)
+                        if (m_animation.GetCurrentAnimation(0).ToString() != m_info.idleAnimation.animation)
                         {
                             m_movement.Stop();
                         }
@@ -545,7 +550,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
                 case State.Turning:
                     m_stateHandle.Wait(m_turnState);
-                    m_turnHandle.Execute(m_info.turnAnimation, m_info.idleAnimation);
+                    m_turnHandle.Execute(m_info.turnAnimation.animation, m_info.idleAnimation.animation);
                     break;
 
                 case State.Attacking:
@@ -557,13 +562,13 @@ namespace DChild.Gameplay.Characters.Enemies
                     {
                         case Attack.Attack1:
                             m_animation.EnableRootMotion(true, true);
-                            m_attackHandle.ExecuteAttack(m_info.attack1.animation, m_info.idleAnimation);
+                            m_attackHandle.ExecuteAttack(m_info.attack1.animation, m_info.idleAnimation.animation);
                             break;
                         case Attack.Attack2:
                             m_targetLastPos = m_targetInfo.position;
                             m_targetPointIK.mode = SkeletonUtilityBone.Mode.Override;
                             m_animation.EnableRootMotion(true, true);
-                            m_attackHandle.ExecuteAttack(m_info.attack2.animation, m_info.idleAnimation);
+                            m_attackHandle.ExecuteAttack(m_info.attack2.animation, m_info.idleAnimation.animation);
                             //StartCoroutine(Attack2Routine());
                             break;
                     }
@@ -575,7 +580,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     if (!IsFacingTarget())
                     {
                         m_turnState = State.Cooldown;
-                        if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
+                        if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation.animation)
                             m_stateHandle.SetState(State.Turning);
                     }
                     
@@ -623,7 +628,7 @@ namespace DChild.Gameplay.Characters.Enemies
                                 }
                                 else
                                 {
-                                    if (m_animation.GetCurrentAnimation(0).ToString() != m_info.idleAnimation)
+                                    if (m_animation.GetCurrentAnimation(0).ToString() != m_info.idleAnimation.animation)
                                     {
                                         m_movement.Stop();
                                     }
@@ -636,7 +641,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         else
                         {
                             m_turnState = State.ReevaluateSituation;
-                            if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
+                            if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation.animation)
                                 m_stateHandle.SetState(State.Turning);
                         }
                     }
@@ -723,7 +728,7 @@ namespace DChild.Gameplay.Characters.Enemies
             //enabled = false;
             //m_flinchHandle.m_autoFlinch = false;
             m_animation.DisableRootMotion();
-            if (m_animation.GetCurrentAnimation(0).ToString() != m_info.deathAnimation)
+            if (m_animation.GetCurrentAnimation(0).ToString() != m_info.deathAnimation.animation)
             {
                 //m_flinchHandle.enabled = false;
                 m_animation.SetAnimation(0, m_info.flinchAnimation, false);

@@ -59,36 +59,36 @@ namespace DChild.Gameplay.Characters.Enemies
             public float awakenTime => m_awakenTime;
 
             //Animations
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_idleAnimation;
-            public string idleAnimation => m_idleAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_turnAnimation;
-            public string turnAnimation => m_turnAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_deathStartAnimation;
-            public string deathStartAnimation => m_deathStartAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_deathFallLoopAnimation;
-            public string deathFallLoopAnimation => m_deathFallLoopAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_deathFallImpact1Animation;
-            public string deathFallImpact1Animation => m_deathFallImpact1Animation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_deathFallImpact2Animation;
-            public string deathFallImpact2Animation => m_deathFallImpact2Animation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_flinchAnimation;
-            public string flinchAnimation => m_flinchAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_awakenAnimation;
-            public string awakenAnimation => m_awakenAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_dormantAnimation;
-            public string dormantAnimation => m_dormantAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_prepAnimation;
-            public string prepAnimation => m_prepAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_idleAnimation = new BasicAnimationInfo();
+            public BasicAnimationInfo idleAnimation => m_idleAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_turnAnimation = new BasicAnimationInfo();
+            public BasicAnimationInfo turnAnimation => m_turnAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_deathStartAnimation = new BasicAnimationInfo();
+            public BasicAnimationInfo deathStartAnimation => m_deathStartAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_deathFallLoopAnimation = new BasicAnimationInfo();
+            public BasicAnimationInfo deathFallLoopAnimation => m_deathFallLoopAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_deathFallImpact1Animation = new BasicAnimationInfo();
+            public BasicAnimationInfo deathFallImpact1Animation => m_deathFallImpact1Animation;
+            [SerializeField]
+            private BasicAnimationInfo m_deathFallImpact2Animation = new BasicAnimationInfo();
+            public BasicAnimationInfo deathFallImpact2Animation => m_deathFallImpact2Animation;
+            [SerializeField]
+            private BasicAnimationInfo m_flinchAnimation = new BasicAnimationInfo();
+            public BasicAnimationInfo flinchAnimation => m_flinchAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_awakenAnimation = new BasicAnimationInfo();
+            public BasicAnimationInfo awakenAnimation => m_awakenAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_dormantAnimation = new BasicAnimationInfo();
+            public BasicAnimationInfo dormantAnimation => m_dormantAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_prepAnimation = new BasicAnimationInfo();
+            public BasicAnimationInfo prepAnimation => m_prepAnimation;
 
             [Title("Events")]
             [SerializeField, ValueDropdown("GetEvents")]
@@ -107,6 +107,17 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_attack1.SetData(m_skeletonDataAsset);
                 m_attack2.SetData(m_skeletonDataAsset);
 
+
+                m_idleAnimation.SetData(m_skeletonDataAsset);
+                m_awakenAnimation.SetData(m_skeletonDataAsset);
+                m_dormantAnimation.SetData(m_skeletonDataAsset);
+                m_prepAnimation.SetData(m_skeletonDataAsset);
+                m_flinchAnimation.SetData(m_skeletonDataAsset);
+                m_turnAnimation.SetData(m_skeletonDataAsset);
+                m_deathStartAnimation.SetData(m_skeletonDataAsset);
+                m_deathFallLoopAnimation.SetData(m_skeletonDataAsset);
+                m_deathFallImpact1Animation.SetData(m_skeletonDataAsset);
+                m_deathFallImpact2Animation.SetData(m_skeletonDataAsset);
 #endif
             }
         }
@@ -413,12 +424,12 @@ namespace DChild.Gameplay.Characters.Enemies
             switch (m_attack)
             {
                 case Attack.Attack1:
-                    m_attackHandle.ExecuteAttack(m_info.attack1.animation, m_info.idleAnimation);
+                    m_attackHandle.ExecuteAttack(m_info.attack1.animation, m_info.idleAnimation.animation);
                     break;
                 case Attack.Attack2:
                     transform.localScale = new Vector3(m_targetInfo.position.x > transform.position.x ? -1 : 1, 1, 1);
                     StartCoroutine(Attack2CooldownRoutine());
-                    m_attackHandle.ExecuteAttack(m_info.attack2.animation, m_info.idleAnimation);
+                    m_attackHandle.ExecuteAttack(m_info.attack2.animation, m_info.idleAnimation.animation);
                     break;
             }
         }
@@ -495,7 +506,7 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 var distance = Vector2.Distance(m_projectilePoint.position, GroundPosition());
                 m_attackBB.enabled = true;
-                m_attackBB.offset = new Vector2(0,(-distance * 0.5f));
+                m_attackBB.offset = new Vector2(0, (-distance * 0.5f));
                 m_attackBB.size = new Vector2(.25f, distance);
             }
             else
@@ -589,7 +600,8 @@ namespace DChild.Gameplay.Characters.Enemies
         }
 
         private void DynamicMovement(Vector2 target, float moveSpeed)
-        {;
+        {
+            ;
             m_agent.SetDestination(target);
             if (IsFacing(target))
             {
@@ -733,7 +745,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     break;
 
                 case State.Patrol:
-                    if (m_animation.GetCurrentAnimation(0).ToString() != m_info.dormantAnimation)
+                    if (m_animation.GetCurrentAnimation(0).ToString() != m_info.dormantAnimation.animation)
                     {
                         if (m_foregroundController.gameObject.activeSelf)
                         {
@@ -763,7 +775,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_rigidbody2D.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezePositionY | RigidbodyConstraints2D.FreezeRotation;
                     //m_selfCollider.SetActive(false);
                     m_animation.SetAnimation(0, m_info.idleAnimation, true);
-                    m_turnHandle.Execute(m_info.turnAnimation, m_info.idleAnimation);
+                    m_turnHandle.Execute(m_info.turnAnimation.animation, m_info.idleAnimation.animation);
                     break;
                 case State.Attacking:
                     m_stateHandle.Wait(State.Cooldown);
@@ -780,7 +792,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     if (!IsFacingTarget())
                     {
                         m_turnState = State.Cooldown;
-                        if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
+                        if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation.animation)
                             m_stateHandle.SetState(State.Turning);
                     }
                     else

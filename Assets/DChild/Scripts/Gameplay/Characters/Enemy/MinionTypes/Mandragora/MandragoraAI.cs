@@ -45,27 +45,27 @@ namespace DChild.Gameplay.Characters.Enemies
 
 
             //Animations
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_idleAnimation;
-            public string idleAnimation => m_idleAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_burrowedAnimation;
-            public string burrowedAnimation => m_burrowedAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_detectAnimation;
-            public string detectAnimation => m_detectAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_flinchAnimation;
-            public string flinchAnimation => m_flinchAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_turnAnimation;
-            public string turnAnimation => m_turnAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_deathAnimation;
-            public string deathAnimation => m_deathAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_deathBurrowedAnimation;
-            public string deathBurrowedAnimation => m_deathBurrowedAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_idleAnimation = new BasicAnimationInfo();
+            public BasicAnimationInfo idleAnimation => m_idleAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_burrowedAnimation = new BasicAnimationInfo();
+            public BasicAnimationInfo burrowedAnimation => m_burrowedAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_detectAnimation = new BasicAnimationInfo();
+            public BasicAnimationInfo detectAnimation => m_detectAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_flinchAnimation = new BasicAnimationInfo();
+            public BasicAnimationInfo flinchAnimation => m_flinchAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_turnAnimation = new BasicAnimationInfo();
+            public BasicAnimationInfo turnAnimation => m_turnAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_deathAnimation = new BasicAnimationInfo();
+            public BasicAnimationInfo deathAnimation => m_deathAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_deathBurrowedAnimation = new BasicAnimationInfo();
+            public BasicAnimationInfo deathBurrowedAnimation => m_deathBurrowedAnimation;
 
             [Title("Events")]
             [SerializeField, ValueDropdown("GetEvents")]
@@ -77,6 +77,14 @@ namespace DChild.Gameplay.Characters.Enemies
 #if UNITY_EDITOR
                 m_move.SetData(m_skeletonDataAsset);
                 m_attack.SetData(m_skeletonDataAsset);
+
+                m_idleAnimation.SetData(m_skeletonDataAsset);
+                m_burrowedAnimation.SetData(m_skeletonDataAsset);
+                m_detectAnimation.SetData(m_skeletonDataAsset);
+                m_flinchAnimation.SetData(m_skeletonDataAsset);
+                m_turnAnimation.SetData(m_skeletonDataAsset);
+                m_deathAnimation.SetData(m_skeletonDataAsset);
+                m_deathBurrowedAnimation.SetData(m_skeletonDataAsset);
 #endif
             }
         }
@@ -257,7 +265,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             if (m_flinchHandle.m_autoFlinch)
             {
-                if (m_animation.GetCurrentAnimation(0).ToString() != m_info.deathAnimation && m_animation.GetCurrentAnimation(0).ToString() != m_info.idleAnimation)
+                if (m_animation.GetCurrentAnimation(0).ToString() != m_info.deathAnimation.animation && m_animation.GetCurrentAnimation(0).ToString() != m_info.idleAnimation.animation)
                     m_animation.SetAnimation(0, m_info.idleAnimation, true);
                 m_selfCollider.enabled = false;
                 m_stateHandle.ApplyQueuedState();
@@ -282,7 +290,7 @@ namespace DChild.Gameplay.Characters.Enemies
             GameplaySystem.minionManager.Register(this);
             m_attackHandle.AttackDone += OnAttackDone;
             m_turnHandle.TurnDone += OnTurnDone;
-            m_deathHandle.SetAnimation(m_targetInfo.isValid ? m_info.deathBurrowedAnimation : m_info.deathAnimation);
+            m_deathHandle.SetAnimation(m_targetInfo.isValid ? m_info.deathBurrowedAnimation.animation : m_info.deathAnimation.animation);
             m_flinchHandle.FlinchStart += OnFlinchStart;
             m_flinchHandle.FlinchEnd += OnFlinchEnd;
             m_stateHandle = new StateHandle<State>(State.Burrowed, State.WaitBehaviourEnd);
@@ -306,20 +314,20 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_animation.EnableRootMotion(false, false);
                     m_spriteMask.SetActive(true);
                     m_shadow.SetActive(false);
-                    m_animation.SetAnimation(0, m_info.burrowedAnimation, true);
+                    m_animation.SetAnimation(0, m_info.burrowedAnimation.animation, true);
                     //m_animation.SetEmptyAnimation(0, 0);
                     break;
 
                 case State.Turning:
                     m_stateHandle.Wait(m_turnState);
-                    m_turnHandle.Execute(m_info.turnAnimation, m_info.idleAnimation);
+                    m_turnHandle.Execute(m_info.turnAnimation.animation, m_info.idleAnimation.animation);
                     break;
 
                 case State.Attacking:
                     m_stateHandle.Wait(State.Cooldown);
 
                     m_animation.EnableRootMotion(true, false);
-                    m_attackHandle.ExecuteAttack(m_info.attack.animation, m_info.idleAnimation);
+                    m_attackHandle.ExecuteAttack(m_info.attack.animation, m_info.idleAnimation.animation);
 
                     break;
 
@@ -329,7 +337,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     if (!IsFacingTarget())
                     {
                         m_turnState = State.Cooldown;
-                        if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
+                        if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation.animation)
                             m_stateHandle.SetState(State.Turning);
                     }
                     else
@@ -384,7 +392,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         else
                         {
                             m_turnState = State.ReevaluateSituation;
-                            if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
+                            if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation.animation)
                                 m_stateHandle.SetState(State.Turning);
                         }
                     }
@@ -455,12 +463,12 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_flinchHandle.m_autoFlinch = false;
             m_characterPhysics.UseStepClimb(false);
             if (!IsFacingTarget()) CustomTurn();
-            if (m_animation.GetCurrentAnimation(0).ToString() != m_info.deathAnimation)
+            if (m_animation.GetCurrentAnimation(0).ToString() != m_info.deathAnimation.animation)
             {
                 m_animation.DisableRootMotion();
                 //m_flinchHandle.enabled = false;
-                m_animation.SetAnimation(0, m_info.flinchAnimation, false);
-                yield return new WaitForAnimationComplete(m_animation.animationState, m_info.flinchAnimation);
+                m_animation.SetAnimation(0, m_info.flinchAnimation.animation, false);
+                yield return new WaitForAnimationComplete(m_animation.animationState, m_info.flinchAnimation.animation);
                 m_animation.SetAnimation(0, m_info.idleAnimation, true);
             }
             yield return new WaitForSeconds(timer);
