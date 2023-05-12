@@ -26,17 +26,17 @@ namespace DChild.Gameplay.Characters.Enemies
             private MovementInfo m_panic = new MovementInfo();
             public MovementInfo panic => m_panic;
 
-            [SerializeField, BoxGroup("Animation"), ValueDropdown("GetAnimations")]
-            private string m_idleAnimation;
-            public string idleAnimation => m_idleAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_idleAnimation;
+            public BasicAnimationInfo idleAnimation => m_idleAnimation;
 
-            [SerializeField, BoxGroup("Animation"), ValueDropdown("GetAnimations")]
-            private string m_movingAnimation;
-            public string movingAnimation => m_movingAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_movingAnimation;
+            public BasicAnimationInfo movingAnimation => m_movingAnimation;
 
-            [SerializeField, BoxGroup("Animation"), ValueDropdown("GetAnimations")]
-            private string m_panicAnimation;
-            public string panicAnimation => m_panicAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_panicAnimation;
+            public BasicAnimationInfo panicAnimation => m_panicAnimation;
 
 
             public override void Initialize()
@@ -45,7 +45,12 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_idle.SetData(m_skeletonDataAsset);
                 m_patrol.SetData(m_skeletonDataAsset);
                 m_panic.SetData(m_skeletonDataAsset);
+
+                m_idleAnimation.SetData(m_skeletonDataAsset);
+                m_movingAnimation.SetData(m_skeletonDataAsset);
+                m_panicAnimation.SetData(m_skeletonDataAsset);
 #endif
+
             }
         }
 

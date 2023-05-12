@@ -54,12 +54,12 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField, TabGroup("Fireball Attacks")]
             private SimpleAttackInfo m_threeFireBallsAttack = new SimpleAttackInfo();
             public SimpleAttackInfo threeFireBallsAttack => m_threeFireBallsAttack;
-            [SerializeField, ValueDropdown("GetAnimations"), TabGroup("Fireball Attacks")]
-            private string m_threeFireBallsPreAnimation;
-            public string threeFireBallsPreAnimation => m_threeFireBallsPreAnimation;
-            [SerializeField, ValueDropdown("GetAnimations"), TabGroup("Fireball Attacks")]
-            private string m_threeFireBallsFireAnimation;
-            public string threeFireBallsFireAnimation => m_threeFireBallsFireAnimation;
+            [SerializeField, TabGroup("Fireball Attacks")]
+            private BasicAnimationInfo m_threeFireBallsPreAnimation;
+            public BasicAnimationInfo threeFireBallsPreAnimation => m_threeFireBallsPreAnimation;
+            [SerializeField, TabGroup("Fireball Attacks")]
+            private BasicAnimationInfo m_threeFireBallsFireAnimation;
+            public BasicAnimationInfo threeFireBallsFireAnimation => m_threeFireBallsFireAnimation;
             [SerializeField, TabGroup("Fireball Attacks")]
             private SimpleAttackInfo m_flameWaveAttack = new SimpleAttackInfo();
             public SimpleAttackInfo flameWaveAttack => m_flameWaveAttack;
@@ -69,21 +69,21 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField, TabGroup("Ice Attacks")]
             private SimpleAttackInfo m_rayOfFrostAttack = new SimpleAttackInfo();
             public SimpleAttackInfo rayOfFrostAttack => m_rayOfFrostAttack;
-            [SerializeField, ValueDropdown("GetAnimations"), TabGroup("Ice Attacks")]
-            private string m_rayOfFrostChargeAnimation;
-            public string rayOfFrostChargeAnimation => m_rayOfFrostChargeAnimation;
-            [SerializeField, ValueDropdown("GetAnimations"), TabGroup("Ice Attacks")]
-            private string m_rayOfFrostFireAnimation;
-            public string rayOfFrostFireAnimation => m_rayOfFrostFireAnimation;
-            [SerializeField, ValueDropdown("GetAnimations"), TabGroup("Ice Attacks")]
-            private string m_rayOfFrostFireToIdleAnimation;
-            public string rayOfFrostFireToIdleAnimation => m_rayOfFrostFireToIdleAnimation;
+            [SerializeField, TabGroup("Ice Attacks")]
+            private BasicAnimationInfo m_rayOfFrostChargeAnimation;
+            public BasicAnimationInfo rayOfFrostChargeAnimation => m_rayOfFrostChargeAnimation;
+            [SerializeField, TabGroup("Ice Attacks")]
+            private BasicAnimationInfo m_rayOfFrostFireAnimation;
+            public BasicAnimationInfo rayOfFrostFireAnimation => m_rayOfFrostFireAnimation;
+            [SerializeField, TabGroup("Ice Attacks")]
+            private BasicAnimationInfo m_rayOfFrostFireToIdleAnimation;
+            public BasicAnimationInfo rayOfFrostFireToIdleAnimation => m_rayOfFrostFireToIdleAnimation;
             [SerializeField, TabGroup("Ice Attacks")]
             private SimpleAttackInfo m_iceBombAttack = new SimpleAttackInfo();
             public SimpleAttackInfo iceBombAttack => m_iceBombAttack;
-            [SerializeField, ValueDropdown("GetAnimations"), TabGroup("Ice Attacks")]
-            private string m_IceBombThrowAnimation;
-            public string IceBombThrowAnimation => m_IceBombThrowAnimation;
+            [SerializeField, TabGroup("Ice Attacks")]
+            private BasicAnimationInfo m_IceBombThrowAnimation;
+            public BasicAnimationInfo IceBombThrowAnimation => m_IceBombThrowAnimation;
             [SerializeField, TabGroup("Electric Attacks")]
             private SimpleAttackInfo m_electricOrbAttack = new SimpleAttackInfo();
             public SimpleAttackInfo electricOrbAttack => m_electricOrbAttack;
@@ -164,18 +164,18 @@ namespace DChild.Gameplay.Characters.Enemies
             //public float targetDistanceTolerance => m_targetDistanceTolerance;
 
             [Title("Animations")]
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_deathAnimation;
-            public string deathAnimation => m_deathAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_flinchAnimation;
-            public string flinchAnimation => m_flinchAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_idleAnimation;
-            public string idleAnimation => m_idleAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_turnAnimation;
-            public string turnAnimation => m_turnAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_deathAnimation;
+            public BasicAnimationInfo deathAnimation => m_deathAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_flinchAnimation;
+            public BasicAnimationInfo flinchAnimation => m_flinchAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_idleAnimation;
+            public BasicAnimationInfo idleAnimation => m_idleAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_turnAnimation;
+            public BasicAnimationInfo turnAnimation => m_turnAnimation;
 
             //[Title("Projectiles")]
             //[SerializeField, BoxGroup("RainProjectiles")]
@@ -218,6 +218,19 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_lightningGroundAttack.SetData(m_skeletonDataAsset);
                 m_fireBallProjectile.SetData(m_skeletonDataAsset);
                 m_iceBombProjectile.SetData(m_skeletonDataAsset);
+
+                m_deathAnimation.SetData(m_skeletonDataAsset);
+                m_flinchAnimation.SetData(m_skeletonDataAsset);
+                m_idleAnimation.SetData(m_skeletonDataAsset);
+                m_turnAnimation.SetData(m_skeletonDataAsset);
+                m_threeFireBallsPreAnimation.SetData(m_skeletonDataAsset);
+                m_threeFireBallsFireAnimation.SetData(m_skeletonDataAsset);
+                m_rayOfFrostChargeAnimation.SetData(m_skeletonDataAsset);
+                m_rayOfFrostFireAnimation.SetData(m_skeletonDataAsset);
+                m_rayOfFrostFireToIdleAnimation.SetData(m_skeletonDataAsset);
+                m_IceBombThrowAnimation.SetData(m_skeletonDataAsset);
+
+
 #endif
             }
         }
@@ -846,7 +859,7 @@ namespace DChild.Gameplay.Characters.Enemies
             base.Awake();
             m_turnHandle.TurnDone += OnTurnDone;
             //m_hitDetector.PlayerHit += AddHitCount;
-            m_deathHandle.SetAnimation(m_info.deathAnimation);
+            m_deathHandle.SetAnimation(m_info.deathAnimation.animation);
             m_flinchHandler.FlinchStart += OnFlinchStart;
             m_flinchHandler.FlinchEnd += OnFlinchEnd;
             m_fireBallProjectileLauncher = new ProjectileLauncher(m_info.fireBallProjectile.projectileInfo, m_fireBallSpawnPoint);
@@ -904,7 +917,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     else
                     {
                         m_turnState = State.Intro;
-                        if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
+                        if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation.animation)
                             m_stateHandle.SetState(State.Turning);
                     }
                     break;
@@ -917,7 +930,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_stateHandle.Wait(m_turnState);
                     StopAllCoroutines();
                     m_book.Turn(false);
-                    m_turnHandle.Execute(m_info.turnAnimation, m_info.idleAnimation);
+                    m_turnHandle.Execute(m_info.turnAnimation.animation, m_info.idleAnimation.animation);
                     m_agent.Stop();
                     break;
                 case State.Attacking:
@@ -1102,7 +1115,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     else
                     {
                         m_turnState = State.Chasing;
-                        if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation /*&& m_animation.GetCurrentAnimation(0).ToString() != m_info.attackDaggersIdle.animation*/)
+                        if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation.animation /*&& m_animation.GetCurrentAnimation(0).ToString() != m_info.attackDaggersIdle.animation*/)
                             m_stateHandle.SetState(State.Turning);
                     }
                     break;
