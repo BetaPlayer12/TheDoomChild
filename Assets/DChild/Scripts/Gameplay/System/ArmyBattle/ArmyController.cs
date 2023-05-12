@@ -1,5 +1,6 @@
 ﻿using Holysoft.Event;
 using Sirenix.OdinInspector;
+using Sirenix.Utilities;
 using UnityEngine;
 
 namespace DChild.Gameplay.ArmyBattle
@@ -14,10 +15,17 @@ namespace DChild.Gameplay.ArmyBattle
         protected ArmyAttackGroup m_currentAttackGroup;
 
         public ArmyAttack currentAttack => m_currentAttack;
-        public ArmyAttackGroup currentAttackGroup => m_currentAttackGroup;
         public Army controlledArmy => m_controlledArmy;
 
         public event EventAction<ArmyAttackEvent> AttackChosen;
+        public event EventAction<ArmyAbilityEvent> AbilityChosen;
+
+        public void DisposeCurrentAttack()
+        {
+            m_currentAttack = new ArmyAttack(UnitType.None, 0, 0);
+            m_currentAttackGroup.SetAvailability(false);
+            m_currentAttackGroup = null;
+        }
 
         public void ChooseRockAttack()
         {
@@ -34,6 +42,11 @@ namespace DChild.Gameplay.ArmyBattle
             ChooseAttack(UnitType.Paper);
         }
 
+        public virtual void ChooseSpecial()
+        {
+            m_controlledArmy.GetAvailableAbilityGroups();
+        }
+
         protected virtual void ChooseAttack(UnitType unitType)
         {
             var chosenGroups = m_controlledArmy.GetAvailableAttackGroups(unitType);
@@ -47,7 +60,17 @@ namespace DChild.Gameplay.ArmyBattle
             AttackChosen?.Invoke(this, armyAttackEvent);
         }
 
-        protected ArmyAttack CreateAttack(ArmyAttackGroup armyAttackGroup) => new ArmyAttack(armyAttackGroup.unitType, armyAttackGroup.GetTotalPower());
+        protected void SendAbilityChosenEvent(ArmyAbilityGroup armyAttackEvent)
+        {
+            using (Cache<ArmyAbilityEvent> eventArgs = Cache<ArmyAbilityEvent>.Claim())
+            {
+                eventArgs.Value.Set(armyAttackEvent);
+                AbilityChosen?.Invoke(this, eventArgs.Value);
+                eventArgs.Release();
+            }
+        }
+
+        protected ArmyAttack CreateAttack(ArmyAttackGroup armyAttackGroup) => new ArmyAttack(armyAttackGroup.unitType, armyAttackGroup.GetTotalPower(), m_controlledArmy.powerModifier.GetModifier(armyAttackGroup.unitType));
 
         protected ArmyAttackEvent CreateAttackEvent(ArmyAttack armyAttack) => new ArmyAttackEvent(armyAttack);
     }

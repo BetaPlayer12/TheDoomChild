@@ -114,6 +114,14 @@ namespace DChild.Gameplay.Characters.AI
         {
             SetTarget(null);
         }
+        public void SetPassive()
+        {
+            this.enabled = false;
+        }
+        public void SetActive()
+        {
+            this.enabled = true;
+        }
 
         /// <summary>
         /// Target is null and cannot accept new Targets if True
