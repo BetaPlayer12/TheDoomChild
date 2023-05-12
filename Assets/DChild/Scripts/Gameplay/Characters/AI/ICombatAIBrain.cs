@@ -19,6 +19,10 @@ namespace DChild.Gameplay.Characters.AI
         void IgnoreAllTargets(bool value);
         void ReturnToSpawnPoint();
 
+        void SetPassive();
+
+        void SetActive();
+
 #if UNITY_EDITOR
 
         CharacterStatsData statsData { get; set; }

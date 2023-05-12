@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace DChild.Gameplay.ArmyBattle
 {
@@ -6,20 +7,31 @@ namespace DChild.Gameplay.ArmyBattle
     public class ArmyAbilityList
     {
         [SerializeField]
-        private ArmyAbility[] m_abilities;
+        private List<ArmyAbilityGroup> m_abilityGroups;
 
-        public ArmyAbilityList(params ArmyAbility[] abilities)
+        public ArmyAbilityList()
         {
-            m_abilities = abilities;
+            m_abilityGroups = new List<ArmyAbilityGroup>();
         }
 
-        public ArmyAbility[] abilities => m_abilities;
-
-        public void ResetAbilities()
+        public ArmyAbilityList(ArmyAbilityGroup[] abilities)
         {
-            for (int i = 0; i < m_abilities.Length; i++)
+            m_abilityGroups = new List<ArmyAbilityGroup>(abilities);
+        }
+        public ArmyAbilityList(ArmyAbilityList reference)
+        {
+
+        }
+
+        public int count => m_abilityGroups.Count;
+
+        public ArmyAbilityGroup GetAbilityGroup(int index) => m_abilityGroups[index];
+
+        public void ResetAvailability()
+        {
+            for (int i = 0; i < m_abilityGroups.Count; i++)
             {
-                m_abilities[i].ResetUseCount();
+                m_abilityGroups[i].SetAvailability(true);
             }
         }
     }

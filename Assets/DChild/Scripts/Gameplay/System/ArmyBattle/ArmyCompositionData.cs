@@ -17,24 +17,70 @@ namespace DChild.Gameplay.ArmyBattle
         [DetailedInfoBox("@GetSummarryMessage(UnitType.Rock)", "@GetDetailedMessage(UnitType.Rock)", InfoMessageType = InfoMessageType.None)]
         [DetailedInfoBox("@GetSummarryMessage(UnitType.Paper)", "@GetDetailedMessage(UnitType.Paper)", InfoMessageType = InfoMessageType.None)]
         [DetailedInfoBox("@GetSummarryMessage(UnitType.Scissors)", "@GetDetailedMessage(UnitType.Scissors)", InfoMessageType = InfoMessageType.None)]
+        [DetailedInfoBox("@GetSummarryAbilityMessage()", "@GetDetailedAbilityMessage()", InfoMessageType = InfoMessageType.None)]
 #endif
         [SerializeField, AssetSelector, PropertyOrder(2), InlineEditor(InlineEditorObjectFieldModes.Foldout, Expanded = true)]
-        private ArmyAttackGroupData[] m_attackGroups;
+        private ArmyGroupData[] m_groups;
 
         public string name => m_name;
         public int troopCount => m_troopCount;
 
         public ArmyComposition GenerateArmyCompositionInstance()
         {
-            var armyAttackGroup = new ArmyAttackGroup[m_attackGroups.Length];
-            for (int i = 0; i < m_attackGroups.Length; i++)
+            List<ArmyAttackGroup> attackgroups = new List<ArmyAttackGroup>();
+            List<ArmyAbilityGroup> abilitygroups = new List<ArmyAbilityGroup>();
+            for (int i = 0; i < m_groups.Length; i++)
             {
-                armyAttackGroup[i] = new ArmyAttackGroup(m_attackGroups[i]);
+                var group = m_groups[i];
+                if (group.canAttack)
+                {
+                    attackgroups.Add(new ArmyAttackGroup(group));
+                }
+                if (group.hasAbility)
+                {
+                    abilitygroups.Add(new ArmyAbilityGroup(group));
+                }
             }
-            return new ArmyComposition(m_name, m_troopCount, armyAttackGroup);
+            return new ArmyComposition(m_name, m_troopCount, attackgroups.ToArray(), abilitygroups.ToArray());
         }
 
 #if UNITY_EDITOR
+
+        private string GetSummarryAbilityMessage()
+        {
+            return $"Ability Groups \n" +
+                 $"Count: {GetTotalAbilities()}";
+        }
+
+        private int GetTotalAbilities()
+        {
+            int abilities = 0;
+            for (int i = 0; i < m_groups.Length; i++)
+            {
+                var group = m_groups[i];
+                if (group.hasAbility)
+                {
+                    abilities++;
+                }
+            }
+
+            return abilities;
+        }
+
+        private string GetDetailedAbilityMessage()
+        {
+            var message = $"Ability Groups";
+            for (int i = 0; i < m_groups.Length; i++)
+            {
+                var group = m_groups[i];
+                if (group.hasAbility)
+                {
+                    message += "\n" + GetDetail(group);
+                }
+            }
+            return message;
+            string GetDetail(IArmyAbilityInfo data) => $"{data.groupName}({data.abilityDescription})";
+        }
 
         private string GetSummarryMessage(UnitType unitType)
         {
@@ -46,12 +92,12 @@ namespace DChild.Gameplay.ArmyBattle
         private int GetTotalPower(UnitType type)
         {
             int power = 0;
-            for (int i = 0; i < m_attackGroups.Length; i++)
+            for (int i = 0; i < m_groups.Length; i++)
             {
-                var attackGroup = m_attackGroups[i];
-                if (attackGroup.unitType == type)
+                var attackGroup = m_groups[i];
+                if (attackGroup.attackType == type)
                 {
-                    power += attackGroup.GetTotalPower();
+                    power += attackGroup.GetTotalAttackPower();
                 }
             }
 
@@ -61,10 +107,10 @@ namespace DChild.Gameplay.ArmyBattle
         private int GetTotalCount(UnitType type)
         {
             int count = 0;
-            for (int i = 0; i < m_attackGroups.Length; i++)
+            for (int i = 0; i < m_groups.Length; i++)
             {
-                var attackGroup = m_attackGroups[i];
-                if (attackGroup.unitType == type)
+                var attackGroup = m_groups[i];
+                if (attackGroup.attackType == type)
                 {
                     count++;
                 }
@@ -76,16 +122,16 @@ namespace DChild.Gameplay.ArmyBattle
         private string GetDetailedMessage(UnitType unitType)
         {
             var message = $"{unitType.ToString()} Groups";
-            for (int i = 0; i < m_attackGroups.Length; i++)
+            for (int i = 0; i < m_groups.Length; i++)
             {
-                var attackGroup = m_attackGroups[i];
-                if (attackGroup.unitType == unitType)
+                var attackGroup = m_groups[i];
+                if (attackGroup.attackType == unitType)
                 {
                     message += "\n" + GetDetail(attackGroup);
                 }
             }
             return message;
-            string GetDetail(ArmyAttackGroupData data) => $"{data.groupName}({data.GetTotalPower()})";
+            string GetDetail(IArmyAttackInfo data) => $"{data.groupName}({data.GetTotalAttackPower()})";
         }
 #endif
 

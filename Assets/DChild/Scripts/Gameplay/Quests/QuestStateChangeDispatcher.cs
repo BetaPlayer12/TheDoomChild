@@ -6,9 +6,14 @@ namespace DChild.Gameplay.Quests
 {
     public class QuestStateChangeDispatcher : MonoBehaviour
     {
+
         public static event Action<string, QuestState> QuestStateChange;
         public static event Action<QuestEntryArgs, QuestState> QuestEntryStateChange;
 
+        public static void SendQuestEntryStateChangeEvent(QuestEntryArgs questInfo)
+        {
+            QuestEntryStateChange?.Invoke(questInfo, QuestLog.GetQuestEntryState(questInfo.questName, questInfo.entryNumber));
+        }
 
         public void OnQuestStateChange(string questName)
         {
@@ -17,7 +22,7 @@ namespace DChild.Gameplay.Quests
 
         public void OnQuestEntryStateChange(QuestEntryArgs questInfo)
         {
-            QuestEntryStateChange?.Invoke(questInfo, QuestLog.GetQuestEntryState(questInfo.questName, questInfo.entryNumber));
+            SendQuestEntryStateChangeEvent(questInfo);
         }
     }
 }
