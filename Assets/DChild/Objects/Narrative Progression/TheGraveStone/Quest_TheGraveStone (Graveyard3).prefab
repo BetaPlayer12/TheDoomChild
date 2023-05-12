@@ -1,5 +1,37 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1785123475336561906
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2906361326451482328}
+  m_Layer: 0
+  m_Name: QuestEntry_TheRestingPlace
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2906361326451482328
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1785123475336561906}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 5759756283694648230}
+  m_Father: {fileID: 6981188668067823861}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3279893043177634307
 GameObject:
   m_ObjectHideFlags: 0
@@ -9,7 +41,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 823030189075793837}
-  - component: {fileID: 4150466807224577555}
   - component: {fileID: 2636329198039242820}
   m_Layer: 11
   m_Name: BrokenSwordGiver
@@ -33,90 +64,6 @@ Transform:
   m_Father: {fileID: 5759756283694648230}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4150466807224577555
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3279893043177634307}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c593457cd8105e148906690e1707c592, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  trigger: 32
-  condition:
-    luaConditions: []
-    questConditions: []
-    acceptedTags: []
-    acceptedGameObjects: []
-    luaWizardIndex: -1
-    lastEvaluationValue: 0
-  setQuestState: 1
-  questName: 
-  questState: 0
-  setQuestEntryState: 0
-  questEntryNumber: 1
-  questEntryState: 0
-  setAnotherQuestEntryState: 0
-  anotherQuestEntryNumber: 1
-  anotherQuestEntryState: 0
-  luaCode: 
-  sequence: 
-  sequenceSpeaker: {fileID: 0}
-  sequenceListener: {fileID: 0}
-  waitOneFrameOnStartOrEnable: 1
-  alertMessage: 
-  textTable: {fileID: 0}
-  alertDuration: 0
-  sendMessages: []
-  barkSource: 0
-  barkConversation: 
-  barkText: 
-  barkTextSequence: 
-  barker: {fileID: 0}
-  barkTarget: {fileID: 0}
-  barkOrder: 0
-  allowBarksDuringConversations: 0
-  skipBarkIfNoValidEntries: 0
-  cacheBarkLines: 0
-  conversation: 
-  conversationConversant: {fileID: 0}
-  conversationActor: {fileID: 0}
-  startConversationEntryID: -1
-  exclusive: 0
-  replace: 0
-  skipIfNoValidEntries: 0
-  preventRestartOnSameFrameEnded: 0
-  stopConversationOnTriggerExit: 0
-  stopConversationIfTooFar: 0
-  maxConversationDistance: 5
-  monitorConversationDistanceFrequency: 1
-  showCursorDuringConversation: 0
-  pauseGameDuringConversation: 0
-  setActiveActions: []
-  setEnabledActions: []
-  setAnimatorStateActions: []
-  onExecute:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 2636329198039242820}
-        m_TargetAssemblyTypeName: DChild.Gameplay.Items.ItemGiver, Assembly-CSharp
-        m_MethodName: GiveItem
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  useConversationTitlePicker: 1
-  useBarkTitlePicker: 1
-  useQuestNamePicker: 1
-  selectedDatabase: {fileID: 11400000, guid: 0261f9a557275204180e4259492917ad, type: 2}
 --- !u!114 &2636329198039242820
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -161,8 +108,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 2434995188652539958}
-  - {fileID: 5759756283694648230}
+  - {fileID: 2906361326451482328}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -181,7 +127,8 @@ MonoBehaviour:
   questName: FindGravestone
   questStateIndicatorLevels: []
   questEntryStateIndicatorLevels:
-  - entryNumber: 3
+  - updateOnStartOnly: 0
+    entryNumber: 3
     questState: 2
     condition:
       luaConditions: []
@@ -194,7 +141,8 @@ MonoBehaviour:
     onEnterState:
       m_PersistentCalls:
         m_Calls: []
-  - entryNumber: 2
+  - updateOnStartOnly: 0
+    entryNumber: 2
     questState: 2
     condition:
       luaConditions: []
@@ -207,7 +155,8 @@ MonoBehaviour:
     onEnterState:
       m_PersistentCalls:
         m_Calls: []
-  - entryNumber: 3
+  - updateOnStartOnly: 0
+    entryNumber: 3
     questState: 4
     condition:
       luaConditions: []
@@ -235,7 +184,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   indicators:
   - {fileID: 0}
-  - {fileID: 2434995188652539945}
+  - {fileID: 0}
   - {fileID: 5759756283694648249}
 --- !u!114 &4073814578008244167
 MonoBehaviour:
@@ -267,7 +216,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    m_TransformParent: {fileID: 6981188668067823861}
+    m_TransformParent: {fileID: 2906361326451482328}
     m_Modifications:
     - target: {fileID: 1245539787021614277, guid: e11127dc23fa14a49bdaf94d154db74d,
         type: 3}
@@ -287,7 +236,7 @@ PrefabInstance:
     - target: {fileID: 5471281700201093914, guid: e11127dc23fa14a49bdaf94d154db74d,
         type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5471281700201093914, guid: e11127dc23fa14a49bdaf94d154db74d,
         type: 3}
@@ -312,17 +261,17 @@ PrefabInstance:
     - target: {fileID: 5471281700201093914, guid: e11127dc23fa14a49bdaf94d154db74d,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 5471281700201093914, guid: e11127dc23fa14a49bdaf94d154db74d,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 5471281700201093914, guid: e11127dc23fa14a49bdaf94d154db74d,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 5471281700201093914, guid: e11127dc23fa14a49bdaf94d154db74d,
         type: 3}
@@ -425,7 +374,7 @@ MonoBehaviour:
     luaWizardIndex: -1
     lastEvaluationValue: 0
   setQuestState: 1
-  questName: FindGravestone
+  questName: 
   questState: 4
   setQuestEntryState: 1
   questEntryNumber: 3
@@ -472,10 +421,9 @@ MonoBehaviour:
   onExecute:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 4150466807224577555}
-        m_TargetAssemblyTypeName: PixelCrushers.DialogueSystem.DialogueSystemTrigger,
-          Assembly-CSharp-firstpass
-        m_MethodName: OnUse
+      - m_Target: {fileID: 2636329198039242820}
+        m_TargetAssemblyTypeName: DChild.Gameplay.Items.ItemGiver, Assembly-CSharp
+        m_MethodName: GiveItem
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -522,250 +470,97 @@ MonoBehaviour:
     prependActorNameSeparator: ': '
     prependActorNameFormat: '{0}{1}'
     subtitleColor: {r: 1, g: 1, b: 1, a: 1}
---- !u!1001 &7649138081068440364
+--- !u!1001 &736399806143959535
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    m_TransformParent: {fileID: 6981188668067823861}
+    m_TransformParent: {fileID: 5759756283694648230}
     m_Modifications:
-    - target: {fileID: 1245539787021614277, guid: e11127dc23fa14a49bdaf94d154db74d,
+    - target: {fileID: 2045270927622476227, guid: 958b0c342417f26479f470b1525aeb0e,
         type: 3}
-      propertyPath: m_Layer
-      value: 11
+      propertyPath: questState
+      value: 4
       objectReference: {fileID: 0}
-    - target: {fileID: 5471281700201093893, guid: e11127dc23fa14a49bdaf94d154db74d,
+    - target: {fileID: 2045270927622476227, guid: 958b0c342417f26479f470b1525aeb0e,
         type: 3}
-      propertyPath: m_Name
-      value: GladiatorGhostShrine_NPC
-      objectReference: {fileID: 0}
-    - target: {fileID: 5471281700201093893, guid: e11127dc23fa14a49bdaf94d154db74d,
-        type: 3}
-      propertyPath: m_Layer
-      value: 11
-      objectReference: {fileID: 0}
-    - target: {fileID: 5471281700201093914, guid: e11127dc23fa14a49bdaf94d154db74d,
-        type: 3}
-      propertyPath: m_RootOrder
+      propertyPath: onExecute.m_PersistentCalls.m_Calls.Array.size
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5471281700201093914, guid: e11127dc23fa14a49bdaf94d154db74d,
+    - target: {fileID: 2045270927622476227, guid: 958b0c342417f26479f470b1525aeb0e,
+        type: 3}
+      propertyPath: onExecute.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 2636329198039242820}
+    - target: {fileID: 2045270927622476227, guid: 958b0c342417f26479f470b1525aeb0e,
+        type: 3}
+      propertyPath: onExecute.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: GiveItem
+      objectReference: {fileID: 0}
+    - target: {fileID: 2045270927622476227, guid: 958b0c342417f26479f470b1525aeb0e,
+        type: 3}
+      propertyPath: onExecute.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: DChild.Gameplay.Items.ItemGiver, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 4667877074216074811, guid: 958b0c342417f26479f470b1525aeb0e,
+        type: 3}
+      propertyPath: m_Name
+      value: afterconversation_TheGraveStone
+      objectReference: {fileID: 0}
+    - target: {fileID: 5722583191681993286, guid: 958b0c342417f26479f470b1525aeb0e,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5722583191681993286, guid: 958b0c342417f26479f470b1525aeb0e,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 800.7
+      value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5471281700201093914, guid: e11127dc23fa14a49bdaf94d154db74d,
+    - target: {fileID: 5722583191681993286, guid: 958b0c342417f26479f470b1525aeb0e,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -76.12
+      value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5471281700201093914, guid: e11127dc23fa14a49bdaf94d154db74d,
+    - target: {fileID: 5722583191681993286, guid: 958b0c342417f26479f470b1525aeb0e,
         type: 3}
       propertyPath: m_LocalPosition.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5471281700201093914, guid: e11127dc23fa14a49bdaf94d154db74d,
+    - target: {fileID: 5722583191681993286, guid: 958b0c342417f26479f470b1525aeb0e,
         type: 3}
       propertyPath: m_LocalRotation.w
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 5471281700201093914, guid: e11127dc23fa14a49bdaf94d154db74d,
+    - target: {fileID: 5722583191681993286, guid: 958b0c342417f26479f470b1525aeb0e,
         type: 3}
       propertyPath: m_LocalRotation.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5471281700201093914, guid: e11127dc23fa14a49bdaf94d154db74d,
+    - target: {fileID: 5722583191681993286, guid: 958b0c342417f26479f470b1525aeb0e,
         type: 3}
       propertyPath: m_LocalRotation.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5471281700201093914, guid: e11127dc23fa14a49bdaf94d154db74d,
+    - target: {fileID: 5722583191681993286, guid: 958b0c342417f26479f470b1525aeb0e,
         type: 3}
       propertyPath: m_LocalRotation.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5471281700201093914, guid: e11127dc23fa14a49bdaf94d154db74d,
+    - target: {fileID: 5722583191681993286, guid: 958b0c342417f26479f470b1525aeb0e,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5471281700201093914, guid: e11127dc23fa14a49bdaf94d154db74d,
+    - target: {fileID: 5722583191681993286, guid: 958b0c342417f26479f470b1525aeb0e,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5471281700201093914, guid: e11127dc23fa14a49bdaf94d154db74d,
+    - target: {fileID: 5722583191681993286, guid: 958b0c342417f26479f470b1525aeb0e,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7482168681115118177, guid: e11127dc23fa14a49bdaf94d154db74d,
-        type: 3}
-      propertyPath: m_Mesh
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 9007901922352237317, guid: e11127dc23fa14a49bdaf94d154db74d,
-        type: 3}
-      propertyPath: m_Layer
-      value: 11
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: e11127dc23fa14a49bdaf94d154db74d, type: 3}
---- !u!1 &2434995188652539945 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5471281700201093893, guid: e11127dc23fa14a49bdaf94d154db74d,
-    type: 3}
-  m_PrefabInstance: {fileID: 7649138081068440364}
-  m_PrefabAsset: {fileID: 0}
---- !u!61 &4311168900319320568
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2434995188652539945}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: -4.2638245, y: 0.24758911}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0, y: 0}
-    oldSize: {x: 0, y: 0}
-    newSize: {x: 0, y: 0}
-    adaptiveTilingThreshold: 0
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 16.240417, y: 1.4951782}
-  m_EdgeRadius: 0
---- !u!114 &613253939565789895
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2434995188652539945}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c593457cd8105e148906690e1707c592, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  trigger: 32
-  condition:
-    luaConditions: []
-    questConditions: []
-    acceptedTags: []
-    acceptedGameObjects: []
-    luaWizardIndex: -1
-    lastEvaluationValue: 0
-  setQuestState: 0
-  questName: FindGravestone
-  questState: 0
-  setQuestEntryState: 1
-  questEntryNumber: 2
-  questEntryState: 4
-  setAnotherQuestEntryState: 1
-  anotherQuestEntryNumber: 3
-  anotherQuestEntryState: 2
-  luaCode: Variable["TheShrine"] = true
-  sequence: 
-  sequenceSpeaker: {fileID: 0}
-  sequenceListener: {fileID: 0}
-  waitOneFrameOnStartOrEnable: 1
-  alertMessage: 
-  textTable: {fileID: 0}
-  alertDuration: 0
-  sendMessages: []
-  barkSource: 0
-  barkConversation: 
-  barkText: 
-  barkTextSequence: 
-  barker: {fileID: 0}
-  barkTarget: {fileID: 0}
-  barkOrder: 0
-  allowBarksDuringConversations: 0
-  skipBarkIfNoValidEntries: 0
-  cacheBarkLines: 0
-  conversation: The Shrine Conversation
-  conversationConversant: {fileID: 0}
-  conversationActor: {fileID: 0}
-  startConversationEntryID: -1
-  exclusive: 0
-  replace: 0
-  skipIfNoValidEntries: 1
-  preventRestartOnSameFrameEnded: 0
-  stopConversationOnTriggerExit: 0
-  stopConversationIfTooFar: 0
-  maxConversationDistance: 5
-  monitorConversationDistanceFrequency: 1
-  showCursorDuringConversation: 0
-  pauseGameDuringConversation: 0
-  setActiveActions: []
-  setEnabledActions: []
-  setAnimatorStateActions: []
-  onExecute:
-    m_PersistentCalls:
-      m_Calls: []
-  useConversationTitlePicker: 1
-  useBarkTitlePicker: 1
-  useQuestNamePicker: 1
-  selectedDatabase: {fileID: 11400000, guid: fe2c59e6cf5c94243a7fd3e68fe50519, type: 2}
---- !u!114 &6620715014086564363
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2434995188652539945}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6e2311e69bbd5cc4298ae02e0fe9275a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_hasDialogue: 1
-  m_hasConditionForDialogue: 0
-  m_promptOffset: {x: -1.98, y: 17.23, z: 0}
---- !u!114 &5990208735733453897
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2434995188652539945}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a64578247383140469c45370654a984a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  actor: GladiatorGhost
-  persistentDataName: 
-  portrait: {fileID: 0}
-  spritePortrait: {fileID: 21300000, guid: ac246e3bfc0c2834fadb6d7e507a5419, type: 3}
-  barkUISettings:
-    barkUI: {fileID: 0}
-    barkUIOffset: {x: 0, y: 2, z: 0}
-  standardDialogueUISettings:
-    subtitlePanelNumber: 0
-    customSubtitlePanel: {fileID: 0}
-    customSubtitlePanelOffset: {x: 0, y: 0, z: 0}
-    menuPanelNumber: 0
-    customMenuPanel: {fileID: 0}
-    customMenuPanelOffset: {x: 0, y: 0, z: 0}
-    useMenuPanelFor: 0
-    portraitAnimatorController: {fileID: 0}
-    setSubtitleColor: 0
-    applyColorToPrependedName: 0
-    prependActorNameSeparator: ': '
-    prependActorNameFormat: '{0}{1}'
-    subtitleColor: {r: 1, g: 1, b: 1, a: 1}
---- !u!4 &2434995188652539958 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 5471281700201093914, guid: e11127dc23fa14a49bdaf94d154db74d,
-    type: 3}
-  m_PrefabInstance: {fileID: 7649138081068440364}
-  m_PrefabAsset: {fileID: 0}
+  m_SourcePrefab: {fileID: 100100000, guid: 958b0c342417f26479f470b1525aeb0e, type: 3}
