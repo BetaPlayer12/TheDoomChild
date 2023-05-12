@@ -7,7 +7,15 @@ public class TimerEyeAnimationGroup : MonoBehaviour
 {
     [SerializeField]
     private TimerEyeAnimation[] m_eyeTimers;
-   
+
+    public void StartAllEyeOpeningAnimation()
+    {
+        for (int i = 0; i < m_eyeTimers.Length; i++)
+        {
+            m_eyeTimers[i].UseCloseAnimation();
+            m_eyeTimers[i].UseOpenAnimation();
+        }
+    }
     public void StartAllEyeCloseAnimation()
     {
         for (int i = 0; i < m_eyeTimers.Length; i++)
@@ -21,6 +29,14 @@ public class TimerEyeAnimationGroup : MonoBehaviour
         for (int i = 0; i < m_eyeTimers.Length; i++)
         {
             m_eyeTimers[i].UseCloseAnimation();
+        }
+    }
+
+    public void UseAllEyeOpenAnimation()
+    {
+        for (int i = 0; i < m_eyeTimers.Length; i++)
+        {
+            m_eyeTimers[i].UseOpenAnimation();
         }
     }
 
