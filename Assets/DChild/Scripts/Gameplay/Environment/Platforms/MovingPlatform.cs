@@ -241,6 +241,7 @@ namespace DChild.Gameplay.Environment
             transform.position = m_waypoints[m_startWaypoint];
             m_isolatedTime = GetComponent<IIsolatedTime>();
             m_wayPointDestination = m_startWaypoint;
+            m_pingPongWaypoint = m_startWaypoint;
             m_currentWayPoint = m_wayPointDestination;
             m_cacheDestination = m_waypoints[m_wayPointDestination];
             m_cacheCurrentWaypoint = m_waypoints[m_currentWayPoint];

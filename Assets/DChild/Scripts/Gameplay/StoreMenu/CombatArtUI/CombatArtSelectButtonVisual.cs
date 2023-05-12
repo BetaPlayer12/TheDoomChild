@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using DChild.Gameplay.Characters.Players;
+using UnityEngine;
+using UnityEngine.UI;
 
 namespace DChild.Gameplay.UI.CombatArts
 {
@@ -6,11 +8,19 @@ namespace DChild.Gameplay.UI.CombatArts
     public class CombatArtSelectButtonVisual
     {
         [SerializeField]
+        private Image m_icon;
+
+        [SerializeField]
         private GameObject m_lockedUIAnimations;
         [SerializeField]
         private GameObject m_unlockableUIAnimations;
         [SerializeField]
         private GameObject m_unlockedUIAnimations;
+
+        public void DisplayAs(CombatArtLevelData artLevelData)
+        {
+            m_icon.sprite = artLevelData.icon;
+        }
 
         public void SetState(CombatArtUnlockState state)
         {
