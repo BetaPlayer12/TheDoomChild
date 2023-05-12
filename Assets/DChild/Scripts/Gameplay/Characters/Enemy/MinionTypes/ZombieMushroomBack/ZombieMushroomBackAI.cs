@@ -54,22 +54,22 @@ namespace DChild.Gameplay.Characters.Enemies
 
             //Animations
             [SerializeField]
-            private BasicAnimationInfo m_idleAnimation;
+            private BasicAnimationInfo m_idleAnimation = new BasicAnimationInfo();
             public BasicAnimationInfo idleAnimation => m_idleAnimation;
             [SerializeField]
-            private BasicAnimationInfo m_asleepAnimation;
+            private BasicAnimationInfo m_asleepAnimation = new BasicAnimationInfo();
             public BasicAnimationInfo asleepAnimation => m_asleepAnimation;
             [SerializeField]
-            private BasicAnimationInfo m_awakenAnimation;
+            private BasicAnimationInfo m_awakenAnimation = new BasicAnimationInfo();
             public BasicAnimationInfo awakenAnimation => m_awakenAnimation;
             [SerializeField]
-            private BasicAnimationInfo m_flinchAnimation;
+            private BasicAnimationInfo m_flinchAnimation = new BasicAnimationInfo();
             public BasicAnimationInfo flinchAnimation => m_flinchAnimation;
             [SerializeField]
-            private BasicAnimationInfo m_turnAnimation;
+            private BasicAnimationInfo m_turnAnimation = new BasicAnimationInfo();
             public BasicAnimationInfo turnAnimation => m_turnAnimation;
             [SerializeField]
-            private BasicAnimationInfo m_deathAnimation;
+            private BasicAnimationInfo m_deathAnimation = new BasicAnimationInfo();
             public BasicAnimationInfo deathAnimation => m_deathAnimation;
             [SerializeField]
             private GameObject m_poisoncloud;
