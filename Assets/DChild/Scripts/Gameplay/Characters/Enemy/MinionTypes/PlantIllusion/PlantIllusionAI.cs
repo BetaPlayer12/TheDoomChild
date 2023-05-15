@@ -49,21 +49,21 @@ namespace DChild.Gameplay.Characters.Enemies
 
 
             //Animations
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_idleAnimation;
-            public string idleAnimation => m_idleAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_surpriseAnimation;
-            public string surpriseAnimation => m_surpriseAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_flinchAnimation;
-            public string flinchAnimation => m_flinchAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_turnAnimation;
-            public string turnAnimation => m_turnAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_deathAnimation;
-            public string deathAnimation => m_deathAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_idleAnimation = new BasicAnimationInfo();
+            public BasicAnimationInfo idleAnimation => m_idleAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_surpriseAnimation = new BasicAnimationInfo();
+            public BasicAnimationInfo surpriseAnimation => m_surpriseAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_flinchAnimation = new BasicAnimationInfo();
+            public BasicAnimationInfo flinchAnimation => m_flinchAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_turnAnimation = new BasicAnimationInfo();
+            public BasicAnimationInfo turnAnimation => m_turnAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_deathAnimation = new BasicAnimationInfo();
+            public BasicAnimationInfo deathAnimation => m_deathAnimation;
 
             [Title("Events")]
             [SerializeField, ValueDropdown("GetEvents")]
@@ -88,6 +88,12 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_attack2.SetData(m_skeletonDataAsset);
                 m_attack2Hide.SetData(m_skeletonDataAsset);
                 m_projectile.SetData(m_skeletonDataAsset);
+
+                m_idleAnimation.SetData(m_skeletonDataAsset);
+                m_surpriseAnimation.SetData(m_skeletonDataAsset);
+                m_flinchAnimation.SetData(m_skeletonDataAsset);
+                m_turnAnimation.SetData(m_skeletonDataAsset);
+                m_deathAnimation.SetData(m_skeletonDataAsset);
 #endif
             }
         }
@@ -250,8 +256,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator FlinchRoutine()
         {
-            m_animation.SetAnimation(1, m_info.flinchAnimation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.flinchAnimation);
+            m_animation.SetAnimation(1, m_info.flinchAnimation.animation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.flinchAnimation.animation);
             m_animation.SetEmptyAnimation(1, 0);
             yield return null;
         }
@@ -260,8 +266,8 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             if (m_flinchHandle.m_autoFlinch)
             {
-                if (m_animation.GetCurrentAnimation(0).ToString() != m_info.deathAnimation)
-                    m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                if (m_animation.GetCurrentAnimation(0).ToString() != m_info.deathAnimation.animation)
+                    m_animation.SetAnimation(0, m_info.idleAnimation.animation, true);
                 m_stateHandle.ApplyQueuedState();
             }
         }
@@ -306,7 +312,7 @@ namespace DChild.Gameplay.Characters.Enemies
             GameplaySystem.minionManager.Register(this);
             m_attackHandle.AttackDone += OnAttackDone;
             m_turnHandle.TurnDone += OnTurnDone;
-            m_deathHandle.SetAnimation(m_info.deathAnimation);
+            m_deathHandle.SetAnimation(m_info.deathAnimation.animation);
             m_flinchHandle.FlinchStart += OnFlinchStart;
             m_flinchHandle.FlinchEnd += OnFlinchEnd;
             m_stateHandle = new StateHandle<State>(State.Burrowed, State.WaitBehaviourEnd);
@@ -324,13 +330,13 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 case State.Burrowed:
                     m_animation.EnableRootMotion(false, false);
-                    m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                    m_animation.SetAnimation(0, m_info.idleAnimation.animation, true);
                     //m_animation.SetEmptyAnimation(0, 0);
                     break;
 
                 case State.Turning:
                     m_stateHandle.Wait(State.ReevaluateSituation);
-                    m_turnHandle.Execute(m_info.turnAnimation, m_info.idleAnimation);
+                    m_turnHandle.Execute(m_info.turnAnimation.animation, m_info.idleAnimation.animation);
                     break;
 
                 case State.Attacking:
@@ -349,11 +355,11 @@ namespace DChild.Gameplay.Characters.Enemies
                             //m_stingerPos.rotation = Quaternion.Euler(0f, 0f, postAtan2 * Mathf.Rad2Deg);
                             m_projectileLauncher.AimAt(target);
                             m_animation.EnableRootMotion(true, false);
-                            m_attackHandle.ExecuteAttack(m_info.attack1Hide.animation, m_info.idleAnimation);
+                            m_attackHandle.ExecuteAttack(m_info.attack1Hide.animation, m_info.idleAnimation.animation);
                             break;
                         case Attack.Attack2:
                             m_animation.EnableRootMotion(true, false);
-                            m_attackHandle.ExecuteAttack(m_info.attack2Hide.animation, m_info.idleAnimation);
+                            m_attackHandle.ExecuteAttack(m_info.attack2Hide.animation, m_info.idleAnimation.animation);
                             break;
                     }
                     m_attackDecider.hasDecidedOnAttack = false;
@@ -365,14 +371,14 @@ namespace DChild.Gameplay.Characters.Enemies
                     //if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
                     if (!IsFacingTarget())
                     {
-                        if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
+                        if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation.animation)
                             m_stateHandle.SetState(State.Turning);
                     }
                     else
                     {
                         if (m_animation.animationState.GetCurrent(0).IsComplete)
                         {
-                            m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                            m_animation.SetAnimation(0, m_info.idleAnimation.animation, true);
                         }
                     }
 
@@ -407,7 +413,7 @@ namespace DChild.Gameplay.Characters.Enemies
                                     //    m_animation.AddAnimation(0, m_info.idleAnimation, true, 0);
                                     //}
                                     m_attackDecider.hasDecidedOnAttack = false;
-                                    m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                                    m_animation.SetAnimation(0, m_info.idleAnimation.animation, true);
                                 }
                             }
                             //else
@@ -417,7 +423,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         }
                         else
                         {
-                            if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
+                            if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation.animation)
                                 m_stateHandle.SetState(State.Turning);
                         }
                     }

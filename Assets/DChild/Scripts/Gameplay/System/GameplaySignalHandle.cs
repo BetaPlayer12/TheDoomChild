@@ -69,8 +69,18 @@ namespace DChild.Gameplay
         public void MakeAllEnemiesPassive(bool arePassive)
         {
             //CombatAIManager.instance?.ForbidAllFromAttackTarget(arePassive);
-            GameplaySystem.minionManager.ForcePassiveIdle(arePassive);
-            Debug.Log("enemies passive");
+            if (arePassive == true)
+            {
+                GameplaySystem.minionManager.SettoPassive();
+                Debug.Log("enemies passive");
+            }
+            else
+            {
+                GameplaySystem.minionManager.SettoActive();
+                Debug.Log("enemies active");
+            }
+            //GameplaySystem.minionManager.ForcePassiveIdle(arePassive);
+            
         }
 
         public void SmartTransferPlayerTo(LocationData locationData)
