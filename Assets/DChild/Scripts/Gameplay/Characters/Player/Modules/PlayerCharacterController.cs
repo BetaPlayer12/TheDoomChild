@@ -422,8 +422,12 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_icarusWings = m_character.GetComponentInChildren<IcarusWings>();
             m_teleportingSkull = m_character.GetComponentInChildren<TeleportingSkull>();
 
+
             //Intro Controller
             m_introController = GetComponent<PlayerIntroControlsController>();
+
+            //Abilities
+            m_abilities = GetComponentInParent<Player>().GetComponentInChildren<BattleAbilities>();
 
             m_updateEnabled = true;
         }
