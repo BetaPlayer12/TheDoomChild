@@ -50,33 +50,33 @@ namespace DChild.Gameplay.Characters.Enemies
 
 
             //Animations
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_idleAnimation;
-            public string idleAnimation => m_idleAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_brokeIdleAnimation;
-            public string brokeIdleAnimation => m_brokeIdleAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_brokeIdle2Animation;
-            public string brokeIdle2Animation => m_brokeIdle2Animation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_brokeToIdleAnimation;
-            public string brokeToIdleAnimation => m_brokeToIdleAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_stillAnimation;
-            public string stillAnimation => m_stillAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_flinchAnimation;
-            public string flinchAnimation => m_flinchAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_flinch2Animation;
-            public string flinch2Animation => m_flinch2Animation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_turnAnimation;
-            public string turnAnimation => m_turnAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_deathAnimation;
-            public string deathAnimation => m_deathAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_idleAnimation;
+            public BasicAnimationInfo idleAnimation => m_idleAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_brokeIdleAnimation;
+            public BasicAnimationInfo brokeIdleAnimation => m_brokeIdleAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_brokeIdle2Animation;
+            public BasicAnimationInfo brokeIdle2Animation => m_brokeIdle2Animation;
+            [SerializeField]
+            private BasicAnimationInfo m_brokeToIdleAnimation;
+            public BasicAnimationInfo brokeToIdleAnimation => m_brokeToIdleAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_stillAnimation;
+            public BasicAnimationInfo stillAnimation => m_stillAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_flinchAnimation;
+            public BasicAnimationInfo flinchAnimation => m_flinchAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_flinch2Animation;
+            public BasicAnimationInfo flinch2Animation => m_flinch2Animation;
+            [SerializeField]
+            private BasicAnimationInfo m_turnAnimation;
+            public BasicAnimationInfo turnAnimation => m_turnAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_deathAnimation;
+            public BasicAnimationInfo deathAnimation => m_deathAnimation;
 
 
             public override void Initialize()
@@ -86,6 +86,16 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_move.SetData(m_skeletonDataAsset);
                 m_attack1.SetData(m_skeletonDataAsset);
                 m_attack2.SetData(m_skeletonDataAsset);
+
+                m_idleAnimation.SetData(m_skeletonDataAsset);
+                m_brokeIdleAnimation.SetData(m_skeletonDataAsset);
+                m_brokeIdle2Animation.SetData(m_skeletonDataAsset);
+                m_brokeToIdleAnimation.SetData(m_skeletonDataAsset);
+                m_stillAnimation.SetData(m_skeletonDataAsset);
+                m_flinchAnimation.SetData(m_skeletonDataAsset);
+                m_flinch2Animation.SetData(m_skeletonDataAsset);
+                m_turnAnimation.SetData(m_skeletonDataAsset);
+                m_deathAnimation.SetData(m_skeletonDataAsset);
 #endif
             }
         }
@@ -306,7 +316,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator DetectRoutine()
         {
             var randomAnimation = UnityEngine.Random.Range(0, 2);
-            m_brokeIdleAnimation = randomAnimation == 0 ? m_info.brokeIdleAnimation : m_info.brokeIdle2Animation;
+            m_brokeIdleAnimation = randomAnimation == 0 ? m_info.brokeIdleAnimation.animation : m_info.brokeIdle2Animation.animation;
             m_animation.SetAnimation(0, m_brokeIdleAnimation, false).MixDuration = 0;
             yield return new WaitForAnimationComplete(m_animation.animationState, m_brokeIdleAnimation);
             CustomTurn();
@@ -391,7 +401,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_patrolHandle.TurnRequest += OnTurnRequest;
             m_attackHandle.AttackDone += OnAttackDone;
             m_turnHandle.TurnDone += OnTurnDone;
-            m_deathHandle.SetAnimation(m_info.deathAnimation);
+            m_deathHandle.SetAnimation(m_info.deathAnimation.animation);
             m_flinchHandle.FlinchStart += OnFlinchStart;
             m_flinchHandle.FlinchEnd += OnFlinchEnd;
             m_stateHandle = new StateHandle<State>(State.Idle, State.WaitBehaviourEnd);
@@ -413,7 +423,7 @@ namespace DChild.Gameplay.Characters.Enemies
             switch (m_stateHandle.currentState)
             {
                 case State.Detect:
-                    if (m_animation.GetCurrentAnimation(0).ToString() == m_info.stillAnimation)
+                    if (m_animation.GetCurrentAnimation(0).ToString() == m_info.stillAnimation.animation)
                     {
                         m_stateHandle.Wait(State.ReevaluateSituation);
                         m_movement.Stop();
@@ -427,7 +437,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
                 case State.Idle:
                     m_movement.Stop();
-                    if (m_animation.GetCurrentAnimation(0).ToString() != m_info.stillAnimation)
+                    if (m_animation.GetCurrentAnimation(0).ToString() != m_info.stillAnimation.animation)
                     {
                         m_animation.SetAnimation(0, m_info.idleAnimation, true);
                     }
@@ -435,7 +445,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
                 case State.Turning:
                     m_stateHandle.Wait(m_turnState);
-                    m_turnHandle.Execute(m_info.turnAnimation, m_info.idleAnimation);
+                    m_turnHandle.Execute(m_info.turnAnimation.animation, m_info.idleAnimation.animation);
                     break;
 
                 case State.Attacking:
@@ -450,11 +460,11 @@ namespace DChild.Gameplay.Characters.Enemies
                             {
                                 case Attack.Attack1:
                                     m_animation.EnableRootMotion(true, false);
-                                    m_attackHandle.ExecuteAttack(m_info.attack1.animation, m_info.idleAnimation);
+                                    m_attackHandle.ExecuteAttack(m_info.attack1.animation, m_info.idleAnimation.animation);
                                     break;
                                 case Attack.Attack2:
                                     m_animation.EnableRootMotion(true, false);
-                                    m_attackHandle.ExecuteAttack(m_info.attack2.animation, m_info.idleAnimation);
+                                    m_attackHandle.ExecuteAttack(m_info.attack2.animation, m_info.idleAnimation.animation);
                                     break;
                             }
                             m_attackDecider.hasDecidedOnAttack = false;
@@ -477,7 +487,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     else
                     {
                         m_turnState = State.ReevaluateSituation;
-                        if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
+                        if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation.animation)
                             m_stateHandle.SetState(State.Turning);
                     }
                     break;
@@ -488,7 +498,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     if (!IsFacingTarget())
                     {
                         m_turnState = State.Cooldown;
-                        if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
+                        if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation.animation)
                             m_stateHandle.SetState(State.Turning);
                     }
                     else

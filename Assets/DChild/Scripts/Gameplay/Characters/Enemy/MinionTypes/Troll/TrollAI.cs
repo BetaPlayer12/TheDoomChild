@@ -56,27 +56,27 @@ namespace DChild.Gameplay.Characters.Enemies
 
 
             //Animations
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_idleAnimation;
-            public string idleAnimation => m_idleAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_detectAnimation;
-            public string detectAnimation => m_detectAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_flinchAnimation;
-            public string flinchAnimation => m_flinchAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_flinchBackwardsAnimation;
-            public string flinchBackwardsAnimation => m_flinchBackwardsAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_turnAnimation;
-            public string turnAnimation => m_turnAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_deathAnimation;
-            public string deathAnimation => m_deathAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_rootShakeAnimation;
-            public string rootShakeAnimation => m_rootShakeAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_idleAnimation = new BasicAnimationInfo();
+            public BasicAnimationInfo idleAnimation => m_idleAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_detectAnimation = new BasicAnimationInfo();
+            public BasicAnimationInfo detectAnimation => m_detectAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_flinchAnimation = new BasicAnimationInfo();
+            public BasicAnimationInfo flinchAnimation => m_flinchAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_flinchBackwardsAnimation = new BasicAnimationInfo();
+            public BasicAnimationInfo flinchBackwardsAnimation => m_flinchBackwardsAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_turnAnimation = new BasicAnimationInfo();
+            public BasicAnimationInfo turnAnimation => m_turnAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_deathAnimation = new BasicAnimationInfo();
+            public BasicAnimationInfo deathAnimation => m_deathAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_rootShakeAnimation = new BasicAnimationInfo();
+            public BasicAnimationInfo rootShakeAnimation => m_rootShakeAnimation;
 
             [Title("Events")]
             [SerializeField, ValueDropdown("GetEvents")]
@@ -105,6 +105,14 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_poundAttack.SetData(m_skeletonDataAsset);
                 m_punchAttack.SetData(m_skeletonDataAsset);
                 m_oraOraAttack.SetData(m_skeletonDataAsset);
+
+                m_idleAnimation.SetData(m_skeletonDataAsset);
+                m_detectAnimation.SetData(m_skeletonDataAsset);
+                m_flinchAnimation.SetData(m_skeletonDataAsset);
+                m_flinchBackwardsAnimation.SetData(m_skeletonDataAsset);
+                m_turnAnimation.SetData(m_skeletonDataAsset);
+                m_deathAnimation.SetData(m_skeletonDataAsset);
+                m_rootShakeAnimation.SetData(m_skeletonDataAsset);
 #endif
             }
         }
@@ -375,7 +383,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator FlinchShakeRoutine()
         {
             m_animation.SetEmptyAnimation(2, 0);
-            m_animation.AddAnimation(2, m_info.rootShakeAnimation, true, 0);
+            m_animation.AddAnimation(2, m_info.rootShakeAnimation.animation, true, 0);
             //m_animation.AddAnimation(1, m_info.flinchAnimation, true, 0);
             m_animation.animationState.GetCurrent(2).TimeScale = 3;
             //m_animation.AddEmptyAnimation(1, 2.5f, 3);
@@ -403,9 +411,9 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator DetectRoutine()
         {
-            m_animation.SetAnimation(0, m_info.detectAnimation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.detectAnimation);
-            m_animation.SetAnimation(0, m_info.idleAnimation, true);
+            m_animation.SetAnimation(0, m_info.detectAnimation.animation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.detectAnimation.animation);
+            m_animation.SetAnimation(0, m_info.idleAnimation.animation, true);
             m_stateHandle.OverrideState(State.ReevaluateSituation);
             yield return null;
         }
@@ -417,7 +425,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_patrolHandle.TurnRequest += OnTurnRequest;
             m_attackHandle.AttackDone += OnAttackDone;
             m_turnHandle.TurnDone += OnTurnDone;
-            m_deathHandle.SetAnimation(m_info.deathAnimation);
+            m_deathHandle.SetAnimation(m_info.deathAnimation.animation);
             m_flinchHandle.FlinchStart += OnFlinchStart;
             m_flinchHandle.FlinchEnd += OnFlinchEnd;
             m_stateHandle = new StateHandle<State>(State.Patrol, State.WaitBehaviourEnd);
@@ -443,7 +451,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     else
                     {
                         m_turnState = State.Detect;
-                        if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
+                        if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation.animation)
                             m_stateHandle.SetState(State.Turning);
                     }
                     break;
@@ -468,7 +476,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 case State.Turning:
                     m_stateHandle.Wait(m_turnState);
                     m_movement.Stop();
-                    m_turnHandle.Execute(m_info.turnAnimation, m_info.idleAnimation);
+                    m_turnHandle.Execute(m_info.turnAnimation.animation, m_info.idleAnimation.animation);
                     m_animation.animationState.GetCurrent(0).MixDuration = 0;
                     break;
 
@@ -481,7 +489,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         case Attack.Pound:
                             Debug.Log("Pound Attack");
                             //m_animation.EnableRootMotion(true, false);
-                            m_attackHandle.ExecuteAttack(m_info.poundAttack.animation, m_info.idleAnimation);
+                            m_attackHandle.ExecuteAttack(m_info.poundAttack.animation, m_info.idleAnimation.animation);
                             break;
                         case Attack.Punch:
                             Debug.Log("Punch Attack");
@@ -489,7 +497,7 @@ namespace DChild.Gameplay.Characters.Enemies
                             {
                                 m_armHitbox.SetActive(false);
                                 //m_animation.EnableRootMotion(true, false);
-                                m_attackHandle.ExecuteAttack(m_info.punchAttack.animation, m_info.idleAnimation);
+                                m_attackHandle.ExecuteAttack(m_info.punchAttack.animation, m_info.idleAnimation.animation);
                             }
                             else
                             {
@@ -499,7 +507,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         case Attack.OraOra:
                             Debug.Log("Oraora Attack");
                             //m_animation.EnableRootMotion(true, false);
-                            m_attackHandle.ExecuteAttack(m_info.oraOraAttack.animation, m_info.idleAnimation);
+                            m_attackHandle.ExecuteAttack(m_info.oraOraAttack.animation, m_info.idleAnimation.animation);
                             break;
                     }
                     m_attackDecider.hasDecidedOnAttack = false;
@@ -517,7 +525,7 @@ namespace DChild.Gameplay.Characters.Enemies
                                 GetComponent<IsolatedCharacterPhysics2D>().UseStepClimb(false);
                                 m_movement.Stop();
                                 m_selfCollider.enabled = true;
-                                m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                                m_animation.SetAnimation(0, m_info.idleAnimation.animation, true);
                                 m_stateHandle.SetState(State.Attacking);
                             }
                             else
@@ -537,14 +545,14 @@ namespace DChild.Gameplay.Characters.Enemies
                                     m_attackDecider.hasDecidedOnAttack = false;
                                     m_movement.Stop();
                                     m_selfCollider.enabled = true;
-                                    m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                                    m_animation.SetAnimation(0, m_info.idleAnimation.animation, true);
                                 }
                             }
                         }
                         else
                         {
                             m_turnState = State.ReevaluateSituation;
-                            if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
+                            if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation.animation)
                                 m_stateHandle.SetState(State.Turning);
                         }
                     }

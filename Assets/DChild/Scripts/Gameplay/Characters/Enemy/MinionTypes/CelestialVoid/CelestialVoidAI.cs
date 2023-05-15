@@ -44,51 +44,66 @@ namespace DChild.Gameplay.Characters.Enemies
             public float patienceDistanceTolerance => m_patienceDistanceTolerance;
 
             //Animations
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_detectAnimation;
-            public string detectAnimation => m_detectAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_idleAnimation;
-            public string idleAnimation => m_idleAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_deathAnimation;
-            public string deathAnimation => m_deathAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_flinchAnimation;
-            public string flinchAnimation => m_flinchAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_counterFlinchAnimation;
-            public string counterFlinchAnimation => m_counterFlinchAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_fadeInAnimation;
-            public string fadeInAnimation => m_fadeInAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_fadeOutAnimation;
-            public string fadeOutAnimation => m_fadeOutAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_lifeDrainAnticipationAnimation;
-            public string lifeDrainAnticipationAnimation => m_lifeDrainAnticipationAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_lifeDrainAnimation;
-            public string lifeDrainAnimation => m_lifeDrainAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_lifeDrainEndAnimation;
-            public string lifeDrainEndAnimation => m_lifeDrainEndAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_healAnticipationAnimation;
-            public string healAnticipationAnimation => m_healAnticipationAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_healAnimation;
-            public string healAnimation => m_healAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_healEndAnimation;
-            public string healEndAnimation => m_healEndAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_detectAnimation;
+            public BasicAnimationInfo detectAnimation => m_detectAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_idleAnimation;
+            public BasicAnimationInfo idleAnimation => m_idleAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_deathAnimation;
+            public BasicAnimationInfo deathAnimation => m_deathAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_flinchAnimation;
+            public BasicAnimationInfo flinchAnimation => m_flinchAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_counterFlinchAnimation;
+            public BasicAnimationInfo counterFlinchAnimation => m_counterFlinchAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_fadeInAnimation;
+            public BasicAnimationInfo fadeInAnimation => m_fadeInAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_fadeOutAnimation;
+            public BasicAnimationInfo fadeOutAnimation => m_fadeOutAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_lifeDrainAnticipationAnimation;
+            public BasicAnimationInfo lifeDrainAnticipationAnimation => m_lifeDrainAnticipationAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_lifeDrainAnimation;
+            public BasicAnimationInfo lifeDrainAnimation => m_lifeDrainAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_lifeDrainEndAnimation;
+            public BasicAnimationInfo lifeDrainEndAnimation => m_lifeDrainEndAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_healAnticipationAnimation;
+            public BasicAnimationInfo healAnticipationAnimation => m_healAnticipationAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_healAnimation;
+            public BasicAnimationInfo healAnimation => m_healAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_healEndAnimation;
+            public BasicAnimationInfo healEndAnimation => m_healEndAnimation;
 
             public override void Initialize()
             {
 #if UNITY_EDITOR
                 m_patrol.SetData(m_skeletonDataAsset);
                 m_attack1.SetData(m_skeletonDataAsset);
+
+                m_detectAnimation.SetData(m_skeletonDataAsset);
+                m_idleAnimation.SetData(m_skeletonDataAsset);
+                m_deathAnimation.SetData(m_skeletonDataAsset);
+                m_flinchAnimation.SetData(m_skeletonDataAsset);
+                m_counterFlinchAnimation.SetData(m_skeletonDataAsset);
+                m_fadeInAnimation.SetData(m_skeletonDataAsset);
+                m_fadeOutAnimation.SetData(m_skeletonDataAsset);
+                m_attack1.SetData(m_skeletonDataAsset);
+                m_lifeDrainAnticipationAnimation.SetData(m_skeletonDataAsset);
+                m_lifeDrainAnimation.SetData(m_skeletonDataAsset);
+                m_lifeDrainEndAnimation.SetData(m_skeletonDataAsset);
+                m_healAnticipationAnimation.SetData(m_skeletonDataAsset);
+                m_healAnimation.SetData(m_skeletonDataAsset);
+                m_healEndAnimation.SetData(m_skeletonDataAsset);
 
 #endif
             }
@@ -562,7 +577,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_flinchHandle.FlinchStart += OnFlinchStart;
             m_flinchHandle.FlinchEnd += OnFlinchEnd;
             m_turnHandle.TurnDone += OnTurnDone;
-            m_deathHandle.SetAnimation(m_info.deathAnimation);
+            m_deathHandle.SetAnimation(m_info.deathAnimation.animation);
             m_stateHandle = new StateHandle<State>(m_willPatrol ? State.Patrol : State.Idle, State.WaitBehaviourEnd);
             m_attackDecider = new RandomAttackDecider<Attack>();
             UpdateAttackDeciderList();
