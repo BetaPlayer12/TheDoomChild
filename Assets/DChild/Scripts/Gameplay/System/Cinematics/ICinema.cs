@@ -1,5 +1,6 @@
 ﻿using Cinemachine;
 using DChild.Gameplay.Cinematics.Cameras;
+using System;
 using UnityEngine;
 
 namespace DChild.Gameplay.Cinematics
@@ -8,6 +9,8 @@ namespace DChild.Gameplay.Cinematics
     {
         Camera mainCamera { get; }
         CinemachineBrain currentBrain { get; }
+
+        event Action<Camera> OnMainCameraChange;
 
         void SetMainCamera(Camera camera);
         void EnableCameraShake(bool enable);

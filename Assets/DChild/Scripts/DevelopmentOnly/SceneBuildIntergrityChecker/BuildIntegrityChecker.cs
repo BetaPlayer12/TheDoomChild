@@ -8,7 +8,6 @@ using UnityEngine;
 
 namespace DChildDebug
 {
-
     public class BuildIntegrityChecker : IPreprocessBuildWithReport, IPostprocessBuildWithReport
     {
         private static List<BuildIntegrityReport> reports = new List<BuildIntegrityReport>();
@@ -18,7 +17,7 @@ namespace DChildDebug
             reports.Add(report);
         }
 
-        public int callbackOrder => 0;
+        public int callbackOrder => 100;
 
         public void OnPreprocessBuild(BuildReport report)
         {
