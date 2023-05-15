@@ -5,7 +5,6 @@ using UnityEngine;
 
 namespace DChild.Gameplay.ArmyBattle
 {
-
     public class Army : MonoBehaviour
     {
         //#if UNITY_EDITOR
@@ -16,18 +15,21 @@ namespace DChild.Gameplay.ArmyBattle
         private Health m_troopCount;
         [SerializeField, HideInEditorMode, TabGroup("Composition")]
         private ArmyComposition m_composition;
-        [SerializeField, HideInEditorMode, TabGroup("Abilities")]
-        private ArmyAbilityList m_abilities;
-
-        private ArmyUnitPowerModifier m_powerModifier;
+        [ShowInInspector, HideInEditorMode, ReadOnly]
+        private ArmyUnitModifier m_powerModifier;
+        [ShowInInspector, HideInEditorMode, ReadOnly]
+        private ArmyUnitModifier m_damageReductionModifier;
 
         private List<ArmyAttackGroup> cacheAttackGroup;
+        private List<ArmyAbilityGroup> cacheAbilityGroup;
 
         public Health troopCount => m_troopCount;
+        public IArmyUnitModifier powerModifier => m_powerModifier;
+        public IArmyUnitModifier damageReductionModifier => m_damageReductionModifier;
 
         public bool HasAvailableAttackGroup(UnitType unitType)
         {
-            var groups = m_composition.GetAttackGroupsOfUnityType(unitType);
+            var groups = m_composition.attacks.GetAttackGroupsOfUnityType(unitType);
             for (int i = 0; i < groups.Count; i++)
             {
                 if (groups[i].isAvailable)
@@ -39,10 +41,24 @@ namespace DChild.Gameplay.ArmyBattle
             return false;
         }
 
+        public bool HasAvailableAbilityGroup()
+        {
+            var abilityList = m_composition.abilities;
+            for (int i = 0; i < abilityList.count; i++)
+            {
+                var group = abilityList.GetAbilityGroup(i);
+                if (group.isAvailable)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         public List<ArmyAttackGroup> GetAvailableAttackGroups(UnitType unitType)
         {
             cacheAttackGroup.Clear();
-            var groups = m_composition.GetAttackGroupsOfUnityType(unitType);
+            var groups = m_composition.attacks.GetAttackGroupsOfUnityType(unitType);
             for (int i = 0; i < groups.Count; i++)
             {
                 var group = groups[i];
@@ -54,6 +70,22 @@ namespace DChild.Gameplay.ArmyBattle
             return cacheAttackGroup;
         }
 
+        public List<ArmyAbilityGroup> GetAvailableAbilityGroups()
+        {
+            cacheAbilityGroup.Clear();
+            var abilityList = m_composition.abilities;
+            for (int i = 0; i < abilityList.count; i++)
+            {
+                var group = abilityList.GetAbilityGroup(i);
+                if (group.isAvailable)
+                {
+                    cacheAbilityGroup.Add(group);
+                }
+            }
+
+            return cacheAbilityGroup;
+        }
+
         public void SetArmyComposition(ArmyComposition armyComposition)
         {
             m_composition = armyComposition;
@@ -62,7 +94,7 @@ namespace DChild.Gameplay.ArmyBattle
 
         public void RecordArmyCompositionTo(ref ArmyComposition armyComposition)
         {
-            armyComposition.CopyComposition(m_composition);
+            //armyComposition.CopyComposition(m_composition);
         }
 
         public void SetTroopCount(int troopCount)
@@ -74,7 +106,14 @@ namespace DChild.Gameplay.ArmyBattle
         public void Initialize()
         {
             SetTroopCount(m_composition.troopCount);
-            m_composition.ResetAvailability();
+            m_powerModifier = new ArmyUnitModifier(1, 1, 1);
+            m_damageReductionModifier = new ArmyUnitModifier(0, 0, 0);
+            m_composition.attacks.ResetAvailability();
+        }
+
+        public override string ToString()
+        {
+            return $"{gameObject.name}(Army[{m_composition.name}])";
         }
 
         private void Awake()
@@ -83,11 +122,14 @@ namespace DChild.Gameplay.ArmyBattle
             if (m_initialComposition != null)
             {
                 m_composition = m_initialComposition.GenerateArmyCompositionInstance();
-                m_composition.ResetAvailability();
+                m_composition.attacks.ResetAvailability();
             }
 
             //#endif
+            m_powerModifier = new ArmyUnitModifier(1, 1, 1);
+            m_damageReductionModifier = new ArmyUnitModifier(0, 0, 0);
             cacheAttackGroup = new List<ArmyAttackGroup>();
+            cacheAbilityGroup = new List<ArmyAbilityGroup>();
         }
     }
 }

@@ -108,6 +108,8 @@ MonoBehaviour:
   m_gameOverSignal: {fileID: 0}
   m_fullScreenNotifSignal: {fileID: 0}
   m_primarySkillNotification: {fileID: 0}
+  m_soulSkillNotification: {fileID: 0}
+  m_journalDetailedNotification: {fileID: 0}
   m_loreNotification: {fileID: 0}
   m_tradeWindowSignal: {fileID: 0}
   m_tradeManager: {fileID: 0}
@@ -115,10 +117,13 @@ MonoBehaviour:
   m_bossCombat: {fileID: 0}
   m_worldMap: {fileID: 0}
   m_navMap: {fileID: 0}
+  m_regen: {fileID: 0}
   m_lootAcquiredUI: {fileID: 0}
   m_storeNotification: {fileID: 0}
   m_journalNotification: {fileID: 0}
+  m_playerHUD: {fileID: 0}
   m_skippableUI: {fileID: 0}
+  m_fadeUI: {fileID: 0}
   m_interactablePrompt: {fileID: 0}
   m_movableObjectPrompt: {fileID: 0}
 --- !u!114 &3084909151314270136
@@ -1589,6 +1594,50 @@ MonoBehaviour:
   m_withGravity: 0
   m_gravityScale: 0
   m_velocity: {x: 0, y: 0}
+--- !u!1 &7489961876385456816
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 542885831100455901}
+  - component: {fileID: 1606430897782843896}
+  m_Layer: 0
+  m_Name: Optimizations
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &542885831100455901
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7489961876385456816}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1656687072529629155}
+  m_RootOrder: 10
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1606430897782843896
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7489961876385456816}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ca5c6775f14a95498f07b4aefd2786f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8419951122956668317
 GameObject:
   m_ObjectHideFlags: 0
@@ -1852,6 +1901,7 @@ Transform:
   - {fileID: 8376592711962980934}
   - {fileID: 6181511787057418469}
   - {fileID: 7629489205284937667}
+  - {fileID: 542885831100455901}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

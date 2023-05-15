@@ -8,6 +8,7 @@ using UnityEngine.SceneManagement;
 
 namespace DChildDebug
 {
+
     public class ZoneDataIntegrityChecker : IProcessSceneWithReport
     {
         public int callbackOrder => 0;
@@ -37,7 +38,7 @@ namespace DChildDebug
                     }
                     catch (Exception e)
                     {
-                        BuildIntegrityChecker.RecordReport(new BuildIntegrityReport(serializer, serializer.gameObject,"Error during simulated serialization:", e));
+                        BuildIntegrityChecker.RecordReport(new BuildIntegrityReport(serializer, serializer.gameObject, "Error during simulated serialization:", e));
                     }
                 }
             }

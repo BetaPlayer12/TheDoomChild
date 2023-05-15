@@ -49,15 +49,15 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField]
             private SimpleAttackInfo m_shoulderBashHookAttack = new SimpleAttackInfo();
             public SimpleAttackInfo shoulderBashHookAttack => m_shoulderBashHookAttack;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_shoulderBashLoopAnimation;
-            public string shoulderBashLoopAnimation => m_shoulderBashLoopAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_shoulderBashEndAnimation;
-            public string shoulderBashEndAnimation => m_shoulderBashEndAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_shoulderBashAnimation;
-            public string shoulderBashAnimation => m_shoulderBashAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_shoulderBashLoopAnimation;
+            public BasicAnimationInfo shoulderBashLoopAnimation => m_shoulderBashLoopAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_shoulderBashEndAnimation;
+            public BasicAnimationInfo shoulderBashEndAnimation => m_shoulderBashEndAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_shoulderBashAnimation;
+            public BasicAnimationInfo shoulderBashAnimation => m_shoulderBashAnimation;
             #endregion
             #region ChainFistPunch
             [SerializeField]
@@ -66,23 +66,23 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField]
             private SimpleAttackInfo m_chainFistPunchAttack = new SimpleAttackInfo();
             public SimpleAttackInfo chainFistPunchAttack => m_chainFistPunchAttack;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_chainFistPunchUpperAnimation;
-            public string chainFistPunchUpperAnimation => m_chainFistPunchUpperAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_chainFistPunchUpperAnimation;
+            public BasicAnimationInfo chainFistPunchUpperAnimation => m_chainFistPunchUpperAnimation;
             #endregion
             #region LeapAttack
             [SerializeField]
             private SimpleAttackInfo m_leapAttack = new SimpleAttackInfo();
             public SimpleAttackInfo leapAttack => m_leapAttack;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_leapfirstAttackAnimation;
-            public string leapfirstAttackAnimation => m_leapfirstAttackAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_leapTransitionAnimation;
-            public string leapTransitionAnimation => m_leapTransitionAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_leapAttackEndAnimation;
-            public string leapAttackEndAnimation => m_leapAttackEndAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_leapfirstAttackAnimation;
+            public BasicAnimationInfo leapfirstAttackAnimation => m_leapfirstAttackAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_leapTransitionAnimation;
+            public BasicAnimationInfo leapTransitionAnimation => m_leapTransitionAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_leapAttackEndAnimation;
+            public BasicAnimationInfo leapAttackEndAnimation => m_leapAttackEndAnimation;
             [SerializeField, TabGroup("Leap Attack Values")]
             private float m_leapVelocity;
             public float leapVelocity => m_leapVelocity;
@@ -97,12 +97,12 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField]
             private SimpleAttackInfo m_chainShockAttack = new SimpleAttackInfo();
             public SimpleAttackInfo chainShockAttack => m_chainShockAttack;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_chainShockLoopAnimation;
-            public string chainShockLoopAnimation => m_chainShockLoopAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_chainShockEndAnimation;
-            public string chainShockEndAnimation => m_chainShockEndAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_chainShockLoopAnimation;
+            public BasicAnimationInfo chainShockLoopAnimation => m_chainShockLoopAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_chainShockEndAnimation;
+            public BasicAnimationInfo chainShockEndAnimation => m_chainShockEndAnimation;
             [SerializeField]
             private float m_shockTime;
             public float shockTime => m_shockTime;
@@ -117,30 +117,30 @@ namespace DChild.Gameplay.Characters.Enemies
             public float targetDistanceTolerance => m_targetDistanceTolerance;
 
             [Title("Animations")]
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_introAnimation;
-            public string introAnimation => m_introAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_idleAnimation;
-            public string idleAnimation => m_idleAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_idle2Animation;
-            public string idle2Animation => m_idle2Animation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_deathAnimation;
-            public string deathAnimation => m_deathAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_turnAnimation;
-            public string turnAnimation => m_turnAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_roarAnimation;
-            public string roarAnimation => m_roarAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_hookTravelLoopAnimation;
-            public string hookTravelLoopAnimation => m_hookTravelLoopAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_hookBackLoopAnimation;
-            public string hookBackLoopAnimation => m_hookBackLoopAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_introAnimation;
+            public BasicAnimationInfo introAnimation => m_introAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_idleAnimation;
+            public BasicAnimationInfo idleAnimation => m_idleAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_idle2Animation;
+            public BasicAnimationInfo idle2Animation => m_idle2Animation;
+            [SerializeField]
+            private BasicAnimationInfo m_deathAnimation;
+            public BasicAnimationInfo deathAnimation => m_deathAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_turnAnimation;
+            public BasicAnimationInfo turnAnimation => m_turnAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_roarAnimation;
+            public BasicAnimationInfo roarAnimation => m_roarAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_hookTravelLoopAnimation;
+            public BasicAnimationInfo hookTravelLoopAnimation => m_hookTravelLoopAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_hookBackLoopAnimation;
+            public BasicAnimationInfo hookBackLoopAnimation => m_hookBackLoopAnimation;
 
             [Title("Projectiles")]
             [SerializeField]
@@ -177,6 +177,24 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_chainShockAttack.SetData(m_skeletonDataAsset);
                 m_lightningStompAttack.SetData(m_skeletonDataAsset);
                 m_stompProjectile.SetData(m_skeletonDataAsset);
+
+                m_shoulderBashLoopAnimation.SetData(m_skeletonDataAsset);
+                m_shoulderBashEndAnimation.SetData(m_skeletonDataAsset);
+                m_shoulderBashAnimation.SetData(m_skeletonDataAsset);
+                m_chainFistPunchUpperAnimation.SetData(m_skeletonDataAsset);
+                m_leapfirstAttackAnimation.SetData(m_skeletonDataAsset);
+                m_leapTransitionAnimation.SetData(m_skeletonDataAsset);
+                m_leapAttackEndAnimation.SetData(m_skeletonDataAsset);
+                m_chainShockLoopAnimation.SetData(m_skeletonDataAsset);
+                m_chainShockEndAnimation.SetData(m_skeletonDataAsset);
+                m_introAnimation.SetData(m_skeletonDataAsset);
+                m_idleAnimation.SetData(m_skeletonDataAsset);
+                m_idle2Animation.SetData(m_skeletonDataAsset);
+                m_deathAnimation.SetData(m_skeletonDataAsset);
+                m_turnAnimation.SetData(m_skeletonDataAsset);
+                m_roarAnimation.SetData(m_skeletonDataAsset);
+                m_hookTravelLoopAnimation.SetData(m_skeletonDataAsset);
+                m_hookBackLoopAnimation.SetData(m_skeletonDataAsset);
 #endif
             }
         }
@@ -685,7 +703,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 {
                     m_animation.SetEmptyAnimation(0, 0);
                 }
-                var leapAnim = i == 0 ? m_info.leapfirstAttackAnimation : m_info.leapAttack.animation;
+                var leapAnim = i == 0 ? m_info.leapfirstAttackAnimation.animation : m_info.leapAttack.animation;
                 m_animation.SetAnimation(0, leapAnim, false).AnimationStart = i == 0 ? 0 : m_info.transitionStart;
                 m_animation.animationState.GetCurrent(0).MixDuration = 0;
                 //while (m_currentLeapDuration < .65f)
@@ -1029,7 +1047,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             base.Awake();
             m_turnHandle.TurnDone += OnTurnDone;
-            m_deathHandle.SetAnimation(m_info.deathAnimation);
+            m_deathHandle.SetAnimation(m_info.deathAnimation.animation);
             m_projectileLauncher = new ProjectileLauncher(m_info.stompProjectile.projectileInfo, m_projectilePoint);
             m_patternDecider = new RandomAttackDecider<Pattern>();
             m_lightningBoltEffects = new List<GameObject>();
@@ -1067,7 +1085,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void LeapFX()
         {
-            if (m_animation.GetCurrentAnimation(0).ToString() != m_info.leapAttackEndAnimation)
+            if (m_animation.GetCurrentAnimation(0).ToString() != m_info.leapAttackEndAnimation.animation)
             {
                 var fxPool = GameSystem.poolManager.GetPool<FXPool>().GetOrCreateItem(m_leapFX);
                 fxPool.Play();
@@ -1124,7 +1142,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 case State.Turning:
                     m_phaseHandle.allowPhaseChange = false;
                     m_stateHandle.Wait(m_turnState);
-                    m_turnHandle.Execute(m_info.turnAnimation, m_info.idleAnimation);
+                    m_turnHandle.Execute(m_info.turnAnimation.animation, m_info.idleAnimation.animation);
                     m_movement.Stop();
                     break;
                 case State.Attacking:
@@ -1164,7 +1182,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     else
                     {
                         m_turnState = State.Attacking;
-                        if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
+                        if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation.animation)
                             m_stateHandle.SetState(State.Turning);
                     }
 
