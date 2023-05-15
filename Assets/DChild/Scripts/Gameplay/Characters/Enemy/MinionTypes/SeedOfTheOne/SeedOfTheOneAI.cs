@@ -188,7 +188,7 @@ namespace DChild.Gameplay.Characters.Enemies
             Debug.Log("DIE HERE");
             //m_animation.SetAnimation(0, m_info.deathStartAnimation, false);
             //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.deathStartAnimation);
-            m_character.physics.simulateGravity = true;
+            //m_character.physics.simulateGravity = true;
             //m_animation.SetAnimation(0, m_info.deathLoopAnimation, true);
             //m_animation.SetAnimation(0, m_info.deathEndAnimation, false);
             //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.deathEndAnimation);
