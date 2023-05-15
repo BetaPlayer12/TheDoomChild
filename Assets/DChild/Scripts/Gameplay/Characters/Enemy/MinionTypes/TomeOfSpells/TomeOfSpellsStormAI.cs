@@ -40,9 +40,9 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField, BoxGroup("Attack")]
             private SimpleAttackInfo m_attackStorm = new SimpleAttackInfo();
             public SimpleAttackInfo attackStorm => m_attackStorm;
-            [SerializeField, BoxGroup("Attack"), ValueDropdown("GetAnimations")]
-            private string m_attackStormStartAnimation;
-            public string attackStormStartAnimation => m_attackStormStartAnimation;
+            [SerializeField, BoxGroup("Attack")]
+            private BasicAnimationInfo m_attackStormStartAnimation;
+            public BasicAnimationInfo attackStormStartAnimation => m_attackStormStartAnimation;
             [SerializeField, BoxGroup("Attack")]
             private float m_attackCD;
             public float attackCD => m_attackCD;
@@ -59,24 +59,24 @@ namespace DChild.Gameplay.Characters.Enemies
             public float patienceDistanceTolerance => m_patienceDistanceTolerance;
 
             //Animations
-            [SerializeField, BoxGroup("Animation"), ValueDropdown("GetAnimations")]
-            private string m_detectAnimation;
-            public string detectAnimation => m_detectAnimation;
-            [SerializeField, BoxGroup("Animation"), ValueDropdown("GetAnimations")]
-            private string m_idleAnimation;
-            public string idleAnimation => m_idleAnimation;
-            [SerializeField, BoxGroup("Animation"), ValueDropdown("GetAnimations")]
-            private string m_deathStartAnimation;
-            public string deathStartAnimation => m_deathStartAnimation;
-            [SerializeField, BoxGroup("Animation"), ValueDropdown("GetAnimations")]
-            private string m_deathLoopAnimation;
-            public string deathLoopAnimation => m_deathLoopAnimation;
-            [SerializeField, BoxGroup("Animation"), ValueDropdown("GetAnimations")]
-            private string m_deathEndAnimation;
-            public string deathEndAnimation => m_deathEndAnimation;
-            [SerializeField, BoxGroup("Animation"), ValueDropdown("GetAnimations")]
-            private string m_flinchAnimation;
-            public string flinchAnimation => m_flinchAnimation;
+            [SerializeField, BoxGroup("Animation")]
+            private BasicAnimationInfo m_detectAnimation;
+            public BasicAnimationInfo detectAnimation => m_detectAnimation;
+            [SerializeField, BoxGroup("Animation")]
+            private BasicAnimationInfo m_idleAnimation;
+            public BasicAnimationInfo idleAnimation => m_idleAnimation;
+            [SerializeField, BoxGroup("Animation")]
+            private BasicAnimationInfo m_deathStartAnimation;
+            public BasicAnimationInfo deathStartAnimation => m_deathStartAnimation;
+            [SerializeField, BoxGroup("Animation")]
+            private BasicAnimationInfo m_deathLoopAnimation;
+            public BasicAnimationInfo deathLoopAnimation => m_deathLoopAnimation;
+            [SerializeField, BoxGroup("Animation")]
+            private BasicAnimationInfo m_deathEndAnimation;
+            public BasicAnimationInfo deathEndAnimation => m_deathEndAnimation;
+            [SerializeField, BoxGroup("Animation")]
+            private BasicAnimationInfo m_flinchAnimation;
+            public BasicAnimationInfo flinchAnimation => m_flinchAnimation;
 
             [SerializeField, BoxGroup("Storm Cloud Configuration")]
             private GameObject m_stormCloud;
@@ -96,6 +96,14 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_patrol.SetData(m_skeletonDataAsset);
                 m_move.SetData(m_skeletonDataAsset);
                 m_attackStorm.SetData(m_skeletonDataAsset);
+
+                m_attackStormStartAnimation.SetData(m_skeletonDataAsset);
+                m_detectAnimation.SetData(m_skeletonDataAsset);
+                m_idleAnimation.SetData(m_skeletonDataAsset);
+                m_deathStartAnimation.SetData(m_skeletonDataAsset);
+                m_deathLoopAnimation.SetData(m_skeletonDataAsset);
+                m_deathEndAnimation.SetData(m_skeletonDataAsset);
+                m_flinchAnimation.SetData(m_skeletonDataAsset);
 #endif
             }
         }
@@ -222,7 +230,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnFlinchStart(object sender, EventActionArgs eventArgs)
         {
-            if (m_animation.GetCurrentAnimation(0).ToString() == m_info.idleAnimation || m_stateHandle.currentState == State.Cooldown)
+            if (m_animation.GetCurrentAnimation(0).ToString() == m_info.idleAnimation.animation || m_stateHandle.currentState == State.Cooldown)
             {
                 //m_animation.SetAnimation(0, m_info.flinchAnimation, false);
                 m_flinchHandle.m_autoFlinch = true;
@@ -623,7 +631,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_flinchHandle.FlinchStart += OnFlinchStart;
             m_flinchHandle.FlinchEnd += OnFlinchEnd;
             m_turnHandle.TurnDone += OnTurnDone;
-            m_deathHandle?.SetAnimation(m_info.deathStartAnimation);
+            m_deathHandle?.SetAnimation(m_info.deathStartAnimation.animation);
             //m_projectileLauncher = new ProjectileLauncher(m_info.projectile.projectileInfo, transform);
             m_stateHandle = new StateHandle<State>(State.Patrol, State.WaitBehaviourEnd);
             m_attackDecider = new RandomAttackDecider<Attack>();
@@ -683,7 +691,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_turnState = State.ReevaluateSituation;
                     if (m_animation.animationState.GetCurrent(0).IsComplete)
                     {
-                        var chosenMoveAnim = UnityEngine.Random.Range(0, 100) < 25 ? m_info.idleAnimation : m_info.move.animation;
+                        var chosenMoveAnim = UnityEngine.Random.Range(0, 100) < 25 ? m_info.idleAnimation.animation : m_info.move.animation;
                         m_animation.SetAnimation(0, chosenMoveAnim, true);
                     }
 

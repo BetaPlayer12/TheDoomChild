@@ -118,30 +118,30 @@ namespace DChild.Gameplay.Characters.Enemies
             //public float phase1Pattern4CD => m_phase1Pattern4CD;
 
             [TitleGroup("Attack Colors")]
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_drillNormalMixAnimation;
-            public string drillNormalMixAnimation => m_drillNormalMixAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_drillGreenMixAnimation;
-            public string drillGreenMixAnimation => m_drillGreenMixAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_drillPurpleMixAnimation;
-            public string drillPurpleMixAnimation => m_drillPurpleMixAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_drillRedMixAnimation;
-            public string drillRedMixAnimation => m_drillRedMixAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_swordNormalMixAnimation;
-            public string swordNormalMixAnimation => m_swordNormalMixAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_swordGreenMixAnimation;
-            public string swordGreenMixAnimation => m_swordGreenMixAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_swordPurpleMixAnimation;
-            public string swordPurpleMixAnimation => m_swordPurpleMixAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_swordRedMixAnimation;
-            public string swordRedMixAnimation => m_swordRedMixAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_drillNormalMixAnimation;
+            public BasicAnimationInfo drillNormalMixAnimation => m_drillNormalMixAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_drillGreenMixAnimation;
+            public BasicAnimationInfo drillGreenMixAnimation => m_drillGreenMixAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_drillPurpleMixAnimation;
+            public BasicAnimationInfo drillPurpleMixAnimation => m_drillPurpleMixAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_drillRedMixAnimation;
+            public BasicAnimationInfo drillRedMixAnimation => m_drillRedMixAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_swordNormalMixAnimation;
+            public BasicAnimationInfo swordNormalMixAnimation => m_swordNormalMixAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_swordGreenMixAnimation;
+            public BasicAnimationInfo swordGreenMixAnimation => m_swordGreenMixAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_swordPurpleMixAnimation;
+            public BasicAnimationInfo swordPurpleMixAnimation => m_swordPurpleMixAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_swordRedMixAnimation;
+            public BasicAnimationInfo swordRedMixAnimation => m_swordRedMixAnimation;
 
             [TitleGroup("Ability Behaviours")]
             [SerializeField, BoxGroup("Blink")]
@@ -150,36 +150,36 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField, BoxGroup("Blink")]
             private float m_fakeBlinkCount;
             public float fakeBlinkCount => m_fakeBlinkCount;
-            [SerializeField, ValueDropdown("GetAnimations"), BoxGroup("Blink")]
-            private string m_blinkAppearBackwardAnimation;
-            public string blinkAppearBackwardAnimation => m_blinkAppearBackwardAnimation;
-            [SerializeField, ValueDropdown("GetAnimations"), BoxGroup("Blink")]
-            private string m_blinkAppearForwardAnimation;
-            public string blinkAppearForwardAnimation => m_blinkAppearForwardAnimation;
-            [SerializeField, ValueDropdown("GetAnimations"), BoxGroup("Blink")]
-            private string m_blinkAppearUpwardAnimation;
-            public string blinkAppearUpwardAnimation => m_blinkAppearUpwardAnimation;
-            [SerializeField, ValueDropdown("GetAnimations"), BoxGroup("Blink")]
-            private string m_blinkDisappearBackwardAnimation;
-            public string blinkDisappearBackwardAnimation => m_blinkDisappearBackwardAnimation;
-            [SerializeField, ValueDropdown("GetAnimations"), BoxGroup("Blink")]
-            private string m_blinkDisappearForwardAnimation;
-            public string blinkDisappearForwardAnimation => m_blinkDisappearForwardAnimation;
-            [SerializeField, ValueDropdown("GetAnimations"), BoxGroup("Blink")]
-            private string m_blinkDisappearUpwardAnimation;
-            public string blinkDisappearUpwardAnimation => m_blinkDisappearUpwardAnimation;
-            [SerializeField, ValueDropdown("GetAnimations"), BoxGroup("Blink")]
-            private string m_blinkFakeAnimation;
-            public string blinkFakeAnimation => m_blinkFakeAnimation;
+            [SerializeField, BoxGroup("Blink")]
+            private BasicAnimationInfo m_blinkAppearBackwardAnimation;
+            public BasicAnimationInfo blinkAppearBackwardAnimation => m_blinkAppearBackwardAnimation;
+            [SerializeField, BoxGroup("Blink")]
+            private BasicAnimationInfo m_blinkAppearForwardAnimation;
+            public BasicAnimationInfo blinkAppearForwardAnimation => m_blinkAppearForwardAnimation;
+            [SerializeField, BoxGroup("Blink")]
+            private BasicAnimationInfo m_blinkAppearUpwardAnimation;
+            public BasicAnimationInfo blinkAppearUpwardAnimation => m_blinkAppearUpwardAnimation;
+            [SerializeField, BoxGroup("Blink")]
+            private BasicAnimationInfo m_blinkDisappearBackwardAnimation;
+            public BasicAnimationInfo blinkDisappearBackwardAnimation => m_blinkDisappearBackwardAnimation;
+            [SerializeField, BoxGroup("Blink")]
+            private BasicAnimationInfo m_blinkDisappearForwardAnimation;
+            public BasicAnimationInfo blinkDisappearForwardAnimation => m_blinkDisappearForwardAnimation;
+            [SerializeField, BoxGroup("Blink")]
+            private BasicAnimationInfo m_blinkDisappearUpwardAnimation;
+            public BasicAnimationInfo blinkDisappearUpwardAnimation => m_blinkDisappearUpwardAnimation;
+            [SerializeField, BoxGroup("Blink")]
+            private BasicAnimationInfo m_blinkFakeAnimation;
+            public BasicAnimationInfo blinkFakeAnimation => m_blinkFakeAnimation;
             [SerializeField, BoxGroup("Drill Dash")]
             private float m_drillDashSpeed;
             public float drillDashSpeed => m_drillDashSpeed;
-            [SerializeField, ValueDropdown("GetAnimations"), BoxGroup("Sword Change")]
-            private string m_swordChangeAnimation;
-            public string swordChangeAnimation => m_swordChangeAnimation;
-            [SerializeField, ValueDropdown("GetAnimations"), BoxGroup("Summon Swords")]
-            private string m_summonSwordsAnimation;
-            public string summonSwordsAnimation => m_summonSwordsAnimation;
+            [SerializeField, BoxGroup("Sword Change")]
+            private BasicAnimationInfo m_swordChangeAnimation;
+            public BasicAnimationInfo swordChangeAnimation => m_swordChangeAnimation;
+            [SerializeField, BoxGroup("Summon Swords")]
+            private BasicAnimationInfo m_summonSwordsAnimation;
+            public BasicAnimationInfo summonSwordsAnimation => m_summonSwordsAnimation;
 
 
             [TitleGroup("Pattern Ranges")]
@@ -235,45 +235,45 @@ namespace DChild.Gameplay.Characters.Enemies
             public int fakeBlinkHitCount => m_fakeBlinkHitCount;
 
             [TitleGroup("Animations")]
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_idleAnimation;
-            public string idleAnimation => m_idleAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_idleCombatAnimation;
-            public string idleCombatAnimation => m_idleCombatAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_drillToGroundAnimation;
-            public string drillToGroundAnimation => m_drillToGroundAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_groundToDrillAnimation;
-            public string groundToDrillAnimation => m_groundToDrillAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_fallAnimation;
-            public string fallAnimation => m_fallAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_landAnimation;
-            public string landAnimation => m_landAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_staggerAnimation;
-            public string staggerAnimation => m_staggerAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_staggerWithKnockbackAnimation;
-            public string staggerWithKnockbackAnimation => m_staggerWithKnockbackAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_defStaggerWithKnockbackAnimation;
-            public string defStaggerWithKnockbackAnimation => m_defStaggerWithKnockbackAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_defeated1Animation;
-            public string defeated1Animation => m_defeated1Animation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_defeated2Animation;
-            public string defeated2Animation => m_defeated2Animation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_defeated3Animation;
-            public string defeated3Animation => m_defeated3Animation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_defeated4Animation;
-            public string defeated4Animation => m_defeated4Animation;
+            [SerializeField]
+            private BasicAnimationInfo m_idleAnimation;
+            public BasicAnimationInfo idleAnimation => m_idleAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_idleCombatAnimation;
+            public BasicAnimationInfo idleCombatAnimation => m_idleCombatAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_drillToGroundAnimation;
+            public BasicAnimationInfo drillToGroundAnimation => m_drillToGroundAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_groundToDrillAnimation;
+            public BasicAnimationInfo groundToDrillAnimation => m_groundToDrillAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_fallAnimation;
+            public BasicAnimationInfo fallAnimation => m_fallAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_landAnimation;
+            public BasicAnimationInfo landAnimation => m_landAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_staggerAnimation;
+            public BasicAnimationInfo staggerAnimation => m_staggerAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_staggerWithKnockbackAnimation;
+            public BasicAnimationInfo staggerWithKnockbackAnimation => m_staggerWithKnockbackAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_defStaggerWithKnockbackAnimation;
+            public BasicAnimationInfo defStaggerWithKnockbackAnimation => m_defStaggerWithKnockbackAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_defeated1Animation;
+            public BasicAnimationInfo defeated1Animation => m_defeated1Animation;
+            [SerializeField]
+            private BasicAnimationInfo m_defeated2Animation;
+            public BasicAnimationInfo defeated2Animation => m_defeated2Animation;
+            [SerializeField]
+            private BasicAnimationInfo m_defeated3Animation;
+            public BasicAnimationInfo defeated3Animation => m_defeated3Animation;
+            [SerializeField]
+            private BasicAnimationInfo m_defeated4Animation;
+            public BasicAnimationInfo defeated4Animation => m_defeated4Animation;
 
             [Title("Projectiles")]
             [SerializeField]
@@ -355,6 +355,39 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_scytheWaveBlackbloodProjectile.SetData(m_skeletonDataAsset);
                 m_scytheWavePoisonProjectile.SetData(m_skeletonDataAsset);
                 m_scytheWaveAcidProjectile.SetData(m_skeletonDataAsset);
+
+
+                m_drillNormalMixAnimation.SetData(m_skeletonDataAsset);
+                m_drillGreenMixAnimation.SetData(m_skeletonDataAsset);
+                m_drillPurpleMixAnimation.SetData(m_skeletonDataAsset);
+                m_drillRedMixAnimation.SetData(m_skeletonDataAsset);
+                m_swordNormalMixAnimation.SetData(m_skeletonDataAsset);
+                m_swordGreenMixAnimation.SetData(m_skeletonDataAsset);
+                m_swordPurpleMixAnimation.SetData(m_skeletonDataAsset);
+                m_swordRedMixAnimation.SetData(m_skeletonDataAsset);
+                m_blinkAppearBackwardAnimation.SetData(m_skeletonDataAsset);
+                m_blinkAppearForwardAnimation.SetData(m_skeletonDataAsset);
+                m_blinkAppearUpwardAnimation.SetData(m_skeletonDataAsset);
+                m_blinkDisappearBackwardAnimation.SetData(m_skeletonDataAsset);
+                m_blinkDisappearForwardAnimation.SetData(m_skeletonDataAsset);
+                m_blinkDisappearUpwardAnimation.SetData(m_skeletonDataAsset);
+                m_blinkFakeAnimation.SetData(m_skeletonDataAsset);
+                m_swordChangeAnimation.SetData(m_skeletonDataAsset);
+                m_summonSwordsAnimation.SetData(m_skeletonDataAsset);
+                m_idleAnimation.SetData(m_skeletonDataAsset);
+                m_idleCombatAnimation.SetData(m_skeletonDataAsset);
+                m_drillToGroundAnimation.SetData(m_skeletonDataAsset);
+                m_groundToDrillAnimation.SetData(m_skeletonDataAsset);
+                m_fallAnimation.SetData(m_skeletonDataAsset);
+                m_landAnimation.SetData(m_skeletonDataAsset);
+                m_staggerAnimation.SetData(m_skeletonDataAsset);
+                m_staggerWithKnockbackAnimation.SetData(m_skeletonDataAsset);
+                m_defStaggerWithKnockbackAnimation.SetData(m_skeletonDataAsset);
+                m_defeated1Animation.SetData(m_skeletonDataAsset);
+                m_defeated2Animation.SetData(m_skeletonDataAsset);
+                m_defeated3Animation.SetData(m_skeletonDataAsset);
+                m_defeated4Animation.SetData(m_skeletonDataAsset);
+
 #endif
             }
         }
@@ -539,14 +572,14 @@ namespace DChild.Gameplay.Characters.Enemies
             switch (m_phaseHandle.currentPhase)
             {
                 case Phase.PhaseOne:
-                    m_idleAnimation = m_info.idleCombatAnimation;
+                    m_idleAnimation = m_info.idleCombatAnimation.animation;
                     AddToAttackCache(Attack.Phase1Pattern1, Attack.Phase1Pattern2, Attack.Phase1Pattern3, Attack.Phase1Pattern4);
                     AddToRangeCache(m_info.phase1Pattern1Range, m_info.phase1Pattern2Range, m_info.phase1Pattern3Range, m_info.phase1Pattern4Range);
                     for (int i = 0; i < m_info.phase1PatternCooldown.Count; i++)
                         m_patternCooldown.Add(m_info.phase1PatternCooldown[i]);
                     break;
                 case Phase.PhaseTwo:
-                    m_idleAnimation = m_info.idleCombatAnimation;
+                    m_idleAnimation = m_info.idleCombatAnimation.animation;
                     AddToAttackCache(Attack.Phase2Pattern1, Attack.Phase2Pattern2, Attack.Phase2Pattern3, Attack.Phase2Pattern4, Attack.Phase2Pattern5);
                     AddToRangeCache(m_info.phase2Pattern1Range, m_info.phase2Pattern2Range, m_info.phase2Pattern3Range, m_info.phase2Pattern4Range, m_info.phase2Pattern5Range);
                     for (int i = 0; i < m_info.phase2PatternCooldown.Count; i++)
@@ -1550,13 +1583,13 @@ namespace DChild.Gameplay.Characters.Enemies
             switch (disappearState)
             {
                 case BlinkState.DisappearForward:
-                    m_blinkDisappearAnimation = m_info.blinkDisappearForwardAnimation;
+                    m_blinkDisappearAnimation = m_info.blinkDisappearForwardAnimation.animation;
                     break;
                 case BlinkState.DisappearBackward:
-                    m_blinkDisappearAnimation = m_info.blinkDisappearBackwardAnimation;
+                    m_blinkDisappearAnimation = m_info.blinkDisappearBackwardAnimation.animation;
                     break;
                 case BlinkState.DisappearUpward:
-                    m_blinkDisappearAnimation = m_info.blinkDisappearUpwardAnimation;
+                    m_blinkDisappearAnimation = m_info.blinkDisappearUpwardAnimation.animation;
                     break;
             }
 
@@ -1604,13 +1637,13 @@ namespace DChild.Gameplay.Characters.Enemies
             switch (appearState)
             {
                 case BlinkState.AppearForward:
-                    m_blinkAppearAnimation = m_info.blinkAppearForwardAnimation;
+                    m_blinkAppearAnimation = m_info.blinkAppearForwardAnimation.animation;
                     break;
                 case BlinkState.AppearBackward:
-                    m_blinkAppearAnimation = m_info.blinkAppearBackwardAnimation;
+                    m_blinkAppearAnimation = m_info.blinkAppearBackwardAnimation.animation;
                     break;
                 case BlinkState.AppearUpward:
-                    m_blinkAppearAnimation = m_info.blinkAppearUpwardAnimation;
+                    m_blinkAppearAnimation = m_info.blinkAppearUpwardAnimation.animation;
                     break;
             }
             if (!IsFacingTarget())
@@ -1784,28 +1817,28 @@ namespace DChild.Gameplay.Characters.Enemies
             switch (swordState)
             {
                 case SwordState.Normal:
-                    m_swordMixAnimation = m_info.swordNormalMixAnimation;
-                    m_drillMixAnimation = m_info.drillNormalMixAnimation;
+                    m_swordMixAnimation = m_info.swordNormalMixAnimation.animation;
+                    m_drillMixAnimation = m_info.drillNormalMixAnimation.animation;
                     m_projectileLauncher = new ProjectileLauncher(m_info.slashNormalProjectile.projectileInfo, m_projectilePoint);
                     m_scytheWaveLauncher = new ProjectileLauncher(m_info.scytheWaveNormalProjectile.projectileInfo, m_scytheWavePoint);
                     break;
                 case SwordState.BlackBlood:
-                    m_swordMixAnimation = m_info.swordRedMixAnimation;
-                    m_drillMixAnimation = m_info.drillRedMixAnimation;
+                    m_swordMixAnimation = m_info.swordRedMixAnimation.animation;
+                    m_drillMixAnimation = m_info.drillRedMixAnimation.animation;
                     m_projectileLauncher = new ProjectileLauncher(m_info.slashBlackbloodProjectile.projectileInfo, m_projectilePoint);
                     m_scytheWaveLauncher = new ProjectileLauncher(m_info.scytheWaveBlackbloodProjectile.projectileInfo, m_scytheWavePoint);
                     m_geyserBurstLauncher = new ProjectileLauncher(m_info.geyserBurstBlackbloodProjectile.projectileInfo, this.transform);
                     break;
                 case SwordState.Poison:
-                    m_swordMixAnimation = m_info.swordPurpleMixAnimation;
-                    m_drillMixAnimation = m_info.drillPurpleMixAnimation;
+                    m_swordMixAnimation = m_info.swordPurpleMixAnimation.animation;
+                    m_drillMixAnimation = m_info.drillPurpleMixAnimation.animation;
                     m_projectileLauncher = new ProjectileLauncher(m_info.slashPoisonProjectile.projectileInfo, m_projectilePoint);
                     m_scytheWaveLauncher = new ProjectileLauncher(m_info.scytheWavePoisonProjectile.projectileInfo, m_scytheWavePoint);
                     m_geyserBurstLauncher = new ProjectileLauncher(m_info.geyserBurstPoisonProjectile.projectileInfo, this.transform);
                     break;
                 case SwordState.Acid:
-                    m_swordMixAnimation = m_info.swordGreenMixAnimation;
-                    m_drillMixAnimation = m_info.drillGreenMixAnimation;
+                    m_swordMixAnimation = m_info.swordGreenMixAnimation.animation;
+                    m_drillMixAnimation = m_info.drillGreenMixAnimation.animation;
                     m_projectileLauncher = new ProjectileLauncher(m_info.slashAcidProjectile.projectileInfo, m_projectilePoint);
                     m_scytheWaveLauncher = new ProjectileLauncher(m_info.scytheWaveAcidProjectile.projectileInfo, m_scytheWavePoint);
                     m_geyserBurstLauncher = new ProjectileLauncher(m_info.geyserBurstAcidProjectile.projectileInfo, this.transform);
@@ -1921,7 +1954,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
             m_currentSwordState = SwordState.Normal;
             m_cachedSwordState = SwordState.Normal;
-            m_drillMixAnimation = m_info.drillNormalMixAnimation;
+            m_drillMixAnimation = m_info.drillNormalMixAnimation.animation;
         }
 
         private void Update()
