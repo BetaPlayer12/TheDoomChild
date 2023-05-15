@@ -44,36 +44,36 @@ namespace DChild.Gameplay.Characters.Enemies
 
 
             //Animations
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_deathAnimation;
-            public string deathAnimation => m_deathAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_flinchAnimation;
-            public string flinchAnimation => m_flinchAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_flinch2Animation;
-            public string flinch2Animation => m_flinch2Animation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_idleAnimation;
-            public string idleAnimation => m_idleAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_imerseAnimation;
-            public string imerseAnimation => m_imerseAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_retreatAnimation;
-            public string retreatAnimation => m_retreatAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_turnAnimation;
-            public string turnAnimation => m_turnAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_submergAnimation;
-            public string submergAnimation => m_submergAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_submergIdleAnimation;
-            public string submergIdleAnimation => m_submergIdleAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_submergeTurnAnimation;
-            public string submergeTurnAnimation => m_submergeTurnAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_deathAnimation;
+            public BasicAnimationInfo deathAnimation => m_deathAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_flinchAnimation;
+            public BasicAnimationInfo flinchAnimation => m_flinchAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_flinch2Animation;
+            public BasicAnimationInfo flinch2Animation => m_flinch2Animation;
+            [SerializeField]
+            private BasicAnimationInfo m_idleAnimation;
+            public BasicAnimationInfo idleAnimation => m_idleAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_imerseAnimation;
+            public BasicAnimationInfo imerseAnimation => m_imerseAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_retreatAnimation;
+            public BasicAnimationInfo retreatAnimation => m_retreatAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_turnAnimation;
+            public BasicAnimationInfo turnAnimation => m_turnAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_submergAnimation;
+            public BasicAnimationInfo submergAnimation => m_submergAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_submergIdleAnimation;
+            public BasicAnimationInfo submergIdleAnimation => m_submergIdleAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_submergeTurnAnimation;
+            public BasicAnimationInfo submergeTurnAnimation => m_submergeTurnAnimation;
 
 
             public override void Initialize()
@@ -81,6 +81,17 @@ namespace DChild.Gameplay.Characters.Enemies
 #if UNITY_EDITOR
                 m_submergeMove.SetData(m_skeletonDataAsset);
                 m_attack1.SetData(m_skeletonDataAsset);
+
+                m_deathAnimation.SetData(m_skeletonDataAsset);
+                m_flinchAnimation.SetData(m_skeletonDataAsset);
+                m_flinch2Animation.SetData(m_skeletonDataAsset);
+                m_idleAnimation.SetData(m_skeletonDataAsset);
+                m_imerseAnimation.SetData(m_skeletonDataAsset);
+                m_retreatAnimation.SetData(m_skeletonDataAsset);
+                m_turnAnimation.SetData(m_skeletonDataAsset);
+                m_submergAnimation.SetData(m_skeletonDataAsset);
+                m_submergIdleAnimation.SetData(m_skeletonDataAsset);
+                m_submergeTurnAnimation.SetData(m_skeletonDataAsset);
 #endif
             }
         }
@@ -256,7 +267,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     //m_flinchFX.Play();
 
                     m_animation.SetAnimation(0, IsFacingTarget() ? m_info.flinchAnimation : m_info.flinch2Animation, false);
-                    m_animation.AddAnimation(0, m_info.idleAnimation, false, 0.2f).TimeScale = 20;
+                    m_animation.AddAnimation(0, m_info.idleAnimation.animation, false, 0.2f).TimeScale = 20;
                     m_stateHandle.OverrideState(State.WaitBehaviourEnd);
                 }
             }
@@ -267,7 +278,7 @@ namespace DChild.Gameplay.Characters.Enemies
             if (m_flinchHandle.m_autoFlinch)
             {
                 //m_flinchFXFollower.SetParent(this.transform);
-                if (m_animation.GetCurrentAnimation(0).ToString() != m_info.deathAnimation)
+                if (m_animation.GetCurrentAnimation(0).ToString() != m_info.deathAnimation.animation)
                     m_animation.SetAnimation(0, m_info.idleAnimation, true);
                 m_stateHandle.OverrideState(State.ReevaluateSituation);
             }
@@ -379,7 +390,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_patrolHandle.TurnRequest += OnTurnRequest;
             m_attackHandle.AttackDone += OnAttackDone;
             m_turnHandle.TurnDone += OnTurnDone;
-            m_deathHandle.SetAnimation(m_info.deathAnimation);
+            m_deathHandle.SetAnimation(m_info.deathAnimation.animation);
             m_flinchHandle.FlinchStart += OnFlinchStart;
             m_flinchHandle.FlinchEnd += OnFlinchEnd;
             m_stateHandle = new StateHandle<State>(State.Patrol, State.WaitBehaviourEnd);
@@ -402,7 +413,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     else
                     {
                         m_turnState = State.Detect;
-                        if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
+                        if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation.animation)
                             m_stateHandle.SetState(State.Turning);
                     }
                     break;
@@ -428,7 +439,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_movement.Stop();
                     m_stateHandle.Wait(m_turnState);
                     m_animation.DisableRootMotion();
-                    m_turnHandle.Execute(m_isSubmerged ? m_info.submergeTurnAnimation : m_info.turnAnimation, m_isSubmerged ? m_info.submergIdleAnimation : m_info.idleAnimation);
+                    m_turnHandle.Execute(m_isSubmerged ? m_info.submergeTurnAnimation.animation : m_info.turnAnimation.animation, m_isSubmerged ? m_info.submergIdleAnimation.animation : m_info.idleAnimation.animation);
                     m_animation.animationState.GetCurrent(0).MixDuration = 0;
                     break;
 
@@ -455,7 +466,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     if (!IsFacingTarget())
                     {
                         m_turnState = State.Cooldown;
-                        if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
+                        if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation.animation)
                             m_stateHandle.SetState(State.Turning);
                     }
                     else
@@ -519,8 +530,8 @@ namespace DChild.Gameplay.Characters.Enemies
                         else
                         {
                             m_turnState = State.ReevaluateSituation;
-                            m_isSubmerged = m_animation.animationState.GetCurrent(0).Animation.ToString() == m_info.idleAnimation ? false : true;
-                            if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
+                            m_isSubmerged = m_animation.animationState.GetCurrent(0).Animation.ToString() == m_info.idleAnimation.animation ? false : true;
+                            if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation.animation)
                                 m_stateHandle.SetState(State.Turning);
                         }
                     }

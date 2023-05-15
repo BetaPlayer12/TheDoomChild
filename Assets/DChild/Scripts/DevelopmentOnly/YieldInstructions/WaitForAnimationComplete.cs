@@ -2,6 +2,7 @@
 using System.Collections;
 using Spine;
 using System;
+using DChild.Gameplay.Characters.AI;
 
 namespace DChild
 {
@@ -15,6 +16,12 @@ namespace DChild
         {
             SafeSubscribe(state);
             m_animationName = animationName;
+        }
+
+        public WaitForAnimationComplete(Spine.AnimationState state, IAIAnimationInfo animationInfo)
+        {
+            SafeSubscribe(state);
+            m_animationName = animationInfo.animation;
         }
 
         public WaitForAnimationComplete()
