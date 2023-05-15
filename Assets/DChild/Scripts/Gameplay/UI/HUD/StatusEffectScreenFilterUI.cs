@@ -43,7 +43,7 @@ namespace DChild.Gameplay.Combat.StatusAilment.UI
 
         private void SetFadeValue(Image image, float value)
         {
-            image.material.SetFloat("_RadialFade", value);
+            image.material.SetFloat("_Overall_Opacity", value);
         }
 
         private void Awake()

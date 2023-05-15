@@ -37,9 +37,9 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField]
             private SimpleAttackInfo m_attack2 = new SimpleAttackInfo();
             public SimpleAttackInfo attack2 => m_attack2;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_attackOrbAnimation;
-            public string attackOrbAnimation => m_attackOrbAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_attackOrbAnimation;
+            public BasicAnimationInfo attackOrbAnimation => m_attackOrbAnimation;
             [SerializeField]
             private float m_attackCD;
             public float attackCD => m_attackCD;
@@ -52,24 +52,24 @@ namespace DChild.Gameplay.Characters.Enemies
             public float patienceDistanceTolerance => m_patienceDistanceTolerance;
 
             //Animations
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_detectAnimation;
-            public string detectAnimation => m_detectAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_idleAnimation;
-            public string idleAnimation => m_idleAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_deathAnimation;
-            public string deathAnimation => m_deathAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_flinchAnimation;
-            public string flinchAnimation => m_flinchAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_fadeInAnimation;
-            public string fadeInAnimation => m_fadeInAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_fadeOutAnimation;
-            public string fadeOutAnimation => m_fadeOutAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_detectAnimation;
+            public BasicAnimationInfo detectAnimation => m_detectAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_idleAnimation;
+            public BasicAnimationInfo idleAnimation => m_idleAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_deathAnimation;
+            public BasicAnimationInfo deathAnimation => m_deathAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_flinchAnimation;
+            public BasicAnimationInfo flinchAnimation => m_flinchAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_fadeInAnimation;
+            public BasicAnimationInfo fadeInAnimation => m_fadeInAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_fadeOutAnimation;
+            public BasicAnimationInfo fadeOutAnimation => m_fadeOutAnimation;
 
             [SerializeField]
             private SimpleProjectileAttackInfo m_projectile;
@@ -96,6 +96,14 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_attack1.SetData(m_skeletonDataAsset);
                 m_attack2.SetData(m_skeletonDataAsset);
                 m_projectile.SetData(m_skeletonDataAsset);
+
+                m_attackOrbAnimation.SetData(m_skeletonDataAsset);
+                m_detectAnimation.SetData(m_skeletonDataAsset);
+                m_idleAnimation.SetData(m_skeletonDataAsset);
+                m_deathAnimation.SetData(m_skeletonDataAsset);
+                m_flinchAnimation.SetData(m_skeletonDataAsset);
+                m_fadeInAnimation.SetData(m_skeletonDataAsset);
+                m_fadeOutAnimation.SetData(m_skeletonDataAsset);
 
 #endif
             }
@@ -587,7 +595,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_flinchHandle.FlinchStart += OnFlinchStart;
             m_flinchHandle.FlinchEnd += OnFlinchEnd;
             m_turnHandle.TurnDone += OnTurnDone;
-            m_deathHandle.SetAnimation(m_info.deathAnimation);
+            m_deathHandle.SetAnimation(m_info.deathAnimation.animation);
             m_stateHandle = new StateHandle<State>(State.Patrol, State.WaitBehaviourEnd);
             m_attackDecider = new RandomAttackDecider<Attack>();
             UpdateAttackDeciderList();
