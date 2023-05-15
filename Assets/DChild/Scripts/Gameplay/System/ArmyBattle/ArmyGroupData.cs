@@ -21,7 +21,7 @@ namespace DChild.Gameplay.ArmyBattle
         [SerializeField, ToggleGroup("m_canAttack"), Indent]
         private bool m_useCharactersForPower;
         [SerializeField, MinValue(1), ToggleGroup("m_canAttack"), ShowIf("@m_canAttack && !m_useCharactersForPower"), Indent(2)]
-        private int m_power = 1;
+        private Holysoft.Collections.RangeInt m_power = new Holysoft.Collections.RangeInt(1, 1);
         #endregion
 
         #region Ability Fields
@@ -70,7 +70,7 @@ namespace DChild.Gameplay.ArmyBattle
                 }
                 else
                 {
-                    return m_power;
+                    return m_power.GenerateRandomValue();
                 }
             }
             else

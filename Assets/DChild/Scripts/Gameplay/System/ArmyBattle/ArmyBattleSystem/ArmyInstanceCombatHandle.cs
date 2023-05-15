@@ -11,7 +11,7 @@ namespace DChild.Gameplay.ArmyBattle
 
         public ArmyController armyController => m_armyController;
         public ArmyAttack attackInfo => m_armyController.currentAttack;
-        public ArmyUnitModifier damageReductionModifier => m_armyController.controlledArmy.damageReductionModifier;
+        public IArmyUnitModifier damageReductionModifier => m_armyController.controlledArmy.damageReductionModifier;
 
         public bool canAttack => !m_isTurnSkipped && m_attackLeftCount > 0;
 

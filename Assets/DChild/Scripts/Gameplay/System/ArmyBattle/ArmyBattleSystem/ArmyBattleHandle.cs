@@ -120,6 +120,7 @@ namespace DChild.Gameplay.ArmyBattle
             {
                 m_player.Reset();
                 m_enemy.Reset();
+                m_playerHasChosenAttackType = false;
             }
         }
 
@@ -136,11 +137,11 @@ namespace DChild.Gameplay.ArmyBattle
                     yield return WaitForAttacks();
                 }
                 m_battleResolver.ResolveBattle(m_player, m_enemy);
-                m_player.HandleAttackEnd();
-                m_enemy.HandleAttackEnd();
 
                 //Battle Animations should be done here
                 yield return m_visuals.StartBattleVisuals(m_player.armyController, m_enemy.armyController);
+                m_player.HandleAttackEnd();
+                m_enemy.HandleAttackEnd();
             } while (m_enemy.canAttack || m_player.canAttack);
 
 

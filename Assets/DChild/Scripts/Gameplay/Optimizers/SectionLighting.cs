@@ -13,7 +13,7 @@ namespace DChild.Gameplay.Optimization.Lights
         private Vector2 m_boundOffset;
         [SerializeField]
         private Vector2 m_boundSize;
-        [SerializeField]
+        [SerializeField, PropertyOrder(100)]
         private Light2D[] m_lights;
 
         private Bounds m_sectionBounds;
@@ -22,6 +22,19 @@ namespace DChild.Gameplay.Optimization.Lights
 
         public Vector2 boundCenter => (Vector2)transform.position + m_boundOffset;
         public Vector2 boundSize => m_boundSize;
+
+        /// <summary>
+        /// This is used For Integrity Checks, No real purpose here
+        /// </summary>
+        public bool HasMissingLights()
+        {
+            for (int i = 0; i < m_lights.Length; i++)
+            {
+                if (m_lights[i] == null)
+                    return true;
+            }
+            return false;
+        }
 
         public bool IsVisible(CameraBounds cameraBounds)
         {
@@ -75,15 +88,27 @@ namespace DChild.Gameplay.Optimization.Lights
             SetBounds(bounds.center - transform.position, bounds.size);
         }
 
+        private IEnumerator RegistrationRoutine()
+        {
+            while (SectionLightingManager.instance == null)
+                yield return null;
+
+            SectionLightingManager.instance.Register(this);
+        }
+
         private void Awake()
         {
             m_sectionBounds = new Bounds(boundCenter, m_boundSize);
+            m_isEnabled = true;
             m_lightsEnabled = m_lights[0].enabled;
         }
 
         private void OnEnable()
         {
-            SectionLightingManager.instance.Register(this);
+            StopAllCoroutines();
+            //Made Specifically for the Editor Only version because OnEnable is sometimes called first that
+            //SectionLightingManager's Awake
+            StartCoroutine(RegistrationRoutine());
         }
 
         private void OnDisable()

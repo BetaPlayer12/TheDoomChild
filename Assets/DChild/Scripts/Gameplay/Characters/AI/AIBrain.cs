@@ -12,6 +12,7 @@ using UnityEditor;
 
 namespace DChild.Gameplay.Characters.AI
 {
+
     public abstract class AIBrain<T> : MonoBehaviour where T : IAIInfo
     {
         [System.Serializable]
@@ -60,35 +61,39 @@ namespace DChild.Gameplay.Characters.AI
                 //#endif
             }
 
-            [System.Serializable, HideReferenceObjectPicker]
-            public class SimpleAttackInfo : SkeletonBaseInfo
+            [HideReferenceObjectPicker]
+            public class BasicAnimationInfo : SkeletonBaseInfo, IAIAnimationInfo
             {
                 [SerializeField, ValueDropdown("GetAnimations")]
                 private string m_animation;
+                [SerializeField, Min(0f)]
+                private float m_timeScale = 1;
+
+                public string animation => m_animation;
+                public float animationTimeScale => m_timeScale;
+            }
+
+            [System.Serializable, HideReferenceObjectPicker]
+            public class SimpleAttackInfo : BasicAnimationInfo
+            {
                 [SerializeField, MinValue(0)]
                 private float m_range;
 
-                public string animation => m_animation;
                 public float range => m_range;
             }
 
             [System.Serializable, HideReferenceObjectPicker]
-            public class MovementInfo : SkeletonBaseInfo
+            public class MovementInfo : BasicAnimationInfo
             {
-                [SerializeField, ValueDropdown("GetAnimations")]
-                private string m_animation;
                 [SerializeField, MinValue(0)]
                 private float m_speed;
 
-                public string animation => m_animation;
                 public float speed => m_speed;
             }
 
             [System.Serializable, HideReferenceObjectPicker]
-            public class SimpleProjectileAttackInfo : SkeletonBaseInfo
+            public class SimpleProjectileAttackInfo : BasicAnimationInfo
             {
-                [SerializeField, ValueDropdown("GetAnimations")]
-                private string m_animation;
                 [SerializeField, ValueDropdown("GetEvents")]
                 private string m_launchOnEvent;
                 [SerializeField, MinValue(0)]
@@ -96,7 +101,6 @@ namespace DChild.Gameplay.Characters.AI
                 [SerializeField]
                 private ProjectileInfo m_projectileInfo;
 
-                public string animation => m_animation;
                 public string launchOnEvent => m_launchOnEvent;
                 public float range => m_range;
                 public ProjectileInfo projectileInfo => m_projectileInfo;
@@ -161,10 +165,13 @@ namespace DChild.Gameplay.Characters.AI
             }
         }
 
+
         protected virtual void Awake()
         {
             ApplyData();
         }
+
+
 
 #if UNITY_EDITOR
         private IEnumerable GetData()

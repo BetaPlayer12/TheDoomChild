@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace DChild.Gameplay.ArmyBattle
 {
@@ -6,6 +7,9 @@ namespace DChild.Gameplay.ArmyBattle
     {
         private static ArmyBattleParticipantsHandle m_participantsHandle;
         private static ArmyBattleHandle m_battleHandle;
+        private static ArmyBattleOngoingEffectHandle m_ongoingEffectHandle;
+
+        public static void HandleOngoingEffect(Action effect, int round) => m_ongoingEffectHandle.RegisterOngoingAbility(effect, round);
 
         public static IArmyCombatHandle GetArmyCombatHandleOf(Army army) => m_participantsHandle.GetArmyCombatHandleOf(army);
 
@@ -31,6 +35,8 @@ namespace DChild.Gameplay.ArmyBattle
             m_participantsHandle.Initialize();
             m_battleHandle = GetComponentInChildren<ArmyBattleHandle>();
             m_battleHandle.InitializeParticipants(m_participantsHandle.player, m_participantsHandle.enemy);
+            m_ongoingEffectHandle = new ArmyBattleOngoingEffectHandle();
+            m_ongoingEffectHandle.Initialize(m_battleHandle);
         }
     }
 }
