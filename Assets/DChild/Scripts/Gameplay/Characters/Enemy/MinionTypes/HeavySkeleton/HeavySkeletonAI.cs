@@ -56,51 +56,51 @@ namespace DChild.Gameplay.Characters.Enemies
 
 
             //Animations
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_idleAnimation;
-            public string idleAnimation => m_idleAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_blockStartAnimation;
-            public string blockStartAnimation => m_blockStartAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_blockLoopAnimation;
-            public string blockLoopAnimation => m_blockLoopAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_blockParryAnimation;
-            public string blockParryAnimation => m_blockParryAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_counterFlinch1Animation;
-            public string counterFlinch1Animation => m_counterFlinch1Animation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_counterFlinch2Animation;
-            public string counterFlinch2Animation => m_counterFlinch2Animation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_parryHardAnimation;
-            public string parryHardAnimation => m_parryHardAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_parryLightAnimation;
-            public string parryLightAnimation => m_parryLightAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_parryNormalAnimation;
-            public string parryNormalAnimation => m_parryNormalAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_disassembledIdleAnimation;
-            public string disassembledIdleAnimation => m_disassembledIdleAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_flinchAnimation;
-            public string flinchAnimation => m_flinchAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_turnAnimation;
-            public string turnAnimation => m_turnAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_deathAnimation;
-            public string deathAnimation => m_deathAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_dismantleAnimation;
-            public string dismantleAnimation => m_dismantleAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_resurrectAnimation;
-            public string resurrectAnimation => m_resurrectAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_idleAnimation;
+            public BasicAnimationInfo idleAnimation => m_idleAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_blockStartAnimation;
+            public BasicAnimationInfo blockStartAnimation => m_blockStartAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_blockLoopAnimation;
+            public BasicAnimationInfo blockLoopAnimation => m_blockLoopAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_blockParryAnimation;
+            public BasicAnimationInfo blockParryAnimation => m_blockParryAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_counterFlinch1Animation;
+            public BasicAnimationInfo counterFlinch1Animation => m_counterFlinch1Animation;
+            [SerializeField]
+            private BasicAnimationInfo m_counterFlinch2Animation;
+            public BasicAnimationInfo counterFlinch2Animation => m_counterFlinch2Animation;
+            [SerializeField]
+            private BasicAnimationInfo m_parryHardAnimation;
+            public BasicAnimationInfo parryHardAnimation => m_parryHardAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_parryLightAnimation;
+            public BasicAnimationInfo parryLightAnimation => m_parryLightAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_parryNormalAnimation;
+            public BasicAnimationInfo parryNormalAnimation => m_parryNormalAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_disassembledIdleAnimation;
+            public BasicAnimationInfo disassembledIdleAnimation => m_disassembledIdleAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_flinchAnimation;
+            public BasicAnimationInfo flinchAnimation => m_flinchAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_turnAnimation;
+            public BasicAnimationInfo turnAnimation => m_turnAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_deathAnimation;
+            public BasicAnimationInfo deathAnimation => m_deathAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_dismantleAnimation;
+            public BasicAnimationInfo dismantleAnimation => m_dismantleAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_resurrectAnimation;
+            public BasicAnimationInfo resurrectAnimation => m_resurrectAnimation;
 
             public override void Initialize()
             {
@@ -108,6 +108,22 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_walk.SetData(m_skeletonDataAsset);
                 m_attack.SetData(m_skeletonDataAsset);
                 m_attackBelow.SetData(m_skeletonDataAsset);
+
+                m_idleAnimation.SetData(m_skeletonDataAsset);
+                m_blockStartAnimation.SetData(m_skeletonDataAsset);
+                m_blockLoopAnimation.SetData(m_skeletonDataAsset);
+                m_blockParryAnimation.SetData(m_skeletonDataAsset);
+                m_counterFlinch1Animation.SetData(m_skeletonDataAsset);
+                m_counterFlinch2Animation.SetData(m_skeletonDataAsset);
+                m_parryHardAnimation.SetData(m_skeletonDataAsset);
+                m_parryLightAnimation.SetData(m_skeletonDataAsset);
+                m_parryNormalAnimation.SetData(m_skeletonDataAsset);
+                m_disassembledIdleAnimation.SetData(m_skeletonDataAsset);
+                m_flinchAnimation.SetData(m_skeletonDataAsset);
+                m_turnAnimation.SetData(m_skeletonDataAsset);
+                m_deathAnimation.SetData(m_skeletonDataAsset);
+                m_dismantleAnimation.SetData(m_skeletonDataAsset);
+                m_resurrectAnimation.SetData(m_skeletonDataAsset);
 #endif
             }
         }
@@ -269,7 +285,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     }
                     //m_enablePatience = false;
                     m_turnState = State.WaitBehaviourEnd;
-                    if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
+                    if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation.animation)
                         m_stateHandle.SetState(State.Turning);
                 }
             }
@@ -329,7 +345,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 StopCoroutine(m_sneerRoutine);
             }
             m_character.physics.UseStepClimb(true);
-            if (m_animation.GetCurrentAnimation(0).ToString() != m_info.idleAnimation)
+            if (m_animation.GetCurrentAnimation(0).ToString() != m_info.idleAnimation.animation)
                 m_movement.Stop();
             
             m_flinchHandle.gameObject.SetActive(false);
@@ -357,7 +373,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnFlinchStart(object sender, EventActionArgs eventArgs)
         {
-            if (m_animation.GetCurrentAnimation(0).ToString() == m_info.idleAnimation)
+            if (m_animation.GetCurrentAnimation(0).ToString() == m_info.idleAnimation.animation)
             {
                 StopAllCoroutines();
                 m_selfCollider.enabled = true;
@@ -379,7 +395,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private void CounterFlinch(object sender, Damageable.DamageEventArgs eventArgs)
         {
             //Debug.Log("HEAVY SKELETON BLOCKING");
-            if (m_animation.GetCurrentAnimation(0).ToString() == m_info.blockLoopAnimation)
+            if (m_animation.GetCurrentAnimation(0).ToString() == m_info.blockLoopAnimation.animation)
             {
                 StopAllCoroutines();
                 //m_animation.SetAnimation(0, m_info.flinchAnimation, false);
@@ -483,7 +499,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator SneerRoutine()
         {
             m_stateHandle.Wait(State.ReevaluateSituation);
-            if (m_animation.GetCurrentAnimation(0).ToString() != m_info.idleAnimation)
+            if (m_animation.GetCurrentAnimation(0).ToString() != m_info.idleAnimation.animation)
                 m_movement.Stop();
 
             while (true)
@@ -530,11 +546,11 @@ namespace DChild.Gameplay.Characters.Enemies
             switch (idle)
             {
                 case 1:
-                    return m_info.parryHardAnimation;
+                    return m_info.parryHardAnimation.animation;
                 case 2:
-                    return m_info.parryLightAnimation;
+                    return m_info.parryLightAnimation.animation;
                 case 3:
-                    return m_info.parryNormalAnimation;
+                    return m_info.parryNormalAnimation.animation;
             }
             return null;
         }
@@ -573,7 +589,7 @@ namespace DChild.Gameplay.Characters.Enemies
             switch (m_stateHandle.currentState)
             {
                 case State.Detect:
-                    if (m_animation.GetCurrentAnimation(0).ToString() != m_info.idleAnimation)
+                    if (m_animation.GetCurrentAnimation(0).ToString() != m_info.idleAnimation.animation)
                         m_movement.Stop();
 
                     m_stateHandle.Wait(State.ReevaluateSituation);
@@ -614,7 +630,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
                 case State.Turning:
                     m_stateHandle.Wait(m_turnState);
-                    m_turnHandle.Execute(m_info.turnAnimation, m_info.idleAnimation);
+                    m_turnHandle.Execute(m_info.turnAnimation.animation, m_info.idleAnimation.animation);
                     break;
 
                 case State.Attacking:
@@ -625,10 +641,10 @@ namespace DChild.Gameplay.Characters.Enemies
                     switch (m_attackDecider.chosenAttack.attack)
                     {
                         case Attack.Attack:
-                            m_attackHandle.ExecuteAttack(m_info.attack.animation, m_info.idleAnimation);
+                            m_attackHandle.ExecuteAttack(m_info.attack.animation, m_info.idleAnimation.animation);
                             break;
                         case Attack.AttackBelow:
-                            m_attackHandle.ExecuteAttack(m_info.attackBelow.animation, m_info.idleAnimation);
+                            m_attackHandle.ExecuteAttack(m_info.attackBelow.animation, m_info.idleAnimation.animation);
                             break;
                         case Attack.Block:
                             StartCoroutine(BlockAttackRoutine());
@@ -643,7 +659,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     if (!IsFacingTarget())
                     {
                         m_turnState = State.Cooldown;
-                        if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
+                        if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation.animation)
                             m_stateHandle.SetState(State.Turning);
                     }
                     else
@@ -670,7 +686,7 @@ namespace DChild.Gameplay.Characters.Enemies
                             m_attackDecider.DecideOnAttack();
                             if (m_attackDecider.hasDecidedOnAttack && IsTargetInRange(m_attackDecider.chosenAttack.range) && !m_wallSensor.allRaysDetecting)
                             {
-                                if (m_animation.GetCurrentAnimation(0).ToString() != m_info.idleAnimation)
+                                if (m_animation.GetCurrentAnimation(0).ToString() != m_info.idleAnimation.animation)
                                     m_movement.Stop();
 
                                 m_selfCollider.enabled = true;
@@ -688,7 +704,7 @@ namespace DChild.Gameplay.Characters.Enemies
                                 }
                                 else
                                 {
-                                    if (m_animation.GetCurrentAnimation(0).ToString() != m_info.idleAnimation)
+                                    if (m_animation.GetCurrentAnimation(0).ToString() != m_info.idleAnimation.animation)
                                         m_movement.Stop();
 
                                     m_selfCollider.enabled = true;
@@ -699,7 +715,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         else
                         {
                             m_turnState = State.ReevaluateSituation;
-                            if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
+                            if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation.animation)
                                 m_stateHandle.SetState(State.Turning);
                         }
                     }
@@ -799,7 +815,7 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.flinchAnimation);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             yield return new WaitForSeconds(timer);
-            if (m_animation.GetCurrentAnimation(0).ToString() != m_info.idleAnimation)
+            if (m_animation.GetCurrentAnimation(0).ToString() != m_info.idleAnimation.animation)
                 m_movement.Stop();
 
             //enabled = true;

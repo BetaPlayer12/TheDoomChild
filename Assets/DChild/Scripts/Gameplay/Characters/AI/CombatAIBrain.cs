@@ -114,6 +114,28 @@ namespace DChild.Gameplay.Characters.AI
         {
             SetTarget(null);
         }
+        public void SetPassive()
+        {
+            if (m_targetInfo.doesTargetExist == false)
+            {
+                m_aggroBoundary.gameObject.SetActive(false);
+                SetTarget(null);
+                m_currentRestrictions |= Restriction.IgnoreTarget;
+            }
+            else
+            {
+                this.enabled = false;
+            }
+                
+        }
+        public void SetActive()
+        {
+            
+                m_aggroBoundary.gameObject.SetActive(true);
+                m_currentRestrictions &= ~Restriction.IgnoreTarget;
+                this.enabled = true;
+ 
+        }
 
         /// <summary>
         /// Target is null and cannot accept new Targets if True

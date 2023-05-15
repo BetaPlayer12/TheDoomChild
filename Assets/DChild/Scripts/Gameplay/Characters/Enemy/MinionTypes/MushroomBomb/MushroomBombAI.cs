@@ -36,9 +36,9 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField]
             private float m_chargeTime;
             public float chargeTime => m_chargeTime;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_explodeAnimation;
-            public string explodeAnimation => m_explodeAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_explodeAnimation = new BasicAnimationInfo();
+            public BasicAnimationInfo explodeAnimation => m_explodeAnimation;
             //
 
             [SerializeField, MinValue(0)]
@@ -51,24 +51,24 @@ namespace DChild.Gameplay.Characters.Enemies
 
 
             //Animations
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_idleAnimation;
-            public string idleAnimation => m_idleAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_detectAnimation;
-            public string detectAnimation => m_detectAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_deathAnimation;
-            public string deathAnimation => m_deathAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_deathStartAnimation;
-            public string deathStartAnimation => m_deathStartAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_deathFallLoopAnimation;
-            public string deathFallLoopAnimation => m_deathFallLoopAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_deathBounceAnimation;
-            public string deathBounceAnimation => m_deathBounceAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_idleAnimation = new BasicAnimationInfo();
+            public BasicAnimationInfo idleAnimation => m_idleAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_detectAnimation = new BasicAnimationInfo();
+            public BasicAnimationInfo detectAnimation => m_detectAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_deathAnimation = new BasicAnimationInfo();
+            public BasicAnimationInfo deathAnimation => m_deathAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_deathStartAnimation = new BasicAnimationInfo();
+            public BasicAnimationInfo deathStartAnimation => m_deathStartAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_deathFallLoopAnimation = new BasicAnimationInfo();
+            public BasicAnimationInfo deathFallLoopAnimation => m_deathFallLoopAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_deathBounceAnimation = new BasicAnimationInfo();
+            public BasicAnimationInfo deathBounceAnimation => m_deathBounceAnimation;
             [SerializeField]
             private Vector2 m_deathKnockbackForce;
             public Vector2 deathKnockbackForce => m_deathKnockbackForce;
@@ -84,6 +84,14 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_patrol.SetData(m_skeletonDataAsset);
                 m_move.SetData(m_skeletonDataAsset);
                 m_attack.SetData(m_skeletonDataAsset);
+
+                m_idleAnimation.SetData(m_skeletonDataAsset);
+                m_detectAnimation.SetData(m_skeletonDataAsset);
+                m_explodeAnimation.SetData(m_skeletonDataAsset);
+                m_deathAnimation.SetData(m_skeletonDataAsset);
+                m_deathStartAnimation.SetData(m_skeletonDataAsset);
+                m_deathFallLoopAnimation.SetData(m_skeletonDataAsset);
+                m_deathBounceAnimation.SetData(m_skeletonDataAsset);
 #endif
             }
         }
@@ -259,7 +267,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_stateHandle.Wait(State.Dead);
             m_aggroSensor.SetActive(false);
             m_smokeChargeFX.Play();
-            if (m_animation.GetCurrentAnimation(0).ToString() == m_info.move.animation || m_animation.GetCurrentAnimation(0).ToString() == m_info.idleAnimation)
+            if (m_animation.GetCurrentAnimation(0).ToString() == m_info.move.animation || m_animation.GetCurrentAnimation(0).ToString() == m_info.idleAnimation.animation)
             {
                 m_animation.SetAnimation(0, m_info.attack.animation, true);
             }
@@ -310,7 +318,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_patrolHandle.TurnRequest += OnTurnRequest;
             m_attackHandle.AttackDone += OnAttackDone;
             m_turnHandle.TurnDone += OnTurnDone;
-            m_deathHandle.SetAnimation(m_info.deathAnimation);
+            m_deathHandle.SetAnimation(m_info.deathAnimation.animation);
             m_flinchHandle.FlinchStart += OnFlinchStart;
             m_flinchHandle.FlinchEnd += OnFlinchEnd;
             m_stateHandle = new StateHandle<State>(State.Idle, State.WaitBehaviourEnd);

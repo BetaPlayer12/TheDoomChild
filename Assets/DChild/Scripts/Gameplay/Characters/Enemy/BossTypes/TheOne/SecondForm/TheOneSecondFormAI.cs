@@ -62,15 +62,15 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField, BoxGroup("Tendril Whip")]
             private SimpleAttackInfo m_tendrilWhipAttack = new SimpleAttackInfo();
             public SimpleAttackInfo tendrilWhipAttack => m_tendrilWhipAttack;
-            [SerializeField, BoxGroup("Tendril Whip"), ValueDropdown("GetAnimations")]
-            private string m_tendrilWhipAnticipationAnimation;
-            public string tendrilWhipAnticipationAnimation => m_tendrilWhipAnticipationAnimation;
-            [SerializeField, BoxGroup("Tendril Whip"), ValueDropdown("GetAnimations")]
-            private string m_tendrilWhipBackAnimation;
-            public string tendrilWhipBackAnimation => m_tendrilWhipBackAnimation;
-            [SerializeField, BoxGroup("Tendril Whip"), ValueDropdown("GetAnimations")]
-            private string m_tendrilWhipBackAnticipationAnimation;
-            public string tendrilWhipBackAnticipationAnimation => m_tendrilWhipBackAnticipationAnimation;
+            [SerializeField, BoxGroup("Tendril Whip")]
+            private BasicAnimationInfo m_tendrilWhipAnticipationAnimation;
+            public BasicAnimationInfo tendrilWhipAnticipationAnimation => m_tendrilWhipAnticipationAnimation;
+            [SerializeField, BoxGroup("Tendril Whip")]
+            private BasicAnimationInfo m_tendrilWhipBackAnimation;
+            public BasicAnimationInfo tendrilWhipBackAnimation => m_tendrilWhipBackAnimation;
+            [SerializeField, BoxGroup("Tendril Whip")]
+            private BasicAnimationInfo m_tendrilWhipBackAnticipationAnimation;
+            public BasicAnimationInfo tendrilWhipBackAnticipationAnimation => m_tendrilWhipBackAnticipationAnimation;
             [SerializeField, BoxGroup("Elemental Beam")]
             private float m_elementalBeamChargeDuration;
             public float elementalBeamChargeDuration => m_elementalBeamChargeDuration;
@@ -83,15 +83,15 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField, BoxGroup("Elemental Beam")]
             private SimpleAttackInfo m_elementalBeamCielingAttack = new SimpleAttackInfo();
             public SimpleAttackInfo elementalBeamCielingAttack => m_elementalBeamCielingAttack;
-            [SerializeField, BoxGroup("Elemental Beam"), ValueDropdown("GetAnimations")]
-            private string m_elementalBeamChargeAnimation;
-            public string elementalBeamChargeAnimation => m_elementalBeamChargeAnimation;
-            [SerializeField, BoxGroup("Elemental Beam"), ValueDropdown("GetAnimations")]
-            private string m_elementalBeamWallChargeAnimation;
-            public string elementalBeamWallChargeAnimation => m_elementalBeamWallChargeAnimation;
-            [SerializeField, BoxGroup("Elemental Beam"), ValueDropdown("GetAnimations")]
-            private string m_elementalBeamCielingChargeAnimation;
-            public string elementalBeamCielingChargeAnimation => m_elementalBeamCielingChargeAnimation;
+            [SerializeField, BoxGroup("Elemental Beam")]
+            private BasicAnimationInfo m_elementalBeamChargeAnimation;
+            public BasicAnimationInfo elementalBeamChargeAnimation => m_elementalBeamChargeAnimation;
+            [SerializeField, BoxGroup("Elemental Beam")]
+            private BasicAnimationInfo m_elementalBeamWallChargeAnimation;
+            public BasicAnimationInfo elementalBeamWallChargeAnimation => m_elementalBeamWallChargeAnimation;
+            [SerializeField, BoxGroup("Elemental Beam")]
+            private BasicAnimationInfo m_elementalBeamCielingChargeAnimation;
+            public BasicAnimationInfo elementalBeamCielingChargeAnimation => m_elementalBeamCielingChargeAnimation;
             [SerializeField, BoxGroup("Elemental Beam Flick")]
             private SimpleAttackInfo m_elementalBeamFlickAttack = new SimpleAttackInfo();
             public SimpleAttackInfo elementalBeamFlickAttack => m_elementalBeamFlickAttack;
@@ -101,15 +101,15 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField, BoxGroup("Jump Smash")]
             private SimpleAttackInfo m_jumpSmashAttack = new SimpleAttackInfo();
             public SimpleAttackInfo jumpSmashAttack => m_jumpSmashAttack;
-            [SerializeField, BoxGroup("Jump Smash"), ValueDropdown("GetAnimations")]
-            private string m_jumpSmashStartAnimation;
-            public string jumpSmashStartAnimation => m_jumpSmashStartAnimation;
-            [SerializeField, BoxGroup("Jump Smash"), ValueDropdown("GetAnimations")]
-            private string m_jumpSmashLandAnimation;
-            public string jumpSmashLandAnimation => m_jumpSmashLandAnimation;
-            [SerializeField, BoxGroup("Jump Smash"), ValueDropdown("GetAnimations")]
-            private string m_jumpSmashWallStickAnimation;
-            public string jumpSmashWallStickAnimation => m_jumpSmashWallStickAnimation;
+            [SerializeField, BoxGroup("Jump Smash")]
+            private BasicAnimationInfo m_jumpSmashStartAnimation;
+            public BasicAnimationInfo jumpSmashStartAnimation => m_jumpSmashStartAnimation;
+            [SerializeField, BoxGroup("Jump Smash")]
+            private BasicAnimationInfo m_jumpSmashLandAnimation;
+            public BasicAnimationInfo jumpSmashLandAnimation => m_jumpSmashLandAnimation;
+            [SerializeField, BoxGroup("Jump Smash")]
+            private BasicAnimationInfo m_jumpSmashWallStickAnimation;
+            public BasicAnimationInfo jumpSmashWallStickAnimation => m_jumpSmashWallStickAnimation;
             [SerializeField, BoxGroup("Jump Smash")]
             private Vector2 m_posOffset;
             public Vector2 posOffset => m_posOffset;
@@ -179,57 +179,57 @@ namespace DChild.Gameplay.Characters.Enemies
             public int backAttackCooldown => m_backAttackCooldown;
 
             [Title("Animations")]
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_introAnimation;
-            public string introAnimation => m_introAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_idle1Animation;
-            public string idle1Animation => m_idle1Animation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_idle2Animation;
-            public string idle2Animation => m_idle2Animation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_tendrilWallIdleAnimation;
-            public string tendrilWallIdleAnimation => m_tendrilWallIdleAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_flinchAnimation;
-            public string flinchAnimation => m_flinchAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_midAirFlinchAnimation;
-            public string midAirFlinchAnimation => m_midAirFlinchAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_flinchToFallAnimation;
-            public string flinchToFallAnimation => m_flinchToFallAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_staggerAnimation;
-            public string staggerAnimation => m_staggerAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_staggerFallAnimation;
-            public string staggerFallAnimation => m_staggerFallAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_staggerLandAnimation;
-            public string staggerLandAnimation => m_staggerLandAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_standUpAnimation;
-            public string standUpAnimation => m_standUpAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_fallAnimation;
-            public string fallAnimation => m_fallAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_landAnimation;
-            public string landAnimation => m_landAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_dodgeAnimation;
-            public string dodgeAnimation => m_dodgeAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_deathAnimation;
-            public string deathAnimation => m_deathAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_turnAnimation;
-            public string turnAnimation => m_turnAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_phaseTransitionRoarAnimation;
-            public string phaseTransitionRoarAnimation => m_phaseTransitionRoarAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_introAnimation;
+            public BasicAnimationInfo introAnimation => m_introAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_idle1Animation;
+            public BasicAnimationInfo idle1Animation => m_idle1Animation;
+            [SerializeField]
+            private BasicAnimationInfo m_idle2Animation;
+            public BasicAnimationInfo idle2Animation => m_idle2Animation;
+            [SerializeField]
+            private BasicAnimationInfo m_tendrilWallIdleAnimation;
+            public BasicAnimationInfo tendrilWallIdleAnimation => m_tendrilWallIdleAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_flinchAnimation;
+            public BasicAnimationInfo flinchAnimation => m_flinchAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_midAirFlinchAnimation;
+            public BasicAnimationInfo midAirFlinchAnimation => m_midAirFlinchAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_flinchToFallAnimation;
+            public BasicAnimationInfo flinchToFallAnimation => m_flinchToFallAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_staggerAnimation;
+            public BasicAnimationInfo staggerAnimation => m_staggerAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_staggerFallAnimation;
+            public BasicAnimationInfo staggerFallAnimation => m_staggerFallAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_staggerLandAnimation;
+            public BasicAnimationInfo staggerLandAnimation => m_staggerLandAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_standUpAnimation;
+            public BasicAnimationInfo standUpAnimation => m_standUpAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_fallAnimation;
+            public BasicAnimationInfo fallAnimation => m_fallAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_landAnimation;
+            public BasicAnimationInfo landAnimation => m_landAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_dodgeAnimation;
+            public BasicAnimationInfo dodgeAnimation => m_dodgeAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_deathAnimation;
+            public BasicAnimationInfo deathAnimation => m_deathAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_turnAnimation;
+            public BasicAnimationInfo turnAnimation => m_turnAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_phaseTransitionRoarAnimation;
+            public BasicAnimationInfo phaseTransitionRoarAnimation => m_phaseTransitionRoarAnimation;
 
             [Title("Projectiles")]
             [SerializeField]
@@ -297,6 +297,34 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_elementalBeamOverloadAttack.SetData(m_skeletonDataAsset);
                 m_tigrexBiteAttack.SetData(m_skeletonDataAsset);
                 m_twoStompsAttack.SetData(m_skeletonDataAsset);
+
+                m_tendrilWhipAnticipationAnimation.SetData(m_skeletonDataAsset);
+                m_tendrilWhipBackAnimation.SetData(m_skeletonDataAsset);
+                m_tendrilWhipBackAnticipationAnimation.SetData(m_skeletonDataAsset);
+                m_elementalBeamChargeAnimation.SetData(m_skeletonDataAsset);
+                m_elementalBeamWallChargeAnimation.SetData(m_skeletonDataAsset);
+                m_elementalBeamCielingChargeAnimation.SetData(m_skeletonDataAsset);
+                m_jumpSmashStartAnimation.SetData(m_skeletonDataAsset);
+                m_jumpSmashLandAnimation.SetData(m_skeletonDataAsset);
+                m_jumpSmashWallStickAnimation.SetData(m_skeletonDataAsset);
+                m_introAnimation.SetData(m_skeletonDataAsset);
+                m_idle1Animation.SetData(m_skeletonDataAsset);
+                m_idle2Animation.SetData(m_skeletonDataAsset);
+                m_tendrilWallIdleAnimation.SetData(m_skeletonDataAsset);
+                m_flinchAnimation.SetData(m_skeletonDataAsset);
+                m_midAirFlinchAnimation.SetData(m_skeletonDataAsset);
+                m_flinchToFallAnimation.SetData(m_skeletonDataAsset);
+                m_staggerAnimation.SetData(m_skeletonDataAsset);
+                m_staggerFallAnimation.SetData(m_skeletonDataAsset);
+                m_staggerLandAnimation.SetData(m_skeletonDataAsset);
+                m_standUpAnimation.SetData(m_skeletonDataAsset);
+                m_fallAnimation.SetData(m_skeletonDataAsset);
+                m_landAnimation.SetData(m_skeletonDataAsset);
+                m_dodgeAnimation.SetData(m_skeletonDataAsset);
+                m_deathAnimation.SetData(m_skeletonDataAsset);
+                m_turnAnimation.SetData(m_skeletonDataAsset);
+                m_phaseTransitionRoarAnimation.SetData(m_skeletonDataAsset);
+
 #endif
             }
         }
@@ -1061,7 +1089,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private string RandomIdleAnimation()
         {
-            m_currentIdleAnimation = UnityEngine.Random.Range(0, 2) == 1 ? m_info.idle1Animation : m_info.idle2Animation;
+            m_currentIdleAnimation = UnityEngine.Random.Range(0, 2) == 1 ? m_info.idle1Animation.animation : m_info.idle2Animation.animation;
             return m_currentIdleAnimation;
         }
 
@@ -1192,7 +1220,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             base.Awake();
             m_turnHandle.TurnDone += OnTurnDone;
-            m_deathHandle.SetAnimation(m_info.deathAnimation);
+            m_deathHandle.SetAnimation(m_info.deathAnimation.animation);
             m_projectileLauncher = new BallisticProjectileLauncher(m_info.elementalOverloadProjectile.projectileInfo, m_projectilePoint, m_info.projectileGravityScale, m_info.elementalOverloadProjectile.projectileInfo.speed);
             m_damageable.DamageTaken += OnDamageTaken;
             m_attackDecider = new RandomAttackDecider<Attack>();
@@ -1269,7 +1297,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     }
                     else
                     {
-                        m_turnHandle.Execute(m_info.turnAnimation, RandomIdleAnimation());
+                        m_turnHandle.Execute(m_info.turnAnimation.animation, RandomIdleAnimation());
                     }
                     break;
                 case State.Attacking:
@@ -1377,7 +1405,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     else
                     {
                         m_turnState = State.Chasing;
-                        if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
+                        if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation.animation)
                             m_stateHandle.SetState(State.Turning);
                     }
                     break;

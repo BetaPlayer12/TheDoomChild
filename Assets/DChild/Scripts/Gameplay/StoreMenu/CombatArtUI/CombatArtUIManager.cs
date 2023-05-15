@@ -17,6 +17,8 @@ namespace DChild.Gameplay.UI.CombatArts
         [SerializeField]
         private CombatArtUIDetail m_uiDetail;
         [SerializeField]
+        private CombatArtSelectorHighlight m_selectorHighlight;
+        [SerializeField]
         private CombatArtUnlockHandle m_unlockArtHandler;
 
         private Dictionary<CombatArt, CombatArtSelectButton[]> m_abilityButtonPair;
@@ -26,7 +28,10 @@ namespace DChild.Gameplay.UI.CombatArts
 
         public void Initialize()
         {
+            m_selectorHighlight.Initialize();
+            m_unlockArtHandler.UnlockSuccessful += OnUnlockSuccessFull;
             m_unlockArtHandler.InitializeReferences(m_progressionReference, m_referenceList);
+            m_unlockArtHandler.ResetUnlockProgress();
             InitializeButtonStates();
             ValidateButtonStates();
         }
@@ -38,16 +43,24 @@ namespace DChild.Gameplay.UI.CombatArts
 
             m_currentSelectedButton = button;
             m_uiDetail.Display(m_referenceList.GetCombatArtData(m_currentSelectedButton.skillUnlock), m_currentSelectedButton.unlockLevel);
+            m_selectorHighlight.Highlight(button);
 
             m_unlockArtHandler.VerifyUnlockFunction(m_currentSelectedButton);
+            m_unlockArtHandler.ResetUnlockProgress();
         }
 
-        public void UnlockSelectedCombatArt()
+        public void StartUnlockSelectedCombatArt()
         {
             if (m_currentSelectedButton.currentState != CombatArtUnlockState.Unlockable)
                 return;
 
-            m_unlockArtHandler.UnlockCombatArt(m_currentSelectedButton.skillUnlock, m_currentSelectedButton.unlockLevel);
+            m_unlockArtHandler.StartUnlockProgress();
+        }
+
+        public void ResetUnlock() => m_unlockArtHandler.ResetUnlockProgress();
+
+        private void OnUnlockSuccessFull()
+        {
             m_unlockArtHandler.DisableUnlockFunction();
             m_currentSelectedButton.SetState(CombatArtUnlockState.Unlocked);
             ValidateButtonStates();
@@ -118,6 +131,20 @@ namespace DChild.Gameplay.UI.CombatArts
                 }
             }
         }
+
+#if UNITY_EDITOR
+        [ContextMenu("Editor/Update SelectButtonVisuals")]
+        private void UpdateSelectButtonVisuals()
+        {
+            var buttons = GetComponentsInChildren<CombatArtSelectButton>();
+            foreach (var button in buttons)
+            {
+                var data = m_referenceList.GetCombatArtData(button.skillUnlock);
+                var levelData = data.GetCombatArtLevelData(button.unlockLevel);
+                button.DisplayAs(levelData);
+            }
+        }
+#endif
 
         private void Awake()
         {

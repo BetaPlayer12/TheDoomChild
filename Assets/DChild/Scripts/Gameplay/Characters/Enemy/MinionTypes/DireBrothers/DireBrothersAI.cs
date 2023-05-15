@@ -46,12 +46,6 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField, TitleGroup("Attacks")]
             private SimpleAttackInfo m_heavyGroundBashAttack = new SimpleAttackInfo();
             public SimpleAttackInfo heavyGroundBashAttack => m_heavyGroundBashAttack;
-            //[SerializeField, TitleGroup("Attacks"), ValueDropdown("GetAnimations")]
-            //private string m_heavyGroundStabStuckAnimation;
-            //public string heavyGroundStabStuckAnimation => m_heavyGroundStabStuckAnimation;
-            //[SerializeField, TitleGroup("Attacks"), ValueDropdown("GetAnimations")]
-            //private string m_heavyGroundStabRecoverAnimation;
-            //public string heavyGroundStabRecoverAnimation => m_heavyGroundStabRecoverAnimation;
             [SerializeField, TitleGroup("Attacks")]
             private SimpleAttackInfo m_spearAttack = new SimpleAttackInfo();
             public SimpleAttackInfo spearAttack => m_spearAttack;
@@ -76,46 +70,46 @@ namespace DChild.Gameplay.Characters.Enemies
             private float m_targetDistanceTolerance;
             public float targetDistanceTolerance => m_targetDistanceTolerance;
             
-            [SerializeField, TitleGroup("Animations"), ValueDropdown("GetAnimations")]
-            private string m_sh_death1Animation;
-            public string sh_death1Animation => m_sh_death1Animation;
-            [SerializeField, TitleGroup("Animations"), ValueDropdown("GetAnimations")]
-            private string m_sh_death2Animation;
-            public string sh_death2Animation => m_sh_death2Animation;
-            [SerializeField, TitleGroup("Animations"), ValueDropdown("GetAnimations")]
-            private string m_sh_stopAnimation;
-            public string sh_stopAnimation => m_sh_stopAnimation;
-            [SerializeField, TitleGroup("Animations"), ValueDropdown("GetAnimations")]
-            private string m_sh_shieldBashAnimation;
-            public string sh_shieldBashAnimation => m_sh_shieldBashAnimation;
+            [SerializeField, TitleGroup("Animations")]
+            private BasicAnimationInfo m_sh_death1Animation;
+            public BasicAnimationInfo sh_death1Animation => m_sh_death1Animation;
+            [SerializeField, TitleGroup("Animations")]
+            private BasicAnimationInfo m_sh_death2Animation;
+            public BasicAnimationInfo sh_death2Animation => m_sh_death2Animation;
+            [SerializeField, TitleGroup("Animations")]
+            private BasicAnimationInfo m_sh_stopAnimation;
+            public BasicAnimationInfo sh_stopAnimation => m_sh_stopAnimation;
+            [SerializeField, TitleGroup("Animations")]
+            private BasicAnimationInfo m_sh_shieldBashAnimation;
+            public BasicAnimationInfo sh_shieldBashAnimation => m_sh_shieldBashAnimation;
             //Animations
-            [SerializeField, TitleGroup("Animations"), ValueDropdown("GetAnimations")]
-            private string m_detectAnimation;
-            public string detectAnimation => m_detectAnimation;
-            [SerializeField, TitleGroup("Animations"), ValueDropdown("GetAnimations")]
-            private string m_heavyFlinchAnimation;
-            public string heavyFlinchAnimation => m_heavyFlinchAnimation;
-            [SerializeField, TitleGroup("Animations"), ValueDropdown("GetAnimations")]
-            private string m_lightFlinchAnimation;
-            public string lightFlinchAnimation => m_lightFlinchAnimation;
-            [SerializeField, TitleGroup("Animations"), ValueDropdown("GetAnimations")]
-            private string m_backFlinchAnimation;
-            public string backFlinchAnimation => m_backFlinchAnimation;
-            [SerializeField, TitleGroup("Animations"), ValueDropdown("GetAnimations")]
-            private string m_counterFlinchAnimation;
-            public string counterFlinchAnimation => m_counterFlinchAnimation;
-            [SerializeField, TitleGroup("Animations"), ValueDropdown("GetAnimations")]
-            private string m_defenceStanceAnimation;
-            public string defenceStanceAnimation => m_defenceStanceAnimation;
-            [SerializeField, TitleGroup("Animations"), ValueDropdown("GetAnimations")]
-            private string m_defenceWhenHitAnimation;
-            public string defenceWhenHitAnimation => m_defenceWhenHitAnimation;
-            [SerializeField, TitleGroup("Animations"), ValueDropdown("GetAnimations")]
-            private string m_exhaustedAnimation;
-            public string exhaustedAnimation => m_exhaustedAnimation;
-            [SerializeField, TitleGroup("Animations"), ValueDropdown("GetAnimations")]
-            private string m_deathAnimation;
-            public string deathAnimation => m_deathAnimation;
+            [SerializeField, TitleGroup("Animations")]
+            private BasicAnimationInfo m_detectAnimation;
+            public BasicAnimationInfo detectAnimation => m_detectAnimation;
+            [SerializeField, TitleGroup("Animations")]
+            private BasicAnimationInfo m_heavyFlinchAnimation;
+            public BasicAnimationInfo heavyFlinchAnimation => m_heavyFlinchAnimation;
+            [SerializeField, TitleGroup("Animations")]
+            private BasicAnimationInfo m_lightFlinchAnimation;
+            public BasicAnimationInfo lightFlinchAnimation => m_lightFlinchAnimation;
+            [SerializeField, TitleGroup("Animations")]
+            private BasicAnimationInfo m_backFlinchAnimation;
+            public BasicAnimationInfo backFlinchAnimation => m_backFlinchAnimation;
+            [SerializeField, TitleGroup("Animations")]
+            private BasicAnimationInfo m_counterFlinchAnimation;
+            public BasicAnimationInfo counterFlinchAnimation => m_counterFlinchAnimation;
+            [SerializeField, TitleGroup("Animations")]
+            private BasicAnimationInfo m_defenceStanceAnimation;
+            public BasicAnimationInfo defenceStanceAnimation => m_defenceStanceAnimation;
+            [SerializeField, TitleGroup("Animations")]
+            private BasicAnimationInfo m_defenceWhenHitAnimation;
+            public BasicAnimationInfo defenceWhenHitAnimation => m_defenceWhenHitAnimation;
+            [SerializeField, TitleGroup("Animations")]
+            private BasicAnimationInfo m_exhaustedAnimation;
+            public BasicAnimationInfo exhaustedAnimation => m_exhaustedAnimation;
+            [SerializeField, TitleGroup("Animations")]
+            private BasicAnimationInfo m_deathAnimation;
+            public BasicAnimationInfo deathAnimation => m_deathAnimation;
 
 
             public override void Initialize()
@@ -130,6 +124,20 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_spearAttack.SetData(m_skeletonDataAsset);
                 m_shieldDashAttack.SetData(m_skeletonDataAsset);
                 m_shieldBashAttack.SetData(m_skeletonDataAsset);
+
+                m_sh_death1Animation.SetData(m_skeletonDataAsset);
+                m_sh_death2Animation.SetData(m_skeletonDataAsset);
+                m_sh_stopAnimation.SetData(m_skeletonDataAsset);
+                m_sh_shieldBashAnimation.SetData(m_skeletonDataAsset);
+                m_detectAnimation.SetData(m_skeletonDataAsset);
+                m_heavyFlinchAnimation.SetData(m_skeletonDataAsset);
+                m_lightFlinchAnimation.SetData(m_skeletonDataAsset);
+                m_backFlinchAnimation.SetData(m_skeletonDataAsset);
+                m_counterFlinchAnimation.SetData(m_skeletonDataAsset);
+                m_defenceStanceAnimation.SetData(m_skeletonDataAsset);
+                m_defenceWhenHitAnimation.SetData(m_skeletonDataAsset);
+                m_exhaustedAnimation.SetData(m_skeletonDataAsset);
+                m_deathAnimation.SetData(m_skeletonDataAsset);
 #endif
             }
         }
@@ -669,7 +677,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_patrolHandle.TurnRequest += OnTurnRequest;
             m_attackHandle.AttackDone += OnAttackDone;
             m_turnHandle.TurnDone += OnTurnDone;
-            m_deathHandle.SetAnimation(m_info.deathAnimation);
+            m_deathHandle.SetAnimation(m_info.deathAnimation.animation);
             m_currentFlinchHandle.FlinchStart += OnFlinchStart;
             m_currentFlinchHandle.FlinchEnd += OnFlinchEnd;
             m_stateHandle = new StateHandle<State>(State.Patrol, State.WaitBehaviourEnd);

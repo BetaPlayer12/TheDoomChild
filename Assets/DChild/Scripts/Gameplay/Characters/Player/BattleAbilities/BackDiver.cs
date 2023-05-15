@@ -2,6 +2,7 @@ using DChild.Gameplay.Characters.Players.Modules;
 using DChild.Gameplay.Combat;
 using DChild.Gameplay.Pooling;
 using DChild.Gameplay.Projectiles;
+using DChild.Gameplay.Systems;
 using Sirenix.OdinInspector;
 using Spine.Unity;
 using System.Collections;
@@ -123,7 +124,10 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
         public void EndExecution()
         {
-            m_hasExecuted = false;
+            if (m_hasExecuted)
+            {
+                m_hasExecuted = false;
+            }
             //m_backDiverInfo.ShowCollider(false);
             //m_hitbox.Enable();
             //m_canBackDiver = true;
@@ -134,15 +138,15 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
         public override void Cancel()
         {
+            //m_backDiverInfo.ShowCollider(false);
+            m_fxAnimator.Play("Buffer");
             if (m_hasExecuted)
             {
                 m_hasExecuted = false;
-                //m_backDiverInfo.ShowCollider(false);
-                m_fxAnimator.Play("Buffer");
                 m_hitbox.Enable();
-                m_animator.SetBool(m_backDiverStateAnimationParameter, false);
-                base.Cancel();
             }
+            m_animator.SetBool(m_backDiverStateAnimationParameter, false);
+            base.Cancel();
         }
 
         public void EnableCollision(bool value)
@@ -175,8 +179,19 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
         private IEnumerator HitboxRoutine()
         {
             m_hitbox.Disable();
-            yield return new WaitForSeconds(m_hitboxDuration);
-            m_hitbox.Enable();
+            var timer = m_hitboxDuration;
+            while (timer > 0)
+            {
+                timer -= Time.deltaTime;
+                if (LookTransform(m_character.centerMass, 5f)?.GetComponent<LocationSwitcher>())
+                    timer = 0;
+            }
+            //yield return new WaitForSeconds(m_hitboxDuration);
+            if (!LookTransform(m_character.centerMass, 5f)?.GetComponent<LocationSwitcher>() && m_hasExecuted)
+            {
+                m_hitbox.Enable();
+                m_hasExecuted = false;
+            }
             yield return null;
         }
 
@@ -189,6 +204,54 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             //LaunchSpike(PuedisYnnusSpike.SkinType.Big, false, Quaternion.identity, true);
             m_launcher.AimAt(new Vector2(m_startPoint.position.x + (m_character.facing == HorizontalDirection.Right ? m_targetOffset.x : -m_targetOffset.x), m_startPoint.position.y + m_targetOffset.y));
             m_launcher.LaunchProjectile(m_startPoint.right, m_spawnedProjectile.gameObject);
+        }
+
+        protected Transform LookTransform(Transform startPoint, float distance)
+        {
+            int hitCount = 0;
+            //RaycastHit2D hit = Physics2D.Raycast(m_projectilePoint.position, Vector2.down,  1000, DChildUtility.GetEnvironmentMask());
+            RaycastHit2D[] hit = Cast(startPoint.position, -startPoint.right, distance, false, out hitCount, true);
+            Debug.DrawRay(startPoint.position, hit[0].point);
+            //var hitPos = (new Vector2(m_projectilePoint.position.x, Vector2.down.y) * hit[0].distance);
+            //return hitPos;
+            return hit[0].transform;
+        }
+
+        private static ContactFilter2D m_contactFilter;
+        private static RaycastHit2D[] m_hitResults;
+        private static bool m_isInitialized;
+
+        private static void Initialize()
+        {
+            if (m_isInitialized == false)
+            {
+                m_contactFilter.useLayerMask = true;
+                m_contactFilter.SetLayerMask(LayerMask.GetMask("PlayerOnly"));
+                //m_contactFilter.SetLayerMask(Physics2D.GetLayerCollisionMask(DChildUtility.GetEnvironmentMask()));
+                m_hitResults = new RaycastHit2D[16];
+                m_isInitialized = true;
+            }
+        }
+
+        protected static RaycastHit2D[] Cast(Vector2 origin, Vector2 direction, float distance, bool ignoreTriggers, out int hitCount, bool debugMode = false)
+        {
+            Initialize();
+            m_contactFilter.useTriggers = !ignoreTriggers;
+            hitCount = Physics2D.Raycast(origin, direction, m_contactFilter, m_hitResults, distance);
+#if UNITY_EDITOR
+            if (debugMode)
+            {
+                if (hitCount > 0)
+                {
+                    Debug.DrawRay(origin, direction * m_hitResults[0].distance, Color.cyan, 1f);
+                }
+                else
+                {
+                    Debug.DrawRay(origin, direction * distance, Color.cyan, 1f);
+                }
+            }
+#endif
+            return m_hitResults;
         }
     }
 }

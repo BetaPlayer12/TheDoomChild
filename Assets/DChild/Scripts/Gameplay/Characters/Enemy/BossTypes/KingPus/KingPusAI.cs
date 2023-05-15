@@ -48,12 +48,12 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField]
             private MovementInfo m_tentaSpearRightCrawl = new MovementInfo();
             public MovementInfo tentaSpearRightCrawl => m_tentaSpearRightCrawl;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_tentaSpearCrawlLeftAnticipationAnimation;
-            public string tentaSpearCrawlLeftAnticipationAnimation => m_tentaSpearCrawlLeftAnticipationAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_tentaSpearCrawlRightAnticipationAnimation;
-            public string tentaSpearCrawlRightAnticipationAnimation => m_tentaSpearCrawlRightAnticipationAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_tentaSpearCrawlLeftAnticipationAnimation;
+            public BasicAnimationInfo tentaSpearCrawlLeftAnticipationAnimation => m_tentaSpearCrawlLeftAnticipationAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_tentaSpearCrawlRightAnticipationAnimation;
+            public BasicAnimationInfo tentaSpearCrawlRightAnticipationAnimation => m_tentaSpearCrawlRightAnticipationAnimation;
 
             [SerializeField, TitleGroup("Attack Behaviours"), Range(0.1f, 10f)]
             private float m_tentacleSpeed;
@@ -91,30 +91,30 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField, BoxGroup("HeavyGroundStab"), Space]
             private SimpleAttackInfo m_heavyGroundStabRightAttack = new SimpleAttackInfo();
             public SimpleAttackInfo heavyGroundStabRightAttack => m_heavyGroundStabRightAttack;
-            [SerializeField, BoxGroup("HeavyGroundStab"), ValueDropdown("GetAnimations")]
-            private string m_heavyGroundStabLoopLeftAnimation;
-            public string heavyGroundStabLoopLeftAnimation => m_heavyGroundStabLoopLeftAnimation;
-            [SerializeField, BoxGroup("HeavyGroundStab"), ValueDropdown("GetAnimations")]
-            private string m_heavyGroundStabLoopRightAnimation;
-            public string heavyGroundStabLoopRightAnimation => m_heavyGroundStabLoopRightAnimation;
-            [SerializeField, BoxGroup("HeavyGroundStab"), ValueDropdown("GetAnimations")]
-            private string m_heavyGroundStabAnticipationLeftAnimation;
-            public string heavyGroundStabAnticipationLeftAnimation => m_heavyGroundStabAnticipationLeftAnimation;
-            [SerializeField, BoxGroup("HeavyGroundStab"), ValueDropdown("GetAnimations")]
-            private string m_heavyGroundStabAnticipationLoopLeftAnimation;
-            public string heavyGroundStabAnticipationLoopLeftAnimation => m_heavyGroundStabAnticipationLoopLeftAnimation;
-            [SerializeField, BoxGroup("HeavyGroundStab"), ValueDropdown("GetAnimations")]
-            private string m_heavyGroundStabAnticipationRightAnimation;
-            public string heavyGroundStabAnticipationRightAnimation => m_heavyGroundStabAnticipationRightAnimation;
-            [SerializeField, BoxGroup("HeavyGroundStab"), ValueDropdown("GetAnimations")]
-            private string m_heavyGroundStabAnticipationLoopRightAnimation;
-            public string heavyGroundStabAnticipationLoopRightAnimation => m_heavyGroundStabAnticipationLoopRightAnimation;
-            [SerializeField, BoxGroup("HeavyGroundStab"), ValueDropdown("GetAnimations")]
-            private string m_heavyGroundStabReturnLeftAnimation;
-            public string heavyGroundStabReturnLeftAnimation => m_heavyGroundStabReturnLeftAnimation;
-            [SerializeField, BoxGroup("HeavyGroundStab"), ValueDropdown("GetAnimations")]
-            private string m_heavyGroundStabReturnRightAnimation;
-            public string heavyGroundStabReturnRightAnimation => m_heavyGroundStabReturnRightAnimation;
+            [SerializeField, BoxGroup("HeavyGroundStab")]
+            private BasicAnimationInfo m_heavyGroundStabLoopLeftAnimation;
+            public BasicAnimationInfo heavyGroundStabLoopLeftAnimation => m_heavyGroundStabLoopLeftAnimation;
+            [SerializeField, BoxGroup("HeavyGroundStab")]
+            private BasicAnimationInfo m_heavyGroundStabLoopRightAnimation;
+            public BasicAnimationInfo heavyGroundStabLoopRightAnimation => m_heavyGroundStabLoopRightAnimation;
+            [SerializeField, BoxGroup("HeavyGroundStab")]
+            private BasicAnimationInfo m_heavyGroundStabAnticipationLeftAnimation;
+            public BasicAnimationInfo heavyGroundStabAnticipationLeftAnimation => m_heavyGroundStabAnticipationLeftAnimation;
+            [SerializeField, BoxGroup("HeavyGroundStab")]
+            private BasicAnimationInfo m_heavyGroundStabAnticipationLoopLeftAnimation;
+            public BasicAnimationInfo heavyGroundStabAnticipationLoopLeftAnimation => m_heavyGroundStabAnticipationLoopLeftAnimation;
+            [SerializeField, BoxGroup("HeavyGroundStab")]
+            private BasicAnimationInfo m_heavyGroundStabAnticipationRightAnimation;
+            public BasicAnimationInfo heavyGroundStabAnticipationRightAnimation => m_heavyGroundStabAnticipationRightAnimation;
+            [SerializeField, BoxGroup("HeavyGroundStab")]
+            private BasicAnimationInfo m_heavyGroundStabAnticipationLoopRightAnimation;
+            public BasicAnimationInfo heavyGroundStabAnticipationLoopRightAnimation => m_heavyGroundStabAnticipationLoopRightAnimation;
+            [SerializeField, BoxGroup("HeavyGroundStab")]
+            private BasicAnimationInfo m_heavyGroundStabReturnLeftAnimation;
+            public BasicAnimationInfo heavyGroundStabReturnLeftAnimation => m_heavyGroundStabReturnLeftAnimation;
+            [SerializeField, BoxGroup("HeavyGroundStab")]
+            private BasicAnimationInfo m_heavyGroundStabReturnRightAnimation;
+            public BasicAnimationInfo heavyGroundStabReturnRightAnimation => m_heavyGroundStabReturnRightAnimation;
             [SerializeField, BoxGroup("HeavySpearStab")]
             private SimpleAttackInfo m_heavySpearStabLeftAttack = new SimpleAttackInfo();
             public SimpleAttackInfo heavySpearStabLeftAttack => m_heavySpearStabLeftAttack;
@@ -127,19 +127,19 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField, BoxGroup("KrakenRage")]
             private SimpleAttackInfo m_krakenRageAttack = new SimpleAttackInfo();
             public SimpleAttackInfo krakenRageAttack => m_krakenRageAttack;
-            [SerializeField, BoxGroup("KrakenRage"), ValueDropdown("GetAnimations")]
-            private string m_krakenRageLoopAnimation;
-            public string krakenRageLoopAnimation => m_krakenRageLoopAnimation;
-            [SerializeField, BoxGroup("KrakenRage"), ValueDropdown("GetAnimations")]
-            private string m_krakenRageEndAnimation;
-            public string krakenRageEndAnimation => m_krakenRageEndAnimation;
+            [SerializeField, BoxGroup("KrakenRage")]
+            private BasicAnimationInfo m_krakenRageLoopAnimation;
+            public BasicAnimationInfo krakenRageLoopAnimation => m_krakenRageLoopAnimation;
+            [SerializeField, BoxGroup("KrakenRage")]
+            private BasicAnimationInfo m_krakenRageEndAnimation;
+            public BasicAnimationInfo krakenRageEndAnimation => m_krakenRageEndAnimation;
             [SerializeField, BoxGroup("SpikeSpitter")]
             private List<SimpleAttackInfo> m_spikeSpitterAttacks = new List<SimpleAttackInfo>();
             public List<SimpleAttackInfo> spikeSpitterAttacks => m_spikeSpitterAttacks;
-            [SerializeField, BoxGroup("SpikeSpitter"), ValueDropdown("GetAnimations")]
+            [SerializeField, BoxGroup("SpikeSpitter")]
             private List<string> m_spikeSpitterExtendAnimations;
             public List<string> spikeSpitterExtendAnimations => m_spikeSpitterExtendAnimations;
-            [SerializeField, BoxGroup("SpikeSpitter"), ValueDropdown("GetAnimations")]
+            [SerializeField, BoxGroup("SpikeSpitter")]
             private List<string> m_spikeSpitterRetractAnimations;
             public List<string> spikeSpitterRetractAnimations => m_spikeSpitterRetractAnimations;
             //[SerializeField, BoxGroup("BodySlam")]
@@ -216,15 +216,15 @@ namespace DChild.Gameplay.Characters.Enemies
             public List<float> phase3PatternCooldown => m_phase3PatternCooldown;
 
             [TitleGroup("Flinch Behaviours")]
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_flinchLeftAnimation;
-            public string flinchLeftAnimation => m_flinchLeftAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_flinchRightAnimation;
-            public string flinchRightAnimation => m_flinchRightAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_flinchColorMixAnimation;
-            public string flinchColorMixAnimation => m_flinchColorMixAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_flinchLeftAnimation;
+            public BasicAnimationInfo flinchLeftAnimation => m_flinchLeftAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_flinchRightAnimation;
+            public BasicAnimationInfo flinchRightAnimation => m_flinchRightAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_flinchColorMixAnimation;
+            public BasicAnimationInfo flinchColorMixAnimation => m_flinchColorMixAnimation;
 
             [TitleGroup("Hit Counts")]
             [SerializeField]
@@ -232,76 +232,76 @@ namespace DChild.Gameplay.Characters.Enemies
             public int grappleEvadeHitCount => m_grappleEvadeHitCount;
 
             [TitleGroup("Phase Behaviours")]
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_phase1MixAnimation;
-            public string phase1MixAnimation => m_phase1MixAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_phase2MixAnimation;
-            public string phase2MixAnimation => m_phase2MixAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_phase3MixAnimation;
-            public string phase3MixAnimation => m_phase3MixAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_rageQuakePhase1ToPhase2Animation;
-            public string rageQuakePhase1ToPhase2Animation => m_rageQuakePhase1ToPhase2Animation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_rageQuakePhase2ToPhase3Animation;
-            public string rageQuakePhase2ToPhase3Animation => m_rageQuakePhase2ToPhase3Animation;
+            [SerializeField]
+            private BasicAnimationInfo m_phase1MixAnimation;
+            public BasicAnimationInfo phase1MixAnimation => m_phase1MixAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_phase2MixAnimation;
+            public BasicAnimationInfo phase2MixAnimation => m_phase2MixAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_phase3MixAnimation;
+            public BasicAnimationInfo phase3MixAnimation => m_phase3MixAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_rageQuakePhase1ToPhase2Animation;
+            public BasicAnimationInfo rageQuakePhase1ToPhase2Animation => m_rageQuakePhase1ToPhase2Animation;
+            [SerializeField]
+            private BasicAnimationInfo m_rageQuakePhase2ToPhase3Animation;
+            public BasicAnimationInfo rageQuakePhase2ToPhase3Animation => m_rageQuakePhase2ToPhase3Animation;
 
             [TitleGroup("Wall Behaviours")]
-            [SerializeField, ValueDropdown("GetAnimations")]
+            [SerializeField]
             private List<string> m_wallGrappleAnimations;
             public List<string> wallGrappleAnimations => m_wallGrappleAnimations;
-            [SerializeField, ValueDropdown("GetAnimations")]
+            [SerializeField]
             private List<string> m_wallGrappleExtendAnimations;
             public List<string> wallGrappleExtendAnimations => m_wallGrappleExtendAnimations;
-            [SerializeField, ValueDropdown("GetAnimations")]
+            [SerializeField]
             private List<string> m_wallGrappleRetractAnimations;
             public List<string> wallGrappleRetractAnimations => m_wallGrappleRetractAnimations;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_wallGrappleAllAnimation;
-            public string wallGrappleAllAnimation => m_wallGrappleAllAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_wallGrappleAllExtendAnimation;
-            public string wallGrappleAllExtendAnimation => m_wallGrappleAllExtendAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_wallGrappleAllRetractAnimation;
-            public string wallGrappleAllRetractAnimation => m_wallGrappleAllRetractAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_wallGrappleAllAnimation;
+            public BasicAnimationInfo wallGrappleAllAnimation => m_wallGrappleAllAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_wallGrappleAllExtendAnimation;
+            public BasicAnimationInfo wallGrappleAllExtendAnimation => m_wallGrappleAllExtendAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_wallGrappleAllRetractAnimation;
+            public BasicAnimationInfo wallGrappleAllRetractAnimation => m_wallGrappleAllRetractAnimation;
 
             //[TitleGroup("Misc")]
             //[SerializeField]
 
             [TitleGroup("Animations")]
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_idleAnimation;
-            public string idleAnimation => m_idleAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_idleMidAirAnimation;
-            public string idleMidAirAnimation => m_idleMidAirAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_idleCielingAnimation;
-            public string idleCielingAnimation => m_idleCielingAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_idleLeftWallAnimation;
-            public string idleLeftWallAnimation => m_idleLeftWallAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_idleRightWallAnimation;
-            public string idleRightWallAnimation => m_idleRightWallAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_deathAnimation;
-            public string deathAnimation => m_deathAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_deathSelfDestructAnimation;
-            public string deathSelfDestructAnimation => m_deathSelfDestructAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_bodySlamStart;
-            public string bodySlamStart => m_bodySlamStart;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_bodySlamLoop;
-            public string bodySlamLoop => m_bodySlamLoop;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_bodySlamEnd;
-            public string bodySlamEnd => m_bodySlamEnd;
+            [SerializeField]
+            private BasicAnimationInfo m_idleAnimation;
+            public BasicAnimationInfo idleAnimation => m_idleAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_idleMidAirAnimation;
+            public BasicAnimationInfo idleMidAirAnimation => m_idleMidAirAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_idleCielingAnimation;
+            public BasicAnimationInfo idleCielingAnimation => m_idleCielingAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_idleLeftWallAnimation;
+            public BasicAnimationInfo idleLeftWallAnimation => m_idleLeftWallAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_idleRightWallAnimation;
+            public BasicAnimationInfo idleRightWallAnimation => m_idleRightWallAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_deathAnimation;
+            public BasicAnimationInfo deathAnimation => m_deathAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_deathSelfDestructAnimation;
+            public BasicAnimationInfo deathSelfDestructAnimation => m_deathSelfDestructAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_bodySlamStart;
+            public BasicAnimationInfo bodySlamStart => m_bodySlamStart;
+            [SerializeField]
+            private BasicAnimationInfo m_bodySlamLoop;
+            public BasicAnimationInfo bodySlamLoop => m_bodySlamLoop;
+            [SerializeField]
+            private BasicAnimationInfo m_bodySlamEnd;
+            public BasicAnimationInfo bodySlamEnd => m_bodySlamEnd;
 
             [Title("Projectiles")]
             [SerializeField, TitleGroup("Grounded")]
@@ -396,6 +396,41 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_airProjectile.SetData(m_skeletonDataAsset);
                 m_airPhase2Projectile.SetData(m_skeletonDataAsset);
                 m_airPhase3Projectile.SetData(m_skeletonDataAsset);
+
+                m_tentaSpearCrawlLeftAnticipationAnimation.SetData(m_skeletonDataAsset);
+                m_tentaSpearCrawlRightAnticipationAnimation.SetData(m_skeletonDataAsset);
+                m_heavyGroundStabLoopLeftAnimation.SetData(m_skeletonDataAsset);
+                m_heavyGroundStabLoopRightAnimation.SetData(m_skeletonDataAsset);
+                m_heavyGroundStabAnticipationLeftAnimation.SetData(m_skeletonDataAsset);
+                m_heavyGroundStabAnticipationLoopLeftAnimation.SetData(m_skeletonDataAsset);
+                m_heavyGroundStabAnticipationRightAnimation.SetData(m_skeletonDataAsset);
+                m_heavyGroundStabAnticipationLoopRightAnimation.SetData(m_skeletonDataAsset);
+                m_heavyGroundStabReturnLeftAnimation.SetData(m_skeletonDataAsset);
+                m_heavyGroundStabReturnRightAnimation.SetData(m_skeletonDataAsset);
+
+                m_krakenRageLoopAnimation.SetData(m_skeletonDataAsset);
+                m_krakenRageEndAnimation.SetData(m_skeletonDataAsset);
+
+                m_flinchLeftAnimation.SetData(m_skeletonDataAsset);
+                m_flinchRightAnimation.SetData(m_skeletonDataAsset);
+                m_flinchColorMixAnimation.SetData(m_skeletonDataAsset);
+                m_phase1MixAnimation.SetData(m_skeletonDataAsset);
+                m_phase2MixAnimation.SetData(m_skeletonDataAsset);
+                m_phase3MixAnimation.SetData(m_skeletonDataAsset);
+                m_rageQuakePhase1ToPhase2Animation.SetData(m_skeletonDataAsset);
+                m_rageQuakePhase2ToPhase3Animation.SetData(m_skeletonDataAsset);
+
+                m_idleAnimation.SetData(m_skeletonDataAsset);
+                m_idleMidAirAnimation.SetData(m_skeletonDataAsset);
+                m_idleCielingAnimation.SetData(m_skeletonDataAsset);
+                m_idleLeftWallAnimation.SetData(m_skeletonDataAsset);
+                m_idleRightWallAnimation.SetData(m_skeletonDataAsset);
+                m_deathAnimation.SetData(m_skeletonDataAsset);
+                m_deathSelfDestructAnimation.SetData(m_skeletonDataAsset);
+                m_bodySlamStart.SetData(m_skeletonDataAsset);
+                m_bodySlamLoop.SetData(m_skeletonDataAsset);
+                m_bodySlamEnd.SetData(m_skeletonDataAsset);
+
 #endif
             }
         }
@@ -1355,13 +1390,13 @@ namespace DChild.Gameplay.Characters.Enemies
             switch (m_phaseHandle.currentPhase)
             {
                 case Phase.PhaseTwo:
-                    rageAnim = m_info.rageQuakePhase1ToPhase2Animation;
+                    rageAnim = m_info.rageQuakePhase1ToPhase2Animation.animation;
                     break;
                 case Phase.PhaseThree:
-                    rageAnim = m_info.rageQuakePhase2ToPhase3Animation;
+                    rageAnim = m_info.rageQuakePhase2ToPhase3Animation.animation;
                     break;
                 default:
-                    rageAnim = m_info.rageQuakePhase2ToPhase3Animation;
+                    rageAnim = m_info.rageQuakePhase2ToPhase3Animation.animation;
                     break;
             }
             m_animation.EnableRootMotion(true, true);
@@ -1515,7 +1550,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator Phase1Pattern2AttackRoutine()
         {
             m_animation.EnableRootMotion(true, false);
-            m_animation.SetAnimation(30, m_info.idleAnimation, true, 0);
+            m_animation.SetAnimation(30, m_info.idleAnimation.animation, true, 0);
             for (int i = 0; i < m_spitterBone.Count; i++)
             {
                 m_spitterBone[i].mode = SkeletonUtilityBone.Mode.Override;
@@ -1566,7 +1601,7 @@ namespace DChild.Gameplay.Characters.Enemies
             enabled = false;
             m_animation.EnableRootMotion(true, true);
             m_animation.SetAnimation(0, DynamicIdleAnimation(), true);
-            m_animation.SetAnimation(30, m_info.idleAnimation, true, 0);
+            m_animation.SetAnimation(30, m_info.idleAnimation.animation, true, 0);
             for (int i = 0; i < m_spitterBone.Count; i++)
             {
                 m_spitterBone[i].mode = SkeletonUtilityBone.Mode.Override;
@@ -1660,7 +1695,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 while (!IsTargetInRange(m_currentGroundStabRange))
                 {
                     m_lastTargetPos = m_targetInfo.position;
-                    heavyGroundStabLoopAnticipation = m_lastTargetPos.x > transform.position.x ? m_info.heavyGroundStabAnticipationLoopRightAnimation : m_info.heavyGroundStabAnticipationLoopLeftAnimation;
+                    heavyGroundStabLoopAnticipation = m_lastTargetPos.x > transform.position.x ? m_info.heavyGroundStabAnticipationLoopRightAnimation.animation : m_info.heavyGroundStabAnticipationLoopLeftAnimation.animation;
                     m_animation.SetAnimation(30, heavyGroundStabLoopAnticipation, true);
                     MoveToTarget(m_currentGroundStabRange, false);
                     yield return null;
@@ -1723,7 +1758,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator Phase3Pattern2AttackRoutine()
         {
             m_animation.EnableRootMotion(true, false);
-            m_animation.SetAnimation(30, m_info.idleAnimation, true, 0);
+            m_animation.SetAnimation(30, m_info.idleAnimation.animation, true, 0);
             for (int i = 0; i < m_spitterBone.Count; i++)
             {
                 m_spitterBone[i].mode = SkeletonUtilityBone.Mode.Override;
@@ -1776,7 +1811,7 @@ namespace DChild.Gameplay.Characters.Enemies
             enabled = false;
             m_animation.EnableRootMotion(true, true);
             m_animation.SetAnimation(0, DynamicIdleAnimation(), true);
-            m_animation.SetAnimation(30, m_info.idleAnimation, true, 0);
+            m_animation.SetAnimation(30, m_info.idleAnimation.animation, true, 0);
             for (int i = 0; i < m_spitterBone.Count; i++)
             {
                 m_spitterBone[i].mode = SkeletonUtilityBone.Mode.Override;
@@ -1959,9 +1994,9 @@ namespace DChild.Gameplay.Characters.Enemies
             else
             {
                 m_animation.SetEmptyAnimation(3, 0);
-                return m_groundSensor.isDetecting ? m_info.idleAnimation : m_info.idleMidAirAnimation;
+                return m_groundSensor.isDetecting ? m_info.idleAnimation.animation : m_info.idleMidAirAnimation.animation;
             }
-            return m_info.idleAnimation;
+            return m_info.idleAnimation.animation;
             //m_animation.SetEmptyAnimation(3, 0);
             //return m_groundSensor.isDetecting ? m_info.idleAnimation : m_info.idleMidAirAnimation;
         }
