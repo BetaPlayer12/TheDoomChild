@@ -271,7 +271,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f1b0d68cd77a89d45b04c6c47d586049, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_source: {fileID: 5663731097083920056}
+  m_source: {fileID: 0}
 --- !u!114 &5663731097018656915
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -435,11 +435,11 @@ GameObject:
   - component: {fileID: 5663731097083920059}
   - component: {fileID: 5663731097083920058}
   - component: {fileID: 5663731097083920057}
-  - component: {fileID: 5663731097083920056}
   - component: {fileID: 5663731097083920063}
   - component: {fileID: 5663731097083920062}
   - component: {fileID: 5663731097083920036}
   - component: {fileID: 5663731097083920037}
+  - component: {fileID: 6979450369478465569}
   m_Layer: 13
   m_Name: SeedOfTheOne
   m_TagString: Character
@@ -534,45 +534,6 @@ MonoBehaviour:
     - m_mass: 1
       m_actualVelocity: {x: 0, y: 0}
   m_materials: []
---- !u!114 &5663731097083920056
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5663731097083920060}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 29150e23aad4b154eb74a477f7989649, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_simulateGravity: 1
-  m_gravity:
-    m_gravityScale: 0
-    m_direction: {x: 0, y: -1}
-    m_angle: -90
-    m_drawDirection: 0
-  m_useLinearDrag: 0
-  m_linearDrag:
-    m_x: 0
-    m_y: 0
-  m_useCoyoteTime: 0
-  m_coyoteTime:
-    m_duration: 0
-  m_useStepClimb: 0
-  m_stepClimber:
-    m_maxStepHeight: 0.01
-    stepSearchOvershoot: 0.01
-    m_detector: {fileID: 0}
-  m_calculateGroundAngle: 1
-  m_acceptableWalkableAngle:
-    m_min: 0
-    m_max: 0
-  m_legCollision: {fileID: 0}
-  m_legCollider: {fileID: 5663731097696986875}
-  m_legColliderLayerMask:
-    serializedVersion: 2
-    m_Bits: 2048
 --- !u!114 &5663731097083920063
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -588,7 +549,7 @@ MonoBehaviour:
   m_height: 0.5
   m_centerMass: {fileID: 5663731097083920061}
   m_isolatedObject: {fileID: 5663731097083920057}
-  m_physics: {fileID: 5663731097083920056}
+  m_physics: {fileID: 0}
   m_colliders: {fileID: 5663731095896816218}
   m_AttackFX: {fileID: 0}
   m_facing: 1
@@ -634,6 +595,7 @@ MonoBehaviour:
   m_health: {fileID: 5663731096323776494}
   m_selfCollider: {fileID: 5663731095896816216}
   m_bodyCollider: {fileID: 5663731097696986875}
+  m_physics: {fileID: 6979450369478465569}
   m_turnHandle: {fileID: 5663731097018656914}
   m_agent: {fileID: 5663731097018656918}
   m_patrolHandle: {fileID: 5663731097018656924}
@@ -662,6 +624,28 @@ MonoBehaviour:
   m_colorToUse: {r: 1, g: 0.030425632, b: 0, a: 1}
   m_overrideScale: 1
   m_scaleToUse: {x: 1, y: 1, z: 1}
+--- !u!114 &6979450369478465569
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5663731097083920060}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00762718fcc9fe449aef23fb022b5dbe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_simulateGravity: 1
+  m_gravity:
+    m_gravityScale: 1
+    m_direction: {x: 0, y: -1}
+    m_angle: -90
+    m_drawDirection: 0
+  m_useLinearDrag: 0
+  m_linearDrag:
+    m_x: 0
+    m_y: 0
 --- !u!1 &5663731097215586467
 GameObject:
   m_ObjectHideFlags: 0
@@ -839,7 +823,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_spine: {fileID: 4851182075108770266}
-  m_physics: {fileID: 5663731097083920056}
+  m_physics: {fileID: 0}
   m_autoFlinch: 1
   m_enableMixFlinch: 1
   m_enableEmpytyIdle: 1
