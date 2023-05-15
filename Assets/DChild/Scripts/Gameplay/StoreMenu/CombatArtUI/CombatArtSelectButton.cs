@@ -35,6 +35,8 @@ namespace DChild.Gameplay.UI.CombatArts
             Selected?.Invoke(this);
         }
 
+        public void DisplayAs(CombatArtLevelData artLevelData) => m_visuals.DisplayAs(artLevelData);
+
 #if UNITY_EDITOR
         private void OnConfigurationChanged()
         {

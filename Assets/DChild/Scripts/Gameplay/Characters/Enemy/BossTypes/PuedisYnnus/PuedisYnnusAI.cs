@@ -83,30 +83,30 @@ namespace DChild.Gameplay.Characters.Enemies
             public float targetDistanceTolerance => m_targetDistanceTolerance;
 
             [Title("Animations")]
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_appearAnimation;
-            public string appearAnimation => m_appearAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_deathAnimation;
-            public string deathAnimation => m_deathAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_disappearAnimation;
-            public string disappearAnimation => m_disappearAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_flinchAnimation;
-            public string flinchAnimation => m_flinchAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_flinchStunnedAnimation;
-            public string flinchStunnedAnimation => m_flinchStunnedAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
+            [SerializeField]
+            private BasicAnimationInfo m_appearAnimation;
+            public BasicAnimationInfo appearAnimation => m_appearAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_deathAnimation;
+            public BasicAnimationInfo deathAnimation => m_deathAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_disappearAnimation;
+            public BasicAnimationInfo disappearAnimation => m_disappearAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_flinchAnimation;
+            public BasicAnimationInfo flinchAnimation => m_flinchAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_flinchStunnedAnimation;
+            public BasicAnimationInfo flinchStunnedAnimation => m_flinchStunnedAnimation;
+            [SerializeField]
             private List<string> m_idleAnimations;
             public List<string> idleAnimations => m_idleAnimations;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_stunnedAnimation;
-            public string stunnedAnimation => m_stunnedAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_turnAnimation;
-            public string turnAnimation => m_turnAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_stunnedAnimation;
+            public BasicAnimationInfo stunnedAnimation => m_stunnedAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_turnAnimation;
+            public BasicAnimationInfo turnAnimation => m_turnAnimation;
 
             [Title("Projectiles")]
             [SerializeField, BoxGroup("RainProjectiles")]
@@ -115,9 +115,9 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField, BoxGroup("RainProjectiles")]
             private SimpleProjectileAttackInfo m_OrbSummonRainProjectile;
             public SimpleProjectileAttackInfo OrbSummonRainProjectile => m_OrbSummonRainProjectile;
-            [SerializeField, BoxGroup("RainProjectiles"), ValueDropdown("GetAnimations")]
-            private string m_OrbSummonRainProjectileLoopAnimation;
-            public string OrbSummonRainProjectileLoopAnimation => m_OrbSummonRainProjectileLoopAnimation;
+            [SerializeField, BoxGroup("RainProjectiles")]
+            private BasicAnimationInfo m_OrbSummonRainProjectileLoopAnimation;
+            public BasicAnimationInfo OrbSummonRainProjectileLoopAnimation => m_OrbSummonRainProjectileLoopAnimation;
             [SerializeField, BoxGroup("RainProjectiles")]
             private SimpleProjectileAttackInfo m_staffPointRainProjectile;
             public SimpleProjectileAttackInfo staffPointRainProjectile => m_staffPointRainProjectile;
@@ -127,12 +127,12 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField, BoxGroup("RainProjectiles"), Min(0)]
             private Vector2 m_rainOffset;
             public Vector2 rainOffset => m_rainOffset;
-            [SerializeField, BoxGroup("RainProjectiles"), ValueDropdown("GetAnimations")]
-            private string m_staffPointRainProjectileLoopAnimation;
-            public string staffPointRainProjectileLoopAnimation => m_staffPointRainProjectileLoopAnimation;
-            [SerializeField, BoxGroup("RainProjectiles"), ValueDropdown("GetAnimations")]
-            private string m_staffPointToIdleRainProjectileAnimation;
-            public string staffPointToIdleRainProjectileAnimation => m_staffPointToIdleRainProjectileAnimation;
+            [SerializeField, BoxGroup("RainProjectiles")]
+            private BasicAnimationInfo m_staffPointRainProjectileLoopAnimation;
+            public BasicAnimationInfo staffPointRainProjectileLoopAnimation => m_staffPointRainProjectileLoopAnimation;
+            [SerializeField, BoxGroup("RainProjectiles")]
+            private BasicAnimationInfo m_staffPointToIdleRainProjectileAnimation;
+            public BasicAnimationInfo staffPointToIdleRainProjectileAnimation => m_staffPointToIdleRainProjectileAnimation;
             [SerializeField, BoxGroup("SingleFleshSpike")]
             private SimpleProjectileAttackInfo m_handClenchSingleFleshSpikeProjectile;
             public SimpleProjectileAttackInfo handClenchSingleFleshSpikeProjectile => m_handClenchSingleFleshSpikeProjectile;
@@ -145,9 +145,9 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField, BoxGroup("EnragedMultipleFleshSpike")]
             private SimpleProjectileAttackInfo m_multipleFleshSpikeProjectile;
             public SimpleProjectileAttackInfo multipleFleshSpikeProjectile => m_multipleFleshSpikeProjectile;
-            [SerializeField, BoxGroup("EnragedMultipleFleshSpike"), ValueDropdown("GetAnimations")]
-            private string m_channelingMultipleFleshSpikeProjectileLoopAnimation;
-            public string channelingMultipleFleshSpikeProjectileLoopAnimation => m_channelingMultipleFleshSpikeProjectileLoopAnimation;
+            [SerializeField, BoxGroup("EnragedMultipleFleshSpike")]
+            private BasicAnimationInfo m_channelingMultipleFleshSpikeProjectileLoopAnimation;
+            public BasicAnimationInfo channelingMultipleFleshSpikeProjectileLoopAnimation => m_channelingMultipleFleshSpikeProjectileLoopAnimation;
             [SerializeField, BoxGroup("EnragedMultipleFleshSpike")]
             private int m_multipleFleshSpikeCount;
             public int multipleFleshSpikeCount => m_multipleFleshSpikeCount;
@@ -185,6 +185,19 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_handClenchSingleFleshSpikeProjectile.SetData(m_skeletonDataAsset);
                 m_multipleFleshSpikeProjectile.SetData(m_skeletonDataAsset);
                 m_staffSpinFleshBombProjectile.SetData(m_skeletonDataAsset);
+
+                m_appearAnimation.SetData(m_skeletonDataAsset);
+                m_deathAnimation.SetData(m_skeletonDataAsset);
+                m_disappearAnimation.SetData(m_skeletonDataAsset);
+                m_flinchAnimation.SetData(m_skeletonDataAsset);
+                m_flinchStunnedAnimation.SetData(m_skeletonDataAsset);
+                m_stunnedAnimation.SetData(m_skeletonDataAsset);
+                m_turnAnimation.SetData(m_skeletonDataAsset);
+                m_OrbSummonRainProjectileLoopAnimation.SetData(m_skeletonDataAsset);
+                m_staffPointRainProjectileLoopAnimation.SetData(m_skeletonDataAsset);
+                m_staffPointToIdleRainProjectileAnimation.SetData(m_skeletonDataAsset);
+                m_channelingMultipleFleshSpikeProjectileLoopAnimation.SetData(m_skeletonDataAsset);
+
 #endif
             }
         }
@@ -921,7 +934,7 @@ namespace DChild.Gameplay.Characters.Enemies
             base.Awake();
             m_turnHandle.TurnDone += OnTurnDone;
             //m_hitDetector.PlayerHit += AddHitCount;
-            m_deathHandle.SetAnimation(m_info.deathAnimation);
+            m_deathHandle.SetAnimation(m_info.deathAnimation.animation);
             m_orbSummonRainProjectileLauncher = new ProjectileLauncher(m_info.OrbSummonRainProjectile.projectileInfo, m_projectilePoint);
             m_staffPointRainProjectileLauncher = new ProjectileLauncher(m_info.staffPointRainProjectile.projectileInfo, m_rainProjectilePoint);
             m_singleFleshSpikeProjectileLauncher = new ProjectileLauncher(m_info.handClenchSingleFleshSpikeProjectile.projectileInfo, m_projectilePoint);
@@ -984,7 +997,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     else
                     {
                         m_turnState = State.Intro;
-                        if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
+                        if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation.animation)
                             m_stateHandle.SetState(State.Turning);
                     }
                     break;
@@ -997,7 +1010,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_stateHandle.Wait(m_turnState);
                     StopAllCoroutines();
                     m_currentIdleAnimation = m_info.idleAnimations[UnityEngine.Random.Range(0, m_info.idleAnimations.Count)];
-                    m_turnHandle.Execute(m_info.turnAnimation, m_currentIdleAnimation);
+                    m_turnHandle.Execute(m_info.turnAnimation.animation, m_currentIdleAnimation);
                     m_movement.Stop();
                     break;
                 case State.Attacking:
@@ -1078,7 +1091,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     else
                     {
                         m_turnState = State.Chasing;
-                        if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation /*&& m_animation.GetCurrentAnimation(0).ToString() != m_info.attackDaggersIdle.animation*/)
+                        if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation.animation /*&& m_animation.GetCurrentAnimation(0).ToString() != m_info.attackDaggersIdle.animation*/)
                             m_stateHandle.SetState(State.Turning);
                     }
                     break;

@@ -31,7 +31,7 @@ namespace DChild.Gameplay.Combat
         private List<Info> m_infos;
 
         protected override bool IsValidColliderToHit(Collider2D collision) => true;
-        protected override bool IsValidHitboxToHit(Collider2D collider2D, Hitbox hitbox) => true;
+        protected override bool IsValidHitboxToHit(Collider2D collider2D, Hitbox hitbox) => hitbox.CanBeDamageBy(m_colliders);
         protected override void HandleDamageUniqueHitboxes(Collider2D collider2D)
         {
             var hitbox = m_collisionRegistrator.GetHitbox(collider2D);

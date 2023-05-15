@@ -21,38 +21,68 @@ namespace DChild.Gameplay
 
             m_registeredMinions.Remove(minion);
         }
+        //[Button]
+        //public void ForbidAllFromAttackingTarget(bool willAttackTarget)
+        //{
+        //    for (int i = 0; i < m_registeredMinions.Count; i++)
+        //    {
+        //        Debug.Log("Enemies Forbidden From Attacking");
+        //        m_registeredMinions[i].ForbidFromAttackTarget(willAttackTarget);
+        //    }
+        //}
+        //[Button]
+        //public void IgnoreAllTargets(bool willIgnoreTargets)
+        //{
+        //    for (int i = 0; i < m_registeredMinions.Count; i++)
+        //    {
+        //        Debug.Log("Enemies Ignoring all Targets");
+        //        m_registeredMinions[i].IgnoreAllTargets(willIgnoreTargets);
+        //    }
+        //}
+        //[Button]
+        //public void IgnoreCurrentTarget()
+        //{
+        //    for (int i = 0; i < m_registeredMinions.Count; i++)
+        //    {
+        //        Debug.Log("Enemies Ignoring Current Target");
+        //        m_registeredMinions[i].IgnoreCurrentTarget();
+        //    }
+        //}
+        ////[Button]
+        ////public void ForcePassiveIdle(bool willForcePassive)
+        ////{
+        ////    for (int i = 0; i < m_registeredMinions.Count; i++)
+        ////    {
+        ////        m_registeredMinions[i].ForcePassiveIdle(willForcePassive);
+        ////    }
 
-        public void ForbidAllFromAttackingTarget(bool willAttackTarget)
+        ////}
+        //[Button]
+        //public void IgnorePlayer(bool willIgnoreTargets)
+        //{
+        //    for (int i = 0; i < m_registeredMinions.Count; i++)
+        //    {
+        //        Debug.Log("Enemies Ignoring all Targets");
+        //        m_registeredMinions[i].IgnoreCurrentTarget();
+        //        m_registeredMinions[i].IgnoreAllTargets(willIgnoreTargets);
+        //        m_registeredMinions[i].ForbidFromAttackTarget(willIgnoreTargets);
+        //    }
+        //}
+        [Button]
+        public void SettoPassive()
         {
             for (int i = 0; i < m_registeredMinions.Count; i++)
             {
-                Debug.Log("Enemies Forbidden From Attacking");
-                m_registeredMinions[i].ForbidFromAttackTarget(willAttackTarget);
+                m_registeredMinions[i].SetPassive();
             }
-        }
-        public void IgnoreAllTargets(bool willIgnoreTargets)
-        {
-            for (int i = 0; i < m_registeredMinions.Count; i++)
-            {
-                Debug.Log("Enemies Ignoring all Targets");
-                m_registeredMinions[i].IgnoreAllTargets(willIgnoreTargets);
-            }
-        }
 
-        public void IgnoreCurrentTarget()
-        {
-            for (int i = 0; i < m_registeredMinions.Count; i++)
-            {
-                Debug.Log("Enemies Ignoring Current Target");
-                m_registeredMinions[i].IgnoreCurrentTarget();
-            }
         }
-
-        public void ForcePassiveIdle(bool willForcePassive)
+        [Button]
+        public void SettoActive()
         {
             for (int i = 0; i < m_registeredMinions.Count; i++)
             {
-                m_registeredMinions[i].ForcePassiveIdle(willForcePassive);
+                m_registeredMinions[i].SetActive();
             }
 
         }

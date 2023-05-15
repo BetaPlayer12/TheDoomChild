@@ -31,6 +31,8 @@ namespace DChild.Gameplay.Cinematics
         private bool m_hasTemporaryShakeProfile;
         private CameraShakeType m_temporaryShakeProfile;
 
+        public event Action<Camera> OnMainCameraChange;
+
         public Camera mainCamera => m_mainCamera;
 
         public CinemachineBrain currentBrain => m_currentBrain;
@@ -175,6 +177,7 @@ namespace DChild.Gameplay.Cinematics
         public void SetMainCamera(Camera camera)
         {
             m_mainCamera = camera;
+            OnMainCameraChange?.Invoke(m_mainCamera);
             m_currentBrain = m_mainCamera.GetComponent<CinemachineBrain>();
         }
 

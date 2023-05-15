@@ -75,12 +75,12 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField, TabGroup("BloodLightning")]
             private SimpleAttackInfo m_bloodLightningAttack = new SimpleAttackInfo();
             public SimpleAttackInfo bloodLightningAttack => m_bloodLightningAttack;
-            [SerializeField, ValueDropdown("GetAnimations"), TabGroup("BloodLightning")]
-            private string m_bloodLightningIdleAnimation;
-            public string bloodLightningIdleAnimation => m_bloodLightningIdleAnimation;
-            [SerializeField, ValueDropdown("GetAnimations"), TabGroup("BloodLightning")]
-            private string m_bloodLightningEndAnimation;
-            public string bloodLightningEndAnimation => m_bloodLightningEndAnimation;
+            [SerializeField, TabGroup("BloodLightning")]
+            private BasicAnimationInfo m_bloodLightningIdleAnimation;
+            public BasicAnimationInfo bloodLightningIdleAnimation => m_bloodLightningIdleAnimation;
+            [SerializeField, TabGroup("BloodLightning")]
+            private BasicAnimationInfo m_bloodLightningEndAnimation;
+            public BasicAnimationInfo bloodLightningEndAnimation => m_bloodLightningEndAnimation;
             [SerializeField, TabGroup("GiantBladeSummon")]
             private SimpleAttackInfo m_attack7 = new SimpleAttackInfo();
             public SimpleAttackInfo attack7 => m_attack7;
@@ -98,33 +98,33 @@ namespace DChild.Gameplay.Characters.Enemies
             public float targetDistanceTolerance => m_targetDistanceTolerance;
 
             [Title("Animations")]
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_deathAnimation;
-            public string deathAnimation => m_deathAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_flinchAnimation;
-            public string flinchAnimation => m_flinchAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_flinch2Animation;
-            public string flinch2Animation => m_flinch2Animation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_idleAnimation;
-            public string idleAnimation => m_idleAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_introAnimation;
-            public string introAnimation => m_introAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_teleportAppearAnimation;
-            public string teleportAppearAnimation => m_teleportAppearAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_teleportVanishAnimation;
-            public string teleportVanishAnimation => m_teleportVanishAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_turnAnimation;
-            public string turnAnimation => m_turnAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_introFXAnimation;
-            public string introFXAnimation => m_introFXAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_deathAnimation;
+            public BasicAnimationInfo deathAnimation => m_deathAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_flinchAnimation;
+            public BasicAnimationInfo flinchAnimation => m_flinchAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_flinch2Animation;
+            public BasicAnimationInfo flinch2Animation => m_flinch2Animation;
+            [SerializeField]
+            private BasicAnimationInfo m_idleAnimation;
+            public BasicAnimationInfo idleAnimation => m_idleAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_introAnimation;
+            public BasicAnimationInfo introAnimation => m_introAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_teleportAppearAnimation;
+            public BasicAnimationInfo teleportAppearAnimation => m_teleportAppearAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_teleportVanishAnimation;
+            public BasicAnimationInfo teleportVanishAnimation => m_teleportVanishAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_turnAnimation;
+            public BasicAnimationInfo turnAnimation => m_turnAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_introFXAnimation;
+            public BasicAnimationInfo introFXAnimation => m_introFXAnimation;
 
             [Title("Projectiles")]
             [SerializeField]
@@ -167,6 +167,18 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_summonCloneAttack.SetData(m_skeletonDataAsset);
                 m_bloodLightningAttack.SetData(m_skeletonDataAsset);
                 m_projectile.SetData(m_skeletonDataAsset);
+
+                m_bloodLightningIdleAnimation.SetData(m_skeletonDataAsset);
+                m_bloodLightningEndAnimation.SetData(m_skeletonDataAsset);
+                m_deathAnimation.SetData(m_skeletonDataAsset);
+                m_flinchAnimation.SetData(m_skeletonDataAsset);
+                m_flinch2Animation.SetData(m_skeletonDataAsset);
+                m_idleAnimation.SetData(m_skeletonDataAsset);
+                m_introAnimation.SetData(m_skeletonDataAsset);
+                m_teleportAppearAnimation.SetData(m_skeletonDataAsset);
+                m_teleportVanishAnimation.SetData(m_skeletonDataAsset);
+                m_turnAnimation.SetData(m_skeletonDataAsset);
+                m_introFXAnimation.SetData(m_skeletonDataAsset);
 #endif
             }
         }
@@ -883,7 +895,7 @@ namespace DChild.Gameplay.Characters.Enemies
             base.Awake();
             m_turnHandle.TurnDone += OnTurnDone;
             m_hitDetector.PlayerHit += AddHitCount;
-            m_deathHandle.SetAnimation(m_info.deathAnimation);
+            m_deathHandle.SetAnimation(m_info.deathAnimation.animation);
             m_projectileLauncher = new ProjectileLauncher(m_info.projectile.projectileInfo, m_projectilePoint);
             m_patternAttackCount = new int[2];
             m_patternDecider = new RandomAttackDecider<Pattern>();
@@ -931,7 +943,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     else
                     {
                         m_turnState = State.Intro;
-                        if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
+                        if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation.animation)
                             m_stateHandle.SetState(State.Turning);
                     }
                     break;
@@ -943,7 +955,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     Debug.Log("Turning Steet");
                     m_stateHandle.Wait(m_turnState);
                     StopAllCoroutines();
-                    m_turnHandle.Execute(m_info.turnAnimation, m_info.idleAnimation);
+                    m_turnHandle.Execute(m_info.turnAnimation.animation, m_info.idleAnimation.animation);
                     m_movement.Stop();
                     break;
                 case State.Attacking:
@@ -1446,7 +1458,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     else
                     {
                         m_turnState = State.Chasing;
-                        if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation /*&& m_animation.GetCurrentAnimation(0).ToString() != m_info.attackDaggersIdle.animation*/)
+                        if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation.animation /*&& m_animation.GetCurrentAnimation(0).ToString() != m_info.attackDaggersIdle.animation*/)
                             m_stateHandle.SetState(State.Turning);
                     }
                     break;

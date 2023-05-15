@@ -46,24 +46,24 @@ namespace DChild.Gameplay.Characters.Enemies
 
 
             //Animations
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_idleAnimation;
-            public string idleAnimation => m_idleAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_deathTopAnimation;
-            public string deathTopAnimation => m_deathTopAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_deathSideAnimation;
-            public string deathSideAnimation => m_deathSideAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_flinch1Animation;
-            public string flinch1Animation => m_flinch1Animation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_flinch2Animation;
-            public string flinch2Animation => m_flinch2Animation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_respawnAnimation;
-            public string respawnAnimation => m_respawnAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_idleAnimation = new BasicAnimationInfo();
+            public BasicAnimationInfo idleAnimation => m_idleAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_deathTopAnimation = new BasicAnimationInfo();
+            public BasicAnimationInfo deathTopAnimation => m_deathTopAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_deathSideAnimation = new BasicAnimationInfo();
+            public BasicAnimationInfo deathSideAnimation => m_deathSideAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_flinch1Animation = new BasicAnimationInfo();
+            public BasicAnimationInfo flinch1Animation => m_flinch1Animation;
+            [SerializeField]
+            private BasicAnimationInfo m_flinch2Animation = new BasicAnimationInfo();
+            public BasicAnimationInfo flinch2Animation => m_flinch2Animation;
+            [SerializeField]
+            private BasicAnimationInfo m_respawnAnimation = new BasicAnimationInfo();
+            public BasicAnimationInfo respawnAnimation => m_respawnAnimation;
 
 
             [Title("Events")]
@@ -80,6 +80,13 @@ namespace DChild.Gameplay.Characters.Enemies
 #if UNITY_EDITOR
                 m_attack.SetData(m_skeletonDataAsset);
                 m_projectile.SetData(m_skeletonDataAsset);
+
+                m_idleAnimation.SetData(m_skeletonDataAsset);
+                m_deathTopAnimation.SetData(m_skeletonDataAsset);
+                m_deathSideAnimation.SetData(m_skeletonDataAsset);
+                m_flinch1Animation.SetData(m_skeletonDataAsset);
+                m_flinch2Animation.SetData(m_skeletonDataAsset);
+                m_respawnAnimation.SetData(m_skeletonDataAsset);
 #endif
             }
         }
@@ -251,13 +258,13 @@ namespace DChild.Gameplay.Characters.Enemies
             string deathAnim;
             if (transform.rotation.z == -1 || transform.rotation.z == 1)
             {
-                deathAnim = m_info.deathTopAnimation;
+                deathAnim = m_info.deathTopAnimation.animation;
                 //m_animation.SetAnimation(0, m_info.deathTopAnimation, false);
             }
             else
             {
                 Debug.Log("Bulb Rotation " + transform.rotation.z);
-                deathAnim = m_info.deathSideAnimation;
+                deathAnim = m_info.deathSideAnimation.animation;
                 //if()
                 m_modelTF.localScale = new Vector3(transform.rotation.z >= 0.5f ? -m_modelTF.localScale.x : m_modelTF.localScale.x, m_modelTF.localScale.y, m_modelTF.localScale.z);
                 //m_animation.SetAnimation(0, m_info.deathSideAnimation, false);
@@ -318,8 +325,8 @@ namespace DChild.Gameplay.Characters.Enemies
         void SkeletonAnimation_UpdateLocal(ISkeletonAnimation animated)
         {
             //Debug.Log("FKING AIM");
-            if (m_targetInfo.isValid && m_animation.GetCurrentAnimation(0).ToString() != m_info.deathTopAnimation 
-                && m_targetInfo.isValid && m_animation.GetCurrentAnimation(0).ToString() != m_info.deathSideAnimation)
+            if (m_targetInfo.isValid && m_animation.GetCurrentAnimation(0).ToString() != m_info.deathTopAnimation.animation 
+                && m_targetInfo.isValid && m_animation.GetCurrentAnimation(0).ToString() != m_info.deathSideAnimation.animation)
             {
                 var localPositon = transform.InverseTransformPoint(m_targetInfo.position);
                 if (transform.rotation.z == 1 || transform.rotation.z == -1)
