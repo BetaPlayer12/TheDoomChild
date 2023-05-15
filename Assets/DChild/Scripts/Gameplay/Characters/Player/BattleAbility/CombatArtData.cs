@@ -29,6 +29,8 @@ namespace DChild.Gameplay.Characters.Players
         public string combatArtName => m_name;
         public int maxLevel => m_levelDatas.Length;
 
+        public CombatArtLevelData GetCombatArtLevelData(int index) => m_levelDatas[index - 1];
+
         private void RenameFilename()
 
         {
