@@ -59,15 +59,15 @@ namespace DChild.Gameplay.Characters.Enemies
 
 
             //Animations
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_idleAnimation;
-            public string idleAnimation => m_idleAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_damageAnimation;
-            public string damageAnimation => m_damageAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_deathAnimation;
-            public string deathAnimation => m_deathAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_idleAnimation;
+            public BasicAnimationInfo idleAnimation => m_idleAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_damageAnimation;
+            public BasicAnimationInfo damageAnimation => m_damageAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_deathAnimation;
+            public BasicAnimationInfo deathAnimation => m_deathAnimation;
 
 
 
@@ -91,6 +91,10 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_biteAttack.SetData(m_skeletonDataAsset);
                 m_spitAttack.SetData(m_skeletonDataAsset);
                 m_projectile.SetData(m_skeletonDataAsset);
+
+                m_idleAnimation.SetData(m_skeletonDataAsset);
+                m_damageAnimation.SetData(m_skeletonDataAsset);
+                m_deathAnimation.SetData(m_skeletonDataAsset);
 #endif
             }
         }
@@ -455,7 +459,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             if (m_flinchHandle.m_autoFlinch)
             {
-                if (m_animation.GetCurrentAnimation(0).ToString() != m_info.deathAnimation)
+                if (m_animation.GetCurrentAnimation(0).ToString() != m_info.deathAnimation.animation)
                     m_animation.SetEmptyAnimation(0, 0);
                 m_selfCollider.enabled = false;
                 m_stateHandle.ApplyQueuedState();
@@ -485,7 +489,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_patrolHandle.TurnRequest += OnTurnRequest;
             m_attackHandle.AttackDone += OnAttackDone;
             m_turnHandle.TurnDone += OnTurnDone;
-            m_deathHandle.SetAnimation(m_info.deathAnimation);
+            m_deathHandle.SetAnimation(m_info.deathAnimation.animation);
             m_flinchHandle.FlinchStart += OnFlinchStart;
             m_flinchHandle.FlinchEnd += OnFlinchEnd;
             m_stateHandle = new StateHandle<State>(m_willPatrol ? State.Patrol : State.Idle, State.WaitBehaviourEnd);
@@ -517,7 +521,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     }
                     break;
                 case State.Idle:
-                    if (m_animation.GetCurrentAnimation(0).ToString() != m_info.idleAnimation)
+                    if (m_animation.GetCurrentAnimation(0).ToString() != m_info.idleAnimation.animation)
                     {
                         m_movement.Stop();
                         m_animation.EnableRootMotion(true, true);
@@ -535,7 +539,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     }
                     else
                     {
-                        if (m_animation.GetCurrentAnimation(0).ToString() != m_info.idleAnimation)
+                        if (m_animation.GetCurrentAnimation(0).ToString() != m_info.idleAnimation.animation)
                         {
                             m_movement.Stop();
                             m_animation.EnableRootMotion(true, true);
@@ -754,7 +758,7 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_flinchHandle.m_autoFlinch = false;
             m_animation.DisableRootMotion();
             m_charcterPhysics.UseStepClimb(false);
-            if (m_animation.GetCurrentAnimation(0).ToString() != m_info.deathAnimation)
+            if (m_animation.GetCurrentAnimation(0).ToString() != m_info.deathAnimation.animation)
             {
                 //m_flinchHandle.enabled = false;
                 m_animation.SetAnimation(0, m_info.damageAnimation, false);

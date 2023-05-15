@@ -116,11 +116,25 @@ namespace DChild.Gameplay.Characters.AI
         }
         public void SetPassive()
         {
-            this.enabled = false;
+            if (m_targetInfo.doesTargetExist == false)
+            {
+                m_aggroBoundary.gameObject.SetActive(false);
+                SetTarget(null);
+                m_currentRestrictions |= Restriction.IgnoreTarget;
+            }
+            else
+            {
+                this.enabled = false;
+            }
+                
         }
         public void SetActive()
         {
-            this.enabled = true;
+            
+                m_aggroBoundary.gameObject.SetActive(true);
+                m_currentRestrictions &= ~Restriction.IgnoreTarget;
+                this.enabled = true;
+ 
         }
 
         /// <summary>

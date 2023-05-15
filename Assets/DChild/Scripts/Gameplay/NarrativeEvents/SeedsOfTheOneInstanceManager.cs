@@ -1,4 +1,5 @@
 using DChild.Gameplay.Combat;
+using DChild.Gameplay.Quests;
 using Holysoft.Collections;
 using Holysoft.Event;
 using PixelCrushers.DialogueSystem;
@@ -10,6 +11,8 @@ using UnityEngine;
 
 public class SeedsOfTheOneInstanceManager : MonoBehaviour
 {
+    [SerializeField]
+    private ForceQuestUpdateHandle m_forceQuestUpdateHandle;
     [SerializeField,VariablePopup(true)]
     private string m_connectedVariable;
     [SerializeField] 
@@ -51,6 +54,7 @@ public class SeedsOfTheOneInstanceManager : MonoBehaviour
         }
 
         DialogueLua.SetVariable(m_connectedVariable, (int)instanceTracker);
+
     }
 
     private void OnSeedDies(object sender, EventActionArgs eventArgs)
@@ -96,5 +100,7 @@ public class SeedsOfTheOneInstanceManager : MonoBehaviour
         {
             m_seedsQuestEndDialogueSystemTrigger.OnUse();
         }
+
+        m_forceQuestUpdateHandle.SendQuestUpdate();
     }
 }

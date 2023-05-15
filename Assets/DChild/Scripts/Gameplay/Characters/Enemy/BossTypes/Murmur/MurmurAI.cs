@@ -33,12 +33,12 @@ namespace DChild.Gameplay.Characters.Enemies
             public RangeFloat attackInterval => m_attackInterval;
 
 
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_idleAnimation;
-            public string idleAnimation => m_idleAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_defeatAnimation;
-            public string defeatAnimation => m_defeatAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_idleAnimation;
+            public BasicAnimationInfo idleAnimation => m_idleAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_defeatAnimation;
+            public BasicAnimationInfo defeatAnimation => m_defeatAnimation;
 
             [SerializeField]
             private MovementInfo m_moveInfo = new MovementInfo();
@@ -68,18 +68,18 @@ namespace DChild.Gameplay.Characters.Enemies
             private ProjectileInfo m_soundBall = new ProjectileInfo();
             [SerializeField, MinValue(0.1), BoxGroup("SoundBallThrow")]
             private float m_soundBallSpawnOffset;
-            [SerializeField, ValueDropdown("GetAnimations"), BoxGroup("SoundBallThrow")]
-            private string m_chargeAnimation;
-            [SerializeField, ValueDropdown("GetAnimations"), BoxGroup("SoundBallThrow")]
-            private string[] m_throwAnimations;
+            [SerializeField, BoxGroup("SoundBallThrow")]
+            private BasicAnimationInfo m_chargeAnimation;
+            [SerializeField, BoxGroup("SoundBallThrow")]
+            private BasicAnimationInfo[] m_throwAnimations;
 
 
             [SerializeField, BoxGroup("Detonate In Place")]
             private GameObject m_detonateInPlaceSoundBallsCenter;
             [SerializeField, BoxGroup("Detonate In Place")]
             private GameObject m_detonateInPlaceSoundBalls;
-            [SerializeField, ValueDropdown("GetAnimations"), BoxGroup("Detonate In Place")]
-            private string m_summonAnimation;
+            [SerializeField, BoxGroup("Detonate In Place")]
+            private BasicAnimationInfo m_summonAnimation;
 
             [SerializeField, MinValue(0), BoxGroup("Detonate In Place")]
             private float m_summonStartDelay;
@@ -95,9 +95,9 @@ namespace DChild.Gameplay.Characters.Enemies
             public GameObject soundBallCharge => m_soundBallCharge;
             public ProjectileInfo soundball => m_soundBall;
             public float soundBallSpawnOffset => m_soundBallSpawnOffset;
-            public string chargeAnimation => m_chargeAnimation;
-            public string[] throwAnimations => m_throwAnimations;
-            public string summonAnimation => m_summonAnimation;
+            public BasicAnimationInfo chargeAnimation => m_chargeAnimation;
+            public BasicAnimationInfo[] throwAnimations => m_throwAnimations;
+            public BasicAnimationInfo summonAnimation => m_summonAnimation;
             public GameObject detonateInPlaceSoundBallsCenter => m_detonateInPlaceSoundBallsCenter;
             public GameObject detonateInPlaceSoundBalls => m_detonateInPlaceSoundBalls;
             public float summonStartDelay => m_summonStartDelay;
@@ -112,6 +112,15 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_frontalScreamInfo.SetData(m_skeletonDataAsset);
                 m_diagonalSoundInfo.SetData(m_skeletonDataAsset);
                 m_diagonalSoundChaseInfo.SetData(m_skeletonDataAsset);
+
+                m_idleAnimation.SetData(m_skeletonDataAsset);
+                m_defeatAnimation.SetData(m_skeletonDataAsset);
+                m_chargeAnimation.SetData(m_skeletonDataAsset);
+                for (int i = 0; i < m_throwAnimations.Length; i++)
+                {
+                    m_throwAnimations[i].SetData(m_skeletonDataAsset);
+                }
+                m_summonAnimation.SetData(m_skeletonDataAsset);
             }
         }
 
