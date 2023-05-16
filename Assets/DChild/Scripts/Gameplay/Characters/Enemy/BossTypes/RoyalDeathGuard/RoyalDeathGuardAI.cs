@@ -52,12 +52,12 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField, TabGroup("Attack 4")]
             private SimpleAttackInfo m_attack4 = new SimpleAttackInfo();
             public SimpleAttackInfo attack4 => m_attack4;
-            [SerializeField, TabGroup("Attack 4"), ValueDropdown("GetAnimations")]
-            private string m_attack4bAnimation;
-            public string attack4bAnimation => m_attack4bAnimation;
-            [SerializeField, TabGroup("Attack 4"), ValueDropdown("GetAnimations")]
-            private string m_attack4FinalAnimation;
-            public string attack4FinalAnimation => m_attack4FinalAnimation;
+            [SerializeField, TabGroup("Attack 4")]
+            private BasicAnimationInfo m_attack4bAnimation;
+            public BasicAnimationInfo attack4bAnimation => m_attack4bAnimation;
+            [SerializeField, TabGroup("Attack 4")]
+            private BasicAnimationInfo m_attack4FinalAnimation;
+            public BasicAnimationInfo attack4FinalAnimation => m_attack4FinalAnimation;
             [SerializeField, TabGroup("Scythe Spin")]
             private SimpleAttackInfo m_scytheSpinAttack = new SimpleAttackInfo();
             public SimpleAttackInfo scytheSpinAttack => m_scytheSpinAttack;
@@ -69,53 +69,50 @@ namespace DChild.Gameplay.Characters.Enemies
             public float targetDistanceTolerance => m_targetDistanceTolerance;
 
             [Title("Animations")]
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_deathAnimation;
-            public string deathAnimation => m_deathAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_defeatAnimation;
-            public string defeatAnimation => m_defeatAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_defeat2Animation;
-            public string defeat2Animation => m_defeat2Animation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_flinchAnimation;
-            public string flinchAnimation => m_flinchAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_flinchBlackAnimation;
-            public string flinchBlackAnimation => m_flinchBlackAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_healAnimation;
-            public string healAnimation => m_healAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_idle1Animation;
-            public string idle1Animation => m_idle1Animation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_idle2Animation;
-            public string idle2Animation => m_idle2Animation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_idleTransition1to2Animation;
-            public string idleTransition1to2Animation => m_idleTransition1to2Animation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_idleTransition2to1Animation;
-            public string idleTransition2to1Animation => m_idleTransition2to1Animation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_playerDetectAnimation;
-            public string playerDetectAnimation => m_playerDetectAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_turnAnimation;
-            public string turnAnimation => m_turnAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_energyAbsorbAnimation;
-            public string energyAbsorbAnimation => m_energyAbsorbAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_deathAnimation;
+            public BasicAnimationInfo deathAnimation => m_deathAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_defeatAnimation;
+            public BasicAnimationInfo defeatAnimation => m_defeatAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_defeat2Animation;
+            public BasicAnimationInfo defeat2Animation => m_defeat2Animation;
+            [SerializeField]
+            private BasicAnimationInfo m_flinchAnimation;
+            public BasicAnimationInfo flinchAnimation => m_flinchAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_flinchBlackAnimation;
+            public BasicAnimationInfo flinchBlackAnimation => m_flinchBlackAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_healAnimation;
+            public BasicAnimationInfo healAnimation => m_healAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_idle1Animation;
+            public BasicAnimationInfo idle1Animation => m_idle1Animation;
+            [SerializeField]
+            private BasicAnimationInfo m_idle2Animation;
+            public BasicAnimationInfo idle2Animation => m_idle2Animation;
+            [SerializeField]
+            private BasicAnimationInfo m_idleTransition1to2Animation;
+            public BasicAnimationInfo idleTransition1to2Animation => m_idleTransition1to2Animation;
+            [SerializeField]
+            private BasicAnimationInfo m_idleTransition2to1Animation;
+            public BasicAnimationInfo idleTransition2to1Animation => m_idleTransition2to1Animation;
+            [SerializeField]
+            private BasicAnimationInfo m_playerDetectAnimation;
+            public BasicAnimationInfo playerDetectAnimation => m_playerDetectAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_turnAnimation;
+            public BasicAnimationInfo turnAnimation => m_turnAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_energyAbsorbAnimation;
+            public BasicAnimationInfo energyAbsorbAnimation => m_energyAbsorbAnimation;
 
-            [Title("Projectiles")]
-            [SerializeField]
-            private GameObject m_tentacle;
-            public GameObject tentacle => m_tentacle;
-            [SerializeField]
-            private SimpleProjectileAttackInfo m_projectile;
-            public SimpleProjectileAttackInfo projectile => m_projectile;
+            //[Title("Projectiles")]
+            //[SerializeField]
+            //private SimpleProjectileAttackInfo m_projectile;
+            //public SimpleProjectileAttackInfo projectile => m_projectile;
 
             //[Title("Events")]
             //[SerializeField, ValueDropdown("GetEvents")]
@@ -135,7 +132,23 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_attack3.SetData(m_skeletonDataAsset);
                 m_attack4.SetData(m_skeletonDataAsset);
                 m_scytheSpinAttack.SetData(m_skeletonDataAsset);
-                m_projectile.SetData(m_skeletonDataAsset);
+                //m_projectile.SetData(m_skeletonDataAsset);
+
+                m_attack4bAnimation.SetData(m_skeletonDataAsset);
+                m_attack4FinalAnimation.SetData(m_skeletonDataAsset);
+                m_deathAnimation.SetData(m_skeletonDataAsset);
+                m_defeatAnimation.SetData(m_skeletonDataAsset);
+                m_defeat2Animation.SetData(m_skeletonDataAsset);
+                m_flinchAnimation.SetData(m_skeletonDataAsset);
+                m_flinchBlackAnimation.SetData(m_skeletonDataAsset);
+                m_healAnimation.SetData(m_skeletonDataAsset);
+                m_idle1Animation.SetData(m_skeletonDataAsset);
+                m_idle2Animation.SetData(m_skeletonDataAsset);
+                m_idleTransition1to2Animation.SetData(m_skeletonDataAsset);
+                m_idleTransition2to1Animation.SetData(m_skeletonDataAsset);
+                m_playerDetectAnimation.SetData(m_skeletonDataAsset);
+                m_turnAnimation.SetData(m_skeletonDataAsset);
+                m_energyAbsorbAnimation.SetData(m_skeletonDataAsset);
 #endif
             }
         }
@@ -237,7 +250,7 @@ namespace DChild.Gameplay.Characters.Enemies
         [ShowInInspector]
         private RandomAttackDecider<Attack> m_attackDecider;
         private Attack m_currentAttack;
-        private ProjectileLauncher m_projectileLauncher;
+        //private ProjectileLauncher m_projectileLauncher;
 
         [SerializeField, TabGroup("Spawn Points")]
         private Transform m_projectilePoint;
@@ -501,7 +514,7 @@ namespace DChild.Gameplay.Characters.Enemies
             }
             else
             {
-                if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation && GetComponent<IsolatedPhysics2D>().velocity.y <= 0 && m_stateHandle.currentState != State.Phasing)
+                if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation.animation && GetComponent<IsolatedPhysics2D>().velocity.y <= 0 && m_stateHandle.currentState != State.Phasing)
                 {
                     m_turnState = State.Attacking;
                     m_stateHandle.OverrideState(State.Turning);
@@ -614,8 +627,8 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             base.Awake();
             m_turnHandle.TurnDone += OnTurnDone;
-            m_deathHandle.SetAnimation(m_info.deathAnimation);
-            m_projectileLauncher = new ProjectileLauncher(m_info.projectile.projectileInfo, m_projectilePoint);
+            m_deathHandle.SetAnimation(m_info.deathAnimation.animation);
+            //m_projectileLauncher = new ProjectileLauncher(m_info.projectile.projectileInfo, m_projectilePoint);
             m_patternDecider = new RandomAttackDecider<Pattern>();
             m_attackDecider = new RandomAttackDecider<Attack>();
             //for (int i = 0; i < 3; i++)
@@ -677,7 +690,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_stateHandle.Wait(m_turnState);
                     StopAllCoroutines();
                     m_agent.Stop();
-                    m_turnHandle.Execute(m_info.turnAnimation, m_info.idle1Animation);
+                    m_turnHandle.Execute(m_info.turnAnimation.animation, m_info.idle1Animation.animation);
                     //m_animation.animationState.GetCurrent(0).MixDuration = 1;
                     //m_movement.Stop();
                     break;
@@ -803,7 +816,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     else
                     {
                         m_turnState = State.Chasing;
-                        if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation /*&& m_animation.GetCurrentAnimation(0).ToString() != m_info.attackDaggersIdle.animation*/)
+                        if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation.animation /*&& m_animation.GetCurrentAnimation(0).ToString() != m_info.attackDaggersIdle.animation*/)
                             m_stateHandle.SetState(State.Turning);
                     }
                     break;

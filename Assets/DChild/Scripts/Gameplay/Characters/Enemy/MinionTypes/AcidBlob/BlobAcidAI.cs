@@ -56,27 +56,27 @@ namespace DChild.Gameplay.Characters.Enemies
 
 
             //Animations
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_spawnAnimation;
-            public string spawnAnimation => m_spawnAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_sleepAnimation;
-            public string sleepAnimation => m_sleepAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_detectAnimation;
-            public string detectAnimation => m_detectAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_idleAnimation;
-            public string idleAnimation => m_idleAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_flinchAnimation;
-            public string flinchAnimation => m_flinchAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_deathAnimation;
-            public string deathAnimation => m_deathAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_rotateToEdgeAnimation;
-            public string rotateToEdgeAnimation => m_rotateToEdgeAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_spawnAnimation = new BasicAnimationInfo();
+            public BasicAnimationInfo spawnAnimation => m_spawnAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_sleepAnimation = new BasicAnimationInfo();
+            public BasicAnimationInfo sleepAnimation => m_sleepAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_detectAnimation = new BasicAnimationInfo();
+            public BasicAnimationInfo detectAnimation => m_detectAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_idleAnimation = new BasicAnimationInfo();
+            public BasicAnimationInfo idleAnimation => m_idleAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_flinchAnimation = new BasicAnimationInfo();
+            public BasicAnimationInfo flinchAnimation => m_flinchAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_deathAnimation = new BasicAnimationInfo();
+            public BasicAnimationInfo deathAnimation => m_deathAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_rotateToEdgeAnimation = new BasicAnimationInfo();
+            public BasicAnimationInfo rotateToEdgeAnimation => m_rotateToEdgeAnimation;
 
             [Title("Events")]
             [SerializeField, ValueDropdown("GetEvents")]
@@ -95,6 +95,14 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_patrol.SetData(m_skeletonDataAsset);
                 m_move.SetData(m_skeletonDataAsset);
                 m_attack.SetData(m_skeletonDataAsset);
+
+                m_idleAnimation.SetData(m_skeletonDataAsset);
+                m_detectAnimation.SetData(m_skeletonDataAsset);
+                m_flinchAnimation.SetData(m_skeletonDataAsset);
+                m_spawnAnimation.SetData(m_skeletonDataAsset);
+                m_sleepAnimation.SetData(m_skeletonDataAsset);
+                m_deathAnimation.SetData(m_skeletonDataAsset);
+                m_rotateToEdgeAnimation.SetData(m_skeletonDataAsset);
 #endif
             }
         }
@@ -364,7 +372,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnFlinchStart(object sender, EventActionArgs eventArgs)
         {
-            if (m_animation.GetCurrentAnimation(0).ToString() == m_info.idleAnimation)
+            if (m_animation.GetCurrentAnimation(0).ToString() == m_info.idleAnimation.animation)
             {
                 m_flinchHandle.m_autoFlinch = true;
                 StopAllCoroutines();
@@ -378,7 +386,7 @@ namespace DChild.Gameplay.Characters.Enemies
             if (m_flinchHandle.m_autoFlinch)
             {
                 m_flinchHandle.m_autoFlinch = false;
-                if (m_animation.GetCurrentAnimation(0).ToString() != m_info.deathAnimation)
+                if (m_animation.GetCurrentAnimation(0).ToString() != m_info.deathAnimation.animation)
                     m_animation.SetAnimation(0, m_info.idleAnimation, true);
                 m_stateHandle.OverrideState(State.ReevaluateSituation);
             }
@@ -405,7 +413,7 @@ namespace DChild.Gameplay.Characters.Enemies
             GameplaySystem.minionManager.Register(this);
             m_attackHandle.AttackDone += OnAttackDone;
             m_turnHandle.TurnDone += OnTurnDone;
-            m_deathHandle.SetAnimation(m_info.deathAnimation);
+            m_deathHandle.SetAnimation(m_info.deathAnimation.animation);
             if (!m_willPatrol)
             {
                 m_flinchHandle.FlinchStart += OnFlinchStart;
@@ -480,7 +488,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         case Attack.Attack:
                             m_animation.EnableRootMotion(false, false);
                             m_animation.animationState.TimeScale = .5f;
-                            m_attackHandle.ExecuteAttack(m_info.attack.animation, m_info.idleAnimation);
+                            m_attackHandle.ExecuteAttack(m_info.attack.animation, m_info.idleAnimation.animation);
                             break;
                     }
                     m_attackDecider.hasDecidedOnAttack = false;

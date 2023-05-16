@@ -25,27 +25,27 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField]
             private SimpleAttackInfo m_attackLeft = new SimpleAttackInfo();
             public SimpleAttackInfo attackLeft => m_attackLeft;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_attackLeftNoShieldAnimation;
-            public string attackLeftNoShieldAnimation => m_attackLeftNoShieldAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_attackLeftSLAnimation;
-            public string attackLeftSLAnimation => m_attackLeftSLAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_attackLeftSRAnimation;
-            public string attackLeftSRAnimation => m_attackLeftSRAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_attackLeftNoShieldAnimation;
+            public BasicAnimationInfo attackLeftNoShieldAnimation => m_attackLeftNoShieldAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_attackLeftSLAnimation;
+            public BasicAnimationInfo attackLeftSLAnimation => m_attackLeftSLAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_attackLeftSRAnimation;
+            public BasicAnimationInfo attackLeftSRAnimation => m_attackLeftSRAnimation;
             [SerializeField]
             private SimpleAttackInfo m_attackRight= new SimpleAttackInfo();
             public SimpleAttackInfo attackRight => m_attackRight;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_attackRightNoShieldAnimation;
-            public string attackRightNoShieldAnimation => m_attackRightNoShieldAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_attackRightSLAnimation;
-            public string attackRightSLAnimation => m_attackRightSLAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_attackRightSRAnimation;
-            public string attackRightSRAnimation => m_attackRightSRAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_attackRightNoShieldAnimation;
+            public BasicAnimationInfo attackRightNoShieldAnimation => m_attackRightNoShieldAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_attackRightSLAnimation;
+            public BasicAnimationInfo attackRightSLAnimation => m_attackRightSLAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_attackRightSRAnimation;
+            public BasicAnimationInfo attackRightSRAnimation => m_attackRightSRAnimation;
             [SerializeField]
             private SimpleAttackInfo m_fistAttackLeft = new SimpleAttackInfo();
             public SimpleAttackInfo fistAttackLeft => m_fistAttackLeft;
@@ -69,24 +69,24 @@ namespace DChild.Gameplay.Characters.Enemies
             //[SerializeField, ValueDropdown("GetAnimations")]
             //private string m_idleAnimation;
             //public string idleAnimation => m_idleAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_awakenAnimation;
-            public string awakenAnimation => m_awakenAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_deathAnimation;
-            public string deathAnimation => m_deathAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_shieldLeftHitAnimation;
-            public string shieldLeftHitAnimation => m_shieldLeftHitAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_shieldRightHitAnimation;
-            public string shieldRightHitAnimation => m_shieldRightHitAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_wingLeftDestroyAnimation;
-            public string wingLeftDestroyAnimation => m_wingLeftDestroyAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_wingRightDestroyAnimation;
-            public string wingRightDestroyAnimation => m_wingRightDestroyAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_awakenAnimation;
+            public BasicAnimationInfo awakenAnimation => m_awakenAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_deathAnimation;
+            public BasicAnimationInfo deathAnimation => m_deathAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_shieldLeftHitAnimation;
+            public BasicAnimationInfo shieldLeftHitAnimation => m_shieldLeftHitAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_shieldRightHitAnimation;
+            public BasicAnimationInfo shieldRightHitAnimation => m_shieldRightHitAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_wingLeftDestroyAnimation;
+            public BasicAnimationInfo wingLeftDestroyAnimation => m_wingLeftDestroyAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_wingRightDestroyAnimation;
+            public BasicAnimationInfo wingRightDestroyAnimation => m_wingRightDestroyAnimation;
 
             [SerializeField]
             private SimpleProjectileAttackInfo m_projectile;
@@ -104,6 +104,20 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_fistAttackLeft.SetData(m_skeletonDataAsset);
                 m_fistAttackRight.SetData(m_skeletonDataAsset);
                 m_projectile.SetData(m_skeletonDataAsset);
+
+                m_attackLeftNoShieldAnimation.SetData(m_skeletonDataAsset);
+                m_attackLeftSLAnimation.SetData(m_skeletonDataAsset);
+                m_attackLeftSRAnimation.SetData(m_skeletonDataAsset);
+                m_attackRightNoShieldAnimation.SetData(m_skeletonDataAsset);
+                m_attackRightSLAnimation.SetData(m_skeletonDataAsset);
+                m_attackRightSRAnimation.SetData(m_skeletonDataAsset);
+
+                m_awakenAnimation.SetData(m_skeletonDataAsset);
+                m_deathAnimation.SetData(m_skeletonDataAsset);
+                m_shieldLeftHitAnimation.SetData(m_skeletonDataAsset);
+                m_shieldRightHitAnimation.SetData(m_skeletonDataAsset);
+                m_wingLeftDestroyAnimation.SetData(m_skeletonDataAsset);
+                m_wingRightDestroyAnimation.SetData(m_skeletonDataAsset);
 #endif
             }
         }
@@ -275,8 +289,8 @@ namespace DChild.Gameplay.Characters.Enemies
                         }
                         else
                         {
-                            m_attackLeftAnimation = m_info.attackLeftSRAnimation;
-                            m_attackRightAnimation = m_info.attackRightSRAnimation;
+                            m_attackLeftAnimation = m_info.attackLeftSRAnimation.animation;
+                            m_attackRightAnimation = m_info.attackRightSRAnimation.animation;
                             if (m_shieldRightDestroyed)
                             {
                                 //m_leftHealth = m_rightHealth;
@@ -284,10 +298,10 @@ namespace DChild.Gameplay.Characters.Enemies
                             }
                             //m_health.SetHealthPercentage(m_leftHealth);
                             //m_leftHealth = ((float)m_health.currentValue / m_health.maxValue);
-                            if (m_animation.GetCurrentAnimation(0).ToString() != m_info.wingLeftDestroyAnimation)
+                            if (m_animation.GetCurrentAnimation(0).ToString() != m_info.wingLeftDestroyAnimation.animation)
                             {
                                 StopAllCoroutines();
-                                StartCoroutine(WingsDestroyedRoutine(1, m_info.wingLeftDestroyAnimation));
+                                StartCoroutine(WingsDestroyedRoutine(1, m_info.wingLeftDestroyAnimation.animation));
                             }
                         }
                     }
@@ -305,8 +319,8 @@ namespace DChild.Gameplay.Characters.Enemies
                         }
                         else
                         {
-                            m_attackLeftAnimation = m_info.attackLeftSLAnimation;
-                            m_attackRightAnimation = m_info.attackRightSLAnimation;
+                            m_attackLeftAnimation = m_info.attackLeftSLAnimation.animation;
+                            m_attackRightAnimation = m_info.attackRightSLAnimation.animation;
                             if (m_shieldLeftDestroyed)
                             {
                                 //m_rightHealth = m_leftHealth;
@@ -314,10 +328,10 @@ namespace DChild.Gameplay.Characters.Enemies
                             }
                             //m_health.SetHealthPercentage(m_rightHealth);
                             //m_rightHealth = ((float)m_health.currentValue / m_health.maxValue);
-                            if (m_animation.GetCurrentAnimation(0).ToString() != m_info.wingRightDestroyAnimation)
+                            if (m_animation.GetCurrentAnimation(0).ToString() != m_info.wingRightDestroyAnimation.animation)
                             {
                                 StopAllCoroutines();
-                                StartCoroutine(WingsDestroyedRoutine(2, m_info.wingRightDestroyAnimation));
+                                StartCoroutine(WingsDestroyedRoutine(2, m_info.wingRightDestroyAnimation.animation));
                             }
                         }
                     }
@@ -325,8 +339,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
                 if (m_shieldLeftDestroyed && m_shieldRightDestroyed)
                 {
-                    m_attackLeftAnimation = m_info.attackLeftNoShieldAnimation;
-                    m_attackRightAnimation = m_info.attackRightNoShieldAnimation;
+                    m_attackLeftAnimation = m_info.attackLeftNoShieldAnimation.animation;
+                    m_attackRightAnimation = m_info.attackRightNoShieldAnimation.animation;
                 }
             }
         }
@@ -336,11 +350,11 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.animationState.GetCurrent(0).TimeScale = 0;
             m_animation.SetAnimation(index, animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, animation);
-            if (animation == m_info.wingLeftDestroyAnimation)
+            if (animation == m_info.wingLeftDestroyAnimation.animation)
             {
                 m_shieldLeftDestroyed = true;
             }
-            else if (animation == m_info.wingRightDestroyAnimation)
+            else if (animation == m_info.wingRightDestroyAnimation.animation)
             {
                 m_shieldRightDestroyed = true;
             }
@@ -423,7 +437,7 @@ namespace DChild.Gameplay.Characters.Enemies
             base.Awake();
             GameplaySystem.minionManager.Register(this);
             m_attackHandle.AttackDone += OnAttackDone;
-            m_deathHandle.SetAnimation(m_info.deathAnimation);
+            m_deathHandle.SetAnimation(m_info.deathAnimation.animation);
             m_flinchHandle.FlinchStart += OnFlinchStart;
             m_projectileLauncher = new ProjectileLauncher(m_info.projectile.projectileInfo, m_projectileStart);
             m_stateHandle = new StateHandle<State>(State.Idle, State.WaitBehaviourEnd);
