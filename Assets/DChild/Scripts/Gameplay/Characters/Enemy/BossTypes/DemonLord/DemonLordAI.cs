@@ -193,6 +193,24 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField, BoxGroup("IceBombProjectile")]
             private float m_iceBombDelay;
             public float iceBombDelay => m_iceBombDelay;
+            [SerializeField, BoxGroup("ElectricOrbProjectile")]
+            private SimpleProjectileAttackInfo m_electricOrbProjectile;
+            public SimpleProjectileAttackInfo electricOrbProjectile => m_electricOrbProjectile;
+            [SerializeField, BoxGroup("ElectricOrbProjectile")]
+            private float m_electricOrbDelay;
+            public float electricOrbDelay => m_electricOrbDelay;
+            [SerializeField, BoxGroup("FlameWaveProjectile")]
+            private SimpleProjectileAttackInfo m_flameWaveProjectile;
+            public SimpleProjectileAttackInfo flameWaveProjectile => m_flameWaveProjectile;
+            [SerializeField, BoxGroup("FlameWaveProjectile")]
+            private float m_flameWaveDelay;
+            public float flameWaveDelay => m_flameWaveDelay;
+            [SerializeField, BoxGroup("LightningGroundProjectile")]
+            private SimpleProjectileAttackInfo m_lightningGroundProjectile;
+            public SimpleProjectileAttackInfo lightningGroundProjectile => m_lightningGroundProjectile;
+            [SerializeField, BoxGroup("LightningGroundProjectile")]
+            private float m_lightningGroundDelay;
+            public float lightningGroundDelay => m_lightningGroundDelay;
 
             //[Title("Events")]
             //[SerializeField, ValueDropdown("GetEvents")]
@@ -218,6 +236,9 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_lightningGroundAttack.SetData(m_skeletonDataAsset);
                 m_fireBallProjectile.SetData(m_skeletonDataAsset);
                 m_iceBombProjectile.SetData(m_skeletonDataAsset);
+                m_electricOrbProjectile.SetData(m_skeletonDataAsset);
+                m_flameWaveProjectile.SetData(m_skeletonDataAsset);
+                m_lightningGroundProjectile.SetData(m_skeletonDataAsset);
 
                 m_deathAnimation.SetData(m_skeletonDataAsset);
                 m_flinchAnimation.SetData(m_skeletonDataAsset);
@@ -336,6 +357,33 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Modules")]
         private FlinchHandler m_flinchHandler;
 
+        [SerializeField, TabGroup("Lazer")]
+        private LineRenderer m_lineRenderer;
+        //[SerializeField, TabGroup("Lazer")]
+        //private LineRenderer m_telegraphLineRenderer;
+        [SerializeField, TabGroup("Lazer")]
+        private EdgeCollider2D m_edgeCollider;
+        [SerializeField, TabGroup("Lazer")]
+        private ParticleFX m_muzzleLoopFX;
+        [SerializeField, TabGroup("Lazer")]
+        private ParticleFX m_muzzleTelegraphFX;
+        [SerializeField, TabGroup("Lazer")]
+        private Transform m_beamFrontPoint;
+        [SerializeField, TabGroup("Lazer")]
+        private Transform m_beamBackPoint;
+        private bool m_beamOn;
+        private bool m_aimOn;
+        [SerializeField, TabGroup("Lazer")]
+        private SkeletonUtilityBone m_aimBone;
+        [SerializeField, TabGroup("Lazer")]
+        private float m_armRotationOffset;
+        private List<Vector2> m_Points;
+        private IEnumerator m_aimRoutine;
+
+
+        //[SerializeField, TabGroup("FX")]
+        //private ParticleFX m_sparkFX;
+
         [SerializeField]
         private SpineEventListener m_spineListener;
 
@@ -354,18 +402,32 @@ namespace DChild.Gameplay.Characters.Enemies
         #region ProjectileLaunchers
         private ProjectileLauncher m_fireBallProjectileLauncher;
         private ProjectileLauncher m_iceBombProjectileLauncher;
+        private ProjectileLauncher m_electricOrbProjectileLauncher;
+        private ProjectileLauncher m_flameWaveProjectileLauncher;
+        private ProjectileLauncher m_lightningGroundProjectileLauncher;
         #endregion
+
+        private List<GameObject> m_electricOrbs;
 
         [SerializeField, TabGroup("Spawn Points")]
         private Transform m_fireBallSpawnPoint;
         [SerializeField, TabGroup("Spawn Points")]
         private Transform m_iceBombSpawnPoint;
+        [SerializeField, TabGroup("Spawn Points")]
+        private Transform m_electricOrbSpawnPoint;
+        [SerializeField, TabGroup("Spawn Points")]
+        private Transform m_flameWaveSpawnPoint;
+        [SerializeField, TabGroup("Spawn Points")]
+        private Transform m_lightningGroundSpawnPoint;
         [SerializeField, TabGroup("Target Points")]
         private Transform m_fireBallTargetPoint;
         [SerializeField, TabGroup("Target Points")]
         private List<Transform> m_iceBombTargetPoints;
+        [SerializeField, TabGroup("Target Points")]
+        private List<Transform> m_electricOrbTargetPoints;
 
         private Vector2 m_lastTargetPos;
+        private Vector2 m_lazerTargetPos;
         private float m_currentCooldown;
         private float m_pickedCooldown;
         private List<float> m_currentFullCooldown;
@@ -375,6 +437,11 @@ namespace DChild.Gameplay.Characters.Enemies
         //private int m_currentHitCount;
         
         private Coroutine m_currentAttackCoroutine;
+        #region Lazer Coroutine
+        private Coroutine m_lazerBeamCoroutine;
+        private Coroutine m_lazerLookCoroutine;
+        private Coroutine m_aimAtPlayerCoroutine;
+        #endregion
 
         private bool m_isDetecting;
 
@@ -499,6 +566,9 @@ namespace DChild.Gameplay.Characters.Enemies
             m_hitbox.Disable();
             m_stateHandle.Wait(State.Chasing);
             //ResetCounts();
+
+            m_animation.SetAnimation(0, m_info.flinchAnimation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.flinchAnimation);
 
             m_hitbox.Enable();
             m_stateHandle.ApplyQueuedState();
@@ -631,6 +701,11 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_book.FlameWave(false);
             m_animation.SetAnimation(0, m_info.flameWaveAttack.animation, false);
+            yield return new WaitForSeconds(m_info.flameWaveDelay);
+            var instance = GameSystem.poolManager.GetPool<ProjectilePool>().GetOrCreateItem(m_info.flameWaveProjectile.projectileInfo.projectile);
+            instance.transform.position = new Vector2(m_flameWaveSpawnPoint.position.x, GroundPosition(m_flameWaveSpawnPoint.position).y);
+
+            m_flameWaveProjectileLauncher.LaunchProjectile(m_character.facing == HorizontalDirection.Right ? m_flameWaveSpawnPoint.right : -m_flameWaveSpawnPoint.right, instance.gameObject);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.flameWaveAttack.animation);
             m_book.Idle(true);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
@@ -642,29 +717,34 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator RayOfFrostAttackRoutine()
         {
+            m_lazerLookCoroutine = StartCoroutine(LazerLookRoutine());
+            m_aimOn = true;
+            //m_aimAtPlayerCoroutine = StartCoroutine(AimAtTargtRoutine());
             m_book.LightningMidair(false);
             m_animation.SetAnimation(0, m_info.lightningStepMidair.animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.lightningStepMidair.animation);
             m_book.RayOfFrost(false);
-            //m_ephemeralArms.RayOfFrost(false);
             m_ephemeralArmsFront.RayOfFrost(false);
             m_ephemeralArmsBack.RayOfFrost(false);
             m_animation.SetAnimation(0, m_info.rayOfFrostAttack.animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.rayOfFrostAttack.animation);
             m_book.RayOfFrostCharge(true);
-            //m_ephemeralArms.RayOfFrostCharge(true);
             m_ephemeralArmsFront.RayOfFrostCharge(true);
             m_ephemeralArmsBack.RayOfFrostCharge(true);
             m_animation.SetAnimation(0, m_info.rayOfFrostChargeAnimation, true);
+            m_beamOn = true;
+            m_lazerBeamCoroutine = StartCoroutine(LazerBeamRoutine());
             yield return new WaitForSeconds(m_info.rayOfFrostChargeDuration);
+            m_beamOn = false;
             m_book.RayOfFrostFire(false);
-            //m_ephemeralArms.RayOfFrostFire(false);
             m_ephemeralArmsFront.RayOfFrostFire(false);
             m_ephemeralArmsBack.RayOfFrostFire(false);
             m_animation.SetAnimation(0, m_info.rayOfFrostFireAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.rayOfFrostFireAnimation);
+            StopCoroutine(m_lazerLookCoroutine);
+            m_lazerLookCoroutine = null;
+            m_aimOn = false;
             m_book.RayOfFrostFireToIdle(false);
-            //m_ephemeralArms.RayOfFrostFireToIdle(false);
             m_ephemeralArmsFront.RayOfFrostFireToIdle(false);
             m_ephemeralArmsBack.RayOfFrostFireToIdle(false);
             m_animation.SetAnimation(0, m_info.rayOfFrostFireToIdleAnimation, false);
@@ -715,6 +795,35 @@ namespace DChild.Gameplay.Characters.Enemies
             m_ephemeralArmsFront.ThreeFireBallsPre(false);
             m_ephemeralArmsBack.ThreeFireBallsPre(false);
             m_animation.SetAnimation(0, m_info.electricOrbAttack.animation, false);
+            for (int i = 0; i < m_electricOrbTargetPoints.Count; i++)
+            {
+                var instance = GameSystem.poolManager.GetPool<ProjectilePool>().GetOrCreateItem(m_info.electricOrbProjectile.projectileInfo.projectile);
+                m_electricOrbs.Add(instance.gameObject);
+                //instance.transform.position = m_electricOrbTargetPoints[i].position;
+            }
+            var timer = m_info.electricOrbDelay;
+            while (timer > 0)
+            {
+                for (int i = 0; i < m_electricOrbTargetPoints.Count; i++)
+                {
+                    m_electricOrbs[i].transform.position = m_electricOrbTargetPoints[i].position;
+                }
+                m_electricOrbSpawnPoint.position = m_targetInfo.position;
+                timer -= Time.deltaTime;
+                yield return null;
+            }
+            for (int i = 0; i < m_electricOrbTargetPoints.Count; i++)
+            {
+                //var instance = GameSystem.poolManager.GetPool<ProjectilePool>().GetOrCreateItem(m_info.electricOrbProjectile.projectileInfo.projectile);
+                //instance.transform.position = m_electricOrbTargetPoints[i].position;
+                m_electricOrbProjectileLauncher = new ProjectileLauncher(m_info.electricOrbProjectile.projectileInfo, m_electricOrbTargetPoints[i]);
+
+                m_electricOrbs[i].GetComponent<Collider2D>().enabled = true;
+
+                m_electricOrbProjectileLauncher.AimAt(m_targetInfo.position);
+                m_electricOrbProjectileLauncher.LaunchProjectile(m_electricOrbTargetPoints[i].right, m_electricOrbs[i].gameObject);
+            }
+            m_electricOrbs.Clear();
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.electricOrbAttack.animation);
             //m_ephemeralArms.EmptyAnimation();
             m_ephemeralArmsFront.EmptyAnimation();
@@ -734,6 +843,10 @@ namespace DChild.Gameplay.Characters.Enemies
             m_ephemeralArmsFront.LightningGround(false);
             m_ephemeralArmsBack.LightningGround(false);
             m_animation.SetAnimation(0, m_info.lightningGroundAttack.animation, false);
+            yield return new WaitForSeconds(m_info.lightningGroundDelay);
+            var instance = GameSystem.poolManager.GetPool<ProjectilePool>().GetOrCreateItem(m_info.lightningGroundProjectile.projectileInfo.projectile);
+            instance.transform.position = new Vector2(m_lightningGroundSpawnPoint.position.x, GroundPosition(m_lightningGroundSpawnPoint.position).y);
+            //m_lightningGroundProjectileLauncher.LaunchProjectile(i == 0 ? m_lightningGroundSpawnPoint.right : -m_lightningGroundSpawnPoint.right, instance.gameObject);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.lightningGroundAttack.animation);
             m_book.Idle(true);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
@@ -742,6 +855,131 @@ namespace DChild.Gameplay.Characters.Enemies
             m_stateHandle.ApplyQueuedState();
             yield return null;
         }
+
+        #region Lazer Attack
+        private IEnumerator LazerLookRoutine()
+        {
+            while (true)
+            {
+                m_lazerTargetPos = LookPosition(m_character.facing == HorizontalDirection.Right ? m_beamFrontPoint : m_beamBackPoint/*m_beamPoint*/);
+                yield return null;
+            }
+            yield return null;
+        }
+
+        public IEnumerator AimAtTargtRoutine()
+        {
+            m_aimBone.mode = SkeletonUtilityBone.Mode.Override;
+            while (m_aimOn)
+            {
+                //m_aimBone.transform.position = new Vector2(m_targetInfo.position.x, m_targetInfo.position.y - 5f);
+                Vector2 spitPos = m_aimBone.transform.position;
+                Vector3 v_diff = (m_targetInfo.position - spitPos);
+                float atan2 = Mathf.Atan2(v_diff.y, v_diff.x);
+                m_aimBone.transform.rotation = Quaternion.Euler(0f, 0f, atan2 * Mathf.Rad2Deg);
+                yield return null;
+            }
+            m_aimBone.mode = SkeletonUtilityBone.Mode.Follow;
+            m_aimAtPlayerCoroutine = null;
+            yield return null;
+        }
+
+        private IEnumerator AimRoutine()
+        {
+            while (true)
+            {
+                //m_telegraphLineRenderer.SetPosition(0, m_telegraphLineRenderer.transform.position);
+                m_lineRenderer.SetPosition(0, m_lineRenderer.transform.position);
+                m_lineRenderer.SetPosition(1, m_lineRenderer.transform.position);
+                yield return null;
+            }
+        }
+
+        private Vector2 ShotPosition()
+        {
+            m_lazerTargetPos = LookPosition(m_character.facing == HorizontalDirection.Right ? m_beamFrontPoint : m_beamBackPoint/*m_beamPoint*/);
+            Vector2 startPoint = m_beamFrontPoint.position;
+            Vector2 direction = (m_lazerTargetPos - startPoint).normalized;
+
+            RaycastHit2D hit = Physics2D.Raycast(/*m_projectilePoint.position*/startPoint, direction, 1000, DChildUtility.GetEnvironmentMask());
+            //Debug.DrawRay(startPoint, direction);
+            return hit.point;
+        }
+
+        //private IEnumerator TelegraphLineRoutine()
+        //{
+        //    //float timer = 0;
+        //    m_muzzleTelegraphFX.Play();
+        //    m_telegraphLineRenderer.useWorldSpace = true;
+        //    m_telegraphLineRenderer.SetPosition(1, ShotPosition());
+        //    var timerOffset = m_telegraphLineRenderer.startWidth;
+        //    while (m_telegraphLineRenderer.startWidth > 0)
+        //    {
+        //        m_telegraphLineRenderer.startWidth -= Time.deltaTime * timerOffset;
+        //        yield return null;
+        //    }
+        //    yield return null;
+        //}
+
+        private IEnumerator LazerBeamRoutine()
+        {
+            if (!m_aimOn)
+            {
+                //StartCoroutine(TelegraphLineRoutine());
+                StartCoroutine(m_aimRoutine);
+            }
+
+            yield return new WaitUntil(() => m_beamOn);
+            StopCoroutine(m_aimRoutine);
+            m_muzzleLoopFX.Play();
+            m_muzzleTelegraphFX.Play();
+
+            m_lineRenderer.useWorldSpace = true;
+            while (m_beamOn)
+            {
+                m_muzzleTelegraphFX.transform.position = ShotPosition();
+
+                m_lineRenderer.SetPosition(0, m_beamFrontPoint.position);
+                m_lineRenderer.SetPosition(1, ShotPosition());
+                for (int i = 0; i < m_lineRenderer.positionCount; i++)
+                {
+                    var pos = m_lineRenderer.GetPosition(i) - m_edgeCollider.transform.position;
+                    pos = new Vector2(Mathf.Abs(pos.x), pos.y);
+                    //if (i > 0)
+                    //{
+                    //    pos = pos * 0.7f;
+                    //}
+                    m_Points.Add(pos);
+                }
+                m_edgeCollider.points = m_Points.ToArray();
+                m_Points.Clear();
+                yield return null;
+            }
+            m_muzzleLoopFX.Stop();
+            m_muzzleTelegraphFX.Stop();
+            //yield return new WaitUntil(() => !m_beamOn);
+            ResetLaser();
+            m_lazerBeamCoroutine = null;
+            yield return null;
+        }
+
+        private void ResetLaser()
+        {
+            //m_telegraphLineRenderer.useWorldSpace = false;
+            m_lineRenderer.useWorldSpace = false;
+            m_lineRenderer.SetPosition(0, Vector3.zero);
+            m_lineRenderer.SetPosition(1, Vector3.zero);
+            //m_telegraphLineRenderer.SetPosition(0, Vector3.zero);
+            //m_telegraphLineRenderer.SetPosition(1, Vector3.zero);
+            //m_telegraphLineRenderer.startWidth = 1;
+            m_Points.Clear();
+            for (int i = 0; i < m_lineRenderer.positionCount; i++)
+            {
+                m_Points.Add(Vector2.zero);
+            }
+            m_edgeCollider.points = m_Points.ToArray();
+        }
+        #endregion
         #endregion
 
         #region Movement
@@ -864,9 +1102,15 @@ namespace DChild.Gameplay.Characters.Enemies
             m_flinchHandler.FlinchEnd += OnFlinchEnd;
             m_fireBallProjectileLauncher = new ProjectileLauncher(m_info.fireBallProjectile.projectileInfo, m_fireBallSpawnPoint);
             m_iceBombProjectileLauncher = new ProjectileLauncher(m_info.iceBombProjectile.projectileInfo, m_iceBombSpawnPoint);
+            m_electricOrbProjectileLauncher = new ProjectileLauncher(m_info.electricOrbProjectile.projectileInfo, m_electricOrbSpawnPoint);
+            m_flameWaveProjectileLauncher = new ProjectileLauncher(m_info.flameWaveProjectile.projectileInfo, m_flameWaveSpawnPoint);
+            m_lightningGroundProjectileLauncher = new ProjectileLauncher(m_info.lightningGroundProjectile.projectileInfo, m_lightningGroundSpawnPoint);
+            m_electricOrbs = new List<GameObject>();
             m_patternAttackCount = new int[2];
             //m_patternDecider = new RandomAttackDecider<Pattern>();
             m_attackDecider = new RandomAttackDecider<Attack>();
+
+            m_Points = new List<Vector2>();
             //for (int i = 0; i < 3; i++)
             //{
             //    m_attackDecider[i] = new RandomAttackDecider<Attack>();
@@ -897,6 +1141,8 @@ namespace DChild.Gameplay.Characters.Enemies
             m_phaseHandle = new PhaseHandle<Phase, PhaseInfo>();
             m_phaseHandle.Initialize(Phase.PhaseOne, m_info.phaseInfo, m_character, ChangeState, ApplyPhaseData);
             m_phaseHandle.ApplyChange();
+
+            m_aimRoutine = AimRoutine();
         }
 
         private void Update()
@@ -942,14 +1188,15 @@ namespace DChild.Gameplay.Characters.Enemies
                     {
                         #region PHASE 1 ATTACKS
                         case Attack.Phase1Pattern1:
-                            if (Vector2.Distance(m_targetInfo.position, m_character.centerMass.position) > m_info.target1CHDistance)
-                            {
-                                m_currentAttackCoroutine = StartCoroutine(ThreeFireBallsAttackRoutine());
-                            }
-                            else
-                            {
-                                m_currentAttackCoroutine = StartCoroutine(EphemeralArmsSmashAttackRoutine(FollowUpAttack.ThreeFireBalls));
-                            }
+                            //if (Vector2.Distance(m_targetInfo.position, m_character.centerMass.position) > m_info.target1CHDistance)
+                            //{
+                            //    m_currentAttackCoroutine = StartCoroutine(ThreeFireBallsAttackRoutine());
+                            //}
+                            //else
+                            //{
+                            //    m_currentAttackCoroutine = StartCoroutine(EphemeralArmsSmashAttackRoutine(FollowUpAttack.ThreeFireBalls));
+                            //}
+                            m_currentAttackCoroutine = StartCoroutine(RayOfFrostAttackRoutine());
                             m_pickedCooldown = m_currentFullCooldown[0];
                             break;
                         case Attack.Phase1Pattern2:
