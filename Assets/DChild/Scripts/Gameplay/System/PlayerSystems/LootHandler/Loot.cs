@@ -46,8 +46,10 @@ namespace DChild.Gameplay.Systems
 
         public void Pop(Vector2 force)
         {
+            m_rigidbody.bodyType = RigidbodyType2D.Dynamic;
             m_rigidbody.velocity = Vector2.zero;
             m_rigidbody.AddForce(force, ForceMode2D.Impulse);
+            Debug.Log("Popped");
         }
 
         public override void SpawnAt(Vector2 position, Quaternion rotation)
