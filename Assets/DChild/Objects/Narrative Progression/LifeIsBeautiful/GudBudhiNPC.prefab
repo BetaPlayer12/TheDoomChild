@@ -15,7 +15,6 @@ GameObject:
   - component: {fileID: 53952425379083697}
   - component: {fileID: 1218638992006138824}
   - component: {fileID: 2188369961201588389}
-  - component: {fileID: 5040009679112047716}
   m_Layer: 11
   m_Name: GudBudhiNPC
   m_TagString: Untagged
@@ -133,7 +132,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_hasDialogue: 1
   m_hasConditionForDialogue: 0
-  m_promptOffset: {x: 0, y: 0, z: 0}
+  m_promptOffset: {x: 0, y: 20, z: 0}
 --- !u!114 &1218638992006138824
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -203,78 +202,6 @@ MonoBehaviour:
   m_legColliderLayerMask:
     serializedVersion: 2
     m_Bits: 0
---- !u!114 &5040009679112047716
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4294538075752476632}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c593457cd8105e148906690e1707c592, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  trigger: 32
-  condition:
-    luaConditions: []
-    questConditions: []
-    acceptedTags: []
-    acceptedGameObjects: []
-    luaWizardIndex: -1
-    lastEvaluationValue: 0
-  setQuestState: 1
-  questName: 
-  questState: 0
-  setQuestEntryState: 0
-  questEntryNumber: 1
-  questEntryState: 0
-  setAnotherQuestEntryState: 0
-  anotherQuestEntryNumber: 1
-  anotherQuestEntryState: 0
-  luaCode: 
-  sequence: 
-  sequenceSpeaker: {fileID: 0}
-  sequenceListener: {fileID: 0}
-  waitOneFrameOnStartOrEnable: 1
-  alertMessage: 
-  textTable: {fileID: 0}
-  alertDuration: 0
-  sendMessages: []
-  barkSource: 0
-  barkConversation: 
-  barkText: 
-  barkTextSequence: 
-  barker: {fileID: 0}
-  barkTarget: {fileID: 0}
-  barkOrder: 0
-  allowBarksDuringConversations: 0
-  skipBarkIfNoValidEntries: 0
-  cacheBarkLines: 0
-  conversation: 
-  conversationConversant: {fileID: 0}
-  conversationActor: {fileID: 0}
-  startConversationEntryID: -1
-  exclusive: 0
-  replace: 0
-  skipIfNoValidEntries: 0
-  preventRestartOnSameFrameEnded: 0
-  stopConversationOnTriggerExit: 0
-  stopConversationIfTooFar: 0
-  maxConversationDistance: 5
-  monitorConversationDistanceFrequency: 1
-  showCursorDuringConversation: 0
-  pauseGameDuringConversation: 0
-  setActiveActions: []
-  setEnabledActions: []
-  setAnimatorStateActions: []
-  onExecute:
-    m_PersistentCalls:
-      m_Calls: []
-  useConversationTitlePicker: 1
-  useBarkTitlePicker: 1
-  useQuestNamePicker: 1
-  selectedDatabase: {fileID: 11400000, guid: 480727c9daa69be498ab44201a9af64e, type: 2}
 --- !u!1 &8575909978054124933
 GameObject:
   m_ObjectHideFlags: 0
@@ -356,9 +283,9 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingLayerID: -1150295711
+  m_SortingLayer: -1
+  m_SortingOrder: 98
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!114 &4425599964102495345
 MonoBehaviour:

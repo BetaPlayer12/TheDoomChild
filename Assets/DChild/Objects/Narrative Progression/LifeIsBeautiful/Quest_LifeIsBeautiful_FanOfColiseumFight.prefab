@@ -1,0 +1,321 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3247157853600993216
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1248562142425532486}
+  - component: {fileID: 8626834468660918459}
+  - component: {fileID: 8596688368047808593}
+  - component: {fileID: 808593956369140596}
+  m_Layer: 0
+  m_Name: Quest_LifeIsBeautiful_FanOfColiseumFight
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1248562142425532486
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3247157853600993216}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 636200708665570266}
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8626834468660918459
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3247157853600993216}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba2e3066672a3834182d094e4029952d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  questName: Life Is Beautiful
+  questStateIndicatorLevels: []
+  questEntryStateIndicatorLevels:
+  - updateOnStartOnly: 0
+    entryNumber: 0
+    questState: 4
+    condition:
+      luaConditions: []
+      questConditions: []
+      acceptedTags: []
+      acceptedGameObjects: []
+      luaWizardIndex: -1
+      lastEvaluationValue: 0
+    indicatorLevel: 0
+    onEnterState:
+      m_PersistentCalls:
+        m_Calls: []
+  - updateOnStartOnly: 0
+    entryNumber: 1
+    questState: 3
+    condition:
+      luaConditions: []
+      questConditions:
+      - questName: Life Is Beautiful
+        questState: 2
+        checkQuestEntry: 1
+        entryNumber: 1
+        questEntryState: 6
+      acceptedTags: []
+      acceptedGameObjects: []
+      luaWizardIndex: -1
+      lastEvaluationValue: 0
+    indicatorLevel: 1
+    onEnterState:
+      m_PersistentCalls:
+        m_Calls: []
+  suppressOnEnterStateEventsOnStart: 0
+--- !u!114 &8596688368047808593
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3247157853600993216}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9788c61928f1bb24a8559f5d6aaed894, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  indicators:
+  - {fileID: 0}
+  - {fileID: 7707893542013394347}
+--- !u!114 &808593956369140596
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3247157853600993216}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6546d1f34e0077748a93d4c356aa9411, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  addTrigger: 16
+  removeTrigger: 1024
+  databases:
+  - {fileID: 11400000, guid: 480727c9daa69be498ab44201a9af64e, type: 2}
+  condition:
+    luaConditions: []
+    questConditions: []
+    acceptedTags: []
+    acceptedGameObjects: []
+    luaWizardIndex: -1
+    lastEvaluationValue: 0
+  once: 0
+  onePerFrame: 0
+--- !u!1 &7707893542013394347
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 636200708665570266}
+  m_Layer: 0
+  m_Name: QuestEntry_FanOfColiseum
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &636200708665570266
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7707893542013394347}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1995697893016479861}
+  m_Father: {fileID: 1248562142425532486}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &6913667008480880968
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 636200708665570266}
+    m_Modifications:
+    - target: {fileID: 53952425379083697, guid: 9b3ba5f0f797d1f41947623a536a9519,
+        type: 3}
+      propertyPath: m_promptOffset.y
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 2114696790354391590, guid: 9b3ba5f0f797d1f41947623a536a9519,
+        type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4294538075752476632, guid: 9b3ba5f0f797d1f41947623a536a9519,
+        type: 3}
+      propertyPath: m_Name
+      value: GudBudhiNPC
+      objectReference: {fileID: 0}
+    - target: {fileID: 4918039831300866365, guid: 9b3ba5f0f797d1f41947623a536a9519,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4918039831300866365, guid: 9b3ba5f0f797d1f41947623a536a9519,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4918039831300866365, guid: 9b3ba5f0f797d1f41947623a536a9519,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4918039831300866365, guid: 9b3ba5f0f797d1f41947623a536a9519,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4918039831300866365, guid: 9b3ba5f0f797d1f41947623a536a9519,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4918039831300866365, guid: 9b3ba5f0f797d1f41947623a536a9519,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4918039831300866365, guid: 9b3ba5f0f797d1f41947623a536a9519,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4918039831300866365, guid: 9b3ba5f0f797d1f41947623a536a9519,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4918039831300866365, guid: 9b3ba5f0f797d1f41947623a536a9519,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4918039831300866365, guid: 9b3ba5f0f797d1f41947623a536a9519,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4918039831300866365, guid: 9b3ba5f0f797d1f41947623a536a9519,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 9b3ba5f0f797d1f41947623a536a9519, type: 3}
+--- !u!4 &1995697893016479861 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4918039831300866365, guid: 9b3ba5f0f797d1f41947623a536a9519,
+    type: 3}
+  m_PrefabInstance: {fileID: 6913667008480880968}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &7235881778031527568 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4294538075752476632, guid: 9b3ba5f0f797d1f41947623a536a9519,
+    type: 3}
+  m_PrefabInstance: {fileID: 6913667008480880968}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2619195260589097314
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7235881778031527568}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c593457cd8105e148906690e1707c592, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  trigger: 32
+  condition:
+    luaConditions: []
+    questConditions: []
+    acceptedTags: []
+    acceptedGameObjects: []
+    luaWizardIndex: -1
+    lastEvaluationValue: 0
+  setQuestState: 1
+  questName: 
+  questState: 0
+  setQuestEntryState: 0
+  questEntryNumber: 1
+  questEntryState: 0
+  setAnotherQuestEntryState: 0
+  anotherQuestEntryNumber: 1
+  anotherQuestEntryState: 0
+  luaCode: 
+  sequence: 
+  sequenceSpeaker: {fileID: 0}
+  sequenceListener: {fileID: 0}
+  waitOneFrameOnStartOrEnable: 1
+  alertMessage: 
+  textTable: {fileID: 0}
+  alertDuration: 0
+  sendMessages: []
+  barkSource: 0
+  barkConversation: 
+  barkText: 
+  barkTextSequence: 
+  barker: {fileID: 0}
+  barkTarget: {fileID: 0}
+  barkOrder: 0
+  allowBarksDuringConversations: 0
+  skipBarkIfNoValidEntries: 0
+  cacheBarkLines: 0
+  conversation: 'Fan of Coliseum Fight Conversation '
+  conversationConversant: {fileID: 0}
+  conversationActor: {fileID: 0}
+  startConversationEntryID: -1
+  exclusive: 0
+  replace: 0
+  skipIfNoValidEntries: 1
+  preventRestartOnSameFrameEnded: 0
+  stopConversationOnTriggerExit: 0
+  stopConversationIfTooFar: 0
+  maxConversationDistance: 5
+  monitorConversationDistanceFrequency: 1
+  showCursorDuringConversation: 0
+  pauseGameDuringConversation: 0
+  setActiveActions: []
+  setEnabledActions: []
+  setAnimatorStateActions: []
+  onExecute:
+    m_PersistentCalls:
+      m_Calls: []
+  useConversationTitlePicker: 1
+  useBarkTitlePicker: 1
+  useQuestNamePicker: 1
+  selectedDatabase: {fileID: 11400000, guid: 480727c9daa69be498ab44201a9af64e, type: 2}
