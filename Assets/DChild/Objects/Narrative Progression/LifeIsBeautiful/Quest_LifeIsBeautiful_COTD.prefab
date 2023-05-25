@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 8596688368047808593}
   - component: {fileID: 808593956369140596}
   m_Layer: 0
-  m_Name: Quest_LifeIsBeautiful_FanOfColiseumFight
+  m_Name: Quest_LifeIsBeautiful_COTD
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -68,13 +68,9 @@ MonoBehaviour:
     entryNumber: 1
     questState: 3
     condition:
-      luaConditions: []
-      questConditions:
-      - questName: Life Is Beautiful
-        questState: 2
-        checkQuestEntry: 1
-        entryNumber: 1
-        questEntryState: 6
+      luaConditions:
+      - Variable["PlayerDefeatedUndeadGeneral"] == true
+      questConditions: []
       acceptedTags: []
       acceptedGameObjects: []
       luaWizardIndex: -1
@@ -295,7 +291,7 @@ MonoBehaviour:
   allowBarksDuringConversations: 0
   skipBarkIfNoValidEntries: 0
   cacheBarkLines: 0
-  conversation: 'Fan of Coliseum Fight Conversation '
+  conversation: Fan Of Coliseum Fight
   conversationConversant: {fileID: 0}
   conversationActor: {fileID: 0}
   startConversationEntryID: -1

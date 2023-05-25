@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 8596688368047808593}
   - component: {fileID: 808593956369140596}
   m_Layer: 0
-  m_Name: Quest_LifeIsBeautiful_LifeOfAWarden
+  m_Name: Quest_LifeIsBeautiful_Prison
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -32,6 +32,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 636200708665570266}
+  - {fileID: 7696685759633654772}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -48,10 +49,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   questName: Life Is Beautiful
-  questStateIndicatorLevels: []
-  questEntryStateIndicatorLevels:
+  questStateIndicatorLevels:
   - updateOnStartOnly: 0
-    entryNumber: 0
     questState: 4
     condition:
       luaConditions: []
@@ -65,21 +64,47 @@ MonoBehaviour:
       m_PersistentCalls:
         m_Calls: []
   - updateOnStartOnly: 0
-    entryNumber: 0
     questState: 2
     condition:
-      luaConditions: []
-      questConditions:
-      - questName: Life Is Beautiful
-        questState: 2
-        checkQuestEntry: 1
-        entryNumber: 2
-        questEntryState: 2
+      luaConditions:
+      - Variable["PlayerHasShadowMorph"] == true
+      - Variable["PlayerHasShadowDash"] == false
+      questConditions: []
       acceptedTags: []
       acceptedGameObjects: []
       luaWizardIndex: -1
       lastEvaluationValue: 0
     indicatorLevel: 1
+    onEnterState:
+      m_PersistentCalls:
+        m_Calls: []
+  - updateOnStartOnly: 0
+    questState: 2
+    condition:
+      luaConditions:
+      - Variable["PlayerHasShadowDash"] == true
+      - Variable["PlayerHasShadowMorph"] == true
+      questConditions: []
+      acceptedTags: []
+      acceptedGameObjects: []
+      luaWizardIndex: -1
+      lastEvaluationValue: 0
+    indicatorLevel: 2
+    onEnterState:
+      m_PersistentCalls:
+        m_Calls: []
+  questEntryStateIndicatorLevels:
+  - updateOnStartOnly: 0
+    entryNumber: 0
+    questState: 2
+    condition:
+      luaConditions: []
+      questConditions: []
+      acceptedTags: []
+      acceptedGameObjects: []
+      luaWizardIndex: -1
+      lastEvaluationValue: 0
+    indicatorLevel: 0
     onEnterState:
       m_PersistentCalls:
         m_Calls: []
@@ -99,6 +124,7 @@ MonoBehaviour:
   indicators:
   - {fileID: 0}
   - {fileID: 7707893542013394347}
+  - {fileID: 9108578197221003512}
 --- !u!114 &808593956369140596
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -155,6 +181,38 @@ Transform:
   - {fileID: 1607964851606955731}
   m_Father: {fileID: 1248562142425532486}
   m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &9108578197221003512
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7696685759633654772}
+  m_Layer: 0
+  m_Name: QuestEntry_TheBudhiFamily
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7696685759633654772
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9108578197221003512}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 3737456974826476653}
+  m_Father: {fileID: 1248562142425532486}
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &5913438139341449198
 PrefabInstance:
@@ -380,7 +438,165 @@ MonoBehaviour:
   allowBarksDuringConversations: 0
   skipBarkIfNoValidEntries: 0
   cacheBarkLines: 0
-  conversation: LIfe of A Warden Conversation
+  conversation: Life of A Warden
+  conversationConversant: {fileID: 0}
+  conversationActor: {fileID: 0}
+  startConversationEntryID: -1
+  exclusive: 0
+  replace: 0
+  skipIfNoValidEntries: 1
+  preventRestartOnSameFrameEnded: 0
+  stopConversationOnTriggerExit: 0
+  stopConversationIfTooFar: 0
+  maxConversationDistance: 5
+  monitorConversationDistanceFrequency: 1
+  showCursorDuringConversation: 0
+  pauseGameDuringConversation: 0
+  setActiveActions: []
+  setEnabledActions: []
+  setAnimatorStateActions: []
+  onExecute:
+    m_PersistentCalls:
+      m_Calls: []
+  useConversationTitlePicker: 1
+  useBarkTitlePicker: 1
+  useQuestNamePicker: 1
+  selectedDatabase: {fileID: 11400000, guid: 480727c9daa69be498ab44201a9af64e, type: 2}
+--- !u!1001 &8619465801369359696
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 7696685759633654772}
+    m_Modifications:
+    - target: {fileID: 2114696790354391590, guid: 9b3ba5f0f797d1f41947623a536a9519,
+        type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4294538075752476632, guid: 9b3ba5f0f797d1f41947623a536a9519,
+        type: 3}
+      propertyPath: m_Name
+      value: GudBudhiNPC
+      objectReference: {fileID: 0}
+    - target: {fileID: 4918039831300866365, guid: 9b3ba5f0f797d1f41947623a536a9519,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4918039831300866365, guid: 9b3ba5f0f797d1f41947623a536a9519,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 6.56
+      objectReference: {fileID: 0}
+    - target: {fileID: 4918039831300866365, guid: 9b3ba5f0f797d1f41947623a536a9519,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4918039831300866365, guid: 9b3ba5f0f797d1f41947623a536a9519,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4918039831300866365, guid: 9b3ba5f0f797d1f41947623a536a9519,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4918039831300866365, guid: 9b3ba5f0f797d1f41947623a536a9519,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4918039831300866365, guid: 9b3ba5f0f797d1f41947623a536a9519,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4918039831300866365, guid: 9b3ba5f0f797d1f41947623a536a9519,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4918039831300866365, guid: 9b3ba5f0f797d1f41947623a536a9519,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4918039831300866365, guid: 9b3ba5f0f797d1f41947623a536a9519,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4918039831300866365, guid: 9b3ba5f0f797d1f41947623a536a9519,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 9b3ba5f0f797d1f41947623a536a9519, type: 3}
+--- !u!4 &3737456974826476653 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4918039831300866365, guid: 9b3ba5f0f797d1f41947623a536a9519,
+    type: 3}
+  m_PrefabInstance: {fileID: 8619465801369359696}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &5478415478829496968 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4294538075752476632, guid: 9b3ba5f0f797d1f41947623a536a9519,
+    type: 3}
+  m_PrefabInstance: {fileID: 8619465801369359696}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &813390609611951385
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5478415478829496968}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c593457cd8105e148906690e1707c592, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  trigger: 32
+  condition:
+    luaConditions: []
+    questConditions: []
+    acceptedTags: []
+    acceptedGameObjects: []
+    luaWizardIndex: -1
+    lastEvaluationValue: 0
+  setQuestState: 1
+  questName: 
+  questState: 2
+  setQuestEntryState: 1
+  questEntryNumber: 1
+  questEntryState: 2
+  setAnotherQuestEntryState: 0
+  anotherQuestEntryNumber: 1
+  anotherQuestEntryState: 0
+  luaCode: 
+  sequence: 
+  sequenceSpeaker: {fileID: 0}
+  sequenceListener: {fileID: 0}
+  waitOneFrameOnStartOrEnable: 1
+  alertMessage: 
+  textTable: {fileID: 0}
+  alertDuration: 0
+  sendMessages: []
+  barkSource: 0
+  barkConversation: 
+  barkText: 
+  barkTextSequence: 
+  barker: {fileID: 0}
+  barkTarget: {fileID: 0}
+  barkOrder: 0
+  allowBarksDuringConversations: 0
+  skipBarkIfNoValidEntries: 0
+  cacheBarkLines: 0
+  conversation: The Budhi Family
   conversationConversant: {fileID: 0}
   conversationActor: {fileID: 0}
   startConversationEntryID: -1
