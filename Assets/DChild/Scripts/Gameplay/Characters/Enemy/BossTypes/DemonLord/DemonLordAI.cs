@@ -96,6 +96,9 @@ namespace DChild.Gameplay.Characters.Enemies
             private float m_targetDistanceTolerance;
             public float targetDistanceTolerance => m_targetDistanceTolerance;
             [SerializeField]
+            private float m_targetGroundDistanceTolerance;
+            public float targetGroundDistanceTolerance => m_targetGroundDistanceTolerance;
+            [SerializeField]
             private float m_target1CHDistance;
             public float target1CHDistance => m_target1CHDistance;
             [SerializeField]
@@ -381,8 +384,12 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator m_aimRoutine;
 
 
-        //[SerializeField, TabGroup("FX")]
-        //private ParticleFX m_sparkFX;
+        [SerializeField, TabGroup("FX")]
+        private ParticleFX m_lightingStepAwayFX;
+        [SerializeField, TabGroup("FX")]
+        private ParticleFX m_lightingStepMidairFX;
+        [SerializeField, TabGroup("FX")]
+        private float m_lightingStepMidairFXYOFfset;
 
         [SerializeField]
         private SpineEventListener m_spineListener;
@@ -492,6 +499,16 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_currentAttackCoroutine = null;
                 m_attackDecider.hasDecidedOnAttack = false;
             }
+            if (m_lazerLookCoroutine != null)
+            {
+                StopCoroutine(m_lazerLookCoroutine);
+                m_lazerLookCoroutine = null;
+            }
+            if (m_lazerBeamCoroutine != null)
+            {
+                StopCoroutine(m_lazerBeamCoroutine);
+                m_lazerBeamCoroutine = null;
+            }
             enabled = true;
             StopAllCoroutines();
             m_stateHandle.OverrideState(State.Phasing);
@@ -502,7 +519,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnAttackDone(object sender, EventActionArgs eventArgs)
         {
-            //m_animation.DisableRootMotion();
+            m_animation.DisableRootMotion();
             m_stateHandle.ApplyQueuedState();
         }
 
@@ -720,9 +737,13 @@ namespace DChild.Gameplay.Characters.Enemies
             m_lazerLookCoroutine = StartCoroutine(LazerLookRoutine());
             m_aimOn = true;
             //m_aimAtPlayerCoroutine = StartCoroutine(AimAtTargtRoutine());
+            m_animation.EnableRootMotion(true, true);
             m_book.LightningMidair(false);
             m_animation.SetAnimation(0, m_info.lightningStepMidair.animation, false);
+            m_lightingStepMidairFX.transform.position = new Vector2(transform.position.x, GroundPosition(m_lightingStepMidairFX.transform.position).y + m_lightingStepMidairFXYOFfset);
+            m_lightingStepMidairFX.Play();
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.lightningStepMidair.animation);
+            m_animation.DisableRootMotion();
             m_book.RayOfFrost(false);
             m_ephemeralArmsFront.RayOfFrost(false);
             m_ephemeralArmsBack.RayOfFrost(false);
@@ -732,10 +753,12 @@ namespace DChild.Gameplay.Characters.Enemies
             m_ephemeralArmsFront.RayOfFrostCharge(true);
             m_ephemeralArmsBack.RayOfFrostCharge(true);
             m_animation.SetAnimation(0, m_info.rayOfFrostChargeAnimation, true);
+            m_lineRenderer.gameObject.SetActive(true);
             m_beamOn = true;
             m_lazerBeamCoroutine = StartCoroutine(LazerBeamRoutine());
             yield return new WaitForSeconds(m_info.rayOfFrostChargeDuration);
             m_beamOn = false;
+            m_lineRenderer.gameObject.SetActive(false);
             m_book.RayOfFrostFire(false);
             m_ephemeralArmsFront.RayOfFrostFire(false);
             m_ephemeralArmsBack.RayOfFrostFire(false);
@@ -983,6 +1006,23 @@ namespace DChild.Gameplay.Characters.Enemies
         #endregion
 
         #region Movement
+        private IEnumerator LightningStepRoutine()
+        {
+            m_stateHandle.Wait(State.ReevaluateSituation);
+            m_animation.EnableRootMotion(true, true);
+            m_animation.SetAnimation(0, m_info.lightningStepAway.animation, false);
+            m_animation.AddAnimation(0, m_info.idleAnimation, true, 0);
+            m_lightingStepAwayFX.Play();
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.idleAnimation);
+            //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.lightningStepAway.animation);
+            m_animation.DisableRootMotion();
+            //m_animation.SetAnimation(0, m_info.idleAnimation, true).MixDuration = 0;
+            //m_attackDecider.hasDecidedOnAttack = false;
+            //m_currentAttackCoroutine = null;
+            m_stateHandle.ApplyQueuedState();
+            yield return null;
+        }
+
         #endregion
 
         //private void DecidedOnAttack(bool condition)
@@ -1188,15 +1228,15 @@ namespace DChild.Gameplay.Characters.Enemies
                     {
                         #region PHASE 1 ATTACKS
                         case Attack.Phase1Pattern1:
-                            //if (Vector2.Distance(m_targetInfo.position, m_character.centerMass.position) > m_info.target1CHDistance)
-                            //{
-                            //    m_currentAttackCoroutine = StartCoroutine(ThreeFireBallsAttackRoutine());
-                            //}
-                            //else
-                            //{
-                            //    m_currentAttackCoroutine = StartCoroutine(EphemeralArmsSmashAttackRoutine(FollowUpAttack.ThreeFireBalls));
-                            //}
-                            m_currentAttackCoroutine = StartCoroutine(RayOfFrostAttackRoutine());
+                            if (Vector2.Distance(m_targetInfo.position, m_character.centerMass.position) > m_info.target1CHDistance)
+                            {
+                                m_currentAttackCoroutine = StartCoroutine(ThreeFireBallsAttackRoutine());
+                            }
+                            else
+                            {
+                                m_currentAttackCoroutine = StartCoroutine(EphemeralArmsSmashAttackRoutine(FollowUpAttack.ThreeFireBalls));
+                            }
+                            //m_currentAttackCoroutine = StartCoroutine(RayOfFrostAttackRoutine());
                             m_pickedCooldown = m_currentFullCooldown[0];
                             break;
                         case Attack.Phase1Pattern2:
@@ -1324,11 +1364,18 @@ namespace DChild.Gameplay.Characters.Enemies
                     {
                         m_turnState = State.Cooldown;
                         m_stateHandle.SetState(State.Turning);
+                        return;
                     }
                     else
                     {
                         m_book.Idle(true);
                         m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                    }
+
+                    if (Vector2.Distance(m_targetInfo.position, m_character.centerMass.position) <= m_info.target1CHDistance)
+                    {
+                        StartCoroutine(LightningStepRoutine());
+                        return;
                     }
 
                     if (m_currentCooldown <= m_pickedCooldown)
@@ -1348,14 +1395,21 @@ namespace DChild.Gameplay.Characters.Enemies
                     ChooseAttack();
                     if (IsFacingTarget())
                     {
-                        if (m_attackDecider.hasDecidedOnAttack && IsTargetInRange(m_currentAttackRange))
+                        if (m_attackDecider.hasDecidedOnAttack && IsTargetInRange(m_currentAttackRange) && Mathf.Abs(GroundPosition(transform.position).y - m_character.centerMass.position.y) <= m_info.targetGroundDistanceTolerance)
                         {
                             m_stateHandle.SetState(State.Attacking);
                         }
                         else
                         {
                             m_animation.SetAnimation(0, m_info.move.animation, true);
-                            m_agent.SetDestination(m_targetInfo.position);
+                            if (Mathf.Abs(GroundPosition(transform.position).y - m_character.centerMass.position.y) <= m_info.targetGroundDistanceTolerance)
+                            {
+                                m_agent.SetDestination(m_targetInfo.position);
+                            }
+                            else
+                            {
+                                m_agent.SetDestination(GroundPosition(transform.position));
+                            }
                             m_agent.Move(m_info.move.speed);
                         }
                     }
