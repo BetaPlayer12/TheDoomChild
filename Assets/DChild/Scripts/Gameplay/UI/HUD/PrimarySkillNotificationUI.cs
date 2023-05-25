@@ -7,8 +7,7 @@ using UnityEngine.UI;
 
 namespace DChild.Gameplay
 {
-    [SerializeField]
-    public class PrimarySkillNotification : MonoBehaviour
+    public class PrimarySkillNotificationUI : NotificationUI
     {
         [SerializeField]
         private PrimarySkillList m_notifiedSkill;
@@ -34,27 +33,17 @@ namespace DChild.Gameplay
             m_instruction.text = INSTRUCTION_HEADER + skill.instruction;
         }
 
-        private void OnSkillUpdate(object sender, PrimarySkillUpdateEventArgs eventArgs)
+        public void SetNotifiedSkill(PrimarySkill skill)
         {
-            if (eventArgs.isEnabled)
+            for (int i = 0; i < m_notifiedSkill.Count; i++)
             {
-                var skill = eventArgs.skill;
-                for (int i = 0; i < m_notifiedSkill.Count; i++)
+                var skillData = m_notifiedSkill.GetData(i);
+                if (skillData.skill == skill)
                 {
-                    var skillData = m_notifiedSkill.GetData(i);
-                    if (skillData.skill == skill)
-                    {
-                        SetNotifiedSkill(skillData);
-                        break;
-                    }
+                    SetNotifiedSkill(skillData);
+                    break;
                 }
             }
         }
-
-        private void Start()
-        {
-            GameplaySystem.playerManager.player.skills.SkillUpdate += OnSkillUpdate;
-        }
-
     }
 }

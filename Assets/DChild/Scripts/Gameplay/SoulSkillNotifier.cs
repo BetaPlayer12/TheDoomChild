@@ -6,21 +6,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PromptSoulSkillNotificationHandle : MonoBehaviour
+public class SoulSkillNotifier : MonoBehaviour
 {
-    [Button]
-    private void NotifySkill()
-    {
-        GameplaySystem.gamplayUIHandle.PromptSoulSkillNotification();
-    }
     private void UpdateNotification(object sender, SoulSkillAcquiredEventArgs eventArgs)
     {
-        NotifySkill();
+        GameplaySystem.gamplayUIHandle.notificationManager.QueueNotification(eventArgs.SoulSKill);
     }
     private void Start()
     {
         GameplaySystem.playerManager.player.inventory.SoulSkillItemAcquired += UpdateNotification;
     }
-
-   
 }
