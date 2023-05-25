@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e2acaed9e8c736b40ba1e2f6f59e7339, type: 3}
-  m_Name: FrostPowderItemData
+  m_Name: FrostOintmentItemData
   m_EditorClassIdentifier: 
   serializationData:
     SerializedFormat: 2
@@ -26,7 +26,16 @@ MonoBehaviour:
       Data: 0|DChild.Gameplay.Items.IUsableItemModule[], Assembly-CSharp
     - Name: 
       Entry: 12
-      Data: 0
+      Data: 1
+    - Name: 
+      Entry: 7
+      Data: 1|DChild.Gameplay.Items.CureStatusItemModule, Assembly-CSharp
+    - Name: m_toCure
+      Entry: 3
+      Data: 4
+    - Name: 
+      Entry: 8
+      Data: 
     - Name: 
       Entry: 13
       Data: 
@@ -35,39 +44,28 @@ MonoBehaviour:
       Data: 
     - Name: m_durationEffectList
       Entry: 7
-      Data: 1|DChild.Gameplay.Items.IDurationItemEffect[], Assembly-CSharp
+      Data: 2|DChild.Gameplay.Items.IDurationItemEffect[], Assembly-CSharp
     - Name: 
       Entry: 12
-      Data: 3
+      Data: 2
     - Name: 
       Entry: 7
-      Data: 2|DChild.Gameplay.Items.PlayerWeaponBaseDamageModificationItemEffect,
-        Assembly-CSharp
-    - Name: m_type
-      Entry: 3
-      Data: 8
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 3|DChild.Gameplay.Items.PlayerDamageModifierItemEffect, Assembly-CSharp
-    - Name: m_addeddamage
-      Entry: 3
-      Data: 30
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 4|DChild.Gameplay.Items.PlayerWeaponStatusInflictorModifierItemEffect,
-        Assembly-CSharp
+      Data: 3|DChild.Gameplay.Items.PlayerStatusImmunityItemEffect, Assembly-CSharp
     - Name: m_type
       Entry: 3
       Data: 4
-    - Name: m_statusinflictchance
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 4|DChild.Gameplay.Items.PlayerResistanceModifierItemEffect, Assembly-CSharp
+    - Name: m_type
       Entry: 3
-      Data: 20
+      Data: 8
+    - Name: m_addedResistance
+      Entry: 3
+      Data: 15
     - Name: 
       Entry: 8
       Data: 
@@ -89,19 +87,21 @@ MonoBehaviour:
     - Name: 
       Entry: 8
       Data: 
-  m_ID: 8756
-  m_name: Frost Powder
+  m_ID: 19772
+  m_name: Frost Ointment
   m_connectToDatabase: 0
   m_databaseID: -1
-  m_customName: Frost Powder
+  m_customName: Frost Ointment
   m_initialized: 1
-  m_category: 4
+  m_category: 2
   m_icon: {fileID: 21300000, guid: 5c65c84f4f00f8c4eb3e28bc032fbd29, type: 3}
-  m_quantityLimit: 500
-  m_cost: 5
-  m_description: 
+  m_quantityLimit: 5
+  m_cost: 160
+  m_description: "-Cures the user\u2019s Frozen status\n-Temporarily grants the user
+    with a +15% resistance against ICE attack damage\n-Temporarily negates the Frozen
+    status for 5 seconds."
   m_canBeSold: 1
   m_hasInfiniteUses: 0
   m_durationEffect: 1
-  m_duration: 20
+  m_duration: 5
   m_moduleSummary: 
