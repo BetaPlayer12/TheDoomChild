@@ -427,7 +427,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_introController = GetComponent<PlayerIntroControlsController>();
 
             //Abilities
-            m_abilities = GetComponentInParent<Player>().GetComponentInChildren<BattleAbilities>();
+            m_abilities = GetComponentInParent<Player>().GetComponentInChildren<CombatArts>();
 
             m_updateEnabled = true;
         }
