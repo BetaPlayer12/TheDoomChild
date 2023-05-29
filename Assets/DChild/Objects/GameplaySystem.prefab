@@ -57,7 +57,6 @@ GameObject:
   m_Component:
   - component: {fileID: 8627908815797908104}
   - component: {fileID: 2151987310079795733}
-  - component: {fileID: 3084909151314270136}
   m_Layer: 0
   m_Name: UIModeHandle
   m_TagString: Untagged
@@ -76,7 +75,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 3697357745177695544}
   m_Father: {fileID: 1656687072529629155}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -100,17 +100,10 @@ MonoBehaviour:
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
-    SerializationNodes:
-    - Name: m_itemNotifications
-      Entry: 6
-      Data: 
+    SerializationNodes: []
   m_cinemaSignal: {fileID: 0}
   m_gameOverSignal: {fileID: 0}
-  m_fullScreenNotifSignal: {fileID: 0}
-  m_primarySkillNotification: {fileID: 0}
-  m_soulSkillNotification: {fileID: 0}
-  m_journalDetailedNotification: {fileID: 0}
-  m_loreNotification: {fileID: 0}
+  m_notificationManager: {fileID: 0}
   m_tradeWindowSignal: {fileID: 0}
   m_tradeManager: {fileID: 0}
   m_storeNavigator: {fileID: 0}
@@ -126,13 +119,71 @@ MonoBehaviour:
   m_fadeUI: {fileID: 0}
   m_interactablePrompt: {fileID: 0}
   m_movableObjectPrompt: {fileID: 0}
---- !u!114 &3084909151314270136
+--- !u!1 &1760432952484764363
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5618533747675153132}
+  - component: {fileID: 3945132187992572300}
+  - component: {fileID: 2623368095625714337}
+  - component: {fileID: 8632759282891180544}
+  m_Layer: 0
+  m_Name: Notifiers
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5618533747675153132
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1760432952484764363}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3697357745177695544}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3945132187992572300
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 741970073896131042}
+  m_GameObject: {fileID: 1760432952484764363}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e661420b0c7907489b8e6d83adcfcd7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &2623368095625714337
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1760432952484764363}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1cd1e0ae161e0b944854929bff0d97b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &8632759282891180544
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1760432952484764363}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 88123d86cdc86d84aacf85356ed10f3c, type: 3}
@@ -512,6 +563,151 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_time: 
+--- !u!1 &1872686505834397819
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3697357745177695544}
+  - component: {fileID: 5846993833608596782}
+  - component: {fileID: 8545634109120223692}
+  - component: {fileID: 2113961725359607985}
+  m_Layer: 0
+  m_Name: UINotifications
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3697357745177695544
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1872686505834397819}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 5618533747675153132}
+  m_Father: {fileID: 8627908815797908104}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5846993833608596782
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1872686505834397819}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0d2ba390f6e00b147bd332746334cc97, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_notificationInterval: 0.01
+  m_fullscreenNotificationHandle: {fileID: 8545634109120223692}
+  m_promptNotificationHandle: {fileID: 0}
+--- !u!114 &8545634109120223692
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1872686505834397819}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb22bff39ad73874caafa10d86335e05, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: m_primarySkillNotification
+      Entry: 6
+      Data: 
+    - Name: m_soulSkillNotification
+      Entry: 6
+      Data: 
+    - Name: m_journalDetailedNotification
+      Entry: 7
+      Data: 0|DChild.Gameplay.UI.FullscreenNotificationHandle+UIContainerSubHandle,
+        Assembly-CSharp
+    - Name: m_priority
+      Entry: 3
+      Data: 0
+    - Name: m_container
+      Entry: 6
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: m_loreNotification
+      Entry: 7
+      Data: 1|DChild.Gameplay.UI.NotificationHandle`1+SubHandle`1[[DChild.Gameplay.UI.FullscreenNotificationHandle+NotificationType,
+        Assembly-CSharp],[DChild.Gameplay.Systems.Lore.LoreInfoUI, Assembly-CSharp]],
+        Assembly-CSharp
+    - Name: m_priority
+      Entry: 3
+      Data: 0
+    - Name: m_ui
+      Entry: 6
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: m_itemNotification
+      Entry: 6
+      Data: 
+  m_priority: 1
+  m_fullScreenNotifSignal: {fileID: 0}
+--- !u!114 &2113961725359607985
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1872686505834397819}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c90c1cc483248c498073c90def0b1a4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: m_questNotification
+      Entry: 7
+      Data: 0|DChild.Gameplay.UI.NotificationHandle`1+SubHandle`1[[DChild.Gameplay.UI.PromptNotificationHandle+NotificationType,
+        Assembly-CSharp],[DChild.Gameplay.Quests.QuestNotificationUI, Assembly-CSharp]],
+        Assembly-CSharp
+    - Name: m_priority
+      Entry: 3
+      Data: 0
+    - Name: m_ui
+      Entry: 6
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+  m_priority: 0
 --- !u!1 &3555969120647319974
 GameObject:
   m_ObjectHideFlags: 0

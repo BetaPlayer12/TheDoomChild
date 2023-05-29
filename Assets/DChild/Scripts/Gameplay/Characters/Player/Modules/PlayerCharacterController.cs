@@ -13,7 +13,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         [SerializeField]
         private PlayerModuleActivator m_skills;
         [SerializeField]
-        private BattleAbilities m_abilities;
+        private CombatArts m_abilities;
         [SerializeField]
         private CharacterState m_state;
         [SerializeField]
