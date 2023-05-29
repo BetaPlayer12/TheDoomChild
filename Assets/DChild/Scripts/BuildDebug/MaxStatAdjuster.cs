@@ -6,6 +6,7 @@ using UnityEngine;
 
 namespace DChildDebug.Window
 {
+
     public class MaxStatAdjuster : SerializedMonoBehaviour, ITrackableValue
     {
         [SerializeField]

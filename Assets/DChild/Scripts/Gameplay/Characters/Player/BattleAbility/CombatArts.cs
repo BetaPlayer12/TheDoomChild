@@ -1,11 +1,30 @@
 ﻿using Sirenix.OdinInspector;
+using System;
 using UnityEngine;
 
 namespace DChild.Gameplay.Characters.Players
 {
-    public class BattleAbilities : SerializedMonoBehaviour
+    public class CombatArts : SerializedMonoBehaviour
     {
+        [SerializeField]
+        private AetherPoints m_aetherPoints;
         private int[] m_abilityLevels;
+
+        public CombatArtsSaveData SaveData()
+        {
+            return new CombatArtsSaveData(m_aetherPoints.points, m_abilityLevels);
+        }
+
+        public AetherPoints aetherPoints => m_aetherPoints;
+
+        public void LoadData(CombatArtsSaveData savedData)
+        {
+            m_aetherPoints.SetPoints(savedData.aetherPoints);
+            for (int i = 0; i < m_abilityLevels.Length; i++)
+            {
+                m_abilityLevels[i] = savedData.GetArtsLevel(i);
+            }
+        }
 
         public bool IsAbilityActivated(CombatArt battleAbility)
         {
