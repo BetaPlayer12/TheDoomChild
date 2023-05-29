@@ -12,17 +12,35 @@ namespace DChild.Gameplay.Items
     {
         [SerializeField]
         private GameObject m_toCreate;
+        [SerializeField]
+        private int m_shadowgaugereduction;
+        private GameObject m_instanceReference;
+        private GameObject m_instance;
 
         public bool CanBeUse(IPlayer player)
         {
-            return true;
+            int m_currentmagic = player.magic.currentValue;
+            if (m_currentmagic >= m_shadowgaugereduction)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+            
         }
 
         public void Use(IPlayer player)
         {
-            m_toCreate = Object.Instantiate(m_toCreate);
-            m_toCreate.transform.SetParent(player.character.transform);
-            m_toCreate.transform.localPosition = Vector3.zero;
+            this.m_instanceReference = m_toCreate;
+            player.magic.ReduceCurrentValue(m_shadowgaugereduction);
+            int magic = player.magic.maxValue;
+            magic= magic - m_shadowgaugereduction;
+            player.magic.SetMaxValue(magic);
+            m_instance = Object.Instantiate(m_instanceReference);
+            m_instance.transform.SetParent(player.character.transform);
+            m_instance.transform.localPosition = Vector3.zero;
         }
     }
 }
