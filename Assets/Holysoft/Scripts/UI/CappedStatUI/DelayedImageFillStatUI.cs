@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 namespace Holysoft.Gameplay.UI
 {
+
     public class DelayedImageFillStatUI : CappedStatUI
     {
         [SerializeField]
