@@ -196,6 +196,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8072390829980146930}
+  - component: {fileID: 8112942921328878934}
   m_Layer: 5
   m_Name: PlayerEXPCounter
   m_TagString: Untagged
@@ -226,6 +227,33 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0.0000038146973}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &8112942921328878934
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 757795321314557292}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01b0389b3450c814baec48642c38b257, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: m_stat
+      Entry: 6
+      Data: 
+  m_trackMissingValue: 0
+  m_currentValueLabel: {fileID: 235013707726076201}
+  m_maxValueLabel: {fileID: 8161982294122581311}
 --- !u!1 &1466105709050307352
 GameObject:
   m_ObjectHideFlags: 0
@@ -570,6 +598,18 @@ MonoBehaviour:
           m_TargetAssemblyTypeName: DChild.Gameplay.UI.CombatArts.CombatArtSelectButton,
             Assembly-CSharp
           m_MethodName: Select
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+        - m_Target: {fileID: 7941678797173900440}
+          m_TargetAssemblyTypeName: DChild.Gameplay.Leveling.PlayerLevelUI, Assembly-CSharp
+          m_MethodName: SyncWithReference
           m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
@@ -1504,6 +1544,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8506342505392904120}
+  - component: {fileID: 7941678797173900440}
   m_Layer: 5
   m_Name: CurrentPlayerLevelSegment
   m_TagString: Untagged
@@ -1533,6 +1574,20 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &7941678797173900440
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5430674556135183751}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7372e72586f59d5409e7f00e945c5bf2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_reference: {fileID: 0}
+  m_levelLabel: {fileID: 5667954036990468220}
 --- !u!1 &5524346201753256745
 GameObject:
   m_ObjectHideFlags: 0
@@ -2879,6 +2934,38 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c990e09198972904d91fc33348f0ade2, type: 3}
+--- !u!1 &90478121636747292 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 63941585387128297, guid: c990e09198972904d91fc33348f0ade2,
+    type: 3}
+  m_PrefabInstance: {fileID: 117757520171916789}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &9195055107737856406
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 90478121636747292}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6a3c5d569bec8604ca0fb21ee4278971, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_reference: {fileID: 0}
+  m_pointsLabel: {fileID: 2343722886752161587}
+--- !u!114 &2343722886752161587 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2388253997521343174, guid: c990e09198972904d91fc33348f0ade2,
+    type: 3}
+  m_PrefabInstance: {fileID: 117757520171916789}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &3201919810723138018 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 3300534677043549207, guid: c990e09198972904d91fc33348f0ade2,

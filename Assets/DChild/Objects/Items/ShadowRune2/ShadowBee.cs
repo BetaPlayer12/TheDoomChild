@@ -1,6 +1,7 @@
 using DChild;
 using DChild.Gameplay;
 using DChild.Gameplay.Characters;
+using DChild.Gameplay.Combat;
 using DChild.Gameplay.Pooling;
 using DChild.Gameplay.Projectiles;
 using Sirenix.OdinInspector;
@@ -24,15 +25,16 @@ public class ShadowBee : MonoBehaviour
     private Transform m_rotationControl;
     [SerializeField, BoxGroup("FX")]
     private List<ParticleFX> m_fxs;
-    [SerializeField]
-    private PoolableObject m_object;
+    //[SerializeField]
+    //private PoolableObject m_object;
     private ProjectileLauncher m_launcher;
+    private SimpleAttackProjectile m_projectile;
 
     private Coroutine m_rotationControlRoutine;
 
     private void Awake()
     {
-        //m_projectile = GetComponent<SimpleAttackProjectile>();
+        m_projectile = GetComponent<SimpleAttackProjectile>();
         m_launcher = new ProjectileLauncher(m_projectileInfo, m_launcherPoints[0]);
     }
 
@@ -57,9 +59,18 @@ public class ShadowBee : MonoBehaviour
                     m_launcher = new ProjectileLauncher(m_projectileInfo, m_launcherPoints[i]);
                     var instance = GameSystem.poolManager.GetPool<ProjectilePool>().GetOrCreateItem(m_projectileInfo.projectile);
                     instance.transform.position = m_launcherPoints[i].position;
-                    //instance.GetComponent<Attacker>().SetParentAttacker(m_attacker);
+                    if (GetComponentInParent<Character>() != null)
+                        instance.GetComponent<Attacker>().SetParentAttacker(GetComponentInParent<Character>().GetComponent<Attacker>());
 
-                    m_launcher.AimAt(new Vector2(m_launcherPoints[i].position.x + 5, m_launcherPoints[i].position.y));
+                    if (GetComponentInParent<Character>() != null)
+                    {
+                        m_launcher.AimAt(new Vector2(m_launcherPoints[i].position.x + (GetComponentInParent<Character>().facing == HorizontalDirection.Right ? 5 : -5), m_launcherPoints[i].position.y));
+                    }
+                    else
+                    {
+                        m_launcher.AimAt(new Vector2(m_launcherPoints[i].position.x + 5, m_launcherPoints[i].position.y));
+                    }
+
                     m_launcher.LaunchProjectile(m_launcherPoints[i].right, instance.gameObject);
                 }
 
@@ -77,7 +88,7 @@ public class ShadowBee : MonoBehaviour
             m_rotationControlRoutine = null;
         }
         m_rotationControl.localRotation = Quaternion.identity;
-        m_object.CallPoolRequest();
+        m_projectile.CallPoolRequest();
         yield return null;
     }
 
