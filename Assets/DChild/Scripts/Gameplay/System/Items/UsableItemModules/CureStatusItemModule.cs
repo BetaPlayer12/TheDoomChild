@@ -12,7 +12,7 @@ namespace DChild.Gameplay.Items
 
         public bool CanBeUse(IPlayer player)
         {
-            return player.statusEffectReciever.IsInflictedWith(m_toCure);
+            return true;
         }
 
         public void Use(IPlayer player)
