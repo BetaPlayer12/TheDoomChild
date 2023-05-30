@@ -19,8 +19,8 @@ using DChild.Gameplay.Projectiles;
 
 namespace DChild.Gameplay.Characters.Enemies
 {
-    [AddComponentMenu("DChild/Gameplay/Enemies/Minion/TomeOfSpells")]
-    public class TomeOfSpellsAI : CombatAIBrain<TomeOfSpellsAI.Info>
+    [AddComponentMenu("DChild/Gameplay/Enemies/Minion/TomeOfSpells (Ice)")]
+    public class TomeOfSpellsIceAI : CombatAIBrain<TomeOfSpellsIceAI.Info>
     {
         [System.Serializable]
         public class Info : BaseInfo
@@ -149,6 +149,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private GameObject m_selfCollider;
         [SerializeField, TabGroup("Reference")]
         private Collider2D m_bodyCollider;
+        [SerializeField, TabGroup("Reference")]
+        private IsolatedObjectPhysics2D m_isolatedObjectPhysics2D;
         [SerializeField, TabGroup("Modules")]
         private TransformTurnHandle m_turnHandle;
         [SerializeField, TabGroup("Modules")]
@@ -371,10 +373,13 @@ namespace DChild.Gameplay.Characters.Enemies
             m_agent.Stop();
             Debug.Log("DIE HERE");
             m_animation.SetAnimation(0, m_info.deathStartAnimation, false);
+            m_animation.EnableRootMotion(true, false);
+            m_rigidbody2D.constraints = RigidbodyConstraints2D.FreezeRotation;
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.deathStartAnimation);
-            m_character.physics.simulateGravity = true;
+            m_isolatedObjectPhysics2D.simulateGravity = true;
             m_animation.SetAnimation(0, m_info.deathLoopAnimation, true);
-            //yield return new WaitUntil(() => m_groundSensor.isDetecting);
+            m_bodyCollider.enabled = true;
+            yield return new WaitUntil(() => m_bodyCollider.IsTouchingLayers(DChildUtility.GetEnvironmentMask()));
             m_animation.SetAnimation(0, m_info.deathEndAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.deathEndAnimation);
             enabled = false;
@@ -387,7 +392,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_targetInfo = target;
             transform.position = new Vector2(m_targetInfo.position.x, m_targetInfo.position.y + 10f);
-            m_character.physics.simulateGravity = false;
+            m_isolatedObjectPhysics2D.simulateGravity = false;
             m_hitbox.Enable();
             m_flinchHandle.gameObject.SetActive(true);
             m_health.SetHealthPercentage(1f);
@@ -435,7 +440,6 @@ namespace DChild.Gameplay.Characters.Enemies
 
             m_flinchHandle.gameObject.SetActive(true);
             m_rigidbody2D.constraints = RigidbodyConstraints2D.FreezeRotation;
-            m_attackRoutine = null;
             m_stateHandle.ApplyQueuedState();
             m_attackDecider.hasDecidedOnAttack = false;
             yield return null;
@@ -462,10 +466,6 @@ namespace DChild.Gameplay.Characters.Enemies
                     instance.transform.position = m_character.centerMass.position;
                     var component = instance.GetComponent<Projectile>();
                     component.ResetState();
-                    //component.GetComponent<Rigidbody2D>().velocity = projectileMoveDirection;
-                    //Vector2 v = component.GetComponent<Rigidbody2D>().velocity;
-                    //var projRotation = Mathf.Atan2(v.y, v.x) * Mathf.Rad2Deg;
-                    //component.transform.rotation = Quaternion.AngleAxis(projRotation, Vector3.forward);
                     Vector2 v = projectileMoveDirection;
                     var projRotation = Mathf.Atan2(v.y, v.x) * Mathf.Rad2Deg;
                     component.transform.rotation = Quaternion.AngleAxis(projRotation, Vector3.forward);
@@ -497,10 +497,6 @@ namespace DChild.Gameplay.Characters.Enemies
                     instance.transform.position = m_character.centerMass.position;
                     var component = instance.GetComponent<Projectile>();
                     component.ResetState();
-                    //component.GetComponent<Rigidbody2D>().velocity = projectileMoveDirection;
-                    //Vector2 v = component.GetComponent<Rigidbody2D>().velocity;
-                    //var projRotation = Mathf.Atan2(v.y, v.x) * Mathf.Rad2Deg;
-                    //component.transform.rotation = Quaternion.AngleAxis(projRotation, Vector3.forward);
                     Vector2 v = projectileMoveDirection;
                     var projRotation = Mathf.Atan2(v.y, v.x) * Mathf.Rad2Deg;
                     component.transform.rotation = Quaternion.AngleAxis(projRotation, Vector3.forward);
@@ -517,17 +513,12 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return new WaitForSeconds(delay);
             component.GetComponent<Rigidbody2D>().velocity = projectileMoveDirection;
             m_delayLaunchRoutine = null;
-            //Vector2 v = component.GetComponent<Rigidbody2D>().velocity;
-            //var projRotation = Mathf.Atan2(v.y, v.x) * Mathf.Rad2Deg;
-            //component.transform.rotation = Quaternion.AngleAxis(projRotation, Vector3.forward);
         }
 
         private void LaunchProjectile()
         {
             if (m_targetInfo.isValid)
             {
-                //m_projectileLauncher.AimAt(m_lastTargetPos);
-                //m_projectileLauncher.LaunchProjectile();
                 LaunchIcePattern(4, 1);
             }
         }
@@ -535,8 +526,6 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             if (m_targetInfo.isValid)
             {
-                //m_projectileLauncher.AimAt(m_lastTargetPos);
-                //m_projectileLauncher.LaunchProjectile();
                 LaunchIcePattern2(4, 1);
             }
         }
@@ -688,7 +677,6 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void Update()
         {
-
             switch (m_stateHandle.currentState)
             {
                 case State.Detect:
@@ -743,7 +731,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
                 case State.Turning:
                     m_stateHandle.Wait(m_turnState);
-                    //StopAllCoroutines();
+                    StopAllCoroutines();
                     m_rigidbody2D.constraints = RigidbodyConstraints2D.FreezePosition | RigidbodyConstraints2D.FreezeRotation;
                     if (m_executeMoveCoroutine != null)
                     {
@@ -771,7 +759,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     {
                         if (Vector2.Distance(m_targetInfo.position, transform.position) <= m_info.targetDistanceTolerance)
                         {
-                            if (m_character.physics.velocity.y > 1 || m_character.physics.velocity.y < -1)
+                            if (m_isolatedObjectPhysics2D.velocity.y > 1 || m_isolatedObjectPhysics2D.velocity.y < -1)
                             {
                                 m_animation.SetAnimation(0, m_info.idleAnimation, true);
                             }
