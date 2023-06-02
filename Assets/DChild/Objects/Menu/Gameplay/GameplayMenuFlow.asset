@@ -629,6 +629,72 @@ MonoBehaviour:
     Mode: 0
   OnEnterHideAllViews: 0
   OnExitHideAllViews: 0
+--- !u!114 &-3488602492790497488
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b2479a69f56cf54c96de81c44e8ad1a, type: 3}
+  m_Name: Portal
+  m_EditorClassIdentifier: 
+  FlowGraphId: cc4022c0-bbcf-4ff3-b644-de466cf85d32
+  NodeId: 9b391a84-d195-4be1-945f-e258229154f1
+  NodeType: 1
+  NodeName: Tab Combat Arts
+  NodeDescription: 
+  InputPorts: []
+  OutputPorts:
+  - NodeId: 9b391a84-d195-4be1-945f-e258229154f1
+    PortId: 26f663af-8de7-4243-a54d-4c337890aaac
+    Direction: 1
+    Capacity: 0
+    Connections:
+    - 4485555f-1d9a-45bb-ab06-14a9d6270935
+    Value: 
+    ValueTypeQualifiedName: 
+    CanBeDeleted: 0
+    CanBeReordered: 0
+  RunUpdate: 0
+  RunFixedUpdate: 0
+  RunLateUpdate: 0
+  NodeState: 0
+  CanBeDeleted: 1
+  Passthrough: 1
+  ClearGraphHistory: 0
+  Position: {x: 1649, y: 847}
+  Trigger: 2
+  SignalPayload:
+    StreamId:
+      Category: None
+      Name: None
+      Custom: 0
+    SignalValueType: 0
+    IntegerValue: 0
+    BooleanValue: 0
+    FloatValue: 0
+    StringValue: 
+    ColorValue: {r: 0, g: 0, b: 0, a: 0}
+    Vector2Value: {x: 0, y: 0}
+    Vector3Value: {x: 0, y: 0, z: 0}
+    Vector4Value: {x: 0, y: 0, z: 0, w: 0}
+  ButtonId:
+    Category: None
+    Name: None
+    Custom: 0
+  ToggleId:
+    Category: PlayerStats
+    Name: CombatArts
+    Custom: 0
+  CommandToggle: 0
+  ViewId:
+    Category: None
+    Name: None
+    Custom: 0
+  CommandShowHide: 0
 --- !u!114 &-3186844690176980444
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -761,6 +827,81 @@ MonoBehaviour:
   OnExitShowViews: []
   OnExitHideViews: []
   OnEnterHideAllViews: 1
+  OnExitHideAllViews: 0
+--- !u!114 &-2993721813557403150
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1c01f9a7d07f5c04a9f277379e94a10b, type: 3}
+  m_Name: UI
+  m_EditorClassIdentifier: 
+  FlowGraphId: cc4022c0-bbcf-4ff3-b644-de466cf85d32
+  NodeId: 3a36cd04-a68c-42d7-97ce-09debd162846
+  NodeType: 0
+  NodeName: Player Stats
+  NodeDescription: 
+  InputPorts:
+  - NodeId: 3a36cd04-a68c-42d7-97ce-09debd162846
+    PortId: ade0907a-1076-4180-a25e-717d4e12ad0a
+    Direction: 0
+    Capacity: 1
+    Connections:
+    - 4ee85054-1f27-48a1-b869-73104654dfcb
+    - ee923934-8933-4ea2-9855-d0d86b3ab8d8
+    Value: '{"CanGoBack":false}'
+    ValueTypeQualifiedName: Doozy.Runtime.UIManager.Nodes.PortData.GoBackInputPortData,
+      Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    CanBeDeleted: 0
+    CanBeReordered: 0
+  OutputPorts:
+  - NodeId: 3a36cd04-a68c-42d7-97ce-09debd162846
+    PortId: 4d019146-87ce-4ce6-b9ce-ce64b98e88f3
+    Direction: 1
+    Capacity: 0
+    Connections: []
+    Value: '{"Trigger":0,"TimeDelay":3.0,"SignalPayload":{"StreamId":{"Category":"None","Name":"None","Custom":false},"SignalValueType":0,"IntegerValue":0,"BooleanValue":false,"FloatValue":0.0,"StringValue":"","ColorValue":{"r":0.0,"g":0.0,"b":0.0,"a":0.0},"Vector2Value":{"x":0.0,"y":0.0},"Vector3Value":{"x":0.0,"y":0.0,"z":0.0},"Vector4Value":{"x":0.0,"y":0.0,"z":0.0,"w":0.0}},"ButtonId":{"Category":"None","Name":"None","Custom":false},"ToggleId":{"Category":"None","Name":"None","Custom":false},"CommandToggle":2,"ViewId":{"Category":"None","Name":"None","Custom":false},"CommandShowHide":0}'
+    ValueTypeQualifiedName: Doozy.Runtime.UIManager.Nodes.PortData.UIOutputPortData,
+      Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    CanBeDeleted: 0
+    CanBeReordered: 0
+  RunUpdate: 0
+  RunFixedUpdate: 0
+  RunLateUpdate: 0
+  NodeState: 0
+  CanBeDeleted: 1
+  Passthrough: 0
+  ClearGraphHistory: 0
+  Position: {x: 1810, y: 634}
+  OnEnterShowViews:
+  - Id:
+      Category: Store
+      Name: StatsMain
+      Custom: 0
+    Mode: 0
+  - Id:
+      Category: Store
+      Name: PlayerStats
+      Custom: 0
+    Mode: 0
+  OnEnterHideViews: []
+  OnExitShowViews: []
+  OnExitHideViews:
+  - Id:
+      Category: Store
+      Name: StatsMain
+      Custom: 0
+    Mode: 0
+  - Id:
+      Category: Store
+      Name: PlayerStats
+      Custom: 0
+    Mode: 0
+  OnEnterHideAllViews: 0
   OnExitHideAllViews: 0
 --- !u!114 &-2631459343607894593
 MonoBehaviour:
@@ -914,7 +1055,7 @@ MonoBehaviour:
     Direction: 1
     Capacity: 0
     Connections:
-    - 4485555f-1d9a-45bb-ab06-14a9d6270935
+    - ade0907a-1076-4180-a25e-717d4e12ad0a
     Value: 
     ValueTypeQualifiedName: 
     CanBeDeleted: 0
@@ -926,7 +1067,7 @@ MonoBehaviour:
   CanBeDeleted: 1
   Passthrough: 1
   ClearGraphHistory: 0
-  Position: {x: 1651.0002, y: 633.7001}
+  Position: {x: 1651, y: 634}
   Trigger: 2
   SignalPayload:
     StreamId:
@@ -1020,7 +1161,7 @@ MonoBehaviour:
   CanBeDeleted: 1
   Passthrough: 1
   ClearGraphHistory: 0
-  Position: {x: 1649.7001, y: 282.50006}
+  Position: {x: 1649.0002, y: 267.912}
   Trigger: 2
   SignalPayload:
     StreamId:
@@ -1493,8 +1634,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02761efe598a45c98fa1baf4d446c6a7, type: 3}
   m_Name: GameplayMenuFlow
   m_EditorClassIdentifier: 
-  EditorPosition: {x: -126, y: 34, z: 0}
-  EditorScale: {x: 0.8695652, y: 0.8695652, z: 1}
+  EditorPosition: {x: -1136, y: -366, z: 0}
+  EditorScale: {x: 1, y: 1, z: 1}
   Id: cc4022c0-bbcf-4ff3-b644-de466cf85d32
   GraphName: Flow Graph
   GraphDescription: 
@@ -1554,6 +1695,9 @@ MonoBehaviour:
   - {fileID: 5466324608755463171}
   - {fileID: -2583389721699372113}
   - {fileID: 2055219563148011848}
+  - {fileID: -3488602492790497488}
+  - {fileID: -2993721813557403150}
+  - {fileID: 6377782472770250205}
   RootNode: {fileID: 6426440333755477475}
   ActiveNode: {fileID: 0}
 --- !u!114 &254213627085283687
@@ -1838,7 +1982,7 @@ MonoBehaviour:
     Direction: 0
     Capacity: 1
     Connections:
-    - 4ee85054-1f27-48a1-b869-73104654dfcb
+    - 26f663af-8de7-4243-a54d-4c337890aaac
     Value: '{"CanGoBack":false}'
     ValueTypeQualifiedName: Doozy.Runtime.UIManager.Nodes.PortData.GoBackInputPortData,
       Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
@@ -1862,16 +2006,26 @@ MonoBehaviour:
   CanBeDeleted: 1
   Passthrough: 0
   ClearGraphHistory: 0
-  Position: {x: 1810.0002, y: 634}
+  Position: {x: 1807, y: 846.5}
   OnEnterShowViews:
+  - Id:
+      Category: Store
+      Name: StatsMain
+      Custom: 0
+    Mode: 0
   - Id:
       Category: Store
       Name: CombatArt
       Custom: 0
-    Mode: 0
+    Mode: 1
   OnEnterHideViews: []
   OnExitShowViews: []
   OnExitHideViews:
+  - Id:
+      Category: Store
+      Name: StatsMain
+      Custom: 0
+    Mode: 0
   - Id:
       Category: Store
       Name: CombatArt
@@ -2787,6 +2941,72 @@ MonoBehaviour:
     Mode: 0
   OnEnterHideAllViews: 0
   OnExitHideAllViews: 0
+--- !u!114 &6377782472770250205
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b2479a69f56cf54c96de81c44e8ad1a, type: 3}
+  m_Name: Portal
+  m_EditorClassIdentifier: 
+  FlowGraphId: cc4022c0-bbcf-4ff3-b644-de466cf85d32
+  NodeId: e9f0bbf1-6dd5-4cca-9c8a-a3aacbb67203
+  NodeType: 1
+  NodeName: Tab Player Stats
+  NodeDescription: 
+  InputPorts: []
+  OutputPorts:
+  - NodeId: e9f0bbf1-6dd5-4cca-9c8a-a3aacbb67203
+    PortId: ee923934-8933-4ea2-9855-d0d86b3ab8d8
+    Direction: 1
+    Capacity: 0
+    Connections:
+    - ade0907a-1076-4180-a25e-717d4e12ad0a
+    Value: 
+    ValueTypeQualifiedName: 
+    CanBeDeleted: 0
+    CanBeReordered: 0
+  RunUpdate: 0
+  RunFixedUpdate: 0
+  RunLateUpdate: 0
+  NodeState: 0
+  CanBeDeleted: 1
+  Passthrough: 1
+  ClearGraphHistory: 0
+  Position: {x: 1650, y: 737}
+  Trigger: 2
+  SignalPayload:
+    StreamId:
+      Category: None
+      Name: None
+      Custom: 0
+    SignalValueType: 0
+    IntegerValue: 0
+    BooleanValue: 0
+    FloatValue: 0
+    StringValue: 
+    ColorValue: {r: 0, g: 0, b: 0, a: 0}
+    Vector2Value: {x: 0, y: 0}
+    Vector3Value: {x: 0, y: 0, z: 0}
+    Vector4Value: {x: 0, y: 0, z: 0, w: 0}
+  ButtonId:
+    Category: None
+    Name: None
+    Custom: 0
+  ToggleId:
+    Category: PlayerStats
+    Name: Stats
+    Custom: 0
+  CommandToggle: 0
+  ViewId:
+    Category: None
+    Name: None
+    Custom: 0
+  CommandShowHide: 0
 --- !u!114 &6426440333755477475
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2927,7 +3147,7 @@ MonoBehaviour:
   CanBeDeleted: 1
   Passthrough: 1
   ClearGraphHistory: 0
-  Position: {x: 1647.7001, y: 506.50003}
+  Position: {x: 1649.0002, y: 508}
   Trigger: 2
   SignalPayload:
     StreamId:

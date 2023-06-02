@@ -1,4 +1,5 @@
 ﻿using DChild.Gameplay.Characters.Players;
+using DChild.Gameplay.UI.PrimarySkills;
 using Sirenix.OdinInspector;
 using System;
 using TMPro;
@@ -12,9 +13,7 @@ namespace DChild.Gameplay
         [SerializeField]
         private PrimarySkillList m_notifiedSkill;
         [SerializeField]
-        private Image m_border;
-        [SerializeField]
-        private Image m_icon;
+        private PrimarySkillIcon m_icon;
         [SerializeField]
         private TextMeshProUGUI m_skillName;
         [SerializeField]
@@ -26,8 +25,7 @@ namespace DChild.Gameplay
 
         public void SetNotifiedSkill(PrimarySkillData skill)
         {
-            m_border.sprite = skill.border;
-            m_icon.sprite = skill.icon;
+            m_icon.DisplayAs(skill);
             m_skillName.text = skill.skillName;
             m_description.text = skill.description;
             m_instruction.text = INSTRUCTION_HEADER + skill.instruction;
