@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Items
 {
-    public abstract class ShadowPetHandler : MonoBehaviour
+    public  class ShadowPetHandler : MonoBehaviour
     {
         public event EventAction<EventActionArgs> Desummoning;
 
