@@ -19,10 +19,21 @@ namespace DChild.Gameplay.Characters.Players
 
         public void LoadData(CombatArtsSaveData savedData)
         {
-            m_aetherPoints.SetPoints(savedData.aetherPoints);
-            for (int i = 0; i < m_abilityLevels.Length; i++)
+            if (savedData != null)
             {
-                m_abilityLevels[i] = savedData.GetArtsLevel(i);
+                m_aetherPoints.SetPoints(savedData.aetherPoints);
+                for (int i = 0; i < m_abilityLevels.Length; i++)
+                {
+                    m_abilityLevels[i] = savedData.GetArtsLevel(i);
+                }
+            }
+            else
+            {
+                m_aetherPoints.SetPoints(0);
+                for (int i = 0; i < m_abilityLevels.Length; i++)
+                {
+                    m_abilityLevels[i] = 0;
+                }
             }
         }
 
