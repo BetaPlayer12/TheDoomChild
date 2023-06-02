@@ -21,7 +21,7 @@ namespace DChild.Gameplay.Items
 
         public void StopEffect(IPlayer player)
         {
-            player.attackResistance.AddResistance(m_type, m_addedResistance / 100f);
+            player.attackResistance.ReduceResistance(m_type, m_addedResistance / 100f);
         }
     }
 }
