@@ -3,6 +3,7 @@ using DChild.Gameplay.UI;
 using Doozy.Runtime.UIManager.Containers;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace DChild.Gameplay.Items
 {
@@ -35,6 +36,11 @@ namespace DChild.Gameplay.Items
         private Command[] m_commands;
 
         private int m_previousAcquiredIndex;
+
+        public void AddListenerToOnNotificationHidden(UnityAction action)
+        {
+            m_container.OnHiddenCallback.Event.AddListener(action);
+        }
 
         public bool IsNotificationFor(ItemData itemData)
         {
@@ -134,6 +140,6 @@ namespace DChild.Gameplay.Items
             Initialize();
         }
 
-
+       
     }
 }

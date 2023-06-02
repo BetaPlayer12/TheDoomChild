@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace DChild.Gameplay.UI
 {
-    public class StoreNotificationUI : MonoBehaviour
+    public class StoreNotificationUI : NotificationUI
     {
         [SerializeField]
         private Image m_icon;

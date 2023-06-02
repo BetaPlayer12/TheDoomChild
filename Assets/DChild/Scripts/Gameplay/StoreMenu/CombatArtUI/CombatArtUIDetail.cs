@@ -14,6 +14,8 @@ namespace DChild.Gameplay.UI.CombatArts
         private VideoPlayer m_preview;
         [SerializeField]
         private TextMeshProUGUI m_descriptionLabel;
+        [SerializeField]
+        private TextMeshProUGUI m_costLabel;
 
         public void Display(CombatArtData data, int level)
         {
@@ -33,6 +35,7 @@ namespace DChild.Gameplay.UI.CombatArts
             StopAllCoroutines();
             StartCoroutine(DisplayPreview(levelData.preview));
             m_descriptionLabel.text = levelData.description;
+            m_costLabel.text = levelData.cost.ToString();
         }
 
         private IEnumerator DisplayPreview(VideoClip clip)

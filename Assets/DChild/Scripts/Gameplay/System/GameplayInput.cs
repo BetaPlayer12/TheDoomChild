@@ -1,5 +1,7 @@
-﻿using DChild.Temp;
+﻿using DChild.Gameplay.Characters.Enemies;
+using DChild.Temp;
 using Doozy.Runtime.Signals;
+using Holysoft.Event;
 using Sirenix.OdinInspector;
 using System;
 using System.Collections;
@@ -23,14 +25,24 @@ namespace DChild.Gameplay.Systems
         private bool m_inputOverridden;
         private InputActionReference m_uiMoveInput;
 
+        private EventAction<EventActionArgs> OverriddenOpenStoreCallBack;
+
         public void ToggleUINavigationInput(bool On)
         {
             //m_uiInput.move = On ? m_uiMoveInput : null;
         }
 
-        public void OverrideNewInfoNotif(float duration)
+        public void RemoveOverrideOpenStore()
         {
             StopAllCoroutines();
+            OverriddenOpenStoreCallBack = null;
+            m_inputOverridden = false;
+        }
+
+        public void OverrideOpenStore(float duration, EventAction<EventActionArgs> overridenCallback)
+        {
+            StopAllCoroutines();
+            OverriddenOpenStoreCallBack = overridenCallback;
             StartCoroutine(OverrideStoreOpen(duration));
         }
 
@@ -61,13 +73,13 @@ namespace DChild.Gameplay.Systems
             {
                 if (m_inputOverridden)
                 {
-                    GameplaySystem.gamplayUIHandle.PromptJournalUpdateNotification();
-                    StopAllCoroutines();
-                    m_inputOverridden = false;
+                    //GameplaySystem.gamplayUIHandle.notificationManager.ShowJournalUpdateNotification();
+                    OverriddenOpenStoreCallBack?.Invoke(this, EventActionArgs.Empty);
+                    RemoveOverrideOpenStore();
                 }
                 else
                 {
-                    GameplaySystem.gamplayUIHandle.OpenStore();
+                    GameplaySystem.gamplayUIHandle.OpenStoreAtPage(StorePage.Map);
                 }
             }
         }
@@ -91,7 +103,7 @@ namespace DChild.Gameplay.Systems
         private void SimulateOverride()
         {
             GameplaySystem.gamplayUIHandle.ShowJournalNotificationPrompt(3);
-            OverrideNewInfoNotif(3);
+            OverrideOpenStore(3, null);
         }
 #endif
     }
