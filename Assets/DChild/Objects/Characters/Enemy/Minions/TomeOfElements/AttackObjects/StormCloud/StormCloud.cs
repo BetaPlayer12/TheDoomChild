@@ -7,7 +7,8 @@ namespace DChild.Gameplay.Projectiles
 {
     public class StormCloud : PoolableObject
     {
-        public float m_timer;
+        [SerializeField]
+        private float m_timer;
         // Start is called before the first frame update
         void Start()
         {
