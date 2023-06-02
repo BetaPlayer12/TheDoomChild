@@ -21,7 +21,10 @@ namespace DChild.Gameplay.Items
 
         public override void Use(IPlayer player)
         {
+
             var handle = player.character.GetComponentInChildren<ProjectileThrow>();
+            Debug.Log("projectile throw");
+            Debug.Log(m_projectile);
             handle.SetProjectileInfo(m_projectile);
             handle.RequestExecution();
         }
