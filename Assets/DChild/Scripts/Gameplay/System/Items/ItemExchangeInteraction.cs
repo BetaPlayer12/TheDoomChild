@@ -13,8 +13,6 @@ namespace DChild.Gameplay.Items
 {
     public class ItemExchangeInteraction : MonoBehaviour, IButtonToInteract, IInteractionRequirement
     {
-       
-
         [InfoBox("When interacted, it will take soul essence when it has not reached the amount, it will give soul essence whn it has reached the amount")]
         [SerializeField, MinValue(1), OnValueChanged("OnAmountChanged")]
         private int m_amountRequired;
@@ -44,7 +42,6 @@ namespace DChild.Gameplay.Items
 
         public bool CanBeInteracted(Character character)
         {
-            GameplaySystem.gamplayUIHandle.ShowSoulEssenceNotify(true);
             var inventory = character.GetComponent<PlayerControlledObject>().owner.inventory;
             return inventory.currency >= m_amountRequired;
         }

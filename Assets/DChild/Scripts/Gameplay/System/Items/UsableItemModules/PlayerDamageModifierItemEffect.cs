@@ -17,8 +17,8 @@ namespace DChild.Gameplay.Items
 
         public void StartEffect(IPlayer player)
         {
-            Damage temp = player.weapon.damage;
-            float damage = temp.value * (m_addeddamage / 100f);
+            int temp = player.stats.GetBaseStat(PlayerStat.Attack);
+            float damage = temp * (m_addeddamage / 100f);
             int Calculateddamage = (int)Math.Ceiling(damage);
             player.weapon.SetAddedDamage(Calculateddamage);
         }

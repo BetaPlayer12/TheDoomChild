@@ -13,7 +13,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         [SerializeField]
         private PlayerModuleActivator m_skills;
         [SerializeField]
-        private BattleAbilities m_abilities;
+        private CombatArts m_abilities;
         [SerializeField]
         private CharacterState m_state;
         [SerializeField]
@@ -427,7 +427,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_introController = GetComponent<PlayerIntroControlsController>();
 
             //Abilities
-            m_abilities = GetComponentInParent<Player>().GetComponentInChildren<BattleAbilities>();
+            m_abilities = GetComponentInParent<Player>().GetComponentInChildren<CombatArts>();
 
             m_updateEnabled = true;
         }
