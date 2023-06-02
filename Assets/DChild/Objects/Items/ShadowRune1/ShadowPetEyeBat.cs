@@ -1,6 +1,7 @@
 using DChild;
 using DChild.Gameplay;
 using DChild.Gameplay.Characters;
+using DChild.Gameplay.Items;
 using DChild.Gameplay.Projectiles;
 using Sirenix.OdinInspector;
 using Spine.Unity;
@@ -64,6 +65,7 @@ public class ShadowPetEyeBat : MonoBehaviour
     #endregion
 
     private SimpleAttackProjectile m_projectile;
+    private ShadowPetHandler m_eventHandler;
 
     private IEnumerator LazerRoutine()
     {
@@ -95,6 +97,7 @@ public class ShadowPetEyeBat : MonoBehaviour
         yield return new WaitUntil(() => m_lazerBeamCoroutine == null);
         m_spine.SetAnimation(0, m_deathAnimation, false);
         yield return new WaitForAnimationComplete(m_spine.animationState, m_deathAnimation);
+        m_eventHandler.PetDesummon();
         m_projectile.CallPoolRequest();
         yield return null;
     }
@@ -268,6 +271,7 @@ public class ShadowPetEyeBat : MonoBehaviour
     {
         m_Points = new List<Vector2>();
         m_projectile = GetComponent<SimpleAttackProjectile>();
+        m_eventHandler = GetComponent<ShadowPetHandler>();
     }
 
     protected Vector2 LookPosition(Transform startPoint)

@@ -1,6 +1,7 @@
 using DChild;
 using DChild.Gameplay;
 using DChild.Gameplay.Characters;
+using DChild.Gameplay.Items;
 using DChild.Gameplay.Projectiles;
 using Sirenix.OdinInspector;
 using Spine.Unity;
@@ -63,6 +64,7 @@ public class ShadowPetWerewolf : MonoBehaviour
 
     private IsolatedPhysics2D m_physics;
     private SimpleAttackProjectile m_projectile;
+    private ShadowPetHandler m_eventHandler;
 
     private Character m_parentCharacter;
 
@@ -99,6 +101,7 @@ public class ShadowPetWerewolf : MonoBehaviour
         //yield return new WaitForAnimationComplete(m_spine.animationState, m_idleAnimation);
         m_spine.SetAnimation(0, m_deathAnimation, false).MixDuration = 0f;
         yield return new WaitForAnimationComplete(m_spine.animationState, m_deathAnimation);
+        m_eventHandler.PetDesummon();
         m_projectile.CallPoolRequest();
         yield return null;
     }
@@ -123,5 +126,6 @@ public class ShadowPetWerewolf : MonoBehaviour
     {
         m_projectile = GetComponent<SimpleAttackProjectile>();
         m_physics = GetComponent<IsolatedPhysics2D>();
+        m_eventHandler = GetComponent<ShadowPetHandler>();
     }
 }

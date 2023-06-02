@@ -2,6 +2,7 @@ using DChild;
 using DChild.Gameplay;
 using DChild.Gameplay.Characters;
 using DChild.Gameplay.Combat;
+using DChild.Gameplay.Items;
 using DChild.Gameplay.Pooling;
 using DChild.Gameplay.Projectiles;
 using Sirenix.OdinInspector;
@@ -29,6 +30,7 @@ public class ShadowBee : MonoBehaviour
     //private PoolableObject m_object;
     private ProjectileLauncher m_launcher;
     private SimpleAttackProjectile m_projectile;
+    private ShadowPetHandler m_eventHandler;
 
     private Coroutine m_rotationControlRoutine;
 
@@ -36,6 +38,7 @@ public class ShadowBee : MonoBehaviour
     {
         m_projectile = GetComponent<SimpleAttackProjectile>();
         m_launcher = new ProjectileLauncher(m_projectileInfo, m_launcherPoints[0]);
+        m_eventHandler = GetComponent<ShadowPetHandler>();
     }
 
     private void Start()
@@ -88,6 +91,7 @@ public class ShadowBee : MonoBehaviour
             m_rotationControlRoutine = null;
         }
         m_rotationControl.localRotation = Quaternion.identity;
+        m_eventHandler.PetDesummon();
         m_projectile.CallPoolRequest();
         yield return null;
     }
