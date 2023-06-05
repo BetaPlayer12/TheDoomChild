@@ -18,6 +18,13 @@ namespace DChild.Gameplay.Characters.Players
 
         public int aetherPoints => m_aetherPoints;
 
-        public int GetArtsLevel(int index) => m_artLevels[index];
+        public int GetArtsLevel(int index)
+        {
+            if (index >= m_artLevels.Length)
+            {
+                return 0;
+            }
+            return m_artLevels[index];
+        }
     }
 }

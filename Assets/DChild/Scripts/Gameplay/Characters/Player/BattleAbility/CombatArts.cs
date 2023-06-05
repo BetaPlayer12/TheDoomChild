@@ -19,9 +19,15 @@ namespace DChild.Gameplay.Characters.Players
 
         public void LoadData(CombatArtsSaveData savedData)
         {
+            if (m_abilityLevels == null)
+            {
+                m_abilityLevels = new int[(int)CombatArt._Count];
+            }
+
             if (savedData != null)
             {
                 m_aetherPoints.SetPoints(savedData.aetherPoints);
+
                 for (int i = 0; i < m_abilityLevels.Length; i++)
                 {
                     m_abilityLevels[i] = savedData.GetArtsLevel(i);
