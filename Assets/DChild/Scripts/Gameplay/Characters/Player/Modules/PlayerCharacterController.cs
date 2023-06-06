@@ -339,13 +339,14 @@ namespace DChild.Gameplay.Characters.Players.Modules
         {
             var oppositeFacing = m_character.facing == HorizontalDirection.Right ? HorizontalDirection.Left : HorizontalDirection.Right;
             m_character.SetFacing(oppositeFacing);
-            m_basicSlashes.Cancel();
+            //m_basicSlashes.Cancel();
             m_slashCombo.Cancel();
             m_slashCombo.Reset();
-            m_whip.Cancel();
+            //m_whip.Cancel();
             m_whipCombo.Cancel();
             m_whipCombo.Reset();
-            m_airSlashCombo.Cancel();
+            //m_airSlashCombo.Cancel();
+            //m_airSlashCombo.Reset();
         }
 
         private void Awake()
@@ -832,15 +833,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
                             ExecuteDash();
                         }
                     }
-
-                    //if (m_skills.IsModuleActive(PrimarySkill.Dash))
-                    //{
-                    //    m_wallStick?.Cancel();
-                    //    FlipCharacter();
-                    //    m_dash?.ResetDurationTimer();
-                    //    m_dash?.Execute();
-                    //    m_dash?.Reset();
-                    //}
                 }
                 else
                 {
