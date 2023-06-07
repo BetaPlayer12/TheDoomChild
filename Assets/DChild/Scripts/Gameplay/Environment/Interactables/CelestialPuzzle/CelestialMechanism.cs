@@ -26,7 +26,7 @@ namespace DChild.Gameplay.Environment
                 m_numberOfActivatedSlots = numberOfActivatedSlots;
             }
 
-            public int slotCount => m_slotIDs.Length;
+            public int slotCount => m_slotIDs?.Length ?? 0;
             public int numberOfActivatedSlots => m_numberOfActivatedSlots;
 
             ISaveData ISaveData.ProduceCopy() => new SaveData(m_slotIDs, m_slotStates, m_numberOfActivatedSlots, m_isActivated);

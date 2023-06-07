@@ -135,8 +135,6 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Reference")]
         private GameObject m_selfCollider;
         [SerializeField, TabGroup("Reference")]
-        private Collider2D m_bodyCollider;
-        [SerializeField, TabGroup("Reference")]
         private Hitbox m_hitbox;
         [SerializeField, TabGroup("Modules")]
         private TransformTurnHandle m_turnHandle;
@@ -444,7 +442,6 @@ namespace DChild.Gameplay.Characters.Enemies
                 StopCoroutine(m_executeMoveCoroutine);
                 m_executeMoveCoroutine = null;
             }
-            m_bodyCollider.enabled = true;
             m_agent.Stop();
             var rb2d = GetComponent<Rigidbody2D>();
             m_character.physics.simulateGravity = true;
@@ -634,7 +631,6 @@ namespace DChild.Gameplay.Characters.Enemies
                         if (Vector2.Distance(m_startPos, transform.position) > 5f)
                         {
                             var rb2d = GetComponent<Rigidbody2D>();
-                            m_bodyCollider.enabled = false;
                             m_agent.Stop();
                             Vector3 dir = (m_startPos - (Vector2)rb2d.transform.position).normalized;
                             rb2d.MovePosition(rb2d.transform.position + dir * m_info.patrol.speed * Time.fixedDeltaTime);
@@ -755,7 +751,6 @@ namespace DChild.Gameplay.Characters.Enemies
         public void ResetAI()
         {
             m_selfCollider.SetActive(false);
-            m_bodyCollider.enabled = false;
             m_targetInfo.Set(null, null);
             m_isDetecting = false;
             m_stateHandle.OverrideState(State.ReturnToPatrol);
