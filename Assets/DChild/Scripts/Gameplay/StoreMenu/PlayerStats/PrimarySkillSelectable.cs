@@ -22,6 +22,7 @@ namespace DChild.Gameplay.UI.PrimarySkills
         public void SetSelectableFor(PrimarySkillData data)
         {
             m_icon.DisplayAs(data);
+            m_reference = data;
         }
 
         private void Awake()

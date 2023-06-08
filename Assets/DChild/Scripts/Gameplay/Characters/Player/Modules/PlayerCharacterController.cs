@@ -296,6 +296,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     m_basicSlashes?.Cancel();
                     m_earthShaker?.Cancel();
                     m_whip?.Cancel();
+                    if (m_projectileThrow.willResetProjectile)
+                        m_projectileThrow.ResetProjectile();
                     m_projectileThrow?.Cancel();
                     m_airSlashCombo?.Cancel();
                 }
@@ -1272,6 +1274,9 @@ namespace DChild.Gameplay.Characters.Players.Modules
                         m_projectileThrow.EndAim();
                         m_projectileThrow.StartThrow();
                         GameplaySystem.cinema.ApplyCameraPeekMode(Cinematics.CameraPeekMode.None);
+
+                        if (m_projectileThrow.willResetProjectile)
+                            m_projectileThrow.ResetProjectile();
                     }
                 }
                 else if (m_state.isDoingSwordThrust)
@@ -1747,9 +1752,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     }
                     else if (m_input.projectileThrowPressed && !m_input.foolsVerdictPressed && !m_input.hellTridentPressed && !m_input.fireFistPressed)
                     {
-                        if (m_projectileThrow.willResetProjectile)
-                            m_projectileThrow.ResetProjectile();
-
                         if (m_input.teleportingSkullPressed && m_abilities.IsAbilityActivated(CombatArt.TeleportingSkull))
                         {
                             m_projectileThrow.SetProjectileInfo(m_teleportingSkull.projectile);
@@ -2210,8 +2212,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         private bool IsFacingInput()
         {
-            return m_input.horizontalInput > 0 && m_character.facing == HorizontalDirection.Right 
-                || m_input.horizontalInput < 0 && m_character.facing == HorizontalDirection.Left 
+            return m_input.horizontalInput > 0 && m_character.facing == HorizontalDirection.Right
+                || m_input.horizontalInput < 0 && m_character.facing == HorizontalDirection.Left
                 || m_input.horizontalInput == 0;
         }
 

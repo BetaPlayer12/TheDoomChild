@@ -79,6 +79,27 @@ namespace DChild.Gameplay.UI
 
         public void QueueNotification(QuestEntryArgs questInfo)
         {
+            for (int i = 0; i < m_requests.Count; i++)
+            {
+                var request = m_requests[i];
+                if (request.type == NotificationType.Quest)
+                {
+                    var requestQuestNotif = (QuestEntryArgs)request.referenceData;
+                    if (requestQuestNotif.questName == questInfo.questName)
+                    {
+                        if (requestQuestNotif.entryNumber < questInfo.entryNumber)
+                        {
+                            m_requests.RemoveAt(i);
+                            break;
+                        }
+                        else if (requestQuestNotif.entryNumber == questInfo.entryNumber)
+                        {
+                            return;
+                        }
+                    }
+                }
+            }
+
             AddNotificationRequest(new NotificationRequest<NotificationType>(m_questNotification.priority, NotificationType.Quest, questInfo));
         }
 
