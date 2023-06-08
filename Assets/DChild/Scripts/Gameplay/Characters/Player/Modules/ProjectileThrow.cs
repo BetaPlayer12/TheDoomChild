@@ -186,6 +186,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_cacheProjectile = m_projectile;
             if (m_projectile != info)
             {
+                
                 m_projectile = info;
                 m_launcher.SetProjectile(m_projectile);
                 var skullThrowVariantIndex = info.projectile.GetComponent<Projectile>().hasConstantSpeed ? 0 : 1;
@@ -201,6 +202,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void ResetProjectile()
         {
+            Debug.Log("projectile Reset");
             m_willResetProjectile = false;
             m_projectile = m_cacheProjectile;
             m_launcher.SetProjectile(m_projectile);
