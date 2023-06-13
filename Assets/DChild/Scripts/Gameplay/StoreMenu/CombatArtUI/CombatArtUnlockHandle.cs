@@ -11,7 +11,7 @@ namespace DChild.Gameplay.UI.CombatArts
     public class CombatArtUnlockHandle : MonoBehaviour
     {
         private CombatArtList m_referenceList;
-        private BattleAbilities m_progress;
+        private Characters.Players.CombatArts m_progress;
 
         private CombatArt m_artToUnlock;
         private int m_levelToUnlock;
@@ -27,7 +27,7 @@ namespace DChild.Gameplay.UI.CombatArts
 
         public event Action UnlockSuccessful;
 
-        public void InitializeReferences(BattleAbilities progress, CombatArtList artList)
+        public void InitializeReferences(Characters.Players.CombatArts progress, CombatArtList artList)
         {
             m_progress = progress;
             m_referenceList = artList;

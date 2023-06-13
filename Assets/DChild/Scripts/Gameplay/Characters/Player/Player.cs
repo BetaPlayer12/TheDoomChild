@@ -14,6 +14,7 @@ using DChild.Gameplay.Characters.Players.Behaviour;
 using PlayerNew;
 using DChild.Gameplay.SoulSkills;
 using DChild.Gameplay.Items;
+using DChild.Gameplay.Leveling;
 
 namespace DChild.Gameplay.Characters.Players
 {
@@ -22,6 +23,7 @@ namespace DChild.Gameplay.Characters.Players
         event EventAction<EventActionArgs> OnDeath;
         Modules.CharacterState state { get; }
         IPlayerStats stats { get; }
+        PlayerLevel level { get; }
         Health health { get; }
         Magic magic { get; }
         Health armor { get; }
@@ -51,6 +53,8 @@ namespace DChild.Gameplay.Characters.Players
         [SerializeField]
         private PlayerStats m_stats;
         [SerializeField]
+        private PlayerLevel m_level;
+        [SerializeField]
         private PlayerWeapon m_weapon;
         [SerializeField]
         private ExtendedAttackResistance m_attackResistance;
@@ -65,7 +69,7 @@ namespace DChild.Gameplay.Characters.Players
         [SerializeField]
         private PlayerSoulSkillHandle m_soulSkills;
         [SerializeField]
-        private BattleAbilities m_combatArts;
+        private CombatArts m_combatArts;
         [SerializeField]
         private PlayerCharacterController m_controller;
         [SerializeField]
@@ -103,6 +107,7 @@ namespace DChild.Gameplay.Characters.Players
         public event EventAction<EventActionArgs> OnDeath;
 
         public IPlayerStats stats => m_stats;
+        public PlayerLevel level => m_level;
 
         public Modules.CharacterState state => m_state;
         public Health health => m_damageable.health;
@@ -115,7 +120,7 @@ namespace DChild.Gameplay.Characters.Players
         public PlayerModuleActivator behaviourModule => m_behaviourModule;
         public PlayerSkills skills => m_skills;
         public PlayerSoulSkillHandle soulSkills => m_soulSkills;
-        public BattleAbilities combatArts => m_combatArts;
+        public CombatArts combatArts => m_combatArts;
         public PlayerWeapon weapon => m_weapon;
         public ExtendedAttackResistance attackResistance => m_attackResistance;
         public PlayerInventory inventory => m_inventory;
@@ -150,6 +155,7 @@ namespace DChild.Gameplay.Characters.Players
         {
             m_moduleConfigurator.InitializeModuleConfigurations();
             m_stats.Initialize();
+            m_level.Initialize();
             m_weapon.Initialize();
             m_attackResistance.Initialize();
             m_statusResistance.Initialize();
