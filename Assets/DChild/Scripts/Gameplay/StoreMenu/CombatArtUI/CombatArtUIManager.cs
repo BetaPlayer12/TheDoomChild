@@ -12,7 +12,7 @@ namespace DChild.Gameplay.UI.CombatArts
         [SerializeField]
         private CombatArtList m_referenceList;
         [SerializeField]
-        private BattleAbilities m_progressionReference;
+        private Characters.Players.CombatArts m_progressionReference;
 
         [SerializeField]
         private CombatArtUIDetail m_uiDetail;
@@ -42,11 +42,21 @@ namespace DChild.Gameplay.UI.CombatArts
                 return;
 
             m_currentSelectedButton = button;
-            m_uiDetail.Display(m_referenceList.GetCombatArtData(m_currentSelectedButton.skillUnlock), m_currentSelectedButton.unlockLevel);
+            var combatArtData = m_referenceList.GetCombatArtData(m_currentSelectedButton.skillUnlock);
+            m_uiDetail.Display(combatArtData, m_currentSelectedButton.unlockLevel);
             m_selectorHighlight.Highlight(button);
 
-            m_unlockArtHandler.VerifyUnlockFunction(m_currentSelectedButton);
+            if (CanAfford(m_progressionReference.aetherPoints, combatArtData.GetCombatArtLevelData(m_currentSelectedButton.unlockLevel)))
+            {
+                m_unlockArtHandler.VerifyUnlockFunction(m_currentSelectedButton);
+            }
+            else
+            {
+                m_unlockArtHandler.DisableUnlockFunction();
+            }
             m_unlockArtHandler.ResetUnlockProgress();
+
+            bool CanAfford(AetherPoints points, CombatArtLevelData combatArtLevelData) => points.points >= combatArtLevelData.cost;
         }
 
         public void StartUnlockSelectedCombatArt()
@@ -62,6 +72,10 @@ namespace DChild.Gameplay.UI.CombatArts
         private void OnUnlockSuccessFull()
         {
             m_unlockArtHandler.DisableUnlockFunction();
+
+            var combatArtData = m_referenceList.GetCombatArtData(m_currentSelectedButton.skillUnlock);
+            var combatArtLevelData = combatArtData.GetCombatArtLevelData(m_currentSelectedButton.unlockLevel);
+            m_progressionReference.aetherPoints.AddPoint(-combatArtLevelData.cost);
             m_currentSelectedButton.SetState(CombatArtUnlockState.Unlocked);
             ValidateButtonStates();
         }

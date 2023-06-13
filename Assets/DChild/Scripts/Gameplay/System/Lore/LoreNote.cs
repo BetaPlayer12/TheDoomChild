@@ -22,7 +22,7 @@ namespace DChild.Gameplay.Systems.Lore
 
         public void Interact(Character character)
         {
-            GameplaySystem.gamplayUIHandle.ShowNotification(UI.StoreNotificationType.Lore);
+            GameplaySystem.gamplayUIHandle.notificationManager.QueueNotification(UI.StoreNotificationType.Lore);
             gameObject.SetActive(false);
         }
 
