@@ -3,6 +3,7 @@ using Doozy.Runtime.UIManager.Containers;
 using Sirenix.OdinInspector;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace DChild.Gameplay.UI
 {
@@ -33,6 +34,11 @@ namespace DChild.Gameplay.UI
             {
                 m_itemNotificationPair[key].InstantHide();
             }
+        }
+
+        public void AddListenerToOnNotificationHidden(UnityAction action)
+        {
+            m_container.OnHiddenCallback.Event.AddListener(action);
         }
     }
 

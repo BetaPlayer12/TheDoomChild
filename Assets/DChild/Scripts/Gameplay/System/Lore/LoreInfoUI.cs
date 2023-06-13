@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 namespace DChild.Gameplay.Systems.Lore
 {
-    public class LoreInfoUI : MonoBehaviour
+    public class LoreInfoUI : NotificationUI
     {
         [SerializeField]
         private UIContainer m_container;
