@@ -23,10 +23,9 @@ namespace DChild.Gameplay.Items
         {
 
             var handle = player.character.GetComponentInChildren<ProjectileThrow>();
-            Debug.Log("projectile throw");
-            Debug.Log(m_projectile);
             handle.SetProjectileInfo(m_projectile);
             handle.RequestExecution();
+            handle.WillResetProjectile();
         }
     }
 }
