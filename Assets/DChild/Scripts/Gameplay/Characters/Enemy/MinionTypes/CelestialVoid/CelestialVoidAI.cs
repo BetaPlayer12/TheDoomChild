@@ -146,14 +146,6 @@ namespace DChild.Gameplay.Characters.Enemies
         private DeathHandle m_deathHandle;
         [SerializeField, TabGroup("Modules")]
         private FlinchHandler m_flinchHandle;
-        //[SerializeField, TabGroup("Sensors")]
-        //private RaySensor m_selfSensor;
-        //[SerializeField, TabGroup("Sensors")]
-        //private RaySensor m_floorSensor;
-        //[SerializeField, TabGroup("Sensors")]
-        //private RaySensor m_roofSensor;
-        //[SerializeField, TabGroup("Sensors")]
-        //private RaySensor m_wallSensor;
         [SerializeField, TabGroup("FX")]
         private GameObject m_lifeDrainFX;
         [SerializeField, TabGroup("FX")]
