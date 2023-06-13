@@ -14,7 +14,7 @@ namespace DChild.Gameplay.UI
         {
             if (m_itemToMonitor.Contains(eventArgs.data))
             {
-                GameplaySystem.gamplayUIHandle.ShowItemNotification(eventArgs.data);
+                GameplaySystem.gamplayUIHandle.notificationManager.QueueNotification(eventArgs.data);
             }
         }
 
