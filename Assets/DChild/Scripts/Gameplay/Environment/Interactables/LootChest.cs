@@ -122,7 +122,7 @@ namespace DChild.Gameplay.Environment
         private void SendNotification()
         {
             //Notify UI of loot chest content
-            GameplaySystem.gamplayUIHandle.ShowLootChestItemAcquired(m_lootList);
+            GameplaySystem.gamplayUIHandle.notificationManager.QueueNotification(m_lootList);
         }
 
         private void Awake()

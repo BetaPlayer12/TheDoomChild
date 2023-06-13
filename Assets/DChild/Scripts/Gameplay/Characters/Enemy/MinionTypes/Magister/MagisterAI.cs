@@ -191,7 +191,7 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("FlinchHandles")]
         private FlinchHandler m_flinchHandleWithBook;
         [SerializeField, TabGroup("Totem")]
-        private TomeOfSpellsAI m_tome;
+        private TomeOfSpellsIceAI m_tome;
 
         [SerializeField]
         private bool m_willPatrol;
