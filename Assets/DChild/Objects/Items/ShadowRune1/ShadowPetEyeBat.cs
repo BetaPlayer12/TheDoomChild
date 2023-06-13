@@ -14,6 +14,9 @@ public class ShadowPetEyeBat : MonoBehaviour
     [SerializeField]
     private float m_duration;
     [SerializeField]
+    private float m_followSpeed;
+    private Transform m_parentTF;
+    [SerializeField]
     private SpineRootAnimation m_spine;
 #if UNITY_EDITOR
     [SerializeField]
@@ -54,6 +57,7 @@ public class ShadowPetEyeBat : MonoBehaviour
     private Vector2 m_lazerTargetPos;
     private bool m_beamOn;
     private bool m_aimOn;
+    private bool m_willFollow;
 
     private List<Vector2> m_Points;
     private IEnumerator m_aimRoutine;
@@ -69,8 +73,6 @@ public class ShadowPetEyeBat : MonoBehaviour
 
     private IEnumerator LazerRoutine()
     {
-        //if (GetComponentInParent<Character>() != null)
-        //    transform.localScale = GetComponentInParent<Character>().transform.localScale;
         transform.localScale = Vector3.one;
         m_spine.SetAnimation(0, m_attackAnimation, false);
         //StartCoroutine(TelegraphLineRoutine());
@@ -95,6 +97,7 @@ public class ShadowPetEyeBat : MonoBehaviour
         m_spine.animationState.GetCurrent(0).MixDuration = 0;
         //yield return new WaitForSeconds(m_duration);
         yield return new WaitUntil(() => m_lazerBeamCoroutine == null);
+        m_willFollow = false;
         m_spine.SetAnimation(0, m_deathAnimation, false);
         yield return new WaitForAnimationComplete(m_spine.animationState, m_deathAnimation);
         m_eventHandler.PetDesummon();
@@ -103,27 +106,6 @@ public class ShadowPetEyeBat : MonoBehaviour
     }
 
     #region Lazer Attack
-    //private IEnumerator ElementalOverloadRoutine()
-    //{
-    //    m_lazerLookCoroutine = StartCoroutine(LazerLookRoutine());
-    //    m_animation.SetAnimation(0, m_info.elementalBeamOverloadAttack.animation, false);
-    //    m_lazerBeamCoroutine = StartCoroutine(LazerBeamRoutine());
-    //    yield return new WaitUntil(() => m_beamOn);
-    //    m_aimAtPlayerCoroutine = StartCoroutine(AimAtTargtRoutine());
-    //    yield return new WaitForAnimationComplete(m_animation.animationState, m_info.elementalBeamOverloadAttack.animation);
-    //    StopCoroutine(m_lazerLookCoroutine);
-    //    m_lazerLookCoroutine = null;
-    //    StopCoroutine(m_aimAtPlayerCoroutine);
-    //    m_aimAtPlayerCoroutine = null;
-    //    m_currentAttackCount++;
-    //    m_movement.Stop();
-    //    m_animation.SetAnimation(0, RandomIdleAnimation(), true);
-    //    m_attackDecider.hasDecidedOnAttack = false;
-    //    m_currentAttackCoroutine = null;
-    //    m_stateHandle.ApplyQueuedState();
-    //    yield return null;
-    //}
-
     private IEnumerator LazerLookRoutine()
     {
         while (true)
@@ -133,23 +115,6 @@ public class ShadowPetEyeBat : MonoBehaviour
         }
         yield return null;
     }
-
-    //public IEnumerator AimAtTargtRoutine()
-    //{
-    //    m_aimBone.mode = SkeletonUtilityBone.Mode.Override;
-    //    while (m_aimOn)
-    //    {
-    //        m_aimBone.transform.position = new Vector2(m_targetInfo.position.x, m_targetInfo.position.y - 5f);
-    //        yield return null;
-    //    }
-    //    //Vector2 spitPos = m_aimBone.transform.position;
-    //    //Vector3 v_diff = (target - spitPos);
-    //    //float atan2 = Mathf.Atan2(v_diff.y, v_diff.x);
-    //    //m_aimBone.transform.rotation = Quaternion.Euler(0f, 0f, atan2 * Mathf.Rad2Deg);
-    //    m_aimBone.mode = SkeletonUtilityBone.Mode.Follow;
-    //    m_aimAtPlayerCoroutine = null;
-    //    yield return null;
-    //}
 
     private IEnumerator AimRoutine()
     {
@@ -168,23 +133,13 @@ public class ShadowPetEyeBat : MonoBehaviour
         Vector2 startPoint = m_lazerOrigin.position;
 
         var direction = m_lazerOrigin.right;
-        if (GetComponentInParent<Character>() != null)
-            direction = GetComponentInParent<Character>().facing == HorizontalDirection.Right ? m_lazerOrigin.right : -m_lazerOrigin.right;
+        direction = m_parentTF.GetComponentInParent<Character>().facing == HorizontalDirection.Right ? m_lazerOrigin.right : -m_lazerOrigin.right;
+        transform.localScale = m_parentTF.GetComponentInParent<Character>().transform.localScale;
 
         RaycastHit2D hit = Physics2D.Raycast(/*m_projectilePoint.position*/startPoint, direction, 1000, DChildUtility.GetEnvironmentMask());
         //Debug.DrawRay(startPoint, direction);
         return hit.point;
     }
-
-    //private Vector2 ShotPosition()
-    //{
-    //    Vector2 startPoint = m_lazerOrigin.position;
-    //    Vector2 direction = ((Vector2)m_lazerOrigin.right - startPoint).normalized;
-
-    //    RaycastHit2D hit = Physics2D.Raycast(/*m_projectilePoint.position*/startPoint, direction, 1000, DChildUtility.GetEnvironmentMask());
-    //    Debug.DrawRay(startPoint, direction);
-    //    return hit.point;
-    //}
 
     private IEnumerator TelegraphLineRoutine()
     {
@@ -261,8 +216,23 @@ public class ShadowPetEyeBat : MonoBehaviour
     }
     #endregion
 
+    private IEnumerator MovetoParentRoutine()
+    {
+        m_willFollow = true;
+        while (m_willFollow)
+        {
+            var target = new Vector2(m_parentTF.GetComponentInParent<Character>().centerMass.position.x, m_parentTF.GetComponentInParent<Character>().centerMass.position.y);
+            this.transform.position = Vector2.Lerp(this.transform.position, target, Time.deltaTime * m_followSpeed);
+            yield return null;
+        }
+        yield return null;
+    }
+
     private void Start()
     {
+        m_parentTF = this.transform.parent;
+        this.transform.SetParent(null);
+        StartCoroutine(MovetoParentRoutine());
         m_aimRoutine = AimRoutine();
         StartCoroutine(LazerRoutine());
     }
