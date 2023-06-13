@@ -88,13 +88,13 @@ namespace DChild.Gameplay
 
                 if (m_cinematic == null)
                 {
-                    GameplaySystem.gamplayUIHandle.PromptPrimarySkillNotification();
+                    GameplaySystem.gamplayUIHandle.notificationManager.QueueNotification(m_toUnlock);
                     m_shrineVisualHandle.SkillShrineState(true);
                 }
                 else
                 {
                     m_cinematic.Play();
-                }   
+                }
 
                 m_isUsed = true;
                 m_collider.enabled = false;
@@ -109,7 +109,7 @@ namespace DChild.Gameplay
 
         private IEnumerator OnCutsceneEnded()
         {
-         //makes sure cutscene has ended before calling notifyskill  
+            //makes sure cutscene has ended before calling notifyskill  
             yield return new WaitForSeconds(1);
             NotifySkill(m_toUnlock);
             SetGlows(false);
@@ -120,7 +120,7 @@ namespace DChild.Gameplay
 
         private void NotifySkill(PrimarySkill skill)
         {
-            GameplaySystem.gamplayUIHandle.PromptPrimarySkillNotification();
+            GameplaySystem.gamplayUIHandle.notificationManager.QueueNotification(skill);
         }
 
         private void SetGlows(bool isOn)
