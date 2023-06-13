@@ -15,10 +15,11 @@ namespace DChild.Gameplay.Environment
         {
             private SerializeID[] m_slotIDs;
             private bool[] m_slotStates;
+            private bool m_isActivated;
 
             public int m_numberOfActivatedSlots;
 
-            public SaveData(IEnumerable<SerializeID> slotIDs, IEnumerable<bool> slotStates, int numberOfActivatedSlots)
+            public SaveData(IEnumerable<SerializeID> slotIDs, IEnumerable<bool> slotStates, int numberOfActivatedSlots, bool isActivated)
             {
                 m_slotIDs = slotIDs.ToArray();
                 m_slotStates = slotStates.ToArray();
@@ -28,10 +29,11 @@ namespace DChild.Gameplay.Environment
             public int slotCount => m_slotIDs.Length;
             public int numberOfActivatedSlots => m_numberOfActivatedSlots;
 
-            ISaveData ISaveData.ProduceCopy() => new SaveData(m_slotIDs,m_slotStates,m_numberOfActivatedSlots);
+            ISaveData ISaveData.ProduceCopy() => new SaveData(m_slotIDs, m_slotStates, m_numberOfActivatedSlots, m_isActivated);
 
             public SerializeID GetID(int index) => m_slotIDs[index];
             public bool GetState(int index) => m_slotStates[index];
+            public bool isActivated => m_isActivated;
         }
 
         [TabGroup("Start", "Reference")]
@@ -52,7 +54,9 @@ namespace DChild.Gameplay.Environment
 
         private bool m_readyActivate;
         private int m_activatedSlots;
-        
+
+        private bool m_isAlreadyActivated;
+
 
 #if UNITY_EDITOR
         [SerializeField, PropertyOrder(-1), MinValue(1), OnValueChanged("OnSizeChange")]
@@ -62,7 +66,7 @@ namespace DChild.Gameplay.Environment
         {
             if (m_slots.Count > m_requiredSlots)
             {
-                
+
                 for (int i = m_slots.Count - 1; i >= m_requiredSlots; i--)
                 {
                     m_slots.RemoveAt(i);
@@ -96,7 +100,7 @@ namespace DChild.Gameplay.Environment
                     }
                 }
             }
-
+            m_isAlreadyActivated = saveData.isActivated;
             for (int i = 0; i < m_activationIndicators.Count; i++)
             {
                 m_activationIndicators[i].SetState(i < saveData.numberOfActivatedSlots);
@@ -112,7 +116,7 @@ namespace DChild.Gameplay.Environment
             }
         }
 
-        public ISaveData Save() => new SaveData(m_slots.Select(x => x.ID), m_slots.Select(x => x.isOccupied), m_activatedSlots);
+        public ISaveData Save() => new SaveData(m_slots.Select(x => x.ID), m_slots.Select(x => x.isOccupied), m_activatedSlots, m_isAlreadyActivated);
         public void Initialize()
         {
             for (int i = 0; i < m_activationIndicators.Count; i++)
@@ -125,9 +129,10 @@ namespace DChild.Gameplay.Environment
         {
             var slot = (CelestialSlot)sender;
             m_activatedSlots += slot.isOccupied ? 1 : -1;
-            if (m_activatedSlots == m_slots.Count)
+            if (m_activatedSlots == m_slots.Count && m_isAlreadyActivated == false)
             {
                 m_readyActivate = true;
+                m_isAlreadyActivated = true;
                 for (int i = 0; i < m_slots.Count; i++)
                 {
                     m_slots[i].SetLockDown(true);

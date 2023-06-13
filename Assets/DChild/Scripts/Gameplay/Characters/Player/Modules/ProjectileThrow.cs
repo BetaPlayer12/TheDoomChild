@@ -39,6 +39,10 @@ namespace DChild.Gameplay.Characters.Players.Modules
         public Projectile spawnedProjectile => m_spawnedProjectile;
         private bool m_reachedVerticalThreshold = false;
 
+        private bool m_willResetProjectile;
+
+        public bool willResetProjectile => m_willResetProjectile;
+
         public event EventAction<EventActionArgs> ExecutionRequested;
         public event EventAction<EventActionArgs> ProjectileThrown;
 
@@ -179,8 +183,10 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void SetProjectileInfo(ProjectileInfo info)
         {
+            m_cacheProjectile = m_projectile;
             if (m_projectile != info)
             {
+                
                 m_projectile = info;
                 m_launcher.SetProjectile(m_projectile);
                 var skullThrowVariantIndex = info.projectile.GetComponent<Projectile>().hasConstantSpeed ? 0 : 1;
@@ -189,8 +195,15 @@ namespace DChild.Gameplay.Characters.Players.Modules
             }
         }
 
+        public void WillResetProjectile()
+        {
+            m_willResetProjectile = true;
+        }
+
         public void ResetProjectile()
         {
+            Debug.Log("projectile Reset");
+            m_willResetProjectile = false;
             m_projectile = m_cacheProjectile;
             m_launcher.SetProjectile(m_projectile);
             var skullThrowVariantIndex = m_cacheProjectile.projectile.GetComponent<Projectile>().hasConstantSpeed ? 0 : 1;
