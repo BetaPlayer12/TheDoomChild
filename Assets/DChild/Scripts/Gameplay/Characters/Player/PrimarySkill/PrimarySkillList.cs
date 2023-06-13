@@ -6,7 +6,7 @@ namespace DChild.Gameplay.Characters.Players
     [CreateAssetMenu(fileName = "PrimarySkillList", menuName = "DChild/Database/Primary Skill List")]
     public class PrimarySkillList : ScriptableObject
     {
-        [SerializeField,AssetList]
+        [SerializeField, AssetList]
         private PrimarySkillData[] m_datas;
 
         public int Count => m_datas.Length;

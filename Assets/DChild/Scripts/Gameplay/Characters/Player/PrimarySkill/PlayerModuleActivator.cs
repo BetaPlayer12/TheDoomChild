@@ -76,8 +76,10 @@ namespace DChild.Gameplay.Characters.Players
 
         public bool IsModuleActive(PrimarySkill module)
         {
-            return m_unlockedSkills.HasFlag(module) && m_activatedSkills.HasFlag(module);
+            return IsModuleUnlock(module) && m_activatedSkills.HasFlag(module);
         }
+
+        public bool IsModuleUnlock(PrimarySkill module) => m_unlockedSkills.HasFlag(module);
 
         public void Validate()
         {

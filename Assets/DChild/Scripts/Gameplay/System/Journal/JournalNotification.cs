@@ -18,7 +18,7 @@ namespace DChild.Gameplay.Systems.Journal
         public void UpdateNotification(JournalData journaldata)
         {
             m_ui.UpdateUI(journaldata);
-            m_gameplayinput.OverrideNewInfoNotif(m_overrideInputDuration);
+            //m_gameplayinput.OverrideNewInfoNotif(m_overrideInputDuration);
             GameplaySystem.gamplayUIHandle.ShowJournalNotificationPrompt(m_overrideInputDuration);
         }
     }
