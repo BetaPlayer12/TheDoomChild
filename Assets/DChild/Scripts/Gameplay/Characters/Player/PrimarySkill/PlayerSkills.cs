@@ -44,6 +44,8 @@ namespace DChild.Gameplay.Characters.Players
             SkillUpdate?.Invoke(this, new PrimarySkillUpdateEventArgs(skill, enableSkill));
         }
 
+        public bool IsSkillUnlocked(PrimarySkill skill) => m_moduleActivator.IsModuleUnlock(skill);
+
         public PrimarySkillsData SaveData()
         {
             return new PrimarySkillsData(m_skills);

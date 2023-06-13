@@ -4,16 +4,14 @@ using UnityEngine;
 
 namespace DChild.Gameplay.UI
 {
-    public class LootAcquiredUI : MonoBehaviour
+    public class LootAcquiredUI : NotificationUI
     {
-        [SerializeField]
-        private UIContainer m_container;
         [SerializeField]
         private IndividualLootAcquiredUI[] m_individualLootUIs;
 
         public void Show()
         {
-            m_container.Show(true);
+            container.Show(true);
         }
 
         public void SetDetails(LootList lootList)
