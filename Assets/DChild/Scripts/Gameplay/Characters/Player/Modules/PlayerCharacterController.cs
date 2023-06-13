@@ -296,6 +296,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     m_basicSlashes?.Cancel();
                     m_earthShaker?.Cancel();
                     m_whip?.Cancel();
+                    if (m_projectileThrow.willResetProjectile)
+                        m_projectileThrow.ResetProjectile();
                     m_projectileThrow?.Cancel();
                     m_airSlashCombo?.Cancel();
                 }
@@ -339,13 +341,14 @@ namespace DChild.Gameplay.Characters.Players.Modules
         {
             var oppositeFacing = m_character.facing == HorizontalDirection.Right ? HorizontalDirection.Left : HorizontalDirection.Right;
             m_character.SetFacing(oppositeFacing);
-            m_basicSlashes.Cancel();
+            //m_basicSlashes.Cancel();
             m_slashCombo.Cancel();
             m_slashCombo.Reset();
-            m_whip.Cancel();
+            //m_whip.Cancel();
             m_whipCombo.Cancel();
             m_whipCombo.Reset();
-            m_airSlashCombo.Cancel();
+            //m_airSlashCombo.Cancel();
+            //m_airSlashCombo.Reset();
         }
 
         private void Awake()
@@ -832,15 +835,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
                             ExecuteDash();
                         }
                     }
-
-                    //if (m_skills.IsModuleActive(PrimarySkill.Dash))
-                    //{
-                    //    m_wallStick?.Cancel();
-                    //    FlipCharacter();
-                    //    m_dash?.ResetDurationTimer();
-                    //    m_dash?.Execute();
-                    //    m_dash?.Reset();
-                    //}
                 }
                 else
                 {
@@ -1280,6 +1274,9 @@ namespace DChild.Gameplay.Characters.Players.Modules
                         m_projectileThrow.EndAim();
                         m_projectileThrow.StartThrow();
                         GameplaySystem.cinema.ApplyCameraPeekMode(Cinematics.CameraPeekMode.None);
+
+                        if (m_projectileThrow.willResetProjectile)
+                            m_projectileThrow.ResetProjectile();
                     }
                 }
                 else if (m_state.isDoingSwordThrust)
@@ -1758,10 +1755,9 @@ namespace DChild.Gameplay.Characters.Players.Modules
                         if (m_input.teleportingSkullPressed && m_abilities.IsAbilityActivated(CombatArt.TeleportingSkull))
                         {
                             m_projectileThrow.SetProjectileInfo(m_teleportingSkull.projectile);
+                            m_projectileThrow.WillResetProjectile();
                             m_teleportingSkull.Execute();
                         }
-                        else if (!m_input.teleportingSkullPressed)
-                            m_projectileThrow.ResetProjectile();
 
                         if (m_skills.IsModuleActive(PrimarySkill.SkullThrow))
                         {
@@ -2216,8 +2212,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         private bool IsFacingInput()
         {
-            return m_input.horizontalInput > 0 && m_character.facing == HorizontalDirection.Right 
-                || m_input.horizontalInput < 0 && m_character.facing == HorizontalDirection.Left 
+            return m_input.horizontalInput > 0 && m_character.facing == HorizontalDirection.Right
+                || m_input.horizontalInput < 0 && m_character.facing == HorizontalDirection.Left
                 || m_input.horizontalInput == 0;
         }
 

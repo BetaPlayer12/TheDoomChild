@@ -130,16 +130,18 @@ namespace DChild.Gameplay.UI
         private IEnumerator NotificationRoutine()
         {
             var waitTime = new WaitForSecondsRealtime(m_notificationInterval);
+            var endOfFrame = new WaitForEndOfFrame();
 
             do
             {
                 while (DialogueManager.isConversationActive)
-                    yield return null;
+                    yield return endOfFrame;
 
+                yield return endOfFrame;
                 HandleNextNotification();
                 do
                 {
-                    yield return null;
+                    yield return endOfFrame;
                 } while (m_hasActiveNotification);
                 yield return waitTime;
 
