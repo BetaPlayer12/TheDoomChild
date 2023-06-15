@@ -1,13 +1,13 @@
-﻿using DChild.Gameplay.Leveling;
+﻿
 using Holysoft.Event;
 using UnityEngine;
 
-namespace DChild.Gameplay.Characters.Players
+namespace DChild.Gameplay.Characters.Player.CombatArt.Leveling
 {
-    public class AetherPoints : MonoBehaviour
+    public class CombatSkillPoints : MonoBehaviour
     {
         [SerializeField]
-        private PlayerLevel m_level;
+        private CombatArtLevel m_level;
         [SerializeField]
         private int m_points;
 

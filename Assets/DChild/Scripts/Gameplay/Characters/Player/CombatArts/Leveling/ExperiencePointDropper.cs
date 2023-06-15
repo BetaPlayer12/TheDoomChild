@@ -2,18 +2,18 @@
 using Holysoft.Event;
 using UnityEngine;
 
-namespace DChild.Gameplay.Leveling
+namespace DChild.Gameplay.Characters.Player.CombatArt.Leveling
 {
-    public class ExperiencePointDropper : MonoBehaviour
+    public class CombatArtExperienceDropper : MonoBehaviour
     {
         [SerializeField]
-        private ExperiencePointDropData m_data;
+        private CombatArtExperienceDropData m_data;
 
         private Damageable m_damageable;
 
         public void GiveEXP()
         {
-            GameplaySystem.playerManager.player.level.exp.AddCurrentValue(m_data.exp);
+            GameplaySystem.playerManager.player.combatArts.level.exp.AddCurrentValue(m_data.exp);
         }
 
         private void OnDestroyed(object sender, EventActionArgs eventArgs)

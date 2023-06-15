@@ -1,13 +1,13 @@
-﻿using DChild.Gameplay.Leveling;
+﻿using DChild.Gameplay.Characters.Player.CombatArt.Leveling;
 using Holysoft.Event;
 using UnityEngine;
 
 namespace DChildDebug.Window
 {
-    public class PlayerLevelAdjuster : MonoBehaviour, ITrackableValue
+    public class CombatArtLevelAdjuster : MonoBehaviour, ITrackableValue
     {
         [SerializeField]
-        private PlayerLevel m_level;
+        private CombatArtLevel m_level;
 
         public float value => m_level.currentLevel;
 
