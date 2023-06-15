@@ -12,8 +12,6 @@ namespace DChild.Gameplay.Environment
         private UnityEvent m_grounddetected;
         private bool m_platform = false;
         
-
-
         void Update()
         {
             if (m_platform == false)
