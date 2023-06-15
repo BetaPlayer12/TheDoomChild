@@ -1,13 +1,14 @@
-﻿using Holysoft.Event;
+﻿using DChild.Gameplay.Characters.Player.CombatArt.Leveling;
+using Holysoft.Event;
 using TMPro;
 using UnityEngine;
 
 namespace DChild.Gameplay.Characters.Players
 {
-    public class AetherPointsUI : MonoBehaviour
+    public class CombatSkillPointsUI : MonoBehaviour
     {
         [SerializeField]
-        private AetherPoints m_reference;
+        private CombatSkillPoints m_reference;
         [SerializeField]
         private TextMeshProUGUI m_pointsLabel;
 

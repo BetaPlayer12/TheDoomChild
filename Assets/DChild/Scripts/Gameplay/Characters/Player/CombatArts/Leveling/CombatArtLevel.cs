@@ -6,10 +6,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace DChild.Gameplay.Leveling
+namespace DChild.Gameplay.Characters.Player.CombatArt.Leveling
 {
     [System.Serializable]
-    public class PlayerLevel : MonoBehaviour
+    public class CombatArtLevel : MonoBehaviour
     {
         public struct SaveData
         {
@@ -26,7 +26,7 @@ namespace DChild.Gameplay.Leveling
         [SerializeField, MinValue(1)]
         private int m_currentLevel = 1;
         [SerializeField]
-        private ExperiencePoint m_exp;
+        private CombatArtExperiencePoint m_exp;
 
         public event EventAction<EventActionArgs> OnLevelUp;
 

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using DChild.Gameplay.Characters.Player.CombatArt.Leveling;
+using UnityEngine;
 
 namespace DChild.Gameplay.Characters.Players
 {
@@ -6,17 +7,22 @@ namespace DChild.Gameplay.Characters.Players
     public class CombatArtsSaveData
     {
         [SerializeField]
-        private int m_aetherPoints;
+        private CombatArtLevel.SaveData m_level;
+        [SerializeField]
+        private int m_skillPoints;
         [SerializeField]
         public int[] m_artLevels;
 
-        public CombatArtsSaveData(int aetherPoints, int[] abilityLevels)
+        public CombatArtsSaveData(CombatArtLevel.SaveData level, int skillPoints, int[] abilityLevels)
         {
-            m_aetherPoints = aetherPoints;
+            m_level = level;
+            m_skillPoints = skillPoints;
             m_artLevels = abilityLevels;
         }
 
-        public int aetherPoints => m_aetherPoints;
+        public int skillPoints => m_skillPoints;
+
+        public CombatArtLevel.SaveData level => m_level;
 
         public int GetArtsLevel(int index)
         {

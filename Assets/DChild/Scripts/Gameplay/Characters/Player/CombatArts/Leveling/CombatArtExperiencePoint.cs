@@ -3,9 +3,9 @@ using Holysoft.Gameplay;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
-namespace DChild.Gameplay.Leveling
+namespace DChild.Gameplay.Characters.Player.CombatArt.Leveling
 {
-    public class ExperiencePoint : MonoBehaviour, ICappedStat
+    public class CombatArtExperiencePoint : MonoBehaviour, ICappedStat
     {
         [SerializeField, MinValue(1)]
         private int m_maxValue = 1;

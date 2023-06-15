@@ -1,4 +1,5 @@
-﻿using Sirenix.OdinInspector;
+﻿using DChild.Gameplay.Characters.Player.CombatArt.Leveling;
+using Sirenix.OdinInspector;
 using System;
 using UnityEngine;
 
@@ -7,15 +8,19 @@ namespace DChild.Gameplay.Characters.Players
     public class CombatArts : SerializedMonoBehaviour
     {
         [SerializeField]
-        private AetherPoints m_aetherPoints;
+        private CombatArtLevel m_level;
+        [SerializeField]
+        private CombatSkillPoints m_skillPoints;
         private int[] m_abilityLevels;
+
+        public CombatArtLevel level => m_level;
 
         public CombatArtsSaveData SaveData()
         {
-            return new CombatArtsSaveData(m_aetherPoints.points, m_abilityLevels);
+            return new CombatArtsSaveData(m_level.Save(), m_skillPoints.points, m_abilityLevels);
         }
 
-        public AetherPoints aetherPoints => m_aetherPoints;
+        public CombatSkillPoints skillPoints => m_skillPoints;
 
         public void LoadData(CombatArtsSaveData savedData)
         {
@@ -26,7 +31,9 @@ namespace DChild.Gameplay.Characters.Players
 
             if (savedData != null)
             {
-                m_aetherPoints.SetPoints(savedData.aetherPoints);
+                m_level.Load(savedData.level);
+
+                m_skillPoints.SetPoints(savedData.skillPoints);
 
                 for (int i = 0; i < m_abilityLevels.Length; i++)
                 {
@@ -35,7 +42,8 @@ namespace DChild.Gameplay.Characters.Players
             }
             else
             {
-                m_aetherPoints.SetPoints(0);
+                m_level.Load(new CombatArtLevel.SaveData(1, 0));
+                m_skillPoints.SetPoints(0);
                 for (int i = 0; i < m_abilityLevels.Length; i++)
                 {
                     m_abilityLevels[i] = 0;
@@ -58,12 +66,14 @@ namespace DChild.Gameplay.Characters.Players
             m_abilityLevels[(int)battleAbility] = Mathf.Max(0, level);
         }
 
-        private void Awake()
+        public void Initialize()
         {
             if (m_abilityLevels == null)
             {
                 m_abilityLevels = new int[(int)CombatArt._Count];
             }
+
+            m_level.Initialize();
         }
     }
 }

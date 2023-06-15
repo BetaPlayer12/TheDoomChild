@@ -1,12 +1,12 @@
 ﻿using TMPro;
 using UnityEngine;
 
-namespace DChild.Gameplay.Leveling
+namespace DChild.Gameplay.Characters.Player.CombatArt.Leveling
 {
-    public class PlayerLevelUI : MonoBehaviour
+    public class CombatArtLevelUI : MonoBehaviour
     {
         [SerializeField]
-        private PlayerLevel m_reference;
+        private CombatArtLevel m_reference;
         [SerializeField]
         private TextMeshProUGUI m_levelLabel;
 
