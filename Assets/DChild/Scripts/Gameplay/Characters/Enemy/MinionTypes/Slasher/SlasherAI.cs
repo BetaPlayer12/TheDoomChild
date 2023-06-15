@@ -569,7 +569,8 @@ namespace DChild.Gameplay.Characters.Enemies
                                 {
                                     m_selfCollider.enabled = false;
                                     m_animation.SetAnimation(0, m_info.walk.animation, true).TimeScale = 2f;
-                                    m_movement.MoveTowards(Vector2.one * transform.localScale.x, m_currentMoveSpeed);
+                                    //m_movement.MoveTowards(Vector2.one * transform.localScale.x, m_currentMoveSpeed);
+                                    m_character.physics.SetVelocity(transform.localScale.x * m_currentMoveSpeed, m_character.physics.velocity.y);
                                 }
                                 else
                                 {
