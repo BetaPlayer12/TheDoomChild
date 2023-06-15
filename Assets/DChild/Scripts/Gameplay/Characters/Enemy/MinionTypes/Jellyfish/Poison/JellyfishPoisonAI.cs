@@ -101,6 +101,8 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Reference")]
         private Rigidbody2D m_rigidbody2D;
         [SerializeField, TabGroup("Reference")]
+        private IsolatedObjectPhysics2D m_objectPhysics;
+        [SerializeField, TabGroup("Reference")]
         private Hitbox m_hitbox;
         [SerializeField, TabGroup("Reference")]
         private GameObject m_selfCollider;
@@ -402,7 +404,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 case State.Cooldown:
                     if (Vector2.Distance(m_targetInfo.position, transform.position) <= m_info.targetDistanceTolerance)
                     {
-                        if (m_character.physics.velocity.y > 1 || m_character.physics.velocity.y < -1)
+                        if (m_objectPhysics.velocity.y > 1 || m_objectPhysics.velocity.y < -1)
                         {
                             m_animation.SetAnimation(0, m_info.idleAnimation, true);
                         }
