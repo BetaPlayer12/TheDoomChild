@@ -870,7 +870,7 @@ MonoBehaviour:
   allowBarksDuringConversations: 0
   skipBarkIfNoValidEntries: 0
   cacheBarkLines: 0
-  conversation: 
+  conversation: BossFight/Ynnus Puedis/Defeat
   conversationConversant: {fileID: 0}
   conversationActor: {fileID: 0}
   startConversationEntryID: -1
@@ -1249,7 +1249,6 @@ GameObject:
   m_Component:
   - component: {fileID: 6223020800281438717}
   - component: {fileID: 8055299169425839536}
-  - component: {fileID: 4876810063333001955}
   m_Layer: 0
   m_Name: Sequence_IntroDialogue
   m_TagString: Untagged
@@ -1268,7 +1267,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 8212942813415222313}
   m_Father: {fileID: 5673815548169273315}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1320,7 +1320,7 @@ MonoBehaviour:
   allowBarksDuringConversations: 0
   skipBarkIfNoValidEntries: 0
   cacheBarkLines: 0
-  conversation: BossFight/Mother Mantis/Intro
+  conversation: BossFight/Ynnus Puedis/Intro
   conversationConversant: {fileID: 0}
   conversationActor: {fileID: 0}
   startConversationEntryID: -1
@@ -1343,14 +1343,80 @@ MonoBehaviour:
   useConversationTitlePicker: 1
   useBarkTitlePicker: 1
   useQuestNamePicker: 1
-  selectedDatabase: {fileID: 11400000, guid: f3fd31c06f9838f4f9d6d9a229755bd9, type: 2}
---- !u!114 &4876810063333001955
+  selectedDatabase: {fileID: 11400000, guid: 1d092c0783279d54d8dbf4b175ed26f7, type: 2}
+--- !u!1 &5449811984302476048
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5673815548169273315}
+  m_Layer: 0
+  m_Name: DefeatYnnusPuedis_Sequence
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5673815548169273315
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5449811984302476048}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 2704645956232561559}
+  - {fileID: 6223020800281438717}
+  - {fileID: 5136924522056086892}
+  m_Father: {fileID: 4689055944405757588}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &9116078449745028850
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8212942813415222313}
+  - component: {fileID: 7121473983175779973}
+  m_Layer: 0
+  m_Name: Sequence_StartCombat
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8212942813415222313
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9116078449745028850}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6223020800281438717}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7121473983175779973
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5379683802766223140}
+  m_GameObject: {fileID: 9116078449745028850}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c593457cd8105e148906690e1707c592, type: 3}
@@ -1427,41 +1493,7 @@ MonoBehaviour:
   useConversationTitlePicker: 1
   useBarkTitlePicker: 1
   useQuestNamePicker: 1
-  selectedDatabase: {fileID: 11400000, guid: f3fd31c06f9838f4f9d6d9a229755bd9, type: 2}
---- !u!1 &5449811984302476048
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 5673815548169273315}
-  m_Layer: 0
-  m_Name: DefeatYnnusPuedis_Sequence
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &5673815548169273315
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5449811984302476048}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 2704645956232561559}
-  - {fileID: 6223020800281438717}
-  - {fileID: 5136924522056086892}
-  m_Father: {fileID: 4689055944405757588}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  selectedDatabase: {fileID: 11400000, guid: 1d092c0783279d54d8dbf4b175ed26f7, type: 2}
 --- !u!1001 &603503690828867162
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1599,7 +1631,7 @@ PrefabInstance:
     - target: {fileID: 289940577983975351, guid: f5c8d74c0e67b4141a1791e8fb349235,
         type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3335645452853624768, guid: f5c8d74c0e67b4141a1791e8fb349235,
         type: 3}
@@ -1729,6 +1761,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 5673815548169273315}
     m_Modifications:
+    - target: {fileID: 6419760541398682482, guid: 69eb62c1a2e826a4db0de39a6f876fe6,
+        type: 3}
+      propertyPath: m_location
+      value: 16
+      objectReference: {fileID: 0}
     - target: {fileID: 6419760541398682482, guid: 69eb62c1a2e826a4db0de39a6f876fe6,
         type: 3}
       propertyPath: m_spawnPosition.x
@@ -2694,7 +2731,7 @@ PrefabInstance:
     - target: {fileID: 289940577983975351, guid: f5c8d74c0e67b4141a1791e8fb349235,
         type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3335645452853624768, guid: f5c8d74c0e67b4141a1791e8fb349235,
         type: 3}
@@ -4997,7 +5034,7 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 2704645956209223977}
   m_PrefabAsset: {fileID: 0}
---- !u!60 &4437696889778075484
+--- !u!60 &6775642854565534856
 PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
