@@ -139,9 +139,6 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_edgeSensor;
 
-        [SerializeField, TabGroup("Material")]
-        private PhysicsMaterial2D m_pMaterial;
-
         [ShowInInspector]
         private StateHandle<State> m_stateHandle;
         [ShowInInspector]
