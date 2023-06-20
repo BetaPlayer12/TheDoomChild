@@ -14,6 +14,7 @@ using DChild;
 using DChild.Gameplay.Characters.Enemies;
 using DChild.Gameplay.Pooling;
 using DChild.Gameplay.Projectiles;
+using Spine.Unity.Examples;
 
 namespace DChild.Gameplay.Characters.Enemies
 {
@@ -194,7 +195,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private Vector2 m_targetLastPos;
 
         [SerializeField]
-        private SkeletonUtilityBone m_targetPointIK;
+        private BoneLocalOverride m_targetPointIK;
 
         [SerializeField]
         private bool m_willPatrol;
@@ -216,7 +217,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnAttackDone(object sender, EventActionArgs eventArgs)
         {
-            m_targetPointIK.mode = SkeletonUtilityBone.Mode.Follow;
+            m_targetPointIK.overridePosition = false;
+            m_targetPointIK.localPosition = Vector2.zero;
             m_flinchHandle.m_autoFlinch = true;
             m_character.physics.UseStepClimb(true);
             m_stateHandle.ApplyQueuedState();
@@ -307,7 +309,8 @@ namespace DChild.Gameplay.Characters.Enemies
                 CustomTurn();
             base.OnDestroyed(sender, eventArgs);
             GameplaySystem.minionManager.Unregister(this);
-            m_targetPointIK.mode = SkeletonUtilityBone.Mode.Follow;
+            m_targetPointIK.overridePosition = false;
+            m_targetPointIK.localPosition = Vector2.zero;
             m_selfCollider.enabled = false;
             m_hitbox.Disable();
             m_animation.DisableRootMotion();
@@ -444,7 +447,11 @@ namespace DChild.Gameplay.Characters.Enemies
 
                 //Shoot Spit
                 //m_muzzleFX.Play();
-                m_targetPointIK.transform.position = new Vector2(m_targetLastPos.x, m_targetLastPos.y + (Vector2.Distance(transform.position, m_targetInfo.position) / 5f));
+                //m_targetPointIK.transform.position = new Vector2(m_targetLastPos.x, m_targetLastPos.y + (Vector2.Distance(transform.position, m_targetInfo.position) / 5f));
+                var overrideTarget = new Vector2(m_targetLastPos.x, m_targetLastPos.y + (Vector2.Distance(transform.position, m_targetInfo.position) / 5f));
+                overrideTarget = new Vector2(Mathf.Abs(m_targetLastPos.x), Mathf.Abs(m_targetLastPos.y));
+                overrideTarget = new Vector2(Mathf.Abs(overrideTarget.x - Mathf.Abs(m_character.centerMass.position.x)), Mathf.Abs(overrideTarget.y - Mathf.Abs(m_character.centerMass.position.y)));
+                m_targetPointIK.localPosition = overrideTarget;
                 Vector2 target = m_targetLastPos;
                 target = new Vector2(target.x, target.y - 2);
                 Vector2 spitPos = new Vector2(transform.localScale.x < 0 ? m_projectilePoint.position.x - 1.5f : m_projectilePoint.position.x + 1.5f, m_projectilePoint.position.y - 0.75f);
@@ -566,7 +573,7 @@ namespace DChild.Gameplay.Characters.Enemies
                             break;
                         case Attack.Attack2:
                             m_targetLastPos = m_targetInfo.position;
-                            m_targetPointIK.mode = SkeletonUtilityBone.Mode.Override;
+                            m_targetPointIK.overridePosition = true;
                             m_animation.EnableRootMotion(true, true);
                             m_attackHandle.ExecuteAttack(m_info.attack2.animation, m_info.idleAnimation.animation);
                             //StartCoroutine(Attack2Routine());
