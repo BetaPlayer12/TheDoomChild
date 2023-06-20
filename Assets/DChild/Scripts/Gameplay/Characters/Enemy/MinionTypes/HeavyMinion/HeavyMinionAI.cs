@@ -164,12 +164,6 @@ namespace DChild.Gameplay.Characters.Enemies
         private StateHandle<State> m_stateHandle;
         [ShowInInspector]
         private RandomAttackDecider<Attack> m_attackDecider;
-        private Attack m_currentAttack;
-        private float m_currentAttackRange;
-
-        private bool[] m_attackUsed;
-        private List<Attack> m_attackCache;
-        private List<float> m_attackRangeCache;
 
         private State m_turnState;
 
@@ -243,8 +237,6 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnTurnDone(object sender, FacingEventArgs eventArgs)
         {
-            m_currentAttack = Attack.AttackTackle;
-            m_currentAttackRange = m_info.attackTackle.range;
             m_attackDecider.hasDecidedOnAttack = true;
             m_stateHandle.ApplyQueuedState();
         }
@@ -401,64 +393,6 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return null;
         }
 
-        private void ChooseAttack()
-        {
-            if (!m_attackDecider.hasDecidedOnAttack)
-            {
-                IsAllAttackComplete();
-                for (int i = 0; i < m_attackCache.Count; i++)
-                {
-                    m_attackDecider.DecideOnAttack();
-                    if (m_attackCache[i] != m_currentAttack && !m_attackUsed[i])
-                    {
-                        m_attackUsed[i] = true;
-                        m_currentAttack = m_attackCache[i];
-                        m_currentAttackRange = m_attackRangeCache[i];
-                        return;
-                    }
-                }
-            }
-        }
-
-        private void IsAllAttackComplete()
-        {
-            for (int i = 0; i < m_attackUsed.Length; ++i)
-            {
-                if (!m_attackUsed[i])
-                {
-                    return;
-                }
-            }
-            for (int i = 0; i < m_attackUsed.Length; ++i)
-            {
-                m_attackUsed[i] = false;
-            }
-        }
-
-        void AddToAttackCache(params Attack[] list)
-        {
-            for (int i = 0; i < list.Length; i++)
-            {
-                m_attackCache.Add(list[i]);
-            }
-        }
-
-        void AddToRangeCache(params float[] list)
-        {
-            for (int i = 0; i < list.Length; i++)
-            {
-                m_attackRangeCache.Add(list[i]);
-            }
-        }
-
-        void UpdateRangeCache(params float[] list)
-        {
-            for (int i = 0; i < list.Length; i++)
-            {
-                m_attackRangeCache[i] = list[i];
-            }
-        }
-
         private void IncreaseHeadFX()
         {
             m_detectionFX.Play();
@@ -490,12 +424,6 @@ namespace DChild.Gameplay.Characters.Enemies
             m_attackDecider = new RandomAttackDecider<Attack>();
             m_propertyBlock = new MaterialPropertyBlock();
             UpdateAttackDeciderList();
-
-            m_attackCache = new List<Attack>();
-            AddToAttackCache(Attack.AttackTackle, Attack.AttackMelee);
-            m_attackRangeCache = new List<float>();
-            AddToRangeCache(m_info.attackTackle.range, m_info.attackMelee.range);
-            m_attackUsed = new bool[m_attackCache.Count];
         }
 
 
@@ -555,25 +483,23 @@ namespace DChild.Gameplay.Characters.Enemies
                 case State.Attacking:
                     if (IsFacingTarget())
                     {
-                        if (IsTargetInRange(m_currentAttackRange) && !m_wallSensor.allRaysDetecting && m_edgeSensor.isDetecting)
+                        if (IsTargetInRange(m_info.attackTackle.range) && !m_wallSensor.allRaysDetecting && m_edgeSensor.isDetecting)
                         {
                             m_stateHandle.Wait(State.Cooldown);
                             m_animation.SetAnimation(0, m_info.idleAnimation, true);
-
-                            switch (/*m_attackDecider.chosenAttack.attack*/ m_currentAttack)
+                            if (Vector2.Distance(m_targetInfo.position, m_character.centerMass.position) <= m_info.attackMelee.range)
                             {
-                                case Attack.AttackTackle:
-                                    m_animation.EnableRootMotion(true, false);
-                                    m_selfCollider.enabled = false;
-                                    //m_attackHandle.ExecuteAttack(m_info.attackTackle.animation, m_info.idleAnimation);
-                                    StartCoroutine(AttackTackleRoutine());
-                                    break;
-                                case Attack.AttackMelee:
-                                    //m_animation.EnableRootMotion(true, false);
-                                    //m_attackHandle.ExecuteAttack(m_info.attackMelee.animation, m_info.idleAnimation);
-                                    m_selfCollider.enabled = true;
-                                    StartCoroutine(GroundSmashRoutine());
-                                    break;
+                                //m_animation.EnableRootMotion(true, false);
+                                //m_attackHandle.ExecuteAttack(m_info.attackMelee.animation, m_info.idleAnimation);
+                                m_selfCollider.enabled = true;
+                                StartCoroutine(GroundSmashRoutine());
+                            }
+                            else
+                            {
+                                m_animation.EnableRootMotion(true, false);
+                                m_selfCollider.enabled = false;
+                                //m_attackHandle.ExecuteAttack(m_info.attackTackle.animation, m_info.idleAnimation);
+                                StartCoroutine(AttackTackleRoutine());
                             }
                             m_attackDecider.hasDecidedOnAttack = false;
                         }
@@ -637,8 +563,8 @@ namespace DChild.Gameplay.Characters.Enemies
                         }
                         else
                         {
-                            m_currentAttack = Vector2.Distance(m_targetInfo.position, transform.position) <= m_info.attackMelee.range + 15 ? Attack.AttackMelee : Attack.AttackTackle;
-                            m_currentAttackRange = m_currentAttack == Attack.AttackMelee ? m_info.attackMelee.range : m_info.attackTackle.range;
+                            //m_currentAttack = Vector2.Distance(m_targetInfo.position, transform.position) <= m_info.attackMelee.range + 15 ? Attack.AttackMelee : Attack.AttackTackle;
+                            //m_currentAttackRange = m_currentAttack == Attack.AttackMelee ? m_info.attackMelee.range : m_info.attackTackle.range;
                             m_attackDecider.hasDecidedOnAttack = true;
                         }
                     }
