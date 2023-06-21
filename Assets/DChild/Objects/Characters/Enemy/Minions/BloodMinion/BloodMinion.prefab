@@ -385,6 +385,7 @@ PrefabInstance:
     m_RemovedComponents:
     - {fileID: 3742746717083090729, guid: 6dc0bee41b383c442afdb964c593053d, type: 3}
     - {fileID: 6793352105128829836, guid: 6dc0bee41b383c442afdb964c593053d, type: 3}
+    - {fileID: 2552790414877006800, guid: 6dc0bee41b383c442afdb964c593053d, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 6dc0bee41b383c442afdb964c593053d, type: 3}
 --- !u!50 &219976401030185757 stripped
 Rigidbody2D:
@@ -407,12 +408,6 @@ MonoBehaviour:
 --- !u!198 &946171765117504018 stripped
 ParticleSystem:
   m_CorrespondingSourceObject: {fileID: 910848514217978970, guid: 6dc0bee41b383c442afdb964c593053d,
-    type: 3}
-  m_PrefabInstance: {fileID: 108792074625803848}
-  m_PrefabAsset: {fileID: 0}
---- !u!198 &946171766130102663 stripped
-ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 910848513087289295, guid: 6dc0bee41b383c442afdb964c593053d,
     type: 3}
   m_PrefabInstance: {fileID: 108792074625803848}
   m_PrefabAsset: {fileID: 0}
@@ -500,21 +495,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ffe2ff51b484f14592540b701d34e27, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!198 &5721212244028450817 stripped
-ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 5685607516002356809, guid: 6dc0bee41b383c442afdb964c593053d,
-    type: 3}
-  m_PrefabInstance: {fileID: 108792074625803848}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &5895005858047573577 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5786498011546212353, guid: 6dc0bee41b383c442afdb964c593053d,
-    type: 3}
-  m_PrefabInstance: {fileID: 108792074625803848}
-  m_PrefabAsset: {fileID: 0}
---- !u!198 &5996477585731230478 stripped
-ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 5959745854002232646, guid: 6dc0bee41b383c442afdb964c593053d,
     type: 3}
   m_PrefabInstance: {fileID: 108792074625803848}
   m_PrefabAsset: {fileID: 0}
@@ -524,19 +507,13 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 108792074625803848}
   m_PrefabAsset: {fileID: 0}
---- !u!198 &7254620088637371969 stripped
-ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 7291071990370553865, guid: 6dc0bee41b383c442afdb964c593053d,
-    type: 3}
-  m_PrefabInstance: {fileID: 108792074625803848}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &7921365299041072368 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7812854843340493496, guid: 6dc0bee41b383c442afdb964c593053d,
     type: 3}
   m_PrefabInstance: {fileID: 108792074625803848}
   m_PrefabAsset: {fileID: 0}
---- !u!60 &7209034617244107580
+--- !u!60 &2911983889092325909
 PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -568,12 +545,6 @@ PolygonCollider2D:
 --- !u!58 &8005292870752320907 stripped
 CircleCollider2D:
   m_CorrespondingSourceObject: {fileID: 7969685391808289731, guid: 6dc0bee41b383c442afdb964c593053d,
-    type: 3}
-  m_PrefabInstance: {fileID: 108792074625803848}
-  m_PrefabAsset: {fileID: 0}
---- !u!198 &8895530280162523768 stripped
-ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 8859077961817758768, guid: 6dc0bee41b383c442afdb964c593053d,
     type: 3}
   m_PrefabInstance: {fileID: 108792074625803848}
   m_PrefabAsset: {fileID: 0}
@@ -751,6 +722,7 @@ MonoBehaviour:
   m_flinchFX: {fileID: 3162832894572007069}
   m_flinchFXRenderer: {fileID: 2381467839546498394}
   m_slashFX: {fileID: 3699393952911389314}
+  m_attackBB: {fileID: 7921365299041072368}
 --- !u!114 &1129131586759431257
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -816,22 +788,8 @@ MonoBehaviour:
   m_slowFactor: 0
   m_fastFactor: 0
   m_fXObjects:
-    m_particleSystems:
-    - {fileID: 946171765117504018}
-    - {fileID: 946171766130102663}
-    - {fileID: 7254620088637371969}
-    - {fileID: 3699393952911389314}
-    - {fileID: 5996477585731230478}
-    - {fileID: 5721212244028450817}
-    - {fileID: 8895530280162523768}
-    m_originalSimulationSpeed:
-    - 1
-    - 8
-    - 6
-    - 9
-    - 1
-    - 9
-    - 4
+    m_particleSystems: []
+    m_originalSimulationSpeed: []
   m_spineObjects:
     m_skeletonAnimations:
     - {fileID: 9104599901191690605}

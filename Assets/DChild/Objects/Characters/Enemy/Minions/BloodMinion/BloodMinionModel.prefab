@@ -5340,7 +5340,6 @@ GameObject:
   m_Component:
   - component: {fileID: 7341654898479879578}
   - component: {fileID: 2458759735212518658}
-  - component: {fileID: 5221166298498806080}
   m_Layer: 13
   m_Name: Sensors
   m_TagString: Untagged
@@ -5379,27 +5378,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 96c374c2142697f42b772f38146544f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &5221166298498806080
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5281392227179110024}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 031d913f8e944d94ea27af5ede12eecb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_sensors:
-  - {fileID: 690779317503796239}
-  - {fileID: 5331696827218925537}
-  - {fileID: 2253064875599639663}
-  m_useDistance: 1
-  m_castPerDistance: 0.5
-  m_useTime: 1
-  m_castPerSecond:
-    m_startTime: 0.5
 --- !u!1 &6104461873166928138
 GameObject:
   m_ObjectHideFlags: 0
@@ -5418,7 +5396,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &6914646348694675814
 Transform:
   m_ObjectHideFlags: 0
@@ -15342,14 +15320,14 @@ GameObject:
   - component: {fileID: 8602518689478344877}
   - component: {fileID: 234860125880079935}
   - component: {fileID: 73366234758108970}
-  - component: {fileID: 2552790414877006800}
+  - component: {fileID: 4643893701819028804}
   m_Layer: 13
   m_Name: AttackBB
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &6316485952662729958
 Transform:
   m_ObjectHideFlags: 0
@@ -15418,7 +15396,7 @@ MonoBehaviour:
   m_damageUniqueHitboxesOnly: 0
   m_collisionRegistrator: {fileID: 0}
   m_ignoreColliderList: []
---- !u!60 &2552790414877006800
+--- !u!60 &4643893701819028804
 PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -15654,7 +15632,6 @@ GameObject:
   - component: {fileID: 9212263189690236714}
   - component: {fileID: 9212263189690236709}
   - component: {fileID: 7813020724018924157}
-  - component: {fileID: 7629801410437138298}
   m_Layer: 13
   m_Name: BloodMinionModel
   m_TagString: Untagged
@@ -15786,21 +15763,6 @@ MonoBehaviour:
   useY: 0
   rb: {fileID: 0}
   siblingBoneNames: []
---- !u!114 &7629801410437138298
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9212263189690236711}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7f726fb798ad621458c431cb9966d91d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  boneRoot: {fileID: 0}
-  flipBy180DegreeRotation: 0
-  skeletonRenderer: {fileID: 9212263189690236709}
 --- !u!1001 &7291071990124365035
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -15856,6 +15818,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Blood_Minion_Death
+      objectReference: {fileID: 0}
+    - target: {fileID: 7605714170252519612, guid: 3929a68c65b7a3b41888c4d214313fb3,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7605714170252519614, guid: 3929a68c65b7a3b41888c4d214313fb3,
         type: 3}
@@ -15967,6 +15934,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4623344324260179601}
     m_Modifications:
+    - target: {fileID: 4787291338446473810, guid: 74cd992e50b1e7c4499e0b336818ff4b,
+        type: 3}
+      propertyPath: simulationSpeed
+      value: 18
+      objectReference: {fileID: 0}
     - target: {fileID: 8082697180275833197, guid: 74cd992e50b1e7c4499e0b336818ff4b,
         type: 3}
       propertyPath: m_Materials.Array.size
@@ -15976,6 +15948,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Blood_minion_Slash
+      objectReference: {fileID: 0}
+    - target: {fileID: 8369216225973702832, guid: 74cd992e50b1e7c4499e0b336818ff4b,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8369216225973702839, guid: 74cd992e50b1e7c4499e0b336818ff4b,
         type: 3}

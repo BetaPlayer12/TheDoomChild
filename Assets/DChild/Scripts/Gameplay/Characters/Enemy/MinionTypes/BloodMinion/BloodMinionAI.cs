@@ -160,6 +160,9 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("FX")]
         private ParticleSystem m_slashFX;
 
+        [SerializeField, TabGroup("Hurtbox")]
+        private GameObject m_attackBB;
+
         [ShowInInspector]
         private StateHandle<State> m_stateHandle;
         [ShowInInspector]
@@ -211,12 +214,6 @@ namespace DChild.Gameplay.Characters.Enemies
             m_stateHandle.ApplyQueuedState();
         }
 
-        private void CustomTurn()
-        {
-            transform.localScale = new Vector3(-transform.localScale.x, 1, 1);
-            m_character.SetFacing(transform.localScale.x == 1 ? HorizontalDirection.Right : HorizontalDirection.Left);
-        }
-
         //Patience Handler
         private void Patience()
         {
@@ -239,8 +236,10 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             //m_Audiosource.clip = m_DeadClip;
             //m_Audiosource.Play();
+            m_deathFX.gameObject.SetActive(true);
             m_deathFX.Play();
             base.OnDestroyed(sender, eventArgs);
+            m_attackBB.SetActive(false);
             GameplaySystem.minionManager.Unregister(this);
             m_movement.Stop();
             m_selfCollider.enabled = false;
@@ -252,6 +251,8 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 if (m_flinchHandle.m_autoFlinch)
                 {
+                    m_flinchFX.gameObject.SetActive(true);
+                    m_attackBB.SetActive(false);
                     m_selfCollider.enabled = false;
                     StopAllCoroutines();
                     if (!IsFacingTarget())
@@ -277,6 +278,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             if (m_flinchHandle.m_autoFlinch)
             {
+                m_flinchFX.gameObject.SetActive(false);
                 //m_flinchFXFollower.SetParent(this.transform);
                 if (m_animation.GetCurrentAnimation(0).ToString() != m_info.deathAnimation.animation)
                     m_animation.SetAnimation(0, m_info.idleAnimation, true);
@@ -312,17 +314,23 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator AttackRoutine()
         {
+            m_attackBB.SetActive(true);
             m_selfCollider.enabled = false;
             m_animation.SetAnimation(0, m_info.imerseAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.imerseAnimation);
+            if (!IsFacingTarget())
+                CustomTurn();
             m_hitbox.gameObject.SetActive(false);
-            m_slashFX.GetComponent<ParticleSystemRenderer>().flip = transform.position.x < m_targetInfo.position.x ? Vector3.zero : Vector3.right;
+            m_slashFX.gameObject.SetActive(true);
+            m_slashFX.GetComponent<ParticleSystemRenderer>().flip = m_character.facing == HorizontalDirection.Right ? Vector3.zero : Vector3.right;
             m_slashFX.Play();
             m_animation.SetAnimation(0, m_info.attack1.animation, false);
             yield return new WaitForSeconds(.75f);
             m_hitbox.gameObject.SetActive(true);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack1.animation);
+            m_attackBB.SetActive(false);
             m_selfCollider.enabled = true;
+            m_slashFX.gameObject.SetActive(false);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_isSubmerged = false;
             m_stateHandle.ApplyQueuedState();
@@ -381,6 +389,9 @@ namespace DChild.Gameplay.Characters.Enemies
             m_currentFullCD = UnityEngine.Random.Range(m_info.attackCD * .5f, m_info.attackCD * 2f);
             m_hitbox.enabled = false;
             m_startPoint = transform.position;
+            m_deathFX.gameObject.SetActive(false);
+            m_slashFX.gameObject.SetActive(false);
+            m_flinchFX.gameObject.SetActive(false);
         }
 
         protected override void Awake()
@@ -419,6 +430,8 @@ namespace DChild.Gameplay.Characters.Enemies
                     break;
 
                 case State.Patrol:
+                    m_groundSensor.Cast();
+                    m_wallSensor.Cast();
                     if (!m_wallSensor.isDetecting && m_groundSensor.isDetecting)
                     {
                         m_turnState = State.ReevaluateSituation;
@@ -503,6 +516,9 @@ namespace DChild.Gameplay.Characters.Enemies
                             }
                             else
                             {
+                                m_groundSensor.Cast();
+                                m_wallSensor.Cast();
+                                m_edgeSensor.Cast();
                                 if (!m_wallSensor.isDetecting && m_groundSensor.isDetecting && m_edgeSensor.isDetecting)
                                 {
                                     //var distance = Vector2.Distance(m_targetInfo.position, transform.position);

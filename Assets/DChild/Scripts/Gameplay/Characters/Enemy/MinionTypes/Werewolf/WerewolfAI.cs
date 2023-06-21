@@ -138,6 +138,11 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_edgeSensor;
 
+        [SerializeField, TabGroup("Hurtbox")]
+        private GameObject m_scratchBB;
+        [SerializeField, TabGroup("Hurtbox")]
+        private GameObject m_biteBB;
+
         [ShowInInspector]
         private StateHandle<State> m_stateHandle;
         [ShowInInspector]
@@ -158,6 +163,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnAttackDone(object sender, EventActionArgs eventArgs)
         {
+            m_biteBB.SetActive(false);
+            m_scratchBB.SetActive(false);
             m_animation.DisableRootMotion();
             m_flinchHandle.m_autoFlinch = true;
             m_flinchHandle.m_enableMixFlinch = true;
@@ -239,6 +246,8 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             //m_Audiosource.clip = m_DeadClip;
             //m_Audiosource.Play();
+            m_biteBB.SetActive(false);
+            m_scratchBB.SetActive(false);
             enabled = false;
             base.OnDestroyed(sender, eventArgs);
             GameplaySystem.minionManager.Unregister(this);
@@ -252,6 +261,8 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             if (!m_isAttacking && m_stateHandle.currentState != State.Chasing)
             {
+                m_biteBB.SetActive(false);
+                m_scratchBB.SetActive(false);
                 m_stateHandle.Wait(m_targetInfo.isValid ? State.Cooldown : State.ReevaluateSituation);
                 if (m_targetInfo.isValid)
                 {
@@ -383,8 +394,6 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void Update()
         {
-            //Debug.Log("Wall Sensor is " + m_wallSensor.isDetecting);
-            //Debug.Log("Edge Sensor is " + m_edgeSensor.isDetecting);
             switch (m_stateHandle.currentState)
             {
                 case State.Detect:
@@ -405,7 +414,9 @@ namespace DChild.Gameplay.Characters.Enemies
                     break;
 
                 case State.Patrol:
-                    if(!m_wallSensor.isDetecting && m_groundSensor.isDetecting)
+                    m_groundSensor.Cast();
+                    m_wallSensor.Cast();
+                    if (!m_wallSensor.isDetecting && m_groundSensor.isDetecting)
                     {
                         m_turnState = State.ReevaluateSituation;
                         m_animation.EnableRootMotion(false, false);
@@ -433,10 +444,12 @@ namespace DChild.Gameplay.Characters.Enemies
                     switch (m_attackDecider.chosenAttack.attack)
                     {
                         case Attack.Bite:
+                            m_biteBB.SetActive(true);
                             m_animation.EnableRootMotion(true, false);
                             m_attackHandle.ExecuteAttack(m_info.biteAttack.animation, m_info.idleAnimation.animation);
                             break;
                         case Attack.Scratch:
+                            m_scratchBB.SetActive(true);
                             m_animation.EnableRootMotion(true, false);
                             m_attackHandle.ExecuteAttack(m_info.scratchAttack.animation, m_info.idleAnimation.animation);
                             break;
@@ -476,6 +489,9 @@ namespace DChild.Gameplay.Characters.Enemies
                         m_flinchHandle.m_autoFlinch = false;
                         if (IsFacingTarget())
                         {
+                            m_groundSensor.Cast();
+                            m_wallSensor.Cast();
+                            m_edgeSensor.Cast();
                             m_attackDecider.DecideOnAttack();
                             if (m_attackDecider.hasDecidedOnAttack && IsTargetInRange(m_attackDecider.chosenAttack.range) && !m_wallSensor.allRaysDetecting)
                             {
@@ -502,7 +518,6 @@ namespace DChild.Gameplay.Characters.Enemies
                                 }
                                 else
                                 {
-                                    Debug.Log("IDLE CHASING");
                                     if (m_animation.GetCurrentAnimation(0).ToString() != m_info.idleAnimation.animation)
                                         m_movement.Stop();
 
