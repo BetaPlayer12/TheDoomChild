@@ -383,16 +383,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 0}
     m_RemovedComponents:
-    - {fileID: 3742746717083090729, guid: 6dc0bee41b383c442afdb964c593053d, type: 3}
-    - {fileID: 6793352105128829836, guid: 6dc0bee41b383c442afdb964c593053d, type: 3}
-    - {fileID: 2552790414877006800, guid: 6dc0bee41b383c442afdb964c593053d, type: 3}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
   m_SourcePrefab: {fileID: 100100000, guid: 6dc0bee41b383c442afdb964c593053d, type: 3}
---- !u!50 &219976401030185757 stripped
-Rigidbody2D:
-  m_CorrespondingSourceObject: {fileID: 184368926307476821, guid: 6dc0bee41b383c442afdb964c593053d,
-    type: 3}
-  m_PrefabInstance: {fileID: 108792074625803848}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &582272710041846343 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 690779317503796239, guid: 6dc0bee41b383c442afdb964c593053d,
@@ -408,6 +402,12 @@ MonoBehaviour:
 --- !u!198 &946171765117504018 stripped
 ParticleSystem:
   m_CorrespondingSourceObject: {fileID: 910848514217978970, guid: 6dc0bee41b383c442afdb964c593053d,
+    type: 3}
+  m_PrefabInstance: {fileID: 108792074625803848}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1257246122682849484 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1220514528388546180, guid: 6dc0bee41b383c442afdb964c593053d,
     type: 3}
   m_PrefabInstance: {fileID: 108792074625803848}
   m_PrefabAsset: {fileID: 0}
@@ -542,12 +542,6 @@ PolygonCollider2D:
       - {x: -18.108198, y: -7.4117}
       - {x: 10.473001, y: -7.7753997}
       - {x: 10.676999, y: 16.3534}
---- !u!58 &8005292870752320907 stripped
-CircleCollider2D:
-  m_CorrespondingSourceObject: {fileID: 7969685391808289731, guid: 6dc0bee41b383c442afdb964c593053d,
-    type: 3}
-  m_PrefabInstance: {fileID: 108792074625803848}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &9104599901191690605 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 9212263189690236709, guid: 6dc0bee41b383c442afdb964c593053d,
@@ -705,7 +699,7 @@ MonoBehaviour:
   m_centerMass: {fileID: 5895005858047573577}
   m_aggroBoundary: {fileID: 1918587848360778105}
   m_statsData: {fileID: 11400000, guid: 3847b87ec09e6e24eb993878e057d7ab, type: 2}
-  m_selfCollider: {fileID: 8005292870752320907}
+  m_selfCollider: {fileID: 1257246122682849484}
   m_flinchFXFollower: {fileID: 6806984028778333998}
   m_hitbox: {fileID: 4316111264401400719}
   m_turnHandle: {fileID: 7946285417891758305}
@@ -798,10 +792,7 @@ MonoBehaviour:
   m_physicsObjects:
     m_rigidbody2Ds:
     - {fileID: 4462968055470568640}
-    - {fileID: 219976401030185757}
     m_physicsTimeObjectInfo:
-    - m_mass: 1
-      m_actualVelocity: {x: 0, y: 0}
     - m_mass: 1
       m_actualVelocity: {x: 0, y: 0}
   m_materials: []
@@ -909,7 +900,7 @@ MonoBehaviour:
   m_useCoyoteTime: 0
   m_coyoteTime:
     m_duration: 0
-  m_useStepClimb: 0
+  m_useStepClimb: 1
   m_stepClimber:
     m_maxStepHeight: 2
     stepSearchOvershoot: 2

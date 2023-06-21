@@ -116,7 +116,7 @@ namespace DChild.Gameplay.Characters.Enemies
         }
 
         [SerializeField, TabGroup("Reference")]
-        private Collider2D m_selfCollider;
+        private GameObject m_selfCollider;
         [SerializeField, TabGroup("Reference")]
         private Transform m_flinchFXFollower;
         [SerializeField, TabGroup("Reference")]
@@ -185,7 +185,7 @@ namespace DChild.Gameplay.Characters.Enemies
             if (damageable != null)
             {
                 base.SetTarget(damageable);
-                m_selfCollider.enabled = false;
+                m_selfCollider.SetActive(false);
                 if (m_stateHandle.currentState != State.Chasing && !m_isDetecting)
                 {
                     m_isDetecting = true;
@@ -223,7 +223,7 @@ namespace DChild.Gameplay.Characters.Enemies
             }
             else
             {
-                m_selfCollider.enabled = false;
+                m_selfCollider.SetActive(false);
                 m_targetInfo.Set(null, null);
                 m_flinchHandle.m_autoFlinch = true;
                 m_isDetecting = false;
@@ -242,7 +242,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_attackBB.SetActive(false);
             GameplaySystem.minionManager.Unregister(this);
             m_movement.Stop();
-            m_selfCollider.enabled = false;
+            m_selfCollider.SetActive(false);
         }
 
         private void OnFlinchStart(object sender, EventActionArgs eventArgs)
@@ -253,7 +253,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 {
                     m_flinchFX.gameObject.SetActive(true);
                     m_attackBB.SetActive(false);
-                    m_selfCollider.enabled = false;
+                    m_selfCollider.SetActive(false);
                     StopAllCoroutines();
                     if (!IsFacingTarget())
                     {
@@ -297,7 +297,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         public void ResetAI()
         {
-            m_selfCollider.enabled = false;
+            m_selfCollider.SetActive(false);
             m_targetInfo.Set(null, null);
             m_flinchHandle.m_autoFlinch = true;
             m_isDetecting = false;
@@ -315,11 +315,9 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator AttackRoutine()
         {
             m_attackBB.SetActive(true);
-            m_selfCollider.enabled = false;
+            m_selfCollider.SetActive(false);
             m_animation.SetAnimation(0, m_info.imerseAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.imerseAnimation);
-            if (!IsFacingTarget())
-                CustomTurn();
             m_hitbox.gameObject.SetActive(false);
             m_slashFX.gameObject.SetActive(true);
             m_slashFX.GetComponent<ParticleSystemRenderer>().flip = m_character.facing == HorizontalDirection.Right ? Vector3.zero : Vector3.right;
@@ -329,7 +327,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_hitbox.gameObject.SetActive(true);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack1.animation);
             m_attackBB.SetActive(false);
-            m_selfCollider.enabled = true;
+            m_selfCollider.SetActive(true);
             m_slashFX.gameObject.SetActive(false);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_isSubmerged = false;
@@ -523,14 +521,14 @@ namespace DChild.Gameplay.Characters.Enemies
                                 {
                                     //var distance = Vector2.Distance(m_targetInfo.position, transform.position);
                                     m_animation.EnableRootMotion(true, false);
-                                    m_selfCollider.enabled = false;
+                                    m_selfCollider.SetActive(false);
                                     m_animation.SetAnimation(0, m_info.submergeMove.animation, true).TimeScale = m_currentTimeScale;
                                     //m_movement.MoveTowards(Vector2.one * transform.localScale.x, distance >= m_info.targetDistanceTolerance ? m_info.move.speed : m_info.patrol.speed);
                                 }
                                 else
                                 {
                                     m_movement.Stop();
-                                    m_selfCollider.enabled = true;
+                                    m_selfCollider.SetActive(true);
                                     if (m_animation.animationState.GetCurrent(0).Animation.ToString() == m_info.submergeMove.animation)
                                     {
                                         m_animation.SetAnimation(0, m_info.imerseAnimation, false);
@@ -581,7 +579,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_currentPatience = 0;
             m_enablePatience = false;
             m_isDetecting = false;
-            m_selfCollider.enabled = false;
+            m_selfCollider.SetActive(false);
         }
 
         public override void ReturnToSpawnPoint()
