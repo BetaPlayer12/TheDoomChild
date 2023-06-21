@@ -162,6 +162,9 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_edgeSensor;
 
+        [SerializeField, TabGroup("Hurtbox")]
+        private GameObject m_attackBB;
+
         [SerializeField]
         private bool m_willPatrol;
 
@@ -182,6 +185,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnAttackDone(object sender, EventActionArgs eventArgs)
         {
+            m_attackBB.SetActive(false);
             m_flinchHandle.m_autoFlinch = true;
             GetComponent<IsolatedCharacterPhysics2D>().UseStepClimb(true);
             m_stateHandle.ApplyQueuedState();
@@ -425,7 +429,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
                 case State.Attacking:
                     m_stateHandle.Wait(State.Cooldown);
-                    
+
+                    m_attackBB.SetActive(true);
                     m_animation.EnableRootMotion(true, true);
                     switch (m_attackDecider.chosenAttack.attack)
                     {
@@ -486,7 +491,6 @@ namespace DChild.Gameplay.Characters.Enemies
                             }
                             else
                             {
-                                m_wallSensor.Cast();
                                 m_groundSensor.Cast();
                                 m_edgeSensor.Cast();
                                 if (!m_wallSensor.isDetecting && m_groundSensor.isDetecting && m_edgeSensor.isDetecting && Mathf.Abs(m_targetInfo.position.x - transform.position.x) > m_info.attack.range - 1)

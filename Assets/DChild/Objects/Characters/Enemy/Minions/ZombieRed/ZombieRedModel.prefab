@@ -49,7 +49,7 @@ MonoBehaviour:
     m_config: {fileID: 11400000, guid: 4ba7b176e7a6f2049bf7f6ec304ccc2a, type: 2}
     m_rayColor: {r: 1, g: 0, b: 0.617527, a: 1}
   m_enable: 1
-  m_debugMode: 1
+  m_debugMode: 0
 --- !u!114 &8630472733947994018
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -73,7 +73,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5657724089707909380}
-  - component: {fileID: 4032344298150136229}
   m_Layer: 13
   m_Name: RotFX
   m_TagString: Untagged
@@ -88,38 +87,15 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1385143037023655571}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.13860956, y: 8.839768, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8951989691351566943}
-  - {fileID: 1786539056979495290}
-  - {fileID: 4996002663657420055}
-  m_Father: {fileID: 4185504718928494157}
+  m_Father: {fileID: 182803244704829877}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4032344298150136229
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1385143037023655571}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a1fd8daaed7b64148a34acb96ba14ce1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  skeletonRenderer: {fileID: 2550697406945093045}
-  boneName: bone3
-  followXYPosition: 1
-  followZPosition: 0
-  followBoneRotation: 0
-  followSkeletonFlip: 0
-  followLocalScale: 0
-  initializeOnAwake: 1
-  m_updateOnFixedUpdate: 0
 --- !u!1 &1582500110579352600
 GameObject:
   m_ObjectHideFlags: 0
@@ -177,7 +153,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7205028510502735274}
-  - component: {fileID: 4696552574689103358}
   m_Layer: 9
   m_Name: Eyes
   m_TagString: Untagged
@@ -200,27 +175,6 @@ Transform:
   m_Father: {fileID: 6030444627310663346}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4696552574689103358
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2111944839062026732}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a1fd8daaed7b64148a34acb96ba14ce1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  skeletonRenderer: {fileID: 2550697406945093045}
-  boneName: bone60
-  followXYPosition: 1
-  followZPosition: 0
-  followBoneRotation: 0
-  followSkeletonFlip: 0
-  followLocalScale: 0
-  initializeOnAwake: 1
-  m_updateOnFixedUpdate: 0
 --- !u!1 &2550697406945093047
 GameObject:
   m_ObjectHideFlags: 0
@@ -258,7 +212,6 @@ Transform:
   - {fileID: 4134200500658245386}
   - {fileID: 4698437518521308578}
   - {fileID: 7738479645969521812}
-  - {fileID: 4185504718928494157}
   - {fileID: 372063423090258847}
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -499,7 +452,8 @@ Transform:
   m_LocalPosition: {x: -0.048668068, y: 7.7266345, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 5657724089707909380}
   m_Father: {fileID: 7738479645969521812}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -560,7 +514,6 @@ GameObject:
   m_Component:
   - component: {fileID: 7913955764830972342}
   - component: {fileID: 3551639738153664519}
-  - component: {fileID: 1148644662625791085}
   m_Layer: 16
   m_Name: SolidBodyCollider
   m_TagString: Untagged
@@ -609,27 +562,6 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 3.5, y: 0.5}
   m_EdgeRadius: 0
---- !u!114 &1148644662625791085
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2760912935969679038}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a1fd8daaed7b64148a34acb96ba14ce1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  skeletonRenderer: {fileID: 2550697406945093045}
-  boneName: bone3
-  followXYPosition: 1
-  followZPosition: 0
-  followBoneRotation: 0
-  followSkeletonFlip: 0
-  followLocalScale: 0
-  initializeOnAwake: 1
-  m_updateOnFixedUpdate: 0
 --- !u!1 &2987479217180622803
 GameObject:
   m_ObjectHideFlags: 0
@@ -679,7 +611,7 @@ MonoBehaviour:
     m_config: {fileID: 11400000, guid: 5289c12609e0be5498b16f7a0199eb9e, type: 2}
     m_rayColor: {r: 1, g: 0.08614111, b: 0, a: 1}
   m_enable: 1
-  m_debugMode: 1
+  m_debugMode: 0
 --- !u!114 &4574292600631622032
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -719,13 +651,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3105112421194343620}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: -0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: -0.5127553, y: 0.5127553, z: 0.51276}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 5657724089707909380}
-  m_RootOrder: 2
+  m_Father: {fileID: 8951989691351566943}
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: -31.781002, y: 87.75201, z: 23.292002}
 --- !u!198 &8588064947015266996
 ParticleSystem:
@@ -735,7 +667,7 @@ ParticleSystem:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3105112421194343620}
   serializedVersion: 8
-  lengthInSec: 10
+  lengthInSec: 1
   simulationSpeed: 1
   stopAction: 0
   cullingMode: 0
@@ -809,9 +741,9 @@ ParticleSystem:
     enabled: 1
     startLifetime:
       serializedVersion: 2
-      minMaxState: 0
-      scalar: 1.5
-      minScalar: 2
+      minMaxState: 3
+      scalar: 0.5
+      minScalar: 0.25
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -978,8 +910,8 @@ ParticleSystem:
         m_NumAlphaKeys: 2
     startSize:
       serializedVersion: 2
-      minMaxState: 0
-      scalar: 30
+      minMaxState: 3
+      scalar: 20
       minScalar: 10
       maxCurve:
         serializedVersion: 2
@@ -1031,7 +963,7 @@ ParticleSystem:
         m_RotationOrder: 4
     startSizeY:
       serializedVersion: 2
-      minMaxState: 0
+      minMaxState: 3
       scalar: 1
       minScalar: 1
       maxCurve:
@@ -1084,7 +1016,7 @@ ParticleSystem:
         m_RotationOrder: 4
     startSizeZ:
       serializedVersion: 2
-      minMaxState: 0
+      minMaxState: 3
       scalar: 1
       minScalar: 1
       maxCurve:
@@ -1295,7 +1227,7 @@ ParticleSystem:
         m_PostInfinity: 2
         m_RotationOrder: 4
     randomizeRotationDirection: 0
-    maxNumParticles: 100
+    maxNumParticles: 10
     customEmitterVelocity: {x: 0, y: 0, z: 0}
     size3D: 0
     rotation3D: 0
@@ -5579,14 +5511,14 @@ GameObject:
   - component: {fileID: 647626285774881865}
   - component: {fileID: 1126858836093529821}
   - component: {fileID: 6031912454763934429}
-  - component: {fileID: 3067947532831359473}
+  - component: {fileID: 5915641902378432843}
   m_Layer: 13
   m_Name: AttackBB
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4847924398863666038
 Transform:
   m_ObjectHideFlags: 0
@@ -5617,7 +5549,7 @@ MonoBehaviour:
   skeletonRenderer: {fileID: 2550697406945093045}
   slotName: Damage_box
   isTrigger: 1
-  clearStateOnDisable: 1
+  clearStateOnDisable: 0
 --- !u!114 &1126858836093529821
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5649,13 +5581,13 @@ MonoBehaviour:
   skeletonRenderer: {fileID: 2550697406945093045}
   boneName: bone59
   followXYPosition: 1
-  followZPosition: 1
+  followZPosition: 0
   followBoneRotation: 1
-  followSkeletonFlip: 1
+  followSkeletonFlip: 0
   followLocalScale: 0
   initializeOnAwake: 1
   m_updateOnFixedUpdate: 0
---- !u!60 &3067947532831359473
+--- !u!60 &5915641902378432843
 PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -5709,13 +5641,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4605544916477882017}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: -0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: -1, y: 1, z: 1}
+  m_LocalScale: {x: 1.9502481, y: 1.9502481, z: 1.9502301}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 5657724089707909380}
-  m_RootOrder: 1
+  m_Father: {fileID: 8951989691351566943}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
 --- !u!198 &7128901256293149494
 ParticleSystem:
@@ -6285,7 +6217,7 @@ ParticleSystem:
         m_PostInfinity: 2
         m_RotationOrder: 4
     randomizeRotationDirection: 0
-    maxNumParticles: 100
+    maxNumParticles: 10
     customEmitterVelocity: {x: 0, y: 0, z: 0}
     size3D: 0
     rotation3D: 0
@@ -10693,38 +10625,6 @@ MonoBehaviour:
   m_damageUniqueHitboxesOnly: 0
   m_collisionRegistrator: {fileID: 0}
   m_ignoreColliderList: []
---- !u!1 &6946734674614145261
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 4185504718928494157}
-  m_Layer: 13
-  m_Name: FX
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &4185504718928494157
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6946734674614145261}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 5657724089707909380}
-  m_Father: {fileID: 2550697406945093044}
-  m_RootOrder: 4
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6972460686890327125
 GameObject:
   m_ObjectHideFlags: 0
@@ -10798,12 +10698,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7480794738575231666}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.24, y: 0.43, z: 0}
-  m_LocalScale: {x: 7.5, y: 7.5, z: 7.5}
+  m_LocalPosition: {x: -0.24, y: -0.28, z: 0}
+  m_LocalScale: {x: 5, y: 5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2550697406945093044}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &2914598858444526942
 SpriteRenderer:
@@ -10979,7 +10879,7 @@ MonoBehaviour:
     m_config: {fileID: 11400000, guid: 77d1e3d542acb984c93295ebff307c32, type: 2}
     m_rayColor: {r: 0, g: 1, b: 0, a: 1}
   m_enable: 1
-  m_debugMode: 1
+  m_debugMode: 0
 --- !u!114 &6726308860703526462
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11023,7 +10923,9 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: -0.5127553, y: 0.5127553, z: 0.51276}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1786539056979495290}
+  - {fileID: 4996002663657420055}
   m_Father: {fileID: 5657724089707909380}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: -31.781002, y: 87.75201, z: 23.292002}
@@ -11035,7 +10937,7 @@ ParticleSystem:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8740553544876678165}
   serializedVersion: 8
-  lengthInSec: 10
+  lengthInSec: 5
   simulationSpeed: 1
   stopAction: 0
   cullingMode: 0
@@ -11595,7 +11497,7 @@ ParticleSystem:
         m_PostInfinity: 2
         m_RotationOrder: 4
     randomizeRotationDirection: 0
-    maxNumParticles: 100
+    maxNumParticles: 10
     customEmitterVelocity: {x: 0, y: 0, z: 0}
     size3D: 0
     rotation3D: 0
