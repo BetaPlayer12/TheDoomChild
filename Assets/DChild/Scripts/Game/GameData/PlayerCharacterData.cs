@@ -7,7 +7,6 @@ using DChild.Gameplay.Characters.Players.SoulSkills;
 using System;
 using DChild.Gameplay.SoulSkills;
 using DChild.Gameplay.Inventories;
-using DChild.Gameplay.Leveling;
 using DChild.Gameplay.Characters.Players;
 
 namespace DChild.Serialization
@@ -15,8 +14,6 @@ namespace DChild.Serialization
     [System.Serializable]
     public class PlayerCharacterData
     {
-        [SerializeField]
-        private PlayerLevel.SaveData m_levelData;
         [SerializeField, TabGroup("Inventory"), HideReferenceObjectPicker, HideLabel]
         private TradableInventorySerialization m_inventoryData;
         [SerializeField, TabGroup("Bestiary"), HideReferenceObjectPicker, HideLabel]
@@ -28,7 +25,6 @@ namespace DChild.Serialization
         [SerializeField]
         private CombatArtsSaveData m_combatArtsData;
 
-        public PlayerLevel.SaveData levelData => m_levelData;
         public TradableInventorySerialization inventoryData => m_inventoryData;
         public AcquisitionData bestiaryProgressData { get => m_bestiaryProgressData; }
         public PrimarySkillsData skills { get => m_skills; }
@@ -37,17 +33,15 @@ namespace DChild.Serialization
 
         public PlayerCharacterData()
         {
-            m_levelData = new PlayerLevel.SaveData();
             m_inventoryData = new TradableInventorySerialization();
             m_bestiaryProgressData = new AcquisitionData();
             m_skills = new PrimarySkillsData();
             m_soulSkillData = new PlayerSoulSkillData();
-            m_combatArtsData = new CombatArtsSaveData(0, new int[0]);
+            m_combatArtsData = new CombatArtsSaveData(new Gameplay.Characters.Player.CombatArt.Leveling.CombatArtLevel.SaveData(),0, new int[0]);
         }
 
-        public PlayerCharacterData(PlayerLevel.SaveData levelData, TradableInventorySerialization m_inventoryData, AcquisitionData m_bestiaryProgressData, PrimarySkillsData m_skills, PlayerSoulSkillData m_soulSkillData, CombatArtsSaveData combatArtsData)
+        public PlayerCharacterData(TradableInventorySerialization m_inventoryData, AcquisitionData m_bestiaryProgressData, PrimarySkillsData m_skills, PlayerSoulSkillData m_soulSkillData, CombatArtsSaveData combatArtsData)
         {
-            m_levelData = levelData;
             this.m_inventoryData = m_inventoryData;
             this.m_bestiaryProgressData = m_bestiaryProgressData;
             this.m_skills = m_skills;
@@ -57,7 +51,6 @@ namespace DChild.Serialization
 
         public PlayerCharacterData(PlayerCharacterData data)
         {
-            m_levelData = data.levelData;
             this.m_inventoryData = new TradableInventorySerialization(data.inventoryData);
             this.m_bestiaryProgressData = new AcquisitionData(data.bestiaryProgressData);
             this.m_skills = data.skills;

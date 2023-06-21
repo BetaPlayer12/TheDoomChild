@@ -17,9 +17,12 @@ public class SpineSkinRandomizer : MonoBehaviour
 
     private void Awake()
     {
-        m_skeletonAnimation = GetComponentInChildren<SkeletonAnimation>();
-        var chosenVariationIndex = UnityEngine.Random.Range(0, m_variation.Count);
-        m_skeletonAnimation.skeleton.SetSkin(m_variation[chosenVariationIndex]);
-        GetComponentInChildren<BestiaryEntity>().SetData(m_variationData[chosenVariationIndex]);
+        if (m_variation.Count > 0)
+        {
+            m_skeletonAnimation = GetComponentInChildren<SkeletonAnimation>();
+            var chosenVariationIndex = UnityEngine.Random.Range(0, m_variation.Count);
+            m_skeletonAnimation.skeleton.SetSkin(m_variation[chosenVariationIndex]);
+            GetComponentInChildren<BestiaryEntity>().SetData(m_variationData[chosenVariationIndex]);
+        }
     }
 }

@@ -175,6 +175,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private GameObject m_attackHitbox;
         [SerializeField, TabGroup("AttackHitbox")]
         private GameObject m_armHitbox;
+        [SerializeField, TabGroup("AttackHitbox")]
+        private List<Collider2D> m_fistHitboxes;
 
         [SerializeField, TabGroup("Cannon Values")]
         private float m_speed;
@@ -302,6 +304,8 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             GetComponent<IsolatedCharacterPhysics2D>().UseStepClimb(true);
             m_armHitbox.SetActive(true);
+            for (int i = 0; i < m_fistHitboxes.Count; i++)
+                m_fistHitboxes[i].enabled = false;
             m_animation.DisableRootMotion();
             m_stateHandle.OverrideState(State.ReevaluateSituation);
         }
@@ -489,6 +493,8 @@ namespace DChild.Gameplay.Characters.Enemies
                         case Attack.Pound:
                             Debug.Log("Pound Attack");
                             //m_animation.EnableRootMotion(true, false);
+                            for (int i = 0; i < m_fistHitboxes.Count; i++)
+                                m_fistHitboxes[i].enabled = true;
                             m_attackHandle.ExecuteAttack(m_info.poundAttack.animation, m_info.idleAnimation.animation);
                             break;
                         case Attack.Punch:

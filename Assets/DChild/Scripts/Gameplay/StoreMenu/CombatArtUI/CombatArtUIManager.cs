@@ -1,3 +1,4 @@
+using DChild.Gameplay.Characters.Player.CombatArt.Leveling;
 using DChild.Gameplay.Characters.Players;
 using System;
 using System.Collections;
@@ -46,7 +47,7 @@ namespace DChild.Gameplay.UI.CombatArts
             m_uiDetail.Display(combatArtData, m_currentSelectedButton.unlockLevel);
             m_selectorHighlight.Highlight(button);
 
-            if (CanAfford(m_progressionReference.aetherPoints, combatArtData.GetCombatArtLevelData(m_currentSelectedButton.unlockLevel)))
+            if (CanAfford(m_progressionReference.skillPoints, combatArtData.GetCombatArtLevelData(m_currentSelectedButton.unlockLevel)))
             {
                 m_unlockArtHandler.VerifyUnlockFunction(m_currentSelectedButton);
             }
@@ -56,7 +57,7 @@ namespace DChild.Gameplay.UI.CombatArts
             }
             m_unlockArtHandler.ResetUnlockProgress();
 
-            bool CanAfford(AetherPoints points, CombatArtLevelData combatArtLevelData) => points.points >= combatArtLevelData.cost;
+            bool CanAfford(CombatSkillPoints points, CombatArtLevelData combatArtLevelData) => points.points >= combatArtLevelData.cost;
         }
 
         public void StartUnlockSelectedCombatArt()
@@ -75,7 +76,7 @@ namespace DChild.Gameplay.UI.CombatArts
 
             var combatArtData = m_referenceList.GetCombatArtData(m_currentSelectedButton.skillUnlock);
             var combatArtLevelData = combatArtData.GetCombatArtLevelData(m_currentSelectedButton.unlockLevel);
-            m_progressionReference.aetherPoints.AddPoint(-combatArtLevelData.cost);
+            m_progressionReference.skillPoints.AddPoint(-combatArtLevelData.cost);
             m_currentSelectedButton.SetState(CombatArtUnlockState.Unlocked);
             ValidateButtonStates();
         }

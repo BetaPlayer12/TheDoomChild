@@ -14,7 +14,6 @@ using DChild.Gameplay.Characters.Players.Behaviour;
 using PlayerNew;
 using DChild.Gameplay.SoulSkills;
 using DChild.Gameplay.Items;
-using DChild.Gameplay.Leveling;
 
 namespace DChild.Gameplay.Characters.Players
 {
@@ -23,7 +22,6 @@ namespace DChild.Gameplay.Characters.Players
         event EventAction<EventActionArgs> OnDeath;
         Modules.CharacterState state { get; }
         IPlayerStats stats { get; }
-        PlayerLevel level { get; }
         Health health { get; }
         Magic magic { get; }
         Health armor { get; }
@@ -32,6 +30,9 @@ namespace DChild.Gameplay.Characters.Players
         IAttacker attackModule { get; }
         PlayerModuleActivator behaviourModule { get; }
         PlayerSkills skills { get; }
+
+        CombatArts combatArts { get; }
+
         PlayerSoulSkillHandle soulSkills { get; }
         PlayerModifierHandle modifiers { get; }
         PlayerWeapon weapon { get; }
@@ -52,8 +53,6 @@ namespace DChild.Gameplay.Characters.Players
     {
         [SerializeField]
         private PlayerStats m_stats;
-        [SerializeField]
-        private PlayerLevel m_level;
         [SerializeField]
         private PlayerWeapon m_weapon;
         [SerializeField]
@@ -107,7 +106,6 @@ namespace DChild.Gameplay.Characters.Players
         public event EventAction<EventActionArgs> OnDeath;
 
         public IPlayerStats stats => m_stats;
-        public PlayerLevel level => m_level;
 
         public Modules.CharacterState state => m_state;
         public Health health => m_damageable.health;
@@ -155,12 +153,12 @@ namespace DChild.Gameplay.Characters.Players
         {
             m_moduleConfigurator.InitializeModuleConfigurations();
             m_stats.Initialize();
-            m_level.Initialize();
             m_weapon.Initialize();
             m_attackResistance.Initialize();
             m_statusResistance.Initialize();
             m_modifiers.Initialize();
             m_soulSkills.Initialize();
+            m_combatArts.Initialize();
         }
 
         private void Awake()
