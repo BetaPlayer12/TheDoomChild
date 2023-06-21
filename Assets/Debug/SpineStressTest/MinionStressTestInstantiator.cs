@@ -1,11 +1,13 @@
 using Sirenix.OdinInspector;
 using Spine;
 using Spine.Unity;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace DChildDebug.Spine.Tests
 {
+    [Obsolete("Use SpineStressTestInstantiator Instead")]
     public class MinionStressTestInstantiator : MonoBehaviour
     {
         private List<GameObject> m_instances;

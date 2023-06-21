@@ -7,11 +7,11 @@ using UnityEngine;
 
 namespace DChildDebug.Spine.Tests
 {
-    public class MinionModelStressTestInstantiator : MonoBehaviour
+    public class MinionModelStressTestInstantiator : MonoBehaviour, IStressTestInstantiator<GameObject>
     {
         private List<GameObject> m_instances;
 
-        public GameObject InstantiateModel(GameObject minionModel, int index)
+        public void Instantiate(GameObject minionModel, int index)
         {
             var GO = Instantiate(minionModel);
             GO.name = $"Instance ({index})";
@@ -36,8 +36,6 @@ namespace DChildDebug.Spine.Tests
             GO.GetComponent<SkeletonAnimation>().AnimationState.SetAnimation(0, animations[animationIndex], true);
 
             m_instances.Add(GO);
-
-            return GO;
         }
 
         [Button]

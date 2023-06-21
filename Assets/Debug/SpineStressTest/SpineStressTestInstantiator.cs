@@ -6,11 +6,11 @@ using UnityEngine;
 
 namespace DChildDebug.Spine.Tests
 {
-    public class SpineStressTestInstantiator : MonoBehaviour
+    public class SpineStressTestInstantiator : MonoBehaviour, IStressTestInstantiator<SkeletonDataAsset>
     {
         private List<SkeletonAnimation> m_instances;
 
-        public SkeletonAnimation InstantiateSpine(SkeletonDataAsset skeletonData, int index)
+        public void Instantiate(SkeletonDataAsset skeletonData, int index)
         {
             var GO = new GameObject($"Instance ({index})");
             var animation = GO.AddComponent<SkeletonAnimation>();
@@ -37,8 +37,6 @@ namespace DChildDebug.Spine.Tests
             animation.AnimationState.SetAnimation(0, aniamtions[animationIndex], true);
 
             m_instances.Add(animation);
-
-            return animation;
         }
 
         [Button]
