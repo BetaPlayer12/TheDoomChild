@@ -9,7 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4531513408074531640}
-  - component: {fileID: 8727593066706615200}
   m_Layer: 13
   m_Name: Sensors
   m_TagString: Untagged
@@ -33,18 +32,6 @@ Transform:
   m_Father: {fileID: 2655276441946630534}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8727593066706615200
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1318043323450034218}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 96c374c2142697f42b772f38146544f8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &2655276441946630533
 GameObject:
   m_ObjectHideFlags: 0
@@ -57,7 +44,6 @@ GameObject:
   - component: {fileID: 2655276441946630537}
   - component: {fileID: 2655276441946630536}
   - component: {fileID: 2655276441946630535}
-  - component: {fileID: 3993720493004578015}
   m_Layer: 13
   m_Name: TomeOfSpellsModel (Frost)
   m_TagString: Untagged
@@ -172,23 +158,6 @@ MonoBehaviour:
   loop: 1
   timeScale: 1
   m_alwaysUpdateMesh: 0
---- !u!114 &3993720493004578015
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2655276441946630533}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ab6a2e545a980c74b97fa2444c15f4ba, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  sourceBoneName: root
-  useX: 0
-  useY: 0
-  rb: {fileID: 0}
-  siblingBoneNames: []
 --- !u!1 &2928387162481618077
 GameObject:
   m_ObjectHideFlags: 0
@@ -235,7 +204,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ffe2ff51b484f14592540b701d34e27, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_colliders: []
+  m_colliders:
+  - {fileID: 6104885200476514096}
+  - {fileID: 3862933956669197665}
 --- !u!1 &3134546077228395292
 GameObject:
   m_ObjectHideFlags: 0
@@ -251,7 +222,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &7893004872929406035
 Transform:
   m_ObjectHideFlags: 0
@@ -382,7 +353,6 @@ GameObject:
   - component: {fileID: 7843036484303278246}
   - component: {fileID: 7018454127660389221}
   - component: {fileID: 305515025300699777}
-  - component: {fileID: 1805587841271079940}
   m_Layer: 13
   m_Name: HitBox
   m_TagString: Untagged
@@ -445,27 +415,6 @@ MonoBehaviour:
   m_damageUniqueHitboxesOnly: 0
   m_collisionRegistrator: {fileID: 0}
   m_ignoreColliderList: []
---- !u!50 &1805587841271079940
-Rigidbody2D:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5833588502128110785}
-  m_BodyType: 1
-  m_Simulated: 1
-  m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDrag: 0
-  m_AngularDrag: 0.05
-  m_GravityScale: 1
-  m_Material: {fileID: 0}
-  m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 0
-  m_Constraints: 0
 --- !u!1 &6262337730504312014
 GameObject:
   m_ObjectHideFlags: 0
@@ -626,7 +575,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8177632098020664795}
-  - component: {fileID: 3763575354309222047}
   - component: {fileID: 4046315104138193028}
   m_Layer: 13
   m_Name: Body
@@ -650,27 +598,6 @@ Transform:
   m_Father: {fileID: 7843036484303278246}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3763575354309222047
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8752721901613292170}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a1fd8daaed7b64148a34acb96ba14ce1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  skeletonRenderer: {fileID: 2655276441946630535}
-  boneName: White
-  followXYPosition: 1
-  followZPosition: 0
-  followBoneRotation: 0
-  followSkeletonFlip: 1
-  followLocalScale: 0
-  initializeOnAwake: 1
-  m_updateOnFixedUpdate: 0
 --- !u!61 &4046315104138193028
 BoxCollider2D:
   m_ObjectHideFlags: 0
