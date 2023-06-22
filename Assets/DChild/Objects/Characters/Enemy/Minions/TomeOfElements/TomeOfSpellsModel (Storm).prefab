@@ -9,7 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2755872332020766589}
-  - component: {fileID: 7044574848096055269}
   m_Layer: 13
   m_Name: Sensors
   m_TagString: Untagged
@@ -33,18 +32,6 @@ Transform:
   m_Father: {fileID: 4324748652614401475}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7044574848096055269
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 763176845881351279}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 96c374c2142697f42b772f38146544f8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1789239544686730668
 GameObject:
   m_ObjectHideFlags: 0
@@ -149,7 +136,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ffe2ff51b484f14592540b701d34e27, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_colliders: []
+  m_colliders:
+  - {fileID: 5504824372263531381}
+  - {fileID: 3262327763114187044}
 --- !u!1 &4324748652614401472
 GameObject:
   m_ObjectHideFlags: 0
@@ -162,8 +151,6 @@ GameObject:
   - component: {fileID: 4324748652614401484}
   - component: {fileID: 4324748652614401485}
   - component: {fileID: 4324748652614401474}
-  - component: {fileID: 3436655016849655962}
-  - component: {fileID: 3043976530228921757}
   m_Layer: 13
   m_Name: TomeOfSpellsModel (Storm)
   m_TagString: Untagged
@@ -277,38 +264,6 @@ MonoBehaviour:
   loop: 1
   timeScale: 1
   m_alwaysUpdateMesh: 0
---- !u!114 &3436655016849655962
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4324748652614401472}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ab6a2e545a980c74b97fa2444c15f4ba, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  sourceBoneName: root
-  useX: 0
-  useY: 0
-  rb: {fileID: 0}
-  siblingBoneNames: []
---- !u!114 &3043976530228921757
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4324748652614401472}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7f726fb798ad621458c431cb9966d91d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  boneRoot: {fileID: 0}
-  flipBy180DegreeRotation: 0
-  skeletonRenderer: {fileID: 4324748652614401474}
 --- !u!1 &5199662998082893956
 GameObject:
   m_ObjectHideFlags: 0
@@ -320,7 +275,6 @@ GameObject:
   - component: {fileID: 8360343403066311907}
   - component: {fileID: 8771735475029100320}
   - component: {fileID: 2080821824056766148}
-  - component: {fileID: 131524354594123841}
   m_Layer: 13
   m_Name: HitBox
   m_TagString: Untagged
@@ -383,27 +337,6 @@ MonoBehaviour:
   m_damageUniqueHitboxesOnly: 0
   m_collisionRegistrator: {fileID: 0}
   m_ignoreColliderList: []
---- !u!50 &131524354594123841
-Rigidbody2D:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5199662998082893956}
-  m_BodyType: 1
-  m_Simulated: 1
-  m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDrag: 0
-  m_AngularDrag: 0.05
-  m_GravityScale: 1
-  m_Material: {fileID: 0}
-  m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 0
-  m_Constraints: 0
 --- !u!1 &5635607166441443467
 GameObject:
   m_ObjectHideFlags: 0
@@ -576,7 +509,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1422448524745338839}
   - component: {fileID: 5504824372263531381}
-  - component: {fileID: 3148559580530030105}
   m_Layer: 16
   m_Name: BodyCollider
   m_TagString: Untagged
@@ -625,24 +557,3 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 4.76669, y: 3.1046648}
   m_EdgeRadius: 0
---- !u!114 &3148559580530030105
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9197012581312594978}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a1fd8daaed7b64148a34acb96ba14ce1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  skeletonRenderer: {fileID: 4324748652614401474}
-  boneName: White
-  followXYPosition: 1
-  followZPosition: 0
-  followBoneRotation: 0
-  followSkeletonFlip: 0
-  followLocalScale: 0
-  initializeOnAwake: 1
-  m_updateOnFixedUpdate: 0

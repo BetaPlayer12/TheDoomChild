@@ -111,7 +111,6 @@ GameObject:
   - component: {fileID: 3118605803485593941}
   - component: {fileID: 2808308294072533654}
   - component: {fileID: 4873733860233309042}
-  - component: {fileID: 6814280243232273911}
   m_Layer: 13
   m_Name: HitBox
   m_TagString: Untagged
@@ -174,27 +173,6 @@ MonoBehaviour:
   m_damageUniqueHitboxesOnly: 0
   m_collisionRegistrator: {fileID: 0}
   m_ignoreColliderList: []
---- !u!50 &6814280243232273911
-Rigidbody2D:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1687304503437458738}
-  m_BodyType: 1
-  m_Simulated: 1
-  m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDrag: 0
-  m_AngularDrag: 0.05
-  m_GravityScale: 1
-  m_Material: {fileID: 0}
-  m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 0
-  m_Constraints: 0
 --- !u!1 &2368947579856142740
 GameObject:
   m_ObjectHideFlags: 0
@@ -324,7 +302,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8754074342857085643}
-  - component: {fileID: 4503934922940869203}
   m_Layer: 13
   m_Name: Sensors
   m_TagString: Untagged
@@ -348,18 +325,6 @@ Transform:
   m_Father: {fileID: 7153682750826444917}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4503934922940869203
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6184904909641013721}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 96c374c2142697f42b772f38146544f8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &7153682750826444918
 GameObject:
   m_ObjectHideFlags: 0
@@ -372,7 +337,6 @@ GameObject:
   - component: {fileID: 7153682750826444922}
   - component: {fileID: 7153682750826444923}
   - component: {fileID: 7153682750826444916}
-  - component: {fileID: 8138876390621842732}
   m_Layer: 13
   m_Name: TomeOfSpellsModel (Flame)
   m_TagString: Untagged
@@ -486,23 +450,6 @@ MonoBehaviour:
   loop: 1
   timeScale: 1
   m_alwaysUpdateMesh: 0
---- !u!114 &8138876390621842732
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7153682750826444918}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ab6a2e545a980c74b97fa2444c15f4ba, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  sourceBoneName: root
-  useX: 0
-  useY: 0
-  rb: {fileID: 0}
-  siblingBoneNames: []
 --- !u!1 &8015329607973584238
 GameObject:
   m_ObjectHideFlags: 0
@@ -549,7 +496,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ffe2ff51b484f14592540b701d34e27, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_colliders: []
+  m_colliders:
+  - {fileID: 1380208059935717059}
+  - {fileID: 8215822066279488658}
 --- !u!1 &8595710182326239656
 GameObject:
   m_ObjectHideFlags: 0
