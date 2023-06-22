@@ -31,6 +31,9 @@ namespace DChild.Gameplay.Characters.Enemies
             private SimpleAttackInfo m_attack1 = new SimpleAttackInfo();
             public SimpleAttackInfo attack1 => m_attack1;
             [SerializeField, MinValue(0)]
+            private float m_attackHitboxDelay;
+            public float attackHitboxDelay => m_attackHitboxDelay;
+            [SerializeField, MinValue(0)]
             private float m_attackCD;
             public float attackCD => m_attackCD;
             //
@@ -316,35 +319,36 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_attackBB.SetActive(true);
             m_selfCollider.SetActive(false);
+            m_isSubmerged = false;
+            m_hitbox.Enable();
             m_animation.SetAnimation(0, m_info.imerseAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.imerseAnimation);
-            m_hitbox.gameObject.SetActive(false);
+            m_hitbox.Disable();
             m_slashFX.gameObject.SetActive(true);
             m_slashFX.GetComponent<ParticleSystemRenderer>().flip = m_character.facing == HorizontalDirection.Right ? Vector3.zero : Vector3.right;
             m_slashFX.Play();
             m_animation.SetAnimation(0, m_info.attack1.animation, false);
-            yield return new WaitForSeconds(.75f);
-            m_hitbox.gameObject.SetActive(true);
+            yield return new WaitForSeconds(m_info.attackHitboxDelay);
+            m_hitbox.Enable();
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack1.animation);
             m_attackBB.SetActive(false);
             m_selfCollider.SetActive(true);
             m_slashFX.gameObject.SetActive(false);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
-            m_isSubmerged = false;
             m_stateHandle.ApplyQueuedState();
             yield return null;
         }
 
         private IEnumerator RetreatRoutine()
         {
-            m_hitbox.gameObject.SetActive(false);
+            m_hitbox.Disable();
             m_animation.EnableRootMotion(true, false);
             m_flinchHandle.gameObject.SetActive(false);
             m_animation.SetAnimation(0, m_info.retreatAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.retreatAnimation);
             m_animation.SetAnimation(0, m_info.submergIdleAnimation, true);
-            m_hitbox.gameObject.SetActive(true);
-            m_flinchHandle.gameObject.SetActive(true);
+            //m_hitbox.gameObject.SetActive(true);
+            //m_flinchHandle.gameObject.SetActive(true);
             m_isSubmerged = true;
             m_stateHandle.ApplyQueuedState();
             yield return null;
@@ -352,7 +356,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator DetectRoutine()
         {
-            m_hitbox.enabled = true;
+            m_hitbox.Enable();
             m_animation.SetAnimation(0, m_info.imerseAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.imerseAnimation);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
@@ -362,7 +366,6 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator SubmerseRoutine()
         {
-            m_hitbox.enabled = false;
             m_animation.SetAnimation(0, m_info.submergAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.submergAnimation);
             m_animation.SetAnimation(0, m_info.submergIdleAnimation, true);
@@ -372,7 +375,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator ImerseRoutine()
         {
-            m_hitbox.enabled = true;
+            m_hitbox.Enable();
             m_animation.SetAnimation(0, m_info.imerseAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.imerseAnimation);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
@@ -385,7 +388,7 @@ namespace DChild.Gameplay.Characters.Enemies
             base.Start();
             m_currentTimeScale = UnityEngine.Random.Range(1.0f, 2.0f);
             m_currentFullCD = UnityEngine.Random.Range(m_info.attackCD * .5f, m_info.attackCD * 2f);
-            m_hitbox.enabled = false;
+            m_hitbox.Disable();
             m_startPoint = transform.position;
             m_deathFX.gameObject.SetActive(false);
             m_slashFX.gameObject.SetActive(false);
@@ -531,6 +534,8 @@ namespace DChild.Gameplay.Characters.Enemies
                                     m_selfCollider.SetActive(true);
                                     if (m_animation.animationState.GetCurrent(0).Animation.ToString() == m_info.submergeMove.animation)
                                     {
+                                        m_isSubmerged = false;
+                                        m_hitbox.Enable();
                                         m_animation.SetAnimation(0, m_info.imerseAnimation, false);
                                     }
                                     else
