@@ -393,6 +393,8 @@ MonoBehaviour:
   m_spineEventListener: {fileID: 2019980391024246571}
   m_hitbox: {fileID: 4743552571892595807}
   m_selfCollider: {fileID: 1524768430028350043}
+  m_rigidbody2D: {fileID: 5178636483543984912}
+  m_bounce: {fileID: 6200000, guid: c33f5add12ae17544a83d5e554c426d5, type: 2}
   m_turnHandle: {fileID: 4086636216859260826}
   m_movement: {fileID: 2019980391893699015}
   m_patrolHandle: {fileID: 2019980391893699012}
@@ -403,6 +405,7 @@ MonoBehaviour:
   m_wallSensor: {fileID: 3625094688190344825}
   m_groundSensor: {fileID: 8225039997138083223}
   m_edgeSensor: {fileID: 7275403555527003639}
+  m_toeSensor: {fileID: 782959577382177925}
   m_attackBB: {fileID: 7511733421361571539}
   m_willPatrol: 1
 --- !u!114 &1997578263670825368
@@ -495,7 +498,7 @@ MonoBehaviour:
   m_simulateGravity: 1
   m_gravity:
     m_gravityScale: 25
-    m_direction: {x: 0, y: -1}
+    m_direction: {x: -0.00000004371139, y: 1}
     m_angle: -90
     m_drawDirection: 0
   m_useLinearDrag: 0
@@ -512,8 +515,8 @@ MonoBehaviour:
     m_detector: {fileID: 318518494170057319}
   m_calculateGroundAngle: 1
   m_acceptableWalkableAngle:
-    m_min: 0
-    m_max: 0
+    m_min: -90
+    m_max: 90
   m_legCollision: {fileID: 318518494170057319}
   m_legCollider: {fileID: 318518494170057318}
   m_legColliderLayerMask:
@@ -598,7 +601,7 @@ MonoBehaviour:
   m_data: {fileID: 11400000, guid: 46ffef3ecbf3f6c4daa03e593af01abe, type: 2}
   m_currentAttackInfo:
     damage:
-      m_type: 0
+      m_type: 1
       m_value: 0
     criticalDamageInfo:
       chance: 0
@@ -853,6 +856,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d247ba06193faa74d9335f5481b2b56c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &782959577382177925 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7153264847969065965, guid: cd3c35fb721b21f4a93a432657af813c,
+    type: 3}
+  m_PrefabInstance: {fileID: 7608868870558242664}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 11a5cea4c16e7c4478a55620f5e666e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!58 &1524768430028350043 stripped

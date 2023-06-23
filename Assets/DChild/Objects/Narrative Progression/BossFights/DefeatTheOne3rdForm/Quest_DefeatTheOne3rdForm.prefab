@@ -431,7 +431,7 @@ MonoBehaviour:
   questName: Defeat The One 3
   questStateIndicatorLevels:
   - updateOnStartOnly: 1
-    questState: 5
+    questState: 1
     condition:
       luaConditions: []
       questConditions: []
@@ -439,7 +439,7 @@ MonoBehaviour:
       acceptedGameObjects: []
       luaWizardIndex: -1
       lastEvaluationValue: 0
-    indicatorLevel: 0
+    indicatorLevel: 1
     onEnterState:
       m_PersistentCalls:
         m_Calls:
@@ -464,7 +464,7 @@ MonoBehaviour:
       acceptedGameObjects: []
       luaWizardIndex: -1
       lastEvaluationValue: 0
-    indicatorLevel: 0
+    indicatorLevel: 1
     onEnterState:
       m_PersistentCalls:
         m_Calls:
@@ -480,6 +480,31 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 1
           m_CallState: 2
+  - updateOnStartOnly: 1
+    questState: 4
+    condition:
+      luaConditions: []
+      questConditions: []
+      acceptedTags: []
+      acceptedGameObjects: []
+      luaWizardIndex: -1
+      lastEvaluationValue: 0
+    indicatorLevel: 0
+    onEnterState:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 5175223598312954199}
+          m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+          m_MethodName: SetActive
+          m_Mode: 6
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
   questEntryStateIndicatorLevels: []
   suppressOnEnterStateEventsOnStart: 0
 --- !u!114 &4709799850580304571
@@ -494,7 +519,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9788c61928f1bb24a8559f5d6aaed894, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  indicators: []
+  indicators:
+  - {fileID: 0}
+  - {fileID: 4785355431478254756}
 --- !u!114 &7788109815118137547
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -984,6 +1011,21 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 5095330621188169469, guid: 183b4269bd43c72458b3691e57d7e9b4,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.46120602
+      objectReference: {fileID: 0}
+    - target: {fileID: 5095330621188169469, guid: 183b4269bd43c72458b3691e57d7e9b4,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -46.98595
+      objectReference: {fileID: 0}
+    - target: {fileID: 5187115985380150736, guid: 183b4269bd43c72458b3691e57d7e9b4,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.7071067
+      objectReference: {fileID: 0}
     - target: {fileID: 5187115985960938054, guid: 183b4269bd43c72458b3691e57d7e9b4,
         type: 3}
       propertyPath: m_Mesh
@@ -1008,6 +1050,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Mesh
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 6120141129066906265, guid: 183b4269bd43c72458b3691e57d7e9b4,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.46120602
+      objectReference: {fileID: 0}
+    - target: {fileID: 6120141129066906265, guid: 183b4269bd43c72458b3691e57d7e9b4,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -46.98595
       objectReference: {fileID: 0}
     - target: {fileID: 6155987022243747912, guid: 183b4269bd43c72458b3691e57d7e9b4,
         type: 3}
