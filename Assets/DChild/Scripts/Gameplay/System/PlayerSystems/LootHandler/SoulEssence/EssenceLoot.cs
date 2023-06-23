@@ -74,6 +74,7 @@ namespace DChild.Gameplay.Essence
         protected override void OnPopDurationEnd(object sender, EventActionArgs eventArgs)
         {
             base.OnPopDurationEnd(sender, eventArgs);
+            m_collision.isTrigger = true;
             if (m_isPopping == false && m_hasBeenPickUp)
             {
                 m_animator?.SetBool("PickedUp", true);
@@ -108,7 +109,6 @@ namespace DChild.Gameplay.Essence
                         m_hasFallen = true;
                         m_rigidbody.gravityScale = m_fallGravity;
                         m_collision.enabled = true;
-                        m_collision.isTrigger = false;
                     }
                 }
                 else if (m_isFading)

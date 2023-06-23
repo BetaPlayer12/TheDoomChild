@@ -1258,7 +1258,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                         m_movement.UpdateFaceDirection(m_input.horizontalInput);
                     }
 
-                    m_projectileThrow.MoveAim(m_input.m_mouseDelta.normalized, Camera.main.ScreenToWorldPoint(m_input.m_mousePosition));
+                    m_projectileThrow.MoveAim(m_input.m_mouseDelta.normalized, GameplaySystem.cinema.mainCamera.ScreenToWorldPoint(m_input.m_mousePosition));
 
                     if (m_projectileThrow?.HasReachedVerticalThreshold() == true)
                     {
