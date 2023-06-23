@@ -37,7 +37,7 @@ public class KingPusCutsceneAnimationMix : MonoBehaviour
         Phase3,
     }
 
-    private void Awake()
+    private void Start()
     {
         switch (m_currentPhase)
         {
