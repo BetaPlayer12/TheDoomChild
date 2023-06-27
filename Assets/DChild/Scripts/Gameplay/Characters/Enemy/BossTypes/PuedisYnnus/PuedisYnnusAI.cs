@@ -787,7 +787,8 @@ namespace DChild.Gameplay.Characters.Enemies
             m_hitbox.Disable();
             m_animation.SetAnimation(0, m_info.disappearAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.disappearAnimation);
-            transform.position = new Vector2(target.x + (m_targetInfo.transform.GetComponent<Character>().facing == HorizontalDirection.Right ? -positionOffset.x : positionOffset.x), /*isGrounded ? GroundPosition().y :*/ target.y + positionOffset.y);
+            transform.position = (Vector2)RandomTeleportPoint();
+            //transform.position = new Vector2(target.x + (m_targetInfo.transform.GetComponent<Character>().facing == HorizontalDirection.Right ? -positionOffset.x : positionOffset.x), /*isGrounded ? GroundPosition().y :*/ target.y + positionOffset.y);
             if (!IsFacingTarget())
             {
                 CustomTurn();
