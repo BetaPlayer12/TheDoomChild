@@ -9,7 +9,15 @@ namespace DChild.Gameplay.Characters
         private void Awake()
         {
             m_rotators = GetComponentsInChildren<ISensorFaceRotation>();
-            GetComponentInParent<ITurningCharacter>().CharacterTurn += OnCharacterTurn;
+            var turningCharacter = GetComponentInParent<ITurningCharacter>();
+            if (turningCharacter != null)
+            {
+                turningCharacter.CharacterTurn += OnCharacterTurn;
+            }
+            else
+            {
+                Debug.LogError("Null Reference on Turning Character", this);
+            }
         }
 
         private void OnCharacterTurn(object sender, FacingEventArgs eventArgs)
