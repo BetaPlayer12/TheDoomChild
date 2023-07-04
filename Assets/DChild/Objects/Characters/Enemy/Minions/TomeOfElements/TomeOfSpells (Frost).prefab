@@ -448,6 +448,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7845266558353687049, guid: 581273cea94d1294a9c56f1ba54042dc,
         type: 3}
+      propertyPath: m_BodyType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7845266558353687049, guid: 581273cea94d1294a9c56f1ba54042dc,
+        type: 3}
       propertyPath: m_UseFullKinematicContacts
       value: 1
       objectReference: {fileID: 0}
@@ -488,7 +493,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c106d3ee04e320140b205c0d1ae65bb4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_centerMass: {fileID: 1760646954974876502}
+  m_centerMass: {fileID: 4261358660108420922}
   m_health: {fileID: 5442758656719886166}
   m_resistance: {fileID: 8483798117981389924}
 --- !u!114 &1555339029117223133
@@ -530,10 +535,7 @@ MonoBehaviour:
   m_physicsObjects:
     m_rigidbody2Ds:
     - {fileID: 3257062711632914123}
-    - {fileID: 6003604638063691493}
     m_physicsTimeObjectInfo:
-    - m_mass: 1
-      m_actualVelocity: {x: 0, y: 0}
     - m_mass: 1
       m_actualVelocity: {x: 0, y: 0}
   m_materials: []
@@ -588,7 +590,7 @@ MonoBehaviour:
   m_animation: {fileID: 3752931432073098632}
   m_data: {fileID: 11400000, guid: c629586ff83b163409c591c4733f38b0, type: 2}
   m_damageable: {fileID: 1307476784340557422}
-  m_centerMass: {fileID: 1760646954974876502}
+  m_centerMass: {fileID: 4261358660108420922}
   m_aggroBoundary: {fileID: 755758048078531442}
   m_statsData: {fileID: 11400000, guid: 55d601270cbf13948a399dc994bdc817, type: 2}
   m_spineEventListener: {fileID: 1555339029117223133}
@@ -612,6 +614,19 @@ MonoBehaviour:
   m_trailFX: {fileID: 7779097964644434402, guid: 903f50fa82b392843ba59f9dd8ee059b,
     type: 3}
   m_magister: {fileID: 0}
+--- !u!114 &2945315754249670349
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1967714862647974770}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dda21921f0a470940b48b3b72f2c67bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_data: {fileID: 11400000, guid: c7b1e4dc41c8986448e53da3e533fd3a, type: 2}
 --- !u!114 &3000883621796871813
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -628,7 +643,7 @@ MonoBehaviour:
   m_enableHitStop: 0
   m_animation: {fileID: 0}
   m_hitboxColliders: []
-  m_flinchHandle: {fileID: 0}
+  m_flinchHandle: {fileID: 6447565185704162579}
   m_Rendererer: {fileID: 0}
 --- !u!114 &3752931432073098632
 MonoBehaviour:
@@ -657,7 +672,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_height: 0.5
-  m_centerMass: {fileID: 1760646954974876502}
+  m_centerMass: {fileID: 4261358660108420922}
   m_isolatedObject: {fileID: 1555339029117223134}
   m_physics: {fileID: 6510595679255500279}
   m_colliders: {fileID: 6539571655536110829}
@@ -745,7 +760,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e10454193b54c9a4eb8bfb67b80c746d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_centerMass: {fileID: 1760646954974876502}
+  m_centerMass: {fileID: 4261358660108420922}
   m_data: {fileID: 11400000, guid: d3185865978e30e428d3504089052f23, type: 2}
   m_currentAttackInfo:
     damage:
@@ -899,7 +914,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 95366dc7311b4af439fef4e94a3732e2, type: 2}
+      objectReference: {fileID: 2100000, guid: 886584de5995b1743a0bb5bd5c762dee, type: 2}
     - target: {fileID: 2655276441946630537, guid: 2558704c3010fcb47bce0977a6b7d25b,
         type: 3}
       propertyPath: m_Mesh
@@ -957,12 +972,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eec63e2d8574ba947936161e71632309, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!4 &1760646954974876502 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 5922437042455720375, guid: 2558704c3010fcb47bce0977a6b7d25b,
-    type: 3}
-  m_PrefabInstance: {fileID: 5359189064573952737}
-  m_PrefabAsset: {fileID: 0}
 --- !u!61 &2226821872877012433 stripped
 BoxCollider2D:
   m_CorrespondingSourceObject: {fileID: 6104885200476514096, guid: 2558704c3010fcb47bce0977a6b7d25b,
@@ -981,9 +990,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1819101304e6a3479b6fb001626539e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!50 &6003604638063691493 stripped
-Rigidbody2D:
-  m_CorrespondingSourceObject: {fileID: 1805587841271079940, guid: 2558704c3010fcb47bce0977a6b7d25b,
+--- !u!4 &4261358660108420922 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8177632098020664795, guid: 2558704c3010fcb47bce0977a6b7d25b,
     type: 3}
   m_PrefabInstance: {fileID: 5359189064573952737}
   m_PrefabAsset: {fileID: 0}
@@ -1006,7 +1015,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_sensors:
-  - {fileID: 6602041617920129156}
+  - {fileID: 0}
   m_useDistance: 0
   m_castPerDistance: 0
   m_useTime: 0
@@ -1036,40 +1045,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d247ba06193faa74d9335f5481b2b56c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1 &8129750253117225559 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4219035879624612022, guid: 2558704c3010fcb47bce0977a6b7d25b,
-    type: 3}
-  m_PrefabInstance: {fileID: 5359189064573952737}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &6178812016728146065
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8129750253117225559}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5fc6cc8feceba564aa4ef1a737c6bf25, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_leftRotation: 270
-  m_rightRotation: 0
---- !u!114 &6602041617920129156
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8129750253117225559}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 11a5cea4c16e7c4478a55620f5e666e1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_multiRaycast:
-    m_config: {fileID: 11400000, guid: 264be9dd99fb74748995d2358da273b2, type: 2}
-    m_rayColor: {r: 0, g: 1, b: 0, a: 1}
-  m_enable: 1
-  m_debugMode: 1

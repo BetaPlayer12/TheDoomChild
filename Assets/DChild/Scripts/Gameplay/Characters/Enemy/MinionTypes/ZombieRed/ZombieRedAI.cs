@@ -49,6 +49,10 @@ namespace DChild.Gameplay.Characters.Enemies
             private float m_targetDistanceTolerance;
             public float targetDistanceTolerance => m_targetDistanceTolerance;
 
+            [SerializeField]
+            private float m_patienceDistanceTolerance;
+            public float patienceDistanceTolerance => m_patienceDistanceTolerance;
+
 
             //Animations
             [SerializeField]
@@ -124,6 +128,10 @@ namespace DChild.Gameplay.Characters.Enemies
         private Collider2D m_legCollider;
         [SerializeField, TabGroup("Reference")]
         private Collider2D m_bodyCollider;
+        [SerializeField, TabGroup("Reference")]
+        private Collider2D m_solidCollider;
+        [SerializeField, TabGroup("Reference")]
+        private Collider2D m_aggroSensor;
         [SerializeField, TabGroup("Modules")]
         private AnimatedTurnHandle m_turnHandle;
         [SerializeField, TabGroup("Modules")]
@@ -142,7 +150,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private float m_currentFullCD;
         private float m_currentMoveSpeed;
         private float m_currentRunAnticDuration;
-        private bool m_enablePatience;
+        //private bool m_enablePatience;
         private bool m_isDetecting;
         private bool m_battlezonemode;
         private Vector2 m_startPoint;
@@ -153,6 +161,9 @@ namespace DChild.Gameplay.Characters.Enemies
         private RaySensor m_groundSensor;
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_edgeSensor;
+
+        [SerializeField, TabGroup("Hurtbox")]
+        private GameObject m_attackBB;
 
         [SerializeField]
         private bool m_willPatrol;
@@ -174,6 +185,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnAttackDone(object sender, EventActionArgs eventArgs)
         {
+            m_attackBB.SetActive(false);
             m_flinchHandle.m_autoFlinch = true;
             GetComponent<IsolatedCharacterPhysics2D>().UseStepClimb(true);
             m_stateHandle.ApplyQueuedState();
@@ -187,26 +199,13 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 base.SetTarget(damageable);
                 m_selfCollider.enabled = false;
+                m_aggroSensor.enabled = false;
+                m_currentPatience = 0;
                 if (m_stateHandle.currentState != State.Chasing && !m_isDetecting)
                 {
                     m_isDetecting = true;
                     m_stateHandle.SetState(State.Detect);
                 }
-                m_currentPatience = 0;
-                //var patienceRoutine = PatienceRoutine();
-                //StopCoroutine(patienceRoutine);
-                m_enablePatience = false;
-            }
-            else
-            {
-                //if (!m_enablePatience)
-                //{
-                //    m_enablePatience = true;
-                //    //Patience();
-                //    StartCoroutine(PatienceRoutine());
-                //}
-                m_enablePatience = true;
-                //StartCoroutine(PatienceRoutine());
             }
         }
 
@@ -233,29 +232,14 @@ namespace DChild.Gameplay.Characters.Enemies
             else
             {
                 m_selfCollider.enabled = false;
+                m_aggroSensor.enabled = true;
                 m_targetInfo.Set(null, null);
                 m_flinchHandle.m_autoFlinch = true;
                 m_isDetecting = false;
-                m_enablePatience = false;
+                //m_enablePatience = false;
                 m_stateHandle.SetState(State.Patrol);
             }
         }
-        //private IEnumerator PatienceRoutine()
-        //{
-        //    //if (m_enablePatience)
-        //    //{
-        //    //    while (m_currentPatience < m_info.patience)
-        //    //    {
-        //    //        m_currentPatience += m_character.isolatedObject.deltaTime;
-        //    //        yield return null;
-        //    //    }
-        //    //}
-        //    yield return new WaitForSeconds(m_info.patience);
-        //    m_targetInfo.Set(null, null);
-        //    m_isDetecting = false;
-        //    m_enablePatience = false;
-        //    m_stateHandle.SetState(State.Patrol);
-        //}
 
         protected override void OnDestroyed(object sender, EventActionArgs eventArgs)
         {
@@ -281,6 +265,7 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return new WaitWhile(() => m_animation.animationState.GetCurrent(0).AnimationTime < (m_animation.animationState.GetCurrent(0).AnimationEnd * 0.2f));
             m_legCollider.enabled = false;
             m_bodyCollider.enabled = false;
+            m_solidCollider.enabled = true;
             yield return null;
         }
 
@@ -380,8 +365,6 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void Update()
         {
-            //Debug.Log("Wall Sensor is " + m_wallSensor.isDetecting);
-            //Debug.Log("Edge Sensor is " + m_edgeSensor.isDetecting);
             switch (m_stateHandle.currentState)
             {
                 case State.Spawning:
@@ -418,6 +401,8 @@ namespace DChild.Gameplay.Characters.Enemies
                     break;
 
                 case State.Patrol:
+                    m_wallSensor.Cast();
+                    m_groundSensor.Cast();
                     if (!m_wallSensor.isDetecting && m_groundSensor.isDetecting)
                     {
                         m_turnState = State.ReevaluateSituation;
@@ -444,7 +429,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
                 case State.Attacking:
                     m_stateHandle.Wait(State.Cooldown);
-                    
+
+                    m_attackBB.SetActive(true);
                     m_animation.EnableRootMotion(true, true);
                     switch (m_attackDecider.chosenAttack.attack)
                     {
@@ -490,25 +476,29 @@ namespace DChild.Gameplay.Characters.Enemies
                         if (IsFacingTarget())
                         {
                             m_attackDecider.DecideOnAttack();
+                            m_wallSensor.Cast();
                             if (m_attackDecider.hasDecidedOnAttack && IsTargetInRange(m_attackDecider.chosenAttack.range) && !m_wallSensor.allRaysDetecting)
                             {
                                 if (m_animation.GetCurrentAnimation(0).ToString() != m_info.idleAnimation.animation)
                                 {
                                     m_movement.Stop();
                                 }
-                                m_selfCollider.enabled = true;
+                                if (!m_selfCollider.enabled)
+                                    m_selfCollider.enabled = true;
                                 GetComponent<IsolatedCharacterPhysics2D>().UseStepClimb(false);
                                 m_animation.SetAnimation(0, m_info.idleAnimation, true);
                                 m_stateHandle.SetState(State.Attacking);
                             }
                             else
                             {
-
+                                m_groundSensor.Cast();
+                                m_edgeSensor.Cast();
                                 if (!m_wallSensor.isDetecting && m_groundSensor.isDetecting && m_edgeSensor.isDetecting && Mathf.Abs(m_targetInfo.position.x - transform.position.x) > m_info.attack.range - 1)
                                 {
                                     var distance = Vector2.Distance(m_targetInfo.position, transform.position);
                                     m_animation.EnableRootMotion(false, false);
-                                    m_selfCollider.enabled = false;
+                                    if (m_selfCollider.enabled)
+                                        m_selfCollider.enabled = false;
                                     m_animation.SetAnimation(0, distance >= m_info.targetDistanceTolerance ? m_info.run.animation : m_info.walk.animation, true);
                                     m_character.physics.SetVelocity(toTarget.normalized.x * (distance >= m_info.targetDistanceTolerance ? m_currentMoveSpeed : m_info.walk.speed), m_character.physics.velocity.y);
                                 }
@@ -519,7 +509,8 @@ namespace DChild.Gameplay.Characters.Enemies
                                         m_movement.Stop();
                                     }
                                     m_animation.EnableRootMotion(true, m_groundSensor.isDetecting ? true : false);
-                                    m_selfCollider.enabled = true;
+                                    if (!m_selfCollider.enabled)
+                                        m_selfCollider.enabled = true;
                                     m_animation.SetAnimation(0, m_info.idleAnimation, true);
                                 }
                             }
@@ -548,10 +539,18 @@ namespace DChild.Gameplay.Characters.Enemies
                     return;
             }
 
-            if (m_enablePatience && !m_battlezonemode)
+            if (m_isDetecting)
             {
-                Patience();
-                //StartCoroutine(PatienceRoutine());
+                if (/*m_enablePatience &&*/ !m_battlezonemode && Vector2.Distance(m_targetInfo.position, m_centerMass.position) > m_info.patienceDistanceTolerance)
+                {
+                    Patience();
+                    //StartCoroutine(PatienceRoutine());
+                }
+                else
+                {
+                    if (m_currentPatience != 0)
+                        m_currentPatience = 0;
+                }
             }
         }
 
@@ -559,7 +558,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_stateHandle.OverrideState(State.Patrol);
             m_currentPatience = 0;
-            m_enablePatience = false;
+            //m_enablePatience = false;
             m_isDetecting = false;
             m_selfCollider.enabled = false;
             m_legCollider.enabled = true;
@@ -572,7 +571,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_targetInfo.Set(null, null);
             m_flinchHandle.m_autoFlinch = true;
             m_isDetecting = false;
-            m_enablePatience = false;
+            //m_enablePatience = false;
             m_legCollider.enabled = true;
             m_bodyCollider.enabled = true;
             m_stateHandle.OverrideState(State.ReevaluateSituation);
