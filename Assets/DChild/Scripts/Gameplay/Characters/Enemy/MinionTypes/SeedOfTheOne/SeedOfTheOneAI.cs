@@ -99,7 +99,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private Coroutine m_executeMoveCoroutine;
 
         [SerializeField]
-        private bool m_patrols;
+        private bool m_willPatrol;
 
         [SerializeField]
         private float m_waitToReturnToPatrolTime;
@@ -211,7 +211,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_panicPoints.Add(m_retreatPoints.retreatPoints[i]);
             }
 
-            if (!m_patrols)
+            if (!m_willPatrol)
             {
                 m_agent.Stop();
             }
@@ -237,7 +237,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 case State.Idle:
                     m_turnState = State.ReevaluateSituation;
 
-                    if (m_patrols)
+                    if (m_willPatrol)
                     {
                         m_stateHandle.OverrideState(State.Patrol);
                     }
@@ -251,7 +251,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_turnState = State.ReevaluateSituation;
                     m_isRetreating = false;
 
-                    if (m_patrols)
+                    if (m_willPatrol)
                     {
                         m_animation.SetAnimation(0, m_info.movingAnimation, true);
 
@@ -296,7 +296,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         }
                         else
                         {
-                            if (m_patrols)
+                            if (m_willPatrol)
                             {
                                 m_stateHandle.SetState(State.Patrol);
                             }
@@ -308,7 +308,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     }
                     else
                     {
-                        if (m_patrols)
+                        if (m_willPatrol)
                         {
                             m_stateHandle.SetState(State.Patrol);
                         }
@@ -340,7 +340,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_agent.OnDestinationReached -= OnPanicPointReach;
 
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
-            if (m_patrols)
+            if (m_willPatrol)
             {
                 StartCoroutine(ReturnToPatrolPathRoutine());
             }

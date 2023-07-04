@@ -335,27 +335,24 @@ namespace DChild.Gameplay.Characters.Enemies
             private Vector2 m_spittersRotationWidth = new Vector2(30, 150);
             public Vector2 spittersRotationWidth => m_spittersRotationWidth;
 
-            [TitleGroup("FX")]
-            //[SerializeField]
-            //private GameObject m_fx;
-            //public GameObject fx => m_fx;
+            //[TitleGroup("FX")]
 
-            [SerializeField, TabGroup("FX")]
-            private ParticleFX m_crawlFX;
-            [SerializeField, TabGroup("FX")]
-            private ParticleFX m_tentaSpearCrawlFX;
-            [SerializeField, TabGroup("FX")]
-            private ParticleFX m_heavyGroundStabFX;
-            [SerializeField, TabGroup("FX")]
-            private ParticleFX m_stabSlashFX;
-            [SerializeField, TabGroup("FX")]
-            private ParticleFX m_krakenFX;
-            [SerializeField, TabGroup("FX")]
-            private ParticleFX m_bodySlamFX;
-            [SerializeField, TabGroup("FX")]
-            private ParticleFX m_healFX;
-            [SerializeField, TabGroup("FX")]
-            private ParticleFX m_deathFX;
+            //[SerializeField, TabGroup("FX")]
+            //private ParticleFX m_crawlFX;
+            //[SerializeField, TabGroup("FX")]
+            //private ParticleFX m_tentaSpearCrawlFX;
+            //[SerializeField, TabGroup("FX")]
+            //private ParticleFX m_heavyGroundStabFX;
+            //[SerializeField, TabGroup("FX")]
+            //private ParticleFX m_stabSlashFX;
+            //[SerializeField, TabGroup("FX")]
+            //private ParticleFX m_krakenFX;
+            //[SerializeField, TabGroup("FX")]
+            //private ParticleFX m_bodySlamFX;
+            //[SerializeField, TabGroup("FX")]
+            //private ParticleFX m_healFX;
+            //[SerializeField, TabGroup("FX")]
+            //private ParticleFX m_deathFX;
 
             [TitleGroup("Events")]
             [SerializeField, ValueDropdown("GetEvents")]
@@ -419,6 +416,11 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_phase3MixAnimation.SetData(m_skeletonDataAsset);
                 m_rageQuakePhase1ToPhase2Animation.SetData(m_skeletonDataAsset);
                 m_rageQuakePhase2ToPhase3Animation.SetData(m_skeletonDataAsset);
+
+                m_wallGrappleAllAnimation.SetData(m_skeletonDataAsset);
+                m_wallGrappleAllExtendAnimation.SetData(m_skeletonDataAsset);
+                m_wallGrappleAllExtendAnimation.SetData(m_skeletonDataAsset);
+                m_wallGrappleAllRetractAnimation.SetData(m_skeletonDataAsset);
 
                 m_idleAnimation.SetData(m_skeletonDataAsset);
                 m_idleMidAirAnimation.SetData(m_skeletonDataAsset);

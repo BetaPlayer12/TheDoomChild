@@ -244,17 +244,17 @@ PrefabInstance:
     - target: {fileID: 3756872488131836482, guid: 581273cea94d1294a9c56f1ba54042dc,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 22.2
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3756872488131836482, guid: 581273cea94d1294a9c56f1ba54042dc,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -54.77
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3756872488131836482, guid: 581273cea94d1294a9c56f1ba54042dc,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 1.21875
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3756872488131836482, guid: 581273cea94d1294a9c56f1ba54042dc,
         type: 3}
@@ -387,7 +387,7 @@ MonoBehaviour:
   m_animation: {fileID: 4434025474834369150}
   m_data: {fileID: 11400000, guid: b6b0bd9ea39b8064db2f68860cb9569c, type: 2}
   m_damageable: {fileID: 1997578263670825368}
-  m_centerMass: {fileID: 7306885742713165632}
+  m_centerMass: {fileID: 106599590587499099}
   m_aggroBoundary: {fileID: 6958521874365384361}
   m_statsData: {fileID: 11400000, guid: 51ebd0db1a006c940baba30eda945e8b, type: 2}
   m_spineEventListener: {fileID: 2019980391024246571}
@@ -405,7 +405,7 @@ MonoBehaviour:
   m_wallSensor: {fileID: 3625094688190344825}
   m_groundSensor: {fileID: 8225039997138083223}
   m_edgeSensor: {fileID: 7275403555527003639}
-  m_toeSensor: {fileID: 782959577382177925}
+  m_toeSensor: {fileID: 0}
   m_attackBB: {fileID: 7511733421361571539}
   m_willPatrol: 1
 --- !u!114 &1997578263670825368
@@ -420,7 +420,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c106d3ee04e320140b205c0d1ae65bb4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_centerMass: {fileID: 7306885742713165632}
+  m_centerMass: {fileID: 106599590587499099}
   m_health: {fileID: 2406557309819951757}
   m_resistance: {fileID: 8944505779591642002}
 --- !u!114 &2019980391024246568
@@ -549,7 +549,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_height: 0.5
-  m_centerMass: {fileID: 7306885742713165632}
+  m_centerMass: {fileID: 106599590587499099}
   m_isolatedObject: {fileID: 2019980391024246568}
   m_physics: {fileID: 3258559902734264145}
   m_colliders: {fileID: 3471262610483700022}
@@ -597,7 +597,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e10454193b54c9a4eb8bfb67b80c746d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_centerMass: {fileID: 7306885742713165632}
+  m_centerMass: {fileID: 106599590587499099}
   m_data: {fileID: 11400000, guid: 46ffef3ecbf3f6c4daa03e593af01abe, type: 2}
   m_currentAttackInfo:
     damage:
@@ -821,6 +821,16 @@ PrefabInstance:
       propertyPath: m_LocalRotation.z
       value: -0.6045963
       objectReference: {fileID: 0}
+    - target: {fileID: 8893499019818281830, guid: cd3c35fb721b21f4a93a432657af813c,
+        type: 3}
+      propertyPath: m_Offset.x
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 8893499019818281830, guid: cd3c35fb721b21f4a93a432657af813c,
+        type: 3}
+      propertyPath: m_Offset.y
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 9099065053583549581, guid: cd3c35fb721b21f4a93a432657af813c,
         type: 3}
       propertyPath: rb
@@ -828,6 +838,12 @@ PrefabInstance:
       objectReference: {fileID: 5178636483543984912}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cd3c35fb721b21f4a93a432657af813c, type: 3}
+--- !u!4 &106599590587499099 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7557768256879940915, guid: cd3c35fb721b21f4a93a432657af813c,
+    type: 3}
+  m_PrefabInstance: {fileID: 7608868870558242664}
+  m_PrefabAsset: {fileID: 0}
 --- !u!70 &318518494170057318 stripped
 CapsuleCollider2D:
   m_CorrespondingSourceObject: {fileID: 7922881840950598926, guid: cd3c35fb721b21f4a93a432657af813c,
@@ -856,18 +872,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d247ba06193faa74d9335f5481b2b56c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &782959577382177925 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7153264847969065965, guid: cd3c35fb721b21f4a93a432657af813c,
-    type: 3}
-  m_PrefabInstance: {fileID: 7608868870558242664}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 11a5cea4c16e7c4478a55620f5e666e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!58 &1524768430028350043 stripped
@@ -942,12 +946,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 11a5cea4c16e7c4478a55620f5e666e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!4 &7306885742713165632 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 936577413577310248, guid: cd3c35fb721b21f4a93a432657af813c,
-    type: 3}
-  m_PrefabInstance: {fileID: 7608868870558242664}
-  m_PrefabAsset: {fileID: 0}
 --- !u!61 &7511733421361571539 stripped
 BoxCollider2D:
   m_CorrespondingSourceObject: {fileID: 119108256114766267, guid: cd3c35fb721b21f4a93a432657af813c,
