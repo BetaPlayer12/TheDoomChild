@@ -354,7 +354,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e10454193b54c9a4eb8bfb67b80c746d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_centerMass: {fileID: 6658306730796243627}
+  m_centerMass: {fileID: 770001834602146677}
   m_data: {fileID: 11400000, guid: c02e4c18779e63d428086b6d86c93475, type: 2}
   m_currentAttackInfo:
     damage:
@@ -437,7 +437,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c106d3ee04e320140b205c0d1ae65bb4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_centerMass: {fileID: 6658306730796243627}
+  m_centerMass: {fileID: 770001834602146677}
   m_health: {fileID: 2133960996888131315}
   m_resistance: {fileID: 3056242605251821597}
 --- !u!114 &6041458321455450341
@@ -456,7 +456,7 @@ MonoBehaviour:
   m_animation: {fileID: 7764313803562873329}
   m_data: {fileID: 11400000, guid: 9334199a4f9941e4294e69f781a9be9f, type: 2}
   m_damageable: {fileID: 5616096701206747671}
-  m_centerMass: {fileID: 6658306730796243627}
+  m_centerMass: {fileID: 770001834602146677}
   m_aggroBoundary: {fileID: 6658914967781878487}
   m_statsData: {fileID: 11400000, guid: dd7aa12cd5ef9214b809a16777fc3db0, type: 2}
   m_selfCollider: {fileID: 6321827052277787490}
@@ -501,7 +501,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_height: 0.5
-  m_centerMass: {fileID: 6658306730796243627}
+  m_centerMass: {fileID: 770001834602146677}
   m_isolatedObject: {fileID: 5350515637440398503}
   m_physics: {fileID: 8894620390895213790}
   m_colliders: {fileID: 924631919613168968}
@@ -955,6 +955,16 @@ PrefabInstance:
         type: 3}
     - target: {fileID: 6780067827176268304, guid: 615469c5a98e3d244b05e4d4750952ec,
         type: 3}
+      propertyPath: m_collider2Ds.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6780067827176268304, guid: 615469c5a98e3d244b05e4d4750952ec,
+        type: 3}
+      propertyPath: m_collider2Ds.Array.data[1]
+      value: 
+      objectReference: {fileID: 7487695603745174817}
+    - target: {fileID: 6780067827176268304, guid: 615469c5a98e3d244b05e4d4750952ec,
+        type: 3}
       propertyPath: m_damageFXInfo.m_scaleToUse.x
       value: 1
       objectReference: {fileID: 0}
@@ -1008,16 +1018,22 @@ PrefabInstance:
       propertyPath: m_LocalPosition.x
       value: -0.026962519
       objectReference: {fileID: 0}
-    - target: {fileID: 8937380816201895472, guid: 615469c5a98e3d244b05e4d4750952ec,
+    - target: {fileID: 9174530546309306598, guid: 615469c5a98e3d244b05e4d4750952ec,
         type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 1.1
-      objectReference: {fileID: 0}
+      propertyPath: m_model
+      value: 
+      objectReference: {fileID: 3887882120941746163}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 615469c5a98e3d244b05e4d4750952ec, type: 3}
 --- !u!50 &267249728972525545 stripped
 Rigidbody2D:
   m_CorrespondingSourceObject: {fileID: 2345877583787015640, guid: 615469c5a98e3d244b05e4d4750952ec,
+    type: 3}
+  m_PrefabInstance: {fileID: 2538707536095687217}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &770001834602146677 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2996254515655285060, guid: 615469c5a98e3d244b05e4d4750952ec,
     type: 3}
   m_PrefabInstance: {fileID: 2538707536095687217}
   m_PrefabAsset: {fileID: 0}
@@ -1045,6 +1061,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 11a5cea4c16e7c4478a55620f5e666e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!4 &3887882120941746163 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1643749254910707138, guid: 615469c5a98e3d244b05e4d4750952ec,
+    type: 3}
+  m_PrefabInstance: {fileID: 2538707536095687217}
+  m_PrefabAsset: {fileID: 0}
 --- !u!70 &4076619426954749464 stripped
 CapsuleCollider2D:
   m_CorrespondingSourceObject: {fileID: 1992916264851280937, guid: 615469c5a98e3d244b05e4d4750952ec,
@@ -1111,12 +1133,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 11a5cea4c16e7c4478a55620f5e666e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!4 &6658306730796243627 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 9177284617204721818, guid: 615469c5a98e3d244b05e4d4750952ec,
-    type: 3}
-  m_PrefabInstance: {fileID: 2538707536095687217}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &6658914967781878487 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 9174530546309306598, guid: 615469c5a98e3d244b05e4d4750952ec,
@@ -1129,3 +1145,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eec63e2d8574ba947936161e71632309, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!61 &7487695603745174817 stripped
+BoxCollider2D:
+  m_CorrespondingSourceObject: {fileID: 4959288335813773072, guid: 615469c5a98e3d244b05e4d4750952ec,
+    type: 3}
+  m_PrefabInstance: {fileID: 2538707536095687217}
+  m_PrefabAsset: {fileID: 0}
