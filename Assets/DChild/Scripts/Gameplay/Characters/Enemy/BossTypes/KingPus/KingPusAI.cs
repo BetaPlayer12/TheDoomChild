@@ -893,6 +893,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
                             //m_stateHandle.Wait(State.ReevaluateSituation);
 
+                            m_hitbox.Enable();
                             m_rb2d.isKinematic = false;
                             m_rb2d.useFullKinematicContacts = false;
                             m_willStickToWall = false;
@@ -931,6 +932,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
                             //m_stateHandle.Wait(State.ReevaluateSituation);
 
+                            m_hitbox.Enable();
                             m_rb2d.isKinematic = false;
                             m_rb2d.useFullKinematicContacts = false;
                             m_willStickToWall = false;
@@ -1017,6 +1019,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 yield return new WaitForSeconds(3f);
                 if (willTargetWall)
                 {
+                    m_hitbox.Disable();
                     m_rb2d.isKinematic = true;
                     m_rb2d.useFullKinematicContacts = true;
                 }
@@ -1050,6 +1053,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 //m_animation.SetAnimation(0, m_info.idleAnimation, true);
                 if (willTargetWall)
                 {
+                    m_hitbox.Enable();
                     m_rb2d.isKinematic = false;
                     m_rb2d.useFullKinematicContacts = false;
                 }
@@ -1234,6 +1238,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator SmartChangePhaseRoutine()
         {
             yield return new WaitWhile(() => !m_phaseHandle.allowPhaseChange);
+            m_hitbox.Enable();
             m_rb2d.isKinematic = false;
             m_rb2d.useFullKinematicContacts = false;
             m_movement.Stop();
@@ -1631,6 +1636,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_grappleCoroutine = StartCoroutine(GrappleRoutine(true, true, 1/*, true*/));
             yield return new WaitUntil(() => m_character.physics.simulateGravity);
             enabled = false;
+            m_hitbox.Enable();
             m_rb2d.isKinematic = false;
             m_rb2d.useFullKinematicContacts = false;
             m_movement.Stop();
@@ -1851,6 +1857,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_grappleCoroutine = StartCoroutine(GrappleRoutine(true, true, 1/*, true*/));
             yield return new WaitUntil(() => m_character.physics.simulateGravity);
             enabled = false;
+            m_hitbox.Enable();
             m_rb2d.isKinematic = false;
             m_rb2d.useFullKinematicContacts = false;
             m_movement.Stop();
@@ -1940,6 +1947,7 @@ namespace DChild.Gameplay.Characters.Enemies
         protected override void OnDestroyed(object sender, EventActionArgs eventArgs)
         {
             base.OnDestroyed(sender, eventArgs);
+            m_hitbox.Enable();
             m_rb2d.isKinematic = false;
             m_rb2d.useFullKinematicContacts = false;
             StopAllCoroutines();
@@ -2056,8 +2064,10 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator DynamicIdleRoutine()
         {
-            while (true)
+            var timer = 1f;
+            while (timer > 0f)
             {
+                timer -= Time.deltaTime;
                 m_animation.SetAnimation(0, DynamicIdleAnimation(), true);
                 yield return null;
             }
