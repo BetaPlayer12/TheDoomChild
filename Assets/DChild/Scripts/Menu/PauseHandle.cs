@@ -24,6 +24,15 @@ namespace DChild.Menu
             m_returnToMainMenuRequest.Execute(OnMainMenuConfirm);
         }
 
+        public void BackToMainMenuNoConfirmation()
+        {
+            //Intended for Demo purposes only
+            if (GameplaySystem.campaignSerializer.slot.demoGame)
+            {
+                GameSystem.LoadMainMenu();
+            }
+        }
+
         private void OnMainMenuConfirm(object sender, EventActionArgs eventArgs)
         {
             GameSystem.LoadMainMenu();
