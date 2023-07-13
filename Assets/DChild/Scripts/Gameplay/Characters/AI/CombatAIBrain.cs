@@ -37,7 +37,8 @@ namespace DChild.Gameplay.Characters.AI
 
         protected Restriction m_currentRestrictions;
 
-        public virtual void ForcePassiveIdle(bool value) {
+        public virtual void ForcePassiveIdle(bool value)
+        {
         }
 
         public virtual void SetTarget(IDamageable damageable, Character m_target = null)
@@ -102,7 +103,7 @@ namespace DChild.Gameplay.Characters.AI
             }
             else
             {
-                m_currentRestrictions |= Restriction.IgnoreTarget;
+                m_currentRestrictions &= ~Restriction.IgnoreTarget;
 
             }
         }
@@ -114,6 +115,7 @@ namespace DChild.Gameplay.Characters.AI
         {
             SetTarget(null);
         }
+
         public void SetPassive()
         {
             if (m_targetInfo.doesTargetExist == false)
@@ -126,15 +128,12 @@ namespace DChild.Gameplay.Characters.AI
             {
                 this.enabled = false;
             }
-                
         }
         public void SetActive()
         {
-            
-                m_aggroBoundary.gameObject.SetActive(true);
-                m_currentRestrictions &= ~Restriction.IgnoreTarget;
-                this.enabled = true;
- 
+            m_aggroBoundary.gameObject.SetActive(true);
+            m_currentRestrictions &= ~Restriction.IgnoreTarget;
+            this.enabled = true;
         }
 
         /// <summary>
@@ -156,7 +155,7 @@ namespace DChild.Gameplay.Characters.AI
             }
         }
 
-       
+
 
         protected void CustomTurn()
         {
@@ -292,16 +291,6 @@ namespace DChild.Gameplay.Characters.AI
             }
         }
 
-        private void OnEnable()
-        {
-            CombatAIManager.instance?.Add(this);
-        }
-
-        private void OnDisable()
-        {
-            CombatAIManager.instance?.Remove(this);
-        }
-
         protected virtual void LateUpdate()
         {
             if (m_targetInfo.isValid && m_targetInfo.doesTargetExist == false)
@@ -312,7 +301,7 @@ namespace DChild.Gameplay.Characters.AI
         }
 
         protected abstract void OnTargetDisappeared();
-    
+
 
 #if UNITY_EDITOR
         public Type aiDataType => m_data.GetType();

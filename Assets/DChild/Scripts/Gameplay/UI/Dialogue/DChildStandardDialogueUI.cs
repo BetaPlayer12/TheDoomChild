@@ -84,7 +84,7 @@ namespace DChild.UI
 
                     if (!isInCutscene)
                     {
-                        CombatAIManager.instance?.ForbidAllFromAttackTarget(true);
+                        GameplaySystem.minionManager?.ForbidAllFromAttackingTarget(true);
                     }
 
                     currentConverstionIsABanter = false;
@@ -115,7 +115,7 @@ namespace DChild.UI
         {
             if (isInCutscene == false)
             {
-                CombatAIManager.instance?.ForbidAllFromAttackTarget(false);
+                GameplaySystem.minionManager?.ForbidAllFromAttackingTarget(false);
                 GameplaySystem.playerManager.EnableControls();
                 if (m_skipUIShown)
                 {
