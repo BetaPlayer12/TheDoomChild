@@ -1081,7 +1081,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
                         return;
                     }
-                    else if (m_input.lightningSpearPressed && m_lightningSpear.CanLightningSpear() && m_abilities.IsAbilityActivated(CombatArt.LightningSpear))
+                    else if (m_input.lightningSpearPressed && m_lightningSpear.CanLightningSpear() && (m_abilities.IsAbilityActivated(CombatArt.LightningSpear) || m_abilities.IsAbilityActivated(CombatArt.AirSlashCombo)))
                     {
                         if (m_state.isInShadowMode == false)
                         {
