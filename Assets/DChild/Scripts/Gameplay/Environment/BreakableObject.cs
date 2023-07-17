@@ -190,7 +190,7 @@ namespace DChild.Gameplay.Environment
                 if(m_forceDirection.x == -1)
                 {
 
-                    instanceTransform.localScale = new Vector3(m_forceDirection.x, instanceTransform.localScale.y);
+                    instanceTransform.localScale = new Vector3(m_forceDirection.x, instanceTransform.localScale.y, 1);
 
                 }
                 else
