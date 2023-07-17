@@ -1713,7 +1713,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
                         return;
                     }
-                    else if (m_input.finalSlashPressed && m_finalSlash.CanFinalSlash() && !m_input.airLungeSlashPressed && !m_input.sovereignImpalePressed /*&& m_abilities.IsAbilityActivated(CombatArt.FinalSlash)*/)
+                    else if (m_input.finalSlashPressed && m_finalSlash.CanFinalSlash() && !m_input.airLungeSlashPressed && !m_input.sovereignImpalePressed && m_abilities.IsAbilityActivated(CombatArt.FinalSlash))
                     {
                         if (m_state.isInShadowMode == false)
                         {
