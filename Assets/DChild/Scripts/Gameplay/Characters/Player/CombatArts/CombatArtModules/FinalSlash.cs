@@ -70,7 +70,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
         private bool m_hasExecuted;
 
         private Coroutine m_finalSlashChargingRoutine;
-
+        private Coroutine m_finalSlashEnemeyCheckRoutine;
 
         public enum FinalSlashState
         {
@@ -162,6 +162,11 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
                 StopCoroutine(m_finalSlashChargingRoutine);
                 m_finalSlashChargingRoutine = null;
             }
+            if (m_finalSlashEnemeyCheckRoutine != null)
+            {
+                StopCoroutine(m_finalSlashEnemeyCheckRoutine);
+                m_finalSlashEnemeyCheckRoutine = null;
+            }
             m_animator.SetBool(m_finalSlashStateAnimationParameter, false);
             base.AttackOver();
         }
@@ -184,6 +189,11 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
                 {
                     StopCoroutine(m_finalSlashChargingRoutine);
                     m_finalSlashChargingRoutine = null;
+                }
+                if (m_finalSlashEnemeyCheckRoutine != null)
+                {
+                    StopCoroutine(m_finalSlashEnemeyCheckRoutine);
+                    m_finalSlashEnemeyCheckRoutine = null;
                 }
                 m_animator.SetBool(m_finalSlashStateAnimationParameter, false);
                 base.Cancel();
@@ -296,18 +306,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
         public void SetFinalSlashHolderFX(FinalSlashState state)
         {
-            var hits = m_enemySensor.GetHits();
-            var target = m_enemySensor.isDetecting ? hits[0].point : Vector2.zero;
-            if (target != Vector2.zero)
-            {
-                //var targetCharacter = target.GetComponentInParent<Character>();
-                //if (targetCharacter == null)
-                //    targetCharacter = GetComponentInChildren<Character>();
-
-                var instance = /*GameSystem.poolManager.GetPool<FXPool>().GetOrCreateItem(m_finalSlashDustFeedbackFX)*/Instantiate(m_finalSlashImpactFX);
-                //instance.GetComponent<ParticleSystem>().Clear();
-                instance.transform.position = target;
-            }
+            m_finalSlashEnemeyCheckRoutine = StartCoroutine(FinalSlashEnemyCheckRoutine());
             switch (state)
             {
                 case FinalSlashState.FinalSlash1:
@@ -320,6 +319,23 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
                     m_finalSlashHolderFXAnimator.SetTrigger("FinalSlash3");
                     break;
             }
+        }
+
+        private IEnumerator FinalSlashEnemyCheckRoutine()
+        {
+            while (!m_enemySensor.isDetecting)
+            {
+                m_enemySensor.Cast();
+                yield return null;
+            }
+            var hits = m_enemySensor.GetHits();
+            var target = /*m_enemySensor.isDetecting ? hits[0].point : Vector2.zero*/hits[0].point;
+            if (target != Vector2.zero)
+            {
+                var instance = Instantiate(m_finalSlashImpactFX);
+                instance.transform.position = target;
+            }
+            yield return null;
         }
         #endregion
     }
