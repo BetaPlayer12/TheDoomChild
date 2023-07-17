@@ -1,12 +1,10 @@
+using System.Collections;
 using UnityEngine;
 
 public class AutoStopParticle : MonoBehaviour
 {
     public ParticleSystem particleSystem;
     public float stopDelay = 5.0f;
-
-    private float timer;
-    private bool isPlaying;
 
     private void Start()
     {
@@ -19,57 +17,49 @@ public class AutoStopParticle : MonoBehaviour
                 return;
             }
         }
-
-        isPlaying = false;
-        timer = 0f;
     }
 
-    private void Update()
+    public void CheckEffect()
     {
-        if (particleSystem != null)
+        StartCoroutine(StopEffectWithDelayRoutine());
+    }
+
+    private IEnumerator StopEffectWithDelayRoutine()
+    {
+        var timer = 0f;
+        while (stopDelay > timer)
         {
-            if (!isPlaying && particleSystem.isPlaying)
-            {
-                isPlaying = true;
-            }
-
-            if (isPlaying)
-            {
-                timer += Time.deltaTime;
-
-                if (timer >= stopDelay && particleSystem.isPlaying)
-                {
-                    StopParticles();
-                }
-            }
+            timer += Time.deltaTime;
+            yield return null;
         }
+
+        StopParticles();
+        yield return null;
     }
 
     public void ForceStop(float delay = 0f)
     {
-        if (particleSystem != null && particleSystem.isPlaying)
+        if (delay > 0f)
         {
-            if (delay > 0f)
-            {
-                Invoke("StopParticles", delay);
-            }
-            else
-            {
-                StopParticles();
-            }
+            Invoke("StopParticles", delay);
+        }
+        else
+        {
+
+            StopAllCoroutines();
+            StopParticles();
         }
     }
 
     private void StopParticles()
     {
         particleSystem.Stop(false, ParticleSystemStopBehavior.StopEmittingAndClear);
+        particleSystem.Stop();
     }
 
     public void Reset()
     {
         particleSystem.Clear();
         particleSystem.Play();
-        isPlaying = true;
-        timer = 0f;
     }
 }

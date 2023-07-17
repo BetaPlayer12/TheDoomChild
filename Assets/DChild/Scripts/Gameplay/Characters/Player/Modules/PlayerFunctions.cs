@@ -321,6 +321,48 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_finalSlash.EndExecution();
         }
 
+        #region FinalSlashFX
+        public void FinalSlashEnableSwordGlowFX()
+        {
+            m_finalSlash.SetSwordGlowFXAnimator(true);
+        }
+
+        public void FinalSlashEnableDustChargeFX()
+        {
+            m_finalSlash.SetDustChargeFXAnimator(true);
+        }
+
+        public void FinalSlashDisableSwordGlowFX()
+        {
+            m_finalSlash.SetSwordGlowFXAnimator(false);
+        }
+
+        public void FinalSlashDisableDustChargeFX()
+        {
+            m_finalSlash.SetDustChargeFXAnimator(false);
+        }
+
+        public void FinalSlashPlayDustFeedbackFX()
+        {
+            m_finalSlash.SpawnDustFeedbackFX();
+        }
+
+        public void FinalSlash1FX()
+        {
+            m_finalSlash.SetFinalSlashHolderFX(FinalSlash.FinalSlashState.FinalSlash1);
+        }
+
+        public void FinalSlash2FX()
+        {
+            m_finalSlash.SetFinalSlashHolderFX(FinalSlash.FinalSlashState.FinalSlash2);
+        }
+
+        public void FinalSlash3FX()
+        {
+            m_finalSlash.SetFinalSlashHolderFX(FinalSlash.FinalSlashState.FinalSlash3);
+        }
+        #endregion
+
         public void KrakenRageEnableCollision()
         {
             m_krakenRage.EnableCollision(true);
