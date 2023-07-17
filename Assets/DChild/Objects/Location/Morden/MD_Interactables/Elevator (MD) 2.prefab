@@ -50,7 +50,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 332cef3fded5d774fb52b53db29bb860, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_speed: 30
+  m_speed: 25
   m_startWaypoint: -2147483648
   m_waypoints: []
 --- !u!50 &51623612125016582
@@ -122,19 +122,11 @@ MonoBehaviour:
   m_allowEditorUpdate: 1
   m_previousReferenceOrder: 0
   m_rendererList:
-  - m_renderer: {fileID: 0}
-    m_baseOrder: 0
-  - m_renderer: {fileID: 0}
-    m_baseOrder: 0
-  - m_renderer: {fileID: 0}
-    m_baseOrder: -1
-  - m_renderer: {fileID: 0}
-    m_baseOrder: -1
-  - m_renderer: {fileID: 0}
-    m_baseOrder: 0
-  - m_renderer: {fileID: 0}
-    m_baseOrder: 0
-  - m_renderer: {fileID: 0}
+  - m_renderer: {fileID: 8426863299922509275}
+    m_baseOrder: 2
+  - m_renderer: {fileID: 2886486216552480175}
+    m_baseOrder: 3
+  - m_renderer: {fileID: 802294571003305245}
     m_baseOrder: 1
   - m_renderer: {fileID: 3326933671016116332}
     m_baseOrder: 0
@@ -2121,6 +2113,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Elevator Lever (MD)
       objectReference: {fileID: 0}
+    - target: {fileID: 1505370088332743609, guid: 0b0d1b2794b453f4aaaa6fabb7ca09be,
+        type: 3}
+      propertyPath: m_SortingOrder
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 2250560372664539397, guid: 0b0d1b2794b453f4aaaa6fabb7ca09be,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -2201,6 +2198,36 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5195120368243807181, guid: 0b0d1b2794b453f4aaaa6fabb7ca09be,
+        type: 3}
+      propertyPath: m_SortingOrder
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6337051768516548146, guid: 0b0d1b2794b453f4aaaa6fabb7ca09be,
+        type: 3}
+      propertyPath: m_rendererList.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6337051768516548146, guid: 0b0d1b2794b453f4aaaa6fabb7ca09be,
+        type: 3}
+      propertyPath: m_rendererList.Array.data[2].m_renderer
+      value: 
+      objectReference: {fileID: 802294571003305245}
+    - target: {fileID: 6337051768516548146, guid: 0b0d1b2794b453f4aaaa6fabb7ca09be,
+        type: 3}
+      propertyPath: m_rendererList.Array.data[0].m_baseOrder
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6337051768516548146, guid: 0b0d1b2794b453f4aaaa6fabb7ca09be,
+        type: 3}
+      propertyPath: m_rendererList.Array.data[1].m_baseOrder
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6337051768516548146, guid: 0b0d1b2794b453f4aaaa6fabb7ca09be,
+        type: 3}
+      propertyPath: m_rendererList.Array.data[2].m_baseOrder
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7756490467762761150, guid: 0b0d1b2794b453f4aaaa6fabb7ca09be,
         type: 3}
       propertyPath: m_onState.m_PersistentCalls.m_Calls.Array.size
@@ -2246,6 +2273,12 @@ PrefabInstance:
 --- !u!4 &507744008725931076 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4314768991274437202, guid: 0b0d1b2794b453f4aaaa6fabb7ca09be,
+    type: 3}
+  m_PrefabInstance: {fileID: 4389600016209653270}
+  m_PrefabAsset: {fileID: 0}
+--- !u!212 &2886486216552480175 stripped
+SpriteRenderer:
+  m_CorrespondingSourceObject: {fileID: 1505370088332743609, guid: 0b0d1b2794b453f4aaaa6fabb7ca09be,
     type: 3}
   m_PrefabInstance: {fileID: 4389600016209653270}
   m_PrefabAsset: {fileID: 0}
@@ -2295,7 +2328,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1150295711
   m_SortingLayer: -1
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: 25b0f72eb092b7546b34424365211759, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -2307,3 +2340,9 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!212 &8426863299922509275 stripped
+SpriteRenderer:
+  m_CorrespondingSourceObject: {fileID: 5195120368243807181, guid: 0b0d1b2794b453f4aaaa6fabb7ca09be,
+    type: 3}
+  m_PrefabInstance: {fileID: 4389600016209653270}
+  m_PrefabAsset: {fileID: 0}
