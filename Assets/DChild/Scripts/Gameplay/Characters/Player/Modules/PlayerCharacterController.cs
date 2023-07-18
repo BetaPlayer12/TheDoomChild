@@ -905,7 +905,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
                 if (m_state.canAttack)
                 {
-                    if (m_input.airSlashComboPressed && m_airSlashCombo.CanAirSlashCombo() && m_abilities.IsAbilityActivated(CombatArt.AirSlashCombo))
+                    if (m_input.airSlashComboPressed && m_airSlashCombo.CanAirSlashCombo() /*&& m_abilities.IsAbilityActivated(CombatArt.AirSlashCombo)*/)
                     {
                         m_activeDash?.Cancel();
 
@@ -958,7 +958,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                         }
                         return;
                     }
-                    else if (m_input.airSlashComboPressed && m_airSlashCombo.CanAirSlashCombo() && !m_input.reaperHarvestPressed && !m_input.diagonalSwordDashPressed)
+                    else if (m_input.airSlashComboPressed && m_airSlashCombo.CanAirSlashCombo() && !m_input.reaperHarvestPressed && !m_input.diagonalSwordDashPressed /*&& m_abilities.IsAbilityActivated(CombatArt.AirSlashCombo)*/)
                     {
                         m_basicSlashes?.Cancel();
                         m_whip?.Cancel();
