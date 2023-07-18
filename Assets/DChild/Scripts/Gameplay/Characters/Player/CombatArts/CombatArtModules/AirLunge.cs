@@ -31,6 +31,10 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
         private RaySensor m_edgeSensor;
         [SerializeField, BoxGroup("Sensors")]
         private RaySensor m_cielingSensor;
+        [SerializeField, BoxGroup("FX")]
+        private ParticleSystem m_airLungeSlashFX;
+        [SerializeField, BoxGroup("FX")]
+        private ParticleSystem m_dustFX;
 
         [SerializeField]
         private Vector2 m_pushForce;
@@ -115,6 +119,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
                 m_cielingCheckRoutine = null;
             }
             m_airLungeInfo.ShowCollider(false);
+            m_airLungeSlashFX.Stop();
             m_fxAnimator.Play("Buffer");
             m_animator.SetBool(m_airLungeStateAnimationParameter, false);
             base.Cancel();
@@ -135,7 +140,9 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             }
             if (value)
             {
-                m_airLungeInfo.fxPosition.localRotation = Quaternion.Euler(0, m_character.facing == HorizontalDirection.Right ? 180 : 0, 0);
+                //m_airLungeInfo.fxPosition.localRotation = Quaternion.Euler(0, m_character.facing == HorizontalDirection.Right ? 180 : 0, 0);
+                m_airLungeSlashFX.Play();
+                m_dustFX.Play();
                 m_airLungeInfo.PlayFX(true);
             }
         }
