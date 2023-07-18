@@ -226,7 +226,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
                 if (m_comboAttackDelayTimer <= 0)
                 {
-                    m_comboAttackDelayTimer = 1;
+                    m_comboAttackDelayTimer = -1;
                     m_state.canAttack = true;
                     m_allowAttackDelayHandling = false;
                 }
