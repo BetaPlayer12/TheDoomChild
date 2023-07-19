@@ -44,19 +44,7 @@ namespace DChild.UI
             {
                 if (conversation.LookupBool("IsBanter"))
                 {
-                    if (m_currentDialogueType != DialogueType.Banter)
-                    {
-                        DialogueManager.displaySettings.subtitleSettings.continueButton = DisplaySettings.SubtitleSettings.ContinueButtonMode.Never;
-                        conversationUIElements.mainPanel = m_banterPanel;
-                        conversationUIElements.defaultPCSubtitlePanel = m_banterSubtitlePanel;
-                        conversationUIElements.defaultNPCSubtitlePanel = m_banterSubtitlePanel;
-
-                        ResetConversationUIElements();
-
-                        m_currentDialogueType = DialogueType.Banter;
-                    }
-
-                    currentConverstionIsABanter = true;
+                    HandleOpenBanter();
                 }
                 else
                 {
@@ -67,33 +55,55 @@ namespace DChild.UI
                         m_skipUIShown = true;
                     }
 
-                    if (m_currentDialogueType != DialogueType.Dialogue)
-                    {
-                        DialogueManager.displaySettings.subtitleSettings.continueButton = DisplaySettings.SubtitleSettings.ContinueButtonMode.Always;
-                        conversationUIElements.mainPanel = m_dialoguePanel;
-                        conversationUIElements.defaultPCSubtitlePanel = m_dialoguePCSubtitlePanel;
-                        conversationUIElements.defaultNPCSubtitlePanel = m_dialogueNPCSubtitlePanel;
-
-                        ResetConversationUIElements();
-
-                        m_currentDialogueType = DialogueType.Dialogue;
-                    }
-
-                    dialogueActive = true;
-                    GameplaySystem.playerManager.DisableControls();
+                    HandleOpenDialogue();
 
                     if (!isInCutscene)
                     {
                         GameplaySystem.minionManager?.ForbidAllFromAttackingTarget(true);
                     }
-
-                    currentConverstionIsABanter = false;
                 }
-
             }
 
             base.Open();
 
+
+        }
+
+        private void HandleOpenDialogue()
+        {
+            if (m_currentDialogueType != DialogueType.Dialogue)
+            {
+                DialogueManager.displaySettings.subtitleSettings.continueButton = DisplaySettings.SubtitleSettings.ContinueButtonMode.Always;
+                conversationUIElements.mainPanel = m_dialoguePanel;
+                conversationUIElements.defaultPCSubtitlePanel = m_dialoguePCSubtitlePanel;
+                conversationUIElements.defaultNPCSubtitlePanel = m_dialogueNPCSubtitlePanel;
+
+                ResetConversationUIElements();
+
+                m_currentDialogueType = DialogueType.Dialogue;
+            }
+
+            dialogueActive = true;
+            GameplaySystem.playerManager.DisableControls();
+
+            currentConverstionIsABanter = false;
+        }
+
+        private void HandleOpenBanter()
+        {
+            if (m_currentDialogueType != DialogueType.Banter)
+            {
+                DialogueManager.displaySettings.subtitleSettings.continueButton = DisplaySettings.SubtitleSettings.ContinueButtonMode.Never;
+                conversationUIElements.mainPanel = m_banterPanel;
+                conversationUIElements.defaultPCSubtitlePanel = m_banterSubtitlePanel;
+                conversationUIElements.defaultNPCSubtitlePanel = m_banterSubtitlePanel;
+
+                ResetConversationUIElements();
+
+                m_currentDialogueType = DialogueType.Banter;
+            }
+
+            currentConverstionIsABanter = true;
         }
 
         private void ResetConversationUIElements()
@@ -113,18 +123,25 @@ namespace DChild.UI
 
         public override void Close()
         {
+
+
             if (isInCutscene == false)
             {
-                GameplaySystem.minionManager?.ForbidAllFromAttackingTarget(false);
+
+                GameplaySystem.minionManager?.ForbidAllFromAttackingTarget(true);
+
                 GameplaySystem.playerManager.EnableControls();
                 if (m_skipUIShown)
                 {
                     GameplaySystem.gamplayUIHandle.ShowSequenceSkip(false);
                     SequenceSkipHandle.SkipExecute -= OnSkipExecute;
                 }
+
             }
             base.Close();
             dialogueActive = false;
+
+
         }
     }
 }
