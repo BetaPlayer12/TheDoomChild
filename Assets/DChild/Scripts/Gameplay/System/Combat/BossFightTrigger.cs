@@ -68,6 +68,7 @@ namespace DChild.Gameplay.Combat
 
         public void StartCombat()
         {
+            GameplaySystem.gamplayUIHandle.MonitorBoss(m_boss);
             m_boss.SetTarget(m_targetTuple.damageable, m_targetTuple.character);
             m_boss.Enable();
         }
@@ -102,23 +103,22 @@ namespace DChild.Gameplay.Combat
             m_onDefeat?.Invoke();
         }
 
-        private IEnumerator DelayedAwakeRoutine(Damageable damageable, Character character)
+        private IEnumerator DelayedAwakeRoutine()
         {
             yield return new WaitForSeconds(m_startDelay);
-            m_boss.SetTarget(damageable, character);
-            m_boss.Enable();
+            StartCombat();
         }
 
         private void StartFight()
         {
-            GameplaySystem.gamplayUIHandle.MonitorBoss(m_boss);
+
             switch (m_prefight)
             {
                 case PreFight.None:
                     StartCombat();
                     break;
                 case PreFight.Delay:
-                    StartCoroutine(DelayedAwakeRoutine(m_targetTuple.damageable, m_targetTuple.character));
+                    StartCoroutine(DelayedAwakeRoutine());
                     break;
                 case PreFight.Cinematic:
                     m_director.extrapolationMode = DirectorWrapMode.None;
