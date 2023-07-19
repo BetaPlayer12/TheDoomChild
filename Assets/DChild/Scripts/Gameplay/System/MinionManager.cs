@@ -2,6 +2,7 @@ using DChild.Gameplay.Characters.AI;
 using DChild.Gameplay.Characters.Enemies;
 using DChild.Gameplay.Systems;
 using Sirenix.OdinInspector;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -35,12 +36,21 @@ namespace DChild.Gameplay
         [Button]
         public void ForbidAllFromAttackingTarget(bool notAllowedToAttack)
         {
-            for (int i = 0; i < m_registeredMinions.Count; i++)
+            //Minions are Volatile so this is done to prevent Dialogue from breaking due to Minions
+            try
             {
-                Debug.Log("Enemies Forbidden From Attacking");
-                m_registeredMinions[i].ForbidFromAttackTarget(notAllowedToAttack);
+                for (int i = 0; i < m_registeredMinions.Count; i++)
+                {
+                    m_registeredMinions[i].ForbidFromAttackTarget(notAllowedToAttack);
+                }
+                m_allForbiddenToAttack = notAllowedToAttack;
             }
-            m_allForbiddenToAttack = notAllowedToAttack;
+            catch (Exception e)
+            {
+                m_allForbiddenToAttack = notAllowedToAttack;
+                Debug.LogError("Some Minions Are not Behaving Well", this);
+                Debug.LogException(e, this);
+            }
         }
 
         [Button]
