@@ -323,19 +323,36 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
         private IEnumerator FinalSlashEnemyCheckRoutine()
         {
-            while (!m_enemySensor.isDetecting)
+            bool hasSpawned = false;
+            while (true)
             {
                 m_enemySensor.Cast();
+                if (m_enemySensor.isDetecting && !hasSpawned)
+                {
+                    var hits = m_enemySensor.GetHits();
+                    //var targetTransform = hits[1].transform;
+                    int hitID = 0;
+                    for (int i = 0; i < hits.Length; i++)
+                    {
+                        if (Vector2.Distance(m_character.centerMass.position, hits[i].transform.position) < 25f)
+                        {
+                            hitID = i;
+                        }
+                    }
+                    var target = /*m_enemySensor.isDetecting ? hits[0].point : Vector2.zero*/hits[hitID].point;
+                    //if (/*target != Vector2.zero &&*/ targetTransform.gameObject.layer == LayerMask.NameToLayer("Enemy"))
+                    //{
+                    //    hasSpawned = true;
+                    //    var instance = Instantiate(m_finalSlashImpactFX);
+                    //    instance.transform.position = target;
+                    //}
+                    hasSpawned = true;
+                    var instance = Instantiate(m_finalSlashImpactFX);
+                    instance.transform.position = target;
+                }
                 yield return null;
             }
-            var hits = m_enemySensor.GetHits();
-            var target = /*m_enemySensor.isDetecting ? hits[0].point : Vector2.zero*/hits[0].point;
-            if (target != Vector2.zero)
-            {
-                var instance = Instantiate(m_finalSlashImpactFX);
-                instance.transform.position = target;
-            }
-            yield return null;
+            //yield return null;
         }
         #endregion
     }
