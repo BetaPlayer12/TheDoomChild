@@ -479,8 +479,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void BackDiverSummon()
         {
-            if (m_teleportingSkull.spawnedProjectile == null)
-                m_backDiver.Summon();
+            //if (m_teleportingSkull.spawnedProjectile == null)
+            //    m_backDiver.Summon();
         }
 
         public void BackDiverGetProjectile()
