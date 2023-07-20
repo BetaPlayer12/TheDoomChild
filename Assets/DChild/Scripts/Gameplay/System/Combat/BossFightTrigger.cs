@@ -69,6 +69,7 @@ namespace DChild.Gameplay.Combat
         public void StartCombat()
         {
             GameplaySystem.gamplayUIHandle.MonitorBoss(m_boss);
+            GameplaySystem.gamplayUIHandle.ToggleBossHealth(true);
             m_boss.SetTarget(m_targetTuple.damageable, m_targetTuple.character);
             m_boss.Enable();
         }
@@ -99,7 +100,7 @@ namespace DChild.Gameplay.Combat
 
         private void OnBossKilled(object sender, EventActionArgs eventArgs)
         {
-            GameplaySystem.gamplayUIHandle.ToggleBossCombatUI(false);
+            GameplaySystem.gamplayUIHandle.ToggleBossHealth(false);
             m_onDefeat?.Invoke();
         }
 
