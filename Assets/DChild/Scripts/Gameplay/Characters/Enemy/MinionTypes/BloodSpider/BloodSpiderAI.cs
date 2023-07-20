@@ -139,6 +139,8 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Reference")]
         private GameObject m_legsForStompAttack;
         [SerializeField, TabGroup("Reference")]
+        private GameObject m_boundingBox;
+        [SerializeField, TabGroup("Reference")]
         private SpineEventListener m_spineEventListener;
         [SerializeField, TabGroup("Reference")]
         private IsolatedCharacterPhysics2D m_charcterPhysics;
@@ -349,6 +351,7 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_Audiosource.clip = m_DeadClip;
             //m_Audiosource.Play();
             StopAllCoroutines();
+            m_boundingBox.SetActive(false);
             base.OnDestroyed(sender, eventArgs);
             GameplaySystem.minionManager.Unregister(this);
             m_movement.Stop();
