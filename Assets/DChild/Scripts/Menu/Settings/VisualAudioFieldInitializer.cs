@@ -28,6 +28,12 @@ namespace DChild.Menu.Settings
             }
         }
 
+        //DemoCon Settings HotFix//
+        public void SaveSettings()
+        {
+            GameSystem.settings.SaveSettings();
+        }
+
         private void Start()
         {
             AssignReferencesToFields(GameSystem.settings.visual);
