@@ -462,7 +462,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void NinthCircleSanctionEnd()
         {
-            //m_ninthCircleSanction?.AttackOver();
             m_ninthCircleSanction.EndExecution();
         }
 
@@ -473,7 +472,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void DoomsdayKongEnd()
         {
-            //m_doomsdayKong?.AttackOver();
             m_doomsdayKong.EndExecution();
         }
 
@@ -486,7 +484,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         public void BackDiverGetProjectile()
         {
             m_teleportingSkull.Execute();
-            m_teleportingSkull.GetSpawnedProjectile(m_backDiver.spawnedProjectile);
+            //m_teleportingSkull.GetSpawnedProjectile(m_backDiver.spawnedProjectile);
         }
 
         public void BackDiverEnd()
@@ -506,7 +504,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void BarrierEnd()
         {
-            //m_barrier?.AttackOver();
             m_barrier.EndExecution();
         }
 

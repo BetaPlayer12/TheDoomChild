@@ -96,15 +96,16 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public override void Reset()
         {
+            Debug.Log("Air Slash Combo Constantly Resetting");
             base.Reset();
 
-            m_canAirSlashCombo = false;
             m_currentAirSlashState = -1;
             m_currentVisualAirSlashState = 0;
             m_animator.SetBool(m_airSlashComboStateAnimationParameter, false);
             m_animator.SetInteger(m_airSlashStateAnimationParameter, m_currentAirSlashState);
-            m_physics.gravityScale = m_cacheGravity;
+            //m_physics.gravityScale = m_cacheGravity;
             m_fxAnimator.Play("Buffer");
+            //m_physics.velocity = Vector2.zero;
         }
 
         public void Execute()
@@ -113,7 +114,9 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_state.isAttacking = true;
             m_state.canAttack = false;
             m_canMove = false;
+            m_comboResetDelayTimer = m_comboResetDelay;
             m_currentAirSlashState += m_currentAirSlashState >= m_airSlashStateAmount - 1 ? 0 : 1;
+            m_comboAttackDelayTimer = m_airSlashComboInfo[m_currentAirSlashState].nextAttackDelay;
             m_animator.SetBool(m_animationParameter, true);
             m_animator.SetBool(m_airSlashComboStateAnimationParameter, true);
             m_animator.SetInteger(m_airSlashStateAnimationParameter, m_currentAirSlashState);
@@ -121,8 +124,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_currentVisualAirSlashState = m_currentAirSlashState;
             m_physics.gravityScale = 0;
 
-            //m_comboResetDelayTimer = m_comboResetDelay;
-            m_comboAttackDelayTimer = m_airSlashComboInfo[m_currentAirSlashState].nextAttackDelay;
             m_airSlashMovementCooldownTimer = /*m_slashMovementCooldown*/m_airlashMovementCooldown;
         }
 
@@ -200,7 +201,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 //m_animator.SetInteger(m_airSlashStateAnimationParameter, m_currentAirSlashState);
                 //m_physics.gravityScale = m_cacheGravity;
             }
-            m_physics.velocity = Vector2.zero;
+            //m_physics.velocity = Vector2.zero;
             //base.AttackOver();
             //m_state.canAttack = true;
             m_animator.SetBool(m_animationParameter, false);
@@ -220,13 +221,14 @@ namespace DChild.Gameplay.Characters.Players.Modules
             {
                 base.AttackOver();
                 m_state.canAttack = true;
-                //m_canAirSlashCombo = false;
-                //m_currentAirSlashState = 0;
-                //m_currentVisualAirSlashState = 0;
-                m_physics.gravityScale = m_cacheGravity;
+                m_canAirSlashCombo = false;
+                m_currentAirSlashState = -1;
+                m_currentVisualAirSlashState = 0;
+                //m_physics.gravityScale = m_cacheGravity;
                 m_animator.SetBool(m_airSlashComboStateAnimationParameter, false);
-                //m_animator.SetInteger(m_airSlashStateAnimationParameter, m_currentAirSlashState);
+                m_animator.SetInteger(m_airSlashStateAnimationParameter, m_currentAirSlashState);
                 m_fxAnimator.Play("Buffer");
+                //m_physics.velocity = Vector2.zero;
             }
         }
 
@@ -280,7 +282,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
         public void ResetAirSlashCombo()
         {
             m_canAirSlashCombo = true;
-            m_currentAirSlashState = -1;
+            //m_currentAirSlashState = -1;
+            Reset();
         }
 
         public void HandleMovementTimer()
