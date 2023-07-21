@@ -22,6 +22,8 @@ namespace DChild.Gameplay.Characters.Players
         [SerializeField, ValueDropdown("GetCombatArtConfigrationClasses"), OnValueChanged("OverrideConfigurations")]
         private string m_configurationType;
 #endif
+        [SerializeField]
+        private string m_controls;
         [OdinSerialize, TableList(ShowIndexLabels = true), ListDrawerSettings(ShowIndexLabels = true)]
         private CombatArtLevelData[] m_levelDatas = new CombatArtLevelData[1];
 
