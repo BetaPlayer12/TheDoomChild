@@ -735,7 +735,10 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 m_whip?.ResetAerialGravityControl();
                 m_whip?.ResetAirAttacks();
                 m_devilWings?.EnableLevitate();
-                m_airSlashCombo?.ResetAirSlashCombo();
+                if (!m_airSlashCombo.CanAirSlashCombo())
+                {
+                    m_airSlashCombo?.ResetAirSlashCombo();
+                }
                 #region Combat Arts Cooldowns
 
                 if (m_doomsdayKong.CanDoomsdayKong() == false)
