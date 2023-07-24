@@ -29,6 +29,7 @@ namespace DChild.Gameplay.Characters.Players
 
         public CombatArt connectedCombatArt => m_ability;
         public string combatArtName => m_name;
+        public string controls => m_controls;
         public int maxLevel => m_levelDatas.Length;
 
         public CombatArtLevelData GetCombatArtLevelData(int index) => m_levelDatas[index - 1];
