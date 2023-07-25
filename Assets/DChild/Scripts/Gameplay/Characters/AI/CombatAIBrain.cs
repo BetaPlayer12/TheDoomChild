@@ -272,6 +272,7 @@ namespace DChild.Gameplay.Characters.AI
                 m_targetInfo = new AITargetInfo();
             }
             base.Awake();
+            GameplaySystem.minionManager.Register(this);
             m_damageable.Destroyed += OnDestroyed;
 
             m_attacker = GetComponent<Attacker>();
@@ -289,6 +290,22 @@ namespace DChild.Gameplay.Characters.AI
                 LoadCharacterStatData(m_statsData);
                 m_damageable.health.ResetValueToMax();
             }
+        }
+
+        protected virtual void OnDisable()
+        {
+            //Incase the ai is dead before scene change since OnDestroy is
+            //not being called if object is disabled
+            if (m_damageable.isAlive == false)
+            {
+                GameplaySystem.minionManager.Unregister(this);
+            }
+        }
+
+        protected void OnDestroy()
+        {
+            //Incase the ai is still alive when scene changes
+            GameplaySystem.minionManager.Unregister(this);
         }
 
         protected virtual void LateUpdate()
