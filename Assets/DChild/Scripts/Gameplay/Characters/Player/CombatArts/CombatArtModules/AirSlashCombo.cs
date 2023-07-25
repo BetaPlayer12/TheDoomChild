@@ -101,7 +101,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public override void Reset()
         {
-            Debug.Log("Air Slash Combo Constantly Resetting");
             base.Reset();
 
             m_currentAirSlashState = -1;

@@ -32,6 +32,16 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
         private RaySensor m_wallSensor;
         [SerializeField, BoxGroup("Sensors")]
         private RaySensor m_groundSensor;
+        [SerializeField, BoxGroup("Sensors")]
+        private RaySensor m_edgeSensor;
+        [SerializeField, BoxGroup("Sensors")]
+        private RaySensor m_enemySensor;
+        [SerializeField, BoxGroup("FX")]
+        private Animator m_diagonalSwordDashFXAnimator;
+        [SerializeField, BoxGroup("FX")]
+        private GameObject m_diagonalSwordDashImpactFX;
+        [SerializeField, BoxGroup("FX")]
+        private GameObject m_diagonalSwordDashGroundImpactFX;
 
         [SerializeField]
         private Vector2 m_pushForce;
@@ -50,6 +60,8 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
         public bool CanDiagonalSwordDash() => m_canDiagonalSwordDash;
         public bool CanMove() => m_canMove;
+
+        private Coroutine m_checkImpactCoroutine;
 
         public override void Initialize(ComplexCharacterInfo info)
         {
@@ -93,6 +105,12 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             m_physics.velocity = Vector2.zero;
             m_cacheGravity = m_physics.gravityScale;
             m_physics.gravityScale = 0;
+            m_diagonalSwordDashFXAnimator.SetTrigger("ActiveTrigger");
+            if (m_checkImpactCoroutine != null)
+            {
+                StopCoroutine(m_checkImpactCoroutine);
+                m_checkImpactCoroutine = null;
+            }
         }
 
         public void EndExecution()
@@ -101,6 +119,12 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             m_canMove = true;
             m_physics.gravityScale = m_cacheGravity;
             m_animator.SetBool(m_diagonalSwordDashStateAnimationParameter, false);
+            m_diagonalSwordDashFXAnimator.SetTrigger("EndTrigger");
+            if (m_checkImpactCoroutine != null)
+            {
+                StopCoroutine(m_checkImpactCoroutine);
+                m_checkImpactCoroutine = null;
+            }
             base.AttackOver();
         }
 
@@ -112,6 +136,12 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             StopAllCoroutines();
             m_physics.gravityScale = m_cacheGravity;
             m_animator.SetBool(m_diagonalSwordDashStateAnimationParameter, false);
+            m_diagonalSwordDashFXAnimator.SetTrigger("EndTrigger");
+            if (m_checkImpactCoroutine != null)
+            {
+                StopCoroutine(m_checkImpactCoroutine);
+                m_checkImpactCoroutine = null;
+            }
             base.Cancel();
         }
 
@@ -120,6 +150,65 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             m_rigidBody.WakeUp();
             m_diagonalSwordDashInfo.ShowCollider(value);
             m_attackFX.transform.position = m_diagonalSwordDashInfo.fxPosition.position;
+            if (value)
+                m_checkImpactCoroutine = StartCoroutine(CheckImpactRoutine());
+        }
+
+        private IEnumerator CheckImpactRoutine()
+        {
+            var timer = 0.25f;
+            var hasChecked = false;
+            while (!hasChecked)
+            {
+                Debug.Log("Checking for Impact Point");
+                m_enemySensor.Cast();
+                if (m_enemySensor.isDetecting && timer >= 0.25f)
+                {
+                    timer = 0f;
+                    var hits = m_enemySensor.GetHits();
+                    //var targetTransform = hits[1].transform;
+                    int hitID = 0;
+                    for (int i = 0; i < hits.Length; i++)
+                    {
+                        if (Vector2.Distance(m_character.centerMass.position, hits[i].transform.position) < 25f)
+                        {
+                            hitID = i;
+                        }
+                    }
+                    var target = hits[hitID].point;
+                    var instance = Instantiate(m_diagonalSwordDashImpactFX);
+                    instance.transform.position = target;
+                }
+                else
+                {
+                    if (timer < 0.25f)
+                    {
+                        timer += Time.deltaTime;
+                    }
+                }
+                m_edgeSensor.Cast();
+                if (m_edgeSensor.isDetecting)
+                {
+                    hasChecked = true;
+                    var hits = m_edgeSensor.GetHits();
+                    //var targetTransform = hits[1].transform;
+                    int hitID = 0;
+                    for (int i = 0; i < hits.Length; i++)
+                    {
+                        if (Vector2.Distance(m_character.centerMass.position, hits[i].transform.position) < 25f)
+                        {
+                            hitID = i;
+                        }
+                    }
+                    var hitPoint = hits[hitID].point;
+                    var instance = Instantiate(m_diagonalSwordDashImpactFX);
+                    instance.transform.position = hitPoint;
+                    var instanceGround = Instantiate(m_diagonalSwordDashGroundImpactFX);
+                    instanceGround.transform.position = hitPoint;
+                }
+                yield return null;
+            }
+            yield return null;
         }
 
         public void StartDash()
