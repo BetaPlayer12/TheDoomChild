@@ -308,7 +308,7 @@ namespace DChild.Gameplay.Characters.Enemies
             if (!IsFacingTarget())
                 CustomTurn();
             base.OnDestroyed(sender, eventArgs);
-            GameplaySystem.minionManager.Unregister(this);
+            
             m_targetPointIK.overridePosition = false;
             m_targetPointIK.localPosition = Vector2.zero;
             m_selfCollider.enabled = false;
@@ -486,7 +486,7 @@ namespace DChild.Gameplay.Characters.Enemies
         protected override void Awake()
         {
             base.Awake();
-            GameplaySystem.minionManager.Register(this);
+            
             m_patrolHandle.TurnRequest += OnTurnRequest;
             m_attackHandle.AttackDone += OnAttackDone;
             m_turnHandle.TurnDone += OnTurnDone;
