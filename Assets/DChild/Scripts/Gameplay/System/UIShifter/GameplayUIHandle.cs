@@ -109,6 +109,18 @@ namespace DChild.Gameplay.Systems
             m_bossCombat?.SetBoss(boss);
         }
 
+        public void ToggleBossHealth(bool willshow)
+        {
+            if (willshow)
+            {
+                m_bossCombat.ShowBossHealth();
+            }
+            else
+            {
+                m_bossCombat.HideBossHealth();
+            }
+        }
+
         public void ResetGameplayUI()
         {
             GameEventMessage.SendEvent("UI Reset");
@@ -123,17 +135,14 @@ namespace DChild.Gameplay.Systems
         [Button]
         public void ToggleBossCombatUI(bool willshow)
         {
-            Debug.Log("Boss UI will show: " + willshow);
             if (willshow)
             {
-                Debug.Log("Will show is: " + willshow);
                 m_bossCombat.ShowBossName();
-                m_bossCombat.ShowBossHealth();
+               // m_bossCombat.ShowBossHealth();
             }
             else
             {
                 m_bossCombat.HideBossHealth();
-                m_bossCombat.HideBossName();
             }
         }
 

@@ -11,24 +11,21 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
     {
         [SerializeField]
         private Animator m_animator;
-        private SoulGathererEffectsHandler effect;
         private IPlayer m_owner;
-        private Coroutine m_glowRoutine;
+
+        public event EventAction<EventActionArgs> OnLootPickup;
+        public event EventAction<EventActionArgs> OnLootPickupEnd;
 
         public void Glow()
         {
-
             m_animator.SetTrigger("Glow");
-            if (effect)
-            {
-                effect.StopEffect();
-            }
+            OnLootPickupEnd?.Invoke(this, EventActionArgs.Empty);
         }
 
         private void Start()
         {
             m_owner = GetComponentInParent<PlayerControlledObject>().owner;
-           
+
         }
 
         private void OnTriggerEnter2D(Collider2D collision)
@@ -36,13 +33,8 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
             var loot = collision.GetComponentInParent<Loot>();
             if (loot)
             {
-                effect = null;
-                 effect = FindObjectOfType<SoulGathererEffectsHandler>();
-                if (effect)
-                {
-                    effect.PlayEffect();
-                }
                 loot.PickUp(m_owner);
+                OnLootPickup?.Invoke(this,EventActionArgs.Empty);
             }
         }
     }

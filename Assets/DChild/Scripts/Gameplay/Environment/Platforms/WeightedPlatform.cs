@@ -23,10 +23,23 @@ namespace DChild.Gameplay.Environment
         private float m_startToActivatedPositionSqrMagnitude;
         private bool m_allowMovement = true;
 
-        [ShowInInspector,ReadOnly]
+        [ShowInInspector, ReadOnly]
         public float lerpValue { get; private set; }
 
         public void SetAllowMovement(bool value) => m_allowMovement = value;
+
+        public void UpdateLerpValue()
+        {
+            var ToCurrentSqrMagnitude = (m_platform.position - m_startingPosition).sqrMagnitude;
+            if (ToCurrentSqrMagnitude == 0)
+            {
+                lerpValue = 0;
+            }
+            else
+            {
+                lerpValue = ToCurrentSqrMagnitude / m_startToActivatedPositionSqrMagnitude;
+            }
+        }
 
         private void OnMassChange(object sender, EventActionArgs eventArgs)
         {
@@ -50,15 +63,7 @@ namespace DChild.Gameplay.Environment
                 m_platform.position = Vector3.MoveTowards(m_platform.position, m_destination, m_speed * GameplaySystem.time.fixedDeltaTime);
             }
 
-            var ToCurrentSqrMagnitude = (m_platform.position - m_startingPosition).sqrMagnitude;
-            if (ToCurrentSqrMagnitude == 0)
-            {
-                lerpValue = 0;
-            }
-            else
-            {
-                lerpValue = ToCurrentSqrMagnitude / m_startToActivatedPositionSqrMagnitude;
-            }
+            UpdateLerpValue();
         }
 
 #if UNITY_EDITOR
