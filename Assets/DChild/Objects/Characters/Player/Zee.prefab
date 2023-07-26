@@ -776,6 +776,9 @@ MonoBehaviour:
   m_edgeSensor: {fileID: 8774030571759925288}
   m_fxParent: {fileID: 6564342301700944192}
   m_fx: {fileID: 783798067465442944}
+  m_finalFlashGlowFX: {fileID: 2692988061179410186}
+  m_finalFlashImpactFX: {fileID: 1242283191867534254}
+  m_finalFlashDustFX: {fileID: 1623464939270236136}
   m_pushForce: {x: 500, y: 0}
 --- !u!114 &4726091039906868247
 MonoBehaviour:
@@ -30681,6 +30684,9 @@ MonoBehaviour:
     - {fileID: 6117420037429614680}
     - {fileID: 458977153834505929}
     - {fileID: 8110408292203614970}
+    - {fileID: 2692988061179410186}
+    - {fileID: 1623464939270236136}
+    - {fileID: 1242283191867534254}
     - {fileID: 6932414470649904744}
     - {fileID: 5588195080431396619}
     - {fileID: 221161450997346515}
@@ -30749,6 +30755,9 @@ MonoBehaviour:
     - 1
     - 1
     - 2.5
+    - 1
+    - 1
+    - 1
     - 1
     - 1
     - 1
@@ -96320,7 +96329,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 74e436d628a3dbc4ba392b0725ad5281, type: 2}
+  - {fileID: 2100000, guid: 0e097c13fa5812c4792157d676fac5ce, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -96354,7 +96363,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d247ba06193faa74d9335f5481b2b56c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  skeletonDataAsset: {fileID: 11400000, guid: 1ee5732947106124aa1e011a7189529f, type: 2}
+  skeletonDataAsset: {fileID: 11400000, guid: d2de6e8e0e280b243933dd7292a99b12, type: 2}
   initialSkinName: 
   initialFlipX: 1
   initialFlipY: 0
@@ -99504,6 +99513,12 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 5884952831304823347}
   m_PrefabAsset: {fileID: 0}
+--- !u!198 &1242283191867534254 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 4654176167407491485, guid: f12efcbc77240e7449cca360a383e925,
+    type: 3}
+  m_PrefabInstance: {fileID: 5884952831304823347}
+  m_PrefabAsset: {fileID: 0}
 --- !u!198 &1271597156902731866 stripped
 ParticleSystem:
   m_CorrespondingSourceObject: {fileID: 4615648156213834345, guid: f12efcbc77240e7449cca360a383e925,
@@ -99564,6 +99579,12 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 5884952831304823347}
   m_PrefabAsset: {fileID: 0}
+--- !u!198 &1623464939270236136 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 5128537475145962971, guid: f12efcbc77240e7449cca360a383e925,
+    type: 3}
+  m_PrefabInstance: {fileID: 5884952831304823347}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &2028336242673369366 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5588285970656178981, guid: f12efcbc77240e7449cca360a383e925,
@@ -99615,6 +99636,12 @@ Transform:
 --- !u!4 &2454867125086158503 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8339256726676114580, guid: f12efcbc77240e7449cca360a383e925,
+    type: 3}
+  m_PrefabInstance: {fileID: 5884952831304823347}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &2692988061179410186 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 8427615014167053625, guid: f12efcbc77240e7449cca360a383e925,
     type: 3}
   m_PrefabInstance: {fileID: 5884952831304823347}
   m_PrefabAsset: {fileID: 0}
@@ -100311,22 +100338,22 @@ PrefabInstance:
     - target: {fileID: 4229937905458067696, guid: 2cfcc5608211e3f41b52eabcc85b4f42,
         type: 3}
       propertyPath: startColor.m_ColorMin.a
-      value: 2.41e-43
+      value: 3e-43
       objectReference: {fileID: 0}
     - target: {fileID: 4229937905458067696, guid: 2cfcc5608211e3f41b52eabcc85b4f42,
         type: 3}
       propertyPath: startColor.m_ColorMin.b
-      value: -63.219574
+      value: -0.00872127
       objectReference: {fileID: 0}
     - target: {fileID: 4229937905458067696, guid: 2cfcc5608211e3f41b52eabcc85b4f42,
         type: 3}
       propertyPath: startColor.m_ColorMin.g
-      value: 2.41e-43
+      value: 3e-43
       objectReference: {fileID: 0}
     - target: {fileID: 4229937905458067696, guid: 2cfcc5608211e3f41b52eabcc85b4f42,
         type: 3}
       propertyPath: startColor.m_ColorMin.r
-      value: -63.220276
+      value: -0.008721441
       objectReference: {fileID: 0}
     - target: {fileID: 4229937905458067700, guid: 2cfcc5608211e3f41b52eabcc85b4f42,
         type: 3}
@@ -100452,22 +100479,22 @@ PrefabInstance:
     - target: {fileID: 102887550663880699, guid: f28503f5dacc9cd4a8fe73c5494c5d00,
         type: 3}
       propertyPath: startColor.m_ColorMin.a
-      value: 2.41e-43
+      value: 3e-43
       objectReference: {fileID: 0}
     - target: {fileID: 102887550663880699, guid: f28503f5dacc9cd4a8fe73c5494c5d00,
         type: 3}
       propertyPath: startColor.m_ColorMin.b
-      value: -63.219574
+      value: -0.00872127
       objectReference: {fileID: 0}
     - target: {fileID: 102887550663880699, guid: f28503f5dacc9cd4a8fe73c5494c5d00,
         type: 3}
       propertyPath: startColor.m_ColorMin.g
-      value: 2.41e-43
+      value: 3e-43
       objectReference: {fileID: 0}
     - target: {fileID: 102887550663880699, guid: f28503f5dacc9cd4a8fe73c5494c5d00,
         type: 3}
       propertyPath: startColor.m_ColorMin.r
-      value: -63.220276
+      value: -0.008721441
       objectReference: {fileID: 0}
     - target: {fileID: 102887550686315782, guid: f28503f5dacc9cd4a8fe73c5494c5d00,
         type: 3}
