@@ -1,4 +1,6 @@
-﻿using UnityEditor;
+﻿#if UNITY_EDITOR
+using UnityEditor;
+#endif
 using UnityEngine;
 using Sirenix.OdinInspector;
 
@@ -20,6 +22,7 @@ namespace DChildEditor.DesignTool.LevelMap.Screenshot
         [Button]
         public void SetForScreenshot()
         {
+#if UNITY_EDITOR
             m_content.GetComponentInParent<ScreenshotContentManager>().InitializeContent();
             m_content.SetActive(true);
 
@@ -36,6 +39,7 @@ namespace DChildEditor.DesignTool.LevelMap.Screenshot
                 GameViewUtils.RemoveCustomSize(GameViewSizeGroupType.Standalone, displayName);
             }
             GameViewUtils.AddAndSelectCustomSize(GameViewUtils.GameViewSizeType.FixedResolution, GameViewSizeGroupType.Standalone, m_resolution.x, m_resolution.y, displayName);
+#endif
         }
 
         [Button]
@@ -44,5 +48,5 @@ namespace DChildEditor.DesignTool.LevelMap.Screenshot
             SetForScreenshot();
             ScreenCapture.CaptureScreenshot($"{m_filePathDestination}/{m_fileName}.png");
         }
-    } 
+    }
 }

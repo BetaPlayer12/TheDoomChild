@@ -271,7 +271,7 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_Audiosource.Play();
             StopAllCoroutines();
             base.OnDestroyed(sender, eventArgs);
-            GameplaySystem.minionManager.Unregister(this);
+            
             m_hitbox.Disable();
             m_animation.EnableRootMotion(true, false);
             LightningShieldDeactivate();
@@ -529,7 +529,7 @@ namespace DChild.Gameplay.Characters.Enemies
         protected override void Awake()
         {
             base.Awake();
-            GameplaySystem.minionManager.Register(this);
+            
             m_patrolHandle.Initialize();
             m_patrolHandle.TurnRequest += OnTurnRequest;
             m_stateHandle = new StateHandle<State>(!enabled ? State.Dormant : State.Patrol, State.WaitForBehaviour);
