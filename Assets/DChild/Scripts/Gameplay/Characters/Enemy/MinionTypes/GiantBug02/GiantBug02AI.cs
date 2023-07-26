@@ -158,7 +158,7 @@ namespace DChild.Gameplay.Characters.Enemies
            
             //m_Audiosource.PlayOneShot(m_Minion_Death_Sound_Clip);
             base.OnDestroyed(sender, eventArgs);
-            GameplaySystem.minionManager.Unregister(this);
+            
             m_movement.Stop();
         }
 
@@ -186,7 +186,7 @@ namespace DChild.Gameplay.Characters.Enemies
         protected override void Awake()
         {
             base.Awake();
-            GameplaySystem.minionManager.Register(this);
+            
             m_patrolHandle.TurnRequest += OnTurnRequest;
             m_flinchHandle.FlinchStart += OnFlinchStart;
             m_flinchHandle.FlinchEnd += OnFlinchEnd;
