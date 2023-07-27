@@ -1,6 +1,7 @@
 using DChild.Gameplay.Characters.Players.Behaviour;
 using Sirenix.OdinInspector;
 using Spine.Unity;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -16,6 +17,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
         //private float m_airSlashComboCooldown;
         [SerializeField]
         private float m_airlashMovementCooldown;
+        [SerializeField]
+        private float m_comboResetDelay;
 
         [SerializeField]
         private SkeletonAnimation m_attackFX;
@@ -45,6 +48,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         [SerializeField]
         private List<Vector2> m_pushForce;
+        [SerializeField]
+        private float m_pushForceDuration;
 
         private bool m_canAirSlashCombo;
         private bool m_canMove;
@@ -64,6 +69,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public bool CanAirSlashCombo() => m_canAirSlashCombo;
         public bool CanMove() => m_canMove;
+
+        private Coroutine m_airSlashDashCoroutine;
 
         public override void Initialize(ComplexCharacterInfo info)
         {
@@ -96,13 +103,13 @@ namespace DChild.Gameplay.Characters.Players.Modules
         {
             base.Reset();
 
-            m_canAirSlashCombo = false;
             m_currentAirSlashState = -1;
             m_currentVisualAirSlashState = 0;
             m_animator.SetBool(m_airSlashComboStateAnimationParameter, false);
             m_animator.SetInteger(m_airSlashStateAnimationParameter, m_currentAirSlashState);
             m_physics.gravityScale = m_cacheGravity;
             m_fxAnimator.Play("Buffer");
+            m_physics.velocity = Vector2.zero;
         }
 
         public void Execute()
@@ -111,27 +118,33 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_state.isAttacking = true;
             m_state.canAttack = false;
             m_canMove = false;
+            m_comboResetDelayTimer = m_comboResetDelay;
             m_currentAirSlashState += m_currentAirSlashState >= m_airSlashStateAmount - 1 ? 0 : 1;
+            m_comboAttackDelayTimer = m_airSlashComboInfo[m_currentAirSlashState].nextAttackDelay;
             m_animator.SetBool(m_animationParameter, true);
             m_animator.SetBool(m_airSlashComboStateAnimationParameter, true);
             m_animator.SetInteger(m_airSlashStateAnimationParameter, m_currentAirSlashState);
             m_attacker.SetDamageModifier(m_airSlashComboInfo[m_currentAirSlashState].damageModifier * m_modifier.Get(PlayerModifier.AttackDamage));
             m_currentVisualAirSlashState = m_currentAirSlashState;
             m_physics.gravityScale = 0;
-            
-            m_comboResetDelayTimer = m_airSlashComboInfo[m_currentAirSlashState].nextAttackDelay;
+
             m_airSlashMovementCooldownTimer = /*m_slashMovementCooldown*/m_airlashMovementCooldown;
         }
 
         public override void Cancel()
         {
-
+            if (m_airSlashDashCoroutine != null)
+            {
+                StopCoroutine(m_airSlashDashCoroutine);
+                m_airSlashDashCoroutine = null;
+            }
             m_state.isDoingCombo = false;
             for (int i = 0; i < m_airSlashComboInfo.Count; i++)
             {
                 m_airSlashComboInfo[i].ShowCollider(false);
             }
             m_physics.gravityScale = m_cacheGravity;
+            m_physics.velocity = Vector2.zero;
             m_fxAnimator.Play("Buffer");
             base.Cancel();
         }
@@ -168,8 +181,12 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_edgeSensor.Cast();
             if (!m_enemySensor.isDetecting /*&& !m_wallSensor.allRaysDetecting && m_edgeSensor.isDetecting*/)
             {
-                m_physics.velocity = Vector2.zero;
-                m_physics.velocity = m_character.facing == HorizontalDirection.Right ? m_pushForce[m_currentVisualAirSlashState] : -m_pushForce[m_currentVisualAirSlashState];
+                if (m_airSlashDashCoroutine != null)
+                {
+                    StopCoroutine(m_airSlashDashCoroutine);
+                    m_airSlashDashCoroutine = null;
+                }
+                m_airSlashDashCoroutine = StartCoroutine(AirSlashDashRoutine());
                 //m_physics.AddForce(m_character.facing == HorizontalDirection.Right ? m_pushForce[m_currentVisualAirSlashState] : -m_pushForce[m_currentVisualAirSlashState], ForceMode2D.Impulse);
             }
         }
@@ -183,13 +200,26 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
             if (m_currentAirSlashState >= m_airSlashStateAmount - 1)
             {
-                m_currentAirSlashState = 0;
-                m_canAirSlashCombo = false;
+                //m_currentAirSlashState = 0;
+                //m_canAirSlashCombo = false;
                 m_canMove = false;
-                m_physics.gravityScale = m_cacheGravity;
+                //m_physics.gravityScale = m_cacheGravity;
+
+                //Reset();
+
+                m_canAirSlashCombo = false;
+                m_currentAirSlashState = -1;
+                //m_currentVisualAirSlashState = 0;
+                //m_animator.SetBool(m_airSlashComboStateAnimationParameter, false);
+                //m_animator.SetInteger(m_airSlashStateAnimationParameter, m_currentAirSlashState);
+                //m_physics.gravityScale = m_cacheGravity;
             }
-            m_physics.velocity = Vector2.zero;
-            base.AttackOver();
+            //m_physics.velocity = Vector2.zero;
+            //base.AttackOver();
+            //m_state.canAttack = true;
+            m_animator.SetBool(m_animationParameter, false);
+            m_state.isAttacking = false;
+            m_state.waitForBehaviour = false;
 
             //m_fxAnimator.Play("Buffer");
         }
@@ -203,13 +233,20 @@ namespace DChild.Gameplay.Characters.Players.Modules
             else
             {
                 base.AttackOver();
+                if (m_airSlashDashCoroutine != null)
+                {
+                    StopCoroutine(m_airSlashDashCoroutine);
+                    m_airSlashDashCoroutine = null;
+                }
                 m_state.canAttack = true;
-                //m_canAirSlashCombo = false;
-                //m_currentAirSlashState = 0;
-                //m_currentVisualAirSlashState = 0;
+                m_canAirSlashCombo = false;
+                m_currentAirSlashState = -1;
+                m_currentVisualAirSlashState = 0;
                 m_physics.gravityScale = m_cacheGravity;
                 m_animator.SetBool(m_airSlashComboStateAnimationParameter, false);
-                //m_animator.SetInteger(m_airSlashStateAnimationParameter, m_currentAirSlashState);
+                m_animator.SetInteger(m_airSlashStateAnimationParameter, m_currentAirSlashState);
+                m_fxAnimator.Play("Buffer");
+                m_physics.velocity = Vector2.zero;
             }
         }
 
@@ -226,7 +263,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
                 if (m_comboAttackDelayTimer <= 0)
                 {
-                    m_comboAttackDelayTimer = 1;
+                    m_comboAttackDelayTimer = -1;
                     m_state.canAttack = true;
                     m_allowAttackDelayHandling = false;
                 }
@@ -263,6 +300,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
         public void ResetAirSlashCombo()
         {
             m_canAirSlashCombo = true;
+            //m_currentAirSlashState = -1;
+            Reset();
         }
 
         public void HandleMovementTimer()
@@ -278,6 +317,20 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 m_airSlashMovementCooldownTimer = m_airlashMovementCooldown;
                 m_canMove = true;
             }
+        }
+
+        private IEnumerator AirSlashDashRoutine()
+        {
+            m_physics.velocity = Vector2.zero;
+            var timer = 0f;
+            while (timer <= m_pushForceDuration && !m_enemySensor.isDetecting && !m_wallSensor.isDetecting)
+            {
+                timer += Time.deltaTime;
+                m_physics.velocity = m_character.facing == HorizontalDirection.Right ? m_pushForce[m_currentVisualAirSlashState] : -m_pushForce[m_currentVisualAirSlashState];
+                yield return null;
+            }
+            //m_physics.gravityScale = m_cacheGravity;
+            m_physics.velocity = Vector2.zero;
         }
     }
 }
