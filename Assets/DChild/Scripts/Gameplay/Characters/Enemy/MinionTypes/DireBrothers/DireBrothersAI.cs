@@ -430,7 +430,7 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_Audiosource.Play();
             StopAllCoroutines();
             base.OnDestroyed(sender, eventArgs);
-            GameplaySystem.minionManager.Unregister(this);
+            
             m_animation.EnableRootMotion(true, false);
             if (m_currentAttackCoroutine != null)
             {
@@ -670,7 +670,7 @@ namespace DChild.Gameplay.Characters.Enemies
         protected override void Awake()
         {
             base.Awake();
-            GameplaySystem.minionManager.Register(this);
+            
             m_phaseHandle = new PhaseHandle<Phase, PhaseInfo>();
             m_phaseHandle.Initialize(Phase.BothAlive, m_info.phaseInfo, m_character, ChangeState, ApplyPhaseData);
             m_phaseHandle.ApplyChange();

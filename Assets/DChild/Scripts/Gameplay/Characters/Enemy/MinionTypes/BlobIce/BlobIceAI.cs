@@ -174,7 +174,7 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_Audiosource.Play();
             StopAllCoroutines();
             base.OnDestroyed(sender, eventArgs);
-            GameplaySystem.minionManager.Unregister(this);
+            
             m_stateHandle.OverrideState(State.WaitBehaviourEnd);
             if (m_sneerRoutine != null)
             {
@@ -196,12 +196,6 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.deathAnimation);
             //m_animation.SetAnimation(0, m_info.disassembledIdleAnimation, true);
             yield return new WaitForSeconds(m_info.deathDuration);
-            m_health.SetHealthPercentage(1f);
-            enabled = true;
-            m_animation.SetAnimation(0, m_info.recoverAnimation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.recoverAnimation);
-            m_animation.SetAnimation(0, m_info.idleAnimation, true);
-            m_stateHandle.OverrideState(State.Patrol);
             InstantiateBlobIceCloud(transform.position);
             gameObject.SetActive(false);
             yield return null;
@@ -276,7 +270,7 @@ namespace DChild.Gameplay.Characters.Enemies
         protected override void Awake()
         {
             base.Awake();
-            GameplaySystem.minionManager.Register(this);
+            
             m_patrolHandle.TurnRequest += OnTurnRequest;
             m_turnHandle.TurnDone += OnTurnDone;
             //m_flinchHandle.FlinchStart += OnFlinchStart;

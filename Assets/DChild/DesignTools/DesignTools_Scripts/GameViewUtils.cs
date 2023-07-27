@@ -1,10 +1,13 @@
 using System;
 using System.Reflection;
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 using UnityEngine;
 
 public static class GameViewUtils
 {
+#if UNITY_EDITOR
     static object gameViewSizesInstance;
     static MethodInfo getGroup;
 
@@ -16,6 +19,7 @@ public static class GameViewUtils
         var instanceProp = singleType.GetProperty("instance");
         getGroup = sizesType.GetMethod("GetGroup");
         gameViewSizesInstance = instanceProp.GetValue(null, null);
+
     }
 
     public enum GameViewSizeType
@@ -69,12 +73,15 @@ public static class GameViewUtils
 
     public static void SetSize(int index)
     {
+
         var gvWndType = typeof(Editor).Assembly.GetType("UnityEditor.GameView");
         var selectedSizeIndexProp = gvWndType.GetProperty("selectedSizeIndex",
                 BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
         var gvWnd = EditorWindow.GetWindow(gvWndType);
         selectedSizeIndexProp.SetValue(gvWnd, index, null);
+
     }
+
 
     [MenuItem("Test/SizeDimensionsQuery")]
     public static void SizeDimensionsQueryTest()
@@ -91,6 +98,7 @@ public static class GameViewUtils
 
     public static void AddCustomSize(GameViewSizeType viewSizeType, GameViewSizeGroupType sizeGroupType, int width, int height, string text)
     {
+
         var group = GetGroup(sizeGroupType);
         var addCustomSize = getGroup.ReturnType.GetMethod("AddCustomSize"); // or group.GetType().
         var gvsType = typeof(Editor).Assembly.GetType("UnityEditor.GameViewSize");
@@ -107,6 +115,7 @@ public static class GameViewUtils
             });
         var newSize = ctor.Invoke(new object[] { (int)viewSizeType, width, height, text });
         addCustomSize.Invoke(group, new object[] { newSize });
+
     }
 
     public static bool SizeExists(GameViewSizeGroupType sizeGroupType, string text)
@@ -188,4 +197,5 @@ public static class GameViewUtils
         var getCurrentGroupTypeProp = gameViewSizesInstance.GetType().GetProperty("currentGroupType");
         return (GameViewSizeGroupType)(int)getCurrentGroupTypeProp.GetValue(gameViewSizesInstance, null);
     }
+#endif
 }

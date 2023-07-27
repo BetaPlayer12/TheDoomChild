@@ -30,6 +30,9 @@ namespace DChild.Gameplay.Systems
 
         void PromptKeystoneFragmentNotification();
         void ShowJournalNotificationPrompt(float duration);
+
+        void ToggleBossHealth(bool willshow);
+
         void ToggleBossCombatUI(bool willshow);
         void ToggleFadeUI(bool willshow);
         void RevealBossName();

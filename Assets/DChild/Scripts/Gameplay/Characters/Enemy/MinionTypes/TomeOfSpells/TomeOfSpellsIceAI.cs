@@ -343,7 +343,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             StopAllCoroutines();
             base.OnDestroyed(sender, eventArgs);
-            GameplaySystem.minionManager.Unregister(this);
+            
             if (m_executeMoveCoroutine != null)
             {
                 StopCoroutine(m_executeMoveCoroutine);
@@ -655,7 +655,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             Debug.Log(m_info);
             base.Awake();
-            GameplaySystem.minionManager.Register(this);
+            
             m_patrolHandle.TurnRequest += OnTurnRequest;
             m_attackHandle.AttackDone += OnAttackDone;
             m_flinchHandle.FlinchStart += OnFlinchStart;

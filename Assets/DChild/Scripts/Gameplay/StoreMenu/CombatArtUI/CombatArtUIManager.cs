@@ -167,6 +167,7 @@ namespace DChild.Gameplay.UI.CombatArts
             var buttons = GetComponentsInChildren<CombatArtSelectButton>();
             PopulateCombatArtList(buttons);
             m_artRequirements = GetComponentsInChildren<CombatArtSelectRequirements>();
+            Debug.Log(m_artRequirements.Length);
         }
 
         private void Start()
