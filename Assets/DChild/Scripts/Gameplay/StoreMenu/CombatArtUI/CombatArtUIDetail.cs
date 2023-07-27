@@ -16,12 +16,15 @@ namespace DChild.Gameplay.UI.CombatArts
         private TextMeshProUGUI m_descriptionLabel;
         [SerializeField]
         private TextMeshProUGUI m_costLabel;
+        [SerializeField]
+        private TextMeshProUGUI m_controlsLabel;
 
         public void Display(CombatArtData data, int level)
         {
             if (data != null)
             {
                 m_artNameLabel.text = data.combatArtName;
+                m_controlsLabel.text = data.controls;
                 if (level > 1)
                 {
                     m_artNameLabel.text += $" {level}";

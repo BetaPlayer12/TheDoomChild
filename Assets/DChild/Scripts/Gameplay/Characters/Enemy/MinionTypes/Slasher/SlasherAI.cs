@@ -140,8 +140,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private RaySensor m_groundSensor;
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_edgeSensor;
-        [SerializeField, TabGroup("Sensors")]
-        private RaySensor m_toeSensor;
+        //[SerializeField, TabGroup("Sensors")]
+        //private RaySensor m_toeSensor;
         [SerializeField, TabGroup("BoundingBox")]
         private Collider2D m_attackBB;
 
@@ -291,7 +291,7 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_Audiosource.Play();
             StopAllCoroutines();
             base.OnDestroyed(sender, eventArgs);
-            GameplaySystem.minionManager.Unregister(this);
+            
             m_stateHandle.OverrideState(State.WaitBehaviourEnd);
             if (m_attackRoutine != null)
             {
@@ -446,7 +446,7 @@ namespace DChild.Gameplay.Characters.Enemies
         protected override void Awake()
         {
             base.Awake();
-            GameplaySystem.minionManager.Register(this);
+            
             m_patrolHandle.TurnRequest += OnTurnRequest;
             m_attackHandle.AttackDone += OnAttackDone;
             m_turnHandle.TurnDone += OnTurnDone;
@@ -492,10 +492,10 @@ namespace DChild.Gameplay.Characters.Enemies
                         var characterInfo = new PatrolHandle.CharacterInfo(m_character.centerMass.position, m_character.facing);
                         m_patrolHandle.Patrol(m_movement, m_info.walk.speed, characterInfo);
 
-                        if (m_toeSensor.isDetecting)
-                            m_rigidbody2D.sharedMaterial = m_bounce;
-                        else if (!m_toeSensor.isDetecting)
-                            m_rigidbody2D.sharedMaterial = null;
+                        //if (m_toeSensor.isDetecting)
+                        //    m_rigidbody2D.sharedMaterial = m_bounce;
+                        //else if (!m_toeSensor.isDetecting)
+                        //    m_rigidbody2D.sharedMaterial = null;
                     }
                     else
                     {
@@ -583,10 +583,10 @@ namespace DChild.Gameplay.Characters.Enemies
                                     //m_movement.MoveTowards(Vector2.one * transform.localScale.x, m_currentMoveSpeed);
                                     m_character.physics.SetVelocity(transform.localScale.x * m_currentMoveSpeed, m_character.physics.velocity.y);
 
-                                    if (m_toeSensor.isDetecting)
-                                        m_rigidbody2D.sharedMaterial = m_bounce;
-                                    else if (!m_toeSensor.isDetecting)
-                                        m_rigidbody2D.sharedMaterial = null;
+                                    //if (m_toeSensor.isDetecting)
+                                    //    m_rigidbody2D.sharedMaterial = m_bounce;
+                                    //else if (!m_toeSensor.isDetecting)
+                                    //    m_rigidbody2D.sharedMaterial = null;
                                 }
                                 else
                                 {
