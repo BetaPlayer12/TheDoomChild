@@ -111,8 +111,6 @@ MonoBehaviour:
   m_worldMap: {fileID: 0}
   m_navMap: {fileID: 0}
   m_regen: {fileID: 0}
-  m_lootAcquiredUI: {fileID: 0}
-  m_storeNotification: {fileID: 0}
   m_journalNotification: {fileID: 0}
   m_playerHUD: {fileID: 0}
   m_skippableUI: {fileID: 0}
@@ -461,6 +459,9 @@ MonoBehaviour:
     - Name: 
       Entry: 8
       Data: 
+    - Name: m_combatArtsData
+      Entry: 6
+      Data: 
     - Name: 
       Entry: 8
       Data: 
@@ -694,20 +695,16 @@ MonoBehaviour:
     PrefabModifications: []
     SerializationNodes:
     - Name: m_questNotification
-      Entry: 7
-      Data: 0|DChild.Gameplay.UI.NotificationHandle`1+SubHandle`1[[DChild.Gameplay.UI.PromptNotificationHandle+NotificationType,
-        Assembly-CSharp],[DChild.Gameplay.Quests.QuestNotificationUI, Assembly-CSharp]],
-        Assembly-CSharp
-    - Name: m_priority
-      Entry: 3
-      Data: 0
-    - Name: m_ui
       Entry: 6
       Data: 
-    - Name: 
-      Entry: 8
+    - Name: m_lootNotification
+      Entry: 6
+      Data: 
+    - Name: m_storeNotification
+      Entry: 6
       Data: 
   m_priority: 0
+  m_input: {fileID: 0}
 --- !u!1 &3555969120647319974
 GameObject:
   m_ObjectHideFlags: 0
@@ -833,6 +830,7 @@ GameObject:
   - component: {fileID: 1282068314815717093}
   - component: {fileID: 1857289648}
   - component: {fileID: 6912939528574181348}
+  - component: {fileID: 550765746942944557}
   m_Layer: 0
   m_Name: CombatManager
   m_TagString: Untagged
@@ -1076,6 +1074,18 @@ MonoBehaviour:
   m_executeOnAttackHit: 0
   m_onAttackHitStopDuration: 0.1
   m_onAttackHitStopTimeScale: 0
+--- !u!114 &550765746942944557
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4824955416592166037}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: baf6c3b1f77c60b4bae71d28b8e210d8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4914704124739206884
 GameObject:
   m_ObjectHideFlags: 0

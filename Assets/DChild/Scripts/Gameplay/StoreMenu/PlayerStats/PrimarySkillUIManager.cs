@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using TMPro;
+using UnityEngine;
 
 namespace DChild.Gameplay.UI.PrimarySkills
 {
@@ -6,6 +7,10 @@ namespace DChild.Gameplay.UI.PrimarySkills
     {
         [SerializeField]
         private PrimarySkillSelectableList m_skillList;
+        [SerializeField]
+        private TextMeshProUGUI m_descriptionLabel;
+        [SerializeField]
+        private TextMeshProUGUI m_controlsLabel;
 
         public void UpdateSelectables()
         {
@@ -14,12 +19,14 @@ namespace DChild.Gameplay.UI.PrimarySkills
 
         public void Select(PrimarySkillSelectable selectable)
         {
-
+            m_descriptionLabel.text = selectable.reference.description;
+            m_controlsLabel.text = selectable.reference.instruction;
         }
 
         private void Start()
         {
             m_skillList.InitializeList();
         }
+
     }
 }

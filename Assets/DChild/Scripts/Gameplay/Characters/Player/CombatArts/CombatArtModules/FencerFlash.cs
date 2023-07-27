@@ -37,6 +37,12 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
         private GameObject m_fxParent;
         [SerializeField, BoxGroup("FX")]
         private SpineFX m_fx;
+        [SerializeField, BoxGroup("FX")]
+        private ParticleSystem m_finalFlashGlowFX;
+        [SerializeField, BoxGroup("FX")]
+        private ParticleSystem m_finalFlashImpactFX;
+        [SerializeField, BoxGroup("FX")]
+        private ParticleSystem m_finalFlashDustFX;
 
         [SerializeField]
         private Vector2 m_pushForce;
@@ -254,6 +260,9 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             }
             m_fxParent.SetActive(true);
             m_fx.Play();
+            m_finalFlashGlowFX.Play();
+            m_finalFlashImpactFX.Play();
+            m_finalFlashDustFX.Play();
             //yield return new WaitForSeconds(m_dashDuration);
             m_physics.velocity = Vector2.zero;
             //m_fencerFlashAnimation.gameObject.SetActive(false);
@@ -269,6 +278,9 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
                     m_fx.Stop();
                     m_fxParent.SetActive(false);
                 }
+                m_finalFlashGlowFX.Stop();
+                m_finalFlashImpactFX.Stop();
+                m_finalFlashDustFX.Stop();
             }
             if (m_enemySensorRoutine != null)
             {

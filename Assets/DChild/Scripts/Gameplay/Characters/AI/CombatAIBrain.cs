@@ -37,7 +37,8 @@ namespace DChild.Gameplay.Characters.AI
 
         protected Restriction m_currentRestrictions;
 
-        public virtual void ForcePassiveIdle(bool value) {
+        public virtual void ForcePassiveIdle(bool value)
+        {
         }
 
         public virtual void SetTarget(IDamageable damageable, Character m_target = null)
@@ -102,7 +103,7 @@ namespace DChild.Gameplay.Characters.AI
             }
             else
             {
-                m_currentRestrictions |= Restriction.IgnoreTarget;
+                m_currentRestrictions &= ~Restriction.IgnoreTarget;
 
             }
         }
@@ -114,6 +115,7 @@ namespace DChild.Gameplay.Characters.AI
         {
             SetTarget(null);
         }
+
         public void SetPassive()
         {
             if (m_targetInfo.doesTargetExist == false)
@@ -126,15 +128,12 @@ namespace DChild.Gameplay.Characters.AI
             {
                 this.enabled = false;
             }
-                
         }
         public void SetActive()
         {
-            
-                m_aggroBoundary.gameObject.SetActive(true);
-                m_currentRestrictions &= ~Restriction.IgnoreTarget;
-                this.enabled = true;
- 
+            m_aggroBoundary.gameObject.SetActive(true);
+            m_currentRestrictions &= ~Restriction.IgnoreTarget;
+            this.enabled = true;
         }
 
         /// <summary>
@@ -156,7 +155,7 @@ namespace DChild.Gameplay.Characters.AI
             }
         }
 
-       
+
 
         protected void CustomTurn()
         {
@@ -273,6 +272,7 @@ namespace DChild.Gameplay.Characters.AI
                 m_targetInfo = new AITargetInfo();
             }
             base.Awake();
+            GameplaySystem.minionManager.Register(this);
             m_damageable.Destroyed += OnDestroyed;
 
             m_attacker = GetComponent<Attacker>();
@@ -292,14 +292,20 @@ namespace DChild.Gameplay.Characters.AI
             }
         }
 
-        private void OnEnable()
+        protected virtual void OnDisable()
         {
-            CombatAIManager.instance?.Add(this);
+            //Incase the ai is dead before scene change since OnDestroy is
+            //not being called if object is disabled
+            if (m_damageable.isAlive == false)
+            {
+                GameplaySystem.minionManager.Unregister(this);
+            }
         }
 
-        private void OnDisable()
+        protected void OnDestroy()
         {
-            CombatAIManager.instance?.Remove(this);
+            //Incase the ai is still alive when scene changes
+            GameplaySystem.minionManager.Unregister(this);
         }
 
         protected virtual void LateUpdate()
@@ -312,7 +318,7 @@ namespace DChild.Gameplay.Characters.AI
         }
 
         protected abstract void OnTargetDisappeared();
-    
+
 
 #if UNITY_EDITOR
         public Type aiDataType => m_data.GetType();

@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9058538712938073728}
   - component: {fileID: 8788184589190241473}
-  - component: {fileID: 6425464045699430795}
+  - component: {fileID: 5502835487768569921}
   - component: {fileID: 6840071391987766968}
   m_Layer: 11
   m_Name: ShadowCloud
@@ -29,6 +29,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -46,13 +47,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_centerMass: {fileID: 9058538712938073728}
-  m_data: {fileID: 0}
-  m_info:
-    damage: []
-    critChance: 0
-    critDamageModifier: 1
-    ignoreInvulnerability: 0
---- !u!114 &6425464045699430795
+  m_data: {fileID: 11400000, guid: bed70890de6c7704fb6da2fd82183b79, type: 2}
+  m_currentAttackInfo:
+    damage:
+      m_type: 256
+      m_value: 0
+    criticalDamageInfo:
+      chance: 0
+      damageModifier: 0
+    ignoreInvulnerability: 100
+    ignoresBlock: 1
+--- !u!114 &5502835487768569921
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -61,13 +66,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 4237873901794564633}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e1819101304e6a3479b6fb001626539e, type: 3}
+  m_Script: {fileID: 11500000, guid: 9d74578be2c646f438409c91e5fd4ee4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_collider2Ds:
-  - {fileID: 6840071391987766968}
-  m_invulnerabilityLevel: 0
-  m_damageReduction: 0
+  m_canDetectInteractables: 0
+  m_damageUniqueHitboxesOnly: 0
+  m_collisionRegistrator: {fileID: 0}
+  m_ignoreColliderList: []
 --- !u!61 &6840071391987766968
 BoxCollider2D:
   m_ObjectHideFlags: 0
