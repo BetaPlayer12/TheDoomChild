@@ -40,6 +40,8 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
         private Transform m_startPoint;
         [SerializeField, BoxGroup("Projectile")]
         private ProjectileInfo m_projectileInfo;
+        [SerializeField, BoxGroup("FX")]
+        private GameObject m_startFX;
 
         [SerializeField]
         private Vector2 m_pushForce;
@@ -115,6 +117,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             m_lightningSpearCooldownTimer = m_lightningSpearCooldown;
             m_lightningSpearMovementCooldownTimer = m_lightningSpearMovementCooldown;
             m_lightningSpearResetCooldownTimer = m_lightningSpearResetCooldown;
+            m_startFX.SetActive(true);
             //m_attacker.SetDamageModifier(m_slashComboInfo[m_currentSlashState].damageModifier * m_modifier.Get(PlayerModifier.AttackDamage)); //Temporary Disabled
         }
 
@@ -135,6 +138,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
         public void SummonLightning()
         {
+            m_startFX.SetActive(false);
             var instance = GameSystem.poolManager.GetPool<ProjectilePool>().GetOrCreateItem(m_projectileInfo.projectile);
             instance.transform.position = m_startPoint.position;
             instance.GetComponent<Attacker>().SetParentAttacker(m_attacker);
@@ -171,6 +175,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             {
                 m_hasExecuted = false;
                 //m_lightningSpearInfo.ShowCollider(false);
+                m_startFX.SetActive(false);
                 m_fxAnimator.Play("Buffer");
                 StopAllCoroutines();
                 m_physics.gravityScale = m_cacheGravity;

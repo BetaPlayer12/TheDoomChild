@@ -33,6 +33,22 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
         private RaySensor m_wallSensor;
         [SerializeField, BoxGroup("Sensors")]
         private RaySensor m_edgeSensor;
+        [SerializeField, BoxGroup("FX")]
+        private Animator m_finalSlashSwordGlowFXAnimator;
+        [SerializeField, BoxGroup("FX")]
+        private ParticleSystem m_swordSmokeTrail_FinalSlashFX;
+        [SerializeField, BoxGroup("FX")]
+        private AutoStopParticle m_autoStopParticle;
+        [SerializeField, BoxGroup("FX")]
+        private Animator m_finalSlashDustChargeFXAnimator;
+        [SerializeField, BoxGroup("FX")]
+        private GameObject m_finalSlashDustFeedbackFX;
+        [SerializeField, BoxGroup("FX")]
+        private Transform m_finalSlashDustFeedbackFXStartPoint;
+        [SerializeField, BoxGroup("FX")]
+        private Animator m_finalSlashHolderFXAnimator;
+        [SerializeField, BoxGroup("FX")]
+        private GameObject m_finalSlashImpactFX;
 
         [SerializeField]
         private Vector2 m_pushForce;
@@ -54,6 +70,14 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
         private bool m_hasExecuted;
 
         private Coroutine m_finalSlashChargingRoutine;
+        private Coroutine m_finalSlashEnemeyCheckRoutine;
+
+        public enum FinalSlashState
+        {
+            FinalSlash1,
+            FinalSlash2,
+            FinalSlash3,
+        }
 
         public override void Initialize(ComplexCharacterInfo info)
         {
@@ -85,6 +109,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
         public void Execute()
         {
             m_hasExecuted = true;
+            m_autoStopParticle.ForceStop(0);
             StopAllCoroutines();
             m_finalSlashChargingRoutine = StartCoroutine(FinalSlashChargingRoutine());
             m_state.waitForBehaviour = false;
@@ -98,6 +123,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             m_finalSlashCooldownTimer = m_finalSlashCooldown;
             m_finalSlashMovementCooldownTimer = m_finalSlashMovementCooldown;
             //m_attacker.SetDamageModifier(m_slashComboInfo[m_currentSlashState].damageModifier * m_modifier.Get(PlayerModifier.AttackDamage));
+            m_autoStopParticle.CheckEffect();
         }
 
         public void ExecuteDash()
@@ -136,6 +162,11 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
                 StopCoroutine(m_finalSlashChargingRoutine);
                 m_finalSlashChargingRoutine = null;
             }
+            if (m_finalSlashEnemeyCheckRoutine != null)
+            {
+                StopCoroutine(m_finalSlashEnemeyCheckRoutine);
+                m_finalSlashEnemeyCheckRoutine = null;
+            }
             m_animator.SetBool(m_finalSlashStateAnimationParameter, false);
             base.AttackOver();
         }
@@ -151,7 +182,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             {
                 m_hasExecuted = false;
                 m_finalSlashInfo.ShowCollider(false);
-                m_fxAnimator.Play("Buffer");
+                //m_fxAnimator.Play("Buffer");
                 m_characterState.isChargingFinalSlash = false;
                 StopAllCoroutines();
                 if (m_finalSlashChargingRoutine != null)
@@ -159,8 +190,15 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
                     StopCoroutine(m_finalSlashChargingRoutine);
                     m_finalSlashChargingRoutine = null;
                 }
+                if (m_finalSlashEnemeyCheckRoutine != null)
+                {
+                    StopCoroutine(m_finalSlashEnemeyCheckRoutine);
+                    m_finalSlashEnemeyCheckRoutine = null;
+                }
                 m_animator.SetBool(m_finalSlashStateAnimationParameter, false);
                 base.Cancel();
+                SetSwordGlowFXAnimator(false);
+                SetDustChargeFXAnimator(false);
             }
         }
 
@@ -169,8 +207,8 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             m_rigidBody.WakeUp();
             m_finalSlashInfo.ShowCollider(value);
             m_attackFX.transform.position = m_finalSlashInfo.fxPosition.position;
-            if (!value)
-                m_fxAnimator.Play("Buffer");
+            //if (!value)
+            //    m_fxAnimator.Play("Buffer");
         }
 
         public void HandleAttackTimer()
@@ -222,7 +260,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             }
             m_canDash = false;
             //m_animator.SetBool(m_finalSlashStateAnimationParameter, false);
-            m_fxAnimator.Play("SlashCombo2");
+            //m_fxAnimator.Play("SlashCombo2");
             //yield return new WaitForSeconds(m_dashDuration);
             m_physics.velocity = new Vector2(0, m_physics.velocity.y);
             m_animator.SetBool(m_finalSlashDashAnimationParameter, false);
@@ -239,5 +277,83 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
                 yield return null;
             }
         }
+
+        #region FX Animators
+        public void SetSwordGlowFXAnimator(bool state)
+        {
+            m_finalSlashSwordGlowFXAnimator.SetBool("isCharging", state);
+
+            m_swordSmokeTrail_FinalSlashFX.transform.localRotation = Quaternion.Euler(0, 0, m_character.facing == HorizontalDirection.Right ? 180f : 0f);
+            if (state)
+                m_swordSmokeTrail_FinalSlashFX.Play();
+            else
+                m_swordSmokeTrail_FinalSlashFX.Stop();
+        }
+
+        public void SetDustChargeFXAnimator(bool state)
+        {
+            m_finalSlashDustChargeFXAnimator.SetBool("Dust_isCharging", state);
+        }
+
+        public void SpawnDustFeedbackFX()
+        {
+            var instance = /*GameSystem.poolManager.GetPool<FXPool>().GetOrCreateItem(m_finalSlashDustFeedbackFX)*/Instantiate(m_finalSlashDustFeedbackFX);
+            //instance.GetComponent<ParticleSystem>().Clear();
+            instance.transform.position = m_finalSlashDustFeedbackFXStartPoint.position;
+            instance.transform.localScale = new Vector3(m_character.facing == HorizontalDirection.Right ? instance.transform.localScale.x : -instance.transform.localScale.x, instance.transform.localScale.y, instance.transform.localScale.z);
+            //m_finalSlashDustFeedbackFX.Play();
+        }
+
+        public void SetFinalSlashHolderFX(FinalSlashState state)
+        {
+            m_finalSlashEnemeyCheckRoutine = StartCoroutine(FinalSlashEnemyCheckRoutine());
+            switch (state)
+            {
+                case FinalSlashState.FinalSlash1:
+                    m_finalSlashHolderFXAnimator.SetTrigger("FinalSlash1");
+                    break;
+                case FinalSlashState.FinalSlash2:
+                    m_finalSlashHolderFXAnimator.SetTrigger("FinalSlash2");
+                    break;
+                case FinalSlashState.FinalSlash3:
+                    m_finalSlashHolderFXAnimator.SetTrigger("FinalSlash3");
+                    break;
+            }
+        }
+
+        private IEnumerator FinalSlashEnemyCheckRoutine()
+        {
+            bool hasSpawned = false;
+            while (true)
+            {
+                m_enemySensor.Cast();
+                if (m_enemySensor.isDetecting && !hasSpawned)
+                {
+                    var hits = m_enemySensor.GetHits();
+                    //var targetTransform = hits[1].transform;
+                    int hitID = 0;
+                    for (int i = 0; i < hits.Length; i++)
+                    {
+                        if (Vector2.Distance(m_character.centerMass.position, hits[i].transform.position) < 25f)
+                        {
+                            hitID = i;
+                        }
+                    }
+                    var target = /*m_enemySensor.isDetecting ? hits[0].point : Vector2.zero*/hits[hitID].point;
+                    //if (/*target != Vector2.zero &&*/ targetTransform.gameObject.layer == LayerMask.NameToLayer("Enemy"))
+                    //{
+                    //    hasSpawned = true;
+                    //    var instance = Instantiate(m_finalSlashImpactFX);
+                    //    instance.transform.position = target;
+                    //}
+                    hasSpawned = true;
+                    var instance = Instantiate(m_finalSlashImpactFX);
+                    instance.transform.position = target;
+                }
+                yield return null;
+            }
+            //yield return null;
+        }
+        #endregion
     }
 }
