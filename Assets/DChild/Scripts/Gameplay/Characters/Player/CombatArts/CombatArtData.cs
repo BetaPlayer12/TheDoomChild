@@ -22,11 +22,14 @@ namespace DChild.Gameplay.Characters.Players
         [SerializeField, ValueDropdown("GetCombatArtConfigrationClasses"), OnValueChanged("OverrideConfigurations")]
         private string m_configurationType;
 #endif
+        [SerializeField]
+        private string m_controls;
         [OdinSerialize, TableList(ShowIndexLabels = true), ListDrawerSettings(ShowIndexLabels = true)]
         private CombatArtLevelData[] m_levelDatas = new CombatArtLevelData[1];
 
         public CombatArt connectedCombatArt => m_ability;
         public string combatArtName => m_name;
+        public string controls => m_controls;
         public int maxLevel => m_levelDatas.Length;
 
         public CombatArtLevelData GetCombatArtLevelData(int index) => m_levelDatas[index - 1];

@@ -620,7 +620,7 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_Audiosource.Play();
             StopAllCoroutines();
             base.OnDestroyed(sender, eventArgs);
-            GameplaySystem.minionManager.Unregister(this);
+            
             m_stateHandle.OverrideState(State.WaitBehaviourEnd);
             if (m_bodylightningCoroutine != null)
             {
@@ -688,7 +688,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             //Debug.Log(m_info);
             base.Awake();
-            GameplaySystem.minionManager.Register(this);
+            
             //Debug.Log("ALCHEMIST BOT BASE AWAKE");
             m_patrolHandle.TurnRequest += OnTurnRequest;
             //m_flinchHandle.FlinchStart += OnFlinchStart;
