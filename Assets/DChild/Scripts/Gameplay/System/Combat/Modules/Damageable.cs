@@ -117,6 +117,12 @@ namespace DChild.Gameplay.Combat
             }
         }
 
+        [Button, ShowIf("isAlive"), HideInEditorMode]
+        public void KillSelf()
+        {
+            TakeDamage(999999999, DamageType.True);
+        }
+
 #if UNITY_EDITOR
         public void InitializeField(Transform centermass, Health health)
         {
@@ -129,11 +135,7 @@ namespace DChild.Gameplay.Combat
             m_resistance = resistance;
         }
 
-        [Button, ShowIf("isAlive"), HideInEditorMode]
-        public void KillSelf()
-        {
-            TakeDamage(999999999, DamageType.True);
-        }
+
 
         [Button, HideIf("isAlive"), HideInEditorMode]
         public void RessurectSelf()
