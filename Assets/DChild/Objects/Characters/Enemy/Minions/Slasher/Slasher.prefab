@@ -244,17 +244,17 @@ PrefabInstance:
     - target: {fileID: 3756872488131836482, guid: 581273cea94d1294a9c56f1ba54042dc,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 22.2
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3756872488131836482, guid: 581273cea94d1294a9c56f1ba54042dc,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -54.77
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3756872488131836482, guid: 581273cea94d1294a9c56f1ba54042dc,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 1.21875
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3756872488131836482, guid: 581273cea94d1294a9c56f1ba54042dc,
         type: 3}
@@ -387,12 +387,14 @@ MonoBehaviour:
   m_animation: {fileID: 4434025474834369150}
   m_data: {fileID: 11400000, guid: b6b0bd9ea39b8064db2f68860cb9569c, type: 2}
   m_damageable: {fileID: 1997578263670825368}
-  m_centerMass: {fileID: 7306885742713165632}
+  m_centerMass: {fileID: 106599590587499099}
   m_aggroBoundary: {fileID: 6958521874365384361}
   m_statsData: {fileID: 11400000, guid: 51ebd0db1a006c940baba30eda945e8b, type: 2}
   m_spineEventListener: {fileID: 2019980391024246571}
   m_hitbox: {fileID: 4743552571892595807}
   m_selfCollider: {fileID: 1524768430028350043}
+  m_rigidbody2D: {fileID: 5178636483543984912}
+  m_bounce: {fileID: 6200000, guid: c33f5add12ae17544a83d5e554c426d5, type: 2}
   m_turnHandle: {fileID: 4086636216859260826}
   m_movement: {fileID: 2019980391893699015}
   m_patrolHandle: {fileID: 2019980391893699012}
@@ -417,7 +419,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c106d3ee04e320140b205c0d1ae65bb4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_centerMass: {fileID: 7306885742713165632}
+  m_centerMass: {fileID: 106599590587499099}
   m_health: {fileID: 2406557309819951757}
   m_resistance: {fileID: 8944505779591642002}
 --- !u!114 &2019980391024246568
@@ -495,7 +497,7 @@ MonoBehaviour:
   m_simulateGravity: 1
   m_gravity:
     m_gravityScale: 25
-    m_direction: {x: 0, y: -1}
+    m_direction: {x: -0.00000004371139, y: 1}
     m_angle: -90
     m_drawDirection: 0
   m_useLinearDrag: 0
@@ -512,8 +514,8 @@ MonoBehaviour:
     m_detector: {fileID: 318518494170057319}
   m_calculateGroundAngle: 1
   m_acceptableWalkableAngle:
-    m_min: 0
-    m_max: 0
+    m_min: -90
+    m_max: 90
   m_legCollision: {fileID: 318518494170057319}
   m_legCollider: {fileID: 318518494170057318}
   m_legColliderLayerMask:
@@ -546,7 +548,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_height: 0.5
-  m_centerMass: {fileID: 7306885742713165632}
+  m_centerMass: {fileID: 106599590587499099}
   m_isolatedObject: {fileID: 2019980391024246568}
   m_physics: {fileID: 3258559902734264145}
   m_colliders: {fileID: 3471262610483700022}
@@ -569,6 +571,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_animationTracks: []
   m_skeletonAnimation: {fileID: 318518496062277309}
+--- !u!114 &4740519941406214091
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8188640386586711721}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dda21921f0a470940b48b3b72f2c67bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_data: {fileID: 11400000, guid: c9ffb1b1c5c3b0b49bedda684415046a, type: 2}
 --- !u!114 &7235581620209251997
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -594,11 +609,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e10454193b54c9a4eb8bfb67b80c746d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_centerMass: {fileID: 7306885742713165632}
+  m_centerMass: {fileID: 106599590587499099}
   m_data: {fileID: 11400000, guid: 46ffef3ecbf3f6c4daa03e593af01abe, type: 2}
   m_currentAttackInfo:
     damage:
-      m_type: 0
+      m_type: 1
       m_value: 0
     criticalDamageInfo:
       chance: 0
@@ -818,6 +833,16 @@ PrefabInstance:
       propertyPath: m_LocalRotation.z
       value: -0.6045963
       objectReference: {fileID: 0}
+    - target: {fileID: 8893499019818281830, guid: cd3c35fb721b21f4a93a432657af813c,
+        type: 3}
+      propertyPath: m_Offset.x
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 8893499019818281830, guid: cd3c35fb721b21f4a93a432657af813c,
+        type: 3}
+      propertyPath: m_Offset.y
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 9099065053583549581, guid: cd3c35fb721b21f4a93a432657af813c,
         type: 3}
       propertyPath: rb
@@ -825,6 +850,12 @@ PrefabInstance:
       objectReference: {fileID: 5178636483543984912}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cd3c35fb721b21f4a93a432657af813c, type: 3}
+--- !u!4 &106599590587499099 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7557768256879940915, guid: cd3c35fb721b21f4a93a432657af813c,
+    type: 3}
+  m_PrefabInstance: {fileID: 7608868870558242664}
+  m_PrefabAsset: {fileID: 0}
 --- !u!70 &318518494170057318 stripped
 CapsuleCollider2D:
   m_CorrespondingSourceObject: {fileID: 7922881840950598926, guid: cd3c35fb721b21f4a93a432657af813c,
@@ -927,12 +958,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 11a5cea4c16e7c4478a55620f5e666e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!4 &7306885742713165632 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 936577413577310248, guid: cd3c35fb721b21f4a93a432657af813c,
-    type: 3}
-  m_PrefabInstance: {fileID: 7608868870558242664}
-  m_PrefabAsset: {fileID: 0}
 --- !u!61 &7511733421361571539 stripped
 BoxCollider2D:
   m_CorrespondingSourceObject: {fileID: 119108256114766267, guid: cd3c35fb721b21f4a93a432657af813c,

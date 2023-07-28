@@ -735,7 +735,10 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 m_whip?.ResetAerialGravityControl();
                 m_whip?.ResetAirAttacks();
                 m_devilWings?.EnableLevitate();
-                m_airSlashCombo?.ResetAirSlashCombo();
+                if (!m_airSlashCombo.CanAirSlashCombo())
+                {
+                    m_airSlashCombo?.ResetAirSlashCombo();
+                }
                 #region Combat Arts Cooldowns
 
                 if (m_doomsdayKong.CanDoomsdayKong() == false)
@@ -905,7 +908,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
                 if (m_state.canAttack)
                 {
-                    if (m_input.airSlashComboPressed && m_airSlashCombo.CanAirSlashCombo() && m_abilities.IsAbilityActivated(CombatArt.AirSlashCombo))
+                    if (m_input.airSlashComboPressed && m_airSlashCombo.CanAirSlashCombo() /*&& m_abilities.IsAbilityActivated(CombatArt.AirSlashCombo)*/)
                     {
                         m_activeDash?.Cancel();
 
@@ -958,7 +961,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                         }
                         return;
                     }
-                    else if (m_input.airSlashComboPressed && m_airSlashCombo.CanAirSlashCombo() && !m_input.reaperHarvestPressed && !m_input.diagonalSwordDashPressed)
+                    else if (m_input.airSlashComboPressed && m_airSlashCombo.CanAirSlashCombo() && !m_input.reaperHarvestPressed && !m_input.diagonalSwordDashPressed /*&& m_abilities.IsAbilityActivated(CombatArt.AirSlashCombo)*/)
                     {
                         m_basicSlashes?.Cancel();
                         m_whip?.Cancel();
@@ -1081,7 +1084,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
                         return;
                     }
-                    else if (m_input.lightningSpearPressed && m_lightningSpear.CanLightningSpear() && m_abilities.IsAbilityActivated(CombatArt.LightningSpear))
+                    else if (m_input.lightningSpearPressed && m_lightningSpear.CanLightningSpear() && (m_abilities.IsAbilityActivated(CombatArt.LightningSpear) || m_abilities.IsAbilityActivated(CombatArt.AirSlashCombo)))
                     {
                         if (m_state.isInShadowMode == false)
                         {
@@ -1258,7 +1261,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                         m_movement.UpdateFaceDirection(m_input.horizontalInput);
                     }
 
-                    m_projectileThrow.MoveAim(m_input.m_mouseDelta.normalized, Camera.main.ScreenToWorldPoint(m_input.m_mousePosition));
+                    m_projectileThrow.MoveAim(m_input.m_mouseDelta.normalized, GameplaySystem.cinema.mainCamera.ScreenToWorldPoint(m_input.m_mousePosition));
 
                     if (m_projectileThrow?.HasReachedVerticalThreshold() == true)
                     {

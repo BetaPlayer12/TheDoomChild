@@ -139,9 +139,6 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_edgeSensor;
 
-        [SerializeField, TabGroup("Material")]
-        private PhysicsMaterial2D m_pMaterial;
-
         [ShowInInspector]
         private StateHandle<State> m_stateHandle;
         [ShowInInspector]
@@ -263,7 +260,7 @@ namespace DChild.Gameplay.Characters.Enemies
             StopAllCoroutines();
             m_character.physics.UseStepClimb(false);
             base.OnDestroyed(sender, eventArgs);
-            GameplaySystem.minionManager.Unregister(this);
+            
             m_rb2d.sharedMaterial = null;
             m_movement.Stop();
             m_selfCollider.enabled = false;
@@ -360,7 +357,7 @@ namespace DChild.Gameplay.Characters.Enemies
         protected override void Awake()
         {
             base.Awake();
-            GameplaySystem.minionManager.Register(this);
+            
             m_patrolHandle.TurnRequest += OnTurnRequest;
             m_attackHandle.AttackDone += OnAttackDone;
             m_turnHandle.TurnDone += OnTurnDone;

@@ -174,7 +174,7 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("AttackHitbox")]
         private GameObject m_attackHitbox;
         [SerializeField, TabGroup("AttackHitbox")]
-        private GameObject m_armHitbox;
+        private List<GameObject> m_fistHitboxes;
 
         [SerializeField, TabGroup("Cannon Values")]
         private float m_speed;
@@ -301,7 +301,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private void OnAttackDone(object sender, EventActionArgs eventArgs)
         {
             GetComponent<IsolatedCharacterPhysics2D>().UseStepClimb(true);
-            m_armHitbox.SetActive(true);
+            for (int i = 0; i < m_fistHitboxes.Count; i++)
+                m_fistHitboxes[i].SetActive(false);
             m_animation.DisableRootMotion();
             m_stateHandle.OverrideState(State.ReevaluateSituation);
         }
@@ -365,7 +366,7 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_Audiosource.Play();
             StopAllCoroutines();
             base.OnDestroyed(sender, eventArgs);
-            GameplaySystem.minionManager.Unregister(this);
+            
             m_selfCollider.enabled = false;
             m_movement.Stop();
         }
@@ -421,7 +422,7 @@ namespace DChild.Gameplay.Characters.Enemies
         protected override void Awake()
         {
             base.Awake();
-            GameplaySystem.minionManager.Register(this);
+            
             m_patrolHandle.TurnRequest += OnTurnRequest;
             m_attackHandle.AttackDone += OnAttackDone;
             m_turnHandle.TurnDone += OnTurnDone;
@@ -436,8 +437,6 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void Update()
         {
-            //Debug.Log("Wall Sensor is " + m_wallSensor.isDetecting);
-            //Debug.Log("Edge Sensor is " + m_edgeSensor.isDetecting);
             switch (m_stateHandle.currentState)
             {
                 case State.Detect:
@@ -457,7 +456,8 @@ namespace DChild.Gameplay.Characters.Enemies
                     break;
 
                 case State.Patrol:
-
+                    m_groundSensor.Cast();
+                    m_wallSensor.Cast();
                     if (!m_wallSensor.isDetecting && m_groundSensor.isDetecting)
                     {
                         m_turnState = State.ReevaluateSituation;
@@ -482,20 +482,19 @@ namespace DChild.Gameplay.Characters.Enemies
 
                 case State.Attacking:
                     m_stateHandle.Wait(State.ReevaluateSituation);
-
-
+                    
+                    for (int i = 0; i < m_fistHitboxes.Count; i++)
+                        m_fistHitboxes[i].SetActive(true);
                     switch (m_attackDecider.chosenAttack.attack)
                     {
                         case Attack.Pound:
-                            Debug.Log("Pound Attack");
                             //m_animation.EnableRootMotion(true, false);
                             m_attackHandle.ExecuteAttack(m_info.poundAttack.animation, m_info.idleAnimation.animation);
                             break;
                         case Attack.Punch:
-                            Debug.Log("Punch Attack");
+                            m_wallSensor.Cast();
                             if (!m_wallSensor.isDetecting)
                             {
-                                m_armHitbox.SetActive(false);
                                 //m_animation.EnableRootMotion(true, false);
                                 m_attackHandle.ExecuteAttack(m_info.punchAttack.animation, m_info.idleAnimation.animation);
                             }
@@ -505,7 +504,6 @@ namespace DChild.Gameplay.Characters.Enemies
                             }
                             break;
                         case Attack.OraOra:
-                            Debug.Log("Oraora Attack");
                             //m_animation.EnableRootMotion(true, false);
                             m_attackHandle.ExecuteAttack(m_info.oraOraAttack.animation, m_info.idleAnimation.animation);
                             break;
@@ -515,11 +513,10 @@ namespace DChild.Gameplay.Characters.Enemies
                     break;
                 case State.Chasing:
                     {
-                        Debug.Log("Is Facing Target: " + IsFacingTarget());
                         if (IsFacingTarget())
                         {
-                            Debug.Log("ATTACKING PLAYER");
                             m_attackDecider.DecideOnAttack();
+                            m_wallSensor.Cast();
                             if (m_attackDecider.hasDecidedOnAttack && IsTargetInRange(m_attackDecider.chosenAttack.range) && !m_wallSensor.allRaysDetecting)
                             {
                                 GetComponent<IsolatedCharacterPhysics2D>().UseStepClimb(false);
@@ -530,6 +527,8 @@ namespace DChild.Gameplay.Characters.Enemies
                             }
                             else
                             {
+                                m_groundSensor.Cast();
+                                m_edgeSensor.Cast();
                                 if (!m_wallSensor.isDetecting && m_groundSensor.isDetecting && m_edgeSensor.isDetecting)
                                 {
                                     m_selfCollider.enabled = false;

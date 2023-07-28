@@ -42,7 +42,7 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField]
             private float m_targetDistanceTolerance;
             public float targetDistanceTolerance => m_targetDistanceTolerance;
-            
+
             [SerializeField, ValueDropdown("GetAnimations")]
             private string m_idleAnimation;
             public string idleAnimation => m_idleAnimation;
@@ -126,7 +126,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private StateHandle<State> m_stateHandle;
 
         //private State m_turnState;
-        
+
         private float m_currentCD;
         private float m_currentMoveSpeed;
         private float m_currentFullCD;
@@ -141,7 +141,6 @@ namespace DChild.Gameplay.Characters.Enemies
 
         public void SummonAt(Vector2 position, AITargetInfo target)
         {
-            //Debug.Log("SUMMON KING PUS BLOB ");
             enabled = false;
             m_targetInfo = target;
             transform.position = new Vector2(m_master.position.x, m_master.position.y + 15f);
@@ -190,6 +189,7 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_Audiosource.clip = m_DeadClip;
             //m_Audiosource.Play();
             base.OnDestroyed(sender, eventArgs);
+            StopAllCoroutines();
             m_hitbox.Disable();
             m_movement.Stop();
             StartCoroutine(ExplodeRoutine(false));
@@ -262,6 +262,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         public void Explode()
         {
+            StopAllCoroutines();
             StartCoroutine(ExplodeRoutine(false));
         }
 
@@ -275,9 +276,11 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 yield return new WaitForSeconds(0.6f);
                 m_healFX.Play();
-                var healPercentage = (((float)m_health.currentValue / m_health.maxValue) + m_info.healPercentage);
+                var healPercentage = (((float)m_master.GetComponentInChildren<Health>().currentValue / m_master.GetComponentInChildren<Health>().maxValue) + m_info.healPercentage);
                 //m_health.SetHealthPercentage(0f);
                 m_master.GetComponentInChildren<Health>().SetHealthPercentage(healPercentage);
+                if (m_master.GetComponentInChildren<Health>().currentValue >= m_master.GetComponentInChildren<Health>().maxValue)
+                    m_master.GetComponentInChildren<Health>().SetHealthPercentage(1);
             }
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.deathAnimation);
             m_animation.DisableRootMotion();
@@ -306,8 +309,6 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void Update()
         {
-            //Debug.Log("Wall Sensor is " + m_wallSensor.isDetecting);
-            //Debug.Log("Ground Sensor is " + m_groundSensor.isDetecting);
             switch (m_stateHandle.currentState)
             {
                 case State.Idle:
@@ -323,6 +324,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     {
                         if (Vector2.Distance(m_master.position, transform.position) <= m_info.targetDistanceTolerance)
                         {
+                            StopAllCoroutines();
                             StartCoroutine(ExplodeRoutine(true));
                         }
                         else
