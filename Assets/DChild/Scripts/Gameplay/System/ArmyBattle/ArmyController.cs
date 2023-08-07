@@ -23,8 +23,8 @@ namespace DChild.Gameplay.ArmyBattle
         public void DisposeCurrentAttack()
         {
             m_currentAttack = new ArmyAttack(UnitType.None, 0, 0);
-            m_currentAttackGroup.SetAvailability(false);
-            m_currentAttackGroup = null;
+            /*m_currentAttackGroup.SetAvailability(false);
+            m_currentAttackGroup = null;*/
         }
 
         public void ChooseRockAttack()
@@ -70,7 +70,7 @@ namespace DChild.Gameplay.ArmyBattle
             }
         }
 
-        protected ArmyAttack CreateAttack(ArmyAttackGroup armyAttackGroup) => new ArmyAttack(armyAttackGroup.unitType, armyAttackGroup.GetTotalPower(), m_controlledArmy.powerModifier.GetModifier(armyAttackGroup.unitType));
+        protected ArmyAttack CreateAttack(ArmyAttackGroup armyAttackGroup) => new ArmyAttack(armyAttackGroup.unitType, armyAttackGroup.GetTotalPower(), m_controlledArmy.powerModifier.GetModifier(armyAttackGroup.unitType));  
 
         protected ArmyAttackEvent CreateAttackEvent(ArmyAttack armyAttack) => new ArmyAttackEvent(armyAttack);
     }

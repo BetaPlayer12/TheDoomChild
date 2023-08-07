@@ -21,6 +21,24 @@ namespace DChild.Gameplay.ArmyBattle
         private int m_power = 1;
 
 
+        public ArmyCharacter()
+        {
+            m_ID = -1;
+            m_image = null;
+            m_troopCount = -1;
+            m_power = -1;
+            m_name = null;
+        }
+
+        public ArmyCharacter(int iD, Sprite image, string name, int troopCount, int power)
+        {
+            m_ID = iD;
+            m_image = image;
+            m_name = name;
+            m_troopCount = troopCount;
+            m_power = power;
+        }
+
         public int ID => m_ID;
         public Sprite image => m_image;
         public string name => m_name;

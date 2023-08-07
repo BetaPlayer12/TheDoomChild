@@ -4,14 +4,21 @@ namespace DChild.Gameplay.ArmyBattle
 {
     public class ArmyAI : ArmyController
     {
-        public void ChooseAttack()
+        [SerializeField]
+        private ArmyAIData m_AiAttackData;
+        public void ChooseAttack(int round)
         {
-            UnitType chosenAttackType;
-            do
-            {
-                chosenAttackType = (UnitType)Random.Range(0, 3);
-            } while (controlledArmy.HasAvailableAttackGroup(chosenAttackType) == false);
-            ChooseAttack(chosenAttackType);
+            var chosenArmyGroup = m_AiAttackData.ChooseAttack(round);
+            m_currentAttackGroup = new ArmyAttackGroup(chosenArmyGroup);
+            m_currentAttack = CreateAttack(m_currentAttackGroup);
+            SendAttackChosenEvent(CreateAttackEvent(m_currentAttack));
         }
+        /* UnitType chosenAttackType;
+         do
+         {
+             chosenAttackType = (UnitType)Random.Range(0, 3);
+         } while (controlledArmy.HasAvailableAttackGroup(chosenAttackType) == false);
+         ChooseAttack(chosenAttackType);*/
+
     }
 }
