@@ -28,14 +28,24 @@ namespace DChild.Gameplay.Characters.Enemies
         private string m_deathAnimation;
         [SerializeField, MinValue(0)]
         private float m_deathDuration;
+        [SerializeField]
+        private Collider2D m_itemlocked;
 
         private void Awake()
         {
+            if (m_itemlocked != null)
+            {
+                m_itemlocked.enabled = false;
+            }
             m_damageable.Destroyed += OnBlobDie;
         }
 
         private void OnBlobDie(object sender, EventActionArgs eventArgs)
         {
+            if (m_itemlocked != null)
+            {
+                m_itemlocked.enabled = true;
+            }
             StartCoroutine(ReviveBlobRoutine());
         }
 
@@ -51,6 +61,10 @@ namespace DChild.Gameplay.Characters.Enemies
             enabled = true;
             m_health.SetHealthPercentage(1f);
             m_animator.SetAnimation(0, m_idleAnimation, true);
+            if (m_itemlocked != null)
+            {
+                m_itemlocked.enabled = false;
+            }
         }
     }
 
