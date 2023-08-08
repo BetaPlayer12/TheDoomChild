@@ -319,7 +319,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.32755852, y: -0.057567775}
+  m_Offset: {x: 0.6546901, y: -0.35996485}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -330,7 +330,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 4.411437, y: 3.833603}
+  m_Size: {x: 1.7440568, y: 2.87143}
   m_EdgeRadius: 0
 --- !u!114 &7754703281515078615
 MonoBehaviour:
@@ -382,7 +382,6 @@ GameObject:
   m_Component:
   - component: {fileID: 5396334746973774712}
   - component: {fileID: 1135544614571161575}
-  - component: {fileID: 2447565870395854882}
   m_Layer: 13
   m_Name: Behaviour
   m_TagString: Untagged
@@ -429,25 +428,6 @@ MonoBehaviour:
   m_idleAnimation: Idle
   m_enableFlinchColor: 0
   m_flinchColorAnimation: beehive_flinch
---- !u!114 &2447565870395854882
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8472500143501934404}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5830f2bbb3b8ac149905b0850dbf3c4f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_source: {fileID: 1988430908825648688}
-  m_animator: {fileID: 3143180933914944205}
-  m_animation: Death
-  m_bodyDuration:
-    m_startTime: 4500
-  m_fx: []
-  m_destroySource: 0
 --- !u!1 &8766755589550986680
 GameObject:
   m_ObjectHideFlags: 0
@@ -465,6 +445,7 @@ GameObject:
   - component: {fileID: 9119233620816102080}
   - component: {fileID: 4217193193957005296}
   - component: {fileID: 4627591895847382272}
+  - component: {fileID: 1049549163803894551}
   m_Layer: 13
   m_Name: BlobOrange
   m_TagString: Character
@@ -630,3 +611,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_data: {fileID: 11400000, guid: c9ffb1b1c5c3b0b49bedda684415046a, type: 2}
+--- !u!114 &1049549163803894551
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8766755589550986680}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 183f7196211992548bceff9ec26cc512, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_damageable: {fileID: 1988430908825648688}
+  m_hitbox: {fileID: 7754703281515078615}
+  m_health: {fileID: 3815314144560908931}
+  m_animator: {fileID: 3143180933914944205}
+  m_recoverAnimation: Recover
+  m_idleAnimation: Idle
+  m_deathAnimation: Death
+  m_deathDuration: 5
