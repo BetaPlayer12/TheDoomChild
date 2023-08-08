@@ -411,6 +411,11 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_hellTrident.Summon();
         }
 
+        public void HellTridentPlaySpawnFX()
+        {
+            m_hellTrident.PlaySpawnFX();
+        }
+
         public void HellTridentEnd()
         {
             //m_hellTrident?.AttackOver();
