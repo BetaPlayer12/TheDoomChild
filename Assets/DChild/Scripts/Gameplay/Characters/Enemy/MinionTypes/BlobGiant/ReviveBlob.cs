@@ -26,6 +26,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private string m_idleAnimation;
         [SerializeField, Spine.Unity.SpineAnimation]
         private string m_deathAnimation;
+        [SerializeField]
+        private ParticleSystem m_deathVFX;
         [SerializeField, MinValue(0)]
         private float m_deathDuration;
         [SerializeField]
@@ -52,6 +54,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator ReviveBlobRoutine()
         {
             m_hitbox.Disable();
+            m_deathVFX.Play();
             m_animator.SetAnimation(0, m_deathAnimation, false);
             yield return new WaitForAnimationComplete(m_animator.animationState, m_deathAnimation);
             yield return new WaitForSeconds(m_deathDuration);
