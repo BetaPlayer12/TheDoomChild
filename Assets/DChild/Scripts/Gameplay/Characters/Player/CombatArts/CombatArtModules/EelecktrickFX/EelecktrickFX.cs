@@ -35,6 +35,10 @@ public class EelecktrickFX : MonoBehaviour
     private string m_eelecktrickLoopAnimation;
     [SerializeField, Spine.Unity.SpineAnimation(dataField = "m_skeletonAnimation"), BoxGroup("Animation")]
     private string m_eelecktrickEndAnimation;
+    [SerializeField, BoxGroup("Audio")]
+    private AudioSource m_startAudio;
+    [SerializeField, BoxGroup("Audio")]
+    private AudioSource m_impactAudio;
 
     private bool m_hasExploded;
 
@@ -56,6 +60,7 @@ public class EelecktrickFX : MonoBehaviour
     private IEnumerator StartAnimationRoutine()
     {
         yield return new WaitForSeconds(0.1f);
+        m_startAudio.Play();
         this.transform.localScale = Vector3.one;
         m_spine.SetEmptyAnimation(0, 0);
         m_spine.SetAnimation(0, m_eelecktrickStartAnimation, false);
@@ -73,6 +78,7 @@ public class EelecktrickFX : MonoBehaviour
         yield return new WaitForAnimationComplete(m_spine.animationState, m_eelecktrickEndAnimation);
         m_hasExploded = true;
         m_impactFX.Play();
+        m_impactAudio.Play();
         for (int i = 0; i < m_trailFXs.Count; i++)
         {
             m_trailFXs[i].Stop();
