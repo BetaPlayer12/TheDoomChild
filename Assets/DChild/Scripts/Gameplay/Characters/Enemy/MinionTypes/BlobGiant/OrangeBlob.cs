@@ -10,7 +10,7 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Characters.Enemies
 {
-    public class ReviveBlob : MonoBehaviour
+    public class OrangeBlob : MonoBehaviour
     {
         [SerializeField]
         private Damageable m_damageable;
@@ -24,6 +24,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private string m_recoverAnimation;
         [SerializeField, Spine.Unity.SpineAnimation]
         private string m_idleAnimation;
+        [SerializeField, Spine.Unity.SpineAnimation]
+        private string m_idleAnimationTwo;
         [SerializeField, Spine.Unity.SpineAnimation]
         private string m_deathAnimation;
         [SerializeField]
@@ -40,6 +42,25 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_itemlocked.enabled = false;
             }
             m_damageable.Destroyed += OnBlobDie;
+        }
+
+        private void Start()
+        {
+            SetRandomIdleAnimation();
+        }
+
+        private void SetRandomIdleAnimation()
+        {
+            int randomNumber = UnityEngine.Random.Range(1, 3);
+
+            if (randomNumber == 1)
+            {
+                m_animator.SetAnimation(0, m_idleAnimation, true);
+            }
+            else
+            {
+                m_animator.SetAnimation(0, m_idleAnimationTwo, true);
+            }
         }
 
         private void OnBlobDie(object sender, EventActionArgs eventArgs)
@@ -60,10 +81,10 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return new WaitForSeconds(m_deathDuration);
             m_animator.SetAnimation(0, m_recoverAnimation, false);
             yield return new WaitForAnimationComplete(m_animator.animationState, m_recoverAnimation);
+            SetRandomIdleAnimation();
             m_hitbox.Enable();
             enabled = true;
             m_health.SetHealthPercentage(1f);
-            m_animator.SetAnimation(0, m_idleAnimation, true);
             if (m_itemlocked != null)
             {
                 m_itemlocked.enabled = false;
