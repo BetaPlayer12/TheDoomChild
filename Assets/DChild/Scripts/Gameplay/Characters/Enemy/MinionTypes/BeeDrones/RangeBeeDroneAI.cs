@@ -296,7 +296,7 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_Audiosource.Play();
            
             base.OnDestroyed(sender, eventArgs);
-            GameplaySystem.minionManager.Unregister(this);
+            
             m_agent.Stop();
         }
 
@@ -359,7 +359,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
            
             base.Awake();
-            GameplaySystem.minionManager.Register(this);
+            
             m_patrolHandle.TurnRequest += OnTurnRequest;
             m_flinchHandle.FlinchStart += OnFlinchStart;
             m_flinchHandle.FlinchEnd += OnFlinchEnd;

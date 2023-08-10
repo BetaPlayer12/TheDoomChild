@@ -74,6 +74,7 @@ namespace DChild.Gameplay.Essence
         protected override void OnPopDurationEnd(object sender, EventActionArgs eventArgs)
         {
             base.OnPopDurationEnd(sender, eventArgs);
+            m_collision.enabled = true;
             m_collision.isTrigger = true;
             if (m_isPopping == false && m_hasBeenPickUp)
             {
