@@ -36,6 +36,12 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
         private RaySensor m_edgeSensor;
         [SerializeField, BoxGroup("Animations")]
         private ReaperHarvestAnimation m_reaperHarvestAnimation;
+        [SerializeField, BoxGroup("FX")]
+        private Animator m_reaperHarvestLineStreakFXAnimator;
+        [SerializeField, BoxGroup("FX")]
+        private ParticleSystem m_reaperHarvestAfterImageFX;
+        [SerializeField, BoxGroup("FX")]
+        private GameObject m_reaperHarvestImpactFX;
         [SerializeField]
         private Hitbox m_hitbox;
 
@@ -156,6 +162,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
                 m_hitbox.Enable();
             }
             m_animator.SetBool(m_reaperHarvestStateAnimationParameter, false);
+            m_reaperHarvestAfterImageFX.Stop();
             base.Cancel();
         }
 
@@ -214,8 +221,12 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
                     break;
             }
             //m_physics.AddForce(new Vector2(m_character.facing == HorizontalDirection.Right ? m_pushForce.x : -m_pushForce.x, m_pushForce.y), ForceMode2D.Impulse);
+            m_reaperHarvestLineStreakFXAnimator.SetTrigger("LineStreakTrigger");
+            m_reaperHarvestAfterImageFX.Play();
+            m_reaperHarvestAfterImageFX.transform.localScale = new Vector3(m_character.facing == HorizontalDirection.Right ? 1 : -1, 1, 1);
             m_hitbox.Disable();
             var timer = m_dashDuration;
+            bool hasSpawned = false;
             while (timer >= 0 && !m_wallSensor.allRaysDetecting /*&& m_edgeSensor.isDetecting*/)
             {
                 m_wallSensor.Cast();
@@ -231,8 +242,28 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
                 }
                 if (LookTransform(m_character.centerMass, 5f)?.GetComponent<LocationSwitcher>())
                     timer = -1;
+
+                m_enemySensor.Cast();
+                if (m_enemySensor.isDetecting && !hasSpawned)
+                {
+                    var hits = m_enemySensor.GetHits();
+                    //var targetTransform = hits[1].transform;
+                    int hitID = 0;
+                    for (int i = 0; i < hits.Length; i++)
+                    {
+                        if (Vector2.Distance(m_character.centerMass.position, hits[i].transform.position) < 25f)
+                        {
+                            hitID = i;
+                        }
+                    }
+                    var target = hits[hitID].point;
+                    hasSpawned = true;
+                    var instance = Instantiate(m_reaperHarvestImpactFX);
+                    instance.transform.position = target;
+                }
                 yield return null;
             }
+            m_reaperHarvestAfterImageFX.Stop();
             //yield return new WaitForSeconds(m_dashDuration);
             if (!LookTransform(m_character.centerMass, 5f)?.GetComponent<LocationSwitcher>() && m_hasExecuted)
             {
