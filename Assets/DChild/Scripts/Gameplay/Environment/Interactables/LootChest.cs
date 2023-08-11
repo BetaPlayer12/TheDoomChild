@@ -96,9 +96,10 @@ namespace DChild.Gameplay.Environment
         private void ShowOpenChestVisual()
         {
             m_visuals.Open();
+            GetComponent<VFXSpawner>().Spawn();
             GetComponent<Collider2D>().enabled = false;
             GetComponent<EventSounds>().ActivateCodeTriggeredEvent1();
-            GetComponent<VFXSpawner>().Spawn();
+            
         }
 
         private void GivePlayerLoot()
