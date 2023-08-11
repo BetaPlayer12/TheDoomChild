@@ -11,6 +11,8 @@ namespace DChild.Gameplay.UI.PrimarySkills
         private TextMeshProUGUI m_descriptionLabel;
         [SerializeField]
         private TextMeshProUGUI m_controlsLabel;
+        [SerializeField]
+        private TextMeshProUGUI m_skillNameLabel;
 
         public void UpdateSelectables()
         {
@@ -21,6 +23,7 @@ namespace DChild.Gameplay.UI.PrimarySkills
         {
             m_descriptionLabel.text = selectable.reference.description;
             m_controlsLabel.text = selectable.reference.instruction;
+            m_skillNameLabel.text = selectable.reference.skillName;
         }
 
         private void Start()
