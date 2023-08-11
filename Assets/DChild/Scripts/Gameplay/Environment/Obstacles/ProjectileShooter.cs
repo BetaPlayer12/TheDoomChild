@@ -8,6 +8,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+using UnityEngine.Events;
 
 namespace DChild.Gameplay.Environment.Obstacles
 {
@@ -62,6 +63,9 @@ namespace DChild.Gameplay.Environment.Obstacles
         private ProjectileLaunchHandle m_launcher;
         private FXSpawnHandle<FX> m_FXSpawner;
 
+        [SerializeField]
+        private UnityEvent m_onShoot;
+
         public float fireDelay => m_fireDelay;
 
         [Button]
@@ -85,6 +89,7 @@ namespace DChild.Gameplay.Environment.Obstacles
                     }
                     break;
             }
+            m_onShoot?.Invoke();
         }
 
         private IEnumerator DelayShootRoutine()
