@@ -70,6 +70,7 @@ namespace DChild.Gameplay.Characters.Players
             LightningSpear,
             IcarusWings,
             AirSlashRange,
+            FinalSlashLevel,
         }
 
         [SerializeField]

@@ -377,6 +377,7 @@ MonoBehaviour:
   m_finalSlashCooldown: 0.25
   m_finalSlashMovementCooldown: 0.2
   m_dashDuration: 0.5
+  m_finalSlashLevel: 3
   m_finalSlashInfo:
     m_fx: {fileID: 0}
     m_fxPosition: {fileID: 4294471023827248790}
@@ -384,12 +385,14 @@ MonoBehaviour:
     m_damageModifier: 1
     m_nextAttackDelay: 0
   m_characterState: {fileID: 4875321966015514855}
+  m_animation: {fileID: 6877241808018165825}
   m_character: {fileID: 4294471023827248791}
   m_physics: {fileID: 4294471023827248786}
   m_enemySensor: {fileID: 6685095848874862076}
   m_wallSensor: {fileID: 2702825902955571488}
   m_edgeSensor: {fileID: 8774030571759925288}
   m_finalSlashSwordGlowFXAnimator: {fileID: 6117420036138166610}
+  m_finalSlashLevelFX: {fileID: 6117420036823162403}
   m_swordSmokeTrail_FinalSlashFX: {fileID: 6117420037796812653}
   m_autoStopParticle: {fileID: 6117420037796812650}
   m_finalSlashDustChargeFXAnimator: {fileID: 2939138462607109207}
@@ -26058,6 +26061,7 @@ GameObject:
   - component: {fileID: 7901103180891829378}
   - component: {fileID: 4480755254296912580}
   - component: {fileID: 1179955367486266678}
+  - component: {fileID: 6877241808018165825}
   m_Layer: 8
   m_Name: Zee
   m_TagString: Character
@@ -26501,6 +26505,20 @@ MonoBehaviour:
   m_character: {fileID: 4294471023827248791}
   m_skeletonAnimation: {fileID: 4084513133358244869}
   m_afterSyncAnimation: Idle1
+--- !u!114 &6877241808018165825
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4294471023827248798}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 09352e9564b46104896226477f31b5b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_animationTracks: []
+  m_skeletonAnimation: {fileID: 4084513133358244869}
 --- !u!1 &4294471024675222932
 GameObject:
   m_ObjectHideFlags: 0
@@ -98542,6 +98560,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_colliders:
   - {fileID: 4084513133358244865}
+--- !u!114 &1420133691834882658
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4084513133358244868}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab6a2e545a980c74b97fa2444c15f4ba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sourceBoneName: root
+  useX: 0
+  useY: 0
+  rb: {fileID: 4294471023827248786}
+  siblingBoneNames: []
 --- !u!114 &4966587747696342843
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -99131,22 +99166,22 @@ PrefabInstance:
     - target: {fileID: 4229937905458067696, guid: 2cfcc5608211e3f41b52eabcc85b4f42,
         type: 3}
       propertyPath: startColor.m_ColorMin.a
-      value: 2.76e-43
+      value: 1.1e-44
       objectReference: {fileID: 0}
     - target: {fileID: 4229937905458067696, guid: 2cfcc5608211e3f41b52eabcc85b4f42,
         type: 3}
       propertyPath: startColor.m_ColorMin.b
-      value: -0.0006671441
+      value: -2.0392764e+20
       objectReference: {fileID: 0}
     - target: {fileID: 4229937905458067696, guid: 2cfcc5608211e3f41b52eabcc85b4f42,
         type: 3}
       propertyPath: startColor.m_ColorMin.g
-      value: 2.76e-43
+      value: 1.1e-44
       objectReference: {fileID: 0}
     - target: {fileID: 4229937905458067696, guid: 2cfcc5608211e3f41b52eabcc85b4f42,
         type: 3}
       propertyPath: startColor.m_ColorMin.r
-      value: -0.0006671548
+      value: -2.0393087e+20
       objectReference: {fileID: 0}
     - target: {fileID: 4229937905458067700, guid: 2cfcc5608211e3f41b52eabcc85b4f42,
         type: 3}
@@ -99272,22 +99307,22 @@ PrefabInstance:
     - target: {fileID: 102887550663880699, guid: f28503f5dacc9cd4a8fe73c5494c5d00,
         type: 3}
       propertyPath: startColor.m_ColorMin.a
-      value: 2.76e-43
+      value: 1.1e-44
       objectReference: {fileID: 0}
     - target: {fileID: 102887550663880699, guid: f28503f5dacc9cd4a8fe73c5494c5d00,
         type: 3}
       propertyPath: startColor.m_ColorMin.b
-      value: -0.0006671441
+      value: -2.0392764e+20
       objectReference: {fileID: 0}
     - target: {fileID: 102887550663880699, guid: f28503f5dacc9cd4a8fe73c5494c5d00,
         type: 3}
       propertyPath: startColor.m_ColorMin.g
-      value: 2.76e-43
+      value: 1.1e-44
       objectReference: {fileID: 0}
     - target: {fileID: 102887550663880699, guid: f28503f5dacc9cd4a8fe73c5494c5d00,
         type: 3}
       propertyPath: startColor.m_ColorMin.r
-      value: -0.0006671548
+      value: -2.0393087e+20
       objectReference: {fileID: 0}
     - target: {fileID: 102887550686315782, guid: f28503f5dacc9cd4a8fe73c5494c5d00,
         type: 3}

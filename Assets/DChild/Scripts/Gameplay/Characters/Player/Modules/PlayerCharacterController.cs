@@ -1001,7 +1001,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                             return;
                         }
                     }
-                    else if (m_input.reaperHarvestPressed && m_reaperHarvest.CanReaperHarvest() && m_abilities.IsAbilityActivated(CombatArt.ReaperHarvest))
+                    else if (m_input.reaperHarvestPressed && m_reaperHarvest.CanReaperHarvest() /*&& m_abilities.IsAbilityActivated(CombatArt.ReaperHarvest)*/)
                     {
                         if (m_state.isInShadowMode == false)
                         {
@@ -1020,7 +1020,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
                         return;
                     }
-                    else if (m_input.fencerFlashPressed && m_fencerFlash.CanFencerFlash() && m_abilities.IsAbilityActivated(CombatArt.FencerFlash))
+                    else if (m_input.fencerFlashPressed && m_fencerFlash.CanFencerFlash() /*&& m_abilities.IsAbilityActivated(CombatArt.FencerFlash)*/)
                     {
                         if (m_state.isInShadowMode == false)
                         {
@@ -1059,7 +1059,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
                         return;
                     }
-                    else if (m_input.edgedFuryPressed && m_edgedFury.CanEdgedFury() && !m_input.fencerFlashPressed && !m_input.lightningSpearPressed && m_abilities.IsAbilityActivated(CombatArt.EdgedFury))
+                    else if (m_input.edgedFuryPressed && m_edgedFury.CanEdgedFury() && !m_input.fencerFlashPressed && !m_input.lightningSpearPressed /*&& m_abilities.IsAbilityActivated(CombatArt.EdgedFury)*/)
                     {
                         PrepareForMidairAttack();
                         m_devilWings?.Cancel();
@@ -1074,7 +1074,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                         m_teleportingSkull.TeleportToProjectile();
                         return;
                     }
-                    else if (m_input.soulFireBlastPressed && !m_input.krakenRagePressed && m_soulFireBlast.CanSoulFireBlast() && m_abilities.IsAbilityActivated(CombatArt.SoulfireBlast))
+                    else if (m_input.soulFireBlastPressed && !m_input.krakenRagePressed && m_soulFireBlast.CanSoulFireBlast())
                     {
                         PrepareForMidairAttack();
                         m_devilWings?.Cancel();
@@ -1093,7 +1093,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
                     //    return;
                     //}
-                    else if (m_input.diagonalSwordDashPressed && m_diagonalSwordDash.CanDiagonalSwordDash() && m_abilities.IsAbilityActivated(CombatArt.DiagonalSwordDash))
+                    else if (m_input.diagonalSwordDashPressed && m_diagonalSwordDash.CanDiagonalSwordDash())
                     {
                         PrepareForMidairAttack();
                         m_devilWings?.Cancel();
@@ -1103,7 +1103,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
                         return;
                     }
-                    else if (m_input.lightningSpearPressed && m_airSlashRange.CanAirSlashRange() && (m_abilities.IsAbilityActivated(CombatArt.AirSlashCombo) && !m_abilities.IsAbilityActivated(CombatArt.LightningSpear)))
+                    else if (m_input.lightningSpearPressed && m_airSlashRange.CanAirSlashRange() /*&& (m_abilities.IsAbilityActivated(CombatArt.AirSlashCombo) && !m_abilities.IsAbilityActivated(CombatArt.LightningSpear))*/)
                     {
                         if (m_state.isInShadowMode == false)
                         {
@@ -1206,7 +1206,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                         }
                     }
                 }
-                else if (m_input.backDiverPressed && m_backDiver.CanBackDiver() && m_backDiver.HaveSpacetoExecute() && m_earthShaker.CanEarthShaker() && m_abilities.IsAbilityActivated(CombatArt.BackDiver))
+                else if (m_input.backDiverPressed && m_backDiver.CanBackDiver() && m_backDiver.HaveSpacetoExecute() && m_earthShaker.CanEarthShaker() /*&& m_abilities.IsAbilityActivated(CombatArt.BackDiver)*/)
                 {
                     if (m_state.isInShadowMode == false)
                     {
@@ -1432,7 +1432,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
                         return;
                     }
-                    else if (m_input.ninthCircleSanctionPressed && m_ninthCircleSanction.CanNinthCircleSanction() && m_abilities.IsAbilityActivated(CombatArt.NinthCircleSanction))
+                    else if (m_input.ninthCircleSanctionPressed && m_ninthCircleSanction.CanNinthCircleSanction() /*&& m_abilities.IsAbilityActivated(CombatArt.NinthCircleSanction)*/)
                     {
                         if (m_state.isInShadowMode == false)
                         {
@@ -1681,7 +1681,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
                         return;
                     }
-                    else if (m_input.airLungeSlashPressed && m_airLunge.CanAirLunge() && m_earthShaker.CanEarthShaker() && m_abilities.IsAbilityActivated(CombatArt.AirLunge))
+                    else if (m_input.airLungeSlashPressed && m_airLunge.CanAirLunge() && m_earthShaker.CanEarthShaker() /*&& m_abilities.IsAbilityActivated(CombatArt.AirLunge)*/)
                     {
                         if (m_state.isInShadowMode == false)
                         {
@@ -1699,7 +1699,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
                         return;
                     }
-                    else if (m_input.reaperHarvestPressed && m_reaperHarvest.CanReaperHarvest() && m_abilities.IsAbilityActivated(CombatArt.ReaperHarvest))
+                    else if (m_input.reaperHarvestPressed && m_reaperHarvest.CanReaperHarvest() /*&& m_abilities.IsAbilityActivated(CombatArt.ReaperHarvest)*/)
                     {
                         if (m_state.isInShadowMode == false)
                         {
@@ -1716,7 +1716,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
                         return;
                     }
-                    else if (m_input.championsUprisingPressed && m_championsUprising.CanChampionsUprising() && !m_input.fencerFlashPressed && m_abilities.IsAbilityActivated(CombatArt.ChampionsUprising))
+                    else if (m_input.championsUprisingPressed && m_championsUprising.CanChampionsUprising() && !m_input.fencerFlashPressed /*&& m_abilities.IsAbilityActivated(CombatArt.ChampionsUprising)*/)
                     {
                         if (m_state.isInShadowMode == false)
                         {
@@ -1733,7 +1733,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
                         return;
                     }
-                    else if (m_input.fencerFlashPressed && m_fencerFlash.CanFencerFlash() && m_abilities.IsAbilityActivated(CombatArt.FencerFlash))
+                    else if (m_input.fencerFlashPressed && m_fencerFlash.CanFencerFlash() /*&& m_abilities.IsAbilityActivated(CombatArt.FencerFlash)*/)
                     {
                         if (m_state.isInShadowMode == false)
                         {
@@ -1750,7 +1750,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
                         return;
                     }
-                    else if (m_input.finalSlashPressed && m_finalSlash.CanFinalSlash() && !m_input.airLungeSlashPressed && !m_input.sovereignImpalePressed && m_abilities.IsAbilityActivated(CombatArt.FinalSlash))
+                    else if (m_input.finalSlashPressed && m_finalSlash.CanFinalSlash() && !m_input.airLungeSlashPressed && !m_input.sovereignImpalePressed /*&& m_abilities.IsAbilityActivated(CombatArt.FinalSlash)*/)
                     {
                         if (m_state.isInShadowMode == false)
                         {
@@ -1767,7 +1767,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
                         return;
                     }
-                    else if (m_input.eelecktrickPressed && m_eelecktrick.CanEelecktrick() && !m_input.airLungeSlashPressed && m_abilities.IsAbilityActivated(CombatArt.Eelecktrick))
+                    else if (m_input.eelecktrickPressed && m_eelecktrick.CanEelecktrick() && !m_input.airLungeSlashPressed /*&& m_abilities.IsAbilityActivated(CombatArt.Eelecktrick)*/)
                     {
                         if (m_state.isInShadowMode == false)
                         {
@@ -1806,7 +1806,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                         }
                         return;
                     }
-                    else if (m_input.fireFistPressed && m_fireFist.CanFireFist() && m_abilities.IsAbilityActivated(CombatArt.FireFist))
+                    else if (m_input.fireFistPressed && m_fireFist.CanFireFist() /*&& m_abilities.IsAbilityActivated(CombatArt.FireFist)*/)
                     {
                         if (m_state.isInShadowMode == false)
                         {
@@ -1821,7 +1821,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
                         return;
                     }
-                    else if (m_input.hellTridentPressed && m_hellTrident.CanHellTrident() && m_abilities.IsAbilityActivated(CombatArt.HellTrident))
+                    else if (m_input.hellTridentPressed && m_hellTrident.CanHellTrident() /*&& m_abilities.IsAbilityActivated(CombatArt.HellTrident)*/)
                     {
                         if (m_state.isInShadowMode == false)
                         {
@@ -1836,7 +1836,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
                         return;
                     }
-                    else if (m_input.foolsVerdictPressed && m_foolsVerdict.CanFoolsVerdict() && m_abilities.IsAbilityActivated(CombatArt.FoolsVerdict))
+                    else if (m_input.foolsVerdictPressed && m_foolsVerdict.CanFoolsVerdict() /*&& m_abilities.IsAbilityActivated(CombatArt.FoolsVerdict)*/)
                     {
                         if (m_state.isInShadowMode == false)
                         {
@@ -1851,7 +1851,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
                         return;
                     }
-                    else if (m_input.doomsdayKongPressed && m_doomsdayKong.CanDoomsdayKong() && m_abilities.IsAbilityActivated(CombatArt.DoomsdayKong))
+                    else if (m_input.doomsdayKongPressed && m_doomsdayKong.CanDoomsdayKong() /*&& m_abilities.IsAbilityActivated(CombatArt.DoomsdayKong)*/)
                     {
                         if (m_state.isInShadowMode == false)
                         {
@@ -1865,7 +1865,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
                         return;
                     }
-                    else if (m_input.backDiverPressed && m_backDiver.CanBackDiver() && m_backDiver.HaveSpacetoExecute() && m_earthShaker.CanEarthShaker() && m_abilities.IsAbilityActivated(CombatArt.BackDiver))
+                    else if (m_input.backDiverPressed && m_backDiver.CanBackDiver() && m_backDiver.HaveSpacetoExecute() && m_earthShaker.CanEarthShaker() /*&& m_abilities.IsAbilityActivated(CombatArt.BackDiver)*/)
                     {
                         if (m_state.isInShadowMode == false)
                         {
@@ -1882,7 +1882,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
                         return;
                     }
-                    else if (m_input.sovereignImpalePressed && m_sovereignImpale.CanSovereignImpale() && m_abilities.IsAbilityActivated(CombatArt.SovereignImpale))
+                    else if (m_input.sovereignImpalePressed && m_sovereignImpale.CanSovereignImpale() /*&& m_abilities.IsAbilityActivated(CombatArt.SovereignImpale)*/)
                     {
                         if (m_state.isInShadowMode == false)
                         {
@@ -1899,7 +1899,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
                         return;
                     }
-                    else if (m_input.barrierPressed && m_abilities.IsAbilityActivated(CombatArt.Barrier))
+                    else if (m_input.barrierPressed /*&& m_abilities.IsAbilityActivated(CombatArt.Barrier)*/)
                     {
                         if (m_state.isInShadowMode == false)
                         {
@@ -1914,7 +1914,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
                         return;
                     }
-                    else if (m_input.icarusWingsPressed && m_icarusWings.CanIcarusWings() && m_abilities.IsAbilityActivated(CombatArt.IcarusWings))
+                    else if (m_input.icarusWingsPressed && m_icarusWings.CanIcarusWings() /*&& m_abilities.IsAbilityActivated(CombatArt.IcarusWings)*/)
                     {
                         if (m_state.isInShadowMode == false)
                         {

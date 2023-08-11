@@ -19,10 +19,14 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
         [SerializeField]
         private float m_dashDuration;
         [SerializeField]
+        private int m_finalSlashLevel;
+        [SerializeField]
         private Info m_finalSlashInfo;
         //TEST
         [SerializeField]
         private CharacterState m_characterState;
+        [SerializeField]
+        private SpineRootAnimation m_animation;
         [SerializeField, BoxGroup("Physics")]
         private Character m_character;
         [SerializeField, BoxGroup("Physics")]
@@ -35,6 +39,8 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
         private RaySensor m_edgeSensor;
         [SerializeField, BoxGroup("FX")]
         private Animator m_finalSlashSwordGlowFXAnimator;
+        [SerializeField, BoxGroup("FX")]
+        private ParticleSystem m_finalSlashLevelFX;
         [SerializeField, BoxGroup("FX")]
         private ParticleSystem m_swordSmokeTrail_FinalSlashFX;
         [SerializeField, BoxGroup("FX")]
@@ -59,6 +65,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
         private IPlayerModifer m_modifier;
         private int m_finalSlashStateAnimationParameter;
         private int m_finalSlashDashAnimationParameter;
+        private int m_finalSlashLevelAnimationParameter;
         private float m_finalSlashCooldownTimer;
         private float m_finalSlashMovementCooldownTimer;
 
@@ -71,6 +78,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
         private Coroutine m_finalSlashChargingRoutine;
         private Coroutine m_finalSlashEnemeyCheckRoutine;
+        private Coroutine m_finalSlashLevelChangeRoutine;
 
         public enum FinalSlashState
         {
@@ -86,6 +94,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             m_modifier = info.modifier;
             m_finalSlashStateAnimationParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.FinalSlash);
             m_finalSlashDashAnimationParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.FinalSlashDash);
+            m_finalSlashLevelAnimationParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.FinalSlashLevel);
             m_canFinalSlash = true;
             m_canMove = true;
             m_finalSlashMovementCooldownTimer = m_finalSlashMovementCooldown;
@@ -112,6 +121,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             m_autoStopParticle.ForceStop(0);
             StopAllCoroutines();
             m_finalSlashChargingRoutine = StartCoroutine(FinalSlashChargingRoutine());
+            m_finalSlashLevelChangeRoutine = StartCoroutine(FinalSlashLevelChangeRoutine());
             m_state.waitForBehaviour = false;
             m_state.isAttacking = true;
             m_characterState.isChargingFinalSlash = true;
@@ -136,6 +146,11 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
                     StopCoroutine(m_finalSlashChargingRoutine);
                     m_finalSlashChargingRoutine = null;
                 }
+                if (m_finalSlashLevelChangeRoutine != null)
+                {
+                    StopCoroutine(m_finalSlashLevelChangeRoutine);
+                    m_finalSlashLevelChangeRoutine = null;
+                }
                 StartCoroutine(DashRoutine());
             }
             else
@@ -156,11 +171,17 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             //m_canFinalSlash = true;
             //m_canMove = true;
             m_canDash = false;
+            m_animation.DisableRootMotion();
             StopAllCoroutines();
             if (m_finalSlashChargingRoutine != null)
             {
                 StopCoroutine(m_finalSlashChargingRoutine);
                 m_finalSlashChargingRoutine = null;
+            }
+            if (m_finalSlashLevelChangeRoutine != null)
+            {
+                StopCoroutine(m_finalSlashLevelChangeRoutine);
+                m_finalSlashLevelChangeRoutine = null;
             }
             if (m_finalSlashEnemeyCheckRoutine != null)
             {
@@ -190,12 +211,18 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
                     StopCoroutine(m_finalSlashChargingRoutine);
                     m_finalSlashChargingRoutine = null;
                 }
+                if (m_finalSlashLevelChangeRoutine != null)
+                {
+                    StopCoroutine(m_finalSlashLevelChangeRoutine);
+                    m_finalSlashLevelChangeRoutine = null;
+                }
                 if (m_finalSlashEnemeyCheckRoutine != null)
                 {
                     StopCoroutine(m_finalSlashEnemeyCheckRoutine);
                     m_finalSlashEnemeyCheckRoutine = null;
                 }
                 m_animator.SetBool(m_finalSlashStateAnimationParameter, false);
+                m_animation.DisableRootMotion();
                 base.Cancel();
                 SetSwordGlowFXAnimator(false);
                 SetDustChargeFXAnimator(false);
@@ -264,6 +291,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             //yield return new WaitForSeconds(m_dashDuration);
             m_physics.velocity = new Vector2(0, m_physics.velocity.y);
             m_animator.SetBool(m_finalSlashDashAnimationParameter, false);
+            m_animation.EnableRootMotion(true, true);
             //m_state.waitForBehaviour = false;
             yield return null;
         }
@@ -274,8 +302,32 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             {
                 m_state.waitForBehaviour = false;
                 m_state.isAttacking = true;
+
+                //switch (m_finalSlashLevel)
+                //{
+                //    case 0:
+                //        m_animator.SetInteger(m_finalSlashLevel, 0);
+                //        break;
+                //    case 1:
+                //        m_animator.SetInteger(m_finalSlashLevel, 1);
+                //        break;
+                //    case 2:
+                //        m_animator.SetInteger(m_finalSlashLevel, 3);
+                //        break;
+                //}
                 yield return null;
             }
+        }
+
+        private IEnumerator FinalSlashLevelChangeRoutine()
+        {
+            for (int i = 0; i < m_finalSlashLevel; i++)
+            {
+                m_animator.SetInteger(m_finalSlashLevelAnimationParameter, i);
+                yield return new WaitForSeconds(1f);
+                m_finalSlashLevelFX.Play();
+            }
+            yield return null;
         }
 
         #region FX Animators
