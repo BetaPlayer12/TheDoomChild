@@ -122,8 +122,6 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Modules")]
         private AttackHandle m_attackHandle;
         [SerializeField, TabGroup("Modules")]
-        private DeathHandle m_deathHandle;
-        [SerializeField, TabGroup("Modules")]
         private FlinchHandler m_flinchHandle;
         [SerializeField, TabGroup("ProjectileInfo")]
         private List<Transform> m_projectilePointsLeft;
@@ -225,13 +223,23 @@ namespace DChild.Gameplay.Characters.Enemies
             m_rightWing.SetActive(false);
             m_selfCollider.SetActive(false);
             GetComponentInChildren<Hitbox>().gameObject.SetActive(false);
+            m_stateHandle.OverrideState(State.WaitBehaviourEnd);
             base.OnDestroyed(sender, eventArgs);
             GameplaySystem.minionManager.Unregister(this);
             m_movement.Stop();
-   
+            m_animation.SetEmptyAnimation(0, 0);
+            StartCoroutine(DeathRoutine());
+
         }
 
-       
+        private IEnumerator DeathRoutine()
+        {
+            m_animation.SetAnimation(0, m_info.deathAnimation, false).MixDuration = 0;
+            yield return new WaitForSeconds(10);
+            m_animation.animationState.TimeScale = 0;
+            enabled = false;
+            yield return null;
+        }
 
         private void OnFlinchStart(object sender, EventActionArgs eventArgs)
         {
@@ -488,7 +496,6 @@ namespace DChild.Gameplay.Characters.Enemies
             base.Awake();
             GameplaySystem.minionManager.Register(this);
             m_attackHandle.AttackDone += OnAttackDone;
-            m_deathHandle.SetAnimation(m_info.deathAnimation.animation);
             m_attackDecider = new RandomAttackDecider<Attack>();
             m_flinchHandle.FlinchStart += OnFlinchStart;
             m_flinchHandle.FlinchEnd += OnFlinchEnd;
