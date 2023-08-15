@@ -221,20 +221,17 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_Audiosource.clip = m_DeadClip;
             //m_Audiosource.Play();
             StopAllCoroutines();
+            m_leftWing.SetActive(false);
+            m_rightWing.SetActive(false);
             m_selfCollider.SetActive(false);
             GetComponentInChildren<Hitbox>().gameObject.SetActive(false);
             base.OnDestroyed(sender, eventArgs);
             GameplaySystem.minionManager.Unregister(this);
             m_movement.Stop();
-            StartCoroutine(DeathRoutine());
+   
         }
 
-        private IEnumerator DeathRoutine()
-        {
-            m_animation.SetAnimation(0, m_info.deathAnimation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.deathAnimation);
-            yield return null;
-        }
+       
 
         private void OnFlinchStart(object sender, EventActionArgs eventArgs)
         {

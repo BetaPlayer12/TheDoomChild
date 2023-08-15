@@ -75,10 +75,9 @@ GameObject:
   m_Component:
   - component: {fileID: 2936220297225461644}
   - component: {fileID: 1568106490246753892}
-  - component: {fileID: 7028036786004815069}
   - component: {fileID: 5134119570071371555}
   m_Layer: 0
-  m_Name: LeftWing
+  m_Name: LeftWingCollider
   m_TagString: Hitbox
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -96,8 +95,8 @@ Transform:
   m_LocalScale: {x: 1, y: -1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 6273558172764717765}
-  m_RootOrder: 2
+  m_Father: {fileID: 4437482114295936161}
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!61 &1568106490246753892
 BoxCollider2D:
@@ -112,7 +111,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.7314836, y: -1.6058364}
+  m_Offset: {x: -2.91644, y: -2.0959578}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -123,29 +122,8 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1.9734726, y: 10.54528}
+  m_Size: {x: 11.833052, y: 19.669144}
   m_EdgeRadius: 0
---- !u!114 &7028036786004815069
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 497946844659074337}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a1fd8daaed7b64148a34acb96ba14ce1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  skeletonRenderer: {fileID: 2238667317745662948}
-  boneName: L_Crack
-  followXYPosition: 1
-  followZPosition: 1
-  followBoneRotation: 1
-  followSkeletonFlip: 1
-  followLocalScale: 0
-  initializeOnAwake: 1
-  m_updateOnFixedUpdate: 0
 --- !u!114 &5134119570071371555
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -226,6 +204,8 @@ Transform:
   - {fileID: 2238667319612585784}
   - {fileID: 3506125468197120497}
   - {fileID: 3839460661361963513}
+  - {fileID: 7526375572951616833}
+  - {fileID: 2936220297225461644}
   m_Father: {fileID: 2238667317745662949}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -874,10 +854,9 @@ GameObject:
   m_Component:
   - component: {fileID: 7526375572951616833}
   - component: {fileID: 278823193309592254}
-  - component: {fileID: 2188793413165741075}
   - component: {fileID: 1982504625384848353}
   m_Layer: 0
-  m_Name: RightWing
+  m_Name: RightWingCollider
   m_TagString: Hitbox
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -891,12 +870,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3198630419858833309}
   m_LocalRotation: {x: -0, y: 0, z: 1, w: -0.00000004371139}
-  m_LocalPosition: {x: -4.9657288, y: 12.412148, z: 0}
+  m_LocalPosition: {x: -5.0999985, y: 12.500001, z: 0}
   m_LocalScale: {x: 1, y: -1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 6273558172764717765}
-  m_RootOrder: 1
+  m_Father: {fileID: 4437482114295936161}
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!61 &278823193309592254
 BoxCollider2D:
@@ -911,7 +890,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.6437377, y: -2.4861474}
+  m_Offset: {x: 2.6363287, y: -3.0516748}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -922,29 +901,8 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1.807457, y: 10.545277}
+  m_Size: {x: 11.383745, y: 19.819954}
   m_EdgeRadius: 0
---- !u!114 &2188793413165741075
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3198630419858833309}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a1fd8daaed7b64148a34acb96ba14ce1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  skeletonRenderer: {fileID: 2238667317745662948}
-  boneName: Debris_R
-  followXYPosition: 1
-  followZPosition: 1
-  followBoneRotation: 1
-  followSkeletonFlip: 1
-  followLocalScale: 0
-  initializeOnAwake: 1
-  m_updateOnFixedUpdate: 0
 --- !u!114 &1982504625384848353
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1469,8 +1427,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8309678348162898643}
-  - {fileID: 7526375572951616833}
-  - {fileID: 2936220297225461644}
   m_Father: {fileID: 2238667317745662949}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1488,8 +1444,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_collider2Ds:
   - {fileID: 444786930411894634}
-  - {fileID: 278823193309592254}
-  - {fileID: 1568106490246753892}
   m_damageFXInfo:
     m_fx: {fileID: 0}
     m_overrideColor: 0
