@@ -228,6 +228,7 @@ namespace DChild.Gameplay.Characters.Enemies
             GameplaySystem.minionManager.Unregister(this);
             m_movement.Stop();
             m_animation.SetEmptyAnimation(0, 0);
+            m_animation.SetEmptyAnimation(1, 0);
             StartCoroutine(DeathRoutine());
 
         }
