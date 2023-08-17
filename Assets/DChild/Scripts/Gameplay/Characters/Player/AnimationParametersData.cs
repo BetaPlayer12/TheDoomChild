@@ -69,6 +69,8 @@ namespace DChild.Gameplay.Characters.Players
             Eelecktrick,
             LightningSpear,
             IcarusWings,
+            AirSlashRange,
+            FinalSlashLevel,
         }
 
         [SerializeField]
