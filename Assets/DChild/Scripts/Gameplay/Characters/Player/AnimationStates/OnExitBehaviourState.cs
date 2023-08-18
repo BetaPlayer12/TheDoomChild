@@ -43,6 +43,7 @@ namespace DChild.Gameplay.Characters.Players
             EndLightningSpear,
             EndIcarusWings,
             EndProjectileThrow,
+            EndAirSlashRange,
         }
 
         [SerializeField]
@@ -156,6 +157,9 @@ namespace DChild.Gameplay.Characters.Players
                         break;
                     case Command.EndProjectileThrow:
                         player.FinishProjectileThrow();
+                        break;
+                    case Command.EndAirSlashRange:
+                        player.AirSlashRangeEnd();
                         break;
                 }
             }
