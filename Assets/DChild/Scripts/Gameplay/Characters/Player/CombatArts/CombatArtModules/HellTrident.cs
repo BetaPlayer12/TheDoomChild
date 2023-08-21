@@ -41,6 +41,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
         [SerializeField, BoxGroup("HellTrident")]
         private ProjectileInfo m_projectileInfo;
 
+
         [SerializeField]
         private Vector2 m_pushForce;
 
@@ -184,6 +185,11 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             //LaunchSpike(PuedisYnnusSpike.SkinType.Big, false, Quaternion.identity, true);
             m_launcher.AimAt(new Vector2(m_startPoint.position.x + (m_character.facing == HorizontalDirection.Right ? 10 : -10), m_startPoint.position.y));
             m_launcher.LaunchProjectile(m_startPoint.right, instance.gameObject);
+        }
+
+        public void PlaySpawnFX()
+        {
+            m_hellTridentInfo.PlayFX(true);
         }
     }
 }

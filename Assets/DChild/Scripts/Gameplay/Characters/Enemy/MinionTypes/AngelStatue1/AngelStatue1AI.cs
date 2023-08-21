@@ -26,32 +26,18 @@ namespace DChild.Gameplay.Characters.Enemies
             private SimpleAttackInfo m_attackLeft = new SimpleAttackInfo();
             public SimpleAttackInfo attackLeft => m_attackLeft;
             [SerializeField]
-            private BasicAnimationInfo m_attackLeftNoShieldAnimation;
-            public BasicAnimationInfo attackLeftNoShieldAnimation => m_attackLeftNoShieldAnimation;
-            [SerializeField]
-            private BasicAnimationInfo m_attackLeftSLAnimation;
-            public BasicAnimationInfo attackLeftSLAnimation => m_attackLeftSLAnimation;
-            [SerializeField]
-            private BasicAnimationInfo m_attackLeftSRAnimation;
-            public BasicAnimationInfo attackLeftSRAnimation => m_attackLeftSRAnimation;
-            [SerializeField]
-            private SimpleAttackInfo m_attackRight= new SimpleAttackInfo();
+            private SimpleAttackInfo m_attackRight = new SimpleAttackInfo();
             public SimpleAttackInfo attackRight => m_attackRight;
             [SerializeField]
-            private BasicAnimationInfo m_attackRightNoShieldAnimation;
-            public BasicAnimationInfo attackRightNoShieldAnimation => m_attackRightNoShieldAnimation;
+            private SimpleAttackInfo m_tripleAttackLeft = new SimpleAttackInfo();
+            public SimpleAttackInfo tripleAttackLeft => m_tripleAttackLeft;
             [SerializeField]
-            private BasicAnimationInfo m_attackRightSLAnimation;
-            public BasicAnimationInfo attackRightSLAnimation => m_attackRightSLAnimation;
+            private SimpleAttackInfo m_tripleAttackRight = new SimpleAttackInfo();
+            public SimpleAttackInfo tripleAttackRight => m_tripleAttackRight;
             [SerializeField]
-            private BasicAnimationInfo m_attackRightSRAnimation;
-            public BasicAnimationInfo attackRightSRAnimation => m_attackRightSRAnimation;
-            [SerializeField]
-            private SimpleAttackInfo m_fistAttackLeft = new SimpleAttackInfo();
-            public SimpleAttackInfo fistAttackLeft => m_fistAttackLeft;
-            [SerializeField]
-            private SimpleAttackInfo m_fistAttackRight = new SimpleAttackInfo();
-            public SimpleAttackInfo fistAttackRight => m_fistAttackRight;
+            private SimpleAttackInfo m_wingAttack = new SimpleAttackInfo();
+            public SimpleAttackInfo wingAttack => m_wingAttack;
+
             [SerializeField, MinValue(0)]
             private float m_attackCD;
             public float attackCD => m_attackCD;
@@ -75,18 +61,8 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField]
             private BasicAnimationInfo m_deathAnimation;
             public BasicAnimationInfo deathAnimation => m_deathAnimation;
-            [SerializeField]
-            private BasicAnimationInfo m_shieldLeftHitAnimation;
-            public BasicAnimationInfo shieldLeftHitAnimation => m_shieldLeftHitAnimation;
-            [SerializeField]
-            private BasicAnimationInfo m_shieldRightHitAnimation;
-            public BasicAnimationInfo shieldRightHitAnimation => m_shieldRightHitAnimation;
-            [SerializeField]
-            private BasicAnimationInfo m_wingLeftDestroyAnimation;
-            public BasicAnimationInfo wingLeftDestroyAnimation => m_wingLeftDestroyAnimation;
-            [SerializeField]
-            private BasicAnimationInfo m_wingRightDestroyAnimation;
-            public BasicAnimationInfo wingRightDestroyAnimation => m_wingRightDestroyAnimation;
+
+            
 
             [SerializeField]
             private SimpleProjectileAttackInfo m_projectile;
@@ -101,23 +77,14 @@ namespace DChild.Gameplay.Characters.Enemies
 #if UNITY_EDITOR
                 m_attackLeft.SetData(m_skeletonDataAsset);
                 m_attackRight.SetData(m_skeletonDataAsset);
-                m_fistAttackLeft.SetData(m_skeletonDataAsset);
-                m_fistAttackRight.SetData(m_skeletonDataAsset);
+                m_tripleAttackLeft.SetData(m_skeletonDataAsset);
+                m_tripleAttackRight.SetData(m_skeletonDataAsset);
+                m_wingAttack.SetData(m_skeletonDataAsset);
                 m_projectile.SetData(m_skeletonDataAsset);
-
-                m_attackLeftNoShieldAnimation.SetData(m_skeletonDataAsset);
-                m_attackLeftSLAnimation.SetData(m_skeletonDataAsset);
-                m_attackLeftSRAnimation.SetData(m_skeletonDataAsset);
-                m_attackRightNoShieldAnimation.SetData(m_skeletonDataAsset);
-                m_attackRightSLAnimation.SetData(m_skeletonDataAsset);
-                m_attackRightSRAnimation.SetData(m_skeletonDataAsset);
 
                 m_awakenAnimation.SetData(m_skeletonDataAsset);
                 m_deathAnimation.SetData(m_skeletonDataAsset);
-                m_shieldLeftHitAnimation.SetData(m_skeletonDataAsset);
-                m_shieldRightHitAnimation.SetData(m_skeletonDataAsset);
-                m_wingLeftDestroyAnimation.SetData(m_skeletonDataAsset);
-                m_wingRightDestroyAnimation.SetData(m_skeletonDataAsset);
+
 #endif
             }
         }
@@ -135,7 +102,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private enum Attack
         {
             Attack,
-            FistAttack,
+            TripleAttack,
             [HideInInspector]
             _COUNT
         }
@@ -143,25 +110,27 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Reference")]
         private GameObject m_selfCollider;
         [SerializeField, TabGroup("Reference")]
-        private GameObject m_boundBoxGO;
-        [SerializeField, TabGroup("Reference")]
         private Hitbox m_hitbox;
         [SerializeField, TabGroup("Reference")]
         private SpineEventListener m_spineEventListener;
+        [SerializeField, TabGroup("Reference")]
+        private GameObject m_leftWing;
+        [SerializeField, TabGroup("Reference")]
+        private GameObject m_rightWing;
         [SerializeField, TabGroup("Modules")]
         private MovementHandle2D m_movement;
         [SerializeField, TabGroup("Modules")]
         private AttackHandle m_attackHandle;
         [SerializeField, TabGroup("Modules")]
-        private DeathHandle m_deathHandle;
-        [SerializeField, TabGroup("Modules")]
         private FlinchHandler m_flinchHandle;
-        [SerializeField, TabGroup("Health")]
-        private Health m_health;
-        [SerializeField, TabGroup("Health")]
-        private float m_leftHealth;
-        [SerializeField, TabGroup("Health")]
-        private float m_rightHealth;
+        [SerializeField, TabGroup("ProjectileInfo")]
+        private List<Transform> m_projectilePointsLeft;
+        [SerializeField, TabGroup("ProjectileInfo")]
+        private List<Transform> m_projectilePointsRight;
+        [SerializeField, TabGroup("ProjectileInfo")]
+        private List<Transform> m_projectileTargetsLeft;
+        [SerializeField, TabGroup("ProjectileInfo")]
+        private List<Transform> m_projectileTargetsRight;
 
         private float m_currentPatience;
         private float m_currentCD;
@@ -169,33 +138,31 @@ namespace DChild.Gameplay.Characters.Enemies
         private bool m_enablePatience;
         private bool m_isDetecting;
         private Vector2 m_startPoint;
-        
-        [SerializeField, TabGroup("Sensors")]
-        private RaySensor m_groundSensor;
+
 
         [ShowInInspector]
         private StateHandle<State> m_stateHandle;
 
-        private ProjectileLauncher m_projectileLauncher;
-        [SerializeField]
-        private Transform m_projectileStart;
+        private ProjectileLauncher m_projectileLauncherLeft;
+        private ProjectileLauncher m_projectileLauncherRight;
+        [ShowInInspector]
+        private RandomAttackDecider<Attack> m_attackDecider;
+        private Attack m_currentAttack;
+        private float m_currentAttackRange;
+
+        private bool[] m_attackUsed;
+        private List<Attack> m_attackCache;
+        private List<float> m_attackRangeCache;
 
 
         private State m_turnState;
         private string m_attackLeftAnimation;
         private string m_attackRightAnimation;
-        private bool m_shieldLeftDestroyed;
-        private bool m_shieldRightDestroyed;
-        private int m_shieldLeftHitCount;
-        private int m_shieldRightHitCount;
+
 
         private void OnAttackDone(object sender, EventActionArgs eventArgs)
         {
-            if (m_attackLeftAnimation == m_info.fistAttackLeft.animation)
-            {
-                m_attackLeftAnimation = m_info.attackLeft.animation;
-                m_attackRightAnimation = m_info.attackRight.animation;
-            }
+            m_flinchHandle.m_autoFlinch = true;
             m_animation.DisableRootMotion();
             m_stateHandle.ApplyQueuedState();
         }
@@ -242,6 +209,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_targetInfo.Set(null, null);
                 m_isDetecting = false;
                 m_enablePatience = false;
+                m_flinchHandle.m_autoFlinch = true;
                 m_stateHandle.SetState(State.Idle);
             }
         }
@@ -251,122 +219,67 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_Audiosource.clip = m_DeadClip;
             //m_Audiosource.Play();
             StopAllCoroutines();
+            m_leftWing.SetActive(false);
+            m_rightWing.SetActive(false);
             m_selfCollider.SetActive(false);
             GetComponentInChildren<Hitbox>().gameObject.SetActive(false);
-            m_boundBoxGO.SetActive(false);
+            m_stateHandle.OverrideState(State.WaitBehaviourEnd);
             base.OnDestroyed(sender, eventArgs);
-            
+            GameplaySystem.minionManager.Unregister(this);
             m_movement.Stop();
+            m_animation.SetEmptyAnimation(0, 0);
+            m_animation.SetEmptyAnimation(1, 0);
             StartCoroutine(DeathRoutine());
+
         }
 
         private IEnumerator DeathRoutine()
         {
-            m_animation.SetAnimation(0, m_info.deathAnimation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.deathAnimation);
+            m_animation.SetAnimation(0, m_info.deathAnimation, false).MixDuration = 0;
+            yield return new WaitForSeconds(10);
+            m_animation.animationState.TimeScale = 0;
+            enabled = false;
             yield return null;
         }
 
         private void OnFlinchStart(object sender, EventActionArgs eventArgs)
         {
-            //if (m_stateHandle.currentState == State.Cooldown)
-            //{
-            //}
-            if (m_targetInfo.isValid)
+            if (m_flinchHandle.m_autoFlinch)
             {
-                if (m_targetInfo.position.x < transform.position.x)
-                {
-                    if (!m_shieldLeftDestroyed)
-                    {
-                        //m_stateHandle.Wait(State.ReevaluateSituation);
-                        //m_hitbox.SetInvulnerability(Invulnerability.Level_1);
-                        if (m_shieldLeftHitCount < 3)
-                        {
-                            m_health.SetHealthPercentage(1);
-                            m_animation.SetEmptyAnimation(1, 0);
-                            m_animation.SetAnimation(1, m_info.shieldLeftHitAnimation, false);
-                            m_shieldLeftHitCount++;
-                        }
-                        else
-                        {
-                            m_attackLeftAnimation = m_info.attackLeftSRAnimation.animation;
-                            m_attackRightAnimation = m_info.attackRightSRAnimation.animation;
-                            if (m_shieldRightDestroyed)
-                            {
-                                //m_leftHealth = m_rightHealth;
-                                m_health.SetHealthPercentage(.001f);
-                            }
-                            //m_health.SetHealthPercentage(m_leftHealth);
-                            //m_leftHealth = ((float)m_health.currentValue / m_health.maxValue);
-                            if (m_animation.GetCurrentAnimation(0).ToString() != m_info.wingLeftDestroyAnimation.animation)
-                            {
-                                StopAllCoroutines();
-                                StartCoroutine(WingsDestroyedRoutine(1, m_info.wingLeftDestroyAnimation.animation));
-                            }
-                        }
-                    }
-                }
-                else
-                {
-                    if (!m_shieldRightDestroyed)
-                    {
-                        if (m_shieldRightHitCount < 3)
-                        {
-                            m_health.SetHealthPercentage(1);
-                            m_animation.SetEmptyAnimation(2, 0);
-                            m_animation.SetAnimation(2, m_info.shieldRightHitAnimation, false);
-                            m_shieldRightHitCount++;
-                        }
-                        else
-                        {
-                            m_attackLeftAnimation = m_info.attackLeftSLAnimation.animation;
-                            m_attackRightAnimation = m_info.attackRightSLAnimation.animation;
-                            if (m_shieldLeftDestroyed)
-                            {
-                                //m_rightHealth = m_leftHealth;
-                                m_health.SetHealthPercentage(.001f);
-                            }
-                            //m_health.SetHealthPercentage(m_rightHealth);
-                            //m_rightHealth = ((float)m_health.currentValue / m_health.maxValue);
-                            if (m_animation.GetCurrentAnimation(0).ToString() != m_info.wingRightDestroyAnimation.animation)
-                            {
-                                StopAllCoroutines();
-                                StartCoroutine(WingsDestroyedRoutine(2, m_info.wingRightDestroyAnimation.animation));
-                            }
-                        }
-                    }
-                }
-
-                if (m_shieldLeftDestroyed && m_shieldRightDestroyed)
-                {
-                    m_attackLeftAnimation = m_info.attackLeftNoShieldAnimation.animation;
-                    m_attackRightAnimation = m_info.attackRightNoShieldAnimation.animation;
-                }
+                StopAllCoroutines();
+                //m_animation.SetAnimation(0, m_info.damageAnimation, false);
+                m_stateHandle.Wait(State.ReevaluateSituation);
             }
         }
 
-        private IEnumerator WingsDestroyedRoutine(int index, string animation)
+        private void OnFlinchEnd(object sender, EventActionArgs eventArgs)
         {
-            m_animation.animationState.GetCurrent(0).TimeScale = 0;
-            m_animation.SetAnimation(index, animation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, animation);
-            if (animation == m_info.wingLeftDestroyAnimation.animation)
+            if (m_flinchHandle.m_autoFlinch)
             {
-                m_shieldLeftDestroyed = true;
+                if (m_animation.GetCurrentAnimation(0).ToString() != m_info.deathAnimation.animation)
+                    m_animation.SetEmptyAnimation(0, 0);
+                m_selfCollider.SetActive(false);
+                m_stateHandle.ApplyQueuedState();
             }
-            else if (animation == m_info.wingRightDestroyAnimation.animation)
-            {
-                m_shieldRightDestroyed = true;
-            }
-            m_stateHandle.OverrideState(State.Cooldown);
-            yield return null;
         }
+
 
         public override void ApplyData()
         {
+            if (m_attackDecider != null)
+            {
+                UpdateAttackDeciderList();
+            }
             base.ApplyData();
         }
-
+        private void UpdateAttackDeciderList()
+        {
+            Debug.Log("Apply Attacker Data");
+            m_attackDecider.SetList(new AttackInfo<Attack>(Attack.Attack, m_info.attackLeft.range),
+                                    new AttackInfo<Attack>(Attack.TripleAttack, m_info.tripleAttackLeft.range)
+                                  );
+            m_attackDecider.hasDecidedOnAttack = false;
+        }
         public void ResetAI()
         {
             m_selfCollider.SetActive(false);
@@ -376,7 +289,85 @@ namespace DChild.Gameplay.Characters.Enemies
             m_stateHandle.OverrideState(State.Idle);
             enabled = true;
         }
+        private void ChooseAttack()
+        {
+            if (!m_attackDecider.hasDecidedOnAttack)
+            {
+                IsAllAttackComplete();
+                for (int i = 0; i < m_attackCache.Count; i++)
+                {
+                    m_attackDecider.DecideOnAttack();
+                    if (m_attackCache[i] != m_currentAttack && !m_attackUsed[i])
+                    {
+                        m_attackUsed[i] = true;
+                        m_currentAttack = m_attackCache[i];
+                        m_currentAttackRange = m_attackRangeCache[i];
+                        return;
+                    }
+                }
+            }
+        }
+        private void IsAllAttackComplete()
+        {
+            for (int i = 0; i < m_attackUsed.Length; ++i)
+            {
+                if (!m_attackUsed[i])
+                {
+                    return;
+                }
+            }
+            for (int i = 0; i < m_attackUsed.Length; ++i)
+            {
+                m_attackUsed[i] = false;
+            }
+        }
 
+        void AddToAttackCache(params Attack[] list)
+        {
+            for (int i = 0; i < list.Length; i++)
+            {
+                m_attackCache.Add(list[i]);
+            }
+        }
+
+        void AddToRangeCache(params float[] list)
+        {
+            for (int i = 0; i < list.Length; i++)
+            {
+                m_attackRangeCache.Add(list[i]);
+            }
+        }
+
+        void UpdateRangeCache(params float[] list)
+        {
+            for (int i = 0; i < list.Length; i++)
+            {
+                m_attackRangeCache[i] = list[i];
+            }
+        }
+
+        private void ExecuteAttack(Attack m_attack,String direction)
+        {
+            m_flinchHandle.m_autoFlinch = false;
+            switch (m_attack)
+            {
+                
+                case Attack.Attack:
+                    m_animation.EnableRootMotion(true, false);
+                    //m_attackHandle.ExecuteAttack(m_info.attack.animation, m_info.idleAnimation);
+                    //LaunchProjectile();
+                    StartCoroutine(DaggerAttackRoutine(direction));
+                    m_attackDecider.hasDecidedOnAttack = true;
+                    break;
+                case Attack.TripleAttack:
+                    m_animation.EnableRootMotion(true, false);
+                    //m_attackHandle.ExecuteAttack(m_info.attack.animation, m_info.idleAnimation);
+                    //LaunchProjectile();
+                    StartCoroutine(TripleDaggerAttackRoutine(direction));
+                    m_attackDecider.hasDecidedOnAttack = true;
+                    break;
+            }
+        }
         private IEnumerator DetectRoutine()
         {
             m_animation.SetAnimation(0, m_info.awakenAnimation, false).MixDuration = 0;
@@ -385,62 +376,142 @@ namespace DChild.Gameplay.Characters.Enemies
             m_stateHandle.OverrideState(State.ReevaluateSituation);
             yield return null;
         }
-
-        private IEnumerator ExecuteAttackRoutine(string attack)
+        private IEnumerator DaggerAttackRoutine(string attack)
         {
-            m_animation.SetEmptyAnimation(0, 0);
-            m_animation.EnableRootMotion(true, false);
-            m_animation.SetAnimation(0, attack, false).MixDuration = 0;
-            yield return new WaitForSeconds(m_attackLeftAnimation == m_info.fistAttackLeft.animation ? 4.9f : 3);
-            m_animation.animationState.TimeScale = 0;
-            if (m_attackLeftAnimation == m_info.fistAttackLeft.animation)
+            if (attack == "left")
             {
-                m_attackLeftAnimation = m_info.attackLeft.animation;
-                m_attackRightAnimation = m_info.attackRight.animation;
+                m_animation.SetAnimation(0, m_info.attackLeft.animation, false);
+                yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attackLeft.animation);
+                m_animation.SetEmptyAnimation(0, 0);
+                LaunchProjectileLeft();
             }
+            if (attack == "right")
+            {
+                m_animation.SetAnimation(0, m_info.attackRight.animation, false);
+                yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attackRight.animation);
+                m_animation.SetEmptyAnimation(0, 0);
+                LaunchProjectileRight();
+            }
+            m_movement.Stop();
+            m_selfCollider.SetActive(false);
+            m_flinchHandle.m_autoFlinch = true;
+            m_stateHandle.ApplyQueuedState();
+            yield return null;
+        }
+        private IEnumerator TripleDaggerAttackRoutine(string attack)
+        {
+            if (attack == "left")
+            {
+                m_animation.SetAnimation(0, m_info.tripleAttackLeft.animation, false);
+                yield return new WaitForAnimationComplete(m_animation.animationState, m_info.tripleAttackLeft.animation);
+                m_animation.SetEmptyAnimation(0, 0);
+                LaunchtripleProjectileLeft();
+            }
+            if (attack == "right")
+            {
+                m_animation.SetAnimation(0, m_info.tripleAttackRight.animation, false);
+                yield return new WaitForAnimationComplete(m_animation.animationState, m_info.tripleAttackRight.animation);
+                m_animation.SetEmptyAnimation(0, 0);
+                LaunchtripleProjectileRight();
+            }
+            m_movement.Stop();
+            m_selfCollider.SetActive(false);
+            m_flinchHandle.m_autoFlinch = true;
             m_stateHandle.ApplyQueuedState();
             yield return null;
         }
 
-        private IEnumerator LaunchProjectilRoutine()
+        private IEnumerator WingAttackRoutine()
         {
-            yield return new WaitForSeconds(m_info.launchDelay);
-            LaunchProjectile();
+            m_leftWing.SetActive(true);
+            m_rightWing.SetActive(true);
+            m_animation.SetAnimation(0, m_info.wingAttack.animation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.wingAttack.animation);
+            m_animation.SetEmptyAnimation(0, 0);
+            m_movement.Stop();
+            m_selfCollider.SetActive(false);
+            m_flinchHandle.m_autoFlinch = true;
+            m_leftWing.SetActive(false);
+            m_rightWing.SetActive(false);
+            m_stateHandle.ApplyQueuedState();
             yield return null;
         }
-
-        private void LaunchProjectile()
+        private void LaunchProjectileLeft()
         {
-            if (m_targetInfo.isValid)
-            {
 
-                //m_stingerPos.rotation = Quaternion.Euler(0f, 0f, postAtan2 * Mathf.Rad2Deg);
-                m_projectileLauncher.LaunchProjectile();
-                //m_Audiosource.clip = m_RangeAttackClip;
-                //m_Audiosource.Play();
+            
+                m_projectileLauncherLeft = new ProjectileLauncher(m_info.projectile.projectileInfo, m_projectilePointsLeft[0]);
+                m_projectileLauncherLeft.AimAt(m_projectileTargetsLeft[0].position);
+                m_projectileLauncherLeft.LaunchProjectile();
+
+
+        }
+
+        private void LaunchProjectileRight()
+        {
+
+         
+                m_projectileLauncherRight = new ProjectileLauncher(m_info.projectile.projectileInfo, m_projectilePointsRight[0]);
+                m_projectileLauncherRight.AimAt(m_projectileTargetsRight[0].position);
+                m_projectileLauncherRight.LaunchProjectile();
+
+
+        }
+        private void LaunchtripleProjectileLeft()
+        {
+          
+                for (int i = 0; i < m_projectilePointsLeft.Count; i++)
+                {
+                    m_projectileLauncherLeft = new ProjectileLauncher(m_info.projectile.projectileInfo, m_projectilePointsLeft[i]);
+                    m_projectileLauncherLeft.AimAt(m_projectileTargetsLeft[i].position);
+                    m_projectileLauncherLeft.LaunchProjectile();
+                }
+    
+        }
+
+        private void LaunchtripleProjectileRight()
+        {
+
+            for (int i = 0; i < m_projectilePointsRight.Count; i++)
+            {
+                m_projectileLauncherRight = new ProjectileLauncher(m_info.projectile.projectileInfo, m_projectilePointsRight[i]);
+                m_projectileLauncherRight.AimAt(m_projectileTargetsRight[i].position);
+                m_projectileLauncherRight.LaunchProjectile();
             }
+
         }
 
         protected override void Start()
         {
             base.Start();
             m_selfCollider.SetActive(false);
-            m_attackLeftAnimation = m_info.fistAttackLeft.animation;
-            m_attackRightAnimation = m_info.fistAttackRight.animation;
-
-            m_spineEventListener.Subscribe(m_info.projectile.launchOnEvent, LaunchProjectile);
+            m_leftWing.SetActive(false);
+            m_rightWing.SetActive(false);
+            m_spineEventListener.Subscribe(m_info.projectile.launchOnEvent, LaunchtripleProjectileLeft);
+            m_spineEventListener.Subscribe(m_info.projectile.launchOnEvent, LaunchtripleProjectileRight);
             m_startPoint = transform.position;
         }
 
         protected override void Awake()
         {
             base.Awake();
-            
+            GameplaySystem.minionManager.Register(this);
             m_attackHandle.AttackDone += OnAttackDone;
-            m_deathHandle.SetAnimation(m_info.deathAnimation.animation);
+            m_attackDecider = new RandomAttackDecider<Attack>();
             m_flinchHandle.FlinchStart += OnFlinchStart;
-            m_projectileLauncher = new ProjectileLauncher(m_info.projectile.projectileInfo, m_projectileStart);
+            m_flinchHandle.FlinchEnd += OnFlinchEnd;
+            m_projectileLauncherLeft = new ProjectileLauncher(m_info.projectile.projectileInfo, m_projectilePointsLeft[0]);
+            m_projectileLauncherLeft.SetProjectile(m_info.projectile.projectileInfo);
+            m_projectileLauncherRight = new ProjectileLauncher(m_info.projectile.projectileInfo, m_projectilePointsRight[0]);
+            m_projectileLauncherRight.SetProjectile(m_info.projectile.projectileInfo);
+            m_attackDecider = new RandomAttackDecider<Attack>();
+            UpdateAttackDeciderList();
             m_stateHandle = new StateHandle<State>(State.Idle, State.WaitBehaviourEnd);
+            m_attackCache = new List<Attack>();
+            AddToAttackCache(Attack.Attack, Attack.TripleAttack);
+            m_attackRangeCache = new List<float>();
+            AddToRangeCache(m_info.attackLeft.range, m_info.tripleAttackLeft.range);
+            m_attackUsed = new bool[m_attackCache.Count];
         }
 
 
@@ -461,23 +532,32 @@ namespace DChild.Gameplay.Characters.Enemies
                     break;
 
                 case State.Attacking:
-                    if (IsTargetInRange(m_info.attackLeft.range))
+                    if (IsTargetInRange(m_info.wingAttack.range))
                     {
-                        m_stateHandle.Wait(State.Cooldown);
-
-                        //var target = new Vector2(m_targetInfo.position.x, m_projectileStart.position.y);
-                        m_projectileLauncher.AimAt(m_targetInfo.position);
-                        //StartCoroutine(LaunchProjectilRoutine());
-
-                        if (m_targetInfo.position.x < transform.position.x)
+                        m_flinchHandle.m_autoFlinch = false;
+                        m_stateHandle.Wait(State.ReevaluateSituation);
+                        StartCoroutine(WingAttackRoutine());
+                    }
+                    else
+                    {
+                        if (IsTargetInRange(m_info.attackLeft.range))
                         {
-                            //m_attackHandle.ExecuteAttack(m_attackLeftAnimation, null);
-                            StartCoroutine(ExecuteAttackRoutine(m_attackLeftAnimation));
-                        }
-                        else
-                        {
-                            //m_attackHandle.ExecuteAttack(m_attackRightAnimation, null);
-                            StartCoroutine(ExecuteAttackRoutine(m_attackRightAnimation));
+                            ChooseAttack();
+                            m_flinchHandle.m_autoFlinch = false;
+                            m_stateHandle.Wait(State.Cooldown);
+
+                            if (m_targetInfo.position.x < transform.position.x)
+                            {
+                                ExecuteAttack( m_currentAttack, "left");
+                                m_attackDecider.hasDecidedOnAttack = false;
+
+                            }
+                            else
+                            {
+                                ExecuteAttack(m_currentAttack, "right");
+                                m_attackDecider.hasDecidedOnAttack = false;
+
+                            }
                         }
                     }
                     break;
@@ -521,7 +601,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_stateHandle.OverrideState(State.Idle);
             GetComponentInChildren<Hitbox>().gameObject.SetActive(true);
-            m_boundBoxGO.SetActive(true);
+
             m_currentPatience = 0;
             m_enablePatience = false;
             m_isDetecting = false;
