@@ -864,9 +864,11 @@ namespace DarkTonic.MasterAudio {
 
                 _songPauseTime = null;
 
-                _activeAudio.Stop(); // stop the previous scheduled play
+                //Holysoft commented it out
+                /*_activeAudio.Stop();*/ // stop the previous scheduled play
 
                 ScheduleClipPlay(newSongStartOffset, _activeAudio, true);
+
             }
 
             if (!_scheduledSongOffsetByAudioSource.ContainsKey(_transitioningAudio)) {
@@ -881,7 +883,8 @@ namespace DarkTonic.MasterAudio {
 
                 _songPauseTime = null;
 
-                _transitioningAudio.Stop(); // stop the previous scheduled play
+                //HolySoft Commented it out
+               /* _transitioningAudio.Stop();*/ // stop the previous scheduled play
 
                 ScheduleClipPlay(newSongStartOffset, _transitioningAudio, true);
             }
