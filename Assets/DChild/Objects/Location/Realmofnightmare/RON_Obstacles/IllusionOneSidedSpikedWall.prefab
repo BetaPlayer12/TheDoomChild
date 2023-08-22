@@ -27,6 +27,7 @@ Transform:
   m_LocalRotation: {x: 0, y: -0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5236669066090267658}
   m_Father: {fileID: 0}
@@ -44,6 +45,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 428c45afd8aa39842857ce08240c0b9f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_setLerpSpeed: 1.5
+  m_lerpValue: 0
+  m_materialParameterCall: {fileID: 7364953048488209803}
 --- !u!1 &8944668698308599032
 GameObject:
   m_ObjectHideFlags: 0
@@ -73,6 +77,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5236669066090267658}
   m_RootOrder: 0
@@ -154,6 +159,7 @@ GameObject:
   - component: {fileID: 5236669066090267658}
   - component: {fileID: 1209741787584196599}
   - component: {fileID: 8766384833164995187}
+  - component: {fileID: 7364953048488209803}
   m_Layer: 11
   m_Name: Model
   m_TagString: Untagged
@@ -171,6 +177,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -2.15, y: 1.04, z: 0}
   m_LocalScale: {x: 4.5942936, y: 4.5942936, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4599282068720631067}
   m_Father: {fileID: 1967014996617538703}
@@ -187,14 +194,16 @@ SpriteRenderer:
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 2100000, guid: 64a156d97e9cfcb4e9b96c50cf913155, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -252,3 +261,18 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.92162335, y: 5.529213}
   m_EdgeRadius: 0
+--- !u!114 &7364953048488209803
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9109865061875883611}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 219df8dadf9989246b4d5e3ff153e49f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_parameter: Vector1_FadeInOut
+  m_renderers:
+  - {fileID: 1209741787584196599}
