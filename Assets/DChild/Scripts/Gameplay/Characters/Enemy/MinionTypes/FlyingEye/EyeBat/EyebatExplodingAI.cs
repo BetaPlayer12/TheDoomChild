@@ -80,6 +80,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private enum State
         {
             Detect,
+            Idle,
             ReturnToPatrol,
             Patrol,
             Cooldown,
@@ -125,6 +126,7 @@ namespace DChild.Gameplay.Characters.Enemies
         [ShowInInspector]
         private StateHandle<State> m_stateHandle;
         private State m_turnState;
+        public bool isIdle;
         [ShowInInspector]
         private RandomAttackDecider<Attack> m_attackDecider;
 
@@ -409,7 +411,14 @@ namespace DChild.Gameplay.Characters.Enemies
             m_flinchHandle.FlinchStart += OnFlinchStart;
             m_flinchHandle.FlinchEnd += OnFlinchEnd;
             m_turnHandle.TurnDone += OnTurnDone;
-            m_stateHandle = new StateHandle<State>(State.Patrol, State.WaitBehaviourEnd);
+            if (isIdle)
+            {
+                m_stateHandle = new StateHandle<State>(State.Idle, State.WaitBehaviourEnd);
+            }
+            else
+            {
+                m_stateHandle = new StateHandle<State>(State.Patrol, State.WaitBehaviourEnd);
+            }
             m_attackDecider = new RandomAttackDecider<Attack>();
             UpdateAttackDeciderList();
         }
@@ -431,6 +440,10 @@ namespace DChild.Gameplay.Characters.Enemies
                         m_turnState = State.Detect;
                         m_stateHandle.SetState(State.Turning);
                     }
+                    break;
+
+                case State.Idle:
+                    m_agent.Stop();
                     break;
 
                 case State.ReturnToPatrol:
