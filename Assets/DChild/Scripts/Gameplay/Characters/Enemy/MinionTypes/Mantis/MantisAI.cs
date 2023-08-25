@@ -329,12 +329,11 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_movement.Stop();
             m_selfCollider.enabled = false;
-            m_scratchAttackBB.enabled = false;
-            m_currentHurtbox = m_leapAttackBB;
-            m_hurtboxCoroutine = StartCoroutine(BoundingBoxRoutine(2.5f));
+            
             m_animation.SetAnimation(0, m_info.leapPrepAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.leapPrepAnimation);
             yield return new WaitForSeconds(m_info.leapWaitTime);
+            m_leapAttackBB.enabled = true;
             var leapDir = new Vector2(m_info.leapDistance.x * transform.localScale.x, m_info.leapDistance.y);
             m_character.physics.SetVelocity(leapDir);
             //m_character.physics.AddForce(leapDir, ForceMode2D.Impulse);
@@ -344,6 +343,7 @@ namespace DChild.Gameplay.Characters.Enemies
             //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.leapAnimation);
             m_movement.Stop();
             m_attackDecider.hasDecidedOnAttack = false;
+            m_leapAttackBB.enabled = false;
             if (!m_wallSensor.isDetecting)
             {
                 GetComponent<IsolatedCharacterPhysics2D>().UseStepClimb(true);
@@ -440,9 +440,9 @@ namespace DChild.Gameplay.Characters.Enemies
                             m_attackHandle.ExecuteAttack(m_info.scratchAttack.animation, m_info.idleAnimation.animation);
                             m_currentHurtbox = m_scratchAttackBB;
                             m_hurtboxCoroutine = StartCoroutine(BoundingBoxRoutine(2.5f));
+                            
 
-
-                            break;
+                    break;
                         case Attack.ScratchDeflect:
                             m_animation.EnableRootMotion(true, false);
                             m_attackHandle.ExecuteAttack(m_info.scratchAttack.animation, m_info.idleAnimation.animation);
@@ -452,6 +452,7 @@ namespace DChild.Gameplay.Characters.Enemies
                             //m_attackHandle.ExecuteAttack(m_info.leapRootAnimation, m_info.idleAnimation);
                             m_animation.EnableRootMotion(false, false);
                             StartCoroutine(LeapAttackRoutine());
+                            m_scratchAttackBB.enabled = false;
                             break;
                     }
                     m_attackDecider.hasDecidedOnAttack = false;
