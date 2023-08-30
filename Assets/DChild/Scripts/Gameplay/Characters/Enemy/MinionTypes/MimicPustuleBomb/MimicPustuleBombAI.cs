@@ -501,11 +501,11 @@ namespace DChild.Gameplay.Characters.Enemies
             Debug.Log(m_info);
             base.Awake();
 
-            m_patrolHandle.TurnRequest += OnTurnRequest;
+           /* m_patrolHandle.TurnRequest += OnTurnRequest;*/
             m_attackHandle.AttackDone += OnAttackDone;
             m_flinchHandle.FlinchStart += OnFlinchStart;
             m_flinchHandle.FlinchEnd += OnFlinchEnd;
-            m_turnHandle.TurnDone += OnTurnDone;
+            /*m_turnHandle.TurnDone += OnTurnDone;*/
             /*m_deathHandle.SetAnimation(m_info.deathAnimation.animation);*/
             m_stateHandle = new StateHandle<State>(State.Patrol, State.WaitBehaviourEnd);
             m_attackDecider = new RandomAttackDecider<Attack>();
