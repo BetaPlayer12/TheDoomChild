@@ -10,7 +10,6 @@ using UnityEngine.UI;
 
 namespace DChild.Menu.Bestiary
 {
-
     public class BestiaryInfoUI : MonoBehaviour
     {
         [ShowInInspector, OnValueChanged("UpdateInfo")]
@@ -56,13 +55,13 @@ namespace DChild.Menu.Bestiary
         {
             if (m_showDataOf == null)
             {
-                creatureNameText = "NOTHING";
+                creatureNameText = "";
                 SetImage(m_creatureImage, m_showDataOf.infoImage);
                 SetImage(m_sketchImage, m_showDataOf.sketchImage);
-                m_location.text = "THE VOID";
-                m_description.text = "Dead";
-                m_storeNotes.text = "Run, don't look back!!";
-                m_hunterNotes.text = "Whatever you do, do not look for this";
+                m_location.text = "";
+                m_description.text = "";
+                m_storeNotes.text = "";
+                m_hunterNotes.text = "";
             }
             else
             {
