@@ -48,7 +48,7 @@ namespace DChild.Configurations
                 resolutionIndex = 0,
                 fullscreen = true,
                 vsync = true,
-                brightness = 0.5f,
+                brightness = 0f,
                 contrast = 0.5f
             };
 

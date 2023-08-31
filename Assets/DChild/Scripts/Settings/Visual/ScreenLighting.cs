@@ -7,7 +7,7 @@ public class ScreenLighting : MonoBehaviour
     #region Variables
     public Shader curShader;
     [SerializeField]
-    [Range(0, 1.5f)]
+    [Range(-1, 1f)]
     private float m_brightness = 1.0f;
     [SerializeField]
     [Range(0, 2f)]
@@ -27,7 +27,7 @@ public class ScreenLighting : MonoBehaviour
 
         set
         {
-            m_brightness = Mathf.Clamp(value, -1, 1f);
+            m_brightness = Mathf.Clamp(value, -1f, 1f);
         }
     }
     public float saturation
