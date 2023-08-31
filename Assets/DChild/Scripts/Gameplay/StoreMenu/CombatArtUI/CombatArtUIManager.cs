@@ -114,7 +114,7 @@ namespace DChild.Gameplay.UI.CombatArts
             Select(obj);
         }
 
-        private void InitializeButtonStates()
+        public void InitializeButtonStates()
         {
             var combatArtCount = (int)CombatArt._Count;
             for (int i = 0; i < combatArtCount; i++)
