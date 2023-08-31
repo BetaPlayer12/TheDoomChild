@@ -98,14 +98,51 @@ namespace DChild.Gameplay
         {
             Initialize();
         }
+        private void OnTriggerExit2D(Collider2D collision)
+        {
+            if (m_oneTimeOnly == false)
+            {
+                var playerObject = collision.gameObject.GetComponentInParent<PlayerControlledObject>();
+                if (playerObject != null && collision.tag == "Hitbox")
+                {
+                    Collider2D collider = GetComponent<Collider2D>();
+                    Transform transformToCheck = playerObject.transform;
 
+                    if (collider.OverlapPoint(transformToCheck.position))
+                    {
+
+                    }
+                    else
+                    {
+                        if (m_waitForPlayerToBeGrounded)
+                        {
+                            if (m_enterEventRoutine != null)
+                            {
+                                StopCoroutine(m_enterEventRoutine);
+                                m_enterEventRoutine = null;
+                            }
+
+                            if (m_exitEventRoutine == null)
+                            {
+                                m_exitEventRoutine = StartCoroutine(ExecuteExitWhenPlayerIsGrounded());
+                            }
+                        }
+                        else
+                        {
+                            TriggerExitEvent();
+                        }
+                    }
+                }
+            }
+        }
         private void OnTriggerEnter2D(Collider2D collision)
         {
 
 
             var playerObject = collision.gameObject.GetComponentInParent<PlayerControlledObject>();
-            if (playerObject != null && collision.tag != "Sensor")
+            if (playerObject != null && collision.tag == "Hitbox")
             {
+
                 if ((m_oneTimeOnly && !m_wasTriggered) || !m_oneTimeOnly)
                 {
                     if (m_waitForPlayerToBeGrounded)
@@ -130,43 +167,7 @@ namespace DChild.Gameplay
 
         }
 
-        private void OnTriggerExit2D(Collider2D collision)
-        {
-            if (m_oneTimeOnly == false)
-            {
-                var playerObject = collision.gameObject.GetComponentInParent<PlayerControlledObject>();
-                if (playerObject != null && collision.tag != "Sensor")
-                {
-                    Collider2D collider = GetComponent<Collider2D>(); 
-                    Transform transformToCheck = playerObject.transform; 
-
-                    if (collider.OverlapPoint(transformToCheck.position))
-                    {
-
-                   }
-                   else
-                   {
-                        if (m_waitForPlayerToBeGrounded)
-                        {
-                            if (m_enterEventRoutine != null)
-                            {
-                                StopCoroutine(m_enterEventRoutine);
-                                m_enterEventRoutine = null;
-                            }
-
-                            if (m_exitEventRoutine == null)
-                            {
-                                m_exitEventRoutine = StartCoroutine(ExecuteExitWhenPlayerIsGrounded());
-                            }
-                        }
-                        else
-                        {
-                            TriggerExitEvent();
-                        }
-                    }
-                }
-            }
-        }
+       
 
         private void OnValidate()
         {
