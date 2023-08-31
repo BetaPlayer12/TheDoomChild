@@ -426,7 +426,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 var idleAnim = UnityEngine.Random.Range(0, 2) == 1 ? m_info.idle1Animation : m_info.idle2Animation;
                 m_animation.SetAnimation(0, idleAnim, true);
                 //m_animation.SetAnimation(0, m_info.rawrAnimation, false);
-                //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.rawrAnimation);
+                yield return new WaitForAnimationComplete(m_animation.animationState, idleAnim);
 
                 //yield return new WaitForSeconds(3f);
                 yield return null;
@@ -618,10 +618,10 @@ namespace DChild.Gameplay.Characters.Enemies
                                 if (!m_wallSensor.isDetecting && m_groundSensor.isDetecting && m_edgeSensor.isDetecting)
                                 {
                                     m_selfCollider.enabled = false;
-                                    if (m_animation.animationState.GetCurrent(0).IsComplete)
-                                    {
-                                        m_animation.SetAnimation(0, m_currentMoveAnim, true);
-                                    }
+                                    //if (m_animation.animationState.GetCurrent(0).IsComplete)
+                                    //{
+                                    //}
+                                    m_animation.SetAnimation(0, m_currentMoveAnim, true);
                                     m_movement.MoveTowards(Vector2.one * transform.localScale.x, m_currentMoveSpeed);
                                 }
                                 else
@@ -631,10 +631,10 @@ namespace DChild.Gameplay.Characters.Enemies
                                         m_movement.Stop();
 
                                     m_selfCollider.enabled = true;
-                                    if (m_animation.animationState.GetCurrent(0).IsComplete)
-                                    {
-                                        m_animation.SetAnimation(0, idleAnimCH, true);
-                                    }
+                                    //if (m_animation.animationState.GetCurrent(0).IsComplete)
+                                    //{
+                                    //}
+                                    m_animation.SetAnimation(0, idleAnimCH, true);
                                 }
                             }
                         }
