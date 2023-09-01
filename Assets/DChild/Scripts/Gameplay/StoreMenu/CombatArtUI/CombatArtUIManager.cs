@@ -137,6 +137,14 @@ namespace DChild.Gameplay.UI.CombatArts
                     }
 
                 }
+                else if (m_progressionReference.IsAbilityActivated(combatArt) == false)
+                {
+                    for (int k = 0; k < array.Length; k++)
+                    {
+                        array[k].SetState(CombatArtUnlockState.Unlockable);
+                    }
+
+                }
                 else
                 {
                     for (int k = 0; k < array.Length; k++)
