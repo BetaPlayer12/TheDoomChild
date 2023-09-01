@@ -15,27 +15,29 @@ namespace DChild.Gameplay.Environment
         [SerializeField]
         private Sprite m_closeVersion;
         [SerializeField]
+        private Material m_closeMaterial;
+        [SerializeField]
         private Sprite m_openVersion;
+        [SerializeField]
+        private Material m_openMaterial;
 
         private SpriteRenderer m_renderer;
-        private MaterialParameterCall m_materialParameterCall;
 
         public override void Close(bool instant = false)
         {
             m_renderer.sprite = m_closeVersion;
-            m_materialParameterCall.SetValue(true);
+            m_renderer.material = m_closeMaterial;
         }
 
         public override void Open(bool instant = false)
         {
             m_renderer.sprite = m_openVersion;
-            m_materialParameterCall.SetValue(false);
+            m_renderer.material = m_openMaterial;
         }
 
         private void Awake()
         {
             m_renderer = GetComponent<SpriteRenderer>();
-            m_materialParameterCall = GetComponent<MaterialParameterCall>();
         }
     }
 }
