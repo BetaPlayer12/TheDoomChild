@@ -35,7 +35,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
             if (collision.tag != "Sensor")
             {
                 var target = collision.GetComponentInParent<ITarget>();
-                if (target.CompareTag(Character.objectTag))
+                Debug.Log(collision.gameObject.name + " " + collision.gameObject.tag);
+                if (collision.tag == "Hitbox")
                 {
                     m_targetTuple = (collision.GetComponentInParent<Damageable>(), collision.GetComponentInParent<Character>());
                     m_forceInteract.Invoke();
