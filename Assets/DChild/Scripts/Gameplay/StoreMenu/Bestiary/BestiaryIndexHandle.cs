@@ -88,10 +88,14 @@ namespace DChild.Menu.Bestiary
                 var itemIndex = m_startIndex + i;
                 var ID = m_IDs[itemIndex];
                 var data = m_bestiaryList.GetInfo(ID);
-                m_buttons[i].SetData(data);
-                m_buttons[i].Show();
                 var hasInfoOnID = m_tracker?.HasInfoOf(ID) ?? true;
+                var revealEntry = m_revealAllData || hasInfoOnID;
                 m_buttons[i].SetInteractable(m_revealAllData || hasInfoOnID);
+                m_buttons[i].Show();
+                if (revealEntry)
+                {
+                    m_buttons[i].SetData(data);
+                }
             }
 
             for (; i < m_buttonCount; i++)
