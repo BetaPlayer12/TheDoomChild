@@ -54,23 +54,23 @@ namespace DChild.Gameplay.Environment.Interractables.Unique
             m_isOnScreen = true;
         }
 
-        private void LateUpdate()
-        {
-            if (m_fixAfterBreakTimer > 0)
-            {
-                m_fixAfterBreakTimer -= GameplaySystem.time.deltaTime;
-            }
-            else
-            {
-                if (m_fixWhenOffScreen && m_isOnScreen)
-                {
-                    return;
-                }
+        //private void LateUpdate()
+        //{
+        //    if (m_fixAfterBreakTimer > 0)
+        //    {
+        //        m_fixAfterBreakTimer -= GameplaySystem.time.deltaTime;
+        //    }
+        //    else
+        //    {
+        //        if (m_fixWhenOffScreen && m_isOnScreen)
+        //        {
+        //            return;
+        //        }
 
-                m_breakable.SetObjectState(false);
-                enabled = false;
-            }
-        }
+        //        m_breakable.SetObjectState(false);
+        //        enabled = false;
+        //    }
+        //}
 
     }
 
