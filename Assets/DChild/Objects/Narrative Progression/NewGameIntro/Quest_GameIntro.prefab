@@ -237,7 +237,6 @@ MonoBehaviour:
   condition:
     luaConditions:
     - Variable["PlayerTaughtHowToAttack"] == true
-    - Variable["CreditsEnd"] == true
     questConditions: []
     acceptedTags: []
     acceptedGameObjects: []
@@ -2549,6 +2548,8 @@ Transform:
   - {fileID: 8534160764601985469}
   - {fileID: 3964670539455001911}
   - {fileID: 608982935980640814}
+  - {fileID: 7227058210030752567}
+  - {fileID: 4103442327507540702}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -12866,7 +12867,19 @@ MonoBehaviour:
   setAnimatorStateActions: []
   onExecute:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 4004542095841247039}
+        m_TargetAssemblyTypeName: DChild.Gameplay.SavePoint, Assembly-CSharp
+        m_MethodName: SaveGame
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   useConversationTitlePicker: 1
   useBarkTitlePicker: 1
   useQuestNamePicker: 1
@@ -17654,6 +17667,98 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 9.464722, y: 113.16359}
   m_EdgeRadius: 0
+--- !u!1 &6392161467170783356
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7227058210030752567}
+  - component: {fileID: 4004542095841247039}
+  m_Layer: 0
+  m_Name: AutosaveCheckpoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7227058210030752567
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6392161467170783356}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 641.67, y: 21.78, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2400683854476012480}
+  m_RootOrder: 18
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4004542095841247039
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6392161467170783356}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 69d4e23fb5e22694a81274160f41148d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_location: 15
+  m_spawnPosition: {x: -606.33, y: 117.78}
+  m_dontActuallySave: 0
+--- !u!1 &6568722721777906728
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4103442327507540702}
+  - component: {fileID: 5945381954670864815}
+  m_Layer: 0
+  m_Name: OrphanMaker
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4103442327507540702
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6568722721777906728}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 537.997, y: 69.01697, z: 1.8946025}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2400683854476012480}
+  m_RootOrder: 19
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5945381954670864815
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6568722721777906728}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad8a2db07202dd54baddb93d2052d5b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_childToBeOrphaned: {fileID: 2400683854869452784}
 --- !u!1 &6899960290801316548
 GameObject:
   m_ObjectHideFlags: 0
