@@ -200,6 +200,7 @@ namespace DChild.Gameplay.Systems
         }
         private void OnPlayerDeath(object sender, EventActionArgs eventArgs)
         {
+            GameplaySystem.gamplayUIHandle.notificationManager.RemoveAllQueuedNotifications();
             GameplaySystem.gamplayUIHandle.ShowGameOverScreen();
             // m_input.Disable();
             //  m_player.controller.Disable();

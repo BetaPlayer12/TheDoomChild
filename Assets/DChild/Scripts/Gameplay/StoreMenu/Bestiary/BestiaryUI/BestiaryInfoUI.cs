@@ -44,9 +44,13 @@ namespace DChild.Menu.Bestiary
 
         public void ShowInfo(BestiaryData data)
         {
-            if (m_showDataOf = data)
+            if (m_showDataOf != data)
             {
                 m_showDataOf = data;
+                UpdateInfo();
+            }
+            else if(data == null)
+            {
                 UpdateInfo();
             }
         }
@@ -56,8 +60,8 @@ namespace DChild.Menu.Bestiary
             if (m_showDataOf == null)
             {
                 creatureNameText = "";
-                SetImage(m_creatureImage, m_showDataOf.infoImage);
-                SetImage(m_sketchImage, m_showDataOf.sketchImage);
+                SetImage(m_creatureImage, null);
+                SetImage(m_sketchImage, null);
                 m_location.text = "";
                 m_description.text = "";
                 m_storeNotes.text = "";
@@ -90,15 +94,14 @@ namespace DChild.Menu.Bestiary
 
         private void SetImage(Image image, Sprite sprite)
         {
+            image.sprite = sprite;
             if (sprite == null)
             {
-                image.sprite = sprite;
-                //image.color = Color.clear;
+                image.color = Color.clear;
             }
             else
             {
-                //image.color = Color.white;
-                image.sprite = sprite;
+                image.color = Color.white;
             }
         }
     }
