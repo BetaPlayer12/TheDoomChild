@@ -87,9 +87,6 @@ namespace DChild.Gameplay.Characters.Enemies
             private BasicAnimationInfo m_tentacleToungeAttackAnimation = new BasicAnimationInfo();
             public BasicAnimationInfo tentacleToungeAttackAnimation => m_tentacleToungeAttackAnimation;
 
-            [SerializeField]
-            private SimpleProjectileAttackInfo m_projectile;
-            public SimpleProjectileAttackInfo projectile => m_projectile;
 
             public override void Initialize()
             {
@@ -339,10 +336,11 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private bool IsInRange(Vector2 position, float distance) => Vector2.Distance(position, m_character.centerMass.position) <= distance;
 
+
         protected override void OnDestroyed(object sender, EventActionArgs eventArgs)
         {
-            //m_Audiosource.clip = m_DeadClip;
-            //m_Audiosource.Play();
+           
+ 
             base.OnDestroyed(sender, eventArgs);
 
             StopAllCoroutines();
@@ -351,20 +349,29 @@ namespace DChild.Gameplay.Characters.Enemies
                 StopCoroutine(m_executeMoveCoroutine);
                 m_executeMoveCoroutine = null;
             }
+            m_animation.SetEmptyAnimation(0, 0);
+            m_deathHandle.enabled = true;
+            StartCoroutine(DeathRoutine());
             m_agent.Stop();
             m_bodycollider.enabled = false;
             m_selfCollider.SetActive(false);
-            m_rigidbody2D.constraints = RigidbodyConstraints2D.FreezeRotation;
-            //m_muzzleLoopFX.Stop();
-            if(m_stateHandle.currentState == State.Patrol)
-            {
-                m_animation.SetAnimation(0, m_info.deathUnAggroAnimation, false);
-            }
-            else
-            {
-                m_animation.SetAnimation(0, m_info.deathAggroAnimation, false);
-            }
+            
+            
+        }
+
+        private IEnumerator DeathRoutine()
+        {
            
+            
+            m_animation.SetAnimation(0, m_info.deathAggroAnimation, true);
+            m_animation.EnableRootMotion(true, false);
+            m_rigidbody2D.constraints = RigidbodyConstraints2D.FreezeRotation;
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.deathAggroAnimation);
+           
+            this.gameObject.SetActive(false);
+            enabled = false;
+            Debug.Log("Die Mimic");
+            yield return null;
         }
 
         #region Attack
@@ -506,7 +513,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_flinchHandle.FlinchStart += OnFlinchStart;
             m_flinchHandle.FlinchEnd += OnFlinchEnd;
             /*m_turnHandle.TurnDone += OnTurnDone;*/
-            /*m_deathHandle.SetAnimation(m_info.deathAnimation.animation);*/
+            m_deathHandle.SetAnimation(m_info.deathAggroAnimation.animation);
             m_stateHandle = new StateHandle<State>(State.Patrol, State.WaitBehaviourEnd);
             m_attackDecider = new RandomAttackDecider<Attack>();
             UpdateAttackDeciderList();
