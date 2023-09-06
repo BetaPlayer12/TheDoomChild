@@ -125,6 +125,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private SpineEventListener m_spineEventListener;
         [SerializeField, TabGroup("Reference")]
         private Hitbox m_hitbox;
+        [SerializeField, TabGroup("Reference")]
+        private GameObject m_boundingBox;
         //[SerializeField, TabGroup("Modules")]
         //private TransformTurnHandle m_turnHandle;
         [SerializeField, TabGroup("Modules")]
@@ -354,6 +356,7 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_Audiosource.clip = m_DeadClip;
             //m_Audiosource.Play();
             m_hitbox.Disable();
+            m_boundingBox.SetActive(false);
             StopAllCoroutines();
             base.OnDestroyed(sender, eventArgs);
             
