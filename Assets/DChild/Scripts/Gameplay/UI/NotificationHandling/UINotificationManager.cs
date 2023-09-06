@@ -11,7 +11,7 @@ using UnityEngine;
 
 namespace DChild.Gameplay.UI
 {
-    public class UINotificationManager : MonoBehaviour, IUINotificationManager
+    public class UINotificationManager : SerializedMonoBehaviour, IUINotificationManager
     {
         [SerializeField, MinValue(0.01f)]
         private float m_notificationInterval = 0.01f;
@@ -82,6 +82,14 @@ namespace DChild.Gameplay.UI
         }
         #endregion
 
+        public void RemoveAllQueuedNotifications()
+        {
+            for (int i = 0; i < m_notificationHandles.Count; i++)
+            {
+                m_notificationHandles[i].RemoveAllQueuedNotifications();
+            }
+        }
+
         public void InitializePriorityHandling()
         {
             if (m_notificationHandles == null)
@@ -109,14 +117,13 @@ namespace DChild.Gameplay.UI
 
             m_promptNotificationHandle.Initialize();
             m_promptNotificationHandle.AddListenerToOnNotificationHidden(CloseCurrentNotification);
-
         }
 
         private int SortPriorityComparison(INotificationHandle x, INotificationHandle y)
         {
             if (x.priority == y.priority)
                 return 0;
-            return x.priority > y.priority ? 1 : -1;
+            return x.priority < y.priority ? 1 : -1;
         }
 
         private void EnableNotificationRoutine()
