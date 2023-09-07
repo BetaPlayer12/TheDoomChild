@@ -110,7 +110,8 @@ namespace DChild.Gameplay.Characters.Enemies
             [HideInInspector]
             _COUNT
         }
-
+        [SerializeField, TabGroup("Reference")]
+        private GameObject m_hitbox;
         [SerializeField, TabGroup("Reference")]
         private Collider2D m_selfCollider;
         [SerializeField, TabGroup("Reference")]
@@ -238,6 +239,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             //m_Audiosource.clip = m_DeadClip;
             //m_Audiosource.Play();
+            m_hitbox.SetActive(false);
             base.OnDestroyed(sender, eventArgs);
             
             m_movement.Stop();

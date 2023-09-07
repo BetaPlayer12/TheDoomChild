@@ -25,6 +25,8 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
         private Rigidbody2D m_physics;
         [SerializeField, BoxGroup("Sensors")]
         private RaySensor m_cielingSensor;
+        [SerializeField, BoxGroup("FX")]
+        private ParticleSystem m_dustFeedbackFX;
 
         [SerializeField]
         private Vector2 m_pushForce;
@@ -68,6 +70,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             m_state.isAttacking = false;
             m_canIcarusWings = true;
             //m_icarusWingsInfo.ShowCollider(false);
+            m_icarusWingsInfo.PlayFX(false);
             m_animator.SetBool(m_icarusWingsStateAnimationParameter, false);
             base.Reset();
         }
@@ -92,6 +95,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             //m_icarusWingsInfo.ShowCollider(false);
             //m_canicarusWings = true;
             //m_canMove = true;
+            m_icarusWingsInfo.PlayFX(false);
             m_physics.velocity = Vector2.zero;
             if (m_cielingCheckRoutine != null)
             {
@@ -109,6 +113,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
                 StopCoroutine(m_cielingCheckRoutine);
                 m_cielingCheckRoutine = null;
             }
+            m_icarusWingsInfo.PlayFX(false);
             //m_icarusWingsInfo.ShowCollider(false);
             m_fxAnimator.Play("Buffer");
             m_animator.SetBool(m_icarusWingsStateAnimationParameter, false);
@@ -138,7 +143,9 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
         public void Jump()
         {
             m_rigidBody.WakeUp();
-            
+
+            m_dustFeedbackFX.Play();
+            m_icarusWingsInfo.PlayFX(true);
             m_physics.AddForce(new Vector2(m_character.facing == HorizontalDirection.Right ? m_pushForce.x : -m_pushForce.x, m_pushForce.y), ForceMode2D.Impulse);
             if (m_icarusWingsInfo.fxPosition != null)
             {

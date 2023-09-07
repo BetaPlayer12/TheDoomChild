@@ -40,6 +40,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private LightningSpear m_lightningSpear;
         private IcarusWings m_icarusWings;
         private TeleportingSkull m_teleportingSkull;
+        private AirSlashRange m_airSlashRange;
         #endregion
 
         public void IdleStateFinished()
@@ -411,6 +412,11 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_hellTrident.Summon();
         }
 
+        public void HellTridentPlaySpawnFX()
+        {
+            m_hellTrident.PlaySpawnFX();
+        }
+
         public void HellTridentEnd()
         {
             //m_hellTrident?.AttackOver();
@@ -609,6 +615,16 @@ namespace DChild.Gameplay.Characters.Players.Modules
         {
             m_teleportingSkull.GetSpawnedProjectile(m_projectileThrow.spawnedProjectile);
         }
+
+        public void AirSlashRangeSummon()
+        {
+            m_airSlashRange.SummonAirSlash();
+        }
+
+        public void AirSlashRangeEnd()
+        {
+            m_airSlashRange.EndExecution();
+        }
         #endregion
 
         public void SkullThrowSpawnProjectile()
@@ -680,6 +696,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_lightningSpear = character.GetComponentInChildren<LightningSpear>();
             m_icarusWings = character.GetComponentInChildren<IcarusWings>();
             m_teleportingSkull = character.GetComponentInChildren<TeleportingSkull>();
+            m_airSlashRange = character.GetComponentInChildren<AirSlashRange>();
         }
 
         #region TESTING
