@@ -95,6 +95,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private LightningSpear m_lightningSpear;
         private IcarusWings m_icarusWings;
         private TeleportingSkull m_teleportingSkull;
+        private AirSlashRange m_airSlashRange;
         #endregion
         #endregion
 
@@ -144,6 +145,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_eelecktrick?.Cancel();
             m_lightningSpear?.Cancel();
             m_icarusWings?.Cancel();
+            m_airSlashRange?.Cancel();
 
             if (m_state.isGrounded)
             {
@@ -329,6 +331,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 m_fencerFlash?.Cancel();
                 m_diagonalSwordDash?.Cancel();
                 m_lightningSpear?.Cancel();
+                m_airSlashRange?.Cancel();
             }
         }
 
@@ -424,6 +427,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_lightningSpear = m_character.GetComponentInChildren<LightningSpear>();
             m_icarusWings = m_character.GetComponentInChildren<IcarusWings>();
             m_teleportingSkull = m_character.GetComponentInChildren<TeleportingSkull>();
+            m_airSlashRange = m_character.GetComponentInChildren<AirSlashRange>();
 
 
             //Intro Controller
@@ -706,6 +710,16 @@ namespace DChild.Gameplay.Characters.Players.Modules
             {
                 m_icarusWings.HandleAttackTimer();
             }
+
+            if (m_airSlashRange.CanReset() == true)
+            {
+                m_airSlashRange.HandleResetTimer();
+            }
+
+            if (m_airSlashRange.CanMove() == false)
+            {
+                m_airSlashRange.HandleMovementTimer();
+            }
             #endregion
 
             if (m_state.canAttack == true)
@@ -774,6 +788,11 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 if (m_lightningSpear.CanLightningSpear() == false)
                 {
                     m_lightningSpear.HandleAttackTimer();
+                }
+
+                if (m_airSlashRange.CanAirSlashRange() == false)
+                {
+                    m_airSlashRange.HandleAttackTimer();
                 }
                 #endregion
             }
@@ -1084,7 +1103,22 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
                         return;
                     }
-                    else if (m_input.lightningSpearPressed && m_lightningSpear.CanLightningSpear() && (m_abilities.IsAbilityActivated(CombatArt.LightningSpear) || m_abilities.IsAbilityActivated(CombatArt.AirSlashCombo)))
+                    else if (m_input.lightningSpearPressed && m_airSlashRange.CanAirSlashRange() && (m_abilities.IsAbilityActivated(CombatArt.AirSlashCombo) && !m_abilities.IsAbilityActivated(CombatArt.LightningSpear)))
+                    {
+                        if (m_state.isInShadowMode == false)
+                        {
+
+                            PrepareForMidairAttack();
+                            if (IsFacingInput())
+                            {
+                                m_airSlashRange.Execute();
+                            }
+                            return;
+                        }
+
+                        return;
+                    }
+                    else if (m_input.lightningSpearPressed && m_lightningSpear.CanLightningSpear() && m_abilities.IsAbilityActivated(CombatArt.LightningSpear))
                     {
                         if (m_state.isInShadowMode == false)
                         {
