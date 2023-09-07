@@ -2,6 +2,7 @@ using DChild.Gameplay.Characters.Players;
 using DChild.Gameplay.Characters.Players.SoulSkills;
 using DChild.Gameplay.Items;
 using DChild.Gameplay.Systems;
+using DChild.Gameplay.Systems.Journal;
 using DChild.Gameplay.Systems.Lore;
 using PixelCrushers.DialogueSystem;
 using Sirenix.OdinInspector;
@@ -26,9 +27,9 @@ namespace DChild.Gameplay.UI
 
         #region Prompts
         [Button, FoldoutGroup("Options"), HideInEditorMode]
-        public void ShowJournalUpdateNotification()
+        public void ShowJournalUpdateNotification(JournalData journalData)
         {
-            m_fullscreenNotificationHandle.PromptJournalUpdateNotification();
+            m_fullscreenNotificationHandle.PromptJournalUpdateNotification(journalData);
             EnableNotificationRoutine();
         }
 

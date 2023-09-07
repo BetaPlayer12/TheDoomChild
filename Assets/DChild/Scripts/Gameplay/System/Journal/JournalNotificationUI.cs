@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace DChild.Gameplay.Systems.Journal
 {
-    public class JournalNotificationUI : MonoBehaviour
+    public class JournalNotificationUI : NotificationUI
     {
         [SerializeField]
         private Image m_notifinfo;
