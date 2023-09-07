@@ -572,7 +572,8 @@ namespace DChild.Gameplay.Characters.Enemies
                             m_attackHandle.ExecuteAttack(m_info.attack1.animation, m_info.idleAnimation.animation);
                             break;
                         case Attack.Attack2:
-                            m_targetLastPos = m_targetInfo.position;
+                            var lastTargetPos = m_targetInfo.position;
+                            m_targetLastPos = lastTargetPos;
                             m_targetPointIK.overridePosition = true;
                             m_animation.EnableRootMotion(true, true);
                             m_attackHandle.ExecuteAttack(m_info.attack2.animation, m_info.idleAnimation.animation);
