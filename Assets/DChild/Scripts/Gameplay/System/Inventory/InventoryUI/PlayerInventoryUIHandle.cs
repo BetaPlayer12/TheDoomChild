@@ -19,9 +19,15 @@ namespace DChild.Gameplay.Inventories.UI
         [SerializeField]
         private UsableInventoryItemHandle m_usableInventoryItemHandle;
 
+        private ItemUI m_currentSelectedItemUI;
+
         public void Select(ItemUI itemUI)
         {
-            m_detailedUI.ShowDetails(itemUI.reference);
+            m_detailedUI.ShowDetails(itemUI?.reference ?? null);
+            if(itemUI == null)
+            {
+                m_currentSelectedItemUI.GetComponent<UIToggle>().SetIsOn(false);
+            }
             if ((itemUI?.reference?.data ?? null) == null || itemUI.reference.data.category != ItemCategory.Consumable)
             {
                 m_usableInventoryItemHandle.Hide();
@@ -31,6 +37,7 @@ namespace DChild.Gameplay.Inventories.UI
                 m_usableInventoryItemHandle.Show();
                 m_usableInventoryItemHandle.HandleUsageOfItem(itemUI.reference.data);
             }
+            m_currentSelectedItemUI = itemUI;
         }
 
         public void Initialize()
@@ -47,6 +54,13 @@ namespace DChild.Gameplay.Inventories.UI
             m_detailedUI.ShowDetails(m_firstSelectedItemUI.reference);
         }
 
+        private void OnItemUsed(object sender, EventActionArgs eventArgs)
+        {
+            m_listUI.ListOverallChange -= OnListOverallChange;
+            m_listUI.UpdateUIList();
+            m_listUI.ListOverallChange += OnListOverallChange;
+        }
+
         private void OnItemUsedConsumed(object sender, EventActionArgs eventArgs)
         {
             Select(null);
@@ -56,7 +70,9 @@ namespace DChild.Gameplay.Inventories.UI
         {
             m_listUI.ListOverallChange += OnListOverallChange;
             m_usableInventoryItemHandle.AllItemCountConsumed += OnItemUsedConsumed;
+            m_usableInventoryItemHandle.ItemUsed += OnItemUsed;
         }
-        
+
+
     }
 }

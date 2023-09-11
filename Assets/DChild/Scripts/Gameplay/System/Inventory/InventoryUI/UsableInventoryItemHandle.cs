@@ -17,6 +17,7 @@ namespace DChild.Gameplay.Inventories.UI
         private UsableItemData m_item;
 
         public event EventAction<EventActionArgs> AllItemCountConsumed;
+        public event EventAction<EventActionArgs> ItemUsed;
 
         public void Show()
         {
@@ -39,6 +40,7 @@ namespace DChild.Gameplay.Inventories.UI
             {
                 m_item.Use(m_player);
                 m_inventory.RemoveItem(m_item);
+                ItemUsed?.Invoke(this, EventActionArgs.Empty);
                 if (m_inventory.GetCurrentAmount(m_item) == 0)
                 {
                     AllItemCountConsumed?.Invoke(this, EventActionArgs.Empty);
@@ -49,7 +51,7 @@ namespace DChild.Gameplay.Inventories.UI
         private void Awake()
         {
             m_player = GameplaySystem.playerManager.player;
-            //m_inventory = m_player.inventory;
+            m_inventory = m_player.inventory;
         }
     }
 }

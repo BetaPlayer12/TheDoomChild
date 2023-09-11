@@ -16,13 +16,9 @@ namespace DChild.Gameplay.Inventories.UI
 
         public void SetReference(IStoredItem reference)
         {
-            if (m_reference != reference)
-            {
-                m_reference = reference;
-                ShowDetailsOf(m_reference);
-            }
+            m_reference = reference;
+            ShowDetailsOf(m_reference);
         }
-
 
         protected virtual void ShowDetailsOf(IStoredItem reference)
         {
