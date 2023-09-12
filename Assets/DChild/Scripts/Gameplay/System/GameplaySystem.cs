@@ -59,7 +59,6 @@ namespace DChild.Gameplay
         private static SoulSkillManager m_soulSkillManager;
         private static MinionManager m_minionManager;
 
-
         public static ICombatManager combatManager => m_combatManager;
         public static IFXManager fXManager => m_fxManager;
         public static ICinema cinema => m_cinema;
@@ -105,7 +104,7 @@ namespace DChild.Gameplay
             {
                 Debug.LogError(e.Message);
             }
-
+            SkeletonAnimationManager.Instance.UnpauseAllSpines();
             //PostProcess.SetActiveToAll(true);
         }
 
@@ -116,6 +115,7 @@ namespace DChild.Gameplay
             isGamePaused = true;
             GameSystem.SetCursorVisibility(true);
             MasterAudio.PauseEverything();
+            SkeletonAnimationManager.Instance.PauseAllSpines();
             //PostProcess.SetActiveToAll(false);
         }
 
@@ -219,7 +219,6 @@ namespace DChild.Gameplay
             AssignModule(out m_gameplayUIHandle);
             AssignModule(out m_soulSkillManager);
             AssignModule(out m_minionManager);
-
         }
 
         private void AssignModule<T>(out T module) where T : MonoBehaviour, IGameplaySystemModule => module = GetComponentInChildren<T>();

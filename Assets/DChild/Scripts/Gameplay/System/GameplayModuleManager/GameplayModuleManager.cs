@@ -15,7 +15,9 @@ namespace DChild.Gameplay
         void IGameplayModuleManager.SetInstance(IGameplayModuleManager instance)
         {
             m_hasInstance = true;
+            SetSingletonInstance(instance);
         }
+
 
         public static void Register(T instance)
         {
@@ -32,6 +34,8 @@ namespace DChild.Gameplay
                 m_list.Remove(instance);
             }
         }
+
+        protected abstract void SetSingletonInstance(IGameplayModuleManager instance);
 
     }
 }
