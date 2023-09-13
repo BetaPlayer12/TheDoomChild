@@ -16,6 +16,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private LedgeGrab m_ledgeGrab;
         private ShadowMorph m_shadowMorph;
         private ShadowGaugeRegen m_shadowGaugeRegen;
+        private ShadowSlide m_shadowSlide;
 
         #region Battle Abilities
         private AirLunge m_airLunge;
@@ -236,6 +237,16 @@ namespace DChild.Gameplay.Characters.Players.Modules
         public void SwordThrustPush()
         {
             m_swordThrust?.Push();
+        }
+
+        public void ShadowSlideEndTransitionStart()
+        {
+            m_shadowSlide.EndTransitionStart();
+        }
+
+        public void ShadowSlideEndTransitionEnd()
+        {
+            m_shadowSlide.EndTransitionEnd();
         }
 
         #region BattleAbilities
@@ -697,6 +708,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_icarusWings = character.GetComponentInChildren<IcarusWings>();
             m_teleportingSkull = character.GetComponentInChildren<TeleportingSkull>();
             m_airSlashRange = character.GetComponentInChildren<AirSlashRange>();
+            m_shadowSlide = character.GetComponentInChildren<ShadowSlide>();
         }
 
         #region TESTING
