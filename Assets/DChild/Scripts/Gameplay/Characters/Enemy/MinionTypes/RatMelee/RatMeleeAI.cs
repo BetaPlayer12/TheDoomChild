@@ -465,8 +465,10 @@ namespace DChild.Gameplay.Characters.Enemies
                     }
                     break;
 
+
                 case State.Standby:
                     Patience();
+                    m_animation.SetAnimation(0, m_info.idleAnimation, true);
                     break;
 
                 case State.Turning:
