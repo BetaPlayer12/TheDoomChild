@@ -287,6 +287,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     m_idle?.Cancel();
                     m_movement?.Cancel();
                     m_block?.Cancel();
+                    m_shadowSlide.Cancel();
                 }
 
                 GameplaySystem.cinema.ApplyCameraPeekMode(Cinematics.CameraPeekMode.None);
