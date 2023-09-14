@@ -9,6 +9,7 @@ using UnityEngine.UI;
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using DChild.Menu.Codex;
 #if UNITY_EDITOR
 using UnityEditor;
 using DChildEditor;
@@ -18,7 +19,7 @@ namespace DChild.Menu.Bestiary
 {
 
     [CreateAssetMenu(fileName = "BestiaryData", menuName = "DChild/Database/Bestiary Data")]
-    public class BestiaryData : DatabaseAsset
+    public class BestiaryData : DatabaseAsset, ICodexIndexInfo
     {
         #region EditorOnly
 #if UNITY_EDITOR
@@ -135,6 +136,13 @@ namespace DChild.Menu.Bestiary
         public string storeNotes { get => m_storeNotes; }
         public string hunterNotes { get => m_hunterNotes; }
         public Location[] locatedIn { get => m_locatedIn; }
+
+
+        #region ICodexIndexInfo Implementation
+        string ICodexIndexInfo.indexName => creatureName;
+        Sprite ICodexIndexInfo.indexImage => m_indexImage;
+        #endregion
+
         public void SetupSpine(SkeletonAnimation animation)
         {
             animation.skeletonDataAsset = m_spineAsset;
@@ -208,6 +216,7 @@ namespace DChild.Menu.Bestiary
         private string m_projectName;
 
         public string projectName => m_projectName;
+
 
         [Button, FoldoutGroup("File Utility")]
         private void UpdateFileNames()

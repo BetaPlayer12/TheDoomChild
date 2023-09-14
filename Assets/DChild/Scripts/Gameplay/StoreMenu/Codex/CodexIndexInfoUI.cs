@@ -1,5 +1,6 @@
 ﻿using Sirenix.OdinInspector;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace DChild.Menu.Codex
 {
