@@ -92,6 +92,8 @@ namespace DChild.Gameplay
         [ReadOnly]
         protected SkeletonAnimation m_skeletonAnimation;
 
+        private bool m_animationDisabled;
+
         public event EventAction<AnimationEventArgs> AnimationSet;
 
         public bool lockBehaviourWithAnimation => m_lockBehaviourWithAnimation;
@@ -164,12 +166,26 @@ namespace DChild.Gameplay
 
         public void LateUpdateAnimation()
         {
-            m_skeletonAnimation.LateUpdateAnimation();
+            if (this.enabled && m_animationDisabled == false)
+                m_skeletonAnimation.LateUpdateAnimation();
         }
 
         public void UpdateAnimation(float deltaTime)
         {
-            m_skeletonAnimation.Update(deltaTime);
+            if (this.enabled && m_animationDisabled == false)
+                m_skeletonAnimation.Update(deltaTime);
+        }
+
+        public bool IsAnimationEnabled() => m_skeletonAnimation.enabled;
+
+        public void EnableAnimation()
+        {
+           m_animationDisabled = false;
+        }
+
+        public void DisableAnimation()
+        {
+            m_animationDisabled = true;
         }
 
         protected virtual void Start()
