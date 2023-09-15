@@ -243,7 +243,8 @@ namespace DChild.Gameplay.Systems
 
         public void Initialize()
         {
-            m_notificationManager.InitializePriorityHandling();
+            m_notificationManager.InitializeFullPriorityHandling();
+            m_notificationManager.InitializePromptPriorityHandling();
         }
     }
 }
