@@ -131,7 +131,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             m_physics.velocity = Vector2.zero;
             //m_barrierInfo.ShowCollider(false);
 
-            m_barrierFX.SetBool("BarrierIsOn", true);
+            m_barrierFX.SetBool("BarrierIsOn", false);
             m_isDoingBarrier = false;
             m_animator.SetBool(m_barrierStateAnimationParameter, false);
             base.Cancel();

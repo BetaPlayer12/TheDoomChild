@@ -1900,7 +1900,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
                         return;
                     }
-                    else if (m_input.barrierPressed /*&& m_abilities.IsAbilityActivated(CombatArt.Barrier)*/)
+                    else if (m_input.barrierPressed && m_abilities.IsAbilityActivated(CombatArt.Barrier))
                     {
                         if (m_state.isInShadowMode == false)
                         {
