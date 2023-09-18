@@ -17,6 +17,8 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField]
         private Hitbox m_hitbox;
         [SerializeField]
+        private Collider2D m_hitboxCollider;
+        [SerializeField]
         private Health m_health;
         [SerializeField]
         private SpineRootAnimation m_animator;
@@ -75,6 +77,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator ReviveBlobRoutine()
         {
             m_hitbox.Disable();
+            m_hitboxCollider.enabled = false;
             m_deathVFX.Play();
             m_animator.SetAnimation(0, m_deathAnimation, false);
             yield return new WaitForAnimationComplete(m_animator.animationState, m_deathAnimation);
@@ -83,6 +86,7 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return new WaitForAnimationComplete(m_animator.animationState, m_recoverAnimation);
             SetRandomIdleAnimation();
             m_hitbox.Enable();
+            m_hitboxCollider.enabled = true;
             enabled = true;
             m_health.SetHealthPercentage(1f);
             if (m_itemlocked != null)
