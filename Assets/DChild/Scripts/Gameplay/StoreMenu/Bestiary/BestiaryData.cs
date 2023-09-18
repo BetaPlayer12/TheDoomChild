@@ -19,7 +19,7 @@ namespace DChild.Menu.Bestiary
 {
 
     [CreateAssetMenu(fileName = "BestiaryData", menuName = "DChild/Database/Bestiary Data")]
-    public class BestiaryData : DatabaseAsset, ICodexIndexInfo
+    public class BestiaryData : DatabaseAsset, ICodexIndexInfo, ICodexInfo
     {
         #region EditorOnly
 #if UNITY_EDITOR
