@@ -45,6 +45,10 @@ namespace DChild.Gameplay.Narrative
         [SerializeField]
         private AnimationReferenceAsset m_playerStandAnimation;
         [SerializeField]
+        private AnimationReferenceAsset m_playerIdleAnimation;
+        [SerializeField]
+        private AnimationReferenceAsset m_playerLieDownAnimation;
+        [SerializeField]
         private DialogueSystemTrigger m_afterWakeupDialogue;
         [SerializeField]
         private GameObject m_storePickupSequence;
@@ -81,12 +85,15 @@ namespace DChild.Gameplay.Narrative
             m_database.OnUse();
             m_storePickupSequence.SetActive(false);
             m_introCutscene.Play();
+            GameplaySystem.playerManager.player.GetComponentInChildren<PlayerInput>().actions.FindActionMap("Gameplay").Disable();
         }
 
         public void TransferPlayerToStartPosition()
         {
             var player = GameplaySystem.playerManager.player.character;
             player.transform.position = m_playerStartPosition.position;
+            var skeleton = GameplaySystem.playerManager.player.character.GetComponentInChildren<SkeletonAnimation>();
+            var lieDownAnimation = skeleton.state.SetAnimation(0, m_playerLieDownAnimation, true);
         }
 
         public void PromptPlayerToStand()
@@ -117,10 +124,8 @@ namespace DChild.Gameplay.Narrative
             yield return WakeupPromptRoutine();
 
             var standAnimation = skeleton.state.SetAnimation(0, m_playerStandAnimation, false);
-            while (standAnimation.IsComplete == false)
-            {
-                yield return null;
-            }
+
+            yield return new WaitForSeconds(m_playerStandAnimation.Animation.Duration);
 
             Debug.Log("Wake Up Animation Completed");
             GameplaySystem.playerManager.StopCharacterControlOverride();
