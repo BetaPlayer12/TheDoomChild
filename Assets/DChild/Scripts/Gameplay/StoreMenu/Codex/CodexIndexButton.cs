@@ -1,5 +1,6 @@
 ﻿using Doozy.Runtime.UIManager.Components;
 using Sirenix.OdinInspector;
+using System;
 using UnityEngine;
 
 namespace DChild.Menu.Codex

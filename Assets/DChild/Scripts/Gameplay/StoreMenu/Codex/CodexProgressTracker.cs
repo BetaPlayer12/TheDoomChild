@@ -44,6 +44,9 @@ namespace DChild.Menu.Codex
                 }
             }
 
+            if (saveData == null)
+                return;
+
             var size = saveData.count;
             for (int i = 0; i < size; i++)
             {

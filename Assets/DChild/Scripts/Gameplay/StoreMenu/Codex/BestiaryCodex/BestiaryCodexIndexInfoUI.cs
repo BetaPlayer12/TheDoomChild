@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 namespace DChild.Menu.Codex.Bestiary
 {
+
     public class BestiaryCodexIndexInfoUI : CodexIndexInfoUI<BestiaryData>
     {
         [SerializeField]

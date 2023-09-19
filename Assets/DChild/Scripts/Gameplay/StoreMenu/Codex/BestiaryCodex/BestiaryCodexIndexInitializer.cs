@@ -2,7 +2,7 @@
 
 namespace DChild.Menu.Codex.Bestiary
 {
-    public class BestiaryCodexHandle : CodexHandle<BestiaryData, BestiaryData> 
+    public class BestiaryCodexIndexInitializer : CodexIndexInitializer<BestiaryData>
     {
 
     }
