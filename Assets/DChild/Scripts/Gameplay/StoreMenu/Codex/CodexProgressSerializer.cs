@@ -51,9 +51,9 @@ namespace DChild.Menu.Codex
                 for (int i = 0; i < m_trackers.Length; i++)
                 {
                     var tracker = m_trackers[i];
-                    if (tracker = null)
+                    if (tracker != null)
                     {
-                        m_trackers[i].LoadData(null);
+                        m_trackers[i].LoadData(saveData.GetData((CodexSubtab)i));
                     }
                 }
             }

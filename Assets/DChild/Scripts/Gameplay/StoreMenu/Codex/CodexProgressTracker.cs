@@ -13,7 +13,7 @@ namespace DChild.Menu.Codex
         [ShowInInspector, HideInEditorMode]
         protected Dictionary<int, bool> m_progress;
 
-        public bool HasInfoOf(int ID) => m_progress.ContainsKey(ID) ? m_progress[ID] : false;
+        public bool HasInfoOf(int ID) => (m_progress?.ContainsKey(ID) ?? false) ? m_progress[ID] : false;
         public void SetProgress(int ID, bool value)
         {
             if (m_progress.ContainsKey(ID))
