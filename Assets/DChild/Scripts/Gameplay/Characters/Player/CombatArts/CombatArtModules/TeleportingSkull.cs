@@ -4,10 +4,12 @@ using DChild.Gameplay.Projectiles;
 using Holysoft.Event;
 using Sirenix.OdinInspector;
 using Spine.Unity;
+using Spine.Unity.Examples;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static DG.Tweening.DOTweenModuleUtils;
 
 namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 {
@@ -15,6 +17,9 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
     {
         [SerializeField, BoxGroup("Physics")]
         private Character m_character;
+        [SerializeField, BoxGroup("Physics")]
+        private Rigidbody2D m_physics;
+        private float m_cacheGravity;
         [SerializeField, BoxGroup("Projectile")]
         private ProjectileInfo m_projectile;
         public ProjectileInfo projectile => m_projectile;
@@ -22,6 +27,22 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
         public Projectile spawnedProjectile => m_spawnedProjectile;
         private bool m_canTeleport;
         public bool canTeleport => m_canTeleport;
+        [SerializeField, BoxGroup("FX")]
+        private ParticleSystem m_teleportFX;
+        [SerializeField, BoxGroup("FX")]
+        private MaterialReplacementExample m_materialReplacement;
+
+        private int m_teleportingSkullStateAnimationParameter;
+
+        public override void Initialize(ComplexCharacterInfo info)
+        {
+            base.Initialize(info);
+
+            m_teleportingSkullStateAnimationParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.TeleportingSkull);
+            //m_canMove = true;
+            //m_edgedFuryMovementCooldownTimer = m_edgedFuryMovementCooldown;
+            m_cacheGravity = m_physics.gravityScale;
+        }
 
         private void DisableTeleport(object sender, EventActionArgs eventArgs)
         {
@@ -40,15 +61,47 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
         public void TeleportToProjectile()
         {
+            m_materialReplacement.replacementEnabled = true;
+            m_teleportFX.Play();
+            m_cacheGravity = m_physics.gravityScale;
+            m_physics.gravityScale = 0;
+            m_physics.velocity = Vector2.zero;
             m_canTeleport = false;
             m_character.transform.position = Mathf.Abs(RoofPosition(m_spawnedProjectile.transform.position).y - m_spawnedProjectile.transform.position.y) < 5f ? new Vector3(m_spawnedProjectile.transform.position.x, m_spawnedProjectile.transform.position.y - m_character.height) : m_spawnedProjectile.transform.position;
             m_spawnedProjectile.CallPoolRequest();
-            base.AttackOver();
+            //base.AttackOver();
+            m_state.waitForBehaviour = true;
+            m_state.isAttacking = true;
+            m_state.canAttack = false;
+            m_animator.SetBool(m_animationParameter, true);
+            m_animator.SetBool(m_teleportingSkullStateAnimationParameter, true);
         }
 
         public void Execute()
         {
             m_canTeleport = true;
+        }
+
+        public void EndExecution()
+        {
+            m_materialReplacement.replacementEnabled = false;
+            m_animator.SetBool(m_teleportingSkullStateAnimationParameter, false);
+            m_state.waitForBehaviour = false;
+            m_physics.gravityScale = m_cacheGravity;
+            m_physics.velocity = Vector2.zero;
+            base.AttackOver();
+        }
+
+        public override void Cancel()
+        {
+            //m_edgedFuryInfo.PlayFX(false);
+            //m_fx.gameObject.SetActive(false);
+            //m_fx.Stop();
+            m_materialReplacement.replacementEnabled = false;
+            m_physics.gravityScale = m_cacheGravity;
+            m_physics.velocity = Vector2.zero;
+            m_animator.SetBool(m_teleportingSkullStateAnimationParameter, false);
+            base.Cancel();
         }
 
         protected Vector2 RoofPosition(Vector2 startPoint)

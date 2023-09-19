@@ -636,6 +636,11 @@ namespace DChild.Gameplay.Characters.Players.Modules
         {
             m_airSlashRange.EndExecution();
         }
+
+        public void TeleportingSkullEnd()
+        {
+            m_teleportingSkull.EndExecution();
+        }
         #endregion
 
         public void SkullThrowSpawnProjectile()
