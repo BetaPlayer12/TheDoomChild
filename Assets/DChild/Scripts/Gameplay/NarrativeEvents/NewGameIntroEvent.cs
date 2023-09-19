@@ -79,7 +79,8 @@ namespace DChild.Gameplay.Narrative
         }
 
         public void Initialize()
-        {        
+        {
+            StartCoroutine(SetupPlayer());
             m_database.OnUse();
             m_storePickupSequence.SetActive(false);
             m_introCutscene.Play();
@@ -151,23 +152,16 @@ namespace DChild.Gameplay.Narrative
         }
 
         public IEnumerator SetupPlayer()
-        {
-            yield return new WaitForSeconds(5f);
-            TransferPlayerToStartPosition();
+        {         
+            yield return new WaitForSeconds(2f);
             var skeleton = GameplaySystem.playerManager.player.character.GetComponentInChildren<SkeletonAnimation>();
+            TransferPlayerToStartPosition();
             var lyingDownAnimation = skeleton.state.SetAnimation(0, m_playerLyingDownAnimation, false);
             while (lyingDownAnimation.IsComplete == false)
             {
                 yield return null;
             }
         }
-
-        private void Awake()
-        {
-            StartCoroutine(SetupPlayer());
-
-        }
-
     }
 
 }
