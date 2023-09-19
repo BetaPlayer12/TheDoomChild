@@ -15,6 +15,9 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 {
     public class TeleportingSkull : AttackBehaviour
     {
+        [SerializeField]
+        private Info m_teleportingSkullInfo;
+
         [SerializeField, BoxGroup("Physics")]
         private Character m_character;
         [SerializeField, BoxGroup("Physics")]
@@ -27,12 +30,15 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
         public Projectile spawnedProjectile => m_spawnedProjectile;
         private bool m_canTeleport;
         public bool canTeleport => m_canTeleport;
-        [SerializeField, BoxGroup("FX")]
-        private ParticleSystem m_teleportFX;
+        //[SerializeField, BoxGroup("FX")]
+        //private ParticleSystem m_teleportFX;
         [SerializeField, BoxGroup("FX")]
         private MaterialReplacementExample m_materialReplacement;
 
         private int m_teleportingSkullStateAnimationParameter;
+        private string m_animationName = "TeleportingSkullEnd";
+
+        public event EventAction<EventActionArgs> Teleported;
 
         public override void Initialize(ComplexCharacterInfo info)
         {
@@ -50,19 +56,27 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             m_spawnedProjectile = null;
         }
 
+        private void TeleportToImpactPoint(object sender, EventActionArgs eventArgs)
+        {
+            TeleportToProjectile();
+        }
+
         public void GetSpawnedProjectile(Projectile spawnedProjectile)
         {
             if (m_spawnedProjectile == null && m_canTeleport)
             {
                 m_spawnedProjectile = spawnedProjectile;
-                m_spawnedProjectile.Impacted += DisableTeleport;
+                //m_spawnedProjectile.Impacted += DisableTeleport;
+                m_spawnedProjectile.Impacted += TeleportToImpactPoint;
             }
         }
 
         public void TeleportToProjectile()
         {
+            Teleported?.Invoke(this, EventActionArgs.Empty);
             m_materialReplacement.replacementEnabled = true;
-            m_teleportFX.Play();
+            m_teleportingSkullInfo.PlayFX(true);
+            //m_teleportFX.Play();
             m_cacheGravity = m_physics.gravityScale;
             m_physics.gravityScale = 0;
             m_physics.velocity = Vector2.zero;
@@ -75,6 +89,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             m_state.canAttack = false;
             m_animator.SetBool(m_animationParameter, true);
             m_animator.SetBool(m_teleportingSkullStateAnimationParameter, true);
+            m_animator.Play(m_animationName);
         }
 
         public void Execute()
@@ -86,9 +101,12 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
         {
             m_materialReplacement.replacementEnabled = false;
             m_animator.SetBool(m_teleportingSkullStateAnimationParameter, false);
+            m_canTeleport = false;
             m_state.waitForBehaviour = false;
             m_physics.gravityScale = m_cacheGravity;
             m_physics.velocity = Vector2.zero;
+            m_teleportingSkullInfo.ShowCollider(false);
+            m_spawnedProjectile = null;
             base.AttackOver();
         }
 
@@ -100,8 +118,17 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             m_materialReplacement.replacementEnabled = false;
             m_physics.gravityScale = m_cacheGravity;
             m_physics.velocity = Vector2.zero;
+            m_canTeleport = false;
+            m_teleportingSkullInfo.ShowCollider(false);
             m_animator.SetBool(m_teleportingSkullStateAnimationParameter, false);
+            m_spawnedProjectile = null;
             base.Cancel();
+        }
+
+        public void EnableCollision(bool value)
+        {
+            m_rigidBody.WakeUp();
+            m_teleportingSkullInfo.ShowCollider(value);
         }
 
         protected Vector2 RoofPosition(Vector2 startPoint)

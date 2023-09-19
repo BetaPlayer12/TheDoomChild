@@ -641,6 +641,16 @@ namespace DChild.Gameplay.Characters.Players.Modules
         {
             m_teleportingSkull.EndExecution();
         }
+
+        public void TeleportingSkullEnableCollision()
+        {
+            m_teleportingSkull.EnableCollision(true);
+        }
+
+        public void TeleportingSkullDisableCollision()
+        {
+            m_teleportingSkull.EnableCollision(false);
+        }
         #endregion
 
         public void SkullThrowSpawnProjectile()

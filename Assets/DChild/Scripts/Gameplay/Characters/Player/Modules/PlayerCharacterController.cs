@@ -146,6 +146,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_lightningSpear?.Cancel();
             m_icarusWings?.Cancel();
             m_airSlashRange?.Cancel();
+            m_teleportingSkull?.Cancel();
 
             if (m_state.isGrounded)
             {
@@ -156,6 +157,51 @@ namespace DChild.Gameplay.Characters.Players.Modules
         public void Enable()
         {
             m_updateEnabled = true;
+        }
+
+        private void HasTeleported(object sender, EventActionArgs eventArgs)
+        {
+            m_idle?.Execute(false);
+            m_movement?.Cancel();
+            m_crouch?.Cancel();
+            m_dash?.Cancel();
+            m_shadowSlide?.Cancel();
+            m_slide?.Cancel();
+            m_wallStick?.Cancel();
+            m_devilWings?.Cancel();
+            m_shadowDash?.Cancel();
+            m_basicSlashes?.Cancel();
+            m_slashCombo?.Cancel();
+            m_swordThrust?.Cancel();
+            m_earthShaker?.Cancel();
+            m_whip?.Cancel();
+            m_whipCombo?.Cancel();
+            m_projectileThrow?.Cancel();
+            m_shadowMorph.Cancel();
+            m_block?.Cancel();
+            m_shadowGaugeRegen.Enable(true);
+            m_airLunge?.Cancel();
+            m_fireFist?.Cancel();
+            m_reaperHarvest?.Cancel();
+            m_krakenRage?.Cancel();
+            m_finalSlash?.Cancel();
+            m_airSlashCombo?.Cancel();
+            m_sovereignImpale?.Cancel();
+            m_hellTrident?.Cancel();
+            m_foolsVerdict?.Cancel();
+            m_soulFireBlast?.Cancel();
+            m_edgedFury?.Cancel();
+            m_ninthCircleSanction?.Cancel();
+            m_doomsdayKong?.Cancel();
+            m_backDiver?.Cancel();
+            m_barrier?.Cancel();
+            m_fencerFlash?.Cancel();
+            m_diagonalSwordDash?.Cancel();
+            m_championsUprising?.Cancel();
+            m_eelecktrick?.Cancel();
+            m_lightningSpear?.Cancel();
+            m_icarusWings?.Cancel();
+            m_airSlashRange?.Cancel();
         }
 
         private void OnGroundednessStateChange(object sender, EventActionArgs eventArgs)
@@ -288,7 +334,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     m_movement?.Cancel();
                     m_block?.Cancel();
                     m_shadowSlide.Cancel();
-                    m_teleportingSkull.Cancel();
+                    m_teleportingSkull?.Cancel();
                 }
 
                 GameplaySystem.cinema.ApplyCameraPeekMode(Cinematics.CameraPeekMode.None);
@@ -334,6 +380,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 m_diagonalSwordDash?.Cancel();
                 m_lightningSpear?.Cancel();
                 m_airSlashRange?.Cancel();
+                m_teleportingSkull?.Cancel();
             }
         }
 
@@ -429,6 +476,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_lightningSpear = m_character.GetComponentInChildren<LightningSpear>();
             m_icarusWings = m_character.GetComponentInChildren<IcarusWings>();
             m_teleportingSkull = m_character.GetComponentInChildren<TeleportingSkull>();
+            m_teleportingSkull.Teleported += HasTeleported;
             m_airSlashRange = m_character.GetComponentInChildren<AirSlashRange>();
 
 
