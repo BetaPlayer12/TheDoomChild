@@ -188,6 +188,70 @@ MonoBehaviour:
     Mode: 0
   OnEnterHideAllViews: 0
   OnExitHideAllViews: 0
+--- !u!114 &-6641027593865999722
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1c01f9a7d07f5c04a9f277379e94a10b, type: 3}
+  m_Name: UI
+  m_EditorClassIdentifier: 
+  FlowGraphId: cc4022c0-bbcf-4ff3-b644-de466cf85d32
+  NodeId: 1ae301e5-bf75-495c-a47e-e0523f174092
+  NodeType: 0
+  NodeName: Codex Bestiary
+  NodeDescription: 
+  InputPorts:
+  - NodeId: 1ae301e5-bf75-495c-a47e-e0523f174092
+    PortId: 9319c3ac-72a4-4822-b55d-e90a1bf5f031
+    Direction: 0
+    Capacity: 1
+    Connections:
+    - e5d207ca-a6e0-4b23-8757-06b5e0fb36ae
+    Value: '{"CanGoBack":true}'
+    ValueTypeQualifiedName: Doozy.Runtime.UIManager.Nodes.PortData.GoBackInputPortData,
+      Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    CanBeDeleted: 0
+    CanBeReordered: 0
+  OutputPorts:
+  - NodeId: 1ae301e5-bf75-495c-a47e-e0523f174092
+    PortId: b04dc46a-fe36-4715-a803-f3afbb41f42f
+    Direction: 1
+    Capacity: 0
+    Connections: []
+    Value: '{"Trigger":0,"TimeDelay":3.0,"SignalPayload":{"StreamId":{"Category":"None","Name":"None","Custom":false},"SignalValueType":0,"IntegerValue":0,"BooleanValue":false,"FloatValue":0.0,"StringValue":"","ColorValue":{"r":0.0,"g":0.0,"b":0.0,"a":0.0},"Vector2Value":{"x":0.0,"y":0.0},"Vector3Value":{"x":0.0,"y":0.0,"z":0.0},"Vector4Value":{"x":0.0,"y":0.0,"z":0.0,"w":0.0}},"ButtonId":{"Category":"None","Name":"None","Custom":false},"ToggleId":{"Category":"None","Name":"None","Custom":false},"CommandToggle":2,"ViewId":{"Category":"None","Name":"None","Custom":false},"CommandShowHide":0}'
+    ValueTypeQualifiedName: Doozy.Runtime.UIManager.Nodes.PortData.UIOutputPortData,
+      Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    CanBeDeleted: 0
+    CanBeReordered: 0
+  RunUpdate: 0
+  RunFixedUpdate: 0
+  RunLateUpdate: 0
+  NodeState: 0
+  CanBeDeleted: 1
+  Passthrough: 0
+  ClearGraphHistory: 0
+  Position: {x: 2329.7476, y: 508}
+  OnEnterShowViews:
+  - Id:
+      Category: Codex
+      Name: Bestiary
+      Custom: 0
+    Mode: 0
+  OnEnterHideViews: []
+  OnExitShowViews: []
+  OnExitHideViews:
+  - Id:
+      Category: Codex
+      Name: Bestiary
+      Custom: 0
+    Mode: 0
+  OnEnterHideAllViews: 0
+  OnExitHideAllViews: 0
 --- !u!114 &-6474808548199888163
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -441,7 +505,7 @@ MonoBehaviour:
   CanBeDeleted: 1
   Passthrough: 1
   ClearGraphHistory: 0
-  Position: {x: 1120, y: 973.9159}
+  Position: {x: 1147.9998, y: 840.99994}
   Payload:
     StreamId:
       Category: Gameplay
@@ -1537,7 +1601,7 @@ MonoBehaviour:
   CanBeDeleted: 1
   Passthrough: 1
   ClearGraphHistory: 0
-  Position: {x: 211.99998, y: 247.00002}
+  Position: {x: 212, y: 224.50003}
   Trigger: 0
   SignalPayload:
     StreamId:
@@ -1615,7 +1679,7 @@ MonoBehaviour:
   CanBeDeleted: 1
   Passthrough: 1
   ClearGraphHistory: 0
-  Position: {x: 937.00006, y: 794.9159}
+  Position: {x: 941.9999, y: 661.49994}
   OnEnterShowViews: []
   OnEnterHideViews: []
   OnExitShowViews: []
@@ -1634,8 +1698,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02761efe598a45c98fa1baf4d446c6a7, type: 3}
   m_Name: GameplayMenuFlow
   m_EditorClassIdentifier: 
-  EditorPosition: {x: -1136, y: -366, z: 0}
-  EditorScale: {x: 1, y: 1, z: 1}
+  EditorPosition: {x: -336, y: 54, z: 0}
+  EditorScale: {x: 0.49717674, y: 0.49717674, z: 1}
   Id: cc4022c0-bbcf-4ff3-b644-de466cf85d32
   GraphName: Flow Graph
   GraphDescription: 
@@ -1698,6 +1762,9 @@ MonoBehaviour:
   - {fileID: -3488602492790497488}
   - {fileID: -2993721813557403150}
   - {fileID: 6377782472770250205}
+  - {fileID: 8112171317156326834}
+  - {fileID: 9176616523228431492}
+  - {fileID: -6641027593865999722}
   RootNode: {fileID: 6426440333755477475}
   ActiveNode: {fileID: 0}
 --- !u!114 &254213627085283687
@@ -2243,7 +2310,7 @@ MonoBehaviour:
   CanBeDeleted: 1
   Passthrough: 0
   ClearGraphHistory: 1
-  Position: {x: 956, y: 619.91583}
+  Position: {x: 942, y: 531}
   OnEnterShowViews:
   - Id:
       Category: Gameplay
@@ -2307,7 +2374,7 @@ MonoBehaviour:
   CanBeDeleted: 1
   Passthrough: 0
   ClearGraphHistory: 0
-  Position: {x: 1215, y: 795.9159}
+  Position: {x: 1219.9998, y: 662.49994}
   OnEnterShowViews: []
   OnEnterHideViews: []
   OnExitShowViews: []
@@ -2469,7 +2536,7 @@ MonoBehaviour:
   FlowGraphId: cc4022c0-bbcf-4ff3-b644-de466cf85d32
   NodeId: 625c0a24-0790-4831-a2a0-973c8a8fba25
   NodeType: 1
-  NodeName: Portal
+  NodeName: Load Start
   NodeDescription: 
   InputPorts: []
   OutputPorts:
@@ -3225,7 +3292,7 @@ MonoBehaviour:
   CanBeDeleted: 1
   Passthrough: 0
   ClearGraphHistory: 0
-  Position: {x: 914.00006, y: 948.9158}
+  Position: {x: 941.9999, y: 816}
   OnEnterShowViews: []
   OnEnterHideViews:
   - Id:
@@ -3424,5 +3491,141 @@ MonoBehaviour:
   OnEnterHideViews: []
   OnExitShowViews: []
   OnExitHideViews: []
+  OnEnterHideAllViews: 0
+  OnExitHideAllViews: 0
+--- !u!114 &8112171317156326834
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b2479a69f56cf54c96de81c44e8ad1a, type: 3}
+  m_Name: Portal
+  m_EditorClassIdentifier: 
+  FlowGraphId: cc4022c0-bbcf-4ff3-b644-de466cf85d32
+  NodeId: 3e82b775-fc89-4cd4-a4c6-0f450c79802b
+  NodeType: 1
+  NodeName: Tab Codex
+  NodeDescription: 
+  InputPorts: []
+  OutputPorts:
+  - NodeId: 3e82b775-fc89-4cd4-a4c6-0f450c79802b
+    PortId: 0093b77c-8c62-47d4-a327-a81c6658ab2e
+    Direction: 1
+    Capacity: 0
+    Connections:
+    - 3e24b6da-59bd-4942-b151-c25cf1702465
+    Value: 
+    ValueTypeQualifiedName: 
+    CanBeDeleted: 0
+    CanBeReordered: 0
+  RunUpdate: 0
+  RunFixedUpdate: 0
+  RunLateUpdate: 0
+  NodeState: 0
+  CanBeDeleted: 1
+  Passthrough: 1
+  ClearGraphHistory: 0
+  Position: {x: 2003.6478, y: 508.00003}
+  Trigger: 2
+  SignalPayload:
+    StreamId:
+      Category: None
+      Name: None
+      Custom: 0
+    SignalValueType: 0
+    IntegerValue: 0
+    BooleanValue: 0
+    FloatValue: 0
+    StringValue: 
+    ColorValue: {r: 0, g: 0, b: 0, a: 0}
+    Vector2Value: {x: 0, y: 0}
+    Vector3Value: {x: 0, y: 0, z: 0}
+    Vector4Value: {x: 0, y: 0, z: 0, w: 0}
+  ButtonId:
+    Category: None
+    Name: None
+    Custom: 0
+  ToggleId:
+    Category: Store
+    Name: Codex
+    Custom: 0
+  CommandToggle: 0
+  ViewId:
+    Category: None
+    Name: None
+    Custom: 0
+  CommandShowHide: 0
+--- !u!114 &9176616523228431492
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1c01f9a7d07f5c04a9f277379e94a10b, type: 3}
+  m_Name: UI
+  m_EditorClassIdentifier: 
+  FlowGraphId: cc4022c0-bbcf-4ff3-b644-de466cf85d32
+  NodeId: e412ec9c-d476-4008-95e1-39f2fd3c0dce
+  NodeType: 0
+  NodeName: Codex
+  NodeDescription: 
+  InputPorts:
+  - NodeId: e412ec9c-d476-4008-95e1-39f2fd3c0dce
+    PortId: 3e24b6da-59bd-4942-b151-c25cf1702465
+    Direction: 0
+    Capacity: 1
+    Connections:
+    - 0093b77c-8c62-47d4-a327-a81c6658ab2e
+    Value: '{"CanGoBack":false}'
+    ValueTypeQualifiedName: Doozy.Runtime.UIManager.Nodes.PortData.GoBackInputPortData,
+      Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    CanBeDeleted: 0
+    CanBeReordered: 0
+  OutputPorts:
+  - NodeId: e412ec9c-d476-4008-95e1-39f2fd3c0dce
+    PortId: e5d207ca-a6e0-4b23-8757-06b5e0fb36ae
+    Direction: 1
+    Capacity: 0
+    Connections:
+    - 9319c3ac-72a4-4822-b55d-e90a1bf5f031
+    Value: '{"Trigger":2,"TimeDelay":3.0,"SignalPayload":{"StreamId":{"Category":"None","Name":"None","Custom":false},"SignalValueType":0,"IntegerValue":0,"BooleanValue":false,"FloatValue":0.0,"StringValue":"","ColorValue":{"r":0.0,"g":0.0,"b":0.0,"a":0.0},"Vector2Value":{"x":0.0,"y":0.0},"Vector3Value":{"x":0.0,"y":0.0,"z":0.0},"Vector4Value":{"x":0.0,"y":0.0,"z":0.0,"w":0.0}},"ButtonId":{"Category":"Codex","Name":"Bestiary","Custom":false},"ToggleId":{"Category":"None","Name":"None","Custom":false},"CommandToggle":2,"ViewId":{"Category":"None","Name":"None","Custom":false},"CommandShowHide":0}'
+    ValueTypeQualifiedName: Doozy.Runtime.UIManager.Nodes.PortData.UIOutputPortData,
+      Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    CanBeDeleted: 0
+    CanBeReordered: 0
+  RunUpdate: 0
+  RunFixedUpdate: 0
+  RunLateUpdate: 0
+  NodeState: 0
+  CanBeDeleted: 1
+  Passthrough: 0
+  ClearGraphHistory: 0
+  Position: {x: 2145.7476, y: 508}
+  OnEnterShowViews:
+  - Id:
+      Category: Store
+      Name: Codex
+      Custom: 0
+    Mode: 0
+  OnEnterHideViews:
+  - Id:
+      Category: Codex
+      Name: Bestiary
+      Custom: 0
+    Mode: 0
+  OnExitShowViews: []
+  OnExitHideViews:
+  - Id:
+      Category: Store
+      Name: Codex
+      Custom: 0
+    Mode: 0
   OnEnterHideAllViews: 0
   OnExitHideAllViews: 0
