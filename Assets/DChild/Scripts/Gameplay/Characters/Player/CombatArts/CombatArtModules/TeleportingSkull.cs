@@ -23,10 +23,14 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
         private SpineRootAnimation m_spineRootAnimation;
         [SerializeField, BoxGroup("Reference")]
         private Hitbox m_hitbox;
+        [SerializeField, BoxGroup("Reference")]
+        private Crouch m_crouch;
         [SerializeField, BoxGroup("Physics")]
         private Character m_character;
         [SerializeField, BoxGroup("Physics")]
         private Rigidbody2D m_physics;
+        [SerializeField, BoxGroup("Physics")]
+        private RaySensor m_groundSensor;
         private float m_cacheGravity;
         [SerializeField, BoxGroup("Projectile")]
         private ProjectileInfo m_projectile;
@@ -92,21 +96,13 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
                 m_spineRootAnimation.EnableRootMotion(true, true);
                 m_materialReplacement.replacementEnabled = true;
                 m_teleportingSkullInfo.PlayFX(true);
-                //m_teleportFX.Play();
                 m_cacheGravity = m_physics.gravityScale;
                 m_physics.gravityScale = 0;
                 m_physics.velocity = Vector2.zero;
-                m_character.transform.position = Mathf.Abs(RoofPosition(m_spawnedProjectile.transform.position).y - m_spawnedProjectile.transform.position.y) < 5f ? new Vector3(m_spawnedProjectile.transform.position.x, m_spawnedProjectile.transform.position.y - m_character.height) : m_spawnedProjectile.transform.position;
+                m_character.transform.position = Mathf.Abs(RoofPosition(new Vector2(m_spawnedProjectile.transform.position.x, m_spawnedProjectile.transform.position.y + m_spawnedProjectile.GetComponent<CircleCollider2D>().radius)).y - m_spawnedProjectile.transform.position.y) < m_character.height && CanTeleportHere(new Vector2(m_spawnedProjectile.transform.position.x, m_spawnedProjectile.transform.position.y)) ? new Vector3(m_spawnedProjectile.transform.position.x, m_spawnedProjectile.transform.position.y - m_character.height) : m_spawnedProjectile.transform.position;
                 m_spawnedProjectile.CallPoolRequest();
-                //base.AttackOver();
                 m_spineRootAnimation.animationState.GetCurrent(0).MixDuration = 0f;
                 m_teleportingSkullRoutine = StartCoroutine(TeleportingSkullRoutine());
-                //m_state.waitForBehaviour = true;
-                //m_state.isAttacking = true;
-                //m_state.canAttack = false;
-                //m_animator.SetBool(m_animationParameter, true);
-                //m_animator.SetBool(m_teleportingSkullStateAnimationParameter, true);
-                //m_animator.Play(m_animationName);
             }
         }
 
@@ -137,6 +133,11 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             {
                 m_hasExecuted = false;
                 m_hitbox.Enable();
+            }
+            m_groundSensor.Cast();
+            if (m_crouch.IsCrouchingPossible() && m_groundSensor.allRaysDetecting)
+            {
+                m_crouch.Execute();
             }
         }
 
@@ -201,6 +202,23 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             return Vector2.zero;
             //var hitPos = (new Vector2(m_projectilePoint.position.x, Vector2.down.y) * hit[0].distance);
             //return hitPos;
+        }
+        
+        protected bool CanTeleportHere(Vector2 startPoint)
+        {
+            int hitCount = 0;
+            //RaycastHit2D hit = Physics2D.Raycast(m_projectilePoint.position, Vector2.down,  1000, DChildUtility.GetEnvironmentMask());
+            RaycastHit2D[] hitUp = Cast(startPoint, Vector2.up, 100f, true, out hitCount, true);
+            RaycastHit2D[] hitDown = Cast(startPoint, Vector2.down, 100f, true, out hitCount, true);
+            if (hitUp != null && hitDown != null)
+            {
+                if ((Vector2.Distance(hitUp[0].point, hitDown[0].point) < m_character.height) && MathF.Abs(m_spawnedProjectile.transform.position.y - hitDown[0].point.y) < m_character.height)
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         private static ContactFilter2D m_contactFilter;
