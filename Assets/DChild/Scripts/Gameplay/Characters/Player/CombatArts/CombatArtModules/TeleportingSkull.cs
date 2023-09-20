@@ -43,8 +43,11 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
         private int m_teleportingSkullStateAnimationParameter;
         private string m_animationName = "TeleportingSkullEnd";
+        private float m_cacheMixDuration;
 
         public event EventAction<EventActionArgs> Teleported;
+
+        private Coroutine m_teleportingSkullRoutine;
 
         public override void Initialize(ComplexCharacterInfo info)
         {
@@ -54,6 +57,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             //m_canMove = true;
             //m_edgedFuryMovementCooldownTimer = m_edgedFuryMovementCooldown;
             m_cacheGravity = m_physics.gravityScale;
+            m_cacheMixDuration = m_spineRootAnimation.animationState.GetCurrent(0).MixDuration;
         }
 
         public void DisableTeleport(/*object sender, EventActionArgs eventArgs*/)
@@ -95,12 +99,14 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
                 m_character.transform.position = Mathf.Abs(RoofPosition(m_spawnedProjectile.transform.position).y - m_spawnedProjectile.transform.position.y) < 5f ? new Vector3(m_spawnedProjectile.transform.position.x, m_spawnedProjectile.transform.position.y - m_character.height) : m_spawnedProjectile.transform.position;
                 m_spawnedProjectile.CallPoolRequest();
                 //base.AttackOver();
-                m_state.waitForBehaviour = true;
-                m_state.isAttacking = true;
-                m_state.canAttack = false;
-                m_animator.SetBool(m_animationParameter, true);
-                m_animator.SetBool(m_teleportingSkullStateAnimationParameter, true);
-                m_animator.Play(m_animationName);
+                m_spineRootAnimation.animationState.GetCurrent(0).MixDuration = 0f;
+                m_teleportingSkullRoutine = StartCoroutine(TeleportingSkullRoutine());
+                //m_state.waitForBehaviour = true;
+                //m_state.isAttacking = true;
+                //m_state.canAttack = false;
+                //m_animator.SetBool(m_animationParameter, true);
+                //m_animator.SetBool(m_teleportingSkullStateAnimationParameter, true);
+                //m_animator.Play(m_animationName);
             }
         }
 
@@ -111,6 +117,11 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
         public void EndExecution()
         {
+            if (m_teleportingSkullRoutine != null)
+            {
+                StopCoroutine(m_teleportingSkullRoutine);
+                m_teleportingSkullRoutine = null;
+            }
             m_spineRootAnimation.DisableRootMotion();
             m_materialReplacement.replacementEnabled = false;
             m_animator.SetBool(m_teleportingSkullStateAnimationParameter, false);
@@ -120,6 +131,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             //m_physics.velocity = Vector2.zero;
             m_teleportingSkullInfo.ShowCollider(false);
             m_spawnedProjectile = null;
+            m_spineRootAnimation.animationState.GetCurrent(0).MixDuration = m_cacheMixDuration;
             base.AttackOver();
             if (m_hasExecuted)
             {
@@ -135,6 +147,11 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             //m_fx.Stop();
             if (m_spawnedProjectile == null && m_canTeleport)
             {
+                if (m_teleportingSkullRoutine != null)
+                {
+                    StopCoroutine(m_teleportingSkullRoutine);
+                    m_teleportingSkullRoutine = null;
+                }
                 m_spineRootAnimation.DisableRootMotion();
                 m_materialReplacement.replacementEnabled = false;
                 m_physics.gravityScale = m_cacheGravity;
@@ -143,6 +160,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
                 m_teleportingSkullInfo.ShowCollider(false);
                 m_animator.SetBool(m_teleportingSkullStateAnimationParameter, false);
                 m_spawnedProjectile = null;
+                m_spineRootAnimation.animationState.GetCurrent(0).MixDuration = m_cacheMixDuration;
                 base.Cancel();
                 if (m_hasExecuted)
                 {
@@ -156,6 +174,18 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
         {
             m_rigidBody.WakeUp();
             m_teleportingSkullInfo.ShowCollider(value);
+        }
+
+        private IEnumerator TeleportingSkullRoutine()
+        {
+            yield return new WaitForSeconds(0.1f);
+            m_state.waitForBehaviour = true;
+            m_state.isAttacking = true;
+            m_state.canAttack = false;
+            m_animator.SetBool(m_animationParameter, true);
+            m_animator.SetBool(m_teleportingSkullStateAnimationParameter, true);
+            m_animator.Play(m_animationName);
+            yield return null;
         }
 
         protected Vector2 RoofPosition(Vector2 startPoint)
