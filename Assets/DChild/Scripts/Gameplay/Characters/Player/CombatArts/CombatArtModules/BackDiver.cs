@@ -163,7 +163,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
         public void CheckGround()
         {
             m_groundSensor.Cast();
-            if (m_groundSensor.isDetecting)
+            if (m_groundSensor.allRaysDetecting)
             {
                 m_animator.SetBool(m_groundStateAnimationParameter, true);
             }
