@@ -1,4 +1,5 @@
 using DChild.Gameplay.Characters.Players.Modules;
+using DChild.Gameplay.Combat;
 using DChild.Gameplay.Pooling;
 using DChild.Gameplay.Projectiles;
 using Holysoft.Event;
@@ -18,6 +19,10 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
         [SerializeField]
         private Info m_teleportingSkullInfo;
 
+        [SerializeField, BoxGroup("Reference")]
+        private SpineRootAnimation m_spineRootAnimation;
+        [SerializeField, BoxGroup("Reference")]
+        private Hitbox m_hitbox;
         [SerializeField, BoxGroup("Physics")]
         private Character m_character;
         [SerializeField, BoxGroup("Physics")]
@@ -29,6 +34,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
         private Projectile m_spawnedProjectile;
         public Projectile spawnedProjectile => m_spawnedProjectile;
         private bool m_canTeleport;
+        private bool m_hasExecuted;
         public bool canTeleport => m_canTeleport;
         //[SerializeField, BoxGroup("FX")]
         //private ParticleSystem m_teleportFX;
@@ -50,7 +56,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             m_cacheGravity = m_physics.gravityScale;
         }
 
-        private void DisableTeleport(object sender, EventActionArgs eventArgs)
+        public void DisableTeleport(/*object sender, EventActionArgs eventArgs*/)
         {
             m_canTeleport = false;
             m_spawnedProjectile = null;
@@ -73,23 +79,29 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
         public void TeleportToProjectile()
         {
-            Teleported?.Invoke(this, EventActionArgs.Empty);
-            m_materialReplacement.replacementEnabled = true;
-            m_teleportingSkullInfo.PlayFX(true);
-            //m_teleportFX.Play();
-            m_cacheGravity = m_physics.gravityScale;
-            m_physics.gravityScale = 0;
-            m_physics.velocity = Vector2.zero;
-            m_canTeleport = false;
-            m_character.transform.position = Mathf.Abs(RoofPosition(m_spawnedProjectile.transform.position).y - m_spawnedProjectile.transform.position.y) < 5f ? new Vector3(m_spawnedProjectile.transform.position.x, m_spawnedProjectile.transform.position.y - m_character.height) : m_spawnedProjectile.transform.position;
-            m_spawnedProjectile.CallPoolRequest();
-            //base.AttackOver();
-            m_state.waitForBehaviour = true;
-            m_state.isAttacking = true;
-            m_state.canAttack = false;
-            m_animator.SetBool(m_animationParameter, true);
-            m_animator.SetBool(m_teleportingSkullStateAnimationParameter, true);
-            m_animator.Play(m_animationName);
+            if (m_spawnedProjectile != null && m_canTeleport)
+            {
+                Teleported?.Invoke(this, EventActionArgs.Empty);
+                m_canTeleport = false;
+                m_hasExecuted = true;
+                m_hitbox.Disable();
+                m_spineRootAnimation.EnableRootMotion(true, true);
+                m_materialReplacement.replacementEnabled = true;
+                m_teleportingSkullInfo.PlayFX(true);
+                //m_teleportFX.Play();
+                m_cacheGravity = m_physics.gravityScale;
+                m_physics.gravityScale = 0;
+                m_physics.velocity = Vector2.zero;
+                m_character.transform.position = Mathf.Abs(RoofPosition(m_spawnedProjectile.transform.position).y - m_spawnedProjectile.transform.position.y) < 5f ? new Vector3(m_spawnedProjectile.transform.position.x, m_spawnedProjectile.transform.position.y - m_character.height) : m_spawnedProjectile.transform.position;
+                m_spawnedProjectile.CallPoolRequest();
+                //base.AttackOver();
+                m_state.waitForBehaviour = true;
+                m_state.isAttacking = true;
+                m_state.canAttack = false;
+                m_animator.SetBool(m_animationParameter, true);
+                m_animator.SetBool(m_teleportingSkullStateAnimationParameter, true);
+                m_animator.Play(m_animationName);
+            }
         }
 
         public void Execute()
@@ -99,15 +111,21 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
         public void EndExecution()
         {
+            m_spineRootAnimation.DisableRootMotion();
             m_materialReplacement.replacementEnabled = false;
             m_animator.SetBool(m_teleportingSkullStateAnimationParameter, false);
             m_canTeleport = false;
             m_state.waitForBehaviour = false;
             m_physics.gravityScale = m_cacheGravity;
-            m_physics.velocity = Vector2.zero;
+            //m_physics.velocity = Vector2.zero;
             m_teleportingSkullInfo.ShowCollider(false);
             m_spawnedProjectile = null;
             base.AttackOver();
+            if (m_hasExecuted)
+            {
+                m_hasExecuted = false;
+                m_hitbox.Enable();
+            }
         }
 
         public override void Cancel()
@@ -115,14 +133,23 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             //m_edgedFuryInfo.PlayFX(false);
             //m_fx.gameObject.SetActive(false);
             //m_fx.Stop();
-            m_materialReplacement.replacementEnabled = false;
-            m_physics.gravityScale = m_cacheGravity;
-            m_physics.velocity = Vector2.zero;
-            m_canTeleport = false;
-            m_teleportingSkullInfo.ShowCollider(false);
-            m_animator.SetBool(m_teleportingSkullStateAnimationParameter, false);
-            m_spawnedProjectile = null;
-            base.Cancel();
+            if (m_spawnedProjectile == null && m_canTeleport)
+            {
+                m_spineRootAnimation.DisableRootMotion();
+                m_materialReplacement.replacementEnabled = false;
+                m_physics.gravityScale = m_cacheGravity;
+                //m_physics.velocity = Vector2.zero;
+                m_canTeleport = false;
+                m_teleportingSkullInfo.ShowCollider(false);
+                m_animator.SetBool(m_teleportingSkullStateAnimationParameter, false);
+                m_spawnedProjectile = null;
+                base.Cancel();
+                if (m_hasExecuted)
+                {
+                    m_hasExecuted = false;
+                    m_hitbox.Enable();
+                }
+            }
         }
 
         public void EnableCollision(bool value)
