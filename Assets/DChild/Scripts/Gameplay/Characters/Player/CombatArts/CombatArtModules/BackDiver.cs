@@ -33,6 +33,8 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
         //private RaySensor m_wallSensor;
         [SerializeField, BoxGroup("Sensors")]
         private RaySensor m_backWallSensor;
+        [SerializeField, BoxGroup("Sensors")]
+        private RaySensor m_groundSensor;
         [SerializeField]
         private Hitbox m_hitbox;
         [SerializeField]
@@ -58,6 +60,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
         private bool m_canMove;
         private IPlayerModifer m_modifier;
         private int m_backDiverStateAnimationParameter;
+        private int m_groundStateAnimationParameter;
         private float m_backDiverCooldownTimer;
         private float m_backDiverMovementCooldownTimer;
 
@@ -79,6 +82,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
             m_modifier = info.modifier;
             m_backDiverStateAnimationParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.BackDiver);
+            m_groundStateAnimationParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.IsGrounded);
             m_canBackDiver = true;
             m_canMove = true;
             m_backDiverMovementCooldownTimer = m_backDiverMovementCooldown;
@@ -154,6 +158,15 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             m_rigidBody.WakeUp();
             m_backDiverInfo.ShowCollider(value);
             m_attackFX.transform.position = m_backDiverInfo.fxPosition.position;
+        }
+
+        public void CheckGround()
+        {
+            m_groundSensor.Cast();
+            if (m_groundSensor.isDetecting)
+            {
+                m_animator.SetBool(m_groundStateAnimationParameter, true);
+            }
         }
 
         public void ResetBackDiver()

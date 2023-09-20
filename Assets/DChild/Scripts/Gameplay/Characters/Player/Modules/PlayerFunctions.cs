@@ -500,8 +500,13 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void BackDiverGetProjectile()
         {
-            m_teleportingSkull.Execute();
+            //m_teleportingSkull.Execute();
             //m_teleportingSkull.GetSpawnedProjectile(m_backDiver.spawnedProjectile);
+        }
+
+        public void BackDiverCheckGround()
+        {
+            m_backDiver.CheckGround();
         }
 
         public void BackDiverEnd()
