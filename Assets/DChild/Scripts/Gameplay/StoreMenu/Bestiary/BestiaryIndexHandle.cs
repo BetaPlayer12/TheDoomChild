@@ -4,6 +4,7 @@ using Sirenix.OdinInspector;
 using DChild.Gameplay.Characters.Players;
 using Holysoft.Collections;
 using Holysoft.Event;
+using DChild.Menu.Codex;
 
 namespace DChild.Menu.Bestiary
 {
@@ -14,7 +15,7 @@ namespace DChild.Menu.Bestiary
         [SerializeField]
         private bool m_revealAllData;
         [SerializeField, InlineEditor]
-        private BestiaryProgress m_tracker;
+        private CodexProgressTracker m_tracker;
         [SerializeField, MinValue(1), PropertyOrder(-1)]
         private int m_page;
         [SerializeField, MinValue(1), PropertyOrder(-1)]

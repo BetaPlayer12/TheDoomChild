@@ -3,6 +3,7 @@ using DChild.Serialization;
 using UnityEngine;
 using Sirenix.OdinInspector;
 using DChild.Gameplay.SoulSkills;
+using DChild.Menu.Codex;
 
 namespace DChild.Gameplay.Characters.Players
 {
@@ -11,8 +12,8 @@ namespace DChild.Gameplay.Characters.Players
     {
         [SerializeField, TabGroup("Inventory")]
         private PlayerInventory m_inventory;
-        [SerializeField, TabGroup("Bestiary")]
-        private BestiaryProgress m_bestiaryProgress;
+        [SerializeField, TabGroup("Codex")]
+        private CodexProgressSerializer m_codex;
         [SerializeField, TabGroup("Skill")]
         private PlayerSkills m_playerSkills;
         [SerializeField, TabGroup("Equipped Soul Skill")]
@@ -23,7 +24,7 @@ namespace DChild.Gameplay.Characters.Players
         public PlayerCharacterData SaveData()
         {
             return new PlayerCharacterData(m_inventory.Save(),
-                                        m_bestiaryProgress.SaveData(),
+                                        m_codex.SaveData(),
                                         m_playerSkills.SaveData(),
                                         m_soulSkillHandle.SaveData(),
                                         m_combatArts.SaveData());
@@ -32,7 +33,7 @@ namespace DChild.Gameplay.Characters.Players
         public void LoadData(PlayerCharacterData data)
         {
             m_inventory.Load(data.inventoryData);
-            m_bestiaryProgress.LoadData(data.bestiaryProgressData);
+            m_codex.LoadData(data.codexData);
             m_playerSkills.LoadData(data.skills);
             m_soulSkillHandle.LoadData(data.soulSkillData);
             m_combatArts.LoadData(data.combatArtsData);
