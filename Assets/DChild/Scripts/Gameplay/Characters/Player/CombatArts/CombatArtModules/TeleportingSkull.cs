@@ -96,7 +96,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
                 m_spineRootAnimation.EnableRootMotion(true, true);
                 m_materialReplacement.replacementEnabled = true;
                 m_teleportingSkullInfo.PlayFX(true);
-                m_cacheGravity = m_physics.gravityScale;
+                //m_cacheGravity = m_physics.gravityScale;
                 m_physics.gravityScale = 0;
                 m_physics.velocity = Vector2.zero;
                 m_character.transform.position = Mathf.Abs(RoofPosition(new Vector2(m_spawnedProjectile.transform.position.x, m_spawnedProjectile.transform.position.y + m_spawnedProjectile.GetComponent<CircleCollider2D>().radius)).y - m_spawnedProjectile.transform.position.y) < m_character.height && CanTeleportHere(new Vector2(m_spawnedProjectile.transform.position.x, m_spawnedProjectile.transform.position.y)) ? new Vector3(m_spawnedProjectile.transform.position.x, m_spawnedProjectile.transform.position.y - m_character.height) : m_spawnedProjectile.transform.position;
