@@ -29,6 +29,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private SkeletonAnimation m_skeletonData;
         [SerializeField]
         private GameObject m_playerShadow;
+        [SerializeField, BoxGroup("FX")]
+        private MaterialReplacementExample m_materialReplacement;
 
         private Damageable m_damageable;
         private ICappedStat m_source;
@@ -68,6 +70,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_skeletonData.Skeleton.SetSkin(m_shadowMorphSkinName);
             m_state.isInShadowMode = true;
             m_state.waitForBehaviour = false;
+            //m_materialReplacement.replacementEnabled = false;
             GameplaySystem.world.SetShadowColliders(true);
             //End?.Invoke(this, EventActionArgs.Empty);
         }
@@ -77,6 +80,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             Debug.Log("Shadow Morph");
             m_animator.Play(SHADOW_MORPH_ANIMATION_STATE);
             m_shadowMorphFX.Play();
+            m_materialReplacement.replacementEnabled = true;
             m_damageable.SetInvulnerability(Invulnerability.Level_2);
             //m_animator.SetBool(m_animationParameter, true);
             m_skeletonGhost.enabled = true;
@@ -103,6 +107,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_animator.SetBool(m_animationParameter, false);
             m_stackedConsumptionRate = 0;
             m_shadowMorphFX.Stop(true);
+            m_materialReplacement.replacementEnabled = false;
             m_skeletonGhost.enabled = false;
             m_playerShadow.SetActive(true);
             End?.Invoke(this, EventActionArgs.Empty);
