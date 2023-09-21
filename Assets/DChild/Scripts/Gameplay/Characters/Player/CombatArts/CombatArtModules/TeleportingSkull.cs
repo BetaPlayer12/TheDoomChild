@@ -120,7 +120,6 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             }
             m_spineRootAnimation.DisableRootMotion();
             m_materialReplacement.replacementEnabled = false;
-            m_animator.SetBool(m_teleportingSkullStateAnimationParameter, false);
             m_canTeleport = false;
             m_state.waitForBehaviour = false;
             m_physics.gravityScale = m_cacheGravity;
@@ -128,7 +127,6 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             m_teleportingSkullInfo.ShowCollider(false);
             m_spawnedProjectile = null;
             m_spineRootAnimation.animationState.GetCurrent(0).MixDuration = m_cacheMixDuration;
-            base.AttackOver();
             if (m_hasExecuted)
             {
                 m_hasExecuted = false;
@@ -139,6 +137,8 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             {
                 m_crouch.Execute();
             }
+            base.AttackOver();
+            m_animator.SetBool(m_teleportingSkullStateAnimationParameter, false);
         }
 
         public override void Cancel()
