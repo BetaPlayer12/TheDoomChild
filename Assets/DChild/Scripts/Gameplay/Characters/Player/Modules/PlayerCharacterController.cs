@@ -1127,7 +1127,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
                         return;
                     }
-                    else if (m_input.teleportingSkullPressed && m_teleportingSkull.canTeleport && m_abilities.IsAbilityActivated(CombatArt.TeleportingSkull))
+                    else if (m_input.teleportingSkullPressed && m_teleportingSkull.canTeleport /*&& m_abilities.IsAbilityActivated(CombatArt.TeleportingSkull)*/)
                     {
                         m_teleportingSkull.TeleportToProjectile();
                         return;
@@ -1264,7 +1264,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                         }
                     }
                 }
-                else if (m_input.backDiverPressed && m_backDiver.CanBackDiver() && m_backDiver.HaveSpacetoExecute() && m_earthShaker.CanEarthShaker() && m_abilities.IsAbilityActivated(CombatArt.BackDiver))
+                else if (m_input.backDiverPressed && m_backDiver.CanBackDiver() && m_backDiver.HaveSpacetoExecute() && m_earthShaker.CanEarthShaker() /*&& m_abilities.IsAbilityActivated(CombatArt.BackDiver)*/)
                 {
                     if (m_state.isInShadowMode == false)
                     {
@@ -1847,7 +1847,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     }
                     else if (m_input.projectileThrowPressed && !m_input.foolsVerdictPressed && !m_input.hellTridentPressed && !m_input.fireFistPressed)
                     {
-                        if (m_input.teleportingSkullPressed && m_abilities.IsAbilityActivated(CombatArt.TeleportingSkull))
+                        if (m_input.teleportingSkullPressed /*&& m_abilities.IsAbilityActivated(CombatArt.TeleportingSkull)*/)
                         {
                             m_projectileThrow.SetProjectileInfo(m_teleportingSkull.projectile);
                             m_projectileThrow.WillResetProjectile();
@@ -1923,7 +1923,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
                         return;
                     }
-                    else if (m_input.backDiverPressed && m_backDiver.CanBackDiver() && m_backDiver.HaveSpacetoExecute() && m_earthShaker.CanEarthShaker() && m_abilities.IsAbilityActivated(CombatArt.BackDiver))
+                    else if (m_input.backDiverPressed && m_backDiver.CanBackDiver() && m_backDiver.HaveSpacetoExecute() && m_earthShaker.CanEarthShaker() /*&& m_abilities.IsAbilityActivated(CombatArt.BackDiver)*/)
                     {
                         if (m_state.isInShadowMode == false)
                         {
@@ -1957,7 +1957,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
                         return;
                     }
-                    else if (m_input.barrierPressed && m_abilities.IsAbilityActivated(CombatArt.Barrier))
+                    else if (m_input.barrierPressed /*&& m_abilities.IsAbilityActivated(CombatArt.Barrier)*/)
                     {
                         if (m_state.isInShadowMode == false)
                         {
