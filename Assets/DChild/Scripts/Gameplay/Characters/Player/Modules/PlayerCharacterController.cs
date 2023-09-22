@@ -1038,7 +1038,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                         }
                         return;
                     }
-                    else if (m_input.airSlashComboPressed && m_airSlashCombo.CanAirSlashCombo() && !m_input.reaperHarvestPressed && !m_input.diagonalSwordDashPressed /*&& m_abilities.IsAbilityActivated(CombatArt.AirSlashCombo)*/)
+                    else if (m_input.airSlashComboPressed && m_airSlashCombo.CanAirSlashCombo() && !m_input.reaperHarvestPressed && !m_input.diagonalSwordDashPressed && !m_wallStick.IsThereAWall() /*&& m_abilities.IsAbilityActivated(CombatArt.AirSlashCombo)*/)
                     {
                         m_basicSlashes?.Cancel();
                         m_whip?.Cancel();
