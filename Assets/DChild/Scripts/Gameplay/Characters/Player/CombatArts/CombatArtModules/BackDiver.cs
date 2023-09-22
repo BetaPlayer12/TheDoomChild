@@ -42,7 +42,9 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
         [SerializeField]
         private Vector2 m_pushForce;
-        
+        [SerializeField]
+        private float m_landDuration;
+
         [SerializeField, BoxGroup("Projectile")]
         private Transform m_startPoint;
         [SerializeField, BoxGroup("Projectile")]
@@ -66,6 +68,8 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
         private Animator m_fxAnimator;
         private SkeletonAnimation m_skeletonAnimation;
+
+        private Coroutine m_landDurationRoutine;
 
         public bool CanBackDiver() => m_canBackDiver;
         //public bool CanMove() => m_canMove;
@@ -122,6 +126,8 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             m_backDiverCooldownTimer = m_backDiverCooldown;
             m_backDiverMovementCooldownTimer = m_backDiverMovementCooldown;
             //m_attacker.SetDamageModifier(m_slashComboInfo[m_currentSlashState].damageModifier * m_modifier.Get(PlayerModifier.AttackDamage));
+            m_physics.constraints = RigidbodyConstraints2D.FreezeRotation;
+            m_physics.velocity = Vector2.zero;
             m_physics.AddForce(new Vector2(m_character.facing == HorizontalDirection.Left ? m_pushForce.x : -m_pushForce.x, m_pushForce.y), ForceMode2D.Impulse);
             StartCoroutine(HitboxRoutine());
         }
@@ -131,6 +137,12 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             if (m_hasExecuted)
             {
                 m_hasExecuted = false;
+            }
+            if (m_landDurationRoutine != null)
+            {
+                StopCoroutine(m_landDurationRoutine);
+                m_landDurationRoutine = null;
+                m_physics.constraints = RigidbodyConstraints2D.FreezeRotation;
             }
             //m_backDiverInfo.ShowCollider(false);
             //m_hitbox.Enable();
@@ -148,6 +160,12 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             {
                 m_hasExecuted = false;
                 m_hitbox.Enable();
+            }
+            if (m_landDurationRoutine != null)
+            {
+                StopCoroutine(m_landDurationRoutine);
+                m_landDurationRoutine = null;
+                m_physics.constraints = RigidbodyConstraints2D.FreezeRotation;
             }
             m_animator.SetBool(m_backDiverStateAnimationParameter, false);
             base.Cancel();
@@ -167,6 +185,11 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             {
                 m_animator.SetBool(m_groundStateAnimationParameter, true);
             }
+        }
+
+        public void LandOnGround()
+        {
+            m_landDurationRoutine = StartCoroutine(LandRoutine());
         }
 
         public void ResetBackDiver()
@@ -205,6 +228,15 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
                 m_hitbox.Enable();
                 m_hasExecuted = false;
             }
+            yield return null;
+        }
+
+        private IEnumerator LandRoutine()
+        {
+            m_physics.velocity = new Vector2(0, m_physics.velocity.y);
+            m_physics.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
+            yield return new WaitForSeconds(m_landDuration);
+            m_physics.constraints = RigidbodyConstraints2D.FreezeRotation;
             yield return null;
         }
 
