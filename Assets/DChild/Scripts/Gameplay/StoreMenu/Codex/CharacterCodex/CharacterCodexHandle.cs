@@ -8,6 +8,10 @@ namespace DChild.Codex.Characters
 {
     public class CharacterCodexHandle : CodexHandle<CharacterCodexData, CharacterCodexData>
     {
+        public void Select(CharacterCodexIndexButton button)
+        {
+            Select(button);
+        }
 
     }
 

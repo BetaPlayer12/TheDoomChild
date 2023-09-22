@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8022655371736583618}
   - component: {fileID: 8022655371736583619}
   - component: {fileID: 8022655371736583620}
-  - component: {fileID: 8022655371736583621}
+  - component: {fileID: 8350422833023168423}
   m_Layer: 5
   m_Name: CharactersIndexList
   m_TagString: Untagged
@@ -210,7 +210,7 @@ MonoBehaviour:
       m_PersistentCalls:
         m_Calls: []
   FirstToggle: {fileID: 7198983984316739240}
---- !u!114 &8022655371736583621
+--- !u!114 &8350422833023168423
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -219,10 +219,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 8022655371736583617}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fcf394ccae86da348a4b87833d60aa30, type: 3}
+  m_Script: {fileID: 11500000, guid: dbac3b8d5d2bbd241a8d8b20085a56db, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_handle: {fileID: 0}
+  m_handle: {fileID: 4102420531123964326}
   m_itemGroup: {fileID: 8022655371736583620}
 --- !u!1 &8022655371875369981
 GameObject:
@@ -872,7 +872,7 @@ MonoBehaviour:
             m_MethodName: Select
             m_Mode: 2
             m_Arguments:
-              m_ObjectArgument: {fileID: 8925235667150955598}
+              m_ObjectArgument: {fileID: 0}
               m_ObjectArgumentAssemblyTypeName: DChild.Menu.Bestiary.BestiaryIndexButton,
                 Assembly-CSharp
               m_IntArgument: 0
@@ -2231,8 +2231,9 @@ MonoBehaviour:
     Event:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 0}
-          m_TargetAssemblyTypeName: DChild.Menu.Bestiary.BestiaryIndexHandle, Assembly-CSharp
+        - m_Target: {fileID: 3267814527310767818}
+          m_TargetAssemblyTypeName: DChild.Menu.Codex.CodexIndexHandle`2[[DChild.Codex.Characters.CharacterCodexData,
+            Assembly-CSharp
           m_MethodName: SetPage
           m_Mode: 3
           m_Arguments:
@@ -2243,13 +2244,14 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
-        - m_Target: {fileID: 0}
-          m_TargetAssemblyTypeName: DChild.Menu.Bestiary.BestiaryHandle, Assembly-CSharp
+        - m_Target: {fileID: 4102420531123964326}
+          m_TargetAssemblyTypeName: DChild.Codex.Characters.CharacterCodexHandle,
+            Assembly-CSharp
           m_MethodName: Select
           m_Mode: 2
           m_Arguments:
-            m_ObjectArgument: {fileID: 8925235667150955598}
-            m_ObjectArgumentAssemblyTypeName: DChild.Menu.Bestiary.BestiaryIndexButton,
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: DChild.Codex.Characters.CharacterCodexIndexButton,
               Assembly-CSharp
             m_IntArgument: 0
             m_FloatArgument: 0
@@ -4043,15 +4045,16 @@ MonoBehaviour:
   serializationData:
     SerializedFormat: 2
     SerializedBytes: 
-    ReferencedUnityObjects: []
+    ReferencedUnityObjects:
+    - {fileID: 3267814527310767818}
     SerializedBytesString: 
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
     SerializationNodes:
     - Name: m_pageHandle
-      Entry: 6
-      Data: 
+      Entry: 10
+      Data: 0
 --- !u!114 &8022655373075679785
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4069,8 +4072,9 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 0}
-          m_TargetAssemblyTypeName: DChild.Menu.Bestiary.BestiaryHandle, Assembly-CSharp
+        - m_Target: {fileID: 4102420531123964326}
+          m_TargetAssemblyTypeName: DChild.Menu.Codex.CodexHandle`1[[DChild.Codex.Characters.CharacterCodexData,
+            Assembly-CSharp
           m_MethodName: LockOnSelectedData
           m_Mode: 1
           m_Arguments:
@@ -4085,8 +4089,9 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 0}
-          m_TargetAssemblyTypeName: DChild.Menu.Bestiary.BestiaryHandle, Assembly-CSharp
+        - m_Target: {fileID: 4102420531123964326}
+          m_TargetAssemblyTypeName: DChild.Menu.Codex.CodexHandle`1[[DChild.Codex.Characters.CharacterCodexData,
+            Assembly-CSharp
           m_MethodName: UnlockOnSelectedData
           m_Mode: 1
           m_Arguments:
@@ -5777,15 +5782,3 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 4361726567977601513}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &8925235667150955598 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5141766868026895783, guid: 87de4440eab667444bd4e86ef081267b,
-    type: 3}
-  m_PrefabInstance: {fileID: 4361726567977601513}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8925235667150955588}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eae7499e4b0909e45a38c58fca3ba9ef, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
