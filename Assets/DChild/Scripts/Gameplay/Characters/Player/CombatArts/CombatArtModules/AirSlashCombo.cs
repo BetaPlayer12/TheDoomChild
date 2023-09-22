@@ -278,7 +278,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
                 if (m_comboResetDelayTimer <= 0)
                 {
-                    Reset();
+                    //Reset();
+                    ComboEnd();
                 }
             }
         }
