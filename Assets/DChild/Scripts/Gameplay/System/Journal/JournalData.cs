@@ -11,6 +11,12 @@ namespace DChild.Gameplay.Systems.Journal
         private int m_id;
         [SerializeField]
         private Sprite m_notification;
+        [SerializeField]
+        private Sprite m_journalItemImage;
+        [SerializeField]
+        private string m_journalItemName;
+        [SerializeField]
+        private string m_description;
 
         public int ID => m_id;
         public Sprite notification => m_notification;
