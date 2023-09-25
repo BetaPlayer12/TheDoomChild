@@ -20,5 +20,8 @@ namespace DChild.Gameplay.Systems.Journal
 
         public int ID => m_id;
         public Sprite notification => m_notification;
+        public Sprite ItemImage => m_journalItemImage;
+        public string ItemName => m_journalItemName;
+        public string ItemDescription => m_description;
     }
 }
