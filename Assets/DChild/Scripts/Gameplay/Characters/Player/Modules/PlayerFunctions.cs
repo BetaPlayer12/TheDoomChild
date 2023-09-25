@@ -509,6 +509,11 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_backDiver.CheckGround();
         }
 
+        public void BackDiverLandOnGround()
+        {
+            m_backDiver.LandOnGround();
+        }
+
         public void BackDiverEnd()
         {
             m_backDiver.EndExecution();

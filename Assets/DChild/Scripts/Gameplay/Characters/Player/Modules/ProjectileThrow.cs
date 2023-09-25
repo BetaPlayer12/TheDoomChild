@@ -189,8 +189,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 
                 m_projectile = info;
                 m_launcher.SetProjectile(m_projectile);
-                var skullThrowVariantIndex = info.projectile.GetComponent<Projectile>().hasConstantSpeed ? 0 : 1;
-                m_animator.SetInteger(m_skullThrowVariantParameter, skullThrowVariantIndex);
+                var skullThrowVariantIndex = info.projectile.GetComponent<Projectile>().hasConstantSpeed ? true : false;
+                m_animator.SetBool(m_skullThrowVariantParameter, skullThrowVariantIndex);
                 m_updateProjectileInfo = true;
             }
         }
@@ -206,8 +206,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_willResetProjectile = false;
             m_projectile = m_cacheProjectile;
             m_launcher.SetProjectile(m_projectile);
-            var skullThrowVariantIndex = m_cacheProjectile.projectile.GetComponent<Projectile>().hasConstantSpeed ? 0 : 1;
-            m_animator.SetInteger(m_skullThrowVariantParameter, skullThrowVariantIndex);
+            var skullThrowVariantIndex = m_cacheProjectile.projectile.GetComponent<Projectile>().hasConstantSpeed ? true : false;
+            m_animator.SetBool(m_skullThrowVariantParameter, skullThrowVariantIndex);
             m_updateProjectileInfo = true;
         }
 
