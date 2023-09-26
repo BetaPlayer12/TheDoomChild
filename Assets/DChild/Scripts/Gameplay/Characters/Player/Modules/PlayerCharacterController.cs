@@ -397,6 +397,12 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_input.projectileThrowPressed = true;
         }
 
+        private void ResetProjectile(object sender, EventActionArgs eventArgs)
+        {
+            if (m_projectileThrow.willResetProjectile)
+                m_projectileThrow.ResetProjectile();
+        }
+
         private void FlipCharacter()
         {
             var oppositeFacing = m_character.facing == HorizontalDirection.Right ? HorizontalDirection.Left : HorizontalDirection.Right;
@@ -458,6 +464,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_whipCombo = m_character.GetComponentInChildren<WhipAttackCombo>();
             m_projectileThrow = m_character.GetComponentInChildren<ProjectileThrow>();
             m_projectileThrow.ExecutionRequested += OnProjectileThrowRequest;
+            m_projectileThrow.ProjectileThrown += ResetProjectile;
             m_block = m_character.GetComponentInChildren<PlayerBlock>();
 
             m_shadowBladeFX = m_character.GetComponentInChildren<ShadowbladeFX>();
@@ -1370,8 +1377,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
                         m_projectileThrow.StartThrow();
                         GameplaySystem.cinema.ApplyCameraPeekMode(Cinematics.CameraPeekMode.None);
 
-                        if (m_projectileThrow.willResetProjectile)
-                            m_projectileThrow.ResetProjectile();
+                        //if (m_projectileThrow.willResetProjectile)
+                        //    m_projectileThrow.ResetProjectile();
                     }
                 }
                 else if (m_state.isDoingSwordThrust)
