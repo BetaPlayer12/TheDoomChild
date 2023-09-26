@@ -283,6 +283,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_spawnedProjectile = GameSystem.poolManager.GetPool<ProjectilePool>().GetOrCreateItem(m_projectile.projectile);
             m_spawnedProjectile.transform.position = m_spawnPoint.position;
             m_spawnedProjectile.transform.parent = transform;
+            m_spawnedProjectile.transform.rotation = Quaternion.identity;
             m_spawnedProjectile.GetComponent<Attacker>().SetParentAttacker(m_attacker);
             //TEST
 
