@@ -178,6 +178,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_whip?.Cancel();
             m_whipCombo?.Cancel();
             m_projectileThrow?.Cancel();
+            if (m_projectileThrow.willResetProjectile)
+                m_projectileThrow.ResetProjectile();
             m_shadowMorph.Cancel();
             m_block?.Cancel();
             m_shadowGaugeRegen.Enable(true);

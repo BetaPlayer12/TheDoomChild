@@ -183,7 +183,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void SetProjectileInfo(ProjectileInfo info)
         {
-            m_cacheProjectile = m_projectile;
+            //m_cacheProjectile = m_projectile;
             if (m_projectile != info)
             {
                 
