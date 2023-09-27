@@ -397,7 +397,8 @@ namespace DChild.Gameplay.Characters.Enemies
             m_utilityBone.mode = SkeletonUtilityBone.Mode.Override;
             m_utilityBone.transform.position = GroundPosition(new Vector2(m_targetLastPos.x, transform.position.y + 5f));
             m_animation.SetAnimation(0, m_info.vomitAttack.animation, false);
-            yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSeconds(1f);
+            //ield return new WaitForAnimationComplete(m_animation.animationState, m_info.vomitAttack.animation);
             var instance = GameSystem.poolManager.GetPool<FXPool>().GetOrCreateItem(m_info.acidPool);
             instance.transform.position = m_utilityBone.transform.position;
             var component = instance.GetComponent<FX>();
