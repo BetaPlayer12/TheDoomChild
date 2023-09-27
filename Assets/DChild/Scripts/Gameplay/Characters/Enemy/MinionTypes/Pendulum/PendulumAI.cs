@@ -291,10 +291,7 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_Audiosource.clip = m_DeadClip;
             //m_Audiosource.Play();
             StopAllCoroutines();
-            for (int i = 0; i < m_attackBBs.Count; i++)
-            {
-                m_attackBBs[i].enabled = false;
-            }
+            DisableAttackBB();
             base.OnDestroyed(sender, eventArgs);
             
             m_stateHandle.OverrideState(State.WaitBehaviourEnd);
@@ -434,6 +431,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 //m_animation.SetAnimation(0, m_info.attackMidSequenceAnimation, false);
                 //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attackMidSequenceAnimation);
             }
+            DisableAttackBB();
             m_animation.SetAnimation(0, m_info.attackEndAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attackEndAnimation);
             m_animation.SetAnimation(0, RandomIdleAnimation(), true);
@@ -448,7 +446,13 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_attackBBs[i].enabled = !m_attackBBs[i].enabled;
             }
         }
-
+        private void DisableAttackBB()
+        {
+            for (int i = 0; i < m_attackBBs.Count; i++)
+            {
+                m_attackBBs[i].enabled = false;
+            }
+        }
         protected override void Start()
         {
             base.Start();
