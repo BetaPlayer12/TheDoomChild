@@ -134,6 +134,7 @@ namespace DChild.Gameplay.UI.CombatArts
                     for (int k = 0; k < currentLevel; k++)
                     {
                         array[k].SetState(CombatArtUnlockState.Unlocked);
+                        array[k].SetAsNormalSelection();
                     }
 
                 }
@@ -142,6 +143,7 @@ namespace DChild.Gameplay.UI.CombatArts
                     for (int k = 0; k < array.Length; k++)
                     {
                         array[k].SetState(CombatArtUnlockState.Unlockable);
+                        array[k].SetAsNormalSelection();
                     }
 
                 }
@@ -150,6 +152,7 @@ namespace DChild.Gameplay.UI.CombatArts
                     for (int k = 0; k < array.Length; k++)
                     {
                         array[k].SetState(CombatArtUnlockState.Locked);
+                        array[k].SetAsNormalSelection();
                     }
                 }
             }
