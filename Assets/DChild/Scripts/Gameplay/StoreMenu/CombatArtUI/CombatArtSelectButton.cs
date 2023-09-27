@@ -24,10 +24,20 @@ namespace DChild.Gameplay.UI.CombatArts
         public int unlockLevel => m_unlockLevel;
         public CombatArtUnlockState currentState => m_currentState;
 
+        private void Awake()
+        {
+            m_visuals.Initialize();
+        }
+
         public void SetState(CombatArtUnlockState state)
         {
             m_currentState = state;
             m_visuals.SetState(state);
+        }
+
+        public void SetAsNormalSelection()
+        {
+            m_visuals.RevertToNormalSelectionState();
         }
 
         public void Select()
