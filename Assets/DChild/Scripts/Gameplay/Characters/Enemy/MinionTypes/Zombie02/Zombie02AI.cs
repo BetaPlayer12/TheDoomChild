@@ -431,7 +431,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void SpitProjectile()
         {
-            if (m_targetInfo.isValid)
+            if (!ShotBlocked())
             {
                 //if (!IsFacingTarget())
                 //{
@@ -467,7 +467,17 @@ namespace DChild.Gameplay.Characters.Enemies
                 //return instance.gameObject;
             }
         }
-
+        private bool ShotBlocked()
+        {
+            Vector2 wat = m_projectilePoint.transform.position;
+            RaycastHit2D hit = Physics2D.Raycast(/*m_projectilePoint.position*/wat, m_targetInfo.position - wat, 1000, LayerMask.GetMask("Player") + DChildUtility.GetEnvironmentMask());
+            var eh = hit.transform.gameObject.layer == LayerMask.NameToLayer("Player") ? false : true;
+#if UNITY_EDITOR
+            Debug.DrawRay(wat, m_targetInfo.position - wat);
+            Debug.Log("Shot is " + eh + " by " + LayerMask.LayerToName(hit.transform.gameObject.layer));
+#endif
+            return hit.transform.gameObject.layer == LayerMask.NameToLayer("Player") ? false : true;
+        }
         private Vector2 GroundPosition()
         {
             RaycastHit2D hit = Physics2D.Raycast(m_character.centerMass.position, Vector2.down, 1000, DChildUtility.GetEnvironmentMask());
