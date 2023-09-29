@@ -45,6 +45,8 @@ namespace DChild.Gameplay.Narrative
         [SerializeField]
         private AnimationReferenceAsset m_playerStandAnimation;
         [SerializeField]
+        private AnimationReferenceAsset m_playerLyingDownAnimation;
+        [SerializeField]
         private DialogueSystemTrigger m_afterWakeupDialogue;
         [SerializeField]
         private GameObject m_storePickupSequence;
@@ -78,6 +80,7 @@ namespace DChild.Gameplay.Narrative
 
         public void Initialize()
         {
+            StartCoroutine(SetupPlayer());
             m_database.OnUse();
             m_storePickupSequence.SetActive(false);
             m_introCutscene.Play();
@@ -148,6 +151,17 @@ namespace DChild.Gameplay.Narrative
             playerInput.actions.FindAction(m_wakeUpInput.action.name).performed += OnInputPerformed;
         }
 
+        public IEnumerator SetupPlayer()
+        {         
+            yield return new WaitForSeconds(2f);
+            var skeleton = GameplaySystem.playerManager.player.character.GetComponentInChildren<SkeletonAnimation>();
+            TransferPlayerToStartPosition();
+            var lyingDownAnimation = skeleton.state.SetAnimation(0, m_playerLyingDownAnimation, false);
+            while (lyingDownAnimation.IsComplete == false)
+            {
+                yield return null;
+            }
+        }
     }
 
 }
