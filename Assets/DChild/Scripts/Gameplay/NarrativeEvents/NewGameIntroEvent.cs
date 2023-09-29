@@ -115,7 +115,10 @@ namespace DChild.Gameplay.Narrative
         private IEnumerator PromptPlayerToStandRoutine()
         {
             GameplaySystem.playerManager.OverrideCharacterControls();
+            GameplaySystem.playerManager.player.GetComponentInChildren<PlayerInput>().actions.FindActionMap("Gameplay").Disable();
             var skeleton = GameplaySystem.playerManager.player.character.GetComponentInChildren<SkeletonAnimation>();
+            var lieDownAnimation = skeleton.state.SetAnimation(0, m_playerLieDownAnimation, true);
+            //var skeleton = GameplaySystem.playerManager.player.character.GetComponentInChildren<SkeletonAnimation>();
             yield return null;
             yield return GameplaySystem.playerManager.PlayerActionChange(PlayerInputFindActionMap);
             GameplaySystem.playerManager.player.GetComponentInChildren<PlayerInput>().actions.FindActionMap("Gameplay").Enable();

@@ -210,6 +210,7 @@ namespace DChild.Gameplay.Systems
         }
         private void OnRespawnPlayer(object sender, EventActionArgs eventArgs)
         {
+            m_player.transform.position = new Vector2(1000000, 1000000);
             GameplaySystem.campaignSerializer.Load(SerializationScope.Gameplay, false);
             GameplaySystem.LoadGame(GameplaySystem.campaignSerializer.slot, Menu.LoadingHandle.LoadType.Smart);
             m_player.Revitilize();
