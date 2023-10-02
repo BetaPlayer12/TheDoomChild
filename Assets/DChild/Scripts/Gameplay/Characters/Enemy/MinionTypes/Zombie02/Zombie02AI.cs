@@ -595,24 +595,31 @@ namespace DChild.Gameplay.Characters.Enemies
                     break;
 
                 case State.Cooldown:
-                    if (!IsFacingTarget())
+                    if (m_targetInfo.isValid)
                     {
-                        m_turnState = State.Cooldown;
-                        if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation.animation)
-                            m_stateHandle.SetState(State.Turning);
-                    }
-                    
-                    if (m_currentCD <= m_currentFullCD)
-                    {
-                        m_currentCD += Time.deltaTime;
+                        if (!IsFacingTarget())
+                        {
+                            m_turnState = State.Cooldown;
+                            if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation.animation)
+                                m_stateHandle.SetState(State.Turning);
+                        }
+
+                        if (m_currentCD <= m_currentFullCD)
+                        {
+                            m_currentCD += Time.deltaTime;
+                        }
+                        else
+                        {
+                            if (IsFacingTarget())
+                            {
+                                m_currentCD = 0;
+                                m_stateHandle.OverrideState(State.ReevaluateSituation);
+                            }
+                        }
                     }
                     else
                     {
-                        if (IsFacingTarget())
-                        {
-                            m_currentCD = 0;
-                            m_stateHandle.OverrideState(State.ReevaluateSituation);
-                        }
+                        m_stateHandle.OverrideState(State.ReevaluateSituation);
                     }
 
                     break;

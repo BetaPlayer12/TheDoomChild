@@ -377,25 +377,30 @@ namespace DChild.Gameplay.Characters.Enemies
                     break;
 
                 case State.Detect:
-                    if (m_animation.GetCurrentAnimation(0).ToString() != m_info.idleAnimation.animation)
+                    if (m_targetInfo.isValid)
                     {
-                        m_movement.Stop();
-                    }
-                    m_flinchHandle.m_autoFlinch = false;
-                    if (IsFacingTarget())
-                    {
-                        m_stateHandle.Wait(State.ReevaluateSituation);
-                        StartCoroutine(DetectRoutine());
-                    }
-                    else
-                    {
-                        m_turnState = State.Detect;
-                        if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation.animation)
-                            m_stateHandle.SetState(State.Turning);
+                        if (m_animation.GetCurrentAnimation(0).ToString() != m_info.idleAnimation.animation)
+                        {
+                            m_movement.Stop();
+                        }
+                        m_flinchHandle.m_autoFlinch = false;
+                        if (IsFacingTarget())
+                        {
+                            m_stateHandle.Wait(State.ReevaluateSituation);
+                            StartCoroutine(DetectRoutine());
+                        }
+                        else
+                        {
+                            m_turnState = State.Detect;
+                            if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation.animation)
+                                m_stateHandle.SetState(State.Turning);
+                        }
                     }
                     break;
 
                 case State.Idle:
+                    if (!m_aggroSensor.enabled)
+                        m_aggroSensor.enabled = true;
                     if (m_animation.GetCurrentAnimation(0).ToString() != m_info.idleAnimation.animation)
                         m_animation.SetAnimation(0, m_info.idleAnimation, true);
                     break;
@@ -403,6 +408,9 @@ namespace DChild.Gameplay.Characters.Enemies
                 case State.Patrol:
                     m_wallSensor.Cast();
                     m_groundSensor.Cast();
+                    if (!m_aggroSensor.enabled)
+                        m_aggroSensor.enabled = true;
+
                     if (!m_wallSensor.isDetecting && m_groundSensor.isDetecting)
                     {
                         m_turnState = State.ReevaluateSituation;
