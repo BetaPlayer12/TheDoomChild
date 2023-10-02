@@ -11,8 +11,10 @@ using DChild.Menu.Trade;
 using DChild.Temp;
 using Doozy.Runtime.Signals;
 using Doozy.Runtime.UIManager.Containers;
+using PixelCrushers.DialogueSystem;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using Location = DChild.Gameplay.Environment.Location;
 
 namespace DChild.Gameplay.Systems
 {
@@ -63,9 +65,13 @@ namespace DChild.Gameplay.Systems
         {
             m_cinemaSignal.Payload.booleanValue = on;
             m_cinemaSignal.SendSignal();
-            if (on && instant)
+            if (on)
             {
-                m_playerHUD.InstantHide();
+                DialogueManager.StopAllConversations();
+                if (instant)
+                {
+                    m_playerHUD.InstantHide();
+                }
             }
         }
 
