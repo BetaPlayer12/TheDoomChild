@@ -33,16 +33,16 @@ public class ThrowableDaggerImpactFX : MonoBehaviour
         m_hurtbox.enabled = false;
         m_impactFX.Play();
         m_righidybody2D.velocity = Vector2.zero;
-        int randomNumber = Random.Range(0, 4);
+        int randomNumber = Random.Range(0, 3);
         switch (randomNumber)
         {
-            case 1:
+            case 0:
                 m_fxAnimator.SetTrigger("impact");
                 break;
-            case 2:
+            case 1:
                 m_fxAnimator.SetTrigger("impact2");
                 break;
-            case 3:
+            case 2:
                 m_fxAnimator.SetTrigger("impact3");
                 break;
         }
