@@ -158,8 +158,8 @@ public class ShadowBee : MonoBehaviour
             //m_rotationControl.Rotate(0, 0, m_rotationSpeed, Space.World); 
 
 
-            angle -= m_rotationSpeed * Time.deltaTime;
-            offset -= m_rotationSpeed * Time.deltaTime; 
+            angle -= m_rotationSpeed * Time.deltaTime; 
+            offset -= m_rotationSpeed * Time.deltaTime;
 
             Vector3 targetPosition = targetObject.transform.position;
             Vector3 behindPosition = targetPosition - targetObject.transform.right * m_distanceBehindTargetX + Vector3.up * heightOffset;
@@ -167,8 +167,9 @@ public class ShadowBee : MonoBehaviour
             for (int i = 0; i < m_shadowBee.Count; i++)
             {
                 float angleOffset = 2 * Mathf.PI * i / m_shadowBee.Count;
-                float x = Mathf.Cos(angle + offset + angleOffset) * m_radius;
-                float y = Mathf.Sin(angle + offset + angleOffset) * m_radius;  
+                float x = Mathf.Cos(angle + offset + angleOffset) * m_radius; 
+                float y = Mathf.Sin(angle + offset + angleOffset) * m_radius; 
+
                 Vector3 finalPosition = behindPosition + new Vector3(x, y, 0);
 
                 bool overlaps = false;
