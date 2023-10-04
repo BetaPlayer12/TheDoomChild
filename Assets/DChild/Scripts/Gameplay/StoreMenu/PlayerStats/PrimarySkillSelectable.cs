@@ -17,6 +17,15 @@ namespace DChild.Gameplay.UI.PrimarySkills
         public void SetAsUnlocked(bool isUnlocked)
         {
             m_toggle.interactable = isUnlocked;
+
+            if(isUnlocked == true)
+            {
+                m_icon.ShowIcon();
+            }
+            else
+            {
+                m_icon.HideIcon();
+            }
         }
 
         public void SetSelectableFor(PrimarySkillData data)

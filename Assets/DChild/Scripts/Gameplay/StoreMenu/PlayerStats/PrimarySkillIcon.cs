@@ -16,5 +16,15 @@ namespace DChild.Gameplay.UI.PrimarySkills
             m_border.sprite = skill.border;
             m_icon.sprite = skill.icon;
         }
+
+        public void ShowIcon()
+        {
+            m_icon.enabled = true;
+        }
+
+        public void HideIcon()
+        {
+            m_icon.enabled = false;
+        }
     }
 }
