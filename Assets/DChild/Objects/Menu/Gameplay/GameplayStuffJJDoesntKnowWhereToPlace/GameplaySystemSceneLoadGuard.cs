@@ -36,7 +36,7 @@ public class GameplaySystemSceneLoadGuard : MonoBehaviour
         if (LoadingHandle.isLoading)
         {
             Debug.LogError("Wait for Loading to Be done");
-            LoadingHandle.LoadingDone += OnLoadingDone;
+            LoadingHandle.SceneDone += OnSceneDone;
         }
         else
         {
@@ -45,10 +45,10 @@ public class GameplaySystemSceneLoadGuard : MonoBehaviour
         }
     }
 
-    private void OnLoadingDone(object sender, EventActionArgs eventArgs)
+    private void OnSceneDone(object sender, EventActionArgs eventArgs)
     {
         m_UIInitializeSignal.SendSignal();
-        LoadingHandle.LoadingDone -= OnLoadingDone;
+        LoadingHandle.SceneDone -= OnSceneDone;
     }
 
 }
