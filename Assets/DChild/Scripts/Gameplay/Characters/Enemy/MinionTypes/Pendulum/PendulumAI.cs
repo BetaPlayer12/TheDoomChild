@@ -422,6 +422,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_info.attackStartAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attackStartAnimation);
 
+            StartCoroutine(EnableAttackBB());
             for (int i = 0; i < m_swingnumber; i++)
             {
 
@@ -439,10 +440,11 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return null;
         }
 
-        private void EnableAttackBB()
+        private IEnumerator EnableAttackBB()
         {
             for (int i = 0; i < m_attackBBs.Count; i++)
             {
+                yield return new WaitForSeconds(0.1f);
                 m_attackBBs[i].enabled = !m_attackBBs[i].enabled;
             }
         }
@@ -460,7 +462,7 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_aggroCollider.enabled = m_willPatrol ? true : false;
             m_randomTurnRoutine = StartCoroutine(RandomTurnRoutine());
 
-            m_spineEventListener.Subscribe(m_info.hitboxStartEvent, EnableAttackBB);
+            //m_spineEventListener.Subscribe(m_info.hitboxStartEvent, EnableAttackBB);
         }
 
         protected override void Awake()
