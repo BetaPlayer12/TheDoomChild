@@ -86,6 +86,7 @@ namespace DChild.Gameplay.Narrative
             m_storePickupSequence.SetActive(false);
             m_introCutscene.Play();
             GameplaySystem.playerManager.player.GetComponentInChildren<PlayerInput>().actions.FindActionMap("Gameplay").Disable();
+            GameplaySystem.gamplayUIHandle.DisableBackUIInput();
         }
 
         public void TransferPlayerToStartPosition()
@@ -117,16 +118,15 @@ namespace DChild.Gameplay.Narrative
         {
             GameplaySystem.playerManager.OverrideCharacterControls();
             GameplaySystem.playerManager.player.GetComponentInChildren<PlayerInput>().actions.FindActionMap("Gameplay").Disable();
-            var skeleton = GameplaySystem.playerManager.player.character.GetComponentInChildren<SkeletonAnimation>();
-            var lieDownAnimation = skeleton.state.SetAnimation(0, m_playerLieDownAnimation, true);
-            //var skeleton = GameplaySystem.playerManager.player.character.GetComponentInChildren<SkeletonAnimation>();
             yield return null;
             yield return GameplaySystem.playerManager.PlayerActionChange(PlayerInputFindActionMap);
-            GameplaySystem.playerManager.player.GetComponentInChildren<PlayerInput>().actions.FindActionMap("Gameplay").Enable();
             m_wakeUpPrompt.Show();
 
+            GameplaySystem.playerManager.player.GetComponentInChildren<PlayerInput>().actions.FindActionMap("Gameplay").Enable();
+            GameplaySystem.gamplayUIHandle.EnableBackUIInput();
             yield return WakeupPromptRoutine();
 
+            var skeleton = GameplaySystem.playerManager.player.character.GetComponentInChildren<SkeletonAnimation>();
             var standAnimation = skeleton.state.SetAnimation(0, m_playerStandAnimation, false);
 
             yield return new WaitForSeconds(m_playerStandAnimation.Animation.Duration);

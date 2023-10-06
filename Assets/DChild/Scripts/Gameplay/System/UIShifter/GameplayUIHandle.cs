@@ -246,5 +246,15 @@ namespace DChild.Gameplay.Systems
             m_notificationManager.InitializeFullPriorityHandling();
             m_notificationManager.InitializePromptPriorityHandling();
         }
+
+        public void DisableBackUIInput()
+        {
+            Doozy.Runtime.UIManager.Input.BackButton.Disable();
+        }
+
+        public void EnableBackUIInput()
+        {
+            Doozy.Runtime.UIManager.Input.BackButton.Enable();
+        }
     }
 }
