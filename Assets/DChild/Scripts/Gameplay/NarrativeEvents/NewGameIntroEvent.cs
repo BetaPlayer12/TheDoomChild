@@ -92,6 +92,7 @@ namespace DChild.Gameplay.Narrative
         {
             var player = GameplaySystem.playerManager.player.character;
             player.transform.position = m_playerStartPosition.position;
+            player.SetFacing(Characters.HorizontalDirection.Right);
             var skeleton = GameplaySystem.playerManager.player.character.GetComponentInChildren<SkeletonAnimation>();
             var lieDownAnimation = skeleton.state.SetAnimation(0, m_playerLieDownAnimation, true);
         }
