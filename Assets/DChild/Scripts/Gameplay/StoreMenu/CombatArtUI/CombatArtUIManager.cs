@@ -99,6 +99,8 @@ namespace DChild.Gameplay.UI.CombatArts
                     m_abilityButtonPair.Add(button.skillUnlock, array);
                 }
             }
+
+            UpdateSelectButtonVisuals();
         }
 
         private void ValidateButtonStates()
