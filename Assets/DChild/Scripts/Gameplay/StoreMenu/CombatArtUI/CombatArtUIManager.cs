@@ -160,7 +160,6 @@ namespace DChild.Gameplay.UI.CombatArts
             }
         }
 
-#if UNITY_EDITOR
         [ContextMenu("Editor/Update SelectButtonVisuals")]
         private void UpdateSelectButtonVisuals()
         {
@@ -172,7 +171,6 @@ namespace DChild.Gameplay.UI.CombatArts
                 button.DisplayAs(levelData);
             }
         }
-#endif
 
         private void Awake()
         {
