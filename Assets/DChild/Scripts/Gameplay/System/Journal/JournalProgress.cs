@@ -22,8 +22,6 @@ namespace DChild.Gameplay.Systems.Journal
 
             ISaveData ISaveData.ProduceCopy() => new SaveData(m_recordedJournalIDs);
         }
-        [SerializeField]
-        public JournalNotification m_notification;
 
         private List<int> m_recordedJournalIDs;
 
@@ -32,7 +30,8 @@ namespace DChild.Gameplay.Systems.Journal
             if (IsNewProgress(journaldata))
             {
                 m_recordedJournalIDs.Add(journaldata.ID);
-                m_notification.UpdateNotification(journaldata);
+                GameplaySystem.gamplayUIHandle.notificationManager.ShowJournalUpdateNotification(journaldata);
+                //m_notification.UpdateNotification(journaldata);
             }
         }
 
