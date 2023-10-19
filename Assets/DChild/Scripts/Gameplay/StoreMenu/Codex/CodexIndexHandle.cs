@@ -1,12 +1,14 @@
-﻿using Holysoft.Event;
+﻿using Holysoft.Collections;
+using Holysoft.Event;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace DChild.Menu.Codex
 {
-    public abstract class CodexIndexHandle<DatabaseAssetType> : MonoBehaviour where DatabaseAssetType : DatabaseAsset
+    public abstract class CodexIndexHandle<DatabaseAssetType> : MonoBehaviour, IPageHandle where DatabaseAssetType : DatabaseAsset
     {
         public abstract int buttonCount { get; }
+        public abstract int currentPage { get; }
 
         public event EventAction<EventActionArgs> PageChange;
 
@@ -41,10 +43,10 @@ namespace DChild.Menu.Codex
         private CodexIndexButton<DatabaseAssetType>[] m_buttons;
         private int m_buttonCount;
         private int m_startIndex;
-        private int m_availableButton;
+        private int m_availableButton;  
         private int[] m_IDs;
 
-        public int currentPage => m_page;
+        public override int currentPage => m_page;
         public override int buttonCount => m_buttonCount;
 
         public override int GetTotalPages()
