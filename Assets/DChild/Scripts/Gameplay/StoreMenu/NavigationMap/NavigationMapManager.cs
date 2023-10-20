@@ -1,4 +1,5 @@
 ﻿using DChild.Gameplay.Environment;
+using Doozy.Runtime.UIManager.Containers;
 using UnityEngine;
 
 namespace DChild.Gameplay.NavigationMap
@@ -51,7 +52,6 @@ namespace DChild.Gameplay.NavigationMap
                     changes.Clear();
                 }
             }
-
             m_tracker.UpdateTrackerPosition();
             MoveTrackerToCenter();
         }
@@ -62,6 +62,17 @@ namespace DChild.Gameplay.NavigationMap
                 return;
 
             m_currentMap.anchoredPosition = -m_tracker.trackerPosition;
+        }
+
+        public void HideNavigationMap()
+        {
+            var showMap = m_currentMap.GetComponent<UIContainer>();
+            showMap.Hide();
+        }
+        public void ShowNavigationMap()
+        {
+            var showMap = m_currentMap.GetComponent<UIContainer>();
+            showMap.Show();
         }
     }
 }
