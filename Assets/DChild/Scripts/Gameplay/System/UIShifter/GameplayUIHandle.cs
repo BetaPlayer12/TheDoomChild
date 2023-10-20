@@ -32,6 +32,9 @@ namespace DChild.Gameplay.Systems
         private TradeManager m_tradeManager;
 
         [SerializeField]
+        private UIContainer m_weaponUpgradeAConfirmationWindow;
+
+        [SerializeField]
         private StoreNavigator m_storeNavigator;
         [SerializeField]
         private BossCombatUI m_bossCombat;
@@ -245,6 +248,12 @@ namespace DChild.Gameplay.Systems
         {
             m_notificationManager.InitializeFullPriorityHandling();
             m_notificationManager.InitializePromptPriorityHandling();
+        }
+
+        public void OpenWeaponUpgradeConfirmation()
+        {
+            Debug.Log("Upgrade Tiem");
+            m_weaponUpgradeAConfirmationWindow.Show();
         }
     }
 }

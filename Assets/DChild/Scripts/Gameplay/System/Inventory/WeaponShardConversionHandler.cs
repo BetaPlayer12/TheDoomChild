@@ -23,5 +23,10 @@ public class WeaponShardConversionHandler : SerializedMonoBehaviour
         m_player.inventory.RemoveItem(m_item);
         m_completionHandle.Execute(m_player);
     }
+
+    public void CommenceUpgrade()
+    {
+        ItemConversionReward();
+    }
    
 }
