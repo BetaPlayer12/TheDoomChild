@@ -26,6 +26,7 @@ public class WeaponShardConversionHandler : SerializedMonoBehaviour
 
     public void CommenceUpgrade()
     {
+        Debug.Log("It do da upgrade");
         ItemConversionReward();
     }
    

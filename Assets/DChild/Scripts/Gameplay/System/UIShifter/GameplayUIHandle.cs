@@ -7,6 +7,7 @@ using DChild.Gameplay.Environment;
 using DChild.Gameplay.NavigationMap;
 using DChild.Gameplay.Trade;
 using DChild.Gameplay.UI;
+using DChild.Menu;
 using DChild.Menu.Trade;
 using DChild.Temp;
 using Doozy.Runtime.Signals;
@@ -32,7 +33,7 @@ namespace DChild.Gameplay.Systems
         private TradeManager m_tradeManager;
 
         [SerializeField]
-        private UIContainer m_weaponUpgradeAConfirmationWindow;
+        private ConfirmationHandler m_confirmationWindow;
 
         [SerializeField]
         private StoreNavigator m_storeNavigator;
@@ -59,6 +60,9 @@ namespace DChild.Gameplay.Systems
         private UIContainer m_interactablePrompt;
         [SerializeField, FoldoutGroup("Object Prompt")]
         private UIContainer m_movableObjectPrompt;
+
+        [SerializeField]
+        private UpgradeWeaponConfirmationHandler m_upgradeWeaponHandler;
 
         public IUINotificationManager notificationManager => m_notificationManager;
 
@@ -252,8 +256,7 @@ namespace DChild.Gameplay.Systems
 
         public void OpenWeaponUpgradeConfirmation()
         {
-            Debug.Log("Upgrade Tiem");
-            m_weaponUpgradeAConfirmationWindow.Show();
+            m_upgradeWeaponHandler.RequestUpgrade();
         }
     }
 }
