@@ -105,7 +105,7 @@ namespace DChild.Gameplay
 
 
             var playerObject = collision.gameObject.GetComponentInParent<PlayerControlledObject>();
-            if (playerObject != null && collision.tag != "Sensor")
+            if (playerObject != null && collision.tag != "Sensor" && playerObject.owner == (IPlayer)GameplaySystem.playerManager.player)
             {
                 if ((m_oneTimeOnly && !m_wasTriggered) || !m_oneTimeOnly)
                 {
@@ -164,7 +164,7 @@ namespace DChild.Gameplay
             }
 
             var playerObject = collision.gameObject.GetComponentInParent<PlayerControlledObject>();
-            if (playerObject != null && collision.tag == "Hitbox")
+            if (playerObject != null && collision.tag == "Hitbox" && playerObject.owner == (IPlayer)GameplaySystem.playerManager.player)
             {
                 Collider2D collider = GetComponent<Collider2D>();
                 Transform transformToCheck = playerObject.transform;
