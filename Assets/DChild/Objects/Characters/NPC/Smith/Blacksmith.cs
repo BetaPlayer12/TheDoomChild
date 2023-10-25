@@ -14,6 +14,8 @@ namespace DChild.Gameplay.Characters
         private Vector3 m_promptOffset;
         [SerializeField]
         private bool m_hasDialogue;
+        [SerializeField]
+        private bool m_signalSender;
 
         public bool showPrompt => true;
 
@@ -37,7 +39,7 @@ namespace DChild.Gameplay.Characters
 
         public void CommenceUpgrade()
         {
-            GameplaySystem.gamplayUIHandle.OpenWeaponUpgradeConfirmation();
+            GameplaySystem.gamplayUIHandle.OpenWeaponUpgradeConfirmationWindow();
         }
     }
 

@@ -12,6 +12,7 @@ using DChild.Menu.Trade;
 using DChild.Temp;
 using Doozy.Runtime.Signals;
 using Doozy.Runtime.UIManager.Containers;
+using Holysoft.Event;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -23,6 +24,8 @@ namespace DChild.Gameplay.Systems
         private SignalSender m_cinemaSignal;
         [SerializeField, FoldoutGroup("Signals")]
         private SignalSender m_gameOverSignal;
+        [SerializeField, FoldoutGroup("Signals")]
+        private SignalSender m_confirmationWindowSignal;
 
         [SerializeField]
         private UINotificationManager m_notificationManager;
@@ -254,9 +257,10 @@ namespace DChild.Gameplay.Systems
             m_notificationManager.InitializePromptPriorityHandling();
         }
 
-        public void OpenWeaponUpgradeConfirmation()
+        public void OpenWeaponUpgradeConfirmationWindow()
         {
             m_upgradeWeaponHandler.RequestUpgrade();
+            m_confirmationWindowSignal.SendSignal();
         }
     }
 }
