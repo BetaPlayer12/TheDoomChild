@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 1961097777446533942}
   - component: {fileID: 799370249785652945}
   - component: {fileID: 3312436933982637714}
-  m_Layer: 9
+  m_Layer: 11
   m_Name: Model
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -151,10 +151,11 @@ GameObject:
   - component: {fileID: 8890114116828458457}
   - component: {fileID: 6121708096688927695}
   - component: {fileID: 5646407217331841767}
-  - component: {fileID: 5704279751291385559}
-  m_Layer: 9
+  - component: {fileID: 2610638032032208097}
+  - component: {fileID: 4172764125932957086}
+  m_Layer: 11
   m_Name: BlackSmith_UpgradeWeapon
-  m_TagString: Untagged
+  m_TagString: Sensor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -209,7 +210,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.61383057, y: 0.39460754}
+  m_Offset: {x: -0.9798279, y: 0.39460754}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -220,7 +221,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 11.873596, y: 2.3153534}
+  m_Size: {x: 30.173767, y: 2.3153534}
   m_EdgeRadius: 0
 --- !u!210 &5646407217331841767
 SortingGroup:
@@ -233,7 +234,7 @@ SortingGroup:
   m_SortingLayerID: -1150295711
   m_SortingLayer: -1
   m_SortingOrder: 0
---- !u!114 &5704279751291385559
+--- !u!114 &2610638032032208097
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -242,12 +243,39 @@ MonoBehaviour:
   m_GameObject: {fileID: 8890114116828458437}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 275851cf650b4e341901cd773f6a9f31, type: 3}
+  m_Script: {fileID: 11500000, guid: 86b588f920affb64c9ce484b810b0490, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_promptMessage: Interact
-  m_promptOffset: {x: -1.3, y: 20, z: 0}
-  m_oneTimeInteraction: 0
-  m_onInteraction:
-    m_PersistentCalls:
-      m_Calls: []
+  m_promptOffset: {x: 0, y: 10, z: 0}
+  m_hasDialogue: 0
+  m_signalSender: 0
+--- !u!114 &4172764125932957086
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8890114116828458437}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78f003aa0ad0a4c469338c205df004d3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Payload:
+    StreamId:
+      Category: ConfirmationWindow
+      Name: WeaponUpgrade
+      Custom: 0
+    SignalValueType: 0
+    IntegerValue: 0
+    BooleanValue: 0
+    FloatValue: 0
+    StringValue: 
+    ColorValue: {r: 0, g: 0, b: 0, a: 0}
+    Vector2Value: {x: 0, y: 0}
+    Vector3Value: {x: 0, y: 0, z: 0}
+    Vector4Value: {x: 0, y: 0, z: 0, w: 0}
+  SendOnStart: 0
+  SendOnEnable: 0
+  SendOnDisable: 0
+  SendOnDestroy: 0
