@@ -71,6 +71,7 @@ namespace DChild.Gameplay.Characters.Players
             IcarusWings,
             AirSlashRange,
             FinalSlashLevel,
+            TeleportingSkull,
         }
 
         [SerializeField]

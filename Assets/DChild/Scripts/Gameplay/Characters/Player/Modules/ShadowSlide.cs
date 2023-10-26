@@ -20,6 +20,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private ParticleSystem m_shadowFX;
         [SerializeField, BoxGroup("Sensors")]
         private RaySensor m_groundSensor;
+        [SerializeField]
+        private CharacterState m_state;
 
         private ICappedStat m_source;
         private IPlayerModifer m_modifier;
@@ -59,6 +61,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_shadowFX?.Stop(true);
             m_animator.SetBool(m_animationParameter, false);
             m_skeletonGhost.enabled = false;
+            m_state.waitForBehaviour = false;
 
             End?.Invoke(this, EventActionArgs.Empty);
         }
@@ -101,7 +104,18 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void Reset()
         {
+            m_state.waitForBehaviour = false;
             m_slide.Reset();
+        }
+
+        public void EndTransitionStart()
+        {
+            m_state.waitForBehaviour = true;
+        }
+
+        public void EndTransitionEnd()
+        {
+            m_state.waitForBehaviour = false;
         }
     }
 }
