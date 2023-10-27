@@ -1,4 +1,5 @@
 using DChild.Gameplay.Characters.Players;
+using DChild.Gameplay.Combat;
 using DChild.Gameplay.Inventories;
 using DChild.Menu;
 using Holysoft.Event;
@@ -46,11 +47,14 @@ public class WeaponUpgradeHandle : MonoBehaviour
 
     public void ExecuteUpgrade(PlayerWeapon playerWeapon, PlayerInventory playerInventory)
     {
+        Damage additionalDamage = m_playerWeapon.damage;
         if(IsViableForUpgrade(playerWeapon, playerInventory))
         {
             Debug.Log("Yay Upgrade");
-            //m_playerInventory.RemoveItem((m_weaponUpgradeData[0].info.weaponUpgradeRequirement[0].item));
-            //m_completionHandle.Execute(m_player);
+
+            additionalDamage.value = m_playerWeapon.damage.value + m_weaponUpgradeData[0].info.attackdamage.damage.value;
+            m_playerInventory.RemoveItem((m_weaponUpgradeData[0].info.weaponUpgradeRequirement[0].item));
+            m_playerWeapon.SetBaseDamage(additionalDamage);
         }
         else
         {
