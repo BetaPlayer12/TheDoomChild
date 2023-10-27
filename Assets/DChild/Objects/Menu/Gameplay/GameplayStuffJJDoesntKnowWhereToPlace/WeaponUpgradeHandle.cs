@@ -1,6 +1,7 @@
 using DChild.Gameplay.Characters.Players;
 using DChild.Gameplay.Combat;
 using DChild.Gameplay.Inventories;
+using DChild.Gameplay.Items;
 using DChild.Menu;
 using Holysoft.Event;
 using System.Collections;
@@ -23,6 +24,7 @@ public class WeaponUpgradeHandle : MonoBehaviour
 
     public void RequestUpgrade()
     {
+        IsViableForUpgrade(m_playerWeapon, m_playerInventory);
         m_confirmationRequest.Execute(OnUpgradeConfirm);
     }
     private void OnUpgradeConfirm(object sender, EventActionArgs eventArgs)
@@ -32,29 +34,31 @@ public class WeaponUpgradeHandle : MonoBehaviour
 
     public bool IsViableForUpgrade(PlayerWeapon playerWeapon, PlayerInventory playerInventory)
     {
-        bool isViable;
-
-        if (m_weaponUpgradeData[0].info.hasUpgradeRequirements)
+        ItemData requiredItem = m_weaponUpgradeData[0].info.weaponUpgradeRequirement[0].item;
+        int requiredItemAmount = m_weaponUpgradeData[0].info.weaponUpgradeRequirement[0].amount;
+        if (playerInventory.GetCurrentAmount(requiredItem) >= requiredItemAmount)
         {
-            return isViable = true;
+            return m_weaponUpgradeData[0].info.hasUpgradeRequirements = true;
         }
         else
         {
-            return isViable = false;
+            return m_weaponUpgradeData[0].info.hasUpgradeRequirements = false;
         }
-        
+
+        //bro check what if null
     }
 
     public void ExecuteUpgrade(PlayerWeapon playerWeapon, PlayerInventory playerInventory)
     {
-        Damage additionalDamage = m_playerWeapon.damage;
-        if(IsViableForUpgrade(playerWeapon, playerInventory))
+        Damage additionalDamage = playerWeapon.damage;
+        if(m_weaponUpgradeData[0].info.hasUpgradeRequirements)
         {
             Debug.Log("Yay Upgrade");
 
-            additionalDamage.value = m_playerWeapon.damage.value + m_weaponUpgradeData[0].info.attackdamage.damage.value;
-            m_playerInventory.RemoveItem((m_weaponUpgradeData[0].info.weaponUpgradeRequirement[0].item));
-            m_playerWeapon.SetBaseDamage(additionalDamage);
+            additionalDamage.type = playerWeapon.damage.type;
+            additionalDamage.value = playerWeapon.damage.value + m_weaponUpgradeData[0].info.attackdamage.damage.value;
+            playerInventory.RemoveItem((m_weaponUpgradeData[0].info.weaponUpgradeRequirement[0].item), m_weaponUpgradeData[0].info.weaponUpgradeRequirement[0].amount);
+            playerWeapon.SetBaseDamage(additionalDamage);
         }
         else
         {
