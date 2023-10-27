@@ -4,7 +4,7 @@ using UnityEngine;
 using DChild.Gameplay.Combat;
 using DChild.Gameplay.Pooling;
 using DChild;
-
+using DChild.Gameplay.Systems;
 
 public class IncreaseDamageMinion : MonoBehaviour
 {
@@ -22,7 +22,7 @@ public class IncreaseDamageMinion : MonoBehaviour
     private Damage SetBaseDamage(GameObject minion)
     {
         var minionBaseDamage = minion.GetComponentInParent<Attacker>().GetBaseDamage();
-        minionBaseDamage.value /= m_damageMultiplier; // Change the subtraction to division
+        minionBaseDamage.value /= m_damageMultiplier; 
         return minionBaseDamage;
     }
     public void MultiplyMinionDamage(GameObject minion)
@@ -56,7 +56,8 @@ public class IncreaseDamageMinion : MonoBehaviour
         {
             Destroy(instance.gameObject);
         }
+       
     }
-
-
+    
+    
 }
