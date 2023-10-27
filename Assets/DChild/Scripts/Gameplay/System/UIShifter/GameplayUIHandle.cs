@@ -65,7 +65,7 @@ namespace DChild.Gameplay.Systems
         private UIContainer m_movableObjectPrompt;
 
         [SerializeField]
-        private UpgradeWeaponConfirmationHandler m_upgradeWeaponHandler;
+        private WeaponUpgradeHandle m_upgradeWeaponHandler;
 
         public IUINotificationManager notificationManager => m_notificationManager;
 

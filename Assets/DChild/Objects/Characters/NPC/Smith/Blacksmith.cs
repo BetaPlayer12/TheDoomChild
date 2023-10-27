@@ -14,8 +14,6 @@ namespace DChild.Gameplay.Characters
         private Vector3 m_promptOffset;
         [SerializeField]
         private bool m_hasDialogue;
-        [SerializeField]
-        private bool m_signalSender;
 
         public bool showPrompt => true;
 

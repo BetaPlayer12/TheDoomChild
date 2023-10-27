@@ -10,12 +10,15 @@ namespace DChild.Gameplay.Systems
     {
         [SerializeField]
         private WeaponLevel m_level;
+        public WeaponLevel level => m_level;
         [SerializeField, ListDrawerSettings(NumberOfItemsPerPage = 1)]
         private WeaponUpgradeRequirement[] m_weaponUpgradeRequirement;
+        public WeaponUpgradeRequirement[] weaponUpgradeRequirement => m_weaponUpgradeRequirement;
         [SerializeField]
-        private bool m_hasUpgradeRequirements;
-        [SerializeField]
-        private WeaponUpgradeResult m_attackdamage;
+        private WeaponUpgradeResult m_attackDamage;
+        public WeaponUpgradeResult attackdamage => m_attackDamage;
+
+        public bool hasUpgradeRequirements;
         public enum WeaponLevel
         {
             Lv1,

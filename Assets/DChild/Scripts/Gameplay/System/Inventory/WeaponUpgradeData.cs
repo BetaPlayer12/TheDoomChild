@@ -3,8 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WeaponUpgradeData : MonoBehaviour
+[CreateAssetMenu(fileName = "WeaponUpgradeData", menuName = "DChild/Gameplay/Trade/WeaponUpgradeData")]
+public class WeaponUpgradeData : ScriptableObject
 {
     [SerializeField]
     private WeaponUpgradeInfo m_info;
+    public WeaponUpgradeInfo info => m_info;
 }

@@ -9,8 +9,10 @@ namespace DChild.Gameplay.Systems
     {
         [SerializeField]
         private ItemData m_item;
+        public ItemData item => m_item;
         [SerializeField]
         private int m_amount;
+        public int amount => m_amount;
 
     }
 }

@@ -126,7 +126,6 @@ namespace DChild.Gameplay.Inventories
             OnAmountSet?.Invoke(this, new CurrencyUpdateEventArgs(value));
         }
 
-
         #region ITradeInventory Implementation
 
         void ITradeInventory.AddCurrency(int value)
