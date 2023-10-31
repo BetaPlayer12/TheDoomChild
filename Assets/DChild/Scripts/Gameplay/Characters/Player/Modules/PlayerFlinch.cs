@@ -27,6 +27,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private float m_flinchState;
         private int m_flinchStateAnimationParameter;
 
+        private Coroutine m_flinchRoutine;
+
         public void Initialize(ComplexCharacterInfo info)
         {
             m_state = info.state;
@@ -65,7 +67,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     isAerialKnockback = true;
                 }
 
-                StartCoroutine(FlinchRoutine(knockBackDirection, isAerialKnockback));
+                m_flinchRoutine = StartCoroutine(FlinchRoutine(knockBackDirection, isAerialKnockback));
             }
             else
             {
@@ -97,6 +99,18 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_animator.SetBool(m_animationParameter, false);
             m_state.waitForBehaviour = false;
             m_rigidBody.gravityScale = playerGravityScale;
+        }
+
+        public void CancelFlinch()
+        {
+            if (m_flinchRoutine != null)
+            {
+                StopCoroutine(m_flinchRoutine);
+                m_flinchRoutine = null;
+                m_animator.SetBool(m_animationParameter, false);
+                m_state.waitForBehaviour = false;
+                m_rigidBody.gravityScale = playerGravityScale;
+            }
         }
     }
 }
