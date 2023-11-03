@@ -124,7 +124,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             if (m_state.isStickingToWall == false)
             {
                 m_state.isStickingToWall = true;
-                m_cacheGravityScale = m_rigidbody.gravityScale;
+                //m_cacheGravityScale = m_rigidbody.gravityScale;
                 m_rigidbody.gravityScale = 0;
                 m_rigidbody.velocity = Vector2.zero;
                 m_animator.SetBool(m_animationParameter, true);
