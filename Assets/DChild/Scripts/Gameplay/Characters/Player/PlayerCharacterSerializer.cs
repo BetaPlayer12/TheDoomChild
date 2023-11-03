@@ -29,7 +29,8 @@ namespace DChild.Gameplay.Characters.Players
                                         m_codex.SaveData(),
                                         m_playerSkills.SaveData(),
                                         m_soulSkillHandle.SaveData(),
-                                        m_combatArts.SaveData());
+                                        m_combatArts.SaveData(),
+                                        m_playerWeapon.GetSaveData());
         }
 
         public void LoadData(PlayerCharacterData data)

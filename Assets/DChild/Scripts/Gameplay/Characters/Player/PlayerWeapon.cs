@@ -110,9 +110,9 @@ namespace DChild.Gameplay.Characters.Players
             m_totalDamage.value += m_addedDamageValue;
         }
 
-        public WeaponUpgradeSaveData GetSaveData(WeaponUpgradeSaveData upgradeSaveData)
+        public WeaponUpgradeSaveData GetSaveData()
         {
-            return upgradeSaveData;
+            return m_weaponUpgradeSaveData;
         }
 
         public void LoadSaveData(WeaponUpgradeSaveData upgradeSaveData)
