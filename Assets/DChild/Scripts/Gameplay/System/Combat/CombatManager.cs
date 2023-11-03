@@ -74,14 +74,14 @@ namespace DChild.Gameplay.Combat
                     }
                     else
                     {
-                        if (targetInfo.isPlayer)
-                        {
-                            m_playerCombatHandler.ResolveDamageRecieved(targetInfo.owner);
-                        }
-
                         if (targetInfo.flinchHandler != null)
                         {
                             FlinchTarget(targetInfo.flinchHandler, targetInfo.facing, m_cacheTarget.position, attacker.position, summary);
+                        }
+
+                        if (targetInfo.isPlayer)
+                        {
+                            m_playerCombatHandler.ResolveDamageRecieved(targetInfo.owner);
                         }
                     }
 
