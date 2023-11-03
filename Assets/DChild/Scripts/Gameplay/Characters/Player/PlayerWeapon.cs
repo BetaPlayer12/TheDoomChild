@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using DChild.Gameplay.Combat;
 using DChild.Gameplay.Combat.StatusAilment;
+using DChild.Gameplay.Systems;
 using Holysoft.Event;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using static DChild.Gameplay.Systems.WeaponUpgradeInfo;
 
 namespace DChild.Gameplay.Characters.Players
 {
@@ -14,6 +16,8 @@ namespace DChild.Gameplay.Characters.Players
     {
         [SerializeField]
         private WeaponBaseStatsData m_defaultWeaponStatsData;
+
+        private WeaponUpgradeSaveData m_weaponUpgradeSaveData;
 
         [HorizontalGroup("Split")]
 
@@ -106,6 +110,15 @@ namespace DChild.Gameplay.Characters.Players
             m_totalDamage.value += m_addedDamageValue;
         }
 
+        public WeaponUpgradeSaveData GetSaveData(WeaponUpgradeSaveData upgradeSaveData)
+        {
+            return upgradeSaveData;
+        }
+
+        public void LoadSaveData(WeaponUpgradeSaveData upgradeSaveData)
+        {
+            var level = upgradeSaveData.currentWeaponLevel;
+        }
 #if UNITY_EDITOR
         private void UpdateDamage()
         {

@@ -20,6 +20,8 @@ namespace DChild.Gameplay.Characters.Players
         private PlayerSoulSkillHandle m_soulSkillHandle;
         [SerializeField]
         private CombatArts m_combatArts;
+        [SerializeField]
+        private PlayerWeapon m_playerWeapon;
 
         public PlayerCharacterData SaveData()
         {
