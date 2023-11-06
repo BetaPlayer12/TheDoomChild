@@ -19,14 +19,6 @@ namespace DChild.Gameplay.Systems
         public WeaponUpgradeResult attackdamage => m_attackDamage;
 
         public bool hasUpgradeRequirements;
-        public enum WeaponLevel
-        {
-            Lv1,
-            Lv2,
-            Lv3,
-            Lv4,
-            Lv5
-        }
         
     }
 }
