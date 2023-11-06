@@ -17,7 +17,7 @@ namespace DChild.Gameplay.Characters.Players
         [SerializeField]
         private WeaponBaseStatsData m_defaultWeaponStatsData;
 
-        private WeaponUpgradeSaveData m_weaponUpgradeSaveData;
+        private WeaponLevel m_weaponUpgradeSaveData;
 
         [HorizontalGroup("Split")]
 
@@ -112,7 +112,7 @@ namespace DChild.Gameplay.Characters.Players
 
         public WeaponUpgradeSaveData GetSaveData()
         {
-            return m_weaponUpgradeSaveData;
+            return new WeaponUpgradeSaveData();
         }
 
         public void LoadSaveData(WeaponUpgradeSaveData upgradeSaveData)

@@ -40,6 +40,7 @@ namespace DChild.Gameplay.Characters.Players
             m_playerSkills.LoadData(data.skills);
             m_soulSkillHandle.LoadData(data.soulSkillData);
             m_combatArts.LoadData(data.combatArtsData);
+            m_playerWeapon.LoadSaveData(data.weaponUpgradeSaveData);
         }
     }
 }
