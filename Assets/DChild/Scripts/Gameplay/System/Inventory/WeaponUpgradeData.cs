@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "WeaponUpgradeData", menuName = "DChild/Gameplay/Trade/WeaponUpgradeData")]
+[System.Serializable]
 public class WeaponUpgradeData : ScriptableObject
 {
     [SerializeField]

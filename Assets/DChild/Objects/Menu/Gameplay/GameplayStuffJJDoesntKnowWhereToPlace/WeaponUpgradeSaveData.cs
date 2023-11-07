@@ -7,6 +7,7 @@ namespace DChild.Gameplay.Systems
     [System.Serializable]
     public struct WeaponUpgradeSaveData
     {
+        [SerializeField]
         private int m_currentWeaponLevel;
 
         public WeaponUpgradeSaveData(WeaponLevel currentWeaponLevel)

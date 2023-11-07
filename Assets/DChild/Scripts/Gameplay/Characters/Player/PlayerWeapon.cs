@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using DChild.Gameplay.Combat;
 using DChild.Gameplay.Combat.StatusAilment;
 using DChild.Gameplay.Systems;
+using DChild.Serialization;
 using Holysoft.Event;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -12,12 +13,15 @@ namespace DChild.Gameplay.Characters.Players
 {
 
     [AddComponentMenu("DChild/Gameplay/Player/Player Weapon")]
+    [System.Serializable]
     public class PlayerWeapon : MonoBehaviour
     {
         [SerializeField]
         private WeaponBaseStatsData m_defaultWeaponStatsData;
 
-        private WeaponLevel m_weaponUpgradeSaveData;
+        [SerializeField]
+        private WeaponLevel m_currentWeaponLevel;
+        public WeaponLevel currentWeaponLevel => m_currentWeaponLevel;
 
         [HorizontalGroup("Split")]
 
@@ -62,6 +66,15 @@ namespace DChild.Gameplay.Characters.Players
             CalculateTotalDamage();
             DamageChange?.Invoke(this, EventActionArgs.Empty);
         }
+        public void SetWeaponLevel(WeaponLevel level)
+        {
+            m_currentWeaponLevel = level;
+        }
+
+        public WeaponLevel GetWeaponLevel()
+        {
+            return m_currentWeaponLevel;
+        }
 
         public void SetInfliction(StatusEffectType type, int chanceValue)
         {
@@ -104,18 +117,19 @@ namespace DChild.Gameplay.Characters.Players
             return false;
         }
 
+
         private void CalculateTotalDamage()
         {
             m_totalDamage = m_baseDamage;
             m_totalDamage.value += m_addedDamageValue;
         }
 
-        public WeaponUpgradeSaveData GetSaveData()
+        public WeaponUpgradeSaveData SaveData()
         {
-            return new WeaponUpgradeSaveData();
+            return new WeaponUpgradeSaveData(m_currentWeaponLevel);
         }
 
-        public void LoadSaveData(WeaponUpgradeSaveData upgradeSaveData)
+        public void LoadData(WeaponUpgradeSaveData upgradeSaveData)
         {
             var level = upgradeSaveData.currentWeaponLevel;
         }

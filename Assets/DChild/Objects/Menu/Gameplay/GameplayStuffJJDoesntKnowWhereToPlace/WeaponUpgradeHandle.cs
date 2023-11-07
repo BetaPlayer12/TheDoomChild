@@ -1,9 +1,12 @@
+using DChild.Gameplay;
 using DChild.Gameplay.Characters.Players;
 using DChild.Gameplay.Combat;
 using DChild.Gameplay.Inventories;
 using DChild.Gameplay.Items;
+using DChild.Gameplay.Systems;
 using DChild.Menu;
 using Holysoft.Event;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -34,31 +37,49 @@ public class WeaponUpgradeHandle : MonoBehaviour
 
     public bool IsViableForUpgrade(PlayerWeapon playerWeapon, PlayerInventory playerInventory)
     {
-        ItemData requiredItem = m_weaponUpgradeData[0].info.weaponUpgradeRequirement[0].item;
-        int requiredItemAmount = m_weaponUpgradeData[0].info.weaponUpgradeRequirement[0].amount;
-        if (playerInventory.GetCurrentAmount(requiredItem) >= requiredItemAmount)
+        WeaponLevel nextWeaponLevel = playerWeapon.GetWeaponLevel()+1;
+        bool hasRequirements = false;
+        
+        for(int i = 0; i < m_weaponUpgradeData[(int)nextWeaponLevel].info.weaponUpgradeRequirement.Length; i++)
         {
-            return m_weaponUpgradeData[0].info.hasUpgradeRequirements = true;
-        }
-        else
-        {
-            return m_weaponUpgradeData[0].info.hasUpgradeRequirements = false;
+            ItemData currentRequiredItem = m_weaponUpgradeData[(int)nextWeaponLevel].info.weaponUpgradeRequirement[i].item;
+            int currentRequiredItemAmount = m_weaponUpgradeData[(int)nextWeaponLevel].info.weaponUpgradeRequirement[i].amount;
+
+            if (playerInventory.GetCurrentAmount(currentRequiredItem) >= currentRequiredItemAmount)
+            {
+                hasRequirements = true;
+            }
+            else
+            {
+                hasRequirements = false;
+                break;
+            }
         }
 
-        //bro check what if null
+        m_weaponUpgradeData[(int)nextWeaponLevel].info.hasUpgradeRequirements = hasRequirements;
+        Debug.Log("Player has all requirements for next level " + m_weaponUpgradeData[(int)nextWeaponLevel].info.hasUpgradeRequirements);
+        return hasRequirements;
     }
 
+    //Effectively this is where we uh when ang item ang mga items needed turns into the actual upgrade
     public void ExecuteUpgrade(PlayerWeapon playerWeapon, PlayerInventory playerInventory)
     {
         Damage additionalDamage = playerWeapon.damage;
-        if(m_weaponUpgradeData[0].info.hasUpgradeRequirements)
+        WeaponLevel nextWeaponLevel = playerWeapon.GetWeaponLevel() + 1;
+        if (m_weaponUpgradeData[(int)nextWeaponLevel].info.hasUpgradeRequirements)
         {
             Debug.Log("Yay Upgrade");
 
             additionalDamage.type = playerWeapon.damage.type;
-            additionalDamage.value = playerWeapon.damage.value + m_weaponUpgradeData[0].info.attackdamage.damage.value;
-            playerInventory.RemoveItem((m_weaponUpgradeData[0].info.weaponUpgradeRequirement[0].item), m_weaponUpgradeData[0].info.weaponUpgradeRequirement[0].amount);
+            additionalDamage.value = playerWeapon.damage.value + m_weaponUpgradeData[(int)nextWeaponLevel].info.attackdamage.damage.value;
+
+            for(int i = 0; i < m_weaponUpgradeData[(int)nextWeaponLevel].info.weaponUpgradeRequirement.Length; i++)
+            {
+                playerInventory.RemoveItem(m_weaponUpgradeData[(int)nextWeaponLevel].info.weaponUpgradeRequirement[i].item, m_weaponUpgradeData[(int)nextWeaponLevel].info.weaponUpgradeRequirement[i].amount);
+            }        
+            
             playerWeapon.SetBaseDamage(additionalDamage);
+            playerWeapon.SetWeaponLevel(playerWeapon.currentWeaponLevel + 1);
         }
         else
         {
@@ -66,8 +87,27 @@ public class WeaponUpgradeHandle : MonoBehaviour
         }
     }
 
+    //reapply stat change based on the wweapons upgrade level
     public void LoadUpgrade(PlayerWeapon playerWeapon)
     {
+        Damage additionalDamage = playerWeapon.damage;
+        WeaponLevel currentWeaponLevel = playerWeapon.GetWeaponLevel();
 
+        additionalDamage.type = playerWeapon.damage.type;
+        additionalDamage.value = playerWeapon.damage.value + m_weaponUpgradeData[(int)currentWeaponLevel].info.attackdamage.damage.value;
+        playerWeapon.SetBaseDamage(additionalDamage);
+    }
+
+    private void Awake()
+    {
+        GameplaySystem.campaignSerializer.PostDeserialization += OnGameplayLoad;
+    }
+
+    private void OnGameplayLoad(object sender, CampaignSlotUpdateEventArgs eventArgs)
+    {
+        if (eventArgs.IsPartOfTheUpdate(SerializationScope.Player))
+        {
+            LoadUpgrade(m_playerWeapon);
+        }
     }
 }
