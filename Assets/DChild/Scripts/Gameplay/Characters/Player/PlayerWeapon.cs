@@ -131,7 +131,7 @@ namespace DChild.Gameplay.Characters.Players
 
         public void LoadData(WeaponUpgradeSaveData upgradeSaveData)
         {
-            var level = upgradeSaveData.currentWeaponLevel;
+            m_currentWeaponLevel = upgradeSaveData.currentWeaponLevel;
         }
 #if UNITY_EDITOR
         private void UpdateDamage()

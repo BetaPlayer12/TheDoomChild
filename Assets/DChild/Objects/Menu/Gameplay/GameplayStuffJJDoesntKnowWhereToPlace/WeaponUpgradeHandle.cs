@@ -6,6 +6,7 @@ using DChild.Gameplay.Items;
 using DChild.Gameplay.Systems;
 using DChild.Menu;
 using Holysoft.Event;
+using Sirenix.OdinInspector;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -96,6 +97,12 @@ public class WeaponUpgradeHandle : MonoBehaviour
         additionalDamage.type = playerWeapon.damage.type;
         additionalDamage.value = playerWeapon.damage.value + m_weaponUpgradeData[(int)currentWeaponLevel].info.attackdamage.damage.value;
         playerWeapon.SetBaseDamage(additionalDamage);
+    }
+
+    [Button]
+    private void ShowWeaponLevel(PlayerWeapon playerWeapon)
+    {
+        Debug.Log("Current level " + playerWeapon.GetWeaponLevel());
     }
 
     private void Awake()
