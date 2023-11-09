@@ -2,6 +2,7 @@ using DChild.Gameplay;
 using DChild.Gameplay.Characters.NPC;
 using DChild.Gameplay.Environment.Interractables;
 using Holysoft.Event;
+using PixelCrushers.DialogueSystem;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
