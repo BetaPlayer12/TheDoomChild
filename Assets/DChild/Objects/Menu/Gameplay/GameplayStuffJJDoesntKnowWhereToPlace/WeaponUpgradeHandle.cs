@@ -1,4 +1,5 @@
 using DChild.Gameplay;
+using DChild.Gameplay.Characters;
 using DChild.Gameplay.Characters.Players;
 using DChild.Gameplay.Combat;
 using DChild.Gameplay.Inventories;
@@ -6,6 +7,7 @@ using DChild.Gameplay.Items;
 using DChild.Gameplay.Systems;
 using DChild.Menu;
 using Holysoft.Event;
+using PixelCrushers.DialogueSystem;
 using Sirenix.OdinInspector;
 using System;
 using System.Collections;
@@ -81,10 +83,12 @@ public class WeaponUpgradeHandle : MonoBehaviour
             
             playerWeapon.SetBaseDamage(additionalDamage);
             playerWeapon.SetWeaponLevel(playerWeapon.currentWeaponLevel + 1);
+            FindObjectOfType<Blacksmith>().UpgradeFinished();
         }
         else
         {
             Debug.Log("No upgrade for u");
+            FindObjectOfType<Blacksmith>().UpgradeFailed();
         }
     }
 
