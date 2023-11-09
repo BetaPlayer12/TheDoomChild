@@ -2,11 +2,13 @@ using DChild.Gameplay;
 using DChild.Gameplay.Characters.Players;
 using DChild.Gameplay.Inventories;
 using DChild.Gameplay.Items;
+using Sirenix.OdinInspector;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WeaponShardConversionHandler : MonoBehaviour
+public class WeaponShardConversionHandler : SerializedMonoBehaviour
 {
     [SerializeField]
     private ItemData m_item;
@@ -20,6 +22,12 @@ public class WeaponShardConversionHandler : MonoBehaviour
     {
         m_player.inventory.RemoveItem(m_item);
         m_completionHandle.Execute(m_player);
+    }
+
+    public void CommenceUpgrade()
+    {
+        Debug.Log("It do da upgrade");
+        ItemConversionReward();
     }
    
 }

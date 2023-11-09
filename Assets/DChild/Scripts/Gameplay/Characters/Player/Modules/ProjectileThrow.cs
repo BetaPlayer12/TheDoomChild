@@ -183,14 +183,14 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void SetProjectileInfo(ProjectileInfo info)
         {
-            m_cacheProjectile = m_projectile;
+            //m_cacheProjectile = m_projectile;
             if (m_projectile != info)
             {
                 
                 m_projectile = info;
                 m_launcher.SetProjectile(m_projectile);
-                var skullThrowVariantIndex = info.projectile.GetComponent<Projectile>().hasConstantSpeed ? 0 : 1;
-                m_animator.SetInteger(m_skullThrowVariantParameter, skullThrowVariantIndex);
+                var skullThrowVariantIndex = info.projectile.GetComponent<Projectile>().hasConstantSpeed ? true : false;
+                m_animator.SetBool(m_skullThrowVariantParameter, skullThrowVariantIndex);
                 m_updateProjectileInfo = true;
             }
         }
@@ -206,8 +206,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_willResetProjectile = false;
             m_projectile = m_cacheProjectile;
             m_launcher.SetProjectile(m_projectile);
-            var skullThrowVariantIndex = m_cacheProjectile.projectile.GetComponent<Projectile>().hasConstantSpeed ? 0 : 1;
-            m_animator.SetInteger(m_skullThrowVariantParameter, skullThrowVariantIndex);
+            var skullThrowVariantIndex = m_cacheProjectile.projectile.GetComponent<Projectile>().hasConstantSpeed ? true : false;
+            m_animator.SetBool(m_skullThrowVariantParameter, skullThrowVariantIndex);
             m_updateProjectileInfo = true;
         }
 
@@ -283,6 +283,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_spawnedProjectile = GameSystem.poolManager.GetPool<ProjectilePool>().GetOrCreateItem(m_projectile.projectile);
             m_spawnedProjectile.transform.position = m_spawnPoint.position;
             m_spawnedProjectile.transform.parent = transform;
+            m_spawnedProjectile.transform.rotation = Quaternion.identity;
             m_spawnedProjectile.GetComponent<Attacker>().SetParentAttacker(m_attacker);
             //TEST
 
