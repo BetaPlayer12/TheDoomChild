@@ -22,9 +22,7 @@ public class SoulEssenceDropper : MonoBehaviour
                 if (!healthStatus && minions != null)
                 {
                     lootInstance.DropLoot();  
-                }
-               
-                
+                }   
             }
             yield return null;
         }

@@ -15,13 +15,13 @@ public class IncreaseDamageMinion : MonoBehaviour
 
     private Damage IncreaseDamage(GameObject minion)
     {
-        var minionBaseDamage = minion.GetComponentInParent<Attacker>().GetBaseDamage();
+        var minionBaseDamage = minion.GetComponent<Attacker>().GetBaseDamage();
         minionBaseDamage.value *= m_damageMultiplier;
         return minionBaseDamage;
     }
     private Damage SetBaseDamage(GameObject minion)
     {
-        var minionBaseDamage = minion.GetComponentInParent<Attacker>().GetBaseDamage();
+        var minionBaseDamage = minion.GetComponent<Attacker>().GetBaseDamage();
         minionBaseDamage.value /= m_damageMultiplier; 
         return minionBaseDamage;
     }
@@ -29,14 +29,14 @@ public class IncreaseDamageMinion : MonoBehaviour
     {
         var multipliedDamage = IncreaseDamage(minion);
         minion.GetComponentInParent<Attacker>().SetDamage(multipliedDamage);
-        Debug.Log(minion.name + " " + " " + minion.GetComponentInParent<Attacker>().GetBaseDamage().value);
+        Debug.Log(minion.name + " " + " " + minion.GetComponent<Attacker>().GetBaseDamage().value);
     }
 
     public void ResetBaseDamage(GameObject minion)
     {
         var baseDamage = SetBaseDamage(minion);
         minion.GetComponentInParent<Attacker>().SetDamage(baseDamage);
-        Debug.Log(minion.name + " " + " " + minion.GetComponentInParent<Attacker>().GetBaseDamage().value);
+        Debug.Log(minion.name + " " + " " + minion.GetComponent<Attacker>().GetBaseDamage().value);
     }
     public void ShowIncreaseDamageVFX(GameObject minion)
     {

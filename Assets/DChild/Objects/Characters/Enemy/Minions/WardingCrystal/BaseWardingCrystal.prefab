@@ -68,12 +68,12 @@ GameObject:
   - component: {fileID: 4288485997040697594}
   - component: {fileID: 3869096794824282013}
   - component: {fileID: 8440831311798702120}
-  - component: {fileID: 2137145191974377968}
   - component: {fileID: 7877119276861091119}
   - component: {fileID: 5792207963769620804}
   - component: {fileID: 5302854197006930435}
   - component: {fileID: 9218903266513141235}
   - component: {fileID: 2772057392987837637}
+  - component: {fileID: 3113342291739669301}
   m_Layer: 13
   m_Name: BaseWardingCrystal
   m_TagString: Character
@@ -135,20 +135,6 @@ MonoBehaviour:
   m_additionalHealthPercentage: 10
   m_healVfx: {fileID: 1988541665513064454, guid: 44e6bb67456de53418d3fbf935b0647a,
     type: 3}
---- !u!114 &2137145191974377968
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4288485997040697597}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9c1b4259523520540850e8ecfd42cc0d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_increaseHealthMinion: {fileID: 8440831311798702120}
-  m_increaseDamageMinion: {fileID: 7877119276861091119}
 --- !u!114 &7877119276861091119
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -270,6 +256,19 @@ MonoBehaviour:
   m_legColliderLayerMask:
     serializedVersion: 2
     m_Bits: 0
+--- !u!114 &3113342291739669301
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4288485997040697597}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d27d33999cac42045b9106c40d3d0f07, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IsBuffed: 0
 --- !u!1 &4811047183554676527
 GameObject:
   m_ObjectHideFlags: 0
@@ -341,9 +340,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8da0bf5cd9af0384e9c7dbe5c0700542, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_wardingCrystalEffects: {fileID: 2137145191974377968}
+  m_wardingCrystalEffects:
+    m_increaseHealthMinion: {fileID: 8440831311798702120}
+    m_increaseDamageMinion: {fileID: 7877119276861091119}
+    m_soulEssenceDropper: {fileID: 3113342291739669301}
   m_minionLayer: 13
   m_minionTag: Hitbox
+  m_minionsInWardingRadius: []
+  m_checkedMinions: []
 --- !u!1 &7685534661452620138
 GameObject:
   m_ObjectHideFlags: 0

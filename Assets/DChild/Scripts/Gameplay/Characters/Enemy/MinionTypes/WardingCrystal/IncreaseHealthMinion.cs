@@ -22,10 +22,10 @@ public class IncreaseHealthMinion : MonoBehaviour
 
     public void AddHealth(GameObject minion)
     {
-        var minionCurrentmaxHealth = minion.GetComponentInParent<Damageable>().health.maxValue;
+        var minionCurrentmaxHealth = minion.GetComponent<Damageable>().health.maxValue;
         var minionAddHealth = GetMinionHealthPercentage(minionCurrentmaxHealth, m_additionalHealthPercentage);
         Debug.Log(minionAddHealth);
-        minion.GetComponentInParent<Damageable>().Heal(Mathf.RoundToInt(minionAddHealth));
+        minion.GetComponent<Damageable>().Heal(Mathf.RoundToInt(minionAddHealth));
     }
 
     public void ShowHealVFX(GameObject minion)
