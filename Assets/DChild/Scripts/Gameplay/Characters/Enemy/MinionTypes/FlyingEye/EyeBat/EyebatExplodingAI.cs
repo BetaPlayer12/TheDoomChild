@@ -145,6 +145,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private GameObject m_blast;
         [ShowInInspector]
         private RandomAttackDecider<Attack> m_attackDecider;
+        /*[SerializeField]
+        private GameObject m_explodieBB;*/
 
         private float m_currentCD;
         private bool m_isDetecting;
@@ -329,7 +331,9 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return new WaitForSeconds(0.1f);
             m_blast.SetActive(true);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.deathAnimation);
+            //m_explodieBB.SetActive(false);
             enabled = false;
+            yield return new WaitForSeconds(1f);
             this.gameObject.SetActive(false);
             yield return null;
         }
