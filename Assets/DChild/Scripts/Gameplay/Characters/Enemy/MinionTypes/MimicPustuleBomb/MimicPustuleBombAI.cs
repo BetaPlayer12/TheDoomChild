@@ -160,7 +160,9 @@ namespace DChild.Gameplay.Characters.Enemies
         private Collider2D m_attackBB;
         [SerializeField, TabGroup("Reference")]
         private Transform m_pushDirection;
-        
+        [SerializeField, TabGroup("Reference")]
+        private List<GameObject> m_PustuleBombsPosition;
+
         [SerializeField, TabGroup("Modules")]
         private TransformTurnHandle m_turnHandle;
         [SerializeField, TabGroup("Modules")]
@@ -177,11 +179,6 @@ namespace DChild.Gameplay.Characters.Enemies
         private DamageContactLocator m_damageContactLocator;
         [SerializeField, TabGroup("Modules")]
         private CollisionEventActionArgs collisionEvent;
-
-
-
-        private List<Vector2> m_Points;
-  
 
         [ShowInInspector]
         private StateHandle<State> m_stateHandle;
@@ -201,8 +198,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private bool m_isDetecting;
         private bool m_isAggro;
         private Vector2 m_startPos;
-        
-   
+
+        private List<Vector2> m_Points;
 
         private Coroutine m_executeMoveCoroutine;
         private Coroutine m_detectRoutine;
@@ -251,14 +248,18 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnFlinchStart(object sender, EventActionArgs eventArgs)
         {
+            if (m_isAggro)
+            {
+                m_flinchHandle.SetAnimation(m_info.flinchAggroAnimation.animation);
+
+            }
+            else
+            {
+                m_flinchHandle.SetAnimation(m_info.flinchUnAggroAnimation.animation);
+            }
             if (m_animation.GetCurrentAnimation(0).ToString() == m_info.idleAggroAnimation1.animation || m_stateHandle.currentState == State.Cooldown)
             {
-                //m_animation.SetAnimation(0, m_info.flinchAnimation, false);
-                if (m_isAggro)
-                {
-                    m_flinchHandle.SetAnimation(m_info.flinchAggroAnimation.animation);
-                   
-                }
+                
                 m_flinchHandle.m_autoFlinch = true;
                 m_agent.Stop();
                 m_rigidbody2D.constraints = RigidbodyConstraints2D.FreezeRotation;
@@ -378,7 +379,6 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 m_deathHandle.SetAnimation(m_info.deathAggroAnimation.animation);
             }
-            m_deathHandle.enabled = true;
             StartCoroutine(DeathRoutine());
             m_agent.Stop();
             m_bodycollider.enabled = false;
@@ -387,13 +387,19 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator DeathRoutine()
         {
+            m_hitbox.enabled = false;
+            m_aggroGroup.SetActive(false);
             m_animation.SetAnimation(0, m_info.deathAggroAnimation, false);
-            m_animation.EnableRootMotion(true, false);
+            
             m_rigidbody2D.constraints = RigidbodyConstraints2D.FreezeRotation;
-            yield return new WaitForSeconds(.25f);
+            yield return new WaitForSeconds(0.6f);
             m_animation.SetAnimation(0, m_info.deathUnAggroAnimation, false);
+            /*
+            m_deathHandle.enabled = true;
+            enabled = false;*/
+            yield return new WaitForSeconds(2.5f);
+            m_animation.EnableRootMotion(true, false);
             m_parentObject.SetActive(false);
-            enabled = false;
             Debug.Log("Die Mimic");
             yield return null;
         }
@@ -493,19 +499,33 @@ namespace DChild.Gameplay.Characters.Enemies
         #endregion
 
 
+        private void SwapPustuleBombPosition()
+        {
+            var random = UnityEngine.Random.Range(1, 100);
+            var pustuleBombPosition = m_startPos;
+            Vector3 randomPustuleBombPosition;
+
+            Debug.Log("Test: " + random);
+            var index = random <= 50 ? 0 : 1;
+
+            randomPustuleBombPosition = m_PustuleBombsPosition[index].transform.position;
+
+            m_PustuleBombsPosition[index].transform.position = pustuleBombPosition;
+            m_parentObject.transform.position = randomPustuleBombPosition;
+        }
+
         protected override void Start()
         {
-
             base.Start();
             m_animation.SetAnimation(0, m_info.patrol.animation, true);
             m_animation.DisableRootMotion();
             m_bodycollider.enabled = false;
             m_startPos = transform.position;
+            SwapPustuleBombPosition();
         }
 
         protected override void Awake()
         {
-            
             base.Awake();
 
             m_attackHandle.AttackDone += OnAttackDone;
@@ -525,7 +545,6 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void Update()
         {
-
             switch (m_stateHandle.currentState)
             {
                 case State.Detect:
