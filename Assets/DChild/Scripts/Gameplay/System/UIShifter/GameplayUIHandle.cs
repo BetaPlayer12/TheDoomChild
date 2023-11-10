@@ -7,10 +7,12 @@ using DChild.Gameplay.Environment;
 using DChild.Gameplay.NavigationMap;
 using DChild.Gameplay.Trade;
 using DChild.Gameplay.UI;
+using DChild.Menu;
 using DChild.Menu.Trade;
 using DChild.Temp;
 using Doozy.Runtime.Signals;
 using Doozy.Runtime.UIManager.Containers;
+using Holysoft.Event;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -22,6 +24,8 @@ namespace DChild.Gameplay.Systems
         private SignalSender m_cinemaSignal;
         [SerializeField, FoldoutGroup("Signals")]
         private SignalSender m_gameOverSignal;
+        [SerializeField, FoldoutGroup("Signals")]
+        private SignalSender m_confirmationWindowSignal;
 
         [SerializeField]
         private UINotificationManager m_notificationManager;
@@ -30,6 +34,9 @@ namespace DChild.Gameplay.Systems
         private SignalSender m_tradeWindowSignal;
         [SerializeField, FoldoutGroup("Merchant UI")]
         private TradeManager m_tradeManager;
+
+        [SerializeField]
+        private ConfirmationHandler m_confirmationWindow;
 
         [SerializeField]
         private StoreNavigator m_storeNavigator;
@@ -56,6 +63,9 @@ namespace DChild.Gameplay.Systems
         private UIContainer m_interactablePrompt;
         [SerializeField, FoldoutGroup("Object Prompt")]
         private UIContainer m_movableObjectPrompt;
+
+        [SerializeField]
+        private WeaponUpgradeHandle m_upgradeWeaponHandler;
 
         public IUINotificationManager notificationManager => m_notificationManager;
 
@@ -243,7 +253,14 @@ namespace DChild.Gameplay.Systems
 
         public void Initialize()
         {
-            m_notificationManager.InitializePriorityHandling();
+            m_notificationManager.InitializeFullPriorityHandling();
+            m_notificationManager.InitializePromptPriorityHandling();
+        }
+
+        public void OpenWeaponUpgradeConfirmationWindow()
+        {
+            m_upgradeWeaponHandler.RequestUpgrade();
+            m_confirmationWindowSignal.SendSignal();
         }
     }
 }

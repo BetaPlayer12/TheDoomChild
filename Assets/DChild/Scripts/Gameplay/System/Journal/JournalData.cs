@@ -12,7 +12,19 @@ namespace DChild.Gameplay.Systems.Journal
         [SerializeField]
         private Sprite m_notification;
 
+        [SerializeField]
+        private string m_itemName;
+
+        [SerializeField]
+        private string m_itemDescription;
+
+
+
         public int ID => m_id;
         public Sprite notification => m_notification;
+
+        public string itemName => m_itemName;
+
+        public string itemDescription => m_itemDescription;
     }
 }
