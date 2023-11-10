@@ -387,7 +387,7 @@ namespace DChild.Gameplay.Characters.Enemies
         public void ResetAI()
         {
             m_selfCollider.enabled = false;
-            m_targetInfo.Set(null, null);
+            //m_targetInfo.Set(null, null);
             m_stateHandle.OverrideState(State.ReevaluateSituation);
             enabled = true;
         }

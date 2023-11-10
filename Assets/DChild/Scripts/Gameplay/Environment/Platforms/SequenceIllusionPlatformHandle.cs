@@ -13,9 +13,10 @@ namespace DChild.Gameplay.Environment
     {
         [SerializeField]
         private IllusionPlatform[] m_sequence;
-
+        
         private PlayerCollisionSensor[] m_collisionSensorList;
         private PlayerCollisionSensor m_subscribeCollisionSensor;
+        [SerializeField]
         private int m_currentAppearingPlatformIndex;
 
         public void Reset()
@@ -49,7 +50,6 @@ namespace DChild.Gameplay.Environment
                 }
                 m_sequence[index]?.Appear(false);
             }
-
             SwitchSubscriptionTo(m_collisionSensorList[index]);
         }
 
@@ -81,3 +81,4 @@ namespace DChild.Gameplay.Environment
         }
     }
 }
+

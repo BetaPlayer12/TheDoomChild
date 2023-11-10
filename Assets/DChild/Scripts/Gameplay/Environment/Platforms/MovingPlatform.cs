@@ -57,7 +57,7 @@ namespace DChild.Gameplay.Environment
         private float m_speed;
         [SerializeField, OnValueChanged("ValidateStartingWaypoint"), TabGroup("Setting")]
         private int m_startWaypoint;
-        [SerializeField, ListDrawerSettings(CustomAddFunction = "AddWaypoint",OnBeginListElementGUI = "OnBeginWayPointElementGUI", OnEndListElementGUI ="OnEndWayPointElementGUI"), TabGroup("Setting"), HideInInlineEditors]
+        [SerializeField, ListDrawerSettings(CustomAddFunction = "AddWaypoint", OnBeginListElementGUI = "OnBeginWayPointElementGUI", OnEndListElementGUI = "OnEndWayPointElementGUI"), TabGroup("Setting"), HideInInlineEditors]
         private Vector2[] m_waypoints;
         [ShowInInspector, OnValueChanged("ChangeDestination"), TabGroup("Debug")]
         private int m_wayPointDestination;
@@ -95,9 +95,10 @@ namespace DChild.Gameplay.Environment
 
         private void OnEndWayPointElementGUI(int index)
         {
-            if(GUILayout.Button("Use Current Position"))
+            if (GUILayout.Button("Use Current Position"))
             {
                 m_waypoints[index] = transform.position;
+                EditorUtility.SetDirty(this);
             }
             EditorGUILayout.EndHorizontal();
         }
@@ -117,7 +118,7 @@ namespace DChild.Gameplay.Environment
         }
         public void Initialize()
         {
-           //editore set up initialize
+            //editore set up initialize
         }
 
         public Vector2 GetWayPoint(int index) => m_waypoints[index];
