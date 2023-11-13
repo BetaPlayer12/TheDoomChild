@@ -176,6 +176,8 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Modules")]
         private FlinchHandler m_flinchHandle;
         [SerializeField, TabGroup("Modules")]
+        private WayPointPatrol m_wayPointPatrol;
+        [SerializeField, TabGroup("Modules")]
         private DamageContactLocator m_damageContactLocator;
         [SerializeField, TabGroup("Modules")]
         private CollisionEventActionArgs collisionEvent;
@@ -501,17 +503,24 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void SwapPustuleBombPosition()
         {
-            var random = UnityEngine.Random.Range(1, 100);
-            var pustuleBombPosition = m_startPos;
-            Vector3 randomPustuleBombPosition;
-
-            Debug.Log("Test: " + random);
-            var index = random <= 50 ? 0 : 1;
-
-            randomPustuleBombPosition = m_PustuleBombsPosition[index].transform.position;
-
-            m_PustuleBombsPosition[index].transform.position = pustuleBombPosition;
-            m_parentObject.transform.position = randomPustuleBombPosition;
+            var randomSwap = UnityEngine.Random.Range(1, 100);
+            var shouldSwap = randomSwap <= 50 ? true : false;
+            Debug.Log("Swap?: " + shouldSwap, gameObject);
+            if (shouldSwap) 
+            {
+                var random = UnityEngine.Random.Range(1, 100);
+                var pustuleBombPosition = m_startPos;
+                Vector3 randomPustuleBombPosition;
+                Debug.Log("Test: " + random, gameObject);
+                var index = random % m_PustuleBombsPosition.Count;
+                Debug.Log("Test Index: " + index, gameObject);
+                randomPustuleBombPosition = m_PustuleBombsPosition[index].transform.position;
+                m_PustuleBombsPosition[index].transform.position = pustuleBombPosition;
+                m_parentObject.transform.position = randomPustuleBombPosition;
+            }
+            m_wayPointPatrol.wayPoints[0].Set(m_parentObject.transform.position.x, m_parentObject.transform.position.y);
+            m_stateHandle.OverrideState(State.Patrol);
+            
         }
 
         protected override void Start()
@@ -602,7 +611,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
 
                     
-                    Vector3 v_diff = new(UnityEngine.Random.Range(250, 300), UnityEngine.Random.Range(250, 300), UnityEngine.Random.Range(200, 300));
+                    Vector3 v_diff = new(UnityEngine.Random.Range(250, 360), UnityEngine.Random.Range(250, 360), UnityEngine.Random.Range(200, 360));
                     float atan2 = Mathf.Atan2(v_diff.y, v_diff.x);
                     m_pushDirection.rotation = Quaternion.Euler(0f, 0f, atan2 * Mathf.Rad2Deg);
                     m_rigidbody2D.AddForce(-m_pushDirection.right * m_info.patrol.speed, ForceMode2D.Force);
