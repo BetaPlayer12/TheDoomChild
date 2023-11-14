@@ -110,7 +110,7 @@ namespace DChild.Gameplay.Inventories
         public IStoredItem[] FindStoredItemsOfType(ItemCategory category) => m_inventory.FindStoredItemsOfType(category);
 
         public IStoredItem GetItem(int index) => m_inventory.GetStoredItem(index);
-        public int GetCurrentAmount(ItemData item) => m_inventory.GetItem(item).count;
+        public int GetCurrentAmount(ItemData item) => m_inventory.GetItem(item)?.count ?? 0;
 
         public bool HasSpaceFor(ItemData item) => m_inventory.HasSpaceFor(item, 1);
 
@@ -125,7 +125,6 @@ namespace DChild.Gameplay.Inventories
             m_inventory.SetCurrency(value);
             OnAmountSet?.Invoke(this, new CurrencyUpdateEventArgs(value));
         }
-
 
         #region ITradeInventory Implementation
 
