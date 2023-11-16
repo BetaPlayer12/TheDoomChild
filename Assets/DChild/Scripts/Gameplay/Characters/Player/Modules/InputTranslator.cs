@@ -118,7 +118,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             if (enabled == true)
             {
                 horizontalInput = value.Get<float>();
-
+                Debug.Log($"Latest Horizontal Value Before Filter: {horizontalInput}");
                 if (horizontalInput < 1 && horizontalInput > -1)
                 {
                     horizontalInput = 0;
