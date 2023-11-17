@@ -36,7 +36,7 @@ public class ShadowPetWerewolf : MonoBehaviour
     [SerializeField, Spine.Unity.SpineAnimation(dataField = "m_skeletonAnimation")]
     private string m_detectAnimation;
     [SerializeField, Spine.Unity.SpineAnimation(dataField = "m_skeletonAnimation")]
-    private string m_moveAnimation;
+    private string m_summonAnimation;
     [SerializeField, Spine.Unity.SpineAnimation(dataField = "m_skeletonAnimation")]
     private string m_idleAnimation;
     [SerializeField, Spine.Unity.SpineAnimation(dataField = "m_skeletonAnimation")]
@@ -75,7 +75,7 @@ public class ShadowPetWerewolf : MonoBehaviour
     private IEnumerator AttackRoutine()
     {
         // m_spine.SetAnimation(0, m_idleAnimation, true);
-        m_spine.SetAnimation(0, m_moveAnimation, false);//changed to summon animation
+        m_spine.SetAnimation(0, m_summonAnimation, false);//changed to summon animation
         while (!m_groundSensor.isDetecting)
         {
             m_groundSensor.Cast();
@@ -95,6 +95,7 @@ public class ShadowPetWerewolf : MonoBehaviour
                 timer = 0;
             yield return null;
         }
+        yield return new WaitForAnimationComplete(m_spine.animationState, m_summonAnimation);
         m_physics.SetVelocity(Vector2.zero);
         m_spine.EnableRootMotion(true, false);
         // m_spine.SetAnimation(0, m_attackAnimation, true);
