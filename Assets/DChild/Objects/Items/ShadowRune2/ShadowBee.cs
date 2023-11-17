@@ -85,8 +85,8 @@ public class ShadowBee : MonoBehaviour
     }
     private IEnumerator ShadowBeeRoutine()
     {
-        SetSpineAnimation(m_idle2Animation, false);
-        yield return new WaitForSeconds(3.657f);
+       /* SetSpineAnimation(m_idle2Animation, false);
+        yield return new WaitForAnimationComplete(m_skeletonAnimation.AnimationState, m_idle2Animation);*/
         var timer = m_duration;
         var interval = m_interval;
         while (timer > 0)
@@ -144,6 +144,50 @@ public class ShadowBee : MonoBehaviour
     
     private IEnumerator RotationRoutine()
     {
+        /* var angle = 0f;
+         var offset = 0f;
+         var smoothingFactor = 5f;
+         var heightOffset = 7f;
+         var someThreshold = 5f;
+         m_parentCharacter = GetComponentInParent<Character>();
+
+         var targetObject = m_parentCharacter;
+         while (true)
+         {
+             //old method
+             //m_rotationControl.Rotate(0, 0, m_rotationSpeed, Space.World); 
+
+
+             angle -= m_rotationSpeed * Time.deltaTime;
+             offset -= m_rotationSpeed * Time.deltaTime;
+
+             Vector3 targetPosition = targetObject.transform.position;
+             Vector3 behindPosition = targetPosition - targetObject.transform.right * m_distanceBehindTargetX + Vector3.up * heightOffset;
+
+             for (int i = 0; i < m_shadowBee.Count; i++)
+             {
+                 float angleOffset = 2 * Mathf.PI * i / m_shadowBee.Count;
+                 float x = Mathf.Cos(angle + offset + angleOffset) * m_radius;
+                 float y = Mathf.Sin(angle + offset + angleOffset) * m_radius;
+
+                 Vector3 finalPosition = behindPosition + new Vector3(x, y, 0);
+
+                 bool overlaps = false;
+
+                 for (int j = 0; j < m_shadowBee.Count; j++)
+                 {
+                     if (i != j && Vector3.Distance(finalPosition, m_shadowBee[j].transform.position) < someThreshold)
+                     {
+                         overlaps = true;
+                         break;
+                     }
+                 }
+
+                 m_shadowBee[i].transform.position = overlaps ? finalPosition : Vector3.Lerp(m_shadowBee[i].transform.position, finalPosition, smoothingFactor);
+             }
+
+             yield return null;
+ */
         var angle = 0f;
         var offset = 0f;
         var smoothingFactor = 5f;
@@ -154,21 +198,19 @@ public class ShadowBee : MonoBehaviour
         var targetObject = m_parentCharacter;
         while (true)
         {
-            //old method
-            //m_rotationControl.Rotate(0, 0, m_rotationSpeed, Space.World); 
-
-
-            angle -= m_rotationSpeed * Time.deltaTime; 
+            angle -= m_rotationSpeed * Time.deltaTime;
             offset -= m_rotationSpeed * Time.deltaTime;
 
             Vector3 targetPosition = targetObject.transform.position;
             Vector3 behindPosition = targetPosition - targetObject.transform.right * m_distanceBehindTargetX + Vector3.up * heightOffset;
 
+            Vector3 parentScale = targetObject.transform.localScale;
+
             for (int i = 0; i < m_shadowBee.Count; i++)
             {
                 float angleOffset = 2 * Mathf.PI * i / m_shadowBee.Count;
-                float x = Mathf.Cos(angle + offset + angleOffset) * m_radius; 
-                float y = Mathf.Sin(angle + offset + angleOffset) * m_radius; 
+                float x = Mathf.Cos(angle + offset + angleOffset) * m_radius * parentScale.x; // Take into account the scale
+                float y = Mathf.Sin(angle + offset + angleOffset) * m_radius;
 
                 Vector3 finalPosition = behindPosition + new Vector3(x, y, 0);
 
@@ -187,6 +229,9 @@ public class ShadowBee : MonoBehaviour
             }
 
             yield return null;
+
         }
     }
+
+    
 }
