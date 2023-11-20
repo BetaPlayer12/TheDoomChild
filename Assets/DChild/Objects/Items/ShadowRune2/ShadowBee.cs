@@ -23,6 +23,8 @@ public class ShadowBee : MonoBehaviour
     private float m_radius;
     [SerializeField, BoxGroup("ShadowBee")]
     private List<GameObject> m_shadowBee;
+    [SerializeField, BoxGroup("ShadowBee")]
+    private GameObject m_shadowBeeParent;
     [SerializeField, BoxGroup("Projectile")]
     private ProjectileInfo m_projectileInfo;
     [SerializeField, BoxGroup("Projectile")]
@@ -83,10 +85,38 @@ public class ShadowBee : MonoBehaviour
             spine.SetAnimation(0, animationName, loop);
         }
     }
+
+    private IEnumerator LaunchShadowBeeProjectiles()
+    {
+        SetSpineAnimation(m_attackAnimation, false);
+        yield return new WaitForSeconds(0.3f);
+        for (int i = 0; i < m_launcherPoints.Count; i++)
+        {
+            m_launcher = new ProjectileLauncher(m_projectileInfo, m_launcherPoints[i]);
+            var instance = GameSystem.poolManager.GetPool<ProjectilePool>().GetOrCreateItem(m_projectileInfo.projectile);
+            instance.transform.position = m_launcherPoints[i].position;
+            if (GetComponentInParent<Character>() != null)
+                instance.GetComponent<Attacker>().SetParentAttacker(GetComponentInParent<Character>().GetComponent<Attacker>());
+
+            if (GetComponentInParent<Character>() != null)
+            {
+                m_launcher.AimAt(new Vector2(m_launcherPoints[i].position.x + (GetComponentInParent<Character>().facing == HorizontalDirection.Right ? 5 : -5), m_launcherPoints[i].position.y));
+            }
+            else
+            {
+                m_launcher.AimAt(new Vector2(m_launcherPoints[i].position.x + 5, m_launcherPoints[i].position.y));
+            }
+
+            m_launcher.LaunchProjectile(m_launcherPoints[i].right, instance.gameObject);
+        }
+        yield return null;
+    }
+
     private IEnumerator ShadowBeeRoutine()
     {
-       /* SetSpineAnimation(m_idle2Animation, false);
-        yield return new WaitForAnimationComplete(m_skeletonAnimation.AnimationState, m_idle2Animation);*/
+        /* SetSpineAnimation(m_idle2Animation, false);
+         yield return new WaitForAnimationComplete(m_skeletonAnimation.AnimationState, m_idle2Animation);*/
+        StartCoroutine(LaunchShadowBeeProjectiles());
         var timer = m_duration;
         var interval = m_interval;
         while (timer > 0)
@@ -96,36 +126,18 @@ public class ShadowBee : MonoBehaviour
             interval -= Time.deltaTime;
             if (interval < 0)
             {
-                SetSpineAnimation(m_attackAnimation, false);
-                yield return new WaitForSeconds(0.3f);
-                for (int i = 0; i < m_launcherPoints.Count; i++)
-                {
-                    m_launcher = new ProjectileLauncher(m_projectileInfo, m_launcherPoints[i]);
-                    var instance = GameSystem.poolManager.GetPool<ProjectilePool>().GetOrCreateItem(m_projectileInfo.projectile);
-                    instance.transform.position = m_launcherPoints[i].position;
-                    if (GetComponentInParent<Character>() != null)
-                        instance.GetComponent<Attacker>().SetParentAttacker(GetComponentInParent<Character>().GetComponent<Attacker>());
-
-                    if (GetComponentInParent<Character>() != null)
-                    {
-                        m_launcher.AimAt(new Vector2(m_launcherPoints[i].position.x + (GetComponentInParent<Character>().facing == HorizontalDirection.Right ? 5 : -5), m_launcherPoints[i].position.y));
-                    }
-                    else
-                    {
-                        m_launcher.AimAt(new Vector2(m_launcherPoints[i].position.x + 5, m_launcherPoints[i].position.y));
-                    }
-
-                    m_launcher.LaunchProjectile(m_launcherPoints[i].right, instance.gameObject);
-                }
+                StartCoroutine(LaunchShadowBeeProjectiles());
 
                 interval = m_interval;
             }
             yield return null;
         }
-       /* for (int i = 0; i < m_fxs.Count; i++)
-        {
-            m_fxs[i].Stop();
-        }*/
+        /* for (int i = 0; i < m_fxs.Count; i++)
+         {
+             m_fxs[i].Stop();
+         }*/
+        StartCoroutine(LaunchShadowBeeProjectiles());
+        yield return new WaitForSeconds(0.3f);
         if (m_rotationControlRoutine != null)
         {
             StopCoroutine(m_rotationControlRoutine);
@@ -144,50 +156,6 @@ public class ShadowBee : MonoBehaviour
     
     private IEnumerator RotationRoutine()
     {
-        /* var angle = 0f;
-         var offset = 0f;
-         var smoothingFactor = 5f;
-         var heightOffset = 7f;
-         var someThreshold = 5f;
-         m_parentCharacter = GetComponentInParent<Character>();
-
-         var targetObject = m_parentCharacter;
-         while (true)
-         {
-             //old method
-             //m_rotationControl.Rotate(0, 0, m_rotationSpeed, Space.World); 
-
-
-             angle -= m_rotationSpeed * Time.deltaTime;
-             offset -= m_rotationSpeed * Time.deltaTime;
-
-             Vector3 targetPosition = targetObject.transform.position;
-             Vector3 behindPosition = targetPosition - targetObject.transform.right * m_distanceBehindTargetX + Vector3.up * heightOffset;
-
-             for (int i = 0; i < m_shadowBee.Count; i++)
-             {
-                 float angleOffset = 2 * Mathf.PI * i / m_shadowBee.Count;
-                 float x = Mathf.Cos(angle + offset + angleOffset) * m_radius;
-                 float y = Mathf.Sin(angle + offset + angleOffset) * m_radius;
-
-                 Vector3 finalPosition = behindPosition + new Vector3(x, y, 0);
-
-                 bool overlaps = false;
-
-                 for (int j = 0; j < m_shadowBee.Count; j++)
-                 {
-                     if (i != j && Vector3.Distance(finalPosition, m_shadowBee[j].transform.position) < someThreshold)
-                     {
-                         overlaps = true;
-                         break;
-                     }
-                 }
-
-                 m_shadowBee[i].transform.position = overlaps ? finalPosition : Vector3.Lerp(m_shadowBee[i].transform.position, finalPosition, smoothingFactor);
-             }
-
-             yield return null;
- */
         var angle = 0f;
         var offset = 0f;
         var smoothingFactor = 5f;
@@ -196,6 +164,8 @@ public class ShadowBee : MonoBehaviour
         m_parentCharacter = GetComponentInParent<Character>();
 
         var targetObject = m_parentCharacter;
+        transform.localScale = m_parentCharacter.transform.localScale;
+        
         while (true)
         {
             angle -= m_rotationSpeed * Time.deltaTime;
@@ -204,12 +174,10 @@ public class ShadowBee : MonoBehaviour
             Vector3 targetPosition = targetObject.transform.position;
             Vector3 behindPosition = targetPosition - targetObject.transform.right * m_distanceBehindTargetX + Vector3.up * heightOffset;
 
-            Vector3 parentScale = targetObject.transform.localScale;
-
             for (int i = 0; i < m_shadowBee.Count; i++)
             {
                 float angleOffset = 2 * Mathf.PI * i / m_shadowBee.Count;
-                float x = Mathf.Cos(angle + offset + angleOffset) * m_radius * parentScale.x; // Take into account the scale
+                float x = Mathf.Cos(angle + offset + angleOffset) * m_radius;
                 float y = Mathf.Sin(angle + offset + angleOffset) * m_radius;
 
                 Vector3 finalPosition = behindPosition + new Vector3(x, y, 0);
@@ -227,9 +195,7 @@ public class ShadowBee : MonoBehaviour
 
                 m_shadowBee[i].transform.position = overlaps ? finalPosition : Vector3.Lerp(m_shadowBee[i].transform.position, finalPosition, smoothingFactor);
             }
-
             yield return null;
-
         }
     }
 
