@@ -20,6 +20,8 @@ namespace DChild.Gameplay.Characters.Players
         private PlayerSoulSkillHandle m_soulSkillHandle;
         [SerializeField]
         private CombatArts m_combatArts;
+        [SerializeField]
+        private PlayerWeapon m_playerWeapon;
 
         public PlayerCharacterData SaveData()
         {
@@ -27,7 +29,8 @@ namespace DChild.Gameplay.Characters.Players
                                         m_codex.SaveData(),
                                         m_playerSkills.SaveData(),
                                         m_soulSkillHandle.SaveData(),
-                                        m_combatArts.SaveData());
+                                        m_combatArts.SaveData(),
+                                        m_playerWeapon.SaveData());
         }
 
         public void LoadData(PlayerCharacterData data)
@@ -37,6 +40,7 @@ namespace DChild.Gameplay.Characters.Players
             m_playerSkills.LoadData(data.skills);
             m_soulSkillHandle.LoadData(data.soulSkillData);
             m_combatArts.LoadData(data.combatArtsData);
+            m_playerWeapon.LoadData(data.weaponUpgradeSaveData);
         }
     }
 }
