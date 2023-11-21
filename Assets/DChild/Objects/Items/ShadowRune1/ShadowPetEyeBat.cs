@@ -11,8 +11,8 @@ using UnityEngine;
 
 public class ShadowPetEyeBat : MonoBehaviour
 {
-    [SerializeField]
-    private float m_duration;
+    //[SerializeField]
+    //private float m_duration;
     [SerializeField]
     private float m_followSpeed;
     private Transform m_parentTF;
@@ -29,9 +29,9 @@ public class ShadowPetEyeBat : MonoBehaviour
 #endif
 
     [SerializeField, Spine.Unity.SpineAnimation(dataField = "m_skeletonAnimation")]
-    private string m_idleAnimation;
-    [SerializeField, Spine.Unity.SpineAnimation(dataField = "m_skeletonAnimation")]
     private string m_attackAnimation;
+    [SerializeField, Spine.Unity.SpineAnimation(dataField = "m_skeletonAnimation")]
+    private string m_idleAnimation;
     [SerializeField, Spine.Unity.SpineAnimation(dataField = "m_skeletonAnimation")]
     private string m_deathAnimation;
 
@@ -55,6 +55,8 @@ public class ShadowPetEyeBat : MonoBehaviour
     private float m_lazerDuration;
     [SerializeField, TabGroup("Lazer")]
     private GameObject m_lazerAnimation;
+    [SerializeField, TabGroup("Lazer")]
+    private SpineEventListener m_spineEventListener;
 
     private Vector2 m_lazerTargetPos;
     private bool m_beamOn;
@@ -91,7 +93,6 @@ public class ShadowPetEyeBat : MonoBehaviour
         m_beamOn = true;
         Animator anim = m_lazerAnimation.GetComponent<Animator>();
         anim.Play("Start");
-        //yield return new WaitForAnimationComplete(m_spine.animationState, m_attackAnimation);//
 
         m_spine.SetAnimation(0, m_idleAnimation, true);
 
