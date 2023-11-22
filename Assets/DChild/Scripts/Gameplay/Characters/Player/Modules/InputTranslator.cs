@@ -118,7 +118,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             if (enabled == true)
             {
                 horizontalInput = value.Get<float>();
-                Debug.Log($"Latest Horizontal Value Before Filter: {horizontalInput}");
+                
                 if (horizontalInput < 1 && horizontalInput > -1)
                 {
                     horizontalInput = 0;
@@ -131,6 +131,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             if (enabled == true)
             {
                 verticalInput = value.Get<float>();
+                Debug.Log($"Latest Vertical Value Before Filter: {verticalInput}");
                 crouchHeld = value.Get<float>() == -1;
 
                 if (verticalInput < 1 && verticalInput > -1)
@@ -171,6 +172,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             if (enabled == true)
             {
                 var isTrue = value.Get<float>() == 1;
+                Debug.Log(value.Get<float>());
                 levitatePressed = isTrue;
                 levitateHeld = isTrue;
             }
