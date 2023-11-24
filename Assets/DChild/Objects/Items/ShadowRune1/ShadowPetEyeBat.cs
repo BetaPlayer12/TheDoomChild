@@ -78,6 +78,7 @@ public class ShadowPetEyeBat : MonoBehaviour
 
     private IEnumerator LazerRoutine()
     {
+        yield return new WaitForSeconds(.1f);
         transform.localScale = Vector3.one;
         m_spine.SetAnimation(0, m_attackAnimation, false);
         //StartCoroutine(TelegraphLineRoutine());
