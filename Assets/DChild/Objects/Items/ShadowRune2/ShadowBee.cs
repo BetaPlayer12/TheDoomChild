@@ -75,6 +75,7 @@ public class ShadowBee : MonoBehaviour
 
     private void Start()
     {
+        m_parentCharacter = GetComponentInParent<Character>();
         StartCoroutine(ShadowBeeRoutine());
         m_rotationControlRoutine = StartCoroutine(RotationRoutine());
     }
@@ -88,6 +89,7 @@ public class ShadowBee : MonoBehaviour
 
     private IEnumerator LaunchShadowBeeProjectiles()
     {
+        yield return new WaitForSeconds(0.1f);
         SetSpineAnimation(m_attackAnimation, false);
         yield return new WaitForSeconds(0.3f);
         for (int i = 0; i < m_launcherPoints.Count; i++)
@@ -96,8 +98,11 @@ public class ShadowBee : MonoBehaviour
             var instance = GameSystem.poolManager.GetPool<ProjectilePool>().GetOrCreateItem(m_projectileInfo.projectile);
             instance.transform.position = m_launcherPoints[i].position;
             if (GetComponentInParent<Character>() != null)
+            { 
                 instance.GetComponent<Attacker>().SetParentAttacker(GetComponentInParent<Character>().GetComponent<Attacker>());
-
+            }
+            //SetSpineAnimation(m_attackAnimation, false);
+            //yield return new WaitForSeconds(0.3f);
             if (GetComponentInParent<Character>() != null)
             {
                 m_launcher.AimAt(new Vector2(m_launcherPoints[i].position.x + (GetComponentInParent<Character>().facing == HorizontalDirection.Right ? 5 : -5), m_launcherPoints[i].position.y));
@@ -106,9 +111,10 @@ public class ShadowBee : MonoBehaviour
             {
                 m_launcher.AimAt(new Vector2(m_launcherPoints[i].position.x + 5, m_launcherPoints[i].position.y));
             }
-
             m_launcher.LaunchProjectile(m_launcherPoints[i].right, instance.gameObject);
+            
         }
+        
         yield return null;
     }
 
@@ -116,9 +122,10 @@ public class ShadowBee : MonoBehaviour
     {
         /* SetSpineAnimation(m_idle2Animation, false);
          yield return new WaitForAnimationComplete(m_skeletonAnimation.AnimationState, m_idle2Animation);*/
-        StartCoroutine(LaunchShadowBeeProjectiles());
         var timer = m_duration;
         var interval = m_interval;
+       
+        StartCoroutine(LaunchShadowBeeProjectiles());
         while (timer > 0)
         {
             SetSpineAnimation(m_idleAnimation, true);
@@ -161,11 +168,19 @@ public class ShadowBee : MonoBehaviour
         var smoothingFactor = 5f;
         var heightOffset = 7f;
         var someThreshold = 5f;
-        m_parentCharacter = GetComponentInParent<Character>();
-
-        var targetObject = m_parentCharacter;
-        transform.localScale = m_parentCharacter.transform.localScale;
         
+        var targetObject = m_parentCharacter;
+
+        if (m_parentCharacter.transform.localScale.x == 1)
+        {
+            var shadowBeeScale = transform.localScale;
+            shadowBeeScale.x *= -1f;
+            for (int i = 0; i < m_shadowBee.Count; i++)
+            {
+                m_shadowBee[i].transform.localScale = shadowBeeScale;
+            }
+        }
+
         while (true)
         {
             angle -= m_rotationSpeed * Time.deltaTime;
