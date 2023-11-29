@@ -3077,6 +3077,17 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""65f666c0-c635-45a0-b88d-e0379aad16bb"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Submit"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""630ce0fc-55d9-49ad-b6a9-d9f690d4a939"",
                     ""path"": ""<Keyboard>/escape"",
                     ""interactions"": """",
@@ -3099,11 +3110,11 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""196fba44-b8be-4059-86c7-1ceb9376569c"",
+                    ""id"": ""c59d0811-d1bb-444e-a15b-3fc7e134f747"",
                     ""path"": ""<Gamepad>/buttonEast"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Gamepad"",
+                    ""groups"": """",
                     ""action"": ""Cancel"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
