@@ -74,16 +74,17 @@ public class ShadowPetWerewolf : MonoBehaviour
 
     private IEnumerator AttackRoutine()
     {
-        // m_spine.SetAnimation(0, m_idleAnimation, true);
+        var waitSound = 0.01f;
+        yield return new WaitForSeconds(waitSound);
         m_spine.SetAnimation(0, m_summonAnimation, false);//changed to summon animation
         while (!m_groundSensor.isDetecting)
         {
             m_groundSensor.Cast();
             yield return null;
         }
-        //yield return new WaitUntil(() => m_groundSensor.isDetecting);
         var timer = m_runDuration;
-
+        //yield return new WaitUntil(() => m_groundSensor.isDetecting);
+       
         while (timer > 0)
         {
             timer -= Time.deltaTime;
@@ -97,7 +98,7 @@ public class ShadowPetWerewolf : MonoBehaviour
         }
         yield return new WaitForAnimationComplete(m_spine.animationState, m_summonAnimation);
         m_physics.SetVelocity(Vector2.zero);
-        m_spine.EnableRootMotion(true, false);
+        //m_spine.EnableRootMotion(true, false); 
         // m_spine.SetAnimation(0, m_attackAnimation, true);
         var slashCall = "SlashCall";
         m_slashCall.SetTrigger(slashCall);
@@ -136,7 +137,7 @@ public class ShadowPetWerewolf : MonoBehaviour
         m_wallSensorRotator.AlignRotationToFacing(m_parentCharacter.facing);
         m_edgeSensorRotator.AlignRotationToFacing(m_parentCharacter.facing);
         m_enemySensorRotator.AlignRotationToFacing(m_parentCharacter.facing);
-
+      
         StartCoroutine(AttackRoutine());
     }
 
