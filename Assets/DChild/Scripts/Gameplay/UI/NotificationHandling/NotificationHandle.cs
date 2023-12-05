@@ -92,7 +92,11 @@ namespace DChild.Gameplay.UI
 
         public bool HasNotifications() => m_requests.Count > 0;
 
-        
+        public void RemoveAllQueuedNotifications()
+        {
+            m_requests.Clear();
+        }
+
         protected void AddNotificationRequest(NotificationRequest<T> request)
         {
             m_requests.Add(request);
@@ -103,7 +107,9 @@ namespace DChild.Gameplay.UI
         {
             if (x.priority == y.priority)
                 return 0;
-            return x.priority > y.priority ? 1 : -1;
+            return x.priority < y.priority ? 1 : -1;
         }
+
+       
     }
 }

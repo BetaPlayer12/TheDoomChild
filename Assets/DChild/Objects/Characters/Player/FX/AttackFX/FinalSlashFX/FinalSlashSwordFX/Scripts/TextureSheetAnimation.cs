@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class TextureSheetAnimation : MonoBehaviour
@@ -8,16 +9,21 @@ public class TextureSheetAnimation : MonoBehaviour
 
     private int currentFrame = 0;
     private SpriteRenderer spriteRenderer;
-    private Sprite[] sprites;
+    private Sprite sprites;
     private int spriteWidth;
     private int spriteHeight;
 
-    void Start()
+    private void Awake()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
-        sprites = Resources.LoadAll<Sprite>(spriteRenderer.sprite.texture.name);
-        spriteWidth = Mathf.RoundToInt(sprites[0].rect.width);
-        spriteHeight = Mathf.RoundToInt(sprites[0].rect.height);
+        sprites = spriteRenderer.sprite;
+        //sprites = Resources.LoadAll<Sprite>(spriteRenderer.sprite.texture.name);
+    }
+
+    void Start()
+    {
+        spriteWidth = Mathf.RoundToInt(sprites.rect.width);
+        spriteHeight = Mathf.RoundToInt(sprites.rect.height);
         InvokeRepeating("NextFrame", 0, 1 / frameRate);
     }
 
@@ -28,8 +34,8 @@ public class TextureSheetAnimation : MonoBehaviour
         int row = currentFrame / columns;
         int index = row * columns + column;
         spriteRenderer.sprite = Sprite.Create(
-            sprites[index].texture,
-            new Rect(sprites[index].rect.x, sprites[index].rect.y, spriteWidth, spriteHeight),
+            sprites.texture,
+            new Rect(sprites.rect.x, sprites.rect.y, spriteWidth, spriteHeight),
             new Vector2(0.5f, 0.5f),
             spriteRenderer.sprite.pixelsPerUnit
         );

@@ -329,7 +329,8 @@ namespace DChild.Gameplay.Characters.Enemies
             m_flinchHandle.gameObject.SetActive(true);
             m_health.SetHealthPercentage(1f);
             enabled = true;
-            m_animation.SetAnimation(0, m_info.idleAnimation, true);
+            //m_animation.SetAnimation(0, m_info.idleAnimation, true);
+ 
             m_stateHandle.OverrideState(m_targetInfo.isValid ? State.Detect : State.DisassembledIdle);
             yield return null;
         }

@@ -40,6 +40,9 @@ namespace DChild.Gameplay.Characters.Enemies
             public float explosionDelay => m_explosionDelay;
             [SerializeField]
             private float m_explosionRange;
+            [SerializeField]
+            private float m_chargeAttackTolerance;
+            public float chargeAttack => m_chargeAttackTolerance;
             public float explosionRange => m_explosionRange;
             //
             [SerializeField]
@@ -62,6 +65,12 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField]
             private BasicAnimationInfo m_flinchAnimation;
             public BasicAnimationInfo flinchAnimation => m_flinchAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_attackCharge;
+            public BasicAnimationInfo attackCharge => m_attackCharge;
+            [SerializeField]
+            private BasicAnimationInfo m_attackCharge2;
+            public BasicAnimationInfo attackCharge2 => m_attackCharge2;
 
             public override void Initialize()
             {
@@ -73,6 +82,8 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_idleAnimation.SetData(m_skeletonDataAsset);
                 m_deathAnimation.SetData(m_skeletonDataAsset);
                 m_flinchAnimation.SetData(m_skeletonDataAsset);
+                m_attackCharge.SetData(m_skeletonDataAsset);
+                m_attackCharge2.SetData(m_skeletonDataAsset);
 #endif
             }
         }
@@ -80,11 +91,13 @@ namespace DChild.Gameplay.Characters.Enemies
         private enum State
         {
             Detect,
-            ReturnToPatrol,
+            Idle,
+            //ReturnToPatrol,
             Patrol,
             Cooldown,
             Turning,
             Attacking,
+            ChargeAttack,
             Chasing,
             ReevaluateSituation,
             WaitBehaviourEnd,
@@ -93,6 +106,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private enum Attack
         {
             Explosion,
+            Charging,
             [HideInInspector]
             _COUNT
         }
@@ -125,13 +139,21 @@ namespace DChild.Gameplay.Characters.Enemies
         [ShowInInspector]
         private StateHandle<State> m_stateHandle;
         private State m_turnState;
+        [SerializeField]
+        private GameObject m_warningSignal;
+        [SerializeField]
+        private GameObject m_blast;
         [ShowInInspector]
         private RandomAttackDecider<Attack> m_attackDecider;
+        /*[SerializeField]
+        private GameObject m_explodieBB;*/
 
         private float m_currentCD;
         private bool m_isDetecting;
         private Vector2 m_startPos;
         private Vector2 m_lastTargetPos;
+        [SerializeField]
+        private float duration;
 
         private Coroutine m_executeMoveCoroutine;
 
@@ -238,7 +260,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_executeMoveCoroutine = null;
             }
             m_agent.Stop();
-            m_stateHandle.SetState(State.ReturnToPatrol);
+            //m_stateHandle.SetState(State.ReturnToPatrol);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_targetInfo.Set(null, null);
             m_isDetecting = false;
@@ -255,7 +277,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void UpdateAttackDeciderList()
         {
-            m_attackDecider.SetList(new AttackInfo<Attack>(Attack.Explosion, m_info.explosionRange));
+            //m_attackDecider.SetList(new AttackInfo<Attack>(Attack.Explosion, m_info.explosionRange));
+            m_attackDecider.SetList(new AttackInfo<Attack>(Attack.Charging, m_info.chargeAttack));
             m_attackDecider.hasDecidedOnAttack = false;
         }
 
@@ -305,10 +328,44 @@ namespace DChild.Gameplay.Characters.Enemies
             m_hitbox.Disable();
             m_animation.SetAnimation(0, m_info.deathAnimation, false);
             StartCoroutine(ExplodeBBRoutine());
+            yield return new WaitForSeconds(0.1f);
+            m_blast.SetActive(true);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.deathAnimation);
+            //m_explodieBB.SetActive(false);
             enabled = false;
+            yield return new WaitForSeconds(1f);
             this.gameObject.SetActive(false);
             yield return null;
+        }
+        private IEnumerator Charge()
+        {
+            m_animation.SetAnimation(0, m_info.attackCharge, false);
+            yield return new WaitForSeconds(0.4f);
+            m_warningSignal.SetActive(true);
+            yield return new WaitForSeconds(0.5f);
+            m_animation.SetAnimation(0, m_info.attackCharge2, true);
+            m_lastTargetPos.x = m_lastTargetPos.x + 5;
+            m_lastTargetPos.y = m_lastTargetPos.y - 11;
+            if (IsFacing(m_lastTargetPos))
+            {
+                var lerpedValue = 0f;
+
+                while(lerpedValue < duration){
+                    float t = lerpedValue / duration;
+                    transform.position = Vector2.Lerp(transform.position, m_lastTargetPos, t);
+                    lerpedValue += Time.deltaTime;
+                    StartCoroutine(ExplodeRoutine());
+                    yield return null;
+                }
+                transform.position = m_lastTargetPos;
+                //DynamicMovement(m_lastTargetPos, 75);
+                //transform.position = Vector2.MoveTowards(m_startPos, m_lastTargetPos, 20);
+                //m_agent.Move(75);
+            }
+            //transform.eulerAngles += Vector3.forward * Time.deltaTime * 75;
+            //m_rigidbody2D.AddForce(transform.forward * 75);
+            //DynamicMovement(m_targetInfo.position, 75);
+            //yield return null;
         }
         private IEnumerator ExplodeBBRoutine()
         {
@@ -318,6 +375,11 @@ namespace DChild.Gameplay.Characters.Enemies
             m_explodeBB.enabled = false;
             yield return null;
         }
+        /*private IEnumerator AttackCharge()
+        {
+            yield return new WaitForSeconds(m_info.chargeAttack);
+            
+        }*/
 
         #region Attack
         private void ExecuteAttack(Attack m_attack)
@@ -330,9 +392,14 @@ namespace DChild.Gameplay.Characters.Enemies
                 //case Attack.Attack:
                 //    StartCoroutine(AttackRoutine());
                 //    break;
-                case Attack.Explosion:
+                /*case Attack.Explosion:
                     m_lastTargetPos = m_targetInfo.position;
                     StartCoroutine(ExplodeRoutine());
+                    break;*/
+                case Attack.Charging:
+                    m_lastTargetPos = m_targetInfo.position;
+                    m_agent.Stop();
+                    StartCoroutine(Charge());
                     break;
             }
         }
@@ -433,7 +500,11 @@ namespace DChild.Gameplay.Characters.Enemies
                     }
                     break;
 
-                case State.ReturnToPatrol:
+                case State.Idle:
+                    m_agent.Stop();
+                    break;
+
+                /*case State.ReturnToPatrol:
                     if (IsFacing(m_startPos))
                     {
                         if (Vector2.Distance(m_startPos, transform.position) > 10f)
@@ -455,7 +526,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         m_turnState = State.ReturnToPatrol;
                         m_stateHandle.SetState(State.Turning);
                     }
-                    break;
+                    break;*/
 
                 case State.Patrol:
                     m_turnState = State.ReevaluateSituation;
@@ -481,13 +552,20 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_agent.Stop();
                     m_turnHandle.Execute();
                     break;
+
+                /*case State.ChargeAttack:
+                    m_agent.Stop();
+                    m_animation.SetAnimation(0, m_info.attackCharge, false);
+                    break;*/
+
                 case State.Attacking:
                     m_stateHandle.Wait(State.Cooldown);
                     m_animation.SetAnimation(0, m_info.idleAnimation, true);
                     m_agent.Stop();
-                    m_executeMoveCoroutine = StartCoroutine(ExecuteMove(m_info.explosionRange, Attack.Explosion));
+                    m_executeMoveCoroutine = StartCoroutine(ExecuteMove(m_info.chargeAttack, Attack.Charging));
                     m_attackDecider.hasDecidedOnAttack = false;
                     break;
+
                 case State.Cooldown:
                     //m_stateHandle.Wait(State.ReevaluateSituation);
                     if (!IsFacingTarget())
@@ -531,6 +609,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     }
 
                     break;
+
                 case State.Chasing:
                     m_attackDecider.DecideOnAttack();
                     //m_attackDecider.hasDecidedOnAttack = false;
@@ -573,7 +652,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         protected override void OnTargetDisappeared()
         {
-            m_stateHandle.OverrideState(State.ReturnToPatrol);
+            //m_stateHandle.OverrideState(State.ReturnToPatrol);
             m_hitbox.gameObject.SetActive(true);
             m_isDetecting = false;
         }
