@@ -171,7 +171,7 @@ BoxCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 270275236182944617}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Density: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 0
@@ -197,7 +197,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 270275236182944617}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 38f1c154d0bdfe644b279d0b4b6b7d08, type: 3}
   m_Name: 
@@ -324,8 +324,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2519996021435263851}
   - component: {fileID: 6494515743404402933}
-  - component: {fileID: 5254763231106998779}
-  - component: {fileID: 1494741687847410851}
   m_Layer: 13
   m_Name: pelvis63
   m_TagString: Hitbox
@@ -370,49 +368,6 @@ MonoBehaviour:
   zPosition: 1
   overrideAlpha: 1
   hierarchy: {fileID: 5991359388476826111}
---- !u!61 &5254763231106998779
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 467869028185809770}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 1.6311917, y: 0.20899983}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0, y: 0}
-    oldSize: {x: 0, y: 0}
-    newSize: {x: 0, y: 0}
-    adaptiveTilingThreshold: 0
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 3.5455074, y: 1.1599225}
-  m_EdgeRadius: 0
---- !u!114 &1494741687847410851
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 467869028185809770}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 38f1c154d0bdfe644b279d0b4b6b7d08, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_canDetectInteractables: 0
-  m_damageUniqueHitboxesOnly: 0
-  m_collisionRegistrator: {fileID: 0}
-  m_ignoreColliderList: []
-  m_damageInterval: 0
 --- !u!1 &484611051130232896
 GameObject:
   m_ObjectHideFlags: 0
@@ -1783,8 +1738,8 @@ GameObject:
   m_Component:
   - component: {fileID: 9060989651053977772}
   - component: {fileID: 712457127051262447}
-  - component: {fileID: 8468915340159258929}
   - component: {fileID: 4593309946852716806}
+  - component: {fileID: 7923856356485201173}
   m_Layer: 13
   m_Name: pelvis20
   m_TagString: Hitbox
@@ -1829,23 +1784,6 @@ MonoBehaviour:
   zPosition: 1
   overrideAlpha: 1
   hierarchy: {fileID: 5991359388476826111}
---- !u!114 &8468915340159258929
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3069043389500960767}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 38f1c154d0bdfe644b279d0b4b6b7d08, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_canDetectInteractables: 0
-  m_damageUniqueHitboxesOnly: 0
-  m_collisionRegistrator: {fileID: 0}
-  m_ignoreColliderList: []
-  m_damageInterval: 0
 --- !u!61 &4593309946852716806
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1872,6 +1810,22 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 3.0295954, y: 3.1082482}
   m_EdgeRadius: 0
+--- !u!114 &7923856356485201173
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3069043389500960767}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d74578be2c646f438409c91e5fd4ee4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_canDetectInteractables: 0
+  m_damageUniqueHitboxesOnly: 0
+  m_collisionRegistrator: {fileID: 0}
+  m_ignoreColliderList: []
 --- !u!1 &3210036571304022240
 GameObject:
   m_ObjectHideFlags: 0
@@ -2215,7 +2169,6 @@ MonoBehaviour:
   - {fileID: 6722726645316094774}
   - {fileID: 2679254352681244462}
   - {fileID: 5373006639829070925}
-  - {fileID: 5254763231106998779}
   m_damageFXInfo:
     m_fx: {fileID: 6741787421250062945, guid: c6f2a4d9789a0ac488180726f8edd914, type: 3}
     m_overrideColor: 1
@@ -2533,6 +2486,8 @@ GameObject:
   m_Component:
   - component: {fileID: 3296693457323859136}
   - component: {fileID: 4472690827132606088}
+  - component: {fileID: 423572360481618643}
+  - component: {fileID: 7365918336379596842}
   m_Layer: 13
   m_Name: root
   m_TagString: Untagged
@@ -2582,6 +2537,35 @@ MonoBehaviour:
   zPosition: 1
   overrideAlpha: 1
   hierarchy: {fileID: 5991359388476826111}
+--- !u!65 &423572360481618643
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4279438166063489949}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 7.4376554, y: 18.882359, z: 1}
+  m_Center: {x: -0.56201315, y: 11.087069, z: 0}
+--- !u!114 &7365918336379596842
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4279438166063489949}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d74578be2c646f438409c91e5fd4ee4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_canDetectInteractables: 0
+  m_damageUniqueHitboxesOnly: 0
+  m_collisionRegistrator: {fileID: 0}
+  m_ignoreColliderList: []
 --- !u!1 &4290073020038840005
 GameObject:
   m_ObjectHideFlags: 0
@@ -2806,7 +2790,7 @@ GameObject:
   - component: {fileID: 398784696084523032}
   - component: {fileID: 3581181101636561520}
   - component: {fileID: 3845292530217515971}
-  - component: {fileID: 5514665241273657839}
+  - component: {fileID: 4114962262103715702}
   m_Layer: 13
   m_Name: pelvis13
   m_TagString: Hitbox
@@ -2880,7 +2864,7 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 14.003564, y: 6.428238}
   m_EdgeRadius: 0
---- !u!114 &5514665241273657839
+--- !u!114 &4114962262103715702
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2889,14 +2873,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 4647945550356728368}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 38f1c154d0bdfe644b279d0b4b6b7d08, type: 3}
+  m_Script: {fileID: 11500000, guid: 9d74578be2c646f438409c91e5fd4ee4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_canDetectInteractables: 0
   m_damageUniqueHitboxesOnly: 0
   m_collisionRegistrator: {fileID: 0}
   m_ignoreColliderList: []
-  m_damageInterval: 0
 --- !u!1 &4980808444581778813
 GameObject:
   m_ObjectHideFlags: 0
@@ -3820,8 +3803,8 @@ GameObject:
   m_Component:
   - component: {fileID: 571940519277809156}
   - component: {fileID: 8007907622813615442}
-  - component: {fileID: 3820855587654796706}
   - component: {fileID: 5373006639829070925}
+  - component: {fileID: 2111823947754827695}
   m_Layer: 13
   m_Name: pelvis47
   m_TagString: Hitbox
@@ -3866,23 +3849,6 @@ MonoBehaviour:
   zPosition: 1
   overrideAlpha: 1
   hierarchy: {fileID: 5991359388476826111}
---- !u!114 &3820855587654796706
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6219667686332209714}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 38f1c154d0bdfe644b279d0b4b6b7d08, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_canDetectInteractables: 0
-  m_damageUniqueHitboxesOnly: 0
-  m_collisionRegistrator: {fileID: 0}
-  m_ignoreColliderList: []
-  m_damageInterval: 0
 --- !u!61 &5373006639829070925
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -3909,6 +3875,22 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 5.1549335, y: 3.1189196}
   m_EdgeRadius: 0
+--- !u!114 &2111823947754827695
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6219667686332209714}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d74578be2c646f438409c91e5fd4ee4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_canDetectInteractables: 0
+  m_damageUniqueHitboxesOnly: 0
+  m_collisionRegistrator: {fileID: 0}
+  m_ignoreColliderList: []
 --- !u!1 &6264500341379402264
 GameObject:
   m_ObjectHideFlags: 0
@@ -4242,8 +4224,8 @@ GameObject:
   m_Component:
   - component: {fileID: 4504289725539546782}
   - component: {fileID: 5680581440792414472}
-  - component: {fileID: 5792394329001745487}
   - component: {fileID: 6722726645316094774}
+  - component: {fileID: 4540657636662970160}
   m_Layer: 13
   m_Name: pelvis74
   m_TagString: Hitbox
@@ -4288,23 +4270,6 @@ MonoBehaviour:
   zPosition: 1
   overrideAlpha: 1
   hierarchy: {fileID: 5991359388476826111}
---- !u!114 &5792394329001745487
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6652483015524156001}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 38f1c154d0bdfe644b279d0b4b6b7d08, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_canDetectInteractables: 0
-  m_damageUniqueHitboxesOnly: 0
-  m_collisionRegistrator: {fileID: 0}
-  m_ignoreColliderList: []
-  m_damageInterval: 0
 --- !u!61 &6722726645316094774
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -4331,6 +4296,22 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 3.470314, y: 2.2569518}
   m_EdgeRadius: 0
+--- !u!114 &4540657636662970160
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6652483015524156001}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d74578be2c646f438409c91e5fd4ee4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_canDetectInteractables: 0
+  m_damageUniqueHitboxesOnly: 0
+  m_collisionRegistrator: {fileID: 0}
+  m_ignoreColliderList: []
 --- !u!1 &6752870148944584368
 GameObject:
   m_ObjectHideFlags: 0
@@ -4394,7 +4375,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6752870148944584368}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 38f1c154d0bdfe644b279d0b4b6b7d08, type: 3}
   m_Name: 
@@ -4411,7 +4392,7 @@ BoxCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6752870148944584368}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Density: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 0
@@ -4797,7 +4778,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7430367872620915019}
   m_LocalRotation: {x: -0, y: -0, z: -0.36706495, w: 0.93019533}
-  m_LocalPosition: {x: -33.78086, y: 61.44252, z: -1.21875}
+  m_LocalPosition: {x: -33.78086, y: 61.442528, z: -1.21875}
   m_LocalScale: {x: 1, y: -1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5294,7 +5275,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8155247398329541721}
   m_LocalRotation: {x: -0, y: 0, z: -0.4835542, w: 0.8753144}
-  m_LocalPosition: {x: -38.86158, y: 63.661545, z: -1.21875}
+  m_LocalPosition: {x: -38.86158, y: 63.66155, z: -1.21875}
   m_LocalScale: {x: 1, y: -1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -6026,8 +6007,8 @@ GameObject:
   m_Component:
   - component: {fileID: 7287665815039628236}
   - component: {fileID: 1092726287091867256}
-  - component: {fileID: 8507201974015285946}
   - component: {fileID: 5426734312238007512}
+  - component: {fileID: 5818223341058265587}
   m_Layer: 13
   m_Name: pelvis26
   m_TagString: Hitbox
@@ -6072,23 +6053,6 @@ MonoBehaviour:
   zPosition: 1
   overrideAlpha: 1
   hierarchy: {fileID: 5991359388476826111}
---- !u!114 &8507201974015285946
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8975708076676881362}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 38f1c154d0bdfe644b279d0b4b6b7d08, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_canDetectInteractables: 0
-  m_damageUniqueHitboxesOnly: 0
-  m_collisionRegistrator: {fileID: 0}
-  m_ignoreColliderList: []
-  m_damageInterval: 0
 --- !u!61 &5426734312238007512
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -6115,6 +6079,22 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 6.3700504, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &5818223341058265587
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8975708076676881362}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d74578be2c646f438409c91e5fd4ee4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_canDetectInteractables: 0
+  m_damageUniqueHitboxesOnly: 0
+  m_collisionRegistrator: {fileID: 0}
+  m_ignoreColliderList: []
 --- !u!1 &9150417965171079659
 GameObject:
   m_ObjectHideFlags: 0
@@ -6180,7 +6160,7 @@ GameObject:
   - component: {fileID: 5656031083991616145}
   - component: {fileID: 4277570060071237193}
   - component: {fileID: 2679254352681244462}
-  - component: {fileID: 4048965455734157856}
+  - component: {fileID: 338179609922099324}
   m_Layer: 13
   m_Name: pelvis42
   m_TagString: Hitbox
@@ -6251,7 +6231,7 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 11.162565, y: 1}
   m_EdgeRadius: 0
---- !u!114 &4048965455734157856
+--- !u!114 &338179609922099324
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -6260,11 +6240,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 9210251840949980457}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 38f1c154d0bdfe644b279d0b4b6b7d08, type: 3}
+  m_Script: {fileID: 11500000, guid: 9d74578be2c646f438409c91e5fd4ee4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_canDetectInteractables: 0
   m_damageUniqueHitboxesOnly: 0
   m_collisionRegistrator: {fileID: 0}
   m_ignoreColliderList: []
-  m_damageInterval: 0
