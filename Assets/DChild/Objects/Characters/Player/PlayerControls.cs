@@ -2066,8 +2066,8 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": ""Gamepad"",
-                    ""id"": ""1cf72b06-afa4-4079-a97c-b8fe886aed4f"",
-                    ""path"": ""TwoModifiers"",
+                    ""id"": ""5f63db05-9b3f-461e-a6c6-8e0cd4cfc126"",
+                    ""path"": ""OneModifier"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -2076,8 +2076,8 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""name"": ""modifier1"",
-                    ""id"": ""2c9935f1-3935-413e-bc73-370bf117abf9"",
+                    ""name"": ""modifier"",
+                    ""id"": ""aa2574ba-1ce6-4c0e-9c88-dee3e470be0f"",
                     ""path"": ""<Gamepad>/rightTrigger"",
                     ""interactions"": """",
                     ""processors"": """",
@@ -2087,20 +2087,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""name"": ""modifier2"",
-                    ""id"": ""7332995d-12a4-4eea-b71a-068caeffc01a"",
-                    ""path"": ""<Gamepad>/leftStick/down"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""AirSlashCombo"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
                     ""name"": ""binding"",
-                    ""id"": ""a35ac268-66d6-4ddb-aa40-2dc0e986049e"",
-                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""id"": ""695840d8-74fd-4470-bf80-22655a2064b7"",
+                    ""path"": ""<Gamepad>/buttonWest"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
