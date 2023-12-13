@@ -18,7 +18,11 @@ public class ShadowPetWerewolf : MonoBehaviour
     [SerializeField]
     private float m_duration;
     [SerializeField]
+    private float m_spawnOffset;
+    [SerializeField]
     private SpineRootAnimation m_spine;
+    [SerializeField]
+    private Animator m_slashCall;
 #if UNITY_EDITOR
     [SerializeField]
     private SkeletonAnimation m_skeletonAnimation;
@@ -32,7 +36,7 @@ public class ShadowPetWerewolf : MonoBehaviour
     [SerializeField, Spine.Unity.SpineAnimation(dataField = "m_skeletonAnimation")]
     private string m_detectAnimation;
     [SerializeField, Spine.Unity.SpineAnimation(dataField = "m_skeletonAnimation")]
-    private string m_moveAnimation;
+    private string m_summonAnimation;
     [SerializeField, Spine.Unity.SpineAnimation(dataField = "m_skeletonAnimation")]
     private string m_idleAnimation;
     [SerializeField, Spine.Unity.SpineAnimation(dataField = "m_skeletonAnimation")]
@@ -70,19 +74,21 @@ public class ShadowPetWerewolf : MonoBehaviour
 
     private IEnumerator AttackRoutine()
     {
-        m_spine.SetAnimation(0, m_idleAnimation, true);
+        var waitSound = 0.01f;
+        yield return new WaitForSeconds(waitSound);
+        m_spine.SetAnimation(0, m_summonAnimation, false);//changed to summon animation
         while (!m_groundSensor.isDetecting)
         {
             m_groundSensor.Cast();
             yield return null;
         }
-        //yield return new WaitUntil(() => m_groundSensor.isDetecting);
         var timer = m_runDuration;
-        m_spine.SetAnimation(0, m_moveAnimation, true);
+        //yield return new WaitUntil(() => m_groundSensor.isDetecting);
+       
         while (timer > 0)
         {
             timer -= Time.deltaTime;
-            m_physics.SetVelocity(m_runSpeed * transform.localScale.x, m_physics.velocity.y);
+            // m_physics.SetVelocity(m_runSpeed * transform.localScale.x, m_physics.velocity.y);
             m_wallSensor.Cast();
             m_edgeSensor.Cast();
             m_enemySensor.Cast();
@@ -90,17 +96,21 @@ public class ShadowPetWerewolf : MonoBehaviour
                 timer = 0;
             yield return null;
         }
+        yield return new WaitForAnimationComplete(m_spine.animationState, m_summonAnimation);
         m_physics.SetVelocity(Vector2.zero);
-        m_spine.EnableRootMotion(true, false);
-        m_spine.SetAnimation(0, m_attackAnimation, true);
+        //m_spine.EnableRootMotion(true, false); 
+        // m_spine.SetAnimation(0, m_attackAnimation, true);
+        var slashCall = "SlashCall";
+        m_slashCall.SetTrigger(slashCall);
+        m_spine.SetAnimation(0, m_attackAnimation, false);
         m_pounceBB.enabled = true;
         yield return new WaitForAnimationComplete(m_spine.animationState, m_attackAnimation);
         m_pounceBB.enabled = false;
         //yield return new WaitForSeconds(m_duration);
         //m_spine.SetAnimation(0, m_idleAnimation, false);
         //yield return new WaitForAnimationComplete(m_spine.animationState, m_idleAnimation);
-        m_spine.SetAnimation(0, m_deathAnimation, false).MixDuration = 0f;
-        yield return new WaitForAnimationComplete(m_spine.animationState, m_deathAnimation);
+        //m_spine.SetAnimation(0, m_deathAnimation, false).MixDuration = 0f;
+        //yield return new WaitForAnimationComplete(m_spine.animationState, m_deathAnimation);
         m_eventHandler.PetDesummon();
         m_projectile.CallPoolRequest();
         yield return null;
@@ -112,13 +122,22 @@ public class ShadowPetWerewolf : MonoBehaviour
             m_parentCharacter = GetComponentInParent<Character>();
         transform.SetParent(null);
         transform.localScale = new Vector3(m_parentCharacter.facing == HorizontalDirection.Right ? 1 : -1, 1, 1);
+        if (m_parentCharacter.facing == HorizontalDirection.Left)
+        {
+            transform.position = new Vector3(m_parentCharacter.transform.position.x - m_spawnOffset,
+                m_parentCharacter.transform.position.y, m_parentCharacter.transform.position.z);
+        }
+        else
+        {
+            transform.position = new Vector3(m_parentCharacter.transform.position.x + m_spawnOffset,
+                m_parentCharacter.transform.position.y, m_parentCharacter.transform.position.z);
+        }
         m_physics.SetVelocity(Vector2.zero);
-
         m_groundSensorRotator.AlignRotationToFacing(m_parentCharacter.facing);
         m_wallSensorRotator.AlignRotationToFacing(m_parentCharacter.facing);
         m_edgeSensorRotator.AlignRotationToFacing(m_parentCharacter.facing);
         m_enemySensorRotator.AlignRotationToFacing(m_parentCharacter.facing);
-
+      
         StartCoroutine(AttackRoutine());
     }
 
