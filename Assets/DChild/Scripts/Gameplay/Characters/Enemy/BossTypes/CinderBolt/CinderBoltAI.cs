@@ -217,9 +217,6 @@ namespace DChild.Gameplay.Characters.Enemies
 
             [Title("Events")]
             //[SerializeField, ValueDropdown("GetEvents")]
-            //private string m_lichOrbStartFXEvent;
-            //public string lichOrbStartFXEvent => m_lichOrbStartFXEvent;
-            //[SerializeField, ValueDropdown("GetEvents")]
             //private string m_mapCurseEvent;
             //public string mapCurseEvent => m_mapCurseEvent;
             //[SerializeField, ValueDropdown("GetEvents")]
@@ -331,15 +328,9 @@ namespace DChild.Gameplay.Characters.Enemies
         private ParticleFX m_ghostOrbStartFX;
         [SerializeField, TabGroup("FX")]
         private ParticleFX m_mapCurseFX;
-        [SerializeField, TabGroup("FX")]
-        private ParticleFX m_lichArmGroundFX;
 
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_groundSensor;
-        [SerializeField]
-        private Transform m_lichLordArmTF;
-        [SerializeField, TabGroup("Spawn Points")]
-        private Collider2D m_randomSpawnCollider;
         [SerializeField, TabGroup("Spawn Points")]
         private List<Transform> m_projectilePoints;
         [SerializeField, TabGroup("Spawn Points")]
@@ -348,8 +339,6 @@ namespace DChild.Gameplay.Characters.Enemies
         private List<Transform> m_lichLordPortPoints;
         [SerializeField, TabGroup("Spawn Points")]
         private Transform m_playerP3Point;
-        [SerializeField, TabGroup("Spawn Points")]
-        private Transform m_lichP3Point;
 
 
         [SerializeField]
@@ -368,8 +357,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private Attack m_currentAttack;
         private ProjectileLauncher m_projectileLauncher;
 
-        [SerializeField, TabGroup("Spawn Points")]
-        private Transform m_projectilePoint;
+        //[SerializeField, TabGroup("Spawn Points")]
+        //private Transform m_projectilePoint;
 
         private int m_hitCount;
         private bool m_hasPhaseChanged;
@@ -414,6 +403,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         public override void SetTarget(IDamageable damageable, Character m_target = null)
         {
+            Debug.Log("CinderBolt detected the Player");
             if (damageable != null)
             {
                 base.SetTarget(damageable, m_target);
@@ -479,12 +469,6 @@ namespace DChild.Gameplay.Characters.Enemies
             enabled = true;
         }
 
-        private Vector2 GroundPosition()
-        {
-            RaycastHit2D hit = Physics2D.Raycast(m_randomSpawnCollider.bounds.center, Vector2.down, 1000, DChildUtility.GetEnvironmentMask());
-            return hit.point;
-        }
-
         protected override void OnDestroyed(object sender, EventActionArgs eventArgs)
         {
             base.OnDestroyed(sender, eventArgs);
@@ -534,19 +518,6 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_stateHandle.OverrideState(State.Turning);
                 }
             }
-        }
-
-        private Vector3 RandomTeleportPoint(Vector3 transformPos)
-        {
-            Vector3 randomPos = transformPos;
-            while (Vector2.Distance(transformPos, randomPos) <= Random.Range(25f, 50f))
-            {
-                randomPos = m_randomSpawnCollider.bounds.center + new Vector3(
-               (UnityEngine.Random.value - 0.5f) * m_randomSpawnCollider.bounds.size.x,
-               (UnityEngine.Random.value - 0.5f) * m_randomSpawnCollider.bounds.size.y,
-               (UnityEngine.Random.value - 0.5f) * m_randomSpawnCollider.bounds.size.z);
-            }
-            return randomPos;
         }
         #endregion
 
@@ -681,7 +652,6 @@ namespace DChild.Gameplay.Characters.Enemies
         protected override void Start()
         {
             base.Start();
-            //m_spineListener.Subscribe(m_info.lichOrbStartFXEvent, m_ghostOrbStartFX.Play);
             //m_spineListener.Subscribe(m_info.ghostOrbProjectile.launchOnEvent, LaunchOrb);
             //m_spineListener.Subscribe(m_info.mapCurseEvent, MapCurse);
             //m_spineListener.Subscribe(m_info.summonTotemEvent, SummonTotemObject);
@@ -691,11 +661,8 @@ namespace DChild.Gameplay.Characters.Enemies
             m_phaseHandle.Initialize(Phase.PhaseOne, m_info.phaseInfo, m_character, ChangeState, ApplyPhaseData);
             m_phaseHandle.ApplyChange();
 
-            m_lichLordArmTF.SetParent(null);
-            m_lichLordArmTF.GetComponentInChildren<SkeletonRenderer>().maskInteraction = SpriteMaskInteraction.VisibleOutsideMask;
-
             //TESTING
-            m_projectilePoint.SetParent(null);
+            //m_projectilePoint.SetParent(null);
         }
 
         private void Update()
@@ -729,8 +696,6 @@ namespace DChild.Gameplay.Characters.Enemies
                     {
                         m_stateHandle.Wait(State.ReevaluateSituation);
                         m_agent.Stop();
-                        var randomFacing = UnityEngine.Random.Range(0, 2) == 1 ? 1 : -1;
-                        var target = new Vector2(m_targetInfo.position.x, GroundPosition().y /*m_startGroundPos*/);
                         switch (m_currentPattern)
                         {
                             case Pattern.AttackPattern1:

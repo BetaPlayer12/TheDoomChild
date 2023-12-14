@@ -337,6 +337,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 7553733668482402655}
     m_Modifications:
+    - target: {fileID: 1128537118752964676, guid: cdcc8d1f281f8d848ae97ce6d8289865,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.5954244
+      objectReference: {fileID: 0}
     - target: {fileID: 2953787709214504872, guid: cdcc8d1f281f8d848ae97ce6d8289865,
         type: 3}
       propertyPath: rb
@@ -360,11 +365,26 @@ PrefabInstance:
     - target: {fileID: 6985429775184974478, guid: cdcc8d1f281f8d848ae97ce6d8289865,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.9923477
+      value: 0.9923458
+      objectReference: {fileID: 0}
+    - target: {fileID: 6985429775184974478, guid: cdcc8d1f281f8d848ae97ce6d8289865,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 6.2748566
       objectReference: {fileID: 0}
     - target: {fileID: 8458946101466059043, guid: cdcc8d1f281f8d848ae97ce6d8289865,
         type: 3}
       propertyPath: m_RootOrder
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8458946101466059043, guid: cdcc8d1f281f8d848ae97ce6d8289865,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8458946101466059043, guid: cdcc8d1f281f8d848ae97ce6d8289865,
+        type: 3}
+      propertyPath: m_LocalScale.y
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8458946101466059043, guid: cdcc8d1f281f8d848ae97ce6d8289865,
@@ -599,7 +619,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a4f98d48509856d43946b8a85c3080ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_data: {fileID: 11400000, guid: 0a14baa3378262449ac8cdb1fcf7868d, type: 2}
+  m_data: {fileID: 11400000, guid: e4860f4325cf48b4e806de7ff4004bcd, type: 2}
   m_health: {fileID: 6238420546596126857}
 --- !u!114 &854086687903300154
 MonoBehaviour:
@@ -663,6 +683,41 @@ MonoBehaviour:
       damageModifier: 0
     ignoreInvulnerability: 0
     ignoresBlock: 0
+--- !u!114 &2337173913192775073
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 456403409269378221}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8df101f1a2b0dcb4080a693309afd41e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_character: {fileID: 6673191782412014210}
+  m_animation: {fileID: 6708388900638230557}
+  m_data: {fileID: 11400000, guid: e5834261fc703eb419887ebb0ebc64dc, type: 2}
+  m_damageable: {fileID: 8874620538674881531}
+  m_centerMass: {fileID: 4688733863306906594}
+  m_aggroBoundary: {fileID: 0}
+  m_statsData: {fileID: 11400000, guid: ffdd353187bd7a4408abe8b62c743b3d, type: 2}
+  m_boss: {fileID: 770157725716695363}
+  m_hitbox: {fileID: 1055513724180395066}
+  m_turnHandle: {fileID: 3051475739366659361}
+  m_deathHandle: {fileID: 8871813555739484705}
+  m_agent: {fileID: 3743428441413967647}
+  m_health: {fileID: 6238420546596126857}
+  m_flinchHandle: {fileID: 5108109798462968268}
+  m_ghostOrbStartFX: {fileID: 0}
+  m_mapCurseFX: {fileID: 0}
+  m_groundSensor: {fileID: 1447829077149774311}
+  m_randomSpawnCollider: {fileID: 0}
+  m_projectilePoints: []
+  m_skeletalArmPoints: []
+  m_lichLordPortPoints: []
+  m_playerP3Point: {fileID: 0}
+  m_spineListener: {fileID: 6395979063530527456}
 --- !u!114 &4942574551524641634
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -788,45 +843,6 @@ MonoBehaviour:
   m_centerMass: {fileID: 4688733863306906594}
   m_health: {fileID: 6238420546596126857}
   m_resistance: {fileID: 0}
---- !u!114 &2337173913192775073
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 456403409269378221}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8df101f1a2b0dcb4080a693309afd41e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_character: {fileID: 6673191782412014210}
-  m_animation: {fileID: 6708388900638230557}
-  m_data: {fileID: 11400000, guid: e5834261fc703eb419887ebb0ebc64dc, type: 2}
-  m_damageable: {fileID: 8874620538674881531}
-  m_centerMass: {fileID: 4688733863306906594}
-  m_aggroBoundary: {fileID: 0}
-  m_statsData: {fileID: 11400000, guid: ffdd353187bd7a4408abe8b62c743b3d, type: 2}
-  m_boss: {fileID: 770157725716695363}
-  m_hitbox: {fileID: 1055513724180395066}
-  m_turnHandle: {fileID: 3051475739366659361}
-  m_deathHandle: {fileID: 8871813555739484705}
-  m_agent: {fileID: 3743428441413967647}
-  m_health: {fileID: 6238420546596126857}
-  m_flinchHandle: {fileID: 5108109798462968268}
-  m_ghostOrbStartFX: {fileID: 0}
-  m_mapCurseFX: {fileID: 0}
-  m_lichArmGroundFX: {fileID: 0}
-  m_groundSensor: {fileID: 1447829077149774311}
-  m_lichLordArmTF: {fileID: 0}
-  m_randomSpawnCollider: {fileID: 0}
-  m_projectilePoints: []
-  m_skeletalArmPoints: []
-  m_lichLordPortPoints: []
-  m_playerP3Point: {fileID: 0}
-  m_lichP3Point: {fileID: 0}
-  m_spineListener: {fileID: 6395979063530527456}
-  m_projectilePoint: {fileID: 0}
 --- !u!50 &3470211537542066452 stripped
 Rigidbody2D:
   m_CorrespondingSourceObject: {fileID: 7845266558353687049, guid: 581273cea94d1294a9c56f1ba54042dc,
