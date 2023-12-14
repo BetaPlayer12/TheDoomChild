@@ -11,8 +11,8 @@ using UnityEngine;
 
 public class ShadowPetEyeBat : MonoBehaviour
 {
-    [SerializeField]
-    private float m_duration;
+    //[SerializeField]
+    //private float m_duration;
     [SerializeField]
     private float m_followSpeed;
     private Transform m_parentTF;
@@ -29,9 +29,9 @@ public class ShadowPetEyeBat : MonoBehaviour
 #endif
 
     [SerializeField, Spine.Unity.SpineAnimation(dataField = "m_skeletonAnimation")]
-    private string m_idleAnimation;
-    [SerializeField, Spine.Unity.SpineAnimation(dataField = "m_skeletonAnimation")]
     private string m_attackAnimation;
+    [SerializeField, Spine.Unity.SpineAnimation(dataField = "m_skeletonAnimation")]
+    private string m_idleAnimation;
     [SerializeField, Spine.Unity.SpineAnimation(dataField = "m_skeletonAnimation")]
     private string m_deathAnimation;
 
@@ -53,11 +53,16 @@ public class ShadowPetEyeBat : MonoBehaviour
     private Transform m_lazerOrigin;
     [SerializeField, TabGroup("Lazer")]
     private float m_lazerDuration;
+    [SerializeField, TabGroup("Lazer")]
+    private GameObject m_lazerAnimation;
+    [SerializeField, TabGroup("Lazer")]
+    private SpineEventListener m_spineEventListener;
 
     private Vector2 m_lazerTargetPos;
     private bool m_beamOn;
     private bool m_aimOn;
     private bool m_willFollow;
+    private string m_clipName;
 
     private List<Vector2> m_Points;
     private IEnumerator m_aimRoutine;
@@ -73,6 +78,7 @@ public class ShadowPetEyeBat : MonoBehaviour
 
     private IEnumerator LazerRoutine()
     {
+        yield return new WaitForSeconds(.1f);
         transform.localScale = Vector3.one;
         m_spine.SetAnimation(0, m_attackAnimation, false);
         //StartCoroutine(TelegraphLineRoutine());
@@ -86,7 +92,8 @@ public class ShadowPetEyeBat : MonoBehaviour
         m_aimOn = false;
 
         m_beamOn = true;
-        yield return new WaitForAnimationComplete(m_spine.animationState, m_attackAnimation);
+        Animator anim = m_lazerAnimation.GetComponent<Animator>();
+        anim.Play("Start");
 
         m_spine.SetAnimation(0, m_idleAnimation, true);
 
