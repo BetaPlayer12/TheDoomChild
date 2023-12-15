@@ -67,6 +67,9 @@ namespace DChild.Gameplay.Systems
         [SerializeField]
         private WeaponUpgradeHandle m_upgradeWeaponHandler;
 
+        [SerializeField]
+        private UIView m_cinematicBars;
+
         public IUINotificationManager notificationManager => m_notificationManager;
 
         public void ToggleCinematicMode(bool on, bool instant)
@@ -77,6 +80,14 @@ namespace DChild.Gameplay.Systems
             {
                 m_playerHUD.InstantHide();
             }
+        }
+
+        public void ToggleCinematicBars(bool value)
+        {
+            if (value)
+                m_cinematicBars.InstantHide();
+            else
+                m_cinematicBars.Show();
         }
 
         public void UpdateNavMapConfiguration(Location location, int sceneIndex, Transform inGameReference, Vector2 mapReferencePoint, Vector2 calculationOffset)
