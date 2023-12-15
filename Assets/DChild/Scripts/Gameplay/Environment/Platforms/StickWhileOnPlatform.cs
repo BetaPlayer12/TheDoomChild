@@ -41,15 +41,10 @@ namespace DChild.Gameplay.Environment
                 {
                     if (collision.rigidbody.gameObject.layer == 8)
                     {
-
+                        collision.rigidbody.transform.parent = null;
                     }
                     else
                     {
-                        if (collision.rigidbody.transform.parent != null)
-                        {
-                            collision.rigidbody.transform.parent = null;
-
-                        }
                         if (m_originalParentPair.ContainsKey(collision.collider) == false)
                         {
                             var cache = Cache<ParentInfo>.Claim();
