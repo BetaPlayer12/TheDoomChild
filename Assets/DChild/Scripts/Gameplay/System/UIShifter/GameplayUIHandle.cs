@@ -82,12 +82,32 @@ namespace DChild.Gameplay.Systems
             }
         }
 
+        public void ToggleCinematicMode(bool on, bool withBars, bool instant = false)
+        {           
+            if (on && instant)
+            {
+                m_playerHUD.InstantHide();
+            }
+
+            if (withBars)
+            {
+                m_cinemaSignal.Payload.booleanValue = on;
+                m_cinemaSignal.SendSignal();
+            }
+        }
+
         public void ToggleCinematicBars(bool value)
         {
             if (value)
-                m_cinematicBars.InstantHide();
-            else
+            {
                 m_cinematicBars.Show();
+                m_playerHUD.InstantHide();
+            }
+            else
+            {
+                m_cinematicBars.Hide();
+                m_playerHUD.InstantShow();
+            }
         }
 
         public void UpdateNavMapConfiguration(Location location, int sceneIndex, Transform inGameReference, Vector2 mapReferencePoint, Vector2 calculationOffset)
