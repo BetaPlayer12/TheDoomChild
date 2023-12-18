@@ -1,8 +1,8 @@
 using DChild.Gameplay;
+using DChild.Menu;
 using Sirenix.Serialization;
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
@@ -13,14 +13,6 @@ namespace DChild.Testing.PreAlpha
     public class PlayerActivityTracker : MonoBehaviour
     {
 
-    }
-
-    public class PlayerDeathCountTracker: MonoBehaviour
-    {
-        private void Start()
-        {
-            
-        }
     }
 
     public class PreAlphaSerializer : MonoBehaviour
@@ -65,7 +57,8 @@ namespace DChild.Testing.PreAlpha
     [System.Serializable]
     public class PreAlphaData
     {
-
+        [SerializeField]
+        private PlayerDeathCountTracker.SaveData m_deathCount;
     }
 
 }
