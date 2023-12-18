@@ -20,24 +20,9 @@ namespace DChild.Gameplay
             GameplaySystem.gamplayUIHandle.ToggleCinematicMode(value);
         }
 
-        public void DoCinematicUIModeWithCinematicBars(bool value)
-        {
-            GameplaySystem.gamplayUIHandle.ToggleCinematicMode(value, value);
-        }
-
         public void ToggleCinematicBars(bool value)
         {
             GameplaySystem.gamplayUIHandle.ToggleCinematicBars(value);
-        }
-
-        public void ForceCinematicUIMode()
-        {
-            GameplaySystem.gamplayUIHandle.ToggleCinematicMode(true, true, true);
-        }
-
-        public void ForceCinematicModeWithoutBars()
-        {
-            GameplaySystem.gamplayUIHandle.ToggleCinematicMode(true, true, false);
         }
 
         public void ToggleBossCombatUI(bool value)

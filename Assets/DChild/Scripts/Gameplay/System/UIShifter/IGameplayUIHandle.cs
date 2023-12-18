@@ -15,7 +15,7 @@ namespace DChild.Gameplay.Systems
     {
         IUINotificationManager notificationManager { get; }
 
-        void ToggleCinematicMode(bool on, bool withBars = false, bool instant = false);
+        void ToggleCinematicMode(bool on, bool instant = false);
 
         public void ToggleCinematicBars(bool value);
 

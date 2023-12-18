@@ -82,20 +82,6 @@ namespace DChild.Gameplay.Systems
             }
         }
 
-        public void ToggleCinematicMode(bool on, bool withBars, bool instant = false)
-        {           
-            if (on && instant)
-            {
-                m_playerHUD.InstantHide();
-            }
-
-            if (withBars)
-            {
-                m_cinemaSignal.Payload.booleanValue = on;
-                m_cinemaSignal.SendSignal();
-            }
-        }
-
         public void ToggleCinematicBars(bool value)
         {
             if (value)
