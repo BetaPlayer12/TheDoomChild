@@ -40,7 +40,7 @@ namespace DChild.Testing.PreAlpha
                 fileName = $"PRa{id}";
             }
 
-            return $"{Application.persistentDataPath}/{fileName}.txt";
+            return $"{Application.persistentDataPath}/{fileName}.tdcqa";
         }
 
         private void Save()

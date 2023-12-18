@@ -81,12 +81,12 @@ namespace DChild.Gameplay.Inventories
                 {
                     m_currentItemData.Use(m_player);
                     m_cooldown.StartCooldown();
+                    ItemUsed?.Invoke(m_currentItemData.itemName);
                 }
                 if (m_removeItemCountOnConsume)
                 {
                     m_itemCountRemover.Remove(m_currentItem.data, 1);
                 }
-                ItemUsed?.Invoke(m_currentItemData.itemName);
             }
         }
 

@@ -54,13 +54,26 @@ namespace DChild.Testing.PreAlpha
 
         public void Load(SaveData data)
         {
+            if (m_itemUsedPair == null)
+            {
+                m_itemUsedPair = new Dictionary<string, int>();
+            }
 
+            m_itemUsedPair.Clear();
+            var infos = data.infos;
+            foreach (var info in infos)
+            {
+                m_itemUsedPair.Add(info.item, info.useCount);
+            }
         }
 
 
         private void Start()
         {
-            m_itemUsedPair = new Dictionary<string, int>();
+            if (m_itemUsedPair == null)
+            {
+                m_itemUsedPair = new Dictionary<string, int>();
+            }
             m_quickItemHandle.ItemUsed += OnItemUsed;
             m_usableInventoryItemHandle.ItemUsed += OnItemUsed;
         }

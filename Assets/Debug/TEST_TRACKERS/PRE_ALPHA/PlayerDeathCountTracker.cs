@@ -13,14 +13,33 @@ namespace DChild.Testing.PreAlpha
         [System.Serializable]
         public class SaveData
         {
-            private Dictionary<string, int> m_sceneDeathCountPair;
-
-            public SaveData(Dictionary<string, int> sceneDeathCountPair)
+            [System.Serializable]
+            public class Info
             {
-                this.m_sceneDeathCountPair = sceneDeathCountPair;
+                public string scene;
+                public int count;
+
+                public Info(string scene, int count)
+                {
+                    this.scene = scene;
+                    this.count = count;
+                }
             }
 
-            public Dictionary<string, int> sceneDeathCountPair => m_sceneDeathCountPair;
+            [SerializeField]
+            private Info[] m_infos;
+            public SaveData(Dictionary<string, int> sceneDeathCountPair)
+            {
+                m_infos = new Info[sceneDeathCountPair.Count];
+                int i = 0;
+                foreach (var item in sceneDeathCountPair)
+                {
+                    m_infos[i] = new Info(item.Key, item.Value);
+                    i++;
+                }
+            }
+
+            public Info[] infos => m_infos;
         }
 
 
@@ -30,7 +49,17 @@ namespace DChild.Testing.PreAlpha
 
         public void Load(SaveData data)
         {
+            if (m_sceneDeathCountPair == null)
+            {
+                m_sceneDeathCountPair = new Dictionary<string, int>();
+            }
 
+            m_sceneDeathCountPair.Clear();
+            var infos = data.infos;
+            foreach (var info in infos)
+            {
+                m_sceneDeathCountPair.Add(info.scene, info.count);
+            }
         }
 
         private void OnPlayerDeath(object sender, EventActionArgs eventArgs)
@@ -48,7 +77,10 @@ namespace DChild.Testing.PreAlpha
 
         private void Start()
         {
-            m_sceneDeathCountPair = new Dictionary<string, int>();
+            if (m_sceneDeathCountPair == null)
+            {
+                m_sceneDeathCountPair = new Dictionary<string, int>();
+            }
             GameplaySystem.playerManager.player.damageableModule.Destroyed += OnPlayerDeath;
         }
 
