@@ -2,6 +2,7 @@
 using DChild.Gameplay.Items;
 using Doozy.Runtime.UIManager.Components;
 using Holysoft.Event;
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -17,6 +18,10 @@ namespace DChild.Gameplay.Inventories.UI
         private UsableItemData m_item;
 
         public event EventAction<EventActionArgs> AllItemCountConsumed;
+
+        #region PRE_ALPHA
+        public event Action<string> ItemUsed;
+        #endregion
 
         public void Show()
         {
@@ -43,6 +48,7 @@ namespace DChild.Gameplay.Inventories.UI
                 {
                     AllItemCountConsumed?.Invoke(this, EventActionArgs.Empty);
                 }
+                ItemUsed?.Invoke(m_item.itemName);
             }
         }
 

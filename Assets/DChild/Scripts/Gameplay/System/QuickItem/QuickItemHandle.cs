@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using DChild.Gameplay.Characters.Players;
 using DChild.Gameplay.Items;
 using Doozy.Runtime.Nody;
@@ -60,6 +61,10 @@ namespace DChild.Gameplay.Inventories
         public event EventAction<SelectionEventArgs> SelectedItem;
         public event EventAction<SelectionEventArgs> Update;
 
+        #region PRE_ALPHA
+        public event Action<string> ItemUsed;
+        #endregion
+
 
         public bool isWrapped => m_wrapped;
         public int currentIndex => m_currentIndex;
@@ -81,6 +86,7 @@ namespace DChild.Gameplay.Inventories
                 {
                     m_itemCountRemover.Remove(m_currentItem.data, 1);
                 }
+                ItemUsed?.Invoke(m_currentItemData.itemName);
             }
         }
 
