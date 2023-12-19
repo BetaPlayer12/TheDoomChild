@@ -28,6 +28,12 @@ namespace DChildDebug
 
         public void ResetSaves()
         {
+            for (int i = 0; i < m_datas.Length; i++)
+            {
+                m_datas[i].slot.Reset();
+                m_datas[i].SaveToFile();
+            }
+
             ForceSystemSaveUpdate();
             var campaignSelect = FindObjectOfType<CampaignSelect>();
             campaignSelect.ReloadSlots();
