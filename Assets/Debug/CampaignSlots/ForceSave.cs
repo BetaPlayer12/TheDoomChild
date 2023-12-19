@@ -1,4 +1,5 @@
 ﻿using DChild;
+using DChild.Menu;
 using DChild.Serialization;
 using System.Collections;
 using System.Collections.Generic;
@@ -24,6 +25,14 @@ namespace DChildDebug
                 m_datas[i].SaveToFile();
             }
         }
+
+        public void ResetSaves()
+        {
+            ForceSystemSaveUpdate();
+            var campaignSelect = FindObjectOfType<CampaignSelect>();
+            //campaignSelect.ReloadSlots();
+        }
+
         private void Awake()
         {
             if (m_loadSaveOnAwake)
