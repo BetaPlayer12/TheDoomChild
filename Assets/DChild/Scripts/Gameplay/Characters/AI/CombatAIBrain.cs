@@ -120,7 +120,10 @@ namespace DChild.Gameplay.Characters.AI
         {
             if (m_targetInfo.doesTargetExist == false)
             {
-                m_aggroBoundary.gameObject.SetActive(false);
+                if (m_aggroBoundary != null)
+            { 
+                    m_aggroBoundary.gameObject.SetActive(false);
+            }
                 SetTarget(null);
                 m_currentRestrictions |= Restriction.IgnoreTarget;
             }
@@ -131,9 +134,14 @@ namespace DChild.Gameplay.Characters.AI
         }
         public void SetActive()
         {
-            m_aggroBoundary.gameObject.SetActive(true);
-            m_currentRestrictions &= ~Restriction.IgnoreTarget;
-            this.enabled = true;
+
+            if (m_aggroBoundary != null)
+            {
+                m_aggroBoundary.gameObject.SetActive(true);
+                m_currentRestrictions &= ~Restriction.IgnoreTarget;
+                this.enabled = true;
+            }
+            
         }
 
         /// <summary>
