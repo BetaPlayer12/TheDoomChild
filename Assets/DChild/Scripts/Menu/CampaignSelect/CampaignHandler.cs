@@ -29,6 +29,11 @@ namespace DChild.Menu
             m_deleteRequester.Execute(OnDeleteAffirmed);
         }
 
+        public void RequestReset()
+        {
+            m_deleteRequester.Execute(OnResetAffirmed);
+        }
+
         public void Play()
         {
             LoadingHandle.SetLoadType(LoadingHandle.LoadType.Force);
@@ -47,6 +52,13 @@ namespace DChild.Menu
                 SerializationHandle.DeleteCampaignSlot(m_selectedSlotID);
             }
             SerializationHandle.SaveCampaignSlot(m_defaultSave.slot.id, m_defaultSave.slot);
+        }
+
+        private void OnResetAffirmed(object sender, EventActionArgs eventArgs)
+        {
+            var m_saveManager = FindObjectOfType<ForceSave>();
+
+            m_saveManager.ResetSaves();
         }
 
         protected override void Awake()

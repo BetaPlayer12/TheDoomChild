@@ -30,7 +30,7 @@ namespace DChildDebug
         {
             ForceSystemSaveUpdate();
             var campaignSelect = FindObjectOfType<CampaignSelect>();
-            //campaignSelect.ReloadSlots();
+            campaignSelect.ReloadSlots();
         }
 
         private void Awake()
