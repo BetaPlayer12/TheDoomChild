@@ -51,7 +51,7 @@ namespace DChild.Gameplay.Inventories
         private FlowController m_graph;
         [SerializeField]
         private QuickItemCooldown m_cooldown;
-        [SerializeField]
+
         private bool m_removeItemCountOnConsume;
         private IStoredItem m_currentItem;
         private ConsumableItemData m_currentItemData;
@@ -247,7 +247,7 @@ namespace DChild.Gameplay.Inventories
             {
                 m_currentItem = m_selections.GetItem(m_currentIndex);
             }
-            //m_removeItemCountOnConsume = true;
+            m_removeItemCountOnConsume = true;
         }
 
         private void Start()

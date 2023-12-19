@@ -12,8 +12,6 @@ namespace DChild.Gameplay.Inventories.UI
     {
         [SerializeField]
         private UIButton m_useItemButton;
-        [SerializeField]
-        private bool m_removeItemCountOnConsume;
 
         private Player m_player;
         private PlayerInventory m_inventory;
@@ -45,16 +43,12 @@ namespace DChild.Gameplay.Inventories.UI
             if (m_item.CanBeUse(m_player))
             {
                 m_item.Use(m_player);
-                ItemUsed?.Invoke(m_item.itemName);
-                if (m_removeItemCountOnConsume)
+                m_inventory.RemoveItem(m_item);
+                if (m_inventory.GetCurrentAmount(m_item) == 0)
                 {
-                    m_inventory.RemoveItem(m_item);
-                    if (m_inventory.GetCurrentAmount(m_item) == 0)
-                    {
-                        AllItemCountConsumed?.Invoke(this, EventActionArgs.Empty);
-                    }
+                    AllItemCountConsumed?.Invoke(this, EventActionArgs.Empty);
                 }
-                
+                ItemUsed?.Invoke(m_item.itemName);
             }
         }
 
