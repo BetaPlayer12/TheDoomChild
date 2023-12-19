@@ -40,7 +40,7 @@ namespace DChild.Testing.PreAlpha
                 fileName = $"PRa{id}";
             }
 
-            return $"{Application.persistentDataPath}/{fileName}.tdcqa";
+            return $"{Application.persistentDataPath}/{fileName}";
         }
 
         private void Save()
@@ -86,7 +86,7 @@ namespace DChild.Testing.PreAlpha
 
         private PreAlphaData CreateSaveData()
         {
-            return new PreAlphaData(m_playTimeTracker.Save() ,m_deathCountTracker.Save(), m_itemUsageTracker.Save());
+            return new PreAlphaData(m_playTimeTracker.Save(), m_deathCountTracker.Save(), m_itemUsageTracker.Save());
         }
 
 
