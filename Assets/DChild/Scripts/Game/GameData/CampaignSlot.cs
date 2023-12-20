@@ -125,6 +125,7 @@ namespace DChild.Serialization
             m_demoGame = slot.demoGame;
             m_newGame = slot.newGame;
             m_location = slot.location;
+            m_sceneToLoad = slot.sceneToLoad;
             m_spawnPosition = slot.spawnPosition;
             m_completion = slot.completion;
             m_duration = slot.duration;

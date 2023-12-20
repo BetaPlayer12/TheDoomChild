@@ -56,15 +56,42 @@ namespace DChild.Menu
 
         private void OnResetAffirmed(object sender, EventActionArgs eventArgs)
         {
-            var m_saveManager = FindObjectOfType<ForceSave>();
-
-            m_saveManager.ResetSaves();
+            OverrideCurrentSlotWithDefaultSave();
         }
 
         protected override void Awake()
         {
             base.Awake();
             m_campaignSelect = GetComponentInParent<ICampaignSelect>();
+        }
+
+        private void OverrideCurrentSlotWithDefaultSave()
+        {
+            //This Logic is Temporary cuz its quite heavy and bypasses too much of other scripts responsibility
+            var resetCampaignSlot = new CampaignSlot(m_selectedSlotID);
+            resetCampaignSlot.Copy(m_defaultSave.slot);
+
+            CampaignSlot[] newSlotList = new CampaignSlot[GameSystem.dataManager.campaignSlotList.slotCount];
+
+            for (int i = 0; i < newSlotList.Length; i++)
+            {
+                newSlotList[i] = GameSystem.dataManager.campaignSlotList.GetSlot(i);
+            }
+
+            for (int i = 0; i < newSlotList.Length; i++)
+            {
+                if(newSlotList[i].id == m_selectedSlotID)
+                {
+                    newSlotList[i] = resetCampaignSlot;
+                }
+            }
+
+            GameSystem.dataManager.campaignSlotList.SetSlots(newSlotList);
+            var campaignSelectStrongValue = (CampaignSelect)m_campaignSelect;
+            campaignSelectStrongValue.SetList(GameSystem.dataManager.campaignSlotList);
+
+            //Keep This Logic when cleaning Up
+            SerializationHandle.SaveCampaignSlot(m_selectedSlotID, resetCampaignSlot);
         }
     }
 }
