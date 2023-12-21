@@ -2,6 +2,7 @@
 using DChild.Gameplay.Items;
 using Doozy.Runtime.UIManager.Components;
 using Holysoft.Event;
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,12 +12,18 @@ namespace DChild.Gameplay.Inventories.UI
     {
         [SerializeField]
         private UIButton m_useItemButton;
+        [SerializeField]
+        private bool m_removeItemCountOnConsume;
 
         private Player m_player;
         private PlayerInventory m_inventory;
         private UsableItemData m_item;
 
         public event EventAction<EventActionArgs> AllItemCountConsumed;
+
+        #region PRE_ALPHA
+        public event Action<string> ItemUsed;
+        #endregion
 
         public void Show()
         {
@@ -38,11 +45,16 @@ namespace DChild.Gameplay.Inventories.UI
             if (m_item.CanBeUse(m_player))
             {
                 m_item.Use(m_player);
-                m_inventory.RemoveItem(m_item);
-                if (m_inventory.GetCurrentAmount(m_item) == 0)
+                ItemUsed?.Invoke(m_item.itemName);
+                if (m_removeItemCountOnConsume)
                 {
-                    AllItemCountConsumed?.Invoke(this, EventActionArgs.Empty);
+                    m_inventory.RemoveItem(m_item);
+                    if (m_inventory.GetCurrentAmount(m_item) == 0)
+                    {
+                        AllItemCountConsumed?.Invoke(this, EventActionArgs.Empty);
+                    }
                 }
+                
             }
         }
 
