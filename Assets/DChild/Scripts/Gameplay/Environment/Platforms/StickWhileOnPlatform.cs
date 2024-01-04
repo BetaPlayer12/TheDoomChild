@@ -39,23 +39,21 @@ namespace DChild.Gameplay.Environment
             {
                 if (collision.rigidbody != null)
                 {
-                    if (collision.rigidbody.gameObject.layer == 8)
+                    if (m_originalParentPair.ContainsKey(collision.collider) == false)
                     {
-                        collision.rigidbody.transform.parent = null;
+                        var cache = Cache<ParentInfo>.Claim();
+                        cache.Value.Initialize(collision.rigidbody.transform.parent, collision.rigidbody.gameObject.scene);
+                        m_originalParentPair.Add(collision.collider, cache);
+                        collision.rigidbody.transform.parent = m_toParent;
+                        Debug.LogError("Stick");
                     }
-                    else
-                    {
-                        if (m_originalParentPair.ContainsKey(collision.collider) == false)
-                        {
-                            var cache = Cache<ParentInfo>.Claim();
-                            cache.Value.Initialize(collision.rigidbody.transform.parent, collision.rigidbody.gameObject.scene);
-                            m_originalParentPair.Add(collision.collider, cache);
-                            collision.rigidbody.transform.parent = m_toParent;
-                            Debug.LogError("Stick");
-                        }
-                    }
-
-
+                    //if (collision.rigidbody.gameObject.layer == 8)
+                    //{
+                    //    collision.rigidbody.transform.parent = null;
+                    //}
+                    //else
+                    //{
+                    //}
                 }
             }
         }
