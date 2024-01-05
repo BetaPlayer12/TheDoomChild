@@ -103,9 +103,11 @@ MonoBehaviour:
     SerializationNodes: []
   m_cinemaSignal: {fileID: 0}
   m_gameOverSignal: {fileID: 0}
+  m_confirmationWindowSignal: {fileID: 0}
   m_notificationManager: {fileID: 0}
   m_tradeWindowSignal: {fileID: 0}
   m_tradeManager: {fileID: 0}
+  m_confirmationWindow: {fileID: 0}
   m_storeNavigator: {fileID: 0}
   m_bossCombat: {fileID: 0}
   m_worldMap: {fileID: 0}
@@ -117,6 +119,7 @@ MonoBehaviour:
   m_fadeUI: {fileID: 0}
   m_interactablePrompt: {fileID: 0}
   m_movableObjectPrompt: {fileID: 0}
+  m_upgradeWeaponHandler: {fileID: 0}
 --- !u!1 &1760432952484764363
 GameObject:
   m_ObjectHideFlags: 0
@@ -321,35 +324,8 @@ MonoBehaviour:
     - Name: 
       Entry: 8
       Data: 
-    - Name: m_bestiaryProgressData
-      Entry: 7
-      Data: 5|DChild.Serialization.AcquisitionData, Assembly-CSharp
-    - Name: m_serializeDatas
-      Entry: 7
-      Data: 6|DChild.Serialization.AcquisitionData+SerializeData[], Assembly-CSharp
-    - Name: 
-      Entry: 12
-      Data: 1
-    - Name: 
-      Entry: 7
-      Data: DChild.Serialization.AcquisitionData+SerializeData, Assembly-CSharp
-    - Name: m_ID
-      Entry: 3
-      Data: 0
-    - Name: m_hasData
-      Entry: 5
-      Data: false
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 8
+    - Name: m_codexData
+      Entry: 6
       Data: 
     - Name: m_skills
       Entry: 7
@@ -365,13 +341,13 @@ MonoBehaviour:
       Data: 
     - Name: m_soulSkillData
       Entry: 7
-      Data: 7|DChild.Gameplay.SoulSkills.PlayerSoulSkillData, Assembly-CSharp
+      Data: 5|DChild.Gameplay.SoulSkills.PlayerSoulSkillData, Assembly-CSharp
     - Name: m_currentSoulCapacity
       Entry: 3
       Data: 0
     - Name: m_acquiredSoulSkills
       Entry: 7
-      Data: 8|System.Int32[], mscorlib
+      Data: 6|System.Int32[], mscorlib
     - Name: 
       Entry: 14
       Data: 21
@@ -446,7 +422,7 @@ MonoBehaviour:
       Data: 
     - Name: m_activatedSoulSkills
       Entry: 7
-      Data: 9|System.Int32[], mscorlib
+      Data: 7|System.Int32[], mscorlib
     - Name: 
       Entry: 14
       Data: 0
@@ -462,19 +438,28 @@ MonoBehaviour:
     - Name: m_combatArtsData
       Entry: 6
       Data: 
+    - Name: m_weaponUpgradeSaveData
+      Entry: 7
+      Data: DChild.Gameplay.Systems.WeaponUpgradeSaveData, Assembly-CSharp
+    - Name: m_currentWeaponLevel
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
     - Name: 
       Entry: 8
       Data: 
     - Name: m_campaignProgress
       Entry: 7
-      Data: 10|DChild.Serialization.SerializeDataList, Assembly-CSharp
+      Data: 8|DChild.Serialization.SerializeDataList, Assembly-CSharp
     - Name: m_saveDatas
       Entry: 7
-      Data: 11|System.Collections.Generic.Dictionary`2[[DChild.Serialization.SerializeID,
+      Data: 9|System.Collections.Generic.Dictionary`2[[DChild.Serialization.SerializeID,
         Assembly-CSharp],[DChild.Serialization.ISaveData, Assembly-CSharp]], mscorlib
     - Name: comparer
       Entry: 7
-      Data: 12|DChild.Serialization.SerializeID+EqualityComparer, Assembly-CSharp
+      Data: 10|DChild.Serialization.SerializeID+EqualityComparer, Assembly-CSharp
     - Name: 
       Entry: 8
       Data: 
@@ -492,14 +477,14 @@ MonoBehaviour:
       Data: 
     - Name: m_zoneDatas
       Entry: 7
-      Data: 13|DChild.Serialization.SerializeDataList, Assembly-CSharp
+      Data: 11|DChild.Serialization.SerializeDataList, Assembly-CSharp
     - Name: m_saveDatas
       Entry: 7
-      Data: 14|System.Collections.Generic.Dictionary`2[[DChild.Serialization.SerializeID,
+      Data: 12|System.Collections.Generic.Dictionary`2[[DChild.Serialization.SerializeID,
         Assembly-CSharp],[DChild.Serialization.ISaveData, Assembly-CSharp]], mscorlib
     - Name: comparer
       Entry: 7
-      Data: 15|DChild.Serialization.SerializeID+EqualityComparer, Assembly-CSharp
+      Data: 13|DChild.Serialization.SerializeID+EqualityComparer, Assembly-CSharp
     - Name: 
       Entry: 8
       Data: 
@@ -520,14 +505,14 @@ MonoBehaviour:
       Data: 
     - Name: m_miscDatas
       Entry: 7
-      Data: 16|DChild.Serialization.SerializeDataList, Assembly-CSharp
+      Data: 14|DChild.Serialization.SerializeDataList, Assembly-CSharp
     - Name: m_saveDatas
       Entry: 7
-      Data: 17|System.Collections.Generic.Dictionary`2[[DChild.Serialization.SerializeID,
+      Data: 15|System.Collections.Generic.Dictionary`2[[DChild.Serialization.SerializeID,
         Assembly-CSharp],[DChild.Serialization.ISaveData, Assembly-CSharp]], mscorlib
     - Name: comparer
       Entry: 7
-      Data: 18|DChild.Serialization.SerializeID+EqualityComparer, Assembly-CSharp
+      Data: 16|DChild.Serialization.SerializeID+EqualityComparer, Assembly-CSharp
     - Name: 
       Entry: 8
       Data: 
@@ -611,6 +596,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d2ba390f6e00b147bd332746334cc97, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
   m_notificationInterval: 0.01
   m_fullscreenNotificationHandle: {fileID: 8545634109120223692}
   m_promptNotificationHandle: {fileID: 0}
@@ -642,21 +636,11 @@ MonoBehaviour:
       Entry: 6
       Data: 
     - Name: m_journalDetailedNotification
-      Entry: 7
-      Data: 0|DChild.Gameplay.UI.FullscreenNotificationHandle+UIContainerSubHandle,
-        Assembly-CSharp
-    - Name: m_priority
-      Entry: 3
-      Data: 0
-    - Name: m_container
       Entry: 6
-      Data: 
-    - Name: 
-      Entry: 8
       Data: 
     - Name: m_loreNotification
       Entry: 7
-      Data: 1|DChild.Gameplay.UI.NotificationHandle`1+SubHandle`1[[DChild.Gameplay.UI.FullscreenNotificationHandle+NotificationType,
+      Data: 0|DChild.Gameplay.UI.NotificationHandle`1+SubHandle`1[[DChild.Gameplay.UI.FullscreenNotificationHandle+NotificationType,
         Assembly-CSharp],[DChild.Gameplay.Systems.Lore.LoreInfoUI, Assembly-CSharp]],
         Assembly-CSharp
     - Name: m_priority
@@ -1932,7 +1916,6 @@ GameObject:
   - component: {fileID: 7629489205284937667}
   - component: {fileID: 791943345586649495}
   - component: {fileID: 6650972148650585585}
-  - component: {fileID: 3291154281184830146}
   m_Layer: 0
   m_Name: ShardConverter
   m_TagString: Untagged
@@ -2027,42 +2010,6 @@ MonoBehaviour:
   m_item: {fileID: 11400000, guid: 212b0c4fd5c869f4cb3a40aadf19efd7, type: 2}
   m_completeItem: {fileID: 11400000, guid: 0a7f15cc185960d4eae3fc100171ee1f, type: 2}
   m_limit: 2
---- !u!114 &3291154281184830146
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8697424349424193199}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 460658ad26c225245a26ee651858d177, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  serializationData:
-    SerializedFormat: 2
-    SerializedBytes: 
-    ReferencedUnityObjects: []
-    SerializedBytesString: 
-    Prefab: {fileID: 0}
-    PrefabModificationsReferencedUnityObjects: []
-    PrefabModifications: []
-    SerializationNodes:
-    - Name: m_completionHandle
-      Entry: 7
-      Data: 0|DChild.Gameplay.Inventories.BaseStatChangeHandle, Assembly-CSharp
-    - Name: m_stat
-      Entry: 3
-      Data: 2
-    - Name: m_modification
-      Entry: 3
-      Data: 11
-    - Name: 
-      Entry: 8
-      Data: 
-  m_item: {fileID: 11400000, guid: 832299907be2dd946abbc59e62114cdb, type: 2}
-  m_completeItem: {fileID: 11400000, guid: 832299907be2dd946abbc59e62114cdb, type: 2}
-  m_limit: 1
 --- !u!1 &9027099112888996189
 GameObject:
   m_ObjectHideFlags: 0

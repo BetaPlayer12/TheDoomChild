@@ -16,6 +16,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private LedgeGrab m_ledgeGrab;
         private ShadowMorph m_shadowMorph;
         private ShadowGaugeRegen m_shadowGaugeRegen;
+        private ShadowSlide m_shadowSlide;
 
         #region Battle Abilities
         private AirLunge m_airLunge;
@@ -40,6 +41,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private LightningSpear m_lightningSpear;
         private IcarusWings m_icarusWings;
         private TeleportingSkull m_teleportingSkull;
+        private AirSlashRange m_airSlashRange;
         #endregion
 
         public void IdleStateFinished()
@@ -237,6 +239,16 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_swordThrust?.Push();
         }
 
+        public void ShadowSlideEndTransitionStart()
+        {
+            m_shadowSlide.EndTransitionStart();
+        }
+
+        public void ShadowSlideEndTransitionEnd()
+        {
+            m_shadowSlide.EndTransitionEnd();
+        }
+
         #region BattleAbilities
 
         public void AirLungeEnableCollision()
@@ -411,6 +423,11 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_hellTrident.Summon();
         }
 
+        public void HellTridentPlaySpawnFX()
+        {
+            m_hellTrident.PlaySpawnFX();
+        }
+
         public void HellTridentEnd()
         {
             //m_hellTrident?.AttackOver();
@@ -483,8 +500,18 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void BackDiverGetProjectile()
         {
-            m_teleportingSkull.Execute();
+            //m_teleportingSkull.Execute();
             //m_teleportingSkull.GetSpawnedProjectile(m_backDiver.spawnedProjectile);
+        }
+
+        public void BackDiverCheckGround()
+        {
+            m_backDiver.CheckGround();
+        }
+
+        public void BackDiverLandOnGround()
+        {
+            m_backDiver.LandOnGround();
         }
 
         public void BackDiverEnd()
@@ -609,6 +636,31 @@ namespace DChild.Gameplay.Characters.Players.Modules
         {
             m_teleportingSkull.GetSpawnedProjectile(m_projectileThrow.spawnedProjectile);
         }
+
+        public void AirSlashRangeSummon()
+        {
+            m_airSlashRange.SummonAirSlash();
+        }
+
+        public void AirSlashRangeEnd()
+        {
+            m_airSlashRange.EndExecution();
+        }
+
+        public void TeleportingSkullEnd()
+        {
+            m_teleportingSkull.EndExecution();
+        }
+
+        public void TeleportingSkullEnableCollision()
+        {
+            m_teleportingSkull.EnableCollision(true);
+        }
+
+        public void TeleportingSkullDisableCollision()
+        {
+            m_teleportingSkull.EnableCollision(false);
+        }
         #endregion
 
         public void SkullThrowSpawnProjectile()
@@ -680,6 +732,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_lightningSpear = character.GetComponentInChildren<LightningSpear>();
             m_icarusWings = character.GetComponentInChildren<IcarusWings>();
             m_teleportingSkull = character.GetComponentInChildren<TeleportingSkull>();
+            m_airSlashRange = character.GetComponentInChildren<AirSlashRange>();
+            m_shadowSlide = character.GetComponentInChildren<ShadowSlide>();
         }
 
         #region TESTING

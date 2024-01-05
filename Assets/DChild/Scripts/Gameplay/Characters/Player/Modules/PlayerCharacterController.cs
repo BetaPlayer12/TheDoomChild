@@ -95,6 +95,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private LightningSpear m_lightningSpear;
         private IcarusWings m_icarusWings;
         private TeleportingSkull m_teleportingSkull;
+        private AirSlashRange m_airSlashRange;
         #endregion
         #endregion
 
@@ -144,6 +145,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_eelecktrick?.Cancel();
             m_lightningSpear?.Cancel();
             m_icarusWings?.Cancel();
+            m_airSlashRange?.Cancel();
+            m_teleportingSkull?.Cancel();
 
             if (m_state.isGrounded)
             {
@@ -154,6 +157,54 @@ namespace DChild.Gameplay.Characters.Players.Modules
         public void Enable()
         {
             m_updateEnabled = true;
+        }
+
+        private void HasTeleported(object sender, EventActionArgs eventArgs)
+        {
+            m_flinch?.CancelFlinch();
+            m_idle?.Execute(false);
+            m_movement?.Cancel();
+            m_crouch?.Cancel();
+            m_dash?.Cancel();
+            m_shadowSlide?.Cancel();
+            m_slide?.Cancel();
+            m_wallStick?.Cancel();
+            m_devilWings?.Cancel();
+            m_shadowDash?.Cancel();
+            m_basicSlashes?.Cancel();
+            m_slashCombo?.Cancel();
+            m_swordThrust?.Cancel();
+            m_earthShaker?.Cancel();
+            m_whip?.Cancel();
+            m_whipCombo?.Cancel();
+            m_projectileThrow?.Cancel();
+            if (m_projectileThrow.willResetProjectile)
+                m_projectileThrow.ResetProjectile();
+            m_shadowMorph.Cancel();
+            m_block?.Cancel();
+            m_shadowGaugeRegen.Enable(true);
+            m_airLunge?.Cancel();
+            m_fireFist?.Cancel();
+            m_reaperHarvest?.Cancel();
+            m_krakenRage?.Cancel();
+            m_finalSlash?.Cancel();
+            m_airSlashCombo?.Cancel();
+            m_sovereignImpale?.Cancel();
+            m_hellTrident?.Cancel();
+            m_foolsVerdict?.Cancel();
+            m_soulFireBlast?.Cancel();
+            m_edgedFury?.Cancel();
+            m_ninthCircleSanction?.Cancel();
+            m_doomsdayKong?.Cancel();
+            m_backDiver?.Cancel();
+            m_barrier?.Cancel();
+            m_fencerFlash?.Cancel();
+            m_diagonalSwordDash?.Cancel();
+            m_championsUprising?.Cancel();
+            m_eelecktrick?.Cancel();
+            m_lightningSpear?.Cancel();
+            m_icarusWings?.Cancel();
+            m_airSlashRange?.Cancel();
         }
 
         private void OnGroundednessStateChange(object sender, EventActionArgs eventArgs)
@@ -218,123 +269,140 @@ namespace DChild.Gameplay.Characters.Players.Modules
             Disable();
             m_idle?.Cancel();
             m_shadowMorph?.Cancel();
+            m_teleportingSkull?.DisableTeleport();
         }
 
         private void OnFlinch(object sender, EventActionArgs eventArgs)
         {
-            m_combatReadiness?.Execution();
-            if (m_state.isGrounded)
+            if (m_teleportingSkull.canTeleport)
             {
-                if (m_state.isAttacking)
-                {
-                    if (m_state.isChargingAttack)
-                    {
-                        m_swordThrust?.Cancel();
-                    }
-                    else
-                    {
-                        m_swordThrust?.Cancel();
-                        m_basicSlashes?.Cancel();
-                        m_whip?.Cancel();
-                        m_slashCombo?.Cancel();
-                        m_slashCombo?.Reset();
-                        m_whipCombo?.Cancel();
-                        m_whipCombo?.Reset();
-                        m_airLunge?.Cancel();
-                        m_fireFist?.Cancel();
-                        m_reaperHarvest?.Cancel();
-                        m_finalSlash?.Cancel();
-                        m_sovereignImpale?.Cancel();
-                        m_hellTrident?.Cancel();
-                        m_foolsVerdict?.Cancel();
-                        m_ninthCircleSanction?.Cancel();
-                        m_doomsdayKong?.Cancel();
-                        m_backDiver?.Cancel();
-                        m_barrier?.Cancel();
-                        m_fencerFlash?.Cancel();
-                        m_championsUprising?.Cancel();
-                        m_eelecktrick?.Cancel();
-                        m_icarusWings?.Cancel();
-                    }
-                }
-
-                if (m_state.isCrouched)
-                {
-                    m_idle?.Cancel();
-                    m_crouch.Cancel();
-                }
-                else if (m_state.isDashing)
-                {
-                    m_dash.Cancel();
-                }
-                else if (m_state.isSliding)
-                {
-                    m_slide.Cancel();
-                }
-                else if (m_state.isGrabbing)
-                {
-                    m_objectManipulation.Cancel();
-                }
-                else if (m_state.isInShadowMode)
-                {
-                    m_shadowMorph?.Cancel();
-                }
-                else
-                {
-                    m_shadowGaugeRegen?.Enable(true);
-                    m_idle?.Cancel();
-                    m_movement?.Cancel();
-                    m_block?.Cancel();
-                }
-
-                GameplaySystem.cinema.ApplyCameraPeekMode(Cinematics.CameraPeekMode.None);
+                m_teleportingSkull?.Cancel();
+                m_teleportingSkull.TeleportToProjectile();
             }
             else
             {
-                if (m_state.isAttacking)
+                m_combatReadiness?.Execution();
+                if (m_state.isGrounded)
                 {
-                    m_basicSlashes?.Cancel();
-                    m_earthShaker?.Cancel();
-                    m_whip?.Cancel();
-                    if (m_projectileThrow.willResetProjectile)
-                        m_projectileThrow.ResetProjectile();
-                    m_projectileThrow?.Cancel();
-                    m_airSlashCombo?.Cancel();
-                }
+                    if (m_state.isAttacking)
+                    {
+                        if (m_state.isChargingAttack)
+                        {
+                            m_swordThrust?.Cancel();
+                        }
+                        else
+                        {
+                            m_swordThrust?.Cancel();
+                            m_basicSlashes?.Cancel();
+                            m_whip?.Cancel();
+                            m_slashCombo?.Cancel();
+                            m_slashCombo?.Reset();
+                            m_whipCombo?.Cancel();
+                            m_whipCombo?.Reset();
+                            m_airLunge?.Cancel();
+                            m_fireFist?.Cancel();
+                            m_reaperHarvest?.Cancel();
+                            m_finalSlash?.Cancel();
+                            m_sovereignImpale?.Cancel();
+                            m_hellTrident?.Cancel();
+                            m_foolsVerdict?.Cancel();
+                            m_ninthCircleSanction?.Cancel();
+                            m_doomsdayKong?.Cancel();
+                            m_backDiver?.Cancel();
+                            m_barrier?.Cancel();
+                            m_fencerFlash?.Cancel();
+                            m_championsUprising?.Cancel();
+                            m_eelecktrick?.Cancel();
+                            m_icarusWings?.Cancel();
+                        }
+                    }
 
-                if (m_state.isStickingToWall)
-                {
-                    m_wallMovement?.Cancel();
-                    m_wallSlide?.Cancel();
-                    m_wallStick?.Cancel();
+                    if (m_state.isCrouched)
+                    {
+                        m_idle?.Cancel();
+                        m_crouch.Cancel();
+                    }
+                    else if (m_state.isDashing)
+                    {
+                        m_dash.Cancel();
+                    }
+                    else if (m_state.isSliding)
+                    {
+                        m_slide.Cancel();
+                    }
+                    else if (m_state.isGrabbing)
+                    {
+                        m_objectManipulation.Cancel();
+                    }
+                    else if (m_state.isInShadowMode)
+                    {
+                        m_shadowMorph?.Cancel();
+                    }
+                    else
+                    {
+                        m_shadowGaugeRegen?.Enable(true);
+                        m_idle?.Cancel();
+                        m_movement?.Cancel();
+                        m_block?.Cancel();
+                        m_shadowSlide.Cancel();
+                    }
+
+                    GameplaySystem.cinema.ApplyCameraPeekMode(Cinematics.CameraPeekMode.None);
                 }
-                else if (m_state.isDashing)
+                else
                 {
-                    m_activeDash?.Cancel();
-                }
-                else if (m_state.isLevitating)
-                {
+                    if (m_state.isAttacking)
+                    {
+                        m_basicSlashes?.Cancel();
+                        m_earthShaker?.Cancel();
+                        m_whip?.Cancel();
+                        if (m_projectileThrow.willResetProjectile)
+                            m_projectileThrow.ResetProjectile();
+                        m_projectileThrow?.Cancel();
+                        m_airSlashCombo?.Cancel();
+                    }
+
+                    if (m_state.isStickingToWall)
+                    {
+                        m_wallMovement?.Cancel();
+                        m_wallSlide?.Cancel();
+                        m_wallStick?.Cancel();
+                    }
+                    else if (m_state.isDashing)
+                    {
+                        m_activeDash?.Cancel();
+                    }
+                    else if (m_state.isLevitating)
+                    {
+                        m_devilWings?.Cancel();
+                    }
+                    else if (m_state.isInShadowMode)
+                    {
+                        m_shadowMorph?.Cancel();
+                    }
+
                     m_devilWings?.Cancel();
+                    m_krakenRage?.Cancel();
+                    m_soulFireBlast?.Cancel();
+                    m_edgedFury?.Cancel();
+                    m_reaperHarvest?.Cancel();
+                    m_fencerFlash?.Cancel();
+                    m_diagonalSwordDash?.Cancel();
+                    m_lightningSpear?.Cancel();
+                    m_airSlashRange?.Cancel();
                 }
-                else if (m_state.isInShadowMode)
-                {
-                    m_shadowMorph?.Cancel();
-                }
-
-                m_devilWings?.Cancel();
-                m_krakenRage?.Cancel();
-                m_soulFireBlast?.Cancel();
-                m_edgedFury?.Cancel();
-                m_reaperHarvest?.Cancel();
-                m_fencerFlash?.Cancel();
-                m_diagonalSwordDash?.Cancel();
-                m_lightningSpear?.Cancel();
             }
         }
 
         private void OnProjectileThrowRequest(object sender, EventActionArgs eventArgs)
         {
             m_input.projectileThrowPressed = true;
+        }
+
+        private void ResetProjectile(object sender, EventActionArgs eventArgs)
+        {
+            if (m_projectileThrow.willResetProjectile)
+                m_projectileThrow.ResetProjectile();
         }
 
         private void FlipCharacter()
@@ -398,6 +466,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_whipCombo = m_character.GetComponentInChildren<WhipAttackCombo>();
             m_projectileThrow = m_character.GetComponentInChildren<ProjectileThrow>();
             m_projectileThrow.ExecutionRequested += OnProjectileThrowRequest;
+            m_projectileThrow.ProjectileThrown += ResetProjectile;
             m_block = m_character.GetComponentInChildren<PlayerBlock>();
 
             m_shadowBladeFX = m_character.GetComponentInChildren<ShadowbladeFX>();
@@ -424,6 +493,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_lightningSpear = m_character.GetComponentInChildren<LightningSpear>();
             m_icarusWings = m_character.GetComponentInChildren<IcarusWings>();
             m_teleportingSkull = m_character.GetComponentInChildren<TeleportingSkull>();
+            m_teleportingSkull.Teleported += HasTeleported;
+            m_airSlashRange = m_character.GetComponentInChildren<AirSlashRange>();
 
 
             //Intro Controller
@@ -706,6 +777,16 @@ namespace DChild.Gameplay.Characters.Players.Modules
             {
                 m_icarusWings.HandleAttackTimer();
             }
+
+            if (m_airSlashRange.CanReset() == true)
+            {
+                m_airSlashRange.HandleResetTimer();
+            }
+
+            if (m_airSlashRange.CanMove() == false)
+            {
+                m_airSlashRange.HandleMovementTimer();
+            }
             #endregion
 
             if (m_state.canAttack == true)
@@ -774,6 +855,11 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 if (m_lightningSpear.CanLightningSpear() == false)
                 {
                     m_lightningSpear.HandleAttackTimer();
+                }
+
+                if (m_airSlashRange.CanAirSlashRange() == false)
+                {
+                    m_airSlashRange.HandleAttackTimer();
                 }
                 #endregion
             }
@@ -961,7 +1047,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                         }
                         return;
                     }
-                    else if (m_input.airSlashComboPressed && m_airSlashCombo.CanAirSlashCombo() && !m_input.reaperHarvestPressed && !m_input.diagonalSwordDashPressed /*&& m_abilities.IsAbilityActivated(CombatArt.AirSlashCombo)*/)
+                    else if (m_input.airSlashComboPressed && m_airSlashCombo.CanAirSlashCombo() && !m_input.reaperHarvestPressed && !m_input.diagonalSwordDashPressed && !m_wallStick.IsThereAWall() /*&& m_abilities.IsAbilityActivated(CombatArt.AirSlashCombo)*/)
                     {
                         m_basicSlashes?.Cancel();
                         m_whip?.Cancel();
@@ -1084,7 +1170,22 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
                         return;
                     }
-                    else if (m_input.lightningSpearPressed && m_lightningSpear.CanLightningSpear() && (m_abilities.IsAbilityActivated(CombatArt.LightningSpear) || m_abilities.IsAbilityActivated(CombatArt.AirSlashCombo)))
+                    else if (m_input.lightningSpearPressed && m_airSlashRange.CanAirSlashRange() && (m_abilities.IsAbilityActivated(CombatArt.AirSlashCombo) && !m_abilities.IsAbilityActivated(CombatArt.LightningSpear)))
+                    {
+                        if (m_state.isInShadowMode == false)
+                        {
+
+                            PrepareForMidairAttack();
+                            if (IsFacingInput())
+                            {
+                                m_airSlashRange.Execute();
+                            }
+                            return;
+                        }
+
+                        return;
+                    }
+                    else if (m_input.lightningSpearPressed && m_lightningSpear.CanLightningSpear() && m_abilities.IsAbilityActivated(CombatArt.LightningSpear))
                     {
                         if (m_state.isInShadowMode == false)
                         {
@@ -1278,8 +1379,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
                         m_projectileThrow.StartThrow();
                         GameplaySystem.cinema.ApplyCameraPeekMode(Cinematics.CameraPeekMode.None);
 
-                        if (m_projectileThrow.willResetProjectile)
-                            m_projectileThrow.ResetProjectile();
+                        //if (m_projectileThrow.willResetProjectile)
+                        //    m_projectileThrow.ResetProjectile();
                     }
                 }
                 else if (m_state.isDoingSwordThrust)
@@ -1865,7 +1966,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
                         return;
                     }
-                    else if (m_input.barrierPressed && m_abilities.IsAbilityActivated(CombatArt.Barrier))
+                    else if (m_input.barrierPressed /*&& m_abilities.IsAbilityActivated(CombatArt.Barrier)*/)
                     {
                         if (m_state.isInShadowMode == false)
                         {

@@ -90,8 +90,6 @@ public class ShadowPetMandaroga : MonoBehaviour
         m_spine.SetAnimation(0, m_attackAnimation, true);
         //yield return new WaitForAnimationComplete(m_spine.animationState, m_attackAnimation);
         yield return new WaitForSeconds(m_duration);
-        m_spine.SetAnimation(0, m_idleAnimation, false);
-        yield return new WaitForAnimationComplete(m_spine.animationState, m_idleAnimation);
         m_spine.SetAnimation(0, m_deathAnimation, false);
         yield return new WaitForAnimationComplete(m_spine.animationState, m_deathAnimation);
         m_eventHandler.PetDesummon();
