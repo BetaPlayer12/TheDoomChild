@@ -56,7 +56,7 @@ namespace DChild.Serialization
         public CampaignSlot(int m_id)
         {
             this.m_id = m_id;
-            m_newGame = true;
+            m_newGame = false;
             m_allowWriteToDisk = true;
             m_location = DLocation.None;
             m_spawnPosition = new SerializedVector2();
@@ -72,7 +72,7 @@ namespace DChild.Serialization
         public CampaignSlot()
         {
             this.m_id = 1;
-            m_newGame = true;
+            m_newGame = false;
             m_allowWriteToDisk = true;
             m_location = DLocation.None;
             m_spawnPosition = new SerializedVector2();
@@ -106,7 +106,7 @@ namespace DChild.Serialization
         [Button]
         public void Reset()
         {
-            m_newGame = true;
+            m_newGame = false;
             m_location = m_demoGame ? DLocation.City_Of_The_Dead : DLocation.None;
             m_spawnPosition = new SerializedVector2();
             m_spawnPosition.x = -1209f;
@@ -125,6 +125,7 @@ namespace DChild.Serialization
             m_demoGame = slot.demoGame;
             m_newGame = slot.newGame;
             m_location = slot.location;
+            m_sceneToLoad = slot.sceneToLoad;
             m_spawnPosition = slot.spawnPosition;
             m_completion = slot.completion;
             m_duration = slot.duration;

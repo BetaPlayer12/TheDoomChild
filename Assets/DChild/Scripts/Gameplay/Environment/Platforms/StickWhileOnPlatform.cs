@@ -47,6 +47,13 @@ namespace DChild.Gameplay.Environment
                         collision.rigidbody.transform.parent = m_toParent;
                         Debug.LogError("Stick");
                     }
+                    //if (collision.rigidbody.gameObject.layer == 8)
+                    //{
+                    //    collision.rigidbody.transform.parent = null;
+                    //}
+                    //else
+                    //{
+                    //}
                 }
             }
         }
