@@ -2392,7 +2392,8 @@ MonoBehaviour:
       falseConditionAction: Block
       conditionPriority: 2
       outgoingLinks: []
-      conditionsString: CurrentQuestEntryState("Rescue Albin", 2) ~= "active"
+      conditionsString: CurrentQuestState("Rescue Albin") == "unassigned" or (CurrentQuestState("Rescue
+        Albin") ~= "active")
       userScript: 
       onExecute:
         m_PersistentCalls:
