@@ -14,6 +14,7 @@ using PlayerNew;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 namespace DChild.Gameplay.Systems
 {
@@ -34,6 +35,8 @@ namespace DChild.Gameplay.Systems
         void EnableIntroAction(List<IntroActions> action);
         void SyncVisualsWith(SpineSyncer spineSyncer);
         IEnumerator PlayerActionChange(Action<PlayerInput> Callback);
+
+        void ReturnPlayerToOrginalScene();
     }
 
     public class PlayerManager : MonoBehaviour, IGameplaySystemModule, IGameplayInitializable, IPlayerManager
@@ -56,6 +59,9 @@ namespace DChild.Gameplay.Systems
 
         private CollisionRegistrator m_collisionRegistrator;
         private InteractableDetector m_interactableDetector;
+
+        private Scene m_playerOriginalScene;
+        private Transform m_playerOriginalParent;
 
         public Player player => m_player;
 
@@ -170,6 +176,12 @@ namespace DChild.Gameplay.Systems
             OverrideCharacterControls();
         }
 
+        public void ReturnPlayerToOrginalScene()
+        {
+            m_player.character.transform.parent = m_playerOriginalParent;
+            SceneManager.MoveGameObjectToScene(m_player.character.gameObject, m_playerOriginalScene);
+        }
+
         public void Initialize()
         {
             var character = m_player.character;
@@ -209,6 +221,7 @@ namespace DChild.Gameplay.Systems
         }
         private void OnRespawnPlayer(object sender, EventActionArgs eventArgs)
         {
+            ReturnPlayerToOrginalScene();
             GameplaySystem.campaignSerializer.Load(SerializationScope.Gameplay, false);
             GameplaySystem.LoadGame(GameplaySystem.campaignSerializer.slot, Menu.LoadingHandle.LoadType.Smart);
             m_player.Revitilize();
@@ -233,6 +246,10 @@ namespace DChild.Gameplay.Systems
             {
                 m_player = player;
                 m_player.OnDeath += OnPlayerDeath;
+
+                var playerCharacter = m_player.character;
+                m_playerOriginalScene = playerCharacter.gameObject.scene;
+                m_playerOriginalParent = playerCharacter.transform.parent;
             }
             //m_autoReflex.Initialize();
         }
