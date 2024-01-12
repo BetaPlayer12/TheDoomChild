@@ -40,21 +40,15 @@ namespace DChild.Gameplay.Environment
         {
             if (collision.gameObject.TryGetComponentInParent(out Rigidbody2D rigidbody))
             {
-                if (collision.gameObject.layer == 8 || collision.gameObject.layer == 11)
-                {
-                    m_currentMass += rigidbody.mass;
-                    ReactOnChangeOnMass();
-                }
+                m_currentMass += rigidbody.mass;
+                ReactOnChangeOnMass();
             }
         }
 
         private void OnCollisionExit2D(Collision2D collision)
         {
-            if (collision.gameObject.TryGetComponentInParent(out Rigidbody2D rigidbody))
-            {
-                m_currentMass -= rigidbody.mass;
-                ReactOnChangeOnMass();
-            }
+            m_currentMass -= collision.rigidbody.mass;
+            ReactOnChangeOnMass();
         }
     }
 }
