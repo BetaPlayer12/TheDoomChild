@@ -40,8 +40,11 @@ namespace DChild.Gameplay.Environment
         {
             if (collision.gameObject.TryGetComponentInParent(out Rigidbody2D rigidbody))
             {
-                m_currentMass += rigidbody.mass;
-                ReactOnChangeOnMass();
+                if (collision.gameObject.layer == 8 || collision.gameObject.layer == 11)
+                {
+                    m_currentMass += rigidbody.mass;
+                    ReactOnChangeOnMass();
+                }
             }
         }
 
