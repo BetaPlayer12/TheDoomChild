@@ -24,6 +24,7 @@ namespace DChild.Gameplay.Environment
                 m_slotIDs = slotIDs.ToArray();
                 m_slotStates = slotStates.ToArray();
                 m_numberOfActivatedSlots = numberOfActivatedSlots;
+                m_isActivated = isActivated;
             }
 
             public int slotCount => m_slotIDs?.Length ?? 0;
