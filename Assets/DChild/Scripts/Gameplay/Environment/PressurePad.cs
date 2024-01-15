@@ -1,4 +1,5 @@
 ﻿using Sirenix.OdinInspector;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -14,6 +15,7 @@ namespace DChild.Gameplay.Environment
         private UnityEvent m_massFail;
 
         private float m_currentMass;
+        [SerializeField]
         private bool m_hasReachedRequiredMass;
 
         private void ReactOnChangeOnMass()
@@ -22,8 +24,8 @@ namespace DChild.Gameplay.Environment
             {
                 if (m_hasReachedRequiredMass == false)
                 {
-                    m_massAcheived?.Invoke();
                     m_hasReachedRequiredMass = true;
+                    m_massAcheived?.Invoke();
                 }
             }
             else
@@ -50,8 +52,14 @@ namespace DChild.Gameplay.Environment
             if (collision.gameObject.TryGetComponentInParent(out Rigidbody2D rigidbody))
             {
                 m_currentMass -= rigidbody.mass;
-                ReactOnChangeOnMass();
+                StartCoroutine(ExitTriggerDelay(0.5f));
             }
+        }
+
+        private IEnumerator ExitTriggerDelay(float delay)
+        {
+            yield return new WaitForSeconds(delay);
+            ReactOnChangeOnMass();
         }
     }
 }
