@@ -49,7 +49,7 @@ namespace DChild.Gameplay
         [SerializeField]
         private SignalReceiver m_signalReceiver;
         [SerializeField]
-        private SignalAsset m_enablePlayerControlsAsset;
+        private SignalAsset[] m_signalsToRun;
         [SerializeField, OnValueChanged("OnIsUsedChanged")]
         private bool m_isUsed;
         [SerializeField, LuaScriptWizard(true)]
@@ -122,8 +122,10 @@ namespace DChild.Gameplay
             NotifySkill(m_toUnlock);
             SetGlows(false);
             m_shrineVisualHandle.SkillShrineState(false);
-            //yield return new WaitForSeconds(1f);
-            m_signalReceiver.GetReaction(m_enablePlayerControlsAsset).Invoke();
+            for(int i = 0; i < m_signalsToRun.Length; i++)
+            {
+                m_signalReceiver.GetReaction(m_signalsToRun[i]).Invoke();
+            }
         }
 
         private void NotifySkill(PrimarySkill skill)
