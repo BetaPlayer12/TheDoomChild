@@ -101,6 +101,7 @@ namespace DChild.Gameplay.Environment
                 }
             }
             m_isAlreadyActivated = saveData.isActivated;
+            Debug.Log("the thingy is: " + m_isAlreadyActivated);
             for (int i = 0; i < m_activationIndicators.Count; i++)
             {
                 m_activationIndicators[i].SetState(i < saveData.numberOfActivatedSlots);
