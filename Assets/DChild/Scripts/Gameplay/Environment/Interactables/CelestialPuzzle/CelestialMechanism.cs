@@ -101,14 +101,15 @@ namespace DChild.Gameplay.Environment
                     }
                 }
             }
-            m_isAlreadyActivated = saveData.isActivated;
+            m_activatedSlots = saveData.numberOfActivatedSlots;
+            m_isAlreadyActivated = m_slots.Count == m_activatedSlots;
             Debug.Log("the thingy is: " + m_isAlreadyActivated);
             for (int i = 0; i < m_activationIndicators.Count; i++)
             {
                 m_activationIndicators[i].SetState(i < saveData.numberOfActivatedSlots);
             }
 
-            if (m_slots.Count == saveData.numberOfActivatedSlots)
+            if (m_isAlreadyActivated)
             {
                 m_completedEvent?.Invoke();
             }
@@ -131,6 +132,7 @@ namespace DChild.Gameplay.Environment
         {
             var slot = (CelestialSlot)sender;
             m_activatedSlots += slot.isOccupied ? 1 : -1;
+
             if (m_activatedSlots == m_slots.Count && m_isAlreadyActivated == false)
             {
                 m_readyActivate = true;
