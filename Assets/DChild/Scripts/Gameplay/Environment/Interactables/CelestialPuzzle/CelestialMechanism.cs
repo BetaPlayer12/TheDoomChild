@@ -102,7 +102,7 @@ namespace DChild.Gameplay.Environment
                 }
             }
             m_activatedSlots = saveData.numberOfActivatedSlots;
-            m_isAlreadyActivated = m_slots.Count >= m_activatedSlots;
+            m_isAlreadyActivated = m_activatedSlots >= m_slots.Count;
             Debug.Log("the thingy is: " + m_isAlreadyActivated);
             for (int i = 0; i < m_activationIndicators.Count; i++)
             {
