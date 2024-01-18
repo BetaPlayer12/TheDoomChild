@@ -1,4 +1,5 @@
 ﻿using Sirenix.OdinInspector;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -47,11 +48,14 @@ namespace DChild.Gameplay.Environment
 
         private void OnCollisionExit2D(Collision2D collision)
         {
-            if (collision.gameObject.TryGetComponentInParent(out Rigidbody2D rigidbody))
-            {
-                m_currentMass -= rigidbody.mass;
-                ReactOnChangeOnMass();
-            }
+            m_currentMass -= collision.rigidbody.mass;
+            StartCoroutine(ExitTriggerDelay(0.5f));
+        }
+
+        private IEnumerator ExitTriggerDelay(float delay)
+        {
+            yield return new WaitForSeconds(delay);
+            ReactOnChangeOnMass();
         }
     }
 }
