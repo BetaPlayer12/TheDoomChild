@@ -1,5 +1,6 @@
 ﻿using DChild.Gameplay.Characters.Players.State;
 using DChild.Gameplay.Combat;
+using DChild.Gameplay.Environment;
 using Sirenix.OdinInspector;
 using System.Collections;
 using UnityEngine;
@@ -65,6 +66,10 @@ namespace DChild.Gameplay.Characters.Players.Modules
                         return false;
                     }
                     else if (hits[i].collider.CompareTag("InvisibleWall") == true)
+                    {
+                        return false;
+                    }
+                    else if (hits[i].collider.GetComponent<MovingPlatform>() != null)
                     {
                         return false;
                     }
