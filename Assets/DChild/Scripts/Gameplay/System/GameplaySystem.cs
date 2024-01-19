@@ -159,14 +159,16 @@ namespace DChild.Gameplay
 
         public static void SetInputActive(bool isActive)
         {
-            //if (isActive)
-            //{
-            //    m_playerManager?.gameplayInput.Enable();
-            //}
-            //else
-            //{
-            //    m_playerManager?.gameplayInput.Disable();
-            //}
+            //Reverted comment because this is used by
+            //system to force player input based on game state i.e. when loading
+            if (isActive)
+            {
+                m_playerManager?.EnableInput();
+            }
+            else
+            {
+                m_playerManager?.DisableInput();
+            }
         }
 
         public static void ListenToNextSceneLoad()
