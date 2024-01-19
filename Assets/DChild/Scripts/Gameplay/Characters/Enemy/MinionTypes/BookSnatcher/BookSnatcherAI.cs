@@ -176,7 +176,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private bool m_willPatrol;
         private int m_minionSummon = 0;
         [SerializeField]
-        private float m_cooldownToSummon = 10f;
+        private float m_cooldownToSummon;
         //public Stack<int> m_summoned = new Stack<int>();
 
 
@@ -401,7 +401,6 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             yield return new WaitForSeconds(m_cooldownToSummon);
             m_minionSummon--;
-            m_cooldownToSummon = 10;
             yield return null;
         }
 
