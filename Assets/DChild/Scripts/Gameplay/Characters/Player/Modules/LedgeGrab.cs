@@ -1,5 +1,6 @@
 ﻿using DChild.Gameplay.Characters.Players.State;
 using DChild.Gameplay.Combat;
+using DChild.Gameplay.Environment;
 using Sirenix.OdinInspector;
 using System.Collections;
 using UnityEngine;
@@ -25,6 +26,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private GameObject m_playerShadow;
         [SerializeField]
         private Collider2D m_playerHitbox;
+        [SerializeField]
+        private float m_heightOffset;
 
         private int m_animation;
         private int m_jumpParameter;
@@ -68,6 +71,10 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     {
                         return false;
                     }
+                    else if (hits[i].collider.GetComponent<MovingPlatform>() != null)
+                    {
+                        return false;
+                    }
 
                     m_overheadSensor.Cast();
                     if (m_overheadSensor.isDetecting == false)
@@ -80,6 +87,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                         if (m_destinationSensor.isDetecting)
                         {
                             m_destination = m_destinationSensor.GetValidHits()[0].point;
+                            m_destination.y += m_heightOffset;
                             var clearingPos = m_clearingSensor.transform.position;
                             clearingPos.x = destinationPosition.x;
                             m_clearingSensor.transform.position = clearingPos;
