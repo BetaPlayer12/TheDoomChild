@@ -261,7 +261,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void SpawnBarrel()
         {
-            var barrelPos = new Vector3(transform.position.x + (2 * transform.localScale.x), transform.position.y - 5, transform.position.z);
+            var barrelPos = new Vector3(transform.position.x + (2 * transform.localScale.x), transform.position.y - 5, 0);
             var barrel = Instantiate(m_info.barrel, barrelPos, Quaternion.identity);
             barrel.GetComponent<ImpBarrel>().SetImp(this.gameObject.GetComponent<ImpAI>());
             m_barrelCache = barrel;
