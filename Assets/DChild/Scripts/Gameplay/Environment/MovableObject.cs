@@ -52,7 +52,7 @@ namespace DChild.Gameplay.Environment
 
         public Vector3 promptPosition => transform.position + m_promptOffset;
         public bool canBeMoved => m_canBeMoved;
-
+        public bool isGrabbed => m_isGrabbed;
         public Transform source => m_source;
 
         public void Load(ISaveData data)

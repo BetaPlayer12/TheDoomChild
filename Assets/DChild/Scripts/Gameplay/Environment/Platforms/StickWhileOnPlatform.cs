@@ -28,6 +28,30 @@ namespace DChild.Gameplay.Environment
 
         private Dictionary<Collider2D, Cache<ParentInfo>> m_originalParentPair;
 
+        private Rigidbody2D m_checkedMovableObject;
+        private Coroutine m_checkMovableObjectRoutine;
+
+        private void AttackRigidbodyToSelf(Collision2D collision)
+        {
+            var cache = Cache<ParentInfo>.Claim();
+            cache.Value.Initialize(collision.rigidbody.transform.parent, collision.rigidbody.gameObject.scene);
+            m_originalParentPair.Add(collision.collider, cache);
+            collision.rigidbody.transform.parent = m_toParent;
+            Debug.LogError("Stick");
+        }
+
+        private System.Collections.IEnumerator AttackRigidbodyToSelfRoutine(MovableObject movableObject, Collision2D collision)
+        {
+            m_checkedMovableObject = collision.rigidbody;
+
+            while (movableObject.isGrabbed)
+                yield return null;
+
+            AttackRigidbodyToSelf(collision);
+
+            m_checkedMovableObject = null;
+        }
+
         private void Awake()
         {
             m_originalParentPair = new Dictionary<Collider2D, Cache<ParentInfo>>();
@@ -41,19 +65,24 @@ namespace DChild.Gameplay.Environment
                 {
                     if (m_originalParentPair.ContainsKey(collision.collider) == false)
                     {
-                        var cache = Cache<ParentInfo>.Claim();
-                        cache.Value.Initialize(collision.rigidbody.transform.parent, collision.rigidbody.gameObject.scene);
-                        m_originalParentPair.Add(collision.collider, cache);
-                        collision.rigidbody.transform.parent = m_toParent;
-                        Debug.LogError("Stick");
+                        var movableObject = collision.rigidbody.GetComponent<MovableObject>();
+                        if (movableObject == null)
+                        {
+                            AttackRigidbodyToSelf(collision);
+                        }
+                        else
+                        {
+                            if (movableObject.isGrabbed)
+                            {
+                                StopAllCoroutines();
+                                m_checkMovableObjectRoutine = StartCoroutine(AttackRigidbodyToSelfRoutine(movableObject, collision));
+                            }
+                            else
+                            {
+                                AttackRigidbodyToSelf(collision);
+                            }
+                        }
                     }
-                    //if (collision.rigidbody.gameObject.layer == 8)
-                    //{
-                    //    collision.rigidbody.transform.parent = null;
-                    //}
-                    //else
-                    //{
-                    //}
                 }
             }
         }
@@ -64,15 +93,23 @@ namespace DChild.Gameplay.Environment
             {
                 if (collision.rigidbody != null)
                 {
-                    var cache = m_originalParentPair[collision.collider];
-                    collision.rigidbody.transform.parent = cache.Value.parent;
-                    if (cache.Value.parent == null)
+                    if (m_checkedMovableObject == collision.rigidbody)
                     {
-                        SceneManager.MoveGameObjectToScene(collision.rigidbody.gameObject, cache.Value.scene);
+                        StopAllCoroutines();
+                        m_checkMovableObjectRoutine = null;
                     }
-                    cache.Release();
-                    m_originalParentPair.Remove(collision.collider);
-                    Debug.LogError("Remove");
+                    else
+                    {
+                        var cache = m_originalParentPair[collision.collider];
+                        collision.rigidbody.transform.parent = cache.Value.parent;
+                        if (cache.Value.parent == null)
+                        {
+                            SceneManager.MoveGameObjectToScene(collision.rigidbody.gameObject, cache.Value.scene);
+                        }
+                        cache.Release();
+                        m_originalParentPair.Remove(collision.collider);
+                        Debug.LogError("Remove");
+                    }
                 }
             }
         }
