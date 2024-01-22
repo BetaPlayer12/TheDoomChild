@@ -18,8 +18,6 @@ namespace DChild.Gameplay.UI.CombatArts
         [SerializeField]
         private CombatArtUIDetail m_uiDetail;
         [SerializeField]
-        private CombatArtSelectionInitializer m_selectionInitializer;
-        [SerializeField]
         private CombatArtSelectorHighlight m_selectorHighlight;
         [SerializeField]
         private CombatArtUnlockHandle m_unlockArtHandler;

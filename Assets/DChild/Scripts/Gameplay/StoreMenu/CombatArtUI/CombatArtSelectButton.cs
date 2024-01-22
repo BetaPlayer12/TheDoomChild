@@ -37,6 +37,11 @@ namespace DChild.Gameplay.UI.CombatArts
 
         public void DisplayAs(CombatArtLevelData artLevelData) => m_visuals.DisplayAs(artLevelData);
 
+        private void Awake()
+        {
+            m_visuals.Initialize(GetComponent<UIButton>());
+        }
+
 #if UNITY_EDITOR
         private void OnConfigurationChanged()
         {
