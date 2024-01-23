@@ -44,6 +44,8 @@ namespace DChild.Gameplay.Environment
         private UnityEvent m_onGrabbed;
         [SerializeField, TabGroup("Let Go"), LabelText("Callback")]
         private UnityEvent m_onLetGo;
+        [SerializeField]
+        private bool m_useTransform;
 
         private Rigidbody2D m_rigidbody;
         private bool m_isGrabbed = false;
@@ -98,8 +100,18 @@ namespace DChild.Gameplay.Environment
         {
             if (m_canBeMoved == true)
             {
-                m_rigidbody.velocity = Vector2.zero;
-                m_rigidbody.velocity += new Vector2(direction * (moveForce * GameplaySystem.time.fixedDeltaTime), m_rigidbody.velocity.y);
+                if (m_useTransform)
+                {
+                    var currentpos = m_source.position;
+                    currentpos.x += direction;
+                    m_source.position = currentpos;
+
+                }
+                else
+                {
+                    m_rigidbody.velocity = Vector2.zero;
+                    m_rigidbody.velocity += new Vector2(direction * (moveForce * GameplaySystem.time.fixedDeltaTime), m_rigidbody.velocity.y);
+                }
 
                 //////
                 //GetComponent<TestBox>().Move();
