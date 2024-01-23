@@ -188,7 +188,10 @@ namespace DChild.Gameplay.Characters.Enemies
         private StateHandle<State> m_stateHandle;
         [ShowInInspector]
         private RandomAttackDecider<Attack> m_attackDecider;
-
+        [SerializeField]
+        private Collider2D m_bitebox;
+        [SerializeField]
+        private Collider2D m_bodyCollider;
         private State m_turnState;
 
         private Coroutine m_detectRoutine;
@@ -504,7 +507,12 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_animation.EnableRootMotion(true, true);
             m_animation.SetAnimation(0, m_info.attack.animation, false);
+            yield return new WaitForSeconds(0.8f);
+            m_bitebox.enabled = true;
+            m_bodyCollider.enabled = false;
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack.animation);
+            m_bodyCollider.enabled = true;
+            m_bitebox.enabled = false;
             m_animation.EnableRootMotion(true, false);
             yield return new WaitUntil(() => m_groundSensor.isDetecting);
             m_animation.SetAnimation(0, m_info.crawlAnimation, false);
