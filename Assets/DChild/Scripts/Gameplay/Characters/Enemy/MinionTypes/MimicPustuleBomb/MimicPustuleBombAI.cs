@@ -196,9 +196,12 @@ namespace DChild.Gameplay.Characters.Enemies
         private List<float> m_attackRangeCache;
 
         private float m_currentCD;
+        private float m_randomRangeMin = 150f;
+        private float m_randomRangeMax = 250f;
 
         private bool m_isDetecting;
         private bool m_isAggro;
+        private bool m_isFirstPatrol = true;
         private Vector2 m_startPos;
 
         private List<Vector2> m_Points;
@@ -253,11 +256,13 @@ namespace DChild.Gameplay.Characters.Enemies
             if (m_isAggro)
             {
                 m_flinchHandle.SetAnimation(m_info.flinchAggroAnimation.animation);
+                m_flinchHandle.SetIdleAnimation(m_info.idleAggroAnimation1.animation);
 
             }
             else
             {
                 m_flinchHandle.SetAnimation(m_info.flinchUnAggroAnimation.animation);
+                m_flinchHandle.SetIdleAnimation(m_info.idleUnAggroAnimation1.animation);
             }
             if (m_animation.GetCurrentAnimation(0).ToString() == m_info.idleAggroAnimation1.animation || m_stateHandle.currentState == State.Cooldown)
             {
@@ -265,7 +270,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_flinchHandle.m_autoFlinch = true;
                 m_agent.Stop();
                 m_rigidbody2D.constraints = RigidbodyConstraints2D.FreezeRotation;
-                m_stateHandle.Wait(State.ReevaluateSituation);
+                m_stateHandle.OverrideState(State.ReevaluateSituation);
                 StopAllCoroutines();
             }
         }
@@ -277,6 +282,10 @@ namespace DChild.Gameplay.Characters.Enemies
                 //m_animation.SetAnimation(0, m_info.idleAnimation, true);
                 m_flinchHandle.m_autoFlinch = false;
                 m_stateHandle.ApplyQueuedState();
+            }
+            if (!m_isAggro)
+            {
+                m_stateHandle.OverrideState(State.ReturnToPatrol);
             }
         }
 
@@ -480,7 +489,12 @@ namespace DChild.Gameplay.Characters.Enemies
             }
             ExecuteAttack(attack);
             yield return null;
-           
+        }
+
+        private IEnumerator DelayChainActivation(float delay)
+        {
+            yield return new WaitForSeconds(delay);
+            m_mimicPustuleBombChain.enabled = true;
         }
 
         private void DynamicMovement(Vector2 target, float moveSpeed)
@@ -505,15 +519,12 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             var randomSwap = UnityEngine.Random.Range(1, 100);
             var shouldSwap = randomSwap <= 50 ? true : false;
-            Debug.Log("Swap?: " + shouldSwap, gameObject);
             if (shouldSwap) 
             {
                 var random = UnityEngine.Random.Range(1, 100);
                 var pustuleBombPosition = m_startPos;
                 Vector3 randomPustuleBombPosition;
-                Debug.Log("Test: " + random, gameObject);
                 var index = random % m_PustuleBombsPosition.Count;
-                Debug.Log("Test Index: " + index, gameObject);
                 randomPustuleBombPosition = m_PustuleBombsPosition[index].transform.position;
                 m_PustuleBombsPosition[index].transform.position = pustuleBombPosition;
                 m_parentObject.transform.position = randomPustuleBombPosition;
@@ -582,8 +593,11 @@ namespace DChild.Gameplay.Characters.Enemies
                    
                     if (Vector2.Distance(m_startPos, transform.position) > 10f)
                     {
-
-                        StartCoroutine(TransformUnAggroRoutine());
+                        if (m_isAggro) 
+                        {
+                            StartCoroutine(TransformUnAggroRoutine());
+                        }
+                        
                         DynamicMovement(m_startPos, m_info.move.speed);
                         m_aggroGroup.SetActive(false);
                         m_turnState = State.ReturnToPatrol;
@@ -591,7 +605,10 @@ namespace DChild.Gameplay.Characters.Enemies
                     }
                     else
                     {
-                        StartCoroutine(TransformUnAggroRoutine());
+                        if (m_isAggro)
+                        {
+                            StartCoroutine(TransformUnAggroRoutine());
+                        }
                         m_aggroGroup.SetActive(false);
                         m_stateHandle.OverrideState(State.Patrol);
                     }
@@ -606,18 +623,27 @@ namespace DChild.Gameplay.Characters.Enemies
                         m_animation.SetAnimation(0, chosenMoveAnim, true);
                     }
 
-                    /*var characterInfo = new PatrolHandle.CharacterInfo(m_character.centerMass.position, m_character.facing);
-                    m_patrolHandle.Patrol(m_agent, m_info.patrol.speed, characterInfo);*/
+                    if (m_isFirstPatrol) 
+                    {
+                        m_isFirstPatrol = false;
+                        m_mimicPustuleBombChain.enabled = true;
 
-
-                    
-                    Vector3 v_diff = new(UnityEngine.Random.Range(250, 360), UnityEngine.Random.Range(250, 360), UnityEngine.Random.Range(200, 360));
-                    float atan2 = Mathf.Atan2(v_diff.y, v_diff.x);
+                    }
+                    else
+                    {
+                        m_randomRangeMin = 10f;
+                        m_randomRangeMax = 20f;
+                        StartCoroutine(DelayChainActivation(5f));
+                    }
+                    Vector3 v_diff = new(UnityEngine.Random.Range(m_randomRangeMin, m_randomRangeMax), UnityEngine.Random.Range(m_randomRangeMin, m_randomRangeMax), UnityEngine.Random.Range(m_randomRangeMin, m_randomRangeMax));   
+                    float atan2 = Mathf.Atan2(v_diff.y, v_diff.x); 
                     m_pushDirection.rotation = Quaternion.Euler(0f, 0f, atan2 * Mathf.Rad2Deg);
                     m_rigidbody2D.AddForce(-m_pushDirection.right * m_info.patrol.speed, ForceMode2D.Force);
-                    m_mimicPustuleBombChain.enabled = true;
                     m_agent.Stop();
                     m_stateHandle.Wait(State.ReevaluateSituation);
+                    
+                    m_isFirstPatrol = false;
+
                     break;
 
 
