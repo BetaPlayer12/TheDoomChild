@@ -15,7 +15,7 @@ namespace DChild.Gameplay.Characters.Players
             switch (module)
             {
                 case PrimarySkill.BlackBloodImmunity:
-                    m_blackBloodImmunity.isActive = isActive;
+                    m_blackBloodImmunity.EnableImmunity(isActive);
                     break;
                 default:
                     break;
