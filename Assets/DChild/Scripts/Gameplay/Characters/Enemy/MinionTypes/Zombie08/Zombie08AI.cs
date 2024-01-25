@@ -442,17 +442,15 @@ namespace DChild.Gameplay.Characters.Enemies
                 || m_animation.GetCurrentAnimation(0).ToString() != m_info.idle2Animation.animation
                 || m_animation.GetCurrentAnimation(0).ToString() != m_info.idle3Animation.animation)
                 m_movement.Stop();
+            m_animation.SetAnimation(0, m_info.detectAnimation, true);
+            yield return null;
+            
+            //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.detectAnimation);
+            //m_animation.SetAnimation(0, m_info.rawrAnimation, false);
+            //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.rawrAnimation);
 
-            while (true)
-            {
-                m_animation.SetAnimation(0, m_info.detectAnimation, false);
-                yield return new WaitForAnimationComplete(m_animation.animationState, m_info.detectAnimation);
-                //m_animation.SetAnimation(0, m_info.rawrAnimation, false);
-                //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.rawrAnimation);
-
-                //yield return new WaitForSeconds(3f);
-                yield return null;
-            }
+            //yield return new WaitForSeconds(3f);
+            
         }
 
         private string RandomIdleAnimation()
