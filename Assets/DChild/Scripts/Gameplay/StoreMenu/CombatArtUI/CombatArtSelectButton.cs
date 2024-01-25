@@ -30,6 +30,11 @@ namespace DChild.Gameplay.UI.CombatArts
             m_visuals.SetState(state);
         }
 
+        public void ForceVisualSync()
+        {
+            m_visuals.SetState(m_currentState);
+        }
+
         public void Select()
         {
             Selected?.Invoke(this);

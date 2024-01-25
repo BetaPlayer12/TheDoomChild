@@ -38,14 +38,17 @@ namespace DChild.Gameplay.UI.CombatArts
             {
                 case CombatArtUnlockState.Locked:
                     m_lockedUIAnimations.SetActive(true);
+                    EnableAnimator(m_lockedUIAnimators);
                     UseAnimator(m_lockedUIAnimators, m_button.selectedState.stateType);
                     break;
                 case CombatArtUnlockState.Unlockable:
                     m_unlockableUIAnimations.SetActive(true);
+                    EnableAnimator(m_unlockableUIAnimators);
                     UseAnimator(m_unlockableUIAnimators, m_button.selectedState.stateType);
                     break;
                 case CombatArtUnlockState.Unlocked:
                     m_unlockedUIAnimations.SetActive(true);
+                    EnableAnimator(m_unlockedUIAnimators);
                     UseAnimator(m_unlockedUIAnimators, m_button.selectedState.stateType);
                     break;
             }
@@ -55,8 +58,8 @@ namespace DChild.Gameplay.UI.CombatArts
         {
             m_button = uIButton;
             m_lockedUIAnimators = m_lockedUIAnimations.GetComponentsInChildren<BaseUISelectableAnimator>();
-            m_unlockableUIAnimators = m_lockedUIAnimations.GetComponentsInChildren<BaseUISelectableAnimator>();
-            m_unlockedUIAnimators = m_lockedUIAnimations.GetComponentsInChildren<BaseUISelectableAnimator>();
+            m_unlockableUIAnimators = m_unlockableUIAnimations.GetComponentsInChildren<BaseUISelectableAnimator>();
+            m_unlockedUIAnimators = m_unlockedUIAnimations.GetComponentsInChildren<BaseUISelectableAnimator>();
         }
 
         private void UseAnimator(BaseUISelectableAnimator[] animators, UISelectionState buttonState)
@@ -67,11 +70,30 @@ namespace DChild.Gameplay.UI.CombatArts
             }
         }
 
+        private void DisableAnimator(BaseUISelectableAnimator[] animators)
+        {
+            for (int i = 0; i < animators.Length; i++)
+            {
+                animators[i].SetController(null);
+            }
+        }
+
+        private void EnableAnimator(BaseUISelectableAnimator[] animators)
+        {
+            for (int i = 0; i < animators.Length; i++)
+            {
+                animators[i].SetController(m_button);
+            }
+        }
+
         private void DisableAllAnimations()
         {
             m_lockedUIAnimations.SetActive(false);
+            DisableAnimator(m_lockedUIAnimators);
             m_unlockableUIAnimations.SetActive(false);
+            DisableAnimator(m_unlockableUIAnimators);
             m_unlockedUIAnimations.SetActive(false);
+            DisableAnimator(m_unlockedUIAnimators);
         }
     }
 
