@@ -41,7 +41,7 @@ namespace DChild.Gameplay.Environment
         {
             // unsubscribe to event so that this function will not be called everytime this forces the resistance value;
             m_resistance.ResistanceChange -= OnResistanceChange;
-            m_resistance.SetResistance(StatusEffectType.Cursed, 1);
+            m_resistance.SetResistance(StatusEffectType.Cursed, 100);
             m_resistance.ResistanceChange += OnResistanceChange;
         }
 
