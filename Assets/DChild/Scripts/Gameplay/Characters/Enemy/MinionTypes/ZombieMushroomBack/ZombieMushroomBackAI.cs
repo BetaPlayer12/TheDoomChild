@@ -270,6 +270,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 //m_animation.SetAnimation(0, m_info.flinchAnimation, false);
                 m_stateHandle.Wait(State.ReevaluateSituation);
                 StartCoroutine(FlinchRoutine());
+                m_stateHandle.OverrideState(State.ReevaluateSituation);
             }
         }
 
@@ -278,7 +279,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_info.flinchAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.flinchAnimation);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
-            m_stateHandle.ApplyQueuedState();
+            //m_stateHandle.ApplyQueuedState();
             yield return null;
         }
 
