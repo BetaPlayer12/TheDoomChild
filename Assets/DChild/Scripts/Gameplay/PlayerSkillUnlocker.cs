@@ -7,6 +7,8 @@ using UnityEngine.Playables;
 using PixelCrushers.DialogueSystem;
 using Holysoft.Event;
 using System.Collections;
+using UnityEngine.Timeline;
+
 
 namespace DChild.Gameplay
 {
@@ -42,6 +44,12 @@ namespace DChild.Gameplay
         private PlayableDirector m_cinematic;
         [SerializeField]
         private Collider2D m_collider;
+        [SerializeField]
+        private GameplaySignalHandle m_shrineSignalHandle;
+        [SerializeField]
+        private SignalReceiver m_signalReceiver;
+        [SerializeField]
+        private SignalAsset[] m_signalsToRun;
         [SerializeField, OnValueChanged("OnIsUsedChanged")]
         private bool m_isUsed;
         [SerializeField, LuaScriptWizard(true)]
@@ -110,12 +118,14 @@ namespace DChild.Gameplay
         private IEnumerator OnCutsceneEnded()
         {
             //makes sure cutscene has ended before calling notifyskill  
-            yield return new WaitForSeconds(1);
+            yield return new WaitForSeconds(1f);
             NotifySkill(m_toUnlock);
             SetGlows(false);
             m_shrineVisualHandle.SkillShrineState(false);
-
-
+            for(int i = 0; i < m_signalsToRun.Length; i++)
+            {
+                m_signalReceiver.GetReaction(m_signalsToRun[i]).Invoke();
+            }
         }
 
         private void NotifySkill(PrimarySkill skill)

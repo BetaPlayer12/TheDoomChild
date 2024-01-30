@@ -31,6 +31,8 @@ namespace DChild.Gameplay
         private bool m_oneTimeOnly;
         [SerializeField]
         private bool m_waitForPlayerToBeGrounded;   //Using Coroutines to check for Player State before execution when this is TRUE. Have to Directly Access Player State for this to work.
+        [SerializeField]
+        private bool m_playerHitboxOnly;
         [SerializeField, TabGroup("Enter")]
         private UnityEvent m_enterEvents;
         [SerializeField, HideIf("m_oneTimeOnly"), TabGroup("Exit")]
@@ -102,7 +104,8 @@ namespace DChild.Gameplay
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
-
+            if (m_playerHitboxOnly && collision.tag != "Hitbox")
+                return;
 
             var playerObject = collision.gameObject.GetComponentInParent<PlayerControlledObject>();
             if (playerObject != null && collision.tag != "Sensor" && playerObject.owner == (IPlayer)GameplaySystem.playerManager.player)
