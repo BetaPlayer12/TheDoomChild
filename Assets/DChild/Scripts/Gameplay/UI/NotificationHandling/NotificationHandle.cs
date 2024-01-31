@@ -5,7 +5,7 @@ using UnityEngine.Events;
 
 namespace DChild.Gameplay.UI
 {
-    public abstract class NotificationHandle<T> : SerializedMonoBehaviour, INotificationHandle where T: System.Enum
+    public abstract class NotificationHandle<T> : SerializedMonoBehaviour, INotificationHandle where T : System.Enum
     {
         #region SubHandles
         protected abstract class SubHandle
@@ -97,6 +97,16 @@ namespace DChild.Gameplay.UI
             m_requests.Clear();
         }
 
+        public bool HasNotificationFor(object requestData)
+        {
+            for (int i = 0; i < m_requests.Count; i++)
+            {
+                if (m_requests[i].referenceData == requestData)
+                    return true;
+            }
+            return false;
+        }
+
         protected void AddNotificationRequest(NotificationRequest<T> request)
         {
             m_requests.Add(request);
@@ -110,6 +120,7 @@ namespace DChild.Gameplay.UI
             return x.priority < y.priority ? 1 : -1;
         }
 
-       
+     
+
     }
 }
