@@ -18,6 +18,10 @@ namespace Doozy.Runtime.UIManager.Containers
         public static void Show(UIViewId.CampaignSelect id, bool instant = false) => Show(nameof(UIViewId.CampaignSelect), id.ToString(), instant);
         public static void Hide(UIViewId.CampaignSelect id, bool instant = false) => Hide(nameof(UIViewId.CampaignSelect), id.ToString(), instant);
 
+        public static IEnumerable<UIView> GetViews(UIViewId.Codex id) => GetViews(nameof(UIViewId.Codex), id.ToString());
+        public static void Show(UIViewId.Codex id, bool instant = false) => Show(nameof(UIViewId.Codex), id.ToString(), instant);
+        public static void Hide(UIViewId.Codex id, bool instant = false) => Hide(nameof(UIViewId.Codex), id.ToString(), instant);
+
         public static IEnumerable<UIView> GetViews(UIViewId.Debug id) => GetViews(nameof(UIViewId.Debug), id.ToString());
         public static void Show(UIViewId.Debug id, bool instant = false) => Show(nameof(UIViewId.Debug), id.ToString(), instant);
         public static void Hide(UIViewId.Debug id, bool instant = false) => Hide(nameof(UIViewId.Debug), id.ToString(), instant);
@@ -70,6 +74,17 @@ namespace Doozy.Runtime.UIManager
             Video
         }
 
+        public enum Codex
+        {
+            Bestiary,
+            Characters,
+            Location,
+            Lore,
+            MainCodex,
+            Quest,
+            Tutorial
+        }
+
         public enum Debug
         {
             CombatArtsDebug,
@@ -83,6 +98,7 @@ namespace Doozy.Runtime.UIManager
         public enum Gameplay
         {
             Cinematic,
+            CinematicVideo,
             GameOver,
             HUD,
             Pause,
@@ -131,6 +147,7 @@ namespace Doozy.Runtime.UIManager
         public enum Store
         {
             Bestiary,
+            Codex,
             CombatArt,
             Inventory,
             Map,
