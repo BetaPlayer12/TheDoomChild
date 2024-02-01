@@ -257,8 +257,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
             }
             else
             {
-                var instance = GameSystem.poolManager.GetPool<ProjectilePool>().GetOrCreateItem(m_projectile.projectile);
-                instance.transform.position = m_spawnPoint.position;
+                var instance = GameSystem.poolManager.GetPool<ProjectilePool>().GetOrCreateItem(m_projectile.projectile, m_spawnPoint.position, Quaternion.identity);
+                //instance.transform.position = m_spawnPoint.position;
 
                 if (instance.TryGetComponentInChildren(out Animator animator))
                 {
@@ -280,10 +280,11 @@ namespace DChild.Gameplay.Characters.Players.Modules
         public void SpawnIdleProjectile()
         {
             //TEST
-            m_spawnedProjectile = GameSystem.poolManager.GetPool<ProjectilePool>().GetOrCreateItem(m_projectile.projectile);
-            m_spawnedProjectile.transform.position = m_spawnPoint.position;
+            m_spawnedProjectile = GameSystem.poolManager.GetPool<ProjectilePool>().GetOrCreateItem(m_projectile.projectile, m_spawnPoint.position, Quaternion.identity);
+            Debug.Log(m_spawnPoint.position);
+            //m_spawnedProjectile.transform.position = m_spawnPoint.position;
             m_spawnedProjectile.transform.parent = transform;
-            m_spawnedProjectile.transform.rotation = Quaternion.identity;
+            //m_spawnedProjectile.transform.rotation = Quaternion.identity;
             m_spawnedProjectile.GetComponent<Attacker>().SetParentAttacker(m_attacker);
             //TEST
 

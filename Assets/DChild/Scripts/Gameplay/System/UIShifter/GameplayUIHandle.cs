@@ -14,7 +14,10 @@ using Doozy.Runtime.Signals;
 using Doozy.Runtime.UIManager.Containers;
 using Holysoft.Event;
 using Sirenix.OdinInspector;
+using System;
+using System.Collections;
 using UnityEngine;
+using UnityEngine.Video;
 
 namespace DChild.Gameplay.Systems
 {
@@ -66,6 +69,11 @@ namespace DChild.Gameplay.Systems
 
         [SerializeField]
         private WeaponUpgradeHandle m_upgradeWeaponHandler;
+        [SerializeField]
+        private CinematicVideoHandle m_cinematicVideoHandle;
+
+        [SerializeField]
+        private UIView m_cinematicBars;
 
         public IUINotificationManager notificationManager => m_notificationManager;
 
@@ -76,6 +84,20 @@ namespace DChild.Gameplay.Systems
             if (on && instant)
             {
                 m_playerHUD.InstantHide();
+            }
+        }
+
+        public void ToggleCinematicBars(bool value)
+        {
+            if (value)
+            {
+                m_cinematicBars.Show();
+                m_playerHUD.InstantHide();
+            }
+            else
+            {
+                m_cinematicBars.Hide();
+                m_playerHUD.InstantShow();
             }
         }
 
@@ -148,7 +170,7 @@ namespace DChild.Gameplay.Systems
             if (willshow)
             {
                 m_bossCombat.ShowBossName();
-               // m_bossCombat.ShowBossHealth();
+                // m_bossCombat.ShowBossHealth();
             }
             else
             {
@@ -255,12 +277,18 @@ namespace DChild.Gameplay.Systems
         {
             m_notificationManager.InitializeFullPriorityHandling();
             m_notificationManager.InitializePromptPriorityHandling();
+            m_cinematicVideoHandle.Initialize();
         }
 
         public void OpenWeaponUpgradeConfirmationWindow()
         {
             m_upgradeWeaponHandler.RequestUpgrade();
             m_confirmationWindowSignal.SendSignal();
+        }
+
+        public void ShowCinematicVideo(VideoClip clip, Func<IEnumerator> behindTheSceneRoutine = null, Action OnVideoDone = null)
+        {
+            m_cinematicVideoHandle.ShowCinematicVideo(clip, behindTheSceneRoutine, OnVideoDone);
         }
     }
 }
