@@ -1,4 +1,5 @@
 ﻿using DChild.Gameplay.Characters.Players.Behaviour;
+using DChild.Gameplay.Characters.Players.State;
 using Holysoft.Event;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -14,11 +15,12 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private ParticleSystem m_doubleJumpFX;
         [SerializeField]
         private Transform m_particleSpawnPosition;
-        [SerializeField, BoxGroup("Sensors")]
-        private RaySensor m_frontWallStickSensor;
+        //[SerializeField, BoxGroup("Sensors")]
+        //private RaySensor m_frontWallStickSensor;
 
         private Rigidbody2D m_rigidbody;
         private Animator m_animator;
+        private IWallStickState m_wallStickState;
         private int m_animationParameter;
         private int m_wallJumpAnimationParameter;
         private int m_currentCount;
@@ -30,6 +32,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_rigidbody = info.rigidbody;
             m_currentCount = m_configuration.count;
             m_animator = info.animator;
+            m_wallStickState = info.state;
             m_animationParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.DoubleJump);
             m_wallJumpAnimationParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.WallJump);
         }
@@ -63,8 +66,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 m_currentCount--;
                 m_rigidbody.velocity = new Vector2(0, m_configuration.power);
 
-                m_frontWallStickSensor.Cast();
-                if (m_frontWallStickSensor.isDetecting)
+                if (m_wallStickState.isStickingToWall)
                 {
                     m_animator.SetBool(m_wallJumpAnimationParameter, true);
                 }

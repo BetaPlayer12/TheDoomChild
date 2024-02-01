@@ -61,6 +61,10 @@ namespace DChild.Gameplay.Characters
 
         public void SetAnimation(string animation) => m_animation = animation;
 
+        public void SetIdleAnimation(string idleAnimation) => m_idleAnimation = idleAnimation;
+
+        public void SetFlinchColorAnimation(string flinchColorAnimation) => m_flinchColorAnimation = flinchColorAnimation;
+
         public virtual void Flinch(Vector2 directionToSource, RelativeDirection damageSource, AttackSummaryInfo attackInfo)
         {
          

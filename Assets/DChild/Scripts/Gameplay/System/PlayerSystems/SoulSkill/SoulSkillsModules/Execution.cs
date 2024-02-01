@@ -52,6 +52,8 @@ namespace DChild.Gameplay.Characters.Players.SoulSkills
                     float damage = temp.value;
                     if (HitCollider.GetComponentInParent<Boss>() != null)
                         return;
+                    if (HitCollider.gameObject.layer == LayerMask.NameToLayer("Environment"))
+                        return;
                     if (m_isPercentage)
                     {
                         instantlyKillTarget = (targetHealth.currentValue / (float)targetHealth.maxValue) <= (m_hpThreshold / 100f);
