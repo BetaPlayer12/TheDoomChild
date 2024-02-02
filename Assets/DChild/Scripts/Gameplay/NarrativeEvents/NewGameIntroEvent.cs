@@ -1,5 +1,6 @@
 ﻿using Cinemachine;
 using DChild.Gameplay.Cinematics;
+using DChild.Gameplay.Systems;
 using DChild.Serialization;
 using DChild.Temp;
 using Doozy.Runtime.UIManager.Containers;
@@ -11,6 +12,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Playables;
+using UnityEngine.Video;
 
 namespace DChild.Gameplay.Narrative
 {
@@ -34,6 +36,8 @@ namespace DChild.Gameplay.Narrative
 
         }
 
+        [SerializeField]
+        private VideoClip m_cinematicVideo;
         [SerializeField]
         private PlayableDirector m_introCutscene;
         [SerializeField]
@@ -74,7 +78,7 @@ namespace DChild.Gameplay.Narrative
             m_isDone = ((SaveData)data).isDone;
             if (m_isDone == false)
             {
-                m_introCutscene.Play();
+                PlayVideoCinematic();
             }
         }
 
@@ -82,8 +86,9 @@ namespace DChild.Gameplay.Narrative
         {
             m_database.OnUse();
             m_storePickupSequence.SetActive(false);
-            m_introCutscene.Play();
             GameplaySystem.playerManager.player.GetComponentInChildren<PlayerInput>().actions.FindActionMap("Gameplay").Disable();
+            PlayVideoCinematic();
+            
         }
 
         public void TransferPlayerToStartPosition()
@@ -150,6 +155,16 @@ namespace DChild.Gameplay.Narrative
         private void PlayerInputFindActionMap(PlayerInput playerInput)
         {
             playerInput.actions.FindAction(m_wakeUpInput.action.name).performed += OnInputPerformed;
+        }
+
+        private void PlayVideoCinematic()
+        {
+            GameplaySystem.gamplayUIHandle.ShowCinematicVideo(m_cinematicVideo, null, PlayIntroCutscene);
+        }
+
+        private void PlayIntroCutscene()
+        {
+            m_introCutscene.Play();
         }
     }
 
