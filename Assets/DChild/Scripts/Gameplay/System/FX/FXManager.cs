@@ -42,7 +42,7 @@ namespace DChild.Gameplay.VFX
             if (fxGO == null)
                 return null;
 
-            var pooledFX = m_pool.GetOrCreateItem(fxGO);
+            var pooledFX = m_pool.GetOrCreateItem(fxGO, position, Quaternion.identity);
             if (pooledFX == null)
             {
                 return InstantiateFX(position, fxGO);

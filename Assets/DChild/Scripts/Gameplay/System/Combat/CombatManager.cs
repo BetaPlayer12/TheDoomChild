@@ -52,7 +52,6 @@ namespace DChild.Gameplay.Combat
                 targetInfo.breakableObject.RecordForceReceived(attacker.instance.transform.localScale, 5);
             }
 
-            ApplyAttackDamage(summary, m_cacheTarget, targetInfo.isCharacter); //reference Struct
 
             if (m_combatFXHandle != null)
             {
@@ -63,6 +62,8 @@ namespace DChild.Gameplay.Combat
                 m_combatFXHandle = new CombatFXHandle();
                 m_combatFXHandle.SpawnFX(attacker.hitCollider, attacker.damageFX, targetInfo.hitCollider, targetInfo.instance, targetInfo.damageFXInfo);
             }
+
+            ApplyAttackDamage(summary, m_cacheTarget, targetInfo.isCharacter); //reference Struct
 
             if (m_cacheTarget.isAlive)
             {

@@ -86,24 +86,38 @@ namespace DChild.Gameplay.UI
         [ContextMenu("Prompt/Journal")]
         public void PromptJournalUpdateNotification(JournalData journalData)
         {
-            AddNotificationRequest(new NotificationRequest<NotificationType>(m_journalDetailedNotification.priority, NotificationType.Journal_Detailed, journalData));
+            if (HasNotificationFor(journalData) == false)
+            {
+                AddNotificationRequest(new NotificationRequest<NotificationType>(m_journalDetailedNotification.priority, NotificationType.Journal_Detailed, journalData));
+            }
         }
 
         [ContextMenu("Prompt/Primary Skill")]
         public void QueueNotification(PrimarySkill primarySkillData)
         {
-            AddNotificationRequest(new NotificationRequest<NotificationType>(m_primarySkillNotification.priority, NotificationType.PrimarySkill, primarySkillData));
+            if (HasNotificationFor(primarySkillData) == false)
+            {
+                AddNotificationRequest(new NotificationRequest<NotificationType>(m_primarySkillNotification.priority, NotificationType.PrimarySkill, primarySkillData));
+            }
         }
 
         [ContextMenu("Prompt/Soul Skill")]
         public void QueueNotification(SoulSkill soulSkill)
         {
-            AddNotificationRequest(new NotificationRequest<NotificationType>(m_soulSkillNotification.priority, NotificationType.SoulSkill, soulSkill));
+            if (HasNotificationFor(soulSkill) == false)
+            {
+                AddNotificationRequest(new NotificationRequest<NotificationType>(m_soulSkillNotification.priority, NotificationType.SoulSkill, soulSkill));
+            }
+            
         }
 
         public void QueueNotification(LoreData data)
         {
-            AddNotificationRequest(new NotificationRequest<NotificationType>(m_soulSkillNotification.priority, NotificationType.Lore_Detailed, data));
+            if (HasNotificationFor(data) == false)
+            {
+                AddNotificationRequest(new NotificationRequest<NotificationType>(m_soulSkillNotification.priority, NotificationType.Lore_Detailed, data));
+            }
+            
         }
 
         public void QueueNotification(ItemData itemData)

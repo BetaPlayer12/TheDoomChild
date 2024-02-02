@@ -72,6 +72,7 @@ namespace DChild.Gameplay.Characters.Players
                 m_unlockedSkills &= ~module;
             }
             EndUpdate(module);
+            //Do this incase the thing is actually a passive module
         }
 
         public bool IsModuleActive(PrimarySkill module)
