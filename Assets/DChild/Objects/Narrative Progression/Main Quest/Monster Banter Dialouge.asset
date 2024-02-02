@@ -57,7 +57,7 @@ MonoBehaviour:
     spritePortrait: {fileID: 0}
     alternatePortraits: []
     spritePortraits: []
-  - id: 2
+  - id: 42
     fields:
     - title: Name
       value: Crazy Knight
@@ -79,7 +79,7 @@ MonoBehaviour:
     spritePortrait: {fileID: 0}
     alternatePortraits: []
     spritePortraits: []
-  - id: 3
+  - id: 41
     fields:
     - title: Name
       value: Necro
@@ -104,10 +104,52 @@ MonoBehaviour:
   items: []
   locations: []
   variables:
-  - id: 1
+  - id: 87
     fields:
     - title: Name
-      value: Gasuka hit counter
+      value: Gasuka attack
+      type: 0
+      typeString: 
+    - title: Initial Value
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Description
+      value: 
+      type: 0
+      typeString: 
+  - id: 88
+    fields:
+    - title: Name
+      value: Gasuka first sight
+      type: 0
+      typeString: 
+    - title: Initial Value
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Description
+      value: 
+      type: 0
+      typeString: 
+  - id: 89
+    fields:
+    - title: Name
+      value: 'PlayerHit '
+      type: 0
+      typeString: 
+    - title: Initial Value
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Description
+      value: 
+      type: 0
+      typeString: 
+  - id: 90
+    fields:
+    - title: Name
+      value: Contact Counter
       type: 0
       typeString: 
     - title: Initial Value
@@ -118,22 +160,22 @@ MonoBehaviour:
       value: 
       type: 0
       typeString: 
-  - id: 2
+  - id: 91
     fields:
     - title: Name
-      value: Contact counter
+      value: isSeen
       type: 0
       typeString: 
     - title: Initial Value
-      value: 0
-      type: 1
-      typeString: CustomFieldType_Number
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
     - title: Description
       value: 
       type: 0
       typeString: 
   conversations:
-  - id: 1
+  - id: 141
     fields:
     - title: Title
       value: Missed by gasuka's puke
@@ -144,13 +186,17 @@ MonoBehaviour:
       type: 0
       typeString: CustomFieldType_Text
     - title: Actor
-      value: 2
+      value: 42
       type: 5
       typeString: CustomFieldType_Actor
     - title: Conversant
       value: -1
       type: 5
       typeString: CustomFieldType_Actor
+    - title: IsBanter
+      value: True
+      type: 2
+      typeString: CustomFieldType_Boolean
     overrideSettings:
       useOverrides: 0
       overrideSubtitleSettings: 0
@@ -190,7 +236,7 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Actor
-        value: 2
+        value: 42
         type: 5
         typeString: CustomFieldType_Actor
       - title: Conversant
@@ -209,7 +255,11 @@ MonoBehaviour:
         value: None()
         type: 0
         typeString: 
-      conversationID: 1
+      - title: Response Menu Sequence
+        value: 
+        type: 0
+        typeString: 
+      conversationID: 141
       isRoot: 0
       isGroup: 0
       nodeColor: 
@@ -217,15 +267,15 @@ MonoBehaviour:
       falseConditionAction: Block
       conditionPriority: 2
       outgoingLinks:
-      - originConversationID: 1
+      - originConversationID: 141
         originDialogueID: 0
-        destinationConversationID: 1
+        destinationConversationID: 141
         destinationDialogueID: 1
         isConnector: 0
         priority: 2
-      - originConversationID: 1
+      - originConversationID: 141
         originDialogueID: 0
-        destinationConversationID: 1
+        destinationConversationID: 141
         destinationDialogueID: 2
         isConnector: 0
         priority: 2
@@ -236,8 +286,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 20
-        y: 55
+        x: 24.189522
+        y: 57.094757
         width: 160
         height: 30
     - id: 1
@@ -245,13 +295,13 @@ MonoBehaviour:
       - title: Title
         value: 
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       - title: Description
         value: First miss
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       - title: Actor
-        value: 2
+        value: 42
         type: 5
         typeString: CustomFieldType_Actor
       - title: Conversant
@@ -261,16 +311,16 @@ MonoBehaviour:
       - title: Menu Text
         value: 
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       - title: Dialogue Text
         value: Oh my god, he really ate something pretty wrong!
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       - title: Sequence
         value: 
         type: 0
-        typeString: 
-      conversationID: 1
+        typeString: CustomFieldType_Text
+      conversationID: 141
       isRoot: 0
       isGroup: 0
       nodeColor: 
@@ -278,16 +328,15 @@ MonoBehaviour:
       falseConditionAction: Block
       conditionPriority: 2
       outgoingLinks: []
-      conditionsString: Variable["Gasuka_hit_counter"] == 0
-      userScript: Variable["Gasuka_hit_counter"] = Variable["Gasuka_hit_counter"]
-        + 1
+      conditionsString: Variable["Gasuka_first_sight"] == false
+      userScript: Variable["Gasuka_first_sight"] = true
       onExecute:
         m_PersistentCalls:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 222.68039
-        y: 30
+        x: 230.9278
+        y: 34.189514
         width: 160
         height: 30
     - id: 2
@@ -295,13 +344,13 @@ MonoBehaviour:
       - title: Title
         value: 
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       - title: Description
         value: Second miss
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       - title: Actor
-        value: 2
+        value: 42
         type: 5
         typeString: CustomFieldType_Actor
       - title: Conversant
@@ -311,20 +360,20 @@ MonoBehaviour:
       - title: Menu Text
         value: 
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       - title: Dialogue Text
         value: No joke! You should change your diet!
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       - title: Sequence
         value: 
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       - title: Response Menu Sequence
         value: 
         type: 0
-        typeString: 
-      conversationID: 1
+        typeString: CustomFieldType_Text
+      conversationID: 141
       isRoot: 0
       isGroup: 0
       nodeColor: 
@@ -332,39 +381,42 @@ MonoBehaviour:
       falseConditionAction: Block
       conditionPriority: 2
       outgoingLinks: []
-      conditionsString: Variable["Gasuka_hit_counter"] == 1
-      userScript: Variable["Gasuka_hit_counter"] = Variable["Gasuka_hit_counter"]
-        + 1
+      conditionsString: Variable["Gasuka_attack"] == false
+      userScript: Variable["Gasuka_attack"] = true
       onExecute:
         m_PersistentCalls:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 225.7732
-        y: 80
+        x: 213.8407
+        y: 163.56
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 9.404567, y: 3.8543205}
-    canvasZoom: 0.97
-  - id: 2
+    canvasScrollPosition: {x: 0, y: 0}
+    canvasZoom: 0.94000006
+  - id: 142
     fields:
     - title: Title
       value: Get hit by gasuka's puke
       type: 0
-      typeString: 
+      typeString: CustomFieldType_Text
     - title: Description
       value: 'B18 '
       type: 0
-      typeString: 
+      typeString: CustomFieldType_Text
     - title: Actor
-      value: 2
+      value: 42
       type: 5
       typeString: CustomFieldType_Actor
     - title: Conversant
-      value: 3
+      value: 41
       type: 5
       typeString: CustomFieldType_Actor
+    - title: IsBanter
+      value: True
+      type: 2
+      typeString: CustomFieldType_Boolean
     overrideSettings:
       useOverrides: 0
       overrideSubtitleSettings: 0
@@ -404,11 +456,11 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Actor
-        value: 2
+        value: 42
         type: 5
         typeString: CustomFieldType_Actor
       - title: Conversant
-        value: 3
+        value: 41
         type: 5
         typeString: CustomFieldType_Actor
       - title: Menu Text
@@ -423,7 +475,11 @@ MonoBehaviour:
         value: None()
         type: 0
         typeString: 
-      conversationID: 2
+      - title: Response Menu Sequence
+        value: 
+        type: 0
+        typeString: 
+      conversationID: 142
       isRoot: 0
       isGroup: 0
       nodeColor: 
@@ -431,9 +487,9 @@ MonoBehaviour:
       falseConditionAction: Block
       conditionPriority: 2
       outgoingLinks:
-      - originConversationID: 2
+      - originConversationID: 142
         originDialogueID: 0
-        destinationConversationID: 2
+        destinationConversationID: 142
         destinationDialogueID: 1
         isConnector: 0
         priority: 2
@@ -459,11 +515,11 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Actor
-        value: 2
+        value: 42
         type: 5
         typeString: CustomFieldType_Actor
       - title: Conversant
-        value: 3
+        value: 41
         type: 5
         typeString: CustomFieldType_Actor
       - title: Menu Text
@@ -478,7 +534,7 @@ MonoBehaviour:
         value: 
         type: 0
         typeString: 
-      conversationID: 2
+      conversationID: 142
       isRoot: 0
       isGroup: 0
       nodeColor: 
@@ -486,21 +542,21 @@ MonoBehaviour:
       falseConditionAction: Block
       conditionPriority: 2
       outgoingLinks:
-      - originConversationID: 2
+      - originConversationID: 142
         originDialogueID: 1
-        destinationConversationID: 2
+        destinationConversationID: 142
         destinationDialogueID: 2
         isConnector: 0
         priority: 2
-      conditionsString: 
+      conditionsString: Variable["PlayerHit_"] == true
       userScript: 
       onExecute:
         m_PersistentCalls:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 29
-        y: 70
+        x: 27.947388
+        y: 73.28175
         width: 160
         height: 30
     - id: 2
@@ -514,11 +570,11 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Actor
-        value: 3
+        value: 41
         type: 5
         typeString: CustomFieldType_Actor
       - title: Conversant
-        value: 2
+        value: 42
         type: 5
         typeString: CustomFieldType_Actor
       - title: Menu Text
@@ -534,7 +590,7 @@ MonoBehaviour:
         value: 
         type: 0
         typeString: 
-      conversationID: 2
+      conversationID: 142
       isRoot: 0
       isGroup: 0
       nodeColor: 
@@ -542,9 +598,9 @@ MonoBehaviour:
       falseConditionAction: Block
       conditionPriority: 2
       outgoingLinks:
-      - originConversationID: 2
+      - originConversationID: 142
         originDialogueID: 2
-        destinationConversationID: 2
+        destinationConversationID: 142
         destinationDialogueID: 3
         isConnector: 0
         priority: 2
@@ -570,7 +626,7 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Actor
-        value: 2
+        value: 42
         type: 5
         typeString: CustomFieldType_Actor
       - title: Conversant
@@ -589,7 +645,7 @@ MonoBehaviour:
         value: 
         type: 0
         typeString: 
-      conversationID: 2
+      conversationID: 142
       isRoot: 0
       isGroup: 0
       nodeColor: 
@@ -598,7 +654,7 @@ MonoBehaviour:
       conditionPriority: 2
       outgoingLinks: []
       conditionsString: 
-      userScript: 
+      userScript: Variable["PlayerHit_"] = false
       onExecute:
         m_PersistentCalls:
           m_Calls: []
@@ -609,26 +665,30 @@ MonoBehaviour:
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 0, y: 0}
-    canvasZoom: 1
-  - id: 3
+    canvasScrollPosition: {x: 0, y: 8.344137}
+    canvasZoom: 0.8300003
+  - id: 143
     fields:
     - title: Title
-      value: First encounter Impaled Charger
+      value: Impaled Charger Encounter
       type: 0
-      typeString: 
+      typeString: CustomFieldType_Text
     - title: Description
       value: B19 B20
       type: 0
-      typeString: 
+      typeString: CustomFieldType_Text
     - title: Actor
-      value: 2
+      value: 42
       type: 5
       typeString: CustomFieldType_Actor
     - title: Conversant
       value: -1
       type: 5
       typeString: CustomFieldType_Actor
+    - title: IsBanter
+      value: True
+      type: 2
+      typeString: CustomFieldType_Boolean
     overrideSettings:
       useOverrides: 0
       overrideSubtitleSettings: 0
@@ -668,7 +728,7 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Actor
-        value: 2
+        value: 42
         type: 5
         typeString: CustomFieldType_Actor
       - title: Conversant
@@ -687,7 +747,7 @@ MonoBehaviour:
         value: None()
         type: 0
         typeString: 
-      conversationID: 3
+      conversationID: 143
       isRoot: 0
       isGroup: 0
       nodeColor: 
@@ -695,15 +755,15 @@ MonoBehaviour:
       falseConditionAction: Block
       conditionPriority: 2
       outgoingLinks:
-      - originConversationID: 3
+      - originConversationID: 143
         originDialogueID: 0
-        destinationConversationID: 3
+        destinationConversationID: 143
         destinationDialogueID: 1
         isConnector: 0
         priority: 2
-      - originConversationID: 3
+      - originConversationID: 143
         originDialogueID: 0
-        destinationConversationID: 3
+        destinationConversationID: 143
         destinationDialogueID: 3
         isConnector: 0
         priority: 2
@@ -729,7 +789,7 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Actor
-        value: 2
+        value: 42
         type: 5
         typeString: CustomFieldType_Actor
       - title: Conversant
@@ -748,7 +808,7 @@ MonoBehaviour:
         value: 
         type: 0
         typeString: 
-      conversationID: 3
+      conversationID: 143
       isRoot: 0
       isGroup: 0
       nodeColor: 
@@ -756,15 +816,15 @@ MonoBehaviour:
       falseConditionAction: Block
       conditionPriority: 2
       outgoingLinks: []
-      conditionsString: Variable["Contact_counter"] == 0
-      userScript: Variable["Contact_counter"] = Variable["Contact_counter"] + 1
+      conditionsString: 'Variable["Contact_Counter"] == 0 '
+      userScript: Variable["Contact_Counter"] = Variable["Contact_Counter"] + 1
       onExecute:
         m_PersistentCalls:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 228
-        y: 29
+        x: 302
+        y: 40
         width: 160
         height: 30
     - id: 3
@@ -778,7 +838,7 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Actor
-        value: 2
+        value: 42
         type: 5
         typeString: CustomFieldType_Actor
       - title: Conversant
@@ -798,7 +858,7 @@ MonoBehaviour:
         value: 
         type: 0
         typeString: 
-      conversationID: 3
+      conversationID: 143
       isRoot: 0
       isGroup: 0
       nodeColor: 
@@ -806,15 +866,15 @@ MonoBehaviour:
       falseConditionAction: Block
       conditionPriority: 2
       outgoingLinks: []
-      conditionsString: Variable["Contact_counter"] == 1
-      userScript: Variable["Contact_counter"] = Variable["Contact_counter"] + 1
+      conditionsString: Variable["Contact_Counter"] == 1
+      userScript: Variable["Contact_Counter"] = Variable["Contact_Counter"] + 1
       onExecute:
         m_PersistentCalls:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 228
-        y: 77
+        x: 260
+        y: 200
         width: 160
         height: 30
     entryGroups: []
