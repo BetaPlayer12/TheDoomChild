@@ -28,6 +28,12 @@ namespace DChild.Gameplay.Systems
         {
             if (m_isPlaying == false)
             {
+                if(clip == null) {
+                    Debug.LogWarning("There was an attempt to play a null video cinematic");
+
+                    return;
+                }
+
                 m_videoPlayer.clip = clip;
                 m_behindTheSceneRoutine = behindTheSceneRoutine;
                 this.OnVideoDone = OnVideoDone;
@@ -57,8 +63,8 @@ namespace DChild.Gameplay.Systems
 
             m_isPlaying = true;
             GameplaySystem.gamplayUIHandle.ToggleFadeUI(true);
-            m_videoCinemaStartSignal?.SendSignal();
             yield return waitForFade;
+            m_videoCinemaStartSignal?.SendSignal();
 
             m_videoClipPlaying = true;
             m_videoPlayer.Play();
@@ -71,11 +77,12 @@ namespace DChild.Gameplay.Systems
                 yield return null;
 
             m_videoPlayer.Stop();
-            GameplaySystem.gamplayUIHandle.ToggleFadeUI(false);
+            m_videoCinemaEndSignal?.SendSignal();
             OnVideoDone?.Invoke();
             yield return waitForFade;
 
-            m_videoCinemaEndSignal?.SendSignal();
+            GameplaySystem.gamplayUIHandle.ToggleFadeUI(false);
+
             m_isPlaying = false;
             m_videoPlayingRoutine = null;
         }
