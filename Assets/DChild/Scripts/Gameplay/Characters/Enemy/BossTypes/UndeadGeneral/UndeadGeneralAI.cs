@@ -17,6 +17,7 @@ using Spine.Unity.Modules;
 using Spine.Unity.Examples;
 using DChild.Gameplay.Pooling;
 using UnityEngine.Playables;
+using UnityEngine.Events;
 
 namespace DChild.Gameplay.Characters.Enemies
 {
@@ -378,6 +379,10 @@ namespace DChild.Gameplay.Characters.Enemies
         //private Pattern m_previousPattern;
         private Attack m_currentAttack;
         private float m_currentAttackRange;
+        [SerializeField]
+        private Health m_percentHealth;
+        [SerializeField]
+        private UnityEvent m_onTrigger;
 
         private int m_currentPhaseIndex;
         private Coroutine m_currentAttackCoroutine;
@@ -459,6 +464,15 @@ namespace DChild.Gameplay.Characters.Enemies
             //StopCurrentAttackRoutine();
             //SetAIToPhasing();
             StartCoroutine(SmartChangePhaseRoutine());
+        }
+
+        private void HealthChecker()
+        {
+            if(m_percentHealth.currentValue <= 300)
+            {
+                Debug.Log("30% health");
+                m_onTrigger?.Invoke();
+            }
         }
 
         private void OnTurnRequest(object sender, EventActionArgs eventArgs)
@@ -1184,6 +1198,7 @@ namespace DChild.Gameplay.Characters.Enemies
             //if (!m_hasPhaseChanged && m_stateHandle.currentState != State.Phasing)
             //{
             //}
+            HealthChecker();
             m_phaseHandle.MonitorPhase();
             switch (m_stateHandle.currentState)
             {
