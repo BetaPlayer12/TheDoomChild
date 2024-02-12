@@ -1,5 +1,56 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &715929381050157834
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 717744939705964703}
+  - component: {fileID: 4102986624607451735}
+  m_Layer: 13
+  m_Name: Behaviour
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &717744939705964703
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 715929381050157834}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6677246587317492230}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4102986624607451735
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 715929381050157834}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5830f2bbb3b8ac149905b0850dbf3c4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_source: {fileID: 7523664408371311691}
+  m_animator: {fileID: 1973810569652518233}
+  m_animation: Death2
+  m_bodyDuration:
+    m_startTime: 0
+  m_fx: []
+  m_destroySource: 1
 --- !u!1 &1664951382088835025
 GameObject:
   m_ObjectHideFlags: 0
@@ -13,13 +64,14 @@ GameObject:
   - component: {fileID: 7523664408371311691}
   - component: {fileID: 2057749560009966893}
   - component: {fileID: 3076353099329705257}
-  - component: {fileID: 5844641336174724215}
   - component: {fileID: 1973810569652518233}
   - component: {fileID: 5841707180932754963}
   - component: {fileID: 4726084788525987341}
   - component: {fileID: 1762485528942823083}
-  m_Layer: 0
-  m_Name: ThornVineNew
+  - component: {fileID: 1860726103486845287}
+  - component: {fileID: 6082715324367685952}
+  m_Layer: 13
+  m_Name: PetalStalagtite
   m_TagString: Character
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -38,6 +90,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 319572044910346466}
+  - {fileID: 717744939705964703}
   - {fileID: 1167448031081274735}
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -90,7 +143,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09224c16f78e2f34eacc2f5e9ee9ba2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_fx: {fileID: 0}
+  m_fx: {fileID: 3314828295703018961, guid: 517531074ae654d46b7f262304f1fbdd, type: 3}
   m_overrideColor: 0
   m_colorToUse: {r: 1, g: 1, b: 1, a: 1}
   m_overrideScale: 0
@@ -117,30 +170,6 @@ MonoBehaviour:
   m_bodyReference:
     m_default: {fileID: 0}
     m_list: []
---- !u!114 &5844641336174724215
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1664951382088835025}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 11a8651c1f4f7e3458d34f8132afc37c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_character: {fileID: 3076353099329705257}
-  m_animation: {fileID: 1973810569652518233}
-  m_data: {fileID: 11400000, guid: 9f6a8d6b0c886d248b6b8c660fc1be0e, type: 2}
-  m_damageable: {fileID: 7523664408371311691}
-  m_centerMass: {fileID: 2428162503821086958}
-  m_aggroBoundary: {fileID: 0}
-  m_statsData: {fileID: 0}
-  m_hitbox: {fileID: 4047959061915686115}
-  m_deathHandle: {fileID: 0}
-  m_flinchHandle: {fileID: 0}
-  m_spawnFX: {fileID: 0}
-  m_deathFX: {fileID: 0}
 --- !u!114 &1973810569652518233
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -223,6 +252,52 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_animation: {fileID: 1167448031081274728}
+--- !u!114 &1860726103486845287
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1664951382088835025}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 737f32f7a4795db44b154448c90c42f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_skeletonAnimation: {fileID: 1167448031081274728}
+  m_growthAnimation: spawn
+  m_idleAnimation: Idle
+  m_flinchAnimation: Flinch
+  m_flinchAnimation2: Flinch2
+  m_deathAnimation: Death
+  m_deathAnimation2: Death2
+  m_wiltAnimation: Wilt
+  m_animation: {fileID: 1973810569652518233}
+  m_colliders: {fileID: 8672858947954352776}
+  m_damageable: {fileID: 7523664408371311691}
+--- !u!114 &6082715324367685952
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1664951382088835025}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e10454193b54c9a4eb8bfb67b80c746d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_centerMass: {fileID: 2428162503821086958}
+  m_data: {fileID: 11400000, guid: 3f234096138374144b49dc4fea296c99, type: 2}
+  m_currentAttackInfo:
+    damage:
+      m_type: 1
+      m_value: 0
+    criticalDamageInfo:
+      chance: 0
+      damageModifier: 0
+    ignoreInvulnerability: 0
+    ignoresBlock: 0
 --- !u!1 &3893254688874006023
 GameObject:
   m_ObjectHideFlags: 0
@@ -233,7 +308,7 @@ GameObject:
   m_Component:
   - component: {fileID: 319572044910346466}
   - component: {fileID: 7205663502827540225}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Stats
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -275,10 +350,30 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 6677246587317492230}
     m_Modifications:
+    - target: {fileID: 1630740758390647664, guid: c6c8b880e9f7bee4496ff6d153b02dff,
+        type: 3}
+      propertyPath: m_Layer
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 3050563583537449207, guid: c6c8b880e9f7bee4496ff6d153b02dff,
+        type: 3}
+      propertyPath: m_Layer
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 4251946074291161149, guid: c6c8b880e9f7bee4496ff6d153b02dff,
+        type: 3}
+      propertyPath: m_Layer
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 5230885618116162098, guid: c6c8b880e9f7bee4496ff6d153b02dff,
+        type: 3}
+      propertyPath: m_Layer
+      value: 13
+      objectReference: {fileID: 0}
     - target: {fileID: 6011820493014497242, guid: c6c8b880e9f7bee4496ff6d153b02dff,
         type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 6011820493014497242, guid: c6c8b880e9f7bee4496ff6d153b02dff,
         type: 3}
@@ -333,7 +428,12 @@ PrefabInstance:
     - target: {fileID: 6011820493014497243, guid: c6c8b880e9f7bee4496ff6d153b02dff,
         type: 3}
       propertyPath: m_Name
-      value: ThornVineModelNew
+      value: PetalStalagtiteModel
+      objectReference: {fileID: 0}
+    - target: {fileID: 6011820493014497243, guid: c6c8b880e9f7bee4496ff6d153b02dff,
+        type: 3}
+      propertyPath: m_Layer
+      value: 13
       objectReference: {fileID: 0}
     - target: {fileID: 6011820493014497244, guid: c6c8b880e9f7bee4496ff6d153b02dff,
         type: 3}
@@ -344,6 +444,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Mesh
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 6499998409414441969, guid: c6c8b880e9f7bee4496ff6d153b02dff,
+        type: 3}
+      propertyPath: m_Layer
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 7123027009979687327, guid: c6c8b880e9f7bee4496ff6d153b02dff,
+        type: 3}
+      propertyPath: m_Layer
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 8082117889776759166, guid: c6c8b880e9f7bee4496ff6d153b02dff,
+        type: 3}
+      propertyPath: m_Layer
+      value: 13
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c6c8b880e9f7bee4496ff6d153b02dff, type: 3}
@@ -394,18 +509,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 4854279164789713589}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &4047959061915686115 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8894856103193493078, guid: c6c8b880e9f7bee4496ff6d153b02dff,
-    type: 3}
-  m_PrefabInstance: {fileID: 4854279164789713589}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e1819101304e6a3479b6fb001626539e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!50 &6075236270632425114 stripped
 Rigidbody2D:
   m_CorrespondingSourceObject: {fileID: 1662477100327877679, guid: c6c8b880e9f7bee4496ff6d153b02dff,
@@ -418,9 +521,15 @@ MonoBehaviour:
     type: 3}
   m_PrefabInstance: {fileID: 4854279164789713589}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 8672858947954352776}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4ffe2ff51b484f14592540b701d34e27, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &8672858947954352776 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4251946074291161149, guid: c6c8b880e9f7bee4496ff6d153b02dff,
+    type: 3}
+  m_PrefabInstance: {fileID: 4854279164789713589}
+  m_PrefabAsset: {fileID: 0}
