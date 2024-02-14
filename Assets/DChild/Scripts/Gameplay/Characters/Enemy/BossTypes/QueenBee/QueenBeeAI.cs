@@ -353,10 +353,18 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Move Points")]
         private Transform m_GroundPoint;
 
+
         [SerializeField]
-        private List<Transform> m_spawnPoints;
+        private List<Transform> m_wavePattern1;
+        [SerializeField]
+        private List<Transform> m_wavePattern2;
+        [SerializeField]
+        private List<Transform> m_wavePattern3;
         [SerializeField]
         private Transform m_spearSpawnPoint;
+
+        private Dictionary<string, List<Transform>> m_ListOfPatterns = new Dictionary<string, List<Transform>>();
+
 
         [SpineBone]
         public string m_boneName;
@@ -644,6 +652,7 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.summonDroneAnimation);
             for (int i = 0; i < m_currentDroneBatches; i++)
             {
+                Debug.Log("horizontal drone !!!");
                 //LaunchBeeProjectile();
                 m_animation.SetAnimation(0, m_info.orderDroneAttackAnimation, false).TimeScale = m_currentSummonSpeed;
                 yield return new WaitForAnimationComplete(m_animation.animationState, m_info.orderDroneAttackAnimation);
@@ -906,16 +915,33 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator LaunchBeeProjectileRoutine()
         {
+
+            float rotation = transform.localScale.x < 1 ? 180 : 0;
+            var randomNumber = UnityEngine.Random.Range(0, m_ListOfPatterns.Count);
+            Debug.Log(m_ListOfPatterns.Count.ToString());
+            string[] patternKeys = new string[m_ListOfPatterns.Count];
+            m_ListOfPatterns.Keys.CopyTo(patternKeys, 0);
+            var randomPattern = patternKeys[randomNumber];
+            List<Transform> randomPatternList = m_ListOfPatterns[randomPattern];
             for (int i = 0; i < m_currentSummonAmmount; i++)
             {
-                float rotation = transform.localScale.x < 1 ? 180 : 0;
-                int rng = UnityEngine.Random.Range(0, m_spawnPoints.Count);
-                m_spawnPoints[rng].localRotation = Quaternion.Euler(new Vector3(0, 0, rotation));
+                Debug.Log("Randomly chosen list (" + randomPattern + "):");
+                //int rng = UnityEngine.Range(0, m_spawnPoints.Count);
+                randomPatternList[i].localRotation = Quaternion.Euler(new Vector3(-rotation, 1 , rotation));
                 //GameObject burst = Instantiate(m_info.burstGO, m_spawnPoints[rng].position, Quaternion.Euler(new Vector3(0, 0, rotation)));
-                m_launcher = new ProjectileLauncher(m_info.beeProjectile.projectileInfo, m_spawnPoints[rng]);
+                m_launcher = new ProjectileLauncher(m_info.beeProjectile.projectileInfo, randomPatternList[i]);
                 m_launcher.LaunchProjectile();
-                yield return new WaitForSeconds(.25f);
+                //yield return new WaitForSeconds(.25f);
+                randomPatternList[i].localRotation = Quaternion.Euler(new Vector3(0, 0, 0));
             }
+            yield return null;
+            //float rotation = transform.localScale.x < 1 ? 180 : 0;
+            ////int rng = UnityEngine.Range(0, m_spawnPoints.Count);
+            //m_spawnPoints[i].localRotation = Quaternion.Euler(new Vector3(0, 0, rotation));
+            ////GameObject burst = Instantiate(m_info.burstGO, m_spawnPoints[rng].position, Quaternion.Euler(new Vector3(0, 0, rotation)));
+            //m_launcher = new ProjectileLauncher(m_info.beeProjectile.projectileInfo, m_spawnPoints[i]);
+            //m_launcher.LaunchProjectile();
+            //yield return new WaitForSeconds(.25f);
         }
 
         void SkeletonAnimation_UpdateLocal(ISkeletonAnimation animated)
@@ -1052,6 +1078,10 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_attackRangeCache = new List<float>();
             //AddToRangeCache(m_info.horizontalDroneAttack.range, m_info.spearChargeAttack.range, m_info.spearMeleeAttack.range, m_info.spearThrowAttack.range);
             m_attackUsed = new bool[m_attackCache.Count];
+
+            m_ListOfPatterns.Add("WavePatterns1", m_wavePattern1);
+            m_ListOfPatterns.Add("WavePatterns2", m_wavePattern2);
+            m_ListOfPatterns.Add("WavePatterns3", m_wavePattern3);
         }
 
         private void Update()
