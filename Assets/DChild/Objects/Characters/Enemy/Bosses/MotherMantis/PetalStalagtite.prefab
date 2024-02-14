@@ -264,16 +264,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 737f32f7a4795db44b154448c90c42f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_skeletonAnimation: {fileID: 1167448031081274728}
-  m_growthAnimation: spawn
-  m_idleAnimation: Idle
-  m_flinchAnimation: Flinch
-  m_flinchAnimation2: Flinch2
-  m_deathAnimation: Death
-  m_deathAnimation2: Death2
-  m_wiltAnimation: Wilt
+  m_character: {fileID: 3076353099329705257}
   m_animation: {fileID: 1973810569652518233}
-  m_colliders: {fileID: 8672858947954352776}
+  m_data: {fileID: 11400000, guid: d325f81e122d7c547afd64210cd03e3a, type: 2}
+  m_damageable: {fileID: 7523664408371311691}
+  m_centerMass: {fileID: 2428162503821086958}
+  m_aggroBoundary: {fileID: 0}
+  m_statsData: {fileID: 0}
+  m_hitbox: {fileID: 4047959061915686115}
   m_damageable: {fileID: 7523664408371311691}
 --- !u!114 &6082715324367685952
 MonoBehaviour:
@@ -360,6 +358,11 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 13
       objectReference: {fileID: 0}
+    - target: {fileID: 3050563583537449207, guid: c6c8b880e9f7bee4496ff6d153b02dff,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4251946074291161149, guid: c6c8b880e9f7bee4496ff6d153b02dff,
         type: 3}
       propertyPath: m_Layer
@@ -437,6 +440,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6011820493014497244, guid: c6c8b880e9f7bee4496ff6d153b02dff,
         type: 3}
+      propertyPath: m_SortingOrder
+      value: 96
+      objectReference: {fileID: 0}
+    - target: {fileID: 6011820493014497244, guid: c6c8b880e9f7bee4496ff6d153b02dff,
+        type: 3}
       propertyPath: m_Materials.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -454,6 +462,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Layer
       value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 8082117889776759166, guid: c6c8b880e9f7bee4496ff6d153b02dff,
+        type: 3}
+      propertyPath: m_Name
+      value: BadiCollider
       objectReference: {fileID: 0}
     - target: {fileID: 8082117889776759166, guid: c6c8b880e9f7bee4496ff6d153b02dff,
         type: 3}
@@ -509,6 +522,18 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 4854279164789713589}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &4047959061915686115 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8894856103193493078, guid: c6c8b880e9f7bee4496ff6d153b02dff,
+    type: 3}
+  m_PrefabInstance: {fileID: 4854279164789713589}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1819101304e6a3479b6fb001626539e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!50 &6075236270632425114 stripped
 Rigidbody2D:
   m_CorrespondingSourceObject: {fileID: 1662477100327877679, guid: c6c8b880e9f7bee4496ff6d153b02dff,
@@ -521,15 +546,9 @@ MonoBehaviour:
     type: 3}
   m_PrefabInstance: {fileID: 4854279164789713589}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8672858947954352776}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4ffe2ff51b484f14592540b701d34e27, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1 &8672858947954352776 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4251946074291161149, guid: c6c8b880e9f7bee4496ff6d153b02dff,
-    type: 3}
-  m_PrefabInstance: {fileID: 4854279164789713589}
-  m_PrefabAsset: {fileID: 0}
