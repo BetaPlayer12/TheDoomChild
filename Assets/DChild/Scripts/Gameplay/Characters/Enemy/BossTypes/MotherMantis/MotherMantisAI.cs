@@ -597,13 +597,13 @@ namespace DChild.Gameplay.Characters.Enemies
         #region SeedLaunch
         private IEnumerator SeedFXRoutine()
         {
-            yield return new WaitForSeconds(.6f);
-            m_seedLaunchFX.Play();
-            yield return new WaitForSeconds(1.4f);
-            m_seedLaunchFX.Play();
-            m_seedLaunchFX.Stop();
-            m_seedLaunchFX.Play();
-            m_seedLaunchFX.Stop();
+            //yield return new WaitForSeconds(.6f);
+            //m_seedLaunchFX.Play();
+            //yield return new WaitForSeconds(1.4f);
+            //m_seedLaunchFX.Play();
+            //m_seedLaunchFX.Stop();
+            //m_seedLaunchFX.Play();
+            //m_seedLaunchFX.Stop();
             StartCoroutine(SeedSpawnRoutine());
             yield return null;
         }
@@ -630,8 +630,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator SeedLaunchRoutine()
         {
             m_stateHandle.Wait(State.Cooldown);
-            m_animation.SetAnimation(0, m_info.attack5.animation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack5.animation);
+            m_animation.SetAnimation(0, m_info.attack2StepBack.animation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack2StepBack.animation);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_stateHandle.ApplyQueuedState();
             yield return null;
@@ -693,7 +693,7 @@ namespace DChild.Gameplay.Characters.Enemies
                                     new AttackInfo<Attack>(Attack.Attack2, m_info.attack2.range),
                                     new AttackInfo<Attack>(Attack.Attack3, m_info.attack3.range),
                                     new AttackInfo<Attack>(Attack.Attack4, m_info.attack4.range),
-                                    new AttackInfo<Attack>(Attack.Attack5, m_info.attack5.range));
+                                    new AttackInfo<Attack>(Attack.Attack5, m_info.attack2StepBack.range));
             m_attackDecider.hasDecidedOnAttack = false;
         }
 
