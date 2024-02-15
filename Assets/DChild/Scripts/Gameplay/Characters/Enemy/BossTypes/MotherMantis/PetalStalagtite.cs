@@ -86,9 +86,12 @@ namespace DChild.Gameplay.Characters.Enemies
         private Hitbox m_hitbox;
         [SerializeField, TabGroup("Reference")]
         private Damageable m_damageable;
+        [SerializeField]
+        private MotherMantisAI motherMantisAI;
 
         [ShowInInspector]
         private StateHandle<State> m_stateHandle;
+        private bool m_isPetalRainEnd;
 
         public void GetTarget(AITargetInfo target)
         {
@@ -134,9 +137,16 @@ namespace DChild.Gameplay.Characters.Enemies
             m_stateHandle = new StateHandle<State>(State.Grow, State.WaitBehaviourEnd);
 
         }
-
+        private bool OnPetalRainEnd()
+        {
+            return false;
+        }
         private void Update()
         {
+            if (!motherMantisAI.m_seedSpawning)
+            {
+                StartCoroutine(WiltFxRoutine());
+            }
             switch (m_stateHandle.currentState)
             {
                 case State.Grow:

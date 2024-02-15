@@ -306,7 +306,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private List<Vector2> m_targetPositions;
 
         private bool m_stickToGround;
-        private bool m_seedSpawning;
+        public bool m_seedSpawning;
         private float m_currentCD;
 
         [ReadOnly, TabGroup("PatternTracker")]
@@ -333,6 +333,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private string m_moveAnim;
         private float m_moveSpeed;
         private bool m_isDetecting;
+
 
         private void ApplyPhaseData(PhaseInfo obj)
         {
@@ -624,8 +625,10 @@ namespace DChild.Gameplay.Characters.Enemies
                 yield return new WaitForSeconds(.5f);
             }
             m_seedSpawning = false;
+            yield return new WaitForSeconds(1f);
             yield return null;
         }
+
 
         private IEnumerator SeedLaunchRoutine()
         {
