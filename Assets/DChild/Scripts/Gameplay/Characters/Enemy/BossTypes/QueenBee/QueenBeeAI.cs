@@ -238,6 +238,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     list.Add(reference[i].Name);
                 }
                 return list;
+                
             }
         }
 
@@ -362,9 +363,12 @@ namespace DChild.Gameplay.Characters.Enemies
         private List<Transform> m_wavePattern3;
         [SerializeField]
         private Transform m_spearSpawnPoint;
+        [SerializeField]
+        private int m_hitCounter;
+        [SerializeField]
+        private int m_hitsToUnstuck;
 
         private Dictionary<string, List<Transform>> m_ListOfPatterns = new Dictionary<string, List<Transform>>();
-
 
         [SpineBone]
         public string m_boneName;
@@ -391,6 +395,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_currentDroneBatches = obj.droneStrikeBatches;
             m_currentSummonSpeed = obj.droneStrikeSummonSpeed;
             m_currentSummonAmmount = obj.droneSummonAmmount;
+          
         }
 
         private void ChangeState()
@@ -425,8 +430,15 @@ namespace DChild.Gameplay.Characters.Enemies
                     StopAllCoroutines();
                     m_animation.SetAnimation(0, IsFacingTarget() ? m_info.stuckStateFlinchForwardAnimation : m_info.stuckStateFlinchBackwardAnimation, false);
                     m_stateHandle.OverrideState(State.Stucc);
+                    
                 }
             }
+        }
+
+        private void HitOnBee(object sender, Damageable.DamageEventArgs eventArgs)
+        {
+            Debug.Log("On me");
+            m_hitCounter++;
         }
 
         //private void OnFlinchEnd(object sender, EventActionArgs eventArgs)
@@ -592,6 +604,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 yield return new WaitForAnimationComplete(m_animation.animationState, m_info.phase4TransitionAnimation);
                 //yield return new WaitForSeconds(5);
                 //m_animation.EnableRootMotion(false, false);
+                m_damageable.DamageTaken += HitOnBee;
                 StartCoroutine(GroundStingerRoutine());
                 //m_animation.SetAnimation(0, m_info.idleAnimation, true);
             }
@@ -883,6 +896,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_colliderDamageGO.SetActive(false);
             m_agent.Stop();
             m_isDetecting = false;
+            m_damageable.DamageTaken -= HitOnBee;
         }
 
         private void LaunchBeeProjectile()
@@ -915,7 +929,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator LaunchBeeProjectileRoutine()
         {
-
+            //leandro spag code 
             float rotation = transform.localScale.x < 1 ? 180 : 0;
             var randomNumber = UnityEngine.Random.Range(0, m_ListOfPatterns.Count);
             Debug.Log(m_ListOfPatterns.Count.ToString());
@@ -935,6 +949,8 @@ namespace DChild.Gameplay.Characters.Enemies
                 randomPatternList[i].localRotation = Quaternion.Euler(new Vector3(0, 0, 0));
             }
             yield return null;
+
+            //old logic
             //float rotation = transform.localScale.x < 1 ? 180 : 0;
             ////int rng = UnityEngine.Range(0, m_spawnPoints.Count);
             //m_spawnPoints[i].localRotation = Quaternion.Euler(new Vector3(0, 0, rotation));
@@ -1060,6 +1076,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.skeletonAnimation.UpdateLocal += SkeletonAnimation_UpdateLocal;
             //m_stingerLauncher = new ProjectileLauncher(m_info.stingerProjectile.projectileInfo, m_spawnPoints[0]);
 
+
         }
 
         protected override void Start()
@@ -1112,6 +1129,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     break;
 
                 case State.Stucc:
+                   // hit counter = 3 to unstucc
                     if (m_info.groundStingerRecoverTime > m_currentRecoverTime)
                     {
                         if (m_animation.skeletonAnimation.AnimationState.GetCurrent(0).IsComplete)
@@ -1120,11 +1138,12 @@ namespace DChild.Gameplay.Characters.Enemies
                         }
                         m_currentRecoverTime += Time.deltaTime;
                     }
-                    else
+                    if (m_info.groundStingerRecoverTime < m_currentRecoverTime || m_hitCounter == m_hitsToUnstuck)
                     {
                         m_stateHandle.OverrideState(State.WaitBehaviourEnd);
                         StartCoroutine(GroundStingerRecoverRoutine());
                         m_currentRecoverTime = 0;
+                        m_hitCounter = 0;
                     }
                     break;
 
