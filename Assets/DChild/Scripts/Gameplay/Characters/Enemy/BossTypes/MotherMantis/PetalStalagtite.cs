@@ -100,7 +100,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private void OnDestroy()
         {
             StopAllCoroutines();
-            
+            m_motherMantisAI.OnPetalRain -= OnPetalRain;
             StartCoroutine(DeathFxRoutine());
         }
         private IEnumerator GrowthRoutine()
@@ -111,7 +111,8 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.growAnimation);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_hitbox.SetInvulnerability(Invulnerability.None);
-            if (m_isPetalRain == true)
+            yield return new WaitForSeconds(1f);
+            if (m_isPetalRain == false)
             {
                 StartCoroutine(WiltFxRoutine());
             }
@@ -128,24 +129,28 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator WiltFxRoutine()
         {
-            yield return new WaitForSeconds(4f);
+            yield return new WaitForSeconds(.5f);
             m_animation.SetAnimation(0, m_info.wiltAnimation, false);
-            m_motherMantisAI.onPetalRain -= PetalRain;
+            m_hitbox.enabled = false;
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.wiltAnimation);
+            Destroy(this.gameObject);
+            //m_motherMantisAI.OnPetalRain -= OnPetalRain;
+            m_motherMantisAI.OnPetalRain += OnPetalRain;
             yield return null;
         }
 
         protected override void Awake()
         {
             base.Awake();
-            m_motherMantisAI.onPetalRain += PetalRain;
+            //m_motherMantisAI.OnPetalRain += OnPetalRain;
             var sizeMult = UnityEngine.Random.Range(119, 120) * .01f;
             transform.localScale = new Vector2(transform.localScale.x * sizeMult, transform.localScale.y * sizeMult);
             m_stateHandle = new StateHandle<State>(State.Grow, State.WaitBehaviourEnd);
 
         }
-        private void PetalRain(object sender, EventActionArgs eventActionArgs )
+        private void OnPetalRain(object sender, EventActionArgs eventActionArgs )
         {
-            m_isPetalRain = true;
+            m_isPetalRain = false;
         }
         private void Update()
         {
