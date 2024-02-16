@@ -87,11 +87,11 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Reference")]
         private Damageable m_damageable;
         [SerializeField]
-        private MotherMantisAI motherMantisAI;
+        private MotherMantisAI m_motherMantisAI;
 
         [ShowInInspector]
         private StateHandle<State> m_stateHandle;
-        private bool m_isPetalRainEnd;
+        private bool m_isPetalRain;
 
         public void GetTarget(AITargetInfo target)
         {
@@ -100,6 +100,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private void OnDestroy()
         {
             StopAllCoroutines();
+            
             StartCoroutine(DeathFxRoutine());
         }
         private IEnumerator GrowthRoutine()
@@ -110,7 +111,10 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.growAnimation);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_hitbox.SetInvulnerability(Invulnerability.None);
-
+            if (m_isPetalRain == true)
+            {
+                StartCoroutine(WiltFxRoutine());
+            }
             m_stateHandle.ApplyQueuedState();
             yield return null;
         }
@@ -124,29 +128,28 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator WiltFxRoutine()
         {
-            yield return new WaitForSeconds(0.25f);
+            yield return new WaitForSeconds(4f);
             m_animation.SetAnimation(0, m_info.wiltAnimation, false);
+            m_motherMantisAI.onPetalRain -= PetalRain;
             yield return null;
         }
 
         protected override void Awake()
         {
             base.Awake();
+            m_motherMantisAI.onPetalRain += PetalRain;
             var sizeMult = UnityEngine.Random.Range(119, 120) * .01f;
             transform.localScale = new Vector2(transform.localScale.x * sizeMult, transform.localScale.y * sizeMult);
             m_stateHandle = new StateHandle<State>(State.Grow, State.WaitBehaviourEnd);
 
         }
-        private bool OnPetalRainEnd()
+        private void PetalRain(object sender, EventActionArgs eventActionArgs )
         {
-            return false;
+            m_isPetalRain = true;
         }
         private void Update()
         {
-            if (!motherMantisAI.m_seedSpawning)
-            {
-                StartCoroutine(WiltFxRoutine());
-            }
+  
             switch (m_stateHandle.currentState)
             {
                 case State.Grow:

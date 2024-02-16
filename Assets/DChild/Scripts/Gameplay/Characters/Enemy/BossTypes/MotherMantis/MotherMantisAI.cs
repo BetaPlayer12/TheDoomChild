@@ -333,6 +333,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private string m_moveAnim;
         private float m_moveSpeed;
         private bool m_isDetecting;
+            
+            public EventAction<EventActionArgs> onPetalRain;
 
 
         private void ApplyPhaseData(PhaseInfo obj)
@@ -632,6 +634,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator SeedLaunchRoutine()
         {
+            onPetalRain?.Invoke(this, EventActionArgs.Empty);
             m_stateHandle.Wait(State.Cooldown);
             m_animation.SetAnimation(0, m_info.attack2StepBack.animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack2StepBack.animation);
