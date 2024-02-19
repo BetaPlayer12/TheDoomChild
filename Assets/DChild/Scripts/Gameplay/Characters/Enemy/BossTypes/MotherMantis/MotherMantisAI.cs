@@ -273,6 +273,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private ParticleFX m_landFX;
         [SerializeField, TabGroup("Effects")]
         private ParticleFX m_flinchFX;
+        [SerializeField, TabGroup("Effects")]
+        private ParticleFX m_landingVisualFX;
         [SerializeField]
         private SpineEventListener m_spineListener;
 
@@ -554,6 +556,7 @@ namespace DChild.Gameplay.Characters.Enemies
             //var animation = UnityEngine.Random.Range(0, 2) == 1 ? m_info.attack2.animation : m_info.attack2StepBack.animation;
             m_animation.SetAnimation(0, m_info.attack2.animation, false);
             yield return new WaitForSeconds(1.5f);
+            m_landingVisualFX.Play();
             Attackbb.SetActive(true);
             transform.position = new Vector2(m_targetInfo.position.x, transform.position.y - 5);
             //yield return new WaitUntil(() => m_groundSensor.isDetecting);
@@ -627,7 +630,6 @@ namespace DChild.Gameplay.Characters.Enemies
                 yield return new WaitForSeconds(.5f);
             }
             m_seedSpawning = false;
-            yield return new WaitForSeconds(1f);
             yield return null;
         }
 
