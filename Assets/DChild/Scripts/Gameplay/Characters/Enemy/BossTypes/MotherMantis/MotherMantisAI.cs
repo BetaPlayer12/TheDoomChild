@@ -86,6 +86,9 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField]
             private float m_seedAmmount;
             public float seedAmmount => m_seedAmmount;
+            [SerializeField]
+            private float m_stalagmite1Seed;
+            public float stalagmite1Seed => stalagmite1Seed;
 
             [Title("Spawned Objects")]
             [SerializeField]
@@ -645,7 +648,24 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return null;
         } 
         #endregion
+        private IEnumerator StalagmiteSeedLaunchIRoutine()
+        {
+            m_seedSpawning = true;
+            for (int i = 0; i < m_info.seedAmmount; i++)
+            {
+                var spawnPoint = new Vector2(m_seedSpawnPoint.position.x + (UnityEngine.Random.Range(-50, 50)), m_seedSpawnPoint.position.y);
+                //var projectile = Instantiate(m_info.seedProjectile, spawnPoint, Quaternion.identity);
 
+                GameObject projectile = m_info.seedProjectile;
+                var instance = GameSystem.poolManager.GetPool<ProjectilePool>().GetOrCreateItem(projectile);
+                instance.transform.position = spawnPoint;
+                var component = instance.GetComponent<Projectile>();
+                component.ResetState();
+                yield return new WaitForSeconds(.5f);
+            }
+                m_seedSpawning = false;
+            yield return null;
+        }
         #endregion
         #region Movement
         private void MoveToTarget()
