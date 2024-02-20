@@ -1,3 +1,4 @@
+using DChild;
 using DChild.Gameplay;
 using DChild.Gameplay.Characters;
 using Holysoft.Event;
@@ -28,17 +29,16 @@ public class FlowerSporeProjectile : MonoBehaviour
     private SpineRootAnimation m_animation;
 
     [SerializeField, TabGroup("FX")]
-    private ParticleSystem m_bulbAnitciaption;
+    private ParticleFX m_bulbAnitciaption;
     [SerializeField, TabGroup("FX")]
-    private ParticleSystem m_bulbExplosion;
+    private ParticleFX m_bulbExplosion;
 
 
     private IEnumerator GrowthRoutine()
     {
-        
         m_animation.SetAnimation(0, m_growthAnimation, false);
-        yield return new WaitForSeconds(0.4f);
-        m_animation.SetAnimation(0, m_idle, true);
+        yield return new WaitForAnimationComplete(m_animation.animationState, m_growthAnimation);
+        m_animation.SetAnimation(0, m_idle, false);
         yield return new WaitForSeconds(1f);
         StartCoroutine(BulbExplosionRoutine());
         yield return null;
@@ -58,7 +58,7 @@ public class FlowerSporeProjectile : MonoBehaviour
         StopAllCoroutines();
     }
 
-    private void Awake()
+    private void Start()
     {
         StartCoroutine(GrowthRoutine());
     }
