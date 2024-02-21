@@ -306,6 +306,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private Transform m_bulbSpawnPoint;
         [SerializeField, TabGroup("Spawn Points")]
         private Transform m_seedSpawnPoint;
+        [SerializeField, TabGroup("Spawn Points")]
+        private List<Transform> m_stalagtiteSp1;
 
         private float m_groundPosition;
         private List<Vector2> m_targetPositions;
@@ -324,7 +326,6 @@ namespace DChild.Gameplay.Characters.Enemies
         public int m_attack4Use;
         [ReadOnly, TabGroup("PatternTracker")]
         public int m_attack5Use;
-
 
 
         private int m_currentPhaseIndex;
@@ -451,8 +452,23 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_isPhasing = false;
             if (m_currentPhaseIndex == 4)
             {
-                StartCoroutine(SeedLaunchRoutine());
-                StartCoroutine(SeedFXRoutine());
+                //StartCoroutine(SeedLaunchRoutine());
+                //StartCoroutine(SeedFXRoutine());
+                var randomNumber = UnityEngine.Random.Range(0, 2);
+                Debug.Log(randomNumber);
+                if (randomNumber == 0)
+                {
+
+                    StartCoroutine(SeedLaunchRoutine());
+                    StartCoroutine(SeedFXRoutine());
+                }
+                else
+                {
+                    StartCoroutine(SeedLaunchRoutine1());
+                    StartCoroutine(StalagmiteSeedLaunchIRoutine1());
+                }
+
+                Debug.Log("m_currentPhaseIndex ");
             }
             else
             {
@@ -576,6 +592,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_stateHandle.ApplyQueuedState();
             yield return null;
         }
+
         #endregion
 
         #region LarvaBulbAttack
@@ -648,14 +665,17 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return null;
         } 
         #endregion
-        private IEnumerator StalagmiteSeedLaunchIRoutine()
+        private IEnumerator StalagmiteSeedLaunchIRoutine1()
         {
             m_seedSpawning = true;
-            for (int i = 0; i < m_info.seedAmmount; i++)
+            Shuffle(m_stalagtiteSp1);
+            var spawnPointsSelected = UnityEngine.Random.Range(7, 9);
+            spawnPointsSelected = Mathf.Min(spawnPointsSelected, m_stalagtiteSp1.Count);
+            List<Transform> selectedSpawnPoints = m_stalagtiteSp1.GetRange(0, spawnPointsSelected);
+            for (int i = 0; i < selectedSpawnPoints.Count; i++)
             {
-                var spawnPoint = new Vector2(m_seedSpawnPoint.position.x + (UnityEngine.Random.Range(-50, 50)), m_seedSpawnPoint.position.y);
-                //var projectile = Instantiate(m_info.seedProjectile, spawnPoint, Quaternion.identity);
-
+                var spawnPoint = selectedSpawnPoints[i].transform.position;
+                //var numberOfSpawnPointToSelect
                 GameObject projectile = m_info.seedProjectile;
                 var instance = GameSystem.poolManager.GetPool<ProjectilePool>().GetOrCreateItem(projectile);
                 instance.transform.position = spawnPoint;
@@ -663,7 +683,42 @@ namespace DChild.Gameplay.Characters.Enemies
                 component.ResetState();
                 yield return new WaitForSeconds(.5f);
             }
-                m_seedSpawning = false;
+            m_seedSpawning = false;
+            yield return null;
+
+
+            //m_seedSpawning = true;
+            //for (int i = 0; i < m_info.stalagmite1Seed; i++)
+            //{
+            //    var spawnPoint = new Vector2(m_seedSpawnPoint.position.x + (UnityEngine.Random.Range(-50, 50)), m_seedSpawnPoint.position.y);
+            //    //var projectile = Instantiate(m_info.seedProjectile, spawnPoint, Quaternion.identity);
+
+            //    GameObject projectile = m_info.seedProjectile;
+            //    var instance = GameSystem.poolManager.GetPool<ProjectilePool>().GetOrCreateItem(projectile);
+            //    instance.transform.position = spawnPoint;
+            //    var component = instance.GetComponent<Projectile>();
+            //    component.ResetState();
+            //    yield return new WaitForSeconds(.5f);
+            //}
+            //m_seedSpawning = false;
+            //yield return null;
+        }
+
+        private IEnumerator SeedLaunchRoutine1()
+        {
+            OnPetalRain?.Invoke(this, EventActionArgs.Empty);
+            m_stateHandle.Wait(State.Cooldown);
+            m_animation.SetAnimation(0, m_info.attack2StepBack.animation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack2StepBack.animation);
+            m_animation.SetAnimation(0, m_info.idleAnimation, true);
+            m_stateHandle.ApplyQueuedState();
+            for (int i = 0; i < m_currentPetalAmount; i++)
+            {
+                m_targetPositions.Add(CalculatePositions());
+            }
+            StartCoroutine(PetalFXRoutine(m_targetInfo.position));
+            StartCoroutine(PetalLaunchRoutine());
+            //m_animation.SetAnimation(0, m_info.idleAnimation, true);
             yield return null;
         }
         #endregion
@@ -698,7 +753,18 @@ namespace DChild.Gameplay.Characters.Enemies
                 return false;
             }
         }
-
+        private void Shuffle<T>(List<T> list)
+        {
+            int n = list.Count;
+            while (n > 1)
+            {
+                n--;
+                int k = UnityEngine.Random.Range(0, n + 1);
+                T value = list[k];
+                list[k] = list[n];
+                list[n] = value;
+            }
+        }
         private void AttackPattern()
         {
             m_attackDecider.hasDecidedOnAttack = true;
@@ -918,8 +984,23 @@ namespace DChild.Gameplay.Characters.Enemies
                                     if (AllowAttack(4) && !m_seedSpawning)
                                     {
                                         //m_attackHandle.ExecuteAttack(m_info.attack5.animation, m_info.idleAnimation);
-                                        StartCoroutine(SeedLaunchRoutine());
-                                        StartCoroutine(SeedFXRoutine());
+                                        //StartCoroutine(SeedLaunchRoutine());
+                                        //StartCoroutine(SeedFXRoutine());
+                                        //StartCoroutine(SeedLaunchRoutine1());
+                                        //StartCoroutine(StalagmiteSeedLaunchIRoutine1());
+                                        var randomNumber = UnityEngine.Random.Range(0,2);
+                                        Debug.Log(randomNumber);
+                                        if (randomNumber == 0)
+                                        {
+                                            
+                                            StartCoroutine(SeedLaunchRoutine());
+                                            StartCoroutine(SeedFXRoutine());
+                                        }
+                                        else{
+                                            StartCoroutine(SeedLaunchRoutine1());
+                                            StartCoroutine(StalagmiteSeedLaunchIRoutine1());
+                                        }
+                                        Debug.Log("AllowAttack");
                                     }
                                     else
                                     {
