@@ -85,6 +85,8 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Reference")]
         private Hitbox m_hitbox;
         [SerializeField, TabGroup("Reference")]
+        private Collider2D m_collider;
+        [SerializeField, TabGroup("Reference")]
         private Damageable m_damageable;
         [SerializeField]
         private MotherMantisAI m_motherMantisAI;
@@ -131,6 +133,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             yield return new WaitForSeconds(.5f);
             m_animation.SetAnimation(0, m_info.wiltAnimation, false);
+            m_collider.enabled = false;
             m_hitbox.enabled = false;
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.wiltAnimation);
             Destroy(this.gameObject);

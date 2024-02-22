@@ -454,19 +454,19 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 //StartCoroutine(SeedLaunchRoutine());
                 //StartCoroutine(SeedFXRoutine());
-                var randomNumber = UnityEngine.Random.Range(0, 2);
+                /*var randomNumber = UnityEngine.Random.Range(0, 2);
                 Debug.Log(randomNumber);
                 if (randomNumber == 0)
-                {
+                {*/
 
                     StartCoroutine(SeedLaunchRoutine());
                     StartCoroutine(SeedFXRoutine());
-                }
+                /*}
                 else
                 {
-                    StartCoroutine(SeedLaunchRoutine1());
-                    StartCoroutine(StalagmiteSeedLaunchIRoutine1());
-                }
+                    *//*StartCoroutine(SeedLaunchRoutine1());
+                    StartCoroutine(StalagmiteSeedLaunchIRoutine1());*//*
+                }*/
 
                 Debug.Log("m_currentPhaseIndex ");
             }
@@ -659,6 +659,16 @@ namespace DChild.Gameplay.Characters.Enemies
             OnPetalRain?.Invoke(this, EventActionArgs.Empty);
             m_stateHandle.Wait(State.Cooldown);
             m_animation.SetAnimation(0, m_info.attack2StepBack.animation, false);
+            yield return new WaitForSeconds(1.5f);
+            if(this.GetComponent<Character>().facing == HorizontalDirection.Left)
+            {
+                transform.position = new Vector2(transform.position.x + 30, transform.position.y - 5);   
+            }
+            else
+            {
+                transform.position = new Vector2(transform.position.x - 30, transform.position.y - 5);
+            }
+            
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack2StepBack.animation);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_stateHandle.ApplyQueuedState();
@@ -709,6 +719,8 @@ namespace DChild.Gameplay.Characters.Enemies
             OnPetalRain?.Invoke(this, EventActionArgs.Empty);
             m_stateHandle.Wait(State.Cooldown);
             m_animation.SetAnimation(0, m_info.attack2StepBack.animation, false);
+            yield return new WaitForSeconds(1.5f);
+            transform.position = new Vector2(m_targetInfo.position.x - 50, transform.position.y - 5);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack2StepBack.animation);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_stateHandle.ApplyQueuedState();

@@ -272,9 +272,9 @@ MonoBehaviour:
   m_aggroBoundary: {fileID: 0}
   m_statsData: {fileID: 0}
   m_hitbox: {fileID: 4047959061915686115}
+  m_collider: {fileID: 1810786668205476930}
   m_damageable: {fileID: 7523664408371311691}
-  motherMantisAI: {fileID: 7042121348533572269, guid: 8c46999a64a997b4caa51de9ecca122b,
-    type: 3}
+  m_motherMantisAI: {fileID: 0}
 --- !u!114 &6082715324367685952
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -354,6 +354,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Layer
       value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 2172452062681207554, guid: c6c8b880e9f7bee4496ff6d153b02dff,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3050563583537449207, guid: c6c8b880e9f7bee4496ff6d153b02dff,
         type: 3}
@@ -475,6 +480,11 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 13
       objectReference: {fileID: 0}
+    - target: {fileID: 8894856103193493078, guid: c6c8b880e9f7bee4496ff6d153b02dff,
+        type: 3}
+      propertyPath: m_damageFXInfo.m_fx
+      value: 
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c6c8b880e9f7bee4496ff6d153b02dff, type: 3}
 --- !u!114 &1167448031081274728 stripped
@@ -518,12 +528,40 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 4854279164789713589}
   m_PrefabAsset: {fileID: 0}
+--- !u!61 &1810786668205476930 stripped
+BoxCollider2D:
+  m_CorrespondingSourceObject: {fileID: 6520343436123989751, guid: c6c8b880e9f7bee4496ff6d153b02dff,
+    type: 3}
+  m_PrefabInstance: {fileID: 4854279164789713589}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &2428162503821086958 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7129002225417009755, guid: c6c8b880e9f7bee4496ff6d153b02dff,
     type: 3}
   m_PrefabInstance: {fileID: 4854279164789713589}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &3707780018385443787 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8082117889776759166, guid: c6c8b880e9f7bee4496ff6d153b02dff,
+    type: 3}
+  m_PrefabInstance: {fileID: 4854279164789713589}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &4213027533019611187
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3707780018385443787}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d74578be2c646f438409c91e5fd4ee4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_canDetectInteractables: 0
+  m_damageUniqueHitboxesOnly: 0
+  m_collisionRegistrator: {fileID: 0}
+  m_ignoreColliderList: []
 --- !u!114 &4047959061915686115 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8894856103193493078, guid: c6c8b880e9f7bee4496ff6d153b02dff,
