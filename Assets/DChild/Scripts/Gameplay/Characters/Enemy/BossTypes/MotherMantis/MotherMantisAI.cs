@@ -248,6 +248,10 @@ namespace DChild.Gameplay.Characters.Enemies
         private Transform m_modelTransform;
         [SerializeField, TabGroup("Reference")]
         private GameObject Attackbb;
+        [SerializeField, TabGroup("Reference")]
+        private GameObject m_leftBounds;
+        [SerializeField, TabGroup("Reference")]
+        private GameObject m_rightBounds;
         [SerializeField, TabGroup("Modules")]
         private AnimatedTurnHandle m_turnHandle;
         [SerializeField, TabGroup("Modules")]
@@ -339,7 +343,9 @@ namespace DChild.Gameplay.Characters.Enemies
         private string m_moveAnim;
         private float m_moveSpeed;
         private bool m_isDetecting;
-            
+        [SerializeField]
+        private float m_distance;
+
         public EventAction<EventActionArgs> OnPetalRain;
 
 
@@ -454,21 +460,22 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 //StartCoroutine(SeedLaunchRoutine());
                 //StartCoroutine(SeedFXRoutine());
-                /*var randomNumber = UnityEngine.Random.Range(0, 2);
+                var randomNumber = UnityEngine.Random.Range(0, 2);
                 Debug.Log(randomNumber);
                 if (randomNumber == 0)
-                {*/
+                {
 
                     StartCoroutine(SeedLaunchRoutine());
                     StartCoroutine(SeedFXRoutine());
-                /*}
+                }
                 else
                 {
-                    *//*StartCoroutine(SeedLaunchRoutine1());
-                    StartCoroutine(StalagmiteSeedLaunchIRoutine1());*//*
-                }*/
 
-                Debug.Log("m_currentPhaseIndex ");
+                    StartCoroutine(SeedLaunchRoutine1());
+                    StartCoroutine(StalagmiteSeedLaunchIRoutine1());
+                }
+
+            Debug.Log("m_currentPhaseIndex ");
             }
             else
             {
@@ -639,7 +646,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_seedSpawning = true;
             for (int i = 0; i < m_info.seedAmmount; i++)
             {
-                var spawnPoint = new Vector2(m_seedSpawnPoint.position.x + (UnityEngine.Random.Range(-50, 50)), m_seedSpawnPoint.position.y);
+                var spawnPoint = new Vector2(m_seedSpawnPoint.position.x + (UnityEngine.Random.Range(-66f, 33f)), m_seedSpawnPoint.position.y);
                 //var projectile = Instantiate(m_info.seedProjectile, spawnPoint, Quaternion.identity);
 
                 GameObject projectile = m_info.seedProjectile;
@@ -660,23 +667,22 @@ namespace DChild.Gameplay.Characters.Enemies
             m_stateHandle.Wait(State.Cooldown);
             m_animation.SetAnimation(0, m_info.attack2StepBack.animation, false);
             yield return new WaitForSeconds(1.5f);
-            if(this.GetComponent<Character>().facing == HorizontalDirection.Left)
-            {
-                transform.position = new Vector2(transform.position.x + 30, transform.position.y - 5);   
-            }
-            else
-            {
-                transform.position = new Vector2(transform.position.x - 30, transform.position.y - 5);
-            }
-            
+            transform.position = new Vector3(-180f, transform.position.y, 0);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack2StepBack.animation);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_stateHandle.ApplyQueuedState();
+            for (int i = 0; i < m_currentPetalAmount; i++)
+            {
+                m_targetPositions.Add(CalculatePositions());
+            }
+            StartCoroutine(PetalFXRoutine(m_targetInfo.position));
+            StartCoroutine(PetalLaunchRoutine());
             yield return null;
         } 
         #endregion
         private IEnumerator StalagmiteSeedLaunchIRoutine1()
         {
+            yield return new WaitForSeconds(1.5f);
             m_seedSpawning = true;
             Shuffle(m_stalagtiteSp1);
             var spawnPointsSelected = UnityEngine.Random.Range(7, 9);
@@ -716,11 +722,34 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator SeedLaunchRoutine1()
         {
+            var distanceLeft = Vector3.Distance(m_targetInfo.position, m_leftBounds.transform.position);
+            var distanceRight = Vector3.Distance(m_targetInfo.position, m_rightBounds.transform.position);
             OnPetalRain?.Invoke(this, EventActionArgs.Empty);
             m_stateHandle.Wait(State.Cooldown);
             m_animation.SetAnimation(0, m_info.attack2StepBack.animation, false);
             yield return new WaitForSeconds(1.5f);
-            transform.position = new Vector2(m_targetInfo.position.x - 50, transform.position.y - 5);
+            if (distanceLeft < distanceRight)
+            {
+                transform.position = new Vector2(m_rightBounds.transform.position.x - m_distance, transform.position.y);
+            }
+            else
+            {
+                transform.position = new Vector2(m_leftBounds.transform.position.x + m_distance, transform.position.y);
+            }
+            /*if (this.GetComponent<Character>().facing == HorizontalDirection.Left)
+            {
+                if (transform.position.x <= -168f)
+                    transform.position = new Vector2(transform.position.x - 50f, transform.position.y);
+                else
+                    transform.position = new Vector2(transform.position.x + 50f, transform.position.y);
+            }
+            else
+            {
+                if (transform.position.x <= -223f)
+                    transform.position = new Vector2(transform.position.x + 50f, transform.position.y);
+                else
+                    transform.position = new Vector2(transform.position.x - 50f, transform.position.y);
+            }*/
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack2StepBack.animation);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_stateHandle.ApplyQueuedState();
@@ -907,6 +936,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void Update()
         {
+            Debug.Log(Vector3.Distance(m_targetInfo.position, m_leftBounds.transform.position));
+            Debug.Log(Vector3.Distance(m_targetInfo.position, m_rightBounds.transform.position));
             //if (!m_isPhasing)
             //{
             //}
