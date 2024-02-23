@@ -174,6 +174,10 @@ namespace DChild.Gameplay.Characters.Enemies
 
         [SerializeField]
         private bool m_willPatrol;
+        private int m_minionSummon = 0;
+        [SerializeField]
+        private float m_cooldownToSummon;
+        //public Stack<int> m_summoned = new Stack<int>();
 
 
         [ShowInInspector]
@@ -274,7 +278,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         m_sneerRoutine = null;
                     }
                     //m_enablePatience = false;
-                    m_turnState = State.WaitBehaviourEnd;
+                    m_turnState = State.Standby;
                     if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation.animation)
                         m_stateHandle.SetState(State.Turning);
                 }
@@ -380,12 +384,25 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_projectileLauncher.LaunchProjectile();
                     break;
                 case Attack.SummonAttack:
-                    m_summons[m_currentSummonID].SummonAt(m_currentSummonID == 0 ? (Vector2)transform.position : new Vector2(m_lastTargetPos.x, m_lastTargetPos.y + 10f), m_targetInfo);
+                    var minions = Instantiate(m_minions[m_currentSummonID], m_currentSummonID == 0 ? (Vector2)transform.position : new Vector2(m_lastTargetPos.x, m_lastTargetPos.y + 10f), Quaternion.identity);
+                    minions.GetComponent<Damageable>().Destroyed += OnMinionSummonedDestroyed;
+                    //m_summons[m_currentSummonID].SummonAt(m_currentSummonID == 0 ? (Vector2)transform.position : new Vector2(m_lastTargetPos.x, m_lastTargetPos.y + 10f), m_targetInfo);
                     break;
             }
         }
+        private void OnMinionSummonedDestroyed(object sender, EventActionArgs eventArgs)
+        {
+            StartCoroutine(Cooldown());
+            //throw new NotImplementedException();
+        }
 
         #endregion
+        private IEnumerator Cooldown()
+        {
+            yield return new WaitForSeconds(m_cooldownToSummon);
+            m_minionSummon--;
+            yield return null;
+        }
 
         public override void ApplyData()
         {
@@ -584,16 +601,24 @@ namespace DChild.Gameplay.Characters.Enemies
                             //m_attackRoutine = StartCoroutine(AttackRoutine());
                             break;
                         case Attack.SummonAttack:
-                            if (!m_minions[m_currentSummonID].gameObject.activeSelf)
+                            m_minionSummon++;
+                            //m_summoned.Push(m_minionSummon);
+                            if (m_minionSummon <= 1)
                             {
                                 m_attackHandle.ExecuteAttack(m_info.summonAttack.animation, m_info.idleAnimation.animation);
                             }
-                            else
+                            if(m_minionSummon >= 1)
                             {
-                                m_animation.DisableRootMotion();
-                                m_attackDecider.hasDecidedOnAttack = false;
-                                m_stateHandle.ApplyQueuedState();
+                                m_minionSummon = 1;
+                                if(m_minionSummon == 1)
+                                {
+                                    m_stateHandle.SetState(State.Cooldown);
+                                }
+                                //m_stateHandle.SetState(State.Attacking);
                             }
+                            m_animation.DisableRootMotion();
+                            m_attackDecider.hasDecidedOnAttack = false;
+                            m_stateHandle.ApplyQueuedState();
                             //m_attackRoutine = StartCoroutine(AttackRoutine());
                             break;
                     }
