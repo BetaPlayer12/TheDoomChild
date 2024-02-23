@@ -29,6 +29,8 @@ public class FlowerSporeProjectile : MonoBehaviour
     private SpineRootAnimation m_animation;
 
     [SerializeField, TabGroup("FX")]
+    private ParticleFX m_bulbGrowthAnitciaption;
+    [SerializeField, TabGroup("FX")]
     private ParticleFX m_bulbAnitciaption;
     [SerializeField, TabGroup("FX")]
     private ParticleFX m_bulbExplosion;
@@ -36,9 +38,11 @@ public class FlowerSporeProjectile : MonoBehaviour
 
     private IEnumerator GrowthRoutine()
     {
+        m_bulbGrowthAnitciaption.Play();
+        yield return new WaitForSeconds(1f);
         m_animation.SetAnimation(0, m_growthAnimation, false);
         yield return new WaitForAnimationComplete(m_animation.animationState, m_growthAnimation);
-        m_animation.SetAnimation(0, m_idle, false);
+        m_animation.SetAnimation(0, m_idle, true);
         yield return new WaitForSeconds(1f);
         StartCoroutine(BulbExplosionRoutine());
         yield return null;
@@ -47,8 +51,8 @@ public class FlowerSporeProjectile : MonoBehaviour
     private IEnumerator BulbExplosionRoutine()
     {
         m_bulbAnitciaption.Play();
-        yield return new WaitForSeconds(1f);
         m_animation.SetAnimation(0, m_sporeAttack1, false);
+        yield return new WaitForSeconds(1f);
         m_bulbExplosion.Play();
         yield return null;
     }
