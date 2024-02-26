@@ -690,11 +690,12 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator SeedLaunchRoutine()
         {
+            var centerPoint = CalculateCenterPoint(m_leftBounds.transform.position, m_rightBounds.transform.position);
             OnPetalRain?.Invoke(this, EventActionArgs.Empty);
             m_stateHandle.Wait(State.Cooldown);
             m_animation.SetAnimation(0, m_info.attack2StepBack.animation, false);
             yield return new WaitForSeconds(1.5f);
-            transform.position = new Vector3(-180f, transform.position.y, 0);
+            transform.position = new Vector3(centerPoint.x, transform.position.y, 0);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack2StepBack.animation);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_stateHandle.ApplyQueuedState();
@@ -705,7 +706,11 @@ namespace DChild.Gameplay.Characters.Enemies
             StartCoroutine(PetalFXRoutine(m_targetInfo.position));
             StartCoroutine(PetalLaunchRoutine());
             yield return null;
-        } 
+        }
+        Vector2 CalculateCenterPoint(Vector2 pos1, Vector2 pos2)
+        {
+            return (pos1 + pos2) / 2f;
+        }
         #endregion
         private IEnumerator StalagmiteSeedLaunchIRoutine1()
         {
@@ -963,8 +968,6 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void Update()
         {
-            Debug.Log(Vector3.Distance(m_targetInfo.position, m_leftBounds.transform.position));
-            Debug.Log(Vector3.Distance(m_targetInfo.position, m_rightBounds.transform.position));
             //if (!m_isPhasing)
             //{
             //}
