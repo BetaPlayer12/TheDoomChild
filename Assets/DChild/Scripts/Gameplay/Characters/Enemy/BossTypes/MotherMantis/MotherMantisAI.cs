@@ -347,6 +347,12 @@ namespace DChild.Gameplay.Characters.Enemies
         private float m_distance;
 
         public EventAction<EventActionArgs> OnPetalRain;
+        public EventAction<EventActionArgs> OnHandRaisedRight;
+        public EventAction<EventActionArgs> OnHandRaisedLeft;
+        public EventAction<EventActionArgs> OnBothHandRaised;
+
+        public GameObject leftHandActive;
+
 
 
         private void ApplyPhaseData(PhaseInfo obj)
@@ -618,9 +624,30 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator SpawnLarvaBulbRoutine()
         {
+            var bulbAttackDecider = UnityEngine.Random.Range(1, 3);
             m_stateHandle.Wait(State.Cooldown);
-            m_animation.SetAnimation(0, m_info.attack3.animation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack3.animation);
+            if(bulbAttackDecider == 1)
+            {
+                m_animation.SetAnimation(0, m_info.idleAnimation.animation, true);
+                leftHandActive.SetActive(true);
+                OnHandRaisedLeft?.Invoke(this, EventActionArgs.Empty);
+                yield return new WaitForSeconds(1f);
+                leftHandActive.SetActive(false);
+
+            }
+            if (bulbAttackDecider == 2)
+            {
+                m_animation.SetAnimation(0, m_info.attack3.animation, false);
+                OnHandRaisedRight?.Invoke(this, EventActionArgs.Empty);
+
+            }
+            if (bulbAttackDecider == 3)
+            {
+                m_animation.SetAnimation(0, m_info.attack4.animation, false);
+                OnBothHandRaised?.Invoke(this, EventActionArgs.Empty);
+
+            }
+            yield return new WaitForSeconds(1f);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_stateHandle.ApplyQueuedState();
             yield return null;
@@ -1007,7 +1034,6 @@ namespace DChild.Gameplay.Characters.Enemies
                                     if (AllowAttack(3))
                                     {
                                         StartCoroutine(SpawnLarvaRoutine());
-                                        StartCoroutine(SpawnLarvaBulbRoutine());
                                     }
                                     break;
                                 case Attack.Attack4:
