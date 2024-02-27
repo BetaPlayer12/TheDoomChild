@@ -86,16 +86,16 @@ public class FlowerSporeBulbHandle : MonoBehaviour
     private
     void Start()
     {
-        m_mothermantisAI.OnHandRaisedLeft += OnLefttHandRaised;
-        m_mothermantisAI.OnHandRaisedRight += OnRightHandRaised;
-        m_mothermantisAI.OnBothHandRaised += OnBothHandRaised;
+        //m_mothermantisAI.OnHandRaisedLeft += OnLefttHandRaised;
+        //m_mothermantisAI.OnHandRaisedRight += OnRightHandRaised;
+        //m_mothermantisAI.OnBothHandRaised += OnBothHandRaised;
     }
 
     private void OnDestroy()
     {
-        m_mothermantisAI.OnHandRaisedLeft -= OnLefttHandRaised;
-        m_mothermantisAI.OnHandRaisedRight -= OnRightHandRaised;
-        m_mothermantisAI.OnBothHandRaised -= OnBothHandRaised;
+        //m_mothermantisai.onhandraisedleft -= onleftthandraised;
+        //m_mothermantisai.onhandraisedright -= onrighthandraised;
+        //m_mothermantisai.onbothhandraised -= onbothhandraised;
     }
 
     // Update is called once per frame
