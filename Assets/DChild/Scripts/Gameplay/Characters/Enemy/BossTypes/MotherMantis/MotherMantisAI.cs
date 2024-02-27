@@ -343,7 +343,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private string m_moveAnim;
         private float m_moveSpeed;
         private bool m_isDetecting;
-        public EventAction<EventActionArgs> onPetalRain;
+        public EventAction<EventActionArgs> OnPetalRain;
 
         private void ApplyPhaseData(PhaseInfo obj)
         {
@@ -941,7 +941,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_stateHandle.Wait(State.Cooldown);
             m_movement.Stop();
-            onPetalRain?.Invoke(this, EventActionArgs.Empty);
+            OnPetalRain?.Invoke(this, EventActionArgs.Empty);
             m_hitbox.SetInvulnerability(Invulnerability.MAX); //wasTrue
             m_animation.SetAnimation(0, m_info.jump.animation, false);
             yield return new WaitForSeconds(1.5f);
