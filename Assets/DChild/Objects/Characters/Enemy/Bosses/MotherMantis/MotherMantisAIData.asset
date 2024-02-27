@@ -16,13 +16,12 @@ MonoBehaviour:
     SerializedFormat: 2
     SerializedBytes: 
     ReferencedUnityObjects:
-    - {fileID: 11400000, guid: 810ee3f0c0b21d6409fd343536e5aad1, type: 2}
+    - {fileID: 11400000, guid: 14dd029bc1c0a5342bbb575a0c0ed592, type: 2}
     - {fileID: 11400000, guid: 1156924e4c6b8ae46a1dc85eab9777e8, type: 2}
     - {fileID: 11400000, guid: 84ab1376832a330468d50715752b10bf, type: 2}
     - {fileID: 11400000, guid: 2a37be1dbd44803428bde04f8a0dbd66, type: 2}
-    - {fileID: 11400000, guid: 45020ff7cedc06f4ca08ac78df9e2b61, type: 2}
     - {fileID: 1095467673669666503, guid: 8d28ec37b263ed94890e4d2c01fa70d7, type: 3}
-    - {fileID: 5491536387865029442, guid: d68e299de7929694db0d64c94a8ac520, type: 3}
+    - {fileID: 7221469844771098798, guid: c8bcb49e13be187438728f4d791f5090, type: 3}
     - {fileID: 749649876316887703, guid: 29d735b0061a41141877c7aa769b7e8e, type: 3}
     SerializedBytesString: 
     Prefab: {fileID: 0}
@@ -59,7 +58,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 12
-      Data: 4
+      Data: 3
     - Name: 
       Entry: 7
       Data: 
@@ -93,18 +92,6 @@ MonoBehaviour:
     - Name: $v
       Entry: 10
       Data: 3
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 
-    - Name: $k
-      Entry: 3
-      Data: 3
-    - Name: $v
-      Entry: 10
-      Data: 4
     - Name: 
       Entry: 8
       Data: 
@@ -137,7 +124,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 12
-      Data: 4
+      Data: 3
     - Name: 
       Entry: 7
       Data: 
@@ -158,18 +145,6 @@ MonoBehaviour:
       Data: 1
     - Name: $v
       Entry: 3
-      Data: 75
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 
-    - Name: $k
-      Entry: 3
-      Data: 2
-    - Name: $v
-      Entry: 3
       Data: 50
     - Name: 
       Entry: 8
@@ -179,7 +154,7 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 3
-      Data: 3
+      Data: 2
     - Name: $v
       Entry: 3
       Data: 25
@@ -204,7 +179,7 @@ MonoBehaviour:
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
-      Data: Move
+      Data: Move1
     - Name: m_timeScale
       Entry: 4
       Data: 1
@@ -220,7 +195,7 @@ MonoBehaviour:
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
-      Data: Move(lowHP)
+      Data: Move Phase3
     - Name: m_timeScale
       Entry: 4
       Data: 1
@@ -230,22 +205,16 @@ MonoBehaviour:
     - Name: 
       Entry: 8
       Data: 
-    - Name: m_universalAttackCD
+    - Name: m_attackCD
       Entry: 4
-      Data: 1
-    - Name: m_universalAttackChance
-      Entry: 4
-      Data: 80
-    - Name: m_meleeAttackChance
-      Entry: 4
-      Data: 100
-    - Name: m_attack1
+      Data: 2
+    - Name: m_clawattack
       Entry: 7
       Data: 9|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.MotherMantisAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
-      Data: Attack1
+      Data: Front Claw Swipe
     - Name: m_timeScale
       Entry: 4
       Data: 1
@@ -255,182 +224,171 @@ MonoBehaviour:
     - Name: 
       Entry: 8
       Data: 
-    - Name: m_attack2
+    - Name: m_jump
       Entry: 7
       Data: 10|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.MotherMantisAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
-      Data: Attack2a
+      Data: Jump
     - Name: m_timeScale
       Entry: 4
       Data: 1
     - Name: m_range
       Entry: 4
-      Data: 80
+      Data: 500
     - Name: 
       Entry: 8
       Data: 
-    - Name: m_stuckAnimation
+    - Name: m_landingAnimation
       Entry: 7
       Data: 11|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.MotherMantisAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
-      Data: Attack2b
+      Data: Landing Attack
     - Name: m_timeScale
       Entry: 4
       Data: 1
     - Name: 
       Entry: 8
       Data: 
-    - Name: m_unstuckAnimation
+    - Name: m_backgroundLandingAnimation
       Entry: 7
       Data: 12|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.MotherMantisAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
-      Data: Attack2c
+      Data: Background Landing
     - Name: m_timeScale
       Entry: 4
       Data: 1
     - Name: 
       Entry: 8
       Data: 
-    - Name: m_stuckDuration
-      Entry: 4
-      Data: 2
-    - Name: m_attack2StepBack
+    - Name: m_backgroundJumpAnimation
       Entry: 7
-      Data: 13|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.MotherMantisAI+Info,
+      Data: 13|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.MotherMantisAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
-      Data: Attack2(withstepback)
+      Data: Background Jump
     - Name: m_timeScale
       Entry: 4
       Data: 1
-    - Name: m_range
-      Entry: 4
-      Data: 80
     - Name: 
       Entry: 8
       Data: 
-    - Name: m_attack3
+    - Name: m_petalBackgroundLeft
       Entry: 7
-      Data: 14|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.MotherMantisAI+Info,
+      Data: 14|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.MotherMantisAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
-      Data: Attack3
+      Data: Background Raise hand Leftside
     - Name: m_timeScale
       Entry: 4
       Data: 1
-    - Name: m_range
-      Entry: 4
-      Data: 200
     - Name: 
       Entry: 8
       Data: 
-    - Name: m_bulbAmount
-      Entry: 4
-      Data: 3
-    - Name: m_attack4
+    - Name: m_petalBackgroundRight
       Entry: 7
-      Data: 15|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.MotherMantisAI+Info,
+      Data: 15|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.MotherMantisAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
-      Data: Attack4
+      Data: Background Raise hand Rightside
     - Name: m_timeScale
       Entry: 4
       Data: 1
-    - Name: m_range
-      Entry: 4
-      Data: 200
     - Name: 
       Entry: 8
       Data: 
-    - Name: m_attack4b
+    - Name: m_petalBackgroundBoth
       Entry: 7
-      Data: 16|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.MotherMantisAI+Info,
+      Data: 16|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.MotherMantisAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
-      Data: Attack4b
+      Data: Background Raise Both hands
     - Name: m_timeScale
       Entry: 4
       Data: 1
-    - Name: m_range
-      Entry: 4
-      Data: 15
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: m_attack5
-      Entry: 7
-      Data: 17|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.MotherMantisAI+Info,
-        Assembly-CSharp]], Assembly-CSharp
-    - Name: m_animation
-      Entry: 1
-      Data: Attack5
-    - Name: m_timeScale
-      Entry: 4
-      Data: 1
-    - Name: m_range
-      Entry: 4
-      Data: 200
     - Name: 
       Entry: 8
       Data: 
     - Name: m_seedAmmount
       Entry: 4
       Data: 10
-    - Name: m_stalagmite1Seed
-      Entry: 4
-      Data: 8
-    - Name: m_larvaBulb
+    - Name: m_FlowerBulb
+      Entry: 10
+      Data: 4
+    - Name: m_spikeVines
       Entry: 10
       Data: 5
-    - Name: m_seedProjectile
-      Entry: 10
-      Data: 6
     - Name: m_targetDistanceTolerance
       Entry: 4
       Data: 20
-    - Name: m_introAnimation
+    - Name: m_rageAnimation
+      Entry: 7
+      Data: 17|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.MotherMantisAI+Info,
+        Assembly-CSharp]], Assembly-CSharp
+    - Name: m_animation
+      Entry: 1
+      Data: Rage Quake
+    - Name: m_timeScale
+      Entry: 4
+      Data: 1
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: m_idlephase1Animation
       Entry: 7
       Data: 18|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.MotherMantisAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
-      Data: Intro
+      Data: Idle1
     - Name: m_timeScale
       Entry: 4
       Data: 1
     - Name: 
       Entry: 8
       Data: 
-    - Name: m_intro2Animation
+    - Name: m_idlephase2Animation
       Entry: 7
       Data: 19|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.MotherMantisAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
-      Data: Intro2
+      Data: Idle2
     - Name: m_timeScale
       Entry: 4
       Data: 1
     - Name: 
       Entry: 8
       Data: 
-    - Name: m_idleAnimation
+    - Name: m_idlephase3Animation
       Entry: 7
       Data: 20|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.MotherMantisAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
-      Data: Idle
+      Data: Idle3
+    - Name: m_timeScale
+      Entry: 4
+      Data: 1
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: m_backgroundidleAnimation
+      Entry: 7
+      Data: 21|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.MotherMantisAI+Info,
+        Assembly-CSharp]], Assembly-CSharp
+    - Name: m_animation
+      Entry: 1
+      Data: Background Idle
     - Name: m_timeScale
       Entry: 4
       Data: 1
@@ -439,7 +397,7 @@ MonoBehaviour:
       Data: 
     - Name: m_deathAnimation
       Entry: 7
-      Data: 21|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.MotherMantisAI+Info,
+      Data: 22|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.MotherMantisAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
@@ -452,7 +410,7 @@ MonoBehaviour:
       Data: 
     - Name: m_turnAnimation
       Entry: 7
-      Data: 22|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.MotherMantisAI+Info,
+      Data: 23|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.MotherMantisAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
@@ -465,24 +423,11 @@ MonoBehaviour:
       Data: 
     - Name: m_flinchAnimation
       Entry: 7
-      Data: 23|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.MotherMantisAI+Info,
-        Assembly-CSharp]], Assembly-CSharp
-    - Name: m_animation
-      Entry: 1
-      Data: Flinch
-    - Name: m_timeScale
-      Entry: 4
-      Data: 1
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: m_flinchBackAnimation
-      Entry: 7
       Data: 24|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.MotherMantisAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
-      Data: Flinch_back
+      Data: Flinch
     - Name: m_timeScale
       Entry: 4
       Data: 1
@@ -495,13 +440,13 @@ MonoBehaviour:
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
-      Data: Attack4
+      Data: Petal Rain
     - Name: m_timeScale
       Entry: 4
       Data: 1
     - Name: m_launchOnEvent
-      Entry: 6
-      Data: 
+      Entry: 1
+      Data: Spawn Projectile
     - Name: m_range
       Entry: 4
       Data: 50
@@ -510,7 +455,7 @@ MonoBehaviour:
       Data: 26|DChild.Gameplay.Characters.ProjectileInfo, Assembly-CSharp
     - Name: m_projectile
       Entry: 10
-      Data: 7
+      Data: 6
     - Name: m_speed
       Entry: 4
       Data: 50

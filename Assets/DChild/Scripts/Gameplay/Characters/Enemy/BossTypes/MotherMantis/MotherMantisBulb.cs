@@ -49,10 +49,7 @@ namespace DChild.Gameplay.Characters.Enemies
             //private string m_flinchAnimation;
             //public string flinchAnimation => m_flinchAnimation;
 
-            [Title("Larva")]
-            [SerializeField]
-            private GameObject m_larva;
-            public GameObject larva => m_larva;
+            
 
             public override void Initialize()
             {
@@ -87,6 +84,9 @@ namespace DChild.Gameplay.Characters.Enemies
         private FlinchHandler m_flinchHandle;
         [SerializeField, TabGroup("FX")]
         private ParticleFX m_spawnFX;
+        [SerializeField, TabGroup("FX")]
+        private GameObject m_spore;
+        public GameObject spore => m_spore;
         //Patience Handler
 
 
@@ -131,7 +131,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_stateHandle.Wait(State.Idle);
             m_hitbox.SetInvulnerability(Invulnerability.MAX);
-            m_animation.SetAnimation(0, m_info.growAnimation, false);
+            m_animation.SetAnimation(0, m_info.growAnimation, false).TimeScale = 10;
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.growAnimation);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_stateHandle.ApplyQueuedState();
@@ -141,22 +141,17 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator DeathRoutine()
         {
             m_hitbox.SetInvulnerability(Invulnerability.MAX);
-            m_animation.SetAnimation(0, m_info.openAnimation, false);
+            m_animation.SetAnimation(0, m_info.openAnimation, false).TimeScale=10;
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.openAnimation);
-            m_animation.AddAnimation(0, m_info.idleOpenAnimation, false, 0);
+            m_spawnFX.Play();
+            spore.SetActive(true);
+            m_animation.SetAnimation(0, m_info.idleOpenAnimation, false).TimeScale = 2;
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.idleOpenAnimation);
             gameObject.SetActive(false);
             yield return null;
         }
 
-        private IEnumerator SpawnLarvaRoutine()
-        {
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.openAnimation);
-            m_spawnFX.Play();
-            var larva = Instantiate(m_info.larva, transform.position, Quaternion.identity);
-            larva.GetComponent<BulbLarvaAI>().GetTarget(m_targetInfo);
-            yield return null;
-        }
+       
 
         protected override void Awake()
         {
@@ -192,7 +187,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         m_currentSpawnTime = 0;
                         m_stateHandle.OverrideState(State.WaitBehaviourEnd);
                         StartCoroutine(DeathRoutine());
-                        StartCoroutine(SpawnLarvaRoutine());
+
                     }
                     //m_animation.SetEmptyAnimation(0, 0);
                     break;
