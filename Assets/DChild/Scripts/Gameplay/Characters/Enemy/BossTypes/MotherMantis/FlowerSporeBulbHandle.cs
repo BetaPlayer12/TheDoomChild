@@ -48,12 +48,13 @@ public class FlowerSporeBulbHandle : MonoBehaviour
 
     private IEnumerator SpawnSeedsRoutine(List<Transform> spawnpoint)
     {
-
+        yield return new WaitForSeconds(0.8f);
         for (int x = 0; x < spawnpoint.Count; x++)
         {
             var temp = this.InstantiateToScene(m_sporeProjectile, new Vector2(spawnpoint[x].position.x, spawnpoint[x].position.y), Quaternion.identity);
             m_bulbList.Add(temp);
         }
+        yield return new WaitForSeconds(1.5f);
         if (leftHandRaised || rightHandRaised)
         {
             Detonate();

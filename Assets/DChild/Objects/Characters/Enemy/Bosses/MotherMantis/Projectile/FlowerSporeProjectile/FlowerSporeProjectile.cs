@@ -53,10 +53,13 @@ public class FlowerSporeProjectile : MonoBehaviour
 
     private IEnumerator BulbExplosionRoutine()
     {
+        StopCoroutine(GrowthRoutine());
         m_bulbAnitciaption.Play();
         m_animation.SetAnimation(0, m_sporeAttack1, false);
         yield return new WaitForSeconds(1f);
         m_bulbExplosion.Play();
+        yield return new WaitForSeconds(0.5f);
+        Destroy(this.gameObject);
         yield return null;
     }
 
