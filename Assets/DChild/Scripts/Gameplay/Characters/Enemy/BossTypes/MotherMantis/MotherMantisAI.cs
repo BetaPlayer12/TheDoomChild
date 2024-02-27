@@ -1036,7 +1036,7 @@ namespace DChild.Gameplay.Characters.Enemies
                                     //m_animation.EnableRootMotion(true, false);
                                     if (AllowAttack(3))
                                     {
-                                        StartCoroutine(SpawnLarvaRoutine());
+                                        StartCoroutine(SpawnLarvaBulbRoutine());
                                     }
                                     break;
                                 case Attack.Attack4:

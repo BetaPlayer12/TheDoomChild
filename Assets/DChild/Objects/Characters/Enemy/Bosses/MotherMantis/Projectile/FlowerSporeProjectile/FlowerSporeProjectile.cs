@@ -36,6 +36,11 @@ public class FlowerSporeProjectile : MonoBehaviour
     private ParticleFX m_bulbExplosion;
 
 
+    public void Detonate()
+    {
+        StartCoroutine(BulbExplosionRoutine());
+    }
+
     private IEnumerator GrowthRoutine()
     {
         m_bulbGrowthAnitciaption.Play();
@@ -46,7 +51,7 @@ public class FlowerSporeProjectile : MonoBehaviour
         yield return null;
     }
 
-    public IEnumerator BulbExplosionRoutine()
+    private IEnumerator BulbExplosionRoutine()
     {
         m_bulbAnitciaption.Play();
         m_animation.SetAnimation(0, m_sporeAttack1, false);
