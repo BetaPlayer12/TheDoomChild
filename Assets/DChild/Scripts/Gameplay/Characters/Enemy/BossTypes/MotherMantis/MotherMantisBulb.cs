@@ -85,8 +85,11 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("FX")]
         private ParticleFX m_spawnFX;
         [SerializeField, TabGroup("FX")]
-        private GameObject m_spore;
-        public GameObject spore => m_spore;
+        private ParticleFX m_spore;
+        public ParticleFX spore => m_spore;
+        [SerializeField, TabGroup("FX")]
+        private ParticleFX m_anticipation;
+        public ParticleFX anticipation => m_anticipation;
         //Patience Handler
 
 
@@ -131,9 +134,11 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_stateHandle.Wait(State.Idle);
             m_hitbox.SetInvulnerability(Invulnerability.MAX);
+            m_spawnFX.Play();
             m_animation.SetAnimation(0, m_info.growAnimation, false).TimeScale = 10;
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.growAnimation);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
+            yield return new WaitForSeconds(1f);
             m_stateHandle.ApplyQueuedState();
             yield return null;
         }
@@ -141,11 +146,12 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator DeathRoutine()
         {
             m_hitbox.SetInvulnerability(Invulnerability.MAX);
-            m_animation.SetAnimation(0, m_info.openAnimation, false).TimeScale=10;
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.openAnimation);
-            m_spawnFX.Play();
-            spore.SetActive(true);
+            //m_animation.SetAnimation(0, m_info.openAnimation, false).TimeScale=10;
+            //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.openAnimation);
+            yield return new WaitForSeconds(1f);
+            spore.Play();
             m_animation.SetAnimation(0, m_info.idleOpenAnimation, false).TimeScale = 2;
+            anticipation.Play();
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.idleOpenAnimation);
             gameObject.SetActive(false);
             yield return null;
