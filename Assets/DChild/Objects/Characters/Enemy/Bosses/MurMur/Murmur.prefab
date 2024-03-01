@@ -181,60 +181,6 @@ MonoBehaviour:
   followLocalScale: 0
   initializeOnAwake: 1
   m_updateOnFixedUpdate: 0
---- !u!1 &2358862787913586982
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2930338730692318404}
-  - component: {fileID: 642797913419495001}
-  m_Layer: 13
-  m_Name: Head
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &2930338730692318404
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2358862787913586982}
-  m_LocalRotation: {x: -0, y: -0, z: 0.4424405, w: 0.89679784}
-  m_LocalPosition: {x: 0.9401703, y: 17.331726, z: 0}
-  m_LocalScale: {x: 1, y: -1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 9195950066755287629}
-  m_Father: {fileID: 677078233523196160}
-  m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &642797913419495001
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2358862787913586982}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a1fd8daaed7b64148a34acb96ba14ce1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  skeletonRenderer: {fileID: 3457866282965822623}
-  boneName: HOODIE
-  followXYPosition: 1
-  followZPosition: 0
-  followBoneRotation: 0
-  followSkeletonFlip: 1
-  followLocalScale: 0
-  initializeOnAwake: 1
-  m_updateOnFixedUpdate: 0
 --- !u!1 &2927728168427360775
 GameObject:
   m_ObjectHideFlags: 0
@@ -377,37 +323,6 @@ MonoBehaviour:
   followLocalScale: 0
   initializeOnAwake: 1
   m_updateOnFixedUpdate: 0
---- !u!1 &7205898618708213139
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 9195950066755287629}
-  m_Layer: 13
-  m_Name: SoundBallThrowSpawn
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &9195950066755287629
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7205898618708213139}
-  m_LocalRotation: {x: -0, y: -0, z: -0.4424405, w: 0.89679784}
-  m_LocalPosition: {x: 5.776475, y: 3.2445693, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 2930338730692318404}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8216903258327418532
 GameObject:
   m_ObjectHideFlags: 0
@@ -723,7 +638,7 @@ MonoBehaviour:
   m_roomCenter: {fileID: 0}
   m_leftSideRoom: {fileID: 0}
   m_rightSideRoom: {fileID: 0}
-  m_soundBallThrowSpawn: {fileID: 9195950066755287629}
+  m_soundBallThrowSpawn: {fileID: 1848698991213864555}
   m_baseFlightHeight: 0
 --- !u!114 &5001611386030855681
 MonoBehaviour:
@@ -1235,12 +1150,6 @@ MonoBehaviour:
   m_invulnerabilityLevel: 0
   m_damageReduction: 0
   m_canBlockDamage: 0
---- !u!4 &677078233523196160 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 1125895962200827692, guid: e19872246b72b864facac535369f72bd,
-    type: 3}
-  m_PrefabInstance: {fileID: 502867662281012780}
-  m_PrefabAsset: {fileID: 0}
 --- !u!70 &832731395962611982 stripped
 CapsuleCollider2D:
   m_CorrespondingSourceObject: {fileID: 969680966519938850, guid: e19872246b72b864facac535369f72bd,
@@ -1250,6 +1159,12 @@ CapsuleCollider2D:
 --- !u!61 &1104749848065219147 stripped
 BoxCollider2D:
   m_CorrespondingSourceObject: {fileID: 697591041864395879, guid: e19872246b72b864facac535369f72bd,
+    type: 3}
+  m_PrefabInstance: {fileID: 502867662281012780}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1848698991213864555 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2260084124589396039, guid: e19872246b72b864facac535369f72bd,
     type: 3}
   m_PrefabInstance: {fileID: 502867662281012780}
   m_PrefabAsset: {fileID: 0}
