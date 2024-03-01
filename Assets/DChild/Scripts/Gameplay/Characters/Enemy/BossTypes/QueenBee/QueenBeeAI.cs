@@ -941,7 +941,7 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 Debug.Log("Randomly chosen list (" + randomPattern + "):");
                 //int rng = UnityEngine.Range(0, m_spawnPoints.Count);
-                randomPatternList[i].localRotation = Quaternion.Euler(new Vector3(-rotation, 1 , rotation));
+                randomPatternList[i].localRotation = Quaternion.Euler(new Vector3(-rotation, 0 , rotation));
                 //GameObject burst = Instantiate(m_info.burstGO, m_spawnPoints[rng].position, Quaternion.Euler(new Vector3(0, 0, rotation)));
                 m_launcher = new ProjectileLauncher(m_info.beeProjectile.projectileInfo, randomPatternList[i]);
                 m_launcher.LaunchProjectile();
