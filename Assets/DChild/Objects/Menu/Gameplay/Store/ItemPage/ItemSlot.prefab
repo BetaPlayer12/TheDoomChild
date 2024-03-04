@@ -1460,7 +1460,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2987371113194193068
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4345,7 +4345,7 @@ GameObject:
   - component: {fileID: 8805562282482243577}
   - component: {fileID: 1100586656933411396}
   - component: {fileID: 3729754696316616829}
-  - component: {fileID: 3448805751900649475}
+  - component: {fileID: 8884024410890590802}
   m_Layer: 0
   m_Name: ItemSlot
   m_TagString: Untagged
@@ -4403,7 +4403,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: fcd4f506433769040a6517aeb4f2a043, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 4df2d0ec11901804dbc805fe377e9666, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -4503,7 +4503,7 @@ MonoBehaviour:
   NormalState:
     StateType: 0
     StateEvent:
-      EventName: Normal
+      EventName: Normal State
       Runners: []
       Event:
         m_PersistentCalls:
@@ -4511,7 +4511,7 @@ MonoBehaviour:
   HighlightedState:
     StateType: 1
     StateEvent:
-      EventName: Highlighted
+      EventName: Highlighted State
       Runners: []
       Event:
         m_PersistentCalls:
@@ -4519,7 +4519,7 @@ MonoBehaviour:
   PressedState:
     StateType: 2
     StateEvent:
-      EventName: Pressed
+      EventName: Pressed State
       Runners: []
       Event:
         m_PersistentCalls:
@@ -4527,7 +4527,7 @@ MonoBehaviour:
   SelectedState:
     StateType: 3
     StateEvent:
-      EventName: Selected
+      EventName: Selected State
       Runners: []
       Event:
         m_PersistentCalls:
@@ -4535,7 +4535,7 @@ MonoBehaviour:
   DisabledState:
     StateType: 4
     StateEvent:
-      EventName: Disabled
+      EventName: Disabled State
       Runners: []
       Event:
         m_PersistentCalls:
@@ -4547,7 +4547,7 @@ MonoBehaviour:
       Event:
         m_PersistentCalls:
           m_Calls:
-          - m_Target: {fileID: 3448805751900649475}
+          - m_Target: {fileID: 8884024410890590802}
             m_TargetAssemblyTypeName: DarkTonic.MasterAudio.EventSounds, Assembly-CSharp-firstpass
             m_MethodName: ActivateCodeTriggeredEvent1
             m_Mode: 1
@@ -4706,11 +4706,11 @@ MonoBehaviour:
   IsOn: 0
   ToggleCommand: 2
   SpriteTarget: {fileID: 3729754696316616829}
-  NormalSprite: {fileID: 21300000, guid: 64cf446b59dbf20428ec9fe8abae016d, type: 3}
-  HighlightedSprite: {fileID: 21300000, guid: 64cf446b59dbf20428ec9fe8abae016d, type: 3}
-  PressedSprite: {fileID: 21300000, guid: 64cf446b59dbf20428ec9fe8abae016d, type: 3}
-  SelectedSprite: {fileID: 21300000, guid: 64cf446b59dbf20428ec9fe8abae016d, type: 3}
-  DisabledSprite: {fileID: 21300000, guid: a83c30be1f3a4634090f7a76398fe73a, type: 3}
+  NormalSprite: {fileID: 21300000, guid: 4df2d0ec11901804dbc805fe377e9666, type: 3}
+  HighlightedSprite: {fileID: 21300000, guid: d9da661af8b041c44bdbee49d3b825da, type: 3}
+  PressedSprite: {fileID: 21300000, guid: 4df2d0ec11901804dbc805fe377e9666, type: 3}
+  SelectedSprite: {fileID: 21300000, guid: d9da661af8b041c44bdbee49d3b825da, type: 3}
+  DisabledSprite: {fileID: 21300000, guid: f6517f8df4cd9744b84b2c5006debbea, type: 3}
 --- !u!114 &3729754696316616829
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4724,7 +4724,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Target: {fileID: 8896249882868125427}
---- !u!114 &3448805751900649475
+--- !u!114 &8884024410890590802
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -5856,49 +5856,7 @@ MonoBehaviour:
     isMechanimStateCheckEvent: 0
     mechanimStateName: 
     mechEventPlayedForState: 0
-    SoundEvents:
-    - actionName: Your action name
-      isExpanded: 1
-      soundType: Store_Inventory_Click
-      allPlaylistControllersForGroupCmd: 0
-      allSoundTypesForGroupCmd: 0
-      allSoundTypesForBusCmd: 0
-      volume: 1
-      useFixedPitch: 0
-      pitch: 1
-      glidePitchType: 0
-      targetGlidePitch: 1
-      pitchGlideTime: 1
-      delaySound: 0
-      currentSoundFunctionType: 0
-      currentPlaylistCommand: 0
-      currentSoundGroupCommand: 0
-      currentBusCommand: 0
-      currentCustomEventCommand: 0
-      currentGlobalCommand: 0
-      currentMixerCommand: 0
-      snapshotToTransitionTo: {fileID: 0}
-      snapshotTransitionTime: 1
-      snapshotsToBlend:
-      - snapshot: {fileID: 0}
-        weight: 1
-      currentPersistentSettingsCommand: 0
-      busName: 
-      playlistName: 
-      playlistControllerName: 
-      startPlaylist: 1
-      fadeVolume: 0
-      fadeTime: 1
-      minAge: 1
-      stopAfterFade: 0
-      restoreVolumeAfterFade: 0
-      targetVolMode: 0
-      clipName: '[None]'
-      variationType: 1
-      variationName: 
-      colliderMaxDistance: 0
-      showSphereGizmo: 0
-      theCustomEventName: 
+    SoundEvents: []
     mouseDragStopMode: 0
     mouseDragFadeOutTime: 1
     retriggerLimitMode: 0
@@ -5924,49 +5882,7 @@ MonoBehaviour:
     isMechanimStateCheckEvent: 0
     mechanimStateName: 
     mechEventPlayedForState: 0
-    SoundEvents:
-    - actionName: Your action name
-      isExpanded: 1
-      soundType: Store_Inventory_Click
-      allPlaylistControllersForGroupCmd: 0
-      allSoundTypesForGroupCmd: 0
-      allSoundTypesForBusCmd: 0
-      volume: 1
-      useFixedPitch: 0
-      pitch: 1
-      glidePitchType: 0
-      targetGlidePitch: 1
-      pitchGlideTime: 1
-      delaySound: 0
-      currentSoundFunctionType: 0
-      currentPlaylistCommand: 0
-      currentSoundGroupCommand: 0
-      currentBusCommand: 0
-      currentCustomEventCommand: 0
-      currentGlobalCommand: 0
-      currentMixerCommand: 0
-      snapshotToTransitionTo: {fileID: 0}
-      snapshotTransitionTime: 1
-      snapshotsToBlend:
-      - snapshot: {fileID: 0}
-        weight: 1
-      currentPersistentSettingsCommand: 0
-      busName: 
-      playlistName: 
-      playlistControllerName: 
-      startPlaylist: 1
-      fadeVolume: 0
-      fadeTime: 1
-      minAge: 1
-      stopAfterFade: 0
-      restoreVolumeAfterFade: 0
-      targetVolMode: 0
-      clipName: '[None]'
-      variationType: 1
-      variationName: 
-      colliderMaxDistance: 0
-      showSphereGizmo: 0
-      theCustomEventName: 
+    SoundEvents: []
     mouseDragStopMode: 0
     mouseDragFadeOutTime: 1
     retriggerLimitMode: 0
@@ -6174,49 +6090,7 @@ MonoBehaviour:
     isMechanimStateCheckEvent: 0
     mechanimStateName: 
     mechEventPlayedForState: 0
-    SoundEvents:
-    - actionName: Your action name
-      isExpanded: 1
-      soundType: '[None]'
-      allPlaylistControllersForGroupCmd: 0
-      allSoundTypesForGroupCmd: 0
-      allSoundTypesForBusCmd: 0
-      volume: 1
-      useFixedPitch: 0
-      pitch: 1
-      glidePitchType: 0
-      targetGlidePitch: 1
-      pitchGlideTime: 1
-      delaySound: 0
-      currentSoundFunctionType: 0
-      currentPlaylistCommand: 0
-      currentSoundGroupCommand: 0
-      currentBusCommand: 0
-      currentCustomEventCommand: 0
-      currentGlobalCommand: 0
-      currentMixerCommand: 0
-      snapshotToTransitionTo: {fileID: 0}
-      snapshotTransitionTime: 1
-      snapshotsToBlend:
-      - snapshot: {fileID: 0}
-        weight: 1
-      currentPersistentSettingsCommand: 0
-      busName: 
-      playlistName: 
-      playlistControllerName: 
-      startPlaylist: 1
-      fadeVolume: 0
-      fadeTime: 1
-      minAge: 1
-      stopAfterFade: 0
-      restoreVolumeAfterFade: 0
-      targetVolMode: 0
-      clipName: '[None]'
-      variationType: 1
-      variationName: 
-      colliderMaxDistance: 0
-      showSphereGizmo: 0
-      theCustomEventName: 
+    SoundEvents: []
     mouseDragStopMode: 0
     mouseDragFadeOutTime: 1
     retriggerLimitMode: 0
@@ -6277,7 +6151,7 @@ MonoBehaviour:
   useUnityEndDragSound: 0
   useUnitySubmitSound: 0
   useUnityCancelSound: 0
-  useUnityToggleSound: 1
+  useUnityToggleSound: 0
 --- !u!1 &6078282808454087032
 GameObject:
   m_ObjectHideFlags: 0
@@ -6312,10 +6186,10 @@ RectTransform:
   m_Father: {fileID: 6886455555135073238}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.7735308, y: 0.038503636}
-  m_AnchorMax: {x: 0.94803995, y: 0.27321607}
-  m_AnchoredPosition: {x: 0.0012550354, y: -0.000022888184}
-  m_SizeDelta: {x: -0.002512, y: -0}
+  m_AnchorMin: {x: 0.7439133, y: 0.07783146}
+  m_AnchorMax: {x: 0.92169607, y: 0.27321604}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0.00000047683716, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2167672185478021669
 CanvasRenderer:
@@ -6373,7 +6247,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 28
+  m_fontSize: 25.3
   m_fontSizeBase: 25
   m_fontWeight: 400
   m_enableAutoSizing: 1
