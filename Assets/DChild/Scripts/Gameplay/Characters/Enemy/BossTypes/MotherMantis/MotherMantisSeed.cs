@@ -1,5 +1,9 @@
 ﻿using DChild;
 using DChild.Gameplay;
+using DChild.Gameplay.Characters.Enemies;
+using DChild.Gameplay.Combat;
+using Holysoft.Event;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,6 +16,8 @@ public class MotherMantisSeed : MonoBehaviour
     private GameObject m_bladeOfGrass;
     [SerializeField]
     private Vector3 m_position;
+    [SerializeField]
+    private MotherMantisAI m_motherMantisAI;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -25,7 +31,14 @@ public class MotherMantisSeed : MonoBehaviour
     {
         Instantiate(m_bladeOfGrass, transform.position, Quaternion.identity);
         yield return new WaitForSeconds(1f);
+        //var stalagmite = Instantiate(m_thornVine, m_position, Quaternion.identity);
+        //stalagmite.GetComponent<PetalStalagtite>().Growing += OnPetalRain;
         Instantiate(m_thornVine, m_position, Quaternion.identity);
         yield return null;
+    }
+    private void OnPetalRain(object sender, EventActionArgs eventArgs)
+    {
+        m_motherMantisAI.OnPetalRain += OnPetalRain;
+        //throw new NotImplementedException();
     }
 }

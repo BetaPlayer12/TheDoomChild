@@ -82,6 +82,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
         /*[SerializeField]
         private GameObject m_colliders;*/
+        [SerializeField, TabGroup("FX")]
+        private ParticleFX m_disturbedGrass;
         [SerializeField, TabGroup("Reference")]
         private Hitbox m_hitbox;
         [SerializeField, TabGroup("Reference")]
@@ -95,6 +97,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private StateHandle<State> m_stateHandle;
         private bool m_isPetalRain;
 
+        //public EventAction<EventActionArgs> Growing;
+
         public void GetTarget(AITargetInfo target)
         {
             m_targetInfo = target;
@@ -107,8 +111,11 @@ namespace DChild.Gameplay.Characters.Enemies
         }
         private IEnumerator GrowthRoutine()
         {
+            //Growing?.Invoke(this, EventActionArgs.Empty);
             m_stateHandle.Wait(State.Idle);
             m_hitbox.SetInvulnerability(Invulnerability.MAX);
+            m_disturbedGrass.Play();
+            //yield return new WaitForSeconds(.2f);
             m_animation.SetAnimation(0, m_info.growAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.growAnimation);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
