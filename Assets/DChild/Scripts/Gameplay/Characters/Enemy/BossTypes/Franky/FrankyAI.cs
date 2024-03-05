@@ -628,7 +628,7 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return new WaitForSeconds(0.65f);
             m_fistRefPoint.GetComponent<CircleCollider2D>().enabled = true;
             m_punchBB.enabled = true;
-            m_character.physics.SetVelocity(m_info.punchVelocity * transform.localScale.x, attackAnim == m_info.chainFistPunchAttack.animation ? 0 : 25);
+            //m_character.physics.SetVelocity(m_info.punchVelocity * transform.localScale.x, attackAnim == m_info.chainFistPunchAttack.animation ? 0 : 25);
             yield return new WaitForSeconds(0.25f);
             m_fistRefPoint.GetComponent<CircleCollider2D>().enabled = false;
             m_punchBB.enabled = false;
@@ -643,7 +643,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, attackAnim, false);
             yield return new WaitForSeconds(0.65f);
             m_punchBB.enabled = true;
-            m_character.physics.SetVelocity(m_info.punchVelocity * transform.localScale.x, attackAnim == m_info.chainFistPunchAttack.animation ? 0 : 25);
+            //m_character.physics.SetVelocity(m_info.punchVelocity * transform.localScale.x, attackAnim == m_info.chainFistPunchAttack.animation ? 0 : 25);
             yield return new WaitForSeconds(0.25f);
             m_punchBB.enabled = false;
             m_movement.Stop();
