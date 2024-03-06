@@ -12,6 +12,10 @@ namespace DChild.Gameplay.Environment.Interractables
         private Damageable m_damageable;
         [SerializeField, FoldoutGroup("References")]
         private SpineAnimation m_eyeAnimator;
+        [SerializeField]
+        private ParticleSystem m_deathFX;
+        [SerializeField]
+        private ParticleSystem m_onDamageFX;
         [SerializeField, FoldoutGroup("References")]
         private SpriteRenderer[] m_renders;
 
@@ -56,12 +60,14 @@ namespace DChild.Gameplay.Environment.Interractables
 
         private void OnDeath(object sender, EventActionArgs eventArgs)
         {
+            m_deathFX?.Play(true);
             StopAllCoroutines();
             StartCoroutine(DissolveRoutine(0, m_deathDuration));
         }
 
         private void OnDamageTaken(object sender, Damageable.DamageEventArgs eventArgs)
         {
+            m_onDamageFX?.Play(true);
             if (m_damageable.health.currentValue > 0)
             {
                 m_eyeAnimator.SetAnimation(0, m_flinchAnimation, false);
