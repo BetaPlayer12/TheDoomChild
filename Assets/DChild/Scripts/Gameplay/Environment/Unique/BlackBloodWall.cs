@@ -10,6 +10,8 @@ namespace DChild.Gameplay.Environment.Interractables
     {
         [SerializeField, FoldoutGroup("References")]
         private Damageable m_damageable;
+        [SerializeField]
+        private GameObject m_wall;
         [SerializeField, FoldoutGroup("References")]
         private SpineAnimation m_eyeAnimator;
         [SerializeField]
@@ -56,6 +58,7 @@ namespace DChild.Gameplay.Environment.Interractables
             {
                 SetDissolveControl(m_renders[i], dissolveValueDestination);
             }
+            m_wall.SetActive(false);
         }
 
         private void OnDeath(object sender, EventActionArgs eventArgs)
