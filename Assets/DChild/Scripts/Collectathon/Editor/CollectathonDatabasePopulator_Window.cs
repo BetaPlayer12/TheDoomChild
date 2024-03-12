@@ -1,5 +1,4 @@
 using DChild.Configurations.Editor;
-using DChild.UI;
 using PixelCrushers.DialogueSystem;
 using Sirenix.OdinInspector;
 using Sirenix.OdinInspector.Editor;
@@ -20,23 +19,10 @@ namespace DChild.UI
             var window = GetWindow<CollectathonDatabasePopulator_Window>(false, "Collectathon Database Populator", true);
         }
 
-        [SerializeField]
-        private DialogueDatabase m_collectathonDatabase;
-
         [Button]
         public void PopulateDatabaseVariables(DialogueDatabase database)
         {
-            Dictionary<Location, string> locationSuffixPair = new Dictionary<Location, string>();
-            locationSuffixPair.Add(Location.City_Of_The_Dead, "COTD");
-            locationSuffixPair.Add(Location.Graveyard, "GY");
-            locationSuffixPair.Add(Location.Unholy_Forest, "UF");
-            locationSuffixPair.Add(Location.Garden, "GD");
-            locationSuffixPair.Add(Location.Laboratory, "LAB");
-            locationSuffixPair.Add(Location.Library, "LIB");
-            locationSuffixPair.Add(Location.Prison, "PR");
-            locationSuffixPair.Add(Location.Throne_Room, "TR");
-            locationSuffixPair.Add(Location.Realm_Of_Nightmare, "RON");
-            locationSuffixPair.Add(Location.Temple_Of_The_One, "TOTO");
+            Dictionary<Location, string> locationSuffixPair = CollecathonUtility.AccessLocationDictionary();
 
             List<string> variablesToAdd = new List<string>();
 
@@ -46,8 +32,8 @@ namespace DChild.UI
                 {
                     //Create Variable names
                     var collecatonType = (CollectathonTypes)i;
-                    string total = $"Collecathon_{collecatonType}_Total_{locationSuffixPair[item]}";
-                    string count = $"Collecathon_{collecatonType}_Count_{locationSuffixPair[item]}";
+                    string count = CollecathonUtility.GenerateCurrentCountVariableName(collecatonType,item);
+                    string total = CollecathonUtility.GenerateCurrentTotalVariableName(collecatonType,item);
 
                     variablesToAdd.Add(total);
                     variablesToAdd.Add(count);
@@ -62,6 +48,12 @@ namespace DChild.UI
                 database.variables.Add(variable);
             }
             EditorUtility.SetDirty(database);
+        }
+
+        [Button]
+        public void RemoveAllVariables(DialogueDatabase database)
+        {
+            database.variables.Clear();
         }
     }
 }
