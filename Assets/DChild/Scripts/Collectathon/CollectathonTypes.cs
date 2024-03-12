@@ -7,8 +7,9 @@ namespace DChild.UI
     public enum CollectathonTypes
     {
         SeedsOfTheOne,
-        TreasureChest,
-        SoulShard,
+        NormalChest,
+        SoulSkillChest,
+        ShardChest,
         [HideInInspector]
         _COUNT,
     }
