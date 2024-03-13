@@ -1,4 +1,5 @@
 ﻿using DChild.Gameplay.Environment;
+using DChild.UI;
 using Doozy.Runtime.UIManager.Containers;
 using UnityEngine;
 
@@ -15,6 +16,8 @@ namespace DChild.Gameplay.NavigationMap
         private NavigationMapInstance m_mapInstance;
         [SerializeField]
         private bool m_mapNeedsCompleteUpdate = true;
+        [SerializeField]
+        private CollectathonUIManager m_collectathonManager;
 
         public void UpdateConfiguration(Location location, int sceneIndex, Transform inGameReference, Vector2 mapReferencePoint, Vector2 calculationOffset)
         {
@@ -25,11 +28,12 @@ namespace DChild.Gameplay.NavigationMap
                 m_currentMap = m_instantiator.LoadMapFor(location);
                 m_mapNeedsCompleteUpdate = true;
                 m_mapInstance = m_currentMap.GetComponentInChildren<NavigationMapInstance>();
+                m_collectathonManager.SetCollectathonDetails(location);
             }
 
             m_tracker.SetReferencePointPosition(m_currentMap, mapReferencePoint);
             m_tracker.SetInGameTrackReferencePoint(inGameReference);
-            m_tracker.SetCalculationOffsets(calculationOffset);
+            m_tracker.SetCalculationOffsets(calculationOffset);         
         }
 
         public void OpenMap()
@@ -54,6 +58,7 @@ namespace DChild.Gameplay.NavigationMap
             }
             m_tracker.UpdateTrackerPosition();
             MoveTrackerToCenter();
+            m_collectathonManager.ShowCollectathonDetails();
         }
 
         private void MoveTrackerToCenter()
