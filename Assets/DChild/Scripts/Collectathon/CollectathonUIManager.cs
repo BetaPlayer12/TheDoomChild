@@ -9,6 +9,9 @@ using DChild.Gameplay.Environment;
 using Location = DChild.Gameplay.Environment.Location;
 using UnityEditor.ShaderGraph.Internal;
 using UnityEditor;
+using System.Linq;
+using System.Xml.Schema;
+using Holysoft.Collections;
 
 namespace DChild.UI
 {
@@ -17,43 +20,36 @@ namespace DChild.UI
         [SerializeField]
         private TextMeshProUGUI m_currentMapName;
         [SerializeField]
-        private TextMeshProUGUI m_seedsCount;
+        private TextMeshProUGUI m_seedsCountText;
         [SerializeField]
-        private TextMeshProUGUI m_normalChestCount;
+        private TextMeshProUGUI m_normalChestCountText;
         [SerializeField]
-        private TextMeshProUGUI m_treasureChestCount;
+        private TextMeshProUGUI m_soulSkillChestCountText;
         [SerializeField]
-        private TextMeshProUGUI m_soulShardCount;
+        private TextMeshProUGUI m_soulShardCountText;
 
         [SerializeField]
         private Location m_currentLocation;
-        [SerializeField]
-        private CollectathonValues m_collectathonValues;
 
         public void SetCollectathonDetails(Location currentLocation)
         {
-             //Set current seeds, normal chest, treasure chest, and soul shard count and location name
-             m_currentLocation = currentLocation;
-
-
+            //Set current seeds, normal chest, treasure chest, and soul shard count and location name
+            m_currentLocation = currentLocation;
         }
 
         [Button]
         public void ShowCollectathonDetails()
         {
-            //int seedCount = DialogueLua.GetVariable("SeedsOfTheOne_Count_COTD").asInt;
-            //int seedTotal = DialogueLua.GetVariable("SeedsOfTheOne_Total_COTD").asInt;
-
-            //int treasureChestCount = DialogueLua.GetVariable("SeedsOfTheOne_Count_COTD").asInt;
-            //int treasureChestTotal = DialogueLua.GetVariable("SeedsOfTheOne_Total_COTD").asInt;
-
-            //int soulShardCount = DialogueLua.GetVariable("SeedsOfTheOne_Count_COTD").asInt;
-            //int soulShardTotal = DialogueLua.GetVariable("SeedsOfTheOne_Total_COTD").asInt;
-
             m_currentMapName.SetText(m_currentLocation.ToString().Replace('_', ' '));
-            //m_seedsCount.SetText($"{seedCount} / {seedTotal}");
-            //m_treasureChestCount.SetText($"{treasureChestCount} / {treasureChestTotal}");
-            //m_soulShardCount.SetText(soulShardCount + " / " + soulShardTotal);
+
+            m_seedsCountText.SetText($"{DialogueLua.GetVariable(CollecathonUtility.GenerateCurrentCountVariableName(CollectathonTypes.SeedsOfTheOne, m_currentLocation)).asInt}" +
+                $" / {DialogueLua.GetVariable(CollecathonUtility.GenerateCurrentTotalVariableName(CollectathonTypes.SeedsOfTheOne, m_currentLocation)).AsInt}");
+            m_normalChestCountText.SetText($"{DialogueLua.GetVariable(CollecathonUtility.GenerateCurrentCountVariableName(CollectathonTypes.NormalChest, m_currentLocation)).AsInt} /" +
+                $" {DialogueLua.GetVariable(CollecathonUtility.GenerateCurrentTotalVariableName(CollectathonTypes.NormalChest, m_currentLocation)).AsInt}");
+            m_soulSkillChestCountText.SetText($"{DialogueLua.GetVariable(CollecathonUtility.GenerateCurrentCountVariableName(CollectathonTypes.SoulSkillChest, m_currentLocation)).asInt}" +
+                $" / {DialogueLua.GetVariable(CollecathonUtility.GenerateCurrentTotalVariableName(CollectathonTypes.SoulSkillChest, m_currentLocation)).AsInt}");
+            m_soulShardCountText.SetText($"{DialogueLua.GetVariable(CollecathonUtility.GenerateCurrentCountVariableName(CollectathonTypes.ShardChest, m_currentLocation)).AsInt} /" +
+                $" {DialogueLua.GetVariable(CollecathonUtility.GenerateCurrentTotalVariableName(CollectathonTypes.ShardChest, m_currentLocation)).AsInt}");
         }
     }
 
