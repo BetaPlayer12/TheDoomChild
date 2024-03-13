@@ -50,7 +50,7 @@ ParticleSystem:
   emitterVelocityMode: 1
   looping: 1
   prewarm: 0
-  playOnAwake: 1
+  playOnAwake: 0
   useUnscaledTime: 0
   autoRandomSeed: 1
   startDelay:
@@ -4823,6 +4823,7 @@ GameObject:
   - component: {fileID: 1483076625249060441}
   - component: {fileID: 1483076625249060440}
   - component: {fileID: 1483076625249060443}
+  - component: {fileID: 936607590978526759}
   m_Layer: 0
   m_Name: CinderBolt_flame thrower
   m_TagString: Untagged
@@ -4864,7 +4865,7 @@ ParticleSystem:
   emitterVelocityMode: 1
   looping: 1
   prewarm: 0
-  playOnAwake: 1
+  playOnAwake: 0
   useUnscaledTime: 0
   autoRandomSeed: 1
   startDelay:
@@ -9644,6 +9645,26 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
+--- !u!114 &936607590978526759
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1483076625249060445}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6178cd111cba844a6e236cfbee492c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_poolableItemData: {fileID: 11400000, guid: ed4a63a5cb1b5ca47923d9fb072fcab5, type: 2}
+  m_particleSystems:
+  - {fileID: 1483076625249060440}
+  - {fileID: 1483076625436929017}
+  - {fileID: 1483076625147629084}
+  m_playOnAwake: 0
+  m_baseFlipped: 0
+  m_poolOnStop: 0
 --- !u!1 &1483076625436929021
 GameObject:
   m_ObjectHideFlags: 0
@@ -9694,7 +9715,7 @@ ParticleSystem:
   emitterVelocityMode: 1
   looping: 1
   prewarm: 0
-  playOnAwake: 1
+  playOnAwake: 0
   useUnscaledTime: 0
   autoRandomSeed: 1
   startDelay:
