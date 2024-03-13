@@ -39,8 +39,7 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField]
             private MovementInfo m_lightningStepMidair = new MovementInfo();
             public MovementInfo lightningStepMidair => m_lightningStepMidair;
-
-
+         
             [Title("Attack Behaviours")]
             [SerializeField, TabGroup("Ephemeral Arms")]
             private SimpleAttackInfo m_ephemeralArmsSmashAttack = new SimpleAttackInfo();
@@ -179,6 +178,13 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField]
             private BasicAnimationInfo m_turnAnimation;
             public BasicAnimationInfo turnAnimation => m_turnAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_teleportDisapear; 
+            public BasicAnimationInfo teleportDisapear => m_teleportDisapear;
+            [SerializeField]
+            private BasicAnimationInfo m_teleportAppear;
+            public BasicAnimationInfo teleportAppear => m_teleportAppear;
+
 
             //[Title("Projectiles")]
             //[SerializeField, BoxGroup("RainProjectiles")]
@@ -253,8 +259,8 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_rayOfFrostFireAnimation.SetData(m_skeletonDataAsset);
                 m_rayOfFrostFireToIdleAnimation.SetData(m_skeletonDataAsset);
                 m_IceBombThrowAnimation.SetData(m_skeletonDataAsset);
-
-
+                m_teleportDisapear.SetData(m_skeletonDataAsset);
+                m_teleportAppear.SetData(m_skeletonDataAsset);
 #endif
             }
         }
@@ -432,7 +438,16 @@ namespace DChild.Gameplay.Characters.Enemies
         private List<Transform> m_iceBombTargetPoints;
         [SerializeField, TabGroup("Target Points")]
         private List<Transform> m_electricOrbTargetPoints;
-
+        [SerializeField, TabGroup("Target Points")]
+        private List<Transform> m_teleportSpawnPointsA;
+        [SerializeField, TabGroup("Target Points")]
+        private List<Transform> m_teleportSpawnPointsB;
+        [SerializeField, TabGroup("Target Points")]
+        private List<Transform> m_teleportSpawnPointsC;
+        [SerializeField]
+        private int m_spawnPointNumber;
+        private Dictionary<string, List<Transform>> m_listOfSpawnPoints = new Dictionary<string, List<Transform>>();
+      
         private Vector2 m_lastTargetPos;
         private Vector2 m_lazerTargetPos;
         private float m_currentCooldown;
@@ -449,9 +464,10 @@ namespace DChild.Gameplay.Characters.Enemies
         private Coroutine m_lazerLookCoroutine;
         private Coroutine m_aimAtPlayerCoroutine;
         #endregion
-
         private bool m_isDetecting;
-
+        [SerializeField]
+        private bool m_startingPoint = true;
+        
         private void ApplyPhaseData(PhaseInfo obj)
         {
             m_attackCache.Clear();
@@ -632,44 +648,44 @@ namespace DChild.Gameplay.Characters.Enemies
                     attack = FollowUpAttack.EphemeralArmsCombo;
                 }
             }
-            else
-            {
-                if (attack == FollowUpAttack.ThreeFireBalls)
-                {
-                    if (Vector2.Distance(m_targetInfo.position, m_character.centerMass.position) <= m_info.target1CHDistance)
-                    {
-                        yield return null;
-                    }
-                }
-            }
+            //else
+            //{
+            //    if (attack == FollowUpAttack.ThreeFireBalls)
+            //    {
+            //        if (Vector2.Distance(m_targetInfo.position, m_character.centerMass.position) <= m_info.target1CHDistance)
+            //        {
+            //            yield return null;
+            //        }
+            //    }
+            //}
             switch (attack)
             {
                 case FollowUpAttack.EphemeralArmsCombo:
                     m_currentAttackCoroutine = StartCoroutine(EphemeralArmsComboAttackRoutine());
                     break;
-                case FollowUpAttack.ThreeFireBalls:
-                    m_currentAttackCoroutine = StartCoroutine(ThreeFireBallsAttackRoutine());
-                    break;
+                //case FollowUpAttack.ThreeFireBalls:
+                //    m_currentAttackCoroutine = StartCoroutine(ThreeFireBallsAttackRoutine());
+                //    break; Removed
                 case FollowUpAttack.FlameWave:
                     m_currentAttackCoroutine = StartCoroutine(FlameWaveAttackRoutine());
                     break;
                 case FollowUpAttack.RayOfFrost:
                     m_currentAttackCoroutine = StartCoroutine(RayOfFrostAttackRoutine());
                     break;
-                case FollowUpAttack.IceBomb:
-                    m_currentAttackCoroutine = StartCoroutine(IceBombAttackRoutine());
-                    break;
+                //case FollowUpAttack.IceBomb:
+                //    m_currentAttackCoroutine = StartCoroutine(IceBombAttackRoutine());
+                //    break;
                 case FollowUpAttack.ElectricOrb:
                     m_currentAttackCoroutine = StartCoroutine(ElectricOrbAttackRoutine());
                     break;
-                case FollowUpAttack.LightningGround:
-                    m_currentAttackCoroutine = StartCoroutine(LightningGroundAttackRoutine());
-                    break;
+                //case FollowUpAttack.LightningGround:
+                //    m_currentAttackCoroutine = StartCoroutine(LightningGroundAttackRoutine());
+                //    break;
             }
             yield return null;
         }
 
-        private IEnumerator EphemeralArmsComboAttackRoutine()
+        private IEnumerator EphemeralArmsComboAttackRoutine() // remove? 
         {
             m_book.EphemeralArmsCombo(false);
             //m_ephemeralArms.EphemeralArmsCombo(false);
@@ -685,7 +701,7 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return null;
         }
 
-        private IEnumerator ThreeFireBallsAttackRoutine()
+        private IEnumerator ThreeFireBallsAttackRoutine() // remove 
         {
             m_book.ThreeFireBallsPre(false);
             //m_ephemeralArms.ThreeFireBallsPre(false);
@@ -780,7 +796,7 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return null;
         }
 
-        private IEnumerator IceBombAttackRoutine()
+        private IEnumerator IceBombAttackRoutine() //remove 
         {
             m_book.IceBomb(false);
             //m_ephemeralArms.IceBomb(false);
@@ -859,7 +875,7 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return null;
         }
 
-        private IEnumerator LightningGroundAttackRoutine()
+        private IEnumerator LightningGroundAttackRoutine() //remove?
         {
             m_book.LightningGround(false);
             //m_ephemeralArms.LightningGround(false);
@@ -1006,7 +1022,7 @@ namespace DChild.Gameplay.Characters.Enemies
         #endregion
 
         #region Movement
-        private IEnumerator LightningStepRoutine()
+        private IEnumerator LightningStepRoutine()// remove 
         {
             m_stateHandle.Wait(State.ReevaluateSituation);
             m_animation.EnableRootMotion(true, true);
@@ -1019,6 +1035,66 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_animation.SetAnimation(0, m_info.idleAnimation, true).MixDuration = 0;
             //m_attackDecider.hasDecidedOnAttack = false;
             //m_currentAttackCoroutine = null;
+            m_stateHandle.ApplyQueuedState();
+            yield return null;
+        }
+
+        private IEnumerator TeleportRoutine()
+        {
+            m_stateHandle.Wait(State.ReevaluateSituation);
+            var randomSpawnPoint = UnityEngine.Random.Range(0, m_listOfSpawnPoints.Count);
+            Debug.Log(m_listOfSpawnPoints.Count.ToString());
+            string[] patternKeys = new string[m_listOfSpawnPoints.Count];
+            m_listOfSpawnPoints.Keys.CopyTo(patternKeys, 0);
+            if (m_startingPoint)
+            {
+                StartCoroutine(TeleportPatterns(randomSpawnPoint, patternKeys, 1, 2));
+                m_startingPoint = false;
+            }
+            else
+            {
+                if (m_spawnPointNumber == 0)
+                {
+                    StartCoroutine(TeleportPatterns(randomSpawnPoint, patternKeys, 0, 1));
+                }
+                else if (m_spawnPointNumber == 1)
+                {
+                    Debug.Log("spawn point B");
+                    var randomSpawnPoint2 = UnityEngine.Random.Range(0, 4);// special case since the points is 4 
+                    Debug.Log(randomSpawnPoint2);
+                    StartCoroutine(TeleportPatterns(randomSpawnPoint, patternKeys, 1, 2));
+                }
+                else if (m_spawnPointNumber == 2)
+                {
+                    StartCoroutine(TeleportPatterns(randomSpawnPoint, patternKeys, 2, 1));
+                }
+            }
+            yield return null;
+        }
+
+        private IEnumerator TeleportPatterns(int randomSpawnPoint, string[] patternKeys, int spawnIndextoAvoid, int fallBackSpawnIndex)
+        {
+            m_spawnPointNumber = UnityEngine.Random.Range(0, m_listOfSpawnPoints.Count);
+            m_spawnPointNumber = (m_spawnPointNumber == spawnIndextoAvoid) ? fallBackSpawnIndex : m_spawnPointNumber;
+            var randomSpawnPointList = patternKeys[m_spawnPointNumber];
+            List<Transform> randomSpawnPoints = m_listOfSpawnPoints[randomSpawnPointList];
+            m_animation.EnableRootMotion(true, true);
+            m_animation.SetAnimation(0, m_info.teleportDisapear.animation, false);
+            var teleportPoint = randomSpawnPoints[randomSpawnPoint];
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.teleportDisapear.animation);
+
+
+            transform.position = teleportPoint.position;
+            if(IsFacingTarget() == false)
+            {
+                m_turnHandle.ExecuteWithAnimationByPass();
+            }
+            m_animation.SetAnimation(0, m_info.teleportAppear.animation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.teleportAppear.animation);
+            m_animation.SetAnimation(0, m_info.idleAnimation, true);
+            m_animation.DisableRootMotion();
+            Debug.Log(randomSpawnPointList.ToString()+ " spawn point list");
+            Debug.Log(m_spawnPointNumber+ " spawn point number");
             m_stateHandle.ApplyQueuedState();
             yield return null;
         }
@@ -1183,6 +1259,11 @@ namespace DChild.Gameplay.Characters.Enemies
             m_phaseHandle.ApplyChange();
 
             m_aimRoutine = AimRoutine();
+
+            m_listOfSpawnPoints.Add("SpawnPointA", m_teleportSpawnPointsA);
+            m_listOfSpawnPoints.Add("SpawnPointB", m_teleportSpawnPointsB);
+            m_listOfSpawnPoints.Add("SpawnPointC", m_teleportSpawnPointsC);
+            m_startingPoint = true;
         }
 
         private void Update()
@@ -1228,26 +1309,28 @@ namespace DChild.Gameplay.Characters.Enemies
                     {
                         #region PHASE 1 ATTACKS
                         case Attack.Phase1Pattern1:
-                            if (Vector2.Distance(m_targetInfo.position, m_character.centerMass.position) > m_info.target1CHDistance)
-                            {
-                                m_currentAttackCoroutine = StartCoroutine(ThreeFireBallsAttackRoutine());
-                            }
-                            else
-                            {
-                                m_currentAttackCoroutine = StartCoroutine(EphemeralArmsSmashAttackRoutine(FollowUpAttack.ThreeFireBalls));
-                            }
+                            //if (Vector2.Distance(m_targetInfo.position, m_character.centerMass.position) > m_info.target1CHDistance)
+                            //{
+                            //    m_currentAttackCoroutine = StartCoroutine(ThreeFireBallsAttackRoutine());
+                            //}
+                            //else
+                            //{
+                            //    m_currentAttackCoroutine = StartCoroutine(EphemeralArmsSmashAttackRoutine(FollowUpAttack.ThreeFireBalls));
+                            //}
+                            m_currentAttackCoroutine = StartCoroutine(EphemeralArmsSmashAttackRoutine(FollowUpAttack.ElectricOrb));
                             //m_currentAttackCoroutine = StartCoroutine(RayOfFrostAttackRoutine());
                             m_pickedCooldown = m_currentFullCooldown[0];
                             break;
                         case Attack.Phase1Pattern2:
-                            if (Vector2.Distance(m_targetInfo.position, m_character.centerMass.position) > m_info.target1CHDistance)
-                            {
-                                m_currentAttackCoroutine = StartCoroutine(IceBombAttackRoutine());
-                            }
-                            else
-                            {
-                                m_currentAttackCoroutine = StartCoroutine(EphemeralArmsSmashAttackRoutine(FollowUpAttack.IceBomb));
-                            }
+                            //if (Vector2.Distance(m_targetInfo.position, m_character.centerMass.position) > m_info.target1CHDistance)
+                            //{
+                            //    m_currentAttackCoroutine = StartCoroutine(IceBombAttackRoutine());
+                            //}
+                            //else
+                            //{
+                            //    m_currentAttackCoroutine = StartCoroutine(EphemeralArmsSmashAttackRoutine(FollowUpAttack.IceBomb));
+                            //}
+                            m_currentAttackCoroutine = StartCoroutine(EphemeralArmsSmashAttackRoutine(FollowUpAttack.ElectricOrb));
                             m_pickedCooldown = m_currentFullCooldown[1];
                             break;
                         case Attack.Phase1Pattern3:
@@ -1257,9 +1340,9 @@ namespace DChild.Gameplay.Characters.Enemies
                             }
                             else
                             {
-                                m_currentAttackCoroutine = StartCoroutine(EphemeralArmsSmashAttackRoutine(FollowUpAttack.ElectricOrb));
+                                m_currentAttackCoroutine = StartCoroutine(EphemeralArmsSmashAttackRoutine(FollowUpAttack.FlameWave));
                             }
-                            m_pickedCooldown = m_currentFullCooldown[3];
+                            m_pickedCooldown = m_currentFullCooldown[2];
                             break;
                         case Attack.Phase1Pattern4:
                             if (Vector2.Distance(m_targetInfo.position, m_character.centerMass.position) > m_info.target1CHDistance)
@@ -1279,14 +1362,15 @@ namespace DChild.Gameplay.Characters.Enemies
                         //    m_pickedCooldown = m_currentFullCooldown[0];
                         //    break;
                         case Attack.Phase2Pattern2:
-                            if (Vector2.Distance(m_targetInfo.position, m_character.centerMass.position) > m_info.target1CHDistance)
-                            {
-                                m_currentAttackCoroutine = StartCoroutine(IceBombAttackRoutine());
-                            }
-                            else
-                            {
-                                m_currentAttackCoroutine = StartCoroutine(EphemeralArmsSmashAttackRoutine(FollowUpAttack.IceBomb));
-                            }
+                            //if (Vector2.Distance(m_targetInfo.position, m_character.centerMass.position) > m_info.target1CHDistance)
+                            //{
+                            //    m_currentAttackCoroutine = StartCoroutine(IceBombAttackRoutine());
+                            //}
+                            //else
+                            //{
+                            //    m_currentAttackCoroutine = StartCoroutine(EphemeralArmsSmashAttackRoutine(FollowUpAttack.IceBomb));
+                            //}
+                            m_currentAttackCoroutine = StartCoroutine(EphemeralArmsSmashAttackRoutine(FollowUpAttack.FlameWave));
                             m_pickedCooldown = m_currentFullCooldown[1];
                             break;
                         case Attack.Phase2Pattern3:
@@ -1312,31 +1396,33 @@ namespace DChild.Gameplay.Characters.Enemies
                             m_pickedCooldown = m_currentFullCooldown[3];
                             break;
                         case Attack.Phase2Pattern5:
-                            m_currentAttackCoroutine = StartCoroutine(LightningGroundAttackRoutine());
+                            m_currentAttackCoroutine = StartCoroutine(LightningGroundAttackRoutine());// change  
                             m_pickedCooldown = m_currentFullCooldown[4];
                             break;
                         #endregion
                         #region PHASE 3 ATTACKS
                         case Attack.Phase3Pattern1:
-                            if (Vector2.Distance(m_targetInfo.position, m_character.centerMass.position) > m_info.target1CHDistance)
-                            {
-                                m_currentAttackCoroutine = StartCoroutine(ThreeFireBallsAttackRoutine());
-                            }
-                            else
-                            {
-                                m_currentAttackCoroutine = StartCoroutine(EphemeralArmsSmashAttackRoutine(FollowUpAttack.ThreeFireBalls));
-                            }
+                            //if (Vector2.Distance(m_targetInfo.position, m_character.centerMass.position) > m_info.target1CHDistance)
+                            //{
+                            //    m_currentAttackCoroutine = StartCoroutine(ThreeFireBallsAttackRoutine());
+                            //}
+                            //else
+                            //{
+                            //    m_currentAttackCoroutine = StartCoroutine(EphemeralArmsSmashAttackRoutine(FollowUpAttack.ThreeFireBalls));
+                            //}
+                            m_currentAttackCoroutine = StartCoroutine(EphemeralArmsSmashAttackRoutine(FollowUpAttack.FlameWave));
                             m_pickedCooldown = m_currentFullCooldown[0];
                             break;
                         case Attack.Phase3Pattern2:
-                            if (Vector2.Distance(m_targetInfo.position, m_character.centerMass.position) > m_info.target1CHDistance)
-                            {
-                                m_currentAttackCoroutine = StartCoroutine(IceBombAttackRoutine());
-                            }
-                            else
-                            {
-                                m_currentAttackCoroutine = StartCoroutine(EphemeralArmsSmashAttackRoutine(FollowUpAttack.IceBomb));
-                            }
+                            //if (Vector2.Distance(m_targetInfo.position, m_character.centerMass.position) > m_info.target1CHDistance)
+                            //{
+                            //    m_currentAttackCoroutine = StartCoroutine(IceBombAttackRoutine());
+                            //}
+                            //else
+                            //{
+                            //    m_currentAttackCoroutine = StartCoroutine(EphemeralArmsSmashAttackRoutine(FollowUpAttack.IceBomb));
+                            //}
+                            m_currentAttackCoroutine = StartCoroutine(EphemeralArmsSmashAttackRoutine(FollowUpAttack.LightningGround));
                             m_pickedCooldown = m_currentFullCooldown[1];
                             break;
                         //case Attack.Phase3Pattern3:
@@ -1348,7 +1434,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         //    m_pickedCooldown = m_currentFullCooldown[3];
                         //    break;
                         case Attack.Phase3Pattern5:
-                            m_currentAttackCoroutine = StartCoroutine(LightningGroundAttackRoutine());
+                            m_currentAttackCoroutine = StartCoroutine(LightningGroundAttackRoutine());// change 
                             m_pickedCooldown = m_currentFullCooldown[4];
                             break;
                         case Attack.Phase3Pattern6:
@@ -1374,8 +1460,10 @@ namespace DChild.Gameplay.Characters.Enemies
 
                     if (Vector2.Distance(m_targetInfo.position, m_character.centerMass.position) <= m_info.target1CHDistance)
                     {
-                        StartCoroutine(LightningStepRoutine());
-                        return;
+                        //StartCoroutine(LightningStepRoutine());// remove 
+                        StartCoroutine(TeleportRoutine());
+                        //return;
+                        Debug.Log("STIP BAK");
                     }
 
                     if (m_currentCooldown <= m_pickedCooldown)
