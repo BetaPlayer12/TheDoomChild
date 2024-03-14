@@ -1,17 +1,10 @@
+using DChild.Gameplay.Characters.AI;
 using DChild.Gameplay.Combat;
 using Holysoft.Event;
-using DChild.Gameplay.Characters.AI;
-using UnityEngine;
-using Spine.Unity;
 using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
-using DChild;
-using DChild.Temp;
-using DChild.Gameplay.Pooling;
-using DChild.Gameplay.Projectiles;
-using System.Linq;
-using UnityEngine.SceneManagement;
+using UnityEngine;
 
 namespace DChild.Gameplay.Characters.Enemies
 {
@@ -233,6 +226,7 @@ namespace DChild.Gameplay.Characters.Enemies
             //public GameObject spike => m_spike;
 
             [Title("Projectiles")]
+            
             //[SerializeField]
             //private SimpleProjectileAttackInfo m_ghostOrbProjectile;
             //public SimpleProjectileAttackInfo ghostOrbProjectile => m_ghostOrbProjectile;
@@ -355,6 +349,14 @@ namespace DChild.Gameplay.Characters.Enemies
         private List<Transform> m_lichLordPortPoints;
         [SerializeField, TabGroup("Spawn Points")]
         private Transform m_playerP3Point;
+        [SerializeField, TabGroup("Spawn Points")]
+        private GameObject m_flamethrower1SpawnPoint;
+        [SerializeField, TabGroup("Spawn Points")]
+        private GameObject m_flamethrower2SpawnPoint;
+        [SerializeField, TabGroup("Spawn Points")]
+        private GameObject m_rightHandSpawnPoint;
+        [SerializeField, TabGroup("Spawn Points")]
+        private GameObject m_leftHandSpawnPoint;
 
 
         [SerializeField]
