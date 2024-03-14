@@ -33,6 +33,11 @@ namespace DChild.Gameplay.UI.CombatArts
             m_unlockArtHandler.UnlockSuccessful += OnUnlockSuccessFull;
             m_unlockArtHandler.InitializeReferences(m_progressionReference, m_referenceList);
             m_unlockArtHandler.ResetUnlockProgress();
+            SyncButtonStates();
+        }
+
+        public void SyncButtonStates()
+        {
             InitializeButtonStates();
             ValidateButtonStates();
         }

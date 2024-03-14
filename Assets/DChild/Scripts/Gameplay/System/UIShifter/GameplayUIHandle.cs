@@ -67,6 +67,9 @@ namespace DChild.Gameplay.Systems
         [SerializeField]
         private WeaponUpgradeHandle m_upgradeWeaponHandler;
 
+        [SerializeField]
+        private UIView m_cinematicBars;
+
         public IUINotificationManager notificationManager => m_notificationManager;
 
         public void ToggleCinematicMode(bool on, bool instant)
@@ -76,6 +79,20 @@ namespace DChild.Gameplay.Systems
             if (on && instant)
             {
                 m_playerHUD.InstantHide();
+            }
+        }
+
+        public void ToggleCinematicBars(bool value)
+        {
+            if (value)
+            {
+                m_cinematicBars.Show();
+                m_playerHUD.InstantHide();
+            }
+            else
+            {
+                m_cinematicBars.Hide();
+                m_playerHUD.InstantShow();
             }
         }
 
@@ -123,11 +140,11 @@ namespace DChild.Gameplay.Systems
         {
             if (willshow)
             {
-                m_bossCombat.ShowBossHealth();
+                m_bossCombat?.ShowBossHealth();
             }
             else
             {
-                m_bossCombat.HideBossHealth();
+                m_bossCombat?.HideBossHealth();
             }
         }
 

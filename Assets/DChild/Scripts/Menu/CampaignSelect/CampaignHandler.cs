@@ -29,6 +29,11 @@ namespace DChild.Menu
             m_deleteRequester.Execute(OnDeleteAffirmed);
         }
 
+        public void RequestReset()
+        {
+            m_deleteRequester.Execute(OnResetAffirmed);
+        }
+
         public void Play()
         {
             LoadingHandle.SetLoadType(LoadingHandle.LoadType.Force);
@@ -49,10 +54,44 @@ namespace DChild.Menu
             SerializationHandle.SaveCampaignSlot(m_defaultSave.slot.id, m_defaultSave.slot);
         }
 
+        private void OnResetAffirmed(object sender, EventActionArgs eventArgs)
+        {
+            OverrideCurrentSlotWithDefaultSave();
+        }
+
         protected override void Awake()
         {
             base.Awake();
             m_campaignSelect = GetComponentInParent<ICampaignSelect>();
+        }
+
+        private void OverrideCurrentSlotWithDefaultSave()
+        {
+            //This Logic is Temporary cuz its quite heavy and bypasses too much of other scripts responsibility
+            var resetCampaignSlot = new CampaignSlot(m_selectedSlotID);
+            resetCampaignSlot.Copy(m_defaultSave.slot);
+
+            CampaignSlot[] newSlotList = new CampaignSlot[GameSystem.dataManager.campaignSlotList.slotCount];
+
+            for (int i = 0; i < newSlotList.Length; i++)
+            {
+                newSlotList[i] = GameSystem.dataManager.campaignSlotList.GetSlot(i);
+            }
+
+            for (int i = 0; i < newSlotList.Length; i++)
+            {
+                if(newSlotList[i].id == m_selectedSlotID)
+                {
+                    newSlotList[i] = resetCampaignSlot;
+                }
+            }
+
+            GameSystem.dataManager.campaignSlotList.SetSlots(newSlotList);
+            var campaignSelectStrongValue = (CampaignSelect)m_campaignSelect;
+            campaignSelectStrongValue.SetList(GameSystem.dataManager.campaignSlotList);
+
+            //Keep This Logic when cleaning Up
+            SerializationHandle.SaveCampaignSlot(m_selectedSlotID, resetCampaignSlot);
         }
     }
 }

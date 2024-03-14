@@ -491,7 +491,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9dd53d8b72e7244391ffd86337df106, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isActive: 1
 --- !u!114 &4311765940864446809
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -660,6 +659,52 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_duration:
     m_startTime: 0.15
+--- !u!114 &8220296208403981761
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8296342612795858042}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42be6986c6a2a414fa5ceddb0018fe09, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_skeletonAnimation: {fileID: 498483727725628526}
+  m_eventInfo:
+  - m_eventName: HitboxOn
+    m_onEventCalled:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 2578074546761957705}
+          m_TargetAssemblyTypeName: UnityEngine.Behaviour, UnityEngine
+          m_MethodName: set_enabled
+          m_Mode: 6
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 1
+          m_CallState: 2
+  - m_eventName: HitboxOff
+    m_onEventCalled:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 2578074546761957705}
+          m_TargetAssemblyTypeName: UnityEngine.Behaviour, UnityEngine
+          m_MethodName: set_enabled
+          m_Mode: 6
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!114 &8541091467676907465
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -716,12 +761,22 @@ PrefabInstance:
     - target: {fileID: 1473870679913893146, guid: 8b446e7c0c3c9b54f9d551d189ba08e6,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -2.4563904
+      value: -2.6927085
       objectReference: {fileID: 0}
     - target: {fileID: 1473870679913893146, guid: 8b446e7c0c3c9b54f9d551d189ba08e6,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 9.494583
+      value: 13.54566
+      objectReference: {fileID: 0}
+    - target: {fileID: 1473870679913893146, guid: 8b446e7c0c3c9b54f9d551d189ba08e6,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.46554875
+      objectReference: {fileID: 0}
+    - target: {fileID: 1473870679913893146, guid: 8b446e7c0c3c9b54f9d551d189ba08e6,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0.8850222
       objectReference: {fileID: 0}
     - target: {fileID: 2496671901723813963, guid: 8b446e7c0c3c9b54f9d551d189ba08e6,
         type: 3}
@@ -817,6 +872,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.88850915
+      objectReference: {fileID: 0}
+    - target: {fileID: 7682606994494718799, guid: 8b446e7c0c3c9b54f9d551d189ba08e6,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8b446e7c0c3c9b54f9d551d189ba08e6, type: 3}

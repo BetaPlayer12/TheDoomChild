@@ -218,6 +218,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 #region Groundedness Switch
                 m_dash.Reset();
                 m_slide.Reset();
+                m_objectManipulation?.Cancel();
                 if (m_state.isGrounded)
                 {
                     m_physicsMat.SetPhysicsTo(PlayerPhysicsMatHandle.Type.Ground);
@@ -1613,23 +1614,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     m_movement?.SwitchConfigTo(Movement.Type.Jog);
                     m_objectManipulation?.Cancel();
                 }
-                //else if (m_input.dashPressed)
-                //{
-                //    if (m_state.isInShadowMode == false)
-                //    {
-                //        if (m_state.isInShadowMode == false)
-                //        {
-                //            if (m_skills.IsModuleActive(PrimarySkill.Dash) && m_state.canDash)
-                //            {
-                //                m_idle?.Cancel();
-                //                m_movement?.Cancel();
-                //                m_objectManipulation?.Cancel();
-                //                m_movement?.SwitchConfigTo(Movement.Type.Jog);
-                //                ExecuteDash();
-                //            }
-                //        }
-                //    }
-                //}
                 else
                 {
                     if (m_objectManipulation.IsThereAMovableObject())
