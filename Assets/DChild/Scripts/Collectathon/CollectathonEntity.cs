@@ -74,6 +74,14 @@ public class CollectathonEntity : MonoBehaviour
         LuaCodeOverride(m_type);
     }
 
+#if UNITY_EDITOR
+    [Button]
+    private void Interact()
+    {
+        LuaCodeOverride(m_type);
+    }
+
+#endif
 
     void Awake()
     {

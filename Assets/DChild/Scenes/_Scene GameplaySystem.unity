@@ -27704,7 +27704,7 @@ PrefabInstance:
     - target: {fileID: 2689624354840882355, guid: 142cdd8df6a55fb49b01b01a248cefe7,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 212.21004
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2689624354840882355, guid: 142cdd8df6a55fb49b01b01a248cefe7,
         type: 3}
@@ -27875,7 +27875,7 @@ PrefabInstance:
     - target: {fileID: 6646220088249893185, guid: 142cdd8df6a55fb49b01b01a248cefe7,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 212.21002
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6646220088249893185, guid: 142cdd8df6a55fb49b01b01a248cefe7,
         type: 3}
@@ -30690,6 +30690,172 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
+--- !u!1 &1333383024
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1333383028}
+  - component: {fileID: 1333383027}
+  - component: {fileID: 1333383026}
+  - component: {fileID: 1333383025}
+  m_Layer: 0
+  m_Name: CollectathonQA
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1333383025
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1333383024}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c593457cd8105e148906690e1707c592, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  trigger: 32
+  condition:
+    luaConditions: []
+    questConditions: []
+    acceptedTags: []
+    acceptedGameObjects: []
+    luaWizardIndex: -1
+    lastEvaluationValue: 0
+  setQuestState: 1
+  questName: 
+  questState: 0
+  setQuestEntryState: 0
+  questEntryNumber: 1
+  questEntryState: 0
+  setAnotherQuestEntryState: 0
+  anotherQuestEntryNumber: 1
+  anotherQuestEntryState: 0
+  luaCode: 
+  sequence: 
+  sequenceSpeaker: {fileID: 0}
+  sequenceListener: {fileID: 0}
+  waitOneFrameOnStartOrEnable: 1
+  alertMessage: 
+  textTable: {fileID: 0}
+  alertDuration: 0
+  sendMessages: []
+  barkSource: 0
+  barkConversation: 
+  barkText: 
+  barkTextSequence: 
+  barker: {fileID: 0}
+  barkTarget: {fileID: 0}
+  barkOrder: 0
+  allowBarksDuringConversations: 0
+  skipBarkIfNoValidEntries: 0
+  cacheBarkLines: 0
+  conversation: 
+  conversationConversant: {fileID: 0}
+  conversationActor: {fileID: 0}
+  startConversationEntryID: -1
+  exclusive: 0
+  replace: 0
+  skipIfNoValidEntries: 0
+  preventRestartOnSameFrameEnded: 0
+  stopConversationOnTriggerExit: 0
+  stopConversationIfTooFar: 0
+  maxConversationDistance: 5
+  monitorConversationDistanceFrequency: 1
+  showCursorDuringConversation: 0
+  pauseGameDuringConversation: 0
+  setActiveActions: []
+  setEnabledActions: []
+  setAnimatorStateActions: []
+  onExecute:
+    m_PersistentCalls:
+      m_Calls: []
+  useConversationTitlePicker: 1
+  useBarkTitlePicker: 1
+  useQuestNamePicker: 1
+  selectedDatabase: {fileID: 11400000, guid: fd02aaa1c5b750744826a2830b6c03c8, type: 2}
+--- !u!114 &1333383026
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1333383024}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b33f0aaa10c04c4888d3ea002484f2d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_trigger: {fileID: 1333383025}
+  m_chestList: []
+  m_soulSkillList: []
+  m_shardList: []
+  m_seedList: []
+  m_location: 15
+  m_type: 0
+  m_luaOverride:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1333383025}
+        m_TargetAssemblyTypeName: PixelCrushers.DialogueSystem.DialogueSystemTrigger,
+          Assembly-CSharp-firstpass
+        m_MethodName: OnUse
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &1333383027
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1333383024}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6546d1f34e0077748a93d4c356aa9411, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  addTrigger: 16
+  removeTrigger: 1024
+  databases:
+  - {fileID: 11400000, guid: fd02aaa1c5b750744826a2830b6c03c8, type: 2}
+  condition:
+    luaConditions: []
+    questConditions: []
+    acceptedTags: []
+    acceptedGameObjects: []
+    luaWizardIndex: -1
+    lastEvaluationValue: 0
+  once: 0
+  onePerFrame: 0
+--- !u!4 &1333383028
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1333383024}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1074.2749, y: -252.69232, z: 92.920395}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 15
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1333729844
 GameObject:
   m_ObjectHideFlags: 0
@@ -48198,7 +48364,7 @@ PrefabInstance:
     - target: {fileID: 284458962919624734, guid: 7ca8ccae6b1d385478023375bea76912,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -29.868057
+      value: -29.868055
       objectReference: {fileID: 0}
     - target: {fileID: 284458963170990434, guid: 7ca8ccae6b1d385478023375bea76912,
         type: 3}
@@ -48303,7 +48469,7 @@ PrefabInstance:
     - target: {fileID: 3884924565739606564, guid: 7ca8ccae6b1d385478023375bea76912,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -20.826454
+      value: -20.826452
       objectReference: {fileID: 0}
     - target: {fileID: 3929526732166968105, guid: 7ca8ccae6b1d385478023375bea76912,
         type: 3}
@@ -48770,17 +48936,17 @@ PrefabInstance:
     - target: {fileID: 1009259744873353529, guid: b9c057a7321f08a4eb30ec8c0a7e9ae3,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -27
+      value: -27.000004
       objectReference: {fileID: 0}
     - target: {fileID: 1009259745787403995, guid: b9c057a7321f08a4eb30ec8c0a7e9ae3,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -27
+      value: -27.000004
       objectReference: {fileID: 0}
     - target: {fileID: 1009259746708653855, guid: b9c057a7321f08a4eb30ec8c0a7e9ae3,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -27
+      value: -27.000004
       objectReference: {fileID: 0}
     - target: {fileID: 1442725258663208645, guid: b9c057a7321f08a4eb30ec8c0a7e9ae3,
         type: 3}
@@ -48790,7 +48956,7 @@ PrefabInstance:
     - target: {fileID: 2212013001304867273, guid: b9c057a7321f08a4eb30ec8c0a7e9ae3,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -27
+      value: -27.000004
       objectReference: {fileID: 0}
     - target: {fileID: 4940493675378503809, guid: b9c057a7321f08a4eb30ec8c0a7e9ae3,
         type: 3}
@@ -51041,7 +51207,7 @@ PrefabInstance:
     - target: {fileID: 3216958927028420196, guid: 65577a732b2c14843a93fb7632be9654,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -0.9000015
+      value: -0.90000176
       objectReference: {fileID: 0}
     - target: {fileID: 3216958927161816736, guid: 65577a732b2c14843a93fb7632be9654,
         type: 3}
@@ -51179,7 +51345,7 @@ PrefabInstance:
     - target: {fileID: 3216958927960485785, guid: 65577a732b2c14843a93fb7632be9654,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 15.040039
+      value: 15.040043
       objectReference: {fileID: 0}
     - target: {fileID: 3216958928062113129, guid: 65577a732b2c14843a93fb7632be9654,
         type: 3}
@@ -51277,7 +51443,7 @@ PrefabInstance:
     - target: {fileID: 3216958928579108820, guid: 65577a732b2c14843a93fb7632be9654,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 12.72876
+      value: 12.728764
       objectReference: {fileID: 0}
     - target: {fileID: 3216958928626443040, guid: 65577a732b2c14843a93fb7632be9654,
         type: 3}
@@ -52961,7 +53127,7 @@ PrefabInstance:
     - target: {fileID: 3447373090316063636, guid: 3d85b8d7fa42431479f6261aae356375,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 43.352295
+      value: 43.35229
       objectReference: {fileID: 0}
     - target: {fileID: 3447373090316063637, guid: 3d85b8d7fa42431479f6261aae356375,
         type: 3}
@@ -52986,7 +53152,7 @@ PrefabInstance:
     - target: {fileID: 3447373090898101630, guid: 3d85b8d7fa42431479f6261aae356375,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 13.000057
+      value: 13.000058
       objectReference: {fileID: 0}
     - target: {fileID: 3447373091448240669, guid: 3d85b8d7fa42431479f6261aae356375,
         type: 3}
@@ -57027,6 +57193,11 @@ PrefabInstance:
       propertyPath: ShowAnimation.Fade.Settings.StartDelay
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 9006613631605753479, guid: bda4058447c425c4ab3bcf4a6a277a58,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0.9998703
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bda4058447c425c4ab3bcf4a6a277a58, type: 3}
 --- !u!1001 &8068403515689650948
@@ -58576,7 +58747,7 @@ PrefabInstance:
     - target: {fileID: 8644313125919117575, guid: d84f5000a1a341e4caf73786d2a075c2,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 369.99994
+      value: 369.99988
       objectReference: {fileID: 0}
     - target: {fileID: 8644313125919117575, guid: d84f5000a1a341e4caf73786d2a075c2,
         type: 3}
