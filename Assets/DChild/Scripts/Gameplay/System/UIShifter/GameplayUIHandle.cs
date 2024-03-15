@@ -140,11 +140,11 @@ namespace DChild.Gameplay.Systems
         {
             if (willshow)
             {
-                m_bossCombat.ShowBossHealth();
+                m_bossCombat?.ShowBossHealth();
             }
             else
             {
-                m_bossCombat.HideBossHealth();
+                m_bossCombat?.HideBossHealth();
             }
         }
 
