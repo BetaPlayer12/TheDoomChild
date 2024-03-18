@@ -212,8 +212,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2429537028488067774}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.25, y: -0.125, z: 0}
-  m_LocalScale: {x: 0.55462915, y: 0.37412843, z: 0.55462915}
+  m_LocalPosition: {x: 0.25, y: 0.139, z: -0}
+  m_LocalScale: {x: 0.55462915, y: 0.35205483, z: 0.55462915}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5488312839968913926}
@@ -287,6 +287,7 @@ GameObject:
   - component: {fileID: 2429537028785659071}
   - component: {fileID: 2429537028785659070}
   - component: {fileID: 2429537028785659069}
+  - component: {fileID: 236244604}
   m_Layer: 0
   m_Name: BlackBloodWall
   m_TagString: Untagged
@@ -303,7 +304,7 @@ Transform:
   m_GameObject: {fileID: 2429537028785659067}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.6605, y: 2.7605813, z: 1.6605}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2429537028231182646}
@@ -326,18 +327,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_damageable: {fileID: 2429537028785659069}
+  m_wall: {fileID: 2429537028488067774}
   m_eyeAnimator: {fileID: 2429537028379254991}
-  m_deathFX: {fileID: 0}
-  m_onDamageFX: {fileID: 0}
+  m_deathFX: {fileID: 734573571033643821}
+  m_onDamageFX: {fileID: 2963362616088975850}
   m_renders:
   - {fileID: 7111196632130586075}
   - {fileID: 5029548218635251563}
   - {fileID: 2429537028488067760}
   m_flinchAnimation: Flinch
   m_idleAnimation: Idle_Grounded
-  m_flinchDissolveThreshold: 0.25
-  m_flinchDissolveDuration: 0.5
-  m_deathDuration: 3
+  m_flinchDissolveThreshold: 0.1
+  m_flinchDissolveDuration: 0.2
+  m_deathDuration: 1.1
 --- !u!114 &2429537028785659071
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -356,14 +358,14 @@ MonoBehaviour:
   m_renderers: []
   m_baseOrders: 
   m_allowEditorUpdate: 1
-  m_previousReferenceOrder: 0
+  m_previousReferenceOrder: 53
   m_rendererList:
   - m_renderer: {fileID: 2429537028488067760}
     m_baseOrder: 0
   - m_renderer: {fileID: 2429537028379254988}
     m_baseOrder: 1
   - m_renderer: {fileID: 0}
-    m_baseOrder: 0
+    m_baseOrder: 2
 --- !u!114 &2429537028785659070
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -477,6 +479,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: 
+        m_MethodName: SetAsVisible
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_onFix:
     m_PersistentCalls:
       m_Calls:
@@ -564,6 +578,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: 
+        m_MethodName: SetAsVisible
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
   m_willRepairSelf: 0
   m_selfRepairTime: 0
 --- !u!114 &2429537028785659069
@@ -581,6 +607,21 @@ MonoBehaviour:
   m_centerMass: {fileID: 2429537028379254986}
   m_health: {fileID: 2429537028231182645}
   m_resistance: {fileID: 0}
+--- !u!114 &236244604
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2429537028785659067}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 169904169d11e8b46aaa137c9857a428, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_id:
+    m_ID: 140
+    m_showHandle: 1
 --- !u!1 &2429537029404225739
 GameObject:
   m_ObjectHideFlags: 0
@@ -847,6 +888,12 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 3827239075797719355}
   m_PrefabAsset: {fileID: 0}
+--- !u!198 &2963362616088975850 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 2018438573120618705, guid: 7e11152b5caa8ad429426142b7771a0e,
+    type: 3}
+  m_PrefabInstance: {fileID: 3827239075797719355}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &6837139615307671901
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -916,6 +963,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f8b86e5b004d24c40bad7c7c1368f5d8, type: 3}
+--- !u!198 &734573571033643821 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 6112471579721175664, guid: f8b86e5b004d24c40bad7c7c1368f5d8,
+    type: 3}
+  m_PrefabInstance: {fileID: 6837139615307671901}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &3880410808274103918 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7726940367608186675, guid: f8b86e5b004d24c40bad7c7c1368f5d8,
@@ -962,13 +1015,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6609778864826976007, guid: 9268d395543e5fe4985ca1bc402f4ed0,
         type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.99375004
+      objectReference: {fileID: 0}
+    - target: {fileID: 6609778864826976007, guid: 9268d395543e5fe4985ca1bc402f4ed0,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.61141163
+      objectReference: {fileID: 0}
+    - target: {fileID: 6609778864826976007, guid: 9268d395543e5fe4985ca1bc402f4ed0,
+        type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.5600004
+      value: -0.7886
       objectReference: {fileID: 0}
     - target: {fileID: 6609778864826976007, guid: 9268d395543e5fe4985ca1bc402f4ed0,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.98
+      value: -0.6151
       objectReference: {fileID: 0}
     - target: {fileID: 6609778864826976007, guid: 9268d395543e5fe4985ca1bc402f4ed0,
         type: 3}

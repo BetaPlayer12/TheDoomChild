@@ -58,7 +58,11 @@ namespace DChild.Gameplay.Environment.Interractables
             {
                 SetDissolveControl(m_renders[i], dissolveValueDestination);
             }
+
+	
+	 if(dissolveValueDestination <= 0){
             m_wall.SetActive(false);
+}
         }
 
         private void OnDeath(object sender, EventActionArgs eventArgs)
