@@ -73,6 +73,9 @@ namespace DChild.Gameplay.Characters.Enemies
             private float m_punchVelocity;
             public float punchVelocity => m_punchVelocity;
             [SerializeField]
+            private BasicAnimationInfo m_chainFistPunchAttackAnticipation;
+            public BasicAnimationInfo chainFistAttackAnticipation => m_chainFistPunchAttackAnticipation;
+            [SerializeField]
             private SimpleAttackInfo m_chainFistPunchAttack = new SimpleAttackInfo();
             public SimpleAttackInfo chainFistPunchAttack => m_chainFistPunchAttack;
             [SerializeField]
@@ -183,6 +186,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_shoulderBashHookAttack.SetData(m_skeletonDataAsset);
                 m_punchComboAttack.SetData(m_skeletonDataAsset);
                 m_chainFistPunchAttack.SetData(m_skeletonDataAsset);
+                m_chainFistPunchAttackAnticipation.SetData(m_skeletonDataAsset);
                 m_leapAttack.SetData(m_skeletonDataAsset);
                 m_chainShockAttack.SetData(m_skeletonDataAsset);
                 m_lightningStompAttack.SetData(m_skeletonDataAsset);
@@ -294,6 +298,16 @@ namespace DChild.Gameplay.Characters.Enemies
         //private PlayableAsset m_bossCapsuleIdleCinematic;
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_groundSensor;
+        [SerializeField, TabGroup("Attackers")]
+        private Attacker m_punchComboAttacker;
+        [SerializeField, TabGroup("Attackers")]
+        private Attacker m_punchComboLastHitAttacker;
+        [SerializeField, TabGroup("Attackers")]
+        private Attacker m_LeapAttackAttacker;
+        [SerializeField, TabGroup("Attackers")]
+        private Attacker m_chainFistAttacker;
+        [SerializeField, TabGroup("Attackers")]
+        private Attacker m_chainedBashAttacker;
         [SerializeField, TabGroup("Effects")]
         private GameObject m_wallStickStartFX;
         [SerializeField, TabGroup("Effects")]
@@ -347,11 +361,13 @@ namespace DChild.Gameplay.Characters.Enemies
         private BoxCollider2D m_leapHurtBox;
 
         private int m_currentPhaseIndex;
+        private int m_buffedAttackCount;
         private float m_attackCount;
         private float[] m_patternCount;
         private float m_currentLeapDuration;
         private bool m_stickToGround;
         private bool m_stickToWall;
+        private bool m_isBuffed;
         //private bool m_hasPhaseChanged;
         private Coroutine m_currentAttackCoroutine;
         private Coroutine m_leapRoutine;
@@ -520,6 +536,15 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator PunchComboRoutine()
         {
+            if (m_isBuffed && m_buffedAttackCount <= 2)
+            {
+                m_punchComboAttacker.SetDamageModifier(1.1f);
+                m_punchComboLastHitAttacker.SetDamageModifier(1.1f);
+            }
+            else
+            {
+                m_punchComboAttacker.SetDamageModifier(1f);
+            };
             m_phaseHandle.allowPhaseChange = false;
             m_animation.EnableRootMotion(true, false);
             m_animation.SetAnimation(0, m_info.punchComboAnimation, false).MixDuration = 0;
@@ -665,7 +690,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator ChainFistPunchRoutine()
         {
             m_phaseHandle.allowPhaseChange = false;
-
+            m_animation.SetAnimation(0, m_info.chainFistAttackAnticipation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.chainFistAttackAnticipation);
             var attackAnim = ChoosePunchAnimation();
             m_animation.SetAnimation(0, attackAnim, false);
             yield return new WaitForSeconds(0.65f);
@@ -929,7 +955,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void ExecuteAttack(int patternIndex)
         {
-            if (m_attackCount < m_patternCount[patternIndex])
+            /* if (m_attackCount < m_patternCount[patternIndex])*/
+            if (m_attackCount < 5)
             {
                 ChooseAttack(patternIndex);
                 if (IsTargetInRange(m_currentAttackRange))
@@ -961,6 +988,8 @@ namespace DChild.Gameplay.Characters.Enemies
                         case Attack.ComboPunch:
                             if (patternIndex == 0 || patternIndex == 1 || patternIndex == 2)
                             {
+                                
+                                m_attackCount++;
                                 m_currentAttackCoroutine = StartCoroutine(PunchComboRoutine());
                             }
                             else
@@ -973,6 +1002,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         case Attack.ChanFistPunch:
                             if (patternIndex == 0 || patternIndex == 1 || patternIndex == 2 && m_currentPhaseIndex != 3)
                             {
+                                
                                 m_attackCount++;
                                 m_currentAttackCoroutine = StartCoroutine(ChainFistPunchRoutine());
                             }
@@ -1121,6 +1151,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void PhaseFX()
         {
+            m_isBuffed = true;
             m_aoeBB.enabled = true;
             m_orbLightningFX.Play();
             m_bodyLightningFX.Play();
@@ -1154,11 +1185,11 @@ namespace DChild.Gameplay.Characters.Enemies
             m_spineListener.Subscribe(m_info.stopRoarEvent, PhaseFXStop);
             m_spineListener.Subscribe(m_info.stompEvent, LaunchProjectile);
             m_animation.DisableRootMotion();
-
+            
             m_phaseHandle = new PhaseHandle<Phase, PhaseInfo>();
             m_phaseHandle.Initialize(Phase.PhaseOne, m_info.phaseInfo, m_character, ChangeState, ApplyPhaseData);
             m_phaseHandle.ApplyChange();
-
+            
             m_fistRefPoint.GetComponent<CircleCollider2D>().enabled = false;
             //StartCoroutine(StartAnimationRoutine());
             //Hack Fix for quests
