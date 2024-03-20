@@ -50,19 +50,25 @@ namespace DChild.Gameplay.Combat.StatusAilment
 
         public void EnableModules()
         {
-            m_updatableModulesEnabled = true;
-            for (int i = 0; i < m_moduleSize; i++)
+            if (m_hasUpdatableModules == false)
             {
-                m_modules[i].Start(m_character);
+                m_updatableModulesEnabled = true;
+                for (int i = 0; i < m_moduleSize; i++)
+                {
+                    m_modules[i].Start(m_character);
+                }
             }
         }
 
         public void DisableModules()
         {
-            m_updatableModulesEnabled = false;
-            for (int i = 0; i < m_moduleSize; i++)
+            if (m_hasUpdatableModules)
             {
-                m_modules[i].Stop(m_character);
+                m_updatableModulesEnabled = false;
+                for (int i = 0; i < m_moduleSize; i++)
+                {
+                    m_modules[i].Stop(m_character);
+                }
             }
         }
 
