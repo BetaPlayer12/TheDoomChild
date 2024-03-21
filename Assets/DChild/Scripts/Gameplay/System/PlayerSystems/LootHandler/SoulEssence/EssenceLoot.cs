@@ -27,6 +27,7 @@ namespace DChild.Gameplay.Essence
         private float m_gravity;
         private bool m_hasBeenPickUp;
         private float m_timer;
+        private bool m_hasReachedCenterMass; // testing , checking if the object has reach the player's center mass
         protected abstract void OnApplyPickup(IPlayer player);
 
         public override void PickUp(IPlayer player)
@@ -98,7 +99,24 @@ namespace DChild.Gameplay.Essence
             {
                 if (m_hasBeenPickUp)
                 {
-                    var toPLayer = (m_pickedBy.damageableModule.position - m_rigidbody.position).normalized;
+                    Vector2 toPLayer;
+                    if(m_hasReachedCenterMass)
+                    {
+                        toPLayer = ((Vector2)m_pickedBy.character.GetBodyPart(BodyReference.BodyPart.Feet).position - m_rigidbody.position).normalized; // because the body reference as of now does not move with the model, i am using the body reference feet to make sure the player gets the loot
+                    }
+                    else
+                    {
+                        toPLayer = (m_pickedBy.damageableModule.position - m_rigidbody.position).normalized;
+                    }
+
+                    //Added to check if the loot has already reached the player's center mass
+                    if(Vector2.Distance(transform.position, m_pickedBy.damageableModule.position)<0.5f&&!m_hasReachedCenterMass)
+                    {
+                        m_hasReachedCenterMass = true;
+                        
+                        Debug.Log("____1111aaa " + toPLayer);
+                    }
+                    
                     m_rigidbody.velocity = toPLayer * m_pickUpVelocity;
                 }
                 else if (m_isFloating)
