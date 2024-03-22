@@ -29,25 +29,32 @@ namespace DChild.Menu.Trade
 
         private void UpdatePrice()
         {
+            if (m_price == null)
+            {
+                m_price = new Dictionary<ItemData, int>();
+            }
+
             m_price.Clear();
             foreach (var item in m_priceModifier.Keys)
             {
-                if(m_priceModifier[item] < 0)
+                if (m_priceModifier[item] < 0)
                 {
                     //Use Original Price
-                    m_price.Add(item,item.cost);
+                    m_price.Add(item, item.cost);
                 }
                 else
                 {
                     m_price.Add(item, m_priceModifier[item]);
                 }
-                
+
             }
         }
 
         [Button, PropertyOrder(-1)]
         private void AddItemsToList()
         {
+
+
             var ids = m_reference.GetIDs();
             for (int i = 0; i < ids.Length; i++)
             {
