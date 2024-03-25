@@ -3,6 +3,7 @@ using DChild.Gameplay.Characters.Players;
 using DChild.Gameplay.Characters.Players.Behaviour;
 using DChild.Gameplay.Characters.Players.State;
 using DChild.Gameplay.Combat;
+using DChild.Gameplay.Combat.StatusAilment;
 using Holysoft.Event;
 using Holysoft.Gameplay;
 using Sirenix.OdinInspector;
@@ -41,6 +42,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private IPlayerModifer m_modifier;
         private SkeletonGhost m_skeletonGhost;
         private string SHADOW_MORPH_ANIMATION_STATE = "Shadow Morph Start";
+        private StatusEffectReciever m_statusEffectReciever;
+
 
         private bool m_attackAllowed = false;
 
@@ -96,6 +99,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
             {
                 m_attackAllowed = false;
             }
+
+            m_statusEffectReciever.DisableUpdatableEffects();
         }
 
         public void Cancel()
@@ -110,6 +115,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_materialReplacement.replacementEnabled = false;
             m_skeletonGhost.enabled = false;
             m_playerShadow.SetActive(true);
+            m_statusEffectReciever.EnableUpdatableEffects();
             End?.Invoke(this, EventActionArgs.Empty);
         }
 
@@ -123,6 +129,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_stackedConsumptionRate = 0;
             m_modifier = info.modifier;
             m_skeletonGhost = info.skeletonGhost;
+            m_statusEffectReciever =info.statusEffectReciever;
         }
 
         public void SetConfiguration(ShadowMorphStatsInfo info)

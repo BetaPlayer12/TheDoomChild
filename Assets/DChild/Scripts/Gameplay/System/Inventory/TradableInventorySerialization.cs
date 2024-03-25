@@ -25,7 +25,7 @@ namespace DChild.Gameplay.Inventories
 
             [SerializeField, ItemDataID]
             private int m_id;
-            [SerializeField,DisableIf("m_isInfinite")]
+            [SerializeField, DisableIf("m_isInfinite")]
             private int m_count;
             [SerializeField]
             private bool m_isInfinite;
@@ -37,7 +37,7 @@ namespace DChild.Gameplay.Inventories
 
         [SerializeField]
         private int m_soulEssence;
-        [SerializeField,TableList]
+        [SerializeField, TableList]
         private ItemSerialization[] m_serializedItems;
 
 
@@ -59,12 +59,20 @@ namespace DChild.Gameplay.Inventories
 
         public TradableInventorySerialization(TradableInventorySerialization inventory)
         {
-            m_serializedItems = new ItemSerialization[inventory.count];
-            for (int i = 0; i < m_serializedItems.Length; i++)
+            if (inventory == null)
             {
-                m_serializedItems[i] = new ItemSerialization(inventory.GetSerializedItem(i));
+                m_serializedItems = new ItemSerialization[0];
+                m_soulEssence = 0;
             }
-            m_soulEssence = inventory.soulEssence;
+            else
+            {
+                m_serializedItems = new ItemSerialization[inventory.count];
+                for (int i = 0; i < m_serializedItems.Length; i++)
+                {
+                    m_serializedItems[i] = new ItemSerialization(inventory.GetSerializedItem(i));
+                }
+                m_soulEssence = inventory.soulEssence;
+            }
         }
 
         public int soulEssence => m_soulEssence;

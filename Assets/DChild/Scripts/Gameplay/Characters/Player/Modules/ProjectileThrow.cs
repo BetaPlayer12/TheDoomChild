@@ -19,6 +19,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private ProjectileInfo m_projectile;
         public ProjectileInfo projectile => m_projectile;
         private ProjectileInfo m_cacheProjectile;
+        
         [SerializeField]
         private Transform m_spawnPoint;
         [SerializeField]
@@ -36,6 +37,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private int m_skullThrowVariantParameter;
         private bool m_updateProjectileInfo;
         private Projectile m_spawnedProjectile;
+        private IPlayerModifer m_modifier;
         public Projectile spawnedProjectile => m_spawnedProjectile;
         private bool m_reachedVerticalThreshold = false;
 
@@ -249,7 +251,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 }
 
                 m_launcher.LaunchProjectile(direction, m_spawnedProjectile.gameObject);
-
+                m_spawnedProjectile.GetComponent<Attacker>().SetDamageModifier(m_modifier.Get(PlayerModifier.AttackDamage));
                 var scale = m_spawnedProjectile.transform.localScale;
                 scale.x = 1;
                 m_spawnedProjectile.transform.localScale = scale;
@@ -372,6 +374,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_launcher.SetSpawnPoint(m_spawnPoint);
             m_updateProjectileInfo = true;
             m_cacheProjectile = m_projectile;
+            m_modifier = info.modifier;
         }
 
 

@@ -90,6 +90,7 @@ namespace DChild.Gameplay.Environment
                 SendNotification();
             }
 
+            InteractionOptionChange?.Invoke(this, EventActionArgs.Empty);
             ShowOpenChestVisual();
         }
 
