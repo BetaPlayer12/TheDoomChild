@@ -1259,7 +1259,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                         }
                     }
                 }
-                else if (((m_input.levitatePressed && m_state.isLevitating == false) || (m_input.levitateHeld && m_state.isLevitating == false)) && m_devilWings.CanLevitate() && !m_input.backDiverPressed)
+                else if (((m_input.levitatePressed && m_state.isLevitating == false) /*|| (m_input.levitateHeld && m_state.isLevitating == false)*/) && m_devilWings.CanLevitate() && !m_input.backDiverPressed)
                 {
                     if (m_state.isInShadowMode == false)
                     {
