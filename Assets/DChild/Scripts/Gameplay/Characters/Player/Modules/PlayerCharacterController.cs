@@ -102,6 +102,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private bool m_updateEnabled = true;
 
         public event EventAction<EventActionArgs> ControllerDisabled;
+        public event EventAction<EventActionArgs> ControllerEnabled;
 
         public void Disable()
         {
@@ -152,11 +153,13 @@ namespace DChild.Gameplay.Characters.Players.Modules
             {
                 m_movement?.SwitchConfigTo(Movement.Type.Jog);
             }
+            ControllerDisabled?.Invoke(this, EventActionArgs.Empty);
         }
 
         public void Enable()
         {
             m_updateEnabled = true;
+            ControllerEnabled?.Invoke(this, EventActionArgs.Empty);
         }
 
         private void HasTeleported(object sender, EventActionArgs eventArgs)

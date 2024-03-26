@@ -57,10 +57,6 @@ namespace DChild.Gameplay.Items
 
         public void Update()
         {
-            for (int i = 0; i < m_activeEffects.Count; i++)
-            {
-                m_activeEffects[i].UpdateEffect(GameplaySystem.time.deltaTime);
-            }
             for (int i = m_activeEffects.Count - 1; i >= 0; i--)
             {
                 var currentEffect = m_activeEffects[i];
