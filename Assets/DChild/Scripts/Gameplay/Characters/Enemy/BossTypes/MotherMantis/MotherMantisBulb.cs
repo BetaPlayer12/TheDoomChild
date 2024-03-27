@@ -155,7 +155,7 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return new WaitForSeconds(.5f);
             spore.Play();
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.idleOpenAnimation);
-            gameObject.SetActive(false);
+            Destroy(this.gameObject);
             yield return null;
         }
 
