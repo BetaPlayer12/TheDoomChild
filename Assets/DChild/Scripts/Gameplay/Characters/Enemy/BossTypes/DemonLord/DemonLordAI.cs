@@ -39,7 +39,7 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField]
             private MovementInfo m_lightningStepMidair = new MovementInfo();
             public MovementInfo lightningStepMidair => m_lightningStepMidair;
-         
+
             [Title("Attack Behaviours")]
             [SerializeField, TabGroup("Ephemeral Arms")]
             private SimpleAttackInfo m_ephemeralArmsSmashAttack = new SimpleAttackInfo();
@@ -62,6 +62,37 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField, TabGroup("Fireball Attacks")]
             private SimpleAttackInfo m_flameWaveAttack = new SimpleAttackInfo();
             public SimpleAttackInfo flameWaveAttack => m_flameWaveAttack;
+            [SerializeField, TabGroup("Dragon Breath Attacks")]
+            private BasicAnimationInfo m_DragonBreathsAnticipation = new BasicAnimationInfo();
+            public BasicAnimationInfo dragonBreathAnticipation => m_DragonBreathsAnticipation;
+            [SerializeField, TabGroup("Dragon Breath Attacks")]
+            private BasicAnimationInfo m_DragonBreathsAttackLeft = new BasicAnimationInfo();
+            public BasicAnimationInfo dragonBreathAttackLeft => m_DragonBreathsAttackLeft;
+            [SerializeField, TabGroup("Dragon Breath Attacks")]
+            private BasicAnimationInfo m_DragonBreathsAttackRight = new BasicAnimationInfo();
+            public BasicAnimationInfo dragonBreathAttackRight => m_DragonBreathsAttackRight;
+            [SerializeField, TabGroup("Summon Dragon Attacks")]
+            private BasicAnimationInfo m_summonDragonAnticipation = new BasicAnimationInfo();
+            public BasicAnimationInfo summonDragonAnticipation => m_summonDragonAnticipation;
+            [SerializeField, TabGroup("Summon Dragon Attacks")]
+            private BasicAnimationInfo m_summonDragonAttack = new BasicAnimationInfo();
+            public BasicAnimationInfo summonDragonAttack => m_summonDragonAttack;
+            [SerializeField, TabGroup("Ice Shard Attacks")]
+            private BasicAnimationInfo m_iceShardAnticipation = new BasicAnimationInfo();
+            public BasicAnimationInfo iceShardAnticipation => m_iceShardAnticipation;
+            [SerializeField, TabGroup("Ice Shard Attacks")]
+            private BasicAnimationInfo m_iceShardAttack = new BasicAnimationInfo();
+            public BasicAnimationInfo iceShardAttack => m_iceShardAttack;
+            [SerializeField, TabGroup("Electric Attacks")]
+            private BasicAnimationInfo m_lightningOrbAttack = new BasicAnimationInfo();
+            public BasicAnimationInfo lightningOrbAttack => m_lightningOrbAttack;
+            [SerializeField, TabGroup("Electric Attacks")]
+            private BasicAnimationInfo m_lightningOrbSummonAnticipation = new BasicAnimationInfo();
+            public BasicAnimationInfo lightningOrbSummonAnticipation => m_lightningOrbSummonAnticipation;
+            [SerializeField, TabGroup("Electric Attacks")]
+            private BasicAnimationInfo m_lightningOrbSummonLoop = new BasicAnimationInfo();
+            public BasicAnimationInfo lightningOrbSummonLoop => m_lightningOrbSummonLoop;
+
             [SerializeField, TabGroup("Ice Attacks")]
             private float m_rayOfFrostChargeDuration;
             public float rayOfFrostChargeDuration => m_rayOfFrostChargeDuration;
@@ -89,6 +120,12 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField, TabGroup("Electric Attacks")]
             private SimpleAttackInfo m_lightningGroundAttack = new SimpleAttackInfo();
             public SimpleAttackInfo lightningGroundAttack => m_lightningGroundAttack;
+            [SerializeField, TabGroup("Electric Attacks")]
+            private SimpleAttackInfo m_lightningStrikeAnticipation = new SimpleAttackInfo();
+            public SimpleAttackInfo lightningStrikeAnticipation => m_lightningStrikeAnticipation;
+            [SerializeField, TabGroup("Electric Attacks")]
+            private SimpleAttackInfo m_lightningStrikeAttack = new SimpleAttackInfo();
+            public SimpleAttackInfo lightningStrikeAttack => m_lightningStrikeAttack;
 
             [TitleGroup("Pattern Ranges")]
             [SerializeField]
@@ -179,12 +216,26 @@ namespace DChild.Gameplay.Characters.Enemies
             private BasicAnimationInfo m_turnAnimation;
             public BasicAnimationInfo turnAnimation => m_turnAnimation;
             [SerializeField]
-            private BasicAnimationInfo m_teleportDisapear; 
+            private BasicAnimationInfo m_teleportDisapear;
             public BasicAnimationInfo teleportDisapear => m_teleportDisapear;
             [SerializeField]
             private BasicAnimationInfo m_teleportAppear;
             public BasicAnimationInfo teleportAppear => m_teleportAppear;
+      
 
+           
+            [Title("Events")]
+            [SerializeField, ValueDropdown("GetEvents")]
+            private string m_iceShardCardinalProjectiles;
+            public string iceShardCardinalProjectiles => m_iceShardCardinalProjectiles;
+
+            [SerializeField, ValueDropdown("GetEvents")]
+            private string m_iceShardDiagonalProjectiles;
+            public string iceShardDiagonalProjectiles => m_iceShardDiagonalProjectiles;
+
+            [SerializeField, ValueDropdown("GetEvents")]
+            private string m_rayOfFrostBeam;
+            public string rayOfFrostBeam => m_rayOfFrostBeam;
 
             //[Title("Projectiles")]
             //[SerializeField, BoxGroup("RainProjectiles")]
@@ -246,6 +297,11 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_fireBallProjectile.SetData(m_skeletonDataAsset);
                 m_iceBombProjectile.SetData(m_skeletonDataAsset);
                 m_electricOrbProjectile.SetData(m_skeletonDataAsset);
+                m_lightningOrbAttack.SetData(m_skeletonDataAsset);
+                m_lightningOrbSummonAnticipation.SetData(m_skeletonDataAsset);
+                m_lightningOrbSummonLoop.SetData(m_skeletonDataAsset);
+                m_lightningStrikeAnticipation.SetData(m_skeletonDataAsset);
+                m_lightningStrikeAttack.SetData(m_skeletonDataAsset);
                 m_flameWaveProjectile.SetData(m_skeletonDataAsset);
                 m_lightningGroundProjectile.SetData(m_skeletonDataAsset);
 
@@ -255,9 +311,17 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_turnAnimation.SetData(m_skeletonDataAsset);
                 m_threeFireBallsPreAnimation.SetData(m_skeletonDataAsset);
                 m_threeFireBallsFireAnimation.SetData(m_skeletonDataAsset);
+                m_DragonBreathsAnticipation.SetData(m_skeletonDataAsset);
+                m_DragonBreathsAttackLeft.SetData(m_skeletonDataAsset);
+                m_DragonBreathsAttackRight.SetData(m_skeletonDataAsset);
+                m_summonDragonAnticipation.SetData(m_skeletonDataAsset);
+                m_summonDragonAttack.SetData(m_skeletonDataAsset);
+                m_iceShardAttack.SetData(m_skeletonDataAsset);
+                m_iceShardAnticipation.SetData(m_skeletonDataAsset);
                 m_rayOfFrostChargeAnimation.SetData(m_skeletonDataAsset);
                 m_rayOfFrostFireAnimation.SetData(m_skeletonDataAsset);
                 m_rayOfFrostFireToIdleAnimation.SetData(m_skeletonDataAsset);
+             
                 m_IceBombThrowAnimation.SetData(m_skeletonDataAsset);
                 m_teleportDisapear.SetData(m_skeletonDataAsset);
                 m_teleportAppear.SetData(m_skeletonDataAsset);
@@ -388,7 +452,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private float m_armRotationOffset;
         private List<Vector2> m_Points;
         private IEnumerator m_aimRoutine;
-
+        [SerializeField, TabGroup("Lazer")]
+        private GameObject m_rayOfFrostBeam;
 
         [SerializeField, TabGroup("FX")]
         private ParticleFX m_lightingStepAwayFX;
@@ -396,6 +461,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private ParticleFX m_lightingStepMidairFX;
         [SerializeField, TabGroup("FX")]
         private float m_lightingStepMidairFXYOFfset;
+      
 
         [SerializeField]
         private SpineEventListener m_spineListener;
@@ -427,27 +493,37 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Spawn Points")]
         private Transform m_iceBombSpawnPoint;
         [SerializeField, TabGroup("Spawn Points")]
+        private List<Transform> m_iceShardsSpawnPointPattern1;
+        [SerializeField, TabGroup("Spawn Points")]
+        private List<Transform> m_iceShardsSpawnPointPattern2;
+        [SerializeField, TabGroup("Spawn Points")]
         private Transform m_electricOrbSpawnPoint;
         [SerializeField, TabGroup("Spawn Points")]
         private Transform m_flameWaveSpawnPoint;
         [SerializeField, TabGroup("Spawn Points")]
         private Transform m_lightningGroundSpawnPoint;
+        [SerializeField, TabGroup("Spawn Points")]
+        private List<Transform> m_teleportSpawnPointsA;
+        [SerializeField, TabGroup("Spawn Points")]
+        private List<Transform> m_teleportSpawnPointsB;
+        [SerializeField, TabGroup("Spawn Points")]
+        private List<Transform> m_teleportSpawnPointsC;
+        [SerializeField, TabGroup("Spawn Points")]
+        private List<Transform> m_rayOfFrostPosition;
+        [SerializeField, TabGroup("Spawn Points")]
+        private Transform m_rayOfFrostBeamPosition;
         [SerializeField, TabGroup("Target Points")]
         private Transform m_fireBallTargetPoint;
         [SerializeField, TabGroup("Target Points")]
         private List<Transform> m_iceBombTargetPoints;
         [SerializeField, TabGroup("Target Points")]
         private List<Transform> m_electricOrbTargetPoints;
-        [SerializeField, TabGroup("Target Points")]
-        private List<Transform> m_teleportSpawnPointsA;
-        [SerializeField, TabGroup("Target Points")]
-        private List<Transform> m_teleportSpawnPointsB;
-        [SerializeField, TabGroup("Target Points")]
-        private List<Transform> m_teleportSpawnPointsC;
-        [SerializeField]
-        private int m_spawnPointNumber;
+        [SerializeField, TabGroup("Values for behaviours")]
+        private int m_spawnPointIndexForTeleportPhase;
+        [SerializeField, TabGroup("Values for behaviours")]
+        private float m_distanceStoppingToleranceForRayFrost;
         private Dictionary<string, List<Transform>> m_listOfSpawnPoints = new Dictionary<string, List<Transform>>();
-      
+
         private Vector2 m_lastTargetPos;
         private Vector2 m_lazerTargetPos;
         private float m_currentCooldown;
@@ -457,7 +533,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private List<float> m_patternCooldown;
         //private int m_maxHitCount;
         //private int m_currentHitCount;
-        
+
         private Coroutine m_currentAttackCoroutine;
         #region Lazer Coroutine
         private Coroutine m_lazerBeamCoroutine;
@@ -467,7 +543,16 @@ namespace DChild.Gameplay.Characters.Enemies
         private bool m_isDetecting;
         [SerializeField]
         private bool m_startingPoint = true;
-        
+        [SerializeField]
+        private bool m_IceShardPattern1Done = false;
+        [SerializeField]
+        private bool m_rayOfFrostBeamActivated = false;
+
+        [SerializeField]
+        private Animator m_rayOfFrostAnimatorRight;
+        [SerializeField]
+        private Animator m_rayOfFrostAnimatorLeft;
+        private string m_chosenPointNameForRayFrost;
         private void ApplyPhaseData(PhaseInfo obj)
         {
             m_attackCache.Clear();
@@ -670,7 +755,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_currentAttackCoroutine = StartCoroutine(FlameWaveAttackRoutine());
                     break;
                 case FollowUpAttack.RayOfFrost:
-                    m_currentAttackCoroutine = StartCoroutine(RayOfFrostAttackRoutine());
+                    m_currentAttackCoroutine = StartCoroutine(RayOfFrostRoutine());
                     break;
                 //case FollowUpAttack.IceBomb:
                 //    m_currentAttackCoroutine = StartCoroutine(IceBombAttackRoutine());
@@ -678,9 +763,10 @@ namespace DChild.Gameplay.Characters.Enemies
                 case FollowUpAttack.ElectricOrb:
                     m_currentAttackCoroutine = StartCoroutine(ElectricOrbAttackRoutine());
                     break;
-                //case FollowUpAttack.LightningGround:
-                //    m_currentAttackCoroutine = StartCoroutine(LightningGroundAttackRoutine());
-                //    break;
+                    //case FollowUpAttack.LightningGround:
+                    //    m_currentAttackCoroutine = StartCoroutine(LightningGroundAttackRoutine());
+                    //    break;
+
             }
             yield return null;
         }
@@ -795,6 +881,59 @@ namespace DChild.Gameplay.Characters.Enemies
             m_stateHandle.ApplyQueuedState();
             yield return null;
         }
+        private IEnumerator RayOfFrostRoutine()
+        {
+            var randIndexForRayOfFrost = UnityEngine.Random.Range(0, 2);
+            var chosenPointForRayOfFrost = m_rayOfFrostPosition[randIndexForRayOfFrost];
+            Debug.Log(chosenPointForRayOfFrost.name.ToString());
+            m_chosenPointNameForRayFrost = chosenPointForRayOfFrost.name.ToString();
+            while (Vector3.Distance(m_centerMass.position, chosenPointForRayOfFrost.position) > m_distanceStoppingToleranceForRayFrost)
+            {
+                var distanceCalculationDLordAndFrost = (chosenPointForRayOfFrost.position - m_centerMass.position).normalized;
+                transform.position += m_info.move.speed * Time.deltaTime * distanceCalculationDLordAndFrost;
+                Debug.Log("lean D ro");
+                yield return null;
+            }
+           
+            m_agent.Stop();
+            transform.position = chosenPointForRayOfFrost.position - m_centerMass.position;
+            yield return null;
+            Debug.Log("Done transfer");
+            if (IsFacingTarget() == false)
+            {
+                m_turnHandle.ExecuteWithAnimationByPass();
+            }
+         
+            m_animation.SetAnimation(0, m_info.rayOfFrostAttack.animation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.rayOfFrostAttack.animation);
+            m_animation.SetAnimation(0, m_info.idleAnimation, true);
+            m_attackDecider.hasDecidedOnAttack = false;
+            m_currentAttackCoroutine = null;
+            m_stateHandle.ApplyQueuedState();
+            yield return null;
+        }
+        private void RayOfFrostBeamController()
+        {
+            RayOfFrostActivator(m_chosenPointNameForRayFrost);
+        }
+
+        private void RayOfFrostActivator(string chosenPointName)
+        {
+            var name = "A2";
+            if (chosenPointName == name)
+            {
+                var rayOfFrost = "RayOfFrost";
+                Debug.Log(rayOfFrost);
+                m_rayOfFrostAnimatorRight.SetTrigger(rayOfFrost);
+
+            }
+            else
+            {
+                var rayOfFrostSide2 = "RayOfFrost";
+                Debug.Log(rayOfFrostSide2);
+                m_rayOfFrostAnimatorLeft.SetTrigger(rayOfFrostSide2);
+            }
+        }
 
         private IEnumerator IceBombAttackRoutine() //remove 
         {
@@ -826,6 +965,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_currentAttackCoroutine = null;
             m_stateHandle.ApplyQueuedState();
             yield return null;
+            
         }
 
         private IEnumerator ElectricOrbAttackRoutine()
@@ -1041,6 +1181,9 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator TeleportRoutine()
         {
+            var spawnPointIndex1 = 0;
+            var spawnPointIndex2 = 1;
+            var spawnPointIndex3 = 2;
             m_stateHandle.Wait(State.ReevaluateSituation);
             var randomSpawnPoint = UnityEngine.Random.Range(0, m_listOfSpawnPoints.Count);
             Debug.Log(m_listOfSpawnPoints.Count.ToString());
@@ -1053,18 +1196,18 @@ namespace DChild.Gameplay.Characters.Enemies
             }
             else
             {
-                if (m_spawnPointNumber == 0)
+                if (m_spawnPointIndexForTeleportPhase == spawnPointIndex1)
                 {
                     StartCoroutine(TeleportPatterns(randomSpawnPoint, patternKeys, 0, 1));
                 }
-                else if (m_spawnPointNumber == 1)
+                else if (m_spawnPointIndexForTeleportPhase == spawnPointIndex2)
                 {
                     Debug.Log("spawn point B");
                     var randomSpawnPoint2 = UnityEngine.Random.Range(0, 4);// special case since the points is 4 
                     Debug.Log(randomSpawnPoint2);
                     StartCoroutine(TeleportPatterns(randomSpawnPoint, patternKeys, 1, 2));
                 }
-                else if (m_spawnPointNumber == 2)
+                else if (m_spawnPointIndexForTeleportPhase == spawnPointIndex3)
                 {
                     StartCoroutine(TeleportPatterns(randomSpawnPoint, patternKeys, 2, 1));
                 }
@@ -1074,18 +1217,16 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator TeleportPatterns(int randomSpawnPoint, string[] patternKeys, int spawnIndextoAvoid, int fallBackSpawnIndex)
         {
-            m_spawnPointNumber = UnityEngine.Random.Range(0, m_listOfSpawnPoints.Count);
-            m_spawnPointNumber = (m_spawnPointNumber == spawnIndextoAvoid) ? fallBackSpawnIndex : m_spawnPointNumber;
-            var randomSpawnPointList = patternKeys[m_spawnPointNumber];
+            m_spawnPointIndexForTeleportPhase = UnityEngine.Random.Range(0, m_listOfSpawnPoints.Count);
+            m_spawnPointIndexForTeleportPhase = (m_spawnPointIndexForTeleportPhase == spawnIndextoAvoid) ? fallBackSpawnIndex : m_spawnPointIndexForTeleportPhase;
+            var randomSpawnPointList = patternKeys[m_spawnPointIndexForTeleportPhase];
             List<Transform> randomSpawnPoints = m_listOfSpawnPoints[randomSpawnPointList];
             m_animation.EnableRootMotion(true, true);
             m_animation.SetAnimation(0, m_info.teleportDisapear.animation, false);
             var teleportPoint = randomSpawnPoints[randomSpawnPoint];
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.teleportDisapear.animation);
-
-
             transform.position = teleportPoint.position;
-            if(IsFacingTarget() == false)
+            if (IsFacingTarget() == false)
             {
                 m_turnHandle.ExecuteWithAnimationByPass();
             }
@@ -1093,12 +1234,132 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.teleportAppear.animation);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_animation.DisableRootMotion();
-            Debug.Log(randomSpawnPointList.ToString()+ " spawn point list");
-            Debug.Log(m_spawnPointNumber+ " spawn point number");
+            Debug.Log(randomSpawnPointList.ToString() + " spawn point list");
+            Debug.Log(m_spawnPointIndexForTeleportPhase + " spawn point number");
             m_stateHandle.ApplyQueuedState();
             yield return null;
         }
 
+        private IEnumerator DragonsBreathRoutine()
+        {
+            // get transform point of spawn pattern b top 
+            // play animation var randIndexForRayOfFrost = UnityEngine.Random.Range(0, 2);
+            var positionForDragonsBreath = m_teleportSpawnPointsB[0];
+            while (Vector3.Distance(m_centerMass.position, positionForDragonsBreath.position) > m_distanceStoppingToleranceForRayFrost)
+            {
+                var distanceCalcuOfTwoPosition = (positionForDragonsBreath.position - m_centerMass.position).normalized;
+                transform.position += m_info.move.speed * Time.deltaTime * distanceCalcuOfTwoPosition;
+                Debug.Log("lean D ro");
+                yield return null;
+            }
+            Debug.Log("BOGA BOSS!");
+            //var centerSpawnPoint = m_teleportSpawnPointsB[0];
+            //transform.position = centerSpawnPoint.position;
+            if (m_character.facing == HorizontalDirection.Left)
+            {
+                m_turnHandle.ExecuteWithAnimationByPass();
+                do {
+
+                    yield return null;
+                }
+                while (m_character.facing == HorizontalDirection.Left);
+              
+            }
+
+            m_animation.SetAnimation(0, m_info.dragonBreathAnticipation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.dragonBreathAnticipation.animation);
+            m_animation.SetAnimation(0, m_info.dragonBreathAttackRight, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.dragonBreathAttackRight.animation);
+            m_animation.SetAnimation(0, m_info.dragonBreathAttackLeft, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.dragonBreathAttackLeft.animation);
+            m_animation.SetAnimation(0, m_info.idleAnimation, true);
+            //delete the fire fire nomi after 2 seconds 
+            m_attackDecider.hasDecidedOnAttack = false;
+            m_currentAttackCoroutine = null;
+            m_stateHandle.ApplyQueuedState();
+            Debug.Log("Done Dragons breath");
+            yield return null;
+        }
+
+        private IEnumerator SummonDragonRoutine()
+        {
+            var positionForSummonDragon = m_teleportSpawnPointsB[0];
+            while (Vector3.Distance(m_centerMass.position, positionForSummonDragon.position) > m_distanceStoppingToleranceForRayFrost)
+            {
+                var CalculatedDistanceOfPositions = (positionForSummonDragon.position - m_centerMass.position).normalized;
+                transform.position += m_info.move.speed * Time.deltaTime * CalculatedDistanceOfPositions;
+                Debug.Log("papuntang langit boss");
+                yield return null;
+            }
+
+            m_animation.SetAnimation(0, m_info.summonDragonAnticipation.animation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.summonDragonAnticipation.animation);
+            m_animation.SetAnimation(0, m_info.summonDragonAttack.animation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.summonDragonAttack.animation);
+            m_animation.SetAnimation(0, m_info.idleAnimation, true);
+            m_attackDecider.hasDecidedOnAttack = false;
+            m_currentAttackCoroutine = null;
+            m_stateHandle.ApplyQueuedState();
+            Debug.Log("Gwa laser done boss ");
+            yield return null;
+        }
+
+        private IEnumerator IceShardRoutine()
+        {
+            //any position? 
+            m_animation.SetAnimation(0, m_info.iceShardAnticipation.animation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.iceShardAnticipation.animation);
+            m_animation.SetAnimation(0, m_info.iceShardAttack.animation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.iceShardAttack.animation);
+            m_animation.SetAnimation(0, m_info.idleAnimation, true);
+            m_attackDecider.hasDecidedOnAttack = false;
+            m_currentAttackCoroutine = null;
+            m_stateHandle.ApplyQueuedState();
+            Debug.Log("Gwa shard done boss?");
+            yield return null;
+        }
+        private void IceShardSpawn()
+        {
+            Debug.Log("Spawns");
+            if (m_IceShardPattern1Done == false)
+            {
+                for (int i = 0; i < m_iceShardsSpawnPointPattern1.Count; i++)
+                {
+                    Debug.Log(m_iceShardsSpawnPointPattern1[i].name);
+                }
+                m_IceShardPattern1Done = true;
+            }
+            else
+            {
+                for (int i = 0; i < m_iceShardsSpawnPointPattern2.Count; i++)
+                {
+                    Debug.Log(m_iceShardsSpawnPointPattern2[i].name);
+                }
+                m_IceShardPattern1Done = false;
+            }
+
+        }
+
+        private IEnumerator LightningOrbRoutine()
+        {
+            Debug.Log("HOLY WEEK SPECIAL BY TOTO DRAGONS CALL ALIMAE");
+
+
+            m_animation.SetAnimation(0, m_info.lightningOrbSummonAnticipation.animation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.lightningOrbSummonAnticipation.animation);
+            m_animation.SetAnimation(0, m_info.lightningOrbAttack.animation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.lightningOrbAttack.animation);
+
+            
+            //m_animation.SetAnimation(0, m_info.lightningOrbSummonLoop, false);
+            //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.lightningOrbAttack.animation);
+            yield return null;
+        }
+        
+        private IEnumerator LightningStrike()
+        {
+            yield return null;
+        }
         #endregion
 
         //private void DecidedOnAttack(bool condition)
@@ -1189,6 +1450,7 @@ namespace DChild.Gameplay.Characters.Enemies
             for (int i = 0; i < m_attackUsed.Length; ++i)
             {
                 m_attackUsed[i] = false;
+            
             }
         }
 
@@ -1235,12 +1497,12 @@ namespace DChild.Gameplay.Characters.Enemies
             UpdateAttackDeciderList();
             //m_patternCount = new float[4];
             m_attackCache = new List<Attack>();
-            AddToAttackCache(Attack.Phase1Pattern1, Attack.Phase1Pattern2, Attack.Phase1Pattern3, Attack.Phase1Pattern4, 
-                /*Attack.Phase2Pattern1,*/ Attack.Phase2Pattern2, Attack.Phase2Pattern3, Attack.Phase2Pattern4, Attack.Phase2Pattern5, 
+            AddToAttackCache(Attack.Phase1Pattern1, Attack.Phase1Pattern2, Attack.Phase1Pattern3, Attack.Phase1Pattern4,
+                /*Attack.Phase2Pattern1,*/ Attack.Phase2Pattern2, Attack.Phase2Pattern3, Attack.Phase2Pattern4, Attack.Phase2Pattern5,
                 Attack.Phase3Pattern1, Attack.Phase3Pattern2, /*Attack.Phase3Pattern3,*/ /*Attack.Phase3Pattern4,*/ Attack.Phase3Pattern5);
             m_attackRangeCache = new List<float>();
-            AddToRangeCache(m_info.phase1Pattern1Range, m_info.phase1Pattern2Range, m_info.phase1Pattern3Range, m_info.phase1Pattern4Range, 
-                /*m_info.phase2Pattern1Range,*/ m_info.phase2Pattern2Range, m_info.phase2Pattern3Range, m_info.phase2Pattern4Range, m_info.phase2Pattern5Range, 
+            AddToRangeCache(m_info.phase1Pattern1Range, m_info.phase1Pattern2Range, m_info.phase1Pattern3Range, m_info.phase1Pattern4Range,
+                /*m_info.phase2Pattern1Range,*/ m_info.phase2Pattern2Range, m_info.phase2Pattern3Range, m_info.phase2Pattern4Range, m_info.phase2Pattern5Range,
                 m_info.phase3Pattern1Range, m_info.phase3Pattern2Range, /*m_info.phase3Pattern3Range,*/ /*m_info.phase3Pattern4Range,*/ m_info.phase3Pattern5Range);
             m_attackUsed = new bool[m_attackCache.Count];
             m_currentFullCooldown = new List<float>();
@@ -1251,7 +1513,9 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             base.Start();
             //m_spineListener.Subscribe(m_info.OrbSummonRainProjectile.launchOnEvent, m_deathFX.Play);
-
+            m_spineListener.Subscribe(m_info.iceShardCardinalProjectiles, IceShardSpawn);
+            m_spineListener.Subscribe(m_info.iceShardDiagonalProjectiles, IceShardSpawn);
+            m_spineListener.Subscribe(m_info.rayOfFrostBeam, RayOfFrostBeamController);
             m_animation.DisableRootMotion();
 
             m_phaseHandle = new PhaseHandle<Phase, PhaseInfo>();
@@ -1317,8 +1581,9 @@ namespace DChild.Gameplay.Characters.Enemies
                             //{
                             //    m_currentAttackCoroutine = StartCoroutine(EphemeralArmsSmashAttackRoutine(FollowUpAttack.ThreeFireBalls));
                             //}
-                            m_currentAttackCoroutine = StartCoroutine(EphemeralArmsSmashAttackRoutine(FollowUpAttack.ElectricOrb));
-                            //m_currentAttackCoroutine = StartCoroutine(RayOfFrostAttackRoutine());
+                            // m_currentAttackCoroutine = StartCoroutine(EphemeralArmsSmashAttackRoutine(FollowUpAttack.ElectricOrb));
+                            //m_currentAttackCoroutine = StartCoroutine(DragonsBreathRoutine());
+                            m_currentAttackCoroutine = StartCoroutine(RayOfFrostRoutine());
                             m_pickedCooldown = m_currentFullCooldown[0];
                             break;
                         case Attack.Phase1Pattern2:
@@ -1438,7 +1703,7 @@ namespace DChild.Gameplay.Characters.Enemies
                             m_pickedCooldown = m_currentFullCooldown[4];
                             break;
                         case Attack.Phase3Pattern6:
-                            m_currentAttackCoroutine = StartCoroutine(RayOfFrostAttackRoutine());
+                            m_currentAttackCoroutine = StartCoroutine(RayOfFrostRoutine());
                             m_pickedCooldown = m_currentFullCooldown[5];
                             break;
                             #endregion
