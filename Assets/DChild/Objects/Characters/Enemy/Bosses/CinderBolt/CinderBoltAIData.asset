@@ -16,7 +16,7 @@ MonoBehaviour:
     SerializedFormat: 2
     SerializedBytes: 
     ReferencedUnityObjects:
-    - {fileID: 11400000, guid: 95b12ec63d1fa5541a78f2e7ec8f6053, type: 2}
+    - {fileID: 11400000, guid: aa1e5ee708bca204a81d40d8356d65f0, type: 2}
     - {fileID: 11400000, guid: 0a363344dcf5d1646bab75de618b9d59, type: 2}
     - {fileID: 11400000, guid: ed96dc05b0a60d441b7a3b8864c2e8f1, type: 2}
     SerializedBytesString: 
@@ -36,9 +36,9 @@ MonoBehaviour:
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_phaseDataList
       Entry: 7
-      Data: 2|UnityEngine.Rendering.SerializedDictionary`2[[DChild.Gameplay.Characters.Enemies.CinderBoltAI+Phase,
+      Data: 2|System.Collections.Generic.Dictionary`2[[DChild.Gameplay.Characters.Enemies.CinderBoltAI+Phase,
         Assembly-CSharp],[DChild.Gameplay.Characters.AI.BossPhaseData, Assembly-CSharp]],
-        Unity.RenderPipelines.Core.Runtime
+        mscorlib
     - Name: comparer
       Entry: 7
       Data: 3|System.Collections.Generic.EnumEqualityComparer`1[[DChild.Gameplay.Characters.Enemies.CinderBoltAI+Phase,
@@ -431,7 +431,7 @@ MonoBehaviour:
       Data: 1
     - Name: m_range
       Entry: 4
-      Data: 0
+      Data: 25
     - Name: 
       Entry: 8
       Data: 
@@ -569,9 +569,81 @@ MonoBehaviour:
     - Name: 
       Entry: 8
       Data: 
-    - Name: m_targetDistanceTolerance
+    - Name: m_firebeamAttack
+      Entry: 7
+      Data: 32|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.CinderBoltAI+Info,
+        Assembly-CSharp]], Assembly-CSharp
+    - Name: m_animation
+      Entry: 1
+      Data: Attack3
+    - Name: m_timeScale
+      Entry: 4
+      Data: 1
+    - Name: m_range
+      Entry: 4
+      Data: 25
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: m_meteorAttack
+      Entry: 7
+      Data: 33|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.CinderBoltAI+Info,
+        Assembly-CSharp]], Assembly-CSharp
+    - Name: m_animation
+      Entry: 1
+      Data: Spin_Drop
+    - Name: m_timeScale
+      Entry: 4
+      Data: 1
+    - Name: m_range
+      Entry: 4
+      Data: 25
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: m_spinAttack
+      Entry: 7
+      Data: 34|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.CinderBoltAI+Info,
+        Assembly-CSharp]], Assembly-CSharp
+    - Name: m_animation
+      Entry: 1
+      Data: Spin
+    - Name: m_timeScale
+      Entry: 4
+      Data: 1
+    - Name: m_range
       Entry: 4
       Data: 100
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: m_phase1Pattern1Range
+      Entry: 4
+      Data: 20
+    - Name: m_phase1Pattern2Range
+      Entry: 4
+      Data: 20
+    - Name: m_phase2Pattern1Range
+      Entry: 4
+      Data: 20
+    - Name: m_phase2Pattern2Range
+      Entry: 4
+      Data: 20
+    - Name: m_phase2Pattern3Range
+      Entry: 4
+      Data: 20
+    - Name: m_phase2Pattern4Range
+      Entry: 4
+      Data: 20
+    - Name: m_targetDistanceTolerance
+      Entry: 4
+      Data: 40
+    - Name: m_punchUppercut
+      Entry: 1
+      Data: Attack1
+    - Name: m_flamethower1
+      Entry: 1
+      Data: Attack2
     - Name: m_deathAnimation
       Entry: 1
       Data: Death
@@ -598,7 +670,7 @@ MonoBehaviour:
       Data: Mulfunctioned State_recovery state
     - Name: m_spinAnimation
       Entry: 1
-      Data: Spin
+      Data: Test_Spin
     - Name: m_spinDropAnimation
       Entry: 1
       Data: Spin_Drop
@@ -623,6 +695,9 @@ MonoBehaviour:
     - Name: m_turnAnimation
       Entry: 1
       Data: Turn
+    - Name: m_punchUppercutEvent
+      Entry: 1
+      Data: attack1_LeftPunch
     - Name: 
       Entry: 8
       Data: 
