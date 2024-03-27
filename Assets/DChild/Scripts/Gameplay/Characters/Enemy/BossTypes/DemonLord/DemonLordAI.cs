@@ -887,17 +887,14 @@ namespace DChild.Gameplay.Characters.Enemies
             var chosenPointForRayOfFrost = m_rayOfFrostPosition[randIndexForRayOfFrost];
             Debug.Log(chosenPointForRayOfFrost.name.ToString());
             m_chosenPointNameForRayFrost = chosenPointForRayOfFrost.name.ToString();
-            while (Vector3.Distance(m_centerMass.position, chosenPointForRayOfFrost.position) > m_distanceStoppingToleranceForRayFrost)
+            while (Vector3.Distance(m_centerMass.position, chosenPointForRayOfFrost.position) != m_distanceStoppingToleranceForRayFrost)
             {
                 var distanceCalculationDLordAndFrost = (chosenPointForRayOfFrost.position - m_centerMass.position).normalized;
                 transform.position += m_info.move.speed * Time.deltaTime * distanceCalculationDLordAndFrost;
                 Debug.Log("lean D ro");
                 yield return null;
             }
-           
-            m_agent.Stop();
-            transform.position = chosenPointForRayOfFrost.position - m_centerMass.position;
-            yield return null;
+            m_agent.Stop(); 
             Debug.Log("Done transfer");
             if (IsFacingTarget() == false)
             {
