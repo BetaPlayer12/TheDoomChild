@@ -237,6 +237,9 @@ namespace DChild.Gameplay.Characters.Enemies
             private string m_rayOfFrostBeam;
             public string rayOfFrostBeam => m_rayOfFrostBeam;
 
+            [SerializeField, ValueDropdown("GetEvents")]
+            private string m_dragonsBreath;
+            public string dragonsBreath => m_dragonsBreath;
             //[Title("Projectiles")]
             //[SerializeField, BoxGroup("RainProjectiles")]
             //private float m_rainProjectilesDuration;
@@ -420,6 +423,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private DemonLordEphemeralArms m_ephemeralArmsBack;
         [SerializeField, TabGroup("Reference")]
         private DemonLordBook m_book;
+        [SerializeField, TabGroup("Reference")]
+        private DragonsBreathFireController m_fireController;
 
         [SerializeField, TabGroup("Modules")]
         private AnimatedTurnHandle m_turnHandle;
@@ -461,7 +466,17 @@ namespace DChild.Gameplay.Characters.Enemies
         private ParticleFX m_lightingStepMidairFX;
         [SerializeField, TabGroup("FX")]
         private float m_lightingStepMidairFXYOFfset;
-      
+        [SerializeField,TabGroup("FX animator")]
+        private Animator m_rayOfFrostAnimatorRight;
+        [SerializeField, TabGroup("FX animator")]
+        private Animator m_rayOfFrostAnimatorLeft;
+        [SerializeField, TabGroup("FX animator")]
+        private Animator m_dragonsBreathAnimator;
+        //[SerializeField, TabGroup("FX animator")]
+        //private Animator m_dragonsBreathAnimatorFxSide1;
+        //[SerializeField, TabGroup("FX animator")]
+        //private Animator m_dragonsBreathAnimatorFxSide2;
+
 
         [SerializeField]
         private SpineEventListener m_spineListener;
@@ -512,6 +527,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private List<Transform> m_rayOfFrostPosition;
         [SerializeField, TabGroup("Spawn Points")]
         private Transform m_rayOfFrostBeamPosition;
+        [SerializeField, TabGroup("Spawn Points")]
+        private Transform m_dragonsBreathPoint;
         [SerializeField, TabGroup("Target Points")]
         private Transform m_fireBallTargetPoint;
         [SerializeField, TabGroup("Target Points")]
@@ -548,10 +565,7 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField]
         private bool m_rayOfFrostBeamActivated = false;
 
-        [SerializeField]
-        private Animator m_rayOfFrostAnimatorRight;
-        [SerializeField]
-        private Animator m_rayOfFrostAnimatorLeft;
+     
         private string m_chosenPointNameForRayFrost;
         private void ApplyPhaseData(PhaseInfo obj)
         {
@@ -887,20 +901,21 @@ namespace DChild.Gameplay.Characters.Enemies
             var chosenPointForRayOfFrost = m_rayOfFrostPosition[randIndexForRayOfFrost];
             Debug.Log(chosenPointForRayOfFrost.name.ToString());
             m_chosenPointNameForRayFrost = chosenPointForRayOfFrost.name.ToString();
-            while (Vector3.Distance(m_centerMass.position, chosenPointForRayOfFrost.position) != m_distanceStoppingToleranceForRayFrost)
+           
+            while (Vector3.Distance(transform.position, chosenPointForRayOfFrost.position) > 0.1f)
             {
-                var distanceCalculationDLordAndFrost = (chosenPointForRayOfFrost.position - m_centerMass.position).normalized;
+                var distanceCalculationDLordAndFrost = (chosenPointForRayOfFrost.position - transform.position).normalized;
                 transform.position += m_info.move.speed * Time.deltaTime * distanceCalculationDLordAndFrost;
                 Debug.Log("lean D ro");
                 yield return null;
             }
-            m_agent.Stop(); 
+            m_agent.Stop();
             Debug.Log("Done transfer");
             if (IsFacingTarget() == false)
             {
                 m_turnHandle.ExecuteWithAnimationByPass();
             }
-         
+            m_animation.DisableRootMotion();
             m_animation.SetAnimation(0, m_info.rayOfFrostAttack.animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.rayOfFrostAttack.animation);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
@@ -916,7 +931,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void RayOfFrostActivator(string chosenPointName)
         {
-            var name = "A2";
+            var name = "Right";
             if (chosenPointName == name)
             {
                 var rayOfFrost = "RayOfFrost";
@@ -931,6 +946,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_rayOfFrostAnimatorLeft.SetTrigger(rayOfFrostSide2);
             }
         }
+       
 
         private IEnumerator IceBombAttackRoutine() //remove 
         {
@@ -1241,10 +1257,12 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             // get transform point of spawn pattern b top 
             // play animation var randIndexForRayOfFrost = UnityEngine.Random.Range(0, 2);
-            var positionForDragonsBreath = m_teleportSpawnPointsB[0];
-            while (Vector3.Distance(m_centerMass.position, positionForDragonsBreath.position) > m_distanceStoppingToleranceForRayFrost)
+            m_dragonsBreathAnimator.gameObject.SetActive(true);
+            m_fireController.SetActiveDragonTrail(true);
+            var positionForDragonsBreath = m_dragonsBreathPoint;
+            while (Vector3.Distance(transform.position, positionForDragonsBreath.position) > 0.1f)
             {
-                var distanceCalcuOfTwoPosition = (positionForDragonsBreath.position - m_centerMass.position).normalized;
+                var distanceCalcuOfTwoPosition = (positionForDragonsBreath.position - transform.position).normalized;
                 transform.position += m_info.move.speed * Time.deltaTime * distanceCalcuOfTwoPosition;
                 Debug.Log("lean D ro");
                 yield return null;
@@ -1255,14 +1273,14 @@ namespace DChild.Gameplay.Characters.Enemies
             if (m_character.facing == HorizontalDirection.Left)
             {
                 m_turnHandle.ExecuteWithAnimationByPass();
-                do {
+                do
+                {
 
                     yield return null;
                 }
                 while (m_character.facing == HorizontalDirection.Left);
-              
-            }
 
+            }
             m_animation.SetAnimation(0, m_info.dragonBreathAnticipation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.dragonBreathAnticipation.animation);
             m_animation.SetAnimation(0, m_info.dragonBreathAttackRight, false);
@@ -1270,7 +1288,8 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_info.dragonBreathAttackLeft, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.dragonBreathAttackLeft.animation);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
-            //delete the fire fire nomi after 2 seconds 
+            m_dragonsBreathAnimator.gameObject.SetActive(false);
+            m_fireController.StartDragonsRoutine();
             m_attackDecider.hasDecidedOnAttack = false;
             m_currentAttackCoroutine = null;
             m_stateHandle.ApplyQueuedState();
@@ -1278,6 +1297,12 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return null;
         }
 
+
+        private void DragonsBreathActivator()
+        {
+           m_fireController.StartDragonBreathRoutine(m_animation.animationState,m_info.dragonBreathAttackRight.animation,m_info.dragonBreathAttackLeft.animation);
+        }
+    
         private IEnumerator SummonDragonRoutine()
         {
             var positionForSummonDragon = m_teleportSpawnPointsB[0];
@@ -1513,6 +1538,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_spineListener.Subscribe(m_info.iceShardCardinalProjectiles, IceShardSpawn);
             m_spineListener.Subscribe(m_info.iceShardDiagonalProjectiles, IceShardSpawn);
             m_spineListener.Subscribe(m_info.rayOfFrostBeam, RayOfFrostBeamController);
+            m_spineListener.Subscribe(m_info.dragonsBreath, DragonsBreathActivator);
             m_animation.DisableRootMotion();
 
             m_phaseHandle = new PhaseHandle<Phase, PhaseInfo>();
@@ -1592,7 +1618,7 @@ namespace DChild.Gameplay.Characters.Enemies
                             //{
                             //    m_currentAttackCoroutine = StartCoroutine(EphemeralArmsSmashAttackRoutine(FollowUpAttack.IceBomb));
                             //}
-                            m_currentAttackCoroutine = StartCoroutine(EphemeralArmsSmashAttackRoutine(FollowUpAttack.ElectricOrb));
+                            m_currentAttackCoroutine = StartCoroutine(DragonsBreathRoutine());
                             m_pickedCooldown = m_currentFullCooldown[1];
                             break;
                         case Attack.Phase1Pattern3:
@@ -1602,7 +1628,7 @@ namespace DChild.Gameplay.Characters.Enemies
                             }
                             else
                             {
-                                m_currentAttackCoroutine = StartCoroutine(EphemeralArmsSmashAttackRoutine(FollowUpAttack.FlameWave));
+                                m_currentAttackCoroutine = StartCoroutine(DragonsBreathRoutine());
                             }
                             m_pickedCooldown = m_currentFullCooldown[2];
                             break;
@@ -1613,7 +1639,7 @@ namespace DChild.Gameplay.Characters.Enemies
                             }
                             else
                             {
-                                m_currentAttackCoroutine = StartCoroutine(EphemeralArmsSmashAttackRoutine(FollowUpAttack.FlameWave));
+                                m_currentAttackCoroutine = StartCoroutine(DragonsBreathRoutine());
                             }
                             m_pickedCooldown = m_currentFullCooldown[3];
                             break;

@@ -726,6 +726,7 @@ MonoBehaviour:
   m_ephemeralArmsFront: {fileID: 2220351104292991992}
   m_ephemeralArmsBack: {fileID: 4932861181646421343}
   m_book: {fileID: 4711183079988479029}
+  m_fireController: {fileID: 3038746082922842278}
   m_turnHandle: {fileID: 5889563430262394174}
   m_agent: {fileID: 6239488024912400118}
   m_deathHandle: {fileID: 6739827688900031740}
@@ -742,6 +743,11 @@ MonoBehaviour:
   m_lightingStepAwayFX: {fileID: 1584804893705912154}
   m_lightingStepMidairFX: {fileID: 8959733797531569256}
   m_lightingStepMidairFXYOFfset: 10
+  m_rayOfFrostAnimatorRight: {fileID: 0}
+  m_rayOfFrostAnimatorLeft: {fileID: 0}
+  m_dragonsBreathAnimator: {fileID: 0}
+  m_dragonsBreathAnimatorFxSide1: {fileID: 0}
+  m_dragonsBreathAnimatorFxSide2: {fileID: 0}
   m_spineListener: {fileID: 8134090112941765845}
   m_fireBallSpawnPoint: {fileID: 4752391134117494860}
   m_iceBombSpawnPoint: {fileID: 6499448787503834908}
@@ -764,6 +770,7 @@ MonoBehaviour:
   m_rayOfFrostPosition:
   - {fileID: 0}
   m_rayOfFrostBeamPosition: {fileID: 4187657424047707283}
+  m_dragonsBreathPoint: {fileID: 0}
   m_fireBallTargetPoint: {fileID: 6097118419546371033}
   m_iceBombTargetPoints: []
   m_electricOrbTargetPoints: []
@@ -772,8 +779,6 @@ MonoBehaviour:
   m_startingPoint: 1
   m_IceShardPattern1Done: 0
   m_rayOfFrostBeamActivated: 0
-  m_rayOfFrostAnimatorRight: {fileID: 0}
-  m_rayOfFrostAnimatorLeft: {fileID: 0}
 --- !u!50 &9120803096519862357 stripped
 Rigidbody2D:
   m_CorrespondingSourceObject: {fileID: 7845266558353687049, guid: 581273cea94d1294a9c56f1ba54042dc,
@@ -851,6 +856,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Mesh
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4978609238074675002, guid: 82abf721e5745294d84da9d98ac90b9f,
+        type: 3}
+      propertyPath: m_fireTrailDuration
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 5211036685946101521, guid: 82abf721e5745294d84da9d98ac90b9f,
         type: 3}
@@ -1144,6 +1154,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d247ba06193faa74d9335f5481b2b56c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &3038746082922842278 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4978609238074675002, guid: 82abf721e5745294d84da9d98ac90b9f,
+    type: 3}
+  m_PrefabInstance: {fileID: 8015380182503425948}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 61b0d89cae25fdd4fbd201a5e0d6c674, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!198 &3040132480604389184 stripped
