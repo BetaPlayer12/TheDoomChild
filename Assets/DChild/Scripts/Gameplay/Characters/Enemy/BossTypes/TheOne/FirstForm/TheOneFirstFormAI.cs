@@ -17,6 +17,7 @@ using Spine.Unity.Modules;
 using Spine.Unity.Examples;
 using DChild.Gameplay.Pooling;
 using UnityEngine.Playables;
+using DG.Tweening;
 
 namespace DChild.Gameplay.Characters.Enemies
 {
@@ -499,6 +500,10 @@ namespace DChild.Gameplay.Characters.Enemies
         private Transform m_projectilePoint;
         [SerializeField, TabGroup("Spawn Points")]
         private Transform m_scytheWavePoint;
+        [SerializeField, TabGroup("Spawn Points")]
+        private Transform m_scytheWaveLeftSpawnPosition;
+        [SerializeField, TabGroup("Spawn Points")]
+        private Transform m_scytheWaveRightSpawnPosition;
         [SerializeField, TabGroup("IK Control")]
         private SkeletonUtilityBone m_targetIK;
 
@@ -930,24 +935,43 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             if (!IsFacingTarget())
                 CustomTurn();
-            //switch (m_currentSwordState)
-            //{
-            //    case SwordState.Normal:
-            //        m_scytheWaveLauncher = new ProjectileLauncher(m_info.scytheWaveNormalProjectile.projectileInfo, m_scytheWavePoint);
-            //        break;
-            //    case SwordState.BlackBlood:
-            //        m_scytheWaveLauncher = new ProjectileLauncher(m_info.scytheWaveBlackbloodProjectile.projectileInfo, m_scytheWavePoint);
-            //        break;
-            //    case SwordState.Poison:
-            //        m_scytheWaveLauncher = new ProjectileLauncher(m_info.scytheWavePoisonProjectile.projectileInfo, m_scytheWavePoint);
-            //        break;
-            //    case SwordState.Acid:
-            //        m_scytheWaveLauncher = new ProjectileLauncher(m_info.scytheWaveAcidProjectile.projectileInfo, m_scytheWavePoint);
-            //        break;
-            //}
+
             var target = new Vector2(m_scytheWavePoint.position.x + (5 * transform.localScale.x), m_scytheWavePoint.position.y);
             m_scytheWaveLauncher.AimAt(target);
             m_scytheWaveLauncher.LaunchProjectile();
+        }
+
+
+
+        private IEnumerator ChooseScytheWaveSpawn()
+        {           
+            var chosenPosition = GetPointFarthestFromPlayer(m_scytheWaveLeftSpawnPosition.position,  m_scytheWaveRightSpawnPosition.position);
+
+            m_animation.SetAnimation(0, m_blinkDisappearAnimation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_blinkDisappearAnimation);
+
+            transform.position = chosenPosition;
+
+            m_animation.SetAnimation(0, m_blinkAppearAnimation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_blinkAppearAnimation);
+
+            yield return null;
+        }
+
+        private Vector2 GetPointFarthestFromPlayer(params Vector2[] options)
+        {
+            int farthestIndex = 0;
+            float farthestDistance = Vector2.Distance(m_lastTargetPos, options[0]);
+            for (int i = 1; i < options.Length; i++)
+            {
+                if(Vector2.Distance(m_lastTargetPos, options[i]) > farthestDistance)
+                {
+                    farthestIndex = i;
+                    farthestDistance = Vector2.Distance(m_lastTargetPos, options[i]);
+                }
+            }
+
+            return options[farthestIndex];
         }
 
         private IEnumerator ProjectileIKControlRoutine()
@@ -981,6 +1005,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 switch (chosenBehavior)
                 {
                     case 0:
+                        yield return ChooseScytheWaveSpawn();
                         m_animation.SetAnimation(0, m_info.scytheWaveAttack.animation, false);
                         yield return new WaitForAnimationComplete(m_animation.animationState, m_info.scytheWaveAttack.animation);
                         m_attackDecider.hasDecidedOnAttack = false;
@@ -1111,8 +1136,6 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_animation.SetAnimation(4, m_drillMixAnimation, false);
                     m_animation.SetAnimation(0, m_info.drillDash1Attack.animation, true);
 
-
-
                     Vector2 spitPos = transform.position;
                     Vector3 v_diff = (new Vector2(m_lastTargetPos.x, m_lastTargetPos.y - 2) - spitPos);
                     float atan2 = Mathf.Atan2(v_diff.y, v_diff.x);
@@ -1176,6 +1199,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.EnableRootMotion(true, false);
             if (IsTargetInRange(m_info.downwardSlash1Attack.range))
             {
+                yield return ChooseScytheWaveSpawn();
                 m_animation.SetAnimation(0, m_info.downwardSlash1Attack.animation, false);
                 yield return new WaitForAnimationComplete(m_animation.animationState, m_info.downwardSlash1Attack.animation);
 
@@ -1184,14 +1208,6 @@ namespace DChild.Gameplay.Characters.Enemies
 
                 for (int i = 0; i < 2; i++)
                 {
-                    //if (i == 2)
-                    //{
-                    //    m_attackDecider.hasDecidedOnAttack = false;
-                    //    m_currentAttackCoroutine = null;
-                    //    if (m_alterBladeCoroutine == null)
-                    //        m_stateHandle.ApplyQueuedState();
-                    //}
-
                     switch (i)
                     {
                         case 0:
@@ -1201,6 +1217,8 @@ namespace DChild.Gameplay.Characters.Enemies
                             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.heavySwordStabAttack.animation);
                             break;
                         case 1:
+                            yield return ChooseScytheWaveSpawn();
+
                             m_animation.SetAnimation(0, m_info.downwardSlash2Attack.animation, false);
                             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.downwardSlash2Attack.animation);
                             m_animation.SetAnimation(0, m_info.twinSlash1Attack.animation, false);
@@ -1230,40 +1248,21 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator Phase1Pattern2AttackRoutine()
         {
             m_animation.EnableRootMotion(true, false);
-            if (IsTargetInRange(m_info.projectilWaveSlashGround1Attack.range))
+
+            m_animation.SetAnimation(0, m_info.projectilWaveSlashGround1Attack.animation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.projectilWaveSlashGround1Attack.animation);
+
+            m_animation.SetAnimation(0, m_info.projectilWaveSlashGround2Attack.animation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.projectilWaveSlashGround2Attack.animation);
+
+            m_attackDecider.hasDecidedOnAttack = false;
+            m_currentAttackCoroutine = null;
+            if (m_alterBladeCoroutine == null)
             {
-                m_animation.SetAnimation(0, m_info.projectilWaveSlashGround1Attack.animation, false);
-                yield return new WaitForAnimationComplete(m_animation.animationState, m_info.projectilWaveSlashGround1Attack.animation);
-
-                float timer = 0;
-                while (timer <= m_info.phase1Pattern2WalkTime && !IsTargetInRange(m_info.projectilWaveSlashGround1Attack.range))
-                {
-                    if (!IsFacingTarget())
-                        CustomTurn();
-
-                    MoveToTarget(20f);
-                    timer += Time.deltaTime;
-                    yield return null;
-                }
-
-                m_animation.SetAnimation(0, m_info.projectilWaveSlashGround2Attack.animation, false);
-                yield return new WaitForAnimationComplete(m_animation.animationState, m_info.projectilWaveSlashGround2Attack.animation);
-
-                m_attackDecider.hasDecidedOnAttack = false;
-                m_currentAttackCoroutine = null;
-                if (m_alterBladeCoroutine == null)
-                {
-                    m_stateHandle.ApplyQueuedState();
-                    enabled = true;
-                }
+                m_stateHandle.ApplyQueuedState();
+                enabled = true;
             }
-            else
-            {
-                if (m_blinkCoroutine != null)
-                    yield return new WaitUntil(() => m_blinkCoroutine == null);
 
-                m_blinkCoroutine = StartCoroutine(BlinkRoutine(BlinkState.DisappearBackward, BlinkState.AppearBackward, 60, m_info.midAirHeight, State.Chasing, false, false, false));
-            }
             yield return null;
         }
 
@@ -1287,8 +1286,6 @@ namespace DChild.Gameplay.Characters.Enemies
                 yield return new WaitForAnimationComplete(m_animation.animationState, m_info.drillToGroundAnimation);
                 m_animation.SetAnimation(0, m_info.idleAnimation, true);
                 yield return new WaitForSeconds(m_info.phase1Pattern3IdleTime);
-                //if (m_evadeCoroutine != null)
-                //    yield return new WaitUntil(() => m_evadeCoroutine == null);
 
                 m_currentAttackCoroutine = StartCoroutine(EvadeRoutine());
             }
@@ -1448,12 +1445,6 @@ namespace DChild.Gameplay.Characters.Enemies
                     }
                     break;
             }
-            //if (Vector2.Distance(transform.position, m_targetInfo.position) > m_info.downwardSlash1Attack.range)
-            //{
-            //}
-            //else
-            //{
-            //}
             yield return null;
         }
 
@@ -1580,6 +1571,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_movement.Stop();
             m_character.physics.simulateGravity = false;
             m_bodyCollider.enabled = false;
+            m_model.transform.rotation = Quaternion.identity;
             switch (disappearState)
             {
                 case BlinkState.DisappearForward:
@@ -2086,7 +2078,6 @@ namespace DChild.Gameplay.Characters.Enemies
                     else
                     {
                         m_currentCooldown = 0;
-                        //m_stateHandle.OverrideState(State.ReevaluateSituation);
                         m_stateHandle.OverrideState(State.ReevaluateSituation);
                     }
 
