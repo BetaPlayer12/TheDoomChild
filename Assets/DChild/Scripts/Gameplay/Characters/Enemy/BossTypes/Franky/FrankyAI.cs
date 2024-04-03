@@ -1,25 +1,16 @@
 ﻿using System;
-using DChild.Gameplay;
-using DChild.Gameplay.Characters;
 using DChild.Gameplay.Combat;
 using Holysoft.Event;
 using DChild.Gameplay.Characters.AI;
 using UnityEngine;
-using Spine;
 using Spine.Unity;
 using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
-using DChild;
-using DChild.Gameplay.Characters.Enemies;
-using DChild.Temp;
-using Spine.Unity.Modules;
-using Spine.Unity.Examples;
-using DChild.Gameplay.Pooling;
-using UnityEngine.Playables;
 
 namespace DChild.Gameplay.Characters.Enemies
 {
+
     [AddComponentMenu("DChild/Gameplay/Enemies/Boss/FrankyAI")]
     public class FrankyAI : CombatAIBrain<FrankyAI.Info>
     {
@@ -684,7 +675,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_phaseHandle.allowPhaseChange = true;
         }
 
-       
+
 
 
         private IEnumerator ChainFistPunchRoutine()
@@ -988,7 +979,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         case Attack.ComboPunch:
                             if (patternIndex == 0 || patternIndex == 1 || patternIndex == 2)
                             {
-                                
+
                                 m_attackCount++;
                                 m_currentAttackCoroutine = StartCoroutine(PunchComboRoutine());
                             }
@@ -1002,7 +993,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         case Attack.ChanFistPunch:
                             if (patternIndex == 0 || patternIndex == 1 || patternIndex == 2 && m_currentPhaseIndex != 3)
                             {
-                                
+
                                 m_attackCount++;
                                 m_currentAttackCoroutine = StartCoroutine(ChainFistPunchRoutine());
                             }
@@ -1145,7 +1136,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_attackCache = new List<Attack>();
             AddToAttackCache(Attack.ChainShock, Attack.ChanFistPunch, Attack.ComboPunch, Attack.LightningStomp, Attack.ShoulderBash, Attack.ShoulderBashHook);
             m_attackRangeCache = new List<float>();
-            AddToRangeCache(m_info.chainShockAttack.range, m_info.punchComboAttack.range ,m_info.chainFistPunchAttack.range, m_info.lightningStompAttack.range, m_info.shoulderBashAttack.range, m_info.shoulderBashHookAttack.range);
+            AddToRangeCache(m_info.chainShockAttack.range, m_info.punchComboAttack.range, m_info.chainFistPunchAttack.range, m_info.lightningStompAttack.range, m_info.shoulderBashAttack.range, m_info.shoulderBashHookAttack.range);
             m_attackUsed = new bool[m_attackCache.Count];
         }
 
@@ -1185,11 +1176,11 @@ namespace DChild.Gameplay.Characters.Enemies
             m_spineListener.Subscribe(m_info.stopRoarEvent, PhaseFXStop);
             m_spineListener.Subscribe(m_info.stompEvent, LaunchProjectile);
             m_animation.DisableRootMotion();
-            
+
             m_phaseHandle = new PhaseHandle<Phase, PhaseInfo>();
             m_phaseHandle.Initialize(Phase.PhaseOne, m_info.phaseInfo, m_character, ChangeState, ApplyPhaseData);
             m_phaseHandle.ApplyChange();
-            
+
             m_fistRefPoint.GetComponent<CircleCollider2D>().enabled = false;
             //StartCoroutine(StartAnimationRoutine());
             //Hack Fix for quests

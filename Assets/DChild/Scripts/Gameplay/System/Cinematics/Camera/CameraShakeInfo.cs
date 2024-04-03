@@ -31,11 +31,5 @@ namespace DChild.Gameplay.Cinematics.Cameras
 
         public float GetAmplitude(float time) => m_amplitudeProperty.GetValue(time);
         public float GetFrequency(float time) => m_frequencyProperty.GetValue(time);
-
-        [SerializeField]
-        private AnimationCurve m_amplitude;
-        [SerializeField]
-        private AnimationCurve m_frequency;
-
     }
 }
