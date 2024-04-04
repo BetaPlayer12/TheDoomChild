@@ -3,7 +3,7 @@ guid: eeb416b2c8c87f04aba84ca7dcdbb229
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
-  serializedVersion: 10
+  serializedVersion: 12
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -23,6 +23,8 @@ TextureImporter:
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMasterTextureLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -31,9 +33,9 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: -1
-    aniso: -1
-    mipBias: -100
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
     wrapU: 1
     wrapV: 1
     wrapW: 1
@@ -54,9 +56,14 @@ TextureImporter:
   textureType: 8
   textureShape: 1
   singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
   maxTextureSizeSet: 0
   compressionQualitySet: 0
   textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 1
+  cookieLightType: 1
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
@@ -82,83 +89,50 @@ TextureImporter:
     overridden: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Server
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 1
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites: []
     outline:
-    - - {x: 45, y: -515}
-      - {x: -93, y: -501}
-      - {x: -85, y: -452}
-      - {x: -54, y: -420}
-      - {x: -73, y: -312}
-      - {x: -39, y: -281}
-      - {x: -56, y: -180}
-      - {x: -119, y: -99}
-      - {x: -213, y: -74}
-      - {x: -260, y: -263}
-      - {x: -492, y: -389}
-      - {x: -596, y: -401}
-      - {x: -641, y: -327}
-      - {x: -647, y: -208}
-      - {x: -618, y: -130}
-      - {x: -631, y: -108}
-      - {x: -616, y: -31}
-      - {x: -573, y: 5}
-      - {x: -540, y: -18}
-      - {x: -438, y: -33}
-      - {x: -435, y: 64}
-      - {x: -449, y: 77}
-      - {x: -435, y: 145}
-      - {x: -387, y: 169}
-      - {x: -329, y: 148}
-      - {x: -279, y: 140}
-      - {x: -284, y: 192}
-      - {x: -270, y: 258}
-      - {x: -300, y: 289}
-      - {x: -292, y: 360}
-      - {x: -277, y: 390}
-      - {x: -260, y: 439}
-      - {x: -199, y: 441}
-      - {x: -100, y: 431}
-      - {x: -61, y: 350}
-      - {x: -34, y: 308}
-      - {x: 12, y: 298}
-      - {x: 49, y: 229}
-      - {x: 101, y: 236}
-      - {x: 105, y: 318}
-      - {x: 127, y: 384}
-      - {x: 160, y: 429}
-      - {x: 259, y: 470}
-      - {x: 370, y: 434}
-      - {x: 405, y: 383}
-      - {x: 471, y: 381}
-      - {x: 492, y: 332}
-      - {x: 488, y: 297}
-      - {x: 515, y: 181}
-      - {x: 572, y: 189}
-      - {x: 622, y: 209}
-      - {x: 593, y: 169}
-      - {x: 630, y: 142}
-      - {x: 682, y: 59}
-      - {x: 637, y: -123}
-      - {x: 586, y: -241}
-      - {x: 529, y: -321}
-      - {x: 469, y: -290}
-      - {x: 206, y: -282}
-      - {x: 176, y: -228}
-      - {x: 133, y: -354}
-      - {x: 154, y: -409}
-      - {x: 203, y: -453}
-      - {x: 187, y: -502}
+    - - {x: -96, y: -519}
+      - {x: -79, y: -219}
+      - {x: -185, y: -104}
+      - {x: -273, y: -334}
+      - {x: -607, y: -421}
+      - {x: -677, y: -179}
+      - {x: -625, y: 11}
+      - {x: -361, y: 207}
+      - {x: -277, y: 445}
+      - {x: -113, y: 458}
+      - {x: 53, y: 380}
+      - {x: 248, y: 497}
+      - {x: 505, y: 394}
+      - {x: 689, y: 128}
+      - {x: 626, y: -216}
+      - {x: 499, y: -327}
+      - {x: 188, y: -302}
+      - {x: 214, y: -512}
     physicsShape: []
     bones: []
     spriteID: 5e97eb03825dee720800000000000000
-    internalID: 0
+    internalID: 1537655665
     vertices: []
     indices: 
     edges: []
     weights: []
     secondaryTextures: []
+    nameFileIdTable: {}
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

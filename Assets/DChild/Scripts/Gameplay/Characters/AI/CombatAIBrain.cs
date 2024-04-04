@@ -2,6 +2,7 @@
 using DChild.Gameplay.Combat.StatusAilment;
 using Holysoft.Event;
 using Sirenix.OdinInspector;
+using SUtil = Sirenix.Serialization.Utilities;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -37,6 +38,9 @@ namespace DChild.Gameplay.Characters.AI
 
         protected Restriction m_currentRestrictions;
 
+
+        public event EventAction<EventActionArgs<bool>> ControllerStateChange;
+
         public virtual void ForcePassiveIdle(bool value)
         {
         }
@@ -66,11 +70,17 @@ namespace DChild.Gameplay.Characters.AI
         public virtual void Enable()
         {
             enabled = true;
+            var eventCache =new EventActionArgs<bool>();
+            eventCache.Set(true);
+            ControllerStateChange?.Invoke(this, eventCache);
         }
 
         public virtual void Disable()
         {
             enabled = false;
+            var eventCache = new EventActionArgs<bool>();
+            eventCache.Set(false);
+            ControllerStateChange?.Invoke(this, eventCache);
         }
 
         public bool IsFacing(Vector2 position)
@@ -216,6 +226,7 @@ namespace DChild.Gameplay.Characters.AI
         private static ContactFilter2D m_contactFilter;
         private static RaycastHit2D[] m_hitResults;
         private static bool m_isInitialized;
+
 
         private static void Initialize()
         {
