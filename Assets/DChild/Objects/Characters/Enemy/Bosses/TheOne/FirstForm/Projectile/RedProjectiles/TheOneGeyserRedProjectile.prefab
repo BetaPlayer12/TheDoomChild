@@ -12,10 +12,10 @@ GameObject:
   - component: {fileID: 5368162736228664093}
   - component: {fileID: 7300806532435804434}
   - component: {fileID: 6776751582834210659}
-  - component: {fileID: 1694046520905935591}
   - component: {fileID: 4088663032234601645}
   - component: {fileID: 7573426674235928029}
   - component: {fileID: 9008681136404203301}
+  - component: {fileID: 8579955372775046294}
   m_Layer: 13
   m_Name: TheOneGeyserRedProjectile
   m_TagString: Untagged
@@ -31,11 +31,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2468993767989008504}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 56.05457, y: -29.896261, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4213718867084386205}
+  - {fileID: 3376723877875848130}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -216,49 +217,6 @@ MonoBehaviour:
   m_linearDrag:
     m_x: 0
     m_y: 0
---- !u!114 &1694046520905935591
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2468993767989008504}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 623e104f4ff08ec40895458e1d3ff0e7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_poolableItemData: {fileID: 11400000, guid: b04d526a974bdc04786839fe2c8491aa, type: 2}
-  m_waitForParticlesEnd: 0
-  m_particleSystem: {fileID: 0}
-  m_particleCallback: {fileID: 0}
-  m_model: {fileID: 2468993767989008504}
-  m_onLaunch:
-    m_PersistentCalls:
-      m_Calls: []
-  m_onReset:
-    m_PersistentCalls:
-      m_Calls: []
-  m_data: {fileID: 11400000, guid: b17885c221ca2364d9edfd99aab59666, type: 2}
-  m_damageSource: 4
-  m_attackDamageInfo:
-    damage:
-      m_type: 0
-      m_value: 0
-    criticalDamageInfo:
-      chance: 0
-      damageModifier: 0
-    ignoreInvulnerability: 0
-    ignoresBlock: 0
-  m_projectileFXDamage:
-    damage:
-      m_type: 0
-      m_value: 0
-    criticalDamageInfo:
-      chance: 0
-      damageModifier: 0
-    ignoreInvulnerability: 0
-    ignoresBlock: 0
 --- !u!114 &4088663032234601645
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -272,10 +230,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_centerMass: {fileID: 5050953322464262885}
-  m_data: {fileID: 0}
+  m_data: {fileID: 11400000, guid: 7e665a288a853e14cbefa532dba3f6f4, type: 2}
   m_currentAttackInfo:
     damage:
-      m_type: 2
+      m_type: 1
       m_value: 0
     criticalDamageInfo:
       chance: 0
@@ -309,12 +267,125 @@ CapsuleCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: -0.89654195, y: -1.9858073}
   m_Size: {x: 58.060196, y: 7.910291}
   m_Direction: 1
+--- !u!114 &8579955372775046294
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2468993767989008504}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eacd29a62c6560a48b75707040795e3a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_poolableItemData: {fileID: 11400000, guid: b04d526a974bdc04786839fe2c8491aa, type: 2}
+  m_geyserCollider: {fileID: 8888001380914004380}
+  m_poolCollider: {fileID: 9008681136404203301}
+  m_puddleDuration: 10
+  m_geyserParticles: {fileID: 4213718866839269430}
+--- !u!1 &2636365944537857065
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3376723877875848130}
+  - component: {fileID: 8888001380914004380}
+  - component: {fileID: 1898923325019854014}
+  - component: {fileID: 4347569248965123653}
+  m_Layer: 13
+  m_Name: GeyserCollider
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3376723877875848130
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2636365944537857065}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5050953322464262885}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!61 &8888001380914004380
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2636365944537857065}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 52}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 40, y: 106}
+  m_EdgeRadius: 0
+--- !u!114 &1898923325019854014
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2636365944537857065}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e10454193b54c9a4eb8bfb67b80c746d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_centerMass: {fileID: 3376723877875848130}
+  m_data: {fileID: 11400000, guid: 5e2fa58bec6acd942acfd9b151f13484, type: 2}
+  m_currentAttackInfo:
+    damage:
+      m_type: 1
+      m_value: 0
+    criticalDamageInfo:
+      chance: 0
+      damageModifier: 0
+    ignoreInvulnerability: 0
+    ignoresBlock: 0
+--- !u!114 &4347569248965123653
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2636365944537857065}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d4914fa10fe1f74fbac7bbe8b95c9b2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_data: {fileID: 11400000, guid: 4bcf15a1aed6341489dd8a0bdb92150d, type: 2}
 --- !u!1001 &8516967044236227100
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -994,7 +1065,7 @@ MonoBehaviour:
   OnCallBack:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1694046520905935591}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: 
         m_MethodName: CallPoolRequest
         m_Mode: 1

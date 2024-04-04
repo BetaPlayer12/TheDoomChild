@@ -1,5 +1,101 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1235808333416739220
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2463155225305353758}
+  - component: {fileID: 2644880244559043714}
+  - component: {fileID: 8002072508126361741}
+  - component: {fileID: 2448502639413533532}
+  m_Layer: 13
+  m_Name: GeyserCollider
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2463155225305353758
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1235808333416739220}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5050953322464262885}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!61 &2644880244559043714
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1235808333416739220}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 52}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 40, y: 106}
+  m_EdgeRadius: 0
+--- !u!114 &8002072508126361741
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1235808333416739220}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e10454193b54c9a4eb8bfb67b80c746d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_centerMass: {fileID: 2463155225305353758}
+  m_data: {fileID: 11400000, guid: f3996b1827ad58b4e9ec76323225d5b0, type: 2}
+  m_currentAttackInfo:
+    damage:
+      m_type: 1
+      m_value: 0
+    criticalDamageInfo:
+      chance: 0
+      damageModifier: 0
+    ignoreInvulnerability: 0
+    ignoresBlock: 0
+--- !u!114 &2448502639413533532
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1235808333416739220}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d4914fa10fe1f74fbac7bbe8b95c9b2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_data: {fileID: 11400000, guid: 001ee28da3f52974abf18d912609a18b, type: 2}
 --- !u!1 &2468993767989008504
 GameObject:
   m_ObjectHideFlags: 0
@@ -12,10 +108,10 @@ GameObject:
   - component: {fileID: 5368162736228664093}
   - component: {fileID: 7300806532435804434}
   - component: {fileID: 6776751582834210659}
-  - component: {fileID: 1694046520905935591}
   - component: {fileID: 4088663032234601645}
   - component: {fileID: 7573426674235928029}
   - component: {fileID: 9008681136404203301}
+  - component: {fileID: 6990479154936018749}
   m_Layer: 13
   m_Name: TheOneGeyserPurpleProjectile
   m_TagString: Untagged
@@ -31,11 +127,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2468993767989008504}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 56.05457, y: -29.896261, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7763070926887597906}
+  - {fileID: 2463155225305353758}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -216,49 +313,6 @@ MonoBehaviour:
   m_linearDrag:
     m_x: 0
     m_y: 0
---- !u!114 &1694046520905935591
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2468993767989008504}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 623e104f4ff08ec40895458e1d3ff0e7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_poolableItemData: {fileID: 11400000, guid: cf280ac853d307248966e3a8042819c0, type: 2}
-  m_waitForParticlesEnd: 0
-  m_particleSystem: {fileID: 0}
-  m_particleCallback: {fileID: 0}
-  m_model: {fileID: 2468993767989008504}
-  m_onLaunch:
-    m_PersistentCalls:
-      m_Calls: []
-  m_onReset:
-    m_PersistentCalls:
-      m_Calls: []
-  m_data: {fileID: 11400000, guid: 9fe3ce7f9061d914581a5f62a5955309, type: 2}
-  m_damageSource: 4
-  m_attackDamageInfo:
-    damage:
-      m_type: 0
-      m_value: 0
-    criticalDamageInfo:
-      chance: 0
-      damageModifier: 0
-    ignoreInvulnerability: 0
-    ignoresBlock: 0
-  m_projectileFXDamage:
-    damage:
-      m_type: 0
-      m_value: 0
-    criticalDamageInfo:
-      chance: 0
-      damageModifier: 0
-    ignoreInvulnerability: 0
-    ignoresBlock: 0
 --- !u!114 &4088663032234601645
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -272,10 +326,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_centerMass: {fileID: 5050953322464262885}
-  m_data: {fileID: 0}
+  m_data: {fileID: 11400000, guid: 7fba3903511958a4f8644a0547386351, type: 2}
   m_currentAttackInfo:
     damage:
-      m_type: 2
+      m_type: 1
       m_value: 0
     criticalDamageInfo:
       chance: 0
@@ -309,12 +363,29 @@ CapsuleCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: -0.96606475, y: -1.6099077}
   m_Size: {x: 54.33348, y: 7.0229845}
   m_Direction: 1
+--- !u!114 &6990479154936018749
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2468993767989008504}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eacd29a62c6560a48b75707040795e3a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_poolableItemData: {fileID: 11400000, guid: cf280ac853d307248966e3a8042819c0, type: 2}
+  m_geyserCollider: {fileID: 2644880244559043714}
+  m_poolCollider: {fileID: 9008681136404203301}
+  m_puddleDuration: 10
+  m_geyserParticles: {fileID: 7763070928034763259}
 --- !u!1001 &1788858874522816693
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -748,7 +819,7 @@ MonoBehaviour:
   OnCallBack:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1694046520905935591}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: 
         m_MethodName: CallPoolRequest
         m_Mode: 1
