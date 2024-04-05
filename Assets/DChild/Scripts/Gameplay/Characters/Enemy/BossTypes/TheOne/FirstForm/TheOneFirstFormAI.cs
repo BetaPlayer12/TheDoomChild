@@ -1980,6 +1980,9 @@ namespace DChild.Gameplay.Characters.Enemies
             m_currentSwordState = SwordState.Normal;
             m_cachedSwordState = SwordState.Normal;
             m_drillMixAnimation = m_info.drillNormalMixAnimation.animation;
+
+            m_blinkDisappearAnimation = m_info.blinkDisappearForwardAnimation.animation;
+            m_blinkAppearAnimation = m_info.blinkAppearForwardAnimation.animation;
         }
 
         private void Update()
