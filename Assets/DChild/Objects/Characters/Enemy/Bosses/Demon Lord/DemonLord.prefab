@@ -709,7 +709,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5255218551835727340}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4dfef2d4e6c59a74c81eeb12c98142e9, type: 3}
   m_Name: 
@@ -727,6 +727,7 @@ MonoBehaviour:
   m_ephemeralArmsBack: {fileID: 4932861181646421343}
   m_book: {fileID: 4711183079988479029}
   m_fireController: {fileID: 3038746082922842278}
+  m_demonLordLightningStrike: {fileID: 0}
   m_turnHandle: {fileID: 5889563430262394174}
   m_agent: {fileID: 6239488024912400118}
   m_deathHandle: {fileID: 6739827688900031740}
@@ -746,10 +747,15 @@ MonoBehaviour:
   m_rayOfFrostAnimatorRight: {fileID: 0}
   m_rayOfFrostAnimatorLeft: {fileID: 0}
   m_dragonsBreathAnimator: {fileID: 0}
-  m_dragonsBreathAnimatorFxSide1: {fileID: 0}
-  m_dragonsBreathAnimatorFxSide2: {fileID: 0}
   m_spineListener: {fileID: 8134090112941765845}
-  m_fireBallSpawnPoint: {fileID: 4752391134117494860}
+  m_lightningStrikePositioningInfos:
+  - m_lightningSpawnPoint: {fileID: 0}
+    m_castingPoint: {fileID: 0}
+  - m_lightningSpawnPoint: {fileID: 0}
+    m_castingPoint: {fileID: 0}
+  - m_lightningSpawnPoint: {fileID: 0}
+    m_castingPoint: {fileID: 0}
+  m_fireBallSpawnPoint: {fileID: 0}
   m_iceBombSpawnPoint: {fileID: 6499448787503834908}
   m_iceShardsSpawnPointPattern1:
   - {fileID: 7183428752706282452}
@@ -764,16 +770,33 @@ MonoBehaviour:
   m_electricOrbSpawnPoint: {fileID: 0}
   m_flameWaveSpawnPoint: {fileID: 15988410449557111}
   m_lightningGroundSpawnPoint: {fileID: 0}
-  m_teleportSpawnPointsA: []
-  m_teleportSpawnPointsB: []
-  m_teleportSpawnPointsC: []
+  m_teleportSpawnPointsA:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  m_teleportSpawnPointsB:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  m_teleportSpawnPointsC:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   m_rayOfFrostPosition:
+  - {fileID: 0}
   - {fileID: 0}
   m_rayOfFrostBeamPosition: {fileID: 4187657424047707283}
   m_dragonsBreathPoint: {fileID: 0}
   m_fireBallTargetPoint: {fileID: 6097118419546371033}
-  m_iceBombTargetPoints: []
-  m_electricOrbTargetPoints: []
+  m_iceBombTargetPoints:
+  - {fileID: 0}
+  - {fileID: 0}
+  m_electricOrbTargetPoints:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  m_LeftRightPointsCalculation: []
   m_spawnPointIndexForTeleportPhase: 0
   m_distanceStoppingToleranceForRayFrost: 10
   m_startingPoint: 1
@@ -856,6 +879,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Mesh
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4978609238074675002, guid: 82abf721e5745294d84da9d98ac90b9f,
+        type: 3}
+      propertyPath: m_fadeDelayDuration
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 4978609238074675002, guid: 82abf721e5745294d84da9d98ac90b9f,
         type: 3}
@@ -1216,12 +1244,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 226d15d55dba92f4084bb0bd5be39cdf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!4 &4752391134117494860 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 3373120536507353040, guid: 82abf721e5745294d84da9d98ac90b9f,
-    type: 3}
-  m_PrefabInstance: {fileID: 8015380182503425948}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &4806975589214264399 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3281319947661581267, guid: 82abf721e5745294d84da9d98ac90b9f,
