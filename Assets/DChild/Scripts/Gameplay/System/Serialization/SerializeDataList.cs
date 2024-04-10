@@ -24,7 +24,7 @@ namespace DChild.Serialization
             }
             else
             {
-                m_saveDatas.Add(new SerializeID(ID,false), data);
+                m_saveDatas.Add(new SerializeID(ID, false), data);
             }
         }
 
@@ -39,9 +39,12 @@ namespace DChild.Serialization
         public SerializeDataList(SerializeDataList data)
         {
             m_saveDatas = new Dictionary<SerializeID, ISaveData>(new SerializeID.EqualityComparer());
-            foreach (var key in data.saveDatas.Keys)
+            if (data != null)
             {
-                m_saveDatas.Add(key, data.saveDatas[key]);
+                foreach (var key in data.saveDatas.Keys)
+                {
+                    m_saveDatas.Add(key, data.saveDatas[key]);
+                }
             }
         }
     }

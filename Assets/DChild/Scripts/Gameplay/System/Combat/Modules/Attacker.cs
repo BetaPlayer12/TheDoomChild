@@ -39,6 +39,8 @@ namespace DChild.Gameplay.Combat
 
         public IAttacker rootParentAttacker { get; private set; }
 
+        public float modifier => m_damageModifier;
+
         public event EventAction<CombatConclusionEventArgs> TargetDamaged;
         public event EventAction<BreakableObjectEventArgs> BreakableObjectDamage;
 
