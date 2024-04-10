@@ -9635,6 +9635,7 @@ GameObject:
   - component: {fileID: 374320998871664061}
   - component: {fileID: 374320998871664060}
   - component: {fileID: 374320998871664035}
+  - component: {fileID: -6791489360723012736}
   m_Layer: 0
   m_Name: Cinder Bolt_ Fire Beam
   m_TagString: Untagged
@@ -9781,6 +9782,28 @@ LineRenderer:
     generateLightingData: 0
   m_UseWorldSpace: 1
   m_Loop: 0
+--- !u!114 &-6791489360723012736
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 374320998871664033}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 079e361551c83b943b61eeba0d2d28c3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxDistance: 1000
+  startLineWidth: 2
+  endLineWidth: 2
+  lineRenderer: {fileID: 374320998871664035}
+  targetTag: Player
+  targetLayer:
+    serializedVersion: 2
+    m_Bits: 256
+  attachedObject: {fileID: 0}
+  startAttachedObject: {fileID: 0}
 --- !u!1 &374320999133833290
 GameObject:
   m_ObjectHideFlags: 0
@@ -9792,6 +9815,7 @@ GameObject:
   - component: {fileID: 374320999133833287}
   - component: {fileID: 374320999133833286}
   - component: {fileID: 374320999133833285}
+  - component: {fileID: 7722578827899063280}
   m_Layer: 0
   m_Name: impact_CB
   m_TagString: Untagged
@@ -14604,6 +14628,26 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
+--- !u!114 &7722578827899063280
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 374320999133833290}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6178cd111cba844a6e236cfbee492c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_poolableItemData: {fileID: 11400000, guid: 26ff5055e03e9dd4e9752e0dc2811dd5, type: 2}
+  m_particleSystems:
+  - {fileID: 374320999133833286}
+  - {fileID: 374320999523632861}
+  - {fileID: 374320998524278490}
+  m_playOnAwake: 0
+  m_baseFlipped: 0
+  m_poolOnStop: 0
 --- !u!1 &374320999523632833
 GameObject:
   m_ObjectHideFlags: 0

@@ -19,6 +19,7 @@ MonoBehaviour:
     - {fileID: 11400000, guid: aa1e5ee708bca204a81d40d8356d65f0, type: 2}
     - {fileID: 11400000, guid: 0a363344dcf5d1646bab75de618b9d59, type: 2}
     - {fileID: 11400000, guid: ed96dc05b0a60d441b7a3b8864c2e8f1, type: 2}
+    - {fileID: 2190019129732136487, guid: 84fedce2a7b58824a8b394986f9e1cf0, type: 3}
     SerializedBytesString: 
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
@@ -294,7 +295,7 @@ MonoBehaviour:
       Data: 1
     - Name: m_speed
       Entry: 4
-      Data: 25
+      Data: 60
     - Name: 
       Entry: 8
       Data: 
@@ -335,7 +336,7 @@ MonoBehaviour:
       Data: 1
     - Name: m_speed
       Entry: 4
-      Data: 25
+      Data: 30
     - Name: 
       Entry: 8
       Data: 
@@ -435,9 +436,25 @@ MonoBehaviour:
     - Name: 
       Entry: 8
       Data: 
-    - Name: m_punchAttack
+    - Name: m_longDashAttack
       Entry: 7
       Data: 24|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.CinderBoltAI+Info,
+        Assembly-CSharp]], Assembly-CSharp
+    - Name: m_animation
+      Entry: 1
+      Data: Long Dash
+    - Name: m_timeScale
+      Entry: 4
+      Data: 1
+    - Name: m_range
+      Entry: 4
+      Data: 100
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: m_punchAttack
+      Entry: 7
+      Data: 25|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.CinderBoltAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
@@ -453,7 +470,7 @@ MonoBehaviour:
       Data: 
     - Name: m_overchargedPunchAttack
       Entry: 7
-      Data: 25|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.CinderBoltAI+Info,
+      Data: 26|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.CinderBoltAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
@@ -469,7 +486,7 @@ MonoBehaviour:
       Data: 
     - Name: m_shotgunBlastFireAttack
       Entry: 7
-      Data: 26|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.CinderBoltAI+Info,
+      Data: 27|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.CinderBoltAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
@@ -479,13 +496,13 @@ MonoBehaviour:
       Data: 1
     - Name: m_range
       Entry: 4
-      Data: 25
+      Data: 100
     - Name: 
       Entry: 8
       Data: 
     - Name: m_overchargedShotgunBlastFireAttack
       Entry: 7
-      Data: 27|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.CinderBoltAI+Info,
+      Data: 28|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.CinderBoltAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
@@ -507,7 +524,7 @@ MonoBehaviour:
       Data: Shot gun Blast_Pre
     - Name: m_shotgunBlastRapidFireAttack
       Entry: 7
-      Data: 28|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.CinderBoltAI+Info,
+      Data: 29|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.CinderBoltAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
@@ -523,7 +540,7 @@ MonoBehaviour:
       Data: 
     - Name: m_overchargedShotgunBlastRapidFireAttack
       Entry: 7
-      Data: 29|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.CinderBoltAI+Info,
+      Data: 30|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.CinderBoltAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
@@ -539,7 +556,7 @@ MonoBehaviour:
       Data: 
     - Name: m_uppercutAttack
       Entry: 7
-      Data: 30|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.CinderBoltAI+Info,
+      Data: 31|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.CinderBoltAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
@@ -555,7 +572,7 @@ MonoBehaviour:
       Data: 
     - Name: m_overchargedUppercutAttack
       Entry: 7
-      Data: 31|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.CinderBoltAI+Info,
+      Data: 32|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.CinderBoltAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
@@ -571,7 +588,7 @@ MonoBehaviour:
       Data: 
     - Name: m_firebeamAttack
       Entry: 7
-      Data: 32|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.CinderBoltAI+Info,
+      Data: 33|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.CinderBoltAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
@@ -587,7 +604,7 @@ MonoBehaviour:
       Data: 
     - Name: m_meteorAttack
       Entry: 7
-      Data: 33|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.CinderBoltAI+Info,
+      Data: 34|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.CinderBoltAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
@@ -603,7 +620,7 @@ MonoBehaviour:
       Data: 
     - Name: m_spinAttack
       Entry: 7
-      Data: 34|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.CinderBoltAI+Info,
+      Data: 35|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.CinderBoltAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
@@ -619,10 +636,10 @@ MonoBehaviour:
       Data: 
     - Name: m_phase1Pattern1Range
       Entry: 4
-      Data: 20
+      Data: 25
     - Name: m_phase1Pattern2Range
       Entry: 4
-      Data: 20
+      Data: 100
     - Name: m_phase2Pattern1Range
       Entry: 4
       Data: 20
@@ -637,7 +654,38 @@ MonoBehaviour:
       Data: 20
     - Name: m_targetDistanceTolerance
       Entry: 4
-      Data: 40
+      Data: 75
+    - Name: m_bulletProjectile
+      Entry: 7
+      Data: 36|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleProjectileAttackInfo[[DChild.Gameplay.Characters.Enemies.CinderBoltAI+Info,
+        Assembly-CSharp]], Assembly-CSharp
+    - Name: m_animation
+      Entry: 1
+      Data: Shot gun Blast_Fire
+    - Name: m_timeScale
+      Entry: 4
+      Data: 1
+    - Name: m_launchOnEvent
+      Entry: 6
+      Data: 
+    - Name: m_range
+      Entry: 4
+      Data: 100
+    - Name: m_projectileInfo
+      Entry: 7
+      Data: 37|DChild.Gameplay.Characters.ProjectileInfo, Assembly-CSharp
+    - Name: m_projectile
+      Entry: 10
+      Data: 3
+    - Name: m_speed
+      Entry: 4
+      Data: 100
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
     - Name: m_punchUppercut
       Entry: 1
       Data: Attack1
@@ -698,6 +746,9 @@ MonoBehaviour:
     - Name: m_punchUppercutEvent
       Entry: 1
       Data: attack1_LeftPunch
+    - Name: m_flamethrower1Event
+      Entry: 1
+      Data: Attack2_Start
     - Name: 
       Entry: 8
       Data: 
