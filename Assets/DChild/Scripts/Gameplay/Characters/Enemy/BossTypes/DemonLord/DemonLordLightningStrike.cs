@@ -18,6 +18,10 @@ namespace DChild.Gameplay.Projectiles
 
         }
         
+        public void StopAnimation()
+        {
+            m_animator.StopPlayback();
+        }
         public void SetSpawnPosition(Vector3 spawnPoint)
         {
             transform.position = spawnPoint;

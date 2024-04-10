@@ -26,6 +26,7 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return null;
             Projectile[] projectiles = null;
             yield return SpawnProjectilesInFormationRoutine(projectiles);
+            Debug.Log(projectiles.ToString());
             yield return new WaitForSeconds(m_shardDelayedLaunch);
             LaunchProjectiles(projectiles, speed);
         }

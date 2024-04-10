@@ -62,6 +62,7 @@ public class DragonsBreathFireController : MonoBehaviour
         m_dragonsBreathAnimatorFxSide2.SetTrigger("StartFade");
         yield return new WaitForSeconds(m_fadeDelayDuration);
         SetActiveDragonTrail(false);
+        m_dragonsBreathAnimator.gameObject.SetActive(false);
     }
     private IEnumerator DragonsBreathControllerRoutine(Spine.AnimationState animation, string dragonsAttackRight, string dragonsAttackLeft)
     {

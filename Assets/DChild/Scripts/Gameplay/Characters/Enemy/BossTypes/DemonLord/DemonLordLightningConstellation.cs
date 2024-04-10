@@ -21,13 +21,14 @@ namespace DChild.Gameplay.Characters.Enemies
 
         [SerializeField]
         private Animator m_animator;
+       
         [SerializeField]
         private Dictionary<Type, string> m_typeToAnimatorParameterPair;
 
         private LightningConstellationColliderConfigurator[] m_lightningConfigurators;
 
         public event EventAction<EventActionArgs> SpellEnd;
-
+        public Animator animator => m_animator;
         public void ExecuteSpell(Type type)
         {
             this.gameObject.SetActive(true);
