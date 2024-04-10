@@ -253,7 +253,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_info.flinchAnimation, false);
             //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.flinchAnimation);
             //bug #2631, something gets boken here where this entity gets stucke here on flinch, and it gets fixed on graveyard and laboratory
-            yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSeconds(0.1f);
             m_hitbox.gameObject.SetActive(true);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_stateHandle.ApplyQueuedState();
