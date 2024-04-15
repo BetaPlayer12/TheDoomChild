@@ -14,7 +14,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using Location = DChild.Gameplay.Environment.Location;
 
-public class CollectathonEntity : MonoBehaviour
+public class CollectathonEntityTracker : MonoBehaviour
 {
     private enum EntityType
     {
@@ -25,6 +25,8 @@ public class CollectathonEntity : MonoBehaviour
     }
 
     [SerializeField]
+    private Location m_location;
+    [SerializeField]
     private DialogueSystemTrigger m_trigger;
     [SerializeField]
     private List<LootChest> m_chestList;
@@ -34,16 +36,14 @@ public class CollectathonEntity : MonoBehaviour
     private List<LootChest> m_shardList;
     [SerializeField]
     private List<Damageable> m_seedList;
-    [SerializeField]
-    private Location m_location;
-    [SerializeField]
-    private CollectathonTypes m_type;
 
+
+    private CollectathonTypes m_type;
     public UnityEvent m_luaOverride;
 
     private void LuaCodeOverride(CollectathonTypes types)
     {
-       
+
         var variableName = CollecathonUtility.GenerateCurrentCountVariableName(types, m_location);
         var variableSyntax = $"Variable[\"{variableName}\"]";
         var increment = 1;
