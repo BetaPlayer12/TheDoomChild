@@ -3,7 +3,7 @@ guid: aa6f9fde5de5121469a0a21b0084cb7d
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
-  serializedVersion: 10
+  serializedVersion: 12
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -23,6 +23,8 @@ TextureImporter:
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMasterTextureLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -31,9 +33,9 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: -1
-    aniso: -1
-    mipBias: -100
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
     wrapU: 1
     wrapV: 1
     wrapW: 1
@@ -54,9 +56,14 @@ TextureImporter:
   textureType: 8
   textureShape: 1
   singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
   maxTextureSizeSet: 0
   compressionQualitySet: 0
   textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 1
+  cookieLightType: 1
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
@@ -82,6 +89,18 @@ TextureImporter:
     overridden: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Server
+    maxTextureSize: 4096
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 20
+    crunchedCompression: 1
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites: []
@@ -89,85 +108,43 @@ TextureImporter:
     - - {x: -541, y: -1205}
       - {x: -451, y: -1212}
       - {x: -371, y: -1055}
-      - {x: -381, y: -967}
-      - {x: -401.61646, y: -866.4971}
-      - {x: -366, y: -780}
-      - {x: -398, y: -664}
-      - {x: -439, y: -477}
+      - {x: -461, y: -510}
       - {x: -314, y: -419}
-      - {x: -372, y: -348}
-      - {x: -399, y: -235}
-      - {x: -450, y: -123}
+      - {x: -419, y: -250}
       - {x: -492, y: 109}
       - {x: -395, y: -93}
       - {x: -380, y: 221}
       - {x: -267, y: 103}
-      - {x: -235, y: 276}
       - {x: -256, y: 394}
       - {x: -146, y: 749}
       - {x: -28, y: 715}
-      - {x: -57, y: 469}
-      - {x: -40, y: 431}
-      - {x: -65, y: 240}
-      - {x: 3, y: 91}
-      - {x: 36, y: 359}
-      - {x: 73, y: 558}
-      - {x: 164, y: 468}
-      - {x: 178, y: 817}
+      - {x: 128, y: 504}
       - {x: 190, y: 1127}
-      - {x: 213, y: 1139}
-      - {x: 244, y: 1028}
-      - {x: 263, y: 1185}
-      - {x: 303, y: 1187}
-      - {x: 282, y: 998}
-      - {x: 302, y: 955}
-      - {x: 286, y: 742}
-      - {x: 343, y: 845}
-      - {x: 384, y: 1097}
-      - {x: 435, y: 1389}
+      - {x: 308, y: 1209}
       - {x: 473, y: 1400}
-      - {x: 369, y: 796}
-      - {x: 313, y: 710}
-      - {x: 294, y: 596}
-      - {x: 373, y: 686}
+      - {x: 387, y: 787}
       - {x: 522, y: 1079}
       - {x: 544, y: 1041}
-      - {x: 417, y: 704}
-      - {x: 351, y: 577}
-      - {x: 378, y: 355}
-      - {x: 450, y: 609}
-      - {x: 438, y: 414}
-      - {x: 433, y: 301}
-      - {x: 474, y: 341}
-      - {x: 498, y: 259}
+      - {x: 446, y: 640}
       - {x: 544, y: 170}
       - {x: 544, y: -227}
       - {x: 481, y: -383}
-      - {x: 275, y: -547}
-      - {x: 170, y: -669}
-      - {x: 244, y: -673}
       - {x: 145, y: -788}
-      - {x: 57, y: -815}
-      - {x: 9, y: -895}
-      - {x: -95, y: -951}
-      - {x: -121, y: -1033}
+      - {x: -75, y: -972}
       - {x: -102, y: -1074}
-      - {x: -151, y: -1111}
-      - {x: -208, y: -1200}
-      - {x: -289, y: -1272}
-      - {x: -359, y: -1292}
-      - {x: -394, y: -1336}
-      - {x: -464, y: -1368}
+      - {x: -254, y: -1272}
+      - {x: -460, y: -1386}
       - {x: -535, y: -1386}
     physicsShape: []
     bones: []
     spriteID: 5e97eb03825dee720800000000000000
-    internalID: 0
+    internalID: 1537655665
     vertices: []
     indices: 
     edges: []
     weights: []
     secondaryTextures: []
+    nameFileIdTable: {}
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0
