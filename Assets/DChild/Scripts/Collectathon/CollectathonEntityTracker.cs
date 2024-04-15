@@ -28,18 +28,65 @@ public class CollectathonEntityTracker : MonoBehaviour
     private Location m_location;
     [SerializeField]
     private DialogueSystemTrigger m_trigger;
-    [SerializeField]
+    [SerializeField, ValueDropdown("GetChestList", IsUniqueList = true, SortDropdownItems = true)]
     private List<LootChest> m_chestList;
-    [SerializeField]
+    [SerializeField, ValueDropdown("GetChestList", IsUniqueList = true, SortDropdownItems = true)]
     private List<LootChest> m_soulSkillList;
-    [SerializeField]
+    [SerializeField, ValueDropdown("GetChestList", IsUniqueList = true, SortDropdownItems = true)]
     private List<LootChest> m_shardList;
-    [SerializeField]
+    [SerializeField, ValueDropdown("GetSeedsOfTheOne", IsUniqueList = true, SortDropdownItems = true)]
     private List<Damageable> m_seedList;
 
 
     private CollectathonTypes m_type;
     public UnityEvent m_luaOverride;
+
+    private IEnumerable GetChestList()
+    {
+        ValueDropdownList<LootChest> list = new ValueDropdownList<LootChest>();
+        var chests = FindObjectsOfType<LootChest>();
+        for (int i = 0; i < chests.Length; i++)
+        {
+            var chest = chests[i];
+            var itemName = GenerateCategory(chest.name) + chest.name;
+            list.Add(itemName, chest);
+        }
+
+        return list;
+
+        string GenerateCategory(string chestName)
+        {
+            string category = "";
+            if (chestName.Contains("Soul"))
+            {
+                category = "Soul Skill";
+            }
+            else if (chestName.Contains("Health") || chestName.Contains("Shadow") || chestName.Contains("Weapon"))
+            {
+                category = "Shard";
+            }
+            else
+            {
+                category = "Loot";
+            }
+
+            return category + " Chests/";
+        }
+    }
+
+    private IEnumerable GetSeedsOfTheOne()
+    {
+        ValueDropdownList<Damageable> list = new ValueDropdownList<Damageable>();
+        var ais = FindObjectsOfType<SeedOfTheOneAI>();
+        for (int i = 0; i < ais.Length; i++)
+        {
+            var ai = ais[i];
+            var itemName = "Everything/" + ai.name;
+            list.Add(itemName, ai.GetComponent<Damageable>());
+        }
+
+        return list;
+    }
 
     private void LuaCodeOverride(CollectathonTypes types)
     {
