@@ -522,6 +522,7 @@ namespace DChild.Gameplay.Characters.Enemies
         [ShowInInspector]
         private RandomAttackDecider<Attack> m_attackDecider;
         private Attack m_currentAttack;
+        private Attack previousAttack;
         private float m_currentAttackRange;
 
         #region ProjectileLaunchers
@@ -676,22 +677,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.DisableRootMotion();
             m_animation.SetEmptyAnimation(0, 0);
             m_phaseHandle.ApplyChange();
-            var dragonsBreath = new AttackInfo<Attack>(Attack.Phase1Pattern1, m_info.phase1Pattern1Range);
-            var iceShard = new AttackInfo<Attack>(Attack.Phase1Pattern2, m_info.phase1Pattern2Range);
-            var lightningStrike = new AttackInfo<Attack>(Attack.Phase1Pattern3, m_info.phase1Pattern3Range);
-            var summonDragonWithDragonsBreath = new AttackInfo<Attack>(Attack.Phase2Pattern1, m_info.phase2Pattern1Range);
-            var summonDragon = new AttackInfo<Attack>(Attack.Phase2Pattern2, m_info.phase2Pattern2Range);
-            var rayOfFrost = new AttackInfo<Attack>(Attack.Phase2Pattern3, m_info.phase2Pattern3Range);
-            var LightningOrb = new AttackInfo<Attack>(Attack.Phase2Pattern4, m_info.phase2Pattern4Range);
-            switch (m_phaseHandle.currentPhase)
-            {
-                case Phase.PhaseOne:
-                    m_attackDecider.SetList(dragonsBreath, iceShard, lightningStrike);
-                    break;
-                case Phase.PhaseTwo:
-                    m_attackDecider.SetList(summonDragonWithDragonsBreath,dragonsBreath, iceShard, lightningStrike, summonDragon, rayOfFrost,LightningOrb);
-                    break;
-            }
+            UpdateAttackDeciderList();
         }
 
         private void OnAttackDone(object sender, EventActionArgs eventArgs)
@@ -1323,6 +1309,7 @@ namespace DChild.Gameplay.Characters.Enemies
             // get transform point of spawn pattern b top 
             // play animation var randIndexForRayOfFrost = UnityEngine.Random.Range(0, 2);
             var positionForDragonsBreath = m_dragonsBreathPoint;
+            m_fireController.SetActiveDragonTrail(true);
             while (Vector3.Distance(transform.position, positionForDragonsBreath.position) > 0.2f)
             {
                 var distanceCalcuOfTwoPosition = (positionForDragonsBreath.position - transform.position).normalized;
@@ -1344,16 +1331,14 @@ namespace DChild.Gameplay.Characters.Enemies
                 while (m_character.facing == HorizontalDirection.Left);
 
             }
-            m_dragonsBreathAnimator.gameObject.SetActive(true);
-            m_fireController.SetActiveDragonTrail(true);
             m_animation.SetAnimation(0, m_info.dragonBreathAnticipation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.dragonBreathAnticipation.animation);
             m_animation.SetAnimation(0, m_info.dragonBreathAttackRight, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.dragonBreathAttackRight.animation);
             m_animation.SetAnimation(0, m_info.dragonBreathAttackLeft, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.dragonBreathAttackLeft.animation);
-            m_fireController.StartDragonsRoutine();
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
+            m_fireController.StartDragonsRoutine();
             m_attackDecider.hasDecidedOnAttack = false;
             m_currentAttackCoroutine = null;
             m_stateHandle.ApplyQueuedState();
@@ -1364,7 +1349,7 @@ namespace DChild.Gameplay.Characters.Enemies
         
         private void DragonsBreathActivator()
         {
-           m_fireController.StartDragonBreathRoutine(m_animation.animationState,m_info.dragonBreathAttackRight.animation,m_info.dragonBreathAttackLeft.animation);
+           m_fireController.StartDragonBreathRoutine();
         }
     
         private IEnumerator SummonDragonRoutine()
@@ -1393,6 +1378,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator DragonsBreathWithSummonDragon()
         {
             var positionForDragonsBreath = m_dragonsBreathPoint;
+             // m_fireController.SetActiveDragonTrail(true);
             while (Vector3.Distance(transform.position, positionForDragonsBreath.position) > 0.2f)
             {
                 var distanceCalcuOfTwoPosition = (positionForDragonsBreath.position - transform.position).normalized;
@@ -1400,8 +1386,8 @@ namespace DChild.Gameplay.Characters.Enemies
                 Debug.Log("lean D ro");
                 yield return null;
             }
-            m_dragonsBreathAnimator.gameObject.SetActive(true);
-            m_fireController.SetActiveDragonTrail(true);
+           // m_dragonsBreathAnimator.gameObject.SetActive(true);
+           // m_fireController.SetActiveDragonTrail(true);
             Debug.Log("BOGA BOSS!");
             //var centerSpawnPoint = m_teleportSpawnPointsB[0];
             //transform.position = centerSpawnPoint.position;
@@ -1469,16 +1455,14 @@ namespace DChild.Gameplay.Characters.Enemies
         }
 
 
-        private bool m_isCastingSpellDone;
+        private bool m_isCastingSpellDone =false;
         private IEnumerator LightningOrbRoutine()
         {
             Debug.Log("HOLY WEEK SPECIAL BY TOTO DRAGONS CALL ALIMAE");
-            m_isCastingSpellDone = false;
-
+            m_demonLordLightningConstellation.SpellEnd += M_demonLordLightningConstellation_SpellEnd1;
             m_animation.SetAnimation(0, m_info.lightningOrbSummonAnticipation.animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.lightningOrbSummonAnticipation.animation);
             m_animation.SetAnimation(0, m_info.lightningOrbSummonLoop, true);
-            m_demonLordLightningConstellation.SpellEnd += M_demonLordLightningConstellation_SpellEnd1;
             ActivateLightningOrb();
             while (m_isCastingSpellDone == false)
             {
@@ -1489,6 +1473,7 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.lightningOrbAttack.animation);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_attackDecider.hasDecidedOnAttack = false;
+            m_isCastingSpellDone = false;
             m_currentAttackCoroutine = null;
             m_stateHandle.ApplyQueuedState();
 
@@ -1576,15 +1561,33 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void UpdateAttackDeciderList()
         {
-            var dragonsBreath = new AttackInfo<Attack>(Attack.Phase1Pattern1, m_info.phase1Pattern1Range);
-            var iceShard = new AttackInfo<Attack>(Attack.Phase1Pattern2, m_info.phase1Pattern2Range);
-            var lightningStrike = new AttackInfo<Attack>(Attack.Phase1Pattern3, m_info.phase1Pattern3Range);
-            var summonDragonWithDragonsBreath = new AttackInfo<Attack>(Attack.Phase2Pattern1, m_info.phase2Pattern2Range);
-            var summonDragon = new AttackInfo<Attack>(Attack.Phase2Pattern2, m_info.phase2Pattern2Range);
-            var rayOfFrost = new AttackInfo<Attack>(Attack.Phase2Pattern3, m_info.phase2Pattern3Range);
-            var LightningOrb = new AttackInfo<Attack>(Attack.Phase2Pattern4, m_info.phase2Pattern4Range);
-            //m_attackDecider.SetList(dragonsBreath, iceShard, lightningStrike);
-            m_attackDecider.SetList(dragonsBreath, iceShard, lightningStrike, summonDragonWithDragonsBreath, summonDragon, rayOfFrost, LightningOrb);
+           
+            
+            
+
+            switch (m_phaseHandle.currentPhase)
+            {
+                case Phase.PhaseOne:
+                    var dragonsBreath = new AttackInfo<Attack>(Attack.Phase1Pattern1, m_info.phase1Pattern1Range);
+                    var iceShard = new AttackInfo<Attack>(Attack.Phase1Pattern2, m_info.phase1Pattern2Range);
+                    var lightningStrike = new AttackInfo<Attack>(Attack.Phase1Pattern3, m_info.phase1Pattern3Range);
+                    m_attackDecider.SetList(dragonsBreath, iceShard, lightningStrike);
+                    break;
+                case Phase.PhaseTwo:
+
+                    dragonsBreath = new AttackInfo<Attack>(Attack.Phase1Pattern1, m_info.phase1Pattern1Range);
+                    iceShard = new AttackInfo<Attack>(Attack.Phase1Pattern2, m_info.phase1Pattern2Range);
+                    lightningStrike = new AttackInfo<Attack>(Attack.Phase1Pattern3, m_info.phase1Pattern3Range);
+                    var summonDragonWithDragonsBreath = new AttackInfo<Attack>(Attack.Phase2Pattern1, m_info.phase2Pattern2Range);
+                    var summonDragon = new AttackInfo<Attack>(Attack.Phase2Pattern2, m_info.phase2Pattern2Range);
+                    var rayOfFrost = new AttackInfo<Attack>(Attack.Phase2Pattern3, m_info.phase2Pattern3Range);
+                    var LightningOrb = new AttackInfo<Attack>(Attack.Phase2Pattern4, m_info.phase2Pattern4Range);
+
+                    m_attackDecider.SetList(dragonsBreath, iceShard, lightningStrike, summonDragonWithDragonsBreath, summonDragon, rayOfFrost, LightningOrb);
+                    break;
+                case Phase.Wait:
+                    break;
+            }
             //m_attackDecider.SetList(new AttackInfo<Attack>(Attack.Phase1Pattern1, m_info.phase1Pattern1Range),
             //                         new AttackInfo<Attack>(Attack.Phase1Pattern2, m_info.phase1Pattern2Range),
             //                         new AttackInfo<Attack>(Attack.Phase1Pattern3, m_info.phase1Pattern3Range),
@@ -1601,7 +1604,7 @@ namespace DChild.Gameplay.Characters.Enemies
             //                         new AttackInfo<Attack>(Attack.Phase3Pattern5, m_info.phase3Pattern5Range),
             //                         new AttackInfo<Attack>(Attack.Phase3Pattern5, m_info.phase3Pattern6Range));
             m_attackDecider.hasDecidedOnAttack = false;
-           
+
         }
 
         public override void ApplyData()
@@ -1704,7 +1707,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_patternAttackCount = new int[2];
             //m_patternDecider = new RandomAttackDecider<Pattern>();
             m_attackDecider = new RandomAttackDecider<Attack>();
-
+           // m_attackDecider.SetMaxRepeatAttack(1);
             m_Points = new List<Vector2>();
             //for (int i = 0; i < 3; i++)
             //{
@@ -1723,7 +1726,6 @@ namespace DChild.Gameplay.Characters.Enemies
             var summonDragon = Attack.Phase2Pattern2;
             var rayOfFrost = Attack.Phase2Pattern3;
             var LightningOrb = Attack.Phase2Pattern4;
-
             //switch (m_phaseHandle.currentPhase)
             //{
             //    case Phase.PhaseOne:
@@ -1751,7 +1753,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             base.Start();
             //m_spineListener.Subscribe(m_info.OrbSummonRainProjectile.launchOnEvent, m_deathFX.Play);
-            m_spineListener.Subscribe(m_info.iceShardCardinalProjectiles, IceShardSpawn);
+           // m_spineListener.Subscribe(m_info.iceShardCardinalProjectiles, IceShardSpawn);
             m_spineListener.Subscribe(m_info.iceShardDiagonalProjectiles, IceShardSpawn);
             m_spineListener.Subscribe(m_info.rayOfFrostBeam, RayOfFrostBeamController);
             m_spineListener.Subscribe(m_info.dragonsBreath, DragonsBreathActivator);
@@ -1763,7 +1765,6 @@ namespace DChild.Gameplay.Characters.Enemies
             m_phaseHandle.ApplyChange();
 
             m_aimRoutine = AimRoutine();
-            m_attackDecider.SetMaxRepeatAttack(1);
             m_listOfSpawnPoints.Add("SpawnPointA", m_teleportSpawnPointsA);
             m_listOfSpawnPoints.Add("SpawnPointB", m_teleportSpawnPointsB);
             m_listOfSpawnPoints.Add("SpawnPointC", m_teleportSpawnPointsC);
@@ -1811,7 +1812,6 @@ namespace DChild.Gameplay.Characters.Enemies
 
                     m_attackDecider.DecideOnAttack();
                     m_currentAttack = m_attackDecider.chosenAttack.attack;
-                   
                     switch (m_currentAttack)
                     {
                        
@@ -1828,7 +1828,7 @@ namespace DChild.Gameplay.Characters.Enemies
                             // m_currentAttackCoroutine = StartCoroutine(EphemeralArmsSmashAttackRoutine(FollowUpAttack.ElectricOrb));
                             //m_currentAttackCoroutine = StartCoroutine(DragonsBreathRoutine());
       
-                            m_currentAttackCoroutine = StartCoroutine(LightningOrbRoutine());
+                            m_currentAttackCoroutine = StartCoroutine(DragonsBreathRoutine());
                             m_pickedCooldown = m_currentFullCooldown[0];
                             break;
                         case Attack.Phase1Pattern2:
@@ -1998,7 +1998,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     {
                         m_turnState = State.Cooldown;
                         m_stateHandle.SetState(State.Turning);
-                        return;
+                       // return;
                     }
                     else
                     {
@@ -2006,7 +2006,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         m_animation.SetAnimation(0, m_info.idleAnimation, true);
                     }
 
-                    if (Vector2.Distance(m_targetInfo.position, m_character.centerMass.position) <= m_info.target1CHDistance)
+                    if (Vector2.Distance(m_targetInfo.position, m_character.centerMass.position) <= m_info.target3CHDistance)
                     {
                         //StartCoroutine(LightningStepRoutine());// remove 
                         StartCoroutine(TeleportRoutine());
@@ -2020,13 +2020,13 @@ namespace DChild.Gameplay.Characters.Enemies
                     }
                     else
                     {
+        
                         m_currentCooldown = 0;
                         //m_stateHandle.OverrideState(State.ReevaluateSituation);
                         m_stateHandle.OverrideState(State.ReevaluateSituation);
                     }
 
                     break;
-
                 //case State.Chasing:
                 //    ChooseAttack();
                 //    Debug.Log("Chasing Choose Attack");
@@ -2072,7 +2072,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     return;
             }
         }
-
+       
         protected override void OnTargetDisappeared()
         {
             //m_stickToGround = false;
