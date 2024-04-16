@@ -251,7 +251,7 @@ Transform:
   m_Children:
   - {fileID: 2559353253726784444}
   m_Father: {fileID: 5610398458618409913}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4757430112491136829
 GameObject:
@@ -283,7 +283,7 @@ Transform:
   m_Children:
   - {fileID: 5523936306288331800}
   m_Father: {fileID: 5610398458618409913}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4791152055079539430
 GameObject:
@@ -397,9 +397,9 @@ Transform:
   m_LocalScale: {x: 1.5, y: 1.25, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 5441104868676675791}
   - {fileID: 1730610092412245490}
   - {fileID: 6547719087205657767}
-  - {fileID: 5441104868676675791}
   - {fileID: 2630164225848332860}
   m_Father: {fileID: 9119202865208580550}
   m_RootOrder: 0
@@ -520,7 +520,6 @@ GameObject:
   - component: {fileID: 1982135631342044222}
   - component: {fileID: 2816893311047565020}
   - component: {fileID: 4918239720197758559}
-  - component: {fileID: 8267198421367448121}
   - component: {fileID: 7317453595354514382}
   - component: {fileID: 3175781029150506315}
   - component: {fileID: 225128133936026482}
@@ -614,22 +613,6 @@ MonoBehaviour:
       damageModifier: 0
     ignoreInvulnerability: 0
     ignoresBlock: 0
---- !u!114 &8267198421367448121
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6237296116582944583}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9d74578be2c646f438409c91e5fd4ee4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_canDetectInteractables: 0
-  m_damageUniqueHitboxesOnly: 0
-  m_collisionRegistrator: {fileID: 0}
-  m_ignoreColliderList: []
 --- !u!114 &7317453595354514382
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -688,6 +671,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5441104868676675791}
+  - component: {fileID: 4886653057638979050}
   - component: {fileID: 5981254404373809486}
   m_Layer: 13
   m_Name: Hurtbox
@@ -703,14 +687,30 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7301006743359299435}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5610398458618409913}
-  m_RootOrder: 2
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4886653057638979050
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7301006743359299435}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d74578be2c646f438409c91e5fd4ee4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_canDetectInteractables: 0
+  m_damageUniqueHitboxesOnly: 0
+  m_collisionRegistrator: {fileID: 0}
+  m_ignoreColliderList: []
 --- !u!61 &5981254404373809486
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -721,9 +721,9 @@ BoxCollider2D:
   m_Enabled: 0
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
-  m_UsedByComposite: 1
+  m_UsedByComposite: 0
   m_Offset: {x: 0, y: 2.3}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
