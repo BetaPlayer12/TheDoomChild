@@ -1,6 +1,7 @@
 ﻿using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 #if UNITY_EDITOR
 #endif
 
@@ -55,10 +56,13 @@ namespace DChild.Gameplay.Characters.AI
                     chosenAttack = attackList[index];
                     chosenAttackIndex = Convert.ToInt32(chosenAttack.attack);
                     sameAttack = m_previousChosenAttack == chosenAttackIndex;
-                } while (m_maxSameAttackCount > 0 && sameAttack && m_maxSameAttackCount == m_sameAttackCount);
+
+                } while (m_maxSameAttackCount > 0 && sameAttack && m_maxSameAttackCount <= m_sameAttackCount);
                 EvaluateSameAttack(sameAttack, chosenAttackIndex);
                 hasDecidedOnAttack = true;
             }
+
+            Debug.Log($"chosen attack : {chosenAttack.attack} \n max same attack count : {m_sameAttackCount}");
         }
 
 
@@ -109,7 +113,7 @@ namespace DChild.Gameplay.Characters.AI
             }
             else
             {
-                m_sameAttackCount = 0;
+                m_sameAttackCount = 1;
                 m_previousChosenAttack = chosenAttackIndex;
             }
         }

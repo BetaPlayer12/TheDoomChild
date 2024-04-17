@@ -48,9 +48,10 @@ namespace DChild.Gameplay.Characters.Enemies
             //    m_lightningConfigurators[i].ReorientCollider();
             //}
 
-            var currentAnimation = m_animator.GetCurrentAnimatorStateInfo(0);
-            while (currentAnimation.normalizedTime < 1)
+            while (m_animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1)
+            {
                 yield return null;
+            }
 
 
             SpellEnd?.Invoke(this, EventActionArgs.Empty);
