@@ -1416,6 +1416,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         switch (m_phase2pattern1Count)
                         {
                             case 0:
+                                yield return ChooseScytheWaveSpawn();
                                 m_animation.SetAnimation(0, m_info.downwardSlash1Attack.animation, false);
                                 yield return new WaitForAnimationComplete(m_animation.animationState, m_info.downwardSlash1Attack.animation);
                                 m_phase2pattern1Count++;
@@ -1432,6 +1433,7 @@ namespace DChild.Gameplay.Characters.Enemies
                                 enabled = true;
                                 break;
                             case 2:
+                                yield return ChooseScytheWaveSpawn();
                                 m_animation.SetAnimation(0, m_info.downwardSlash2Attack.animation, false);
                                 yield return new WaitForAnimationComplete(m_animation.animationState, m_info.downwardSlash2Attack.animation);
                                 m_phase2pattern1Count++;
@@ -1467,7 +1469,8 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_phase2pattern2Count = 0;
                     m_animation.SetAnimation(0, m_info.projectilWaveSlashGround1Attack.animation, false);
                     yield return new WaitForAnimationComplete(m_animation.animationState, m_info.projectilWaveSlashGround1Attack.animation);
-                    
+
+                    yield return ChooseScytheWaveSpawn();
                     var randomAttackAnimation = UnityEngine.Random.Range(0, 2) == 1 ? m_info.projectilWaveSlashGround2Attack.animation : m_info.scytheWaveAttack.animation;
 
                     m_animation.SetAnimation(0, randomAttackAnimation, false);
@@ -1489,6 +1492,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             if (IsTargetInRange(m_info.scytheWaveAttack.range))
             {
+                yield return ChooseScytheWaveSpawn();
                 m_animation.SetAnimation(0, m_info.scytheDoubleWaveAttack.animation, false);
                 yield return new WaitForAnimationComplete(m_animation.animationState, m_info.scytheDoubleWaveAttack.animation);
 
