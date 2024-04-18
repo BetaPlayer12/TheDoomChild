@@ -142,12 +142,6 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField, BoxGroup("SpikeSpitter")]
             private List<string> m_spikeSpitterRetractAnimations;
             public List<string> spikeSpitterRetractAnimations => m_spikeSpitterRetractAnimations;
-            //[SerializeField, BoxGroup("BodySlam")]
-            //private SimpleAttackInfo m_bodySlamGroundNearAttack = new SimpleAttackInfo();
-            //public SimpleAttackInfo bodySlamGroundNearAttack => m_bodySlamGroundNearAttack;
-            //[SerializeField, BoxGroup("BodySlam")]
-            //private SimpleAttackInfo m_bodySlamGroundFarAttack = new SimpleAttackInfo();
-            //public SimpleAttackInfo bodySlamGroundFarAttack => m_bodySlamGroundFarAttack;
 
             [SerializeField, TitleGroup("Pattern Ranges")]
             private float m_targetDistanceTolerance;
@@ -663,6 +657,10 @@ namespace DChild.Gameplay.Characters.Enemies
         #endregion
         private bool m_isDetecting;
 
+        public event EventAction<EventActionArgs> BodySlamDone;
+        public event EventAction<EventActionArgs> WreckingBallDone;
+        public event EventAction<EventActionArgs> PhaseChangeDone;
+
         private void ApplyPhaseData(PhaseInfo obj)
         {
             switch (m_phaseHandle.currentPhase)
@@ -711,6 +709,7 @@ namespace DChild.Gameplay.Characters.Enemies
                             m_patternCooldown.Add(m_info.phase2PatternCooldown[i]);
                         m_airProjectileInfo = m_info.airPhase2Projectile.projectileInfo;
                         m_ballisticProjectileInfo = m_info.ballisticPhase2Projectile.projectileInfo;
+                        PhaseChangeDone?.Invoke(this, new EventActionArgs());
                     }
                     break;
                 case Phase.PhaseThree:
@@ -734,6 +733,7 @@ namespace DChild.Gameplay.Characters.Enemies
                             m_patternCooldown.Add(m_info.phase3PatternCooldown[i]);
                         m_airProjectileInfo = m_info.airPhase3Projectile.projectileInfo;
                         m_ballisticProjectileInfo = m_info.ballisticPhase3Projectile.projectileInfo;
+                        PhaseChangeDone?.Invoke(this, new EventActionArgs());
                     }
                     break;
                 case Phase.PhaseFour:
@@ -1003,6 +1003,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_bodySlamFX.Play();
                 m_animation.SetAnimation(0, m_info.bodySlamEnd, false);
                 yield return new WaitForAnimationComplete(m_animation.animationState, m_info.bodySlamEnd);
+                BodySlamDone?.Invoke(this, new EventActionArgs());
                 //yield return new WaitUntil(() => m_groundSensor.isDetecting);
                 m_movement.Stop();
                 m_animation.SetEmptyAnimation(27, 0);
@@ -1083,6 +1084,8 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_movement.Stop();
                 m_animation.SetAnimation(0, m_info.bodySlamEnd, false);
                 yield return new WaitForAnimationComplete(m_animation.animationState, m_info.bodySlamEnd);
+                BodySlamDone?.Invoke(this, new EventActionArgs());
+
                 m_animation.SetEmptyAnimation(27, 0);
             }
             StopCoroutine(m_attackCoroutineStopper);
@@ -1125,6 +1128,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_bodySlamFX.Play();
                 m_animation.SetAnimation(0, m_info.bodySlamEnd, false);
                 yield return new WaitForAnimationComplete(m_animation.animationState, m_info.bodySlamEnd);
+                BodySlamDone?.Invoke(this, new EventActionArgs());
                 //yield return new WaitUntil(() => m_groundSensor.isDetecting);
                 m_movement.Stop();
                 m_animation.SetEmptyAnimation(9, 0);
@@ -1190,6 +1194,8 @@ namespace DChild.Gameplay.Characters.Enemies
             m_bodySlamFX.Play();
             m_animation.SetAnimation(0, m_info.bodySlamEnd, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.bodySlamEnd);
+            BodySlamDone?.Invoke(this, new EventActionArgs());
+            WreckingBallDone?.Invoke(this, new EventActionArgs());
             m_rb2d.sharedMaterial = null;
             m_wreckingBallCoroutine = null;
             m_hitbox.SetCanBlockDamageState(false);
@@ -1369,6 +1375,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_bodySlamFX.Play();
                 m_animation.SetAnimation(0, m_info.bodySlamEnd, false);
                 yield return new WaitForAnimationComplete(m_animation.animationState, m_info.bodySlamEnd);
+                BodySlamDone?.Invoke(this, new EventActionArgs());
                 enabled = false;
                 m_movement.Stop();
                 m_animation.SetEmptyAnimation(9, 0);
@@ -1416,6 +1423,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_hitbox.SetCanBlockDamageState(false);
             m_changePhaseCoroutine = null;
             m_stateHandle.OverrideState(State.Chasing);
+            PhaseChangeDone?.Invoke(this, new EventActionArgs());
             yield return null;
 
             enabled = true;
@@ -1896,6 +1904,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 }
                 m_animation.SetAnimation(0, m_info.bodySlamEnd, false);
                 yield return new WaitForAnimationComplete(m_animation.animationState, m_info.bodySlamEnd);
+                BodySlamDone?.Invoke(this, new EventActionArgs());
                 m_movement.Stop();
                 m_animation.SetEmptyAnimation(9, 0);
                 m_animation.SetAnimation(0, m_info.idleAnimation, true);
