@@ -61,6 +61,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private bool m_updateEnabled = true;
 
         public event EventAction<EventActionArgs> ControllerDisabled;
+        public event EventAction<EventActionArgs> ControllerEnabled;
 
         public void Enable()
         {
