@@ -49,6 +49,11 @@ namespace DChild.Gameplay.Combat
 
         public virtual void TakeDamage(int totalDamage, DamageType type)
         {
+            if (!isAlive)
+            {
+                Debug.Log("___1111Im Already dead??");
+                return;
+            }
             m_health?.ReduceCurrentValue(totalDamage);
             CallDamageTaken(totalDamage, type);
             if (m_health?.isEmpty ?? false)
