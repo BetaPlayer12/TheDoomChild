@@ -79,23 +79,33 @@ namespace DChild.Gameplay.Characters.AI
             {
                 bool sameAttack = false;
                 int chosenAttackIndex = -1;
+                int index = -1;
                 do
                 {
-                    var index = UnityEngine.Random.Range(0, list.Length - 1);
+                    index = UnityEngine.Random.Range(0, list.Length - 1);
                     //chosenAttack = attackList[index];
                     var enumIndex = Convert.ToInt32(list[index]);
                     sameAttack = m_previousChosenAttack == enumIndex;
                     chosenAttackIndex = enumIndex;
                 } while (m_maxSameAttackCount > 0 && sameAttack && m_maxSameAttackCount == m_sameAttackCount);
 
+
+                bool isDecidedAttackPartOfList = false;
                 for (int i = 0; i < attackList.Count; i++)
                 {
                     if (Convert.ToInt32(attackList[i].attack) == chosenAttackIndex)
                     {
                         chosenAttack = attackList[i];
+                        isDecidedAttackPartOfList = true;
                         break;
                     }
                 }
+
+                if (isDecidedAttackPartOfList ==false)
+                {
+                    chosenAttack = new AttackInfo<T>(list[index], 0);
+                }
+
                 EvaluateSameAttack(sameAttack, chosenAttackIndex);
                 hasDecidedOnAttack = true;
             }
