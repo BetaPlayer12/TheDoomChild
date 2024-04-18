@@ -268,9 +268,6 @@ namespace DChild.Gameplay.Characters.Enemies
             private BasicAnimationInfo m_wallGrappleAllRetractAnimation;
             public BasicAnimationInfo wallGrappleAllRetractAnimation => m_wallGrappleAllRetractAnimation;
 
-            //[TitleGroup("Misc")]
-            //[SerializeField]
-
             [TitleGroup("Animations")]
             [SerializeField]
             private BasicAnimationInfo m_idleAnimation;
@@ -294,6 +291,10 @@ namespace DChild.Gameplay.Characters.Enemies
             private BasicAnimationInfo m_deathSelfDestructAnimation;
             public BasicAnimationInfo deathSelfDestructAnimation => m_deathSelfDestructAnimation;
             [SerializeField]
+            private BasicAnimationInfo m_fakeDeathAnimation;
+            [SerializeField]
+            public BasicAnimationInfo fakeDeathAnimation => m_fakeDeathAnimation;
+            [SerializeField]
             private BasicAnimationInfo m_bodySlamStart;
             public BasicAnimationInfo bodySlamStart => m_bodySlamStart;
             [SerializeField]
@@ -302,6 +303,9 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField]
             private BasicAnimationInfo m_bodySlamEnd;
             public BasicAnimationInfo bodySlamEnd => m_bodySlamEnd;
+            [SerializeField]
+            private BasicAnimationInfo m_cannibalizationAnimation;
+            public BasicAnimationInfo cannibalizationAnimation => m_cannibalizationAnimation;
 
             [Title("Projectiles")]
             [SerializeField, TitleGroup("Grounded")]
@@ -334,25 +338,6 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField, TitleGroup("Spitter"), MinMaxSlider(30, 150)]
             private Vector2 m_spittersRotationWidth = new Vector2(30, 150);
             public Vector2 spittersRotationWidth => m_spittersRotationWidth;
-
-            //[TitleGroup("FX")]
-
-            //[SerializeField, TabGroup("FX")]
-            //private ParticleFX m_crawlFX;
-            //[SerializeField, TabGroup("FX")]
-            //private ParticleFX m_tentaSpearCrawlFX;
-            //[SerializeField, TabGroup("FX")]
-            //private ParticleFX m_heavyGroundStabFX;
-            //[SerializeField, TabGroup("FX")]
-            //private ParticleFX m_stabSlashFX;
-            //[SerializeField, TabGroup("FX")]
-            //private ParticleFX m_krakenFX;
-            //[SerializeField, TabGroup("FX")]
-            //private ParticleFX m_bodySlamFX;
-            //[SerializeField, TabGroup("FX")]
-            //private ParticleFX m_healFX;
-            //[SerializeField, TabGroup("FX")]
-            //private ParticleFX m_deathFX;
 
             [TitleGroup("Events")]
             [SerializeField, ValueDropdown("GetEvents")]
@@ -433,6 +418,9 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_bodySlamLoop.SetData(m_skeletonDataAsset);
                 m_bodySlamEnd.SetData(m_skeletonDataAsset);
 
+                m_fakeDeathAnimation.SetData(m_skeletonDataAsset);
+                m_cannibalizationAnimation.SetData(m_skeletonDataAsset);
+
 #endif
             }
         }
@@ -443,6 +431,9 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField]
             private List<float> m_fullCooldown;
             public List<float> fullCooldown => m_fullCooldown;
+            [SerializeField]
+            private float m_health;
+            public float health => m_health;
             [SerializeField]
             private int m_hitCount;
             public int hitCount => m_hitCount;
@@ -1392,25 +1383,6 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             enabled = false;
 
-            //m_allCoroutineStopper = StartCoroutine(AllCoroutinesStopper());
-            //StopCurrentBehaviorRoutine();
-            //ResetCounterCounts();
-            //m_movement.Stop();
-            //m_rb2d.sharedMaterial = null;
-            //m_willStickToWall = false;
-            //m_bodyCollider.size = m_bodyColliderCacheSize;
-            //m_legCollider.enabled = true;
-            //m_willGripTarget = false;
-            //m_willGripWall = false;
-            //m_hitbox.SetCanBlockDamageState(false);
-            //m_animation.DisableRootMotion();
-
-            //m_animation.SetEmptyAnimation(0, 0);
-            //m_animation.SetEmptyAnimation(3, 0);
-            //m_animation.SetEmptyAnimation(15, 0);
-            //m_animation.SetEmptyAnimation(27, 0);
-            //m_animation.SetEmptyAnimation(30, 0);
-
             m_hitbox.Disable();
 
             m_stabSlashFX.Stop();
@@ -1488,18 +1460,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private void LaunchSingleProjectile()
         {
             var projectileInfo = m_willStickToWall ? m_airProjectileInfo : m_ballisticProjectileInfo;
-            //switch (m_phaseHandle.currentPhase)
-            //{
-            //    case Phase.PhaseOne:
-            //        projectileInfo = m_willStickToWall ? m_info.airProjectile.projectileInfo : m_info.ballisticProjectile.projectileInfo;
-            //        break;
-            //    case Phase.PhaseTwo:
-            //        projectileInfo = m_willStickToWall ? m_info.airPhase2Projectile.projectileInfo : m_info.ballisticPhase2Projectile.projectileInfo;
-            //        break;
-            //    case Phase.PhaseThree:
-            //        projectileInfo = m_willStickToWall ? m_info.airPhase3Projectile.projectileInfo : m_info.ballisticPhase3Projectile.projectileInfo;
-            //        break;
-            //}
+
             m_projectileLauncher = new BallisticProjectileLauncher(projectileInfo, m_spitterPositions[0], m_info.projectileGravityScale, projectileInfo.speed);
             m_projectileLauncher.AimAt(m_targetInfo.position);
             switch (m_willStickToWall)
@@ -1511,8 +1472,6 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_projectileLauncher.LaunchBallisticProjectile(m_targetInfo.position);
                     break;
             }
-
-            //StartCoroutine(DelayedProjectileLauncher(m_spitterPositions.Count, m_info.launchDelay));
         }
 
         private IEnumerator ProjectilePositionCheckerRoutine()
@@ -1521,7 +1480,6 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 for (int x = 0; x < m_spitterBone.Count; x++)
                 {
-                    //m_spitterBone[x].transform.rotation = Quaternion.Euler(0, 0, UnityEngine.Random.Range(m_info.spittersRotationWidth.x, m_info.spittersRotationWidth.y));
                     Vector2 spitPos = m_spitterBone[0].transform.position;
                     Vector3 v_diff = (m_targetInfo.position - spitPos);
                     float atan2 = Mathf.Atan2(v_diff.y, v_diff.x);
@@ -1534,18 +1492,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private void LaunchMultiProjectile()
         {
             var projectileInfo = m_willStickToWall ? m_airProjectileInfo : m_ballisticProjectileInfo;
-            //switch (m_phaseHandle.currentPhase)
-            //{
-            //    case Phase.PhaseOne:
-            //        projectileInfo = m_willStickToWall ? m_info.airProjectile.projectileInfo : m_info.ballisticProjectile.projectileInfo;
-            //        break;
-            //    case Phase.PhaseTwo:
-            //        projectileInfo = m_willStickToWall ? m_info.airPhase2Projectile.projectileInfo : m_info.ballisticPhase2Projectile.projectileInfo;
-            //        break;
-            //    case Phase.PhaseThree:
-            //        projectileInfo = m_willStickToWall ? m_info.airPhase3Projectile.projectileInfo : m_info.ballisticPhase3Projectile.projectileInfo;
-            //        break;
-            //}
+
             for (int i = 0; i < m_spitterPositions.Count; i++)
             {
                 m_projectileLauncher = new BallisticProjectileLauncher(projectileInfo, m_spitterPositions[i], m_info.projectileGravityScale, projectileInfo.speed);
@@ -1561,20 +1508,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         break;
                 }
             }
-
-            //StartCoroutine(DelayedProjectileLauncher(m_spitterPositions.Count, m_info.launchDelay));
         }
-
-        //private IEnumerator DelayedProjectileLauncher(int launchCounts, float launchDelay)
-        //{
-        //    yield return new WaitForSeconds(launchDelay);
-        //    for (int i = 0; i < launchCounts; i++)
-        //    {
-        //        m_projectileLauncher = new BallisticProjectileLauncher(m_info.ballisticProjectile.projectileInfo, m_spitterPositions[i], m_info.projectileGravityScale, m_info.ballisticProjectile.projectileInfo.speed);
-        //        m_projectileLauncher.LaunchBallisticProjectile(SpitterAimPosition(m_spitterPositions[i]));
-        //    }
-        //    yield return null;
-        //}
 
         private Vector2 SpitterAimPosition(Transform spitter)
         {
@@ -1629,18 +1563,14 @@ namespace DChild.Gameplay.Characters.Enemies
                 for (int i = 0; i < m_info.spikeSpitterAttacks.Count; i++)
                 {
                     m_projectilePositionCheckerCoroutine = StartCoroutine(ProjectilePositionCheckerRoutine());
-                    //if (!IsFacingTarget() && i == 0)
-                    //    CustomTurn();
+ 
                     m_lastTargetPos = m_targetInfo.position;
                     m_animation.SetAnimation(0, m_info.spikeSpitterExtendAnimations[i], false);
                     yield return new WaitForAnimationComplete(m_animation.animationState, m_info.spikeSpitterExtendAnimations[i]);
-                    //LaunchProjectile(i == 0 ? false : true);
                     m_animation.SetAnimation(0, m_info.spikeSpitterAttacks[i].animation, false);
                     yield return new WaitForAnimationComplete(m_animation.animationState, m_info.spikeSpitterAttacks[i].animation);
                     m_animation.SetAnimation(0, m_info.spikeSpitterRetractAnimations[i], false);
                     yield return new WaitForAnimationComplete(m_animation.animationState, m_info.spikeSpitterRetractAnimations[i]);
-                    //if (m_character.facing != HorizontalDirection.Right && i == 0)
-                    //    CustomTurn();
                 }
                 for (int i = 0; i < m_spitterBone.Count; i++)
                 {
@@ -1717,10 +1647,6 @@ namespace DChild.Gameplay.Characters.Enemies
             //if (m_character.facing != HorizontalDirection.Right)
             //    CustomTurn();
             m_willStickToWall = false;
-            //m_animation.DisableRootMotion();
-            //m_attackDecider.hasDecidedOnAttack = false;
-            //m_currentAttackCoroutine = null;
-            //m_stateHandle.ApplyQueuedState();
             yield return null;
         }
 
@@ -1968,25 +1894,6 @@ namespace DChild.Gameplay.Characters.Enemies
         protected override void OnDestroyed(object sender, EventActionArgs eventArgs)
         {
             base.OnDestroyed(sender, eventArgs);
-            //m_rb2d.isKinematic = false;
-            //m_rb2d.useFullKinematicContacts = false;
-            //StopAllCoroutines();
-            //StopCurrentBehaviorRoutine();
-            //StopAnimations();
-            //m_hitbox.Disable();
-            //m_animation.DisableRootMotion();
-            //m_movement.Stop();
-            //m_character.physics.simulateGravity = true;
-            //m_crawlFX.Stop();
-            //m_krakenFX.Stop();
-
-            //for (int z = 0; z < m_blobCounts; z++)
-            //{
-            //    if (m_blobs[z].activeSelf)
-            //        m_blobs[z].GetComponent<KingPusBlobAI>().Explode();
-            //}
-
-            //StartCoroutine(DeathRoutine());
         }
 
         private void AllahuAkbar()
@@ -2016,23 +1923,6 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator DeathRoutine()
         {
-            //
-            //m_rb2d.isKinematic = false;
-            //m_rb2d.useFullKinematicContacts = false;
-            //StopAnimations();
-            //m_hitbox.Disable();
-            //m_animation.DisableRootMotion();
-            //m_movement.Stop();
-            //m_character.physics.simulateGravity = true;
-            //m_crawlFX.Stop();
-            //m_krakenFX.Stop();
-
-            //for (int z = 0; z < m_blobCounts; z++)
-            //{
-            //    if (m_blobs[z].activeSelf)
-            //        m_blobs[z].GetComponent<KingPusBlobAI>().Explode();
-            //}
-            //
             enabled = false;
             m_grappleRetractCoroutine = StartCoroutine(GrappleRetractRoutine(m_info.wallGrappleRetractAnimations.Count - 1));
             if (!m_character.physics.inContactWithGround)
