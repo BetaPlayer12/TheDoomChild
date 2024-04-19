@@ -1,4 +1,5 @@
 using DChild.Gameplay.Characters.Enemies;
+using DChild.Gameplay.Combat;
 using DChild.Gameplay.Combat.UI;
 using Doozy.Runtime.Signals;
 using Holysoft.Event;
@@ -17,6 +18,8 @@ namespace DChild.Gameplay.UI
         [SerializeField]
         private BossCombatUI m_bossCombatUI;
 
+        public event EventAction<EventActionArgs> HideHealthUI;
+
         void Start()
         {
             m_kingPusAI.PhaseChangeStart += OnPhaseChangeStart;
@@ -28,6 +31,7 @@ namespace DChild.Gameplay.UI
         private void OnPhaseChangeStart(object sender, EventActionArgs eventArgs)
         {
             m_bossCombatUI.HideBossHealth();
+            HideHealthUI.Invoke(this, eventArgs);
         }
 
         private void OnPhaseChangeDone(object sender, EventActionArgs eventArgs)

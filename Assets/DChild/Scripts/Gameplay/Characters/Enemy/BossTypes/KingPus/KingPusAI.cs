@@ -1928,6 +1928,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator DeathRoutine()
         {
+            PhaseChangeStart?.Invoke(this, new EventActionArgs());
             enabled = false;
             m_grappleRetractCoroutine = StartCoroutine(GrappleRetractRoutine(m_info.wallGrappleRetractAnimations.Count - 1));
             if (!m_character.physics.inContactWithGround)

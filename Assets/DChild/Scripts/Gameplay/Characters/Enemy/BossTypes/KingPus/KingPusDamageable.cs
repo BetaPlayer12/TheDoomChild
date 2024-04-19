@@ -1,4 +1,5 @@
 using DChild.Gameplay.Characters.Enemies;
+using DChild.Gameplay.UI;
 using Holysoft.Event;
 using System;
 using System.Collections;
@@ -11,6 +12,8 @@ namespace DChild.Gameplay.Combat
     {
         [SerializeField]
         private KingPusAI m_kingPusAI;
+        [SerializeField]
+        private KingPusUIHandle m_kingPusUIHandle;
         [SerializeField]
         private Phase m_currentPhase = Phase.PhaseOne;
 
@@ -27,14 +30,19 @@ namespace DChild.Gameplay.Combat
         private void Start()
         {
             PhaseChangeTime += OnChangePhase;
+            m_kingPusUIHandle.HideHealthUI += OnHealthHide;
             m_currentPhase = Phase.PhaseOne;
+        }
+
+        private void OnHealthHide(object sender, EventActionArgs eventArgs)
+        {
+            if (m_currentPhase != Phase.PhaseFour)
+                RestoreHPForPhaseChange();
         }
 
         private void OnChangePhase(object sender, EventActionArgs eventArgs)
         {
-            m_currentPhase++;
-            if(m_currentPhase != Phase.PhaseFour)
-                RestoreHPForPhaseChange();
+            m_currentPhase++;           
         }
 
         private void RestoreHPForPhaseChange()
