@@ -511,6 +511,8 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Reference")]
         private Hitbox m_hitbox;
         [SerializeField, TabGroup("Reference")]
+        private CapsuleCollider2D m_hitboxCollider;
+        [SerializeField, TabGroup("Reference")]
         private CapsuleCollider2D m_bodyCollider;
         private Vector2 m_bodyColliderCacheSize;
         [SerializeField, TabGroup("Reference")]
@@ -1327,9 +1329,13 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 case Phase.PhaseOne:
                     m_phaseHandle.SetPhase(Phase.PhaseTwo);
+                    m_hitboxCollider.offset = new Vector2(2.37f, 2.46f);
+                    m_hitboxCollider.size = new Vector2(18.09f, 10.83f);
                     break;
                 case Phase.PhaseTwo:
                     m_phaseHandle.SetPhase(Phase.PhaseThree);
+                    m_hitboxCollider.offset = new Vector2(3.19f, 1.58f);
+                    m_hitboxCollider.size = new Vector2(41.23f, 17.41f);
                     break;
                 case Phase.PhaseThree:
                     m_phaseHandle.SetPhase(Phase.PhaseFour);
