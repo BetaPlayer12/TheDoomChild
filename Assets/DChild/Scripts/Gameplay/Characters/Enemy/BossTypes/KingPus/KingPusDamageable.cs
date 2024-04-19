@@ -21,6 +21,7 @@ namespace DChild.Gameplay.Combat
             PhaseOne,
             PhaseTwo, 
             PhaseThree,
+            PhaseFour,
         }
 
         private void Start()
@@ -32,7 +33,8 @@ namespace DChild.Gameplay.Combat
         private void OnChangePhase(object sender, EventActionArgs eventArgs)
         {
             m_currentPhase++;
-            RestoreHPForPhaseChange();
+            if(m_currentPhase != Phase.PhaseFour)
+                RestoreHPForPhaseChange();
         }
 
         private void RestoreHPForPhaseChange()
@@ -51,7 +53,8 @@ namespace DChild.Gameplay.Combat
                 if (m_currentPhase == Phase.PhaseThree)
                 {
                     Debug.Log("Going to Die!");
-                    base.TakeDamage(totalDamage, type);
+                    m_currentPhase = Phase.PhaseFour;
+                    PhaseChangeTime?.Invoke(this, new EventActionArgs());
                 }
                 else
                 {
