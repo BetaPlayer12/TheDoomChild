@@ -3,7 +3,7 @@ guid: cf2fbaced88d5db4aae160cd18afefa5
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
-  serializedVersion: 10
+  serializedVersion: 12
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -23,6 +23,8 @@ TextureImporter:
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMasterTextureLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -31,9 +33,9 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: -1
-    aniso: -1
-    mipBias: -100
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
     wrapU: 1
     wrapV: 1
     wrapW: 1
@@ -54,9 +56,14 @@ TextureImporter:
   textureType: 8
   textureShape: 1
   singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
   maxTextureSizeSet: 0
   compressionQualitySet: 0
   textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 1
+  cookieLightType: 1
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
@@ -82,53 +89,49 @@ TextureImporter:
     overridden: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Server
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 1
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites: []
     outline:
-    - - {x: 2726, y: -2633}
+    - - {x: 2729, y: -2630}
       - {x: 2287, y: -2809}
-      - {x: 1979, y: -2680}
-      - {x: 1495, y: -2784}
-      - {x: 647, y: -2846}
-      - {x: 317, y: -2850}
-      - {x: 295, y: -3020}
-      - {x: -418, y: -3019}
-      - {x: -448, y: -2819}
-      - {x: -900, y: -2813}
-      - {x: -1991, y: -2708}
+      - {x: 2068, y: -2718}
+      - {x: 300, y: -2868}
+      - {x: 303, y: -3020}
+      - {x: -422, y: -3030}
+      - {x: -434, y: -2825}
+      - {x: -2045, y: -2710}
       - {x: -2262, y: -2856}
-      - {x: -2740, y: -2700}
-      - {x: -2739, y: -2520}
-      - {x: -2934, y: -2419}
-      - {x: -3071, y: -2268}
-      - {x: -3046.275, y: -1972.0273}
-      - {x: -2948, y: -1820}
-      - {x: -2800, y: -1738}
-      - {x: -2792.7495, y: -1506.5212}
-      - {x: -2616, y: -1442}
+      - {x: -2726, y: -2682}
+      - {x: -2729, y: -2526}
+      - {x: -3060, y: -2323}
+      - {x: -3059, y: -2044}
+      - {x: -2958, y: -1829}
+      - {x: -2782, y: -1746}
+      - {x: -2779, y: -1483}
       - {x: -2362, y: -1427}
-      - {x: -2374, y: 1382}
-      - {x: -2443, y: 1454}
-      - {x: -2493, y: 1555}
-      - {x: -2528, y: 1738}
-      - {x: -2688, y: 1773}
-      - {x: -2683.409, y: 1931.9678}
-      - {x: -2631, y: 1989}
-      - {x: -2622, y: 2451}
-      - {x: -2657.6873, y: 2486.3525}
-      - {x: -2664, y: 2604}
-      - {x: -2522, y: 2758}
+      - {x: -2353, y: 1254}
+      - {x: -2559, y: 1751}
+      - {x: -2680, y: 1778}
+      - {x: -2654, y: 2614}
+      - {x: -2490, y: 2734}
       - {x: -1058, y: 2841}
       - {x: 1134, y: 2837}
-      - {x: 2468, y: 2731}
-      - {x: 2544, y: 2645}
-      - {x: 2546.419, y: 2533.7456}
-      - {x: 2499, y: 2521}
-      - {x: 2497, y: 2020}
-      - {x: 2566, y: 1969}
-      - {x: 2562, y: 1817}
-      - {x: 2419, y: 1566}
+      - {x: 2436, y: 2727}
+      - {x: 2537, y: 2657}
+      - {x: 2562, y: 1833}
       - {x: 2326, y: 1469}
       - {x: 2359, y: -1363}
       - {x: 2814, y: -1495}
@@ -136,18 +139,19 @@ TextureImporter:
       - {x: 2953, y: -1813}
       - {x: 2969, y: -1948}
       - {x: 3055, y: -2053}
-      - {x: 3036, y: -2257}
+      - {x: 3057, y: -2230}
       - {x: 2960, y: -2393}
-      - {x: 2738, y: -2514}
+      - {x: 2722, y: -2492}
     physicsShape: []
     bones: []
     spriteID: 5e97eb03825dee720800000000000000
-    internalID: 0
+    internalID: 1537655665
     vertices: []
     indices: 
     edges: []
     weights: []
     secondaryTextures: []
+    nameFileIdTable: {}
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0
