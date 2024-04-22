@@ -1345,7 +1345,6 @@ namespace DChild.Gameplay.Characters.Enemies
 
             //m_phaseHandle.ApplyChange();
             PhaseChangeDone?.Invoke(this, new EventActionArgs());
-
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_hitbox.Enable();
             m_hitbox.SetCanBlockDamageState(false);
@@ -2469,13 +2468,54 @@ namespace DChild.Gameplay.Characters.Enemies
                     break;
 
                 case State.ReevaluateSituation:
-                    if (m_targetInfo.isValid)
+                    //if (m_targetInfo.isValid)
+                    //{
+                    //    m_stateHandle.SetState(State.Chasing);
+                    //}
+                    //else
+                    //{
+                    //    m_stateHandle.SetState(State.Idle);
+                    //}
+                    //break;
+                    switch (m_phaseHandle.currentPhase)
                     {
-                        m_stateHandle.SetState(State.Chasing);
-                    }
-                    else
-                    {
-                        m_stateHandle.SetState(State.Idle);
+                        case Phase.PhaseOne:
+                            /*
+                             * Check if boss is flinched, if on wall or ceiling do spike spit 1
+                             * else for both conditions do crawl for 4 seconds towards location of player
+                             * after crawling check distance of player and decide to do short ranged or long ranged attack
+                             * short: heavy spear stab, tentaspear crawl
+                             * long: spike spit 1, spike shower 1, tentaspear crawl
+                             */
+
+                            break;
+                        case Phase.PhaseTwo:
+                            /*
+                            * Check if boss is flinched, if on wall or ceiling do spike spit 2
+                            * else for both conditions check if hp is at 50% and do body slam 
+                            * if not do crawl for 2 seconds towards location of player
+                            * after crawling check distance of player and decide to do short ranged or long ranged attack
+                            * short: heavy ground stab, tentaspear crawl, heavy spear stab
+                            * long: spike spit 2, spike shower 1, tentaspear crawl, body slam (pus blob drop by extension)
+                            */
+
+                            break;
+                        case Phase.PhaseThree:
+                            /*
+                            * Check if boss is flinched, if on wall or ceiling do spike spit 2
+                            * else for both conditions check if hp is at 75%, 50%, or 25% and do wrecking ball 
+                            * if not do crawl for 1 seconds towards location of player
+                            * after crawling check distance of player and decide to do short ranged or long ranged attack
+                            * short: tentaspear crawl, heavy spear stab
+                            * long:  spike shower 1 (followed by spike shower 2), tentaspear crawl, body slam (pus blob drop by extension), heavy ground stab
+                            */
+
+                            break;
+                        case Phase.PhaseFour:
+                            break;
+                        default:
+                            m_stateHandle.SetState(State.Idle);
+                            break;
                     }
                     break;
                 case State.WaitBehaviourEnd:
