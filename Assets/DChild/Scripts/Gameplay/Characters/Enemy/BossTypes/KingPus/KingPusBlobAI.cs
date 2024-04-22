@@ -191,9 +191,13 @@ namespace DChild.Gameplay.Characters.Enemies
         }
         public IEnumerator ShakeAnimRoutine()
         {
-            PlaceholderShake.SetActive(true);
-            yield return new WaitForSeconds(0.75f);
-            PlaceholderShake.SetActive(false);
+            if(!m_isAlive)
+            {
+                PlaceholderShake.SetActive(true);
+                yield return new WaitForSeconds(0.75f);
+                PlaceholderShake.SetActive(false);
+            }
+            yield return null;
         }
 
         public void StayDormant(float Randomtime)
@@ -369,6 +373,7 @@ namespace DChild.Gameplay.Characters.Enemies
             this.transform.SetParent(m_master);
             this.transform.localPosition = Vector3.zero;
             m_isAlive = false;
+            m_timeAlive = 0f;
             yield return null;
         }
 

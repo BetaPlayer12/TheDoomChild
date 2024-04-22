@@ -64,14 +64,13 @@ namespace DChild.Gameplay.Characters.Enemies
                     StartCoroutine(m_blob[x].GetComponent<KingPusBlobAI>().ShakeAnimRoutine());
                 }
             }
-            if (m_bodySlamCounter >= 1)
+            if (m_bodySlamCounter >= 3)
             {
                 DropPusBlob();
                 m_hasDroppedPusBlobs = true;
                 m_timeLapsed = 0f;
                 m_bodySlamCounter = 0;
             }
-            throw new NotImplementedException();
         }
 
         
@@ -88,13 +87,11 @@ namespace DChild.Gameplay.Characters.Enemies
             m_hasDroppedPusBlobs = true;
             m_timeLapsed = 0f;
             m_bodySlamCounter = 0;
-            throw new NotImplementedException();
         }
 
         private void KingPusHasChangedPhase(object sender, EventActionArgs eventArgs)
         {
             m_hasPhaseChanged = true;
-            throw new NotImplementedException();
         }
 
         private void Start()
