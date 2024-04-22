@@ -126,12 +126,22 @@ namespace DChild.Gameplay.Characters.Players.Modules
             return (Vector2)m_spawnPoint.position;
         }
 
+        private Vector2 GetProjectilesCalculatedThrowDirection(Projectile projectile)
+        {
+            var direction = CalculateThrowDirection();
+            if(projectile.hasConstantSpeed)
+            {
+                direction = direction.normalized;
+            }
+            return direction;
+        }
         private void UpdateTrajectorySimulation()
         {
             var simulator = GameplaySystem.simulationHandler.GetTrajectorySimulator();
             simulator.SetStartPosition(GetStartingPosition());
 
-            var velocity = CalculateThrowDirection() * m_projectile.speed;
+            //var velocity = CalculateThrowDirection() * m_projectile.speed;
+            var velocity = GetProjectilesCalculatedThrowDirection(m_projectile.projectile.GetComponent<Projectile>()) * m_projectile.speed;
             velocity.x *= (int)m_character.facing;
             simulator.SetVelocity(velocity);
             simulator.SimulateTrajectory();
@@ -230,7 +240,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
         {
             m_skeletonAnimation.state.Complete += State_Complete;
 
-            var direction = CalculateThrowDirection();
+            //var direction = CalculateThrowDirection();
+            var direction = GetProjectilesCalculatedThrowDirection(m_spawnedProjectile);
             direction.x *= (int)m_character.facing;
 
             if (m_spawnedProjectile != null)
