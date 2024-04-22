@@ -237,9 +237,12 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_hitbox.gameObject.SetActive(false);
             m_animation.SetAnimation(0, m_info.flinchAnimation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.flinchAnimation);
+            //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.flinchAnimation);
+            yield return new WaitForSeconds(0.5f);
+            //bug #2631, connected with spectreFire, and by extension also the spectreEarth, something gets boken here where this entity gets stucke here on flinch, and it gets fixed on graveyard and laboratory
             m_animation.SetAnimation(0, m_info.fadeOutAnimation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.fadeOutAnimation);
+            //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.fadeOutAnimation); //also gets stuck here, needs to be further investigated.
+            yield return new WaitForSeconds(0.5f);
             var random = UnityEngine.Random.Range(0, 2);
             transform.position = new Vector2(m_targetInfo.position.x + (IsFacingTarget() ? -30 : 30), m_targetInfo.position.y+30);
             if (!IsFacingTarget())
