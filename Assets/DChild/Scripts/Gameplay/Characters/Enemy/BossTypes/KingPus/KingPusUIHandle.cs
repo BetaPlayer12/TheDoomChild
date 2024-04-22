@@ -38,8 +38,6 @@ namespace DChild.Gameplay.UI
         {
             m_bossCombatUI.ShowBossHealth();
         }
-
-       
     }
 }
 

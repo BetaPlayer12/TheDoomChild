@@ -16,6 +16,8 @@ namespace DChild.Gameplay.Combat
         private KingPusUIHandle m_kingPusUIHandle;
         [SerializeField]
         private Phase m_currentPhase = Phase.PhaseOne;
+        [SerializeField]
+        private float m_healDelay;
 
         public event EventAction<EventActionArgs> PhaseChangeTime;
 
@@ -37,7 +39,7 @@ namespace DChild.Gameplay.Combat
         private void OnHealthHide(object sender, EventActionArgs eventArgs)
         {
             if (m_currentPhase != Phase.PhaseFour)
-                RestoreHPForPhaseChange();
+                StartCoroutine(DelayBeforeHeal(m_healDelay));
         }
 
         private void OnChangePhase(object sender, EventActionArgs eventArgs)
@@ -48,6 +50,12 @@ namespace DChild.Gameplay.Combat
         private void RestoreHPForPhaseChange()
         {
             Heal(1000);
+        }
+
+        private IEnumerator DelayBeforeHeal(float delay)
+        {
+            yield return new WaitForSeconds(delay);
+            RestoreHPForPhaseChange();
         }
 
         public override void TakeDamage(int totalDamage, DamageType type)
