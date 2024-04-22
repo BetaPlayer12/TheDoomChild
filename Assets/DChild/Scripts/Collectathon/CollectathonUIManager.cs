@@ -7,7 +7,6 @@ using Sirenix.OdinInspector;
 using DChild.Gameplay.NavigationMap;
 using DChild.Gameplay.Environment;
 using Location = DChild.Gameplay.Environment.Location;
-using UnityEditor.ShaderGraph.Internal;
 using UnityEditor;
 using System.Linq;
 using System.Xml.Schema;
