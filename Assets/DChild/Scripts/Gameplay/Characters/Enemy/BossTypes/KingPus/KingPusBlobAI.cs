@@ -202,6 +202,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         public void StayDormant(float Randomtime)
         {
+            //can call the growth stage here
             enabled = false;
             m_isAlive = false;
             this.gameObject.SetActive(true);
@@ -210,6 +211,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_rigidbody2D.velocity = Vector2.zero;
             m_isAlive = false;
             m_hitbox.Disable();
+            //if the growth animation is made, wait first for it to finish and then mess with this timescale for the pulsing
             m_animation.animationState.TimeScale = Randomtime;
             Awake();
             enabled = true;

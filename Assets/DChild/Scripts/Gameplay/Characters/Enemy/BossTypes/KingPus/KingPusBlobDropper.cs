@@ -27,7 +27,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private void InitializePusPlacement()
         {
             for(int x=0;x<m_pusSpawnPoint.Count;x++)
-            {
+            {                                           //This can be changed to make from the poolable objects
                 if (!m_blob[x].activeSelf)
                 {
                     m_blob[x].transform.position = m_pusSpawnPoint[x].transform.position;
