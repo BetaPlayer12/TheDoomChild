@@ -670,6 +670,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1516931183595549778}
   - component: {fileID: 1516931183595549777}
+  - component: {fileID: 8416298972094963666}
+  - component: {fileID: 4063268100945367247}
   m_Layer: 0
   m_Name: MotherMantis_IntroCutscene_Timeline
   m_TagString: Untagged
@@ -730,6 +732,12 @@ PlayableDirector:
     value: {fileID: 5496530454994471381}
   - key: {fileID: 5704948453375491733, guid: ab4e8b7787b6fb349b23653743720776, type: 2}
     value: {fileID: 1516931182759403405}
+  - key: {fileID: -1335477157987023079, guid: ab4e8b7787b6fb349b23653743720776, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: -810049619471887814, guid: ab4e8b7787b6fb349b23653743720776, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: 7669285756571617064, guid: ab4e8b7787b6fb349b23653743720776, type: 2}
+    value: {fileID: 0}
   m_ExposedReferences:
     m_References:
     - f62d2b87c2f8b814cbf1a8416c08dd00: {fileID: 1516931183224465407}
@@ -739,6 +747,54 @@ PlayableDirector:
     - 7ecff6313be0e994e88459a2e64066b5: {fileID: 1516931183207233829}
     - cac0dab39d3f334418f1ba343f00590d: {fileID: 1516931182797932016}
     - 79c2d87bcb33abc46b18bf6dc9df390d: {fileID: 1516931183195047219}
+--- !u!95 &8416298972094963666
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1516931183595549776}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 0}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &4063268100945367247
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1516931183595549776}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2008bbb0897bd484fa71201ac706de37, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_actions:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: PixelCrushers.DialogueSystem.DialogueSystemTrigger,
+          Assembly-CSharp-firstpass
+        m_MethodName: OnUse
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &1516931183750475892
 GameObject:
   m_ObjectHideFlags: 0
@@ -1293,6 +1349,20 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &6467499737228833371
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5314784352476857348}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e809b506251fb743a8d7942c14ba4fd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_animation: {fileID: 0}
+  m_skeleton: {fileID: 5314784352476857344}
 --- !u!4 &5314784352476857349 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6686949251351277774, guid: b7d3bfb7de83ba344b1c708e3715caa4,
