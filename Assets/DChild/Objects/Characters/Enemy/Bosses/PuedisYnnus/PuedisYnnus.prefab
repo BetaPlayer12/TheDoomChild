@@ -98,7 +98,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f1b0d68cd77a89d45b04c6c47d586049, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_source: {fileID: 0}
+  m_source: {fileID: 5423149284505183853}
 --- !u!1 &8446102973645213343
 GameObject:
   m_ObjectHideFlags: 0
@@ -340,7 +340,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e10454193b54c9a4eb8bfb67b80c746d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_centerMass: {fileID: 0}
+  m_centerMass: {fileID: 4166308373953279392}
   m_data: {fileID: 11400000, guid: b0c8eac1b59186442aa684389d0e1fe4, type: 2}
   m_currentAttackInfo:
     damage:
@@ -390,7 +390,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c106d3ee04e320140b205c0d1ae65bb4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_centerMass: {fileID: 0}
+  m_centerMass: {fileID: 4166308373953279392}
   m_health: {fileID: 230623883701866928}
   m_resistance: {fileID: 0}
 --- !u!114 &5423149284505183853
@@ -444,7 +444,7 @@ MonoBehaviour:
   m_animation: {fileID: 7863188423771683678}
   m_data: {fileID: 11400000, guid: 8040a97a4b45c7d4cb2313957d9e5520, type: 2}
   m_damageable: {fileID: 5417733870813630648}
-  m_centerMass: {fileID: 0}
+  m_centerMass: {fileID: 82386614944323958}
   m_aggroBoundary: {fileID: 0}
   m_statsData: {fileID: 11400000, guid: e6fb52040249c0646965440b10ec4765, type: 2}
   m_boss: {fileID: 4230976004932581888}
@@ -453,13 +453,21 @@ MonoBehaviour:
   m_movement: {fileID: 2452025966790420530}
   m_deathHandle: {fileID: 5411171094896841058}
   m_spineListener: {fileID: 5441232046212251300}
-  m_encircledProjectileHandle: {fileID: 8048297820263776721}
   m_flightAreas: []
-  m_projectilePoint: {fileID: 6550721798225414196}
-  m_randomSpawnCollider: {fileID: 0}
-  m_fleshBombPoint: {fileID: 8627291657219165026}
-  m_horizontalSpikeGroup: {fileID: 0}
-  m_verticalSpikeGroups: []
+  m_rainProjectileSpawnArea: {fileID: 0}
+  m_rightmostFlightPosition: {fileID: 0}
+  m_leftmostFlightPosition: {fileID: 0}
+  m_encircledProjectileHandle: {fileID: 8048297820263776721}
+  m_encircledProjectileMovePoint: {fileID: 0}
+  m_massiveSpikePattern: []
+  m_multipleSpikes: []
+  m_multipleSpikesCastPosition: {fileID: 0}
+  m_rainProjectilePatterns: []
+  m_fleshBomb: {fileID: 0}
+  m_illusionPlatformCastPosition: {fileID: 0}
+  m_illusionPlatforms: []
+  m_sequenceMassiveSpike: {fileID: 0}
+  m_bottomMultipleSpike: {fileID: 0}
 --- !u!114 &7549230405166149406
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -652,12 +660,12 @@ PrefabInstance:
     - target: {fileID: 4493284216601179846, guid: ee2cdf6aa069aac4083bb1c2cc2cef9e,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 5.3546295
+      value: 5.35466
       objectReference: {fileID: 0}
     - target: {fileID: 4493284216601179846, guid: ee2cdf6aa069aac4083bb1c2cc2cef9e,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 11.390945
+      value: 11.390968
       objectReference: {fileID: 0}
     - target: {fileID: 5411510951581040013, guid: ee2cdf6aa069aac4083bb1c2cc2cef9e,
         type: 3}
@@ -694,14 +702,21 @@ PrefabInstance:
     - {fileID: 6728383338217491085, guid: ee2cdf6aa069aac4083bb1c2cc2cef9e, type: 3}
     - {fileID: 5640574529560821702, guid: ee2cdf6aa069aac4083bb1c2cc2cef9e, type: 3}
     - {fileID: 1614804784141772863, guid: ee2cdf6aa069aac4083bb1c2cc2cef9e, type: 3}
+    - {fileID: 17746740043692842, guid: ee2cdf6aa069aac4083bb1c2cc2cef9e, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: ee2cdf6aa069aac4083bb1c2cc2cef9e, type: 3}
+--- !u!4 &82386614944323958 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1621379862574258950, guid: ee2cdf6aa069aac4083bb1c2cc2cef9e,
+    type: 3}
+  m_PrefabInstance: {fileID: 1703766202573455984}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1316955597403828027 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 423965597643222347, guid: ee2cdf6aa069aac4083bb1c2cc2cef9e,
     type: 3}
   m_PrefabInstance: {fileID: 1703766202573455984}
   m_PrefabAsset: {fileID: 0}
---- !u!60 &3638424341987046782
+--- !u!60 &7061909563300944141
 PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -738,9 +753,9 @@ PolygonCollider2D:
       - {x: 10.1727, y: -3.324}
       - {x: 11.209, y: 1.3991}
       - {x: 9.157599, y: 7.3159003}
---- !u!4 &6550721798225414196 stripped
+--- !u!4 &4166308373953279392 stripped
 Transform:
-  m_CorrespondingSourceObject: {fileID: 5569871443343657540, guid: ee2cdf6aa069aac4083bb1c2cc2cef9e,
+  m_CorrespondingSourceObject: {fileID: 3347666774266836944, guid: ee2cdf6aa069aac4083bb1c2cc2cef9e,
     type: 3}
   m_PrefabInstance: {fileID: 1703766202573455984}
   m_PrefabAsset: {fileID: 0}
@@ -774,12 +789,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d247ba06193faa74d9335f5481b2b56c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!4 &8627291657219165026 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 6926169368481515794, guid: ee2cdf6aa069aac4083bb1c2cc2cef9e,
-    type: 3}
-  m_PrefabInstance: {fileID: 1703766202573455984}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &6882379641912034919
 PrefabInstance:
   m_ObjectHideFlags: 0

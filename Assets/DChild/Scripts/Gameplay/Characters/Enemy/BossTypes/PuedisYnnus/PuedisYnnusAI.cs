@@ -1,22 +1,11 @@
-﻿using System;
-using DChild.Gameplay;
-using DChild.Gameplay.Characters;
-using DChild.Gameplay.Combat;
+﻿using DChild.Gameplay.Combat;
 using Holysoft.Event;
 using DChild.Gameplay.Characters.AI;
 using UnityEngine;
-using Spine;
 using Spine.Unity;
 using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
-using DChild;
-using DChild.Gameplay.Characters.Enemies;
-using Spine.Unity.Modules;
-using Spine.Unity.Examples;
-using DChild.Gameplay.Pooling;
-using DChild.Gameplay.Projectiles;
-using DChild.Temp;
 
 namespace DChild.Gameplay.Characters.Enemies
 {
@@ -73,9 +62,7 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField, BoxGroup("Rain Projectile")]
             private float m_rainProjectileDropDelay;
             public float rainProjectileDropDelay => m_rainProjectileDropDelay;
-            [SerializeField, BoxGroup("Rain Projectile")]
-            private BasicAnimationInfo m_rainProjectileAnticipationAnimation;
-            public BasicAnimationInfo rainProjectileAnticipationAnimation => m_rainProjectileAnticipationAnimation;
+
             [SerializeField, BoxGroup("Rain Projectile")]
             private BasicAnimationInfo m_rainProjectileAttackAnimation;
             public BasicAnimationInfo rainProjectileAttackAnimation => m_rainProjectileAttackAnimation;
@@ -98,9 +85,6 @@ namespace DChild.Gameplay.Characters.Enemies
 
             #region Massive Spike
             [SerializeField, BoxGroup("Massive Spike")]
-            private BasicAnimationInfo m_massiveSpikeAnticipationAnimation;
-            public BasicAnimationInfo massiveSpikeAnticipationAnimation => m_massiveSpikeAnticipationAnimation;
-            [SerializeField, BoxGroup("Massive Spike")]
             private BasicAnimationInfo m_massiveSpikeAttackAnimation;
             public BasicAnimationInfo massiveSpikeAttackAnimation => m_massiveSpikeAttackAnimation;
             [SerializeField, MinValue(0), BoxGroup("Massive Spike")]
@@ -116,6 +100,10 @@ namespace DChild.Gameplay.Characters.Enemies
             private int m_patternedRainProjectileRepeatCount;
             public int patternedRainProjectileRepeatCount => m_patternedRainProjectileRepeatCount;
 
+            [SerializeField, BoxGroup("FleshBomb")]
+            private BasicAnimationInfo m_fleshBombAttackAnimation;
+            public BasicAnimationInfo fleshBombAttackAnimation => m_fleshBombAttackAnimation;
+
             [Title("Projectiles")]
             [SerializeField]
             private ProjectileInfo m_crimsonProjectile;
@@ -123,38 +111,36 @@ namespace DChild.Gameplay.Characters.Enemies
 
 
 
+            [SerializeField]
+            private float m_damageCheckDuration;
+            public float damageCheckDuration => m_damageCheckDuration;
 
-            [SerializeField, BoxGroup("FleshBomb")]
-            private SimpleProjectileAttackInfo m_staffSpinFleshBombProjectile;
-            public SimpleProjectileAttackInfo staffSpinFleshBombProjectile => m_staffSpinFleshBombProjectile;
-
-
+            [SerializeField]
+            private float m_floatTimeCheckDuration;
+            public float floatTimeCheckDuration => m_floatTimeCheckDuration;
 
             public override void Initialize()
             {
 #if UNITY_EDITOR
                 m_moveForward.SetData(m_skeletonDataAsset);
                 m_moveBackward.SetData(m_skeletonDataAsset);
-
-                m_staffSpinFleshBombProjectile.SetData(m_skeletonDataAsset);
-
-                m_appearAnimation.SetData(m_skeletonDataAsset);
+                m_turnAnimation.SetData(m_skeletonDataAsset);
                 m_deathAnimation.SetData(m_skeletonDataAsset);
-                m_disappearAnimation.SetData(m_skeletonDataAsset);
                 m_flinchAnimation.SetData(m_skeletonDataAsset);
 
-                m_rainProjectileAnticipationAnimation.SetData(m_skeletonDataAsset);
+                m_appearAnimation.SetData(m_skeletonDataAsset);
+                m_disappearAnimation.SetData(m_skeletonDataAsset);
+
                 m_rainProjectileAttackAnimation.SetData(m_skeletonDataAsset);
 
                 m_encircledProjectileSummonAnimation.SetData(m_skeletonDataAsset);
                 m_encircledProjectileScatterAnimation.SetData(m_skeletonDataAsset);
 
-                m_massiveSpikeAnticipationAnimation.SetData(m_skeletonDataAsset);
                 m_massiveSpikeAttackAnimation.SetData(m_skeletonDataAsset);
 
                 m_multipleSpikeSummonAnimation.SetData(m_skeletonDataAsset);
 
-                m_turnAnimation.SetData(m_skeletonDataAsset);
+                m_fleshBombAttackAnimation.SetData(m_skeletonDataAsset);
 #endif
             }
         }
@@ -197,6 +183,7 @@ namespace DChild.Gameplay.Characters.Enemies
             MassiveFleshSpikes,
             SummonAndScatterProjectiles,
             MultipleSpikeToOtherAttacksCombo,
+            IllusionSpikeToOtherAttacksCombo,
             TEST
         }
 
@@ -231,8 +218,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private RandomAttackDecider<Attack> m_attackDecider;
         private Attack m_currentAttack;
 
-        private int m_teleportCounter;
-        private int m_attackCounter;
+
 
         #region ProjectileLaunchers
         private ProjectileLauncher m_fleshBombProjectileLauncher;
@@ -243,44 +229,52 @@ namespace DChild.Gameplay.Characters.Enemies
 
 
         [TitleGroup("Attacks")]
-        [SerializeField, TabGroup("Attacks/Split", "Rain Projectile")]
+        [TabGroup("Attacks/Split", "Part1")]
+        [SerializeField, TabGroup("Attacks/Split/Part1", "Rain Projectile")]
         private BoxCollider2D m_rainProjectileSpawnArea;
-        [SerializeField, TabGroup("Attacks/Split", "Rain Projectile")]
+        [SerializeField, TabGroup("Attacks/Split/Part1", "Rain Projectile")]
         private Transform m_rightmostFlightPosition;
-        [SerializeField, TabGroup("Attacks/Split", "Rain Projectile")]
+        [SerializeField, TabGroup("Attacks/Split/Part1", "Rain Projectile")]
         private Transform m_leftmostFlightPosition;
 
-        [SerializeField, TabGroup("Attacks/Split", "Encricled Projectile Attack")]
+        [SerializeField, TabGroup("Attacks/Split/Part1", "Encricled Projectile Attack")]
         private PuedisYnnusEncircledProjectileHandle m_encircledProjectileHandle;
-        [SerializeField, TabGroup("Attacks/Split", "Encricled Projectile Attack")]
+        [SerializeField, TabGroup("Attacks/Split/Part1", "Encricled Projectile Attack")]
         private Transform m_encircledProjectileMovePoint;
 
-        [SerializeField, TabGroup("Attacks/Split", "Massive Spike")]
+        [SerializeField, TabGroup("Attacks/Split/Part1", "Massive Spike")]
         private PuedisYnnusMassiveSpikePattern[] m_massiveSpikePattern;
 
-        [SerializeField, TabGroup("Attacks/Split", "Multiple Spike")]
+        [TabGroup("Attacks/Split", "Part2")]
+        [SerializeField, TabGroup("Attacks/Split/Part2", "Multiple Spike")]
         private PuedisYnnusMultipleSpikeHandle[] m_multipleSpikes;
-        [SerializeField, TabGroup("Attacks/Split", "Multiple Spike")]
+        [SerializeField, TabGroup("Attacks/Split/Part2", "Multiple Spike")]
         private Transform m_multipleSpikesCastPosition;
 
 
-        [SerializeField, TabGroup("Attacks/Split", "Patterned Rain Projectile")]
+        [SerializeField, TabGroup("Attacks/Split/Part2", "Patterned Rain Projectile")]
         private BoxCollider2D[] m_rainProjectilePatterns;
 
-        [SerializeField, TabGroup("Spawn Points")]
-        private Transform m_projectilePoint;
-        [SerializeField, TabGroup("Spawn Points")]
-        private Collider2D m_randomSpawnCollider;
-        [SerializeField, TabGroup("Spawn Points")]
-        private Transform m_fleshBombPoint;
-        [SerializeField, TabGroup("Spike Group")]
-        private Transform m_horizontalSpikeGroup;
-        [SerializeField, TabGroup("Spike Group")]
-        private List<Transform> m_verticalSpikeGroups;
+        [SerializeField, TabGroup("Attacks/Split/Part2", "Flesh Bomb")]
+        private PuedisYnnusFleshSpikeBomb m_fleshBomb;
+
+        [TabGroup("Attacks/Split", "Part3")]
+        [SerializeField, TabGroup("Attacks/Split/Part3", "Illusion Platform")]
+        private Transform m_illusionPlatformCastPosition;
+        [SerializeField, TabGroup("Attacks/Split/Part3", "Illusion Platform")]
+        private PuedisYnnusIllusionPlatform[] m_illusionPlatforms;
+        [SerializeField, TabGroup("Attacks/Split/Part3", "Illusion Platform")]
+        private PuedisYnnusSequenceMassiveSpikePattern m_sequenceMassiveSpike;
+        [SerializeField, TabGroup("Attacks/Split/Part3", "Illusion Platform")]
+        private PuedisYnnusMultipleSpikeHandle m_bottomMultipleSpike;
 
 
         private PhaseInfo m_currentPhaseInfo;
         private PuedisYnnusRainProjectileHandle m_rainProjectileHandle;
+
+        private int m_teleportCounter;
+        private int m_attackCounter;
+        private bool m_wasHitDuringDamageChecks;
 
         private void ApplyPhaseData(PhaseInfo obj)
         {
@@ -317,15 +311,15 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator ChangePhaseRoutine()
         {
-            m_hitbox.Disable();
-            m_animation.SetAnimation(0, m_info.disappearAnimation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.disappearAnimation);
-            transform.position = new Vector2(m_randomSpawnCollider.bounds.center.x, m_randomSpawnCollider.bounds.center.y - 5);
-            m_animation.SetAnimation(0, m_info.appearAnimation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.appearAnimation);
+            //m_hitbox.Disable();
+            //m_animation.SetAnimation(0, m_info.disappearAnimation, false);
+            //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.disappearAnimation);
+            //transform.position = 
+            //m_animation.SetAnimation(0, m_info.appearAnimation, false);
+            //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.appearAnimation);
 
-            m_hitbox.Enable();
-            m_stateHandle.ApplyQueuedState();
+            //m_hitbox.Enable();
+            //m_stateHandle.ApplyQueuedState();
             yield return null;
         }
 
@@ -383,7 +377,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_animation.SetAnimation(0, m_info.moveBackward, true);
             }
 
-            while (Vector3.Distance(transform.position, destination) > 0.5f)
+            while (Vector3.Distance(transform.position, destination) > 5f)
             {
                 yield return null;
             }
@@ -412,12 +406,25 @@ namespace DChild.Gameplay.Characters.Enemies
             m_stateHandle.ApplyQueuedState();
         }
 
-        private IEnumerator TeleportToDestination(Vector3 destination)
+        private IEnumerator DisappearRoutine()
         {
-            m_stateHandle.Wait(State.ReevaluateSituation);
             m_hitbox.Disable();
             m_animation.SetAnimation(0, m_info.disappearAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.disappearAnimation);
+        }
+
+        private IEnumerator AppearRoutine()
+        {
+            m_animation.SetAnimation(0, m_info.appearAnimation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.appearAnimation);
+            m_hitbox.Enable();
+        }
+
+        private IEnumerator TeleportToDestination(Vector3 destination)
+        {
+            m_stateHandle.Wait(State.ReevaluateSituation);
+
+            yield return DisappearRoutine();
             yield return new WaitForSeconds(m_currentPhaseInfo.teleportReappearanceDelay);
             transform.position = destination;
             yield return null;
@@ -427,9 +434,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_turnHandle.ForceTurnImmidiately();
             }
 
-            m_animation.SetAnimation(0, m_info.appearAnimation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.appearAnimation);
-            m_hitbox.Enable();
+            yield return AppearRoutine();
             yield return null;
             m_stateHandle.ApplyQueuedState();
         }
@@ -441,18 +446,12 @@ namespace DChild.Gameplay.Characters.Enemies
             m_stateHandle.ApplyQueuedState();
         }
 
-        private IEnumerator SpikeBombRoutine()
-        {
-            yield return IdleFloatRoutine(1f);
-        }
-
         #region Attacks Modules
 
         private IEnumerator RainProjectileRoutine(Bounds bounds)
         {
-            m_animation.SetAnimation(0, m_info.rainProjectileAnticipationAnimation, false);
-            m_animation.AddAnimation(0, m_info.rainProjectileAttackAnimation, false, 0);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.rainProjectileAttackAnimation);
+            m_animation.SetAnimation(0, m_info.rainProjectileAttackAnimation.animation, false, 0);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.rainProjectileAttackAnimation.animation);
             yield return IdleFloatRoutine(0.1f);
             m_rainProjectileHandle.SpawnProjectiles(m_info.crimsonProjectile.projectile, bounds, m_info.rainProjectileSpawnCount);
             yield return new WaitForSeconds(m_info.rainProjectileDropDelay);
@@ -479,14 +478,19 @@ namespace DChild.Gameplay.Characters.Enemies
             m_encircledProjectileHandle.ScatterProjectiles(m_info.crimsonProjectile.speed);
         }
 
+        private IEnumerator SummonMultipleFleshSpikesRoutine(PuedisYnnusMultipleSpikeHandle spikeHandle)
+        {
+            var summonAnimation = m_animation.SetAnimation(0, m_info.multipleSpikeSummonAnimation, false);
+            yield return new WaitForSpineAnimationComplete(summonAnimation, true);
+            spikeHandle.Grow();
+            yield return IdleFloatRoutine(0.1f);
+        }
+
         private IEnumerator MultipleFleshSpikesRoutine()
         {
             for (int i = 0; i < m_multipleSpikes.Length; i++)
             {
-                var summonAnimation = m_animation.SetAnimation(0, m_info.multipleSpikeSummonAnimation, false);
-                yield return new WaitForSpineAnimationComplete(summonAnimation, true);
-                m_multipleSpikes[i].Grow();
-                yield return IdleFloatRoutine(0.1f);
+                yield return SummonMultipleFleshSpikesRoutine(m_multipleSpikes[i]);
             }
             yield return null;
         }
@@ -497,23 +501,53 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return RainProjectileRoutine(m_rainProjectilePatterns[index].bounds);
         }
 
-        private void LaunchFleshBomb()
-        {
-            if (!IsFacingTarget())
-                CustomTurn();
-
-            m_fleshBombProjectileLauncher.AimAt(m_targetInfo.position);
-            m_fleshBombProjectileLauncher.LaunchProjectile();
-        }
-
         private IEnumerator FleshBombRoutine()
         {
-            m_animation.SetAnimation(0, m_info.staffSpinFleshBombProjectile.animation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.staffSpinFleshBombProjectile.animation);
+            m_animation.SetAnimation(0, m_info.fleshBombAttackAnimation.animation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.fleshBombAttackAnimation.animation);
+            //Spawn The Flesh Bomb
+            yield return m_fleshBomb.BeSummoned();
+            yield return m_fleshBomb.ExplodeRoutine();
+            yield return IdleFloatRoutine(0.1f);
+        }
 
-            m_attackDecider.hasDecidedOnAttack = false;
-            m_stateHandle.ApplyQueuedState();
-            yield return null;
+        private IEnumerator IllusionSpikeRoutine()
+        {
+            yield return DisappearRoutine();
+
+            for (int i = 0; i < m_illusionPlatforms.Length; i++)
+            {
+                m_illusionPlatforms[i].Show();
+            }
+
+            yield return new WaitForSeconds(2f);
+
+            transform.position = m_illusionPlatformCastPosition.position;
+            yield return AppearRoutine();
+            yield return IdleFloatRoutine(1f);
+        }
+
+        private IEnumerator PatternedMassiveSpikeRoutine()
+        {
+            yield return m_sequenceMassiveSpike.ExecuteSequence();
+        }
+
+        private IEnumerator DamageCheckRoutine(float duration)
+        {
+            m_wasHitDuringDamageChecks = false;
+            m_damageable.DamageTaken += OnDamageTakenDuringDamageCheck;
+            var timer = 0f;
+            do
+            {
+                yield return null;
+                timer += GameplaySystem.time.deltaTime;
+            } while (timer < duration && m_wasHitDuringDamageChecks == false);
+            m_damageable.DamageTaken -= OnDamageTakenDuringDamageCheck;
+        }
+
+        private void OnDamageTakenDuringDamageCheck(object sender, Damageable.DamageEventArgs eventArgs)
+        {
+            m_wasHitDuringDamageChecks = true;
         }
         #endregion
 
@@ -558,8 +592,7 @@ namespace DChild.Gameplay.Characters.Enemies
             var patternIndex = UnityEngine.Random.Range(0, m_massiveSpikePattern.Length);
             var chosenPattern = m_massiveSpikePattern[patternIndex];
 
-            m_animation.SetAnimation(0, m_info.massiveSpikeAnticipationAnimation, false);
-            m_animation.AddAnimation(0, m_info.massiveSpikeAttackAnimation, false, 0);
+            m_animation.SetAnimation(0, m_info.massiveSpikeAttackAnimation.animation, false, 0);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.massiveSpikeAttackAnimation);
             yield return IdleFloatRoutine(0.1f);
             chosenPattern.Grow();
@@ -588,13 +621,52 @@ namespace DChild.Gameplay.Characters.Enemies
 
             yield return IdleFloatRoutine(m_currentPhaseInfo.idleAfterAttackDuration);
 
-            yield return SpikeBombRoutine();
+            yield return FleshBombRoutine();
+
+            yield return IdleFloatRoutine(1f);
 
             for (int i = 0; i < m_multipleSpikes.Length; i++)
             {
                 m_multipleSpikes[i].Disappear();
             }
 
+            m_attackDecider.hasDecidedOnAttack = false;
+            m_stateHandle.ApplyQueuedState();
+        }
+
+        private IEnumerator IllusionSpikesToOtherAttacksCombo()
+        {
+            m_stateHandle.Wait(State.ReevaluateSituation);
+            yield return IllusionSpikeRoutine();
+
+            yield return DamageCheckRoutine(m_info.damageCheckDuration);
+
+            if (m_wasHitDuringDamageChecks)
+            {
+                var flinchAnimation = m_animation.SetAnimation(0, m_info.flinchAnimation, false);
+                yield return new WaitForSpineAnimationComplete(flinchAnimation);
+                yield return PatternedMassiveSpikeRoutine();
+                yield return IdleFloatRoutine(1f);
+            }
+
+            yield return SummonMultipleFleshSpikesRoutine(m_bottomMultipleSpike);
+
+            var startTime = Time.time;
+            float timeDifferenceSinceStart = 0;
+            do
+            {
+                yield return FloatToDestinationRoutine(GetRandomMajorFlightArea());
+                timeDifferenceSinceStart = Time.time - startTime;
+            } while (timeDifferenceSinceStart <= m_info.floatTimeCheckDuration);
+            yield return IdleFloatRoutine(0.1f);
+
+            m_bottomMultipleSpike.Disappear();
+
+            for (int i = 0; i < m_illusionPlatforms.Length; i++)
+            {
+                m_illusionPlatforms[i].Hide();
+            }
+            m_attackDecider.hasDecidedOnAttack = false;
             m_stateHandle.ApplyQueuedState();
         }
 
@@ -615,9 +687,20 @@ namespace DChild.Gameplay.Characters.Enemies
             switch (m_phaseHandle.currentPhase)
             {
                 case Phase.PhaseOne:
-                    m_attackDecider.SetList(new AttackInfo<Attack>(Attack.TEST, 0));
+                    m_attackDecider.SetList(new AttackInfo<Attack>(Attack.RainProjectiles, 0),
+                                            new AttackInfo<Attack>(Attack.MassiveFleshSpikes, 0),
+                                             new AttackInfo<Attack>(Attack.SummonAndScatterProjectiles, 0));
                     break;
                 case Phase.PhaseTwo:
+                    m_attackDecider.SetList(new AttackInfo<Attack>(Attack.RainProjectiles, 0),
+                                            new AttackInfo<Attack>(Attack.MassiveFleshSpikes, 0),
+                                            new AttackInfo<Attack>(Attack.SummonAndScatterProjectiles, 0));
+                    break;
+                case Phase.PhaseThree:
+                    m_attackDecider.SetList(new AttackInfo<Attack>(Attack.RainProjectiles, 0),
+                                            new AttackInfo<Attack>(Attack.MassiveFleshSpikes, 0),
+                                            new AttackInfo<Attack>(Attack.SummonAndScatterProjectiles, 0),
+                                            new AttackInfo<Attack>(Attack.MultipleSpikeToOtherAttacksCombo, 0));
                     break;
                 case Phase.Wait:
                     break;
@@ -701,6 +784,9 @@ namespace DChild.Gameplay.Characters.Enemies
                         case Attack.MultipleSpikeToOtherAttacksCombo:
                             StartCoroutine(MultipleSpikeToOtherAttacksCombo());
                             break;
+                        case Attack.IllusionSpikeToOtherAttacksCombo:
+                            StartCoroutine(IllusionSpikesToOtherAttacksCombo());
+                            break;
                         default:
                             StartCoroutine(TeleportCountTEST());
                             break;
@@ -715,11 +801,24 @@ namespace DChild.Gameplay.Characters.Enemies
                         m_teleportCounter = 0;
                         StartCoroutine(TeleportToDestination(GetRandomMajorFlightArea()));
                     }
-                    else if (/*m_phaseHandle.currentPhase != Phase.PhaseOne &&*/ m_attackCounter > m_currentPhaseInfo.atttackCountThreshold)
+                    else if (m_phaseHandle.currentPhase != Phase.PhaseOne && m_attackCounter > m_currentPhaseInfo.atttackCountThreshold)
                     {
                         m_attackCounter = 0;
                         m_stateHandle.SetState(State.Attacking);
-                        m_attackDecider.DecideOnAttack(Attack.MultipleSpikeToOtherAttacksCombo);
+
+                        switch (m_phaseHandle.currentPhase)
+                        {
+                            case Phase.PhaseTwo:
+                                m_attackDecider.DecideOnAttack(Attack.MultipleSpikeToOtherAttacksCombo);
+                                break;
+                            case Phase.PhaseThree:
+                                m_attackDecider.DecideOnAttack(Attack.IllusionSpikeToOtherAttacksCombo);
+                                break;
+                            default:
+                                //For Testing ATM
+                                m_attackDecider.DecideOnAttack(Attack.IllusionSpikeToOtherAttacksCombo);
+                                break;
+                        }
                     }
                     else
                     {

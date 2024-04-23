@@ -42,6 +42,9 @@ namespace DChild.Gameplay.Characters.Enemies
             for (int i = 0; i < m_spawnedProjectiles.Count; i++)
             {
                 var instance = m_spawnedProjectiles[i];
+                if (instance == null)
+                    continue;
+
                 instance.transform.parent = null;
                 instance.GetComponent<Rigidbody2D>().velocity = instance.transform.right * speed;
             }

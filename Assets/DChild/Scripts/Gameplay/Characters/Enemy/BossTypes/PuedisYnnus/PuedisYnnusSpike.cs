@@ -2,6 +2,7 @@
 using UnityEngine;
 using Spine.Unity;
 using System.Collections.Generic;
+using Sirenix.OdinInspector;
 
 namespace DChild.Gameplay.Characters.Enemies
 {
@@ -24,8 +25,9 @@ namespace DChild.Gameplay.Characters.Enemies
         public void Grow()
         {
             gameObject.SetActive(true);
-            RandomizeSkin();
-            m_animation.SetAnimation(0, m_growAnimation, false);
+           // RandomizeSkin();
+            var animation = m_animation.SetAnimation(0, m_growAnimation, false);
+            animation.MixDuration = 0;
             m_collider.enabled = true;
         }
 
@@ -35,6 +37,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_collider.enabled = false;
         }
 
+        [Button]
         private void RandomizeSkin()
         {
             var chosenVariationIndex = UnityEngine.Random.Range(0, m_variations.Count);

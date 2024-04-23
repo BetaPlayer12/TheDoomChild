@@ -3,7 +3,6 @@
 namespace DChild.Gameplay.Characters.Enemies
 {
 
-
     public class PuedisYnnusMassiveSpikePattern : MonoBehaviour
     {
         [SerializeField]
