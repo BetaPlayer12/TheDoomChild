@@ -41,6 +41,17 @@ namespace DChild.Gameplay.Characters.AI
 #endif
         }
 
+        public void SetPhase(T phase)
+        {
+            m_currentPhase = phase;
+            m_willTransistion = true;
+            if (allowPhaseChange)
+            {
+                ChangeState();
+                m_isTransistioning = true;
+            }
+        }
+
         public void MonitorPhase()
         {
 #if UNITY_EDITOR
@@ -52,13 +63,7 @@ namespace DChild.Gameplay.Characters.AI
                     var phase = m_conditionHandle.GetProposedPhase();
                     if (m_currentPhase.Equals(phase) == false)
                     {
-                        m_currentPhase = phase;
-                        m_willTransistion = true;
-                        if (allowPhaseChange)
-                        {
-                            ChangeState();
-                            m_isTransistioning = true;
-                        }
+                        SetPhase(phase);
                     }
                 }
                 else if (m_isTransistioning == false && allowPhaseChange)

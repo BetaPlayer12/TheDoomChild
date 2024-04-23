@@ -115,12 +115,17 @@ namespace DChild.Gameplay.Characters.Enemies
         private RaySensor m_selfSensor;
         [SerializeField, TabGroup("FX")]
         private ParticleFX m_healFX;
+        [SerializeField, TabGroup("PlaceHolder")]
+        private GameObject PlaceholderShake;
 
+        [SerializeField]
+        private float m_lifeTime;
         [SerializeField]
         private float m_rotateSpeed;
         [SerializeField]
         private Transform m_master;
         private float m_targetDistance;
+        
 
         [ShowInInspector]
         private StateHandle<State> m_stateHandle;
@@ -131,19 +136,23 @@ namespace DChild.Gameplay.Characters.Enemies
         private float m_currentMoveSpeed;
         private float m_currentFullCD;
         private float m_currentScale;
-
+        private float m_timeAlive; //
+        private bool m_isAlive;
         #region Animation
         private string m_crawlAnimation;
         #endregion
 
         //private void OnTurnRequest(object sender, EventActionArgs eventArgs) => m_stateHandle.SetState(State.Turning);
+        public void SetMaster(Transform master)
+        {
+            m_master = master;
+        }
 
-
-        public void SummonAt(Vector2 position, AITargetInfo target)
+        public void SummonAt(Vector2 position,AITargetInfo target)
         {
             enabled = false;
-            m_targetInfo = target;
-            transform.position = new Vector2(m_master.position.x, m_master.position.y + 15f);
+            //m_targetInfo = target;
+            //transform.position = new Vector2(m_master.position.x, m_master.position.y + 15f);
             //m_character.physics.simulateGravity = false;
             m_flinchHandle.gameObject.SetActive(true);
             m_health.SetHealthPercentage(1f);
@@ -154,6 +163,57 @@ namespace DChild.Gameplay.Characters.Enemies
             m_groundSensor.Cast();
             Awake();
             StartCoroutine(FlightRoutine());
+            //StartCoroutine(StartToFallRoutine());
+            enabled = true;
+        }
+
+        public void StartFall()
+        {
+            
+            //m_targetInfo = target;
+            //transform.position = new Vector2(m_master.position.x, m_master.position.y + 15f);
+            //m_character.physics.simulateGravity = false;
+            m_flinchHandle.gameObject.SetActive(true);
+            m_health.SetHealthPercentage(1f);
+            m_hitbox.Enable();
+            this.gameObject.SetActive(true);
+            this.transform.SetParent(null);
+            m_rigidbody2D.velocity = Vector2.zero;
+            m_groundSensor.Cast();
+            //StartCoroutine(FlightRoutine());
+            StartCoroutine(StartToFallRoutine());
+            
+        }
+
+        public void ResetPosition(Vector2 position)
+        {
+            transform.position = new Vector2(position.x, position.y);
+        }
+        public IEnumerator ShakeAnimRoutine()
+        {
+            if(!m_isAlive)
+            {
+                PlaceholderShake.SetActive(true);
+                yield return new WaitForSeconds(0.75f);
+                PlaceholderShake.SetActive(false);
+            }
+            yield return null;
+        }
+
+        public void StayDormant(float Randomtime)
+        {
+            //can call the growth stage here
+            enabled = false;
+            m_isAlive = false;
+            this.gameObject.SetActive(true);
+            this.transform.SetParent(null);
+            m_rigidbody2D.simulated = false;
+            m_rigidbody2D.velocity = Vector2.zero;
+            m_isAlive = false;
+            m_hitbox.Disable();
+            //if the growth animation is made, wait first for it to finish and then mess with this timescale for the pulsing
+            m_animation.animationState.TimeScale = Randomtime;
+            Awake();
             enabled = true;
         }
 
@@ -213,8 +273,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator FlinchMixRoutine()
         {
-            var flinchAnim = m_targetInfo.position.x < transform.position.x ? m_info.flinchRightAnimation : m_info.flinchLeftAnimation;
-            m_animation.SetAnimation(1, flinchAnim, false, 0).MixBlend = MixBlend.First;
+            //var flinchAnim = m_targetInfo.position.x < transform.position.x ? m_info.flinchRightAnimation : m_info.flinchLeftAnimation;
+            m_animation.SetAnimation(1, m_info.flinchRightAnimation, false, 0).MixBlend = MixBlend.First;
             m_animation.AddEmptyAnimation(1, 1, 0).Alpha = 0f;
             m_animation.animationState.GetCurrent(1).Alpha = 1f;
             m_animation.animationState.GetCurrent(1).MixDuration = 1;
@@ -231,6 +291,33 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_animation.SetAnimation(0, m_info.idleAnimation, true);
                 m_stateHandle.OverrideState(State.ReevaluateSituation);
             }
+        }
+        public IEnumerator StartToFallRoutine()
+        {
+            PlaceholderShake.SetActive(true);
+            yield return new WaitForSeconds(0.75f);
+            PlaceholderShake.SetActive(false);
+            m_animation.animationState.TimeScale = 1f;
+            m_rigidbody2D.simulated = true;
+            m_stateHandle.Wait(State.Crawl);
+            m_animation.SetAnimation(0, m_info.fallAnimation, true);
+            while (!m_groundSensor.isDetecting /*&& !m_cielingSensor.isDetecting*/)
+            {
+                var dir = m_rigidbody2D.velocity;
+                var angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+                var q = Quaternion.AngleAxis(angle, Vector3.down);
+                m_model.rotation = Quaternion.RotateTowards(m_model.rotation, q, m_rotateSpeed * Time.deltaTime);
+                yield return null;
+            }
+            m_movement.Stop();
+            m_model.rotation = Quaternion.Euler(Vector3.zero);
+            m_animation.SetAnimation(0, m_info.landAnimation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.landAnimation);
+            m_animation.SetAnimation(0, m_info.idleAnimation, true);
+            m_isAlive = true;
+            m_stateHandle.OverrideState(State.Crawl);
+            m_animation.animationState.TimeScale = UnityEngine.Random.Range(0.75f, 1.25f);
+            yield return null;
         }
 
         private IEnumerator FlightRoutine()
@@ -287,6 +374,8 @@ namespace DChild.Gameplay.Characters.Enemies
             this.gameObject.SetActive(false);
             this.transform.SetParent(m_master);
             this.transform.localPosition = Vector3.zero;
+            m_isAlive = false;
+            m_timeAlive = 0f;
             yield return null;
         }
 
@@ -309,6 +398,16 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void Update()
         {
+            if(m_isAlive)
+            {
+                if(m_lifeTime>m_timeAlive)
+                {
+                    m_timeAlive += GameplaySystem.time.deltaTime;
+                }else
+                {
+                    Explode();
+                }
+            }
             switch (m_stateHandle.currentState)
             {
                 case State.Idle:
