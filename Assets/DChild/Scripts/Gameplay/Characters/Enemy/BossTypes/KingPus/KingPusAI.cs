@@ -658,7 +658,6 @@ namespace DChild.Gameplay.Characters.Enemies
         #endregion
         private bool m_isDetecting;
 
-
         public event EventAction<EventActionArgs> BodySlamDone;
         public event EventAction<EventActionArgs> WreckingBallDone;
         public event EventAction<EventActionArgs> PhaseChangeStart;
@@ -1822,8 +1821,9 @@ namespace DChild.Gameplay.Characters.Enemies
             m_patternCooldown[chosenCD] = fullCooldownTime;
             yield return null;
         }
-        #endregion 
+        #endregion
 
+        #region Working Stuff I Probably don't need to touch and don't completely understand 
         public override void SetTarget(IDamageable damageable, Character m_target = null)
         {
             if (damageable != null)
@@ -2222,53 +2222,6 @@ namespace DChild.Gameplay.Characters.Enemies
             //yield return null;
         }
 
-        protected override void Awake()
-        {
-            base.Awake();
-            m_damageable.DamageTaken += OnDamageTaken;
-            m_flinchRighthHandle.FlinchStart += OnFlinchStart;
-            m_flinchLeftHandle.FlinchStart += OnFlinchStart;
-            m_flinchRighthHandle.FlinchEnd += OnFlinchEnd;
-            m_flinchLeftHandle.FlinchEnd += OnFlinchEnd;
-            m_health = GetComponentInChildren<Health>();
-            m_attackDecider = new RandomAttackDecider<Attack>();
-            m_stateHandle = new StateHandle<State>(State.Idle, State.WaitBehaviourEnd);
-            UpdateAttackDeciderList();
-            m_attackCache = new List<Attack>();
-            AddToAttackCache(Attack.Phase1Pattern1, Attack.Phase1Pattern2, Attack.Phase1Pattern3, Attack.Phase1Pattern4);
-            m_attackRangeCache = new List<float>();
-            AddToRangeCache(m_info.phase1Pattern1Range, m_info.phase1Pattern2Range, m_info.phase1Pattern3Range, m_info.phase1Pattern4Range);
-            m_attackUsed = new bool[m_attackCache.Count];
-            m_currentFullCooldown = new List<float>();
-            m_patternCooldown = new List<float>();
-        }
-
-        protected override void Start()
-        {
-            base.Start();
-            m_animation.DisableRootMotion();
-            m_phaseHandle = new PhaseHandle<Phase, PhaseInfo>();
-            m_phaseHandle.Initialize(Phase.PhaseOne, m_info.phaseInfo, m_character, ChangeState, ApplyPhaseData);
-            m_phaseHandle.ApplyChange();
-            m_spineListener.Subscribe(m_info.singleShotEvent, LaunchSingleProjectile);
-            m_spineListener.Subscribe(m_info.multiShotEvent, LaunchMultiProjectile);
-            m_spineListener.Subscribe(m_info.moveEvent, EventMove);
-            m_spineListener.Subscribe(m_info.stopEvent, EventStop);
-            m_crawlFX.Play();
-            for (int i = 0; i < m_chains.Count; i++)
-            {
-                m_chains[i].gameObject.SetActive(false);
-                m_chains[i].transform.localPosition = Vector2.zero;
-            }
-            m_defaultTentacleOverridePointPositions = new List<Vector2>();
-            for (int i = 0; i < m_tentacleOverridePoints.Count; i++)
-            {
-                m_defaultTentacleOverridePointPositions.Add(m_tentacleOverridePoints[i].position);
-            }
-
-            m_kingPusDamageable.PhaseChangeTime += OnChangePhaseTime;
-        }
-
         public void AimAt(Vector2 target)
         {
             Vector3 v_diff = (target - (Vector2)m_targetLooker.position);
@@ -2301,6 +2254,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 }
             }
         }
+        #endregion
 
         private void Update()
         {
@@ -2510,6 +2464,53 @@ namespace DChild.Gameplay.Characters.Enemies
                 case State.WaitBehaviourEnd:
                     return;
             }
+        }
+
+        protected override void Awake()
+        {
+            base.Awake();
+            m_damageable.DamageTaken += OnDamageTaken;
+            m_flinchRighthHandle.FlinchStart += OnFlinchStart;
+            m_flinchLeftHandle.FlinchStart += OnFlinchStart;
+            m_flinchRighthHandle.FlinchEnd += OnFlinchEnd;
+            m_flinchLeftHandle.FlinchEnd += OnFlinchEnd;
+            m_health = GetComponentInChildren<Health>();
+            m_attackDecider = new RandomAttackDecider<Attack>();
+            m_stateHandle = new StateHandle<State>(State.Idle, State.WaitBehaviourEnd);
+            UpdateAttackDeciderList();
+            m_attackCache = new List<Attack>();
+            AddToAttackCache(Attack.Phase1Pattern1, Attack.Phase1Pattern2, Attack.Phase1Pattern3, Attack.Phase1Pattern4);
+            m_attackRangeCache = new List<float>();
+            AddToRangeCache(m_info.phase1Pattern1Range, m_info.phase1Pattern2Range, m_info.phase1Pattern3Range, m_info.phase1Pattern4Range);
+            m_attackUsed = new bool[m_attackCache.Count];
+            m_currentFullCooldown = new List<float>();
+            m_patternCooldown = new List<float>();
+        }
+
+        protected override void Start()
+        {
+            base.Start();
+            m_animation.DisableRootMotion();
+            m_phaseHandle = new PhaseHandle<Phase, PhaseInfo>();
+            m_phaseHandle.Initialize(Phase.PhaseOne, m_info.phaseInfo, m_character, ChangeState, ApplyPhaseData);
+            m_phaseHandle.ApplyChange();
+            m_spineListener.Subscribe(m_info.singleShotEvent, LaunchSingleProjectile);
+            m_spineListener.Subscribe(m_info.multiShotEvent, LaunchMultiProjectile);
+            m_spineListener.Subscribe(m_info.moveEvent, EventMove);
+            m_spineListener.Subscribe(m_info.stopEvent, EventStop);
+            m_crawlFX.Play();
+            for (int i = 0; i < m_chains.Count; i++)
+            {
+                m_chains[i].gameObject.SetActive(false);
+                m_chains[i].transform.localPosition = Vector2.zero;
+            }
+            m_defaultTentacleOverridePointPositions = new List<Vector2>();
+            for (int i = 0; i < m_tentacleOverridePoints.Count; i++)
+            {
+                m_defaultTentacleOverridePointPositions.Add(m_tentacleOverridePoints[i].position);
+            }
+
+            m_kingPusDamageable.PhaseChangeTime += OnChangePhaseTime;
         }
 
         protected override void OnTargetDisappeared()
