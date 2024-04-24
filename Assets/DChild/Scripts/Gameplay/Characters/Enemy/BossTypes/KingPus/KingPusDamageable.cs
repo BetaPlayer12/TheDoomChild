@@ -32,7 +32,7 @@ namespace DChild.Gameplay.Combat
         private void Start()
         {
             PhaseChangeTime += OnChangePhase;
-            m_kingPusUIHandle.HideHealthUI += OnHealthHide;
+            //m_kingPusUIHandle.HideHealthUI += OnHealthHide;
             m_currentPhase = Phase.PhaseOne;
         }
 
@@ -49,7 +49,7 @@ namespace DChild.Gameplay.Combat
 
         private void RestoreHPForPhaseChange()
         {
-            Heal(1000);
+            Heal(9999);
         }
 
         private IEnumerator DelayBeforeHeal(float delay)
@@ -76,6 +76,10 @@ namespace DChild.Gameplay.Combat
                 {
                     Debug.Log("Phase Change Time!");
                     PhaseChangeTime?.Invoke(this, new EventActionArgs());
+                    if(m_kingPusUIHandle == null)
+                    {
+                        RestoreHPForPhaseChange();
+                    }
                 }
             }
         }
