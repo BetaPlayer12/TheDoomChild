@@ -304,6 +304,7 @@ namespace DChild.Gameplay.Characters.Enemies
             RunAttack,
             ShockRampage,
             WaitAttackEnd,
+            LeapAttack
         }
 
         public enum Phase
@@ -423,6 +424,7 @@ namespace DChild.Gameplay.Characters.Enemies
         //private bool m_hasPhaseChanged;
         private Coroutine m_currentAttackCoroutine;
         private Coroutine m_leapRoutine;
+        private int m_attackSpecialAttackLimit;
 
         private bool m_isDetecting;
 
@@ -523,6 +525,20 @@ namespace DChild.Gameplay.Characters.Enemies
         {
 
             yield return new WaitWhile(() => !m_phaseHandle.allowPhaseChange);
+            switch(m_phaseHandle.currentPhase)
+            {
+                case Phase.PhaseOne:
+                    break;
+
+                case Phase.PhaseTwo:
+                    m_attackCache.Add(Attack.LeapAttack);
+                    m_attackSpecialAttackLimit = 10;
+                    break;
+
+                case Phase.PhaseThree:
+                    m_attackSpecialAttackLimit = 12;
+                    break;
+            }
             StopCurrentAttackRoutine();
             SetAIToPhasing();
             yield return null;
@@ -623,12 +639,15 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.DisableRootMotion();
             m_targetInfo.transform.GetComponent<Damageable>().DamageTaken -= PlayerTakenDamge;//
 
-            if (m_playerIsHitFromPunchCombo&&m_phaseHandle.currentPhase==Phase.PhaseOne)
+            if (m_playerIsHitFromPunchCombo)
             {
                 m_playerIsHitFromPunchCombo = false;
-                m_attackCount++;
-                m_currentAttackCoroutine = StartCoroutine(ShoulderBashRoutine());
-                yield return null;
+                if (m_phaseHandle.currentPhase == Phase.PhaseOne)
+                {
+                    m_attackCount++;
+                    m_currentAttackCoroutine = StartCoroutine(ShoulderBashRoutine());
+                    yield return null;
+                }
             }else
             {
                 if(m_isBuffed)
@@ -726,7 +745,7 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return new WaitForSeconds(.65f);
             m_fistRefPoint.GetComponent<CircleCollider2D>().enabled = true;
             m_fistPoint.position = m_wristPoint.position;
-            m_animation.SetAnimation(0, m_info.hookTravelLoopAnimation, true);
+            m_animation.SetAnimation(0, m_info.hookTravelLoopAnimation, false);
             while (Vector2.Distance(m_fistPoint.position, m_wallPosPoint.position) > 3f)
             {
                 m_fistPoint.position = Vector2.MoveTowards(m_fistPoint.position, m_wallPosPoint.position, 5);
@@ -916,6 +935,23 @@ namespace DChild.Gameplay.Characters.Enemies
             }
             m_stateHandle.OverrideState(State.Chasing);
             m_phaseHandle.allowPhaseChange = true;
+            yield return null;
+        }
+
+        private IEnumerator PhaseDischarge()
+        {
+            m_stateHandle.Wait(State.ReevaluateSituation);
+            //m_hitbox.SetInvulnerability(Invulnerability.None);
+            //m_hasPhaseChanged = false;
+            m_animation.SetAnimation(0, m_info.roarAnimation, false).MixDuration = 0;
+            //yield return new WaitForSeconds(3.9f);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.roarAnimation);
+            m_isBuffed = true;
+            m_attackCount = 0f;
+            m_hitbox.SetInvulnerability(Invulnerability.None);
+            StartCoroutine(StickToGroundRoutine(GroundPosition().y));
+            //yield return StartCoroutine(LeapAttackRoutine(3));
+            m_stateHandle.ApplyQueuedState();
             yield return null;
         }
 
@@ -1120,7 +1156,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private void ExecuteAttack(int patternIndex)
         {
             /* if (m_attackCount < m_patternCount[patternIndex])*/
-            if (m_attackCount < 5)
+            if (m_attackCount < m_attackSpecialAttackLimit)
             {
                 ChooseAttack(patternIndex);
                 if (IsTargetInRange(m_currentAttackRange))
@@ -1225,6 +1261,23 @@ namespace DChild.Gameplay.Characters.Enemies
                                 }
                             }
                             break;
+                        case Attack.LeapAttack:
+                            if(m_phaseHandle.currentPhase != Phase.PhaseOne)
+                            {
+                                if (IsTargetInRange(m_info.leapAttack.range))
+                                {
+                                    var leapCount = 3;
+                                m_stateHandle.Wait(State.Chasing);
+                                StartCoroutine(StickToGroundRoutine(GroundPosition().y));
+                                m_currentAttackCoroutine = StartCoroutine(LeapAttackRoutine(leapCount));
+                                m_leapRoutine = m_currentAttackCoroutine;
+                                }
+                                else
+                                {
+                                    MoveToTarget(m_info.leapAttack.range);
+                                }
+                            }
+                            break;
                     }
                 }
                 else
@@ -1242,22 +1295,32 @@ namespace DChild.Gameplay.Characters.Enemies
                         return;
                     }
 
-                    if (IsTargetInRange(m_info.leapAttack.range))
+                    switch(m_phaseHandle.currentPhase)
                     {
-                        if(m_phaseHandle.currentPhase!=Phase.PhaseOne)
-                        {
-                            m_attackCount = 0; // temporary implementation, needs to be changed for phase 2
-                        }
-                        var leapCount = 3;
-                        m_stateHandle.Wait(State.Chasing);
-                        StartCoroutine(StickToGroundRoutine(GroundPosition().y));
-                        m_currentAttackCoroutine = StartCoroutine(LeapAttackRoutine(leapCount));
-                        m_leapRoutine = m_currentAttackCoroutine;
+                        case Phase.PhaseOne:
+                            if (IsTargetInRange(m_info.leapAttack.range))
+                            {
+                                var leapCount = 3;
+                                m_stateHandle.Wait(State.Chasing);
+                                StartCoroutine(StickToGroundRoutine(GroundPosition().y));
+                                m_currentAttackCoroutine = StartCoroutine(LeapAttackRoutine(leapCount));
+                                m_leapRoutine = m_currentAttackCoroutine;
+                            }
+                            else
+                            {
+                                MoveToTarget(m_info.leapAttack.range);
+                            }
+                            break;
+
+                        case Phase.PhaseTwo:
+                            StartCoroutine(PhaseDischarge());
+                            break;
+
+                        case Phase.PhaseThree:
+                            StartCoroutine(PhaseDischarge());
+                            break;
                     }
-                    else
-                    {
-                        MoveToTarget(m_info.leapAttack.range);
-                    }
+                    
                 }
                 else if (patternIndex == 2)
                 {
@@ -1371,6 +1434,8 @@ namespace DChild.Gameplay.Characters.Enemies
             m_phaseHandle.ApplyChange();
 
             m_fistRefPoint.GetComponent<CircleCollider2D>().enabled = false;
+
+            m_attackSpecialAttackLimit = 5;
             //StartCoroutine(StartAnimationRoutine());
             //Hack Fix for quests
         }
