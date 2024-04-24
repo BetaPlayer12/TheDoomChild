@@ -39,9 +39,9 @@ public class DragonsBreathFireController : MonoBehaviour
     private float m_fadeDelayDuration;
 
     [SerializeField]
-    private bool m_leftFireBreath = true;
+    public bool m_leftFireBreath = true;
     [SerializeField]
-    private bool m_isFireRoutineDone;
+    public bool m_isFireRoutineDone;
   
     public void StartDragonsRoutine()
     {
@@ -78,19 +78,43 @@ public class DragonsBreathFireController : MonoBehaviour
         }
    
     }
-    private IEnumerator DragonsBreathFireTrailRoutine()
+    public IEnumerator DragonsBreathFireTrailRoutine()
     {
         m_isFireRoutineDone = false;
         yield return new WaitForSeconds(m_fireTrailDuration);
         TriggerFade();
         m_leftCollider.SetActive(false);
         m_rightCollider.SetActive(false);
+        yield return new WaitForSeconds(1f);
+        //SetActiveDragonTrail(false);
+        DragonBreathTrailAnimatorStateChecker();
         m_isFireRoutineDone = true;
     }
     public void TriggerFade()
     {
         m_dragonsBreathAnimatorFxSide1.SetTrigger("StartFade");
         m_dragonsBreathAnimatorFxSide2.SetTrigger("StartFade");
+    }
+    public void DragonBreathTrailAnimatorStateChecker()
+    {
+        var sideTrail1Activated = m_dragonsBreathAnimatorFxSide1.GetCurrentAnimatorStateInfo(0);
+        var sideTrail2Activated = m_dragonsBreathAnimatorFxSide2.GetCurrentAnimatorStateInfo(0);
+        if (sideTrail1Activated.IsName("DemonLord_FireTrailGrounded_Side1") == true)
+        {
+            m_dragonsBreathAnimatorFxSide1.SetTrigger("StartFade");
+        }
+        
+        if(sideTrail2Activated.IsName("DemonLord_FireTrailGrounded_Side2") == true)
+        {
+            m_dragonsBreathAnimatorFxSide2.SetTrigger("StartFade");
+        }
+       
+        
+    }
+    public void RemoveDamageCollider()
+    {
+        m_leftCollider.SetActive(false);
+        m_rightCollider.SetActive(false);
     }
     private IEnumerator DragonsBreathControllerRoutine()
     {
@@ -114,6 +138,11 @@ public class DragonsBreathFireController : MonoBehaviour
          }
  
         yield return null;
+    }
+
+    private void Start()
+    {
+        this.gameObject.SetActive(false);
     }
 
 }

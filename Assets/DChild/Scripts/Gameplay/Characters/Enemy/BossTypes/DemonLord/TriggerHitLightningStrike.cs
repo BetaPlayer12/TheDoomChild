@@ -7,13 +7,13 @@ using UnityEngine;
 public class TriggerHitLightningStrike : MonoBehaviour
 {
     [SerializeField]
-    private DemonLordAI m_demonLord;
+    public bool m_isPlayerHit;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-       if(collision.gameObject.layer == 8)
+       if(collision.gameObject.layer == 8 )
         {
-            m_demonLord.m_isPlayerHit = true;
+            m_isPlayerHit = true;
             Debug.Log("MEEMMEMEMEMEME");
         }
     }
@@ -22,11 +22,5 @@ public class TriggerHitLightningStrike : MonoBehaviour
     {
         
     }
-    private void Awake()
-    {
-
-
-       
-
-    }
+   
 }

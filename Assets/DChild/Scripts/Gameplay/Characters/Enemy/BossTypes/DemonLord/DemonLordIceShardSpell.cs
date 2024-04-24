@@ -2,6 +2,7 @@
 using System.Collections;
 using DChild.Gameplay.Pooling;
 using DChild.Gameplay.Projectiles;
+using System.Collections.Generic;
 
 namespace DChild.Gameplay.Characters.Enemies
 {
@@ -24,24 +25,22 @@ namespace DChild.Gameplay.Characters.Enemies
             transform.position = position;
             transform.rotation = Quaternion.Euler(0, 0, rotation);
             yield return null;
-            Projectile[] projectiles = null;
+            List<Projectile> projectiles = new List<Projectile>();
             yield return SpawnProjectilesInFormationRoutine(projectiles);
             Debug.Log(projectiles.ToString());
             yield return new WaitForSeconds(m_shardDelayedLaunch);
             LaunchProjectiles(projectiles, speed);
         }
 
-        private IEnumerator SpawnProjectilesInFormationRoutine(Projectile[] projectiles)
+        private IEnumerator SpawnProjectilesInFormationRoutine(List<Projectile> projectiles)
         {
             var castDimensionExtent = m_castDimension / 2;
             var centerPosition = transform.position;
 
-            projectiles = new Projectile[4];
-
-            projectiles[0] = SpawnProjectile((transform.right * castDimensionExtent.x), 0);
-            projectiles[1] = SpawnProjectile((transform.up * castDimensionExtent.y), 90);
-            projectiles[2] = SpawnProjectile((-transform.right * castDimensionExtent.x), 180);
-            projectiles[3] = SpawnProjectile((-transform.up * castDimensionExtent.y), 270);
+            projectiles.Add(SpawnProjectile((transform.right * castDimensionExtent.x), 0));
+            projectiles.Add(SpawnProjectile((transform.up * castDimensionExtent.y), 90));
+            projectiles.Add(SpawnProjectile((-transform.right * castDimensionExtent.x), 180));
+            projectiles.Add(SpawnProjectile((-transform.up * castDimensionExtent.y), 270));
 
             yield return null;
         }
@@ -56,12 +55,14 @@ namespace DChild.Gameplay.Characters.Enemies
             return instance.GetComponent<Projectile>();
         }
 
-        private void LaunchProjectiles(Projectile[] projectiles, float speed)
+        private void LaunchProjectiles(List<Projectile> projectiles, float speed)
         {
-            for (int i = 0; i < projectiles.Length; i++)
+            for (int i = 0; i < projectiles.Count; i++)
             {
                 var projectile = projectiles[i];
-                projectile.SetVelocity(projectile.transform.right, speed);
+                var rigidBody = projectile.GetComponent<Rigidbody2D>();
+                rigidBody.velocity = projectile.transform.right * speed;
+                //rigidBody.
             }
         }
 

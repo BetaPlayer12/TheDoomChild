@@ -32,6 +32,10 @@ namespace DChild.Gameplay.Characters.Enemies
             public PhaseInfo<Phase> phaseInfo => m_phaseInfo;
 
             [SerializeField]
+            private List<DemonLordSummonDragon.Pattern[]> m_summonDragonPattern;
+            public List<DemonLordSummonDragon.Pattern[]> summonDragonPattern => m_summonDragonPattern;
+
+            [SerializeField]
             private MovementInfo m_move = new MovementInfo();
             public MovementInfo move => m_move;
             [SerializeField]
@@ -250,6 +254,10 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField, ValueDropdown("GetEvents")]
             private string m_LightningOrbs;
             public string LightningOrbs => m_LightningOrbs;
+
+            [SerializeField, ValueDropdown("GetEvents")]
+            private string m_summonDragonEvent;
+            public string summonDragonEvent => m_summonDragonEvent;
             //[Title("Projectiles")]
             //[SerializeField, BoxGroup("RainProjectiles")]
             //private float m_rainProjectilesDuration;
@@ -316,7 +324,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_lightningStrikeAnticipation.SetData(m_skeletonDataAsset);
                 m_lightningStrikeAttack.SetData(m_skeletonDataAsset);
                 m_flameWaveProjectile.SetData(m_skeletonDataAsset);
-              // m_lightningGroundProjectile.SetData(m_skeletonDataAsset);
+                // m_lightningGroundProjectile.SetData(m_skeletonDataAsset);
                 m_rageAnimation.SetData(m_skeletonDataAsset);
 
                 m_deathAnimation.SetData(m_skeletonDataAsset);
@@ -379,7 +387,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private enum Attack
         {
-            
+
             Phase1Pattern1,
             Phase1Pattern2,
             Phase1Pattern3,
@@ -447,6 +455,9 @@ namespace DChild.Gameplay.Characters.Enemies
         private DemonLordIceShardSpell m_demonLordIceShardSpell;
         [SerializeField, TabGroup("Reference")]
         private DemonLordLightningConstellation m_demonLordLightningConstellation;
+        [SerializeField, TabGroup("Reference")]
+        private DemonLordSummonDragon m_demonLordSummonDragon;
+
 
         [SerializeField, TabGroup("Modules")]
         private AnimatedTurnHandle m_turnHandle;
@@ -566,6 +577,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private int m_spawnPointIndexForTeleportPhase;
         [SerializeField, TabGroup("Values for behaviours")]
         private float m_distanceStoppingToleranceForRayFrost;
+        [SerializeField, TabGroup("Teleport Area Points")]
+        private List<Transform> m_areaForTeleportRoutine;
         private Dictionary<string, List<Transform>> m_listOfSpawnPoints = new Dictionary<string, List<Transform>>();
 
         private Vector2 m_lastTargetPos;
@@ -594,10 +607,10 @@ namespace DChild.Gameplay.Characters.Enemies
 
 
         private string m_chosenPointNameForRayFrost;
- 
+
         private void ApplyPhaseData(PhaseInfo obj)
         {
-         
+
             if (m_patternCooldown.Count != 0)
                 m_patternCooldown.Clear();
             UpdateAttackDeciderList();
@@ -631,6 +644,17 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_lazerBeamCoroutine = null;
             }
             enabled = true;
+            m_damageable.DamageTaken -= DemonLordAI_DamageTaken;
+            m_demonLordSummonDragon.SpellEnd -= SpellEndEventSummonDragon;
+            m_isDemonLordHit = false;
+            m_isSpellDoneSummonDragon = false;
+            m_lightningStrikeCounter = 0;
+            m_isHit = false;
+            //m_fireController.SetActiveDragonTrail(false);
+            m_fireController.DragonBreathTrailAnimatorStateChecker();
+            m_fireController.gameObject.SetActive(false);
+            m_fireController.m_isFireRoutineDone = false;
+            m_fireController.m_leftFireBreath = true;
             StopAllCoroutines();
             UpdateAttackDeciderList();
             m_stateHandle.OverrideState(State.Phasing);
@@ -836,7 +860,6 @@ namespace DChild.Gameplay.Characters.Enemies
         //    m_attackDecider.hasDecidedOnAttack = false;
         //    m_currentAttackCoroutine = null;
         //    m_stateHandle.ApplyQueuedState();
-        //    yield return null;
         //}
 
         //private IEnumerator FlameWaveAttackRoutine()
@@ -904,6 +927,7 @@ namespace DChild.Gameplay.Characters.Enemies
         //    m_stateHandle.ApplyQueuedState();
         //    yield return null;
         //}
+        
         private IEnumerator RayOfFrostRoutine()
         {
             var randIndexForRayOfFrost = UnityEngine.Random.Range(0, 2);
@@ -921,14 +945,39 @@ namespace DChild.Gameplay.Characters.Enemies
             transform.position = chosenPointForRayOfFrost.position;
             m_agent.Stop();
             Debug.Log("Done transfer");
-            if (IsFacingTarget() == false)
+            if(m_chosenPointNameForRayFrost == "Right")
             {
-                m_turnHandle.ExecuteWithAnimationByPass();
+
+                if(m_character.facing == HorizontalDirection.Left)
+                {
+                    m_turnHandle.ExecuteWithAnimationByPass();
+                }
+   
             }
+            else
+            {
+                if (m_character.facing == HorizontalDirection.Right)
+                {
+                    m_turnHandle.ExecuteWithAnimationByPass();
+                }
+
+            }
+            //m_turnHandle.ExecuteWithAnimationByPass();
+            //if (IsFacingTarget() == false)
+            //{
+            //    m_turnHandle.ExecuteWithAnimationByPass();
+            //    do
+            //    {
+
+            //        yield return null;
+            //    }
+            //    while (IsFacingTarget() == false);
+            //}
             m_animation.DisableRootMotion();
             m_animation.SetAnimation(0, m_info.rayOfFrostAttack.animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.rayOfFrostAttack.animation);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
+            yield return new WaitForSeconds(0.5f);
             m_attackDecider.hasDecidedOnAttack = false;
             m_currentAttackCoroutine = null;
             m_stateHandle.ApplyQueuedState();
@@ -936,14 +985,15 @@ namespace DChild.Gameplay.Characters.Enemies
         }
         private void RayOfFrostBeamController()
         {
+
             RayOfFrostActivator(m_chosenPointNameForRayFrost);
         }
-
         private void RayOfFrostActivator(string chosenPointName)
         {
             var name = "Right";
             if (chosenPointName == name)
             {
+
                 var rayOfFrost = "RayOfFrost";
                 Debug.Log(rayOfFrost);
                 m_rayOfFrostAnimatorRight.SetTrigger(rayOfFrost);
@@ -1204,37 +1254,62 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator TeleportRoutine()
         {
-            var spawnPointIndex1 = 0;
-            var spawnPointIndex2 = 1;
-            var spawnPointIndex3 = 2;
-            m_stateHandle.Wait(State.ReevaluateSituation);
+            //var spawnPointIndex1 = 0;
+            //var spawnPointIndex2 = 1;
+            //var spawnPointIndex3 = 2;
+
+            var A_Area = m_areaForTeleportRoutine[0];
+            var B_Area = m_areaForTeleportRoutine[1];
+            var C_Area = m_areaForTeleportRoutine[2];
+            m_stateHandle.Wait(State.Cooldown);
             var randomSpawnPoint = UnityEngine.Random.Range(0, m_listOfSpawnPoints.Count);
             Debug.Log(m_listOfSpawnPoints.Count.ToString());
             string[] patternKeys = new string[m_listOfSpawnPoints.Count];
             m_listOfSpawnPoints.Keys.CopyTo(patternKeys, 0);
-            if (m_startingPoint)
+            //if (m_startingPoint)
+            //{
+            //    yield return TeleportPatterns(randomSpawnPoint, patternKeys, 1, 2);
+            //    m_startingPoint = false;
+            //}
+            //else
+            //{
+            //    if (m_spawnPointIndexForTeleportPhase == spawnPointIndex1)
+            //    {
+            //        Debug.Log("spawn point A");
+            //        yield return TeleportPatterns(randomSpawnPoint, patternKeys, 0, 1);
+            //    }
+            //    else if (m_spawnPointIndexForTeleportPhase == spawnPointIndex2)
+            //    {
+            //        Debug.Log("spawn point B");
+            //        var randomSpawnPoint2 = UnityEngine.Random.Range(0, 4);// special case since the points is 4 
+            //        Debug.Log(randomSpawnPoint2);
+            //        yield return TeleportPatterns(randomSpawnPoint, patternKeys, 1, 2);
+            //    }
+            //    else if (m_spawnPointIndexForTeleportPhase == spawnPointIndex3)
+            //    {
+            //        Debug.Log("spawn point C");
+            //        yield return TeleportPatterns(randomSpawnPoint, patternKeys, 2, 1);
+            //    }
+            //}
+
+            if (Vector2.Distance(A_Area.position, m_character.centerMass.position) <= m_info.target3CHDistance)
             {
-                StartCoroutine(TeleportPatterns(randomSpawnPoint, patternKeys, 1, 2));
-                m_startingPoint = false;
+                Debug.Log("spawn point A");
+                yield return TeleportPatterns(randomSpawnPoint, patternKeys, 0, 1);
             }
-            else
+            else if (Vector2.Distance(B_Area.position, m_character.centerMass.position) <= m_info.target3CHDistance)
             {
-                if (m_spawnPointIndexForTeleportPhase == spawnPointIndex1)
-                {
-                    StartCoroutine(TeleportPatterns(randomSpawnPoint, patternKeys, 0, 1));
-                }
-                else if (m_spawnPointIndexForTeleportPhase == spawnPointIndex2)
-                {
-                    Debug.Log("spawn point B");
-                    var randomSpawnPoint2 = UnityEngine.Random.Range(0, 4);// special case since the points is 4 
-                    Debug.Log(randomSpawnPoint2);
-                    StartCoroutine(TeleportPatterns(randomSpawnPoint, patternKeys, 1, 2));
-                }
-                else if (m_spawnPointIndexForTeleportPhase == spawnPointIndex3)
-                {
-                    StartCoroutine(TeleportPatterns(randomSpawnPoint, patternKeys, 2, 1));
-                }
+                Debug.Log("spawn point B");
+                var randomSpawnPoint2 = UnityEngine.Random.Range(0, 4);// special case since the points is 4 
+                Debug.Log(randomSpawnPoint2);
+                yield return TeleportPatterns(randomSpawnPoint, patternKeys, 1, 2);
             }
+            else if (Vector2.Distance(C_Area.position, m_character.centerMass.position) <= m_info.target3CHDistance)
+            {
+                Debug.Log("spawn point C");
+                yield return TeleportPatterns(randomSpawnPoint, patternKeys, 2, 1);
+            }
+            m_damageable.DamageTaken -= DemonLordAI_DamageTaken;
             yield return null;
         }
 
@@ -1252,6 +1327,12 @@ namespace DChild.Gameplay.Characters.Enemies
             if (IsFacingTarget() == false)
             {
                 m_turnHandle.ExecuteWithAnimationByPass();
+                do
+                {
+
+                    yield return null;
+                }
+                while (IsFacingTarget() == false);
             }
             m_animation.SetAnimation(0, m_info.teleportAppear.animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.teleportAppear.animation);
@@ -1259,7 +1340,9 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.DisableRootMotion();
             Debug.Log(randomSpawnPointList.ToString() + " spawn point list");
             Debug.Log(m_spawnPointIndexForTeleportPhase + " spawn point number");
-            m_stateHandle.ApplyQueuedState();
+            //m_attackDecider.hasDecidedOnAttack = false;
+            //m_currentAttackCoroutine = null;
+            //m_stateHandle.ApplyQueuedState();
             yield return null;
         }
 
@@ -1268,8 +1351,15 @@ namespace DChild.Gameplay.Characters.Enemies
             // get transform point of spawn pattern b top 
             // play animation var randIndexForRayOfFrost = UnityEngine.Random.Range(0, 2);
             var positionForDragonsBreath = m_dragonsBreathPoint;
-            m_fireController.SetActiveDragonTrail(true);
-            while (Vector3.Distance(transform.position, positionForDragonsBreath.position) > 0.2f)
+            m_fireController.RemoveDamageCollider();
+            //m_fireController.SetActiveDragonTrail(false);
+            m_fireController.DragonBreathTrailAnimatorStateChecker();
+            m_fireController.gameObject.SetActive(false);
+            m_fireController.m_isFireRoutineDone = false;
+            yield return new WaitForSeconds(0.5f);
+            m_fireController.gameObject.SetActive(true);
+           // m_fireController.SetActiveDragonTrail(true);
+            while (Vector3.Distance(transform.position, positionForDragonsBreath.position) > 0.5f)
             {
                 var distanceCalcuOfTwoPosition = (positionForDragonsBreath.position - transform.position).normalized;
                 transform.position += m_info.move.speed * Time.deltaTime * distanceCalcuOfTwoPosition;
@@ -1281,12 +1371,11 @@ namespace DChild.Gameplay.Characters.Enemies
             //transform.position = centerSpawnPoint.position;
             if (m_character.facing == HorizontalDirection.Left)
             {
-              // m_turnHandle.Execute(m_info.turnAnimation.animation, m_info.idleAnimation.animation);
-                m_turnHandle.ExecuteWithAnimationByPass();
+                // m_turnHandle.Execute(m_info.turnAnimation.animation, m_info.idleAnimation.animation);
+                //  
                 do
                 {
-
-                    yield return null;
+                    m_turnHandle.ExecuteWithAnimationByPass();
                 }
                 while (m_character.facing == HorizontalDirection.Left);
 
@@ -1305,41 +1394,61 @@ namespace DChild.Gameplay.Characters.Enemies
             Debug.Log("Done Dragons breath");
             yield return null;
         }
-
-
         private void DragonsBreathActivator()
         {
+            m_fireController.gameObject.SetActive(true);
+            m_fireController.m_isFireRoutineDone = true;
             m_fireController.StartDragonBreathRoutine();
         }
 
+        [SerializeField]
+        private bool m_isSpellDoneSummonDragon = false;
         private IEnumerator SummonDragonRoutine()
         {
+            m_demonLordSummonDragon.SpellEnd += SpellEndEventSummonDragon;
             var positionForSummonDragon = m_dragonsBreathPoint;
-            while (Vector3.Distance(transform.position, positionForSummonDragon.position) > m_distanceStoppingToleranceForRayFrost)
+            while (Vector3.Distance(transform.position, positionForSummonDragon.position) > 0.5f)
             {
                 var CalculatedDistanceOfPositions = (positionForSummonDragon.position - transform.position).normalized;
                 transform.position += m_info.move.speed * Time.deltaTime * CalculatedDistanceOfPositions;
                 Debug.Log("papuntang langit boss");
                 yield return null;
             }
-
             m_animation.SetAnimation(0, m_info.summonDragonAnticipation.animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.summonDragonAnticipation.animation);
             m_animation.SetAnimation(0, m_info.summonDragonAttack.animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.summonDragonAttack.animation);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
+            while (m_isSpellDoneSummonDragon == false)
+            {
+                yield return null;
+            }
+
+            m_demonLordSummonDragon.SpellEnd -= SpellEndEventSummonDragon;
+            m_isSpellDoneSummonDragon = false;
             m_attackDecider.hasDecidedOnAttack = false;
             m_currentAttackCoroutine = null;
             m_stateHandle.ApplyQueuedState();
             Debug.Log("Gwa laser done boss ");
             yield return null;
         }
-
+        private void SpellEndEventSummonDragon(object sender, EventActionArgs eventArgs)
+        {
+            m_isSpellDoneSummonDragon = true;
+        }
+        
         private IEnumerator DragonsBreathWithSummonDragon()
         {
             var positionForDragonsBreath = m_dragonsBreathPoint;
-            // m_fireController.SetActiveDragonTrail(true);
-            while (Vector3.Distance(transform.position, positionForDragonsBreath.position) > 0.2f)
+            m_fireController.RemoveDamageCollider();
+            //m_fireController.SetActiveDragonTrail(false);
+            m_fireController.gameObject.SetActive(false);
+            m_fireController.DragonBreathTrailAnimatorStateChecker();
+            m_fireController.m_isFireRoutineDone = false;
+            yield return new WaitForSeconds(0.5f);
+            m_fireController.gameObject.SetActive(true);
+            m_fireController.SetActiveDragonTrail(true);
+            while (Vector3.Distance(transform.position, positionForDragonsBreath.position) > 0.5f)
             {
                 var distanceCalcuOfTwoPosition = (positionForDragonsBreath.position - transform.position).normalized;
                 transform.position += m_info.move.speed * Time.deltaTime * distanceCalcuOfTwoPosition;
@@ -1368,17 +1477,27 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.dragonBreathAttackRight.animation);
             m_animation.SetAnimation(0, m_info.dragonBreathAttackLeft, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.dragonBreathAttackLeft.animation);
-           
+
             m_fireController.StartDragonsRoutine();
 
+            m_demonLordSummonDragon.SpellEnd += SpellEndEventSummonDragon;
             m_animation.SetAnimation(0, m_info.summonDragonAnticipation.animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.summonDragonAnticipation.animation);
             m_animation.SetAnimation(0, m_info.summonDragonAttack.animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.summonDragonAttack.animation);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
+
+            while (m_isSpellDoneSummonDragon == false)
+            {
+                yield return null;
+            }
+
+            m_demonLordSummonDragon.SpellEnd -= SpellEndEventSummonDragon;
+            m_isSpellDoneSummonDragon = false;
             m_attackDecider.hasDecidedOnAttack = false;
             m_currentAttackCoroutine = null;
             m_stateHandle.ApplyQueuedState();
+            Debug.Log("SummonDragon");
             yield return null;
         }
         private IEnumerator IceShardRoutine()
@@ -1400,12 +1519,12 @@ namespace DChild.Gameplay.Characters.Enemies
             Debug.Log("Spawns");
             if (m_IceShardPattern1Done == false)
             {
-                IceShardSpell(transform.position, 0, 100);
+                IceShardSpell(m_centerMass.position, 0, 120);
                 m_IceShardPattern1Done = true;
             }
             else
             {
-                IceShardSpell(transform.position, 45, 100);
+                IceShardSpell(m_centerMass.position,30, 120);
                 m_IceShardPattern1Done = false;
             }
 
@@ -1457,28 +1576,39 @@ namespace DChild.Gameplay.Characters.Enemies
             m_demonLordLightningConstellation.ExecuteSpell(randomType);
         }
 
-
+        private void ADragonsCall_AllemarTubongbanuaBestThesisOfAllTime()
+        {
+            Debug.Log("WEWE");
+            var TotalsummonDragonPattern = m_info.summonDragonPattern.Count();
+            System.Random random = new System.Random();
+            int randomValue = random.Next(0, TotalsummonDragonPattern);
+            var chosenSummonDragonPattern = m_info.summonDragonPattern[randomValue];
+            m_demonLordSummonDragon.ExecuteSpell(chosenSummonDragonPattern);
+        }
 
         [SerializeField]
         private int m_lightningStrikeCounter;
         private IEnumerator LightningStrike()
         {
+
             var chosenlightingStrikePositioning = GetNearestLightingStrikePositioning(m_lightningStrikePositioningInfos);
             var ChosenPosition = chosenlightingStrikePositioning.castingPosition;
-            yield return new WaitForSeconds(0.5f);
+
             while (Vector3.Distance(transform.position, ChosenPosition) > m_distanceStoppingToleranceForRayFrost)
             {
+                // m_hitbox.SetInvulnerability(Invulnerability.MAX);
                 var CalculatedDistanceOfPositions = (ChosenPosition - transform.position).normalized;
                 transform.position += m_info.move.speed * Time.deltaTime * CalculatedDistanceOfPositions;
                 Debug.Log("papuntang langit boss");
                 yield return null;
             }
+            //m_hitbox.SetInvulnerability(Invulnerability.None);
             if (IsFacingTarget() == false)
             {
-               // m_turnHandle.Execute(m_info.turnAnimation.animation, m_info.idleAnimation.animation);
+                // m_turnHandle.Execute(m_info.turnAnimation.animation, m_info.idleAnimation.animation);
                 m_turnHandle.ExecuteWithAnimationByPass();
             }
-         
+
             Debug.Log(chosenlightingStrikePositioning.ToString());
             //m_demonLordLightningStrike.LightningStrikeSpawnPosition(lightStrikeSpawnPoint, lightningStrikeObject);
             m_animation.SetAnimation(0, m_info.lightningStrikeAnticipation.animation, false);
@@ -1488,7 +1618,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_info.lightningStrikeAttack.animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.lightningStrikeAttack.animation);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
-       
+
             //m_attackDecider.hasDecidedOnAttack = false;
             //m_currentAttackCoroutine = null;
             //m_stateHandle.ApplyQueuedState();
@@ -1496,22 +1626,110 @@ namespace DChild.Gameplay.Characters.Enemies
             //GameplaySystem.playerManager.player.character.GetComponent<Damageable>().DamageTaken -= HitOnPlayer;         
             yield return null;
         }
-     
+        [SerializeField]
+        private TriggerHitLightningStrike m_isPlayerHitChecker;
         private IEnumerator ContinuousUpdate()
         {
-            while (m_isPlayerHit == false && m_lightningStrikeCounter <3)
+            do
             {
-
-                yield return StartCoroutine(LightningStrike());
+                yield return LightningStrike();
                 m_lightningStrikeCounter++;
-            }
-            //GameplaySystem.playerManager.player.character.GetComponent<Damageable>().DamageTaken -= HitOnPlayer;
+                yield return new WaitForSeconds(1f);
+            } while (m_isHit == false && m_lightningStrikeCounter < 3);
+
+            m_isHit = false;
+            m_isPlayerHitChecker.m_isPlayerHit = false;
             m_lightningStrikeCounter = 0;
-            m_isPlayerHit = false;
+            yield return new WaitForSeconds(0.5f);
             m_attackDecider.hasDecidedOnAttack = false;
             m_currentAttackCoroutine = null;
             m_stateHandle.ApplyQueuedState();
             //yield return new WaitForSeconds(1f);
+            yield return null;
+        }
+        [SerializeField]
+        private int m_teleportCounter;
+        [SerializeField]
+        private bool m_isDemonLordHit = false;
+        private bool m_activateDamageTaken = false;
+        private void DemonLordAI_DamageTaken(object sender, Damageable.DamageEventArgs eventArgs)
+        {
+            Debug.Log("Damage by Player boss?");
+            
+            m_isDemonLordHit = true;
+        }
+        private IEnumerator ContinuousUpdateTeleportPhase2()
+        {
+            
+            m_teleportCounter = 0;
+            bool isNearPlayer = false;
+            m_isDemonLordHit = false;
+            do
+            {
+
+                m_isDemonLordHit = false;
+                m_damageable.DamageTaken -= DemonLordAI_DamageTaken;
+                yield return new WaitForSeconds(0.2f);
+                yield return TeleportRoutine();
+                m_teleportCounter++;
+               
+                isNearPlayer = Vector2.Distance(m_targetInfo.position, m_character.centerMass.position) <= m_info.target1CHDistance;
+                //Calculate if Player is Near
+                if (isNearPlayer == false)
+                {
+                    m_isDemonLordHit = false;
+                    m_damageable.DamageTaken -= DemonLordAI_DamageTaken;
+                    break;
+
+                }
+
+            } while (m_teleportCounter < 2);
+
+            if (isNearPlayer ==false)
+            {   
+                m_isDemonLordHit = false;
+                m_activateDamageTaken = false;
+                m_attackDecider.hasDecidedOnAttack = false;
+                m_currentAttackCoroutine = null;
+                m_damageable.DamageTaken -= DemonLordAI_DamageTaken;
+                m_stateHandle.OverrideState(State.ReevaluateSituation);
+
+            }
+            else if (m_teleportCounter == 2)
+            {
+                m_teleportCounter = 0;
+                m_activateDamageTaken = false;
+                m_isDemonLordHit = false;
+                m_damageable.DamageTaken -= DemonLordAI_DamageTaken;
+                m_attackDecider.hasDecidedOnAttack = false;
+                m_currentAttackCoroutine = null;
+                Debug.Log("teleport counter");
+                yield return RandomizeAttacksForTeleport();
+            }
+
+            m_isDemonLordHit = false;
+            m_damageable.DamageTaken -= DemonLordAI_DamageTaken;
+            yield return null;
+
+        }
+
+
+        private IEnumerator TeleportToReevaluateState()
+        {
+            yield return TeleportRoutine();
+            m_stateHandle.OverrideState(State.ReevaluateSituation);
+        }
+        private IEnumerator RandomizeAttacksForTeleport()
+        {
+            var rng = UnityEngine.Random.Range(1, 3);
+            if (rng == 1)
+            {
+                yield return RayOfFrostRoutine();
+            }
+            else
+            {
+                yield return ContinuousUpdate();
+            }
             yield return null;
         }
         private LightningStrikePositioningInfo GetNearestLightingStrikePositioning(LightningStrikePositioningInfo[] options)
@@ -1532,10 +1750,13 @@ namespace DChild.Gameplay.Characters.Enemies
             return options[nearestIndex];
         }
 
+
         private void LightingstrikeController()
         {
             m_demonLordLightningStrike.StrikeLightning();
         }
+
+
         #endregion
 
         //private void DecidedOnAttack(bool condition)
@@ -1562,8 +1783,9 @@ namespace DChild.Gameplay.Characters.Enemies
                     var summonDragon = new AttackInfo<Attack>(Attack.Phase2Pattern2, m_info.phase2Pattern2Range);
                     var rayOfFrost = new AttackInfo<Attack>(Attack.Phase2Pattern3, m_info.phase2Pattern3Range);
                     var LightningOrb = new AttackInfo<Attack>(Attack.Phase2Pattern4, m_info.phase2Pattern4Range);
+                    var IceShards = new AttackInfo<Attack>(Attack.Phase2Pattern5, m_info.phase2Pattern5Range);
 
-                    m_attackDecider.SetList(dragonsBreath, iceShard, lightningStrike, summonDragonWithDragonsBreath, summonDragon, rayOfFrost, LightningOrb);
+                    m_attackDecider.SetList(dragonsBreath, iceShard, lightningStrike, summonDragonWithDragonsBreath, summonDragon, rayOfFrost, LightningOrb, IceShards);
                     break;
             }
             //m_attackDecider.SetList(new AttackInfo<Attack>(Attack.Phase1Pattern1, m_info.phase1Pattern1Range),
@@ -1620,6 +1842,7 @@ namespace DChild.Gameplay.Characters.Enemies
             // m_patternAttackCount = new int[2];
             //m_patternDecider = new RandomAttackDecider<Pattern>();
             base.Awake();
+
             m_attackDecider = new RandomAttackDecider<Attack>();
             m_attackDecider.SetMaxRepeatAttack(1);
             //m_Points = new List<Vector2>();
@@ -1631,7 +1854,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_currentFullCooldown = new List<float>();
             m_patternCooldown = new List<float>();
 
-           
+
         }
 
         protected override void Start()
@@ -1644,30 +1867,28 @@ namespace DChild.Gameplay.Characters.Enemies
             m_spineListener.Subscribe(m_info.rayOfFrostBeam, RayOfFrostBeamController);
             m_spineListener.Subscribe(m_info.dragonsBreath, DragonsBreathActivator);
             //m_spineListener.Subscribe(m_info.lightningStrike, LightingstrikeController);
+            m_spineListener.Subscribe(m_info.summonDragonEvent, ADragonsCall_AllemarTubongbanuaBestThesisOfAllTime);
             //m_animation.DisableRootMotion();
 
             m_phaseHandle = new PhaseHandle<Phase, PhaseInfo>();
             m_phaseHandle.Initialize(Phase.PhaseOne, m_info.phaseInfo, m_character, ChangeState, ApplyPhaseData);
-        
-            
+
+
             m_phaseHandle.ApplyChange();
             m_aimRoutine = AimRoutine();
             m_listOfSpawnPoints.Add("SpawnPointA", m_teleportSpawnPointsA);
             m_listOfSpawnPoints.Add("SpawnPointB", m_teleportSpawnPointsB);
             m_listOfSpawnPoints.Add("SpawnPointC", m_teleportSpawnPointsC);
             m_startingPoint = true;
-         
+
         }
         [SerializeField]
-        public bool m_isPlayerHit = false;
-   
-        private void HitOnPlayer(object sender, Damageable.DamageEventArgs eventArgs)
-        {
-            Debug.Log("On me");
-            m_isPlayerHit = true;
-        }
+        public bool m_isHit;
+
+
         private void Update()
         {
+            m_isHit = m_isPlayerHitChecker.m_isPlayerHit;
             m_phaseHandle.MonitorPhase();
             switch (m_stateHandle.currentState)
             {
@@ -1714,60 +1935,28 @@ namespace DChild.Gameplay.Characters.Enemies
 
                         #region PHASE 1 ATTACKS
                         case Attack.Phase1Pattern1:
-                            //if (Vector2.Distance(m_targetInfo.position, m_character.centerMass.position) > m_info.target1CHDistance)
-                            //{
-                            //    m_currentAttackCoroutine = StartCoroutine(ThreeFireBallsAttackRoutine());
-                            //}
-                            //else
-                            //{
-                            //    m_currentAttackCoroutine = StartCoroutine(EphemeralArmsSmashAttackRoutine(FollowUpAttack.ThreeFireBalls));
-                            //}
-                            // m_currentAttackCoroutine = StartCoroutine(EphemeralArmsSmashAttackRoutine(FollowUpAttack.ElectricOrb));
-                            //m_currentAttackCoroutine = StartCoroutine(DragonsBreathRoutine());
-
+                            //test attack coroutine:
+                           // m_currentAttackCoroutine = StartCoroutine(RayOfFrostRoutine());
                             m_currentAttackCoroutine = StartCoroutine(DragonsBreathRoutine());
                             m_pickedCooldown = m_currentFullCooldown[0];
                             break;
                         case Attack.Phase1Pattern2:
-                            //if (Vector2.Distance(m_targetInfo.position, m_character.centerMass.position) > m_info.target1CHDistance)
-                            //{
-                            //    m_currentAttackCoroutine = StartCoroutine(IceBombAttackRoutine());
-                            //}
-                            //else
-                            //{
-                            //    m_currentAttackCoroutine = StartCoroutine(EphemeralArmsSmashAttackRoutine(FollowUpAttack.IceBomb));
-                            //}
-                            m_currentAttackCoroutine = StartCoroutine(IceShardRoutine());
+                            //test attack coroutine:
+                            //m_currentAttackCoroutine = StartCoroutine(RayOfFrostRoutine());
+                            m_currentAttackCoroutine = StartCoroutine(SummonDragonRoutine());
                             m_pickedCooldown = m_currentFullCooldown[1];
                             break;
                         case Attack.Phase1Pattern3:
-                            //if (Vector2.Distance(m_targetInfo.position, m_character.centerMass.position) > m_info.target1CHDistance)
-                            //{
-                            //    m_currentAttackCoroutine = StartCoroutine(LightningStrike());
-                            //}
-                            //else
-                            //{
-                            //    m_currentAttackCoroutine = StartCoroutine(LightningStrike());
-                            //}
-                            
-                            m_currentAttackCoroutine = StartCoroutine(ContinuousUpdate());
+                            //test attack coroutine:
+                            //m_currentAttackCoroutine = StartCoroutine(IceShardRoutine());
+                           m_currentAttackCoroutine = StartCoroutine(ContinuousUpdate());
                             m_pickedCooldown = m_currentFullCooldown[2];
                             break;
-                        //case Attack.Phase1Pattern4:
-                        //    if (Vector2.Distance(m_targetInfo.position, m_character.centerMass.position) > m_info.target1CHDistance)
-                        //    {
-                        //        m_currentAttackCoroutine = StartCoroutine(LightningOrbRoutine());
-                        //    }
-                        //    else
-                        //    {
-                        //        m_currentAttackCoroutine = StartCoroutine(IceShardRoutine());
-                        //    }
-                        //    m_pickedCooldown = m_currentFullCooldown[3];
-                        //    break;
+
                         #endregion
                         #region PHASE 2 ATTACKS
                         case Attack.Phase2Pattern1:
-                            //m_currentAttackCoroutine = StartCoroutine(TestingAttackRoutine());
+
                             if (m_phaseHandle.currentPhase == Phase.PhaseTwo)
                             {
                                 StartCoroutine(DragonsBreathWithSummonDragon());
@@ -1780,14 +1969,7 @@ namespace DChild.Gameplay.Characters.Enemies
                             }
                             break;
                         case Attack.Phase2Pattern2:
-                            //if (Vector2.Distance(m_targetInfo.position, m_character.centerMass.position) > m_info.target1CHDistance)
-                            //{
-                            //    m_currentAttackCoroutine = StartCoroutine(IceBombAttackRoutine());
-                            //}
-                            //else
-                            //{
-                            //    m_currentAttackCoroutine = StartCoroutine(EphemeralArmsSmashAttackRoutine(FollowUpAttack.IceBomb));
-                            //}
+
 
                             if (m_phaseHandle.currentPhase == Phase.PhaseTwo)
                             {
@@ -1801,14 +1983,7 @@ namespace DChild.Gameplay.Characters.Enemies
                             }
                             break;
                         case Attack.Phase2Pattern3:
-                            //if (Vector2.Distance(m_targetInfo.position, m_character.centerMass.position) > m_info.target1CHDistance)
-                            //{
-                            //    m_currentAttackCoroutine = StartCoroutine(SummonDragonRoutine());
-                            //}
-                            //else
-                            //{
-                            //    m_currentAttackCoroutine = StartCoroutine(EphemeralArmsSmashAttackRoutine(FollowUpAttack.ElectricOrb));
-                            //}
+
                             if (m_phaseHandle.currentPhase == Phase.PhaseTwo)
                             {
                                 m_currentAttackCoroutine = StartCoroutine(SummonDragonRoutine());
@@ -1822,14 +1997,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
                             break;
                         case Attack.Phase2Pattern4:
-                            //if (Vector2.Distance(m_targetInfo.position, m_character.centerMass.position) > m_info.target1CHDistance)
-                            //{
-                            //    m_currentAttackCoroutine = StartCoroutine(FlameWaveAttackRoutine());
-                            //}
-                            //else
-                            //{
-                            //    m_currentAttackCoroutine = StartCoroutine(EphemeralArmsSmashAttackRoutine(FollowUpAttack.FlameWave));
-                            //}
+
                             if (m_phaseHandle.currentPhase == Phase.PhaseTwo)
                             {
                                 m_currentAttackCoroutine = StartCoroutine(LightningOrbRoutine());
@@ -1841,10 +2009,19 @@ namespace DChild.Gameplay.Characters.Enemies
                                 m_stateHandle.ApplyQueuedState();
                             }
                             break;
-                            //case Attack.Phase2Pattern5:
-                            //    m_currentAttackCoroutine = StartCoroutine(LightningOrbRoutine());// change  
-                            //    m_pickedCooldown = m_currentFullCooldown[3];
-                            //    break;
+                        case Attack.Phase2Pattern5:
+
+                            if (m_phaseHandle.currentPhase == Phase.PhaseTwo)
+                            {
+                                m_currentAttackCoroutine = StartCoroutine(IceShardRoutine());
+                                m_pickedCooldown = m_currentFullCooldown[3];
+                            }
+                            else
+                            {
+                                m_attackDecider.hasDecidedOnAttack = false;
+                                m_stateHandle.ApplyQueuedState();
+                            }
+                            break;
                             #endregion
                             #region PHASE 3 ATTACKS
                             //case Attack.Phase3Pattern1:
@@ -1892,37 +2069,63 @@ namespace DChild.Gameplay.Characters.Enemies
                     break;
 
                 case State.Cooldown:
-                    if (!IsFacingTarget())
-                    {
-                        m_agent.Stop();
-                        m_turnHandle.Execute(m_info.turnAnimation.animation, m_info.idleAnimation.animation);
-                    }
-                    else
-                    {
-                        m_book.Idle(true);
-                        m_animation.SetAnimation(0, m_info.idleAnimation, true);
-                        //  m_stateHandle.SetState(State.Attacking);
-                    }
-
+                    //if (!IsFacingTarget())
+                    //{
+                    //    m_agent.Stop();
+                    //    m_book.Idle(true);
+                    //    m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                    //    //m_turnHandle.Execute(m_info.turnAnimation.animation, m_info.idleAnimation.animation);
+                    //}
+                    //else
+                    //{
+                    //    m_book.Idle(true);
+                    //    m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                    //    //  m_stateHandle.SetState(State.Attacking);
+                    //}
+                   
+                    m_book.Idle(true);
+                    m_animation.SetAnimation(0, m_info.idleAnimation, true);
                     if (Vector2.Distance(m_targetInfo.position, m_character.centerMass.position) <= m_info.target3CHDistance)
                     {
-                        //StartCoroutine(LightningStepRoutine());// remove 
-                        StartCoroutine(TeleportRoutine());
-                        //return;
-                        Debug.Log("STIP BAK");
-                    }
 
-                    if (m_currentCooldown <= m_pickedCooldown)
-                    {
-                        m_currentCooldown += Time.deltaTime;
+                        if (m_phaseHandle.currentPhase == Phase.PhaseOne)
+                        {
+                            StartCoroutine(TeleportToReevaluateState());
+                        }
+                        else
+                        {
+                           
+                            m_damageable.DamageTaken += DemonLordAI_DamageTaken;
+                            if(m_isDemonLordHit == true)
+                            {
+                                // m_damageable.DamageTaken -= DemonLordAI_DamageTaken;
+                                m_isDemonLordHit = false;
+                                StartCoroutine(ContinuousUpdateTeleportPhase2());
+                            }
+                            
+                        }
                     }
                     else
                     {
+                        m_isDemonLordHit = false;
+                        m_damageable.DamageTaken -= DemonLordAI_DamageTaken;
+                        if (m_currentCooldown <= m_pickedCooldown)
+                        {
+                            m_currentCooldown += Time.deltaTime;
+                            m_isDemonLordHit = false;
+                            m_damageable.DamageTaken -= DemonLordAI_DamageTaken;
+                        }
+                        else
+                        {
 
-                        m_currentCooldown = 0;
-                        //m_stateHandle.OverrideState(State.ReevaluateSituation);
-                        m_stateHandle.OverrideState(State.ReevaluateSituation);
+                            m_currentCooldown = 0;
+                            //m_stateHandle.OverrideState(State.ReevaluateSituation);
+                            m_stateHandle.OverrideState(State.ReevaluateSituation);
+                        }
+                       
                     }
+
+
 
                     break;
                 //case State.Chasing:
@@ -1959,6 +2162,12 @@ namespace DChild.Gameplay.Characters.Enemies
                 case State.ReevaluateSituation:
                     if (m_targetInfo.isValid)
                     {
+                        m_isHit = false;
+                        m_teleportCounter = 0;
+                        m_isPlayerHitChecker.m_isPlayerHit = false;
+                        m_isDemonLordHit = false;
+                        m_damageable.DamageTaken -= DemonLordAI_DamageTaken;
+                        m_lightningStrikeCounter = 0;
                         m_stateHandle.SetState(State.Attacking);
                     }
                     else
@@ -1967,6 +2176,8 @@ namespace DChild.Gameplay.Characters.Enemies
                     }
                     break;
                 case State.WaitBehaviourEnd:
+                    //m_isDemonLordHit = false;
+                    m_damageable.DamageTaken -= DemonLordAI_DamageTaken;
                     return;
             }
         }

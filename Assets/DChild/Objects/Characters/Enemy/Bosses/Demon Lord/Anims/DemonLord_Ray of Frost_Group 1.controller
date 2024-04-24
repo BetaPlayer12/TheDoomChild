@@ -1,5 +1,33 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-8004422986208687553
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 39a859a4cbc623a42a92fdf0db8290b7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  whenToChange: 1
+  enableColliders: 1
+--- !u!114 &-5924755064896680045
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 39a859a4cbc623a42a92fdf0db8290b7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  whenToChange: 1
+  enableColliders: 1
 --- !u!1102 &-5197888681934795504
 AnimatorState:
   serializedVersion: 6
@@ -12,7 +40,8 @@ AnimatorState:
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: 3248924170940065803}
-  m_StateMachineBehaviours: []
+  m_StateMachineBehaviours:
+  - {fileID: -8004422986208687553}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1
@@ -63,7 +92,7 @@ AnimatorStateMachine:
   m_ChildStates:
   - serializedVersion: 1
     m_State: {fileID: 8766146017333884795}
-    m_Position: {x: 260, y: 210, z: 0}
+    m_Position: {x: 160, y: 220, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 1158737368663076205}
     m_Position: {x: 240, y: -80, z: 0}
@@ -116,13 +145,13 @@ AnimatorController:
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: RayOfFrostSide2
     m_Type: 9
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   m_AnimatorLayers:
   - serializedVersion: 5
     m_Name: Base Layer
@@ -223,7 +252,8 @@ AnimatorState:
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: -640540308962733548}
-  m_StateMachineBehaviours: []
+  m_StateMachineBehaviours:
+  - {fileID: -5924755064896680045}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1

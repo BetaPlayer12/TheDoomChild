@@ -11,8 +11,6 @@ public class RayOfFrostColliderConfigurator : MonoBehaviour
     [SerializeField]
     private float m_activateColliderThreshold;
 
-    private MaterialPropertyBlock m_propertyBlock;
-    private int m_shraderAlphaProperty2D;
     private List<Vector2> m_colliderPoints;
 
 
@@ -26,9 +24,15 @@ public class RayOfFrostColliderConfigurator : MonoBehaviour
         }
         m_collider.SetPoints(m_colliderPoints);
     }
+
+
+    private void Awake()
+    {
+        m_colliderPoints = new List<Vector2>();
+    }
     // Update is called once per frame
     void Update()
     {
-        
+        ReorientCollider();
     }
 }

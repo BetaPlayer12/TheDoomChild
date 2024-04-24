@@ -21,7 +21,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         [SerializeField]
         private Animator m_animator;
-       
+
         [SerializeField]
         private Dictionary<Type, string> m_typeToAnimatorParameterPair;
 
@@ -29,6 +29,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
         public event EventAction<EventActionArgs> SpellEnd;
         public Animator animator => m_animator;
+
+        [Button]
         public void ExecuteSpell(Type type)
         {
             this.gameObject.SetActive(true);
@@ -41,12 +43,12 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animator.SetTrigger(m_typeToAnimatorParameterPair[type]);
 
             ////Wait for Animator to actually do the Animation;
-            //yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(1f);
 
-            //for (int i = 0; i < m_lightningConfigurators.Length; i++)
-            //{
-            //    m_lightningConfigurators[i].ReorientCollider();
-            //}
+            for (int i = 0; i < m_lightningConfigurators.Length; i++)
+            {
+                m_lightningConfigurators[i].ReorientCollider();
+            }
 
             while (m_animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1)
             {
@@ -60,7 +62,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void Awake()
         {
-            m_lightningConfigurators = GetComponentsInChildren<LightningConstellationColliderConfigurator>();
+            m_lightningConfigurators = GetComponentsInChildren<LightningConstellationColliderConfigurator>(true);
         }
 
         private void Start()
