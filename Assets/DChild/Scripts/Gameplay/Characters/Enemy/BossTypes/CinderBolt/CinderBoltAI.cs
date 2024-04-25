@@ -18,6 +18,7 @@ using Spine.Unity.Examples;
 using DChild.Gameplay.Pooling;
 using UnityEngine.Playables;
 using DChild.Gameplay.Projectiles;
+using Sirenix.Serialization;
 
 namespace DChild.Gameplay.Characters.Enemies
 {
@@ -285,6 +286,14 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField, ValueDropdown("GetEvents")]
             private string m_flamethrower1Event;
             public string flamethrower1Event => m_flamethrower1Event;
+            [SerializeField]
+            private CinderBoltHeatHandle.Config m_heatHandleConfiguration;
+            public CinderBoltHeatHandle.Config heatHandleConfiguration => m_heatHandleConfiguration;
+            /*
+                        [Title("Damagetypes")]
+                        [SerializeField]
+                        private Dictionary<DamageType, int> m_damageType;
+                        public Dictionary<DamageType, int> damageType => m_damageType;*/
 
             public override void Initialize()
             {
@@ -358,6 +367,7 @@ namespace DChild.Gameplay.Characters.Enemies
             Phasing,
             Intro,
             Idle,
+            Malfunction,
             Turning,
             Attacking,
             Chasing,
@@ -375,7 +385,6 @@ namespace DChild.Gameplay.Characters.Enemies
             Phase2Pattern4,
             WaitAttackEnd,
         }
-
         private enum Attack
         {
             PunchUppercut,
@@ -435,11 +444,13 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("FX")]
         private ParticleFX m_meteorSmashFX;
         [SerializeField, TabGroup("FX")]
-        private ParticleFX m_runeShieldFX;
+        private GameObject m_runeShieldFX;
         [SerializeField, TabGroup("FX")]
-        private ParticleFX m_runeShieldBreakFX;
+        private GameObject m_runeShieldBreakFX;
         [SerializeField, TabGroup("FX")]
         private GameObject m_meteorSmashTrailFX;
+        [SerializeField, TabGroup("FX")]
+        private ParticleFX m_steamMalfAndOver;
 
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_groundSensor;
@@ -539,16 +550,66 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField]
         private bool m_isRaging = false;
         private float m_runeDuration;
+        private bool m_hasMalfactioned = false;
+        [SerializeField]
+        private bool m_hasRune = false;
+        [SerializeField]
+        private CinderBoltHeatHandle m_heatHandler;
+
+        /*[SerializeField]
+        private Dictionary<DamageType, int> m_heatHandle;
+        public Dictionary<DamageType, int> heatHandle => m_heatHandle;*/
 
         private void ApplyPhaseData(PhaseInfo obj)
         {
             /*m_attackCache.Clear();
             m_attackRangeCache.Clear();*/
+            GetComponent<Damageable>().DamageTaken += CinderBoltAI_DamageTaken;
             m_currentPhaseIndex = obj.phaseIndex;
             for (int i = 0; i < m_patternCount.Length; i++)
             {
                 m_patternCount[i] = obj.patternCount[i];
             }
+            switch (m_phaseHandle.currentPhase)
+            {
+                case Phase.PhaseOne:
+                    m_patternDecider.SetList(new AttackInfo<Pattern>(Pattern.Phase1Pattern1, m_info.targetDistanceTolerance),
+                                             new AttackInfo<Pattern>(Pattern.Phase1Pattern2, m_info.targetDistanceTolerance)/*,
+                                     new AttackInfo<Pattern>(Pattern.Phase2Pattern1, m_info.targetDistanceTolerance),
+                                     new AttackInfo<Pattern>(Pattern.Phase2Pattern2, m_info.targetDistanceTolerance),
+                                     new AttackInfo<Pattern>(Pattern.Phase2Pattern3, m_info.targetDistanceTolerance),
+                                     new AttackInfo<Pattern>(Pattern.Phase2Pattern4, m_info.targetDistanceTolerance)*/);
+                    m_attackDecider[1].SetList(new AttackInfo<Attack>(Attack.PunchUppercut, m_info.punchAttack.range),
+                                               new AttackInfo<Attack>(Attack.Flamethrower1, m_info.flameThrowerAttack.range));
+                    m_attackDecider[2].SetList(new AttackInfo<Attack>(Attack.PunchUppercut, m_info.punchAttack.range),
+                                               new AttackInfo<Attack>(Attack.Flamethrower1, m_info.flameThrowerAttack.range),
+                                               new AttackInfo<Attack>(Attack.SpinAttack, m_info.spinAttack.range),
+                                               new AttackInfo<Attack>(Attack.Firebeam, m_info.firebeamAttack.range),
+                                               new AttackInfo<Attack>(Attack.LongDash, m_info.longDashAttack.range));
+                    break;
+                case Phase.PhaseTwo:
+                    m_patternDecider.SetList(new AttackInfo<Pattern>(Pattern.Phase2Pattern1, m_info.targetDistanceTolerance),
+                                             new AttackInfo<Pattern>(Pattern.Phase2Pattern2, m_info.targetDistanceTolerance),
+                                             new AttackInfo<Pattern>(Pattern.Phase2Pattern3, m_info.targetDistanceTolerance),
+                                             new AttackInfo<Pattern>(Pattern.Phase2Pattern4, m_info.targetDistanceTolerance));
+                    m_attackDecider[3].SetList(new AttackInfo<Attack>(Attack.PunchUppercut, m_info.punchAttack.range),
+                                               new AttackInfo<Attack>(Attack.ShotgunBlast, m_info.shotgunBlastFireAttack.range),
+                                               new AttackInfo<Attack>(Attack.Flamethrower1, m_info.flameThrowerAttack.range),
+                                               new AttackInfo<Attack>(Attack.Flamethrower2, m_info.flameThrowerAttack.range), //change to flamethrower2 range
+                                               new AttackInfo<Attack>(Attack.SpinAttack, m_info.spinAttack.range),
+                                               new AttackInfo<Attack>(Attack.ShortDash, m_info.shortDashAttack.range));
+                    m_attackDecider[4].SetList(new AttackInfo<Attack>(Attack.PunchUppercut, m_info.punchAttack.range),
+                                               new AttackInfo<Attack>(Attack.ShotgunBlast, m_info.shotgunBlastFireAttack.range),
+                                               new AttackInfo<Attack>(Attack.SpinAttack, m_info.spinAttack.range),
+                                               new AttackInfo<Attack>(Attack.LongDash, m_info.longDashAttack.range));
+                    m_attackDecider[5].SetList(new AttackInfo<Attack>(Attack.SpinAttack, m_info.spinAttack.range),
+                                               new AttackInfo<Attack>(Attack.MeteorSmash, m_info.meteorAttack.range),
+                                               new AttackInfo<Attack>(Attack.Firebeam, m_info.firebeamAttack.range));
+                    m_attackDecider[6].SetList(new AttackInfo<Attack>(Attack.Flamethrower2, m_info.flameThrowerAttack.range), //change to flamethrower2 range
+                                               new AttackInfo<Attack>(Attack.Firebeam, m_info.firebeamAttack.range));
+                    break;
+            }
+            DecidedOnAttack(false);
             /*switch (m_phaseHandle.currentPhase)
             {
                 case Phase.PhaseOne:
@@ -563,6 +624,11 @@ namespace DChild.Gameplay.Characters.Enemies
 
         }
 
+        private void CinderBoltAI_DamageTaken1(object sender, Damageable.DamageEventArgs eventArgs)
+        {
+            throw new NotImplementedException();
+        }
+
         private void ChangeState()
         {
             if (!m_hasPhaseChanged && m_changeLocationRoutine == null)
@@ -571,7 +637,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 /*StopAllCoroutines();*/
                 m_stateHandle.OverrideState(State.Phasing);
                 m_hasPhaseChanged = true;
-                UpdateAttackDeciderList();
+                //UpdateAttackDeciderList();
                 m_phaseHandle.ApplyChange();
                 m_animation.DisableRootMotion();
                 m_animation.SetEmptyAnimation(0, 0);
@@ -611,6 +677,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator IntroRoutine()
         {
+            enabled = false;
             m_stateHandle.Wait(State.Chasing);
             m_movement.Stop();
             m_hitbox.SetInvulnerability(Invulnerability.MAX);
@@ -618,22 +685,31 @@ namespace DChild.Gameplay.Characters.Enemies
             m_hitbox.SetInvulnerability(Invulnerability.None);
             m_stateHandle.ApplyQueuedState();
             yield return null;
+            enabled = true;
         }
 
         private IEnumerator ChangePhaseRoutine()
         {
-            m_stateHandle.Wait(State.ReevaluateSituation);
+            m_stateHandle.Wait(State.Chasing);
             m_hitbox.SetInvulnerability(Invulnerability.MAX);
             m_animation.SetAnimation(0, m_info.flinchAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.flinchAnimation);
-            //UpdateAttackDeciderList();
             m_hitbox.SetInvulnerability(Invulnerability.None);
+            StartCoroutine(OnFirstRuneShieldRoutine());
             m_hasPhaseChanged = false;
             m_stateHandle.ApplyQueuedState();
-            /*if (m_phaseHandle.currentPhase == Phase.PhaseTwo)
-            {
-                m_phase1Done = true;
-            }*/
+            yield return null;
+        }
+        private IEnumerator OnFirstRuneShieldRoutine()
+        {
+            m_hasRune = false;
+            m_runeDuration = 10;
+            m_runeShieldFX.SetActive(true);
+            yield return new WaitForSeconds(m_runeDuration);
+            m_runeShieldFX.SetActive(false);
+            m_runeShieldBreakFX.SetActive(true);
+            yield return new WaitForSeconds(1f);
+            m_runeShieldBreakFX.SetActive(false);
             yield return null;
         }
 
@@ -740,6 +816,7 @@ namespace DChild.Gameplay.Characters.Enemies
         #region Overcharged Attacks
         private IEnumerator OverchargedPunchAttackRoutine()
         {
+            enabled = false;
             m_runeDuration = 5;
             Vector2 targetPoint = m_targetInfo.position;
             var direction = (targetPoint - (Vector2)transform.position).normalized;
@@ -763,9 +840,11 @@ namespace DChild.Gameplay.Characters.Enemies
             m_stateHandle.ApplyQueuedState();
             m_punchAttackCollider.enabled = false;
             yield return null;
+            enabled = true;
         }
         private IEnumerator OverchargedFlamethrower1Routine()
         {
+            enabled = false;
             m_runeDuration = 5;
             Vector2 targetPoint = m_targetInfo.position;
             var direction = (targetPoint - (Vector2)transform.position).normalized;
@@ -790,9 +869,11 @@ namespace DChild.Gameplay.Characters.Enemies
             m_currentAttackCoroutine = null;
             m_stateHandle.ApplyQueuedState();
             yield return null;
+            enabled = true;
         }
         private IEnumerator OverchargedSpinAttackRoutine()
         {
+            enabled = false;
             yield return new WaitForSeconds(0.5f);
             m_hitbox.SetInvulnerability(Invulnerability.MAX);
             //m_stateHandle.Wait(State.Chasing);
@@ -820,9 +901,11 @@ namespace DChild.Gameplay.Characters.Enemies
             m_currentAttackCoroutine = null;
             m_stateHandle.ApplyQueuedState();
             yield return null;
+            enabled = true;
         }
         private IEnumerator OverchargedFirebeamRoutine()
         {
+            enabled = false;
             yield return new WaitForSeconds(0.5f);
             m_runeDuration = 5;
             //m_stateHandle.Wait(State.Chasing);
@@ -866,9 +949,11 @@ namespace DChild.Gameplay.Characters.Enemies
             m_currentAttackCoroutine = null;
             m_stateHandle.ApplyQueuedState();
             yield return null;
+            enabled = true;
         }
         private IEnumerator OverchargedShortDash()
         {
+            enabled = false;
             yield return new WaitForSeconds(0.5f);
             m_hitbox.SetInvulnerability(Invulnerability.MAX);
             //m_stateHandle.Wait(State.Chasing);
@@ -897,13 +982,15 @@ namespace DChild.Gameplay.Characters.Enemies
                     StartCoroutine(OverchargedFlamethrower1Routine());
                     break;
                 case 2:
-                    StartCoroutine(ShotgunBlastRoutine());
+                    StartCoroutine(OverchargedShotgunBlastRoutine());
                     break;
             }
             yield return null;
+            enabled = true;
         }
         private IEnumerator OverchargedLongDash()
         {
+            enabled = false;
             yield return new WaitForSeconds(0.5f);
             m_hitbox.SetInvulnerability(Invulnerability.MAX);
             //m_stateHandle.Wait(State.Chasing);
@@ -926,9 +1013,11 @@ namespace DChild.Gameplay.Characters.Enemies
             }
             StartCoroutine(OverchargedPunchAttackRoutine());
             yield return null;
+            enabled = true;
         }
         private IEnumerator OverchargedShotgunBlastRoutine()
         {
+            enabled = false;
             yield return new WaitForSeconds(0.5f);
             m_runeDuration = 5;
             //m_stateHandle.Wait(State.Chasing);
@@ -959,9 +1048,11 @@ namespace DChild.Gameplay.Characters.Enemies
             m_currentAttackCoroutine = null;
             m_stateHandle.ApplyQueuedState();
             yield return null;
+            enabled = true;
         }
         private IEnumerator OverchargedFlamethrower2Routine()
         {
+            enabled = false;
             yield return new WaitForSeconds(0.5f);
             m_runeDuration = 5;
             //m_stateHandle.Wait(State.Chasing);
@@ -1002,9 +1093,11 @@ namespace DChild.Gameplay.Characters.Enemies
             m_currentAttackCoroutine = null;
             m_stateHandle.ApplyQueuedState();
             yield return null;
+            enabled = true;
         }
         private IEnumerator OverchargedMeteorSmashRoutine()
         {
+            enabled = false;
             yield return new WaitForSeconds(0.5f);
             m_runeDuration = 5;
             //m_stateHandle.Wait(State.Chasing);
@@ -1038,7 +1131,7 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 StartCoroutine(OverchargedSpinAttackRoutine());
             }
-            StartCoroutine(RuneShieldRoutine());
+            //StartCoroutine(RuneShieldRoutine());
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.overchargedSpinEndAnimation);
             m_meteorSmashCollider.enabled = false;
             m_animation.SetAnimation(0, m_info.overchargedIdle, true);
@@ -1047,12 +1140,14 @@ namespace DChild.Gameplay.Characters.Enemies
             m_currentAttackCoroutine = null;
             m_stateHandle.ApplyQueuedState();
             yield return null;
+            enabled = true;
         }
         #endregion
         #region Normal Attacks
         private IEnumerator PunchAttackRoutine()
         {
-            yield return new WaitForSeconds(0.5f);
+            enabled = false;
+            //yield return new WaitForSeconds(0.5f);
             m_runeDuration = 5;
             Vector2 targetPoint = m_targetInfo.position;
             var direction = (targetPoint - (Vector2)transform.position).normalized;
@@ -1075,15 +1170,17 @@ namespace DChild.Gameplay.Characters.Enemies
             m_stateHandle.ApplyQueuedState();
             m_punchAttackCollider.enabled = false;
             yield return null;
+            enabled = true;
         }
         private IEnumerator Flamethrower1Routine()
         {
-            yield return new WaitForSeconds(0.5f);
+            enabled = false;
+            //yield return new WaitForSeconds(0.5f);
             //m_stateHandle.Wait(State.Chasing);
             m_runeDuration = 5;
             Vector2 targetPoint = m_targetInfo.position;
             var direction = (targetPoint - (Vector2)transform.position).normalized;
-            while (Vector2.Distance(transform.position, targetPoint) > m_info.flameThrowerAttack.range)
+            while (Vector2.Distance(transform.position, targetPoint) > m_info.punchAttack.range)
             {
                 m_animation.SetAnimation(0, m_info.move, true);
                 m_movement.MoveTowards(direction, m_info.move.speed);
@@ -1101,6 +1198,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.DisableRootMotion();
             m_currentAttackCoroutine = null;
             m_stateHandle.ApplyQueuedState();
+            enabled = true;
             yield return null;
         }
         private bool SpinColliders(bool isDone)
@@ -1113,6 +1211,7 @@ namespace DChild.Gameplay.Characters.Enemies
         }
         private IEnumerator SpinAttackRoutine()
         {
+            enabled = false;
             yield return new WaitForSeconds(0.5f);
             m_hitbox.SetInvulnerability(Invulnerability.MAX);
             //m_stateHandle.Wait(State.Chasing);
@@ -1140,6 +1239,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_currentAttackCoroutine = null;
             m_stateHandle.ApplyQueuedState();
             yield return null;
+            enabled = true;
         }
         #region Laser Coroutine
         private IEnumerator FirebeamLaserRoutine()
@@ -1253,7 +1353,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_lineRenderer.SetPosition(1, Vector3.zero);
             m_telegraphLineRenderer.SetPosition(0, Vector3.zero);
             m_telegraphLineRenderer.SetPosition(1, Vector3.zero);
-            m_telegraphLineRenderer.startWidth = 17;
+            m_telegraphLineRenderer.startWidth = 30;
             m_Points.Clear();
             /*for (int i = 0; i < m_lineRenderer.positionCount; i++)
             {
@@ -1274,13 +1374,14 @@ namespace DChild.Gameplay.Characters.Enemies
         #endregion
         private IEnumerator FirebeamRoutine()
         {
+            enabled = false;
             yield return new WaitForSeconds(0.5f);
             m_runeDuration = 5;
             //m_stateHandle.Wait(State.Chasing);
-            if (m_phaseHandle.currentPhase == Phase.PhaseTwo)
+            /*if (m_phaseHandle.currentPhase == Phase.PhaseTwo)
             {
                 StartCoroutine(RuneShieldRoutine());
-            }
+            }*/
             int closestPointIndex = 0;
             float closestDistance = Vector2.Distance(m_firebeamTransformPoints[closestPointIndex].position, m_targetInfo.position);
             for (int i = 0; i < m_firebeamTransformPoints.Count; i++)
@@ -1317,9 +1418,11 @@ namespace DChild.Gameplay.Characters.Enemies
             m_currentAttackCoroutine = null;
             m_stateHandle.ApplyQueuedState();
             yield return null;
+            enabled = true;
         }
         private IEnumerator ShortDash()
         {
+            enabled = false;
             yield return new WaitForSeconds(0.5f);
             m_hitbox.SetInvulnerability(Invulnerability.MAX);
             //m_stateHandle.Wait(State.Chasing);
@@ -1352,9 +1455,11 @@ namespace DChild.Gameplay.Characters.Enemies
                     break;
             }
             yield return null;
+            enabled = true;
         }
         private IEnumerator LongDash()
         {
+            enabled = false;
             yield return new WaitForSeconds(0.5f);
             m_hitbox.SetInvulnerability(Invulnerability.MAX);
             //m_stateHandle.Wait(State.Chasing);
@@ -1373,13 +1478,36 @@ namespace DChild.Gameplay.Characters.Enemies
             if (!IsFacingTarget())
             {
                 /*m_animation.SetAnimation(0, m_info.turnAnimation, false);*/
-                CustomTurn();
+                //CustomTurn();
+                transform.localScale = new Vector3(-transform.localScale.x, 1, 1);
+                m_character.SetFacing(transform.localScale.x == 1 ? HorizontalDirection.Right : HorizontalDirection.Left);
             }
-            StartCoroutine(PunchAttackRoutine());
+            Vector2 targetPoint = m_targetInfo.position;
+            var direction = (targetPoint - (Vector2)transform.position).normalized;
+            while (Vector2.Distance(transform.position, targetPoint) > m_info.punchAttack.range)
+            {
+                m_animation.SetAnimation(0, m_info.move, true);
+                m_movement.MoveTowards(direction, m_info.move.speed);
+                yield return null;
+            }
+            //m_stateHandle.Wait(State.Chasing);
+            m_movement.Stop();
+            m_animation.EnableRootMotion(true, false);
+            m_animation.SetAnimation(0, m_info.punchUppercut, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.punchUppercut);
+            m_punchAttackCollider.enabled = false;
+            m_animation.SetAnimation(0, m_info.idleAnimation, true);
+            DecidedOnAttack(false);
+            m_animation.DisableRootMotion();
+            m_currentAttackCoroutine = null;
+            m_stateHandle.ApplyQueuedState();
+            m_punchAttackCollider.enabled = false;
             yield return null;
+            enabled = true;
         }
         private IEnumerator ShotgunBlastRoutine()
         {
+            enabled = false;
             yield return new WaitForSeconds(0.5f);
             m_runeDuration = 5;
             //m_stateHandle.Wait(State.Chasing);
@@ -1410,9 +1538,11 @@ namespace DChild.Gameplay.Characters.Enemies
             m_currentAttackCoroutine = null;
             m_stateHandle.ApplyQueuedState();
             yield return null;
+            enabled = true;
         }
         private IEnumerator MeteorSmashRoutine()
         {
+            enabled = false;
             yield return new WaitForSeconds(0.5f);
             m_runeDuration = 5;
             //m_stateHandle.Wait(State.Chasing);
@@ -1446,7 +1576,7 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 StartCoroutine(SpinAttackRoutine());
             }
-            StartCoroutine(RuneShieldRoutine());
+            //StartCoroutine(RuneShieldRoutine());
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.spinEndAnimation);
             m_meteorSmashCollider.enabled = false;
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
@@ -1456,9 +1586,11 @@ namespace DChild.Gameplay.Characters.Enemies
             m_currentAttackCoroutine = null;
             m_stateHandle.ApplyQueuedState();
             yield return null;
+            enabled = true;
         }
         private IEnumerator Flamethrower2Routine()
         {
+            enabled = false;
             yield return new WaitForSeconds(0.5f);
             m_runeDuration = 5;
             //m_stateHandle.Wait(State.Chasing);
@@ -1498,29 +1630,14 @@ namespace DChild.Gameplay.Characters.Enemies
             m_currentAttackCoroutine = null;
             m_stateHandle.ApplyQueuedState();
             yield return null;
-        }
-        private IEnumerator RuneShieldRoutine()
-        {
-            yield return new WaitForSeconds(0.5f);
-            m_hitbox.SetInvulnerability(Invulnerability.MAX);
-            while (!(m_runeDuration == 0))
-            {
-                m_runeShieldFX.Play();
-                m_runeDuration -= Time.deltaTime;
-                yield return null;
-            }
-            m_runeShieldFX.Stop();
-            m_runeShieldBreakFX.Play();
-            yield return new WaitForSeconds(0.5f);
-            m_runeShieldBreakFX.Stop();
-            m_hitbox.SetInvulnerability(Invulnerability.None);
-            yield return null;
+            enabled = true;
         }
         #endregion
 
         #region Movement
         private void MoveToTarget(float targetRange)
         {
+            enabled = false;
             if (!IsTargetInRange(targetRange))
             {
                 m_animation.SetAnimation(0, m_info.move, true);
@@ -1546,7 +1663,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 //m_movement.Stop();
                 m_animation.SetAnimation(0, m_info.idleAnimation, true);
             }
-
+            enabled = true;
         }
         #endregion
 
@@ -1575,34 +1692,34 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void UpdateAttackDeciderList()
         {
-            m_patternDecider.SetList(new AttackInfo<Pattern>(Pattern.Phase1Pattern1, m_info.targetDistanceTolerance),
-                                     new AttackInfo<Pattern>(Pattern.Phase1Pattern2, m_info.targetDistanceTolerance),
-                                     new AttackInfo<Pattern>(Pattern.Phase2Pattern1, m_info.targetDistanceTolerance),
-                                     new AttackInfo<Pattern>(Pattern.Phase2Pattern2, m_info.targetDistanceTolerance),
-                                     new AttackInfo<Pattern>(Pattern.Phase2Pattern3, m_info.targetDistanceTolerance),
-                                     new AttackInfo<Pattern>(Pattern.Phase2Pattern4, m_info.targetDistanceTolerance));
-            m_attackDecider[0].SetList(new AttackInfo<Attack>(Attack.PunchUppercut, m_info.punchAttack.range),
-                                     new AttackInfo<Attack>(Attack.Flamethrower1, m_info.flameThrowerAttack.range));
+            /*m_patternDecider.SetList(new AttackInfo<Pattern>(Pattern.Phase1Pattern1, m_info.targetDistanceTolerance),
+                             new AttackInfo<Pattern>(Pattern.Phase1Pattern2, m_info.targetDistanceTolerance),
+                             new AttackInfo<Pattern>(Pattern.Phase2Pattern1, m_info.targetDistanceTolerance),
+                             new AttackInfo<Pattern>(Pattern.Phase2Pattern2, m_info.targetDistanceTolerance),
+                             new AttackInfo<Pattern>(Pattern.Phase2Pattern3, m_info.targetDistanceTolerance),
+                             new AttackInfo<Pattern>(Pattern.Phase2Pattern4, m_info.targetDistanceTolerance));
             m_attackDecider[1].SetList(new AttackInfo<Attack>(Attack.PunchUppercut, m_info.punchAttack.range),
+                            new AttackInfo<Attack>(Attack.Flamethrower1, m_info.flameThrowerAttack.range));
+            m_attackDecider[2].SetList(new AttackInfo<Attack>(Attack.PunchUppercut, m_info.punchAttack.range),
                                      new AttackInfo<Attack>(Attack.Flamethrower1, m_info.flameThrowerAttack.range),
                                      new AttackInfo<Attack>(Attack.SpinAttack, m_info.spinAttack.range),
                                      new AttackInfo<Attack>(Attack.Firebeam, m_info.firebeamAttack.range),
                                      new AttackInfo<Attack>(Attack.LongDash, m_info.longDashAttack.range));
-            m_attackDecider[2].SetList(new AttackInfo<Attack>(Attack.PunchUppercut, m_info.punchAttack.range),
-                                     new AttackInfo<Attack>(Attack.ShotgunBlast, m_info.shotgunBlastFireAttack.range),
-                                     new AttackInfo<Attack>(Attack.Flamethrower1, m_info.flameThrowerAttack.range),
-                                     new AttackInfo<Attack>(Attack.Flamethrower2, m_info.flameThrowerAttack.range), //change to flamethrower2 range
-                                     new AttackInfo<Attack>(Attack.SpinAttack, m_info.spinAttack.range),
-                                     new AttackInfo<Attack>(Attack.ShortDash, m_info.shortDashAttack.range));
             m_attackDecider[3].SetList(new AttackInfo<Attack>(Attack.PunchUppercut, m_info.punchAttack.range),
+                             new AttackInfo<Attack>(Attack.ShotgunBlast, m_info.shotgunBlastFireAttack.range),
+                             new AttackInfo<Attack>(Attack.Flamethrower1, m_info.flameThrowerAttack.range),
+                             new AttackInfo<Attack>(Attack.Flamethrower2, m_info.flameThrowerAttack.range), //change to flamethrower2 range
+                             new AttackInfo<Attack>(Attack.SpinAttack, m_info.spinAttack.range),
+                             new AttackInfo<Attack>(Attack.ShortDash, m_info.shortDashAttack.range));
+            m_attackDecider[4].SetList(new AttackInfo<Attack>(Attack.PunchUppercut, m_info.punchAttack.range),
                                      new AttackInfo<Attack>(Attack.ShotgunBlast, m_info.shotgunBlastFireAttack.range),
                                      new AttackInfo<Attack>(Attack.SpinAttack, m_info.spinAttack.range),
                                      new AttackInfo<Attack>(Attack.LongDash, m_info.longDashAttack.range));
-            m_attackDecider[4].SetList(new AttackInfo<Attack>(Attack.SpinAttack, m_info.spinAttack.range),
+            m_attackDecider[5].SetList(new AttackInfo<Attack>(Attack.SpinAttack, m_info.spinAttack.range),
                                      new AttackInfo<Attack>(Attack.MeteorSmash, m_info.meteorAttack.range),
                                      new AttackInfo<Attack>(Attack.Firebeam, m_info.firebeamAttack.range));
-            m_attackDecider[5].SetList(new AttackInfo<Attack>(Attack.Flamethrower2, m_info.flameThrowerAttack.range), //change to flamethrower2 range
-                                     new AttackInfo<Attack>(Attack.Firebeam, m_info.firebeamAttack.range));
+            m_attackDecider[6].SetList(new AttackInfo<Attack>(Attack.Flamethrower2, m_info.flameThrowerAttack.range), //change to flamethrower2 range
+                                     new AttackInfo<Attack>(Attack.Firebeam, m_info.firebeamAttack.range));*/
             DecidedOnAttack(false);
         }
 
@@ -1618,238 +1735,250 @@ namespace DChild.Gameplay.Characters.Enemies
         private void ExecuteAttack(int patternIndex)
         {
             //m_patternCount = new float[m_currentPhaseIndex == 1 ? 2 : 4];
-            if (m_attackCount < m_patternCount[patternIndex])
+            /*if (m_attackCount < m_patternCount[patternIndex])
+            {*/
+            enabled = false;
+            ChooseAttack(patternIndex);
+            if (IsTargetInRange(m_patternDecider.chosenAttack.range))
             {
-                ChooseAttack(patternIndex);
-                if (IsTargetInRange(m_patternDecider.chosenAttack.range))
+                m_stateHandle.Wait(State.Attacking);
+                switch (m_currentAttack)
                 {
-                    m_stateHandle.Wait(State.ReevaluateSituation);
-                    switch (m_currentAttack)
-                    {
-                        case Attack.PunchUppercut:
-                            //m_stateHandle.Wait(State.Chasing);
-                            Debug.Log("punch");
-                            if (patternIndex == 0 || patternIndex == 1 || patternIndex == 2 || patternIndex == 3)
+                    case Attack.PunchUppercut:
+                        //m_stateHandle.Wait(State.Chasing);
+                        Debug.Log("punch");
+                        if (patternIndex == 1 || patternIndex == 2 || patternIndex == 3 || patternIndex == 4)
+                        {
+                            if (m_phaseHandle.currentPhase == Phase.PhaseOne || m_phaseHandle.currentPhase == Phase.PhaseTwo)
                             {
-                                if (m_phaseHandle.currentPhase == Phase.PhaseOne || m_phaseHandle.currentPhase == Phase.PhaseTwo)
+                                if (!m_isRaging)
                                 {
-                                    if (!m_isRaging)
-                                    {
-                                        m_currentAttackCoroutine = StartCoroutine(PunchAttackRoutine());
-                                    }
-                                    else
-                                    {
-                                        m_currentAttackCoroutine = StartCoroutine(OverchargedPunchAttackRoutine());
-                                    }
+                                    m_currentAttackCoroutine = StartCoroutine(PunchAttackRoutine());
                                 }
-                                break;
-                            }
-                            else
-                            {
-                                DecidedOnAttack(false);
-                                m_stateHandle.ApplyQueuedState();
+                                else
+                                {
+                                    m_currentAttackCoroutine = StartCoroutine(OverchargedPunchAttackRoutine());
+                                }
                             }
                             break;
-                        case Attack.Flamethrower1:
-                            //m_stateHandle.Wait(State.Chasing);
-                            Debug.Log("flame");
-                            if (patternIndex == 0 || patternIndex == 1 || patternIndex == 2)
-                            {
+                        }
+                        else
+                        {
+                            DecidedOnAttack(false);
+                            m_stateHandle.ApplyQueuedState();
+                        }
+                        enabled = true;
+                        break;
+                    case Attack.Flamethrower1:
+                        //m_stateHandle.Wait(State.Chasing);
+                        Debug.Log("flame");
+                        if (patternIndex == 1 || patternIndex == 2 || patternIndex == 3)
+                        {
 
-                                if (m_phaseHandle.currentPhase == Phase.PhaseOne || m_phaseHandle.currentPhase == Phase.PhaseTwo)
-                                {
-                                    if (!m_isRaging)
-                                    {
-                                        m_currentAttackCoroutine = StartCoroutine(Flamethrower1Routine());
-                                    }
-                                    else
-                                    {
-                                        m_currentAttackCoroutine = StartCoroutine(OverchargedFlamethrower1Routine());
-                                    }
-                                }
-                                break;
-                            }
-                            else
+                            if (m_phaseHandle.currentPhase == Phase.PhaseOne || m_phaseHandle.currentPhase == Phase.PhaseTwo)
                             {
-                                DecidedOnAttack(false);
-                                m_stateHandle.ApplyQueuedState();
+                                if (!m_isRaging)
+                                {
+                                    m_currentAttackCoroutine = StartCoroutine(Flamethrower1Routine());
+                                }
+                                else
+                                {
+                                    m_currentAttackCoroutine = StartCoroutine(OverchargedFlamethrower1Routine());
+                                }
                             }
                             break;
-                        case Attack.LongDash:
-                            //m_stateHandle.Wait(State.Chasing);
-                            Debug.Log("long");
-                            if (patternIndex == 1 || patternIndex == 3)
+                        }
+                        else
+                        {
+                            DecidedOnAttack(false);
+                            m_stateHandle.ApplyQueuedState();
+                        }
+                        enabled = true;
+                        break;
+                    case Attack.LongDash:
+                        //m_stateHandle.Wait(State.Chasing);
+                        Debug.Log("long");
+                        if (patternIndex == 2 || patternIndex == 4)
+                        {
+                            if (m_phaseHandle.currentPhase == Phase.PhaseOne || m_phaseHandle.currentPhase == Phase.PhaseTwo)
                             {
-                                if (m_phaseHandle.currentPhase == Phase.PhaseOne || m_phaseHandle.currentPhase == Phase.PhaseTwo)
+                                if (!m_isRaging)
                                 {
-                                    if (!m_isRaging)
-                                    {
-                                        m_currentAttackCoroutine = StartCoroutine(LongDash());
-                                    }
-                                    else
-                                    {
-                                        m_currentAttackCoroutine = StartCoroutine(OverchargedLongDash());
-                                    }
+                                    m_currentAttackCoroutine = StartCoroutine(LongDash());
                                 }
-                                break;
-                            }
-                            else
-                            {
-                                DecidedOnAttack(false);
-                                m_stateHandle.ApplyQueuedState();
+                                else
+                                {
+                                    m_currentAttackCoroutine = StartCoroutine(OverchargedLongDash());
+                                }
                             }
                             break;
-                        case Attack.ShortDash:
-                            //m_stateHandle.Wait(State.Chasing);
-                            Debug.Log("short");
-                            if (patternIndex == 2)
+                        }
+                        else
+                        {
+                            DecidedOnAttack(false);
+                            m_stateHandle.ApplyQueuedState();
+                        }
+                        enabled = true;
+                        break;
+                    case Attack.ShortDash:
+                        //m_stateHandle.Wait(State.Chasing);
+                        Debug.Log("short");
+                        if (patternIndex == 3)
+                        {
+                            if (m_phaseHandle.currentPhase == Phase.PhaseTwo)
                             {
-                                if (AllowAttack(2, State.Attacking))
+                                if (!m_isRaging)
                                 {
-                                    if (!m_isRaging)
-                                    {
-                                        m_currentAttackCoroutine = StartCoroutine(ShortDash());
-                                    }
-                                    else
-                                    {
-                                        m_currentAttackCoroutine = StartCoroutine(OverchargedShortDash());
-                                    }
+                                    m_currentAttackCoroutine = StartCoroutine(ShortDash());
                                 }
-                                break;
-                            }
-                            else
-                            {
-                                DecidedOnAttack(false);
-                                m_stateHandle.ApplyQueuedState();
+                                else
+                                {
+                                    m_currentAttackCoroutine = StartCoroutine(OverchargedShortDash());
+                                }
                             }
                             break;
-                        case Attack.SpinAttack:
-                            //m_stateHandle.Wait(State.Chasing);
-                            Debug.Log("spin");
-                            if (patternIndex == 1 || patternIndex == 2 || patternIndex == 3 || patternIndex == 4)
+                        }
+                        else
+                        {
+                            DecidedOnAttack(false);
+                            m_stateHandle.ApplyQueuedState();
+                        }
+                        enabled = true;
+                        break;
+                    case Attack.SpinAttack:
+                        //m_stateHandle.Wait(State.Chasing);
+                        Debug.Log("spin");
+                        if (patternIndex == 2 || patternIndex == 3 || patternIndex == 4 || patternIndex == 5)
+                        {
+                            if (m_phaseHandle.currentPhase == Phase.PhaseOne || m_phaseHandle.currentPhase == Phase.PhaseTwo)
                             {
-                                if ((m_phaseHandle.currentPhase == Phase.PhaseOne) || m_phaseHandle.currentPhase == Phase.PhaseTwo)
+                                if (!m_isRaging)
                                 {
-                                    if (!m_isRaging)
-                                    {
-                                        m_currentAttackCoroutine = StartCoroutine(SpinAttackRoutine());
-                                    }
-                                    else
-                                    {
-                                        m_currentAttackCoroutine = StartCoroutine(OverchargedSpinAttackRoutine());
-                                    }
+                                    m_currentAttackCoroutine = StartCoroutine(SpinAttackRoutine());
                                 }
-                                break;
-                            }
-                            else
-                            {
-                                DecidedOnAttack(false);
-                                m_stateHandle.ApplyQueuedState();
+                                else
+                                {
+                                    m_currentAttackCoroutine = StartCoroutine(OverchargedSpinAttackRoutine());
+                                }
                             }
                             break;
-                        case Attack.Firebeam:
-                            //m_stateHandle.Wait(State.Chasing);
-                            Debug.Log("firebeam");
-                            if (patternIndex == 1 || patternIndex == 4 || patternIndex == 5)
+                        }
+                        else
+                        {
+                            DecidedOnAttack(false);
+                            m_stateHandle.ApplyQueuedState();
+                        }
+                        enabled = true;
+                        break;
+                    case Attack.Firebeam:
+                        //m_stateHandle.Wait(State.Chasing);
+                        Debug.Log("firebeam");
+                        if (patternIndex == 2 || patternIndex == 5 || patternIndex == 6)
+                        {
+                            if (m_phaseHandle.currentPhase == Phase.PhaseOne || m_phaseHandle.currentPhase == Phase.PhaseTwo)
                             {
-                                if ((m_phaseHandle.currentPhase == Phase.PhaseOne) || m_phaseHandle.currentPhase == Phase.PhaseTwo)
+                                if (!m_isRaging)
                                 {
-                                    if (!m_isRaging)
-                                    {
-                                        m_currentAttackCoroutine = StartCoroutine(FirebeamRoutine());
-                                    }
-                                    else
-                                    {
-                                        m_currentAttackCoroutine = StartCoroutine(OverchargedFirebeamRoutine());
-                                    }
+                                    m_currentAttackCoroutine = StartCoroutine(FirebeamRoutine());
                                 }
-                                break;
-                            }
-                            else
-                            {
-                                DecidedOnAttack(false);
-                                m_stateHandle.ApplyQueuedState();
+                                else
+                                {
+                                    m_currentAttackCoroutine = StartCoroutine(OverchargedFirebeamRoutine());
+                                }
                             }
                             break;
-                        case Attack.ShotgunBlast:
-                            //m_stateHandle.Wait(State.Chasing);
-                            Debug.Log("shotgun");
-                            if (patternIndex == 2 || patternIndex == 3)
+                        }
+                        else
+                        {
+                            DecidedOnAttack(false);
+                            m_stateHandle.ApplyQueuedState();
+                        }
+                        enabled = true;
+                        break;
+                    case Attack.ShotgunBlast:
+                        //m_stateHandle.Wait(State.Chasing);
+                        Debug.Log("shotgun");
+                        if (patternIndex == 3 || patternIndex == 4)
+                        {
+                            if (m_phaseHandle.currentPhase == Phase.PhaseTwo)
                             {
-                                if (m_phaseHandle.currentPhase == Phase.PhaseTwo)
+                                if (!m_isRaging)
                                 {
-                                    if (!m_isRaging)
-                                    {
-                                        m_currentAttackCoroutine = StartCoroutine(ShotgunBlastRoutine());
-                                    }
-                                    else
-                                    {
-                                        m_currentAttackCoroutine = StartCoroutine(OverchargedShotgunBlastRoutine());
-                                    }
+                                    m_currentAttackCoroutine = StartCoroutine(ShotgunBlastRoutine());
                                 }
-                                break;
-                            }
-                            else
-                            {
-                                DecidedOnAttack(false);
-                                m_stateHandle.ApplyQueuedState();
+                                else
+                                {
+                                    m_currentAttackCoroutine = StartCoroutine(OverchargedShotgunBlastRoutine());
+                                }
                             }
                             break;
-                        case Attack.Flamethrower2:
-                            //m_stateHandle.Wait(State.Chasing);
-                            Debug.Log("flame2");
-                            if (patternIndex == 2 || patternIndex == 5)
+                        }
+                        else
+                        {
+                            DecidedOnAttack(false);
+                            m_stateHandle.ApplyQueuedState();
+                        }
+                        enabled = true;
+                        break;
+                    case Attack.Flamethrower2:
+                        //m_stateHandle.Wait(State.Chasing);
+                        Debug.Log("flame2");
+                        if (patternIndex == 3 || patternIndex == 6)
+                        {
+                            if (m_phaseHandle.currentPhase == Phase.PhaseTwo)
                             {
-                                if (m_phaseHandle.currentPhase == Phase.PhaseTwo)
+                                if (!m_isRaging)
                                 {
-                                    if (!m_isRaging)
-                                    {
-                                        m_currentAttackCoroutine = StartCoroutine(Flamethrower2Routine());
-                                    }
-                                    else
-                                    {
-                                        m_currentAttackCoroutine = StartCoroutine(OverchargedFlamethrower2Routine());
-                                    }
+                                    m_currentAttackCoroutine = StartCoroutine(Flamethrower2Routine());
                                 }
-                                break;
-                            }
-                            else
-                            {
-                                DecidedOnAttack(false);
-                                m_stateHandle.ApplyQueuedState();
+                                else
+                                {
+                                    m_currentAttackCoroutine = StartCoroutine(OverchargedFlamethrower2Routine());
+                                }
                             }
                             break;
-                        case Attack.MeteorSmash:
-                            //m_stateHandle.Wait(State.Chasing);
-                            Debug.Log("meteor");
-                            if (patternIndex == 4)
+                        }
+                        else
+                        {
+                            DecidedOnAttack(false);
+                            m_stateHandle.ApplyQueuedState();
+                        }
+                        enabled = true;
+                        break;
+                    case Attack.MeteorSmash:
+                        //m_stateHandle.Wait(State.Chasing);
+                        Debug.Log("meteor");
+                        if (patternIndex == 5)
+                        {
+                            if (m_phaseHandle.currentPhase == Phase.PhaseTwo)
                             {
-                                if (m_phaseHandle.currentPhase == Phase.PhaseTwo)
+                                if (!m_isRaging)
                                 {
-                                    if (!m_isRaging)
-                                    {
-                                        m_currentAttackCoroutine = StartCoroutine(MeteorSmashRoutine());
-                                    }
-                                    else
-                                    {
-                                        m_currentAttackCoroutine = StartCoroutine(OverchargedMeteorSmashRoutine());
-                                    }
+                                    m_currentAttackCoroutine = StartCoroutine(MeteorSmashRoutine());
                                 }
-                                break;
-                            }
-                            else
-                            {
-                                DecidedOnAttack(false);
-                                m_stateHandle.ApplyQueuedState();
+                                else
+                                {
+                                    m_currentAttackCoroutine = StartCoroutine(OverchargedMeteorSmashRoutine());
+                                }
                             }
                             break;
-                    }
-                }
-                else
-                {
-                    MoveToTarget(m_currentAttackRange);
+                        }
+                        else
+                        {
+                            DecidedOnAttack(false);
+                            m_stateHandle.ApplyQueuedState();
+                        }
+                        enabled = true;
+                        break;
                 }
             }
+            else
+            {
+                enabled = false;
+                MoveToTarget(m_currentAttackRange);
+                enabled = true;
+            }
+            //}
         }
 
         private void ChooseAttack(int patternIndex)
@@ -1933,6 +2062,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_deathHandle.SetAnimation(m_info.deathAnimation);
             m_patternDecider = new RandomAttackDecider<Pattern>();
             m_attackDecider = new RandomAttackDecider<Attack>[9];
+            m_heatHandler.SetConfiguration(m_info.heatHandleConfiguration);
             m_projectile = GetComponent<SimpleAttackProjectile>();
             m_projectileLauncher = new ProjectileLauncher(m_info.bulletProjectile.projectileInfo, m_projectilePoints);
             for (int i = 0; i < m_attackDecider.Length; i++)
@@ -1941,13 +2071,13 @@ namespace DChild.Gameplay.Characters.Enemies
             }
             m_patternCount = new float[2];
             m_stateHandle = new StateHandle<State>(State.Idle, State.WaitBehaviourEnd);
-            UpdateAttackDeciderList();
+            //UpdateAttackDeciderList();
             m_attackCache = new List<Attack>();
-            //AddToAttackCache(Attack.Firebeam, Attack.LongDash, Attack.Flamethrower1, Attack.Flamethrower2, Attack.MeteorSmash, Attack.PunchUppercut, Attack.ShotgunBlast, Attack.SpinAttack, Attack.ShortDash);
+            AddToAttackCache(Attack.Firebeam, Attack.LongDash, Attack.Flamethrower1, Attack.Flamethrower2, Attack.MeteorSmash, Attack.PunchUppercut, Attack.ShotgunBlast, Attack.SpinAttack, Attack.ShortDash);
             m_attackRangeCache = new List<float>();
-            //AddToRangeCache(m_info.firebeamAttack.range, m_info.longDashAttack.range, m_info.flameBeamAttack.range, m_info.flameBeamAttack.range, m_info.meteorAttack.range, m_info.punchAttack.range, m_info.shotgunBlastFireAttack.range, m_info.spinAttack.range, m_info.shortDashAttack.range);
+            AddToRangeCache(m_info.firebeamAttack.range, m_info.longDashAttack.range, m_info.flameBeamAttack.range, m_info.flameBeamAttack.range, m_info.meteorAttack.range, m_info.punchAttack.range, m_info.shotgunBlastFireAttack.range, m_info.spinAttack.range, m_info.shortDashAttack.range);
 
-            AddToAttackAndRangeCaches(
+            /*AddToAttackAndRangeCaches(
                 Attack.Firebeam, m_info.firebeamAttack.range,
                 Attack.LongDash, m_info.longDashAttack.range,
                 Attack.Flamethrower1, m_info.flameThrowerAttack.range,
@@ -1957,7 +2087,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 Attack.ShotgunBlast, m_info.shotgunBlastFireAttack.range,
                 Attack.SpinAttack, m_info.spinAttack.range,
                 Attack.ShortDash, m_info.shortDashAttack.range
-            );
+            );*/
             m_attackUsed = new bool[m_attackCache.Count];
         }
 
@@ -1983,10 +2113,140 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_flamethrower1Collider.enabled = true;
         }
-
+        private int counter;
+        [SerializeField]
+        private float timeLeft = 0;
+        private IEnumerator CounterForRageRoutine()
+        {
+            var duration = 10f;
+            while (duration > timeLeft && checker)
+            {
+                timeLeft += Time.deltaTime;
+                if (timeLeft >= duration)
+                {
+                    timeLeft = 0f;
+                    checker = false;
+                }
+                if(timeLeft == 0)
+                {
+                    m_heatHandler.HandleDamageTaken(DamageType.Fire);
+                }
+                yield return null;
+            }
+            yield return null;
+        }
+        private IEnumerator OnRageCounter()
+        {
+            var elapsedTime = 0f;
+            var rageDuration = 10f;
+            while (m_isRaging && rageDuration > elapsedTime)
+            {
+                elapsedTime += Time.deltaTime;
+                if (elapsedTime >= rageDuration)
+                {
+                    elapsedTime = 0f;
+                    m_isRaging = false;
+                    m_hasMalfactioned = true;
+                    m_steamMalfAndOver.Stop();
+                    m_heatHandler.ResetHeat();
+                    /*damage = 0;
+                    ligthVisuals.GetComponent<CinderBoltHeatLightsReaction>().HandleReaction(damage);*/
+                }
+                yield return null;
+            }
+            yield return null;
+        }
+        private IEnumerator OnMlfunctionedRoutine()
+        {
+            enabled = false;
+            yield return new WaitForSeconds(0.5f);
+            m_hasMalfactioned = false;
+            m_steamMalfAndOver.Play();
+            m_movement.Stop();
+            m_firebeamAnticipationFX.Stop();
+            m_flamethrower1FX.Stop();
+            m_flamethrower2FX.Stop();
+            m_laserOriginMuzzleFX.Stop();
+            m_longDashFX.Stop();
+            m_meteorSmashFX.Stop();
+            m_meteorSmashTrailFX.SetActive(false);
+            m_muzzleLoopFX.Stop();
+            m_shortDashFX.Stop();
+            m_spinAttackFX.Stop();
+            m_punchAttackCollider.enabled = false;
+            m_flamethrower2Colliders.enabled = false;
+            m_firebeamCollider.enabled = false;
+            m_longDashCollider.enabled = false;
+            m_flamethrower2Colliders.enabled = false;
+            m_meteorSmashCollider.enabled = false;
+            m_spinAttackCollider[0].enabled = false;
+            m_spinAttackCollider[1].enabled = false;
+            m_animation.SetAnimation(0, m_info.malfunctionStateAnimation, false);
+            yield return new WaitForSeconds(1.5f);
+            m_animation.SetAnimation(0, m_info.malfunctionStateIdleAnimation, true);
+            yield return new WaitForSeconds(5f);
+            m_animation.SetAnimation(0, m_info.malfunctionRecoveryStateAnimation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.malfunctionRecoveryStateAnimation);
+            m_steamMalfAndOver.Stop();
+            m_animation.SetAnimation(0, m_info.idleAnimation, true);
+            m_heatHandler.ResetHeat();
+            DecidedOnAttack(false);
+            m_currentAttackCoroutine = null;
+            m_stateHandle.ApplyQueuedState();
+            yield return null;
+            enabled = true;
+        }
+        private IEnumerator OnRuneShieldRoutine()
+        {
+            m_hasRune = false;
+            m_runeDuration = m_phaseHandle.currentPhase == Phase.PhaseOne ? 5 : 8;
+            m_runeShieldFX.SetActive(true);
+            yield return new WaitForSeconds(m_runeDuration);
+            m_runeShieldFX.SetActive(false);
+            m_runeShieldBreakFX.SetActive(true);
+            yield return new WaitForSeconds(1f);
+            m_runeShieldBreakFX.SetActive(false);
+            yield return null;
+        }
+        public GameObject ligthVisuals;
+        public bool checker = false;
+        private void CinderBoltAI_DamageTaken(object sender, Damageable.DamageEventArgs eventArgs)
+        {
+            if (eventArgs.type == DamageType.Fire)
+            {
+                checker = true;
+                counter += 1;
+                if (counter == 2)
+                {
+                    m_hasRune = true;
+                    counter = 0;
+                }
+                StartCoroutine(CounterForRageRoutine());
+            }
+            //throw new NotImplementedException();
+        }
         private void Update()
         {
-            Debug.Log(m_patternCount.Length);
+            Debug.Log("asd " + GetComponent<CinderBoltHeatGauge>().currentValue);
+            ligthVisuals.GetComponent<CinderBoltHeatLightsReaction>().HandleReaction(GetComponent<CinderBoltHeatGauge>().currentValue);
+            if (GetComponent<CinderBoltHeatGauge>().currentValue == 90)
+            {
+                m_isRaging = true;
+            }
+            if (m_isRaging)
+            {
+                m_steamMalfAndOver.Play();
+                StartCoroutine(OnRageCounter());
+            }
+            if (m_hasMalfactioned)
+            {
+                StopAllCoroutines();
+                StartCoroutine(OnMlfunctionedRoutine());
+            }
+            if (m_hasRune)
+            {
+                StartCoroutine(OnRuneShieldRoutine());
+            }
             m_phaseHandle.MonitorPhase();
             switch (m_stateHandle.currentState)
             {
@@ -1994,15 +2254,20 @@ namespace DChild.Gameplay.Characters.Enemies
                     //m_animation.SetAnimation(0, m_info.idleAnimation, true);
                     break;
                 case State.Intro:
-                    if (IsFacingTarget())
-                    {
-                        StartCoroutine(IntroRoutine());
-                    }
+                    /*if (IsFacingTarget())
+                    {*/
+                    //enabled = true;
+                    StartCoroutine(IntroRoutine());
+                    /*}
                     else
                     {
                         CustomTurn();
-                    }
+                    }*/
                     break;
+                /*case State.Malfunction:
+                    StartCoroutine(OnMlfunctionedRoutine());
+                    enabled = true;
+                    break;*/
                 case State.Phasing:
                     StartCoroutine(ChangePhaseRoutine());
                     break;
@@ -2020,80 +2285,58 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_movement.Stop();
                     break;
                 case State.Attacking:
+                    m_hitbox.SetInvulnerability(Invulnerability.None);
                     if (IsFacingTarget())
                     {
                         switch (m_chosenPattern)
                         {
                             case Pattern.Phase1Pattern1:
-                                /*if (m_phaseHandle.currentPhase == Phase.PhaseOne)
-                                {*/
                                 if (m_phaseHandle.currentPhase == Phase.PhaseOne)
                                 {
                                     Debug.Log("0 ni ha, bsi alinganga ka");
                                     UpdateRangeCache(m_info.punchAttack.range, m_info.flameThrowerAttack.range);
-                                    ExecuteAttack(0);
+                                    ExecuteAttack(1);
                                 }
-                                /*}*/
                                 break;
                             case Pattern.Phase1Pattern2:
-                                /*if (m_phaseHandle.currentPhase == Phase.PhaseOne)
-                                {*/
                                 if (m_phaseHandle.currentPhase == Phase.PhaseOne)
                                 {
                                     Debug.Log("1 ni ha, bsi alinganga ka");
                                     UpdateRangeCache(m_info.punchAttack.range, m_info.flameThrowerAttack.range, m_info.spinAttack.range, m_info.firebeamAttack.range, m_info.longDashAttack.range);
-                                    ExecuteAttack(1);
+                                    ExecuteAttack(2);
                                 }
-                                /*}*/
                                 break;
                             case Pattern.Phase2Pattern1:
-                                /*if (m_phaseHandle.currentPhase == Phase.PhaseTwo)
-                                {*/
                                 if (m_phaseHandle.currentPhase == Phase.PhaseTwo)
                                 {
                                     Debug.Log("2 ni ha, bsi alinganga ka");
                                     UpdateRangeCache(m_info.punchAttack.range, m_info.flameThrowerAttack.range, m_info.spinAttack.range, m_info.shotgunBlastFireAttack.range, m_info.flameThrowerAttack.range, m_info.shortDashAttack.range);//change the flamethrower to flamethrower2range
-                                    ExecuteAttack(2);
+                                    ExecuteAttack(3);
                                 }
-
-                                /*}*/
-                                /*m_stateHandle.OverrideState(State.Chasing);*/
                                 break;
                             case Pattern.Phase2Pattern2:
-                                /*if (m_phaseHandle.currentPhase == Phase.PhaseTwo)
-                                {*/
                                 if (m_phaseHandle.currentPhase == Phase.PhaseTwo)
                                 {
                                     Debug.Log("3 ni ha, bsi alinganga ka");
                                     UpdateRangeCache(m_info.punchAttack.range, m_info.spinAttack.range, m_info.shotgunBlastFireAttack.range, m_info.longDashAttack.range);
-                                    ExecuteAttack(3);
+                                    ExecuteAttack(4);
                                 }
-                                /*}*/
-                                /*m_stateHandle.OverrideState(State.Chasing);*/
                                 break;
                             case Pattern.Phase2Pattern3:
-                                /*if (m_phaseHandle.currentPhase == Phase.PhaseTwo)
-                                {*/
                                 if (m_phaseHandle.currentPhase == Phase.PhaseTwo)
                                 {
                                     Debug.Log("4 ni ha, bsi alinganga ka");
                                     UpdateRangeCache(m_info.spinAttack.range, m_info.firebeamAttack.range, m_info.meteorAttack.range);
-                                    ExecuteAttack(4);
+                                    ExecuteAttack(5);
                                 }
-                                /*}*/
-                                /*m_stateHandle.OverrideState(State.Chasing);*/
                                 break;
                             case Pattern.Phase2Pattern4:
-                                /*if (m_phaseHandle.currentPhase == Phase.PhaseTwo)
-                                {*/
                                 if (m_phaseHandle.currentPhase == Phase.PhaseTwo)
                                 {
                                     Debug.Log("5 ni ha, bsi alinganga ka");
                                     UpdateRangeCache(m_info.firebeamAttack.range, m_info.flameThrowerAttack.range);//change the flamethrower to flamethrower2range
-                                    ExecuteAttack(5);
+                                    ExecuteAttack(6);
                                 }
-                                /*}*/
-                                /*m_stateHandle.OverrideState(State.Chasing);*/
                                 break;
                         }
                     }
@@ -2106,6 +2349,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     break;
 
                 case State.Chasing:
+                    enabled = false;
                     //m_attackCount = 0;
                     /*if (IsFacingTarget())
                     {*/
@@ -2127,6 +2371,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         CustomTurn();
                         MoveToTarget(m_patternDecider.chosenAttack.range);
                     }*/
+                    enabled = true;
                     break;
 
                 case State.ReevaluateSituation:

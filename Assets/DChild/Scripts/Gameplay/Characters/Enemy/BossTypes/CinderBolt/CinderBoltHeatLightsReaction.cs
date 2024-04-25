@@ -11,32 +11,37 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             [SerializeField]
             private int m_heatThreshold;
-            [SerializeField, SpineSlot]
-            private string m_slot;
-            [SerializeField, SpineAttachment]
-            private string m_attachment;
+            [SerializeField]
+            private SkeletonRendererCustomMaterials m_renderCustomMaterials;
 
             public int heatThreshold => m_heatThreshold;
-            public string slot => m_slot;
-            public string attachment => m_attachment;
+            public SkeletonRendererCustomMaterials skeletonRendererCustomMaterials => m_renderCustomMaterials;
         }
 
         [SerializeField]
         private Configuration[] m_configurations;
 
-        public override void HandleReaction(SpineAnimation spineAnimation, int heatValue)
+        public override void HandleReaction(int heatValue)
         {
             for (int i = 0; i < m_configurations.Length; i++)
             {
                 var config = m_configurations[i];
                 if (heatValue >= config.heatThreshold)
                 {
-                    spineAnimation.skeletonAnimation.skeleton.SetAttachment(config.slot, config.attachment);
+                    config.skeletonRendererCustomMaterials.enabled = true;
                 }
                 else
                 {
-                    spineAnimation.skeletonAnimation.skeleton.SetAttachment(config.slot, null);
+                    config.skeletonRendererCustomMaterials.enabled = false;
                 }
+            }
+        }
+
+        private void Start()
+        {
+            for (int i = 0; i < m_configurations.Length; i++)
+            {
+                m_configurations[i].skeletonRendererCustomMaterials.enabled = false;
             }
         }
     }

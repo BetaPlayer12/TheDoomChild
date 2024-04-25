@@ -15,7 +15,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             for (int i = 0; i < m_reactions.Length; i++)
             {
-                m_reactions[i].HandleReaction(m_animation, m_heatGauge.currentValue);
+                m_reactions[i].HandleReaction(m_heatGauge.currentValue);
             }
         }
 

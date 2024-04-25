@@ -28,7 +28,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         [SerializeField]
         private CinderBoltHeatGauge m_gauge;
-        [ShowInInspector, HideInEditorMode]
+        [ShowInInspector]
         private Config m_config;
 
         private bool m_isInitialized;
