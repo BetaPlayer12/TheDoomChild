@@ -33,7 +33,6 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField]
             private List<DemonLordSummonDragon.Pattern[]> m_summonDragonPattern;
             public List<DemonLordSummonDragon.Pattern[]> summonDragonPattern => m_summonDragonPattern;
-
             [SerializeField]
             private MovementInfo m_move = new MovementInfo();
             public MovementInfo move => m_move;
@@ -650,6 +649,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_lightningStrikeCounter = 0;
             m_isHit = false;
             //m_fireController.SetActiveDragonTrail(false);
+            m_fireController.RemoveDamageCollider();
             m_fireController.DragonBreathTrailAnimatorStateChecker();
             m_fireController.gameObject.SetActive(false);
             m_fireController.m_isFireRoutineDone = false;
@@ -753,10 +753,30 @@ namespace DChild.Gameplay.Characters.Enemies
         protected override void OnDestroyed(object sender, EventActionArgs eventArgs)
         {
             base.OnDestroyed(sender, eventArgs);
+            EndAttacks();
             m_book.Death(false);
             StopAllCoroutines();
             m_agent.Stop();
             m_isDetecting = false;
+
+
+        }
+
+        private void EndAttacks()
+        {
+            m_rayOfFrostAnimatorLeft.gameObject.SetActive(false);
+            m_rayOfFrostAnimatorRight.gameObject.SetActive(false);
+            m_fireController.RemoveDamageCollider();
+            m_fireController.DragonBreathTrailAnimatorStateChecker();
+            m_fireController.gameObject.SetActive(false);
+            m_fireController.m_isFireRoutineDone = false;
+            m_fireController.m_leftFireBreath = true;
+            m_damageable.DamageTaken -= DemonLordAI_DamageTaken;
+            m_demonLordSummonDragon.SpellEnd -= SpellEndEventSummonDragon;
+            m_isDemonLordHit = false;
+            m_isSpellDoneSummonDragon = false;
+            m_lightningStrikeCounter = 0;
+            m_isHit = false;
         }
 
         #region Attacks
@@ -926,7 +946,7 @@ namespace DChild.Gameplay.Characters.Enemies
         //    m_stateHandle.ApplyQueuedState();
         //    yield return null;
         //}
-        
+
         private IEnumerator RayOfFrostRoutine()
         {
             var randIndexForRayOfFrost = UnityEngine.Random.Range(0, 2);
