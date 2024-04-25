@@ -658,12 +658,12 @@ namespace DChild.Gameplay.Characters.Enemies
         #endregion
         private bool m_isDetecting;
 
-
         public event EventAction<EventActionArgs> BodySlamDone;
         public event EventAction<EventActionArgs> WreckingBallDone;
         public event EventAction<EventActionArgs> PhaseChangeStart;
         public event EventAction<EventActionArgs> PhaseChangeDone;
 
+        #region Phasing
         private void ApplyPhaseData(PhaseInfo obj)
         {
             switch (m_phaseHandle.currentPhase)
@@ -810,418 +810,10 @@ namespace DChild.Gameplay.Characters.Enemies
         private void ChangeState()
         {
             Debug.Log("ChangeState for King Pus");
-            switch (m_phaseHandle.currentPhase)
-            {
-                case Phase.PhaseOne:
-                    if (m_phase1Done /*&& m_phase2Done && m_phase3Done*/)
-                        return;
-                    break;
-                case Phase.PhaseTwo:
-                    if (m_phase2Done)
-                        return;
-                    break;
-                case Phase.PhaseThree:
-                    if (m_phase3Done)
-                        return;
-                    break;
-                case Phase.PhaseFour:
-                    if (m_phase4Done)
-                        return;
-                    break;
-            }
+
             StartCoroutine(SmartChangePhaseRoutine());
-            //m_changePhaseCoroutine = StartCoroutine(ChangePhaseRoutine());
         }
 
-        public override void SetTarget(IDamageable damageable, Character m_target = null)
-        {
-            if (damageable != null)
-            {
-                base.SetTarget(damageable, m_target);
-                if (!m_isDetecting)
-                {
-                    m_isDetecting = true;
-                    m_stateHandle.OverrideState(State.Intro);
-                    //GameEventMessage.SendEvent("Boss Encounter");
-                }
-            }
-        }
-
-        private void OnFlinchStart(object sender, EventActionArgs eventArgs)
-        {
-            if (m_targetInfo.position.x > transform.position.x)
-            {
-                m_flinchRighthHandle.gameObject.SetActive(true);
-            }
-            else
-            {
-                m_flinchLeftHandle.gameObject.SetActive(true);
-            }
-        }
-
-        private void OnFlinchEnd(object sender, EventActionArgs eventArgs)
-        {
-            m_flinchRighthHandle.gameObject.SetActive(false);
-            m_flinchLeftHandle.gameObject.SetActive(false);
-        }
-
-        private void OnDamageTaken(object sender, Damageable.DamageEventArgs eventArgs)
-        {
-            if (m_changePhaseCoroutine == null && m_grappleEvadeCoroutine == null && m_wreckingBallCoroutine == null && enabled)
-            {
-                switch (m_phaseHandle.currentPhase)
-                {
-                    case Phase.PhaseOne:
-                        if (m_currentHitCount < m_maxHitCount)
-                            m_currentHitCount++;
-                        else
-                        {
-                            m_hitbox.SetCanBlockDamageState(true);
-                        }
-
-                        if (m_hitbox.canBlockDamage)
-                        {
-                            if (m_grappleCoroutine != null)
-                            {
-                                StopCoroutine(m_grappleCoroutine);
-                                m_grappleCoroutine = null;
-                            }
-
-                            if (m_currentAttackCoroutine != null)
-                            {
-                                StopCoroutine(m_currentAttackCoroutine);
-                                m_currentAttackCoroutine = null;
-                                m_attackDecider.hasDecidedOnAttack = false;
-                            }
-
-                            //m_stateHandle.Wait(State.ReevaluateSituation);
-
-                            m_hitbox.Enable();
-                            m_rb2d.isKinematic = false;
-                            m_rb2d.useFullKinematicContacts = false;
-                            m_willStickToWall = false;
-                            m_legCollider.enabled = true;
-
-                            m_grappleEvadeCoroutine = StartCoroutine(GrappleRoutine(false, true, m_info.bodySlamCount/*, true*/));
-                            //m_wreckingBallCoroutine = StartCoroutine(WreckingBallRoutine(m_info.wreckingBallCount));
-                            m_currentHitCount = 0;
-
-                            //StartCoroutine(AttackCoroutineStopper());
-
-                        }
-                        break;
-                    default:
-                        if (m_currentHitCount < m_maxHitCount)
-                            m_currentHitCount++;
-                        else
-                        {
-                            m_hitbox.SetCanBlockDamageState(true);
-                        }
-
-                        if (m_hitbox.canBlockDamage)
-                        {
-                            if (m_grappleCoroutine != null)
-                            {
-                                StopCoroutine(m_grappleCoroutine);
-                                m_grappleCoroutine = null;
-                            }
-
-                            if (m_currentAttackCoroutine != null)
-                            {
-                                StopCoroutine(m_currentAttackCoroutine);
-                                m_currentAttackCoroutine = null;
-                                m_attackDecider.hasDecidedOnAttack = false;
-                            }
-
-                            //m_stateHandle.Wait(State.ReevaluateSituation);
-
-                            m_hitbox.Enable();
-                            m_rb2d.isKinematic = false;
-                            m_rb2d.useFullKinematicContacts = false;
-                            m_willStickToWall = false;
-                            m_legCollider.enabled = true;
-
-                            m_wreckingBallCoroutine = StartCoroutine(WreckingBallRoutine(m_info.wreckingBallCount));
-                            m_currentHitCount = 0;
-
-                            //StartCoroutine(AttackCoroutineStopper());
-
-                        }
-                        break;
-                }
-            }
-        }
-
-        private IEnumerator AttackCoroutineStopper(Coroutine attackCoroutine)
-        {
-            //Debug.Log("Entered AttackCoroutineStopper");
-            while (true /*|| m_wreckingBallCoroutine != null*/)
-            {
-                //Debug.Log("Checking KingPus Attack Routines");
-                if (attackCoroutine != null)
-                {
-                    //Debug.Log("CURRENT ATACK OF KING PUS NOT NULL");
-                    StopCoroutine(attackCoroutine);
-                    attackCoroutine = null;
-                    if (m_stabIKControlCoroutine != null)
-                    {
-                        StopCoroutine(m_stabIKControlCoroutine);
-                        m_stabIKControlCoroutine = null;
-                    }
-                    if (m_projectilePositionCheckerCoroutine != null)
-                    {
-                        StopCoroutine(m_projectilePositionCheckerCoroutine);
-                        m_projectilePositionCheckerCoroutine = null;
-                    }
-                    m_stateHandle.Wait(State.ReevaluateSituation);
-                }
-                yield return null;
-            }
-            //yield return null;
-        }
-
-        private IEnumerator GrappleRoutine(bool willTargetWall, bool willTargetSlam, int slamCount/*, bool randomGrapple*/)
-        {
-            enabled = true;
-
-            m_attackCoroutineStopper = StartCoroutine(AttackCoroutineStopper(m_stabCoroutine));
-            m_stateHandle.Wait(State.ReevaluateSituation);
-
-            StopAnimations();
-            m_crawlFX.Stop();
-            m_stabSlashFX.Stop();
-            m_krakenFX.Stop();
-            if (!m_groundSensor.isDetecting)
-            {
-                m_animation.DisableRootMotion();
-                m_character.physics.simulateGravity = true;
-                m_grappleRetractCoroutine = StartCoroutine(GrappleRetractRoutine(4));
-                m_animation.SetAnimation(0, m_info.bodySlamStart, false);
-                yield return new WaitForAnimationComplete(m_animation.animationState, m_info.bodySlamStart);
-                while (!m_groundSensor.isDetecting)
-                {
-                    m_animation.SetAnimation(0, m_info.bodySlamLoop, true);
-                    yield return null;
-                }
-                m_bodySlamFX.Play();
-                m_animation.SetAnimation(0, m_info.bodySlamEnd, false);
-                yield return new WaitForAnimationComplete(m_animation.animationState, m_info.bodySlamEnd);
-                BodySlamDone?.Invoke(this, new EventActionArgs());
-                //yield return new WaitUntil(() => m_groundSensor.isDetecting);
-                m_movement.Stop();
-                m_animation.SetEmptyAnimation(27, 0);
-            }
-            m_animation.AddAnimation(0, m_info.idleAnimation, true, 0);
-            for (int i = 0; i < slamCount; i++)
-            {
-                m_animation.DisableRootMotion();
-                CalculateWallGrapple(true);
-                m_character.physics.simulateGravity = false;
-                m_movement.Stop();
-                m_bodyCollider.size = new Vector2(m_bodyCollider.size.y, m_bodyCollider.size.y);
-                m_grappleExtendCoroutine = StartCoroutine(GrappleExtendRoutine(4));
-                yield return new WaitForSeconds(3f);
-                if (willTargetWall)
-                {
-                    m_hitbox.Disable();
-                    m_rb2d.isKinematic = true;
-                    m_rb2d.useFullKinematicContacts = true;
-                }
-                m_legCollider.enabled = false;
-                if (willTargetSlam)
-                {
-                    m_willGripTarget = true;
-                    //m_tentacleTargetPointIndex = m_wallGrappleDirectionIndex == 0 ? 6 : 0;
-                    m_targetPosition.position = willTargetWall ? m_tentacleOverridePoints[UnityEngine.Random.Range(0, m_tentacleOverridePoints.Count)].position : new Vector3(m_targetInfo.position.x, GroundPosition(m_targetInfo.position).y);
-                    AimAt(m_targetPosition.position);
-                    m_animation.SetAnimation(27, m_info.wallGrappleExtendAnimations[m_info.wallGrappleExtendAnimations.Count - 1], false).TimeScale = m_info.tentacleSpeed;
-                    yield return new WaitForAnimationComplete(m_animation.animationState, m_info.wallGrappleExtendAnimations[m_info.wallGrappleExtendAnimations.Count - 1]);
-                }
-                m_grappleRetractCoroutine = StartCoroutine(GrappleRetractRoutine(4));
-                if (willTargetSlam)
-                {
-                    yield return new WaitForAnimationComplete(m_animation.animationState, m_info.wallGrappleRetractAnimations[0]);
-                    m_animation.SetAnimation(27, m_info.wallGrappleAnimations[m_info.wallGrappleAnimations.Count - 1], false).MixDuration = 0;
-                    while (willTargetWall ? !m_groundSensor.isDetecting && !m_cielingSensor.isDetecting && !m_rightWallSensor.isDetecting && !m_leftWallSensor.isDetecting : !m_groundSensor.isDetecting)
-                    {
-                        m_character.physics.SetVelocity(m_targetLooker.right * m_info.toTargetRetractSpeed);
-                        yield return null;
-                    }
-                    //yield return new WaitUntil(() => m_groundSensor.isDetecting);
-                    m_willGripTarget = false;
-                    m_targetPosition.position = Vector2.zero;
-                    //m_targetChain.gameObject.SetActive(false);
-                    m_animation.SetAnimation(27, m_info.wallGrappleRetractAnimations[m_info.wallGrappleRetractAnimations.Count - 1], false).TimeScale = m_info.tentacleSpeed;
-                }
-                //m_animation.SetEmptyAnimation(0, 0);
-                //m_animation.SetAnimation(0, m_info.idleAnimation, true);
-                if (willTargetWall)
-                {
-                    m_hitbox.Enable();
-                    m_rb2d.isKinematic = false;
-                    m_rb2d.useFullKinematicContacts = false;
-                }
-                m_character.physics.simulateGravity = true;
-                yield return new WaitUntil(() => !m_willGripWall);
-                switch (willTargetSlam)
-                {
-                    case true:
-                        yield return new WaitUntil(() => !m_willStickToWall);
-                        m_bodyCollider.size = m_bodyColliderCacheSize;
-                        m_legCollider.enabled = true;
-                        break;
-                    case false:
-                        m_bodyCollider.size = m_bodyColliderCacheSize;
-                        m_legCollider.enabled = true;
-                        m_animation.SetAnimation(0, m_info.bodySlamStart, false);
-                        yield return new WaitForAnimationComplete(m_animation.animationState, m_info.bodySlamStart);
-                        while (!m_groundSensor.isDetecting)
-                        {
-                            m_animation.SetAnimation(0, m_info.bodySlamLoop, true);
-                            yield return null;
-                        }
-                        break;
-                }
-
-                m_bodySlamFX.Play();
-                m_movement.Stop();
-                m_animation.SetAnimation(0, m_info.bodySlamEnd, false);
-                yield return new WaitForAnimationComplete(m_animation.animationState, m_info.bodySlamEnd);
-                BodySlamDone?.Invoke(this, new EventActionArgs());
-
-                m_animation.SetEmptyAnimation(27, 0);
-            }
-            StopCoroutine(m_attackCoroutineStopper);
-            m_attackCoroutineStopper = null;
-            m_grappleEvadeCoroutine = null;
-            m_hitbox.SetCanBlockDamageState(false);
-            //TEMP
-            m_attackDecider.hasDecidedOnAttack = false;
-            m_currentAttackCoroutine = null;
-            //TEMP
-            m_stateHandle.ApplyQueuedState();
-            yield return null;
-            enabled = true;
-        }
-
-        private IEnumerator IntroRoutine()
-        {
-            m_stateHandle.Wait(State.Chasing);
-            m_movement.Stop();
-            m_hitbox.SetInvulnerability(Invulnerability.MAX);
-            //m_cinematic.PlayCinematic(1, false);
-            m_animation.animationState.TimeScale = 1;
-            m_animation.EnableRootMotion(true, false);
-            m_hitbox.Enable();
-            m_hitbox.SetInvulnerability(Invulnerability.None);
-            m_stateHandle.ApplyQueuedState();
-            yield return null;
-        }
-
-        private void SetAIToPhasing()
-        {
-            StopAnimations();
-            m_stateHandle.OverrideState(State.Phasing);
-        }
-
-        private void StopAnimations()
-        {
-            m_animation.SetEmptyAnimation(0, 0);
-            m_animation.SetEmptyAnimation(3, 0);
-            m_animation.SetEmptyAnimation(15, 0);
-            m_animation.SetEmptyAnimation(27, 0);
-            m_animation.SetEmptyAnimation(30, 0);
-        }
-
-        private void StopCurrentBehaviorRoutine()
-        {
-            if (m_currentAttackCoroutine != null)
-            {
-                StopCoroutine(m_currentAttackCoroutine);
-                m_currentAttackCoroutine = null;
-                m_attackDecider.hasDecidedOnAttack = false;
-            }
-            if (m_stabCoroutine != null)
-            {
-                StopCoroutine(m_stabCoroutine);
-                m_stabCoroutine = null;
-            }
-            if (m_stabIKControlCoroutine != null)
-            {
-                StopCoroutine(m_stabIKControlCoroutine);
-                m_stabIKControlCoroutine = null;
-            }
-            if (m_projectilePositionCheckerCoroutine != null)
-            {
-                StopCoroutine(m_projectilePositionCheckerCoroutine);
-                m_projectilePositionCheckerCoroutine = null;
-            }
-            if (m_grappleCoroutine != null)
-            {
-                StopCoroutine(m_grappleCoroutine);
-                m_grappleCoroutine = null;
-                //StartCoroutine(GrappleRetractRoutine(m_info.wallGrappleRetractAnimations.Count - 1));
-            }
-            if (m_grappleExtendCoroutine != null)
-            {
-                StopCoroutine(m_grappleExtendCoroutine);
-                m_grappleExtendCoroutine = null;
-                //StartCoroutine(GrappleRetractRoutine(m_info.wallGrappleRetractAnimations.Count - 1));
-            }
-            if (m_grappleRetractCoroutine != null)
-            {
-                StopCoroutine(m_grappleRetractCoroutine);
-                m_grappleRetractCoroutine = null;
-                //StartCoroutine(GrappleRetractRoutine(m_info.wallGrappleRetractAnimations.Count - 1));
-            }
-            if (m_grappleEvadeCoroutine != null)
-            {
-                StopCoroutine(m_grappleEvadeCoroutine);
-                m_grappleEvadeCoroutine = null;
-                //StartCoroutine(GrappleRetractRoutine(m_info.wallGrappleRetractAnimations.Count - 1));
-            }
-            if (m_tentacleControlCoroutine != null)
-            {
-                StopCoroutine(m_tentacleControlCoroutine);
-                m_tentacleControlCoroutine = null;
-                //StartCoroutine(GrappleRetractRoutine(m_info.wallGrappleRetractAnimations.Count - 1));
-            }
-            if (m_wreckingBallCoroutine != null)
-            {
-                StopCoroutine(m_wreckingBallCoroutine);
-                m_wreckingBallCoroutine = null;
-            }
-            if (m_attackCoroutineStopper != null)
-            {
-                StopCoroutine(m_attackCoroutineStopper);
-                m_attackCoroutineStopper = null;
-            }
-            if (m_allCoroutineStopper != null)
-            {
-                StopCoroutine(m_allCoroutineStopper);
-                m_allCoroutineStopper = null;
-            }
-            if (m_dynamicIdleCoroutine != null)
-            {
-                StopCoroutine(m_dynamicIdleCoroutine);
-                m_dynamicIdleCoroutine = null;
-            }
-        }
-
-        private void ResetCounterCounts()
-        {
-            m_currentHitCount = 0;
-        }
-
-        private IEnumerator AllCoroutinesStopper()
-        {
-            while (m_changePhaseCoroutine == null)
-            {
-                StopCurrentBehaviorRoutine();
-                yield return null;
-            }
-            yield return null;
-        }
 
         private void OnChangePhaseTime(object sender, EventActionArgs eventArgs)
         {
@@ -1289,7 +881,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.EnableRootMotion(true, false);
             m_animation.SetAnimation(0, flinchAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, flinchAnimation);
-            if(m_phaseHandle.currentPhase != Phase.PhaseThree)
+            if (m_phaseHandle.currentPhase != Phase.PhaseThree)
             {
                 m_animation.SetAnimation(0, m_info.fakeDeathAnimation, false);
                 yield return new WaitForAnimationComplete(m_animation.animationState, m_info.fakeDeathAnimation);
@@ -1354,6 +946,16 @@ namespace DChild.Gameplay.Characters.Enemies
 
             enabled = true;
         }
+
+
+        private void SetAIToPhasing()
+        {
+            StopAnimations();
+            m_stateHandle.OverrideState(State.Phasing);
+        }
+
+        #endregion
+
         #region Attacks
 
         private void LaunchSingleProjectile()
@@ -1901,38 +1503,24 @@ namespace DChild.Gameplay.Characters.Enemies
 
         #endregion
 
-        protected override void OnDestroyed(object sender, EventActionArgs eventArgs)
-        {
-            base.OnDestroyed(sender, eventArgs);
-        }
+        #region Movement
 
-        private void AllahuAkbar()
+        private IEnumerator GrappleRoutine(bool willTargetWall, bool willTargetSlam, int slamCount/*, bool randomGrapple*/)
         {
-            m_rb2d.isKinematic = false;
-            m_rb2d.useFullKinematicContacts = false;
-            StopAllCoroutines();
-            StopCurrentBehaviorRoutine();
+            enabled = true;
+
+            m_attackCoroutineStopper = StartCoroutine(AttackCoroutineStopper(m_stabCoroutine));
+            m_stateHandle.Wait(State.ReevaluateSituation);
+
             StopAnimations();
-            m_hitbox.Disable();
-            m_animation.DisableRootMotion();
-            m_movement.Stop();
-            m_character.physics.simulateGravity = true;
             m_crawlFX.Stop();
+            m_stabSlashFX.Stop();
             m_krakenFX.Stop();
-
-            Debug.Log("Allahu Akbar!");
-
-            StartCoroutine(DeathRoutine());
-        }
-
-        private IEnumerator DeathRoutine()
-        {
-            PhaseChangeStart?.Invoke(this, new EventActionArgs());
-            enabled = false;
-            m_grappleRetractCoroutine = StartCoroutine(GrappleRetractRoutine(m_info.wallGrappleRetractAnimations.Count - 1));
-            if (!m_character.physics.inContactWithGround)
+            if (!m_groundSensor.isDetecting)
             {
-                yield return new WaitForAnimationComplete(m_animation.animationState, m_info.wallGrappleRetractAnimations[0]);
+                m_animation.DisableRootMotion();
+                m_character.physics.simulateGravity = true;
+                m_grappleRetractCoroutine = StartCoroutine(GrappleRetractRoutine(4));
                 m_animation.SetAnimation(0, m_info.bodySlamStart, false);
                 yield return new WaitForAnimationComplete(m_animation.animationState, m_info.bodySlamStart);
                 while (!m_groundSensor.isDetecting)
@@ -1940,34 +1528,107 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_animation.SetAnimation(0, m_info.bodySlamLoop, true);
                     yield return null;
                 }
+                m_bodySlamFX.Play();
                 m_animation.SetAnimation(0, m_info.bodySlamEnd, false);
                 yield return new WaitForAnimationComplete(m_animation.animationState, m_info.bodySlamEnd);
                 BodySlamDone?.Invoke(this, new EventActionArgs());
+                //yield return new WaitUntil(() => m_groundSensor.isDetecting);
                 m_movement.Stop();
-                m_animation.SetEmptyAnimation(9, 0);
-                m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                m_animation.SetEmptyAnimation(27, 0);
             }
-            m_animation.SetEmptyAnimation(0, 0);
-            m_animation.SetEmptyAnimation(3, 0);
-            m_animation.SetEmptyAnimation(15, 0);
-            m_animation.SetEmptyAnimation(27, 0);
-            m_krakenRageBB.enabled = false;
-            m_deathFX.Play();
-            m_animation.SetAnimation(0, m_info.deathSelfDestructAnimation, false);
-            yield return new WaitForSeconds(0.75f);
-            m_health.SetHealthPercentage(0.01f);
-            m_selfDestructBB.enabled = true;
-            yield return new WaitForSeconds(0.25f);
-            m_selfDestructBB.enabled = false;
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.deathSelfDestructAnimation);
-            m_damageable.KillSelf();
-            m_animation.SetAnimation(0, m_info.deathAnimation, true);
-            m_isDetecting = false;
-            //enabled = false;
+            m_animation.AddAnimation(0, m_info.idleAnimation, true, 0);
+            for (int i = 0; i < slamCount; i++)
+            {
+                m_animation.DisableRootMotion();
+                CalculateWallGrapple(true);
+                m_character.physics.simulateGravity = false;
+                m_movement.Stop();
+                //m_bodyCollider.size = new Vector2(m_bodyCollider.size.y, m_bodyCollider.size.y);
+                m_grappleExtendCoroutine = StartCoroutine(GrappleExtendRoutine(4));
+                yield return new WaitForSeconds(3f);
+                if (willTargetWall)
+                {
+                    //hitbox.Disable();
+                    m_rb2d.isKinematic = true;
+                    m_rb2d.useFullKinematicContacts = true;
+                }
+                m_legCollider.enabled = false;
+                if (willTargetSlam)
+                {
+                    m_willGripTarget = true;
+                    //m_tentacleTargetPointIndex = m_wallGrappleDirectionIndex == 0 ? 6 : 0;
+                    m_targetPosition.position = willTargetWall ? m_tentacleOverridePoints[UnityEngine.Random.Range(0, m_tentacleOverridePoints.Count)].position : new Vector3(m_targetInfo.position.x, GroundPosition(m_targetInfo.position).y);
+                    AimAt(m_targetPosition.position);
+                    m_animation.SetAnimation(27, m_info.wallGrappleExtendAnimations[m_info.wallGrappleExtendAnimations.Count - 1], false).TimeScale = m_info.tentacleSpeed;
+                    yield return new WaitForAnimationComplete(m_animation.animationState, m_info.wallGrappleExtendAnimations[m_info.wallGrappleExtendAnimations.Count - 1]);
+                }
+                m_grappleRetractCoroutine = StartCoroutine(GrappleRetractRoutine(4));
+                if (willTargetSlam)
+                {
+                    yield return new WaitForAnimationComplete(m_animation.animationState, m_info.wallGrappleRetractAnimations[0]);
+                    m_animation.SetAnimation(27, m_info.wallGrappleAnimations[m_info.wallGrappleAnimations.Count - 1], false).MixDuration = 0;
+                    while (willTargetWall ? !m_groundSensor.isDetecting && !m_cielingSensor.isDetecting && !m_rightWallSensor.isDetecting && !m_leftWallSensor.isDetecting : !m_groundSensor.isDetecting)
+                    {
+                        m_character.physics.SetVelocity(m_targetLooker.right * m_info.toTargetRetractSpeed);
+                        yield return null;
+                    }
+                    //yield return new WaitUntil(() => m_groundSensor.isDetecting);
+                    m_willGripTarget = false;
+                    m_targetPosition.position = Vector2.zero;
+                    //m_targetChain.gameObject.SetActive(false);
+                    m_animation.SetAnimation(27, m_info.wallGrappleRetractAnimations[m_info.wallGrappleRetractAnimations.Count - 1], false).TimeScale = m_info.tentacleSpeed;
+                }
+                //m_animation.SetEmptyAnimation(0, 0);
+                //m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                if (willTargetWall)
+                {
+                    //m_hitbox.Enable();
+                    m_rb2d.isKinematic = false;
+                    m_rb2d.useFullKinematicContacts = false;
+                }
+                m_character.physics.simulateGravity = true;
+                yield return new WaitUntil(() => !m_willGripWall);
+                switch (willTargetSlam)
+                {
+                    case true:
+                        yield return new WaitUntil(() => !m_willStickToWall);
+                        //m_bodyCollider.size = m_bodyColliderCacheSize;
+                        m_legCollider.enabled = true;
+                        break;
+                    case false:
+                        //m_bodyCollider.size = m_bodyColliderCacheSize;
+                        m_legCollider.enabled = true;
+                        m_animation.SetAnimation(0, m_info.bodySlamStart, false);
+                        yield return new WaitForAnimationComplete(m_animation.animationState, m_info.bodySlamStart);
+                        while (!m_groundSensor.isDetecting)
+                        {
+                            m_animation.SetAnimation(0, m_info.bodySlamLoop, true);
+                            yield return null;
+                        }
+                        break;
+                }
+
+                m_bodySlamFX.Play();
+                m_movement.Stop();
+                m_animation.SetAnimation(0, m_info.bodySlamEnd, false);
+                yield return new WaitForAnimationComplete(m_animation.animationState, m_info.bodySlamEnd);
+                BodySlamDone?.Invoke(this, new EventActionArgs());
+
+                m_animation.SetEmptyAnimation(27, 0);
+            }
+            StopCoroutine(m_attackCoroutineStopper);
+            m_attackCoroutineStopper = null;
+            m_grappleEvadeCoroutine = null;
+            //m_hitbox.SetCanBlockDamageState(false);
+            //TEMP
+            m_attackDecider.hasDecidedOnAttack = false;
+            m_currentAttackCoroutine = null;
+            //TEMP
+            m_stateHandle.ApplyQueuedState();
             yield return null;
+            enabled = true;
         }
 
-        #region Movement
         private void MoveToTarget(float targetRange, bool willTentaSpearChase)
         {
             var moveRight = willTentaSpearChase ? m_info.tentaSpearRightCrawl : m_info.rightMove;
@@ -2160,7 +1821,202 @@ namespace DChild.Gameplay.Characters.Enemies
             m_patternCooldown[chosenCD] = fullCooldownTime;
             yield return null;
         }
-        #endregion 
+        #endregion
+
+        #region Working Stuff I Probably don't need to touch and don't completely understand 
+        public override void SetTarget(IDamageable damageable, Character m_target = null)
+        {
+            if (damageable != null)
+            {
+                base.SetTarget(damageable, m_target);
+                if (!m_isDetecting)
+                {
+                    m_isDetecting = true;
+                    m_stateHandle.OverrideState(State.Intro);
+                    //GameEventMessage.SendEvent("Boss Encounter");
+                }
+            }
+        }
+
+        private IEnumerator IntroRoutine()
+        {
+            m_stateHandle.Wait(State.Chasing);
+            m_movement.Stop();
+            m_hitbox.SetInvulnerability(Invulnerability.MAX);
+            //m_cinematic.PlayCinematic(1, false);
+            m_animation.animationState.TimeScale = 1;
+            m_animation.EnableRootMotion(true, false);
+            m_hitbox.Enable();
+            m_hitbox.SetInvulnerability(Invulnerability.None);
+            m_stateHandle.ApplyQueuedState();
+            yield return null;
+        }
+
+        private void StopAnimations()
+        {
+            m_animation.SetEmptyAnimation(0, 0);
+            m_animation.SetEmptyAnimation(3, 0);
+            m_animation.SetEmptyAnimation(15, 0);
+            m_animation.SetEmptyAnimation(27, 0);
+            m_animation.SetEmptyAnimation(30, 0);
+        }
+
+        private void StopCurrentBehaviorRoutine()
+        {
+            if (m_currentAttackCoroutine != null)
+            {
+                StopCoroutine(m_currentAttackCoroutine);
+                m_currentAttackCoroutine = null;
+                m_attackDecider.hasDecidedOnAttack = false;
+            }
+            if (m_stabCoroutine != null)
+            {
+                StopCoroutine(m_stabCoroutine);
+                m_stabCoroutine = null;
+            }
+            if (m_stabIKControlCoroutine != null)
+            {
+                StopCoroutine(m_stabIKControlCoroutine);
+                m_stabIKControlCoroutine = null;
+            }
+            if (m_projectilePositionCheckerCoroutine != null)
+            {
+                StopCoroutine(m_projectilePositionCheckerCoroutine);
+                m_projectilePositionCheckerCoroutine = null;
+            }
+            if (m_grappleCoroutine != null)
+            {
+                StopCoroutine(m_grappleCoroutine);
+                m_grappleCoroutine = null;
+                //StartCoroutine(GrappleRetractRoutine(m_info.wallGrappleRetractAnimations.Count - 1));
+            }
+            if (m_grappleExtendCoroutine != null)
+            {
+                StopCoroutine(m_grappleExtendCoroutine);
+                m_grappleExtendCoroutine = null;
+                //StartCoroutine(GrappleRetractRoutine(m_info.wallGrappleRetractAnimations.Count - 1));
+            }
+            if (m_grappleRetractCoroutine != null)
+            {
+                StopCoroutine(m_grappleRetractCoroutine);
+                m_grappleRetractCoroutine = null;
+                //StartCoroutine(GrappleRetractRoutine(m_info.wallGrappleRetractAnimations.Count - 1));
+            }
+            if (m_grappleEvadeCoroutine != null)
+            {
+                StopCoroutine(m_grappleEvadeCoroutine);
+                m_grappleEvadeCoroutine = null;
+                //StartCoroutine(GrappleRetractRoutine(m_info.wallGrappleRetractAnimations.Count - 1));
+            }
+            if (m_tentacleControlCoroutine != null)
+            {
+                StopCoroutine(m_tentacleControlCoroutine);
+                m_tentacleControlCoroutine = null;
+                //StartCoroutine(GrappleRetractRoutine(m_info.wallGrappleRetractAnimations.Count - 1));
+            }
+            if (m_wreckingBallCoroutine != null)
+            {
+                StopCoroutine(m_wreckingBallCoroutine);
+                m_wreckingBallCoroutine = null;
+            }
+            if (m_attackCoroutineStopper != null)
+            {
+                StopCoroutine(m_attackCoroutineStopper);
+                m_attackCoroutineStopper = null;
+            }
+            if (m_allCoroutineStopper != null)
+            {
+                StopCoroutine(m_allCoroutineStopper);
+                m_allCoroutineStopper = null;
+            }
+            if (m_dynamicIdleCoroutine != null)
+            {
+                StopCoroutine(m_dynamicIdleCoroutine);
+                m_dynamicIdleCoroutine = null;
+            }
+        }
+
+        private void ResetCounterCounts()
+        {
+            m_currentHitCount = 0;
+        }
+
+        private IEnumerator AllCoroutinesStopper()
+        {
+            while (m_changePhaseCoroutine == null)
+            {
+                StopCurrentBehaviorRoutine();
+                yield return null;
+            }
+            yield return null;
+        }
+
+
+        protected override void OnDestroyed(object sender, EventActionArgs eventArgs)
+        {
+            base.OnDestroyed(sender, eventArgs);
+        }
+
+        private void AllahuAkbar()
+        {
+            m_rb2d.isKinematic = false;
+            m_rb2d.useFullKinematicContacts = false;
+            StopAllCoroutines();
+            StopCurrentBehaviorRoutine();
+            StopAnimations();
+            m_hitbox.Disable();
+            m_animation.DisableRootMotion();
+            m_movement.Stop();
+            m_character.physics.simulateGravity = true;
+            m_crawlFX.Stop();
+            m_krakenFX.Stop();
+
+            Debug.Log("Allahu Akbar!");
+
+            StartCoroutine(DeathRoutine());
+        }
+
+        private IEnumerator DeathRoutine()
+        {
+            PhaseChangeStart?.Invoke(this, new EventActionArgs());
+            enabled = false;
+            m_grappleRetractCoroutine = StartCoroutine(GrappleRetractRoutine(m_info.wallGrappleRetractAnimations.Count - 1));
+            if (!m_character.physics.inContactWithGround)
+            {
+                yield return new WaitForAnimationComplete(m_animation.animationState, m_info.wallGrappleRetractAnimations[0]);
+                m_animation.SetAnimation(0, m_info.bodySlamStart, false);
+                yield return new WaitForAnimationComplete(m_animation.animationState, m_info.bodySlamStart);
+                while (!m_groundSensor.isDetecting)
+                {
+                    m_animation.SetAnimation(0, m_info.bodySlamLoop, true);
+                    yield return null;
+                }
+                m_animation.SetAnimation(0, m_info.bodySlamEnd, false);
+                yield return new WaitForAnimationComplete(m_animation.animationState, m_info.bodySlamEnd);
+                BodySlamDone?.Invoke(this, new EventActionArgs());
+                m_movement.Stop();
+                m_animation.SetEmptyAnimation(9, 0);
+                m_animation.SetAnimation(0, m_info.idleAnimation, true);
+            }
+            m_animation.SetEmptyAnimation(0, 0);
+            m_animation.SetEmptyAnimation(3, 0);
+            m_animation.SetEmptyAnimation(15, 0);
+            m_animation.SetEmptyAnimation(27, 0);
+            m_krakenRageBB.enabled = false;
+            m_deathFX.Play();
+            m_animation.SetAnimation(0, m_info.deathSelfDestructAnimation, false);
+            yield return new WaitForSeconds(0.75f);
+            m_health.SetHealthPercentage(0.01f);
+            m_selfDestructBB.enabled = true;
+            yield return new WaitForSeconds(0.25f);
+            m_selfDestructBB.enabled = false;
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.deathSelfDestructAnimation);
+            m_damageable.KillSelf();
+            m_animation.SetAnimation(0, m_info.deathAnimation, true);
+            m_isDetecting = false;
+            //enabled = false;
+            yield return null;
+        }
 
         private void UpdateAttackDeciderList()
         {
@@ -2233,51 +2089,137 @@ namespace DChild.Gameplay.Characters.Enemies
             }
         }
 
-        protected override void Awake()
+        private void OnFlinchStart(object sender, EventActionArgs eventArgs)
         {
-            base.Awake();
-            m_damageable.DamageTaken += OnDamageTaken;
-            m_flinchRighthHandle.FlinchStart += OnFlinchStart;
-            m_flinchLeftHandle.FlinchStart += OnFlinchStart;
-            m_flinchRighthHandle.FlinchEnd += OnFlinchEnd;
-            m_flinchLeftHandle.FlinchEnd += OnFlinchEnd;
-            m_health = GetComponentInChildren<Health>();
-            m_attackDecider = new RandomAttackDecider<Attack>();
-            m_stateHandle = new StateHandle<State>(State.Idle, State.WaitBehaviourEnd);
-            UpdateAttackDeciderList();
-            m_attackCache = new List<Attack>();
-            AddToAttackCache(Attack.Phase1Pattern1, Attack.Phase1Pattern2, Attack.Phase1Pattern3, Attack.Phase1Pattern4);
-            m_attackRangeCache = new List<float>();
-            AddToRangeCache(m_info.phase1Pattern1Range, m_info.phase1Pattern2Range, m_info.phase1Pattern3Range, m_info.phase1Pattern4Range);
-            m_attackUsed = new bool[m_attackCache.Count];
-            m_currentFullCooldown = new List<float>();
-            m_patternCooldown = new List<float>();
+            if (m_targetInfo.position.x > transform.position.x)
+            {
+                m_flinchRighthHandle.gameObject.SetActive(true);
+            }
+            else
+            {
+                m_flinchLeftHandle.gameObject.SetActive(true);
+            }
         }
 
-        protected override void Start()
+        private void OnFlinchEnd(object sender, EventActionArgs eventArgs)
         {
-            base.Start();
-            m_animation.DisableRootMotion();
-            m_phaseHandle = new PhaseHandle<Phase, PhaseInfo>();
-            m_phaseHandle.Initialize(Phase.PhaseOne, m_info.phaseInfo, m_character, ChangeState, ApplyPhaseData);
-            m_phaseHandle.ApplyChange();
-            m_spineListener.Subscribe(m_info.singleShotEvent, LaunchSingleProjectile);
-            m_spineListener.Subscribe(m_info.multiShotEvent, LaunchMultiProjectile);
-            m_spineListener.Subscribe(m_info.moveEvent, EventMove);
-            m_spineListener.Subscribe(m_info.stopEvent, EventStop);
-            m_crawlFX.Play();
-            for (int i = 0; i < m_chains.Count; i++)
-            {
-                m_chains[i].gameObject.SetActive(false);
-                m_chains[i].transform.localPosition = Vector2.zero;
-            }
-            m_defaultTentacleOverridePointPositions = new List<Vector2>();
-            for (int i = 0; i < m_tentacleOverridePoints.Count; i++)
-            {
-                m_defaultTentacleOverridePointPositions.Add(m_tentacleOverridePoints[i].position);
-            }
+            m_flinchRighthHandle.gameObject.SetActive(false);
+            m_flinchLeftHandle.gameObject.SetActive(false);
+        }
 
-            m_kingPusDamageable.PhaseChangeTime += OnChangePhaseTime;
+        private void OnDamageTaken(object sender, Damageable.DamageEventArgs eventArgs)
+        {
+            if (m_changePhaseCoroutine == null && m_grappleEvadeCoroutine == null && m_wreckingBallCoroutine == null && enabled)
+            {
+                switch (m_phaseHandle.currentPhase)
+                {
+                    case Phase.PhaseOne:
+                        if (m_currentHitCount < m_maxHitCount)
+                            m_currentHitCount++;
+                        else
+                        {
+                            m_hitbox.SetCanBlockDamageState(true);
+                        }
+
+                        if (m_hitbox.canBlockDamage)
+                        {
+                            if (m_grappleCoroutine != null)
+                            {
+                                StopCoroutine(m_grappleCoroutine);
+                                m_grappleCoroutine = null;
+                            }
+
+                            if (m_currentAttackCoroutine != null)
+                            {
+                                StopCoroutine(m_currentAttackCoroutine);
+                                m_currentAttackCoroutine = null;
+                                m_attackDecider.hasDecidedOnAttack = false;
+                            }
+
+                            //m_stateHandle.Wait(State.ReevaluateSituation);
+
+                            m_hitbox.Enable();
+                            m_rb2d.isKinematic = false;
+                            m_rb2d.useFullKinematicContacts = false;
+                            m_willStickToWall = false;
+                            m_legCollider.enabled = true;
+
+                            m_grappleEvadeCoroutine = StartCoroutine(GrappleRoutine(false, true, m_info.bodySlamCount/*, true*/));
+                            //m_wreckingBallCoroutine = StartCoroutine(WreckingBallRoutine(m_info.wreckingBallCount));
+                            m_currentHitCount = 0;
+
+                            //StartCoroutine(AttackCoroutineStopper());
+
+                        }
+                        break;
+                    default:
+                        if (m_currentHitCount < m_maxHitCount)
+                            m_currentHitCount++;
+                        else
+                        {
+                            m_hitbox.SetCanBlockDamageState(true);
+                        }
+
+                        if (m_hitbox.canBlockDamage)
+                        {
+                            if (m_grappleCoroutine != null)
+                            {
+                                StopCoroutine(m_grappleCoroutine);
+                                m_grappleCoroutine = null;
+                            }
+
+                            if (m_currentAttackCoroutine != null)
+                            {
+                                StopCoroutine(m_currentAttackCoroutine);
+                                m_currentAttackCoroutine = null;
+                                m_attackDecider.hasDecidedOnAttack = false;
+                            }
+
+                            //m_stateHandle.Wait(State.ReevaluateSituation);
+
+                            m_hitbox.Enable();
+                            m_rb2d.isKinematic = false;
+                            m_rb2d.useFullKinematicContacts = false;
+                            m_willStickToWall = false;
+                            m_legCollider.enabled = true;
+
+                            m_wreckingBallCoroutine = StartCoroutine(WreckingBallRoutine(m_info.wreckingBallCount));
+                            m_currentHitCount = 0;
+
+                            //StartCoroutine(AttackCoroutineStopper());
+
+                        }
+                        break;
+                }
+            }
+        }
+
+        private IEnumerator AttackCoroutineStopper(Coroutine attackCoroutine)
+        {
+            //Debug.Log("Entered AttackCoroutineStopper");
+            while (true /*|| m_wreckingBallCoroutine != null*/)
+            {
+                //Debug.Log("Checking KingPus Attack Routines");
+                if (attackCoroutine != null)
+                {
+                    //Debug.Log("CURRENT ATACK OF KING PUS NOT NULL");
+                    StopCoroutine(attackCoroutine);
+                    attackCoroutine = null;
+                    if (m_stabIKControlCoroutine != null)
+                    {
+                        StopCoroutine(m_stabIKControlCoroutine);
+                        m_stabIKControlCoroutine = null;
+                    }
+                    if (m_projectilePositionCheckerCoroutine != null)
+                    {
+                        StopCoroutine(m_projectilePositionCheckerCoroutine);
+                        m_projectilePositionCheckerCoroutine = null;
+                    }
+                    m_stateHandle.Wait(State.ReevaluateSituation);
+                }
+                yield return null;
+            }
+            //yield return null;
         }
 
         public void AimAt(Vector2 target)
@@ -2312,6 +2254,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 }
             }
         }
+        #endregion
 
         private void Update()
         {
@@ -2521,6 +2464,53 @@ namespace DChild.Gameplay.Characters.Enemies
                 case State.WaitBehaviourEnd:
                     return;
             }
+        }
+
+        protected override void Awake()
+        {
+            base.Awake();
+            m_damageable.DamageTaken += OnDamageTaken;
+            m_flinchRighthHandle.FlinchStart += OnFlinchStart;
+            m_flinchLeftHandle.FlinchStart += OnFlinchStart;
+            m_flinchRighthHandle.FlinchEnd += OnFlinchEnd;
+            m_flinchLeftHandle.FlinchEnd += OnFlinchEnd;
+            m_health = GetComponentInChildren<Health>();
+            m_attackDecider = new RandomAttackDecider<Attack>();
+            m_stateHandle = new StateHandle<State>(State.Idle, State.WaitBehaviourEnd);
+            UpdateAttackDeciderList();
+            m_attackCache = new List<Attack>();
+            AddToAttackCache(Attack.Phase1Pattern1, Attack.Phase1Pattern2, Attack.Phase1Pattern3, Attack.Phase1Pattern4);
+            m_attackRangeCache = new List<float>();
+            AddToRangeCache(m_info.phase1Pattern1Range, m_info.phase1Pattern2Range, m_info.phase1Pattern3Range, m_info.phase1Pattern4Range);
+            m_attackUsed = new bool[m_attackCache.Count];
+            m_currentFullCooldown = new List<float>();
+            m_patternCooldown = new List<float>();
+        }
+
+        protected override void Start()
+        {
+            base.Start();
+            m_animation.DisableRootMotion();
+            m_phaseHandle = new PhaseHandle<Phase, PhaseInfo>();
+            m_phaseHandle.Initialize(Phase.PhaseOne, m_info.phaseInfo, m_character, ChangeState, ApplyPhaseData);
+            m_phaseHandle.ApplyChange();
+            m_spineListener.Subscribe(m_info.singleShotEvent, LaunchSingleProjectile);
+            m_spineListener.Subscribe(m_info.multiShotEvent, LaunchMultiProjectile);
+            m_spineListener.Subscribe(m_info.moveEvent, EventMove);
+            m_spineListener.Subscribe(m_info.stopEvent, EventStop);
+            m_crawlFX.Play();
+            for (int i = 0; i < m_chains.Count; i++)
+            {
+                m_chains[i].gameObject.SetActive(false);
+                m_chains[i].transform.localPosition = Vector2.zero;
+            }
+            m_defaultTentacleOverridePointPositions = new List<Vector2>();
+            for (int i = 0; i < m_tentacleOverridePoints.Count; i++)
+            {
+                m_defaultTentacleOverridePointPositions.Add(m_tentacleOverridePoints[i].position);
+            }
+
+            m_kingPusDamageable.PhaseChangeTime += OnChangePhaseTime;
         }
 
         protected override void OnTargetDisappeared()
