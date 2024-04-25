@@ -24,6 +24,9 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Growing")]
         private Vector3[] m_growScale;
 
+        [SerializeField]
+        private float m_lerpDuration;
+
         [SerializeField, Spine.Unity.SpineAnimation, TabGroup("Explosion")]
         private string m_explodeAnimation;
         [SerializeField, Spine.Unity.SpineEvent, TabGroup("Explosion")]
@@ -31,7 +34,7 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Explosion")]
         private PuedisYnnusFleshSpikeProjectileHandle m_projectileHandle;
 
-        
+
         public IEnumerator BeSummoned()
         {
             transform.localScale = m_startingScale;
@@ -39,6 +42,20 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_summonAnimation, false);
             var idleTrack = m_animation.AddAnimation(0, m_idleAnimation, true, 0);
             yield return new WaitForSpineAnimation(idleTrack, WaitForSpineAnimation.AnimationEventTypes.Start);
+        }
+
+        public IEnumerator FloatTo(Vector3 destination)
+        {
+            m_animation.SetAnimation(0, m_idleAnimation, true);
+            var originalPosition = transform.position;
+            var lerpValue = 0f;
+            var lerpSpeed = 1 / m_lerpDuration;
+            do
+            {
+                transform.position = Vector3.Lerp(originalPosition, destination, lerpValue);
+                lerpValue += lerpSpeed * GameplaySystem.time.deltaTime;
+                yield return null;
+            } while (lerpValue < 1);
         }
 
         public IEnumerator ExplodeRoutine()
@@ -62,7 +79,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private void ExecuteBeSummonedRoutine()
         {
             gameObject.SetActive(true);
-            StopAllCoroutines();     
+            StopAllCoroutines();
             StartCoroutine(BeSummoned());
         }
 

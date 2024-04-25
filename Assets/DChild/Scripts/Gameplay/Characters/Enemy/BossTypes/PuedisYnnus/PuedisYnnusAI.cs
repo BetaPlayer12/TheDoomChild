@@ -64,8 +64,17 @@ namespace DChild.Gameplay.Characters.Enemies
             public float rainProjectileDropDelay => m_rainProjectileDropDelay;
 
             [SerializeField, BoxGroup("Rain Projectile")]
+            private BasicAnimationInfo m_rainProjectileAnticipationAnimation;
+            public BasicAnimationInfo rainProjectileAnticipationAnimation => m_rainProjectileAnticipationAnimation;
+            [SerializeField, BoxGroup("Rain Projectile")]
+            private BasicAnimationInfo m_rainProjectileAnticipationLoopAnimation;
+            public BasicAnimationInfo rainProjectileAnticipationLoopAnimation => m_rainProjectileAnticipationLoopAnimation;
+            [SerializeField, BoxGroup("Rain Projectile")]
             private BasicAnimationInfo m_rainProjectileAttackAnimation;
             public BasicAnimationInfo rainProjectileAttackAnimation => m_rainProjectileAttackAnimation;
+            [SerializeField, BoxGroup("Rain Projectile")]
+            private BasicEventInfo m_rainProjectileAttackEvent;
+            public BasicEventInfo rainProjectileAttackEvent => m_rainProjectileAttackEvent;
             #endregion
 
             #region Encircled Projectile
@@ -131,7 +140,10 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_appearAnimation.SetData(m_skeletonDataAsset);
                 m_disappearAnimation.SetData(m_skeletonDataAsset);
 
+                m_rainProjectileAnticipationAnimation.SetData(m_skeletonDataAsset);
+                m_rainProjectileAnticipationLoopAnimation.SetData(m_skeletonDataAsset);
                 m_rainProjectileAttackAnimation.SetData(m_skeletonDataAsset);
+                m_rainProjectileAttackEvent.SetData(m_skeletonDataAsset);
 
                 m_encircledProjectileSummonAnimation.SetData(m_skeletonDataAsset);
                 m_encircledProjectileScatterAnimation.SetData(m_skeletonDataAsset);
@@ -256,6 +268,10 @@ namespace DChild.Gameplay.Characters.Enemies
         private BoxCollider2D[] m_rainProjectilePatterns;
 
         [SerializeField, TabGroup("Attacks/Split/Part2", "Flesh Bomb")]
+        private Transform m_fleshBombSummonParent;
+        [SerializeField, TabGroup("Attacks/Split/Part2", "Flesh Bomb")]
+        private Transform m_fleshBombExplosionDestination;
+        [SerializeField, TabGroup("Attacks/Split/Part2", "Flesh Bomb")]
         private PuedisYnnusFleshSpikeBomb m_fleshBomb;
 
         [TabGroup("Attacks/Split", "Part3")]
@@ -320,6 +336,10 @@ namespace DChild.Gameplay.Characters.Enemies
 
             //m_hitbox.Enable();
             //m_stateHandle.ApplyQueuedState();
+            if (m_attackDecider.hasDecidedOnAttack == false)
+            {
+                m_stateHandle.OverrideState(State.ReevaluateSituation);
+            }
             yield return null;
         }
 
@@ -450,12 +470,16 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator RainProjectileRoutine(Bounds bounds)
         {
-            m_animation.SetAnimation(0, m_info.rainProjectileAttackAnimation.animation, false, 0);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.rainProjectileAttackAnimation.animation);
-            yield return IdleFloatRoutine(0.1f);
+            m_animation.SetAnimation(0, m_info.rainProjectileAnticipationAnimation.animation, false, 0);
+            var anticipationLoopAnimation = m_animation.AddAnimation(0, m_info.rainProjectileAnticipationLoopAnimation.animation, true, 0);
+            yield return new WaitForSpineAnimation(anticipationLoopAnimation, WaitForSpineAnimation.AnimationEventTypes.Start);
             m_rainProjectileHandle.SpawnProjectiles(m_info.crimsonProjectile.projectile, bounds, m_info.rainProjectileSpawnCount);
             yield return new WaitForSeconds(m_info.rainProjectileDropDelay);
+            var attackAnimation = m_animation.SetAnimation(0, m_info.rainProjectileAttackAnimation, false);
+            yield return new WaitForSpineEvent(m_animation.skeletonAnimation, m_info.rainProjectileAttackEvent.eventName);
             m_rainProjectileHandle.DropSpawnedProjectiles(m_info.crimsonProjectile.speed);
+            yield return new WaitForSpineAnimationComplete(attackAnimation);
+            yield return IdleFloatRoutine(0.1f);
             yield return null;
         }
 
@@ -506,7 +530,13 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_info.fleshBombAttackAnimation.animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.fleshBombAttackAnimation.animation);
             //Spawn The Flesh Bomb
+            m_fleshBomb.transform.parent = m_fleshBombSummonParent;
+            m_fleshBomb.transform.localPosition = Vector3.zero;
             yield return m_fleshBomb.BeSummoned();
+
+            m_fleshBomb.transform.parent = null;
+            yield return m_fleshBomb.FloatTo(m_fleshBombExplosionDestination.position);
+
             yield return m_fleshBomb.ExplodeRoutine();
             yield return IdleFloatRoutine(0.1f);
         }
@@ -756,7 +786,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     break;
 
                 case State.Phasing:
-                    StopAllCoroutines();
+                    //StopAllCoroutines();
                     StartCoroutine(ChangePhaseRoutine());
                     break;
                 case State.Turning:
