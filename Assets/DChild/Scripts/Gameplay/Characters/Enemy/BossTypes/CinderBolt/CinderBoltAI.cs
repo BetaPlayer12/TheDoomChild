@@ -1409,8 +1409,9 @@ namespace DChild.Gameplay.Characters.Enemies
             }
             m_animation.SetAnimation(0, m_info.firebeamAttack, false);
             yield return new WaitForSeconds(0.25f);
-            m_firebeamCollider.enabled = true;
             StartCoroutine(FirebeamLaserRoutine());
+            yield return new WaitForSeconds(0.25f);
+            m_firebeamCollider.enabled = true;
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.firebeamAttack);
             m_firebeamCollider.enabled = false;
             m_animation.SetAnimation(0, m_info.idleAnimation, true);

@@ -206,7 +206,6 @@ GameObject:
   - component: {fileID: 4624136590369477630}
   - component: {fileID: 4624136590369477629}
   - component: {fileID: 8144111049150372011}
-  - component: {fileID: 8653087979754938712}
   m_Layer: 11
   m_Name: Sequence_OnBossDefeat
   m_TagString: Untagged
@@ -250,7 +249,7 @@ MonoBehaviour:
     luaWizardIndex: -1
     lastEvaluationValue: 0
   setQuestState: 1
-  questName: 
+  questName: Defeat Cinder Bolt
   questState: 4
   setQuestEntryState: 0
   questEntryNumber: 1
@@ -258,7 +257,7 @@ MonoBehaviour:
   setAnotherQuestEntryState: 0
   anotherQuestEntryNumber: 1
   anotherQuestEntryState: 0
-  luaCode: 
+  luaCode: Variable["CinderBolt_HasBeenDefeated"] = true
   sequence: 
   sequenceSpeaker: {fileID: 0}
   sequenceListener: {fileID: 0}
@@ -277,7 +276,7 @@ MonoBehaviour:
   allowBarksDuringConversations: 0
   skipBarkIfNoValidEntries: 0
   cacheBarkLines: 0
-  conversation: Cinder Bolt Defeated
+  conversation: 
   conversationConversant: {fileID: 0}
   conversationActor: {fileID: 4624136590369477630}
   startConversationEntryID: -1
@@ -373,24 +372,6 @@ MonoBehaviour:
   useBarkTitlePicker: 1
   useQuestNamePicker: 1
   selectedDatabase: {fileID: 11400000, guid: 367e86e4a388f794c8829a46d56bff85, type: 2}
---- !u!114 &8653087979754938712
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4624136590369477631}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 689b4b1238e337d4590a91183947bcd5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_key: 
-  m_appendSaverTypeToKey: 0
-  m_saveAcrossSceneChanges: 1
-  m_restoreStateOnStart: 0
-  skipApplyDataAfterFramesIfApplyImmediate: 1
-  saveRawData: 0
 --- !u!1 &4624136590550013315
 GameObject:
   m_ObjectHideFlags: 0
@@ -653,7 +634,7 @@ MonoBehaviour:
   questName: Defeat Cinder Bolt
   questStateIndicatorLevels:
   - updateOnStartOnly: 1
-    questState: 0
+    questState: 3
     condition:
       luaConditions: []
       questConditions: []
@@ -677,18 +658,6 @@ MonoBehaviour:
             m_FloatArgument: 0
             m_StringArgument: 
             m_BoolArgument: 0
-          m_CallState: 2
-        - m_Target: {fileID: 4624136590550013315}
-          m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-          m_MethodName: SetActive
-          m_Mode: 6
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 1
           m_CallState: 2
   - updateOnStartOnly: 1
     questState: 4
@@ -717,7 +686,7 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 1
           m_CallState: 2
-        - m_Target: {fileID: 0}
+        - m_Target: {fileID: 3898159725496890431}
           m_TargetAssemblyTypeName: DChild.Gameplay.Environment.Interractables.Door,
             Assembly-CSharp
           m_MethodName: SetAsOpen
@@ -729,18 +698,6 @@ MonoBehaviour:
             m_FloatArgument: 0
             m_StringArgument: 
             m_BoolArgument: 1
-          m_CallState: 2
-        - m_Target: {fileID: 4624136591463007843}
-          m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-          m_MethodName: SetActive
-          m_Mode: 6
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
           m_CallState: 2
   questEntryStateIndicatorLevels: []
   suppressOnEnterStateEventsOnStart: 0
@@ -773,7 +730,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   addTrigger: 16
   removeTrigger: 1024
-  databases: []
+  databases:
+  - {fileID: 11400000, guid: 367e86e4a388f794c8829a46d56bff85, type: 2}
   condition:
     luaConditions: []
     questConditions: []
@@ -781,7 +739,7 @@ MonoBehaviour:
     acceptedGameObjects: []
     luaWizardIndex: -1
     lastEvaluationValue: 0
-  once: 0
+  once: 1
   onePerFrame: 0
 --- !u!1 &7483115001734720671
 GameObject:
@@ -946,6 +904,16 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: 7.2966957
       objectReference: {fileID: 0}
+    - target: {fileID: 6467290149614675867, guid: dbf17b0af4486bb41a5c6a41c1f75058,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 3.158081
+      objectReference: {fileID: 0}
+    - target: {fileID: 6467290149614675867, guid: dbf17b0af4486bb41a5c6a41c1f75058,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 7.8972015
+      objectReference: {fileID: 0}
     - target: {fileID: 7347964421609778993, guid: dbf17b0af4486bb41a5c6a41c1f75058,
         type: 3}
       propertyPath: m_Mesh
@@ -964,7 +932,7 @@ PrefabInstance:
     - target: {fileID: 7553733668482402655, guid: dbf17b0af4486bb41a5c6a41c1f75058,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -49.750023
+      value: -53.4
       objectReference: {fileID: 0}
     - target: {fileID: 7553733668482402655, guid: dbf17b0af4486bb41a5c6a41c1f75058,
         type: 3}
@@ -1405,7 +1373,7 @@ PrefabInstance:
     - target: {fileID: 920715635346599692, guid: dcd6b858842dd2741866a5a9a3db829e,
         type: 3}
       propertyPath: m_onDefeat.m_PersistentCalls.m_Calls.Array.size
-      value: 5
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 920715635346599692, guid: dcd6b858842dd2741866a5a9a3db829e,
         type: 3}
@@ -1461,7 +1429,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_onDefeat.m_PersistentCalls.m_Calls.Array.data[4].m_Target
       value: 
-      objectReference: {fileID: 8653087979754938712}
+      objectReference: {fileID: 0}
     - target: {fileID: 920715635346599692, guid: dcd6b858842dd2741866a5a9a3db829e,
         type: 3}
       propertyPath: m_uponTrigger.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
@@ -1475,7 +1443,7 @@ PrefabInstance:
     - target: {fileID: 920715635346599692, guid: dcd6b858842dd2741866a5a9a3db829e,
         type: 3}
       propertyPath: m_uponTrigger.m_PersistentCalls.m_Calls.Array.data[3].m_Mode
-      value: 1
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 920715635346599692, guid: dcd6b858842dd2741866a5a9a3db829e,
         type: 3}
@@ -1501,17 +1469,17 @@ PrefabInstance:
         type: 3}
       propertyPath: m_uponTrigger.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
-      objectReference: {fileID: 4624136590731210599}
+      objectReference: {fileID: 5660287675936231401}
     - target: {fileID: 920715635346599692, guid: dcd6b858842dd2741866a5a9a3db829e,
         type: 3}
       propertyPath: m_uponTrigger.m_PersistentCalls.m_Calls.Array.data[2].m_Target
       value: 
-      objectReference: {fileID: 5660287675936231401}
+      objectReference: {fileID: 3898159725496890431}
     - target: {fileID: 920715635346599692, guid: dcd6b858842dd2741866a5a9a3db829e,
         type: 3}
       propertyPath: m_uponTrigger.m_PersistentCalls.m_Calls.Array.data[3].m_Target
       value: 
-      objectReference: {fileID: 3898159725496890431}
+      objectReference: {fileID: 4624136589697903188}
     - target: {fileID: 920715635346599692, guid: dcd6b858842dd2741866a5a9a3db829e,
         type: 3}
       propertyPath: m_onDefeat.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
@@ -1549,6 +1517,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 920715635346599692, guid: dcd6b858842dd2741866a5a9a3db829e,
         type: 3}
+      propertyPath: m_uponTrigger.m_PersistentCalls.m_Calls.Array.data[2].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 920715635346599692, guid: dcd6b858842dd2741866a5a9a3db829e,
+        type: 3}
+      propertyPath: m_uponTrigger.m_PersistentCalls.m_Calls.Array.data[3].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 920715635346599692, guid: dcd6b858842dd2741866a5a9a3db829e,
+        type: 3}
       propertyPath: m_alreadyDefeated.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 5660287675936231401}
@@ -1565,7 +1543,7 @@ PrefabInstance:
     - target: {fileID: 920715635346599692, guid: dcd6b858842dd2741866a5a9a3db829e,
         type: 3}
       propertyPath: m_uponTrigger.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
-      value: OnUse
+      value: Close
       objectReference: {fileID: 0}
     - target: {fileID: 920715635346599692, guid: dcd6b858842dd2741866a5a9a3db829e,
         type: 3}
@@ -1575,7 +1553,7 @@ PrefabInstance:
     - target: {fileID: 920715635346599692, guid: dcd6b858842dd2741866a5a9a3db829e,
         type: 3}
       propertyPath: m_uponTrigger.m_PersistentCalls.m_Calls.Array.data[3].m_MethodName
-      value: Close
+      value: set_enabled
       objectReference: {fileID: 0}
     - target: {fileID: 920715635346599692, guid: dcd6b858842dd2741866a5a9a3db829e,
         type: 3}
@@ -1630,7 +1608,7 @@ PrefabInstance:
     - target: {fileID: 920715635346599692, guid: dcd6b858842dd2741866a5a9a3db829e,
         type: 3}
       propertyPath: m_uponTrigger.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
-      value: PixelCrushers.DialogueSystem.DialogueSystemTrigger, Assembly-CSharp-firstpass
+      value: DChild.Gameplay.Environment.Interractables.Door, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 920715635346599692, guid: dcd6b858842dd2741866a5a9a3db829e,
         type: 3}
@@ -1640,7 +1618,7 @@ PrefabInstance:
     - target: {fileID: 920715635346599692, guid: dcd6b858842dd2741866a5a9a3db829e,
         type: 3}
       propertyPath: m_uponTrigger.m_PersistentCalls.m_Calls.Array.data[3].m_TargetAssemblyTypeName
-      value: DChild.Gameplay.Environment.Interractables.Door, Assembly-CSharp
+      value: UnityEngine.Behaviour, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 920715635346599692, guid: dcd6b858842dd2741866a5a9a3db829e,
         type: 3}
@@ -1651,6 +1629,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_uponTrigger.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_BoolArgument
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 920715635346599692, guid: dcd6b858842dd2741866a5a9a3db829e,
+        type: 3}
+      propertyPath: m_uponTrigger.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_BoolArgument
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 920715635346599692, guid: dcd6b858842dd2741866a5a9a3db829e,
         type: 3}
@@ -1720,7 +1703,7 @@ PrefabInstance:
     - target: {fileID: 2650815890552088563, guid: dcd6b858842dd2741866a5a9a3db829e,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 991.9395
+      value: 932.3
       objectReference: {fileID: 0}
     - target: {fileID: 2650815890552088563, guid: dcd6b858842dd2741866a5a9a3db829e,
         type: 3}
@@ -1774,6 +1757,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dcd6b858842dd2741866a5a9a3db829e, type: 3}
+--- !u!61 &4624136589697903188 stripped
+BoxCollider2D:
+  m_CorrespondingSourceObject: {fileID: 822407851, guid: dcd6b858842dd2741866a5a9a3db829e,
+    type: 3}
+  m_PrefabInstance: {fileID: 4624136590486182143}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &5542579048194766835 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 920715635346599692, guid: dcd6b858842dd2741866a5a9a3db829e,
