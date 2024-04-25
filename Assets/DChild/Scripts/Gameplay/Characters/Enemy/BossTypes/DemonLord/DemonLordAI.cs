@@ -30,7 +30,6 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField]
             private PhaseInfo<Phase> m_phaseInfo;
             public PhaseInfo<Phase> phaseInfo => m_phaseInfo;
-
             [SerializeField]
             private List<DemonLordSummonDragon.Pattern[]> m_summonDragonPattern;
             public List<DemonLordSummonDragon.Pattern[]> summonDragonPattern => m_summonDragonPattern;
@@ -1943,7 +1942,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         case Attack.Phase1Pattern2:
                             //test attack coroutine:
                             //m_currentAttackCoroutine = StartCoroutine(RayOfFrostRoutine());
-                            m_currentAttackCoroutine = StartCoroutine(SummonDragonRoutine());
+                            m_currentAttackCoroutine = StartCoroutine(IceShardRoutine());
                             m_pickedCooldown = m_currentFullCooldown[1];
                             break;
                         case Attack.Phase1Pattern3:
