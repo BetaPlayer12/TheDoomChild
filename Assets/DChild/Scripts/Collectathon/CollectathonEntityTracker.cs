@@ -43,12 +43,27 @@ public class CollectathonEntityTracker : MonoBehaviour
 
     private IEnumerable GetChestList()
     {
+        Dictionary<string, int> nameToInstanceCountPair = new Dictionary<string, int>();
+
         ValueDropdownList<LootChest> list = new ValueDropdownList<LootChest>();
         var chests = FindObjectsOfType<LootChest>();
         for (int i = 0; i < chests.Length; i++)
         {
             var chest = chests[i];
-            var itemName = GenerateCategory(chest.name) + chest.name;
+            var chestName = chest.name;
+
+            if (nameToInstanceCountPair.TryGetValue(chestName, out int index))
+            {
+                index++;
+                chestName = $"{chest.name} [{index}]";
+                nameToInstanceCountPair[chest.name] = index;
+            }
+            else
+            {
+                nameToInstanceCountPair.Add(chest.name, 1);
+            }
+
+            var itemName = GenerateCategory(chest.name) + chestName;
             list.Add(itemName, chest);
         }
 
@@ -76,12 +91,26 @@ public class CollectathonEntityTracker : MonoBehaviour
 
     private IEnumerable GetSeedsOfTheOne()
     {
+        Dictionary<string, int> nameToInstanceCountPair = new Dictionary<string, int>();
         ValueDropdownList<Damageable> list = new ValueDropdownList<Damageable>();
         var ais = FindObjectsOfType<SeedOfTheOneAI>();
         for (int i = 0; i < ais.Length; i++)
         {
             var ai = ais[i];
-            var itemName = "Everything/" + ai.name;
+
+            var aiName = ai.name;
+            if (nameToInstanceCountPair.TryGetValue(aiName, out int index))
+            {
+                index++;
+                aiName = $"{ai.name} [{index}]";
+                nameToInstanceCountPair[ai.name] = index;
+            }
+            else
+            {
+                nameToInstanceCountPair.Add(ai.name, 1);
+            }
+
+            var itemName = "Everything/" + aiName;
             list.Add(itemName, ai.GetComponent<Damageable>());
         }
 
