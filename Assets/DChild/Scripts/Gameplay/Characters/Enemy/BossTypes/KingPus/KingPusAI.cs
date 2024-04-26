@@ -17,6 +17,7 @@ using Spine.Unity.Modules;
 using Spine.Unity.Examples;
 using DChild.Gameplay.Pooling;
 using UnityEngine.Playables;
+using Language.Lua;
 
 namespace DChild.Gameplay.Characters.Enemies
 {
@@ -509,7 +510,7 @@ namespace DChild.Gameplay.Characters.Enemies
             BodySlam,
             WreckingBall,
             WaitAttackEnd,
-            
+
         }
 
         public enum Phase
@@ -885,6 +886,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private void OnChangePhaseTime(object sender, EventActionArgs eventArgs)
         {
             m_hitbox.Disable();
+
             StartCoroutine(SmartChangePhaseRoutine());
         }
 
@@ -892,6 +894,11 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             //yield return new WaitWhile(() => !m_phaseHandle.allowPhaseChange);
             Debug.Log("Smart Phase Change for King Pus");
+
+            if (!m_groundSensor.isDetecting)
+            {
+                yield return FallFromMidairOrStickingRoutine();
+            }
 
             m_phaseHandle.ApplyChange();
             m_rb2d.isKinematic = false;
@@ -1272,30 +1279,36 @@ namespace DChild.Gameplay.Characters.Enemies
         #region Attack Patterns
         private IEnumerator TentaspearCrawlAttackFullRoutine()
         {
-            var timer = 0f;
-            var tentacipationAnimation = m_targetInfo.position.x > transform.position.x ? m_info.tentaSpearCrawlRightAnticipationAnimation : m_info.tentaSpearCrawlLeftAnticipationAnimation;
-            if (!IsTargetInRange(m_info.heavyGroundStabRightAttack.range))
-            {
-                m_animation.SetAnimation(0, tentacipationAnimation, false);
-                yield return new WaitForAnimationComplete(m_animation.animationState, tentacipationAnimation);
-            }
-            while (timer <= m_info.crawlDuration && !IsTargetInRange(m_info.heavyGroundStabRightAttack.range))
-            {
-                MoveToTarget(m_info.heavyGroundStabRightAttack.range, true);
-                timer += Time.deltaTime;
-                yield return null;
-            }
-            m_animation.SetEmptyAnimation(0, 0);
+            //var timer = 0f;
+            //var tentacipationAnimation = m_targetInfo.position.x > transform.position.x ? m_info.tentaSpearCrawlRightAnticipationAnimation : m_info.tentaSpearCrawlLeftAnticipationAnimation;
+            //if (!IsTargetInRange(m_info.heavyGroundStabRightAttack.range))
+            //{
+            //    m_animation.SetAnimation(0, tentacipationAnimation, false);
+            //    yield return new WaitForAnimationComplete(m_animation.animationState, tentacipationAnimation);
+            //}
+            //while (timer <= m_info.crawlDuration && !IsTargetInRange(m_info.heavyGroundStabRightAttack.range))
+            //{
+            //    MoveToTarget(m_info.heavyGroundStabRightAttack.range, true);
+            //    timer += Time.deltaTime;
+            //    yield return null;
+            //}
+            //m_animation.SetEmptyAnimation(0, 0);
 
-            if (IsTargetInRange(m_currentPhase.heavyGroundStabRange))
-            {
-                m_currentAttackCoroutine = null;
-                m_stabCoroutine = StartCoroutine(HeavyGroundStabAttackRoutine());
-            }
-            else
-            {
-                //m_grappleCoroutine = StartCoroutine(GrappleRoutine(false, false, m_info.bodySlamCount/*, true*/));
-            }
+            //if (IsTargetInRange(m_currentPhase.heavyGroundStabRange))
+            //{
+            //    m_currentAttackCoroutine = null;
+            //    m_stabCoroutine = StartCoroutine(HeavyGroundStabAttackRoutine());
+            //}
+            //else
+            //{
+            //    //m_grappleCoroutine = StartCoroutine(GrappleRoutine(false, false, m_info.bodySlamCount/*, true*/));
+            //}
+
+            //if (!IsFacingTarget())
+            //    CustomTurn();
+            enabled = false;
+            StartCoroutine(TentaspearCrawlRoutine());
+            enabled = true;
             yield return null;
         }
 
@@ -1540,7 +1553,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_willStickToWall = false;
 
             yield return null;
-       
+
             //yield return SpikeSpitTwoFullAttackRoutine(true);
         }
 
@@ -1600,7 +1613,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_bodySlamFX.Play();
                 m_animation.SetAnimation(0, m_info.bodySlamEnd, false);
                 yield return new WaitForAnimationComplete(m_animation.animationState, m_info.bodySlamEnd);
-                if(m_phaseHandle.currentPhase > Phase.PhaseOne)
+                if (m_phaseHandle.currentPhase > Phase.PhaseOne)
                     BodySlamDone?.Invoke(this, new EventActionArgs());
 
                 DamageSelfFromBodySlam();
@@ -1723,6 +1736,8 @@ namespace DChild.Gameplay.Characters.Enemies
             m_movement.Stop();
             m_animation.SetAnimation(0, m_info.bodySlamEnd, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.bodySlamEnd);
+
+            ResetCounterCounts();
         }
 
         private void DamageSelfFromBodySlam()
@@ -1730,10 +1745,77 @@ namespace DChild.Gameplay.Characters.Enemies
             m_damageable.TakeDamage(10, DamageType.True);
         }
 
+        #region Tentaspear Crawl
+        [SerializeField]
+        private int m_maxSpearCrawlStopCount; 
+        private int m_spearCrawlStopCount = 0;
+
+        private string currentSpearCrawlAnticipationAnimation;
+        private string currentSpearCrawlAnimation;
+
+        public void SpearCrawlStopDetected()
+        {
+            m_spearCrawlStopCount++;
+
+            if(m_spearCrawlStopCount < m_maxSpearCrawlStopCount)
+            {
+                SetTentaspearCrawlAnimation();
+            }
+            else
+            {
+                m_spearCrawlStopCount = 0;
+                SetTentaspearCrawlAnimation();
+            }
+        }
+
+        private void SetTentaspearCrawlAnimation()
+        {
+            if (m_targetPosition.position.x > transform.position.x)
+            {
+                currentSpearCrawlAnticipationAnimation = m_info.tentaSpearCrawlRightAnticipationAnimation.animation;
+                currentSpearCrawlAnimation = m_info.tentaSpearRightCrawl.animation;
+            }
+            else
+            {
+                currentSpearCrawlAnticipationAnimation = m_info.tentaSpearCrawlLeftAnticipationAnimation.animation;
+                currentSpearCrawlAnimation = m_info.tentaSpearLeftCrawl.animation;
+            }
+        }
+
+        private IEnumerator TentaspearCrawlRoutine()
+        {
+            //SetTentaspearCrawlAnimation();
+
+            //m_animation.SetAnimation(0, currentSpearCrawlAnticipationAnimation, false);
+            //yield return new WaitForAnimationComplete(m_animation.animationState, currentSpearCrawlAnticipationAnimation);
+
+            //m_animation.EnableRootMotion(true, false);
+            //m_animation.SetAnimation(0, currentSpearCrawlAnimation, false);
+            //yield return new WaitForAnimationComplete(m_animation.animationState, currentSpearCrawlAnimation);
+
+            if (!IsFacingTarget())
+                CustomTurn();
+            m_animation.SetAnimation(0, m_info.tentaSpearCrawlRightAnticipationAnimation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.tentaSpearCrawlRightAnticipationAnimation);
+
+            m_animation.EnableRootMotion(true, false);
+            m_animation.SetAnimation(0, m_info.tentaSpearRightCrawl, true);
+            
+            if(m_spearCrawlStopCount > m_maxSpearCrawlStopCount)
+            {
+                m_animation.SetEmptyAnimation(0, 0);
+                yield return null;
+            }
+            
+        }
+        #endregion
+
         private void MoveToTarget(float targetRange, bool willTentaSpearChase)
         {
+            willTentaSpearChase = true;
             var moveRight = willTentaSpearChase ? m_info.tentaSpearRightCrawl : m_info.rightMove;
             var moveLeft = willTentaSpearChase ? m_info.tentaSpearLeftCrawl : m_info.leftMove;
+            
             if (!IsTargetInRange(targetRange) && m_groundSensor.isDetecting /*&& !m_wallSensor.isDetecting && m_edgeSensor.isDetecting*/)
             {
                 m_animation.EnableRootMotion(willTentaSpearChase ? false : true, false);
@@ -2292,7 +2374,6 @@ namespace DChild.Gameplay.Characters.Enemies
                             m_willStickToWall = false;
                             m_legCollider.enabled = true;
 
-                            m_wreckingBallCoroutine = StartCoroutine(WreckingBallRoutine(m_info.wreckingBallCount));
                             m_currentHitCount = 0;
 
                             //StartCoroutine(AttackCoroutineStopper());
@@ -2407,35 +2488,35 @@ namespace DChild.Gameplay.Characters.Enemies
                             break;
                         case Attack.SpikeShower1:
                             m_currentAttackCoroutine = StartCoroutine(SpikeShowerOneFullAttackRoutine());
-                            m_pickedCooldown = m_currentFullCooldown[1];
+                            m_pickedCooldown = m_currentFullCooldown[0];
                             break;
                         case Attack.SpikeSpit1:
                             m_currentAttackCoroutine = StartCoroutine(SpikeSpitAttackFullRoutine(false));
-                            m_pickedCooldown = m_currentFullCooldown[2];
+                            m_pickedCooldown = m_currentFullCooldown[0];
                             break;
                         case Attack.SpikeSpit2:
                             m_currentAttackCoroutine = StartCoroutine(SpikeSpitAttackFullRoutine(true));
-                            m_pickedCooldown = m_currentFullCooldown[3];
+                            m_pickedCooldown = m_currentFullCooldown[0];
                             break;
                         case Attack.SpikeSpit1ToSpikeSpit2:
                             m_currentAttackCoroutine = StartCoroutine(SpikeSpitOneToSpikeSpitTwoFullAttackRoutine());
-                            m_pickedCooldown = m_currentFullCooldown[2];
+                            m_pickedCooldown = m_currentFullCooldown[0];
                             break;
                         case Attack.HeavyGroundStab:
                             m_currentAttackCoroutine = StartCoroutine(HeavyGroundStabAttackRoutine());
-                            m_pickedCooldown = m_currentFullCooldown[4];
+                            m_pickedCooldown = m_currentFullCooldown[0];
                             break;
                         case Attack.HeavySpearStab:
                             m_currentAttackCoroutine = StartCoroutine(HeavySpearStabAttackRoutine());
-                            m_pickedCooldown = m_currentFullCooldown[5];
+                            m_pickedCooldown = m_currentFullCooldown[0];
                             break;
                         case Attack.SpikeShower1toSpikeShower2:
                             m_currentAttackCoroutine = StartCoroutine(SpikeShowerOneToSpikeShowerTwoFullAttackRoutine());
-                            m_pickedCooldown = m_currentFullCooldown[1];
+                            m_pickedCooldown = m_currentFullCooldown[0];
                             break;
                         case Attack.KrakenRage:
                             m_currentAttackCoroutine = StartCoroutine(KrakenRageFullAttackRoutine());
-                            m_pickedCooldown = m_currentFullCooldown[1];
+                            m_pickedCooldown = m_currentFullCooldown[0];
                             break;
                         case Attack.BodySlam:
                             m_currentAttackCoroutine = StartCoroutine(GrappleRoutine(false, true, m_slamCount));
@@ -2448,7 +2529,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         case Attack.WaitAttackEnd:
                             break;
                         default: //for testing
-                            //m_currentAttackCoroutine = StartCoroutine(KrakenRageFullAttackRoutine());
+                            //m_currentAttackCoroutine = StartCoroutine(TentaspearCrawlAttackFullRoutine());
                             //m_pickedCooldown = m_currentFullCooldown[0];
                             break;
                     }
