@@ -920,6 +920,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator ChangePhaseRoutine()
         {
+            m_stateHandle.Wait(State.Chasing);
             PhaseChangeStart?.Invoke(this, new EventActionArgs());
             enabled = false;
 
@@ -1015,7 +1016,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_hitbox.Enable();
             m_hitbox.SetCanBlockDamageState(false);
             m_changePhaseCoroutine = null;
-            m_stateHandle.OverrideState(State.Chasing);
+            m_stateHandle.ApplyQueuedState();
             yield return null;
 
             enabled = true;
@@ -1704,7 +1705,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
                 m_animation.SetEmptyAnimation(27, 0);
             }
-            StopCoroutine(m_attackCoroutineStopper);
+            if(m_attackCoroutineStopper != null)
+                StopCoroutine(m_attackCoroutineStopper);
             m_attackCoroutineStopper = null;
             m_grappleEvadeCoroutine = null;
             //m_hitbox.SetCanBlockDamageState(false);
@@ -2278,6 +2280,7 @@ namespace DChild.Gameplay.Characters.Enemies
             }
             else
             {
+                StopCurrentBehaviorRoutine();
                 StartCoroutine(FallFromMidairOrStickingRoutine());
             }
             
@@ -2468,6 +2471,8 @@ namespace DChild.Gameplay.Characters.Enemies
                         }
                         else
                         {
+                            StopCurrentBehaviorRoutine();
+                            StopAllCoroutines();
                             m_changePhaseCoroutine = StartCoroutine(ChangePhaseRoutine());
                         }
                     }
