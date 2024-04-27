@@ -18,6 +18,7 @@ using Spine.Unity.Examples;
 using DChild.Gameplay.Pooling;
 using UnityEngine.Playables;
 using Language.Lua;
+using DChild.Gameplay.Combat.StatusAilment;
 
 namespace DChild.Gameplay.Characters.Enemies
 {
@@ -546,6 +547,10 @@ namespace DChild.Gameplay.Characters.Enemies
         private Collider2D m_legCollider;
         [SerializeField, TabGroup("Reference")]
         private GameObject m_model;
+        [SerializeField, TabGroup("Reference")]
+        private StatusEffectReciever m_statusEffectReciever;
+        [SerializeField, TabGroup("Reference")]
+        private KingPusBlobDropper m_pusBlobDropper;
         [SerializeField, TabGroup("FlinchHandles")]
         private FlinchHandler m_flinchRighthHandle;
         [SerializeField, TabGroup("FlinchHandles")]
@@ -686,6 +691,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private List<string> m_wallGrappleRetractAnimations;
         #endregion
         private bool m_isDetecting;
+        private bool m_grapplersOut;
+        private bool m_pusBlobsDown;
 
         public event EventAction<EventActionArgs> BodySlamDone;
         public event EventAction<EventActionArgs> WreckingBallDone;
@@ -931,7 +938,13 @@ namespace DChild.Gameplay.Characters.Enemies
 
             m_animation.DisableRootMotion();
             m_character.physics.simulateGravity = true;
-            m_grappleRetractCoroutine = StartCoroutine(GrappleRetractRoutine(m_info.wallGrappleRetractAnimations.Count - 1));
+
+            if (m_grapplersOut)
+            {
+                m_grappleRetractCoroutine = StartCoroutine(GrappleRetractRoutine(m_info.wallGrappleRetractAnimations.Count - 1));
+            }
+                
+
             if (!m_character.physics.inContactWithGround)
             {
                 yield return new WaitForAnimationComplete(m_animation.animationState, m_info.wallGrappleRetractAnimations[0]);
@@ -979,16 +992,18 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, rageAnim, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, rageAnim);
             m_animation.DisableRootMotion();
+
+            var bodyScaleTrackIndex = 10;
             switch (m_phaseHandle.currentPhase)
             {
                 case Phase.PhaseOne:
-                    m_animation.SetAnimation(10, m_info.phase2MixAnimation, false);
+                    m_animation.SetAnimation(bodyScaleTrackIndex, m_info.phase2MixAnimation, false);
                     break;
                 case Phase.PhaseTwo:
-                    m_animation.SetAnimation(10, m_info.phase3MixAnimation, false);
+                    m_animation.SetAnimation(bodyScaleTrackIndex, m_info.phase3MixAnimation, false);
                     break;
                 case Phase.PhaseThree:
-                    m_animation.SetAnimation(10, m_info.phase3MixAnimation, false);
+                    m_animation.SetAnimation(bodyScaleTrackIndex, m_info.phase3MixAnimation, false);
                     break;
             }
 
@@ -1584,9 +1599,106 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return null;
         }
 
+        private IEnumerator BodySlamFullAttackRoutine()
+        {
+            //grapple away
+            m_animation.DisableRootMotion();
+            CalculateWallGrapple(true);
+            m_character.physics.simulateGravity = false;
+            m_movement.Stop();
+            m_grappleExtendCoroutine = StartCoroutine(GrappleExtendRoutine(4));
+            yield return new WaitForSeconds(3f);
+
+            m_animation.DisableRootMotion();
+            m_character.physics.simulateGravity = true;
+
+            m_grappleRetractCoroutine = StartCoroutine(GrappleRetractRoutine(4));
+
+            m_animation.SetAnimation(0, m_info.bodySlamStart, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.bodySlamStart);
+            while (!m_groundSensor.isDetecting)
+            {
+                m_animation.SetAnimation(0, m_info.bodySlamLoop, true);
+                yield return null;
+            }
+
+            m_animation.SetAnimation(0, m_info.bodySlamEnd, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.bodySlamEnd);
+            m_bodySlamFX.Play();
+            if (m_phaseHandle.currentPhase > Phase.PhaseOne)
+                BodySlamDone?.Invoke(this, new EventActionArgs());
+
+            DamageSelfFromBodySlam();
+
+            if (m_pusBlobsDown)
+            {
+                m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                yield return new WaitForSeconds(5f);
+                m_pusBlobsDown = false;
+            }
+
+            m_willStickToWall = false;
+
+            m_stateHandle.SetState(State.ReevaluateSituation);
+        }
         #endregion
 
         #region Movement
+
+        private IEnumerator GrappleEvadeRoutine(bool willStickToSurface)
+        {
+            ResetCounterCounts();
+
+            if (willStickToSurface)
+            {
+                m_willStickToWall = true;
+                m_animation.EnableRootMotion(true, false);
+                m_animation.AddAnimation(0, m_info.idleAnimation, true, 0);
+                GrappleEvadeWallCalculation();
+                m_grappleCoroutine = StartCoroutine(GrappleRoutine(true, true, 1/*, true*/));
+                yield return new WaitUntil(() => m_character.physics.simulateGravity);
+                m_hitbox.Enable();
+                m_animation.EnableRootMotion(true, true);
+                m_rb2d.isKinematic = false;
+                m_rb2d.useFullKinematicContacts = false;
+                m_movement.Stop();
+                m_dynamicIdleCoroutine = StartCoroutine(DynamicIdleRoutine());
+                m_animation.SetAnimation(0, m_info.idleAnimation.animation, true, 0);
+
+                yield return new WaitForSeconds(3f);
+            }
+            else
+            {
+                //grapple away
+                m_animation.DisableRootMotion();
+                GrappleEvadeWallCalculation();
+                m_character.physics.simulateGravity = false;
+                m_movement.Stop();
+                m_grappleExtendCoroutine = StartCoroutine(GrappleExtendRoutine(4));
+                yield return new WaitForSeconds(3f);
+            }
+
+            m_animation.DisableRootMotion();
+            m_character.physics.simulateGravity = true;
+
+            if (willStickToSurface)
+                m_grappleRetractCoroutine = StartCoroutine(GrappleRetractRoutine(4));
+
+            m_animation.SetAnimation(0, m_info.bodySlamStart, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.bodySlamStart);
+            while (!m_groundSensor.isDetecting)
+            {
+                m_animation.SetAnimation(0, m_info.bodySlamLoop, true);
+                yield return null;
+            }
+
+            m_animation.SetAnimation(0, m_info.bodySlamEnd, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.bodySlamEnd);
+            m_bodySlamFX.Play();
+            m_willStickToWall = false;
+
+            m_stateHandle.SetState(State.ReevaluateSituation);
+        }
 
         private IEnumerator GrappleRoutine(bool willTargetWall, bool willTargetSlam, int slamCount/*, bool randomGrapple*/)
         {
@@ -1614,10 +1726,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_bodySlamFX.Play();
                 m_animation.SetAnimation(0, m_info.bodySlamEnd, false);
                 yield return new WaitForAnimationComplete(m_animation.animationState, m_info.bodySlamEnd);
-                if (m_phaseHandle.currentPhase > Phase.PhaseOne)
-                    BodySlamDone?.Invoke(this, new EventActionArgs());
 
-                DamageSelfFromBodySlam();
                 //yield return new WaitUntil(() => m_groundSensor.isDetecting);
                 m_movement.Stop();
                 m_animation.SetEmptyAnimation(27, 0);
@@ -1698,14 +1807,10 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_movement.Stop();
                 m_animation.SetAnimation(0, m_info.bodySlamEnd, false);
                 yield return new WaitForAnimationComplete(m_animation.animationState, m_info.bodySlamEnd);
-                if (m_phaseHandle.currentPhase > Phase.PhaseOne)
-                    BodySlamDone?.Invoke(this, new EventActionArgs());
-
-                DamageSelfFromBodySlam();
 
                 m_animation.SetEmptyAnimation(27, 0);
             }
-            if(m_attackCoroutineStopper != null)
+            if (m_attackCoroutineStopper != null)
                 StopCoroutine(m_attackCoroutineStopper);
             m_attackCoroutineStopper = null;
             m_grappleEvadeCoroutine = null;
@@ -1739,6 +1844,8 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_info.bodySlamEnd, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.bodySlamEnd);
 
+            m_grapplersOut = false;
+            m_willStickToWall = false;
             ResetCounterCounts();
         }
 
@@ -1749,7 +1856,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         #region Tentaspear Crawl
         [SerializeField]
-        private int m_maxSpearCrawlStopCount; 
+        private int m_maxSpearCrawlStopCount;
         private int m_spearCrawlStopCount = 0;
 
         private string currentSpearCrawlAnticipationAnimation;
@@ -1759,7 +1866,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_spearCrawlStopCount++;
 
-            if(m_spearCrawlStopCount < m_maxSpearCrawlStopCount)
+            if (m_spearCrawlStopCount < m_maxSpearCrawlStopCount)
             {
                 SetTentaspearCrawlAnimation();
             }
@@ -1802,13 +1909,13 @@ namespace DChild.Gameplay.Characters.Enemies
 
             m_animation.EnableRootMotion(true, false);
             m_animation.SetAnimation(0, m_info.tentaSpearRightCrawl, true);
-            
-            if(m_spearCrawlStopCount > m_maxSpearCrawlStopCount)
+
+            if (m_spearCrawlStopCount > m_maxSpearCrawlStopCount)
             {
                 m_animation.SetEmptyAnimation(0, 0);
                 yield return null;
             }
-            
+
         }
         #endregion
 
@@ -1817,7 +1924,7 @@ namespace DChild.Gameplay.Characters.Enemies
             willTentaSpearChase = true;
             var moveRight = willTentaSpearChase ? m_info.tentaSpearRightCrawl : m_info.rightMove;
             var moveLeft = willTentaSpearChase ? m_info.tentaSpearLeftCrawl : m_info.leftMove;
-            
+
             if (!IsTargetInRange(targetRange) && m_groundSensor.isDetecting /*&& !m_wallSensor.isDetecting && m_edgeSensor.isDetecting*/)
             {
                 m_animation.EnableRootMotion(willTentaSpearChase ? false : true, false);
@@ -1898,6 +2005,63 @@ namespace DChild.Gameplay.Characters.Enemies
             }
         }
 
+        private void GrappleEvadeWallCalculation()
+        {
+            m_lastTargetPos = m_targetInfo.position;
+            ResetTentaclePosition();
+            ResetTentacleOverridePoints();
+            
+            //RandomizeTentaclePosition();
+
+            List<Transform> selectablePoints = new List<Transform>();
+
+            //if player is on left of king pus, set selectable tentacle points on the right
+            if(m_targetInfo.position.x < transform.position.x)
+            {
+                for (int i = 0; i < m_tentacleOverridePoints.Count; i++)
+                {
+                    if (m_tentacleOverridePoints[i].position.x > transform.position.x)
+                    {
+                        selectablePoints.Add(m_tentacleOverridePoints[i]);
+                    }
+                }
+
+                for(int i = 0; i < selectablePoints.Count; i++)
+                {
+                    m_tentacleOverridePoints[i].position = selectablePoints[i].position;
+                }
+
+            }
+            else if(m_targetInfo.position.x > transform.position.x) //if player is on right side of king pus, set selectable tentacle points on the left
+            {
+                for (int i = 0; i < m_tentacleOverridePoints.Count; i++)
+                {
+                    if (m_tentacleOverridePoints[i].position.x < transform.position.x)
+                    {
+                        selectablePoints.Add(m_tentacleOverridePoints[i]);
+                    }
+                }
+
+                for (int i = 0; i < selectablePoints.Count; i++)
+                {
+                    m_tentacleOverridePoints[i].position = selectablePoints[i].position;
+                }
+            }
+            else if(m_targetInfo.position.x == transform.position.x) //if somehow player is on the same x point as king pus, do randomized tentacle selection
+            {
+                RandomizeTentaclePosition();
+            }
+              
+        }
+
+        private void ResetTentacleOverridePoints()
+        {
+            for (int i = 0; i < m_tentacleOverridePoints.Count; i++)
+            {
+                m_tentacleOverridePoints[i].position = m_defaultTentacleOverridePointPositions[i];
+            }
+        }
+
         private IEnumerator TentacleControlRoutine()
         {
             m_willGripWall = true;
@@ -1931,6 +2095,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_chains[i].gameObject.SetActive(true);
             }
             m_grappleExtendCoroutine = null;
+            m_grapplersOut = true;
             yield return null;
         }
 
@@ -1957,6 +2122,8 @@ namespace DChild.Gameplay.Characters.Enemies
             ResetTentaclePosition();
             m_willGripWall = false;
             m_grappleRetractCoroutine = null;
+            m_grapplersOut = false;
+
             yield return null;
         }
 
@@ -2267,7 +2434,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnFlinchStart(object sender, EventActionArgs eventArgs)
         {
-            if(m_groundSensor.isDetecting)
+            if (m_groundSensor.isDetecting)
             {
                 if (m_targetInfo.position.x > transform.position.x)
                 {
@@ -2283,7 +2450,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 StopCurrentBehaviorRoutine();
                 StartCoroutine(FallFromMidairOrStickingRoutine());
             }
-            
+            ResetCounterCounts();
         }
 
         private void OnFlinchEnd(object sender, EventActionArgs eventArgs)
@@ -2316,7 +2483,13 @@ namespace DChild.Gameplay.Characters.Enemies
                                 m_attackDecider.hasDecidedOnAttack = false;
                             }
 
-                            StartCoroutine(GrappleRoutine(false, false, m_info.bodySlamCount));
+                            //stop all behaviours
+                            //make new animation (flinch/wiggle) to grapple evade
+                            StopAnimations();
+                            StopAllCoroutines();
+
+                            //StartCoroutine(GrappleRoutine(false, false, m_info.bodySlamCount));
+                            //StartCoroutine(GrappleEvade());
                         }
 
                         if (m_hitbox.canBlockDamage)
@@ -2386,7 +2559,6 @@ namespace DChild.Gameplay.Characters.Enemies
                 }
             }
         }
-
         private IEnumerator AttackCoroutineStopper(Coroutine attackCoroutine)
         {
             //Debug.Log("Entered AttackCoroutineStopper");
@@ -2464,7 +2636,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     if (m_changePhaseCoroutine == null)
                     {
                         Debug.Log("Current Phase " + m_phaseHandle.currentPhase);
-                        if(m_phaseHandle.currentPhase == Phase.PhaseThree)
+                        if (m_phaseHandle.currentPhase == Phase.PhaseThree)
                         {
                             m_stateHandle.Wait(State.ReevaluateSituation);
                             AllahuAkbar();
@@ -2487,55 +2659,55 @@ namespace DChild.Gameplay.Characters.Enemies
 
                     switch (m_currentAttack)
                     {
-                        case Attack.TentaspearCrawl:
-                            m_currentAttackCoroutine = StartCoroutine(TentaspearCrawlAttackFullRoutine());
-                            m_pickedCooldown = m_currentFullCooldown[0];
-                            break;
-                        case Attack.SpikeShower1:
-                            m_currentAttackCoroutine = StartCoroutine(SpikeShowerOneFullAttackRoutine());
-                            m_pickedCooldown = m_currentFullCooldown[0];
-                            break;
-                        case Attack.SpikeSpit1:
-                            m_currentAttackCoroutine = StartCoroutine(SpikeSpitAttackFullRoutine(false));
-                            m_pickedCooldown = m_currentFullCooldown[0];
-                            break;
-                        case Attack.SpikeSpit2:
-                            m_currentAttackCoroutine = StartCoroutine(SpikeSpitAttackFullRoutine(true));
-                            m_pickedCooldown = m_currentFullCooldown[0];
-                            break;
-                        case Attack.SpikeSpit1ToSpikeSpit2:
-                            m_currentAttackCoroutine = StartCoroutine(SpikeSpitOneToSpikeSpitTwoFullAttackRoutine());
-                            m_pickedCooldown = m_currentFullCooldown[0];
-                            break;
-                        case Attack.HeavyGroundStab:
-                            m_currentAttackCoroutine = StartCoroutine(HeavyGroundStabAttackRoutine());
-                            m_pickedCooldown = m_currentFullCooldown[0];
-                            break;
-                        case Attack.HeavySpearStab:
-                            m_currentAttackCoroutine = StartCoroutine(HeavySpearStabAttackRoutine());
-                            m_pickedCooldown = m_currentFullCooldown[0];
-                            break;
-                        case Attack.SpikeShower1toSpikeShower2:
-                            m_currentAttackCoroutine = StartCoroutine(SpikeShowerOneToSpikeShowerTwoFullAttackRoutine());
-                            m_pickedCooldown = m_currentFullCooldown[0];
-                            break;
-                        case Attack.KrakenRage:
-                            m_currentAttackCoroutine = StartCoroutine(KrakenRageFullAttackRoutine());
-                            m_pickedCooldown = m_currentFullCooldown[0];
-                            break;
-                        case Attack.BodySlam:
-                            m_currentAttackCoroutine = StartCoroutine(GrappleRoutine(false, true, m_slamCount));
-                            m_pickedCooldown = m_currentFullCooldown[0];
-                            break;
-                        case Attack.WreckingBall:
-                            m_currentAttackCoroutine = StartCoroutine(WreckingBallRoutine(m_slamCount));
-                            m_pickedCooldown = m_currentFullCooldown[0];
-                            break;
-                        case Attack.WaitAttackEnd:
-                            break;
+                        //case Attack.TentaspearCrawl:
+                        //    m_currentAttackCoroutine = StartCoroutine(TentaspearCrawlAttackFullRoutine());
+                        //    m_pickedCooldown = m_currentFullCooldown[0];
+                        //    break;
+                        //case Attack.SpikeShower1:
+                        //    m_currentAttackCoroutine = StartCoroutine(SpikeShowerOneFullAttackRoutine());
+                        //    m_pickedCooldown = m_currentFullCooldown[0];
+                        //    break;
+                        //case Attack.SpikeSpit1:
+                        //    m_currentAttackCoroutine = StartCoroutine(SpikeSpitAttackFullRoutine(false));
+                        //    m_pickedCooldown = m_currentFullCooldown[0];
+                        //    break;
+                        //case Attack.SpikeSpit2:
+                        //    m_currentAttackCoroutine = StartCoroutine(SpikeSpitAttackFullRoutine(true));
+                        //    m_pickedCooldown = m_currentFullCooldown[0];
+                        //    break;
+                        //case Attack.SpikeSpit1ToSpikeSpit2:
+                        //    m_currentAttackCoroutine = StartCoroutine(SpikeSpitOneToSpikeSpitTwoFullAttackRoutine());
+                        //    m_pickedCooldown = m_currentFullCooldown[0];
+                        //    break;
+                        //case Attack.HeavyGroundStab:
+                        //    m_currentAttackCoroutine = StartCoroutine(HeavyGroundStabAttackRoutine());
+                        //    m_pickedCooldown = m_currentFullCooldown[0];
+                        //    break;
+                        //case Attack.HeavySpearStab:
+                        //    m_currentAttackCoroutine = StartCoroutine(HeavySpearStabAttackRoutine());
+                        //    m_pickedCooldown = m_currentFullCooldown[0];
+                        //    break;
+                        //case Attack.SpikeShower1toSpikeShower2:
+                        //    m_currentAttackCoroutine = StartCoroutine(SpikeShowerOneToSpikeShowerTwoFullAttackRoutine());
+                        //    m_pickedCooldown = m_currentFullCooldown[0];
+                        //    break;
+                        //case Attack.KrakenRage:
+                        //    m_currentAttackCoroutine = StartCoroutine(KrakenRageFullAttackRoutine());
+                        //    m_pickedCooldown = m_currentFullCooldown[0];
+                        //    break;
+                        //case Attack.BodySlam:
+                        //    m_currentAttackCoroutine = StartCoroutine(GrappleRoutine(false, true, m_slamCount));
+                        //    m_pickedCooldown = m_currentFullCooldown[0];
+                        //    break;
+                        //case Attack.WreckingBall:
+                        //    m_currentAttackCoroutine = StartCoroutine(WreckingBallRoutine(m_slamCount));
+                        //    m_pickedCooldown = m_currentFullCooldown[0];
+                        //    break;
+                        //case Attack.WaitAttackEnd:
+                        //    break;
                         default: //for testing
-                            //m_currentAttackCoroutine = StartCoroutine(TentaspearCrawlAttackFullRoutine());
-                            //m_pickedCooldown = m_currentFullCooldown[0];
+                            m_currentAttackCoroutine = StartCoroutine(GrappleEvadeRoutine(true));
+                            m_pickedCooldown = m_currentFullCooldown[0];
                             break;
                     }
 
@@ -2611,47 +2783,47 @@ namespace DChild.Gameplay.Characters.Enemies
                         m_stateHandle.SetState(State.Idle);
                     }
                     break;
-                    //switch (m_phaseHandle.currentPhase)
-                    //{
-                    //    case Phase.PhaseOne:
-                    //        /*
-                    //         * Check if boss is flinched, if on wall or ceiling do spike spit 1
-                    //         * else for both conditions do crawl for 4 seconds towards location of player
-                    //         * after crawling check distance of player and decide to do short ranged or long ranged attack
-                    //         * short: heavy spear stab, tentaspear crawl
-                    //         * long: spike spit 1, spike shower 1, tentaspear crawl
-                    //         */
+                //switch (m_phaseHandle.currentPhase)
+                //{
+                //    case Phase.PhaseOne:
+                //        /*
+                //         * Check if boss is flinched, if on wall or ceiling do spike spit 1
+                //         * else for both conditions do crawl for 4 seconds towards location of player
+                //         * after crawling check distance of player and decide to do short ranged or long ranged attack
+                //         * short: heavy spear stab, tentaspear crawl
+                //         * long: spike spit 1, spike shower 1, tentaspear crawl
+                //         */
 
-                    //        break;
-                    //    case Phase.PhaseTwo:
-                    //        /*
-                    //        * Check if boss is flinched, if on wall or ceiling do spike spit 2
-                    //        * else for both conditions check if hp is at 50% and do body slam 
-                    //        * if not do crawl for 2 seconds towards location of player
-                    //        * after crawling check distance of player and decide to do short ranged or long ranged attack
-                    //        * short: heavy ground stab, tentaspear crawl, heavy spear stab
-                    //        * long: spike spit 2, spike shower 1, tentaspear crawl, body slam (pus blob drop by extension)
-                    //        */
+                //        break;
+                //    case Phase.PhaseTwo:
+                //        /*
+                //        * Check if boss is flinched, if on wall or ceiling do spike spit 2
+                //        * else for both conditions check if hp is at 50% and do body slam 
+                //        * if not do crawl for 2 seconds towards location of player
+                //        * after crawling check distance of player and decide to do short ranged or long ranged attack
+                //        * short: heavy ground stab, tentaspear crawl, heavy spear stab
+                //        * long: spike spit 2, spike shower 1, tentaspear crawl, body slam (pus blob drop by extension)
+                //        */
 
-                    //        break;
-                    //    case Phase.PhaseThree:
-                    //        /*
-                    //        * Check if boss is flinched, if on wall or ceiling do spike spit 2
-                    //        * else for both conditions check if hp is at 75%, 50%, or 25% and do wrecking ball 
-                    //        * if not do crawl for 1 seconds towards location of player
-                    //        * after crawling check distance of player and decide to do short ranged or long ranged attack
-                    //        * short: tentaspear crawl, heavy spear stab
-                    //        * long:  spike shower 1 (followed by spike shower 2), tentaspear crawl, body slam (pus blob drop by extension), heavy ground stab
-                    //        */
+                //        break;
+                //    case Phase.PhaseThree:
+                //        /*
+                //        * Check if boss is flinched, if on wall or ceiling do spike spit 2
+                //        * else for both conditions check if hp is at 75%, 50%, or 25% and do wrecking ball 
+                //        * if not do crawl for 1 seconds towards location of player
+                //        * after crawling check distance of player and decide to do short ranged or long ranged attack
+                //        * short: tentaspear crawl, heavy spear stab
+                //        * long:  spike shower 1 (followed by spike shower 2), tentaspear crawl, body slam (pus blob drop by extension), heavy ground stab
+                //        */
 
-                    //        break;
-                    //    case Phase.PhaseFour:
-                    //        break;
-                    //    default:
-                    //        m_stateHandle.SetState(State.Idle);
-                    //        break;
-                    //}
-                    //break;
+                //        break;
+                //    case Phase.PhaseFour:
+                //        break;
+                //    default:
+                //        m_stateHandle.SetState(State.Idle);
+                //        break;
+                //}
+                //break;
                 case State.WaitBehaviourEnd:
                     return;
             }
@@ -2675,9 +2847,9 @@ namespace DChild.Gameplay.Characters.Enemies
             m_patternCooldown = new List<float>();
             m_currentAttackCache = new List<Attack>();
             m_shortRangedAttackCache = new List<Attack>();
-            m_longRangedAttackCache = new List<Attack> ();
-            m_shortRangedAttackRangeCache = new List<float> ();
-            m_longRangedAttackRangeCache = new List<float> ();
+            m_longRangedAttackCache = new List<Attack>();
+            m_shortRangedAttackRangeCache = new List<float>();
+            m_longRangedAttackRangeCache = new List<float>();
 
             AddToAttackCache(m_shortRangedAttackCache, Attack.HeavySpearStab, Attack.TentaspearCrawl);
             AddToAttackCache(m_longRangedAttackCache, Attack.SpikeSpit1, Attack.SpikeShower1, Attack.TentaspearCrawl);
@@ -2686,7 +2858,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
             SetCurrentAttackCache(m_shortRangedAttackCache);
             SetCurrentAttackRangeCache(m_shortRangedAttackRangeCache);
-            m_attackUsed = new bool[m_currentAttackCache.Count]; 
+            m_attackUsed = new bool[m_currentAttackCache.Count];
         }
 
         protected override void Start()
@@ -2714,6 +2886,12 @@ namespace DChild.Gameplay.Characters.Enemies
             }
 
             m_kingPusDamageable.PhaseChangeTime += OnChangePhaseTime;
+            m_pusBlobDropper.PusBlobsDown += OnPusBlobDropped;
+        }
+
+        private void OnPusBlobDropped(object sender, EventActionArgs eventArgs)
+        {
+            m_pusBlobsDown = true;
         }
 
         protected override void OnTargetDisappeared()
