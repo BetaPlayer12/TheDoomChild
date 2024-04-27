@@ -957,8 +957,7 @@ namespace DChild.Gameplay.Characters.Enemies
             if (m_grapplersOut)
             {
                 m_grappleRetractCoroutine = StartCoroutine(GrappleRetractRoutine(m_info.wallGrappleRetractAnimations.Count - 1));
-            }
-                
+            }       
 
             if (!m_character.physics.inContactWithGround)
             {
@@ -2454,6 +2453,9 @@ namespace DChild.Gameplay.Characters.Enemies
             m_flinchLeftHandle.gameObject.SetActive(false);
         }
 
+        private bool m_WreckingBallAt75PercentHP = false;
+        private bool m_WreckingBallAt50PercentHP = false;
+        private bool m_WreckingBallAt25PercentHP = false;
         private void OnDamageTaken(object sender, Damageable.DamageEventArgs eventArgs)
         {
             if (m_changePhaseCoroutine == null && m_grappleEvadeCoroutine == null && m_wreckingBallCoroutine == null && enabled)
@@ -2482,6 +2484,7 @@ namespace DChild.Gameplay.Characters.Enemies
                             //make new animation (flinch/wiggle) to grapple evade
                             StopAnimations();
                             StopAllCoroutines();
+                            StartCoroutine(GrappleEvadeRoutine(false));
 
                             //StartCoroutine(GrappleRoutine(false, false, m_info.bodySlamCount));
                             //StartCoroutine(GrappleEvade());
@@ -2518,9 +2521,115 @@ namespace DChild.Gameplay.Characters.Enemies
 
                         }
                         break;
+                    case Phase.PhaseThree:
+                        {
+                            if (m_currentHitCount < m_maxHitCount)
+                                m_currentHitCount++;
+                            else
+                            {
+                                if (m_grappleCoroutine != null)
+                                {
+                                    StopCoroutine(m_grappleCoroutine);
+                                    m_grappleCoroutine = null;
+                                }
+
+                                if (m_currentAttackCoroutine != null)
+                                {
+                                    StopCoroutine(m_currentAttackCoroutine);
+                                    m_currentAttackCoroutine = null;
+                                    m_attackDecider.hasDecidedOnAttack = false;
+                                }
+
+                                //stop all behaviours
+                                //make new animation (flinch/wiggle) to grapple evade
+                                StopAnimations();
+                                StopAllCoroutines();
+                                StartCoroutine(GrappleEvadeRoutine(false));
+
+                                //StartCoroutine(GrappleRoutine(false, false, m_info.bodySlamCount));
+                                //StartCoroutine(GrappleEvade());
+                            }
+
+                            if (m_hitbox.canBlockDamage)
+                            {
+                                if (m_grappleCoroutine != null)
+                                {
+                                    StopCoroutine(m_grappleCoroutine);
+                                    m_grappleCoroutine = null;
+                                }
+
+                                if (m_currentAttackCoroutine != null)
+                                {
+                                    StopCoroutine(m_currentAttackCoroutine);
+                                    m_currentAttackCoroutine = null;
+                                    m_attackDecider.hasDecidedOnAttack = false;
+                                }
+
+                                //m_stateHandle.Wait(State.ReevaluateSituation);
+
+                                m_hitbox.Enable();
+                                m_rb2d.isKinematic = false;
+                                m_rb2d.useFullKinematicContacts = false;
+                                m_willStickToWall = false;
+                                m_legCollider.enabled = true;
+
+                                m_currentHitCount = 0;
+
+                                //StartCoroutine(AttackCoroutineStopper());
+                            }
+
+                            if (!m_WreckingBallAt75PercentHP && (m_health.currentValue < (m_health.maxValue * 0.75)))
+                            {
+                                StopAllCoroutines();
+                                StopAnimations();
+                                StartCoroutine(WreckingBallRoutine(5));
+                                m_WreckingBallAt75PercentHP = true;
+                            }
+
+                            if (!m_WreckingBallAt50PercentHP && (m_health.currentValue < (m_health.maxValue * 0.50)))
+                            {
+                                StopAllCoroutines();
+                                StopAnimations();
+                                StartCoroutine(WreckingBallRoutine(5));
+                                m_WreckingBallAt50PercentHP = true;
+                            }
+
+                            if (!m_WreckingBallAt25PercentHP && (m_health.currentValue < (m_health.maxValue * 0.25)))
+                            {
+                                StopAllCoroutines();
+                                StopAnimations();
+                                StartCoroutine(WreckingBallRoutine(5));
+                                m_WreckingBallAt25PercentHP = true;
+                            }
+                            break;
+                        }
                     default:
                         if (m_currentHitCount < m_maxHitCount)
                             m_currentHitCount++;
+                        else
+                        {
+                            if (m_grappleCoroutine != null)
+                            {
+                                StopCoroutine(m_grappleCoroutine);
+                                m_grappleCoroutine = null;
+                            }
+
+                            if (m_currentAttackCoroutine != null)
+                            {
+                                StopCoroutine(m_currentAttackCoroutine);
+                                m_currentAttackCoroutine = null;
+                                m_attackDecider.hasDecidedOnAttack = false;
+                            }
+
+                            //stop all behaviours
+                            //make new animation (flinch/wiggle) to grapple evade
+                            StopAnimations();
+                            StopAllCoroutines();
+                            StartCoroutine(GrappleEvadeRoutine(false));
+
+                            //StartCoroutine(GrappleRoutine(false, false, m_info.bodySlamCount));
+                            //StartCoroutine(GrappleEvade());
+                        }
 
                         if (m_hitbox.canBlockDamage)
                         {
@@ -2691,7 +2800,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         //    m_pickedCooldown = m_currentFullCooldown[0];
                         //    break;
                         //case Attack.BodySlam:
-                        //    m_currentAttackCoroutine = StartCoroutine(GrappleRoutine(false, true, m_slamCount));
+                        //    m_currentAttackCoroutine = StartCoroutine(BodySlamFullAttackRoutine());
                         //    m_pickedCooldown = m_currentFullCooldown[0];
                         //    break;
                         //case Attack.WreckingBall:
@@ -2701,7 +2810,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         //case Attack.WaitAttackEnd:
                         //    break;
                         default: //for testing
-                            m_currentAttackCoroutine = StartCoroutine(TentaspearCrawlAttackFullRoutine());
+                            m_currentAttackCoroutine = StartCoroutine(SpikeShowerOneFullAttackRoutine());
                             m_pickedCooldown = m_currentFullCooldown[0];
                             break;
                     }
