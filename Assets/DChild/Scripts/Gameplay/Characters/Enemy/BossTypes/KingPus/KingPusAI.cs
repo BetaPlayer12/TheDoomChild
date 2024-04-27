@@ -1602,17 +1602,19 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator BodySlamFullAttackRoutine()
         {
             //grapple away
+            m_stateHandle.Wait(State.ReevaluateSituation);
             m_animation.DisableRootMotion();
             CalculateWallGrapple(true);
             m_character.physics.simulateGravity = false;
             m_movement.Stop();
             m_grappleExtendCoroutine = StartCoroutine(GrappleExtendRoutine(4));
-            yield return new WaitForSeconds(3f);
+            yield return new WaitForSeconds(2f);
 
-            m_animation.DisableRootMotion();
             m_character.physics.simulateGravity = true;
 
             m_grappleRetractCoroutine = StartCoroutine(GrappleRetractRoutine(4));
+
+            enabled = false;
 
             m_animation.SetAnimation(0, m_info.bodySlamStart, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.bodySlamStart);
@@ -1638,8 +1640,12 @@ namespace DChild.Gameplay.Characters.Enemies
             }
 
             m_willStickToWall = false;
+            m_attackDecider.hasDecidedOnAttack = false;
+            m_currentAttackCoroutine = null;
+            m_stateHandle.ApplyQueuedState();
 
-            m_stateHandle.SetState(State.ReevaluateSituation);
+            enabled = true;
+            yield return null;
         }
         #endregion
 
@@ -1648,6 +1654,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator GrappleEvadeRoutine(bool willStickToSurface)
         {
             ResetCounterCounts();
+            m_stateHandle.Wait(State.ReevaluateSituation);
 
             if (willStickToSurface)
             {
@@ -1655,6 +1662,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_animation.EnableRootMotion(true, false);
                 m_animation.AddAnimation(0, m_info.idleAnimation, true, 0);
                 GrappleEvadeWallCalculation();
+                enabled = false;
                 m_grappleCoroutine = StartCoroutine(GrappleRoutine(true, true, 1/*, true*/));
                 yield return new WaitUntil(() => m_character.physics.simulateGravity);
                 m_hitbox.Enable();
@@ -1676,13 +1684,14 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_movement.Stop();
                 m_grappleExtendCoroutine = StartCoroutine(GrappleExtendRoutine(4));
                 yield return new WaitForSeconds(3f);
+                enabled = false;
             }
+
+            if(!willStickToSurface)
+                m_grappleRetractCoroutine = StartCoroutine(GrappleRetractRoutine(4));
 
             m_animation.DisableRootMotion();
             m_character.physics.simulateGravity = true;
-
-            if (willStickToSurface)
-                m_grappleRetractCoroutine = StartCoroutine(GrappleRetractRoutine(4));
 
             m_animation.SetAnimation(0, m_info.bodySlamStart, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.bodySlamStart);
@@ -1692,12 +1701,18 @@ namespace DChild.Gameplay.Characters.Enemies
                 yield return null;
             }
 
+            m_bodySlamFX.Play();
             m_animation.SetAnimation(0, m_info.bodySlamEnd, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.bodySlamEnd);
-            m_bodySlamFX.Play();
             m_willStickToWall = false;
 
-            m_stateHandle.SetState(State.ReevaluateSituation);
+            m_movement.Stop();
+
+            m_stateHandle.ApplyQueuedState();
+
+            enabled = true;
+
+            yield return null;    
         }
 
         private IEnumerator GrappleRoutine(bool willTargetWall, bool willTargetSlam, int slamCount/*, bool randomGrapple*/)
@@ -2706,7 +2721,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         //case Attack.WaitAttackEnd:
                         //    break;
                         default: //for testing
-                            m_currentAttackCoroutine = StartCoroutine(GrappleEvadeRoutine(true));
+                            m_currentAttackCoroutine = StartCoroutine(GrappleEvadeRoutine(false));
                             m_pickedCooldown = m_currentFullCooldown[0];
                             break;
                     }
