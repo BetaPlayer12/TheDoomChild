@@ -24,6 +24,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private int m_bodySlamCounter;
         private float m_timeLapsed;
 
+        public event EventAction<EventActionArgs> PusBlobsDown;
+
         private void InitializePusPlacement()
         {
             for(int x=0;x<m_pusSpawnPoint.Count;x++)
@@ -52,6 +54,8 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_blob[x].GetComponent<KingPusBlobAI>().StartFall();
                 NumbersPicked.Add(x);
             }
+
+            PusBlobsDown?.Invoke(this, new EventActionArgs());
         }
 
         private void KingPusHasBodyslam(object sender, EventActionArgs eventArgs)
