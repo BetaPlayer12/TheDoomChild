@@ -302,6 +302,15 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField]
             private BasicAnimationInfo m_cannibalizationAnimation;
             public BasicAnimationInfo cannibalizationAnimation => m_cannibalizationAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_tentaspearCrawlAnimation1;
+            public BasicAnimationInfo tentaspearCrawlAnimation1 => m_tentaspearCrawlAnimation1;
+            [SerializeField]
+            private BasicAnimationInfo m_tentaspearCrawlAnimation2;
+            public BasicAnimationInfo tentaspearCrawlAnimation2 => m_tentaspearCrawlAnimation2;
+            [SerializeField]
+            private BasicAnimationInfo m_tentaspearCrawlAnimation3;
+            public BasicAnimationInfo tentaspearCrawlAnimation3 => m_tentaspearCrawlAnimation3;
 
             [Title("Projectiles")]
             [SerializeField, TitleGroup("Grounded")]
@@ -416,6 +425,9 @@ namespace DChild.Gameplay.Characters.Enemies
 
                 m_fakeDeathAnimation.SetData(m_skeletonDataAsset);
                 m_cannibalizationAnimation.SetData(m_skeletonDataAsset);
+                m_tentaspearCrawlAnimation1.SetData(m_skeletonDataAsset);
+                m_tentaspearCrawlAnimation2.SetData(m_skeletonDataAsset);
+                m_tentaspearCrawlAnimation3.SetData(m_skeletonDataAsset);
 
 #endif
             }
@@ -693,6 +705,9 @@ namespace DChild.Gameplay.Characters.Enemies
         private bool m_isDetecting;
         private bool m_grapplersOut;
         private bool m_pusBlobsDown;
+        [SerializeField]
+        private int m_maxSpearCrawlStopCount;
+        private int m_spearCrawlStopCount = 0;
 
         public event EventAction<EventActionArgs> BodySlamDone;
         public event EventAction<EventActionArgs> WreckingBallDone;
@@ -1293,37 +1308,67 @@ namespace DChild.Gameplay.Characters.Enemies
         #endregion
 
         #region Attack Patterns
+        public void SpearCrawlStopDetected()
+        {
+            m_spearCrawlStopCount++;
+
+            if (!IsFacingTarget())
+                CustomTurn();
+        }
+
+        private void ResetTentaSpearStopCount()
+        {
+            m_spearCrawlStopCount = 0;
+        }
+
         private IEnumerator TentaspearCrawlAttackFullRoutine()
         {
-            //var timer = 0f;
-            //var tentacipationAnimation = m_targetInfo.position.x > transform.position.x ? m_info.tentaSpearCrawlRightAnticipationAnimation : m_info.tentaSpearCrawlLeftAnticipationAnimation;
-            //if (!IsTargetInRange(m_info.heavyGroundStabRightAttack.range))
-            //{
-            //    m_animation.SetAnimation(0, tentacipationAnimation, false);
-            //    yield return new WaitForAnimationComplete(m_animation.animationState, tentacipationAnimation);
-            //}
-            //while (timer <= m_info.crawlDuration && !IsTargetInRange(m_info.heavyGroundStabRightAttack.range))
-            //{
-            //    MoveToTarget(m_info.heavyGroundStabRightAttack.range, true);
-            //    timer += Time.deltaTime;
-            //    yield return null;
-            //}
-            //m_animation.SetEmptyAnimation(0, 0);
+            enabled = false;
+            m_stateHandle.Wait(State.ReevaluateSituation);
 
-            //if (IsTargetInRange(m_currentPhase.heavyGroundStabRange))
+            m_animation.EnableRootMotion(true, false);
+
+            if (!IsFacingTarget())
+                CustomTurn();
+
+            m_animation.SetAnimation(0, m_info.tentaSpearCrawlRightAnticipationAnimation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.tentaSpearCrawlRightAnticipationAnimation);
+
+            m_animation.SetAnimation(0, m_info.tentaSpearRightCrawl, true);
+
+            //if (m_spearCrawlStopCount < m_maxSpearCrawlStopCount)
             //{
-            //    m_currentAttackCoroutine = null;
-            //    m_stabCoroutine = StartCoroutine(HeavyGroundStabAttackRoutine());
+            //    //m_animation.SetAnimation(3, m_info.tentaspearCrawlAnimation1, false);
+            //    //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.tentaspearCrawlAnimation1);
+            //    //m_animation.SetAnimation(6, m_info.tentaspearCrawlAnimation2, false);
+            //    //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.tentaspearCrawlAnimation2);
+            //    //m_animation.SetAnimation(9, m_info.tentaspearCrawlAnimation3, false);
+            //    //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.tentaspearCrawlAnimation3);
+            //    //m_animation.SetAnimation(0, m_info.idleAnimation, false);
+            //    //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.idleAnimation);               
+            //    //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.tentaSpearCrawlRightAnticipationAnimation);
+
             //}
             //else
             //{
-            //    //m_grappleCoroutine = StartCoroutine(GrappleRoutine(false, false, m_info.bodySlamCount/*, true*/));
+            //    m_animation.SetEmptyAnimation(0, 0);
+            //    m_animation.SetEmptyAnimation(3, 0);
+            //    m_animation.SetEmptyAnimation(6, 0);
+            //    m_animation.SetEmptyAnimation(9, 0);
+
+            //    ResetTentaSpearStopCount();
+            //    yield return null;
             //}
 
-            //if (!IsFacingTarget())
-            //    CustomTurn();
-            enabled = false;
-            StartCoroutine(TentaspearCrawlRoutine());
+            yield return new WaitUntil(() => m_spearCrawlStopCount >= m_maxSpearCrawlStopCount);
+
+            if (m_spearCrawlStopCount >= m_maxSpearCrawlStopCount)
+            {
+                m_movement.Stop();
+                m_animation.SetEmptyAnimation(0, 0);
+                ResetTentaSpearStopCount();
+            }
+            m_stateHandle.ApplyQueuedState();
             enabled = true;
             yield return null;
         }
@@ -1868,71 +1913,6 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_damageable.TakeDamage(10, DamageType.True);
         }
-
-        #region Tentaspear Crawl
-        [SerializeField]
-        private int m_maxSpearCrawlStopCount;
-        private int m_spearCrawlStopCount = 0;
-
-        private string currentSpearCrawlAnticipationAnimation;
-        private string currentSpearCrawlAnimation;
-
-        public void SpearCrawlStopDetected()
-        {
-            m_spearCrawlStopCount++;
-
-            if (m_spearCrawlStopCount < m_maxSpearCrawlStopCount)
-            {
-                SetTentaspearCrawlAnimation();
-            }
-            else
-            {
-                m_spearCrawlStopCount = 0;
-                SetTentaspearCrawlAnimation();
-            }
-        }
-
-        private void SetTentaspearCrawlAnimation()
-        {
-            if (m_targetPosition.position.x > transform.position.x)
-            {
-                currentSpearCrawlAnticipationAnimation = m_info.tentaSpearCrawlRightAnticipationAnimation.animation;
-                currentSpearCrawlAnimation = m_info.tentaSpearRightCrawl.animation;
-            }
-            else
-            {
-                currentSpearCrawlAnticipationAnimation = m_info.tentaSpearCrawlLeftAnticipationAnimation.animation;
-                currentSpearCrawlAnimation = m_info.tentaSpearLeftCrawl.animation;
-            }
-        }
-
-        private IEnumerator TentaspearCrawlRoutine()
-        {
-            //SetTentaspearCrawlAnimation();
-
-            //m_animation.SetAnimation(0, currentSpearCrawlAnticipationAnimation, false);
-            //yield return new WaitForAnimationComplete(m_animation.animationState, currentSpearCrawlAnticipationAnimation);
-
-            //m_animation.EnableRootMotion(true, false);
-            //m_animation.SetAnimation(0, currentSpearCrawlAnimation, false);
-            //yield return new WaitForAnimationComplete(m_animation.animationState, currentSpearCrawlAnimation);
-
-            if (!IsFacingTarget())
-                CustomTurn();
-            m_animation.SetAnimation(0, m_info.tentaSpearCrawlRightAnticipationAnimation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.tentaSpearCrawlRightAnticipationAnimation);
-
-            m_animation.EnableRootMotion(true, false);
-            m_animation.SetAnimation(0, m_info.tentaSpearRightCrawl, true);
-
-            if (m_spearCrawlStopCount > m_maxSpearCrawlStopCount)
-            {
-                m_animation.SetEmptyAnimation(0, 0);
-                yield return null;
-            }
-
-        }
-        #endregion
 
         private void MoveToTarget(float targetRange, bool willTentaSpearChase)
         {
@@ -2721,7 +2701,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         //case Attack.WaitAttackEnd:
                         //    break;
                         default: //for testing
-                            m_currentAttackCoroutine = StartCoroutine(GrappleEvadeRoutine(false));
+                            m_currentAttackCoroutine = StartCoroutine(TentaspearCrawlAttackFullRoutine());
                             m_pickedCooldown = m_currentFullCooldown[0];
                             break;
                     }
