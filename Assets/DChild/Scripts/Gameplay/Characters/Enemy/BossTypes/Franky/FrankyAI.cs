@@ -105,6 +105,10 @@ namespace DChild.Gameplay.Characters.Enemies
             public BasicAnimationInfo chainBash1AnimationStart => m_chainBash1AnimationStart;
 
             [SerializeField]
+            private BasicAnimationInfo m_chainBash1AnimationLoop;
+            public BasicAnimationInfo chainBash1AnimationLoop => m_chainBash1AnimationLoop;
+
+            [SerializeField]
             private BasicAnimationInfo m_chainBash1AnimationEnd;
             public BasicAnimationInfo chainBash1AnimationEnd => m_chainBash1AnimationEnd;
 
@@ -112,7 +116,13 @@ namespace DChild.Gameplay.Characters.Enemies
             private BasicAnimationInfo m_chainBash2AnimationEnd;
             public BasicAnimationInfo chainBash2AnimationEnd => m_chainBash2AnimationEnd;
 
+            [SerializeField]
+            private BasicAnimationInfo m_chainBash2AnimationLoop;
+            public BasicAnimationInfo chainBash2AnimationLoop => m_chainBash2AnimationLoop;
 
+            [SerializeField]
+            private float m_chainBashDuration;
+            public float ChainBashDuration => m_chainBashDuration;
             #endregion
             #region RunAttack
             [SerializeField]
@@ -255,6 +265,8 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_chainBash1AnimationStart.SetData(m_skeletonDataAsset);
                 m_chainBash1AnimationEnd.SetData(m_skeletonDataAsset);
                 m_chainBash2AnimationEnd.SetData(m_skeletonDataAsset);
+                m_chainBash2AnimationLoop.SetData(m_skeletonDataAsset);
+                m_chainBash1AnimationLoop.SetData(m_skeletonDataAsset);
 #endif
             }
         }
@@ -417,6 +429,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private float m_attackCount;
         private float[] m_patternCount;
         private float m_currentLeapDuration;
+        private bool m_rangeAttack; ///
         private bool m_stickToGround;
         private bool m_stickToWall;
         private bool m_isBuffed;
@@ -431,10 +444,11 @@ namespace DChild.Gameplay.Characters.Enemies
         private void ApplyPhaseData(PhaseInfo obj)
         {
             m_currentPhaseIndex = obj.phaseIndex;
+            /*
             for (int i = 0; i < m_patternCount.Length; i++)
             {
                 m_patternCount[i] = obj.patternCount[i];
-            }
+            }*/
         }
 
         private void ChangeState()
@@ -525,7 +539,8 @@ namespace DChild.Gameplay.Characters.Enemies
         {
 
             yield return new WaitWhile(() => !m_phaseHandle.allowPhaseChange);
-            switch(m_phaseHandle.currentPhase)
+            UpdateAttackDeciderList();
+            switch (m_phaseHandle.currentPhase)
             {
                 case Phase.PhaseOne:
                     break;
@@ -533,6 +548,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 case Phase.PhaseTwo:
                     m_attackCache.Add(Attack.LeapAttack);
                     m_attackSpecialAttackLimit = 10;
+                    UpdateRangeCache(m_info.leapAttack.range, m_info.chainFistPunchAttack.range, m_info.punchComboAttack.range);
                     break;
 
                 case Phase.PhaseThree:
@@ -746,7 +762,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_fistRefPoint.GetComponent<CircleCollider2D>().enabled = true;
             m_fistPoint.position = m_wristPoint.position;
             m_animation.SetAnimation(0, m_info.hookTravelLoopAnimation, false);
-            while (Vector2.Distance(m_fistPoint.position, m_wallPosPoint.position) > 3f)
+            while (Vector2.Distance(m_fistPoint.position, m_wallPosPoint.position) > 5f)
             {
                 m_fistPoint.position = Vector2.MoveTowards(m_fistPoint.position, m_wallPosPoint.position, 5);
                 yield return null;
@@ -762,8 +778,9 @@ namespace DChild.Gameplay.Characters.Enemies
             StartCoroutine(StickToWallRoutine(m_wallPosPoint.position));
             GetComponentInChildren<SkeletonRenderer>().maskInteraction = SpriteMaskInteraction.VisibleOutsideMask;
             m_animation.SetAnimation(0, m_info.chainbash1Attack, true);
-            while (Vector2.Distance(transform.position, m_fistPoint.position) > 15f)
+            while (Vector2.Distance(transform.position, m_fistPoint.position) > 25f)
             {
+                //Debug.Log(Vector2.Distance(transform.position, m_fistPoint.position));
                 m_movement.MoveTowards(Vector2.one * transform.localScale.x, m_info.shoulderBashReelSpeed);
                 yield return null;
             }
@@ -775,14 +792,26 @@ namespace DChild.Gameplay.Characters.Enemies
             GetComponentInChildren<SkeletonRenderer>().maskInteraction = SpriteMaskInteraction.None;
             m_stickToWall = false;
             m_fistRefPoint.GetComponent<CircleCollider2D>().enabled = false;
+            m_animation.SetAnimation(0, m_info.chainBash1AnimationLoop, true);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.chainBash1AnimationLoop);
+            yield return new WaitForSeconds(m_info.ChainBashDuration);
             m_animation.SetAnimation(0, m_info.chainBash1AnimationEnd, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.chainBash1AnimationEnd);
+            yield return new WaitForSeconds(.5f);
             m_fistPoint.GetComponent<SkeletonUtilityBone>().enabled = false;
             m_wallPosPoint.SetParent(m_hitbox.transform);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             DecidedOnAttack(false);
+            if (m_isBuffed)
+            {
+                m_attackCount = 0;
+                m_currentAttack = Attack.LeapAttack;
+                m_stateHandle.ApplyQueuedState();
+            }
+                
             m_currentAttackCoroutine = null;
             m_stateHandle.ApplyQueuedState();
+            
             yield return null;
             m_fistPoint.GetComponent<SkeletonUtilityBone>().mode = SkeletonUtilityBone.Mode.Follow;
             m_phaseHandle.allowPhaseChange = true;
@@ -825,14 +854,14 @@ namespace DChild.Gameplay.Characters.Enemies
             DecidedOnAttack(false);
             if(m_isBuffed)
             {
-                m_currentAttackCoroutine = StartCoroutine(PunchComboRoutine());
+                m_currentAttack = Attack.ComboPunch;
             }
             else
             {
                 m_attackCount++;
-                m_currentAttackCoroutine = null;
-                m_stateHandle.ApplyQueuedState();
             }
+            m_currentAttackCoroutine = null;
+            m_stateHandle.ApplyQueuedState();
             yield return null;
 
             m_phaseHandle.allowPhaseChange = true;
@@ -852,6 +881,10 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.lightningStompAttack.animation);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             DecidedOnAttack(false);
+            if(m_isBuffed)
+            {
+                m_currentAttack = Attack.ComboPunch;
+            }
             m_currentAttackCoroutine = null;
             m_stateHandle.ApplyQueuedState();
             yield return null;
@@ -940,6 +973,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator PhaseDischarge()
         {
+
             m_stateHandle.Wait(State.ReevaluateSituation);
             //m_hitbox.SetInvulnerability(Invulnerability.None);
             //m_hasPhaseChanged = false;
@@ -949,6 +983,16 @@ namespace DChild.Gameplay.Characters.Enemies
             m_isBuffed = true;
             m_attackCount = 0f;
             m_hitbox.SetInvulnerability(Invulnerability.None);
+            switch(m_currentPhaseIndex)
+            {
+                case 2:
+                    ChooseAttack(3);
+                    break;
+
+                case 3:
+                    ChooseAttack(4);
+                    break;
+            }
             StartCoroutine(StickToGroundRoutine(GroundPosition().y));
             //yield return StartCoroutine(LeapAttackRoutine(3));
             m_stateHandle.ApplyQueuedState();
@@ -960,6 +1004,13 @@ namespace DChild.Gameplay.Characters.Enemies
             m_phaseHandle.allowPhaseChange = false;
             m_animation.SetAnimation(0, m_info.shockRampageAttack.animation, false);
             m_phaseHandle.allowPhaseChange = true;
+            if(m_isBuffed)
+            {
+                m_isBuffed = false;
+            }
+            DecidedOnAttack(false);
+            m_currentAttackCoroutine = null;
+            m_stateHandle.ApplyQueuedState();
             yield return null;
         }
 
@@ -992,6 +1043,13 @@ namespace DChild.Gameplay.Characters.Enemies
             m_movement.Stop();
             m_wallRunPoint.SetParent(m_hitbox.transform);
             DecidedOnAttack(false);
+            if (m_isBuffed)
+            {
+                m_currentAttack = Attack.ShockRampage;
+                m_stateHandle.ApplyQueuedState();
+            }
+            
+            m_currentAttackCoroutine = null;
             m_stateHandle.ApplyQueuedState();
 
             yield return null;
@@ -1071,7 +1129,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void DecidedOnAttack(bool condition)
         {
-            m_patternDecider.hasDecidedOnAttack = condition;
+            //m_patternDecider.hasDecidedOnAttack = condition;
             for (int i = 0; i < m_attackDecider.Length; i++)
             {
                 m_attackDecider[i].hasDecidedOnAttack = condition;
@@ -1080,30 +1138,89 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void UpdateAttackDeciderList()
         {
+            /*
+            if(m_currentPhaseIndex>1)
+            {
+                switch(m_currentPhaseIndex)
+                {
+                    case 2:
+                        m_patternDecider.SetList(new AttackInfo<Pattern>(Pattern.AttackPattern1, m_info.targetDistanceTolerance),
+                                    new AttackInfo<Pattern>(Pattern.AttackPattern2, m_info.targetDistanceTolerance),
+                                    new AttackInfo<Pattern>(Pattern.AttackPattern3, m_info.targetDistanceTolerance));
+                        m_attackDecider[0].SetList(new AttackInfo<Attack>(Attack.LeapAttack, m_info.leapAttack.range));
+                        m_attackDecider[1].SetList(new AttackInfo<Attack>(Attack.ChanFistPunch, m_info.chainFistPunchAttack.range));
+                        m_attackDecider[2].SetList(new AttackInfo<Attack>(Attack.ComboPunch, m_info.punchComboAttack.range));
+                        break;
+
+                    case 3:
+                        m_patternDecider.SetList(new AttackInfo<Pattern>(Pattern.AttackPattern1, m_info.targetDistanceTolerance),
+                                    new AttackInfo<Pattern>(Pattern.AttackPattern2, m_info.targetDistanceTolerance),
+                                    new AttackInfo<Pattern>(Pattern.AttackPattern3, m_info.targetDistanceTolerance));
+                        m_attackDecider[0].SetList(new AttackInfo<Attack>(Attack.LeapAttack, m_info.leapAttack.range));
+                        m_attackDecider[1].SetList(new AttackInfo<Attack>(Attack.ChanFistPunch, m_info.chainFistPunchAttack.range));
+                        m_attackDecider[2].SetList(new AttackInfo<Attack>(Attack.ComboPunch, m_info.punchComboAttack.range));
+                        break;
+                }
+            }else
+            {
+                m_patternDecider.SetList(new AttackInfo<Pattern>(Pattern.AttackPattern1, m_info.targetDistanceTolerance),
+                                    new AttackInfo<Pattern>(Pattern.AttackPattern2, m_info.targetDistanceTolerance),
+                                    new AttackInfo<Pattern>(Pattern.AttackPattern3, m_info.targetDistanceTolerance));
+                m_attackDecider[0].SetList(new AttackInfo<Attack>(Attack.ShoulderBash, m_info.shoulderBashAttack.range));
+                m_attackDecider[1].SetList(new AttackInfo<Attack>(Attack.ChanFistPunch, m_info.chainFistPunchAttack.range));
+                m_attackDecider[2].SetList(new AttackInfo<Attack>(Attack.ComboPunch, m_info.punchComboAttack.range));
+            }
+            */
+            m_attackDecider[0].SetList(new AttackInfo<Attack>(Attack.RunAttack, m_info.runAttack.range),
+                                new AttackInfo<Attack>(Attack.ChainedBashI, m_info.chainbash1Attack.range)); //For Out of range Attacks (used for phase 2 and 3)
+
+            m_attackDecider[1].SetList(new AttackInfo<Attack>(Attack.ShoulderBash, m_info.shoulderBashAttack.range),
+                                new AttackInfo<Attack>(Attack.ChanFistPunch, m_info.chainFistPunchAttack.range),
+                                new AttackInfo<Attack>(Attack.ComboPunch, m_info.punchComboAttack.range)); //Moveset for phase 1
+
+            m_attackDecider[2].SetList(new AttackInfo<Attack>(Attack.LeapAttack, m_info.leapAttack.range),
+                                new AttackInfo<Attack>(Attack.ChanFistPunch, m_info.chainFistPunchAttack.range),
+                                new AttackInfo<Attack>(Attack.ComboPunch, m_info.punchComboAttack.range)); // Moveset for Phase 2 and 3
+
+            m_attackDecider[3].SetList(new AttackInfo<Attack>(Attack.ChainedBashI, m_info.chainbash1Attack.range),
+                                new AttackInfo<Attack>(Attack.ChanFistPunch, m_info.chainFistPunchAttack.range)); //moveset for Empowered phase 2
+
+            m_attackDecider[4].SetList(new AttackInfo<Attack>(Attack.ChainedBashI, m_info.chainbash1Attack.range),
+                                new AttackInfo<Attack>(Attack.LightningStomp, m_info.lightningStompAttack.range),
+                                new AttackInfo<Attack>(Attack.RunAttack, m_info.runAttack.range)); //moveset for emowered phase 3
+            //UpdateRangeCache(m_info.shoulderBashAttack.range, m_info.chainFistPunchAttack.range, m_info.punchComboAttack.range);
+            m_attackSpecialAttackLimit = 5;
+            Debug.Log(m_attackCount + " " + m_attackSpecialAttackLimit);
+
+            /*
             m_patternDecider.SetList(new AttackInfo<Pattern>(Pattern.AttackPattern1, m_info.targetDistanceTolerance),
                                     new AttackInfo<Pattern>(Pattern.AttackPattern2, m_info.targetDistanceTolerance),
                                     new AttackInfo<Pattern>(Pattern.AttackPattern3, m_info.targetDistanceTolerance),
                                     new AttackInfo<Pattern>(Pattern.AttackPattern4, m_info.targetDistanceTolerance));
+
             m_attackDecider[0].SetList(new AttackInfo<Attack>(Attack.ShoulderBash, m_info.shoulderBashAttack.range)
                                     , new AttackInfo<Attack>(Attack.ComboPunch, m_info.punchComboAttack.range)
                                     , new AttackInfo<Attack>(Attack.ChainedBashI, m_info.chainbash1Attack.range)
                                     , new AttackInfo<Attack>(Attack.ChanFistPunch, m_info.chainFistPunchAttack.range)
-                                    , new AttackInfo<Attack>(Attack.RunAttack, m_info.runAttack.range));
+                                    , new AttackInfo<Attack>(Attack.RunAttack, m_info.runAttack.range)); // All Range attack
+                                    
             m_attackDecider[1].SetList(new AttackInfo<Attack>(Attack.ShoulderBash, m_info.shoulderBashAttack.range)
                                     , new AttackInfo<Attack>(Attack.ComboPunch, m_info.punchComboAttack.range)
                                     , new AttackInfo<Attack>(Attack.ChanFistPunch, m_info.chainFistPunchAttack.range)
-                                    , new AttackInfo<Attack>(Attack.LightningStomp, m_info.lightningStompAttack.range));
+                                    , new AttackInfo<Attack>(Attack.LightningStomp, m_info.lightningStompAttack.range)); //All melee Attack
+
             m_attackDecider[2].SetList(new AttackInfo<Attack>(Attack.ChainedBashI, m_info.chainbash1Attack.range)
                                     , new AttackInfo<Attack>(Attack.ChanFistPunch, m_info.chainFistPunchAttack.range)
                                     , new AttackInfo<Attack>(Attack.LightningStomp, m_info.lightningStompAttack.range)
                                     , new AttackInfo<Attack>(Attack.ChainShock, m_info.chainShockAttack.range)
-                                    , new AttackInfo<Attack>(Attack.RunAttack, m_info.runAttack.range));
+                                    , new AttackInfo<Attack>(Attack.RunAttack, m_info.runAttack.range)); // Any Attack
+            */
             DecidedOnAttack(false);
         }
 
         public override void ApplyData()
         {
-            if (m_patternDecider != null)
+            if (m_attackDecider != null)
             {
                 UpdateAttackDeciderList();
             }
@@ -1138,8 +1255,10 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             if (!m_attackDecider[patternIndex].hasDecidedOnAttack)
             {
-                IsAllAttackComplete();
-                for (int i = 0; i < m_attackCache.Count; i++)
+                Debug.Log(" asdasd"+patternIndex);
+                //IsAllAttackComplete();
+
+                /*for (int i = 0; i < m_attackCache.Count; i++)
                 {
                     m_attackDecider[patternIndex].DecideOnAttack();
                     if (m_attackCache[i] != m_currentAttack && !m_attackUsed[i])
@@ -1150,15 +1269,20 @@ namespace DChild.Gameplay.Characters.Enemies
                         return;
                     }
                 }
+                */
+                m_attackDecider[patternIndex].DecideOnAttack();
+                m_currentAttack = m_attackDecider[patternIndex].chosenAttack.attack;
+                m_currentAttackRange = m_attackDecider[patternIndex].chosenAttack.range;
             }
         }
 
         private void ExecuteAttack(int patternIndex)
         {
             /* if (m_attackCount < m_patternCount[patternIndex])*/
-            if (m_attackCount < m_attackSpecialAttackLimit)
+            if (m_attackCount < m_attackSpecialAttackLimit||m_isBuffed)
             {
-                ChooseAttack(patternIndex);
+                //ChooseAttack(patternIndex);
+                /*
                 if (IsTargetInRange(m_currentAttackRange))
                 {
                     m_stateHandle.Wait(State.Attacking);
@@ -1169,7 +1293,6 @@ namespace DChild.Gameplay.Characters.Enemies
                             {
                                 if (m_currentPhaseIndex != 3)
                                 {
-                                    
                                     m_currentAttackCoroutine = StartCoroutine(ShoulderBashRoutine());
                                     //StartCoroutine(ShoulderBashRoutine());
                                 }
@@ -1188,8 +1311,6 @@ namespace DChild.Gameplay.Characters.Enemies
                         case Attack.ComboPunch:
                             if (patternIndex == 0 || patternIndex == 1 || patternIndex == 2)
                             {
-
-                                
                                 m_currentAttackCoroutine = StartCoroutine(PunchComboRoutine());
                             }
                             else
@@ -1284,17 +1405,104 @@ namespace DChild.Gameplay.Characters.Enemies
                 {
                     MoveToTarget(m_currentAttackRange);
                 }
+                */
+                if (IsTargetInRange(m_currentAttackRange) || m_rangeAttack||m_isBuffed)
+                {
+                    m_stateHandle.Wait(State.Attacking);
+                    switch (m_currentAttack)
+                    {
+                        case Attack.ShoulderBash:
+                            m_currentAttackCoroutine = StartCoroutine(ShoulderBashRoutine()); 
+                            break;
+                        case Attack.ComboPunch:
+                            m_currentAttackCoroutine = StartCoroutine(PunchComboRoutine());
+                            break;
+
+                        case Attack.ChanFistPunch:
+                            m_currentAttackCoroutine = StartCoroutine(ChainFistPunchRoutine());
+                            break;
+                        case Attack.ChainedBashI:
+                            
+                                if (AllowAttack(2, State.Attacking))
+                                {
+                                    m_attackCount++;
+                                    m_currentAttackCoroutine = StartCoroutine(ChainedBashIRoutine());
+                                }
+                            
+                            break;
+                        case Attack.LightningStomp:
+                            if (AllowAttack(3, State.Attacking))
+                            {
+                                m_attackCount++;
+                                m_currentAttackCoroutine = StartCoroutine(LightningStompRoutine());
+
+                            }
+                            break;
+                        case Attack.ChainShock:
+                            if (AllowAttack(3, State.Attacking))
+                            {
+                               m_attackCount++;
+                               m_currentAttackCoroutine = StartCoroutine(ChainShockRoutine());
+                            }
+                            break;
+                            
+                        case Attack.RunAttack:
+                            if (m_phaseHandle.currentPhase == Phase.PhaseTwo)
+                            {
+                                if (AllowAttack(2, State.Attacking))
+                                {
+                                    m_attackCount++;
+                                    m_currentAttackCoroutine = StartCoroutine(RunningAttackRoutine());
+                                }
+                            }
+                            break;
+                        case Attack.LeapAttack:
+                            if (m_phaseHandle.currentPhase != Phase.PhaseOne)
+                            {   
+                                var leapCount = 3;
+                                m_stateHandle.Wait(State.Chasing);
+                                StartCoroutine(StickToGroundRoutine(GroundPosition().y));
+                                    
+                                m_currentAttackCoroutine = StartCoroutine(LeapAttackRoutine(leapCount));
+                                m_leapRoutine = m_currentAttackCoroutine; 
+                            }
+                            break;
+                    }
+                    ChooseAttack(m_currentPhaseIndex);
+                    m_rangeAttack = false;
+                }
+                else
+                {
+                    switch(m_currentPhaseIndex)
+                    {
+                        case 1:
+                            MoveToTarget(m_currentAttackRange);
+                            break;
+
+                        case 2:
+                            ChooseAttack(0);
+                            m_rangeAttack = true;
+                            break;
+
+                        case 3:
+                            ChooseAttack(0);
+                            m_rangeAttack = true;
+                            break;
+                    }
+                    
+                }
             }
             else
-            {
+            {/*
                 if (patternIndex == 0 || patternIndex == 1)
                 {
+                    /*
                     if (patternIndex == 1 && m_currentPhaseIndex == 1)
                     {
                         m_stateHandle.OverrideState(State.Chasing);
                         return;
                     }
-
+                    
                     switch(m_phaseHandle.currentPhase)
                     {
                         case Phase.PhaseOne:
@@ -1303,6 +1511,7 @@ namespace DChild.Gameplay.Characters.Enemies
                                 var leapCount = 3;
                                 m_stateHandle.Wait(State.Chasing);
                                 StartCoroutine(StickToGroundRoutine(GroundPosition().y));
+                                //m_currentAttackCoroutine = StartCoroutine(ChainedBashIRoutine());
                                 m_currentAttackCoroutine = StartCoroutine(LeapAttackRoutine(leapCount));
                                 m_leapRoutine = m_currentAttackCoroutine;
                             }
@@ -1325,8 +1534,39 @@ namespace DChild.Gameplay.Characters.Enemies
                 else if (patternIndex == 2)
                 {
                     m_stateHandle.OverrideState(State.Chasing);
+                }*/
+                
+                switch (m_phaseHandle.currentPhase)
+                {
+                    case Phase.PhaseOne:
+                        if (IsTargetInRange(m_info.leapAttack.range))
+                        {
+                            var leapCount = 3;
+                            m_stateHandle.Wait(State.Chasing);
+                            StartCoroutine(StickToGroundRoutine(GroundPosition().y));
+                            //m_currentAttackCoroutine = StartCoroutine(ChainedBashIRoutine());
+                            m_currentAttackCoroutine = StartCoroutine(LeapAttackRoutine(leapCount));
+                            m_leapRoutine = m_currentAttackCoroutine;
+                        }
+                        else
+                        {
+                            MoveToTarget(m_info.leapAttack.range);
+                        }
+                        break;
+
+                    case Phase.PhaseTwo:
+                        StartCoroutine(PhaseDischarge());
+                        break;
+
+                    case Phase.PhaseThree:
+                        StartCoroutine(PhaseDischarge());
+                        break;
                 }
+                ChooseAttack(m_currentPhaseIndex);
             }
+            
+            //m_patternDecider.DecideOnAttack();
+            //m_chosenPattern = m_patternDecider.chosenAttack.attack;
         }
 
         private void IsAllAttackComplete()
@@ -1374,10 +1614,10 @@ namespace DChild.Gameplay.Characters.Enemies
             m_turnHandle.TurnDone += OnTurnDone;
             m_deathHandle.SetAnimation(m_info.deathAnimation.animation);
             m_projectileLauncher = new ProjectileLauncher(m_info.stompProjectile.projectileInfo, m_projectilePoint);
-            m_patternDecider = new RandomAttackDecider<Pattern>();
+            //m_patternDecider = new RandomAttackDecider<Pattern>();
             m_lightningBoltEffects = new List<GameObject>();
-            m_attackDecider = new RandomAttackDecider<Attack>[3];
-            for (int i = 0; i < 3; i++)
+            m_attackDecider = new RandomAttackDecider<Attack>[5];
+            for (int i = 0; i < 5; i++)
             {
                 m_attackDecider[i] = new RandomAttackDecider<Attack>();
             }
@@ -1385,9 +1625,12 @@ namespace DChild.Gameplay.Characters.Enemies
             UpdateAttackDeciderList();
             m_patternCount = new float[4];
             m_attackCache = new List<Attack>();
-            AddToAttackCache(Attack.ChainShock, Attack.ChanFistPunch, Attack.ComboPunch, Attack.LightningStomp, Attack.ShoulderBash, Attack.ChainedBashI);
+            //AddToAttackCache(Attack.ChainShock, Attack.ChanFistPunch, Attack.ComboPunch, Attack.LightningStomp, Attack.ShoulderBash, Attack.ChainedBashI);
+            AddToAttackCache(Attack.ChanFistPunch, Attack.ComboPunch, Attack.ShoulderBash);
             m_attackRangeCache = new List<float>();
-            AddToRangeCache(m_info.chainShockAttack.range, m_info.punchComboAttack.range, m_info.chainFistPunchAttack.range, m_info.lightningStompAttack.range, m_info.shoulderBashAttack.range, m_info.chainbash1Attack.range);
+            //AddToRangeCache(m_info.chainShockAttack.range, m_info.punchComboAttack.range, m_info.chainFistPunchAttack.range, m_info.lightningStompAttack.range, m_info.shoulderBashAttack.range, m_info.chainbash1Attack.range);
+            AddToRangeCache(m_info.shoulderBashAttack.range, m_info.chainFistPunchAttack.range, m_info.punchComboAttack.range);
+            UpdateRangeCache(m_info.shoulderBashAttack.range, m_info.chainFistPunchAttack.range, m_info.punchComboAttack.range);
             m_attackUsed = new bool[m_attackCache.Count];
         }
 
@@ -1434,8 +1677,8 @@ namespace DChild.Gameplay.Characters.Enemies
             m_phaseHandle.ApplyChange();
 
             m_fistRefPoint.GetComponent<CircleCollider2D>().enabled = false;
-
-            m_attackSpecialAttackLimit = 5;
+            Debug.Log("i have been reached");
+            
             //StartCoroutine(StartAnimationRoutine());
             //Hack Fix for quests
         }
@@ -1477,9 +1720,10 @@ namespace DChild.Gameplay.Characters.Enemies
                 case State.Attacking:
                     if (IsFacingTarget())
                     {
-                        switch (m_chosenPattern)
+                        /*switch (m_chosenPattern)
                         {
                             case Pattern.AttackPattern1:
+                                
                                 UpdateRangeCache(m_info.chainShockAttack.range, m_info.chainFistPunchAttack.range, m_info.punchComboAttack.range, m_info.lightningStompAttack.range, m_currentPhaseIndex != 3 ? m_info.shoulderBashAttack.range : m_info.lightningStompAttack.range, m_info.chainbash1Attack.range);
                                 ExecuteAttack(0);
                                 break;
@@ -1507,6 +1751,41 @@ namespace DChild.Gameplay.Characters.Enemies
                                 }
                                 break;
                         }
+                        switch (m_chosenPattern)
+                        {
+                            case Pattern.AttackPattern1:
+                                Debug.Log("Chosen 1");
+                                UpdateRangeCache(m_info.shoulderBashAttack.range, m_info.leapAttack.range);
+                                ExecuteAttack(0);
+                                break;
+                            case Pattern.AttackPattern2:
+                                Debug.Log("Chosen 2");
+                                UpdateRangeCache(m_info.chainFistPunchAttack.range);
+                                ExecuteAttack(1);
+                                break;
+                            case Pattern.AttackPattern3:
+                                Debug.Log("Chosen 3");
+                                UpdateRangeCache(m_info.punchComboAttack.range);
+                                ExecuteAttack(2);
+                                break;
+                        }
+                        */
+                        switch(m_currentPhaseIndex)
+                        {
+                            case 1:
+                                
+                                ExecuteAttack(1);
+                                break;
+                            case 2:
+                                
+                                ExecuteAttack(2);
+                                break;
+
+                            case 3:
+                                
+                                ExecuteAttack(3);
+                                break;
+                        }
                     }
                     else
                     {
@@ -1519,6 +1798,12 @@ namespace DChild.Gameplay.Characters.Enemies
 
                 case State.Chasing:
                     DecidedOnAttack(false);
+                    ChooseAttack(m_currentPhaseIndex);
+                    if(m_attackDecider[m_currentPhaseIndex].hasDecidedOnAttack)
+                    {
+                        m_stateHandle.SetState(State.Attacking);
+                    }
+                    /*
                     m_patternDecider.DecideOnAttack();
                     m_chosenPattern = m_patternDecider.chosenAttack.attack;
                     if (m_chosenPattern == m_previousPattern)
@@ -1530,6 +1815,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         m_previousPattern = m_chosenPattern;
                         m_stateHandle.SetState(State.Attacking);
                     }
+                    */
                     break;
 
                 case State.ReevaluateSituation:
