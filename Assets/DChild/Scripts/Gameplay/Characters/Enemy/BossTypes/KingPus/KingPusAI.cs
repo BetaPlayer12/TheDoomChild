@@ -19,6 +19,7 @@ using DChild.Gameplay.Pooling;
 using UnityEngine.Playables;
 using Language.Lua;
 using DChild.Gameplay.Combat.StatusAilment;
+using Unity.Mathematics;
 
 namespace DChild.Gameplay.Characters.Enemies
 {
@@ -708,6 +709,8 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField]
         private int m_maxSpearCrawlStopCount;
         private int m_spearCrawlStopCount = 0;
+        private bool m_scriptedPhaseTwoAttackDone = false;
+        private bool m_scriptedPhaseThreeAttackDone = false;
 
         public event EventAction<EventActionArgs> BodySlamDone;
         public event EventAction<EventActionArgs> WreckingBallDone;
@@ -1027,11 +1030,13 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_phaseHandle.SetPhase(Phase.PhaseTwo);
                     m_hitboxCollider.offset = new Vector2(2.37f, 2.46f);
                     m_hitboxCollider.size = new Vector2(18.09f, 10.83f);
+                    yield return BodySlamFullAttackRoutine(true);
                     break;
                 case Phase.PhaseTwo:
                     m_phaseHandle.SetPhase(Phase.PhaseThree);
                     m_hitboxCollider.offset = new Vector2(3.19f, 1.58f);
                     m_hitboxCollider.size = new Vector2(41.23f, 17.41f);
+                    yield return KrakenRageFullAttackRoutine(true);
                     break;
                 case Phase.PhaseThree:
                     m_phaseHandle.SetPhase(Phase.PhaseFour);
@@ -1050,7 +1055,6 @@ namespace DChild.Gameplay.Characters.Enemies
 
             enabled = true;
         }
-
 
         private void SetAIToPhasing()
         {
@@ -1617,7 +1621,7 @@ namespace DChild.Gameplay.Characters.Enemies
             //yield return SpikeSpitTwoFullAttackRoutine(true);
         }
 
-        private IEnumerator KrakenRageFullAttackRoutine()
+        private IEnumerator KrakenRageFullAttackRoutine(bool doneDuringPhaseChange)
         {
             m_animation.EnableRootMotion(true, false);
             m_animation.SetAnimation(0, m_info.krakenRageAttack.animation, false);
@@ -1639,20 +1643,22 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.DisableRootMotion();
             m_attackDecider.hasDecidedOnAttack = false;
             m_currentAttackCoroutine = null;
-            m_stateHandle.ApplyQueuedState();
+            if(!doneDuringPhaseChange)
+                m_stateHandle.ApplyQueuedState();
             yield return null;
         }
 
-        private IEnumerator BodySlamFullAttackRoutine()
+        private IEnumerator BodySlamFullAttackRoutine(bool doneDuringPhaseChange)
         {
             //grapple away
-            m_stateHandle.Wait(State.ReevaluateSituation);
+            if(!doneDuringPhaseChange)
+                m_stateHandle.Wait(State.ReevaluateSituation);
             m_animation.DisableRootMotion();
             CalculateWallGrapple(true);
             m_character.physics.simulateGravity = false;
             m_movement.Stop();
             m_grappleExtendCoroutine = StartCoroutine(GrappleExtendRoutine(4));
-            yield return new WaitForSeconds(2f);
+            yield return new WaitForSeconds(3f);
 
             m_character.physics.simulateGravity = true;
 
@@ -1686,7 +1692,8 @@ namespace DChild.Gameplay.Characters.Enemies
             m_willStickToWall = false;
             m_attackDecider.hasDecidedOnAttack = false;
             m_currentAttackCoroutine = null;
-            m_stateHandle.ApplyQueuedState();
+            if(!doneDuringPhaseChange)
+                m_stateHandle.ApplyQueuedState();
 
             enabled = true;
             yield return null;
@@ -2462,65 +2469,6 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 switch (m_phaseHandle.currentPhase)
                 {
-                    case Phase.PhaseOne:
-                        if (m_currentHitCount < m_maxHitCount)
-                            m_currentHitCount++;
-                        else
-                        {
-                            if (m_grappleCoroutine != null)
-                            {
-                                StopCoroutine(m_grappleCoroutine);
-                                m_grappleCoroutine = null;
-                            }
-
-                            if (m_currentAttackCoroutine != null)
-                            {
-                                StopCoroutine(m_currentAttackCoroutine);
-                                m_currentAttackCoroutine = null;
-                                m_attackDecider.hasDecidedOnAttack = false;
-                            }
-
-                            //stop all behaviours
-                            //make new animation (flinch/wiggle) to grapple evade
-                            StopAnimations();
-                            StopAllCoroutines();
-                            StartCoroutine(GrappleEvadeRoutine(false));
-
-                            //StartCoroutine(GrappleRoutine(false, false, m_info.bodySlamCount));
-                            //StartCoroutine(GrappleEvade());
-                        }
-
-                        if (m_hitbox.canBlockDamage)
-                        {
-                            if (m_grappleCoroutine != null)
-                            {
-                                StopCoroutine(m_grappleCoroutine);
-                                m_grappleCoroutine = null;
-                            }
-
-                            if (m_currentAttackCoroutine != null)
-                            {
-                                StopCoroutine(m_currentAttackCoroutine);
-                                m_currentAttackCoroutine = null;
-                                m_attackDecider.hasDecidedOnAttack = false;
-                            }
-
-                            //m_stateHandle.Wait(State.ReevaluateSituation);
-
-                            m_hitbox.Enable();
-                            m_rb2d.isKinematic = false;
-                            m_rb2d.useFullKinematicContacts = false;
-                            m_willStickToWall = false;
-                            m_legCollider.enabled = true;
-
-                            m_grappleEvadeCoroutine = StartCoroutine(GrappleRoutine(false, true, m_info.bodySlamCount/*, true*/));
-                            //m_wreckingBallCoroutine = StartCoroutine(WreckingBallRoutine(m_info.wreckingBallCount));
-                            m_currentHitCount = 0;
-
-                            //StartCoroutine(AttackCoroutineStopper());
-
-                        }
-                        break;
                     case Phase.PhaseThree:
                         {
                             if (m_currentHitCount < m_maxHitCount)
@@ -2544,7 +2492,15 @@ namespace DChild.Gameplay.Characters.Enemies
                                 //make new animation (flinch/wiggle) to grapple evade
                                 StopAnimations();
                                 StopAllCoroutines();
-                                StartCoroutine(GrappleEvadeRoutine(false));
+                                int rand = UnityEngine.Random.Range(0, 2);
+                                if (rand == 0)
+                                {
+                                    StartCoroutine(GrappleEvadeRoutine(false));
+                                }
+                                else
+                                {
+                                    StartCoroutine(GrappleEvadeRoutine(true));
+                                }
 
                                 //StartCoroutine(GrappleRoutine(false, false, m_info.bodySlamCount));
                                 //StartCoroutine(GrappleEvade());
@@ -2625,7 +2581,15 @@ namespace DChild.Gameplay.Characters.Enemies
                             //make new animation (flinch/wiggle) to grapple evade
                             StopAnimations();
                             StopAllCoroutines();
-                            StartCoroutine(GrappleEvadeRoutine(false));
+                            int rand = UnityEngine.Random.Range(0, 2);
+                            if (rand == 0)
+                            {
+                                StartCoroutine(GrappleEvadeRoutine(false));
+                            }
+                            else
+                            {
+                                StartCoroutine(GrappleEvadeRoutine(true));
+                            }
 
                             //StartCoroutine(GrappleRoutine(false, false, m_info.bodySlamCount));
                             //StartCoroutine(GrappleEvade());
@@ -2654,6 +2618,16 @@ namespace DChild.Gameplay.Characters.Enemies
                             m_willStickToWall = false;
                             m_legCollider.enabled = true;
 
+                            int rand = UnityEngine.Random.Range(0, 2);
+                            if (rand == 0)
+                            {
+                                StartCoroutine(GrappleEvadeRoutine(false));
+                            }
+                            else
+                            {
+                                StartCoroutine(GrappleEvadeRoutine(true));
+                            }
+                            //m_wreckingBallCoroutine = StartCoroutine(WreckingBallRoutine(m_info.wreckingBallCount));
                             m_currentHitCount = 0;
 
                             //StartCoroutine(AttackCoroutineStopper());
@@ -2810,7 +2784,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         //case Attack.WaitAttackEnd:
                         //    break;
                         default: //for testing
-                            m_currentAttackCoroutine = StartCoroutine(SpikeShowerOneFullAttackRoutine());
+                            m_currentAttackCoroutine = StartCoroutine(BodySlamFullAttackRoutine(false));
                             m_pickedCooldown = m_currentFullCooldown[0];
                             break;
                     }
@@ -2837,18 +2811,6 @@ namespace DChild.Gameplay.Characters.Enemies
                 case State.Chasing:
                     if (!m_hitbox.canBlockDamage)
                     {
-                        //ChooseAttack();
-                        //if (m_character.facing != HorizontalDirection.Right)
-                        //    CustomTurn();
-                        //if (IsTargetInRange(m_currentAttackRange) && m_currentAttackCoroutine == null)
-                        //{
-                        //    m_animation.SetEmptyAnimation(0, 0);
-                        //    m_stateHandle.SetState(State.Attacking);
-                        //}
-                        //else
-                        //{
-                        //    MoveToTarget(m_currentAttackRange, false);
-                        //}
                         if (m_character.facing != HorizontalDirection.Right)
                             CustomTurn();
                         if (IsTargetInRange(m_shortRangeAttackDistance))
