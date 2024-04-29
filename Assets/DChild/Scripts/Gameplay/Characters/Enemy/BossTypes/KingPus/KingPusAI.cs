@@ -1336,7 +1336,6 @@ namespace DChild.Gameplay.Characters.Enemies
 
             m_animation.SetAnimation(0, m_info.tentaSpearCrawlRightAnticipationAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.tentaSpearCrawlRightAnticipationAnimation);
-
             m_animation.SetAnimation(0, m_info.tentaSpearRightCrawl, true);
 
             //if (m_spearCrawlStopCount < m_maxSpearCrawlStopCount)
@@ -1755,6 +1754,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_bodySlamFX.Play();
             m_animation.SetAnimation(0, m_info.bodySlamEnd, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.bodySlamEnd);
+            m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_willStickToWall = false;
 
             m_movement.Stop();
@@ -2784,7 +2784,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         //case Attack.WaitAttackEnd:
                         //    break;
                         default: //for testing
-                            m_currentAttackCoroutine = StartCoroutine(BodySlamFullAttackRoutine(false));
+                            m_currentAttackCoroutine = StartCoroutine(SpikeSpitAttackFullRoutine(false));
                             m_pickedCooldown = m_currentFullCooldown[0];
                             break;
                     }
