@@ -451,6 +451,10 @@ namespace DChild.Gameplay.Characters.Enemies
         private GameObject m_meteorSmashTrailFX;
         [SerializeField, TabGroup("FX")]
         private ParticleFX m_steamMalfAndOver;
+        [SerializeField, TabGroup("FX")]
+        private GameObject m_steamThrustFX;
+        [SerializeField, TabGroup("FX")]
+        private ParticleFX m_boosterChargeFX;
 
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_groundSensor;
@@ -496,19 +500,19 @@ namespace DChild.Gameplay.Characters.Enemies
         private bool m_hasPhaseChanged;
         private Coroutine m_currentAttackCoroutine = null;
         [SerializeField, TabGroup("Attack Colliders")]
-        private Collider2D m_punchAttackCollider;
+        private Collider2D m_punchAttackCollider, m_overchargedPunchAttackCollider;
         [SerializeField, TabGroup("Attack Colliders")]
-        private Collider2D m_flamethrower1Collider;
+        private Collider2D m_flamethrower1Collider, m_overchargedFlamethrower1Collider;
         [SerializeField, TabGroup("Attack Colliders")]
-        private Collider2D m_firebeamCollider;
+        private Collider2D m_firebeamCollider, m_overchargedFirebeamCollider;
         [SerializeField, TabGroup("Attack Colliders")]
-        private Collider2D m_longDashCollider;
+        private Collider2D m_longDashCollider, m_overchargedLongDashCollider;
         [SerializeField, TabGroup("Attack Colliders")]
-        private Collider2D m_flamethrower2Colliders;
+        private Collider2D m_flamethrower2Colliders, m_overchargedFlamethrower2Colliders;
         [SerializeField, TabGroup("Attack Colliders")]
-        private Collider2D m_meteorSmashCollider;
+        private Collider2D m_meteorSmashCollider, m_overchargedMeteorSmashCollider;
         [SerializeField, TabGroup("Attack Colliders")]
-        private List<Collider2D> m_spinAttackCollider;
+        private List<Collider2D> m_spinAttackCollider, m_overchargedSpinAttackCollider;
 
         private Coroutine m_changeLocationRoutine;
         private bool m_isDetecting;
@@ -679,7 +683,14 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             enabled = false;
             m_stateHandle.Wait(State.Chasing);
-            m_movement.Stop();
+            m_movement.Stop();/*
+            m_punchAttacker.SetDamageModifier(1);
+            m_flamethrower1.SetDamageModifier(1);
+            m_flamethrower2.SetDamageModifier(1);
+            m_firebeam.SetDamageModifier(1);
+            m_longD.SetDamageModifier(1);
+            m_meteor.SetDamageModifier(1);
+            m_shotG.SetDamageModifier(1);*/
             m_hitbox.SetInvulnerability(Invulnerability.MAX);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_hitbox.SetInvulnerability(Invulnerability.None);
@@ -814,9 +825,45 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return null;
         }*/
         #region Overcharged Attacks
+        [SerializeField, TabGroup("Attackers")]
+        private GameObject m_punchAttacker;
+        [SerializeField, TabGroup("Attackers")]
+        private GameObject m_punchAttacker2;
+        [SerializeField, TabGroup("Attackers")]
+        private GameObject m_flamethrower1;
+        [SerializeField, TabGroup("Attackers")]
+        private GameObject m_flamethrower2;
+        [SerializeField, TabGroup("Attackers")]
+        private GameObject m_firebeam;
+        [SerializeField, TabGroup("Attackers")]
+        private GameObject m_longD;
+        [SerializeField, TabGroup("Attackers")]
+        private GameObject m_meteor;
+        [SerializeField, TabGroup("Attackers")]
+        private GameObject m_shotG;
+        [SerializeField, TabGroup("Attackers")]
+        private GameObject m_overchargedPunchAttacker;
+        [SerializeField, TabGroup("Attackers")]
+        private GameObject m_overchargedPunchAttacker2;
+        [SerializeField, TabGroup("Attackers")]
+        private GameObject m_overchargedFlamethrower1;
+        [SerializeField, TabGroup("Attackers")]
+        private GameObject m_overchargedFlamethrower2;
+        [SerializeField, TabGroup("Attackers")]
+        private GameObject m_overchargedFirebeam;
+        [SerializeField, TabGroup("Attackers")]
+        private GameObject m_overchargedLongD;
+        [SerializeField, TabGroup("Attackers")]
+        private GameObject m_overchargedMeteor;
+        [SerializeField, TabGroup("Attackers")]
+        private GameObject m_overchargedShotG;
         private IEnumerator OverchargedPunchAttackRoutine()
         {
-            enabled = false;
+            enabled = false;/*
+            m_punchAttacker.enabled = false;
+            m_punchAttacker2.enabled = false;
+            m_overchargedPunchAttacker.enabled = true;
+            m_overchargedPunchAttacker2.enabled = true;*/
             m_runeDuration = 5;
             Vector2 targetPoint = m_targetInfo.position;
             var direction = (targetPoint - (Vector2)transform.position).normalized;
@@ -826,6 +873,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_movement.MoveTowards(direction, m_info.move.speed * 2);
                 yield return null;
             }
+            m_steamThrustFX.SetActive(false);
             yield return new WaitForSeconds(0.5f);
             //m_stateHandle.Wait(State.Chasing);
             m_movement.Stop();
@@ -844,7 +892,9 @@ namespace DChild.Gameplay.Characters.Enemies
         }
         private IEnumerator OverchargedFlamethrower1Routine()
         {
-            enabled = false;
+            enabled = false;/*
+            m_flamethrower1.enabled = false;
+            m_overchargedFlamethrower1.enabled = true;*/
             m_runeDuration = 5;
             Vector2 targetPoint = m_targetInfo.position;
             var direction = (targetPoint - (Vector2)transform.position).normalized;
@@ -854,6 +904,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_movement.MoveTowards(direction, m_info.move.speed * 2);
                 yield return null;
             }
+            m_steamThrustFX.SetActive(false);
             yield return new WaitForSeconds(0.5f);
             //m_stateHandle.Wait(State.Chasing);
             m_movement.Stop();
@@ -873,7 +924,10 @@ namespace DChild.Gameplay.Characters.Enemies
         }
         private IEnumerator OverchargedSpinAttackRoutine()
         {
-            enabled = false;
+            enabled = false;/*
+            m_punchAttacker.enabled = false;
+            m_overchargedPunchAttacker.enabled = true;*/
+            m_steamThrustFX.SetActive(false);
             yield return new WaitForSeconds(0.5f);
             m_hitbox.SetInvulnerability(Invulnerability.MAX);
             //m_stateHandle.Wait(State.Chasing);
@@ -905,7 +959,8 @@ namespace DChild.Gameplay.Characters.Enemies
         }
         private IEnumerator OverchargedFirebeamRoutine()
         {
-            enabled = false;
+            enabled = false;/*
+            m_firebeam.enabled = true;*/
             yield return new WaitForSeconds(0.5f);
             m_runeDuration = 5;
             //m_stateHandle.Wait(State.Chasing);
@@ -933,11 +988,9 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_movement.MoveTowards(direction, m_info.move.speed * 2);
                 yield return null;
             }
+            m_steamThrustFX.SetActive(false);
             m_movement.Stop();
-            if (!IsFacingTarget())
-            {
-                CustomTurn();
-            }
+            CustomTurn();
             m_animation.SetAnimation(0, m_info.overchargedFirebeamAttack, false);
             //yield return new WaitForSeconds(1f);
             m_firebeamCollider.enabled = true;
@@ -953,7 +1006,10 @@ namespace DChild.Gameplay.Characters.Enemies
         }
         private IEnumerator OverchargedShortDash()
         {
-            enabled = false;
+            enabled = false;/*
+            m_longD.enabled = false;
+            m_overchargedLongD.enabled = true;*/
+            m_steamThrustFX.SetActive(false);
             yield return new WaitForSeconds(0.5f);
             m_hitbox.SetInvulnerability(Invulnerability.MAX);
             //m_stateHandle.Wait(State.Chasing);
@@ -962,9 +1018,9 @@ namespace DChild.Gameplay.Characters.Enemies
             m_shortDashFX.Play();
             m_movement.MoveTowards(new Vector2(m_targetInfo.position.x - transform.position.x, 0).normalized, m_info.shortDash.speed * 2);
             //m_movement.Stop();
-            m_longDashCollider.enabled = true;
+            m_overchargedLongDashCollider.enabled = true;
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.overchargedShortDash);
-            m_longDashCollider.enabled = false;
+            m_overchargedLongDashCollider.enabled = false;
             m_shortDashFX.Stop();
             m_hitbox.SetInvulnerability(Invulnerability.None);
             yield return new WaitForSeconds(.5f);
@@ -990,19 +1046,23 @@ namespace DChild.Gameplay.Characters.Enemies
         }
         private IEnumerator OverchargedLongDash()
         {
-            enabled = false;
+            enabled = false;/*
+            m_longD.enabled = false;
+            m_overchargedLongD.enabled = true;*/
+            m_steamThrustFX.SetActive(false);
             yield return new WaitForSeconds(0.5f);
             m_hitbox.SetInvulnerability(Invulnerability.MAX);
-            //m_stateHandle.Wait(State.Chasing);
             m_movement.Stop();
+            m_boosterChargeFX.Play();
+            yield return new WaitForSeconds(3f);
             m_animation.SetAnimation(0, m_info.overchargedLongDash, false);
             m_longDashFX.Play();
             m_movement.MoveTowards(new Vector2(m_targetInfo.position.x - transform.position.x, 0).normalized, m_info.longDash.speed * 2);
             m_animation.SetAnimation(0, m_info.longDashStopAnimation, false);
             //m_movement.Stop();
-            m_longDashCollider.enabled = true;
+            m_overchargedLongDashCollider.enabled = true;
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.longDashStopAnimation);
-            m_longDashCollider.enabled = false;
+            m_overchargedLongDashCollider.enabled = false;
             m_longDashFX.Stop();
             m_hitbox.SetInvulnerability(Invulnerability.None);
             yield return new WaitForSeconds(.5f);
@@ -1017,7 +1077,9 @@ namespace DChild.Gameplay.Characters.Enemies
         }
         private IEnumerator OverchargedShotgunBlastRoutine()
         {
-            enabled = false;
+            enabled = false;/*
+            m_shotG.enabled = true;*/
+            m_steamThrustFX.SetActive(false);
             yield return new WaitForSeconds(0.5f);
             m_runeDuration = 5;
             //m_stateHandle.Wait(State.Chasing);
@@ -1052,12 +1114,15 @@ namespace DChild.Gameplay.Characters.Enemies
         }
         private IEnumerator OverchargedFlamethrower2Routine()
         {
-            enabled = false;
+            enabled = false;/*
+            m_flamethrower2.enabled = false;
+            m_overchargedFlamethrower2.enabled = true;*/
+            m_steamThrustFX.SetActive(false);
             yield return new WaitForSeconds(0.5f);
             m_runeDuration = 5;
             //m_stateHandle.Wait(State.Chasing);
             m_movement.Stop();
-            Vector2 targetPoint = new Vector2(transform.position.x, m_firebeamTransformPoints[1].position.y + 20f);
+            Vector2 targetPoint = new Vector2(transform.position.x + 5, m_firebeamTransformPoints[1].position.y + 20f);
             var direction = (targetPoint - (Vector2)transform.position).normalized;
             m_animation.SetAnimation(0, m_info.overchargedMove, true);
             while (Vector2.Distance(transform.position, targetPoint) > 10f)
@@ -1069,7 +1134,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_info.overchargedHoverDownward, true);
             yield return new WaitForSeconds(0.5f);
             m_animation.SetAnimation(0, m_info.overchargedMove, true);
-            m_flamethrower2FX.enabled = true;
+            m_overchargedFlamethrower2Colliders.enabled = true;
             m_flamethrower2FX.Play();
             var m_followElapsedTime = 0f;
             var m_followDuration = 10f;
@@ -1084,7 +1149,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 yield return null;
             }
             m_movement.Stop();
-            m_flamethrower2FX.enabled = false;
+            m_overchargedFlamethrower2Colliders.enabled = false;
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.overchargedMove);
             m_flamethrower2FX.Stop();
             m_animation.SetAnimation(0, m_info.overchargedIdle, true);
@@ -1097,7 +1162,10 @@ namespace DChild.Gameplay.Characters.Enemies
         }
         private IEnumerator OverchargedMeteorSmashRoutine()
         {
-            enabled = false;
+            enabled = false;/*
+            m_meteor.enabled = false;
+            m_overchargedMeteor.enabled = true;*/
+            m_steamThrustFX.SetActive(false);
             yield return new WaitForSeconds(0.5f);
             m_runeDuration = 5;
             //m_stateHandle.Wait(State.Chasing);
@@ -1112,7 +1180,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_movement.Stop();
             m_animation.SetAnimation(0, m_info.overchargedSpinPreAnimation, false);
             yield return new WaitForSeconds(0.5f);
-            m_meteorSmashCollider.enabled = true;
+            m_overchargedMeteorSmashCollider.enabled = true;
             m_animation.SetAnimation(0, m_info.overchargedSpinAttack, true);
             m_meteorSmashTrailFX.SetActive(true);
             m_meteorSmashFX.Play();
@@ -1133,7 +1201,7 @@ namespace DChild.Gameplay.Characters.Enemies
             }
             //StartCoroutine(RuneShieldRoutine());
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.overchargedSpinEndAnimation);
-            m_meteorSmashCollider.enabled = false;
+            m_overchargedMeteorSmashCollider.enabled = false;
             m_animation.SetAnimation(0, m_info.overchargedIdle, true);
             DecidedOnAttack(false);
             m_animation.DisableRootMotion();
@@ -1146,7 +1214,11 @@ namespace DChild.Gameplay.Characters.Enemies
         #region Normal Attacks
         private IEnumerator PunchAttackRoutine()
         {
-            enabled = false;
+            enabled = false;/*
+            m_punchAttacker.enabled = true;
+            m_punchAttacker2.enabled = true;
+            m_overchargedPunchAttacker.enabled = false;
+            m_overchargedPunchAttacker2.enabled = false;*/
             //yield return new WaitForSeconds(0.5f);
             m_runeDuration = 5;
             Vector2 targetPoint = m_targetInfo.position;
@@ -1157,6 +1229,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_movement.MoveTowards(direction, m_info.move.speed);
                 yield return null;
             }
+            m_steamThrustFX.SetActive(false);
             //m_stateHandle.Wait(State.Chasing);
             m_movement.Stop();
             m_animation.EnableRootMotion(true, false);
@@ -1174,7 +1247,9 @@ namespace DChild.Gameplay.Characters.Enemies
         }
         private IEnumerator Flamethrower1Routine()
         {
-            enabled = false;
+            enabled = false;/*
+            m_flamethrower1.enabled = true;
+            m_overchargedFlamethrower1.enabled = false;*/
             //yield return new WaitForSeconds(0.5f);
             //m_stateHandle.Wait(State.Chasing);
             m_runeDuration = 5;
@@ -1186,6 +1261,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_movement.MoveTowards(direction, m_info.move.speed);
                 yield return null;
             }
+            m_steamThrustFX.SetActive(false);
             m_movement.Stop();
             m_animation.EnableRootMotion(true, false);
             m_animation.SetAnimation(0, m_info.flameThrowerAttack.animation, false);
@@ -1211,7 +1287,10 @@ namespace DChild.Gameplay.Characters.Enemies
         }
         private IEnumerator SpinAttackRoutine()
         {
-            enabled = false;
+            enabled = false;/*
+            m_punchAttacker.enabled = true;
+            m_overchargedPunchAttacker.enabled = false;*/
+            m_steamThrustFX.SetActive(false);
             yield return new WaitForSeconds(0.5f);
             m_hitbox.SetInvulnerability(Invulnerability.MAX);
             //m_stateHandle.Wait(State.Chasing);
@@ -1374,7 +1453,8 @@ namespace DChild.Gameplay.Characters.Enemies
         #endregion
         private IEnumerator FirebeamRoutine()
         {
-            enabled = false;
+            enabled = false;/*
+            m_firebeam.enabled = true;*/
             yield return new WaitForSeconds(0.5f);
             m_runeDuration = 5;
             //m_stateHandle.Wait(State.Chasing);
@@ -1402,11 +1482,9 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_movement.MoveTowards(direction, m_info.move.speed);
                 yield return null;
             }
+            m_steamThrustFX.SetActive(false);
             m_movement.Stop();
-            if (!IsFacingTarget())
-            {
-                CustomTurn();
-            }
+            CustomTurn();
             m_animation.SetAnimation(0, m_info.firebeamAttack, false);
             yield return new WaitForSeconds(0.25f);
             StartCoroutine(FirebeamLaserRoutine());
@@ -1423,7 +1501,10 @@ namespace DChild.Gameplay.Characters.Enemies
         }
         private IEnumerator ShortDash()
         {
-            enabled = false;
+            enabled = false;/*
+            m_longD.enabled = true;
+            m_overchargedLongD.enabled = false;*/
+            m_steamThrustFX.SetActive(false);
             yield return new WaitForSeconds(0.5f);
             m_hitbox.SetInvulnerability(Invulnerability.MAX);
             //m_stateHandle.Wait(State.Chasing);
@@ -1460,11 +1541,16 @@ namespace DChild.Gameplay.Characters.Enemies
         }
         private IEnumerator LongDash()
         {
-            enabled = false;
+            enabled = false;/*
+            m_longD.enabled = true;
+            m_overchargedLongD.enabled = false;*/
+            m_steamThrustFX.SetActive(false);
             yield return new WaitForSeconds(0.5f);
             m_hitbox.SetInvulnerability(Invulnerability.MAX);
-            //m_stateHandle.Wait(State.Chasing);
             m_movement.Stop();
+            m_boosterChargeFX.Play();
+            yield return new WaitForSeconds(3f);
+            //m_stateHandle.Wait(State.Chasing);
             m_animation.SetAnimation(0, m_info.longDashAttack, false);
             m_longDashFX.Play();
             m_movement.MoveTowards(new Vector2(m_targetInfo.position.x - transform.position.x, 0).normalized, m_info.longDash.speed);
@@ -1508,7 +1594,9 @@ namespace DChild.Gameplay.Characters.Enemies
         }
         private IEnumerator ShotgunBlastRoutine()
         {
-            enabled = false;
+            enabled = false;/*
+            m_shotG.enabled = true;*/
+            m_steamThrustFX.SetActive(false);
             yield return new WaitForSeconds(0.5f);
             m_runeDuration = 5;
             //m_stateHandle.Wait(State.Chasing);
@@ -1543,7 +1631,10 @@ namespace DChild.Gameplay.Characters.Enemies
         }
         private IEnumerator MeteorSmashRoutine()
         {
-            enabled = false;
+            enabled = false;/*
+            m_meteor.enabled = true;
+            m_overchargedMeteor.enabled = false;*/
+            m_steamThrustFX.SetActive(false);
             yield return new WaitForSeconds(0.5f);
             m_runeDuration = 5;
             //m_stateHandle.Wait(State.Chasing);
@@ -1591,12 +1682,15 @@ namespace DChild.Gameplay.Characters.Enemies
         }
         private IEnumerator Flamethrower2Routine()
         {
-            enabled = false;
+            enabled = false;/*
+            m_flamethrower2.enabled = true;
+            m_overchargedFlamethrower2.enabled = false;*/
+            m_steamThrustFX.SetActive(false);
             yield return new WaitForSeconds(0.5f);
             m_runeDuration = 5;
             //m_stateHandle.Wait(State.Chasing);
             m_movement.Stop();
-            Vector2 targetPoint = new Vector2(transform.position.x, m_firebeamTransformPoints[1].position.y + 20f);
+            Vector2 targetPoint = new Vector2(transform.position.x + 5, m_firebeamTransformPoints[1].position.y + 20f);
             var direction = (targetPoint - (Vector2)transform.position).normalized;
             while (Vector2.Distance(transform.position, targetPoint) > 10f)
             {
@@ -1607,7 +1701,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_info.hoverDownward, true);
             yield return new WaitForSeconds(0.5f);
             m_animation.SetAnimation(0, m_info.move, true);
-            m_flamethrower2FX.enabled = true;
+            m_flamethrower2Colliders.enabled = true;
             m_flamethrower2FX.Play();
             var m_followElapsedTime = 0f;
             var m_followDuration = 10f;
@@ -1622,7 +1716,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 yield return null;
             }
             m_movement.Stop();
-            m_flamethrower2FX.enabled = false;
+            m_flamethrower2Colliders.enabled = false;
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.move);
             m_flamethrower2FX.Stop();
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
@@ -1747,7 +1841,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 {
                     case Attack.PunchUppercut:
                         //m_stateHandle.Wait(State.Chasing);
-                        Debug.Log("punch");
+                        Debug.Log("Cinder used Punch Attack");
                         if (patternIndex == 1 || patternIndex == 2 || patternIndex == 3 || patternIndex == 4)
                         {
                             if (m_phaseHandle.currentPhase == Phase.PhaseOne || m_phaseHandle.currentPhase == Phase.PhaseTwo)
@@ -1761,6 +1855,7 @@ namespace DChild.Gameplay.Characters.Enemies
                                     m_currentAttackCoroutine = StartCoroutine(OverchargedPunchAttackRoutine());
                                 }
                             }
+                            Debug.Log("Punch Attack finished or cancelled");
                             break;
                         }
                         else
@@ -1772,7 +1867,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         break;
                     case Attack.Flamethrower1:
                         //m_stateHandle.Wait(State.Chasing);
-                        Debug.Log("flame");
+                        Debug.Log("Cinder used Flamethrower1");
                         if (patternIndex == 1 || patternIndex == 2 || patternIndex == 3)
                         {
 
@@ -1787,6 +1882,7 @@ namespace DChild.Gameplay.Characters.Enemies
                                     m_currentAttackCoroutine = StartCoroutine(OverchargedFlamethrower1Routine());
                                 }
                             }
+                            Debug.Log("Flamethrower1 finished or cancelled");
                             break;
                         }
                         else
@@ -1798,7 +1894,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         break;
                     case Attack.LongDash:
                         //m_stateHandle.Wait(State.Chasing);
-                        Debug.Log("long");
+                        Debug.Log("Cinder used Long Dash");
                         if (patternIndex == 2 || patternIndex == 4)
                         {
                             if (m_phaseHandle.currentPhase == Phase.PhaseOne || m_phaseHandle.currentPhase == Phase.PhaseTwo)
@@ -1812,6 +1908,7 @@ namespace DChild.Gameplay.Characters.Enemies
                                     m_currentAttackCoroutine = StartCoroutine(OverchargedLongDash());
                                 }
                             }
+                            Debug.Log("Long Dash finished or cancelled");
                             break;
                         }
                         else
@@ -1823,7 +1920,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         break;
                     case Attack.ShortDash:
                         //m_stateHandle.Wait(State.Chasing);
-                        Debug.Log("short");
+                        Debug.Log("Cinder used Short Dash");
                         if (patternIndex == 3)
                         {
                             if (m_phaseHandle.currentPhase == Phase.PhaseTwo)
@@ -1837,6 +1934,7 @@ namespace DChild.Gameplay.Characters.Enemies
                                     m_currentAttackCoroutine = StartCoroutine(OverchargedShortDash());
                                 }
                             }
+                            Debug.Log("Short Dash finished or cancelled");
                             break;
                         }
                         else
@@ -1848,7 +1946,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         break;
                     case Attack.SpinAttack:
                         //m_stateHandle.Wait(State.Chasing);
-                        Debug.Log("spin");
+                        Debug.Log("Cinder used Spin Attack");
                         if (patternIndex == 2 || patternIndex == 3 || patternIndex == 4 || patternIndex == 5)
                         {
                             if (m_phaseHandle.currentPhase == Phase.PhaseOne || m_phaseHandle.currentPhase == Phase.PhaseTwo)
@@ -1862,6 +1960,7 @@ namespace DChild.Gameplay.Characters.Enemies
                                     m_currentAttackCoroutine = StartCoroutine(OverchargedSpinAttackRoutine());
                                 }
                             }
+                            Debug.Log("Spin Attack finished or cancelled");
                             break;
                         }
                         else
@@ -1873,7 +1972,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         break;
                     case Attack.Firebeam:
                         //m_stateHandle.Wait(State.Chasing);
-                        Debug.Log("firebeam");
+                        Debug.Log("Cinder used Firebeam");
                         if (patternIndex == 2 || patternIndex == 5 || patternIndex == 6)
                         {
                             if (m_phaseHandle.currentPhase == Phase.PhaseOne || m_phaseHandle.currentPhase == Phase.PhaseTwo)
@@ -1887,6 +1986,7 @@ namespace DChild.Gameplay.Characters.Enemies
                                     m_currentAttackCoroutine = StartCoroutine(OverchargedFirebeamRoutine());
                                 }
                             }
+                            Debug.Log("Firebeam finished or cancelled");
                             break;
                         }
                         else
@@ -1898,7 +1998,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         break;
                     case Attack.ShotgunBlast:
                         //m_stateHandle.Wait(State.Chasing);
-                        Debug.Log("shotgun");
+                        Debug.Log("Cinder used Shotgun Blast");
                         if (patternIndex == 3 || patternIndex == 4)
                         {
                             if (m_phaseHandle.currentPhase == Phase.PhaseTwo)
@@ -1912,6 +2012,7 @@ namespace DChild.Gameplay.Characters.Enemies
                                     m_currentAttackCoroutine = StartCoroutine(OverchargedShotgunBlastRoutine());
                                 }
                             }
+                            Debug.Log("Shotgun Blast finished or cancelled");
                             break;
                         }
                         else
@@ -1923,7 +2024,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         break;
                     case Attack.Flamethrower2:
                         //m_stateHandle.Wait(State.Chasing);
-                        Debug.Log("flame2");
+                        Debug.Log("Cinder used Flamethrower2");
                         if (patternIndex == 3 || patternIndex == 6)
                         {
                             if (m_phaseHandle.currentPhase == Phase.PhaseTwo)
@@ -1937,6 +2038,7 @@ namespace DChild.Gameplay.Characters.Enemies
                                     m_currentAttackCoroutine = StartCoroutine(OverchargedFlamethrower2Routine());
                                 }
                             }
+                            Debug.Log("Flamethrower2 finished or cancelled");
                             break;
                         }
                         else
@@ -1948,7 +2050,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         break;
                     case Attack.MeteorSmash:
                         //m_stateHandle.Wait(State.Chasing);
-                        Debug.Log("meteor");
+                        Debug.Log("Cinder used Meteor Smash");
                         if (patternIndex == 5)
                         {
                             if (m_phaseHandle.currentPhase == Phase.PhaseTwo)
@@ -1962,6 +2064,7 @@ namespace DChild.Gameplay.Characters.Enemies
                                     m_currentAttackCoroutine = StartCoroutine(OverchargedMeteorSmashRoutine());
                                 }
                             }
+                            Debug.Log("Meteor Smash finished or cancelled");
                             break;
                         }
                         else
@@ -1975,9 +2078,11 @@ namespace DChild.Gameplay.Characters.Enemies
             }
             else
             {
+                m_steamThrustFX.SetActive(true);
                 enabled = false;
                 MoveToTarget(m_currentAttackRange);
                 enabled = true;
+                //m_steamThrustFX.SetActive(false);
             }
             //}
         }
@@ -2098,6 +2203,8 @@ namespace DChild.Gameplay.Characters.Enemies
             m_aimRoutine = AimRoutine();
             m_spineListener.Subscribe(m_info.punchUppercutEvent, PunchAttack);
             m_spineListener.Subscribe(m_info.flamethrower1Event, Flamethrower1Attack);
+            m_spineListener.Subscribe(m_info.punchUppercutEvent, OvercahrgedPunchAttack);
+            m_spineListener.Subscribe(m_info.flamethrower1Event, OverchargedFlamethrower1Attack);
             m_animation.DisableRootMotion();
             m_phaseHandle = new PhaseHandle<Phase, PhaseInfo>();
             m_phaseHandle.Initialize(Phase.PhaseOne, m_info.phaseInfo, m_character, ChangeState, ApplyPhaseData);
@@ -2107,12 +2214,33 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void PunchAttack()
         {
-            m_punchAttackCollider.enabled = true;
+            if (!m_isRaging)
+            {
+                m_punchAttackCollider.enabled = true;
+            }
             //throw new System.NotImplementedException();
         }
         private void Flamethrower1Attack()
         {
-            m_flamethrower1Collider.enabled = true;
+            if (!m_isRaging)
+            {
+                m_flamethrower1Collider.enabled = true;
+            }
+        }
+        private void OvercahrgedPunchAttack()
+        {
+            if (m_isRaging)
+            {
+                m_overchargedPunchAttackCollider.enabled = true;
+            }
+            //throw new System.NotImplementedException();
+        }
+        private void OverchargedFlamethrower1Attack()
+        {
+            if (m_isRaging)
+            {
+                m_overchargedFlamethrower1Collider.enabled = true;
+            }
         }
         private int counter;
         [SerializeField]
@@ -2138,6 +2266,14 @@ namespace DChild.Gameplay.Characters.Enemies
         }
         private IEnumerator OnRageCounter()
         {
+            /*m_punchAttacker.SetDamageModifier(2);
+            m_flamethrower1.SetDamageModifier(2);
+            m_flamethrower2.SetDamageModifier(2);
+            m_firebeam.SetDamageModifier(2);
+            m_longD.SetDamageModifier(2);
+            m_meteor.SetDamageModifier(2);
+            m_shotG.SetDamageModifier(2);*/
+
             var elapsedTime = 0f;
             var rageDuration = 10f;
             while (m_isRaging && rageDuration > elapsedTime)
@@ -2149,7 +2285,14 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_isRaging = false;
                     m_hasMalfactioned = true;
                     m_steamMalfAndOver.Stop();
-                    m_heatHandler.ResetHeat();
+                    m_heatHandler.ResetHeat();/*
+                    m_punchAttacker.SetDamageModifier(1);
+                    m_flamethrower1.SetDamageModifier(1);
+                    m_flamethrower2.SetDamageModifier(1);
+                    m_firebeam.SetDamageModifier(1);
+                    m_longD.SetDamageModifier(1);
+                    m_meteor.SetDamageModifier(1);
+                    m_shotG.SetDamageModifier(1);*/
                     /*damage = 0;
                     ligthVisuals.GetComponent<CinderBoltHeatLightsReaction>().HandleReaction(damage);*/
                 }
@@ -2161,6 +2304,20 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             enabled = false;
             yield return new WaitForSeconds(0.5f);
+            m_punchAttacker.SetActive(true);
+            m_punchAttacker2.SetActive(true);
+            m_overchargedPunchAttacker.SetActive(false);
+            m_overchargedPunchAttacker2.SetActive(false);
+            m_flamethrower1.SetActive(true);
+            m_overchargedFlamethrower1.SetActive(false);
+            m_firebeam.SetActive(true);
+            m_longD.SetActive(true);
+            m_overchargedLongD.SetActive(false);
+            m_shotG.SetActive(true);
+            m_meteor.SetActive(true);
+            m_overchargedMeteor.SetActive(false);
+            m_flamethrower2.SetActive(true);
+            m_overchargedFlamethrower2.SetActive(false);
             m_hasMalfactioned = false;
             m_steamMalfAndOver.Play();
             m_movement.Stop();
@@ -2190,7 +2347,9 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.malfunctionRecoveryStateAnimation);
             m_steamMalfAndOver.Stop();
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
-            m_heatHandler.ResetHeat();
+            enabled = true;
+            //m_heatHandler.ResetHeat();
+            GetComponent<CinderBoltHeatGauge>().AddHeat(0);
             DecidedOnAttack(false);
             m_currentAttackCoroutine = null;
             m_stateHandle.ApplyQueuedState();
@@ -2213,6 +2372,7 @@ namespace DChild.Gameplay.Characters.Enemies
         public bool checker = false;
         private void CinderBoltAI_DamageTaken(object sender, Damageable.DamageEventArgs eventArgs)
         {
+            Debug.Log("Heat Gauge value is: " + GetComponent<CinderBoltHeatGauge>().currentValue);
             if (eventArgs.type == DamageType.Fire)
             {
                 checker = true;
@@ -2228,7 +2388,6 @@ namespace DChild.Gameplay.Characters.Enemies
         }
         private void Update()
         {
-            Debug.Log("asd " + GetComponent<CinderBoltHeatGauge>().currentValue);
             ligthVisuals.GetComponent<CinderBoltHeatLightsReaction>().HandleReaction(GetComponent<CinderBoltHeatGauge>().currentValue);
             if (GetComponent<CinderBoltHeatGauge>().currentValue == 90)
             {
@@ -2236,6 +2395,20 @@ namespace DChild.Gameplay.Characters.Enemies
             }
             if (m_isRaging)
             {
+                m_punchAttacker.SetActive(false);
+                m_punchAttacker2.SetActive(false);
+                m_overchargedPunchAttacker.SetActive(true);
+                m_overchargedPunchAttacker2.SetActive(true);
+                m_flamethrower1.SetActive(false);
+                m_overchargedFlamethrower1.SetActive(true);
+                m_firebeam.SetActive(false);
+                m_longD.SetActive(false);
+                m_overchargedLongD.SetActive(true);
+                m_shotG.SetActive(false);
+                m_meteor.SetActive(false);
+                m_overchargedMeteor.SetActive(true);
+                m_flamethrower2.SetActive(false);
+                m_overchargedFlamethrower2.SetActive(true);
                 m_steamMalfAndOver.Play();
                 StartCoroutine(OnRageCounter());
             }
@@ -2294,7 +2467,7 @@ namespace DChild.Gameplay.Characters.Enemies
                             case Pattern.Phase1Pattern1:
                                 if (m_phaseHandle.currentPhase == Phase.PhaseOne)
                                 {
-                                    Debug.Log("0 ni ha, bsi alinganga ka");
+                                    Debug.Log("Phase 1 Pattern 1");
                                     UpdateRangeCache(m_info.punchAttack.range, m_info.flameThrowerAttack.range);
                                     ExecuteAttack(1);
                                 }
@@ -2302,7 +2475,7 @@ namespace DChild.Gameplay.Characters.Enemies
                             case Pattern.Phase1Pattern2:
                                 if (m_phaseHandle.currentPhase == Phase.PhaseOne)
                                 {
-                                    Debug.Log("1 ni ha, bsi alinganga ka");
+                                    Debug.Log("Phase 1 Pattern 2");
                                     UpdateRangeCache(m_info.punchAttack.range, m_info.flameThrowerAttack.range, m_info.spinAttack.range, m_info.firebeamAttack.range, m_info.longDashAttack.range);
                                     ExecuteAttack(2);
                                 }
@@ -2310,7 +2483,7 @@ namespace DChild.Gameplay.Characters.Enemies
                             case Pattern.Phase2Pattern1:
                                 if (m_phaseHandle.currentPhase == Phase.PhaseTwo)
                                 {
-                                    Debug.Log("2 ni ha, bsi alinganga ka");
+                                    Debug.Log("Phase 2 Pattern 1");
                                     UpdateRangeCache(m_info.punchAttack.range, m_info.flameThrowerAttack.range, m_info.spinAttack.range, m_info.shotgunBlastFireAttack.range, m_info.flameThrowerAttack.range, m_info.shortDashAttack.range);//change the flamethrower to flamethrower2range
                                     ExecuteAttack(3);
                                 }
@@ -2318,7 +2491,7 @@ namespace DChild.Gameplay.Characters.Enemies
                             case Pattern.Phase2Pattern2:
                                 if (m_phaseHandle.currentPhase == Phase.PhaseTwo)
                                 {
-                                    Debug.Log("3 ni ha, bsi alinganga ka");
+                                    Debug.Log("Phase 2 Pattern 2");
                                     UpdateRangeCache(m_info.punchAttack.range, m_info.spinAttack.range, m_info.shotgunBlastFireAttack.range, m_info.longDashAttack.range);
                                     ExecuteAttack(4);
                                 }
@@ -2326,7 +2499,7 @@ namespace DChild.Gameplay.Characters.Enemies
                             case Pattern.Phase2Pattern3:
                                 if (m_phaseHandle.currentPhase == Phase.PhaseTwo)
                                 {
-                                    Debug.Log("4 ni ha, bsi alinganga ka");
+                                    Debug.Log("Phase 2 Pattern 3");
                                     UpdateRangeCache(m_info.spinAttack.range, m_info.firebeamAttack.range, m_info.meteorAttack.range);
                                     ExecuteAttack(5);
                                 }
@@ -2334,7 +2507,7 @@ namespace DChild.Gameplay.Characters.Enemies
                             case Pattern.Phase2Pattern4:
                                 if (m_phaseHandle.currentPhase == Phase.PhaseTwo)
                                 {
-                                    Debug.Log("5 ni ha, bsi alinganga ka");
+                                    Debug.Log("Phase 2 Pattern 4");
                                     UpdateRangeCache(m_info.firebeamAttack.range, m_info.flameThrowerAttack.range);//change the flamethrower to flamethrower2range
                                     ExecuteAttack(6);
                                 }
