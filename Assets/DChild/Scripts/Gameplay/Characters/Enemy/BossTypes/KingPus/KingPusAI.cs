@@ -1311,19 +1311,6 @@ namespace DChild.Gameplay.Characters.Enemies
         #endregion
 
         #region Attack Patterns
-        public void SpearCrawlStopDetected()
-        {
-            m_spearCrawlStopCount++;
-
-            if (!IsFacingTarget())
-                CustomTurn();
-        }
-
-        private void ResetTentaSpearStopCount()
-        {
-            m_spearCrawlStopCount = 0;
-        }
-
         private IEnumerator TentaspearCrawlAttackFullRoutine(Vector2 currentTargetDestination)
         {
             enabled = false;
@@ -1347,12 +1334,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
             m_spineListener.Unsubcribe(m_info.moveEvent, EventMoveToLastPosition);
 
-            if (m_spearCrawlStopCount >= m_maxSpearCrawlStopCount)
-            {
-                m_movement.Stop();
-                m_animation.SetEmptyAnimation(0, 0);
-                ResetTentaSpearStopCount();
-            }
+            m_movement.Stop();
+            m_animation.SetEmptyAnimation(0, 0);
 
             m_stateHandle.ApplyQueuedState();
             enabled = true;
