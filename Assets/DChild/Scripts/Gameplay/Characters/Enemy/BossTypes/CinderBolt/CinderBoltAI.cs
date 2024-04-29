@@ -727,6 +727,42 @@ namespace DChild.Gameplay.Characters.Enemies
         protected override void OnDestroyed(object sender, EventActionArgs eventArgs)
         {
             base.OnDestroyed(sender, eventArgs);
+            m_movement.Stop();
+
+            m_punchAttacker.SetActive(true);
+            m_punchAttacker2.SetActive(true);
+            m_overchargedPunchAttacker.SetActive(false);
+            m_overchargedPunchAttacker2.SetActive(false);
+            m_flamethrower1.SetActive(true);
+            m_overchargedFlamethrower1.SetActive(false);
+            m_firebeam.SetActive(true);
+            m_longD.SetActive(true);
+            m_overchargedLongD.SetActive(false);
+            m_shotG.SetActive(true);
+            m_meteor.SetActive(true);
+            m_overchargedMeteor.SetActive(false);
+            m_flamethrower2.SetActive(true);
+            m_overchargedFlamethrower2.SetActive(false);
+            m_steamMalfAndOver.Play();
+            m_movement.Stop();
+            m_firebeamAnticipationFX.Stop();
+            m_flamethrower1FX.Stop();
+            m_flamethrower2FX.Stop();
+            m_laserOriginMuzzleFX.Stop();
+            m_longDashFX.Stop();
+            m_meteorSmashFX.Stop();
+            m_meteorSmashTrailFX.SetActive(false);
+            m_muzzleLoopFX.Stop();
+            m_shortDashFX.Stop();
+            m_spinAttackFX.Stop();
+            m_punchAttackCollider.enabled = false;
+            m_flamethrower2Colliders.enabled = false;
+            m_firebeamCollider.enabled = false;
+            m_longDashCollider.enabled = false;
+            m_flamethrower2Colliders.enabled = false;
+            m_meteorSmashCollider.enabled = false;
+            m_spinAttackCollider[0].enabled = false;
+            m_spinAttackCollider[1].enabled = false;
             StopAllCoroutines();
             m_movement.Stop();
             m_isDetecting = false;
@@ -935,7 +971,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_info.overchargedPreSpinAttack, false);
             yield return new WaitForSeconds(0.5f);
             m_animation.SetAnimation(0, m_info.overchargedSpinAttack, true);
-            SpinColliders(true);
+            OverchargeSpinColliders(true);
             var m_followElapsedTime = 0f;
             var m_followDuration = 10f;
             while (m_followElapsedTime < m_followDuration)
@@ -946,7 +982,7 @@ namespace DChild.Gameplay.Characters.Enemies
             }
             m_movement.Stop();
             m_animation.SetAnimation(0, m_info.overchargedSpinEndAnimation, false);
-            SpinColliders(false);
+            OverchargeSpinColliders(false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.overchargedSpinEndAnimation);
             m_hitbox.SetInvulnerability(Invulnerability.None);
             m_animation.SetAnimation(0, m_info.overchargedIdle, true);
@@ -1122,7 +1158,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_runeDuration = 5;
             //m_stateHandle.Wait(State.Chasing);
             m_movement.Stop();
-            Vector2 targetPoint = new Vector2(transform.position.x + 5, m_firebeamTransformPoints[1].position.y + 20f);
+            Vector2 targetPoint = new Vector2(transform.position.x + 10f, m_firebeamTransformPoints[1].position.y + 20f);
             var direction = (targetPoint - (Vector2)transform.position).normalized;
             m_animation.SetAnimation(0, m_info.overchargedMove, true);
             while (Vector2.Distance(transform.position, targetPoint) > 10f)
@@ -1282,6 +1318,14 @@ namespace DChild.Gameplay.Characters.Enemies
             for (int i = 0; i < m_spinAttackCollider.Count; i++)
             {
                 m_spinAttackCollider[i].enabled = isDone;
+            }
+            return isDone;
+        }
+        private bool OverchargeSpinColliders(bool isDone)
+        {
+            for (int i = 0; i < m_overchargedSpinAttackCollider.Count; i++)
+            {
+                m_overchargedSpinAttackCollider[i].enabled = isDone;
             }
             return isDone;
         }
@@ -1690,7 +1734,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_runeDuration = 5;
             //m_stateHandle.Wait(State.Chasing);
             m_movement.Stop();
-            Vector2 targetPoint = new Vector2(transform.position.x + 5, m_firebeamTransformPoints[1].position.y + 20f);
+            Vector2 targetPoint = new Vector2(transform.position.x + 10f, m_firebeamTransformPoints[1].position.y + 20f);
             var direction = (targetPoint - (Vector2)transform.position).normalized;
             while (Vector2.Distance(transform.position, targetPoint) > 10f)
             {
