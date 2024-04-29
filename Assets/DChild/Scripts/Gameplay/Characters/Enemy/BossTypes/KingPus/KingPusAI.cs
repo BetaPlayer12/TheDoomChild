@@ -960,7 +960,7 @@ namespace DChild.Gameplay.Characters.Enemies
             if (m_grapplersOut)
             {
                 m_grappleRetractCoroutine = StartCoroutine(GrappleRetractRoutine(m_info.wallGrappleRetractAnimations.Count - 1));
-            }       
+            }
 
             if (!m_character.physics.inContactWithGround)
             {
@@ -1324,45 +1324,28 @@ namespace DChild.Gameplay.Characters.Enemies
             m_spearCrawlStopCount = 0;
         }
 
-        private IEnumerator TentaspearCrawlAttackFullRoutine()
+        private IEnumerator TentaspearCrawlAttackFullRoutine(Vector2 currentTargetDestination)
         {
             enabled = false;
             m_stateHandle.Wait(State.ReevaluateSituation);
 
             m_animation.EnableRootMotion(true, false);
 
+
+            m_lastTargetPos = currentTargetDestination;
+
+            m_spineListener.Subscribe(m_info.moveEvent, EventMoveToLastPosition);
+
+
             if (!IsFacingTarget())
                 CustomTurn();
 
             m_animation.SetAnimation(0, m_info.tentaSpearCrawlRightAnticipationAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.tentaSpearCrawlRightAnticipationAnimation);
-            m_animation.SetAnimation(0, m_info.tentaSpearRightCrawl, true);
+            m_animation.SetAnimation(0, m_info.tentaSpearRightCrawl, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.tentaSpearRightCrawl);
 
-            //if (m_spearCrawlStopCount < m_maxSpearCrawlStopCount)
-            //{
-            //    //m_animation.SetAnimation(3, m_info.tentaspearCrawlAnimation1, false);
-            //    //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.tentaspearCrawlAnimation1);
-            //    //m_animation.SetAnimation(6, m_info.tentaspearCrawlAnimation2, false);
-            //    //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.tentaspearCrawlAnimation2);
-            //    //m_animation.SetAnimation(9, m_info.tentaspearCrawlAnimation3, false);
-            //    //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.tentaspearCrawlAnimation3);
-            //    //m_animation.SetAnimation(0, m_info.idleAnimation, false);
-            //    //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.idleAnimation);               
-            //    //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.tentaSpearCrawlRightAnticipationAnimation);
-
-            //}
-            //else
-            //{
-            //    m_animation.SetEmptyAnimation(0, 0);
-            //    m_animation.SetEmptyAnimation(3, 0);
-            //    m_animation.SetEmptyAnimation(6, 0);
-            //    m_animation.SetEmptyAnimation(9, 0);
-
-            //    ResetTentaSpearStopCount();
-            //    yield return null;
-            //}
-
-            yield return new WaitUntil(() => m_spearCrawlStopCount >= m_maxSpearCrawlStopCount);
+            m_spineListener.Unsubcribe(m_info.moveEvent, EventMoveToLastPosition);
 
             if (m_spearCrawlStopCount >= m_maxSpearCrawlStopCount)
             {
@@ -1370,9 +1353,17 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_animation.SetEmptyAnimation(0, 0);
                 ResetTentaSpearStopCount();
             }
+
             m_stateHandle.ApplyQueuedState();
             enabled = true;
             yield return null;
+        }
+
+        private void EventMoveToLastPosition()
+        {
+            m_animation.DisableRootMotion();
+            //m_movement.MoveTowards(Vector2.one * transform.localScale.x, m_targetInfo.position.x > transform.position.x ? m_info.tentaSpearRightCrawl.speed : -m_info.tentaSpearRightCrawl.speed);
+            m_rb2d.AddForce(new Vector2(transform.localScale.x > 0 ? m_info.tentaSpearRightCrawl.speed : -m_info.tentaSpearRightCrawl.speed, m_character.physics.velocity.y), ForceMode2D.Impulse);
         }
 
         private IEnumerator SpikeShowerOneFullAttackRoutine()
@@ -1642,7 +1633,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.DisableRootMotion();
             m_attackDecider.hasDecidedOnAttack = false;
             m_currentAttackCoroutine = null;
-            if(!doneDuringPhaseChange)
+            if (!doneDuringPhaseChange)
                 m_stateHandle.ApplyQueuedState();
             yield return null;
         }
@@ -1650,7 +1641,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator BodySlamFullAttackRoutine(bool doneDuringPhaseChange)
         {
             //grapple away
-            if(!doneDuringPhaseChange)
+            if (!doneDuringPhaseChange)
                 m_stateHandle.Wait(State.ReevaluateSituation);
             m_animation.DisableRootMotion();
             CalculateWallGrapple(true);
@@ -1691,7 +1682,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_willStickToWall = false;
             m_attackDecider.hasDecidedOnAttack = false;
             m_currentAttackCoroutine = null;
-            if(!doneDuringPhaseChange)
+            if (!doneDuringPhaseChange)
                 m_stateHandle.ApplyQueuedState();
 
             enabled = true;
@@ -1737,7 +1728,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 enabled = false;
             }
 
-            if(!willStickToSurface)
+            if (!willStickToSurface)
                 m_grappleRetractCoroutine = StartCoroutine(GrappleRetractRoutine(4));
 
             m_animation.DisableRootMotion();
@@ -1763,7 +1754,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
             enabled = true;
 
-            yield return null;    
+            yield return null;
         }
 
         private IEnumerator GrappleRoutine(bool willTargetWall, bool willTargetSlam, int slamCount/*, bool randomGrapple*/)
@@ -2011,13 +2002,13 @@ namespace DChild.Gameplay.Characters.Enemies
             m_lastTargetPos = m_targetInfo.position;
             ResetTentaclePosition();
             ResetTentacleOverridePoints();
-            
+
             //RandomizeTentaclePosition();
 
             List<Transform> selectablePoints = new List<Transform>();
 
             //if player is on left of king pus, set selectable tentacle points on the right
-            if(m_targetInfo.position.x < transform.position.x)
+            if (m_targetInfo.position.x < transform.position.x)
             {
                 for (int i = 0; i < m_tentacleOverridePoints.Count; i++)
                 {
@@ -2027,13 +2018,13 @@ namespace DChild.Gameplay.Characters.Enemies
                     }
                 }
 
-                for(int i = 0; i < selectablePoints.Count; i++)
+                for (int i = 0; i < selectablePoints.Count; i++)
                 {
                     m_tentacleOverridePoints[i].position = selectablePoints[i].position;
                 }
 
             }
-            else if(m_targetInfo.position.x > transform.position.x) //if player is on right side of king pus, set selectable tentacle points on the left
+            else if (m_targetInfo.position.x > transform.position.x) //if player is on right side of king pus, set selectable tentacle points on the left
             {
                 for (int i = 0; i < m_tentacleOverridePoints.Count; i++)
                 {
@@ -2048,11 +2039,11 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_tentacleOverridePoints[i].position = selectablePoints[i].position;
                 }
             }
-            else if(m_targetInfo.position.x == transform.position.x) //if somehow player is on the same x point as king pus, do randomized tentacle selection
+            else if (m_targetInfo.position.x == transform.position.x) //if somehow player is on the same x point as king pus, do randomized tentacle selection
             {
                 RandomizeTentaclePosition();
             }
-              
+
         }
 
         private void ResetTentacleOverridePoints()
@@ -2784,7 +2775,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         //case Attack.WaitAttackEnd:
                         //    break;
                         default: //for testing
-                            m_currentAttackCoroutine = StartCoroutine(SpikeSpitAttackFullRoutine(false));
+                            m_currentAttackCoroutine = StartCoroutine(TentaspearCrawlAttackFullRoutine(m_lastTargetPos));
                             m_pickedCooldown = m_currentFullCooldown[0];
                             break;
                     }
@@ -2820,7 +2811,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         }
                         else
                         {
-                            MoveToTarget(m_shortRangeAttackDistance, false);
+                            //MoveToTarget(m_shortRangeAttackDistance, false);
 
                             if (IsTargetInRange(m_shortRangeAttackDistance))
                             {
@@ -2937,7 +2928,7 @@ namespace DChild.Gameplay.Characters.Enemies
             UpdateAttackDeciderList();
             m_spineListener.Subscribe(m_info.singleShotEvent, LaunchSingleProjectile);
             m_spineListener.Subscribe(m_info.multiShotEvent, LaunchMultiProjectile);
-            m_spineListener.Subscribe(m_info.moveEvent, EventMove);
+            //m_spineListener.Subscribe(m_info.moveEvent, EventMove);
             m_spineListener.Subscribe(m_info.stopEvent, EventStop);
             m_crawlFX.Play();
             for (int i = 0; i < m_chains.Count; i++)
