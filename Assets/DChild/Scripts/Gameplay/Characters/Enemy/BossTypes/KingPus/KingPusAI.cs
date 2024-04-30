@@ -222,6 +222,9 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField]
             private BasicAnimationInfo m_flinchColorMixAnimation;
             public BasicAnimationInfo flinchColorMixAnimation => m_flinchColorMixAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_flinchBurnAnimation;
+            public BasicAnimationInfo flinchBurnAnimation => m_flinchBurnAnimation;
 
             [TitleGroup("Hit Counts")]
             [SerializeField]
@@ -429,6 +432,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_tentaspearCrawlAnimation1.SetData(m_skeletonDataAsset);
                 m_tentaspearCrawlAnimation2.SetData(m_skeletonDataAsset);
                 m_tentaspearCrawlAnimation3.SetData(m_skeletonDataAsset);
+                m_flinchBurnAnimation.SetData(m_skeletonDataAsset);
 
 #endif
             }
@@ -711,6 +715,11 @@ namespace DChild.Gameplay.Characters.Enemies
         private int m_spearCrawlStopCount = 0;
         private bool m_scriptedPhaseTwoAttackDone = false;
         private bool m_scriptedPhaseThreeAttackDone = false;
+
+        private bool m_WreckingBallAt75PercentHP = false;
+        private bool m_WreckingBallAt50PercentHP = false;
+        private bool m_WreckingBallAt25PercentHP = false;
+        private bool m_kingPusIsBurning;
 
         public event EventAction<EventActionArgs> BodySlamDone;
         public event EventAction<EventActionArgs> WreckingBallDone;
@@ -1193,7 +1202,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         m_animation.DisableRootMotion();
                     }
                 }
-                yield return null;
+                yield return new WaitForSeconds(1f);
             }
             m_animation.EnableRootMotion(true, true);
             m_movement.Stop();
@@ -1224,6 +1233,9 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.bodySlamEnd);
             BodySlamDone?.Invoke(this, new EventActionArgs());
             WreckingBallDone?.Invoke(this, new EventActionArgs());
+            m_animation.SetAnimation(0, m_info.idleAnimation, true);
+            yield return new WaitForSeconds(5f);
+
             m_rb2d.sharedMaterial = null;
             m_wreckingBallCoroutine = null;
             m_hitbox.SetCanBlockDamageState(false);
@@ -1313,7 +1325,6 @@ namespace DChild.Gameplay.Characters.Enemies
         #region Attack Patterns
         private IEnumerator TentaspearCrawlAttackFullRoutine(Vector2 currentTargetDestination)
         {
-            enabled = false;
             m_stateHandle.Wait(State.ReevaluateSituation);
 
             m_animation.EnableRootMotion(true, false);
@@ -1322,7 +1333,6 @@ namespace DChild.Gameplay.Characters.Enemies
             m_lastTargetPos = currentTargetDestination;
 
             m_spineListener.Subscribe(m_info.moveEvent, EventMoveToLastPosition);
-
 
             if (!IsFacingTarget())
                 CustomTurn();
@@ -1338,14 +1348,14 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetEmptyAnimation(0, 0);
 
             m_stateHandle.ApplyQueuedState();
-            enabled = true;
+
             yield return null;
         }
 
         private void EventMoveToLastPosition()
         {
             m_animation.DisableRootMotion();
-            //m_movement.MoveTowards(Vector2.one * transform.localScale.x, m_targetInfo.position.x > transform.position.x ? m_info.tentaSpearRightCrawl.speed : -m_info.tentaSpearRightCrawl.speed);
+            //m_movement.MoveTowards(Vector2.one * transform.localScale.x, transform.localScale.x < 0 ? m_info.tentaSpearRightCrawl.speed : -m_info.tentaSpearRightCrawl.speed);
             m_rb2d.AddForce(new Vector2(transform.localScale.x > 0 ? m_info.tentaSpearRightCrawl.speed : -m_info.tentaSpearRightCrawl.speed, m_character.physics.velocity.y), ForceMode2D.Impulse);
         }
 
@@ -1674,10 +1684,10 @@ namespace DChild.Gameplay.Characters.Enemies
         #endregion
 
         #region Movement
-
         private IEnumerator GrappleEvadeRoutine(bool willStickToSurface)
         {
             ResetCounterCounts();
+            m_spineListener.Unsubcribe(m_info.moveEvent, EventMoveToLastPosition);
             m_stateHandle.Wait(State.ReevaluateSituation);
 
             if (willStickToSurface)
@@ -1695,7 +1705,6 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_rb2d.useFullKinematicContacts = false;
                 m_movement.Stop();
                 m_dynamicIdleCoroutine = StartCoroutine(DynamicIdleRoutine());
-                m_animation.SetAnimation(0, m_info.idleAnimation.animation, true, 0);
 
                 yield return new WaitForSeconds(3f);
             }
@@ -1719,6 +1728,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
             m_animation.SetAnimation(0, m_info.bodySlamStart, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.bodySlamStart);
+            m_animation.SetEmptyAnimation(3, 0);
             while (!m_groundSensor.isDetecting)
             {
                 m_animation.SetAnimation(0, m_info.bodySlamLoop, true);
@@ -2434,9 +2444,27 @@ namespace DChild.Gameplay.Characters.Enemies
             m_flinchLeftHandle.gameObject.SetActive(false);
         }
 
-        private bool m_WreckingBallAt75PercentHP = false;
-        private bool m_WreckingBallAt50PercentHP = false;
-        private bool m_WreckingBallAt25PercentHP = false;
+        [SerializeField]
+        private StatusEffectHandle statusHandle;
+        [Button]
+        private void BurnPus()
+        {
+            m_statusEffectReciever.RecieveStatusEffect(statusHandle);
+        }
+
+        private void BurnFlinch()
+        {
+            StopAnimations();
+            m_animation.SetAnimation(0, m_info.flinchBurnAnimation, false);
+            m_currentHitCount = 0;
+        }
+
+        private IEnumerator CannibalizePusBlob()
+        {
+            m_animation.SetAnimation(0, m_info.cannibalizationAnimation, false);
+            yield return new WaitForAnimationComplete();
+        }
+
         private void OnDamageTaken(object sender, Damageable.DamageEventArgs eventArgs)
         {
             if (m_changePhaseCoroutine == null && m_grappleEvadeCoroutine == null && m_wreckingBallCoroutine == null && enabled)
@@ -2445,6 +2473,8 @@ namespace DChild.Gameplay.Characters.Enemies
                 {
                     case Phase.PhaseThree:
                         {
+                            if(m_kingPusIsBurning)
+                                BurnFlinch();
                             if (m_currentHitCount < m_maxHitCount)
                                 m_currentHitCount++;
                             else
@@ -2512,7 +2542,7 @@ namespace DChild.Gameplay.Characters.Enemies
                             {
                                 StopAllCoroutines();
                                 StopAnimations();
-                                StartCoroutine(WreckingBallRoutine(5));
+                                StartCoroutine(WreckingBallRoutine(10));
                                 m_WreckingBallAt75PercentHP = true;
                             }
 
@@ -2534,6 +2564,8 @@ namespace DChild.Gameplay.Characters.Enemies
                             break;
                         }
                     default:
+                        if (m_kingPusIsBurning)
+                            BurnFlinch();
                         if (m_currentHitCount < m_maxHitCount)
                             m_currentHitCount++;
                         else
@@ -2877,6 +2909,8 @@ namespace DChild.Gameplay.Characters.Enemies
             m_flinchLeftHandle.FlinchStart += OnFlinchStart;
             m_flinchRighthHandle.FlinchEnd += OnFlinchEnd;
             m_flinchLeftHandle.FlinchEnd += OnFlinchEnd;
+            m_statusEffectReciever.StatusRecieved += OnStatusRecieved;
+            m_statusEffectReciever.StatusEnd += OnStatusEnd;
             m_health = GetComponentInChildren<Health>();
             m_attackDecider = new RandomAttackDecider<Attack>();
             m_stateHandle = new StateHandle<State>(State.Idle, State.WaitBehaviourEnd);
@@ -2899,6 +2933,20 @@ namespace DChild.Gameplay.Characters.Enemies
             SetCurrentAttackCache(m_shortRangedAttackCache);
             SetCurrentAttackRangeCache(m_shortRangedAttackRangeCache);
             m_attackUsed = new bool[m_currentAttackCache.Count];
+        }
+
+        private void OnStatusEnd(object sender, StatusEffectRecieverEventArgs eventArgs)
+        {
+            if(eventArgs.type == StatusEffectType.Burning)
+                m_kingPusIsBurning = false;
+        }
+
+        private void OnStatusRecieved(object sender, StatusEffectRecieverEventArgs eventArgs)
+        {
+            if(eventArgs.type == StatusEffectType.Burning)
+            {
+                m_kingPusIsBurning = true;
+            }
         }
 
         protected override void Start()
@@ -2932,6 +2980,15 @@ namespace DChild.Gameplay.Characters.Enemies
         private void OnPusBlobDropped(object sender, EventActionArgs eventArgs)
         {
             m_pusBlobsDown = true;
+        }
+
+        private void OnCollisionEnter2D(Collision2D collision)
+        {
+            if(collision.gameObject.GetComponent<KingPusBlobAI>() != null)
+            {
+                StopAnimations();
+                StartCoroutine(CannibalizePusBlob());
+            }
         }
 
         protected override void OnTargetDisappeared()
