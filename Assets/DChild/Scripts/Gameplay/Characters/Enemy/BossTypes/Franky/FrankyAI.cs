@@ -419,6 +419,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private Transform m_projectilePoint;
         [SerializeField, TabGroup("Spawn Points")]
         private Transform m_wallRunPoint;
+        [SerializeField, TabGroup("Spawn Points")]
+        private Transform m_CenterOfTheArena;
         [SerializeField, TabGroup("Chain")]
         private BoxCollider2D m_chainHurtBox;
         [SerializeField, TabGroup("Chain")]
@@ -438,6 +440,9 @@ namespace DChild.Gameplay.Characters.Enemies
         private Coroutine m_currentAttackCoroutine;
         private Coroutine m_leapRoutine;
         private int m_attackSpecialAttackLimit;
+
+        public event EventAction<EventActionArgs> PhaseDischargeAction;
+
 
         private bool m_isDetecting;
 
@@ -594,7 +599,23 @@ namespace DChild.Gameplay.Characters.Enemies
             m_stateHandle.Wait(State.ReevaluateSituation);
             //m_hitbox.SetInvulnerability(Invulnerability.None);
             //m_hasPhaseChanged = false;
+            Debug.Log("is facing?" + IsFacing(m_CenterOfTheArena.position));
+            if (!IsFacing(m_CenterOfTheArena.position))
+            {
+                CustomTurn();
+            }
+            m_animation.SetAnimation(0, m_info.runAttackStartAnimation, false);
+            yield return new WaitForAnimationComplete(m_animation.skeletonAnimation.state, m_info.runAttackStartAnimation);
+            m_animation.SetAnimation(0, m_info.runAttackAnimation, true);
+            while (Vector2.Distance(transform.position, m_CenterOfTheArena.position) > 15f)
+            {
+                m_movement.MoveTowards(Vector2.right * transform.localScale.x, m_info.runAttackSpeed);
+                yield return null;
+            }
+            m_animation.SetAnimation(0, m_info.runAttackEndAnimation, false);
+            m_movement.Stop();
             m_animation.SetAnimation(0, m_info.roarAnimation, false).MixDuration = 0;
+            PhaseDischargeAction?.Invoke(this,EventActionArgs.Empty);
             //yield return new WaitForSeconds(3.9f);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.roarAnimation);
             m_isBuffed = true;
@@ -661,10 +682,13 @@ namespace DChild.Gameplay.Characters.Enemies
                 if (m_phaseHandle.currentPhase == Phase.PhaseOne)
                 {
                     m_attackCount++;
-                    m_currentAttackCoroutine = StartCoroutine(ShoulderBashRoutine());
+                    m_currentAttack = Attack.ShoulderBash;
                     yield return null;
                 }
-            }else
+                m_currentAttackCoroutine = null;
+                m_stateHandle.ApplyQueuedState();
+            }
+            else
             {
                 if(m_isBuffed)
                 {
@@ -977,6 +1001,22 @@ namespace DChild.Gameplay.Characters.Enemies
             m_stateHandle.Wait(State.ReevaluateSituation);
             //m_hitbox.SetInvulnerability(Invulnerability.None);
             //m_hasPhaseChanged = false;
+            Debug.Log("is facing?"+ IsFacing(m_CenterOfTheArena.position));
+            if (!IsFacing(m_CenterOfTheArena.position))
+            {
+                CustomTurn();
+            }
+            m_animation.SetAnimation(0, m_info.runAttackStartAnimation, false);
+            PhaseDischargeAction?.Invoke(this, EventActionArgs.Empty);
+            yield return new WaitForAnimationComplete(m_animation.skeletonAnimation.state, m_info.runAttackStartAnimation);
+            m_animation.SetAnimation(0, m_info.runAttackAnimation, true);
+            while (Vector2.Distance(transform.position, m_CenterOfTheArena.position) > 15f)
+            {
+                m_movement.MoveTowards(Vector2.right * transform.localScale.x, m_info.runAttackSpeed);
+                yield return null;
+            }
+            m_animation.SetAnimation(0, m_info.runAttackEndAnimation, false);
+            m_movement.Stop();
             m_animation.SetAnimation(0, m_info.roarAnimation, false).MixDuration = 0;
             //yield return new WaitForSeconds(3.9f);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.roarAnimation);
