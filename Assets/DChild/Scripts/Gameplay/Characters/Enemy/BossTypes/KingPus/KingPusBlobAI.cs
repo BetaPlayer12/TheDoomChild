@@ -91,9 +91,6 @@ namespace DChild.Gameplay.Characters.Enemies
         //private DeathHandle m_deathHandle;
         [SerializeField, TabGroup("Modules")]
         private FlinchHandler m_flinchHandle;
-        //Patience Handler
-        private float m_currentPatience;
-        private int m_turnID = 1;
 
         [SerializeField, TabGroup("Reference")]
         private Transform m_model;
@@ -119,19 +116,20 @@ namespace DChild.Gameplay.Characters.Enemies
         private GameObject PlaceholderShake;
 
         [SerializeField]
+        private int m_healingValue;
+        [SerializeField]
         private float m_lifeTime;
         [SerializeField]
         private float m_rotateSpeed;
         [SerializeField]
         private Transform m_master;
         private float m_targetDistance;
-        
+
 
         [ShowInInspector]
         private StateHandle<State> m_stateHandle;
 
-        //private State m_turnState;
-
+        private float m_currentPatience;
         private float m_currentCD;
         private float m_currentMoveSpeed;
         private float m_currentFullCD;
@@ -142,18 +140,19 @@ namespace DChild.Gameplay.Characters.Enemies
         private string m_crawlAnimation;
         #endregion
 
-        //private void OnTurnRequest(object sender, EventActionArgs eventArgs) => m_stateHandle.SetState(State.Turning);
+        public int healingValue => m_healingValue;
+
+        private bool m_isNearMaster;
+        public event EventAction<EventActionArgs> OnNearToMaster;
+
         public void SetMaster(Transform master)
         {
             m_master = master;
         }
 
-        public void SummonAt(Vector2 position,AITargetInfo target)
+        public void SummonAt(Vector2 position, AITargetInfo target)
         {
             enabled = false;
-            //m_targetInfo = target;
-            //transform.position = new Vector2(m_master.position.x, m_master.position.y + 15f);
-            //m_character.physics.simulateGravity = false;
             m_flinchHandle.gameObject.SetActive(true);
             m_health.SetHealthPercentage(1f);
             m_hitbox.Enable();
@@ -163,16 +162,11 @@ namespace DChild.Gameplay.Characters.Enemies
             m_groundSensor.Cast();
             Awake();
             StartCoroutine(FlightRoutine());
-            //StartCoroutine(StartToFallRoutine());
             enabled = true;
         }
 
         public void StartFall()
         {
-            
-            //m_targetInfo = target;
-            //transform.position = new Vector2(m_master.position.x, m_master.position.y + 15f);
-            //m_character.physics.simulateGravity = false;
             m_flinchHandle.gameObject.SetActive(true);
             m_health.SetHealthPercentage(1f);
             m_hitbox.Enable();
@@ -180,9 +174,8 @@ namespace DChild.Gameplay.Characters.Enemies
             this.transform.SetParent(null);
             m_rigidbody2D.velocity = Vector2.zero;
             m_groundSensor.Cast();
-            //StartCoroutine(FlightRoutine());
             StartCoroutine(StartToFallRoutine());
-            
+
         }
 
         public void ResetPosition(Vector2 position)
@@ -191,7 +184,7 @@ namespace DChild.Gameplay.Characters.Enemies
         }
         public IEnumerator ShakeAnimRoutine()
         {
-            if(!m_isAlive)
+            if (!m_isAlive)
             {
                 PlaceholderShake.SetActive(true);
                 yield return new WaitForSeconds(0.75f);
@@ -224,18 +217,6 @@ namespace DChild.Gameplay.Characters.Enemies
                 base.SetTarget(damageable, m_target);
                 m_selfCollider.enabled = false;
                 m_currentPatience = 0;
-
-                //if (m_stateHandle.currentState != State.Chasing && !m_isDetecting)
-                //{
-                //    m_isDetecting = true;
-                //    m_stateHandle.SetState(State.Detect);
-                //}
-                //if (transform.localRotation.z != 0)
-                //{
-                //    transform.localRotation = Quaternion.Euler(Vector3.zero);
-                //    GetComponent<IsolatedPhysics2D>().simulateGravity = true;
-                //    m_animation.DisableRootMotion();
-                //}
             }
         }
 
@@ -252,22 +233,11 @@ namespace DChild.Gameplay.Characters.Enemies
             StopAllCoroutines();
             m_hitbox.Disable();
             m_movement.Stop();
-            StartCoroutine(ExplodeRoutine(false));
+            StartCoroutine(ExplodeRoutine());
         }
 
         private void OnFlinchStart(object sender, EventActionArgs eventArgs)
         {
-            //if (m_animation.GetCurrentAnimation(0).ToString() == m_info.idleAnimation)
-            //{
-            //    m_flinchHandle.m_autoFlinch = true;
-            //    StopAllCoroutines();
-            //    //m_animation.SetAnimation(0, m_info.damageAnimation, false);
-            //    m_stateHandle.OverrideState(State.WaitBehaviourEnd);
-            //}
-            //else
-            //{
-            //    StartCoroutine(FlinchMixRoutine());
-            //}
             StartCoroutine(FlinchMixRoutine());
         }
 
@@ -327,8 +297,7 @@ namespace DChild.Gameplay.Characters.Enemies
             var offsetAngle = new Vector2(UnityEngine.Random.Range(0, 2) == 1 ? m_info.flyOffset.x : -m_info.flyOffset.x, m_info.flyOffset.y);
             var randomFlySpeed = UnityEngine.Random.Range(m_info.flySpeed - 5f, m_info.flySpeed + 5f);
             m_character.physics.AddForce(Vector2.one * (offsetAngle * randomFlySpeed), ForceMode2D.Impulse);
-            //m_character.physics.SetVelocity(offsetAngle * m_info.flySpeed);
-            //yield return new WaitForSeconds(1f);
+
             while (!m_groundSensor.isDetecting /*&& !m_cielingSensor.isDetecting*/)
             {
                 var dir = m_rigidbody2D.velocity;
@@ -337,7 +306,6 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_model.rotation = Quaternion.RotateTowards(m_model.rotation, q, m_rotateSpeed * Time.deltaTime);
                 yield return null;
             }
-            //yield return new WaitUntil(() => m_groundSensor.isDetecting || m_cielingSensor.isDetecting);
             m_movement.Stop();
             m_model.rotation = Quaternion.Euler(Vector3.zero);
             m_animation.SetAnimation(0, m_info.landAnimation, false);
@@ -350,25 +318,16 @@ namespace DChild.Gameplay.Characters.Enemies
         public void Explode()
         {
             StopAllCoroutines();
-            StartCoroutine(ExplodeRoutine(false));
+            StartCoroutine(ExplodeRoutine());
         }
 
-        private IEnumerator ExplodeRoutine(bool willHeal)
+        private IEnumerator ExplodeRoutine()
         {
             enabled = false;
             m_hitbox.Disable();
             m_stateHandle.Wait(State.ReevaluateSituation);
             m_animation.SetAnimation(0, m_info.deathAnimation, false);
-            if (willHeal)
-            {
-                yield return new WaitForSeconds(0.6f);
-                m_healFX.Play();
-                var healPercentage = (((float)m_master.GetComponentInChildren<Health>().currentValue / m_master.GetComponentInChildren<Health>().maxValue) + m_info.healPercentage);
-                //m_health.SetHealthPercentage(0f);
-                m_master.GetComponentInChildren<Health>().SetHealthPercentage(healPercentage);
-                if (m_master.GetComponentInChildren<Health>().currentValue >= m_master.GetComponentInChildren<Health>().maxValue)
-                    m_master.GetComponentInChildren<Health>().SetHealthPercentage(1);
-            }
+
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.deathAnimation);
             m_animation.DisableRootMotion();
             this.gameObject.SetActive(false);
@@ -388,8 +347,6 @@ namespace DChild.Gameplay.Characters.Enemies
         protected override void Awake()
         {
             base.Awake();
-            //m_turnHandle.TurnDone += OnTurnDone;
-            //m_deathHandle.SetAnimation(m_info.deathAnimation);
             m_flinchHandle.FlinchStart += OnFlinchStart;
             m_flinchHandle.FlinchEnd += OnFlinchEnd;
             m_stateHandle = new StateHandle<State>(State.Idle, State.WaitBehaviourEnd);
@@ -398,12 +355,13 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void Update()
         {
-            if(m_isAlive)
+            if (m_isAlive)
             {
-                if(m_lifeTime>m_timeAlive)
+                if (m_lifeTime > m_timeAlive)
                 {
                     m_timeAlive += GameplaySystem.time.deltaTime;
-                }else
+                }
+                else
                 {
                     Explode();
                 }
@@ -423,11 +381,18 @@ namespace DChild.Gameplay.Characters.Enemies
                     {
                         if (Vector2.Distance(m_master.position, transform.position) <= m_info.targetDistanceTolerance)
                         {
-                            StopAllCoroutines();
-                            StartCoroutine(ExplodeRoutine(true));
+                            if (m_isNearMaster == false)
+                            {
+                                m_isNearMaster = true;
+                                OnNearToMaster?.Invoke(this, EventActionArgs.Empty);
+                            }
+
+                            //StopAllCoroutines();
+                            //StartCoroutine(ExplodeRoutine(true));
                         }
                         else
                         {
+                            m_isNearMaster = false;
                             m_crawlAnimation = transform.position.x < m_master.position.x ? m_info.crawlRight.animation : m_info.crawlLeft.animation;
                             if (IsFacing(m_master.position))
                             {
@@ -435,12 +400,10 @@ namespace DChild.Gameplay.Characters.Enemies
                                 {
                                     m_animation.EnableRootMotion(true, false);
                                     m_animation.SetAnimation(0, m_crawlAnimation, true);
-                                    //m_movement.MoveTowards(Vector2.one * transform.localScale.x, m_currentMoveSpeed);
                                 }
                                 else
                                 {
                                     m_movement.Stop();
-                                    //m_selfCollider.enabled = true;
                                     m_animation.SetAnimation(0, m_info.idleAnimation, true);
                                 }
                                 if (m_selfSensor.isDetecting)
@@ -450,9 +413,6 @@ namespace DChild.Gameplay.Characters.Enemies
                             }
                             else
                             {
-                                //m_turnState = State.ReevaluateSituation;
-                                //m_stateHandle.SetState(State.Turning);
-                                m_turnID = transform.position.x < m_master.position.x ? 1 : -1;
                                 m_character.SetFacing(transform.position.x < m_master.position.x ? HorizontalDirection.Right : HorizontalDirection.Left);
 
                             }
