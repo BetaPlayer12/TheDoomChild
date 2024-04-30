@@ -660,6 +660,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private Attack m_currentAttack;
         private float m_currentAttackRange;
         private int m_maxHitCount;
+        [SerializeField]
         private int m_currentHitCount;
         private int m_slamCount;
         private int m_currentSlamCount;
@@ -684,6 +685,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private Coroutine m_grappleRetractCoroutine;
         private Coroutine m_tentacleControlCoroutine;
         private Coroutine m_dynamicIdleCoroutine;
+        private Coroutine m_grappleEvadeRoutine;
         #endregion
 
         #region Coroutine Stoppers
@@ -725,6 +727,7 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField]
         private List<KingPusBlobAI> m_pusBlobs;
         private List<KingPusBlobAI> m_pusBlobstoBeEaten;
+
 
         public event EventAction<EventActionArgs> BodySlamDone;
         public event EventAction<EventActionArgs> WreckingBallDone;
@@ -975,7 +978,7 @@ namespace DChild.Gameplay.Characters.Enemies
             }
 
             if (!m_character.physics.inContactWithGround)
-            {               
+            {
                 m_animation.SetAnimation(0, m_info.bodySlamStart, false);
                 yield return new WaitForAnimationComplete(m_animation.animationState, m_info.bodySlamStart);
                 while (!m_groundSensor.isDetecting)
@@ -995,8 +998,11 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return new WaitUntil(() => m_groundSensor.isDetecting);
             var flinchAnimation = m_targetInfo.position.x > transform.position.x ? m_info.flinchLeftAnimation : m_info.flinchRightAnimation;
             m_animation.EnableRootMotion(true, false);
-            m_animation.SetAnimation(0, flinchAnimation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, flinchAnimation);
+            var flinchTrack = m_animation.SetAnimation(0, flinchAnimation, false);
+
+            yield return new WaitForSpineAnimationComplete(flinchTrack);
+
+
             if (m_phaseHandle.currentPhase != Phase.PhaseThree)
             {
                 m_animation.SetAnimation(0, m_info.fakeDeathAnimation, false);
@@ -1143,7 +1149,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator WreckingBallRoutine(int slamCount)
         {
-            enabled = true;
+            enabled = false;
 
             StartCoroutine(AttackCoroutineStopper(m_stabCoroutine));
             m_stateHandle.Wait(State.ReevaluateSituation);
@@ -1712,7 +1718,6 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             ResetCounterCounts();
             m_spineListener.Unsubcribe(m_info.moveEvent, EventMoveToLastPosition);
-            m_stateHandle.Wait(State.ReevaluateSituation);
 
             if (willStickToSurface)
             {
@@ -1720,9 +1725,9 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_animation.EnableRootMotion(true, false);
                 m_animation.AddAnimation(0, m_info.idleAnimation, true, 0);
                 GrappleEvadeWallCalculation();
-                enabled = false;
                 m_grappleCoroutine = StartCoroutine(GrappleRoutine(true, true, 1/*, true*/));
                 yield return new WaitUntil(() => m_character.physics.simulateGravity);
+                enabled = false;
                 m_hitbox.Enable();
                 m_animation.EnableRootMotion(true, true);
                 m_rb2d.isKinematic = false;
@@ -1743,6 +1748,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 yield return new WaitForSeconds(3f);
                 enabled = false;
             }
+            m_stateHandle.Wait(State.ReevaluateSituation);
 
             if (!willStickToSurface)
                 m_grappleRetractCoroutine = StartCoroutine(GrappleRetractRoutine(4));
@@ -2270,6 +2276,11 @@ namespace DChild.Gameplay.Characters.Enemies
                 StopCoroutine(m_dynamicIdleCoroutine);
                 m_dynamicIdleCoroutine = null;
             }
+            if(m_grappleEvadeRoutine != null)
+            {
+                StopCoroutine(m_grappleEvadeRoutine);
+                m_grappleEvadeRoutine = null;
+            }
         }
 
         private void ResetCounterCounts()
@@ -2383,6 +2394,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         return;
                     }
                 }
+
             }
         }
 
@@ -2466,9 +2478,46 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 switch (m_phaseHandle.currentPhase)
                 {
+
+                    default:
+                        if (m_kingPusIsBurning)
+                            BurnFlinch();
+                        if (m_currentHitCount < m_maxHitCount)
+                            m_currentHitCount++;
+                        else
+                        {
+                            if (m_grappleCoroutine != null)
+                            {
+                                StopCoroutine(m_grappleCoroutine);
+                                m_grappleCoroutine = null;
+                            }
+
+                            if (m_currentAttackCoroutine != null)
+                            {
+                                StopCoroutine(m_currentAttackCoroutine);
+                                m_currentAttackCoroutine = null;
+                                m_attackDecider.hasDecidedOnAttack = false;
+                            }
+
+                            //stop all behaviours
+                            //make new animation (flinch/wiggle) to grapple evade
+                            StopAnimations();
+                            StopAllCoroutines();
+                            int rand = UnityEngine.Random.Range(0, 2);
+
+                            if (rand == 0)
+                            {
+                                m_grappleEvadeRoutine = StartCoroutine(GrappleEvadeRoutine(false));
+                            }
+                            else
+                            {
+                                m_grappleEvadeRoutine = StartCoroutine(GrappleEvadeRoutine(true));
+                            }
+                        }
+                        break;
                     case Phase.PhaseThree:
                         {
-                            if(m_kingPusIsBurning)
+                            if (m_kingPusIsBurning)
                                 BurnFlinch();
                             if (m_currentHitCount < m_maxHitCount)
                                 m_currentHitCount++;
@@ -2495,24 +2544,12 @@ namespace DChild.Gameplay.Characters.Enemies
 
                                 if (rand == 0)
                                 {
-                                    StartCoroutine(GrappleEvadeRoutine(false));
+                                    m_grappleEvadeRoutine = StartCoroutine(GrappleEvadeRoutine(false));
                                 }
                                 else
                                 {
-                                    StartCoroutine(GrappleEvadeRoutine(true));
+                                    m_grappleEvadeRoutine = StartCoroutine(GrappleEvadeRoutine(true));
                                 }
-                                //if (m_willStickToWall)
-                                //{
-                                //    StartCoroutine(SpikeSpitAttackFullRoutine(true));
-                                //}
-                                //else
-                                //{
-                                    
-                                //}
-                                
-
-                                //StartCoroutine(GrappleRoutine(false, false, m_info.bodySlamCount));
-                                //StartCoroutine(GrappleEvade());
                             }
 
                             if (m_hitbox.canBlockDamage)
@@ -2592,24 +2629,17 @@ namespace DChild.Gameplay.Characters.Enemies
                             //make new animation (flinch/wiggle) to grapple evade
                             StopAnimations();
                             StopAllCoroutines();
+
                             int rand = UnityEngine.Random.Range(0, 2);
-                            //if (m_willStickToWall)
-                            //{
-                            //    StartCoroutine(SpikeSpitAttackFullRoutine(true));
-                            //}
-                            //else
-                            //{
-                                
-                            //}
+
                             if (rand == 0)
                             {
-                                StartCoroutine(GrappleEvadeRoutine(false));
+                                m_grappleEvadeRoutine = StartCoroutine(GrappleEvadeRoutine(false));
                             }
                             else
                             {
-                                StartCoroutine(GrappleEvadeRoutine(true));
+                                m_grappleEvadeRoutine = StartCoroutine(GrappleEvadeRoutine(true));
                             }
-
                             //StartCoroutine(GrappleRoutine(false, false, m_info.bodySlamCount));
                             //StartCoroutine(GrappleEvade());
                         }
@@ -2637,105 +2667,24 @@ namespace DChild.Gameplay.Characters.Enemies
                             m_willStickToWall = false;
                             m_legCollider.enabled = true;
 
+                            StopAnimations();
+                            StopAllCoroutines();
                             int rand = UnityEngine.Random.Range(0, 2);
+
                             if (rand == 0)
                             {
-                                StartCoroutine(GrappleEvadeRoutine(false));
+                                m_grappleEvadeRoutine = StartCoroutine(GrappleEvadeRoutine(false));
                             }
                             else
                             {
-                                StartCoroutine(GrappleEvadeRoutine(true));
+                               m_grappleEvadeRoutine = StartCoroutine(GrappleEvadeRoutine(true));
                             }
-                            //m_wreckingBallCoroutine = StartCoroutine(WreckingBallRoutine(m_info.wreckingBallCount));
+
                             m_currentHitCount = 0;
 
                             //StartCoroutine(AttackCoroutineStopper());
 
                         }
-                        break;
-                    default:
-                        if (m_kingPusIsBurning)
-                            BurnFlinch();
-                        if (m_currentHitCount < m_maxHitCount)
-                            m_currentHitCount++;
-                        else
-                        {
-                            if (m_grappleCoroutine != null)
-                            {
-                                StopCoroutine(m_grappleCoroutine);
-                                m_grappleCoroutine = null;
-                            }
-
-                            if (m_currentAttackCoroutine != null)
-                            {
-                                StopCoroutine(m_currentAttackCoroutine);
-                                m_currentAttackCoroutine = null;
-                                m_attackDecider.hasDecidedOnAttack = false;
-                            }
-
-                            //stop all behaviours
-                            //make new animation (flinch/wiggle) to grapple evade
-                            StopAnimations();
-                            StopAllCoroutines();
-                            int rand = UnityEngine.Random.Range(0, 2);
-                            //if (m_willStickToWall)
-                            //{
-                            //    StartCoroutine(SpikeSpitAttackFullRoutine(false));
-                            //}
-                            //else
-                            //{
-                            //}
-                                if (rand == 0)
-                                {
-                                    StartCoroutine(GrappleEvadeRoutine(false));
-                                }
-                                else
-                                {
-                                    StartCoroutine(GrappleEvadeRoutine(true));
-                                }
-
-                            //StartCoroutine(GrappleRoutine(false, false, m_info.bodySlamCount));
-                            //StartCoroutine(GrappleEvade());
-                        }
-
-                        //if (m_hitbox.canBlockDamage)
-                        //{
-                        //    if (m_grappleCoroutine != null)
-                        //    {
-                        //        StopCoroutine(m_grappleCoroutine);
-                        //        m_grappleCoroutine = null;
-                        //    }
-
-                        //    if (m_currentAttackCoroutine != null)
-                        //    {
-                        //        StopCoroutine(m_currentAttackCoroutine);
-                        //        m_currentAttackCoroutine = null;
-                        //        m_attackDecider.hasDecidedOnAttack = false;
-                        //    }
-
-                        //    //m_stateHandle.Wait(State.ReevaluateSituation);
-
-                        //    m_hitbox.Enable();
-                        //    m_rb2d.isKinematic = false;
-                        //    m_rb2d.useFullKinematicContacts = false;
-                        //    m_willStickToWall = false;
-                        //    m_legCollider.enabled = true;
-
-                        //    int rand = UnityEngine.Random.Range(0, 2);
-                        //    if (rand == 0)
-                        //    {
-                        //        StartCoroutine(GrappleEvadeRoutine(false));
-                        //    }
-                        //    else
-                        //    {
-                        //        StartCoroutine(GrappleEvadeRoutine(true));
-                        //    }
-                        //    //m_wreckingBallCoroutine = StartCoroutine(WreckingBallRoutine(m_info.wreckingBallCount));
-                        //    m_currentHitCount = 0;
-
-                        //    //StartCoroutine(AttackCoroutineStopper());
-
-                        //}
                         break;
                 }
             }
@@ -2929,6 +2878,7 @@ namespace DChild.Gameplay.Characters.Enemies
                                 SetCurrentAttackRangeCache(m_longRangedAttackRangeCache);
                             }
                         }
+
                         ChooseAttack();
                         m_animation.SetEmptyAnimation(0, 0);
                         m_stateHandle.SetState(State.Attacking);
@@ -2986,13 +2936,13 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnStatusEnd(object sender, StatusEffectRecieverEventArgs eventArgs)
         {
-            if(eventArgs.type == StatusEffectType.Burning)
+            if (eventArgs.type == StatusEffectType.Burning)
                 m_kingPusIsBurning = false;
         }
 
         private void OnStatusRecieved(object sender, StatusEffectRecieverEventArgs eventArgs)
         {
-            if(eventArgs.type == StatusEffectType.Burning)
+            if (eventArgs.type == StatusEffectType.Burning)
             {
                 m_kingPusIsBurning = true;
             }
@@ -3024,7 +2974,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
             m_kingPusDamageable.PhaseChangeTime += OnChangePhaseTime;
             m_pusBlobDropper.PusBlobsDown += OnPusBlobDropped;
-            for(int i = 0; i < m_pusBlobs.Count; i++)
+            for (int i = 0; i < m_pusBlobs.Count; i++)
             {
                 m_pusBlobs[i].OnNearToMaster += OnBlobNearKingPus;
 
