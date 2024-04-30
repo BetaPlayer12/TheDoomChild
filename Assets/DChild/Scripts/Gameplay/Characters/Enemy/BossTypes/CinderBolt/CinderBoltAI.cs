@@ -213,6 +213,9 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField]
             private SimpleProjectileAttackInfo m_bulletProjectile;
             public SimpleProjectileAttackInfo bulletProjectile => m_bulletProjectile;
+            [SerializeField]
+            private SimpleProjectileAttackInfo m_overchargedBulletProjectile;
+            public SimpleProjectileAttackInfo overchargedBulletProjectile => m_overchargedBulletProjectile;
 
             [Title("Animations")]
             [SerializeField, ValueDropdown("GetAnimations")]
@@ -286,6 +289,12 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField, ValueDropdown("GetEvents")]
             private string m_flamethrower1Event;
             public string flamethrower1Event => m_flamethrower1Event;
+            [SerializeField, ValueDropdown("GetEvents")]
+            private string m_overchargedPunchUppercutEvent;
+            public string overchargedPunchUppercutEvent => m_overchargedPunchUppercutEvent;
+            [SerializeField, ValueDropdown("GetEvents")]
+            private string m_overchargedFlamethrower1Event;
+            public string overchargedFlamethrower1Event => m_overchargedFlamethrower1Event;
             [SerializeField]
             private CinderBoltHeatHandle.Config m_heatHandleConfiguration;
             public CinderBoltHeatHandle.Config heatHandleConfiguration => m_heatHandleConfiguration;
@@ -341,7 +350,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_overchargedShotgunBlastPreAnimation.SetData(m_skeletonDataAsset);
                 m_overchargedShotgunBlastFireAttack.SetData(m_skeletonDataAsset);
                 m_overchargedShotgunBlastBackToIdleAnimation.SetData(m_skeletonDataAsset);
-
+                m_overchargedBulletProjectile.SetData(m_skeletonDataAsset);
                 m_overchargedMove.SetData(m_skeletonDataAsset);
 #endif
             }
@@ -492,6 +501,7 @@ namespace DChild.Gameplay.Characters.Enemies
         [ShowInInspector]
         private float m_currentAttackRange;
         private ProjectileLauncher m_projectileLauncher;
+        private ProjectileLauncher m_overchargeProjectileLauncher;
 
         private int m_currentPhaseIndex;
         private float m_attackCount;
@@ -872,6 +882,8 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Attackers")]
         private GameObject m_firebeam;
         [SerializeField, TabGroup("Attackers")]
+        private GameObject m_spinAttacker;
+        [SerializeField, TabGroup("Attackers")]
         private GameObject m_longD;
         [SerializeField, TabGroup("Attackers")]
         private GameObject m_meteor;
@@ -887,6 +899,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private GameObject m_overchargedFlamethrower2;
         [SerializeField, TabGroup("Attackers")]
         private GameObject m_overchargedFirebeam;
+        [SerializeField, TabGroup("Attackers")]
+        private GameObject m_overchargedSpinAttacker;
         [SerializeField, TabGroup("Attackers")]
         private GameObject m_overchargedLongD;
         [SerializeField, TabGroup("Attackers")]
@@ -916,13 +930,13 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.EnableRootMotion(true, false);
             m_animation.SetAnimation(0, m_info.overchargedPunchUppercutAttack, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.overchargedPunchUppercutAttack);
-            m_punchAttackCollider.enabled = false;
+            m_overchargedPunchAttackCollider.enabled = false;
             m_animation.SetAnimation(0, m_info.overchargedIdle, true);
             DecidedOnAttack(false);
             m_animation.DisableRootMotion();
             m_currentAttackCoroutine = null;
             m_stateHandle.ApplyQueuedState();
-            m_punchAttackCollider.enabled = false;
+            m_overchargedPunchAttackCollider.enabled = false;
             yield return null;
             enabled = true;
         }
@@ -1090,7 +1104,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_hitbox.SetInvulnerability(Invulnerability.MAX);
             m_movement.Stop();
             m_boosterChargeFX.Play();
-            yield return new WaitForSeconds(3f);
+            yield return new WaitForSeconds(2f);
             m_animation.SetAnimation(0, m_info.overchargedLongDash, false);
             m_longDashFX.Play();
             m_movement.MoveTowards(new Vector2(m_targetInfo.position.x - transform.position.x, 0).normalized, m_info.longDash.speed * 2);
@@ -1125,20 +1139,24 @@ namespace DChild.Gameplay.Characters.Enemies
             Vector3 v_diff = (m_targetInfo.position - spitPos);
             float atan2 = Mathf.Atan2(v_diff.y, v_diff.x);
             var aimRotation = atan2 * Mathf.Rad2Deg;
-            aimRotation = aimRotation - 5f;
-            ProjectileLaunchHandle launchHandle = new ProjectileLaunchHandle();
+            aimRotation -= 5f;
+            ProjectileLaunchHandle overchargeLaunchHandle = new ProjectileLaunchHandle();
+            yield return new WaitForSeconds(1f);
             for (int i = 0; i < 3; i++)
             {
                 m_projectilePoints.transform.rotation = Quaternion.Euler(0f, 0f, aimRotation);
+                Debug.Log("To");
                 var spawnDirection = m_projectilePoints.transform.right;
-                launchHandle.Launch(m_info.bulletProjectile.projectileInfo.projectile, m_projectilePoints.transform.position, spawnDirection, m_info.bulletProjectile.projectileInfo.speed);
+                Debug.Log("mm");
+       
+                overchargeLaunchHandle.Launch(m_info.overchargedBulletProjectile.projectileInfo.projectile, m_projectilePoints.transform.position, spawnDirection, m_info.overchargedBulletProjectile.projectileInfo.speed);
+                Debug.Log("i");
                 aimRotation += 5f;
             }
             //m_projectileLauncher.AimAt(m_targetInfo.position);
             m_animation.SetAnimation(0, m_info.overchargedShotgunBlastFireAttack, false);
-            yield return new WaitForSeconds(0.5f);
             //m_projectileLauncher.LaunchProjectile();
-            yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSeconds(1f);
             m_animation.SetAnimation(0, m_info.overchargedShotgunBlastBackToIdleAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.overchargedShotgunBlastBackToIdleAnimation);
             m_animation.SetAnimation(0, m_info.overchargedIdle, true);
@@ -1593,7 +1611,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_hitbox.SetInvulnerability(Invulnerability.MAX);
             m_movement.Stop();
             m_boosterChargeFX.Play();
-            yield return new WaitForSeconds(3f);
+            yield return new WaitForSeconds(2f);
             //m_stateHandle.Wait(State.Chasing);
             m_animation.SetAnimation(0, m_info.longDashAttack, false);
             m_longDashFX.Play();
@@ -1650,13 +1668,16 @@ namespace DChild.Gameplay.Characters.Enemies
             Vector3 v_diff = (m_targetInfo.position - spitPos);
             float atan2 = Mathf.Atan2(v_diff.y, v_diff.x);
             var aimRotation = atan2 * Mathf.Rad2Deg;
-            aimRotation = aimRotation - 5f;
+            aimRotation -= 5f;
             ProjectileLaunchHandle launchHandle = new ProjectileLaunchHandle();
             for (int i = 0; i < 3; i++)
             {
                 m_projectilePoints.transform.rotation = Quaternion.Euler(0f, 0f, aimRotation);
+                Debug.Log("Lea");
                 var spawnDirection = m_projectilePoints.transform.right;
+                Debug.Log("nd");
                 launchHandle.Launch(m_info.bulletProjectile.projectileInfo.projectile, m_projectilePoints.transform.position, spawnDirection, m_info.bulletProjectile.projectileInfo.speed);
+                Debug.Log("ro");
                 aimRotation += 5f;
             }
             //m_projectileLauncher.AimAt(m_targetInfo.position);
@@ -2215,6 +2236,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_heatHandler.SetConfiguration(m_info.heatHandleConfiguration);
             m_projectile = GetComponent<SimpleAttackProjectile>();
             m_projectileLauncher = new ProjectileLauncher(m_info.bulletProjectile.projectileInfo, m_projectilePoints);
+            m_overchargeProjectileLauncher = new ProjectileLauncher(m_info.overchargedBulletProjectile.projectileInfo, m_projectilePoints);
             for (int i = 0; i < m_attackDecider.Length; i++)
             {
                 m_attackDecider[i] = new RandomAttackDecider<Attack>();
@@ -2247,8 +2269,8 @@ namespace DChild.Gameplay.Characters.Enemies
             m_aimRoutine = AimRoutine();
             m_spineListener.Subscribe(m_info.punchUppercutEvent, PunchAttack);
             m_spineListener.Subscribe(m_info.flamethrower1Event, Flamethrower1Attack);
-            m_spineListener.Subscribe(m_info.punchUppercutEvent, OvercahrgedPunchAttack);
-            m_spineListener.Subscribe(m_info.flamethrower1Event, OverchargedFlamethrower1Attack);
+            m_spineListener.Subscribe(m_info.overchargedPunchUppercutEvent, OvercahrgedPunchAttack);
+            m_spineListener.Subscribe(m_info.overchargedFlamethrower1Event, OverchargedFlamethrower1Attack);
             m_animation.DisableRootMotion();
             m_phaseHandle = new PhaseHandle<Phase, PhaseInfo>();
             m_phaseHandle.Initialize(Phase.PhaseOne, m_info.phaseInfo, m_character, ChangeState, ApplyPhaseData);
@@ -2355,9 +2377,12 @@ namespace DChild.Gameplay.Characters.Enemies
             m_flamethrower1.SetActive(true);
             m_overchargedFlamethrower1.SetActive(false);
             m_firebeam.SetActive(true);
+            m_spinAttacker.SetActive(true);
+            m_overchargedSpinAttacker.SetActive(false);
             m_longD.SetActive(true);
             m_overchargedLongD.SetActive(false);
             m_shotG.SetActive(true);
+            m_overchargedShotG.SetActive(false);
             m_meteor.SetActive(true);
             m_overchargedMeteor.SetActive(false);
             m_flamethrower2.SetActive(true);
@@ -2369,6 +2394,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_flamethrower1FX.Stop();
             m_flamethrower2FX.Stop();
             m_laserOriginMuzzleFX.Stop();
+            m_muzzleTelegraphFX.Stop();
             m_longDashFX.Stop();
             m_meteorSmashFX.Stop();
             m_meteorSmashTrailFX.SetActive(false);
@@ -2378,6 +2404,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_punchAttackCollider.enabled = false;
             m_flamethrower2Colliders.enabled = false;
             m_firebeamCollider.enabled = false;
+            m_overchargedFirebeamCollider.enabled = false;
             m_longDashCollider.enabled = false;
             m_flamethrower2Colliders.enabled = false;
             m_meteorSmashCollider.enabled = false;
@@ -2396,7 +2423,7 @@ namespace DChild.Gameplay.Characters.Enemies
             GetComponent<CinderBoltHeatGauge>().AddHeat(0);
             DecidedOnAttack(false);
             m_currentAttackCoroutine = null;
-            m_stateHandle.ApplyQueuedState();
+            m_stateHandle.OverrideState(State.Chasing);
             yield return null;
             enabled = true;
         }
@@ -2445,10 +2472,13 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_overchargedPunchAttacker2.SetActive(true);
                 m_flamethrower1.SetActive(false);
                 m_overchargedFlamethrower1.SetActive(true);
+                m_spinAttacker.SetActive(false);
+                m_overchargedSpinAttacker.SetActive(true);
                 m_firebeam.SetActive(false);
                 m_longD.SetActive(false);
                 m_overchargedLongD.SetActive(true);
                 m_shotG.SetActive(false);
+                m_overchargedShotG.SetActive(true);
                 m_meteor.SetActive(false);
                 m_overchargedMeteor.SetActive(true);
                 m_flamethrower2.SetActive(false);

@@ -20,7 +20,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_currentValue += value;
             m_currentValue = Mathf.Clamp(m_currentValue, 0, m_maxValue);
 
-            HeatChanged.Invoke(this, EventActionArgs.Empty);
+            HeatChanged?.Invoke(this, EventActionArgs.Empty);
 
             if (m_currentValue == m_maxValue)
             {
@@ -31,7 +31,7 @@ namespace DChild.Gameplay.Characters.Enemies
         public void Reset()
         {
             m_currentValue = 0;
-            HeatChanged.Invoke(this, EventActionArgs.Empty);
+            HeatChanged?.Invoke(this, EventActionArgs.Empty);
         }
     }
 }
