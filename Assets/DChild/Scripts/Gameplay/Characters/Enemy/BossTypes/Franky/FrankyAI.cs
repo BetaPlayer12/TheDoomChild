@@ -510,8 +510,16 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void CustomTurn()
         {
+            //m_animation.SetAnimation(0,m_info.turnAnimation,false);
             transform.localScale = new Vector3(-transform.localScale.x, 1, 1);
             m_character.SetFacing(transform.localScale.x == 1 ? HorizontalDirection.Right : HorizontalDirection.Left);
+        }
+
+        private IEnumerator TurnRoutine()
+        {
+            m_animation.SetAnimation(0, m_info.turnAnimation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState,m_info.turnAnimation);
+            CustomTurn();
         }
 
         private IEnumerator IntroRoutine()
@@ -628,17 +636,18 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 m_animation.SetAnimation(0, m_info.roarAnimation, false).MixDuration = 0;
                 yield return null;
-                PhaseDischargeAction?.Invoke(this, EventActionArgs.Empty);
+                
                 yield return new WaitForAnimationComplete(m_animation.animationState, m_info.roarAnimation);
-                ChooseAttack(4);
+                ChooseAttack(3);
+                PhaseDischargeAction?.Invoke(this, EventActionArgs.Empty);
             }
             if (m_phaseHandle.currentPhase == Phase.PhaseThree)
             {
                 m_animation.SetAnimation(0, m_info.roarAnimation, false).MixDuration = 0;
                 yield return null;
-                PhaseDischargeAction?.Invoke(this, EventActionArgs.Empty);
                 yield return new WaitForAnimationComplete(m_animation.animationState, m_info.roarAnimation);
-                ChooseAttack(5);
+                ChooseAttack(4);
+                PhaseDischargeAction?.Invoke(this, EventActionArgs.Empty);
             }
             //yield return new WaitForSeconds(3.9f);      
             m_isBuffed = true;
@@ -834,7 +843,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_wallPosPoint.SetParent(null);
             m_wallPosPoint.position = WallPosition();
             m_animation.SetAnimation(0, m_info.chainBash1AnimationStart.animation, false);
-            yield return new WaitForSeconds(.65f);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.chainBash1AnimationStart);
             var fistRefPointCollider = m_fistRefPoint.GetComponent<CircleCollider2D>();
             fistRefPointCollider.enabled = true;
             m_fistPoint.position = m_wristPoint.position;
@@ -884,7 +893,6 @@ namespace DChild.Gameplay.Characters.Enemies
             m_fistPoint.GetComponent<SkeletonUtilityBone>().mode = SkeletonUtilityBone.Mode.Follow;
             yield return null;
             m_fistPoint.GetComponent<SkeletonUtilityBone>().enabled = false;
-            m_stateHandle.ApplyQueuedState();
             enabled = true;
             m_phaseHandle.allowPhaseChange = true;
             yield return null;
@@ -893,8 +901,8 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 m_attackCount = 0;
                 m_currentAttack = Attack.LeapAttack;
-                m_stateHandle.ApplyQueuedState();
             }
+            m_stateHandle.ApplyQueuedState();
         }
 
         private IEnumerator ChainedBashIIRoutine()
@@ -966,7 +974,6 @@ namespace DChild.Gameplay.Characters.Enemies
             m_fistPoint.GetComponent<SkeletonUtilityBone>().mode = SkeletonUtilityBone.Mode.Follow;
             yield return null;
             m_fistPoint.GetComponent<SkeletonUtilityBone>().enabled = false;
-            m_stateHandle.ApplyQueuedState();
             enabled = true;
             m_phaseHandle.allowPhaseChange = true;
             yield return null;
@@ -975,8 +982,9 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 m_attackCount = 0;
                 m_currentAttack = Attack.LeapAttack;
-                m_stateHandle.ApplyQueuedState();
+
             }
+            m_stateHandle.ApplyQueuedState();
         }
 
 
@@ -1135,7 +1143,6 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator PhaseDischarge()
         {
-
             m_stateHandle.Wait(State.ReevaluateSituation);
             //m_hitbox.SetInvulnerability(Invulnerability.None);
             //m_hasPhaseChanged = false;
@@ -1145,7 +1152,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 CustomTurn();
             }
             m_animation.SetAnimation(0, m_info.runAttackStartAnimation, false);
-            PhaseDischargeAction?.Invoke(this, EventActionArgs.Empty);
+            
             yield return new WaitForAnimationComplete(m_animation.skeletonAnimation.state, m_info.runAttackStartAnimation);
             m_animation.SetAnimation(0, m_info.runAttackAnimation, true);
             while (Vector2.Distance(transform.position, m_CenterOfTheArena.position) > 15f)
@@ -1156,6 +1163,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_info.runAttackEndAnimation, false);
             m_movement.Stop();
             m_animation.SetAnimation(0, m_info.roarAnimation, false).MixDuration = 0;
+            PhaseDischargeAction?.Invoke(this, EventActionArgs.Empty);
             //yield return new WaitForSeconds(3.9f);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.roarAnimation);
             m_isBuffed = true;
@@ -1902,6 +1910,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     }
                     else
                     {
+                        //StartCoroutine(TurnRoutine());
                         CustomTurn();
                         //m_turnState = State.Intro;
                         //if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
