@@ -76,6 +76,10 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField, TitleGroup("Attack Behaviours"), Range(1, 10)]
             private int m_wreckingBallCount;
             public int wreckingBallCount => m_wreckingBallCount;
+
+            [SerializeField, TitleGroup("Attack Behaviours"), Range(1, 10)]
+            private float m_wreackingBallStickDuration = 1;
+            public float wreackingBallStickDuration => m_wreackingBallStickDuration;
             [SerializeField, TitleGroup("Attack Behaviours"), Range(1, 10)]
             private int m_groundStabCount;
             public int groundStabCount => m_groundStabCount;
@@ -929,8 +933,6 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_hitbox.Disable();
 
-            //StopAllCoroutines();
-
             StartCoroutine(SmartChangePhaseRoutine());
         }
 
@@ -1201,6 +1203,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     {
                         m_animation.EnableRootMotion(true, true);
                         m_movement.Stop();
+                        yield return new WaitForSeconds(m_info.wreackingBallStickDuration);
                         if (targetID > m_tentacleOverridePoints.Count - 1)
                             targetID = 0;
                         target = m_tentacleOverridePoints[targetID].position;
@@ -1210,7 +1213,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         m_animation.DisableRootMotion();
                     }
                 }
-                yield return new WaitForSeconds(1f);
+                yield return null;
             }
             m_animation.EnableRootMotion(true, true);
             m_movement.Stop();
@@ -2276,7 +2279,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 StopCoroutine(m_dynamicIdleCoroutine);
                 m_dynamicIdleCoroutine = null;
             }
-            if(m_grappleEvadeRoutine != null)
+            if (m_grappleEvadeRoutine != null)
             {
                 StopCoroutine(m_grappleEvadeRoutine);
                 m_grappleEvadeRoutine = null;
@@ -2584,7 +2587,7 @@ namespace DChild.Gameplay.Characters.Enemies
                             {
                                 StopAllCoroutines();
                                 StopAnimations();
-                                StartCoroutine(WreckingBallRoutine(10));
+                                StartCoroutine(WreckingBallRoutine(5));
                                 m_WreckingBallAt75PercentHP = true;
                             }
 
@@ -2677,7 +2680,7 @@ namespace DChild.Gameplay.Characters.Enemies
                             }
                             else
                             {
-                               m_grappleEvadeRoutine = StartCoroutine(GrappleEvadeRoutine(true));
+                                m_grappleEvadeRoutine = StartCoroutine(GrappleEvadeRoutine(true));
                             }
 
                             m_currentHitCount = 0;
