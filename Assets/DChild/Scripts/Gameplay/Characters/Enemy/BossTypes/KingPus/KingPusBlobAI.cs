@@ -30,9 +30,9 @@ namespace DChild.Gameplay.Characters.Enemies
             private MovementInfo m_crawlRight = new MovementInfo();
             public MovementInfo crawlRight => m_crawlRight;
 
-            [SerializeField, Range(0.01f, 1f)]
-            private float m_healPercentage;
-            public float healPercentage => m_healPercentage;
+            [SerializeField]
+            private int m_healValue;
+            public int healValue => m_healValue;
             [SerializeField]
             private float m_flySpeed;
             public float flySpeed => m_flySpeed;
@@ -115,8 +115,7 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("PlaceHolder")]
         private GameObject PlaceholderShake;
 
-        [SerializeField]
-        private int m_healingValue;
+
         [SerializeField]
         private float m_lifeTime;
         [SerializeField]
@@ -140,7 +139,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private string m_crawlAnimation;
         #endregion
 
-        public int healingValue => m_healingValue;
+        public int healValue => m_info.healValue;
 
         private bool m_isNearMaster;
         public event EventAction<EventActionArgs> OnNearToMaster;
