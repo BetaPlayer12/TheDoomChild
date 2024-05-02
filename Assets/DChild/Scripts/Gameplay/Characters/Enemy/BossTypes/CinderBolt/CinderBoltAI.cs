@@ -1194,7 +1194,7 @@ namespace DChild.Gameplay.Characters.Enemies
             var m_followDuration = 10f;
             while (m_followElapsedTime < m_followDuration)
             {
-                m_movement.MoveTowards(new Vector2(m_targetInfo.position.x - transform.position.x, 0).normalized, m_info.move.speed * 2);
+                m_movement.MoveTowards(new Vector2((m_targetInfo.position.x + 10f) - transform.position.x, 0).normalized, m_info.move.speed * 2);
                 m_followElapsedTime += Time.deltaTime;
                 if (!IsFacingTarget())
                 {
@@ -1772,7 +1772,7 @@ namespace DChild.Gameplay.Characters.Enemies
             var m_followDuration = 10f;
             while (m_followElapsedTime < m_followDuration)
             {
-                m_movement.MoveTowards(new Vector2(m_targetInfo.position.x - transform.position.x, 0).normalized, m_info.move.speed);
+                m_movement.MoveTowards(new Vector2((m_targetInfo.position.x + 10f) - transform.position.x, 0).normalized, m_info.move.speed);
                 m_followElapsedTime += Time.deltaTime;
                 if (!IsFacingTarget())
                 {
@@ -2369,6 +2369,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator OnMlfunctionedRoutine()
         {
             enabled = false;
+            m_stateHandle.Wait(State.Chasing);
             yield return new WaitForSeconds(0.5f);
             m_punchAttacker.SetActive(true);
             m_punchAttacker2.SetActive(true);
@@ -2418,12 +2419,11 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.malfunctionRecoveryStateAnimation);
             m_steamMalfAndOver.Stop();
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
-            enabled = true;
-            //m_heatHandler.ResetHeat();
-            GetComponent<CinderBoltHeatGauge>().AddHeat(0);
+            m_heatHandler.ResetHeat();
+            //GetComponent<CinderBoltHeatGauge>().AddHeat(0);
             DecidedOnAttack(false);
             m_currentAttackCoroutine = null;
-            m_stateHandle.OverrideState(State.Chasing);
+            m_stateHandle.ApplyQueuedState();
             yield return null;
             enabled = true;
         }
@@ -2490,6 +2490,7 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 StopAllCoroutines();
                 StartCoroutine(OnMlfunctionedRoutine());
+                return;
             }
             if (m_hasRune)
             {
