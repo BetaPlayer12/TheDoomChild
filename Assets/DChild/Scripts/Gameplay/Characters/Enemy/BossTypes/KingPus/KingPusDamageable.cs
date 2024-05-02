@@ -32,7 +32,7 @@ namespace DChild.Gameplay.Combat
         private void Start()
         {
             PhaseChangeTime += OnChangePhase;
-            //m_kingPusUIHandle.HideHealthUI += OnHealthHide;
+            m_kingPusUIHandle.HideHealthUI += OnHealthHide;
             m_currentPhase = Phase.PhaseOne;
         }
 
