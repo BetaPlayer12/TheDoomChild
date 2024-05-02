@@ -20,6 +20,7 @@ using UnityEngine.Playables;
 using Language.Lua;
 using DChild.Gameplay.Combat.StatusAilment;
 using Unity.Mathematics;
+using NUnit.Framework.Constraints;
 
 namespace DChild.Gameplay.Characters.Enemies
 {
@@ -697,6 +698,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private Coroutine m_allCoroutineStopper;
         #endregion
 
+        private Coroutine m_cannibalizationCoroutine;
+
         private Vector2 m_lastTargetPos;
         private float m_currentCooldown;
         private float m_pickedCooldown;
@@ -726,7 +729,6 @@ namespace DChild.Gameplay.Characters.Enemies
         private bool m_WreckingBallAt50PercentHP = false;
         private bool m_WreckingBallAt25PercentHP = false;
         private bool m_kingPusIsBurning = false;
-        private bool m_cannibalizingPusBlob = false;
 
         [SerializeField]
         private List<KingPusBlobAI> m_pusBlobs;
@@ -932,7 +934,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private void OnChangePhaseTime(object sender, EventActionArgs eventArgs)
         {
             m_hitbox.Disable();
-
+            StopAllCoroutines();
             StartCoroutine(SmartChangePhaseRoutine());
         }
 
@@ -1001,9 +1003,9 @@ namespace DChild.Gameplay.Characters.Enemies
             var flinchAnimation = m_targetInfo.position.x > transform.position.x ? m_info.flinchLeftAnimation : m_info.flinchRightAnimation;
             m_animation.EnableRootMotion(true, false);
             var flinchTrack = m_animation.SetAnimation(0, flinchAnimation, false);
-
             yield return new WaitForSpineAnimationComplete(flinchTrack);
 
+            //Never Got this part of the thingy
 
             if (m_phaseHandle.currentPhase != Phase.PhaseThree)
             {
@@ -1244,8 +1246,7 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.bodySlamEnd);
             BodySlamDone?.Invoke(this, new EventActionArgs());
             WreckingBallDone?.Invoke(this, new EventActionArgs());
-            m_animation.SetAnimation(0, m_info.idleAnimation, true);
-            yield return new WaitForSeconds(5f);
+            yield return WaitForBlobsToCannibalize(5f);
 
             m_rb2d.sharedMaterial = null;
             m_wreckingBallCoroutine = null;
@@ -1408,6 +1409,10 @@ namespace DChild.Gameplay.Characters.Enemies
             }
             else
             {
+                if (m_grappleCoroutine != null)
+                {
+                    StopCoroutine(m_grappleCoroutine);
+                }
                 m_grappleCoroutine = StartCoroutine(GrappleRoutine(false, true, m_info.bodySlamCount/*, true*/));
             }
 
@@ -1431,6 +1436,10 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.EnableRootMotion(true, false);
             m_animation.AddAnimation(0, m_info.idleAnimation, true, 0);
             RandomizeTentaclePosition();
+            if (m_grappleCoroutine != null)
+            {
+                StopCoroutine(m_grappleCoroutine);
+            }
             m_grappleCoroutine = StartCoroutine(GrappleRoutine(true, true, 1/*, true*/));
             yield return new WaitUntil(() => m_character.physics.simulateGravity);
             m_hitbox.Enable();
@@ -1569,6 +1578,10 @@ namespace DChild.Gameplay.Characters.Enemies
             }
             else
             {
+                if (m_grappleCoroutine != null)
+                {
+                    StopCoroutine(m_grappleCoroutine);
+                }
                 m_grappleCoroutine = StartCoroutine(GrappleRoutine(false, true, m_info.bodySlamCount/*, true*/));
             }
             yield return null;
@@ -1580,6 +1593,10 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.EnableRootMotion(true, false);
             m_animation.AddAnimation(0, m_info.idleAnimation, true, 0);
             RandomizeTentaclePosition();
+            if (m_grappleCoroutine != null)
+            {
+                StopCoroutine(m_grappleCoroutine);
+            }
             m_grappleCoroutine = StartCoroutine(GrappleRoutine(true, true, 1));
             yield return new WaitUntil(() => m_character.physics.simulateGravity);
             m_animation.EnableRootMotion(true, true);
@@ -1700,9 +1717,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
             if (m_pusBlobsDown)
             {
-                m_animation.SetAnimation(0, m_info.idleAnimation, true);
-                yield return new WaitForSeconds(5f);
-                m_pusBlobsDown = false;
+                yield return WaitForBlobsToCannibalize(5f);
             }
 
             m_willStickToWall = false;
@@ -1728,6 +1743,10 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_animation.EnableRootMotion(true, false);
                 m_animation.AddAnimation(0, m_info.idleAnimation, true, 0);
                 GrappleEvadeWallCalculation();
+                if (m_grappleCoroutine != null)
+                {
+                    StopCoroutine(m_grappleCoroutine);
+                }
                 m_grappleCoroutine = StartCoroutine(GrappleRoutine(true, true, 1/*, true*/));
                 yield return new WaitUntil(() => m_character.physics.simulateGravity);
                 enabled = false;
@@ -1902,9 +1921,10 @@ namespace DChild.Gameplay.Characters.Enemies
             m_attackDecider.hasDecidedOnAttack = false;
             m_currentAttackCoroutine = null;
             //TEMP
-            m_stateHandle.ApplyQueuedState();
             ResetCounterCounts();
             yield return null;
+
+            m_stateHandle.ApplyQueuedState();
             enabled = true;
         }
 
@@ -2309,6 +2329,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void AllahuAkbar()
         {
+            
             m_rb2d.isKinematic = false;
             m_rb2d.useFullKinematicContacts = false;
             StopAllCoroutines();
@@ -2462,17 +2483,41 @@ namespace DChild.Gameplay.Characters.Enemies
             m_currentHitCount = 0;
         }
 
+        private IEnumerator WaitForBlobsToCannibalize(float duration)
+        {
+            if(m_phaseHandle.currentPhase != Phase.PhaseFour)
+            {
+                m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                var timer = duration;
+                do
+                {
+                    if (m_pusBlobstoBeEaten.Count > 0)
+                    {
+                        yield return CannibalizePusBlob();
+                        timer = 0;
+                    }
+                    timer -= GameplaySystem.time.deltaTime;
+                    yield return null;
+                } while (timer > 0 || m_phaseHandle.currentPhase != Phase.PhaseFour);
+            }
+            else
+            {
+                yield return null;
+            }
+            
+        }
+
         private IEnumerator CannibalizePusBlob()
         {
-            m_cannibalizingPusBlob = true;
-
-            m_animation.SetAnimation(3, m_info.cannibalizationAnimation, false);
-            yield return new WaitForAnimationComplete();
-
+            var animationTrack = m_animation.SetAnimation(3, m_info.cannibalizationAnimation, false);
+            yield return new WaitForSpineAnimationComplete(animationTrack);
+            for (int i = 0; i < m_pusBlobstoBeEaten.Count; i++)
+            {
+                GameplaySystem.combatManager.Heal(m_damageable, m_pusBlobstoBeEaten[i].healValue);
+            }
             m_animation.SetEmptyAnimation(3, 0);
-
-            //m_pusBlobstoBeEaten.Clear();
-            m_cannibalizingPusBlob = false;
+            m_pusBlobstoBeEaten.Clear();
+            yield return null;
         }
 
         private void OnDamageTaken(object sender, Damageable.DamageEventArgs eventArgs)
@@ -2772,6 +2817,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         if (m_phaseHandle.currentPhase == Phase.PhaseThree)
                         {
                             m_stateHandle.Wait(State.ReevaluateSituation);
+                            m_phaseHandle.SetPhase(Phase.PhaseFour);
                             AllahuAkbar();
                         }
                         else
@@ -2980,23 +3026,16 @@ namespace DChild.Gameplay.Characters.Enemies
             for (int i = 0; i < m_pusBlobs.Count; i++)
             {
                 m_pusBlobs[i].OnNearToMaster += OnBlobNearKingPus;
-
             }
+            m_pusBlobstoBeEaten = new List<KingPusBlobAI>();
         }
 
         private void OnBlobNearKingPus(object sender, EventActionArgs eventArgs)
         {
-            //If the Coroutine has started
-            if (m_cannibalizingPusBlob)
+            var blob = (KingPusBlobAI)sender;
+            if (m_pusBlobstoBeEaten.Contains(blob) == false)
             {
-                //m_pusBlobstoBeEaten.Add((KingPusBlobAI)sender);
-            }
-            else
-            {
-                //m_pusBlobstoBeEaten.Add((KingPusBlobAI)sender);
-                //Find A way to eat the blob after current action is done.
-                StartCoroutine(CannibalizePusBlob());
-
+                m_pusBlobstoBeEaten.Add((KingPusBlobAI)sender);
             }
         }
 
