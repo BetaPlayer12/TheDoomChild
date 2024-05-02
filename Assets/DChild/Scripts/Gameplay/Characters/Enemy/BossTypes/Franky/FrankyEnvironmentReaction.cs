@@ -23,9 +23,6 @@ namespace DChild.Gameplay.Characters.Enemies
         private Animator m_frankyAnimator;
 
         [SerializeField]
-        private AnimatorController m_frankyAnimatorController;
-
-        [SerializeField]
         private EvironmentReactionType m_environmentReaction;
 
         private string m_reactionType;
@@ -68,8 +65,17 @@ namespace DChild.Gameplay.Characters.Enemies
             }
 
             m_frankyAnimator.SetTrigger(m_reactionType);
+            m_evironmentEvent?.Invoke();
             //m_frankyAnimator.SetBool(m_reactionType, true);
         }
 
+        private void Start()
+        {
+            m_franky.PhaseDischargeAction += PhaseDischargeReaction;
+            m_franky.ElectricPushLeft += PushLeft;
+            m_franky.ElectricPushRight += PushRight;
+        }
+
     }
+
 }
