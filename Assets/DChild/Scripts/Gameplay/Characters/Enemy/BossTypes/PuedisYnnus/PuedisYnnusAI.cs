@@ -327,19 +327,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator ChangePhaseRoutine()
         {
-            //m_hitbox.Disable();
-            //m_animation.SetAnimation(0, m_info.disappearAnimation, false);
-            //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.disappearAnimation);
-            //transform.position = 
-            //m_animation.SetAnimation(0, m_info.appearAnimation, false);
-            //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.appearAnimation);
-
-            //m_hitbox.Enable();
-            //m_stateHandle.ApplyQueuedState();
-            if (m_attackDecider.hasDecidedOnAttack == false)
-            {
-                m_stateHandle.OverrideState(State.ReevaluateSituation);
-            }
+            //Has No Special Behaviour for Phasing
             yield return null;
         }
 
@@ -355,9 +343,21 @@ namespace DChild.Gameplay.Characters.Enemies
 
         protected override void OnDestroyed(object sender, EventActionArgs eventArgs)
         {
-            base.OnDestroyed(sender, eventArgs);
             StopAllCoroutines();
+            m_encircledProjectileHandle.ScatterProjectiles(m_info.crimsonProjectile.speed);
+            for (int i = 0; i < m_massiveSpikePattern.Length; i++)
+            {
+                m_massiveSpikePattern[i].Disappear();
+            }
+            for (int i = 0; i < m_multipleSpikes.Length; i++)
+            {
+                m_multipleSpikes[i].Disappear();
+            }
+            m_bottomMultipleSpike.Disappear();
+            m_fleshBomb.gameObject.SetActive(false);
+            m_rainProjectileHandle.DropSpawnedProjectiles(m_info.crimsonProjectile.speed);
             m_movement.Stop();
+            base.OnDestroyed(sender, eventArgs);
         }
 
         private Vector2 GetRandomPointInBounds(Bounds bounds)
