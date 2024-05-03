@@ -539,7 +539,9 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Laser")]
         private LineRenderer m_telegraphLineRenderer; //renderers
         [SerializeField, TabGroup("Laser")]
-        private EdgeCollider2D m_edgeCollider; //damage
+        private EdgeCollider2D m_edgeCollider;
+        [SerializeField, TabGroup("Laser")]
+        private EdgeCollider2D m_overchargeEdgeCollider; //damage
         [SerializeField, TabGroup("Laser")]
         private GameObject m_muzzleFXGO; //to be deleted
         [SerializeField, TabGroup("Laser")]
@@ -769,6 +771,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_muzzleLoopFX.Stop();
             m_shortDashFX.Stop();
             m_spinAttackFX.Stop();
+            m_punchAttackCollider.enabled = false;
             m_punchAttackCollider.enabled = false;
             m_flamethrower2Colliders.enabled = false;
             m_firebeamCollider.enabled = false;
@@ -1059,10 +1062,10 @@ namespace DChild.Gameplay.Characters.Enemies
             }
             m_animation.SetAnimation(0, m_info.overchargedFirebeamAttack, false);
             //yield return new WaitForSeconds(1f);
-            m_firebeamCollider.enabled = true;
+            //m_firebeamCollider.enabled = true;
             StartCoroutine(FirebeamLaserRoutine());
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.overchargedFirebeamAttack);
-            m_firebeamCollider.enabled = false;
+            //m_firebeamCollider.enabled = false;
             m_animation.SetAnimation(0, m_info.overchargedIdle, true);
             DecidedOnAttack(false);
             m_currentAttackCoroutine = null;
@@ -1480,7 +1483,14 @@ namespace DChild.Gameplay.Characters.Enemies
             }
 
             yield return new WaitUntil(() => m_beamOn);
-            m_firebeamCollider.enabled = true;
+            if (!m_isRaging)
+            {
+                m_firebeamCollider.enabled = true;
+            }
+            else
+            {
+                m_overchargedFirebeamCollider.enabled = true;
+            }
             StopCoroutine(m_aimRoutine);
             m_laserOriginMuzzleFX.Play();
             //m_muzzleFXGO.SetActive(true);
@@ -1493,10 +1503,18 @@ namespace DChild.Gameplay.Characters.Enemies
 
                 m_lineRenderer.SetPosition(0, m_laserOrigin.position);
                 m_lineRenderer.SetPosition(1, ShotPosition());
-                Debug.Log(m_lineRenderer.positionCount);
+                //Debug.Log(m_lineRenderer.positionCount);
                 for (int i = 0; i < m_lineRenderer.positionCount; i++)
                 {
-                    var pos = m_lineRenderer.GetPosition(i) - m_edgeCollider.transform.position;
+                    var pos = Vector3.zero;
+                    if (!m_isRaging)
+                    {
+                        pos = m_lineRenderer.GetPosition(i) - m_edgeCollider.transform.position;
+                    }
+                    else
+                    {
+                        pos = m_lineRenderer.GetPosition(i) - m_overchargeEdgeCollider.transform.position;
+                    }
                     pos = new Vector2(pos.x, pos.y);
                     //if (i > 0)
                     //{
@@ -1504,13 +1522,25 @@ namespace DChild.Gameplay.Characters.Enemies
                     //}
                     m_Points.Add(pos);
                 }
-                m_edgeCollider.points = m_Points.ToArray();
+                if (!m_isRaging)
+                {
+                    m_edgeCollider.points = m_Points.ToArray();
+                }
+                else
+                {
+                    m_overchargeEdgeCollider.points = m_Points.ToArray();
+                }
                 m_Points.Clear();
                 yield return null;
             }
-
-
-            m_firebeamCollider.enabled = false;
+            if (!m_isRaging)
+            {
+                m_firebeamCollider.enabled = false;
+            }
+            else
+            {
+                m_overchargedFirebeamCollider.enabled = false;
+            }
 
             m_laserOriginMuzzleFX.Stop();
             m_muzzleLoopFX.Stop();
@@ -1534,7 +1564,14 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 m_Points.Add(Vector2.zero);
             }*/
-            m_edgeCollider.points = m_Points.ToArray();
+            if (!m_isRaging)
+            {
+                m_edgeCollider.points = m_Points.ToArray();
+            }
+            else
+            {
+                m_overchargeEdgeCollider.points = m_Points.ToArray();
+            }
         }
         protected new Vector2 LookPosition(Transform startPoint)
         {
@@ -1710,7 +1747,7 @@ namespace DChild.Gameplay.Characters.Enemies
             Vector2 targetPoint = m_targetInfo.position;
             var direction = (targetPoint - (Vector2)transform.position).normalized;
             m_steamThrustFX.SetActive(true);
-            while (Vector2.Distance(transform.position, targetPoint) > m_info.punchAttack.range + 10f)
+            while (Vector2.Distance(transform.position, targetPoint) > m_info.punchAttack.range + 40f)
             {
                 m_animation.SetAnimation(0, m_info.move, true);
                 m_movement.MoveTowards(direction, m_info.move.speed);
@@ -1998,11 +2035,11 @@ namespace DChild.Gameplay.Characters.Enemies
                             {
                                 if (!m_isRaging)
                                 {
-                                    m_currentAttackCoroutine = StartCoroutine(ShotgunBlastRoutine());
+                                    m_currentAttackCoroutine = StartCoroutine(Flamethrower1Routine());
                                 }
                                 else
                                 {
-                                    m_currentAttackCoroutine = StartCoroutine(OverchargedShotgunBlastRoutine());
+                                    m_currentAttackCoroutine = StartCoroutine(OverchargedFlamethrower1Routine());
                                 }
                             }
                             Debug.Log("Flamethrower1 finished or cancelled");
@@ -2436,6 +2473,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_flamethrower1.SetActive(true);
             m_overchargedFlamethrower1.SetActive(false);
             m_firebeam.SetActive(true);
+            m_overchargedFirebeam.SetActive(false);
             m_spinAttacker.SetActive(true);
             m_overchargedSpinAttacker.SetActive(false);
             m_longD.SetActive(true);
@@ -2541,6 +2579,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_spinAttacker.SetActive(false);
                 m_overchargedSpinAttacker.SetActive(true);
                 m_firebeam.SetActive(false);
+                m_overchargedFirebeam.SetActive(true);
                 m_longD.SetActive(false);
                 m_overchargedLongD.SetActive(true);
                 m_shotG.SetActive(true);
