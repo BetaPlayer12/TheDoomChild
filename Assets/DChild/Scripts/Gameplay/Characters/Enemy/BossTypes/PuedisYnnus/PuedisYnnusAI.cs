@@ -292,6 +292,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private int m_attackCounter;
         private bool m_wasHitDuringDamageChecks;
 
+        private bool m_wasWaitingDuringPhaseChange;
+
         private void ApplyPhaseData(PhaseInfo obj)
         {
             m_currentPhaseInfo = obj;
@@ -300,13 +302,12 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void ChangePhase()
         {
-            StopAllCoroutines();
-            m_stateHandle.OverrideState(State.Phasing);
-            m_animation.DisableRootMotion();
-            m_animation.SetEmptyAnimation(0, 0);
             m_phaseHandle.ApplyChange();
-
             m_attackCounter = 0;
+            m_teleportCounter = 0;
+
+            m_wasWaitingDuringPhaseChange = m_stateHandle.currentState == State.WaitBehaviourEnd;
+            m_stateHandle.OverrideState(State.Phasing);
         }
 
         private void OnAttackDone(object sender, EventActionArgs eventArgs)
@@ -328,6 +329,10 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator ChangePhaseRoutine()
         {
             //Has No Special Behaviour for Phasing
+            if (m_wasWaitingDuringPhaseChange)
+            {
+                m_stateHandle.OverrideState(State.WaitBehaviourEnd);
+            }
             yield return null;
         }
 
@@ -357,6 +362,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_fleshBomb.gameObject.SetActive(false);
             m_rainProjectileHandle.DropSpawnedProjectiles(m_info.crimsonProjectile.speed);
             m_movement.Stop();
+            m_stateHandle.Wait(State.WaitBehaviourEnd);
             base.OnDestroyed(sender, eventArgs);
         }
 
