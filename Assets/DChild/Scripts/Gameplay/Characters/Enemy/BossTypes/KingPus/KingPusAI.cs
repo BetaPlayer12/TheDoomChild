@@ -78,8 +78,8 @@ namespace DChild.Gameplay.Characters.Enemies
             private int m_wreckingBallCount;
             public int wreckingBallCount => m_wreckingBallCount;
 
-            [SerializeField, TitleGroup("Attack Behaviours"), Range(1, 10)]
-            private float m_wreackingBallStickDuration = 1;
+            [SerializeField, TitleGroup("Attack Behaviours")]
+            private float m_wreackingBallStickDuration = 0.5f;
             public float wreackingBallStickDuration => m_wreackingBallStickDuration;
             [SerializeField, TitleGroup("Attack Behaviours"), Range(1, 10)]
             private int m_groundStabCount;
@@ -724,6 +724,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private int m_spearCrawlStopCount = 0;
         private bool m_scriptedPhaseTwoAttackDone = false;
         private bool m_scriptedPhaseThreeAttackDone = false;
+        private bool m_canCannibalize;
 
         private bool m_WreckingBallAt75PercentHP = false;
         private bool m_WreckingBallAt50PercentHP = false;
@@ -927,13 +928,14 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             Debug.Log("ChangeState for King Pus");
 
-            StartCoroutine(SmartChangePhaseRoutine());
+            //StartCoroutine(SmartChangePhaseRoutine());
         }
 
 
         private void OnChangePhaseTime(object sender, EventActionArgs eventArgs)
         {
             m_hitbox.Disable();
+            StopCurrentBehaviorRoutine();
             StopAllCoroutines();
             StartCoroutine(SmartChangePhaseRoutine());
         }
@@ -958,6 +960,7 @@ namespace DChild.Gameplay.Characters.Enemies
             StopCurrentBehaviorRoutine();
             ResetCounterCounts();
             SetAIToPhasing();
+            enabled = true;
             yield return null;
         }
 
@@ -1073,7 +1076,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_changePhaseCoroutine = null;
             m_stateHandle.ApplyQueuedState();
             yield return null;
-
+            Debug.Log("Phase Change Done!");
             enabled = true;
         }
 
@@ -1081,6 +1084,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             StopAnimations();
             m_stateHandle.OverrideState(State.Phasing);
+
         }
 
         #endregion
@@ -2304,6 +2308,12 @@ namespace DChild.Gameplay.Characters.Enemies
                 StopCoroutine(m_grappleEvadeRoutine);
                 m_grappleEvadeRoutine = null;
             }
+            if (m_cannibalizationCoroutine != null)
+            {
+                StopCoroutine(m_cannibalizationCoroutine);
+                m_cannibalizationCoroutine = null;
+                m_animation.SetEmptyAnimation(3, 0);
+            }
         }
 
         private void ResetCounterCounts()
@@ -2329,7 +2339,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void AllahuAkbar()
         {
-            
+            KillAllBlobsToBeEaten();
             m_rb2d.isKinematic = false;
             m_rb2d.useFullKinematicContacts = false;
             StopAllCoroutines();
@@ -2345,6 +2355,18 @@ namespace DChild.Gameplay.Characters.Enemies
             Debug.Log("Allahu Akbar!");
 
             StartCoroutine(DeathRoutine());
+        }
+
+        private void KillAllBlobsToBeEaten()
+        {
+            for (int i = 0; i < m_pusBlobstoBeEaten.Count; i++)
+            {
+                m_pusBlobs[i].OnNearToMaster -= OnBlobNearKingPus;
+                m_pusBlobstoBeEaten[i].OnNearToMaster -= OnBlobNearKingPus;
+                m_pusBlobs[i].Explode();
+            }
+            m_pusBlobstoBeEaten.Clear();
+            m_pusBlobs.Clear();
         }
 
         private IEnumerator DeathRoutine()
@@ -2485,26 +2507,18 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator WaitForBlobsToCannibalize(float duration)
         {
-            if(m_phaseHandle.currentPhase != Phase.PhaseFour)
+            m_animation.SetAnimation(0, m_info.idleAnimation, true);
+            var timer = duration;
+            do
             {
-                m_animation.SetAnimation(0, m_info.idleAnimation, true);
-                var timer = duration;
-                do
+                if (m_pusBlobstoBeEaten.Count > 0)
                 {
-                    if (m_pusBlobstoBeEaten.Count > 0)
-                    {
-                        yield return CannibalizePusBlob();
-                        timer = 0;
-                    }
-                    timer -= GameplaySystem.time.deltaTime;
-                    yield return null;
-                } while (timer > 0 || m_phaseHandle.currentPhase != Phase.PhaseFour);
-            }
-            else
-            {
+                    yield return CannibalizePusBlob();
+                    timer = 0;
+                }
+                timer -= GameplaySystem.time.deltaTime;
                 yield return null;
-            }
-            
+            } while (timer > 0);
         }
 
         private IEnumerator CannibalizePusBlob()
@@ -2817,7 +2831,6 @@ namespace DChild.Gameplay.Characters.Enemies
                         if (m_phaseHandle.currentPhase == Phase.PhaseThree)
                         {
                             m_stateHandle.Wait(State.ReevaluateSituation);
-                            m_phaseHandle.SetPhase(Phase.PhaseFour);
                             AllahuAkbar();
                         }
                         else

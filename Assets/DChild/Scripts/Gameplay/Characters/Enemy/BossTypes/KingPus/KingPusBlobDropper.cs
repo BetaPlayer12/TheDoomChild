@@ -39,7 +39,8 @@ namespace DChild.Gameplay.Characters.Enemies
                 }
             }
         }
-        
+
+        [Button]
         private void DropPusBlob()
         {
             List<int> NumbersPicked = new List<int>();

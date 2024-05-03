@@ -60,7 +60,7 @@ namespace DChild.Gameplay.Combat
 
         public override void TakeDamage(int totalDamage, DamageType type)
         {
-            if(totalDamage <= base.health.currentValue)
+            if(totalDamage < base.health.currentValue)
             {
                 base.TakeDamage(totalDamage, type);
             }
@@ -72,7 +72,7 @@ namespace DChild.Gameplay.Combat
                     m_currentPhase = Phase.PhaseFour;
                     PhaseChangeTime?.Invoke(this, new EventActionArgs());
                 }
-                else
+                else if(m_currentPhase < Phase.PhaseThree)
                 {
                     Debug.Log("Phase Change Time!");
                     PhaseChangeTime?.Invoke(this, new EventActionArgs());
