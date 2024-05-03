@@ -526,7 +526,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator TurnRoutine()
         {
             m_animation.SetAnimation(0, m_info.turnAnimation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState,m_info.turnAnimation);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.turnAnimation);
             CustomTurn();
         }
 
@@ -644,7 +644,7 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 m_animation.SetAnimation(0, m_info.roarAnimation, false).MixDuration = 0;
                 yield return null;
-                
+
                 yield return new WaitForAnimationComplete(m_animation.animationState, m_info.roarAnimation);
                 ChooseAttack(3);
                 PhaseDischargeAction?.Invoke(this, EventActionArgs.Empty);
@@ -904,8 +904,6 @@ namespace DChild.Gameplay.Characters.Enemies
             m_fistPoint.GetComponent<SkeletonUtilityBone>().enabled = false;
             enabled = true;
             m_phaseHandle.allowPhaseChange = true;
-            yield return null;
-
             if (m_isBuffed)
             {
                 m_attackCount = 0;
@@ -913,6 +911,8 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_currentAttackRange = m_info.leapAttack.range;
             }
             m_stateHandle.ApplyQueuedState();
+            yield return null;
+
         }
 
         private IEnumerator ChainedBashIIRoutine()
@@ -1165,7 +1165,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 CustomTurn();
             }
             m_animation.SetAnimation(0, m_info.runAttackStartAnimation, false);
-            
+
             yield return new WaitForAnimationComplete(m_animation.skeletonAnimation.state, m_info.runAttackStartAnimation);
             m_animation.SetAnimation(0, m_info.runAttackAnimation, true);
             while (Vector2.Distance(transform.position, m_CenterOfTheArena.position) > 15f)
@@ -1483,7 +1483,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     }
                 }
                 */
-                
+
                 m_attackDecider[patternIndex].DecideOnAttack();
                 /*
                 while(m_attackDecider[patternIndex].chosenAttack.attack == m_currentAttack)
@@ -1496,330 +1496,290 @@ namespace DChild.Gameplay.Characters.Enemies
             }
         }
 
-        private void ExecuteAttack(int patternIndex)
+        private void ExecuteAttack()
         {
             /* if (m_attackCount < m_patternCount[patternIndex])*/
-            if (m_attackCount < m_attackSpecialAttackLimit)
+
+            #region DELETE THIS LATER
+            //ChooseAttack(patternIndex);
+            /*
+            if (IsTargetInRange(m_currentAttackRange))
             {
-                //ChooseAttack(patternIndex);
-                /*
-                if (IsTargetInRange(m_currentAttackRange))
+                m_stateHandle.Wait(State.Attacking);
+                switch (m_currentAttack)
                 {
-                    m_stateHandle.Wait(State.Attacking);
-                    switch (m_currentAttack)
-                    {
-                        case Attack.ShoulderBash:
-                            if (patternIndex == 0 || patternIndex == 1)
+                    case Attack.ShoulderBash:
+                        if (patternIndex == 0 || patternIndex == 1)
+                        {
+                            if (m_currentPhaseIndex != 3)
                             {
-                                if (m_currentPhaseIndex != 3)
-                                {
-                                    m_currentAttackCoroutine = StartCoroutine(ShoulderBashRoutine());
-                                    //StartCoroutine(ShoulderBashRoutine());
-                                }
-                                else
-                                {
-                                    DecidedOnAttack(false);
-                                    m_stateHandle.ApplyQueuedState();
-                                }
+                                m_currentAttackCoroutine = StartCoroutine(ShoulderBashRoutine());
+                                //StartCoroutine(ShoulderBashRoutine());
                             }
                             else
                             {
                                 DecidedOnAttack(false);
                                 m_stateHandle.ApplyQueuedState();
                             }
-                            break;
-                        case Attack.ComboPunch:
-                            if (patternIndex == 0 || patternIndex == 1 || patternIndex == 2)
-                            {
-                                m_currentAttackCoroutine = StartCoroutine(PunchComboRoutine());
-                            }
-                            else
-                            {
-                                DecidedOnAttack(false);
-                                m_stateHandle.ApplyQueuedState();
-                            }
-                            break;
-
-                        case Attack.ChanFistPunch:
-                            if (patternIndex == 0 || patternIndex == 1 || patternIndex == 2 && m_currentPhaseIndex != 3)
-                            {
-
-                                
-                                m_currentAttackCoroutine = StartCoroutine(ChainFistPunchRoutine());
-                            }
-                            else
-                            {
-                                DecidedOnAttack(false);
-                                m_stateHandle.ApplyQueuedState();
-                            }
-                            break;
-                        case Attack.ChainedBashI:
-                            if (patternIndex == 0 || patternIndex == 2)
-                            {
-                                if (AllowAttack(2, State.Attacking))
-                                {
-                                    m_attackCount++;
-                                    m_currentAttackCoroutine = StartCoroutine(ChainedBashIRoutine());
-                                }
-                            }
-                            else
-                            {
-                                DecidedOnAttack(false);
-                                m_stateHandle.ApplyQueuedState();
-                            }
-                            break;
-                        case Attack.LightningStomp:
-                            if (AllowAttack(3, State.Attacking))
-                            {
-                                m_attackCount++;
-                                m_currentAttackCoroutine = StartCoroutine(LightningStompRoutine());
-
-                            }
-                            break;
-                        case Attack.ChainShock:
-                            if (patternIndex == 1)
-                            {
-                                if (AllowAttack(3, State.Attacking))
-                                {
-                                    m_attackCount++;
-                                    m_currentAttackCoroutine = StartCoroutine(ChainShockRoutine());
-                                }
-                            }
-                            else
-                            {
-                                DecidedOnAttack(false);
-                                m_stateHandle.ApplyQueuedState();
-                            }
-                            break;
-                        case Attack.RunAttack:
-                            if(m_phaseHandle.currentPhase == Phase.PhaseTwo)
-                            {
-                                
-                                if(AllowAttack(2, State.Attacking))
-                                {
-                                    m_attackCount++;
-                                    m_currentAttackCoroutine = StartCoroutine(RunningAttackRoutine());
-                                }
-                            }
-                            break;
-                        case Attack.LeapAttack:
-                            if(m_phaseHandle.currentPhase != Phase.PhaseOne)
-                            {
-                                if (IsTargetInRange(m_info.leapAttack.range))
-                                {
-                                    var leapCount = 3;
-                                m_stateHandle.Wait(State.Chasing);
-                                StartCoroutine(StickToGroundRoutine(GroundPosition().y));
-                                m_currentAttackCoroutine = StartCoroutine(LeapAttackRoutine(leapCount));
-                                m_leapRoutine = m_currentAttackCoroutine;
-                                }
-                                else
-                                {
-                                    MoveToTarget(m_info.leapAttack.range);
-                                }
-                            }
-                            break;
-                    }
-                }
-                else
-                {
-                    MoveToTarget(m_currentAttackRange);
-                }
-                */
-                if (IsTargetInRange(m_currentAttackRange)&&!m_isBuffed || IsTargetInRange(m_currentAttackRange)&& !m_rangeAttack)
-                {
-                    m_stateHandle.Wait(State.Attacking);
-                    switch (m_currentAttack)
-                    {
-                        case Attack.ShoulderBash:
-                            m_currentAttackCoroutine = StartCoroutine(ShoulderBashRoutine());
-                            break;
-                        case Attack.ComboPunch:
+                        }
+                        else
+                        {
+                            DecidedOnAttack(false);
+                            m_stateHandle.ApplyQueuedState();
+                        }
+                        break;
+                    case Attack.ComboPunch:
+                        if (patternIndex == 0 || patternIndex == 1 || patternIndex == 2)
+                        {
                             m_currentAttackCoroutine = StartCoroutine(PunchComboRoutine());
-                            break;
+                        }
+                        else
+                        {
+                            DecidedOnAttack(false);
+                            m_stateHandle.ApplyQueuedState();
+                        }
+                        break;
 
-                        case Attack.ChanFistPunch:
+                    case Attack.ChanFistPunch:
+                        if (patternIndex == 0 || patternIndex == 1 || patternIndex == 2 && m_currentPhaseIndex != 3)
+                        {
+
+
                             m_currentAttackCoroutine = StartCoroutine(ChainFistPunchRoutine());
-                            break;
-                        case Attack.ChainedBashI:
-
-                            if (AllowAttack(2, State.Attacking) || AllowAttack(3, State.Attacking))
+                        }
+                        else
+                        {
+                            DecidedOnAttack(false);
+                            m_stateHandle.ApplyQueuedState();
+                        }
+                        break;
+                    case Attack.ChainedBashI:
+                        if (patternIndex == 0 || patternIndex == 2)
+                        {
+                            if (AllowAttack(2, State.Attacking))
                             {
                                 m_attackCount++;
-
                                 m_currentAttackCoroutine = StartCoroutine(ChainedBashIRoutine());
-
                             }
+                        }
+                        else
+                        {
+                            DecidedOnAttack(false);
+                            m_stateHandle.ApplyQueuedState();
+                        }
+                        break;
+                    case Attack.LightningStomp:
+                        if (AllowAttack(3, State.Attacking))
+                        {
+                            m_attackCount++;
+                            m_currentAttackCoroutine = StartCoroutine(LightningStompRoutine());
 
-                            break;
-                        case Attack.ChainedBashII:
-                            if (AllowAttack(3, State.Attacking) && m_isBuffed == true)
-                            {
-                                m_currentAttackCoroutine = StartCoroutine(ChainedBashIIRoutine());
-                            }
-                            break;
-                        case Attack.LightningStomp:
-                            if (AllowAttack(3, State.Attacking))
-                            {
-                                m_attackCount++;
-                                m_currentAttackCoroutine = StartCoroutine(LightningStompRoutine());
-
-                            }
-                            break;
-                        case Attack.ChainShock:
+                        }
+                        break;
+                    case Attack.ChainShock:
+                        if (patternIndex == 1)
+                        {
                             if (AllowAttack(3, State.Attacking))
                             {
                                 m_attackCount++;
                                 m_currentAttackCoroutine = StartCoroutine(ChainShockRoutine());
                             }
-                            break;
+                        }
+                        else
+                        {
+                            DecidedOnAttack(false);
+                            m_stateHandle.ApplyQueuedState();
+                        }
+                        break;
+                    case Attack.RunAttack:
+                        if(m_phaseHandle.currentPhase == Phase.PhaseTwo)
+                        {
 
-                        case Attack.RunAttack:
-                            if (m_phaseHandle.currentPhase == Phase.PhaseTwo)
+                            if(AllowAttack(2, State.Attacking))
                             {
-                                if (AllowAttack(2, State.Attacking))
-                                {
-                                    m_attackCount++;
-                                    m_currentAttackCoroutine = StartCoroutine(RunningAttackRoutine());
-                                }
+                                m_attackCount++;
+                                m_currentAttackCoroutine = StartCoroutine(RunningAttackRoutine());
                             }
-                            break;
-                        case Attack.LeapAttack:
-                            if (m_phaseHandle.currentPhase != Phase.PhaseOne)
-                            {
-                                var leapCount = 3;
-                                m_stateHandle.Wait(State.Chasing);
-                                StartCoroutine(StickToGroundRoutine(GroundPosition().y));
-
-                                m_currentAttackCoroutine = StartCoroutine(LeapAttackRoutine(leapCount));
-                                m_leapRoutine = m_currentAttackCoroutine;
-                            }
-                            break;
-                        case Attack.ShockRampage:
-                            if (m_phaseHandle.currentPhase != Phase.PhaseOne)
-                            {
-                                m_currentAttackCoroutine = StartCoroutine(ShockRampage());
-                            }
-                            break;
-                    }
-                    if(!m_isBuffed)
-                    {
-                        ChooseAttack(m_currentPhaseIndex);
-                    }
-                    m_rangeAttack = false;
-                }
-                else
-                {
-                    switch (m_currentPhaseIndex)
-                    {
-                        case 1:
-                            MoveToTarget(m_currentAttackRange);
-                            break;
-
-                        case 2:
-                            if(!m_isBuffed)
-                            {
-                                ChooseAttack(0);
-                                m_rangeAttack = true;
-                            }
-                            else
-                            {
-                                MoveToTarget(m_currentAttackRange);
-                            }
-                            
-                            break;
-
-                        case 3:
-                            if(!m_isBuffed)
-                            {
-                                ChooseAttack(0);
-                                m_rangeAttack = true;
-                            }
-                            else
-                            {
-                                MoveToTarget(m_currentAttackRange);
-                            }
-                            break;
-                    }
-
-                }
-            }
-            else
-            {/*
-                if (patternIndex == 0 || patternIndex == 1)
-                {
-                    /*
-                    if (patternIndex == 1 && m_currentPhaseIndex == 1)
-                    {
-                        m_stateHandle.OverrideState(State.Chasing);
-                        return;
-                    }
-                    
-                    switch(m_phaseHandle.currentPhase)
-                    {
-                        case Phase.PhaseOne:
+                        }
+                        break;
+                    case Attack.LeapAttack:
+                        if(m_phaseHandle.currentPhase != Phase.PhaseOne)
+                        {
                             if (IsTargetInRange(m_info.leapAttack.range))
                             {
                                 var leapCount = 3;
-                                m_stateHandle.Wait(State.Chasing);
-                                StartCoroutine(StickToGroundRoutine(GroundPosition().y));
-                                //m_currentAttackCoroutine = StartCoroutine(ChainedBashIRoutine());
-                                m_currentAttackCoroutine = StartCoroutine(LeapAttackRoutine(leapCount));
-                                m_leapRoutine = m_currentAttackCoroutine;
+                            m_stateHandle.Wait(State.Chasing);
+                            StartCoroutine(StickToGroundRoutine(GroundPosition().y));
+                            m_currentAttackCoroutine = StartCoroutine(LeapAttackRoutine(leapCount));
+                            m_leapRoutine = m_currentAttackCoroutine;
                             }
                             else
                             {
                                 MoveToTarget(m_info.leapAttack.range);
                             }
-                            break;
-
-                        case Phase.PhaseTwo:
-                            StartCoroutine(PhaseDischarge());
-                            break;
-
-                        case Phase.PhaseThree:
-                            StartCoroutine(PhaseDischarge());
-                            break;
-                    }
-                    
-                }
-                else if (patternIndex == 2)
-                {
-                    m_stateHandle.OverrideState(State.Chasing);
-                }*/
-
-                switch (m_phaseHandle.currentPhase)
-                {
-                    case Phase.PhaseOne:
-                        if (IsTargetInRange(m_info.leapAttack.range))
-                        {
-                            var leapCount = 3;
-                            m_stateHandle.Wait(State.Chasing);
-                            StartCoroutine(StickToGroundRoutine(GroundPosition().y));
-                            //m_currentAttackCoroutine = StartCoroutine(ChainedBashIRoutine());
-                            m_currentAttackCoroutine = StartCoroutine(LeapAttackRoutine(leapCount));
-                            m_leapRoutine = m_currentAttackCoroutine;
-                        }
-                        else
-                        {
-                            MoveToTarget(m_info.leapAttack.range);
                         }
                         break;
-
-                    case Phase.PhaseTwo:
-                        StartCoroutine(PhaseDischarge());
-                        break;
-
-                    case Phase.PhaseThree:
-                        StartCoroutine(PhaseDischarge());
-                        break;
                 }
-                ChooseAttack(m_currentPhaseIndex);
             }
+            else
+            {
+                MoveToTarget(m_currentAttackRange);
+            }
+            */
+            #endregion
+            m_stateHandle.Wait(State.Attacking);
 
-            //m_patternDecider.DecideOnAttack();
-            //m_chosenPattern = m_patternDecider.chosenAttack.attack;
+            switch (m_currentAttack)
+            {
+                case Attack.ShoulderBash:
+                    m_currentAttackCoroutine = StartCoroutine(ShoulderBashRoutine());
+                    break;
+                case Attack.ComboPunch:
+                    m_currentAttackCoroutine = StartCoroutine(PunchComboRoutine());
+                    break;
+
+                case Attack.ChanFistPunch:
+                    m_currentAttackCoroutine = StartCoroutine(ChainFistPunchRoutine());
+                    break;
+                case Attack.ChainedBashI:
+
+                    if (AllowAttack(2, State.Attacking) || AllowAttack(3, State.Attacking))
+                    {
+                        m_attackCount++;
+
+                        m_currentAttackCoroutine = StartCoroutine(ChainedBashIRoutine());
+
+                    }
+
+                    break;
+                case Attack.ChainedBashII:
+                    if (AllowAttack(3, State.Attacking) && m_isBuffed == true)
+                    {
+                        m_currentAttackCoroutine = StartCoroutine(ChainedBashIIRoutine());
+                    }
+                    break;
+                case Attack.LightningStomp:
+                    if (AllowAttack(3, State.Attacking))
+                    {
+                        m_attackCount++;
+                        m_currentAttackCoroutine = StartCoroutine(LightningStompRoutine());
+
+                    }
+                    break;
+                case Attack.ChainShock:
+                    if (AllowAttack(3, State.Attacking))
+                    {
+                        m_attackCount++;
+                        m_currentAttackCoroutine = StartCoroutine(ChainShockRoutine());
+                    }
+                    break;
+
+                case Attack.RunAttack:
+                    if (m_phaseHandle.currentPhase == Phase.PhaseTwo)
+                    {
+                        if (AllowAttack(2, State.Attacking))
+                        {
+                            m_attackCount++;
+                            m_currentAttackCoroutine = StartCoroutine(RunningAttackRoutine());
+                        }
+                    }
+                    break;
+                case Attack.LeapAttack:
+                    if (m_phaseHandle.currentPhase != Phase.PhaseOne)
+                    {
+                        var leapCount = 3;
+                        m_stateHandle.Wait(State.Chasing);
+                        StartCoroutine(StickToGroundRoutine(GroundPosition().y));
+
+                        m_currentAttackCoroutine = StartCoroutine(LeapAttackRoutine(leapCount));
+                        m_leapRoutine = m_currentAttackCoroutine;
+                    }
+                    break;
+                case Attack.ShockRampage:
+                    if (m_phaseHandle.currentPhase != Phase.PhaseOne)
+                    {
+                        m_currentAttackCoroutine = StartCoroutine(ShockRampage());
+                    }
+                    break;
+            }
+            #region DELETE THIS LATER
+            //else
+            //{/*
+            //    if (patternIndex == 0 || patternIndex == 1)
+            //    {
+            //        /*
+            //        if (patternIndex == 1 && m_currentPhaseIndex == 1)
+            //        {
+            //            m_stateHandle.OverrideState(State.Chasing);
+            //            return;
+            //        }
+
+            //        switch(m_phaseHandle.currentPhase)
+            //        {
+            //            case Phase.PhaseOne:
+            //                if (IsTargetInRange(m_info.leapAttack.range))
+            //                {
+            //                    var leapCount = 3;
+            //                    m_stateHandle.Wait(State.Chasing);
+            //                    StartCoroutine(StickToGroundRoutine(GroundPosition().y));
+            //                    //m_currentAttackCoroutine = StartCoroutine(ChainedBashIRoutine());
+            //                    m_currentAttackCoroutine = StartCoroutine(LeapAttackRoutine(leapCount));
+            //                    m_leapRoutine = m_currentAttackCoroutine;
+            //                }
+            //                else
+            //                {
+            //                    MoveToTarget(m_info.leapAttack.range);
+            //                }
+            //                break;
+
+            //            case Phase.PhaseTwo:
+            //                StartCoroutine(PhaseDischarge());
+            //                break;
+
+            //            case Phase.PhaseThree:
+            //                StartCoroutine(PhaseDischarge());
+            //                break;
+            //        }
+
+            //    }
+            //    else if (patternIndex == 2)
+            //    {
+            //        m_stateHandle.OverrideState(State.Chasing);
+            //    }*/
+
+            //    switch (m_phaseHandle.currentPhase)
+            //    {
+            //        case Phase.PhaseOne:
+            //            if (IsTargetInRange(m_info.leapAttack.range))
+            //            {
+            //                var leapCount = 3;
+            //                m_stateHandle.Wait(State.Chasing);
+            //                StartCoroutine(StickToGroundRoutine(GroundPosition().y));
+            //                //m_currentAttackCoroutine = StartCoroutine(ChainedBashIRoutine());
+            //                m_currentAttackCoroutine = StartCoroutine(LeapAttackRoutine(leapCount));
+            //                m_leapRoutine = m_currentAttackCoroutine;
+            //            }
+            //            else
+            //            {
+            //                MoveToTarget(m_info.leapAttack.range);
+            //            }
+            //            break;
+
+            //        case Phase.PhaseTwo:
+            //            StartCoroutine(PhaseDischarge());
+            //            break;
+
+            //        case Phase.PhaseThree:
+            //            StartCoroutine(PhaseDischarge());
+            //            break;
+            //    }
+            //    ChooseAttack(m_currentPhaseIndex); 
+
+        //m_patternDecider.DecideOnAttack();
+        //m_chosenPattern = m_patternDecider.chosenAttack.attack;
+            #endregion
         }
+
 
         private void IsAllAttackComplete()
         {
@@ -1848,7 +1808,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             for (int i = 0; i < list.Length; i++)
             {
-                m_attackCache[i]=list[i];
+                m_attackCache[i] = list[i];
             }
         }
 
@@ -1977,6 +1937,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     }
                     break;
                 case State.Phasing:
+                    //Stop Everything Else Before Change Phase
                     StartCoroutine(ChangePhaseRoutine());
                     break;
                 case State.Turning:
@@ -1986,80 +1947,122 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_movement.Stop();
                     break;
                 case State.Attacking:
-                    if (IsFacingTarget())
+                    if (m_isBuffed)
                     {
-                        /*switch (m_chosenPattern)
+                        if (IsFacingTarget())
                         {
-                            case Pattern.AttackPattern1:
-                                
-                                UpdateRangeCache(m_info.chainShockAttack.range, m_info.chainFistPunchAttack.range, m_info.punchComboAttack.range, m_info.lightningStompAttack.range, m_currentPhaseIndex != 3 ? m_info.shoulderBashAttack.range : m_info.lightningStompAttack.range, m_info.chainbash1Attack.range);
-                                ExecuteAttack(0);
-                                break;
-                            case Pattern.AttackPattern2:
-                                UpdateRangeCache(m_info.chainShockAttack.range, m_info.chainFistPunchAttack.range, m_info.punchComboAttack.range, m_info.lightningStompAttack.range, m_currentPhaseIndex != 3 ? m_info.shoulderBashAttack.range : m_info.chainShockAttack.range, m_info.chainbash1Attack.range);
-                                ExecuteAttack(1);
-                                break;
-                            case Pattern.AttackPattern3:
-                                UpdateRangeCache(m_info.chainShockAttack.range, m_currentPhaseIndex != 3 ? m_info.chainFistPunchAttack.range : m_info.chainShockAttack.range, m_info.lightningStompAttack.range, m_info.chainbash1Attack.range, m_info.chainbash1Attack.range);
-                                ExecuteAttack(2);
-                                break;
-                            case Pattern.AttackPattern4:
-                                if (AllowAttack(3, State.Chasing))
+                            if (IsTargetInRange(m_currentAttackRange))
+                            {
+                                ExecuteAttack();
+                            }
+                            else
+                            {
+                                MoveToTarget(m_currentAttackRange);
+                            }
+                        }
+                        else
+                        {
+                            m_turnState = State.Attacking;
+                            if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation.animation)
+                                m_stateHandle.SetState(State.Turning);
+                        }
+                    }
+                    else if (m_attackCount >= m_attackSpecialAttackLimit)
+                    {
+                        switch (m_phaseHandle.currentPhase)
+                        {
+                            case Phase.PhaseOne:
+                                if (IsTargetInRange(m_info.leapAttack.range))
                                 {
-                                    if (IsTargetInRange(m_info.leapAttack.range))
-                                    {
-                                        m_stateHandle.Wait(State.Chasing);
-                                        StartCoroutine(StickToGroundRoutine(GroundPosition().y));
-                                        m_currentAttackCoroutine = StartCoroutine(LeapAttackRoutine(3));
-                                    }
-                                    else
-                                    {
-                                        MoveToTarget(m_info.leapAttack.range);
-                                    }
+                                    m_attackCount = 0;
+                                    var leapCount = 3;
+                                    m_stateHandle.Wait(State.Chasing);
+                                    StartCoroutine(StickToGroundRoutine(GroundPosition().y));
+                                    //m_currentAttackCoroutine = StartCoroutine(ChainedBashIRoutine());
+                                    m_currentAttackCoroutine = StartCoroutine(LeapAttackRoutine(leapCount));
+                                    m_leapRoutine = m_currentAttackCoroutine;
+                                }
+                                else
+                                {
+                                    MoveToTarget(m_info.leapAttack.range);
                                 }
                                 break;
-                        }
-                        switch (m_chosenPattern)
-                        {
-                            case Pattern.AttackPattern1:
-                                Debug.Log("Chosen 1");
-                                UpdateRangeCache(m_info.shoulderBashAttack.range, m_info.leapAttack.range);
-                                ExecuteAttack(0);
-                                break;
-                            case Pattern.AttackPattern2:
-                                Debug.Log("Chosen 2");
-                                UpdateRangeCache(m_info.chainFistPunchAttack.range);
-                                ExecuteAttack(1);
-                                break;
-                            case Pattern.AttackPattern3:
-                                Debug.Log("Chosen 3");
-                                UpdateRangeCache(m_info.punchComboAttack.range);
-                                ExecuteAttack(2);
-                                break;
-                        }
-                        */
-                        switch (m_currentPhaseIndex)
-                        {
-                            case 1:
-
-                                ExecuteAttack(1);
-                                break;
-                            case 2:
-
-                                ExecuteAttack(2);
-                                break;
-
-                            case 3:
-
-                                ExecuteAttack(3);
+                            case Phase.PhaseTwo:
+                            case Phase.PhaseThree:
+                                m_attackCount = 0;
+                                StartCoroutine(PhaseDischarge());
                                 break;
                         }
                     }
                     else
                     {
-                        m_turnState = State.Attacking;
-                        if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation.animation)
-                            m_stateHandle.SetState(State.Turning);
+                        if (IsFacingTarget())
+                        {
+                            #region DELETE THIS LATER
+                            /*switch (m_chosenPattern)
+                                            {
+                                                case Pattern.AttackPattern1:
+
+                                                    UpdateRangeCache(m_info.chainShockAttack.range, m_info.chainFistPunchAttack.range, m_info.punchComboAttack.range, m_info.lightningStompAttack.range, m_currentPhaseIndex != 3 ? m_info.shoulderBashAttack.range : m_info.lightningStompAttack.range, m_info.chainbash1Attack.range);
+                                                    ExecuteAttack(0);
+                                                    break;
+                                                case Pattern.AttackPattern2:
+                                                    UpdateRangeCache(m_info.chainShockAttack.range, m_info.chainFistPunchAttack.range, m_info.punchComboAttack.range, m_info.lightningStompAttack.range, m_currentPhaseIndex != 3 ? m_info.shoulderBashAttack.range : m_info.chainShockAttack.range, m_info.chainbash1Attack.range);
+                                                    ExecuteAttack(1);
+                                                    break;
+                                                case Pattern.AttackPattern3:
+                                                    UpdateRangeCache(m_info.chainShockAttack.range, m_currentPhaseIndex != 3 ? m_info.chainFistPunchAttack.range : m_info.chainShockAttack.range, m_info.lightningStompAttack.range, m_info.chainbash1Attack.range, m_info.chainbash1Attack.range);
+                                                    ExecuteAttack(2);
+                                                    break;
+                                                case Pattern.AttackPattern4:
+                                                    if (AllowAttack(3, State.Chasing))
+                                                    {
+                                                        if (IsTargetInRange(m_info.leapAttack.range))
+                                                        {
+                                                            m_stateHandle.Wait(State.Chasing);
+                                                            StartCoroutine(StickToGroundRoutine(GroundPosition().y));
+                                                            m_currentAttackCoroutine = StartCoroutine(LeapAttackRoutine(3));
+                                                        }
+                                                        else
+                                                        {
+                                                            MoveToTarget(m_info.leapAttack.range);
+                                                        }
+                                                    }
+                                                    break;
+                                            }
+                                            switch (m_chosenPattern)
+                                            {
+                                                case Pattern.AttackPattern1:
+                                                    Debug.Log("Chosen 1");
+                                                    UpdateRangeCache(m_info.shoulderBashAttack.range, m_info.leapAttack.range);
+                                                    ExecuteAttack(0);
+                                                    break;
+                                                case Pattern.AttackPattern2:
+                                                    Debug.Log("Chosen 2");
+                                                    UpdateRangeCache(m_info.chainFistPunchAttack.range);
+                                                    ExecuteAttack(1);
+                                                    break;
+                                                case Pattern.AttackPattern3:
+                                                    Debug.Log("Chosen 3");
+                                                    UpdateRangeCache(m_info.punchComboAttack.range);
+                                                    ExecuteAttack(2);
+                                                    break;
+                                            }
+                                            */
+                            #endregion
+                            do
+                            {
+                                ChooseAttack(m_currentPhaseIndex);
+                            } while (IsTargetInRange(m_currentAttackRange) == false);
+
+                            ExecuteAttack();
+                        }
+                        else
+                        {
+                            m_turnState = State.Attacking;
+                            if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation.animation)
+                                m_stateHandle.SetState(State.Turning);
+                        }
                     }
 
                     break;
