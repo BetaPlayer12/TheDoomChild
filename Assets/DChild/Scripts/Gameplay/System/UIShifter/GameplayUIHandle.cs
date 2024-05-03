@@ -14,6 +14,7 @@ using Doozy.Runtime.Signals;
 using Doozy.Runtime.UIManager.Containers;
 using Holysoft.Event;
 using Sirenix.OdinInspector;
+using System;
 using UnityEngine;
 
 namespace DChild.Gameplay.Systems
@@ -272,12 +273,18 @@ namespace DChild.Gameplay.Systems
         {
             m_notificationManager.InitializeFullPriorityHandling();
             m_notificationManager.InitializePromptPriorityHandling();
+            GameplaySystem.campaignSerializer.PostDeserialization += OnPostDeserialization;
         }
 
         public void OpenWeaponUpgradeConfirmationWindow()
         {
             m_upgradeWeaponHandler.RequestUpgrade();
             m_confirmationWindowSignal.SendSignal();
+        }
+
+        private void OnPostDeserialization(object sender, CampaignSlotUpdateEventArgs eventArgs)
+        {
+            m_navMap.ForceMapUpdateOnNextOpen();
         }
     }
 }
