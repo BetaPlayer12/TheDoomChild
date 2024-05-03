@@ -503,6 +503,13 @@ namespace DChild.Gameplay.Characters.Enemies
         private Animator m_rayOfFrostAnimatorLeft;
         [SerializeField, TabGroup("FX animator")]
         private Animator m_dragonsBreathAnimator;
+        [SerializeField, TabGroup("Book Particle FX")]
+        private ParticleSystem m_FireFX;
+        [SerializeField, TabGroup("Book Particle FX")]
+        private ParticleSystem m_ElectricFX;
+        [SerializeField, TabGroup("Book Particle FX")]
+        private ParticleSystem m_IceFX;
+   
         //[SerializeField, TabGroup("FX animator")]
         //private Animator m_dragonsBreathAnimatorFxSide1;
         //[SerializeField, TabGroup("FX animator")]
@@ -642,6 +649,9 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_lazerBeamCoroutine = null;
             }
             enabled = true;
+            m_FireFX.Stop();
+            m_ElectricFX.Stop();
+            m_IceFX.Stop();
             m_damageable.DamageTaken -= DemonLordAI_DamageTaken;
             m_demonLordSummonDragon.SpellEnd -= SpellEndEventSummonDragon;
             m_isDemonLordHit = false;
@@ -764,6 +774,9 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void EndAttacks()
         {
+            m_FireFX.Stop();
+            m_ElectricFX.Stop();
+            m_IceFX.Stop();
             m_rayOfFrostAnimatorLeft.gameObject.SetActive(false);
             m_rayOfFrostAnimatorRight.gameObject.SetActive(false);
             m_fireController.RemoveDamageCollider();
@@ -992,11 +1005,15 @@ namespace DChild.Gameplay.Characters.Enemies
             //    }
             //    while (IsFacingTarget() == false);
             //}
+            m_IceFX.Play();
+            yield return new WaitForSeconds(0.5f);
+            m_IceFX.Stop();
             m_animation.DisableRootMotion();
             m_animation.SetAnimation(0, m_info.rayOfFrostAttack.animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.rayOfFrostAttack.animation);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             yield return new WaitForSeconds(0.5f);
+            m_IceFX.Stop();
             m_attackDecider.hasDecidedOnAttack = false;
             m_currentAttackCoroutine = null;
             m_stateHandle.ApplyQueuedState();
@@ -1375,7 +1392,6 @@ namespace DChild.Gameplay.Characters.Enemies
             m_fireController.DragonBreathTrailAnimatorStateChecker();
             m_fireController.gameObject.SetActive(false);
             m_fireController.m_isFireRoutineDone = false;
-            yield return new WaitForSeconds(0.5f);
             m_fireController.gameObject.SetActive(true);
            // m_fireController.SetActiveDragonTrail(true);
             while (Vector3.Distance(transform.position, positionForDragonsBreath.position) > 0.5f)
@@ -1399,6 +1415,9 @@ namespace DChild.Gameplay.Characters.Enemies
                 while (m_character.facing == HorizontalDirection.Left);
 
             }
+            m_FireFX.Play();
+            yield return new WaitForSeconds(0.5f);
+            m_FireFX.Stop();
             m_animation.SetAnimation(0, m_info.dragonBreathAnticipation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.dragonBreathAnticipation.animation);
             m_animation.SetAnimation(0, m_info.dragonBreathAttackRight, false);
@@ -1409,6 +1428,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_fireController.StartDragonsRoutine();
             m_attackDecider.hasDecidedOnAttack = false;
             m_currentAttackCoroutine = null;
+            m_FireFX.Stop();
             m_stateHandle.ApplyQueuedState();
             Debug.Log("Done Dragons breath");
             yield return null;
@@ -1433,6 +1453,9 @@ namespace DChild.Gameplay.Characters.Enemies
                 Debug.Log("papuntang langit boss");
                 yield return null;
             }
+            m_FireFX.Play();
+            yield return new WaitForSeconds(0.5f);
+            m_FireFX.Stop();
             m_animation.SetAnimation(0, m_info.summonDragonAnticipation.animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.summonDragonAnticipation.animation);
             m_animation.SetAnimation(0, m_info.summonDragonAttack.animation, false);
@@ -1447,6 +1470,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_isSpellDoneSummonDragon = false;
             m_attackDecider.hasDecidedOnAttack = false;
             m_currentAttackCoroutine = null;
+            m_FireFX.Stop();
             m_stateHandle.ApplyQueuedState();
             Debug.Log("Gwa laser done boss ");
             yield return null;
@@ -1490,6 +1514,9 @@ namespace DChild.Gameplay.Characters.Enemies
                 while (m_character.facing == HorizontalDirection.Left);
 
             }
+            m_FireFX.Play();
+            yield return new WaitForSeconds(0.5f);
+            m_FireFX.Stop();
             m_animation.SetAnimation(0, m_info.dragonBreathAnticipation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.dragonBreathAnticipation.animation);
             m_animation.SetAnimation(0, m_info.dragonBreathAttackRight, false);
@@ -1500,6 +1527,9 @@ namespace DChild.Gameplay.Characters.Enemies
             m_fireController.StartDragonsRoutine();
 
             m_demonLordSummonDragon.SpellEnd += SpellEndEventSummonDragon;
+            m_FireFX.Play();
+            yield return new WaitForSeconds(0.5f);
+            m_FireFX.Stop();
             m_animation.SetAnimation(0, m_info.summonDragonAnticipation.animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.summonDragonAnticipation.animation);
             m_animation.SetAnimation(0, m_info.summonDragonAttack.animation, false);
@@ -1517,12 +1547,16 @@ namespace DChild.Gameplay.Characters.Enemies
             m_currentAttackCoroutine = null;
             m_stateHandle.ApplyQueuedState();
             Debug.Log("SummonDragon");
+            m_FireFX.Stop();
             yield return null;
         }
         private IEnumerator IceShardRoutine()
         {
             //any position? 
+            m_IceFX.Play();
             m_animation.SetAnimation(0, m_info.iceShardAnticipation.animation, false);
+            yield return new WaitForSeconds(0.5f);
+            m_IceFX.Stop();
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.iceShardAnticipation.animation);
             m_animation.SetAnimation(0, m_info.iceShardAttack.animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.iceShardAttack.animation);
@@ -1531,6 +1565,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_currentAttackCoroutine = null;
             m_stateHandle.ApplyQueuedState();
             Debug.Log("Gwa shard done boss?");
+            m_IceFX.Stop();
             yield return null;
         }
         private void IceShardSpawn()
@@ -1559,6 +1594,9 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             Debug.Log("HOLY WEEK SPECIAL BY TOTO DRAGONS CALL ALIMAE");
             m_demonLordLightningConstellation.SpellEnd += M_demonLordLightningConstellation_SpellEnd1;
+            m_ElectricFX.Play();
+            yield return new WaitForSeconds(0.5f);
+            m_ElectricFX.Stop();
             m_animation.SetAnimation(0, m_info.lightningOrbSummonAnticipation.animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.lightningOrbSummonAnticipation.animation);
             m_animation.SetAnimation(0, m_info.lightningOrbSummonLoop, true);
@@ -1575,7 +1613,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_isCastingSpellDone = false;
             m_currentAttackCoroutine = null;
             m_stateHandle.ApplyQueuedState();
-
+            m_ElectricFX.Stop();
             //m_animation.SetAnimation(0, m_info.lightningOrbSummonLoop, false);
             //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.lightningOrbAttack.animation);
             yield return null;
@@ -1627,7 +1665,9 @@ namespace DChild.Gameplay.Characters.Enemies
                 // m_turnHandle.Execute(m_info.turnAnimation.animation, m_info.idleAnimation.animation);
                 m_turnHandle.ExecuteWithAnimationByPass();
             }
-
+            m_ElectricFX.Play();
+            yield return new WaitForSeconds(0.5f);
+            m_ElectricFX.Stop();
             Debug.Log(chosenlightingStrikePositioning.ToString());
             //m_demonLordLightningStrike.LightningStrikeSpawnPosition(lightStrikeSpawnPoint, lightningStrikeObject);
             m_animation.SetAnimation(0, m_info.lightningStrikeAnticipation.animation, false);
@@ -1637,7 +1677,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_info.lightningStrikeAttack.animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.lightningStrikeAttack.animation);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
-
+            m_ElectricFX.Stop();
             //m_attackDecider.hasDecidedOnAttack = false;
             //m_currentAttackCoroutine = null;
             //m_stateHandle.ApplyQueuedState();
