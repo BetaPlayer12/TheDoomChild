@@ -24,7 +24,7 @@ namespace DChild.Gameplay.Combat
         enum Phase
         {
             PhaseOne,
-            PhaseTwo, 
+            PhaseTwo,
             PhaseThree,
             PhaseFour,
         }
@@ -44,7 +44,10 @@ namespace DChild.Gameplay.Combat
 
         private void OnChangePhase(object sender, EventActionArgs eventArgs)
         {
-            m_currentPhase++;           
+            if (m_currentPhase < Phase.PhaseFour)
+            {
+                m_currentPhase++;
+            }
         }
 
         private void RestoreHPForPhaseChange()
@@ -60,11 +63,11 @@ namespace DChild.Gameplay.Combat
 
         public override void TakeDamage(int totalDamage, DamageType type)
         {
-            if(totalDamage < base.health.currentValue)
+            if (totalDamage < base.health.currentValue)
             {
                 base.TakeDamage(totalDamage, type);
             }
-            else if(totalDamage >= base.health.currentValue) 
+            else if (totalDamage >= base.health.currentValue)
             {
                 if (m_currentPhase == Phase.PhaseThree)
                 {
@@ -72,14 +75,18 @@ namespace DChild.Gameplay.Combat
                     m_currentPhase = Phase.PhaseFour;
                     PhaseChangeTime?.Invoke(this, new EventActionArgs());
                 }
-                else if(m_currentPhase < Phase.PhaseThree)
+                else if (m_currentPhase < Phase.PhaseThree)
                 {
                     Debug.Log("Phase Change Time!");
                     PhaseChangeTime?.Invoke(this, new EventActionArgs());
-                    if(m_kingPusUIHandle == null)
+                    if (m_kingPusUIHandle == null)
                     {
                         RestoreHPForPhaseChange();
                     }
+                }
+                else if (m_currentPhase == Phase.PhaseFour)
+                {
+                    CallDestroyed();
                 }
             }
         }
