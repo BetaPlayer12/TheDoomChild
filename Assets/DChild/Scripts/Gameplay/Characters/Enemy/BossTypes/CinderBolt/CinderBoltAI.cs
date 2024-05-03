@@ -464,6 +464,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private GameObject m_steamThrustFX;
         [SerializeField, TabGroup("FX")]
         private ParticleFX m_boosterChargeFX;
+        [SerializeField, TabGroup("FX")]
+        private GameObject RecoveryFX;
 
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_groundSensor;
@@ -523,6 +525,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private Collider2D m_meteorSmashCollider, m_overchargedMeteorSmashCollider;
         [SerializeField, TabGroup("Attack Colliders")]
         private List<Collider2D> m_spinAttackCollider, m_overchargedSpinAttackCollider;
+        [SerializeField, TabGroup("Attack Colliders")]
+        private List<Collider2D> m_recoveryDamageCollider;
 
         private Coroutine m_changeLocationRoutine;
         private bool m_isDetecting;
@@ -1040,7 +1044,19 @@ namespace DChild.Gameplay.Characters.Enemies
             }
             m_steamThrustFX.SetActive(false);
             m_movement.Stop();
-            CustomTurn();
+            for (int i = 1; i < m_firebeamTransformPoints.Count; i++)
+            {
+                if ((closestPointIndex + 1) % 2 == 0)
+                {
+                    transform.localScale = new Vector3(-1, 1, 1);
+                    m_character.SetFacing(HorizontalDirection.Left);
+                }
+                else
+                {
+                    transform.localScale = new Vector3(1, 1, 1);
+                    m_character.SetFacing(HorizontalDirection.Right);
+                }
+            }
             m_animation.SetAnimation(0, m_info.overchargedFirebeamAttack, false);
             //yield return new WaitForSeconds(1f);
             m_firebeamCollider.enabled = true;
@@ -1059,6 +1075,7 @@ namespace DChild.Gameplay.Characters.Enemies
             enabled = false;/*
             m_longD.enabled = false;
             m_overchargedLongD.enabled = true;*/
+            var targetPos = m_targetInfo.position.x;
             m_steamThrustFX.SetActive(false);
             yield return new WaitForSeconds(0.5f);
             m_hitbox.SetInvulnerability(Invulnerability.MAX);
@@ -1066,7 +1083,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_movement.Stop();
             m_animation.SetAnimation(0, m_info.overchargedShortDash, false);
             m_shortDashFX.Play();
-            m_movement.MoveTowards(new Vector2(m_targetInfo.position.x - transform.position.x, 0).normalized, m_info.shortDash.speed * 2);
+            m_movement.MoveTowards(new Vector2(targetPos - transform.position.x, 0).normalized, m_info.shortDash.speed * 2);
             //m_movement.Stop();
             m_overchargedLongDashCollider.enabled = true;
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.overchargedShortDash);
@@ -1099,6 +1116,7 @@ namespace DChild.Gameplay.Characters.Enemies
             enabled = false;/*
             m_longD.enabled = false;
             m_overchargedLongD.enabled = true;*/
+            var targetPos = m_targetInfo.position.x;
             m_steamThrustFX.SetActive(false);
             yield return new WaitForSeconds(0.5f);
             m_hitbox.SetInvulnerability(Invulnerability.MAX);
@@ -1107,7 +1125,7 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return new WaitForSeconds(2f);
             m_animation.SetAnimation(0, m_info.overchargedLongDash, false);
             m_longDashFX.Play();
-            m_movement.MoveTowards(new Vector2(m_targetInfo.position.x - transform.position.x, 0).normalized, m_info.longDash.speed * 2);
+            m_movement.MoveTowards(new Vector2(targetPos - transform.position.x, 0).normalized, m_info.longDash.speed * 2);
             m_animation.SetAnimation(0, m_info.longDashStopAnimation, false);
             //m_movement.Stop();
             m_overchargedLongDashCollider.enabled = true;
@@ -1133,14 +1151,27 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return new WaitForSeconds(0.5f);
             m_runeDuration = 5;
             //m_stateHandle.Wait(State.Chasing);
+            Vector2 targetPoint = m_targetInfo.position;
+            var direction = (targetPoint - (Vector2)transform.position).normalized;
+            m_steamThrustFX.SetActive(true);
+            while (Vector2.Distance(transform.position, targetPoint) > m_info.punchAttack.range + 10f)
+            {
+                m_animation.SetAnimation(0, m_info.move, true);
+                m_movement.MoveTowards(direction, m_info.move.speed);
+                yield return null;
+            }
             m_movement.Stop();
             m_animation.SetAnimation(0, m_info.overchargedShotgunBlastPreAnimation, false);
             Vector2 spitPos = m_projectilePoints.transform.position;
-            Vector3 v_diff = (m_targetInfo.position - spitPos);
+            Vector3 v_diff = (targetPoint - spitPos);
             float atan2 = Mathf.Atan2(v_diff.y, v_diff.x);
             var aimRotation = atan2 * Mathf.Rad2Deg;
             aimRotation -= 5f;
             ProjectileLaunchHandle overchargeLaunchHandle = new ProjectileLaunchHandle();
+            
+            //m_projectileLauncher.AimAt(m_targetInfo.position);
+            m_animation.SetAnimation(0, m_info.overchargedShotgunBlastFireAttack, false);
+            //m_projectileLauncher.LaunchProjectile();
             yield return new WaitForSeconds(1f);
             for (int i = 0; i < 3; i++)
             {
@@ -1148,14 +1179,11 @@ namespace DChild.Gameplay.Characters.Enemies
                 Debug.Log("To");
                 var spawnDirection = m_projectilePoints.transform.right;
                 Debug.Log("mm");
-       
+
                 overchargeLaunchHandle.Launch(m_info.overchargedBulletProjectile.projectileInfo.projectile, m_projectilePoints.transform.position, spawnDirection, m_info.overchargedBulletProjectile.projectileInfo.speed);
                 Debug.Log("i");
                 aimRotation += 5f;
             }
-            //m_projectileLauncher.AimAt(m_targetInfo.position);
-            m_animation.SetAnimation(0, m_info.overchargedShotgunBlastFireAttack, false);
-            //m_projectileLauncher.LaunchProjectile();
             yield return new WaitForSeconds(1f);
             m_animation.SetAnimation(0, m_info.overchargedShotgunBlastBackToIdleAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.overchargedShotgunBlastBackToIdleAnimation);
@@ -1426,6 +1454,8 @@ namespace DChild.Gameplay.Characters.Enemies
             var direction = m_character.facing == HorizontalDirection.Right ? Vector2.right : Vector2.left;
             //transform.localScale = GetComponentInParent<Character>().transform.localScale;
 
+            var contactFilter = new ContactFilter2D();
+            contactFilter.useTriggers = false;
             RaycastHit2D hit = Physics2D.Raycast(/*m_projectilePoint.position*/startPoint, direction, 1000, DChildUtility.GetEnvironmentMask());
             //Debug.DrawRay(startPoint, direction);
             //Debug.Log(hit)
@@ -1450,6 +1480,7 @@ namespace DChild.Gameplay.Characters.Enemies
             }
 
             yield return new WaitUntil(() => m_beamOn);
+            m_firebeamCollider.enabled = true;
             StopCoroutine(m_aimRoutine);
             m_laserOriginMuzzleFX.Play();
             //m_muzzleFXGO.SetActive(true);
@@ -1477,6 +1508,9 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_Points.Clear();
                 yield return null;
             }
+
+
+            m_firebeamCollider.enabled = false;
 
             m_laserOriginMuzzleFX.Stop();
             m_muzzleLoopFX.Stop();
@@ -1546,14 +1580,24 @@ namespace DChild.Gameplay.Characters.Enemies
             }
             m_steamThrustFX.SetActive(false);
             m_movement.Stop();
-            CustomTurn();
+            for (int i = 1; i < m_firebeamTransformPoints.Count; i++)
+            {
+                if ((closestPointIndex + 1) % 2 == 0)
+                {
+                    transform.localScale = new Vector3(-1, 1, 1);
+                    m_character.SetFacing(HorizontalDirection.Left);
+                }
+                else
+                {
+                    transform.localScale = new Vector3(1, 1, 1);
+                    m_character.SetFacing(HorizontalDirection.Right);
+                }
+            }
             m_animation.SetAnimation(0, m_info.firebeamAttack, false);
             yield return new WaitForSeconds(0.25f);
             StartCoroutine(FirebeamLaserRoutine());
-            yield return new WaitForSeconds(0.25f);
-            m_firebeamCollider.enabled = true;
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.firebeamAttack);
-            m_firebeamCollider.enabled = false;
+            //m_firebeamCollider.enabled = false;
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             DecidedOnAttack(false);
             m_currentAttackCoroutine = null;
@@ -1566,6 +1610,7 @@ namespace DChild.Gameplay.Characters.Enemies
             enabled = false;/*
             m_longD.enabled = true;
             m_overchargedLongD.enabled = false;*/
+            var targetPos = m_targetInfo.position.x;
             m_steamThrustFX.SetActive(false);
             yield return new WaitForSeconds(0.5f);
             m_hitbox.SetInvulnerability(Invulnerability.MAX);
@@ -1573,7 +1618,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_movement.Stop();
             m_animation.SetAnimation(0, m_info.shortDash, false);
             m_shortDashFX.Play();
-            m_movement.MoveTowards(new Vector2(m_targetInfo.position.x - transform.position.x, 0).normalized, m_info.shortDash.speed);
+            m_movement.MoveTowards(new Vector2(targetPos - transform.position.x, 0).normalized, m_info.shortDash.speed);
             //m_movement.Stop();
             m_longDashCollider.enabled = true;
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.shortDash);
@@ -1606,6 +1651,7 @@ namespace DChild.Gameplay.Characters.Enemies
             enabled = false;/*
             m_longD.enabled = true;
             m_overchargedLongD.enabled = false;*/
+            var targetPos = m_targetInfo.position.x;
             m_steamThrustFX.SetActive(false);
             yield return new WaitForSeconds(0.5f);
             m_hitbox.SetInvulnerability(Invulnerability.MAX);
@@ -1615,7 +1661,7 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_stateHandle.Wait(State.Chasing);
             m_animation.SetAnimation(0, m_info.longDashAttack, false);
             m_longDashFX.Play();
-            m_movement.MoveTowards(new Vector2(m_targetInfo.position.x - transform.position.x, 0).normalized, m_info.longDash.speed);
+            m_movement.MoveTowards(new Vector2(targetPos - transform.position.x, 0).normalized, m_info.longDash.speed);
             m_animation.SetAnimation(0, m_info.longDashStopAnimation, false);
             //m_movement.Stop();
             m_longDashCollider.enabled = true;
@@ -1658,18 +1704,33 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             enabled = false;/*
             m_shotG.enabled = true;*/
-            m_steamThrustFX.SetActive(false);
+            //m_steamThrustFX.SetActive(false);
             yield return new WaitForSeconds(0.5f);
             m_runeDuration = 5;
+            Vector2 targetPoint = m_targetInfo.position;
+            var direction = (targetPoint - (Vector2)transform.position).normalized;
+            m_steamThrustFX.SetActive(true);
+            while (Vector2.Distance(transform.position, targetPoint) > m_info.punchAttack.range + 10f)
+            {
+                m_animation.SetAnimation(0, m_info.move, true);
+                m_movement.MoveTowards(direction, m_info.move.speed);
+                yield return null;
+            }
             //m_stateHandle.Wait(State.Chasing);
+            m_steamThrustFX.SetActive(false);
             m_movement.Stop();
             m_animation.SetAnimation(0, m_info.shotgunBlastPreAnimation, false);
             Vector2 spitPos = m_projectilePoints.transform.position;
-            Vector3 v_diff = (m_targetInfo.position - spitPos);
+            Vector3 v_diff = (targetPoint - spitPos);
             float atan2 = Mathf.Atan2(v_diff.y, v_diff.x);
             var aimRotation = atan2 * Mathf.Rad2Deg;
             aimRotation -= 5f;
             ProjectileLaunchHandle launchHandle = new ProjectileLaunchHandle();
+            //yield return new WaitForSeconds(1.5f);
+            
+            //m_projectileLauncher.AimAt(m_targetInfo.position);
+            m_animation.SetAnimation(0, m_info.shotgunBlastFireAttack, false);
+            yield return new WaitForSeconds(0.5f);
             for (int i = 0; i < 3; i++)
             {
                 m_projectilePoints.transform.rotation = Quaternion.Euler(0f, 0f, aimRotation);
@@ -1680,9 +1741,6 @@ namespace DChild.Gameplay.Characters.Enemies
                 Debug.Log("ro");
                 aimRotation += 5f;
             }
-            //m_projectileLauncher.AimAt(m_targetInfo.position);
-            m_animation.SetAnimation(0, m_info.shotgunBlastFireAttack, false);
-            yield return new WaitForSeconds(0.5f);
             //m_projectileLauncher.LaunchProjectile();
             yield return new WaitForSeconds(0.5f);
             m_animation.SetAnimation(0, m_info.shotgunBlastBackToIdleAnimation, false);
@@ -1940,11 +1998,11 @@ namespace DChild.Gameplay.Characters.Enemies
                             {
                                 if (!m_isRaging)
                                 {
-                                    m_currentAttackCoroutine = StartCoroutine(Flamethrower1Routine());
+                                    m_currentAttackCoroutine = StartCoroutine(ShotgunBlastRoutine());
                                 }
                                 else
                                 {
-                                    m_currentAttackCoroutine = StartCoroutine(OverchargedFlamethrower1Routine());
+                                    m_currentAttackCoroutine = StartCoroutine(OverchargedShotgunBlastRoutine());
                                 }
                             }
                             Debug.Log("Flamethrower1 finished or cancelled");
@@ -2383,7 +2441,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_longD.SetActive(true);
             m_overchargedLongD.SetActive(false);
             m_shotG.SetActive(true);
-            m_overchargedShotG.SetActive(false);
+            m_overchargedShotG.SetActive(true);
             m_meteor.SetActive(true);
             m_overchargedMeteor.SetActive(false);
             m_flamethrower2.SetActive(true);
@@ -2416,7 +2474,15 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_info.malfunctionStateIdleAnimation, true);
             yield return new WaitForSeconds(5f);
             m_animation.SetAnimation(0, m_info.malfunctionRecoveryStateAnimation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.malfunctionRecoveryStateAnimation);
+            yield return new WaitForSeconds(1f);
+            RecoveryFX.SetActive(true);
+            m_recoveryDamageCollider[0].enabled = true;
+            m_recoveryDamageCollider[1].enabled = true;
+            yield return new WaitForSeconds(1f);
+            RecoveryFX.SetActive(false);/*
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.malfunctionRecoveryStateAnimation);*/
+            m_recoveryDamageCollider[0].enabled = false;
+            m_recoveryDamageCollider[1].enabled = false;
             m_steamMalfAndOver.Stop();
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_heatHandler.ResetHeat();
@@ -2477,7 +2543,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_firebeam.SetActive(false);
                 m_longD.SetActive(false);
                 m_overchargedLongD.SetActive(true);
-                m_shotG.SetActive(false);
+                m_shotG.SetActive(true);
                 m_overchargedShotG.SetActive(true);
                 m_meteor.SetActive(false);
                 m_overchargedMeteor.SetActive(true);
