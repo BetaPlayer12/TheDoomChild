@@ -1038,7 +1038,7 @@ namespace DChild.Gameplay.Characters.Enemies
             }
             Vector2 targetPoint = m_firebeamTransformPoints[closestPointIndex].position;
             var direction = (targetPoint - (Vector2)transform.position).normalized;
-            while (Vector2.Distance(transform.position, targetPoint) > 10f)
+            while (Vector2.Distance(transform.position, targetPoint) > 1f)
             {
                 // Move towards the target point
                 m_animation.SetAnimation(0, m_info.overchargedMove, true);
@@ -1096,7 +1096,8 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return new WaitForSeconds(.5f);
             if (!IsFacingTarget())
             {
-                CustomTurn();
+                transform.localScale = new Vector3(-transform.localScale.x, 1, 1);
+                m_character.SetFacing(transform.localScale.x == 1 ? HorizontalDirection.Right : HorizontalDirection.Left);
             }
             var randomAttackDecider = UnityEngine.Random.Range(0, 3);
             switch (randomAttackDecider)
@@ -1139,8 +1140,8 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return new WaitForSeconds(.5f);
             if (!IsFacingTarget())
             {
-                /*m_animation.SetAnimation(0, m_info.turnAnimation, false);*/
-                CustomTurn();
+                transform.localScale = new Vector3(-transform.localScale.x, 1, 1);
+                m_character.SetFacing(transform.localScale.x == 1 ? HorizontalDirection.Right : HorizontalDirection.Left);
             }
             StartCoroutine(OverchargedPunchAttackRoutine());
             yield return null;
@@ -1225,7 +1226,7 @@ namespace DChild.Gameplay.Characters.Enemies
             var m_followDuration = 10f;
             while (m_followElapsedTime < m_followDuration)
             {
-                m_movement.MoveTowards(new Vector2((m_targetInfo.position.x + 10f) - transform.position.x, 0).normalized, m_info.move.speed * 2);
+                m_movement.MoveTowards(new Vector2((m_targetInfo.position.x + (m_character.facing == HorizontalDirection.Left ? 10f : -10f)) - transform.position.x, 0).normalized, m_info.move.speed * 2);
                 m_followElapsedTime += Time.deltaTime;
                 if (!IsFacingTarget())
                 {
@@ -1609,7 +1610,7 @@ namespace DChild.Gameplay.Characters.Enemies
             }
             Vector2 targetPoint = m_firebeamTransformPoints[closestPointIndex].position;
             var direction = (targetPoint - (Vector2)transform.position).normalized;
-            while (Vector2.Distance(transform.position, targetPoint) > 10f)
+            while (Vector2.Distance(transform.position, targetPoint) > 1f)
             {
                 // Move towards the target point
                 m_animation.SetAnimation(0, m_info.move, true);
@@ -1666,7 +1667,8 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return new WaitForSeconds(.5f);
             if (!IsFacingTarget())
             {
-                CustomTurn();
+                transform.localScale = new Vector3(-transform.localScale.x, 1, 1);
+                m_character.SetFacing(transform.localScale.x == 1 ? HorizontalDirection.Right : HorizontalDirection.Left);
             }
             var randomAttackDecider = UnityEngine.Random.Range(0, 3);
             switch (randomAttackDecider)
@@ -1765,7 +1767,6 @@ namespace DChild.Gameplay.Characters.Enemies
             aimRotation -= 5f;
             ProjectileLaunchHandle launchHandle = new ProjectileLaunchHandle();
             //yield return new WaitForSeconds(1.5f);
-            
             //m_projectileLauncher.AimAt(m_targetInfo.position);
             m_animation.SetAnimation(0, m_info.shotgunBlastFireAttack, false);
             yield return new WaitForSeconds(0.5f);
@@ -1868,7 +1869,7 @@ namespace DChild.Gameplay.Characters.Enemies
             var m_followDuration = 10f;
             while (m_followElapsedTime < m_followDuration)
             {
-                m_movement.MoveTowards(new Vector2((m_targetInfo.position.x + 10f) - transform.position.x, 0).normalized, m_info.move.speed);
+                m_movement.MoveTowards(new Vector2((m_targetInfo.position.x + (m_character.facing == HorizontalDirection.Left? 10f : -10f)) - transform.position.x, 0).normalized, m_info.move.speed);
                 m_followElapsedTime += Time.deltaTime;
                 if (!IsFacingTarget())
                 {
@@ -2036,11 +2037,11 @@ namespace DChild.Gameplay.Characters.Enemies
                             {
                                 if (!m_isRaging)
                                 {
-                                    m_currentAttackCoroutine = StartCoroutine(Flamethrower1Routine());
+                                    m_currentAttackCoroutine = StartCoroutine(ShotgunBlastRoutine());
                                 }
                                 else
                                 {
-                                    m_currentAttackCoroutine = StartCoroutine(OverchargedFlamethrower1Routine());
+                                    m_currentAttackCoroutine = StartCoroutine(OverchargedShotgunBlastRoutine());
                                 }
                             }
                             Debug.Log("Flamethrower1 finished or cancelled");
