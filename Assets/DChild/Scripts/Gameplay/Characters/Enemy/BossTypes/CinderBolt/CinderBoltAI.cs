@@ -1515,6 +1515,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     {
                         pos = m_lineRenderer.GetPosition(i) - m_overchargeEdgeCollider.transform.position;
                     }
+                    pos.x *= (int)m_character.facing;
                     pos = new Vector2(pos.x, pos.y);
                     //if (i > 0)
                     //{
