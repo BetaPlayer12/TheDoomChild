@@ -446,6 +446,7 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField]
         private bool m_isBuffed;
         private bool m_playerIsHitFromPunchCombo; ///
+        private bool m_hasChosenAttack; //
         //private bool m_hasPhaseChanged;
         private Coroutine m_currentAttackCoroutine;
         private Coroutine m_leapRoutine;
@@ -635,11 +636,7 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return null;
             m_animation.SetAnimation(0, m_info.runAttackEndAnimation, false);
             m_movement.Stop();
-            if (m_phaseHandle.currentPhase == Phase.PhaseOne)
-            {
-                m_animation.SetAnimation(0, m_info.roarAnimation, false).MixDuration = 0;
-                yield return new WaitForAnimationComplete(m_animation.animationState, m_info.roarAnimation);
-            }
+            m_isBuffed = true;
             if (m_phaseHandle.currentPhase == Phase.PhaseTwo)
             {
                 m_animation.SetAnimation(0, m_info.roarAnimation, false).MixDuration = 0;
@@ -658,7 +655,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 PhaseDischargeAction?.Invoke(this, EventActionArgs.Empty);
             }
             //yield return new WaitForSeconds(3.9f);      
-            m_isBuffed = true;
+            m_hasChosenAttack = true;
             m_hitbox.SetInvulnerability(Invulnerability.None);
             StartCoroutine(StickToGroundRoutine(GroundPosition().y));
             //yield return StartCoroutine(LeapAttackRoutine(3));
@@ -722,6 +719,7 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 m_currentAttack = Attack.ShoulderBash;
                 m_currentAttackRange = m_info.shoulderBashAttack.range;
+                m_hasChosenAttack = true;
             }
             else
             {
@@ -1192,6 +1190,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     ChooseAttack(4);
                     break;
             }
+            m_hasChosenAttack = true;
             StartCoroutine(StickToGroundRoutine(GroundPosition().y));
             //yield return StartCoroutine(LeapAttackRoutine(3));
             m_stateHandle.ApplyQueuedState();
@@ -1393,7 +1392,9 @@ namespace DChild.Gameplay.Characters.Enemies
 
             m_attackDecider[2].SetList(new AttackInfo<Attack>(Attack.LeapAttack, m_info.leapAttack.range),
                                 new AttackInfo<Attack>(Attack.ChanFistPunch, m_info.chainFistPunchAttack.range),
-                                new AttackInfo<Attack>(Attack.ComboPunch, m_info.punchComboAttack.range)); // Moveset for Phase 2 and 3
+                                new AttackInfo<Attack>(Attack.ComboPunch, m_info.punchComboAttack.range),
+                                new AttackInfo<Attack>(Attack.RunAttack, m_info.runAttack.range),
+                                new AttackInfo<Attack>(Attack.ChainedBashI, m_info.chainbash1Attack.range)); // Moveset for Phase 2 and 3
 
             m_attackDecider[3].SetList(new AttackInfo<Attack>(Attack.ChainedBashI, m_info.chainbash1Attack.range),
                                 new AttackInfo<Attack>(Attack.ChanFistPunch, m_info.chainFistPunchAttack.range)); //moveset for Empowered phase 2
@@ -1628,7 +1629,7 @@ namespace DChild.Gameplay.Characters.Enemies
             */
             #endregion
             m_stateHandle.Wait(State.Attacking);
-
+            m_hasChosenAttack = false;
             switch (m_currentAttack)
             {
                 case Attack.ShoulderBash:
@@ -1702,6 +1703,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     }
                     break;
             }
+            
             #region DELETE THIS LATER
             //else
             //{/*
@@ -1775,8 +1777,8 @@ namespace DChild.Gameplay.Characters.Enemies
             //    }
             //    ChooseAttack(m_currentPhaseIndex); 
 
-        //m_patternDecider.DecideOnAttack();
-        //m_chosenPattern = m_patternDecider.chosenAttack.attack;
+            //m_patternDecider.DecideOnAttack();
+            //m_chosenPattern = m_patternDecider.chosenAttack.attack;
             #endregion
         }
 
@@ -1938,6 +1940,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     break;
                 case State.Phasing:
                     //Stop Everything Else Before Change Phase
+                    m_stateHandle.Wait(State.Attacking);
                     StartCoroutine(ChangePhaseRoutine());
                     break;
                 case State.Turning:
@@ -2050,12 +2053,35 @@ namespace DChild.Gameplay.Characters.Enemies
                                             }
                                             */
                             #endregion
-                            do
+                            if(!m_hasChosenAttack)
                             {
                                 ChooseAttack(m_currentPhaseIndex);
-                            } while (IsTargetInRange(m_currentAttackRange) == false);
-
-                            ExecuteAttack();
+                                m_hasChosenAttack = true;
+                            }
+                            if(m_currentPhaseIndex>=2)
+                            {
+                                int loopStopper = 0;
+                                do
+                                {
+                                    ChooseAttack(m_currentPhaseIndex);
+                                    loopStopper++;
+                                    if (loopStopper>50)
+                                    {
+                                        m_currentAttack = Attack.ChainedBashI;
+                                        m_currentAttackRange = m_info.chainbash1Attack.range;
+                                    }
+                                } while (IsTargetInRange(m_currentAttackRange) == false&&!m_isBuffed);
+                                ExecuteAttack();
+                            }else
+                            {
+                                if(IsTargetInRange(m_currentAttackRange))
+                                {
+                                    ExecuteAttack();
+                                }else
+                                {
+                                    MoveToTarget(m_currentAttackRange);
+                                }
+                            }
                         }
                         else
                         {
@@ -2064,7 +2090,6 @@ namespace DChild.Gameplay.Characters.Enemies
                                 m_stateHandle.SetState(State.Turning);
                         }
                     }
-
                     break;
 
                 case State.Chasing:
