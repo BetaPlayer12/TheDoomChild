@@ -617,6 +617,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator ChangePhaseRoutine()
         {
+            enabled = false;
             m_stateHandle.Wait(State.ReevaluateSituation);
             //m_hitbox.SetInvulnerability(Invulnerability.None);
             //m_hasPhaseChanged = false;
@@ -660,6 +661,7 @@ namespace DChild.Gameplay.Characters.Enemies
             StartCoroutine(StickToGroundRoutine(GroundPosition().y));
             //yield return StartCoroutine(LeapAttackRoutine(3));
             m_stateHandle.ApplyQueuedState();
+            enabled = true;
             yield return null;
         }
         #region Attacks
@@ -1154,6 +1156,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator PhaseDischarge()
         {
+            enabled = false;
             m_stateHandle.Wait(State.ReevaluateSituation);
             //m_hitbox.SetInvulnerability(Invulnerability.None);
             //m_hasPhaseChanged = false;
@@ -1194,6 +1197,7 @@ namespace DChild.Gameplay.Characters.Enemies
             StartCoroutine(StickToGroundRoutine(GroundPosition().y));
             //yield return StartCoroutine(LeapAttackRoutine(3));
             m_stateHandle.ApplyQueuedState();
+            enabled = true;
             yield return null;
         }
 
@@ -1261,7 +1265,6 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return null;
             if (m_isBuffed)
             {
-
                 m_currentAttack = Attack.ShockRampage;
                 m_currentAttackRange = m_info.shockRampageAttack.range;
             }
@@ -1399,7 +1402,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_attackDecider[3].SetList(new AttackInfo<Attack>(Attack.ChainedBashI, m_info.chainbash1Attack.range),
                                 new AttackInfo<Attack>(Attack.ChanFistPunch, m_info.chainFistPunchAttack.range)); //moveset for Empowered phase 2
 
-            m_attackDecider[4].SetList(new AttackInfo<Attack>(Attack.ChainedBashI, m_info.chainbash1Attack.range),
+            m_attackDecider[4].SetList(new AttackInfo<Attack>(Attack.ChainedBashII, m_info.chainbash1Attack.range),
                                 new AttackInfo<Attack>(Attack.LightningStomp, m_info.lightningStompAttack.range),
                                 new AttackInfo<Attack>(Attack.RunAttack, m_info.runAttack.range)); //moveset for emowered phase 3
             //UpdateRangeCache(m_info.shoulderBashAttack.range, m_info.chainFistPunchAttack.range, m_info.punchComboAttack.range);
@@ -1940,7 +1943,6 @@ namespace DChild.Gameplay.Characters.Enemies
                     break;
                 case State.Phasing:
                     //Stop Everything Else Before Change Phase
-                    m_stateHandle.Wait(State.Attacking);
                     StartCoroutine(ChangePhaseRoutine());
                     break;
                 case State.Turning:
@@ -1981,7 +1983,6 @@ namespace DChild.Gameplay.Characters.Enemies
                                     var leapCount = 3;
                                     m_stateHandle.Wait(State.Chasing);
                                     StartCoroutine(StickToGroundRoutine(GroundPosition().y));
-                                    //m_currentAttackCoroutine = StartCoroutine(ChainedBashIRoutine());
                                     m_currentAttackCoroutine = StartCoroutine(LeapAttackRoutine(leapCount));
                                     m_leapRoutine = m_currentAttackCoroutine;
                                 }
@@ -2094,8 +2095,11 @@ namespace DChild.Gameplay.Characters.Enemies
 
                 case State.Chasing:
                     DecidedOnAttack(false);
-                    ChooseAttack(m_currentPhaseIndex);
-                    if (m_attackDecider[m_currentPhaseIndex].hasDecidedOnAttack)
+                    if (!m_hasChosenAttack)
+                    {
+                        ChooseAttack(m_currentPhaseIndex);
+                    }
+                    if (m_attackDecider[m_currentPhaseIndex].hasDecidedOnAttack||m_hasChosenAttack)
                     {
                         m_stateHandle.SetState(State.Attacking);
                     }
