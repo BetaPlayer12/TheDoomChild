@@ -2037,11 +2037,11 @@ namespace DChild.Gameplay.Characters.Enemies
                             {
                                 if (!m_isRaging)
                                 {
-                                    m_currentAttackCoroutine = StartCoroutine(ShotgunBlastRoutine());
+                                    m_currentAttackCoroutine = StartCoroutine(Flamethrower1Routine());
                                 }
                                 else
                                 {
-                                    m_currentAttackCoroutine = StartCoroutine(OverchargedShotgunBlastRoutine());
+                                    m_currentAttackCoroutine = StartCoroutine(OverchargedFlamethrower1Routine());
                                 }
                             }
                             Debug.Log("Flamethrower1 finished or cancelled");
