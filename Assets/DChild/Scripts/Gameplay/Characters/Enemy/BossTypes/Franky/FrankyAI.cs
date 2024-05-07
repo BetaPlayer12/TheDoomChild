@@ -642,18 +642,19 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 m_animation.SetAnimation(0, m_info.roarAnimation, false).MixDuration = 0;
                 yield return null;
-
+                PhaseDischargeAction?.Invoke(this, EventActionArgs.Empty);
                 yield return new WaitForAnimationComplete(m_animation.animationState, m_info.roarAnimation);
                 ChooseAttack(3);
-                PhaseDischargeAction?.Invoke(this, EventActionArgs.Empty);
+                
             }
             if (m_phaseHandle.currentPhase == Phase.PhaseThree)
             {
                 m_animation.SetAnimation(0, m_info.roarAnimation, false).MixDuration = 0;
                 yield return null;
+                PhaseDischargeAction?.Invoke(this, EventActionArgs.Empty);
                 yield return new WaitForAnimationComplete(m_animation.animationState, m_info.roarAnimation);
                 ChooseAttack(4);
-                PhaseDischargeAction?.Invoke(this, EventActionArgs.Empty);
+                
             }
             //yield return new WaitForSeconds(3.9f);      
             m_hasChosenAttack = true;
@@ -851,12 +852,13 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return null;
             m_wallPosPoint.SetParent(null);
             m_wallPosPoint.position = WallPosition();
-            m_animation.SetAnimation(0, m_info.chainBash1AnimationStart.animation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.chainBash1AnimationStart);
+            //m_animation.SetAnimation(0, m_info.chainBash1AnimationStart.animation, false);
+            //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.chainBash1AnimationStart);
             var fistRefPointCollider = m_fistRefPoint.GetComponent<CircleCollider2D>();
             fistRefPointCollider.enabled = true;
             m_fistPoint.position = m_wristPoint.position;
-            m_animation.SetAnimation(0, m_info.hookTravelLoopAnimation, true);
+            //m_animation.SetAnimation(0, m_info.hookTravelLoopAnimation, true);
+            m_animation.SetAnimation(0, m_info.chainBash1AnimationStart.animation, false);
             while (Vector2.Distance(m_fistPoint.position, m_wallPosPoint.position) > 3f)
             {
                 m_fistPoint.position = Vector2.MoveTowards(m_fistPoint.position, m_wallPosPoint.position, 5f);
@@ -873,7 +875,7 @@ namespace DChild.Gameplay.Characters.Enemies
             StartCoroutine(StickToWallRoutine(m_wallPosPoint.position));
             GetComponentInChildren<SkeletonRenderer>().maskInteraction = SpriteMaskInteraction.VisibleOutsideMask;
             fistRefPointCollider.enabled = false;
-            //m_animation.SetAnimation(0, m_info.hookTravelLoopAnimation, true);
+            m_animation.SetAnimation(0, m_info.hookTravelLoopAnimation, true);
             while (Vector2.Distance(transform.position, m_fistPoint.position) > 15f)
             {
                 //Debug.Log(Vector2.Distance(transform.position, m_fistPoint.position));
@@ -925,12 +927,13 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return null;
             m_wallPosPoint.SetParent(null);
             m_wallPosPoint.position = WallPosition();
-            m_animation.SetAnimation(0, m_info.chainBash1AnimationStart.animation, false);
-            yield return new WaitForSeconds(.65f);
+            //m_animation.SetAnimation(0, m_info.chainBash1AnimationStart.animation, false);
+            //yield return new WaitForSeconds(.65f);
             var fistRefPointCollider = m_fistRefPoint.GetComponent<CircleCollider2D>();
             fistRefPointCollider.enabled = true;
             m_fistPoint.position = m_wristPoint.position;
-            m_animation.SetAnimation(0, m_info.hookTravelLoopAnimation, true);
+            //m_animation.SetAnimation(0, m_info.hookTravelLoopAnimation, true);
+            m_animation.SetAnimation(0, m_info.chainBash1AnimationStart.animation, false);
             while (Vector2.Distance(m_fistPoint.position, m_wallPosPoint.position) > 3f)
             {
                 m_fistPoint.position = Vector2.MoveTowards(m_fistPoint.position, m_wallPosPoint.position, 5f);
@@ -947,7 +950,7 @@ namespace DChild.Gameplay.Characters.Enemies
             StartCoroutine(StickToWallRoutine(m_wallPosPoint.position));
             GetComponentInChildren<SkeletonRenderer>().maskInteraction = SpriteMaskInteraction.VisibleOutsideMask;
             fistRefPointCollider.enabled = false;
-            //m_animation.SetAnimation(0, m_info.hookTravelLoopAnimation, true);
+            m_animation.SetAnimation(0, m_info.hookTravelLoopAnimation, true);
             while (Vector2.Distance(transform.position, m_fistPoint.position) > 15f)
             {
                 //Debug.Log(Vector2.Distance(transform.position, m_fistPoint.position));
