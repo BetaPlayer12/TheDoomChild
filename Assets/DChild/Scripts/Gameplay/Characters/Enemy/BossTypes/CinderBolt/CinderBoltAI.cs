@@ -955,7 +955,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_runeDuration = 5;
             Vector2 targetPoint = m_targetInfo.position;
             var direction = (targetPoint - (Vector2)transform.position).normalized;
-            while (Vector2.Distance(transform.position, targetPoint) > m_info.flameThrowerAttack.range)
+            while (Vector2.Distance(transform.position, targetPoint) > m_info.punchAttack.range)
             {
                 m_animation.SetAnimation(0, m_info.overchargedHoverForward, true);
                 m_movement.MoveTowards(direction, m_info.move.speed * 2);
@@ -976,8 +976,8 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.DisableRootMotion();
             m_currentAttackCoroutine = null;
             m_stateHandle.ApplyQueuedState();
-            yield return null;
             enabled = true;
+            yield return null;
         }
         private IEnumerator OverchargedSpinAttackRoutine()
         {
@@ -1242,7 +1242,7 @@ namespace DChild.Gameplay.Characters.Enemies
             Vector2 targetPoint = m_targetInfo.position;
             var direction = (targetPoint - (Vector2)transform.position).normalized;
             m_steamThrustFX.SetActive(true);
-            while (Vector2.Distance(transform.position, targetPoint) > m_info.punchAttack.range + 10f)
+            while (Vector2.Distance(transform.position, targetPoint) > m_info.punchAttack.range + 40f)
             {
                 m_animation.SetAnimation(0, m_info.move, true);
                 m_movement.MoveTowards(direction, m_info.move.speed);
@@ -1916,10 +1916,15 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_steamThrustFX.SetActive(false);
             yield return new WaitForSeconds(0.5f);
             m_runeDuration = 5;
-            Vector2 targetPoint = m_targetInfo.position;
-            var direction = (targetPoint - (Vector2)transform.position).normalized;
+            Vector2 targetPosition = m_targetInfo.position;
+            var direction = (targetPosition - (Vector2)transform.position).normalized;
+            Vector2 spitPos = m_projectilePoints.transform.position;
+            Vector3 v_diff = (targetPosition - spitPos);
+            float atan2 = Mathf.Atan2(v_diff.y, v_diff.x);
+            var aimRotation = atan2 * Mathf.Rad2Deg;
+            aimRotation -= 5f;
             m_steamThrustFX.SetActive(true);
-            while (Vector2.Distance(transform.position, targetPoint) > m_info.punchAttack.range + 40f)
+            while (Vector2.Distance(transform.position, targetPosition) > m_info.punchAttack.range + 40f)
             {
                 m_animation.SetAnimation(0, m_info.move, true);
                 m_movement.MoveTowards(direction, m_info.move.speed);
@@ -1929,11 +1934,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_steamThrustFX.SetActive(false);
             m_movement.Stop();
             m_animation.SetAnimation(0, m_info.shotgunBlastPreAnimation, false);
-            Vector2 spitPos = m_projectilePoints.transform.position;
-            Vector3 v_diff = (targetPoint - spitPos);
-            float atan2 = Mathf.Atan2(v_diff.y, v_diff.x);
-            var aimRotation = atan2 * Mathf.Rad2Deg;
-            aimRotation -= 5f;
+            
             ProjectileLaunchHandle launchHandle = new ProjectileLaunchHandle();
             //yield return new WaitForSeconds(1.5f);
             //m_projectileLauncher.AimAt(m_targetInfo.position);
@@ -2708,13 +2709,16 @@ namespace DChild.Gameplay.Characters.Enemies
         }
         private IEnumerator OnRuneShieldRoutine()
         {
-            m_runeDuration = m_phaseHandle.currentPhase == Phase.PhaseOne ? 5 : 8;
-            m_runeShieldFX.SetActive(true);
-            yield return new WaitForSeconds(m_runeDuration);
-            m_runeShieldFX.SetActive(false);
-            m_runeShieldBreakFX.SetActive(true);
-            yield return new WaitForSeconds(1f);
-            m_runeShieldBreakFX.SetActive(false);
+            if (m_hasRune)
+            {
+                m_runeDuration = m_phaseHandle.currentPhase == Phase.PhaseOne ? 5 : 8;
+                m_runeShieldFX.SetActive(true);
+                yield return new WaitForSeconds(m_runeDuration);
+                m_runeShieldFX.SetActive(false);
+                m_runeShieldBreakFX.SetActive(true);
+                yield return new WaitForSeconds(1f);
+                m_runeShieldBreakFX.SetActive(false);
+            }
             m_hasRune = false;
             yield return null;
         }
@@ -2734,8 +2738,10 @@ namespace DChild.Gameplay.Characters.Enemies
                 if (counter == 2)
                 {
                     m_hasRune = true;
+                    StartCoroutine(OnRuneShieldRoutine());
                     counter = 0;
                 }
+                StartCoroutine(CounterForRageRoutine());
                 if (m_hasRune)
                 {
                     m_basicAttackResistance.SetData(m_attackResistanceData);
@@ -2744,7 +2750,6 @@ namespace DChild.Gameplay.Characters.Enemies
                 {
                     m_basicAttackResistance.ClearResistance();
                 }
-                StartCoroutine(CounterForRageRoutine());
             }
             //throw new NotImplementedException();
         }
@@ -2783,11 +2788,11 @@ namespace DChild.Gameplay.Characters.Enemies
                 StopAllCoroutines();
                 StartCoroutine(OnMlfunctionedRoutine());
                 return;
-            }
+            }/*
             if (m_hasRune)
             {
                 StartCoroutine(OnRuneShieldRoutine());
-            }
+            }*/
             //m_basicAttackResistance.SetData(m_attackResistanceData);
             m_phaseHandle.MonitorPhase();
             switch (m_stateHandle.currentState)
