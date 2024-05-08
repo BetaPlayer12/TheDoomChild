@@ -617,12 +617,13 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator ChangePhaseRoutine()
         {
+            Debug.Log("Im changing phase");
             enabled = false;
             m_stateHandle.Wait(State.ReevaluateSituation);
             //m_hitbox.SetInvulnerability(Invulnerability.None);
             //m_hasPhaseChanged = false;
-            //Debug.Log("is facing?" + IsFacing(m_CenterOfTheArena.position));
-            if (!IsFacing(m_CenterOfTheArena.position))
+            Debug.Log("is facing?" + IsFacing(m_CenterOfTheArena.position));
+            if (!IsFacing(m_CenterOfTheArena.position) && m_stateHandle.currentState != State.Turning)
             {
                 CustomTurn();
             }
@@ -1163,7 +1164,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_stateHandle.Wait(State.ReevaluateSituation);
             //m_hitbox.SetInvulnerability(Invulnerability.None);
             //m_hasPhaseChanged = false;
-            //Debug.Log("is facing?" + IsFacing(m_CenterOfTheArena.position));
+            Debug.Log("is facing?" + IsFacing(m_CenterOfTheArena.position));
             if (!IsFacing(m_CenterOfTheArena.position))
             {
                 CustomTurn();
@@ -1649,64 +1650,33 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_currentAttackCoroutine = StartCoroutine(ChainFistPunchRoutine());
                     break;
                 case Attack.ChainedBashI:
-
-                    if (AllowAttack(2, State.Attacking) || AllowAttack(3, State.Attacking))
-                    {
-                        m_attackCount++;
-
                         m_currentAttackCoroutine = StartCoroutine(ChainedBashIRoutine());
-
-                    }
-
                     break;
                 case Attack.ChainedBashII:
-                    if (AllowAttack(3, State.Attacking) && m_isBuffed == true)
-                    {
                         m_currentAttackCoroutine = StartCoroutine(ChainedBashIIRoutine());
-                    }
                     break;
                 case Attack.LightningStomp:
-                    if (AllowAttack(3, State.Attacking))
-                    {
                         m_attackCount++;
                         m_currentAttackCoroutine = StartCoroutine(LightningStompRoutine());
-
-                    }
                     break;
                 case Attack.ChainShock:
-                    if (AllowAttack(3, State.Attacking))
-                    {
                         m_attackCount++;
                         m_currentAttackCoroutine = StartCoroutine(ChainShockRoutine());
-                    }
                     break;
 
                 case Attack.RunAttack:
-                    if (m_phaseHandle.currentPhase == Phase.PhaseTwo)
-                    {
-                        if (AllowAttack(2, State.Attacking))
-                        {
                             m_attackCount++;
                             m_currentAttackCoroutine = StartCoroutine(RunningAttackRoutine());
-                        }
-                    }
                     break;
                 case Attack.LeapAttack:
-                    if (m_phaseHandle.currentPhase != Phase.PhaseOne)
-                    {
                         var leapCount = 3;
                         m_stateHandle.Wait(State.Chasing);
                         StartCoroutine(StickToGroundRoutine(GroundPosition().y));
-
                         m_currentAttackCoroutine = StartCoroutine(LeapAttackRoutine(leapCount));
                         m_leapRoutine = m_currentAttackCoroutine;
-                    }
                     break;
                 case Attack.ShockRampage:
-                    if (m_phaseHandle.currentPhase != Phase.PhaseOne)
-                    {
                         m_currentAttackCoroutine = StartCoroutine(ShockRampage());
-                    }
                     break;
             }
             
