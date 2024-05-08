@@ -472,6 +472,10 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Spawn Points")]
         private Transform m_projectilePoints;
         [SerializeField, TabGroup("Spawn Points")]
+        private Transform m_projectilePoints2;
+        [SerializeField, TabGroup("Spawn Points")]
+        private Transform m_projectilePoints3;
+        [SerializeField, TabGroup("Spawn Points")]
         private GameObject m_flamethrower1SpawnPoint;
         [SerializeField, TabGroup("Spawn Points")]
         private GameObject m_flamethrower2SpawnPoint;
@@ -1241,6 +1245,11 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_stateHandle.Wait(State.Chasing);
             Vector2 targetPoint = m_targetInfo.position;
             var direction = (targetPoint - (Vector2)transform.position).normalized;
+            Vector2 spitPos = m_projectilePoints.transform.position;
+            Vector3 v_diff = (targetPoint - spitPos);
+            float atan2 = Mathf.Atan2(v_diff.y, v_diff.x);
+            var aimRotation = atan2 * Mathf.Rad2Deg;
+            //aimRotation -= 5f;
             m_steamThrustFX.SetActive(true);
             while (Vector2.Distance(transform.position, targetPoint) > m_info.punchAttack.range + 40f)
             {
@@ -1250,18 +1259,16 @@ namespace DChild.Gameplay.Characters.Enemies
             }
             m_movement.Stop();
             m_animation.SetAnimation(0, m_info.overchargedShotgunBlastPreAnimation, false);
-            Vector2 spitPos = m_projectilePoints.transform.position;
-            Vector3 v_diff = (targetPoint - spitPos);
-            float atan2 = Mathf.Atan2(v_diff.y, v_diff.x);
-            var aimRotation = atan2 * Mathf.Rad2Deg;
-            aimRotation -= 5f;
             ProjectileLaunchHandle overchargeLaunchHandle = new ProjectileLaunchHandle();
             
             //m_projectileLauncher.AimAt(m_targetInfo.position);
             m_animation.SetAnimation(0, m_info.overchargedShotgunBlastFireAttack, false);
             //m_projectileLauncher.LaunchProjectile();
             yield return new WaitForSeconds(1f);
-            for (int i = 0; i < 3; i++)
+            overchargeLaunchHandle.Launch(m_info.overchargedBulletProjectile.projectileInfo.projectile, m_projectilePoints.transform.position, Vector2.right * transform.localScale.x, m_info.overchargedBulletProjectile.projectileInfo.speed);
+            overchargeLaunchHandle.Launch(m_info.overchargedBulletProjectile.projectileInfo.projectile, m_projectilePoints2.transform.position, Vector2.right * transform.localScale.x, m_info.overchargedBulletProjectile.projectileInfo.speed);
+            overchargeLaunchHandle.Launch(m_info.overchargedBulletProjectile.projectileInfo.projectile, m_projectilePoints3.transform.position, Vector2.right * transform.localScale.x, m_info.overchargedBulletProjectile.projectileInfo.speed);
+            /*for (int i = 0; i < 3; i++)
             {
                 m_projectilePoints.transform.rotation = Quaternion.Euler(0f, 0f, aimRotation);
                 Debug.Log("To");
@@ -1271,7 +1278,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 overchargeLaunchHandle.Launch(m_info.overchargedBulletProjectile.projectileInfo.projectile, m_projectilePoints.transform.position, spawnDirection, m_info.overchargedBulletProjectile.projectileInfo.speed);
                 Debug.Log("i");
                 aimRotation += 5f;
-            }
+            }*/
             yield return new WaitForSeconds(1f);
             m_animation.SetAnimation(0, m_info.overchargedShotgunBlastBackToIdleAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.overchargedShotgunBlastBackToIdleAnimation);
@@ -1920,9 +1927,9 @@ namespace DChild.Gameplay.Characters.Enemies
             var direction = (targetPosition - (Vector2)transform.position).normalized;
             Vector2 spitPos = m_projectilePoints.transform.position;
             Vector3 v_diff = (targetPosition - spitPos);
-            float atan2 = Mathf.Atan2(v_diff.y, v_diff.x);
+            float atan2 = Mathf.Atan2(v_diff.y, v_diff.x * transform.localScale.x);
             var aimRotation = atan2 * Mathf.Rad2Deg;
-            aimRotation -= 5f;
+            //aimRotation -= 5f;
             m_steamThrustFX.SetActive(true);
             while (Vector2.Distance(transform.position, targetPosition) > m_info.punchAttack.range + 40f)
             {
@@ -1934,22 +1941,24 @@ namespace DChild.Gameplay.Characters.Enemies
             m_steamThrustFX.SetActive(false);
             m_movement.Stop();
             m_animation.SetAnimation(0, m_info.shotgunBlastPreAnimation, false);
-            
             ProjectileLaunchHandle launchHandle = new ProjectileLaunchHandle();
             //yield return new WaitForSeconds(1.5f);
             //m_projectileLauncher.AimAt(m_targetInfo.position);
             m_animation.SetAnimation(0, m_info.shotgunBlastFireAttack, false);
             yield return new WaitForSeconds(0.5f);
-            for (int i = 0; i < 3; i++)
+            launchHandle.Launch(m_info.bulletProjectile.projectileInfo.projectile, m_projectilePoints.transform.position, Vector2.right * transform.localScale.x, m_info.bulletProjectile.projectileInfo.speed);
+            launchHandle.Launch(m_info.bulletProjectile.projectileInfo.projectile, m_projectilePoints2.transform.position, Vector2.right * transform.localScale.x, m_info.bulletProjectile.projectileInfo.speed);
+            launchHandle.Launch(m_info.bulletProjectile.projectileInfo.projectile, m_projectilePoints3.transform.position, Vector2.right * transform.localScale.x, m_info.bulletProjectile.projectileInfo.speed);
+            /*for (int i = 0; i < 3; i++)
             {
                 m_projectilePoints.transform.rotation = Quaternion.Euler(0f, 0f, aimRotation);
                 Debug.Log("Lea");
-                var spawnDirection = m_projectilePoints.transform.right;
+                var spawnDirection = Vector2.right * transform.localScale.x;
                 Debug.Log("nd");
                 launchHandle.Launch(m_info.bulletProjectile.projectileInfo.projectile, m_projectilePoints.transform.position, spawnDirection, m_info.bulletProjectile.projectileInfo.speed);
                 Debug.Log("ro");
                 aimRotation += 5f;
-            }
+            }*/
             //m_projectileLauncher.LaunchProjectile();
             yield return new WaitForSeconds(0.5f);
             m_animation.SetAnimation(0, m_info.shotgunBlastBackToIdleAnimation, false);
@@ -2207,11 +2216,11 @@ namespace DChild.Gameplay.Characters.Enemies
                             {
                                 if (!m_isRaging)
                                 {
-                                    m_currentAttackCoroutine = StartCoroutine(Flamethrower1Routine());
+                                    m_currentAttackCoroutine = StartCoroutine(ShotgunBlastRoutine());
                                 }
                                 else
                                 {
-                                    m_currentAttackCoroutine = StartCoroutine(OverchargedFlamethrower1Routine());
+                                    m_currentAttackCoroutine = StartCoroutine(OverchargedShotgunBlastRoutine());
                                 }
                             }
                             Debug.Log("Flamethrower1 finished or cancelled");
@@ -2579,7 +2588,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private int counter;
         [SerializeField]
         private float timeLeft = 0;
-        private IEnumerator CounterForRageRoutine()
+        private IEnumerator CounterForRuneRoutine()
         {
             var duration = 10f;
             while (duration > timeLeft && checker)
@@ -2589,10 +2598,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 {
                     timeLeft = 0f;
                     checker = false;
-                }
-                if(timeLeft == 0)
-                {
-                    m_heatHandler.HandleDamageTaken(DamageType.Fire);
+                    secondChecker = true;
                 }
                 yield return null;
             }
@@ -2709,21 +2715,26 @@ namespace DChild.Gameplay.Characters.Enemies
         }
         private IEnumerator OnRuneShieldRoutine()
         {
-            if (m_hasRune)
+            if (m_hasRune && checker)
             {
+                secondChecker = false;
                 m_runeDuration = m_phaseHandle.currentPhase == Phase.PhaseOne ? 5 : 8;
                 m_runeShieldFX.SetActive(true);
+                m_basicAttackResistance.SetData(m_attackResistanceData);
                 yield return new WaitForSeconds(m_runeDuration);
                 m_runeShieldFX.SetActive(false);
+                m_basicAttackResistance.ClearResistance();
                 m_runeShieldBreakFX.SetActive(true);
                 yield return new WaitForSeconds(1f);
                 m_runeShieldBreakFX.SetActive(false);
             }
+            StartCoroutine(CounterForRuneRoutine());
             m_hasRune = false;
             yield return null;
         }
         public GameObject ligthVisuals;
         public bool checker = false;
+        public bool secondChecker = true;
         [SerializeField]
         private BasicAttackResistance m_basicAttackResistance;
         [SerializeField]
@@ -2731,25 +2742,17 @@ namespace DChild.Gameplay.Characters.Enemies
         private void CinderBoltAI_DamageTaken(object sender, Damageable.DamageEventArgs eventArgs)
         {
             Debug.Log("Heat Gauge value is: " + GetComponent<CinderBoltHeatGauge>().currentValue);
-            if (eventArgs.type == DamageType.Fire)
+            if (eventArgs.type == DamageType.Fire && secondChecker)
             {
-                checker = true;
                 counter += 1;
                 if (counter == 2)
                 {
+                    checker = true;
                     m_hasRune = true;
                     StartCoroutine(OnRuneShieldRoutine());
                     counter = 0;
                 }
-                StartCoroutine(CounterForRageRoutine());
-                if (m_hasRune)
-                {
-                    m_basicAttackResistance.SetData(m_attackResistanceData);
-                }
-                else
-                {
-                    m_basicAttackResistance.ClearResistance();
-                }
+                //StartCoroutine(CounterForRageRoutine());
             }
             //throw new NotImplementedException();
         }
