@@ -1779,6 +1779,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_rb2d.isKinematic = false;
                 m_rb2d.useFullKinematicContacts = false;
                 m_movement.Stop();
+                m_character.physics.SetVelocity(0, 0);
                 m_dynamicIdleCoroutine = StartCoroutine(DynamicIdleRoutine());
 
                 yield return new WaitForSeconds(3f);
@@ -1812,6 +1813,7 @@ namespace DChild.Gameplay.Characters.Enemies
             }
 
             m_bodySlamFX.Play();
+            m_character.physics.SetVelocity(0, 0);
             m_animation.SetAnimation(0, m_info.bodySlamEnd, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.bodySlamEnd);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
@@ -1849,6 +1851,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_animation.SetAnimation(0, m_info.bodySlamLoop, true);
                     yield return null;
                 }
+                m_character.physics.SetVelocity(0, 0);
                 m_bodySlamFX.Play();
                 m_animation.SetAnimation(0, m_info.bodySlamEnd, false);
                 yield return new WaitForAnimationComplete(m_animation.animationState, m_info.bodySlamEnd);
