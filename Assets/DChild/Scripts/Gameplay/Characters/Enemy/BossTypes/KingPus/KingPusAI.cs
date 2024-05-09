@@ -1200,6 +1200,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     yield return null;
                 }
                 m_bodySlamFX.Play();
+                m_character.physics.SetVelocity(0, 0);
                 m_animation.SetAnimation(0, m_info.bodySlamEnd, false);
                 yield return new WaitForAnimationComplete(m_animation.animationState, m_info.bodySlamEnd);
                 //yield return new WaitUntil(() => m_groundSensor.isDetecting);
@@ -1263,6 +1264,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     yield return null;
                 }
             }
+            m_character.physics.SetVelocity(0, 0);
             m_bodyCollider.size = m_bodyColliderCacheSize;
             m_movement.Stop();
             m_bodySlamFX.Play();
@@ -1751,6 +1753,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_stateHandle.ApplyQueuedState();
 
             enabled = true;
+            m_character.physics.SetVelocity(0, 0);
             yield return null;
         }
         #endregion
@@ -1811,9 +1814,8 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_animation.SetAnimation(0, m_info.bodySlamLoop, true);
                 yield return null;
             }
-
-            m_bodySlamFX.Play();
             m_character.physics.SetVelocity(0, 0);
+            m_bodySlamFX.Play();
             m_animation.SetAnimation(0, m_info.bodySlamEnd, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.bodySlamEnd);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
@@ -1932,7 +1934,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         }
                         break;
                 }
-
+                m_character.physics.SetVelocity(0, 0);
                 m_bodySlamFX.Play();
                 m_movement.Stop();
                 m_animation.SetAnimation(0, m_info.bodySlamEnd, false);
