@@ -550,8 +550,15 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator SmartChangePhaseRoutine()
         {
-
+            Debug.Log("Im changing phase");
             yield return new WaitWhile(() => !m_phaseHandle.allowPhaseChange);
+            /*if(m_phaseHandle.allowPhaseChange == false)
+            {
+                do
+                {
+                    yield return null;
+                } while (m_phaseHandle.allowPhaseChange == false);
+            }*/
             UpdateAttackDeciderList();
             switch (m_phaseHandle.currentPhase)
             {
@@ -570,6 +577,7 @@ namespace DChild.Gameplay.Characters.Enemies
             }
             StopCurrentAttackRoutine();
             SetAIToPhasing();
+            Debug.Log("Im have changed phase");
             yield return null;
         }
 
@@ -614,12 +622,13 @@ namespace DChild.Gameplay.Characters.Enemies
             m_stateHandle.Wait(State.ReevaluateSituation);
             //m_hitbox.SetInvulnerability(Invulnerability.None);
             //m_hasPhaseChanged = false;
-            Debug.Log("is facing?" + IsFacing(m_CenterOfTheArena.position));
+            //yield return new WaitForSeconds(0.25f);
             if (!IsFacing(m_CenterOfTheArena.position) && m_stateHandle.currentState != State.Turning)
             {
+                yield return new WaitForSeconds(.5f);
+                Debug.Log("is facing?" + IsFacing(m_CenterOfTheArena.position)+" Turning now");
                 CustomTurning();
             }
-            yield return null;
             m_animation.SetAnimation(0, m_info.runAttackStartAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.skeletonAnimation.state, m_info.runAttackStartAnimation);
             m_animation.SetAnimation(0, m_info.runAttackAnimation, true);
@@ -899,8 +908,8 @@ namespace DChild.Gameplay.Characters.Enemies
             m_fistPoint.GetComponent<SkeletonUtilityBone>().mode = SkeletonUtilityBone.Mode.Follow;
             yield return null;
             m_fistPoint.GetComponent<SkeletonUtilityBone>().enabled = false;
+            yield return new WaitForSeconds(.5f);
             enabled = true;
-            m_phaseHandle.allowPhaseChange = true;
             if (m_isBuffed)
             {
                 m_attackCount = 0;
@@ -908,6 +917,8 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_currentAttackRange = m_info.leapAttack.range;
             }
             m_stateHandle.ApplyQueuedState();
+            yield return new WaitForSeconds(0.2f);
+            m_phaseHandle.allowPhaseChange = true;
             yield return null;
 
         }
@@ -1641,7 +1652,8 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_currentAttackCoroutine = StartCoroutine(ChainFistPunchRoutine());
                     break;
                 case Attack.ChainedBashI:
-                        m_currentAttackCoroutine = StartCoroutine(ChainedBashIRoutine());
+                    m_attackCount++;
+                    m_currentAttackCoroutine = StartCoroutine(ChainedBashIRoutine());
                     break;
                 case Attack.ChainedBashII:
                         m_currentAttackCoroutine = StartCoroutine(ChainedBashIIRoutine());
