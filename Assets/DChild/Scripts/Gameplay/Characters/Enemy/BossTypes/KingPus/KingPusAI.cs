@@ -35,6 +35,14 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField]
             private PhaseInfo<Phase> m_phaseInfo;
             public PhaseInfo<Phase> phaseInfo => m_phaseInfo;
+            [TitleGroup("New Ray Sensor")]
+            [SerializeField]
+            private MultiRayCastData m_RaySensorsForPhaseTwo;
+            public MultiRayCastData RaySensorsForPhaseTwo => m_RaySensorsForPhaseTwo;
+
+            [SerializeField]
+            private MultiRayCastData m_RaySensorsForPhaseThree;
+            public MultiRayCastData RaySensorsForPhaseThree => m_RaySensorsForPhaseThree;
 
             [TitleGroup("Movement Behaviours")]
             [SerializeField]
@@ -581,6 +589,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private MovementHandle2D m_movement;
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_groundSensor;
+        
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_leftWallSensor;
         [SerializeField, TabGroup("Sensors")]
@@ -755,7 +764,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
                         if (m_patternCooldown.Count != 0)
                             m_patternCooldown.Clear();
-
+        
                         m_phase1Done = true;
                         m_canUpdateStats = true;
                         m_bodyCollider.size = new Vector2(40, 15);
@@ -974,7 +983,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
             m_stabSlashFX.Stop();
             m_krakenFX.Stop();
-
+            Debug.Log("??");
             m_animation.DisableRootMotion();
             m_character.physics.simulateGravity = true;
 
@@ -1047,19 +1056,30 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_animation.SetAnimation(bodyScaleTrackIndex, m_info.phase3MixAnimation, false);
                     break;
             }
-
             switch (m_phaseHandle.currentPhase)
             {
                 case Phase.PhaseOne:
                     m_phaseHandle.SetPhase(Phase.PhaseTwo);
                     m_hitboxCollider.offset = new Vector2(2.37f, 2.46f);
                     m_hitboxCollider.size = new Vector2(18.09f, 10.83f);
+                    m_leftWallSensor.multiRaycast.SetData(m_info.RaySensorsForPhaseTwo);
+                    m_rightWallSensor.multiRaycast.SetData(m_info.RaySensorsForPhaseTwo);
+                    m_cielingSensor.multiRaycast.SetData(m_info.RaySensorsForPhaseTwo);
+                    //m_leftWallSensor.multiRaycast.Set(2, 1f, 7);
+                    //m_rightWallSensor.multiRaycast.Set(2, 1f, 7);
+                    //m_cielingSensor.multiRaycast.Set(2, 1f, 7);
                     yield return BodySlamFullAttackRoutine(true);
                     break;
                 case Phase.PhaseTwo:
                     m_phaseHandle.SetPhase(Phase.PhaseThree);
                     m_hitboxCollider.offset = new Vector2(3.19f, 1.58f);
                     m_hitboxCollider.size = new Vector2(41.23f, 17.41f);
+                    m_leftWallSensor.multiRaycast.SetData(m_info.RaySensorsForPhaseThree);
+                    m_rightWallSensor.multiRaycast.SetData(m_info.RaySensorsForPhaseThree);
+                    m_cielingSensor.multiRaycast.SetData(m_info.RaySensorsForPhaseThree);
+                    //m_leftWallSensor.multiRaycast.Set(2, 2f, 12);
+                    //m_rightWallSensor.multiRaycast.Set(2, 2f, 12);
+                    //m_cielingSensor.multiRaycast.Set(2, 2f, 12);
                     yield return KrakenRageFullAttackRoutine(true);
                     break;
                 case Phase.PhaseThree:
@@ -1893,11 +1913,12 @@ namespace DChild.Gameplay.Characters.Enemies
                 {
                     case true:
                         yield return new WaitUntil(() => !m_willStickToWall);
-                        //m_bodyCollider.size = m_bodyColliderCacheSize;
+                        m_bodyCollider.size = m_bodyColliderCacheSize;
+                        
                         m_legCollider.enabled = true;
                         break;
                     case false:
-                        //m_bodyCollider.size = m_bodyColliderCacheSize;
+                        m_bodyCollider.size = m_bodyColliderCacheSize;
                         m_legCollider.enabled = true;
                         m_animation.SetAnimation(0, m_info.bodySlamStart, false);
                         yield return new WaitForAnimationComplete(m_animation.animationState, m_info.bodySlamStart);
