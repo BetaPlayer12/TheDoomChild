@@ -476,14 +476,6 @@ namespace DChild.Gameplay.Characters.Enemies
             StartCoroutine(SmartChangePhaseRoutine());
         }
 
-        private void OnTurnRequest(object sender, EventActionArgs eventArgs)
-        {
-            if (m_stateHandle.currentState != State.Phasing /*&& !m_hasPhaseChanged*/)
-            {
-                m_stateHandle.OverrideState(State.Turning);
-            }
-        }
-
         public override void SetTarget(IDamageable damageable, Character m_target = null)
         {
 
@@ -517,19 +509,14 @@ namespace DChild.Gameplay.Characters.Enemies
             m_phaseHandle.allowPhaseChange = true;
         }
 
-        private void CustomTurn()
+        private void CustomTurning()
         {
+            Debug.Log("Got Called");
             //m_animation.SetAnimation(0,m_info.turnAnimation,false);
             transform.localScale = new Vector3(-transform.localScale.x, 1, 1);
             m_character.SetFacing(transform.localScale.x == 1 ? HorizontalDirection.Right : HorizontalDirection.Left);
         }
 
-        private IEnumerator TurnRoutine()
-        {
-            m_animation.SetAnimation(0, m_info.turnAnimation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.turnAnimation);
-            CustomTurn();
-        }
 
         private IEnumerator IntroRoutine()
         {
@@ -618,6 +605,11 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator ChangePhaseRoutine()
         {
             Debug.Log("Im changing phase");
+            //breather for franky to update before phasing
+            if (!enabled)
+            {
+                enabled = true;
+            }
             enabled = false;
             m_stateHandle.Wait(State.ReevaluateSituation);
             //m_hitbox.SetInvulnerability(Invulnerability.None);
@@ -625,8 +617,9 @@ namespace DChild.Gameplay.Characters.Enemies
             Debug.Log("is facing?" + IsFacing(m_CenterOfTheArena.position));
             if (!IsFacing(m_CenterOfTheArena.position) && m_stateHandle.currentState != State.Turning)
             {
-                CustomTurn();
+                CustomTurning();
             }
+            yield return null;
             m_animation.SetAnimation(0, m_info.runAttackStartAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.skeletonAnimation.state, m_info.runAttackStartAnimation);
             m_animation.SetAnimation(0, m_info.runAttackAnimation, true);
@@ -850,9 +843,9 @@ namespace DChild.Gameplay.Characters.Enemies
 
             m_fistPoint.GetComponent<SkeletonUtilityBone>().enabled = true;
             m_fistPoint.GetComponent<SkeletonUtilityBone>().mode = SkeletonUtilityBone.Mode.Override;
-            yield return null;
             m_wallPosPoint.SetParent(null);
             m_wallPosPoint.position = WallPosition();
+            yield return new WaitForSeconds(0.5f);
             //m_animation.SetAnimation(0, m_info.chainBash1AnimationStart.animation, false);
             //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.chainBash1AnimationStart);
             var fistRefPointCollider = m_fistRefPoint.GetComponent<CircleCollider2D>();
@@ -876,6 +869,7 @@ namespace DChild.Gameplay.Characters.Enemies
             StartCoroutine(StickToWallRoutine(m_wallPosPoint.position));
             GetComponentInChildren<SkeletonRenderer>().maskInteraction = SpriteMaskInteraction.VisibleOutsideMask;
             fistRefPointCollider.enabled = false;
+            yield return new WaitForSeconds(0.5f);
             m_animation.SetAnimation(0, m_info.hookTravelLoopAnimation, true);
             while (Vector2.Distance(transform.position, m_fistPoint.position) > 15f)
             {
@@ -929,7 +923,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_wallPosPoint.SetParent(null);
             m_wallPosPoint.position = WallPosition();
             //m_animation.SetAnimation(0, m_info.chainBash1AnimationStart.animation, false);
-            //yield return new WaitForSeconds(.65f);
+            //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.chainBash1AnimationStart);
             var fistRefPointCollider = m_fistRefPoint.GetComponent<CircleCollider2D>();
             fistRefPointCollider.enabled = true;
             m_fistPoint.position = m_wristPoint.position;
@@ -1002,9 +996,6 @@ namespace DChild.Gameplay.Characters.Enemies
             m_stateHandle.ApplyQueuedState();
         }
 
-
-
-
         private IEnumerator ChainFistPunchRoutine()
         {
             m_phaseHandle.allowPhaseChange = false;
@@ -1024,7 +1015,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             if (!IsFacingTarget())
             {
-                CustomTurn();
+                CustomTurning();
             }
             attackAnim = ChoosePunchAnimation();
             m_animation.SetAnimation(0, attackAnim, false);
@@ -1098,7 +1089,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 {
                     m_animation.SetAnimation(0, m_info.leapTransitionAnimation, false).MixDuration = 0;
                     yield return new WaitForSeconds(m_info.transitionStart);
-                    CustomTurn();
+                    CustomTurning();
                 }
                 else
                 {
@@ -1167,7 +1158,7 @@ namespace DChild.Gameplay.Characters.Enemies
             Debug.Log("is facing?" + IsFacing(m_CenterOfTheArena.position));
             if (!IsFacing(m_CenterOfTheArena.position))
             {
-                CustomTurn();
+                CustomTurning();
             }
             m_animation.SetAnimation(0, m_info.runAttackStartAnimation, false);
 
@@ -1908,7 +1899,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     else
                     {
                         //StartCoroutine(TurnRoutine());
-                        CustomTurn();
+                        CustomTurning();
                         //m_turnState = State.Intro;
                         //if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
                         //    m_stateHandle.SetState(State.Turning);
@@ -1919,9 +1910,11 @@ namespace DChild.Gameplay.Characters.Enemies
                     StartCoroutine(ChangePhaseRoutine());
                     break;
                 case State.Turning:
+                    Debug.Log("Turning");
                     m_phaseHandle.allowPhaseChange = false;
                     m_stateHandle.Wait(m_turnState);
                     m_turnHandle.Execute(m_info.turnAnimation.animation, m_info.idleAnimation.animation);
+
                     m_movement.Stop();
                     break;
                 case State.Attacking:
