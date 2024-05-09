@@ -2548,6 +2548,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_spineListener.Subscribe(m_info.flamethrower1Event, Flamethrower1Attack);
             m_spineListener.Subscribe(m_info.overchargedPunchUppercutEvent, OvercahrgedPunchAttack);
             m_spineListener.Subscribe(m_info.overchargedFlamethrower1Event, OverchargedFlamethrower1Attack);
+            m_basicAttackResistance.SetResistance(DamageType.Physical, AttackResistanceType.Strong);
             m_animation.DisableRootMotion();
             m_phaseHandle = new PhaseHandle<Phase, PhaseInfo>();
             m_phaseHandle.Initialize(Phase.PhaseOne, m_info.phaseInfo, m_character, ChangeState, ApplyPhaseData);
@@ -2707,6 +2708,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_heatHandler.ResetHeat();
             //GetComponent<CinderBoltHeatGauge>().AddHeat(0);
             m_hitbox.SetInvulnerability(Invulnerability.None);
+            m_basicAttackResistance.SetResistance(DamageType.Physical, AttackResistanceType.Strong);
             DecidedOnAttack(false);
             m_currentAttackCoroutine = null;
             m_stateHandle.ApplyQueuedState();
@@ -2744,22 +2746,24 @@ namespace DChild.Gameplay.Characters.Enemies
         private void CinderBoltAI_DamageTaken(object sender, Damageable.DamageEventArgs eventArgs)
         {
             Debug.Log("Heat Gauge value is: " + GetComponent<CinderBoltHeatGauge>().currentValue);
-            if (eventArgs.type == DamageType.Fire && secondChecker)
+            if (eventArgs.type == DamageType.Fire)
             {
-                counter += 1;
-                if (counter == 2)
+                if (secondChecker)
                 {
-                    thirdChecker = true;
-                    checker = true;
-                    m_hasRune = true;
-                    StartCoroutine(OnRuneShieldRoutine());
-                    counter = 0;
+                    counter += 1;
+                    if (counter == 2)
+                    {
+                        thirdChecker = true;
+                        checker = true;
+                        m_hasRune = true;
+                        StartCoroutine(OnRuneShieldRoutine());
+                        counter = 0;
+                    }
                 }
-                //StartCoroutine(CounterForRageRoutine());
-            }
-            if (eventArgs.type == DamageType.Fire && !thirdChecker)
-            {
-                m_heatHandler.HandleDamageTaken(DamageType.Fire);
+                if (!thirdChecker)
+                {
+                    m_heatHandler.HandleDamageTaken(DamageType.Fire);
+                }
             }
         }
         private void Update()
@@ -2791,6 +2795,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_overchargedFlamethrower2.SetActive(true);
                 m_steamMalfAndOver.Play();
                 StartCoroutine(OnRageCounter());
+                m_basicAttackResistance.SetResistance(DamageType.Physical, AttackResistanceType.Weak);
             }
             if (m_hasMalfactioned)
             {
