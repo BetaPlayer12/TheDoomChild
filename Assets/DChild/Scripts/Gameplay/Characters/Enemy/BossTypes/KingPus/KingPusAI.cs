@@ -1720,7 +1720,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_character.physics.simulateGravity = true;
 
             m_grappleRetractCoroutine = StartCoroutine(GrappleRetractRoutine(4));
-
+            m_character.physics.SetVelocity(0,0);
             enabled = false;
 
             m_animation.SetAnimation(0, m_info.bodySlamStart, false);
