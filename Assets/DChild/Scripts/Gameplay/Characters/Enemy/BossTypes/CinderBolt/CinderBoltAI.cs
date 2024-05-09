@@ -2216,11 +2216,11 @@ namespace DChild.Gameplay.Characters.Enemies
                             {
                                 if (!m_isRaging)
                                 {
-                                    m_currentAttackCoroutine = StartCoroutine(ShotgunBlastRoutine());
+                                    m_currentAttackCoroutine = StartCoroutine(Flamethrower1Routine());
                                 }
                                 else
                                 {
-                                    m_currentAttackCoroutine = StartCoroutine(OverchargedShotgunBlastRoutine());
+                                    m_currentAttackCoroutine = StartCoroutine(OverchargedFlamethrower1Routine());
                                 }
                             }
                             Debug.Log("Flamethrower1 finished or cancelled");
@@ -2599,7 +2599,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     timeLeft = 0f;
                     checker = false;
                     secondChecker = true;
-                }
+                }  
                 yield return null;
             }
             yield return null;
@@ -2724,6 +2724,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 yield return new WaitForSeconds(m_runeDuration);
                 m_runeShieldFX.SetActive(false);
                 m_basicAttackResistance.ClearResistance();
+                thirdChecker = false;
                 m_runeShieldBreakFX.SetActive(true);
                 yield return new WaitForSeconds(1f);
                 m_runeShieldBreakFX.SetActive(false);
@@ -2735,6 +2736,7 @@ namespace DChild.Gameplay.Characters.Enemies
         public GameObject ligthVisuals;
         public bool checker = false;
         public bool secondChecker = true;
+        public bool thirdChecker = false;
         [SerializeField]
         private BasicAttackResistance m_basicAttackResistance;
         [SerializeField]
@@ -2747,6 +2749,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 counter += 1;
                 if (counter == 2)
                 {
+                    thirdChecker = true;
                     checker = true;
                     m_hasRune = true;
                     StartCoroutine(OnRuneShieldRoutine());
@@ -2754,7 +2757,10 @@ namespace DChild.Gameplay.Characters.Enemies
                 }
                 //StartCoroutine(CounterForRageRoutine());
             }
-            //throw new NotImplementedException();
+            if (eventArgs.type == DamageType.Fire && !thirdChecker)
+            {
+                m_heatHandler.HandleDamageTaken(DamageType.Fire);
+            }
         }
         private void Update()
         {
