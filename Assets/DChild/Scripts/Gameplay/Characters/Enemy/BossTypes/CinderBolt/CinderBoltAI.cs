@@ -466,6 +466,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private ParticleFX m_boosterChargeFX;
         [SerializeField, TabGroup("FX")]
         private GameObject RecoveryFX;
+        [SerializeField, TabGroup("FX")]
+        private ParticleFX m_firebeamFX;
 
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_groundSensor;
@@ -574,6 +576,7 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField]
         private bool m_isRaging = false;
         private float m_runeDuration;
+        [SerializeField]
         private bool m_hasMalfactioned = false;
         [SerializeField]
         private bool m_hasRune = false;
@@ -748,7 +751,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             base.OnDestroyed(sender, eventArgs);
             m_movement.Stop();
-
+            ResetLaser();
             m_punchAttacker.SetActive(true);
             m_punchAttacker2.SetActive(true);
             m_overchargedPunchAttacker.SetActive(false);
@@ -1231,7 +1234,29 @@ namespace DChild.Gameplay.Characters.Enemies
                 transform.localScale = new Vector3(-transform.localScale.x, 1, 1);
                 m_character.SetFacing(transform.localScale.x == 1 ? HorizontalDirection.Right : HorizontalDirection.Left);
             }
-            StartCoroutine(OverchargedPunchAttackRoutine());
+            //StartCoroutine(OverchargedPunchAttackRoutine());
+            Vector2 targetPoint = m_targetInfo.position;
+            var direction = (targetPoint - (Vector2)transform.position).normalized;
+            while (Vector2.Distance(transform.position, targetPoint) > m_info.punchAttack.range)
+            {
+                m_animation.SetAnimation(0, m_info.overchargedHoverForward, true);
+                m_movement.MoveTowards(direction, m_info.move.speed * 2);
+                yield return null;
+            }
+            m_steamThrustFX.SetActive(false);
+            yield return new WaitForSeconds(0.5f);
+            //m_stateHandle.Wait(State.Chasing);
+            m_movement.Stop();
+            m_animation.EnableRootMotion(true, false);
+            m_animation.SetAnimation(0, m_info.overchargedPunchUppercutAttack, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.overchargedPunchUppercutAttack);
+            m_overchargedPunchAttackCollider.enabled = false;
+            m_animation.SetAnimation(0, m_info.overchargedIdle, true);
+            DecidedOnAttack(false);
+            m_animation.DisableRootMotion();
+            m_currentAttackCoroutine = null;
+            m_stateHandle.ApplyQueuedState();
+            m_overchargedPunchAttackCollider.enabled = false;
             yield return null;
             enabled = true;
         }
@@ -2646,6 +2671,8 @@ namespace DChild.Gameplay.Characters.Enemies
             enabled = false;
             m_stateHandle.Wait(State.Chasing);
             yield return new WaitForSeconds(0.5f);
+            //m_firebeamFX.Stop();
+            ResetLaser();
             m_punchAttacker.SetActive(true);
             m_punchAttacker2.SetActive(true);
             m_overchargedPunchAttacker.SetActive(false);
@@ -2800,6 +2827,7 @@ namespace DChild.Gameplay.Characters.Enemies
             }
             if (m_hasMalfactioned)
             {
+                m_beamOn = false;
                 StopAllCoroutines();
                 StartCoroutine(OnRuneShieldRoutine());
                 StartCoroutine(OnMlfunctionedRoutine());
