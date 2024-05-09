@@ -925,7 +925,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_punchAttacker2.enabled = false;
             m_overchargedPunchAttacker.enabled = true;
             m_overchargedPunchAttacker2.enabled = true;*/
-            m_runeDuration = 5;
+            //m_runeDuration = 5;
             Vector2 targetPoint = m_targetInfo.position;
             var direction = (targetPoint - (Vector2)transform.position).normalized;
             while (Vector2.Distance(transform.position, targetPoint) > m_info.punchAttack.range)
@@ -956,7 +956,7 @@ namespace DChild.Gameplay.Characters.Enemies
             enabled = false;/*
             m_flamethrower1.enabled = false;
             m_overchargedFlamethrower1.enabled = true;*/
-            m_runeDuration = 5;
+            //m_runeDuration = 5;
             Vector2 targetPoint = m_targetInfo.position;
             var direction = (targetPoint - (Vector2)transform.position).normalized;
             while (Vector2.Distance(transform.position, targetPoint) > m_info.punchAttack.range)
@@ -1023,7 +1023,7 @@ namespace DChild.Gameplay.Characters.Enemies
             enabled = false;/*
             m_firebeam.enabled = true;*/
             yield return new WaitForSeconds(0.5f);
-            m_runeDuration = 5;
+            //m_runeDuration = 5;
             //m_stateHandle.Wait(State.Chasing);
             /*if (m_phaseHandle.currentPhase == Phase.PhaseTwo)
             {
@@ -1241,7 +1241,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_shotG.enabled = true;*/
             m_steamThrustFX.SetActive(false);
             yield return new WaitForSeconds(0.5f);
-            m_runeDuration = 5;
+            //m_runeDuration = 5;
             //m_stateHandle.Wait(State.Chasing);
             Vector2 targetPoint = m_targetInfo.position;
             var direction = (targetPoint - (Vector2)transform.position).normalized;
@@ -1296,7 +1296,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_overchargedFlamethrower2.enabled = true;*/
             m_steamThrustFX.SetActive(false);
             yield return new WaitForSeconds(0.5f);
-            m_runeDuration = 5;
+            //m_runeDuration = 5;
             //m_stateHandle.Wait(State.Chasing);
             m_movement.Stop();
             Vector2 targetPoint = new Vector2(transform.position.x + 10f, m_firebeamTransformPoints[1].position.y + 20f);
@@ -1344,7 +1344,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_overchargedMeteor.enabled = true;*/
             m_steamThrustFX.SetActive(false);
             yield return new WaitForSeconds(0.5f);
-            m_runeDuration = 5;
+            //m_runeDuration = 5;
             //m_stateHandle.Wait(State.Chasing);
             m_movement.Stop();
             Vector2 targetPoint = new Vector2(m_targetInfo.position.x, m_firebeamTransformPoints[1].position.y + 20f);
@@ -1397,7 +1397,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_overchargedPunchAttacker.enabled = false;
             m_overchargedPunchAttacker2.enabled = false;*/
             //yield return new WaitForSeconds(0.5f);
-            m_runeDuration = 5;
+            //m_runeDuration = 5;
             Vector2 targetPoint = m_targetInfo.position;
             var direction = (targetPoint - (Vector2)transform.position).normalized;
             while (Vector2.Distance(transform.position, targetPoint) > m_info.punchAttack.range)
@@ -1429,7 +1429,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_overchargedFlamethrower1.enabled = false;*/
             //yield return new WaitForSeconds(0.5f);
             //m_stateHandle.Wait(State.Chasing);
-            m_runeDuration = 5;
+            //m_runeDuration = 5;
             Vector2 targetPoint = m_targetInfo.position;
             var direction = (targetPoint - (Vector2)transform.position).normalized;
             while (Vector2.Distance(transform.position, targetPoint) > m_info.punchAttack.range)
@@ -1691,7 +1691,7 @@ namespace DChild.Gameplay.Characters.Enemies
             enabled = false;/*
             m_firebeam.enabled = true;*/
             yield return new WaitForSeconds(0.5f);
-            m_runeDuration = 5;
+            //m_runeDuration = 5;
             //m_stateHandle.Wait(State.Chasing);
             /*if (m_phaseHandle.currentPhase == Phase.PhaseTwo)
             {
@@ -1922,7 +1922,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_shotG.enabled = true;*/
             //m_steamThrustFX.SetActive(false);
             yield return new WaitForSeconds(0.5f);
-            m_runeDuration = 5;
+            //m_runeDuration = 5;
             Vector2 targetPosition = m_targetInfo.position;
             var direction = (targetPosition - (Vector2)transform.position).normalized;
             Vector2 spitPos = m_projectilePoints.transform.position;
@@ -1977,7 +1977,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_overchargedMeteor.enabled = false;*/
             m_steamThrustFX.SetActive(false);
             yield return new WaitForSeconds(0.5f);
-            m_runeDuration = 5;
+            //m_runeDuration = 5;
             //m_stateHandle.Wait(State.Chasing);
             m_movement.Stop();
             Vector2 targetPoint = new Vector2(m_targetInfo.position.x, m_firebeamTransformPoints[1].position.y + 20f);
@@ -2028,7 +2028,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_overchargedFlamethrower2.enabled = false;*/
             m_steamThrustFX.SetActive(false);
             yield return new WaitForSeconds(0.5f);
-            m_runeDuration = 5;
+            //m_runeDuration = 5;
             //m_stateHandle.Wait(State.Chasing);
             m_movement.Stop();
             Vector2 targetPoint = new Vector2(transform.position.x + 10f, m_firebeamTransformPoints[1].position.y + 20f);
@@ -2768,6 +2768,7 @@ namespace DChild.Gameplay.Characters.Enemies
         }
         private void Update()
         {
+            //Debug.Log("Rune duration: " + m_runeDuration);
             ligthVisuals.GetComponent<CinderBoltHeatLightsReaction>().HandleReaction(GetComponent<CinderBoltHeatGauge>().currentValue);
             if (GetComponent<CinderBoltHeatGauge>().currentValue == 90)
             {
@@ -2800,6 +2801,7 @@ namespace DChild.Gameplay.Characters.Enemies
             if (m_hasMalfactioned)
             {
                 StopAllCoroutines();
+                StartCoroutine(OnRuneShieldRoutine());
                 StartCoroutine(OnMlfunctionedRoutine());
                 return;
             }/*
