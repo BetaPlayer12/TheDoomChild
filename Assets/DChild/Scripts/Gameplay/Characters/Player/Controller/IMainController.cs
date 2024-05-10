@@ -11,5 +11,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
         void Enable();
         void Disable();
         event EventAction<EventActionArgs> ControllerDisabled;
+        event EventAction<EventActionArgs> ControllerEnabled;
     }
 }

@@ -3,7 +3,7 @@ guid: f58bf9248a059184abe98c962e523559
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
-  serializedVersion: 10
+  serializedVersion: 12
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -23,6 +23,8 @@ TextureImporter:
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMasterTextureLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -31,9 +33,9 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: -1
-    aniso: -1
-    mipBias: -100
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
     wrapU: 1
     wrapV: 1
     wrapW: 1
@@ -54,12 +56,29 @@ TextureImporter:
   textureType: 8
   textureShape: 1
   singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
   maxTextureSizeSet: 0
   compressionQualitySet: 0
   textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 1
+  cookieLightType: 1
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 1
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
@@ -69,65 +88,49 @@ TextureImporter:
     allowsAlphaSplitting: 0
     overridden: 0
     androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 1
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Server
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites: []
     outline:
-    - - {x: 576, y: -42.5}
-      - {x: 576, y: -170.5}
-      - {x: 510, y: -213.5}
-      - {x: 353, y: -256.5}
-      - {x: 131, y: -265.5}
-      - {x: -191, y: -247.5}
-      - {x: -196, y: -199.5}
-      - {x: -493, y: -195.5}
-      - {x: -511, y: -159.5}
-      - {x: -558, y: -143.5}
-      - {x: -576, y: -104.5}
-      - {x: -576, y: -51.5}
-      - {x: -576, y: -24.5}
-      - {x: -514, y: -25.5}
-      - {x: -519, y: 12.5}
-      - {x: -448.5583, y: 14.558685}
-      - {x: -443, y: 52.5}
-      - {x: -370, y: 57.5}
-      - {x: -336, y: 72.5}
-      - {x: -410, y: 93.5}
-      - {x: -414, y: 110.5}
-      - {x: -251, y: 60.5}
-      - {x: -304, y: 107.5}
-      - {x: -303, y: 127.5}
-      - {x: -162, y: 86.5}
-      - {x: -195, y: 187.5}
-      - {x: -200, y: 265.5}
-      - {x: -187, y: 265.5}
-      - {x: -183, y: 205.5}
-      - {x: -140, y: 95.5}
-      - {x: -128, y: 107.5}
-      - {x: -75, y: 115.5}
-      - {x: -76, y: 137.5}
-      - {x: -30, y: 165.5}
-      - {x: 88, y: 119.5}
-      - {x: 124, y: 176.5}
-      - {x: 194, y: 208.5}
-      - {x: 122, y: 106.5}
-      - {x: 185, y: 142.5}
-      - {x: 306, y: 204.5}
-      - {x: 430, y: 211.5}
-      - {x: 231, y: 117.5}
-      - {x: 381, y: 115.5}
-      - {x: 565, y: 111.5}
-      - {x: 492, y: -9.5}
+    - - {x: -576, y: 9}
+      - {x: -419, y: 131}
+      - {x: -208, y: 131}
+      - {x: -219, y: 266}
+      - {x: -169, y: 266}
+      - {x: -145, y: 120}
+      - {x: -12, y: 171}
+      - {x: 185, y: 207}
+      - {x: 434, y: 211}
+      - {x: 576, y: 95}
+      - {x: 576, y: -221}
+      - {x: 346, y: -266}
+      - {x: -22, y: -266}
+      - {x: 5, y: -223}
+      - {x: -425, y: -202}
+      - {x: -576, y: -147}
     physicsShape: []
     bones: []
     spriteID: b7bd7009fef791e41b969ea1b8918ee9
-    internalID: 0
+    internalID: 1024349478
     vertices: []
     indices: 
     edges: []
     weights: []
     secondaryTextures: []
+    nameFileIdTable: {}
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

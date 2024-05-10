@@ -36,6 +36,8 @@ namespace DChild.Gameplay.Environment
         private Transform m_source;
         [SerializeField, ReadOnly]
         private bool m_canBeMoved = true;
+        [SerializeField]
+        private float m_grabbedMoveModifier = 1f;
         [SerializeField, TabGroup("Grabbed"), LabelText("Constraints")]
         private RigidbodyConstraints2D m_onGrabbedConstraints = RigidbodyConstraints2D.FreezeRotation;
         [SerializeField, TabGroup("Let Go"), LabelText("Constraints")]
@@ -54,6 +56,7 @@ namespace DChild.Gameplay.Environment
 
         public Vector3 promptPosition => transform.position + m_promptOffset;
         public bool canBeMoved => m_canBeMoved;
+        public float grabbedMoveModifier => m_grabbedMoveModifier;
         public bool isGrabbed => m_isGrabbed;
         public Transform source => m_source;
 
@@ -103,7 +106,7 @@ namespace DChild.Gameplay.Environment
                 if (m_useTransform)
                 {
                     var currentpos = m_source.position;
-                    currentpos.x += direction;
+                    currentpos.x += direction * moveForce * GameplaySystem.time.deltaTime;
                     m_source.position = currentpos;
 
                 }
