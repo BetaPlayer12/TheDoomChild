@@ -39,6 +39,10 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField]
             private MultiRayCastData m_RaySensorsForPhaseTwo;
             public MultiRayCastData RaySensorsForPhaseTwo => m_RaySensorsForPhaseTwo;
+            [TitleGroup("Attack Data")]
+            [SerializeField]
+            private AttackData m_AttackDataDamageHeavyStab;
+            public AttackData AttackDataDamageHeavyStab => m_AttackDataDamageHeavyStab;
 
             [SerializeField]
             private MultiRayCastData m_RaySensorsForPhaseThree;
@@ -565,6 +569,8 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Reference")]
         private Boss m_boss;
         [SerializeField, TabGroup("Reference")]
+        private Attacker m_attackerForHeavyStab;
+        [SerializeField, TabGroup("Reference")]
         private Rigidbody2D m_rb2d;
         [SerializeField, TabGroup("Reference")]
         private Hitbox m_hitbox;
@@ -743,7 +749,7 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField]
         private List<KingPusBlobAI> m_pusBlobs;
         private List<KingPusBlobAI> m_pusBlobstoBeEaten;
-
+        private bool m_canEvade = true;
 
         public event EventAction<EventActionArgs> BodySlamDone;
         public event EventAction<EventActionArgs> WreckingBallDone;
@@ -985,6 +991,8 @@ namespace DChild.Gameplay.Characters.Enemies
             m_krakenFX.Stop();
             Debug.Log("??");
             m_animation.DisableRootMotion();
+            var newHeavyStabDamage = new Damage(DamageType.Physical, 90);
+            m_attackerForHeavyStab.SetDamage(newHeavyStabDamage);
             m_character.physics.simulateGravity = true;
 
             if (m_grapplersOut)
@@ -1065,6 +1073,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_leftWallSensor.multiRaycast.SetData(m_info.RaySensorsForPhaseTwo);
                     m_rightWallSensor.multiRaycast.SetData(m_info.RaySensorsForPhaseTwo);
                     m_cielingSensor.multiRaycast.SetData(m_info.RaySensorsForPhaseTwo);
+        
                     //m_leftWallSensor.multiRaycast.Set(2, 1f, 7);
                     //m_rightWallSensor.multiRaycast.Set(2, 1f, 7);
                     //m_cielingSensor.multiRaycast.Set(2, 1f, 7);
@@ -1181,7 +1190,6 @@ namespace DChild.Gameplay.Characters.Enemies
 
             StartCoroutine(AttackCoroutineStopper(m_stabCoroutine));
             m_stateHandle.Wait(State.ReevaluateSituation);
-
             StopAnimations();
             m_rb2d.sharedMaterial = m_physicsMat;
             m_animation.DisableRootMotion();
@@ -1242,6 +1250,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 }
                 yield return null;
             }
+            m_character.physics.SetVelocity(0, 0);
             m_animation.EnableRootMotion(true, true);
             m_movement.Stop();
             m_rb2d.isKinematic = false;
@@ -1517,7 +1526,7 @@ namespace DChild.Gameplay.Characters.Enemies
             }
             //if (m_character.facing != HorizontalDirection.Right)
             //    CustomTurn();
-
+            m_character.physics.SetVelocity(0, 0);
             m_animation.DisableRootMotion();
             m_attackDecider.hasDecidedOnAttack = false;
             m_currentAttackCoroutine = null;
@@ -1673,6 +1682,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_animation.SetAnimation(0, m_info.bodySlamLoop, true);
                 yield return null;
             }
+            m_character.physics.SetVelocity(0, 0);
             m_willStickToWall = false;
 
             yield return null;
@@ -1710,6 +1720,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator BodySlamFullAttackRoutine(bool doneDuringPhaseChange)
         {
             //grapple away
+            m_canEvade = false;
             if (!doneDuringPhaseChange)
                 m_stateHandle.Wait(State.ReevaluateSituation);
             m_animation.DisableRootMotion();
@@ -1735,6 +1746,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
             m_animation.SetAnimation(0, m_info.bodySlamEnd, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.bodySlamEnd);
+            m_character.physics.SetVelocity(0, 0);
             m_bodySlamFX.Play();
             if (m_phaseHandle.currentPhase > Phase.PhaseOne)
                 BodySlamDone?.Invoke(this, new EventActionArgs());
@@ -1754,6 +1766,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
             enabled = true;
             m_character.physics.SetVelocity(0, 0);
+            m_canEvade = true;
             yield return null;
         }
         #endregion
@@ -1761,6 +1774,7 @@ namespace DChild.Gameplay.Characters.Enemies
         #region Movement
         private IEnumerator GrappleEvadeRoutine(bool willStickToSurface)
         {
+            m_canEvade = false;
             ResetCounterCounts();
             m_spineListener.Unsubcribe(m_info.moveEvent, EventMoveToLastPosition);
 
@@ -1784,7 +1798,6 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_movement.Stop();
                 m_character.physics.SetVelocity(0, 0);
                 m_dynamicIdleCoroutine = StartCoroutine(DynamicIdleRoutine());
-
                 yield return new WaitForSeconds(3f);
             }
             else
@@ -1809,6 +1822,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_info.bodySlamStart, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.bodySlamStart);
             m_animation.SetEmptyAnimation(3, 0);
+            m_character.physics.SetVelocity(0, 0);
             while (!m_groundSensor.isDetecting)
             {
                 m_animation.SetAnimation(0, m_info.bodySlamLoop, true);
@@ -1826,6 +1840,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_stateHandle.ApplyQueuedState();
 
             enabled = true;
+            m_canEvade = true;
 
             yield return null;
         }
@@ -2129,6 +2144,7 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 m_animation.SetAnimation(i + 20, m_info.wallGrappleExtendAnimations[i], false).TimeScale = m_info.tentacleSpeed;
             }
+            
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.wallGrappleExtendAnimations[0]);
             for (int i = 0; i < tentaclesCount; i++)
             {
@@ -2570,43 +2586,8 @@ namespace DChild.Gameplay.Characters.Enemies
                     default:
                         if (m_kingPusIsBurning)
                             BurnFlinch();
-                        if (m_currentHitCount < m_maxHitCount)
-                            m_currentHitCount++;
-                        else
+                        if (m_canEvade == true)
                         {
-                            if (m_grappleCoroutine != null)
-                            {
-                                StopCoroutine(m_grappleCoroutine);
-                                m_grappleCoroutine = null;
-                            }
-
-                            if (m_currentAttackCoroutine != null)
-                            {
-                                StopCoroutine(m_currentAttackCoroutine);
-                                m_currentAttackCoroutine = null;
-                                m_attackDecider.hasDecidedOnAttack = false;
-                            }
-
-                            //stop all behaviours
-                            //make new animation (flinch/wiggle) to grapple evade
-                            StopAnimations();
-                            StopAllCoroutines();
-                            int rand = UnityEngine.Random.Range(0, 2);
-
-                            if (rand == 0)
-                            {
-                                m_grappleEvadeRoutine = StartCoroutine(GrappleEvadeRoutine(false));
-                            }
-                            else
-                            {
-                                m_grappleEvadeRoutine = StartCoroutine(GrappleEvadeRoutine(true));
-                            }
-                        }
-                        break;
-                    case Phase.PhaseThree:
-                        {
-                            if (m_kingPusIsBurning)
-                                BurnFlinch();
                             if (m_currentHitCount < m_maxHitCount)
                                 m_currentHitCount++;
                             else
@@ -2639,6 +2620,49 @@ namespace DChild.Gameplay.Characters.Enemies
                                     m_grappleEvadeRoutine = StartCoroutine(GrappleEvadeRoutine(true));
                                 }
                             }
+                        }
+                        
+                        break;
+                    case Phase.PhaseThree:
+                        {
+                            if (m_kingPusIsBurning)
+                                BurnFlinch();
+                            if (m_canEvade == true)
+                            {
+                                if (m_currentHitCount < m_maxHitCount)
+                                    m_currentHitCount++;
+                                else
+                                {
+                                    if (m_grappleCoroutine != null)
+                                    {
+                                        StopCoroutine(m_grappleCoroutine);
+                                        m_grappleCoroutine = null;
+                                    }
+
+                                    if (m_currentAttackCoroutine != null)
+                                    {
+                                        StopCoroutine(m_currentAttackCoroutine);
+                                        m_currentAttackCoroutine = null;
+                                        m_attackDecider.hasDecidedOnAttack = false;
+                                    }
+
+                                    //stop all behaviours
+                                    //make new animation (flinch/wiggle) to grapple evade
+                                    StopAnimations();
+                                    StopAllCoroutines();
+                                    int rand = UnityEngine.Random.Range(0, 2);
+
+                                    if (rand == 0)
+                                    {
+                                        m_grappleEvadeRoutine = StartCoroutine(GrappleEvadeRoutine(false));
+                                    }
+                                    else
+                                    {
+                                        m_grappleEvadeRoutine = StartCoroutine(GrappleEvadeRoutine(true));
+                                    }
+                                }
+                            }
+                            
 
                             if (m_hitbox.canBlockDamage)
                             {
