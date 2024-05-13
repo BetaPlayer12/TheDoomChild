@@ -709,10 +709,10 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_info.punchComboAnimation, false).MixDuration = 0;
             yield return new WaitForSeconds(.8f);
             m_punchRightComboBB.enabled = true;
-            yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSeconds(0.2f);
             m_punchRightComboBB.enabled = false;
             m_punchLeftComboBB.enabled = true;
-            yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSeconds(0.2f);
             m_punchLeftComboBB.enabled = false;
             m_punchComboLastHitBB.enabled = true;
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.punchComboAnimation);
