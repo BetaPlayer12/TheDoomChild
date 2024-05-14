@@ -950,7 +950,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
 
         private IEnumerator ChooseScytheWaveSpawn()
-        {           
+        {
+            enabled = false;
             var chosenPosition = GetPointFarthestFromPlayer(m_scytheWaveLeftSpawnPosition.position,  m_scytheWaveRightSpawnPosition.position);
 
             m_animation.SetAnimation(0, m_blinkDisappearAnimation, false);
@@ -962,6 +963,7 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return new WaitForAnimationComplete(m_animation.animationState, m_blinkAppearAnimation);
 
             yield return null;
+            enabled = true;
         }
 
         private Vector2 GetPointFarthestFromPlayer(params Vector2[] options)
@@ -1033,6 +1035,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator FakeBlinkRoutine()
         {
+            enabled = false;
             if (m_currentAttackCoroutine == null)
             {
                 switch (m_fakeBlinkCount)
@@ -1055,6 +1058,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 }
             }
             yield return null;
+            enabled = true;
         }
 
         private IEnumerator DrillDash2Routine()
@@ -1150,15 +1154,11 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_model.transform.rotation = Quaternion.Euler(0f, 0f, (atan2 * Mathf.Rad2Deg) + (m_character.facing == HorizontalDirection.Right ? 0 : 180));
 
                     float time = 0;
-                    while (time < .25f)
+                    while (time < .25f || !m_groundSensor.isDetecting)
                     {
-                        m_groundSensor.multiRaycast.SetCastDistance(25);
-                        if (!m_groundSensor.isDetecting)
-                        {
-                            m_character.physics.SetVelocity((m_character.facing == HorizontalDirection.Right ? m_info.drillDashSpeed : -m_info.drillDashSpeed) * m_model.transform.right);
-                            time += Time.deltaTime;
-                            yield return null;
-                        }
+                        m_character.physics.SetVelocity((m_character.facing == HorizontalDirection.Right ? m_info.drillDashSpeed : -m_info.drillDashSpeed) * m_model.transform.right);
+                        time += Time.deltaTime;
+                        m_groundSensor.multiRaycast.SetCastDistance(100);
                         yield return null;
                     }
                     m_groundSensor.multiRaycast.SetCastDistance(1);
@@ -2005,7 +2005,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_blinkDisappearAnimation = m_info.blinkDisappearForwardAnimation.animation;
             m_blinkAppearAnimation = m_info.blinkAppearForwardAnimation.animation;
         }
-
+        
         private void Update()
         {
             m_phaseHandle.MonitorPhase();
@@ -2175,7 +2175,24 @@ namespace DChild.Gameplay.Characters.Enemies
                     }
                     break;
                 case State.WaitBehaviourEnd:
+                    StartCoroutine(ForceReevaluate());
                     return;
+            }
+        }
+        //temporary fix
+        private float m_waitTime = 5f;
+        private IEnumerator ForceReevaluate()
+        {
+            m_waitTime = 5f;
+            do
+            {
+                m_waitTime -= Time.deltaTime;
+                yield return null;
+            }
+            while (m_stateHandle.currentState == State.WaitBehaviourEnd);
+            if (m_waitTime == 0)
+            {
+                m_stateHandle.OverrideState(State.ReevaluateSituation);
             }
         }
 
