@@ -774,16 +774,16 @@ namespace DChild.Gameplay.Characters.Enemies
                 yield return new WaitForSeconds(waitTime);
                 m_hitbox.Disable();
                 m_animation.SetAnimation(4, m_drillMixAnimation, false);
-                m_drillDamage.SetActive(true);
                 m_character.physics.SetVelocity(m_info.drillDashSpeed * transform.localScale.x, 0);
+                m_drillDamage.SetActive(true);
                 m_animation.SetAnimation(0, m_info.drillDash1Attack.animation, false);
                 yield return new WaitForAnimationComplete(m_animation.animationState, m_info.drillDash1Attack.animation);
                 m_animation.SetEmptyAnimation(4, 0);
                 m_hitbox.Enable();
                 m_movement.Stop();
                 m_animation.SetAnimation(0, m_info.drillToGroundAnimation, false);
-                yield return new WaitForAnimationComplete(m_animation.animationState, m_info.drillToGroundAnimation);
                 m_drillDamage.SetActive(false);
+                yield return new WaitForAnimationComplete(m_animation.animationState, m_info.drillToGroundAnimation);
                 m_animation.SetAnimation(0, m_info.idleAnimation, true);
                 if (!IsFacingTarget())
                     CustomTurn();
@@ -1030,6 +1030,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 }
             }
             //m_evadeCoroutine = null;
+            m_blinkCoroutine = null;
             yield return null;
         }
 
@@ -1057,6 +1058,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         break;
                 }
             }
+            m_blinkCoroutine = null;
             yield return null;
             enabled = true;
         }
@@ -1079,9 +1081,9 @@ namespace DChild.Gameplay.Characters.Enemies
                 while (drillCount < 2)
                 {
                     m_animation.SetAnimation(0, m_info.groundToDrillAnimation, false);
-                    m_drillDamage.SetActive(true);
                     var waitTime = m_animation.animationState.GetCurrent(0).AnimationEnd * 0.75f;
                     yield return new WaitForSeconds(waitTime);
+                    m_drillDamage.SetActive(true);
                     m_hitbox.Disable();
                     m_animation.SetAnimation(4, m_drillMixAnimation, false);
                     m_character.physics.SetVelocity(m_info.drillDashSpeed * transform.localScale.x, 0);
@@ -1091,8 +1093,8 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_hitbox.Enable();
                     m_movement.Stop();
                     m_animation.SetAnimation(0, m_info.drillToGroundAnimation, false);
-                    yield return new WaitForAnimationComplete(m_animation.animationState, m_info.drillToGroundAnimation);
                     m_drillDamage.SetActive(false);
+                    yield return new WaitForAnimationComplete(m_animation.animationState, m_info.drillToGroundAnimation);
                     m_animation.SetAnimation(0, m_info.idleAnimation, true);
                     if (!IsFacingTarget())
                         CustomTurn();
@@ -1115,6 +1117,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
                 m_blinkCoroutine = StartCoroutine(BlinkRoutine(BlinkState.DisappearBackward, BlinkState.AppearBackward, 50, 0, State.Chasing, false, false, false));
             }
+            m_blinkCoroutine = null;
             yield return null;
             enabled = true;
         }
@@ -1168,8 +1171,8 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_hitbox.Enable();
                     m_movement.Stop();
                     m_animation.SetAnimation(0, m_info.drillToGroundAnimation, false);
-                    yield return new WaitForAnimationComplete(m_animation.animationState, m_info.drillToGroundAnimation);
                     m_drillDamage.SetActive(false);
+                    yield return new WaitForAnimationComplete(m_animation.animationState, m_info.drillToGroundAnimation);
                     //m_animation.SetEmptyAnimation(0, 0);
                     if (!m_groundSensor.isDetecting)
                     {
@@ -1182,8 +1185,8 @@ namespace DChild.Gameplay.Characters.Enemies
                         CustomTurn();
 
                     m_animation.SetAnimation(0, m_info.groundToDrillAnimation, false);
-                    m_drillDamage.SetActive(true);
                     var waitTime = m_animation.animationState.GetCurrent(0).AnimationEnd * 0.75f;
+                    m_drillDamage.SetActive(true);
                     yield return new WaitForSeconds(waitTime);
                     m_hitbox.Disable();
                     m_animation.SetAnimation(4, m_drillMixAnimation, false);
@@ -1194,8 +1197,8 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_hitbox.Enable();
                     m_movement.Stop();
                     m_animation.SetAnimation(0, m_info.drillToGroundAnimation, false);
-                    yield return new WaitForAnimationComplete(m_animation.animationState, m_info.drillToGroundAnimation);
                     m_drillDamage.SetActive(false);
+                    yield return new WaitForAnimationComplete(m_animation.animationState, m_info.drillToGroundAnimation);
                     m_animation.SetAnimation(0, m_info.idleAnimation, true);
                     StopComboCounts();
                     m_attackDecider.hasDecidedOnAttack = false;
@@ -1207,6 +1210,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         m_stateHandle.ApplyQueuedState();
                     break;
             }
+            m_blinkCoroutine = null;
             yield return null;
             enabled = true;
         }
@@ -1259,6 +1263,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
                 m_blinkCoroutine = StartCoroutine(BlinkRoutine(BlinkState.DisappearForward, BlinkState.AppearForward, 25, m_info.midAirHeight, State.Chasing, false, false, false));
             }
+            m_blinkCoroutine = null;
             yield return null;
         }
 
@@ -1280,6 +1285,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 enabled = true;
             }
 
+            m_blinkCoroutine = null;
             yield return null;
         }
 
@@ -1301,8 +1307,8 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_hitbox.Enable();
                 m_movement.Stop();
                 m_animation.SetAnimation(0, m_info.drillToGroundAnimation, false);
-                yield return new WaitForAnimationComplete(m_animation.animationState, m_info.drillToGroundAnimation);
                 m_drillDamage.SetActive(false);
+                yield return new WaitForAnimationComplete(m_animation.animationState, m_info.drillToGroundAnimation);
                 m_animation.SetAnimation(0, m_info.idleAnimation, true);
                 yield return new WaitForSeconds(m_info.phase1Pattern3IdleTime);
 
@@ -1315,6 +1321,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
                 m_blinkCoroutine = StartCoroutine(BlinkRoutine(BlinkState.DisappearBackward, BlinkState.AppearBackward, 60, m_info.midAirHeight, State.Chasing, false, false, false));
             }
+            m_blinkCoroutine = null;
             yield return null;
         }
 
@@ -1467,6 +1474,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     }
                     break;
             }
+            m_blinkCoroutine = null;
             yield return null;
         }
 
@@ -1502,6 +1510,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     }
                     break;
             }
+            m_blinkCoroutine = null;
             yield return null;
         }
 
@@ -1528,6 +1537,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
                 m_blinkCoroutine = StartCoroutine(BlinkRoutine(BlinkState.DisappearBackward, BlinkState.AppearBackward, 60, m_info.midAirHeight, State.Chasing, false, false, false));
             }
+            m_blinkCoroutine = null;
             yield return null;
         }
 
@@ -1580,6 +1590,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_currentAttackCoroutine = StartCoroutine(DrillDashComboRoutine());
                     break;
             }
+            m_blinkCoroutine = null;
             yield return null;
         }
         #endregion
@@ -1624,6 +1635,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator BlinkRoutine(BlinkState disappearState, BlinkState appearState, float blinkDistance, float midAirHeight, State transitionState, bool fakeBlink, bool evadeBlink, bool isMidAir)
         {
+            m_drillDamage.SetActive(false);
             m_legCollider.enabled = false;
             m_hitbox.Disable();
             m_movement.Stop();
