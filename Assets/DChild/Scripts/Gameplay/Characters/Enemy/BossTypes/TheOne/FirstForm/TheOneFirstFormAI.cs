@@ -1433,7 +1433,8 @@ namespace DChild.Gameplay.Characters.Enemies
             }
             Debug.Log("done");
         }
-
+        [SerializeField]
+        private GameObject m_twinSlashMidAir;
         private IEnumerator Phase2Pattern1AttackRoutine()
         {
             Debug.Log("phase2pattern1");
@@ -1445,6 +1446,10 @@ namespace DChild.Gameplay.Characters.Enemies
                     if (!playerIsGrouned)
                     {
                         m_animation.SetAnimation(0, m_info.twinSlash2Attack.animation, false);
+                        yield return new WaitForSeconds(0.4f);
+                        m_twinSlashMidAir.SetActive(true);
+                        yield return new WaitForSeconds(0.2f);
+                        m_twinSlashMidAir.SetActive(false);
                         yield return new WaitForAnimationComplete(m_animation.animationState, m_info.twinSlash2Attack.animation);
                         m_animation.EnableRootMotion(true, false);
                         m_animation.AddAnimation(0, m_info.fallAnimation, true, 0);
@@ -1701,6 +1706,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator BlinkRoutine(BlinkState disappearState, BlinkState appearState, float blinkDistance, float midAirHeight, State transitionState, bool fakeBlink, bool evadeBlink, bool isMidAir)
         {
             Debug.Log("blinkroutine");
+            m_character.physics.SetVelocity(0f, 0f);
             m_drillDamage.SetActive(false);
             m_heavySwordStab.SetActive(false);
             m_swordStab.SetActive(false);
