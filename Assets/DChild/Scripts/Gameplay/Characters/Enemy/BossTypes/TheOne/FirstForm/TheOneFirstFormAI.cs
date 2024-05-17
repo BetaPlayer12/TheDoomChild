@@ -1244,6 +1244,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator Phase1Pattern1AttackRoutine()
         {
             Debug.Log("phase1pattern1");
+            enabled = false;
             m_animation.EnableRootMotion(true, false);
             if (IsTargetInRange(m_info.downwardSlash1Attack.range))
             {
@@ -1279,11 +1280,10 @@ namespace DChild.Gameplay.Characters.Enemies
                             m_animation.SetAnimation(0, m_info.twinSlash1Attack.animation, false);
                             yield return new WaitForSeconds(.3f);
                             m_twinSlash.SetActive(true);
-                            yield return new WaitForSeconds(.2f);
+                            yield return new WaitForSeconds(.1f);
                             m_twinSlash.SetActive(false);
                             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.twinSlash1Attack.animation);
                             m_attackDecider.hasDecidedOnAttack = false;
-                            m_currentAttackCoroutine = null;
                             if (m_alterBladeCoroutine == null)
                             {
                                 m_stateHandle.ApplyQueuedState();
@@ -1300,7 +1300,9 @@ namespace DChild.Gameplay.Characters.Enemies
 
                 m_blinkCoroutine = StartCoroutine(BlinkRoutine(BlinkState.DisappearForward, BlinkState.AppearForward, 25, m_info.midAirHeight, State.Chasing, false, false, false));
             }
+            m_currentAttackCoroutine = null;
             m_blinkCoroutine = null;
+            enabled = true;
             yield return null;
             Debug.Log("done");
         }
