@@ -1665,7 +1665,6 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_currentAttackCoroutine = StartCoroutine(DrillDashComboRoutine());
                     break;
             }
-            m_blinkCoroutine = null;
             yield return null;
             Debug.Log("done");
         }
@@ -1835,6 +1834,7 @@ namespace DChild.Gameplay.Characters.Enemies
             //    {
             //    }
             //}
+            m_blinkCoroutine = null;
             yield return null;
             Debug.Log("done");
         }
