@@ -749,8 +749,8 @@ namespace DChild.Gameplay.Characters.Enemies
             m_hitbox.SetCanBlockDamageState(false);
             if (m_alterBladeCoroutine == null)
                 m_stateHandle.ApplyQueuedState();
-            yield return null;
             enabled = true;
+            yield return null;
         }
         [SerializeField]
         private GameObject m_drillDamage;
@@ -909,8 +909,8 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return new WaitForSeconds(m_info.phaseChangeToBlinkDelay);
             m_alterBladeMonitorCoroutine = StartCoroutine(AlterBladeMonitorRoutine());
             m_blinkCoroutine = StartCoroutine(BlinkRoutine(BlinkState.DisappearForward, BlinkState.AppearForward, 25, m_info.midAirHeight, State.Chasing, true, false, false));
-            yield return null;
             enabled = true;
+            yield return null;
             Debug.Log("done");
         }
         #region Attacks
@@ -968,9 +968,9 @@ namespace DChild.Gameplay.Characters.Enemies
 
             m_animation.SetAnimation(0, m_blinkAppearAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_blinkAppearAnimation);
+            enabled = true;
 
             yield return null;
-            enabled = true;
             Debug.Log("done");
         }
 
@@ -1009,6 +1009,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator EvadeRoutine()
         {
             Debug.Log("evading");
+            enabled = false;
             m_animation.EnableRootMotion(true, false);
             if (/*IsTargetInRange(m_info.projectilWaveSlashGround1Attack.range) &&*/ m_blinkCount < 2)
             {
@@ -1034,7 +1035,6 @@ namespace DChild.Gameplay.Characters.Enemies
                         if (m_alterBladeCoroutine == null)
                         {
                             m_stateHandle.ApplyQueuedState();
-                            enabled = true;
                         }
                         break;
                     case 1:
@@ -1044,6 +1044,7 @@ namespace DChild.Gameplay.Characters.Enemies
             }
             //m_evadeCoroutine = null;
             m_blinkCoroutine = null;
+            enabled = true;
             yield return null;
             Debug.Log("done");
         }
@@ -1074,8 +1075,8 @@ namespace DChild.Gameplay.Characters.Enemies
                 }
             }
             m_blinkCoroutine = null;
-            yield return null;
             enabled = true;
+            yield return null;;
             Debug.Log("done");
         }
 
@@ -1135,8 +1136,8 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_blinkCoroutine = StartCoroutine(BlinkRoutine(BlinkState.DisappearBackward, BlinkState.AppearBackward, 50, 0, State.Chasing, false, false, false));
             }
             m_blinkCoroutine = null;
-            yield return null;
             enabled = true;
+            yield return null;
             Debug.Log("done");
         }
         
@@ -1230,8 +1231,8 @@ namespace DChild.Gameplay.Characters.Enemies
                     break;
             }
             m_blinkCoroutine = null;
-            yield return null;
             enabled = true;
+            yield return null;
             Debug.Log("done");
         }
         [SerializeField]
@@ -1286,7 +1287,6 @@ namespace DChild.Gameplay.Characters.Enemies
                             if (m_alterBladeCoroutine == null)
                             {
                                 m_stateHandle.ApplyQueuedState();
-                                enabled = true;
                             }
 
                             break;
@@ -1308,6 +1308,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator Phase1Pattern2AttackRoutine()
         {
             Debug.Log("phase1pattern2");
+            enabled = false;
             m_animation.EnableRootMotion(true, false);
 
             m_animation.SetAnimation(0, m_info.projectilWaveSlashGround1Attack.animation, false);
@@ -1321,10 +1322,10 @@ namespace DChild.Gameplay.Characters.Enemies
             if (m_alterBladeCoroutine == null)
             {
                 m_stateHandle.ApplyQueuedState();
-                enabled = true;
             }
 
             m_blinkCoroutine = null;
+            enabled = true;
             yield return null;
             Debug.Log("done");
         }
@@ -1370,6 +1371,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator Phase1Pattern4AttackRoutine()
         {
             Debug.Log("phase1pattern4");
+            enabled = false;
             var geyserAnimation = "";
             GameObject geyserToSpawn = null;
             switch (m_currentSwordState)
@@ -1417,8 +1419,8 @@ namespace DChild.Gameplay.Characters.Enemies
             if (m_alterBladeCoroutine == null)
             {
                 m_stateHandle.ApplyQueuedState();
-                enabled = true;
             }
+            enabled = true;
             yield return null;
             Debug.Log("done");
         }
@@ -1438,6 +1440,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator Phase2Pattern1AttackRoutine()
         {
             Debug.Log("phase2pattern1");
+            enabled = false;
             m_animation.EnableRootMotion(true, m_phase2pattern1Count == 3 ? true : false);
             switch (m_phase2pattern1Count)
             {
@@ -1481,8 +1484,8 @@ namespace DChild.Gameplay.Characters.Enemies
                     if (m_alterBladeCoroutine == null)
                     {
                         m_stateHandle.ApplyQueuedState();
-                        enabled = true;
                     }
+                    enabled = true;
                     yield return null;
                     break;
                 default:
@@ -1500,7 +1503,6 @@ namespace DChild.Gameplay.Characters.Enemies
                                 yield return new WaitForAnimationComplete(m_animation.animationState, m_info.downwardSlash1Attack.animation);
                                 m_phase2pattern1Count++;
                                 m_stateHandle.OverrideState(State.Attacking);
-                                enabled = true;
                                 break;
                             case 1:
                                 m_swordStab.SetActive(true);
@@ -1516,7 +1518,6 @@ namespace DChild.Gameplay.Characters.Enemies
                                 yield return new WaitForAnimationComplete(m_animation.animationState, m_info.heavySwordStabAttack.animation);
                                 m_phase2pattern1Count++;
                                 m_stateHandle.OverrideState(State.Attacking);
-                                enabled = true;
                                 break;
                             case 2:
                                 yield return ChooseScytheWaveSpawn();
@@ -1538,6 +1539,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     break;
             }
             m_blinkCoroutine = null;
+            enabled = true;
             yield return null;
             Debug.Log("done");
         }
@@ -1546,6 +1548,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             Debug.Log("phase2pattern2");
             Debug.Log("blinkers" + m_blinkCoroutine);
+            enabled = false;
             switch (m_phase2pattern2Count)
             {
                 case 0:
@@ -1571,10 +1574,10 @@ namespace DChild.Gameplay.Characters.Enemies
                     if (m_alterBladeCoroutine == null)
                     {
                         m_stateHandle.ApplyQueuedState();
-                        enabled = true;
                     }
                     break;
             }
+            enabled = true;
             m_blinkCoroutine = null;
             yield return null;
             Debug.Log("done");
@@ -1583,6 +1586,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator Phase2Pattern3AttackRoutine()
         {
             Debug.Log("phase2pattern3");
+            enabled = false;
             if (IsTargetInRange(m_info.scytheWaveAttack.range))
             {
                 yield return ChooseScytheWaveSpawn();
@@ -1594,7 +1598,6 @@ namespace DChild.Gameplay.Characters.Enemies
                 if (m_alterBladeCoroutine == null)
                 {
                     m_stateHandle.ApplyQueuedState();
-                    enabled = true;
                 }
             }
             else
@@ -1605,6 +1608,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_blinkCoroutine = StartCoroutine(BlinkRoutine(BlinkState.DisappearBackward, BlinkState.AppearBackward, 60, m_info.midAirHeight, State.Chasing, false, false, false));
             }
             m_blinkCoroutine = null;
+            enabled = true;
             yield return null;
             Debug.Log("done");
         }
@@ -1820,7 +1824,6 @@ namespace DChild.Gameplay.Characters.Enemies
                         break;
                     case false:
                         m_stateHandle.OverrideState(transitionState);
-                        enabled = true;
                         break;
                 }
             }
@@ -2208,8 +2211,6 @@ namespace DChild.Gameplay.Characters.Enemies
                             m_pickedCooldown = m_currentFullCooldown[4];
                             break;
                     }
-
-                    enabled = false;
                     break;
 
                 case State.Cooldown:
