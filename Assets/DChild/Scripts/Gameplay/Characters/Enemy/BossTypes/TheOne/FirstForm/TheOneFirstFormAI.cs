@@ -1473,12 +1473,12 @@ namespace DChild.Gameplay.Characters.Enemies
                         transform.position = new Vector2(transform.position.x, GroundPosition().y);
                         m_animation.SetAnimation(0, m_info.blinkAppearBackwardAnimation, false);
                         yield return new WaitForAnimationComplete(m_animation.animationState, m_info.blinkAppearBackwardAnimation);
-                        m_animation.SetAnimation(0, m_info.twinSlash1Attack.animation, false);
+                        var animTwinSlash = m_animation.SetAnimation(0, m_info.twinSlash1Attack.animation, false);
                         yield return new WaitForSeconds(.3f);
                         m_twinSlash.SetActive(true);
-                        yield return new WaitForSeconds(.2f);
+                        //yield return new WaitForSeconds(.1f);
+                        yield return new WaitForSpineAnimationComplete(animTwinSlash);
                         m_twinSlash.SetActive(false);
-                        yield return new WaitForAnimationComplete(m_animation.animationState, m_info.twinSlash1Attack.animation);
                     }
                     StopComboCounts();
                     m_attackDecider.hasDecidedOnAttack = false;
