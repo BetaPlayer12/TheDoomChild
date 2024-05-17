@@ -1043,7 +1043,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 }
             }
             //m_evadeCoroutine = null;
-            m_blinkCoroutine = null;
+            //m_blinkCoroutine = null;
             enabled = true;
             yield return null;
             Debug.Log("done");
@@ -1074,7 +1074,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         break;
                 }
             }
-            m_blinkCoroutine = null;
+            //m_blinkCoroutine = null;
             enabled = true;
             yield return null;;
             Debug.Log("done");
@@ -1135,7 +1135,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
                 m_blinkCoroutine = StartCoroutine(BlinkRoutine(BlinkState.DisappearBackward, BlinkState.AppearBackward, 50, 0, State.Chasing, false, false, false));
             }
-            m_blinkCoroutine = null;
+            //m_blinkCoroutine = null;
             enabled = true;
             yield return null;
             Debug.Log("done");
@@ -1230,7 +1230,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         m_stateHandle.ApplyQueuedState();
                     break;
             }
-            m_blinkCoroutine = null;
+            //m_blinkCoroutine = null;
             enabled = true;
             yield return null;
             Debug.Log("done");
@@ -1301,7 +1301,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_blinkCoroutine = StartCoroutine(BlinkRoutine(BlinkState.DisappearForward, BlinkState.AppearForward, 25, m_info.midAirHeight, State.Chasing, false, false, false));
             }
             m_currentAttackCoroutine = null;
-            m_blinkCoroutine = null;
+            //m_blinkCoroutine = null;
             enabled = true;
             yield return null;
             Debug.Log("done");
@@ -1365,7 +1365,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
                 m_blinkCoroutine = StartCoroutine(BlinkRoutine(BlinkState.DisappearBackward, BlinkState.AppearBackward, 60, m_info.midAirHeight, State.Chasing, false, false, false));
             }
-            m_blinkCoroutine = null;
+            //m_blinkCoroutine = null;
             yield return null;
             Debug.Log("done");
         }
@@ -1540,7 +1540,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     }
                     break;
             }
-            m_blinkCoroutine = null;
+            //m_blinkCoroutine = null;
             enabled = true;
             yield return null;
             Debug.Log("done");
@@ -1580,7 +1580,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     break;
             }
             enabled = true;
-            m_blinkCoroutine = null;
+            //m_blinkCoroutine = null;
             yield return null;
             Debug.Log("done");
         }
@@ -1609,7 +1609,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
                 m_blinkCoroutine = StartCoroutine(BlinkRoutine(BlinkState.DisappearBackward, BlinkState.AppearBackward, 60, m_info.midAirHeight, State.Chasing, false, false, false));
             }
-            m_blinkCoroutine = null;
+            //m_blinkCoroutine = null;
             enabled = true;
             yield return null;
             Debug.Log("done");
@@ -1665,6 +1665,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_currentAttackCoroutine = StartCoroutine(DrillDashComboRoutine());
                     break;
             }
+            //m_blinkCoroutine = null;
             yield return null;
             Debug.Log("done");
         }
@@ -1834,7 +1835,6 @@ namespace DChild.Gameplay.Characters.Enemies
             //    {
             //    }
             //}
-            m_blinkCoroutine = null;
             yield return null;
             Debug.Log("done");
         }
