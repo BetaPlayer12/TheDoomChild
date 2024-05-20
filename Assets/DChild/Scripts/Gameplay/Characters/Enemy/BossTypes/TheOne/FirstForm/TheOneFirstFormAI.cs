@@ -1245,7 +1245,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             Debug.Log("phase1pattern1");
             enabled = false;
-            StopCoroutine(m_blinkCoroutine);
+            //StopCoroutine(m_blinkCoroutine);
             m_animation.EnableRootMotion(true, false);
             if (IsTargetInRange(m_info.downwardSlash1Attack.range))
             {
@@ -1313,7 +1313,7 @@ namespace DChild.Gameplay.Characters.Enemies
             Debug.Log("phase1pattern2");
             enabled = false;
             m_animation.EnableRootMotion(true, false);
-            StopCoroutine(m_blinkCoroutine);
+            //StopCoroutine(m_blinkCoroutine);
             m_animation.SetAnimation(0, m_info.projectilWaveSlashGround1Attack.animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.projectilWaveSlashGround1Attack.animation);
 
@@ -1376,7 +1376,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             Debug.Log("phase1pattern4");
             enabled = false;
-            StopCoroutine(m_blinkCoroutine);
+            //StopCoroutine(m_blinkCoroutine);
             var geyserAnimation = "";
             GameObject geyserToSpawn = null;
             switch (m_currentSwordState)
@@ -1446,7 +1446,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             Debug.Log("phase2pattern1");
             enabled = false;
-            StopCoroutine(m_blinkCoroutine);
+            //StopCoroutine(m_blinkCoroutine);
             m_animation.EnableRootMotion(true, m_phase2pattern1Count == 3 ? true : false);
             switch (m_phase2pattern1Count)
             {
@@ -1554,7 +1554,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             Debug.Log("phase2pattern2");
             enabled = false;
-            StopCoroutine(m_blinkCoroutine);
+            //StopCoroutine(m_blinkCoroutine);
             switch (m_phase2pattern2Count)
             {
                 case 0:
@@ -1593,7 +1593,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             Debug.Log("phase2pattern3");
             enabled = false;
-            StopCoroutine(m_blinkCoroutine);
+            //StopCoroutine(m_blinkCoroutine);
             if (IsTargetInRange(m_info.scytheWaveAttack.range))
             {
                 yield return ChooseScytheWaveSpawn();
@@ -1625,7 +1625,7 @@ namespace DChild.Gameplay.Characters.Enemies
             Debug.Log("phase2pattern5");
             var isMidAir = UnityEngine.Random.Range(0, 2) == 1 ? true : false;
             m_phase2pattern5Count = m_phase2pattern5Count > 3 ? 3 : m_phase2pattern5Count;
-            StopCoroutine(m_blinkCoroutine);
+            //StopCoroutine(m_blinkCoroutine);
             switch (m_phase2pattern5Count)
             {
                 case 0:
