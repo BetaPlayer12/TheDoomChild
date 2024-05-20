@@ -581,29 +581,29 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 case Phase.PhaseOne:
                     m_idleAnimation = m_info.idleCombatAnimation.animation;
-                    AddToAttackCache(Attack.Phase1Pattern1, Attack.Phase1Pattern2, Attack.Phase1Pattern3, Attack.Phase1Pattern4);
-                    AddToRangeCache(m_info.phase1Pattern1Range, m_info.phase1Pattern2Range, m_info.phase1Pattern3Range, m_info.phase1Pattern4Range);
-                    m_attackDecider.SetList(new AttackInfo<Attack>(Attack.Phase1Pattern1, m_info.phase1Pattern1Range)
+                    //AddToAttackCache(Attack.Phase1Pattern1, Attack.Phase1Pattern2, Attack.Phase1Pattern3, Attack.Phase1Pattern4);
+                    //AddToRangeCache(m_info.phase1Pattern1Range, m_info.phase1Pattern2Range, m_info.phase1Pattern3Range, m_info.phase1Pattern4Range);
+                    /*m_attackDecider.SetList(new AttackInfo<Attack>(Attack.Phase1Pattern1, m_info.phase1Pattern1Range)
                                     , new AttackInfo<Attack>(Attack.Phase1Pattern2, m_info.phase1Pattern2Range)
                                     , new AttackInfo<Attack>(Attack.Phase1Pattern3, m_info.phase1Pattern3Range)
-                                    , new AttackInfo<Attack>(Attack.Phase1Pattern4, m_info.phase1Pattern4Range));
+                                    , new AttackInfo<Attack>(Attack.Phase1Pattern4, m_info.phase1Pattern4Range));*/
                     for (int i = 0; i < m_info.phase1PatternCooldown.Count; i++)
                         m_patternCooldown.Add(m_info.phase1PatternCooldown[i]);
                     break;
                 case Phase.PhaseTwo:
                     m_idleAnimation = m_info.idleCombatAnimation.animation;
-                    AddToAttackCache(Attack.Phase2Pattern1, Attack.Phase2Pattern2, Attack.Phase2Pattern3, Attack.Phase2Pattern4, Attack.Phase2Pattern5);
-                    AddToRangeCache(m_info.phase2Pattern1Range, m_info.phase2Pattern2Range, m_info.phase2Pattern3Range, m_info.phase2Pattern4Range, m_info.phase2Pattern5Range);
-                    m_attackDecider.SetList(new AttackInfo<Attack>(Attack.Phase2Pattern1, m_info.phase2Pattern1Range)
+                    //AddToAttackCache(Attack.Phase2Pattern1, Attack.Phase2Pattern2, Attack.Phase2Pattern3, Attack.Phase2Pattern4, Attack.Phase2Pattern5);
+                    //AddToRangeCache(m_info.phase2Pattern1Range, m_info.phase2Pattern2Range, m_info.phase2Pattern3Range, m_info.phase2Pattern4Range, m_info.phase2Pattern5Range);
+                    /*m_attackDecider.SetList(new AttackInfo<Attack>(Attack.Phase2Pattern1, m_info.phase2Pattern1Range)
                                     , new AttackInfo<Attack>(Attack.Phase2Pattern2, m_info.phase2Pattern2Range)
                                     , new AttackInfo<Attack>(Attack.Phase2Pattern3, m_info.phase2Pattern3Range)
                                     , new AttackInfo<Attack>(Attack.Phase2Pattern4, m_info.phase2Pattern4Range)
-                                    , new AttackInfo<Attack>(Attack.Phase2Pattern5, m_info.phase2Pattern5Range));
+                                    , new AttackInfo<Attack>(Attack.Phase2Pattern5, m_info.phase2Pattern5Range));*/
                     for (int i = 0; i < m_info.phase2PatternCooldown.Count; i++)
                         m_patternCooldown.Add(m_info.phase2PatternCooldown[i]);
                     break;
             }
-            m_attackUsed = new bool[m_attackCache.Count];
+            //m_attackUsed = new bool[m_attackCache.Count];
             if (m_currentFullCooldown.Count != 0)
             {
                 m_currentFullCooldown.Clear();
@@ -612,6 +612,8 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 m_currentFullCooldown.Add(obj.fullCooldown[i]);
             }
+            //m_attackDecider.hasDecidedOnAttack = false;
+            UpdateAttackDeciderList();
         }
 
         private void ChangeState()
@@ -2020,10 +2022,26 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void UpdateAttackDeciderList()
         {
-            /*m_attackDecider.SetList(new AttackInfo<Attack>(Attack.Phase1Pattern1, m_info.phase1Pattern1Range)
+            switch (m_phaseHandle.currentPhase)
+            {
+                case Phase.PhaseOne:
+                    m_attackDecider.SetList(new AttackInfo<Attack>(Attack.Phase1Pattern1, m_info.phase1Pattern1Range)
                                     , new AttackInfo<Attack>(Attack.Phase1Pattern2, m_info.phase1Pattern2Range)
                                     , new AttackInfo<Attack>(Attack.Phase1Pattern3, m_info.phase1Pattern3Range)
-                                    , new AttackInfo<Attack>(Attack.Phase1Pattern4, m_info.phase1Pattern4Range));*/
+                                    , new AttackInfo<Attack>(Attack.Phase1Pattern4, m_info.phase1Pattern4Range));
+                    break;
+                case Phase.PhaseTwo:
+                    m_attackDecider.SetList(new AttackInfo<Attack>(Attack.Phase2Pattern1, m_info.phase2Pattern1Range)
+                                    , new AttackInfo<Attack>(Attack.Phase2Pattern2, m_info.phase2Pattern2Range)
+                                    , new AttackInfo<Attack>(Attack.Phase2Pattern3, m_info.phase2Pattern3Range)
+                                    , new AttackInfo<Attack>(Attack.Phase2Pattern4, m_info.phase2Pattern4Range)
+                                    , new AttackInfo<Attack>(Attack.Phase2Pattern5, m_info.phase2Pattern5Range));
+                    break;
+                    /*m_attackDecider.SetList(new AttackInfo<Attack>(Attack.Phase1Pattern1, m_info.phase1Pattern1Range)
+                                            , new AttackInfo<Attack>(Attack.Phase1Pattern2, m_info.phase1Pattern2Range)
+                                            , new AttackInfo<Attack>(Attack.Phase1Pattern3, m_info.phase1Pattern3Range)
+                                            , new AttackInfo<Attack>(Attack.Phase1Pattern4, m_info.phase1Pattern4Range));*/
+            }
             m_attackDecider.hasDecidedOnAttack = false;
         }
 
@@ -2094,14 +2112,15 @@ namespace DChild.Gameplay.Characters.Enemies
             m_scytheWaveLauncher = new ProjectileLauncher(m_info.scytheWaveNormalProjectile.projectileInfo, m_scytheWavePoint);
             m_attackDecider = new RandomAttackDecider<Attack>();
             m_stateHandle = new StateHandle<State>(State.Idle, State.WaitBehaviourEnd);
-            UpdateAttackDeciderList();
+            //UpdateAttackDeciderList();
             m_attackCache = new List<Attack>();
             AddToAttackCache(Attack.Phase1Pattern1, Attack.Phase1Pattern2, Attack.Phase1Pattern3, Attack.Phase1Pattern4, Attack.Phase2Pattern1, Attack.Phase2Pattern2, Attack.Phase2Pattern3, Attack.Phase2Pattern4, Attack.Phase2Pattern5);
             m_attackRangeCache = new List<float>();
             AddToRangeCache(m_info.phase1Pattern1Range, m_info.phase1Pattern2Range, m_info.phase1Pattern3Range, m_info.phase1Pattern4Range, m_info.phase2Pattern1Range, m_info.phase2Pattern2Range, m_info.phase2Pattern3Range, m_info.phase2Pattern4Range, m_info.phase2Pattern5Range);
-            m_attackUsed = new bool[m_attackCache.Count];
+            
             m_currentFullCooldown = new List<float>();
             m_patternCooldown = new List<float>();
+            m_attackUsed = new bool[m_attackCache.Count];
         }
 
         protected override void Start()
@@ -2162,48 +2181,45 @@ namespace DChild.Gameplay.Characters.Enemies
                     switch (m_currentAttack)
                     {
                         case Attack.Phase1Pattern1:
-                            m_currentAttackCoroutine = StartCoroutine(Phase1Pattern1AttackRoutine());
-                            m_pickedCooldown = m_currentFullCooldown[0];
-                            break;
-                        case Attack.Phase1Pattern2:
-                            m_currentAttackCoroutine = StartCoroutine(Phase1Pattern2AttackRoutine());
-                            m_pickedCooldown = m_currentFullCooldown[1];
-                            break;
-                        case Attack.Phase1Pattern3:
-                            m_currentAttackCoroutine = StartCoroutine(Phase1Pattern3AttackRoutine());
-                            m_pickedCooldown = m_currentFullCooldown[2];
-                            break;
-                        case Attack.Phase1Pattern4:
-                            if (m_patternCooldown[3] == m_info.phase1PatternCooldown[3] && m_currentSwordState != SwordState.Normal)
+                            if (m_phaseHandle.currentPhase == Phase.PhaseOne)
                             {
-                                m_currentAttackCoroutine = StartCoroutine(Phase1Pattern4AttackRoutine());
-                                m_pickedCooldown = m_currentFullCooldown[3];
-                                StartCoroutine(CooldownMonitorRoutine(3));
+                                m_currentAttackCoroutine = StartCoroutine(Phase1Pattern1AttackRoutine());
+                                m_pickedCooldown = m_currentFullCooldown[0];
                             }
                             else
                             {
                                 m_attackDecider.hasDecidedOnAttack = false;
-                                m_currentAttackCoroutine = null;
-                                if (m_alterBladeCoroutine == null)
-                                    m_stateHandle.ApplyQueuedState();
+                                m_stateHandle.ApplyQueuedState();
                             }
                             break;
-                        case Attack.Phase2Pattern1:
-                            m_currentAttackCoroutine = StartCoroutine(Phase2Pattern1AttackRoutine());
-                            m_pickedCooldown = m_currentFullCooldown[0];
-                            break;
-                        case Attack.Phase2Pattern2:
-                            m_currentAttackCoroutine = StartCoroutine(Phase2Pattern2AttackRoutine());
-                            m_pickedCooldown = m_currentFullCooldown[1];
-                            break;
-                        case Attack.Phase2Pattern3:
-                            m_currentAttackCoroutine = StartCoroutine(Phase2Pattern3AttackRoutine());
-                            m_pickedCooldown = m_currentFullCooldown[2];
-                            break;
-                        case Attack.Phase2Pattern4:
-                            if (m_patternCooldown[3] == m_info.phase2PatternCooldown[3])
+                        case Attack.Phase1Pattern2:
+                            if (m_phaseHandle.currentPhase == Phase.PhaseOne)
                             {
-                                if (m_currentSwordState != SwordState.Normal)
+                                m_currentAttackCoroutine = StartCoroutine(Phase1Pattern2AttackRoutine());
+                                m_pickedCooldown = m_currentFullCooldown[1];
+                            }
+                            else
+                            {
+                                m_attackDecider.hasDecidedOnAttack = false;
+                                m_stateHandle.ApplyQueuedState();
+                            }
+                            break;
+                        case Attack.Phase1Pattern3:
+                            if (m_phaseHandle.currentPhase == Phase.PhaseOne)
+                            {
+                                m_currentAttackCoroutine = StartCoroutine(Phase1Pattern3AttackRoutine());
+                                m_pickedCooldown = m_currentFullCooldown[2];
+                            }
+                            else
+                            {
+                                m_attackDecider.hasDecidedOnAttack = false;
+                                m_stateHandle.ApplyQueuedState();
+                            }
+                            break;
+                        case Attack.Phase1Pattern4:
+                            if (m_phaseHandle.currentPhase == Phase.PhaseOne)
+                            {
+                                if (m_patternCooldown[3] == m_info.phase1PatternCooldown[3] && m_currentSwordState != SwordState.Normal)
                                 {
                                     m_currentAttackCoroutine = StartCoroutine(Phase1Pattern4AttackRoutine());
                                     m_pickedCooldown = m_currentFullCooldown[3];
@@ -2211,21 +2227,96 @@ namespace DChild.Gameplay.Characters.Enemies
                                 }
                                 else
                                 {
-                                    //m_attackDecider.hasDecidedOnAttack = false;
-                                    //m_currentAttackCoroutine = null;
-                                    //if (m_alterBladeCoroutine == null)
-                                    //    m_stateHandle.ApplyQueuedState();
+                                    m_attackDecider.hasDecidedOnAttack = false;
+                                    m_currentAttackCoroutine = null;
+                                    if (m_alterBladeCoroutine == null)
+                                        m_stateHandle.ApplyQueuedState();
+                                }
+                            }
+                            else
+                            {
+                                m_attackDecider.hasDecidedOnAttack = false;
+                                m_stateHandle.ApplyQueuedState();
+                            }
+                            break;
+                        case Attack.Phase2Pattern1:
+                            if (m_phaseHandle.currentPhase == Phase.PhaseTwo)
+                            {
+                                m_currentAttackCoroutine = StartCoroutine(Phase2Pattern1AttackRoutine());
+                                m_pickedCooldown = m_currentFullCooldown[0];
+                            }
+                            else
+                            {
+                                m_attackDecider.hasDecidedOnAttack = false;
+                                m_stateHandle.ApplyQueuedState();
+                            }
+                            break;
+                        case Attack.Phase2Pattern2:
+                            if (m_phaseHandle.currentPhase == Phase.PhaseTwo)
+                            {
+                                m_currentAttackCoroutine = StartCoroutine(Phase2Pattern2AttackRoutine());
+                                m_pickedCooldown = m_currentFullCooldown[1];
+                            }
+                            else
+                            {
+                                m_attackDecider.hasDecidedOnAttack = false;
+                                m_stateHandle.ApplyQueuedState();
+                            }
+                            break;
+                        case Attack.Phase2Pattern3:
+                            if (m_phaseHandle.currentPhase == Phase.PhaseTwo)
+                            {
+                                m_currentAttackCoroutine = StartCoroutine(Phase2Pattern3AttackRoutine());
+                                m_pickedCooldown = m_currentFullCooldown[2];
+                            }
+                            else
+                            {
+                                m_attackDecider.hasDecidedOnAttack = false;
+                                m_stateHandle.ApplyQueuedState();
+                            }
+                            break;
+                        case Attack.Phase2Pattern4:
+                            if (m_phaseHandle.currentPhase == Phase.PhaseTwo)
+                            {
+                                if (m_patternCooldown[3] == m_info.phase2PatternCooldown[3])
+                                {
+                                    if (m_currentSwordState != SwordState.Normal)
+                                    {
+                                        m_currentAttackCoroutine = StartCoroutine(Phase1Pattern4AttackRoutine());
+                                        m_pickedCooldown = m_currentFullCooldown[3];
+                                        StartCoroutine(CooldownMonitorRoutine(3));
+                                    }
+                                    else
+                                    {
+                                        //m_attackDecider.hasDecidedOnAttack = false;
+                                        //m_currentAttackCoroutine = null;
+                                        //if (m_alterBladeCoroutine == null)
+                                        //    m_stateHandle.ApplyQueuedState();
+                                        m_currentAttackCoroutine = StartCoroutine(DrillDashComboRoutine());
+                                    }
+                                }
+                                else
+                                {
                                     m_currentAttackCoroutine = StartCoroutine(DrillDashComboRoutine());
                                 }
                             }
                             else
                             {
-                                m_currentAttackCoroutine = StartCoroutine(DrillDashComboRoutine());
+                                m_attackDecider.hasDecidedOnAttack = false;
+                                m_stateHandle.ApplyQueuedState();
                             }
                             break;
                         case Attack.Phase2Pattern5:
-                            m_currentAttackCoroutine = StartCoroutine(Phase2Pattern5AttackRoutine());
-                            m_pickedCooldown = m_currentFullCooldown[4];
+                            if (m_phaseHandle.currentPhase == Phase.PhaseTwo)
+                            {
+                                m_currentAttackCoroutine = StartCoroutine(Phase2Pattern5AttackRoutine());
+                                m_pickedCooldown = m_currentFullCooldown[4];
+                            }
+                            else
+                            {
+                                m_attackDecider.hasDecidedOnAttack = false;
+                                m_stateHandle.ApplyQueuedState();
+                            }
                             break;
                     }
                     break;
