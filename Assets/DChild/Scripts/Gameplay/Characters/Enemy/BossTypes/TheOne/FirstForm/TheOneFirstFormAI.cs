@@ -855,11 +855,11 @@ namespace DChild.Gameplay.Characters.Enemies
                 StopCoroutine(m_fakeBlinkRoutine);
                 m_fakeBlinkRoutine = null;
             }
-            /*if (m_blinkCoroutine != null)
+            if (m_blinkCoroutine != null)
             {
                 StopCoroutine(m_blinkCoroutine);
                 m_blinkCoroutine = null;
-            }*/
+            }
             if (m_alterBladeMonitorCoroutine != null)
             {
                 StopCoroutine(m_alterBladeMonitorCoroutine);
