@@ -1330,10 +1330,7 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.projectilWaveSlashGround2Attack.animation);
 
             
-            if (m_alterBladeCoroutine == null)
-            {
-                m_stateHandle.ApplyQueuedState();
-            }
+            m_stateHandle.ApplyQueuedState();
             m_attackDecider.hasDecidedOnAttack = false;
             m_currentAttackCoroutine = null;
             //m_blinkCoroutine = null;
@@ -1409,6 +1406,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
                 m_blinkCoroutine = StartCoroutine(BlinkRoutine(BlinkState.DisappearBackward, BlinkState.AppearBackward, 60, m_info.midAirHeight, State.Chasing, false, false, false));
             }
+            m_attackDecider.hasDecidedOnAttack = false;
             m_currentAttackCoroutine = null;
             //m_blinkCoroutine = null;
             yield return null;
@@ -1706,13 +1704,145 @@ namespace DChild.Gameplay.Characters.Enemies
                     else
                     {
                         m_phase2pattern5Count = 0;
-                        m_currentAttackCoroutine = StartCoroutine(DrillDash2Routine());
+                        if (IsTargetInRange(m_info.drillDash1Attack.range))
+                        {
+                            //if (!m_groundSensor.isDetecting)
+                            //{
+                            //    m_animation.DisableRootMotion();
+                            //    m_animation.SetAnimation(0, m_info.fallAnimation, true);
+                            //    yield return new WaitUntil(() => m_groundSensor.isDetecting);
+                            //    m_animation.SetAnimation(0, m_info.landAnimation, false);
+                            //    yield return new WaitForAnimationComplete(m_animation.animationState, m_info.landAnimation);
+                            //}
+                            m_animation.EnableRootMotion(false, false);
+                            var drillCount = 0;
+                            while (drillCount < 2)
+                            {
+                                m_animation.SetAnimation(0, m_info.groundToDrillAnimation, false);
+                                var waitTime = m_animation.animationState.GetCurrent(0).AnimationEnd * 0.75f;
+                                yield return new WaitForSeconds(waitTime);
+                                m_drillDamage.SetActive(true);
+                                m_hitbox.Disable();
+                                m_animation.SetAnimation(4, m_drillMixAnimation, false);
+                                m_character.physics.SetVelocity(m_info.drillDashSpeed * transform.localScale.x, 0);
+                                m_animation.SetAnimation(0, m_info.drillDash1Attack.animation, false);
+                                yield return new WaitForAnimationComplete(m_animation.animationState, m_info.drillDash1Attack.animation);
+                                m_animation.SetEmptyAnimation(4, 0);
+                                m_hitbox.Enable();
+                                m_movement.Stop();
+                                m_animation.SetAnimation(0, m_info.drillToGroundAnimation, false);
+                                m_drillDamage.SetActive(false);
+                                yield return new WaitForAnimationComplete(m_animation.animationState, m_info.drillToGroundAnimation);
+                                m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                                if (!IsFacingTarget())
+                                    CustomTurn();
+
+                                drillCount++;
+                                yield return null;
+                            }
+
+                            m_fakeBlinkCount = 0;
+                            m_fakeBlinkRoutine = null;
+                            m_hitbox.SetCanBlockDamageState(false);
+                            if (m_alterBladeCoroutine == null)
+                                m_stateHandle.ApplyQueuedState();
+                        }
+                        else
+                        {
+                            if (m_blinkCoroutine != null)
+                                yield return new WaitUntil(() => m_blinkCoroutine == null);
+
+                            m_blinkCoroutine = StartCoroutine(BlinkRoutine(BlinkState.DisappearBackward, BlinkState.AppearBackward, 50, 0, State.Chasing, false, false, false));
+                        }
                     }
                     break;
                 case 3:
                     m_phase2pattern5Count = 0;
                     m_drillDashComboCount++;
-                    m_currentAttackCoroutine = StartCoroutine(DrillDashComboRoutine());
+                    m_drillDashComboCount = m_drillDashComboCount > 1 ? 1 : m_drillDashComboCount;
+                    switch (m_drillDashComboCount)
+                    {
+                        case 0:
+                            m_drillDashComboCount++;
+                            if (m_blinkCoroutine != null)
+                                yield return new WaitUntil(() => m_blinkCoroutine == null);
+
+                            m_blinkCoroutine = StartCoroutine(BlinkRoutine(BlinkState.DisappearUpward, BlinkState.AppearUpward, 60, 50, State.Chasing, false, false, true));
+                            break;
+                        case 1:
+                            m_drillDashComboCount = 0;
+                            m_lastTargetPos = m_targetInfo.position;
+                            m_hitbox.Disable();
+                            m_animation.DisableRootMotion();
+                            if (!IsFacingTarget())
+                                CustomTurn();
+                            //m_animation.SetAnimation(0, m_info.groundToDrillAnimation, false);
+                            //var waitTime = m_animation.animationState.GetCurrent(0).AnimationEnd * 0.75f;
+                            //yield return new WaitForSeconds(waitTime);
+                            m_animation.SetAnimation(0, m_info.fallAnimation, true);
+                            yield return new WaitForSeconds(0.25f);
+                            m_character.physics.simulateGravity = false;
+                            m_animation.SetAnimation(4, m_drillMixAnimation, false);
+                            m_animation.SetAnimation(0, m_info.drillDash1Attack.animation, true);
+                            m_drillDamage.SetActive(true);
+                            Vector2 spitPos = transform.position;
+                            Vector3 v_diff = (new Vector2(m_lastTargetPos.x, m_lastTargetPos.y - 2) - spitPos);
+                            float atan2 = Mathf.Atan2(v_diff.y, v_diff.x);
+                            m_model.transform.rotation = Quaternion.Euler(0f, 0f, (atan2 * Mathf.Rad2Deg) + (m_character.facing == HorizontalDirection.Right ? 0 : 180));
+
+                            float time = 0;
+                            while (time < .25f || !m_groundSensor.isDetecting)
+                            {
+                                m_character.physics.SetVelocity((m_character.facing == HorizontalDirection.Right ? m_info.drillDashSpeed : -m_info.drillDashSpeed) * m_model.transform.right);
+                                time += Time.deltaTime;
+                                m_groundSensor.multiRaycast.SetCastDistance(100);
+                                yield return null;
+                            }
+                            m_groundSensor.multiRaycast.SetCastDistance(1);
+                            m_character.physics.simulateGravity = true;
+                            m_model.transform.rotation = Quaternion.identity;
+                            m_animation.SetEmptyAnimation(4, 0);
+                            m_hitbox.Enable();
+                            m_movement.Stop();
+                            m_animation.SetAnimation(0, m_info.drillToGroundAnimation, false);
+                            m_drillDamage.SetActive(false);
+                            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.drillToGroundAnimation);
+                            //m_animation.SetEmptyAnimation(0, 0);
+                            if (!m_groundSensor.isDetecting)
+                            {
+                                m_animation.SetAnimation(0, m_info.fallAnimation, true);
+                                yield return new WaitUntil(() => m_groundSensor.isDetecting);
+                                m_animation.SetAnimation(0, m_info.landAnimation, false);
+                                yield return new WaitForAnimationComplete(m_animation.animationState, m_info.landAnimation);
+                            }
+                            if (!IsFacingTarget())
+                                CustomTurn();
+
+                            m_animation.SetAnimation(0, m_info.groundToDrillAnimation, false);
+                            var waitTime = m_animation.animationState.GetCurrent(0).AnimationEnd * 0.75f;
+                            m_drillDamage.SetActive(true);
+                            yield return new WaitForSeconds(waitTime);
+                            m_hitbox.Disable();
+                            m_animation.SetAnimation(4, m_drillMixAnimation, false);
+                            m_character.physics.SetVelocity(m_info.drillDashSpeed * transform.localScale.x, 0);
+                            m_animation.SetAnimation(0, m_info.drillDash1Attack.animation, false);
+                            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.drillDash1Attack.animation);
+                            m_animation.SetEmptyAnimation(4, 0);
+                            m_hitbox.Enable();
+                            m_movement.Stop();
+                            m_animation.SetAnimation(0, m_info.drillToGroundAnimation, false);
+                            m_drillDamage.SetActive(false);
+                            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.drillToGroundAnimation);
+                            m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                            StopComboCounts();
+
+                            m_fakeBlinkCount = 0;
+                            m_fakeBlinkRoutine = null;
+                            m_hitbox.SetCanBlockDamageState(false);
+                            if (m_alterBladeCoroutine == null)
+                                m_stateHandle.ApplyQueuedState();
+                            break;
+                    }
                     break;
             }
             m_attackDecider.hasDecidedOnAttack = false;
@@ -2225,8 +2355,7 @@ namespace DChild.Gameplay.Characters.Enemies
                             {
                                 m_attackDecider.hasDecidedOnAttack = false;
                                 m_currentAttackCoroutine = null;
-                                if (m_alterBladeCoroutine == null)
-                                    m_stateHandle.ApplyQueuedState();
+                                m_stateHandle.ApplyQueuedState();
                             }
                             break;
                         case Attack.Phase2Pattern1:
