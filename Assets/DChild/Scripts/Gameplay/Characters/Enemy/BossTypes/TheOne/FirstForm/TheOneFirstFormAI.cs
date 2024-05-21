@@ -1129,8 +1129,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     drillCount++;
                     yield return null;
                 }
-                m_attackDecider.hasDecidedOnAttack = false;
-                m_currentAttackCoroutine = null;
+                
                 m_fakeBlinkCount = 0;
                 m_fakeBlinkRoutine = null;
                 m_hitbox.SetCanBlockDamageState(false);
@@ -1144,6 +1143,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
                 m_blinkCoroutine = StartCoroutine(BlinkRoutine(BlinkState.DisappearBackward, BlinkState.AppearBackward, 50, 0, State.Chasing, false, false, false));
             }
+            m_attackDecider.hasDecidedOnAttack = false;
+            m_currentAttackCoroutine = null;
             //m_blinkCoroutine = null;
             enabled = true;
             yield return null;
@@ -1230,8 +1231,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     yield return new WaitForAnimationComplete(m_animation.animationState, m_info.drillToGroundAnimation);
                     m_animation.SetAnimation(0, m_info.idleAnimation, true);
                     StopComboCounts();
-                    m_attackDecider.hasDecidedOnAttack = false;
-                    m_currentAttackCoroutine = null;
+                    
                     m_fakeBlinkCount = 0;
                     m_fakeBlinkRoutine = null;
                     m_hitbox.SetCanBlockDamageState(false);
@@ -1239,6 +1239,8 @@ namespace DChild.Gameplay.Characters.Enemies
                         m_stateHandle.ApplyQueuedState();
                     break;
             }
+            m_attackDecider.hasDecidedOnAttack = false;
+            m_currentAttackCoroutine = null;
             //m_blinkCoroutine = null;
             enabled = true;
             yield return null;
@@ -1290,10 +1292,10 @@ namespace DChild.Gameplay.Characters.Enemies
                             var animTwinSlash = m_animation.SetAnimation(0, m_info.twinSlash1Attack.animation, false);
                             yield return new WaitForSeconds(.3f);
                             m_twinSlash.SetActive(true);
-                            //yield return new WaitForSeconds(.1f);
-                            yield return new WaitForSpineAnimationComplete(animTwinSlash);
+                            yield return new WaitForSeconds(.2f);
                             m_twinSlash.SetActive(false);
-                            m_attackDecider.hasDecidedOnAttack = false;
+                            yield return new WaitForSpineAnimationComplete(animTwinSlash);
+                            //m_twinSlash.SetActive(false);
                             if (m_alterBladeCoroutine == null)
                             {
                                 m_stateHandle.ApplyQueuedState();
@@ -1310,6 +1312,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
                 m_blinkCoroutine = StartCoroutine(BlinkRoutine(BlinkState.DisappearForward, BlinkState.AppearForward, 25, m_info.midAirHeight, State.Chasing, false, false, false));
             }
+            m_attackDecider.hasDecidedOnAttack = false;
             m_currentAttackCoroutine = null;
             enabled = true;
             //m_blinkCoroutine = null;
@@ -1329,14 +1332,14 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_info.projectilWaveSlashGround2Attack.animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.projectilWaveSlashGround2Attack.animation);
 
-            m_attackDecider.hasDecidedOnAttack = false;
-            m_currentAttackCoroutine = null;
+            
             if (m_alterBladeCoroutine == null)
             {
                 m_stateHandle.ApplyQueuedState();
             }
-
-            m_blinkCoroutine = null;
+            m_attackDecider.hasDecidedOnAttack = false;
+            m_currentAttackCoroutine = null;
+            //m_blinkCoroutine = null;
             enabled = true;
             yield return null;
             Debug.Log("phase1pattern2 done");
@@ -1489,13 +1492,13 @@ namespace DChild.Gameplay.Characters.Enemies
                         var animTwinSlash = m_animation.SetAnimation(0, m_info.twinSlash1Attack.animation, false);
                         yield return new WaitForSeconds(.3f);
                         m_twinSlash.SetActive(true);
-                        //yield return new WaitForSeconds(.1f);
-                        yield return new WaitForSpineAnimationComplete(animTwinSlash);
+                        yield return new WaitForSeconds(.2f);
                         m_twinSlash.SetActive(false);
+                        yield return new WaitForSpineAnimationComplete(animTwinSlash);
+                        //m_twinSlash.SetActive(false);
                     }
                     StopComboCounts();
-                    m_attackDecider.hasDecidedOnAttack = false;
-                    m_currentAttackCoroutine = null;
+                    
                     if (m_alterBladeCoroutine == null)
                     {
                         m_stateHandle.ApplyQueuedState();
@@ -1553,6 +1556,8 @@ namespace DChild.Gameplay.Characters.Enemies
                     }
                     break;
             }
+            m_attackDecider.hasDecidedOnAttack = false;
+            m_currentAttackCoroutine = null;
             //m_blinkCoroutine = null;
             enabled = true;
             yield return null;
@@ -1584,14 +1589,15 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_animation.SetAnimation(0, randomAttackAnimation, false);
                     yield return new WaitForAnimationComplete(m_animation.animationState, randomAttackAnimation);
 
-                    m_attackDecider.hasDecidedOnAttack = false;
-                    m_currentAttackCoroutine = null;
+                    
                     if (m_alterBladeCoroutine == null)
                     {
                         m_stateHandle.ApplyQueuedState();
                     }
                     break;
             }
+            m_attackDecider.hasDecidedOnAttack = false;
+            m_currentAttackCoroutine = null;
             enabled = true;
             //m_blinkCoroutine = null;
             yield return null;
@@ -1609,8 +1615,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_animation.SetAnimation(0, m_info.scytheDoubleWaveAttack.animation, false);
                 yield return new WaitForAnimationComplete(m_animation.animationState, m_info.scytheDoubleWaveAttack.animation);
 
-                m_attackDecider.hasDecidedOnAttack = false;
-                m_currentAttackCoroutine = null;
+                
                 if (m_alterBladeCoroutine == null)
                 {
                     m_stateHandle.ApplyQueuedState();
@@ -1623,6 +1628,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
                 m_blinkCoroutine = StartCoroutine(BlinkRoutine(BlinkState.DisappearBackward, BlinkState.AppearBackward, 60, m_info.midAirHeight, State.Chasing, false, false, false));
             }
+            m_attackDecider.hasDecidedOnAttack = false;
+            m_currentAttackCoroutine = null;
             //m_blinkCoroutine = null;
             enabled = true;
             yield return null;
@@ -1680,6 +1687,8 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_currentAttackCoroutine = StartCoroutine(DrillDashComboRoutine());
                     break;
             }
+            m_attackDecider.hasDecidedOnAttack = false;
+            m_currentAttackCoroutine = null;
             //m_blinkCoroutine = null;
             yield return null;
             Debug.Log("phase2pattern5 done");
