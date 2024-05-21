@@ -1296,10 +1296,7 @@ namespace DChild.Gameplay.Characters.Enemies
                             m_twinSlash.SetActive(false);
                             yield return new WaitForSpineAnimationComplete(animTwinSlash);
                             //m_twinSlash.SetActive(false);
-                            if (m_alterBladeCoroutine == null)
-                            {
-                                m_stateHandle.ApplyQueuedState();
-                            }
+                            m_stateHandle.ApplyQueuedState();
 
                             break;
                     }
@@ -1467,10 +1464,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
             m_attackDecider.hasDecidedOnAttack = false;
             m_currentAttackCoroutine = null;
-            if (m_alterBladeCoroutine == null)
-            {
-                m_stateHandle.ApplyQueuedState();
-            }
+            m_stateHandle.ApplyQueuedState();
             enabled = true;
             yield return null;
             Debug.Log("phase1pattern4 done");
@@ -1954,7 +1948,7 @@ namespace DChild.Gameplay.Characters.Enemies
         }
         #endregion
 
-        #region Cooldown Monitors
+            #region Cooldown Monitors
         private IEnumerator CooldownMonitorRoutine(int chosenCD)
         {
             Debug.Log("cooldown");
