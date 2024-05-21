@@ -1239,8 +1239,8 @@ namespace DChild.Gameplay.Characters.Enemies
                         m_stateHandle.ApplyQueuedState();
                     break;
             }
-            m_attackDecider.hasDecidedOnAttack = false;
-            m_currentAttackCoroutine = null;
+            //m_attackDecider.hasDecidedOnAttack = false;
+            //m_currentAttackCoroutine = null;
             //m_blinkCoroutine = null;
             enabled = true;
             yield return null;
