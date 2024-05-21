@@ -1370,7 +1370,40 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_animation.SetAnimation(0, m_info.idleAnimation, true);
                 yield return new WaitForSeconds(m_info.phase1Pattern3IdleTime);
 
-                m_currentAttackCoroutine = StartCoroutine(EvadeRoutine());
+                //m_currentAttackCoroutine = StartCoroutine(EvadeRoutine());
+                m_animation.EnableRootMotion(true, false);
+                if (/*IsTargetInRange(m_info.projectilWaveSlashGround1Attack.range) &&*/ m_blinkCount < 2)
+                {
+                    m_blinkCount++;
+                    if (m_blinkCoroutine != null)
+                        yield return new WaitUntil(() => m_blinkCoroutine == null);
+
+                    m_blinkCoroutine = StartCoroutine(BlinkRoutine(BlinkState.DisappearBackward, BlinkState.AppearBackward, 60, m_info.midAirHeight, State.Chasing, m_blinkCount == 1 ? true : false, true, false));
+                }
+                else
+                {
+                    m_blinkCount = 0;
+                    var chosenBehavior = UnityEngine.Random.Range(0, 2) == 1 ? 0 : 1;
+
+                    switch (chosenBehavior)
+                    {
+                        case 0:
+                            yield return ChooseScytheWaveSpawn();
+                            m_animation.SetAnimation(0, m_info.scytheWaveAttack.animation, false);
+                            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.scytheWaveAttack.animation);
+                            m_attackDecider.hasDecidedOnAttack = false;
+                            m_currentAttackCoroutine = null;
+                            if (m_alterBladeCoroutine == null)
+                            {
+                                m_stateHandle.ApplyQueuedState();
+                            }
+                            break;
+                        case 1:
+                            m_currentAttackCoroutine = StartCoroutine(Phase1Pattern1AttackRoutine());
+                            break;
+                    }
+                    
+                }
             }
             else
             {
@@ -1379,6 +1412,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
                 m_blinkCoroutine = StartCoroutine(BlinkRoutine(BlinkState.DisappearBackward, BlinkState.AppearBackward, 60, m_info.midAirHeight, State.Chasing, false, false, false));
             }
+            m_currentAttackCoroutine = null;
             //m_blinkCoroutine = null;
             yield return null;
             Debug.Log("phase1pattern3 done");
@@ -1736,6 +1770,10 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator BlinkRoutine(BlinkState disappearState, BlinkState appearState, float blinkDistance, float midAirHeight, State transitionState, bool fakeBlink, bool evadeBlink, bool isMidAir)
         {
             Debug.Log("blinkroutine");
+            if (m_currentAttackCoroutine != null)
+            {
+                yield return new WaitUntil(() => m_currentAttackCoroutine == null);
+            }
             m_character.physics.SetVelocity(0f, 0f);
             m_drillDamage.SetActive(false);
             m_heavySwordStab.SetActive(false);
