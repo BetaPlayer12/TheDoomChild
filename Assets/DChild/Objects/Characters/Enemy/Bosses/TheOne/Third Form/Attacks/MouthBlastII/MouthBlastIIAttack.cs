@@ -14,6 +14,8 @@ namespace DChild.Gameplay.Characters.Enemies
     {
         [SerializeField, TabGroup("Reference")]
         protected SpineRootAnimation m_animation;
+        [SerializeField, TabGroup("Reference")]
+        private GameObject m_HitboxCollider;
         [SerializeField]
         private SkeletonAnimation m_skeletonAnimation;
         [SerializeField, Spine.Unity.SpineAnimation(dataField = "m_skeletonAnimation")]
@@ -65,6 +67,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_animation.SetAnimation(0, m_toGrowAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_toGrowAnimation);
+            m_HitboxCollider.SetActive(true);
             yield return ChargeBeam();
         }
 
@@ -90,6 +93,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_animation.SetAnimation(0, m_afterAttackAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_afterAttackAnimation);
+            m_HitboxCollider.SetActive(false);
         }
 
         private void Start()
