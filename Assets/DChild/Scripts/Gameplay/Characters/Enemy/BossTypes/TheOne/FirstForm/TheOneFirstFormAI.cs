@@ -1946,6 +1946,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator BlinkRoutine(BlinkState disappearState, BlinkState appearState, float blinkDistance, float midAirHeight, State transitionState, bool fakeBlink, bool evadeBlink, bool isMidAir)
         {
             Debug.Log("blinkroutine");
+
+            yield return new WaitUntil(() => m_blinkCoroutine == null);
             enabled = false;
             m_blinkCount++;
             /*if (m_currentAttackCoroutine != null)
@@ -2482,24 +2484,24 @@ namespace DChild.Gameplay.Characters.Enemies
                 case State.Chasing:
                     if (!m_hitbox.canBlockDamage)
                     {
-                        if (IsFacingTarget())
+                        ChooseAttack();
+                        if (IsTargetInRange(m_currentAttackRange) && m_currentAttackCoroutine == null)
                         {
-                            ChooseAttack();
-                            if (IsTargetInRange(m_currentAttackRange) && m_currentAttackCoroutine == null)
-                            {
-                                m_stateHandle.SetState(State.Attacking);
-                            }
-                            else
-                            {
-                                MoveToTarget(m_currentAttackRange);
-                            }
+                            m_stateHandle.SetState(State.Attacking);
                         }
                         else
+                        {
+                            MoveToTarget(m_currentAttackRange);
+                        }
+                        /*else
                         {
                             m_turnState = State.Attacking;
                             if (m_alterBladeCoroutine == null)
                                 m_stateHandle.SetState(State.Turning);
-                        }
+                        }*/
+                        m_turnState = State.Attacking;
+                        /*if (m_alterBladeCoroutine == null)
+                            m_stateHandle.SetState(State.Turning);*/
                     }
                     break;
 
