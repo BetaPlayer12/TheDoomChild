@@ -917,8 +917,9 @@ namespace DChild.Gameplay.Characters.Enemies
             m_changePhaseCoroutine = null;
             yield return new WaitForSeconds(m_info.phaseChangeToBlinkDelay);
             m_alterBladeMonitorCoroutine = StartCoroutine(AlterBladeMonitorRoutine());
-            m_blinkCoroutine = StartCoroutine(BlinkRoutine(BlinkState.DisappearForward, BlinkState.AppearForward, 25, m_info.midAirHeight, State.Chasing, true, false, false));
             enabled = true;
+            m_blinkCoroutine = StartCoroutine(BlinkRoutine(BlinkState.DisappearForward, BlinkState.AppearForward, 25, m_info.midAirHeight, State.Chasing, true, false, false));
+            yield return new WaitUntil(() => m_blinkCoroutine == null);
             yield return null;
             Debug.Log("changing routine done");
         }
@@ -1027,6 +1028,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     yield return new WaitUntil(() => m_blinkCoroutine == null);
 
                 m_blinkCoroutine = StartCoroutine(BlinkRoutine(BlinkState.DisappearBackward, BlinkState.AppearBackward, 60, m_info.midAirHeight, State.Chasing, m_blinkCount == 1 ? true : false, true, false));
+                yield return new WaitUntil(() => m_blinkCoroutine == null);
             }
             else
             {
@@ -1073,6 +1075,7 @@ namespace DChild.Gameplay.Characters.Enemies
                             yield return new WaitUntil(() => m_blinkCoroutine == null);
 
                         m_blinkCoroutine = StartCoroutine(BlinkRoutine(BlinkState.DisappearBackward, BlinkState.AppearBackward, 50, 0, State.Chasing, true, false, false));
+                        yield return new WaitUntil(() => m_blinkCoroutine == null);
                         break;
                     case 1:
                         //m_fakeBlinkCount = 0;
@@ -1136,17 +1139,20 @@ namespace DChild.Gameplay.Characters.Enemies
                 if (m_alterBladeCoroutine == null)
                     m_stateHandle.ApplyQueuedState();
             }
-            else
+            /*else
             {
                 if (m_blinkCoroutine != null)
                     yield return new WaitUntil(() => m_blinkCoroutine == null);
-
-                m_blinkCoroutine = StartCoroutine(BlinkRoutine(BlinkState.DisappearBackward, BlinkState.AppearBackward, 50, 0, State.Chasing, false, false, false));
-            }
+*/
+                
+            /*}*/
             m_attackDecider.hasDecidedOnAttack = false;
+
+            enabled = true;
+            m_blinkCoroutine = StartCoroutine(BlinkRoutine(BlinkState.DisappearBackward, BlinkState.AppearBackward, 50, 0, State.Chasing, false, false, false));
+            yield return new WaitUntil(() => m_blinkCoroutine == null);
             m_currentAttackCoroutine = null;
             //m_blinkCoroutine = null;
-            enabled = true;
             yield return null;
             Debug.Log("drill2route done");
         }
@@ -1160,10 +1166,10 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 case 0:
                     m_drillDashComboCount++;
-                    if (m_blinkCoroutine != null)
-                        yield return new WaitUntil(() => m_blinkCoroutine == null);
-
+                    enabled = true;
                     m_blinkCoroutine = StartCoroutine(BlinkRoutine(BlinkState.DisappearUpward, BlinkState.AppearUpward, 60, 50, State.Chasing, false, false, true));
+                    yield return new WaitUntil(() => m_blinkCoroutine == null);
+                    enabled = false;
                     break;
                 case 1:
                     m_drillDashComboCount = 0;
@@ -1240,7 +1246,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     break;
             }
             //m_attackDecider.hasDecidedOnAttack = false;
-            //m_currentAttackCoroutine = null;
+            m_currentAttackCoroutine = null;
             //m_blinkCoroutine = null;
             enabled = true;
             yield return null;
@@ -1255,6 +1261,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator Phase1Pattern1AttackRoutine()
         {
             Debug.Log("phase1pattern1");
+            yield return new WaitUntil(() => m_blinkCoroutine == null);
             enabled = false;
             //StopCoroutine(m_blinkCoroutine);
             m_animation.EnableRootMotion(true, false);
@@ -1302,17 +1309,24 @@ namespace DChild.Gameplay.Characters.Enemies
                     }
                 }
             }
-            else
+            /*else
             {
                 if (m_blinkCoroutine != null)
                     yield return new WaitUntil(() => m_blinkCoroutine == null);
 
                 m_blinkCoroutine = StartCoroutine(BlinkRoutine(BlinkState.DisappearForward, BlinkState.AppearForward, 25, m_info.midAirHeight, State.Chasing, false, false, false));
-            }
+            }*/
             m_attackDecider.hasDecidedOnAttack = false;
-            m_currentAttackCoroutine = null;
+            //m_currentAttackCoroutine = null;
             enabled = true;
+            m_blinkCoroutine = StartCoroutine(BlinkRoutine(BlinkState.DisappearForward, BlinkState.AppearForward, 25, m_info.midAirHeight, State.Chasing, false, false, false));
+            
+            //StopAllCoroutines();
+            //m_stateHandle.OverrideState(State.ReevaluateSituation);
             //m_blinkCoroutine = null;
+            yield return new WaitUntil(() => m_blinkCoroutine == null);
+            m_currentAttackCoroutine = null;
+            m_stateHandle.ApplyQueuedState();
             yield return null;
             Debug.Log("phase1pattern1 done");
         }
@@ -1320,6 +1334,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator Phase1Pattern2AttackRoutine()
         {
             Debug.Log("phase1pattern2");
+            yield return new WaitUntil(() => m_blinkCoroutine == null);
             enabled = false;
             m_animation.EnableRootMotion(true, false);
             //StopCoroutine(m_blinkCoroutine);
@@ -1342,6 +1357,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator Phase1Pattern3AttackRoutine()
         {
             Debug.Log("phase1pattern3");
+            yield return new WaitUntil(() => m_blinkCoroutine == null);
+            enabled = false;
             m_animation.EnableRootMotion(false, false);
             //StopCoroutine(m_blinkCoroutine);
             if (IsTargetInRange(m_info.drillDash1Attack.range))
@@ -1366,15 +1383,15 @@ namespace DChild.Gameplay.Characters.Enemies
 
                 //m_currentAttackCoroutine = StartCoroutine(EvadeRoutine());
                 m_animation.EnableRootMotion(true, false);
-                if (/*IsTargetInRange(m_info.projectilWaveSlashGround1Attack.range) &&*/ m_blinkCount < 2)
+                /*if (*//*IsTargetInRange(m_info.projectilWaveSlashGround1Attack.range) &&*//* m_blinkCount < 2)
                 {
                     m_blinkCount++;
                     if (m_blinkCoroutine != null)
                         yield return new WaitUntil(() => m_blinkCoroutine == null);
 
                     m_blinkCoroutine = StartCoroutine(BlinkRoutine(BlinkState.DisappearBackward, BlinkState.AppearBackward, 60, m_info.midAirHeight, State.Chasing, m_blinkCount == 1 ? true : false, true, false));
-                }
-                else
+                }*/
+                if(m_blinkCount > 2)
                 {
                     m_blinkCount = 0;
                     var chosenBehavior = UnityEngine.Random.Range(0, 2) == 1 ? 0 : 1;
@@ -1399,16 +1416,28 @@ namespace DChild.Gameplay.Characters.Enemies
                     
                 }
             }
-            else
+            /*else
             {
                 if (m_blinkCoroutine != null)
                     yield return new WaitUntil(() => m_blinkCoroutine == null);
 
                 m_blinkCoroutine = StartCoroutine(BlinkRoutine(BlinkState.DisappearBackward, BlinkState.AppearBackward, 60, m_info.midAirHeight, State.Chasing, false, false, false));
-            }
+            }*/
             m_attackDecider.hasDecidedOnAttack = false;
-            m_currentAttackCoroutine = null;
+            //m_currentAttackCoroutine = null;
+            /*if (m_blinkCoroutine != null)
+                yield return new WaitUntil(() => m_blinkCoroutine == null);
+*/
+
+            enabled = true;
+            m_blinkCoroutine = StartCoroutine(BlinkRoutine(BlinkState.DisappearForward, BlinkState.AppearForward, 25, m_info.midAirHeight, State.Chasing, false, false, false));
+            
+            //StopAllCoroutines();
+            //m_stateHandle.OverrideState(State.ReevaluateSituation);
             //m_blinkCoroutine = null;
+            yield return new WaitUntil(() => m_blinkCoroutine == null);
+            m_currentAttackCoroutine = null;
+            m_stateHandle.ApplyQueuedState();
             yield return null;
             Debug.Log("phase1pattern3 done");
         }
@@ -1483,6 +1512,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator Phase2Pattern1AttackRoutine()
         {
             Debug.Log("phase2pattern1");
+            yield return new WaitUntil(() => m_blinkCoroutine == null);
             enabled = false;
             //StopCoroutine(m_blinkCoroutine);
             m_animation.EnableRootMotion(true, m_phase2pattern1Count == 3 ? true : false);
@@ -1568,17 +1598,21 @@ namespace DChild.Gameplay.Characters.Enemies
                                 m_animation.SetAnimation(0, m_info.downwardSlash2Attack.animation, false);
                                 yield return new WaitForAnimationComplete(m_animation.animationState, m_info.downwardSlash2Attack.animation);
                                 m_phase2pattern1Count++;
+                                enabled = true;
                                 m_blinkCoroutine = StartCoroutine(BlinkRoutine(BlinkState.DisappearUpward, BlinkState.AppearUpward, 25, m_info.midAirHeight, State.Chasing, false, false, true));
+                                enabled = false;
+                                yield return new WaitUntil(() => m_blinkCoroutine == null);
                                 yield return null;
                                 break;
                         }
                     }
                     else
-                    {
+                    {/*
                         if (m_blinkCoroutine != null)
                             yield return new WaitUntil(() => m_blinkCoroutine == null);
-
+*/
                         m_blinkCoroutine = StartCoroutine(BlinkRoutine(BlinkState.DisappearForward, BlinkState.AppearForward, 0, m_info.midAirHeight, State.Chasing, false, false, false));
+                        yield return new WaitUntil(() => m_blinkCoroutine == null);
                     }
                     break;
             }
@@ -1599,10 +1633,10 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 case 0:
                     m_phase2pattern2Count++;
-                    if (m_blinkCoroutine != null)
-                        yield return new WaitUntil(() => m_blinkCoroutine == null);
-
+                    enabled = true;
                     m_blinkCoroutine = StartCoroutine(BlinkRoutine(BlinkState.DisappearBackward, BlinkState.AppearBackward, 60, m_info.midAirHeight, State.Chasing, false, false, false));
+                    yield return new WaitUntil(() => m_blinkCoroutine == null);
+                    enabled = false;
                     break;
                 case 1:
                     m_phase2pattern2Count = 0;
@@ -1633,6 +1667,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator Phase2Pattern3AttackRoutine()
         {
             Debug.Log("phase2pattern3");
+            yield return new WaitUntil(() => m_blinkCoroutine == null);
             enabled = false;
             //StopCoroutine(m_blinkCoroutine);
             if (IsTargetInRange(m_info.scytheWaveAttack.range))
@@ -1649,10 +1684,10 @@ namespace DChild.Gameplay.Characters.Enemies
             }
             else
             {
-                if (m_blinkCoroutine != null)
-                    yield return new WaitUntil(() => m_blinkCoroutine == null);
-
+                enabled = true;
                 m_blinkCoroutine = StartCoroutine(BlinkRoutine(BlinkState.DisappearBackward, BlinkState.AppearBackward, 60, m_info.midAirHeight, State.Chasing, false, false, false));
+                yield return new WaitUntil(() => m_blinkCoroutine == null);
+                enabled = false;
             }
             m_attackDecider.hasDecidedOnAttack = false;
             m_currentAttackCoroutine = null;
@@ -1665,6 +1700,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator Phase2Pattern5AttackRoutine()
         {
             Debug.Log("phase2pattern5");
+            enabled = false;
             var isMidAir = UnityEngine.Random.Range(0, 2) == 1 ? true : false;
             m_phase2pattern5Count = m_phase2pattern5Count > 3 ? 3 : m_phase2pattern5Count;
             //StopCoroutine(m_blinkCoroutine);
@@ -1672,9 +1708,10 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 case 0:
                     m_phase2pattern5Count++;
-                    if (m_blinkCoroutine != null)
-                        yield return new WaitUntil(() => m_blinkCoroutine == null);
+                    enabled = true;
                     m_blinkCoroutine = StartCoroutine(BlinkRoutine(BlinkState.DisappearForward, isMidAir ? BlinkState.AppearUpward : BlinkState.AppearForward, 40, m_info.midAirHeight, State.Chasing, true, false, isMidAir ? true : false));
+                    yield return new WaitUntil(() => m_blinkCoroutine == null);
+                    enabled = false;
                     break;
                 case 1:
                     m_phase2pattern5Count++;
@@ -1686,20 +1723,26 @@ namespace DChild.Gameplay.Characters.Enemies
                         m_animation.SetAnimation(0, m_info.landAnimation, false);
                         yield return new WaitForAnimationComplete(m_animation.animationState, m_info.landAnimation);
                     }
-
-                    if (m_blinkCoroutine != null)
-                        yield return new WaitUntil(() => m_blinkCoroutine == null);
-
+                    /*
+                                        if (m_blinkCoroutine != null)
+                                            yield return new WaitUntil(() => m_blinkCoroutine == null);
+                    */
+                    enabled = true;
                     m_blinkCoroutine = StartCoroutine(BlinkRoutine(BlinkState.DisappearForward, BlinkState.AppearForward, 15, 0, State.Chasing, false, false, false));
+                    yield return new WaitUntil(() => m_blinkCoroutine == null);
+                    enabled = false;
                     break;
                 case 2:
                     m_phase2pattern5Count++;
                     if (isMidAir)
                     {
-                        if (m_blinkCoroutine != null)
+                        /*if (m_blinkCoroutine != null)
                             yield return new WaitUntil(() => m_blinkCoroutine == null);
-
+*/
+                        enabled = true;
                         m_blinkCoroutine = StartCoroutine(BlinkRoutine(BlinkState.DisappearUpward, BlinkState.AppearUpward, 60, 50, State.Chasing, false, false, true));
+                        yield return new WaitUntil(() => m_blinkCoroutine == null);
+                        enabled = false;
                     }
                     else
                     {
@@ -1749,10 +1792,13 @@ namespace DChild.Gameplay.Characters.Enemies
                         }
                         else
                         {
-                            if (m_blinkCoroutine != null)
+                            /*if (m_blinkCoroutine != null)
                                 yield return new WaitUntil(() => m_blinkCoroutine == null);
-
+*/
+                            enabled = true;
                             m_blinkCoroutine = StartCoroutine(BlinkRoutine(BlinkState.DisappearBackward, BlinkState.AppearBackward, 50, 0, State.Chasing, false, false, false));
+                            yield return new WaitUntil(() => m_blinkCoroutine == null);
+                            enabled = false;
                         }
                     }
                     break;
@@ -1764,10 +1810,13 @@ namespace DChild.Gameplay.Characters.Enemies
                     {
                         case 0:
                             m_drillDashComboCount++;
-                            if (m_blinkCoroutine != null)
+                            /*if (m_blinkCoroutine != null)
                                 yield return new WaitUntil(() => m_blinkCoroutine == null);
-
+*/
+                            enabled = true;
                             m_blinkCoroutine = StartCoroutine(BlinkRoutine(BlinkState.DisappearUpward, BlinkState.AppearUpward, 60, 50, State.Chasing, false, false, true));
+                            yield return new WaitUntil(() => m_blinkCoroutine == null);
+                            enabled = false;
                             break;
                         case 1:
                             m_drillDashComboCount = 0;
@@ -1846,7 +1895,10 @@ namespace DChild.Gameplay.Characters.Enemies
                     break;
             }
             m_attackDecider.hasDecidedOnAttack = false;
+
+            yield return new WaitUntil(() => m_blinkCoroutine == null);
             m_currentAttackCoroutine = null;
+            enabled = true;
             //m_blinkCoroutine = null;
             yield return null;
             Debug.Log("phase2pattern5 done");
@@ -1894,10 +1946,12 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator BlinkRoutine(BlinkState disappearState, BlinkState appearState, float blinkDistance, float midAirHeight, State transitionState, bool fakeBlink, bool evadeBlink, bool isMidAir)
         {
             Debug.Log("blinkroutine");
-            if (m_currentAttackCoroutine != null)
+            enabled = false;
+            m_blinkCount++;
+            /*if (m_currentAttackCoroutine != null)
             {
                 yield return new WaitUntil(() => m_currentAttackCoroutine == null);
-            }
+            }*/
             m_character.physics.SetVelocity(0f, 0f);
             m_drillDamage.SetActive(false);
             m_heavySwordStab.SetActive(false);
@@ -2020,7 +2074,8 @@ namespace DChild.Gameplay.Characters.Enemies
             //    }
             //}
             m_blinkCoroutine = null;
-            m_currentAttackCoroutine = null;
+            //m_currentAttackCoroutine = null;
+            enabled = true;
             yield return null;
             Debug.Log("blinkroutine done");
         }
