@@ -11,12 +11,33 @@ namespace DChild.Gameplay.Cinematics.Cameras
         {
             [SerializeField]
             private bool m_useCurve;
-            [SerializeField, HideIf("m_useCurve")]
-            private float m_value;
             [SerializeField, ShowIf("m_useCurve")]
             private AnimationCurve m_curve;
+            [SerializeField, HideIf("m_useCurve")]
+            private float m_value;
+            [SerializeField, HideIf("m_useCurve")]
+            private bool m_useCurveModifier;
+            [SerializeField, ShowIf("@!m_useCurve && m_useCurveModifier")]
+            private AnimationCurve m_curveModifier;
 
-            public float GetValue(float time) => m_useCurve ? m_curve.Evaluate(time) : m_value;
+            public float GetValue(float time)
+            {
+                if (m_useCurve)
+                {
+                    return m_curve.Evaluate(time);
+                }
+                else
+                {
+                    if (m_useCurveModifier)
+                    {
+                        return m_value * m_curveModifier.Evaluate(time);
+                    }
+                    else
+                    {
+                        return m_value;
+                    }
+                }
+            }
         }
 
         [SerializeField, MinValue(0f)]

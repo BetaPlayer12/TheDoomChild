@@ -1,102 +1,53 @@
-﻿using System.Collections.Generic;
-using Cinemachine;
-using Sirenix.OdinInspector;
-using Sirenix.Serialization;
+﻿using System.Collections;
+using DChild.Gameplay.Cinematics.Cameras;
 using UnityEngine;
 
 namespace DChild.Gameplay.Cinematics
 {
-    [System.Serializable, ShowOdinSerializedPropertiesInInspector]
-    public class CameraShakeHandle
+    [System.Serializable]
+    public class CameraShakeHandle : MonoBehaviour
     {
-        [SerializeField]
-        private Dictionary<CameraShakeType, NoiseSettings> m_noiseSettings;
-        [ShowInInspector, OnValueChanged("EnableCameraShake"),PropertyOrder(-1)]
-        private bool m_cameraShake;
-        [SerializeField, ShowIf("m_cameraShake"), PropertyOrder(-1)]
-        private CameraShakeType m_currentShakeType;
-        [ShowInInspector, MinValue(0), ShowIf("m_cameraShake"), PropertyOrder(-1)]
-        private float m_shakeAmplitude;
-        [ShowInInspector, MinValue(0), ShowIf("m_cameraShake"), PropertyOrder(-1)]
-        private float m_shakeFrequency;
+        private IVirtualCamera m_currentCamera;
 
-        private List<CinemachineBasicMultiChannelPerlin> m_noiseList;
-        public CameraShakeType currentShakeType => m_currentShakeType;
-
-        public void Initialize()
+        public void Execute(CameraShakeInfo data)
         {
-            m_noiseList = new List<CinemachineBasicMultiChannelPerlin>();
+            StopAllCoroutines();
+            StartCoroutine(ExecuteShakeRoutine(data));
         }
 
-        public void RegisterNoiseModule(CinemachineBasicMultiChannelPerlin noise)
+        public void SetCamera(IVirtualCamera camera)
         {
-            m_noiseList.Add(noise);
-            if (m_cameraShake)
+            if (camera.noiseModule == null)
+                return;
+
+            if (m_currentCamera != null)
             {
-                noise.m_AmplitudeGain = m_shakeAmplitude;
-                noise.m_FrequencyGain = m_shakeFrequency;
+                camera.noiseModule.m_AmplitudeGain = m_currentCamera.noiseModule.m_AmplitudeGain;
+                camera.noiseModule.m_FrequencyGain = m_currentCamera.noiseModule.m_FrequencyGain;
+                RemoveNoiseFromCamera(m_currentCamera);
             }
-            else
-            {
-                noise.m_AmplitudeGain = 0;
-                noise.m_FrequencyGain = 0;
-            }
+            m_currentCamera = camera;
         }
 
-        public void UnregisterNoiseModule(CinemachineBasicMultiChannelPerlin noise)
+        private IEnumerator ExecuteShakeRoutine(CameraShakeInfo info)
         {
-            m_noiseList.Remove(noise);
+            var timer = 0f;
+
+            do
+            {
+                m_currentCamera.noiseModule.m_AmplitudeGain = info.GetAmplitude(timer);
+                m_currentCamera.noiseModule.m_FrequencyGain = info.GetFrequency(timer);
+                timer += GameplaySystem.time.deltaTime;
+                yield return null;
+            } while (timer <= info.duration && m_currentCamera != null);
+
+            RemoveNoiseFromCamera(m_currentCamera);
         }
 
-        public void EnableCameraShake(bool enable)
+        private void RemoveNoiseFromCamera(IVirtualCamera camera)
         {
-            float amplitude = 0;
-            float frequency = 0;
-
-            if (enable)
-            {
-                amplitude = m_shakeAmplitude;
-                frequency = m_shakeFrequency;
-            }
-
-            for (int i = 0; i < m_noiseList.Count; i++)
-            {
-                var noise = m_noiseList[i];
-                noise.m_AmplitudeGain = amplitude;
-                noise.m_FrequencyGain = frequency;
-            }
-            m_cameraShake = enable;
-        }
-
-        public void SetCameraShake(float amplitude, float frequency)
-        {
-            m_shakeAmplitude = amplitude;
-            m_shakeFrequency = frequency;
-
-            if (m_cameraShake)
-            {
-                for (int i = 0; i < m_noiseList.Count; i++)
-                {
-                    var noise = m_noiseList[i];
-                    noise.m_AmplitudeGain = m_shakeAmplitude;
-                    noise.m_FrequencyGain = m_shakeFrequency;
-                }
-            }
-        }
-
-        public void SetCameraShakeProfile(CameraShakeType shakeType)
-        {
-            m_currentShakeType = shakeType;
-            var noiseProfile = m_noiseSettings[shakeType];
-            for (int i = 0; i < m_noiseList.Count; i++)
-            {
-                m_noiseList[i].m_NoiseProfile = noiseProfile;
-            }
-        }
-
-        public void ClearList()
-        {
-            m_noiseList?.Clear();
+            camera.noiseModule.m_AmplitudeGain = 0;
+            camera.noiseModule.m_FrequencyGain = 0;
         }
     }
 }
