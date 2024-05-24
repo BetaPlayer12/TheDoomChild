@@ -33,7 +33,7 @@ namespace DChild.Gameplay.Combat.StatusAilment
                 for (int i = 0; i < m_infos.Length; i++)
                 {
                     var info = m_infos[i];
-                    playerControlledObject.owner.modifiers.Set(PlayerModifier.AttackDamage,info.value);
+                    playerControlledObject.owner.modifiers.Add(PlayerModifier.AttackDamage,info.value);
                 }
             }
             else
@@ -42,7 +42,7 @@ namespace DChild.Gameplay.Combat.StatusAilment
                 for (int i = 0; i < m_infos.Length; i++)
                 {
                     var info = m_infos[i];
-                    characterObject.SetDamageModifier(info.value);
+                    characterObject.SetDamageModifier(characterObject.modifier + info.value);
                 }
                 
             }
@@ -57,7 +57,7 @@ namespace DChild.Gameplay.Combat.StatusAilment
                 for (int i = 0; i < m_infos.Length; i++)
                 {
                     var info = m_infos[i];
-                    playerControlledObject.owner.modifiers.Set(PlayerModifier.AttackDamage, - info.value);
+                    playerControlledObject.owner.modifiers.Add(PlayerModifier.AttackDamage, - info.value);
                 }
             }
             else
