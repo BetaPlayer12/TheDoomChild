@@ -908,6 +908,7 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return new WaitForSeconds(1.5f);
             m_skeleton.GetComponent<MeshRenderer>().sortingLayerName = "PlayableGround";
             m_damageCollider.SetActive(true);
+            m_hitbox.SetInvulnerability(Invulnerability.None);
             yield return new WaitForSeconds(1.5f);
             transform.position = new Vector2(m_targetInfo.position.x, transform.position.y - 5);
             if (randomStalagmitepattern == 0)
@@ -1196,6 +1197,7 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return new WaitForSeconds(1.5f);
             m_skeleton.GetComponent<MeshRenderer>().sortingLayerName = "PlayableGround";
             m_damageCollider.SetActive(true);
+            m_hitbox.SetInvulnerability(Invulnerability.None);
             yield return new WaitForSeconds(1.5f);
             transform.position = new Vector2(m_targetInfo.position.x, transform.position.y - 5);
             if (randomStalagmitepattern == 0)
