@@ -60,7 +60,7 @@ namespace DChild.Gameplay.Cinematics.Cameras
         public NoiseSettings noiseProfile => m_noiseProfile;
         public float duration => m_duration;
 
-        public float GetAmplitude(float time) => m_amplitudeProperty.GetValue(time);
-        public float GetFrequency(float time) => m_frequencyProperty.GetValue(time);
+        public float GetAmplitude(float time) => m_amplitudeProperty.GetValue(time/m_duration);
+        public float GetFrequency(float time) => m_frequencyProperty.GetValue(time/m_duration);
     }
 }
