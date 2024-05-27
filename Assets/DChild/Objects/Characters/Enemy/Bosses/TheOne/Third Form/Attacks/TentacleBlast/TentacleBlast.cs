@@ -58,6 +58,7 @@ namespace DChild.Gameplay.Characters.Enemies
             AttackStart?.Invoke(this, EventActionArgs.Empty);
             yield return EmergeTentacle();
             yield return ShootTentacleBeam();
+            yield return new WaitForSeconds(2f);
             yield return DespawnTentacle();
             AttackDone?.Invoke(this, EventActionArgs.Empty);
         }

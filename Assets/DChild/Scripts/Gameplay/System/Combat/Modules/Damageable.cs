@@ -72,7 +72,10 @@ namespace DChild.Gameplay.Combat
             m_health?.AddCurrentValue(health);
             Healed?.Invoke(this, EventActionArgs.Empty);
         }
-
+        public void OvverideHealthPointer(Health h)
+        {
+            m_health = h;
+        }
         public void SetHitboxActive(bool enable)
         {
             if (enable)

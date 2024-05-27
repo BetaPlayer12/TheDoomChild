@@ -20,6 +20,8 @@ namespace DChild.Gameplay.Projectiles
         [SerializeField]
         private Collider2D m_hitbox;
         [SerializeField]
+        private GameObject m_hurtbox;
+        [SerializeField]
         private float m_tentacleStabAnimationSpeedMultiplier;
 
         [SerializeField, TabGroup("Reference")]
@@ -39,6 +41,7 @@ namespace DChild.Gameplay.Projectiles
 
         public IEnumerator StabRoutine()
         {
+            m_hurtbox.SetActive(true);
             m_animation.SetAnimation(0, m_anticipationStartAnimation, false).TimeScale = m_tentacleStabAnimationSpeedMultiplier;
             yield return new WaitForAnimationComplete(m_animation.animationState, m_anticipationStartAnimation);
 
@@ -59,6 +62,7 @@ namespace DChild.Gameplay.Projectiles
         {
             InitializeSafeZone();
             m_animation.SetAnimation(0, m_stayAnimation, false);
+            //m_hurtbox.SetActive(true);
             yield return new WaitForSeconds(lifespan);
             yield return Retract();
         }
@@ -66,9 +70,10 @@ namespace DChild.Gameplay.Projectiles
         public IEnumerator Retract()
         {
             RemoveSafeZones();
+            
             m_animation.SetAnimation(0, m_retractAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_retractAnimation);
-
+            m_hurtbox.SetActive(false);
             DestroyInstance();
         }
 
@@ -83,6 +88,11 @@ namespace DChild.Gameplay.Projectiles
         void Update()
         {
             
+        }
+
+        public GameObject GetHurtBox()
+        {
+            return m_hurtbox;
         }
 
         private void InitializeSafeZone()

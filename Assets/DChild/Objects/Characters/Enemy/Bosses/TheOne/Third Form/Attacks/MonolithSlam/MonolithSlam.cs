@@ -34,12 +34,13 @@ namespace DChild.Gameplay.Characters.Enemies
         private RaySensor m_playerSensor;
         [SerializeField]
         private bool m_playerHit;
+        private float m_TentacleHoldSpeed = 0f;
 
         private bool m_smashMonolith;
         public bool removeMonolithOnGround;
         public bool keepMonolith;
         public bool monolithGrounded;
-
+        
         // Start is called before the first frame update
         void Start()
         {
@@ -78,6 +79,11 @@ namespace DChild.Gameplay.Characters.Enemies
             }            
         }
 
+        public void SetTentacleHoldDuration(float HoldForSeconds)
+        {
+            m_TentacleHoldSpeed = HoldForSeconds;
+        }
+
         private IEnumerator EmergeTentacle()
         {
             m_impactCollider.enabled = false;
@@ -90,6 +96,8 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_animation.SetAnimation(0, m_anticipationLoopAnimation, true);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_anticipationLoopAnimation);
+            yield return new WaitForSeconds(m_TentacleHoldSpeed);
+            TriggerSmash();
         }
 
         private IEnumerator DestroyMonolith()

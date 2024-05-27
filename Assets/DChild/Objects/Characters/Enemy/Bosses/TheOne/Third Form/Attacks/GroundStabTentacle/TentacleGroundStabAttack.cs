@@ -8,6 +8,7 @@ using Sirenix.OdinInspector;
 using DChild.Gameplay.Characters.AI;
 using Holysoft.Event;
 using System;
+using DChild.Gameplay.Combat;
 
 namespace DChild.Gameplay.Characters.Enemies
 {
@@ -181,6 +182,11 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             var instance = GameSystem.poolManager.GetPool<PoolableObjectPool>().GetOrCreateItem(tentacle, gameObject.scene);
             instance.SpawnAt(spawnPosition, Quaternion.identity);
+            //instance.transform.SetParent(this.transform);
+
+            instance.GetComponent<Damageable>().OvverideHealthPointer(GetComponentInParent<Health>());
+            //instance.GetComponent<TentacleGroundStab>().GetHurtBox().GetComponent<Hitbox>().OvverideDamageable(GetComponentInParent<Damageable>());
+            Debug.Log("i have i have");
 
             instance.GetComponentInChildren<MeshRenderer>().sortingLayerID = sortingLayerID;
             instance.GetComponentInChildren<MeshRenderer>().sortingLayerName = sortingLayerName;
@@ -192,6 +198,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
             Component[] spriteRenderers;
             spriteRenderers = instance.GetComponentsInChildren(typeof(SpriteRenderer), true);
+            
+            
             foreach(SpriteRenderer safeZone in spriteRenderers)
             {
                 safeZone.sortingLayerID = sortingLayerID;
@@ -200,6 +208,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     safeZone.gameObject.layer = 12;
             }
 
+            //instance.transform.SetParent(null);
             m_tentaclesSpawned.Add(instance);
             m_tentaclesSpawnedXPositions.Add(instance.transform.position.x);
         }

@@ -64,6 +64,11 @@ namespace DChild.Gameplay.Combat
             m_damageable = GetComponentInParent<IDamageable>();
         }
 
+        public void OvverideDamageable(IDamageable changeDamageable)
+        {
+            m_damageable = changeDamageable;
+        }
+
         private void OnValidate()
         {
             var compositeCollider = GetComponent<CompositeCollider2D>();
