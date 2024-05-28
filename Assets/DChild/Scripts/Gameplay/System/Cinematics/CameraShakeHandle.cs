@@ -11,8 +11,15 @@ namespace DChild.Gameplay.Cinematics
 
         public void Execute(CameraShakeInfo data)
         {
-            StopAllCoroutines();
-            StartCoroutine(ExecuteShakeRoutine(data));
+            if (data != null)
+            {
+                StopAllCoroutines();
+                StartCoroutine(ExecuteShakeRoutine(data));
+            }
+            else
+            {
+                Debug.LogWarning("There was an attempt to use a null reference as camera shake");
+            }
         }
 
         public void SetCamera(IVirtualCamera camera)
