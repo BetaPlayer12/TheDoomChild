@@ -56,6 +56,8 @@ namespace DChild.Gameplay
         private string m_onInteractionCommand;
         [SerializeField]
         SkillShrineVisualHandle m_shrineVisualHandle;
+        [SerializeField, HideInPrefabInstances]
+        private float m_notificationDelay;
 
         public event EventAction<EventActionArgs> InteractionOptionChange;
 
@@ -118,16 +120,20 @@ namespace DChild.Gameplay
         private IEnumerator OnCutsceneEnded()
         {
             //makes sure cutscene has ended before calling notifyskill  
-            yield return new WaitForSeconds(1f);
-            NotifySkill(m_toUnlock);
+            yield return new WaitForSeconds(0.5f);
             SetGlows(false);
             m_shrineVisualHandle.SkillShrineState(false);
-            for(int i = 0; i < m_signalsToRun.Length; i++)
+            for (int i = 0; i < m_signalsToRun.Length; i++)
             {
                 m_signalReceiver.GetReaction(m_signalsToRun[i]).Invoke();
             }
+
+            yield return new WaitForSeconds(m_notificationDelay);
+            NotifySkill(m_toUnlock);
+
         }
 
+        [Button, HideInEditorMode]
         private void NotifySkill(PrimarySkill skill)
         {
             GameplaySystem.gamplayUIHandle.notificationManager.QueueNotification(skill);
