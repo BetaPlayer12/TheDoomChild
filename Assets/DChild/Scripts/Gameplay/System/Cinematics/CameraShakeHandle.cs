@@ -9,12 +9,19 @@ namespace DChild.Gameplay.Cinematics
     {
         private IVirtualCamera m_currentCamera;
 
+        private CameraShakeInfo m_currentShakeInfo;
+
         public void Execute(CameraShakeInfo data)
         {
             if (data != null)
             {
-                StopAllCoroutines();
-                StartCoroutine(ExecuteShakeRoutine(data));
+                var currentPriority = m_currentShakeInfo?.priority ?? -1;
+                if (currentPriority <= data.priority)
+                {
+                    StopAllCoroutines();
+                    StartCoroutine(ExecuteShakeRoutine(data));
+                    m_currentShakeInfo = data;
+                }
             }
             else
             {
@@ -29,6 +36,7 @@ namespace DChild.Gameplay.Cinematics
 
             if (m_currentCamera != null)
             {
+                camera.noiseModule.m_NoiseProfile = m_currentCamera.noiseModule.m_NoiseProfile;
                 camera.noiseModule.m_AmplitudeGain = m_currentCamera.noiseModule.m_AmplitudeGain;
                 camera.noiseModule.m_FrequencyGain = m_currentCamera.noiseModule.m_FrequencyGain;
                 RemoveNoiseFromCamera(m_currentCamera);
@@ -39,7 +47,7 @@ namespace DChild.Gameplay.Cinematics
         private IEnumerator ExecuteShakeRoutine(CameraShakeInfo info)
         {
             var timer = 0f;
-
+            m_currentCamera.noiseModule.m_NoiseProfile = info.noiseProfile;
             do
             {
                 m_currentCamera.noiseModule.m_AmplitudeGain = info.GetAmplitude(timer);

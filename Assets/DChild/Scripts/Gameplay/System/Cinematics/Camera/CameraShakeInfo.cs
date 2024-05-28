@@ -1,4 +1,5 @@
-﻿using Sirenix.OdinInspector;
+﻿using Cinemachine;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace DChild.Gameplay.Cinematics.Cameras
@@ -40,6 +41,11 @@ namespace DChild.Gameplay.Cinematics.Cameras
             }
         }
 
+        [SerializeField,Min(0)]
+        private int m_priority;
+        [SerializeField, HideLabel]
+        private NoiseSettings m_noiseProfile;
+
         [SerializeField, MinValue(0f)]
         private float m_duration;
         [TitleGroup("Amplitude")]
@@ -48,6 +54,10 @@ namespace DChild.Gameplay.Cinematics.Cameras
         [TitleGroup("Frequency")]
         [SerializeField, HideLabel]
         private Property m_frequencyProperty;
+
+
+        public int priority => m_priority;
+        public NoiseSettings noiseProfile => m_noiseProfile;
         public float duration => m_duration;
 
         public float GetAmplitude(float time) => m_amplitudeProperty.GetValue(time);
