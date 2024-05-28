@@ -36,6 +36,9 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, BoxGroup("tentacleValues")]
         List<float> m_waitValues = new List<float>();
 
+        List<int> m_positionsUsed = new List<int>();
+        List<float> m_DurationUsed = new List<float>();
+
         private bool m_leftToRightSequence;
 
         public event EventAction<EventActionArgs> AttackStart;
@@ -71,6 +74,8 @@ namespace DChild.Gameplay.Characters.Enemies
             else
                 OrganizeMonolithsSpawnedInAscendingOrder();
 
+            //Anticipation time before smashing monoliths
+            yield return new WaitForSeconds(1f);
 
             //Pick a monolith to keep as platform
             if (m_monolithsSpawned.Count > 1)
@@ -82,20 +87,18 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_obstacleChecker.AddMonolithToList(m_monolithsSpawned[rollMonolithToKeep]);
             }
 
-            //Anticipation time before smashing monoliths
-            yield return new WaitForSeconds(1f);
+            
 
-            /*
             //Set smashMonolith true in each monolith to trigger smash
             foreach (PoolableObject monolith in m_monolithsSpawned)
             {
                 if(monolith != null)
                     monolith.GetComponent<MonolithSlam>().TriggerSmash();
-                yield return new WaitForSeconds(m_timeBeforeSmash);
+                //yield return new WaitForSeconds(m_timeBeforeSmash);
             }
-            */
+            m_DurationUsed.Clear();
             //Anticipation time before smashing monoliths
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(3f);
 
             while (counter < m_numOfMonoliths)
             {
@@ -104,16 +107,15 @@ namespace DChild.Gameplay.Characters.Enemies
             }
 
             //Anticipation time before smashing monoliths
-            yield return new WaitForSeconds(2f);
-            /*
+            yield return new WaitForSeconds(1f);
             //Set smashMonolith true in each monolith to trigger smash
             foreach (PoolableObject monolith in m_monolithsSpawned)
             {
                 if (monolith != null)
                     monolith.GetComponent<MonolithSlam>().TriggerSmash();
-                yield return new WaitForSeconds(m_timeBeforeSmash);
+                //yield return new WaitForSeconds(m_timeBeforeSmash);
             }
-            */
+            m_positionsUsed.Clear();
             m_monolithsSpawned.Clear();
             m_monolithsSpawnedXPositions.Clear();
             AttackDone?.Invoke(this, EventActionArgs.Empty);
@@ -129,7 +131,13 @@ namespace DChild.Gameplay.Characters.Enemies
             Debug.Log(counter);
             if(counter>=5)
             {
+
                 int x = Random.Range(0, 4);
+                while (m_positionsUsed.Contains(x))
+                {
+                    x = Random.Range(0, 4);
+                }
+                m_positionsUsed.Add(x);
                 InstantiateMonolith(m_tentaclePosition[x].position, m_monolith.gameObject);
             }else
             {
@@ -184,7 +192,15 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             var instance = GameSystem.poolManager.GetPool<PoolableObjectPool>().GetOrCreateItem(monolith, gameObject.scene);
             instance.SpawnAt(new Vector2(spawnPosition.x, m_monolithSlamHeight.position.y), Quaternion.identity);
-            float waitVal = m_waitValues[Random.Range(0, m_waitValues.Count - 1)];
+            int index = Random.Range(0, m_waitValues.Count - 1) ;
+            int counter = 0;
+            while(m_DurationUsed.Contains(index)&&counter<10)
+            {
+                index = Random.Range(0, m_waitValues.Count - 1);
+                counter++;
+            }
+            m_DurationUsed.Add(index);
+            float waitVal = m_waitValues[index];
             instance.GetComponent<MonolithSlam>().SetTentacleHoldDuration(waitVal);
             m_monolithsSpawnedXPositions.Add(instance.transform.position.x);
             m_monolithsSpawned.Add(instance); 
@@ -199,6 +215,13 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_monolithsSpawned = m_monolithsSpawned.OrderByDescending(x => x.transform.position.x).ToList();
             m_monolithsSpawned.Reverse();
+        }
+
+        [Button]
+        private void TestMonolithSlam()
+        {
+            AITargetInfo dummy = new AITargetInfo();
+            StartCoroutine(ExecuteAttack(dummy));
         }
     }
 }

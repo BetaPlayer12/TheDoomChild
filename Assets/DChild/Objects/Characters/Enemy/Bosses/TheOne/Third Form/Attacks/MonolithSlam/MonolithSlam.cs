@@ -11,6 +11,8 @@ namespace DChild.Gameplay.Characters.Enemies
     {
         [SerializeField, TabGroup("Reference")]
         protected SpineRootAnimation m_animation;
+        [SerializeField, TabGroup("Placeholder")]
+        private GameObject m_AttackIndicator;
         [SerializeField]
         private SkeletonAnimation m_skeletonAnimation;
         [SerializeField, Spine.Unity.SpineAnimation(dataField = "m_skeletonAnimation")]
@@ -37,6 +39,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private float m_TentacleHoldSpeed = 0f;
 
         private bool m_smashMonolith;
+        private bool m_isAlreadyTriggered;
         public bool removeMonolithOnGround;
         public bool keepMonolith;
         public bool monolithGrounded;
@@ -58,7 +61,10 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             if (m_smashMonolith)
             {
-                StartCoroutine(Smash());
+                if (!m_isAlreadyTriggered)
+                {
+                    StartCoroutine(Smash());
+                }
                 m_smashMonolith = false;
             }
 
@@ -96,8 +102,6 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_animation.SetAnimation(0, m_anticipationLoopAnimation, true);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_anticipationLoopAnimation);
-            yield return new WaitForSeconds(m_TentacleHoldSpeed);
-            TriggerSmash();
         }
 
         private IEnumerator DestroyMonolith()
@@ -149,10 +153,14 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator Smash()
         {
+            yield return new WaitForSeconds(m_TentacleHoldSpeed);
+            m_AttackIndicator.SetActive(true);
+            yield return new WaitForSeconds(0.5f);
             m_playerSensor.enabled = true;
             m_impactCollider.enabled = true;
             if (keepMonolith)
             {
+                m_isAlreadyTriggered = true;
                 AttackKeepMonolith();
             }
             else if(!keepMonolith)
