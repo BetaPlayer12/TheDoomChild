@@ -176,7 +176,8 @@ namespace DChild.Gameplay.Characters.Enemies
         protected override void Awake()
         {
             base.Awake();
-
+            m_motherMantisAI.GetComponent<MotherMantisAI>().OnMantisLand += OnMantisLand;
+            m_motherMantisAI.GetComponent<MotherMantisAI>().OnPetalRain += OnPetalRain;
             var sizeMult = UnityEngine.Random.Range(119, 120) * .01f;
             transform.localScale = new Vector2(transform.localScale.x * sizeMult, transform.localScale.y * sizeMult);
             m_stateHandle = new StateHandle<State>(State.Sprout, State.WaitBehaviourEnd);
