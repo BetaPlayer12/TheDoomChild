@@ -94,8 +94,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private Collider2D m_collider;
         [SerializeField, TabGroup("Reference")]
         private Damageable m_damageable;
-        [SerializeField]
-        private GameObject m_motherMantisAI;
+        public GameObject m_motherMantisAI;
 
         [ShowInInspector]
         private StateHandle<State> m_stateHandle;
@@ -137,7 +136,7 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.growAnimation);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_hitbox.SetInvulnerability(Invulnerability.None);
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(2f);
             m_hasMantisLanded = false;
             //m_motherMantisAI.GetComponent<MotherMantisAI>().OnMantisLand -= OnMantisLand;
             if (m_isPetalRain == false)
@@ -176,6 +175,7 @@ namespace DChild.Gameplay.Characters.Enemies
         protected override void Awake()
         {
             base.Awake();
+            //m_motherMantisAI = GameObject.Find("MotherMantis");
             m_motherMantisAI.GetComponent<MotherMantisAI>().OnMantisLand += OnMantisLand;
             m_motherMantisAI.GetComponent<MotherMantisAI>().OnPetalRain += OnPetalRain;
             var sizeMult = UnityEngine.Random.Range(119, 120) * .01f;
@@ -184,12 +184,12 @@ namespace DChild.Gameplay.Characters.Enemies
 
         }
 
-        private void Start()
+        /*private void Start()
         {
             base.Start();
-            m_motherMantisAI.GetComponent<MotherMantisAI>().OnMantisLand += OnMantisLand;
-            m_motherMantisAI.GetComponent<MotherMantisAI>().OnPetalRain += OnPetalRain;
-        }
+            *//*m_motherMantisAI.GetComponent<MotherMantisAI>().OnMantisLand += OnMantisLand;
+            m_motherMantisAI.GetComponent<MotherMantisAI>().OnPetalRain += OnPetalRain;*//*
+        }*/
         private void OnPetalRain(object sender, EventActionArgs eventActionArgs )
         {
             m_isPetalRain = false;

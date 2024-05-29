@@ -1261,8 +1261,11 @@ namespace DChild.Gameplay.Characters.Enemies
                 list[n] = value;
             }
         }
+        [SerializeField]
+        private GameObject m_petalStalagmite;
         private IEnumerator StalagmiteSeedLaunchRoutine1()
         {
+            m_petalStalagmite.GetComponent<PetalStalagtite>().m_motherMantisAI = this.gameObject;
             m_seedSpawning = true;
             m_targetPos = m_targetInfo.position;
             Shuffle(m_stalagmiteSpawnPoint1);
@@ -1349,6 +1352,7 @@ namespace DChild.Gameplay.Characters.Enemies
         }
         private IEnumerator StalagmiteSeedLaunchRoutine2()
         {
+            m_petalStalagmite.GetComponent<PetalStalagtite>().m_motherMantisAI = this.gameObject;
             m_seedSpawning = true;
             for (int i = 0; i < m_info.seedAmount; i++)
             {
