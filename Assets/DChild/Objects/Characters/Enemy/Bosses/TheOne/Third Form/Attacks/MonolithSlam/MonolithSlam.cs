@@ -1,4 +1,7 @@
-﻿using DChild.Gameplay.Pooling;
+﻿using DChild.Gameplay.Characters.Players.Modules;
+using DChild.Gameplay.Combat;
+using DChild.Gameplay.Pooling;
+using Holysoft.Event;
 using Sirenix.OdinInspector;
 using Spine.Unity;
 using System.Collections;
@@ -38,6 +41,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private bool m_playerHit;
         private float m_TentacleHoldSpeed = 0f;
 
+        public event EventAction<EventActionArgs> Destroyed;
+
         private bool m_smashMonolith;
         private bool m_isAlreadyTriggered;
         public bool removeMonolithOnGround;
@@ -50,7 +55,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_impactCollider.enabled = true;
             m_obstacleCollider.enabled = false;
             m_smashMonolith = false;
-            keepMonolith = false;
+            keepMonolith = true;
             m_playerHit = false;
             m_playerSensor.enabled = false;
             StartCoroutine(EmergeTentacle());
@@ -82,7 +87,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         StartCoroutine(DestroyMonolith());
                     }
                 }
-            }            
+            }
         }
 
         public void SetTentacleHoldDuration(float HoldForSeconds)
@@ -111,6 +116,7 @@ namespace DChild.Gameplay.Characters.Enemies
             monolithGrounded = true;
             m_impactCollider.enabled = false;
             m_obstacleCollider.enabled = false;
+            Destroyed?.Invoke(this, EventActionArgs.Empty);
             DestroyInstance();
         }
 
@@ -158,6 +164,9 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return new WaitForSeconds(0.5f);
             m_playerSensor.enabled = true;
             m_impactCollider.enabled = true;
+            m_isAlreadyTriggered = true;
+            AttackKeepMonolith();
+            /*
             if (keepMonolith)
             {
                 m_isAlreadyTriggered = true;
@@ -167,7 +176,9 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 AttackDestroyMonolith();
             }
-            yield return null;
+            */
+            yield return new WaitForSeconds(6f-m_TentacleHoldSpeed);
+            StartCoroutine(DestroyMonolith());
         }
 
         private void OnDestroy()

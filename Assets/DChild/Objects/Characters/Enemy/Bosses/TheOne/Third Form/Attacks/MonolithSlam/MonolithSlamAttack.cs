@@ -77,6 +77,7 @@ namespace DChild.Gameplay.Characters.Enemies
             //Anticipation time before smashing monoliths
             yield return new WaitForSeconds(1f);
 
+            /*
             //Pick a monolith to keep as platform
             if (m_monolithsSpawned.Count > 1)
             {
@@ -86,6 +87,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
                 m_obstacleChecker.AddMonolithToList(m_monolithsSpawned[rollMonolithToKeep]);
             }
+            */
 
             
 
@@ -98,7 +100,7 @@ namespace DChild.Gameplay.Characters.Enemies
             }
             m_DurationUsed.Clear();
             //Anticipation time before smashing monoliths
-            yield return new WaitForSeconds(3f);
+            yield return new WaitForSeconds(6f);
 
             while (counter < m_numOfMonoliths)
             {
@@ -112,9 +114,14 @@ namespace DChild.Gameplay.Characters.Enemies
             foreach (PoolableObject monolith in m_monolithsSpawned)
             {
                 if (monolith != null)
+                {
+                    monolith.GetComponent<MonolithSlam>().keepMonolith=false;
                     monolith.GetComponent<MonolithSlam>().TriggerSmash();
+                }
+                    
                 //yield return new WaitForSeconds(m_timeBeforeSmash);
             }
+            yield return new WaitForSeconds(6f);
             m_positionsUsed.Clear();
             m_monolithsSpawned.Clear();
             m_monolithsSpawnedXPositions.Clear();
@@ -198,6 +205,10 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 index = Random.Range(0, m_waitValues.Count - 1);
                 counter++;
+                if(counter>=10)
+                {
+                    index = 2;
+                }
             }
             m_DurationUsed.Add(index);
             float waitVal = m_waitValues[index];
