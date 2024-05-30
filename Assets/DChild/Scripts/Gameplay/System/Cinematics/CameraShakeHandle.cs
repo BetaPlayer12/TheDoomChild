@@ -15,6 +15,7 @@ namespace DChild.Gameplay.Cinematics
         private IVirtualCamera m_currentCamera;
 
         private CameraShakeInfo m_currentShakeInfo;
+        [ShowInInspector, DisableInPlayMode, HideInEditorMode]
         private bool m_isExecutingShake;
 
         public void Execute(CameraShakeData data)
@@ -67,7 +68,10 @@ namespace DChild.Gameplay.Cinematics
                 yield return null;
             } while (m_blendHandle.hasClipsLeft);
 
-            RemoveNoiseFromCamera(m_currentCamera);
+            if (m_currentCamera != null)
+            {
+                RemoveNoiseFromCamera(m_currentCamera);
+            }
             m_isExecutingShake = false;
         }
 
