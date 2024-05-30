@@ -21,6 +21,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private string m_mouthBlastAnimation;
         [SerializeField, Spine.Unity.SpineAnimation(dataField = "m_skeletonAnimation")]
         private string m_spawnAnimation;
+        [SerializeField]
+        private SpineEventListener m_spineListener;
 
         private GameObject m_tentacleBlastLaser;
 
@@ -30,13 +32,18 @@ namespace DChild.Gameplay.Characters.Enemies
         public event EventAction<EventActionArgs> AttackStart;
         public event EventAction<EventActionArgs> AttackDone;
 
+        [SerializeField, ValueDropdown("GetEvents")]
+        private string m_StartWarning;
+        [SerializeField, ValueDropdown("GetEvents")]
+        private string m_StartBlast;
+        [SerializeField, ValueDropdown("GetEvents")]
+        private string m_BlastDissipate;
+
         private IEnumerator EmergeTentacle()
         {
+            m_launcher.SetAim(false);
             m_animation.SetAnimation(0, m_spawnAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_spawnAnimation);
-
-            m_launcher.SetBeam(true);
-            m_launcher.SetAim(false);
         }
 
         private IEnumerator DespawnTentacle()
@@ -50,7 +57,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_mouthBlastAnimation, false);
             StartCoroutine(m_launcher.LazerBeamRoutine());
             yield return new WaitForAnimationComplete(m_animation.animationState, m_mouthBlastAnimation);
-            m_launcher.SetBeam(false);
+            
         }
 
         public IEnumerator TentacleBlastAttack()
@@ -58,9 +65,30 @@ namespace DChild.Gameplay.Characters.Enemies
             AttackStart?.Invoke(this, EventActionArgs.Empty);
             yield return EmergeTentacle();
             yield return ShootTentacleBeam();
-            yield return new WaitForSeconds(2f);
+            yield return new WaitForSeconds(0.5f);
             yield return DespawnTentacle();
+            yield return new WaitForSeconds(0.5f);
+            //m_launcher.DisableMouthEffects();
             AttackDone?.Invoke(this, EventActionArgs.Empty);
+        }
+
+        private void WarningBeam()
+        {
+            m_launcher.TurnOffDamageCollider();
+            m_launcher.SetBeam(true);
+        }
+
+        private void ShootBeam()
+        {
+            m_launcher.ShootLazer();
+            m_launcher.TurnOnDamageCollider();
+        }
+
+        private void DissipateBeam()
+        {
+            m_launcher.DissipateLazer();
+            m_launcher.TurnOffDamageCollider();
+            m_launcher.SetBeam(false);
         }
 
         // Start is called before the first frame update
@@ -68,6 +96,9 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             //m_tentacleOriginalPosition = m_tentacleEntity.transform.position;
             //m_tentacleBlastLaser.SetActive(false);
+            m_spineListener.Subscribe(m_StartWarning, WarningBeam);
+            m_spineListener.Subscribe(m_StartBlast, ShootBeam);
+            m_spineListener.Subscribe(m_BlastDissipate, DissipateBeam);
         }
 
         // Update is called once per frame
@@ -80,6 +111,20 @@ namespace DChild.Gameplay.Characters.Enemies
         private void ShootBlast()
         {
             StartCoroutine(TentacleBlastAttack());
+        }
+
+        [SerializeField, PreviewField, OnValueChanged("Initialize")]
+        private SkeletonDataAsset m_skeletonDataAsset;
+        //#if UNITY_EDITOR
+        private IEnumerable GetEvents()
+        {
+            ValueDropdownList<string> list = new ValueDropdownList<string>();
+            var reference = m_skeletonDataAsset.GetAnimationStateData().SkeletonData.Events.ToArray();
+            for (int i = 0; i < reference.Length; i++)
+            {
+                list.Add(reference[i].Name);
+            }
+            return list;
         }
     }
 }

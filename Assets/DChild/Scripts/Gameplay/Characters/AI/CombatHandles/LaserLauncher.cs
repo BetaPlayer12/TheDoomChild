@@ -19,6 +19,15 @@ namespace DChild.Gameplay.Characters
         private ParticleFX m_muzzleLoopFX;
         [SerializeField, TabGroup("Lazer")]
         private ParticleFX m_muzzleTelegraphFX;
+        [SerializeField, TabGroup("Lazer")]
+        private Animator m_lazerAnimator;
+        [SerializeField, TabGroup("Lazer")]
+        private Transform m_endSFXtransform;
+        [SerializeField, TabGroup("Lazer")]
+        private Transform m_MouthSFXtransform;
+        [SerializeField, TabGroup("Lazer")]
+        private Vector2 m_mouthBlastOffset;
+
 
         //[SerializeField, TabGroup("Spawn Points")]
         //private Transform m_beamFrontPoint;
@@ -36,6 +45,7 @@ namespace DChild.Gameplay.Characters
 
         private bool m_beamOn;
         private bool m_aimOn;
+
 
         #region Lazer Coroutine
         private Coroutine m_lazerBeamCoroutine;
@@ -104,13 +114,14 @@ namespace DChild.Gameplay.Characters
         private IEnumerator TelegraphLineRoutine()
         {
             //float timer = 0;
-            m_muzzleTelegraphFX.Play();
+            //m_muzzleTelegraphFX.Play();
             m_telegraphLineRenderer.useWorldSpace = true;
             m_telegraphLineRenderer.SetPosition(1, ShotPosition());
             var timerOffset = m_telegraphLineRenderer.startWidth;
+            
             while (m_telegraphLineRenderer.startWidth > 0)
             {
-                m_muzzleTelegraphFX.transform.position = m_beamPoint.position;
+                //m_muzzleTelegraphFX.transform.position = m_beamPoint.position;
                 m_telegraphLineRenderer.startWidth -= Time.deltaTime * timerOffset;
                 yield return null;
             }
@@ -119,24 +130,31 @@ namespace DChild.Gameplay.Characters
 
         public IEnumerator LazerBeamRoutine()
         {
+            m_lineRenderer.gameObject.SetActive(false);
+            yield return new WaitForSeconds(2f);
+            AnticipateLazer();
             if (!m_aimOn)
             {
                 StartCoroutine(TelegraphLineRoutine());
                 StartCoroutine(m_aimRoutine);
             }
 
-            yield return new WaitUntil(() => m_beamOn);
+            
             StopCoroutine(m_aimRoutine);
-            m_muzzleLoopFX.Play();
-
+            //m_muzzleLoopFX.Play();
+            yield return new WaitUntil(() => m_beamOn);
             m_edgeCollider.transform.position = m_beamPoint.position;
             m_lineRenderer.useWorldSpace = true;
+            m_MouthSFXtransform.gameObject.SetActive(true);
             while (m_beamOn)
             {
-                m_muzzleLoopFX.transform.position = ShotPosition();
-
+                //m_muzzleLoopFX.transform.position = ShotPosition();
+                
                 m_lineRenderer.SetPosition(0, m_beamPoint.position);
                 m_lineRenderer.SetPosition(1, ShotPosition());
+                m_MouthSFXtransform.transform.position = m_lineRenderer.GetPosition(0) + (Vector3)m_mouthBlastOffset; //new Vector2 (m_lineRenderer.GetPosition(0).x+ m_mouthBlastOffset.x, m_lineRenderer.GetPosition(0).y+ m_mouthBlastOffset.y);
+                m_MouthSFXtransform.rotation = m_beamPoint.rotation;
+                m_endSFXtransform.transform.position = m_lineRenderer.GetPosition(1);
                 for (int i = 0; i < m_lineRenderer.positionCount; i++)
                 {
                     var pos = m_lineRenderer.GetPosition(i) - m_edgeCollider.transform.position;
@@ -151,7 +169,7 @@ namespace DChild.Gameplay.Characters
                 m_Points.Clear();
                 yield return null;
             }
-            m_muzzleLoopFX.Stop();
+            //m_muzzleLoopFX.Stop();
             //yield return new WaitUntil(() => !m_beamOn);
             ResetLaser();
             m_lazerBeamCoroutine = null;
@@ -175,6 +193,39 @@ namespace DChild.Gameplay.Characters
             m_edgeCollider.points = m_Points.ToArray();
         }
         #endregion
+
+        public void TurnOffDamageCollider()
+        {
+            m_edgeCollider.gameObject.SetActive(false);
+        }
+
+        public void TurnOnDamageCollider()
+        {
+            m_edgeCollider.gameObject.SetActive(true);
+        }
+
+        public void AnticipateLazer()
+        {
+            m_lineRenderer.gameObject.SetActive(true);
+            m_lazerAnimator.SetTrigger("TentacleBlastAnticipation");
+        }
+
+        public void DissipateLazer()
+        {
+            m_lazerAnimator.ResetTrigger("TentacleBlast");
+            m_lazerAnimator.SetTrigger("TentacleBlastDissipation");
+        }
+
+        public void ShootLazer()
+        {
+            m_lazerAnimator.ResetTrigger("TentacleBlastAnticipation");
+            m_lazerAnimator.SetTrigger("TentacleBlast");
+        }
+
+        public void DisableMouthEffects()
+        {
+            m_MouthSFXtransform.gameObject.SetActive(false);
+        }
 
         protected Vector2 LookPosition(Transform startPoint)
         {
