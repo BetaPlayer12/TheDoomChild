@@ -1122,7 +1122,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private void EarthShaker()
         {
             //m_earthShakerFX.Play();
-            GameplaySystem.cinema.ExecuteCameraShake(m_earthShakeCamShake.cameraShakeInfo);
+            GameplaySystem.cinema.ExecuteCameraShake(m_earthShakeCamShake);
             StartCoroutine(EarthShakerBBRoutine(5f));
             m_currentHurtbox = m_earthShakerBB;
             m_hurtboxCoroutine = StartCoroutine(BoundingBoxRoutine(0.50f));

@@ -12,7 +12,7 @@ namespace DChild.Gameplay.Cinematics
         [Button]
         public void ForceShake()
         {
-            GameplaySystem.cinema.ExecuteCameraShake(m_data.cameraShakeInfo);
+            GameplaySystem.cinema.ExecuteCameraShake(m_data);
         }
     }
 }

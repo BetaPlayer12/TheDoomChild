@@ -1,26 +1,31 @@
 ﻿using System.Collections;
 using DChild.Gameplay.Cinematics.Cameras;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace DChild.Gameplay.Cinematics
 {
+
     [System.Serializable]
     public class CameraShakeHandle : MonoBehaviour
     {
+        [ShowInInspector, HideInEditorMode]
+        private CameraShakeBlendHandle m_blendHandle;
+
         private IVirtualCamera m_currentCamera;
 
         private CameraShakeInfo m_currentShakeInfo;
+        [ShowInInspector, DisableInPlayMode, HideInEditorMode]
+        private bool m_isExecutingShake;
 
-        public void Execute(CameraShakeInfo data)
+        public void Execute(CameraShakeData data)
         {
             if (data != null)
             {
-                var currentPriority = m_currentShakeInfo?.priority ?? -1;
-                if (currentPriority <= data.priority)
+                m_blendHandle.Execute(data);
+                if (m_isExecutingShake == false)
                 {
-                    StopAllCoroutines();
-                    StartCoroutine(ExecuteShakeRoutine(data));
-                    m_currentShakeInfo = data;
+                    StartCoroutine(ExecuteShakeRoutine());
                 }
             }
             else
@@ -44,25 +49,41 @@ namespace DChild.Gameplay.Cinematics
             m_currentCamera = camera;
         }
 
-        private IEnumerator ExecuteShakeRoutine(CameraShakeInfo info)
+        private IEnumerator ExecuteShakeRoutine()
         {
-            var timer = 0f;
-            m_currentCamera.noiseModule.m_NoiseProfile = info.noiseProfile;
+            m_isExecutingShake = true;
             do
             {
-                m_currentCamera.noiseModule.m_AmplitudeGain = info.GetAmplitude(timer);
-                m_currentCamera.noiseModule.m_FrequencyGain = info.GetFrequency(timer);
-                timer += GameplaySystem.time.deltaTime;
+                m_blendHandle.Update(GameplaySystem.time.deltaTime);
+                if (m_currentCamera == null)
+                {
+                    Debug.LogWarning("WARNING: Camera Shake Handle does not have a reference to a camera to apply Shake");
+                }
+                else
+                {
+                    m_currentCamera.noiseModule.m_NoiseProfile = m_blendHandle.profile;
+                    m_currentCamera.noiseModule.m_AmplitudeGain = m_blendHandle.amplitude;
+                    m_currentCamera.noiseModule.m_FrequencyGain = m_blendHandle.frequency;
+                }
                 yield return null;
-            } while (timer <= info.duration && m_currentCamera != null);
+            } while (m_blendHandle.hasClipsLeft);
 
-            RemoveNoiseFromCamera(m_currentCamera);
+            if (m_currentCamera != null)
+            {
+                RemoveNoiseFromCamera(m_currentCamera);
+            }
+            m_isExecutingShake = false;
         }
 
         private void RemoveNoiseFromCamera(IVirtualCamera camera)
         {
             camera.noiseModule.m_AmplitudeGain = 0;
             camera.noiseModule.m_FrequencyGain = 0;
+        }
+
+        private void Awake()
+        {
+            m_blendHandle = new CameraShakeBlendHandle();
         }
     }
 }

@@ -43,11 +43,11 @@ namespace DChild.Gameplay.Cinematics.Cameras
 
         [SerializeField,Min(0)]
         private int m_priority;
-        [SerializeField, HideLabel]
-        private NoiseSettings m_noiseProfile;
-
         [SerializeField, MinValue(0f)]
         private float m_duration;
+
+        [SerializeField, HideLabel]
+        private NoiseSettings m_noiseProfile;
         [TitleGroup("Amplitude")]
         [SerializeField, HideLabel]
         private Property m_amplitudeProperty;
