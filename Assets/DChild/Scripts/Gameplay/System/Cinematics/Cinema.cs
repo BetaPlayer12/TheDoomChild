@@ -121,7 +121,7 @@ namespace DChild.Gameplay.Cinematics
             m_cameraShakeHandleOld.SetCameraShake(amplitude, frequency);
         }
 
-        public void ExecuteCameraShake(CameraShakeInfo info)
+        public void ExecuteCameraShake(CameraShakeData info)
         {
             m_cameraShakeHandle.Execute(info);
         }

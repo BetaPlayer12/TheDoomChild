@@ -46,7 +46,7 @@ namespace DChild.Gameplay.Cinematics.Cameras
 
         public void HandleOnDamageRecieveShake()
         {
-            m_cinema.ExecuteCameraShake(m_onDamageShakeData.cameraShakeInfo);
+            m_cinema.ExecuteCameraShake(m_onDamageShakeData);
             //if (m_shakeOnDamage)
             //{
             //    StopAllCoroutines();
@@ -62,11 +62,11 @@ namespace DChild.Gameplay.Cinematics.Cameras
             {
                 if (eventArgs.target.instance.isAlive)
                 {
-                    m_cinema.ExecuteCameraShake(m_onAttackHitShakeData.cameraShakeInfo);
+                    m_cinema.ExecuteCameraShake(m_onAttackHitShakeData);
                 }
                 else
                 {
-                    m_cinema.ExecuteCameraShake(m_onAttackKillShakeData.cameraShakeInfo);
+                    m_cinema.ExecuteCameraShake(m_onAttackKillShakeData);
                 }
             }
 
@@ -137,7 +137,8 @@ namespace DChild.Gameplay.Cinematics.Cameras
 
         private IEnumerator OnAttackCameraShakeRoutine()
         {
-            yield return new WaitForSeconds(m_onAttackHitShakeLoopResetDuration);
+            yield return null;
+            //yield return new WaitForSeconds(m_onAttackHitShakeLoopResetDuration);
             //m_useOnAttackLoop = false;
             //m_onAttackShakeResetRoutine = null;
         }
