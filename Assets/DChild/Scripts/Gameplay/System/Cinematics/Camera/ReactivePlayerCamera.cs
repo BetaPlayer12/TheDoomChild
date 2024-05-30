@@ -137,7 +137,8 @@ namespace DChild.Gameplay.Cinematics.Cameras
 
         private IEnumerator OnAttackCameraShakeRoutine()
         {
-            yield return new WaitForSeconds(m_onAttackHitShakeLoopResetDuration);
+	yield return null;
+            //yield return new WaitForSeconds(m_onAttackHitShakeLoopResetDuration);
             //m_useOnAttackLoop = false;
             //m_onAttackShakeResetRoutine = null;
         }

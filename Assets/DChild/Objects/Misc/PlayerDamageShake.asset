@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bd83b7dfb692a8b4392b1365ba09caff, type: 3}
-  m_Name: EnemyKillCameraShake
+  m_Name: PlayerDamageShake
   m_EditorClassIdentifier: 
   m_cameraShakeInfo:
     m_priority: 2
     m_noiseProfile: {fileID: 11400000, guid: 8a25648852baf0945928369b7abe8b4f, type: 2}
-    m_duration: 0.5
+    m_duration: 0.4
     m_amplitudeProperty:
       m_useCurve: 0
       m_curve:
@@ -24,37 +24,37 @@ MonoBehaviour:
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
-      m_value: 1
+      m_value: 2
       m_useCurveModifier: 1
       m_curveModifier:
         serializedVersion: 2
         m_Curve:
         - serializedVersion: 3
           time: 0
-          value: 0
-          inSlope: 2.3739388
-          outSlope: 2.3739388
-          tangentMode: 0
-          weightedMode: 0
-          inWeight: 0
-          outWeight: 0.08146639
-        - serializedVersion: 3
-          time: 0.5
-          value: 0.5
+          value: 1
           inSlope: 0
           outSlope: 0
           tangentMode: 34
           weightedMode: 0
-          inWeight: 0.33333334
+          inWeight: 0
+          outWeight: 0.33333334
+        - serializedVersion: 3
+          time: 0.5
+          value: 1
+          inSlope: -0
+          outSlope: -0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.11608964
           outWeight: 0.33333334
         - serializedVersion: 3
           time: 1
           value: 0
-          inSlope: -2.5265853
-          outSlope: -2.5265853
+          inSlope: -5.684825
+          outSlope: -5.684825
           tangentMode: 0
           weightedMode: 0
-          inWeight: 0.08961308
+          inWeight: 0.04480648
           outWeight: 0
         m_PreInfinity: 2
         m_PostInfinity: 2
@@ -67,7 +67,7 @@ MonoBehaviour:
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
-      m_value: 5
+      m_value: 1.5
       m_useCurveModifier: 1
       m_curveModifier:
         serializedVersion: 2
