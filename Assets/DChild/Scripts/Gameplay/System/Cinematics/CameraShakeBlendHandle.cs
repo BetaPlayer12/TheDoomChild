@@ -54,10 +54,10 @@ namespace DChild.Gameplay.Cinematics
         private int m_executionIDIteration;
         private const int CURRENT_SHAKECLIP_INDEX = 0;
 
-        public NoiseSettings profile => m_queue[CURRENT_SHAKECLIP_INDEX].Value.info.noiseProfile;
-        public float amplitude => m_queue[CURRENT_SHAKECLIP_INDEX].Value.amplitude;
-        public float frequency => m_queue[CURRENT_SHAKECLIP_INDEX].Value.frequency;
         public bool hasClipsLeft => m_queue.Count > 0;
+        public NoiseSettings profile => hasClipsLeft ? m_queue[CURRENT_SHAKECLIP_INDEX].Value.info.noiseProfile : null;
+        public float amplitude => hasClipsLeft ? m_queue[CURRENT_SHAKECLIP_INDEX].Value.amplitude : 0f;
+        public float frequency => hasClipsLeft ? m_queue[CURRENT_SHAKECLIP_INDEX].Value.frequency : 0f;
 
         public CameraShakeBlendHandle()
         {
