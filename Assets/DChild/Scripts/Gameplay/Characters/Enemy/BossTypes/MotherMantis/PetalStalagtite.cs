@@ -100,6 +100,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private StateHandle<State> m_stateHandle;
         private bool m_isPetalRain;
         public bool m_hasMantisLanded;
+        public bool m_checker;
 
         public EventAction<EventActionArgs> Growing;
 
@@ -115,6 +116,7 @@ namespace DChild.Gameplay.Characters.Enemies
         }
         private IEnumerator SproutRoutine()
         {
+            m_checker = false;
             m_stateHandle.Wait(State.Idle);
             m_hitbox.SetInvulnerability(Invulnerability.MAX);
             m_collider.enabled = false;
@@ -133,13 +135,16 @@ namespace DChild.Gameplay.Characters.Enemies
             //yield return new WaitForSeconds(.2f);
             //m_motherMantisAI.GetComponent<MotherMantisAI>().OnMantisLand += OnMantisLand;
             m_animation.SetAnimation(0, m_info.growAnimation, false);
+            yield return new WaitForSeconds(1f);
+            m_collider.enabled = true;
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.growAnimation);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_hitbox.SetInvulnerability(Invulnerability.None);
+            this.GetComponent<Damageable>().Destroyed += OnDestroyed;
             yield return new WaitForSeconds(2f);
             m_hasMantisLanded = false;
             //m_motherMantisAI.GetComponent<MotherMantisAI>().OnMantisLand -= OnMantisLand;
-            if (m_isPetalRain == false)
+            if (m_isPetalRain == false && m_checker == false)
             {
                 StartCoroutine(WiltFxRoutine());
             }
@@ -154,8 +159,9 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator DeathFxRoutine()
         {
             m_animation.SetAnimation(0, m_info.deathAnimation, false);
-            m_isPetalRain = true;
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.deathAnimation);
+            //m_isPetalRain = true;
+            //yield return new WaitForSeconds(1f);
             Destroy(this.gameObject);
             yield return null;
 
@@ -193,6 +199,10 @@ namespace DChild.Gameplay.Characters.Enemies
         private void OnPetalRain(object sender, EventActionArgs eventActionArgs )
         {
             m_isPetalRain = false;
+        }
+        private void OnDestroyed(object sender, EventActionArgs eventActionArgs )
+        {
+            m_checker = true;
         }
         /*public void CallGrowthRoutine()
         {
