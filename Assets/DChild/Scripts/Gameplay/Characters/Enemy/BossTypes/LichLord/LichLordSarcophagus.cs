@@ -25,8 +25,6 @@ public class LichLordSarcophagus : MonoBehaviour
 #if UNITY_EDITOR
     [SerializeField]
     private SkeletonAnimation m_skeletonAnimation;
-    [SerializeField]
-    private GameObject m_placeholder;
 
     public void InitializeField(SpineRootAnimation spineRoot, SkeletonAnimation animation)
     {
@@ -70,7 +68,6 @@ public class LichLordSarcophagus : MonoBehaviour
         m_hurtbox.enabled = true;
         yield return new WaitForSeconds(.25f);
         m_hurtbox.enabled = false;
-        m_placeholder.SetActive(false);
         yield return new WaitForAnimationComplete(m_spine.animationState, m_explodeAnimation);
         Destroy(this.gameObject);
         yield return null;
@@ -78,7 +75,6 @@ public class LichLordSarcophagus : MonoBehaviour
 
     private IEnumerator PreExplodeRoutine()
     {
-        m_placeholder.SetActive(true);
         m_spine.SetAnimation(0, m_explodeAnimation, false);
         yield return null;
     }

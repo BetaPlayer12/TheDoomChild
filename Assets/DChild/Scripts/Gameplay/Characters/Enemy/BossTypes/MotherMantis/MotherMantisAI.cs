@@ -244,8 +244,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private AttackHandle m_attackHandle;
         [SerializeField, TabGroup("Modules")]
         private DeathHandle m_deathHandle;
-        [SerializeField, TabGroup("Sensors")]
-        private RaySensor m_groundSensor;
+        [TabGroup("Sensors")]
+        public RaySensor m_groundSensor;
         //[SerializeField, TabGroup("Modules")]
         //private FlinchHandler m_flinchHandle;
         [SerializeField, TabGroup("Effects")]
@@ -293,6 +293,8 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Spawn Points")]
         private Transform m_stalagmiteLandingSpawnPoint2;*/
         [SerializeField, TabGroup("Spawn Points")]
+        private Transform m_stalagmiteSpawnPointMain;
+        [SerializeField, TabGroup("Spawn Points")]
         private List<Transform> m_stalagmiteSpawnPoint1;
         [SerializeField, TabGroup("Spawn Points")]
         private Transform m_stalagmiteSpawnPoint2;
@@ -312,6 +314,10 @@ namespace DChild.Gameplay.Characters.Enemies
         private Transform[] m_flowerSpawnPointF;
         [SerializeField, TabGroup("Spawn Points")]
         private Transform[] m_flowerSpawnPointG;
+        [SerializeField, TabGroup("Spawn Points")]
+        private Transform m_leftStalagSpawn;
+        [SerializeField, TabGroup("Spawn Points")]
+        private Transform m_rightStalagSpawn;
         /*[SerializeField, TabGroup("Spawn Points")]
         private Transform[] m_StalagmiteSpawnPoint;
         [SerializeField, TabGroup("Spawn Points")]
@@ -360,7 +366,9 @@ namespace DChild.Gameplay.Characters.Enemies
         private string m_moveAnim;
         private float m_moveSpeed;
         private bool m_isDetecting;
+        private Vector2 m_targetPos;
         public EventAction<EventActionArgs> OnPetalRain;
+        public EventAction<EventActionArgs> OnMantisLand;
 
         private void ApplyPhaseData(PhaseInfo obj)
         {
@@ -485,6 +493,7 @@ namespace DChild.Gameplay.Characters.Enemies
             }
             m_targetPositions.Clear();
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.petalRain);
+            OnPetalRain?.Invoke(this, EventActionArgs.Empty);
             m_stateHandle.ApplyQueuedState();
             //LaunchPetalProjectile(target);
             yield return null;
@@ -723,9 +732,236 @@ namespace DChild.Gameplay.Characters.Enemies
             m_stateHandle.ApplyQueuedState();
             yield return null;
         }
+        private IEnumerator LeapFlowerAttack1Routine()
+        {
+            m_movement.Stop();
+            m_hitbox.SetInvulnerability(Invulnerability.MAX); //wasTrue
+            m_damageCollider.SetActive(false);
+            m_skeleton.GetComponent<MeshRenderer>().sortingLayerName = "Background";
+            m_animation.SetAnimation(0, m_info.jump.animation, false);
+            yield return new WaitForSeconds(1.5f);
+            transform.position = m_backgroundSpawnPoint.position;
+            m_animation.SetAnimation(0, m_info.backgroundLandingAnimation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.backgroundLandingAnimation.animation);
+            m_animation.SetAnimation(0, m_info.backgroundidleAnimation, false);
+            yield return new WaitForSeconds(1.5f);
+            int randomFlowerPatternNumber = UnityEngine.Random.Range(0, 5);
+            Debug.Log("mantis random :" + randomFlowerPatternNumber);
+            if (randomFlowerPatternNumber == 0)
+            {
+
+                for (int i = 0; i < FlowerPattern1.Length; i++)
+                {
+                    if (FlowerPattern1[i] == 0)
+                    {
+                        for (int x = 0; x < m_flowerSpawnPointA.Length; x++)
+                        {
+                            m_animation.SetAnimation(0, m_info.petalBackgroundRight, true);
+                            Instantiate(m_info.flowerBulb, m_flowerSpawnPointA[x].position, m_flowerSpawnPointA[x].rotation);
+                            yield return new WaitForSeconds(1f);
+                        }
+                    }
+                    if (FlowerPattern1[i] == 1)
+                    {
+                        for (int x = 0; x < m_flowerSpawnPointB.Length; x++)
+                        {
+                            m_animation.SetAnimation(0, m_info.petalBackgroundLeft, true);
+                            Instantiate(m_info.flowerBulb, m_flowerSpawnPointB[x].position, m_flowerSpawnPointB[x].rotation);
+                            yield return new WaitForSeconds(1f);
+                        }
+                    }
+                    m_animation.SetAnimation(0, m_info.backgroundidleAnimation, true);
+                    yield return new WaitForSeconds(2f);
+                }
+
+
+            }
+            if (randomFlowerPatternNumber == 1)
+            {
+
+                for (int i = 0; i < FlowerPattern2.Length; i++)
+                {
+                    if (FlowerPattern2[i] == 0)
+                    {
+                        for (int x = 0; x < m_flowerSpawnPointA.Length; x++)
+                        {
+                            m_animation.SetAnimation(0, m_info.petalBackgroundRight, true);
+                            Instantiate(m_info.flowerBulb, m_flowerSpawnPointA[x].position, m_flowerSpawnPointA[x].rotation);
+                            yield return new WaitForSeconds(1f);
+                        }
+                    }
+                    if (FlowerPattern2[i] == 1)
+                    {
+                        for (int x = 0; x < m_flowerSpawnPointB.Length; x++)
+                        {
+                            m_animation.SetAnimation(0, m_info.petalBackgroundLeft, true);
+                            Instantiate(m_info.flowerBulb, m_flowerSpawnPointB[x].position, m_flowerSpawnPointB[x].rotation);
+                            yield return new WaitForSeconds(1f);
+                        }
+                    }
+                    m_animation.SetAnimation(0, m_info.backgroundidleAnimation, true);
+                    yield return new WaitForSeconds(2f);
+                }
+
+            }
+            if (randomFlowerPatternNumber == 2)
+            {
+
+                for (int i = 0; i < FlowerPattern3.Length; i++)
+                {
+                    if (FlowerPattern3[i] == 0)
+                    {
+                        for (int x = 0; x < m_flowerSpawnPointA.Length; x++)
+                        {
+                            m_animation.SetAnimation(0, m_info.petalBackgroundRight, true);
+                            Instantiate(m_info.flowerBulb, m_flowerSpawnPointA[x].position, m_flowerSpawnPointA[x].rotation);
+                            yield return new WaitForSeconds(1f);
+                        }
+                    }
+                    if (FlowerPattern3[i] == 1)
+                    {
+                        for (int x = 0; x < m_flowerSpawnPointB.Length; x++)
+                        {
+                            m_animation.SetAnimation(0, m_info.petalBackgroundLeft, true);
+                            Instantiate(m_info.flowerBulb, m_flowerSpawnPointB[x].position, m_flowerSpawnPointB[x].rotation);
+                            yield return new WaitForSeconds(1f);
+                        }
+                    }
+                    m_animation.SetAnimation(0, m_info.backgroundidleAnimation, true);
+                    yield return new WaitForSeconds(2f);
+                }
+
+            }
+            if (randomFlowerPatternNumber == 3)
+            {
+
+                for (int i = 0; i < FlowerPattern4.Length; i++)
+                {
+                    if (FlowerPattern4[i] == 0)
+                    {
+                        for (int x = 0; x < m_flowerSpawnPointA.Length; x++)
+                        {
+                            m_animation.SetAnimation(0, m_info.petalBackgroundRight, true);
+                            Instantiate(m_info.flowerBulb, m_flowerSpawnPointA[x].position, m_flowerSpawnPointA[x].rotation);
+                            yield return new WaitForSeconds(1f);
+                        }
+                    }
+                    if (FlowerPattern4[i] == 1)
+                    {
+                        for (int x = 0; x < m_flowerSpawnPointB.Length; x++)
+                        {
+                            m_animation.SetAnimation(0, m_info.petalBackgroundLeft, true);
+                            Instantiate(m_info.flowerBulb, m_flowerSpawnPointB[x].position, m_flowerSpawnPointB[x].rotation);
+                            yield return new WaitForSeconds(1f);
+                        }
+                    }
+                    m_animation.SetAnimation(0, m_info.backgroundidleAnimation, true);
+                    yield return new WaitForSeconds(2f);
+                }
+
+            }
+            if (randomFlowerPatternNumber == 4)
+            {
+
+                for (int i = 0; i < FlowerPattern5.Length; i++)
+                {
+                    if (FlowerPattern5[i] == 0)
+                    {
+                        for (int x = 0; x < m_flowerSpawnPointA.Length; x++)
+                        {
+                            m_animation.SetAnimation(0, m_info.petalBackgroundRight, true);
+                            Instantiate(m_info.flowerBulb, m_flowerSpawnPointA[x].position, m_flowerSpawnPointA[x].rotation);
+                            yield return new WaitForSeconds(1f);
+                        }
+                    }
+                    if (FlowerPattern5[i] == 1)
+                    {
+                        for (int x = 0; x < m_flowerSpawnPointB.Length; x++)
+                        {
+                            m_animation.SetAnimation(0, m_info.petalBackgroundLeft, true);
+                            Instantiate(m_info.flowerBulb, m_flowerSpawnPointB[x].position, m_flowerSpawnPointB[x].rotation);
+                            yield return new WaitForSeconds(1f);
+                        }
+                    }
+                    m_animation.SetAnimation(0, m_info.backgroundidleAnimation, true);
+                    yield return new WaitForSeconds(2f);
+                }
+
+            }
+
+            m_animation.SetAnimation(0, m_info.backgroundJumpAnimation, false);
+            int randomStalagmitepattern = UnityEngine.Random.Range(0, 2);
+            if (m_currentPhaseIndex == 3 && !m_seedSpawning)
+            {
+                if (randomStalagmitepattern == 0)
+                {
+                    StartCoroutine(StalagmiteSeedLaunchRoutine1());
+                    //StartCoroutine(SeedLaunchRoutine1());
+                }
+                else
+                {
+                    StartCoroutine(StalagmiteSeedLaunchRoutine2());
+                    //StartCoroutine(SeedLaunchRoutine2());
+                }
+                //m_animation.SetAnimation(0, m_info.idlephase3Animation, true);
+            }
+            yield return new WaitForSeconds(1.5f);
+            m_skeleton.GetComponent<MeshRenderer>().sortingLayerName = "PlayableGround";
+            m_damageCollider.SetActive(true);
+            yield return new WaitForSeconds(1.5f);
+            transform.position = new Vector2(m_targetInfo.position.x, transform.position.y - 5);
+            if (randomStalagmitepattern == 0)
+            {
+                yield return new WaitForSeconds(.5f);
+                m_stateHandle.Wait(State.Cooldown);
+                var distanceLeft = Vector3.Distance(m_targetPos, m_leftBounds.transform.position);
+                var distanceRight = Vector3.Distance(m_targetPos, m_rightBounds.transform.position);
+                //OnPetalRain?.Invoke(this, EventActionArgs.Empty);
+                yield return new WaitForSeconds(3f);
+                if (distanceLeft < distanceRight)
+                {
+                    transform.position = new Vector2(m_rightBounds.transform.position.x - m_distance, transform.position.y);
+                }
+                else
+                {
+                    transform.position = new Vector2(m_leftBounds.transform.position.x + m_distance, transform.position.y);
+                }
+                yield return new WaitForSeconds(1.5f);
+                m_landingCueFX.Play();
+                yield return new WaitForSeconds(1f);
+                m_animation.SetAnimation(0, m_info.landingAnimation, false);
+                yield return new WaitForSeconds(0.6f);
+                m_landFX.Play();
+                yield return new WaitForAnimationComplete(m_animation.animationState, m_info.landingAnimation.animation);
+                OnMantisLand?.Invoke(this, EventActionArgs.Empty);
+            }
+            else
+            {
+                yield return new WaitForSeconds(.5f);
+                m_stateHandle.Wait(State.Cooldown);
+                var centerPoint = CalculateCenterPoint(m_leftBounds.transform.position, m_rightBounds.transform.position);
+                //OnPetalRain?.Invoke(this, EventActionArgs.Empty);
+                yield return new WaitForSeconds(1.5f);
+                transform.position = new Vector3(centerPoint.x, transform.position.y, 0);
+                m_landingCueFX.Play();
+                yield return new WaitForSeconds(1f);
+                m_animation.SetAnimation(0, m_info.landingAnimation, false);
+                yield return new WaitForSeconds(0.6f);
+                m_landFX.Play();
+                yield return new WaitForAnimationComplete(m_animation.animationState, m_info.landingAnimation.animation);
+                OnMantisLand?.Invoke(this, EventActionArgs.Empty);
+                m_animation.SetAnimation(0, m_info.idlephase3Animation, true);
+            }
+            for (int i = 0; i < m_currentPetalAmount; i++)
+            {
+                m_targetPositions.Add(CalculatePositions());
+            }
+            StartCoroutine(PetalFXRoutine(m_targetInfo.position));
+            //m_stateHandle.ApplyQueuedState();
+            yield return null;
+        }
         private IEnumerator LeapFlowerAttack2Routine()
         {
-            m_stateHandle.Wait(State.Cooldown);
             m_movement.Stop();
             m_hitbox.SetInvulnerability(Invulnerability.MAX); //wasTrue
             m_damageCollider.SetActive(false);
@@ -942,28 +1178,73 @@ namespace DChild.Gameplay.Characters.Enemies
 
 
             }
-
-
             m_animation.SetAnimation(0, m_info.backgroundJumpAnimation, false);
+            int randomStalagmitepattern = UnityEngine.Random.Range(0, 2);
+            if (m_currentPhaseIndex == 3 && !m_seedSpawning)
+            {
+                if (randomStalagmitepattern == 0)
+                {
+                    StartCoroutine(StalagmiteSeedLaunchRoutine1());
+                    //StartCoroutine(SeedLaunchRoutine1());
+                }
+                else
+                {
+                    StartCoroutine(StalagmiteSeedLaunchRoutine2());
+                    //StartCoroutine(SeedLaunchRoutine2());
+                }
+            }
+            yield return new WaitForSeconds(1.5f);
+            m_skeleton.GetComponent<MeshRenderer>().sortingLayerName = "PlayableGround";
+            m_damageCollider.SetActive(true);
             yield return new WaitForSeconds(1.5f);
             transform.position = new Vector2(m_targetInfo.position.x, transform.position.y - 5);
-            m_landingCueFX.Play();
-            yield return new WaitForSeconds(1f);
-            m_animation.SetAnimation(0, m_info.landingAnimation, false);
-            yield return new WaitForSeconds(0.6f);
-            m_landFX.Play();
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.landingAnimation.animation);
-            m_damageCollider.SetActive(true);
-            m_hitbox.SetInvulnerability(Invulnerability.None);
-            if (m_currentPhaseIndex == 2)
+            if (randomStalagmitepattern == 0)
             {
-                m_animation.SetAnimation(0, m_info.idlephase2Animation, true);
+                yield return new WaitForSeconds(1.5f);
+                m_stateHandle.Wait(State.Cooldown); 
+                var distanceLeft = Vector3.Distance(m_targetPos, m_leftBounds.transform.position);
+                var distanceRight = Vector3.Distance(m_targetPos, m_rightBounds.transform.position);
+                //OnPetalRain?.Invoke(this, EventActionArgs.Empty);
+                yield return new WaitForSeconds(3f);
+                if (distanceLeft < distanceRight)
+                {
+                    transform.position = new Vector2(m_rightBounds.transform.position.x - m_distance, transform.position.y);
+                }
+                else
+                {
+                    transform.position = new Vector2(m_leftBounds.transform.position.x + m_distance, transform.position.y);
+                }
+                yield return new WaitForSeconds(1.5f);
+                m_landingCueFX.Play();
+                yield return new WaitForSeconds(1f);
+                m_animation.SetAnimation(0, m_info.landingAnimation, false);
+                yield return new WaitForSeconds(0.6f);
+                m_landFX.Play();
+                yield return new WaitForAnimationComplete(m_animation.animationState, m_info.landingAnimation.animation);
+                OnMantisLand?.Invoke(this, EventActionArgs.Empty);
             }
-            if (m_currentPhaseIndex == 3)
+            else
             {
-                m_animation.SetAnimation(0, m_info.idlephase3Animation, true);
+                yield return new WaitForSeconds(.5f);
+                m_stateHandle.Wait(State.Cooldown);
+                var centerPoint = CalculateCenterPoint(m_leftBounds.transform.position, m_rightBounds.transform.position);
+                //OnPetalRain?.Invoke(this, EventActionArgs.Empty);
+                yield return new WaitForSeconds(1.5f);
+                transform.position = new Vector3(centerPoint.x, transform.position.y, 0);
+                m_landingCueFX.Play();
+                yield return new WaitForSeconds(1f);
+                m_animation.SetAnimation(0, m_info.landingAnimation, false);
+                yield return new WaitForSeconds(0.6f);
+                m_landFX.Play();
+                yield return new WaitForAnimationComplete(m_animation.animationState, m_info.landingAnimation.animation);
+                OnMantisLand?.Invoke(this, EventActionArgs.Empty);
             }
-            m_stateHandle.ApplyQueuedState();
+            for (int i = 0; i < m_currentPetalAmount; i++)
+            {
+                m_targetPositions.Add(CalculatePositions());
+            }
+            StartCoroutine(PetalFXRoutine(m_targetInfo.position));
+            //m_stateHandle.ApplyQueuedState();
             yield return null;
         }
         private void Shuffle<T>(List<T> list)
@@ -980,37 +1261,63 @@ namespace DChild.Gameplay.Characters.Enemies
         }
         private IEnumerator StalagmiteSeedLaunchRoutine1()
         {
-            yield return new WaitForSeconds(1.5f);
             m_seedSpawning = true;
+            m_targetPos = m_targetInfo.position;
             Shuffle(m_stalagmiteSpawnPoint1);
             var spawnPointsSelected = UnityEngine.Random.Range(7, 9);
             spawnPointsSelected = Mathf.Min(spawnPointsSelected, m_stalagmiteSpawnPoint1.Count);
             List<Transform> selectedSpawnPoints = m_stalagmiteSpawnPoint1.GetRange(0, spawnPointsSelected);
+            
+            yield return new WaitForSeconds(3.5f);
             for (int i = 0; i < selectedSpawnPoints.Count; i++)
             {
+                var distanceLeft = Vector3.Distance(m_targetPos, m_leftBounds.transform.position);
+                var distanceRight = Vector3.Distance(m_targetPos, m_rightBounds.transform.position);
+                if (distanceLeft < distanceRight)
+                {
+                    m_stalagmiteSpawnPointMain.position = new Vector2(m_rightStalagSpawn.position.x, m_rightStalagSpawn.position.y);
+                }
+                else
+                {
+                    m_stalagmiteSpawnPointMain.position = new Vector2(m_leftStalagSpawn.position.x, m_leftStalagSpawn.position.y);
+                }
                 var spawnPoint = selectedSpawnPoints[i].transform.position;
                 //var numberOfSpawnPointToSelect
                 GameObject projectile = m_info.seedProjectile;
                 var instance = GameSystem.poolManager.GetPool<ProjectilePool>().GetOrCreateItem(projectile);
                 instance.transform.position = spawnPoint;
                 var component = instance.GetComponent<Projectile>();
+                //instance.GetComponent<MotherMantisSeed>().OnStalagmiteSummoned += OnStalagmiteInstantiate;
                 component.ResetState();
                 yield return new WaitForSeconds(1f);
             }
             m_seedSpawning = false;
             yield return null;
         }
+
+        /*private void OnStalagmiteInstantiate(object sender, EventActionArgs eventArgs)
+        {
+            m_numberOfStalagmite++;
+
+            *//*for (int i = 0; i < m_petalStalagmite.Count; i++)
+            {
+                m_petalStalagmite[i].CallGrowthRoutine();
+            }*//*
+            //throw new NotImplementedException();
+        }*/
+
         private IEnumerator SeedLaunchRoutine1()
         {
-            yield return new WaitForSeconds(.5f);
+            yield return new WaitForSeconds(1.5f);
             m_stateHandle.Wait(State.Cooldown);
-            var distanceLeft = Vector3.Distance(m_targetInfo.position, m_leftBounds.transform.position);
-            var distanceRight = Vector3.Distance(m_targetInfo.position, m_rightBounds.transform.position);
-            OnPetalRain?.Invoke(this, EventActionArgs.Empty);
+            //OnPetalRain?.Invoke(this, EventActionArgs.Empty);
             m_movement.Stop();
             m_hitbox.SetInvulnerability(Invulnerability.MAX);
             m_animation.SetAnimation(0, m_info.jump.animation, false);
-            yield return new WaitForSeconds(1.5f);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.jump.animation);
+            yield return new WaitForSeconds(6f);
+            var distanceLeft = Vector3.Distance(m_targetPos, m_leftBounds.transform.position);
+            var distanceRight = Vector3.Distance(m_targetPos, m_rightBounds.transform.position);
             if (distanceLeft < distanceRight)
             {
                 transform.position = new Vector2(m_rightBounds.transform.position.x - m_distance, transform.position.y);
@@ -1026,6 +1333,7 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return new WaitForSeconds(0.6f);
             m_landFX.Play();
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.landingAnimation.animation);
+            OnMantisLand?.Invoke(this, EventActionArgs.Empty);
             m_animation.SetAnimation(0, m_info.idlephase3Animation, true);
             m_stateHandle.ApplyQueuedState();
             for (int i = 0; i < m_currentPetalAmount; i++)
@@ -1042,7 +1350,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_seedSpawning = true;
             for (int i = 0; i < m_info.seedAmount; i++)
             {
-                var spawnPoint = new Vector2(m_stalagmiteSpawnPoint2.position.x + (UnityEngine.Random.Range(-66f, 33f)), m_stalagmiteSpawnPoint2.position.y);
+                var spawnPoint = new Vector2(m_stalagmiteSpawnPoint2.position.x + (UnityEngine.Random.Range(-50f, 50f)), m_stalagmiteSpawnPoint2.position.y);
                 //var projectile = Instantiate(m_info.seedProjectile, spawnPoint, Quaternion.identity);
 
                 GameObject projectile = m_info.seedProjectile;
@@ -1062,11 +1370,10 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return new WaitForSeconds(.5f);
             m_stateHandle.Wait(State.Cooldown);
             var centerPoint = CalculateCenterPoint(m_leftBounds.transform.position, m_rightBounds.transform.position);
-            OnPetalRain?.Invoke(this, EventActionArgs.Empty);
             m_movement.Stop();
             m_hitbox.SetInvulnerability(Invulnerability.MAX);
             m_animation.SetAnimation(0, m_info.jump.animation, false);
-            yield return new WaitForSeconds(1.5f);
+            yield return new WaitForSeconds(4f);
             transform.position = new Vector3(centerPoint.x, transform.position.y, 0);
             m_landingCueFX.Play();
             yield return new WaitForSeconds(1f);
@@ -1074,6 +1381,7 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return new WaitForSeconds(0.6f);
             m_landFX.Play();
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.landingAnimation.animation);
+            OnMantisLand?.Invoke(this, EventActionArgs.Empty);
             m_animation.SetAnimation(0, m_info.idlephase3Animation, true);
             for (int i = 0; i < m_currentPetalAmount; i++)
             {
@@ -1261,7 +1569,6 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void Update()
         {
-           
             m_phaseHandle.MonitorPhase();
             switch (m_stateHandle.currentState)
             {
@@ -1349,7 +1656,7 @@ namespace DChild.Gameplay.Characters.Enemies
                                         Debug.Log("mantis flower attack :" + randomFlowerattackNumber);
                                         if (randomFlowerattackNumber == 0)
                                         {
-                                            StartCoroutine(LeapFlowerAttackRoutine());
+                                            StartCoroutine(LeapFlowerAttack1Routine());
                                         }
                                         else
                                         {
@@ -1367,6 +1674,7 @@ namespace DChild.Gameplay.Characters.Enemies
                                         m_targetPositions.Add(CalculatePositions());
                                     }
                                     StartCoroutine(PetalFXRoutine(m_targetInfo.position));
+                                    //OnPetalRain?.Invoke(this, EventActionArgs.Empty);
                                     //m_stateHandle.ApplyQueuedState();
                                     break;
 

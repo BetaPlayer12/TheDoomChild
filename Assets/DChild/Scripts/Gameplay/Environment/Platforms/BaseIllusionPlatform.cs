@@ -26,10 +26,6 @@ namespace DChild.Gameplay.Environment
                 return;
             }
             m_worldInteraction.SetActive(true);
-
-
-
-
         }
 
         [Button]

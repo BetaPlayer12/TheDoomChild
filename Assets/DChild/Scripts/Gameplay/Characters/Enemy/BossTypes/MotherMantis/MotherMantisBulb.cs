@@ -135,6 +135,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_stateHandle.Wait(State.Idle);
             m_hitbox.SetInvulnerability(Invulnerability.MAX);
             m_spawnFX.Play();
+            yield return new WaitForSeconds(1f);
             m_animation.SetAnimation(0, m_info.growAnimation, false).TimeScale = 10;
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.growAnimation);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
@@ -148,12 +149,13 @@ namespace DChild.Gameplay.Characters.Enemies
             m_hitbox.SetInvulnerability(Invulnerability.MAX);
             //m_animation.SetAnimation(0, m_info.openAnimation, false).TimeScale=10;
             //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.openAnimation);
-            yield return new WaitForSeconds(1f);
-            spore.Play();
-            m_animation.SetAnimation(0, m_info.idleOpenAnimation, false).TimeScale = 2;
             anticipation.Play();
+            yield return new WaitForSeconds(.2f);
+            m_animation.SetAnimation(0, m_info.idleOpenAnimation, false).TimeScale = 2;
+            yield return new WaitForSeconds(.5f);
+            spore.Play();
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.idleOpenAnimation);
-            gameObject.SetActive(false);
+            Destroy(this.gameObject);
             yield return null;
         }
 
