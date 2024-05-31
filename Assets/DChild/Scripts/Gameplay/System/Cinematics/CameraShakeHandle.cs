@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using Cinemachine;
 using DChild.Gameplay.Cinematics.Cameras;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -13,6 +14,11 @@ namespace DChild.Gameplay.Cinematics
         private CameraShakeBlendHandle m_blendHandle;
 
         private IVirtualCamera m_currentCamera;
+
+        private ICinemachineCamera m_blendCamA;
+        private ICinemachineCamera m_blendCamB;
+        private CinemachineBasicMultiChannelPerlin m_blendCamANoise;
+        private CinemachineBasicMultiChannelPerlin m_blendCamBNoise;
 
         private CameraShakeInfo m_currentShakeInfo;
         [ShowInInspector, DisableInPlayMode, HideInEditorMode]
@@ -44,7 +50,7 @@ namespace DChild.Gameplay.Cinematics
                 camera.noiseModule.m_NoiseProfile = m_currentCamera.noiseModule.m_NoiseProfile;
                 camera.noiseModule.m_AmplitudeGain = m_currentCamera.noiseModule.m_AmplitudeGain;
                 camera.noiseModule.m_FrequencyGain = m_currentCamera.noiseModule.m_FrequencyGain;
-                RemoveNoiseFromCamera(m_currentCamera);
+                RemoveNoiseFromCamera(m_currentCamera.noiseModule);
             }
             m_currentCamera = camera;
         }
@@ -61,24 +67,66 @@ namespace DChild.Gameplay.Cinematics
                 }
                 else
                 {
-                    m_currentCamera.noiseModule.m_NoiseProfile = m_blendHandle.profile;
-                    m_currentCamera.noiseModule.m_AmplitudeGain = m_blendHandle.amplitude;
-                    m_currentCamera.noiseModule.m_FrequencyGain = m_blendHandle.frequency;
+                    var brain = GameplaySystem.cinema.currentBrain;
+                    if (brain.ActiveBlend.IsValid && !brain.ActiveBlend.IsComplete)
+                    {
+                        HandleShakeDuringCameraBlend(brain);
+                    }
+                    else
+                    {
+                        if (brain.ActiveBlend.IsComplete)
+                        {
+                            if (m_blendCamA != null)
+                            {
+                                RemoveNoiseFromCamera(m_blendCamANoise);
+                                m_blendCamA = null;
+                                m_blendCamB = null;
+                            }
+                        }
+
+                        ApplyNoise(m_currentCamera.noiseModule, m_blendHandle.profile, m_blendHandle.amplitude, m_blendHandle.frequency);
+                    }
                 }
                 yield return null;
             } while (m_blendHandle.hasClipsLeft);
 
             if (m_currentCamera != null)
             {
-                RemoveNoiseFromCamera(m_currentCamera);
+                RemoveNoiseFromCamera(m_currentCamera.noiseModule);
             }
             m_isExecutingShake = false;
         }
 
-        private void RemoveNoiseFromCamera(IVirtualCamera camera)
+        private void HandleShakeDuringCameraBlend(CinemachineBrain brain)
         {
-            camera.noiseModule.m_AmplitudeGain = 0;
-            camera.noiseModule.m_FrequencyGain = 0;
+            VerifyBlendCamera(ref m_blendCamA, m_blendCamANoise, brain.ActiveBlend.CamA);
+            VerifyBlendCamera(ref m_blendCamB, m_blendCamBNoise, brain.ActiveBlend.CamB);
+
+            ApplyNoise(m_blendCamANoise, m_blendHandle.profile, m_blendHandle.amplitude, m_blendHandle.frequency);
+            ApplyNoise(m_blendCamBNoise, m_blendHandle.profile, m_blendHandle.amplitude, m_blendHandle.frequency);
+        }
+
+        private void VerifyBlendCamera(ref ICinemachineCamera cache, CinemachineBasicMultiChannelPerlin cacheNoise, ICinemachineCamera activeBlendCam)
+        {
+            if (cache != activeBlendCam)
+            {
+                RemoveNoiseFromCamera(cacheNoise);
+                cache = activeBlendCam;
+
+                cacheNoise = ((CinemachineVirtualCamera)cache).GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
+            }
+        }
+
+        private void RemoveNoiseFromCamera(CinemachineBasicMultiChannelPerlin noiseModule)
+        {
+            ApplyNoise(noiseModule, null, 0, 0);
+        }
+
+        private void ApplyNoise(CinemachineBasicMultiChannelPerlin module, NoiseSettings profile, float amplitude, float frequency)
+        {
+            module.m_NoiseProfile = profile;
+            module.m_AmplitudeGain = amplitude;
+            module.m_FrequencyGain = frequency;
         }
 
         private void Awake()
