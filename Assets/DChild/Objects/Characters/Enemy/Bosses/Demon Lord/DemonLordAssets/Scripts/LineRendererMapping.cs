@@ -7,7 +7,7 @@ public class LineRendererMapping : MonoBehaviour
 
     public float lineWidthA = 0.2f; // Width of the line for pointA
     public float lineWidthB = 0.2f; // Width of the line for pointB
-
+    public bool DontMove;
     private LineRenderer lineRenderer; // Reference to the LineRenderer component
 
     void Start()
@@ -28,10 +28,14 @@ public class LineRendererMapping : MonoBehaviour
 
     void SetLineRendererProperties()
     {
-        // Set the positions of the LineRenderer points
-        lineRenderer.positionCount = 2;
-        lineRenderer.SetPosition(0, pointA.position);
-        lineRenderer.SetPosition(1, pointB.position);
+        if(!DontMove)
+        {
+            // Set the positions of the LineRenderer points
+            lineRenderer.positionCount = 2;
+            lineRenderer.SetPosition(0, pointA.position);
+            lineRenderer.SetPosition(1, pointB.position);
+        }
+        
 
         // Set the widths of the LineRenderer for pointA and pointB
         lineRenderer.startWidth = lineWidthA;

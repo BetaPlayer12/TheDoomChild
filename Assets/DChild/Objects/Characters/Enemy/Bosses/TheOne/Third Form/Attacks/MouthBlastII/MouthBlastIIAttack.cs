@@ -76,21 +76,30 @@ namespace DChild.Gameplay.Characters.Enemies
             m_launcher.SetBeam(true);
             m_launcher.SetAim(false);
             m_animation.SetAnimation(0, m_attackChargeAnimation, false);
+            m_launcher.TurnOffDamageCollider();
+            m_launcher.PlayAnimation("WallMouthBlastAnticipation");
             yield return new WaitForAnimationComplete(m_animation.animationState, m_attackChargeAnimation);
+            yield return new WaitForSeconds(2f);
             yield return ShootBlast();
         }
 
         private IEnumerator ShootBlast()
         {
+            m_launcher.TurnOnDamageCollider();
+            m_launcher.PlayAnimation("WallMouthBlast","WallMouthBlastAnticipation");
             StartCoroutine(m_launcher.LazerBeamRoutine());
             m_animation.SetAnimation(0, m_attackLoopAnimation, true);
             yield return new WaitForSeconds(m_blastDuration);
             m_launcher.SetBeam(false);
+            
             yield return RetractMouth();
         }
 
         private IEnumerator RetractMouth()
         {
+            m_launcher.TurnOffDamageCollider();
+            m_launcher.PlayAnimation("TentacleBlastDissipation","WallMouthBlast");
+            m_launcher.TurnLazer(false);
             m_animation.SetAnimation(0, m_afterAttackAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_afterAttackAnimation);
             m_HitboxCollider.SetActive(false);

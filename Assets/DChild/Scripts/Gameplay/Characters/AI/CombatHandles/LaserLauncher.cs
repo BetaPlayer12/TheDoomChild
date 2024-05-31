@@ -130,16 +130,11 @@ namespace DChild.Gameplay.Characters
 
         public IEnumerator LazerBeamRoutine()
         {
-            m_lineRenderer.gameObject.SetActive(false);
-            yield return new WaitForSeconds(2f);
-            AnticipateLazer();
             if (!m_aimOn)
             {
                 StartCoroutine(TelegraphLineRoutine());
                 StartCoroutine(m_aimRoutine);
             }
-
-            
             StopCoroutine(m_aimRoutine);
             //m_muzzleLoopFX.Play();
             yield return new WaitUntil(() => m_beamOn);
@@ -204,23 +199,22 @@ namespace DChild.Gameplay.Characters
             m_edgeCollider.gameObject.SetActive(true);
         }
 
-        public void AnticipateLazer()
+        public void PlayAnimation(string AnimToTrigger)
         {
-            m_lineRenderer.gameObject.SetActive(true);
-            m_lazerAnimator.SetTrigger("TentacleBlastAnticipation");
+            m_lazerAnimator.SetTrigger(AnimToTrigger);
         }
 
-        public void DissipateLazer()
+        public void PlayAnimation(string AnimToTrigger,string AnimToReset)
         {
-            m_lazerAnimator.ResetTrigger("TentacleBlast");
-            m_lazerAnimator.SetTrigger("TentacleBlastDissipation");
+            m_lazerAnimator.ResetTrigger(AnimToReset);
+            m_lazerAnimator.SetTrigger(AnimToTrigger);
         }
 
-        public void ShootLazer()
+        public void TurnLazer(bool TurnLazerTo)
         {
-            m_lazerAnimator.ResetTrigger("TentacleBlastAnticipation");
-            m_lazerAnimator.SetTrigger("TentacleBlast");
+            m_lineRenderer.gameObject.SetActive(TurnLazerTo);
         }
+
 
         public void DisableMouthEffects()
         {

@@ -62,7 +62,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4784075122782624390}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!68 &8940129620732700276
 EdgeCollider2D:
@@ -152,6 +152,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_animation: {fileID: 0}
+  m_HitboxCollider: {fileID: 0}
   m_skeletonAnimation: {fileID: 0}
   m_waitForInitializeAnimation: 
   m_attackLoopAnimation: 
@@ -172,11 +173,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 14ebb37975eaeec4b94e2be423cd6148, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_lineRenderer: {fileID: 2911024502164830317}
+  m_lineRenderer: {fileID: 2920219363937257737}
   m_telegraphLineRenderer: {fileID: 7639423995179256380}
   m_edgeCollider: {fileID: 8940129620732700276}
   m_muzzleLoopFX: {fileID: 6937850477880958457}
   m_muzzleTelegraphFX: {fileID: 5685912842061454806}
+  m_lazerAnimator: {fileID: 2920219363937257733}
+  m_endSFXtransform: {fileID: 2920219365519262125}
+  m_MouthSFXtransform: {fileID: 2920219364529720486}
+  m_mouthBlastOffset: {x: 0, y: 0}
   m_beamPoint: {fileID: 6933251846007114707}
 --- !u!114 &6543986801425367543
 MonoBehaviour:
@@ -5114,7 +5119,7 @@ Transform:
   m_Children:
   - {fileID: 7902337254691379305}
   m_Father: {fileID: 4784075122782624390}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6112105453685507344
 GameObject:
@@ -5134,7 +5139,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1374126368802625618
 Transform:
   m_ObjectHideFlags: 0
@@ -5149,7 +5154,7 @@ Transform:
   m_Children:
   - {fileID: 6547718343980979219}
   m_Father: {fileID: 4784075122782624390}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 11.982, z: 18}
 --- !u!198 &2888026119527680995
 ParticleSystem:
@@ -10043,7 +10048,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &7573249173522408929
 Transform:
   m_ObjectHideFlags: 0
@@ -10057,7 +10062,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4784075122782624390}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!120 &7639423995179256380
 LineRenderer:
@@ -10174,7 +10179,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1853440030788267448
 Transform:
   m_ObjectHideFlags: 0
@@ -10188,7 +10193,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4784075122782624390}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!120 &2911024502164830317
 LineRenderer:
@@ -10317,6 +10322,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 2920219363937257738}
   - {fileID: 1853440030788267448}
   - {fileID: 7573249173522408929}
   - {fileID: 1374126368802625618}
@@ -10346,7 +10352,7 @@ PrefabInstance:
     - target: {fileID: 4428182852656146171, guid: 96ed4d1eab1a63d409358aa3c76035fa,
         type: 3}
       propertyPath: m_RootOrder
-      value: 4
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 4428182852656146171, guid: 96ed4d1eab1a63d409358aa3c76035fa,
         type: 3}
@@ -10402,6 +10408,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Eye_Flying_Minion_Projectile_Muzzle_Flash_For_LAserTelegraph
+      objectReference: {fileID: 0}
+    - target: {fileID: 4428182852656146172, guid: 96ed4d1eab1a63d409358aa3c76035fa,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6440241077610883512, guid: 96ed4d1eab1a63d409358aa3c76035fa,
         type: 3}
@@ -11941,4 +11952,103 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6723472782687325010, guid: 5b25feb0f695f2b4fb928fc2c9db29c3,
     type: 3}
   m_PrefabInstance: {fileID: 3522992498242933563}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &6034006981483588427
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 4784075122782624390}
+    m_Modifications:
+    - target: {fileID: 8879881766743892545, guid: 38a8f1bb4dc3b7841b9ee784154b2909,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8879881766743892545, guid: 38a8f1bb4dc3b7841b9ee784154b2909,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -264
+      objectReference: {fileID: 0}
+    - target: {fileID: 8879881766743892545, guid: 38a8f1bb4dc3b7841b9ee784154b2909,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -420
+      objectReference: {fileID: 0}
+    - target: {fileID: 8879881766743892545, guid: 38a8f1bb4dc3b7841b9ee784154b2909,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8879881766743892545, guid: 38a8f1bb4dc3b7841b9ee784154b2909,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8879881766743892545, guid: 38a8f1bb4dc3b7841b9ee784154b2909,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8879881766743892545, guid: 38a8f1bb4dc3b7841b9ee784154b2909,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8879881766743892545, guid: 38a8f1bb4dc3b7841b9ee784154b2909,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8879881766743892545, guid: 38a8f1bb4dc3b7841b9ee784154b2909,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8879881766743892545, guid: 38a8f1bb4dc3b7841b9ee784154b2909,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8879881766743892545, guid: 38a8f1bb4dc3b7841b9ee784154b2909,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8879881766743892549, guid: 38a8f1bb4dc3b7841b9ee784154b2909,
+        type: 3}
+      propertyPath: m_Name
+      value: TheOneFinalForm_Tentacle Blast I and II_VFX_Holder
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 38a8f1bb4dc3b7841b9ee784154b2909, type: 3}
+--- !u!95 &2920219363937257733 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 8879881766743892558, guid: 38a8f1bb4dc3b7841b9ee784154b2909,
+    type: 3}
+  m_PrefabInstance: {fileID: 6034006981483588427}
+  m_PrefabAsset: {fileID: 0}
+--- !u!120 &2920219363937257737 stripped
+LineRenderer:
+  m_CorrespondingSourceObject: {fileID: 8879881766743892546, guid: 38a8f1bb4dc3b7841b9ee784154b2909,
+    type: 3}
+  m_PrefabInstance: {fileID: 6034006981483588427}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &2920219363937257738 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8879881766743892545, guid: 38a8f1bb4dc3b7841b9ee784154b2909,
+    type: 3}
+  m_PrefabInstance: {fileID: 6034006981483588427}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &2920219364529720486 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8879881765608269805, guid: 38a8f1bb4dc3b7841b9ee784154b2909,
+    type: 3}
+  m_PrefabInstance: {fileID: 6034006981483588427}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &2920219365519262125 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8879881766243953382, guid: 38a8f1bb4dc3b7841b9ee784154b2909,
+    type: 3}
+  m_PrefabInstance: {fileID: 6034006981483588427}
   m_PrefabAsset: {fileID: 0}

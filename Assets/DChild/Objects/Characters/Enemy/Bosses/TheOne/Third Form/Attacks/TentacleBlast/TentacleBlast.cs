@@ -49,12 +49,17 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator DespawnTentacle()
         {
             m_animation.SetAnimation(0, m_despawnAnimation, false);
+            yield return new WaitForSeconds(0.5f);
+            m_launcher.TurnLazer(false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_despawnAnimation);
         }
 
         private IEnumerator ShootTentacleBeam()
         {
             m_animation.SetAnimation(0, m_mouthBlastAnimation, false);
+            yield return new WaitForSeconds(2f);
+            m_launcher.PlayAnimation("TentacleBlastAnticipation");
+            m_launcher.TurnLazer(true);
             StartCoroutine(m_launcher.LazerBeamRoutine());
             yield return new WaitForAnimationComplete(m_animation.animationState, m_mouthBlastAnimation);
             
@@ -80,13 +85,13 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void ShootBeam()
         {
-            m_launcher.ShootLazer();
+            m_launcher.PlayAnimation("TentacleBlast", "TentacleBlastAnticipation");
             m_launcher.TurnOnDamageCollider();
         }
 
         private void DissipateBeam()
         {
-            m_launcher.DissipateLazer();
+            m_launcher.PlayAnimation("TentacleBlastDissipation", "TentacleBlast");
             m_launcher.TurnOffDamageCollider();
             m_launcher.SetBeam(false);
         }
