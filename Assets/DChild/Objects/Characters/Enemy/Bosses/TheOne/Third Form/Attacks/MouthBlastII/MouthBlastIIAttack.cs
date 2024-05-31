@@ -79,6 +79,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_launcher.TurnOffDamageCollider();
             m_launcher.PlayAnimation("WallMouthBlastAnticipation");
             yield return new WaitForAnimationComplete(m_animation.animationState, m_attackChargeAnimation);
+            StartCoroutine(m_launcher.LazerBeamRoutine());
             yield return new WaitForSeconds(2f);
             yield return ShootBlast();
         }
@@ -87,7 +88,6 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_launcher.TurnOnDamageCollider();
             m_launcher.PlayAnimation("WallMouthBlast","WallMouthBlastAnticipation");
-            StartCoroutine(m_launcher.LazerBeamRoutine());
             m_animation.SetAnimation(0, m_attackLoopAnimation, true);
             yield return new WaitForSeconds(m_blastDuration);
             m_launcher.SetBeam(false);
