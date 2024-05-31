@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using Cinemachine;
 using DChild.Gameplay.Cinematics.Cameras;
 using Sirenix.OdinInspector;
@@ -23,6 +24,9 @@ namespace DChild.Gameplay.Cinematics
         private CameraShakeInfo m_currentShakeInfo;
         [ShowInInspector, DisableInPlayMode, HideInEditorMode]
         private bool m_isExecutingShake;
+
+        [ShowInInspector, DisableInPlayMode, HideInEditorMode]
+        private bool m_isHandlingCameraBlendShake => m_isExecutingShake && GameplaySystem.cinema.currentBrain.ActiveBlend != null;
 
         public void Execute(CameraShakeData data)
         {
@@ -68,12 +72,10 @@ namespace DChild.Gameplay.Cinematics
                 else
                 {
                     var brain = GameplaySystem.cinema.currentBrain;
-                    if (brain.ActiveBlend.IsValid && !brain.ActiveBlend.IsComplete)
+                    if (brain.ActiveBlend != null)
                     {
                         HandleShakeDuringCameraBlend(brain);
-                    }
-                    else
-                    {
+
                         if (brain.ActiveBlend.IsComplete)
                         {
                             if (m_blendCamA != null)
@@ -82,7 +84,12 @@ namespace DChild.Gameplay.Cinematics
                                 m_blendCamA = null;
                                 m_blendCamB = null;
                             }
+                            ApplyNoise(m_currentCamera.noiseModule, m_blendHandle.profile, m_blendHandle.amplitude, m_blendHandle.frequency);
                         }
+                    }
+                    else
+                    {
+
 
                         ApplyNoise(m_currentCamera.noiseModule, m_blendHandle.profile, m_blendHandle.amplitude, m_blendHandle.frequency);
                     }
@@ -99,21 +106,34 @@ namespace DChild.Gameplay.Cinematics
 
         private void HandleShakeDuringCameraBlend(CinemachineBrain brain)
         {
-            VerifyBlendCamera(ref m_blendCamA, m_blendCamANoise, brain.ActiveBlend.CamA);
-            VerifyBlendCamera(ref m_blendCamB, m_blendCamBNoise, brain.ActiveBlend.CamB);
+            VerifyBlendCamera(ref m_blendCamA, ref m_blendCamANoise, brain.ActiveBlend.CamA);
+            VerifyBlendCamera(ref m_blendCamB, ref m_blendCamBNoise, brain.ActiveBlend.CamB);
 
             ApplyNoise(m_blendCamANoise, m_blendHandle.profile, m_blendHandle.amplitude, m_blendHandle.frequency);
             ApplyNoise(m_blendCamBNoise, m_blendHandle.profile, m_blendHandle.amplitude, m_blendHandle.frequency);
         }
 
-        private void VerifyBlendCamera(ref ICinemachineCamera cache, CinemachineBasicMultiChannelPerlin cacheNoise, ICinemachineCamera activeBlendCam)
+        private void VerifyBlendCamera(ref ICinemachineCamera cache, ref CinemachineBasicMultiChannelPerlin cacheNoise, ICinemachineCamera activeBlendCam)
         {
+            if (activeBlendCam.VirtualCameraGameObject == null)
+                return;
+
             if (cache != activeBlendCam)
             {
-                RemoveNoiseFromCamera(cacheNoise);
+                if (cacheNoise != null)
+                {
+                    RemoveNoiseFromCamera(cacheNoise);
+                }
                 cache = activeBlendCam;
 
-                cacheNoise = ((CinemachineVirtualCamera)cache).GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
+                if (cache != null)
+                {
+                    cacheNoise = ((CinemachineVirtualCamera)cache).GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
+                }
+                else
+                {
+                    cacheNoise = null;
+                }
             }
         }
 
@@ -124,6 +144,9 @@ namespace DChild.Gameplay.Cinematics
 
         private void ApplyNoise(CinemachineBasicMultiChannelPerlin module, NoiseSettings profile, float amplitude, float frequency)
         {
+            if (module == null)
+                return;
+
             module.m_NoiseProfile = profile;
             module.m_AmplitudeGain = amplitude;
             module.m_FrequencyGain = frequency;
