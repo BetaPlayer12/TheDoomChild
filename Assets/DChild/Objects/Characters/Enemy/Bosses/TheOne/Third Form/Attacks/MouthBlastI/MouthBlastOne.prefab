@@ -82,11 +82,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 14ebb37975eaeec4b94e2be423cd6148, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_lineRenderer: {fileID: 7904567914491961471}
+  m_lineRenderer: {fileID: 4776816766705958737}
   m_telegraphLineRenderer: {fileID: 4893906698137236378}
   m_edgeCollider: {fileID: 485593546671687923}
   m_muzzleLoopFX: {fileID: 4907516255298475771}
   m_muzzleTelegraphFX: {fileID: 3594036226299779}
+  m_lazerAnimator: {fileID: 4776816766705958749}
+  m_endSFXtransform: {fileID: 4776816765201020917}
+  m_MouthSFXtransform: {fileID: 4776816765824088830}
+  m_mouthBlastOffset: {x: 0, y: 0}
   m_beamPoint: {fileID: 5407258362908634748}
 --- !u!1 &981838899477139369
 GameObject:
@@ -152,7 +156,7 @@ Transform:
   m_Children:
   - {fileID: 3985982882309621481}
   m_Father: {fileID: 5017967787176138823}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1955528374499404280
 GameObject:
@@ -170,7 +174,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &7360217896456029709
 Transform:
   m_ObjectHideFlags: 0
@@ -184,7 +188,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5017967787176138823}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!120 &4893906698137236378
 LineRenderer:
@@ -301,7 +305,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &6373337148532203959
 Transform:
   m_ObjectHideFlags: 0
@@ -315,7 +319,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5017967787176138823}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!120 &7904567914491961471
 LineRenderer:
@@ -434,7 +438,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &8404783527741961275
 Transform:
   m_ObjectHideFlags: 0
@@ -449,7 +453,7 @@ Transform:
   m_Children:
   - {fileID: 7558654003128244909}
   m_Father: {fileID: 5017967787176138823}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 11.982, z: 18}
 --- !u!198 &5159889705587503634
 ParticleSystem:
@@ -10272,7 +10276,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5017967787176138823}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!68 &485593546671687923
 EdgeCollider2D:
@@ -10337,10 +10341,11 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8506478199105810975}
   m_LocalRotation: {x: -0, y: -0, z: -0.7933533, w: -0.6087614}
-  m_LocalPosition: {x: -58.112526, y: 9.784424, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: -58.112534, y: 9.784412, z: 0}
+  m_LocalScale: {x: 1.0000001, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 4776816766705958738}
   - {fileID: 6373337148532203959}
   - {fileID: 7360217896456029709}
   - {fileID: 8404783527741961275}
@@ -10350,6 +10355,105 @@ Transform:
   m_Father: {fileID: 981838899477139368}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &4139094897927888147
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 5017967787176138823}
+    m_Modifications:
+    - target: {fileID: 8879881766743892545, guid: 38a8f1bb4dc3b7841b9ee784154b2909,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8879881766743892545, guid: 38a8f1bb4dc3b7841b9ee784154b2909,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -361.85226
+      objectReference: {fileID: 0}
+    - target: {fileID: 8879881766743892545, guid: 38a8f1bb4dc3b7841b9ee784154b2909,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 310.10843
+      objectReference: {fileID: 0}
+    - target: {fileID: 8879881766743892545, guid: 38a8f1bb4dc3b7841b9ee784154b2909,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8879881766743892545, guid: 38a8f1bb4dc3b7841b9ee784154b2909,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: -0.6087614
+      objectReference: {fileID: 0}
+    - target: {fileID: 8879881766743892545, guid: 38a8f1bb4dc3b7841b9ee784154b2909,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8879881766743892545, guid: 38a8f1bb4dc3b7841b9ee784154b2909,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8879881766743892545, guid: 38a8f1bb4dc3b7841b9ee784154b2909,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.7933533
+      objectReference: {fileID: 0}
+    - target: {fileID: 8879881766743892545, guid: 38a8f1bb4dc3b7841b9ee784154b2909,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8879881766743892545, guid: 38a8f1bb4dc3b7841b9ee784154b2909,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8879881766743892545, guid: 38a8f1bb4dc3b7841b9ee784154b2909,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8879881766743892549, guid: 38a8f1bb4dc3b7841b9ee784154b2909,
+        type: 3}
+      propertyPath: m_Name
+      value: TheOneFinalForm_Tentacle Blast I and II_VFX_Holder
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 38a8f1bb4dc3b7841b9ee784154b2909, type: 3}
+--- !u!4 &4776816765201020917 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8879881766243953382, guid: 38a8f1bb4dc3b7841b9ee784154b2909,
+    type: 3}
+  m_PrefabInstance: {fileID: 4139094897927888147}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &4776816765824088830 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8879881765608269805, guid: 38a8f1bb4dc3b7841b9ee784154b2909,
+    type: 3}
+  m_PrefabInstance: {fileID: 4139094897927888147}
+  m_PrefabAsset: {fileID: 0}
+--- !u!120 &4776816766705958737 stripped
+LineRenderer:
+  m_CorrespondingSourceObject: {fileID: 8879881766743892546, guid: 38a8f1bb4dc3b7841b9ee784154b2909,
+    type: 3}
+  m_PrefabInstance: {fileID: 4139094897927888147}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &4776816766705958738 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8879881766743892545, guid: 38a8f1bb4dc3b7841b9ee784154b2909,
+    type: 3}
+  m_PrefabInstance: {fileID: 4139094897927888147}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &4776816766705958749 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 8879881766743892558, guid: 38a8f1bb4dc3b7841b9ee784154b2909,
+    type: 3}
+  m_PrefabInstance: {fileID: 4139094897927888147}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &7192984060473794058
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -10365,7 +10469,7 @@ PrefabInstance:
     - target: {fileID: 4428182852656146171, guid: 96ed4d1eab1a63d409358aa3c76035fa,
         type: 3}
       propertyPath: m_RootOrder
-      value: 4
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 4428182852656146171, guid: 96ed4d1eab1a63d409358aa3c76035fa,
         type: 3}
@@ -10421,6 +10525,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Eye_Flying_Minion_Projectile_Muzzle_Flash_For_LAserTelegraph
+      objectReference: {fileID: 0}
+    - target: {fileID: 4428182852656146172, guid: 96ed4d1eab1a63d409358aa3c76035fa,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6440241077610883512, guid: 96ed4d1eab1a63d409358aa3c76035fa,
         type: 3}

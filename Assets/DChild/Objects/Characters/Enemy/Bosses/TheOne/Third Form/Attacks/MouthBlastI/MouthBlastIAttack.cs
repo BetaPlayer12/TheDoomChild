@@ -23,7 +23,8 @@ namespace DChild.Gameplay.Characters.Enemies
         public Vector2 mouthBlastOneOriginalPosition => m_mouthBlastOneOriginalPosition;
         [SerializeField]
         private BlackBloodFlood m_blackBloodFlood;
-
+        [SerializeField, TabGroup("References")]
+        private GameObject MouthBlastHolder;
         [SerializeField, BoxGroup("Laser")]
         private LaserLauncher m_launcher;
 
@@ -58,15 +59,27 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator ShootBlast()
         {
+            MouthBlastHolder.SetActive(true);
+            yield return new WaitForSeconds(0.1f);
+            m_launcher.TurnLazer(true);
             StartCoroutine(m_launcher.LazerBeamRoutine());
+            m_launcher.PlayAnimation("CielingBlastAnticipation");
+            yield return new WaitForSeconds(0.5f);
             m_blackBloodFlood.StartFlooding();
             yield return new WaitForSeconds(10f);
-            yield return null;
+            yield return EndMouthBlast();
         }
-
+        public void ShootLazer()
+        {
+            m_launcher.PlayAnimation("CielingBlast", "CielingBlastAnticipation");
+        }
         public IEnumerator EndMouthBlast()
         {
             m_launcher.SetBeam(false);
+            m_launcher.PlayAnimation("TentacleBlastDissipation", "CielingBlast");
+            m_launcher.TurnLazer(false);
+            MouthBlastHolder.SetActive(false);
+            //m_launcher.TurnOffDamageCollider();
             yield return null;
         }
 

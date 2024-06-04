@@ -925,17 +925,20 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 m_model.transform.position = new Vector2(m_theOneThirdFormAttacks.mouthBlastOneAttack.mouthBlastOneRightSide.position.x, m_model.transform.position.y);
             }
+            StartCoroutine(m_theOneThirdFormAttacks.mouthBlastOneAttack.ExecuteAttack());
+            yield return new WaitForSeconds(1.5f);
             yield return MoveMouthBlast(side);
         }
 
         private IEnumerator MoveMouthBlast(int side)
         {
+            m_theOneThirdFormAttacks.mouthBlastOneAttack.ShootLazer();
             m_animation.SetAnimation(0, m_info.eyeMouthBlastAnimation, true);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.eyeMouthBlastAnimation);
 
             if(side == 0)
             {
-                StartCoroutine(m_theOneThirdFormAttacks.mouthBlastOneAttack.ExecuteAttack());
+                //StartCoroutine(m_theOneThirdFormAttacks.mouthBlastOneAttack.ExecuteAttack());
                 while (m_model.transform.position.x < m_theOneThirdFormAttacks.mouthBlastOneAttack.mouthBlastOneRightSide.position.x)
                 {
                     m_model.transform.position = Vector2.MoveTowards(m_model.transform.position,
@@ -946,7 +949,7 @@ namespace DChild.Gameplay.Characters.Enemies
             }
             else if(side == 1)
             {
-                StartCoroutine(m_theOneThirdFormAttacks.mouthBlastOneAttack.ExecuteAttack());
+                //StartCoroutine(m_theOneThirdFormAttacks.mouthBlastOneAttack.ExecuteAttack());
                 while (m_model.transform.position.x > m_theOneThirdFormAttacks.mouthBlastOneAttack.mouthBlastOneLeftSide.position.x)
                 {
                     m_model.transform.position = Vector2.MoveTowards(m_model.transform.position,
@@ -955,17 +958,19 @@ namespace DChild.Gameplay.Characters.Enemies
                     yield return new WaitForSeconds(0.002f * GameplaySystem.time.deltaTime);
                 }
             }
+            //m_theOneThirdFormAttacks.mouthBlastOneAttack.EndMouthBlast();
         }
 
         private IEnumerator MouthBlastEnd(Vector2 OriginalPosition)
         {
-            StartCoroutine(m_theOneThirdFormAttacks.mouthBlastOneAttack.EndMouthBlast());
+            
             while (m_model.transform.position.x != OriginalPosition.x)
             {
                 m_model.transform.position = Vector2.MoveTowards(m_model.transform.position,
                     OriginalPosition, m_theOneThirdFormAttacks.mouthBlastOneAttack.mouthBlastOneMoveSpeed);
                 yield return new WaitForSeconds(0.002f * GameplaySystem.time.deltaTime);
             }
+            StartCoroutine(m_theOneThirdFormAttacks.mouthBlastOneAttack.EndMouthBlast());
         }
 
         private IEnumerator FullMouthBlastOneSequence()
