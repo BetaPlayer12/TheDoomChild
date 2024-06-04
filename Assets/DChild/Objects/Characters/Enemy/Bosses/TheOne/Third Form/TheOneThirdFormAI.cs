@@ -970,6 +970,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     OriginalPosition, m_theOneThirdFormAttacks.mouthBlastOneAttack.mouthBlastOneMoveSpeed);
                 yield return new WaitForSeconds(0.002f * GameplaySystem.time.deltaTime);
             }
+            m_animation.SetAnimation(0, m_info.idleAnimation, true);
             StartCoroutine(m_theOneThirdFormAttacks.mouthBlastOneAttack.EndMouthBlast());
         }
 
