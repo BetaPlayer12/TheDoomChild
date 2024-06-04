@@ -88,19 +88,10 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_obstacleChecker.AddMonolithToList(m_monolithsSpawned[rollMonolithToKeep]);
             }
             */
-
+            SetMonolithsToTriggerSmash();
             
-
-            //Set smashMonolith true in each monolith to trigger smash
-            foreach (PoolableObject monolith in m_monolithsSpawned)
-            {
-                if(monolith != null)
-                    monolith.GetComponent<MonolithSlam>().TriggerSmash();
-                //yield return new WaitForSeconds(m_timeBeforeSmash);
-            }
-            m_DurationUsed.Clear();
             //Anticipation time before smashing monoliths
-            yield return new WaitForSeconds(6f);
+            yield return new WaitForSeconds(3f);
 
             while (counter < m_numOfMonoliths)
             {
@@ -110,17 +101,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
             //Anticipation time before smashing monoliths
             yield return new WaitForSeconds(1f);
-            //Set smashMonolith true in each monolith to trigger smash
-            foreach (PoolableObject monolith in m_monolithsSpawned)
-            {
-                if (monolith != null)
-                {
-                    monolith.GetComponent<MonolithSlam>().keepMonolith=false;
-                    monolith.GetComponent<MonolithSlam>().TriggerSmash();
-                }
-                    
-                //yield return new WaitForSeconds(m_timeBeforeSmash);
-            }
+            SetMonolithsToTriggerSmash();
             yield return new WaitForSeconds(6f);
             m_positionsUsed.Clear();
             m_monolithsSpawned.Clear();
@@ -138,11 +119,18 @@ namespace DChild.Gameplay.Characters.Enemies
             Debug.Log(counter);
             if(counter>=5)
             {
-
-                int x = Random.Range(0, 4);
-                while (m_positionsUsed.Contains(x))
+                int x = Random.Range(0, 5);
+                int loopCounter = 0;
+                while (m_positionsUsed.Contains(x)&&loopCounter<10)
                 {
-                    x = Random.Range(0, 4);
+                    x = Random.Range(0, 5);
+                    loopCounter++;
+                    if(loopCounter==10)
+                    {
+                        SetMonolithsToTriggerSmash();
+                        m_positionsUsed.Clear();
+                        yield return new WaitForSeconds(3f);
+                    }
                 }
                 m_positionsUsed.Add(x);
                 InstantiateMonolith(m_tentaclePosition[x].position, m_monolith.gameObject);
@@ -205,7 +193,7 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 index = Random.Range(0, m_waitValues.Count - 1);
                 counter++;
-                if(counter>=10)
+                if(counter>=20)
                 {
                     index = 2;
                 }
@@ -215,6 +203,18 @@ namespace DChild.Gameplay.Characters.Enemies
             instance.GetComponent<MonolithSlam>().SetTentacleHoldDuration(waitVal);
             m_monolithsSpawnedXPositions.Add(instance.transform.position.x);
             m_monolithsSpawned.Add(instance); 
+        }
+
+        private void SetMonolithsToTriggerSmash()
+        {
+            //Set smashMonolith true in each monolith to trigger smash
+            foreach (PoolableObject monolith in m_monolithsSpawned)
+            {
+                if (monolith != null)
+                    monolith.GetComponent<MonolithSlam>().TriggerSmash();
+                //yield return new WaitForSeconds(m_timeBeforeSmash);
+            }
+            m_DurationUsed.Clear();
         }
 
         public void OrganizeMonolithsSpawnedInDescendingOrder()

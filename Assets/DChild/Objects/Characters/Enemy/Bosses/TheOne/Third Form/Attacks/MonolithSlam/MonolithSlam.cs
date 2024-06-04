@@ -84,6 +84,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
                     if (m_playerHit)
                     {
+                        Debug.Log("??? what Wha Uh?");
                         StartCoroutine(DestroyMonolith());
                     }
                 }
@@ -126,7 +127,7 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return new WaitForAnimationComplete(m_animation.animationState, m_attackPlatformAftermathAnimation);
 
             //FindObjectOfType<ObstacleChecker>().RemoveMonolithAtIndex(0);
-
+            m_AttackIndicator.SetActive(false);
             m_impactCollider.enabled = false;
             m_obstacleCollider.enabled = true;
             m_animation.SetAnimation(0, m_platformPersistAnimation, false);
