@@ -1342,6 +1342,8 @@ namespace DChild.Gameplay.Characters.Enemies
                 
                 
             }
+            StopCoroutine(BlinkRoutine(BlinkState.DisappearForward, BlinkState.AppearForward, 25, m_info.midAirHeight, State.Cooldown, false, false, false));
+            m_blinkCoroutine = null;
             m_currentAttackCoroutine = null;
             m_stateHandle.ApplyQueuedState();
             yield return null;
@@ -1379,6 +1381,8 @@ namespace DChild.Gameplay.Characters.Enemies
                 /*m_currentAttackCoroutine = null;
                 m_stateHandle.ApplyQueuedState();*/
             }
+            StopCoroutine(BlinkRoutine(BlinkState.DisappearForward, BlinkState.AppearForward, 25, m_info.midAirHeight, State.Cooldown, false, false, false));
+            m_blinkCoroutine = null;
             m_currentAttackCoroutine = null;
             m_stateHandle.ApplyQueuedState();
             yield return null;
@@ -1481,6 +1485,8 @@ namespace DChild.Gameplay.Characters.Enemies
                 /*m_currentAttackCoroutine = null;
                 m_stateHandle.ApplyQueuedState();*/
             }
+            StopCoroutine(BlinkRoutine(BlinkState.DisappearForward, BlinkState.AppearForward, 25, m_info.midAirHeight, State.Cooldown, false, false, false));
+            m_blinkCoroutine = null;
             m_currentAttackCoroutine = null;
             m_stateHandle.ApplyQueuedState();
             yield return null;
@@ -1551,6 +1557,8 @@ namespace DChild.Gameplay.Characters.Enemies
                 /*m_currentAttackCoroutine = null;
                 m_stateHandle.ApplyQueuedState();*/
             }
+            StopCoroutine(BlinkRoutine(BlinkState.DisappearForward, BlinkState.AppearForward, 25, m_info.midAirHeight, State.Cooldown, false, false, false));
+            m_blinkCoroutine = null;
             m_currentAttackCoroutine = null;
             m_stateHandle.ApplyQueuedState();
             yield return null;
@@ -2099,9 +2107,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             Debug.Log("blinkroutine");
 
-            yield return new WaitUntil(() => m_blinkCoroutine == null);
-            if (m_blinkCoroutine == null)
-            {
+           
                 enabled = false;
                 m_blinkCount++;
                 /*if (m_currentAttackCoroutine != null)
@@ -2234,11 +2240,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_blinkCoroutine = null;
                 //m_currentAttackCoroutine = null;
                 enabled = true;
-            }
-            else
-            {
-                m_blinkCoroutine = null;
-            }
+           
             yield return null;
             m_hitbox.SetCanBlockDamageState(false);
             enabled = true;
