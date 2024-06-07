@@ -58,6 +58,7 @@ namespace DChild.Gameplay.Characters.Enemies
             keepMonolith = true;
             m_playerHit = false;
             m_playerSensor.enabled = false;
+            m_playerSensor.gameObject.SetActive(false);
             StartCoroutine(EmergeTentacle());
         }
 
@@ -163,6 +164,7 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return new WaitForSeconds(m_TentacleHoldSpeed);
             m_AttackIndicator.SetActive(true);
             yield return new WaitForSeconds(0.5f);
+            m_playerSensor.gameObject.SetActive(true);
             m_playerSensor.enabled = true;
             m_impactCollider.enabled = true;
             m_isAlreadyTriggered = true;
