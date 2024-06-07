@@ -358,7 +358,12 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 m_multipleSpikes[i].Disappear();
             }
+            for (int i = 0; i < m_illusionPlatforms.Length; i++)
+            {
+                m_illusionPlatforms[i].Hide();
+            }
             m_bottomMultipleSpike.Disappear();
+
             m_fleshBomb.gameObject.SetActive(false);
             m_rainProjectileHandle.DropSpawnedProjectiles(m_info.crimsonProjectile.speed);
             m_movement.Stop();
