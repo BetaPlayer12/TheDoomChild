@@ -62,7 +62,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
             m_monolithsSpawned.Clear();
 
-            while (counter<=4)
+            while (counter<5)
             {
                 yield return SetUpMonoliths(Target,counter);
                 counter++;
