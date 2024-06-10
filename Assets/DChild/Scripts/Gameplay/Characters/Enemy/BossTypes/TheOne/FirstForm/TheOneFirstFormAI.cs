@@ -2107,7 +2107,9 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             Debug.Log("blinkroutine");
 
-           
+            yield return new WaitUntil(() => m_blinkCoroutine == null);
+            if (m_blinkCoroutine == null)
+            {
                 enabled = false;
                 m_blinkCount++;
                 /*if (m_currentAttackCoroutine != null)
@@ -2240,13 +2242,18 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_blinkCoroutine = null;
                 //m_currentAttackCoroutine = null;
                 enabled = true;
-           
+            }
+            else
+            {
+                m_blinkCoroutine = null;
+            }
             yield return null;
             m_hitbox.SetCanBlockDamageState(false);
             enabled = true;
             StartCoroutine(ForceCooldown());
             Debug.Log("blinkroutine done");
         }
+
 
         private Vector3 RandomTeleportPoint(Vector3 storedPos)
         {
