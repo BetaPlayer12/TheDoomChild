@@ -35,8 +35,10 @@ namespace DChild.Gameplay.Characters.Enemies
         private BoxCollider2D m_impactCollider;
         [SerializeField]
         private BoxCollider2D m_obstacleCollider;
+        //[SerializeField]
+        //private RaySensor m_playerSensor;
         [SerializeField]
-        private RaySensor m_playerSensor;
+        private Attacker TargetDamageDetector;
         [SerializeField]
         private bool m_playerHit;
         private float m_TentacleHoldSpeed = 0f;
@@ -57,9 +59,10 @@ namespace DChild.Gameplay.Characters.Enemies
             m_smashMonolith = false;
             keepMonolith = true;
             m_playerHit = false;
-            m_playerSensor.enabled = false;
-            m_playerSensor.gameObject.SetActive(false);
+            //m_playerSensor.enabled = false;
+            //m_playerSensor.gameObject.SetActive(false);
             StartCoroutine(EmergeTentacle());
+            TargetDamageDetector.TargetDamaged += TargetDamaged;
         }
 
         // Update is called once per frame
@@ -78,10 +81,11 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 if (keepMonolith)
                 {
-                    if (m_playerSensor.isDetecting)
-                    {
-                        m_playerHit = true;
-                    }
+                    
+                    //if (m_playerSensor.isDetecting)
+                    //{
+                    //    m_playerHit = true;
+                    //}
 
                     if (m_playerHit)
                     {
@@ -91,7 +95,10 @@ namespace DChild.Gameplay.Characters.Enemies
                 }
             }
         }
-
+        void TargetDamaged(object sender, CombatConclusionEventArgs eventArgs)
+        {
+            m_playerHit = true;
+        }
         public void SetTentacleHoldDuration(float HoldForSeconds)
         {
             m_TentacleHoldSpeed = HoldForSeconds;
@@ -164,8 +171,8 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return new WaitForSeconds(m_TentacleHoldSpeed);
             m_AttackIndicator.SetActive(true);
             yield return new WaitForSeconds(0.5f);
-            m_playerSensor.gameObject.SetActive(true);
-            m_playerSensor.enabled = true;
+            //m_playerSensor.gameObject.SetActive(true);
+            //m_playerSensor.enabled = true;
             m_impactCollider.enabled = true;
             m_isAlreadyTriggered = true;
             AttackKeepMonolith();
