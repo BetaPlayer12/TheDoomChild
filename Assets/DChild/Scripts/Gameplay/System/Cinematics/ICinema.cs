@@ -25,11 +25,7 @@ namespace DChild.Gameplay.Cinematics
 
         void SetCameraPeekConfiguration(CameraPeekConfiguration configuration);
         void ApplyCameraPeekMode(CameraPeekMode look);
-
-        void SetCameraShake(float amplitude, float frequency);
         void ExecuteCameraShake(CameraShakeData info);
-
-        void SetCameraShakeProfile(CameraShakeType shakeType, bool onNextShakeOnly = false);
     }
 
 }
