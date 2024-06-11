@@ -27,6 +27,9 @@ namespace DChild.Gameplay.Combat.StatusAilment
         private int m_moduleSize;
         [ShowInInspector, ReadOnly]
         private bool m_isActive;
+        private bool m_updatableModulesEnabled;
+        private bool m_areModulesEnabled;
+
 
         private Character m_character;
         public bool isActive { set => m_isActive = value; }
@@ -43,7 +46,43 @@ namespace DChild.Gameplay.Combat.StatusAilment
             this.m_modules = m_modules;
             this.m_updatableModules = m_updatableModules;
             m_hasUpdatableModules = m_updatableModules != null || m_updatableModules.Length > 0;
+            m_areModulesEnabled = false;
             m_moduleSize = m_modules?.Length ?? 0;
+            m_updatableModulesEnabled = true;
+        }
+
+        public void EnableModules()
+        {
+            if (m_hasUpdatableModules == false)
+            {
+                m_updatableModulesEnabled = true;
+            }
+
+            if (m_areModulesEnabled == false)
+            {
+                m_areModulesEnabled = true;
+                for (int i = 0; i < m_moduleSize; i++)
+                {
+                    m_modules[i].Start(m_character);
+                }
+            }
+        }
+
+        public void DisableModules()
+        {
+            if (m_hasUpdatableModules)
+            {
+                m_updatableModulesEnabled = false;
+            }
+
+            if (m_areModulesEnabled)
+            {
+                m_areModulesEnabled = false;
+                for (int i = 0; i < m_moduleSize; i++)
+                {
+                    m_modules[i].Stop(m_character);
+                }
+            }
         }
 
         public void ResetDuration()
@@ -64,18 +103,27 @@ namespace DChild.Gameplay.Combat.StatusAilment
         public void StopEffect()
         {
             m_isActive = false;
-            for (int i = 0; i < m_moduleSize; i++)
+
+            if (m_areModulesEnabled)
             {
-                m_modules[i].Stop(m_character);
+                m_areModulesEnabled = false;
+                for (int i = 0; i < m_moduleSize; i++)
+                {
+                    m_modules[i].Stop(m_character);
+                }
             }
         }
 
         public void StartEffect()
         {
             m_isActive = true;
-            for (int i = 0; i < m_moduleSize; i++)
+            if (m_areModulesEnabled == false)
             {
-                m_modules[i].Start(m_character);
+                m_areModulesEnabled = true;
+                for (int i = 0; i < m_moduleSize; i++)
+                {
+                    m_modules[i].Start(m_character);
+                }
             }
         }
 
@@ -83,7 +131,7 @@ namespace DChild.Gameplay.Combat.StatusAilment
         {
             if (m_isActive)
             {
-                if (m_hasUpdatableModules)
+                if (m_hasUpdatableModules && m_updatableModulesEnabled)
                 {
                     for (int i = 0; i < m_updatableModules.Length; i++)
                     {

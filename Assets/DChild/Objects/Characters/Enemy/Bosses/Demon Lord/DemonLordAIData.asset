@@ -16,15 +16,9 @@ MonoBehaviour:
     SerializedFormat: 2
     SerializedBytes: 
     ReferencedUnityObjects:
-    - {fileID: 11400000, guid: c4fc65cd7fe94f64ea878a70f63b663c, type: 2}
+    - {fileID: 11400000, guid: 4b364f84ff8be38469804757b4d67f30, type: 2}
     - {fileID: 11400000, guid: 5b1f9915015e3ff45adba981fa375ec3, type: 2}
     - {fileID: 11400000, guid: b948639021483ad40b1028bfac2f68ff, type: 2}
-    - {fileID: 11400000, guid: df73105b4b987ae4eaf6225f49c94a6e, type: 2}
-    - {fileID: 4791238810572298706, guid: 1204f9f3ddf92fe41b70cf949f783656, type: 3}
-    - {fileID: 4791238810572298706, guid: a7af77a3d283c09488ae11308828de59, type: 3}
-    - {fileID: 4791238810572298706, guid: 002dee321ea218048aa4984d18ebd3e5, type: 3}
-    - {fileID: 4791238810572298706, guid: dec883ebe11f9354cb247cf5ef7702dc, type: 3}
-    - {fileID: 4791238810572298706, guid: 4e4adc26684f70f45809c4e7c50d5cf6, type: 3}
     SerializedBytesString: 
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
@@ -42,9 +36,9 @@ MonoBehaviour:
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_phaseDataList
       Entry: 7
-      Data: 2|UnityEngine.Rendering.SerializedDictionary`2[[DChild.Gameplay.Characters.Enemies.DemonLordAI+Phase,
+      Data: 2|System.Collections.Generic.Dictionary`2[[DChild.Gameplay.Characters.Enemies.DemonLordAI+Phase,
         Assembly-CSharp],[DChild.Gameplay.Characters.AI.BossPhaseData, Assembly-CSharp]],
-        Unity.RenderPipelines.Core.Runtime
+        mscorlib
     - Name: comparer
       Entry: 7
       Data: 3|System.Collections.Generic.EnumEqualityComparer`1[[DChild.Gameplay.Characters.Enemies.DemonLordAI+Phase,
@@ -60,7 +54,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 12
-      Data: 3
+      Data: 2
     - Name: 
       Entry: 7
       Data: 
@@ -82,18 +76,6 @@ MonoBehaviour:
     - Name: $v
       Entry: 10
       Data: 2
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 
-    - Name: $k
-      Entry: 3
-      Data: 2
-    - Name: $v
-      Entry: 10
-      Data: 3
     - Name: 
       Entry: 8
       Data: 
@@ -112,21 +94,11 @@ MonoBehaviour:
       Data: 5|System.Collections.Generic.Dictionary`2[[DChild.Gameplay.Characters.Enemies.DemonLordAI+Phase,
         Assembly-CSharp],[System.Int32, mscorlib]], mscorlib
     - Name: comparer
-      Entry: 7
-      Data: 6|System.Collections.Generic.EnumEqualityComparer`1[[DChild.Gameplay.Characters.Enemies.DemonLordAI+Phase,
-        Assembly-CSharp]], mscorlib
-    - Name: 
-      Entry: 12
-      Data: 0
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 12
+      Entry: 9
       Data: 3
+    - Name: 
+      Entry: 12
+      Data: 2
     - Name: 
       Entry: 7
       Data: 
@@ -145,18 +117,6 @@ MonoBehaviour:
     - Name: $k
       Entry: 3
       Data: 1
-    - Name: $v
-      Entry: 3
-      Data: 80
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 
-    - Name: $k
-      Entry: 3
-      Data: 2
     - Name: $v
       Entry: 3
       Data: 60
@@ -175,332 +135,455 @@ MonoBehaviour:
     - Name: 
       Entry: 8
       Data: 
+    - Name: m_summonDragonPattern
+      Entry: 7
+      Data: 6|System.Collections.Generic.List`1[[DChild.Gameplay.Characters.Enemies.DemonLordSummonDragon+Pattern[],
+        Assembly-CSharp]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 5
+    - Name: 
+      Entry: 7
+      Data: 7|DChild.Gameplay.Characters.Enemies.DemonLordSummonDragon+Pattern[],
+        Assembly-CSharp
+    - Name: 
+      Entry: 12
+      Data: 4
+    - Name: 
+      Entry: 3
+      Data: 1
+    - Name: 
+      Entry: 3
+      Data: 2
+    - Name: 
+      Entry: 3
+      Data: 5
+    - Name: 
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 8|DChild.Gameplay.Characters.Enemies.DemonLordSummonDragon+Pattern[],
+        Assembly-CSharp
+    - Name: 
+      Entry: 12
+      Data: 4
+    - Name: 
+      Entry: 3
+      Data: 2
+    - Name: 
+      Entry: 3
+      Data: 1
+    - Name: 
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 3
+      Data: 1
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 9|DChild.Gameplay.Characters.Enemies.DemonLordSummonDragon+Pattern[],
+        Assembly-CSharp
+    - Name: 
+      Entry: 12
+      Data: 4
+    - Name: 
+      Entry: 3
+      Data: 3
+    - Name: 
+      Entry: 3
+      Data: 4
+    - Name: 
+      Entry: 3
+      Data: 2
+    - Name: 
+      Entry: 3
+      Data: 5
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 10|DChild.Gameplay.Characters.Enemies.DemonLordSummonDragon+Pattern[],
+        Assembly-CSharp
+    - Name: 
+      Entry: 12
+      Data: 4
+    - Name: 
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 3
+      Data: 1
+    - Name: 
+      Entry: 3
+      Data: 2
+    - Name: 
+      Entry: 3
+      Data: 3
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 11|DChild.Gameplay.Characters.Enemies.DemonLordSummonDragon+Pattern[],
+        Assembly-CSharp
+    - Name: 
+      Entry: 12
+      Data: 4
+    - Name: 
+      Entry: 3
+      Data: 4
+    - Name: 
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 3
+      Data: 5
+    - Name: 
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
     - Name: m_move
       Entry: 7
-      Data: 7|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+MovementInfo[[DChild.Gameplay.Characters.Enemies.DemonLordAI+Info,
+      Data: 12|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+MovementInfo[[DChild.Gameplay.Characters.Enemies.DemonLordAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
       Data: move
     - Name: m_timeScale
       Entry: 4
-      Data: 0
+      Data: 1
     - Name: m_speed
       Entry: 4
-      Data: 25
+      Data: 40
     - Name: 
       Entry: 8
       Data: 
     - Name: m_lightningStepAway
       Entry: 7
-      Data: 8|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+MovementInfo[[DChild.Gameplay.Characters.Enemies.DemonLordAI+Info,
+      Data: 13|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+MovementInfo[[DChild.Gameplay.Characters.Enemies.DemonLordAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
       Data: attack8_step_away
     - Name: m_timeScale
       Entry: 4
-      Data: 0
+      Data: 1
     - Name: m_speed
       Entry: 4
-      Data: 100
+      Data: 0
     - Name: 
       Entry: 8
       Data: 
     - Name: m_lightningStepMidair
       Entry: 7
-      Data: 9|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+MovementInfo[[DChild.Gameplay.Characters.Enemies.DemonLordAI+Info,
+      Data: 14|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+MovementInfo[[DChild.Gameplay.Characters.Enemies.DemonLordAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
       Data: attack9_lighting mid air
     - Name: m_timeScale
       Entry: 4
-      Data: 0
+      Data: 1
     - Name: m_speed
       Entry: 4
-      Data: 100
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: m_ephemeralArmsSmashAttack
-      Entry: 7
-      Data: 10|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.DemonLordAI+Info,
-        Assembly-CSharp]], Assembly-CSharp
-    - Name: m_animation
-      Entry: 1
-      Data: attack1_ephemeralsmash
-    - Name: m_timeScale
-      Entry: 4
       Data: 0
-    - Name: m_range
-      Entry: 4
-      Data: 100
     - Name: 
       Entry: 8
       Data: 
-    - Name: m_ephemeralArmsComboAttack
+    - Name: m_DragonBreathsAnticipation
       Entry: 7
-      Data: 11|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.DemonLordAI+Info,
+      Data: 15|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.DemonLordAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
-      Data: attack2_ephemeral_combo
-    - Name: m_timeScale
-      Entry: 4
-      Data: 0
-    - Name: m_range
-      Entry: 4
-      Data: 100
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: m_threeFireBallsCycle
-      Entry: 4
-      Data: 3
-    - Name: m_threeFireBallsAttack
-      Entry: 7
-      Data: 12|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.DemonLordAI+Info,
-        Assembly-CSharp]], Assembly-CSharp
-    - Name: m_animation
-      Entry: 1
-      Data: attack3_3fireball
-    - Name: m_timeScale
-      Entry: 4
-      Data: 0
-    - Name: m_range
-      Entry: 4
-      Data: 50
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: m_threeFireBallsPreAnimation
-      Entry: 7
-      Data: 13|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.DemonLordAI+Info,
-        Assembly-CSharp]], Assembly-CSharp
-    - Name: m_animation
-      Entry: 1
-      Data: attack3_3fireball_pre
+      Data: DragonsBreath_Anticipation
     - Name: m_timeScale
       Entry: 4
       Data: 1
     - Name: 
       Entry: 8
       Data: 
-    - Name: m_threeFireBallsFireAnimation
+    - Name: m_DragonBreathsAttackLeft
       Entry: 7
-      Data: 14|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.DemonLordAI+Info,
+      Data: 16|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.DemonLordAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
-      Data: attack3_3fireball_fire
+      Data: DragonsBreath_AttackSide2
     - Name: m_timeScale
       Entry: 4
       Data: 1
     - Name: 
       Entry: 8
       Data: 
-    - Name: m_flameWaveAttack
-      Entry: 7
-      Data: 15|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.DemonLordAI+Info,
-        Assembly-CSharp]], Assembly-CSharp
-    - Name: m_animation
-      Entry: 1
-      Data: attack4_flamewave
-    - Name: m_timeScale
-      Entry: 4
-      Data: 0
-    - Name: m_range
-      Entry: 4
-      Data: 100
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: m_rayOfFrostChargeDuration
-      Entry: 4
-      Data: 3
-    - Name: m_rayOfFrostAttack
-      Entry: 7
-      Data: 16|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.DemonLordAI+Info,
-        Assembly-CSharp]], Assembly-CSharp
-    - Name: m_animation
-      Entry: 1
-      Data: attack5_RayofFrost
-    - Name: m_timeScale
-      Entry: 4
-      Data: 0
-    - Name: m_range
-      Entry: 4
-      Data: 100
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: m_rayOfFrostChargeAnimation
+    - Name: m_DragonBreathsAttackRight
       Entry: 7
       Data: 17|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.DemonLordAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
-      Data: attack5_RayofFrost_charge
+      Data: DragonsBreath_AttackSide1
     - Name: m_timeScale
       Entry: 4
       Data: 1
     - Name: 
       Entry: 8
       Data: 
-    - Name: m_rayOfFrostFireAnimation
+    - Name: m_summonDragonAnticipation
       Entry: 7
       Data: 18|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.DemonLordAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
-      Data: attack5_RayofFrost_fire
+      Data: SummonDragon_Anticipation
     - Name: m_timeScale
       Entry: 4
       Data: 1
     - Name: 
       Entry: 8
       Data: 
-    - Name: m_rayOfFrostFireToIdleAnimation
+    - Name: m_summonDragonAttack
       Entry: 7
       Data: 19|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.DemonLordAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
-      Data: attack5_RayofFrost_fire_to_Idle
+      Data: SummonDragon
     - Name: m_timeScale
       Entry: 4
       Data: 1
     - Name: 
       Entry: 8
       Data: 
-    - Name: m_iceBombAttack
+    - Name: m_iceShardAnticipation
       Entry: 7
-      Data: 20|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.DemonLordAI+Info,
+      Data: 20|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.DemonLordAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
-      Data: attack6_icebomb
+      Data: IceShard_Anticipation
     - Name: m_timeScale
       Entry: 4
-      Data: 0
-    - Name: m_range
-      Entry: 4
-      Data: 100
+      Data: 1
     - Name: 
       Entry: 8
       Data: 
-    - Name: m_IceBombThrowAnimation
+    - Name: m_iceShardAttack
       Entry: 7
       Data: 21|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.DemonLordAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
-      Data: attack6_icebomb_throw
+      Data: IceShard_Attack
     - Name: m_timeScale
       Entry: 4
       Data: 1
     - Name: 
       Entry: 8
       Data: 
-    - Name: m_electricOrbAttack
+    - Name: m_lightningOrbAttack
       Entry: 7
-      Data: 22|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.DemonLordAI+Info,
+      Data: 22|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.DemonLordAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
-      Data: attack3_3fireball_pre
+      Data: LightningOrb_Attack
     - Name: m_timeScale
       Entry: 4
-      Data: 0
+      Data: 1
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: m_lightningOrbSummonAnticipation
+      Entry: 7
+      Data: 23|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.DemonLordAI+Info,
+        Assembly-CSharp]], Assembly-CSharp
+    - Name: m_animation
+      Entry: 1
+      Data: LightningOrb_Summon_Anticipation
+    - Name: m_timeScale
+      Entry: 4
+      Data: 1
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: m_lightningOrbSummonLoop
+      Entry: 7
+      Data: 24|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.DemonLordAI+Info,
+        Assembly-CSharp]], Assembly-CSharp
+    - Name: m_animation
+      Entry: 1
+      Data: LightningOrb_Summon_Loop
+    - Name: m_timeScale
+      Entry: 4
+      Data: 1
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: m_rayOfFrostAttack
+      Entry: 7
+      Data: 25|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.DemonLordAI+Info,
+        Assembly-CSharp]], Assembly-CSharp
+    - Name: m_animation
+      Entry: 1
+      Data: Ray of Frost New
+    - Name: m_timeScale
+      Entry: 4
+      Data: 1
     - Name: m_range
       Entry: 4
-      Data: 100
+      Data: 200
     - Name: 
       Entry: 8
       Data: 
     - Name: m_lightningGroundAttack
       Entry: 7
-      Data: 23|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.DemonLordAI+Info,
+      Data: 26|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.DemonLordAI+Info,
+        Assembly-CSharp]], Assembly-CSharp
+    - Name: m_animation
+      Entry: 6
+      Data: 
+    - Name: m_timeScale
+      Entry: 4
+      Data: 1
+    - Name: m_range
+      Entry: 4
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: m_lightningStrikeAnticipation
+      Entry: 7
+      Data: 27|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.DemonLordAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
-      Data: attack7_lightning ground
+      Data: LightningStrike_Anticipation
     - Name: m_timeScale
       Entry: 4
-      Data: 0
+      Data: 1
     - Name: m_range
       Entry: 4
-      Data: 100
+      Data: 200
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: m_lightningStrikeAttack
+      Entry: 7
+      Data: 28|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.DemonLordAI+Info,
+        Assembly-CSharp]], Assembly-CSharp
+    - Name: m_animation
+      Entry: 1
+      Data: LightningStrike_Attack
+    - Name: m_timeScale
+      Entry: 4
+      Data: 1
+    - Name: m_range
+      Entry: 4
+      Data: 200
     - Name: 
       Entry: 8
       Data: 
     - Name: m_targetDistanceTolerance
       Entry: 4
-      Data: 50
+      Data: 10
     - Name: m_targetGroundDistanceTolerance
       Entry: 4
-      Data: 30
+      Data: 10
     - Name: m_target1CHDistance
       Entry: 4
       Data: 10
     - Name: m_target3CHDistance
       Entry: 4
-      Data: 30
+      Data: 20
     - Name: m_phase1Pattern1Range
       Entry: 4
-      Data: 50
+      Data: 200
     - Name: m_phase1Pattern2Range
       Entry: 4
-      Data: 100
+      Data: 200
     - Name: m_phase1Pattern3Range
       Entry: 4
-      Data: 100
+      Data: 200
     - Name: m_phase1Pattern4Range
       Entry: 4
-      Data: 100
+      Data: 200
+    - Name: m_phase2Pattern1Range
+      Entry: 4
+      Data: 200
     - Name: m_phase2Pattern2Range
       Entry: 4
-      Data: 100
+      Data: 200
     - Name: m_phase2Pattern3Range
       Entry: 4
-      Data: 100
+      Data: 200
     - Name: m_phase2Pattern4Range
       Entry: 4
-      Data: 100
+      Data: 200
     - Name: m_phase2Pattern5Range
       Entry: 4
-      Data: 100
+      Data: 200
     - Name: m_phase3Pattern1Range
       Entry: 4
-      Data: 100
+      Data: 0
     - Name: m_phase3Pattern2Range
       Entry: 4
-      Data: 100
+      Data: 0
     - Name: m_phase3Pattern5Range
       Entry: 4
-      Data: 100
+      Data: 0
     - Name: m_phase3Pattern6Range
       Entry: 4
-      Data: 100
+      Data: 0
     - Name: m_phase1PatternCooldown
       Entry: 7
-      Data: 24|System.Collections.Generic.List`1[[System.Single, mscorlib]], mscorlib
+      Data: 29|System.Collections.Generic.List`1[[System.Single, mscorlib]], mscorlib
     - Name: 
       Entry: 12
       Data: 4
     - Name: 
       Entry: 4
-      Data: 1
+      Data: 0
     - Name: 
       Entry: 4
-      Data: 1
+      Data: 0
     - Name: 
       Entry: 4
-      Data: 1
+      Data: 0
     - Name: 
       Entry: 4
-      Data: 1
+      Data: 0
     - Name: 
       Entry: 13
       Data: 
@@ -509,22 +592,22 @@ MonoBehaviour:
       Data: 
     - Name: m_phase2PatternCooldown
       Entry: 7
-      Data: 25|System.Collections.Generic.List`1[[System.Single, mscorlib]], mscorlib
+      Data: 30|System.Collections.Generic.List`1[[System.Single, mscorlib]], mscorlib
     - Name: 
       Entry: 12
       Data: 4
     - Name: 
       Entry: 4
-      Data: 0.5
+      Data: 0
     - Name: 
       Entry: 4
-      Data: 0.5
+      Data: 0
     - Name: 
       Entry: 4
-      Data: 0.5
+      Data: 0
     - Name: 
       Entry: 4
-      Data: 0.5
+      Data: 0
     - Name: 
       Entry: 13
       Data: 
@@ -533,22 +616,10 @@ MonoBehaviour:
       Data: 
     - Name: m_phase3PatternCooldown
       Entry: 7
-      Data: 26|System.Collections.Generic.List`1[[System.Single, mscorlib]], mscorlib
+      Data: 31|System.Collections.Generic.List`1[[System.Single, mscorlib]], mscorlib
     - Name: 
       Entry: 12
-      Data: 4
-    - Name: 
-      Entry: 4
-      Data: 0.1
-    - Name: 
-      Entry: 4
-      Data: 0.1
-    - Name: 
-      Entry: 4
-      Data: 0.1
-    - Name: 
-      Entry: 4
-      Data: 0.1
+      Data: 0
     - Name: 
       Entry: 13
       Data: 
@@ -557,7 +628,7 @@ MonoBehaviour:
       Data: 
     - Name: m_deathAnimation
       Entry: 7
-      Data: 27|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.DemonLordAI+Info,
+      Data: 32|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.DemonLordAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
@@ -570,7 +641,7 @@ MonoBehaviour:
       Data: 
     - Name: m_flinchAnimation
       Entry: 7
-      Data: 28|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.DemonLordAI+Info,
+      Data: 33|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.DemonLordAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
@@ -583,7 +654,7 @@ MonoBehaviour:
       Data: 
     - Name: m_idleAnimation
       Entry: 7
-      Data: 29|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.DemonLordAI+Info,
+      Data: 34|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+MovementInfo[[DChild.Gameplay.Characters.Enemies.DemonLordAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
@@ -591,12 +662,15 @@ MonoBehaviour:
     - Name: m_timeScale
       Entry: 4
       Data: 1
+    - Name: m_speed
+      Entry: 4
+      Data: 0
     - Name: 
       Entry: 8
       Data: 
     - Name: m_turnAnimation
       Entry: 7
-      Data: 30|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.DemonLordAI+Info,
+      Data: 35|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.DemonLordAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
@@ -607,31 +681,91 @@ MonoBehaviour:
     - Name: 
       Entry: 8
       Data: 
-    - Name: m_fireBallProjectile
+    - Name: m_teleportDisapear
       Entry: 7
-      Data: 31|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleProjectileAttackInfo[[DChild.Gameplay.Characters.Enemies.DemonLordAI+Info,
+      Data: 36|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.DemonLordAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
-      Data: attack3_3fireball
+      Data: PhasingTeleport_Disappear
     - Name: m_timeScale
       Entry: 4
-      Data: 0
+      Data: 1
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: m_teleportAppear
+      Entry: 7
+      Data: 37|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.DemonLordAI+Info,
+        Assembly-CSharp]], Assembly-CSharp
+    - Name: m_animation
+      Entry: 1
+      Data: PhaseTeleport_Appear
+    - Name: m_timeScale
+      Entry: 4
+      Data: 1
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: m_rageAnimation
+      Entry: 7
+      Data: 38|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.DemonLordAI+Info,
+        Assembly-CSharp]], Assembly-CSharp
+    - Name: m_animation
+      Entry: 1
+      Data: Rage_Quake
+    - Name: m_timeScale
+      Entry: 4
+      Data: 1
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: m_iceShardCardinalProjectiles
+      Entry: 1
+      Data: Spawn Cardinal Projectiles
+    - Name: m_iceShardDiagonalProjectiles
+      Entry: 1
+      Data: Spawn Diagonal Projectiles
+    - Name: m_rayOfFrostBeam
+      Entry: 1
+      Data: Spawn Ray of Frost Beam
+    - Name: m_dragonsBreath
+      Entry: 1
+      Data: Spawn Fire from Face
+    - Name: m_lightningStrike
+      Entry: 1
+      Data: Spawn Summoning Circle
+    - Name: m_LightningOrbs
+      Entry: 1
+      Data: fade in COSMIC OVERLAY shader and white glow outline
+    - Name: m_summonDragonEvent
+      Entry: 1
+      Data: Spawn Fire Dragon from Portal
+    - Name: m_fireBallProjectile
+      Entry: 7
+      Data: 39|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleProjectileAttackInfo[[DChild.Gameplay.Characters.Enemies.DemonLordAI+Info,
+        Assembly-CSharp]], Assembly-CSharp
+    - Name: m_animation
+      Entry: 6
+      Data: 
+    - Name: m_timeScale
+      Entry: 4
+      Data: 1
     - Name: m_launchOnEvent
       Entry: 6
       Data: 
     - Name: m_range
       Entry: 4
-      Data: 100
+      Data: 0
     - Name: m_projectileInfo
       Entry: 7
-      Data: 32|DChild.Gameplay.Characters.ProjectileInfo, Assembly-CSharp
+      Data: 40|DChild.Gameplay.Characters.ProjectileInfo, Assembly-CSharp
     - Name: m_projectile
-      Entry: 10
-      Data: 4
+      Entry: 6
+      Data: 
     - Name: m_speed
       Entry: 4
-      Data: 100
+      Data: 0
     - Name: 
       Entry: 8
       Data: 
@@ -640,32 +774,32 @@ MonoBehaviour:
       Data: 
     - Name: m_fireBallDelay
       Entry: 4
-      Data: 0.5
+      Data: 0
     - Name: m_iceBombProjectile
       Entry: 7
-      Data: 33|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleProjectileAttackInfo[[DChild.Gameplay.Characters.Enemies.DemonLordAI+Info,
+      Data: 41|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleProjectileAttackInfo[[DChild.Gameplay.Characters.Enemies.DemonLordAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
-      Entry: 1
-      Data: attack6_icebomb_throw
+      Entry: 6
+      Data: 
     - Name: m_timeScale
       Entry: 4
-      Data: 0
+      Data: 1
     - Name: m_launchOnEvent
       Entry: 6
       Data: 
     - Name: m_range
       Entry: 4
-      Data: 100
+      Data: 0
     - Name: m_projectileInfo
       Entry: 7
-      Data: 34|DChild.Gameplay.Characters.ProjectileInfo, Assembly-CSharp
+      Data: 42|DChild.Gameplay.Characters.ProjectileInfo, Assembly-CSharp
     - Name: m_projectile
-      Entry: 10
-      Data: 5
+      Entry: 6
+      Data: 
     - Name: m_speed
       Entry: 4
-      Data: 25
+      Data: 0
     - Name: 
       Entry: 8
       Data: 
@@ -674,14 +808,14 @@ MonoBehaviour:
       Data: 
     - Name: m_iceBombDelay
       Entry: 4
-      Data: 0.5
+      Data: 0
     - Name: m_electricOrbProjectile
       Entry: 7
-      Data: 35|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleProjectileAttackInfo[[DChild.Gameplay.Characters.Enemies.DemonLordAI+Info,
+      Data: 43|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleProjectileAttackInfo[[DChild.Gameplay.Characters.Enemies.DemonLordAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
-      Entry: 1
-      Data: attack3_3fireball_pre
+      Entry: 6
+      Data: 
     - Name: m_timeScale
       Entry: 4
       Data: 1
@@ -690,16 +824,16 @@ MonoBehaviour:
       Data: 
     - Name: m_range
       Entry: 4
-      Data: 100
+      Data: 0
     - Name: m_projectileInfo
       Entry: 7
-      Data: 36|DChild.Gameplay.Characters.ProjectileInfo, Assembly-CSharp
+      Data: 44|DChild.Gameplay.Characters.ProjectileInfo, Assembly-CSharp
     - Name: m_projectile
-      Entry: 10
-      Data: 6
+      Entry: 6
+      Data: 
     - Name: m_speed
       Entry: 4
-      Data: 100
+      Data: 0
     - Name: 
       Entry: 8
       Data: 
@@ -708,14 +842,14 @@ MonoBehaviour:
       Data: 
     - Name: m_electricOrbDelay
       Entry: 4
-      Data: 1
+      Data: 0
     - Name: m_flameWaveProjectile
       Entry: 7
-      Data: 37|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleProjectileAttackInfo[[DChild.Gameplay.Characters.Enemies.DemonLordAI+Info,
+      Data: 45|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleProjectileAttackInfo[[DChild.Gameplay.Characters.Enemies.DemonLordAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
-      Entry: 1
-      Data: attack4_flamewave
+      Entry: 6
+      Data: 
     - Name: m_timeScale
       Entry: 4
       Data: 1
@@ -724,16 +858,16 @@ MonoBehaviour:
       Data: 
     - Name: m_range
       Entry: 4
-      Data: 100
+      Data: 0
     - Name: m_projectileInfo
       Entry: 7
-      Data: 38|DChild.Gameplay.Characters.ProjectileInfo, Assembly-CSharp
+      Data: 46|DChild.Gameplay.Characters.ProjectileInfo, Assembly-CSharp
     - Name: m_projectile
-      Entry: 10
-      Data: 7
+      Entry: 6
+      Data: 
     - Name: m_speed
       Entry: 4
-      Data: 50
+      Data: 0
     - Name: 
       Entry: 8
       Data: 
@@ -742,14 +876,14 @@ MonoBehaviour:
       Data: 
     - Name: m_flameWaveDelay
       Entry: 4
-      Data: 1
+      Data: 0
     - Name: m_lightningGroundProjectile
       Entry: 7
-      Data: 39|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleProjectileAttackInfo[[DChild.Gameplay.Characters.Enemies.DemonLordAI+Info,
+      Data: 47|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleProjectileAttackInfo[[DChild.Gameplay.Characters.Enemies.DemonLordAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
-      Entry: 1
-      Data: attack7_lightning ground
+      Entry: 6
+      Data: 
     - Name: m_timeScale
       Entry: 4
       Data: 1
@@ -758,16 +892,16 @@ MonoBehaviour:
       Data: 
     - Name: m_range
       Entry: 4
-      Data: 100
+      Data: 0
     - Name: m_projectileInfo
       Entry: 7
-      Data: 40|DChild.Gameplay.Characters.ProjectileInfo, Assembly-CSharp
+      Data: 48|DChild.Gameplay.Characters.ProjectileInfo, Assembly-CSharp
     - Name: m_projectile
-      Entry: 10
-      Data: 8
+      Entry: 6
+      Data: 
     - Name: m_speed
       Entry: 4
-      Data: 100
+      Data: 0
     - Name: 
       Entry: 8
       Data: 
@@ -776,7 +910,7 @@ MonoBehaviour:
       Data: 
     - Name: m_lightningGroundDelay
       Entry: 4
-      Data: 1
+      Data: 0
     - Name: 
       Entry: 8
       Data: 

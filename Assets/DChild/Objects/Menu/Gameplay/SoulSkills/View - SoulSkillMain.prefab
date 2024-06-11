@@ -707,12 +707,9 @@ GameObject:
   - component: {fileID: 33829321095340261}
   - component: {fileID: 33829321095340260}
   - component: {fileID: 33829321095340259}
-  - component: {fileID: 33829321095340257}
-  - component: {fileID: 33829321095340256}
   - component: {fileID: 33829321095340270}
   - component: {fileID: 33829321095340280}
   - component: {fileID: 33829321095340263}
-  - component: {fileID: 33829321095340262}
   m_Layer: 5
   m_Name: View - SoulSkillMain
   m_TagString: Untagged
@@ -796,44 +793,6 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
---- !u!222 &33829321095340257
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 33829321095340268}
-  m_CullTransparentMesh: 0
---- !u!114 &33829321095340256
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 33829321095340268}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 0.78039217}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Sprite: {fileID: 0}
-  m_Type: 0
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
 --- !u!114 &33829321095340270
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1482,36 +1441,6 @@ MonoBehaviour:
       ToCustomValue: 0
       FromOffset: 0
       ToOffset: 0
---- !u!114 &33829321095340262
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 33829321095340268}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 78f003aa0ad0a4c469338c205df004d3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Payload:
-    StreamId:
-      Category: Store
-      Name: SoulSkill
-      Custom: 0
-    SignalValueType: 0
-    IntegerValue: 0
-    BooleanValue: 0
-    FloatValue: 0
-    StringValue: 
-    ColorValue: {r: 0, g: 0, b: 0, a: 0}
-    Vector2Value: {x: 0, y: 0}
-    Vector3Value: {x: 0, y: 0, z: 0}
-    Vector4Value: {x: 0, y: 0, z: 0, w: 0}
-  SendOnStart: 0
-  SendOnEnable: 0
-  SendOnDisable: 0
-  SendOnDestroy: 0
 --- !u!1 &33829321412028550
 GameObject:
   m_ObjectHideFlags: 0
@@ -1916,7 +1845,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 34.2
+  m_fontSize: 31
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -2387,7 +2316,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 46.45
+  m_fontSize: 42.05
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -5360,6 +5289,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 33829320794387252}
     m_Modifications:
+    - target: {fileID: 1628456459799313860, guid: 2c1b2ca5139e8ec4d9e85514c1a327b2,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1628456459799313860, guid: 2c1b2ca5139e8ec4d9e85514c1a327b2,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4288325732341147336, guid: 2c1b2ca5139e8ec4d9e85514c1a327b2,
         type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -5527,6 +5466,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_orb: {fileID: 370499470443494663}
   m_icon: {fileID: 1890922147159396751}
+  m_glow: {fileID: 0}
 --- !u!224 &8340809477627259563 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 8338605552424434755, guid: 2c1b2ca5139e8ec4d9e85514c1a327b2,
