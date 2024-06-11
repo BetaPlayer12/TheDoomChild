@@ -18,6 +18,7 @@ public static class CollecathonUtility
         locationSuffixPair.Add(Location.Throne_Room, "TR");
         locationSuffixPair.Add(Location.Realm_Of_Nightmare, "RON");
         locationSuffixPair.Add(Location.Temple_Of_The_One, "TOTO");
+        locationSuffixPair.Add(Location.Morden, "MD");
     }
 
     public static string GenerateCurrentCountVariableName(CollectathonTypes type, Location location)

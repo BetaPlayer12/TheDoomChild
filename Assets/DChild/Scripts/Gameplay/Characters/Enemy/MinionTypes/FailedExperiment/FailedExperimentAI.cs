@@ -332,6 +332,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         protected override void OnDestroyed(object sender, EventActionArgs eventArgs)
         {
+            Debug.Log("___1111Die");
             //m_Audiosource.clip = m_DeadClip;
             //m_Audiosource.Play();
             StopAllCoroutines();
@@ -360,6 +361,12 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnFlinchStart(object sender, EventActionArgs eventArgs)
         {
+            
+            if (!m_damageable.isAlive) {
+                Debug.Log("___1111Im Already dead??");
+                return;
+            }
+
             if (m_animation.GetCurrentAnimation(0).ToString() == m_info.idleAnimation.animation)
             {
                 if (m_evadeRoutine != null)

@@ -7,7 +7,7 @@ namespace DChild.Gameplay.Environment
 {
     public class BlackBloodImmunity : MonoBehaviour
     {
-        [ShowInInspector, ReadOnly]
+        [SerializeField]
         private bool m_isActive;
         private StatusEffectResistance m_resistance;
 

@@ -186,14 +186,17 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 m_state.isPushing = false;
                 m_state.isPulling = true;
 
-                if (dist > m_configuration.distanceCheck)
+                //if (dist > m_configuration.distanceCheck)
+                //{
+                //    Debug.Log("Distance is "+dist+" and it is greater than distancecheck"+ m_configuration.distanceCheck+" While i am pulling");
+                //    m_rigidbody.velocity = Vector2.zero;
+                //    m_movableObject.MoveObject(direction, m_modifier.Get(PlayerModifier.MoveSpeed) * m_configuration.pullForce + (m_configuration.pullForce / 2));
+                //}
+                //else
                 {
-                    m_rigidbody.velocity = Vector2.zero;
-                    m_movableObject.MoveObject(direction, m_modifier.Get(PlayerModifier.MoveSpeed) * m_configuration.pushForce + (m_configuration.pullForce / 2));
-                }
-                else
-                {
-                    m_movableObject.MoveObject(direction, m_modifier.Get(PlayerModifier.MoveSpeed) * m_configuration.pullForce);
+                    //Debug.Log("Distance is " + dist + " and it is less than distancecheck" + m_configuration.distanceCheck + " While i am pulling");
+                    var pullSpeed = m_modifier.Get(PlayerModifier.MoveSpeed) *(m_configuration.pullForce/ m_movableObject.grabbedMoveModifier);
+                    m_movableObject.MoveObject(direction, pullSpeed);
                 }
             }
             else
@@ -201,14 +204,17 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 m_state.isPushing = true;
                 m_state.isPulling = false;
 
-                if (dist > m_configuration.distanceCheck)
+                //if (dist > m_configuration.distanceCheck)
+                //{
+                //    Debug.Log("Distance is " + dist + " and it is greater than distancecheck" + m_configuration.distanceCheck + " While i am pushing");
+                //    m_rigidbody.velocity = Vector2.zero;
+                //    m_movableObject.MoveObject(direction, m_modifier.Get(PlayerModifier.MoveSpeed) * m_configuration.pushForce / 2);
+                //}
+                //else
                 {
-                    m_rigidbody.velocity = Vector2.zero;
-                    m_movableObject.MoveObject(direction, m_modifier.Get(PlayerModifier.MoveSpeed) * m_configuration.pushForce / 2);
-                }
-                else
-                {
-                    m_movableObject.MoveObject(direction, m_modifier.Get(PlayerModifier.MoveSpeed) * m_configuration.pushForce);
+                    //Debug.Log("Distance is " + dist + " and it is less than distancecheck" + m_configuration.distanceCheck + " While i am pushing");
+                    var pushSpeed = m_modifier.Get(PlayerModifier.MoveSpeed) * (m_configuration.pushForce / m_movableObject.grabbedMoveModifier);
+                    m_movableObject.MoveObject(direction, pushSpeed);
                 }
             }
         }

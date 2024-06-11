@@ -140,6 +140,7 @@ namespace DChild.Gameplay.Combat
 
         private void Awake()
         {
+            m_damageModifier = 1;
             if (m_data != null)
             {
                 m_currentAttackInfo = m_data.info;

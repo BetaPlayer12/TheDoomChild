@@ -13,9 +13,9 @@ namespace DChild.Menu.Trade
     public class TradeAskingPriceData : SerializedScriptableObject
     {
         [OdinSerialize, HideReferenceObjectPicker, OnValueChanged("UpdatePrice", true)]
-        private Dictionary<ItemData, float> m_priceModifier = new Dictionary<ItemData, float>();
+        private Dictionary<ItemData, int> m_priceModifier = new Dictionary<ItemData, int>();
 
-        public bool TryGetPriceModifier(ItemData data, out float value)
+        public bool TryGetPriceModifier(ItemData data, out int value)
         {
             return m_priceModifier.TryGetValue(data, out value);
         }
@@ -29,23 +29,39 @@ namespace DChild.Menu.Trade
 
         private void UpdatePrice()
         {
+            if (m_price == null)
+            {
+                m_price = new Dictionary<ItemData, int>();
+            }
+
             m_price.Clear();
             foreach (var item in m_priceModifier.Keys)
             {
-                m_price.Add(item, Mathf.CeilToInt(item.cost * (m_priceModifier[item] / 100f)));
+                if (m_priceModifier[item] < 0)
+                {
+                    //Use Original Price
+                    m_price.Add(item, item.cost);
+                }
+                else
+                {
+                    m_price.Add(item, m_priceModifier[item]);
+                }
+
             }
         }
 
         [Button, PropertyOrder(-1)]
         private void AddItemsToList()
         {
+
+
             var ids = m_reference.GetIDs();
             for (int i = 0; i < ids.Length; i++)
             {
                 var item = m_reference.GetInfo(ids[i]);
                 if (m_priceModifier.ContainsKey(item) == false)
                 {
-                    m_priceModifier.Add(item, 100f);
+                    m_priceModifier.Add(item, -1);
                     EditorUtility.SetDirty(this);
                 }
             }

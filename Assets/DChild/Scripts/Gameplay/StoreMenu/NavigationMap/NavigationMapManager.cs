@@ -36,6 +36,11 @@ namespace DChild.Gameplay.NavigationMap
             m_tracker.SetCalculationOffsets(calculationOffset);         
         }
 
+        public void ForceMapUpdateOnNextOpen()
+        {
+            m_mapNeedsCompleteUpdate = true;
+        }
+
         public void OpenMap()
         {
             if (m_mapNeedsCompleteUpdate)

@@ -635,7 +635,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         m_randomRangeMax = 20f;
                         StartCoroutine(DelayChainActivation(5f));
                     }
-                    Vector3 v_diff = new(UnityEngine.Random.Range(m_randomRangeMin, m_randomRangeMax), UnityEngine.Random.Range(m_randomRangeMin, m_randomRangeMax), UnityEngine.Random.Range(m_randomRangeMin, m_randomRangeMax));   
+                    Vector3 v_diff = new Vector3(UnityEngine.Random.Range(m_randomRangeMin, m_randomRangeMax), UnityEngine.Random.Range(m_randomRangeMin, m_randomRangeMax), UnityEngine.Random.Range(m_randomRangeMin, m_randomRangeMax));   
                     float atan2 = Mathf.Atan2(v_diff.y, v_diff.x); 
                     m_pushDirection.rotation = Quaternion.Euler(0f, 0f, atan2 * Mathf.Rad2Deg);
                     m_rigidbody2D.AddForce(-m_pushDirection.right * m_info.patrol.speed, ForceMode2D.Force);
