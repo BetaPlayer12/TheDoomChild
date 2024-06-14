@@ -41,8 +41,10 @@ namespace DChild.Gameplay.Cinematics.Cameras
             }
         }
 
-        [SerializeField,Min(0)]
+        [SerializeField, Min(0)]
         private int m_priority;
+        [SerializeField, MinValue(0f)]
+        private float m_delay;
         [SerializeField, MinValue(0f)]
         private float m_duration;
 
@@ -58,9 +60,10 @@ namespace DChild.Gameplay.Cinematics.Cameras
 
         public int priority => m_priority;
         public NoiseSettings noiseProfile => m_noiseProfile;
+        public float delay => m_delay;
         public float duration => m_duration;
 
-        public float GetAmplitude(float time) => m_amplitudeProperty.GetValue(time/m_duration);
-        public float GetFrequency(float time) => m_frequencyProperty.GetValue(time/m_duration);
+        public float GetAmplitude(float time) => m_amplitudeProperty.GetValue(time / m_duration);
+        public float GetFrequency(float time) => m_frequencyProperty.GetValue(time / m_duration);
     }
 }
