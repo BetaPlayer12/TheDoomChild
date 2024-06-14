@@ -32,15 +32,27 @@ namespace DChild.Gameplay.Cinematics
         {
             if (data != null)
             {
-                m_blendHandle.Execute(data);
-                if (m_isExecutingShake == false)
+                if (data.cameraShakeInfo.delay > 0)
                 {
-                    StartCoroutine(ExecuteShakeRoutine());
+                    StartCoroutine(DelayedExecute(data));
+                }
+                else
+                {
+                    ExecuteShakeImmidiate(data);
                 }
             }
             else
             {
                 Debug.LogWarning("There was an attempt to use a null reference as camera shake");
+            }
+        }
+
+        private void ExecuteShakeImmidiate(CameraShakeData data)
+        {
+            m_blendHandle.Execute(data);
+            if (m_isExecutingShake == false)
+            {
+                StartCoroutine(ExecuteShakeRoutine());
             }
         }
 
@@ -57,6 +69,12 @@ namespace DChild.Gameplay.Cinematics
                 RemoveNoiseFromCamera(m_currentCamera.noiseModule);
             }
             m_currentCamera = camera;
+        }
+
+        private IEnumerator DelayedExecute(CameraShakeData data)
+        {
+            yield return new WaitForSeconds(data.cameraShakeInfo.delay);
+            ExecuteShakeImmidiate(data);
         }
 
         private IEnumerator ExecuteShakeRoutine()

@@ -61,10 +61,7 @@ namespace DChild.Gameplay.Cinematics.Cameras
                 }
                 else
                 {
-                    if (eventArgs.target.instance.isAlive)
-                    {
-                        m_cinema.ExecuteCameraShake(m_onAttackHitShakeData);
-                    }
+                    m_cinema.ExecuteCameraShake(m_onAttackHitShakeData);
                 }
             }
         }
