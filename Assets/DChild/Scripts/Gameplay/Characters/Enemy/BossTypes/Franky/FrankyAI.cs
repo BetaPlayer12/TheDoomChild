@@ -858,7 +858,9 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_animation.SetAnimation(0, m_info.chainBash1AnimationStart.animation, false);
             //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.chainBash1AnimationStart);
             var fistRefPointCollider = m_fistRefPoint.GetComponent<CircleCollider2D>();
+            yield return new WaitForSeconds(0.5f);
             fistRefPointCollider.enabled = true;
+            yield return null;
             m_fistPoint.position = m_wristPoint.position;
             //m_animation.SetAnimation(0, m_info.hookTravelLoopAnimation, true);
             m_animation.SetAnimation(0, m_info.chainBash1AnimationStart.animation, false);
@@ -867,6 +869,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_fistPoint.position = Vector2.MoveTowards(m_fistPoint.position, m_wallPosPoint.position, 5f);
                 yield return null;
             }
+            yield return new WaitForSeconds(0.7f);
             var fxPos = new Vector2(m_fistPoint.position.x + (5f * transform.localScale.x), m_fistPoint.position.y);
             var wallStickStartFX = GameSystem.poolManager.GetPool<FXPool>().GetOrCreateItem(m_wallStickStartFX);
             wallStickStartFX.transform.rotation = Quaternion.Euler(new Vector3(0, 0, transform.localScale.x > 0 ? 90 : 270));
@@ -936,7 +939,9 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_animation.SetAnimation(0, m_info.chainBash1AnimationStart.animation, false);
             //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.chainBash1AnimationStart);
             var fistRefPointCollider = m_fistRefPoint.GetComponent<CircleCollider2D>();
+            yield return new WaitForSeconds(0.5f);
             fistRefPointCollider.enabled = true;
+            yield return null;
             m_fistPoint.position = m_wristPoint.position;
             //m_animation.SetAnimation(0, m_info.hookTravelLoopAnimation, true);
             m_animation.SetAnimation(0, m_info.chainBash1AnimationStart.animation, false);

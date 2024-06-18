@@ -1342,6 +1342,8 @@ namespace DChild.Gameplay.Characters.Enemies
                 
                 
             }
+            StopCoroutine(BlinkRoutine(BlinkState.DisappearForward, BlinkState.AppearForward, 25, m_info.midAirHeight, State.Cooldown, false, false, false));
+            m_blinkCoroutine = null;
             m_currentAttackCoroutine = null;
             m_stateHandle.ApplyQueuedState();
             yield return null;
@@ -1379,6 +1381,8 @@ namespace DChild.Gameplay.Characters.Enemies
                 /*m_currentAttackCoroutine = null;
                 m_stateHandle.ApplyQueuedState();*/
             }
+            StopCoroutine(BlinkRoutine(BlinkState.DisappearForward, BlinkState.AppearForward, 25, m_info.midAirHeight, State.Cooldown, false, false, false));
+            m_blinkCoroutine = null;
             m_currentAttackCoroutine = null;
             m_stateHandle.ApplyQueuedState();
             yield return null;
@@ -1481,6 +1485,8 @@ namespace DChild.Gameplay.Characters.Enemies
                 /*m_currentAttackCoroutine = null;
                 m_stateHandle.ApplyQueuedState();*/
             }
+            StopCoroutine(BlinkRoutine(BlinkState.DisappearForward, BlinkState.AppearForward, 25, m_info.midAirHeight, State.Cooldown, false, false, false));
+            m_blinkCoroutine = null;
             m_currentAttackCoroutine = null;
             m_stateHandle.ApplyQueuedState();
             yield return null;
@@ -1551,6 +1557,8 @@ namespace DChild.Gameplay.Characters.Enemies
                 /*m_currentAttackCoroutine = null;
                 m_stateHandle.ApplyQueuedState();*/
             }
+            StopCoroutine(BlinkRoutine(BlinkState.DisappearForward, BlinkState.AppearForward, 25, m_info.midAirHeight, State.Cooldown, false, false, false));
+            m_blinkCoroutine = null;
             m_currentAttackCoroutine = null;
             m_stateHandle.ApplyQueuedState();
             yield return null;
@@ -2245,6 +2253,7 @@ namespace DChild.Gameplay.Characters.Enemies
             StartCoroutine(ForceCooldown());
             Debug.Log("blinkroutine done");
         }
+
 
         private Vector3 RandomTeleportPoint(Vector3 storedPos)
         {
