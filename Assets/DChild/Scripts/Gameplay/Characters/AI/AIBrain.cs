@@ -73,6 +73,15 @@ namespace DChild.Gameplay.Characters.AI
                 public float animationTimeScale => m_timeScale;
             }
 
+            [HideReferenceObjectPicker]
+            public class BasicEventInfo : SkeletonBaseInfo
+            {
+                [SerializeField, ValueDropdown("GetEvents")]
+                private string m_eventName;
+
+                public string eventName => m_eventName;
+            }
+
             [System.Serializable, HideReferenceObjectPicker]
             public class SimpleAttackInfo : BasicAnimationInfo
             {

@@ -8,10 +8,10 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: MANDRAGORA_Material_OutsideMask
-  m_Shader: {fileID: -6465566751694194690, guid: caec37cbd946878438f1f6f9caa286fd,
-    type: 3}
+  m_Shader: {fileID: 4800000, guid: 1e8a610c9e01c3648bac42585e5fc676, type: 3}
   m_ValidKeywords: []
   m_InvalidKeywords:
+  - _EFFECT_SELECTION_GRADIENT_NOISE_EFFECT
   - _USE8NEIGHBOURHOOD_ON
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -32,6 +32,10 @@ Material:
         m_Offset: {x: 0, y: 0}
     - _MaskTex:
         m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Texture_Effect_Mask:
+        m_Texture: {fileID: 2800000, guid: 4c9536051b3dafa4aade8b698926697c, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
@@ -71,7 +75,18 @@ Material:
     - Vector1_GradientScale: 5
     - Vector_Fade: 1
     - _Cutoff: 0.1
+    - _Disortion_Strength: 0
+    - _Distortion_Amount: 0
+    - _Distortion_Scale: 0
+    - _Distortion_Scale_Overlay: 0
+    - _EFFECT_SELECTION: 1
+    - _Gradient_Noise_Brightness: 1
+    - _Gradient_Noise_Scale: 10
     - _LightAffectsAdditive: 0
+    - _Noise_Distort_Amount: 0
+    - _Noise_Distort_Scale: 0
+    - _Noise_Distort_Scale_Overlay: 0
+    - _Noise_Distort_Strength: 0
     - _OutlineMipLevel: 0
     - _OutlineReferenceTexWidth: 1024
     - _OutlineSmoothness: 1
@@ -79,6 +94,8 @@ Material:
     - _StencilComp: 5
     - _StencilRef: 1
     - _StraightAlphaInput: 0
+    - _Texture_Distortion_True: 0
+    - _Texture_Opacity: 1
     - _ThresholdEnd: 0.25
     - _Use8Neighbourhood: 1
     m_Colors:
@@ -93,5 +110,13 @@ Material:
     - Vector2_4D9CA5F6: {r: 2, g: 1, b: 0, a: 0}
     - Vector2_5C750283: {r: 0, g: 0, b: 0, a: 0}
     - Vector2_GradientNoiseOffset: {r: 0.5, g: 0.5, b: 0, a: 0}
+    - _Distortion_Offset_Speed: {r: 0, g: 0, b: 0, a: 0}
+    - _Distortion_Offset_Speed_Overlay: {r: 0, g: 0, b: 0, a: 0}
+    - _Gradient_Noise_Color_Primary: {r: 1, g: 1, b: 1, a: 1}
+    - _Gradient_Noise_Color_Secondary: {r: 0, g: 0, b: 0, a: 1}
+    - _Gradient_Noise_Offset_Speed: {r: 0.2, g: 0.5, b: 0, a: 0}
+    - _Noise_Offset_Speed: {r: 0, g: 0, b: 0, a: 0}
+    - _Noise_Offset_Speed_Overlay: {r: 0, g: 0, b: 0, a: 0}
     - _OutlineColor: {r: 1, g: 1, b: 0, a: 1}
+    - _Texture_Color: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []

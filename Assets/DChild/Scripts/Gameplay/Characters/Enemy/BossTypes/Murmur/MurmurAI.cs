@@ -377,6 +377,7 @@ namespace DChild.Gameplay.Characters.Enemies
             } while (isInRange == false);
             LookAt(m_targetInfo.position);
             yield return null;
+            yield return new WaitForSeconds(0.7f);
             m_animation.SetAnimation(0, attackInfo.animation, false);
             m_animation.AddAnimation(0, m_info.idleAnimation, true, 0f);
             //Spawn the Thingy via event
@@ -669,11 +670,12 @@ namespace DChild.Gameplay.Characters.Enemies
                 for (int i = 0; i < m_pipes.Length; i++)
                 {
                     var instance = GameSystem.poolManager.GetPool<FXPool>().GetOrCreateItem(m_info.diagonalSoundInfo.projectileInfo.projectile);
-                    var scale = instance.transform.localScale;
+                    Vector3 scale = instance.transform.localScale;
                     instance.transform.parent = m_pipes[i];
-                    instance.transform.localPosition = Vector3.zero;
+                    scale.x = Mathf.Abs(scale.x) * -1;
                     instance.transform.localScale = scale;
-                    instance.transform.localRotation = Quaternion.Euler(0, 0, 0);
+                    instance.transform.localPosition = Vector3.zero;
+                    instance.transform.localRotation = Quaternion.Euler(0, 0, 0); 
                 }
             }
             else if (eventName == m_info.frontalScreamInfo.launchOnEvent)

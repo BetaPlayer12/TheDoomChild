@@ -6,15 +6,30 @@ namespace DChild.Gameplay.Cinematics.Cameras
     [System.Serializable]
     public class CameraShakeInfo
     {
-        [SerializeField]
-        private AnimationCurve m_amplitude;
-        [SerializeField]
-        private AnimationCurve m_frequency;
+        [System.Serializable]
+        public class Property
+        {
+            [SerializeField]
+            private bool m_useCurve;
+            [SerializeField, HideIf("m_useCurve")]
+            private float m_value;
+            [SerializeField, ShowIf("m_useCurve")]
+            private AnimationCurve m_curve;
+
+            public float GetValue(float time) => m_useCurve ? m_curve.Evaluate(time) : m_value;
+        }
+
         [SerializeField, MinValue(0f)]
         private float m_duration;
-
-        public AnimationCurve amplitude => m_amplitude;
-        public AnimationCurve frequency => m_frequency;
+        [TitleGroup("Amplitude")]
+        [SerializeField, HideLabel]
+        private Property m_amplitudeProperty;
+        [TitleGroup("Frequency")]
+        [SerializeField, HideLabel]
+        private Property m_frequencyProperty;
         public float duration => m_duration;
+
+        public float GetAmplitude(float time) => m_amplitudeProperty.GetValue(time);
+        public float GetFrequency(float time) => m_frequencyProperty.GetValue(time);
     }
 }

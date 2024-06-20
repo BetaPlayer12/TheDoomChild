@@ -7,6 +7,8 @@ using UnityEngine.Playables;
 using PixelCrushers.DialogueSystem;
 using Holysoft.Event;
 using System.Collections;
+using UnityEngine.Timeline;
+
 
 namespace DChild.Gameplay
 {
@@ -42,12 +44,24 @@ namespace DChild.Gameplay
         private PlayableDirector m_cinematic;
         [SerializeField]
         private Collider2D m_collider;
+        [SerializeField]
+        private GameplaySignalHandle m_shrineSignalHandle;
+        [SerializeField]
+        private SignalReceiver m_signalReceiver;
+        [SerializeField]
+        private SignalAsset[] m_signalsToRun;
+        [SerializeField]
+        private SignalAsset m_cutsceneEnd;
+        [SerializeField]
+        private SignalAsset m_enablePlayerControls;
         [SerializeField, OnValueChanged("OnIsUsedChanged")]
         private bool m_isUsed;
         [SerializeField, LuaScriptWizard(true)]
         private string m_onInteractionCommand;
         [SerializeField]
         SkillShrineVisualHandle m_shrineVisualHandle;
+        [SerializeField, HideInPrefabInstances]
+        private float m_notificationDelay;
 
         public event EventAction<EventActionArgs> InteractionOptionChange;
 
@@ -110,14 +124,23 @@ namespace DChild.Gameplay
         private IEnumerator OnCutsceneEnded()
         {
             //makes sure cutscene has ended before calling notifyskill  
-            yield return new WaitForSeconds(1);
-            NotifySkill(m_toUnlock);
+            yield return new WaitForSeconds(0.5f);
             SetGlows(false);
             m_shrineVisualHandle.SkillShrineState(false);
+            //for (int i = 0; i < m_signalsToRun.Length; i++)
+            //{
+            //    m_signalReceiver.GetReaction(m_signalsToRun[i]).Invoke();
+            //}
+            m_signalReceiver.GetReaction(m_cutsceneEnd).Invoke();
+            yield return new WaitForSeconds(m_notificationDelay);
+            m_signalReceiver.GetReaction(m_enablePlayerControls).Invoke();
 
+            
+            NotifySkill(m_toUnlock);
 
         }
 
+        [Button, HideInEditorMode]
         private void NotifySkill(PrimarySkill skill)
         {
             GameplaySystem.gamplayUIHandle.notificationManager.QueueNotification(skill);

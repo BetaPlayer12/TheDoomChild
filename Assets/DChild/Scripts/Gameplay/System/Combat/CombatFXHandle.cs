@@ -17,10 +17,12 @@ namespace DChild.Gameplay.Combat
                 if (attackerFX != null)
                 {
                     m_fXSpawnHandle.InstantiateFX(attackerFX, hitPoint, hitDirection);
+                    Debug.Log(hitPoint);
                 }
                 if (targetFX.fx != null)
                 {
                     m_fXSpawnHandle.InstantiateFX(targetFX, hitPoint, hitDirection, target.transform);
+                    Debug.Log(hitPoint);
                 }
             }
         }

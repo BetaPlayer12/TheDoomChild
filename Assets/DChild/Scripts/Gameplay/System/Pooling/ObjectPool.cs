@@ -27,6 +27,11 @@ namespace DChild.Gameplay.Pooling
 
         public T GetOrCreateItem(GameObject gameObject)
         {
+            return GetOrCreateItem(gameObject, Vector3.zero, Quaternion.identity);
+        }
+
+        public T GetOrCreateItem(GameObject gameObject, Vector3 position, Quaternion rotation)
+        {
             var component = gameObject.GetComponent<T>();
             if (component == null)
             {
@@ -35,22 +40,32 @@ namespace DChild.Gameplay.Pooling
             else if (m_items.Count > 0)
             {
                 var retrievedInstance = RetrieveFromPool(component);
-                return retrievedInstance != null ? retrievedInstance : CreateInstance(gameObject);
+                if(null != retrievedInstance)
+                {
+                    retrievedInstance.transform.position = position;
+                    retrievedInstance.transform.rotation = rotation;
+                }
+
+                return retrievedInstance != null ? retrievedInstance : CreateInstance(gameObject, position, rotation);
             }
             else
             {
-                return CreateInstance(gameObject);
+                return CreateInstance(gameObject, position, rotation);
             }
         }
 
         public T GetOrCreateItem(GameObject gameObject, Scene scene)
         {
-            var instance = GetOrCreateItem(gameObject);
+            return GetOrCreateItem(gameObject, scene, Vector3.zero, Quaternion.identity);
+        }
+
+        public T GetOrCreateItem(GameObject gameObject, Scene scene, Vector3 position, Quaternion rotation)
+        {
+            var instance = GetOrCreateItem(gameObject, position, rotation);
             instance.transform.parent = null;
             SceneManager.MoveGameObjectToScene(instance.gameObject, scene);
             return instance;
         }
-
         public void GetOrCreateItem(AssetReferenceT<GameObject> gameObject, int index = 0, Action<GameObject, int> CallBack = null)
         {
 
@@ -80,7 +95,12 @@ namespace DChild.Gameplay.Pooling
 
         private T CreateInstance(GameObject gameObject)
         {
-            var instance = UnityEngine.Object.Instantiate(gameObject);
+            return CreateInstance(gameObject, Vector3.zero, Quaternion.identity);
+        }
+
+        private T CreateInstance(GameObject gameObject, Vector3 position, Quaternion rotation)
+        {
+            var instance = UnityEngine.Object.Instantiate(gameObject, position, rotation);
             var newComponent = instance.GetComponent<T>();
             newComponent.PoolRequest += OnPoolRequest;
             newComponent.InstanceDestroyed += OnInstanceDestroyed;

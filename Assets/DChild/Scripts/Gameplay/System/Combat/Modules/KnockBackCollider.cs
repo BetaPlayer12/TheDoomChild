@@ -45,6 +45,16 @@ namespace DChild.Gameplay.Combat
             }
         }
 
+        public void Enable()
+        {
+            m_isEnabled = true;
+        }
+
+        public void Disable()
+        {
+            m_isEnabled = false;
+        }
+
         public void SetForce(float force)
         {
             m_force = Mathf.Max(0, force);
@@ -57,11 +67,16 @@ namespace DChild.Gameplay.Combat
 
         private void OnDamageableDetected(TargetInfo arg1, Collider2D arg2)
         {
+            if (m_isEnabled == false)
+                return;
+
             if (arg1.isCharacter)
             {
                 if (arg1.isPlayer)
                 {
 
+                    var rigidBody = arg1.owner.character.GetComponentInParent<Rigidbody2D>();
+                    rigidBody.AddForce(CalculateKnockBackForce(arg1.instance.position), ForceMode2D.Impulse);
                 }
                 else
                 {
@@ -79,51 +94,56 @@ namespace DChild.Gameplay.Combat
             }
         }
 
-            private void Execute(IsolatedPhysics2D physics, Vector3 physicsCenter)
-            {
-                physics.SetVelocity(Vector2.zero);
-                switch (m_type)
-                {
-                    case Type.AwayFromCenter:
-                        var direction = (Vector2)physicsCenter - center;
-                        if (m_affectX == false)
-                        {
-                            direction.x = 0;
-                        }
-                        if (m_affectY == false)
-                        {
-                            direction.y = 0;
-                        }
+        private void Execute(IsolatedPhysics2D physics, Vector3 physicsCenter)
+        {
+            physics.SetVelocity(Vector2.zero);
+            physics.AddForce(CalculateKnockBackForce(physicsCenter), ForceMode2D.Impulse);
+        }
 
-                        physics.AddForce(direction.normalized * m_force, ForceMode2D.Impulse);
-                        break;
-                    case Type.ToOneDirection:
-                        physics.AddForce(relativeDirection * m_force, ForceMode2D.Impulse);
-                        break;
-                }
+        private Vector2 CalculateKnockBackForce(Vector3 physicsCenter)
+        {
+            switch (m_type)
+            {
+                case Type.AwayFromCenter:
+                    var direction = (Vector2)physicsCenter - center;
+                    if (m_affectX == false)
+                    {
+                        direction.x = 0;
+                    }
+                    if (m_affectY == false)
+                    {
+                        direction.y = 0;
+                    }
+
+                    return direction.normalized * m_force;
+                case Type.ToOneDirection:
+                    return relativeDirection * m_force;
+                default:
+                    return Vector2.up;
             }
+        }
 
-            private void Start()
-            {
-                GetComponent<ColliderDamage>().DamageableDetected += OnDamageableDetected;
-            }
+        private void Start()
+        {
+            GetComponent<ColliderDamage>().DamageableDetected += OnDamageableDetected;
+        }
 
-            private void OnDrawGizmosSelected()
+        private void OnDrawGizmosSelected()
+        {
+            Gizmos.color = Color.yellow;
+            switch (m_type)
             {
-                Gizmos.color = Color.yellow;
-                switch (m_type)
-                {
-                    case Type.AwayFromCenter:
-                        Gizmos.DrawSphere(center, 0.5f);
-                        break;
-                    case Type.ToOneDirection:
-                        var position = (Vector2)transform.position;
-                        var lineLength = 4f;
-                        var lineEndPos = position + (relativeDirection * lineLength);
-                        Gizmos.DrawSphere(position, 0.25f);
-                        Gizmos.DrawLine(position, lineEndPos);
-                        break;
-                }
+                case Type.AwayFromCenter:
+                    Gizmos.DrawSphere(center, 0.5f);
+                    break;
+                case Type.ToOneDirection:
+                    var position = (Vector2)transform.position;
+                    var lineLength = 4f;
+                    var lineEndPos = position + (relativeDirection * lineLength);
+                    Gizmos.DrawSphere(position, 0.25f);
+                    Gizmos.DrawLine(position, lineEndPos);
+                    break;
             }
         }
     }
+}

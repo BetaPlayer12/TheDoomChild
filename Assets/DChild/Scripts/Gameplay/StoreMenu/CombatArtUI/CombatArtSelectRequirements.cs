@@ -22,6 +22,7 @@ namespace DChild.Gameplay.UI.CombatArts
             {
                 m_button.SetState(CombatArtUnlockState.Locked);
             }
+            m_button.ForceVisualSync();
         }
 
         private bool AreRequiredArtsUnlocked()

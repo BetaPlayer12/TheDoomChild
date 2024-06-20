@@ -352,6 +352,8 @@ namespace DChild.Gameplay.Characters.Enemies
                     {
                         m_spikeCache[i].GetComponent<LichLordSpike>().SubmergeSpike();
                     }
+                    m_lichLordArmTF.GetComponent<LichLordArm>().ChangePhaseFX(); // added to change the fx for phase 3
+                    m_lichArmGroundFX = m_lichLordArmTF.GetComponent<LichLordArm>().GetPhase3GroundFx(); // added because the reference is changed
                     while (m_spikeCache.Count != 0)
                     {
                         for (int i = 0; i < m_spikeCache.Count; i++)

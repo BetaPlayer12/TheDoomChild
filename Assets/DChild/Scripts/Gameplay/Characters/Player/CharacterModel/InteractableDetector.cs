@@ -206,11 +206,16 @@ namespace DChild.Gameplay.Characters.Players
                 {
                     if (interactableObject.showPrompt)
                     {
-                        m_objectsInRange.Add(interactableObject);
-                        if (m_objectsInRange.Count == 1)
+                        if (!m_objectsInRange.Contains(interactableObject))
                         {
-                            SetAsClosestInteractableObject(interactableObject);
+                            m_objectsInRange.Add(interactableObject);
+
+                            if (m_objectsInRange.Count == 1)
+                            {
+                                SetAsClosestInteractableObject(interactableObject);
+                            }
                         }
+                        
                     }
                 }
             }
