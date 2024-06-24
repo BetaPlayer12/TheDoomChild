@@ -624,10 +624,14 @@ namespace DChild.Gameplay.Characters.Enemies
         private ParticleFX m_healFX;
         [SerializeField, TabGroup("FX")]
         private ParticleFX m_deathFX;
+        [SerializeField, TabGroup("FX")]
+        private ParticleFX m_deathAnticipationFX;
 
         private Health m_health;
         [SerializeField]
         private KingPusDamageable m_kingPusDamageable;
+        [SerializeField]
+        private GameObject m_heavySpearStab;
 
         #region TentaclVariables
         [SerializeField, TabGroup("Tentacle Points")]
@@ -675,6 +679,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private bool m_phase4Done;
         private bool m_canUpdateStats;
         private PhaseInfo m_currentPhase;
+        [SerializeField]
+        private Transform m_bodyColliderTransform;
         [ShowInInspector]
         private RandomAttackDecider<Attack> m_attackDecider;
         private Attack m_currentAttack;
@@ -988,7 +994,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_hitbox.Disable();
 
             m_stabSlashFX.Stop();
-            m_krakenFX.Stop();
+            //m_krakenFX.Stop();
             Debug.Log("??");
             m_animation.DisableRootMotion();
             var newHeavyStabDamage = new Damage(DamageType.Physical, 90);
@@ -1046,7 +1052,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     break;
             }
             m_animation.EnableRootMotion(true, true);
-            m_crawlFX.Play();
+            //m_crawlFX.Play();
             m_animation.SetAnimation(0, rageAnim, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, rageAnim);
             m_animation.DisableRootMotion();
@@ -1195,7 +1201,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.DisableRootMotion();
             m_crawlFX.Stop();
             m_stabSlashFX.Stop();
-            m_krakenFX.Stop();
+            //m_krakenFX.Stop();
             if (!m_groundSensor.isDetecting)
             {
                 m_character.physics.simulateGravity = true;
@@ -1237,6 +1243,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     if (Vector2.Distance(transform.position, target) < 25f)
                     {
                         m_animation.EnableRootMotion(true, true);
+                        m_character.physics.SetVelocity(0, 0);
                         m_movement.Stop();
                         yield return new WaitForSeconds(m_info.wreackingBallStickDuration);
                         if (targetID > m_tentacleOverridePoints.Count - 1)
@@ -1310,9 +1317,10 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_animation.SetAnimation(0, heavyGroundStabAnticipation, false);
             //yield return new WaitForAnimationComplete(m_animation.animationState, heavyGroundStabAnticipation);
             var heavySpearStabAttackAnimation = m_targetInfo.position.x > transform.position.x ? m_info.heavySpearStabRightAttack.animation : m_info.heavySpearStabLeftAttack.animation;
-            m_stabSlashFX.transform.rotation = Quaternion.Euler(0, 0, heavySpearStabAttackAnimation == m_info.heavySpearStabRightAttack.animation ? 0 : 180);
-            m_stabSlashFX.Play();
+            m_heavySpearStab.transform.rotation = Quaternion.Euler(0, 0, heavySpearStabAttackAnimation == m_info.heavySpearStabRightAttack.animation ? 0 : 180);
             m_animation.SetAnimation(0, heavySpearStabAttackAnimation, false);
+            yield return new WaitForSeconds(1.5f);
+            m_stabSlashFX.Play();
             yield return new WaitForAnimationComplete(m_animation.animationState, heavySpearStabAttackAnimation);
             m_animation.DisableRootMotion();
             m_attackDecider.hasDecidedOnAttack = false;
@@ -1374,6 +1382,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_stateHandle.Wait(State.ReevaluateSituation);
 
+            m_crawlFX.Play();
             m_animation.EnableRootMotion(true, false);
 
 
@@ -1398,7 +1407,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_attackDecider.hasDecidedOnAttack = false;
             m_currentAttackCoroutine = null;
             m_stateHandle.ApplyQueuedState();
-
+            m_crawlFX.Stop();
             yield return null;
         }
 
@@ -1406,6 +1415,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_animation.DisableRootMotion();
             //m_movement.MoveTowards(Vector2.one * transform.localScale.x, transform.localScale.x < 0 ? m_info.tentaSpearRightCrawl.speed : -m_info.tentaSpearRightCrawl.speed);
+            m_tentaSpearCrawlFX.Play();
             m_rb2d.AddForce(new Vector2(transform.localScale.x > 0 ? m_info.tentaSpearRightCrawl.speed : -m_info.tentaSpearRightCrawl.speed, m_character.physics.velocity.y), ForceMode2D.Impulse);
         }
 
@@ -1482,6 +1492,14 @@ namespace DChild.Gameplay.Characters.Enemies
             m_rb2d.isKinematic = false;
             m_rb2d.useFullKinematicContacts = false;
             m_movement.Stop();
+            if (m_leftWallSensor.isDetecting)
+            {
+                m_bodyColliderTransform.rotation = Quaternion.Euler(0, 0, 90f);
+            }
+            else if (m_rightWallSensor.isDetecting)
+            {
+                m_bodyColliderTransform.rotation = Quaternion.Euler(0, 0, 90f);
+            }
             //m_animation.SetAnimation(0, DynamicIdleAnimation(), true);
             m_dynamicIdleCoroutine = StartCoroutine(DynamicIdleRoutine());
             m_animation.SetAnimation(30, m_info.idleAnimation.animation, true, 0);
@@ -1514,6 +1532,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetEmptyAnimation(30, 0);
             m_animation.DisableRootMotion();
             m_animation.SetAnimation(0, m_info.bodySlamStart, false);
+            m_bodyColliderTransform.rotation = Quaternion.Euler(0, 0, 0);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.bodySlamStart);
             for (int i = 0; i < m_spitterBone.Count; i++)
             {
@@ -1695,7 +1714,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.EnableRootMotion(true, false);
             m_animation.SetAnimation(0, m_info.krakenRageAttack.animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.krakenRageAttack.animation);
-            m_krakenFX.Play();
+            //m_krakenFX.Play();
             m_animation.SetAnimation(0, m_info.krakenRageLoopAnimation, true);
             m_krakenRageBB.enabled = true;
             //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.krakenRageAttack.animation);
@@ -1706,7 +1725,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 yield return null;
             }
             m_krakenRageBB.enabled = false;
-            m_krakenFX.Stop();
+            //m_krakenFX.Stop();
             m_animation.SetAnimation(0, m_info.krakenRageEndAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.krakenRageEndAnimation);
             m_animation.DisableRootMotion();
@@ -1855,7 +1874,7 @@ namespace DChild.Gameplay.Characters.Enemies
             StopAnimations();
             m_crawlFX.Stop();
             m_stabSlashFX.Stop();
-            m_krakenFX.Stop();
+            //m_krakenFX.Stop();
             if (!m_groundSensor.isDetecting)
             {
                 m_animation.DisableRootMotion();
@@ -2007,6 +2026,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private void EventStop()
         {
             m_animation.EnableRootMotion(true, false);
+            m_tentaSpearCrawlFX.Stop();
             m_movement.Stop();
         }
 
@@ -2014,10 +2034,12 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             if (m_leftWallSensor.isDetecting)
             {
+                //m_bodyColliderTransform.rotation = Quaternion.Euler(0, 0, 90f);
                 m_animation.SetAnimation(3, m_info.idleLeftWallAnimation, true);
             }
             else if (m_rightWallSensor.isDetecting)
             {
+                //m_bodyColliderTransform.rotation = Quaternion.Euler(0, 0, 90f);
                 m_animation.SetAnimation(3, m_info.idleRightWallAnimation, true);
             }
             else if (m_cielingSensor.isDetecting)
@@ -2392,7 +2414,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_movement.Stop();
             m_character.physics.simulateGravity = true;
             m_crawlFX.Stop();
-            m_krakenFX.Stop();
+            //m_krakenFX.Stop();
 
             Debug.Log("Allahu Akbar!");
 
@@ -2437,16 +2459,22 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetEmptyAnimation(15, 0);
             m_animation.SetEmptyAnimation(27, 0);
             m_krakenRageBB.enabled = false;
-            m_deathFX.Play();
             m_animation.SetAnimation(0, m_info.deathSelfDestructAnimation, false);
-            yield return new WaitForSeconds(0.75f);
+            m_deathAnticipationFX.Play();
+            yield return new WaitForSeconds(.8f);
+            m_selfDestructBB.enabled = true;
+            m_deathFX.Play();
+            /*yield return new WaitForSeconds(0.75f);
             m_health.SetHealthPercentage(0.01f);
             m_selfDestructBB.enabled = true;
             yield return new WaitForSeconds(0.25f);
-            m_selfDestructBB.enabled = false;
+            m_selfDestructBB.enabled = false;*/
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.deathSelfDestructAnimation);
+            m_selfDestructBB.enabled = false;
             m_damageable.KillSelf();
-            m_animation.SetAnimation(0, m_info.deathAnimation, true);
+            m_animation.SetAnimation(0, m_info.deathAnimation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.deathAnimation);
+            this.gameObject.SetActive(false);
             m_isDetecting = false;
             //enabled = false;
             yield return null;
@@ -2951,6 +2979,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     break;
 
                 case State.Cooldown:
+                    m_crawlFX.Stop();
                     m_animation.SetAnimation(0, m_info.idleAnimation, true);
 
                     if (m_currentCooldown <= m_pickedCooldown)
@@ -2961,7 +2990,6 @@ namespace DChild.Gameplay.Characters.Enemies
                     {
                         m_currentCooldown = 0;
                         m_animation.DisableRootMotion();
-                        m_crawlFX.Play();
                         m_stateHandle.OverrideState(State.ReevaluateSituation);
                     }
 
@@ -3072,7 +3100,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_spineListener.Subscribe(m_info.multiShotEvent, LaunchMultiProjectile);
             //m_spineListener.Subscribe(m_info.moveEvent, EventMove);
             m_spineListener.Subscribe(m_info.stopEvent, EventStop);
-            m_crawlFX.Play();
+            //m_crawlFX.Play();
             for (int i = 0; i < m_chains.Count; i++)
             {
                 m_chains[i].gameObject.SetActive(false);
