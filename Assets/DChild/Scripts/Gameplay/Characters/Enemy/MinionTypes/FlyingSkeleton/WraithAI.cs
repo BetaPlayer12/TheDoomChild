@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using DChild;
 using DChild.Gameplay.Characters.Enemies;
 using DChild.Gameplay.Pathfinding;
+using Unity.Mathematics;
 
 namespace DChild.Gameplay.Characters.Enemies
 {
@@ -50,6 +51,14 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField]
             private float m_patienceDistanceTolerance = 50f;
             public float patienceDistanceTolerance => m_patienceDistanceTolerance;
+
+            //AttackData
+            [SerializeField]
+            private AttackData m_HeavySlashAttackData;
+            public AttackData heavySlashAttackData => m_HeavySlashAttackData;
+            [SerializeField]
+            private AttackData m_SlashComboAttackData;
+            public AttackData SlashComboAttackData => m_SlashComboAttackData;
 
             //Animations
             [SerializeField]
@@ -300,35 +309,66 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_animation.SetAnimation(0, m_info.deathCombinedAnimation, false);
             m_animation.EnableRootMotion(true, false);
-            //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.deathStartAnimation);
-            yield return new WaitForSeconds(1.6f);
-            //m_animation.DisableRootMotion();
-            m_character.physics.simulateGravity = true;
-            //m_animation.SetAnimation(0, m_info.deathLoopAnimation, true);
-            m_bodyCollider.enabled = true;
-            m_animation.EnableRootMotion(true, true);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.deathCombinedAnimation);
+            //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.deathStartAnimation);
+            //yield return new WaitForSeconds(1.6f);
+            //m_animation.DisableRootMotion();
+            //m_character.physics.simulateGravity = true;
+            //m_animation.SetAnimation(0, m_info.deathLoopAnimation, true);
+            //m_bodyCollider.enabled = true;
+            //m_animation.EnableRootMotion(true, true);
             enabled = false;
             this.gameObject.SetActive(false);
             yield return null;
+        }
+
+        private void CustomDecideOnAttack()
+        {
+            //single attack is AttackCache[0]
+            //Combo Attack is AttackCache[1]
+
+            int attackChance = UnityEngine.Random.Range(0, 100);
+            if(attackChance < 61)
+            {
+                //Choose AttackCache[0]
+                m_statsData.SetAttackData(m_info.heavySlashAttackData);
+                m_attackDecider.ForcedDecideOnAttack(0);
+                m_currentAttack = m_attackCache[0];
+                m_currentAttackRange = m_attackRangeCache[0];
+                Debug.Log("Chosen Attack: " + m_attackCache[0]);
+            }
+            else
+            {
+                //Choose AttackCache[1]
+                m_statsData.SetAttackData(m_info.SlashComboAttackData);
+                m_attackDecider.ForcedDecideOnAttack(1);
+                m_currentAttack = m_attackCache[1];
+                m_currentAttackRange = m_attackRangeCache[1];
+                Debug.Log("Chosen Attack: " + m_attackCache[1]);
+            }
+
+            Debug.Log("CSD Damage: " + m_statsData.damage);
+            Debug.Log("Chance attack percent value: " + attackChance);
         }
 
         private void ChooseAttack()
         {
             if (!m_attackDecider.hasDecidedOnAttack)
             {
-                IsAllAttackComplete();
-                for (int i = 0; i < m_attackCache.Count; i++)
-                {
-                    m_attackDecider.DecideOnAttack();
-                    if (m_attackCache[i] != m_currentAttack && !m_attackUsed[i])
-                    {
-                        m_attackUsed[i] = true;
-                        m_currentAttack = m_attackCache[i];
-                        m_currentAttackRange = m_attackRangeCache[i];
-                        return;
-                    }
-                }
+                //IsAllAttackComplete();
+                //for (int i = 0; i < m_attackCache.Count; i++)
+                //{
+                //    //m_attackDecider.DecideOnAttack();
+                //    CustomDecideOnAttack();
+                //    if (m_attackCache[i] != m_currentAttack && !m_attackUsed[i])
+                //    {
+                //        m_attackUsed[i] = true;
+                //        m_currentAttack = m_attackCache[i];
+                //        m_currentAttackRange = m_attackRangeCache[i];
+                //        return;
+                //    }
+                //}
+                CustomDecideOnAttack();
             }
         }
 
