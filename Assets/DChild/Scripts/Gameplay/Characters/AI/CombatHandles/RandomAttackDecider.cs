@@ -65,7 +65,15 @@ namespace DChild.Gameplay.Characters.AI
             Debug.Log($"chosen attack : {chosenAttack.attack} \n max same attack count : {m_sameAttackCount}");
         }
 
-
+        public void ForcedDecideOnAttack(int attackIndex)
+        {
+            if(hasDecidedOnAttack == false)
+            {
+                chosenAttack = attackList[attackIndex];
+                hasDecidedOnAttack = true;
+            }
+            
+        }
 
         /// <summary>
         /// 
