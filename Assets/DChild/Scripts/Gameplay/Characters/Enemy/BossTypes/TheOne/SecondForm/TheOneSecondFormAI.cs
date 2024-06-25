@@ -31,6 +31,9 @@ namespace DChild.Gameplay.Characters.Enemies
             public PhaseInfo<Phase> phaseInfo => m_phaseInfo;
 
             [SerializeField]
+            private int m_maxHitCount;
+            public int maxhitcount => m_maxHitCount;
+            [SerializeField]
             private MovementInfo m_move = new MovementInfo();
             public MovementInfo move => m_move;
             [SerializeField]
@@ -39,6 +42,17 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField]
             private MovementInfo m_runAway = new MovementInfo();
             public MovementInfo runAway => m_runAway;
+
+            [SerializeField,MinValue(0),BoxGroup("ReevaluationInfo")]
+            private float m_targetDistancetoleranceBehind = 1;
+            public float targetDistancetoleranceBehind => m_targetDistancetoleranceBehind;
+            [SerializeField, MinValue(0), BoxGroup("ReevaluationInfo")]
+            private float m_targetDistancetolerance = 1;
+            public float targetDistancetolerance => m_targetDistancetolerance;
+
+
+
+
             [SerializeField, BoxGroup("Tendril Climb")]
             private MovementInfo m_tendrilClimbUp = new MovementInfo();
             public MovementInfo tendrilClimbUp => m_tendrilClimbUp;
@@ -347,25 +361,12 @@ namespace DChild.Gameplay.Characters.Enemies
         private enum State
         {
             Phasing,
-            Intro,
             Idle,
             Turning,
             Attacking,
-            Cooldown,
-            Roar,
-            Chasing,
             ReevaluateSituation,
             WaitBehaviourEnd,
         }
-
-        //private enum Pattern
-        //{
-        //    AttackPattern1,
-        //    AttackPattern2,
-        //    AttackPattern3,
-        //    AttackPattern4,
-        //    WaitAttackEnd,
-        //}
 
         private enum Attack
         {
@@ -379,6 +380,14 @@ namespace DChild.Gameplay.Characters.Enemies
             Phase2Pattern4,
             Phase2Pattern5,
             Phase2Pattern6,
+            BackwardTendrilWhip,
+            TwoStomp,
+            TendrilWhip,
+            TendrilClimbJumpSmash,
+            ElementalBeamFlick,
+            TendrilClimbElementalBeam,
+            TigrexBiting,
+            ElementalOverload,
             WaitAttackEnd,
         }
         private enum WallAttack
@@ -395,19 +404,18 @@ namespace DChild.Gameplay.Characters.Enemies
             Wait,
         }
 
-        private bool[] m_attackUsed;
+/*        private bool[] m_attackUsed;
         private List<Attack> m_attackCache;
-        private List<float> m_attackRangeCache;
+        private List<float> m_attackRangeCache;*/
         private Vector2 m_lastTargetPos;
         private Vector2 m_lazerTargetPos;
         private float m_currentCooldown;
         private float m_pickedCooldown;
-        private int m_backCooldown;
+        private float m_backCooldown;
         private List<float> m_currentFullCooldown;
         private int[] m_patternAttackCount;
         private List<float> m_patternCooldown;
-        private int m_maxHitCount;
-        private int m_currentHitCount;
+        private int m_currentHitCount = 0;
         private int m_maxAttackCount;
         private int m_currentAttackCount;
         private float m_defaultGravityScale;
@@ -471,31 +479,33 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Spawn Points")]
         private Transform m_beamBackPoint;
 
-        private Coroutine m_roarCoroutine;
-        private Coroutine m_currentAttackCoroutine;
-        private Coroutine m_counterAttackCoroutine;
-        private Coroutine m_backAttackCoroutine;
-        private Coroutine m_backAttackCooldownCoroutine;
-        #region Lazer Coroutine
-        private Coroutine m_lazerBeamCoroutine;
-        private Coroutine m_lazerLookCoroutine;
-        private Coroutine m_aimAtPlayerCoroutine;
-        #endregion
+        private bool canUseBackTendril => m_backCooldown <= 0;
 
+        /*        private Coroutine m_roarCoroutine;
+                private Coroutine m_currentAttackCoroutine;
+                private Coroutine m_counterAttackCoroutine;
+                private Coroutine m_backAttackCoroutine;
+                private Coroutine m_backAttackCooldownCoroutine;
+                #region Lazer Coroutine
+                private Coroutine m_lazerBeamCoroutine;
+                private Coroutine m_lazerLookCoroutine;
+                private Coroutine m_aimAtPlayerCoroutine;
+                #endregion*/
+        private PhaseInfo m_currentPhaseInfo;
         #region Animations
         private string m_currentIdleAnimation;
         #endregion
-        private bool m_isDetecting;
+ 
 
         private void ApplyPhaseData(PhaseInfo obj)
         {
-            m_attackCache.Clear();
-            m_attackRangeCache.Clear();
-            if (m_patternCooldown.Count != 0)
-                m_patternCooldown.Clear();
-            m_maxHitCount = obj.hitCount;
-            m_maxAttackCount = obj.attackCount;
-            switch (m_phaseHandle.currentPhase)
+            /*            m_attackCache.Clear();
+                        m_attackRangeCache.Clear();*/
+            //if (m_patternCooldown.Count != 0)
+            //    m_patternCooldown.Clear();
+            //m_maxHitCount = obj.hitCount;
+            //m_maxAttackCount = obj.attackCount;
+            /*switch (m_phaseHandle.currentPhase)
             {
                 case Phase.PhaseOne:
                     //m_idleAnimation = m_info.idleCombatAnimation;
@@ -511,16 +521,18 @@ namespace DChild.Gameplay.Characters.Enemies
                     for (int i = 0; i < m_info.phase2PatternCooldown.Count; i++)
                         m_patternCooldown.Add(m_info.phase2PatternCooldown[i]);
                     break;
-            }
-            m_attackUsed = new bool[m_attackCache.Count];
-            if (m_currentFullCooldown.Count != 0)
-            {
-                m_currentFullCooldown.Clear();
-            }
-            for (int i = 0; i < obj.fullCooldown.Count; i++)
-            {
-                m_currentFullCooldown.Add(obj.fullCooldown[i]);
-            }
+            }*/
+            //m_attackUsed = new bool[m_attackCache.Count];
+            //if (m_currentFullCooldown.Count != 0)
+            //{
+            //    m_currentFullCooldown.Clear();
+            //}
+            //for (int i = 0; i < obj.fullCooldown.Count; i++)
+            //{
+            //    m_currentFullCooldown.Add(obj.fullCooldown[i]);
+            //}
+            m_currentPhaseInfo = obj;
+            UpdateAttackDeciderList();
         }
 
         private void ChangeState()
@@ -540,55 +552,65 @@ namespace DChild.Gameplay.Characters.Enemies
 
         public override void SetTarget(IDamageable damageable, Character m_target = null)
         {
-            if (damageable != null)
+            if (damageable != null && m_stateHandle.currentState == State.Idle)
             {
                 base.SetTarget(damageable, m_target);
-                if (!m_isDetecting)
-                {
-                    m_isDetecting = true;
-                    m_stateHandle.OverrideState(State.Intro);
-                    //GameEventMessage.SendEvent("Boss Encounter");
-                }
+                m_stateHandle.OverrideState(State.ReevaluateSituation);
             }
         }
 
         private void OnDamageTaken(object sender, Damageable.DamageEventArgs eventArgs)
         {
-            if (m_groundSensor.isDetecting && m_roarCoroutine == null)
+            //if (m_groundSensor.isDetecting && m_roarCoroutine == null)
+            //{
+            //    switch (m_phaseHandle.currentPhase)
+            //    {
+            //        case Phase.PhaseOne:
+            //            if (m_currentHitCount < m_maxHitCount)
+            //                m_currentHitCount++;
+            //            else
+            //            {
+            //                StopRoutines();
+            //                m_stateHandle.Wait(State.ReevaluateSituation);
+
+            //                m_counterAttackCoroutine = StartCoroutine(DodgeRoutine());
+            //                m_currentHitCount = 0;
+            //            }
+            //            break;
+            //        case Phase.PhaseTwo:
+            //            if (m_currentHitCount < m_maxHitCount)
+            //                m_currentHitCount++;
+            //            else
+            //            {
+            //                StopRoutines();
+            //                m_stateHandle.Wait(State.ReevaluateSituation);
+
+            //                m_counterAttackCoroutine = StartCoroutine(DodgeRoutine());
+            //                m_currentHitCount = 0;
+            //            }
+            //            break;
+            //    }
+            //}
+            if (m_groundSensor.isDetecting)
             {
-                switch (m_phaseHandle.currentPhase)
+                
+                if (m_currentHitCount < m_info.maxhitcount)
                 {
-                    case Phase.PhaseOne:
-                        if (m_currentHitCount < m_maxHitCount)
-                            m_currentHitCount++;
-                        else
-                        {
-                            StopRoutines();
-                            m_stateHandle.Wait(State.ReevaluateSituation);
-
-                            m_counterAttackCoroutine = StartCoroutine(DodgeRoutine());
-                            m_currentHitCount = 0;
-                        }
-                        break;
-                    case Phase.PhaseTwo:
-                        if (m_currentHitCount < m_maxHitCount)
-                            m_currentHitCount++;
-                        else
-                        {
-                            StopRoutines();
-                            m_stateHandle.Wait(State.ReevaluateSituation);
-
-                            m_counterAttackCoroutine = StartCoroutine(DodgeRoutine());
-                            m_currentHitCount = 0;
-                        }
-                        break;
+                    m_currentHitCount++;
+                    Debug.Log("current hit count"+ m_currentHitCount);
+                }
+                else if (m_currentHitCount >= m_info.maxhitcount)
+                {
+                    StartCoroutine(DodgeRoutine());
+                    m_currentHitCount = 0;
+                    Debug.Log("current hit count" + m_currentHitCount);
                 }
             }
-        }
 
-        private IEnumerator DodgeRoutine()
+            }
+        private IEnumerator DodgeMovement()
         {
-            enabled = false;
+          
             if (!IsFacingTarget())
                 CustomTurn();
 
@@ -600,11 +622,15 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_info.dodgeAnimation, false);
             m_animation.AddAnimation(0, m_info.idle1Animation, true, 0);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.idle1Animation);
-            m_animation.DisableRootMotion();
-            //m_animation.SetAnimation(0, RandomIdleAnimation(), true);
-            m_stateHandle.ApplyQueuedState();
-            yield return null;
-            enabled = true;
+
+   
+        }
+        private IEnumerator DodgeRoutine()
+        {
+            StopAllCoroutines();
+            yield return DodgeMovement();
+           // m_stateHandle.SetState(State.ReevaluateSituation);
+
         }
 
         private void OnTurnDone(object sender, FacingEventArgs eventArgs)
@@ -617,7 +643,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_phaseHandle.allowPhaseChange = true;
         }
 
-        private IEnumerator IntroRoutine()
+        /*private IEnumerator IntroRoutine()
         {
             //gameObject.SetActive(true);
             //m_animation.EnableRootMotion(true, true);
@@ -630,12 +656,12 @@ namespace DChild.Gameplay.Characters.Enemies
             m_hitbox.Enable();
             m_stateHandle.ApplyQueuedState();
             yield return null;
-        }
+        }*/
 
         private IEnumerator SmartChangePhaseRoutine()
         {
             yield return new WaitWhile(() => !m_phaseHandle.allowPhaseChange);
-            StopRoutines();
+            //StopRoutines();
             SetAIToPhasing();
             m_muzzleLoopFX.Stop();
             ResetLaser();
@@ -653,9 +679,9 @@ namespace DChild.Gameplay.Characters.Enemies
             m_beamOn = false;
         }
 
-        private void StopRoutines()
+       /* private void StopRoutines()
         {
-            if (m_currentAttackCoroutine != null)
+            *//*if (m_currentAttackCoroutine != null)
             {
                 StopCoroutine(m_currentAttackCoroutine);
                 m_currentAttackCoroutine = null;
@@ -690,12 +716,18 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 StopCoroutine(m_roarCoroutine);
                 m_roarCoroutine = null;
-            }
+            }*//*
+        }*/
+
+        private void HandleCooldowns()
+        {
+            m_backCooldown -= GameplaySystem.time.deltaTime;
+
         }
 
         private IEnumerator ChangePhaseRoutine()
         {
-            enabled = false;
+           
             m_stateHandle.Wait(State.ReevaluateSituation);
             m_hitbox.Disable();
             //m_hasPhaseChanged = false;
@@ -706,50 +738,31 @@ namespace DChild.Gameplay.Characters.Enemies
             m_hitbox.Enable();
             m_stateHandle.ApplyQueuedState();
             yield return null;
-            enabled = true;
+
         }
 
+        #region Modules
+
+        private void DoRandomIdleAnimation() {
+            m_animation.SetAnimation(0, RandomIdleAnimation(), true);
+        }
+
+        private IEnumerator RoarBehaviour()
+        {
+            m_stateHandle.Wait(State.ReevaluateSituation);
+            yield return RoarRoutine();
+            DoRandomIdleAnimation();
+            m_hitbox.Enable();
+            m_stateHandle.ApplyQueuedState();
+        }
         private IEnumerator RoarRoutine()
         {
-            m_stateHandle.Wait(State.ReevaluateSituation);
             m_currentAttackCount = 0;
             m_hitbox.Disable();
-            //m_hasPhaseChanged = false;
             m_animation.SetAnimation(0, m_info.phaseTransitionRoarAnimation, false).MixDuration = 0;
-            //yield return new WaitForSeconds(3.9f);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.phaseTransitionRoarAnimation);
-            m_animation.SetAnimation(0, RandomIdleAnimation(), true);
-            m_hitbox.Enable();
-            m_roarCoroutine = null;
-            m_stateHandle.ApplyQueuedState();
-            yield return null;
+           
         }
-
-        #region Attacks
-        private void LaunchProjectile()
-        {
-            //var target = new Vector2(m_projectilePoint.position.x + (5 * transform.localScale.x), m_projectilePoint.position.y);
-            //m_projectileLauncher.AimAt(target);
-            //m_projectileLauncher.LaunchProjectile();
-
-            m_projectileLauncher.AimAt(m_targetInfo.position);
-            m_projectileLauncher.LaunchBallisticProjectile(m_targetInfo.position);
-        }
-
-        private IEnumerator TendrilWhipRoutine()
-        {
-            m_animation.SetAnimation(0, m_info.tendrilWhipAnticipationAnimation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.tendrilWhipAnticipationAnimation);
-            m_animation.SetAnimation(0, m_info.tendrilWhipAttack.animation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.tendrilWhipAttack.animation);
-            m_currentAttackCount++;
-            m_animation.SetAnimation(0, RandomIdleAnimation(), true);
-            m_attackDecider.hasDecidedOnAttack = false;
-            m_currentAttackCoroutine = null;
-            m_stateHandle.ApplyQueuedState();
-            yield return null;
-        }
-
         private IEnumerator TendrilWhipBackwardRoutine()
         {
             m_animation.SetAnimation(0, m_info.tendrilWhipBackAnticipationAnimation, false);
@@ -758,28 +771,8 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.tendrilWhipBackAnimation);
             m_animation.SetAnimation(0, m_info.turnAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.turnAnimation);
-            m_currentAttackCount++;
-            CustomTurn();
-            m_animation.SetAnimation(0, RandomIdleAnimation(), true);
-            m_attackDecider.hasDecidedOnAttack = false;
-            m_currentAttackCoroutine = null;
-            m_backAttackCooldownCoroutine = StartCoroutine(TendrilWhipBackwardCooldownRoutine());
-            m_stateHandle.ApplyQueuedState();
-            yield return null;
-        }
 
-        private IEnumerator TendrilWhipBackwardCooldownRoutine()
-        {
-            m_backCooldown = 0;
-            while (m_backCooldown < m_info.backAttackCooldown)
-            {
-                yield return new WaitForSeconds(1f);
-                m_backCooldown++;
-                yield return null;
-            }
-            yield return null;
         }
-
         private IEnumerator TwoStompsRoutine()
         {
             m_animation.SetAnimation(0, m_info.twoStompsAttack.animation, true);
@@ -790,15 +783,15 @@ namespace DChild.Gameplay.Characters.Enemies
                 timer += Time.deltaTime;
                 yield return null;
             }
-            m_currentAttackCount++;
-            m_movement.Stop();
-            m_animation.SetAnimation(0, RandomIdleAnimation(), true);
-            m_attackDecider.hasDecidedOnAttack = false;
-            m_currentAttackCoroutine = null;
-            m_stateHandle.ApplyQueuedState();
-            yield return null;
         }
-
+        private IEnumerator TendrilWhipRoutine()
+        {
+            m_animation.SetAnimation(0, m_info.tendrilWhipAnticipationAnimation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.tendrilWhipAnticipationAnimation);
+            m_animation.SetAnimation(0, m_info.tendrilWhipAttack.animation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.tendrilWhipAttack.animation);
+            DoRandomIdleAnimation();
+        }
         private IEnumerator TigrexBiteRoutine()
         {
             m_animation.SetAnimation(0, m_info.tigrexBiteAttack.animation, true);
@@ -812,54 +805,185 @@ namespace DChild.Gameplay.Characters.Enemies
                 timer += Time.deltaTime;
                 yield return null;
             }
-            m_currentAttackCount++;
-            m_movement.Stop();
-            m_animation.SetAnimation(0, RandomIdleAnimation(), true);
-            m_attackDecider.hasDecidedOnAttack = false;
-            m_currentAttackCoroutine = null;
-            m_stateHandle.ApplyQueuedState();
-            yield return null;
         }
         private IEnumerator ElementalBeamFlickRoutine()
         {
-            m_lazerLookCoroutine = StartCoroutine(LazerLookRoutine());
+            //m_lazerLookCoroutine = StartCoroutine(LazerLookRoutine());
             m_animation.SetAnimation(0, m_info.elementalBeamChargeAnimation, true);
-            m_lazerBeamCoroutine = StartCoroutine(LazerBeamRoutine());
+            //m_lazerBeamCoroutine = StartCoroutine(LazerBeamRoutine());
             yield return new WaitForSeconds(m_info.elementalBeamChargeDuration);
             m_animation.SetAnimation(0, m_info.elementalBeamFlickAttack.animation, true);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.elementalBeamFlickAttack.animation);
-            StopCoroutine(m_lazerLookCoroutine);
-            m_lazerLookCoroutine = null;
-            m_currentAttackCount++;
-            m_movement.Stop();
-            m_animation.SetAnimation(0, RandomIdleAnimation(), true);
-            m_attackDecider.hasDecidedOnAttack = false;
-            m_currentAttackCoroutine = null;
-            m_stateHandle.ApplyQueuedState();
-            yield return null;
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.elementalBeamFlickAttack.animation);       
         }
+        private IEnumerator TendrilClimbJumpSmashRoutine()
+        {
+            m_animation.EnableRootMotion(false, false);
+            //m_stateHandle.Wait(State.Chasing);
+            m_animation.SetAnimation(0, m_info.phaseTransitionRoarAnimation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.phaseTransitionRoarAnimation);
+            m_animation.SetAnimation(0, m_info.turnAnimation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.turnAnimation);
+            CustomTurn();
+            m_animation.SetAnimation(0, m_info.move.animation, true);
+            while (!m_wallSensor.isDetecting)
+            {
+                m_movement.MoveTowards(Vector2.one * transform.localScale.x, m_info.move.speed);
+                yield return null;
+            }
+            CustomTurn();
+            m_movement.Stop();
+            m_character.physics.simulateGravity = false;
+            m_animation.SetAnimation(0, m_info.tendrilClimbUp.animation, true);
+            while (!m_cielingSensor.isDetecting)
+            {
+                m_character.physics.SetVelocity(0, m_info.tendrilClimbUp.speed);
+                yield return null;
+            }
+            m_character.physics.SetVelocity(Vector2.zero);
 
-        #region Lazer Attack
+            m_character.physics.SetVelocity(BallisticVelocity(new Vector2(m_targetInfo.position.x, /*(transform.position.y - m_targetInfo.position.y)*/GroundPosition(m_targetInfo.position).y)));
+            m_animation.SetAnimation(0, m_info.jumpSmashStartAnimation, false);
+            //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.jumpSmashStartAnimation);
+            yield return new WaitUntil(() => m_groundSensor.isDetecting);
+            m_animation.SetAnimation(0, m_info.jumpSmashAttack.animation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.jumpSmashAttack.animation);
+            m_animation.SetAnimation(0, m_info.jumpSmashLandAnimation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.jumpSmashLandAnimation);
+ 
+        }
         private IEnumerator ElementalOverloadRoutine()
         {
-            m_lazerLookCoroutine = StartCoroutine(LazerLookRoutine());
+            //m_lazerLookCoroutine = StartCoroutine(LazerLookRoutine());
             m_animation.SetAnimation(0, m_info.elementalBeamOverloadAttack.animation, false);
-            m_lazerBeamCoroutine = StartCoroutine(LazerBeamRoutine());
+            //m_lazerBeamCoroutine = StartCoroutine(LazerBeamRoutine());
             yield return new WaitUntil(() => m_beamOn);
-            m_aimAtPlayerCoroutine = StartCoroutine(AimAtTargtRoutine());
+            // m_aimAtPlayerCoroutine = StartCoroutine(AimAtTargtRoutine());
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.elementalBeamOverloadAttack.animation);
-            StopCoroutine(m_lazerLookCoroutine);
-            m_lazerLookCoroutine = null;
-            StopCoroutine(m_aimAtPlayerCoroutine);
-            m_aimAtPlayerCoroutine = null;
+            // StopCoroutine(m_lazerLookCoroutine);
+            // m_lazerLookCoroutine = null;
+            // StopCoroutine(m_aimAtPlayerCoroutine);
+            // m_aimAtPlayerCoroutine = null;
+           
+        }
+        #endregion
+
+        #region Attack Patterns
+        private IEnumerator TestRoutine()
+        {
+            m_stateHandle.Wait(State.ReevaluateSituation);
+            yield return new WaitForSeconds(1);
+            m_currentAttackCount++;
+            m_stateHandle.ApplyQueuedState();
+        }
+
+        private IEnumerator ElementalOverloadAttack()
+        {
+            yield return ElementalOverloadRoutine();
+            m_currentAttackCount++;
+            m_movement.Stop();
+            DoRandomIdleAnimation();
+            m_attackDecider.hasDecidedOnAttack = false;
+            m_stateHandle.ApplyQueuedState();
+
+        }
+        
+        private IEnumerator TendrilClimbJumpSmashAttack()
+        {
+            m_stateHandle.Wait(State.ReevaluateSituation);
+            yield return TendrilClimbJumpSmashRoutine();
+            m_currentAttackCount++;
+            m_movement.Stop();
+            m_attackDecider.hasDecidedOnAttack = false;
+            DoRandomIdleAnimation();
+            m_stateHandle.ApplyQueuedState();
+
+        }
+        private IEnumerator ElementalBeamAttack()
+        {
+            m_stateHandle.Wait(State.ReevaluateSituation);
+            yield return ElementalBeamFlickRoutine();
             m_currentAttackCount++;
             m_movement.Stop();
             m_animation.SetAnimation(0, RandomIdleAnimation(), true);
             m_attackDecider.hasDecidedOnAttack = false;
-            m_currentAttackCoroutine = null;
+            // m_currentAttackCoroutine = null;
             m_stateHandle.ApplyQueuedState();
             yield return null;
         }
+        
+        private IEnumerator TigrexBiteAttack()
+        {
+            m_stateHandle.Wait(State.ReevaluateSituation);
+            yield return TigrexBiteRoutine();
+            m_currentAttackCount++;
+            m_movement.Stop();
+            DoRandomIdleAnimation();
+            m_attackDecider.hasDecidedOnAttack = false;
+            m_stateHandle.ApplyQueuedState();
+
+        }
+
+        private IEnumerator TendrilWhipBackwardAttack()
+        {
+            m_stateHandle.Wait(State.ReevaluateSituation);
+            yield return TendrilWhipBackwardRoutine();
+            CustomTurn();
+            DoRandomIdleAnimation();
+            m_currentAttackCount++;
+            m_backCooldown = m_info.backAttackCooldown;
+            m_attackDecider.hasDecidedOnAttack = false;
+            m_stateHandle.ApplyQueuedState();
+        }
+
+        private IEnumerator TwoStompAttack()
+        {
+            m_stateHandle.Wait(State.ReevaluateSituation);
+            if (!IsFacingTarget())
+            {
+                CustomTurn();
+            }
+            yield return TwoStompsRoutine();
+           
+            m_movement.Stop();
+            m_currentAttackCount++;
+            m_attackDecider.hasDecidedOnAttack = false;
+            m_stateHandle.ApplyQueuedState();
+        }
+        
+        private IEnumerator TendrilWhipAttack()
+        {
+            m_stateHandle.Wait(State.ReevaluateSituation);
+            if (!IsFacingTarget())
+            {
+                CustomTurn();
+            }
+            yield return TendrilWhipRoutine();
+            m_currentAttackCount++;
+            m_attackDecider.hasDecidedOnAttack = false;
+            m_stateHandle.ApplyQueuedState();
+        }
+
+        #endregion
+
+
+
+        #region Attacks
+        private void LaunchProjectile()
+        {
+            //var target = new Vector2(m_projectilePoint.position.x + (5 * transform.localScale.x), m_projectilePoint.position.y);
+            //m_projectileLauncher.AimAt(target);
+            //m_projectileLauncher.LaunchProjectile();
+
+            m_projectileLauncher.AimAt(m_targetInfo.position);
+            m_projectileLauncher.LaunchBallisticProjectile(m_targetInfo.position);
+        }
+
+     
+     
+       
+
+        #region Lazer Attack
+       
 
         private IEnumerator LazerLookRoutine()
         {
@@ -884,7 +1008,7 @@ namespace DChild.Gameplay.Characters.Enemies
             //float atan2 = Mathf.Atan2(v_diff.y, v_diff.x);
             //m_aimBone.transform.rotation = Quaternion.Euler(0f, 0f, atan2 * Mathf.Rad2Deg);
             m_aimBone.mode = SkeletonUtilityBone.Mode.Follow;
-            m_aimAtPlayerCoroutine = null;
+           // m_aimAtPlayerCoroutine = null;
             yield return null;
         }
 
@@ -961,7 +1085,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_muzzleLoopFX.Stop();
             //yield return new WaitUntil(() => !m_beamOn);
             ResetLaser();
-            m_lazerBeamCoroutine = null;
+            //m_lazerBeamCoroutine = null;
             yield return null;
         }
 
@@ -989,7 +1113,6 @@ namespace DChild.Gameplay.Characters.Enemies
             base.OnDestroyed(sender, eventArgs);
             StopAllCoroutines();
             m_movement.Stop();
-            m_isDetecting = false;
         }
 
         #region Movement
@@ -1057,18 +1180,18 @@ namespace DChild.Gameplay.Characters.Enemies
             //        break;
             //}
             #region Experiment
-            m_lazerLookCoroutine = StartCoroutine(LazerLookRoutine());
+            //m_lazerLookCoroutine = StartCoroutine(LazerLookRoutine());
             m_aimOn = true;
-            m_aimAtPlayerCoroutine = StartCoroutine(AimAtTargtRoutine());
+            //m_aimAtPlayerCoroutine = StartCoroutine(AimAtTargtRoutine());
             m_animation.SetAnimation(0, m_info.jumpSmashWallStickAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.jumpSmashWallStickAnimation);
             m_animation.SetAnimation(0, m_info.elementalBeamWallChargeAnimation, true);
-            m_lazerBeamCoroutine = StartCoroutine(LazerBeamRoutine());
+           // m_lazerBeamCoroutine = StartCoroutine(LazerBeamRoutine());
             yield return new WaitForSeconds(m_info.elementalBeamChargeDuration);
             m_animation.SetAnimation(0, m_info.elementalBeamWallAttack.animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.elementalBeamWallAttack.animation);
-            StopCoroutine(m_lazerLookCoroutine);
-            m_lazerLookCoroutine = null;
+           // StopCoroutine(m_lazerLookCoroutine);
+            //m_lazerLookCoroutine = null;
             m_aimOn = false;
             m_character.physics.SetVelocity(BallisticVelocity(new Vector2(m_targetInfo.position.x, /*(transform.position.y - m_targetInfo.position.y)*/GroundPosition(m_targetInfo.position).y)));
             m_animation.SetAnimation(0, m_info.jumpSmashStartAnimation, false);
@@ -1082,7 +1205,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
             m_currentAttackCount++;
             m_attackDecider.hasDecidedOnAttack = false;
-            m_currentAttackCoroutine = null;
+           // m_currentAttackCoroutine = null;
             m_stateHandle.ApplyQueuedState();
             yield return null;
         }
@@ -1123,16 +1246,31 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void UpdateAttackDeciderList()
         {
-            m_attackDecider.SetList(new AttackInfo<Attack>(Attack.Phase1Pattern1, m_info.phase1Pattern1Range),
-                                    new AttackInfo<Attack>(Attack.Phase1Pattern2, m_info.phase1Pattern2Range),
-                                    new AttackInfo<Attack>(Attack.Phase1Pattern3, m_info.phase1Pattern3Range),
-                                    new AttackInfo<Attack>(Attack.Phase1Pattern4, m_info.phase1Pattern4Range),
-                                    new AttackInfo<Attack>(Attack.Phase2Pattern1, m_info.phase2Pattern1Range),
-                                    new AttackInfo<Attack>(Attack.Phase2Pattern2, m_info.phase2Pattern2Range),
-                                    new AttackInfo<Attack>(Attack.Phase2Pattern3, m_info.phase2Pattern3Range),
-                                    new AttackInfo<Attack>(Attack.Phase2Pattern4, m_info.phase2Pattern4Range),
-                                    new AttackInfo<Attack>(Attack.Phase2Pattern5, m_info.phase2Pattern5Range),
-                                    new AttackInfo<Attack>(Attack.Phase2Pattern6, m_info.phase2Pattern6Range));
+
+            switch (m_phaseHandle.currentPhase)
+            {
+                case Phase.PhaseOne:
+                    m_attackDecider.SetList(new AttackInfo<Attack>(Attack.BackwardTendrilWhip, 0),
+                                            new AttackInfo<Attack>(Attack.TwoStomp, 0),
+                                            new AttackInfo<Attack>(Attack.TendrilWhip, 0),
+                                            new AttackInfo<Attack>(Attack.TendrilClimbJumpSmash, 0),
+                                            new AttackInfo<Attack>(Attack.ElementalBeamFlick, 0),
+                                            new AttackInfo<Attack>(Attack.TendrilClimbElementalBeam, 0));
+                    break;
+                case Phase.PhaseTwo:
+                    m_attackDecider.SetList(new AttackInfo<Attack>(Attack.BackwardTendrilWhip,0),
+                                             new AttackInfo<Attack>(Attack.TwoStomp,0),
+                                             new AttackInfo<Attack>(Attack.TendrilWhip,0),
+                                             new AttackInfo<Attack>(Attack.TendrilClimbJumpSmash, 0),
+                                             new AttackInfo<Attack>(Attack.ElementalBeamFlick,0),
+                                             new AttackInfo<Attack>(Attack.TendrilClimbElementalBeam, 0),
+                                             new AttackInfo<Attack>(Attack.TigrexBiting,0), 
+                                             new AttackInfo<Attack>(Attack.ElementalOverload,0));
+                    break;
+                case Phase.Wait:
+                    break;
+            }
+
             m_attackDecider.hasDecidedOnAttack = false;
         }
 
@@ -1158,7 +1296,7 @@ namespace DChild.Gameplay.Characters.Enemies
         //    return hit.point;
         //}
 
-        private void ChooseAttack()
+        /*private void ChooseAttack()
         {
             if (!m_attackDecider.hasDecidedOnAttack)
             {
@@ -1214,7 +1352,23 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 m_attackRangeCache[i] = list[i];
             }
+        }*/
+
+        private bool IsTargetBehind(float distanceTolerance)
+        {
+            return !IsFacingTarget() && IsTargetWithin(distanceTolerance);
         }
+
+        private bool IsTargetWithin(float distanceTolerance) 
+        {
+
+            //var directionToTarget = (Vector3)m_targetInfo.position - m_character.centerMass.position;
+            //return directionToTarget.magnitude <= distanceTolerance;
+
+            var dasd = Vector2.Distance(m_targetInfo.position, m_character.centerMass.position) <= distanceTolerance;
+             return dasd;
+        }
+
 
         protected override void Awake()
         {
@@ -1229,17 +1383,19 @@ namespace DChild.Gameplay.Characters.Enemies
 
             m_Points = new List<Vector2>();
 
-            m_attackCache = new List<Attack>();
+           /* m_attackCache = new List<Attack>();
             AddToAttackCache(Attack.Phase1Pattern1, Attack.Phase1Pattern2, Attack.Phase1Pattern3, Attack.Phase1Pattern4, Attack.Phase2Pattern1, Attack.Phase2Pattern2, Attack.Phase2Pattern3, Attack.Phase2Pattern4, Attack.Phase2Pattern5, Attack.Phase2Pattern6);
             m_attackRangeCache = new List<float>();
             AddToRangeCache(m_info.phase1Pattern1Range, m_info.phase1Pattern2Range, m_info.phase1Pattern3Range, m_info.phase1Pattern4Range, m_info.phase2Pattern1Range, m_info.phase2Pattern2Range, m_info.phase2Pattern3Range, m_info.phase2Pattern4Range, m_info.phase2Pattern5Range, m_info.phase2Pattern6Range);
-            m_attackUsed = new bool[m_attackCache.Count];
+            m_attackUsed = new bool[m_attackCache.Count];*/
             m_currentFullCooldown = new List<float>();
             m_patternCooldown = new List<float>();
         }
 
         protected override void Start()
         {
+           
+
             base.Start();
             m_spineListener.Subscribe(m_info.beamOffEvent, BeamOff);
             m_spineListener.Subscribe(m_info.beamOnEvent, BeamOn);
@@ -1274,38 +1430,64 @@ namespace DChild.Gameplay.Characters.Enemies
             //{
             //}
             m_phaseHandle.MonitorPhase();
+            HandleCooldowns();
             switch (m_stateHandle.currentState)
             {
                 case State.Idle:
                     break;
-                case State.Intro:
-                    if (IsFacingTarget())
-                        CustomTurn();
-
-                    StartCoroutine(IntroRoutine());
-                    break;
+                
                 case State.Phasing:
                     StartCoroutine(ChangePhaseRoutine());
                     break;
-                case State.Turning:
-                    m_phaseHandle.allowPhaseChange = false;
-                    m_stateHandle.Wait(m_turnState);
-                    m_movement.Stop();
-                    if (IsTargetInRange(m_info.tendrilWhipAttack.range) && m_backCooldown >= m_info.backAttackCooldown)
-                    {
-                        m_backAttackCoroutine = StartCoroutine(TendrilWhipBackwardRoutine());
-                    }
-                    else
-                    {
-                        m_turnHandle.Execute(m_info.turnAnimation.animation, RandomIdleAnimation());
-                    }
-                    break;
+                //case State.Turning:
+                //    m_phaseHandle.allowPhaseChange = false;
+                //    m_stateHandle.Wait(m_turnState);
+                //    m_movement.Stop();
+                //    if (IsTargetInRange(m_info.tendrilWhipAttack.range) && m_backCooldown >= m_info.backAttackCooldown)
+                //    {
+                //       // m_backAttackCoroutine = StartCoroutine(TendrilWhipBackwardRoutine());
+                //    }
+                //    else
+                //    {
+                //        m_turnHandle.Execute(m_info.turnAnimation.animation, RandomIdleAnimation());
+                //    }
+                //    break;
                 case State.Attacking:
-                    m_stateHandle.Wait(m_currentAttackCount >= m_maxAttackCount ? State.Roar : State.Cooldown);
+                    //m_stateHandle.Wait(m_currentAttackCount >= m_maxAttackCount ? State.Roar : State.Cooldown);
                     m_lastTargetPos = m_targetInfo.position;
                     m_currentIdleAnimation = RandomIdleAnimation();
-
-                    switch (m_currentAttack)
+                    StopAllCoroutines();
+                    if (m_attackDecider.hasDecidedOnAttack == false)
+                    {
+                        m_attackDecider.DecideOnAttack();
+                    }
+                    switch (m_attackDecider.chosenAttack.attack)
+                    {
+                      
+                        case Attack.BackwardTendrilWhip:
+                            StartCoroutine(TendrilWhipBackwardAttack());
+                            break;
+                        case Attack.TwoStomp:
+                            StartCoroutine(TwoStompAttack());
+                            break;
+                        case Attack.TendrilWhip:
+                            StartCoroutine(TendrilWhipAttack());
+                            break;
+                        case Attack.TendrilClimbJumpSmash:
+                            StartCoroutine(TendrilClimbJumpSmashAttack());
+                            break;
+                        case Attack.ElementalBeamFlick:
+                            break;
+                        case Attack.TendrilClimbElementalBeam:
+                            break;
+                        case Attack.TigrexBiting:
+                            StartCoroutine(TigrexBiteAttack());
+                            break;
+                        case Attack.ElementalOverload:
+                            break;
+                    }
+                    m_stateHandle.Wait(State.ReevaluateSituation);
+                    /*switch (m_currentAttack)
                     {
                         case Attack.Phase1Pattern1:
                             m_currentAttackCoroutine = StartCoroutine(TwoStompsRoutine());
@@ -1347,10 +1529,10 @@ namespace DChild.Gameplay.Characters.Enemies
                             m_currentAttackCoroutine = StartCoroutine(ElementalOverloadRoutine());
                             m_pickedCooldown = m_currentFullCooldown[5];
                             break;
-                    }
+                    }*/
                     break;
 
-                case State.Cooldown:
+                /*case State.Cooldown:
                     if (!IsFacingTarget())
                     {
                         m_turnState = State.Cooldown;
@@ -1372,25 +1554,20 @@ namespace DChild.Gameplay.Characters.Enemies
                         m_stateHandle.OverrideState(State.ReevaluateSituation);
                     }
 
-                    break;
+                    break;*/
 
-                case State.Roar:
-                    m_roarCoroutine = StartCoroutine(RoarRoutine());
-
-                    break;
-
-                case State.Chasing:
-                    if (IsFacingTarget())
+                /*case State.Chasing:
+                    *//*if (IsFacingTarget())
                     {
                         ChooseAttack();
-                        Debug.Log(/*"range for attack is " + IsTargetInRange(m_currentAttackRange) + */" attack coroutine is " + (m_currentAttackCoroutine != null));
+                        Debug.Log(*//*"range for attack is " + IsTargetInRange(m_currentAttackRange) + *//*" attack coroutine is " + (m_currentAttackCoroutine != null));
                         if (m_attackDecider.hasDecidedOnAttack && IsTargetInRange(m_currentAttackRange) && m_currentAttackCoroutine == null)
                         {
                             m_stateHandle.SetState(State.Attacking);
                         }
                         else
                         {
-                            if (m_groundSensor.isDetecting /*&& !m_wallSensor.isDetecting && m_edgeSensor.isDetecting*/)
+                            if (m_groundSensor.isDetecting *//*&& !m_wallSensor.isDetecting && m_edgeSensor.isDetecting*//*)
                             {
                                 m_animation.SetAnimation(0, m_info.move.animation, true);
                                 m_movement.MoveTowards(Vector2.one * transform.localScale.x, m_info.move.speed);
@@ -1407,18 +1584,48 @@ namespace DChild.Gameplay.Characters.Enemies
                         m_turnState = State.Chasing;
                         if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation.animation)
                             m_stateHandle.SetState(State.Turning);
-                    }
-                    break;
+                    }*//*
+                    break;*/
 
                 case State.ReevaluateSituation:
-                    if (m_targetInfo.isValid)
+                    if(m_currentAttackCount == 7)
                     {
-                        m_stateHandle.SetState(State.Chasing);
+                        StartCoroutine(RoarBehaviour());
+                        Debug.Log("roar");
+                    }
+                    else
+                    {
+                        if (IsTargetBehind(m_info.targetDistancetoleranceBehind))
+                        {
+                            if (canUseBackTendril)
+                            {
+                                m_stateHandle.SetState(State.Attacking);
+                                m_attackDecider.DecideOnAttack(Attack.BackwardTendrilWhip);
+                            }
+                            Debug.Log("Backward tendril");
+                        }
+                        else if (IsTargetWithin(m_info.targetDistancetolerance))
+                        {
+                            //m_stateHandle.SetState(State.Attacking);
+                            Debug.Log("Randomly Choose attack");
+                        }
+                        else
+                        {
+                            //m_stateHandle.SetState(State.Attacking);
+                            Debug.Log("Randomly Choose range or movement attacks");
+                        }
+                        //StartCoroutine(TestRoutine());
+                    }
+                    
+
+                   /* if (m_targetInfo.isValid)
+                    {
+                        //m_stateHandle.SetState(State.Chasing);
                     }
                     else
                     {
                         m_stateHandle.SetState(State.Idle);
-                    }
+                    }*/
                     break;
                 case State.WaitBehaviourEnd:
                     return;
