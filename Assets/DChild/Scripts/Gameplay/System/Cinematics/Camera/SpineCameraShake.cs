@@ -2,6 +2,7 @@
 using Spine;
 using Spine.Unity;
 using System;
+using System.Collections;
 using UnityEngine;
 
 namespace DChild.Gameplay.Cinematics.Cameras
@@ -34,7 +35,6 @@ namespace DChild.Gameplay.Cinematics.Cameras
         [SerializeField]
         private Configuration[] m_config;
 
-
         [Button]
         private void UpdateConfigurations()
         {
@@ -51,14 +51,29 @@ namespace DChild.Gameplay.Cinematics.Cameras
             {
                 if (m_config[i].animation == animation)
                 {
-                    //GameplaySystem.cinema.ExecuteCameraShake(m_config[i].camShakeData);
+                    GameplaySystem.cinema.ExecuteCameraShake(m_config[i].camShakeData);
+                    break;
                 }
+            }
+        }
+
+        private void AttemptInitialize()
+        {
+            if (m_skeleton.AnimationState != null)
+            {
+                m_skeleton.AnimationState.Start += OnAnimationStart;
+                enabled = false;
             }
         }
 
         private void Start()
         {
-            m_skeleton.AnimationState.Start += OnAnimationStart;
+            AttemptInitialize();
+        }
+
+        private void Update()
+        {
+            AttemptInitialize();
         }
 
     }
