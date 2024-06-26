@@ -20,6 +20,7 @@ using DChild.Temp;
 
 namespace DChild.Gameplay.Characters.Enemies
 {
+
     [AddComponentMenu("DChild/Gameplay/Enemies/Boss/TheOneSecondForm")]
     public class TheOneSecondFormAI : CombatAIBrain<TheOneSecondFormAI.Info>
     {
@@ -43,7 +44,7 @@ namespace DChild.Gameplay.Characters.Enemies
             private MovementInfo m_runAway = new MovementInfo();
             public MovementInfo runAway => m_runAway;
 
-            [SerializeField,MinValue(0),BoxGroup("ReevaluationInfo")]
+            [SerializeField, MinValue(0), BoxGroup("ReevaluationInfo")]
             private float m_targetDistancetoleranceBehind = 1;
             public float targetDistancetoleranceBehind => m_targetDistancetoleranceBehind;
             [SerializeField, MinValue(0), BoxGroup("ReevaluationInfo")]
@@ -404,9 +405,9 @@ namespace DChild.Gameplay.Characters.Enemies
             Wait,
         }
 
-/*        private bool[] m_attackUsed;
-        private List<Attack> m_attackCache;
-        private List<float> m_attackRangeCache;*/
+        /*        private bool[] m_attackUsed;
+                private List<Attack> m_attackCache;
+                private List<float> m_attackRangeCache;*/
         private Vector2 m_lastTargetPos;
         private Vector2 m_lazerTargetPos;
         private float m_currentCooldown;
@@ -434,6 +435,10 @@ namespace DChild.Gameplay.Characters.Enemies
         private MovementHandle2D m_movement;
         [SerializeField, TabGroup("Modules")]
         private DeathHandle m_deathHandle;
+
+        [SerializeField]
+        private TheOneSecondFormElementalBeamAttack m_elementalBeamAttackHandle;
+
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_groundSensor;
         [SerializeField, TabGroup("Sensors")]
@@ -442,22 +447,12 @@ namespace DChild.Gameplay.Characters.Enemies
         private RaySensor m_wallSensor;
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_cielingSensor;
+
         [SerializeField, TabGroup("Lazer")]
-        private LineRenderer m_lineRenderer;
+        private ParticleSystem m_muzzleLoopFX;
         [SerializeField, TabGroup("Lazer")]
-        private LineRenderer m_telegraphLineRenderer;
-        [SerializeField, TabGroup("Lazer")]
-        private EdgeCollider2D m_edgeCollider;
-        [SerializeField, TabGroup("Lazer")]
-        private ParticleFX m_muzzleLoopFX;
-        [SerializeField, TabGroup("Lazer")]
-        private ParticleFX m_muzzleTelegraphFX;
-        private bool m_beamOn;
-        private bool m_aimOn;
-        [SerializeField]
-        private SkeletonUtilityBone m_aimBone;
-        private List<Vector2> m_Points;
-        private IEnumerator m_aimRoutine;
+        private ParticleSystem m_elementalBeamIndicatorFX;
+
         [SerializeField]
         private SpineEventListener m_spineListener;
 
@@ -467,17 +462,18 @@ namespace DChild.Gameplay.Characters.Enemies
         [ShowInInspector]
         private PhaseHandle<Phase, PhaseInfo> m_phaseHandle;
         [ShowInInspector]
-        private RandomAttackDecider<Attack> m_attackDecider;
+        private RandomAttackDecider<Attack> m_BasicAttackDecider;
+        [ShowInInspector]
+        private RandomAttackDecider<Attack> m_ComplexeattackDecider;
+
+        private RandomAttackDecider<Attack> m_currentAttackDecider;
+
         private Attack m_currentAttack;
         private float m_currentAttackRange;
         private BallisticProjectileLauncher m_projectileLauncher;
 
         [SerializeField, TabGroup("Spawn Points")]
         private Transform m_projectilePoint;
-        [SerializeField, TabGroup("Spawn Points")]
-        private Transform m_beamFrontPoint;
-        [SerializeField, TabGroup("Spawn Points")]
-        private Transform m_beamBackPoint;
 
         private bool canUseBackTendril => m_backCooldown <= 0;
 
@@ -495,7 +491,7 @@ namespace DChild.Gameplay.Characters.Enemies
         #region Animations
         private string m_currentIdleAnimation;
         #endregion
- 
+
 
         private void ApplyPhaseData(PhaseInfo obj)
         {
@@ -593,43 +589,44 @@ namespace DChild.Gameplay.Characters.Enemies
             //}
             if (m_groundSensor.isDetecting)
             {
-                
+
                 if (m_currentHitCount < m_info.maxhitcount)
                 {
                     m_currentHitCount++;
-                    Debug.Log("current hit count"+ m_currentHitCount);
+                    Debug.Log("current hit count" + m_currentHitCount);
                 }
                 else if (m_currentHitCount >= m_info.maxhitcount)
                 {
-                    StartCoroutine(DodgeRoutine());
+                 
+                   // StartCoroutine(DodgeRoutine());
                     m_currentHitCount = 0;
                     Debug.Log("current hit count" + m_currentHitCount);
                 }
             }
 
-            }
+        }
         private IEnumerator DodgeMovement()
         {
-          
+            m_stateHandle.Wait(State.ReevaluateSituation);
             if (!IsFacingTarget())
                 CustomTurn();
 
             m_muzzleLoopFX.Stop();
-            ResetLaser();
-            m_aimOn = false;
-            m_beamOn = false;
+            //  ResetLaser();
+            // m_aimOn = false;
+            // m_beamOn = false;
             m_animation.EnableRootMotion(true, false);
             m_animation.SetAnimation(0, m_info.dodgeAnimation, false);
-            m_animation.AddAnimation(0, m_info.idle1Animation, true, 0);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.idle1Animation);
-
-   
+            //m_animation.AddAnimation(0, m_info.idle1Animation, true, 0);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.dodgeAnimation);
+           
         }
         private IEnumerator DodgeRoutine()
         {
-            StopAllCoroutines();
+           // StopAllCoroutines();
             yield return DodgeMovement();
-           // m_stateHandle.SetState(State.ReevaluateSituation);
+            DoRandomIdleAnimation();
+            m_stateHandle.ApplyQueuedState();
 
         }
 
@@ -664,7 +661,7 @@ namespace DChild.Gameplay.Characters.Enemies
             //StopRoutines();
             SetAIToPhasing();
             m_muzzleLoopFX.Stop();
-            ResetLaser();
+            // ResetLaser();
             yield return null;
         }
 
@@ -675,49 +672,49 @@ namespace DChild.Gameplay.Characters.Enemies
             m_phaseHandle.ApplyChange();
             m_animation.DisableRootMotion();
             m_animation.SetEmptyAnimation(0, 0);
-            m_aimOn = false;
-            m_beamOn = false;
+            // m_aimOn = false;
+            //m_beamOn = false;
         }
 
-       /* private void StopRoutines()
-        {
-            *//*if (m_currentAttackCoroutine != null)
-            {
-                StopCoroutine(m_currentAttackCoroutine);
-                m_currentAttackCoroutine = null;
-            }
-            StopCoroutine(m_aimRoutine);
-            if (m_aimAtPlayerCoroutine != null)
-            {
-                StopCoroutine(m_aimAtPlayerCoroutine);
-                m_aimAtPlayerCoroutine = null;
-            }
-            if (m_lazerLookCoroutine != null)
-            {
-                StopCoroutine(m_lazerLookCoroutine);
-                m_lazerLookCoroutine = null;
-            }
-            if (m_lazerBeamCoroutine != null)
-            {
-                StopCoroutine(m_lazerBeamCoroutine);
-                m_lazerBeamCoroutine = null;
-            }
-            if (m_backAttackCoroutine != null)
-            {
-                StopCoroutine(m_backAttackCoroutine);
-                m_backAttackCoroutine = null;
-            }
-            if (m_backAttackCooldownCoroutine != null)
-            {
-                StopCoroutine(m_backAttackCooldownCoroutine);
-                m_backAttackCooldownCoroutine = null;
-            }
-            if (m_roarCoroutine != null)
-            {
-                StopCoroutine(m_roarCoroutine);
-                m_roarCoroutine = null;
-            }*//*
-        }*/
+        /* private void StopRoutines()
+         {
+             *//*if (m_currentAttackCoroutine != null)
+             {
+                 StopCoroutine(m_currentAttackCoroutine);
+                 m_currentAttackCoroutine = null;
+             }
+             StopCoroutine(m_aimRoutine);
+             if (m_aimAtPlayerCoroutine != null)
+             {
+                 StopCoroutine(m_aimAtPlayerCoroutine);
+                 m_aimAtPlayerCoroutine = null;
+             }
+             if (m_lazerLookCoroutine != null)
+             {
+                 StopCoroutine(m_lazerLookCoroutine);
+                 m_lazerLookCoroutine = null;
+             }
+             if (m_lazerBeamCoroutine != null)
+             {
+                 StopCoroutine(m_lazerBeamCoroutine);
+                 m_lazerBeamCoroutine = null;
+             }
+             if (m_backAttackCoroutine != null)
+             {
+                 StopCoroutine(m_backAttackCoroutine);
+                 m_backAttackCoroutine = null;
+             }
+             if (m_backAttackCooldownCoroutine != null)
+             {
+                 StopCoroutine(m_backAttackCooldownCoroutine);
+                 m_backAttackCooldownCoroutine = null;
+             }
+             if (m_roarCoroutine != null)
+             {
+                 StopCoroutine(m_roarCoroutine);
+                 m_roarCoroutine = null;
+             }*//*
+         }*/
 
         private void HandleCooldowns()
         {
@@ -727,7 +724,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator ChangePhaseRoutine()
         {
-           
+
             m_stateHandle.Wait(State.ReevaluateSituation);
             m_hitbox.Disable();
             //m_hasPhaseChanged = false;
@@ -743,7 +740,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
         #region Modules
 
-        private void DoRandomIdleAnimation() {
+        private void DoRandomIdleAnimation()
+        {
             m_animation.SetAnimation(0, RandomIdleAnimation(), true);
         }
 
@@ -759,9 +757,10 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_currentAttackCount = 0;
             m_hitbox.Disable();
+            m_movement.Stop();
             m_animation.SetAnimation(0, m_info.phaseTransitionRoarAnimation, false).MixDuration = 0;
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.phaseTransitionRoarAnimation);
-           
+
         }
         private IEnumerator TendrilWhipBackwardRoutine()
         {
@@ -790,7 +789,7 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.tendrilWhipAnticipationAnimation);
             m_animation.SetAnimation(0, m_info.tendrilWhipAttack.animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.tendrilWhipAttack.animation);
-            DoRandomIdleAnimation();
+            
         }
         private IEnumerator TigrexBiteRoutine()
         {
@@ -808,17 +807,33 @@ namespace DChild.Gameplay.Characters.Enemies
         }
         private IEnumerator ElementalBeamFlickRoutine()
         {
-            //m_lazerLookCoroutine = StartCoroutine(LazerLookRoutine());
             m_animation.SetAnimation(0, m_info.elementalBeamChargeAnimation, true);
-            //m_lazerBeamCoroutine = StartCoroutine(LazerBeamRoutine());
+            m_muzzleLoopFX.Play();
             yield return new WaitForSeconds(m_info.elementalBeamChargeDuration);
             m_animation.SetAnimation(0, m_info.elementalBeamFlickAttack.animation, true);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.elementalBeamFlickAttack.animation);       
+            yield return ElementalBeamLazerRoutine();
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.elementalBeamFlickAttack.animation);
+            m_muzzleLoopFX.Stop();
         }
-        private IEnumerator TendrilClimbJumpSmashRoutine()
+        private IEnumerator ElementalBeamRoutine()
+        {
+            m_animation.SetAnimation(0, m_info.elementalBeamWallChargeAnimation, true);
+            m_muzzleLoopFX.Play();
+            m_elementalBeamAttackHandle.EnableAimAtTarget(m_targetInfo.transform);
+            m_elementalBeamIndicatorFX.Play();
+            m_elementalBeamAttackHandle.ShowIndicator(m_info.elementalBeamChargeDuration);
+            yield return new WaitForSeconds(m_info.elementalBeamChargeDuration);
+            m_elementalBeamAttackHandle.HoldAim();
+            m_animation.SetAnimation(0, m_info.elementalBeamWallAttack.animation, false);
+            yield return ElementalBeamLazerRoutine();
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.elementalBeamWallAttack.animation);
+            m_muzzleLoopFX.Stop();
+            m_elementalBeamAttackHandle.DisableAimAtTarget();
+
+        }
+        private IEnumerator TendrilClimbRoutine()
         {
             m_animation.EnableRootMotion(false, false);
-            //m_stateHandle.Wait(State.Chasing);
             m_animation.SetAnimation(0, m_info.phaseTransitionRoarAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.phaseTransitionRoarAnimation);
             m_animation.SetAnimation(0, m_info.turnAnimation, false);
@@ -840,7 +855,14 @@ namespace DChild.Gameplay.Characters.Enemies
                 yield return null;
             }
             m_character.physics.SetVelocity(Vector2.zero);
+        }
 
+        /// <summary>
+        /// Make Sure Tendril Climb Routine is use right before this
+        /// </summary>
+        /// <returns></returns>
+        private IEnumerator JumpSmashRoutine()
+        {
             m_character.physics.SetVelocity(BallisticVelocity(new Vector2(m_targetInfo.position.x, /*(transform.position.y - m_targetInfo.position.y)*/GroundPosition(m_targetInfo.position).y)));
             m_animation.SetAnimation(0, m_info.jumpSmashStartAnimation, false);
             //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.jumpSmashStartAnimation);
@@ -849,22 +871,23 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.jumpSmashAttack.animation);
             m_animation.SetAnimation(0, m_info.jumpSmashLandAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.jumpSmashLandAnimation);
- 
         }
+
         private IEnumerator ElementalOverloadRoutine()
         {
             //m_lazerLookCoroutine = StartCoroutine(LazerLookRoutine());
             m_animation.SetAnimation(0, m_info.elementalBeamOverloadAttack.animation, false);
             //m_lazerBeamCoroutine = StartCoroutine(LazerBeamRoutine());
-            yield return new WaitUntil(() => m_beamOn);
+            //  yield return new WaitUntil(() => m_beamOn);
             // m_aimAtPlayerCoroutine = StartCoroutine(AimAtTargtRoutine());
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.elementalBeamOverloadAttack.animation);
             // StopCoroutine(m_lazerLookCoroutine);
             // m_lazerLookCoroutine = null;
             // StopCoroutine(m_aimAtPlayerCoroutine);
             // m_aimAtPlayerCoroutine = null;
-           
+
         }
+
         #endregion
 
         #region Attack Patterns
@@ -878,39 +901,59 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator ElementalOverloadAttack()
         {
+            m_stateHandle.Wait(State.ReevaluateSituation);
             yield return ElementalOverloadRoutine();
             m_currentAttackCount++;
             m_movement.Stop();
             DoRandomIdleAnimation();
-            m_attackDecider.hasDecidedOnAttack = false;
+            m_currentAttackDecider.hasDecidedOnAttack = false;
             m_stateHandle.ApplyQueuedState();
 
         }
-        
+
         private IEnumerator TendrilClimbJumpSmashAttack()
         {
             m_stateHandle.Wait(State.ReevaluateSituation);
-            yield return TendrilClimbJumpSmashRoutine();
+            yield return TendrilClimbRoutine();
+            yield return JumpSmashRoutine();
             m_currentAttackCount++;
             m_movement.Stop();
-            m_attackDecider.hasDecidedOnAttack = false;
+            m_currentAttackDecider.hasDecidedOnAttack = false;
             DoRandomIdleAnimation();
             m_stateHandle.ApplyQueuedState();
-
         }
-        private IEnumerator ElementalBeamAttack()
+
+        private IEnumerator TendrilClimbAttack()
         {
             m_stateHandle.Wait(State.ReevaluateSituation);
+            yield return TendrilClimbRoutine();
+            var Random = UnityEngine.Random.Range(0, 2);
+
+            yield return ElementalBeamRoutine();
+
+
+            yield return JumpSmashRoutine();
+            m_currentAttackCount++;
+            m_movement.Stop();
+            m_currentAttackDecider.hasDecidedOnAttack = false;
+            DoRandomIdleAnimation();
+            m_stateHandle.ApplyQueuedState();
+        }
+
+        private IEnumerator ElementalBeamFlickAttack()
+        {
+            m_stateHandle.Wait(State.ReevaluateSituation);
+            if (!IsFacingTarget())
+                CustomTurn();
             yield return ElementalBeamFlickRoutine();
             m_currentAttackCount++;
             m_movement.Stop();
             m_animation.SetAnimation(0, RandomIdleAnimation(), true);
-            m_attackDecider.hasDecidedOnAttack = false;
-            // m_currentAttackCoroutine = null;
+            m_currentAttackDecider.hasDecidedOnAttack = false;
             m_stateHandle.ApplyQueuedState();
-            yield return null;
+            
         }
-        
+
         private IEnumerator TigrexBiteAttack()
         {
             m_stateHandle.Wait(State.ReevaluateSituation);
@@ -918,7 +961,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_currentAttackCount++;
             m_movement.Stop();
             DoRandomIdleAnimation();
-            m_attackDecider.hasDecidedOnAttack = false;
+            m_currentAttackDecider.hasDecidedOnAttack = false;
             m_stateHandle.ApplyQueuedState();
 
         }
@@ -927,11 +970,12 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_stateHandle.Wait(State.ReevaluateSituation);
             yield return TendrilWhipBackwardRoutine();
-            CustomTurn();
+            if (!IsFacingTarget())
+                CustomTurn();
             DoRandomIdleAnimation();
             m_currentAttackCount++;
             m_backCooldown = m_info.backAttackCooldown;
-            m_attackDecider.hasDecidedOnAttack = false;
+            m_currentAttackDecider.hasDecidedOnAttack = false;
             m_stateHandle.ApplyQueuedState();
         }
 
@@ -939,27 +983,26 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_stateHandle.Wait(State.ReevaluateSituation);
             if (!IsFacingTarget())
-            {
                 CustomTurn();
-            }
+            
             yield return TwoStompsRoutine();
-           
+
             m_movement.Stop();
+            DoRandomIdleAnimation();
             m_currentAttackCount++;
-            m_attackDecider.hasDecidedOnAttack = false;
+            m_currentAttackDecider.hasDecidedOnAttack = false;
             m_stateHandle.ApplyQueuedState();
         }
-        
+
         private IEnumerator TendrilWhipAttack()
         {
             m_stateHandle.Wait(State.ReevaluateSituation);
             if (!IsFacingTarget())
-            {
                 CustomTurn();
-            }
             yield return TendrilWhipRoutine();
+            DoRandomIdleAnimation();
             m_currentAttackCount++;
-            m_attackDecider.hasDecidedOnAttack = false;
+            m_currentAttackDecider.hasDecidedOnAttack = false;
             m_stateHandle.ApplyQueuedState();
         }
 
@@ -978,134 +1021,55 @@ namespace DChild.Gameplay.Characters.Enemies
             m_projectileLauncher.LaunchBallisticProjectile(m_targetInfo.position);
         }
 
-     
-     
-       
-
-        #region Lazer Attack
-       
-
-        private IEnumerator LazerLookRoutine()
+        private IEnumerator ElementalBeamLazerRoutine()
         {
-            while (true)
-            {
-                m_lazerTargetPos = LookPosition(m_character.facing == HorizontalDirection.Right ? m_beamFrontPoint : m_beamBackPoint/*m_beamPoint*/);
-                yield return null;
-            }
-            yield return null;
-        }
+            yield return new WaitForSpineEvent(m_animation.skeletonAnimation, m_info.beamOnEvent);
 
-        public IEnumerator AimAtTargtRoutine()
-        {
-            m_aimBone.mode = SkeletonUtilityBone.Mode.Override;
-            while (m_aimOn)
-            {
-                m_aimBone.transform.position = new Vector2(m_targetInfo.position.x, m_targetInfo.position.y -5f);
-                yield return null;
-            }
-            //Vector2 spitPos = m_aimBone.transform.position;
-            //Vector3 v_diff = (target - spitPos);
-            //float atan2 = Mathf.Atan2(v_diff.y, v_diff.x);
-            //m_aimBone.transform.rotation = Quaternion.Euler(0f, 0f, atan2 * Mathf.Rad2Deg);
-            m_aimBone.mode = SkeletonUtilityBone.Mode.Follow;
-           // m_aimAtPlayerCoroutine = null;
-            yield return null;
-        }
-
-        private IEnumerator AimRoutine()
-        {
-            while (true)
-            {
-                m_telegraphLineRenderer.SetPosition(0, m_telegraphLineRenderer.transform.position);
-                m_lineRenderer.SetPosition(0, m_lineRenderer.transform.position);
-                m_lineRenderer.SetPosition(1, m_lineRenderer.transform.position);
-                yield return null;
-            }
-        }
-
-        private Vector2 ShotPosition()
-        {
-            m_lazerTargetPos = LookPosition(m_character.facing == HorizontalDirection.Right ? m_beamFrontPoint : m_beamBackPoint/*m_beamPoint*/);
-            Vector2 startPoint = m_beamFrontPoint.position;
-            Vector2 direction = (m_lazerTargetPos - startPoint).normalized;
-
-            RaycastHit2D hit = Physics2D.Raycast(/*m_projectilePoint.position*/startPoint, direction, 1000, DChildUtility.GetEnvironmentMask());
-            //Debug.DrawRay(startPoint, direction);
-            return hit.point;
-        }
-
-        private IEnumerator TelegraphLineRoutine()
-        {
-            //float timer = 0;
-            m_muzzleTelegraphFX.Play();
-            m_telegraphLineRenderer.useWorldSpace = true;
-            m_telegraphLineRenderer.SetPosition(1, ShotPosition());
-            var timerOffset = m_telegraphLineRenderer.startWidth;
-            while (m_telegraphLineRenderer.startWidth > 0)
-            {
-                m_telegraphLineRenderer.startWidth -= Time.deltaTime * timerOffset;
-                yield return null;
-            }
-            yield return null;
-        }
-
-        private IEnumerator LazerBeamRoutine()
-        {
-            if (!m_aimOn)
-            {
-                StartCoroutine(TelegraphLineRoutine());
-                StartCoroutine(m_aimRoutine);
-            }
-
-            yield return new WaitUntil(() => m_beamOn);
-            StopCoroutine(m_aimRoutine);
             m_muzzleLoopFX.Play();
+            m_elementalBeamAttackHandle.ExecuteBeamAttack();
 
-            m_lineRenderer.useWorldSpace = true;
-            while (m_beamOn)
-            {
-                m_muzzleLoopFX.transform.position = ShotPosition();
+            yield return new WaitForSpineEvent(m_animation.skeletonAnimation, m_info.beamOffEvent);
 
-                m_lineRenderer.SetPosition(0, m_beamFrontPoint.position);
-                m_lineRenderer.SetPosition(1, ShotPosition());
-                for (int i = 0; i < m_lineRenderer.positionCount; i++)
-                {
-                    var pos = m_lineRenderer.GetPosition(i) - m_edgeCollider.transform.position;
-                    pos = new Vector2(Mathf.Abs(pos.x), pos.y);
-                    //if (i > 0)
-                    //{
-                    //    pos = pos * 0.7f;
-                    //}
-                    m_Points.Add(pos);
-                }
-                m_edgeCollider.points = m_Points.ToArray();
-                m_Points.Clear();
-                yield return null;
-            }
-            m_muzzleLoopFX.Stop();
-            //yield return new WaitUntil(() => !m_beamOn);
-            ResetLaser();
-            //m_lazerBeamCoroutine = null;
-            yield return null;
+            m_elementalBeamAttackHandle.StopBeam();
+
+            //if (!m_aimOn)
+            //{
+            //    StartCoroutine(TelegraphLineRoutine());
+            //    StartCoroutine(m_aimRoutine);
+            //}
+
+            //yield return new WaitUntil(() => m_beamOn);
+            //StopCoroutine(m_aimRoutine);
+
+            //m_lineRenderer.useWorldSpace = true;
+            //while (m_beamOn)
+            //{
+            //    m_muzzleLoopFX.transform.position = ShotPosition();
+
+            //    m_lineRenderer.SetPosition(0, m_beamFrontPoint.position);
+            //    m_lineRenderer.SetPosition(1, ShotPosition());
+            //    for (int i = 0; i < m_lineRenderer.positionCount; i++)
+            //    {
+            //        var pos = m_lineRenderer.GetPosition(i) - m_edgeCollider.transform.position;
+            //        pos = new Vector2(Mathf.Abs(pos.x), pos.y);
+            //        //if (i > 0)
+            //        //{
+            //        //    pos = pos * 0.7f;
+            //        //}
+            //        m_Points.Add(pos);
+            //    }
+            //    m_edgeCollider.points = m_Points.ToArray();
+            //    m_Points.Clear();
+            //    yield return null;
+            //}
+            //m_muzzleLoopFX.Stop();
+            ////yield return new WaitUntil(() => !m_beamOn);
+            //ResetLaser();
+            ////m_lazerBeamCoroutine = null;
+            //yield return null;
         }
 
-        private void ResetLaser()
-        {
-            m_telegraphLineRenderer.useWorldSpace = false;
-            m_lineRenderer.useWorldSpace = false;
-            m_lineRenderer.SetPosition(0, Vector3.zero);
-            m_lineRenderer.SetPosition(1, Vector3.zero);
-            m_telegraphLineRenderer.SetPosition(0, Vector3.zero);
-            m_telegraphLineRenderer.SetPosition(1, Vector3.zero);
-            m_telegraphLineRenderer.startWidth = 1;
-            m_Points.Clear();
-            for (int i = 0; i < m_lineRenderer.positionCount; i++)
-            {
-                m_Points.Add(Vector2.zero);
-            }
-            m_edgeCollider.points = m_Points.ToArray();
-        }
-        #endregion
+
         #endregion
 
         protected override void OnDestroyed(object sender, EventActionArgs eventArgs)
@@ -1181,18 +1145,18 @@ namespace DChild.Gameplay.Characters.Enemies
             //}
             #region Experiment
             //m_lazerLookCoroutine = StartCoroutine(LazerLookRoutine());
-            m_aimOn = true;
+            //m_aimOn = true;
             //m_aimAtPlayerCoroutine = StartCoroutine(AimAtTargtRoutine());
             m_animation.SetAnimation(0, m_info.jumpSmashWallStickAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.jumpSmashWallStickAnimation);
             m_animation.SetAnimation(0, m_info.elementalBeamWallChargeAnimation, true);
-           // m_lazerBeamCoroutine = StartCoroutine(LazerBeamRoutine());
+            // m_lazerBeamCoroutine = StartCoroutine(LazerBeamRoutine());
             yield return new WaitForSeconds(m_info.elementalBeamChargeDuration);
             m_animation.SetAnimation(0, m_info.elementalBeamWallAttack.animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.elementalBeamWallAttack.animation);
-           // StopCoroutine(m_lazerLookCoroutine);
+            // StopCoroutine(m_lazerLookCoroutine);
             //m_lazerLookCoroutine = null;
-            m_aimOn = false;
+            // m_aimOn = false;
             m_character.physics.SetVelocity(BallisticVelocity(new Vector2(m_targetInfo.position.x, /*(transform.position.y - m_targetInfo.position.y)*/GroundPosition(m_targetInfo.position).y)));
             m_animation.SetAnimation(0, m_info.jumpSmashStartAnimation, false);
             //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.jumpSmashStartAnimation);
@@ -1204,8 +1168,8 @@ namespace DChild.Gameplay.Characters.Enemies
             #endregion
 
             m_currentAttackCount++;
-            m_attackDecider.hasDecidedOnAttack = false;
-           // m_currentAttackCoroutine = null;
+            m_currentAttackDecider.hasDecidedOnAttack = false;
+            // m_currentAttackCoroutine = null;
             m_stateHandle.ApplyQueuedState();
             yield return null;
         }
@@ -1250,33 +1214,39 @@ namespace DChild.Gameplay.Characters.Enemies
             switch (m_phaseHandle.currentPhase)
             {
                 case Phase.PhaseOne:
-                    m_attackDecider.SetList(new AttackInfo<Attack>(Attack.BackwardTendrilWhip, 0),
-                                            new AttackInfo<Attack>(Attack.TwoStomp, 0),
+                    m_BasicAttackDecider.SetList(new AttackInfo<Attack>(Attack.TwoStomp, 0),
                                             new AttackInfo<Attack>(Attack.TendrilWhip, 0),
                                             new AttackInfo<Attack>(Attack.TendrilClimbJumpSmash, 0),
                                             new AttackInfo<Attack>(Attack.ElementalBeamFlick, 0),
                                             new AttackInfo<Attack>(Attack.TendrilClimbElementalBeam, 0));
+
+                    m_ComplexeattackDecider.SetList(new AttackInfo<Attack>(Attack.TendrilClimbJumpSmash, 0),
+                                           new AttackInfo<Attack>(Attack.ElementalBeamFlick, 0),
+                                           new AttackInfo<Attack>(Attack.TendrilClimbElementalBeam, 0));
                     break;
                 case Phase.PhaseTwo:
-                    m_attackDecider.SetList(new AttackInfo<Attack>(Attack.BackwardTendrilWhip,0),
-                                             new AttackInfo<Attack>(Attack.TwoStomp,0),
-                                             new AttackInfo<Attack>(Attack.TendrilWhip,0),
+                    m_BasicAttackDecider.SetList(new AttackInfo<Attack>(Attack.TwoStomp, 0),
+                                             new AttackInfo<Attack>(Attack.TendrilWhip, 0),
                                              new AttackInfo<Attack>(Attack.TendrilClimbJumpSmash, 0),
-                                             new AttackInfo<Attack>(Attack.ElementalBeamFlick,0),
-                                             new AttackInfo<Attack>(Attack.TendrilClimbElementalBeam, 0),
-                                             new AttackInfo<Attack>(Attack.TigrexBiting,0), 
-                                             new AttackInfo<Attack>(Attack.ElementalOverload,0));
+                                             new AttackInfo<Attack>(Attack.ElementalBeamFlick, 0),
+                                             new AttackInfo<Attack>(Attack.TendrilClimbElementalBeam, 0));
+
+                   m_ComplexeattackDecider.SetList(new AttackInfo<Attack>(Attack.TendrilClimbJumpSmash, 0),
+                                         new AttackInfo<Attack>(Attack.ElementalBeamFlick, 0),
+                                         new AttackInfo<Attack>(Attack.TendrilClimbElementalBeam, 0), 
+                                         new AttackInfo<Attack>(Attack.TigrexBiting, 0));
+                                         //new AttackInfo<Attack>(Attack.ElementalOverload, 0));
                     break;
                 case Phase.Wait:
                     break;
             }
 
-            m_attackDecider.hasDecidedOnAttack = false;
+            //m_currentAttackDecider.hasDecidedOnAttack = false;
         }
 
         public override void ApplyData()
         {
-            if (m_attackDecider != null)
+            if (m_BasicAttackDecider != null && m_ComplexeattackDecider != null)
             {
                 UpdateAttackDeciderList();
             }
@@ -1359,14 +1329,14 @@ namespace DChild.Gameplay.Characters.Enemies
             return !IsFacingTarget() && IsTargetWithin(distanceTolerance);
         }
 
-        private bool IsTargetWithin(float distanceTolerance) 
+        private bool IsTargetWithin(float distanceTolerance)
         {
 
             //var directionToTarget = (Vector3)m_targetInfo.position - m_character.centerMass.position;
             //return directionToTarget.magnitude <= distanceTolerance;
 
             var dasd = Vector2.Distance(m_targetInfo.position, m_character.centerMass.position) <= distanceTolerance;
-             return dasd;
+            return dasd;
         }
 
 
@@ -1377,28 +1347,26 @@ namespace DChild.Gameplay.Characters.Enemies
             m_deathHandle.SetAnimation(m_info.deathAnimation.animation);
             m_projectileLauncher = new BallisticProjectileLauncher(m_info.elementalOverloadProjectile.projectileInfo, m_projectilePoint, m_info.projectileGravityScale, m_info.elementalOverloadProjectile.projectileInfo.speed);
             m_damageable.DamageTaken += OnDamageTaken;
-            m_attackDecider = new RandomAttackDecider<Attack>();
+            m_BasicAttackDecider = new RandomAttackDecider<Attack>();
+            m_ComplexeattackDecider = new RandomAttackDecider<Attack>();
+            m_currentAttackDecider = m_BasicAttackDecider;
             m_stateHandle = new StateHandle<State>(State.Idle, State.WaitBehaviourEnd);
             UpdateAttackDeciderList();
 
-            m_Points = new List<Vector2>();
-
-           /* m_attackCache = new List<Attack>();
-            AddToAttackCache(Attack.Phase1Pattern1, Attack.Phase1Pattern2, Attack.Phase1Pattern3, Attack.Phase1Pattern4, Attack.Phase2Pattern1, Attack.Phase2Pattern2, Attack.Phase2Pattern3, Attack.Phase2Pattern4, Attack.Phase2Pattern5, Attack.Phase2Pattern6);
-            m_attackRangeCache = new List<float>();
-            AddToRangeCache(m_info.phase1Pattern1Range, m_info.phase1Pattern2Range, m_info.phase1Pattern3Range, m_info.phase1Pattern4Range, m_info.phase2Pattern1Range, m_info.phase2Pattern2Range, m_info.phase2Pattern3Range, m_info.phase2Pattern4Range, m_info.phase2Pattern5Range, m_info.phase2Pattern6Range);
-            m_attackUsed = new bool[m_attackCache.Count];*/
+            /* m_attackCache = new List<Attack>();
+             AddToAttackCache(Attack.Phase1Pattern1, Attack.Phase1Pattern2, Attack.Phase1Pattern3, Attack.Phase1Pattern4, Attack.Phase2Pattern1, Attack.Phase2Pattern2, Attack.Phase2Pattern3, Attack.Phase2Pattern4, Attack.Phase2Pattern5, Attack.Phase2Pattern6);
+             m_attackRangeCache = new List<float>();
+             AddToRangeCache(m_info.phase1Pattern1Range, m_info.phase1Pattern2Range, m_info.phase1Pattern3Range, m_info.phase1Pattern4Range, m_info.phase2Pattern1Range, m_info.phase2Pattern2Range, m_info.phase2Pattern3Range, m_info.phase2Pattern4Range, m_info.phase2Pattern5Range, m_info.phase2Pattern6Range);
+             m_attackUsed = new bool[m_attackCache.Count];*/
             m_currentFullCooldown = new List<float>();
             m_patternCooldown = new List<float>();
         }
 
         protected override void Start()
         {
-           
+
 
             base.Start();
-            m_spineListener.Subscribe(m_info.beamOffEvent, BeamOff);
-            m_spineListener.Subscribe(m_info.beamOnEvent, BeamOn);
             m_spineListener.Subscribe(m_info.elementalOverloadProjectile.launchOnEvent, LaunchProjectile);
             m_animation.DisableRootMotion();
 
@@ -1408,20 +1376,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
             m_currentIdleAnimation = RandomIdleAnimation();
             m_defaultGravityScale = GetComponent<IsolatedCharacterPhysics2D>().gravity.gravityScale;
-            m_muzzleLoopFX.transform.SetParent(null);
+           // m_muzzleLoopFX.transform.SetParent(null);
             m_backCooldown = m_info.backAttackCooldown;
-
-            m_aimRoutine = AimRoutine();
-        }
-
-        private void BeamOff()
-        {
-            m_beamOn = false;
-        }
-
-        private void BeamOn()
-        {
-            m_beamOn = true;
         }
 
         private void Update()
@@ -1435,7 +1391,7 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 case State.Idle:
                     break;
-                
+
                 case State.Phasing:
                     StartCoroutine(ChangePhaseRoutine());
                     break;
@@ -1457,13 +1413,13 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_lastTargetPos = m_targetInfo.position;
                     m_currentIdleAnimation = RandomIdleAnimation();
                     StopAllCoroutines();
-                    if (m_attackDecider.hasDecidedOnAttack == false)
+                    if (m_currentAttackDecider.hasDecidedOnAttack == false)
                     {
-                        m_attackDecider.DecideOnAttack();
+                        m_currentAttackDecider.DecideOnAttack();
                     }
-                    switch (m_attackDecider.chosenAttack.attack)
+                    switch (m_currentAttackDecider.chosenAttack.attack)
                     {
-                      
+
                         case Attack.BackwardTendrilWhip:
                             StartCoroutine(TendrilWhipBackwardAttack());
                             break;
@@ -1477,8 +1433,10 @@ namespace DChild.Gameplay.Characters.Enemies
                             StartCoroutine(TendrilClimbJumpSmashAttack());
                             break;
                         case Attack.ElementalBeamFlick:
-                            break;
+                            StartCoroutine(ElementalBeamFlickAttack());
+                           break;
                         case Attack.TendrilClimbElementalBeam:
+                            StartCoroutine(TendrilClimbAttack());
                             break;
                         case Attack.TigrexBiting:
                             StartCoroutine(TigrexBiteAttack());
@@ -1588,9 +1546,11 @@ namespace DChild.Gameplay.Characters.Enemies
                     break;*/
 
                 case State.ReevaluateSituation:
-                    if(m_currentAttackCount == 7)
+                    if (m_currentAttackCount == 7)
                     {
+                        StopAllCoroutines();
                         StartCoroutine(RoarBehaviour());
+                        m_currentAttackCount = 0;
                         Debug.Log("roar");
                     }
                     else
@@ -1600,32 +1560,40 @@ namespace DChild.Gameplay.Characters.Enemies
                             if (canUseBackTendril)
                             {
                                 m_stateHandle.SetState(State.Attacking);
-                                m_attackDecider.DecideOnAttack(Attack.BackwardTendrilWhip);
+                                m_currentAttackDecider.DecideOnAttack(Attack.BackwardTendrilWhip);
                             }
                             Debug.Log("Backward tendril");
                         }
                         else if (IsTargetWithin(m_info.targetDistancetolerance))
                         {
                             //m_stateHandle.SetState(State.Attacking);
+                            m_stateHandle.SetState(State.Attacking);
+                            // m_currentAttackDecider.DecideOnAttack(Attack.TendrilWhip);
+                            m_currentAttackDecider = m_BasicAttackDecider;
+                            m_currentAttackDecider.hasDecidedOnAttack = false;
+                            //m_currentAttackDecider.DecideOnAttack(Attack.ElementalBeamFlick);
                             Debug.Log("Randomly Choose attack");
                         }
                         else
                         {
-                            //m_stateHandle.SetState(State.Attacking);
+                            m_stateHandle.SetState(State.Attacking);
+                            //m_currentAttackDecider.DecideOnAttack(Attack.TendrilWhip);
+                            m_currentAttackDecider = m_ComplexeattackDecider;
+                            m_currentAttackDecider.hasDecidedOnAttack = false;
                             Debug.Log("Randomly Choose range or movement attacks");
                         }
                         //StartCoroutine(TestRoutine());
                     }
-                    
 
-                   /* if (m_targetInfo.isValid)
-                    {
-                        //m_stateHandle.SetState(State.Chasing);
-                    }
-                    else
-                    {
-                        m_stateHandle.SetState(State.Idle);
-                    }*/
+
+                    /* if (m_targetInfo.isValid)
+                     {
+                         //m_stateHandle.SetState(State.Chasing);
+                     }
+                     else
+                     {
+                         m_stateHandle.SetState(State.Idle);
+                     }*/
                     break;
                 case State.WaitBehaviourEnd:
                     return;
