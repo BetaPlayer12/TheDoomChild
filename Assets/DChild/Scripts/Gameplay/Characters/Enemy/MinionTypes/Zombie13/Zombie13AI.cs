@@ -138,6 +138,10 @@ namespace DChild.Gameplay.Characters.Enemies
         private DeathHandle m_deathHandle;
         [SerializeField, TabGroup("Modules")]
         private FlinchHandler m_flinchHandle;
+        [SerializeField, TabGroup("AttackHitbox")]
+        private GameObject m_RegularBoundingBox;
+        [SerializeField, TabGroup("AttackHitbox")]
+        private GameObject m_HopBoundingBox;
 
         private float m_currentPatience;
         private float m_currentCD;
@@ -463,6 +467,8 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_hitbox.gameObject.SetActive(false);
             m_selfCollider.enabled = false;
             m_animation.SetAnimation(0, m_info.attack.animation, false);
+            m_RegularBoundingBox.SetActive(false);
+            m_HopBoundingBox.SetActive(true);
             var waitTime = m_animation.animationState.GetCurrent(0).AnimationEnd * .5f;
             yield return new WaitForSeconds(waitTime);
             //m_hitbox.gameObject.SetActive(true);
@@ -471,6 +477,8 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack.animation);
             GetComponent<IsolatedCharacterPhysics2D>().UseStepClimb(false);
             m_animation.SetAnimation(0, RandomIdleAnimation(), true);
+            m_RegularBoundingBox.SetActive(true);
+            m_HopBoundingBox.SetActive(false);
             m_selfCollider.enabled = true;
             m_stateHandle.ApplyQueuedState();
             yield return null;
