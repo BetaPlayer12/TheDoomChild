@@ -330,12 +330,18 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator LaunchProjectilRoutine()
         {
             var projectilePos = new Vector2(m_projectileStart.position.x + (50 * transform.localScale.x), m_projectileStart.position.y - 20f);
-            for (int i = 0; i < 3; i++)
+            /*for (int i = 0; i < 3; i++)
             {
                 projectilePos = new Vector2(projectilePos.x, projectilePos.y + 10f);
                 m_projectileLauncher.AimAt(projectilePos);
                 m_projectileLauncher.LaunchProjectile();
-            }
+            }*/
+            projectilePos = new Vector2(projectilePos.x, projectilePos.y + 20f);
+            m_projectileLauncher.AimAt(projectilePos);
+            m_projectileLauncher.LaunchProjectile();
+            yield return new WaitForSeconds(0.8f);
+            m_projectileLauncher.AimAt(projectilePos);
+            m_projectileLauncher.LaunchProjectile();
             yield return null;
         }
 
@@ -530,14 +536,27 @@ namespace DChild.Gameplay.Characters.Enemies
                                 m_animation.DisableRootMotion();
                                 if (!m_wallSensor.isDetecting && m_groundSensor.isDetecting && m_edgeSensor.isDetecting)
                                 {
-                                    if (m_mobileAttackCoroutine == null && IsTargetInRange(m_attackDecider.chosenAttack.range))
+                                    if (m_mobileAttackCoroutine == null && IsTargetInRange(m_attackDecider.chosenAttack.range)&& Vector2.Distance(m_targetInfo.position, transform.position) > 50)
                                     {
                                         m_mobileAttackCoroutine = StartCoroutine(MobileAttackRoutine());
                                     }
-                                    if (Vector2.Distance(m_targetInfo.position, transform.position) < 50)
+                                    else if(Vector2.Distance(m_targetInfo.position, transform.position) < 50)
                                     {
-                                        if (m_backSensor.isDetecting || !m_backEdgeSensor.isDetecting)
+                                        m_movement.Stop();
+                                        if (m_mobileAttackCoroutine != null)
                                         {
+                                            StopCoroutine(m_mobileAttackCoroutine);
+                                            m_mobileAttackCoroutine = null;
+                                        }
+                                        m_selfCollider.enabled = true;
+                                        m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                                        m_stateHandle.SetState(State.Attacking);
+                                        return;
+                                    }
+                                    /*if (Vector2.Distance(m_targetInfo.position, transform.position) < 50)
+                                    {
+                                        //if (m_backSensor.isDetecting || !m_backEdgeSensor.isDetecting)
+                                        //{
                                             m_movement.Stop();
                                             if (m_mobileAttackCoroutine != null)
                                             {
@@ -548,17 +567,17 @@ namespace DChild.Gameplay.Characters.Enemies
                                             m_animation.SetAnimation(0, m_info.idleAnimation, true);
                                             m_stateHandle.SetState(State.Attacking);
                                             return;
-                                        }
-                                        m_selfCollider.enabled = false;
-                                        m_animation.SetAnimation(0, m_info.moveBackwards.animation, true);
-                                        m_movement.MoveTowards(Vector2.one * -transform.localScale.x, m_currentBackMoveSpeed);
+                                        //}
+                                        //m_selfCollider.enabled = false;
+                                        //m_animation.SetAnimation(0, m_info.moveBackwards.animation, true);
+                                        //m_movement.MoveTowards(Vector2.one * -transform.localScale.x, m_currentBackMoveSpeed);
                                     }
                                     else
-                                    {
+                                    {*/
                                         m_selfCollider.enabled = false;
                                         m_animation.SetAnimation(0, m_info.move.animation, true);
                                         m_movement.MoveTowards(Vector2.one * transform.localScale.x, m_currentMoveSpeed);
-                                    }
+                                    //}
                                 }
                                 else
                                 {
