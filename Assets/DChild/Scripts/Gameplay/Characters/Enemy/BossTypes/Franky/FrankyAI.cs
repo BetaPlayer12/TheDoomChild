@@ -166,6 +166,14 @@ namespace DChild.Gameplay.Characters.Enemies
             public SimpleAttackInfo shockRampageAttack => m_shockRampageAttack;
 
             #endregion
+
+            #region PhaseDischarge
+            [SerializeField]
+            private SimpleAttackInfo m_phaseDischarge = new SimpleAttackInfo();
+            public SimpleAttackInfo phaseDischarge => m_phaseDischarge;
+
+            #endregion
+
             [SerializeField]
             private SimpleAttackInfo m_lightningStompAttack = new SimpleAttackInfo();
             public SimpleAttackInfo lightningStompAttack => m_lightningStompAttack;
@@ -241,6 +249,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_stompProjectile.SetData(m_skeletonDataAsset);
                 m_runAttack.SetData(m_skeletonDataAsset);
                 m_shockRampageAttack.SetData(m_skeletonDataAsset);
+                m_phaseDischarge.SetData(m_skeletonDataAsset);
 
                 m_shoulderBashLoopAnimation.SetData(m_skeletonDataAsset);
                 m_shoulderBashEndAnimation.SetData(m_skeletonDataAsset);
@@ -551,14 +560,14 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator SmartChangePhaseRoutine()
         {
             Debug.Log("Im changing phase");
-            yield return new WaitWhile(() => !m_phaseHandle.allowPhaseChange);
-            /*if(m_phaseHandle.allowPhaseChange == false)
+            //yield return new WaitWhile(() => !m_phaseHandle.allowPhaseChange);
+            if (m_phaseHandle.allowPhaseChange == false)
             {
                 do
                 {
                     yield return null;
                 } while (m_phaseHandle.allowPhaseChange == false);
-            }*/
+            }
             UpdateAttackDeciderList();
             switch (m_phaseHandle.currentPhase)
             {
@@ -620,44 +629,48 @@ namespace DChild.Gameplay.Characters.Enemies
             }
             enabled = false;
             m_stateHandle.Wait(State.ReevaluateSituation);
+
+            m_animation.SetAnimation(0, m_info.roarAnimation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.roarAnimation);
             //m_hitbox.SetInvulnerability(Invulnerability.None);
             //m_hasPhaseChanged = false;
             //yield return new WaitForSeconds(0.25f);
-            if (!IsFacing(m_CenterOfTheArena.position) && m_stateHandle.currentState != State.Turning)
-            {
-                yield return new WaitForSeconds(.5f);
-                Debug.Log("is facing?" + IsFacing(m_CenterOfTheArena.position)+" Turning now");
-                CustomTurning();
-            }
-            m_animation.SetAnimation(0, m_info.runAttackStartAnimation, false);
-            yield return new WaitForAnimationComplete(m_animation.skeletonAnimation.state, m_info.runAttackStartAnimation);
-            m_animation.SetAnimation(0, m_info.runAttackAnimation, true);
-            while (Vector2.Distance(transform.position, m_CenterOfTheArena.position) > 15f)
-            {
-                m_movement.MoveTowards(Vector2.right * transform.localScale.x, m_info.runAttackSpeed);
-                yield return null;
-            }
-            yield return null;
-            m_animation.SetAnimation(0, m_info.runAttackEndAnimation, false);
-            m_movement.Stop();
-            m_isBuffed = true;
+            //if (!IsFacing(m_CenterOfTheArena.position) && m_stateHandle.currentState != State.Turning)
+            //{
+            //    yield return new WaitForSeconds(.5f);
+            //    Debug.Log("is facing?" + IsFacing(m_CenterOfTheArena.position)+" Turning now");
+            //    CustomTurning();
+            //}
+            //m_animation.SetAnimation(0, m_info.runAttackStartAnimation, false);
+            //yield return new WaitForAnimationComplete(m_animation.skeletonAnimation.state, m_info.runAttackStartAnimation);
+            //m_animation.SetAnimation(0, m_info.runAttackAnimation, true);
+            //while (Vector2.Distance(transform.position, m_CenterOfTheArena.position) > 15f)
+            //{
+            //    m_movement.MoveTowards(Vector2.right * transform.localScale.x, m_info.runAttackSpeed);
+            //    yield return null;
+            //}
+            //yield return null;
+            //m_animation.SetAnimation(0, m_info.runAttackEndAnimation, false);
+            //m_movement.Stop();
+            //m_isBuffed = true;
             if (m_phaseHandle.currentPhase == Phase.PhaseTwo)
             {
-                m_animation.SetAnimation(0, m_info.roarAnimation, false).MixDuration = 0;
-                yield return null;
-                PhaseDischargeAction?.Invoke(this, EventActionArgs.Empty);
-                yield return new WaitForAnimationComplete(m_animation.animationState, m_info.roarAnimation);
-                ChooseAttack(3);
-                
+                //m_animation.SetAnimation(0, m_info.phaseDischarge, false).MixDuration = 0;
+                //yield return null;
+                //PhaseDischargeAction?.Invoke(this, EventActionArgs.Empty);
+                //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.phaseDischarge);
+                //ChooseAttack(3);
+                yield return PhaseDischarge();
             }
             if (m_phaseHandle.currentPhase == Phase.PhaseThree)
             {
-                m_animation.SetAnimation(0, m_info.roarAnimation, false).MixDuration = 0;
-                yield return null;
-                PhaseDischargeAction?.Invoke(this, EventActionArgs.Empty);
-                yield return new WaitForAnimationComplete(m_animation.animationState, m_info.roarAnimation);
-                ChooseAttack(4);
-                
+                //m_animation.SetAnimation(0, m_info.phaseDischarge, false).MixDuration = 0;
+                //yield return null;
+                //PhaseDischargeAction?.Invoke(this, EventActionArgs.Empty);
+                //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.phaseDischarge);
+                //ChooseAttack(4);
+                yield return PhaseDischarge();
+
             }
             //yield return new WaitForSeconds(3.9f);      
             m_hasChosenAttack = true;
@@ -1187,10 +1200,20 @@ namespace DChild.Gameplay.Characters.Enemies
             }
             m_animation.SetAnimation(0, m_info.runAttackEndAnimation, false);
             m_movement.Stop();
-            m_animation.SetAnimation(0, m_info.roarAnimation, false).MixDuration = 0;
-            PhaseDischargeAction?.Invoke(this, EventActionArgs.Empty);
+           
+            if(m_currentPhaseIndex == 3)
+            {
+                m_animation.SetAnimation(0, m_info.phaseDischarge, false);
+                yield return new WaitForSeconds(0.7f);
+                PhaseDischargeAction?.Invoke(this, EventActionArgs.Empty);
+            }
+            else
+            {
+                m_animation.SetAnimation(0, m_info.phaseDischarge, false);
+            }
+            
             //yield return new WaitForSeconds(3.9f);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.roarAnimation);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.phaseDischarge);
             m_isBuffed = true;
             m_attackCount = 0f;
             m_hitbox.SetInvulnerability(Invulnerability.None);
@@ -1201,6 +1224,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     break;
 
                 case 3:
+
                     ChooseAttack(4);
                     break;
             }
