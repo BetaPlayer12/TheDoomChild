@@ -880,7 +880,11 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_lazerBeamCoroutine = StartCoroutine(LazerBeamRoutine());
             //  yield return new WaitUntil(() => m_beamOn);
             // m_aimAtPlayerCoroutine = StartCoroutine(AimAtTargtRoutine());
+            m_muzzleLoopFX.Play();
+            yield return ElementalBeamLazerRoutine();
+            m_muzzleLoopFX.Stop();
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.elementalBeamOverloadAttack.animation);
+            
             // StopCoroutine(m_lazerLookCoroutine);
             // m_lazerLookCoroutine = null;
             // StopCoroutine(m_aimAtPlayerCoroutine);
@@ -1234,8 +1238,8 @@ namespace DChild.Gameplay.Characters.Enemies
                    m_ComplexeattackDecider.SetList(new AttackInfo<Attack>(Attack.TendrilClimbJumpSmash, 0),
                                          new AttackInfo<Attack>(Attack.ElementalBeamFlick, 0),
                                          new AttackInfo<Attack>(Attack.TendrilClimbElementalBeam, 0), 
-                                         new AttackInfo<Attack>(Attack.TigrexBiting, 0));
-                                         //new AttackInfo<Attack>(Attack.ElementalOverload, 0));
+                                         new AttackInfo<Attack>(Attack.TigrexBiting, 0),
+                                         new AttackInfo<Attack>(Attack.ElementalOverload, 0));
                     break;
                 case Phase.Wait:
                     break;
@@ -1442,6 +1446,7 @@ namespace DChild.Gameplay.Characters.Enemies
                             StartCoroutine(TigrexBiteAttack());
                             break;
                         case Attack.ElementalOverload:
+                            StartCoroutine(ElementalOverloadAttack());
                             break;
                     }
                     m_stateHandle.Wait(State.ReevaluateSituation);
@@ -1568,7 +1573,6 @@ namespace DChild.Gameplay.Characters.Enemies
                         {
                             //m_stateHandle.SetState(State.Attacking);
                             m_stateHandle.SetState(State.Attacking);
-                            // m_currentAttackDecider.DecideOnAttack(Attack.TendrilWhip);
                             m_currentAttackDecider = m_BasicAttackDecider;
                             m_currentAttackDecider.hasDecidedOnAttack = false;
                             //m_currentAttackDecider.DecideOnAttack(Attack.ElementalBeamFlick);
@@ -1577,7 +1581,6 @@ namespace DChild.Gameplay.Characters.Enemies
                         else
                         {
                             m_stateHandle.SetState(State.Attacking);
-                            //m_currentAttackDecider.DecideOnAttack(Attack.TendrilWhip);
                             m_currentAttackDecider = m_ComplexeattackDecider;
                             m_currentAttackDecider.hasDecidedOnAttack = false;
                             Debug.Log("Randomly Choose range or movement attacks");
