@@ -154,6 +154,13 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("FX")]
         private List<ParticleSystem> m_fxSystem;
 
+        [SerializeField, TabGroup("AttackCollider")]
+        private GameObject BodyCollider;
+        [SerializeField, TabGroup("AttackCollider")]
+        private GameObject GroundRoll;
+        [SerializeField, TabGroup("AttackCollider")]
+        private GameObject FireTrail;
+
         [ShowInInspector]
         private StateHandle<State> m_stateHandle;
         [ShowInInspector]
@@ -421,6 +428,8 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_info.attackLoop, true);
             //yield return new WaitForSeconds(1.4f);
             float countdown = 0;
+            BodyCollider.SetActive(false);
+            GroundRoll.SetActive(true);
             while (countdown < 1.5f /*|| !m_wallSensor.isDetecting*/)
             {
                 m_movement.MoveTowards(Vector2.one * transform.localScale.x, m_currentMoveSpeed * 2.5f);
@@ -435,6 +444,8 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_trailFX.gameObject.SetActive(false);
             //m_hitbox.SetInvulnerability(Invulnerability.None);
             m_movement.Stop();
+            BodyCollider.SetActive(true);
+            GroundRoll.SetActive(false);
             m_animation.SetAnimation(0, m_info.attackEnd, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attackEnd);
             m_flinchHandle.gameObject.SetActive(true);
