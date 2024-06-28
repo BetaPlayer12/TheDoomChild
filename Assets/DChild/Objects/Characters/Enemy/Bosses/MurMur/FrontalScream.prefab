@@ -28,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 2898952035230076465}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: -1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8164948016897238559}
@@ -113,29 +113,9 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 13
       objectReference: {fileID: 0}
-    - target: {fileID: 1083470141, guid: 6f6b0e7e57921534bb6a7ff9e119adff, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -50.999996
-      objectReference: {fileID: 0}
-    - target: {fileID: 1083470141, guid: 6f6b0e7e57921534bb6a7ff9e119adff, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 3.7
-      objectReference: {fileID: 0}
-    - target: {fileID: 1083470141, guid: 6f6b0e7e57921534bb6a7ff9e119adff, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 1083470143, guid: 6f6b0e7e57921534bb6a7ff9e119adff, type: 3}
       propertyPath: stopAction
       value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 1083470143, guid: 6f6b0e7e57921534bb6a7ff9e119adff, type: 3}
-      propertyPath: playOnAwake
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1083470143, guid: 6f6b0e7e57921534bb6a7ff9e119adff, type: 3}
-      propertyPath: scalingMode
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2871811411307809898, guid: 6f6b0e7e57921534bb6a7ff9e119adff,
         type: 3}
@@ -147,15 +127,10 @@ PrefabInstance:
       propertyPath: lengthInSec
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 2871811411307809898, guid: 6f6b0e7e57921534bb6a7ff9e119adff,
+    - target: {fileID: 3338636182241690444, guid: 6f6b0e7e57921534bb6a7ff9e119adff,
         type: 3}
-      propertyPath: playOnAwake
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2871811411307809898, guid: 6f6b0e7e57921534bb6a7ff9e119adff,
-        type: 3}
-      propertyPath: scalingMode
-      value: 0
+      propertyPath: m_RootOrder
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 4471235750783946411, guid: 6f6b0e7e57921534bb6a7ff9e119adff,
         type: 3}
@@ -238,21 +213,6 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 13
       objectReference: {fileID: 0}
-    - target: {fileID: 4471235751185185752, guid: 6f6b0e7e57921534bb6a7ff9e119adff,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -99.4
-      objectReference: {fileID: 0}
-    - target: {fileID: 4471235751185185752, guid: 6f6b0e7e57921534bb6a7ff9e119adff,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 6.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 4471235751185185752, guid: 6f6b0e7e57921534bb6a7ff9e119adff,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -0
-      objectReference: {fileID: 0}
     - target: {fileID: 4471235751185185753, guid: 6f6b0e7e57921534bb6a7ff9e119adff,
         type: 3}
       propertyPath: m_Layer
@@ -263,18 +223,19 @@ PrefabInstance:
       propertyPath: stopAction
       value: 3
       objectReference: {fileID: 0}
-    - target: {fileID: 4471235751185185758, guid: 6f6b0e7e57921534bb6a7ff9e119adff,
+    - target: {fileID: 5379375676228775936, guid: 6f6b0e7e57921534bb6a7ff9e119adff,
         type: 3}
-      propertyPath: playOnAwake
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4471235751185185758, guid: 6f6b0e7e57921534bb6a7ff9e119adff,
-        type: 3}
-      propertyPath: scalingMode
-      value: 0
+      propertyPath: stopAction
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6f6b0e7e57921534bb6a7ff9e119adff, type: 3}
+--- !u!198 &424988056589670580 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 5379375676228775936, guid: 6f6b0e7e57921534bb6a7ff9e119adff,
+    type: 3}
+  m_PrefabInstance: {fileID: 5711335978043549876}
+  m_PrefabAsset: {fileID: 0}
 --- !u!198 &5711335976977422731 stripped
 ParticleSystem:
   m_CorrespondingSourceObject: {fileID: 1083470143, guid: 6f6b0e7e57921534bb6a7ff9e119adff,
@@ -316,6 +277,7 @@ MonoBehaviour:
   - {fileID: 7536778978914985182}
   - {fileID: 8164948016220525418}
   - {fileID: 5711335976977422731}
+  - {fileID: 424988056589670580}
   m_playOnAwake: 1
   m_baseFlipped: 0
   m_poolOnStop: 1
