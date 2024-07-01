@@ -1,4 +1,5 @@
 ﻿using DChild.Gameplay.Combat;
+using Holysoft.Event;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -33,9 +34,11 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private bool m_canEarthShaker;
         private IPlayerModifer m_modifier;
         private Rigidbody2D m_rigidbody;
-        private Damageable m_damageable; 
+        private Damageable m_damageable;
         private int m_earthShakerAnimationParameter;
         private float m_originalGravity;
+
+        public event EventAction<EventActionArgs> OnImpact;
 
         public bool CanEarthShaker() => m_canEarthShaker;
 
@@ -74,7 +77,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         public void Impact()
         {
             //m_state.waitForBehaviour = true;
-            m_attacker.SetDamageModifier(/*m_impactDamageModifier*/m_configuration.impactDamageModifier  * m_modifier.Get(PlayerModifier.AttackDamage));
+            m_attacker.SetDamageModifier(/*m_impactDamageModifier*/m_configuration.impactDamageModifier * m_modifier.Get(PlayerModifier.AttackDamage));
             m_rigidBody.WakeUp();
             m_fallLoopFX?.Stop(true);
             m_fallCollider.enabled = false;
@@ -82,6 +85,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_impactCollider.enabled = true;
             m_rigidbody.velocity = Vector2.zero;
             //m_animator.SetBool(m_earthShakerAnimationParameter, false);
+            OnImpact?.Invoke(this, EventActionArgs.Empty);
         }
 
         public void HandlePreFall()

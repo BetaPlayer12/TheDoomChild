@@ -27,6 +27,7 @@ namespace DChild.Gameplay.Projectiles
 
         protected override void Collide()
         {
+            base.Collide();
             var projectileAttacker = GetComponent<Attacker>();
             var explosion = m_spawnHandle.InstantiateFX(projectileData.impactFX, transform.position);
             var explosionAttacker = explosion.gameObject.GetComponent<Attacker>();
@@ -35,7 +36,7 @@ namespace DChild.Gameplay.Projectiles
             SetImpactFxInfo(explosionAttacker);
             UnloadProjectile();
             CallImpactedEvent();
-           
+
         }
 
         private void PassProjectileAttacker(Attacker damageDealer)
@@ -81,7 +82,7 @@ namespace DChild.Gameplay.Projectiles
                     m_attackDamageInfo.damage.type = projectileDamage.type;
                     projectileAttacker.SetDamageModifier(1);
                     projectileAttacker.SetDamage(m_attackDamageInfo.damage);
-                    if(m_attackDamageInfo.criticalDamageInfo.chance != 0)
+                    if (m_attackDamageInfo.criticalDamageInfo.chance != 0)
                     {
                         projectileAttacker.SetCrit(m_attackDamageInfo.criticalDamageInfo);
                     }
@@ -141,7 +142,7 @@ namespace DChild.Gameplay.Projectiles
 
         private void Start()
         {
-            ProjectileDamageConfigHandle();  
+            ProjectileDamageConfigHandle();
         }
 
 
