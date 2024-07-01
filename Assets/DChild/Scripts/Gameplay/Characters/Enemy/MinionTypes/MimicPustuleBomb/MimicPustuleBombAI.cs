@@ -162,6 +162,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private Transform m_pushDirection;
         [SerializeField, TabGroup("Reference")]
         private List<GameObject> m_PustuleBombsPosition;
+        [SerializeField, TabGroup("Reference")]
+        private GameObject m_ExplosionBB;
 
         [SerializeField, TabGroup("Modules")]
         private TransformTurnHandle m_turnHandle;
@@ -405,6 +407,10 @@ namespace DChild.Gameplay.Characters.Enemies
             m_rigidbody2D.constraints = RigidbodyConstraints2D.FreezeRotation;
             yield return new WaitForSeconds(0.6f);
             m_animation.SetAnimation(0, m_info.deathUnAggroAnimation, false);
+            yield return new WaitForSeconds(.75f);
+            m_ExplosionBB.SetActive(true);
+            yield return new WaitForSeconds(.25f);
+            m_ExplosionBB.SetActive(false);
             /*
             m_deathHandle.enabled = true;
             enabled = false;*/
