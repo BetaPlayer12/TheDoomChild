@@ -46,16 +46,19 @@ namespace DChild.Gameplay.Characters.Enemies
 
             [SerializeField, BoxGroup("Sound Wave Attacks")]
             private SimpleProjectileAttackInfo m_frontalScreamInfo = new SimpleProjectileAttackInfo();
+            [SerializeField, MinValue(0), BoxGroup("Sound Wave Attacks")]
+            private float m_frontalScreamAnticipationDuration;
+
             [SerializeField, BoxGroup("Sound Wave Attacks")]
             private SimpleProjectileAttackInfo m_diagonalSoundInfo = new SimpleProjectileAttackInfo();
             [SerializeField, BoxGroup("Sound Wave Attacks")]
             private MovementInfo m_diagonalSoundChaseInfo = new MovementInfo();
-
             [SerializeField, MinValue(1), BoxGroup("Sound Wave Attacks")]
             private float m_diagonalSoundHeight;
             [SerializeField, MinValue(0), BoxGroup("Sound Wave Attacks")]
             private float m_diagonalSoundInterval;
             public SimpleProjectileAttackInfo frontalScreamInfo => m_frontalScreamInfo;
+            public float frontalScreamAnticipationDuration => m_frontalScreamAnticipationDuration;
             public SimpleProjectileAttackInfo diagonalSoundInfo => m_diagonalSoundInfo;
             public MovementInfo diagonalSoundChaseInfo => m_diagonalSoundChaseInfo;
             public float diagonalSoundHeight => m_diagonalSoundHeight;
@@ -213,6 +216,9 @@ namespace DChild.Gameplay.Characters.Enemies
         private PathFinderAgent m_agent;
         [SerializeField, TabGroup("Reference")]
         private SimpleTurnHandle m_turnHandle;
+
+        [SerializeField]
+        private ParticleSystem m_frontalScreamIndicator;
 
         [SerializeField]
         private Transform m_mouth;
@@ -380,6 +386,7 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return new WaitForSeconds(0.7f);
             m_animation.SetAnimation(0, attackInfo.animation, false);
             m_animation.AddAnimation(0, m_info.idleAnimation, true, 0f);
+            m_frontalScreamIndicator.Play();
             //Spawn the Thingy via event
             yield return new WaitForAnimationComplete(m_animation.animationState, attackInfo.animation);
             m_hasAttacked = true;
