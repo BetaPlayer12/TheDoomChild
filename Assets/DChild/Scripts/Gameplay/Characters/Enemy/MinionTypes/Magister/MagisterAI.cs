@@ -158,6 +158,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private Collider2D m_bodyCollider;
         [SerializeField, TabGroup("Reference")]
         private Collider2D m_legCollider;
+        [SerializeField, TabGroup("Reference")]
+        private int m_HealValue;
         [SerializeField, TabGroup("Modules")]
         private AnimatedTurnHandle m_turnHandle;
         [SerializeField, TabGroup("Modules")]
@@ -177,6 +179,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private bool m_enablePatience;
         private bool m_isDetecting;
         private Vector2 m_startPoint;
+        private bool m_HasHealed;
+        private float m_healthHealThreshold;
 
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_wallSensor;
@@ -564,16 +568,17 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator TeleportRoutine()
         {
+           
+            m_animation.SetAnimation(0, m_info.teleportDisappearAnimation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.teleportDisappearAnimation);
             m_hitbox.Disable();
             m_movement.Stop();
             m_character.physics.simulateGravity = false;
             m_bodyCollider.enabled = false;
             m_legCollider.enabled = false;
-            m_animation.SetAnimation(0, m_info.teleportDisappearAnimation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.teleportDisappearAnimation);
-            yield return new WaitUntil(() => Vector2.Distance(m_targetInfo.position, transform.position) > m_info.targetDistanceTolerance);
+            //yield return new WaitUntil(() => Vector2.Distance(m_targetInfo.position, transform.position) > m_info.targetDistanceTolerance);
             transform.position = new Vector2(m_targetInfo.position.x + (UnityEngine.Random.Range(0, 2) == 1 ? 25f : -25f), GroundPosition(m_targetInfo.position).y);
-            yield return new WaitForSeconds(2f);
+            yield return new WaitForSeconds(1.2f);
             while (m_wallSensor.isDetecting && m_backSensor.isDetecting)
             {
                 transform.position = Vector3.MoveTowards(transform.position, m_targetInfo.position, m_currentMoveSpeed);
@@ -586,6 +591,17 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_info.teleportFromBelowAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.teleportFromBelowAnimation);
             m_teleportRoutine = null;
+            m_stateHandle.ApplyQueuedState();
+            yield return null;
+        }
+
+        private IEnumerator Healing()
+        {
+            m_stateHandle.Wait(State.ReevaluateSituation);
+            m_HasHealed = true;
+            m_animation.SetAnimation(0, m_info.healAnimation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.healAnimation);
+            GameplaySystem.combatManager.Heal(m_damageable, m_HealValue);
             m_stateHandle.ApplyQueuedState();
             yield return null;
         }
@@ -606,6 +622,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
             m_spineEventListener.Subscribe(m_info.summonTotemEvent, SummonTotem);
             m_startPoint = transform.position;
+            m_healthHealThreshold = (statsData.maxHealth * 0.2f);
         }
 
         protected override void Awake()
@@ -749,6 +766,12 @@ namespace DChild.Gameplay.Characters.Enemies
                     break;
 
                 case State.Fleeing:
+
+                    if (m_damageable.health.currentValue < m_healthHealThreshold && !m_HasHealed)
+                    {
+                        StartCoroutine(Healing());
+                        break;
+                    }
 
                     if (IsTargetInRange(m_info.targetDistanceTolerance) && !m_wallSensor.allRaysDetecting && !m_backSensor.allRaysDetecting)
                     {
