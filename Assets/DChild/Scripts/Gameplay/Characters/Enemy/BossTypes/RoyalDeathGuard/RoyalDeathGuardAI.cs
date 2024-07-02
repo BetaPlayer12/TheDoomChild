@@ -1,22 +1,10 @@
-﻿using System;
-using DChild.Gameplay;
-using DChild.Gameplay.Characters;
-using DChild.Gameplay.Combat;
+﻿using DChild.Gameplay.Combat;
 using Holysoft.Event;
 using DChild.Gameplay.Characters.AI;
 using UnityEngine;
-using Spine;
-using Spine.Unity;
 using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
-using DChild;
-using DChild.Gameplay.Characters.Enemies;
-using DChild.Temp;
-using Spine.Unity.Modules;
-using Spine.Unity.Examples;
-using DChild.Gameplay.Pooling;
-using DChild.Gameplay.Projectiles;
 
 namespace DChild.Gameplay.Characters.Enemies
 {
@@ -29,6 +17,15 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField]
             private PhaseInfo<Phase> m_phaseInfo;
             public PhaseInfo<Phase> phaseInfo => m_phaseInfo;
+
+            [SerializeField]
+            private Dictionary<int, float> m_hitsToFlinchChancePair;
+            public float GetFlinchChance(int hitCount) => m_hitsToFlinchChancePair.TryGetValue(hitCount, out float value) ? value : 0;
+
+            [SerializeField, Min(0.1f)]
+            private float m_consecutiveHitToFlinchInterval;
+            public float consecutiveHitToFlinchInterval => m_consecutiveHitToFlinchInterval;
+
 
             [SerializeField]
             private MovementInfo m_move = new MovementInfo();
@@ -109,19 +106,6 @@ namespace DChild.Gameplay.Characters.Enemies
             private BasicAnimationInfo m_energyAbsorbAnimation;
             public BasicAnimationInfo energyAbsorbAnimation => m_energyAbsorbAnimation;
 
-            //[Title("Projectiles")]
-            //[SerializeField]
-            //private SimpleProjectileAttackInfo m_projectile;
-            //public SimpleProjectileAttackInfo projectile => m_projectile;
-
-            //[Title("Events")]
-            //[SerializeField, ValueDropdown("GetEvents")]
-            //private string m_deathFXEvent;
-            //public string deathFXEvent => m_deathFXEvent;
-            //[SerializeField, ValueDropdown("GetEvents")]
-            //private string m_teleportFXEvent;
-            //public string teleportFXEvent => m_teleportFXEvent;
-
             public override void Initialize()
             {
 #if UNITY_EDITOR
@@ -159,30 +143,17 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField]
             private int m_attackCount;
             public int attackCount => m_attackCount;
-            //[SerializeField]
-            //private List<int> m_patternAttackCount;
-            //public List<int> patternAttackCount => m_patternAttackCount;
         }
 
 
         private enum State
         {
             Phasing,
-            Intro,
             Idle,
             Turning,
             Attacking,
-            Chasing,
             ReevaluateSituation,
             WaitBehaviourEnd,
-        }
-
-        private enum Pattern
-        {
-            AttackPattern1,
-            AttackPattern2,
-            AttackPattern3,
-            WaitAttackEnd,
         }
 
         private enum Attack
@@ -202,9 +173,6 @@ namespace DChild.Gameplay.Characters.Enemies
             Wait,
         }
 
-        private bool[] m_attackUsed;
-        private List<Pattern> m_attackCache;
-
         [SerializeField, TabGroup("Reference")]
         private Boss m_boss;
         [SerializeField, TabGroup("Reference")]
@@ -212,8 +180,6 @@ namespace DChild.Gameplay.Characters.Enemies
 
         [SerializeField, TabGroup("Modules")]
         private AnimatedTurnHandle m_turnHandle;
-        //[SerializeField, TabGroup("Modules")]
-        //private MovementHandle2D m_movement;
         [SerializeField, TabGroup("Modules")]
         private DeathHandle m_deathHandle;
         [SerializeField, TabGroup("Modules")]
@@ -223,7 +189,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_groundSensor;
-        
+
         [SerializeField, TabGroup("Effects")]
         private ParticleFX m_slashGroundFX;
         [SerializeField, TabGroup("Effects")]
@@ -245,25 +211,19 @@ namespace DChild.Gameplay.Characters.Enemies
         [ShowInInspector]
         private PhaseHandle<Phase, PhaseInfo> m_phaseHandle;
         [ShowInInspector]
-        private RandomAttackDecider<Pattern> m_patternDecider;
-        private Pattern m_currentPattern;
-        [ShowInInspector]
         private RandomAttackDecider<Attack> m_attackDecider;
         private Attack m_currentAttack;
         //private ProjectileLauncher m_projectileLauncher;
 
         [SerializeField, TabGroup("Spawn Points")]
         private Transform m_projectilePoint;
-        
+
         private int m_attackCount;
         private int m_randomAttack;
         private float m_startGroundPos;
         private bool m_hasHealed;
         private bool m_hasPhaseChanged;
         private PhaseInfo m_phaseInfo;
-        //private int m_hitCount;
-        //private int[] m_patternAttackCount;
-        private bool m_isDetecting;
 
         private void ApplyPhaseData(PhaseInfo obj)
         {
@@ -294,11 +254,10 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             if (damageable != null)
             {
-                base.SetTarget(damageable, m_target);
-                if (!m_isDetecting)
+                if (m_stateHandle.currentState == State.Idle)
                 {
-                    m_isDetecting = true;
-                    m_stateHandle.OverrideState(State.Chasing);
+                    base.SetTarget(damageable, m_target);
+                    m_stateHandle.OverrideState(State.ReevaluateSituation);
                     //GameEventMessage.SendEvent("Boss Encounter");
                 }
             }
@@ -311,20 +270,6 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_animation.animationState.TimeScale = 1f;
                 m_stateHandle.ApplyQueuedState();
             }
-        }
-
-        private IEnumerator IntroRoutine()
-        {
-            m_stateHandle.Wait(State.ReevaluateSituation);
-            m_agent.Stop();
-            //m_hitbox.SetInvulnerability(Invulnerability.MAX);
-            //CustomTurn();
-            //m_animation.SetAnimation(0, m_info.playerDetectAnimation, false);
-            //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.playerDetectAnimation);
-            //m_animation.SetAnimation(0, m_info.idle1Animation, true);
-            m_hitbox.SetInvulnerability(Invulnerability.None);
-            m_stateHandle.ApplyQueuedState();
-            yield return null;
         }
 
         private IEnumerator ChangePhaseRoutine()
@@ -370,8 +315,6 @@ namespace DChild.Gameplay.Characters.Enemies
             m_scytheSpinFX.Stop();
             m_agent.Stop();
             m_hitbox.Disable();
-            //this.gameObject.SetActive(false); //TEMP
-            m_isDetecting = false;
             if (!m_deathHandle.gameObject.activeSelf)
             {
                 this.enabled = false;
@@ -523,59 +466,15 @@ namespace DChild.Gameplay.Characters.Enemies
         }
         #endregion
 
-        private bool AllowAttack(Phase phase, State state)
-        {
-            if (m_phaseHandle.currentPhase >= phase)
-            {
-                return true;
-            }
-            else
-            {
-                DecidedOnAttack(false);
-                m_stateHandle.OverrideState(state);
-                return false;
-            }
-        }
-
-        private void DecidedOnAttack(bool condition)
-        {
-            m_patternDecider.hasDecidedOnAttack = condition;
-            m_attackDecider.hasDecidedOnAttack = condition;
-        }
-
         private void UpdateAttackDeciderList()
         {
-            m_patternDecider.SetList(new AttackInfo<Pattern>(Pattern.AttackPattern1, m_info.targetDistanceTolerance),
-                                     new AttackInfo<Pattern>(Pattern.AttackPattern2, m_info.targetDistanceTolerance),
-                                     new AttackInfo<Pattern>(Pattern.AttackPattern3, m_info.targetDistanceTolerance));
-            DecidedOnAttack(false);
+
         }
 
         public override void ApplyData()
         {
-            if (m_patternDecider != null)
-            {
-                UpdateAttackDeciderList();
-            }
-            base.ApplyData();
-        }
 
-        private void ChoosePattern()
-        {
-            if (!m_patternDecider.hasDecidedOnAttack)
-            {
-                IsAllAttackComplete();
-                for (int i = 0; i < m_attackCache.Count; i++)
-                {
-                    m_patternDecider.DecideOnAttack();
-                    if (m_attackCache[i] != m_currentPattern && !m_attackUsed[i])
-                    {
-                        m_attackUsed[i] = true;
-                        m_currentPattern = m_attackCache[i];
-                        return;
-                    }
-                }
-            }
+            base.ApplyData();
         }
 
         private void ExecuteAttack(Attack m_attack)
@@ -595,31 +494,8 @@ namespace DChild.Gameplay.Characters.Enemies
                     StartCoroutine(Attack4Routine());
                     break;
                 case Attack.ScytheSpinAttack:
-                    m_stateHandle.OverrideState(State.Chasing);
+                    //m_stateHandle.OverrideState(State.Chasing);
                     break;
-            }
-        }
-
-        private void IsAllAttackComplete()
-        {
-            for (int i = 0; i < m_attackUsed.Length; ++i)
-            {
-                if (!m_attackUsed[i])
-                {
-                    return;
-                }
-            }
-            for (int i = 0; i < m_attackUsed.Length; ++i)
-            {
-                m_attackUsed[i] = false;
-            }
-        }
-
-        void AddToAttackCache(params Pattern[] list)
-        {
-            for (int i = 0; i < list.Length; i++)
-            {
-                m_attackCache.Add(list[i]);
             }
         }
 
@@ -628,19 +504,10 @@ namespace DChild.Gameplay.Characters.Enemies
             base.Awake();
             m_turnHandle.TurnDone += OnTurnDone;
             m_deathHandle.SetAnimation(m_info.deathAnimation.animation);
-            //m_projectileLauncher = new ProjectileLauncher(m_info.projectile.projectileInfo, m_projectilePoint);
-            m_patternDecider = new RandomAttackDecider<Pattern>();
             m_attackDecider = new RandomAttackDecider<Attack>();
-            //for (int i = 0; i < 3; i++)
-            //{
-            //    m_attackDecider[i] = new RandomAttackDecider<Attack>();
-            //}
-            m_stateHandle = new StateHandle<State>(State.WaitBehaviourEnd, State.WaitBehaviourEnd);
+
+            m_stateHandle = new StateHandle<State>(State.Idle, State.WaitBehaviourEnd);
             UpdateAttackDeciderList();
-            //m_patternCount = new float[4];
-            m_attackCache = new List<Pattern>();
-            AddToAttackCache(Pattern.AttackPattern1, Pattern.AttackPattern2, Pattern.AttackPattern3);
-            m_attackUsed = new bool[m_attackCache.Count];
         }
 
         protected override void Start()
@@ -664,22 +531,22 @@ namespace DChild.Gameplay.Characters.Enemies
             switch (m_stateHandle.currentState)
             {
                 case State.Idle:
-                    m_animation.SetAnimation(0, m_info.idle1Animation, true);
+                    // Starting State When Fight is not triggered
                     break;
-                case State.Intro:
-                    StartCoroutine(IntroRoutine());
-                    //if (IsFacingTarget())
-                    //{
-                    //    StartCoroutine(IntroRoutine());
-                    //    //m_stateHandle.OverrideState(State.ReevaluateSituation);
-                    //}
-                    //else
-                    //{
-                    //    m_turnState = State.Intro;
-                    //    if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
-                    //        m_stateHandle.SetState(State.Turning);
-                    //}
-                    break;
+                //case State.Intro:
+                //    StartCoroutine(IntroRoutine());
+                //    //if (IsFacingTarget())
+                //    //{
+                //    //    StartCoroutine(IntroRoutine());
+                //    //    //m_stateHandle.OverrideState(State.ReevaluateSituation);
+                //    //}
+                //    //else
+                //    //{
+                //    //    m_turnState = State.Intro;
+                //    //    if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
+                //    //        m_stateHandle.SetState(State.Turning);
+                //    //}
+                //    break;
                 case State.Phasing:
                     Debug.Log("Phase Time");
                     m_stateHandle.Wait(State.ReevaluateSituation);
@@ -695,142 +562,140 @@ namespace DChild.Gameplay.Characters.Enemies
                     //m_movement.Stop();
                     break;
                 case State.Attacking:
-                    m_stateHandle.Wait(State.Attacking);
-                    var randomFacing = UnityEngine.Random.Range(0, 2) == 1 ? 1 : -1;
-                    var target = new Vector2(m_targetInfo.position.x, GroundPosition().y /*m_startGroundPos*/);
-                    m_attackCount++;
-                    switch (m_currentPattern)
-                    {
-                        case Pattern.AttackPattern1:
-                            if (m_randomAttack == 1) //do dis tomorow
-                            {
-                                if (m_attackCount <= m_phaseInfo.attackCount)
-                                {
-                                    StartCoroutine(ExecuteMove(target, m_info.attack1.range, /*0,*/ Attack.Attack1));
-                                }
-                                else
-                                {
-                                    m_stateHandle.OverrideState(State.ReevaluateSituation);
-                                }
-                            }
-                            else
-                            {
-                                if (m_phaseHandle.currentPhase == Phase.PhaseTwo)
-                                {
-                                    switch (m_attackCount)
-                                    {
-                                        case 1:
-                                            StartCoroutine(ExecuteMove(target, m_info.attack1.range, /*0,*/ Attack.Attack1));
-                                            break;
-                                        case 2:
-                                            //StartCoroutine(ExecuteMove(m_targetInfo.position, m_info.attack2.range, /*0,*/ Attack.Attack2));
-                                            ExecuteAttack(Attack.Attack2);
-                                            break;
-                                        case 3:
-                                            m_stateHandle.OverrideState(State.ReevaluateSituation);
-                                            break;
-                                    }
-                                }
-                                else
-                                {
-                                    m_stateHandle.OverrideState(State.ReevaluateSituation);
-                                }
-                            }
-                            ///////
-                            //m_stateHandle.OverrideState(State.ReevaluateSituation);
-                            break;
-                        case Pattern.AttackPattern2:
-                            switch (m_attackCount)
-                            {
-                                case 1:
-                                    StartCoroutine(ExecuteMove(target, m_info.attack2.range, /*0,*/ Attack.Attack2));
-                                    break;
-                                case 2:
-                                    m_stateHandle.OverrideState(State.ReevaluateSituation);
-                                    break;
-                            }
-                            ///////
-                            //m_stateHandle.OverrideState(State.ReevaluateSituation);
-                            break;
-                        case Pattern.AttackPattern3:
-                            switch (m_attackCount)
-                            {
-                                case 1:
-                                    StartCoroutine(ExecuteMove(target, m_info.attack2.range, /*0,*/ Attack.Attack3));
-                                    break;
-                                case 2:
-                                    Debug.Log("pattern 3 condition for health: " + (m_health.maxValue * .6f));
-                                    if (m_phaseHandle.currentPhase == Phase.PhaseOne ? m_health.currentValue <= (m_health.maxValue * .6f) : m_health.currentValue <= (m_health.maxValue * .1f))
-                                    {
-                                        StartCoroutine(ExecuteMove(target, m_info.attack2.range, /*0,*/ Attack.Attack3));
-                                    }
-                                    else
-                                    {
-                                        m_stateHandle.OverrideState(State.ReevaluateSituation);
-                                    }
-                                    break;
-                                case 3:
-                                    if (m_phaseHandle.currentPhase == Phase.PhaseOne ? m_health.currentValue <= (m_health.maxValue * .6f) : m_health.currentValue <= (m_health.maxValue * .1f))
-                                    {
-                                        m_randomAttack = m_phaseHandle.currentPhase == Phase.PhaseOne ? 1 : m_randomAttack;
-                                        if (m_randomAttack == 1)
-                                        {
-                                            StartCoroutine(ExecuteMove(target, m_info.attack2.range, /*0,*/ Attack.Attack3));
-                                        }
-                                        else
-                                        {
-                                            StartCoroutine(ExecuteMove(target, m_info.attack2.range, /*0,*/ Attack.Attack4));
-                                        }
-                                    }
-                                    else
-                                    {
-                                        m_stateHandle.OverrideState(State.ReevaluateSituation);
-                                    }
-                                    break;
-                                case 4:
-                                    m_stateHandle.OverrideState(State.ReevaluateSituation);
-                                    break;
-                            }
-                            ///////
-                            //m_stateHandle.OverrideState(State.ReevaluateSituation);
-                            break;
-                    }
-                    break;
-
-                case State.Chasing:
-                    DecidedOnAttack(false);
-                    ChoosePattern();
-                    //if (IsTargetInRange(m_info.attack1.range))
+                    //m_stateHandle.Wait(State.Attacking);
+                    //var randomFacing = UnityEngine.Random.Range(0, 2) == 1 ? 1 : -1;
+                    //var target = new Vector2(m_targetInfo.position.x, GroundPosition().y /*m_startGroundPos*/);
+                    //m_attackCount++;
+                    //switch (m_currentPattern)
                     //{
-                    //    m_currentPattern = Pattern.AttackPattern1;
+                    //    case Pattern.AttackPattern1:
+                    //        if (m_randomAttack == 1) //do dis tomorow
+                    //        {
+                    //            if (m_attackCount <= m_phaseInfo.attackCount)
+                    //            {
+                    //                StartCoroutine(ExecuteMove(target, m_info.attack1.range, /*0,*/ Attack.Attack1));
+                    //            }
+                    //            else
+                    //            {
+                    //                m_stateHandle.OverrideState(State.ReevaluateSituation);
+                    //            }
+                    //        }
+                    //        else
+                    //        {
+                    //            if (m_phaseHandle.currentPhase == Phase.PhaseTwo)
+                    //            {
+                    //                switch (m_attackCount)
+                    //                {
+                    //                    case 1:
+                    //                        StartCoroutine(ExecuteMove(target, m_info.attack1.range, /*0,*/ Attack.Attack1));
+                    //                        break;
+                    //                    case 2:
+                    //                        //StartCoroutine(ExecuteMove(m_targetInfo.position, m_info.attack2.range, /*0,*/ Attack.Attack2));
+                    //                        ExecuteAttack(Attack.Attack2);
+                    //                        break;
+                    //                    case 3:
+                    //                        m_stateHandle.OverrideState(State.ReevaluateSituation);
+                    //                        break;
+                    //                }
+                    //            }
+                    //            else
+                    //            {
+                    //                m_stateHandle.OverrideState(State.ReevaluateSituation);
+                    //            }
+                    //        }
+                    //        ///////
+                    //        //m_stateHandle.OverrideState(State.ReevaluateSituation);
+                    //        break;
+                    //    case Pattern.AttackPattern2:
+                    //        switch (m_attackCount)
+                    //        {
+                    //            case 1:
+                    //                StartCoroutine(ExecuteMove(target, m_info.attack2.range, /*0,*/ Attack.Attack2));
+                    //                break;
+                    //            case 2:
+                    //                m_stateHandle.OverrideState(State.ReevaluateSituation);
+                    //                break;
+                    //        }
+                    //        ///////
+                    //        //m_stateHandle.OverrideState(State.ReevaluateSituation);
+                    //        break;
+                    //    case Pattern.AttackPattern3:
+                    //        switch (m_attackCount)
+                    //        {
+                    //            case 1:
+                    //                StartCoroutine(ExecuteMove(target, m_info.attack2.range, /*0,*/ Attack.Attack3));
+                    //                break;
+                    //            case 2:
+                    //                Debug.Log("pattern 3 condition for health: " + (m_health.maxValue * .6f));
+                    //                if (m_phaseHandle.currentPhase == Phase.PhaseOne ? m_health.currentValue <= (m_health.maxValue * .6f) : m_health.currentValue <= (m_health.maxValue * .1f))
+                    //                {
+                    //                    StartCoroutine(ExecuteMove(target, m_info.attack2.range, /*0,*/ Attack.Attack3));
+                    //                }
+                    //                else
+                    //                {
+                    //                    m_stateHandle.OverrideState(State.ReevaluateSituation);
+                    //                }
+                    //                break;
+                    //            case 3:
+                    //                if (m_phaseHandle.currentPhase == Phase.PhaseOne ? m_health.currentValue <= (m_health.maxValue * .6f) : m_health.currentValue <= (m_health.maxValue * .1f))
+                    //                {
+                    //                    m_randomAttack = m_phaseHandle.currentPhase == Phase.PhaseOne ? 1 : m_randomAttack;
+                    //                    if (m_randomAttack == 1)
+                    //                    {
+                    //                        StartCoroutine(ExecuteMove(target, m_info.attack2.range, /*0,*/ Attack.Attack3));
+                    //                    }
+                    //                    else
+                    //                    {
+                    //                        StartCoroutine(ExecuteMove(target, m_info.attack2.range, /*0,*/ Attack.Attack4));
+                    //                    }
+                    //                }
+                    //                else
+                    //                {
+                    //                    m_stateHandle.OverrideState(State.ReevaluateSituation);
+                    //                }
+                    //                break;
+                    //            case 4:
+                    //                m_stateHandle.OverrideState(State.ReevaluateSituation);
+                    //                break;
+                    //        }
+                    //        ///////
+                    //        //m_stateHandle.OverrideState(State.ReevaluateSituation);
+                    //        break;
                     //}
-                    if (IsFacingTarget())
-                    {
-                        if (m_patternDecider.hasDecidedOnAttack)
-                        {
-                            m_attackCount = 0;
-                            m_randomAttack = UnityEngine.Random.Range(0, 2);
-                            m_stateHandle.SetState(State.Attacking);
-                        }
-                    }
-                    else
-                    {
-                        m_turnState = State.Chasing;
-                        if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation.animation /*&& m_animation.GetCurrentAnimation(0).ToString() != m_info.attackDaggersIdle.animation*/)
-                            m_stateHandle.SetState(State.Turning);
-                    }
                     break;
 
+                //case State.Chasing:
+                //    //DecidedOnAttack(false);
+                //    ////if (IsTargetInRange(m_info.attack1.range))
+                //    ////{
+                //    ////    m_currentPattern = Pattern.AttackPattern1;
+                //    ////}
+                //    //if (IsFacingTarget())
+                //    //{
+                //    //    if (m_patternDecider.hasDecidedOnAttack)
+                //    //    {
+                //    //        m_attackCount = 0;
+                //    //        m_randomAttack = UnityEngine.Random.Range(0, 2);
+                //    //        m_stateHandle.SetState(State.Attacking);
+                //    //    }
+                //    //}
+                //    //else
+                //    //{
+                //    //    m_turnState = State.Chasing;
+                //    //    if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation.animation /*&& m_animation.GetCurrentAnimation(0).ToString() != m_info.attackDaggersIdle.animation*/)
+                //    //        m_stateHandle.SetState(State.Turning);
+                //    //}
+                //    break;
                 case State.ReevaluateSituation:
-                    Debug.Log("20% of health is: " + m_health.maxValue * .2f);
-                    if (m_health.currentValue <= m_health.maxValue * .2f && !m_hasHealed)
-                    {
-                        Debug.Log("Current health is: " + m_health.currentValue);
-                        m_stateHandle.Wait(State.ReevaluateSituation);
-                        StartCoroutine(HealingRoutine());
-                        return;
-                    }
-                    m_stateHandle.SetState(State.Chasing);
+                    //Debug.Log("20% of health is: " + m_health.maxValue * .2f);
+                    //if (m_health.currentValue <= m_health.maxValue * .2f && !m_hasHealed)
+                    //{
+                    //    Debug.Log("Current health is: " + m_health.currentValue);
+                    //    m_stateHandle.Wait(State.ReevaluateSituation);
+                    //    StartCoroutine(HealingRoutine());
+                    //    return;
+                    //}
+                    //m_stateHandle.SetState(State.Chasing);
                     break;
                 case State.WaitBehaviourEnd:
                     return;
