@@ -245,6 +245,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private PhaseInfo m_currentPhaseInfo;
 
         private float m_targetHeight;
+        private Vector3 m_frontalScreamIndicatorOffset;
         private bool m_hasAttacked;
         private CountdownTimer m_attackIntervalTimer;
         private List<Projectile> m_soundBallList;
@@ -386,12 +387,23 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return new WaitForSeconds(0.7f);
             m_animation.SetAnimation(0, attackInfo.animation, false);
             m_animation.AddAnimation(0, m_info.idleAnimation, true, 0f);
-            m_frontalScreamIndicator.Play();
+
+            ShowFrontalScreamIndicator();
             //Spawn the Thingy via event
             yield return new WaitForAnimationComplete(m_animation.animationState, attackInfo.animation);
             m_hasAttacked = true;
             m_stateHandle.ApplyQueuedState();
             m_phaseHandle.allowPhaseChange = true;
+        }
+
+        private void ShowFrontalScreamIndicator()
+        {
+            m_frontalScreamIndicator.transform.parent = transform;
+            m_frontalScreamIndicator.transform.localPosition = m_frontalScreamIndicatorOffset;
+            m_frontalScreamIndicator.transform.localScale = Vector3.one;
+            m_frontalScreamIndicator.transform.parent = null;
+            m_frontalScreamIndicator.transform.rotation = Quaternion.identity;
+            m_frontalScreamIndicator.Play();
         }
 
         private IEnumerator DiagonalSoundRoutine()
@@ -678,6 +690,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 instance.transform.parent = m_mouth;
                 instance.transform.localPosition = Vector3.zero;
                 instance.transform.localScale = scale;
+                //instance.transform.localRotation = Quaternion.Euler(0, 0, 0);
                 instance.transform.parent = null;
             }
         }
@@ -704,6 +717,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
             m_soundBallList = new List<Projectile>();
             m_damageable.Destroyed += OnDeath;
+
+            m_frontalScreamIndicatorOffset = m_frontalScreamIndicator.transform.localPosition;
         }
 
 
