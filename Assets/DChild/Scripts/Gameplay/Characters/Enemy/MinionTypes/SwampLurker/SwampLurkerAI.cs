@@ -104,6 +104,7 @@ namespace DChild.Gameplay.Characters.Enemies
             Sneaking,
             Chasing,
             Flinch,
+            Retreating,
             ReevaluateSituation,
             WaitBehaviourEnd,
         }
@@ -163,6 +164,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private StateHandle<State> m_stateHandle;
         [ShowInInspector]
         private RandomAttackDecider<Attack> m_attackDecider;
+
+        private bool hasRetreated;
 
         private State m_turnState;
 
@@ -302,7 +305,7 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_Audiosource.Play();
             StopAllCoroutines();
             base.OnDestroyed(sender, eventArgs);
-            
+
             m_stateHandle.OverrideState(State.WaitBehaviourEnd);
             if (m_sneerRoutine != null)
             {
@@ -421,6 +424,48 @@ namespace DChild.Gameplay.Characters.Enemies
             }
         }
 
+        private IEnumerator DefeatRoutine()
+        {
+            m_stateHandle.Wait(State.Standby);
+
+            m_animation.EnableRootMotion(true,false);
+            m_animation.SetAnimation(0, m_info.defeatAnimation.animation, false);
+            m_animation.DisableRootMotion();
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.defeatAnimation);
+
+            if (IsFacingTarget() && !m_wallSensor.isDetecting && m_edgeSensor.isDetecting)
+            {
+                //Call Turn Away;
+                m_turnHandle.Execute(m_info.turnAnimation.animation, m_info.idleAnimation.animation);
+                yield return new WaitForAnimationComplete(m_animation.animationState, m_info.turnAnimation.animation);
+            }
+
+            //Should be Facing Away from Player
+            var distanceFromPlayer = 0f;
+            bool isPlayerNear = true;
+            do
+            {
+                distanceFromPlayer = Vector2.Distance(m_targetInfo.position, transform.position);
+                isPlayerNear = distanceFromPlayer <= m_info.targetDistanceTolerance;
+                m_animation.SetAnimation(0, !isPlayerNear ? m_info.move.animation : m_info.sneak.animation, true);
+                m_movement.MoveTowards(Vector2.one * transform.localScale.x, isPlayerNear ? m_currentMoveSpeed : m_info.sneak.speed);
+                yield return null;
+            } while (isPlayerNear && !m_wallSensor.isDetecting && m_edgeSensor.isDetecting);
+
+            m_movement.Stop();
+            m_animation.SetAnimation(0, m_info.idleAnimation, true).TimeScale = 1f;
+
+            yield return null;
+            if (isPlayerNear)
+            {
+                m_stateHandle.SetState(State.Attacking);
+            }
+            else
+            {
+                m_stateHandle.SetState(State.Standby);
+            }
+        }
+
         protected override void Start()
         {
             base.Start();
@@ -432,14 +477,14 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_randomTurnRoutine = StartCoroutine(RandomTurnRoutine());
                 m_randomIdleRoutine = StartCoroutine(RandomIdleRoutine());
             }
-            
+
             m_startPoint = transform.position;
         }
 
         protected override void Awake()
         {
             base.Awake();
-            
+
             m_patrolHandle.TurnRequest += OnTurnRequest;
             m_attackHandle.AttackDone += OnAttackDone;
             m_turnHandle.TurnDone += OnTurnDone;
@@ -637,16 +682,14 @@ namespace DChild.Gameplay.Characters.Enemies
                     }
                     break;
 
+                case State.Retreating:
+
+                    StartCoroutine(DefeatRoutine());
+
+                    break;
+
                 case State.ReevaluateSituation:
                     //How far is target, is it worth it to chase or go back to patrol
-                    if (m_targetInfo.isValid)
-                    {
-                        m_stateHandle.SetState(State.Chasing);
-                    }
-                    else
-                    {
-                        m_stateHandle.SetState(State.Patrol);
-                    }
 
                     if (m_patienceRoutine != null /*&& m_targetInfo.isValid*/)
                     {
@@ -659,9 +702,53 @@ namespace DChild.Gameplay.Characters.Enemies
                         StopCoroutine(m_sneerRoutine);
                         m_sneerRoutine = null;
                     }
+
+                    var retreatThreshold = m_damageable.health.currentValue / m_damageable.health.maxValue;
+
+                    if (retreatThreshold <= 0.2)
+                    {
+                        if (!m_wallSensor.isDetecting || !m_edgeSensor.isDetecting)
+                        {
+                            if(hasRetreated == false)
+                            {
+                                hasRetreated = true;
+                                m_stateHandle.SetState(State.Retreating);
+                            }
+                            else
+                            {
+                                if (m_targetInfo.isValid)
+                                {
+                                    m_stateHandle.SetState(State.Chasing);
+                                }
+                                else
+                                {
+                                    m_stateHandle.SetState(State.Standby);
+                                }
+                                
+                            }
+                            
+                        }
+                        else
+                        {
+                            m_stateHandle.SetState(State.Attacking);
+                        }
+                    }
+                    else
+                    {
+                        if (m_targetInfo.isValid)
+                        {
+                            m_stateHandle.SetState(State.Chasing);
+                        }
+                        else
+                        {
+                            m_stateHandle.SetState(State.Patrol);
+                        }
+                    }
                     break;
+
                 case State.WaitBehaviourEnd:
-                    return;
+                    break;
+
             }
 
             if (m_enablePatience && m_stateHandle.currentState != State.Standby)
@@ -673,6 +760,9 @@ namespace DChild.Gameplay.Characters.Enemies
                 }
             }
         }
+
+
+
 
         protected override void OnTargetDisappeared()
         {
