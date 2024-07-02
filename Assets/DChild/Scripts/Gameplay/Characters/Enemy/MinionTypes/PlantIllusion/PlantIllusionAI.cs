@@ -54,7 +54,7 @@ namespace DChild.Gameplay.Characters.Enemies
             public BasicAnimationInfo idleAnimation => m_idleAnimation;
             [SerializeField]
             private BasicAnimationInfo m_idleAnimation2 = new BasicAnimationInfo();
-            public BasicAnimationInfo idleAnimatio2n => m_idleAnimation2;
+            public BasicAnimationInfo idleAnimation2 => m_idleAnimation2;
             [SerializeField]
             private BasicAnimationInfo m_surpriseAnimation = new BasicAnimationInfo();
             public BasicAnimationInfo surpriseAnimation => m_surpriseAnimation;
@@ -247,7 +247,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnFlinchStart(object sender, EventActionArgs eventArgs)
         {
-            if (m_animation.GetCurrentAnimation(0).ToString() != m_info.attack1Hide.animation && m_animation.GetCurrentAnimation(0).ToString() != m_info.attack2Hide.animation)
+            if (m_animation.GetCurrentAnimation(0).ToString() != m_info.attack1.animation && m_animation.GetCurrentAnimation(0).ToString() != m_info.attack2.animation)
             {
                 StartCoroutine(FlinchRoutine());
             }
@@ -272,7 +272,7 @@ namespace DChild.Gameplay.Characters.Enemies
             if (m_flinchHandle.m_autoFlinch)
             {
                 if (m_animation.GetCurrentAnimation(0).ToString() != m_info.deathAnimation.animation)
-                    m_animation.SetAnimation(0, m_info.idleAnimation.animation, true);
+                    m_animation.SetAnimation(0, m_info.idleAnimation2.animation, true);
                 m_stateHandle.ApplyQueuedState();
             }
         }
@@ -301,7 +301,7 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_stingerPos.rotation = Quaternion.Euler(0f, 0f, postAtan2 * Mathf.Rad2Deg);
             m_projectileLauncher.AimAt(target);
             m_animation.EnableRootMotion(true, false);
-            m_attackHandle.ExecuteAttack(m_info.attack1.animation, m_info.idleAnimatio2n.animation);
+            m_attackHandle.ExecuteAttack(m_info.attack1.animation, m_info.idleAnimation2.animation);
            
 
         }
@@ -314,7 +314,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
             isFirstEncounter = false;
             m_animation.EnableRootMotion(true, false);
-            m_attackHandle.ExecuteAttack(m_info.attack2.animation, m_info.idleAnimatio2n.animation);
+            m_attackHandle.ExecuteAttack(m_info.attack2.animation, m_info.idleAnimation2.animation);
         }
         
   
@@ -425,7 +425,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     {
                         if (m_animation.animationState.GetCurrent(0).IsComplete)
                         {
-                            m_animation.SetAnimation(0, m_info.idleAnimatio2n.animation, true);
+                            m_animation.SetAnimation(0, m_info.idleAnimation2.animation, true);
                         }
                     }
 
@@ -460,7 +460,6 @@ namespace DChild.Gameplay.Characters.Enemies
                                     //    m_animation.AddAnimation(0, m_info.idleAnimation, true, 0);
                                     //}
                                     m_attackDecider.hasDecidedOnAttack = false;
-
                                     Debug.Log(isFirstEncounter + "else");
                                     m_stateHandle.SetState(State.ReevaluateSituation);
                                     // m_animation.SetAnimation(0, m_info.idleAnimatio2n.animation, true);
