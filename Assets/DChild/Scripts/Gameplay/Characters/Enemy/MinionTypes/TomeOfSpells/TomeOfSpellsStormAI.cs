@@ -90,6 +90,10 @@ namespace DChild.Gameplay.Characters.Enemies
             private float m_stormCloudOffset;
             public float stormCloudOffset => m_stormCloudOffset;
 
+            [SerializeField, BoxGroup("Storm Cloud Configuration")]
+            private float m_cloudSize;
+            public float cloudSize => m_cloudSize;
+
             public override void Initialize()
             {
 #if UNITY_EDITOR
@@ -432,15 +436,59 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator SummonStormCloudsRoutine(int numOfClouds)
         {
-            var playerCenter = m_targetInfo.position;
-            InstantiateStormCloud(playerCenter);
+            /*var playerCenter = m_targetInfo.position; player position
+            InstantiateStormCloud(playerCenter);*/
 
-            for (int i = 0; i < numOfClouds - 1; i++)
+
+            //InstantiateStormCloud(bookCenter);
+            /*var bookCenter = new Vector2(transform.position.x, transform.position.y);
+            for (int i = 0; i < numOfClouds; i++)
             {
+                *//*var offset = UnityEngine.Random.insideUnitCircle * m_info.stormCloudOffset;*//*
                 var offset = UnityEngine.Random.insideUnitCircle * m_info.stormCloudOffset;
-                var spawnPosition = playerCenter + offset;
+                var spawnPosition = bookCenter + offset;
                 InstantiateStormCloud(spawnPosition);
             }
+            yield return null;*/
+            var bookCenter = new Vector2(transform.position.x, transform.position.y);
+
+            var leftSidePositions = new List<Vector2>();
+            var rightSidePositions = new List<Vector2>();
+            var rectangleWidth = 70f;
+            var rectangleHeight = 30f;
+            var leftRightMargin = 5f;
+            var bufferSpace = 10f;
+
+            for (int i = 0; i < numOfClouds / 2; i++)
+            {
+                Vector2 spawnPosition;
+                do
+                {
+                    var randomX = UnityEngine.Random.Range(bookCenter.x - rectangleWidth / 2 - leftRightMargin, bookCenter.x - bufferSpace);
+                    var randomY = UnityEngine.Random.Range(bookCenter.y - rectangleHeight / 2, bookCenter.y + rectangleHeight / 2);
+                    spawnPosition = new Vector2(randomX, randomY);
+                } while (IsOverlapping(spawnPosition, leftSidePositions) || IsOverlappingWithTome(spawnPosition, bookCenter));
+
+                leftSidePositions.Add(spawnPosition);
+                InstantiateStormCloud(spawnPosition);
+            }
+
+            for (int i = 0; i < numOfClouds / 2; i++)
+            {
+                Vector2 spawnPosition;
+                do
+                {
+                    var randomX = UnityEngine.Random.Range(bookCenter.x + bufferSpace, bookCenter.x + rectangleWidth / 2 + leftRightMargin);
+                    var randomY = UnityEngine.Random.Range(bookCenter.y - rectangleHeight / 2, bookCenter.y + rectangleHeight / 2);
+                    spawnPosition = new Vector2(randomX, randomY);
+                } while (IsOverlapping(spawnPosition, rightSidePositions) || IsOverlappingWithTome(spawnPosition, bookCenter));
+
+                rightSidePositions.Add(spawnPosition);
+                InstantiateStormCloud(spawnPosition);
+            }
+
+            leftSidePositions.Clear();
+            rightSidePositions.Clear();
             yield return null;
         }
 
@@ -450,52 +498,70 @@ namespace DChild.Gameplay.Characters.Enemies
             instance.SpawnAt(spawnPosition, Quaternion.identity);
         }
 
-        //private IEnumerator FrostAttackRoutine()
-        //{
-        //    m_animation.SetAnimation(0, m_info.attackFrostStartAnimation, false);
-        //    yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attackFrostStartAnimation);
-        //    m_animation.SetAnimation(0, m_info.attackFrost.animation, false);
-        //    yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attackFrost.animation);
-        //    m_animation.SetAnimation(0, m_info.idleAnimation, true);
-        //    m_flinchHandle.gameObject.SetActive(true);
-        //    m_rigidbody2D.constraints = RigidbodyConstraints2D.FreezeRotation;
-        //    m_stateHandle.ApplyQueuedState();
-        //    m_attackDecider.hasDecidedOnAttack = false;
-        //    yield return null;
-        //}
+        private bool IsOverlapping(Vector2 position, List<Vector2> existingPositions)
+        {
+            foreach (Vector2 existingPosition in existingPositions)
+            {
+                if (Vector2.Distance(position, existingPosition) < m_info.cloudSize)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
 
-        //private void LaunchIcePattern(int numberOfProjectiles, int rotations)
-        //{
-        //    for (int x = 0; x < rotations; x++)
-        //    {
-        //        float angleStep = 360f / numberOfProjectiles;
-        //        float angle = 45f;
-        //        for (int z = 0; z < numberOfProjectiles; z++)
-        //        {
-        //            Vector2 startPoint = new Vector2(m_character.centerMass.position.x, m_character.centerMass.position.y);
-        //            float projectileDirXposition = startPoint.x + Mathf.Sin((angle * Mathf.PI) / 180) * 5;
-        //            float projectileDirYposition = startPoint.y + Mathf.Cos((angle * Mathf.PI) / 180) * 5;
+        private bool IsOverlappingWithTome(Vector2 position, Vector2 bookCenter)
+        {
+            return Vector2.Distance(position, bookCenter) < m_info.cloudSize;
+        }
+    
 
-        //            Vector2 projectileVector = new Vector2(projectileDirXposition, projectileDirYposition);
-        //            Vector2 projectileMoveDirection = (projectileVector - startPoint).normalized * m_info.projectile.projectileInfo.speed;
+    //private IEnumerator FrostAttackRoutine()
+    //{
+    //    m_animation.SetAnimation(0, m_info.attackFrostStartAnimation, false);
+    //    yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attackFrostStartAnimation);
+    //    m_animation.SetAnimation(0, m_info.attackFrost.animation, false);
+    //    yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attackFrost.animation);
+    //    m_animation.SetAnimation(0, m_info.idleAnimation, true);
+    //    m_flinchHandle.gameObject.SetActive(true);
+    //    m_rigidbody2D.constraints = RigidbodyConstraints2D.FreezeRotation;
+    //    m_stateHandle.ApplyQueuedState();
+    //    m_attackDecider.hasDecidedOnAttack = false;
+    //    yield return null;
+    //}
 
-        //            GameObject projectile = m_info.projectile.projectileInfo.projectile;
-        //            var instance = GameSystem.poolManager.GetPool<ProjectilePool>().GetOrCreateItem(projectile);
-        //            instance.transform.position = m_character.centerMass.position;
-        //            var component = instance.GetComponent<Projectile>();
-        //            component.ResetState();
-        //            component.GetComponent<Rigidbody2D>().velocity = projectileMoveDirection;
-        //            Vector2 v = component.GetComponent<Rigidbody2D>().velocity;
-        //            var projRotation = Mathf.Atan2(v.y, v.x) * Mathf.Rad2Deg;
-        //            component.transform.rotation = Quaternion.AngleAxis(projRotation, Vector3.forward);
+    //private void LaunchIcePattern(int numberOfProjectiles, int rotations)
+    //{
+    //    for (int x = 0; x < rotations; x++)
+    //    {
+    //        float angleStep = 360f / numberOfProjectiles;
+    //        float angle = 45f;
+    //        for (int z = 0; z < numberOfProjectiles; z++)
+    //        {
+    //            Vector2 startPoint = new Vector2(m_character.centerMass.position.x, m_character.centerMass.position.y);
+    //            float projectileDirXposition = startPoint.x + Mathf.Sin((angle * Mathf.PI) / 180) * 5;
+    //            float projectileDirYposition = startPoint.y + Mathf.Cos((angle * Mathf.PI) / 180) * 5;
 
-        //            angle += angleStep;
-        //        }
-        //    }
-        //    //yield return null;
-        //}
+    //            Vector2 projectileVector = new Vector2(projectileDirXposition, projectileDirYposition);
+    //            Vector2 projectileMoveDirection = (projectileVector - startPoint).normalized * m_info.projectile.projectileInfo.speed;
 
-        private void LaunchProjectile()
+    //            GameObject projectile = m_info.projectile.projectileInfo.projectile;
+    //            var instance = GameSystem.poolManager.GetPool<ProjectilePool>().GetOrCreateItem(projectile);
+    //            instance.transform.position = m_character.centerMass.position;
+    //            var component = instance.GetComponent<Projectile>();
+    //            component.ResetState();
+    //            component.GetComponent<Rigidbody2D>().velocity = projectileMoveDirection;
+    //            Vector2 v = component.GetComponent<Rigidbody2D>().velocity;
+    //            var projRotation = Mathf.Atan2(v.y, v.x) * Mathf.Rad2Deg;
+    //            component.transform.rotation = Quaternion.AngleAxis(projRotation, Vector3.forward);
+
+    //            angle += angleStep;
+    //        }
+    //    }
+    //    //yield return null;
+    //}
+
+    private void LaunchProjectile()
         {
             if (m_targetInfo.isValid)
             {
@@ -744,6 +810,10 @@ namespace DChild.Gameplay.Characters.Enemies
                             }
                             m_rigidbody2D.constraints = RigidbodyConstraints2D.FreezeRotation;
                             CalculateRunPath();
+                            var directionToTarget = m_targetInfo.transform.position - transform.position;
+
+                            var oppositeDirection = -directionToTarget.normalized;
+                            m_agent.SetDestination(oppositeDirection);
                             m_agent.Move(m_info.move.speed);
                         }
                         else
@@ -751,7 +821,29 @@ namespace DChild.Gameplay.Characters.Enemies
                             m_agent.Stop();
                             m_rigidbody2D.constraints = RigidbodyConstraints2D.FreezePosition | RigidbodyConstraints2D.FreezeRotation;
                             m_animation.SetAnimation(0, m_info.idleAnimation, true).TimeScale = 1f;
+
                         }
+                        /*if (Vector2.Distance(m_targetInfo.position, transform.position) <= m_info.targetDistanceTolerance)
+                        {
+                            m_rigidbody2D.constraints = RigidbodyConstraints2D.FreezeRotation;
+                            CalculateRunPath();
+                            m_agent.Move(m_info.move.speed);
+                        }
+                        else
+                        {
+                            if (Vector2.Distance(m_targetInfo.position, transform.position) < m_info.targetDistanceTolerance + 10)
+                            {
+                              
+                                
+ 
+                            }
+                            else
+                            {
+                                m_agent.Stop();
+                                m_rigidbody2D.constraints = RigidbodyConstraints2D.FreezePosition | RigidbodyConstraints2D.FreezeRotation;
+                                m_animation.SetAnimation(0, m_info.idleAnimation, true).TimeScale = 1f;
+                            }
+                        }*/
                     }
 
                     if (m_currentCD <= m_info.attackCD)
