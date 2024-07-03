@@ -162,6 +162,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private int m_HealValue;
         [SerializeField, TabGroup("Reference")]
         private float m_summonCooldown;
+        //[SerializeField, TabGroup("Reference")]
+        //private float m_TeleportCooldown;
         [SerializeField, TabGroup("Modules")]
         private AnimatedTurnHandle m_turnHandle;
         [SerializeField, TabGroup("Modules")]
@@ -184,6 +186,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private bool m_HasHealed;
         private float m_healthHealThreshold;
         private float m_summonCooldownDuration=0f;
+        //private float m_teleportCooldownDuration = 0f;
 
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_wallSensor;
@@ -395,7 +398,14 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_currentFlinchAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_currentFlinchAnimation);
             m_animation.SetAnimation(0, m_currentFlinchAnimation, true);
-            m_stateHandle.ApplyQueuedState();
+            if (m_teleportRoutine == null && !m_wallSensor.allRaysDetecting && !m_backSensor.allRaysDetecting)
+            {
+                //m_stateHandle.Wait(State.ReevaluateSituation);
+                m_teleportRoutine = StartCoroutine(TeleportRoutine());
+            }else
+            {
+                m_stateHandle.ApplyQueuedState();
+            }
             yield return null;
         }
 
@@ -565,6 +575,54 @@ namespace DChild.Gameplay.Characters.Enemies
                 if (m_animation.animationState.GetCurrent(0).IsComplete)
                 {
                     m_animation.SetAnimation(0, m_currentIdleAnimation, true);
+                }
+            }
+        }
+
+        private void TeleportFleeing()
+        {
+            
+
+            if (IsTargetInRange(m_info.targetDistanceTolerance) && !m_wallSensor.allRaysDetecting && !m_backSensor.allRaysDetecting)
+            {
+                if (IsTargetInRange(m_info.fleeDistance))
+                {
+                    m_stateHandle.Wait(State.ReevaluateSituation);
+                    m_teleportRoutine = StartCoroutine(TeleportRoutine());
+                }
+                else
+                {
+                    if (IsFacingTarget())
+                    {
+                        if (m_animation.GetCurrentAnimation(0).ToString() != m_currentIdleAnimation)
+                            m_movement.Stop();
+
+                        m_selfCollider.enabled = true;
+                        m_animation.SetAnimation(0, m_currentIdleAnimation, true);
+                    }
+                    else
+                    {
+                        m_turnState = State.ReevaluateSituation;
+                        if (m_animation.GetCurrentAnimation(0).ToString() != m_currentTurnAnimation)
+                            m_stateHandle.SetState(State.Turning);
+                    }
+                }
+
+            }
+            else
+            {
+                if (IsFacingTarget())
+                {
+                    Move();
+                }
+                else
+                {
+                    if (!m_backSensor.allRaysDetecting)
+                    {
+                        m_turnState = State.ReevaluateSituation;
+                        if (m_animation.GetCurrentAnimation(0).ToString() != m_currentTurnAnimation)
+                            m_stateHandle.SetState(State.Turning);
+                    }
                 }
             }
         }
@@ -799,48 +857,8 @@ namespace DChild.Gameplay.Characters.Enemies
                         break;
                     }
 
-                    if (IsTargetInRange(m_info.targetDistanceTolerance) && !m_wallSensor.allRaysDetecting && !m_backSensor.allRaysDetecting)
-                    {
-                        if (IsTargetInRange(m_info.fleeDistance))
-                        {
-                            m_stateHandle.Wait(State.ReevaluateSituation);
-                            m_teleportRoutine = StartCoroutine(TeleportRoutine());
-                        }
-                        else
-                        {
-                            if (IsFacingTarget())
-                            {
-                                if (m_animation.GetCurrentAnimation(0).ToString() != m_currentIdleAnimation)
-                                    m_movement.Stop();
-
-                                m_selfCollider.enabled = true;
-                                m_animation.SetAnimation(0, m_currentIdleAnimation, true);
-                            }
-                            else
-                            {
-                                m_turnState = State.ReevaluateSituation;
-                                if (m_animation.GetCurrentAnimation(0).ToString() != m_currentTurnAnimation)
-                                    m_stateHandle.SetState(State.Turning);
-                            }
-                        }
-
-                    }
-                    else
-                    {
-                        if (IsFacingTarget())
-                        {
-                            Move();
-                        }
-                        else
-                        {
-                            if (!m_backSensor.allRaysDetecting)
-                            {
-                                m_turnState = State.ReevaluateSituation;
-                                if (m_animation.GetCurrentAnimation(0).ToString() != m_currentTurnAnimation)
-                                    m_stateHandle.SetState(State.Turning);
-                            }
-                        }
-                    }
+                    TeleportFleeing();
+                    
                     break;
 
                 case State.ReevaluateSituation:
