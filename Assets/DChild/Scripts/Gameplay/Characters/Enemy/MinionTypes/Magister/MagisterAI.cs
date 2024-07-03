@@ -160,6 +160,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private Collider2D m_legCollider;
         [SerializeField, TabGroup("Reference")]
         private int m_HealValue;
+        [SerializeField, TabGroup("Reference")]
+        private float m_summonCooldown;
         [SerializeField, TabGroup("Modules")]
         private AnimatedTurnHandle m_turnHandle;
         [SerializeField, TabGroup("Modules")]
@@ -181,6 +183,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private Vector2 m_startPoint;
         private bool m_HasHealed;
         private float m_healthHealThreshold;
+        private float m_summonCooldownDuration=0f;
 
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_wallSensor;
@@ -606,11 +609,22 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return null;
         }
 
+        private IEnumerator SummonBook()
+        {
+            m_stateHandle.Wait(State.ReevaluateSituation);
+            m_animation.SetAnimation(0,m_info.bookSummonAnimation,false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.bookSummonAnimation);
+            ApplyBookState(BookState.WithBook);
+            m_summonCooldownDuration = m_summonCooldown;
+            m_stateHandle.ApplyQueuedState();
+            yield return null;
+        }
+
         protected override void Start()
         {
             base.Start();
 
-            ApplyBookState(BookState.WithBook);
+            ApplyBookState(BookState.WithoutBook);
             m_currentFullCD = UnityEngine.Random.Range(m_info.attackCD * .5f, m_info.attackCD * 2f);
             //m_aggroCollider.enabled = m_willPatrol ? true : false;
 
@@ -651,6 +665,8 @@ namespace DChild.Gameplay.Characters.Enemies
                     if (m_animation.GetCurrentAnimation(0).ToString() != m_currentIdleAnimation)
                         m_movement.Stop();
 
+                    
+
                     if (!IsFacingTarget())
                     {
                         m_turnState = State.Detect;
@@ -659,6 +675,11 @@ namespace DChild.Gameplay.Characters.Enemies
                     }
                     else
                     {
+                        if (m_bookState == BookState.WithoutBook && m_summonCooldownDuration <= 0)
+                        {
+                            StartCoroutine(SummonBook());
+                            break;
+                        }
                         m_stateHandle.OverrideState(State.ReevaluateSituation);
                     }
                     break;
@@ -767,6 +788,11 @@ namespace DChild.Gameplay.Characters.Enemies
 
                 case State.Fleeing:
 
+                    if (m_summonCooldownDuration > 0)
+                    {
+                        m_summonCooldownDuration -= Time.deltaTime;
+                    }
+
                     if (m_damageable.health.currentValue < m_healthHealThreshold && !m_HasHealed)
                     {
                         StartCoroutine(Healing());
@@ -824,6 +850,10 @@ namespace DChild.Gameplay.Characters.Enemies
                         switch (m_bookState)
                         {
                             case BookState.WithoutBook:
+                                if(m_summonCooldownDuration<=0)
+                                {
+                                    StartCoroutine(SummonBook());
+                                }
                                 m_stateHandle.SetState(State.Fleeing);
                                 break;
                             case BookState.WithBook:
@@ -849,6 +879,10 @@ namespace DChild.Gameplay.Characters.Enemies
                     }
                     break;
                 case State.WaitBehaviourEnd:
+                    if (m_summonCooldownDuration > 0)
+                    {
+                        m_summonCooldownDuration -= Time.deltaTime;
+                    }
                     return;
             }
 
