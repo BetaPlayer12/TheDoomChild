@@ -175,12 +175,6 @@ namespace DChild.Gameplay.Characters.Enemies
             RoyalGuard2,
             Harvest,
             DeathStenchWave,
-            Attack1,
-            Attack2,
-            Attack3,
-            Attack4,
-            ScytheSpinAttack,
-            WaitAttackEnd,
         }
 
         public enum Phase
