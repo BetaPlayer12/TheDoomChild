@@ -5,6 +5,7 @@ using UnityEngine;
 using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
+using Spine.Unity;
 
 namespace DChild.Gameplay.Characters.Enemies
 {
@@ -18,14 +19,17 @@ namespace DChild.Gameplay.Characters.Enemies
             private PhaseInfo<Phase> m_phaseInfo;
             public PhaseInfo<Phase> phaseInfo => m_phaseInfo;
 
-            [SerializeField]
-            private Dictionary<int, float> m_hitsToFlinchChancePair;
-            public float GetFlinchChance(int hitCount) => m_hitsToFlinchChancePair.TryGetValue(hitCount, out float value) ? value : 0;
 
-            [SerializeField, Min(0.1f)]
+            [SerializeField, Min(0.1f), BoxGroup("Consecutive Hits")]
             private float m_consecutiveHitToFlinchInterval;
             public float consecutiveHitToFlinchInterval => m_consecutiveHitToFlinchInterval;
+            [SerializeField, BoxGroup("Consecutive Hits")]
+            private Dictionary<int, float> m_consecutiveHitsToFlinchChancePair;
+            public float GetFlinchChance(int hitCount) => m_consecutiveHitsToFlinchChancePair.TryGetValue(hitCount, out float value) ? value : 0;
 
+            [SerializeField, TabGroup("Rage Quake")]
+            private BasicAnimationInfo m_rageQuakeAnimation;
+            public BasicAnimationInfo rageQuakeAnimation => m_rageQuakeAnimation;
 
             [SerializeField]
             private MovementInfo m_move = new MovementInfo();
@@ -81,9 +85,7 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField]
             private BasicAnimationInfo m_flinchBlackAnimation;
             public BasicAnimationInfo flinchBlackAnimation => m_flinchBlackAnimation;
-            [SerializeField]
-            private BasicAnimationInfo m_healAnimation;
-            public BasicAnimationInfo healAnimation => m_healAnimation;
+
             [SerializeField]
             private BasicAnimationInfo m_idle1Animation;
             public BasicAnimationInfo idle1Animation => m_idle1Animation;
@@ -109,6 +111,8 @@ namespace DChild.Gameplay.Characters.Enemies
             public override void Initialize()
             {
 #if UNITY_EDITOR
+                m_rageQuakeAnimation.SetData(m_skeletonDataAsset);
+
                 m_move.SetData(m_skeletonDataAsset);
                 m_move2.SetData(m_skeletonDataAsset);
                 m_attack1.SetData(m_skeletonDataAsset);
@@ -125,7 +129,6 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_defeat2Animation.SetData(m_skeletonDataAsset);
                 m_flinchAnimation.SetData(m_skeletonDataAsset);
                 m_flinchBlackAnimation.SetData(m_skeletonDataAsset);
-                m_healAnimation.SetData(m_skeletonDataAsset);
                 m_idle1Animation.SetData(m_skeletonDataAsset);
                 m_idle2Animation.SetData(m_skeletonDataAsset);
                 m_idleTransition1to2Animation.SetData(m_skeletonDataAsset);
@@ -156,8 +159,22 @@ namespace DChild.Gameplay.Characters.Enemies
             WaitBehaviourEnd,
         }
 
+        private enum Mode
+        {
+            Normal,
+            RoyalGuardian
+        }
+
         private enum Attack
         {
+            ScytheThrow,
+            ScytheSwipe1,
+            ScytheSwipe2,
+            ScytheSmash,
+            RoyalGuard1,
+            RoyalGuard2,
+            Harvest,
+            DeathStenchWave,
             Attack1,
             Attack2,
             Attack3,
@@ -170,6 +187,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             PhaseOne,
             PhaseTwo,
+            PhaseThree,
             Wait,
         }
 
@@ -218,34 +236,29 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Spawn Points")]
         private Transform m_projectilePoint;
 
-        private int m_attackCount;
+        private int m_consecutiveHitToFlinchCounter;
+        private float m_consectiveHitTimer;
+        private bool m_willTrackConsecutiveHits;
+
         private int m_randomAttack;
         private float m_startGroundPos;
         private bool m_hasHealed;
-        private bool m_hasPhaseChanged;
         private PhaseInfo m_phaseInfo;
 
         private void ApplyPhaseData(PhaseInfo obj)
         {
             m_phaseInfo = obj;
-            //for (int i = 0; i < m_patternAttackCount.Length; i++)
-            //{
-            //    m_patternAttackCount[i] = obj.patternAttackCount[i];
-            //}
+            UpdateAttackDeciderList();
         }
 
         private void ChangeState()
         {
-            if (!m_hasPhaseChanged)
-            {
-                m_hasPhaseChanged = true;
-                StopAllCoroutines();
-                m_scytheSpinFX.Stop();
-                m_animation.DisableRootMotion();
-                m_animation.SetEmptyAnimation(0, 0);
-                m_stateHandle.OverrideState(State.Phasing);
-                m_phaseHandle.ApplyChange();
-            }
+            StopAllCoroutines();
+            m_scytheSpinFX.Stop();
+            m_animation.DisableRootMotion();
+            m_animation.SetEmptyAnimation(0, 0);
+            m_stateHandle.OverrideState(State.Phasing);
+            m_phaseHandle.ApplyChange();
         }
 
         private void OnTurnRequest(object sender, EventActionArgs eventArgs) => m_stateHandle.OverrideState(State.Turning);
@@ -258,7 +271,6 @@ namespace DChild.Gameplay.Characters.Enemies
                 {
                     base.SetTarget(damageable, m_target);
                     m_stateHandle.OverrideState(State.ReevaluateSituation);
-                    //GameEventMessage.SendEvent("Boss Encounter");
                 }
             }
         }
@@ -270,36 +282,6 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_animation.animationState.TimeScale = 1f;
                 m_stateHandle.ApplyQueuedState();
             }
-        }
-
-        private IEnumerator ChangePhaseRoutine()
-        {
-            //SelfHeal
-            m_hitbox.SetInvulnerability(Invulnerability.None);
-            var flinch = IsFacingTarget() ? m_info.flinchAnimation : m_info.flinchBlackAnimation;
-            m_animation.SetAnimation(0, flinch, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, flinch);
-            m_animation.SetAnimation(0, m_info.healAnimation, false);
-            Debug.Log("health percentage " + (float)m_health.currentValue / m_health.maxValue);
-            var healPercentage = (((float)m_health.currentValue / m_health.maxValue) + .2f);
-            yield return new WaitForSeconds(1);
-            m_health.SetHealthPercentage(healPercentage);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.healAnimation);
-            m_stateHandle.ApplyQueuedState();
-            yield return null;
-        }
-
-        private IEnumerator HealingRoutine()
-        {
-            m_hasHealed = true;
-            m_animation.SetAnimation(0, m_info.healAnimation, false);
-            var healPercentage = (((float)m_health.currentValue / m_health.maxValue) + .2f);
-            //Debug.Log("heal points " + healPercentage);
-            yield return new WaitForSeconds(1);
-            m_health.SetHealthPercentage(healPercentage);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.healAnimation);
-            m_stateHandle.ApplyQueuedState();
-            yield return null;
         }
 
         private Vector2 GroundPosition()
@@ -343,6 +325,28 @@ namespace DChild.Gameplay.Characters.Enemies
                 yield return null;
             }
         }
+
+        #region Modules
+        private IEnumerator FlinchRoutine()
+        {
+            var flinch = IsFacingTarget() ? m_info.flinchAnimation : m_info.flinchBlackAnimation;
+            var flinchTrack = m_animation.SetAnimation(0, flinch, false);
+            m_animation.AddAnimation(0, m_info.idle1Animation, true, 0);
+            yield return new WaitForSpineAnimationComplete(flinchTrack);
+        }
+
+        private IEnumerator ChangePhaseRoutine()
+        {
+            m_stateHandle.Wait(State.ReevaluateSituation);
+            m_willTrackConsecutiveHits = false;
+            yield return FlinchRoutine();
+            var rageAnimation = m_animation.SetAnimation(0, m_info.rageQuakeAnimation, false);
+            m_animation.AddAnimation(0, m_info.idle2Animation, true, 0);
+            yield return new WaitForSpineAnimationComplete(rageAnimation);
+            m_willTrackConsecutiveHits = true;
+            m_stateHandle.ApplyQueuedState();
+        }
+        #endregion
 
         #region Attacks
         private IEnumerator Attack1Routine()
@@ -438,8 +442,6 @@ namespace DChild.Gameplay.Characters.Enemies
                 yield return null;
             }
             m_agent.Stop();
-
-            ExecuteAttack(attack);
             yield return null;
         }
 
@@ -468,46 +470,83 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void UpdateAttackDeciderList()
         {
-
+            switch (m_phaseHandle.currentPhase)
+            {
+                case Phase.PhaseOne:
+                    m_attackDecider.SetList(new AttackInfo<Attack>(Attack.ScytheThrow, 0),
+                                            new AttackInfo<Attack>(Attack.ScytheSmash, 0));
+                    break;
+                case Phase.PhaseTwo:
+                    break;
+                case Phase.PhaseThree:
+                    break;
+            }
         }
 
         public override void ApplyData()
         {
-
             base.ApplyData();
         }
 
-        private void ExecuteAttack(Attack m_attack)
+
+        private void OnDamageTaken(object sender, Damageable.DamageEventArgs eventArgs)
         {
-            switch (m_attack)
+            if (m_willTrackConsecutiveHits)
             {
-                case Attack.Attack1:
-                    StartCoroutine(Attack1Routine());
-                    break;
-                case Attack.Attack2:
-                    StartCoroutine(Attack2Routine());
-                    break;
-                case Attack.Attack3:
-                    StartCoroutine(Attack3Routine());
-                    break;
-                case Attack.Attack4:
-                    StartCoroutine(Attack4Routine());
-                    break;
-                case Attack.ScytheSpinAttack:
-                    //m_stateHandle.OverrideState(State.Chasing);
-                    break;
+                TrackConsecutiveHit();
+            }
+
+            var flinchChance = m_info.GetFlinchChance(m_consecutiveHitToFlinchCounter);
+            if (flinchChance > 0)
+            {
+                if (Random.Range(0, 1f) <= flinchChance)
+                {
+                    m_consecutiveHitToFlinchCounter = 0;
+                    ForcedFlinch();
+                }
             }
         }
+
+        private void TrackConsecutiveHit()
+        {
+            if (m_consectiveHitTimer > 0)
+            {
+                m_consecutiveHitToFlinchCounter++;
+            }
+            else
+            {
+                m_consecutiveHitToFlinchCounter = 1;
+            }
+            m_consectiveHitTimer = m_info.consecutiveHitToFlinchInterval;
+        }
+
+        private void ForcedFlinch()
+        {
+            //StopCurrentBehaviour
+            StartCoroutine(ConsecutiveHitFlinchRoutine());
+        }
+
+        private IEnumerator ConsecutiveHitFlinchRoutine()
+        {
+            m_stateHandle.Wait(State.ReevaluateSituation);
+            yield return FlinchRoutine();
+            m_stateHandle.ApplyQueuedState();
+        }
+
 
         protected override void Awake()
         {
             base.Awake();
             m_turnHandle.TurnDone += OnTurnDone;
+            m_damageable.DamageTaken += OnDamageTaken;
+
             m_deathHandle.SetAnimation(m_info.deathAnimation.animation);
             m_attackDecider = new RandomAttackDecider<Attack>();
 
             m_stateHandle = new StateHandle<State>(State.Idle, State.WaitBehaviourEnd);
+            m_willTrackConsecutiveHits = true;
             UpdateAttackDeciderList();
+
         }
 
         protected override void Start()
@@ -524,32 +563,16 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void Update()
         {
-            if (!m_hasPhaseChanged)
-            {
-                m_phaseHandle.MonitorPhase();
-            }
+            m_consectiveHitTimer -= GameplaySystem.time.deltaTime;
+            m_phaseHandle.MonitorPhase();
+
             switch (m_stateHandle.currentState)
             {
                 case State.Idle:
                     // Starting State When Fight is not triggered
                     break;
-                //case State.Intro:
-                //    StartCoroutine(IntroRoutine());
-                //    //if (IsFacingTarget())
-                //    //{
-                //    //    StartCoroutine(IntroRoutine());
-                //    //    //m_stateHandle.OverrideState(State.ReevaluateSituation);
-                //    //}
-                //    //else
-                //    //{
-                //    //    m_turnState = State.Intro;
-                //    //    if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
-                //    //        m_stateHandle.SetState(State.Turning);
-                //    //}
-                //    break;
                 case State.Phasing:
                     Debug.Log("Phase Time");
-                    m_stateHandle.Wait(State.ReevaluateSituation);
                     StartCoroutine(ChangePhaseRoutine());
                     break;
                 case State.Turning:
@@ -558,10 +581,29 @@ namespace DChild.Gameplay.Characters.Enemies
                     StopAllCoroutines();
                     m_agent.Stop();
                     m_turnHandle.Execute(m_info.turnAnimation.animation, m_info.idle1Animation.animation);
-                    //m_animation.animationState.GetCurrent(0).MixDuration = 1;
-                    //m_movement.Stop();
                     break;
                 case State.Attacking:
+
+
+                    switch (m_attackDecider.chosenAttack.attack)
+                    {
+                        case Attack.ScytheThrow:
+                            break;
+                        case Attack.ScytheSwipe1:
+                            break;
+                        case Attack.ScytheSwipe2:
+                            break;
+                        case Attack.ScytheSmash:
+                            break;
+                        case Attack.RoyalGuard1:
+                            break;
+                        case Attack.RoyalGuard2:
+                            break;
+                        case Attack.Harvest:
+                            break;
+                        case Attack.DeathStenchWave:
+                            break;
+                    }
                     //m_stateHandle.Wait(State.Attacking);
                     //var randomFacing = UnityEngine.Random.Range(0, 2) == 1 ? 1 : -1;
                     //var target = new Vector2(m_targetInfo.position.x, GroundPosition().y /*m_startGroundPos*/);
