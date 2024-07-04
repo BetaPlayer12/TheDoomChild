@@ -442,6 +442,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             var instance = GameSystem.poolManager.GetPool<PoolableObjectPool>().GetOrCreateItem(m_info.fireDragonHead, gameObject.scene);
             var toPlayer = playerPosition - spawnPosition;
+            Debug.Log(toPlayer);
             var rad = Mathf.Atan2(toPlayer.y, toPlayer.x);
             //Vector3 instScale = instance.GetComponent<Transform>().localScale;
 

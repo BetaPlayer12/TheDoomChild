@@ -22,6 +22,15 @@ namespace DChild.Gameplay.Projectiles
         public GameObject m_model;
         public Transform m_fireDragonMouthPos;
 
+        [SerializeField, TabGroup("Reference")]
+        private RaySensor m_roofSensor;
+        [SerializeField, TabGroup("Reference")]
+        private RaySensor m_wallSensor;
+        [SerializeField, TabGroup("Reference")]
+        private float m_moveOutOfWallSpeed;
+        private Vector2 m_spawnPosition;
+        private Vector2 m_ToPlayerDirection;
+
         public void InitializeField(SpineRootAnimation spineRoot)
         {
             m_spine = spineRoot;
@@ -38,6 +47,14 @@ namespace DChild.Gameplay.Projectiles
         private IEnumerator AttackRoutine()
         {
             m_spine.SetAnimation(0, m_attackAnimation, false);
+
+            //THIS IS A TEMORARY FIXX
+            yield return new WaitForSeconds(0.7f);
+            ShootFire();
+            yield return new WaitForSeconds(1f);
+            OffFire();
+
+
             yield return new WaitForAnimationComplete(m_spine.animationState, m_attackAnimation);
             DestroyInstance();
             yield return null;
@@ -48,6 +65,18 @@ namespace DChild.Gameplay.Projectiles
             m_flameEffect.Play(true);
             m_flameCollider.SetActive(true);
 
+        }
+
+        void Update()
+        {
+                if (m_roofSensor.isDetecting)
+                {
+                    transform.position = Vector3.MoveTowards(transform.position, new Vector2(m_ToPlayerDirection.x, transform.position.y), m_moveOutOfWallSpeed);
+                }
+                if (m_wallSensor.isDetecting)
+                {
+                    transform.position = Vector3.MoveTowards(transform.position, new Vector2(transform.position.x, m_ToPlayerDirection.y), m_moveOutOfWallSpeed);
+                }
         }
 
         public void OffFire()
@@ -63,13 +92,17 @@ namespace DChild.Gameplay.Projectiles
             var toPlayer = playerPosition - fireBreathPos;
             var rad = Mathf.Atan2(toPlayer.y, toPlayer.x);
 
-            m_model.transform.localScale = new Vector3(transform.position.x < playerPosition.x ? -1 : 1, transform.position.y < playerPosition.y ? -1 : 1);
+            //m_model.transform.localScale = new Vector3(transform.position.x < playerPosition.x ? -1 : 1, transform.position.y < playerPosition.y ? -1 : 1);
+            
+            m_model.transform.localScale = new Vector3(transform.position.x < playerPosition.x ? -1 : 1, 1);
 
             Debug.Log("Dragon Head: " + transform.position + "\n Dragon Scale: " + m_model.transform.localScale + "\n Player Pos: " + playerPosition);
         }
 
         public void SetPlayerPosition(Vector2 playerPos)
         {
+            m_ToPlayerDirection = ((Vector2)transform.position - playerPos).normalized;
+            m_spawnPosition = transform.position;
             m_playerPosition = playerPos;
             AdjustFireBreathRotationToPlayerPosition(m_playerPosition);
             PlayAttackAnimation();
