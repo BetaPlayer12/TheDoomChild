@@ -15,10 +15,13 @@ public class CrystalCrawlerSpike : FX
     private ParticleFX m_dustFX;
     [SerializeField, BoxGroup("FX")]
     private GameObject m_explodeFXGO;
+    [SerializeField, BoxGroup("FX")]
+    private GameObject m_shatterFX;
     [SerializeField, BoxGroup("Spine")]
     private SpineEventListener m_spineListener;
     [SerializeField, BoxGroup("Spine")]
     private SpineRootAnimation m_spine;
+
     [SerializeField, BoxGroup("Audio")]
     private AudioSource m_audio;
 
@@ -38,6 +41,8 @@ public class CrystalCrawlerSpike : FX
     private string m_loopAnimation;
     [SerializeField, Spine.Unity.SpineAnimation(dataField = "m_skeletonAnimation"), BoxGroup("Spine")]
     private string m_endAnimation;
+    [SerializeField, Spine.Unity.SpineAnimation(dataField = "m_skeletonAnimation"), BoxGroup("Spine")]
+    private string m_shattterAnimation;
 
     [SerializeField, ValueDropdown("GetEvents")]
     private string m_event;
@@ -85,10 +90,11 @@ public class CrystalCrawlerSpike : FX
 
     private IEnumerator SpikeRoutine()
     {
-        m_dustFX?.Play();
+        //m_dustFX?.Play();
         var explodFX = GameSystem.poolManager.GetPool<FXPool>().GetOrCreateItem(m_explodeFXGO);
         explodFX.transform.position = transform.position;
         m_audio.Play();
+        this.gameObject.SetActive(true);
         m_spine.SetAnimation(0, m_startAnimation, false);
         yield return new WaitForAnimationComplete(m_spine.animationState, m_startAnimation);
         m_spine.SetAnimation(0, m_loopAnimation, false);
@@ -98,6 +104,32 @@ public class CrystalCrawlerSpike : FX
         yield return new WaitForAnimationComplete(m_spine.animationState, m_endAnimation);
         Stop();
         yield return null;
+    }
+
+    private IEnumerator ShatterShardRoutine()
+    {
+        
+        m_spine.SetAnimation(0, m_shattterAnimation, false);
+        StopCoroutine(SpikeRoutine());
+        var shatterFX = GameSystem.poolManager.GetPool<FXPool>().GetOrCreateItem(m_shatterFX);
+        shatterFX.transform.position = transform.position;
+        yield return new WaitForAnimationComplete(m_spine.animationState, m_shattterAnimation);
+        Stop();
+
+    }
+    
+    public void HideObject()
+    {
+        StopAllCoroutines();
+        this.gameObject.SetActive(false);
+    }
+    public void PlayShatterShard()
+    {
+        StartCoroutine(ShatterShardRoutine());
+    }
+    public void StopShatterShard()
+    {
+        StopCoroutine(ShatterShardRoutine());
     }
 
     public override void Play()

@@ -362,11 +362,13 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator AttackRoutine(Vector2 target)
         {
+           
+            var spike = GameSystem.poolManager.GetPool<FXPool>().GetOrCreateItem(m_info.spikeGO);
+            spike.GetComponent<CrystalCrawlerSpike>().StopShatterShard();
+            spike.transform.position = transform.position;
             m_animation.SetAnimation(0, m_info.attack.animation, false);
             //float speed = (2f * transform.localScale.x);
             //var spike = this.InstantiateToScene(m_info.spikeGO, transform.position, Quaternion.identity);
-            var spike = GameSystem.poolManager.GetPool<FXPool>().GetOrCreateItem(m_info.spikeGO);
-            spike.transform.position = transform.position;
             //m_spike.transform.SetParent(null);
             //m_spike.transform.localScale = new Vector3(-transform.localScale.x, m_spike.transform.localScale.y, m_spike.transform.localScale.z);
             spike.transform.localScale = new Vector3(-transform.localScale.x, spike.transform.localScale.y, spike.transform.localScale.z);
