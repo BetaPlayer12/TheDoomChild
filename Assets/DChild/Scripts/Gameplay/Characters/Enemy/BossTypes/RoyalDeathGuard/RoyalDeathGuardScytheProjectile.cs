@@ -37,9 +37,9 @@ namespace DChild.Gameplay.Characters.Enemies
 
 
             public float distance => m_distance;
-            public SegmentConfig forwardInfo; => m_forwardInfo;
+            public SegmentConfig forwardInfo => m_forwardInfo;
             public float returnDelay => m_returnDelay;
-            public SegmentConfig returnInfo; => m_returnInfo;
+            public SegmentConfig returnInfo => m_returnInfo;
         }
 
         [SerializeField]
@@ -47,6 +47,12 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private bool m_isInFlight;
         public event EventAction<EventActionArgs> FlightDone;
+
+#if UNITY_EDITOR
+        private Vector3 m_startingPosition;
+        private Vector3 m_destination;
+#endif
+
 
         [Button]
         public void ExecuteFlight()
@@ -64,6 +70,11 @@ namespace DChild.Gameplay.Characters.Enemies
             var startingPosition = transform.position;
             var destination = startingPosition + (transform.right * m_info.distance);
 
+#if UNITY_EDITOR
+            m_startingPosition = startingPosition;
+            m_destination = destination;
+#endif
+
             gameObject.SetActive(true);
             yield return MoveTo(startingPosition, destination, m_info.forwardInfo);
             yield return new WaitForSeconds(m_info.returnDelay);
@@ -76,19 +87,62 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator MoveTo(Vector3 from, Vector3 to, FlightInfo.SegmentConfig segmentConfig)
         {
+            var travelTime = Vector3.Distance(from, to) / segmentConfig.speed;
+            var maxLerpDelta = 1 / travelTime;
             var lerpValue = 0f;
             do
             {
-                lerpValue += GameplaySystem.time.deltaTime * segmentConfig.speed;
-                transform.position = Vector3.Lerp(from, to, lerpValue);
-                transform.position += transform.up * segmentConfig.GetOffset(lerpValue);
+                lerpValue += GameplaySystem.time.deltaTime * maxLerpDelta;
+                transform.position = CalculatePosition(from, to, transform.up, segmentConfig, lerpValue);
                 yield return null;
             } while (lerpValue < 1);
+        }
+
+        private Vector3 CalculatePosition(Vector3 from, Vector3 to, Vector3 upDirection, FlightInfo.SegmentConfig segmentConfig, float lerpValue)
+        {
+            var position = Vector3.Lerp(from, to, lerpValue);
+            position += upDirection * segmentConfig.GetOffset(lerpValue);
+            return position;
         }
 
         private void Awake()
         {
             gameObject.SetActive(false);
+        }
+
+        private void OnDrawGizmosSelected()
+        {
+#if UNITY_EDITOR
+            if (m_isInFlight == false)
+            {
+                m_startingPosition = transform.position;
+                m_destination = m_startingPosition + (transform.right * m_info.distance);
+            }
+            Gizmos.DrawLine(m_startingPosition, m_destination);
+
+            Gizmos.color = Color.yellow;
+            var lerpValue = 0f;
+            var previousPosition = CalculatePosition(m_startingPosition, m_destination, transform.up, m_info.forwardInfo, lerpValue); ;
+            do
+            {
+                lerpValue += 0.05f;
+                var nextPosition = CalculatePosition(m_startingPosition, m_destination, transform.up, m_info.forwardInfo, lerpValue);
+                Gizmos.DrawLine(previousPosition, nextPosition);
+                previousPosition = nextPosition;
+            } while (lerpValue < 1);
+
+            Gizmos.color = Color.red;
+            lerpValue = 0f;
+            previousPosition = CalculatePosition(m_destination, m_startingPosition, transform.up, m_info.returnInfo, lerpValue); ;
+            do
+            {
+                lerpValue += 0.05f;
+                var nextPosition = CalculatePosition(m_destination, m_startingPosition, transform.up, m_info.returnInfo, lerpValue);
+                Gizmos.DrawLine(previousPosition, nextPosition);
+                previousPosition = nextPosition;
+            } while (lerpValue < 1);
+#endif
+
         }
     }
 }
