@@ -120,6 +120,7 @@ MonoBehaviour:
   m_interactablePrompt: {fileID: 0}
   m_movableObjectPrompt: {fileID: 0}
   m_upgradeWeaponHandler: {fileID: 0}
+  m_cinematicBars: {fileID: 0}
 --- !u!1 &1760432952484764363
 GameObject:
   m_ObjectHideFlags: 0
@@ -325,7 +326,40 @@ MonoBehaviour:
       Entry: 8
       Data: 
     - Name: m_codexData
+      Entry: 7
+      Data: 5|DChild.Menu.Codex.CodexSaveData, Assembly-CSharp
+    - Name: m_codexDatas
+      Entry: 7
+      Data: 6|DChild.Serialization.AcquisitionData[], Assembly-CSharp
+    - Name: 
+      Entry: 12
+      Data: 6
+    - Name: 
       Entry: 6
+      Data: 
+    - Name: 
+      Entry: 6
+      Data: 
+    - Name: 
+      Entry: 6
+      Data: 
+    - Name: 
+      Entry: 6
+      Data: 
+    - Name: 
+      Entry: 6
+      Data: 
+    - Name: 
+      Entry: 6
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
       Data: 
     - Name: m_skills
       Entry: 7
@@ -341,13 +375,13 @@ MonoBehaviour:
       Data: 
     - Name: m_soulSkillData
       Entry: 7
-      Data: 5|DChild.Gameplay.SoulSkills.PlayerSoulSkillData, Assembly-CSharp
+      Data: 7|DChild.Gameplay.SoulSkills.PlayerSoulSkillData, Assembly-CSharp
     - Name: m_currentSoulCapacity
       Entry: 3
       Data: 0
     - Name: m_acquiredSoulSkills
       Entry: 7
-      Data: 6|System.Int32[], mscorlib
+      Data: 8|System.Int32[], mscorlib
     - Name: 
       Entry: 14
       Data: 21
@@ -422,7 +456,7 @@ MonoBehaviour:
       Data: 
     - Name: m_activatedSoulSkills
       Entry: 7
-      Data: 7|System.Int32[], mscorlib
+      Data: 9|System.Int32[], mscorlib
     - Name: 
       Entry: 14
       Data: 0
@@ -436,7 +470,23 @@ MonoBehaviour:
       Entry: 8
       Data: 
     - Name: m_combatArtsData
+      Entry: 7
+      Data: 10|DChild.Gameplay.Characters.Players.CombatArtsSaveData, Assembly-CSharp
+    - Name: m_level
+      Entry: 7
+      Data: DChild.Gameplay.Characters.Player.CombatArt.Leveling.CombatArtLevel+SaveData,
+        Assembly-CSharp
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: m_skillPoints
+      Entry: 3
+      Data: 0
+    - Name: m_artLevels
       Entry: 6
+      Data: 
+    - Name: 
+      Entry: 8
       Data: 
     - Name: m_weaponUpgradeSaveData
       Entry: 7
@@ -451,31 +501,6 @@ MonoBehaviour:
       Entry: 8
       Data: 
     - Name: m_campaignProgress
-      Entry: 7
-      Data: 8|DChild.Serialization.SerializeDataList, Assembly-CSharp
-    - Name: m_saveDatas
-      Entry: 7
-      Data: 9|System.Collections.Generic.Dictionary`2[[DChild.Serialization.SerializeID,
-        Assembly-CSharp],[DChild.Serialization.ISaveData, Assembly-CSharp]], mscorlib
-    - Name: comparer
-      Entry: 7
-      Data: 10|DChild.Serialization.SerializeID+EqualityComparer, Assembly-CSharp
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 12
-      Data: 0
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: m_zoneDatas
       Entry: 7
       Data: 11|DChild.Serialization.SerializeDataList, Assembly-CSharp
     - Name: m_saveDatas
@@ -500,10 +525,7 @@ MonoBehaviour:
     - Name: 
       Entry: 8
       Data: 
-    - Name: m_importable
-      Entry: 6
-      Data: 
-    - Name: m_miscDatas
+    - Name: m_zoneDatas
       Entry: 7
       Data: 14|DChild.Serialization.SerializeDataList, Assembly-CSharp
     - Name: m_saveDatas
@@ -513,6 +535,34 @@ MonoBehaviour:
     - Name: comparer
       Entry: 7
       Data: 16|DChild.Serialization.SerializeID+EqualityComparer, Assembly-CSharp
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: m_importable
+      Entry: 6
+      Data: 
+    - Name: m_miscDatas
+      Entry: 7
+      Data: 17|DChild.Serialization.SerializeDataList, Assembly-CSharp
+    - Name: m_saveDatas
+      Entry: 7
+      Data: 18|System.Collections.Generic.Dictionary`2[[DChild.Serialization.SerializeID,
+        Assembly-CSharp],[DChild.Serialization.ISaveData, Assembly-CSharp]], mscorlib
+    - Name: comparer
+      Entry: 7
+      Data: 19|DChild.Serialization.SerializeID+EqualityComparer, Assembly-CSharp
     - Name: 
       Entry: 8
       Data: 
@@ -1083,6 +1133,7 @@ GameObject:
   - component: {fileID: 5459732075996280386}
   - component: {fileID: 6610132760341546613}
   - component: {fileID: 4538709575358643873}
+  - component: {fileID: 8006665138157474551}
   m_Layer: 0
   m_Name: Cinema
   m_TagString: Untagged
@@ -1120,88 +1171,18 @@ MonoBehaviour:
   serializationData:
     SerializedFormat: 2
     SerializedBytes: 
-    ReferencedUnityObjects:
-    - {fileID: 11400000, guid: fe22f8d4a9e7dbc4aa30e8f6f6738e64, type: 2}
-    - {fileID: 11400000, guid: c1fb42a4bab731a4f9e0b8ccc861a4f0, type: 2}
-    - {fileID: 11400000, guid: dfa74ab838e3fa4478a24f633dc06c70, type: 2}
+    ReferencedUnityObjects: []
     SerializedBytesString: 
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
     SerializationNodes:
-    - Name: m_cameraShakeHandle
-      Entry: 7
-      Data: 0|DChild.Gameplay.Cinematics.CameraShakeHandle, Assembly-CSharp
-    - Name: m_noiseSettings
-      Entry: 7
-      Data: 1|UnityEngine.Rendering.SerializedDictionary`2[[DChild.Gameplay.Cinematics.CameraShakeType,
-        Assembly-CSharp],[Cinemachine.NoiseSettings, Cinemachine]], Unity.RenderPipelines.Core.Runtime
-    - Name: comparer
-      Entry: 7
-      Data: 2|System.Collections.Generic.EnumEqualityComparer`1[[DChild.Gameplay.Cinematics.CameraShakeType,
-        Assembly-CSharp]], mscorlib
-    - Name: 
-      Entry: 12
-      Data: 0
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 12
-      Data: 3
-    - Name: 
-      Entry: 7
-      Data: 
-    - Name: $k
-      Entry: 3
-      Data: 0
-    - Name: $v
-      Entry: 10
-      Data: 0
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 
-    - Name: $k
-      Entry: 3
-      Data: 1
-    - Name: $v
-      Entry: 10
-      Data: 1
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 
-    - Name: $k
-      Entry: 3
-      Data: 2
-    - Name: $v
-      Entry: 10
-      Data: 2
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: m_currentShakeType
-      Entry: 3
-      Data: 0
-    - Name: 
-      Entry: 8
+    - Name: m_cameraShakeHandleOld
+      Entry: 6
       Data: 
   m_mainCamera: {fileID: 0}
   m_trackingTarget: {fileID: 0}
+  m_cameraShakeHandle: {fileID: 8006665138157474551}
 --- !u!114 &5459732075996280386
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1394,6 +1375,18 @@ MonoBehaviour:
   m_onEnemyKilledShakeLoopData: {fileID: 11400000, guid: c6c041b3c8229444fa1206fd9bb1bb30,
     type: 2}
   m_shakePause: 0.2
+--- !u!114 &8006665138157474551
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4914704124739206884}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8c6a241c8cac8f348adee728ee0af763, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5608145492047156799
 GameObject:
   m_ObjectHideFlags: 0
