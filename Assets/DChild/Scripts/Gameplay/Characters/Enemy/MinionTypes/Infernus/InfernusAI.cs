@@ -82,6 +82,9 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField, ValueDropdown("GetEvents")]
             private string m_flameoffEvent;
             public string flameoffEvent => m_flameoffEvent;
+            [SerializeField, ValueDropdown("GetEvents")]
+            private string m_fireballEvent;
+            public string fireballEvent => m_fireballEvent;
 
             public override void Initialize()
             {
@@ -338,10 +341,10 @@ namespace DChild.Gameplay.Characters.Enemies
             }*/
             projectilePos = new Vector2(projectilePos.x, projectilePos.y + 20f);
             m_projectileLauncher.AimAt(projectilePos);
-            m_projectileLauncher.LaunchProjectile();
+            m_projectileLauncher.LaunchProjectile();/*
             yield return new WaitForSeconds(0.8f);
             m_projectileLauncher.AimAt(projectilePos);
-            m_projectileLauncher.LaunchProjectile();
+            m_projectileLauncher.LaunchProjectile();*/
             yield return null;
         }
 
@@ -389,7 +392,6 @@ namespace DChild.Gameplay.Characters.Enemies
             m_currentMoveSpeed = UnityEngine.Random.Range(m_info.move.speed * .75f, m_info.move.speed * 1.25f);
             m_currentBackMoveSpeed = UnityEngine.Random.Range(m_info.moveBackwards.speed * .75f, m_info.moveBackwards.speed * 1.25f);
             m_currentFullCD = UnityEngine.Random.Range(m_info.attackCD * .5f, m_info.attackCD * 2f);
-
             m_spineEventListener.Subscribe(m_info.projectile.launchOnEvent, LaunchProjectile);
             m_spineEventListener.Subscribe(m_info.flameoffEvent, m_flameFX.Stop);
             m_startPoint = transform.position;
