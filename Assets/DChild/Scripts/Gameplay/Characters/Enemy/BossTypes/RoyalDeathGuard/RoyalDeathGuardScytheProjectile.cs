@@ -48,17 +48,25 @@ namespace DChild.Gameplay.Characters.Enemies
         private bool m_isInFlight;
         public event EventAction<EventActionArgs> FlightDone;
 
-#if UNITY_EDITOR
-        private Vector3 m_startingPosition;
-        private Vector3 m_destination;
-#endif
 
+        public void SetFlightInfo(FlightInfo info)
+        {
+            m_info = info;
+        }
 
         [Button]
-        public void ExecuteFlight()
+        public void ExecuteFlight(Vector3 startingPosition, Vector3 aimTowards)
         {
             if (m_isInFlight == false)
             {
+                transform.position = startingPosition;
+
+                Vector3 spitPos = startingPosition;
+                Vector3 v_diff = (aimTowards - spitPos);
+                float atan2 = Mathf.Atan2(v_diff.y, v_diff.x);
+                transform.rotation = Quaternion.Euler(0f, 0f, atan2 * Mathf.Rad2Deg);
+
+                gameObject.SetActive(true);
                 StartCoroutine(FlightRoutine());
             }
         }
@@ -76,10 +84,12 @@ namespace DChild.Gameplay.Characters.Enemies
 #endif
 
             gameObject.SetActive(true);
+            yield return new WaitForSeconds(0.1f); //JUst for the eyes to catch up that it appeared;
             yield return MoveTo(startingPosition, destination, m_info.forwardInfo);
             yield return new WaitForSeconds(m_info.returnDelay);
             yield return MoveTo(destination, startingPosition, m_info.returnInfo);
             FlightDone?.Invoke(this, EventActionArgs.Empty);
+            yield return new WaitForSeconds(0.1f); //JUst for the eyes to catch up that it disappeared;
             gameObject.SetActive(false);
 
             m_isInFlight = false;
@@ -110,6 +120,39 @@ namespace DChild.Gameplay.Characters.Enemies
             gameObject.SetActive(false);
         }
 
+#if UNITY_EDITOR
+        private Vector3 m_startingPosition;
+        private Vector3 m_destination;
+
+        private void DrawTrajectory(Vector3 from, Vector3 to, FlightInfo.SegmentConfig segmentConfig)
+        {
+            var lerpValue = 0f;
+            var previousPosition = CalculatePosition(from, to, transform.up, segmentConfig, lerpValue);
+            ;
+            do
+            {
+                lerpValue += 0.05f;
+                var nextPosition = CalculatePosition(from, to, transform.up, segmentConfig, lerpValue);
+                Gizmos.DrawLine(previousPosition, nextPosition);
+                previousPosition = nextPosition;
+            } while (lerpValue < 1);
+        }
+
+        private void DrawSpeedIndicators(Vector3 from, Vector3 to, FlightInfo.SegmentConfig segmentConfig, float size)
+        {
+            var travelTime = Vector3.Distance(from, to) / segmentConfig.speed;
+            var maxLerpDelta = 1 / travelTime;
+            var lerpValue = 0f;
+            ;
+            do
+            {
+                lerpValue += 0.05f * maxLerpDelta;
+                var position = CalculatePosition(from, to, transform.up, segmentConfig, lerpValue);
+                Gizmos.DrawCube(position, Vector3.one * size);
+            } while (lerpValue < 1);
+        }
+#endif
+
         private void OnDrawGizmosSelected()
         {
 #if UNITY_EDITOR
@@ -121,28 +164,16 @@ namespace DChild.Gameplay.Characters.Enemies
             Gizmos.DrawLine(m_startingPosition, m_destination);
 
             Gizmos.color = Color.yellow;
-            var lerpValue = 0f;
-            var previousPosition = CalculatePosition(m_startingPosition, m_destination, transform.up, m_info.forwardInfo, lerpValue); ;
-            do
-            {
-                lerpValue += 0.05f;
-                var nextPosition = CalculatePosition(m_startingPosition, m_destination, transform.up, m_info.forwardInfo, lerpValue);
-                Gizmos.DrawLine(previousPosition, nextPosition);
-                previousPosition = nextPosition;
-            } while (lerpValue < 1);
+            DrawTrajectory(m_startingPosition, m_destination, m_info.forwardInfo);
+            DrawSpeedIndicators(m_startingPosition, m_destination, m_info.forwardInfo, 0.7f);
 
             Gizmos.color = Color.red;
-            lerpValue = 0f;
-            previousPosition = CalculatePosition(m_destination, m_startingPosition, transform.up, m_info.returnInfo, lerpValue); ;
-            do
-            {
-                lerpValue += 0.05f;
-                var nextPosition = CalculatePosition(m_destination, m_startingPosition, transform.up, m_info.returnInfo, lerpValue);
-                Gizmos.DrawLine(previousPosition, nextPosition);
-                previousPosition = nextPosition;
-            } while (lerpValue < 1);
+            DrawTrajectory(m_destination, m_startingPosition, m_info.returnInfo);
+            DrawSpeedIndicators(m_destination, m_startingPosition, m_info.returnInfo, 0.5f);
 #endif
 
         }
+
+
     }
 }
