@@ -207,7 +207,7 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 StopCoroutine(m_randomTurnRoutine);
             }
-            //m_spineEventListener.Subscribe(m_info.projectile.launchOnEvent, SpitProjectile);
+            m_spineEventListener.Subscribe(m_info.projectile.launchOnEvent, SpitProjectile);
             m_startPoint = transform.position;
             m_legsForStompAttack.SetActive(false);
         }
@@ -388,8 +388,8 @@ namespace DChild.Gameplay.Characters.Enemies
             m_movement.Stop();
             m_targetLastPos = m_targetInfo.position - m_info.targetOffset;
             m_animation.SetAnimation(0, m_info.spitAttack.animation, false).MixDuration = 0;
-            yield return new WaitUntil(() => m_attackBB.CurrentCollider != null);
-            SpitProjectile();
+            //yield return new WaitUntil(() => m_attackBB.CurrentCollider != null);
+            //SpitProjectile();
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.spitAttack.animation);
             m_animation.EnableRootMotion(true, false);
             m_animation.SetAnimation(0, m_info.move.animation, false);
