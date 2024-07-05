@@ -38,58 +38,82 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField]
             private MovementInfo m_move2 = new MovementInfo();
             public MovementInfo move2 => m_move2;
-
+            [SerializeField]
+            private MovementInfo m_floatMove = new MovementInfo();
+            public MovementInfo floatMove => m_floatMove;
 
             [Title("Attack Behaviours")]
-            [SerializeField, TabGroup("Scythe Throw")]
+            [SerializeField, TabGroup("Attacks1", "Scythe Throw")]
             private SimpleAttackInfo m_scytheThrowAttack = new SimpleAttackInfo();
             public SimpleAttackInfo scytheThrowAttack => m_scytheThrowAttack;
-            [SerializeField, TabGroup("Scythe Throw")]
+            [SerializeField, TabGroup("Attacks1", "Scythe Throw")]
             private BasicAnimationInfo m_scytheThrowAnticipation;
             public BasicAnimationInfo scytheThrowAnticipation => m_scytheThrowAnticipation;
 
-            [SerializeField, TabGroup("Scythe Swipe")]
+            [SerializeField, TabGroup("Attacks1", "Scythe Swipe")]
             private SimpleAttackInfo m_scytheSwipeAttack = new SimpleAttackInfo();
             public SimpleAttackInfo scytheSwipeAttack => m_scytheSwipeAttack;
-            [SerializeField, TabGroup("Scythe Swipe")]
+            [SerializeField, TabGroup("Attacks1", "Scythe Swipe")]
             private BasicAnimationInfo m_scytheSwipeAnticipation;
             public BasicAnimationInfo scytheSwipeAnticipation => m_scytheSwipeAnticipation;
+            [SerializeField, TabGroup("Attacks1", "Scythe Swipe")]
+            private AttackData m_scytheSwipeAttackData;
+            public AttackData scytheSwipeAttackData => m_scytheSwipeAttackData;
 
-            [SerializeField, TabGroup("Scythe Smash")]
+
+            [SerializeField, TabGroup("Attacks1", "Scythe Smash")]
             private SimpleAttackInfo m_scytheSmashAttack = new SimpleAttackInfo();
             public SimpleAttackInfo scytheSmashAttack => m_scytheSmashAttack;
-            [SerializeField, TabGroup("Scythe Smash")]
+            [SerializeField, TabGroup("Attacks1", "Scythe Smash")]
             private BasicAnimationInfo m_scytheSmashAnticipation;
             public BasicAnimationInfo scytheSmashAnticipation => m_scytheSmashAnticipation;
+            [SerializeField, TabGroup("Attacks1", "Scythe Smash")]
+            private AttackData m_scytheSmashAttackData;
+            public AttackData scytheSmashAttackData => m_scytheSmashAttackData;
 
-            [SerializeField, TabGroup("Royal Guardian One")]
+            [SerializeField, TabGroup("Attacks2", "Royal Guardian One")]
             private SimpleAttackInfo m_royalGuardianOneAttack = new SimpleAttackInfo();
             public SimpleAttackInfo royalGuardianOneAttack => m_royalGuardianOneAttack;
-            [SerializeField, TabGroup("Royal Guardian One")]
+            [SerializeField, TabGroup("Attacks2", "Royal Guardian One")]
             private BasicAnimationInfo m_royalGuardianOneAnticipation;
             public BasicAnimationInfo royalGuardianOneAnticipation => m_royalGuardianOneAnticipation;
 
-
-            [SerializeField, TabGroup("Scythe Swipe Two")]
+            [SerializeField, TabGroup("Attacks2", "Scythe Swipe Two")]
             private SimpleAttackInfo m_scytheSwipeTwoAttack = new SimpleAttackInfo();
             public SimpleAttackInfo scytheSwipeTwoAttack => m_scytheSwipeTwoAttack;
-            [SerializeField, TabGroup("Scythe Swipe Two")]
+            [SerializeField, TabGroup("Attacks2", "Scythe Swipe Two")]
             private BasicAnimationInfo m_scytheSwipeTwoAnticipation;
             public BasicAnimationInfo scytheSwipeTwoAnticipation => m_scytheSwipeTwoAnticipation;
+            [SerializeField, TabGroup("Attacks2", "Scythe Swipe Two")]
+            private AttackData m_scytheSwipeTwoAttackData;
+            public AttackData scytheSwipeTwoAttackData => m_scytheSwipeTwoAttackData;
 
-            [SerializeField, TabGroup("Harvest")]
+            [SerializeField, TabGroup("Attacks2", "Harvest")]
             private SimpleAttackInfo m_harvestAttack = new SimpleAttackInfo();
             public SimpleAttackInfo harvestAttack => m_harvestAttack;
-            [SerializeField, TabGroup("Harvest")]
+            [SerializeField, TabGroup("Attacks2", "Harvest")]
             private BasicAnimationInfo m_harvestAnticipation;
             public BasicAnimationInfo harvestAnticipation => m_harvestAnticipation;
+            [SerializeField, TabGroup("Attacks2", "Harvest")]
+            private AttackData m_harvestAttackData;
+            public AttackData harvestAttackData => m_harvestAttackData;
 
-            [SerializeField, TabGroup("Royale Guardian Two")]
+            [SerializeField, TabGroup("Attacks3", "Royal Guardian Two")]
             private SimpleAttackInfo m_royalGuardianTwoAttack = new SimpleAttackInfo();
             public SimpleAttackInfo royalGuardianTwoAttack => m_royalGuardianTwoAttack;
-            [SerializeField, TabGroup("Royal Guardian Two")]
+            [SerializeField, TabGroup("Attacks3", "Royal Guardian Two")]
             private BasicAnimationInfo m_royalGuardianTwoAnticipation;
             public BasicAnimationInfo royalGuardianTwoAnticipation => m_royalGuardianTwoAnticipation;
+
+            [SerializeField, TabGroup("Attacks3", "Death Stench Wave")]
+            private SimpleAttackInfo m_deathStenchWaveAttack = new SimpleAttackInfo();
+            public SimpleAttackInfo deathStenchWaveAttack => m_deathStenchWaveAttack;
+            [SerializeField, TabGroup("Attacks3", "Death Stench Wave")]
+            private BasicAnimationInfo m_deathStenchWaveAnticipation;
+            public BasicAnimationInfo m_deathStenchWaveAttackAnticipation => m_deathStenchWaveAttackAnticipation;
+            [SerializeField, TabGroup("Attacks3", "Death Stench Wave")]
+            private AttackData m_deathStenchWaveAttackData;
+            public AttackData deathStenchWaveAttackData => m_deathStenchWaveAttackData;
 
             [Title("Misc")]
             [SerializeField]
@@ -142,6 +166,9 @@ namespace DChild.Gameplay.Characters.Enemies
 
                 m_move.SetData(m_skeletonDataAsset);
                 m_move2.SetData(m_skeletonDataAsset);
+                m_floatMove.SetData(m_skeletonDataAsset);
+
+                //Attack Animations
                 m_scytheThrowAttack.SetData(m_skeletonDataAsset);
                 m_scytheSwipeAttack.SetData(m_skeletonDataAsset);
                 m_scytheSmashAttack.SetData(m_skeletonDataAsset);
@@ -149,7 +176,19 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_scytheSwipeTwoAttack.SetData(m_skeletonDataAsset);
                 m_harvestAttack.SetData(m_skeletonDataAsset);
                 m_royalGuardianTwoAttack.SetData(m_skeletonDataAsset);
+                m_deathStenchWaveAttack.SetData(m_skeletonDataAsset);
 
+                //Attack Anticipation Animations
+                m_scytheThrowAnticipation.SetData(m_skeletonDataAsset);
+                m_scytheSwipeAnticipation.SetData(m_skeletonDataAsset);
+                m_scytheSmashAnticipation.SetData(m_skeletonDataAsset);
+                m_royalGuardianOneAnticipation.SetData(m_skeletonDataAsset);
+                m_scytheSwipeTwoAnticipation.SetData(m_skeletonDataAsset);
+                m_harvestAnticipation.SetData(m_skeletonDataAsset);
+                m_royalGuardianTwoAnticipation.SetData(m_skeletonDataAsset);
+                m_deathStenchWaveAnticipation.SetData(m_skeletonDataAsset);
+
+                //Other Behavior Animations
                 m_deathAnimation.SetData(m_skeletonDataAsset);
                 m_defeatAnimation.SetData(m_skeletonDataAsset);
                 m_defeat2Animation.SetData(m_skeletonDataAsset);
@@ -272,6 +311,9 @@ namespace DChild.Gameplay.Characters.Enemies
         private float m_startGroundPos;
         private bool m_hasHealed;
         private PhaseInfo m_phaseInfo;
+
+        [SerializeField, ReadOnly]
+        private int m_attackCounter;
 
         private void ApplyPhaseData(PhaseInfo obj)
         {
@@ -451,41 +493,76 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator ScytheThrow()
         {
+            m_stateHandle.Wait(State.ReevaluateSituation);
+
+            m_stateHandle.ApplyQueuedState();
             yield return null;
         }
         
         private IEnumerator ScytheSwipe()
         {
+            //m_animation.SetAnimation(0, m_info.scytheSwipeAnticipation.animation, false);
+            //yield return new WaitForAnimationComplete();
+            m_stateHandle.Wait(State.ReevaluateSituation);
+
+            SetCurrentAttackData();
+
+            m_animation.SetAnimation(0, m_info.scytheSwipeAttack.animation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.scytheSwipeAttack.animation);
+
+            m_attackCounter++;
+
+            m_animation.SetAnimation(0, m_info.floatMove.animation, true);
+
+            m_stateHandle.ApplyQueuedState();
             yield return null;
         }
 
         private IEnumerator ScytheSwipeTwo()
         {
+            m_stateHandle.Wait(State.ReevaluateSituation);
+
+            m_stateHandle.ApplyQueuedState();
             yield return null;
         }
 
         private IEnumerator ScytheSmash()
         {
+            m_stateHandle.Wait(State.ReevaluateSituation);
+
+            m_stateHandle.ApplyQueuedState();
             yield return null;
         }
 
         private IEnumerator RoyalGuardianOne()
         {
+            m_stateHandle.Wait(State.ReevaluateSituation);
+
+            m_stateHandle.ApplyQueuedState();
             yield return null;
         }
 
         private IEnumerator RoyalGuardianTwo()
         {
+            m_stateHandle.Wait(State.ReevaluateSituation);
+
+            m_stateHandle.ApplyQueuedState();
             yield return null;
         }
 
         private IEnumerator Harvest()
         {
+            m_stateHandle.Wait(State.ReevaluateSituation);
+
+            m_stateHandle.ApplyQueuedState();
             yield return null;
         }
 
         private IEnumerator DeathStenchWave()
         {
+            m_stateHandle.Wait(State.ReevaluateSituation);
+
+            m_stateHandle.ApplyQueuedState();
             yield return null;
         }
         #endregion
@@ -648,6 +725,7 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 case State.Idle:
                     // Starting State When Fight is not triggered
+                    m_animation.SetAnimation(0, m_info.idle1Animation.animation, true);
                     break;
                 case State.Phasing:
                     Debug.Log("Phase Time");
@@ -670,20 +748,28 @@ namespace DChild.Gameplay.Characters.Enemies
                     switch (m_currentAttackDecider.chosenAttack.attack)
                     {
                         case Attack.ScytheThrow:
+                            StartCoroutine(ScytheThrow());
                             break;
                         case Attack.ScytheSwipe1:
+                            StartCoroutine(ScytheSwipe());
                             break;
                         case Attack.ScytheSwipe2:
+                            StartCoroutine(ScytheSwipeTwo());
                             break;
                         case Attack.ScytheSmash:
+                            StartCoroutine(ScytheSmash());
                             break;
                         case Attack.RoyalGuard1:
+                            StartCoroutine(RoyalGuardianOne());
                             break;
                         case Attack.RoyalGuard2:
+                            StartCoroutine(RoyalGuardianTwo());
                             break;
                         case Attack.Harvest:
+                            StartCoroutine(Harvest());
                             break;
                         case Attack.DeathStenchWave:
+                            StartCoroutine(DeathStenchWave());
                             break;
                     }                 
                     break;
@@ -691,19 +777,44 @@ namespace DChild.Gameplay.Characters.Enemies
                 case State.ReevaluateSituation:
                     //Phase 1 Reevaluation consists of check boss HP -> Check player distance 
 
+                    //Sample Set long range attack decider if requirements met
                     m_currentAttackDecider = m_longRangedAttackDecider;
-                    m_currentAttackDecider.hasDecidedOnAttack = false;
+                    //m_currentAttackDecider.hasDecidedOnAttack = false;
 
                     //Sample Force Attack
+                    //m_currentAttackDecider.hasDecidedOnAttack = true;
                     //m_currentAttackDecider.DecideOnAttack(Attack.ScytheThrow);
 
                     //Phase 2 Reevaluation consists of check boss HP -> Check player distance -> check attack counter
 
                     //Phase 3 Reevaluation consists of check boss HP -> Check player distance -> check attack counter
+
+                    //Temporary Reevaluation Behavior
+                    if (IsFacingTarget())
+                    {
+                        m_stateHandle.SetState(State.Idle);
+                    }
+                    else
+                    {
+                        m_stateHandle.SetState(State.Turning);
+                    }
                     break;
                 case State.WaitBehaviourEnd:
                     return;
             }
+        }
+
+        [Button]
+        private void ForceAttack(Attack attack)
+        {
+            m_currentAttackDecider.DecideOnAttack(attack);
+            m_currentAttackDecider.hasDecidedOnAttack = true;
+            m_stateHandle.SetState(State.Attacking);
+        }
+
+        private void SetCurrentAttackData()
+        {
+            //Change Attack Data
         }
 
         protected override void OnTargetDisappeared()
