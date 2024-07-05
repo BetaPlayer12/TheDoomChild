@@ -16,9 +16,12 @@ namespace DChild.Gameplay.Characters.Enemies
         public class Info : BaseInfo
         {
             [SerializeField]
+            private RoyalDeathGuardScytheProjectile.FlightInfo[] m_scytheThrowPatterns;
+            public RoyalDeathGuardScytheProjectile.FlightInfo[] scytheThrowPatterns => m_scytheThrowPatterns;
+
+            [SerializeField]
             private PhaseInfo<Phase> m_phaseInfo;
             public PhaseInfo<Phase> phaseInfo => m_phaseInfo;
-
 
             [SerializeField, Min(0.1f), BoxGroup("Consecutive Hits")]
             private float m_consecutiveHitToFlinchInterval;
@@ -302,6 +305,11 @@ namespace DChild.Gameplay.Characters.Enemies
 
         [SerializeField, TabGroup("Spawn Points")]
         private Transform m_projectilePoint;
+        [SerializeField, TabGroup("Spawn Points")]
+        private Transform m_scytheThrowPoint;
+
+        [SerializeField, TabGroup("Projectiles")]
+        private RoyalDeathGuardScytheProjectile m_scytheThrowProjectile;
 
         private int m_consecutiveHitToFlinchCounter;
         private float m_consectiveHitTimer;
@@ -419,84 +427,48 @@ namespace DChild.Gameplay.Characters.Enemies
         #endregion
 
         #region Attacks
-        private IEnumerator Attack1Routine()
-        {
-            m_animation.EnableRootMotion(true, false);
-            //m_animation.SetAnimation(0, m_info.attack1.animation, false);
-            m_animation.AddAnimation(0, m_info.idle1Animation, true, 0)/*.MixDuration = 1*/;
-            //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack1.animation);
-            m_stateHandle.ApplyQueuedState();
-            yield return null;
-        }
-
-        private IEnumerator Attack2Routine()
-        {
-            if (!IsFacingTarget())
-            {
-                CustomTurn();
-            }
-            m_animation.EnableRootMotion(true, false);
-            m_animation.SetAnimation(0, m_info.scytheSwipeAttack.animation, false);
-            m_animation.AddAnimation(0, m_info.idle1Animation, true, 0)/*.MixDuration = 1*/;
-            yield return new WaitForSeconds(.5f);
-            m_groundStabBB.transform.position = new Vector2(m_targetInfo.position.x, GroundPosition().y);
-            yield return new WaitForSeconds(1.75f);
-            m_slashGroundFX.Play();
-            m_groundStabBB.enabled = true;
-            m_scytheStabBB.enabled = true;
-            yield return new WaitForSeconds(1f);
-            m_groundStabBB.enabled = false;
-            m_scytheStabBB.enabled = false;
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.scytheSwipeAttack.animation);
-            m_stateHandle.ApplyQueuedState();
-            yield return null;
-        }
-
-        private IEnumerator Attack3Routine()
-        {
-            if (!IsFacingTarget())
-            {
-                CustomTurn();
-            }
-            m_animation.EnableRootMotion(true, false);
-            m_animation.SetAnimation(0, m_info.scytheSmashAttack.animation, false);
-            m_animation.AddAnimation(0, m_info.idle1Animation, true, 0)/*.MixDuration = 1*/;
-            yield return new WaitForSeconds(3f);
-            //m_scytheSpinFX.gameObject.SetActive(true);
-            m_scytheSpinFX.Play(); //m_scytheSpinFX.GetComponent<ParticleSystem>().Play();
-            m_scytheSpinBB.enabled = true;
-            yield return new WaitForSeconds(1.5f);
-            m_scytheSpinFX.Stop();
-            m_scytheSpinBB.enabled = false;
-            //m_scytheSpinFX.gameObject.SetActive(false); //m_scytheSpinFX.GetComponent<ParticleSystem>().Stop();
-            //yield return new WaitForSeconds(1.3f);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.scytheSmashAttack.animation);
-            m_stateHandle.ApplyQueuedState();
-            yield return null;
-        }
-
-        private IEnumerator Attack4Routine()
-        {
-            if (!IsFacingTarget())
-            {
-                CustomTurn();
-            }
-            m_animation.EnableRootMotion(true, false);
-            m_animation.SetAnimation(0, m_info.royalGuardianOneAttack.animation, false);
-            //m_animation.AddAnimation(0, m_info.attack4bAnimation, true, 0)/*.MixDuration = 1*/;
-            m_animation.AddAnimation(0, m_info.idle1Animation, true, 0)/*.MixDuration = 1*/;
-            //yield return new WaitForSeconds(1.3f);
-            //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack4bAnimation);
-            m_stateHandle.ApplyQueuedState();
-            yield return null;
-        }
-
         private IEnumerator ScytheThrow()
         {
             m_stateHandle.Wait(State.ReevaluateSituation);
 
+            m_animation.SetAnimation(0, m_info.scytheThrowAnticipation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.scytheThrowAnticipation);
+
+            m_animation.SetAnimation(0, m_info.scytheThrowAttack, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.scytheThrowAttack);
+
+            m_attackCounter++;
+
+            m_animation.SetAnimation(0, m_info.floatMove.animation, true);
+            yield return new WaitForSeconds(1f);
+
             m_stateHandle.ApplyQueuedState();
             yield return null;
+        }
+
+        public void ThrowScythe()
+        {
+            m_scytheThrowProjectile.transform.position = m_scytheThrowPoint.position;
+
+            if (m_phaseHandle.currentPhase == Phase.PhaseOne)
+            {
+                //Pattern 1
+                m_scytheThrowProjectile.SetFlightInfo(m_info.scytheThrowPatterns[0]);
+            }
+            else
+            {
+                //Patern 1 or Pattern 2
+                int rand = Random.Range(0, 2);
+                if (rand == 0)
+                {
+                    m_scytheThrowProjectile.SetFlightInfo(m_info.scytheThrowPatterns[0]);
+                }
+                else
+                {
+                    m_scytheThrowProjectile.SetFlightInfo(m_info.scytheThrowPatterns[1]);
+                }
+            }
+            m_scytheThrowProjectile.ExecuteFlight(m_scytheThrowPoint.position, m_targetInfo.position);
         }
         
         private IEnumerator ScytheSwipe()
@@ -505,7 +477,7 @@ namespace DChild.Gameplay.Characters.Enemies
             //yield return new WaitForAnimationComplete();
             m_stateHandle.Wait(State.ReevaluateSituation);
 
-            SetCurrentAttackData();
+            m_statsData.SetAttackData(m_info.scytheSwipeAttackData);
 
             m_animation.SetAnimation(0, m_info.scytheSwipeAttack.animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.scytheSwipeAttack.animation);
@@ -513,6 +485,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_attackCounter++;
 
             m_animation.SetAnimation(0, m_info.floatMove.animation, true);
+            yield return new WaitForSeconds(1f);
 
             m_stateHandle.ApplyQueuedState();
             yield return null;
@@ -521,6 +494,18 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator ScytheSwipeTwo()
         {
             m_stateHandle.Wait(State.ReevaluateSituation);
+
+            m_animation.EnableRootMotion(true, true);
+
+            m_statsData.SetAttackData(m_info.scytheSwipeTwoAttackData);
+
+            m_animation.SetAnimation(0, m_info.scytheSwipeTwoAttack.animation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.scytheSwipeTwoAttack.animation);
+
+            m_attackCounter++;
+
+            m_animation.SetAnimation(0, m_info.floatMove.animation, true);
+            yield return new WaitForSeconds(1f);
 
             m_stateHandle.ApplyQueuedState();
             yield return null;
