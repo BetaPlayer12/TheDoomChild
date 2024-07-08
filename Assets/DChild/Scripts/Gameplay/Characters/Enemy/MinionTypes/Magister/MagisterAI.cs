@@ -162,6 +162,10 @@ namespace DChild.Gameplay.Characters.Enemies
         private int m_HealValue;
         [SerializeField, TabGroup("Reference")]
         private float m_summonCooldown;
+        [SerializeField, TabGroup("Reference")]
+        private ParticleSystem m_TeleportVFX;
+        [SerializeField, TabGroup("Reference")]
+        private GameObject m_shadow;
         //[SerializeField, TabGroup("Reference")]
         //private float m_TeleportCooldown;
         [SerializeField, TabGroup("Modules")]
@@ -398,7 +402,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_currentFlinchAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_currentFlinchAnimation);
             m_animation.SetAnimation(0, m_currentFlinchAnimation, true);
-            if (m_teleportRoutine == null && !m_wallSensor.allRaysDetecting && !m_backSensor.allRaysDetecting)
+            if (m_teleportRoutine == null && !m_wallSensor.allRaysDetecting && !m_backSensor.allRaysDetecting&& m_targetInfo!=null)
             {
                 //m_stateHandle.Wait(State.ReevaluateSituation);
                 m_teleportRoutine = StartCoroutine(TeleportRoutine());
@@ -629,7 +633,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator TeleportRoutine()
         {
-           
+            m_TeleportVFX.Play();
+            m_shadow.SetActive(false);
             m_animation.SetAnimation(0, m_info.teleportDisappearAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.teleportDisappearAnimation);
             m_hitbox.Disable();
@@ -637,6 +642,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_character.physics.simulateGravity = false;
             m_bodyCollider.enabled = false;
             m_legCollider.enabled = false;
+            yield return new WaitForSeconds(2f);
             //yield return new WaitUntil(() => Vector2.Distance(m_targetInfo.position, transform.position) > m_info.targetDistanceTolerance);
             transform.position = new Vector2(m_targetInfo.position.x + (UnityEngine.Random.Range(0, 2) == 1 ? 25f : -25f), GroundPosition(m_targetInfo.position).y);
             yield return new WaitForSeconds(1.2f);
@@ -645,12 +651,14 @@ namespace DChild.Gameplay.Characters.Enemies
                 transform.position = Vector3.MoveTowards(transform.position, m_targetInfo.position, m_currentMoveSpeed);
                 yield return null;
             }
+            m_animation.SetAnimation(0, m_info.teleportFromBelowAnimation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.teleportFromBelowAnimation);
+            //m_TeleportVFX.Play();
+            m_shadow.SetActive(true);
             m_hitbox.Enable();
             m_character.physics.simulateGravity = true;
             m_bodyCollider.enabled = true;
             m_legCollider.enabled = true;
-            m_animation.SetAnimation(0, m_info.teleportFromBelowAnimation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.teleportFromBelowAnimation);
             m_teleportRoutine = null;
             m_stateHandle.ApplyQueuedState();
             yield return null;
