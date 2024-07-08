@@ -65,6 +65,9 @@ namespace DChild.Gameplay.Characters.Enemies
                 Vector3 v_diff = (aimTowards - spitPos);
                 float atan2 = Mathf.Atan2(v_diff.y, v_diff.x);
                 transform.rotation = Quaternion.Euler(0f, 0f, atan2 * Mathf.Rad2Deg);
+                //if(transform.localScale.x > -1)
+                //else
+                //    transform.rotation = Quaternion.Euler(0f, 0f, -atan2 * Mathf.Rad2Deg);
 
                 gameObject.SetActive(true);
                 StartCoroutine(FlightRoutine());
@@ -110,6 +113,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private Vector3 CalculatePosition(Vector3 from, Vector3 to, Vector3 upDirection, FlightInfo.SegmentConfig segmentConfig, float lerpValue)
         {
+            upDirection.y = Mathf.Abs(upDirection.y); //When Projectile is Flipped due to Raycast Sensor requiremnt
             var position = Vector3.Lerp(from, to, lerpValue);
             position += upDirection * segmentConfig.GetOffset(lerpValue);
             return position;
