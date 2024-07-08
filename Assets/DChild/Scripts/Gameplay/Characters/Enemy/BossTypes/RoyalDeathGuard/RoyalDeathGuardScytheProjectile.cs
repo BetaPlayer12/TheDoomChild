@@ -5,6 +5,7 @@ using System.Collections;
 
 namespace DChild.Gameplay.Characters.Enemies
 {
+
     public class RoyalDeathGuardScytheProjectile : MonoBehaviour
     {
         [System.Serializable]
