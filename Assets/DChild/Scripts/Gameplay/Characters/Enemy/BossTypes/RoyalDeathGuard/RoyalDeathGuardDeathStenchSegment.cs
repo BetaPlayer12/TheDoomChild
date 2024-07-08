@@ -1,6 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
 using Sirenix.OdinInspector;
+using Holysoft.Event;
+using DChild.Gameplay.Pooling;
+using Holysoft.Pooling;
+using System;
 
 namespace DChild.Gameplay.Characters.Enemies
 {
@@ -10,6 +14,9 @@ namespace DChild.Gameplay.Characters.Enemies
         private Collider2D m_collider;
         [SerializeField]
         private float m_colliderDuration;
+
+        public event EventAction<EventActionArgs> Done;
+
 
         [Button]
         public void Execute()
@@ -23,11 +30,17 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return new WaitForSeconds(m_colliderDuration);
             m_collider.enabled = false;
         }
+        private void OnPoolRequest(object sender, PoolItemEventArgs eventArgs)
+        {
+            Done?.Invoke(this, EventActionArgs.Empty);
+        }
 
         private void Awake()
         {
             gameObject.SetActive(false);
+            GetComponent<PoolableObject>().PoolRequest += OnPoolRequest;
         }
+
 
         private void OnEnable()
         {

@@ -45,14 +45,28 @@ namespace DChild.Gameplay.Characters.Enemies
             var direction = transform.right;
             var startSpawnPosition = transform.position;
             startSpawnPosition.y = m_groundPosition;
+            RoyalDeathGuardDeathStenchSegment lastSegment = null;
             for (int i = 0; i < numberToSpawn; i++)
             {
                 var spawnPosition = startSpawnPosition + (direction * m_segmentDistanceInterval * i);
                 var segment = GameSystem.poolManager.GetPool<PoolableObjectPool>().GetOrCreateItem(m_segment, spawnPosition, Quaternion.identity);
-                segment.GetComponent<RoyalDeathGuardDeathStenchSegment>().Execute();
+                lastSegment = segment.GetComponent<RoyalDeathGuardDeathStenchSegment>();
+                lastSegment.Execute();
                 yield return new WaitForSeconds(m_segmentSpawnInterval);
             }
+
+            bool isLastSegmentDone = false;
+            lastSegment.Done += OnLastSegmentDone;
+            while (isLastSegmentDone == false)
+                yield return null;
+            lastSegment.Done -= OnLastSegmentDone;
+
             m_isSpawningSegments = false;
+
+            void OnLastSegmentDone(object sender, EventActionArgs eventActionArgs)
+            {
+                isLastSegmentDone = true;
+            }
         }
 
         private void OnDrawGizmosSelected()
