@@ -302,7 +302,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             GetComponent<IsolatedCharacterPhysics2D>().UseStepClimb(true);
             for (int i = 0; i < m_fistHitboxes.Count; i++)
-                m_fistHitboxes[i].SetActive(false);
+                m_fistHitboxes[i].GetComponent<BoxCollider2D>().enabled = false;
             m_animation.DisableRootMotion();
             m_stateHandle.OverrideState(State.ReevaluateSituation);
         }
@@ -483,8 +483,8 @@ namespace DChild.Gameplay.Characters.Enemies
                 case State.Attacking:
                     m_stateHandle.Wait(State.ReevaluateSituation);
                     
-                    for (int i = 0; i < m_fistHitboxes.Count; i++)
-                        m_fistHitboxes[i].SetActive(true);
+                    //for (int i = 0; i < m_fistHitboxes.Count; i++)
+                    //    m_fistHitboxes[i].SetActive(true);
                     switch (m_attackDecider.chosenAttack.attack)
                     {
                         case Attack.Pound:

@@ -17,7 +17,7 @@ using Spine.Unity.Modules;
 using Spine.Unity.Examples;
 using DChild.Gameplay.Pooling;
 using UnityEngine.Playables;
-using UnityEngine.Events;
+using DChild.Gameplay.Cinematics.Cameras;
 
 namespace DChild.Gameplay.Characters.Enemies
 {
@@ -366,6 +366,9 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField]
         private SpineEventListener m_spineListener;
 
+        [SerializeField]
+        private CameraShakeData m_earthShakeCamShake;
+
         [ShowInInspector]
         private StateHandle<State> m_stateHandle;
         State m_turnState;
@@ -379,10 +382,6 @@ namespace DChild.Gameplay.Characters.Enemies
         //private Pattern m_previousPattern;
         private Attack m_currentAttack;
         private float m_currentAttackRange;
-        [SerializeField]
-        private Health m_percentHealth;
-        [SerializeField]
-        private UnityEvent m_onTrigger;
 
         private int m_currentPhaseIndex;
         private Coroutine m_currentAttackCoroutine;
@@ -464,15 +463,6 @@ namespace DChild.Gameplay.Characters.Enemies
             //StopCurrentAttackRoutine();
             //SetAIToPhasing();
             StartCoroutine(SmartChangePhaseRoutine());
-        }
-
-        private void HealthChecker()
-        {
-            if(m_percentHealth.currentValue <= 300)
-            {
-                Debug.Log("30% health");
-                m_onTrigger?.Invoke();
-            }
         }
 
         private void OnTurnRequest(object sender, EventActionArgs eventArgs)
@@ -613,7 +603,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.animationState.GetCurrent(0).MixDuration = 0;
             yield return new WaitWhile(() => m_animation.animationState.GetCurrent(0).AnimationTime < 0.5f);
             m_enragedFX.Play();
-            yield return new WaitWhile (() => m_animation.animationState.GetCurrent(0).AnimationTime < m_animation.animationState.GetCurrent(0).AnimationEnd * 0.8f) ;
+            yield return new WaitWhile(() => m_animation.animationState.GetCurrent(0).AnimationTime < m_animation.animationState.GetCurrent(0).AnimationEnd * 0.8f);
             m_enragedFX.Stop();
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.phasingEnragedAnimation);
             //m_animation.SetAnimation(0, m_info.moveFastAnticipationAnimation, false);
@@ -911,7 +901,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_stateHandle.ApplyQueuedState();
             yield return null;
         }
-        
+
         private IEnumerator SpecialThrustAttackRoutine()
         {
             //m_animation.SetAnimation(0, m_info.specialThrustStartAnimation, false);
@@ -1132,6 +1122,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private void EarthShaker()
         {
             //m_earthShakerFX.Play();
+            GameplaySystem.cinema.ExecuteCameraShake(m_earthShakeCamShake);
             StartCoroutine(EarthShakerBBRoutine(5f));
             m_currentHurtbox = m_earthShakerBB;
             m_hurtboxCoroutine = StartCoroutine(BoundingBoxRoutine(0.50f));
@@ -1198,7 +1189,6 @@ namespace DChild.Gameplay.Characters.Enemies
             //if (!m_hasPhaseChanged && m_stateHandle.currentState != State.Phasing)
             //{
             //}
-            HealthChecker();
             m_phaseHandle.MonitorPhase();
             switch (m_stateHandle.currentState)
             {

@@ -32,6 +32,7 @@ namespace DChild.Gameplay
 
         [SerializeField, HideLabel]
         private MultiRaycast m_multiRaycast;
+        public MultiRaycast multiRaycast => m_multiRaycast;
         [SerializeField]
         private bool m_enable = true;
 #if UNITY_EDITOR
@@ -64,6 +65,7 @@ namespace DChild.Gameplay
         public int DetectionCount => m_detectionCount;
 
         public RaycastHit2D m_castHit;
+
         public RaycastHit2D[] GetHits() => m_multiRaycast.hits;
         public List<RaycastHit2D> GetHitsList() => m_multiRaycast.hitsList;
         public RaycastHit2D[] GetUniqueHits()

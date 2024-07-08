@@ -15,6 +15,7 @@ public class TombSoul : AttackProjectile
 
     protected override void Collide()
     {
+        base.Collide();
         var explosion = m_spawnHandle.InstantiateFX(projectileData.impactFX, transform.position);
         explosion.transform.parent = null;
         UnloadProjectile();

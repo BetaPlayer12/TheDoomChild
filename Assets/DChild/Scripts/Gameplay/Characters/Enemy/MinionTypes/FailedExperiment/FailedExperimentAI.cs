@@ -188,7 +188,10 @@ namespace DChild.Gameplay.Characters.Enemies
         private StateHandle<State> m_stateHandle;
         [ShowInInspector]
         private RandomAttackDecider<Attack> m_attackDecider;
-
+        [SerializeField]
+        private Collider2D m_bitebox;
+        [SerializeField]
+        private Collider2D m_bodyCollider;
         private State m_turnState;
 
         private Coroutine m_detectRoutine;
@@ -329,11 +332,12 @@ namespace DChild.Gameplay.Characters.Enemies
 
         protected override void OnDestroyed(object sender, EventActionArgs eventArgs)
         {
+            Debug.Log("___1111Die");
             //m_Audiosource.clip = m_DeadClip;
             //m_Audiosource.Play();
             StopAllCoroutines();
             base.OnDestroyed(sender, eventArgs);
-            
+
             m_stateHandle.OverrideState(State.WaitBehaviourEnd);
             m_selfCollider.enabled = false;
             if (m_attackRoutine != null)
@@ -357,6 +361,12 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnFlinchStart(object sender, EventActionArgs eventArgs)
         {
+            
+            if (!m_damageable.isAlive) {
+                Debug.Log("___1111Im Already dead??");
+                return;
+            }
+
             if (m_animation.GetCurrentAnimation(0).ToString() == m_info.idleAnimation.animation)
             {
                 if (m_evadeRoutine != null)
@@ -504,7 +514,12 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_animation.EnableRootMotion(true, true);
             m_animation.SetAnimation(0, m_info.attack.animation, false);
+            yield return new WaitForSeconds(0.8f);
+            m_bitebox.enabled = true;
+            m_bodyCollider.enabled = false;
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack.animation);
+            m_bodyCollider.enabled = true;
+            m_bitebox.enabled = false;
             m_animation.EnableRootMotion(true, false);
             yield return new WaitUntil(() => m_groundSensor.isDetecting);
             m_animation.SetAnimation(0, m_info.crawlAnimation, false);
@@ -573,7 +588,7 @@ namespace DChild.Gameplay.Characters.Enemies
         protected override void Awake()
         {
             base.Awake();
-            
+
             m_patrolHandle.TurnRequest += OnTurnRequest;
             m_attackHandle.AttackDone += OnAttackDone;
             m_turnHandle.TurnDone += OnTurnDone;

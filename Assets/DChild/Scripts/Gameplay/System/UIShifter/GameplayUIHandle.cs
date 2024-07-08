@@ -15,9 +15,7 @@ using Doozy.Runtime.UIManager.Containers;
 using Holysoft.Event;
 using Sirenix.OdinInspector;
 using System;
-using System.Collections;
 using UnityEngine;
-using UnityEngine.Video;
 
 namespace DChild.Gameplay.Systems
 {
@@ -69,8 +67,6 @@ namespace DChild.Gameplay.Systems
 
         [SerializeField]
         private WeaponUpgradeHandle m_upgradeWeaponHandler;
-        [SerializeField]
-        private CinematicVideoHandle m_cinematicVideoHandle;
 
         [SerializeField]
         private UIView m_cinematicBars;
@@ -145,11 +141,11 @@ namespace DChild.Gameplay.Systems
         {
             if (willshow)
             {
-                m_bossCombat.ShowBossHealth();
+                m_bossCombat?.ShowBossHealth();
             }
             else
             {
-                m_bossCombat.HideBossHealth();
+                m_bossCombat?.HideBossHealth();
             }
         }
 
@@ -170,7 +166,7 @@ namespace DChild.Gameplay.Systems
             if (willshow)
             {
                 m_bossCombat.ShowBossName();
-                // m_bossCombat.ShowBossHealth();
+               // m_bossCombat.ShowBossHealth();
             }
             else
             {
@@ -277,7 +273,7 @@ namespace DChild.Gameplay.Systems
         {
             m_notificationManager.InitializeFullPriorityHandling();
             m_notificationManager.InitializePromptPriorityHandling();
-            m_cinematicVideoHandle.Initialize();
+            GameplaySystem.campaignSerializer.PostDeserialization += OnPostDeserialization;
         }
 
         public void OpenWeaponUpgradeConfirmationWindow()
@@ -286,9 +282,9 @@ namespace DChild.Gameplay.Systems
             m_confirmationWindowSignal.SendSignal();
         }
 
-        public void ShowCinematicVideo(VideoClip clip, Func<IEnumerator> behindTheSceneRoutine = null, Action OnVideoDone = null)
+        private void OnPostDeserialization(object sender, CampaignSlotUpdateEventArgs eventArgs)
         {
-            m_cinematicVideoHandle.ShowCinematicVideo(clip, behindTheSceneRoutine, OnVideoDone);
+            m_navMap.ForceMapUpdateOnNextOpen();
         }
     }
 }
