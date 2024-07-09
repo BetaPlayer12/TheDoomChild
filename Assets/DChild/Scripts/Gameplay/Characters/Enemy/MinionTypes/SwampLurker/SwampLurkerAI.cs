@@ -450,12 +450,13 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_animation.SetAnimation(0, !isPlayerNear ? m_info.move.animation : m_info.sneak.animation, true);
                 m_movement.MoveTowards(Vector2.one * transform.localScale.x, isPlayerNear ? m_currentMoveSpeed : m_info.sneak.speed);
                 yield return null;
-            } while (isPlayerNear && !m_wallSensor.isDetecting && m_edgeSensor.isDetecting);
+            } while (/*isPlayerNear &&*/ !m_wallSensor.isDetecting && m_edgeSensor.isDetecting);
 
             m_movement.Stop();
             m_animation.SetAnimation(0, m_info.idleAnimation, true).TimeScale = 1f;
 
             yield return null;
+
             if (isPlayerNear)
             {
                 m_stateHandle.SetState(State.Attacking);
