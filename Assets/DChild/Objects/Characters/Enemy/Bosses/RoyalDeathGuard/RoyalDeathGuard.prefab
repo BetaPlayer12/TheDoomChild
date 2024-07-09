@@ -705,6 +705,7 @@ MonoBehaviour:
   m_boss: {fileID: 1965495511867728909}
   m_hitbox: {fileID: 5541628099559436159}
   m_arenaCenter: {fileID: 0}
+  m_attacker: {fileID: 6938754767204626994}
   m_turnHandle: {fileID: 4300925118461376623}
   m_deathHandle: {fileID: 6798658030097351708}
   m_agent: {fileID: 2451547861898179153}
@@ -719,10 +720,10 @@ MonoBehaviour:
   m_projectilePoint: {fileID: 5551516527544042056}
   m_scytheThrowProjectile: {fileID: 5576909613627768335}
   m_scytheThrowPoint: {fileID: 2109678828020851607}
-  m_throwLeftPosition: {fileID: 0}
-  m_throwRightPosition: {fileID: 0}
-  m_leftAimPosition: {fileID: 0}
-  m_rightAimPosition: {fileID: 0}
+  m_leftThrowAttackPosition: {fileID: 0}
+  m_rightThrowAttackPosition: {fileID: 0}
+  m_leftThrowScytheTargetPosition: {fileID: 0}
+  m_rightThrowScytheTargetPosition: {fileID: 0}
   m_throwScytheRight: 0
   m_attackCounter: 0
 --- !u!114 &7700607547958873781
@@ -888,6 +889,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Mesh
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 5964784845335744142, guid: 18a853f314a7baf45a9ae8dfdb87fc98,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6557367089615103167, guid: 18a853f314a7baf45a9ae8dfdb87fc98,
         type: 3}
@@ -1059,6 +1065,7 @@ PrefabInstance:
     - {fileID: 6309806359715792199, guid: 18a853f314a7baf45a9ae8dfdb87fc98, type: 3}
     - {fileID: 1521240817016098802, guid: 18a853f314a7baf45a9ae8dfdb87fc98, type: 3}
     - {fileID: 8836628476297774014, guid: 18a853f314a7baf45a9ae8dfdb87fc98, type: 3}
+    - {fileID: 1685585670714801000, guid: 18a853f314a7baf45a9ae8dfdb87fc98, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 18a853f314a7baf45a9ae8dfdb87fc98, type: 3}
 --- !u!4 &239706582261338279 stripped
 Transform:
@@ -1179,7 +1186,7 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 7719443944605926414}
   m_PrefabAsset: {fileID: 0}
---- !u!60 &5420477360507867016
+--- !u!60 &1846892614738713383
 PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1290,6 +1297,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 11a5cea4c16e7c4478a55620f5e666e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &6938754767204626994 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 822911803464971836, guid: 18a853f314a7baf45a9ae8dfdb87fc98,
+    type: 3}
+  m_PrefabInstance: {fileID: 7719443944605926414}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e10454193b54c9a4eb8bfb67b80c746d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!70 &7010914979458433202 stripped
