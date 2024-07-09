@@ -312,7 +312,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private Attack m_currentAttack;
         //private ProjectileLauncher m_projectileLauncher;
 
-        [SerializeField, TabGroup("Attacks", "Projectile Spawn Points")]
+        [SerializeField, TabGroup("Projectile Spawn Points")]
         private Transform m_projectilePoint;
 
         [SerializeField, TabGroup("Attacks", "ScytheThrow")]
@@ -329,6 +329,9 @@ namespace DChild.Gameplay.Characters.Enemies
         private Transform m_rightThrowScytheTargetPosition;
         [SerializeField, TabGroup("Attacks", "Scythe Throw")]
         private bool m_throwScytheRight;
+
+        [SerializeField, TabGroup("Attacks", "Scythe Smash")]
+        private RoyalDeathGuardScythSmashDeathStench m_scytheSmashDeathStench;
 
 
         private int m_consecutiveHitToFlinchCounter;
@@ -611,6 +614,20 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator ScytheSmashRoutine()
         {
             m_stateHandle.Wait(State.ReevaluateSituation);
+
+            m_attacker.SetData(m_info.scytheSmashAttackData);
+
+            m_scytheSmashDeathStench.transform.eulerAngles = transform.localScale.x < 1 ? new Vector3(0, 0, 180f) : Vector3.zero;
+
+            m_animation.SetAnimation(0, m_info.scytheSmashAttack.animation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.scytheSmashAttack.animation);
+
+            //loop anim while stuck on ground
+
+            //anim taking scythe out
+
+            //move this to be done on a scythe smash animation event
+            m_scytheSmashDeathStench.Execute();
 
             m_currentAttackDecider.hasDecidedOnAttack = false;
             m_stateHandle.ApplyQueuedState();
