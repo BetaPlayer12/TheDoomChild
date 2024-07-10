@@ -1527,12 +1527,12 @@ namespace DChild.Gameplay.Characters.Enemies
                 StopCoroutine(m_dynamicIdleCoroutine);
                 m_dynamicIdleCoroutine = null;
             }
+            m_bodyColliderTransform.rotation = Quaternion.Euler(0, 0, 0);
             m_animation.SetEmptyAnimation(3, 0);
             m_animation.SetEmptyAnimation(15, 0);
             m_animation.SetEmptyAnimation(30, 0);
             m_animation.DisableRootMotion();
             m_animation.SetAnimation(0, m_info.bodySlamStart, false);
-            m_bodyColliderTransform.rotation = Quaternion.Euler(0, 0, 0);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.bodySlamStart);
             for (int i = 0; i < m_spitterBone.Count; i++)
             {
