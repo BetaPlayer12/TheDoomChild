@@ -113,6 +113,7 @@ namespace DChild.Gameplay.Characters.Enemies
             Turning,
             Attacking,
             Chasing,
+            RunAway,
             ReevaluateSituation,
             WaitBehaviourEnd,
         }
@@ -131,6 +132,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private GameObject m_selfCollider;
         [SerializeField, TabGroup("Reference")]
         private Collider2D m_bodyCollider;
+        [SerializeField, TabGroup("Reference")]
+        private Collider2D m_environmentCollider;
         [SerializeField, TabGroup("Reference")]
         private Hitbox m_hitbox;
         [SerializeField, TabGroup("Reference")]
@@ -191,7 +194,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 if (m_stateHandle.currentState != State.Chasing && !m_isDetecting)
                 {
                     m_isDetecting = true;
-                    m_stateHandle.SetState(State.Chasing);
+                    m_stateHandle.SetState(State.Detect);
                 }
             }
         }
@@ -320,8 +323,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private void CalculateRunPath()
         {
             bool isRight = m_targetInfo.position.x >= transform.position.x;
-            var movePos = new Vector2(transform.position.x + (isRight ? -3 : 3), m_targetInfo.position.y + 10);
-            while (Vector2.Distance(transform.position, WallPosition()) <= 5)
+            var movePos = new Vector2(transform.position.x + (isRight ? -10 : 10), m_targetInfo.position.y + 10);
+            while (Vector2.Distance(transform.position, WallPosition()) <= 10)
             {
                 movePos = new Vector2(movePos.x + 0.1f, movePos.y);
                 break;
@@ -338,7 +341,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_stateHandle.Wait(State.WaitBehaviourEnd);
             StopAllCoroutines();
             base.OnDestroyed(sender, eventArgs);
-            
+
             if (m_executeMoveCoroutine != null)
             {
                 StopCoroutine(m_executeMoveCoroutine);
@@ -458,24 +461,25 @@ namespace DChild.Gameplay.Characters.Enemies
         }
 
         #region Movement
-        private IEnumerator ExecuteMove(float attackRange, /*float heightOffset,*/ Attack attack)
+        private IEnumerator ExecuteMove(/*float heightOffset,*/ Attack attack)
         {
             m_animation.DisableRootMotion();
             bool inRange = false;
             /*Vector2.Distance(transform.position, target) > m_info.spearMeleeAttack.range*/ //old target in range condition
             var moveSpeed = m_info.move.speed - UnityEngine.Random.Range(0, 3);
-            var newPos = Vector2.zero;
-            while (!inRange || TargetBlocked())
+            while (!inRange || TargetBlocked() || m_environmentCollider.IsTouchingLayers(DChildUtility.GetEnvironmentMask()))
             {
-                newPos = new Vector2(m_targetInfo.position.x, /*GroundPosition().y + 20*/m_targetInfo.position.y);
-                bool xTargetInRange = Mathf.Abs(/*m_targetInfo.position.x*/newPos.x - transform.position.x) < attackRange ? true : false;
-                bool yTargetInRange = Mathf.Abs(/*m_targetInfo.position.y*/newPos.y - transform.position.y) < attackRange ? true : false;
+                bool xTargetInRange = Mathf.Abs(m_targetInfo.position.x - transform.position.x) < m_currentAttackRange ? true : false;
+                bool yTargetInRange = Mathf.Abs(m_targetInfo.position.y - transform.position.y) < m_currentAttackRange/*1*/ ? true : false;
                 if (xTargetInRange && yTargetInRange)
                 {
                     inRange = true;
                 }
                 //DynamicMovement(/*new Vector2(m_targetInfo.position.x, m_targetInfo.position.y)*/ newPos);
-                DynamicMovement(newPos, moveSpeed);
+                if (m_currentAttack == Attack.Attack2)
+                {
+                    DynamicMovement(m_targetInfo.position, moveSpeed);
+                }
                 yield return null;
             }
             if (!IsFacingTarget())
@@ -488,11 +492,11 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void DynamicMovement(Vector2 target, float moveSpeed)
         {
-            var rb2d = GetComponent<Rigidbody2D>();
             m_agent.SetDestination(target);
             if (IsFacing(target))
             {
                 m_agent.Move(moveSpeed);
+                CalculateRunPath();
             }
             else
             {
@@ -544,7 +548,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             Debug.Log(m_info);
             base.Awake();
-            
+
             m_patrolHandle.TurnRequest += OnTurnRequest;
             m_attackHandle.AttackDone += OnAttackDone;
             m_flinchHandle.FlinchStart += OnFlinchStart;
@@ -635,7 +639,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_stateHandle.Wait(State.Cooldown);
                     //m_animation.SetAnimation(0, m_info.idleAnimation, true);
                     m_agent.Stop();
-                    m_executeMoveCoroutine = StartCoroutine(ExecuteMove(/*m_currentAttackRange*/ m_currentAttackRange, m_currentAttack));
+                    m_executeMoveCoroutine = StartCoroutine(ExecuteMove(/*m_currentAttackRange*//* m_currentAttackRange, */m_currentAttack));
                     m_attackDecider.hasDecidedOnAttack = false;
                     break;
                 case State.Cooldown:
@@ -671,7 +675,9 @@ namespace DChild.Gameplay.Characters.Enemies
                     ChooseAttack();
                     m_stateHandle.SetState(State.Attacking);
                     break;
+                case State.RunAway:
 
+                    break;
                 case State.ReevaluateSituation:
                     //How far is target, is it worth it to chase or go back to patrol
                     if (m_targetInfo.isValid)

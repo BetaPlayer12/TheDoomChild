@@ -220,7 +220,7 @@ MonoBehaviour:
   traversableTags: -1
   tagPenalties: 0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
   graphMask:
-    value: -1
+    value: 2
 --- !u!114 &1141152001038095354
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -305,6 +305,76 @@ MonoBehaviour:
   m_destinationTolerance: 2
   m_refreshPath: 0
   m_refreshRate: 0
+--- !u!1 &9175086080216509231
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1740611349598756209}
+  - component: {fileID: 2399749404570646695}
+  - component: {fileID: 3651912712764305802}
+  m_Layer: 16
+  m_Name: EnvironmentCollider
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1740611349598756209
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9175086080216509231}
+  m_LocalRotation: {x: -0, y: -0, z: 0.7164283, w: 0.69766074}
+  m_LocalPosition: {x: -0.0886992, y: 1.4440906, z: 0}
+  m_LocalScale: {x: 1, y: -1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4457652438965239760}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!58 &2399749404570646695
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9175086080216509231}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 2
+--- !u!114 &3651912712764305802
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9175086080216509231}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a1fd8daaed7b64148a34acb96ba14ce1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  skeletonRenderer: {fileID: 2258697251317526677}
+  boneName: bone2
+  followXYPosition: 1
+  followZPosition: 1
+  followBoneRotation: 1
+  followSkeletonFlip: 1
+  followLocalScale: 0
+  initializeOnAwake: 1
+  m_updateOnFixedUpdate: 0
 --- !u!1001 &87491223472075877
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -392,6 +462,21 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 7003614164269729505, guid: 05a77d4ff156d13409be74a4081d80d8,
+        type: 3}
+      propertyPath: m_Radius
+      value: 17.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 7003614164269729505, guid: 05a77d4ff156d13409be74a4081d80d8,
+        type: 3}
+      propertyPath: m_Offset.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7003614164269729505, guid: 05a77d4ff156d13409be74a4081d80d8,
+        type: 3}
+      propertyPath: m_Offset.y
+      value: 2.02
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 05a77d4ff156d13409be74a4081d80d8, type: 3}
 --- !u!4 &1940370278718307436 stripped
@@ -439,6 +524,12 @@ Transform:
 --- !u!4 &4291712271333519919 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4231674318829946442, guid: 05a77d4ff156d13409be74a4081d80d8,
+    type: 3}
+  m_PrefabInstance: {fileID: 87491223472075877}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &4457652438965239760 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4389346674416896949, guid: 05a77d4ff156d13409be74a4081d80d8,
     type: 3}
   m_PrefabInstance: {fileID: 87491223472075877}
   m_PrefabAsset: {fileID: 0}
@@ -854,6 +945,7 @@ MonoBehaviour:
   m_spineEventListener: {fileID: 2128376137561387911}
   m_selfCollider: {fileID: 8102022863059906868}
   m_bodyCollider: {fileID: 8014443932982099490}
+  m_environmentCollider: {fileID: 2399749404570646695}
   m_hitbox: {fileID: 6550309882829851255}
   m_health: {fileID: 4203781308334320805}
   m_turnHandle: {fileID: 2448482114860148516}
