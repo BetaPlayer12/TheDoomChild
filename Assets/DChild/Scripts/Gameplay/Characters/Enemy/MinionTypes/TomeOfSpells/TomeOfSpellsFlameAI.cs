@@ -461,6 +461,7 @@ namespace DChild.Gameplay.Characters.Enemies
             //Debug.Log("sCALE: " + instance.GetComponent<Transform>().localScale);
 
             instance.SpawnAt(spawnPosition, Quaternion.identity);
+            instance.GetComponent<FireDragonHead>().enabled = true;
             instance.GetComponent<FireDragonHead>().SetPlayerPosition(playerPosition);
         }
 

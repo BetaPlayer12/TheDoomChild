@@ -52,8 +52,8 @@ namespace DChild.Gameplay.Projectiles
 
         private void Awake()
         {
-            m_spineEventListener.Subscribe(m_fireOnEvent, ShootFire);
-            m_spineEventListener.Subscribe(m_fireOffEvent, OffFire);
+           m_spineEventListener.Subscribe(m_fireOnEvent, ShootFire);
+           m_spineEventListener.Subscribe(m_fireOffEvent, OffFire);
         }
 
         private IEnumerator AttackRoutine()
@@ -113,14 +113,16 @@ namespace DChild.Gameplay.Projectiles
 
         public void SetPlayerPosition(Vector2 playerPos)
         {
+            
             m_ToPlayerDirection = ((Vector2)transform.position - playerPos).normalized;
             m_spawnPosition = transform.position;
             m_playerPosition = playerPos;
             AdjustFireBreathRotationToPlayerPosition(m_playerPosition);
             PlayAttackAnimation();
+            
         }
 
-        [SerializeField, PreviewField, OnValueChanged("Initialize"), TabGroup("Animation")]
+        [SerializeField, PreviewField, TabGroup("Animation")]
         protected SkeletonDataAsset m_skeletonDataAsset;
 
         //#if UNITY_EDITOR
