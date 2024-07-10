@@ -671,7 +671,9 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.harvestAttack);
 
             //swap pull animation if willheal
-            if(willHeal)
+            var pullAnimation = willHeal ? "WIllHealAnim" : "WillnotHealAnim";
+            //m_animation.SetAnimation(0, pullAnimation, false);
+            if (willHeal)
             {
                 //pull animation with heal effect
             }
