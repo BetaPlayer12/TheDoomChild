@@ -28,6 +28,12 @@ namespace DChild.Gameplay.Projectiles
         private RaySensor m_wallSensor;
         [SerializeField, TabGroup("Reference")]
         private float m_moveOutOfWallSpeed;
+        [SerializeField, TabGroup("Reference")]
+        private SpineEventListener m_spineEventListener;
+        [SerializeField, ValueDropdown("GetEvents"), TabGroup("Animation")]
+        private string m_fireOnEvent;
+        [SerializeField, ValueDropdown("GetEvents"), TabGroup("Animation")]
+        private string m_fireOffEvent;
         private Vector2 m_spawnPosition;
         private Vector2 m_ToPlayerDirection;
 
@@ -44,16 +50,22 @@ namespace DChild.Gameplay.Projectiles
             StartCoroutine(AttackRoutine());
         }
 
+        private void Awake()
+        {
+            m_spineEventListener.Subscribe(m_fireOnEvent, ShootFire);
+            m_spineEventListener.Subscribe(m_fireOffEvent, OffFire);
+        }
+
         private IEnumerator AttackRoutine()
         {
             m_spine.SetAnimation(0, m_attackAnimation, false);
 
             //THIS IS A TEMORARY FIXX
-            yield return new WaitForSeconds(0.7f);
+            /*yield return new WaitForSeconds(1.7f);
             ShootFire();
             yield return new WaitForSeconds(1f);
             OffFire();
-
+            */
 
             yield return new WaitForAnimationComplete(m_spine.animationState, m_attackAnimation);
             DestroyInstance();
@@ -106,6 +118,21 @@ namespace DChild.Gameplay.Projectiles
             m_playerPosition = playerPos;
             AdjustFireBreathRotationToPlayerPosition(m_playerPosition);
             PlayAttackAnimation();
+        }
+
+        [SerializeField, PreviewField, OnValueChanged("Initialize"), TabGroup("Animation")]
+        protected SkeletonDataAsset m_skeletonDataAsset;
+
+        //#if UNITY_EDITOR
+        protected IEnumerable GetEvents()
+        {
+            ValueDropdownList<string> list = new ValueDropdownList<string>();
+            var reference = m_skeletonDataAsset.GetAnimationStateData().SkeletonData.Events.ToArray();
+            for (int i = 0; i < reference.Length; i++)
+            {
+                list.Add(reference[i].Name);
+            }
+            return list;
         }
     }
 }
