@@ -1,0 +1,34 @@
+﻿using UnityEngine;
+
+namespace DChild.Gameplay.Cinematics.Cameras
+{
+    public class VirtualCameraSwitcher : MonoBehaviour
+    {
+        [SerializeField, Min(0)]
+        private int m_awakeIndex;
+        [SerializeField]
+        private VirtualCamera[] m_cameraOptions;
+
+        public void SwitchTo(int index)
+        {
+            if (index < 0 || index >= m_cameraOptions.Length)
+            {
+                Debug.LogError($"Camera ERROR: Attempt to Switch Camera in {gameObject.name} reached out of bounds");
+            }
+            else
+            {
+                for (int i = 0; i < m_cameraOptions.Length; i++)
+                {
+                    m_cameraOptions[i].gameObject.SetActive(false);
+                }
+                m_cameraOptions[index].gameObject.SetActive(true);
+            }
+        }
+
+        private void Awake()
+        {
+            SwitchTo(m_awakeIndex);
+        }
+    }
+
+}
