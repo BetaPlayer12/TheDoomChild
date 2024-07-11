@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Sirenix.OdinInspector;
+using UnityEngine;
 
 namespace DChild.Gameplay.Cinematics.Cameras
 {
@@ -6,7 +7,7 @@ namespace DChild.Gameplay.Cinematics.Cameras
     {
         [SerializeField, Min(0)]
         private int m_awakeIndex;
-        [SerializeField]
+        [SerializeField, ListDrawerSettings(ShowIndexLabels = true)]
         private VirtualCamera[] m_cameraOptions;
 
         public void SwitchTo(int index)
