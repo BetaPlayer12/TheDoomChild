@@ -2183,7 +2183,7 @@ GameObject:
   - component: {fileID: 6874965639453636978}
   - component: {fileID: 5189920457195073287}
   - component: {fileID: 5031938947267122393}
-  - component: {fileID: 476579247342368511}
+  - component: {fileID: 8366201308818342203}
   m_Layer: 13
   m_Name: Attackbb
   m_TagString: Untagged
@@ -2259,7 +2259,7 @@ MonoBehaviour:
   followLocalScale: 0
   initializeOnAwake: 1
   m_updateOnFixedUpdate: 0
---- !u!60 &476579247342368511
+--- !u!60 &8366201308818342203
 PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2449,6 +2449,70 @@ MonoBehaviour:
   zPosition: 1
   overrideAlpha: 1
   hierarchy: {fileID: 5077992621287433060}
+--- !u!1 &3442007811046055366
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 9095585505442491349}
+  - component: {fileID: 2909749833503461865}
+  - component: {fileID: 3871816703422625894}
+  m_Layer: 13
+  m_Name: ScytheThrowWallSensor
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &9095585505442491349
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3442007811046055366}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 17.7, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8609442191741975607}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2909749833503461865
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3442007811046055366}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 11a5cea4c16e7c4478a55620f5e666e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_multiRaycast:
+    m_config: {fileID: 11400000, guid: 423219b7ae126184380266f396c65e71, type: 2}
+    m_rayColor: {r: 1, g: 0, b: 0.89550066, a: 1}
+  m_enable: 1
+  m_debugMode: 1
+--- !u!114 &3871816703422625894
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3442007811046055366}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fc6cc8feceba564aa4ef1a737c6bf25, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_leftRotation: 0
+  m_rightRotation: 0
 --- !u!1 &3650106283542373683
 GameObject:
   m_ObjectHideFlags: 0
@@ -2795,7 +2859,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &215719684689093886
 Transform:
   m_ObjectHideFlags: 0
@@ -2803,8 +2867,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3839114105822697486}
-  m_LocalRotation: {x: 0, y: 0, z: 0.7071068, w: -0.7071068}
-  m_LocalPosition: {x: 0, y: 0.5, z: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 17.7, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2824,7 +2888,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_multiRaycast:
-    m_config: {fileID: 11400000, guid: 5552f880aa6967942b909cb254204301, type: 2}
+    m_config: {fileID: 11400000, guid: 249737bbd1f0be646a5e7f05983608ef, type: 2}
     m_rayColor: {r: 0, g: 1, b: 0, a: 1}
   m_enable: 1
   m_debugMode: 1
@@ -2840,8 +2904,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5fc6cc8feceba564aa4ef1a737c6bf25, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_leftRotation: 90
-  m_rightRotation: 270
+  m_leftRotation: 0
+  m_rightRotation: 0
 --- !u!1 &3860568676438224794
 GameObject:
   m_ObjectHideFlags: 0
@@ -2851,6 +2915,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8532048505280047001}
+  - component: {fileID: 5390147089051069745}
   m_Layer: 0
   m_Name: ScytheThrowSpawnPoint
   m_TagString: Untagged
@@ -2865,14 +2930,35 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3860568676438224794}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 7.8071632, y: 17.64935, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0.20969133, w: 0.97776765}
+  m_LocalPosition: {x: 5.627838, y: 15.111431, z: 0}
+  m_LocalScale: {x: 1, y: -1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1962858658854301979}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5390147089051069745
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3860568676438224794}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a1fd8daaed7b64148a34acb96ba14ce1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  skeletonRenderer: {fileID: 1194891103113868902}
+  boneName: Hand_2
+  followXYPosition: 1
+  followZPosition: 1
+  followBoneRotation: 1
+  followSkeletonFlip: 1
+  followLocalScale: 0
+  initializeOnAwake: 1
+  m_updateOnFixedUpdate: 0
 --- !u!1 &3964995183554861648
 GameObject:
   m_ObjectHideFlags: 0
@@ -3174,6 +3260,76 @@ MonoBehaviour:
   zPosition: 1
   overrideAlpha: 1
   hierarchy: {fileID: 5077992621287433060}
+--- !u!1 &4291625501168708327
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2143392439524298765}
+  - component: {fileID: 3818582876810767}
+  - component: {fileID: 8243934639388645883}
+  m_Layer: 13
+  m_Name: Hurtbox
+  m_TagString: Hitbox
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2143392439524298765
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4291625501168708327}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1.5082779, y: 19.404976, z: 0}
+  m_LocalScale: {x: 1, y: -1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1374823235296288922}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!70 &3818582876810767
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4291625501168708327}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: -2.432724, y: 2.6883469}
+  m_Size: {x: 8.919983, y: 18.353691}
+  m_Direction: 0
+--- !u!114 &8243934639388645883
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4291625501168708327}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a1fd8daaed7b64148a34acb96ba14ce1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  skeletonRenderer: {fileID: 1194891103113868902}
+  boneName: Armor_demon_face3
+  followXYPosition: 1
+  followZPosition: 0
+  followBoneRotation: 0
+  followSkeletonFlip: 1
+  followLocalScale: 0
+  initializeOnAwake: 1
+  m_updateOnFixedUpdate: 0
 --- !u!1 &4320929247579809983
 GameObject:
   m_ObjectHideFlags: 0
@@ -4139,6 +4295,7 @@ Transform:
   m_Children:
   - {fileID: 2750023167270438470}
   - {fileID: 8532048505280047001}
+  - {fileID: 2215323439382513965}
   m_Father: {fileID: 9072061043972069124}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -5473,6 +5630,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7526467719525586089}
+  - {fileID: 2143392439524298765}
   m_Father: {fileID: 9072061043972069124}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -5511,6 +5669,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_collider2Ds:
   - {fileID: 2947693914151608501}
+  - {fileID: 3818582876810767}
   m_damageFXInfo:
     m_fx: {fileID: 0}
     m_overrideColor: 0
@@ -5858,6 +6017,59 @@ MonoBehaviour:
   zPosition: 1
   overrideAlpha: 1
   hierarchy: {fileID: 5077992621287433060}
+--- !u!1 &7935289950367770012
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2215323439382513965}
+  - component: {fileID: 6553826903326492959}
+  m_Layer: 13
+  m_Name: ScytheSmashDeathStenchStartSpawnPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2215323439382513965
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7935289950367770012}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 16.873268, y: 18.874798, z: 0}
+  m_LocalScale: {x: 1, y: -1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1962858658854301979}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6553826903326492959
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7935289950367770012}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a1fd8daaed7b64148a34acb96ba14ce1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  skeletonRenderer: {fileID: 1194891103113868902}
+  boneName: SCYTHE4
+  followXYPosition: 1
+  followZPosition: 0
+  followBoneRotation: 0
+  followSkeletonFlip: 1
+  followLocalScale: 0
+  initializeOnAwake: 1
+  m_updateOnFixedUpdate: 0
 --- !u!1 &8141563902860869755
 GameObject:
   m_ObjectHideFlags: 0
@@ -6307,9 +6519,9 @@ CircleCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -1.183815, y: 2.339075}
+  m_Offset: {x: -1.183815, y: -0.7363491}
   serializedVersion: 2
-  m_Radius: 8.02289
+  m_Radius: 4.947466
 --- !u!114 &1222784324376772951
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6475,6 +6687,7 @@ Transform:
   m_Children:
   - {fileID: 9034263634335721087}
   - {fileID: 215719684689093886}
+  - {fileID: 9095585505442491349}
   m_Father: {fileID: 9072061043972069124}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -6504,6 +6717,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_sensors:
   - {fileID: 4428552217174929068}
+  - {fileID: 6565948273757461261}
+  - {fileID: 2909749833503461865}
   m_useDistance: 1
   m_castPerDistance: 0.5
   m_useTime: 1
