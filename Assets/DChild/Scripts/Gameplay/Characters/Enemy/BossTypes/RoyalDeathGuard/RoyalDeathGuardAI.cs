@@ -446,7 +446,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_stateHandle.Wait(State.ReevaluateSituation);
 
             //yield return MoveIntoPositionForAttack();
-            yield return MoveIntoPosition(SetupPositionForScytheThrowAttack(), m_info.move.speed);            
+            yield return MoveIntoPosition(SetupPositionForScytheThrowAttack(), m_info.move.speed);
 
             //m_animation.SetAnimation(0, m_info.scytheThrowAnticipation, false);
             //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.scytheThrowAnticipation);
@@ -471,7 +471,7 @@ namespace DChild.Gameplay.Characters.Enemies
         public void ThrowScythe()
         {
 
-            if(transform.localScale.x < 1f)
+            if (transform.localScale.x < 1f)
             {
                 Vector3 scale = new Vector3(-1f, 1, 1);
                 m_scytheThrowProjectile.transform.localScale = scale;
@@ -498,7 +498,7 @@ namespace DChild.Gameplay.Characters.Enemies
             }
 
             m_scytheThrowProjectile.ExecuteFlight(m_scytheThrowPoint.position, m_throwScytheRight ? m_rightThrowScytheTargetPosition.position : m_leftThrowScytheTargetPosition.position);
-            
+
         }
 
         private Vector2 SetupPositionForScytheThrowAttack()
@@ -543,7 +543,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
             m_animation.SetAnimation(0, m_info.move, true);
 
-            while(hasReachedPosition == false)
+            while (hasReachedPosition == false)
             {
                 m_agent.Move(speed);
 
@@ -553,7 +553,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 }
                 yield return null;
             }
-            
+
             //Find way to face player if not facing player after reaching destination
 
             m_agent.Stop();
@@ -820,7 +820,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     break;
                 case State.Attacking:
 
-                    if(m_currentAttackDecider.hasDecidedOnAttack == false)
+                    if (m_currentAttackDecider.hasDecidedOnAttack == false)
                     {
                         m_currentAttackDecider.DecideOnAttack();
                     }
@@ -851,7 +851,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         case Attack.DeathStenchWave:
                             StartCoroutine(DeathStenchWave());
                             break;
-                    }                 
+                    }
                     break;
 
                 case State.ReevaluateSituation:
