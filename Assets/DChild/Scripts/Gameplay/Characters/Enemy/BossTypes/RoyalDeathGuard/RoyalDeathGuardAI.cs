@@ -9,6 +9,7 @@ using Spine.Unity;
 using DG.Tweening;
 using DChild.Gameplay.Environment;
 using UnityEngine.UIElements;
+using System.Drawing.Text;
 
 namespace DChild.Gameplay.Characters.Enemies
 {
@@ -321,17 +322,19 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Attacks", "ScytheThrow")]
         private RoyalDeathGuardScytheProjectile m_scytheThrowProjectile;
         [SerializeField, TabGroup("Attacks", "Scythe Throw")]
-        private Transform m_scytheThrowPoint;
+        private Transform m_scytheThrowReleasePoint;
         [SerializeField, TabGroup("Attacks", "Scythe Throw")]
-        private Transform m_leftThrowAttackPosition;
+        private Transform m_scytheThrowTargetPoint;
         [SerializeField, TabGroup("Attacks", "Scythe Throw")]
-        private Transform m_rightThrowAttackPosition;
+        private RaySensor m_scytheThrowWallCheckSensor;
         [SerializeField, TabGroup("Attacks", "Scythe Throw")]
-        private Transform m_leftThrowScytheTargetPosition;
+        private float m_scytheThrowHeight;
         [SerializeField, TabGroup("Attacks", "Scythe Throw")]
-        private Transform m_rightThrowScytheTargetPosition;
+        private float m_scytheThrowMinXMove;
         [SerializeField, TabGroup("Attacks", "Scythe Throw")]
-        private bool m_throwScytheRight;
+        private float m_scytheThrowMaxXMove;
+        [SerializeField, TabGroup("Attacks", "Scythe Throw")]
+        private float m_scytheThrowTargetHeight;
 
         [SerializeField, TabGroup("Attacks", "Scythe Smash")]
         private RoyalDeathGuardScythSmashDeathStench m_scytheSmashDeathStench;
@@ -467,19 +470,20 @@ namespace DChild.Gameplay.Characters.Enemies
         #endregion
 
         #region Attacks
-        public void ThrowScythe()
+        private void SetScytheThrowInfo()
         {
-            if(transform.localScale.x < 1f)
-            {
-                Vector3 scale = new Vector3(-1f, 1, 1);
-                m_scytheThrowProjectile.transform.localScale = scale;
-            }
-            m_scytheThrowProjectile.transform.position = m_scytheThrowPoint.position;
+            RoyalDeathGuardScytheProjectile.FlightInfo chosenFlightInfo;
+            bool willThrowScytheRight;
+
+            if (transform.localScale.x < 0)
+                willThrowScytheRight = false;
+            else
+                willThrowScytheRight = true;
 
             if (m_phaseHandle.currentPhase == Phase.PhaseOne)
             {
                 //Pattern 1
-                m_scytheThrowProjectile.SetFlightInfo(m_info.scytheThrowPatterns[0]);
+                chosenFlightInfo = m_info.scytheThrowPatterns[0];          
             }
             else
             {
@@ -487,48 +491,47 @@ namespace DChild.Gameplay.Characters.Enemies
                 int rand = Random.Range(0, 2);
                 if (rand == 0)
                 {
-                    m_scytheThrowProjectile.SetFlightInfo(m_info.scytheThrowPatterns[0]);
+                    chosenFlightInfo = m_info.scytheThrowPatterns[0];
                 }
                 else
                 {
-                    m_scytheThrowProjectile.SetFlightInfo(m_info.scytheThrowPatterns[1]);
+                    chosenFlightInfo = m_info.scytheThrowPatterns[1];
                 }
-            }
+            }         
 
-            m_scytheThrowProjectile.ExecuteFlight(m_scytheThrowPoint.position, m_throwScytheRight ? m_rightThrowScytheTargetPosition.position : m_leftThrowScytheTargetPosition.position);          
-        }
+            Vector2 targetPointPosition;
+            if(willThrowScytheRight)
+                targetPointPosition = new Vector2(m_scytheThrowReleasePoint.position.x + chosenFlightInfo.distance, m_scytheThrowTargetHeight);
+            else
+                targetPointPosition = new Vector2(m_scytheThrowReleasePoint.position.x - chosenFlightInfo.distance, m_scytheThrowTargetHeight);
 
-        private Vector2 SetupPositionForScytheThrowAttack()
-        {
-            Vector2 attackPosition;
-
-            if (m_targetInfo.position.x < m_arenaCenter.position.x)
+            //Manually rotating scytheThrow wall Sensor instead of putting in character sensor so that can cast only once
+            if (transform.localScale.x < 0)
             {
-                attackPosition = m_leftThrowAttackPosition.position;
-                m_throwScytheRight = false;
-            }
-            else if (m_targetInfo.position.x > m_arenaCenter.position.x)
-            {
-                attackPosition = m_rightThrowAttackPosition.position;
-                m_throwScytheRight = true;
+                m_scytheThrowWallCheckSensor.transform.eulerAngles = new Vector3(0, 0, 180);
             }
             else
             {
-                int randomRoll = Random.Range(0, 2);
-
-                if (randomRoll > 0)
-                {
-                    attackPosition = m_leftThrowAttackPosition.position;
-                    m_throwScytheRight = false;
-                }
-                else
-                {
-                    attackPosition = m_rightThrowAttackPosition.position;
-                    m_throwScytheRight = true;
-                }
+                m_scytheThrowWallCheckSensor.transform.eulerAngles = Vector3.zero;
             }
 
-            return attackPosition;
+            m_scytheThrowProjectile.SetFlightInfo(chosenFlightInfo);
+            m_scytheThrowWallCheckSensor.multiRaycast.SetCastDistance(chosenFlightInfo.distance + 20);
+            m_scytheThrowTargetPoint.position = targetPointPosition;
+
+        }
+
+        public void ThrowScythe()
+        {
+            //flip scythe
+            if(transform.localScale.x < 1f)
+            {
+                Vector3 scale = new Vector3(-1f, 1, 1);
+                m_scytheThrowProjectile.transform.localScale = scale;
+            }
+            m_scytheThrowProjectile.transform.position = m_scytheThrowReleasePoint.position;
+
+            m_scytheThrowProjectile.ExecuteFlight(m_scytheThrowReleasePoint.position, m_scytheThrowTargetPoint.position);          
         }
 
         private IEnumerator MoveIntoPositionRoutine(Vector3 destination, float speed)
@@ -542,11 +545,7 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 m_agent.Move(speed);
 
-                if (!IsFacingTarget())
-                {
-                    m_turnHandle.ForceTurnImmidiately();
-               
-                }
+                FacePlayerInstantly();
 
                 if (!IsFacing(destination))
                 {
@@ -564,36 +563,66 @@ namespace DChild.Gameplay.Characters.Enemies
                 yield return null;
             }
 
-            if (!IsFacingTarget())
-            {
-                m_turnHandle.ForceTurnImmidiately();
-            }
+            FacePlayerInstantly();
 
             m_agent.Stop();
         }
 
-        private IEnumerator DynamicMoveToGroundLevelRoutine()
+        private IEnumerator DynamicXMoveIntoPositionRoutine(float minXDistance, float maxXDistance, float yHeight)
         {
-            //Setup 3 possible destinations 
-            Vector2[] possibleDestinations = new Vector2[3];
-            int randomXDistance = Random.Range(2, 30);
-            //straight dowm
-            possibleDestinations[0] = new Vector2(transform.position.x, m_groundCombatHeight);
-            //move down back
-            possibleDestinations[1] = new Vector2(transform.position.x - randomXDistance, m_groundCombatHeight);
-            //move down forward
-            possibleDestinations[2] = new Vector2(transform.position.x + randomXDistance, m_groundCombatHeight);
+            int chosenXDistance = Random.Range((int)minXDistance, (int)maxXDistance);
 
-            int randomChoice = Random.Range(0, 3);
+            int directionChoice = Random.Range(0, 3);
 
-            yield return MoveIntoPositionRoutine(possibleDestinations[randomChoice], m_info.move.speed);
+            Vector2 positionToMoveInto = transform.position;
+
+            switch(directionChoice)
+            {
+                case 0: //straight up
+                    positionToMoveInto = new Vector2(transform.position.x, yHeight);
+                    break;
+                case 1: //go right
+                    positionToMoveInto = new Vector2(transform.position.x + chosenXDistance, yHeight);
+                    break;
+                case 2: //go left
+                    positionToMoveInto = new Vector2(transform.position.x - chosenXDistance, yHeight);
+                    break;
+                default:
+                    positionToMoveInto = new Vector2(transform.position.x, yHeight);
+                    break;
+            }
+
+            yield return MoveIntoPositionRoutine(positionToMoveInto, m_info.move.speed);
+
+        }
+
+        private void FacePlayerInstantly()
+        {
+            if (!IsFacingTarget())
+            {
+                m_turnHandle.ForceTurnImmidiately();
+            }
         }
 
         private IEnumerator ScytheThrowRoutine()
         {
             m_stateHandle.Wait(State.ReevaluateSituation);
 
-            yield return MoveIntoPositionRoutine(SetupPositionForScytheThrowAttack(), m_info.move.speed);
+            FacePlayerInstantly();
+            SetScytheThrowInfo();
+
+            m_scytheThrowWallCheckSensor.Cast();
+            var hasHitWall = m_scytheThrowWallCheckSensor.isDetecting;
+            if (hasHitWall)
+            {
+                m_currentAttackDecider.hasDecidedOnAttack = false;
+                m_stateHandle.ApplyQueuedState();
+                yield return null;
+                yield break;
+            }
+
+            //Move up for scythe throw
+            yield return DynamicXMoveIntoPositionRoutine(m_scytheThrowMinXMove, m_scytheThrowMaxXMove, m_scytheThrowHeight);
 
             m_animation.SetAnimation(0, m_info.scytheThrowAttack, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.scytheThrowAttack);
@@ -605,7 +634,8 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_info.floatAnimation.animation, true);
             yield return new WaitForSeconds(1f);
 
-            yield return DynamicMoveToGroundLevelRoutine();
+            //Move back to ground level
+            yield return DynamicXMoveIntoPositionRoutine(m_scytheThrowMinXMove, m_scytheThrowMaxXMove, m_groundCombatHeight);
 
             m_currentAttackDecider.hasDecidedOnAttack = false;
             m_stateHandle.ApplyQueuedState();
@@ -614,8 +644,6 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator ScytheSwipeRoutine()
         {
-            //m_animation.SetAnimation(0, m_info.scytheSwipeAnticipation.animation, false);
-            //yield return new WaitForAnimationComplete();
             m_stateHandle.Wait(State.ReevaluateSituation);
 
             m_attacker.SetData(m_info.scytheSwipeAttackData);
@@ -748,8 +776,6 @@ namespace DChild.Gameplay.Characters.Enemies
                 Debug.Log("Damaged by Harvest");
             }
         }
-
-        
 
         private IEnumerator DeathStenchWaveRoutine()
         {
