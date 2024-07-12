@@ -758,7 +758,7 @@ MonoBehaviour:
   m_scytheThrowHeight: 0
   m_scytheThrowMinXMove: 0
   m_scytheThrowMaxXMove: 0
-  m_scytheThrowFlightLowestHeight: 0
+  m_scytheThrowTargetHeight: 0
   m_scytheSmashDeathStench: {fileID: 5914285124908110184}
   m_scytheSmashDeathStenchSpawn: {fileID: 8475371734113652003}
   m_groundCombatHeight: 0
@@ -1014,6 +1014,26 @@ PrefabInstance:
       propertyPath: events.Array.data[0].unityHandler.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 7102245480258337044}
+    - target: {fileID: 4619474570062982852, guid: 18a853f314a7baf45a9ae8dfdb87fc98,
+        type: 3}
+      propertyPath: events.Array.data[1].unityHandler.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 7102245480258337044}
+    - target: {fileID: 4619474570062982852, guid: 18a853f314a7baf45a9ae8dfdb87fc98,
+        type: 3}
+      propertyPath: events.Array.data[1].unityHandler.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: ReleaseScytheSmashDeathStench
+      objectReference: {fileID: 0}
+    - target: {fileID: 4619474570062982852, guid: 18a853f314a7baf45a9ae8dfdb87fc98,
+        type: 3}
+      propertyPath: events.Array.data[1].unityHandler.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: DChild.Gameplay.Characters.Enemies.RoyalDeathGuardAI, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 4619474570062982852, guid: 18a853f314a7baf45a9ae8dfdb87fc98,
+        type: 3}
+      propertyPath: events.Array.data[1].unityHandler.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 5520268195459952762, guid: 18a853f314a7baf45a9ae8dfdb87fc98,
         type: 3}
       propertyPath: m_Mesh
@@ -1200,6 +1220,7 @@ PrefabInstance:
     - {fileID: 6572562152867559084, guid: 18a853f314a7baf45a9ae8dfdb87fc98, type: 3}
     - {fileID: 1024708312078958704, guid: 18a853f314a7baf45a9ae8dfdb87fc98, type: 3}
     - {fileID: 8366201308818342203, guid: 18a853f314a7baf45a9ae8dfdb87fc98, type: 3}
+    - {fileID: 1554810949412574041, guid: 18a853f314a7baf45a9ae8dfdb87fc98, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 18a853f314a7baf45a9ae8dfdb87fc98, type: 3}
 --- !u!4 &239706582261338279 stripped
 Transform:
@@ -1332,7 +1353,7 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 7719443944605926414}
   m_PrefabAsset: {fileID: 0}
---- !u!60 &1542221675199798997
+--- !u!60 &2855631761962575985
 PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
