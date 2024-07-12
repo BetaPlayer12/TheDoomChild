@@ -48,6 +48,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private bool m_isInFlight;
         public event EventAction<EventActionArgs> FlightDone;
+        public event EventAction<EventActionArgs> ReturnToStart;
 
 
         public void SetFlightInfo(FlightInfo info)
@@ -91,6 +92,7 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return new WaitForSeconds(0.1f); //JUst for the eyes to catch up that it appeared;
             yield return MoveTo(startingPosition, destination, m_info.forwardInfo);
             yield return new WaitForSeconds(m_info.returnDelay);
+            ReturnToStart?.Invoke(this, EventActionArgs.Empty);
             yield return MoveTo(destination, startingPosition, m_info.returnInfo);
             FlightDone?.Invoke(this, EventActionArgs.Empty);
             yield return new WaitForSeconds(0.1f); //JUst for the eyes to catch up that it disappeared;
