@@ -53,6 +53,15 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField, TabGroup("Attacks1", "Scythe Throw")]
             private BasicAnimationInfo m_scytheThrowAnticipation;
             public BasicAnimationInfo scytheThrowAnticipation => m_scytheThrowAnticipation;
+            [SerializeField, TabGroup("Attacks1", "Scythe Throw")]
+            private BasicAnimationInfo m_scytheThrowThrow;
+            public BasicAnimationInfo scytheThrowThrow => m_scytheThrowThrow;
+            [SerializeField, TabGroup("Attacks1", "Scythe Throw")]
+            private BasicAnimationInfo m_scytheThrowWaitForScythe;
+            public BasicAnimationInfo scytheThrowWaitForScythe => m_scytheThrowWaitForScythe;
+            [SerializeField, TabGroup("Attacks1", "Scythe Throw")]
+            private BasicAnimationInfo m_scytheThrowCatch;
+            public BasicAnimationInfo scytheThrowCatch => m_scytheThrowCatch;
 
             [SerializeField, TabGroup("Attacks1", "Scythe Swipe")]
             private SimpleAttackInfo m_scytheSwipeAttack = new SimpleAttackInfo();
@@ -71,6 +80,12 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField, TabGroup("Attacks1", "Scythe Smash")]
             private BasicAnimationInfo m_scytheSmashAnticipation;
             public BasicAnimationInfo scytheSmashAnticipation => m_scytheSmashAnticipation;
+            [SerializeField, TabGroup("Attacks1", "Scythe Smash")]
+            private BasicAnimationInfo m_scytheSmashGroundLoop;
+            public BasicAnimationInfo scytheSmashGroundLoop => m_scytheSmashGroundLoop;
+            [SerializeField, TabGroup("Attacks1", "Scythe Smash")]
+            private BasicAnimationInfo m_scytheSmashRemoveScytheFromGround;
+            public BasicAnimationInfo scytheSmashRemoveScytheFromGround => m_scytheSmashRemoveScytheFromGround;
             [SerializeField, TabGroup("Attacks1", "Scythe Smash")]
             private AttackData m_scytheSmashAttackData;
             public AttackData scytheSmashAttackData => m_scytheSmashAttackData;
@@ -98,6 +113,15 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField, TabGroup("Attacks2", "Harvest")]
             private BasicAnimationInfo m_harvestAnticipation;
             public BasicAnimationInfo harvestAnticipation => m_harvestAnticipation;
+            [SerializeField, TabGroup("Attacks2", "Harvest")]
+            private BasicAnimationInfo m_harvestPullNoHeal;
+            public BasicAnimationInfo harvestPullNoHeal => m_harvestPullNoHeal;
+            [SerializeField, TabGroup("Attacks2", "Harvest")]
+            private BasicAnimationInfo m_harvestPullWithHeal;
+            public BasicAnimationInfo harvestPullWithHeal => m_harvestPullWithHeal;
+            [SerializeField, TabGroup("Attacks2", "Harvest")]
+            private BasicAnimationInfo m_harvestScytheDrag;
+            public BasicAnimationInfo harvestScytheDrag => m_harvestScytheDrag;
             [SerializeField, TabGroup("Attacks2", "Harvest")]
             private AttackData m_harvestAttackData;
             public AttackData harvestAttackData => m_harvestAttackData;
@@ -197,6 +221,16 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_harvestAnticipation.SetData(m_skeletonDataAsset);
                 m_royalGuardianTwoAnticipation.SetData(m_skeletonDataAsset);
                 m_deathStenchWaveAnticipation.SetData(m_skeletonDataAsset);
+
+                //Other Attack Animations
+                m_scytheThrowThrow.SetData(m_skeletonDataAsset);
+                m_scytheThrowWaitForScythe.SetData(m_skeletonDataAsset);
+                m_scytheThrowCatch.SetData(m_skeletonDataAsset);
+                m_harvestPullNoHeal.SetData(m_skeletonDataAsset);
+                m_harvestPullWithHeal.SetData(m_skeletonDataAsset);
+                m_harvestScytheDrag.SetData(m_skeletonDataAsset);
+                m_scytheSmashGroundLoop.SetData(m_skeletonDataAsset);
+                m_scytheSmashRemoveScytheFromGround.SetData(m_skeletonDataAsset);
 
                 //Other Behavior Animations
                 m_deathAnimation.SetData(m_skeletonDataAsset);
@@ -534,6 +568,11 @@ namespace DChild.Gameplay.Characters.Enemies
             m_scytheThrowProjectile.ExecuteFlight(m_scytheThrowReleasePoint.position, m_scytheThrowTargetPoint.position);          
         }
 
+        public void ReleaseScytheSmashDeathStench()
+        {
+            m_scytheSmashDeathStench.Execute();
+        }
+
         private IEnumerator MoveIntoPositionRoutine(Vector3 destination, float speed)
         {
             m_agent.Stop();
@@ -604,9 +643,15 @@ namespace DChild.Gameplay.Characters.Enemies
             }
         }
 
+        public float temporaryvarCatchDistance = 30f;
         private IEnumerator ScytheThrowRoutine()
         {
             m_stateHandle.Wait(State.ReevaluateSituation);
+
+            bool isReturning = false;
+            bool timeToCatch = false;
+
+            m_scytheThrowProjectile.ReturnToStart += OnReturnToStart;
 
             FacePlayerInstantly();
             SetScytheThrowInfo();
@@ -624,10 +669,33 @@ namespace DChild.Gameplay.Characters.Enemies
             //Move up for scythe throw
             yield return DynamicXMoveIntoPositionRoutine(m_scytheThrowMinXMove, m_scytheThrowMaxXMove, m_scytheThrowHeight);
 
-            m_animation.SetAnimation(0, m_info.scytheThrowAttack, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.scytheThrowAttack);
+            m_animation.SetAnimation(0, m_info.scytheThrowAnticipation.animation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.scytheThrowAnticipation.animation);
 
-            //[URGENT!!!!!] NEED SCYTHE CATCH ANIMATION AND WAITING FOR SCYTHE TO RETURN LOOP BEFORE PROCEEDING FROM THIS POINT [URGENT!!!!]
+            //Looks better with just anticipation straight to wait loop
+            //m_animation.SetAnimation(0, m_info.scytheThrowAttack.animation, false);
+            //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.scytheThrowAttack.animation);
+
+            ThrowScythe();
+
+            m_animation.SetAnimation(0, m_info.scytheThrowWaitForScythe.animation, true);
+            while (!timeToCatch)
+            {
+                if (isReturning)
+                {
+                    var distance = Vector2.Distance(m_scytheThrowProjectile.transform.position, m_scytheThrowReleasePoint.position);
+                    if(distance < temporaryvarCatchDistance)
+                    {
+                        timeToCatch = true;
+                    }
+                }
+                yield return null;
+            }
+
+            m_animation.SetAnimation(0, m_info.scytheThrowCatch.animation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.scytheThrowCatch.animation);
+
+            m_scytheThrowProjectile.ReturnToStart -= OnReturnToStart;
 
             m_attackCounter++;
 
@@ -640,7 +708,12 @@ namespace DChild.Gameplay.Characters.Enemies
             m_currentAttackDecider.hasDecidedOnAttack = false;
             m_stateHandle.ApplyQueuedState();
             yield return null;
-        }
+
+            void OnReturnToStart(object sender, EventActionArgs eventArgs)
+            {
+                isReturning = true;
+            }
+        }     
 
         private IEnumerator ScytheSwipeRoutine()
         {
@@ -688,19 +761,34 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_stateHandle.Wait(State.ReevaluateSituation);
 
+            bool deathStenchDone = false;
+
             m_attacker.SetData(m_info.scytheSmashAttackData);
 
+            m_scytheSmashDeathStench.Done += OnDeathStenchDone;
+
             m_scytheSmashDeathStench.transform.eulerAngles = transform.localScale.x < 1 ? new Vector3(0, 0, 180f) : Vector3.zero;
+
+            m_animation.SetAnimation(0, m_info.scytheSmashAnticipation.animation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.scytheSmashAnticipation.animation);
 
             m_animation.SetAnimation(0, m_info.scytheSmashAttack.animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.scytheSmashAttack.animation);
 
+            //scytheSmash Death Stench executed via animation event
+
             //loop anim while stuck on ground
+            while (!deathStenchDone)
+            {
+                m_animation.SetAnimation(0, m_info.scytheSmashGroundLoop.animation, true);
+                yield return null;
+            }
 
             //anim taking scythe out
+            m_animation.SetAnimation(0, m_info.scytheSmashRemoveScytheFromGround.animation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.scytheSmashRemoveScytheFromGround.animation);
 
-            //move this to be done on a scythe smash animation event
-            m_scytheSmashDeathStench.Execute();
+            m_scytheSmashDeathStench.Done -= OnDeathStenchDone;
 
             m_attackCounter++;
 
@@ -710,7 +798,14 @@ namespace DChild.Gameplay.Characters.Enemies
             m_currentAttackDecider.hasDecidedOnAttack = false;
             m_stateHandle.ApplyQueuedState();
             yield return null;
+
+            void OnDeathStenchDone(object sender, EventActionArgs eventArgs)
+            {
+                deathStenchDone = true;
+            }
         }
+
+        
 
         private IEnumerator RoyalGuardianOneRoutine()
         {
@@ -744,19 +839,23 @@ namespace DChild.Gameplay.Characters.Enemies
             
             m_attacker.TargetDamaged += OnTargetDamagedByHarvest;
 
-            //m_animation.SetAnimation(0, m_info.harvestAnticipation, false);
-            //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.harvestAnticipation);
-
             //anticipation animatin missing
+            m_animation.SetAnimation(0, m_info.harvestAttack.animation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.harvestAttack.animation);
 
+            //scythe drag
+            //Set destination next to player and if possible gradually accelerate towards it
+
+            //attack
             m_animation.SetAnimation(0, m_info.harvestAttack.animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.harvestAttack.animation);
 
             //swap pull animation if willheal
-            var pullAnimation = willHeal ? "WIllHealAnim" : "WillnotHealAnim";
+            var pullAnimation = willHeal ? m_info.harvestPullWithHeal.animation : m_info.harvestPullNoHeal.animation;
 
             //play pull animation here
-            //m_animation.SetAnimation(0, pullAnimation, false);
+            m_animation.SetAnimation(0, pullAnimation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, pullAnimation);
 
             m_attacker.TargetDamaged -= OnTargetDamagedByHarvest;
 
@@ -789,6 +888,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
             m_animation.SetAnimation(0, m_info.deathStenchWaveAttack.animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.deathStenchWaveAttack.animation);
+
+            //release death stench wave via animation event
 
             m_attackCounter++;
 
