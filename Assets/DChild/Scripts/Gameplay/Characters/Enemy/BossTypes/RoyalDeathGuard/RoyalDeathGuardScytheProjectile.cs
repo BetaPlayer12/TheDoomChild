@@ -56,6 +56,11 @@ namespace DChild.Gameplay.Characters.Enemies
             m_info = info;
         }
 
+        public FlightInfo GetFLightInfo()
+        {
+            return m_info;
+        }
+
         [Button]
         public void ExecuteFlight(Vector3 startingPosition, Vector3 aimTowards)
         {
