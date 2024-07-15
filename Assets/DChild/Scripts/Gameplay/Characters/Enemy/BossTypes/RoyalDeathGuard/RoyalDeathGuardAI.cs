@@ -362,7 +362,7 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Attacks", "Scythe Throw")]
         private RaySensor m_scytheThrowWallCheckSensor;
         [SerializeField, TabGroup("Attacks", "Scythe Throw")]
-        private float m_scytheThrowHeight;
+        private float m_scytheThrowReleaseHeight;
         [SerializeField, TabGroup("Attacks", "Scythe Throw")]
         private float m_scytheThrowMinXMove;
         [SerializeField, TabGroup("Attacks", "Scythe Throw")]
@@ -666,7 +666,7 @@ namespace DChild.Gameplay.Characters.Enemies
             }
 
             //Move up for scythe throw
-            yield return DynamicXMoveIntoPositionRoutine(m_scytheThrowMinXMove, m_scytheThrowMaxXMove, m_scytheThrowHeight);
+            yield return DynamicXMoveIntoPositionRoutine(m_scytheThrowMinXMove, m_scytheThrowMaxXMove, m_scytheThrowReleaseHeight);
 
             m_animation.SetAnimation(0, m_info.scytheThrowAnticipation.animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.scytheThrowAnticipation.animation);
@@ -840,14 +840,25 @@ namespace DChild.Gameplay.Characters.Enemies
             
             m_attacker.TargetDamaged += OnTargetDamagedByHarvest;
 
-            //anticipation animatin missing
-            m_animation.SetAnimation(0, m_info.harvestAttack.animation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.harvestAttack.animation);
-
             //scythe drag
             //Set destination next to player and if possible gradually accelerate towards it
+            m_animation.SetAnimation(0, m_info.harvestScytheDrag.animation, true);
 
-            //attack
+            Vector3 targetDestination;
+            if(transform.localScale.x > 0)
+            {
+                targetDestination = new Vector3(m_targetInfo.position.x - 10, m_groundCombatHeight); //temporary magic number
+            }
+            else
+            {
+                targetDestination = new Vector3(m_targetInfo.position.x + 10, m_groundCombatHeight); //temporary magic number
+            }
+
+            yield return MoveIntoPositionRoutine(targetDestination, 80); //temporary magic number
+
+            m_animation.SetAnimation(0, m_info.harvestAnticipation.animation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.harvestAnticipation.animation);
+
             m_animation.SetAnimation(0, m_info.harvestAttack.animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.harvestAttack.animation);
 
@@ -871,8 +882,9 @@ namespace DChild.Gameplay.Characters.Enemies
 
             void OnTargetDamagedByHarvest(object sender, CombatConclusionEventArgs eventArgs)
             {
-                m_damageable.Heal(m_info.harvestHealAmount);
+                //m_damageable.Heal(m_info.harvestHealAmount);
                 willHeal = true;
+                //spawn healing orb 
                 Debug.Log("Damaged by Harvest");
             }
         }
