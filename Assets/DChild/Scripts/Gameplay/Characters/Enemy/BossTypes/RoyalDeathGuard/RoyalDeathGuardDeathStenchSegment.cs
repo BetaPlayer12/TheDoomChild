@@ -14,6 +14,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private Collider2D m_collider;
         [SerializeField]
         private float m_colliderDuration;
+        [SerializeField]
+        private float m_colliderSpawnDelay;
 
         public event EventAction<EventActionArgs> Done;
 
@@ -26,10 +28,12 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator ColliderLifetime()
         {
+            yield return new WaitForSeconds(m_colliderSpawnDelay);
             m_collider.enabled = true;
             yield return new WaitForSeconds(m_colliderDuration);
             m_collider.enabled = false;
         }
+
         private void OnPoolRequest(object sender, PoolItemEventArgs eventArgs)
         {
             Done?.Invoke(this, EventActionArgs.Empty);

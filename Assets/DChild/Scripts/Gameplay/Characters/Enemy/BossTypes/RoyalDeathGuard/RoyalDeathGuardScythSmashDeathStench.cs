@@ -20,6 +20,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private float m_segmentDistanceInterval;
         [SerializeField]
         private float m_segmentSpawnInterval;
+        [SerializeField]
+        private float m_maxStenchShadowDistance;
 
         private List<RoyalDeathGuardDeathStenchSegment> segment;
 
@@ -32,9 +34,10 @@ namespace DChild.Gameplay.Characters.Enemies
             if (m_isSpawningSegments)
                 return;
 
+            m_toWallRaycast.multiRaycast.SetCastDistance(m_maxStenchShadowDistance);
             m_toWallRaycast.Cast();
             var hasHitWall = m_toWallRaycast.isDetecting;
-            var distanceToWall = hasHitWall ? m_toWallRaycast.GetUniqueHits()[0].distance : 30f;
+            var distanceToWall = hasHitWall ? m_toWallRaycast.GetUniqueHits()[0].distance : m_maxStenchShadowDistance;
             var instancesToCreate = Mathf.CeilToInt(distanceToWall / m_segmentDistanceInterval);
             StartCoroutine(SpawnSegments(instancesToCreate));
         }
