@@ -643,7 +643,6 @@ namespace DChild.Gameplay.Characters.Enemies
             }
         }
 
-        public float temporaryvarCatchDistance = 30f;
         private IEnumerator ScytheThrowRoutine()
         {
             m_stateHandle.Wait(State.ReevaluateSituation);
@@ -679,18 +678,19 @@ namespace DChild.Gameplay.Characters.Enemies
             ThrowScythe();
 
             m_animation.SetAnimation(0, m_info.scytheThrowWaitForScythe.animation, true);
-            while (!timeToCatch)
-            {
-                if (isReturning)
-                {
-                    var distance = Vector2.Distance(m_scytheThrowProjectile.transform.position, m_scytheThrowReleasePoint.position);
-                    if(distance < temporaryvarCatchDistance)
-                    {
-                        timeToCatch = true;
-                    }
-                }
-                yield return null;
-            }
+            yield return new WaitForSeconds(0.75f); //smoothest looking timing with current animation 7/15/24
+            //while (!timeToCatch)
+            //{
+            //    if (isReturning)
+            //    {
+            //        var distance = Vector2.Distance(m_scytheThrowProjectile.transform.position, m_scytheThrowReleasePoint.position);
+            //        if(distance < m_scytheThrowProjectile.GetFLightInfo().distance)
+            //        {
+            //            timeToCatch = true;
+            //        }
+            //    }
+            //    yield return null;
+            //}
 
             m_animation.SetAnimation(0, m_info.scytheThrowCatch.animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.scytheThrowCatch.animation);
