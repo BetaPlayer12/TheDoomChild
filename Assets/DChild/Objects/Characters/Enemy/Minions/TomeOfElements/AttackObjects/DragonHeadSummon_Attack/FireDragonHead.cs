@@ -76,7 +76,6 @@ namespace DChild.Gameplay.Projectiles
         {
             m_flameEffect.Play(true);
             m_flameCollider.SetActive(true);
-
         }
 
         void Update()
@@ -84,11 +83,13 @@ namespace DChild.Gameplay.Projectiles
                 if (m_roofSensor.isDetecting)
                 {
                     transform.position = Vector3.MoveTowards(transform.position, new Vector2(m_ToPlayerDirection.x, transform.position.y), m_moveOutOfWallSpeed);
+                    transform.localScale = new Vector3(m_model.transform.position.x < m_ToPlayerDirection.x ? -1 : 1, 1);
                 }
                 if (m_wallSensor.isDetecting)
                 {
-                    transform.position = Vector3.MoveTowards(transform.position, new Vector2(transform.position.x, m_ToPlayerDirection.y), m_moveOutOfWallSpeed);
+                    transform.position = Vector3.MoveTowards(transform.position, new Vector2(transform.position.x, m_ToPlayerDirection.y), m_moveOutOfWallSpeed*0.8f);
                 }
+                //m_model.transform.localScale = new Vector3(transform.position.x < m_ToPlayerDirection.x ? -1 : 1, 1);
         }
 
         public void OffFire()
@@ -106,7 +107,7 @@ namespace DChild.Gameplay.Projectiles
 
             //m_model.transform.localScale = new Vector3(transform.position.x < playerPosition.x ? -1 : 1, transform.position.y < playerPosition.y ? -1 : 1);
             
-            m_model.transform.localScale = new Vector3(transform.position.x < playerPosition.x ? -1 : 1, 1);
+            transform.localScale = new Vector3(m_model.transform.position.x < playerPosition.x ? -1 : 1, 1);
 
             Debug.Log("Dragon Head: " + transform.position + "\n Dragon Scale: " + m_model.transform.localScale + "\n Player Pos: " + playerPosition);
         }
@@ -114,7 +115,7 @@ namespace DChild.Gameplay.Projectiles
         public void SetPlayerPosition(Vector2 playerPos)
         {
             
-            m_ToPlayerDirection = ((Vector2)transform.position - playerPos).normalized;
+            m_ToPlayerDirection = (playerPos -(Vector2)transform.position).normalized;
             m_spawnPosition = transform.position;
             m_playerPosition = playerPos;
             AdjustFireBreathRotationToPlayerPosition(m_playerPosition);
