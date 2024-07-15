@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace DChild.Gameplay
 {
+
     public class WaveMovementHandler2D : MovementHandle2D
     {
         [SerializeField]

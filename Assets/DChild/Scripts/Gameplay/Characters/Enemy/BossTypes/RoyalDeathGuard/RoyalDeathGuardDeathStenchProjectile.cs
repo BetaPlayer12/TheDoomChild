@@ -12,14 +12,21 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField]
         private float m_homingEarlyCancelDistance;
 
+        [SerializeField]
+        private AnimationCurveMovement m_curveMovement;
+        [SerializeField]
+        private Collider2D m_collider;
+
         private Vector2 m_flightDirection;
 
         [Button]
-        public void DoSomething(Transform target, float speed)
+        public void Release(Transform target, float speed)
         {
             m_physics.SetVelocity(Vector2.zero);
             StopAllCoroutines();
             StartCoroutine(HomeInTowards(target, speed));
+            m_curveMovement.enabled = true;
+            m_collider.enabled = true;
         }
 
         private IEnumerator HomeInTowards(Transform target, float speed)
@@ -39,6 +46,12 @@ namespace DChild.Gameplay.Characters.Enemies
                 homingTimer -= GameplaySystem.time.fixedDeltaTime;
                 yield return new WaitForFixedUpdate();
             } while (homingTimer > 0 && distanceToTarget > m_homingEarlyCancelDistance);
+        }
+
+        private void OnEnable()
+        {
+            m_curveMovement.enabled = false;
+            m_collider.enabled = false;
         }
     }
 }
