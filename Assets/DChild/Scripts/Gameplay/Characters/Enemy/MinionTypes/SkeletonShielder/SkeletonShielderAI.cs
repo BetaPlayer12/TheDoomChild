@@ -105,6 +105,9 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField]
             private MovementInfo m_noShieldMove = new MovementInfo();
             public MovementInfo noShieldMove => m_noShieldMove;
+            [SerializeField]
+            private BasicAnimationInfo m_noShieldFlinch;
+            public BasicAnimationInfo noShieldFlinch => m_noShieldFlinch;
             #endregion
 
 
@@ -131,6 +134,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_noShieldMove.SetData(m_skeletonDataAsset);
                 m_march.SetData(m_skeletonDataAsset);
                 m_deathAnimation2.SetData(m_skeletonDataAsset);
+                m_noShieldFlinch.SetData(m_skeletonDataAsset);
 #endif
             }
         }
@@ -170,6 +174,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private Hitbox hitbox;
         [SerializeField, TabGroup("Reference")]
         private Damageable m_shieldDamageable;
+        [SerializeField, TabGroup("Reference")]
+        private Attacker m_shieldAttacker;
         [SerializeField, TabGroup("Modules")]
         private AnimatedTurnHandle m_turnHandle;
         [SerializeField, TabGroup("Modules")]
@@ -205,6 +211,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private ParticleSystem m_shieldBreakVFX;
         [SerializeField, TabGroup("VFX")]
         private ParticleSystem m_deathFx;
+        [SerializeField, TabGroup("VFX")]
+        private ParticleSystem m_targetHitVfx;
 
         [ShowInInspector]
         private MinionMode m_minionMode;
@@ -221,6 +229,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private List<string> m_skins;
 
         private bool m_shieldActive;
+        private bool m_targetHit;
 
         private IEnumerable GetSkins()
         {
@@ -353,7 +362,15 @@ namespace DChild.Gameplay.Characters.Enemies
                 hitbox.SetInvulnerability(Invulnerability.None);
                 StopAllCoroutines();
                 m_animation.animationState.TimeScale = .5f;
-                m_animation.SetAnimation(0, m_info.flinchAnimation, false);
+                if(m_minionMode != MinionMode.NoShield)
+                {
+                    m_animation.SetAnimation(0, m_info.flinchAnimation, false);
+                }
+                else
+                {
+                    m_animation.SetAnimation(0, m_info.noShieldFlinch, false);
+                }
+               
                 m_stateHandle.OverrideState(State.WaitBehaviourEnd);
             }
         }
@@ -406,7 +423,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator ShieldBashRoutine()
         {
-
+            
             if (!IsFacingTarget() && !m_wallSensor.isDetecting && m_edgeSensor.isDetecting)
             {
                 //Call Turn;
@@ -425,22 +442,31 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_movement.MoveTowards(Vector2.one * transform.localScale.x, m_info.march.speed);
                     yield return null;
                 } while (!isPlayerNear && !m_wallSensor.isDetecting && m_edgeSensor.isDetecting);
-
                 m_movement.Stop();
 
             }
             m_animation.SetAnimation(0, m_info.idleGuardAnimation, false);
             yield return null;
+            m_shieldAttacker.gameObject.SetActive(true);
+            yield return null;
             m_animation.SetAnimation(0, m_info.ShieldBash.animation, false);
             //yield return new WaitUntil(() => m_wallSensor.isDetecting && m_playerSensor.isDetecting);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.ShieldBash);
-            m_stateHandle.ApplyQueuedState();
+            if (m_targetHit)
+            {
+                m_targetHitVfx.Play();
+                m_targetHit = false;
+            }
             yield return null;
+            m_targetHitVfx.Stop();
+            m_shieldAttacker.gameObject.SetActive(false);
+            yield return null;
+            m_stateHandle.ApplyQueuedState();
         }
 
         private IEnumerator ShieldDestroyedRoutine()
         {
-            m_stateHandle.Wait(State.Flee);
+            //m_stateHandle.Wait(State.Flee);
 
             m_animation.SetAnimation(0, m_info.shieldDestroyed, false);
             m_shieldGlow.Stop();
@@ -458,7 +484,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_animation.SetAnimation(0, m_info.noShieldCrouch, true);
             yield return null;
-            m_stateHandle.SetState(State.WaitBehaviourEnd);
+            m_stateHandle.SetState(State.ReevaluateSituation);
         }
 
         private IEnumerator NoShieldRunRoutine()
@@ -466,8 +492,8 @@ namespace DChild.Gameplay.Characters.Enemies
             if (IsFacingTarget() && !m_wallSensor.isDetecting && m_edgeSensor.isDetecting)
             {
                 //Call Turn Away;
-                m_turnHandle.Execute(m_info.turnAnimation.animation, m_info.idleAnimation.animation);
-                yield return new WaitForAnimationComplete(m_animation.animationState, m_info.turnAnimation.animation);
+                m_turnHandle.Execute(m_info.noShieldTurn.animation, m_info.noShieldIdle.animation);
+                yield return new WaitForAnimationComplete(m_animation.animationState, m_info.noShieldTurn);
             }
 
             //var distanceFromPlayer = 0f;
@@ -482,7 +508,7 @@ namespace DChild.Gameplay.Characters.Enemies
             } while (/*isPlayerNear &&*/ !m_wallSensor.isDetecting && m_edgeSensor.isDetecting);
             m_movement.Stop();
             yield return null;
-            m_stateHandle.SetState(State.Crouching);
+            m_stateHandle.SetState(State.ReevaluateSituation);
         }
 
         private IEnumerator ChangeModeNoGuardRoutine()
@@ -508,6 +534,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator DeathRoutine()
         {
+            StopAllCoroutines();
             if(m_minionMode != MinionMode.NoShield)
             {
                 m_shieldGlow.Stop();
@@ -516,6 +543,7 @@ namespace DChild.Gameplay.Characters.Enemies
             else
             {
                 m_animation.SetAnimation(0, m_info.deathAnimation2, false);
+                yield return new WaitForAnimationComplete(m_animation.animationState, m_info.deathAnimation2);
                 m_deathFx.Play();
             }
 
@@ -529,7 +557,13 @@ namespace DChild.Gameplay.Characters.Enemies
             m_selfCollider.SetActive(false);
             m_startPoint = transform.position;
             m_shieldDamageable.Destroyed += OnShieldDestroyed;
+            m_shieldAttacker.TargetDamaged += OnTargetDamaged;
             m_shieldActive = true;
+        }
+
+        private void OnTargetDamaged(object sender, CombatConclusionEventArgs eventArgs)
+        {
+            m_targetHit = true;
         }
 
         private void OnShieldDestroyed(object sender, EventActionArgs eventArgs)
@@ -704,13 +738,33 @@ namespace DChild.Gameplay.Characters.Enemies
 
                 case State.Turning:
                     m_stateHandle.Wait(m_turnState);
-                    m_turnHandle.Execute(m_info.turnAnimation.animation, m_info.noShieldIdle.animation);
+                    m_turnHandle.Execute(m_info.noShieldTurn.animation, m_info.noShieldIdle.animation);
                     break;
 
                 case State.Crouching:
                     StartCoroutine(CrouchInFearRoutine());
                     m_animation.SetAnimation(0, m_info.noShieldCrouch, true);
-                    m_stateHandle.SetState(State.WaitBehaviourEnd);
+                    m_stateHandle.SetState(State.ReevaluateSituation);
+                    break;
+
+                case State.ReevaluateSituation:
+
+                    if (m_targetInfo.isValid)
+                    {
+                       if(Vector2.Distance(m_targetInfo.position,transform.position) >= m_info.targetDistanceTolerance)
+                        {
+                            m_stateHandle.SetState(State.Crouching);
+                        }
+                        else
+                        {
+                            m_stateHandle.SetState(State.Flee);
+                        }
+                    }
+                    else
+                    {
+                        m_animation.SetAnimation(0, m_info.noShieldIdle, true);
+                        m_stateHandle.SetState(State.WaitBehaviourEnd);
+                    }
                     break;
                 case State.WaitBehaviourEnd:
                     return;
