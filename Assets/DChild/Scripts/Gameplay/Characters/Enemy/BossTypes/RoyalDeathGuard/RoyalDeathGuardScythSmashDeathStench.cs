@@ -39,6 +39,7 @@ namespace DChild.Gameplay.Characters.Enemies
             var hasHitWall = m_toWallRaycast.isDetecting;
             var distanceToWall = hasHitWall ? m_toWallRaycast.GetUniqueHits()[0].distance : m_maxStenchShadowDistance;
             var instancesToCreate = Mathf.CeilToInt(distanceToWall / m_segmentDistanceInterval);
+            Debug.Log("Spawn number of death stench: " + instancesToCreate);
             StartCoroutine(SpawnSegments(instancesToCreate));
         }
 
@@ -65,6 +66,7 @@ namespace DChild.Gameplay.Characters.Enemies
             lastSegment.Done -= OnLastSegmentDone;
 
             m_isSpawningSegments = false;
+            Done?.Invoke(this, EventActionArgs.Empty);
 
             void OnLastSegmentDone(object sender, EventActionArgs eventActionArgs)
             {

@@ -777,10 +777,10 @@ namespace DChild.Gameplay.Characters.Enemies
 
             //scytheSmash Death Stench executed via animation event
 
+            m_animation.SetAnimation(0, m_info.scytheSmashGroundLoop.animation, true);
             //loop anim while stuck on ground
             while (!deathStenchDone)
             {
-                m_animation.SetAnimation(0, m_info.scytheSmashGroundLoop.animation, true);
                 yield return null;
             }
 
@@ -801,6 +801,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
             void OnDeathStenchDone(object sender, EventActionArgs eventArgs)
             {
+                Debug.Log("Scythe Smash DeathStench Done ");
                 deathStenchDone = true;
             }
         }
