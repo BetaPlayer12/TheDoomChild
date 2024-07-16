@@ -11,6 +11,8 @@ namespace DChildDebug.Cutscene
     {
         private DialogueEntryPicker entryPicker = null;
         private DialogueEntryPicker noteEntryPicker = null;
+        private string entryPickerLastConvesationString;
+        private string noteEntryPickerLastConvesationString;
 
         protected override void DrawPropertyLayout(GUIContent label)
         {
@@ -29,14 +31,16 @@ namespace DChildDebug.Cutscene
                         {
                             var conversation = children.Get("conversation");
                             var conversationString = (string)conversation.ValueEntry.WeakSmartValue;
-                            entryPicker = new DialogueEntryPicker(conversationString);
-                            entryPicker.SetDialogueEntries(dialougeDatabase, conversationString);
+                            UpdateDialogueEntryPicker(ref entryPicker, ref entryPickerLastConvesationString, dialougeDatabase, conversationString);
                         }
                         else
                         {
                             var conversation = children.Get("conversation");
                             var conversationString = (string)conversation.ValueEntry.WeakSmartValue;
-                            entryPicker.SetDialogueEntries(dialougeDatabase, conversationString);
+                            if (entryPickerLastConvesationString != conversationString)
+                            {
+                                UpdateDialogueEntryPicker(ref entryPicker, ref entryPickerLastConvesationString, dialougeDatabase, conversationString);
+                            }
                         }
                         if (entryPicker.isValid)
                         {
@@ -56,14 +60,13 @@ namespace DChildDebug.Cutscene
                     {
                         var conversation = children.Get("noteConversation");
                         var conversationString = (string)conversation.ValueEntry.WeakSmartValue;
-                        noteEntryPicker = new DialogueEntryPicker(conversationString);
-                        noteEntryPicker.SetDialogueEntries(dialougeDatabase, conversationString);
+                        UpdateDialogueEntryPicker(ref noteEntryPicker, ref noteEntryPickerLastConvesationString, dialougeDatabase, conversationString);
                     }
                     else
                     {
                         var conversation = children.Get("noteConversation");
                         var conversationString = (string)conversation.ValueEntry.WeakSmartValue;
-                        noteEntryPicker.SetDialogueEntries(dialougeDatabase, conversationString);
+                        UpdateDialogueEntryPicker(ref noteEntryPicker, ref noteEntryPickerLastConvesationString, dialougeDatabase, conversationString);
                     }
                     if (noteEntryPicker.isValid)
                     {
@@ -84,6 +87,13 @@ namespace DChildDebug.Cutscene
                 }
 
             }
+        }
+
+        private void UpdateDialogueEntryPicker(ref DialogueEntryPicker entryPicker, ref string lastConversationString, DialogueDatabase dialougeDatabase, string conversationString)
+        {
+            lastConversationString = conversationString;
+            entryPicker = new DialogueEntryPicker(conversationString);
+            entryPicker.SetDialogueEntries(dialougeDatabase, conversationString);
         }
     }
 }
