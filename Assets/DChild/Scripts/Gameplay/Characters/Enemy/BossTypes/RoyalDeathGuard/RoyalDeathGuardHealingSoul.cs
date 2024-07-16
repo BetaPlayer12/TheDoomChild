@@ -10,66 +10,56 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Characters.Enemies
 {
-    public class RoyalDeathGuardHealingSoul : MonoBehaviour
+    public class RoyalDeathGuardHealingSoul : PoolableObject
     {
         [SerializeField]
         private Collider2D m_collider;
         [SerializeField]
+        private float m_speed;
+        [SerializeField]
         private int m_healAmount;
         [SerializeField]
-        private Transform m_target;
-        [SerializeField]
-        private float m_speed;
-
         private bool m_hasHealed;
+        [SerializeField]
+        private GameObject m_targetObject;
+        [SerializeField]
+        private Vector3 m_targetDestination;
 
-        public void SetTarget(Transform target)
+        private IEnumerator MoveToTarget(Vector2 target)
         {
-            m_target = target;
-        }
-
-        [Button]
-        private IEnumerator MoveTowardsTarget()
-        {
-            while (!m_hasHealed)
+            var step = m_speed * Time.deltaTime;
+            while(!m_hasHealed)
             {
-                Vector2.MoveTowards(transform.position, m_target.position, m_speed);
+                transform.position = Vector2.MoveTowards(transform.position, target, step);
                 yield return null;
             }
         }
 
-        private void HealTarget(Damageable damageable, int healAmount)
+        private void HealTarget(Damageable damageable)
         {
-            damageable.Heal(healAmount);
+            damageable.Heal(m_healAmount);
         }
 
-        private void OnCollisionEnter2D(Collision2D collision)
+        private void OnTriggerEnter2D(Collider2D collision)
         {
-            var targetDamageable = collision.gameObject.GetComponent<Damageable>();
-            HealTarget(targetDamageable, m_healAmount);
-            m_hasHealed = true;
+            if (collision.gameObject.tag == "Hitbox")
+            {
+                var targetDamageable = m_targetObject.GetComponent<Damageable>();
+                HealTarget(targetDamageable);
+                m_hasHealed = true;
 
+                DestroyInstance();
+            }
         }
 
-        private void Awake()
+        private void Start()
         {
-            gameObject.SetActive(false);
-        }
-
-        private void OnPoolRequest(object sender, PoolItemEventArgs eventArgs)
-        {
-            throw new NotImplementedException();
-        }
-
-        private void OnEnable()
-        {
-            m_hasHealed = false;
-            StartCoroutine(MoveTowardsTarget());
-        }
-
-        private void OnDisable()
-        {
-            StopAllCoroutines();
+            m_targetObject = FindObjectOfType<RoyalDeathGuardAI>().gameObject;
+            //Set Target for Heal
+            var hitbox = m_targetObject.transform.GetComponentInChildren<Hitbox>();
+            var hurtbox = hitbox.GetComponentInChildren<CapsuleCollider2D>();
+            m_targetDestination = hurtbox.transform.position;
+            StartCoroutine(MoveToTarget(m_targetDestination));
         }
     }
 
