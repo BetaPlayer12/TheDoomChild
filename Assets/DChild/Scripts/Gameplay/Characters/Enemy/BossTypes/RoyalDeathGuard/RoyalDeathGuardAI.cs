@@ -135,6 +135,9 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField, TabGroup("Attacks2", "Harvest")]
             private float m_harvestChaseSpeed;
             public float harvestChaseSpeed => m_harvestChaseSpeed;
+            [SerializeField, TabGroup("Attacks2", "Harvest")]
+            private GameObject m_healingOrb;
+            public GameObject healingOrb => m_healingOrb;
 
             [SerializeField, TabGroup("Attacks3", "Death Stench Wave")]
             private SimpleAttackInfo m_deathStenchWaveAttack = new SimpleAttackInfo();
@@ -374,8 +377,6 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Attacks", "Scythe Smash")]
         private Transform m_scytheSmashDeathStenchSpawn;
 
-        [SerializeField, TabGroup("Attacks", "Harvest")]
-        private GameObject m_healingOrb;
         [SerializeField, TabGroup("Attacks", "Harvest")]
         private float m_targetDistanceOffset;
 
@@ -933,9 +934,15 @@ namespace DChild.Gameplay.Characters.Enemies
                 willHeal = true;
                 Vector3 healingOrbSpawnPos = new Vector3(m_targetInfo.position.x, m_targetInfo.position.y + 20);
                 //spawn healing orb 
-                var healingOrb = GameSystem.poolManager.GetPool<PoolableObjectPool>().GetOrCreateItem(m_healingOrb, healingOrbSpawnPos, Quaternion.identity);
+                InstantiateHealingOrb(healingOrbSpawnPos);
                 Debug.Log("Damaged by Harvest");
             }
+        }
+
+        private void InstantiateHealingOrb(Vector2 spawnPosition)
+        {
+            var instance = GameSystem.poolManager.GetPool<PoolableObjectPool>().GetOrCreateItem(m_info.healingOrb, gameObject.scene);
+            instance.SpawnAt(spawnPosition, Quaternion.identity);
         }
 
         private IEnumerator DeathStenchWaveRoutine()
