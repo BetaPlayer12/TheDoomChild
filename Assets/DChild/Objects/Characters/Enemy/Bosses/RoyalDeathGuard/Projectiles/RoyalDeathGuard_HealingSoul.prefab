@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 7119981423892780228}
   - component: {fileID: 7119981423892780231}
   - component: {fileID: 7119981423892780230}
-  - component: {fileID: 7119981423892780229}
   m_Layer: 0
   m_Name: RoyalDeathGuard_HealingSoul
   m_TagString: Untagged
@@ -48,9 +47,9 @@ CircleCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.44007492, y: -2.8085573}
+  m_Offset: {x: 0.44007492, y: -2.0911558}
   serializedVersion: 2
-  m_Radius: 1.9883335
+  m_Radius: 1.4169352
 --- !u!114 &7119981423892780230
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -63,23 +62,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f6bd09c4af2a114b833558479f57462, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_collider: {fileID: 7119981423892780231}
-  m_healAmount: 200
-  m_target: {fileID: 0}
-  m_speed: 10
---- !u!114 &7119981423892780229
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7119981423892780225}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e2130a8bda7a1a544b7fe2cfe9725688, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
   m_poolableItemData: {fileID: 11400000, guid: d43c8143552017949bb7294190b8ed9f, type: 2}
+  m_collider: {fileID: 7119981423892780231}
+  m_speed: 10
+  m_healAmount: 200
+  m_hasHealed: 0
+  m_targetObject: {fileID: 0}
 --- !u!1001 &7119981423059088785
 PrefabInstance:
   m_ObjectHideFlags: 0
