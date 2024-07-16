@@ -69,6 +69,8 @@ namespace DChild.Gameplay.Systems
 
         [SerializeField]
         private WeaponUpgradeHandle m_upgradeWeaponHandler;
+        [SerializeField]
+        private CinematicVideoHandle m_cinematicVideoHandle;
 
         [SerializeField]
         private UIView m_cinematicBars;
@@ -275,6 +277,7 @@ namespace DChild.Gameplay.Systems
         {
             m_notificationManager.InitializeFullPriorityHandling();
             m_notificationManager.InitializePromptPriorityHandling();
+            m_cinematicVideoHandle.Initialize();
             GameplaySystem.campaignSerializer.PostDeserialization += OnPostDeserialization;
         }
 
@@ -291,7 +294,7 @@ namespace DChild.Gameplay.Systems
 
         public void ShowCinematicVideo(VideoClip clip, Func<IEnumerator> behindTheSceneRoutine = null, Action OnVideoDone = null)
         {
-
+            m_cinematicVideoHandle.ShowCinematicVideo(clip, behindTheSceneRoutine, OnVideoDone);
         }
     }
 }
