@@ -20,7 +20,7 @@ namespace DChild.Gameplay.FastTravel
             CharacterState collisionState = character.GetComponentInChildren<CharacterState>();
             collisionState.forcedCurrentGroundedness = true;
 
-            LoadingHandle.SetLoadType(LoadingHandle.LoadType.Force);
+            LoadingHandle.SetLoadType(LoadingHandle.LoadType.Smart);
             GameplaySystem.ResumeGame();
             GameSystem.LoadZone(destination.sceneInfo, true, OnTransferPlayerDone);
         }
