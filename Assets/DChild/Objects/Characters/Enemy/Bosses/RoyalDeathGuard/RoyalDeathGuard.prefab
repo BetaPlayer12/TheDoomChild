@@ -645,6 +645,11 @@ MonoBehaviour:
     - {fileID: 4990807462091851068}
     - {fileID: 724551924451725146}
     - {fileID: 724551923004297406}
+    - {fileID: 3124441120348424411}
+    - {fileID: 3124441121396890772}
+    - {fileID: 2952084931020335922}
+    - {fileID: 8605107873629225594}
+    - {fileID: 6271703852182487400}
     - {fileID: 6610204870915050031}
     - {fileID: 6610204871684068928}
     - {fileID: 6610204870220848123}
@@ -658,6 +663,11 @@ MonoBehaviour:
     - 5
     - 7
     - 8
+    - 2
+    - 1
+    - 1
+    - 2
+    - 2
     - 1
     - 1
     - 1
@@ -670,8 +680,11 @@ MonoBehaviour:
     m_rigidbody2Ds:
     - {fileID: 8244554107020012113}
     - {fileID: 5304060778478686516}
+    - {fileID: 6686265046845682526}
     - {fileID: 337099639111037619}
     m_physicsTimeObjectInfo:
+    - m_mass: 1
+      m_actualVelocity: {x: 0, y: 0}
     - m_mass: 1
       m_actualVelocity: {x: 0, y: 0}
     - m_mass: 1
@@ -761,9 +774,8 @@ MonoBehaviour:
   m_scytheThrowTargetHeight: 0
   m_scytheSmashDeathStench: {fileID: 5914285124908110184}
   m_scytheSmashDeathStenchSpawn: {fileID: 8475371734113652003}
-  m_healingOrb: {fileID: 7119981423892780225, guid: ccbfb1e5ea06d544481cd05bf890d949,
-    type: 3}
   m_targetDistanceOffset: 20
+  m_royalGuardianShield: {fileID: 3770010571934106578}
   m_groundCombatHeight: 0
   m_attackCounter: 0
 --- !u!114 &7700607547958873781
@@ -911,6 +923,16 @@ PrefabInstance:
       propertyPath: rb
       value: 
       objectReference: {fileID: 8244554107020012113}
+    - target: {fileID: 2504027448868170799, guid: 18a853f314a7baf45a9ae8dfdb87fc98,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 2504027448868170799, guid: 18a853f314a7baf45a9ae8dfdb87fc98,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 13.624134
+      objectReference: {fileID: 0}
     - target: {fileID: 2720498986600060438, guid: 18a853f314a7baf45a9ae8dfdb87fc98,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1014,27 +1036,37 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4619474570062982852, guid: 18a853f314a7baf45a9ae8dfdb87fc98,
         type: 3}
-      propertyPath: events.Array.data[0].unityHandler.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 7102245480258337044}
-    - target: {fileID: 4619474570062982852, guid: 18a853f314a7baf45a9ae8dfdb87fc98,
-        type: 3}
-      propertyPath: events.Array.data[1].unityHandler.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 7102245480258337044}
-    - target: {fileID: 4619474570062982852, guid: 18a853f314a7baf45a9ae8dfdb87fc98,
-        type: 3}
-      propertyPath: events.Array.data[1].unityHandler.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: ReleaseScytheSmashDeathStench
+      propertyPath: events.Array.data[0].unityHandler.m_PersistentCalls.m_Calls.Array.size
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4619474570062982852, guid: 18a853f314a7baf45a9ae8dfdb87fc98,
         type: 3}
-      propertyPath: events.Array.data[1].unityHandler.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      propertyPath: events.Array.data[0].unityHandler.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4619474570062982852, guid: 18a853f314a7baf45a9ae8dfdb87fc98,
+        type: 3}
+      propertyPath: events.Array.data[0].unityHandler.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 7102245480258337044}
+    - target: {fileID: 4619474570062982852, guid: 18a853f314a7baf45a9ae8dfdb87fc98,
+        type: 3}
+      propertyPath: events.Array.data[0].unityHandler.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4619474570062982852, guid: 18a853f314a7baf45a9ae8dfdb87fc98,
+        type: 3}
+      propertyPath: events.Array.data[0].unityHandler.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: HarvestHeal
+      objectReference: {fileID: 0}
+    - target: {fileID: 4619474570062982852, guid: 18a853f314a7baf45a9ae8dfdb87fc98,
+        type: 3}
+      propertyPath: events.Array.data[0].unityHandler.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
       value: DChild.Gameplay.Characters.Enemies.RoyalDeathGuardAI, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 4619474570062982852, guid: 18a853f314a7baf45a9ae8dfdb87fc98,
         type: 3}
-      propertyPath: events.Array.data[1].unityHandler.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      propertyPath: events.Array.data[0].unityHandler.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 5520268195459952762, guid: 18a853f314a7baf45a9ae8dfdb87fc98,
@@ -1224,6 +1256,8 @@ PrefabInstance:
     - {fileID: 1024708312078958704, guid: 18a853f314a7baf45a9ae8dfdb87fc98, type: 3}
     - {fileID: 8366201308818342203, guid: 18a853f314a7baf45a9ae8dfdb87fc98, type: 3}
     - {fileID: 1554810949412574041, guid: 18a853f314a7baf45a9ae8dfdb87fc98, type: 3}
+    - {fileID: 6586894878832270186, guid: 18a853f314a7baf45a9ae8dfdb87fc98, type: 3}
+    - {fileID: 4203461456000684533, guid: 18a853f314a7baf45a9ae8dfdb87fc98, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 18a853f314a7baf45a9ae8dfdb87fc98, type: 3}
 --- !u!4 &239706582261338279 stripped
 Transform:
@@ -1326,6 +1360,12 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 7719443944605926414}
   m_PrefabAsset: {fileID: 0}
+--- !u!198 &2952084931020335922 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 4888394358183096124, guid: 18a853f314a7baf45a9ae8dfdb87fc98,
+    type: 3}
+  m_PrefabInstance: {fileID: 7719443944605926414}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &3020764846270604851 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4812959048933876285, guid: 18a853f314a7baf45a9ae8dfdb87fc98,
@@ -1338,6 +1378,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a6178cd111cba844a6e236cfbee492c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!198 &3124441120348424411 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 4646808797971156181, guid: 18a853f314a7baf45a9ae8dfdb87fc98,
+    type: 3}
+  m_PrefabInstance: {fileID: 7719443944605926414}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &3124441121396890772 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 4646808796922566810, guid: 18a853f314a7baf45a9ae8dfdb87fc98,
+    type: 3}
+  m_PrefabInstance: {fileID: 7719443944605926414}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &3476240652048654083 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6565948273757461261, guid: 18a853f314a7baf45a9ae8dfdb87fc98,
@@ -1350,13 +1402,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 11a5cea4c16e7c4478a55620f5e666e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &3770010571934106578 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6877346251237443548, guid: 18a853f314a7baf45a9ae8dfdb87fc98,
+    type: 3}
+  m_PrefabInstance: {fileID: 7719443944605926414}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db1e25d8c724a2a448db9f70e8a81799, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4655471356338848134 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3151244126042949000, guid: 18a853f314a7baf45a9ae8dfdb87fc98,
     type: 3}
   m_PrefabInstance: {fileID: 7719443944605926414}
   m_PrefabAsset: {fileID: 0}
---- !u!60 &3373500153399436738
+--- !u!60 &5606801044694621756
 PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1481,6 +1545,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 11a5cea4c16e7c4478a55620f5e666e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!198 &6271703852182487400 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 4335110684306015590, guid: 18a853f314a7baf45a9ae8dfdb87fc98,
+    type: 3}
+  m_PrefabInstance: {fileID: 7719443944605926414}
+  m_PrefabAsset: {fileID: 0}
+--- !u!50 &6686265046845682526 stripped
+Rigidbody2D:
+  m_CorrespondingSourceObject: {fileID: 4029204324253841232, guid: 18a853f314a7baf45a9ae8dfdb87fc98,
+    type: 3}
+  m_PrefabInstance: {fileID: 7719443944605926414}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &6938754767204626994 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 822911803464971836, guid: 18a853f314a7baf45a9ae8dfdb87fc98,
@@ -1514,6 +1590,12 @@ BoxCollider2D:
 --- !u!4 &8475371734113652003 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2215323439382513965, guid: 18a853f314a7baf45a9ae8dfdb87fc98,
+    type: 3}
+  m_PrefabInstance: {fileID: 7719443944605926414}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &8605107873629225594 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 2038869880732681844, guid: 18a853f314a7baf45a9ae8dfdb87fc98,
     type: 3}
   m_PrefabInstance: {fileID: 7719443944605926414}
   m_PrefabAsset: {fileID: 0}
