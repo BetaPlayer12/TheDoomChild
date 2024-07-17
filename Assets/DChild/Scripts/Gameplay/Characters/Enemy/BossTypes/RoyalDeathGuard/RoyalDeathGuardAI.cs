@@ -135,9 +135,6 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField, TabGroup("Attacks2", "Harvest")]
             private float m_harvestChaseSpeed;
             public float harvestChaseSpeed => m_harvestChaseSpeed;
-            [SerializeField, TabGroup("Attacks2", "Harvest")]
-            private GameObject m_healingOrb;
-            public GameObject healingOrb => m_healingOrb;
 
             [SerializeField, TabGroup("Attacks3", "Death Stench Wave")]
             private SimpleAttackInfo m_deathStenchWaveAttack = new SimpleAttackInfo();
@@ -344,7 +341,7 @@ namespace DChild.Gameplay.Characters.Enemies
         [ShowInInspector]
         private RandomAttackDecider<Attack> m_shortRangedAttackDecider;
         [ShowInInspector]
-        private RandomAttackDecider<Attack> m_shortRangedAttackCountBasedAttackDecider;
+        private RandomAttackDecider<Attack> m_royalGuardianAttackDecider;
 
         [ShowInInspector]
         private RandomAttackDecider<Attack> m_currentAttackDecider;
@@ -379,6 +376,9 @@ namespace DChild.Gameplay.Characters.Enemies
 
         [SerializeField, TabGroup("Attacks", "Harvest")]
         private float m_targetDistanceOffset;
+
+        [SerializeField, TabGroup("Attacks", "Royal Guardian")]
+        private RoyalDeathGuardShield m_royalGuardianShield;
 
         private int m_consecutiveHitToFlinchCounter;
         private float m_consectiveHitTimer;
@@ -683,6 +683,11 @@ namespace DChild.Gameplay.Characters.Enemies
             }
         }
 
+        public void HarvestHeal()
+        {
+            m_damageable.Heal(m_info.harvestHealAmount);
+        }
+
         private IEnumerator ScytheThrowRoutine()
         {
             m_stateHandle.Wait(State.ReevaluateSituation);
@@ -846,8 +851,6 @@ namespace DChild.Gameplay.Characters.Enemies
             }
         }
 
-        
-
         private IEnumerator RoyalGuardianOneRoutine()
         {
             m_stateHandle.Wait(State.ReevaluateSituation);
@@ -857,6 +860,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
             m_animation.SetAnimation(0, m_info.royalGuardianShieldSummon.animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.royalGuardianShieldSummon.animation);
+
+            m_royalGuardianShield.Spawn();
 
             m_attackCounter++;
 
@@ -874,6 +879,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
             m_animation.SetAnimation(0, m_info.royalGuardianShieldSummon.animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.royalGuardianShieldSummon.animation);
+
+            m_royalGuardianShield.Spawn();
 
             m_attackCounter++;
 
@@ -929,20 +936,10 @@ namespace DChild.Gameplay.Characters.Enemies
 
             void OnTargetDamagedByHarvest(object sender, CombatConclusionEventArgs eventArgs)
             {
-                //m_damageable.Heal(m_info.harvestHealAmount);
-                harvestCounter = 3;
                 willHeal = true;
-                Vector3 healingOrbSpawnPos = new Vector3(m_targetInfo.position.x, m_targetInfo.position.y + 20);
-                //spawn healing orb 
-                InstantiateHealingOrb(healingOrbSpawnPos);
+                harvestCounter = 3;               
                 Debug.Log("Damaged by Harvest");
             }
-        }
-
-        private void InstantiateHealingOrb(Vector2 spawnPosition)
-        {
-            var instance = GameSystem.poolManager.GetPool<PoolableObjectPool>().GetOrCreateItem(m_info.healingOrb, gameObject.scene);
-            instance.SpawnAt(spawnPosition, Quaternion.identity);
         }
 
         private IEnumerator DeathStenchWaveRoutine()
@@ -1027,17 +1024,19 @@ namespace DChild.Gameplay.Characters.Enemies
                     break;
                 case Phase.PhaseTwo:
                     m_shortRangedAttackDecider.SetList(new AttackInfo<Attack>(Attack.ScytheSwipe2, 0),
-                                                        new AttackInfo<Attack>(Attack.Harvest, 0));
+                                                        new AttackInfo<Attack>(Attack.ScytheSwipe1, 0));
                     m_longRangedAttackDecider.SetList(new AttackInfo<Attack>(Attack.ScytheThrow, 0),
-                                                       new AttackInfo<Attack>(Attack.ScytheSmash, 0));
+                                                       new AttackInfo<Attack>(Attack.ScytheSmash, 0),
+                                                       new AttackInfo<Attack>(Attack.Harvest, 0));
                     break;
                 case Phase.PhaseThree:
                     m_shortRangedAttackDecider.SetList(new AttackInfo<Attack>(Attack.ScytheSwipe2, 0),
-                                                        new AttackInfo<Attack>(Attack.Harvest, 0));
+                                                        new AttackInfo<Attack>(Attack.ScytheSwipe1, 0));
                     m_longRangedAttackDecider.SetList(new AttackInfo<Attack>(Attack.ScytheThrow, 0),
-                                                       new AttackInfo<Attack>(Attack.ScytheSmash, 0));
-                    m_shortRangedAttackCountBasedAttackDecider.SetList(new AttackInfo<Attack>(Attack.ScytheSwipe2, 0),
-                                                                        new AttackInfo<Attack>(Attack.Harvest, 0));
+                                                       new AttackInfo<Attack>(Attack.ScytheSmash, 0),
+                                                       new AttackInfo<Attack>(Attack.Harvest, 0));
+                    m_royalGuardianAttackDecider.SetList(new AttackInfo<Attack>(Attack.DeathStenchWave, 0),
+                                                                        new AttackInfo<Attack>(Attack.ScytheThrow, 0));
                     break;
             }
         }
@@ -1046,7 +1045,6 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             base.ApplyData();
         }
-
 
         private void OnDamageTaken(object sender, Damageable.DamageEventArgs eventArgs)
         {
