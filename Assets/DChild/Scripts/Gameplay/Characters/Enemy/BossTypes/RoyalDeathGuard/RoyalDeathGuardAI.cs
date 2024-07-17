@@ -379,6 +379,10 @@ namespace DChild.Gameplay.Characters.Enemies
 
         [SerializeField, TabGroup("Attacks", "Royal Guardian")]
         private RoyalDeathGuardShield m_royalGuardianShield;
+        [SerializeField, TabGroup("Attacks", "Royal Guardian")]
+        private RoyalDeathGuardRoyalGuardShieldSlam m_royalGuardianShieldSlam;
+        [SerializeField, ReadOnly, TabGroup("Attacks", "Royal Guardian")]
+        private bool m_royalGuardianShieldActive;
 
         private int m_consecutiveHitToFlinchCounter;
         private float m_consectiveHitTimer;
@@ -393,6 +397,9 @@ namespace DChild.Gameplay.Characters.Enemies
 
         [SerializeField]
         private float m_groundCombatHeight;
+
+        [SerializeField, BoxGroup("TESTING")]
+        private bool m_testingMode;
 
         [SerializeField, ReadOnly]
         private int m_attackCounter;
@@ -675,6 +682,19 @@ namespace DChild.Gameplay.Characters.Enemies
             m_agent.Stop();
         }
 
+        private IEnumerator SummonRoyalGuardianShieldRoutine()
+        {
+            m_animation.SetAnimation(0, m_info.royalGuardianAnticipation.animation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.royalGuardianAnticipation.animation);
+
+            m_animation.SetAnimation(0, m_info.royalGuardianShieldSummon.animation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.royalGuardianShieldSummon.animation);
+
+            m_royalGuardianShield.Spawn();
+
+            m_royalGuardianShieldActive = true;
+        }
+
         private void FacePlayerInstantly()
         {
             if (!IsFacingTarget())
@@ -855,32 +875,36 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_stateHandle.Wait(State.ReevaluateSituation);
 
-            m_animation.SetAnimation(0, m_info.royalGuardianAnticipation.animation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.royalGuardianAnticipation.animation);
+            if(!m_royalGuardianShieldActive)
+            {
+                yield return SummonRoyalGuardianShieldRoutine();
 
-            m_animation.SetAnimation(0, m_info.royalGuardianShieldSummon.animation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.royalGuardianShieldSummon.animation);
+                m_attackCounter++;
+            }        
 
-            m_royalGuardianShield.Spawn();
-
-            m_attackCounter++;
 
             m_currentAttackDecider.hasDecidedOnAttack = false;
             m_stateHandle.ApplyQueuedState();
             yield return null;
         }
 
+        public void RoyalGuardianDeathStenchProjectileRelease()
+        {
+            var target = m_targetInfo.transform;
+            m_royalGuardianShieldSlam.Execute(target);
+        }
+
         private IEnumerator RoyalGuardianTwoRoutine()
         {
             m_stateHandle.Wait(State.ReevaluateSituation);
 
-            m_animation.SetAnimation(0, m_info.royalGuardianAnticipation.animation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.royalGuardianAnticipation.animation);
+            if (!m_royalGuardianShieldActive)
+            {
+                yield return SummonRoyalGuardianShieldRoutine();
+            }
 
-            m_animation.SetAnimation(0, m_info.royalGuardianShieldSummon.animation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.royalGuardianShieldSummon.animation);
-
-            m_royalGuardianShield.Spawn();
+            m_animation.SetAnimation(0, m_info.royalGuardianShieldSlam.animation, false); ;
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.royalGuardianShieldSlam.animation);
 
             m_attackCounter++;
 
@@ -956,6 +980,7 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.deathStenchWaveAttack.animation);
 
             //release death stench wave via animation event
+            m_animation.EnableRootMotion(false, false);
 
             m_attackCounter++;
 
@@ -1016,6 +1041,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void UpdateAttackDeciderList()
         {
+            m_royalGuardianAttackDecider.SetList(new AttackInfo<Attack>(Attack.DeathStenchWave, 0),
+                                                 new AttackInfo<Attack>(Attack.ScytheThrow, 0));
             switch (m_phaseHandle.currentPhase)
             {
                 case Phase.PhaseOne:
@@ -1035,8 +1062,6 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_longRangedAttackDecider.SetList(new AttackInfo<Attack>(Attack.ScytheThrow, 0),
                                                        new AttackInfo<Attack>(Attack.ScytheSmash, 0),
                                                        new AttackInfo<Attack>(Attack.Harvest, 0));
-                    m_royalGuardianAttackDecider.SetList(new AttackInfo<Attack>(Attack.DeathStenchWave, 0),
-                                                                        new AttackInfo<Attack>(Attack.ScytheThrow, 0));
                     break;
             }
         }
@@ -1096,6 +1121,7 @@ namespace DChild.Gameplay.Characters.Enemies
             base.Awake();
             m_turnHandle.TurnDone += OnTurnDone;
             m_damageable.DamageTaken += OnDamageTaken;
+            m_royalGuardianShield.Destroyed += OnRoyalGuardianShieldDestroyed;
 
             m_deathHandle.SetAnimation(m_info.deathAnimation.animation);
             m_longRangedAttackDecider = new RandomAttackDecider<Attack>();
@@ -1107,6 +1133,11 @@ namespace DChild.Gameplay.Characters.Enemies
             m_idleAnimationNames[0] = m_info.idle1Animation.animation;
             m_idleAnimationNames[1] = m_info.idle2Animation.animation;
 
+        }
+
+        private void OnRoyalGuardianShieldDestroyed(object sender, EventActionArgs eventArgs)
+        {
+            m_royalGuardianShieldActive = false;
         }
 
         protected override void Start()
@@ -1181,29 +1212,55 @@ namespace DChild.Gameplay.Characters.Enemies
                     break;
 
                 case State.ReevaluateSituation:
-                    //Phase 1 Reevaluation consists of check boss HP -> Check player distance 
-
-                    //Sample Set long range attack decider if requirements met
-                    m_currentAttackDecider = m_longRangedAttackDecider;
-                    //m_currentAttackDecider.hasDecidedOnAttack = false;
-
-                    //Sample Force Attack
-                    //m_currentAttackDecider.hasDecidedOnAttack = true;
-                    //m_currentAttackDecider.DecideOnAttack(Attack.ScytheThrow);
-
-                    //Phase 2 Reevaluation consists of check boss HP -> Check player distance -> check attack counter
-
-                    //Phase 3 Reevaluation consists of check boss HP -> Check player distance -> check attack counter
-
+                    
                     //Temporary Reevaluation Behavior
-                    if (IsFacingTarget())
+                    if (m_testingMode)
                     {
-                        m_stateHandle.SetState(State.Idle);
+                        m_currentAttackDecider = m_longRangedAttackDecider;
+                        if (IsFacingTarget())
+                        {
+                            m_stateHandle.SetState(State.Idle);
+                        }
+                        else
+                        {
+                            m_stateHandle.SetState(State.Turning);
+                        }
                     }
                     else
                     {
-                        m_stateHandle.SetState(State.Turning);
+                        if (m_royalGuardianShieldActive)
+                            m_currentAttackDecider = m_royalGuardianAttackDecider;
+
+                        switch(m_phaseHandle.currentPhase)
+                        {
+                            case Phase.PhaseOne:
+                                
+                                break;
+                            case Phase.PhaseTwo:
+                                break;
+                            case Phase.PhaseThree:
+                                break;
+                            default:
+                                break;
+                        }
+
+                        //Phase 1 Reevaluation consists of check boss HP -> Check player distance 
+
+
+                        //Sample Set long range attack decider if requirements met
+                        //m_currentAttackDecider = m_longRangedAttackDecider;
+                        //m_currentAttackDecider.hasDecidedOnAttack = false;
+
+                        //Sample Force Attack
+                        //m_currentAttackDecider.hasDecidedOnAttack = true;
+                        //m_currentAttackDecider.DecideOnAttack(Attack.ScytheThrow);
+
+                        //Phase 2 Reevaluation consists of check boss HP -> Check player distance -> check attack counter
+
+                        //Phase 3 Reevaluation consists of check boss HP -> Check player distance -> check attack counter
+
                     }
+
                     break;
                 case State.WaitBehaviourEnd:
                     return;
