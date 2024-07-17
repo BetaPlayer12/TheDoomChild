@@ -172,6 +172,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private float m_velOffset;
         [SerializeField, TabGroup("Cannon Values")]
         private Vector2 m_targetOffset;
+        [SerializeField, TabGroup("Cannon Values")]
+        private bool isStraightProjectile;
 
         private float m_targetDistance;
 
@@ -258,6 +260,8 @@ namespace DChild.Gameplay.Characters.Enemies
                 //
 
 
+                m_targetLastPos = m_targetInfo.position;
+
                 //Shoot Spit
                 m_muzzleFX.Play();
                 Vector2 target = m_targetLastPos;
@@ -265,14 +269,23 @@ namespace DChild.Gameplay.Characters.Enemies
                 Vector2 spitPos = new Vector2(transform.localScale.x < 0 ? m_throwPoint.position.x - 1.5f : m_throwPoint.position.x + 1.5f, m_throwPoint.position.y - 0.75f);
                 Vector3 v_diff = (target - spitPos);
                 float atan2 = Mathf.Atan2(v_diff.y, v_diff.x);
-
+                if(isStraightProjectile)
+                {
+                Debug.Log(v_diff + " AAAAAAAAAAAAAAAAHHHHHHHHHH");
+                m_projectileLauncher.AimAt(target);
+                m_projectileLauncher.LaunchProjectile();
+                }
+                else
+                {
                 var instance = GameSystem.poolManager.GetPool<ProjectilePool>().GetOrCreateItem(m_info.projectile.projectileInfo.projectile);
                 instance.transform.position = m_throwPoint.position;
                 var component = instance.GetComponent<Projectile>();
                 component.ResetState();
                 //component.GetComponent<IsolatedObjectPhysics2D>().AddForce(BallisticVel(), ForceMode2D.Impulse);
                 component.GetComponent<IsolatedObjectPhysics2D>().SetVelocity(BallisticVel());
-                //return instance.gameObject;
+                    //return instance.gameObject;
+                }
+
             }
         }
 
@@ -360,7 +373,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator DetectRoutine()
         {
-            m_animation.SetAnimation(0, m_info.idleAnimation, true)/*.MixDuration = 0*/;
+            m_animation.SetAnimation(0, m_info.idleAnimation, true)/*.MixDuration = 0*/
+                ;
             yield return new WaitForSeconds(2f);
             m_stateHandle.ApplyQueuedState();
             yield return null;
@@ -386,7 +400,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator ProjectileRoutine()
         {
             m_movement.Stop();
-            m_targetLastPos = m_targetInfo.position - m_info.targetOffset;
+            //m_targetLastPos = m_targetInfo.position + m_info.targetOffset;
             m_animation.SetAnimation(0, m_info.spitAttack.animation, false).MixDuration = 0;
             //yield return new WaitUntil(() => m_attackBB.CurrentCollider != null);
             //SpitProjectile();
@@ -463,7 +477,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_flinchHandle.FlinchEnd += OnFlinchEnd;
             m_stateHandle = new StateHandle<State>(m_willPatrol ? State.Patrol : State.Idle, State.WaitBehaviourEnd);
             m_attackDecider = new RandomAttackDecider<Attack>();
-            //m_projectileLauncher = new ProjectileLauncher(m_info.projectile.projectileInfo, m_throwPoint);
+            m_projectileLauncher = new ProjectileLauncher(m_info.projectile.projectileInfo, m_throwPoint);
             UpdateAttackDeciderList();
         }
 
@@ -531,6 +545,8 @@ namespace DChild.Gameplay.Characters.Enemies
                             m_animation.EnableRootMotion(false, false);
                             if (IsTargetInRange(m_info.stompAttack.range))
                             {
+                                m_movement.Stop();
+                                m_selfCollider.enabled = true;
                                 StartCoroutine(StompRoutine());
                             }
                             else
