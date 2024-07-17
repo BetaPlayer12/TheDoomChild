@@ -423,6 +423,7 @@ Transform:
   m_Children:
   - {fileID: 5576909613627768332}
   - {fileID: 5914285124908110187}
+  - {fileID: 2158660139958096251}
   m_Father: {fileID: 3068747426451886618}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -776,7 +777,10 @@ MonoBehaviour:
   m_scytheSmashDeathStenchSpawn: {fileID: 8475371734113652003}
   m_targetDistanceOffset: 20
   m_royalGuardianShield: {fileID: 3770010571934106578}
+  m_royalGuardianShieldSlam: {fileID: 2158660139958096250}
+  m_royalGuardianShieldActive: 0
   m_groundCombatHeight: 0
+  m_testingMode: 0
   m_attackCounter: 0
 --- !u!114 &7700607547958873781
 MonoBehaviour:
@@ -931,7 +935,12 @@ PrefabInstance:
     - target: {fileID: 2504027448868170799, guid: 18a853f314a7baf45a9ae8dfdb87fc98,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 13.624134
+      value: 6.6998596
+      objectReference: {fileID: 0}
+    - target: {fileID: 2504027448868170799, guid: 18a853f314a7baf45a9ae8dfdb87fc98,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 13.807365
       objectReference: {fileID: 0}
     - target: {fileID: 2720498986600060438, guid: 18a853f314a7baf45a9ae8dfdb87fc98,
         type: 3}
@@ -1036,12 +1045,32 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4619474570062982852, guid: 18a853f314a7baf45a9ae8dfdb87fc98,
         type: 3}
+      propertyPath: events.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4619474570062982852, guid: 18a853f314a7baf45a9ae8dfdb87fc98,
+        type: 3}
+      propertyPath: events.Array.data[2].spineEvent
+      value: RoyalGuardian2_Slam_DeathStench
+      objectReference: {fileID: 0}
+    - target: {fileID: 4619474570062982852, guid: 18a853f314a7baf45a9ae8dfdb87fc98,
+        type: 3}
       propertyPath: events.Array.data[0].unityHandler.m_PersistentCalls.m_Calls.Array.size
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4619474570062982852, guid: 18a853f314a7baf45a9ae8dfdb87fc98,
         type: 3}
+      propertyPath: events.Array.data[2].unityHandler.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4619474570062982852, guid: 18a853f314a7baf45a9ae8dfdb87fc98,
+        type: 3}
       propertyPath: events.Array.data[0].unityHandler.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4619474570062982852, guid: 18a853f314a7baf45a9ae8dfdb87fc98,
+        type: 3}
+      propertyPath: events.Array.data[2].unityHandler.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4619474570062982852, guid: 18a853f314a7baf45a9ae8dfdb87fc98,
@@ -1051,7 +1080,17 @@ PrefabInstance:
       objectReference: {fileID: 7102245480258337044}
     - target: {fileID: 4619474570062982852, guid: 18a853f314a7baf45a9ae8dfdb87fc98,
         type: 3}
+      propertyPath: events.Array.data[2].unityHandler.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 7102245480258337044}
+    - target: {fileID: 4619474570062982852, guid: 18a853f314a7baf45a9ae8dfdb87fc98,
+        type: 3}
       propertyPath: events.Array.data[0].unityHandler.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4619474570062982852, guid: 18a853f314a7baf45a9ae8dfdb87fc98,
+        type: 3}
+      propertyPath: events.Array.data[2].unityHandler.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4619474570062982852, guid: 18a853f314a7baf45a9ae8dfdb87fc98,
@@ -1061,12 +1100,27 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4619474570062982852, guid: 18a853f314a7baf45a9ae8dfdb87fc98,
         type: 3}
+      propertyPath: events.Array.data[2].unityHandler.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: RoyalGuardianDeathStenchProjectileRelease
+      objectReference: {fileID: 0}
+    - target: {fileID: 4619474570062982852, guid: 18a853f314a7baf45a9ae8dfdb87fc98,
+        type: 3}
       propertyPath: events.Array.data[0].unityHandler.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
       value: DChild.Gameplay.Characters.Enemies.RoyalDeathGuardAI, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 4619474570062982852, guid: 18a853f314a7baf45a9ae8dfdb87fc98,
         type: 3}
+      propertyPath: events.Array.data[2].unityHandler.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: DChild.Gameplay.Characters.Enemies.RoyalDeathGuardAI, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 4619474570062982852, guid: 18a853f314a7baf45a9ae8dfdb87fc98,
+        type: 3}
       propertyPath: events.Array.data[0].unityHandler.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 4619474570062982852, guid: 18a853f314a7baf45a9ae8dfdb87fc98,
+        type: 3}
+      propertyPath: events.Array.data[2].unityHandler.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 5520268195459952762, guid: 18a853f314a7baf45a9ae8dfdb87fc98,
@@ -1258,6 +1312,7 @@ PrefabInstance:
     - {fileID: 1554810949412574041, guid: 18a853f314a7baf45a9ae8dfdb87fc98, type: 3}
     - {fileID: 6586894878832270186, guid: 18a853f314a7baf45a9ae8dfdb87fc98, type: 3}
     - {fileID: 4203461456000684533, guid: 18a853f314a7baf45a9ae8dfdb87fc98, type: 3}
+    - {fileID: 846073801640493819, guid: 18a853f314a7baf45a9ae8dfdb87fc98, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 18a853f314a7baf45a9ae8dfdb87fc98, type: 3}
 --- !u!4 &239706582261338279 stripped
 Transform:
@@ -1420,7 +1475,7 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 7719443944605926414}
   m_PrefabAsset: {fileID: 0}
---- !u!60 &5606801044694621756
+--- !u!60 &410630754858737928
 PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1611,6 +1666,93 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d247ba06193faa74d9335f5481b2b56c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1001 &8887955897876799006
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 2434228357674657433}
+    m_Modifications:
+    - target: {fileID: 7398645876785647459, guid: 035c94cd756027c439b57bfdf40faee2,
+        type: 3}
+      propertyPath: m_Name
+      value: RoyalDeathGuardRoyalGuardSheildSlam
+      objectReference: {fileID: 0}
+    - target: {fileID: 7398645876785647461, guid: 035c94cd756027c439b57bfdf40faee2,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7398645876785647461, guid: 035c94cd756027c439b57bfdf40faee2,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 6.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7398645876785647461, guid: 035c94cd756027c439b57bfdf40faee2,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 35
+      objectReference: {fileID: 0}
+    - target: {fileID: 7398645876785647461, guid: 035c94cd756027c439b57bfdf40faee2,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7398645876785647461, guid: 035c94cd756027c439b57bfdf40faee2,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7398645876785647461, guid: 035c94cd756027c439b57bfdf40faee2,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7398645876785647461, guid: 035c94cd756027c439b57bfdf40faee2,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7398645876785647461, guid: 035c94cd756027c439b57bfdf40faee2,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7398645876785647461, guid: 035c94cd756027c439b57bfdf40faee2,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7398645876785647461, guid: 035c94cd756027c439b57bfdf40faee2,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7398645876785647461, guid: 035c94cd756027c439b57bfdf40faee2,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 035c94cd756027c439b57bfdf40faee2, type: 3}
+--- !u!114 &2158660139958096250 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7398645876785647460, guid: 035c94cd756027c439b57bfdf40faee2,
+    type: 3}
+  m_PrefabInstance: {fileID: 8887955897876799006}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: af14aa97596e42445b3cbc10c86f4258, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &2158660139958096251 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7398645876785647461, guid: 035c94cd756027c439b57bfdf40faee2,
+    type: 3}
+  m_PrefabInstance: {fileID: 8887955897876799006}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &8936337922651732362
 PrefabInstance:
   m_ObjectHideFlags: 0
