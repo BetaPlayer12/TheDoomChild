@@ -835,6 +835,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
             bool deathStenchDone = false;
 
+            FacePlayerInstantly();
+
             m_attacker.SetData(m_info.scytheSmashAttackData);
 
             m_scytheSmashDeathStench.Done += OnDeathStenchDone;
@@ -1220,29 +1222,28 @@ namespace DChild.Gameplay.Characters.Enemies
                     break;
 
                 case State.ReevaluateSituation:
-                    
-                    //Temporary Reevaluation Behavior
-                    if (m_testingMode)
-                    {
-                        m_currentAttackDecider = m_longRangedAttackDecider;
-                        if (IsFacingTarget())
-                        {
-                            m_stateHandle.SetState(State.Idle);
-                        }
-                        else
-                        {
-                            m_stateHandle.SetState(State.Turning);
-                        }
-                    }
-                    else
-                    {
-                        if (m_royalGuardianShieldActive)
-                            m_currentAttackDecider = m_royalGuardianAttackDecider;
 
-                        switch(m_phaseHandle.currentPhase)
+                    if (!IsFacingTarget())
+                    {
+                        m_stateHandle.SetState(State.Turning);
+                    }
+
+                    if (!m_testingMode)
+                    {
+                        switch (m_phaseHandle.currentPhase)
                         {
                             case Phase.PhaseOne:
-                                
+                                if (IsTargetInRange(m_info.shortRangedAttackEvaluateDistance))
+                                {
+                                    m_currentAttackDecider = m_shortRangedAttackDecider;
+                                    m_currentAttackDecider.DecideOnAttack(Attack.ScytheSwipe1);
+                                    m_currentAttackDecider.hasDecidedOnAttack = true;
+                                }
+                                else
+                                {
+                                    m_currentAttackDecider = m_longRangedAttackDecider;
+                                    m_currentAttackDecider.hasDecidedOnAttack = false;
+                                }
                                 break;
                             case Phase.PhaseTwo:
                                 break;
@@ -1251,6 +1252,11 @@ namespace DChild.Gameplay.Characters.Enemies
                             default:
                                 break;
                         }
+
+                        if (m_royalGuardianShieldActive)
+                            m_currentAttackDecider = m_royalGuardianAttackDecider;
+
+                        m_stateHandle.SetState(State.Attacking);
 
                         //Phase 1 Reevaluation consists of check boss HP -> Check player distance 
 
@@ -1266,6 +1272,14 @@ namespace DChild.Gameplay.Characters.Enemies
                         //Phase 2 Reevaluation consists of check boss HP -> Check player distance -> check attack counter
 
                         //Phase 3 Reevaluation consists of check boss HP -> Check player distance -> check attack counter
+                    }
+                    else
+                    {
+                        m_currentAttackDecider = m_longRangedAttackDecider;
+                        if (IsFacingTarget())
+                        {
+                            m_stateHandle.SetState(State.Idle);
+                        }  
 
                     }
 
