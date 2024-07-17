@@ -11,6 +11,7 @@ using DChild.Gameplay.Environment;
 using UnityEngine.UIElements;
 using System.Drawing.Text;
 using DChild.Gameplay.Pooling;
+using Doozy.Runtime.Reactor.Reactions;
 
 namespace DChild.Gameplay.Characters.Enemies
 {
@@ -150,6 +151,9 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField]
             private float m_targetDistanceTolerance;
             public float targetDistanceTolerance => m_targetDistanceTolerance;
+            [SerializeField]
+            private float m_shortRangedAttackEvaluateDistance;
+            public float shortRangedAttackEvaluateDistance => m_shortRangedAttackEvaluateDistance;
 
             [Title("Animations")]
             [SerializeField]
@@ -506,9 +510,12 @@ namespace DChild.Gameplay.Characters.Enemies
             m_stateHandle.Wait(State.ReevaluateSituation);
             m_willTrackConsecutiveHits = false;
             yield return FlinchRoutine();
-            var rageAnimation = m_animation.SetAnimation(0, m_info.rageQuakeAnimation, false);
-            m_animation.AddAnimation(0, m_info.idle2Animation, true, 0);
-            yield return new WaitForSpineAnimationComplete(rageAnimation);
+            m_animation.SetAnimation(0, m_info.rageQuakeAnimation.animation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.rageQuakeAnimation.animation);
+            m_animation.SetAnimation(0, m_info.idle2Animation.animation, false);
+            //var rageAnimation = m_animation.SetAnimation(0, m_info.rageQuakeAnimation, false);
+            //m_animation.AddAnimation(0, m_info.idle2Animation, true, 0);
+            //yield return new WaitForSpineAnimationComplete(rageAnimation);
             m_willTrackConsecutiveHits = true;
             m_stateHandle.ApplyQueuedState();
         }
@@ -1124,8 +1131,9 @@ namespace DChild.Gameplay.Characters.Enemies
             m_royalGuardianShield.Destroyed += OnRoyalGuardianShieldDestroyed;
 
             m_deathHandle.SetAnimation(m_info.deathAnimation.animation);
+            m_shortRangedAttackDecider = new RandomAttackDecider<Attack>();
             m_longRangedAttackDecider = new RandomAttackDecider<Attack>();
-
+            m_royalGuardianAttackDecider = new RandomAttackDecider<Attack>();
             m_stateHandle = new StateHandle<State>(State.Idle, State.WaitBehaviourEnd);
             m_willTrackConsecutiveHits = true;
             UpdateAttackDeciderList();
