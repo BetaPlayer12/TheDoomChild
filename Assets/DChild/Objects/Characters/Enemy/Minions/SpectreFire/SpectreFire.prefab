@@ -77,6 +77,8 @@ GameObject:
   - component: {fileID: 6346726231279242267}
   - component: {fileID: 1141152001038095354}
   - component: {fileID: 2448482114860148516}
+  - component: {fileID: 4482795558263560851}
+  - component: {fileID: 7401379194323112480}
   m_Layer: 13
   m_Name: Behaviours
   m_TagString: Untagged
@@ -258,6 +260,51 @@ MonoBehaviour:
   m_character: {fileID: 4434415820344777805}
   m_maintainScaleValue: 1
   m_maintainScaleValue: 1
+--- !u!114 &4482795558263560851
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2128376138565059942}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 847a14d4dc9cc43679ab34fc78e0182f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 4
+  m_agent: {fileID: 293233690763371891}
+  autoRepath:
+    mode: 0
+    period: 0.5
+    sensitivity: 1
+    maximumPeriod: 0
+    visualizeSensitivity: 0
+  canMove: 1
+  speed: 20
+  orientation: 0
+  enableRotation: 0
+  rotationSpeed: 10
+  interpolatePathSwitches: 0
+  switchPathInterpolationSpeed: 5
+  targetCompatibility: {fileID: 0}
+  repathRateCompatibility: NaN
+  canSearchCompability: 0
+--- !u!114 &7401379194323112480
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2128376138565059942}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e87fec94a6f6a974c92063ac3c0f2e46, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ai: {fileID: 4482795558263560851}
+  m_positionReference: {fileID: 293233690763371891}
+  m_distanceTolerance: 0
 --- !u!1 &2559278825515328159
 GameObject:
   m_ObjectHideFlags: 0
@@ -461,6 +508,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6616268269509262866, guid: 05a77d4ff156d13409be74a4081d80d8,
+        type: 3}
+      propertyPath: m_damageFXInfo.m_overrideColor
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7003614164269729505, guid: 05a77d4ff156d13409be74a4081d80d8,
         type: 3}
@@ -955,9 +1007,13 @@ MonoBehaviour:
     m_animation: {fileID: 4326051631625635538}
   m_deathHandle: {fileID: 3083025403035253608}
   m_flinchHandle: {fileID: 4061554359700875270}
+  m_lerpAgent: {fileID: 7401379194323112480}
+  m_aiLerp: {fileID: 4482795558263560851}
   m_projectilePoints:
   - {fileID: 3609907432325754597}
   m_spineListener: {fileID: 2128376137561387911}
+  m_fireball: {fileID: 64530671093734122, guid: dd410cf50caedec429f72ed5c498b312,
+    type: 3}
 --- !u!114 &6522366827023170204
 MonoBehaviour:
   m_ObjectHideFlags: 0

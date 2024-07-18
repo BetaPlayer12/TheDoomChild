@@ -61,7 +61,8 @@ namespace DChild.Gameplay.Combat
                 m_infos.Add(new Info(m_damageInterval));
             }
             base.OnValidCollider(collision, hitbox);
-            m_collisionRegistrator.RegisterHitboxAs(hitbox, true);
+            if(m_damageUniqueHitboxesOnly)
+                m_collisionRegistrator.RegisterHitboxAs(hitbox, true);
         }
 
         private void RemoveAffectedIndex(int i)
