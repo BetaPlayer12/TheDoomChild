@@ -10,9 +10,21 @@ namespace DChild.Gameplay.Cinematics.Cameras
         [SerializeField, ListDrawerSettings(ShowIndexLabels = true)]
         private VirtualCamera[] m_cameraOptions;
 
+        public void EnableCam(int index)
+        {
+            if (IsIndexOutOfBounds(index))
+            {
+                Debug.LogError($"Camera ERROR: Attempt to Enable Camera in {gameObject.name} reached out of bounds");
+            }
+            else
+            {
+                m_cameraOptions[index].gameObject.SetActive(false);
+            }
+        }
+
         public void SwitchTo(int index)
         {
-            if (index < 0 || index >= m_cameraOptions.Length)
+            if (IsIndexOutOfBounds(index))
             {
                 Debug.LogError($"Camera ERROR: Attempt to Switch Camera in {gameObject.name} reached out of bounds");
             }
@@ -24,6 +36,11 @@ namespace DChild.Gameplay.Cinematics.Cameras
                 }
                 m_cameraOptions[index].gameObject.SetActive(true);
             }
+        }
+
+        private bool IsIndexOutOfBounds(int index)
+        {
+            return index < 0 || index >= m_cameraOptions.Length;
         }
 
         private void Awake()
