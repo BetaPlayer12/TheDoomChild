@@ -257,12 +257,14 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             if (m_isAggro)
             {
+                m_mimicPustuleBombChain.enabled = true;
                 m_flinchHandle.SetAnimation(m_info.flinchAggroAnimation.animation);
                 m_flinchHandle.SetIdleAnimation(m_info.idleAggroAnimation1.animation);
 
             }
             else
             {
+                m_mimicPustuleBombChain.enabled = false;
                 m_flinchHandle.SetAnimation(m_info.flinchUnAggroAnimation.animation);
                 m_flinchHandle.SetIdleAnimation(m_info.idleUnAggroAnimation1.animation);
             }
@@ -402,15 +404,20 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_hitbox.enabled = false;
             m_aggroGroup.SetActive(false);
-            m_animation.SetAnimation(0, m_info.deathAggroAnimation, false);
-            
             m_rigidbody2D.constraints = RigidbodyConstraints2D.FreezeRotation;
-            yield return new WaitForSeconds(0.6f);
-            m_animation.SetAnimation(0, m_info.deathUnAggroAnimation, false);
+            if (m_isAggro)
+            {
+                m_animation.SetAnimation(0, m_info.deathAggroAnimation, false);
+                yield return new WaitForAnimationComplete(m_animation.animationState, m_info.deathAggroAnimation);
+            }else
+            {
+                m_animation.SetAnimation(0, m_info.deathUnAggroAnimation, false);
+                yield return new WaitForAnimationComplete(m_animation.animationState, m_info.deathUnAggroAnimation);
+                m_ExplosionBB.SetActive(true);
+                yield return new WaitForSeconds(.25f);
+                m_ExplosionBB.SetActive(false);
+            }
             yield return new WaitForSeconds(.75f);
-            m_ExplosionBB.SetActive(true);
-            yield return new WaitForSeconds(.25f);
-            m_ExplosionBB.SetActive(false);
             /*
             m_deathHandle.enabled = true;
             enabled = false;*/
