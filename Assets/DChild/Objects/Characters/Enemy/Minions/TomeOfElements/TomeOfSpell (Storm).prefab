@@ -131,8 +131,8 @@ GameObject:
   - component: {fileID: 5766920521730342636}
   - component: {fileID: 561263283646112013}
   - component: {fileID: 7581582873856486029}
-  - component: {fileID: 4512691690892028251}
-  - component: {fileID: 7687224849278837625}
+  - component: {fileID: 7053369174209175941}
+  - component: {fileID: 116848237090433514}
   m_Layer: 13
   m_Name: Behaviours
   m_TagString: Untagged
@@ -256,7 +256,7 @@ MonoBehaviour:
   smoothType: 0
   subdivisions: 2
   iterations: 2
-  strength: 0.5
+  strength: 1
   uniformLength: 1
   maxSegmentLength: 2
   bezierTangentLength: 0.4
@@ -277,7 +277,7 @@ MonoBehaviour:
   m_character: {fileID: 3861304486000455354}
   m_maintainScaleValue: 1
   m_maintainScaleValue: 1
---- !u!114 &4512691690892028251
+--- !u!114 &7053369174209175941
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -289,10 +289,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e87fec94a6f6a974c92063ac3c0f2e46, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_ai: {fileID: 7687224849278837625}
+  m_ai: {fileID: 116848237090433514}
   m_positionReference: {fileID: 4286456688637945938}
   m_distanceTolerance: 0
---- !u!114 &7687224849278837625
+--- !u!114 &116848237090433514
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -307,21 +307,21 @@ MonoBehaviour:
   version: 4
   m_agent: {fileID: 4286456688637945938}
   autoRepath:
-    mode: 1
+    mode: 2
     period: 0.5
-    sensitivity: 10
+    sensitivity: 7
     maximumPeriod: 2
     visualizeSensitivity: 0
   canMove: 1
-  speed: 3
+  speed: 5
   orientation: 1
   enableRotation: 0
   rotationSpeed: 10
   interpolatePathSwitches: 1
   switchPathInterpolationSpeed: 5
   targetCompatibility: {fileID: 0}
-  repathRateCompatibility: 0.5
-  canSearchCompability: 1
+  repathRateCompatibility: NaN
+  canSearchCompability: 0
 --- !u!1 &3141345133038735464
 GameObject:
   m_ObjectHideFlags: 0
@@ -531,7 +531,7 @@ MonoBehaviour:
   m_bodyCollider: {fileID: 5788336711760261891}
   m_isolatedObjectPhysics2D: {fileID: 1864300514783158911}
   m_turnHandle: {fileID: 7581582873856486029}
-  m_agent: {fileID: 4512691690892028251}
+  m_agent: {fileID: 7053369174209175941}
   m_attackHandle:
     m_animation: {fileID: 0}
   m_patrolHandle: {fileID: 1555339028989917087}
@@ -741,6 +741,18 @@ MonoBehaviour:
   m_legColliderLayerMask:
     serializedVersion: 2
     m_Bits: 65536
+--- !u!114 &7281062999125653346
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6196307803881516448}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a356d19ff8aba004689809ada74cddb4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &7878744333748396658
 MonoBehaviour:
   m_ObjectHideFlags: 0
