@@ -1,4 +1,5 @@
 ﻿using DChild.Gameplay.Pooling;
+using Holysoft.Event;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -19,6 +20,8 @@ namespace DChild.Gameplay.Projectiles
         private Collider2D m_damageCollider;
 
         private Coroutine m_summonStormCloudRoutine;
+
+        public EventAction<EventActionArgs> OnDestroyedInstance;
         // Start is called before the first frame update
         void Start()
         {
@@ -45,6 +48,7 @@ namespace DChild.Gameplay.Projectiles
             m_damageCollider.enabled = false;
             yield return new WaitForSeconds(3f);
             DestroyInstance();
+            OnDestroyedInstance?.Invoke(this, EventActionArgs.Empty);
         }
 
         private IEnumerator StormCloudTriggered()
@@ -56,6 +60,7 @@ namespace DChild.Gameplay.Projectiles
             yield return new WaitForSeconds(3f);
             m_damageCollider.enabled = false;
             DestroyInstance();
+            OnDestroyedInstance?.Invoke(this, EventActionArgs.Empty);
         }
 
         private void OnTriggerEnter2D(Collider2D collision)
