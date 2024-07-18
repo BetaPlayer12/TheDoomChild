@@ -166,6 +166,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private IsolatedCharacterPhysics2D m_charcterPhysics;
         [SerializeField, TabGroup("Reference")]
         private Collider2D m_selfCollider;
+        [SerializeField, TabGroup("Reference")]
+        private CobWebTrigger m_cobWebTrigger;
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_wallSensor;
         [SerializeField, TabGroup("Sensors")]
@@ -220,9 +222,9 @@ namespace DChild.Gameplay.Characters.Enemies
         protected override void Start()
         {
             base.Start();
+           m_cobWebTrigger.CobWebEnterEvent += CobwebEvent;
             m_currentTimeScale = UnityEngine.Random.Range(1.0f, 2.0f);
             m_currentFullCD = UnityEngine.Random.Range(m_info.attackCD * .5f, m_info.attackCD * 2f);
-
 
             //m_randomTurnRoutine = StartCoroutine(RandomTurnRoutine());
             //if (m_willPatrol)
@@ -420,7 +422,7 @@ namespace DChild.Gameplay.Characters.Enemies
             }
         }
         [SerializeField]
-        private bool isPlayerDetected = false;
+        public bool isPlayerDetected = false;
         private IEnumerator DetectRoutine()
         {
             Debug.Log("Detected");
@@ -670,6 +672,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void RunToCharacter()
         {
+         
             var direction = (int)m_character.facing * Vector2.right;
             isPlayerDetected = true;
             if (!m_wallSensor.isDetecting && m_edgeSensor.isDetecting && m_groundSensor.isDetecting)
@@ -720,13 +723,17 @@ namespace DChild.Gameplay.Characters.Enemies
                    // m_movement.Stop();
                     //yield return RampageRoutine();
                     m_animation.SetAnimation(0, m_info.jumpAttack.animation, true);
+                    //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.jumpAttack.animation);
                     Debug.Log("Attacking");
                 }
                 else
                 {
                     if (!IsFacingTarget())
                         CustomTurn();
+                    //m_animation.SetAnimation(0, m_info.idleAnimation.animation, true);
                     //yield return ChaseRoutine();
+                    var currentAnimation = m_animation.GetCurrentAnimation(0);
+                    yield return new WaitForAnimationComplete(m_animation.animationState, currentAnimation);
                     RunToCharacter();
 
                 }
@@ -818,7 +825,6 @@ namespace DChild.Gameplay.Characters.Enemies
         protected override void Awake()
         {
             base.Awake();
-            
             m_patrolHandle.TurnRequest += OnTurnRequest;
             m_attackHandle.AttackDone += OnAttackDone;
             m_turnHandle.TurnDone += OnTurnDone;
@@ -831,11 +837,18 @@ namespace DChild.Gameplay.Characters.Enemies
             UpdateAttackDeciderList();
         }
 
+        private void CobwebEvent(object sender, EventActionArgs eventArgs)
+        {
+            //throw new NotImplementedException();
+            isPlayerDetected = true;
+            Debug.Log("true");
+        }
 
         private void Update()
         {
             //Debug.Log("Wall Sensor is " + m_wallSensor.isDetecting);
             //Debug.Log("Ground Sensor is " + m_groundSensor.isDetecting);
+           // isPlayerDetected = m_webTriggerStatus.m_isPlayerCaught;
             switch (m_stateHandle.currentState)
             {
                 case State.Detect:
@@ -1093,7 +1106,7 @@ namespace DChild.Gameplay.Characters.Enemies
         public void HandleKnockback(float resumeAIDelay)
         {
           //  StopAllCoroutines();
-            m_stateHandle.Wait(State.ReevaluateSituation);
+            m_stateHandle.Wait(State.Attacking);
             StartCoroutine(KnockbackRoutine(resumeAIDelay));
             m_stateHandle.ApplyQueuedState();
         }
