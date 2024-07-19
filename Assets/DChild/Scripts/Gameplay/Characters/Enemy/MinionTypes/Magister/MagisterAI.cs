@@ -206,6 +206,10 @@ namespace DChild.Gameplay.Characters.Enemies
         private FlinchHandler m_flinchHandleWithBook;
         [SerializeField, TabGroup("Totem")]
         private TomeOfSpellsIceAI m_tome;
+        [SerializeField, TabGroup("Totem")]
+        private TomeOfSpellsFlameAI m_tomeFire;
+        [SerializeField, TabGroup("Totem")]
+        private TomeOfSpellsStormAI m_tomeStorm;
 
         [SerializeField]
         private bool m_willPatrol;
@@ -509,7 +513,71 @@ namespace DChild.Gameplay.Characters.Enemies
             if (m_bookState == BookState.WithBook)
             {
                 ApplyBookState(BookState.WithoutBook);
-                m_tome.SummonTome(m_targetInfo);
+                int count = 0;
+                do
+                {
+                    int x = UnityEngine.Random.Range(1, 3);
+                    switch (x)
+                    {
+                        case 1:
+                            if (!m_tome.gameObject.activeSelf)
+                            {
+                                m_tome.SummonTome(m_targetInfo);
+                            }
+                            else
+                            {
+                                if (!m_tomeFire.gameObject.activeSelf)
+                                {
+                                    m_tomeFire.SummonTome(m_targetInfo);
+                                }
+                                else
+                                {
+                                    m_tomeStorm.SummonTome(m_targetInfo);
+                                }
+                            }
+                            break;
+
+                        case 2:
+                            if (!m_tomeFire.gameObject.activeSelf)
+                            {
+                                m_tomeFire.SummonTome(m_targetInfo);
+                            }
+                            else
+                            {
+                                if (!m_tomeStorm.gameObject.activeSelf)
+                                {
+                                    m_tomeStorm.SummonTome(m_targetInfo);
+                                }
+                                else
+                                {
+                                    m_tome.SummonTome(m_targetInfo);
+                                }
+                            }
+                            break;
+
+                        case 3:
+                            if (!m_tomeStorm.gameObject.activeSelf)
+                            {
+                                m_tomeStorm.SummonTome(m_targetInfo);
+                            }
+                            else
+                            {
+                                if (!m_tome.gameObject.activeSelf)
+                                {
+                                    m_tome.SummonTome(m_targetInfo);
+                                }
+                                else
+                                {
+                                    m_tomeFire.SummonTome(m_targetInfo);
+                                }
+                            }
+                            break;
+                    }
+                    count++;
+                } while (count < 2);
+
+                
+                
             }
         }
 
@@ -876,7 +944,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         switch (m_bookState)
                         {
                             case BookState.WithoutBook:
-                                if(m_summonCooldownDuration<=0)
+                                if(m_summonCooldownDuration<=0 &&!m_tome.gameObject.activeSelf && !m_tomeFire.gameObject.activeSelf && !m_tomeStorm.gameObject.activeSelf)
                                 {
                                     StartCoroutine(SummonBook());
                                 }

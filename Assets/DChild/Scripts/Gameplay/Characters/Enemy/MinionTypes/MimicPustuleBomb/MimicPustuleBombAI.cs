@@ -257,7 +257,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             if (m_isAggro)
             {
-                m_mimicPustuleBombChain.enabled = true;
+                //m_mimicPustuleBombChain.enabled = true;
                 m_flinchHandle.SetAnimation(m_info.flinchAggroAnimation.animation);
                 m_flinchHandle.SetIdleAnimation(m_info.idleAggroAnimation1.animation);
 
@@ -409,7 +409,13 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 m_animation.SetAnimation(0, m_info.deathAggroAnimation, false);
                 yield return new WaitForAnimationComplete(m_animation.animationState, m_info.deathAggroAnimation);
-            }else
+                m_animation.SetAnimation(0, m_info.deathUnAggroAnimation, false);
+                yield return new WaitForAnimationComplete(m_animation.animationState, m_info.deathUnAggroAnimation);
+                m_ExplosionBB.SetActive(true);
+                yield return new WaitForSeconds(.25f);
+                m_ExplosionBB.SetActive(false);
+            }
+            else
             {
                 m_animation.SetAnimation(0, m_info.deathUnAggroAnimation, false);
                 yield return new WaitForAnimationComplete(m_animation.animationState, m_info.deathUnAggroAnimation);
