@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 2623244994229527136}
   - component: {fileID: 2623244994229527151}
   - component: {fileID: 2623244994229527150}
+  - component: {fileID: 8191375723582171429}
   m_Layer: 0
   m_Name: TestCobWeb
   m_TagString: Sensor
@@ -126,3 +127,36 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerDamageable: {fileID: 0}
+--- !u!114 &8191375723582171429
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2623244994229527139}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0cc064dd0124bb749aa872864526e014, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_oneTimeOnly: 1
+  m_waitForPlayerToBeGrounded: 0
+  m_playerHitboxOnly: 1
+  m_enterEvents:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2623244994229527150}
+        m_TargetAssemblyTypeName: CobWebTrigger, Assembly-CSharp
+        m_MethodName: CobwebEvent
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  m_exitEvents:
+    m_PersistentCalls:
+      m_Calls: []
