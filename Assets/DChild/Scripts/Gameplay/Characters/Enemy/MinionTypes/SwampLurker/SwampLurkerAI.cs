@@ -428,12 +428,12 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_stateHandle.Wait(State.Standby);
 
-            m_animation.EnableRootMotion(true,false);
+            m_animation.EnableRootMotion(true,true);
             m_animation.SetAnimation(0, m_info.defeatAnimation.animation, false);
-            m_animation.DisableRootMotion();
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.defeatAnimation);
+            m_animation.DisableRootMotion();
 
-            if (IsFacingTarget() && !m_wallSensor.isDetecting && m_edgeSensor.isDetecting)
+            if (IsFacingTarget())
             {
                 //Call Turn Away;
                 m_turnHandle.Execute(m_info.turnAnimation.animation, m_info.idleAnimation.animation);
@@ -708,7 +708,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
                     if (retreatThreshold <= 0.2)
                     {
-                        if (!m_wallSensor.isDetecting || !m_edgeSensor.isDetecting)
+                        if (!m_wallSensor.isDetecting && m_edgeSensor.isDetecting)
                         {
                             if(hasRetreated == false)
                             {
