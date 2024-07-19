@@ -6,6 +6,9 @@ using DChild.Gameplay.Characters.Enemies;
 using Holysoft.Event;
 using Sirenix.OdinInspector;
 using System;
+using DChild.Gameplay.Characters.Players;
+using DChild.Gameplay;
+using DChild.Gameplay.Characters.Players.Modules;
 
 //public class CobWebTrigger : MonoBehaviour
 //{
@@ -40,10 +43,15 @@ public class CobWebTrigger : MonoBehaviour
     [ReadOnly]
     private EventAction<EventActionArgs> m_cobWebExitEvent;
 
+   
+    public PlayerDamageable playerDamageable;
     public void CobwebEvent()
     {
         CobWebEnterEvent.Invoke(this, EventActionArgs.Empty);
+
     }
+
+
     //private void TestEvent(object sender, EventActionArgs eventAction)
     //{
     //    Debug.Log("Cobweb Activated");
@@ -56,5 +64,20 @@ public class CobWebTrigger : MonoBehaviour
     {
         //m_cobWebEnterEvent += TestEvent;
         //m_cobWebExitEvent += TestEventExit;
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.tag != "Hitbox")
+            return;
+
+        var playerObject = collision.gameObject.GetComponentInParent<PlayerControlledObject>();
+        if (playerObject != null && collision.tag != "Sensor" && playerObject.owner == (IPlayer)GameplaySystem.playerManager.player)
+        {
+            playerDamageable = collision.GetComponentInParent<PlayerDamageable>();
+            CobWebEnterEvent.Invoke(this, EventActionArgs.Empty);
+
+        }
+
     }
 }

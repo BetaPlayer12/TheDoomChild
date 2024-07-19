@@ -312,13 +312,14 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_animation.DisableRootMotion();
             m_flinchHandle.m_autoFlinch = true;
             m_stateHandle.ApplyQueuedState();
+            
         }
 
         private void OnTurnRequest(object sender, EventActionArgs eventArgs) => m_stateHandle.SetState(State.Turning);
 
         public override void SetTarget(IDamageable damageable, Character m_target = null)
         {
-
+          
             if (damageable != null)
             {
                 base.SetTarget(damageable, m_target);
@@ -352,7 +353,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 ///*_enablePatience = true;*/
                 //StopAllCoroutines();
 
-                //m_isDetecting = false;
+                m_isDetecting = false;
                 //isPlayerDetected = false;
                 if(m_stateHandle.currentState == State.WaitBehaviourEnd)
                 {
@@ -360,6 +361,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     StopAllCoroutines();
                     StartCoroutine(PatienceRoutine());
                     m_stateHandle.ApplyQueuedState();
+                    Debug.Log("State of waitBehaviourEnd");
                 }
                 else
                 {
@@ -674,7 +676,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
          
             var direction = (int)m_character.facing * Vector2.right;
-            isPlayerDetected = true;
+           // isPlayerDetected = true;
             if (!m_wallSensor.isDetecting && m_edgeSensor.isDetecting && m_groundSensor.isDetecting)
             {
                 m_animation.SetAnimation(0, m_info.run, true);
@@ -717,10 +719,10 @@ namespace DChild.Gameplay.Characters.Enemies
             StartCoroutine(RampageDuration());
             do
             {
-                if (Vector2.Distance(m_targetInfo.position, m_character.centerMass.position) < 20f)
+                if (Vector2.Distance(m_targetInfo.position, m_character.centerMass.position) < 15f)
                 {
                     //StartCoroutine(RampageRoutine());
-                   // m_movement.Stop();
+                    m_movement.Stop();
                     //yield return RampageRoutine();
                     m_animation.SetAnimation(0, m_info.jumpAttack.animation, true);
                     //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.jumpAttack.animation);
@@ -775,20 +777,21 @@ namespace DChild.Gameplay.Characters.Enemies
             //    if (m_animation.GetCurrentAnimation(0).ToString() != m_info.idleAnimation.animation)
             //    {
             //        m_movement.Stop();
-            //        m_animation.EnableRootMotion(true, true);
+                   
             //    }
             //    m_animation.SetAnimation(0, m_info.idleAnimation, true);
             //}
-          
+
             yield return null;
         }
 
         
         private void OnFlinchStart(object sender, EventActionArgs eventArgs)
         {
+            isPlayerDetected = true;
             if (m_flinchHandle.m_autoFlinch)
             {
-                isPlayerDetected = true;
+                //isPlayerDetected = true;
                 //StopAllCoroutines();
                // m_animation.SetAnimation(0, m_info.damageAnimation, false);
               //  m_stateHandle.Wait(State.ReevaluateSituation);
@@ -841,6 +844,8 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             //throw new NotImplementedException();
             isPlayerDetected = true;
+            var playerDamageable = m_cobWebTrigger.playerDamageable;
+            SetTarget(playerDamageable);
             Debug.Log("true");
         }
 
@@ -1106,15 +1111,16 @@ namespace DChild.Gameplay.Characters.Enemies
         public void HandleKnockback(float resumeAIDelay)
         {
           //  StopAllCoroutines();
-            m_stateHandle.Wait(State.Attacking);
+           
             StartCoroutine(KnockbackRoutine(resumeAIDelay));
-            m_stateHandle.ApplyQueuedState();
+         
         }
 
         private IEnumerator KnockbackRoutine(float timer)
         {
             //enabled = false;
             //m_flinchHandle.m_autoFlinch = false;
+            m_stateHandle.Wait(State.ReevaluateSituation);
             m_animation.DisableRootMotion();
             m_charcterPhysics.UseStepClimb(false);
             if (m_animation.GetCurrentAnimation(0).ToString() != m_info.deathAnimation.animation)
@@ -1126,6 +1132,7 @@ namespace DChild.Gameplay.Characters.Enemies
             }
             yield return new WaitForSeconds(timer);
             m_charcterPhysics.UseStepClimb(true);
+            m_stateHandle.ApplyQueuedState();
             //enabled = true;
             //m_flinchHandle.enabled = true;
             //m_stateHandle.SetState(State.ReevaluateSituation);
