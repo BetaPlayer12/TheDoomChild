@@ -1031,6 +1031,12 @@ namespace DChild.Gameplay.Characters.Enemies
 
             var randomChaseTime = Random.Range(m_info.minChaseTime, m_info.maxChaseTime);
 
+            if(transform.position.y > m_groundCombatHeight)
+            {
+                var groundPos = new Vector3(transform.position.x, m_groundCombatHeight, transform.position.z);
+                yield return MoveIntoPositionRoutine(groundPos, m_info.move.speed);
+            }          
+
             m_agent.Stop();
 
             while (randomChaseTime > 0)
