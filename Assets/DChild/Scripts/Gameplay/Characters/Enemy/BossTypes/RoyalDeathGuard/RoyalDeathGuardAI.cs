@@ -154,6 +154,12 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField]
             private float m_shortRangedAttackEvaluateDistance;
             public float shortRangedAttackEvaluateDistance => m_shortRangedAttackEvaluateDistance;
+            [SerializeField]
+            private float m_minChaseTime;
+            public float minChaseTime => m_minChaseTime;
+            [SerializeField]
+            private float m_maxChaseTime;
+            public float maxChaseTime => m_maxChaseTime;
 
             [Title("Animations")]
             [SerializeField]
@@ -267,6 +273,7 @@ namespace DChild.Gameplay.Characters.Enemies
             Idle,
             Turning,
             Attacking,
+            EvaluateAction,
             ReevaluateSituation,
             WaitBehaviourEnd,
         }
@@ -287,6 +294,7 @@ namespace DChild.Gameplay.Characters.Enemies
             RoyalGuard2,
             Harvest,
             DeathStenchWave,
+            NullAttack,
         }
 
         public enum Phase
@@ -396,17 +404,20 @@ namespace DChild.Gameplay.Characters.Enemies
         private float m_startGroundPos;
         private bool m_hasHealed;
         private PhaseInfo m_phaseInfo;
+        private Coroutine m_evaluateActionBeforeAttack;
 
         private string[] m_idleAnimationNames;
 
         [SerializeField]
         private float m_groundCombatHeight;
 
-        [SerializeField, BoxGroup("TESTING")]
-        private bool m_testingMode;
-
         [SerializeField, ReadOnly]
         private int m_attackCounter;
+        [SerializeField, ReadOnly]
+        private Attack m_lastAttack;
+
+        [SerializeField, BoxGroup("TESTING")]
+        private bool m_testingMode;
 
         private void ApplyPhaseData(PhaseInfo obj)
         {
@@ -513,9 +524,6 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_info.rageQuakeAnimation.animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.rageQuakeAnimation.animation);
             m_animation.SetAnimation(0, m_info.idle2Animation.animation, false);
-            //var rageAnimation = m_animation.SetAnimation(0, m_info.rageQuakeAnimation, false);
-            //m_animation.AddAnimation(0, m_info.idle2Animation, true, 0);
-            //yield return new WaitForSpineAnimationComplete(rageAnimation);
             m_willTrackConsecutiveHits = true;
             m_stateHandle.ApplyQueuedState();
         }
@@ -591,102 +599,10 @@ namespace DChild.Gameplay.Characters.Enemies
             m_scytheSmashDeathStench.Execute();
         }
 
-        private IEnumerator MoveIntoPositionRoutine(Vector3 destination, float speed)
+        public void RoyalGuardianDeathStenchProjectileRelease()
         {
-            m_agent.Stop();
-            m_agent.SetDestination(destination);
-
-            bool hasReachedPosition = false;
-
-            while(hasReachedPosition == false)
-            {
-                m_agent.Move(speed);
-
-                FacePlayerInstantly();
-
-                if (!IsFacing(destination))
-                {
-                    m_animation.SetAnimation(0, m_info.idle1Animation, true);
-                }
-                else
-                {
-                    m_animation.SetAnimation(0, m_info.move.animation, true);
-                }
-
-                if (Vector3.Distance(transform.position, destination) < 10 || m_wallSensor.isDetecting)
-                {
-                    hasReachedPosition = true;
-                }
-                yield return null;
-            }
-
-            FacePlayerInstantly();
-
-            m_agent.Stop();
-        }
-
-        private IEnumerator DynamicXMoveIntoPositionRoutine(float minXDistance, float maxXDistance, float yHeight)
-        {
-            int chosenXDistance = Random.Range((int)minXDistance, (int)maxXDistance);
-
-            int directionChoice = Random.Range(0, 3);
-
-            Vector2 positionToMoveInto = transform.position;
-
-            switch(directionChoice)
-            {
-                case 0: //straight up
-                    positionToMoveInto = new Vector2(transform.position.x, yHeight);
-                    break;
-                case 1: //go right
-                    positionToMoveInto = new Vector2(transform.position.x + chosenXDistance, yHeight);
-                    break;
-                case 2: //go left
-                    positionToMoveInto = new Vector2(transform.position.x - chosenXDistance, yHeight);
-                    break;
-                default:
-                    positionToMoveInto = new Vector2(transform.position.x, yHeight);
-                    break;
-            }
-
-            yield return MoveIntoPositionRoutine(positionToMoveInto, m_info.move.speed);
-
-        }
-
-        private IEnumerator HarvestChase()
-        {
-            m_agent.Stop();
-            FacePlayerInstantly();
-
-            m_animation.SetAnimation(0, m_info.harvestScytheDrag.animation, true);
-
-            //Set target position near player to go to
-            Vector3 targetDestination;
-            if (transform.localScale.x > 0)
-            {
-                targetDestination = new Vector3(m_targetInfo.position.x - m_targetDistanceOffset, m_groundCombatHeight);
-            }
-            else
-            {
-                targetDestination = new Vector3(m_targetInfo.position.x + m_targetDistanceOffset, m_groundCombatHeight);
-            }
-
-            m_agent.SetDestination(targetDestination);
-
-            bool hasReachedPosition = false;
-
-            while (hasReachedPosition == false)
-            {
-                m_agent.Move(m_info.harvestChaseSpeed);
-
-                if (Vector3.Distance(transform.position, targetDestination) < 10 || m_wallSensor.isDetecting)
-                {
-                    hasReachedPosition = true;
-                }
-                yield return null;
-            }
-
-            m_agent.Stop();
+            var target = m_targetInfo.transform;
+            m_royalGuardianShieldSlam.Execute(target);
         }
 
         private IEnumerator SummonRoyalGuardianShieldRoutine()
@@ -717,7 +633,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator ScytheThrowRoutine()
         {
-            m_stateHandle.Wait(State.ReevaluateSituation);
+            m_stateHandle.Wait(State.EvaluateAction);
 
             bool isReturning = false;
             bool timeToCatch = false;
@@ -738,7 +654,7 @@ namespace DChild.Gameplay.Characters.Enemies
             }
 
             //Move up for scythe throw
-            yield return DynamicXMoveIntoPositionRoutine(m_scytheThrowMinXMove, m_scytheThrowMaxXMove, m_scytheThrowReleaseHeight);
+            yield return ScytheThrowDynamicMoveRoutine(m_scytheThrowMinXMove, m_scytheThrowMaxXMove, m_scytheThrowReleaseHeight);
 
             m_animation.SetAnimation(0, m_info.scytheThrowAnticipation.animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.scytheThrowAnticipation.animation);
@@ -775,8 +691,9 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return new WaitForSeconds(1f);
 
             //Move back to ground level
-            yield return DynamicXMoveIntoPositionRoutine(m_scytheThrowMinXMove, m_scytheThrowMaxXMove, m_groundCombatHeight);
+            yield return ScytheThrowDynamicMoveRoutine(m_scytheThrowMinXMove, m_scytheThrowMaxXMove, m_groundCombatHeight);
 
+            m_lastAttack = Attack.ScytheThrow;
             m_currentAttackDecider.hasDecidedOnAttack = false;
             m_stateHandle.ApplyQueuedState();
             yield return null;
@@ -789,9 +706,11 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator ScytheSwipeRoutine()
         {
-            m_stateHandle.Wait(State.ReevaluateSituation);
+            m_stateHandle.Wait(State.EvaluateAction);
 
             m_attacker.SetData(m_info.scytheSwipeAttackData);
+
+            m_agent.Stop();
 
             m_animation.SetAnimation(0, m_info.scytheSwipeAttack.animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.scytheSwipeAttack.animation);
@@ -808,9 +727,11 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator ScytheSwipeTwoRoutine()
         {
-            m_stateHandle.Wait(State.ReevaluateSituation);
+            m_stateHandle.Wait(State.EvaluateAction);
 
             m_attacker.SetData(m_info.scytheSwipeTwoAttackData);
+
+            m_agent.Stop();
 
             m_animation.EnableRootMotion(true, true);
 
@@ -831,10 +752,11 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator ScytheSmashRoutine()
         {
-            m_stateHandle.Wait(State.ReevaluateSituation);
+            m_stateHandle.Wait(State.EvaluateAction);
 
             bool deathStenchDone = false;
 
+            m_agent.Stop();
             FacePlayerInstantly();
 
             m_attacker.SetData(m_info.scytheSmashAttackData);
@@ -869,6 +791,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_info.floatAnimation.animation, true);
             yield return new WaitForSeconds(1f);
 
+            m_lastAttack = Attack.ScytheSmash;
             m_currentAttackDecider.hasDecidedOnAttack = false;
             m_stateHandle.ApplyQueuedState();
             yield return null;
@@ -882,7 +805,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator RoyalGuardianOneRoutine()
         {
-            m_stateHandle.Wait(State.ReevaluateSituation);
+            m_stateHandle.Wait(State.EvaluateAction);
 
             if(!m_royalGuardianShieldActive)
             {
@@ -891,21 +814,14 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_attackCounter++;
             }        
 
-
             m_currentAttackDecider.hasDecidedOnAttack = false;
             m_stateHandle.ApplyQueuedState();
             yield return null;
         }
 
-        public void RoyalGuardianDeathStenchProjectileRelease()
-        {
-            var target = m_targetInfo.transform;
-            m_royalGuardianShieldSlam.Execute(target);
-        }
-
         private IEnumerator RoyalGuardianTwoRoutine()
         {
-            m_stateHandle.Wait(State.ReevaluateSituation);
+            m_stateHandle.Wait(State.EvaluateAction);
 
             if (!m_royalGuardianShieldActive)
             {
@@ -924,7 +840,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator HarvestRoutine()
         {
-            m_stateHandle.Wait(State.ReevaluateSituation);
+            m_stateHandle.Wait(State.EvaluateAction);
 
             m_attacker.SetData(m_info.harvestAttackData);
 
@@ -977,7 +893,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator DeathStenchWaveRoutine()
         {
-            m_stateHandle.Wait(State.ReevaluateSituation);
+            m_stateHandle.Wait(State.EvaluateAction);
 
             yield return MoveIntoPositionRoutine(m_arenaCenter.position, m_info.move.speed);
 
@@ -1046,6 +962,201 @@ namespace DChild.Gameplay.Characters.Enemies
                 }
             }
         }
+
+        private IEnumerator MoveIntoPositionRoutine(Vector3 destination, float speed)
+        {
+            m_agent.Stop();
+            m_agent.SetDestination(destination);
+
+            bool hasReachedPosition = false;
+
+            while (hasReachedPosition == false)
+            {
+                m_agent.Move(speed);
+
+                FacePlayerInstantly();
+
+                if (!IsFacing(destination))
+                {
+                    m_animation.SetAnimation(0, m_info.idle1Animation, true);
+                }
+                else
+                {
+                    m_animation.SetAnimation(0, m_info.move.animation, true);
+                }
+
+                if (Vector3.Distance(transform.position, destination) < 10 || m_wallSensor.isDetecting)
+                {
+                    hasReachedPosition = true;
+                }
+                yield return null;
+            }
+
+            FacePlayerInstantly();
+
+            m_agent.Stop();
+        }
+
+        private IEnumerator ScytheThrowDynamicMoveRoutine(float minXDistance, float maxXDistance, float yHeight)
+        {
+            float chosenXDistance = Random.Range(minXDistance, maxXDistance);
+
+
+            Vector2 positionToMoveInto = transform.position;
+
+            int directionChoice = Random.Range(0, 3);
+            switch (directionChoice)
+            {
+                case 0: //straight up
+                    positionToMoveInto = new Vector2(transform.position.x, yHeight);
+                    break;
+                case 1: //go right
+                    positionToMoveInto = new Vector2(transform.position.x + chosenXDistance, yHeight);
+                    break;
+                case 2: //go left
+                    positionToMoveInto = new Vector2(transform.position.x - chosenXDistance, yHeight);
+                    break;
+                default:
+                    positionToMoveInto = new Vector2(transform.position.x, yHeight);
+                    break;
+            }
+
+            yield return MoveIntoPositionRoutine(positionToMoveInto, m_info.move.speed);
+
+        }
+
+        private IEnumerator DynamicChasePlayerRoutine(float speed)
+        {
+            m_stateHandle.Wait(State.ReevaluateSituation);
+
+            var randomChaseTime = Random.Range(m_info.minChaseTime, m_info.maxChaseTime);
+
+            m_agent.Stop();
+
+            while (randomChaseTime > 0)
+            {
+                FacePlayerInstantly();
+                if (!IsFacingTarget())
+                {
+                    m_animation.SetAnimation(0, m_info.idle1Animation, true);
+                }
+                else
+                {
+                    m_animation.SetAnimation(0, m_info.move.animation, true);
+                }
+
+                m_agent.SetDestination(new Vector2(m_targetInfo.position.x, m_groundCombatHeight));
+                m_agent.Move(speed);
+
+                if (IsTargetInRange(m_info.shortRangedAttackEvaluateDistance) || m_wallSensor.isDetecting)
+                {
+                    m_agent.Stop();
+                    randomChaseTime = 0;
+                }
+
+                randomChaseTime -= Time.deltaTime;
+                yield return null;
+            }
+
+            m_evaluateActionBeforeAttack = null;
+
+            m_stateHandle.ApplyQueuedState();
+        }
+
+        private IEnumerator DynamicMoveAwayFromPlayerRoutine(float speed, float minDistance, float maxDistance)
+        {
+            m_stateHandle.Wait(State.ReevaluateSituation);
+
+            m_agent.Stop();
+
+            int goRightDecider = Random.Range(0, 1);
+            bool goRight = goRightDecider > 0? true : false;
+            
+            //set random point left or right of player position
+            var currentPlayerPos = m_targetInfo.position;
+
+            float chosenDistance = minDistance;
+            if(goRight)
+            {
+                chosenDistance = Random.Range(currentPlayerPos.x + minDistance, currentPlayerPos.x + maxDistance);
+            }
+            else
+            {
+                chosenDistance = Random.Range(currentPlayerPos.x - minDistance, currentPlayerPos.x - maxDistance);
+            }
+
+            Vector2 chosenPoint = new Vector2(chosenDistance, m_groundCombatHeight);
+            bool isNearDestination = false;
+            // move towards that location while always facing player
+            while (!isNearDestination)
+            {
+                FacePlayerInstantly();
+                if (!IsFacingTarget())
+                {
+                    m_animation.SetAnimation(0, m_info.idle1Animation, true);
+                }
+                else
+                {
+                    m_animation.SetAnimation(0, m_info.move.animation, true);
+                }
+                m_agent.SetDestination(chosenPoint);
+                m_agent.Move(speed);
+
+                //if player gets close or wall is detected, stop and evaluate attack
+                if (Vector3.Distance(transform.position, m_targetInfo.position) <= m_info.shortRangedAttackEvaluateDistance || m_wallSensor.isDetecting)
+                {
+                    m_agent.Stop();
+                }
+
+                if(Vector2.Distance(transform.position, chosenPoint) > 10)
+                {
+                    isNearDestination = true;
+                }
+
+                yield return null;
+
+            }
+
+            m_evaluateActionBeforeAttack = null;
+
+            m_stateHandle.ApplyQueuedState();
+        }
+
+        private IEnumerator HarvestChase()
+        {
+            m_agent.Stop();
+            FacePlayerInstantly();
+
+            m_animation.SetAnimation(0, m_info.harvestScytheDrag.animation, true);
+
+            //Set target position near player to go to
+            Vector3 targetDestination;
+            if (transform.localScale.x > 0)
+            {
+                targetDestination = new Vector3(m_targetInfo.position.x - m_targetDistanceOffset, m_groundCombatHeight);
+            }
+            else
+            {
+                targetDestination = new Vector3(m_targetInfo.position.x + m_targetDistanceOffset, m_groundCombatHeight);
+            }
+
+            m_agent.SetDestination(targetDestination);
+
+            bool hasReachedPosition = false;
+
+            while (hasReachedPosition == false)
+            {
+                m_agent.Move(m_info.harvestChaseSpeed);
+
+                if (Vector3.Distance(transform.position, targetDestination) < 10 || m_wallSensor.isDetecting)
+                {
+                    hasReachedPosition = true;
+                }
+                yield return null;
+            }
+
+            m_agent.Stop();
+        }
         #endregion
 
         private void UpdateAttackDeciderList()
@@ -1073,6 +1184,21 @@ namespace DChild.Gameplay.Characters.Enemies
                                                        new AttackInfo<Attack>(Attack.Harvest, 0));
                     break;
             }
+        }
+
+        private IEnumerator ChooseAttack()
+        {
+            if(!m_currentAttackDecider.hasDecidedOnAttack)
+            {
+                do
+                {
+                    m_currentAttackDecider.DecideOnAttack();
+                    yield return null;
+                }
+                while (m_currentAttackDecider.chosenAttack.attack == m_lastAttack);
+                    
+            }
+           
         }
 
         public override void ApplyData()
@@ -1185,12 +1311,25 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_agent.Stop();
                     m_turnHandle.Execute(m_info.turnAnimation.animation, m_info.idle1Animation.animation);
                     break;
+                case State.EvaluateAction:
+                    var decideRandomAction = Random.Range(0, 1);
+                    if(m_evaluateActionBeforeAttack == null)
+                    {
+                        if (decideRandomAction > 0)
+                        {
+                           m_evaluateActionBeforeAttack = StartCoroutine(DynamicChasePlayerRoutine(m_info.move.speed));
+                        }
+                        else
+                        {
+                            //m_evaluateActionBeforeAttack = StartCoroutine(DynamicMoveAwayFromPlayerRoutine(m_info.move.speed, 40, 60));// temp valuesd
+                            m_evaluateActionBeforeAttack = StartCoroutine(DynamicChasePlayerRoutine(m_info.move.speed));
+                        }
+                    }
+                    
+                    break;
                 case State.Attacking:
 
-                    if(m_currentAttackDecider.hasDecidedOnAttack == false)
-                    {
-                        m_currentAttackDecider.DecideOnAttack();
-                    }
+                    StartCoroutine(ChooseAttack());
 
                     switch (m_currentAttackDecider.chosenAttack.attack)
                     {
@@ -1236,6 +1375,7 @@ namespace DChild.Gameplay.Characters.Enemies
                                 if (IsTargetInRange(m_info.shortRangedAttackEvaluateDistance))
                                 {
                                     m_currentAttackDecider = m_shortRangedAttackDecider;
+                                    m_lastAttack = Attack.NullAttack;
                                     m_currentAttackDecider.DecideOnAttack(Attack.ScytheSwipe1);
                                     m_currentAttackDecider.hasDecidedOnAttack = true;
                                 }
@@ -1254,7 +1394,11 @@ namespace DChild.Gameplay.Characters.Enemies
                         }
 
                         if (m_royalGuardianShieldActive)
+                        {
                             m_currentAttackDecider = m_royalGuardianAttackDecider;
+                            m_currentAttackDecider.hasDecidedOnAttack = false;
+                        }
+                            
 
                         m_stateHandle.SetState(State.Attacking);
 
