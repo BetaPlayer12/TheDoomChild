@@ -75,6 +75,9 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField]
             private GameObject m_spike;
             public GameObject spike => m_spike;
+            [SerializeField]
+            private GameObject m_anticipation;
+            public GameObject anticipation => m_anticipation;
             [Title("Events")]
             [SerializeField, ValueDropdown("GetEvents")]
             private string m_chargeEvent;
@@ -477,6 +480,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_aiLerp.enabled = false;
             m_fireball.m_player = m_targetInfo.transform.gameObject;
             SpawnSpike();
+            yield return new WaitForSeconds(.5f);
             m_animation.SetAnimation(0, m_info.attack2.animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack2.animation);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
@@ -489,6 +493,10 @@ namespace DChild.Gameplay.Characters.Enemies
         #region Movement
         private IEnumerator RunningAwayRoutine()
         {
+            CalculateRunPath();
+            m_aiLerp.enabled = true;
+            m_agent.Move(m_info.move.speed);
+            yield return null;
             /*while(!m_willStopRunningAway)
             {
                 m_agent.Move(m_info.move.speed);
@@ -497,7 +505,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_agent.Stop();
             //m_willStopRunningAway = false;
             m_aiLerp.enabled = false;*/
-            do
+            /*do
             {
                 RunningAwayMovement();
                 yield return null;
@@ -505,7 +513,7 @@ namespace DChild.Gameplay.Characters.Enemies
             while (!m_willStopRunningAway && !m_canUseAttack);
             m_stateHandle.SetState(State.Chasing);
             m_canUseAttack = true;
-            yield return null;
+            yield return null;*/
         }
         private void RunningAwayMovement()
         {
@@ -517,18 +525,6 @@ namespace DChild.Gameplay.Characters.Enemies
             }
             m_agent.Stop();
             m_animation.SetAnimation(0, m_info.idleAnimation, true).TimeScale = 1f;
-            /*if (Vector2.Distance(m_targetInfo.position, transform.position) < m_info.targetDistanceTolerance)
-            {
-                CalculateRunPath();
-                m_aiLerp.enabled = true;
-                m_agent.Move(m_info.move.speed);
-                //StartCoroutine(RunningAwayRoutine());
-            }
-            else
-            {
-                m_agent.Stop();
-                m_animation.SetAnimation(0, m_info.idleAnimation, true).TimeScale = 1f;
-            }*/
         }
         private void Movement(Vector2 target, float moveSpeed)
         {
@@ -603,13 +599,20 @@ namespace DChild.Gameplay.Characters.Enemies
                 Instantiate(m_info.projectile.projectileInfo.projectile, projectilePointPos, Quaternion.identity);
             //}
         }
+        private Vector2 targetground;
+        private Vector3 targetgroundv3;
         private void SpawnSpike()
         {
-            Vector2 targetground = new Vector2(m_targetInfo.position.x, GroundPosition().y);
-            Vector3 targetgroundv3 = targetground;
+            targetground = new Vector2(m_targetInfo.position.x, GroundPosition().y);
+            targetgroundv3 = targetground;
+            StartCoroutine(SpawnSpikeAnticipation());
             Instantiate(m_info.spike, targetgroundv3, Quaternion.identity);
         }
-
+        private IEnumerator SpawnSpikeAnticipation()
+        {
+            Instantiate(m_info.anticipation, targetgroundv3, Quaternion.identity);
+            yield return new WaitForSeconds(.5f);
+        }
         protected override void Start()
         {
             base.Start();
@@ -734,7 +737,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         CalculateRunPath();
                         m_aiLerp.enabled = true;
                         m_agent.Move(m_info.move.speed);
-                        //StartCoroutine(RunningAwayRoutine());
+                        StartCoroutine(RunningAwayRoutine());
                     }
                     else
                     {
