@@ -535,6 +535,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator DetectionMovement()
         {
             m_stateHandle.Wait(State.Stalk);
+            m_animation.EnableRootMotion(false, false);
             yield return DetectRoutine();
             m_stateHandle.ApplyQueuedState();
         }
