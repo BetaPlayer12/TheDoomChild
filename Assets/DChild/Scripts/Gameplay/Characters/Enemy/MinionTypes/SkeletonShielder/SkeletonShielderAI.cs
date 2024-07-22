@@ -280,11 +280,11 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 base.SetTarget(damageable);
                 m_selfCollider.SetActive(true);
-                m_stateHandle.SetState(State.Detect);
                 m_currentPatience = 0;
                 //var patienceRoutine = PatienceRoutine();
                 //StopCoroutine(patienceRoutine);
                 m_enablePatience = false;
+                m_stateHandle.SetState(State.Detect);
             }
             else
             {
@@ -330,7 +330,6 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_enablePatience = false;
                     m_shieldGlow.gameObject.SetActive(false);
                     SwitchModeTo(MinionMode.NoGuard);
-                    m_stateHandle.SetState(State.Patrol);
                 }
 
             }
@@ -376,7 +375,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 hitbox.SetInvulnerability(Invulnerability.None);
                 StopAllCoroutines();
                 m_animation.animationState.TimeScale = .5f;
-                if(m_minionMode != MinionMode.NoShield)
+                if (m_minionMode != MinionMode.NoShield)
                 {
                     m_animation.SetAnimation(0, m_info.flinchAnimation, false);
                 }
@@ -384,8 +383,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 {
                     m_animation.SetAnimation(0, m_info.noShieldFlinch, false);
                 }
-               
-                m_stateHandle.OverrideState(State.WaitBehaviourEnd);
+                m_stateHandle.ApplyQueuedState();
             }
         }
 
@@ -403,7 +401,6 @@ namespace DChild.Gameplay.Characters.Enemies
             else
             {
                 SwitchModeTo(MinionMode.Guard);
-                m_stateHandle.OverrideState(State.ReevaluateSituation);
             }
 
         }
@@ -424,9 +421,9 @@ namespace DChild.Gameplay.Characters.Enemies
             m_isDetecting = false;
             m_enablePatience = false;
             m_shieldGlow.gameObject.SetActive(false);
-            m_minionMode = MinionMode.NoGuard;
-            m_stateHandle.OverrideState(State.Patrol);
             enabled = true;
+            SwitchModeTo(MinionMode.NoGuard);
+
         }
 
         private void UpdateAttackDeciderList()
@@ -443,6 +440,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_animation.SetAnimation(0, m_info.detectAnimation, false);
                 yield return new WaitForAnimationComplete(m_animation.animationState, m_info.detectAnimation);
                 m_shieldGlow.gameObject.SetActive(true);
+                m_shieldGlow.Play();
                 yield return null;
                 SwitchModeTo(MinionMode.Guard);
             }
@@ -450,12 +448,13 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 m_animation.SetAnimation(0, m_info.noShiledDetectAnimation, false);
                 yield return new WaitForAnimationComplete(m_animation.animationState, m_info.noShiledDetectAnimation);
+                m_stateHandle.ApplyQueuedState();
             }
-            m_stateHandle.ApplyQueuedState();  
+
         }
         private IEnumerator ShieldBashRoutine()
         {
-            
+
             if (!IsFacingTarget() && !m_wallSensor.isDetecting && m_edgeSensor.isDetecting)
             {
                 //Call Turn;
@@ -463,36 +462,49 @@ namespace DChild.Gameplay.Characters.Enemies
                 yield return new WaitForAnimationComplete(m_animation.animationState, m_info.turnAnimation.animation);
             }
             var distancefromplayer = Vector2.Distance(m_targetInfo.position, transform.position);
-            var isPlayerNear = distancefromplayer < m_info.ShieldBash.range;
-            if (!isPlayerNear)
+            var isPlayerNear = true;
+            do
             {
-                do
-                {
-                    distancefromplayer = Vector2.Distance(m_targetInfo.position, transform.position);
-                    isPlayerNear = distancefromplayer < m_info.ShieldBash.range;
-                    m_animation.SetAnimation(0,/* !isPlayerNear ? m_info.noShieldMove.animation :*/ m_info.march.animation, true);
-                    m_movement.MoveTowards(Vector2.one * transform.localScale.x, m_info.march.speed);
-                    yield return null;
-                } while (!isPlayerNear && !m_wallSensor.isDetecting && m_edgeSensor.isDetecting);
-                m_movement.Stop();
+                distancefromplayer = Vector2.Distance(m_targetInfo.position, transform.position);
+                isPlayerNear = distancefromplayer < m_info.ShieldBash.range;
+                m_animation.SetAnimation(0,/* !isPlayerNear ? m_info.noShieldMove.animation :*/ m_info.march.animation, true);
+                m_movement.MoveTowards(Vector2.one * transform.localScale.x, m_info.march.speed);
+                yield return null;
+            } while (!isPlayerNear && !m_wallSensor.isDetecting && m_edgeSensor.isDetecting && IsFacingTarget());
+            m_movement.Stop();
 
-            }
             m_animation.SetAnimation(0, m_info.idleGuardAnimation, false);
-            yield return null;
-            m_shieldAttacker.gameObject.SetActive(true);
-            yield return null;
-            m_animation.SetAnimation(0, m_info.ShieldBash.animation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.idleGuardAnimation);
+            if (m_edgeSensor.isDetecting && !m_wallSensor.isDetecting)
+            {
+                if (IsFacingTarget())
+                {
+                    m_shieldAttacker.gameObject.SetActive(true);
+                    yield return null;
+                    m_animation.SetAnimation(0, m_info.ShieldBash.animation, false);
+                    yield return new WaitForAnimationComplete(m_animation.animationState, m_info.ShieldBash);
+                    m_targetHitVfx.Stop();
+                    m_shieldAttacker.gameObject.SetActive(false);
+                }
+                else
+                {
+                    m_turnHandle.Execute(m_info.turnAnimation.animation, m_info.idleAnimation.animation);
+                    yield return new WaitForAnimationComplete(m_animation.animationState, m_info.turnAnimation.animation);
+                }
+        
+            }
+            else
+            {
+                m_animation.SetAnimation(0, m_info.idleGuardAnimation, false);
+                yield return new WaitForAnimationComplete(m_animation.animationState, m_info.idleGuardAnimation);
+            }
             //if (m_targetHit)
             //{
             //    m_targetHitVfx.Play();
             //    m_targetHit = false;
             //}
             //yield return new WaitUntil(() => m_wallSensor.isDetecting && m_playerSensor.isDetecting);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.ShieldBash);
-     
-            yield return null;
-            m_targetHitVfx.Stop();
-            m_shieldAttacker.gameObject.SetActive(false);
+
             yield return null;
             m_stateHandle.ApplyQueuedState();
         }
@@ -555,11 +567,10 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator ChangeModeNoGuardRoutine()
         {
-            m_stateHandle.Wait(State.ReevaluateSituation);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             yield return null;
             m_minionMode = MinionMode.NoGuard;
-            m_stateHandle.SetState(State.Patrol);
+            m_stateHandle.ApplyQueuedState();
         }
         private IEnumerator ChangeModeGuardRoutine()
         {
@@ -583,7 +594,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator DeathRoutine()
         {
             StopAllCoroutines();
-            if(m_minionMode != MinionMode.NoShield)
+            if (m_minionMode != MinionMode.NoShield)
             {
                 m_shieldGlow.Stop();
                 m_animation.SetAnimation(0, m_info.deathAnimation, false);
@@ -596,7 +607,7 @@ namespace DChild.Gameplay.Characters.Enemies
             }
 
             yield return null;
-            
+
         }
 
         protected override void Start()
@@ -616,13 +627,13 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnShieldDestroyed(object sender, EventActionArgs eventArgs)
         {
-           
+
             m_skeletonAnimation.skeleton.SetSkin(m_skins[0]);
-            if(hitbox.invulnerabilityLevel == Invulnerability.Level_1)
+            if (hitbox.invulnerabilityLevel == Invulnerability.Level_1)
             {
                 hitbox.SetInvulnerability(Invulnerability.None);
             }
-           SwitchModeTo(MinionMode.NoShield);
+            SwitchModeTo(MinionMode.NoShield);
         }
 
         protected override void Awake()
@@ -717,9 +728,8 @@ namespace DChild.Gameplay.Characters.Enemies
                 case State.Attacking:
                     if (IsFacingTarget())
                     {
-                        
+
                         m_stateHandle.Wait(State.Cooldown);
-                        m_animation.SetAnimation(0, m_info.idleGuardAnimation, true);
 
                         switch (m_attackDecider.chosenAttack.attack)
                         {
@@ -819,7 +829,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         if (m_animation.GetCurrentAnimation(0).ToString() != m_info.idleAnimation.animation)
                         {
                             m_movement.Stop();
-                           
+
                         }
                         m_animation.SetAnimation(0, m_info.noShieldIdle, false);
                     }
