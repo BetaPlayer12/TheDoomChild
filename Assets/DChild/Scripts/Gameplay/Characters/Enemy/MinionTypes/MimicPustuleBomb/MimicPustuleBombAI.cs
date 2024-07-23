@@ -513,7 +513,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator DelayChainActivation(float delay)
         {
             yield return new WaitForSeconds(delay);
-            m_mimicPustuleBombChain.enabled = true;
+            //m_mimicPustuleBombChain.enabled = true;
         }
 
         private void DynamicMovement(Vector2 target, float moveSpeed)
@@ -645,7 +645,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     if (m_isFirstPatrol) 
                     {
                         m_isFirstPatrol = false;
-                        m_mimicPustuleBombChain.enabled = true;
+                        //m_mimicPustuleBombChain.enabled = true;
 
                     }
                     else
