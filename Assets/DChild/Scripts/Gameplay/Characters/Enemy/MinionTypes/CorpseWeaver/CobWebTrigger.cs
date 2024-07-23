@@ -9,74 +9,40 @@ using System;
 using DChild.Gameplay.Characters.Players;
 using DChild.Gameplay;
 using DChild.Gameplay.Characters.Players.Modules;
+using DChild.Gameplay.Combat;
 
-//public class CobWebTrigger : MonoBehaviour
-//{
-
-//    [SerializeField]
-//    private CorpseWeaverAI m_corpseWeaverAI;
-
-//    public bool m_isPlayerCaught;
-//    private void OnTriggerEnter2D(Collider2D collision)
-//    {
-//        if ( collision.gameObject.layer == 8)
-//        {
-//            m_isPlayerCaught = m_corpseWeaverAI.isPlayerDetected = true;
-//            Debug.Log("Hit the player");
-//        }
-//        Debug.Log("Hit outside the if statement");
-//    }
-
-
-
-
-
-
-//    private void Start()
-//    {
-//    }
-//}
 public class CobWebTrigger : MonoBehaviour
 {
     
     public EventAction<EventActionArgs> CobWebEnterEvent;
-    [ReadOnly]
-    private EventAction<EventActionArgs> m_cobWebExitEvent;
-
-   
+    public EventAction<EventActionArgs> Onhit;
     public PlayerDamageable playerDamageable;
+    
+ 
     public void CobwebEvent()
     {
         CobWebEnterEvent.Invoke(this, EventActionArgs.Empty);
 
     }
-
-
-    //private void TestEvent(object sender, EventActionArgs eventAction)
-    //{
-    //    Debug.Log("Cobweb Activated");
-    //}
-    //private void TestEventExit(object sender, EventActionArgs eventAction)
-    //{
-    //    Debug.Log("Cobweb DeActivated");
-    //}
-    private void Start()
+    public void DamageTaken()
     {
-        //m_cobWebEnterEvent += TestEvent;
-        //m_cobWebExitEvent += TestEventExit;
+        Onhit.Invoke(this, EventActionArgs.Empty);
     }
+    
+
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.tag != "Hitbox")
-            return;
+        //if (collision.tag != "Hitbox")
+        //    return;
 
         var playerObject = collision.gameObject.GetComponentInParent<PlayerControlledObject>();
         if (playerObject != null && collision.tag != "Sensor" && playerObject.owner == (IPlayer)GameplaySystem.playerManager.player)
         {
             playerDamageable = collision.GetComponentInParent<PlayerDamageable>();
-            CobWebEnterEvent.Invoke(this, EventActionArgs.Empty);
-
+            DamageTaken();
+            Debug.Log("hit??");
+          
         }
 
     }

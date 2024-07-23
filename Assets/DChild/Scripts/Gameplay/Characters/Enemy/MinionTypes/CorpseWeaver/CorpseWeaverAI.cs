@@ -14,6 +14,7 @@ using DChild;
 using DChild.Gameplay.Characters.Enemies;
 using DChild.Gameplay.Pooling;
 using DChild.Gameplay.Projectiles;
+using DChild.Gameplay.Characters.Players.Modules;
 
 namespace DChild.Gameplay.Characters.Enemies
 {
@@ -204,11 +205,13 @@ namespace DChild.Gameplay.Characters.Enemies
         private State m_turnState;
 
         private ProjectileLauncher m_projectileLauncher;
-
         [SerializeField]
         private Transform m_throwPoint;
         [SerializeField]
         private float m_rampageDuration;
+
+        private PlayerDamageable m_playerDamageable;
+
 
         private bool m_isDetecting;
         private float m_currentCD;
@@ -222,7 +225,8 @@ namespace DChild.Gameplay.Characters.Enemies
         protected override void Start()
         {
             base.Start();
-           m_cobWebTrigger.CobWebEnterEvent += CobwebEvent;
+            m_cobWebTrigger.CobWebEnterEvent += CobwebEvent;
+            m_cobWebTrigger.Onhit += HitCobWeb;
             m_currentTimeScale = UnityEngine.Random.Range(1.0f, 2.0f);
             m_currentFullCD = UnityEngine.Random.Range(m_info.attackCD * .5f, m_info.attackCD * 2f);
 
@@ -234,6 +238,8 @@ namespace DChild.Gameplay.Characters.Enemies
             m_spineEventListener.Subscribe(m_info.projectile.launchOnEvent, SpitProjectile);
             m_startPoint = transform.position;
         }
+
+        
 
         private Vector2 BallisticVel()
         {
@@ -842,12 +848,18 @@ namespace DChild.Gameplay.Characters.Enemies
         }
 
         private void CobwebEvent(object sender, EventActionArgs eventArgs)
-        {
-            //throw new NotImplementedException();
+        { 
             isPlayerDetected = true;
             var playerDamageable = m_cobWebTrigger.playerDamageable;
             SetTarget(playerDamageable);
             Debug.Log("true");
+        }
+        private void HitCobWeb(object sender, EventActionArgs eventArgs)
+        {
+            isPlayerDetected = true;
+            var playerDamageable = m_cobWebTrigger.playerDamageable;
+            SetTarget(playerDamageable);
+            Debug.Log("hit boss?");
         }
 
         private void Update()
@@ -1081,7 +1093,7 @@ namespace DChild.Gameplay.Characters.Enemies
         protected override void OnTargetDisappeared()
         {
             m_stateHandle.OverrideState(State.Patrol);
-            m_targetInfo.Set(null, null);
+           // m_targetInfo.Set(null, null);
             m_currentPatience = 0;
             m_enablePatience = false;
             m_isDetecting = false;
@@ -1091,7 +1103,7 @@ namespace DChild.Gameplay.Characters.Enemies
         public void ResetAI()
         {
             m_selfCollider.enabled = false;
-            m_targetInfo.Set(null, null);
+           // m_targetInfo.Set(null, null);
             m_flinchHandle.m_autoFlinch = true;
             m_isDetecting = false;
             m_enablePatience = false;
