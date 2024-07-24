@@ -10,6 +10,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
 using UnityEngine.Playables;
 using UnityEngine.Video;
@@ -37,10 +38,6 @@ namespace DChild.Gameplay.Narrative
         }
 
         [SerializeField]
-        private VideoClip m_cinematicVideo;
-        [SerializeField]
-        private PlayableDirector m_introCutscene;
-        [SerializeField]
         private Transform m_playerStartPosition;
         [SerializeField]
         private CinemachineVirtualCamera m_cameraToDisable;
@@ -58,6 +55,10 @@ namespace DChild.Gameplay.Narrative
         private ExtraDatabases m_database;
         [SerializeField]
         private InputActionReference m_wakeUpInput;
+        [SerializeField]
+        private UnityEvent m_introStartEvent;
+
+
         private PlayerInput m_playerInput;
 
         private bool m_isDone;
@@ -78,7 +79,7 @@ namespace DChild.Gameplay.Narrative
             m_isDone = ((SaveData)data).isDone;
             if (m_isDone == false)
             {
-                PlayVideoCinematic();
+                m_introStartEvent?.Invoke();
             }
         }
 
@@ -87,8 +88,7 @@ namespace DChild.Gameplay.Narrative
             m_database.OnUse();
             m_storePickupSequence.SetActive(false);
             GameplaySystem.playerManager.player.GetComponentInChildren<PlayerInput>().actions.FindActionMap("Gameplay").Disable();
-            PlayVideoCinematic();
-            
+            m_introStartEvent?.Invoke();
         }
 
         public void TransferPlayerToStartPosition()
@@ -155,16 +155,6 @@ namespace DChild.Gameplay.Narrative
         private void PlayerInputFindActionMap(PlayerInput playerInput)
         {
             playerInput.actions.FindAction(m_wakeUpInput.action.name).performed += OnInputPerformed;
-        }
-
-        private void PlayVideoCinematic()
-        {
-            GameplaySystem.gamplayUIHandle.ShowCinematicVideo(m_cinematicVideo, null, PlayIntroCutscene);
-        }
-
-        private void PlayIntroCutscene()
-        {
-            m_introCutscene.Play();
         }
     }
 
