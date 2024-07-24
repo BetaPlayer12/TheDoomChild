@@ -153,6 +153,10 @@ namespace DChild.Gameplay.Characters.Enemies
         private FlinchHandler m_flinchHandle;
         [SerializeField, TabGroup("Modules")]
         private MovementHandle2D m_movement;
+        [SerializeField, TabGroup("Sensor")]
+        private RaySensor m_upDownSensor;
+        [SerializeField, TabGroup("Sensor")]
+        private RaySensor m_leftRightSensor;
         [SerializeField, TabGroup("ProjectileInfo")]
         private List<Transform> m_projectilePoints;
 
@@ -534,14 +538,21 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_agent.MoveTowardsForced(direction, m_info.move.speed);
                     yield return null;
                 }
-                m_icePlungeSameAttackCounter++;
                 m_agent.Stop();
                 //m_movement.MoveTowards(new Vector2(m_targetInfo.position.x, m_targetInfo.position.y + 20), m_info.move.speed);
                 yield return new WaitForSeconds(1.25f);
-                SpawnSpike();
-                m_animation.SetAnimation(0, m_info.attack2.animation, false);
-                yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack2.animation);
-                m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                if (!m_upDownSensor.isDetecting && !m_leftRightSensor.isDetecting || !m_upDownSensor.allRaysDetecting && !m_leftRightSensor.allRaysDetecting)
+                {
+                    m_icePlungeSameAttackCounter++;
+                    SpawnSpike();
+                    m_animation.SetAnimation(0, m_info.attack2.animation, false);
+                    yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack2.animation);
+                    m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                }
+                else
+                {
+                    yield return null;
+                }
                 m_selfCollider.SetActive(false);
                 m_flinchHandle.m_autoFlinch = true;
                 m_stateHandle.ApplyQueuedState();
