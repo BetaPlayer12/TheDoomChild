@@ -157,6 +157,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private DeathHandle m_deathHandle;
         [SerializeField, TabGroup("Modules")]
         private FlinchHandler m_flinchHandle;
+        [SerializeField, TabGroup("Modules")]
+        private BodyHitTrigger bodyHitTrigger;
         //Patience Handler
         private float m_currentPatience;
         private bool m_enablePatience;
@@ -227,6 +229,7 @@ namespace DChild.Gameplay.Characters.Enemies
             base.Start();
             m_cobWebTrigger.CobWebEnterEvent += CobwebEvent;
             m_cobWebTrigger.Onhit += HitCobWeb;
+            bodyHitTrigger.OnhitEvent += BodyhitEvent;
             m_currentTimeScale = UnityEngine.Random.Range(1.0f, 2.0f);
             m_currentFullCD = UnityEngine.Random.Range(m_info.attackCD * .5f, m_info.attackCD * 2f);
 
@@ -239,7 +242,14 @@ namespace DChild.Gameplay.Characters.Enemies
             m_startPoint = transform.position;
         }
 
-        
+        private void BodyhitEvent(object sender, EventActionArgs eventArgs)
+        {
+            isPlayerDetected = true;
+            var playerDamageable = bodyHitTrigger.playerDamageable;
+            Debug.Log("Hit event");
+            SetTarget(playerDamageable);
+            bodyHitTrigger.OnhitEvent -= BodyhitEvent;
+        }
 
         private Vector2 BallisticVel()
         {
@@ -356,12 +366,9 @@ namespace DChild.Gameplay.Characters.Enemies
             }
             else
             {
-                ///*_enablePatience = true;*/
-                //StopAllCoroutines();
-
+                StopAllCoroutines();
                 m_isDetecting = false;
-                //isPlayerDetected = false;
-                if(m_stateHandle.currentState == State.WaitBehaviourEnd)
+                if (m_stateHandle.currentState == State.WaitBehaviourEnd)
                 {
                     m_stateHandle.Wait(State.Patrol);
                     StopAllCoroutines();
@@ -374,7 +381,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     StopAllCoroutines();
                     StartCoroutine(PatienceRoutine());
                 }
-               
+
                 Debug.Log("cancel target");
             }
         }
@@ -694,8 +701,12 @@ namespace DChild.Gameplay.Characters.Enemies
                 if (m_animation.GetCurrentAnimation(0).ToString() != m_info.idleAnimation.animation)
                 {
                     m_movement.Stop();
+                    
                 }
+                CustomTurn();
+                m_stateHandle.SetState(State.Patrol);
                 m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                
             }
             Debug.Log("run to character function");
         }
@@ -724,6 +735,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_stateHandle.Wait(State.ReevaluateSituation);
             StartCoroutine(RampageDuration());
+            m_animation.SetAnimation(0, m_info.playerDetect2.animation, false);
             do
             {
                 if (Vector2.Distance(m_targetInfo.position, m_character.centerMass.position) < 15f)
@@ -1093,7 +1105,7 @@ namespace DChild.Gameplay.Characters.Enemies
         protected override void OnTargetDisappeared()
         {
             m_stateHandle.OverrideState(State.Patrol);
-           // m_targetInfo.Set(null, null);
+           //m_targetInfo.Set(null, null);
             m_currentPatience = 0;
             m_enablePatience = false;
             m_isDetecting = false;
