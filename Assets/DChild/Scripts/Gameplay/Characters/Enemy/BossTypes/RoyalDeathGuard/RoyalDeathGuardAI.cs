@@ -401,6 +401,9 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, ReadOnly, TabGroup("Attacks", "Royal Guardian")]
         private bool m_royalGuardianShieldActive;
 
+        [SerializeField, TabGroup("Attacks", "Death Stench Wave")]
+        private RoyalDeathGuardDeathStenchWave m_deathStenchWave;
+
         private int m_consecutiveHitToFlinchCounter;
         private float m_consectiveHitTimer;
         private bool m_willTrackConsecutiveHits;
@@ -641,6 +644,11 @@ namespace DChild.Gameplay.Characters.Enemies
             m_damageable.Heal(m_info.harvestHealAmount);
         }
 
+        public void DeathStenchWaveExecute()
+        {
+            m_deathStenchWave.transform.position = m_arenaCenter.transform.position;
+            m_deathStenchWave.Execute();
+        }
         private IEnumerator ScytheThrowRoutine()
         {
             m_stateHandle.Wait(State.EvaluateAction);
