@@ -358,6 +358,8 @@ namespace DChild.Gameplay.Characters.Enemies
         [ShowInInspector]
         private RandomAttackDecider<Attack> m_shortRangedAttackDecider;
         [ShowInInspector]
+        private RandomAttackDecider<Attack> m_longRangedAttackDeciderWithAttackCounter;
+        [ShowInInspector]
         private RandomAttackDecider<Attack> m_royalGuardianAttackDecider;
 
         [ShowInInspector]
@@ -404,6 +406,13 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Attacks", "Death Stench Wave")]
         private RoyalDeathGuardDeathStenchWave m_deathStenchWave;
 
+        [SerializeField]
+        private float m_groundCombatHeight;
+        [SerializeField]
+        private Transform m_leftRetreatPoint;
+        [SerializeField]
+        private Transform m_rightRetreatPoint;
+
         private int m_consecutiveHitToFlinchCounter;
         private float m_consectiveHitTimer;
         private bool m_willTrackConsecutiveHits;
@@ -413,16 +422,12 @@ namespace DChild.Gameplay.Characters.Enemies
         private bool m_hasHealed;
         private PhaseInfo m_phaseInfo;
         private Coroutine m_evaluateActionBeforeAttack;
+        private bool m_phaseTwoPhaseChangeAttackDone;
+        private bool m_phaseThreePhaseChangeAttackDone;
+        private bool m_scriptedPhaseTwoAttackDone;
+        private bool m_scriptedPhaseThreeAttackDone;
 
-        private string[] m_idleAnimationNames;
-
-        [SerializeField]
-        private float m_groundCombatHeight;
-        [SerializeField]
-        private Transform m_leftRetreatPoint;
-        [SerializeField]
-        private Transform m_rightRetreatPoint;
-
+        private string[] m_idleAnimationNames; //when trying to make dynamic idle but not pursued as of 7-25-24
 
         [SerializeField, ReadOnly]
         private int m_attackCounter;
@@ -687,7 +692,10 @@ namespace DChild.Gameplay.Characters.Enemies
 
             m_scytheThrowProjectile.ReturnToStart -= OnReturnToStart;
 
-            m_attackCounter++;
+            if (!m_royalGuardianShieldActive)
+            {
+                m_attackCounter++;
+            }
 
             m_animation.SetAnimation(0, m_info.floatAnimation.animation, true);
             yield return new WaitForSeconds(1f);
@@ -813,8 +821,18 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 yield return SummonRoyalGuardianShieldRoutine();
 
-                m_attackCounter++;
-            }        
+                m_attackCounter = 0;
+            }
+
+            if(!m_phaseTwoPhaseChangeAttackDone)
+            {
+                m_phaseTwoPhaseChangeAttackDone = true;
+            }
+
+            if (!m_scriptedPhaseTwoAttackDone)
+            {
+                m_scriptedPhaseTwoAttackDone = true;
+            }
 
             m_currentAttackDecider.hasDecidedOnAttack = false;
             m_stateHandle.ApplyQueuedState();
@@ -830,10 +848,20 @@ namespace DChild.Gameplay.Characters.Enemies
                 yield return SummonRoyalGuardianShieldRoutine();
             }
 
+            if (!m_phaseThreePhaseChangeAttackDone)
+            {
+                m_phaseThreePhaseChangeAttackDone = true;
+            }
+
+            if (!m_scriptedPhaseThreeAttackDone)
+            {
+                m_scriptedPhaseThreeAttackDone = true;
+            }
+
             m_animation.SetAnimation(0, m_info.royalGuardianShieldSlam.animation, false); ;
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.royalGuardianShieldSlam.animation);
 
-            m_attackCounter++;
+            m_attackCounter = 0;
 
             m_currentAttackDecider.hasDecidedOnAttack = false;
             m_stateHandle.ApplyQueuedState();
@@ -909,7 +937,7 @@ namespace DChild.Gameplay.Characters.Enemies
             //release death stench wave via animation event
             m_animation.EnableRootMotion(false, false);
 
-            m_attackCounter++;
+            m_attackCounter = 0;
 
             m_animation.SetAnimation(0, m_info.floatAnimation.animation, true);
             yield return new WaitForSeconds(1.5f);
@@ -1263,6 +1291,8 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_longRangedAttackDecider.SetList(new AttackInfo<Attack>(Attack.ScytheThrow, 0),
                                                        new AttackInfo<Attack>(Attack.ScytheSmash, 0),
                                                        new AttackInfo<Attack>(Attack.Harvest, 0));
+                    m_longRangedAttackDeciderWithAttackCounter.SetList(new AttackInfo<Attack>(Attack.RoyalGuard2, 0), 
+                                                        new AttackInfo<Attack>(Attack.DeathStenchWave, 0));
                     break;
             }
         }
@@ -1364,6 +1394,8 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.DisableRootMotion();
             m_startGroundPos = GroundPosition().y;
             m_scytheSmashDeathStench.transform.position = m_scytheSmashDeathStenchSpawn.position;
+            m_phaseTwoPhaseChangeAttackDone = false;
+            m_phaseThreePhaseChangeAttackDone = false;
 
             m_phaseHandle = new PhaseHandle<Phase, PhaseInfo>();
             m_phaseHandle.Initialize(Phase.PhaseOne, m_info.phaseInfo, m_character, ChangeState, ApplyPhaseData);
@@ -1466,39 +1498,127 @@ namespace DChild.Gameplay.Characters.Enemies
                                 }
                                 break;
                             case Phase.PhaseTwo:
+                                if (!m_phaseTwoPhaseChangeAttackDone)
+                                {
+                                    m_currentAttackDecider = m_shortRangedAttackDecider;
+                                    m_lastAttack = Attack.NullAttack;
+                                    m_currentAttackDecider.DecideOnAttack(Attack.RoyalGuard1);
+                                    m_currentAttackDecider.hasDecidedOnAttack = true;
+                                }
+                                else
+                                {
+                                    if (m_health.currentValue <= m_health.maxValue * 0.6)
+                                    {
+                                        if (!m_scriptedPhaseTwoAttackDone)
+                                        {
+                                            m_currentAttackDecider = m_shortRangedAttackDecider;
+                                            m_lastAttack = Attack.NullAttack;
+                                            m_currentAttackDecider.DecideOnAttack(Attack.RoyalGuard1);
+                                            m_currentAttackDecider.hasDecidedOnAttack = true;
+                                        }
+                                    }
+
+                                    if (!m_royalGuardianShieldActive)
+                                    {
+                                        if (IsTargetInRange(m_info.shortRangedAttackEvaluateDistance))
+                                        {
+                                            if (m_attackCounter >= 5)
+                                            {
+                                                m_currentAttackDecider = m_shortRangedAttackDecider;
+                                                m_lastAttack = Attack.NullAttack;
+                                                m_currentAttackDecider.DecideOnAttack(Attack.RoyalGuard1);
+                                                m_currentAttackDecider.hasDecidedOnAttack = true;
+                                            }
+                                            else
+                                            {
+                                                m_currentAttackDecider = m_shortRangedAttackDecider;
+                                                m_currentAttackDecider.hasDecidedOnAttack = false;
+                                            }
+                                        }
+                                        else
+                                        {
+                                            m_currentAttackDecider = m_longRangedAttackDecider;
+                                            m_currentAttackDecider.hasDecidedOnAttack = false;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        m_currentAttackDecider = m_royalGuardianAttackDecider;
+                                        m_currentAttackDecider.hasDecidedOnAttack = false;
+                                    }
+                                }                               
+
                                 break;
                             case Phase.PhaseThree:
+                                if (!m_phaseThreePhaseChangeAttackDone)
+                                {
+                                    m_currentAttackDecider = m_shortRangedAttackDecider;
+                                    m_lastAttack = Attack.NullAttack;
+                                    m_currentAttackDecider.DecideOnAttack(Attack.RoyalGuard2);
+                                    m_currentAttackDecider.hasDecidedOnAttack = true;
+                                }
+                                else
+                                {
+                                    if (m_health.currentValue <= m_health.maxValue * 0.3)
+                                    {
+                                        if (!m_scriptedPhaseTwoAttackDone)
+                                        {
+                                            m_currentAttackDecider = m_shortRangedAttackDecider;
+                                            m_lastAttack = Attack.NullAttack;
+                                            m_currentAttackDecider.DecideOnAttack(Attack.RoyalGuard2);
+                                            m_currentAttackDecider.hasDecidedOnAttack = true;
+                                        }
+                                    }
+
+                                    if (!m_royalGuardianShieldActive)
+                                    {
+                                        if (IsTargetInRange(m_info.shortRangedAttackEvaluateDistance))
+                                        {
+                                            if (m_attackCounter >= 5)
+                                            {
+                                                m_currentAttackDecider = m_shortRangedAttackDecider;
+                                                m_lastAttack = Attack.NullAttack;
+                                                m_currentAttackDecider.DecideOnAttack(Attack.DeathStenchWave);
+                                                m_currentAttackDecider.hasDecidedOnAttack = true;
+                                            }
+                                            else
+                                            {
+                                                m_currentAttackDecider = m_shortRangedAttackDecider;
+                                                m_currentAttackDecider.hasDecidedOnAttack = false;
+                                            }
+                                        }
+                                        else
+                                        {
+                                            if (m_attackCounter >= 5)
+                                            {
+                                                m_currentAttackDecider = m_longRangedAttackDeciderWithAttackCounter;
+                                                m_currentAttackDecider.hasDecidedOnAttack = false;
+                                            }
+                                            else
+                                            {
+                                                m_currentAttackDecider = m_longRangedAttackDecider;
+                                                m_currentAttackDecider.hasDecidedOnAttack = false;
+                                            }
+
+                                        }
+                                    }
+                                    else
+                                    {
+                                        m_currentAttackDecider = m_royalGuardianAttackDecider;
+                                        m_currentAttackDecider.hasDecidedOnAttack = false;
+                                    }
+                                }
+                               
                                 break;
                             default:
                                 break;
                         }
 
-                        if (m_royalGuardianShieldActive)
-                        {
-                            m_currentAttackDecider = m_royalGuardianAttackDecider;
-                            m_currentAttackDecider.hasDecidedOnAttack = false;
-                        }
-                            
-
                         m_stateHandle.SetState(State.Attacking);
-
-                        //Phase 1 Reevaluation consists of check boss HP -> Check player distance 
-
-
-                        //Sample Set long range attack decider if requirements met
-                        //m_currentAttackDecider = m_longRangedAttackDecider;
-                        //m_currentAttackDecider.hasDecidedOnAttack = false;
-
-                        //Sample Force Attack
-                        //m_currentAttackDecider.hasDecidedOnAttack = true;
-                        //m_currentAttackDecider.DecideOnAttack(Attack.ScytheThrow);
-
-                        //Phase 2 Reevaluation consists of check boss HP -> Check player distance -> check attack counter
-
-                        //Phase 3 Reevaluation consists of check boss HP -> Check player distance -> check attack counter
                     }
                     else
                     {
+                        //behaviour in testing mode
                         m_currentAttackDecider = m_longRangedAttackDecider;
                         if (IsFacingTarget())
                         {
