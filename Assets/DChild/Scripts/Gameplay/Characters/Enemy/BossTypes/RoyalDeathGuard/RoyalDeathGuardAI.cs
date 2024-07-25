@@ -155,11 +155,14 @@ namespace DChild.Gameplay.Characters.Enemies
             private float m_shortRangedAttackEvaluateDistance;
             public float shortRangedAttackEvaluateDistance => m_shortRangedAttackEvaluateDistance;
             [SerializeField]
-            private float m_minChaseTime;
-            public float minChaseTime => m_minChaseTime;
+            private float m_minMoveTime;
+            public float minMoveTime => m_minMoveTime;
             [SerializeField]
-            private float m_maxChaseTime;
-            public float maxChaseTime => m_maxChaseTime;
+            private float m_maxMoveTime;
+            public float maxMoveTime => m_maxMoveTime;
+            [SerializeField]
+            private float m_moveAdjustmentTime;
+            public float moveAdjustmentTime => m_moveAdjustmentTime;
 
             [Title("Animations")]
             [SerializeField]
@@ -326,7 +329,9 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_groundSensor;
         [SerializeField, TabGroup("Sensors")]
-        private RaySensor m_wallSensor;
+        private RaySensor m_rightWallSensor;
+        [SerializeField, TabGroup("Sensors")]
+        private RaySensor m_leftWallSensor;
 
         [SerializeField, TabGroup("Effects")]
         private ParticleFX m_slashGroundFX;
@@ -410,6 +415,11 @@ namespace DChild.Gameplay.Characters.Enemies
 
         [SerializeField]
         private float m_groundCombatHeight;
+        [SerializeField]
+        private Transform m_leftRetreatPoint;
+        [SerializeField]
+        private Transform m_rightRetreatPoint;
+
 
         [SerializeField, ReadOnly]
         private int m_attackCounter;
@@ -659,26 +669,10 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_info.scytheThrowAnticipation.animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.scytheThrowAnticipation.animation);
 
-            //Looks better with just anticipation straight to wait loop
-            //m_animation.SetAnimation(0, m_info.scytheThrowAttack.animation, false);
-            //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.scytheThrowAttack.animation);
-
             ThrowScythe();
 
             m_animation.SetAnimation(0, m_info.scytheThrowWaitForScythe.animation, true);
             yield return new WaitForSeconds(0.75f); //smoothest looking timing with current animation 7/15/24
-            //while (!timeToCatch)
-            //{
-            //    if (isReturning)
-            //    {
-            //        var distance = Vector2.Distance(m_scytheThrowProjectile.transform.position, m_scytheThrowReleasePoint.position);
-            //        if(distance < m_scytheThrowProjectile.GetFLightInfo().distance)
-            //        {
-            //            timeToCatch = true;
-            //        }
-            //    }
-            //    yield return null;
-            //}
 
             m_animation.SetAnimation(0, m_info.scytheThrowCatch.animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.scytheThrowCatch.animation);
@@ -985,7 +979,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_animation.SetAnimation(0, m_info.move.animation, true);
                 }
 
-                if (Vector3.Distance(transform.position, destination) < 10 || m_wallSensor.isDetecting)
+                if (Vector3.Distance(transform.position, destination) < 10 || m_rightWallSensor.isDetecting)
                 {
                     hasReachedPosition = true;
                 }
@@ -1029,7 +1023,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_stateHandle.Wait(State.ReevaluateSituation);
 
-            var randomChaseTime = Random.Range(m_info.minChaseTime, m_info.maxChaseTime);
+            var randomChaseTime = Random.Range(m_info.minMoveTime, m_info.maxMoveTime);
 
             if(transform.position.y > m_groundCombatHeight)
             {
@@ -1054,7 +1048,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_agent.SetDestination(new Vector2(m_targetInfo.position.x, m_groundCombatHeight));
                 m_agent.Move(speed);
 
-                if (IsTargetInRange(m_info.shortRangedAttackEvaluateDistance) || m_wallSensor.isDetecting)
+                if (IsTargetInRange(m_info.shortRangedAttackEvaluateDistance) || m_rightWallSensor.isDetecting)
                 {
                     m_agent.Stop();
                     randomChaseTime = 0;
@@ -1069,63 +1063,136 @@ namespace DChild.Gameplay.Characters.Enemies
             m_stateHandle.ApplyQueuedState();
         }
 
-        private IEnumerator DynamicMoveAwayFromPlayerRoutine(float speed, float minDistance, float maxDistance)
+        private IEnumerator DyanamicMovementBeforeAttackRoutine(float speed, bool willChase)
         {
             m_stateHandle.Wait(State.ReevaluateSituation);
 
+            Vector2 destination = transform.position;
+
+            var randomMoveTime = Random.Range(m_info.minMoveTime, m_info.maxMoveTime);
+
+            //return to ground combat level if somehow ends up higher
+            if (transform.position.y > m_groundCombatHeight)
+            {
+                var groundPos = new Vector3(transform.position.x, m_groundCombatHeight, transform.position.z);
+                yield return MoveIntoPositionRoutine(groundPos, m_info.move.speed);
+            }
+
+            //Adjust position to left or right depending on wall sensor
+            if(m_rightWallSensor.isDetecting || m_leftWallSensor.isDetecting)
+            {
+                float adjustmentTimer = m_info.moveAdjustmentTime;
+                if (m_rightWallSensor.isDetecting) //move left a bit to stop detecting wall
+                {
+                    destination = new Vector2(m_leftRetreatPoint.position.x, m_groundCombatHeight);
+                    m_agent.SetDestination(destination);
+                    while (adjustmentTimer > 0)
+                    {
+                        m_agent.Move(speed);
+                        adjustmentTimer -= Time.deltaTime;
+                        yield return null;
+                    }
+                }
+
+                if (m_leftWallSensor.isDetecting)
+                {
+                    destination = new Vector2(m_rightRetreatPoint.position.x, m_groundCombatHeight);
+                    m_agent.SetDestination(destination);
+                    while (adjustmentTimer > 0)
+                    {
+                        m_agent.Move(speed);
+                        adjustmentTimer -= Time.deltaTime;
+                        yield return null;
+                    }
+                }
+            }
+
             m_agent.Stop();
 
-            int goRightDecider = Random.Range(0, 1);
-            bool goRight = goRightDecider > 0? true : false;
-            
-            //set random point left or right of player position
-            var currentPlayerPos = m_targetInfo.position;
-
-            float chosenDistance = minDistance;
-            if(goRight)
+            //Set destination depending on whether chase or not
+            if (willChase)
             {
-                chosenDistance = Random.Range(currentPlayerPos.x + minDistance, currentPlayerPos.x + maxDistance);
+                destination = new Vector2(m_targetInfo.position.x, m_groundCombatHeight);
             }
             else
             {
-                chosenDistance = Random.Range(currentPlayerPos.x - minDistance, currentPlayerPos.x - maxDistance);
+                destination = SetRunawayPosition();
             }
 
-            Vector2 chosenPoint = new Vector2(chosenDistance, m_groundCombatHeight);
-            bool isNearDestination = false;
-            // move towards that location while always facing player
-            while (!isNearDestination)
+            m_agent.SetDestination(destination);
+
+            while (randomMoveTime > 0)
             {
                 FacePlayerInstantly();
-                if (!IsFacingTarget())
+                if(willChase)
                 {
-                    m_animation.SetAnimation(0, m_info.idle1Animation, true);
+                    if (!IsFacingTarget())
+                    {
+                        m_animation.SetAnimation(0, m_info.idle1Animation, true);
+                    }
+                    else
+                    {
+                        m_animation.SetAnimation(0, m_info.move.animation, true);
+                    }
                 }
                 else
                 {
-                    m_animation.SetAnimation(0, m_info.move.animation, true);
+                    if (!IsFacing(destination))
+                    {
+                        m_animation.SetAnimation(0, m_info.idle1Animation, true);
+                    }
+                    else
+                    {
+                        m_animation.SetAnimation(0, m_info.move.animation, true);
+                    }
                 }
-                m_agent.SetDestination(chosenPoint);
+                
+
+                if(willChase)
+                {
+                    m_agent.SetDestination(new Vector2(m_targetInfo.position.x, m_groundCombatHeight));
+                }
                 m_agent.Move(speed);
 
-                //if player gets close or wall is detected, stop and evaluate attack
-                if (Vector3.Distance(transform.position, m_targetInfo.position) <= m_info.shortRangedAttackEvaluateDistance || m_wallSensor.isDetecting)
+                if (IsTargetInRange(m_info.shortRangedAttackEvaluateDistance) || m_rightWallSensor.isDetecting || m_leftWallSensor.isDetecting)
                 {
                     m_agent.Stop();
+                    randomMoveTime = 0;
                 }
 
-                if(Vector2.Distance(transform.position, chosenPoint) > 10)
-                {
-                    isNearDestination = true;
-                }
-
+                randomMoveTime -= Time.deltaTime;
                 yield return null;
-
             }
 
             m_evaluateActionBeforeAttack = null;
 
             m_stateHandle.ApplyQueuedState();
+        }
+
+        private Vector2 SetRunawayPosition()
+        {
+            Vector2 destination = transform.position;
+
+            int goRightDecider = Random.Range(0, 2);
+
+            if(!m_rightWallSensor.isDetecting && !m_leftWallSensor.isDetecting)
+            {
+                destination = goRightDecider > 0 ? new Vector2(m_leftRetreatPoint.position.x, m_groundCombatHeight) : new Vector2(m_rightRetreatPoint.position.x, m_groundCombatHeight);
+            }
+            else if (m_leftWallSensor.isDetecting) //go right
+            {
+                destination = new Vector2(m_rightRetreatPoint.position.x, m_groundCombatHeight);
+            }
+            else if (m_rightWallSensor.isDetecting) //go left
+            {
+                destination = new Vector2(m_leftRetreatPoint.position.x, m_groundCombatHeight);
+            }
+
+            //Fallback plan in case dynamic run away isn't working
+            //int randomPointDecider = Random.Range(0, m_retreatPoints.Length);
+            //destination = new Vector2(m_retreatPoints[randomPointDecider].position.x, m_groundCombatHeight);
+
+            return destination;
         }
 
         private IEnumerator HarvestChase()
@@ -1154,7 +1221,7 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 m_agent.Move(m_info.harvestChaseSpeed);
 
-                if (Vector3.Distance(transform.position, targetDestination) < 10 || m_wallSensor.isDetecting)
+                if (Vector3.Distance(transform.position, targetDestination) < 10 || m_rightWallSensor.isDetecting)
                 {
                     hasReachedPosition = true;
                 }
@@ -1318,17 +1385,16 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_turnHandle.Execute(m_info.turnAnimation.animation, m_info.idle1Animation.animation);
                     break;
                 case State.EvaluateAction:
-                    var decideRandomAction = Random.Range(0, 1);
+                    var decideRandomAction = Random.Range(0, 2);
                     if(m_evaluateActionBeforeAttack == null)
                     {
                         if (decideRandomAction > 0)
                         {
-                           m_evaluateActionBeforeAttack = StartCoroutine(DynamicChasePlayerRoutine(m_info.move.speed));
+                            m_evaluateActionBeforeAttack = StartCoroutine(DyanamicMovementBeforeAttackRoutine(m_info.move.speed, true));
                         }
                         else
                         {
-                            //m_evaluateActionBeforeAttack = StartCoroutine(DynamicMoveAwayFromPlayerRoutine(m_info.move.speed, 40, 60));// temp valuesd
-                            m_evaluateActionBeforeAttack = StartCoroutine(DynamicChasePlayerRoutine(m_info.move.speed));
+                            m_evaluateActionBeforeAttack = StartCoroutine(DyanamicMovementBeforeAttackRoutine(m_info.move.speed, false));
                         }
                     }
                     
