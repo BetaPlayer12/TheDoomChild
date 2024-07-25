@@ -646,7 +646,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         public void DeathStenchWaveExecute()
         {
-            m_deathStenchWave.transform.position = m_arenaCenter.transform.position;
+            m_deathStenchWave.transform.position = m_arenaCenter.transform.position;                                                                                                                                                                                                                                  
             m_deathStenchWave.Execute();
         }
         private IEnumerator ScytheThrowRoutine()
@@ -1516,9 +1516,11 @@ namespace DChild.Gameplay.Characters.Enemies
         [Button]
         private void ForceAttack(Attack attack)
         {
+            m_stateHandle.Wait(State.Attacking);
+            m_currentAttackDecider.SetList(new AttackInfo<Attack>(attack, 0));
             m_currentAttackDecider.DecideOnAttack(attack);
             m_currentAttackDecider.hasDecidedOnAttack = true;
-            m_stateHandle.SetState(State.Attacking);
+            m_stateHandle.ApplyQueuedState();
         }
 
         protected override void OnTargetDisappeared()
