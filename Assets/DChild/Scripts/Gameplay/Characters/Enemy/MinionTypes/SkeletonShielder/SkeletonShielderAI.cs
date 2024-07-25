@@ -296,6 +296,9 @@ namespace DChild.Gameplay.Characters.Enemies
                 //}
                 m_enablePatience = true;
                 //StartCoroutine(PatienceRoutine());
+                m_stateHandle.SetState(State.Patrol);
+                //SwitchModeTo(MinionMode.NoGuard);
+
             }
         }
 
@@ -383,7 +386,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 {
                     m_animation.SetAnimation(0, m_info.noShieldFlinch, false);
                 }
-                m_stateHandle.ApplyQueuedState();
+                m_stateHandle.SetState(State.ReevaluateSituation);
             }
         }
 
@@ -448,7 +451,7 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 m_animation.SetAnimation(0, m_info.noShiledDetectAnimation, false);
                 yield return new WaitForAnimationComplete(m_animation.animationState, m_info.noShiledDetectAnimation);
-                m_stateHandle.ApplyQueuedState();
+                m_stateHandle.SetState(State.ReevaluateSituation);
             }
 
         }
@@ -491,7 +494,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_targetHitVfx.Stop();
                     m_shieldAttacker.gameObject.SetActive(false);
                     m_attackDecider.hasDecidedOnAttack = false;
-                    m_stateHandle.ApplyQueuedState();
+                   
                 }
                 //else
                 //{
@@ -500,6 +503,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 //}
         
             }
+            m_stateHandle.ApplyQueuedState();
             //if (m_targetHit)
             //{
             //    m_targetHitVfx.Play();
@@ -535,7 +539,6 @@ namespace DChild.Gameplay.Characters.Enemies
                 yield return null;
                 m_stateHandle.SetState(State.ReevaluateSituation);
             }
-            m_stateHandle.ApplyQueuedState();
         }
 
         private IEnumerator CrouchInFearRoutine()
@@ -571,28 +574,31 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator ChangeModeNoGuardRoutine()
         {
+            m_stateHandle.Wait(State.Patrol);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
-            yield return null;
             m_minionMode = MinionMode.NoGuard;
+            yield return null;
             m_stateHandle.ApplyQueuedState();
+            
         }
         private IEnumerator ChangeModeGuardRoutine()
         {
+            m_stateHandle.Wait(State.ReevaluateSituation);
             if (!IsFacingTarget() && !m_wallSensor.isDetecting && m_edgeSensor.isDetecting)
             {
                 m_stateHandle.SetState(State.Turning);
             }
-            m_stateHandle.Wait(State.ReevaluateSituation);
+            //m_stateHandle.Wait(State.ReevaluateSituation);
             m_animation.SetAnimation(0, m_info.idleGuardAnimation, true);
-            yield return null;
             m_minionMode = MinionMode.Guard;
+            yield return null;
             m_stateHandle.ApplyQueuedState();
         }
         private IEnumerator ChangeModeNoShieldRoutine()
         {
             m_minionMode = MinionMode.NoShield;
-            yield return null;
             m_stateHandle.SetState(State.ReevaluateSituation);
+            yield return null;
         }
 
         private IEnumerator DeathRoutine()
@@ -663,7 +669,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_movement.Stop();
                     if (IsFacingTarget())
                     {
-                        m_stateHandle.Wait(State.ReevaluateSituation);
+                        //m_stateHandle.Wait(State.ReevaluateSituation);
                         StartCoroutine(DetectRoutine());
                     }
                     else
@@ -706,8 +712,8 @@ namespace DChild.Gameplay.Characters.Enemies
                     //How far is target, is it worth it to chase or go back to patrol
                     if (m_targetInfo.isValid)
                     {
-                        SwitchModeTo(MinionMode.Guard);
-
+                        //SwitchModeTo(MinionMode.Guard);
+                        m_stateHandle.SetState(State.Detect);
                     }
                     else
                     {
@@ -730,7 +736,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     }
                     else
                     {
-                        m_turnState = State.ReevaluateSituation;
+                        m_turnState = State.Detect;
                         if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation.animation)
                             m_stateHandle.SetState(State.Turning);
                     }
@@ -746,6 +752,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     if (IsFacingTarget())
                     {
                         m_stateHandle.Wait(State.Cooldown);
+
                         switch (m_attackDecider.chosenAttack.attack)
                         {
 
@@ -758,7 +765,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     }
                     else
                     {
-                        m_turnState = State.ReevaluateSituation;
+                        m_turnState = State.Attacking;
                         if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation.animation)
                             m_stateHandle.SetState(State.Turning);
                     }
@@ -805,7 +812,6 @@ namespace DChild.Gameplay.Characters.Enemies
                         {
                             m_stateHandle.SetState(State.Turning);
                         }
-
                     }
 
                     else
@@ -826,7 +832,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 case State.Detect:
                     if (IsFacingTarget())
                     {
-                        m_stateHandle.Wait(State.ReevaluateSituation);
+                        //m_stateHandle.Wait(State.ReevaluateSituation);
                         StartCoroutine(DetectRoutine());
                     }
                     else
