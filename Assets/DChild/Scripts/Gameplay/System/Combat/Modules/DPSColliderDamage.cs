@@ -30,6 +30,13 @@ namespace DChild.Gameplay.Combat
         private List<Hitbox> m_toDamage;
         private List<Info> m_infos;
 
+        public void ForceClearAffectedColliders()
+        {
+            m_affectedColliders.Clear();
+            m_toDamage.Clear();
+            m_infos.Clear();
+        }
+
         protected override bool IsValidColliderToHit(Collider2D collision) => true;
         protected override bool IsValidHitboxToHit(Collider2D collider2D, Hitbox hitbox) => hitbox.CanBeDamageBy(m_colliders);
         protected override void HandleDamageUniqueHitboxes(Collider2D collider2D)
