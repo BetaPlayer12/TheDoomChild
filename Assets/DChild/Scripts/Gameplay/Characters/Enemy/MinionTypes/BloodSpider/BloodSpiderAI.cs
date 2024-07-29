@@ -152,6 +152,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private RaySensor m_groundSensor;
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_edgeSensor;
+        [SerializeField, TabGroup("Sensors")]
+        private RaySensor m_backWallSensor;
 
         [SerializeField, TabGroup("BoundingBox")]
         private BoundingBoxFollower m_attackBB;
@@ -176,6 +178,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private bool isStraightProjectile;
 
         private float m_targetDistance;
+        [SerializeField] float m_StompDetectRange;
 
         [ShowInInspector]
         private StateHandle<State> m_stateHandle;
@@ -259,8 +262,8 @@ namespace DChild.Gameplay.Characters.Enemies
                 //obj.transform.localPosition = new Vector2(4, -1.5f);
                 //
 
-
-                m_targetLastPos = m_targetInfo.position;
+                m_targetLastPos = m_targetInfo.position + m_info.targetOffset;
+                //m_targetLastPos = m_targetInfo.position;
 
                 //Shoot Spit
                 m_muzzleFX.Play();
@@ -271,18 +274,18 @@ namespace DChild.Gameplay.Characters.Enemies
                 float atan2 = Mathf.Atan2(v_diff.y, v_diff.x);
                 if(isStraightProjectile)
                 {
-                Debug.Log(v_diff + " AAAAAAAAAAAAAAAAHHHHHHHHHH");
-                m_projectileLauncher.AimAt(target);
-                m_projectileLauncher.LaunchProjectile();
+                    Debug.Log(v_diff + " AAAAAAAAAAAAAAAAHHHHHHHHHH");
+                    m_projectileLauncher.AimAt(target);
+                    m_projectileLauncher.LaunchProjectile();
                 }
                 else
                 {
-                var instance = GameSystem.poolManager.GetPool<ProjectilePool>().GetOrCreateItem(m_info.projectile.projectileInfo.projectile);
-                instance.transform.position = m_throwPoint.position;
-                var component = instance.GetComponent<Projectile>();
-                component.ResetState();
-                //component.GetComponent<IsolatedObjectPhysics2D>().AddForce(BallisticVel(), ForceMode2D.Impulse);
-                component.GetComponent<IsolatedObjectPhysics2D>().SetVelocity(BallisticVel());
+                    var instance = GameSystem.poolManager.GetPool<ProjectilePool>().GetOrCreateItem(m_info.projectile.projectileInfo.projectile);
+                    instance.transform.position = m_throwPoint.position;
+                    var component = instance.GetComponent<Projectile>();
+                    component.ResetState();
+                    //component.GetComponent<IsolatedObjectPhysics2D>().AddForce(BallisticVel(), ForceMode2D.Impulse);
+                    component.GetComponent<IsolatedObjectPhysics2D>().SetVelocity(BallisticVel());
                     //return instance.gameObject;
                 }
 
@@ -405,10 +408,13 @@ namespace DChild.Gameplay.Characters.Enemies
             //yield return new WaitUntil(() => m_attackBB.CurrentCollider != null);
             //SpitProjectile();
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.spitAttack.animation);
-            m_animation.EnableRootMotion(true, false);
-            m_animation.SetAnimation(0, m_info.move.animation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.move.animation);
-            m_animation.EnableRootMotion(false, false);
+            if(!m_backWallSensor.isDetecting)
+            {
+                m_animation.EnableRootMotion(true, false);
+                m_animation.SetAnimation(0, m_info.move.animation, false);
+                yield return new WaitForAnimationComplete(m_animation.animationState, m_info.move.animation);
+                m_animation.EnableRootMotion(false, false);
+            }
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_flinchHandle.m_autoFlinch = true;
             m_stateHandle.ApplyQueuedState();
@@ -593,12 +599,31 @@ namespace DChild.Gameplay.Characters.Enemies
                         if (IsFacingTarget())
                         {
                             m_attackDecider.DecideOnAttack();
-                            if (m_attackDecider.hasDecidedOnAttack && IsTargetInRange(m_attackDecider.chosenAttack.range) && !m_wallSensor.allRaysDetecting)
+                            if (m_attackDecider.hasDecidedOnAttack && IsTargetInRange(m_attackDecider.chosenAttack.range)&& !m_wallSensor.allRaysDetecting)
                             {
-                                m_movement.Stop();
-                                m_selfCollider.enabled = true;
-                                //m_animation.SetAnimation(0, m_info.idleAnimation, true);
-                                m_stateHandle.SetState(State.Attacking);
+                                if(IsTargetInRange(m_StompDetectRange))
+                                {
+                                    if(IsTargetInRange(m_info.stompAttack.range))
+                                    {
+                                        m_movement.Stop();
+                                        m_selfCollider.enabled = true;
+                                        //m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                                        m_stateHandle.SetState(State.Attacking);
+                                    }
+                                    else
+                                    {
+                                        m_animation.EnableRootMotion(true, false);
+                                        m_selfCollider.enabled = false;
+                                        m_animation.SetAnimation(0, m_info.patrol.animation, true).TimeScale = m_currentTimeScale;
+                                    }
+                                }
+                                else if (IsTargetInRange(m_attackDecider.chosenAttack.range))
+                                {
+                                    m_movement.Stop();
+                                    m_selfCollider.enabled = true;
+                                    //m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                                    m_stateHandle.SetState(State.Attacking);
+                                }
                             }
                             else
                             {

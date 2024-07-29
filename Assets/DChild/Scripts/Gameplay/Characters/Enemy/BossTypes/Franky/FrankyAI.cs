@@ -1200,8 +1200,8 @@ namespace DChild.Gameplay.Characters.Enemies
             }
             m_animation.SetAnimation(0, m_info.runAttackEndAnimation, false);
             m_movement.Stop();
-           
-            if(m_currentPhaseIndex == 3)
+
+            if (m_currentPhaseIndex == 3)
             {
                 m_animation.SetAnimation(0, m_info.phaseDischarge, false);
                 yield return new WaitForSeconds(0.7f);
@@ -1211,7 +1211,7 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 m_animation.SetAnimation(0, m_info.phaseDischarge, false);
             }
-            
+
             //yield return new WaitForSeconds(3.9f);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.phaseDischarge);
             m_isBuffed = true;
@@ -1685,33 +1685,33 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_currentAttackCoroutine = StartCoroutine(ChainedBashIRoutine());
                     break;
                 case Attack.ChainedBashII:
-                        m_currentAttackCoroutine = StartCoroutine(ChainedBashIIRoutine());
+                    m_currentAttackCoroutine = StartCoroutine(ChainedBashIIRoutine());
                     break;
                 case Attack.LightningStomp:
-                        m_attackCount++;
-                        m_currentAttackCoroutine = StartCoroutine(LightningStompRoutine());
+                    m_attackCount++;
+                    m_currentAttackCoroutine = StartCoroutine(LightningStompRoutine());
                     break;
                 case Attack.ChainShock:
-                        m_attackCount++;
-                        m_currentAttackCoroutine = StartCoroutine(ChainShockRoutine());
+                    m_attackCount++;
+                    m_currentAttackCoroutine = StartCoroutine(ChainShockRoutine());
                     break;
 
                 case Attack.RunAttack:
-                            m_attackCount++;
-                            m_currentAttackCoroutine = StartCoroutine(RunningAttackRoutine());
+                    m_attackCount++;
+                    m_currentAttackCoroutine = StartCoroutine(RunningAttackRoutine());
                     break;
                 case Attack.LeapAttack:
-                        var leapCount = 3;
-                        m_stateHandle.Wait(State.Chasing);
-                        StartCoroutine(StickToGroundRoutine(GroundPosition().y));
-                        m_currentAttackCoroutine = StartCoroutine(LeapAttackRoutine(leapCount));
-                        m_leapRoutine = m_currentAttackCoroutine;
+                    var leapCount = 3;
+                    m_stateHandle.Wait(State.Chasing);
+                    StartCoroutine(StickToGroundRoutine(GroundPosition().y));
+                    m_currentAttackCoroutine = StartCoroutine(LeapAttackRoutine(leapCount));
+                    m_leapRoutine = m_currentAttackCoroutine;
                     break;
                 case Attack.ShockRampage:
-                        m_currentAttackCoroutine = StartCoroutine(ShockRampage());
+                    m_currentAttackCoroutine = StartCoroutine(ShockRampage());
                     break;
             }
-            
+
             #region DELETE THIS LATER
             //else
             //{/*
@@ -2061,31 +2061,33 @@ namespace DChild.Gameplay.Characters.Enemies
                                             }
                                             */
                             #endregion
-                            if(!m_hasChosenAttack)
+                            if (!m_hasChosenAttack)
                             {
                                 ChooseAttack(m_currentPhaseIndex);
                                 m_hasChosenAttack = true;
                             }
-                            if(m_currentPhaseIndex>=2)
+                            if (m_currentPhaseIndex >= 2)
                             {
                                 int loopStopper = 0;
                                 do
                                 {
                                     ChooseAttack(m_currentPhaseIndex);
                                     loopStopper++;
-                                    if (loopStopper>50)
+                                    if (loopStopper > 50)
                                     {
                                         m_currentAttack = Attack.ChainedBashI;
                                         m_currentAttackRange = m_info.chainbash1Attack.range;
                                     }
-                                } while (IsTargetInRange(m_currentAttackRange) == false&&!m_isBuffed);
+                                } while (IsTargetInRange(m_currentAttackRange) == false && !m_isBuffed);
                                 ExecuteAttack();
-                            }else
+                            }
+                            else
                             {
-                                if(IsTargetInRange(m_currentAttackRange))
+                                if (IsTargetInRange(m_currentAttackRange))
                                 {
                                     ExecuteAttack();
-                                }else
+                                }
+                                else
                                 {
                                     MoveToTarget(m_currentAttackRange);
                                 }
@@ -2106,7 +2108,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     {
                         ChooseAttack(m_currentPhaseIndex);
                     }
-                    if (m_attackDecider[m_currentPhaseIndex].hasDecidedOnAttack||m_hasChosenAttack)
+                    if (m_attackDecider[m_currentPhaseIndex].hasDecidedOnAttack || m_hasChosenAttack)
                     {
                         m_stateHandle.SetState(State.Attacking);
                     }
