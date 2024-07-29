@@ -158,6 +158,8 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Modules")]
         private LerpAgent m_lerpAgent;
         [SerializeField, TabGroup("Modules")]
+        private RaySensor m_wallSensor;
+        [SerializeField, TabGroup("Modules")]
         private AILerp m_aiLerp;
         [SerializeField, TabGroup("ProjectileInfo")]
         private List<Transform> m_projectilePoints;
