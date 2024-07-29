@@ -18,7 +18,7 @@ namespace DChild.Gameplay.Cinematics.Cameras
             }
             else
             {
-                m_cameraOptions[index].gameObject.SetActive(false);
+                m_cameraOptions[index].gameObject.SetActive(true);
             }
         }
 
