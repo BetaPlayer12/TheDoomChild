@@ -35,6 +35,9 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField, BoxGroup("Consecutive Hits")]
             private Dictionary<int, float> m_consecutiveHitsToFlinchChancePair;
             public float GetFlinchChance(int hitCount) => m_consecutiveHitsToFlinchChancePair.TryGetValue(hitCount, out float value) ? value : 0;
+            [SerializeField, BoxGroup("Consecutive Hits")]
+            private float m_consecutiveHitInterval;
+            public float consecutiveHitInterval => m_consecutiveHitInterval;
 
             [SerializeField, TabGroup("Rage Quake")]
             private BasicAnimationInfo m_rageQuakeAnimation;
@@ -43,10 +46,6 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField]
             private MovementInfo m_move = new MovementInfo();
             public MovementInfo move => m_move;
-
-            [SerializeField]
-            private MovementInfo m_move2 = new MovementInfo();
-            public MovementInfo move2 => m_move2;
 
             [Title("Attack Behaviours")]
             [SerializeField, TabGroup("Attacks1", "Scythe Throw")]
@@ -74,7 +73,6 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField, TabGroup("Attacks1", "Scythe Swipe")]
             private AttackData m_scytheSwipeAttackData;
             public AttackData scytheSwipeAttackData => m_scytheSwipeAttackData;
-
 
             [SerializeField, TabGroup("Attacks1", "Scythe Smash")]
             private SimpleAttackInfo m_scytheSmashAttack = new SimpleAttackInfo();
@@ -179,7 +177,7 @@ namespace DChild.Gameplay.Characters.Enemies
             public BasicAnimationInfo flinchAnimation => m_flinchAnimation;
             [SerializeField]
             private BasicAnimationInfo m_flinchBlackAnimation;
-            public BasicAnimationInfo flinchBlackAnimation => m_flinchBlackAnimation;
+            public BasicAnimationInfo flinchBackAnimation => m_flinchBlackAnimation;
 
             [SerializeField]
             private BasicAnimationInfo m_floatAnimation;
@@ -212,7 +210,6 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_rageQuakeAnimation.SetData(m_skeletonDataAsset);
 
                 m_move.SetData(m_skeletonDataAsset);
-                m_move2.SetData(m_skeletonDataAsset);
                 m_floatAnimation.SetData(m_skeletonDataAsset);
 
                 //Attack Animations
@@ -268,7 +265,6 @@ namespace DChild.Gameplay.Characters.Enemies
             private int m_attackCount;
             public int attackCount => m_attackCount;
         }
-
 
         private enum State
         {
@@ -413,8 +409,12 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField]
         private Transform m_rightRetreatPoint;
 
+        //Consecutive Hit variables
+        [SerializeField, ReadOnly]
         private int m_consecutiveHitToFlinchCounter;
+        [SerializeField, ReadOnly]
         private float m_consectiveHitTimer;
+        [SerializeField, ReadOnly]
         private bool m_willTrackConsecutiveHits;
 
         private int m_randomAttack;
@@ -426,6 +426,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private bool m_phaseThreePhaseChangeAttackDone;
         private bool m_scriptedPhaseTwoAttackDone;
         private bool m_scriptedPhaseThreeAttackDone;
+
 
         private string[] m_idleAnimationNames; //when trying to make dynamic idle but not pursued as of 7-25-24
 
@@ -528,10 +529,12 @@ namespace DChild.Gameplay.Characters.Enemies
         #region Modules
         private IEnumerator FlinchRoutine()
         {
-            var flinch = IsFacingTarget() ? m_info.flinchAnimation : m_info.flinchBlackAnimation;
-            var flinchTrack = m_animation.SetAnimation(0, flinch, false);
-            m_animation.AddAnimation(0, m_info.idle1Animation, true, 0);
-            yield return new WaitForSpineAnimationComplete(flinchTrack);
+            var flinch = IsFacingTarget() ? m_info.flinchAnimation : m_info.flinchBackAnimation;
+            //var flinchTrack = m_animation.SetAnimation(0, flinch, false);
+            //m_animation.AddAnimation(0, m_info.idle1Animation, true, 0);
+            //yield return new WaitForSpineAnimationComplete(flinchTrack);
+            m_animation.SetAnimation(0, flinch, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, flinch);
         }
 
         private IEnumerator ChangePhaseRoutine()
@@ -542,7 +545,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_info.rageQuakeAnimation.animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.rageQuakeAnimation.animation);
             m_animation.SetAnimation(0, m_info.idle2Animation.animation, false);
-            m_willTrackConsecutiveHits = true;
+            //m_willTrackConsecutiveHits = true;
             m_stateHandle.ApplyQueuedState();
         }
         #endregion
@@ -703,6 +706,7 @@ namespace DChild.Gameplay.Characters.Enemies
             //Move back to ground level
             yield return ScytheThrowDynamicMoveRoutine(m_scytheThrowMinXMove, m_scytheThrowMaxXMove, m_groundCombatHeight);
 
+
             m_lastAttack = Attack.ScytheThrow;
             m_currentAttackDecider.hasDecidedOnAttack = false;
             m_stateHandle.ApplyQueuedState();
@@ -770,6 +774,11 @@ namespace DChild.Gameplay.Characters.Enemies
             FacePlayerInstantly();
 
             m_attacker.SetData(m_info.scytheSmashAttackData);
+
+            if(transform.position.y > m_groundCombatHeight)
+            {
+                yield return MoveIntoPositionRoutine(new Vector2(transform.position.x, m_groundCombatHeight), m_info.move.speed);
+            }
 
             m_scytheSmashDeathStench.Done += OnDeathStenchDone;
 
@@ -925,7 +934,11 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_stateHandle.Wait(State.EvaluateAction);
 
-            yield return MoveIntoPositionRoutine(m_arenaCenter.position, m_info.move.speed);
+            m_deathStenchWave.gameObject.SetActive(true);
+
+            var center = new Vector2(m_arenaCenter.position.x, m_groundCombatHeight);
+
+            yield return MoveIntoPositionRoutine(center, m_info.move.speed);
 
             m_animation.EnableRootMotion(true, true);
             m_animation.SetAnimation(0, m_info.deathStenchWaveAnticipation, false);
@@ -941,6 +954,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
             m_animation.SetAnimation(0, m_info.floatAnimation.animation, true);
             yield return new WaitForSeconds(1.5f);
+
+            m_deathStenchWave.gameObject.SetActive(false);
 
             m_currentAttackDecider.hasDecidedOnAttack = false;
             m_stateHandle.ApplyQueuedState();
@@ -1055,49 +1070,49 @@ namespace DChild.Gameplay.Characters.Enemies
 
         }
 
-        private IEnumerator DynamicChasePlayerRoutine(float speed)
-        {
-            m_stateHandle.Wait(State.ReevaluateSituation);
+        //private IEnumerator DynamicChasePlayerRoutine(float speed)
+        //{
+        //    m_stateHandle.Wait(State.ReevaluateSituation);
 
-            var randomChaseTime = Random.Range(m_info.minMoveTime, m_info.maxMoveTime);
+        //    var randomChaseTime = Random.Range(m_info.minMoveTime, m_info.maxMoveTime);
 
-            if(transform.position.y > m_groundCombatHeight)
-            {
-                var groundPos = new Vector3(transform.position.x, m_groundCombatHeight, transform.position.z);
-                yield return MoveIntoPositionRoutine(groundPos, m_info.move.speed);
-            }          
+        //    if(transform.position.y > m_groundCombatHeight)
+        //    {
+        //        var groundPos = new Vector3(transform.position.x, m_groundCombatHeight, transform.position.z);
+        //        yield return MoveIntoPositionRoutine(groundPos, m_info.move.speed);
+        //    }          
 
-            m_agent.Stop();
+        //    m_agent.Stop();
 
-            while (randomChaseTime > 0)
-            {
-                FacePlayerInstantly();
-                if (!IsFacingTarget())
-                {
-                    m_animation.SetAnimation(0, m_info.idle1Animation, true);
-                }
-                else
-                {
-                    m_animation.SetAnimation(0, m_info.move.animation, true);
-                }
+        //    while (randomChaseTime > 0)
+        //    {
+        //        FacePlayerInstantly();
+        //        if (!IsFacingTarget())
+        //        {
+        //            m_animation.SetAnimation(0, m_info.idle1Animation, true);
+        //        }
+        //        else
+        //        {
+        //            m_animation.SetAnimation(0, m_info.move.animation, true);
+        //        }
 
-                m_agent.SetDestination(new Vector2(m_targetInfo.position.x, m_groundCombatHeight));
-                m_agent.Move(speed);
+        //        m_agent.SetDestination(new Vector2(m_targetInfo.position.x, m_groundCombatHeight));
+        //        m_agent.Move(speed);
 
-                if (IsTargetInRange(m_info.shortRangedAttackEvaluateDistance) || m_rightWallSensor.isDetecting)
-                {
-                    m_agent.Stop();
-                    randomChaseTime = 0;
-                }
+        //        if (IsTargetInRange(m_info.shortRangedAttackEvaluateDistance) || m_rightWallSensor.isDetecting)
+        //        {
+        //            m_agent.Stop();
+        //            randomChaseTime = 0;
+        //        }
 
-                randomChaseTime -= Time.deltaTime;
-                yield return null;
-            }
+        //        randomChaseTime -= Time.deltaTime;
+        //        yield return null;
+        //    }
 
-            m_evaluateActionBeforeAttack = null;
+        //    m_evaluateActionBeforeAttack = null;
 
-            m_stateHandle.ApplyQueuedState();
-        }
+        //    m_stateHandle.ApplyQueuedState();
+        //}
 
         private IEnumerator DyanamicMovementBeforeAttackRoutine(float speed, bool willChase)
         {
@@ -1306,10 +1321,8 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_currentAttackDecider.DecideOnAttack();
                     yield return null;
                 }
-                while (m_currentAttackDecider.chosenAttack.attack == m_lastAttack);
-                    
-            }
-           
+                while (m_currentAttackDecider.chosenAttack.attack == m_lastAttack);                   
+            }          
         }
 
         public override void ApplyData()
@@ -1319,20 +1332,36 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnDamageTaken(object sender, Damageable.DamageEventArgs eventArgs)
         {
-            if (m_willTrackConsecutiveHits)
+            m_willTrackConsecutiveHits = true;
+            m_consecutiveHitToFlinchCounter++;
+
+            if (m_consecutiveHitToFlinchCounter == 5)
             {
-                TrackConsecutiveHit();
+                Debug.Log("Will Flinch");
+                ForcedFlinch();
             }
 
-            var flinchChance = m_info.GetFlinchChance(m_consecutiveHitToFlinchCounter);
-            if (flinchChance > 0)
-            {
-                if (Random.Range(0, 1f) <= flinchChance)
-                {
-                    m_consecutiveHitToFlinchCounter = 0;
-                    ForcedFlinch();
-                }
-            }
+            //if (m_willTrackConsecutiveHits)
+            //{
+            //    TrackConsecutiveHit();
+            //}
+
+            //if(m_consectiveHitTimer > 0)
+            //{
+            //    m_consectiveHitTimer = m_info.consecutiveHitInterval;
+            //    m_consecutiveHitCount++;
+            //    m_willTrackConsecutiveHits
+            //}
+            //var flinchChance = m_info.GetFlinchChance(m_consecutiveHitToFlinchCounter);
+            //if (flinchChance > 0)
+            //{
+            //    if (Random.Range(0, 1f) <= flinchChance)
+            //    {
+            //        m_consecutiveHitToFlinchCounter = 0;
+            //        ForcedFlinch();
+            //    }
+            //}
+
         }
 
         private void TrackConsecutiveHit()
@@ -1348,12 +1377,6 @@ namespace DChild.Gameplay.Characters.Enemies
             m_consectiveHitTimer = m_info.consecutiveHitToFlinchInterval;
         }
 
-        private void ForcedFlinch()
-        {
-            //StopCurrentBehaviour
-            StartCoroutine(ConsecutiveHitFlinchRoutine());
-        }
-
         private IEnumerator ConsecutiveHitFlinchRoutine()
         {
             m_stateHandle.Wait(State.ReevaluateSituation);
@@ -1361,6 +1384,13 @@ namespace DChild.Gameplay.Characters.Enemies
             m_stateHandle.ApplyQueuedState();
         }
 
+
+        private void ForcedFlinch()
+        {
+            //StopCurrentBehaviour
+            StopAllCoroutines();
+            StartCoroutine(ConsecutiveHitFlinchRoutine());
+        }
 
         protected override void Awake()
         {
@@ -1374,7 +1404,6 @@ namespace DChild.Gameplay.Characters.Enemies
             m_longRangedAttackDecider = new RandomAttackDecider<Attack>();
             m_royalGuardianAttackDecider = new RandomAttackDecider<Attack>();
             m_stateHandle = new StateHandle<State>(State.Idle, State.WaitBehaviourEnd);
-            m_willTrackConsecutiveHits = true;
             UpdateAttackDeciderList();
 
             m_idleAnimationNames[0] = m_info.idle1Animation.animation;
@@ -1397,6 +1426,10 @@ namespace DChild.Gameplay.Characters.Enemies
             m_phaseTwoPhaseChangeAttackDone = false;
             m_phaseThreePhaseChangeAttackDone = false;
 
+            m_willTrackConsecutiveHits = false;
+            m_consecutiveHitToFlinchCounter = 0;
+            m_consectiveHitTimer = m_info.consecutiveHitInterval;
+
             m_phaseHandle = new PhaseHandle<Phase, PhaseInfo>();
             m_phaseHandle.Initialize(Phase.PhaseOne, m_info.phaseInfo, m_character, ChangeState, ApplyPhaseData);
             m_phaseHandle.ApplyChange();
@@ -1406,6 +1439,18 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_consectiveHitTimer -= GameplaySystem.time.deltaTime;
             m_phaseHandle.MonitorPhase();
+
+            //if(m_willTrackConsecutiveHits)
+            //{
+            //    m_consectiveHitTimer -= Time.deltaTime;
+            //}
+
+            if(m_consectiveHitTimer <= 0)
+            {
+                m_willTrackConsecutiveHits = false;
+                m_consecutiveHitToFlinchCounter = 0;
+                m_consectiveHitTimer = m_info.consecutiveHitInterval;
+            }
 
             switch (m_stateHandle.currentState)
             {
