@@ -46,6 +46,9 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField]
             private float m_patienceDistanceTolerance = 50f;
             public float patienceDistanceTolerance => m_patienceDistanceTolerance;
+            [SerializeField]
+            private float m_distanceToOriginReturnTolerance = 10f;
+            public float distanceToOriginReturnTolerance => m_distanceToOriginReturnTolerance;
 
             //Animations
             [SerializeField]
@@ -204,6 +207,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private bool m_isDetecting;
         private bool m_isAggro;
         private bool m_isFirstPatrol = true;
+        private bool m_returnToOriginalPos;
         private Vector2 m_startPos;
 
         private List<Vector2> m_Points;
@@ -267,6 +271,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_mimicPustuleBombChain.enabled = false;
                 m_flinchHandle.SetAnimation(m_info.flinchUnAggroAnimation.animation);
                 m_flinchHandle.SetIdleAnimation(m_info.idleUnAggroAnimation1.animation);
+                StartCoroutine(ReturnToOriginalPosition(5f));
             }
             if (m_animation.GetCurrentAnimation(0).ToString() == m_info.idleAggroAnimation1.animation || m_stateHandle.currentState == State.Cooldown)
             {
@@ -513,7 +518,12 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator DelayChainActivation(float delay)
         {
             yield return new WaitForSeconds(delay);
-            //m_mimicPustuleBombChain.enabled = true;
+            if(Vector2.Distance(m_startPos, transform.position) > m_info.distanceToOriginReturnTolerance)
+            {
+                m_returnToOriginalPos = true;
+                m_stateHandle.OverrideState(State.ReturnToPatrol);
+                //m_mimicPustuleBombChain.enabled = true;
+            }
         }
 
         private void DynamicMovement(Vector2 target, float moveSpeed)
@@ -527,6 +537,12 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 m_stateHandle.OverrideState(State.Turning);
             }
+        }
+
+        private IEnumerator ReturnToOriginalPosition(float delay)
+        {
+            yield return new WaitForSeconds(delay);
+            m_returnToOriginalPos=true;
         }
 
 
@@ -610,7 +626,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         m_detectRoutine = null;
                     }
                    
-                    if (Vector2.Distance(m_startPos, transform.position) > 10f)
+                    if (Vector2.Distance(m_startPos, transform.position) > 5f)
                     {
                         if (m_isAggro) 
                         {
@@ -627,6 +643,16 @@ namespace DChild.Gameplay.Characters.Enemies
                         if (m_isAggro)
                         {
                             StartCoroutine(TransformUnAggroRoutine());
+                        }
+                        Debug.Log(Vector2.Distance(m_startPos, transform.position));
+                        if(m_returnToOriginalPos)//&& Vector2.Distance(m_startPos, transform.position) < 0.2f)
+                        {
+                            m_mimicPustuleBombChain.enabled = true;
+                            m_returnToOriginalPos = false;
+                            m_rigidbody2D.velocity = new Vector2(0f,0f);
+                        }else
+                        {
+                            DynamicMovement(m_startPos, 2f);
                         }
                         m_aggroGroup.SetActive(false);
                         m_stateHandle.OverrideState(State.Patrol);
@@ -652,7 +678,10 @@ namespace DChild.Gameplay.Characters.Enemies
                     {
                         m_randomRangeMin = 10f;
                         m_randomRangeMax = 20f;
-                        StartCoroutine(DelayChainActivation(5f));
+                        if(!m_isAggro)
+                        {
+                            StartCoroutine(DelayChainActivation(5f));
+                        }
                     }
                     Vector3 v_diff = new Vector3(UnityEngine.Random.Range(m_randomRangeMin, m_randomRangeMax), UnityEngine.Random.Range(m_randomRangeMin, m_randomRangeMax), UnityEngine.Random.Range(m_randomRangeMin, m_randomRangeMax));   
                     float atan2 = Mathf.Atan2(v_diff.y, v_diff.x); 
