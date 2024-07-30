@@ -352,55 +352,6 @@ MonoBehaviour:
   m_destinationTolerance: 2
   m_refreshPath: 0
   m_refreshRate: 0
---- !u!1 &4404718800106359198
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 3233770032413939535}
-  - component: {fileID: 3165303421095709098}
-  m_Layer: 13
-  m_Name: Wall Sensor
-  m_TagString: Sensor
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!4 &3233770032413939535
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4404718800106359198}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 5.87, y: 1.64, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 388089784707078698}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3165303421095709098
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4404718800106359198}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 11a5cea4c16e7c4478a55620f5e666e1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_multiRaycast:
-    m_config: {fileID: 11400000, guid: 2a90c80a61ff710429a671e854893df8, type: 2}
-    m_rayColor: {r: 0, g: 1, b: 0, a: 1}
-  m_enable: 1
-  m_debugMode: 1
 --- !u!1 &9175086080216509231
 GameObject:
   m_ObjectHideFlags: 0
@@ -580,12 +531,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 05a77d4ff156d13409be74a4081d80d8, type: 3}
---- !u!4 &388089784707078698 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 311893342749732431, guid: 05a77d4ff156d13409be74a4081d80d8,
-    type: 3}
-  m_PrefabInstance: {fileID: 87491223472075877}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1940370278718307436 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2007269188074113033, guid: 05a77d4ff156d13409be74a4081d80d8,
@@ -610,31 +555,6 @@ Rigidbody2D:
     type: 3}
   m_PrefabInstance: {fileID: 87491223472075877}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &3011588318091481400 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2953687713113138525, guid: 05a77d4ff156d13409be74a4081d80d8,
-    type: 3}
-  m_PrefabInstance: {fileID: 87491223472075877}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &6263208000721099291
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3011588318091481400}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 031d913f8e944d94ea27af5ede12eecb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_sensors:
-  - {fileID: 3165303421095709098}
-  m_useDistance: 1
-  m_castPerDistance: 0.5
-  m_useTime: 1
-  m_castPerSecond:
-    m_startTime: 0.5
 --- !u!114 &3107339978522777374 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3038146283173585787, guid: 05a77d4ff156d13409be74a4081d80d8,
@@ -1088,7 +1008,6 @@ MonoBehaviour:
   m_deathHandle: {fileID: 3083025403035253608}
   m_flinchHandle: {fileID: 4061554359700875270}
   m_lerpAgent: {fileID: 7401379194323112480}
-  m_wallSensor: {fileID: 3165303421095709098}
   m_aiLerp: {fileID: 4482795558263560851}
   m_projectilePoints:
   - {fileID: 3609907432325754597}
