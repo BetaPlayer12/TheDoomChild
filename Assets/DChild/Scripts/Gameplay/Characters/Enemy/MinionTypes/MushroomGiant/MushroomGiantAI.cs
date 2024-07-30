@@ -157,6 +157,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private GameObject m_attackBB;
         [SerializeField, TabGroup("Reference")]
         private Collider2D m_selfCollider;
+        [SerializeField, TabGroup("Reference")]
+        private Collider2D m_bodyCollider;
         [SerializeField, TabGroup("Modules")]
         private TransformTurnHandle m_turnHandle;
         [SerializeField, TabGroup("Modules")]
@@ -334,7 +336,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private void UpdateAttackDeciderList()
         {
             m_attackDecider.SetList(new AttackInfo<Attack>(Attack.Attack3, m_info.attack1.range),/**/
-                                    new AttackInfo<Attack>(Attack.Attack1, m_info.attack3.range),
+                                    //new AttackInfo<Attack>(Attack.Attack1, m_info.attack3.range),
                                     new AttackInfo<Attack>(Attack.Attack2, m_info.attack2.range));
             m_attackDecider.hasDecidedOnAttack = false;
         }
@@ -361,11 +363,13 @@ namespace DChild.Gameplay.Characters.Enemies
             var bounceDir = new Vector2(m_info.attack2Velocity.x * transform.localScale.x, m_info.attack2Velocity.y);
             m_character.physics.SetVelocity(bounceDir);
             m_flinchHandle.gameObject.SetActive(false);
+            m_bodyCollider.enabled = false;
             //m_hitbox.SetInvulnerability(true);
             //m_hitbox.gameObject.SetActive(false);
             yield return new WaitForSeconds(m_info.attack2AirTime);
             yield return new WaitUntil(() => m_groundSensor.isDetecting);
             m_animation.SetAnimation(0, m_info.attack2_bounce, false);
+            m_bodyCollider.enabled = true;
             yield return new WaitForSeconds(.75f);
             m_character.physics.SetVelocity(new Vector2(m_info.attack2Bounce2Velocity.x * transform.localScale.x, m_info.attack2Bounce2Velocity.y));
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack2_bounce);
@@ -478,10 +482,10 @@ namespace DChild.Gameplay.Characters.Enemies
 
                     switch (m_attackDecider.chosenAttack.attack)
                     {
-                        case Attack.Attack1:
-                            m_animation.EnableRootMotion(true, false);
-                            m_attackHandle.ExecuteAttack(m_info.attack1.animation, m_info.idleAnimation.animation);
-                            break;
+                    //    case Attack.Attack1:
+                    //        m_animation.EnableRootMotion(true, false);
+                    //        m_attackHandle.ExecuteAttack(m_info.attack1.animation, m_info.idleAnimation.animation);
+                    //        break;
                         case Attack.Attack2:
                             m_animation.EnableRootMotion(false, false);
                             //m_attackHandle.ExecuteAttack(m_info.attack2_downward.animation, m_info.idleAnimation);
