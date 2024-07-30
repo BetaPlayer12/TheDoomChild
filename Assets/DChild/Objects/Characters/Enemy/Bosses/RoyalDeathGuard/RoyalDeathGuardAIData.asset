@@ -698,9 +698,6 @@ MonoBehaviour:
     - Name: 
       Entry: 8
       Data: 
-    - Name: m_consecutiveHitToFlinchInterval
-      Entry: 4
-      Data: 0
     - Name: m_consecutiveHitsToFlinchChancePair
       Entry: 7
       Data: 22|UnityEngine.Rendering.SerializedDictionary`2[[System.Int32, mscorlib],[System.Single,
@@ -745,6 +742,12 @@ MonoBehaviour:
     - Name: 
       Entry: 8
       Data: 
+    - Name: m_consecutiveHitInterval
+      Entry: 4
+      Data: 2
+    - Name: m_maxConsecutiveHits
+      Entry: 3
+      Data: 5
     - Name: m_rageQuakeAnimation
       Entry: 7
       Data: 24|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.RoyalDeathGuardAI+Info,
@@ -774,25 +777,9 @@ MonoBehaviour:
     - Name: 
       Entry: 8
       Data: 
-    - Name: m_move2
-      Entry: 7
-      Data: 26|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+MovementInfo[[DChild.Gameplay.Characters.Enemies.RoyalDeathGuardAI+Info,
-        Assembly-CSharp]], Assembly-CSharp
-    - Name: m_animation
-      Entry: 1
-      Data: Move2
-    - Name: m_timeScale
-      Entry: 4
-      Data: 1
-    - Name: m_speed
-      Entry: 4
-      Data: 20
-    - Name: 
-      Entry: 8
-      Data: 
     - Name: m_scytheThrowAttack
       Entry: 7
-      Data: 27|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.RoyalDeathGuardAI+Info,
+      Data: 26|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.RoyalDeathGuardAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
@@ -808,7 +795,7 @@ MonoBehaviour:
       Data: 
     - Name: m_scytheThrowAnticipation
       Entry: 7
-      Data: 28|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.RoyalDeathGuardAI+Info,
+      Data: 27|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.RoyalDeathGuardAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
@@ -821,7 +808,7 @@ MonoBehaviour:
       Data: 
     - Name: m_scytheThrowThrow
       Entry: 7
-      Data: 29|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.RoyalDeathGuardAI+Info,
+      Data: 28|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.RoyalDeathGuardAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
@@ -834,7 +821,7 @@ MonoBehaviour:
       Data: 
     - Name: m_scytheThrowWaitForScythe
       Entry: 7
-      Data: 30|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.RoyalDeathGuardAI+Info,
+      Data: 29|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.RoyalDeathGuardAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
@@ -847,7 +834,7 @@ MonoBehaviour:
       Data: 
     - Name: m_scytheThrowCatch
       Entry: 7
-      Data: 31|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.RoyalDeathGuardAI+Info,
+      Data: 30|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.RoyalDeathGuardAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
@@ -860,7 +847,7 @@ MonoBehaviour:
       Data: 
     - Name: m_scytheSwipeAttack
       Entry: 7
-      Data: 32|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.RoyalDeathGuardAI+Info,
+      Data: 31|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.RoyalDeathGuardAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
@@ -876,7 +863,7 @@ MonoBehaviour:
       Data: 
     - Name: m_scytheSwipeAnticipation
       Entry: 7
-      Data: 33|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.RoyalDeathGuardAI+Info,
+      Data: 32|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.RoyalDeathGuardAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 6
@@ -892,7 +879,7 @@ MonoBehaviour:
       Data: 1
     - Name: m_scytheSmashAttack
       Entry: 7
-      Data: 34|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.RoyalDeathGuardAI+Info,
+      Data: 33|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.RoyalDeathGuardAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
@@ -908,7 +895,7 @@ MonoBehaviour:
       Data: 
     - Name: m_scytheSmashAnticipation
       Entry: 7
-      Data: 35|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.RoyalDeathGuardAI+Info,
+      Data: 34|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.RoyalDeathGuardAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
@@ -921,7 +908,7 @@ MonoBehaviour:
       Data: 
     - Name: m_scytheSmashGroundLoop
       Entry: 7
-      Data: 36|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.RoyalDeathGuardAI+Info,
+      Data: 35|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.RoyalDeathGuardAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
@@ -934,7 +921,7 @@ MonoBehaviour:
       Data: 
     - Name: m_scytheSmashRemoveScytheFromGround
       Entry: 7
-      Data: 37|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.RoyalDeathGuardAI+Info,
+      Data: 36|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.RoyalDeathGuardAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
@@ -950,7 +937,7 @@ MonoBehaviour:
       Data: 2
     - Name: m_royalGuardianShieldSummon
       Entry: 7
-      Data: 38|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.RoyalDeathGuardAI+Info,
+      Data: 37|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.RoyalDeathGuardAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
@@ -963,7 +950,7 @@ MonoBehaviour:
       Data: 
     - Name: m_royalGuardianAnticipation
       Entry: 7
-      Data: 39|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.RoyalDeathGuardAI+Info,
+      Data: 38|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.RoyalDeathGuardAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
@@ -976,7 +963,7 @@ MonoBehaviour:
       Data: 
     - Name: m_royalGuardianShieldSlam
       Entry: 7
-      Data: 40|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.RoyalDeathGuardAI+Info,
+      Data: 39|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.RoyalDeathGuardAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
@@ -989,7 +976,7 @@ MonoBehaviour:
       Data: 
     - Name: m_scytheSwipeTwoAttack
       Entry: 7
-      Data: 41|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.RoyalDeathGuardAI+Info,
+      Data: 40|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.RoyalDeathGuardAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
@@ -1005,7 +992,7 @@ MonoBehaviour:
       Data: 
     - Name: m_scytheSwipeTwoAnticipation
       Entry: 7
-      Data: 42|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.RoyalDeathGuardAI+Info,
+      Data: 41|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.RoyalDeathGuardAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 6
@@ -1021,7 +1008,7 @@ MonoBehaviour:
       Data: 3
     - Name: m_harvestAttack
       Entry: 7
-      Data: 43|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.RoyalDeathGuardAI+Info,
+      Data: 42|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.RoyalDeathGuardAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
@@ -1037,7 +1024,7 @@ MonoBehaviour:
       Data: 
     - Name: m_harvestAnticipation
       Entry: 7
-      Data: 44|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.RoyalDeathGuardAI+Info,
+      Data: 43|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.RoyalDeathGuardAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
@@ -1050,7 +1037,7 @@ MonoBehaviour:
       Data: 
     - Name: m_harvestPullNoHeal
       Entry: 7
-      Data: 45|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.RoyalDeathGuardAI+Info,
+      Data: 44|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.RoyalDeathGuardAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
@@ -1063,7 +1050,7 @@ MonoBehaviour:
       Data: 
     - Name: m_harvestPullWithHeal
       Entry: 7
-      Data: 46|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.RoyalDeathGuardAI+Info,
+      Data: 45|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.RoyalDeathGuardAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
@@ -1076,7 +1063,7 @@ MonoBehaviour:
       Data: 
     - Name: m_harvestScytheDrag
       Entry: 7
-      Data: 47|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.RoyalDeathGuardAI+Info,
+      Data: 46|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.RoyalDeathGuardAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
@@ -1098,7 +1085,7 @@ MonoBehaviour:
       Data: 80
     - Name: m_deathStenchWaveAttack
       Entry: 7
-      Data: 48|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.RoyalDeathGuardAI+Info,
+      Data: 47|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.RoyalDeathGuardAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
@@ -1114,7 +1101,7 @@ MonoBehaviour:
       Data: 
     - Name: m_deathStenchWaveAnticipation
       Entry: 7
-      Data: 49|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.RoyalDeathGuardAI+Info,
+      Data: 48|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.RoyalDeathGuardAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
@@ -1145,7 +1132,7 @@ MonoBehaviour:
       Data: 0.5
     - Name: m_deathAnimation
       Entry: 7
-      Data: 50|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.RoyalDeathGuardAI+Info,
+      Data: 49|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.RoyalDeathGuardAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
@@ -1158,7 +1145,7 @@ MonoBehaviour:
       Data: 
     - Name: m_defeatAnimation
       Entry: 7
-      Data: 51|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.RoyalDeathGuardAI+Info,
+      Data: 50|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.RoyalDeathGuardAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
@@ -1171,7 +1158,7 @@ MonoBehaviour:
       Data: 
     - Name: m_defeat2Animation
       Entry: 7
-      Data: 52|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.RoyalDeathGuardAI+Info,
+      Data: 51|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.RoyalDeathGuardAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
@@ -1184,7 +1171,7 @@ MonoBehaviour:
       Data: 
     - Name: m_flinchAnimation
       Entry: 7
-      Data: 53|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.RoyalDeathGuardAI+Info,
+      Data: 52|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.RoyalDeathGuardAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
@@ -1197,7 +1184,7 @@ MonoBehaviour:
       Data: 
     - Name: m_flinchBlackAnimation
       Entry: 7
-      Data: 54|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.RoyalDeathGuardAI+Info,
+      Data: 53|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.RoyalDeathGuardAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
@@ -1210,7 +1197,7 @@ MonoBehaviour:
       Data: 
     - Name: m_floatAnimation
       Entry: 7
-      Data: 55|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.RoyalDeathGuardAI+Info,
+      Data: 54|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.RoyalDeathGuardAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
@@ -1223,7 +1210,7 @@ MonoBehaviour:
       Data: 
     - Name: m_idle1Animation
       Entry: 7
-      Data: 56|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.RoyalDeathGuardAI+Info,
+      Data: 55|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.RoyalDeathGuardAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
@@ -1236,7 +1223,7 @@ MonoBehaviour:
       Data: 
     - Name: m_idle2Animation
       Entry: 7
-      Data: 57|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.RoyalDeathGuardAI+Info,
+      Data: 56|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.RoyalDeathGuardAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
@@ -1249,7 +1236,7 @@ MonoBehaviour:
       Data: 
     - Name: m_idleTransition1to2Animation
       Entry: 7
-      Data: 58|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.RoyalDeathGuardAI+Info,
+      Data: 57|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.RoyalDeathGuardAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
@@ -1262,7 +1249,7 @@ MonoBehaviour:
       Data: 
     - Name: m_idleTransition2to1Animation
       Entry: 7
-      Data: 59|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.RoyalDeathGuardAI+Info,
+      Data: 58|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.RoyalDeathGuardAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
@@ -1275,7 +1262,7 @@ MonoBehaviour:
       Data: 
     - Name: m_playerDetectAnimation
       Entry: 7
-      Data: 60|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.RoyalDeathGuardAI+Info,
+      Data: 59|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.RoyalDeathGuardAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
@@ -1288,7 +1275,7 @@ MonoBehaviour:
       Data: 
     - Name: m_turnAnimation
       Entry: 7
-      Data: 61|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.RoyalDeathGuardAI+Info,
+      Data: 60|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.RoyalDeathGuardAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
@@ -1301,7 +1288,7 @@ MonoBehaviour:
       Data: 
     - Name: m_energyAbsorbAnimation
       Entry: 7
-      Data: 62|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.RoyalDeathGuardAI+Info,
+      Data: 61|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.RoyalDeathGuardAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
