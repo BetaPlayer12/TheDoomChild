@@ -29,15 +29,15 @@ namespace DChild.Gameplay.Characters.Enemies
             private PhaseInfo<Phase> m_phaseInfo;
             public PhaseInfo<Phase> phaseInfo => m_phaseInfo;
 
-            [SerializeField, Min(0.1f), BoxGroup("Consecutive Hits")]
-            private float m_consecutiveHitToFlinchInterval;
-            public float consecutiveHitToFlinchInterval => m_consecutiveHitToFlinchInterval;
             [SerializeField, BoxGroup("Consecutive Hits")]
             private Dictionary<int, float> m_consecutiveHitsToFlinchChancePair;
             public float GetFlinchChance(int hitCount) => m_consecutiveHitsToFlinchChancePair.TryGetValue(hitCount, out float value) ? value : 0;
             [SerializeField, BoxGroup("Consecutive Hits")]
             private float m_consecutiveHitInterval;
             public float consecutiveHitInterval => m_consecutiveHitInterval;
+            [SerializeField, BoxGroup("Consecutive Hits")]
+            private int m_maxConsecutiveHits;
+            public float maxConsecutiveHits => m_maxConsecutiveHits;
 
             [SerializeField, TabGroup("Rage Quake")]
             private BasicAnimationInfo m_rageQuakeAnimation;
@@ -1333,48 +1333,20 @@ namespace DChild.Gameplay.Characters.Enemies
         private void OnDamageTaken(object sender, Damageable.DamageEventArgs eventArgs)
         {
             m_willTrackConsecutiveHits = true;
+            m_consectiveHitTimer = m_info.consecutiveHitInterval;
+
+            if(m_consecutiveHitToFlinchCounter >= m_info.maxConsecutiveHits)
+                m_consecutiveHitToFlinchCounter = 0;
+
             m_consecutiveHitToFlinchCounter++;
 
-            if (m_consecutiveHitToFlinchCounter == 5)
+            float randomFlinchChanceValue = Random.Range(1, 100);
+
+            if(randomFlinchChanceValue < m_info.GetFlinchChance(m_consecutiveHitToFlinchCounter))
             {
                 Debug.Log("Will Flinch");
                 ForcedFlinch();
             }
-
-            //if (m_willTrackConsecutiveHits)
-            //{
-            //    TrackConsecutiveHit();
-            //}
-
-            //if(m_consectiveHitTimer > 0)
-            //{
-            //    m_consectiveHitTimer = m_info.consecutiveHitInterval;
-            //    m_consecutiveHitCount++;
-            //    m_willTrackConsecutiveHits
-            //}
-            //var flinchChance = m_info.GetFlinchChance(m_consecutiveHitToFlinchCounter);
-            //if (flinchChance > 0)
-            //{
-            //    if (Random.Range(0, 1f) <= flinchChance)
-            //    {
-            //        m_consecutiveHitToFlinchCounter = 0;
-            //        ForcedFlinch();
-            //    }
-            //}
-
-        }
-
-        private void TrackConsecutiveHit()
-        {
-            if (m_consectiveHitTimer > 0)
-            {
-                m_consecutiveHitToFlinchCounter++;
-            }
-            else
-            {
-                m_consecutiveHitToFlinchCounter = 1;
-            }
-            m_consectiveHitTimer = m_info.consecutiveHitToFlinchInterval;
         }
 
         private IEnumerator ConsecutiveHitFlinchRoutine()
@@ -1440,15 +1412,17 @@ namespace DChild.Gameplay.Characters.Enemies
             m_consectiveHitTimer -= GameplaySystem.time.deltaTime;
             m_phaseHandle.MonitorPhase();
 
-            //if(m_willTrackConsecutiveHits)
-            //{
-            //    m_consectiveHitTimer -= Time.deltaTime;
-            //}
-
-            if(m_consectiveHitTimer <= 0)
+            if(m_willTrackConsecutiveHits)
             {
-                m_willTrackConsecutiveHits = false;
-                m_consecutiveHitToFlinchCounter = 0;
+                if (m_consectiveHitTimer <= 0)
+                {
+                    m_willTrackConsecutiveHits = false;
+                    m_consecutiveHitToFlinchCounter = 0;
+                }
+            }
+
+            if(!m_willTrackConsecutiveHits)
+            {
                 m_consectiveHitTimer = m_info.consecutiveHitInterval;
             }
 
