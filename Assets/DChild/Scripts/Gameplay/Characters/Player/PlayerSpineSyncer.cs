@@ -42,8 +42,8 @@ namespace DChild.Visuals
         private void SyncPosition(SpineSyncer reference)
         {
             var referenceTransform = reference.transform;
-            referenceTransform.position = transform.position;
-            referenceTransform.localScale = transform.localScale;
+            transform.position = referenceTransform.position;
+            transform.localScale = referenceTransform.localScale;
         }
 
         private void SyncAnimation(SpineSyncer reference)
