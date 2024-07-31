@@ -202,7 +202,6 @@ namespace DChild.Gameplay.Characters.Enemies
         private Coroutine m_attackRoutine;
         private Coroutine m_summonStormCloudCoroutine;
         private Coroutine m_patienceRoutine;
-        private Coroutine m_moveAwayFromPlayerRoutine;
 
 
 
@@ -482,10 +481,10 @@ namespace DChild.Gameplay.Characters.Enemies
             var bookCenter = new Vector2(transform.position.x, transform.position.y);
 
             var stormCloudPositions = new List<Vector2>();
-            var bufferSpace = 5f;
+            var bufferSpace = 10f;
 
             var currentStormCloudPositions = new List<Vector2>();
-      
+            var stormCloudSpacing = 15f;
 
             for (int i = 0; i < numOfClouds; i++)
             {
@@ -510,7 +509,8 @@ namespace DChild.Gameplay.Characters.Enemies
                 } while (IsOverlapping(spawnPosition, stormCloudPositions) ||
                          IsOverlappingWithTome(spawnPosition, bookCenter) ||
                          IsOverlappingWithEnvironment(spawnPosition, m_info.cloudSize) ||
-                         IsOverlapping(spawnPosition, m_summonedStormCloudPositions) || attempts >= 100);
+                         IsOverlapping(spawnPosition, m_summonedStormCloudPositions) ||
+                         IsOverlappingWithStormClouds(spawnPosition, stormCloudPositions, stormCloudSpacing) || attempts >= 100);
 
                 var instance = InstantiateStormCloud(spawnPosition);
                 instance.GetComponent<StormCloud>().OnDestroyedInstance += OnDestroyedInstance;
@@ -521,6 +521,19 @@ namespace DChild.Gameplay.Characters.Enemies
             }
             stormCloudPositions.Clear();
             yield return m_summonStormCloudCoroutine = null;
+        }
+
+
+        private bool IsOverlappingWithStormClouds(Vector2 position, List<Vector2> otherPositions, float spacing)
+        {
+            foreach (var otherPosition in otherPositions)
+            {
+                if (Vector2.Distance(position, otherPosition) < spacing)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         private GameObject InstantiateStormCloud(Vector2 spawnPosition)

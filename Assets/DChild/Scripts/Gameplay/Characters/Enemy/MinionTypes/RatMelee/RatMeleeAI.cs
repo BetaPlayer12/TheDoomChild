@@ -214,10 +214,10 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_enablePatience = false;
                 }
             }
-            else
+            /*else
             {
                 m_enablePatience = true;
-            }
+            }*/
         }
 
         private bool TargetBlocked()
@@ -311,9 +311,9 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             //m_Audiosource.clip = m_DeadClip;
             //m_Audiosource.Play();
+            StartCoroutine(ReturnItem());
             StopAllCoroutines();
             base.OnDestroyed(sender, eventArgs);
-            
             m_characterPhysics.UseStepClimb(true);
             m_movement.Stop();
             m_selfCollider.enabled = false;
@@ -557,7 +557,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     }
                     else
                     {
-                        if (Vector2.Distance(m_targetInfo.position, transform.position) <= m_info.targetDistanceTolerance /*&& !m_wallSensor.isDetecting && m_groundSensor.isDetecting*/ && m_edgeSensor.isDetecting)
+                        if (Vector2.Distance(m_targetInfo.position, transform.position) <= m_info.targetDistanceTolerance /*&& !m_wallSensor.isDetecting && m_groundSensor.isDetecting*/ && m_edgeSensor.isDetecting && !m_wallSensor.isDetecting)
                         {
                             var distance = Vector2.Distance(m_targetInfo.position, transform.position);
                             m_animation.SetAnimation(0, distance >= m_info.targetDistanceTolerance ? m_info.move.animation : m_info.patrol.animation, true);
@@ -567,7 +567,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         {
                             m_movement.Stop();
                             m_animation.SetAnimation(0, m_info.idleAnimation, true).TimeScale = 1f;
-                            m_stateHandle.SetState(State.Burrow);
+                            m_stateHandle.OverrideState(State.Burrow);
                         }
                     }
 
@@ -683,8 +683,11 @@ namespace DChild.Gameplay.Characters.Enemies
             StartCoroutine(StealItems());
             yield return new WaitForSeconds(.2f);
             m_biteBox.enabled = false;
+            m_stateHandle.ApplyQueuedState();
             yield return null;
         }
+        private bool m_hasSteal = false;
+        private ItemData m_stolenItem;
         private IEnumerator StealItems()
         {
             var random = UnityEngine.Random.RandomRange(0, 1f);
@@ -695,12 +698,22 @@ namespace DChild.Gameplay.Characters.Enemies
                 if (playerInventory.Length > 0)
                 {
                     GameplaySystem.playerManager.player.inventory.RemoveItem(playerInventory[randomItem].data, 1);
+                    m_stolenItem = playerInventory[randomItem].data;
+                    m_hasSteal = true;
                     Debug.Log("You're too late, you'll never find your " + playerInventory[randomItem].data.name + " now!");
                 }
                 else
                 {
                     Debug.Log("Aw man!");
                 }
+            }
+            yield return null;
+        }
+        private IEnumerator ReturnItem()
+        {
+            if (m_hasSteal)
+            {
+                GameplaySystem.playerManager.player.inventory.AddItem(m_stolenItem, 1);
             }
             yield return null;
         }

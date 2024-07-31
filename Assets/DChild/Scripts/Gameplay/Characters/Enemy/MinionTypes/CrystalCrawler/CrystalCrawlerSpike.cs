@@ -9,7 +9,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CrystalCrawlerSpike : FX
+public class CrystalCrawlerSpike : MonoBehaviour
 {
     [SerializeField, BoxGroup("FX")]
     private ParticleFX m_dustFX;
@@ -50,8 +50,13 @@ public class CrystalCrawlerSpike : FX
     [SerializeField, BoxGroup("Spike")]
     private BoxCollider2D m_hitbox;
     [SerializeField, BoxGroup("Spike")]
+    private BoxCollider2D m_hitbox2;
+    [SerializeField, BoxGroup("Spike")]
     private float m_spikeDuration;
+    [SerializeField]
+    private GameObject m_shatterFXGO;
 
+    private bool m_boolFixesEverythingByStephenBibangco;
     // Start is called before the first frame update
     //private void Start()
     //{
@@ -59,9 +64,10 @@ public class CrystalCrawlerSpike : FX
     //    m_spineListener.Subscribe(m_event, m_explodeFX.Play);
     //}
 
-    [SerializeField, PreviewField, OnValueChanged("Initialize")]
+    [SerializeField, PreviewField]
     private SkeletonDataAsset m_skeletonDataAsset;
 
+    private bool isHit;
     //[SerializeField]
     //private string[] m_viableTags;
 
@@ -88,34 +94,55 @@ public class CrystalCrawlerSpike : FX
         return list;
     }
 
+    private void Start()
+    {
+        StartCoroutine(SpikeRoutine());
+    }
     private IEnumerator SpikeRoutine()
     {
         //m_dustFX?.Play();
-        var explodFX = GameSystem.poolManager.GetPool<FXPool>().GetOrCreateItem(m_explodeFXGO);
-        explodFX.transform.position = transform.position;
-        m_audio.Play();
-        this.gameObject.SetActive(true);
-        m_spine.SetAnimation(0, m_startAnimation, false);
-        yield return new WaitForAnimationComplete(m_spine.animationState, m_startAnimation);
-        m_spine.SetAnimation(0, m_loopAnimation, false);
-        yield return new WaitForSeconds(m_spikeDuration);
-        m_hitbox.enabled = false;
-        m_spine.SetAnimation(0, m_endAnimation, false);
-        yield return new WaitForAnimationComplete(m_spine.animationState, m_endAnimation);
-        Stop();
-        yield return null;
-    }
 
+        //var explodFX = GameSystem.poolManager.GetPool<FXPool>().GetOrCreateItem(m_explodeFXGO);
+        //explodFX.Play();
+        //explodFX.transform.position = transform.position;
+        m_audio.Play();
+        //this.gameObject.SetActive(true);
+            m_spine.SetAnimation(0, m_startAnimation, false);
+            m_hitbox.enabled = true;
+            m_hitbox2.enabled = true;
+            yield return new WaitForAnimationComplete(m_spine.animationState, m_startAnimation);
+            m_spine.SetAnimation(0, m_loopAnimation, true);
+            yield return new WaitForSeconds(m_spikeDuration);
+            m_hitbox.enabled = false;
+            m_hitbox2.enabled = false;
+         if(m_boolFixesEverythingByStephenBibangco == false) {
+            m_spine.SetAnimation(0, m_endAnimation, false);
+        }
+        else
+        {
+
+            m_spine.SetEmptyAnimation(0, 0);
+            m_boolFixesEverythingByStephenBibangco = false;
+        }
+        
+         yield return new WaitForSeconds(5f);
+            Destroy(this.gameObject);    
+    }
+   
     private IEnumerator ShatterShardRoutine()
     {
-        
-        m_spine.SetAnimation(0, m_shattterAnimation, false);
-        StopCoroutine(SpikeRoutine());
-        var shatterFX = GameSystem.poolManager.GetPool<FXPool>().GetOrCreateItem(m_shatterFX);
+        m_boolFixesEverythingByStephenBibangco = true;
+       // GameObject shatter = m_shatterFXGO;
+        var shatterFX = Instantiate(m_shatterFXGO, transform.position, Quaternion.identity);
+        m_hitbox.enabled = false;
+        m_hitbox2.enabled = false;
+        //m_spine.SetAnimation(0, m_shattterAnimation, false);
+        //yield return new WaitForAnimationComplete(m_spine.animationState, m_shattterAnimation);
+        m_spine.SetEmptyAnimation(0, 0);
         shatterFX.transform.position = transform.position;
-        yield return new WaitForAnimationComplete(m_spine.animationState, m_shattterAnimation);
-        Stop();
-
+        yield return new WaitForSeconds(5f);
+        Destroy(this.gameObject);
+        Destroy(shatterFX.gameObject);
     }
     
     public void HideObject()
@@ -123,6 +150,14 @@ public class CrystalCrawlerSpike : FX
         StopAllCoroutines();
         this.gameObject.SetActive(false);
     }
+    public void stopShatterFX()
+    {
+        var shatterFX = GameSystem.poolManager.GetPool<FXPool>().GetOrCreateItem(m_shatterFX);
+        shatterFX.Stop();
+        Destroy(shatterFX.gameObject);
+
+    }
+
     public void PlayShatterShard()
     {
         StartCoroutine(ShatterShardRoutine());
@@ -132,26 +167,5 @@ public class CrystalCrawlerSpike : FX
         StopCoroutine(ShatterShardRoutine());
     }
 
-    public override void Play()
-    {
-        this.gameObject.SetActive(true);
-        m_hitbox.enabled = true;
-        StartCoroutine(SpikeRoutine());
-    }
-
-    public override void Stop()
-    {
-        CallFXDone();
-        CallPoolRequest();
-    }
-
-    public override void Pause()
-    {
-
-    }
-
-    public override void SetFacing(HorizontalDirection horizontalDirection)
-    {
-
-    }
+  
 }

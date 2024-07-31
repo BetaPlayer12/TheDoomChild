@@ -1,5 +1,69 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &7359153261114926591
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7380666773214180376}
+  - component: {fileID: 505504760510608036}
+  - component: {fileID: 5749496221841778895}
+  m_Layer: 13
+  m_Name: BackWallSensor
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7380666773214180376
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7359153261114926591}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -11.57, y: 3.93, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1314296348414342141}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &505504760510608036
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7359153261114926591}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 11a5cea4c16e7c4478a55620f5e666e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_multiRaycast:
+    m_config: {fileID: 11400000, guid: 2f72fedebdd55b444875fcc7a1cd98fa, type: 2}
+    m_rayColor: {r: 1, g: 0.08614111, b: 0, a: 1}
+  m_enable: 1
+  m_debugMode: 1
+--- !u!114 &5749496221841778895
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7359153261114926591}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fc6cc8feceba564aa4ef1a737c6bf25, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_leftRotation: 180
+  m_rightRotation: 0
 --- !u!1 &8557275399230000600
 GameObject:
   m_ObjectHideFlags: 0
@@ -448,14 +512,17 @@ MonoBehaviour:
   m_wallSensor: {fileID: 4477250585846100358}
   m_groundSensor: {fileID: 9100008527148221032}
   m_edgeSensor: {fileID: 9089792743137960741}
+  m_backWallSensor: {fileID: 505504760510608036}
   m_attackBB: {fileID: 985767662628536424}
   m_willPatrol: 1
   m_muzzleFX: {fileID: 5681747280825450790}
   m_speed: 3
-  m_gravityScale: 120
+  m_gravityScale: 30
   m_posOffset: {x: 1, y: 1}
   m_velOffset: 0.4
-  m_targetOffset: {x: 1.6, y: 1}
+  m_targetOffset: {x: 1.3, y: 1.1}
+  isStraightProjectile: 0
+  m_StompDetectRange: 30
   m_throwPoint: {fileID: 8704977271113491529}
 --- !u!114 &6248953250185615785
 MonoBehaviour:
@@ -1111,6 +1178,16 @@ PrefabInstance:
       propertyPath: m_LocalRotation.z
       value: 0.27080485
       objectReference: {fileID: 0}
+    - target: {fileID: 7317038986194938215, guid: b660e8f56e6e3f9458a5cf702398d222,
+        type: 3}
+      propertyPath: m_sensors.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7317038986194938215, guid: b660e8f56e6e3f9458a5cf702398d222,
+        type: 3}
+      propertyPath: m_sensors.Array.data[3]
+      value: 
+      objectReference: {fileID: 505504760510608036}
     - target: {fileID: 7360455294592311285, guid: b660e8f56e6e3f9458a5cf702398d222,
         type: 3}
       propertyPath: m_IsActive
@@ -1339,6 +1416,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0317ee9ba6e1b1e49a030268e026d372, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!4 &1314296348414342141 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5196268993382452669, guid: b660e8f56e6e3f9458a5cf702398d222,
+    type: 3}
+  m_PrefabInstance: {fileID: 6494624482603597376}
+  m_PrefabAsset: {fileID: 0}
 --- !u!58 &1704802649397344720 stripped
 CircleCollider2D:
   m_CorrespondingSourceObject: {fileID: 5587039095514548112, guid: b660e8f56e6e3f9458a5cf702398d222,
@@ -1458,7 +1541,7 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 3.971056, y: 4.1103077}
   m_EdgeRadius: 0
---- !u!60 &3430020333241845914
+--- !u!60 &8621794940098212257
 PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1505,7 +1588,7 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 6494624482603597376}
   m_PrefabAsset: {fileID: 0}
---- !u!60 &468814458699175764
+--- !u!60 &4326104993302072677
 PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

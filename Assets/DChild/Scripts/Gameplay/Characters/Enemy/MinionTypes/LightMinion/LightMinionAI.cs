@@ -73,6 +73,7 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField, ValueDropdown("GetEvents")]
             private string m_trailEvent;
             public string trailEvent => m_trailEvent;
+            
 
 
             public override void Initialize()
@@ -160,6 +161,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private GameObject GroundRoll;
         [SerializeField, TabGroup("AttackCollider")]
         private GameObject FireTrail;
+        
 
         [ShowInInspector]
         private StateHandle<State> m_stateHandle;
@@ -377,8 +379,6 @@ namespace DChild.Gameplay.Characters.Enemies
             m_selfCollider.enabled = false;
             m_animation.SetAnimation(0, m_info.attackStart.animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attackStart.animation);
-            m_trailDamageCoroutine = StartCoroutine(TrailDamageRoutine());
-            m_trailFX.Play();
             m_stateHandle.ApplyQueuedState();
             yield return null;
         }
@@ -426,6 +426,8 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_selfCollider.enabled = false;
             m_animation.SetAnimation(0, m_info.attackLoop, true);
+            m_trailDamageCoroutine = StartCoroutine(TrailDamageRoutine());
+            m_trailFX.Play();
             //yield return new WaitForSeconds(1.4f);
             float countdown = 0;
             BodyCollider.SetActive(false);
