@@ -169,6 +169,10 @@ namespace DChild.Gameplay.Characters.Enemies
         private FlinchHandler m_flinchHandle;
         [SerializeField, TabGroup("Modules")]
         private Health m_health;
+        [SerializeField, TabGroup("Modules")]
+        private GameObject m_Damager_1;
+        [SerializeField, TabGroup("Modules")]
+        private GameObject m_Damager_2;
 
         private float m_currentPatience;
         private float m_currentCD;
@@ -477,6 +481,17 @@ namespace DChild.Gameplay.Characters.Enemies
             }
         }
 
+        private IEnumerator ChangeAttackDamageRoutine()
+        {
+
+            yield return new WaitForSeconds(1.5f);
+            m_Damager_2.SetActive(true);
+            m_Damager_1.SetActive(false);
+            yield return new WaitForSeconds(1f);
+            m_Damager_2.SetActive(false);
+            m_Damager_1.SetActive(true);
+     
+        }
         protected override void Start()
         {
             base.Start();
@@ -579,7 +594,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     //m_attackRoutine = StartCoroutine(AttackRoutine()); //commented this out in favor of using attack handle to work with timescale 2
 
                     m_attackHandle.ExecuteAttack(m_info.idleToAttackAnimation.animation, m_info.idleAnimation.animation);
-
+                    StartCoroutine(ChangeAttackDamageRoutine());
                     break;
 
                 case State.Cooldown:
