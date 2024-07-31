@@ -408,6 +408,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private Transform m_leftRetreatPoint;
         [SerializeField]
         private Transform m_rightRetreatPoint;
+        [SerializeField]
+        private float m_destinationDistanceTolerance;
 
         //Consecutive Hit variables
         [SerializeField, ReadOnly]
@@ -437,6 +439,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         [SerializeField, BoxGroup("TESTING")]
         private bool m_testingMode;
+        private bool m_canTrackConsecutiveHits;
 
         private void ApplyPhaseData(PhaseInfo obj)
         {
@@ -664,6 +667,8 @@ namespace DChild.Gameplay.Characters.Enemies
             bool isReturning = false;
             bool timeToCatch = false;
 
+            yield return ForceReturnToGround();
+
             m_scytheThrowProjectile.ReturnToStart += OnReturnToStart;
 
             FacePlayerInstantly();
@@ -682,6 +687,8 @@ namespace DChild.Gameplay.Characters.Enemies
             //Move up for scythe throw
             yield return ScytheThrowDynamicMoveRoutine(m_scytheThrowMinXMove, m_scytheThrowMaxXMove, m_scytheThrowReleaseHeight);
 
+            m_canTrackConsecutiveHits = false;
+
             m_animation.SetAnimation(0, m_info.scytheThrowAnticipation.animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.scytheThrowAnticipation.animation);
 
@@ -699,6 +706,8 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 m_attackCounter++;
             }
+
+            m_canTrackConsecutiveHits = true;
 
             m_animation.SetAnimation(0, m_info.floatAnimation.animation, true);
             yield return new WaitForSeconds(1f);
@@ -725,6 +734,8 @@ namespace DChild.Gameplay.Characters.Enemies
             m_attacker.SetData(m_info.scytheSwipeAttackData);
 
             m_agent.Stop();
+
+            yield return ForceReturnToGround();
 
             m_animation.SetAnimation(0, m_info.scytheSwipeAttack.animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.scytheSwipeAttack.animation);
@@ -770,15 +781,12 @@ namespace DChild.Gameplay.Characters.Enemies
 
             bool deathStenchDone = false;
 
+            yield return ForceReturnToGround();
+
             m_agent.Stop();
             FacePlayerInstantly();
 
             m_attacker.SetData(m_info.scytheSmashAttackData);
-
-            if(transform.position.y > m_groundCombatHeight)
-            {
-                yield return MoveIntoPositionRoutine(new Vector2(transform.position.x, m_groundCombatHeight), m_info.move.speed);
-            }
 
             m_scytheSmashDeathStench.Done += OnDeathStenchDone;
 
@@ -826,7 +834,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_stateHandle.Wait(State.EvaluateAction);
 
-            if(!m_royalGuardianShieldActive)
+            if (!m_royalGuardianShieldActive)
             {
                 yield return SummonRoyalGuardianShieldRoutine();
 
@@ -940,6 +948,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
             yield return MoveIntoPositionRoutine(center, m_info.move.speed);
 
+            m_canTrackConsecutiveHits = false;
+
             m_animation.EnableRootMotion(true, true);
             m_animation.SetAnimation(0, m_info.deathStenchWaveAnticipation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.deathStenchWaveAnticipation);
@@ -951,6 +961,8 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.EnableRootMotion(false, false);
 
             m_attackCounter = 0;
+
+            m_canTrackConsecutiveHits = true;
 
             m_animation.SetAnimation(0, m_info.floatAnimation.animation, true);
             yield return new WaitForSeconds(1.5f);
@@ -1030,7 +1042,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_animation.SetAnimation(0, m_info.move.animation, true);
                 }
 
-                if (Vector3.Distance(transform.position, destination) < 10 || m_rightWallSensor.isDetecting)
+                if (Vector3.Distance(transform.position, destination) < m_destinationDistanceTolerance || m_rightWallSensor.isDetecting || m_leftWallSensor.isDetecting)
                 {
                     hasReachedPosition = true;
                 }
@@ -1046,10 +1058,14 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             float chosenXDistance = Random.Range(minXDistance, maxXDistance);
 
-
             Vector2 positionToMoveInto = transform.position;
 
             int directionChoice = Random.Range(0, 3);
+            if (m_rightWallSensor.isDetecting || m_leftWallSensor.isDetecting)
+            {
+                directionChoice = 0;
+            }
+
             switch (directionChoice)
             {
                 case 0: //straight up
@@ -1332,21 +1348,24 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnDamageTaken(object sender, Damageable.DamageEventArgs eventArgs)
         {
-            m_willTrackConsecutiveHits = true;
-            m_consectiveHitTimer = m_info.consecutiveHitInterval;
-
-            if(m_consecutiveHitToFlinchCounter >= m_info.maxConsecutiveHits)
-                m_consecutiveHitToFlinchCounter = 0;
-
-            m_consecutiveHitToFlinchCounter++;
-
-            float randomFlinchChanceValue = Random.Range(1, 100);
-
-            if(randomFlinchChanceValue < m_info.GetFlinchChance(m_consecutiveHitToFlinchCounter))
+            if(m_canTrackConsecutiveHits)
             {
-                Debug.Log("Will Flinch");
-                ForcedFlinch();
-            }
+                m_willTrackConsecutiveHits = true;
+                m_consectiveHitTimer = m_info.consecutiveHitInterval;
+
+                if (m_consecutiveHitToFlinchCounter >= m_info.maxConsecutiveHits)
+                    m_consecutiveHitToFlinchCounter = 0;
+
+                m_consecutiveHitToFlinchCounter++;
+
+                float randomFlinchChanceValue = Random.Range(1, 100);
+
+                if (randomFlinchChanceValue < m_info.GetFlinchChance(m_consecutiveHitToFlinchCounter))
+                {
+                    Debug.Log("Will Flinch");
+                    ForcedFlinch();
+                }
+            }        
         }
 
         private IEnumerator ConsecutiveHitFlinchRoutine()
@@ -1412,7 +1431,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_consectiveHitTimer -= GameplaySystem.time.deltaTime;
             m_phaseHandle.MonitorPhase();
 
-            if(m_willTrackConsecutiveHits)
+            if (m_willTrackConsecutiveHits)
             {
                 if (m_consectiveHitTimer <= 0)
                 {
@@ -1421,7 +1440,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 }
             }
 
-            if(!m_willTrackConsecutiveHits)
+            if (!m_willTrackConsecutiveHits)
             {
                 m_consectiveHitTimer = m_info.consecutiveHitInterval;
             }
@@ -1660,6 +1679,23 @@ namespace DChild.Gameplay.Characters.Enemies
             m_currentAttackDecider.DecideOnAttack(attack);
             m_currentAttackDecider.hasDecidedOnAttack = true;
             m_stateHandle.ApplyQueuedState();
+        }
+
+        [Button]
+        private void GoDown()
+        {
+            StartCoroutine(ForceReturnToGround());
+        }
+
+        private IEnumerator ForceReturnToGround()
+        {
+            var groundPos = new Vector2(transform.position.x, m_groundCombatHeight);
+
+            if(transform.position.y > m_groundCombatHeight)
+            {
+                yield return MoveIntoPositionRoutine(groundPos, m_info.move.speed);               
+            }
+            yield return null;
         }
 
         protected override void OnTargetDisappeared()
