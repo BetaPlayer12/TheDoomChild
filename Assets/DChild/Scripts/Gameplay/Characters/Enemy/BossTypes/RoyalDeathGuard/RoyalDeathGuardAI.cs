@@ -378,10 +378,6 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Attacks", "Scythe Throw")]
         private float m_scytheThrowReleaseHeight;
         [SerializeField, TabGroup("Attacks", "Scythe Throw")]
-        private float m_scytheThrowMinXMove;
-        [SerializeField, TabGroup("Attacks", "Scythe Throw")]
-        private float m_scytheThrowMaxXMove;
-        [SerializeField, TabGroup("Attacks", "Scythe Throw")]
         private float m_scytheThrowTargetHeight;
 
         [SerializeField, TabGroup("Attacks", "Scythe Smash")]
@@ -402,14 +398,18 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Attacks", "Death Stench Wave")]
         private RoyalDeathGuardDeathStenchWave m_deathStenchWave;
 
-        [SerializeField]
+        [SerializeField, TabGroup("Movement")]
         private float m_groundCombatHeight;
-        [SerializeField]
+        [SerializeField, TabGroup("Movement")]
         private Transform m_leftRetreatPoint;
-        [SerializeField]
+        [SerializeField, TabGroup("Movement")]
         private Transform m_rightRetreatPoint;
-        [SerializeField]
+        [SerializeField, TabGroup("Movement")]
         private float m_destinationDistanceTolerance;
+        [SerializeField, TabGroup("Movement")]
+        private float m_dynamicMoveLeftMaxDistance;
+        [SerializeField, TabGroup("Movement")]
+        private float m_dynamicMoveRightMaxtDistance;
 
         //Consecutive Hit variables
         [SerializeField, ReadOnly]
@@ -667,7 +667,8 @@ namespace DChild.Gameplay.Characters.Enemies
             bool isReturning = false;
             bool timeToCatch = false;
 
-            yield return ForceReturnToGround();
+            //Return to ground in case somehow up too high 
+            yield return ReturnToGround(m_dynamicMoveLeftMaxDistance, m_dynamicMoveRightMaxtDistance);
 
             m_scytheThrowProjectile.ReturnToStart += OnReturnToStart;
 
@@ -685,7 +686,7 @@ namespace DChild.Gameplay.Characters.Enemies
             }
 
             //Move up for scythe throw
-            yield return ScytheThrowDynamicMoveRoutine(m_scytheThrowMinXMove, m_scytheThrowMaxXMove, m_scytheThrowReleaseHeight);
+            yield return ScytheThrowDynamicMoveRoutine(m_dynamicMoveLeftMaxDistance, m_dynamicMoveRightMaxtDistance, m_scytheThrowReleaseHeight);
 
             m_canTrackConsecutiveHits = false;
 
@@ -713,7 +714,7 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return new WaitForSeconds(1f);
 
             //Move back to ground level
-            yield return ScytheThrowDynamicMoveRoutine(m_scytheThrowMinXMove, m_scytheThrowMaxXMove, m_groundCombatHeight);
+            yield return ReturnToGround(m_dynamicMoveLeftMaxDistance, m_dynamicMoveRightMaxtDistance);
 
 
             m_lastAttack = Attack.ScytheThrow;
@@ -733,9 +734,11 @@ namespace DChild.Gameplay.Characters.Enemies
 
             m_attacker.SetData(m_info.scytheSwipeAttackData);
 
+            //Return to ground in case somehow up too high 
+            yield return ReturnToGround(m_dynamicMoveLeftMaxDistance, m_dynamicMoveRightMaxtDistance);
+
             m_agent.Stop();
 
-            yield return ForceReturnToGround();
 
             m_animation.SetAnimation(0, m_info.scytheSwipeAttack.animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.scytheSwipeAttack.animation);
@@ -755,6 +758,9 @@ namespace DChild.Gameplay.Characters.Enemies
             m_stateHandle.Wait(State.EvaluateAction);
 
             m_attacker.SetData(m_info.scytheSwipeTwoAttackData);
+
+            //Return to ground in case somehow up too high 
+            yield return ReturnToGround(m_dynamicMoveLeftMaxDistance, m_dynamicMoveRightMaxtDistance);
 
             m_agent.Stop();
 
@@ -781,7 +787,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
             bool deathStenchDone = false;
 
-            yield return ForceReturnToGround();
+            //Return to ground in case somehow up too high 
+            yield return ReturnToGround(m_dynamicMoveLeftMaxDistance, m_dynamicMoveRightMaxtDistance);
 
             m_agent.Stop();
             FacePlayerInstantly();
@@ -834,6 +841,9 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_stateHandle.Wait(State.EvaluateAction);
 
+            //Return to ground in case somehow up too high 
+            yield return ReturnToGround(m_dynamicMoveLeftMaxDistance, m_dynamicMoveRightMaxtDistance);
+
             if (!m_royalGuardianShieldActive)
             {
                 yield return SummonRoyalGuardianShieldRoutine();
@@ -859,6 +869,9 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator RoyalGuardianTwoRoutine()
         {
             m_stateHandle.Wait(State.EvaluateAction);
+
+            //Return to ground in case somehow up too high 
+            yield return ReturnToGround(m_dynamicMoveLeftMaxDistance, m_dynamicMoveRightMaxtDistance);
 
             if (!m_royalGuardianShieldActive)
             {
@@ -890,6 +903,9 @@ namespace DChild.Gameplay.Characters.Enemies
             m_stateHandle.Wait(State.EvaluateAction);
 
             m_attacker.SetData(m_info.harvestAttackData);
+
+            //Return to ground in case somehow up too high 
+            yield return ReturnToGround(m_dynamicMoveLeftMaxDistance, m_dynamicMoveRightMaxtDistance);
 
             bool willHeal = false;
 
@@ -941,6 +957,9 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator DeathStenchWaveRoutine()
         {
             m_stateHandle.Wait(State.EvaluateAction);
+
+            //Return to ground in case somehow up too high 
+            yield return ReturnToGround(m_dynamicMoveLeftMaxDistance, m_dynamicMoveRightMaxtDistance);
 
             m_deathStenchWave.gameObject.SetActive(true);
 
@@ -1042,7 +1061,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_animation.SetAnimation(0, m_info.move.animation, true);
                 }
 
-                if (Vector3.Distance(transform.position, destination) < m_destinationDistanceTolerance || m_rightWallSensor.isDetecting || m_leftWallSensor.isDetecting)
+                if (Vector3.Distance(transform.position, destination) < m_destinationDistanceTolerance)
                 {
                     hasReachedPosition = true;
                 }
@@ -1054,36 +1073,52 @@ namespace DChild.Gameplay.Characters.Enemies
             m_agent.Stop();
         }
 
-        private IEnumerator ScytheThrowDynamicMoveRoutine(float minXDistance, float maxXDistance, float yHeight)
+        private IEnumerator ScytheThrowDynamicMoveRoutine(float leftDistance, float rightDistance, float yHeight)
         {
-            float chosenXDistance = Random.Range(minXDistance, maxXDistance);
+            var XRange = Random.Range(transform.position.x - leftDistance, transform.position.y + rightDistance);
 
-            Vector2 positionToMoveInto = transform.position;
-
-            int directionChoice = Random.Range(0, 3);
-            if (m_rightWallSensor.isDetecting || m_leftWallSensor.isDetecting)
+            if (m_leftWallSensor.isDetecting || m_rightWallSensor.isDetecting)
             {
-                directionChoice = 0;
+                if (m_leftWallSensor.isDetecting)
+                {
+                    XRange = Random.Range(transform.position.x, transform.position.y + rightDistance);
+                }
+
+                if (m_rightWallSensor.isDetecting)
+                {
+                    XRange = Random.Range(transform.position.x - leftDistance, transform.position.y);
+                }
             }
 
-            switch (directionChoice)
+            var groundPos = new Vector2(XRange, yHeight);
+
+            yield return MoveIntoPositionRoutine(groundPos, m_info.move.speed);
+        }
+
+        private IEnumerator ReturnToGround(float leftDistance, float rightDistance)
+        {
+            var XRange = Random.Range(transform.position.x - leftDistance, transform.position.y + rightDistance);
+
+            if(m_leftWallSensor.isDetecting || m_rightWallSensor.isDetecting)
             {
-                case 0: //straight up
-                    positionToMoveInto = new Vector2(transform.position.x, yHeight);
-                    break;
-                case 1: //go right
-                    positionToMoveInto = new Vector2(transform.position.x + chosenXDistance, yHeight);
-                    break;
-                case 2: //go left
-                    positionToMoveInto = new Vector2(transform.position.x - chosenXDistance, yHeight);
-                    break;
-                default:
-                    positionToMoveInto = new Vector2(transform.position.x, yHeight);
-                    break;
+                if (m_leftWallSensor.isDetecting)
+                {
+                    XRange = Random.Range(transform.position.x, transform.position.y + rightDistance);
+                }
+
+                if (m_rightWallSensor.isDetecting)
+                {
+                    XRange = Random.Range(transform.position.x - leftDistance, transform.position.y);
+                }
             }
+            
+            var groundPos = new Vector2(XRange, m_groundCombatHeight);
 
-            yield return MoveIntoPositionRoutine(positionToMoveInto, m_info.move.speed);
-
+            if (transform.position.y > m_groundCombatHeight)
+            {
+                yield return MoveIntoPositionRoutine(groundPos, m_info.move.speed);
+            }
+            yield return null;
         }
 
         //private IEnumerator DynamicChasePlayerRoutine(float speed)
@@ -1254,10 +1289,6 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 destination = new Vector2(m_leftRetreatPoint.position.x, m_groundCombatHeight);
             }
-
-            //Fallback plan in case dynamic run away isn't working
-            //int randomPointDecider = Random.Range(0, m_retreatPoints.Length);
-            //destination = new Vector2(m_retreatPoints[randomPointDecider].position.x, m_groundCombatHeight);
 
             return destination;
         }
@@ -1682,20 +1713,9 @@ namespace DChild.Gameplay.Characters.Enemies
         }
 
         [Button]
-        private void GoDown()
+        private void GoDown(float leftDistance, float rightDistance)
         {
-            StartCoroutine(ForceReturnToGround());
-        }
-
-        private IEnumerator ForceReturnToGround()
-        {
-            var groundPos = new Vector2(transform.position.x, m_groundCombatHeight);
-
-            if(transform.position.y > m_groundCombatHeight)
-            {
-                yield return MoveIntoPositionRoutine(groundPos, m_info.move.speed);               
-            }
-            yield return null;
+            StartCoroutine(ReturnToGround(leftDistance, rightDistance));
         }
 
         protected override void OnTargetDisappeared()
