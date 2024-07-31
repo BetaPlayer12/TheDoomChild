@@ -272,13 +272,13 @@ namespace DChild.Gameplay.Characters.Enemies
                             cloudTimer = 3f;
                         }
                     }
-                    //else
-                    //{
-                    //    if (m_animation.animationState.GetCurrent(0).IsComplete)
-                    //    {
-                    //        m_animation.SetAnimation(0, m_info.idleAnimation, true);
-                    //    }
-                    //}
+                    else
+                    {
+                        if (m_animation.animationState.GetCurrent(0).IsComplete)
+                        {
+                            m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                        }
+                    }
                     break;
 
                 case State.Turning:
