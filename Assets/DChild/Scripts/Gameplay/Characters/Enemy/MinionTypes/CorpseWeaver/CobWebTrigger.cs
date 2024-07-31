@@ -10,26 +10,28 @@ using DChild.Gameplay.Characters.Players;
 using DChild.Gameplay;
 using DChild.Gameplay.Characters.Players.Modules;
 using DChild.Gameplay.Combat;
+using DChild.Gameplay.Combat.StatusAilment;
 
 public class CobWebTrigger : MonoBehaviour
 {
-    
+    [SerializeField]
+    private StatusInflictor m_statusInflictor;
+
     public EventAction<EventActionArgs> CobWebEnterEvent;
     public EventAction<EventActionArgs> Onhit;
     public PlayerDamageable playerDamageable;
-    
- 
+
+
+
     public void CobwebEvent()
     {
-        CobWebEnterEvent.Invoke(this, EventActionArgs.Empty);
+        CobWebEnterEvent?.Invoke(this, EventActionArgs.Empty);
 
     }
     public void DamageTaken()
     {
-        Onhit.Invoke(this, EventActionArgs.Empty);
+        Onhit?.Invoke(this, EventActionArgs.Empty);
     }
-    
-
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -42,8 +44,11 @@ public class CobWebTrigger : MonoBehaviour
             playerDamageable = collision.GetComponentInParent<PlayerDamageable>();
             DamageTaken();
             Debug.Log("hit??");
-          
-        }
 
+            if (collision.tag == "Hitbox")
+            {
+                m_statusInflictor.InflictStatusTo(collision.GetComponentInParent<StatusEffectReciever>());
+            }
+        }
     }
 }

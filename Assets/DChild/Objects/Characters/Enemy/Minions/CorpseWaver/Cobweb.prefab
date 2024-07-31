@@ -14,8 +14,9 @@ GameObject:
   - component: {fileID: 2623244994229527150}
   - component: {fileID: 8191375723582171429}
   - component: {fileID: 5298906718593748417}
+  - component: {fileID: 6343315958406877532}
   m_Layer: 13
-  m_Name: TestCobWeb
+  m_Name: Cobweb
   m_TagString: Sensor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -75,8 +76,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -1150295711
+  m_SortingLayer: -1
   m_SortingOrder: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6,
     type: 3}
@@ -128,8 +129,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5144a37211c0b3846b23d9e8ecd76f5b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_statusInflictor: {fileID: 6343315958406877532}
   playerDamageable: {fileID: 0}
-  m_setPlayerDamageable: {fileID: 0}
 --- !u!114 &8191375723582171429
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -211,6 +212,19 @@ MonoBehaviour:
       m_Calls: []
   m_willRepairSelf: 0
   m_selfRepairTime: 0
+--- !u!114 &6343315958406877532
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2623244994229527139}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d4914fa10fe1f74fbac7bbe8b95c9b2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_data: {fileID: 11400000, guid: 27fb6703540454547b6d16032b00d01e, type: 2}
 --- !u!1 &6917031714119485037
 GameObject:
   m_ObjectHideFlags: 0

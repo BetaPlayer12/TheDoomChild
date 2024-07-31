@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Combat.StatusAilment
 {
+
     [System.Serializable]
     public class PlayerBehaviourLock : IStatusEffectModule
     {
