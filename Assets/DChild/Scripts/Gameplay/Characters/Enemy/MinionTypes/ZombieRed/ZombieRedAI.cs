@@ -483,8 +483,8 @@ namespace DChild.Gameplay.Characters.Enemies
                                 {
                                     m_movement.Stop();
                                 }
-                                if (!m_selfCollider.enabled)
-                                    m_selfCollider.enabled = true;
+                                //if (!m_selfCollider.enabled)
+                                //    m_selfCollider.enabled = true;
                                 GetComponent<IsolatedCharacterPhysics2D>().UseStepClimb(false);
                                 m_animation.SetAnimation(0, m_info.idleAnimation, true);
                                 m_stateHandle.SetState(State.Attacking);
@@ -497,8 +497,8 @@ namespace DChild.Gameplay.Characters.Enemies
                                 {
                                     var distance = Vector2.Distance(m_targetInfo.position, transform.position);
                                     m_animation.EnableRootMotion(false, false);
-                                    if (m_selfCollider.enabled)
-                                        m_selfCollider.enabled = false;
+                                    //if (m_selfCollider.enabled)
+                                    //    m_selfCollider.enabled = false;
                                     m_animation.SetAnimation(0, distance >= m_info.targetDistanceTolerance ? m_info.run.animation : m_info.walk.animation, true);
                                     m_character.physics.SetVelocity(toTarget.normalized.x * (distance >= m_info.targetDistanceTolerance ? m_currentMoveSpeed : m_info.walk.speed), m_character.physics.velocity.y);
                                 }
@@ -509,8 +509,8 @@ namespace DChild.Gameplay.Characters.Enemies
                                         m_movement.Stop();
                                     }
                                     m_animation.EnableRootMotion(true, m_groundSensor.isDetecting ? true : false);
-                                    if (!m_selfCollider.enabled)
-                                        m_selfCollider.enabled = true;
+                                    //if (!m_selfCollider.enabled)
+                                    //    m_selfCollider.enabled = true;
                                     m_animation.SetAnimation(0, m_info.idleAnimation, true);
                                 }
                             }
