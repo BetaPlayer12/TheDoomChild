@@ -137,6 +137,10 @@ namespace DChild.Gameplay.Characters.Enemies
         private FlinchHandler m_flinchHandle;
         [SerializeField, TabGroup("Modules")]
         private Health m_health;
+        [SerializeField, TabGroup("AttackBoundingBox")]
+        private GameObject m_UppercutAttack;
+        [SerializeField, TabGroup("AttackBoundingBox")]
+        private GameObject m_JumpAttack;
 
         private float m_currentPatience;
         private float m_currentCD;
@@ -437,12 +441,18 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator ComboAttackRoutine()
         {
             m_animation.SetAnimation(0, m_info.attack1.animation, false);
+            m_JumpAttack.SetActive(true);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack1.animation);
+            m_JumpAttack.SetActive(false);
             m_animation.SetAnimation(0, m_info.attack2.animation, false);
+            m_UppercutAttack.SetActive(true);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack2.animation);
+            m_UppercutAttack.SetActive(false);
             m_animation.SetAnimation(0, m_info.attack1.animation, false);
+            m_JumpAttack.SetActive(true);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack1.animation);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
+            m_JumpAttack.SetActive(false);
             m_stateHandle.ApplyQueuedState();
             yield return null;
         }
@@ -464,6 +474,7 @@ namespace DChild.Gameplay.Characters.Enemies
             
             m_patrolHandle.TurnRequest += OnTurnRequest;
             m_attackHandle.AttackDone += OnAttackDone;
+            m_attackHandle.AttackDone += ResetAttackBB;
             m_turnHandle.TurnDone += OnTurnDone;
             m_flinchHandle.FlinchStart += OnFlinchStart;
             m_stateHandle = new StateHandle<State>(State.DisassembledIdle, State.WaitBehaviourEnd);
@@ -537,9 +548,11 @@ namespace DChild.Gameplay.Characters.Enemies
                     switch (m_attackDecider.chosenAttack.attack)
                     {
                         case Attack.Attack1:
+                            m_JumpAttack.SetActive(true);
                             m_attackHandle.ExecuteAttack(m_info.attack1.animation, m_info.idleAnimation.animation);
                             break;
                         case Attack.Attack2:
+                            m_UppercutAttack.SetActive(true);
                             m_attackHandle.ExecuteAttack(m_info.attack2.animation, m_info.idleAnimation.animation);
                             break;
                         case Attack.Attack3:
@@ -722,6 +735,12 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_flinchHandle.enabled = true;
             m_stateHandle.OverrideState(State.ReevaluateSituation);
             yield return null;
+        }
+
+        private void ResetAttackBB(object sender, EventActionArgs eventArgs)
+        {
+            m_JumpAttack.SetActive(false);
+            m_UppercutAttack.SetActive(false);
         }
     }
 }

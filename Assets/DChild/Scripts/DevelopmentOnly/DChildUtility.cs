@@ -63,6 +63,46 @@ namespace DChild
             return list;
         }
 
+        #region Raycast
+        private static ContactFilter2D m_contactFilter;
+        private static RaycastHit2D[] m_hitResults;
+        private static bool m_isInitialized;
+
+
+        public static void Initialize()
+        {
+            if (m_isInitialized == false)
+            {
+                m_contactFilter.useLayerMask = true;
+                m_contactFilter.SetLayerMask(DChildUtility.GetEnvironmentMask());
+                //m_contactFilter.SetLayerMask(Physics2D.GetLayerCollisionMask(DChildUtility.GetEnvironmentMask()));
+                m_hitResults = new RaycastHit2D[16];
+                m_isInitialized = true;
+            }
+        }
+
+        public static RaycastHit2D[] RayCastEnvironment(Vector2 origin, Vector2 direction, float distance, bool ignoreTriggers, out int hitCount, bool debugMode = false)
+        {
+            Initialize();
+            m_contactFilter.useTriggers = !ignoreTriggers;
+            hitCount = Physics2D.Raycast(origin, direction, m_contactFilter, m_hitResults, distance);
+#if UNITY_EDITOR
+            if (debugMode)
+            {
+                if (hitCount > 0)
+                {
+                    Debug.DrawRay(origin, direction * m_hitResults[0].distance, Color.cyan, 1f);
+                }
+                else
+                {
+                    Debug.DrawRay(origin, direction * distance, Color.cyan, 1f);
+                }
+            }
+#endif
+            return m_hitResults;
+        } 
+        #endregion
+
 #if UNITY_EDITOR
         private static IEnumerable<Type> GetDerivedClasses(Type baseClass, bool includeAbstract = false, bool includeGenerics = false)
         {

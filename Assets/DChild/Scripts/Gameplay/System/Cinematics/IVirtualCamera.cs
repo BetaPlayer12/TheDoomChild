@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Cinemachine;
+using UnityEngine;
 
 namespace DChild.Gameplay.Cinematics
 {
@@ -11,5 +12,7 @@ namespace DChild.Gameplay.Cinematics
         void Deactivate();
 
         void ApplyOffset(Vector3 offset);
+
+        CinemachineBasicMultiChannelPerlin noiseModule { get; }
     }
 }
