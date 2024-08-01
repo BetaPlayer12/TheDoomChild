@@ -1207,7 +1207,9 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_animation.SetAnimation(0, m_info.move.animation, true);
                 }
 
-                if(m_hitCounter >= m_info.maxMoveTime)
+                m_agent.Move(speed);
+
+                if(m_hitCounter >= m_info.numberOfHitsToRetreat)
                 {
                     if (m_rightWallSensor.isDetecting || m_leftWallSensor.isDetecting)
                     {
@@ -1224,7 +1226,6 @@ namespace DChild.Gameplay.Characters.Enemies
                     }
                 }
                 
-                m_agent.Move(speed);
 
                 randomMoveTime -= Time.deltaTime;
                 yield return null;
