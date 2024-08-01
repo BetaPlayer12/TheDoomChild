@@ -43,7 +43,7 @@ namespace DChild.Gameplay.Characters.Enemies
             private BasicAnimationInfo m_rageQuakeAnimation;
             public BasicAnimationInfo rageQuakeAnimation => m_rageQuakeAnimation;
 
-            [SerializeField]
+            [SerializeField, BoxGroup("Movement")]
             private MovementInfo m_move = new MovementInfo();
             public MovementInfo move => m_move;
 
@@ -161,6 +161,9 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField]
             private float m_moveAdjustmentTime;
             public float moveAdjustmentTime => m_moveAdjustmentTime;
+            [SerializeField]
+            private int m_numberOfHitsToRetreat;
+            public int numberOfHitsToRetreat => m_numberOfHitsToRetreat;
 
             [Title("Animations")]
             [SerializeField]
@@ -398,17 +401,17 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Attacks", "Death Stench Wave")]
         private RoyalDeathGuardDeathStenchWave m_deathStenchWave;
 
-        [SerializeField, TabGroup("Movement")]
+        [SerializeField, BoxGroup("Movement")]
         private float m_groundCombatHeight;
-        [SerializeField, TabGroup("Movement")]
+        [SerializeField, BoxGroup("Movement")]
         private Transform m_leftRetreatPoint;
-        [SerializeField, TabGroup("Movement")]
+        [SerializeField, BoxGroup("Movement")]
         private Transform m_rightRetreatPoint;
-        [SerializeField, TabGroup("Movement")]
+        [SerializeField, BoxGroup("Movement")]
         private float m_destinationDistanceTolerance;
-        [SerializeField, TabGroup("Movement")]
+        [SerializeField, BoxGroup("Movement")]
         private float m_dynamicMoveLeftMaxDistance;
-        [SerializeField, TabGroup("Movement")]
+        [SerializeField, BoxGroup("Movement")]
         private float m_dynamicMoveRightMaxtDistance;
 
         //Consecutive Hit variables
@@ -418,6 +421,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private float m_consectiveHitTimer;
         [SerializeField, ReadOnly]
         private bool m_willTrackConsecutiveHits;
+        [SerializeField, ReadOnly]
+        private int m_hitCounter;
 
         private int m_randomAttack;
         private float m_startGroundPos;
@@ -667,9 +672,6 @@ namespace DChild.Gameplay.Characters.Enemies
             bool isReturning = false;
             bool timeToCatch = false;
 
-            //Return to ground in case somehow up too high 
-            yield return ReturnToGround(m_dynamicMoveLeftMaxDistance, m_dynamicMoveRightMaxtDistance);
-
             m_scytheThrowProjectile.ReturnToStart += OnReturnToStart;
 
             FacePlayerInstantly();
@@ -714,7 +716,7 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return new WaitForSeconds(1f);
 
             //Move back to ground level
-            yield return ReturnToGround(m_dynamicMoveLeftMaxDistance, m_dynamicMoveRightMaxtDistance);
+            yield return ReturnToGroundCombatHeight(m_dynamicMoveLeftMaxDistance, m_dynamicMoveRightMaxtDistance);
 
 
             m_lastAttack = Attack.ScytheThrow;
@@ -734,11 +736,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
             m_attacker.SetData(m_info.scytheSwipeAttackData);
 
-            //Return to ground in case somehow up too high 
-            yield return ReturnToGround(m_dynamicMoveLeftMaxDistance, m_dynamicMoveRightMaxtDistance);
-
             m_agent.Stop();
-
 
             m_animation.SetAnimation(0, m_info.scytheSwipeAttack.animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.scytheSwipeAttack.animation);
@@ -758,9 +756,6 @@ namespace DChild.Gameplay.Characters.Enemies
             m_stateHandle.Wait(State.EvaluateAction);
 
             m_attacker.SetData(m_info.scytheSwipeTwoAttackData);
-
-            //Return to ground in case somehow up too high 
-            yield return ReturnToGround(m_dynamicMoveLeftMaxDistance, m_dynamicMoveRightMaxtDistance);
 
             m_agent.Stop();
 
@@ -786,9 +781,6 @@ namespace DChild.Gameplay.Characters.Enemies
             m_stateHandle.Wait(State.EvaluateAction);
 
             bool deathStenchDone = false;
-
-            //Return to ground in case somehow up too high 
-            yield return ReturnToGround(m_dynamicMoveLeftMaxDistance, m_dynamicMoveRightMaxtDistance);
 
             m_agent.Stop();
             FacePlayerInstantly();
@@ -841,9 +833,6 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_stateHandle.Wait(State.EvaluateAction);
 
-            //Return to ground in case somehow up too high 
-            yield return ReturnToGround(m_dynamicMoveLeftMaxDistance, m_dynamicMoveRightMaxtDistance);
-
             if (!m_royalGuardianShieldActive)
             {
                 yield return SummonRoyalGuardianShieldRoutine();
@@ -869,9 +858,6 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator RoyalGuardianTwoRoutine()
         {
             m_stateHandle.Wait(State.EvaluateAction);
-
-            //Return to ground in case somehow up too high 
-            yield return ReturnToGround(m_dynamicMoveLeftMaxDistance, m_dynamicMoveRightMaxtDistance);
 
             if (!m_royalGuardianShieldActive)
             {
@@ -903,9 +889,6 @@ namespace DChild.Gameplay.Characters.Enemies
             m_stateHandle.Wait(State.EvaluateAction);
 
             m_attacker.SetData(m_info.harvestAttackData);
-
-            //Return to ground in case somehow up too high 
-            yield return ReturnToGround(m_dynamicMoveLeftMaxDistance, m_dynamicMoveRightMaxtDistance);
 
             bool willHeal = false;
 
@@ -957,9 +940,6 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator DeathStenchWaveRoutine()
         {
             m_stateHandle.Wait(State.EvaluateAction);
-
-            //Return to ground in case somehow up too high 
-            yield return ReturnToGround(m_dynamicMoveLeftMaxDistance, m_dynamicMoveRightMaxtDistance);
 
             m_deathStenchWave.gameObject.SetActive(true);
 
@@ -1095,7 +1075,7 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return MoveIntoPositionRoutine(groundPos, m_info.move.speed);
         }
 
-        private IEnumerator ReturnToGround(float leftDistance, float rightDistance)
+        private IEnumerator ReturnToGroundCombatHeight(float leftDistance, float rightDistance)
         {
             var XRange = Random.Range(transform.position.x - leftDistance, transform.position.y + rightDistance);
 
@@ -1114,7 +1094,7 @@ namespace DChild.Gameplay.Characters.Enemies
             
             var groundPos = new Vector2(XRange, m_groundCombatHeight);
 
-            if (transform.position.y > m_groundCombatHeight)
+            if (transform.position.y > m_groundCombatHeight || transform.position.y < m_groundCombatHeight)
             {
                 yield return MoveIntoPositionRoutine(groundPos, m_info.move.speed);
             }
@@ -1165,23 +1145,105 @@ namespace DChild.Gameplay.Characters.Enemies
         //    m_stateHandle.ApplyQueuedState();
         //}
 
-        private IEnumerator DyanamicMovementBeforeAttackRoutine(float speed, bool willChase)
+        private IEnumerator ChasePlayer(float speed)
         {
             m_stateHandle.Wait(State.ReevaluateSituation);
 
-            Vector2 destination = transform.position;
+            yield return AdjustPositionBeforeMoving(m_info.move.speed);
 
             var randomMoveTime = Random.Range(m_info.minMoveTime, m_info.maxMoveTime);
 
-            //return to ground combat level if somehow ends up higher
-            if (transform.position.y > m_groundCombatHeight)
+            while (randomMoveTime > 0)
             {
-                var groundPos = new Vector3(transform.position.x, m_groundCombatHeight, transform.position.z);
-                yield return MoveIntoPositionRoutine(groundPos, m_info.move.speed);
+                FacePlayerInstantly();
+                if (!IsFacingTarget())
+                {
+                    m_animation.SetAnimation(0, m_info.idle1Animation, true);
+                }
+                else
+                {
+                    m_animation.SetAnimation(0, m_info.move.animation, true);
+                }
+
+                if (IsTargetInRange(m_info.shortRangedAttackEvaluateDistance) || m_rightWallSensor.isDetecting || m_leftWallSensor.isDetecting)
+                {
+                    m_agent.Stop();
+                    randomMoveTime = 0;
+                }
+
+                m_agent.SetDestination(new Vector2(m_targetInfo.position.x, m_groundCombatHeight));
+
+                m_agent.Move(speed);
+
+                randomMoveTime -= Time.deltaTime;
+                yield return null;
             }
 
+            m_evaluateActionBeforeAttack = null;
+
+            m_stateHandle.ApplyQueuedState();
+        }
+
+        private IEnumerator RetreatFromPlayer(float speed)
+        {
+            m_stateHandle.Wait(State.ReevaluateSituation);
+
+            var randomMoveTime = Random.Range(m_info.minMoveTime, m_info.maxMoveTime);
+
+            yield return AdjustPositionBeforeMoving(m_info.move.speed);
+
+            Vector2 destination = SetRunawayPosition();
+            m_agent.SetDestination(destination);
+
+            while (randomMoveTime > 0)
+            {
+                FacePlayerInstantly();
+                if (!IsFacing(destination))
+                {
+                    m_animation.SetAnimation(0, m_info.idle1Animation, true);
+                }
+                else
+                {
+                    m_animation.SetAnimation(0, m_info.move.animation, true);
+                }
+
+                if(m_hitCounter >= m_info.maxMoveTime)
+                {
+                    if (m_rightWallSensor.isDetecting || m_leftWallSensor.isDetecting)
+                    {
+                        m_agent.Stop();
+                        randomMoveTime = 0;
+                    }
+                }
+                else
+                {
+                    if (IsTargetInRange(m_info.shortRangedAttackEvaluateDistance) || m_rightWallSensor.isDetecting || m_leftWallSensor.isDetecting)
+                    {
+                        m_agent.Stop();
+                        randomMoveTime = 0;
+                    }
+                }
+                
+                m_agent.Move(speed);
+
+                randomMoveTime -= Time.deltaTime;
+                yield return null;
+            }
+
+            m_evaluateActionBeforeAttack = null;
+
+            m_stateHandle.ApplyQueuedState();
+        }
+
+        private IEnumerator AdjustPositionBeforeMoving(float speed)
+        {
+            Vector2 destination = transform.position;
+
+            //return to ground combat level if somehow ends up higher
+            yield return ReturnToGroundCombatHeight(m_dynamicMoveLeftMaxDistance, m_dynamicMoveRightMaxtDistance);
+
             //Adjust position to left or right depending on wall sensor
-            if(m_rightWallSensor.isDetecting || m_leftWallSensor.isDetecting)
+            if (m_rightWallSensor.isDetecting || m_leftWallSensor.isDetecting)
             {
                 float adjustmentTimer = m_info.moveAdjustmentTime;
                 if (m_rightWallSensor.isDetecting) //move left a bit to stop detecting wall
@@ -1210,65 +1272,6 @@ namespace DChild.Gameplay.Characters.Enemies
             }
 
             m_agent.Stop();
-
-            //Set destination depending on whether chase or not
-            if (willChase)
-            {
-                destination = new Vector2(m_targetInfo.position.x, m_groundCombatHeight);
-            }
-            else
-            {
-                destination = SetRunawayPosition();
-            }
-
-            m_agent.SetDestination(destination);
-
-            while (randomMoveTime > 0)
-            {
-                FacePlayerInstantly();
-                if(willChase)
-                {
-                    if (!IsFacingTarget())
-                    {
-                        m_animation.SetAnimation(0, m_info.idle1Animation, true);
-                    }
-                    else
-                    {
-                        m_animation.SetAnimation(0, m_info.move.animation, true);
-                    }
-                }
-                else
-                {
-                    if (!IsFacing(destination))
-                    {
-                        m_animation.SetAnimation(0, m_info.idle1Animation, true);
-                    }
-                    else
-                    {
-                        m_animation.SetAnimation(0, m_info.move.animation, true);
-                    }
-                }
-                
-
-                if(willChase)
-                {
-                    m_agent.SetDestination(new Vector2(m_targetInfo.position.x, m_groundCombatHeight));
-                }
-                m_agent.Move(speed);
-
-                if (IsTargetInRange(m_info.shortRangedAttackEvaluateDistance) || m_rightWallSensor.isDetecting || m_leftWallSensor.isDetecting)
-                {
-                    m_agent.Stop();
-                    randomMoveTime = 0;
-                }
-
-                randomMoveTime -= Time.deltaTime;
-                yield return null;
-            }
-
-            m_evaluateActionBeforeAttack = null;
-
-            m_stateHandle.ApplyQueuedState();
         }
 
         private Vector2 SetRunawayPosition()
@@ -1379,6 +1382,13 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnDamageTaken(object sender, Damageable.DamageEventArgs eventArgs)
         {
+            if(m_hitCounter >= m_info.numberOfHitsToRetreat)
+            {
+                m_hitCounter = 0;
+            }
+
+            m_hitCounter++;
+
             if(m_canTrackConsecutiveHits)
             {
                 m_willTrackConsecutiveHits = true;
@@ -1401,7 +1411,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator ConsecutiveHitFlinchRoutine()
         {
-            m_stateHandle.Wait(State.ReevaluateSituation);
+            m_stateHandle.Wait(State.EvaluateAction);
             yield return FlinchRoutine();
             m_stateHandle.ApplyQueuedState();
         }
@@ -1499,11 +1509,11 @@ namespace DChild.Gameplay.Characters.Enemies
                     {
                         if (decideRandomAction > 0)
                         {
-                            m_evaluateActionBeforeAttack = StartCoroutine(DyanamicMovementBeforeAttackRoutine(m_info.move.speed, true));
+                            m_evaluateActionBeforeAttack = StartCoroutine(ChasePlayer(m_info.move.speed));
                         }
                         else
                         {
-                            m_evaluateActionBeforeAttack = StartCoroutine(DyanamicMovementBeforeAttackRoutine(m_info.move.speed, false));
+                            m_evaluateActionBeforeAttack = StartCoroutine(RetreatFromPlayer(m_info.move.speed));
                         }
                     }
                     
@@ -1715,7 +1725,7 @@ namespace DChild.Gameplay.Characters.Enemies
         [Button]
         private void GoDown(float leftDistance, float rightDistance)
         {
-            StartCoroutine(ReturnToGround(leftDistance, rightDistance));
+            StartCoroutine(ReturnToGroundCombatHeight(leftDistance, rightDistance));
         }
 
         protected override void OnTargetDisappeared()
