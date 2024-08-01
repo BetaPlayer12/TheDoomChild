@@ -593,6 +593,20 @@ namespace DChild.Gameplay.Characters.Enemies
                 //    m_turnHandle.Execute();
                 //    break;
 
+                case State.Returning:
+                    if (Vector2.Distance(m_initialPos, transform.position) > 2f)
+                    {
+                        m_animation.SetAnimation(0, IsFacing(m_initialPos) ? m_info.move.animation : m_info.moveBackwards.animation, true);
+                        m_movement.MoveTowards(Vector2.one * transform.localScale.x, IsFacing(m_initialPos) ? m_info.move.speed : m_info.moveBackwards.speed);
+                    }
+                    else
+                    {
+                        //m_randomTurnRoutine = StartCoroutine(RandomTurnRoutine());
+                        CustomTurn();
+                        m_stateHandle.OverrideState(State.Idle);
+                    }
+                    break;
+
                 case State.Attacking:
                     m_stateHandle.Wait(State.Cooldown);
                         

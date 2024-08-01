@@ -510,7 +510,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_info.move.animation, true);
             m_playerStepRoutine = StartCoroutine(PlayerSteppedOnRoutine());
             float time = 0;
-            while (time < m_chargeDuration)
+            while (time < m_chargeDuration&& m_edgeSensor.isDetecting)
             {
                 time += Time.deltaTime;
                 m_chargerAI.transform.localPosition = new Vector2(-6.5f, 0);

@@ -626,7 +626,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         m_detectRoutine = null;
                     }
                    
-                    if (Vector2.Distance(m_startPos, transform.position) > 5f)
+                    if (Vector2.Distance(m_startPos, transform.position) > 3f)
                     {
                         if (m_isAggro) 
                         {
