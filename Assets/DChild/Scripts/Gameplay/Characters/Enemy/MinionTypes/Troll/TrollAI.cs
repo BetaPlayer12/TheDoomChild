@@ -441,10 +441,11 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 case State.Detect:
                     m_movement.Stop();
-                    m_animation.DisableRootMotion();
+                    m_animation.SetEmptyAnimation(0, 0);
                     if (IsFacingTarget())
                     {
                         m_stateHandle.Wait(State.ReevaluateSituation);
+                        //m_animation.DisableRootMotion();
                         StartCoroutine(DetectRoutine());
                     }
                     else
@@ -461,7 +462,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     if (!m_wallSensor.isDetecting && m_groundSensor.isDetecting)
                     {
                         m_turnState = State.ReevaluateSituation;
-                        m_animation.EnableRootMotion(true, false);
+                        //m_animation.EnableRootMotion(true, false);
                         m_animation.SetAnimation(0, m_info.patrol.animation, true);
                         var characterInfo = new PatrolHandle.CharacterInfo(m_character.centerMass.position, m_character.facing);
                         m_patrolHandle.Patrol(m_movement, m_info.patrol.speed, characterInfo);
