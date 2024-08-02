@@ -608,7 +608,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_selfCollider.enabled = false;
             m_targetInfo.Set(null, null);
             m_flinchHandle.m_autoFlinch = true;
-            m_glow.SetActive(true);
+            //m_glow.SetActive(true);
             m_isDetecting = false;
             m_enablePatience = false;
             m_stateHandle.OverrideState(State.ReevaluateSituation);
