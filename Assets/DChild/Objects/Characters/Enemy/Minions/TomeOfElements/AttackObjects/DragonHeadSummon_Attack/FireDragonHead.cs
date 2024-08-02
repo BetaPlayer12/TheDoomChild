@@ -36,6 +36,7 @@ namespace DChild.Gameplay.Projectiles
         private string m_fireOffEvent;
         private Vector2 m_spawnPosition;
         private Vector2 m_ToPlayerDirection;
+        private bool m_alreadyFlipped;
 
         public void InitializeField(SpineRootAnimation spineRoot)
         {
@@ -52,8 +53,8 @@ namespace DChild.Gameplay.Projectiles
 
         private void Awake()
         {
-           m_spineEventListener.Subscribe(m_fireOnEvent, ShootFire);
-           m_spineEventListener.Subscribe(m_fireOffEvent, OffFire);
+           //m_spineEventListener.Subscribe(m_fireOnEvent, ShootFire);
+           //m_spineEventListener.Subscribe(m_fireOffEvent, OffFire);
         }
 
         private IEnumerator AttackRoutine()
@@ -80,15 +81,18 @@ namespace DChild.Gameplay.Projectiles
 
         void Update()
         {
-                if (m_roofSensor.isDetecting)
+                /*if (m_roofSensor.isDetecting)
                 {
-                    m_model.transform.position = Vector3.MoveTowards(m_model.transform.position, new Vector2(m_ToPlayerDirection.x, m_model.transform.position.y), m_moveOutOfWallSpeed);
-                    m_model.transform.localScale = new Vector3(m_model.transform.position.x < m_ToPlayerDirection.x ? -1 : 1, 1);
-                }
+                    transform.transform.localScale = new Vector3(-1, 1);
+                    //m_model.transform.position = Vector3.MoveTowards(m_model.transform.position, new Vector2(m_ToPlayerDirection.x, m_model.transform.position.y), m_moveOutOfWallSpeed);
+                    //m_model.transform.localScale = new Vector3(m_model.transform.position.x < m_ToPlayerDirection.x ? -1 : 1, 1);
+                    
+                    //m_alreadyFlipped = true;
+                }*/
                 
                 if (m_wallSensor.isDetecting&&!m_roofSensor.isDetecting)
                 {
-                    m_model.transform.position = Vector3.MoveTowards(m_model.transform.position, new Vector2(m_model.transform.position.x, m_ToPlayerDirection.y), m_moveOutOfWallSpeed);
+                    transform.position = Vector3.MoveTowards(transform.position, new Vector2(transform.position.x, m_ToPlayerDirection.y), m_moveOutOfWallSpeed);
                 }
                 //m_model.transform.localScale = new Vector3(transform.position.x < m_ToPlayerDirection.x ? -1 : 1, 1);
         }
@@ -108,13 +112,17 @@ namespace DChild.Gameplay.Projectiles
 
             //m_model.transform.localScale = new Vector3(transform.position.x < playerPosition.x ? -1 : 1, transform.position.y < playerPosition.y ? -1 : 1);
 
-            transform.localScale = new Vector3(m_model.transform.position.x < playerPosition.x ? -1 : 1, 1);
+            //transform.localScale = new Vector3(m_model.transform.position.x < playerPosition.x ? -1 : 1, 1);
 
             //m_model.transform.localScale = new Vector3(transform.position.x < playerPosition.x ? -1 : 1, 1);
 
             Debug.Log("Dragon Head: " + transform.position + "\n Dragon Scale: " + m_model.transform.localScale + "\n Player Pos: " + playerPosition);
         }
 
+        public void FlipModel()
+        {
+            m_model.transform.localScale = new Vector3(-1, 1);
+        }
         public void SetPlayerPosition(Vector2 playerPos)
         {
             
