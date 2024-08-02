@@ -543,9 +543,6 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_agent.Stop();
             var flinch = IsFacingTarget() ? m_info.flinchAnimation : m_info.flinchBackAnimation;
-            //var flinchTrack = m_animation.SetAnimation(0, flinch, false);
-            //m_animation.AddAnimation(0, m_info.idle1Animation, true, 0);
-            //yield return new WaitForSpineAnimationComplete(flinchTrack);
             m_animation.SetAnimation(0, flinch, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, flinch);
         }
@@ -848,6 +845,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
             if (!m_royalGuardianShieldActive)
             {
+                m_agent.Stop();
                 yield return SummonRoyalGuardianShieldRoutine();
 
                 m_attackCounter = 0;
@@ -866,7 +864,10 @@ namespace DChild.Gameplay.Characters.Enemies
 
             if (!m_royalGuardianShieldActive)
             {
+                m_agent.Stop();
                 yield return SummonRoyalGuardianShieldRoutine();
+
+                m_attackCounter = 0;
             }
 
             m_animation.SetAnimation(0, m_info.royalGuardianShieldSlam.animation, false); ;
@@ -1336,6 +1337,11 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_stateHandle.Wait(State.PreAttackMovement);
             yield return FlinchRoutine();
+
+            //Set these values to force run away after flinch
+            m_canTrackRetreatHits = false;
+            m_retreatHitCounter = m_info.numberOfHitsToRetreat;
+
             m_stateHandle.ApplyQueuedState();
         }
 
@@ -1357,6 +1363,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_shortRangedAttackDecider = new RandomAttackDecider<Attack>();
             m_longRangedAttackDecider = new RandomAttackDecider<Attack>();
             m_royalGuardianAttackDecider = new RandomAttackDecider<Attack>();
+            m_longRangedAttackDeciderWithAttackCounter = new RandomAttackDecider<Attack>();
             m_stateHandle = new StateHandle<State>(State.Idle, State.WaitBehaviourEnd);
             UpdateAttackDeciderList();
 
@@ -1444,6 +1451,8 @@ namespace DChild.Gameplay.Characters.Enemies
                     else
                     {
                         StartCoroutine(RetreatFromPlayer(m_info.move.speed));
+                        m_canTrackRetreatHits = true;
+
                     }
                     
 
