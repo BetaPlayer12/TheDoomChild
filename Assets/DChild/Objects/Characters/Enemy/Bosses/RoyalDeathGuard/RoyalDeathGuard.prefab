@@ -807,8 +807,6 @@ MonoBehaviour:
   m_scytheThrowTargetPoint: {fileID: 7152989491862782698}
   m_scytheThrowWallCheckSensor: {fileID: 4846290261296223719}
   m_scytheThrowReleaseHeight: 0
-  m_scytheThrowMinXMove: 0
-  m_scytheThrowMaxXMove: 0
   m_scytheThrowTargetHeight: 0
   m_scytheSmashDeathStench: {fileID: 5914285124908110184}
   m_scytheSmashDeathStenchSpawn: {fileID: 8475371734113652003}
@@ -821,6 +819,8 @@ MonoBehaviour:
   m_leftRetreatPoint: {fileID: 0}
   m_rightRetreatPoint: {fileID: 0}
   m_destinationDistanceTolerance: 1.5
+  m_dynamicMoveLeftMaxDistance: 30
+  m_dynamicMoveRightMaxtDistance: 30
   m_consecutiveHitToFlinchCounter: 0
   m_consectiveHitTimer: 0
   m_willTrackConsecutiveHits: 0
@@ -1364,6 +1364,16 @@ PrefabInstance:
       propertyPath: m_LocalRotation.z
       value: 0.75757736
       objectReference: {fileID: 0}
+    - target: {fileID: 8347896544221086227, guid: 18a853f314a7baf45a9ae8dfdb87fc98,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.24221304
+      objectReference: {fileID: 0}
+    - target: {fileID: 8347896544221086227, guid: 18a853f314a7baf45a9ae8dfdb87fc98,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0.9702231
+      objectReference: {fileID: 0}
     - target: {fileID: 8532048505280047001, guid: 18a853f314a7baf45a9ae8dfdb87fc98,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1459,6 +1469,16 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: -2.4010696
       objectReference: {fileID: 0}
+    - target: {fileID: 9181707116381840984, guid: 18a853f314a7baf45a9ae8dfdb87fc98,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.94384825
+      objectReference: {fileID: 0}
+    - target: {fileID: 9181707116381840984, guid: 18a853f314a7baf45a9ae8dfdb87fc98,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0.33037928
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 5317963179151454244, guid: 18a853f314a7baf45a9ae8dfdb87fc98, type: 3}
     - {fileID: 8854332134046864581, guid: 18a853f314a7baf45a9ae8dfdb87fc98, type: 3}
@@ -1481,6 +1501,7 @@ PrefabInstance:
     - {fileID: 846073801640493819, guid: 18a853f314a7baf45a9ae8dfdb87fc98, type: 3}
     - {fileID: 4967270187287179150, guid: 18a853f314a7baf45a9ae8dfdb87fc98, type: 3}
     - {fileID: 337612527911164912, guid: 18a853f314a7baf45a9ae8dfdb87fc98, type: 3}
+    - {fileID: 1268552359363493354, guid: 18a853f314a7baf45a9ae8dfdb87fc98, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 18a853f314a7baf45a9ae8dfdb87fc98, type: 3}
 --- !u!4 &239706582261338279 stripped
 Transform:
@@ -1643,7 +1664,7 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 7719443944605926414}
   m_PrefabAsset: {fileID: 0}
---- !u!60 &8031932496166231914
+--- !u!60 &6679776333154394153
 PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
