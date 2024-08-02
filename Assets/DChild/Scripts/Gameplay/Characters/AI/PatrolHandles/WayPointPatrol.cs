@@ -41,14 +41,14 @@ namespace DChild.Gameplay.Characters.AI
 
         [SerializeField]
         [OnValueChanged("UpdateStartIndex")]
-        [BoxGroup("Configuration"), HideIf("@UnityEditor.Experimental.SceneManagement.PrefabStageUtility.GetCurrentPrefabStage() != null")]
+        [BoxGroup("Configuration"), HideIf("@UnityEditor.SceneManagement.PrefabStageUtility.GetCurrentPrefabStage() != null")]
         private int m_startIndex;
         [SerializeField]
-        [BoxGroup("Configuration"), HideIf("@UnityEditor.Experimental.SceneManagement.PrefabStageUtility.GetCurrentPrefabStage() != null")]
+        [BoxGroup("Configuration"), HideIf("@UnityEditor.SceneManagement.PrefabStageUtility.GetCurrentPrefabStage() != null")]
         private Iteration m_startIteration = Iteration.Forward;
         [SerializeField]
         [BoxGroup("Configuration")]
-        [ListDrawerSettings(CustomAddFunction = "AddToWaypoint"), HideIf("@UnityEditor.Experimental.SceneManagement.PrefabStageUtility.GetCurrentPrefabStage() != null")]
+        [ListDrawerSettings(CustomAddFunction = "AddToWaypoint"), HideIf("@UnityEditor.SceneManagement.PrefabStageUtility.GetCurrentPrefabStage() != null")]
         private Vector2[] m_wayPoints;
 
         private int m_currentIndex;
@@ -155,11 +155,11 @@ namespace DChild.Gameplay.Characters.AI
         [Space]
 
         [FoldoutGroup("ToolKit")]
-        [SerializeField, HideIf("@UnityEditor.Experimental.SceneManagement.PrefabStageUtility.GetCurrentPrefabStage() != null")]
+        [SerializeField, HideIf("@UnityEditor.SceneManagement.PrefabStageUtility.GetCurrentPrefabStage() != null")]
         private bool m_useCurrentPosition;
         [FoldoutGroup("ToolKit")]
         [SerializeField]
-        [MinValue(0), OnValueChanged("UpdateStartIndex"), HideIf("@UnityEditor.Experimental.SceneManagement.PrefabStageUtility.GetCurrentPrefabStage() != null")]
+        [MinValue(0), OnValueChanged("UpdateStartIndex"), HideIf("@UnityEditor.SceneManagement.PrefabStageUtility.GetCurrentPrefabStage() != null")]
         private int m_overridePatrolIndex;
 
         public bool useCurrentPosition => m_useCurrentPosition;
@@ -167,7 +167,7 @@ namespace DChild.Gameplay.Characters.AI
         public int iteration => (int)m_startIteration;
 
         [FoldoutGroup("ToolKit")]
-        [HideIf("@UnityEditor.Experimental.SceneManagement.PrefabStageUtility.GetCurrentPrefabStage() != null || m_useCurrentPosition")]
+        [HideIf("@UnityEditor.SceneManagement.PrefabStageUtility.GetCurrentPrefabStage() != null || m_useCurrentPosition")]
         [Button("Save To Current Index")]
         private void SaveToCurrentIndex()
         {
@@ -175,7 +175,7 @@ namespace DChild.Gameplay.Characters.AI
         }
 
         [FoldoutGroup("ToolKit")]
-        [Button("Go To Starting Position"), HideIf("@UnityEditor.Experimental.SceneManagement.PrefabStageUtility.GetCurrentPrefabStage() != null")]
+        [Button("Go To Starting Position"), HideIf("@UnityEditor.SceneManagement.PrefabStageUtility.GetCurrentPrefabStage() != null")]
         private void GoToStartingPosition()
         {
             m_useCurrentPosition = false;
