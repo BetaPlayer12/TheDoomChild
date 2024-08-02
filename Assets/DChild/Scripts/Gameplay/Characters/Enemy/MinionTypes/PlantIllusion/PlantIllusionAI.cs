@@ -136,7 +136,7 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Reference")]
         private SpineEventListener m_spineEventListener;
         [SerializeField, TabGroup("FX")]
-        private ParticleSystem m_smokeFX;
+        private GameObject m_smokeFX;
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_wallSensor;
         [SerializeField, TabGroup("Sensors")]
@@ -163,8 +163,7 @@ namespace DChild.Gameplay.Characters.Enemies
             base.Start();
 
             m_spineEventListener.Subscribe(m_info.dartFXEvent, LaunchProjectile);
-            m_spineEventListener.Subscribe(m_info.smokeFXEvent, SmokeStart);
-            m_spineEventListener.Subscribe(m_info.smokeStopFXEvent, SmokeEnd);
+           
             //GameplaySystem.SetBossHealth(m_character);
         }
 
@@ -178,16 +177,18 @@ namespace DChild.Gameplay.Characters.Enemies
             }
         }
 
-        private void SmokeStart()
+        public void SmokeStart()
         {
+            Debug.Log("START");
             m_smokeHitbox.SetActive(true);
-            m_smokeFX.Play();
+            m_smokeFX.SetActive(true);
         }
 
-        private void SmokeEnd()
+        public void SmokeEnd()
         {
+            Debug.Log("START");
             m_smokeHitbox.SetActive(false);
-            m_smokeFX.Stop();
+            m_smokeFX.SetActive(false);
         }
 
         private void OnAttackDone(object sender, EventActionArgs eventArgs)
@@ -283,6 +284,7 @@ namespace DChild.Gameplay.Characters.Enemies
             isFirstEncounter = false;
             m_animation.SetAnimation(0, m_info.surpriseAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.surpriseAnimation);
+            m_animation.SetAnimation(0, m_info.idleAnimation2, true);
         }
         private IEnumerator AttackRoutineOne()
         {
@@ -347,7 +349,8 @@ namespace DChild.Gameplay.Characters.Enemies
         protected override void Awake()
         {
             base.Awake();
-            
+            m_spineEventListener.Subscribe(m_info.smokeFXEvent, SmokeStart);
+            m_spineEventListener.Subscribe(m_info.smokeStopFXEvent, SmokeEnd);
             m_attackHandle.AttackDone += OnAttackDone;
             m_turnHandle.TurnDone += OnTurnDone;
             m_deathHandle.SetAnimation(m_info.deathAnimation.animation);
