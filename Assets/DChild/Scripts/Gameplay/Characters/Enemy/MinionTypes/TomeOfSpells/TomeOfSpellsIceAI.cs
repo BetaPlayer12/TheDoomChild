@@ -198,6 +198,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private bool m_enablePatience;
         private Vector2 m_lastTargetPos;
         private Vector2 m_startPos;
+        private float m_justSummonedDelay = 0f;
 
         private Coroutine m_executeMoveCoroutine;
         private Coroutine m_attackRoutine;
@@ -407,6 +408,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_flinchHandle.gameObject.SetActive(true);
             m_health.SetHealthPercentage(1f);
             enabled = true;
+            m_justSummonedDelay = 1.5f;
             this.gameObject.SetActive(true);
             this.transform.SetParent(null);
             Awake();
@@ -434,7 +436,12 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator FrostAttackRoutine()
         {
-           // m_attackBlastFX.Play();
+            if (m_justSummonedDelay > 0)
+            {
+                yield return new WaitForSeconds(m_justSummonedDelay);
+                m_justSummonedDelay = 0f;
+            }
+            // m_attackBlastFX.Play();
             //m_attackSparkleFX.Play();
             LaunchProjectile2();
          

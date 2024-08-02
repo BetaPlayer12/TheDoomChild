@@ -516,23 +516,27 @@ namespace DChild.Gameplay.Characters.Enemies
                 int count = 0;
                 do
                 {
-                    int x = UnityEngine.Random.Range(1, 3);
+                    GameObject bookSpawned = null;
+                    int x = UnityEngine.Random.Range(1, 4);
                     switch (x)
                     {
                         case 1:
                             if (!m_tome.gameObject.activeSelf)
                             {
                                 m_tome.SummonTome(m_targetInfo);
+                                bookSpawned = m_tome.gameObject;
                             }
                             else
                             {
                                 if (!m_tomeFire.gameObject.activeSelf)
                                 {
                                     m_tomeFire.SummonTome(m_targetInfo);
+                                    bookSpawned = m_tomeFire.gameObject;
                                 }
                                 else
                                 {
                                     m_tomeStorm.SummonTome(m_targetInfo);
+                                    bookSpawned = m_tomeStorm.gameObject;
                                 }
                             }
                             break;
@@ -541,16 +545,19 @@ namespace DChild.Gameplay.Characters.Enemies
                             if (!m_tomeFire.gameObject.activeSelf)
                             {
                                 m_tomeFire.SummonTome(m_targetInfo);
+                                bookSpawned = m_tomeFire.gameObject;
                             }
                             else
                             {
                                 if (!m_tomeStorm.gameObject.activeSelf)
                                 {
                                     m_tomeStorm.SummonTome(m_targetInfo);
+                                    bookSpawned = m_tomeStorm.gameObject;
                                 }
                                 else
                                 {
                                     m_tome.SummonTome(m_targetInfo);
+                                    bookSpawned = m_tome.gameObject;
                                 }
                             }
                             break;
@@ -559,21 +566,25 @@ namespace DChild.Gameplay.Characters.Enemies
                             if (!m_tomeStorm.gameObject.activeSelf)
                             {
                                 m_tomeStorm.SummonTome(m_targetInfo);
+                                bookSpawned = m_tomeStorm.gameObject;
                             }
                             else
                             {
                                 if (!m_tome.gameObject.activeSelf)
                                 {
                                     m_tome.SummonTome(m_targetInfo);
+                                    bookSpawned = m_tome.gameObject;
                                 }
                                 else
                                 {
                                     m_tomeFire.SummonTome(m_targetInfo);
+                                    bookSpawned = m_tomeFire.gameObject;
                                 }
                             }
                             break;
                     }
                     count++;
+                    bookSpawned.transform.position += (count == 1 ? new Vector3(10f, 0f) : new Vector3(-10f, 0f));
                 } while (count < 2);
 
                 

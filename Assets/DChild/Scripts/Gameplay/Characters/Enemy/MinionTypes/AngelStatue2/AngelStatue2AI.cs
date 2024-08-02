@@ -49,6 +49,7 @@ namespace DChild.Gameplay.Characters.Enemies
             public float targetDistanceTolerance => m_targetDistanceTolerance;
 
 
+            
             //Animations
             [SerializeField]
             private BasicAnimationInfo m_idleAnimation;
@@ -79,6 +80,13 @@ namespace DChild.Gameplay.Characters.Enemies
             public BasicAnimationInfo deathAnimation => m_deathAnimation;
 
 
+            [Title("Events")]
+            [SerializeField, ValueDropdown("GetEvents")]
+            private string m_onColliderAttackSmash;
+            public string onColliderAttackSmash => m_onColliderAttackSmash;
+            [SerializeField, ValueDropdown("GetEvents")]
+            private string m_offColliderAttackSmash;
+            public string offColliderAttackSmash => m_offColliderAttackSmash;
             public override void Initialize()
             {
 #if UNITY_EDITOR
@@ -153,6 +161,14 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_edgeSensor;
 
+        [SerializeField]
+        private SpineEventListener m_spineListener;
+        [SerializeField]
+        private GameObject m_bgStatue;
+        [SerializeField]
+        private CapsuleCollider2D m_stillLegCollider;
+        [SerializeField]
+        private CapsuleCollider2D m_LegCollider;
         [ShowInInspector]
         private StateHandle<State> m_stateHandle;
         [ShowInInspector]
@@ -264,9 +280,10 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnFlinchStart(object sender, EventActionArgs eventArgs)
         {
-            StopAllCoroutines();
-            StartCoroutine(FlinchRoutine());
-            m_stateHandle.OverrideState(State.WaitBehaviourEnd);
+           
+            //StopAllCoroutines();
+          //  StartCoroutine(FlinchRoutine());
+            //m_stateHandle.OverrideState(State.WaitBehaviourEnd);
         }
 
         private void OnFlinchEnd(object sender, EventActionArgs eventArgs)
@@ -281,9 +298,9 @@ namespace DChild.Gameplay.Characters.Enemies
                 flinch = IsFacingTarget() ? m_info.flinchAnimation : m_info.flinch2Animation;
             }
             m_animation.SetAnimation(0, flinch, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, flinch);
-            m_animation.SetAnimation(0, m_info.idleAnimation, true);
-            m_stateHandle.OverrideState(State.ReevaluateSituation);
+            //yield return new WaitForAnimationComplete(m_animation.animationState, flinch);
+            //m_animation.SetAnimation(0, m_info.idleAnimation, true);
+            //m_stateHandle.OverrideState(State.ReevaluateSituation);
             yield return null;
         }
 
@@ -315,13 +332,21 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator DetectRoutine()
         {
-            var randomAnimation = UnityEngine.Random.Range(0, 2);
-            m_brokeIdleAnimation = randomAnimation == 0 ? m_info.brokeIdleAnimation.animation : m_info.brokeIdle2Animation.animation;
-            m_animation.SetAnimation(0, m_brokeIdleAnimation, false).MixDuration = 0;
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_brokeIdleAnimation);
+            //m_hitbox.Disable();
+            // var randomAnimation = UnityEngine.Random.Range(0, 2);
+            //m_brokeIdleAnimation = randomAnimation == 0 ? m_info.brokeIdleAnimation.animation : m_info.brokeIdle2Animation.animation;
+            m_animation.SetAnimation(0, m_info.brokeIdleAnimation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.brokeIdleAnimation);
+            m_stillLegCollider.enabled = false;
+            m_LegCollider.enabled = true;
+            m_bgStatue.SetActive(true);
+            m_bgStatue.transform.SetParent(null);
             CustomTurn();
             m_animation.SetAnimation(0, m_info.brokeToIdleAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.brokeToIdleAnimation);
+            m_flinchHandle.SetAnimation(m_info.flinchAnimation.animation);
+            m_flinchHandle.SetIdleAnimation(m_info.idleAnimation.animation);
+            m_flinchHandle.m_enableEmpytyIdle = false;
             m_hitbox.Enable();
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_stateHandle.OverrideState(State.ReevaluateSituation);
@@ -389,6 +414,8 @@ namespace DChild.Gameplay.Characters.Enemies
         protected override void Start()
         {
             base.Start();
+            m_spineListener.Subscribe(m_info.onColliderAttackSmash,OnAttackCollider);
+            m_spineListener.Subscribe(m_info.offColliderAttackSmash, OffAttackCollider);
             m_selfCollider.SetActive(false);
             m_animation.SetAnimation(0, m_info.stillAnimation, true);
             m_startpoint = transform.position;
@@ -397,7 +424,10 @@ namespace DChild.Gameplay.Characters.Enemies
         protected override void Awake()
         {
             base.Awake();
-            
+            m_hitbox.Disable();
+           
+      
+            m_flinchHandle.enabled = false;
             m_patrolHandle.TurnRequest += OnTurnRequest;
             m_attackHandle.AttackDone += OnAttackDone;
             m_turnHandle.TurnDone += OnTurnDone;
@@ -415,6 +445,18 @@ namespace DChild.Gameplay.Characters.Enemies
             m_attackUsed = new bool[m_attackCache.Count];
         }
 
+        [SerializeField]
+        private Collider2D m_attackCollider;
+ 
+        private void OnAttackCollider()
+        {
+            m_attackCollider.enabled = true;
+        }
+
+        private void OffAttackCollider()
+        {
+            m_attackCollider.enabled = false;
+        }
 
         private void Update()
         {
@@ -460,6 +502,7 @@ namespace DChild.Gameplay.Characters.Enemies
                             {
                                 case Attack.Attack1:
                                     m_animation.EnableRootMotion(true, false);
+ 
                                     m_attackHandle.ExecuteAttack(m_info.attack1.animation, m_info.idleAnimation.animation);
                                     break;
                                 case Attack.Attack2:

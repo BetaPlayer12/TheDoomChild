@@ -296,6 +296,9 @@ namespace DChild.Gameplay.Characters.Enemies
                 //}
                 m_enablePatience = true;
                 //StartCoroutine(PatienceRoutine());
+                m_stateHandle.SetState(State.Patrol);
+                //SwitchModeTo(MinionMode.NoGuard);
+
             }
         }
 
@@ -383,7 +386,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 {
                     m_animation.SetAnimation(0, m_info.noShieldFlinch, false);
                 }
-                m_stateHandle.ApplyQueuedState();
+                m_stateHandle.SetState(State.ReevaluateSituation);
             }
         }
 
@@ -448,33 +451,37 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 m_animation.SetAnimation(0, m_info.noShiledDetectAnimation, false);
                 yield return new WaitForAnimationComplete(m_animation.animationState, m_info.noShiledDetectAnimation);
-                m_stateHandle.ApplyQueuedState();
+                m_stateHandle.SetState(State.ReevaluateSituation);
             }
 
         }
         private IEnumerator ShieldBashRoutine()
         {
 
-            if (!IsFacingTarget() && !m_wallSensor.isDetecting && m_edgeSensor.isDetecting)
-            {
-                //Call Turn;
-                m_turnHandle.Execute(m_info.turnAnimation.animation, m_info.idleAnimation.animation);
-                yield return new WaitForAnimationComplete(m_animation.animationState, m_info.turnAnimation.animation);
-            }
+            //if (!IsFacingTarget() && !m_wallSensor.isDetecting && m_edgeSensor.isDetecting)
+            //{
+            //    //Call Turn;
+            //    m_turnHandle.Execute(m_info.turnAnimation.animation, m_info.idleAnimation.animation);
+            //    yield return new WaitForAnimationComplete(m_animation.animationState, m_info.turnAnimation.animation);
+            //}
             var distancefromplayer = Vector2.Distance(m_targetInfo.position, transform.position);
-            var isPlayerNear = true;
-            do
+            var isPlayerNear = distancefromplayer < m_info.ShieldBash.range;
+            if (!isPlayerNear)
             {
-                distancefromplayer = Vector2.Distance(m_targetInfo.position, transform.position);
-                isPlayerNear = distancefromplayer < m_info.ShieldBash.range;
-                m_animation.SetAnimation(0,/* !isPlayerNear ? m_info.noShieldMove.animation :*/ m_info.march.animation, true);
-                m_movement.MoveTowards(Vector2.one * transform.localScale.x, m_info.march.speed);
-                yield return null;
-            } while (!isPlayerNear && !m_wallSensor.isDetecting && m_edgeSensor.isDetecting && IsFacingTarget());
+                do
+                {
+                    distancefromplayer = Vector2.Distance(m_targetInfo.position, transform.position);
+                    isPlayerNear = distancefromplayer < m_info.ShieldBash.range;
+                    m_animation.SetAnimation(0,/* !isPlayerNear ? m_info.noShieldMove.animation :*/ m_info.march.animation, true);
+                    m_movement.MoveTowards(Vector2.one * transform.localScale.x, m_info.march.speed);
+                    yield return null;
+                } while (!isPlayerNear && !m_wallSensor.isDetecting && m_edgeSensor.isDetecting && IsFacingTarget());
+            }
+       
             m_movement.Stop();
-
             m_animation.SetAnimation(0, m_info.idleGuardAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.idleGuardAnimation);
+            Debug.Log("ASD");
             if (m_edgeSensor.isDetecting && !m_wallSensor.isDetecting)
             {
                 if (IsFacingTarget())
@@ -483,30 +490,31 @@ namespace DChild.Gameplay.Characters.Enemies
                     yield return null;
                     m_animation.SetAnimation(0, m_info.ShieldBash.animation, false);
                     yield return new WaitForAnimationComplete(m_animation.animationState, m_info.ShieldBash);
+                    Debug.Log("hit");
                     m_targetHitVfx.Stop();
                     m_shieldAttacker.gameObject.SetActive(false);
+                    m_attackDecider.hasDecidedOnAttack = false;
+                   
                 }
-                else
-                {
-                    m_turnHandle.Execute(m_info.turnAnimation.animation, m_info.idleAnimation.animation);
-                    yield return new WaitForAnimationComplete(m_animation.animationState, m_info.turnAnimation.animation);
-                }
+                //else
+                //{
+                //    m_turnHandle.Execute(m_info.turnAnimation.animation, m_info.idleAnimation.animation);
+                //    yield return new WaitForAnimationComplete(m_animation.animationState, m_info.turnAnimation.animation);
+                //}
         
             }
-            else
-            {
-                m_animation.SetAnimation(0, m_info.idleGuardAnimation, false);
-                yield return new WaitForAnimationComplete(m_animation.animationState, m_info.idleGuardAnimation);
-            }
+            m_stateHandle.ApplyQueuedState();
             //if (m_targetHit)
             //{
             //    m_targetHitVfx.Play();
             //    m_targetHit = false;
             //}
             //yield return new WaitUntil(() => m_wallSensor.isDetecting && m_playerSensor.isDetecting);
+            //m_stateHandle.SetState(State.ReevaluateSituation);
+            //m_stateHandle.ApplyQueuedState();
+            //yield return null;
 
-            yield return null;
-            m_stateHandle.ApplyQueuedState();
+
         }
 
         private IEnumerator ShieldDestroyedRoutine()
@@ -531,7 +539,6 @@ namespace DChild.Gameplay.Characters.Enemies
                 yield return null;
                 m_stateHandle.SetState(State.ReevaluateSituation);
             }
-            m_stateHandle.ApplyQueuedState();
         }
 
         private IEnumerator CrouchInFearRoutine()
@@ -567,28 +574,31 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator ChangeModeNoGuardRoutine()
         {
+            m_stateHandle.Wait(State.Patrol);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
-            yield return null;
             m_minionMode = MinionMode.NoGuard;
+            yield return null;
             m_stateHandle.ApplyQueuedState();
+            
         }
         private IEnumerator ChangeModeGuardRoutine()
         {
+            m_stateHandle.Wait(State.ReevaluateSituation);
             if (!IsFacingTarget() && !m_wallSensor.isDetecting && m_edgeSensor.isDetecting)
             {
                 m_stateHandle.SetState(State.Turning);
             }
-            m_stateHandle.Wait(State.ReevaluateSituation);
+            //m_stateHandle.Wait(State.ReevaluateSituation);
             m_animation.SetAnimation(0, m_info.idleGuardAnimation, true);
-            yield return null;
             m_minionMode = MinionMode.Guard;
+            yield return null;
             m_stateHandle.ApplyQueuedState();
         }
         private IEnumerator ChangeModeNoShieldRoutine()
         {
             m_minionMode = MinionMode.NoShield;
-            yield return null;
             m_stateHandle.SetState(State.ReevaluateSituation);
+            yield return null;
         }
 
         private IEnumerator DeathRoutine()
@@ -659,7 +669,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_movement.Stop();
                     if (IsFacingTarget())
                     {
-                        m_stateHandle.Wait(State.ReevaluateSituation);
+                        //m_stateHandle.Wait(State.ReevaluateSituation);
                         StartCoroutine(DetectRoutine());
                     }
                     else
@@ -702,8 +712,8 @@ namespace DChild.Gameplay.Characters.Enemies
                     //How far is target, is it worth it to chase or go back to patrol
                     if (m_targetInfo.isValid)
                     {
-                        SwitchModeTo(MinionMode.Guard);
-
+                        //SwitchModeTo(MinionMode.Guard);
+                        m_stateHandle.SetState(State.Detect);
                     }
                     else
                     {
@@ -719,6 +729,18 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             switch (m_stateHandle.currentState)
             {
+                case State.Detect:
+                    if (IsFacingTarget())
+                    {
+                        m_stateHandle.SetState(State.Attacking);
+                    }
+                    else
+                    {
+                        m_turnState = State.Detect;
+                        if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation.animation)
+                            m_stateHandle.SetState(State.Turning);
+                    }
+                    break;
                 case State.Turning:
                     m_stateHandle.Wait(m_turnState);
                     m_turnHandle.Execute(m_info.turnAnimation.animation, m_info.idleGuardAnimation.animation);
@@ -726,13 +748,14 @@ namespace DChild.Gameplay.Characters.Enemies
                     break;
 
                 case State.Attacking:
+
                     if (IsFacingTarget())
                     {
-
                         m_stateHandle.Wait(State.Cooldown);
 
                         switch (m_attackDecider.chosenAttack.attack)
                         {
+
                             case Attack.ShieldBash:
                                 m_attackDecider.hasDecidedOnAttack = true;
                                 StartCoroutine(ShieldBashRoutine());
@@ -742,7 +765,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     }
                     else
                     {
-                        m_turnState = State.ReevaluateSituation;
+                        m_turnState = State.Attacking;
                         if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation.animation)
                             m_stateHandle.SetState(State.Turning);
                     }
@@ -781,9 +804,14 @@ namespace DChild.Gameplay.Characters.Enemies
                     //How far is target, is it worth it to chase or go back to patrol
                     if (m_targetInfo.isValid)
                     {
-
-                        m_stateHandle.SetState(State.Attacking);
-
+                        if (IsFacingTarget())
+                        {
+                            m_stateHandle.SetState(State.Attacking);
+                        }
+                        else
+                        {
+                            m_stateHandle.SetState(State.Turning);
+                        }
                     }
 
                     else
@@ -804,7 +832,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 case State.Detect:
                     if (IsFacingTarget())
                     {
-                        m_stateHandle.Wait(State.ReevaluateSituation);
+                        //m_stateHandle.Wait(State.ReevaluateSituation);
                         StartCoroutine(DetectRoutine());
                     }
                     else

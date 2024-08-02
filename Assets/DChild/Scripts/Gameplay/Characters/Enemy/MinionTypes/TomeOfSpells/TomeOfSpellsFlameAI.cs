@@ -178,6 +178,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private bool m_enablePatience;
         private Vector2 m_lastTargetPos;
         private Vector2 m_startPos;
+        private float m_justSummonedDelay = 0;
 
         private Coroutine m_executeMoveCoroutine;
         private Coroutine m_attackRoutine;
@@ -382,6 +383,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_hitbox.Enable();
             m_flinchHandle.gameObject.SetActive(true);
             m_health.SetHealthPercentage(1f);
+            m_justSummonedDelay = 1.5f;
             enabled = true;
             this.gameObject.SetActive(true);
             this.transform.SetParent(null);
@@ -413,6 +415,11 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator FlameAttackRoutine()
         {
+            if (m_justSummonedDelay > 0)
+            {
+                yield return new WaitForSeconds(m_justSummonedDelay);
+                m_justSummonedDelay = 0f;
+            }
             m_animation.SetAnimation(0, m_info.attackFlameStartAnimation, false);
             StartCoroutine(SummonFireDragonHeadRoutine());
 
@@ -432,8 +439,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator SummonFireDragonHeadRoutine()
         {
             var playerCenter = m_targetInfo.position;
-            var offset = UnityEngine.Random.insideUnitCircle * m_info.fireDragonHeadOffset;
-            var spawnPosition = playerCenter + offset;
+            //var offset = UnityEngine.Random.insideUnitCircle * m_info.fireDragonHeadOffset;
+            var spawnPosition = playerCenter;// + offset;
             InstantiateFireDragonHead(spawnPosition, m_targetInfo.position);
             yield return null;
         }
