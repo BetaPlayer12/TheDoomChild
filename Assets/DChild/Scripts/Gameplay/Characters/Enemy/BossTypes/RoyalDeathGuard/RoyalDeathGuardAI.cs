@@ -1109,7 +1109,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_agent.SetDestination(new Vector2(m_targetInfo.position.x, m_groundCombatHeight));
 
                 m_agent.Move(speed);
-
+                
                 randomMoveTime -= Time.deltaTime;
                 yield return null;
             }
@@ -1432,6 +1432,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_consectiveHitTimer -= GameplaySystem.time.deltaTime;
             m_phaseHandle.MonitorPhase();
 
+            //Consecutive Hit section handles counting down on consecutive hit interval
             if (m_canTrackConsecutiveHits)
             {
                 if (m_consectiveHitTimer <= 0)
@@ -1444,6 +1445,23 @@ namespace DChild.Gameplay.Characters.Enemies
             if (!m_canTrackConsecutiveHits)
             {
                 m_consectiveHitTimer = m_info.consecutiveHitInterval;
+            }
+
+            //RDG Shield Active handles turning on hitbox if active and facing player
+            if(m_royalGuardianShieldActive)
+            {
+                if (IsFacingTarget())
+                {
+                    m_hitbox.Disable();
+                }
+                else
+                {
+                    m_hitbox.Enable();
+                }
+            }
+            else
+            {
+                m_hitbox.Enable();
             }
 
             switch (m_stateHandle.currentState)
