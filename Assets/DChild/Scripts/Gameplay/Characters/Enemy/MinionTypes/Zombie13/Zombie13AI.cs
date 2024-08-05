@@ -77,6 +77,13 @@ namespace DChild.Gameplay.Characters.Enemies
             private BasicAnimationInfo m_deathAnimation;
             public BasicAnimationInfo deathAnimation => m_deathAnimation;
 
+            [TitleGroup("Events")]
+            [SerializeField, ValueDropdown("GetEvents")]
+            private string m_jumpEvent;
+            public string jumpEvent => m_jumpEvent;
+            [SerializeField, ValueDropdown("GetEvents")]
+            private string m_landEvent;
+            public string landEvent => m_landEvent;
             public override void Initialize()
             {
 #if UNITY_EDITOR
@@ -159,9 +166,16 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_edgeSensor;
 
+        [SerializeField, TabGroup("VFX")]
+        private ParticleFX m_jumpVFX;
+        [SerializeField, TabGroup("VFX")]
+        private ParticleFX m_impactVFX;
+
         [SerializeField]
         private bool m_willPatrol;
         private Vector2 m_patrolDestination;
+        [SerializeField]
+        private SpineEventListener m_spineListener;
 
         [ShowInInspector]
         private StateHandle<State> m_stateHandle;
@@ -492,7 +506,22 @@ namespace DChild.Gameplay.Characters.Enemies
             m_turnHandle.Execute(turnAnim, RandomIdleAnimation());
             yield return null;
         }
-
+        private void JumpEvent()
+        {
+            if(m_character.facing == HorizontalDirection.Left)
+            {
+                m_jumpVFX.transform.localScale = new Vector3(-1.3f, 1.3f, 1.3f);
+            }
+            else
+            {
+                m_jumpVFX.transform.localScale = new Vector3(1.3f, 1.3f, 1.3f);
+            }
+            Instantiate(m_jumpVFX, transform.position, Quaternion.identity);
+        }
+        private void LandEvent()
+        {
+            Instantiate(m_impactVFX, transform.position, Quaternion.identity);
+        }
         protected override void Start()
         {
             base.Start();
@@ -513,6 +542,8 @@ namespace DChild.Gameplay.Characters.Enemies
                 CustomTurn();
             //m_spineEventListener.Subscribe(m_info.explodeEvent, m_explodeFX.Play);
             GetComponent<IsolatedCharacterPhysics2D>().UseStepClimb(false);
+            m_spineListener.Subscribe(m_info.jumpEvent, JumpEvent);
+            m_spineListener.Subscribe(m_info.landEvent, LandEvent);
         }
 
         protected override void Awake()
