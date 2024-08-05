@@ -358,10 +358,13 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator AttackRoutine1()
         {
             m_animation.SetAnimation(0, m_info.attack1.animation, false);
-            m_cloudBurst.Play();
+            if (Vector2.Distance(m_targetInfo.position, m_character.centerMass.position) < 15)
+            {
+                m_cloudBurst.Play();
+                SpawnCloud();
+            }
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack1.animation);
             m_cloudBurst.Stop();
-            SpawnCloud();
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_flinchHandle.m_autoFlinch = true;
             m_stateHandle.SetState(State.ReevaluateSituation);
@@ -387,7 +390,6 @@ namespace DChild.Gameplay.Characters.Enemies
             //Instantiate(m_info.poisoncloud, this.transform.position, Quaternion.identity);
             m_poisonCloud.Play();
             m_poisonCloudCollider.enabled = true;
-            m_poisonCloudDeathDelay.enabled = true;
         }
         private void Bite()
         {
