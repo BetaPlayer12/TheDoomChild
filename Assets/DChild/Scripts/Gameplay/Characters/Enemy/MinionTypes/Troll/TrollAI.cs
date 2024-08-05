@@ -419,6 +419,18 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return null;
         }
 
+        private IEnumerator PunchRoutine()
+        {
+            //m_attackHandle.ExecuteAttack(m_info.punchAttack.animation, m_info.idleAnimation.animation);
+            m_animation.EnableRootMotion(true, false);
+            m_animation.SetAnimation(0, m_info.punchAttack, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.punchAttack);
+            m_animation.SetAnimation(0, m_info.idleAnimation, false);
+            yield return null;
+            m_animation.DisableRootMotion();          
+            m_stateHandle.ApplyQueuedState();
+        }
+
         protected override void Awake()
         {
             base.Awake();
@@ -497,7 +509,8 @@ namespace DChild.Gameplay.Characters.Enemies
                             if (!m_wallSensor.isDetecting)
                             {
                                 //m_animation.EnableRootMotion(true, false);
-                                m_attackHandle.ExecuteAttack(m_info.punchAttack.animation, m_info.idleAnimation.animation);
+                                //m_attackHandle.ExecuteAttack(m_info.punchAttack.animation, m_info.idleAnimation.animation);
+                                StartCoroutine(PunchRoutine());
                             }
                             else
                             {
