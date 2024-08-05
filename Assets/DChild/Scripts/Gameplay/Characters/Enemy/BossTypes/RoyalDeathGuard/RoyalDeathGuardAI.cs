@@ -854,6 +854,11 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_stateHandle.Wait(State.PreAttackMovement);
 
+            if(!m_isFlinchForbidden)
+            {
+                m_isFlinchForbidden = false;
+            }
+
             FacePlayerInstantly();
 
             if (!m_royalGuardianShieldActive)
@@ -872,6 +877,11 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator RoyalGuardianTwoRoutine()
         {
             m_stateHandle.Wait(State.PreAttackMovement);
+
+            if (!m_isFlinchForbidden)
+            {
+                m_isFlinchForbidden = false;
+            }
 
             FacePlayerInstantly();
 
