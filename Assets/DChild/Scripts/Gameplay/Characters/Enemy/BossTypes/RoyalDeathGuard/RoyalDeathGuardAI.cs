@@ -1084,6 +1084,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
             Debug.Log("Chase Player");
 
+            m_animation.DisableRootMotion();
+
             yield return AdjustPositionBeforeMoving(m_info.move.speed);
 
             var randomMoveTime = Random.Range(m_info.minMoveTime, m_info.maxMoveTime);
@@ -1120,6 +1122,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator RetreatFromPlayer(float speed)
         {
             m_stateHandle.Wait(State.ReevaluateSituation);
+
+            m_animation.DisableRootMotion();
 
             Debug.Log("Retreat from Player");
 
