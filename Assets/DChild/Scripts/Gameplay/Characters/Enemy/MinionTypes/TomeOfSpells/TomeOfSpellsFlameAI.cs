@@ -93,6 +93,10 @@ namespace DChild.Gameplay.Characters.Enemies
             private LayerMask m_mask;
             public LayerMask mask => m_mask;
 
+            [SerializeField, BoxGroup("Dragon Head Configuration")]
+            private float m_wallCheckDistance;
+            public float wallCheckDistance => m_wallCheckDistance;
+
             public override void Initialize()
             {
 #if UNITY_EDITOR
@@ -381,8 +385,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
         public void SummonTome(AITargetInfo target)
         {
-            m_targetInfo = target;
-            transform.position = new Vector2(m_targetInfo.position.x, m_targetInfo.position.y + 10f);
+            
+            transform.position = new Vector2(target.position.x, target.position.y + 10f);
             m_isolatedObjectPhysics2D.simulateGravity = false;
             m_hitbox.Enable();
             m_flinchHandle.gameObject.SetActive(true);
@@ -392,6 +396,7 @@ namespace DChild.Gameplay.Characters.Enemies
             this.gameObject.SetActive(true);
             this.transform.SetParent(null);
             Awake();
+            m_targetInfo = target;
             m_stateHandle.OverrideState(State.ReevaluateSituation);
         }
 
@@ -448,9 +453,9 @@ namespace DChild.Gameplay.Characters.Enemies
             switch(RandValue)
             {
                 case 1:
-                    if (Physics2D.Raycast(playerCenter, -Vector2.left, 25 + m_info.fireDragonHeadOffset, m_info.mask))
+                    if (Physics2D.Raycast(playerCenter, -Vector2.left, m_info.wallCheckDistance + m_info.fireDragonHeadOffset, m_info.mask))
                     {
-                        if (Physics2D.Raycast(playerCenter, Vector2.left, 25 + m_info.fireDragonHeadOffset, m_info.mask))
+                        if (Physics2D.Raycast(playerCenter, Vector2.left, m_info.wallCheckDistance + m_info.fireDragonHeadOffset, m_info.mask))
                         {
                             yield return null;
                         }
@@ -470,9 +475,9 @@ namespace DChild.Gameplay.Characters.Enemies
                     break;
 
                 case 2:
-                    if (Physics2D.Raycast(playerCenter, Vector2.left, 25 + m_info.fireDragonHeadOffset, m_info.mask))
+                    if (Physics2D.Raycast(playerCenter, Vector2.left, m_info.wallCheckDistance + m_info.fireDragonHeadOffset, m_info.mask))
                     {
-                        if (Physics2D.Raycast(playerCenter, -Vector2.left, 25 + m_info.fireDragonHeadOffset, m_info.mask))
+                        if (Physics2D.Raycast(playerCenter, -Vector2.left, m_info.wallCheckDistance + m_info.fireDragonHeadOffset, m_info.mask))
                         {
                             yield return null;
                         }
