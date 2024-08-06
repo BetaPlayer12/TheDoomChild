@@ -467,7 +467,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     if (!m_wallSensor.isDetecting && m_groundSensor.isDetecting)
                     {
                         m_turnState = State.ReevaluateSituation;
-                        m_animation.EnableRootMotion(true, transform.localRotation.z != 0 ? true : false);
+                        //m_animation.EnableRootMotion(true, transform.localRotation.z != 0 ? true : false);
                         m_animation.SetAnimation(0, m_info.patrol.animation, true).TimeScale = 1f;
                         m_animation.animationState.GetCurrent(0).MixDuration = 0;
                         var characterInfo = new PatrolHandle.CharacterInfo(m_character.centerMass.position, m_character.facing);
@@ -476,12 +476,15 @@ namespace DChild.Gameplay.Characters.Enemies
                     else
                     {
                         m_movement.Stop();
+                        //m_animation.DisableRootMotion();
                         m_animation.SetAnimation(0, m_info.idleAnimation.animation, true).MixDuration = 0;
                     }
                     break;
 
                 case State.Turning:
                     m_stateHandle.Wait(m_turnState);
+                    m_movement.Stop();
+                    //m_animation.DisableRootMotion();
                     m_turnHandle.Execute(m_info.turnAnimation.animation, m_info.idleAnimation.animation);
                     break;
 
@@ -492,12 +495,12 @@ namespace DChild.Gameplay.Characters.Enemies
                     switch (m_attackDecider.chosenAttack.attack)
                     {
                         case Attack.Spike:
-                            m_animation.EnableRootMotion(false, false);
+                            //m_animation.EnableRootMotion(false, false);
                             m_attackHandle.ExecuteAttack(m_info.spikeAttack.animation, m_info.idleAnimation.animation);
                             m_animation.animationState.GetCurrent(0).MixDuration = 0;
                             break;
                         case Attack.Spit:
-                            m_animation.EnableRootMotion(true, false);
+                            //m_animation.EnableRootMotion(true, false);
                             //m_attackHandle.ExecuteAttack(m_info.spitAttack.animation, m_info.idleAnimation);
                             StartCoroutine(SlugProjectileRoutine());
                             break;
@@ -551,9 +554,10 @@ namespace DChild.Gameplay.Characters.Enemies
                             {
                                 if (!m_wallSensor.isDetecting && m_groundSensor.isDetecting /*&& m_edgeSensor.isDetecting*/)
                                 {
-                                    m_animation.EnableRootMotion(true, false);
+                                    //m_animation.EnableRootMotion(true, false);
                                     m_selfCollider.enabled = false;
                                     m_animation.SetAnimation(0, m_info.move.animation, true).TimeScale = m_currentTimeScale;
+                                    m_movement.MoveTowards(Vector2.one * transform.localScale.x, m_info.move.speed);
                                 }
                                 else
                                 {
