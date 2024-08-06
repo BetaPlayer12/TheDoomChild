@@ -388,9 +388,6 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Attacks", "Scythe Smash")]
         private Transform m_scytheSmashDeathStenchSpawn;
 
-        [SerializeField, TabGroup("Attacks", "Harvest")]
-        private float m_targetDistanceOffset;
-
         [SerializeField, TabGroup("Attacks", "Royal Guardian")]
         private RoyalDeathGuardShield m_royalGuardianShield;
         [SerializeField, TabGroup("Attacks", "Royal Guardian")]
@@ -821,6 +818,7 @@ namespace DChild.Gameplay.Characters.Enemies
             //scytheSmash Death Stench executed via animation event
 
             m_animation.SetAnimation(0, m_info.scytheSmashGroundLoop.animation, true);
+
             //loop anim while stuck on ground
             while (!deathStenchDone)
             {
@@ -854,7 +852,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_stateHandle.Wait(State.PreAttackMovement);
 
-            if(!m_isFlinchForbidden)
+            if (!m_isFlinchForbidden)
             {
                 m_isFlinchForbidden = false;
             }
@@ -913,16 +911,17 @@ namespace DChild.Gameplay.Characters.Enemies
 
             int harvestCounter = 0;
 
+            m_animation.DisableRootMotion();
+
             FacePlayerInstantly();
 
             m_attacker.TargetDamaged += OnTargetDamagedByHarvest;
 
+            yield return HarvestChaseRoutine();
             //scythe drag
             //Set destination next to player and if possible gradually accelerate towards it
             while(harvestCounter < 2)
             {
-                yield return HarvestChase();
-
                 m_animation.SetAnimation(0, m_info.harvestAnticipation.animation, false);
                 yield return new WaitForAnimationComplete(m_animation.animationState, m_info.harvestAnticipation.animation);
 
@@ -1244,7 +1243,7 @@ namespace DChild.Gameplay.Characters.Enemies
             return destination;
         }
 
-        private IEnumerator HarvestChase()
+        private IEnumerator HarvestChaseRoutine()
         {
             m_agent.Stop();
             FacePlayerInstantly();
@@ -1252,28 +1251,20 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_info.harvestScytheDrag.animation, true);
 
             //Set target position near player to go to
-            Vector3 targetDestination;
-            if (transform.localScale.x > 0)
-            {
-                targetDestination = new Vector3(m_targetInfo.position.x - m_targetDistanceOffset, m_groundCombatHeight);
-            }
-            else
-            {
-                targetDestination = new Vector3(m_targetInfo.position.x + m_targetDistanceOffset, m_groundCombatHeight);
-            }
-
-            m_agent.SetDestination(targetDestination);
+            Vector3 targetDestination = new Vector3(m_targetInfo.position.x, m_groundCombatHeight); ;   
 
             bool hasReachedPosition = false;
 
             while (hasReachedPosition == false)
             {
-                m_agent.Move(m_info.harvestChaseSpeed);
-
-                if (Vector3.Distance(transform.position, targetDestination) < m_info.shortRangedAttackEvaluateDistance || m_rightWallSensor.isDetecting || m_leftWallSensor.isDetecting)
+                
+                if (Vector3.Distance(transform.position, targetDestination) < m_info.shortRangedAttackEvaluateDistance)
                 {
+                    m_agent.Stop();
                     hasReachedPosition = true;
                 }
+                m_agent.SetDestination(targetDestination);
+                m_agent.Move(m_info.harvestChaseSpeed);
                 yield return null;
             }
 
