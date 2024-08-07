@@ -134,6 +134,9 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField, TabGroup("Attacks2", "Harvest")]
             private float m_harvestChaseSpeed;
             public float harvestChaseSpeed => m_harvestChaseSpeed;
+            [SerializeField, TabGroup("Attacks2", "Harvest")]
+            private float m_harvestChaseDuration;
+            public float harvestChaseDuration => m_harvestChaseDuration;
 
             [SerializeField, TabGroup("Attacks3", "Death Stench Wave")]
             private SimpleAttackInfo m_deathStenchWaveAttack = new SimpleAttackInfo();
@@ -917,11 +920,12 @@ namespace DChild.Gameplay.Characters.Enemies
 
             m_attacker.TargetDamaged += OnTargetDamagedByHarvest;
 
-            yield return HarvestChaseRoutine();
             //scythe drag
             //Set destination next to player and if possible gradually accelerate towards it
             while(harvestCounter < 2)
             {
+                yield return HarvestChaseRoutine();
+
                 m_animation.SetAnimation(0, m_info.harvestAnticipation.animation, false);
                 yield return new WaitForAnimationComplete(m_animation.animationState, m_info.harvestAnticipation.animation);
 
@@ -1250,18 +1254,16 @@ namespace DChild.Gameplay.Characters.Enemies
 
             m_animation.SetAnimation(0, m_info.harvestScytheDrag.animation, true);
 
-            //Set target position near player to go to
-            Vector3 targetDestination = new Vector3(m_targetInfo.position.x, m_groundCombatHeight); ;   
+            float timer = m_info.harvestChaseDuration;
 
-            bool hasReachedPosition = false;
-
-            while (hasReachedPosition == false)
+            while (timer > 0)
             {
                 
+                Vector3 targetDestination = new Vector3(m_targetInfo.position.x, m_groundCombatHeight); ;   
                 if (Vector3.Distance(transform.position, targetDestination) < m_info.shortRangedAttackEvaluateDistance)
                 {
                     m_agent.Stop();
-                    hasReachedPosition = true;
+                    timer = 0f;
                 }
                 m_agent.SetDestination(targetDestination);
                 m_agent.Move(m_info.harvestChaseSpeed);
