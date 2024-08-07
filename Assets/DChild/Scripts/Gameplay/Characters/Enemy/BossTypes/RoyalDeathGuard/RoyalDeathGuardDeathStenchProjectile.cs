@@ -2,6 +2,7 @@
 using Sirenix.OdinInspector;
 using System.Collections;
 using DChild.Gameplay.Projectiles;
+using DG.Tweening;
 
 namespace DChild.Gameplay.Characters.Enemies
 {
@@ -42,6 +43,9 @@ namespace DChild.Gameplay.Characters.Enemies
 
                 distanceToTarget = toTargetVector.magnitude;
                 m_flightDirection = toTargetVector.normalized;
+                var scale = transform.localScale;
+                scale.x = Mathf.Sign(m_flightDirection.x);
+                transform.localScale = scale;
                 m_physics.SetVelocity(m_flightDirection * speed);
                 homingTimer -= GameplaySystem.time.fixedDeltaTime;
                 yield return new WaitForFixedUpdate();
