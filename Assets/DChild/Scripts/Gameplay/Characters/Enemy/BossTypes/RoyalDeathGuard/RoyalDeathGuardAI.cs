@@ -1259,7 +1259,7 @@ namespace DChild.Gameplay.Characters.Enemies
             while (timer > 0)
             {
                 
-                Vector3 targetDestination = new Vector3(m_targetInfo.position.x, m_groundCombatHeight); ;   
+                Vector3 targetDestination = new Vector3(m_targetInfo.position.x, m_groundCombatHeight);
                 if (Vector3.Distance(transform.position, targetDestination) < m_info.shortRangedAttackEvaluateDistance)
                 {
                     m_agent.Stop();
