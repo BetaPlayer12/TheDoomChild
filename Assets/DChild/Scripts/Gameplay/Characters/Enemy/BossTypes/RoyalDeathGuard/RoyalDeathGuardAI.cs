@@ -551,7 +551,8 @@ namespace DChild.Gameplay.Characters.Enemies
             m_consecutiveHitToFlinchCounter = 0;
             m_attackCounter = 0;
             m_retreatHitCounter = 0;
-            
+            m_currentAttackDecider.hasDecidedOnAttack = false;
+
             m_isFlinchForbidden = true;
             yield return FlinchRoutine();
             m_animation.SetAnimation(0, m_info.rageQuakeAnimation.animation, false);
@@ -1370,6 +1371,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_canTrackRetreatHits = false;
             m_retreatHitCounter = m_info.numberOfHitsToRetreat;
 
+            m_currentAttackDecider.hasDecidedOnAttack = false;
             m_stateHandle.ApplyQueuedState();
         }
 
