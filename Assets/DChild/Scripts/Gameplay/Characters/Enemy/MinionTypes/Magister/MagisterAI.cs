@@ -518,6 +518,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 {
                     GameObject bookSpawned = null;
                     int x = UnityEngine.Random.Range(1, 4);
+                    Debug.Log(x+" ??????????????????????????????");
                     switch (x)
                     {
                         case 1:
