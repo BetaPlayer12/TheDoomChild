@@ -412,7 +412,8 @@ namespace DChild.Gameplay.Characters.Enemies
             this.gameObject.SetActive(true);
             this.transform.SetParent(null);
             Awake();
-            m_targetInfo = target;
+            SetTarget(target.GetTargetDamagable());
+            //m_targetInfo = target;
             m_stateHandle.OverrideState(State.ReevaluateSituation);
         }
 
