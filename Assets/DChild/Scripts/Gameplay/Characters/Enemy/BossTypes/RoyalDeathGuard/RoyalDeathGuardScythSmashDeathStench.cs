@@ -56,21 +56,25 @@ namespace DChild.Gameplay.Characters.Enemies
                 var segment = GameSystem.poolManager.GetPool<PoolableObjectPool>().GetOrCreateItem(m_segment, spawnPosition, Quaternion.identity);
                 lastSegment = segment.GetComponent<RoyalDeathGuardDeathStenchSegment>();
                 lastSegment.Execute();
+                if(i == numberToSpawn - 1)
+                {
+                    yield return new WaitForSeconds(m_segmentSpawnInterval);
+                    Done?.Invoke(this, EventActionArgs.Empty);
+                }
                 yield return new WaitForSeconds(m_segmentSpawnInterval);
             }
 
             bool isLastSegmentDone = false;
             lastSegment.Done += OnLastSegmentDone;
             while (isLastSegmentDone == false)
-                yield return null;
+                yield return null;            
             lastSegment.Done -= OnLastSegmentDone;
 
             m_isSpawningSegments = false;
-            Done?.Invoke(this, EventActionArgs.Empty);
-
+            
             void OnLastSegmentDone(object sender, EventActionArgs eventActionArgs)
             {
-                isLastSegmentDone = true;
+                isLastSegmentDone = true;               
             }
         }
 
