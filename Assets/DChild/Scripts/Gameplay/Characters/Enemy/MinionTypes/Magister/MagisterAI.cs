@@ -724,8 +724,20 @@ namespace DChild.Gameplay.Characters.Enemies
             m_legCollider.enabled = false;
             yield return new WaitForSeconds(2f);
             //yield return new WaitUntil(() => Vector2.Distance(m_targetInfo.position, transform.position) > m_info.targetDistanceTolerance);
-            transform.position = new Vector2(m_targetInfo.position.x + (UnityEngine.Random.Range(0, 2) == 1 ? 25f : -25f), GroundPosition(m_targetInfo.position).y);
+            int randomnum = UnityEngine.Random.Range(0, 2);
+            transform.position = new Vector2(m_targetInfo.position.x + (randomnum == 1 ? 25f : -25f), GroundPosition(m_targetInfo.position).y);
             yield return new WaitForSeconds(1.2f);
+            if (!m_groundSensor.isDetecting)
+            {
+                if (randomnum == 0)
+                {
+                    transform.position += new Vector3(50f, 0);
+                }
+                else
+                {
+                    transform.position -= new Vector3(50f, 0);
+                }
+            }
             while (m_wallSensor.isDetecting && m_backSensor.isDetecting)
             {
                 transform.position = Vector3.MoveTowards(transform.position, m_targetInfo.position, m_currentMoveSpeed);
