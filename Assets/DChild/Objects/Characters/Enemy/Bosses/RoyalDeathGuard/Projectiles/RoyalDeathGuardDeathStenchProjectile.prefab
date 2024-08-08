@@ -10,22 +10,22 @@ PrefabInstance:
     - target: {fileID: 2741527837235121479, guid: 2e6b81f616ff1d34c829b1e008419e38,
         type: 3}
       propertyPath: m_Layer
-      value: 11
+      value: 13
       objectReference: {fileID: 0}
     - target: {fileID: 7660646522091527084, guid: 2e6b81f616ff1d34c829b1e008419e38,
         type: 3}
       propertyPath: m_Layer
-      value: 11
+      value: 13
       objectReference: {fileID: 0}
     - target: {fileID: 7660646522307497868, guid: 2e6b81f616ff1d34c829b1e008419e38,
         type: 3}
       propertyPath: m_Layer
-      value: 11
+      value: 13
       objectReference: {fileID: 0}
     - target: {fileID: 7660646523080383891, guid: 2e6b81f616ff1d34c829b1e008419e38,
         type: 3}
       propertyPath: m_Layer
-      value: 11
+      value: 13
       objectReference: {fileID: 0}
     - target: {fileID: 7660646523820401643, guid: 2e6b81f616ff1d34c829b1e008419e38,
         type: 3}
@@ -35,7 +35,7 @@ PrefabInstance:
     - target: {fileID: 7660646523820401643, guid: 2e6b81f616ff1d34c829b1e008419e38,
         type: 3}
       propertyPath: m_Layer
-      value: 11
+      value: 13
       objectReference: {fileID: 0}
     - target: {fileID: 7660646523820401644, guid: 2e6b81f616ff1d34c829b1e008419e38,
         type: 3}
@@ -148,7 +148,7 @@ Rigidbody2D:
   m_GameObject: {fileID: 4044109556271880256}
   m_BodyType: 1
   m_Simulated: 1
-  m_UseFullKinematicContacts: 0
+  m_UseFullKinematicContacts: 1
   m_UseAutoMass: 0
   m_Mass: 1
   m_LinearDrag: 0
@@ -159,6 +159,22 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!58 &3958925174964198497
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4044109556271880256}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0.26756048}
+  serializedVersion: 2
+  m_Radius: 1.8048935
 --- !u!114 &845775140751600198
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -205,7 +221,7 @@ MonoBehaviour:
   m_homingDuration: 3
   m_homingEarlyCancelDistance: 30
   m_curveMovement: {fileID: 2447238759803337161}
-  m_collider: {fileID: 8927305766085091829}
+  m_collider: {fileID: 3958925174964198497}
 --- !u!114 &4472401936993581550
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -289,6 +305,22 @@ MonoBehaviour:
   m_linearDrag:
     m_x: 0
     m_y: 0
+--- !u!114 &8641607409139245193
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4044109556271880256}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d74578be2c646f438409c91e5fd4ee4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_canDetectInteractables: 0
+  m_damageUniqueHitboxesOnly: 0
+  m_collisionRegistrator: {fileID: 0}
+  m_ignoreColliderList: []
 --- !u!198 &4044109556271880261 stripped
 ParticleSystem:
   m_CorrespondingSourceObject: {fileID: 7660646523820401646, guid: 2e6b81f616ff1d34c829b1e008419e38,
@@ -320,7 +352,7 @@ CircleCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8377918311668840172}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Density: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 1
