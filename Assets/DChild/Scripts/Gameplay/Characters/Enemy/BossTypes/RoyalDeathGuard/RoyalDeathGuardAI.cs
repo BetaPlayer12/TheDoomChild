@@ -1404,6 +1404,11 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnRoyalGuardianShieldDestroyed(object sender, EventActionArgs eventArgs)
         {
+            Invoke("HandleShieldBreak", 1.5f);
+        }
+
+        private void HandleShieldBreak()
+        {
             m_royalGuardianShieldActive = false;
         }
 
