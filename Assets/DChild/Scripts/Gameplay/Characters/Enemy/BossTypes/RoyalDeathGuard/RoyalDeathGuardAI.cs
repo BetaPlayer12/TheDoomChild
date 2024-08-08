@@ -145,8 +145,8 @@ namespace DChild.Gameplay.Characters.Enemies
             private BasicAnimationInfo m_deathStenchWaveAnticipation;
             public BasicAnimationInfo deathStenchWaveAnticipation => m_deathStenchWaveAnticipation;
             [SerializeField, TabGroup("Attacks3", "Death Stench Wave")]
-            private AttackData m_deathStenchWaveAttackData;
-            public AttackData deathStenchWaveAttackData => m_deathStenchWaveAttackData;
+            private AttackData m_deathStenchWaveImpactAttackData;
+            public AttackData deathStenchWaveImpactAttackData => m_deathStenchWaveImpactAttackData;
 
             [Title("Misc")]
             [SerializeField]
