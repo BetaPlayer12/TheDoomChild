@@ -24,10 +24,5 @@ namespace DChild.Gameplay
         public AttackResistanceData attackResistance => m_attackResistance;
         public StatusEffectChanceData statusInfliction => m_statusInfliction;
         public StatusEffectChanceData statusResistanceData => m_statusResistanceData;
-
-        public void SetAttackData(AttackData damage)
-        {
-            m_damage = damage;
-        }
     }
 }
