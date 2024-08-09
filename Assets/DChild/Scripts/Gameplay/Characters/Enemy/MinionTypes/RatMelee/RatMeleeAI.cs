@@ -680,19 +680,27 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             yield return new WaitForSeconds(.5f);
             m_biteBox.enabled = true;
+            m_targetInfo.GetTargetDamagable().DamageTaken += RatMeleeAI_DamageTaken;
             StartCoroutine(StealItems());
             yield return new WaitForSeconds(.2f);
             m_biteBox.enabled = false;
             m_stateHandle.ApplyQueuedState();
             yield return null;
         }
+        private bool m_hasBitPlayer = false;
+        private void RatMeleeAI_DamageTaken(object sender, Damageable.DamageEventArgs eventArgs)
+        {
+            m_hasBitPlayer = true;
+            //throw new NotImplementedException();
+        }
+
         private bool m_hasSteal = false;
         private ItemData m_stolenItem;
         private IEnumerator StealItems()
         {
             var random = UnityEngine.Random.RandomRange(0, 1f);
             var playerInventory = GameplaySystem.playerManager.player.inventory.FindStoredItemsOfType(ItemCategory.Consumable);
-            if ((Mathf.Round(random * 10.0f) * 0.1f) <= m_stealPercentage)
+            if ((Mathf.Round(random * 10.0f) * 0.1f) <= m_stealPercentage && m_hasBitPlayer)
             {
                 var randomItem = UnityEngine.Random.RandomRange(0, (playerInventory.Length));
                 if (playerInventory.Length > 0)
@@ -707,6 +715,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     Debug.Log("Aw man!");
                 }
             }
+            m_hasBitPlayer = false;
             yield return null;
         }
         private IEnumerator ReturnItem()
