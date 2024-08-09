@@ -1005,7 +1005,6 @@ namespace DChild.Gameplay.Characters.Enemies
         #region Movement
         private IEnumerator MoveIntoPositionRoutine(Vector3 destination, float speed)
         {
-            m_agent.Stop();
             m_agent.SetDestination(destination);
 
             bool hasReachedPosition = false;
@@ -1113,6 +1112,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 {
                     m_agent.Stop();
                     randomMoveTime = 0;
+                    break;
                 }
 
                 m_agent.SetDestination(new Vector2(m_targetInfo.position.x, m_groundCombatHeight));
@@ -1122,6 +1122,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 randomMoveTime -= Time.deltaTime;
                 yield return null;
             }
+            m_agent.Stop();
 
             m_stateHandle.ApplyQueuedState();
         }
@@ -1163,6 +1164,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         randomMoveTime = 0;
                         m_canTrackRetreatHits = true;
                         m_retreatHitCounter = 0;
+                        break;
                     }
                 }
                 else
@@ -1171,6 +1173,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     {
                         m_agent.Stop();
                         randomMoveTime = 0;
+                        break;
                     }
                 }
 
@@ -1253,7 +1256,6 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator HarvestChaseRoutine()
         {
-            m_agent.Stop();
             FacePlayerInstantly();
 
             m_animation.SetAnimation(0, m_info.harvestScytheDrag.animation, true);
@@ -1261,13 +1263,13 @@ namespace DChild.Gameplay.Characters.Enemies
             float timer = m_info.harvestChaseDuration;
 
             while (timer > 0)
-            {
-                
+            {               
                 Vector3 targetDestination = new Vector3(m_targetInfo.position.x, m_groundCombatHeight);
                 if (Vector3.Distance(transform.position, targetDestination) < m_info.shortRangedAttackEvaluateDistance)
                 {
                     m_agent.Stop();
                     timer = 0f;
+                    break;
                 }
                 m_agent.SetDestination(targetDestination);
                 m_agent.Move(m_info.harvestChaseSpeed);
