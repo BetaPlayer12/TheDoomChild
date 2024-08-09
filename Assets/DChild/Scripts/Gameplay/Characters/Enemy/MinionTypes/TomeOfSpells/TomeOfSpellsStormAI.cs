@@ -416,8 +416,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
         public void SummonTome(AITargetInfo target)
         {
-            m_targetInfo = target;
-            transform.position = new Vector2(m_targetInfo.position.x, m_targetInfo.position.y + 10f);
+            
+            transform.position = new Vector2(target.position.x, target.position.y + 10f);
             m_isolatedObjectPhysics2D.simulateGravity = false;
             m_hitbox.Enable();
             m_flinchHandle.gameObject.SetActive(true);
@@ -427,6 +427,8 @@ namespace DChild.Gameplay.Characters.Enemies
             this.gameObject.SetActive(true);
             this.transform.SetParent(null);
             Awake();
+            SetTarget(target.GetTargetDamagable());
+            //m_targetInfo = target;
             m_stateHandle.OverrideState(State.ReevaluateSituation);
         }
 

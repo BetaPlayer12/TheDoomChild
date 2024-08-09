@@ -89,6 +89,14 @@ namespace DChild.Gameplay.Characters.Enemies
             private int m_numberOfFireDragonHeads;
             public int numberOfFireDragonHeads => m_numberOfFireDragonHeads;
 
+            [SerializeField, BoxGroup("Dragon Head Configuration")]
+            private LayerMask m_mask;
+            public LayerMask mask => m_mask;
+
+            [SerializeField, BoxGroup("Dragon Head Configuration")]
+            private float m_wallCheckDistance;
+            public float wallCheckDistance => m_wallCheckDistance;
+
             public override void Initialize()
             {
 #if UNITY_EDITOR
@@ -377,8 +385,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
         public void SummonTome(AITargetInfo target)
         {
-            m_targetInfo = target;
-            transform.position = new Vector2(m_targetInfo.position.x, m_targetInfo.position.y + 10f);
+            
+            transform.position = new Vector2(target.position.x, target.position.y + 10f);
             m_isolatedObjectPhysics2D.simulateGravity = false;
             m_hitbox.Enable();
             m_flinchHandle.gameObject.SetActive(true);
@@ -388,6 +396,8 @@ namespace DChild.Gameplay.Characters.Enemies
             this.gameObject.SetActive(true);
             this.transform.SetParent(null);
             Awake();
+            SetTarget(target.GetTargetDamagable());
+            //m_targetInfo = target;
             m_stateHandle.OverrideState(State.ReevaluateSituation);
         }
 
@@ -439,13 +449,77 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator SummonFireDragonHeadRoutine()
         {
             var playerCenter = m_targetInfo.position;
-            //var offset = UnityEngine.Random.insideUnitCircle * m_info.fireDragonHeadOffset;
-            var spawnPosition = playerCenter;// + offset;
-            InstantiateFireDragonHead(spawnPosition, m_targetInfo.position);
+            var offset = new Vector2(m_info.fireDragonHeadOffset, 0);
+            int RandValue = UnityEngine.Random.Range(1, 3);
+            switch(RandValue)
+            {
+                case 1:
+                    if (Physics2D.Raycast(playerCenter, -Vector2.left, m_info.wallCheckDistance + m_info.fireDragonHeadOffset, m_info.mask))
+                    {
+                        if (Physics2D.Raycast(playerCenter, Vector2.left, m_info.wallCheckDistance + m_info.fireDragonHeadOffset, m_info.mask))
+                        {
+                            yield return null;
+                        }
+                        else
+                        {
+                            var spawnPosition = playerCenter - offset;
+                            InstantiateFireDragonHead(spawnPosition, m_targetInfo.position,true);
+                        }
+                    }
+                    else
+                    {
+                        //var offset = UnityEngine.Random.insideUnitCircle * m_info.fireDragonHeadOffset;
+                        var spawnPosition = playerCenter + offset;
+                        InstantiateFireDragonHead(spawnPosition, m_targetInfo.position,false);
+                    }
+
+                    break;
+
+                case 2:
+                    if (Physics2D.Raycast(playerCenter, Vector2.left, m_info.wallCheckDistance + m_info.fireDragonHeadOffset, m_info.mask))
+                    {
+                        if (Physics2D.Raycast(playerCenter, -Vector2.left, m_info.wallCheckDistance + m_info.fireDragonHeadOffset, m_info.mask))
+                        {
+                            yield return null;
+                        }
+                        else
+                        {
+                            var spawnPosition = playerCenter + offset;
+                            InstantiateFireDragonHead(spawnPosition, m_targetInfo.position,false);
+                        }
+                    }
+                    else
+                    {
+                        //var offset = UnityEngine.Random.insideUnitCircle * m_info.fireDragonHeadOffset;
+                        var spawnPosition = playerCenter - offset;
+                        InstantiateFireDragonHead(spawnPosition, m_targetInfo.position,true);
+                    }
+                    break;
+            }
+
+            /*
+            if(Physics2D.Raycast(playerCenter, -Vector2.left, 25+m_info.fireDragonHeadOffset, m_info.mask))
+            {
+                if (Physics2D.Raycast(playerCenter, Vector2.left, 25 + m_info.fireDragonHeadOffset, m_info.mask))
+                {
+                    yield return null;
+                }else
+                {
+                    var spawnPosition = playerCenter + offset;
+                    InstantiateFireDragonHead(spawnPosition, m_targetInfo.position);
+                }
+            }
+            else
+            {
+                //var offset = UnityEngine.Random.insideUnitCircle * m_info.fireDragonHeadOffset;
+                var spawnPosition = playerCenter + offset;
+                InstantiateFireDragonHead(spawnPosition, m_targetInfo.position);
+            }*/
+            
             yield return null;
         }
 
-        private void InstantiateFireDragonHead(Vector2 spawnPosition, Vector2 playerPosition)
+        private void InstantiateFireDragonHead(Vector2 spawnPosition, Vector2 playerPosition,bool Flip)
         {
             var instance = GameSystem.poolManager.GetPool<PoolableObjectPool>().GetOrCreateItem(m_info.fireDragonHead, gameObject.scene);
             var toPlayer = playerPosition - spawnPosition;
@@ -468,6 +542,11 @@ namespace DChild.Gameplay.Characters.Enemies
             //Debug.Log("sCALE: " + instance.GetComponent<Transform>().localScale);
 
             instance.SpawnAt(spawnPosition, Quaternion.identity);
+            if(Flip)
+            {
+                //instance.transform.localScale = new Vector3(-1, 1);
+                instance.GetComponent<FireDragonHead>().FlipModel();
+            }
             instance.GetComponent<FireDragonHead>().enabled = true;
             instance.GetComponent<FireDragonHead>().SetPlayerPosition(playerPosition);
         }

@@ -163,23 +163,33 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator FlinchRoutine()
         {
             m_hitbox.Disable();
-            m_animation.SetAnimation(0, m_info.flinchAnimation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.flinchAnimation);
+            var flinchTrack = m_animation.SetAnimation(0, m_info.flinchAnimation, false);
+            yield return new WaitForSpineAnimationComplete(flinchTrack);
+            yield return BurrowRoutine();
+            yield return UnburrowRoutine();
+            //m_animation.SetAnimation(0, m_info.idleAnimation, true).MixDuration = 0;
+            m_stateHandle.ApplyQueuedState();
+            yield return null;
+        }
+        private IEnumerator BurrowRoutine()
+        {
             m_shadow.enabled = false;
             m_shadowObject.SetActive(false);
-            m_animation.SetAnimation(0, m_info.burrowAnimation, false).MixDuration = 0;
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.burrowAnimation);
+            var burrowTrack = m_animation.SetAnimation(0, m_info.burrowAnimation, false);
+            burrowTrack.MixDuration = 0;
+            yield return new WaitForSpineAnimationComplete(burrowTrack);
             transform.position = m_startPoint;
             yield return new WaitForSeconds(m_info.burrowDuration);
-            m_animation.SetAnimation(0, m_info.unburrowAnimation, false).MixDuration = 0;
+        }
+        private IEnumerator UnburrowRoutine()
+        {
+            var unborrowTrack = m_animation.SetAnimation(0, m_info.unburrowAnimation, false);
+            unborrowTrack.MixDuration = 0;
             m_animation.AddAnimation(0, m_info.idleAnimation, true, 0);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.idleAnimation);
             m_shadow.enabled = true;
             m_shadowObject.SetActive(true);
             m_hitbox.Enable();
-            //m_animation.SetAnimation(0, m_info.idleAnimation, true).MixDuration = 0;
-            m_stateHandle.ApplyQueuedState();
-            yield return null;
         }
 
         protected override void Start()

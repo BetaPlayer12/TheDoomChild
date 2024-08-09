@@ -327,19 +327,18 @@ namespace DChild.Gameplay.Characters.Enemies
             m_selfCollider.SetActive(false);
             m_isSubmerged = false;
             m_hitbox.Enable();
-            AIBrainUtility.SetAnimation(m_animation, 0, m_info.imerseAnimation, false);
+            m_animation.SetAnimation(0, m_info.imerseAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.imerseAnimation);
             m_hitbox.Disable();
-            m_slashFX.gameObject.SetActive(true);
-            m_slashFX.GetComponent<ParticleSystemRenderer>().flip = m_character.facing == HorizontalDirection.Right ? Vector3.zero : Vector3.right;
-            m_slashFX.Play();
-            AIBrainUtility.SetAnimation(m_animation, 0, m_info.attack1, false);
+            m_animation.SetAnimation(0, m_info.attack1, false);
             yield return new WaitForSeconds(m_info.attackHitboxDelay);
+            m_slashFX.GetComponent<ParticleSystemRenderer>().flip = m_character.facing == HorizontalDirection.Right ? Vector3.zero : Vector3.right;
             m_hitbox.Enable();
+            yield return new WaitForSeconds(.5f);
+            m_slashFX.Play();
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack1.animation);
             m_attackBB.SetActive(false);
             m_selfCollider.SetActive(true);
-            m_slashFX.gameObject.SetActive(false);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_stateHandle.ApplyQueuedState();
             yield return null;
@@ -399,7 +398,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_hitbox.Disable();
             m_startPoint = transform.position;
             m_deathFX.gameObject.SetActive(false);
-            m_slashFX.gameObject.SetActive(false);
+            //m_slashFX.gameObject.SetActive(false);
             m_flinchFX.gameObject.SetActive(false);
         }
 
