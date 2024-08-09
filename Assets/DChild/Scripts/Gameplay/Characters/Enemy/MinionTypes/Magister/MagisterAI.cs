@@ -726,7 +726,7 @@ namespace DChild.Gameplay.Characters.Enemies
             //yield return new WaitUntil(() => Vector2.Distance(m_targetInfo.position, transform.position) > m_info.targetDistanceTolerance);
             int randomnum = UnityEngine.Random.Range(0, 2);
             transform.position = new Vector2(m_targetInfo.position.x + (randomnum == 1 ? 25f : -25f), GroundPosition(m_targetInfo.position).y);
-            yield return new WaitForSeconds(1.2f);
+            yield return new WaitForSeconds(0.6f);
             if (!m_groundSensor.isDetecting)
             {
                 if (randomnum == 0)
@@ -738,6 +738,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     transform.position -= new Vector3(50f, 0);
                 }
             }
+            yield return new WaitForSeconds(0.6f);
             while (m_wallSensor.isDetecting && m_backSensor.isDetecting)
             {
                 transform.position = Vector3.MoveTowards(transform.position, m_targetInfo.position, m_currentMoveSpeed);
