@@ -86,6 +86,10 @@ namespace DChild.Gameplay.Characters.Enemies
             private BasicAnimationInfo m_turnAnimation;
             public BasicAnimationInfo turnAnimation => m_turnAnimation;
 
+            [SerializeField]
+            private float m_attackDistance;
+            public float attackDistance => m_attackDistance;
+
             public override void Initialize()
             {
 #if UNITY_EDITOR
@@ -150,6 +154,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private AttackHandle m_attackHandle;
         [SerializeField, TabGroup("Modules")]
         private FlinchHandler m_flinchHandle;
+        [SerializeField, TabGroup("Modules")]
+        private Attacker m_attacker;
 
         [SerializeField]
         private SpineEventListener m_spineListener;
@@ -328,27 +334,22 @@ namespace DChild.Gameplay.Characters.Enemies
             //Combo Attack is AttackCache[1]
 
             int attackChance = UnityEngine.Random.Range(0, 100);
-            if(attackChance < 61)
+            if(attackChance <= 60)
             {
                 //Choose AttackCache[0]
-                m_statsData.SetAttackData(m_info.heavySlashAttackData);
-                m_attackDecider.ForcedDecideOnAttack(0);
-                m_currentAttack = m_attackCache[0];
+                m_attackDecider.DecideOnAttack(Attack.SingleAttack);
+                m_currentAttack = Attack.SingleAttack;
                 m_currentAttackRange = m_attackRangeCache[0];
                 Debug.Log("Chosen Attack: " + m_attackCache[0]);
             }
             else
             {
                 //Choose AttackCache[1]
-                m_statsData.SetAttackData(m_info.SlashComboAttackData);
-                m_attackDecider.ForcedDecideOnAttack(1);
-                m_currentAttack = m_attackCache[1];
+                m_attackDecider.DecideOnAttack(Attack.ComboAttack);
+                m_currentAttack = Attack.ComboAttack;
                 m_currentAttackRange = m_attackRangeCache[1];
                 Debug.Log("Chosen Attack: " + m_attackCache[1]);
             }
-
-            Debug.Log("CSD Damage: " + m_statsData.damage);
-            Debug.Log("Chance attack percent value: " + attackChance);
         }
 
         private void ChooseAttack()
@@ -420,25 +421,49 @@ namespace DChild.Gameplay.Characters.Enemies
             switch (m_attack)
             {
                 case Attack.SingleAttack:
-                    m_attackHandle.ExecuteAttack(m_info.singleAttack.animation, m_info.idleAnimation.animation);
+                    StartCoroutine(HeavySlashAttackRoutine());
                     break;
                 case Attack.ComboAttack:
-                    StartCoroutine(AttackRoutine());
+                    StartCoroutine(ComboAttackRoutine());
                     break;
             }
         }
 
-        private IEnumerator AttackRoutine()
+        private IEnumerator HeavySlashAttackRoutine()
         {
+            m_stateHandle.Wait(State.Cooldown);
+
+            m_animation.EnableRootMotion(true, true);
+
+            m_attacker.SetData(m_info.heavySlashAttackData);
+            m_animation.SetAnimation(0, m_info.singleAttack.animation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.singleAttack.animation);
+
+            m_animation.DisableRootMotion();
+
+            m_attackDecider.hasDecidedOnAttack = false;
+
+            m_stateHandle.ApplyQueuedState();
+        }
+
+        private IEnumerator ComboAttackRoutine()
+        {
+            m_stateHandle.Wait(State.Cooldown);
+
+            m_animation.EnableRootMotion(true, true);
+
+            m_attacker.SetData(m_info.SlashComboAttackData);
             m_animation.SetAnimation(0, m_info.comboAttack.animation, false);
-            m_animation.AddAnimation(0, m_info.idleAnimation.animation, true, 0).TimeScale = 5f;
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.comboAttack.animation);
+            m_animation.AddAnimation(0, m_info.idleAnimation.animation, true, 0).TimeScale = 5f;
             m_hurtbox.enabled = false;
             if (!IsFacingTarget())
                 CustomTurn();
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.idleAnimation);
             m_animation.DisableRootMotion();
-            m_stateHandle.OverrideState(State.Chasing);
+            m_attackDecider.hasDecidedOnAttack = false;
+
+            m_stateHandle.ApplyQueuedState();
             yield return null;
         }
 
@@ -600,11 +625,29 @@ namespace DChild.Gameplay.Characters.Enemies
                     }
                     break;
                 case State.Attacking:
-                    m_stateHandle.Wait(State.Cooldown);
+                    //m_stateHandle.Wait(State.Cooldown);
                     //m_animation.SetAnimation(0, m_info.idleAnimation, true);
-                    m_agent.Stop();
-                    m_executeMoveCoroutine = StartCoroutine(ExecuteMove(/*m_currentAttackRange*/ m_attackRangeCache[0], m_currentAttack));
-                    m_attackDecider.hasDecidedOnAttack = false;
+                    //m_agent.Stop();
+                    //m_executeMoveCoroutine = StartCoroutine(ExecuteMove(/*m_currentAttackRange*/ m_attackRangeCache[0], m_currentAttack));
+                    //m_attackDecider.hasDecidedOnAttack = false;
+
+                    if(m_attackDecider.hasDecidedOnAttack == false)
+                    {
+                        CustomDecideOnAttack();
+                    }
+
+                    switch (m_attackDecider.chosenAttack.attack)
+                    {
+                        case Attack.SingleAttack:
+                            StartCoroutine(HeavySlashAttackRoutine());
+                            break;
+                        case Attack.ComboAttack:
+                            StartCoroutine(ComboAttackRoutine());
+                            break;
+                        default:
+                            StartCoroutine(HeavySlashAttackRoutine());
+                            break;
+                    }
                     break;
                 case State.Cooldown:
                     //m_stateHandle.Wait(State.ReevaluateSituation);
@@ -643,13 +686,12 @@ namespace DChild.Gameplay.Characters.Enemies
 
                     break;
                 case State.Chasing:
-                    m_attackDecider.hasDecidedOnAttack = false;
-                    ChooseAttack();
-                    if (m_attackDecider.hasDecidedOnAttack /*&& !ShotBlocked()*/)
-                    {
-                        m_agent.Stop();
-                        m_stateHandle.SetState(State.Attacking);
-                    }
+                    //if (m_attackDecider.hasDecidedOnAttack /*&& !ShotBlocked()*/)
+                    //{
+                    //    m_agent.Stop();
+                    //    m_stateHandle.SetState(State.Attacking);
+                    //}
+                    StartCoroutine(ChasePlayerRoutine());
                     break;
 
                 case State.ReevaluateSituation:
@@ -680,6 +722,23 @@ namespace DChild.Gameplay.Characters.Enemies
                     }
                 }
             }
+        }
+
+        private IEnumerator ChasePlayerRoutine()
+        {
+            m_stateHandle.Wait(State.Attacking);
+
+            m_animation.SetAnimation(0, m_info.move.animation, true);
+
+            while(!IsInRange(m_targetInfo.position, m_info.attackDistance))
+            {
+                m_agent.SetDestination(m_targetInfo.position);
+                m_agent.Move(m_info.move.speed);
+                yield return null;
+            }
+
+            m_stateHandle.ApplyQueuedState();
+            yield return null;
         }
 
         protected override void OnTargetDisappeared()
