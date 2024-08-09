@@ -966,7 +966,8 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_stateHandle.Wait(State.PreAttackMovement);
 
-            m_deathStenchWave.gameObject.SetActive(true);
+            m_attacker.SetData(m_info.deathStenchWaveImpactAttackData);
+
 
             var center = new Vector2(m_arenaCenter.position.x, m_groundCombatHeight);
 
@@ -977,6 +978,8 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.EnableRootMotion(true, true);
             m_animation.SetAnimation(0, m_info.deathStenchWaveAnticipation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.deathStenchWaveAnticipation);
+            
+            m_deathStenchWave.gameObject.SetActive(true);
 
             m_animation.SetAnimation(0, m_info.deathStenchWaveAttack.animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.deathStenchWaveAttack.animation);
