@@ -16,7 +16,7 @@ MonoBehaviour:
     SerializedFormat: 2
     SerializedBytes: 
     ReferencedUnityObjects:
-    - {fileID: 11400000, guid: 614d0262a154d19439f51e3f76148398, type: 2}
+    - {fileID: 11400000, guid: d7f21431cdf3e554c8aad84ebb6659bf, type: 2}
     SerializedBytesString: 
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
@@ -28,86 +28,13 @@ MonoBehaviour:
     - Name: m_skeletonDataAsset
       Entry: 10
       Data: 0
-    - Name: m_patrol
-      Entry: 7
-      Data: 1|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+MovementInfo[[DChild.Gameplay.Characters.Enemies.MortumAI+Info,
-        Assembly-CSharp]], Assembly-CSharp
-    - Name: m_animation
-      Entry: 1
-      Data: walk animation_final
-    - Name: m_timeScale
-      Entry: 4
-      Data: 0
-    - Name: m_speed
-      Entry: 4
-      Data: 5
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: m_move
-      Entry: 7
-      Data: 2|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+MovementInfo[[DChild.Gameplay.Characters.Enemies.MortumAI+Info,
-        Assembly-CSharp]], Assembly-CSharp
-    - Name: m_animation
-      Entry: 1
-      Data: walk animation_final
-    - Name: m_timeScale
-      Entry: 4
-      Data: 0
-    - Name: m_speed
-      Entry: 4
-      Data: 5
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: m_attackCD
-      Entry: 4
-      Data: 2
-    - Name: m_backhandAttack
-      Entry: 7
-      Data: 3|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.MortumAI+Info,
-        Assembly-CSharp]], Assembly-CSharp
-    - Name: m_animation
-      Entry: 1
-      Data: attack_uppercut_final
-    - Name: m_timeScale
-      Entry: 4
-      Data: 0
-    - Name: m_range
-      Entry: 4
-      Data: 20
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: m_armAttack
-      Entry: 7
-      Data: 4|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.MortumAI+Info,
-        Assembly-CSharp]], Assembly-CSharp
-    - Name: m_animation
-      Entry: 1
-      Data: attack_sideslash_final
-    - Name: m_timeScale
-      Entry: 4
-      Data: 0
-    - Name: m_range
-      Entry: 4
-      Data: 20
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: m_patience
-      Entry: 4
-      Data: 10
-    - Name: m_targetDistanceTolerance
-      Entry: 4
-      Data: 10
     - Name: m_idleAnimation
       Entry: 7
-      Data: 5|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.MortumAI+Info,
+      Data: 1|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.MortumAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
-      Data: idle_animation_final
+      Data: Idle NEW
     - Name: m_timeScale
       Entry: 4
       Data: 1
@@ -116,70 +43,155 @@ MonoBehaviour:
       Data: 
     - Name: m_detectAnimation
       Entry: 7
-      Data: 6|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.MortumAI+Info,
+      Data: 2|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.MortumAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
-      Data: player_detect_animation
+      Data: Detect NEW
     - Name: m_timeScale
       Entry: 4
       Data: 1
     - Name: 
       Entry: 8
       Data: 
-    - Name: m_flinchAnimation
+    - Name: m_kneelDuration
+      Entry: 4
+      Data: 5
+    - Name: m_kneelingAnimation
       Entry: 7
-      Data: 7|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.MortumAI+Info,
+      Data: 3|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.MortumAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
-      Data: flinch_animation
+      Data: Kneel NEW
     - Name: m_timeScale
       Entry: 4
       Data: 1
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: m_standingAnimation
+      Entry: 7
+      Data: 4|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.MortumAI+Info,
+        Assembly-CSharp]], Assembly-CSharp
+    - Name: m_animation
+      Entry: 1
+      Data: Stand NEW
+    - Name: m_timeScale
+      Entry: 4
+      Data: 1
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: m_patrol
+      Entry: 7
+      Data: 5|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+MovementInfo[[DChild.Gameplay.Characters.Enemies.MortumAI+Info,
+        Assembly-CSharp]], Assembly-CSharp
+    - Name: m_animation
+      Entry: 1
+      Data: Walk NEW
+    - Name: m_timeScale
+      Entry: 4
+      Data: 1
+    - Name: m_speed
+      Entry: 4
+      Data: 5
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: m_move
+      Entry: 7
+      Data: 6|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+MovementInfo[[DChild.Gameplay.Characters.Enemies.MortumAI+Info,
+        Assembly-CSharp]], Assembly-CSharp
+    - Name: m_animation
+      Entry: 1
+      Data: Walk NEW
+    - Name: m_timeScale
+      Entry: 4
+      Data: 1
+    - Name: m_speed
+      Entry: 4
+      Data: 5
     - Name: 
       Entry: 8
       Data: 
     - Name: m_turnAnimation
       Entry: 7
-      Data: 8|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.MortumAI+Info,
+      Data: 7|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.MortumAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
-      Data: turn_animation
+      Data: Turn NEW
     - Name: m_timeScale
       Entry: 4
       Data: 1
     - Name: 
       Entry: 8
       Data: 
-    - Name: m_flinchdeathAnimation
+    - Name: m_backHandAttack
+      Entry: 7
+      Data: 8|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.MortumAI+Info,
+        Assembly-CSharp]], Assembly-CSharp
+    - Name: m_animation
+      Entry: 1
+      Data: Backhand NEW
+    - Name: m_timeScale
+      Entry: 4
+      Data: 1
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: m_armBashAttack
       Entry: 7
       Data: 9|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.MortumAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
-      Data: Death_flinch_animation_final
+      Data: ArmBash NEW
     - Name: m_timeScale
       Entry: 4
       Data: 1
     - Name: 
       Entry: 8
       Data: 
-    - Name: m_deathAnimation
+    - Name: m_meleeAttackRange
+      Entry: 4
+      Data: 10
+    - Name: m_eyeLaserAttack
       Entry: 7
-      Data: 10|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.MortumAI+Info,
+      Data: 10|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.MortumAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
-      Data: Death_animation_final
+      Data: Eye Laser NEW
     - Name: m_timeScale
       Entry: 4
       Data: 1
+    - Name: m_range
+      Entry: 4
+      Data: 40
     - Name: 
       Entry: 8
       Data: 
+    - Name: m_eyeLaserMaxDistance
+      Entry: 4
+      Data: 100
+    - Name: m_eyeLaserOnEvent
+      Entry: 1
+      Data: Spawn Particles at Pelvis77 and LASER TARGET
+    - Name: m_eyeLaserOffEvent
+      Entry: 1
+      Data: Remove Particles at Pelvis77 and LASER TARGET
+    - Name: m_eyelaserMinRange
+      Entry: 4
+      Data: 40
+    - Name: m_eyelaserMaxRange
+      Entry: 4
+      Data: 50
+    - Name: m_patienceDuration
+      Entry: 4
+      Data: 10
     - Name: 
       Entry: 8
       Data: 
-  m_bestiaryData: {fileID: 0}
+  m_bestiaryData: {fileID: 11400000, guid: b7a5218c4805a2f4c924fb8d36b91bce, type: 2}

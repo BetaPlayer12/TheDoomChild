@@ -32,7 +32,7 @@ namespace DChild.Gameplay.Characters
         [SerializeField]
         private SkeletonAnimation m_skeletonAnimation;
 
-        public void InitializeField(SpineRootAnimation spineRoot,IsolatedPhysics2D physics, SkeletonAnimation animation)
+        public void InitializeField(SpineRootAnimation spineRoot, IsolatedPhysics2D physics, SkeletonAnimation animation)
         {
             m_spine = spineRoot;
             m_physics = physics;
@@ -49,6 +49,7 @@ namespace DChild.Gameplay.Characters
         private string m_flinchColorAnimation;
 
         private bool m_isFlinching;
+        public bool m_enableModule = true;
 
         //public event EventAction<EventActionArgs> HitStopStart;
         public event EventAction<EventActionArgs> FlinchStart;
@@ -67,8 +68,8 @@ namespace DChild.Gameplay.Characters
 
         public virtual void Flinch(Vector2 directionToSource, RelativeDirection damageSource, AttackSummaryInfo attackInfo)
         {
-         
-            Flinch();
+            if (m_enableModule)
+                Flinch();
         }
 
         public void Flinch()
