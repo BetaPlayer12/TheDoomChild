@@ -80,6 +80,9 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField, ValueDropdown("GetEvents")]
             private string m_bookSummonEvent;
             public string bookSummonEvent => m_bookSummonEvent;
+            [SerializeField, ValueDropdown("GetEvents")]
+            private string m_bookSummonEvent2;
+            public string bookSummonEvent2 => m_bookSummonEvent2;
 
             public override void Initialize()
             {
@@ -177,6 +180,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private int m_minionSummon = 0;
         [SerializeField]
         private float m_cooldownToSummon;
+        [SerializeField]
+        private List<ParticleFX> m_summonElement;
         //public Stack<int> m_summoned = new Stack<int>();
 
 
@@ -328,7 +333,7 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_Audiosource.Play();
             StopAllCoroutines();
             base.OnDestroyed(sender, eventArgs);
-            
+
             m_stateHandle.OverrideState(State.WaitBehaviourEnd);
             //if (m_attackRoutine != null)
             //{
@@ -370,23 +375,84 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_stateHandle.ApplyQueuedState();
             }
         }
-
+        [SerializeField]
+        private Transform m_summonMinionLocation;
+        private int m_projectileElement;
+        private int m_projectileID;
         #region Attacks
         private void LaunchAttack()
         {
-            var projectileID = UnityEngine.Random.Range(0, m_info.projectiles.Count);
-            m_currentSummonID = UnityEngine.Random.Range(0, m_summons.Count);
             switch (m_attackDecider.chosenAttack.attack)
             {
                 case Attack.SpellAttack:
-                    m_projectileLauncher = new ProjectileLauncher(m_info.projectiles[projectileID].projectileInfo, m_projectilePoint.transform);
+                    m_projectileLauncher = new ProjectileLauncher(m_info.projectiles[m_projectileID].projectileInfo, m_projectilePoint.transform);
                     m_projectileLauncher.AimAt(m_lastTargetPos);
                     m_projectileLauncher.LaunchProjectile();
                     break;
                 case Attack.SummonAttack:
-                    var minions = Instantiate(m_minions[m_currentSummonID], m_currentSummonID == 0 ? (Vector2)transform.position : new Vector2(m_lastTargetPos.x, m_lastTargetPos.y + 10f), Quaternion.identity);
+                    var minions = Instantiate(m_minions[m_currentSummonID], m_summonLocation, Quaternion.identity);
                     minions.GetComponent<Damageable>().Destroyed += OnMinionSummonedDestroyed;
                     //m_summons[m_currentSummonID].SummonAt(m_currentSummonID == 0 ? (Vector2)transform.position : new Vector2(m_lastTargetPos.x, m_lastTargetPos.y + 10f), m_targetInfo);
+                    break;
+            }
+        }
+        private Vector2 m_summonLocation;
+        private void LaunchMinion()
+        {
+            m_currentSummonID = UnityEngine.Random.Range(0, m_summons.Count);
+            switch (m_currentSummonID)
+            {
+                case 0:
+                    if(m_character.facing == HorizontalDirection.Left){
+                        m_summonLocation = new Vector2(m_summonMinionLocation.position.x - 1f, m_summonMinionLocation.position.y);
+                    }
+                    else
+                    {
+                        m_summonLocation = new Vector2(m_summonMinionLocation.position.x + 1f, m_summonMinionLocation.position.y);
+                    }
+                    break;
+                case 1:
+                    if (m_character.facing == HorizontalDirection.Left)
+                    {
+                        m_summonLocation = new Vector2(m_summonMinionLocation.position.x -1f, m_summonMinionLocation.position.y - 5f);
+                    }
+                    else
+                    {
+                        m_summonLocation = new Vector2(m_summonMinionLocation.position.x + 1f, m_summonMinionLocation.position.y - 5f);
+                    }
+                    break;
+                case 2:
+                    if (m_character.facing == HorizontalDirection.Left)
+                    {
+                        m_summonLocation = new Vector2(m_summonMinionLocation.position.x - 1f, m_summonMinionLocation.position.y);
+                    }
+                    else
+                    {
+                        m_summonLocation = new Vector2(m_summonMinionLocation.position.x + 1f, m_summonMinionLocation.position.y);
+                    }
+                    break;
+            }
+            var projectileID = UnityEngine.Random.Range(0, m_info.projectiles.Count);
+            switch (projectileID)
+            {
+                case 0:
+                    m_projectileElement = 0;
+                    break;
+                case 1:
+                    m_projectileElement = 1;
+                    break;
+                case 2:
+                    m_projectileElement = 2;
+                    break;
+            }
+            m_projectileID = projectileID;
+            switch (m_attackDecider.chosenAttack.attack)
+            {
+                case Attack.SpellAttack:
+                    m_summonElement[m_projectileElement].Play();
+                    break;
+                case Attack.SummonAttack:
+                    m_summonElement[3].Play();
                     break;
             }
         }
@@ -500,6 +566,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_currentFullCD = UnityEngine.Random.Range(m_info.attackCD * .5f, m_info.attackCD * 2f);
 
             m_spineEventListener.Subscribe(m_info.bookSummonEvent, LaunchAttack);
+            m_spineEventListener.Subscribe(m_info.bookSummonEvent2, LaunchMinion);
 
             if (!m_willPatrol)
             {
@@ -513,7 +580,7 @@ namespace DChild.Gameplay.Characters.Enemies
         protected override void Awake()
         {
             base.Awake();
-            
+
             m_patrolHandle.TurnRequest += OnTurnRequest;
             m_attackHandle.AttackDone += OnAttackDone;
             m_turnHandle.TurnDone += OnTurnDone;
@@ -607,10 +674,10 @@ namespace DChild.Gameplay.Characters.Enemies
                             {
                                 m_attackHandle.ExecuteAttack(m_info.summonAttack.animation, m_info.idleAnimation.animation);
                             }
-                            if(m_minionSummon >= 1)
+                            if (m_minionSummon >= 1)
                             {
                                 m_minionSummon = 1;
-                                if(m_minionSummon == 1)
+                                if (m_minionSummon == 1)
                                 {
                                     m_stateHandle.SetState(State.Cooldown);
                                 }
