@@ -18,7 +18,7 @@ using Unity.Mathematics;
 namespace DChild.Gameplay.Characters.Enemies
 {
     [AddComponentMenu("DChild/Gameplay/Enemies/Minion/Wraith")]
-    public class WraithAI : CombatAIBrain<WraithAI.Info>
+    public class WraithAI : CombatAIBrain<WraithAI.Info>, ISummonedEnemy
     {
         [System.Serializable]
         public class Info : BaseInfo
@@ -142,6 +142,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private Hitbox m_hitbox;
         [SerializeField, TabGroup("Reference")]
         private Collider2D m_hurtbox;
+        [SerializeField, TabGroup("Reference")]
+        private Health m_health;
         [SerializeField, TabGroup("Modules")]
         private AnimatedTurnHandle m_turnHandle;
         [SerializeField, TabGroup("Modules")]
@@ -748,6 +750,17 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return null;
         }
 
+        private IEnumerator MatchPlayerHeightLevel()
+        {
+            var destination = new Vector2(transform.position.x, m_targetInfo.transform.position.y);
+            m_agent.SetDestination(destination);
+            while (transform.position.y > destination.y)
+            {
+                m_agent.Move(m_info.move.speed);
+                yield return null;
+            }
+        }
+
         protected override void OnTargetDisappeared()
         {
             m_stateHandle.OverrideState(State.ReturnToPatrol);
@@ -773,6 +786,30 @@ namespace DChild.Gameplay.Characters.Enemies
         public override void ReturnToSpawnPoint()
         {
             Patience();
+        }
+
+        public void SummonAt(Vector2 position, AITargetInfo target)
+        {
+            enabled = false;
+            m_targetInfo = target;
+            m_isDetecting = true;
+            transform.position = new Vector2(m_targetInfo.position.x, m_targetInfo.position.y + 10f);
+            m_character.physics.simulateGravity = false;
+            m_hitbox.Enable();
+            m_flinchHandle.gameObject.SetActive(true);
+            m_health.SetHealthPercentage(1f);
+            this.gameObject.SetActive(true);
+            this.transform.SetParent(null);
+            if (!IsFacingTarget())
+                CustomTurn();
+            Awake();
+            m_stateHandle.OverrideState(State.Detect);
+            enabled = true;
+        }
+
+        public void DestroyObject()
+        {
+            throw new NotImplementedException();
         }
     }
 }
