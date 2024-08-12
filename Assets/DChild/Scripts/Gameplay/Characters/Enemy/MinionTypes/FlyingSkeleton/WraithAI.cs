@@ -291,10 +291,12 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             //m_Audiosource.clip = m_DeadClip;
             //m_Audiosource.Play();
+            m_animation.animationState.ClearTrack(1);
+            m_flinchHandle.m_enableModule = false;
             m_stateHandle.Wait(State.WaitBehaviourEnd);
             StopAllCoroutines();
             base.OnDestroyed(sender, eventArgs);
-            
+
             if (m_executeMoveCoroutine != null)
             {
                 StopCoroutine(m_executeMoveCoroutine);
@@ -313,16 +315,19 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator DeathRoutine()
         {
-            m_animation.SetAnimation(0, m_info.deathCombinedAnimation, false);
-            m_animation.EnableRootMotion(true, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.deathCombinedAnimation);
+            m_animation.EnableRootMotion(true, true);
+            //m_animation.SetAnimation(0, m_info.deathCombinedAnimation, false);
+            //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.deathCombinedAnimation);
+            var track = m_animation.SetAnimation(0, m_info.deathStartAnimation, false);
+            yield return new WaitForSpineAnimationComplete(track);
             //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.deathStartAnimation);
             //yield return new WaitForSeconds(1.6f);
             //m_animation.DisableRootMotion();
-            //m_character.physics.simulateGravity = true;
-            //m_animation.SetAnimation(0, m_info.deathLoopAnimation, true);
-            //m_bodyCollider.enabled = true;
-            //m_animation.EnableRootMotion(true, true);
+            // m_character.physics.simulateGravity = true;
+            GetComponent<IsolatedObjectPhysics2D>().simulateGravity = true;
+            m_animation.SetAnimation(0, m_info.deathLoopAnimation, true);
+            m_bodyCollider.enabled = true;
+            m_animation.DisableRootMotion();
             enabled = false;
             this.gameObject.SetActive(false);
             yield return null;
@@ -334,12 +339,13 @@ namespace DChild.Gameplay.Characters.Enemies
             //Combo Attack is AttackCache[1]
 
             int attackChance = UnityEngine.Random.Range(0, 100);
-            if(attackChance <= 60)
+            if (attackChance <= 60)
             {
                 //Choose AttackCache[0]
                 m_attackDecider.DecideOnAttack(Attack.SingleAttack);
                 m_currentAttack = Attack.SingleAttack;
                 m_currentAttackRange = m_attackRangeCache[0];
+                m_attackDecider.hasDecidedOnAttack = true;
                 Debug.Log("Chosen Attack: " + m_attackCache[0]);
             }
             else
@@ -348,6 +354,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_attackDecider.DecideOnAttack(Attack.ComboAttack);
                 m_currentAttack = Attack.ComboAttack;
                 m_currentAttackRange = m_attackRangeCache[1];
+                m_attackDecider.hasDecidedOnAttack = true;
                 Debug.Log("Chosen Attack: " + m_attackCache[1]);
             }
         }
@@ -486,7 +493,7 @@ namespace DChild.Gameplay.Characters.Enemies
             while (!inRange || TargetBlocked())
             {
                 newPos = new Vector2(m_targetInfo.position.x - ((Vector2.Distance(m_targetInfo.position, transform.position) > attackRange ? attackRange : 0f) * transform.localScale.x), /*GroundPosition().y + 20*/m_targetInfo.position.y - m_info.attackOffset);
-                bool xTargetInRange = Mathf.Abs(/*m_targetInfo.position.x*/newPos.x - transform.position.x) < (Vector2.Distance(m_targetInfo.position, transform.position) > attackRange ?  1 : attackRange) ? true : false;
+                bool xTargetInRange = Mathf.Abs(/*m_targetInfo.position.x*/newPos.x - transform.position.x) < (Vector2.Distance(m_targetInfo.position, transform.position) > attackRange ? 1 : attackRange) ? true : false;
                 bool yTargetInRange = Mathf.Abs(/*m_targetInfo.position.y*/newPos.y - transform.position.y) < 1 ? true : false;
                 if (xTargetInRange && yTargetInRange)
                 {
@@ -535,7 +542,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             Debug.Log(m_info);
             base.Awake();
-            
+
             m_patrolHandle.TurnRequest += OnTurnRequest;
             m_attackHandle.AttackDone += OnAttackDone;
             m_flinchHandle.FlinchStart += OnFlinchStart;
@@ -631,7 +638,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     //m_executeMoveCoroutine = StartCoroutine(ExecuteMove(/*m_currentAttackRange*/ m_attackRangeCache[0], m_currentAttack));
                     //m_attackDecider.hasDecidedOnAttack = false;
 
-                    if(m_attackDecider.hasDecidedOnAttack == false)
+                    if (m_attackDecider.hasDecidedOnAttack == false)
                     {
                         CustomDecideOnAttack();
                     }
@@ -730,7 +737,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
             m_animation.SetAnimation(0, m_info.move.animation, true);
 
-            while(!IsInRange(m_targetInfo.position, m_info.attackDistance))
+            while (!IsInRange(m_targetInfo.position, m_info.attackDistance))
             {
                 m_agent.SetDestination(m_targetInfo.position);
                 m_agent.Move(m_info.move.speed);
