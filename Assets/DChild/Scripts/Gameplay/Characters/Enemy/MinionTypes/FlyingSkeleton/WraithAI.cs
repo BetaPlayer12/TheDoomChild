@@ -147,13 +147,13 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Reference")]
         private Hitbox m_hitbox;
         [SerializeField, TabGroup("Reference")]
-        private Collider2D m_hurtbox;
-        [SerializeField, TabGroup("Reference")]
         private Health m_health;
         [SerializeField, TabGroup("Reference")]
         private RaySensor m_rightWallSensor;
         [SerializeField, TabGroup("Reference")]
         private RaySensor m_lefttWallSensor;
+        [SerializeField, TabGroup("Reference")]
+        private RaySensor m_groundSensor;
         [SerializeField, TabGroup("Modules")]
         private AnimatedTurnHandle m_turnHandle;
         [SerializeField, TabGroup("Modules")]
@@ -193,7 +193,6 @@ namespace DChild.Gameplay.Characters.Enemies
         private void OnAttackDone(object sender, EventActionArgs eventArgs)
         {
             m_animation.DisableRootMotion();
-            m_hurtbox.enabled = false;
             m_flinchHandle.m_autoFlinch = true;
             //m_stateHandle.ApplyQueuedState();
         }
@@ -315,7 +314,6 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_executeMoveCoroutine = null;
             }
             m_hitbox.Disable();
-            m_hurtbox.enabled = false;
             m_flinchHandle.gameObject.SetActive(false);
             m_agent.Stop();
             m_selfCollider.SetActive(false);
@@ -332,13 +330,22 @@ namespace DChild.Gameplay.Characters.Enemies
             //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.deathCombinedAnimation);
             var track = m_animation.SetAnimation(0, m_info.deathStartAnimation, false);
             yield return new WaitForSpineAnimationComplete(track);
+            m_animation.DisableRootMotion();
             //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.deathStartAnimation);
             //yield return new WaitForSeconds(1.6f);
             //m_animation.DisableRootMotion();
             // m_character.physics.simulateGravity = true;
             GetComponent<IsolatedObjectPhysics2D>().simulateGravity = true;
             m_animation.SetAnimation(0, m_info.deathLoopAnimation, true);
+
+            while (!m_groundSensor.isDetecting)
+            {
+                yield return null;
+            }
+
             m_bodyCollider.enabled = true;
+            track = m_animation.SetAnimation(0, m_info.deathEndAnimation, false);
+            yield return new WaitForSpineAnimationComplete(track);
             m_animation.DisableRootMotion();
             enabled = false;
             this.gameObject.SetActive(false);
@@ -436,7 +443,6 @@ namespace DChild.Gameplay.Characters.Enemies
             m_flinchHandle.m_autoFlinch = false;
             m_agent.Stop();
             m_animation.EnableRootMotion(true, false);
-            m_hurtbox.enabled = true;
             switch (m_attack)
             {
                 case Attack.SingleAttack:
