@@ -210,8 +210,9 @@ GameObject:
   m_Component:
   - component: {fileID: 9013217665373877925}
   - component: {fileID: 3527049091974896189}
-  - component: {fileID: 2182515509564539064}
   - component: {fileID: 4932855472460118443}
+  - component: {fileID: 2264308943763369818}
+  - component: {fileID: 7909766081598685110}
   m_Layer: 13
   m_Name: AttackBB
   m_TagString: Untagged
@@ -227,7 +228,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1533986154733861196}
   m_LocalRotation: {x: -0, y: -0, z: -0.99877876, w: 0.049406867}
-  m_LocalPosition: {x: 2.5784569, y: 21.257988, z: 0}
+  m_LocalPosition: {x: 2.5784607, y: 21.257988, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -247,7 +248,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   skeletonRenderer: {fileID: 8097378882614417115}
-  boneName: pelvis40
+  boneName: Attack Collider
   followXYPosition: 1
   followZPosition: 1
   followBoneRotation: 1
@@ -255,32 +256,6 @@ MonoBehaviour:
   followLocalScale: 0
   initializeOnAwake: 1
   m_updateOnFixedUpdate: 0
---- !u!61 &2182515509564539064
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1533986154733861196}
-  m_Enabled: 0
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 4.062241, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0, y: 0}
-    oldSize: {x: 0, y: 0}
-    newSize: {x: 0, y: 0}
-    adaptiveTilingThreshold: 0
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 9.124482, y: 1}
-  m_EdgeRadius: 0
 --- !u!114 &4932855472460118443
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -297,6 +272,51 @@ MonoBehaviour:
   m_damageUniqueHitboxesOnly: 0
   m_collisionRegistrator: {fileID: 0}
   m_ignoreColliderList: []
+--- !u!114 &2264308943763369818
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1533986154733861196}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0317ee9ba6e1b1e49a030268e026d372, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  skeletonRenderer: {fileID: 8097378882614417115}
+  slotName: Attack Collider
+  isTrigger: 1
+  clearStateOnDisable: 1
+--- !u!60 &7909766081598685110
+PolygonCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1533986154733861196}
+  m_Enabled: 0
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Points:
+    m_Paths:
+    - - {x: -5.6275, y: 3.0023}
+      - {x: -5.7852, y: -3.3854}
+      - {x: 5.5707, y: -3.2276}
+      - {x: 5.5707, y: 3.6332}
 --- !u!1 &2267281770239137658
 GameObject:
   m_ObjectHideFlags: 0
@@ -371,7 +391,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2586520423263579261}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.6365166, y: 14.95425, z: 0}
+  m_LocalPosition: {x: 0.6365204, y: 14.95425, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -893,7 +913,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9153217548990041142}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.95604706, y: 20.963326, z: 0}
+  m_LocalPosition: {x: 0.9560394, y: 20.963326, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
