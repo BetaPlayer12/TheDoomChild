@@ -8,6 +8,7 @@ using Sirenix.Serialization;
 using System.Collections;
 using UnityEngine.SceneManagement;
 using PixelCrushers.DialogueSystem;
+using DChild.Gameplay.Cinematics;
 #if UNITY_EDITOR
 using UnityEditor;
 using DChildDebug;
@@ -71,6 +72,9 @@ namespace DChild.Serialization
 
             public Dictionary<SerializeID, ISaveData> savedDatas => m_savedDatas;
         }
+        [SerializeField, BoxGroup("Temporary (To Be Deleted)")]
+        private bool m_useCameraPrioritization;
+
         public ZoneSlot Zone;
 
         [SerializeField]
@@ -223,6 +227,8 @@ namespace DChild.Serialization
 #if UNITY_EDITOR
             SceneCameraIntergrityChecker.ValidateIntegrity();
 #endif
+            ((Cinema)GameplaySystem.cinema).m_useCameraPrioritization = m_useCameraPrioritization;
+
 
             var proposedData = GameplaySystem.campaignSerializer.slot.GetZoneData<ZoneData>(m_ID);
 #if UNITY_EDITOR
