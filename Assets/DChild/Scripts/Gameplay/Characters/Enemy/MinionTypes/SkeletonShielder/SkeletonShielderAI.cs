@@ -921,14 +921,20 @@ namespace DChild.Gameplay.Characters.Enemies
             switch (nextMode)
             {
                 case MinionMode.NoGuard:
-                    m_attackDecider.hasDecidedOnAttack = false;
+                    if(m_attackDecider != null)
+                    {
+                        m_attackDecider.hasDecidedOnAttack = false;
+                    }   
                     StartCoroutine(ChangeModeNoGuardRoutine());
                     break;
                 case MinionMode.Guard:
                     StartCoroutine(ChangeModeGuardRoutine());
                     break;
                 case MinionMode.NoShield:
-                    m_attackDecider.hasDecidedOnAttack = false;
+                    if (m_attackDecider != null)
+                    {
+                        m_attackDecider.hasDecidedOnAttack = false;
+                    }
                     StartCoroutine(ShieldDestroyedRoutine());
                     break;
                 case MinionMode.SwitchingToOtherMode:
