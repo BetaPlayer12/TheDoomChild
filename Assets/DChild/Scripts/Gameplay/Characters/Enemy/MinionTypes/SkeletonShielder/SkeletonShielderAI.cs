@@ -389,8 +389,9 @@ namespace DChild.Gameplay.Characters.Enemies
                 }
                 else
                 {
+                    
                     m_flinchHandle.SetAnimation(m_info.noShieldFlinch.animation);
-                    m_flinchHandle.SetAnimation(m_info.noShieldIdle.animation);
+                    m_flinchHandle.SetIdleAnimation(m_info.noShieldIdle.animation);
                     //m_animation.SetAnimation(0, m_info.noShieldFlinch, false);
                 }
                 
@@ -421,7 +422,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 }
                 SwitchModeTo(MinionMode.Guard);
             }
-
+            m_stateHandle.SetState(State.ReevaluateSituation);
         }
 
         public override void ApplyData()
@@ -831,7 +832,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     }
                     else
                     {
-                        m_turnState = State.Detect;
+                        m_turnState = State.ReevaluateSituation;
                         if (m_animation.GetCurrentAnimation(0).ToString() != m_info.noShieldTurn.animation)
                             m_stateHandle.SetState(State.Turning);
                     }
