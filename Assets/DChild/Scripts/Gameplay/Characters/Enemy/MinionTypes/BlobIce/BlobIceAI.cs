@@ -257,18 +257,6 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void Update()
         {
-            if(m_isCowering)
-            {
-                if (m_targetInfo.isValid)
-                {
-                    if (IsTargetInRange(2f))
-                    {
-                        m_damageable.KillSelf();
-                        m_isCowering = false;
-                    }
-                }               
-            }
-
             switch (m_stateHandle.currentState)
             {
                 case State.Patrol:
@@ -329,6 +317,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_stateHandle.Wait(State.Patrol);
 
+            m_isRetreating = false;
             m_isCowering = true;
             m_cowerInFearDuration = m_info.cowerInFearDuration;
 
@@ -387,7 +376,16 @@ namespace DChild.Gameplay.Characters.Enemies
 
             while (!m_wallSensor.isDetecting && m_edgeSensor.isDetecting)
             {
-                m_movement.MoveTowards(Vector2.right, m_info.retreat.speed);
+                if (m_character.facing == HorizontalDirection.Right)
+                {
+                    m_movement.MoveTowards(Vector2.right, m_info.retreat.speed);
+
+                }
+                else
+                {
+                    m_movement.MoveTowards(Vector2.left, m_info.retreat.speed);
+
+                }
                 yield return null;
             }
 
