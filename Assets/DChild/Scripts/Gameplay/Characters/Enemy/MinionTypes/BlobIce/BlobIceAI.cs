@@ -87,6 +87,13 @@ namespace DChild.Gameplay.Characters.Enemies
             }
         }
 
+        private enum IceBlobType
+        {
+            Ground,
+            Ceiling,
+            Wall
+        }
+
         private enum State
         {
             Patrol,
@@ -104,8 +111,6 @@ namespace DChild.Gameplay.Characters.Enemies
             _COUNT
         }
 
-        //[SerializeField, TabGroup("Reference")]
-        //private SpineEventListener m_spineEventListener;
         [SerializeField, TabGroup("Reference")]
         private Hitbox m_hitbox;
         [SerializeField, TabGroup("Reference")]
@@ -118,6 +123,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private PatrolHandle m_patrolHandle;
         [SerializeField, TabGroup("Modules")]
         private FlinchHandler m_flinchHandle;
+        [SerializeField, TabGroup("Modules")]
+        private IsolatedCharacterPhysics2D m_isolatedCharacterPhysics2D;
         [SerializeField, TabGroup("Modules")]
         private Health m_health;
 
@@ -133,6 +140,8 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_iceTrailSensor;
 
+        [SerializeField]
+        private IceBlobType m_iceBlobType;
         [ShowInInspector]
         private StateHandle<State> m_stateHandle;
 
@@ -142,9 +151,6 @@ namespace DChild.Gameplay.Characters.Enemies
         private Coroutine m_patienceRoutine;
         private Coroutine m_randomIdleRoutine;
         private Coroutine m_randomTurnRoutine;
-
-        [SerializeField]
-        private Renderer m_renderer;
 
         private void OnAttackDone(object sender, EventActionArgs eventArgs)
         {
@@ -196,25 +202,27 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.deathAnimation);
             //m_animation.SetAnimation(0, m_info.disassembledIdleAnimation, true);
             yield return new WaitForSeconds(m_info.deathDuration);
-            InstantiateBlobIceCloud(transform.position);
             gameObject.SetActive(false);
             yield return null;
         }
 
         private IEnumerator RetreatRoutine()
         {
+            m_stateHandle.Wait(State.ReevaluateSituation);
+
+            //If player is on right, turn left, vice versa
+            //Set destination equal to wall sensor distance x, current y, vice versa if wall blob
+            //Move while wall sensor is not detecting
             if (!m_wallSensor.isDetecting)
             {
                 if (m_character.facing == HorizontalDirection.Right)
                 {
-                    transform.Translate(Vector2.right * m_info.retreat.speed * GameplaySystem.time.deltaTime);
+                    //Use waypoint finder to set runaway position and move repeatedly until wall is reached
                 }
                 else if (m_character.facing == HorizontalDirection.Left)
                 {
-                    transform.Translate(Vector2.left * m_info.retreat.speed * GameplaySystem.time.deltaTime);
+                    
                 }
-
-                InstantiateBlobIceTrail();
             }
             else
             {
@@ -222,36 +230,48 @@ namespace DChild.Gameplay.Characters.Enemies
 
                 if (m_targetInfo.doesTargetExist)
                 {
-                    StartCoroutine(DeathRoutine());
+                    yield return DeathRoutine();
                 }
             }
-            
 
-            if (!m_renderer.isVisible)
-            {
-                gameObject.SetActive(false);
-            }
-
-            
+            m_stateHandle.ApplyQueuedState();
             yield return null;
         }
 
-        private void InstantiateBlobIceCloud(Vector2 spawnPosition)
+        private void SetUpGroundBlob()
         {
-            var instance = GameSystem.poolManager.GetPool<FXPool>().GetOrCreateItem(m_info.blobIceCloud, gameObject.scene);
-            instance.transform.position = spawnPosition;
-            //var component = instance.GetComponent<ParticleFX>();
-            //component.ResetState();
+            transform.rotation = Quaternion.identity;
+
+            m_isolatedCharacterPhysics2D.simulateGravity = true;
         }
 
-        private void InstantiateBlobIceTrail()
+        private void SetUpCeilingBlob()
         {
-            var instance = GameSystem.poolManager.GetPool<FXPool>().GetOrCreateItem(m_info.blobIceTrail, gameObject.scene);
+            transform.rotation = Quaternion.identity;
+            transform.Rotate(new Vector3(0f, 0f, 180f));
 
-            if (!m_iceTrailSensor.isDetecting)
+            m_isolatedCharacterPhysics2D.simulateGravity = false;
+
+            //Set trail on
+        }
+
+        private void SetUpWallBlob()
+        {
+            transform.rotation = Quaternion.identity;           
+
+            m_wallSensor.Cast();
+            if (m_wallSensor.isDetecting)
             {
-                instance.transform.position = m_iceTrailSensor.transform.position;
+                transform.Rotate(new Vector3(0f, 0f, 90f));
             }
+            else
+            {
+                transform.Rotate(new Vector3(0f, 0f, 270f));
+            }
+
+            m_isolatedCharacterPhysics2D.simulateGravity = false;
+
+            //Set trail on
         }
 
         public override void ApplyData()
@@ -262,7 +282,19 @@ namespace DChild.Gameplay.Characters.Enemies
         protected override void Start()
         {
             base.Start();
-            //m_currentMoveSpeed = UnityEngine.Random.Range(m_info.move.speed * .75f, m_info.move.speed * 1.25f);
+
+            switch (m_iceBlobType)
+            {
+                case IceBlobType.Ground:
+                    SetUpGroundBlob();
+                    break;
+                case IceBlobType.Ceiling:
+                    SetUpCeilingBlob();
+                    break;
+                case IceBlobType.Wall:
+                    SetUpWallBlob();
+                    break;
+            }
 
             m_startPoint = transform.position;
         }
@@ -273,7 +305,7 @@ namespace DChild.Gameplay.Characters.Enemies
             
             m_patrolHandle.TurnRequest += OnTurnRequest;
             m_turnHandle.TurnDone += OnTurnDone;
-            //m_flinchHandle.FlinchStart += OnFlinchStart;
+            
             m_stateHandle = new StateHandle<State>(State.Patrol, State.WaitBehaviourEnd);
         }
 
