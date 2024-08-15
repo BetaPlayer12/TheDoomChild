@@ -93,10 +93,14 @@ namespace DChild.Gameplay.Characters.Enemies
         private Hitbox m_hitbox;
         [SerializeField, TabGroup("Reference")]
         private Collider2D m_selfCollider;
+        [SerializeField, TabGroup("Reference")]
+        private SkeletonAnimation m_skelAnimation;
         [SerializeField, TabGroup("Modules")]
         private TransformTurnHandle m_turnHandle;
         [SerializeField, TabGroup("Modules")]
-        private MovementHandle2D m_movement;
+        private MovementHandle2D m_groundMovement;
+        [SerializeField, TabGroup("Modules")]
+        private MovementHandle2D m_wallMovement;
         [SerializeField, TabGroup("Modules")]
         private PatrolHandle m_patrolHandle;
         [SerializeField, TabGroup("Modules")]
@@ -109,14 +113,18 @@ namespace DChild.Gameplay.Characters.Enemies
         private Vector2 m_startPoint;
 
         [SerializeField, TabGroup("Sensors")]
-        private RaySensor m_wallSensor;
+        private RaySensor m_rightWallSensor;
+        [SerializeField, TabGroup("Sensors")]
+        private RaySensor m_leftWallSensor;
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_groundSensor;
         [SerializeField, TabGroup("Sensors")]
-        private RaySensor m_edgeSensor;
+        private RaySensor m_rightEdgeSensor;
         [SerializeField, TabGroup("Sensors")]
-        private RaySensor m_iceTrailSensor;
+        private RaySensor m_leftEdgeSensor;
 
+        [ShowInInspector]
+        private MovementHandle2D m_currentMovementHandle;
         [SerializeField]
         private IceBlobType m_iceBlobType;
         [ShowInInspector]
@@ -165,7 +173,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 StopCoroutine(m_sneerRoutine);
             }
             m_character.physics.UseStepClimb(true);
-            m_movement.Stop();
+            m_currentMovementHandle.Stop();
             m_selfCollider.enabled = false;
             StartCoroutine(DeathRoutine());
         }
@@ -188,6 +196,7 @@ namespace DChild.Gameplay.Characters.Enemies
             transform.rotation = Quaternion.identity;
 
             m_isolatedCharacterPhysics2D.simulateGravity = true;
+            m_currentMovementHandle = m_groundMovement;
         }
 
         private void SetUpCeilingBlob()
@@ -196,26 +205,43 @@ namespace DChild.Gameplay.Characters.Enemies
             transform.Rotate(new Vector3(0f, 0f, 180f));
 
             m_isolatedCharacterPhysics2D.simulateGravity = false;
+            m_currentMovementHandle = m_groundMovement;
+            m_skelAnimation.initialFlipX = true;
+
+            //Correct Sensor positions after flip
+            m_rightWallSensor.transform.localPosition = new Vector3(-0.75f, -0.99f, 0);
+            m_leftWallSensor.transform.localPosition = new Vector3(0.75f, -0.99f, 0);
+
+            m_leftEdgeSensor.transform.localPosition = new Vector3(1.5f, -3.5f, 0);
+            m_rightEdgeSensor.transform.localPosition = new Vector3(-1.5f, -3.5f, 0);
 
             //Set trail on
         }
 
         private void SetUpWallBlob()
         {
-            transform.rotation = Quaternion.identity;           
+            transform.rotation = Quaternion.identity;
 
-            m_wallSensor.Cast();
-            if (m_wallSensor.isDetecting)
+            m_rightWallSensor.Cast();
+            if (m_rightWallSensor.isDetecting) //wall on right
             {
                 transform.Rotate(new Vector3(0f, 0f, 90f));
+                //Correct Sensor positions after flip
+                m_rightWallSensor.transform.localPosition = new Vector3(-0.75f, -0.99f, 0);
+                m_leftWallSensor.transform.localPosition = new Vector3(0.75f, -0.99f, 0);
             }
-            else
+            else //wall on left
             {
                 transform.Rotate(new Vector3(0f, 0f, 270f));
+                //Correct Sensor positions after flip
+                m_rightWallSensor.transform.localPosition = new Vector3(0.75f, -0.99f, 0);
+                m_leftWallSensor.transform.localPosition = new Vector3(-0.75f, -0.99f, 0);
             }
 
-            m_isolatedCharacterPhysics2D.simulateGravity = false;
+            
 
+            m_isolatedCharacterPhysics2D.simulateGravity = false;
+            m_currentMovementHandle = m_wallMovement;
             //Set trail on
         }
         #endregion
@@ -260,28 +286,21 @@ namespace DChild.Gameplay.Characters.Enemies
             switch (m_stateHandle.currentState)
             {
                 case State.Patrol:
-                    if (!m_wallSensor.isDetecting && m_groundSensor.isDetecting)
-                    {
-                        m_turnState = State.ReevaluateSituation;
-                        m_animation.EnableRootMotion(false, false);
-                        m_animation.SetAnimation(0, m_info.move.animation, true);
-                        var characterInfo = new PatrolHandle.CharacterInfo(m_character.centerMass.position, m_character.facing);
-                        m_patrolHandle.Patrol(m_movement, m_info.move.speed, characterInfo);
-                    }
-                    else
-                    {
-                        if (m_animation.animationState.GetCurrent(0).IsComplete)
-                        {
-                            m_animation.SetAnimation(0, m_info.idleAnimation, true);
-                        }
-                    }
+                    StartCoroutine(PatrolRoutine());
                     break;
-
                 case State.Turning:
                     m_stateHandle.Wait(m_turnState);
                     m_turnHandle.Execute();
                     break;
-
+                case State.Detect:
+                    StartCoroutine(DetectRoutine());
+                    break;
+                case State.Retreat:
+                    StartCoroutine(RetreatRoutine());
+                    break;
+                case State.Cower:
+                    StartCoroutine(CowerRoutine());
+                    break;
                 case State.ReevaluateSituation:
                     //How far is target, is it worth it to chase or go back to patrol
                     m_stateHandle.SetState(State.Patrol);
@@ -299,15 +318,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     }
                     break;
 
-                case State.Detect:
-                    StartCoroutine(DetectRoutine());
-                    break;
-                case State.Retreat:
-                    StartCoroutine(RetreatRoutine());
-                    break;
-                case State.Cower:
-                    StartCoroutine(CowerRoutine());
-                    break;
+                
                 case State.WaitBehaviourEnd:
                     return;
             }
@@ -374,28 +385,50 @@ namespace DChild.Gameplay.Characters.Enemies
 
             m_animation.SetAnimation(0, m_info.retreat.animation, true);
 
-            while (!m_wallSensor.isDetecting && m_edgeSensor.isDetecting)
+            while (!m_rightWallSensor.isDetecting && m_rightEdgeSensor.isDetecting)
             {
+                if(m_iceBlobType == IceBlobType.Ground || m_iceBlobType == IceBlobType.Ceiling) { 
+                }
                 if (m_character.facing == HorizontalDirection.Right)
                 {
-                    m_movement.MoveTowards(Vector2.right, m_info.retreat.speed);
+                    m_currentMovementHandle.MoveTowards(Vector2.right, m_info.retreat.speed);
 
                 }
                 else
                 {
-                    m_movement.MoveTowards(Vector2.left, m_info.retreat.speed);
+                    m_currentMovementHandle.MoveTowards(Vector2.left, m_info.retreat.speed);
 
                 }
                 yield return null;
             }
 
-            m_movement.Stop();
+            m_currentMovementHandle.Stop();
             m_isRetreating = false;
 
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
 
             m_stateHandle.ApplyQueuedState();
             yield return null;
+        }
+
+        private IEnumerator PatrolRoutine()
+        {
+            while (m_stateHandle.currentState == State.Patrol)
+            {
+                if (!m_rightWallSensor.isDetecting && m_groundSensor.isDetecting)
+                {
+                    m_turnState = State.ReevaluateSituation;
+                    m_animation.EnableRootMotion(false, false);
+                    m_animation.SetAnimation(0, m_info.move.animation, true);
+                    var characterInfo = new PatrolHandle.CharacterInfo(m_character.centerMass.position, m_character.facing);
+                    m_patrolHandle.Patrol(m_currentMovementHandle, m_info.move.speed, characterInfo);
+                }
+                else
+                {
+                    m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                }
+                yield return null;
+            }           
         }
 
         protected override void OnTargetDisappeared()
