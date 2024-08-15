@@ -365,7 +365,7 @@ namespace DChild.Gameplay.Characters.Enemies
             GetComponentInChildren<Hitbox>().gameObject.SetActive(false);
             m_boundBoxGO.SetActive(false);
             m_movement.Stop();
-            StartCoroutine(DeathRoutine());
+            //StartCoroutine(DeathRoutine());
             base.OnDestroyed(sender, eventArgs);
          
         }
@@ -390,8 +390,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 else
                 {
                     
-                    m_flinchHandle.SetAnimation(m_info.noShieldFlinch.animation);
-                    m_flinchHandle.SetIdleAnimation(m_info.noShieldIdle.animation);
+
                     //m_animation.SetAnimation(0, m_info.noShieldFlinch, false);
                 }
                 
@@ -558,6 +557,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_shieldGlow.gameObject.SetActive(false);
                 m_shieldBreakVFX.gameObject.SetActive(false);
                 m_shieldActive = false;
+                m_deathHandle.SetAnimation(m_info.deathAnimation2.animation);
                 m_stateHandle.OverrideState(State.Flee);
             }
             else
@@ -584,7 +584,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_animation.SetAnimation(0,m_info.noShieldRun.animation, true);
                 m_movement.MoveTowards(Vector2.one * transform.localScale.x, m_info.noShieldRun.speed);
                 yield return null;
-            } while (/*isPlayerNear &&*/ !m_wallSensor.isDetecting && m_edgeSensor.isDetecting);
+            } while (/*isPlayerNear &&*/ !m_wallSensor.isDetecting && m_edgeSensor.allRaysDetecting);
             m_movement.Stop();
 
             m_stateHandle.ApplyQueuedState();
@@ -622,16 +622,17 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator DeathRoutine()
         {
             StopAllCoroutines();
-            if (m_minionMode != MinionMode.NoShield)
-            {
-                m_shieldGlow.Stop();
-                m_animation.SetAnimation(0, m_info.deathAnimation, false);
-            }
-            else
+            if (m_minionMode == MinionMode.NoShield)
             {
                 m_animation.SetAnimation(0, m_info.deathAnimation2, false);
                 yield return new WaitForAnimationComplete(m_animation.animationState, m_info.deathAnimation2);
                 m_deathFx.Play();
+    
+            }
+            else
+            {
+                m_shieldGlow.Stop();
+                m_animation.SetAnimation(0, m_info.deathAnimation, false);
             }
 
             yield return null;
@@ -653,6 +654,8 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 hitbox.SetInvulnerability(Invulnerability.None);
             }
+            m_flinchHandle.SetAnimation(m_info.noShieldFlinch.animation);
+            m_flinchHandle.SetIdleAnimation(m_info.noShieldIdle.animation);
             SwitchModeTo(MinionMode.NoShield);
         }
 
@@ -861,7 +864,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
                 case State.Flee:
                     
-                    if (!IsFacingTarget() && !m_wallSensor.isDetecting && m_edgeSensor.isDetecting)
+                    if (!IsFacingTarget() && !m_wallSensor.isDetecting && m_edgeSensor.allRaysDetecting)
                     {
                         m_stateHandle.Wait(State.ReevaluateSituation);
                         StartCoroutine(NoShieldRunRoutine());
@@ -893,7 +896,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     {
                         //var distance = Vector2.Distance(m_targetInfo.position, transform.position);
                         Debug.Log(m_wallSensor);
-                        if (/*distance < 20f &&*/ !m_wallSensor.isDetecting && m_edgeSensor.isDetecting)
+                        if (/*distance < 20f &&*/ !m_wallSensor.isDetecting && m_edgeSensor.allRaysDetecting)
                         {
                             m_stateHandle.SetState(State.Flee);
                             
