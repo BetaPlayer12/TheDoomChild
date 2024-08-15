@@ -190,8 +190,6 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("FX")]
         private Collider2D m_poisonCloudCollider;
         [SerializeField, TabGroup("FX")]
-        private SpawnedObjectDeathHandler m_poisonCloudDeathDelay;
-        [SerializeField, TabGroup("FX")]
         private ParticleFX m_cloudBurst;
         [SerializeField, TabGroup("FX")]
         private ParticleFX m_biteFX;
@@ -336,6 +334,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.EnableRootMotion(true, true);
             m_animation.SetAnimation(0, m_info.awakenAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.awakenAnimation);
+            SpawnCloud();
             StartCoroutine(AttackRoutine1());
         }
         private IEnumerator RandomTurnRoutine()
@@ -358,10 +357,10 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator AttackRoutine1()
         {
             m_animation.SetAnimation(0, m_info.attack1.animation, false);
+         
             if (Vector2.Distance(m_targetInfo.position, m_character.centerMass.position) < 15)
             {
-                m_cloudBurst.Play();
-                SpawnCloud();
+                m_cloudBurst.Play();  
             }
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack1.animation);
             m_cloudBurst.Stop();
