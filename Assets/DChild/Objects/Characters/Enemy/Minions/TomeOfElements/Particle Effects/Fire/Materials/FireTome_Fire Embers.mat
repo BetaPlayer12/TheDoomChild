@@ -7,19 +7,11 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: SmokeCloud_LightningTome
+  m_Name: FireTome_Fire Embers
   m_Shader: {fileID: 4800000, guid: b430983578466934c944e7171b4c372c, type: 3}
   m_ValidKeywords:
-  - ALPHAFADEINPUTSTREAM_ON
-  - ALPHAFADETRANSPARENCYTOO_ON
-  - ALPHASMOOTHSTEP_ON
   - COLORRAMP_ON
-  - FADE_ON
   - GLOW_ON
-  - HSV_ON
-  - MASK_ON
-  - SHAPE2_ON
-  - SHAPE3_ON
   m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -31,7 +23,7 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _ColorRampTex:
-        m_Texture: {fileID: -96973511383611469, guid: fc73b2313bba63448a86d0197217fb7c,
+        m_Texture: {fileID: 28828065244276170, guid: 9afe3a3ddb0db2642accad446fc2a398,
           type: 2}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -60,11 +52,11 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: 854b25bc08516364da5a786b1cad247e, type: 3}
+        m_Texture: {fileID: 2800000, guid: 2f6642b43dc405d498acba7e288c068c, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MaskTex:
-        m_Texture: {fileID: 2800000, guid: 81d1ae552e5fb354aac9e3b17dab3617, type: 3}
+        m_Texture: {fileID: 2800000, guid: 2f6642b43dc405d498acba7e288c068c, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Shape1MaskTex:
@@ -76,16 +68,16 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Shape2Tex:
-        m_Texture: {fileID: 2800000, guid: 854b25bc08516364da5a786b1cad247e, type: 3}
-        m_Scale: {x: 2, y: 2}
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Shape3DistortTex:
         m_Texture: {fileID: 2800000, guid: fcb027caad6963b4a80539bbce0d10e9, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Shape3Tex:
-        m_Texture: {fileID: 2800000, guid: 854b25bc08516364da5a786b1cad247e, type: 3}
-        m_Scale: {x: 0.5, y: 0.5}
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _ShapeDistortTex:
         m_Texture: {fileID: 2800000, guid: fcb027caad6963b4a80539bbce0d10e9, type: 3}
@@ -101,20 +93,20 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Alpha: 0.256
+    - _Alpha: 1
     - _AlphaCutoffValue: 0.25
     - _AlphaFadeAmount: -0.1
     - _AlphaFadePow: 1
     - _AlphaFadeSmooth: 0.075
-    - _AlphaStepMax: 0.364
-    - _AlphaStepMin: 0.084
+    - _AlphaStepMax: 0.075
+    - _AlphaStepMin: 0
     - _CamDistFadeStepMax: 100
     - _CamDistFadeStepMin: 0
     - _CamDistProximityFade: 0
     - _ColorGradingMidPoint: 0.5
     - _ColorMask: 15
     - _ColorRampBlend: 1
-    - _ColorRampLuminosity: -0.17
+    - _ColorRampLuminosity: -0.3
     - _CullingOption: 0
     - _DebugShape: 1
     - _DepthGlow: 1
@@ -129,23 +121,23 @@ Material:
     - _DistortionScrollXSpeed: 0
     - _DistortionScrollYSpeed: 0
     - _DstMode: 10
-    - _EditorDrawers: 61
-    - _FadeAmount: 0.082
+    - _EditorDrawers: 60
+    - _FadeAmount: -0.1
     - _FadeBurnGlow: 5
     - _FadeBurnWidth: 0.01
-    - _FadePower: 0.5
+    - _FadePower: 1
     - _FadeScrollXSpeed: 0
     - _FadeScrollYSpeed: 0
     - _FadeTransition: 0.075
     - _Glow: 0
-    - _GlowGlobal: 1
+    - _GlowGlobal: 5
     - _HandDrawnAmount: 10
     - _HandDrawnSpeed: 5
-    - _HsvBright: 1.18
-    - _HsvSaturation: 0.14
-    - _HsvShift: 238
+    - _HsvBright: 1
+    - _HsvSaturation: 1
+    - _HsvShift: 180
     - _LightAmount: 0
-    - _MaskPow: 0.69
+    - _MaskPow: 1
     - _OffsetSh1: 1
     - _OffsetSh2: 1
     - _OffsetSh3: 1
@@ -185,8 +177,8 @@ Material:
     - _Shape2DistortYSpeed: 0.1
     - _Shape2RotationOffset: 0
     - _Shape2RotationSpeed: 0
-    - _Shape2XSpeed: 0.6
-    - _Shape2YSpeed: 0.6
+    - _Shape2XSpeed: 0
+    - _Shape2YSpeed: 0
     - _Shape3AlphaWeight: 2
     - _Shape3Brightness: 0
     - _Shape3ColorWeight: 2
@@ -196,8 +188,8 @@ Material:
     - _Shape3DistortYSpeed: 0.1
     - _Shape3RotationOffset: 0
     - _Shape3RotationSpeed: 0
-    - _Shape3XSpeed: 0.1
-    - _Shape3YSpeed: 0.1
+    - _Shape3XSpeed: 0
+    - _Shape3YSpeed: 0
     - _ShapeAlphaWeight: 1
     - _ShapeBrightness: 0
     - _ShapeColorWeight: 1
@@ -207,8 +199,8 @@ Material:
     - _ShapeDistortYSpeed: 0.1
     - _ShapeRotationOffset: 0
     - _ShapeRotationSpeed: 0
-    - _ShapeXSpeed: 0.2
-    - _ShapeYSpeed: 0.2
+    - _ShapeXSpeed: 0
+    - _ShapeYSpeed: 0
     - _SoftFactor: 0.5
     - _SrcMode: 5
     - _TextureScrollXSpeed: 1
@@ -239,7 +231,7 @@ Material:
     - _DepthGlowColor: {r: 1, g: 1, b: 1, a: 1}
     - _FadeBurnColor: {r: 1, g: 1, b: 0, a: 1}
     - _FrontFaceTint: {r: 1, g: 1, b: 1, a: 1}
-    - _GlowColor: {r: 0.72543013, g: 0.2971698, b: 1, a: 1}
+    - _GlowColor: {r: 1, g: 1, b: 1, a: 1}
     - _LightColor: {r: 1, g: 1, b: 1, a: 1}
     - _RimColor: {r: 1, g: 1, b: 1, a: 1}
     - _Shape2Color: {r: 1, g: 1, b: 1, a: 1}
