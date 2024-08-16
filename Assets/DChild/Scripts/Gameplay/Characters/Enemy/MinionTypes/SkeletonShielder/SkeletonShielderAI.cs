@@ -380,23 +380,23 @@ namespace DChild.Gameplay.Characters.Enemies
             //{
             if (m_damageable.isAlive)
             {
-                hitbox.SetInvulnerability(Invulnerability.None);
-                StopAllCoroutines();
-                m_animation.animationState.TimeScale = .5f;
-                if (m_minionMode != MinionMode.NoShield)
-                {
-                    m_animation.SetAnimation(0, m_info.flinchAnimation, false);
-                }
-                else
-                {
-                    
+                //hitbox.SetInvulnerability(Invulnerability.None);
+                //StopAllCoroutines();
+                //m_animation.animationState.TimeScale = .5f;
+                //if (m_minionMode != MinionMode.NoShield)
+                //{
+                //    m_animation.SetAnimation(0, m_info.flinchAnimation, false);
+                //}
+                //else
+                //{
 
-                    //m_animation.SetAnimation(0, m_info.noShieldFlinch, false);
-                }
+
+                //    m_animation.SetAnimation(0, m_info.noShieldFlinch, false);
+                //}
                 
             }
 
-            m_stateHandle.SetState(State.ReevaluateSituation);
+            m_stateHandle.ApplyQueuedState();
 
             // }
         }
@@ -410,7 +410,9 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_animation.SetAnimation(0, m_info.idleAnimation, true);
             if (m_minionMode == MinionMode.NoShield)
             {
+                m_shieldActive = false;
                 SwitchModeTo(MinionMode.NoShield);
+                m_stateHandle.OverrideState(State.ReevaluateSituation);
             }
             else
             {
@@ -421,7 +423,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 }
                 SwitchModeTo(MinionMode.Guard);
             }
-            m_stateHandle.SetState(State.ReevaluateSituation);
+            //m_stateHandle.SetState(State.ReevaluateSituation);
         }
 
         public override void ApplyData()
