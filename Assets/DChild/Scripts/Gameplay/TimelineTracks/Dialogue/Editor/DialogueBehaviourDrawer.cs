@@ -37,10 +37,11 @@ namespace DChildDebug.Cutscene
                         {
                             var conversation = children.Get("conversation");
                             var conversationString = (string)conversation.ValueEntry.WeakSmartValue;
-                            if (entryPickerLastConvesationString != conversationString)
+                            if(entryPickerLastConvesationString != conversationString)
                             {
-                                UpdateDialogueEntryPicker(ref entryPicker, ref entryPickerLastConvesationString, dialougeDatabase, conversationString);
+                                UpdateDialogueEntryPicker(ref entryPicker,ref entryPickerLastConvesationString, dialougeDatabase, conversationString);
                             }
+
                         }
                         if (entryPicker.isValid)
                         {
@@ -60,13 +61,13 @@ namespace DChildDebug.Cutscene
                     {
                         var conversation = children.Get("noteConversation");
                         var conversationString = (string)conversation.ValueEntry.WeakSmartValue;
-                        UpdateDialogueEntryPicker(ref noteEntryPicker, ref noteEntryPickerLastConvesationString, dialougeDatabase, conversationString);
+                        UpdateDialogueEntryPicker(ref noteEntryPicker,ref noteEntryPickerLastConvesationString, dialougeDatabase, conversationString);
                     }
                     else
                     {
                         var conversation = children.Get("noteConversation");
                         var conversationString = (string)conversation.ValueEntry.WeakSmartValue;
-                        UpdateDialogueEntryPicker(ref noteEntryPicker, ref noteEntryPickerLastConvesationString, dialougeDatabase, conversationString);
+                        UpdateDialogueEntryPicker(ref noteEntryPicker,ref noteEntryPickerLastConvesationString, dialougeDatabase, conversationString);
                     }
                     if (noteEntryPicker.isValid)
                     {
@@ -89,7 +90,7 @@ namespace DChildDebug.Cutscene
             }
         }
 
-        private void UpdateDialogueEntryPicker(ref DialogueEntryPicker entryPicker, ref string lastConversationString, DialogueDatabase dialougeDatabase, string conversationString)
+        private void UpdateDialogueEntryPicker(ref DialogueEntryPicker entryPicker,ref string lastConversationString, DialogueDatabase dialougeDatabase, string conversationString)
         {
             lastConversationString = conversationString;
             entryPicker = new DialogueEntryPicker(conversationString);

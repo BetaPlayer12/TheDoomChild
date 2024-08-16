@@ -58,7 +58,7 @@ namespace DChild.Gameplay.Cinematics
 
         public void SetCamera(IVirtualCamera camera)
         {
-            if (camera.noiseModule == null)
+            if (camera == null || camera.noiseModule == null)
                 return;
 
             if (m_currentCamera != null)
