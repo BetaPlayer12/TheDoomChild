@@ -238,8 +238,6 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_leftWallSensor.transform.localPosition = new Vector3(-0.75f, -0.99f, 0);
             }
 
-            
-
             m_isolatedCharacterPhysics2D.simulateGravity = false;
             m_currentMovementHandle = m_wallMovement;
             //Set trail on
@@ -286,7 +284,7 @@ namespace DChild.Gameplay.Characters.Enemies
             switch (m_stateHandle.currentState)
             {
                 case State.Patrol:
-                    StartCoroutine(PatrolRoutine());
+                    StartCoroutine(PatrolRoutine());  
                     break;
                 case State.Turning:
                     m_stateHandle.Wait(m_turnState);
@@ -339,6 +337,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 yield return null;
             }
 
+            Debug.Log("Done Cowering");
             m_isCowering = false;
 
             m_stateHandle.ApplyQueuedState();
@@ -368,39 +367,49 @@ namespace DChild.Gameplay.Characters.Enemies
             //Move while wall sensor is not detecting
 
             m_isRetreating = true;
-            if (m_targetInfo.position.x > transform.position.x)
+
+            switch (m_iceBlobType)
             {
-                if (m_character.facing == HorizontalDirection.Right)
-                {
-                    m_turnHandle.ForceTurnImmidiately();
-                }
+                case IceBlobType.Ground:
+                    if (m_targetInfo.position.x > transform.position.x)
+                    {
+                        if (m_character.facing == HorizontalDirection.Right)
+                        {
+                            m_turnHandle.ForceTurnImmidiately();
+                        }
+                    }
+                    else
+                    {
+                        if (m_character.facing == HorizontalDirection.Left)
+                        {
+                            m_turnHandle.ForceTurnImmidiately();
+                        }
+                    }
+
+                    Debug.Log("Retreating");
+                    m_animation.SetAnimation(0, m_info.retreat.animation, true);
+
+                    while (!m_rightWallSensor.isDetecting && m_rightEdgeSensor.isDetecting)
+                    {
+                        if (m_character.facing == HorizontalDirection.Right)
+                        {
+                            m_currentMovementHandle.MoveTowards(Vector2.right, m_info.retreat.speed);
+
+                        }
+                        else
+                        {
+                            m_currentMovementHandle.MoveTowards(Vector2.left, m_info.retreat.speed);
+
+                        }
+                        yield return null;
+                    }
+                    break;
+                    case IceBlobType.Ceiling:
+                    break;
+                case IceBlobType.Wall:
+                    break;
             }
-            else
-            {
-                if (m_character.facing == HorizontalDirection.Left)
-                {
-                    m_turnHandle.ForceTurnImmidiately();
-                }
-            }
-
-            m_animation.SetAnimation(0, m_info.retreat.animation, true);
-
-            while (!m_rightWallSensor.isDetecting && m_rightEdgeSensor.isDetecting)
-            {
-                if(m_iceBlobType == IceBlobType.Ground || m_iceBlobType == IceBlobType.Ceiling) { 
-                }
-                if (m_character.facing == HorizontalDirection.Right)
-                {
-                    m_currentMovementHandle.MoveTowards(Vector2.right, m_info.retreat.speed);
-
-                }
-                else
-                {
-                    m_currentMovementHandle.MoveTowards(Vector2.left, m_info.retreat.speed);
-
-                }
-                yield return null;
-            }
+            
 
             m_currentMovementHandle.Stop();
             m_isRetreating = false;
@@ -415,20 +424,28 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             while (m_stateHandle.currentState == State.Patrol)
             {
-                if (!m_rightWallSensor.isDetecting && m_groundSensor.isDetecting)
-                {
-                    m_turnState = State.ReevaluateSituation;
-                    m_animation.EnableRootMotion(false, false);
-                    m_animation.SetAnimation(0, m_info.move.animation, true);
-                    var characterInfo = new PatrolHandle.CharacterInfo(m_character.centerMass.position, m_character.facing);
-                    m_patrolHandle.Patrol(m_currentMovementHandle, m_info.move.speed, characterInfo);
-                }
-                else
-                {
-                    m_animation.SetAnimation(0, m_info.idleAnimation, true);
-                }
+                //if (!m_rightWallSensor.isDetecting && m_groundSensor.isDetecting)
+                //{
+                //    m_turnState = State.ReevaluateSituation;
+                //    m_animation.EnableRootMotion(false, false);
+                //    m_animation.SetAnimation(0, m_info.move.animation, true);
+                //    var characterInfo = new PatrolHandle.CharacterInfo(m_character.centerMass.position, m_character.facing);
+                //    m_patrolHandle.Patrol(m_currentMovementHandle, m_info.move.speed, characterInfo);
+                //}
+                //else
+                //{
+                //    m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                //}
+
+                m_turnState = State.ReevaluateSituation;
+                m_animation.EnableRootMotion(false, false);
+                m_animation.SetAnimation(0, m_info.move.animation, true);
+                var characterInfo = new PatrolHandle.CharacterInfo(m_character.centerMass.position, m_character.facing);
+                m_patrolHandle.Patrol(m_currentMovementHandle, m_info.move.speed, characterInfo);
+
                 yield return null;
-            }           
+            }
+            yield return null;
         }
 
         protected override void OnTargetDisappeared()
