@@ -56,6 +56,11 @@ namespace DChild.Gameplay.Characters.AI
         public Vector2[] wayPoints => m_wayPoints;
         public int startIndex => m_startIndex;
 
+        public void ForceNextWaypointIndex(int waypointIndex)
+        {
+            m_currentIndex = waypointIndex;
+        }
+
         public void Initialize()
         {
             m_currentIndex = m_startIndex;
