@@ -42,6 +42,10 @@ namespace DChild.Gameplay.Characters.Enemies
             private float m_targetDistanceTolerance;
             public float targetDistanceTolerance => m_targetDistanceTolerance;
 
+            [SerializeField]
+            private float m_suicideDistance;
+            public float suicideDistance => m_suicideDistance;
+
 
             //Animations
             [SerializeField]
@@ -76,6 +80,12 @@ namespace DChild.Gameplay.Characters.Enemies
             Ground,
             Ceiling,
             Wall
+        }
+
+        private enum RetreatAxis
+        {
+            Horizontal,
+            Vertical,
         }
 
         private enum State
@@ -120,13 +130,13 @@ namespace DChild.Gameplay.Characters.Enemies
         private RaySensor m_groundSensor;
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_rightEdgeSensor;
-        [SerializeField, TabGroup("Sensors")]
-        private RaySensor m_leftEdgeSensor;
 
         [ShowInInspector]
         private MovementHandle2D m_currentMovementHandle;
         [SerializeField]
         private IceBlobType m_iceBlobType;
+        [ShowInInspector]
+        private RetreatAxis m_retreatDirection;
         [ShowInInspector]
         private StateHandle<State> m_stateHandle;
         [ShowInInspector]
@@ -140,20 +150,31 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private Coroutine m_sneerRoutine;
         private Coroutine m_patienceRoutine;
+        private bool m_isDetecting;
 
         private void OnTurnRequest(object sender, EventActionArgs eventArgs) => m_stateHandle.SetState(State.Turning);
 
         public override void SetTarget(IDamageable damageable, Character m_target = null)
         {
-            base.SetTarget(damageable);
-            if (m_stateHandle.currentState != State.Retreat)
-            {
-                if (IsFacingTarget())
-                {
-                    m_turnHandle.ForceTurnImmidiately();
-                }
+            //base.SetTarget(damageable);
+            //if (m_stateHandle.currentState != State.Retreat)
+            //{
+            //    if (IsFacingTarget())
+            //    {
+            //        m_turnHandle.ForceTurnImmidiately();
+            //    }
 
-                m_stateHandle.SetState(State.Retreat);
+            //    m_stateHandle.SetState(State.Retreat);
+            //}
+
+            if (damageable != null)
+            {
+                base.SetTarget(damageable);
+                if (m_stateHandle.currentState != State.Retreat && !m_isDetecting)
+                {
+                    m_isDetecting = true;
+                    m_stateHandle.SetState(State.Detect);
+                }
             }
         }
 
@@ -182,6 +203,8 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_hitbox.Disable();
             m_selfCollider.enabled = false;
+            m_stateHandle.OverrideState(State.WaitBehaviourEnd);
+            m_currentMovementHandle.Stop();
             m_animation.SetAnimation(0, m_info.deathAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.deathAnimation);
             //explode 
@@ -195,8 +218,12 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             transform.rotation = Quaternion.identity;
 
+            m_rightWallSensor.transform.localPosition = new Vector3(0.75f, -0.9f, 0);
+            m_leftWallSensor.transform.localPosition = new Vector3(-0.75f, -0.9f, 0);
+
             m_isolatedCharacterPhysics2D.simulateGravity = true;
             m_currentMovementHandle = m_groundMovement;
+            m_retreatDirection = RetreatAxis.Horizontal;
         }
 
         private void SetUpCeilingBlob()
@@ -209,12 +236,13 @@ namespace DChild.Gameplay.Characters.Enemies
             m_skelAnimation.initialFlipX = true;
 
             //Correct Sensor positions after flip
-            m_rightWallSensor.transform.localPosition = new Vector3(-0.75f, -0.99f, 0);
-            m_leftWallSensor.transform.localPosition = new Vector3(0.75f, -0.99f, 0);
+            m_rightWallSensor.transform.localPosition = new Vector3(0.75f, -0.99f, 0);
+            m_leftWallSensor.transform.localPosition = new Vector3(-0.75f, -0.99f, 0);
 
-            m_leftEdgeSensor.transform.localPosition = new Vector3(1.5f, -3.5f, 0);
+            //m_leftEdgeSensor.transform.localPosition = new Vector3(1.5f, -3.5f, 0);
             m_rightEdgeSensor.transform.localPosition = new Vector3(-1.5f, -3.5f, 0);
 
+            m_retreatDirection = RetreatAxis.Horizontal;
             //Set trail on
         }
 
@@ -229,6 +257,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 //Correct Sensor positions after flip
                 m_rightWallSensor.transform.localPosition = new Vector3(-0.75f, -0.99f, 0);
                 m_leftWallSensor.transform.localPosition = new Vector3(0.75f, -0.99f, 0);
+                m_retreatDirection = RetreatAxis.Vertical;
             }
             else //wall on left
             {
@@ -236,6 +265,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 //Correct Sensor positions after flip
                 m_rightWallSensor.transform.localPosition = new Vector3(0.75f, -0.99f, 0);
                 m_leftWallSensor.transform.localPosition = new Vector3(-0.75f, -0.99f, 0);
+                m_retreatDirection = RetreatAxis.Vertical;
             }
 
             m_isolatedCharacterPhysics2D.simulateGravity = false;
@@ -315,7 +345,6 @@ namespace DChild.Gameplay.Characters.Enemies
                         m_sneerRoutine = null;
                     }
                     break;
-
                 
                 case State.WaitBehaviourEnd:
                     return;
@@ -330,15 +359,27 @@ namespace DChild.Gameplay.Characters.Enemies
             m_isCowering = true;
             m_cowerInFearDuration = m_info.cowerInFearDuration;
 
-            while(m_cowerInFearDuration > 0)
+            while(m_isCowering)
             {
                 m_cowerInFearDuration -= Time.deltaTime;
+
+                if(m_cowerInFearDuration <= 0)
+                {
+                    m_isCowering = false;
+                }
+
+                if (IsTargetInRange(m_info.suicideDistance))
+                {
+                    StopAllCoroutines();
+                    yield return DeathRoutine();
+                }
 
                 yield return null;
             }
 
             Debug.Log("Done Cowering");
-            m_isCowering = false;
+            m_isDetecting = false;
+            m_cowerInFearDuration = m_info.cowerInFearDuration;
 
             m_stateHandle.ApplyQueuedState();
             yield return null;
@@ -357,60 +398,50 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return null;
         }
 
+        private Vector2 SetRetreatDirection()
+        {
+            Vector2 direction = Vector2.zero;
+            switch(m_retreatDirection)
+            {
+                case RetreatAxis.Horizontal:
+                    if(m_targetInfo.position.x > transform.position.x)
+                    {
+                        direction = Vector2.left;
+                    }
+                    else
+                    {
+                        direction = Vector2.right;
+                    }
+                    break;
+                case RetreatAxis.Vertical:
+                    if (m_targetInfo.position.y > transform.position.y)
+                    {
+                        direction = Vector2.down;
+                    }
+                    else
+                    {
+                        direction = Vector2.up;
+                    }
+                    break;
+            }
+            return direction;
+        }
 
         private IEnumerator RetreatRoutine()
         {
             m_stateHandle.Wait(State.Cower);
 
-            //If player is on right, turn left, vice versa
-            //Set destination equal to wall sensor distance x, current y, vice versa if wall blob
-            //Move while wall sensor is not detecting
-
             m_isRetreating = true;
+            Vector2 retreatDirection = SetRetreatDirection();
 
-            switch (m_iceBlobType)
+            m_animation.SetAnimation(0, m_info.retreat.animation, true);
+
+            while (!IsWallOrEdgeDetected())
             {
-                case IceBlobType.Ground:
-                    if (m_targetInfo.position.x > transform.position.x)
-                    {
-                        if (m_character.facing == HorizontalDirection.Right)
-                        {
-                            m_turnHandle.ForceTurnImmidiately();
-                        }
-                    }
-                    else
-                    {
-                        if (m_character.facing == HorizontalDirection.Left)
-                        {
-                            m_turnHandle.ForceTurnImmidiately();
-                        }
-                    }
-
-                    Debug.Log("Retreating");
-                    m_animation.SetAnimation(0, m_info.retreat.animation, true);
-
-                    while (!m_rightWallSensor.isDetecting && m_rightEdgeSensor.isDetecting)
-                    {
-                        if (m_character.facing == HorizontalDirection.Right)
-                        {
-                            m_currentMovementHandle.MoveTowards(Vector2.right, m_info.retreat.speed);
-
-                        }
-                        else
-                        {
-                            m_currentMovementHandle.MoveTowards(Vector2.left, m_info.retreat.speed);
-
-                        }
-                        yield return null;
-                    }
-                    break;
-                    case IceBlobType.Ceiling:
-                    break;
-                case IceBlobType.Wall:
-                    break;
+                m_currentMovementHandle.MoveTowards(retreatDirection, m_info.retreat.speed);
+                yield return null;
             }
             
-
             m_currentMovementHandle.Stop();
             m_isRetreating = false;
 
@@ -424,19 +455,6 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             while (m_stateHandle.currentState == State.Patrol)
             {
-                //if (!m_rightWallSensor.isDetecting && m_groundSensor.isDetecting)
-                //{
-                //    m_turnState = State.ReevaluateSituation;
-                //    m_animation.EnableRootMotion(false, false);
-                //    m_animation.SetAnimation(0, m_info.move.animation, true);
-                //    var characterInfo = new PatrolHandle.CharacterInfo(m_character.centerMass.position, m_character.facing);
-                //    m_patrolHandle.Patrol(m_currentMovementHandle, m_info.move.speed, characterInfo);
-                //}
-                //else
-                //{
-                //    m_animation.SetAnimation(0, m_info.idleAnimation, true);
-                //}
-
                 m_turnState = State.ReevaluateSituation;
                 m_animation.EnableRootMotion(false, false);
                 m_animation.SetAnimation(0, m_info.move.animation, true);
@@ -448,6 +466,21 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return null;
         }
 
+        private bool IsWallOrEdgeDetected()
+        {
+            bool result = false;
+            if(m_rightWallSensor.isDetecting || m_leftWallSensor.isDetecting /*|| !m_leftEdgeSensor.isDetecting*/ || !m_rightEdgeSensor.isDetecting)
+            {
+                result = true;
+            }
+            else
+            {
+                result = false;
+            }
+
+            return result;
+        }
+
         protected override void OnTargetDisappeared()
         {
             if (m_sneerRoutine != null)
@@ -455,6 +488,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 StopCoroutine(m_sneerRoutine);
                 m_sneerRoutine = null;
             }
+            m_isDetecting = false;
             m_stateHandle.OverrideState(State.Patrol);
             m_selfCollider.enabled = false;
         }
@@ -463,6 +497,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_selfCollider.enabled = false;
             m_targetInfo.Set(null, null);
+            m_isDetecting = false;
             if (m_sneerRoutine != null)
             {
                 StopCoroutine(m_sneerRoutine);
