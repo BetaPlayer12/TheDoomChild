@@ -559,7 +559,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_shieldGlow.gameObject.SetActive(false);
                 m_shieldBreakVFX.gameObject.SetActive(false);
                 m_shieldActive = false;
-                m_deathHandle.SetAnimation(m_info.deathAnimation2.animation);
+
                 m_stateHandle.OverrideState(State.Flee);
             }
             else
@@ -658,6 +658,7 @@ namespace DChild.Gameplay.Characters.Enemies
             }
             m_flinchHandle.SetAnimation(m_info.noShieldFlinch.animation);
             m_flinchHandle.SetIdleAnimation(m_info.noShieldIdle.animation);
+            m_deathHandle.SetAnimation(m_info.deathAnimation2.animation);
             SwitchModeTo(MinionMode.NoShield);
         }
 
