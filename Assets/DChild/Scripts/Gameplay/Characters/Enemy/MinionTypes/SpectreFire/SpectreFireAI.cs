@@ -155,10 +155,6 @@ namespace DChild.Gameplay.Characters.Enemies
         private DeathHandle m_deathHandle;
         [SerializeField, TabGroup("Modules")]
         private FlinchHandler m_flinchHandle;
-        [SerializeField, TabGroup("Modules")]
-        private LerpAgent m_lerpAgent;
-        [SerializeField, TabGroup("Modules")]
-        private AILerp m_aiLerp;
         [SerializeField, TabGroup("ProjectileInfo")]
         private List<Transform> m_projectilePoints;
 
@@ -187,11 +183,14 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField]
         private SpectreFireFireballFollow m_fireball;
         private GameObject m_spectreFireball;
+        [SerializeField]
+        private SkeletonUtilityBone m_bone;
 
 
         private void OnAttackDone(object sender, EventActionArgs eventArgs)
         {
             m_animation.DisableRootMotion();
+            m_bone.enabled = true;
             m_flinchHandle.m_autoFlinch = true;
             m_stateHandle.ApplyQueuedState();
         }
@@ -204,6 +203,7 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 base.SetTarget(damageable);
                 m_selfCollider.SetActive(true);
+                m_fireball.m_player = m_targetInfo.transform.gameObject;
                 if (m_stateHandle.currentState != State.Chasing && !m_isDetecting)
                 {
                     m_isDetecting = true;
@@ -435,6 +435,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     if (m_canUseAttack)
                     {
                         m_animation.EnableRootMotion(true, false);
+                        m_bone.enabled = false;
                         //m_attackHandle.ExecuteAttack(m_info.attack.animation, m_info.idleAnimation);
                         //LaunchProjectile();
                         StartCoroutine(AttackRoutine1());
@@ -444,6 +445,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     if (m_canUseAttack)
                     {
                         m_animation.EnableRootMotion(true, false);
+                        m_bone.enabled = false;
                         //m_attackHandle.ExecuteAttack(m_info.attack.animation, m_info.idleAnimation);
                         //LaunchProjectile();
                         StartCoroutine(AttackRoutine2());
@@ -454,31 +456,25 @@ namespace DChild.Gameplay.Characters.Enemies
         private bool m_canUseAttack = true;
         private IEnumerator AttackRoutine1()
         {
-            //m_stateHandle.Wait(State.RunAway);
+            //m_stateHandle.Wait(State.Cooldown);
             //LaunchProjectile();
-            m_aiLerp.enabled = false;
             m_willStopRunningAway = false;
-            //if (m_canUseAttack)
-            //{
             m_canUseAttack = false;
-                m_fireball.m_spectreFire = this.gameObject;
-                var projectilePointPos = new Vector3(m_projectilePoints[0].position.x, m_projectilePoints[0].position.y, 0);
-                m_spectreFireball = Instantiate(m_info.projectile.projectileInfo.projectile, projectilePointPos, Quaternion.identity);
-                m_spectreFireball.GetComponent<SpectreFireFireballFollow>().OnFireballDissipate += OnFireballDissipate;
-                m_animation.SetAnimation(0, m_info.attack1.animation, false);
-                yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack1.animation);
-                m_stateHandle.ApplyQueuedState();
-                m_animation.SetAnimation(0, m_info.idleAnimation, true);
-                m_selfCollider.SetActive(false);
-                m_flinchHandle.m_autoFlinch = true;
-            //}
+            m_fireball.m_spectreFire = this.gameObject;
+            var projectilePointPos = new Vector3(m_projectilePoints[0].position.x, m_projectilePoints[0].position.y, 0);
+            m_spectreFireball = Instantiate(m_info.projectile.projectileInfo.projectile, projectilePointPos, Quaternion.identity);
+            m_spectreFireball.GetComponent<SpectreFireFireballFollow>().OnFireballDissipate += OnFireballDissipate;
+            m_animation.SetAnimation(0, m_info.attack1.animation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack1.animation);
+            m_animation.SetAnimation(0, m_info.idleAnimation, true);
+            m_selfCollider.SetActive(false);
+            m_flinchHandle.m_autoFlinch = true;
+            m_stateHandle.ApplyQueuedState();
             yield return null;
         }
         private IEnumerator AttackRoutine2()
         {
             m_stateHandle.Wait(State.Chasing);
-            m_aiLerp.enabled = false;
-            m_fireball.m_player = m_targetInfo.transform.gameObject;
             SpawnSpike();
             yield return new WaitForSeconds(.5f);
             m_animation.SetAnimation(0, m_info.attack2.animation, false);
@@ -491,11 +487,18 @@ namespace DChild.Gameplay.Characters.Enemies
         }
 
         #region Movement
-        private IEnumerator RunningAwayRoutine()
+        private IEnumerator RunningAwayRoutine(Vector2 target, float moveSpeed)
         {
-            CalculateRunPath();
-            m_aiLerp.enabled = true;
-            m_agent.Move(m_info.move.speed);
+            m_agent.SetDestination(target);
+            if (IsFacing(target))
+            {
+                m_agent.Move(moveSpeed);
+                CalculateRunPath();
+            }
+            else
+            {
+                m_stateHandle.OverrideState(State.Turning);
+            }
             yield return null;
             /*while(!m_willStopRunningAway)
             {
@@ -519,8 +522,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             if (Vector2.Distance(m_targetInfo.position, transform.position) < m_info.targetDistanceTolerance)
             {
-                CalculateRunPath();
-                m_aiLerp.enabled = true;
+                //CalculateRunPath();
                 m_agent.Move(m_info.move.speed);
             }
             m_agent.Stop();
@@ -531,14 +533,13 @@ namespace DChild.Gameplay.Characters.Enemies
             m_agent.SetDestination(target);
             m_agent.Move(moveSpeed);
         }
-        private IEnumerator ExecuteMove(/*float heightOffset,*/ Attack attack)
+        private IEnumerator ExecuteMove(/*float heightOffset,*/bool isRunningAway, Attack attack)
         {
-            m_aiLerp.enabled = false;
             m_animation.DisableRootMotion();
+            m_bone.enabled = true;
             bool inRange = false;
             /*Vector2.Distance(transform.position, target) > m_info.spearMeleeAttack.range*/ //old target in range condition
             var moveSpeed = m_info.move.speed - UnityEngine.Random.Range(0, 3);
-            m_targetPoint = new Vector2(m_targetInfo.position.x + 20f, m_targetInfo.position.y + 30f);
             while (!inRange || TargetBlocked() || m_environmentCollider.IsTouchingLayers(DChildUtility.GetEnvironmentMask()))
             {
                 bool xTargetInRange = Mathf.Abs(m_targetInfo.position.x - transform.position.x) < m_currentAttackRange ? true : false;
@@ -559,17 +560,22 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 CustomTurn();
             }
-            ExecuteAttack(attack);
+            if (!isRunningAway)
+            {
+                ExecuteAttack(attack);
+            }
             yield return null;
         }
-
         private void DynamicMovement(Vector2 target, float moveSpeed)
         {
             m_agent.SetDestination(target);
             if (IsFacing(target))
             {
                 m_agent.Move(moveSpeed);
-                CalculateRunPath();
+                if (!m_willStopRunningAway)
+                {
+                    CalculateRunPath();
+                }
             }
             else
             {
@@ -647,7 +653,7 @@ namespace DChild.Gameplay.Characters.Enemies
             AddToRangeCache(m_info.attack1.range, m_info.attack2.range);
             m_attackUsed = new bool[m_attackCache.Count];
         }
-        private bool m_willStopRunningAway;
+        private bool m_willStopRunningAway = true;
         private void OnFireballDissipate(object sender, EventActionArgs eventArgs)
         {
             m_willStopRunningAway = true;
@@ -701,6 +707,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 case State.Patrol:
                     m_turnState = State.Patrol;
                     m_animation.DisableRootMotion();
+                    m_bone.enabled = true;
                     m_animation.SetAnimation(0, m_info.patrol.animation, true);
                     var characterInfo = new PatrolHandle.CharacterInfo(m_character.centerMass.position, m_character.facing);
                     m_patrolHandle.Patrol(m_agent, m_info.patrol.speed, characterInfo);
@@ -727,17 +734,14 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_stateHandle.Wait(State.Cooldown);
                     //m_animation.SetAnimation(0, m_info.idleAnimation, true);
                     m_agent.Stop();
-                    m_executeMoveCoroutine = StartCoroutine(ExecuteMove(/*m_currentAttackRange*//* m_currentAttackRange, */m_currentAttack));
+                    m_executeMoveCoroutine = StartCoroutine(ExecuteMove(false, m_currentAttack));
                     m_attackDecider.hasDecidedOnAttack = false;
                     break;
                 case State.Cooldown:
                     //m_stateHandle.Wait(State.ReevaluateSituation);
                     if (Vector2.Distance(m_targetInfo.position, transform.position) < m_info.targetDistanceTolerance)
                     {
-                        CalculateRunPath();
-                        m_aiLerp.enabled = true;
-                        m_agent.Move(m_info.move.speed);
-                        StartCoroutine(RunningAwayRoutine());
+                        StartCoroutine(RunningAwayRoutine(m_targetInfo.position, m_info.move.speed));
                     }
                     else
                     {
@@ -749,12 +753,12 @@ namespace DChild.Gameplay.Characters.Enemies
                         m_turnState = State.Cooldown;
                         m_stateHandle.SetState(State.Turning);
                     }
-                    else
+                    /*else
                     {
                         m_agent.Stop();
                         m_animation.SetAnimation(0, m_info.idleAnimation, true).TimeScale = 1f;
 
-                    }
+                    }*/
 
                     if (m_currentCD <= m_info.attackCD)
                     {

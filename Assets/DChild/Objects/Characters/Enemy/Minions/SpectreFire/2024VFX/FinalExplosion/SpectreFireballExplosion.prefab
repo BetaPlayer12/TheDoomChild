@@ -9,6 +9,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8021223419574447486}
+  - component: {fileID: 8988369364542351306}
+  - component: {fileID: 566280975763123121}
   m_Layer: 0
   m_Name: SpectreFireballExplosion
   m_TagString: Untagged
@@ -32,6 +34,40 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8988369364542351306
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6556255652245660308}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 094c85efa1471b94cafc1bbd2f3b6055, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_poolableItemData: {fileID: 11400000, guid: ed076a116d0fae444a6af6910dc593bf, type: 2}
+  m_despawnDelay: 1
+--- !u!114 &566280975763123121
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6556255652245660308}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6178cd111cba844a6e236cfbee492c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_poolableItemData: {fileID: 11400000, guid: ed076a116d0fae444a6af6910dc593bf, type: 2}
+  m_particleSystems:
+  - {fileID: 6256001155736903930}
+  - {fileID: 6256001156033445060}
+  - {fileID: 6256001154582301502}
+  m_playOnAwake: 1
+  m_baseFlipped: 0
+  m_poolOnStop: 0
 --- !u!1001 &2404212228095203496
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -39,6 +75,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 8021223419574447486}
     m_Modifications:
+    - target: {fileID: 8614468746721629078, guid: 0d19c48c36c78e247a87d730a49723a3,
+        type: 3}
+      propertyPath: playOnAwake
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8614468747750701138, guid: 0d19c48c36c78e247a87d730a49723a3,
+        type: 3}
+      propertyPath: playOnAwake
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8614468747750701139, guid: 0d19c48c36c78e247a87d730a49723a3,
         type: 3}
       propertyPath: m_RootOrder
@@ -99,11 +145,34 @@ PrefabInstance:
       propertyPath: m_Name
       value: SpectreFireballExplosion
       objectReference: {fileID: 0}
+    - target: {fileID: 8614468748038743148, guid: 0d19c48c36c78e247a87d730a49723a3,
+        type: 3}
+      propertyPath: playOnAwake
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0d19c48c36c78e247a87d730a49723a3, type: 3}
+--- !u!198 &6256001154582301502 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 8614468746721629078, guid: 0d19c48c36c78e247a87d730a49723a3,
+    type: 3}
+  m_PrefabInstance: {fileID: 2404212228095203496}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &6256001155736903930 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 8614468747750701138, guid: 0d19c48c36c78e247a87d730a49723a3,
+    type: 3}
+  m_PrefabInstance: {fileID: 2404212228095203496}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &6256001155736903931 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8614468747750701139, guid: 0d19c48c36c78e247a87d730a49723a3,
+    type: 3}
+  m_PrefabInstance: {fileID: 2404212228095203496}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &6256001156033445060 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 8614468748038743148, guid: 0d19c48c36c78e247a87d730a49723a3,
     type: 3}
   m_PrefabInstance: {fileID: 2404212228095203496}
   m_PrefabAsset: {fileID: 0}

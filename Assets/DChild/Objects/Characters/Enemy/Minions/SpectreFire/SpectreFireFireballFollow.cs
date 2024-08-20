@@ -20,7 +20,7 @@ public class SpectreFireFireballFollow : MonoBehaviour
     [SerializeField]
     private PathFinderAgent m_movement;
     [SerializeField]
-    private GameObject m_dissipateState;
+    private ParticleFX m_dissipateState;
     public GameObject m_player;
     public GameObject m_spectreFire;
 
@@ -53,7 +53,7 @@ public class SpectreFireFireballFollow : MonoBehaviour
                 m_movement.Stop();
                 Instantiate(m_dissipateState, transform.position, Quaternion.identity);
                 OnFireballDissipate?.Invoke(this, EventActionArgs.Empty);
-                gameObject.SetActive(false);
+                Destroy(this.gameObject);
             }
             yield return null;
         }
