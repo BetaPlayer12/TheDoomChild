@@ -182,7 +182,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8212498839113538767}
   - component: {fileID: 8485601582526777900}
-  - component: {fileID: 5684173659098915381}
+  - component: {fileID: 5218283749434581732}
   m_Layer: 13
   m_Name: LeftWallSensor
   m_TagString: Untagged
@@ -198,12 +198,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 858261579981150816}
   m_LocalRotation: {x: 0, y: 0, z: 1, w: -0.00000004371139}
-  m_LocalPosition: {x: -0.97, y: -0.99, z: 0}
+  m_LocalPosition: {x: -0.75, y: -0.9, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6344984443190722257}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &8485601582526777900
 MonoBehaviour:
@@ -218,11 +218,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_multiRaycast:
-    m_config: {fileID: 11400000, guid: f4b5c717917208c45839c4a6bddfd0e0, type: 2}
+    m_config: {fileID: 11400000, guid: ae24e5db2ad1fd4459dcf75927033e6e, type: 2}
     m_rayColor: {r: 1, g: 0.08614111, b: 0, a: 1}
   m_enable: 1
   m_debugMode: 1
---- !u!114 &5684173659098915381
+--- !u!114 &5218283749434581732
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -267,7 +267,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6344984443190722257}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!61 &6100152343914196701
 BoxCollider2D:
@@ -458,70 +458,6 @@ MonoBehaviour:
   zPosition: 1
   overrideAlpha: 1
   hierarchy: {fileID: 3506268105208128447}
---- !u!1 &2516702499807995121
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 5918491785517430823}
-  - component: {fileID: 3102657045292298392}
-  - component: {fileID: 2576275656843105552}
-  m_Layer: 13
-  m_Name: LeftEdgeSensor
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &5918491785517430823
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2516702499807995121}
-  m_LocalRotation: {x: 0, y: 0, z: 0.7071068, w: -0.7071068}
-  m_LocalPosition: {x: -1.45, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 6344984443190722257}
-  m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -90}
---- !u!114 &3102657045292298392
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2516702499807995121}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 11a5cea4c16e7c4478a55620f5e666e1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_multiRaycast:
-    m_config: {fileID: 11400000, guid: fba2974633acf014f9bd17f071e3b1dd, type: 2}
-    m_rayColor: {r: 1, g: 0, b: 0.7175808, a: 1}
-  m_enable: 1
-  m_debugMode: 1
---- !u!114 &2576275656843105552
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2516702499807995121}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5fc6cc8feceba564aa4ef1a737c6bf25, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_leftRotation: 90
-  m_rightRotation: 270
 --- !u!1 &2845902309071716285
 GameObject:
   m_ObjectHideFlags: 0
@@ -686,20 +622,20 @@ CompositeCollider2D:
   m_ColliderPaths:
   - m_Collider: {fileID: 4161497205252205539}
     m_ColliderPaths:
-    - - X: 15900002
-        Y: 19200000
-      - X: -14099998
-        Y: 19200000
-      - X: -14099998
-        Y: -10799999
-      - X: 15900002
-        Y: -10799999
+    - - X: 15900003
+        Y: -10799979
+      - X: 15900000
+        Y: 19200022
+      - X: -14100000
+        Y: 19200018
+      - X: -14099997
+        Y: -10799981
   m_CompositePaths:
     m_Paths:
-    - - {x: 1.5899973, y: -1.0799999}
-      - {x: 1.5899973, y: 1.9200001}
-      - {x: -1.4099998, y: 1.9199972}
-      - {x: -1.4099969, y: -1.0799999}
+    - - {x: -1.4099997, y: -1.0799952}
+      - {x: 1.5900003, y: -1.079995}
+      - {x: 1.5899972, y: 1.9200022}
+      - {x: -1.41, y: 1.9199988}
   m_VertexDistance: 0.0005
   m_OffsetDistance: 0.000005
 --- !u!114 &542767333440138892
@@ -1022,7 +958,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2708945170482397868}
   - component: {fileID: 8363988820425931946}
-  - component: {fileID: 6024403463115206455}
+  - component: {fileID: 8413764333062828920}
   m_Layer: 13
   m_Name: RightWallSensor
   m_TagString: Untagged
@@ -1038,12 +974,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5199370917881351688}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1, y: -0.99, z: 0}
+  m_LocalPosition: {x: 0.75, y: -0.9, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6344984443190722257}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &8363988820425931946
 MonoBehaviour:
@@ -1062,7 +998,7 @@ MonoBehaviour:
     m_rayColor: {r: 1, g: 0.08614111, b: 0, a: 1}
   m_enable: 1
   m_debugMode: 1
---- !u!114 &6024403463115206455
+--- !u!114 &8413764333062828920
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1214,7 +1150,6 @@ Transform:
   m_Children:
   - {fileID: 6762462515095334668}
   - {fileID: 5083431482701747621}
-  - {fileID: 5918491785517430823}
   - {fileID: 2708945170482397868}
   - {fileID: 8212498839113538767}
   - {fileID: 3666556511061731177}
@@ -1318,7 +1253,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5083431482701747621}
   - component: {fileID: 3753141693382012425}
-  - component: {fileID: 3504325692553495572}
+  - component: {fileID: 4412977074080014202}
   m_Layer: 13
   m_Name: RightEdgeSensor
   m_TagString: Untagged
@@ -1358,7 +1293,7 @@ MonoBehaviour:
     m_rayColor: {r: 1, g: 0, b: 0.7175808, a: 1}
   m_enable: 1
   m_debugMode: 1
---- !u!114 &3504325692553495572
+--- !u!114 &4412977074080014202
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
