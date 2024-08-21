@@ -14,6 +14,7 @@ using DChild;
 using DChild.Gameplay.Characters.Enemies;
 using DChild.Gameplay.Pooling;
 using DChild.Gameplay.Projectiles;
+using Language.Lua;
 
 namespace DChild.Gameplay.Characters.Enemies
 {
@@ -130,6 +131,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private RaySensor m_groundSensor;
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_rightEdgeSensor;
+        [SerializeField, TabGroup("Sensors")]
+        private RaySensor m_leftEdgeSensor;
 
         [ShowInInspector]
         private MovementHandle2D m_currentMovementHandle;
@@ -239,7 +242,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_rightWallSensor.transform.localPosition = new Vector3(0.75f, -0.99f, 0);
             m_leftWallSensor.transform.localPosition = new Vector3(-0.75f, -0.99f, 0);
 
-            //m_leftEdgeSensor.transform.localPosition = new Vector3(1.5f, -3.5f, 0);
+            m_leftEdgeSensor.transform.localPosition = new Vector3(1.5f, -3.5f, 0);
             m_rightEdgeSensor.transform.localPosition = new Vector3(-1.5f, -3.5f, 0);
 
             m_retreatDirection = RetreatAxis.Horizontal;
@@ -398,39 +401,12 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return null;
         }
 
-        private Vector2 SetRetreatDirection()
-        {
-            Vector2 direction = Vector2.zero;
-            switch(m_retreatDirection)
-            {
-                case RetreatAxis.Horizontal:
-                    if(m_targetInfo.position.x > transform.position.x)
-                    {
-                        direction = Vector2.left;
-                    }
-                    else
-                    {
-                        direction = Vector2.right;
-                    }
-                    break;
-                case RetreatAxis.Vertical:
-                    if (m_targetInfo.position.y > transform.position.y)
-                    {
-                        direction = Vector2.down;
-                    }
-                    else
-                    {
-                        direction = Vector2.up;
-                    }
-                    break;
-            }
-            return direction;
-        }
 
         private IEnumerator RetreatRoutine()
         {
             m_stateHandle.Wait(State.Cower);
 
+            AdjustSensorPositions();
             m_isRetreating = true;
             Vector2 retreatDirection = SetRetreatDirection();
 
@@ -464,6 +440,78 @@ namespace DChild.Gameplay.Characters.Enemies
                 yield return null;
             }
             yield return null;
+        }
+
+        private void AdjustSensorPositions()
+        {
+            switch(m_iceBlobType)
+            {
+                case IceBlobType.Ground:
+                    if(m_character.facing == HorizontalDirection.Right)
+                    {
+                        m_rightWallSensor.transform.localPosition = new Vector3(0.75f, -0.9f, 0);
+                        m_leftWallSensor.transform.localPosition = new Vector3(-0.75f, -0.9f, 0);
+                    }
+                    else
+                    {
+                        m_rightWallSensor.transform.localPosition = new Vector3(0.75f, -0.9f, 0);
+                        m_leftWallSensor.transform.localPosition = new Vector3(-0.75f, -0.9f, 0);
+                    }
+                    break;
+                case IceBlobType.Ceiling:
+                    if (m_character.facing == HorizontalDirection.Right)
+                    {
+                        m_rightWallSensor.transform.localPosition = new Vector3(0.75f, -0.9f, 0);
+                        m_leftWallSensor.transform.localPosition = new Vector3(-0.75f, -0.9f, 0);
+                        m_rightEdgeSensor.transform.localPosition = new Vector3(-1.5f, 0.2f, 0);
+                    }
+                    else
+                    {
+                        m_rightWallSensor.transform.localPosition = new Vector3(0.75f, -0.9f, 0);
+                        m_leftWallSensor.transform.localPosition = new Vector3(-0.75f, -0.9f, 0);
+                    }
+                    break;
+                case IceBlobType.Wall:
+                    if (m_character.facing == HorizontalDirection.Right)
+                    {
+                        m_rightWallSensor.transform.localPosition = new Vector3(0.75f, -0.9f, 0);
+                        m_leftWallSensor.transform.localPosition = new Vector3(-0.75f, -0.9f, 0);
+                    }
+                    else
+                    {
+                        m_rightWallSensor.transform.localPosition = new Vector3(0.75f, -0.9f, 0);
+                        m_leftWallSensor.transform.localPosition = new Vector3(-0.75f, -0.9f, 0);
+                    }
+                    break;
+            }
+        }
+        private Vector2 SetRetreatDirection()
+        {
+            Vector2 direction = Vector2.zero;
+            switch(m_retreatDirection)
+            {
+                case RetreatAxis.Horizontal:
+                    if(m_targetInfo.position.x > transform.position.x)
+                    {
+                        direction = Vector2.left;
+                    }
+                    else
+                    {
+                        direction = Vector2.right;
+                    }
+                    break;
+                case RetreatAxis.Vertical:
+                    if (m_targetInfo.position.y > transform.position.y)
+                    {
+                        direction = Vector2.down;
+                    }
+                    else
+                    {
+                        direction = Vector2.up;
+                    }
+                    break;
+            }
+            return direction;
         }
 
         private bool IsWallOrEdgeDetected()
