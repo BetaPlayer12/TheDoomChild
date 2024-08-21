@@ -1,5 +1,53 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &520407855838840983
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1444713066643789057}
+  - component: {fileID: 8265114772012278953}
+  m_Layer: 0
+  m_Name: VideoCinematics
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1444713066643789057
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 520407855838840983}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1595390651572007820}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8265114772012278953
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 520407855838840983}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b1e1ce647344c704e965fa331160eb1e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_videoCinemaStartSignal: {fileID: 0}
+  m_videoCinemaEndSignal: {fileID: 0}
+  m_videoPlayer: {fileID: 0}
+  m_fadeBufferTime: 1
 --- !u!1 &638597965148341211
 GameObject:
   m_ObjectHideFlags: 0
@@ -120,6 +168,7 @@ MonoBehaviour:
   m_interactablePrompt: {fileID: 0}
   m_movableObjectPrompt: {fileID: 0}
   m_upgradeWeaponHandler: {fileID: 0}
+  m_cinematicVideoHandle: {fileID: 8265114772012278953}
   m_cinematicBars: {fileID: 0}
 --- !u!1 &1760432952484764363
 GameObject:
@@ -1152,7 +1201,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1444713066643789057}
   m_Father: {fileID: 1656687072529629155}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1176,10 +1226,7 @@ MonoBehaviour:
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
-    SerializationNodes:
-    - Name: m_cameraShakeHandleOld
-      Entry: 6
-      Data: 
+    SerializationNodes: []
   m_mainCamera: {fileID: 0}
   m_trackingTarget: {fileID: 0}
   m_cameraShakeHandle: {fileID: 8006665138157474551}
@@ -1265,116 +1312,16 @@ MonoBehaviour:
     PrefabModifications: []
     SerializationNodes:
     - Name: m_cameraShake
-      Entry: 7
-      Data: 0|DChild.Gameplay.Cinematics.Cameras.BlendedCameraShake, Assembly-CSharp
-    - Name: m_blendCurve
-      Entry: 7
-      Data: 1|UnityEngine.AnimationCurve, UnityEngine.CoreModule
-    - Name: 
-      Entry: 7
-      Data: 2|UnityEngine.Keyframe[], UnityEngine.CoreModule
-    - Name: 
-      Entry: 12
-      Data: 2
-    - Name: 
-      Entry: 7
-      Data: UnityEngine.Keyframe, UnityEngine.CoreModule
-    - Name: ver
-      Entry: 3
-      Data: 1
-    - Name: m_Time
-      Entry: 4
-      Data: 0
-    - Name: m_Value
-      Entry: 4
-      Data: 1
-    - Name: m_InTangent
-      Entry: 4
-      Data: -1
-    - Name: m_OutTangent
-      Entry: 4
-      Data: -1
-    - Name: m_TangentMode
-      Entry: 3
-      Data: 34
-    - Name: m_WeightedMode
-      Entry: 3
-      Data: 0
-    - Name: m_InWeight
-      Entry: 4
-      Data: 0
-    - Name: m_OutWeight
-      Entry: 4
-      Data: 0.333333343
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: UnityEngine.Keyframe, UnityEngine.CoreModule
-    - Name: ver
-      Entry: 3
-      Data: 1
-    - Name: m_Time
-      Entry: 4
-      Data: 1
-    - Name: m_Value
-      Entry: 4
-      Data: 0
-    - Name: m_InTangent
-      Entry: 4
-      Data: -1
-    - Name: m_OutTangent
-      Entry: 4
-      Data: -1
-    - Name: m_TangentMode
-      Entry: 3
-      Data: 34
-    - Name: m_WeightedMode
-      Entry: 3
-      Data: 0
-    - Name: m_InWeight
-      Entry: 4
-      Data: 0.333333343
-    - Name: m_OutWeight
-      Entry: 4
-      Data: 0
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 3
-      Data: 8
-    - Name: 
-      Entry: 3
-      Data: 8
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: m_duration
-      Entry: 4
-      Data: 0.1
-    - Name: 
-      Entry: 8
+      Entry: 6
       Data: 
   m_shakeOnDamage: 1
   m_onDamageShakeData: {fileID: 11400000, guid: 5909878700f2dcc4a9d9c8e1d56ad68a,
     type: 2}
   m_shakeOnAttackHit: 1
-  m_onAttackHitShakeStartData: {fileID: 11400000, guid: 739a6049632169942bcc14bac8b59e19,
-    type: 2}
-  m_onAttackHitShakeLoopData: {fileID: 11400000, guid: 53a7415a65b08a04c93ee6a1ce3cd8a2,
-    type: 2}
-  m_onAttackHitShakeLoopResetDuration: 0.5
-  m_onEnemyKilledShakeLoopData: {fileID: 11400000, guid: c6c041b3c8229444fa1206fd9bb1bb30,
-    type: 2}
-  m_shakePause: 0.2
+  m_onAttackHitShakeData: {fileID: 0}
+  m_onAttackKillShakeData: {fileID: 0}
+  m_onEarthShakerImpactShakeData: {fileID: 0}
+  m_onSwordThrustShakeData: {fileID: 0}
 --- !u!114 &8006665138157474551
 MonoBehaviour:
   m_ObjectHideFlags: 0

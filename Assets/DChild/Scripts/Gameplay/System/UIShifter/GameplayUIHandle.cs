@@ -15,7 +15,9 @@ using Doozy.Runtime.UIManager.Containers;
 using Holysoft.Event;
 using Sirenix.OdinInspector;
 using System;
+using System.Collections;
 using UnityEngine;
+using UnityEngine.Video;
 
 namespace DChild.Gameplay.Systems
 {
@@ -67,6 +69,8 @@ namespace DChild.Gameplay.Systems
 
         [SerializeField]
         private WeaponUpgradeHandle m_upgradeWeaponHandler;
+        [SerializeField]
+        private CinematicVideoHandle m_cinematicVideoHandle;
 
         [SerializeField]
         private UIView m_cinematicBars;
@@ -166,7 +170,7 @@ namespace DChild.Gameplay.Systems
             if (willshow)
             {
                 m_bossCombat.ShowBossName();
-               // m_bossCombat.ShowBossHealth();
+                // m_bossCombat.ShowBossHealth();
             }
             else
             {
@@ -273,6 +277,7 @@ namespace DChild.Gameplay.Systems
         {
             m_notificationManager.InitializeFullPriorityHandling();
             m_notificationManager.InitializePromptPriorityHandling();
+            m_cinematicVideoHandle.Initialize();
             GameplaySystem.campaignSerializer.PostDeserialization += OnPostDeserialization;
         }
 
@@ -285,6 +290,11 @@ namespace DChild.Gameplay.Systems
         private void OnPostDeserialization(object sender, CampaignSlotUpdateEventArgs eventArgs)
         {
             m_navMap.ForceMapUpdateOnNextOpen();
+        }
+
+        public void ShowCinematicVideo(VideoClip clip, Func<IEnumerator> behindTheSceneRoutine = null, Action OnVideoDone = null)
+        {
+            m_cinematicVideoHandle.ShowCinematicVideo(clip, behindTheSceneRoutine, OnVideoDone);
         }
     }
 }
