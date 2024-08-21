@@ -106,6 +106,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private Collider2D m_selfCollider;
         [SerializeField, TabGroup("Reference")]
         private SkeletonAnimation m_skelAnimation;
+        [SerializeField, TabGroup("Reference")]
+        private Attacker m_bodyCollisionAttacker;
         [SerializeField, TabGroup("Modules")]
         private TransformTurnHandle m_turnHandle;
         [SerializeField, TabGroup("Modules")]
@@ -133,6 +135,13 @@ namespace DChild.Gameplay.Characters.Enemies
         private RaySensor m_rightEdgeSensor;
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_leftEdgeSensor;
+
+        [SerializeField, BoxGroup("Spawned Objects")]
+        private ParticleSystem m_detonationIceCloud;
+        [SerializeField, BoxGroup("Spawned Objects")]
+        private Collider2D m_detonationDamageCollider;
+        [SerializeField, BoxGroup("Spawned Objects")]
+        private Collider2D m_iceCloudStatusInflictionCollider;
 
         [ShowInInspector]
         private MovementHandle2D m_currentMovementHandle;
@@ -208,11 +217,19 @@ namespace DChild.Gameplay.Characters.Enemies
             m_selfCollider.enabled = false;
             m_stateHandle.OverrideState(State.WaitBehaviourEnd);
             m_currentMovementHandle.Stop();
+            m_bodyCollisionAttacker.SetDamageModifier(0);
             m_animation.SetAnimation(0, m_info.deathAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.deathAnimation);
-            //explode 
-            //wait for explosion to dissipate
+            //explode
+            m_detonationDamageCollider.enabled = true;
+            yield return new WaitForSeconds(0.5f);
+            m_detonationDamageCollider.enabled = false;
+            m_detonationIceCloud.Play();
+            m_iceCloudStatusInflictionCollider.enabled = true;
+            float cloudDuration = m_detonationIceCloud.main.duration;
+            yield return new WaitForSeconds(cloudDuration);
             gameObject.SetActive(false);
+            //wait for explosion to dissipate
             yield return null;
         }
 
@@ -285,6 +302,10 @@ namespace DChild.Gameplay.Characters.Enemies
         protected override void Start()
         {
             base.Start();
+            
+            //Set VFX stuff off if not needed, if needed setup in setup methods
+            m_detonationDamageCollider.enabled = false;
+            m_iceCloudStatusInflictionCollider.enabled = false;
 
             switch (m_iceBlobType)
             {
@@ -371,17 +392,20 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_isCowering = false;
                 }
 
-                if (IsTargetInRange(m_info.suicideDistance))
-                {
-                    StopAllCoroutines();
-                    yield return DeathRoutine();
-                }
-
                 yield return null;
             }
 
             Debug.Log("Done Cowering");
-            m_isDetecting = false;
+            if(!m_targetInfo.isValid)
+            {
+                m_isDetecting = false;
+            }
+            else
+            {
+                m_stateHandle.OverrideState(State.Retreat);
+                
+            }
+
             m_cowerInFearDuration = m_info.cowerInFearDuration;
 
             m_stateHandle.ApplyQueuedState();
