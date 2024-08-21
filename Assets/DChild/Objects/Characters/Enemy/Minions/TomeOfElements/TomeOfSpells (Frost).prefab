@@ -56,6 +56,7 @@ MonoBehaviour:
   m_idleAnimation: Idle
   m_enableFlinchColor: 0
   m_flinchColorAnimation: 
+  m_enableModule: 1
 --- !u!1 &1471593220268909049
 GameObject:
   m_ObjectHideFlags: 0
@@ -156,7 +157,7 @@ Transform:
   - {fileID: 4157308211638098429}
   - {fileID: 6696529668672135757}
   m_Father: {fileID: 8489147336556650112}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1555339029984081458
 MonoBehaviour:
@@ -369,6 +370,93 @@ MonoBehaviour:
   m_destinationTolerance: 2
   m_refreshPath: 0
   m_refreshRate: 0
+--- !u!1001 &2673179836611975804
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 8489147336556650112}
+    m_Modifications:
+    - target: {fileID: 3085988432768401472, guid: 7eda27e7f7c39c04687c7c0754bc4133,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3085988432768401472, guid: 7eda27e7f7c39c04687c7c0754bc4133,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3085988432768401472, guid: 7eda27e7f7c39c04687c7c0754bc4133,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3085988432768401472, guid: 7eda27e7f7c39c04687c7c0754bc4133,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3085988432768401472, guid: 7eda27e7f7c39c04687c7c0754bc4133,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3085988432768401472, guid: 7eda27e7f7c39c04687c7c0754bc4133,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3085988432768401472, guid: 7eda27e7f7c39c04687c7c0754bc4133,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3085988432768401472, guid: 7eda27e7f7c39c04687c7c0754bc4133,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3085988432768401472, guid: 7eda27e7f7c39c04687c7c0754bc4133,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3085988432768401472, guid: 7eda27e7f7c39c04687c7c0754bc4133,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3085988432768401472, guid: 7eda27e7f7c39c04687c7c0754bc4133,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3085988432768401535, guid: 7eda27e7f7c39c04687c7c0754bc4133,
+        type: 3}
+      propertyPath: m_Name
+      value: IceTome_Frosty Particles_Holder
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 7eda27e7f7c39c04687c7c0754bc4133, type: 3}
+--- !u!198 &1137907419555191357 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 3085988432768401473, guid: 7eda27e7f7c39c04687c7c0754bc4133,
+    type: 3}
+  m_PrefabInstance: {fileID: 2673179836611975804}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &3303345463356171196 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 634688515212343744, guid: 7eda27e7f7c39c04687c7c0754bc4133,
+    type: 3}
+  m_PrefabInstance: {fileID: 2673179836611975804}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &8238077520607135369 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 6289995128649358581, guid: 7eda27e7f7c39c04687c7c0754bc4133,
+    type: 3}
+  m_PrefabInstance: {fileID: 2673179836611975804}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &4750335645751223490
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -525,8 +613,14 @@ MonoBehaviour:
   m_slowFactor: 0
   m_fastFactor: 0
   m_fXObjects:
-    m_particleSystems: []
-    m_originalSimulationSpeed: []
+    m_particleSystems:
+    - {fileID: 1137907419555191357}
+    - {fileID: 8238077520607135369}
+    - {fileID: 3303345463356171196}
+    m_originalSimulationSpeed:
+    - 1
+    - 1
+    - 1
   m_spineObjects:
     m_skeletonAnimations:
     - {fileID: 7964270506728196966}
@@ -848,7 +942,7 @@ PrefabInstance:
     - target: {fileID: 2655276441946630534, guid: 2558704c3010fcb47bce0977a6b7d25b,
         type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 2655276441946630534, guid: 2558704c3010fcb47bce0977a6b7d25b,
         type: 3}

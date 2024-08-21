@@ -2,22 +2,26 @@
 using DChild.Gameplay.Characters.NPC;
 using DChild.Gameplay.Characters.Players.SoulSkills;
 using DChild.Gameplay.Environment;
-using DChild.Gameplay.Items;
-using DChild.Gameplay.Systems.Lore;
 using DChild.Gameplay.Trade;
 using DChild.Gameplay.UI;
 using DChild.Menu.Trade;
+using System;
+using System.Collections;
 using UnityEngine;
+using UnityEngine.Video;
 
 namespace DChild.Gameplay.Systems
 {
+
     public interface IGameplayUIHandle
     {
         IUINotificationManager notificationManager { get; }
 
+        void ShowCinematicVideo(VideoClip clip, Func<IEnumerator> behindTheSceneRoutine = null, Action OnVideoDone = null);
+
         void ToggleCinematicMode(bool on, bool instant = false);
 
-        public void ToggleCinematicBars(bool value);
+        void ToggleCinematicBars(bool value);
 
         void UpdateNavMapConfiguration(Location location, int sceneIndex, Transform inGameReference, Vector2 mapReferencePoint, Vector2 calculationOffset);
         void OpenTradeWindow(NPCProfile merchantData, ITradeInventory merchantInventory, TradeAskingPrice merchantBuyingPriceRate);

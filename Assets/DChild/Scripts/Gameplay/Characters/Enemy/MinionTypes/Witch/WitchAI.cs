@@ -27,6 +27,7 @@ namespace DChild.Gameplay.Characters.Enemies
             private MovementInfo m_move = new MovementInfo();
             public MovementInfo move => m_move;
 
+
             //Attack Behaviours
             [SerializeField, TabGroup("Attack")]
             private SimpleAttackInfo m_attack = new SimpleAttackInfo();
@@ -52,6 +53,11 @@ namespace DChild.Gameplay.Characters.Enemies
             private float m_wallOffset;
             public float wallOffset => m_wallOffset;
 
+            [Title("Events")]
+            [SerializeField, ValueDropdown("GetEvents")]
+            private string m_onShriekEvent;
+
+            public string onShriekEvent => m_onShriekEvent;
 
             //Animations
             [SerializeField]
@@ -155,6 +161,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private RaySensor m_edgeSensor;
         [SerializeField, TabGroup("Hurtbox")]
         private Collider2D m_attackBB;
+        [SerializeField, TabGroup("Particle")]
+        private ParticleSystem m_shriekFX;
 
         [SerializeField]
         private bool m_willStand;
@@ -346,6 +354,10 @@ namespace DChild.Gameplay.Characters.Enemies
                 UpdateAttackDeciderList();
             }
         }
+        public void OnShriekVFX()
+        {
+            m_shriekFX.Play();
+        }
 
         private void UpdateAttackDeciderList()
         {
@@ -364,7 +376,6 @@ namespace DChild.Gameplay.Characters.Enemies
             IAIAnimationInfo detectAnimation = m_willStand ? m_info.detectStandingAnimation : m_info.detectSittingAnimation;
             m_animation.SetAnimation(0, detectAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, detectAnimation);
-
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_stateHandle.ApplyQueuedState();
             yield return null;
@@ -394,7 +405,7 @@ namespace DChild.Gameplay.Characters.Enemies
             base.Start();
             m_currentTimeScale = UnityEngine.Random.Range(1.0f, 2.0f);
             m_currentFullCD = UnityEngine.Random.Range(m_info.attackCD * .5f, m_info.attackCD * 2f);
-
+            m_spineEventListener.Subscribe(m_info.onShriekEvent, OnShriekVFX);
             IAIAnimationInfo idleAnimation = m_willStand ? m_info.idleStandingAnimation : m_info.idleSittingAnimation;
             m_animation.SetAnimation(0, idleAnimation, true);
 

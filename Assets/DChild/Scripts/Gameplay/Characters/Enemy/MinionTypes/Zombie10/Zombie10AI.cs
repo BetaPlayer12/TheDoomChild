@@ -32,15 +32,27 @@ namespace DChild.Gameplay.Characters.Enemies
             public MovementInfo move => m_move;
 
             //Attack Behaviours
-            [SerializeField, MinValue(0)]
+            /*[SerializeField, MinValue(0)]
             private float m_attackCD;
-            public float attackCD => m_attackCD;
+            public float attackCD => m_attackCD;*/
             [SerializeField]
             private SimpleAttackInfo m_swipeAttack = new SimpleAttackInfo();
             public SimpleAttackInfo swipeAttack => m_swipeAttack;
             [SerializeField]
+            private float m_swipeAttackCD;
+            public float swipeAttackCD => m_swipeAttackCD;
+            [SerializeField]
             private SimpleAttackInfo m_leapAttack = new SimpleAttackInfo();
             public SimpleAttackInfo leapAttack => m_leapAttack;
+            [SerializeField, MinValue(0)]
+            private float m_leapAttackCD;
+            public float leapAttackCD => m_leapAttackCD;
+            [SerializeField]
+            private SimpleAttackInfo m_groundPoundAttack = new SimpleAttackInfo();
+            public SimpleAttackInfo groundPoundAttack => m_groundPoundAttack;
+            [SerializeField, MinValue(0)]
+            private float m_groundPoundAttackCD;
+            public float groundPoundAttackCD => m_groundPoundAttackCD;
             [SerializeField, MinValue(0)]
             private float m_leapTime;
             public float leapTime => m_leapTime;
@@ -73,10 +85,19 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField, ValueDropdown("GetAnimations")]
             private string m_deathAnimation;
             public string deathAnimation => m_deathAnimation;
-
+            [SerializeField, ValueDropdown("GetEvents")]
+            private string m_groundPoundEvent;
+            public string groundPoundEvent => m_groundPoundEvent;
+            [SerializeField, ValueDropdown("GetEvents")]
+            private string m_innardsThrowEvent;
+            public string innardsThrowEvent => m_innardsThrowEvent;
             [SerializeField]
             private SimpleProjectileAttackInfo m_projectile;
             public SimpleProjectileAttackInfo projectile => m_projectile;
+
+            [SerializeField]
+            private GameObject m_groundPoundProjectile;
+            public GameObject groundPoundProjectile => m_groundPoundProjectile;
 
 
             public override void Initialize()
@@ -86,6 +107,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_move.SetData(m_skeletonDataAsset);
                 m_swipeAttack.SetData(m_skeletonDataAsset);
                 m_leapAttack.SetData(m_skeletonDataAsset);
+                m_groundPoundAttack.SetData(m_skeletonDataAsset);
                 m_projectile.SetData(m_skeletonDataAsset);
 #endif
             }
@@ -108,6 +130,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             Swipe,
             Leap,
+            GroundPound,
             [HideInInspector]
             _COUNT
         }
@@ -117,7 +140,11 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Reference")]
         private GameObject m_legCollider;
         [SerializeField, TabGroup("Reference")]
-        private CircleCollider2D m_shockwaveBB;
+        private BoxCollider2D m_shockwaveBB;
+        [SerializeField, TabGroup("Reference")]
+        private BoxCollider2D m_innardSlashBB;
+        [SerializeField, TabGroup("Reference")]
+        private GameObject m_groundPoundBB;
         [SerializeField, TabGroup("Modules")]
         private AnimatedTurnHandle m_turnHandle;
         [SerializeField, TabGroup("Modules")]
@@ -160,17 +187,25 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private float m_targetDistance;
 
+
+        [SerializeField]
+        private SpineEventListener m_spineEventListener;
         [SerializeField]
         private Transform m_throwPoint;
+        [SerializeField]
+        private Transform m_groundPoundPoint;
 
         [ShowInInspector]
         private StateHandle<State> m_stateHandle;
 
         private Attack m_currentAttack;
         private float m_currentAttackRange;
+        private float m_currentAttackCD;
         private State m_turnState;
         private Vector2 m_targetLastPos;
 
+        private Coroutine m_innardsColliderRoutine;
+        private Coroutine m_groundPoundColliderRoutine;
 
         //[SerializeField]
         //private AudioSource m_Audiosource;
@@ -358,6 +393,7 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return new WaitForSeconds(.5f);
             m_animation.animationState.TimeScale = animTime;
             m_legCollider.SetActive(false);
+            m_shockwaveBB.enabled = true;
             while (time < m_info.leapTime)
             {
                 m_character.physics.SetVelocity(velocity * transform.localScale.x, 0);
@@ -379,24 +415,72 @@ namespace DChild.Gameplay.Characters.Enemies
             mainFX.startLifetime = m_info.shockwaveSpeed;
             m_shockwaveFX.Play();
             var shockwaveSpeed = 15 / m_info.shockwaveSpeed;
-            m_shockwaveBB.enabled = true;
+           
             float time = 0;
             while (time < m_info.shockwaveSpeed)
             {
-                m_shockwaveBB.radius += Time.deltaTime * shockwaveSpeed;
+                //m_shockwaveBB.radius += Time.deltaTime * shockwaveSpeed;
                 time += Time.deltaTime;
                 yield return null;
             }
-            m_shockwaveBB.radius = 0.1f;
+            //m_shockwaveBB.radius = 1f;
             m_shockwaveBB.enabled = false;
             yield return null;
         }
+        
+        private IEnumerator InnardsThrowColliderRoutine()
+        {
+            m_innardSlashBB.enabled = true;
+            yield return new WaitForSeconds(1.5f);
+            m_innardSlashBB.enabled = false;
+        }
+
+       private IEnumerator GroundPoundBBColliderRoutine()
+        {
+            m_groundPoundBB.SetActive(true);
+            yield return new WaitForSeconds(0.5f);
+            m_groundPoundBB.SetActive(false);
+            m_groundPoundColliderRoutine = null;
+        }
+
+        private void OnGroundPoundSpawn()
+        {
+            var instance = GameSystem.poolManager.GetPool<PoolableObjectPool>().GetOrCreateItem(m_info.groundPoundProjectile, gameObject.scene);
+            Vector2 spawnPosition = new Vector2(m_groundPoundPoint.transform.position.x, m_groundPoundPoint.transform.position.y);
+            instance.SpawnAt(spawnPosition, Quaternion.identity);
+            if (m_groundPoundColliderRoutine == null) 
+            {
+                m_groundPoundColliderRoutine = StartCoroutine(GroundPoundBBColliderRoutine());
+            }
+            else
+            {
+                m_groundPoundColliderRoutine = null;
+                m_groundPoundColliderRoutine = StartCoroutine(GroundPoundBBColliderRoutine());
+            }
+        }
+
+        private void OnInnardsThrowEvent()
+        {
+            if (m_innardsColliderRoutine == null)
+            {
+                m_innardsColliderRoutine = StartCoroutine(InnardsThrowColliderRoutine());
+            }
+            else
+            {
+                m_innardsColliderRoutine = null;
+                m_innardsColliderRoutine = StartCoroutine(InnardsThrowColliderRoutine());
+            }
+        }
+
+       
 
         protected override void Start()
         {
             base.Start();
             m_selfCollider.SetActive(false);
             m_startPoint = transform.position;
+            m_spineEventListener.Subscribe(m_info.groundPoundEvent, OnGroundPoundSpawn);
+            m_spineEventListener.Subscribe(m_info.innardsThrowEvent, OnInnardsThrowEvent);
         }
 
         protected override void Awake()
@@ -415,7 +499,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void Update()
         {
-            //Debug.Log("Wall Sensor is " + m_wallSensor.isDetecting);
+            //Debug.Log("Wall Sensor is " + Vector2.Distance(m_targetInfo.position, transform.position));
             //Debug.Log("Edge Sensor is " + m_edgeSensor.isDetecting);
             switch (m_stateHandle.currentState)
             {
@@ -468,12 +552,19 @@ namespace DChild.Gameplay.Characters.Enemies
                         case Attack.Swipe:
                             m_animation.EnableRootMotion(false, false);
                             m_attackHandle.ExecuteAttack(m_info.swipeAttack.animation, m_info.idleAnimation);
+                            m_currentAttackCD = m_info.swipeAttackCD;
                             StartCoroutine(ThrowGutsRoutine());
                             break;
                         case Attack.Leap:
                             m_animation.EnableRootMotion(false, false);
                             m_attackHandle.ExecuteAttack(m_info.leapAttack.animation, m_info.idleAnimation);
+                            m_currentAttackCD = m_info.leapAttackCD;
                             StartCoroutine(LeapAttackVelocityRoutine(m_targetInfo.position));
+                            break;
+                        case Attack.GroundPound:
+                            m_animation.EnableRootMotion(false, false);
+                            m_attackHandle.ExecuteAttack(m_info.groundPoundAttack.animation, m_info.idleAnimation);
+                            m_currentAttackCD = m_info.groundPoundAttackCD;
                             break;
                     }
 
@@ -496,7 +587,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         }
                     }
 
-                    if (m_currentCD <= m_info.attackCD)
+                    if (m_currentCD <= m_currentAttackCD)
                     {
                         m_currentCD += Time.deltaTime;
                     }
@@ -511,15 +602,21 @@ namespace DChild.Gameplay.Characters.Enemies
                 case State.Chasing:
                     {
                         m_flinchHandle.m_autoFlinch = false;
-                        if (Vector2.Distance(m_targetInfo.position, transform.position) < m_info.swipeAttack.range * 3)
+                       
+                        if (Vector2.Distance(m_targetInfo.position, transform.position) < m_info.swipeAttack.range * 2)
                         {
                             m_currentAttack = Attack.Swipe;
                             m_currentAttackRange = m_info.swipeAttack.range;
                         }
-                        else /*if (Vector2.Distance(m_targetInfo.position, transform.position) >= m_info.leapAttack.range)*/
+                        else if (Vector2.Distance(m_targetInfo.position, transform.position) >= m_info.leapAttack.range)
                         {
                             m_currentAttack = Attack.Leap;
                             m_currentAttackRange = m_info.leapAttack.range;
+                        }
+                        if (Vector2.Distance(m_targetInfo.position, transform.position) <= m_info.groundPoundAttack.range)
+                        {
+                            m_currentAttack = Attack.GroundPound;
+                            m_currentAttackRange = m_info.groundPoundAttack.range;
                         }
                         if (IsFacingTarget())
                         {

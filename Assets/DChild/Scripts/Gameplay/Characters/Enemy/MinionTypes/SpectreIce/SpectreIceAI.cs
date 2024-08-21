@@ -527,7 +527,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 {
                     m_targetPoint = new Vector2(m_targetInfo.position.x + 10, m_targetInfo.position.y + 30f);
                 }
-                var direction = (m_targetPoint - (Vector2)transform.position).normalized;
+                /*var direction = (m_targetPoint - (Vector2)transform.position).normalized;
                 m_animation.SetAnimation(0, m_info.move, true);
                 while (Vector2.Distance(transform.position, m_targetPoint) > 10f)
                 {
@@ -538,7 +538,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_agent.MoveTowardsForced(direction, m_info.move.speed);
                     yield return null;
                 }
-                m_agent.Stop();
+                m_agent.Stop();*/
                 //m_movement.MoveTowards(new Vector2(m_targetInfo.position.x, m_targetInfo.position.y + 20), m_info.move.speed);
                 yield return new WaitForSeconds(1.25f);
                 if (!m_upDownSensor.isDetecting && !m_leftRightSensor.isDetecting || !m_upDownSensor.allRaysDetecting && !m_leftRightSensor.allRaysDetecting)
@@ -578,7 +578,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     {
                         CustomTurn();
                     }
-                    var direction = (m_targetPoint - (Vector2)transform.position).normalized;
+                    /*var direction = (m_targetPoint - (Vector2)transform.position).normalized;
                     m_animation.SetAnimation(0, m_info.move, true);
                     while (Vector2.Distance(transform.position, m_targetPoint) > 10f)
                     {
@@ -586,7 +586,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         yield return null;
                     }
                     m_agent.Stop();
-                    yield return null;
+                    yield return null;*/
                 }
                 m_stateHandle.OverrideState(State.ReevaluateSituation);
             }
@@ -617,7 +617,7 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return null;
         }
         #region Movement
-        private IEnumerator ExecuteMove(float attackRange, /*float heightOffset,*/ Attack attack)
+        private IEnumerator ExecuteMove(/*float attackRange, *//*float heightOffset,*/ Attack attack)
         {
             m_animation.DisableRootMotion();
             bool inRange = false;
@@ -626,9 +626,9 @@ namespace DChild.Gameplay.Characters.Enemies
             var newPos = Vector2.zero;
             while (!inRange || TargetBlocked())
             {
-                newPos = new Vector2(m_targetInfo.position.x, /*GroundPosition().y + 20*/m_targetInfo.position.y);
-                bool xTargetInRange = Mathf.Abs(/*m_targetInfo.position.x*/newPos.x - transform.position.x) < attackRange ? true : false;
-                bool yTargetInRange = Mathf.Abs(/*m_targetInfo.position.y*/newPos.y - transform.position.y) < attackRange ? true : false;
+                newPos = new Vector2(m_character.facing == HorizontalDirection.Left? m_targetInfo.position.x + 10 : m_targetInfo.position.x - 10, /*GroundPosition().y + 20*/m_targetInfo.position.y + 40f);
+                bool xTargetInRange = Mathf.Abs(/*m_targetInfo.position.x*/newPos.x - transform.position.x) < m_currentAttackRange ? true : false;
+                bool yTargetInRange = Mathf.Abs(/*m_targetInfo.position.y*/newPos.y - transform.position.y) < m_currentAttackRange ? true : false;
                 if (xTargetInRange && yTargetInRange)
                 {
                     inRange = true;
@@ -831,8 +831,8 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_stateHandle.Wait(State.Cooldown);
                     //m_animation.SetAnimation(0, m_info.idleAnimation, true);
                     m_agent.Stop();
-                    //m_executeMoveCoroutine = StartCoroutine(ExecuteMove(/*m_currentAttackRange*/ m_currentAttackRange, m_currentAttack));
-                    StartCoroutine(AttackRoutine2());
+                    m_executeMoveCoroutine = StartCoroutine(ExecuteMove(/*m_currentAttackRange*//* m_currentAttackRange, */m_currentAttack));
+                    //StartCoroutine(AttackRoutine2());
                     m_attackDecider.hasDecidedOnAttack = false;
                     break;
                 case State.Cooldown:

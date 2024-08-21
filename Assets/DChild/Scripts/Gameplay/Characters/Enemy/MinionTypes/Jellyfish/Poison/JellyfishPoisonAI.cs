@@ -179,7 +179,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_agent.Stop();
                 m_rigidbody2D.constraints = RigidbodyConstraints2D.FreezeRotation;
                 m_stateHandle.Wait(State.ReevaluateSituation);
-                StopAllCoroutines();
+                //StopAllCoroutines();
             }
         }
 
