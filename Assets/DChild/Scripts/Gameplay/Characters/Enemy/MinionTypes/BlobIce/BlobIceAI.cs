@@ -136,12 +136,14 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_leftEdgeSensor;
 
-        [SerializeField, BoxGroup("Spawned Objects")]
+        [SerializeField, TabGroup("VFX Objects", "Ice Cloud")]
         private ParticleSystem m_detonationIceCloud;
-        [SerializeField, BoxGroup("Spawned Objects")]
+        [SerializeField, TabGroup("VFX Objects", "Ice Cloud")]
         private Collider2D m_detonationDamageCollider;
-        [SerializeField, BoxGroup("Spawned Objects")]
+        [SerializeField, TabGroup("VFX Objects", "Ice Cloud")]
         private Collider2D m_iceCloudStatusInflictionCollider;
+        [SerializeField, TabGroup("VFX Objects", "Ice Trail")]
+        private GameObject m_iceTrailObject;
 
         [ShowInInspector]
         private MovementHandle2D m_currentMovementHandle;
@@ -218,6 +220,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_stateHandle.OverrideState(State.WaitBehaviourEnd);
             m_currentMovementHandle.Stop();
             m_bodyCollisionAttacker.SetDamageModifier(0);
+            m_iceTrailObject.SetActive(false);
             m_animation.SetAnimation(0, m_info.deathAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.deathAnimation);
             //explode
@@ -241,6 +244,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_rightWallSensor.transform.localPosition = new Vector3(0.75f, -0.9f, 0);
             m_leftWallSensor.transform.localPosition = new Vector3(-0.75f, -0.9f, 0);
 
+            m_iceTrailObject.SetActive(false);
             m_isolatedCharacterPhysics2D.simulateGravity = true;
             m_currentMovementHandle = m_groundMovement;
             m_retreatDirection = RetreatAxis.Horizontal;
@@ -251,9 +255,11 @@ namespace DChild.Gameplay.Characters.Enemies
             transform.rotation = Quaternion.identity;
             transform.Rotate(new Vector3(0f, 0f, 180f));
 
+            m_iceTrailObject.SetActive(true);
             m_isolatedCharacterPhysics2D.simulateGravity = false;
             m_currentMovementHandle = m_groundMovement;
             m_skelAnimation.initialFlipX = true;
+            m_iceTrailObject.transform.localScale = new Vector3(-1, 1, 1);
 
             //Correct Sensor positions after flip
             m_rightWallSensor.transform.localPosition = new Vector3(0.75f, -0.99f, 0);
@@ -288,6 +294,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_retreatDirection = RetreatAxis.Vertical;
             }
 
+            m_iceTrailObject.SetActive(true);
             m_isolatedCharacterPhysics2D.simulateGravity = false;
             m_currentMovementHandle = m_wallMovement;
             //Set trail on
@@ -382,8 +389,9 @@ namespace DChild.Gameplay.Characters.Enemies
             m_isRetreating = false;
             m_isCowering = true;
             m_cowerInFearDuration = m_info.cowerInFearDuration;
+            m_iceTrailObject.SetActive(false);
 
-            while(m_isCowering)
+            while (m_isCowering)
             {
                 m_cowerInFearDuration -= Time.deltaTime;
 
@@ -396,14 +404,11 @@ namespace DChild.Gameplay.Characters.Enemies
             }
 
             Debug.Log("Done Cowering");
-            if(!m_targetInfo.isValid)
+            m_isDetecting = false;
+
+            if(m_iceBlobType == IceBlobType.Wall || m_iceBlobType == IceBlobType.Ceiling)
             {
-                m_isDetecting = false;
-            }
-            else
-            {
-                m_stateHandle.OverrideState(State.Retreat);
-                
+                m_iceTrailObject.SetActive(true);
             }
 
             m_cowerInFearDuration = m_info.cowerInFearDuration;
@@ -434,6 +439,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_isRetreating = true;
             Vector2 retreatDirection = SetRetreatDirection();
 
+            m_iceTrailObject.SetActive(true);
             m_animation.SetAnimation(0, m_info.retreat.animation, true);
 
             while (!IsWallOrEdgeDetected())
