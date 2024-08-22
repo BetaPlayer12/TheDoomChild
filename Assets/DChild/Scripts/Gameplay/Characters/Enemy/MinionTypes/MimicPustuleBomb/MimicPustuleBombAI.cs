@@ -575,8 +575,8 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_info.patrol.animation, true);
             m_animation.DisableRootMotion();
             m_bodycollider.enabled = false;
-            m_startPos = transform.position;
             SwapPustuleBombPosition();
+            m_startPos = transform.position;
         }
 
         protected override void Awake()
