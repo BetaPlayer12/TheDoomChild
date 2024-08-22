@@ -635,6 +635,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         
                         DynamicMovement(m_startPos, m_info.move.speed);
                         m_aggroGroup.SetActive(false);
+                        m_rigidbody2D.velocity = Vector2.zero;
                         m_turnState = State.ReturnToPatrol;
                         
                     }
@@ -644,15 +645,17 @@ namespace DChild.Gameplay.Characters.Enemies
                         {
                             StartCoroutine(TransformUnAggroRoutine());
                         }
-                        Debug.Log(Vector2.Distance(m_startPos, transform.position));
+                        
                         if(m_returnToOriginalPos)//&& Vector2.Distance(m_startPos, transform.position) < 0.2f)
                         {
+                            Debug.Log(Vector2.Distance(m_startPos, transform.position)+" AAAAAAAAAAAAAAAAAAAA");
                             m_mimicPustuleBombChain.enabled = true;
                             m_returnToOriginalPos = false;
-                            m_rigidbody2D.velocity = new Vector2(0f,0f);
-                        }else
+                            m_rigidbody2D.velocity = Vector2.zero;
+                        }
+                        else
                         {
-                            DynamicMovement(m_startPos, 2f);
+                            DynamicMovement(m_startPos, 1f);
                         }
                         m_aggroGroup.SetActive(false);
                         m_stateHandle.OverrideState(State.Patrol);

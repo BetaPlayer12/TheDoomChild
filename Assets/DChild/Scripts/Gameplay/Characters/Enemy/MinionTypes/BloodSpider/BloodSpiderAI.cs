@@ -333,6 +333,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnTurnDone(object sender, FacingEventArgs eventArgs)
         {
+            //CustomTurn();
             m_stateHandle.ApplyQueuedState();
         }
 
@@ -549,7 +550,7 @@ namespace DChild.Gameplay.Characters.Enemies
                        
                         case Attack.Spit:
                             m_animation.EnableRootMotion(false, false);
-                            if (IsTargetInRange(m_info.stompAttack.range))
+                            if (IsTargetInRange(m_info.stompAttack.range)&&(transform.position.y+1)<m_targetInfo.transform.position.y)
                             {
                                 m_movement.Stop();
                                 m_selfCollider.enabled = true;
@@ -635,10 +636,20 @@ namespace DChild.Gameplay.Characters.Enemies
                                 }
                                 else
                                 {
-                                    m_attackDecider.hasDecidedOnAttack = false;
-                                    m_movement.Stop();
-                                    m_selfCollider.enabled = true;
-                                    m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                                    if (!m_backWallSensor.isDetecting)
+                                    {
+                                        m_animation.EnableRootMotion(true, false);
+                                        m_animation.SetAnimation(0, m_info.move.animation, false);
+                                        //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.move.animation);
+                                        //m_animation.EnableRootMotion(false, false);
+                                    }else
+                                    {
+                                        m_attackDecider.hasDecidedOnAttack = false;
+                                        m_movement.Stop();
+                                        m_selfCollider.enabled = true;
+                                        m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                                    }
+                                    
                                 }
                             }
                         }
