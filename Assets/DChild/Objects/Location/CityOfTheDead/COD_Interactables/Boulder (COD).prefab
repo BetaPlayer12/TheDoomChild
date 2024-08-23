@@ -180,17 +180,74 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8653724399639445526, guid: 08ea6597abb36bc458c49b2a87f15543,
         type: 3}
+      propertyPath: m_data
+      value: 
+      objectReference: {fileID: 11400000, guid: fee4845f63938794480a72a2f31ab3d9,
+        type: 2}
+    - target: {fileID: 8653724399639445526, guid: 08ea6597abb36bc458c49b2a87f15543,
+        type: 3}
+      propertyPath: m_currentAttackInfo.ignoresBlock
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8653724399639445526, guid: 08ea6597abb36bc458c49b2a87f15543,
+        type: 3}
+      propertyPath: m_currentAttackInfo.damage.m_type
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8653724399639445526, guid: 08ea6597abb36bc458c49b2a87f15543,
+        type: 3}
       propertyPath: m_currentAttackInfo.damage.m_value
-      value: 20
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 08ea6597abb36bc458c49b2a87f15543, type: 3}
+--- !u!114 &4108830302692842043 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6873115987864900440, guid: 08ea6597abb36bc458c49b2a87f15543,
+    type: 3}
+  m_PrefabInstance: {fileID: 7378947841133168995}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5173561243335103087}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e2130a8bda7a1a544b7fe2cfe9725688, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5173561243335103087 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2426146611145431820, guid: 08ea6597abb36bc458c49b2a87f15543,
     type: 3}
   m_PrefabInstance: {fileID: 7378947841133168995}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1386700130124567634
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5173561243335103087}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1bcfbb95dde2f4045a51a99e091974d9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_delay: 3
+  m_startOnAwake: 1
+  m_event:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4108830302692842043}
+        m_TargetAssemblyTypeName: DChild.Gameplay.Pooling.PoolableObject, Assembly-CSharp
+        m_MethodName: DestroyInstance
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &7217284874745905563
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -217,4 +274,4 @@ MonoBehaviour:
   IncludeChildColliders: 0
   RuntimeFollower: {fileID: 0}
   colliderMaxDistance: 0
-  lastTimeMaxDistanceCalced: 638285616373129776
+  lastTimeMaxDistanceCalced: 638597645718381184
