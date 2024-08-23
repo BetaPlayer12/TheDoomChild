@@ -264,7 +264,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
                 m_targetLastPos = m_targetInfo.position + m_info.targetOffset;
                 //m_targetLastPos = m_targetInfo.position;
-
+                Debug.Log(m_targetLastPos+" THERE IT IS");
                 //Shoot Spit
                 m_muzzleFX.Play();
                 Vector2 target = m_targetLastPos;
@@ -281,11 +281,13 @@ namespace DChild.Gameplay.Characters.Enemies
                 else
                 {
                     var instance = GameSystem.poolManager.GetPool<ProjectilePool>().GetOrCreateItem(m_info.projectile.projectileInfo.projectile);
+                    //instance.gameObject.SetActive(false);
                     instance.transform.position = m_throwPoint.position;
                     var component = instance.GetComponent<Projectile>();
                     component.ResetState();
                     //component.GetComponent<IsolatedObjectPhysics2D>().AddForce(BallisticVel(), ForceMode2D.Impulse);
                     component.GetComponent<IsolatedObjectPhysics2D>().SetVelocity(BallisticVel());
+                    //instance.gameObject.SetActive(true);
                     //return instance.gameObject;
                 }
 
