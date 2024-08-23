@@ -378,7 +378,7 @@ namespace DChild.Gameplay.Characters.Enemies
             float countdown = 0;
             while (countdown < 1f /*|| !m_wallSensor.isDetecting*/)
             {
-                m_movement.MoveTowards(Vector2.one * m_targetInfo.transform.localScale.x, m_info.run.speed * 6);
+                m_movement.MoveTowards(Vector2.one * transform.localScale.x, m_info.run.speed * 6);
                 countdown += Time.deltaTime;
                 yield return null;
             }
