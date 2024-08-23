@@ -394,7 +394,8 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             yield return new WaitForSeconds(0.5f);
             m_flinchHandle.gameObject.SetActive(false);
-            StartCoroutine(ExecuteMove(m_info.attackStart.range));
+            m_attackCoroutine = null;
+            m_stateHandle.ApplyQueuedState();
             yield return null;
         }
         private IEnumerator ExecuteMove(float attackRange)
