@@ -718,6 +718,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d247ba06193faa74d9335f5481b2b56c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &2009689999569077404 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3632821698923861370, guid: dabb587cd444bd04f88579376a9e90af,
+    type: 3}
+  m_PrefabInstance: {fileID: 2993128479107076582}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 11a5cea4c16e7c4478a55620f5e666e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &2133699081023160303 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3753141693382012425, guid: dabb587cd444bd04f88579376a9e90af,
@@ -988,6 +1000,7 @@ MonoBehaviour:
   m_groundMovement: {fileID: 4834345702496402077}
   m_wallMovement: {fileID: 3910944197415989504}
   m_patrolHandle: {fileID: 6107204167903927495}
+  m_wayPointPatrol: {fileID: 6107204167903927495}
   m_flinchHandle: {fileID: 5517817836577318179}
   m_isolatedCharacterPhysics2D: {fileID: 8797988823694398820}
   m_health: {fileID: 5762972987136159026}
@@ -996,10 +1009,14 @@ MonoBehaviour:
   m_groundSensor: {fileID: 2157430791534878370}
   m_rightEdgeSensor: {fileID: 2133699081023160303}
   m_leftEdgeSensor: {fileID: 3677486523166384057}
+  m_escapePathSensor: {fileID: 2009689999569077404}
   m_detonationIceCloud: {fileID: 7720978820333676450}
   m_detonationDamageCollider: {fileID: 6641070175624503384}
   m_iceCloudStatusInflictionCollider: {fileID: 6277287210885180673}
   m_iceTrailObject: {fileID: 5866052532294588195}
+  m_iceDrip: {fileID: 4651631400139598095, guid: abfa06d6dc8443a4c9350379e68c6cab,
+    type: 3}
+  m_coolDripTimer: 0
   m_iceBlobType: 0
 --- !u!114 &2879666354333744859
 MonoBehaviour:
@@ -1255,7 +1272,7 @@ PrefabInstance:
     - target: {fileID: 5489752875556503899, guid: 03b7aacf63a7b8143a92e1bdeb37f38e,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 1.13
       objectReference: {fileID: 0}
     - target: {fileID: 5489752875556503899, guid: 03b7aacf63a7b8143a92e1bdeb37f38e,
         type: 3}
