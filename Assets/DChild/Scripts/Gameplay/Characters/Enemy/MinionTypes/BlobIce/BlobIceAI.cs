@@ -171,6 +171,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private StateHandle<State> m_stateHandle;
         [ShowInInspector]
         private float m_cowerInFearDuration;
+        [SerializeField]
+        private Vector2 m_startingPosition;
         [ShowInInspector]
         private bool m_isCowering;
         [ShowInInspector]
@@ -188,17 +190,6 @@ namespace DChild.Gameplay.Characters.Enemies
 
         public override void SetTarget(IDamageable damageable, Character m_target = null)
         {
-            //base.SetTarget(damageable);
-            //if (m_stateHandle.currentState != State.Retreat)
-            //{
-            //    if (IsFacingTarget())
-            //    {
-            //        m_turnHandle.ForceTurnImmidiately();
-            //    }
-
-            //    m_stateHandle.SetState(State.Retreat);
-            //}
-
             if (damageable != null)
             {
                 base.SetTarget(damageable);
@@ -352,6 +343,7 @@ namespace DChild.Gameplay.Characters.Enemies
             }
 
             m_cowerInFearDuration = m_info.cowerInFearDuration;
+            m_startingPosition = transform.position;
         }
 
         protected override void Awake()
@@ -428,22 +420,22 @@ namespace DChild.Gameplay.Characters.Enemies
             m_isCowering = true;
             m_cowerInFearDuration = m_info.cowerInFearDuration;
             m_iceTrailObject.SetActive(false);
-            m_targetInfo.Set(null);
+            m_aggroBoundary.GetComponent<Collider2D>().enabled = true;
 
             while (m_isCowering)
             {
-                if (m_targetInfo.isValid)
-                {
-                    yield return new WaitForSeconds(m_info.suicideDelay);
-                    m_damageable.KillSelf();
-                }
+                m_cowerInFearDuration -= Time.deltaTime;          
 
                 if (m_cowerInFearDuration <= 0)
                 {
                     m_isCowering = false;
                 }
 
-                m_cowerInFearDuration -= Time.deltaTime;
+                if (m_targetInfo.isValid)
+                {
+                    yield return new WaitForSeconds(m_info.suicideDelay);
+                    m_damageable.KillSelf();
+                }
 
                 yield return null;
             }
@@ -482,6 +474,8 @@ namespace DChild.Gameplay.Characters.Enemies
             AdjustSensorPositions();
             m_isRetreating = true;
             Vector2 retreatDirection = SetRetreatDirection();
+            m_targetInfo.Set(null);
+            m_aggroBoundary.GetComponent<Collider2D>().enabled = false;
 
             m_iceTrailObject.SetActive(true);
             m_animation.SetAnimation(0, m_info.retreat.animation, true);
@@ -510,36 +504,40 @@ namespace DChild.Gameplay.Characters.Enemies
 
                 if (transform.localRotation.z == 90) //on right wall
                 {
-                    if(moveInfo.destination.y > transform.position.y)
+                    if(moveInfo.destination.y > m_startingPosition.y) //if destination is higher than starting position, it is going up 
                     {
-                        if(m_character.facing != HorizontalDirection.Left)
+                        if(m_character.facing == HorizontalDirection.Right) //if character is facing left, turn
                         {
                             m_turnHandle.ForceTurnImmidiately();
+                            transform.localScale = new Vector3(1, 1, 1);
                         }
                     }
                     else
                     {
-                        if (m_character.facing != HorizontalDirection.Right)
+                        if (m_character.facing == HorizontalDirection.Left)
                         {
                             m_turnHandle.ForceTurnImmidiately();
+                            transform.localScale = new Vector3(-1, 1, 1);
                         }
                     }
                 }
 
                 if(transform.localRotation.z == 270) //on left wall
                 {
-                    if (moveInfo.destination.y > transform.position.y)
+                    if (moveInfo.destination.y > m_startingPosition.y)
                     {
-                        if (m_character.facing != HorizontalDirection.Right)
+                        if (m_character.facing == HorizontalDirection.Right)
                         {
                             m_turnHandle.ForceTurnImmidiately();
+                            transform.localScale = new Vector3(-1, 1, 1);
                         }
                     }
                     else
                     {
-                        if (m_character.facing != HorizontalDirection.Left)
+                        if (m_character.facing == HorizontalDirection.Left)
                         {
                             m_turnHandle.ForceTurnImmidiately();
+                            transform.localScale = new Vector3(1, 1, 1);
                         }
                     }
                 }
