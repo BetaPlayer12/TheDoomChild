@@ -35,17 +35,14 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField, MinValue(0)]
             private float m_cowerInFearDuration;
             public float cowerInFearDuration => m_cowerInFearDuration;
-            [SerializeField, MinValue(0)]
-            private float m_deathDuration;
-            public float deathDuration => m_deathDuration;
 
             [SerializeField]
             private float m_targetDistanceTolerance;
             public float targetDistanceTolerance => m_targetDistanceTolerance;
 
             [SerializeField]
-            private float m_suicideDistance;
-            public float suicideDistance => m_suicideDistance;
+            private float m_suicideDelay;
+            public float suicideDelay => m_suicideDelay;
 
             [SerializeField]
             private float m_minCoolDripTimer;
@@ -377,6 +374,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     SpawnIceDrip();
                 }
             }
+
             switch (m_stateHandle.currentState)
             {
                 case State.Patrol:
@@ -434,18 +432,18 @@ namespace DChild.Gameplay.Characters.Enemies
 
             while (m_isCowering)
             {
-                m_cowerInFearDuration -= Time.deltaTime;
+                if (m_targetInfo.isValid)
+                {
+                    yield return new WaitForSeconds(m_info.suicideDelay);
+                    m_damageable.KillSelf();
+                }
 
-                if(m_cowerInFearDuration <= 0)
+                if (m_cowerInFearDuration <= 0)
                 {
                     m_isCowering = false;
                 }
 
-                if (m_targetInfo.isValid)
-                {
-                    yield return new WaitForSeconds(1f);
-                    m_damageable.KillSelf();
-                }
+                m_cowerInFearDuration -= Time.deltaTime;
 
                 yield return null;
             }
@@ -499,33 +497,6 @@ namespace DChild.Gameplay.Characters.Enemies
             m_isRetreating = false;
 
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
-
-            m_stateHandle.ApplyQueuedState();
-            yield return null;
-        }
-
-        private IEnumerator PatrolRoutine()
-        {
-            m_stateHandle.Wait(State.Patrol);
-
-            m_turnState = State.ReevaluateSituation;
-            m_animation.EnableRootMotion(false, false);
-            m_animation.SetAnimation(0, m_info.move.animation, true);
-            var characterInfo = new PatrolHandle.CharacterInfo(m_character.centerMass.position, m_character.facing);
-            m_patrolHandle.Patrol(m_currentMovementHandle, m_info.move.speed, characterInfo);
-
-            var moveInfo = m_wayPointPatrol.GetInfo(transform.position);
-
-            Vector2 destination = moveInfo.destination;
-
-            while (Vector2.Distance(transform.position, destination) > 2)
-            {               
-                
-
-                //WallBlobManualTurn();
-
-                yield return null;
-            }
 
             m_stateHandle.ApplyQueuedState();
             yield return null;
