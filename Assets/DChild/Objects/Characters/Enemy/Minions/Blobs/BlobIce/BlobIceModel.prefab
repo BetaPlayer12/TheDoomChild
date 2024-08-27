@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7894449054134208123}
   - component: {fileID: 4775212301692649596}
+  - component: {fileID: 5302057297357024710}
   m_Layer: 16
   m_Name: BodyCollider
   m_TagString: Untagged
@@ -24,8 +25,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 112977869084323214}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0.0012149337, w: 0.9999993}
+  m_LocalPosition: {x: -0.096003644, y: -1.0638433, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -45,9 +46,30 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.06038233, y: -0.57739115}
-  m_Size: {x: 1.1320357, y: 1.1320357}
+  m_Offset: {x: 0.078159414, y: 0.23271248}
+  m_Size: {x: 1.0591846, y: 1.1756428}
   m_Direction: 0
+--- !u!114 &5302057297357024710
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 112977869084323214}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a1fd8daaed7b64148a34acb96ba14ce1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  skeletonRenderer: {fileID: 2841330179961810471}
+  boneName: eye
+  followXYPosition: 1
+  followZPosition: 1
+  followBoneRotation: 1
+  followSkeletonFlip: 1
+  followLocalScale: 0
+  initializeOnAwake: 1
+  m_updateOnFixedUpdate: 0
 --- !u!1 &138669157165722614
 GameObject:
   m_ObjectHideFlags: 0
@@ -622,20 +644,20 @@ CompositeCollider2D:
   m_ColliderPaths:
   - m_Collider: {fileID: 4161497205252205539}
     m_ColliderPaths:
-    - - X: 15900003
-        Y: -10799979
-      - X: 15900000
-        Y: 19200022
-      - X: -14100000
-        Y: 19200018
-      - X: -14099997
-        Y: -10799981
+    - - X: 15900002
+        Y: -10799998
+      - X: 15899999
+        Y: 19200002
+      - X: -14100001
+        Y: 19200000
+      - X: -14099998
+        Y: -10800000
   m_CompositePaths:
     m_Paths:
-    - - {x: -1.4099997, y: -1.0799952}
-      - {x: 1.5900003, y: -1.079995}
-      - {x: 1.5899972, y: 1.9200022}
-      - {x: -1.41, y: 1.9199988}
+    - - {x: -1.4099998, y: -1.0799971}
+      - {x: 1.5900003, y: -1.079997}
+      - {x: 1.589997, y: 1.9200002}
+      - {x: -1.4100001, y: 1.9199972}
   m_VertexDistance: 0.0005
   m_OffsetDistance: 0.000005
 --- !u!114 &542767333440138892
@@ -801,8 +823,8 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: -1.15}
-  m_Size: {x: 1.5, y: 0.25}
+  m_Offset: {x: 0.031936243, y: -1.3996886}
+  m_Size: {x: 1.7148509, y: 0.23838681}
   m_Direction: 1
 --- !u!114 &4771472610679118004
 MonoBehaviour:
