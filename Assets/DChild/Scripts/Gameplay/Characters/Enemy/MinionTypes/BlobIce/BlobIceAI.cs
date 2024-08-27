@@ -58,8 +58,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
             //Animations
             [SerializeField]
-            private BasicAnimationInfo m_idleAnimation;
-            public BasicAnimationInfo idleAnimation => m_idleAnimation;
+            private BasicAnimationInfo m_cowerAnimation;
+            public BasicAnimationInfo cowerAnimation => m_cowerAnimation;
             [SerializeField]
             private BasicAnimationInfo m_turnAnimation;
             public BasicAnimationInfo turnAnimation => m_turnAnimation;
@@ -77,7 +77,7 @@ namespace DChild.Gameplay.Characters.Enemies
 #if UNITY_EDITOR
                 m_move.SetData(m_skeletonDataAsset);
                 m_retreat.SetData(m_skeletonDataAsset);
-                m_idleAnimation.SetData(m_skeletonDataAsset);
+                m_cowerAnimation.SetData(m_skeletonDataAsset);
                 m_turnAnimation.SetData(m_skeletonDataAsset);
                 m_deathAnimation.SetData(m_skeletonDataAsset);
 #endif
@@ -496,7 +496,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_currentMovementHandle.Stop();
             m_isRetreating = false;
 
-            m_animation.SetAnimation(0, m_info.idleAnimation, true);
+            m_animation.SetAnimation(0, m_info.cowerAnimation, true);
 
             m_stateHandle.ApplyQueuedState();
             yield return null;
