@@ -47,6 +47,17 @@ namespace DChild.Gameplay.Characters.Enemies
             private float m_suicideDistance;
             public float suicideDistance => m_suicideDistance;
 
+            [SerializeField]
+            private float m_minCoolDripTimer;
+            public float minCoolDripTimer => m_minCoolDripTimer;
+
+            [SerializeField]
+            private float m_maxCoolDripTimer;
+            public float maxCoolDripTimer => m_maxCoolDripTimer;
+
+            [SerializeField]
+            private float m_coolDripDropOffset;
+            public float coolDripDropOffset => m_coolDripDropOffset;
 
             //Animations
             [SerializeField]
@@ -117,6 +128,8 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Modules")]
         private PatrolHandle m_patrolHandle;
         [SerializeField, TabGroup("Modules")]
+        private WayPointPatrol m_wayPointPatrol;
+        [SerializeField, TabGroup("Modules")]
         private FlinchHandler m_flinchHandle;
         [SerializeField, TabGroup("Modules")]
         private IsolatedCharacterPhysics2D m_isolatedCharacterPhysics2D;
@@ -135,6 +148,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private RaySensor m_rightEdgeSensor;
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_leftEdgeSensor;
+        [SerializeField, TabGroup("Sensors")]
+        private RaySensor m_escapePathSensor;
 
         [SerializeField, TabGroup("VFX Objects", "Ice Cloud")]
         private ParticleSystem m_detonationIceCloud;
@@ -144,6 +159,10 @@ namespace DChild.Gameplay.Characters.Enemies
         private Collider2D m_iceCloudStatusInflictionCollider;
         [SerializeField, TabGroup("VFX Objects", "Ice Trail")]
         private GameObject m_iceTrailObject;
+        [SerializeField, TabGroup("VFX Objects", "Ice Drip")]
+        private GameObject m_iceDrip;
+        [SerializeField, TabGroup("VFX Objects", "Ice Drip")]
+        private float m_coolDripTimer;
 
         [ShowInInspector]
         private MovementHandle2D m_currentMovementHandle;
@@ -159,6 +178,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private bool m_isCowering;
         [ShowInInspector]
         private bool m_isRetreating;
+        [ShowInInspector]
+        private bool m_willDropCoolDrip;
 
         private State m_turnState;
 
@@ -248,6 +269,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_isolatedCharacterPhysics2D.simulateGravity = true;
             m_currentMovementHandle = m_groundMovement;
             m_retreatDirection = RetreatAxis.Horizontal;
+            m_willDropCoolDrip = false;
         }
 
         private void SetUpCeilingBlob()
@@ -264,11 +286,15 @@ namespace DChild.Gameplay.Characters.Enemies
             //Correct Sensor positions after flip
             m_rightWallSensor.transform.localPosition = new Vector3(0.75f, -0.99f, 0);
             m_leftWallSensor.transform.localPosition = new Vector3(-0.75f, -0.99f, 0);
+            m_escapePathSensor.transform.localPosition = new Vector3(-1, -0.70f, 0);
+
+            m_escapePathSensor.GetComponent<RaySensorFaceRotator>().transform.localRotation = Quaternion.identity;
 
             m_leftEdgeSensor.transform.localPosition = new Vector3(1.5f, -3.5f, 0);
             m_rightEdgeSensor.transform.localPosition = new Vector3(-1.5f, -3.5f, 0);
 
             m_retreatDirection = RetreatAxis.Horizontal;
+            m_willDropCoolDrip = true;
             //Set trail on
         }
 
@@ -297,6 +323,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_iceTrailObject.SetActive(true);
             m_isolatedCharacterPhysics2D.simulateGravity = false;
             m_currentMovementHandle = m_wallMovement;
+            m_willDropCoolDrip = false;
             //Set trail on
         }
         #endregion
@@ -342,10 +369,23 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void Update()
         {
+            if (m_willDropCoolDrip)
+            {
+                m_coolDripTimer -= Time.deltaTime;
+                if(m_coolDripTimer <= 0)
+                {
+                    SpawnIceDrip();
+                }
+            }
             switch (m_stateHandle.currentState)
             {
                 case State.Patrol:
-                    StartCoroutine(PatrolRoutine());  
+                    m_turnState = State.ReevaluateSituation;
+                    m_animation.EnableRootMotion(false, false);
+                    m_animation.SetAnimation(0, m_info.move.animation, true);
+                    var characterInfo = new PatrolHandle.CharacterInfo(m_character.centerMass.position, m_character.facing);
+                    m_patrolHandle.Patrol(m_currentMovementHandle, m_info.move.speed, characterInfo);
+                    WallBlobManualTurn();
                     break;
                 case State.Turning:
                     m_stateHandle.Wait(m_turnState);
@@ -390,6 +430,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_isCowering = true;
             m_cowerInFearDuration = m_info.cowerInFearDuration;
             m_iceTrailObject.SetActive(false);
+            m_targetInfo.Set(null);
 
             while (m_isCowering)
             {
@@ -398,6 +439,12 @@ namespace DChild.Gameplay.Characters.Enemies
                 if(m_cowerInFearDuration <= 0)
                 {
                     m_isCowering = false;
+                }
+
+                if (m_targetInfo.isValid)
+                {
+                    yield return new WaitForSeconds(1f);
+                    m_damageable.KillSelf();
                 }
 
                 yield return null;
@@ -430,7 +477,6 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return null;
         }
 
-
         private IEnumerator RetreatRoutine()
         {
             m_stateHandle.Wait(State.Cower);
@@ -447,7 +493,8 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_currentMovementHandle.MoveTowards(retreatDirection, m_info.retreat.speed);
                 yield return null;
             }
-            
+
+            m_turnHandle.ForceTurnImmidiately();
             m_currentMovementHandle.Stop();
             m_isRetreating = false;
 
@@ -459,17 +506,73 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator PatrolRoutine()
         {
-            while (m_stateHandle.currentState == State.Patrol)
-            {
-                m_turnState = State.ReevaluateSituation;
-                m_animation.EnableRootMotion(false, false);
-                m_animation.SetAnimation(0, m_info.move.animation, true);
-                var characterInfo = new PatrolHandle.CharacterInfo(m_character.centerMass.position, m_character.facing);
-                m_patrolHandle.Patrol(m_currentMovementHandle, m_info.move.speed, characterInfo);
+            m_stateHandle.Wait(State.Patrol);
+
+            m_turnState = State.ReevaluateSituation;
+            m_animation.EnableRootMotion(false, false);
+            m_animation.SetAnimation(0, m_info.move.animation, true);
+            var characterInfo = new PatrolHandle.CharacterInfo(m_character.centerMass.position, m_character.facing);
+            m_patrolHandle.Patrol(m_currentMovementHandle, m_info.move.speed, characterInfo);
+
+            var moveInfo = m_wayPointPatrol.GetInfo(transform.position);
+
+            Vector2 destination = moveInfo.destination;
+
+            while (Vector2.Distance(transform.position, destination) > 2)
+            {               
+                
+
+                //WallBlobManualTurn();
 
                 yield return null;
             }
+
+            m_stateHandle.ApplyQueuedState();
             yield return null;
+        }
+
+        private void WallBlobManualTurn()
+        {
+            if(m_iceBlobType == IceBlobType.Wall)
+            {
+                var moveInfo = m_wayPointPatrol.GetInfo(transform.position);
+
+                if (transform.localRotation.z == 90) //on right wall
+                {
+                    if(moveInfo.destination.y > transform.position.y)
+                    {
+                        if(m_character.facing != HorizontalDirection.Left)
+                        {
+                            m_turnHandle.ForceTurnImmidiately();
+                        }
+                    }
+                    else
+                    {
+                        if (m_character.facing != HorizontalDirection.Right)
+                        {
+                            m_turnHandle.ForceTurnImmidiately();
+                        }
+                    }
+                }
+
+                if(transform.localRotation.z == 270) //on left wall
+                {
+                    if (moveInfo.destination.y > transform.position.y)
+                    {
+                        if (m_character.facing != HorizontalDirection.Right)
+                        {
+                            m_turnHandle.ForceTurnImmidiately();
+                        }
+                    }
+                    else
+                    {
+                        if (m_character.facing != HorizontalDirection.Left)
+                        {
+                            m_turnHandle.ForceTurnImmidiately();
+                        }
+                    }
+                }
+            }
         }
 
         private void AdjustSensorPositions()
@@ -493,7 +596,6 @@ namespace DChild.Gameplay.Characters.Enemies
                     {
                         m_rightWallSensor.transform.localPosition = new Vector3(0.75f, -0.9f, 0);
                         m_leftWallSensor.transform.localPosition = new Vector3(-0.75f, -0.9f, 0);
-                        m_rightEdgeSensor.transform.localPosition = new Vector3(-1.5f, 0.2f, 0);
                     }
                     else
                     {
@@ -515,19 +617,42 @@ namespace DChild.Gameplay.Characters.Enemies
                     break;
             }
         }
+
         private Vector2 SetRetreatDirection()
         {
             Vector2 direction = Vector2.zero;
             switch(m_retreatDirection)
             {
                 case RetreatAxis.Horizontal:
-                    if(m_targetInfo.position.x > transform.position.x)
+                    if(m_targetInfo.position.x > transform.position.x) //PLayer is right of blob
                     {
+                        if(m_character.facing == HorizontalDirection.Right)
+                        {
+                            m_turnHandle.ForceTurnImmidiately();
+                        }
+
+                        m_escapePathSensor.Cast();
+
+                        if (!m_escapePathSensor.m_castHit)
+                        {
                         direction = Vector2.left;
+                            
+                        }
                     }
-                    else
+                    else //Player on left
                     {
+                        if (m_character.facing == HorizontalDirection.Left)
+                        {
+                            m_turnHandle.ForceTurnImmidiately();
+                        }
+
+                        m_escapePathSensor.Cast();
+
+                        if (!m_escapePathSensor.m_castHit)
+                        {
                         direction = Vector2.right;
+                            
+                        }
                     }
                     break;
                 case RetreatAxis.Vertical:
@@ -557,6 +682,16 @@ namespace DChild.Gameplay.Characters.Enemies
             }
 
             return result;
+        }
+
+        private void SpawnIceDrip()
+        {
+            var instance = GameSystem.poolManager.GetPool<PoolableObjectPool>().GetOrCreateItem(m_iceDrip, gameObject.scene);
+            var spawnPos = new Vector2(transform.position.x, transform.position.y - m_info.coolDripDropOffset);
+            instance.SpawnAt(spawnPos, Quaternion.identity);
+
+            var RandomTime = UnityEngine.Random.Range(m_info.minCoolDripTimer, m_info.maxCoolDripTimer);
+            m_coolDripTimer = RandomTime;
         }
 
         protected override void OnTargetDisappeared()
