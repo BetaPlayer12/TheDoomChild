@@ -258,7 +258,6 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_info.rangeAttack.animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.rangeAttack.animation);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
-            yield return new WaitForSeconds(2f);
             m_aggroSensor.enabled = true;
             if (!m_aggroSensor.IsTouchingLayers(LayerMask.NameToLayer("Player")) /*&& m_stateHandle.currentState == State.ReevaluateSituation*/)
             {
