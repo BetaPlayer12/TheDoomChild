@@ -114,6 +114,10 @@ namespace DChild.Gameplay.Characters.Enemies
         private Hitbox m_hitbox;
         [SerializeField, TabGroup("Reference")]
         private CircleCollider2D m_explosionBB;
+        [SerializeField, TabGroup("Reference")]
+        private BoxCollider2D m_chargedDashBB;
+        [SerializeField, TabGroup("Reference")]
+        private BoxCollider2D m_bodyCollisionBB;
         [SerializeField, TabGroup("Modules")]
         private TransformTurnHandle m_turnHandle;
         [SerializeField, TabGroup("Modules")]
@@ -352,6 +356,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator AttackTackleRoutine()
         {
+            m_bodyCollisionBB.enabled = false;
             m_animation.SetAnimation(0, m_info.attackTackleAnticipationAnimation, false);
             m_flinchHandle.m_autoFlinch = UnityEngine.Random.Range(0, 100) <= 30 ? true : false;
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attackTackleAnticipationAnimation);
@@ -367,8 +372,10 @@ namespace DChild.Gameplay.Characters.Enemies
                 }
                 yield return null;
             }
+            m_chargedDashBB.enabled = true;
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attackTackle.animation);
             m_selfCollider.enabled = true;
+            m_chargedDashBB.enabled = false;
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_stateHandle.ApplyQueuedState();
             yield return null;
@@ -381,10 +388,12 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.EnableRootMotion(true, false);
             m_animation.SetAnimation(0, m_info.attackMelee.animation, false);
             yield return new WaitForSeconds(1.25f);
+            m_bodyCollisionBB.enabled = false;
             m_explosionBB.enabled = true;
             m_explosionFX.Play();
             yield return new WaitForSeconds(0.15f);
             m_explosionBB.enabled = false;
+            m_bodyCollisionBB.enabled = true;
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attackMelee.animation);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_flinchHandle.gameObject.SetActive(true);
