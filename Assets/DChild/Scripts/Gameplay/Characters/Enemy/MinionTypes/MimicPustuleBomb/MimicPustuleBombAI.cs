@@ -271,7 +271,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_mimicPustuleBombChain.enabled = false;
                 m_flinchHandle.SetAnimation(m_info.flinchUnAggroAnimation.animation);
                 m_flinchHandle.SetIdleAnimation(m_info.idleUnAggroAnimation1.animation);
-                StopCoroutine("ReturnToOriginalPosition");
+                //StopCoroutine("ReturnToOriginalPosition");
                 StartCoroutine(ReturnToOriginalPosition(5f));
             }
             if (m_animation.GetCurrentAnimation(0).ToString() == m_info.idleAggroAnimation1.animation || m_stateHandle.currentState == State.Cooldown)
@@ -543,6 +543,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator ReturnToOriginalPosition(float delay)
         {
+            m_returnToOriginalPos = false;
             yield return new WaitForSeconds(delay);
             m_returnToOriginalPos=true;
         }
