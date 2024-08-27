@@ -169,10 +169,12 @@ namespace DChild.Gameplay.Characters.Enemies
         private RetreatAxis m_retreatDirection;
         [ShowInInspector]
         private StateHandle<State> m_stateHandle;
-        [ShowInInspector]
-        private float m_cowerInFearDuration;
         [SerializeField]
         private Vector2 m_startingPosition;
+        [ShowInInspector]
+        private Collider2D m_aggroCollider;
+        [ShowInInspector]
+        private float m_cowerInFearDuration;
         [ShowInInspector]
         private bool m_isCowering;
         [ShowInInspector]
@@ -344,6 +346,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
             m_cowerInFearDuration = m_info.cowerInFearDuration;
             m_startingPosition = transform.position;
+            m_aggroCollider = m_aggroBoundary.GetComponent<Collider2D>();
         }
 
         protected override void Awake()
@@ -420,7 +423,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_isCowering = true;
             m_cowerInFearDuration = m_info.cowerInFearDuration;
             m_iceTrailObject.SetActive(false);
-            m_aggroBoundary.GetComponent<Collider2D>().enabled = true;
+            m_aggroCollider.enabled = true;
 
             while (m_isCowering)
             {
@@ -475,7 +478,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_isRetreating = true;
             Vector2 retreatDirection = SetRetreatDirection();
             m_targetInfo.Set(null);
-            m_aggroBoundary.GetComponent<Collider2D>().enabled = false;
+            m_aggroCollider.enabled = false;
 
             m_iceTrailObject.SetActive(true);
             m_animation.SetAnimation(0, m_info.retreat.animation, true);
