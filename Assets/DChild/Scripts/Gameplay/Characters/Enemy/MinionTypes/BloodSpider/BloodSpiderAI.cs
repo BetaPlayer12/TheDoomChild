@@ -196,6 +196,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private float m_currentCD;
         private float m_currentFullCD;
         private float m_currentTimeScale;
+        private float m_loopMove=0f;
         private Vector2 m_targetLastPos;
         private Vector2 m_startPoint;
         private Coroutine m_randomTurnRoutine;
@@ -604,7 +605,8 @@ namespace DChild.Gameplay.Characters.Enemies
                             m_attackDecider.DecideOnAttack();
                             if (m_attackDecider.hasDecidedOnAttack && IsTargetInRange(m_attackDecider.chosenAttack.range)&& !m_wallSensor.allRaysDetecting)
                             {
-                                if(IsTargetInRange(m_StompDetectRange))
+                                m_loopMove = 0f;
+                                if (IsTargetInRange(m_StompDetectRange))
                                 {
                                     if(IsTargetInRange(m_info.stompAttack.range))
                                     {
@@ -630,7 +632,7 @@ namespace DChild.Gameplay.Characters.Enemies
                             }
                             else
                             {
-                                if (!m_wallSensor.isDetecting && m_groundSensor.isDetecting /*&& m_edgeSensor.isDetecting*/)
+                                if (!m_wallSensor.isDetecting && m_groundSensor.isDetecting && m_edgeSensor.isDetecting)
                                 {
                                     m_animation.EnableRootMotion(true, false);
                                     m_selfCollider.enabled = false;
@@ -638,8 +640,9 @@ namespace DChild.Gameplay.Characters.Enemies
                                 }
                                 else
                                 {
-                                    if (!m_backWallSensor.isDetecting)
+                                    if (!m_backWallSensor.isDetecting&&m_loopMove<0.5f)
                                     {
+                                        m_loopMove += Time.deltaTime;
                                         m_animation.EnableRootMotion(true, false);
                                         m_animation.SetAnimation(0, m_info.move.animation, false);
                                         //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.move.animation);
