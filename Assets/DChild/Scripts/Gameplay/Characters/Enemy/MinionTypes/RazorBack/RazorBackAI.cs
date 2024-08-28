@@ -375,11 +375,12 @@ namespace DChild.Gameplay.Characters.Enemies
             m_selfCollider.enabled = false;
             m_animation.SetAnimation(0, m_info.attackLoop, true);
             //yield return new WaitForSeconds(1.4f);
-            float countdown = 0;
-            while (countdown < 1f /*|| !m_wallSensor.isDetecting*/)
+            float maxDistance = 6f;
+            float temptargetlocation = m_targetInfo.transform.position.x;
+            Debug.Log("razorback:"+m_targetInfo.transform.position.x);
+            while (Mathf.Abs(transform.position.x - temptargetlocation) > maxDistance)
             {
                 m_movement.MoveTowards(Vector2.one * transform.localScale.x, m_info.run.speed * 6);
-                countdown += Time.deltaTime;
                 yield return null;
             }
             m_trailFX.Stop();
