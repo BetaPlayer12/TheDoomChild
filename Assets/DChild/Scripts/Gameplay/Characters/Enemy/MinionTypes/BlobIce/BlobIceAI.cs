@@ -161,6 +161,8 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("VFX Objects", "Ice Drip")]
         private float m_coolDripTimer;
 
+        [InfoBox("For Wall Blobs on Right, the waypoints for patrol needs to be diagonal for the facing and patrol to work properly like this: / \n" +
+            "For Wall Blobs on Left, the waypoints for patrol needs to be diagonal for the facing and patrol to work properly like this: " + @"\")]
         [ShowInInspector]
         private MovementHandle2D m_currentMovementHandle;
         [SerializeField]
@@ -181,6 +183,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private bool m_isRetreating;
         [ShowInInspector]
         private bool m_willDropCoolDrip;
+        [ShowInInspector]
+        private bool m_isRightWallBlob;
 
         private State m_turnState;
 
@@ -300,6 +304,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_rightWallSensor.transform.localPosition = new Vector3(-0.75f, -0.99f, 0);
                 m_leftWallSensor.transform.localPosition = new Vector3(0.75f, -0.99f, 0);
                 m_retreatDirection = RetreatAxis.Vertical;
+                m_isRightWallBlob = true;
             }
             else //wall on left
             {
@@ -308,6 +313,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_rightWallSensor.transform.localPosition = new Vector3(0.75f, -0.99f, 0);
                 m_leftWallSensor.transform.localPosition = new Vector3(-0.75f, -0.99f, 0);
                 m_retreatDirection = RetreatAxis.Vertical;
+                m_isRightWallBlob = false;
             }
 
             m_iceTrailObject.SetActive(true);
@@ -353,8 +359,11 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             base.Awake();
             
-            m_patrolHandle.TurnRequest += OnTurnRequest;
-            m_turnHandle.TurnDone += OnTurnDone;
+            if(m_iceBlobType != IceBlobType.Wall)
+            {
+                m_patrolHandle.TurnRequest += OnTurnRequest;
+                m_turnHandle.TurnDone += OnTurnDone;
+            }
             
             m_stateHandle = new StateHandle<State>(State.Patrol, State.WaitBehaviourEnd);
         }
@@ -378,7 +387,10 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_animation.SetAnimation(0, m_info.move.animation, true);
                     var characterInfo = new PatrolHandle.CharacterInfo(m_character.centerMass.position, m_character.facing);
                     m_patrolHandle.Patrol(m_currentMovementHandle, m_info.move.speed, characterInfo);
-                    WallBlobManualTurn();
+                    if(m_iceBlobType == IceBlobType.Wall)
+                    {
+                        WallBlobManualTurn();
+                    }
                     break;
                 case State.Turning:
                     m_stateHandle.Wait(m_turnState);
@@ -501,49 +513,30 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void WallBlobManualTurn()
         {
-            if(m_iceBlobType == IceBlobType.Wall)
+            //Set up and down point by comparing waypoints to starting point
+            //If current destination is equal to up point, face right
+            //If current destination is equal to down point, face left
+            //reverse if blob on left wall
+            var moveInfo = m_wayPointPatrol.GetInfo(transform.position);
+            var wayPoints = m_wayPointPatrol.GetWaypoints();
+            Vector2 upPatrolPoint = wayPoints[0];
+            Vector2 downPatrolPoint = wayPoints[1];
+            var signDirection = Mathf.Sign(moveInfo.moveDirection.y);
+
+            HorizontalDirection relativeDirection = HorizontalDirection.Right;
+            if (m_isRightWallBlob)
             {
-                var moveInfo = m_wayPointPatrol.GetInfo(transform.position);
+                relativeDirection = signDirection == 1 ? HorizontalDirection.Right : HorizontalDirection.Left;
+            }
+            else
+            {
+                relativeDirection = signDirection == 1 ? HorizontalDirection.Left : HorizontalDirection.Right;
+            }
 
-                if (transform.localRotation.z == 90) //on right wall
-                {
-                    if(moveInfo.destination.y > m_startingPosition.y) //if destination is higher than starting position, it is going up 
-                    {
-                        if(m_character.facing == HorizontalDirection.Right) //if character is facing left, turn
-                        {
-                            m_turnHandle.ForceTurnImmidiately();
-                            transform.localScale = new Vector3(1, 1, 1);
-                        }
-                    }
-                    else
-                    {
-                        if (m_character.facing == HorizontalDirection.Left)
-                        {
-                            m_turnHandle.ForceTurnImmidiately();
-                            transform.localScale = new Vector3(-1, 1, 1);
-                        }
-                    }
-                }
-
-                if(transform.localRotation.z == 270) //on left wall
-                {
-                    if (moveInfo.destination.y > m_startingPosition.y)
-                    {
-                        if (m_character.facing == HorizontalDirection.Right)
-                        {
-                            m_turnHandle.ForceTurnImmidiately();
-                            transform.localScale = new Vector3(-1, 1, 1);
-                        }
-                    }
-                    else
-                    {
-                        if (m_character.facing == HorizontalDirection.Left)
-                        {
-                            m_turnHandle.ForceTurnImmidiately();
-                            transform.localScale = new Vector3(1, 1, 1);
-                        }
-                    }
-                }
+            if (relativeDirection != m_character.facing)
+            {
+                //Turn
+                m_turnHandle.ForceTurnImmidiately();
             }
         }
 
