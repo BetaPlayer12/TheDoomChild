@@ -378,7 +378,7 @@ namespace DChild.Gameplay.Characters.Enemies
             float maxDistance = 6f;
             float temptargetlocation = m_targetInfo.transform.position.x;
             Debug.Log("razorback:"+m_targetInfo.transform.position.x);
-            while (Mathf.Abs(transform.position.x - temptargetlocation) > maxDistance)
+            while (Mathf.Abs(transform.position.x - temptargetlocation) > maxDistance && !m_wallSensor.isDetecting)
             {
                 m_movement.MoveTowards(Vector2.one * transform.localScale.x, m_info.run.speed * 6);
                 yield return null;
