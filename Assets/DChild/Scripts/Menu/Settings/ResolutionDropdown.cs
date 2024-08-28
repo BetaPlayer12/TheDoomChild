@@ -53,7 +53,7 @@ namespace DChild.Menu.UI
                 for (int i = 0; i < resolutions.Length; i++)
                 {
                     var resolution = resolutions[i];
-                    options.Add($"{resolution.width}X{resolution.height} [{resolution.widthAspect}:{resolution.heightAspect}]");
+                    options.Add($"{resolution.width} X {resolution.height} [{resolution.widthAspect}:{resolution.heightAspect}]");
                 }
 
                 var dropDown = GetComponent<TMP_Dropdown>();
