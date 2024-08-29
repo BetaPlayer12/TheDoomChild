@@ -19,6 +19,7 @@ namespace DChild.Gameplay.Projectiles
 
         public ParticleSystem m_flameEffect;
         public GameObject m_flameCollider;
+        public GameObject m_HeadCollider;
         public GameObject m_model;
         public Transform m_fireDragonMouthPos;
 
@@ -75,10 +76,16 @@ namespace DChild.Gameplay.Projectiles
 
         public void ShootFire()
         {
+            StartCoroutine(ShootFireDelayRoutine());
+            //m_flameEffect.Play(true);
+            //m_flameCollider.SetActive(true);
+        }
+        public IEnumerator ShootFireDelayRoutine()
+        {
             m_flameEffect.Play(true);
+            yield return new WaitForSeconds(0.3f);
             m_flameCollider.SetActive(true);
         }
-
         void Update()
         {
                 /*if (m_roofSensor.isDetecting)
@@ -101,6 +108,17 @@ namespace DChild.Gameplay.Projectiles
         {
             m_flameEffect.Stop(true);
             m_flameCollider.SetActive(false);
+            StartCoroutine(TurnHeadColliderOffRoutine());
+        }
+        IEnumerator TurnOnHeadColliderRoutine()
+        {
+            yield return new WaitForSeconds(0.4f);
+            m_HeadCollider.SetActive(true);
+        }
+        IEnumerator TurnHeadColliderOffRoutine()
+        {
+            yield return new WaitForSeconds(0.1f);
+            m_HeadCollider.SetActive(false);
         }
 
         public void AdjustFireBreathRotationToPlayerPosition(Vector2 playerPosition)
@@ -110,6 +128,7 @@ namespace DChild.Gameplay.Projectiles
             var toPlayer = playerPosition - fireBreathPos;
             var rad = Mathf.Atan2(toPlayer.y, toPlayer.x);
 
+            StartCoroutine(TurnOnHeadColliderRoutine());
             //m_model.transform.localScale = new Vector3(transform.position.x < playerPosition.x ? -1 : 1, transform.position.y < playerPosition.y ? -1 : 1);
 
             //transform.localScale = new Vector3(m_model.transform.position.x < playerPosition.x ? -1 : 1, 1);

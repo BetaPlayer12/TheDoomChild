@@ -350,7 +350,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator DetectRoutine()
         {
-
+            m_returnToOriginalPos = false;
             m_aggroGroup.SetActive(true);
             m_isAggro = true;
             m_mimicPustuleBombChain.enabled = false;
@@ -448,7 +448,8 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_animation.SetAnimation(0, m_info.transformUnAggroAnimation, false);
                 yield return new WaitForSeconds(1f);
                 m_animation.SetAnimation(0, m_info.idleUnAggroAnimation1, true);
-                
+                m_isAggro = false;
+                m_isDetecting = false;
             }
             
             //yield return null;
@@ -533,10 +534,12 @@ namespace DChild.Gameplay.Characters.Enemies
             m_agent.SetDestination(target);
             if (IsFacing(target))
             {
+                Debug.Log("BBBBBBB");
                 m_agent.Move(moveSpeed);
             }
             else
             {
+                Debug.Log("AAAAAAAAA");
                 m_stateHandle.OverrideState(State.Turning);
             }
         }
@@ -555,6 +558,10 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void SwapPustuleBombPosition()
         {
+            if(m_PustuleBombsPosition.Count<=0)
+            {
+                return;
+            }
             var randomSwap = UnityEngine.Random.Range(1, 100);
             var shouldSwap = randomSwap <= 50 ? true : false;
             if (shouldSwap) 
@@ -607,6 +614,7 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 case State.Detect:
                     m_agent.Stop();
+
                     if (IsFacingTarget() && m_detectRoutine == null)
                     {
 

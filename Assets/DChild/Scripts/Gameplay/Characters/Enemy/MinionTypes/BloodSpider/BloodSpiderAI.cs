@@ -262,8 +262,10 @@ namespace DChild.Gameplay.Characters.Enemies
                 //obj.transform.parent = m_seedSpitTF;
                 //obj.transform.localPosition = new Vector2(4, -1.5f);
                 //
-
-                m_targetLastPos = m_targetInfo.position + m_info.targetOffset;
+                if(IsFacingTarget())
+                {
+                    m_targetLastPos = m_targetInfo.position + m_info.targetOffset;
+                }
                 //m_targetLastPos = m_targetInfo.position;
                 Debug.Log(m_targetLastPos+" THERE IT IS");
                 //Shoot Spit
@@ -407,7 +409,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator ProjectileRoutine()
         {
             m_movement.Stop();
-            //m_targetLastPos = m_targetInfo.position + m_info.targetOffset;
+            m_targetLastPos = m_targetInfo.position + m_info.targetOffset;
             m_animation.SetAnimation(0, m_info.spitAttack.animation, false).MixDuration = 0;
             //yield return new WaitUntil(() => m_attackBB.CurrentCollider != null);
             //SpitProjectile();
