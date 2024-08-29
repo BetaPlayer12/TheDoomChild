@@ -430,6 +430,34 @@ MonoBehaviour:
       value: 
       type: 0
       typeString: CustomFieldType_Text
+  - id: 187
+    fields:
+    - title: Name
+      value: PlayerMeetsAdran
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Initial Value
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Description
+      value: 
+      type: 0
+      typeString: CustomFieldType_Text
+  - id: 188
+    fields:
+    - title: Name
+      value: PlayerDodgesAdran
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Initial Value
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Description
+      value: 
+      type: 0
+      typeString: CustomFieldType_Text
   conversations:
   - id: 164
     fields:
@@ -2871,12 +2899,6 @@ MonoBehaviour:
       - originConversationID: 168
         originDialogueID: 0
         destinationConversationID: 168
-        destinationDialogueID: 1
-        isConnector: 0
-        priority: 2
-      - originConversationID: 168
-        originDialogueID: 0
-        destinationConversationID: 168
         destinationDialogueID: 2
         isConnector: 0
         priority: 2
@@ -2889,67 +2911,6 @@ MonoBehaviour:
         serializedVersion: 2
         x: 30
         y: 20
-        width: 160
-        height: 30
-    - id: 1
-      fields:
-      - title: Title
-        value: 
-        type: 0
-        typeString: CustomFieldType_Text
-      - title: Description
-        value: 
-        type: 0
-        typeString: CustomFieldType_Text
-      - title: Actor
-        value: 1
-        type: 5
-        typeString: CustomFieldType_Actor
-      - title: Conversant
-        value: 19
-        type: 5
-        typeString: CustomFieldType_Actor
-      - title: Menu Text
-        value: 
-        type: 0
-        typeString: CustomFieldType_Text
-      - title: Dialogue Text
-        value: Who are you?
-        type: 0
-        typeString: CustomFieldType_Text
-      - title: Sequence
-        value: 
-        type: 0
-        typeString: CustomFieldType_Text
-      - title: Audio Files
-        value: '[]'
-        type: 0
-        typeString: CustomFieldType_Files
-      - title: Video File
-        value: 
-        type: 0
-        typeString: CustomFieldType_Text
-      - title: Parenthetical
-        value: 
-        type: 0
-        typeString: CustomFieldType_Text
-      conversationID: 168
-      isRoot: 0
-      isGroup: 0
-      nodeColor: 
-      delaySimStatus: 0
-      falseConditionAction: Block
-      conditionPriority: 2
-      outgoingLinks: []
-      conditionsString: 
-      userScript: 
-      onExecute:
-        m_PersistentCalls:
-          m_Calls: []
-      canvasRect:
-        serializedVersion: 2
-        x: 30
-        y: 70
         width: 160
         height: 30
     - id: 2
@@ -3015,8 +2976,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 30
-        y: 70
+        x: 36.956543
+        y: 79.565216
         width: 160
         height: 30
     - id: 3
@@ -3082,8 +3043,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 30
-        y: 120
+        x: 32.971725
+        y: 133.9384
         width: 160
         height: 30
     - id: 4
@@ -3150,8 +3111,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 30
-        y: 170
+        x: 32.76909
+        y: 174.98102
         width: 160
         height: 30
     - id: 5
@@ -3217,8 +3178,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 30
-        y: 220
+        x: 34.710846
+        y: 219.15578
         width: 160
         height: 30
     - id: 6
@@ -3284,8 +3245,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 30
-        y: 270
+        x: 34.710846
+        y: 269.15582
         width: 160
         height: 30
     - id: 7
@@ -3351,8 +3312,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 30
-        y: 320
+        x: 34.710846
+        y: 319.15582
         width: 160
         height: 30
     - id: 8
@@ -3419,8 +3380,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 30
-        y: 370
+        x: 34.710846
+        y: 369.15582
         width: 160
         height: 30
     - id: 9
@@ -3481,13 +3442,13 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 30
-        y: 420
+        x: 34.710846
+        y: 419.15582
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 0, y: 61.405807}
-    canvasZoom: 1.1799998
+    canvasScrollPosition: {x: 0, y: 0}
+    canvasZoom: 1.03
   - id: 169
     fields:
     - title: Title
@@ -4327,7 +4288,7 @@ MonoBehaviour:
       conditionPriority: 2
       outgoingLinks: []
       conditionsString: 
-      userScript: 
+      userScript: Variable["PlayerMeetsAdran"] = true;
       onExecute:
         m_PersistentCalls:
           m_Calls: []
@@ -4338,8 +4299,8 @@ MonoBehaviour:
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 0, y: 231}
-    canvasZoom: 1
+    canvasScrollPosition: {x: 0, y: 0}
+    canvasZoom: 0.9100001
   - id: 170
     fields:
     - title: Title
@@ -5575,8 +5536,8 @@ MonoBehaviour:
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 0.7692261, y: 324.1823}
-    canvasZoom: 1.2999997
+    canvasScrollPosition: {x: 0, y: 163.39288}
+    canvasZoom: 1.1199999
   - id: 172
     fields:
     - title: Title
