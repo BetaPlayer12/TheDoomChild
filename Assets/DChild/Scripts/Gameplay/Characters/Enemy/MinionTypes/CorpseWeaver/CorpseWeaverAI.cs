@@ -1163,10 +1163,6 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_stateHandle.SetState(State.ReevaluateSituation);
         }
     }
-
-    internal interface IEnumator
-    {
-    }
 }
 
 
