@@ -154,6 +154,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private RaySensor m_lefttWallSensor;
         [SerializeField, TabGroup("Reference")]
         private RaySensor m_groundSensor;
+        [SerializeField, TabGroup("Reference")]
+        private RaySensor m_wallCheckForAttackSensor;
         [SerializeField, TabGroup("Modules")]
         private AnimatedTurnHandle m_turnHandle;
         [SerializeField, TabGroup("Modules")]
@@ -458,6 +460,13 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_stateHandle.Wait(State.Cooldown);
 
+            m_wallCheckForAttackSensor.Cast();
+            if (m_wallCheckForAttackSensor.m_castHit)
+            {
+                //Adjust position backwards based on how far the cast hit
+                yield return AdjustFromWallForAttack();
+            }
+
             m_agent.Stop();
             m_animation.EnableRootMotion(true, true);
 
@@ -479,6 +488,13 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_stateHandle.Wait(State.Cooldown);
 
+            m_wallCheckForAttackSensor.Cast();
+            if (m_wallCheckForAttackSensor.m_castHit)
+            {
+                //Adjust position backwards based on how far the cast hit
+                yield return AdjustFromWallForAttack();
+            }
+
             m_agent.Stop();
             m_animation.EnableRootMotion(true, true);
 
@@ -495,6 +511,12 @@ namespace DChild.Gameplay.Characters.Enemies
             m_stateHandle.ApplyQueuedState();
             yield return null;
         }
+
+        private IEnumerator AdjustFromWallForAttack()
+        {
+
+            yield return null;
+        } 
 
         private IEnumerator DetectRoutine()
         {
@@ -679,39 +701,6 @@ namespace DChild.Gameplay.Characters.Enemies
                     }
                     break;
                 case State.Cooldown:
-                    //m_stateHandle.Wait(State.ReevaluateSituation);
-                    //if (!IsFacingTarget())
-                    //{
-                    //    m_turnState = State.Cooldown;
-                    //    if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation.animation)
-                    //        m_stateHandle.SetState(State.Turning);
-                    //}
-                    //else
-                    //{
-                    //    if (Vector2.Distance(m_targetInfo.position, transform.position) <= m_info.targetDistanceTolerance)
-                    //    {
-                    //        m_animation.EnableRootMotion(false, false);
-                    //        m_animation.SetAnimation(0, m_info.move.animation, true).TimeScale = 1f;
-                    //        CalculateRunPath();
-                    //        m_agent.Move(m_info.move.speed);
-                    //    }
-                    //    else
-                    //    {
-                    //        m_agent.Stop();
-                    //        m_animation.SetAnimation(0, m_info.idleAnimation, true).TimeScale = 1f;
-                    //    }
-                    //}
-
-                    //if (m_currentCD <= m_info.attackCD)
-                    //{
-                    //    m_currentCD += Time.deltaTime;
-                    //}
-                    //else
-                    //{
-                    //    m_currentCD = 0;
-                    //    m_selfCollider.SetActive(true);
-                    //    m_stateHandle.OverrideState(State.ReevaluateSituation);
-                    //}
                     StartCoroutine(CooldownRoutine());
 
                     break;
