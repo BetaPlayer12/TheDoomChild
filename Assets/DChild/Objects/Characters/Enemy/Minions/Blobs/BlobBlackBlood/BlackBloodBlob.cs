@@ -7,6 +7,7 @@ using UnityEngine;
 using DChild;
 using DChild.Gameplay;
 using DChild.Gameplay.Combat;
+using Holysoft.Event;
 
 public class BlackBloodBlob : MonoBehaviour
 {
@@ -22,7 +23,7 @@ public class BlackBloodBlob : MonoBehaviour
     private bool m_canMove;
     public bool canMove => m_canMove;
 
-    [SerializeField,Spine.Unity.SpineAnimation]
+    [SerializeField, Spine.Unity.SpineAnimation]
     private string m_resurrectionOfBlob;
     [SerializeField, Spine.Unity.SpineAnimation]
     private string m_death;
@@ -51,24 +52,26 @@ public class BlackBloodBlob : MonoBehaviour
     [SerializeField, Spine.Unity.SpineAnimation]
     private string m_idle;
 
+    public event EventAction<EventActionArgs> Ressurected;
+    public event EventAction<EventActionArgs> Death;
     [Button]
     public void BlobResurrection()
     {
 
         ResurrectionOfBlob();
     }
-     [Button]
+    [Button]
     public void BlobDeath()
     {
 
-        Death();
+        Die();
     }
     [Button]
     public void GroundToRight()
     {
 
         StartCoroutine(GroundToRightRoutine());
-      
+
     }
     [Button]
     public void CeilingToLeft()
@@ -85,10 +88,14 @@ public class BlackBloodBlob : MonoBehaviour
     {
         StartCoroutine(RightToCeilingRoutine());
     }
-    public void Death()
+    public void Die()
     {
         m_canMove = false;
         StartCoroutine(DeathRoutine());
+    }
+    public void DoMoveAnimation()
+    {
+        m_animation.SetAnimation(0, m_patrolWalking, true);
     }
     public void ResurrectionOfBlob()
     {
@@ -98,46 +105,47 @@ public class BlackBloodBlob : MonoBehaviour
         GameplaySystem.combatManager.Heal(m_damageable, 99999999);
         StartCoroutine(ResurrectionRoutine());
     }
-    
-    private IEnumerator ResurrectionRoutine()
+
+    public IEnumerator ResurrectionRoutine()
     {
-        
+
         m_animation.SetAnimation(0, m_resurrectionOfBlob, false);
         yield return new WaitForAnimationComplete(m_animation.animationState, m_resurrectionOfBlob);
         m_canMove = true;
         m_animation.SetAnimation(0, m_idle, true);
+        Ressurected?.Invoke(this, EventActionArgs.Empty);
 
     }
-    private IEnumerator DeathRoutine()
+    public IEnumerator DeathRoutine()
     {
-       
+        Death?.Invoke(this, EventActionArgs.Empty);
         m_animation.SetAnimation(0, m_death, false);
         yield return new WaitForAnimationComplete(m_animation.animationState, m_death);
         gameObject.SetActive(false);
 
     }
 
-    private IEnumerator CeilingToLeftRoutine()
+    public IEnumerator CeilingToLeftRoutine()
     {
         m_animation.SetAnimation(0, m_ceilingToLeft, false);
         yield return new WaitForAnimationComplete(m_animation.animationState, m_ceilingToLeft);
         m_animation.SetAnimation(0, m_idle, true);
     }
 
-    private IEnumerator GroundToRightRoutine()
+    public IEnumerator GroundToRightRoutine()
     {
         m_animation.SetAnimation(0, m_groundToright, false);
         yield return new WaitForAnimationComplete(m_animation.animationState, m_groundToright);
         m_animation.SetAnimation(0, m_idle, true);
     }
 
-    private IEnumerator LeftToDefaultRoutine()
+    public IEnumerator LeftToDefaultRoutine()
     {
         m_animation.SetAnimation(0, m_leftToDefault, false);
         yield return new WaitForAnimationComplete(m_animation.animationState, m_leftToDefault);
         m_animation.SetAnimation(0, m_idle, true);
     }
-    private IEnumerator RightToCeilingRoutine()
+    public IEnumerator RightToCeilingRoutine()
     {
         m_animation.SetAnimation(0, m_rightToCeiling, false);
         yield return new WaitForAnimationComplete(m_animation.animationState, m_rightToCeiling);

@@ -158,8 +158,9 @@ MonoBehaviour:
   m_skeletonAnimation: {fileID: 2129103702765763946}
   m_animation: Flinch1
   m_idleAnimation: idle
-  m_enableFlinchColor: 1
+  m_enableFlinchColor: 0
   m_flinchColorAnimation: FlinchColor
+  m_enableModule: 1
 --- !u!1 &9133351925685918021
 GameObject:
   m_ObjectHideFlags: 0
@@ -248,7 +249,7 @@ MonoBehaviour:
   m_animator: {fileID: 6863649608002607857}
   m_animation: Death2
   m_bodyDuration:
-    m_startTime: 3
+    m_startTime: 0.25
   m_fx:
   - {fileID: 513512947604325500, guid: f8befa5dc4968b5478bac98407c5edfc, type: 3}
   m_destroySource: 0
@@ -808,8 +809,33 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3575179013862852887, guid: b5ef54a354fb6e349893861436e0f940,
         type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.29852295
+      objectReference: {fileID: 0}
+    - target: {fileID: 3575179013862852887, guid: b5ef54a354fb6e349893861436e0f940,
+        type: 3}
       propertyPath: m_LocalPosition.y
-      value: 2.8484802
+      value: 2.8484764
+      objectReference: {fileID: 0}
+    - target: {fileID: 4085855202745878189, guid: b5ef54a354fb6e349893861436e0f940,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4085855202745878189, guid: b5ef54a354fb6e349893861436e0f940,
+        type: 3}
+      propertyPath: m_renderer
+      value: 
+      objectReference: {fileID: 2129103702765763941}
+    - target: {fileID: 4085855202745878189, guid: b5ef54a354fb6e349893861436e0f940,
+        type: 3}
+      propertyPath: m_animation
+      value: 
+      objectReference: {fileID: 6863649608002607857}
+    - target: {fileID: 4085855202745878189, guid: b5ef54a354fb6e349893861436e0f940,
+        type: 3}
+      propertyPath: m_startDissolveEvent
+      value: Explode_FX
       objectReference: {fileID: 0}
     - target: {fileID: 4601027322415538611, guid: b5ef54a354fb6e349893861436e0f940,
         type: 3}
@@ -821,6 +847,17 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 7544267348091799667, guid: b5ef54a354fb6e349893861436e0f940,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: e8b87152d475bf345948969c8d4a7338, type: 2}
+    - target: {fileID: 7544267348091799676, guid: b5ef54a354fb6e349893861436e0f940,
+        type: 3}
+      propertyPath: skeletonDataAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 5ca429ce8eddb56469dafff12c75df3f,
+        type: 2}
     - target: {fileID: 7544267348091799677, guid: b5ef54a354fb6e349893861436e0f940,
         type: 3}
       propertyPath: m_RootOrder
@@ -912,6 +949,12 @@ BoxCollider2D:
 --- !u!58 &922836211258399116 stripped
 CircleCollider2D:
   m_CorrespondingSourceObject: {fileID: 8786545971420589210, guid: b5ef54a354fb6e349893861436e0f940,
+    type: 3}
+  m_PrefabInstance: {fileID: 8448339102470075670}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &2129103702765763941 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 7544267348091799667, guid: b5ef54a354fb6e349893861436e0f940,
     type: 3}
   m_PrefabInstance: {fileID: 8448339102470075670}
   m_PrefabAsset: {fileID: 0}

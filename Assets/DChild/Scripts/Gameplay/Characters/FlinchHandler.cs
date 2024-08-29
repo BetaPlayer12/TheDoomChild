@@ -86,13 +86,6 @@ namespace DChild.Gameplay.Characters
             m_flinchRoutine = StartCoroutine(FlinchRoutine());
             if (!m_autoFlinch && m_enableMixFlinch)
                 StartCoroutine(FlinchMixRoutine());
-            if (m_enableFlinchColor)
-            {
-                if (m_flinchColorRoutine == null)
-                {
-                    m_flinchColorRoutine = StartCoroutine(FlinchColorRoutine());
-                }
-            }
         }
 
         private IEnumerator FlinchRoutine()
@@ -132,15 +125,6 @@ namespace DChild.Gameplay.Characters
             m_spine.animationState.GetCurrent(1).Alpha = m_alphaBlendStrength;
             m_spine.animationState.GetCurrent(1).MixDuration = 1;
             m_spine.animationState.GetCurrent(1).MixTime = 1;
-            yield return null;
-        }
-
-        private IEnumerator FlinchColorRoutine()
-        {
-            m_spine.SetAnimation(2, m_flinchColorAnimation, false);
-            yield return new WaitForAnimationComplete(m_spine.animationState, m_flinchColorAnimation);
-            m_spine.SetEmptyAnimation(2, 0);
-            m_flinchColorRoutine = null;
             yield return null;
         }
 

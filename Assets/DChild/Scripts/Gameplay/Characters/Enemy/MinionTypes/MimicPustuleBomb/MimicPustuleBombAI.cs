@@ -271,6 +271,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_mimicPustuleBombChain.enabled = false;
                 m_flinchHandle.SetAnimation(m_info.flinchUnAggroAnimation.animation);
                 m_flinchHandle.SetIdleAnimation(m_info.idleUnAggroAnimation1.animation);
+                //StopCoroutine("ReturnToOriginalPosition");
                 StartCoroutine(ReturnToOriginalPosition(5f));
             }
             if (m_animation.GetCurrentAnimation(0).ToString() == m_info.idleAggroAnimation1.animation || m_stateHandle.currentState == State.Cooldown)
@@ -361,7 +362,8 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_info.detectAnimation, false); ;
             yield return new WaitForSeconds(.25f);
                 
-            m_animation.SetAnimation(0, m_info.idleAggroAnimation2, true);
+            //m_animation.SetAnimation(0, m_info.idleAggroAnimation2, true);
+            m_animation.SetAnimation(0, m_info.idleAggroAnimation1, true);
             m_stateHandle.OverrideState(State.ReevaluateSituation);
             yield return null;
         }
@@ -541,6 +543,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator ReturnToOriginalPosition(float delay)
         {
+            m_returnToOriginalPos = false;
             yield return new WaitForSeconds(delay);
             m_returnToOriginalPos=true;
         }
@@ -575,8 +578,8 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_info.patrol.animation, true);
             m_animation.DisableRootMotion();
             m_bodycollider.enabled = false;
-            m_startPos = transform.position;
             SwapPustuleBombPosition();
+            m_startPos = transform.position;
         }
 
         protected override void Awake()
@@ -635,6 +638,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         
                         DynamicMovement(m_startPos, m_info.move.speed);
                         m_aggroGroup.SetActive(false);
+                        m_rigidbody2D.velocity = Vector2.zero;
                         m_turnState = State.ReturnToPatrol;
                         
                     }
@@ -644,15 +648,17 @@ namespace DChild.Gameplay.Characters.Enemies
                         {
                             StartCoroutine(TransformUnAggroRoutine());
                         }
-                        Debug.Log(Vector2.Distance(m_startPos, transform.position));
+                        
                         if(m_returnToOriginalPos)//&& Vector2.Distance(m_startPos, transform.position) < 0.2f)
                         {
+                            Debug.Log(Vector2.Distance(m_startPos, transform.position)+" AAAAAAAAAAAAAAAAAAAA");
                             m_mimicPustuleBombChain.enabled = true;
                             m_returnToOriginalPos = false;
-                            m_rigidbody2D.velocity = new Vector2(0f,0f);
-                        }else
+                            m_rigidbody2D.velocity = Vector2.zero;
+                        }
+                        else
                         {
-                            DynamicMovement(m_startPos, 2f);
+                            DynamicMovement(m_startPos, 1f);
                         }
                         m_aggroGroup.SetActive(false);
                         m_stateHandle.OverrideState(State.Patrol);
@@ -709,7 +715,8 @@ namespace DChild.Gameplay.Characters.Enemies
                     break;
                 case State.Attacking:
                     m_stateHandle.Wait(State.Cooldown);
-                    m_animation.SetAnimation(0, m_info.idleAggroAnimation2, true);
+                    //m_animation.SetAnimation(0, m_info.idleAggroAnimation2, true);
+                    m_animation.SetAnimation(0, m_info.idleAggroAnimation1, true);
                     m_agent.Stop();
                     m_executeMoveCoroutine = StartCoroutine(ExecuteMove(25f, m_currentAttack));
                     m_attackDecider.hasDecidedOnAttack = false;

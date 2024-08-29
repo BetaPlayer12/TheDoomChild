@@ -153,6 +153,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private Collider2D m_bodyCollider;
         [SerializeField, TabGroup("Reference")]
         private IsolatedObjectPhysics2D m_isolatedObjectPhysics2D;
+        [SerializeField, TabGroup("Reference")]
+        private ParticleSystem IdleEffects;
         [SerializeField, TabGroup("Modules")]
         private TransformTurnHandle m_turnHandle;
         [SerializeField, TabGroup("Modules")]
