@@ -415,9 +415,10 @@ namespace DChild.Gameplay.Characters.Enemies
             if(!m_backWallSensor.isDetecting)
             {
                 m_animation.EnableRootMotion(true, false);
-                m_animation.SetAnimation(0, m_info.move.animation, false);
+                m_selfCollider.enabled = false;
+                m_animation.SetAnimation(0, m_info.move.animation, false).TimeScale = m_currentTimeScale;
                 yield return new WaitForAnimationComplete(m_animation.animationState, m_info.move.animation);
-                m_animation.EnableRootMotion(false, false);
+                //m_animation.EnableRootMotion(false, false);
             }
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_flinchHandle.m_autoFlinch = true;
@@ -606,7 +607,7 @@ namespace DChild.Gameplay.Characters.Enemies
                             if (m_attackDecider.hasDecidedOnAttack && IsTargetInRange(m_attackDecider.chosenAttack.range)&& !m_wallSensor.allRaysDetecting)
                             {
                                 m_loopMove = 0f;
-                                if (IsTargetInRange(m_StompDetectRange))
+                                if (IsTargetInRange(m_StompDetectRange) && m_edgeSensor.isDetecting)
                                 {
                                     if(IsTargetInRange(m_info.stompAttack.range))
                                     {
