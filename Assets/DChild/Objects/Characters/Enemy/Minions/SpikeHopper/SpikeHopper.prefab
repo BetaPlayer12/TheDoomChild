@@ -56,6 +56,7 @@ MonoBehaviour:
   m_idleAnimation: Idle
   m_enableFlinchColor: 0
   m_flinchColorAnimation: 
+  m_enableModule: 1
 --- !u!1 &3101691603782506320
 GameObject:
   m_ObjectHideFlags: 0
@@ -285,7 +286,7 @@ MonoBehaviour:
   m_animator: {fileID: 9210280208371270211}
   m_animation: Death
   m_bodyDuration:
-    m_startTime: 3
+    m_startTime: 0.5
   m_fx: []
   m_destroySource: 0
 --- !u!114 &8858310385223778215
@@ -1034,6 +1035,11 @@ PrefabInstance:
       propertyPath: m_LocalRotation.z
       value: 0.6816372
       objectReference: {fileID: 0}
+    - target: {fileID: 8626159350324620184, guid: df7d015f7a0a25e468721d77079957bb,
+        type: 3}
+      propertyPath: m_animation
+      value: 
+      objectReference: {fileID: 9210280208371270211}
     - target: {fileID: 8897896215499404308, guid: df7d015f7a0a25e468721d77079957bb,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1089,7 +1095,7 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 4116703414830672438}
   m_PrefabAsset: {fileID: 0}
---- !u!60 &1426300238029822646
+--- !u!60 &3162268116281660312
 PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
