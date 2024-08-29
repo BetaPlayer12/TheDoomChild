@@ -42,7 +42,7 @@ ParticleSystem:
   m_GameObject: {fileID: 2294313732582809686}
   serializedVersion: 8
   lengthInSec: 8
-  simulationSpeed: 1
+  simulationSpeed: 10
   stopAction: 0
   cullingMode: 0
   ringBufferMode: 0
@@ -50,7 +50,7 @@ ParticleSystem:
   emitterVelocityMode: 1
   looping: 0
   prewarm: 0
-  playOnAwake: 0
+  playOnAwake: 1
   useUnscaledTime: 0
   autoRandomSeed: 1
   startDelay:
@@ -4859,7 +4859,7 @@ ParticleSystem:
   m_GameObject: {fileID: 2294313733219679032}
   serializedVersion: 8
   lengthInSec: 5
-  simulationSpeed: 1
+  simulationSpeed: 5
   stopAction: 0
   cullingMode: 0
   ringBufferMode: 0
@@ -4867,7 +4867,7 @@ ParticleSystem:
   emitterVelocityMode: 1
   looping: 0
   prewarm: 0
-  playOnAwake: 0
+  playOnAwake: 1
   useUnscaledTime: 0
   autoRandomSeed: 1
   startDelay:
@@ -9671,7 +9671,7 @@ ParticleSystem:
   m_GameObject: {fileID: 2294313733289346025}
   serializedVersion: 8
   lengthInSec: 9
-  simulationSpeed: 1
+  simulationSpeed: 10
   stopAction: 0
   cullingMode: 0
   ringBufferMode: 0
@@ -9679,7 +9679,7 @@ ParticleSystem:
   emitterVelocityMode: 1
   looping: 0
   prewarm: 0
-  playOnAwake: 0
+  playOnAwake: 1
   useUnscaledTime: 0
   autoRandomSeed: 1
   startDelay:
@@ -14468,7 +14468,7 @@ ParticleSystemRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 3
   m_RenderMode: 0
   m_MeshDistribution: 0
   m_SortMode: 0
@@ -14541,7 +14541,7 @@ ParticleSystem:
   m_GameObject: {fileID: 2294313733393651458}
   serializedVersion: 8
   lengthInSec: 9
-  simulationSpeed: 1
+  simulationSpeed: 10
   stopAction: 0
   cullingMode: 0
   ringBufferMode: 0
@@ -14549,7 +14549,7 @@ ParticleSystem:
   emitterVelocityMode: 1
   looping: 0
   prewarm: 0
-  playOnAwake: 0
+  playOnAwake: 1
   useUnscaledTime: 0
   autoRandomSeed: 1
   startDelay:
@@ -19338,7 +19338,7 @@ ParticleSystemRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_RenderMode: 0
   m_MeshDistribution: 0
   m_SortMode: 0
@@ -19411,7 +19411,7 @@ ParticleSystem:
   m_GameObject: {fileID: 2294313733518384174}
   serializedVersion: 8
   lengthInSec: 9
-  simulationSpeed: 1
+  simulationSpeed: 10
   stopAction: 0
   cullingMode: 0
   ringBufferMode: 0
@@ -19419,7 +19419,7 @@ ParticleSystem:
   emitterVelocityMode: 1
   looping: 0
   prewarm: 0
-  playOnAwake: 0
+  playOnAwake: 1
   useUnscaledTime: 0
   autoRandomSeed: 1
   startDelay:
@@ -24208,7 +24208,7 @@ ParticleSystemRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 2
   m_RenderMode: 0
   m_MeshDistribution: 0
   m_SortMode: 0
@@ -24281,7 +24281,7 @@ ParticleSystem:
   m_GameObject: {fileID: 2294313733823794990}
   serializedVersion: 8
   lengthInSec: 8
-  simulationSpeed: 1
+  simulationSpeed: 10
   stopAction: 0
   cullingMode: 0
   ringBufferMode: 0
@@ -24289,7 +24289,7 @@ ParticleSystem:
   emitterVelocityMode: 1
   looping: 0
   prewarm: 0
-  playOnAwake: 0
+  playOnAwake: 1
   useUnscaledTime: 0
   autoRandomSeed: 1
   startDelay:
@@ -29182,7 +29182,10 @@ GameObject:
   m_Component:
   - component: {fileID: 2294313734032634636}
   - component: {fileID: 2294313734032634639}
+  - component: {fileID: 6529355092174622559}
   - component: {fileID: 2294313734032634638}
+  - component: {fileID: -8762374583763959928}
+  - component: {fileID: 1807350480749120968}
   m_Layer: 0
   m_Name: CelestialVoid_TeleportThePlayer_Holder
   m_TagString: Untagged
@@ -29215,7 +29218,7 @@ ParticleSystem:
   m_GameObject: {fileID: 2294313734032634633}
   serializedVersion: 8
   lengthInSec: 5
-  simulationSpeed: 1
+  simulationSpeed: 5
   stopAction: 0
   cullingMode: 0
   ringBufferMode: 0
@@ -29223,7 +29226,7 @@ ParticleSystem:
   emitterVelocityMode: 1
   looping: 0
   prewarm: 0
-  playOnAwake: 0
+  playOnAwake: 1
   useUnscaledTime: 0
   autoRandomSeed: 1
   startDelay:
@@ -33913,6 +33916,30 @@ ParticleSystem:
         m_PostInfinity: 2
         m_RotationOrder: 4
     vectorLabel1_3: W
+--- !u!114 &6529355092174622559
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2294313734032634633}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6178cd111cba844a6e236cfbee492c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_poolableItemData: {fileID: 11400000, guid: a6b504dae7827eb4f8fdf334c30c0005, type: 2}
+  m_particleSystems:
+  - {fileID: 2294313734032634639}
+  - {fileID: 2294313733219679039}
+  - {fileID: 2294313733393651462}
+  - {fileID: 2294313733289346029}
+  - {fileID: 2294313732582809706}
+  - {fileID: 2294313733823794978}
+  - {fileID: 2294313733518384162}
+  m_playOnAwake: 1
+  m_baseFlipped: 0
+  m_poolOnStop: 0
 --- !u!199 &2294313734032634638
 ParticleSystemRenderer:
   serializedVersion: 6
@@ -33985,3 +34012,45 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
+--- !u!114 &-8762374583763959928
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2294313734032634633}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e2130a8bda7a1a544b7fe2cfe9725688, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_poolableItemData: {fileID: 11400000, guid: a6b504dae7827eb4f8fdf334c30c0005, type: 2}
+--- !u!114 &1807350480749120968
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2294313734032634633}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1bcfbb95dde2f4045a51a99e091974d9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_delay: 2
+  m_startOnAwake: 1
+  m_event:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: -8762374583763959928}
+        m_TargetAssemblyTypeName: DChild.Gameplay.Pooling.PoolableObject, Assembly-CSharp
+        m_MethodName: DestroyInstance
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
