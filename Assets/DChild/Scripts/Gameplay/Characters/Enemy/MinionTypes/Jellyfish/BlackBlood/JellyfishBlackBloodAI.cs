@@ -73,6 +73,11 @@ namespace DChild.Gameplay.Characters.Enemies
 
             public GameObject blackBloodPuddle => m_blackBloodPuddle;
 
+            [Title("Events")]
+            [SerializeField, ValueDropdown("GetEvents")]
+            private string m_deathExplosionEvent;
+            public string deathExplosionEvent => m_deathExplosionEvent;
+
             public override void Initialize()
             {
 #if UNITY_EDITOR
@@ -129,9 +134,6 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Reference")]
         private Collider2D m_bodycollider;
 
-        [SerializeField, TabGroup("Reference")]
-        private Collider2D m_explosionBB;
-
         [SerializeField, TabGroup("Modules")]
         private PathFinderAgent m_agent;
 
@@ -147,6 +149,12 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Modules")]
         private FlinchHandler m_flinchHandle;
 
+        [SerializeField, TabGroup("FX")]
+        private ParticleSystem m_explosionDroppingsFX;
+
+        [SerializeField, TabGroup("FX")]
+        private ParticleSystem m_deathExplosionFX;
+
         [ShowInInspector]
         private StateHandle<State> m_stateHandle;
 
@@ -154,7 +162,6 @@ namespace DChild.Gameplay.Characters.Enemies
         private RandomAttackDecider<Attack> m_attackDecider;
 
         private ProjectileLauncher m_projectileLauncher;
-        private ProjectileLauncher m_projectileLauncherOnDeath;
 
         private float m_currentCD;
         private bool m_isDetecting;
@@ -334,6 +341,13 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_projectileLauncher.LaunchProjectile();
             }
         }
+        
+        private void DeathExplosionEvent()
+        {
+            m_deathExplosionFX.Play();
+            m_explosionDroppingsFX.Play();
+
+        }
 
         #endregion Attack
 
@@ -382,6 +396,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_startPos = transform.position;
 
             m_spineEventListener.Subscribe(m_info.projectile.launchOnEvent, LaunchProjectile);
+            m_spineEventListener.Subscribe(m_info.deathExplosionEvent, DeathExplosionEvent);
         }
 
         protected override void Awake()
