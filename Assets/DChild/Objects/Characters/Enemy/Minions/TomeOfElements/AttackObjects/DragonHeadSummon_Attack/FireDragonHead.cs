@@ -60,7 +60,7 @@ namespace DChild.Gameplay.Projectiles
 
         private IEnumerator AttackRoutine()
         {
-            m_spine.SetAnimation(0, m_attackAnimation, false);
+            //m_spine.SetAnimation(0, m_attackAnimation, false);
 
             //THIS IS A TEMORARY FIXX
             /*yield return new WaitForSeconds(1.7f);
@@ -68,8 +68,9 @@ namespace DChild.Gameplay.Projectiles
             yield return new WaitForSeconds(1f);
             OffFire();
             */
-
-            yield return new WaitForAnimationComplete(m_spine.animationState, m_attackAnimation);
+            Debug.Log("ASAAAAAAAAAAAA");
+            //yield return new WaitForAnimationComplete(m_spine.animationState, m_attackAnimation);
+            yield return new WaitForSeconds(1f);
             DestroyInstance();
             yield return null;
         }
@@ -109,6 +110,7 @@ namespace DChild.Gameplay.Projectiles
             m_flameEffect.Stop(true);
             m_flameCollider.SetActive(false);
             StartCoroutine(TurnHeadColliderOffRoutine());
+            StartCoroutine(AttackRoutine());
         }
         IEnumerator TurnOnHeadColliderRoutine()
         {

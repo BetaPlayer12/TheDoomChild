@@ -329,7 +329,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_targetInfo.Set(null, null);
             m_isDetecting = false;
             m_stateHandle.SetState(State.ReturnToPatrol);
-
+            m_returnToOriginalPos = true;
             enabled = true;
         }
 
