@@ -555,7 +555,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     {
                        
                         case Attack.Spit:
-                            m_animation.EnableRootMotion(false, false);
+                            //m_animation.EnableRootMotion(false, false);
                             if (IsTargetInRange(m_info.stompAttack.range)&&(transform.position.y+1)>m_targetInfo.transform.position.y)
                             {
                                 m_movement.Stop();
