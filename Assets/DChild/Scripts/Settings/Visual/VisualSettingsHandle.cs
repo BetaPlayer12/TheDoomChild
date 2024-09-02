@@ -109,6 +109,18 @@ namespace DChild.Configurations
             }
         }
 
+        public bool bloom
+        {
+            get => m_screenLighting.bloom;
+
+            set
+            {
+                m_screenLighting.bloom = value;
+                m_configuration.visualConfiguration.bloom = value;
+                SceneVisualsChange?.Invoke(this, EventActionArgs.Empty);
+            }
+        }
+
         public void Initialize(GameSettingsConfiguration configuration)
         {
             m_configuration = configuration;
