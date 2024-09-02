@@ -168,6 +168,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private FlinchHandler m_flinchHandle;
         [SerializeField, TabGroup("Modules")]
         private Attacker m_attacker;
+        [SerializeField, TabGroup("Modules")]
+        private WayPointPatrol m_wayPointPatrol;
 
         [SerializeField]
         private SpineEventListener m_spineListener;
@@ -860,6 +862,10 @@ namespace DChild.Gameplay.Characters.Enemies
             m_targetInfo = target;
             m_isDetecting = true;
             transform.position = new Vector2(m_targetInfo.position.x, m_targetInfo.position.y + 10f);
+            Vector2 summonedPosStart = position;
+            Vector2 summonedPosEnd = new Vector2(position.x + 10, position.y);
+            Vector2[] summonablePatrolPoints = { summonedPosStart, summonedPosEnd };
+            m_wayPointPatrol.SetWayPoints(summonablePatrolPoints);
             m_character.physics.simulateGravity = false;
             m_hitbox.Enable();
             m_flinchHandle.gameObject.SetActive(true);
