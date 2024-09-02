@@ -154,8 +154,6 @@ namespace DChild.Gameplay.Characters.Enemies
         private RaySensor m_lefttWallSensor;
         [SerializeField, TabGroup("Reference")]
         private RaySensor m_groundSensor;
-        [SerializeField, TabGroup("Reference")]
-        private RaySensor m_wallCheckForAttackSensor;
         [SerializeField, TabGroup("Modules")]
         private AnimatedTurnHandle m_turnHandle;
         [SerializeField, TabGroup("Modules")]
@@ -460,13 +458,6 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_stateHandle.Wait(State.Cooldown);
 
-            m_wallCheckForAttackSensor.Cast();
-            if (m_wallCheckForAttackSensor.m_castHit)
-            {
-                //Adjust position backwards based on how far the cast hit
-                yield return AdjustFromWallForAttack();
-            }
-
             m_agent.Stop();
             m_animation.EnableRootMotion(true, true);
 
@@ -488,13 +479,6 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_stateHandle.Wait(State.Cooldown);
 
-            m_wallCheckForAttackSensor.Cast();
-            if (m_wallCheckForAttackSensor.m_castHit)
-            {
-                //Adjust position backwards based on how far the cast hit
-                yield return AdjustFromWallForAttack();
-            }
-
             m_agent.Stop();
             m_animation.EnableRootMotion(true, true);
 
@@ -511,12 +495,6 @@ namespace DChild.Gameplay.Characters.Enemies
             m_stateHandle.ApplyQueuedState();
             yield return null;
         }
-
-        private IEnumerator AdjustFromWallForAttack()
-        {
-
-            yield return null;
-        } 
 
         private IEnumerator DetectRoutine()
         {
@@ -757,14 +735,42 @@ namespace DChild.Gameplay.Characters.Enemies
         private Vector2 SetRunawayPosition()
         {
             Vector2 destination = transform.position;
-            if(m_targetInfo.position.x < transform.position.x)
+            bool isCloseToWall = false;
+
+            switch (m_character.facing)
             {
-                destination = new Vector2(transform.position.x + 3, m_targetInfo.position.y + 1);
+                case HorizontalDirection.Left:
+                    {
+                        if (m_rightWallSensor.isDetecting)
+                        {
+                            isCloseToWall = true;
+                            destination = new Vector2(transform.position.x + 3, m_targetInfo.position.y + 1);
+                        }
+                    }
+                    break;
+                case HorizontalDirection.Right:
+                    {
+                        if (m_rightWallSensor.isDetecting)
+                        {
+                            isCloseToWall = true;
+                            destination = new Vector2(transform.position.x - 3, m_targetInfo.position.y + 1);
+                        }
+                    }
+                    break;
             }
-            else
+
+            if (!isCloseToWall)
             {
-                destination = new Vector2(transform.position.x - 3, m_targetInfo.position.y + 1);
+                if (m_targetInfo.position.x >= transform.position.x)
+                {
+                    destination = new Vector2(transform.position.x - 3, m_targetInfo.position.y + 1);
+                }
+                else if(m_targetInfo.position.x < transform.position.x)
+                {
+                    destination = new Vector2(transform.position.x + 3, m_targetInfo.position.y + 1);
+                }
             }
+            
             return destination;
         }
 
@@ -783,7 +789,7 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 FacePlayer();
 
-                if(m_rightWallSensor.isDetecting || m_lefttWallSensor.isDetecting)
+                if(m_lefttWallSensor.isDetecting)
                 {
                     m_currentCD = m_info.attackCD;
                 }
