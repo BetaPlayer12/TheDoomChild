@@ -241,7 +241,6 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_info.deathAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.deathAnimation);
             //explode
-            m_deathExplosionEffect.Play();
             m_detonationDamageCollider.enabled = true;
             yield return new WaitForSeconds(0.5f);
             m_detonationDamageCollider.enabled = false;
