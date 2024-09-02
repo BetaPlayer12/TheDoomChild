@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using DChild;
 using DChild.Gameplay.Characters.Enemies;
 using DChild.Gameplay.Environment;
+using Pathfinding;
 
 namespace DChild.Gameplay.Characters.Enemies
 {
@@ -391,6 +392,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     break;
                 case Attack.SummonAttack:
                     var minions = Instantiate(m_minions[m_currentSummonID], m_summonLocation, Quaternion.identity);
+                    minions.GetComponent<Seeker>().graphMask = GraphMask.FromGraphName("Grid Graph");
                     minions.GetComponent<Damageable>().Destroyed += OnMinionSummonedDestroyed;
                     //m_summons[m_currentSummonID].SummonAt(m_currentSummonID == 0 ? (Vector2)transform.position : new Vector2(m_lastTargetPos.x, m_lastTargetPos.y + 10f), m_targetInfo);
                     break;
