@@ -463,6 +463,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_fireball.m_spectreFire = this.gameObject;
             var projectilePointPos = new Vector3(m_projectilePoints[0].position.x, m_projectilePoints[0].position.y, 0);
             m_spectreFireball = Instantiate(m_info.projectile.projectileInfo.projectile, projectilePointPos, Quaternion.identity);
+            m_spectreFireball.GetComponent<Seeker>().graphMask = GraphMask.FromGraphName("SpectreFireballGraph");
             m_spectreFireball.GetComponent<SpectreFireFireballFollow>().OnFireballDissipate += OnFireballDissipate;
             m_animation.SetAnimation(0, m_info.attack1.animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack1.animation);
