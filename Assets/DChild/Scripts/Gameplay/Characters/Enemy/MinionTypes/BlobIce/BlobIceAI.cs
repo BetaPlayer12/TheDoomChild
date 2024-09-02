@@ -160,6 +160,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private GameObject m_iceDrip;
         [SerializeField, TabGroup("VFX Objects", "Ice Drip")]
         private float m_coolDripTimer;
+        [SerializeField, TabGroup("VFX Objects", "Death")]
+        private ParticleSystem m_deathExplosionEffect;
 
         [InfoBox("For Wall Blobs on Right, the waypoints for patrol needs to be diagonal for the facing and patrol to work properly like this: / \n" +
             "For Wall Blobs on Left, the waypoints for patrol needs to be diagonal for the facing and patrol to work properly like this: " + @"\")]
@@ -239,6 +241,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_info.deathAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.deathAnimation);
             //explode
+            m_deathExplosionEffect.Play();
             m_detonationDamageCollider.enabled = true;
             yield return new WaitForSeconds(0.5f);
             m_detonationDamageCollider.enabled = false;
