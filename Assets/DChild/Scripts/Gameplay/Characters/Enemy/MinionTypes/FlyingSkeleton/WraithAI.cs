@@ -19,7 +19,7 @@ using NSubstitute;
 namespace DChild.Gameplay.Characters.Enemies
 {
     [AddComponentMenu("DChild/Gameplay/Enemies/Minion/Wraith")]
-    public class WraithAI : CombatAIBrain<WraithAI.Info>, ISummonedEnemy
+    public class WraithAI : CombatAIBrain<WraithAI.Info>, ISummonedEnemy, IBattleZoneAIBrain
     {
         [System.Serializable]
         public class Info : BaseInfo
@@ -189,6 +189,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private float m_currentCD;
         private bool m_isDetecting;
+        private bool m_battleZoneMode;
 
         private Coroutine m_executeMoveCoroutine;
 
@@ -608,7 +609,6 @@ namespace DChild.Gameplay.Characters.Enemies
                         if (Vector2.Distance(m_startPos, transform.position) > 5f)
                         {
                             var rb2d = GetComponent<Rigidbody2D>();
-                            m_bodyCollider.enabled = false;
                             m_agent.Stop();
                             Vector3 dir = (m_startPos - (Vector2)rb2d.transform.position).normalized;
                             rb2d.MovePosition(rb2d.transform.position + dir * m_info.patrol.speed * Time.fixedDeltaTime);
@@ -838,7 +838,6 @@ namespace DChild.Gameplay.Characters.Enemies
         public void ResetAI()
         {
             m_selfCollider.SetActive(false);
-            m_bodyCollider.enabled = false;
             m_targetInfo.Set(null, null);
             m_flinchHandle.m_autoFlinch = true;
             m_isDetecting = false;
@@ -882,6 +881,21 @@ namespace DChild.Gameplay.Characters.Enemies
         public void DestroyObject()
         {
             throw new NotImplementedException();
+        }
+
+        public void SwitchToBattleZoneAI()
+        {
+            m_battleZoneMode = true;
+            Vector2 summonedPosStart = transform.position;
+            Vector2 summonedPosEnd = new Vector2(transform.position.x + 10, transform.position.y);
+            Vector2[] summonablePatrolPoints = { summonedPosStart, summonedPosEnd };
+            m_stateHandle.OverrideState(State.Chasing);
+        }
+
+        public void SwitchToBaseAI()
+        {
+            m_battleZoneMode = false;
+            m_stateHandle.OverrideState(State.ReevaluateSituation);
         }
     }
 }
