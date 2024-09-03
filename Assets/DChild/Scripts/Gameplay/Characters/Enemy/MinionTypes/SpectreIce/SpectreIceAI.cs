@@ -196,6 +196,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private float m_icePlungeCooldown;
         private int m_icePlungeSameAttackCounter;
         private bool m_canUseIcePlunge = true;
+        [SerializeField]
+        private IcePlunge m_icePlunge;
         /*
                 [SerializeField]
                 private GameObject m_spectreIceShieldHitbox;
@@ -221,6 +223,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_selfCollider.SetActive(true);
                 if (m_stateHandle.currentState != State.Chasing && !m_isDetecting)
                 {
+                    m_icePlunge.m_playerDamageable = m_targetInfo.transform.gameObject;
                     m_isDetecting = true;
                     m_stateHandle.SetState(State.Detect);
                 }
@@ -717,10 +720,11 @@ namespace DChild.Gameplay.Characters.Enemies
             //GetComponent<Damageable>().DamageTaken += SpectreIceAI_DamageTaken;
             /*m_hitbox = m_spectreIceShieldHitbox.GetComponent<Hitbox>();
             m_damageable = m_spectreIceShieldHealth.GetComponent<Damageable>();*/
+            m_icePlunge = m_info.spike.GetComponent<IcePlunge>();
             m_patrolHandle.TurnRequest += OnTurnRequest;
             m_attackHandle.AttackDone += OnAttackDone;
-            m_flinchHandle.FlinchStart += OnFlinchStart;
-            m_flinchHandle.FlinchEnd += OnFlinchEnd;
+            /*m_flinchHandle.FlinchStart += OnFlinchStart;
+            m_flinchHandle.FlinchEnd += OnFlinchEnd;*/
             m_turnHandle.TurnDone += OnTurnDone;
             m_spectreIceShield.GetComponent<SpectreIceShield>().OnActivate += OnActivate;
             m_spectreIceShield.GetComponent<SpectreIceShield>().OnShieldDestroy += OnShieldDestroy;
