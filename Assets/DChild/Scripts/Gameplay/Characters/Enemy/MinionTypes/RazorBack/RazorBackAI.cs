@@ -377,7 +377,7 @@ namespace DChild.Gameplay.Characters.Enemies
             //yield return new WaitForSeconds(1.4f);
             float maxDistance = 6f;
             float temptargetlocation = m_targetInfo.transform.position.x;
-            while (Mathf.Abs(transform.position.x - temptargetlocation) > maxDistance && !m_wallSensor.isDetecting && !m_edgeSensor.isDetecting)
+            while (Mathf.Abs(transform.position.x - temptargetlocation) > maxDistance && !m_wallSensor.isDetecting && m_edgeSensor.isDetecting)
             {
                 m_movement.MoveTowards(Vector2.one * transform.localScale.x, m_info.run.speed * 6);
                 yield return null;
