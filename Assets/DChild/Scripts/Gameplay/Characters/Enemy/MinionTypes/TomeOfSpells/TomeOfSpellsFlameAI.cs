@@ -453,8 +453,54 @@ namespace DChild.Gameplay.Characters.Enemies
             var playerCenter = m_targetInfo.position;
             var offset = new Vector2(m_info.fireDragonHeadOffset, 0);
             int RandValue = UnityEngine.Random.Range(1, 3);
-            switch(RandValue)
+
+            Raycaster.SetLayerMask(m_info.mask);
+
+            Raycaster.Cast(playerCenter, -Vector2.left, m_info.wallCheckDistance + m_info.fireDragonHeadOffset, true, out int m_WallsonRight,true);
+            Raycaster.Cast(playerCenter, Vector2.left, m_info.wallCheckDistance + m_info.fireDragonHeadOffset, true, out int m_WallsonLeft, true);
+            switch (RandValue)
             {
+                case 1:
+                    
+
+                    if (m_WallsonRight > 0)
+                    {
+                        if(m_WallsonLeft >0)
+                        {
+                            yield return null;
+                        }else
+                        {
+                            var spawnPosition = playerCenter - offset;
+                            InstantiateFireDragonHead(spawnPosition, m_targetInfo.position, true);
+                        }
+                    }
+                    else
+                    {
+                        var spawnPosition = playerCenter + offset;
+                        InstantiateFireDragonHead(spawnPosition, m_targetInfo.position, false);
+                    }
+                    break;
+
+                case 2:
+
+                    if(m_WallsonLeft >0)
+                    {
+                        if(m_WallsonRight>0)
+                        {
+                            yield return null;
+                        }else
+                        {
+                            var spawnPosition = playerCenter + offset;
+                            InstantiateFireDragonHead(spawnPosition, m_targetInfo.position, false);
+                        }
+                    }
+                    else
+                    {
+                        var spawnPosition = playerCenter - offset;
+                        InstantiateFireDragonHead(spawnPosition, m_targetInfo.position, true);
+                    }
+                    break;
+                /*
                 case 1:
                     if (Physics2D.Raycast(playerCenter, -Vector2.left, m_info.wallCheckDistance + m_info.fireDragonHeadOffset, m_info.mask))
                     {
@@ -497,6 +543,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         InstantiateFireDragonHead(spawnPosition, m_targetInfo.position,true);
                     }
                     break;
+                    */
             }
 
             /*
