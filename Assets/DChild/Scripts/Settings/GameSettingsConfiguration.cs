@@ -17,6 +17,7 @@ namespace DChild.Configurations
             public int resolutionIndex;
             public bool fullscreen;
             public bool vsync;
+            public bool bloom;
             [MinValue(0)]
             public float brightness;
             [MinValue(0)]
@@ -48,6 +49,7 @@ namespace DChild.Configurations
                 resolutionIndex = 0,
                 fullscreen = true,
                 vsync = true,
+                bloom = true,
                 brightness = 0.5f,
                 contrast = 0.5f
             };
