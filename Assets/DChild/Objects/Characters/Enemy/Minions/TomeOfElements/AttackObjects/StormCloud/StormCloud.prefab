@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3609584994252019657}
   - component: {fileID: 3609584994252019659}
   - component: {fileID: 3609584994252019658}
-  m_Layer: 9
+  m_Layer: 13
   m_Name: Aoe_Indicator_LightningTome
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4825,9 +4825,9 @@ GameObject:
   - component: {fileID: 3609584994500194718}
   - component: {fileID: 3609584994500194704}
   - component: {fileID: 2370869639237488010}
-  - component: {fileID: 7230842261862497466}
   - component: {fileID: 5674609219964728481}
-  m_Layer: 9
+  - component: {fileID: 2130494801982470922}
+  m_Layer: 13
   m_Name: StormCloud
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4862,7 +4862,7 @@ ParticleSystem:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3609584994500194716}
   serializedVersion: 8
-  lengthInSec: 5.5
+  lengthInSec: 6
   simulationSpeed: 0
   stopAction: 0
   cullingMode: 0
@@ -4937,7 +4937,7 @@ ParticleSystem:
     startLifetime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 5
+      scalar: 6
       minScalar: 5
       maxCurve:
         serializedVersion: 2
@@ -9669,24 +9669,11 @@ MonoBehaviour:
   m_timer: 5
   m_animator: {fileID: 3609584994500194704}
   m_particle: {fileID: 3609584994500194719}
-  m_playerDetection: {fileID: 7230842261862497466}
+  m_playerDetection: {fileID: 2130494801982470922}
   m_damageCollider: {fileID: 7732272512683759255}
---- !u!58 &7230842261862497466
-CircleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3609584994500194716}
-  m_Enabled: 0
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  serializedVersion: 2
-  m_Radius: 5
+  m_playerDetectionTriggerEvent:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &5674609219964728481
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9704,7 +9691,7 @@ MonoBehaviour:
   m_event:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 7230842261862497466}
+      - m_Target: {fileID: 2130494801982470922}
         m_TargetAssemblyTypeName: UnityEngine.Behaviour, UnityEngine
         m_MethodName: set_enabled
         m_Mode: 6
@@ -9716,6 +9703,32 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
+--- !u!61 &2130494801982470922
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3609584994500194716}
+  m_Enabled: 0
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 15, y: 15}
+  m_EdgeRadius: 0
 --- !u!1 &3609584994748427161
 GameObject:
   m_ObjectHideFlags: 0
@@ -9727,7 +9740,7 @@ GameObject:
   - component: {fileID: 3609584994748427162}
   - component: {fileID: 3609584994748427165}
   - component: {fileID: 3609584994748427164}
-  m_Layer: 9
+  m_Layer: 13
   m_Name: LightningCore
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14593,7 +14606,7 @@ GameObject:
   - component: {fileID: 3609584995126746799}
   - component: {fileID: 3609584995126746786}
   - component: {fileID: 3609584995126746785}
-  m_Layer: 9
+  m_Layer: 13
   m_Name: LightningDamagingStrike
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -19405,7 +19418,7 @@ GameObject:
   - component: {fileID: 3609584995888581072}
   - component: {fileID: 3609584995888581075}
   - component: {fileID: 3609584995888581074}
-  m_Layer: 9
+  m_Layer: 13
   m_Name: SmokeCloud_LightningTome
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -24218,7 +24231,7 @@ GameObject:
   - component: {fileID: 6583427115473669103}
   - component: {fileID: 6618790281042997842}
   - component: {fileID: 7732272512683759255}
-  m_Layer: 9
+  m_Layer: 13
   m_Name: Damager
   m_TagString: Untagged
   m_Icon: {fileID: 0}

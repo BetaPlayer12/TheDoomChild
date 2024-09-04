@@ -1,24 +1,12 @@
-﻿using System;
-using DChild.Gameplay;
-using DChild.Gameplay.Characters;
-using DChild.Gameplay.Combat;
+﻿using DChild.Gameplay.Combat;
 using Holysoft.Event;
 using DChild.Gameplay.Characters.AI;
 using UnityEngine;
-using Spine;
-using Spine.Unity;
 using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
-using DChild;
-using DChild.Gameplay.Characters.Enemies;
-using DChild.Gameplay.Pathfinding;
-using DarkTonic.MasterAudio;
 using DChild.Gameplay.Pooling;
 using DChild.Gameplay.Projectiles;
-using Holysoft.Collections;
-using Holysoft.Pooling;
-using Sirenix.Utilities;
 
 namespace DChild.Gameplay.Characters.Enemies
 {
@@ -172,7 +160,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private DeathHandle m_deathHandle;
         [SerializeField, TabGroup("Modules")]
         private FlinchHandler m_flinchHandle;
-
+        [SerializeField, TabGroup("Sensors")]
+        private RaySensor m_wallSensor;
 
         [SerializeField, TabGroup("Magister")]
         private Transform m_magister;
@@ -264,28 +253,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_stateHandle.ApplyQueuedState();
         }
 
-        private void OnFlinchStart(object sender, EventActionArgs eventArgs)
-        {
-            if (m_animation.GetCurrentAnimation(0).ToString() == m_info.idleAnimation.animation || m_stateHandle.currentState == State.Cooldown)
-            {
-                //m_animation.SetAnimation(0, m_info.flinchAnimation, false);
-                m_flinchHandle.m_autoFlinch = true;
-                m_agent.Stop();
-                m_rigidbody2D.constraints = RigidbodyConstraints2D.FreezeRotation;
-                m_stateHandle.Wait(State.ReevaluateSituation);
-                StopAllCoroutines();
-            }
-        }
-
-        private void OnFlinchEnd(object sender, EventActionArgs eventArgs)
-        {
-            if (m_flinchHandle.m_autoFlinch)
-            {
-                //m_animation.SetAnimation(0, m_info.idleAnimation, true);
-                m_flinchHandle.m_autoFlinch = false;
-                m_stateHandle.ApplyQueuedState();
-            }
-        }
+      
         private Vector2 WallPosition()
         {
             RaycastHit2D hit = Physics2D.Raycast(m_character.centerMass.position, Vector2.right * transform.localScale.x, 1000, DChildUtility.GetEnvironmentMask());
@@ -498,6 +466,8 @@ namespace DChild.Gameplay.Characters.Enemies
             var currentStormCloudPositions = new List<Vector2>();
             var stormCloudSpacing = 15f;
 
+           
+
             for (int i = 0; i < numOfClouds; i++)
             {
                 Vector2 spawnPosition;
@@ -514,7 +484,6 @@ namespace DChild.Gameplay.Characters.Enemies
 
                     if (attempts >= 100)
                     {
-                        //m_summonStormCloudCoroutine = null;
                         yield break;
                     }
 
@@ -526,9 +495,10 @@ namespace DChild.Gameplay.Characters.Enemies
 
                 var instance = InstantiateStormCloud(spawnPosition);
                 instance.GetComponent<StormCloud>().OnDestroyedInstance += OnDestroyedInstance;
-
+              
                 m_summonedStormCloudPositions.Add(instance.transform.position);
                 stormCloudPositions.Add(spawnPosition);
+                instance.GetComponent<StormCloud>().m_tomeOfSpellsStorm = gameObject;
                 yield return null;
             }
             stormCloudPositions.Clear();
@@ -776,8 +746,6 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_info.stormCloud.GetComponent<StormCloud>().OnDestroyedInstance += OnDestroyedInstance;
             m_patrolHandle.TurnRequest += OnTurnRequest;
             m_attackHandle.AttackDone += OnAttackDone;
-            m_flinchHandle.FlinchStart += OnFlinchStart;
-            m_flinchHandle.FlinchEnd += OnFlinchEnd;
             m_turnHandle.TurnDone += OnTurnDone;
             m_deathHandle?.SetAnimation(m_info.deathStartAnimation.animation);
             //m_projectileLauncher = new ProjectileLauncher(m_info.projectile.projectileInfo, transform);
@@ -876,7 +844,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     }
                     else
                     {
-                        if (Vector2.Distance(m_targetInfo.position, transform.position) <= m_info.targetDistanceTolerance)
+                        if (Vector2.Distance(m_targetInfo.position, transform.position) <= m_info.targetDistanceTolerance && !m_wallSensor.allRaysDetecting)
                         {
                            /* if (m_isolatedObjectPhysics2D.velocity.y > 1 || m_isolatedObjectPhysics2D.velocity.y < -1)
                             {
