@@ -157,6 +157,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private RaySensor m_upDownSensor;
         [SerializeField, TabGroup("Sensor")]
         private RaySensor m_leftRightSensor;
+        [SerializeField, TabGroup("Sensor")]
+        private RaySensor m_headSensor;
         [SerializeField, TabGroup("ProjectileInfo")]
         private List<Transform> m_projectilePoints;
 
@@ -165,7 +167,6 @@ namespace DChild.Gameplay.Characters.Enemies
 
         [ShowInInspector]
         private StateHandle<State> m_stateHandle;
-        private State m_turnState;
         private ProjectileLauncher m_projectileLauncher;
         [ShowInInspector]
         private RandomAttackDecider<Attack> m_attackDecider;
@@ -198,14 +199,6 @@ namespace DChild.Gameplay.Characters.Enemies
         private bool m_canUseIcePlunge = true;
         [SerializeField]
         private IcePlunge m_icePlunge;
-        /*
-                [SerializeField]
-                private GameObject m_spectreIceShieldHitbox;
-                [SerializeField]
-                private GameObject m_spectreIceShieldHealth;
-                [SerializeField]
-                private Health m_healthToChange;
-        */
         private void OnAttackDone(object sender, EventActionArgs eventArgs)
         {
             m_animation.DisableRootMotion();
@@ -236,6 +229,7 @@ namespace DChild.Gameplay.Characters.Enemies
         }
         private IEnumerator DetectRoutine()
         {
+            m_stateHandle.Wait(State.ReevaluateSituation);
             OnDetection?.Invoke(this, EventActionArgs.Empty);
             m_animation.SetAnimation(0, m_info.detectAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.detectAnimation);
@@ -268,11 +262,8 @@ namespace DChild.Gameplay.Characters.Enemies
             OnDamaged?.Invoke(this, EventActionArgs.Empty);
             m_hitbox.gameObject.SetActive(false);
             m_animation.SetAnimation(0, m_info.flinchAnimation, false);
-            //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.flinchAnimation);
             yield return new WaitForSeconds(0.5f);
-            //bug #2631, connected with spectreFire, and by extension also the spectreEarth, something gets boken here where this entity gets stucke here on flinch, and it gets fixed on graveyard and laboratory
             m_animation.SetAnimation(0, m_info.fadeOutAnimation, false);
-            //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.fadeOutAnimation); //also gets stuck here, needs to be further investigated.
             yield return new WaitForSeconds(0.5f);
             var random = UnityEngine.Random.Range(0, 2);
             transform.position = new Vector2(m_targetInfo.position.x + (IsFacingTarget() ? -30 : 30), m_targetInfo.position.y+30);
@@ -297,17 +288,12 @@ namespace DChild.Gameplay.Characters.Enemies
         private Vector2 WallPosition()
         {
             RaycastHit2D hit = Physics2D.Raycast(m_character.centerMass.position, Vector2.right * transform.localScale.x, 1000, DChildUtility.GetEnvironmentMask());
-            //if (hit.collider != null)
-            //{
-            //    return hit.point;
-            //}
             return hit.point;
         }
 
         //Patience Handler
         private void Patience()
         {
-            //StopAllCoroutines();
             if (m_executeMoveCoroutine != null)
             {
                 StopCoroutine(m_executeMoveCoroutine);
@@ -334,8 +320,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             Debug.Log("Apply Attacker Data");
             m_attackDecider.SetList(new AttackInfo<Attack>(Attack.Attack1, m_info.attack1.range),
-                                    new AttackInfo<Attack>(Attack.Attack2, m_info.attack2.range)
-                                  /*, new AttackInfo<Attack>(Attack.Attack2, m_info.attack2.range)*/);
+                                    new AttackInfo<Attack>(Attack.Attack2, m_info.attack2.range));
             m_attackDecider.hasDecidedOnAttack = false;
         }
 
@@ -355,8 +340,6 @@ namespace DChild.Gameplay.Characters.Enemies
 
         protected override void OnDestroyed(object sender, EventActionArgs eventArgs)
         {
-            //m_Audiosource.clip = m_DeadClip;
-            //m_Audiosource.Play();
             m_stateHandle.Wait(State.WaitBehaviourEnd);
             StopAllCoroutines();
 
@@ -368,10 +351,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_executeMoveCoroutine = null;
             }
             m_selfCollider.SetActive(false);
-            //m_bodyCollider.SetActive(true);
-            //m_animation.SetAnimation(0, m_info.deathAnimation, false);
             m_agent.Stop();
-            //m_character.physics.simulateGravity = true;
         }
 
         private void ChooseAttack()
@@ -444,62 +424,10 @@ namespace DChild.Gameplay.Characters.Enemies
                 case Attack.Attack1:
                     m_animation.EnableRootMotion(true, false);
                     StartCoroutine(AttackRoutine2());
-                    //m_attackHandle.ExecuteAttack(m_info.attack.animation, m_info.idleAnimation);
-                    //LaunchProjectile();
-                    /*if (m_character.facing == HorizontalDirection.Right)
-                    {
-                        if (m_shardspawned == false && m_targetInfo.position.x - 6.5 > this.transform.position.x
-                            && m_targetInfo.position.x + 8.3 < WallPosition().x && this.transform.position.y + 20 > GroundPosition().y)
-                        {
-                            StartCoroutine(AttackRoutine2());
-                        }
-                        else
-                        {
-                            StartCoroutine(AttackRoutine2());
-                        }
-                    }
-                    else
-                    {
-                        if (m_shardspawned == false && m_targetInfo.position.x - 6.5 > WallPosition().x
-                            && m_targetInfo.position.x + 8.3 < this.transform.position.x && this.transform.position.y + 20 > GroundPosition().y)
-                        {
-                            StartCoroutine(AttackRoutine2());
-                        }
-                        else
-                        {
-                            StartCoroutine(AttackRoutine2());
-                        }
-                    }*/
                     break;
                 case Attack.Attack2:
                     m_animation.EnableRootMotion(true, false);
                     StartCoroutine(AttackRoutine2());
-                    //m_attackHandle.ExecuteAttack(m_info.attack.animation, m_info.idleAnimation);
-                    //LaunchProjectile();
-                    /*if (m_character.facing == HorizontalDirection.Right)
-                    {
-                        if (m_shardspawned == false && m_targetInfo.position.x - 6.5 > this.transform.position.x
-                            && m_targetInfo.position.x + 8.3 < WallPosition().x && this.transform.position.y > GroundPosition().y)
-                        {
-                            StartCoroutine(AttackRoutine2());
-                        }
-                        else
-                        {
-                            StartCoroutine(AttackRoutine2());
-                        }
-                    }
-                    else
-                    {
-                        if (m_shardspawned == false && m_targetInfo.position.x - 6.5 > WallPosition().x
-                            && m_targetInfo.position.x + 8.3 < this.transform.position.x && this.transform.position.y > GroundPosition().y)
-                        {
-                            StartCoroutine(AttackRoutine2());
-                        }
-                        else
-                        {
-                            StartCoroutine(AttackRoutine2());
-                        }
-                    }*/
                     break;
             }
         }
@@ -530,19 +458,6 @@ namespace DChild.Gameplay.Characters.Enemies
                 {
                     m_targetPoint = new Vector2(m_targetInfo.position.x + 10, m_targetInfo.position.y + 30f);
                 }
-                /*var direction = (m_targetPoint - (Vector2)transform.position).normalized;
-                m_animation.SetAnimation(0, m_info.move, true);
-                while (Vector2.Distance(transform.position, m_targetPoint) > 10f)
-                {
-                    if (!IsFacingTarget())
-                    {
-                        CustomTurn();
-                    }
-                    m_agent.MoveTowardsForced(direction, m_info.move.speed);
-                    yield return null;
-                }
-                m_agent.Stop();*/
-                //m_movement.MoveTowards(new Vector2(m_targetInfo.position.x, m_targetInfo.position.y + 20), m_info.move.speed);
                 yield return new WaitForSeconds(1.25f);
                 if (!m_upDownSensor.isDetecting && !m_leftRightSensor.isDetecting || !m_upDownSensor.allRaysDetecting && !m_leftRightSensor.allRaysDetecting)
                 {
@@ -581,15 +496,6 @@ namespace DChild.Gameplay.Characters.Enemies
                     {
                         CustomTurn();
                     }
-                    /*var direction = (m_targetPoint - (Vector2)transform.position).normalized;
-                    m_animation.SetAnimation(0, m_info.move, true);
-                    while (Vector2.Distance(transform.position, m_targetPoint) > 10f)
-                    {
-                        m_agent.MoveTowardsForced(direction, m_info.move.speed);
-                        yield return null;
-                    }
-                    m_agent.Stop();
-                    yield return null;*/
                 }
                 m_stateHandle.OverrideState(State.ReevaluateSituation);
             }
@@ -597,7 +503,6 @@ namespace DChild.Gameplay.Characters.Enemies
         }
         private IEnumerator IcePlungeCooldown()
         {
-            //m_icePlungeCooldown -= Time.deltaTime;
             var duration = m_icePlungeCooldown;
             var timeLeft = 0f;
             while (duration > timeLeft && !m_canUseIcePlunge)
@@ -620,23 +525,27 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return null;
         }
         #region Movement
-        private IEnumerator ExecuteMove(/*float attackRange, *//*float heightOffset,*/ Attack attack)
+        private IEnumerator ExecuteMove(Attack attack)
         {
             m_animation.DisableRootMotion();
             bool inRange = false;
-            /*Vector2.Distance(transform.position, target) > m_info.spearMeleeAttack.range*/ //old target in range condition
             var moveSpeed = m_info.move.speed - UnityEngine.Random.Range(0, 3);
             var newPos = Vector2.zero;
+            var zeeYPosition = m_targetInfo.position.y + 40f;
             while (!inRange || TargetBlocked())
             {
-                newPos = new Vector2(m_character.facing == HorizontalDirection.Left? m_targetInfo.position.x + 10 : m_targetInfo.position.x - 10, /*GroundPosition().y + 20*/m_targetInfo.position.y + 40f);
-                bool xTargetInRange = Mathf.Abs(/*m_targetInfo.position.x*/newPos.x - transform.position.x) < m_currentAttackRange ? true : false;
-                bool yTargetInRange = Mathf.Abs(/*m_targetInfo.position.y*/newPos.y - transform.position.y) < m_currentAttackRange ? true : false;
+                newPos = new Vector2(m_character.facing == HorizontalDirection.Left? m_targetInfo.position.x + 10 : m_targetInfo.position.x - 10, zeeYPosition);
+                if (m_headSensor.isDetecting)
+                {
+                    m_agent.Stop();
+                    zeeYPosition = transform.position.y;
+                }
+                bool xTargetInRange = Mathf.Abs(newPos.x - transform.position.x) < m_currentAttackRange ? true : false;
+                bool yTargetInRange = Mathf.Abs(newPos.y - transform.position.y) < m_currentAttackRange ? true : false;
                 if (xTargetInRange && yTargetInRange)
                 {
                     inRange = true;
                 }
-                //DynamicMovement(/*new Vector2(m_targetInfo.position.x, m_targetInfo.position.y)*/ newPos);
                 DynamicMovement(newPos, moveSpeed);
                 yield return null;
             }
@@ -684,17 +593,6 @@ namespace DChild.Gameplay.Characters.Enemies
         }
         private void SpawnSpike()
         {
-            //Vector2 targetground = new Vector2(m_targetInfo.position.x, this.transform.position.y);
-            /*Vector3 targetgroundv3;
-            if (m_character.facing == HorizontalDirection.Right)
-            {
-                targetgroundv3 = new Vector3(m_targetPoint.x + 10f, m_targetPoint.y, 0);
-            }
-            else
-            {
-                targetgroundv3 = new Vector3(m_targetPoint.x - 10f, m_targetPoint.y, 0);
-            }*//*
-            Vector3 targetgroundv3 = new Vector3(m_targetPoint.x + 10f, m_targetPoint.y, 0);*/
             Instantiate(m_info.spike, m_projectilePoints[0].position, Quaternion.identity);
             m_shardspawned = true;
             StartCoroutine(ShardDelay());
@@ -705,26 +603,15 @@ namespace DChild.Gameplay.Characters.Enemies
             base.Start();
             m_animation.SetAnimation(0, m_info.patrol.animation, true);
             m_startPos = transform.position;
-            //Debug.Log("START OF SPECTRE MAGE");
-            //m_spineListener.Subscribe(m_info.projectile.launchOnEvent, LaunchProjectile);
-            //m_spineListener.Subscribe(m_info.chargeEvent, LaunchProjectile);
-            //m_spineListener.Subscribe(m_info.fireEvent, LaunchProjectile);
-            //m_spineListener.Subscribe(m_info.hitEvent, LaunchProjectile);
-            //m_selfCollider.SetActive(false);
         }
 
         protected override void Awake()
         {
             Debug.Log(m_info);
             base.Awake();
-            //GetComponent<Damageable>().DamageTaken += SpectreIceAI_DamageTaken;
-            /*m_hitbox = m_spectreIceShieldHitbox.GetComponent<Hitbox>();
-            m_damageable = m_spectreIceShieldHealth.GetComponent<Damageable>();*/
             m_icePlunge = m_info.spike.GetComponent<IcePlunge>();
             m_patrolHandle.TurnRequest += OnTurnRequest;
             m_attackHandle.AttackDone += OnAttackDone;
-            /*m_flinchHandle.FlinchStart += OnFlinchStart;
-            m_flinchHandle.FlinchEnd += OnFlinchEnd;*/
             m_turnHandle.TurnDone += OnTurnDone;
             m_spectreIceShield.GetComponent<SpectreIceShield>().OnActivate += OnActivate;
             m_spectreIceShield.GetComponent<SpectreIceShield>().OnShieldDestroy += OnShieldDestroy;
@@ -734,7 +621,6 @@ namespace DChild.Gameplay.Characters.Enemies
             UpdateAttackDeciderList();
             m_projectileLauncher = new ProjectileLauncher(m_info.projectile.projectileInfo, m_projectilePoints[0]);
             m_projectileLauncher.SetProjectile(m_info.projectile.projectileInfo);
-
             m_attackCache = new List<Attack>();
             AddToAttackCache(Attack.Attack1, Attack.Attack2);
             m_attackRangeCache = new List<float>();
@@ -746,21 +632,13 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_hitbox.SetCanBlockDamageState(true);
             m_hitbox.damageFXInfo.fx = null;
-            //throw new NotImplementedException();
         }
 
         private void OnShieldDestroy(object sender, EventActionArgs eventArgs)
         {
             m_hitbox.SetCanBlockDamageState(false);
             m_hitbox.damageFXInfo.fx = m_hurtFX;
-            //throw new NotImplementedException();
         }
-
-        /*private void SpectreIceAI_DamageTaken(object sender, Damageable.DamageEventArgs eventArgs)
-        {
-            OnDamaged?.Invoke(this, EventActionArgs.Empty);
-            //throw new NotImplementedException();
-        }*/
 
         private void Update()
         {
@@ -771,46 +649,26 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_agent.Stop();
                     if (IsFacingTarget())
                     {
-                        m_stateHandle.Wait(State.ReevaluateSituation);
                         StartCoroutine(DetectRoutine());
                     }
                     else
                     {
-                        m_turnState = State.Detect;
-                        m_stateHandle.SetState(State.Turning);
+                        CustomTurn();
+                        StartCoroutine(DetectRoutine());
                     }
                     break;
 
                 case State.ReturnToPatrol:
-                    if (IsFacing(m_startPos))
-                    {
-                        if (Vector2.Distance(m_startPos, transform.position) > 5f)
-                        {
-                            var rb2d = GetComponent<Rigidbody2D>();
-                            m_bodyCollider.enabled = false;
-                            m_agent.Stop();
-                            Vector3 dir = (m_startPos - (Vector2)rb2d.transform.position).normalized;
-                            rb2d.MovePosition(rb2d.transform.position + dir * m_info.move.speed * Time.fixedDeltaTime);
-                            m_animation.SetAnimation(0, m_info.patrol.animation, true);
-                        }
-                        else
-                        {
-                            m_stateHandle.OverrideState(State.Patrol);
-                        }
-                    }
-                    else
-                    {
-                        m_turnState = State.ReturnToPatrol;
-                        m_stateHandle.SetState(State.Turning);
-                    }
+                    m_stateHandle.OverrideState(State.Patrol);
+                    m_isDetecting = false;
                     break;
 
                 case State.Patrol:
-                    m_turnState = State.Patrol;
                     m_animation.DisableRootMotion();
                     m_animation.SetAnimation(0, m_info.patrol.animation, true);
                     var characterInfo = new PatrolHandle.CharacterInfo(m_character.centerMass.position, m_character.facing);
                     m_patrolHandle.Patrol(m_agent, m_info.patrol.speed, characterInfo);
+                    m_stateHandle.SetState(State.Patrol);
                     break;
 
                 case State.Idle:
@@ -819,9 +677,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     break;
 
                 case State.Turning:
-                    m_stateHandle.Wait(m_turnState);
-                    if (m_shardspawned != true)
-                    StopAllCoroutines();
+                    m_stateHandle.Wait(State.ReevaluateSituation);
                     if (m_executeMoveCoroutine != null)
                     {
                         StopCoroutine(m_executeMoveCoroutine);
@@ -833,18 +689,15 @@ namespace DChild.Gameplay.Characters.Enemies
                     break;
                 case State.Attacking:
                     m_stateHandle.Wait(State.Cooldown);
-                    //m_animation.SetAnimation(0, m_info.idleAnimation, true);
                     m_agent.Stop();
-                    m_executeMoveCoroutine = StartCoroutine(ExecuteMove(/*m_currentAttackRange*//* m_currentAttackRange, */m_currentAttack));
-                    //StartCoroutine(AttackRoutine2());
+                    m_executeMoveCoroutine = StartCoroutine(ExecuteMove(m_currentAttack));
                     m_attackDecider.hasDecidedOnAttack = false;
                     break;
                 case State.Cooldown:
-                    //m_stateHandle.Wait(State.ReevaluateSituation);
                     if (!IsFacingTarget())
                     {
-                        m_turnState = State.Cooldown;
-                        m_stateHandle.SetState(State.Turning);
+                        m_stateHandle.SetState(State.Cooldown);
+                        CustomTurn();
                     }
                     else
                     {
@@ -867,7 +720,6 @@ namespace DChild.Gameplay.Characters.Enemies
 
                     break;
                 case State.Chasing:
-                    //OnDetection?.Invoke(this, EventActionArgs.Empty);
                     m_agent.Stop();
                     m_attackDecider.hasDecidedOnAttack = false;
                     ChooseAttack();
@@ -875,7 +727,6 @@ namespace DChild.Gameplay.Characters.Enemies
                     break;
 
                 case State.ReevaluateSituation:
-                    //How far is target, is it worth it to chase or go back to patrol
                     if (m_targetInfo.isValid)
                     {
 
@@ -885,7 +736,6 @@ namespace DChild.Gameplay.Characters.Enemies
 
                     {
                         m_stateHandle.SetState(State.Patrol);
-                        //timeCounter = 0;
                     }
                     break;
                 case State.WaitBehaviourEnd:
