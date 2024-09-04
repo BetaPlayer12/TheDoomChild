@@ -41,7 +41,7 @@ namespace DChild.Gameplay.Combat
                 isPlayer = GameplaySystem.playerManager.IsPartOfPlayer(character.gameObject, out m_owner);
             }
 
-            var bestiaryEntity = character.GetComponent< BestiaryEntity>();
+            var bestiaryEntity = character.GetComponent<BestiaryEntity>();
             hasBestiaryData = bestiaryEntity;
             if (hasBestiaryData)
             {
@@ -111,7 +111,7 @@ namespace DChild.Gameplay.Combat
                 this.breakableObject = breakableObject;
             }
 
-            var bestiaryEntity = breakableObject.GetComponent<BestiaryEntity>();
+            var bestiaryEntity = breakableObject?.GetComponent<BestiaryEntity>() ?? null;
             hasBestiaryData = bestiaryEntity;
             if (hasBestiaryData)
             {
