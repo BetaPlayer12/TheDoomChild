@@ -194,6 +194,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_explodeBB.enabled = true;
             yield return new WaitForSeconds(.25f);
             m_explodeBB.enabled = false;
+            yield return new WaitForSeconds(1f);
             m_parentObject.SetActive(false);
             yield return null;
         }

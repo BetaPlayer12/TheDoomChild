@@ -434,7 +434,7 @@ namespace DChild.Gameplay.Characters.Enemies
             /*
             m_deathHandle.enabled = true;
             enabled = false;*/
-            yield return new WaitForSeconds(2.5f);
+            yield return new WaitForSeconds(3.25f);
             m_animation.EnableRootMotion(true, false);
             m_parentObject.SetActive(false);
             Debug.Log("Die Mimic");
