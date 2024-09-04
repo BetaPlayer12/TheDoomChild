@@ -111,7 +111,10 @@ namespace DChild.Configurations
 
         public bool bloom
         {
-            get => m_screenLighting.bloom;
+            get
+            {
+                return m_screenLighting.bloom;
+            }
 
             set
             {
@@ -121,6 +124,22 @@ namespace DChild.Configurations
             }
         }
 
+        public int antiAliasing
+        {
+            get
+            {
+                return QualitySettings.antiAliasing;
+            }
+
+            set
+            {
+                QualitySettings.antiAliasing = value;
+                m_configuration.visualConfiguration.antiAliasingIndex = value;
+                SceneVisualsChange?.Invoke(this, EventActionArgs.Empty);
+            }
+        }
+
+    
         public void Initialize(GameSettingsConfiguration configuration)
         {
             m_configuration = configuration;
@@ -130,9 +149,9 @@ namespace DChild.Configurations
             m_screenResolution.SetFullscreen(visualConfiguration.fullscreen);
             m_screenResolution.Apply();
 
-
             m_screenLighting.brightness = visualConfiguration.brightness;
             m_screenLighting.contrast = visualConfiguration.contrast;
+            m_screenLighting.bloom = visualConfiguration.bloom;
             QualitySettings.vSyncCount = visualConfiguration.vsync ? 1 : 0;
         }
     }

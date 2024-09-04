@@ -1,4 +1,5 @@
-﻿using Sirenix.OdinInspector;
+﻿using Holysoft.Event;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Rendering;
 
@@ -19,18 +20,52 @@ namespace DChild.Configurations.Visuals
             }
         }
 
+        private void UpdateVisualSettings()
+        {
+
+            var bloomValue = GameSystem.settings.visual.bloom;
+            var brightnessValue = GameSystem.settings.visual.brightness;
+            var antiAliasing = GameSystem.settings.visual.antiAliasing;
+
+            var configuration = new PostProcessConfiguration()
+            {
+                gamma = brightnessValue,
+                isBloomEnabled = bloomValue,
+                antiAliasingIndex = antiAliasing,
+            };
+            SetConfiguration(configuration);
+
+            GameSystem.settings.visual.SceneVisualsChange += OnSettingsChange;
+        }
+
+        private void OnSettingsChange(object sender, EventActionArgs eventArgs)
+        {
+            OnModuleValueChange();
+        }
 
         private void OnModuleValueChange()
         {
-            var configuration = new PostProcessConfiguration();
+            var bloomValue = GameSystem.settings.visual.bloom;
+            var brightnessValue = GameSystem.settings.visual.brightness;
+            var antiAliasing = GameSystem.settings.visual.antiAliasing;
+
+            var configuration = new PostProcessConfiguration()
+            {
+                gamma = brightnessValue,
+                isBloomEnabled = bloomValue,
+                antiAliasingIndex = antiAliasing,
+            };
+
             for (int i = 0; i < m_modules.Length; i++)
             {
                 var module = m_modules[i];
-                module.ModifyConfiguration(ref configuration);
+                //module.ModifyConfiguration(ref configuration);
                 module.ApplyConfiguration(configuration);
             }
         }
 
+        
+              
         private void Awake()
         {
             renderingVolume = GetComponent<Volume>();
@@ -46,6 +81,15 @@ namespace DChild.Configurations.Visuals
             }
 
             if (hasFailedValidation) throw new System.NullReferenceException(validationMessage);
+        }
+
+        private void OnEnable()
+        {
+            UpdateVisualSettings();
+         }
+        private void OnDisable()
+        {
+            GameSystem.settings.visual.SceneVisualsChange -= OnSettingsChange;
         }
 
     }
