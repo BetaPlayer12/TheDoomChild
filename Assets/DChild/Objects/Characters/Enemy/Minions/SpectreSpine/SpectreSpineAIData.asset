@@ -60,7 +60,7 @@ MonoBehaviour:
     - Name: 
       Entry: 8
       Data: 
-    - Name: m_verticalAttack
+    - Name: m_verticalStabAttack
       Entry: 7
       Data: 3|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.SpectreSpineAI+Info,
         Assembly-CSharp]], Assembly-CSharp
@@ -72,13 +72,26 @@ MonoBehaviour:
       Data: 1
     - Name: m_range
       Entry: 4
-      Data: 50
+      Data: 30
     - Name: 
       Entry: 8
       Data: 
-    - Name: m_verticalAttackAnticipation
+    - Name: m_verticalStabFakeOut
       Entry: 7
       Data: 4|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.SpectreSpineAI+Info,
+        Assembly-CSharp]], Assembly-CSharp
+    - Name: m_animation
+      Entry: 1
+      Data: 2nd Attack Vertical Charged Penetrating Stab_Spin Loop
+    - Name: m_timeScale
+      Entry: 4
+      Data: 1
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: m_verticalStabStart
+      Entry: 7
+      Data: 5|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.SpectreSpineAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
@@ -89,9 +102,9 @@ MonoBehaviour:
     - Name: 
       Entry: 8
       Data: 
-    - Name: m_verticalAttackHit
+    - Name: m_verticalStabEnd
       Entry: 7
-      Data: 5|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.SpectreSpineAI+Info,
+      Data: 6|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.SpectreSpineAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
@@ -102,9 +115,9 @@ MonoBehaviour:
     - Name: 
       Entry: 8
       Data: 
-    - Name: m_chargeAttack
+    - Name: m_chargeStabAattack
       Entry: 7
-      Data: 6|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.SpectreSpineAI+Info,
+      Data: 7|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.SpectreSpineAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
@@ -114,13 +127,26 @@ MonoBehaviour:
       Data: 1
     - Name: m_range
       Entry: 4
-      Data: 50
+      Data: 30
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: m_attackCharge
+      Entry: 7
+      Data: 8|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.SpectreSpineAI+Info,
+        Assembly-CSharp]], Assembly-CSharp
+    - Name: m_animation
+      Entry: 1
+      Data: 1stAttack Charged Penetrating Stab_Attack Loop
+    - Name: m_timeScale
+      Entry: 4
+      Data: 1
     - Name: 
       Entry: 8
       Data: 
     - Name: m_chargeAttackEnd
       Entry: 7
-      Data: 7|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.SpectreSpineAI+Info,
+      Data: 9|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.SpectreSpineAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
@@ -133,7 +159,7 @@ MonoBehaviour:
       Data: 
     - Name: m_chargeAttackAnticipation
       Entry: 7
-      Data: 8|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.SpectreSpineAI+Info,
+      Data: 10|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.SpectreSpineAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
@@ -146,7 +172,7 @@ MonoBehaviour:
       Data: 
     - Name: m_chargeAttackAimComplete
       Entry: 7
-      Data: 9|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.SpectreSpineAI+Info,
+      Data: 11|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.SpectreSpineAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
@@ -157,24 +183,24 @@ MonoBehaviour:
     - Name: 
       Entry: 8
       Data: 
-    - Name: m_numberOfSwings
-      Entry: 3
+    - Name: m_attackCD
+      Entry: 4
+      Data: 1
+    - Name: m_swingNumber
+      Entry: 4
       Data: 5
     - Name: m_swingDuration
       Entry: 4
       Data: 2
-    - Name: m_attackCD
-      Entry: 4
-      Data: 1
     - Name: m_targetDistanceTolerance
       Entry: 4
-      Data: 0
+      Data: 50
     - Name: m_patienceDistanceTolerance
       Entry: 4
       Data: 50
     - Name: m_detectAnimation
       Entry: 7
-      Data: 10|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.SpectreSpineAI+Info,
+      Data: 12|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.SpectreSpineAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
@@ -187,7 +213,7 @@ MonoBehaviour:
       Data: 
     - Name: m_idleAnimation
       Entry: 7
-      Data: 11|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.SpectreSpineAI+Info,
+      Data: 13|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.SpectreSpineAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
@@ -200,7 +226,7 @@ MonoBehaviour:
       Data: 
     - Name: m_deathAnimation
       Entry: 7
-      Data: 12|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.SpectreSpineAI+Info,
+      Data: 14|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.SpectreSpineAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
@@ -213,7 +239,7 @@ MonoBehaviour:
       Data: 
     - Name: m_flinchAnimation
       Entry: 7
-      Data: 13|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.SpectreSpineAI+Info,
+      Data: 15|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.SpectreSpineAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
@@ -226,7 +252,7 @@ MonoBehaviour:
       Data: 
     - Name: m_fadeInAnimation
       Entry: 7
-      Data: 14|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.SpectreSpineAI+Info,
+      Data: 16|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.SpectreSpineAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
@@ -239,7 +265,7 @@ MonoBehaviour:
       Data: 
     - Name: m_fadeOutAnimation
       Entry: 7
-      Data: 15|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.SpectreSpineAI+Info,
+      Data: 17|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.SpectreSpineAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
