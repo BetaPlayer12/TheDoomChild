@@ -386,10 +386,6 @@ namespace DChild.Gameplay.Characters.Enemies
 
         protected override void OnDestroyed(object sender, EventActionArgs eventArgs)
         {
-
-
-            base.OnDestroyed(sender, eventArgs);
-
             StopAllCoroutines();
             if (m_executeMoveCoroutine != null)
             {
@@ -397,14 +393,15 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_executeMoveCoroutine = null;
             }
             m_animation.SetEmptyAnimation(0, 0);
-            if (m_isAggro)
+            /*if (m_isAggro)
             {
                 m_deathHandle.SetAnimation(m_info.deathAggroAnimation.animation);
-            }
+            }*/
             StartCoroutine(DeathRoutine());
             m_agent.Stop();
             m_bodycollider.enabled = false;
             m_selfCollider.SetActive(false);
+            base.OnDestroyed(sender, eventArgs);
         }
 
         private IEnumerator DeathRoutine()
@@ -418,17 +415,11 @@ namespace DChild.Gameplay.Characters.Enemies
                 yield return new WaitForAnimationComplete(m_animation.animationState, m_info.deathAggroAnimation);
                 m_animation.SetAnimation(0, m_info.deathUnAggroAnimation, false);
                 yield return new WaitForAnimationComplete(m_animation.animationState, m_info.deathUnAggroAnimation);
-                m_ExplosionBB.SetActive(true);
-                yield return new WaitForSeconds(.25f);
-                m_ExplosionBB.SetActive(false);
             }
             else
             {
                 m_animation.SetAnimation(0, m_info.deathUnAggroAnimation, false);
                 yield return new WaitForAnimationComplete(m_animation.animationState, m_info.deathUnAggroAnimation);
-                m_ExplosionBB.SetActive(true);
-                yield return new WaitForSeconds(.25f);
-                m_ExplosionBB.SetActive(false);
             }
             yield return new WaitForSeconds(.75f);
             /*
@@ -534,12 +525,10 @@ namespace DChild.Gameplay.Characters.Enemies
             m_agent.SetDestination(target);
             if (IsFacing(target))
             {
-                Debug.Log("BBBBBBB");
                 m_agent.Move(moveSpeed);
             }
             else
             {
-                Debug.Log("AAAAAAAAA");
                 m_stateHandle.OverrideState(State.Turning);
             }
         }
@@ -551,10 +540,19 @@ namespace DChild.Gameplay.Characters.Enemies
             m_returnToOriginalPos=true;
         }
 
-
-
         #endregion
 
+        public void ExplodeDamage()
+        {
+            StartCoroutine(ExplodeRoutine());
+        }
+
+        IEnumerator ExplodeRoutine()
+        {
+            m_ExplosionBB.SetActive(true);
+            yield return new WaitForSeconds(.25f);
+            m_ExplosionBB.SetActive(false);
+        }
 
         private void SwapPustuleBombPosition()
         {

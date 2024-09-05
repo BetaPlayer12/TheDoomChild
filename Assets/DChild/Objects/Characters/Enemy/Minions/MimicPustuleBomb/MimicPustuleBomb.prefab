@@ -604,7 +604,7 @@ MonoBehaviour:
   m_animator: {fileID: 2715395151254739910}
   m_animation: Death Explode_Fx
   m_bodyDuration:
-    m_startTime: 1
+    m_startTime: 1.3
   m_fx: []
   m_destroySource: 0
 --- !u!114 &2292168603449394195
@@ -1614,7 +1614,7 @@ MonoBehaviour:
     type: 3}
   m_PrefabInstance: {fileID: 7872022250898410860}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 6070641769478778414}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d247ba06193faa74d9335f5481b2b56c, type: 3}
@@ -1626,6 +1626,43 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 7872022250898410860}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &6070641769478778414 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4107364228798292802, guid: 0082acf3036c14d45a195ea96625deb7,
+    type: 3}
+  m_PrefabInstance: {fileID: 7872022250898410860}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &8798363828957931643
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6070641769478778414}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42be6986c6a2a414fa5ceddb0018fe09, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_skeletonAnimation: {fileID: 6070641769478778412}
+  m_eventInfo:
+  - m_eventName: Death explode FX
+    m_onEventCalled:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 5224928624376903593}
+          m_TargetAssemblyTypeName: DChild.Gameplay.Characters.Enemies.MimicPustuleBombAI,
+            Assembly-CSharp
+          m_MethodName: ExplodeDamage
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!114 &6951513381634869671 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 956933628015527115, guid: 0082acf3036c14d45a195ea96625deb7,
