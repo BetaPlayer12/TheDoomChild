@@ -25,13 +25,12 @@ namespace DChild.Configurations.Visuals
 
             var bloomValue = GameSystem.settings.visual.bloom;
             var brightnessValue = GameSystem.settings.visual.brightness;
-            var antiAliasing = GameSystem.settings.visual.antiAliasing;
+
 
             var configuration = new PostProcessConfiguration()
             {
                 gamma = brightnessValue,
                 isBloomEnabled = bloomValue,
-                antiAliasingIndex = antiAliasing,
             };
             SetConfiguration(configuration);
 
@@ -47,13 +46,11 @@ namespace DChild.Configurations.Visuals
         {
             var bloomValue = GameSystem.settings.visual.bloom;
             var brightnessValue = GameSystem.settings.visual.brightness;
-            var antiAliasing = GameSystem.settings.visual.antiAliasing;
 
             var configuration = new PostProcessConfiguration()
             {
                 gamma = brightnessValue,
                 isBloomEnabled = bloomValue,
-                antiAliasingIndex = antiAliasing,
             };
 
             for (int i = 0; i < m_modules.Length; i++)
@@ -63,8 +60,7 @@ namespace DChild.Configurations.Visuals
                 module.ApplyConfiguration(configuration);
             }
         }
-
-        
+               
               
         private void Awake()
         {

@@ -22,6 +22,7 @@ namespace DChild.Configurations
             public float brightness;
             [MinValue(0)]
             public float contrast;
+            public int antiAliasingIndex;
         }
 
         [Serializable]
@@ -51,7 +52,8 @@ namespace DChild.Configurations
                 vsync = true,
                 bloom = true,
                 brightness = 0.5f,
-                contrast = 0.5f
+                contrast = 0.5f,
+                antiAliasingIndex = 0
             };
 
             audioConfiguration = new AudioConfiguration

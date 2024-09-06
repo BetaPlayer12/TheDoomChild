@@ -4,11 +4,12 @@ using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 
 namespace DChild.Configurations
 {
     [System.Serializable]
-    public class VisualSettingsHandle
+    public class VisualSettingsHandle   
     {
         [SerializeField]
         private SupportedResolutions m_supportedResolutions;
@@ -18,6 +19,8 @@ namespace DChild.Configurations
         [BoxGroup("Configurators")]
         [SerializeField]
         private ScreenLighting m_screenLighting;
+
+        private AntialiasingMode m_antialiasing;
 
         private GameSettingsConfiguration m_configuration;
 
@@ -128,12 +131,12 @@ namespace DChild.Configurations
         {
             get
             {
-                return QualitySettings.antiAliasing;
+                return (int) m_antialiasing;
             }
 
             set
             {
-                QualitySettings.antiAliasing = value;
+                m_antialiasing = (AntialiasingMode) value;
                 m_configuration.visualConfiguration.antiAliasingIndex = value;
                 SceneVisualsChange?.Invoke(this, EventActionArgs.Empty);
             }
@@ -152,6 +155,8 @@ namespace DChild.Configurations
             m_screenLighting.brightness = visualConfiguration.brightness;
             m_screenLighting.contrast = visualConfiguration.contrast;
             m_screenLighting.bloom = visualConfiguration.bloom;
+
+            m_antialiasing = (AntialiasingMode) visualConfiguration.antiAliasingIndex;
             QualitySettings.vSyncCount = visualConfiguration.vsync ? 1 : 0;
         }
     }
