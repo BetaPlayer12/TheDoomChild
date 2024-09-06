@@ -344,9 +344,9 @@ namespace DChild.Gameplay.Characters.Enemies
             CustomTurn();
             m_animation.SetAnimation(0, m_info.brokeToIdleAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.brokeToIdleAnimation);
-            m_flinchHandle.SetAnimation(m_info.flinchAnimation.animation);
-            m_flinchHandle.SetIdleAnimation(m_info.idleAnimation.animation);
-            m_flinchHandle.m_enableEmpytyIdle = false;
+            //m_flinchHandle.SetAnimation(m_info.flinchAnimation.animation);
+            //m_flinchHandle.SetIdleAnimation(m_info.idleAnimation.animation);
+            //m_flinchHandle.m_enableEmpytyIdle = false;
             m_hitbox.Enable();
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_stateHandle.OverrideState(State.ReevaluateSituation);
@@ -427,7 +427,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_hitbox.Disable();
            
       
-            m_flinchHandle.enabled = false;
+           // m_flinchHandle.enabled = false;
             m_patrolHandle.TurnRequest += OnTurnRequest;
             m_attackHandle.AttackDone += OnAttackDone;
             m_turnHandle.TurnDone += OnTurnDone;
