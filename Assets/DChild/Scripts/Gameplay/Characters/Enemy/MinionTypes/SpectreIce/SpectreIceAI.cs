@@ -534,12 +534,12 @@ namespace DChild.Gameplay.Characters.Enemies
             var zeeYPosition = m_targetInfo.position.y + 40f;
             while (!inRange || TargetBlocked())
             {
-                newPos = new Vector2(m_character.facing == HorizontalDirection.Left? m_targetInfo.position.x + 10 : m_targetInfo.position.x - 10, zeeYPosition);
                 if (m_headSensor.isDetecting)
                 {
                     m_agent.Stop();
                     zeeYPosition = transform.position.y;
                 }
+                newPos = new Vector2(m_character.facing == HorizontalDirection.Left? m_targetInfo.position.x + 10 : m_targetInfo.position.x - 10, zeeYPosition);
                 bool xTargetInRange = Mathf.Abs(newPos.x - transform.position.x) < m_currentAttackRange ? true : false;
                 bool yTargetInRange = Mathf.Abs(newPos.y - transform.position.y) < m_currentAttackRange ? true : false;
                 if (xTargetInRange && yTargetInRange)
