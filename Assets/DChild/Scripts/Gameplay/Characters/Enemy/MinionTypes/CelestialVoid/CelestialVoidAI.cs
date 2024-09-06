@@ -397,14 +397,6 @@ namespace DChild.Gameplay.Characters.Enemies
             }*/
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.healAnticipationAnimation);
             m_animation.SetAnimation(0, m_info.healAnimation, false);
-            if (m_willTeleportPlayer)
-            {
-                
-                m_targetInfo.transform.position = m_teleportationMarker.position;
-                /*if (longTime)
-                {
-                }*/
-            }
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.healAnimation);
             m_animation.SetAnimation(0, m_info.healEndAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.healEndAnimation);
@@ -720,19 +712,23 @@ namespace DChild.Gameplay.Characters.Enemies
         public IEnumerator ActivateTeleportFX()
         {
             m_stateHandle.Wait(State.ReturnToPatrol);
-            instance = GameSystem.poolManager.GetPool<PoolableObjectPool>().GetOrCreateItem(m_info.teleportMarker);
-            instance.SpawnAt(new Vector2(m_targetInfo.position.x, m_targetInfo.position.y - 2f), Quaternion.identity);
-            GameplaySystem.playerManager.DisableControls();
-            GameplaySystem.gamplayUIHandle.ToggleFadeUI(true);
-            yield return new WaitForSeconds(.7f);
-            //instance.gameObject.transform.SetParent(m_targetInfo.transform);
-            instance.transform.position = m_targetInfo.position;
-            yield return new WaitForSeconds(.7f);
-            GameplaySystem.gamplayUIHandle.ToggleFadeUI(false);
-            yield return new WaitForSeconds(.5f);
-            GameplaySystem.playerManager.EnableControls();
-            m_stateHandle.ApplyQueuedState();
-            m_willTeleportPlayer = false;
+            if (m_willTeleportPlayer)
+            {
+                instance = GameSystem.poolManager.GetPool<PoolableObjectPool>().GetOrCreateItem(m_info.teleportMarker);
+                instance.SpawnAt(new Vector2(m_targetInfo.position.x, m_targetInfo.position.y - 2f), Quaternion.identity);
+                //instance.transform.SetParent(m_targetInfo.transform.parent); //Attempt 
+                GameplaySystem.playerManager.DisableControls();
+                GameplaySystem.gamplayUIHandle.ToggleFadeUI(true);
+                yield return new WaitForSeconds(.25f);
+                m_targetInfo.transform.position = m_teleportationMarker.position;
+                //instance.transform.position = m_targetInfo.position;
+                /*yield return new WaitForSeconds(.5f);*/
+                GameplaySystem.gamplayUIHandle.ToggleFadeUI(false);
+                yield return new WaitForSeconds(.5f);
+                GameplaySystem.playerManager.EnableControls();
+                m_stateHandle.ApplyQueuedState();
+                m_willTeleportPlayer = false;
+            }
             yield return null;
         }
         protected override void OnTargetDisappeared()

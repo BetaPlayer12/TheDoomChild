@@ -70,7 +70,7 @@ public class TeleportPlayer : MonoBehaviour
     private bool willTeleport;
     private IEnumerator TurnOffRoutine()
     {
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(.5f);
         m_boxCollider.enabled = false;
     }
     private IEnumerator TriggerRoutine()
