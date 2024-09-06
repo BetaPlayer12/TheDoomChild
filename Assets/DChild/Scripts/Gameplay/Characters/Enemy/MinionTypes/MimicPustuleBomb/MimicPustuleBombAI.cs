@@ -176,8 +176,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private AttackHandle m_attackHandle;
         [SerializeField, TabGroup("Modules")]
         private PatrolHandle m_patrolHandle;
-        [SerializeField, TabGroup("Modules")]
-        private DeathHandle m_deathHandle;
+        //[SerializeField, TabGroup("Modules")]
+        //private DeathHandle m_deathHandle;
         [SerializeField, TabGroup("Modules")]
         private FlinchHandler m_flinchHandle;
         [SerializeField, TabGroup("Modules")]
@@ -425,7 +425,7 @@ namespace DChild.Gameplay.Characters.Enemies
             /*
             m_deathHandle.enabled = true;
             enabled = false;*/
-            yield return new WaitForSeconds(3.25f);
+            yield return new WaitForSeconds(1.25f);
             m_animation.EnableRootMotion(true, false);
             m_parentObject.SetActive(false);
             Debug.Log("Die Mimic");
@@ -595,7 +595,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_flinchHandle.FlinchStart += OnFlinchStart;
             m_flinchHandle.FlinchEnd += OnFlinchEnd;
             m_turnHandle.TurnDone += OnTurnDone;
-            m_deathHandle.SetAnimation(m_info.deathAggroAnimation.animation);
+            //m_deathHandle.SetAnimation(m_info.deathAggroAnimation.animation);
             m_stateHandle = new StateHandle<State>(State.Patrol, State.WaitBehaviourEnd);
             m_attackDecider = new RandomAttackDecider<Attack>();
             UpdateAttackDeciderList();
