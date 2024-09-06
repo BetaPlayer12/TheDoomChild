@@ -660,7 +660,7 @@ namespace DChild.Gameplay.Characters.Enemies
                             Debug.Log(Vector2.Distance(m_startPos, transform.position)+" AAAAAAAAAAAAAAAAAAAA");
                             m_mimicPustuleBombChain.enabled = true;
                             m_returnToOriginalPos = false;
-                            m_rigidbody2D.velocity = Vector2.zero;
+                            //m_rigidbody2D.velocity = Vector2.zero;
                         }
                         else
                         {
