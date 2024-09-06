@@ -514,7 +514,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_canUseIcePlunge = true;
                     m_icePlungeSameAttackCounter = 0;
                 }
-                yield return null;
+                yield break;
             }
             yield return null;
         }
