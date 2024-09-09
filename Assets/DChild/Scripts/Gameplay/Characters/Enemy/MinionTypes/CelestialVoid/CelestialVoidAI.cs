@@ -147,6 +147,8 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Modules")]
         private PatrolHandle m_patrolHandle;
         [SerializeField, TabGroup("Modules")]
+        private WayPointPatrol m_waypointHandle;
+        [SerializeField, TabGroup("Modules")]
         private AttackHandle m_attackHandle;
         [SerializeField, TabGroup("Modules")]
         private DeathHandle m_deathHandle;
@@ -237,19 +239,20 @@ namespace DChild.Gameplay.Characters.Enemies
                         Patience();
                     }
                 }*/
-                //StopAllCoroutines();
-                //m_isDetecting = false; 
+                StopAllCoroutines();
+                m_isDetecting = false; 
                 if (m_stateHandle.currentState == State.WaitBehaviourEnd)
                 {
-                    //StopAllCoroutines();
+                    StopAllCoroutines();
                     StartCoroutine(PatienceRoutine());
                     m_stateHandle.OverrideState(State.ReturnToPatrol);
                     Debug.Log("State of waitBehaviourEnd");
                 }
                 else
                 {
-                    //StopAllCoroutines();
+                    StopAllCoroutines();
                     StartCoroutine(PatienceRoutine());
+                    Debug.Log("or here");
                 }
             }
         }
@@ -615,6 +618,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     if (IsFacingTarget())
                     {
                         m_stateHandle.Wait(State.ReevaluateSituation);
+                        m_willTeleportPlayer = false;
                         StartCoroutine(DetectRoutine());
                     }
                     else

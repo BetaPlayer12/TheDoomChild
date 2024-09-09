@@ -66,7 +66,7 @@ public class TeleportPlayer : MonoBehaviour
         StartCoroutine(TurnOffRoutine());
     }
     private float time = 0f;
-    private float duration = 1f;
+    private float duration = 1.5f;
     private bool willTeleport;
     private IEnumerator TurnOffRoutine()
     {
