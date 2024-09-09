@@ -157,13 +157,17 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Reference")]
         private GameObject m_selfCollider;
         [SerializeField, TabGroup("Reference")]
-        private BoxCollider2D m_AttackBB;
+        private BoxCollider2D m_chargedAttackBB;
+        [SerializeField, TabGroup("Reference")]
+        private BoxCollider2D m_stabAttackBB;
         [SerializeField, TabGroup("Reference")]
         private Collider2D m_bodyCollider;
         [SerializeField, TabGroup("Reference")]
         private Hitbox m_hitbox;
         [SerializeField, TabGroup("Reference")]
-        private Attacker m_attacker;
+        private Attacker m_chargedAttackAttacker;
+        [SerializeField, TabGroup("Reference")]
+        private Attacker m_stabAttackAttacker;
         [SerializeField, TabGroup("Modules")]
         private TransformTurnHandle m_turnHandle;
         [SerializeField, TabGroup("Modules")]
@@ -382,9 +386,9 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return FakeOutRoutine();
 
             //attackProper
-            m_attacker.TargetDamaged += OnTargetHit;
+            m_stabAttackAttacker.TargetDamaged += OnTargetHit;
             var targetPOsition = m_targetInfo.position;
-            m_AttackBB.enabled = true;
+            m_stabAttackAttacker.enabled = true;
             m_animation.SetAnimation(0, m_info.verticalStabAttack.animation, false);
 
             do
@@ -417,7 +421,8 @@ namespace DChild.Gameplay.Characters.Enemies
                 CustomTurn();
             }
             m_hitbox.gameObject.SetActive(true);
-            m_AttackBB.enabled = false;
+            m_stabAttackBB.enabled = false;
+            m_stabAttackAttacker.TargetDamaged -= OnTargetHit;
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_selfCollider.SetActive(false);
             m_stateHandle.ApplyQueuedState();
@@ -502,8 +507,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator ChargedStabRoutine()
         {
             transform.rotation = Quaternion.Euler(0f, 0f, 0f);
-            m_attacker.TargetDamaged += OnTargetHit;
-            m_AttackBB.enabled = true;
+            m_chargedAttackAttacker.TargetDamaged += OnTargetHit;
+            m_chargedAttackBB.enabled = true;
             float distanceToGround = 0f;
             m_animation.SetAnimation(0, m_info.fadeOutAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.fadeOutAnimation);
@@ -569,8 +574,8 @@ namespace DChild.Gameplay.Characters.Enemies
             }
             m_hitbox.gameObject.SetActive(true);
             m_selfCollider.SetActive(false);
-            m_AttackBB.enabled = false;
-            m_attacker.TargetDamaged -= OnTargetHit;
+            m_chargedAttackBB.enabled = false;
+            m_chargedAttackAttacker.TargetDamaged -= OnTargetHit;
             m_stateHandle.ApplyQueuedState();
             yield return null;
         }
