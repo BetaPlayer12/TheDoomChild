@@ -186,6 +186,10 @@ namespace DChild.Gameplay.Characters.Enemies
         private DamageContactLocator m_damageContactLocator;
         [SerializeField, TabGroup("Modules")]
         private CollisionEventActionArgs collisionEvent;
+        [SerializeField,TabGroup("Modules")]
+        NavigationTracker navigationTracker = null;
+        [SerializeField, TabGroup("Modules")]
+        MovementHandle2D movementOverrideHandle;
 
         [ShowInInspector]
         private StateHandle<State> m_stateHandle;
@@ -203,12 +207,14 @@ namespace DChild.Gameplay.Characters.Enemies
         private float m_currentCD;
         private float m_randomRangeMin = 150f;
         private float m_randomRangeMax = 250f;
+        private bool m_pathChecked;
 
         private bool m_isDetecting;
         private bool m_isAggro;
         private bool m_isFirstPatrol = true;
         private bool m_returnToOriginalPos;
         private Vector2 m_startPos;
+        private Vector2 m_OutOfBoundMoveDir;
 
         private List<Vector2> m_Points;
 
@@ -514,7 +520,7 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return new WaitForSeconds(delay);
             if(Vector2.Distance(m_startPos, transform.position) > m_info.distanceToOriginReturnTolerance)
             {
-                m_returnToOriginalPos = true;
+                //m_returnToOriginalPos = true;
                 m_stateHandle.OverrideState(State.ReturnToPatrol);
                 //m_mimicPustuleBombChain.enabled = true;
             }
@@ -523,14 +529,46 @@ namespace DChild.Gameplay.Characters.Enemies
         private void DynamicMovement(Vector2 target, float moveSpeed)
         {
             m_agent.SetDestination(target);
-            if (IsFacing(target))
+            if (!m_pathChecked)
             {
+                Debug.Log("2");
                 m_agent.Move(moveSpeed);
+                if (!navigationTracker.wasEntityInStartingPathSegment)
+                {
+                    Debug.Log("3");
+                    m_agent.Stop();
+                    m_OutOfBoundMoveDir = ( navigationTracker.previousPathSegment- transform.position).normalized;
+                    //Move Towards navigationTracker.previousPathSegment; using movementOverrideHandle.MoveTowards
+                }
+                m_pathChecked = true;
             }
-            else
+            if (m_agent.hasPath)
             {
-                m_stateHandle.OverrideState(State.Turning);
+                Debug.Log("1");
+                {
+                    if(Vector3.Distance(navigationTracker.previousPathSegment, transform.position) > 5f&&!navigationTracker.wasEntityInStartingPathSegment)
+                    {
+                        Debug.Log("4");
+                        Debug.Log(m_OutOfBoundMoveDir);
+                        m_returnToOriginalPos = true;
+                        movementOverrideHandle.MoveTowards(m_OutOfBoundMoveDir, m_info.move.speed);
+                    }
+                    else
+                    {
+                        m_rigidbody2D.velocity = Vector2.zero;
+                        if (IsFacing(target))
+                        {
+                            Debug.Log("5");
+                            m_agent.Move(moveSpeed);
+                        }
+                        else
+                        {
+                            m_stateHandle.OverrideState(State.Turning);
+                        }
+                    }
+                }
             }
+            Debug.Log("6");
         }
 
         private IEnumerator ReturnToOriginalPosition(float delay)
@@ -630,23 +668,23 @@ namespace DChild.Gameplay.Characters.Enemies
 
                 case State.ReturnToPatrol:
 
-                    if(m_detectRoutine != null)
+                    if (m_detectRoutine != null)
                     {
                         m_detectRoutine = null;
                     }
-                   
+
                     if (Vector2.Distance(m_startPos, transform.position) > 3f)
                     {
-                        if (m_isAggro) 
+                        if (m_isAggro)
                         {
                             StartCoroutine(TransformUnAggroRoutine());
                         }
-                        
+
                         DynamicMovement(m_startPos, m_info.move.speed);
                         m_aggroGroup.SetActive(false);
-                        m_rigidbody2D.velocity = Vector2.zero;
+                        //m_rigidbody2D.velocity = Vector2.zero;
                         m_turnState = State.ReturnToPatrol;
-                        
+
                     }
                     else
                     {
@@ -654,13 +692,14 @@ namespace DChild.Gameplay.Characters.Enemies
                         {
                             StartCoroutine(TransformUnAggroRoutine());
                         }
-                        
-                        if(m_returnToOriginalPos)//&& Vector2.Distance(m_startPos, transform.position) < 0.2f)
+
+                        if (m_returnToOriginalPos)//&& Vector2.Distance(m_startPos, transform.position) < 0.2f)
                         {
-                            Debug.Log(Vector2.Distance(m_startPos, transform.position)+" AAAAAAAAAAAAAAAAAAAA");
+                            Debug.Log(Vector2.Distance(m_startPos, transform.position) + " AAAAAAAAAAAAAAAAAAAA");
                             m_mimicPustuleBombChain.enabled = true;
                             m_returnToOriginalPos = false;
-                            //m_rigidbody2D.velocity = Vector2.zero;
+                            m_rigidbody2D.velocity = Vector2.up;
+                            m_pathChecked = false;
                         }
                         else
                         {
@@ -669,7 +708,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         m_aggroGroup.SetActive(false);
                         m_stateHandle.OverrideState(State.Patrol);
                     }
-                    
+
                     break;
 
                 case State.Patrol:
