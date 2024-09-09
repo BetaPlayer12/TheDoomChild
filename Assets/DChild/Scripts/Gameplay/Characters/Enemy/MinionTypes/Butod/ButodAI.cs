@@ -169,6 +169,9 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private Vector2 m_targetLastPos;
 
+        [HideInInspector]
+        public bool stateHandle  => m_stateHandle.currentState == State.Attacking;
+
         private void OnAttackDone(object sender, EventActionArgs eventArgs)
         {
             //m_animation.DisableRootMotion();

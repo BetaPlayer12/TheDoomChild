@@ -26,8 +26,11 @@ namespace DChild.Gameplay.Cinematics
         private CameraPeekMode m_currentLookAhead;
 
         private bool m_leavePreviousCamAsNull;
-        [OdinSerialize]
+        [SerializeField]
         private CameraShakeHandle m_cameraShakeHandle;
+        [SerializeField]
+        public bool m_useCameraPrioritization;
+
         private bool m_hasTemporaryShakeProfile;
         private CameraShakeType m_temporaryShakeProfile;
 
@@ -39,26 +42,35 @@ namespace DChild.Gameplay.Cinematics
 
         public void TransistionTo(IVirtualCamera vCam)
         {
-            if (m_currentVCam != null)
+            if (m_useCameraPrioritization)
             {
-                m_currentVCam.Deactivate();
-                m_offsetHandle.CopyOffset(m_currentVCam, vCam);
-                if (m_leavePreviousCamAsNull)
+                vCam.Activate();
+                m_offsetHandle.ApplyOffset(vCam, m_currentLookAhead);
+            }
+            else
+            {
+                if (m_currentVCam != null)
+                {
+                    m_currentVCam.Deactivate();
+                    m_offsetHandle.CopyOffset(m_currentVCam, vCam);
+                    if (m_leavePreviousCamAsNull)
+                    {
+                        m_currentVCam = vCam;
+                        m_leavePreviousCamAsNull = false;
+                    }
+                    else
+                    {
+                        m_previousCam = m_currentVCam;
+                        m_currentVCam = vCam;
+                    }
+                }
+                else
                 {
                     m_currentVCam = vCam;
                     m_leavePreviousCamAsNull = false;
                 }
-                else
-                {
-                    m_previousCam = m_currentVCam;
-                    m_currentVCam = vCam;
-                }
             }
-            else
-            {
-                m_currentVCam = vCam;
-                m_leavePreviousCamAsNull = false;
-            }
+            m_cameraShakeHandle.SetCamera(m_currentVCam);
 #if UNITY_EDITOR
             Debug.Log($"Camera Activated: {vCam.name}");
 #endif
@@ -68,20 +80,27 @@ namespace DChild.Gameplay.Cinematics
 
         public void ResolveCamTransistion(IVirtualCamera vCam)
         {
-            if (vCam == m_previousCam)
+            if (m_useCameraPrioritization)
             {
-                m_previousCam = null;
+                vCam.Deactivate();
             }
-            else if (vCam == m_currentVCam)
+            else
             {
-                if (m_previousCam == null)
+                if (vCam == m_previousCam)
                 {
-                    m_leavePreviousCamAsNull = true;
-                }
-                else
-                {
-                    TransistionTo(m_previousCam);
                     m_previousCam = null;
+                }
+                else if (vCam == m_currentVCam)
+                {
+                    if (m_previousCam == null)
+                    {
+                        m_leavePreviousCamAsNull = true;
+                    }
+                    else
+                    {
+                        TransistionTo(m_previousCam);
+                        m_previousCam = null;
+                    }
                 }
             }
         }
@@ -103,38 +122,32 @@ namespace DChild.Gameplay.Cinematics
 
         public void EnableCameraShake(bool enable)
         {
-            m_cameraShakeHandle.EnableCameraShake(enable);
             if (m_hasTemporaryShakeProfile && enable == false)
             {
-                SetCameraShakeProfile(m_temporaryShakeProfile);
             }
         }
 
-        public void SetCameraShake(float amplitude, float frequency)
-        {
-            m_cameraShakeHandle.SetCameraShake(amplitude, frequency);
-        }
 
-        public void SetCameraShakeProfile(CameraShakeType shakeType, bool onNextShakeOnly = false)
+
+        public void ExecuteCameraShake(CameraShakeData info)
         {
-            if (onNextShakeOnly)
+            if (info == null)
             {
-                m_temporaryShakeProfile = m_cameraShakeHandle.currentShakeType;
-                m_hasTemporaryShakeProfile = true;
+                Debug.LogWarning("WARNING: THERE WAS AN ATTEMPT TO EXECUTE A NULL CAMERA SHAKE");
             }
             else
             {
-                m_hasTemporaryShakeProfile = false;
+                m_cameraShakeHandle.Execute(info);
             }
-            m_cameraShakeHandle.SetCameraShakeProfile(shakeType);
         }
+
+
 
         public void ClearLists()
         {
             m_currentVCam = null;
             m_previousCam = null;
             m_trackingCameras?.Clear();
-            m_cameraShakeHandle.ClearList();
         }
 
         public void AllowTracking(ITrackingCamera trackingCamera)
@@ -152,7 +165,6 @@ namespace DChild.Gameplay.Cinematics
         {
             if (trackingCamera.noiseModule != null)
             {
-                m_cameraShakeHandle.RegisterNoiseModule(trackingCamera.noiseModule);
             }
         }
 
@@ -161,7 +173,6 @@ namespace DChild.Gameplay.Cinematics
             m_trackingCameras.Remove(trackingCamera);
             if (trackingCamera.noiseModule != null)
             {
-                m_cameraShakeHandle.UnregisterNoiseModule(trackingCamera.noiseModule);
             }
         }
 
@@ -184,7 +195,6 @@ namespace DChild.Gameplay.Cinematics
         public void Initialize()
         {
             m_trackingCameras = new List<ITrackingCamera>();
-            m_cameraShakeHandle.Initialize();
             m_offsetHandle = GetComponent<CameraPeekHandle>();
         }
 
@@ -199,6 +209,8 @@ namespace DChild.Gameplay.Cinematics
         {
             m_trackingTarget = centerOfMass;
         }
+
+
 #endif
     }
 }
