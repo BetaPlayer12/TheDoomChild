@@ -332,7 +332,7 @@ namespace DChild.Gameplay.Characters.Enemies
         }
         private IEnumerator FakeOutRoutine()
         {
-            var distanceToGround = Vector2.Distance(transform.position, GroundPosition());
+            var distanceToGround = 0f;
             var distanceToWall = Vector2.Distance(transform.position, WallPosition());
             var lastPostion = transform.position;
             var targetPosition = m_targetInfo.position;
@@ -340,24 +340,25 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_info.verticalStabFakeOut, true);
             do
             {
-                m_agent.MoveTowardsForced(new Vector2(targetPosition.x, GroundPosition().y + 1), 120);
-                distanceToGround = MathF.Abs(transform.position.y - GroundPosition().y + 1);
+                m_agent.MoveTowardsForced(Vector2.down, 50);
+                distanceToGround = MathF.Abs(transform.position.y - targetPosition.y);
                 distanceToWall = Vector2.Distance(transform.position, WallPosition());
 
                 yield return null;
-            } while (distanceToGround >= 20f && distanceToWall >= 20f);
+            } while (distanceToGround > 15f && distanceToWall >= 20f);
 
             m_agent.Stop();
+
             yield return null;
 
-            m_animation.SetAnimation(0, m_info.verticalStabFakeOut, true);
             do
             {
-                m_agent.MoveTowardsForced(new Vector2(targetPosition.x, lastPostion.y + 20), 120);
-                distanceToGround = MathF.Abs(transform.position.y - lastPostion.y + 20);
+                m_agent.MoveTowardsForced(Vector2.up, 50);
+                distanceToGround = MathF.Abs(transform.position.y - GroundPosition().y);
                 distanceToWall = Vector2.Distance(transform.position, WallPosition());
                 yield return null;
-            } while (distanceToGround <= 20f && distanceToWall >= 20f);
+            } while (distanceToGround <= 30f && distanceToWall >= 20f);
+
             m_agent.Stop();
             yield return null;
         }
@@ -392,7 +393,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 distanceToGround = MathF.Abs(transform.position.y - GroundPosition().y + 1);
                 distanceToWall = Vector2.Distance(transform.position, WallPosition());
                 yield return null;
-            } while (distanceToGround >= 4f && distanceToWall >= 20f);
+            } while (distanceToGround >= 10f && distanceToWall >= 20f);
 
             m_agent.Stop();
             m_dustTrail.Stop();
@@ -530,7 +531,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 distanceToGround = MathF.Abs(transform.position.y - GroundPosition().y + 1);
                 distanceToWall = Vector2.Distance(transform.position, WallPosition());
                 yield return null;
-            } while (distanceToGround >= 4f && distanceToWall >= 20f);
+            } while (distanceToGround >= 10f && distanceToWall >= 20f);
             m_dustTrail.Stop();
             m_agent.Stop();
 
