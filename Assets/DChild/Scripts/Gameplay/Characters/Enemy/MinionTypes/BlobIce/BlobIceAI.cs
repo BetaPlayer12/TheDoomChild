@@ -156,6 +156,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private Collider2D m_iceCloudStatusInflictionCollider;
         [SerializeField, TabGroup("VFX Objects", "Ice Trail")]
         private GameObject m_iceTrailObject;
+        [SerializeField, TabGroup("VFX Objects", "Ice Trail")]
+        private Collider2D m_iceTrailCollider;
         [SerializeField, TabGroup("VFX Objects", "Ice Drip")]
         private GameObject m_iceDrip;
         [SerializeField, TabGroup("VFX Objects", "Ice Drip")]
@@ -484,6 +486,21 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return null;
         }
 
+        private IEnumerator TriggerIceTrailRoutine()
+        {
+            //if ice trail is off, turn on and delay box collider enabled by 1 second
+            var collider = m_iceTrailObject.GetComponent<BoxCollider2D>();
+            m_iceTrailObject.SetActive(true);
+            collider.enabled = false;
+            yield return new WaitForSeconds(2f);
+            collider.enabled = true;
+        }
+
+        private void TurnOnIceTrail()
+        {
+            m_iceTrailCollider.enabled = true;
+        }
+
         private IEnumerator RetreatRoutine()
         {
             m_stateHandle.Wait(State.Cower);
@@ -494,8 +511,14 @@ namespace DChild.Gameplay.Characters.Enemies
             m_targetInfo.Set(null);
             m_aggroCollider.enabled = false;
 
-            m_iceTrailObject.SetActive(true);
             m_animation.SetAnimation(0, m_info.retreat.animation, true);
+
+            if(m_iceBlobType == IceBlobType.Ground)
+            {
+                m_iceTrailObject.SetActive(true);
+                m_iceTrailCollider.enabled = false;
+                Invoke("TurnOnIceTrail", 1f);
+            }
 
             while (!IsWallOrEdgeDetected())
             {
