@@ -1,5 +1,52 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!28 &-3450065204858650663
+Texture2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: _TrailWidthGradientTex{"mode":0,"colorKeys":[{"color":{"r":0.27358490228652956,"g":0.27358490228652956,"b":0.27358490228652956,"a":1.0},"time":0.0},{"color":{"r":0.6320754289627075,"g":0.6320754289627075,"b":0.6320754289627075,"a":1.0},"time":0.25882354378700259},{"color":{"r":0.0,"g":0.0,"b":0.0,"a":1.0},"time":1.0}],"alphaKeys":[{"alpha":1.0,"time":0.0},{"alpha":1.0,"time":1.0}]}
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_ForcedFallbackFormat: 4
+  m_DownscaleFallback: 0
+  m_IsAlphaChannelOptional: 0
+  serializedVersion: 2
+  m_Width: 64
+  m_Height: 1
+  m_CompleteImageSize: 256
+  m_MipsStripped: 0
+  m_TextureFormat: 4
+  m_MipCount: 1
+  m_IsReadable: 1
+  m_IsPreProcessed: 0
+  m_IgnoreMasterTextureLimit: 0
+  m_StreamingMipmaps: 0
+  m_StreamingMipmapsPriority: 0
+  m_VTOnly: 0
+  m_AlphaIsTransparency: 0
+  m_ImageCount: 1
+  m_TextureDimension: 2
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 1
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_LightmapFormat: 0
+  m_ColorSpace: 0
+  m_PlatformBlob: 
+  image data: 256
+  _typelessdata: 464646ff4b4b4bff515151ff575757ff5c5c5cff626262ff676767ff6d6d6dff737373ff787878ff7e7e7eff838383ff898989ff8f8f8fff949494ff9a9a9aff9f9f9fff9f9f9fff9b9b9bff989898ff949494ff919191ff8e8e8eff8a8a8aff878787ff838383ff808080ff7c7c7cff797979ff757575ff727272ff6e6e6eff6b6b6bff686868ff646464ff616161ff5d5d5dff5a5a5aff565656ff535353ff4f4f4fff4c4c4cff484848ff454545ff424242ff3e3e3eff3b3b3bff373737ff343434ff303030ff2d2d2dff292929ff262626ff232323ff1f1f1fff1c1c1cff181818ff151515ff111111ff0e0e0eff0a0a0aff070707ff030303ff000000ff
+  m_StreamData:
+    serializedVersion: 2
+    offset: 0
+    size: 0
+    path: 
 --- !u!21 &2100000
 Material:
   serializedVersion: 8
@@ -11,6 +58,7 @@ Material:
   m_Shader: {fileID: 4800000, guid: b430983578466934c944e7171b4c372c, type: 3}
   m_ValidKeywords:
   - ADDITIVECONFIG_ON
+  - ALPHACUTOFF_ON
   - ALPHASMOOTHSTEP_ON
   - COLORRAMP_ON
   - FADE_ON
@@ -21,6 +69,7 @@ Material:
   - SHAPE2_ON
   - SHAPE3CONTRAST_ON
   - SHAPE3_ON
+  - TRAILWIDTH_ON
   m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -65,7 +114,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MaskTex:
-        m_Texture: {fileID: 2800000, guid: 95ef4804fe0be4c999ddaa383536cde8, type: 3}
+        m_Texture: {fileID: 2800000, guid: 76ba854393aba634893a750ec98ef712, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Shape1MaskTex:
@@ -89,11 +138,11 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _ShapeDistortTex:
-        m_Texture: {fileID: 2800000, guid: fcb027caad6963b4a80539bbce0d10e9, type: 3}
-        m_Scale: {x: 1.76, y: 3.18}
+        m_Texture: {fileID: 2800000, guid: 7edeb2845516ce545a3b7f862c98fe20, type: 3}
+        m_Scale: {x: 2, y: 3}
         m_Offset: {x: 0, y: 0}
     - _TrailWidthGradient:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: -3450065204858650663}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _VertOffsetTex:
@@ -122,7 +171,7 @@ Material:
     - _DepthGlowDist: 0.5
     - _DepthGlowGlobal: 1
     - _DepthGlowPow: 1
-    - _DistortAmount: 0.5
+    - _DistortAmount: 0
     - _DistortTexXSpeed: 5
     - _DistortTexYSpeed: 5
     - _DistortionBlend: 1
@@ -146,7 +195,7 @@ Material:
     - _HsvSaturation: 0.15
     - _HsvShift: 360
     - _LightAmount: 0
-    - _MaskPow: 1.8
+    - _MaskPow: 6.6
     - _OffsetSh1: 1
     - _OffsetSh2: 1
     - _OffsetSh3: 1
@@ -186,7 +235,7 @@ Material:
     - _Shape2DistortYSpeed: 0.1
     - _Shape2RotationOffset: 0
     - _Shape2RotationSpeed: 0
-    - _Shape2XSpeed: 0.7
+    - _Shape2XSpeed: 0.1
     - _Shape2YSpeed: 0.04
     - _Shape3AlphaWeight: 2
     - _Shape3Brightness: 0.08
@@ -203,7 +252,7 @@ Material:
     - _ShapeBrightness: 0.42
     - _ShapeColorWeight: 1
     - _ShapeContrast: 4.6
-    - _ShapeDistortAmount: 2.6
+    - _ShapeDistortAmount: 4.5
     - _ShapeDistortXSpeed: 0.1
     - _ShapeDistortYSpeed: 0.1
     - _ShapeRotationOffset: 0
