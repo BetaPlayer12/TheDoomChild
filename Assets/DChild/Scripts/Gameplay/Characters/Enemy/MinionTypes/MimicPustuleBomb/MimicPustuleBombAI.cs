@@ -531,11 +531,9 @@ namespace DChild.Gameplay.Characters.Enemies
             m_agent.SetDestination(target);
             if (!m_pathChecked)
             {
-                Debug.Log("2");
-                m_agent.Move(moveSpeed);
+                m_agent.Move(moveSpeed); // needed to run at least once to let the agent make a path
                 if (!navigationTracker.wasEntityInStartingPathSegment)
                 {
-                    Debug.Log("3");
                     m_agent.Stop();
                     m_OutOfBoundMoveDir = ( navigationTracker.previousPathSegment- transform.position).normalized;
                     //Move Towards navigationTracker.previousPathSegment; using movementOverrideHandle.MoveTowards
@@ -544,11 +542,9 @@ namespace DChild.Gameplay.Characters.Enemies
             }
             if (m_agent.hasPath)
             {
-                Debug.Log("1");
                 {
-                    if(Vector3.Distance(navigationTracker.previousPathSegment, transform.position) > 5f&&!navigationTracker.wasEntityInStartingPathSegment)
+                    if(Vector3.Distance(navigationTracker.previousPathSegment, transform.position) > 2f&&!navigationTracker.wasEntityInStartingPathSegment)
                     {
-                        Debug.Log("4");
                         Debug.Log(m_OutOfBoundMoveDir);
                         m_returnToOriginalPos = true;
                         movementOverrideHandle.MoveTowards(m_OutOfBoundMoveDir, m_info.move.speed);
@@ -558,7 +554,6 @@ namespace DChild.Gameplay.Characters.Enemies
                         m_rigidbody2D.velocity = Vector2.zero;
                         if (IsFacing(target))
                         {
-                            Debug.Log("5");
                             m_agent.Move(moveSpeed);
                         }
                         else
@@ -568,7 +563,6 @@ namespace DChild.Gameplay.Characters.Enemies
                     }
                 }
             }
-            Debug.Log("6");
         }
 
         private IEnumerator ReturnToOriginalPosition(float delay)
@@ -695,10 +689,14 @@ namespace DChild.Gameplay.Characters.Enemies
 
                         if (m_returnToOriginalPos)//&& Vector2.Distance(m_startPos, transform.position) < 0.2f)
                         {
+                            if(m_isDetecting)
+                            {
+                                m_isDetecting = false;
+                            }
                             Debug.Log(Vector2.Distance(m_startPos, transform.position) + " AAAAAAAAAAAAAAAAAAAA");
                             m_mimicPustuleBombChain.enabled = true;
                             m_returnToOriginalPos = false;
-                            m_rigidbody2D.velocity = Vector2.up;
+                            m_rigidbody2D.velocity = Vector2.up*3f;
                             m_pathChecked = false;
                         }
                         else
