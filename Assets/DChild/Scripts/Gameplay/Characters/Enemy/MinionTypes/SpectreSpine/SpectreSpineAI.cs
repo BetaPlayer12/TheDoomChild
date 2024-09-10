@@ -266,10 +266,11 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnFlinchEnd(object sender, EventActionArgs eventArgs)
         {
-            if (!m_targetInfo.isValid)
-            {
-                m_stateHandle.ApplyQueuedState();
-            }
+            //if (!m_targetInfo.isValid)
+            //{
+            //    m_stateHandle.ApplyQueuedState();
+            //}
+            m_stateHandle.ApplyQueuedState();
         }
         private Vector2 WallPosition()
         {
@@ -506,6 +507,7 @@ namespace DChild.Gameplay.Characters.Enemies
         }
         private IEnumerator ChargedStabRoutine()
         {
+            m_stateHandle.Wait(State.Cooldown);
             transform.rotation = Quaternion.Euler(0f, 0f, 0f);
             m_chargedAttackAttacker.TargetDamaged += OnTargetHit;
             m_chargedAttackBB.enabled = true;
@@ -896,6 +898,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     }
                     else
                     {
+                        m_animation.SetAnimation(0, m_info.move.animation, true).TimeScale = 1f;
                         CalculateRunPath();
                         m_agent.Move(m_info.move.speed);
                         m_stateHandle.SetState(State.ReevaluateSituation);
