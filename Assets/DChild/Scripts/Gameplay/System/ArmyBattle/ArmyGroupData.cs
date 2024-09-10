@@ -12,6 +12,10 @@ namespace DChild.Gameplay.ArmyBattle
         [InfoBox("@\"Total Power: \" + GetTotalAttackPower()", "m_useCharactersForPower", InfoMessageType = InfoMessageType.None)]
         [SerializeField, InlineEditor(Expanded = true)]
         private ArmyCharacterData[] m_members;
+        [SerializeField]
+        private ArmyCharacterGroup m_armyCharacterGroup;
+        [SerializeField]
+        private SpecialSkill m_specialSkill;
 
         #region Attack Fields
         [SerializeField, ToggleGroup("m_canAttack", "Can Attack")]
@@ -35,6 +39,8 @@ namespace DChild.Gameplay.ArmyBattle
 
         public string groupName => m_groupName;
         public int memberCount => m_members.Length;
+        public ArmyCharacterGroup armyCharacterGroup => m_armyCharacterGroup;
+        public SpecialSkill specialSkill => m_specialSkill;
 
         #region Attack Properties
         public bool canAttack => m_canAttack;
