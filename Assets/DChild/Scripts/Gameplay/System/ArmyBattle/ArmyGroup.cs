@@ -5,18 +5,18 @@ namespace DChild.Gameplay.ArmyBattle
 {
     public abstract class ArmyGroup
     {
-        protected List<ArmyCharacter> m_availableMembers;
+        protected List<ArmyCharacterData> m_availableMembers;
         [ShowInInspector]
         private bool m_isAvailable;
 
         public ArmyGroup()
         {
-            m_availableMembers = new List<ArmyCharacter>();
+            m_availableMembers = new List<ArmyCharacterData>();
             m_isAvailable = true;
         }
         public ArmyGroup(ArmyGroup reference)
         {
-            m_availableMembers = new List<ArmyCharacter>();
+            m_availableMembers = new List<ArmyCharacterData>();
             for (int i = 0; i < reference.availableMemberCount; i++)
             {
                 m_availableMembers.Add(reference.GetAvailableMember(i));
@@ -30,7 +30,7 @@ namespace DChild.Gameplay.ArmyBattle
         public int availableMemberCount => m_availableMembers.Count;
         public bool isAvailable => m_isAvailable;
 
-        public ArmyCharacter GetAvailableMember(int index) => m_availableMembers[index];
+        public ArmyCharacterData GetAvailableMember(int index) => m_availableMembers[index];
 
         public void SetAvailability(bool isAvailable)
         {

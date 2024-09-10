@@ -5,7 +5,7 @@
         string groupName { get; }
         int memberCount { get; }
         string abilityDescription { get; }
-        ArmyCharacter GetMember(int index);
+        ArmyCharacterData GetMember(int index);
         void UseAbility(Army owner, Army oppponent);
     }
 }

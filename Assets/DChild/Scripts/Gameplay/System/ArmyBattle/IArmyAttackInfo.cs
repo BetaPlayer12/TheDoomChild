@@ -6,7 +6,7 @@
         UnitType attackType { get; }
         int memberCount { get; }
         bool isUsingCharactersForPower { get; }
-        ArmyCharacter GetMember(int index);
+        ArmyCharacterData GetMember(int index);
         int GetTotalAttackPower();
     }
 }
