@@ -724,25 +724,47 @@ namespace DChild.Gameplay.Characters.Enemies
             m_legCollider.enabled = false;
             yield return new WaitForSeconds(2f);
             //yield return new WaitUntil(() => Vector2.Distance(m_targetInfo.position, transform.position) > m_info.targetDistanceTolerance);
-            int randomnum = UnityEngine.Random.Range(0, 2);
-            transform.position = new Vector2(m_targetInfo.position.x + (randomnum == 1 ? 25f : -25f), GroundPosition(m_targetInfo.position).y);
+            //int randomnum = UnityEngine.Random.Range(0, 2);
+            int randomnum;
+            Vector3 LastPosition = transform.position;
+            if (m_targetInfo.position.x < transform.position.x)
+            {
+                randomnum = 1;
+            }else
+            {
+                randomnum = 0;
+            }
+            transform.position = new Vector2(m_targetInfo.position.x + (randomnum==1 ? 50f : -50f), GroundPosition(transform.position).y);
+            //transform.position = new Vector2(m_targetInfo.position.x + (randomnum == 1 ? 25f : -25f), GroundPosition(m_targetInfo.position).y);
+            yield return new WaitForSeconds(0.6f);
+            /*
+            int check = 0;
+            yield return new WaitForSeconds(0.6f);
+            while (!m_groundSensor.isDetecting&&check<10)
+            {
+                check++;
+                Debug.Log(check+" "+transform.position);
+                transform.position -= new Vector3(0f, 1.5f);
+            }
+            */
+            while (m_wallSensor.isDetecting && m_backSensor.isDetecting)
+            {
+                transform.position = Vector3.MoveTowards(transform.position, LastPosition, m_currentMoveSpeed);
+                yield return null;
+            }
             yield return new WaitForSeconds(0.6f);
             if (!m_groundSensor.isDetecting)
             {
                 if (randomnum == 0)
                 {
-                    transform.position += new Vector3(50f, 0);
+                    transform.position += new Vector3(75f, 0);
+                    transform.position = new Vector3(transform.position.x, GroundPosition(transform.position).y);
                 }
                 else
                 {
-                    transform.position -= new Vector3(50f, 0);
+                    transform.position -= new Vector3(75f, 0);
+                    transform.position = new Vector3(transform.position.x, GroundPosition(transform.position).y);
                 }
-            }
-            yield return new WaitForSeconds(0.6f);
-            while (m_wallSensor.isDetecting && m_backSensor.isDetecting)
-            {
-                transform.position = Vector3.MoveTowards(transform.position, m_targetInfo.position, m_currentMoveSpeed);
-                yield return null;
             }
             m_animation.SetAnimation(0, m_info.teleportFromBelowAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.teleportFromBelowAnimation);
@@ -753,6 +775,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_bodyCollider.enabled = true;
             m_legCollider.enabled = true;
             m_teleportRoutine = null;
+            m_animation.SetAnimation(0, m_currentIdleAnimation, true);
             m_stateHandle.ApplyQueuedState();
             yield return null;
         }
