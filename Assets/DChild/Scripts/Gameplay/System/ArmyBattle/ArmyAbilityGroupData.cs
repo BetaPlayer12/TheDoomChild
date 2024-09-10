@@ -14,7 +14,7 @@ namespace DChild.Gameplay.ArmyBattle
         [SerializeField]
         private bool m_useCharactersForUseCount;
         [SerializeField]
-        private ArmyCharacter[] m_members;
+        private ArmyCharacterData[] m_members;
         [SerializeField]
         private IArmyAbilityEffect[] m_effects = new IArmyAbilityEffect[0];
 
@@ -22,7 +22,7 @@ namespace DChild.Gameplay.ArmyBattle
         public string description => m_description;
         public bool useCharactersForUseCount => m_useCharactersForUseCount;
         public int memberCount => m_members.Length;
-        public ArmyCharacter GetMember(int index) => m_members[index];
+        public ArmyCharacterData GetMember(int index) => m_members[index];
 
         public void ApplyEffect(Army owner, Army opponent)
         {

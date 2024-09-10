@@ -8,9 +8,9 @@ public class PlayerArmyCharacters : ScriptableObject
 {
 
     [SerializeField, AssetSelector, PropertyOrder(2), InlineEditor(InlineEditorObjectFieldModes.Foldout, Expanded = true)]
-    private ArmyCharacter[] m_playerCharacter;
+    private ArmyCharacterData[] m_playerCharacter;
 
-    public ArmyCharacter GetCharacters(int index) => m_playerCharacter[index];
+    public ArmyCharacterData GetCharacters(int index) => m_playerCharacter[index];
     public int charactersCount => m_playerCharacter.Length;
 
 }

@@ -9,12 +9,12 @@ public class PlayerArmyCompositionCreator : MonoBehaviour
     [SerializeField]
     private StoreRecruitedCharacters recruitedCharacters;
     [SerializeField]
-    private ArmyCharacter[] m_characters;
+    private ArmyCharacterData[] m_characters;
     [SerializeField]
-    private ArmyCharacter[] m_recruitedCharacters;
+    private ArmyCharacterData[] m_recruitedCharacters;
     [SerializeField]
     private string m_name;
-    public ArmyCharacter GetCharacter(int index) => m_characters[index];
+    public ArmyCharacterData GetCharacter(int index) => m_characters[index];
     public int recruitedCharactersCount => m_recruitedCharacters.Length;
     public string name => m_name;
  
@@ -63,7 +63,7 @@ public class PlayerArmyCompositionCreator : MonoBehaviour
     }
     private void InitializeRecruitedCharacters() 
     { 
-        List<ArmyCharacter> recruitedCharacter = new List<ArmyCharacter>();
+        List<ArmyCharacterData> recruitedCharacter = new List<ArmyCharacterData>();
         for (int i = 0; i < m_characters.Length; i++)
         {
             var characterID = m_characters[i].ID;
@@ -90,7 +90,7 @@ public class PlayerArmyCompositionCreator : MonoBehaviour
         return memberAvailability;
     }
 
-    private bool HasBeenRecruited(ArmyCharacter character)
+    private bool HasBeenRecruited(ArmyCharacterData character)
     {
         
         for (int i = 0; i < recruitedCharactersCount; i++)
@@ -114,7 +114,7 @@ public class PlayerArmyCompositionCreator : MonoBehaviour
         return troopCount;
        
     }
-    private ArmyCharacter GetMember(int index)
+    private ArmyCharacterData GetMember(int index)
     {
         return m_recruitedCharacters[index];
     }

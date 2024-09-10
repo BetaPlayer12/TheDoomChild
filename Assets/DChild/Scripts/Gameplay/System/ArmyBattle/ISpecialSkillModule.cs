@@ -4,10 +4,9 @@ using UnityEngine;
 
 namespace DChild.Gameplay.ArmyBattle
 {
-    public enum DamageType
+    public interface ISpecialSkillModule
     {
-        Melee,
-        Range,
-        Magic
+ 
     }
 }
+

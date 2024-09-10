@@ -9,7 +9,7 @@ namespace DChild.Gameplay.ArmyBattle
     public class ArmyAbility
     {
         private ArmyAbilityData m_reference;
-        private List<ArmyCharacter> m_availableMembers;
+        private List<ArmyCharacterData> m_availableMembers;
         [ShowInInspector]
         private int m_useCountLeft;
 
@@ -26,7 +26,7 @@ namespace DChild.Gameplay.ArmyBattle
         public ArmyAbility(ArmyAbilityData data)
         {
             m_reference = data;
-            m_availableMembers = new List<ArmyCharacter>();
+            m_availableMembers = new List<ArmyCharacterData>();
             for (int i = 0; i < data.membersCount; i++)
             {
                 m_availableMembers.Add(data.GetMember(i));
@@ -50,7 +50,7 @@ namespace DChild.Gameplay.ArmyBattle
             }
         }
 
-        public ArmyCharacter GetAvailableMember(int index) => m_availableMembers[index];
+        public ArmyCharacterData GetAvailableMember(int index) => m_availableMembers[index];
 
         public void UseAbility(Army owner, Army enemy)
         {

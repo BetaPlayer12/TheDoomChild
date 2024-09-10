@@ -6,7 +6,7 @@ namespace DChild.Gameplay.ArmyBattle
 {
 
     [System.Serializable]
-    public class ArmyAbilityGroup : ArmyGroup
+    public class ArmyAbilityGroup : ArmyCharacterGroup
     {
         private IArmyAbilityInfo m_reference;
 
@@ -24,7 +24,7 @@ namespace DChild.Gameplay.ArmyBattle
         [ShowInInspector, PropertyOrder(0)]
         public string description => m_reference.abilityDescription;
 
-        public override string groupName => m_reference.groupName;
+        public override string name => m_reference.groupName;
 
         public void UseAbility(Army owner, Army enemy)
         {

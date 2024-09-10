@@ -18,13 +18,13 @@ namespace DChild.Gameplay.ArmyBattle
         [InfoBox("@\"Total Power: \" + GetTotalPower()", InfoMessageType = InfoMessageType.None), ShowIf("m_useCharactersForPower")]
 #endif
         [SerializeField, InlineEditor(Expanded = true), ShowIf("m_useCharactersForPower")]
-        private ArmyCharacter[] m_members;
+        private ArmyCharacterData[] m_members;
 
         public string groupName => m_groupName;
         public bool isUsingCharactersForPower => m_useCharactersForPower;
         public int memberCount => m_members.Length;
         public UnitType unitType => m_unitType;
-        public ArmyCharacter GetMember(int index)
+        public ArmyCharacterData GetMember(int index)
         {
             if (m_useCharactersForPower)
             {
@@ -55,7 +55,7 @@ namespace DChild.Gameplay.ArmyBattle
 
         private void ClearMembers()
         {
-            m_members = new ArmyCharacter[0];
+            m_members = new ArmyCharacterData[0];
         }
     }
 }

@@ -15,7 +15,7 @@ namespace DChild.Gameplay.ArmyBattle
 
         }
 
-        public void AddCharacter(ArmyCharacter character)
+        public void AddCharacter(ArmyCharacterData character)
         {
             //if(m_composition.GetNumberOfCharacter(character.unitType) < m_maxCharacterPerType)
             //{
@@ -23,7 +23,7 @@ namespace DChild.Gameplay.ArmyBattle
             //}
         }
 
-        public void RemoveCharacter(ArmyCharacter character)
+        public void RemoveCharacter(ArmyCharacterData character)
         {
 
         }
