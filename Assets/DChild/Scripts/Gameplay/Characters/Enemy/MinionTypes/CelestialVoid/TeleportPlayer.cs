@@ -30,8 +30,26 @@ public class TeleportPlayer : MonoBehaviour
     private CelestialVoidAI m_celestialVoidAI;
     [SerializeField]
     private BoxCollider2D m_boxCollider;
+    [SerializeField]
+    private bool boolenitoto;
 
     public EventAction<EventActionArgs> OnPlayerStay;
+
+    public bool IsPlayerInsideBounds()
+    {
+        /*if (m_boxCollider.bounds.Contains(m_celestialVoidAI.m_playerPos))
+        {
+            Debug.Log("sulod di sa");
+            return true;
+        }
+        else
+        {
+            StartCoroutine(TurnOffRoutine());
+            Debug.Log("player pos" + m_celestialVoidAI.m_playerPos);
+            return false;
+        }*/
+        return false;
+    }
 
     private void Start()
     {
@@ -49,31 +67,32 @@ public class TeleportPlayer : MonoBehaviour
         //Destroy(this.gameObject);
         //throw new System.NotImplementedException();
     }
-    private void OnTriggerStay2D(Collider2D collision)
-    {
-        var playerObject = collision.gameObject.GetComponentInParent<PlayerControlledObject>();
-        if (playerObject != null && collision.tag != "Sensor" && playerObject.owner == (IPlayer)GameplaySystem.playerManager.player)
-        {
-            if (collision.tag == "Hitbox")
-            {
-                StartCoroutine(TriggerRoutine());
-            }
-        }
-    }
-    private void OnTriggerExit2D(Collider2D collision)
-    {
-        StopAllCoroutines();
-        StartCoroutine(TurnOffRoutine());
-    }
+    //private void OnTriggerStay2D(Collider2D collision)
+    //{
+    //    var playerObject = collision.gameObject.GetComponentInParent<PlayerControlledObject>();
+    //    if (playerObject != null && collision.tag != "Sensor" && playerObject.owner == (IPlayer)GameplaySystem.playerManager.player)
+    //    {
+    //        if (collision.tag == "Hitbox")
+    //        {
+    //            StartCoroutine(TriggerRoutine());
+    //        }
+    //    }
+    //}
+    //private void OnTriggerExit2D(Collider2D collision)
+    //{
+    //    StopAllCoroutines();
+    //    StartCoroutine(TurnOffRoutine());
+    //}
     private float time = 0f;
     private float duration = 1.5f;
     private bool willTeleport;
+    public Vector2 m_playerPos;
     private IEnumerator TurnOffRoutine()
     {
         yield return new WaitForSeconds(.5f);
         m_boxCollider.enabled = false;
     }
-    private IEnumerator TriggerRoutine()
+    public IEnumerator TriggerRoutine()
     {
         time = 0f;
         duration = 1f;
@@ -99,66 +118,72 @@ public class TeleportPlayer : MonoBehaviour
             willTeleport = false;
         }
     }
-        /*private bool m_drainable = false;
-        private bool m_enraged = false;*/
+    /*private bool m_drainable = false;
+    private bool m_enraged = false;*/
 
-        /*public void setrage(bool value)
-        {
-            m_enraged = value;
-        }
-        public void ActivateLifeDrain()
-        {
-
-            this.gameObject.GetComponent<Collider2D>().enabled = true;
-
-        }
-        public void AfterRage()
-        {
-            GameplaySystem.combatManager.Heal(m_healable[0], m_postRageHeal);
-        }
-            private void OnTriggerEnter2D(Collider2D collision)
-        {
-
-
-            if (collision.tag != "Sensor" )
-            {
-
-                m_damageable = collision.gameObject.GetComponentsInParent<IDamageable>();
-                m_healable = this.gameObject.GetComponentsInParent<IHealable>();
-                m_drainable = true;
-            }
-        }
-        private void OnTriggerExit2D(Collider2D collision)
-        {
-
-            StopAllCoroutines();
-            m_drainable = false;
-            this.gameObject.GetComponent<Collider2D>().enabled = false;
-            //m_celestialVoidAI.DeActivateLifeDrain();
-        }
-            IEnumerator DelayCoroutine()
-        {
-            m_drainable = false;
-            if (m_enraged == true)
-            {
-                GameplaySystem.combatManager.Damage(m_damageable[0], m_damagePerEnragedInterval);
-                GameplaySystem.combatManager.Heal(m_healable[0], m_enragedHeal);
-            }
-            else
-            {
-                GameplaySystem.combatManager.Damage(m_damageable[0], m_damagePerInterval);
-                GameplaySystem.combatManager.Heal(m_healable[0], m_heal);
-            }
-            yield return new WaitForSeconds(m_drainDelay);
-            m_drainable = true;
-
-        }
-        private void FixedUpdate()
-        {
-            if(m_drainable == true)
-            {
-                StartCoroutine(DelayCoroutine());
-
-            }
-        }*/
+    /*public void setrage(bool value)
+    {
+        m_enraged = value;
     }
+    public void ActivateLifeDrain()
+    {
+
+        this.gameObject.GetComponent<Collider2D>().enabled = true;
+
+    }
+    public void AfterRage()
+    {
+        GameplaySystem.combatManager.Heal(m_healable[0], m_postRageHeal);
+    }
+        private void OnTriggerEnter2D(Collider2D collision)
+    {
+
+
+        if (collision.tag != "Sensor" )
+        {
+
+            m_damageable = collision.gameObject.GetComponentsInParent<IDamageable>();
+            m_healable = this.gameObject.GetComponentsInParent<IHealable>();
+            m_drainable = true;
+        }
+    }
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+
+        StopAllCoroutines();
+        m_drainable = false;
+        this.gameObject.GetComponent<Collider2D>().enabled = false;
+        //m_celestialVoidAI.DeActivateLifeDrain();
+    }
+        IEnumerator DelayCoroutine()
+    {
+        m_drainable = false;
+        if (m_enraged == true)
+        {
+            GameplaySystem.combatManager.Damage(m_damageable[0], m_damagePerEnragedInterval);
+            GameplaySystem.combatManager.Heal(m_healable[0], m_enragedHeal);
+        }
+        else
+        {
+            GameplaySystem.combatManager.Damage(m_damageable[0], m_damagePerInterval);
+            GameplaySystem.combatManager.Heal(m_healable[0], m_heal);
+        }
+        yield return new WaitForSeconds(m_drainDelay);
+        m_drainable = true;
+
+    }
+    private void FixedUpdate()
+    {
+        if(m_drainable == true)
+        {
+            StartCoroutine(DelayCoroutine());
+
+        }
+    }*/
+    private void Update()
+    {
+        boolenitoto = m_boxCollider.bounds.Contains(m_playerPos);
+        Debug.Log("sulod di sa" + m_boxCollider.bounds.center);
+        Debug.Log("player ni sa" + m_playerPos);
+    }
+}

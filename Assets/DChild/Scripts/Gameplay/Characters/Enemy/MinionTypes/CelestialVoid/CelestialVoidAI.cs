@@ -216,6 +216,7 @@ namespace DChild.Gameplay.Characters.Enemies
             if (damageable != null)
             {
                 base.SetTarget(damageable);
+                m_teleportPlayer.m_playerPos = m_targetInfo.transform.position;
                 if (m_stateHandle.currentState != State.Chasing && !m_isDetecting)
                 {
                     m_selfCollider.SetActive(true);
@@ -240,6 +241,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     }
                 }*/
                 StopAllCoroutines();
+                m_teleportPlayer.m_playerPos = new Vector2(0, 0);
                 m_isDetecting = false; 
                 if (m_stateHandle.currentState == State.WaitBehaviourEnd)
                 {
@@ -380,6 +382,10 @@ namespace DChild.Gameplay.Characters.Enemies
             Animator anim = m_detectionFX.GetComponent<Animator>();
             anim.SetBool("detected", true);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.detectAnimation);
+            if (m_teleportPlayer.IsPlayerInsideBounds())
+            {
+                StartCoroutine(m_teleportPlayer.TriggerRoutine());
+            }
             m_stateHandle.OverrideState(State.Chasing);
             yield return null;
         }
@@ -716,7 +722,7 @@ namespace DChild.Gameplay.Characters.Enemies
         public IEnumerator ActivateTeleportFX()
         {
             m_stateHandle.Wait(State.ReturnToPatrol);
-            if (m_willTeleportPlayer)
+            if (m_teleportPlayer.IsPlayerInsideBounds())
             {
                 instance = GameSystem.poolManager.GetPool<PoolableObjectPool>().GetOrCreateItem(m_info.teleportMarker);
                 instance.SpawnAt(new Vector2(m_targetInfo.position.x, m_targetInfo.position.y - 2f), Quaternion.identity);
