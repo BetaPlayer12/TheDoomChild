@@ -220,6 +220,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private Coroutine m_executeMoveCoroutine;
         private Coroutine m_detectRoutine;
+        private float m_AwayfromOrigPosinSeconds;
 
         private void OnAttackDone(object sender, EventActionArgs eventArgs)
         {
@@ -520,6 +521,8 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return new WaitForSeconds(delay);
             if(Vector2.Distance(m_startPos, transform.position) > m_info.distanceToOriginReturnTolerance)
             {
+                m_AwayfromOrigPosinSeconds = 9.5f;
+                Debug.Log("How much is this called?");
                 //m_returnToOriginalPos = true;
                 m_stateHandle.OverrideState(State.ReturnToPatrol);
                 //m_mimicPustuleBombChain.enabled = true;
@@ -546,7 +549,8 @@ namespace DChild.Gameplay.Characters.Enemies
                     if(Vector3.Distance(navigationTracker.previousPathSegment, transform.position) > 2f&&!navigationTracker.wasEntityInStartingPathSegment)
                     {
                         Debug.Log(m_OutOfBoundMoveDir);
-                        m_returnToOriginalPos = true;
+                        //StartCoroutine(ReturnToOriginalPosition(1.5f));
+                        //m_returnToOriginalPos = true;
                         movementOverrideHandle.MoveTowards(m_OutOfBoundMoveDir, m_info.move.speed);
                     }
                     else
@@ -567,9 +571,12 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator ReturnToOriginalPosition(float delay)
         {
-            m_returnToOriginalPos = false;
+            //m_returnToOriginalPos = false;
+            m_AwayfromOrigPosinSeconds = (10 - delay);
+            yield return null;
+            /*
             yield return new WaitForSeconds(delay);
-            m_returnToOriginalPos=true;
+            m_returnToOriginalPos=true;*/
         }
 
         #endregion
@@ -640,6 +647,15 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void Update()
         {
+            if(m_AwayfromOrigPosinSeconds<=10)
+            {
+                m_AwayfromOrigPosinSeconds += Time.deltaTime;
+                m_returnToOriginalPos = false;
+            }
+            else if(m_AwayfromOrigPosinSeconds>10)
+            {
+                m_returnToOriginalPos = true;
+            }
             switch (m_stateHandle.currentState)
             {
                 case State.Detect:
@@ -702,6 +718,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         else
                         {
                             DynamicMovement(m_startPos, 1f);
+                            m_rigidbody2D.velocity = Vector2.up * 3f;
                         }
                         m_aggroGroup.SetActive(false);
                         m_stateHandle.OverrideState(State.Patrol);
@@ -729,6 +746,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         m_randomRangeMax = 20f;
                         if(!m_isAggro)
                         {
+                            
                             StartCoroutine(DelayChainActivation(5f));
                         }
                     }
@@ -831,7 +849,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
                     {
                         m_aggroGroup.SetActive(false);
-                        
+                        m_AwayfromOrigPosinSeconds = 9.5f;
                         m_isAggro = false;
                         m_stateHandle.SetState(State.ReturnToPatrol);
 
