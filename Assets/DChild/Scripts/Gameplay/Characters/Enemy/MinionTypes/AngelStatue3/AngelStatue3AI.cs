@@ -136,6 +136,7 @@ namespace DChild.Gameplay.Characters.Enemies
             Attacking,
             Cooldown,
             Chasing,
+            ReturnToSpawnPoint,
             ReevaluateSituation,
             WaitBehaviourEnd,
         }
@@ -176,6 +177,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private float m_currentRunAttackDuration;
         private bool m_enablePatience;
         private bool m_isDetecting;
+        private bool m_isDetectedOnce;
         private Vector2 m_startPoint;
 
         [SerializeField, TabGroup("Sensors")]
@@ -208,7 +210,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_stateHandle.ApplyQueuedState();
         }
 
-        private void OnTurnRequest(object sender, EventActionArgs eventArgs) => m_stateHandle.SetState(State.Turning);
+       // private void OnTurnRequest(object sender, EventActionArgs eventArgs) => m_stateHandle.SetState(State.Turning);
 
         public override void SetTarget(IDamageable damageable, Character m_target = null)
         {
@@ -218,8 +220,9 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_selfCollider.SetActive(true);
                 if (m_stateHandle.currentState != State.Chasing && !m_isDetecting)
                 {
+                    m_stateHandle.OverrideState(State.Detect);
                     m_isDetecting = true;
-                    m_stateHandle.SetState(State.Detect);
+                   
                 }
                 m_currentPatience = 0;
                 //var patienceRoutine = PatienceRoutine();
@@ -257,7 +260,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_targetInfo.Set(null, null);
                 m_isDetecting = false;
                 m_enablePatience = false;
-                m_stateHandle.SetState(State.Idle);
+                m_stateHandle.SetState(State.ReturnToSpawnPoint);
             }
         }
         //private IEnumerator PatienceRoutine()
@@ -338,10 +341,19 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator DetectRoutine()
         {
             m_bgStatue.transform.SetParent(null);
-            m_animation.SetAnimation(0, m_info.detectAnimation, false);
-            m_animation.animationState.TimeScale = 1;
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.detectAnimation);
-            m_hitbox.Enable();
+           
+            if (!m_isDetectedOnce)
+            {
+                m_isDetectedOnce = true;
+                m_animation.SetAnimation(0, m_info.detectAnimation, false);
+                m_animation.animationState.TimeScale = 1;
+                yield return new WaitForAnimationComplete(m_animation.animationState, m_info.detectAnimation);
+                m_hitbox.Enable();
+                if (!IsFacingTarget())
+                {
+                    CustomTurn();
+                }
+            }
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_stateHandle.OverrideState(State.ReevaluateSituation);
             yield return null;
@@ -359,7 +371,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
             m_animation.SetAnimation(0, m_info.swordCleaveAttack, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.swordCleaveAttack);
-          m_animation.SetAnimation(0, m_info.idleAnimation, true);
+            
     
         }
 
@@ -387,9 +399,10 @@ namespace DChild.Gameplay.Characters.Enemies
         }
         private IEnumerator SwordCleaveAttack()
         {
-            m_stateHandle.Wait(State.Cooldown);
+            m_stateHandle.Wait(State.ReevaluateSituation);
             yield return SwordCleaveRoutine();
             m_attackDecider.hasDecidedOnAttack = false;
+            m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_stateHandle.ApplyQueuedState();
         }
 
@@ -397,13 +410,13 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_animation.SetAnimation(0, m_info.attack.animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack.animation);
-            m_animation.SetAnimation(0, m_info.idleAnimation, true);
+           
         }
         private IEnumerator AttackStabRoutine()
         {
             m_animation.SetAnimation(0, m_info.stabAttack.animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.stabAttack.animation);
-            m_animation.SetAnimation(0, m_info.idleAnimation, true);
+            
         }
         private IEnumerator WingPushRoutine()
         {
@@ -416,9 +429,10 @@ namespace DChild.Gameplay.Characters.Enemies
         }
         private IEnumerator SlashStabComboAttack()
         {
-            m_stateHandle.Wait(State.Cooldown);
+            m_stateHandle.Wait(State.ReevaluateSituation);
             yield return AttackSlashRoutine();
             yield return AttackStabRoutine();
+            m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_attackDecider.hasDecidedOnAttack = false;
             m_stateHandle.ApplyQueuedState();
         }
@@ -427,12 +441,30 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_stateHandle.Wait(State.ReevaluateSituation);
             //m_flinchHandle.SetAnimation(m_info.wingShieldHitAnimation.animation);
-            yield return WingPushRoutine();;
+            yield return WingPushRoutine();
+            m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_attackDecider.hasDecidedOnAttack = false;
             m_stateHandle.ApplyQueuedState();
         }
-        
+        private IEnumerator ReturnToStartingPoint()
+        {
+            m_stateHandle.Wait(State.Idle);
+            var direction = (int)m_character.facing * Vector2.right;
+            if(!IsFacing(m_startPoint))
+            {
+                CustomTurn();
+            }
+            do
+            {
+                m_animation.SetAnimation(0, m_info.move, true);
+                m_movement.MoveTowards(direction, m_info.move.speed);
+                Debug.Log("Return to spot");
+                yield return null;
 
+            } while (Vector2.Distance(transform.position, m_startPoint) > 1f);
+            Debug.Log("outside loop");
+            m_stateHandle.ApplyQueuedState();
+        }
         protected override void Start()
         {
             base.Start();
@@ -452,9 +484,9 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             base.Awake();
             m_hitbox.Disable();
-            m_patrolHandle.TurnRequest += OnTurnRequest;
-            m_attackHandle.AttackDone += OnAttackDone;
-            m_turnHandle.TurnDone += OnTurnDone;
+            //m_patrolHandle.TurnRequest += OnTurnRequest;
+            //m_attackHandle.AttackDone += OnAttackDone;
+            //m_turnHandle.TurnDone += OnTurnDone;
 
             m_deathHandle.SetAnimation(m_info.deathAnimation.animation);
             m_flinchHandle.FlinchStart += OnFlinchStart;
@@ -478,17 +510,29 @@ namespace DChild.Gameplay.Characters.Enemies
                     break;
 
                 case State.Idle:
-                    m_animation.SetAnimation(0, m_info.detectAnimation, false).AnimationStart = 0.15f;
-                    m_animation.animationState.TimeScale = 0;
+                    m_movement.Stop();
+                    if (!m_isDetectedOnce)
+                    {
+                        m_animation.SetAnimation(0, m_info.detectAnimation, true).AnimationStart = 0.15f;
+                        m_animation.animationState.TimeScale = 0;
+                    }
+                    else
+                    {
+                        m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                    }    
                     //if (m_animation.GetCurrentAnimation(0).ToString() != m_info.detectAnimation)
                     //{
                     //}
                     break;
+                case State.ReturnToSpawnPoint:
+                    StopAllCoroutines();
 
-                case State.Turning:
-                    m_stateHandle.Wait(m_turnState);
-                    m_turnHandle.Execute(m_info.turnAnimation.animation, m_info.idleAnimation.animation);
+                    StartCoroutine(ReturnToStartingPoint());
                     break;
+                //case State.Turning:
+                //    m_stateHandle.Wait(m_turnState);
+                //    m_turnHandle.Execute(m_info.turnAnimation.animation, m_info.idleAnimation.animation);
+                //    break;
 
                 case State.Attacking:  
                     var healthPercentage = CalculatePercentage(m_damageable.health.currentValue, m_damageable.health.maxValue);
@@ -526,40 +570,41 @@ namespace DChild.Gameplay.Characters.Enemies
 
                     break;
 
-                case State.Cooldown:
-                    //m_stateHandle.Wait(State.ReevaluateSituation);
-                    //if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
-                    if (IsTargetInRange(100))
-                    {
-                        if (!IsFacingTarget())
-                        {
-                            m_turnState = State.Cooldown;
-                            if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation.animation)
-                                m_stateHandle.SetState(State.Turning);
-                        }
-                        else
-                        {
-                            m_animation.EnableRootMotion(true, false);
-                            m_animation.SetAnimation(0, m_info.backMove.animation, true);
-                            m_movement.MoveTowards(Vector2.one * -transform.localScale.x, m_info.backMove.speed);
-                        }
-                    }
-                    else
-                    {
-                        m_animation.SetAnimation(0, m_info.idleAnimation, true);
-                    }
+                //case State.Cooldown:
+                //    m_stateHandle.Wait(State.ReevaluateSituation);
+                //    if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
+                //    if (IsTargetInRange(100))
+                //    {
+                //        if (!IsFacingTarget())
+                //        {
+                //            m_turnState = State.Cooldown;
+                //            if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation.animation)
+                //                m_stateHandle.SetState(State.Turning);
+                //            CustomTurn();
+                //        }
+                //        else
+                //        {
+                //            m_animation.EnableRootMotion(true, false);
+                //            m_animation.SetAnimation(0, m_info.backMove.animation, true);
+                //            m_movement.MoveTowards(Vector2.one * -transform.localScale.x, m_info.backMove.speed);
+                //        }
+                //    }
+                //    else
+                //    {
+                //        m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                //    }
 
-                    if (m_currentCD <= m_info.attackCD)
-                    {
-                        m_currentCD += Time.deltaTime;
-                    }
-                    else
-                    {
-                        m_currentCD = 0;
-                        m_stateHandle.OverrideState(State.ReevaluateSituation);
-                    }
+                //    if (m_currentCD <= m_info.attackCD)
+                //    {
+                //        m_currentCD += Time.deltaTime;
+                //    }
+                //    else
+                //    {
+                //        m_currentCD = 0;
+                //        m_stateHandle.OverrideState(State.ReevaluateSituation);
+                //    }
 
-                    break;
+                    //break;
                 case State.Chasing:
                     {
                         if (IsFacingTarget())
@@ -589,9 +634,10 @@ namespace DChild.Gameplay.Characters.Enemies
                         }
                         else
                         {
-                            m_turnState = State.ReevaluateSituation;
-                            if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation.animation)
-                                m_stateHandle.SetState(State.Turning);
+                            //m_turnState = State.ReevaluateSituation;
+                            //if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation.animation)
+                            //    m_stateHandle.SetState(State.Turning);
+                            CustomTurn();
                         }
                     }
                     break;
