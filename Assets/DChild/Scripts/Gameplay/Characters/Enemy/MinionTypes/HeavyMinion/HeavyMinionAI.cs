@@ -356,7 +356,6 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator AttackTackleRoutine()
         {
-            m_bodyCollisionBB.enabled = false;
             m_animation.SetAnimation(0, m_info.attackTackleAnticipationAnimation, false);
             m_flinchHandle.m_autoFlinch = UnityEngine.Random.Range(0, 100) <= 30 ? true : false;
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attackTackleAnticipationAnimation);
@@ -375,7 +374,6 @@ namespace DChild.Gameplay.Characters.Enemies
             m_chargedDashBB.enabled = true;
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attackTackle.animation);
             m_selfCollider.enabled = true;
-            m_bodyCollisionBB.enabled = true;
             m_chargedDashBB.enabled = false;
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_stateHandle.ApplyQueuedState();
