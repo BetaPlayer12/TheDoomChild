@@ -14,7 +14,7 @@ namespace DChild.Gameplay.ArmyBattle.UI
         {
             if (group != null)
             {
-                UpdateText(m_groupLabel, group.groupName);
+                UpdateText(m_groupLabel, group.name);
                 var modifiedPower = ArmyBattleUtlity.CalculateModifiedPower(group.GetTotalPower(), modifier);
                 UpdateText(m_powerLabel, modifiedPower.ToString());
             }

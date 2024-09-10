@@ -5,7 +5,7 @@ namespace DChild.Gameplay.ArmyBattle
 {
 
     [System.Serializable]
-    public class ArmyAttackGroup : ArmyGroup
+    public class ArmyAttackGroup : ArmyCharacterGroup
     {
         private IArmyAttackInfo m_reference;
 
@@ -25,11 +25,11 @@ namespace DChild.Gameplay.ArmyBattle
         [ShowInInspector, PropertyOrder(0)]
         private int totalPower => GetTotalPower();
 
-        public override string groupName => m_reference.groupName;
+        public override string name => m_reference.groupName;
 
         public void SetMemberAvailability(params bool[] memberAvailability)
         {
-            m_availableMembers.Clear();
+            m_armyGroupList.Clear();
             for (int i = 0; i < m_reference.memberCount; i++)
             {
                 if (i >= memberAvailability.Length)
@@ -38,7 +38,7 @@ namespace DChild.Gameplay.ArmyBattle
                 }
                 else if (memberAvailability[i])
                 {
-                    m_availableMembers.Add(reference.GetMember(i));
+                    m_armyGroupList.Add(reference.GetMember(i));
                 }
             }
         }
@@ -48,9 +48,9 @@ namespace DChild.Gameplay.ArmyBattle
             var power = 0;
             if (m_reference.isUsingCharactersForPower)
             {
-                for (int i = 0; i < m_availableMembers.Count; i++)
+                for (int i = 0; i < m_armyGroupList.Count; i++)
                 {
-                    power += m_availableMembers[i].power;
+                    power += m_armyGroupList[i].power;
                 }
             }
             else
