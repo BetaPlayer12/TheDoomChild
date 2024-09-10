@@ -608,7 +608,7 @@ namespace DChild.Gameplay.Characters.Enemies
                             m_currentAttack = Attack.Swipe;
                             m_currentAttackRange = m_info.swipeAttack.range;
                         }
-                        else if (Vector2.Distance(m_targetInfo.position, transform.position) >= m_info.leapAttack.range)
+                        if (Vector2.Distance(m_targetInfo.position, transform.position) <= m_info.leapAttack.range)
                         {
                             m_currentAttack = Attack.Leap;
                             m_currentAttackRange = m_info.leapAttack.range;
