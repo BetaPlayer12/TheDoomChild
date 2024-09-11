@@ -5,13 +5,8 @@ namespace DChild.Gameplay.ArmyBattle
 {
 
     [CreateAssetMenu(fileName = "ArmyGroupData", menuName = "DChild/Gameplay/Army/Group")]
-    public class ArmyGroupData : SerializedScriptableObject, IArmyAttackInfo, IArmyAbilityInfo
+    public class ArmyGroupTemplateData : SerializedScriptableObject
     {
-        [SerializeField]
-        private string m_groupName;
-        [InfoBox("@\"Total Power: \" + GetTotalAttackPower()", "m_useCharactersForPower", InfoMessageType = InfoMessageType.None)]
-        [SerializeField, InlineEditor(Expanded = true)]
-        private ArmyCharacterData[] m_members;
         [SerializeField]
         private ArmyCharacterGroup m_armyCharacterGroup;
         [SerializeField]
@@ -37,8 +32,6 @@ namespace DChild.Gameplay.ArmyBattle
         private IArmyAbilityEffect[] m_effects = new IArmyAbilityEffect[0];
         #endregion
 
-        public string groupName => m_groupName;
-        public int memberCount => m_members.Length;
         public ArmyCharacterGroup armyCharacterGroup => m_armyCharacterGroup;
         public SpecialSkill specialSkill => m_specialSkill;
 
@@ -53,13 +46,6 @@ namespace DChild.Gameplay.ArmyBattle
         public string abilityDescription => m_abilityDescription;
         #endregion
 
-        public ArmyCharacterData GetMember(int index) => m_members[index];
-
-        private void ClearMembers()
-        {
-            m_members = new ArmyCharacterData[0];
-        }
-
         #region Attack Functions
         public int GetTotalAttackPower()
         {
@@ -68,10 +54,6 @@ namespace DChild.Gameplay.ArmyBattle
                 if (m_useCharactersForPower)
                 {
                     var power = 0;
-                    for (int i = 0; i < m_members.Length; i++)
-                    {
-                        power += m_members[i]?.power ?? 0;
-                    }
                     return power;
                 }
                 else
