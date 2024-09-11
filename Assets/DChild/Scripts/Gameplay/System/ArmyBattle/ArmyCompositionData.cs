@@ -131,7 +131,7 @@ namespace DChild.Gameplay.ArmyBattle
                 }
             }
             return message;
-            string GetDetail(IArmyAttackInfo data) => $"{data.groupName}({data.GetTotalAttackPower()})";
+            string GetDetail(IAttackGroup data) => $"{data.groupName}({data.GetAttackPower()})";
         }
 #endif
 
