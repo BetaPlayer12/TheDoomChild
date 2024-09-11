@@ -378,14 +378,14 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator ColliderAttackSlashRoutine()
         {
             m_origWeapon.SetActive(true);
-            yield return new WaitForSeconds(0.2f);
+            yield return new WaitForSeconds(0.5f);
             m_origWeapon.SetActive(false);
         }
 
         private IEnumerator ColliderAttackCleaveRoutine()
         {
             m_swordCleave.SetActive(true);
-            yield return new WaitForSeconds(0.2f);
+            yield return new WaitForSeconds(0.5f);
             m_swordCleave.SetActive(false);
         }
 
@@ -526,7 +526,6 @@ namespace DChild.Gameplay.Characters.Enemies
                     break;
                 case State.ReturnToSpawnPoint:
                     StopAllCoroutines();
-
                     StartCoroutine(ReturnToStartingPoint());
                     break;
                 //case State.Turning:
@@ -606,12 +605,13 @@ namespace DChild.Gameplay.Characters.Enemies
 
                     //break;
                 case State.Chasing:
-                    {
-                        if (IsFacingTarget())
+                    StopAllCoroutines();
+                    if (IsFacingTarget())
                         {
                             m_attackDecider.DecideOnAttack();
                             if (m_attackDecider.hasDecidedOnAttack && IsTargetInRange(m_attackDecider.chosenAttack.range) && !m_wallSensor.allRaysDetecting)
                             {
+                               
                                 m_movement.Stop();
                                 m_animation.SetAnimation(0, m_info.idleAnimation, true);
                                 m_stateHandle.SetState(State.Attacking);
@@ -627,8 +627,10 @@ namespace DChild.Gameplay.Characters.Enemies
                                 }
                                 else
                                 {
+                                    
                                     m_movement.Stop();
                                     m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                                    
                                 }
                             }
                         }
@@ -639,7 +641,7 @@ namespace DChild.Gameplay.Characters.Enemies
                             //    m_stateHandle.SetState(State.Turning);
                             CustomTurn();
                         }
-                    }
+                    
                     break;
 
                 case State.ReevaluateSituation:

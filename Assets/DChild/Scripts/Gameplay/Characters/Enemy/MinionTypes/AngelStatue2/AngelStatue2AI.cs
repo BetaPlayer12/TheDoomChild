@@ -202,7 +202,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 if (m_stateHandle.currentState != State.Chasing && !m_isDetecting)
                 {
                     m_isDetecting = true;
-                    m_stateHandle.SetState(State.Detect);
+                    m_stateHandle.OverrideState(State.Detect);
                 }
                 m_currentPatience = 0;
                 //var patienceRoutine = PatienceRoutine();
@@ -330,7 +330,7 @@ namespace DChild.Gameplay.Characters.Enemies
                                     new AttackInfo<Attack>(Attack.Attack2, m_info.attack2.range));
             m_attackDecider.hasDecidedOnAttack = false;
         }
-
+      
         private IEnumerator DetectRoutine()
         {
             //m_hitbox.Disable();
@@ -346,13 +346,22 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_bgStatue.SetActive(true);
                 m_bgStatue.transform.SetParent(null);
                 m_hitbox.Enable();
-                if (!IsFacingTarget())
-                {
-                    CustomTurn();
-                }
+                //if (!IsFacingTarget())
+                //{
+                //    m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                //   // m_turnHandle.Execute(m_info.turnAnimation.animation, m_info.idleAnimation.animation);
+                //    //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.turnAnimation.animation);
+                //    CustomTurn();
+                //    Debug.Log("hello is not facing target!!!!!!!");
+                   
+                //}
+                //else
+                //{
                 //m_animation.SetAnimation(0, m_info.brokeToIdleAnimation, false);
                 //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.brokeToIdleAnimation);
-            } 
+                //}
+
+            }
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_stateHandle.OverrideState(State.ReevaluateSituation);
             yield return null;
@@ -365,6 +374,8 @@ namespace DChild.Gameplay.Characters.Enemies
             if (!IsFacing(m_startpoint))
             {
                 CustomTurn();
+               // m_turnHandle.Execute(m_info.turnAnimation.animation, m_info.idleAnimation.animation);
+                
             }
             do
             {
@@ -407,6 +418,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_attackDecider.hasDecidedOnAttack = false;
             m_stateHandle.ApplyQueuedState();
         }
+            
         private void ChooseAttack()
         {
             if (!m_attackDecider.hasDecidedOnAttack)
@@ -554,9 +566,10 @@ namespace DChild.Gameplay.Characters.Enemies
                     break;
 
                 //case State.Turning:
-                //    m_stateHandle.Wait(m_turnState);
-                //    m_turnHandle.Execute(m_info.turnAnimation.animation, m_info.idleAnimation.animation);
-                    //break;
+                //    m_stateHandle.Wait(State.ReevaluateSituation);
+                //    // m_turnHandle.Execute(m_info.turnAnimation.animation, m_info.idleAnimation.animation);
+                //    CustomTurn();
+                //    break;
 
                 case State.Attacking:
                     StopAllCoroutines();
@@ -651,7 +664,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
                 //    break;
                 case State.Chasing:
-                        if (IsFacingTarget())
+                    StopAllCoroutines();
+                    if (IsFacingTarget())
                         {
                             m_attackDecider.DecideOnAttack();
                             if (m_attackDecider.hasDecidedOnAttack && IsTargetInRange(m_attackDecider.chosenAttack.range) && !m_wallSensor.allRaysDetecting)
@@ -678,10 +692,13 @@ namespace DChild.Gameplay.Characters.Enemies
                         }
                         else
                         {
-                            //m_turnState = State.ReevaluateSituation;
-                            //if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation.animation)
-                            //    m_stateHandle.SetState(State.Turning);
-                            CustomTurn();
+                        //m_turnState = State.ReevaluateSituation;
+                        //if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation.animation)
+                        //m_stateHandle.SetState(State.Turning);
+
+                        //m_turnHandle.Execute(m_info.turnAnimation.animation, m_info.idleAnimation.animation);
+                       
+                        CustomTurn();
                         }
                         //Debug.Log("Chasing state");
                         ////m_attackDecider.DecideOnAttack();
