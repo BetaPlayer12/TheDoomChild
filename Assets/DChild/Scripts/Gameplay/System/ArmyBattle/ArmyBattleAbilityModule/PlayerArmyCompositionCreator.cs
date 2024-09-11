@@ -80,7 +80,7 @@ public class PlayerArmyCompositionCreator : MonoBehaviour
         m_recruitedCharacters = recruitedCharacter.ToArray();
 
     }
-    private bool[] CheckMemberAvailability(ArmyGroupData armyGroup)
+    private bool[] CheckMemberAvailability(ArmyGroupTemplateData armyGroup)
     {
         var memberAvailability = new bool[armyGroup.memberCount];
         for (int k = 0; k < armyGroup.memberCount; k++)

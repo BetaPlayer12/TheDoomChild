@@ -9,8 +9,8 @@ public class RandomizedArmyAttackHandle
     [SerializeField]
     private float[] m_probabilities = new float[3];
     [SerializeField]
-    private ArmyGroupData[] m_outcomes;
-    public ArmyGroupData Randomized()
+    private ArmyGroupTemplateData[] m_outcomes;
+    public ArmyGroupTemplateData Randomized()
     {
         float rand = Random.Range(0f, 100f);
 

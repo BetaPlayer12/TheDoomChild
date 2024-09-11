@@ -2,6 +2,7 @@
 using Sirenix.OdinInspector;
 using Sirenix.Utilities;
 using UnityEngine;
+using System;
 
 namespace DChild.Gameplay.ArmyBattle
 {
@@ -70,7 +71,11 @@ namespace DChild.Gameplay.ArmyBattle
             }
         }
 
-        protected ArmyAttack CreateAttack(ArmyAttackGroup armyAttackGroup) => new ArmyAttack(armyAttackGroup.unitType, armyAttackGroup.GetTotalPower(), m_controlledArmy.powerModifier.GetModifier(armyAttackGroup.unitType));  
+        protected ArmyAttack CreateAttack(ArmyAttackGroup armyAttackGroup)
+        {
+            ////return new ArmyAttack(armyAttackGroup.unitType, armyAttackGroup.GetTotalPower(), m_controlledArmy.powerModifier.GetModifier(armyAttackGroup.unitType));
+            throw new NotImplementedException();
+        }
 
         protected ArmyAttackEvent CreateAttackEvent(ArmyAttack armyAttack) => new ArmyAttackEvent(armyAttack);
     }

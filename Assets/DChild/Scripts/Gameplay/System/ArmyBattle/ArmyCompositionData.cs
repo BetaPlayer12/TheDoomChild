@@ -20,7 +20,7 @@ namespace DChild.Gameplay.ArmyBattle
         [DetailedInfoBox("@GetSummarryAbilityMessage()", "@GetDetailedAbilityMessage()", InfoMessageType = InfoMessageType.None)]
 #endif
         [SerializeField, AssetSelector, PropertyOrder(2), InlineEditor(InlineEditorObjectFieldModes.Foldout, Expanded = true)]
-        private ArmyGroupData[] m_groups;
+        private ArmyGroupTemplateData[] m_groups;
 
         public string name => m_name;
         public int troopCount => m_troopCount;
@@ -79,7 +79,7 @@ namespace DChild.Gameplay.ArmyBattle
                 }
             }
             return message;
-            string GetDetail(IArmyAbilityInfo data) => $"{data.groupName}({data.abilityDescription})";
+            string GetDetail(ISpecialSkillGroup data) => $"{data.groupName}({data.abilityDescription})";
         }
 
         private string GetSummarryMessage(UnitType unitType)

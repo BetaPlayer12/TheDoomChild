@@ -1,5 +1,7 @@
 ﻿using DChildDebug;
+using NUnit.Framework.Constraints;
 using UnityEngine;
+using System;
 
 namespace DChild.Gameplay.ArmyBattle
 {
@@ -62,7 +64,12 @@ namespace DChild.Gameplay.ArmyBattle
 
         private int CalculateDamageDealt(int power, Outcome battleResult) => m_data.baseDamageValue + Mathf.FloorToInt(power * GetOutcomeDamageModifier(battleResult));
 
-        private int CalculateDamageReduction(int damage, UnitType type, IArmyUnitModifier modifier) => Mathf.CeilToInt(modifier.GetModifier(type) * damage);
+        private int CalculateDamageReduction(int damage, UnitType type, ArmyDamageTypeModifier modifier)
+        {
+            //return Mathf.CeilToInt(modifier.GetModifier(type) * damage);
+            throw new NotImplementedException();
+            return 0;
+        }
 
         private float GetOutcomeDamageModifier(Outcome battleResult)
         {

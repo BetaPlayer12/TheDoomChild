@@ -65,8 +65,9 @@ namespace DChild.Gameplay.ArmyBattle.UI
 
         private void UpdateDisplay()
         {
-            var modifier = m_source.controlledArmy.powerModifier.GetModifier(m_currentChoice.unitType);
-            m_display.Display(m_currentChoice, modifier);
+            throw new NotImplementedException();
+            //var modifier = m_source.controlledArmy.powerModifier.GetModifier(m_currentChoice.unitType);
+            //m_display.Display(m_currentChoice, modifier);
         }
 
         private void Awake()

@@ -1,7 +1,7 @@
 using DChild.Gameplay.ArmyBattle;
 public interface IArmyAIAction
 {
-    public ArmyGroupData GetAction();
+    public ArmyGroupTemplateData GetAction();
     bool isRandomizedAction { get; }
 
 }

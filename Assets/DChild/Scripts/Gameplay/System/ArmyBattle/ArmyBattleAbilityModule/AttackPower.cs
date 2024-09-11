@@ -2,6 +2,7 @@ using UnityEngine;
 using DChild.Gameplay.ArmyBattle;
 using System.Collections;
 using System.Collections.Generic;
+using System;
 
 
 
@@ -34,9 +35,10 @@ public class AttackPower : IArmyAbilityEffect
     {
         var convertedPercentage = PercentageConverter.ConvertPercentage(attackPercentage);
         Debug.Log(convertedPercentage);
-        army.powerModifier.SetModifier(UnitType.Rock, convertedPercentage);
-        army.powerModifier.SetModifier(UnitType.Paper, convertedPercentage);
-        army.powerModifier.SetModifier(UnitType.Scissors, convertedPercentage);
+        //army.powerModifier.SetModifier(UnitType.Rock, convertedPercentage);
+        //army.powerModifier.SetModifier(UnitType.Paper, convertedPercentage);
+        //army.powerModifier.SetModifier(UnitType.Scissors, convertedPercentage);
+        throw new NotImplementedException();
     }
 
    

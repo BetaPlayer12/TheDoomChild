@@ -24,8 +24,8 @@ namespace DChild.Gameplay.ArmyBattle
         private List<ArmyAbilityGroup> cacheAbilityGroup;
 
         public Health troopCount => m_troopCount;
-        public IArmyUnitModifier powerModifier => m_powerModifier;
-        public IArmyUnitModifier damageReductionModifier => m_damageReductionModifier;
+        public ArmyDamageTypeModifier powerModifier => m_powerModifier;
+        public ArmyDamageTypeModifier damageReductionModifier => m_damageReductionModifier;
 
         public bool HasAvailableAttackGroup(UnitType unitType)
         {
