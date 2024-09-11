@@ -222,6 +222,10 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_stateHandle.SetState(State.Detect);
                 }
             }
+            else
+            {
+                m_isDetecting = false;
+            }
         }
 
         private void OnTurnDone(object sender, FacingEventArgs eventArgs)
@@ -254,6 +258,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator FlinchRoutine()
         {
             m_hitbox.gameObject.SetActive(false);
+            transform.rotation = Quaternion.Euler(0f, 0f, 0f);
+            m_chargeGlow.Stop();
             m_animation.SetAnimation(0, m_info.flinchAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.flinchAnimation);
             m_hitbox.gameObject.SetActive(true);
@@ -292,6 +298,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_executeMoveCoroutine = null;
             }
             m_agent.Stop();
+            transform.rotation = Quaternion.Euler(0f, 0f, 0f);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_stateHandle.SetState(State.ReturnToPatrol);
             m_targetInfo.Set(null, null);
@@ -410,7 +417,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_attackHit = false;
                 m_dustImpact.Stop();
             }
-            
+            m_stabAttackBB.enabled = false;
             transform.rotation = Quaternion.Euler(0f, 0f, 0f);
             var random = UnityEngine.Random.Range(0, 2);
             transform.position = new Vector2(m_targetInfo.position.x + (random == 0 ? 5 : -5), m_targetInfo.position.y + 20);
@@ -421,8 +428,7 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 CustomTurn();
             }
-            m_hitbox.gameObject.SetActive(true);
-            m_stabAttackBB.enabled = false;
+            m_hitbox.gameObject.SetActive(true);   
             m_stabAttackAttacker.TargetDamaged -= OnTargetHit;
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_selfCollider.SetActive(false);
@@ -501,6 +507,7 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 transform.rotation = Quaternion.Euler(0f, 0f, angle * Mathf.Rad2Deg - 180);
             }
+            yield return null;
             m_animation.SetAnimation(0, m_info.chargeAttackAimComplete, false);
             m_chargeGlow.Play();
             yield return null;
@@ -508,6 +515,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator ChargedStabRoutine()
         {
             m_stateHandle.Wait(State.Cooldown);
+            m_selfCollider.SetActive(true);
             transform.rotation = Quaternion.Euler(0f, 0f, 0f);
             m_chargedAttackAttacker.TargetDamaged += OnTargetHit;
             m_chargedAttackBB.enabled = true;
@@ -526,7 +534,8 @@ namespace DChild.Gameplay.Characters.Enemies
             m_chargeGlow.Stop();
 
             //Attack
-
+            m_hitbox.gameObject.SetActive(false);
+            
             //var currenttarget = m_targetInfo.transform.position;
             var directionFacing = transform.right * (m_character.facing == HorizontalDirection.Right ? 1 : -1);
             var distanceToWall = 0f;
@@ -548,6 +557,7 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 m_animation.SetAnimation(0, m_info.chargeAttackEnd, false);
                 yield return new WaitForAnimationComplete(m_animation.animationState, m_info.chargeAttackEnd);
+                m_chargedAttackBB.enabled = false;
                 m_dustImpact.Play();
                 yield return null;
                 m_dustImpact.Stop();
@@ -562,12 +572,12 @@ namespace DChild.Gameplay.Characters.Enemies
             }
             else
             {
+                m_chargedAttackBB.enabled = false;
                 transform.rotation = Quaternion.Euler(0f, 0f, 0f);
                 m_animation.SetAnimation(0, m_info.idleAnimation, false);
                 yield return new WaitForAnimationComplete(m_animation.animationState, m_info.idleAnimation);
                 m_stateHandle.OverrideState(State.Attacking);
             }
-
 
             //attackend
             if (!IsFacingTarget())
@@ -576,7 +586,6 @@ namespace DChild.Gameplay.Characters.Enemies
             }
             m_hitbox.gameObject.SetActive(true);
             m_selfCollider.SetActive(false);
-            m_chargedAttackBB.enabled = false;
             m_chargedAttackAttacker.TargetDamaged -= OnTargetHit;
             m_stateHandle.ApplyQueuedState();
             yield return null;
@@ -698,11 +707,12 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_animation.DisableRootMotion();
             var targetPOsition = m_targetInfo.position;
-            bool inRange = false;
+            bool inAttackRange = false;
+            var wallDistance = Vector2.Distance(transform.position, WallPosition());
             /*Vector2.Distance(transform.position, target) > m_info.spearMeleeAttack.range*/ //old target in range condition
             var moveSpeed = m_info.move.speed - UnityEngine.Random.Range(0, 3);
             var newPos = Vector2.zero;
-            while (!inRange || TargetBlocked())
+            while (!inAttackRange || TargetBlocked() || wallDistance >= 20f)
             {
                 newPos = new Vector2(targetPOsition.x, targetPOsition.y + 20f);
                 bool xTargetInRange = Mathf.Abs(targetPOsition.x - transform.position.x) < attackRange ? true : false;
@@ -711,12 +721,12 @@ namespace DChild.Gameplay.Characters.Enemies
                 {
                     if (yTargetInRange)
                     {
-                        inRange = true;
+                        inAttackRange = true;
                     }
                 }
                 else
                 {
-                    inRange = true;
+                    inAttackRange = true;
                 }
 
                 DynamicMovement(newPos, moveSpeed);
