@@ -712,7 +712,7 @@ namespace DChild.Gameplay.Characters.Enemies
             /*Vector2.Distance(transform.position, target) > m_info.spearMeleeAttack.range*/ //old target in range condition
             var moveSpeed = m_info.move.speed - UnityEngine.Random.Range(0, 3);
             var newPos = Vector2.zero;
-            while (!inAttackRange || TargetBlocked() || wallDistance >= 20f)
+            while (!inAttackRange || TargetBlocked() || wallDistance < 20f)
             {
                 newPos = new Vector2(targetPOsition.x, targetPOsition.y + 20f);
                 bool xTargetInRange = Mathf.Abs(targetPOsition.x - transform.position.x) < attackRange ? true : false;
