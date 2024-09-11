@@ -91,6 +91,9 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField, ValueDropdown("GetEvents")]
             private string m_innardsThrowEvent;
             public string innardsThrowEvent => m_innardsThrowEvent;
+            [SerializeField, ValueDropdown("GetEvents")]
+            private string m_groundSmashEvent;
+            public string groundSmashEvent => m_groundSmashEvent;
             [SerializeField]
             private SimpleProjectileAttackInfo m_projectile;
             public SimpleProjectileAttackInfo projectile => m_projectile;
@@ -393,7 +396,7 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return new WaitForSeconds(.5f);
             m_animation.animationState.TimeScale = animTime;
             m_legCollider.SetActive(false);
-            m_shockwaveBB.enabled = true;
+            
             while (time < m_info.leapTime)
             {
                 m_character.physics.SetVelocity(velocity * transform.localScale.x, 0);
@@ -472,7 +475,11 @@ namespace DChild.Gameplay.Characters.Enemies
             }
         }
 
-       
+        private void OnGroundSmash()
+        {
+            m_shockwaveBB.enabled = true;
+        }
+
 
         protected override void Start()
         {
@@ -481,6 +488,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_startPoint = transform.position;
             m_spineEventListener.Subscribe(m_info.groundPoundEvent, OnGroundPoundSpawn);
             m_spineEventListener.Subscribe(m_info.innardsThrowEvent, OnInnardsThrowEvent);
+            m_spineEventListener.Subscribe(m_info.groundSmashEvent, OnGroundSmash);
         }
 
         protected override void Awake()
@@ -603,12 +611,13 @@ namespace DChild.Gameplay.Characters.Enemies
                     {
                         m_flinchHandle.m_autoFlinch = false;
                        
-                        if (Vector2.Distance(m_targetInfo.position, transform.position) < m_info.swipeAttack.range * 2)
+                        if (Vector2.Distance(m_targetInfo.position, transform.position) <= m_info.swipeAttack.range * 2)
                         {
                             m_currentAttack = Attack.Swipe;
                             m_currentAttackRange = m_info.swipeAttack.range;
                         }
-                        if (Vector2.Distance(m_targetInfo.position, transform.position) <= m_info.leapAttack.range)
+                        if (Vector2.Distance(m_targetInfo.position, transform.position) <= m_info.leapAttack.range && 
+                            Vector2.Distance(m_targetInfo.position, transform.position) > m_info.swipeAttack.range * 2)
                         {
                             m_currentAttack = Attack.Leap;
                             m_currentAttackRange = m_info.leapAttack.range;
