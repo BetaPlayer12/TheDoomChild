@@ -1,31 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!61 &7088244813904981631
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4447421342429651484}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: -0.27536094, y: 2.3649845}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0, y: 0}
-    oldSize: {x: 0, y: 0}
-    newSize: {x: 0, y: 0}
-    adaptiveTilingThreshold: 0
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 4.0082026, y: 5.72602}
-  m_EdgeRadius: 0
 --- !u!1 &6642526335931721020
 GameObject:
   m_ObjectHideFlags: 0
@@ -39,6 +13,7 @@ GameObject:
   - component: {fileID: 6642526335931721017}
   - component: {fileID: 6642526335931721022}
   - component: {fileID: 6642526335931721023}
+  - component: {fileID: 1152279968367292034}
   m_Layer: 11
   m_Name: Overworld Portal
   m_TagString: Untagged
@@ -56,6 +31,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 1.9, y: -9.48, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7011527655927193321}
   m_Father: {fileID: 0}
@@ -176,6 +152,19 @@ CircleCollider2D:
   m_Offset: {x: -0.08, y: 0.4299388}
   serializedVersion: 2
   m_Radius: 0.83395624
+--- !u!114 &1152279968367292034
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6642526335931721020}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56eb94d3a6af70146bc650c7d234b97b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_overworldInput: {fileID: 0}
 --- !u!1001 &4135288066640015928
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -187,6 +176,26 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: OverworldPortal_Prefab
+      objectReference: {fileID: 0}
+    - target: {fileID: 6354172079354637521, guid: 9d97929562386054ead2b09049325d38,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6354172079354637521, guid: 9d97929562386054ead2b09049325d38,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.17570432
+      objectReference: {fileID: 0}
+    - target: {fileID: 6354172079354637521, guid: 9d97929562386054ead2b09049325d38,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.17570432
+      objectReference: {fileID: 0}
+    - target: {fileID: 6354172079354637521, guid: 9d97929562386054ead2b09049325d38,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.17570432
       objectReference: {fileID: 0}
     - target: {fileID: 6354172079354637521, guid: 9d97929562386054ead2b09049325d38,
         type: 3}
@@ -205,6 +214,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6354172079354637521, guid: 9d97929562386054ead2b09049325d38,
         type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6354172079354637521, guid: 9d97929562386054ead2b09049325d38,
+        type: 3}
       propertyPath: m_LocalRotation.x
       value: 0
       objectReference: {fileID: 0}
@@ -216,16 +230,6 @@ PrefabInstance:
     - target: {fileID: 6354172079354637521, guid: 9d97929562386054ead2b09049325d38,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6354172079354637521, guid: 9d97929562386054ead2b09049325d38,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6354172079354637521, guid: 9d97929562386054ead2b09049325d38,
-        type: 3}
-      propertyPath: m_RootOrder
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6354172079354637521, guid: 9d97929562386054ead2b09049325d38,
@@ -243,21 +247,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6354172079354637521, guid: 9d97929562386054ead2b09049325d38,
-        type: 3}
-      propertyPath: m_LocalScale.x
-      value: 0.17570432
-      objectReference: {fileID: 0}
-    - target: {fileID: 6354172079354637521, guid: 9d97929562386054ead2b09049325d38,
-        type: 3}
-      propertyPath: m_LocalScale.y
-      value: 0.17570432
-      objectReference: {fileID: 0}
-    - target: {fileID: 6354172079354637521, guid: 9d97929562386054ead2b09049325d38,
-        type: 3}
-      propertyPath: m_LocalScale.z
-      value: 0.17570432
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9d97929562386054ead2b09049325d38, type: 3}
 --- !u!1 &4447421342429651484 stripped
@@ -266,6 +255,32 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 4135288066640015928}
   m_PrefabAsset: {fileID: 0}
+--- !u!61 &7088244813904981631
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4447421342429651484}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: -0.27536094, y: 2.3649845}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 4.0082026, y: 5.72602}
+  m_EdgeRadius: 0
 --- !u!4 &7011527655927193321 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6354172079354637521, guid: 9d97929562386054ead2b09049325d38,
