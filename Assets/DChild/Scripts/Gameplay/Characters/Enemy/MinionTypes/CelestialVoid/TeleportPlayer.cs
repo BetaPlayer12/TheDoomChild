@@ -8,26 +8,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[AddComponentMenu("DChild/Gameplay/Enemies/Minion/TriggerForTeleportationCounter")]
 public class TeleportPlayer : MonoBehaviour
 {
-    
-    /*[SerializeField]
-    private Damage m_damagePerInterval;
-    [SerializeField]
-    private Damage m_damagePerEnragedInterval;
-    [SerializeField]
-    private int m_heal;
-    [SerializeField]
-    private int m_enragedHeal;
-    [SerializeField]
-    private int m_postRageHeal;
-    private IDamageable[] m_damageable;
-    [SerializeField]
-    private IHealable[] m_healable;
-    [SerializeField, MinValue(0.1)]
-    private float m_drainDelay = 0.2f;*/
     [SerializeField]
     private CelestialVoidAI m_celestialVoidAI;
+    [SerializeField]
+    private TeleportPlayerController m_teleportPlayerController;
     [SerializeField]
     private BoxCollider2D m_boxCollider;
     [SerializeField]
@@ -35,9 +22,9 @@ public class TeleportPlayer : MonoBehaviour
 
     public EventAction<EventActionArgs> OnPlayerStay;
 
-    public bool IsPlayerInsideBounds()
+    /*public bool IsPlayerInsideBounds()
     {
-        /*if (m_boxCollider.bounds.Contains(m_celestialVoidAI.m_playerPos))
+        *//*if (m_boxCollider.bounds.Contains(m_celestialVoidAI.m_playerPos))
         {
             Debug.Log("sulod di sa");
             return true;
@@ -47,13 +34,13 @@ public class TeleportPlayer : MonoBehaviour
             StartCoroutine(TurnOffRoutine());
             Debug.Log("player pos" + m_celestialVoidAI.m_playerPos);
             return false;
-        }*/
+        }*//*
         return false;
-    }
+    }*/
 
-    private void Start()
+    /*private void Start()
     {
-        m_celestialVoidAI.GetComponent<CelestialVoidAI>().OnAttackingState += OnAttackingState;
+        //m_celestialVoidAI.GetComponent<CelestialVoidAI>().OnAttackingState += OnAttackingState;
     }
 
     private void OnAttackingState(object sender, EventActionArgs eventArgs)
@@ -66,6 +53,17 @@ public class TeleportPlayer : MonoBehaviour
         m_boxCollider.enabled = false;
         //Destroy(this.gameObject);
         //throw new System.NotImplementedException();
+    }*/
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.tag == "Hitbox")
+        {
+            m_teleportPlayerController.m_boxCollider.enabled = true;
+        }
+    }
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        StartCoroutine(TurnOffRoutine());
     }
     //private void OnTriggerStay2D(Collider2D collision)
     //{
@@ -78,21 +76,25 @@ public class TeleportPlayer : MonoBehaviour
     //        }
     //    }
     //}
-    //private void OnTriggerExit2D(Collider2D collision)
-    //{
-    //    StopAllCoroutines();
-    //    StartCoroutine(TurnOffRoutine());
-    //}
+
     private float time = 0f;
     private float duration = 1.5f;
     private bool willTeleport;
+    private bool lastBoundCheckRequestResult;
     public Vector2 m_playerPos;
+
+    public bool IsTargetInsideBounds(Vector3 targetPosition) {
+       var isInsideBounds = m_boxCollider.bounds.Contains(targetPosition);
+        lastBoundCheckRequestResult = isInsideBounds;
+        return isInsideBounds;
+    }
+
     private IEnumerator TurnOffRoutine()
     {
         yield return new WaitForSeconds(.5f);
-        m_boxCollider.enabled = false;
+        m_teleportPlayerController.m_boxCollider.enabled = false;
     }
-    public IEnumerator TriggerRoutine()
+    /*public IEnumerator TriggerRoutine()
     {
         time = 0f;
         duration = 1f;
@@ -108,8 +110,8 @@ public class TeleportPlayer : MonoBehaviour
             EventSender();
         }
         yield return null;
-    }
-    public void EventSender()
+    }*/
+    /*public void EventSender()
     {
         if(willTeleport)
         {
@@ -117,7 +119,7 @@ public class TeleportPlayer : MonoBehaviour
             StartCoroutine(m_celestialVoidAI.ActivateTeleportFX());
             willTeleport = false;
         }
-    }
+    }*/
     /*private bool m_drainable = false;
     private bool m_enraged = false;*/
 
@@ -180,10 +182,14 @@ public class TeleportPlayer : MonoBehaviour
 
         }
     }*/
-    private void Update()
+/*    private void Update()
     {
-        boolenitoto = m_boxCollider.bounds.Contains(m_playerPos);
+        boolenitoto = 
+        if (boolenitoto)
+        {
+            Debug.Log("true");
+        }
         Debug.Log("sulod di sa" + m_boxCollider.bounds.center);
         Debug.Log("player ni sa" + m_playerPos);
-    }
+    }*/
 }

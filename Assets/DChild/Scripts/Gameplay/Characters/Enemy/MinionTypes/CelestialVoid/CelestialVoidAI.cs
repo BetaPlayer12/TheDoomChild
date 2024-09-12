@@ -174,6 +174,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private bool m_willPatrol;
         [SerializeField]
         private TeleportPlayer m_teleportPlayer;
+        [SerializeField]
+        private TeleportPlayerController m_teleportPlayerController;
 
         [ShowInInspector]
         private StateHandle<State> m_stateHandle;
@@ -227,7 +229,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 {
                     if (Vector2.Distance(m_targetInfo.position, transform.position) > m_info.patienceDistanceTolerance)
                     {
-                        Patience();
+                        StartCoroutine(PatienceRoutine());
                     }
                 }
             }
@@ -237,25 +239,29 @@ namespace DChild.Gameplay.Characters.Enemies
                 {
                     if (Vector2.Distance(m_targetInfo.position, transform.position) > m_info.patienceDistanceTolerance)
                     {
-                        Patience();
+                        StartCoroutine(PlayerTeleportChecker());
+                        StartCoroutine(PatienceRoutine());
                     }
                 }*/
-                StopAllCoroutines();
+                m_attackCounterForPatience = 0;
                 m_teleportPlayer.m_playerPos = new Vector2(0, 0);
-                m_isDetecting = false; 
-                if (m_stateHandle.currentState == State.WaitBehaviourEnd)
+                m_isDetecting = false;
+                //StopAllCoroutines();
+                if (m_stateHandle.currentState == State.WaitBehaviourEnd/* && m_targetInfo.isValid*/)
                 {
-                    StopAllCoroutines();
+                    //StopAllCoroutines();
+                    //StartCoroutine(PlayerTeleportChecker());
                     StartCoroutine(PatienceRoutine());
-                    m_stateHandle.OverrideState(State.ReturnToPatrol);
+                    //m_stateHandle.OverrideState(State.ReturnToPatrol);
                     Debug.Log("State of waitBehaviourEnd");
                 }
-                else
+                /*else
                 {
-                    StopAllCoroutines();
+                    //StopAllCoroutines();
                     StartCoroutine(PatienceRoutine());
+                    m_stateHandle.OverrideState(State.ReturnToPatrol);
                     Debug.Log("or here");
-                }
+                }*/
             }
         }
 
@@ -271,22 +277,23 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_stateHandle.OverrideState(State.WaitBehaviourEnd);
             //StopAllCoroutines();
             m_agent.Stop();
-            m_stateHandle.Wait(m_targetInfo.isValid ? State.Cooldown : State.ReevaluateSituation);
-            if (m_targetInfo.isValid)
+            m_stateHandle.Wait(m_targetInfo.isValid || !TargetBlocked() ? State.Cooldown : State.ReevaluateSituation);
+            StartCoroutine(FlinchRoutine());
+            /*if (m_targetInfo.isValid)
             {
-                /*if (!IsFacingTarget())
+                *//*if (!IsFacingTarget())
                 {
                     CustomTurn();
                 }
                 if (m_animation.GetCurrentAnimation(0).ToString() == m_info.attack1.animation)
                 {
                     StartCoroutine(CounterFlinchRoutine());
-                }*/
+                }*//*
                 //else
                 //{
                     StartCoroutine(FlinchRoutine());
                 //}
-            }
+            }*/
         }
 
         private IEnumerator FlinchRoutine()
@@ -295,8 +302,9 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_info.flinchAnimation, false);
             /*yield return new WaitForAnimationComplete(m_animation.animationState, m_info.flinchAnimation);*/
             yield return new WaitForSeconds(0.1f);
-            m_hitbox.gameObject.SetActive(true);
-            m_animation.SetAnimation(0, m_info.idleAnimation, true);
+            m_hitbox.gameObject.SetActive(true);/*
+            m_animation.SetAnimation(0, m_info.idleAnimation, true);*/
+            yield return StartCoroutine(PatienceRoutine());
             m_stateHandle.ApplyQueuedState();
             yield return null;
         }
@@ -334,20 +342,30 @@ namespace DChild.Gameplay.Characters.Enemies
         }
         private IEnumerator PatienceRoutine()
         {
-            yield return new WaitForSeconds(5f);
-            //StopAllCoroutines();
-            m_enablePatience = false;
-            m_targetInfo.Set(null, null);
-            m_isDetecting = false;
-            if (m_executeMoveCoroutine != null)
+            if (m_teleportPlayerController.TeleportRoutine != null)
             {
-                StopCoroutine(m_executeMoveCoroutine);
-                m_executeMoveCoroutine = null;
+                yield return new WaitForSeconds(3f);
+                //StopAllCoroutines();
+                m_enablePatience = false;
+                m_targetInfo.Set(null, null);
+                m_isDetecting = false;
+                yield return StartCoroutine(PlayerTeleportChecker());
+                if (m_executeMoveCoroutine != null)
+                {
+                    StopCoroutine(m_executeMoveCoroutine);
+                    m_executeMoveCoroutine = null;
+                }
+                m_agent.Stop();
+                //StopAllCoroutines();
+                m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                m_stateHandle.OverrideState(State.ReturnToPatrol);
+                StopAllCoroutines();
             }
-            m_agent.Stop();
-            //StopAllCoroutines();
-            m_animation.SetAnimation(0, m_info.idleAnimation, true);
-            m_stateHandle.SetState(State.ReturnToPatrol);
+            else
+            {
+                m_stateHandle.OverrideState(State.ReturnToPatrol);
+                StopAllCoroutines();
+            }
         }
 
         public override void ApplyData()
@@ -379,20 +397,29 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator DetectRoutine()
         {
             m_animation.SetAnimation(0, m_info.detectAnimation, false);
+            if (m_teleportPlayerController.IsTargetInsideBounds(m_targetInfo.position) && m_teleportPlayerController.m_checker == false)
+            {
+                StartCoroutine(m_teleportPlayerController.TriggerRoutine());
+            }
             Animator anim = m_detectionFX.GetComponent<Animator>();
             anim.SetBool("detected", true);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.detectAnimation);
-            if (m_teleportPlayer.IsPlayerInsideBounds())
-            {
-                StartCoroutine(m_teleportPlayer.TriggerRoutine());
-            }
             m_stateHandle.OverrideState(State.Chasing);
             yield return null;
         }
         public EventAction<EventActionArgs> OnAttackingState;
+        private int m_attackCounterForPatience;
         private IEnumerator AttackRoutine()
         {
+            if (m_teleportPlayerController.IsTargetInsideBounds(m_targetInfo.position))
+            {
+                StartCoroutine(m_teleportPlayerController.TriggerRoutine());
+            }
             yield return new WaitForSeconds(.5f);
+            if(m_attackCounterForPatience == 2)
+            {
+                yield return StartCoroutine(PatienceRoutine());
+            }
             m_stateHandle.Wait(State.ReevaluateSituation);
             m_animation.SetAnimation(0, m_info.healAnticipationAnimation, false);
             /*if (m_willTeleportPlayer)
@@ -422,10 +449,13 @@ namespace DChild.Gameplay.Characters.Enemies
                 if (waitAnimation)
                     m_targetInfo.transform.position = m_teleportationMarker.position;
             }*/
+           
+
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_selfCollider.SetActive(false);
             m_flinchHandle.m_autoFlinch = true;
             m_stateHandle.ApplyQueuedState();
+            m_attackCounterForPatience++;
             yield return null;
         }
         
@@ -590,10 +620,10 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             Debug.Log(m_info);
             base.Awake();
-            m_teleportPlayer.GetComponent<TeleportPlayer>().OnPlayerStay += OnPlayerStay;
+            m_teleportPlayerController.GetComponent<TeleportPlayerController>().OnPlayerStay += OnPlayerStay;
             m_patrolHandle.TurnRequest += OnTurnRequest;
             m_attackHandle.AttackDone += OnAttackDone;
-            //m_flinchHandle.FlinchStart += OnFlinchStart;
+            m_flinchHandle.FlinchStart += OnFlinchStart;
             //m_flinchHandle.FlinchEnd += OnFlinchEnd;
             m_turnHandle.TurnDone += OnTurnDone;
             m_deathHandle.SetAnimation(m_info.deathAnimation.animation);
@@ -676,8 +706,9 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_attackDecider.hasDecidedOnAttack = false;
                     break;
                 case State.Cooldown:
+                    StartCoroutine(PatienceRoutine());
                     //m_stateHandle.Wait(State.ReevaluateSituation);
-                    if (!IsFacingTarget())
+                    /*if (!IsFacingTarget())
                     {
                         m_turnState = State.Cooldown;
                         m_stateHandle.SetState(State.Turning);
@@ -692,7 +723,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         m_currentCD = 0;
                         m_selfCollider.SetActive(true);
                         m_stateHandle.OverrideState(State.ReevaluateSituation);
-                    }
+                    }*/
 
                     break;
                 case State.Chasing:
@@ -722,7 +753,7 @@ namespace DChild.Gameplay.Characters.Enemies
         public IEnumerator ActivateTeleportFX()
         {
             m_stateHandle.Wait(State.ReturnToPatrol);
-            if (m_teleportPlayer.IsPlayerInsideBounds())
+            if (m_willTeleportPlayer)
             {
                 instance = GameSystem.poolManager.GetPool<PoolableObjectPool>().GetOrCreateItem(m_info.teleportMarker);
                 instance.SpawnAt(new Vector2(m_targetInfo.position.x, m_targetInfo.position.y - 2f), Quaternion.identity);
@@ -738,7 +769,13 @@ namespace DChild.Gameplay.Characters.Enemies
                 GameplaySystem.playerManager.EnableControls();
                 m_stateHandle.ApplyQueuedState();
                 m_willTeleportPlayer = false;
+                m_teleportPlayerController.TeleportRoutine = null;
             }
+            yield return null;
+        }
+        private IEnumerator PlayerTeleportChecker()
+        {
+            yield return new WaitUntil(() => m_teleportPlayerController.TeleportRoutine == null);
             yield return null;
         }
         protected override void OnTargetDisappeared()
@@ -759,7 +796,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         public override void ReturnToSpawnPoint()
         {
-            Patience();
+            PatienceRoutine();
         }
 
         protected override void OnForbidFromAttackTarget()

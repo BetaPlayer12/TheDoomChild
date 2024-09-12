@@ -47,6 +47,81 @@ MonoBehaviour:
   m_destinationTolerance: 2
   m_refreshPath: 0
   m_refreshRate: 0
+--- !u!1 &7370733174007352831
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6920419112268728559}
+  - component: {fileID: 8480469876229181335}
+  - component: {fileID: 6502137635785544057}
+  m_Layer: 9
+  m_Name: TeleportBounds
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6920419112268728559
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7370733174007352831}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.56, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8322647851919502429}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!61 &8480469876229181335
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7370733174007352831}
+  m_Enabled: 0
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: -7.449499, y: 1.8238232}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 17.525856, y: 11.824051}
+  m_EdgeRadius: 0
+--- !u!114 &6502137635785544057
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7370733174007352831}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf5274d08ca68c6479a5fece45b9b50f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_teleportPlayerScript: {fileID: 4749846493114006453}
+  m_celestialVoidAI: {fileID: 1132357948903099121}
+  m_boxCollider: {fileID: 8480469876229181335}
+  m_playerPos: {x: 0, y: 0}
 --- !u!1 &8977011140860201723
 GameObject:
   m_ObjectHideFlags: 0
@@ -606,6 +681,11 @@ PrefabInstance:
       propertyPath: m_celestialVoidAI
       value: 
       objectReference: {fileID: 1132357948903099121}
+    - target: {fileID: 3926130316365661265, guid: 2d9cc30f73a02de48bd74d67b6235ef0,
+        type: 3}
+      propertyPath: m_teleportPlayerController
+      value: 
+      objectReference: {fileID: 6502137635785544057}
     - target: {fileID: 4798362116589526248, guid: 2d9cc30f73a02de48bd74d67b6235ef0,
         type: 3}
       propertyPath: m_model
@@ -639,7 +719,7 @@ PrefabInstance:
     - target: {fileID: 5633083752109772288, guid: 2d9cc30f73a02de48bd74d67b6235ef0,
         type: 3}
       propertyPath: m_Size.x
-      value: 10.865929
+      value: 9.241283
       objectReference: {fileID: 0}
     - target: {fileID: 5633083752109772288, guid: 2d9cc30f73a02de48bd74d67b6235ef0,
         type: 3}
@@ -649,12 +729,12 @@ PrefabInstance:
     - target: {fileID: 5633083752109772288, guid: 2d9cc30f73a02de48bd74d67b6235ef0,
         type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5633083752109772288, guid: 2d9cc30f73a02de48bd74d67b6235ef0,
         type: 3}
       propertyPath: m_Offset.x
-      value: -4.1195364
+      value: -3.3072133
       objectReference: {fileID: 0}
     - target: {fileID: 5633083752109772288, guid: 2d9cc30f73a02de48bd74d67b6235ef0,
         type: 3}
@@ -714,7 +794,7 @@ PrefabInstance:
     - target: {fileID: 7445714615230264205, guid: 2d9cc30f73a02de48bd74d67b6235ef0,
         type: 3}
       propertyPath: m_Name
-      value: VisionSensor
+      value: TeleportStartTrigger
       objectReference: {fileID: 0}
     - target: {fileID: 8346270479241501369, guid: 2d9cc30f73a02de48bd74d67b6235ef0,
         type: 3}
@@ -892,6 +972,12 @@ Rigidbody2D:
 --- !u!198 &7835365502502346096 stripped
 ParticleSystem:
   m_CorrespondingSourceObject: {fileID: 1957515430569403028, guid: 2d9cc30f73a02de48bd74d67b6235ef0,
+    type: 3}
+  m_PrefabInstance: {fileID: 8617271202520498148}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &8322647851919502429 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 353900498505143225, guid: 2d9cc30f73a02de48bd74d67b6235ef0,
     type: 3}
   m_PrefabInstance: {fileID: 8617271202520498148}
   m_PrefabAsset: {fileID: 0}
@@ -1109,6 +1195,7 @@ MonoBehaviour:
   m_detectionFX: {fileID: 8442382652037162269}
   m_willPatrol: 1
   m_teleportPlayer: {fileID: 4749846493114006453}
+  m_teleportPlayerController: {fileID: 6502137635785544057}
   m_willTeleportPlayer: 0
   m_teleportationMarker: {fileID: 0}
 --- !u!114 &4224925408022031985
