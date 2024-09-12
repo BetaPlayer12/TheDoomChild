@@ -48,6 +48,16 @@ namespace DChild.Gameplay.ArmyBattle
             m_controlledArmy.GetAvailableAbilityGroups();
         }
 
+        public void SetArmyToControl(Army army)
+        {
+            m_controlledArmy = army;
+        }
+
+        public ArmyGroup[] GetArmyGroups()
+        {
+            throw new NotImplementedException();
+        }
+
         protected virtual void ChooseAttack(UnitType unitType)
         {
             var chosenGroups = m_controlledArmy.GetAvailableAttackGroups(unitType);
