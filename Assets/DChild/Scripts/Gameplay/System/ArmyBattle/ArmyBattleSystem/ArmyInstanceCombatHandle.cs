@@ -15,8 +15,9 @@ namespace DChild.Gameplay.ArmyBattle
 
         public bool canAttack => !m_isTurnSkipped && m_attackLeftCount > 0;
 
-        public Health troopCount => m_armyController.controlledArmy.troopCount;
+        public int troopCount => m_armyController.controlledArmy.troopCount;
 
+        Health IArmyCombatInfo.troopCount => throw new System.NotImplementedException();
 
         public ArmyInstanceCombatHandle(ArmyController armyController)
         {

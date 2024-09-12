@@ -15,19 +15,19 @@ public class Gamble : IArmyAbilityEffect
     {
         float number = Random.Range(0f, 1f);
         var convertedPercentage = PercentageConverter.ConvertPercentage(m_gamblePercentage);
-        var ownerCurrentValue = owner.troopCount.currentValue;
-        var opponentCurrentValue = opponent.troopCount.currentValue;
+        var ownerCurrentValue = owner.troopCount;
+        var opponentCurrentValue = opponent.troopCount;
         if (m_appliedEffectToOpponent)
         {
 
             if (number >= 0f && number <= convertedPercentage)
             {
-                owner.troopCount.ReduceCurrentValue(opponentCurrentValue);
+                owner.AddTroopCount(opponentCurrentValue);
                 Debug.Log("Win");
             }
             else
             {
-                opponent.troopCount.ReduceCurrentValue(opponentCurrentValue);
+                opponent.SubtractTroopCount(opponentCurrentValue);
                 Debug.Log("Lose");
             }
 
@@ -36,12 +36,12 @@ public class Gamble : IArmyAbilityEffect
         {
             if (number >= 0f && number <= convertedPercentage)
             {
-                opponent.troopCount.ReduceCurrentValue(ownerCurrentValue);
+                opponent.AddTroopCount(ownerCurrentValue);
                 Debug.Log("Win");
             }
             else
             {
-                owner.troopCount.ReduceCurrentValue(ownerCurrentValue);
+                owner.SubtractTroopCount(ownerCurrentValue);
                 Debug.Log("Lose");
             }
         }
