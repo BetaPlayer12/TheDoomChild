@@ -333,6 +333,7 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 m_animation.SetAnimation(0, m_info.transformUnAggroAnimation, false);
             }
+            Debug.Log("?????????AHHHHHHHHHHHH");
             m_targetInfo.Set(null, null);
             m_isDetecting = false;
             m_stateHandle.SetState(State.ReturnToPatrol);
@@ -377,6 +378,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void CalculateRunPath()
         {
+            Debug.Log("????!??????????");
             bool isRight = m_targetInfo.position.x >= transform.position.x;
             var movePos = new Vector2(transform.position.x + (isRight ? -3 : 3), m_targetInfo.position.y +10);
             while (Vector2.Distance(transform.position, WallPosition()) <= 5)
@@ -644,7 +646,16 @@ namespace DChild.Gameplay.Characters.Enemies
             m_attackCache = new List<Attack>();
             m_attackUsed = new bool[m_attackCache.Count];
         }
-
+        IEnumerator delayedAgentStopperRoutine()
+        {
+            // this is a failsafe
+            Debug.Log("LOOGAMI");
+            yield return new WaitForSeconds(.5f);
+            m_agent.Stop();
+            m_rigidbody2D.constraints = RigidbodyConstraints2D.FreezeRotation;
+            m_rigidbody2D.AddForce((Vector2.up * 30f) + (Vector2.right * 15f), ForceMode2D.Force);
+            m_stateHandle.OverrideState(State.ReevaluateSituation);
+        }
         private void Update()
         {
             if(m_AwayfromOrigPosinSeconds<=10)
@@ -717,7 +728,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         }
                         else
                         {
-                            DynamicMovement(m_startPos, 1f);
+                            //DynamicMovement(m_startPos, 1f);
                             m_rigidbody2D.velocity = Vector2.up * 3f;
                         }
                         m_aggroGroup.SetActive(false);
@@ -755,10 +766,29 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_pushDirection.rotation = Quaternion.Euler(0f, 0f, atan2 * Mathf.Rad2Deg);
                     m_rigidbody2D.AddForce(-m_pushDirection.right * m_info.patrol.speed, ForceMode2D.Force);
                     m_agent.Stop();
-                    m_stateHandle.Wait(State.ReevaluateSituation);
+                    if (m_rigidbody2D.constraints == RigidbodyConstraints2D.FreezeAll)
+                    {
+                        Debug.Log("AHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH HOW DID YOU GET HERE!!!!!!!!!!!!!!!!!");
+                        /*//m_rigidbody2D.constraints = RigidbodyConstraints2D.None;
+                        m_rigidbody2D.constraints = RigidbodyConstraints2D.FreezeRotation;
+                        StopAllCoroutines();
+                        DynamicMovement(m_startPos, m_info.move.speed);
+                        m_agent.Stop();
+                        //m_rigidbody2D.constraints = ~RigidbodyConstraints2D.FreezePosition; /// FFS sometimes the entity just returns with a frozen position
+                        m_rigidbody2D.AddForce((Vector2.up * 30f) + (Vector2.right * 15f), ForceMode2D.Force);
+                        //m_rigidbody2D.AddForce((m_startPos - (Vector2)transform.position).normalized*30f, ForceMode2D.Force);
+                        //m_rigidbody2D.velocity = Vector2.up * 3f;
+                        Patience();
+                        //ResetAI();
+                        //OnFlinchStart();
+                        m_stateHandle.OverrideState(State.Cooldown);*/
+                        StartCoroutine(delayedAgentStopperRoutine());
+                        //break;
+                    }
+                        m_stateHandle.Wait(State.ReevaluateSituation);
                     
                     m_isFirstPatrol = false;
-
+                    
                     break;
 
 
@@ -775,6 +805,10 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_turnHandle.Execute();
                     break;
                 case State.Attacking:
+                    if(m_mimicPustuleBombChain.enabled)
+                    {
+                        m_mimicPustuleBombChain.enabled = false;
+                    }
                     m_stateHandle.Wait(State.Cooldown);
                     //m_animation.SetAnimation(0, m_info.idleAggroAnimation2, true);
                     m_animation.SetAnimation(0, m_info.idleAggroAnimation1, true);
@@ -852,7 +886,6 @@ namespace DChild.Gameplay.Characters.Enemies
                         m_AwayfromOrigPosinSeconds = 9.5f;
                         m_isAggro = false;
                         m_stateHandle.SetState(State.ReturnToPatrol);
-
                         //timeCounter = 0;
                     }
                     break;
