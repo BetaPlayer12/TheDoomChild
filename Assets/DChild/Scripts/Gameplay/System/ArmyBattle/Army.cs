@@ -48,6 +48,11 @@ namespace DChild.Gameplay.ArmyBattle
             return m_troopCount + additionalTroops;
         }
 
+        public int SubtractTroopCount(int subtractedTroops)
+        {
+            return m_troopCount - subtractedTroops;
+        }
+
         public void ResetTroopCount()
         {
             throw new NotImplementedException(); 
