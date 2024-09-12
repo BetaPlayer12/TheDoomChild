@@ -68,7 +68,7 @@ namespace DChild.Gameplay.ArmyBattle
             throw new NotImplementedException();
         }
 
-        public void ResetGrouAvailability()
+        public void ResetGroupAvailability()
         {
             throw new NotImplementedException();
         }
