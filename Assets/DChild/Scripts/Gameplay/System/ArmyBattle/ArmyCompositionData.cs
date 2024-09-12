@@ -32,14 +32,14 @@ namespace DChild.Gameplay.ArmyBattle
             for (int i = 0; i < m_groups.Length; i++)
             {
                 var group = m_groups[i];
-                if (group.canAttack)
-                {
-                    attackgroups.Add(new ArmyAttackGroup(group));
-                }
-                if (group.hasAbility)
-                {
-                    abilitygroups.Add(new ArmyAbilityGroup(group));
-                }
+                //if (group.canAttack)
+                //{
+                //    attackgroups.Add(new ArmyAttackGroup(group));
+                //}
+                //if (group.hasAbility)
+                //{
+                //    abilitygroups.Add(new ArmyAbilityGroup(group));
+                //}
             }
             return new ArmyComposition(m_name, m_troopCount, attackgroups.ToArray(), abilitygroups.ToArray());
         }
@@ -75,7 +75,7 @@ namespace DChild.Gameplay.ArmyBattle
                 var group = m_groups[i];
                 if (group.hasAbility)
                 {
-                    message += "\n" + GetDetail(group);
+                    //message += "\n" + GetDetail(group);
                 }
             }
             return message;
@@ -127,7 +127,7 @@ namespace DChild.Gameplay.ArmyBattle
                 var attackGroup = m_groups[i];
                 if (attackGroup.attackType == unitType)
                 {
-                    message += "\n" + GetDetail(attackGroup);
+                    //message += "\n" + GetDetail(attackGroup);
                 }
             }
             return message;

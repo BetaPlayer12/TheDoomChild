@@ -16,9 +16,9 @@ namespace DChild.Gameplay.ArmyBattle
         [SerializeField, HideInEditorMode, TabGroup("Composition")]
         private ArmyComposition m_composition;
         [ShowInInspector, HideInEditorMode, ReadOnly]
-        private ArmyUnitModifier m_powerModifier;
+        private ArmyDamageTypeModifier m_powerModifier;
         [ShowInInspector, HideInEditorMode, ReadOnly]
-        private ArmyUnitModifier m_damageReductionModifier;
+        private ArmyDamageTypeModifier m_damageReductionModifier;
 
         private List<ArmyAttackGroup> cacheAttackGroup;
         private List<ArmyAbilityGroup> cacheAbilityGroup;
@@ -106,8 +106,8 @@ namespace DChild.Gameplay.ArmyBattle
         public void Initialize()
         {
             SetTroopCount(m_composition.troopCount);
-            m_powerModifier = new ArmyUnitModifier(1, 1, 1);
-            m_damageReductionModifier = new ArmyUnitModifier(0, 0, 0);
+            //m_powerModifier = new ArmyUnitModifier(1, 1, 1);
+            //m_damageReductionModifier = new ArmyUnitModifier(0, 0, 0);
             m_composition.attacks.ResetAvailability();
         }
 
@@ -126,8 +126,8 @@ namespace DChild.Gameplay.ArmyBattle
             }
 
             //#endif
-            m_powerModifier = new ArmyUnitModifier(1, 1, 1);
-            m_damageReductionModifier = new ArmyUnitModifier(0, 0, 0);
+            //m_powerModifier = new ArmyUnitModifier(1, 1, 1);
+            //m_damageReductionModifier = new ArmyUnitModifier(0, 0, 0);
             cacheAttackGroup = new List<ArmyAttackGroup>();
             cacheAbilityGroup = new List<ArmyAbilityGroup>();
         }

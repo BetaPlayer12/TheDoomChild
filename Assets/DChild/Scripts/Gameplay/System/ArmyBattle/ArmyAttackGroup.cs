@@ -38,7 +38,7 @@ namespace DChild.Gameplay.ArmyBattle
                 }
                 else if (memberAvailability[i])
                 {
-                    m_armyGroupList.Add(reference.GetTroopCount(i));
+                    //m_armyGroupList.Add(reference.GetTroopCount(i));
                 }
             }
         }

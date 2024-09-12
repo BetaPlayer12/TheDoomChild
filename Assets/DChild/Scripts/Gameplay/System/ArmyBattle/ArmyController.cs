@@ -51,7 +51,7 @@ namespace DChild.Gameplay.ArmyBattle
         protected virtual void ChooseAttack(UnitType unitType)
         {
             var chosenGroups = m_controlledArmy.GetAvailableAttackGroups(unitType);
-            m_currentAttackGroup = chosenGroups[Random.Range(0, chosenGroups.Count)];
+            //m_currentAttackGroup = chosenGroups[Random.Range(0, chosenGroups.Count)];
             m_currentAttack = CreateAttack(m_currentAttackGroup);
             SendAttackChosenEvent(CreateAttackEvent(m_currentAttack));
         }

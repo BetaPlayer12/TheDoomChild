@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using DChild.Gameplay.ArmyBattle;
+using System;
 
 public class PlayerArmyCompositionCreator : MonoBehaviour
 {
@@ -31,20 +32,20 @@ public class PlayerArmyCompositionCreator : MonoBehaviour
             if (HasAvailableMembers(memberAvailability) == false)
                 continue;
 
-            var attackgroup = new ArmyAttackGroup(armyGroup);
+            //var attackgroup = new ArmyAttackGroup(armyGroup);
 
-            if (armyGroup.canAttack)
-            {
-                attackgroup.SetMemberAvailability(memberAvailability);
-                attackgroups.Add(attackgroup);
-            }
-            if (armyGroup.hasAbility)
-            {
-                var abilityGroup = new ArmyAbilityGroup(armyGroup);
-                //we should set availability of ability group
-                abilityGroup.SetAvailability(true);
-                abilitygroups.Add(abilityGroup);
-            }
+            //if (armyGroup.canAttack)
+            //{
+            //    attackgroup.SetMemberAvailability(memberAvailability);
+            //    attackgroups.Add(attackgroup);
+            //}
+            //if (armyGroup.hasAbility)
+            //{
+            //    //var abilityGroup = new ArmyAbilityGroup(armyGroup);
+            //    //we should set availability of ability group
+            //    abilityGroup.SetAvailability(true);
+            //    abilitygroups.Add(abilityGroup);
+            //}
                        
         }
         return new ArmyComposition(m_name, CalculateTotalTroopCount(), attackgroups.ToArray(), abilitygroups.ToArray());
@@ -82,12 +83,13 @@ public class PlayerArmyCompositionCreator : MonoBehaviour
     }
     private bool[] CheckMemberAvailability(ArmyGroupTemplateData armyGroup)
     {
-        var memberAvailability = new bool[armyGroup.memberCount];
-        for (int k = 0; k < armyGroup.memberCount; k++)
-        {
-            memberAvailability[k] = HasBeenRecruited(armyGroup.GetMember(k));
-        }
-        return memberAvailability;
+        //var memberAvailability = new bool[armyGroup.memberCount];
+        //for (int k = 0; k < armyGroup.memberCount; k++)
+        //{
+        //    memberAvailability[k] = HasBeenRecruited(armyGroup.GetMember(k));
+        //}
+        //return memberAvailability;
+        throw new NotImplementedException();
     }
 
     private bool HasBeenRecruited(ArmyCharacterData character)
