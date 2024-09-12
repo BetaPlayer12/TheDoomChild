@@ -83,8 +83,8 @@ namespace DChild.Gameplay.ArmyBattle
         {
             if (m_isListeningToEntities)
             {
-                m_player.troopCount.Death -= OnPlayerArmyLose;
-                m_enemy.troopCount.Death -= OnEnemyArmyLose;
+                //m_player.troopCount.Death -= OnPlayerArmyLose;
+                //m_enemy.troopCount.Death -= OnEnemyArmyLose;
                 m_isListeningToEntities = false;
             }
         }
@@ -93,8 +93,8 @@ namespace DChild.Gameplay.ArmyBattle
         {
             if (m_isListeningToEntities == false)
             {
-                m_player.troopCount.Death += OnPlayerArmyLose;
-                m_enemy.troopCount.Death += OnEnemyArmyLose;
+                //m_player.troopCount.Death += OnPlayerArmyLose;
+                //m_enemy.troopCount.Death += OnEnemyArmyLose;
                 m_isListeningToEntities = true;
             }
         }
