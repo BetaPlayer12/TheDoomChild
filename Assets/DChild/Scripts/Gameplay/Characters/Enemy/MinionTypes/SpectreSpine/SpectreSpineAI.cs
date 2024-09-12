@@ -208,6 +208,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private bool m_attackHit;
 
+        private bool m_patience;
+
         private void OnTurnRequest(object sender, EventActionArgs eventArgs) => m_stateHandle.OverrideState(State.Turning);
 
         public override void SetTarget(IDamageable damageable, Character m_target = null)
@@ -217,6 +219,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 base.SetTarget(damageable);
                 if (m_stateHandle.currentState != State.Chasing && !m_isDetecting)
                 {
+                    m_patience = false;
                     m_selfCollider.SetActive(true);
                     m_isDetecting = true;
                     m_stateHandle.SetState(State.Detect);
@@ -224,7 +227,8 @@ namespace DChild.Gameplay.Characters.Enemies
             }
             else
             {
-                m_isDetecting = false;
+                 m_patience = true;
+                 m_isDetecting = false;
             }
         }
 
@@ -240,6 +244,8 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_stateHandle.OverrideState(State.WaitBehaviourEnd);
             StopAllCoroutines();
             m_agent.Stop();
+            transform.rotation = Quaternion.Euler(0f, 0f, 0f);
+            m_chargeGlow.Stop();
             m_stateHandle.Wait(m_targetInfo.isValid ? State.Cooldown : State.ReevaluateSituation);
             if (m_targetInfo.isValid)
             {
@@ -258,11 +264,11 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator FlinchRoutine()
         {
             m_hitbox.gameObject.SetActive(false);
-            transform.rotation = Quaternion.Euler(0f, 0f, 0f);
-            m_chargeGlow.Stop();
             m_animation.SetAnimation(0, m_info.flinchAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.flinchAnimation);
             m_hitbox.gameObject.SetActive(true);
+            m_stabAttackBB.enabled = false;
+            m_chargedAttackBB.enabled = false;
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_stateHandle.ApplyQueuedState();
             yield return null;
@@ -395,8 +401,9 @@ namespace DChild.Gameplay.Characters.Enemies
 
             //attackProper
             m_stabAttackAttacker.TargetDamaged += OnTargetHit;
+            m_stabAttackBB.enabled = true;
             var targetPOsition = m_targetInfo.position;
-            m_stabAttackAttacker.enabled = true;
+            
             m_animation.SetAnimation(0, m_info.verticalStabAttack.animation, false);
 
             do
@@ -411,13 +418,14 @@ namespace DChild.Gameplay.Characters.Enemies
             m_dustTrail.Stop();
             m_animation.SetAnimation(0, m_info.verticalStabEnd, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.verticalStabEnd);
+            m_stabAttackBB.enabled = false;
             if (m_attackHit)
             {
                 m_dustImpact.Play();
                 m_attackHit = false;
                 m_dustImpact.Stop();
             }
-            m_stabAttackBB.enabled = false;
+            
             transform.rotation = Quaternion.Euler(0f, 0f, 0f);
             var random = UnityEngine.Random.Range(0, 2);
             transform.position = new Vector2(m_targetInfo.position.x + (random == 0 ? 5 : -5), m_targetInfo.position.y + 20);
@@ -428,9 +436,10 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 CustomTurn();
             }
-            m_hitbox.gameObject.SetActive(true);   
+             
             m_stabAttackAttacker.TargetDamaged -= OnTargetHit;
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
+            m_hitbox.gameObject.SetActive(true);
             m_selfCollider.SetActive(false);
             m_stateHandle.ApplyQueuedState();
             yield return null;
@@ -438,6 +447,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator AimSwingRoutine()
         {
+            transform.rotation = Quaternion.Euler(0f, 0f, 0f);
             Vector3 v_diff = (m_targetInfo.transform.position - transform.position);
             float angle = Mathf.Atan2(v_diff.y, v_diff.x);
 
@@ -517,8 +527,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_stateHandle.Wait(State.Cooldown);
             m_selfCollider.SetActive(true);
             transform.rotation = Quaternion.Euler(0f, 0f, 0f);
-            m_chargedAttackAttacker.TargetDamaged += OnTargetHit;
-            m_chargedAttackBB.enabled = true;
+            
             float distanceToGround = 0f;
             m_animation.SetAnimation(0, m_info.fadeOutAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.fadeOutAnimation);
@@ -534,6 +543,8 @@ namespace DChild.Gameplay.Characters.Enemies
             m_chargeGlow.Stop();
 
             //Attack
+            m_chargedAttackAttacker.TargetDamaged += OnTargetHit;
+            m_chargedAttackBB.enabled = true;
             m_hitbox.gameObject.SetActive(false);
             
             //var currenttarget = m_targetInfo.transform.position;
@@ -600,7 +611,8 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             bool isRight = m_targetInfo.position.x >= transform.position.x;
             var movePos = new Vector2(transform.position.x + (isRight ? -3 : 3), m_targetInfo.position.y + 20);
-            while (Vector2.Distance(transform.position, WallPosition()) <= 20)
+            var wallDistance = Vector2.Distance(transform.position, WallPosition());
+            while (wallDistance <= 20)
             {
                 movePos = new Vector2(movePos.x + 0.1f, movePos.y + 20);
                 break;
@@ -708,11 +720,11 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.DisableRootMotion();
             var targetPOsition = m_targetInfo.position;
             bool inAttackRange = false;
-            var wallDistance = Vector2.Distance(transform.position, WallPosition());
+            
             /*Vector2.Distance(transform.position, target) > m_info.spearMeleeAttack.range*/ //old target in range condition
             var moveSpeed = m_info.move.speed - UnityEngine.Random.Range(0, 3);
             var newPos = Vector2.zero;
-            while (!inAttackRange || TargetBlocked() || wallDistance < 20f)
+            while (!inAttackRange || TargetBlocked())
             {
                 newPos = new Vector2(targetPOsition.x, targetPOsition.y + 20f);
                 bool xTargetInRange = Mathf.Abs(targetPOsition.x - transform.position.x) < attackRange ? true : false;
@@ -935,9 +947,11 @@ namespace DChild.Gameplay.Characters.Enemies
 
             if (m_targetInfo.isValid)
             {
-                if (TargetBlocked())
+                if (TargetBlocked() || m_patience == true)
                 {
-                    if (Vector2.Distance(m_targetInfo.position, transform.position) > m_info.patienceDistanceTolerance)
+                    var distanceTolerated = Vector2.Distance(m_targetInfo.position, transform.position);
+                    Debug.Log("Distance Tolerated: " + distanceTolerated);
+                    if ( distanceTolerated > m_info.patienceDistanceTolerance)
                     {
                         Patience();
                     }
