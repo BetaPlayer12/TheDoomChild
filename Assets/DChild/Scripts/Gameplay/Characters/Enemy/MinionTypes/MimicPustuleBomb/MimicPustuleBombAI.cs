@@ -649,12 +649,15 @@ namespace DChild.Gameplay.Characters.Enemies
         IEnumerator delayedAgentStopperRoutine()
         {
             // this is a failsafe
-            Debug.Log("LOOGAMI");
-            yield return new WaitForSeconds(.5f);
+            
+            yield return new WaitForSeconds(3.5f);
+            Debug.Log("THIS IS A FAILSAFE// SOMETHING GONE WRONG SO RESET");
             m_agent.Stop();
             m_rigidbody2D.constraints = RigidbodyConstraints2D.FreezeRotation;
-            m_rigidbody2D.AddForce((Vector2.up * 30f) + (Vector2.right * 15f), ForceMode2D.Force);
-            m_stateHandle.OverrideState(State.ReevaluateSituation);
+            m_rigidbody2D.AddForce((Vector2.up * 30f) + (Vector2.right * 35f), ForceMode2D.Force);
+            ResetAI();
+            Patience();
+            //m_stateHandle.OverrideState(State.ReevaluateSituation);
         }
         private void Update()
         {
