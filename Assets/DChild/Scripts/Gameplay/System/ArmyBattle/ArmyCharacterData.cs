@@ -1,3 +1,4 @@
+using DChild.Gameplay.Environment;
 using Sirenix.OdinInspector;
 using System.Collections;
 using UnityEngine;
@@ -19,6 +20,8 @@ namespace DChild.Gameplay.ArmyBattle
         private int m_troopCount = 1;
         [SerializeField, DisableInInlineEditors, VerticalGroup("Line/Vert"), MinValue(1)]
         private int m_attackPower = 1;
+        [SerializeField, DisableInInlineEditors, VerticalGroup("Line/Vert"), MinValue(1)]
+        private Location m_location;
 
 
         public ArmyCharacterData()
