@@ -8,6 +8,8 @@ namespace DChild.Gameplay.ArmyBattle
     {
         Melee,
         Range,
-        Magic
+        Magic,
+        [HideInInspector]
+        _COUNT
     }
 }
