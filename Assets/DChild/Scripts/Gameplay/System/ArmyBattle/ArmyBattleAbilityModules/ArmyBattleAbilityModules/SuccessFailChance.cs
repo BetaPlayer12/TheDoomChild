@@ -13,7 +13,7 @@ namespace DChild.Gameplay.ArmyBattle
         public ArmyController ApplyEffect(ArmyController owner, ArmyController target)
         {
             float chance = Random.Range(0, 100);
-            if ((chance <= m_successChance)
+            if ((chance <= m_successChance))
             {
                 m_effectSuccessful = true;
             }
