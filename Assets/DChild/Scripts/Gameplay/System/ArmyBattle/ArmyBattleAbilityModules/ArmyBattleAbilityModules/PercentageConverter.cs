@@ -17,7 +17,7 @@ public static class PercentageConverter
 
     public static float ConvertTroopsPercentage(float troopPercentage, Army ownerOrEnemy)
     {
-        var currentValueHp = ownerOrEnemy.troopCount.currentValue;
+        var currentValueHp = ownerOrEnemy.troopCount;
         var valueOftroops = troopPercentage * currentValueHp;
         return valueOftroops;
     }

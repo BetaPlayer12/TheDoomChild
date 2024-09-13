@@ -7,9 +7,9 @@ namespace DChild.Gameplay.ArmyBattle
     [System.Serializable]
     public class ArmyAttackGroup : ArmyCharacterGroup
     {
-        private IArmyAttackInfo m_reference;
+        private IAttackGroup m_reference;
 
-        public ArmyAttackGroup(IArmyAttackInfo data) : base()
+        public ArmyAttackGroup(IAttackGroup data) : base()
         {
             m_reference = data;
         }
@@ -19,7 +19,7 @@ namespace DChild.Gameplay.ArmyBattle
             m_reference = reference.reference;
         }
 
-        public IArmyAttackInfo reference => m_reference;
+        public IAttackGroup reference => m_reference;
         public UnitType unitType => m_reference.attackType;
 
         [ShowInInspector, PropertyOrder(0)]
@@ -38,7 +38,7 @@ namespace DChild.Gameplay.ArmyBattle
                 }
                 else if (memberAvailability[i])
                 {
-                    m_armyGroupList.Add(reference.GetMember(i));
+                    //m_armyGroupList.Add(reference.GetTroopCount(i));
                 }
             }
         }
@@ -55,7 +55,7 @@ namespace DChild.Gameplay.ArmyBattle
             }
             else
             {
-                power = m_reference.GetTotalAttackPower();
+                power = m_reference.GetAttackPower();
             }
             return power;
         }

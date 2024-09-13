@@ -17,16 +17,16 @@ public class StealTroops :IArmyAbilityEffect
         if (m_appliedEffectToOpponent)
         {
             var troopsConverted = PercentageConverter.ConvertTroopsPercentage(convertedTroopPercentage, opponent);
-            opponent.troopCount.ReduceCurrentValue(Mathf.FloorToInt(troopsConverted));
-            owner.troopCount.AddCurrentValue(Mathf.FloorToInt(troopsConverted));
-            Debug.Log(opponent.troopCount.currentValue + " Opponent");
+            opponent.SubtractTroopCount(Mathf.FloorToInt(troopsConverted));
+            owner.AddTroopCount(Mathf.FloorToInt(troopsConverted));
+            Debug.Log(opponent.troopCount + " Opponent");
         }
         else
         {
             var troopsConverted = PercentageConverter.ConvertTroopsPercentage(convertedTroopPercentage, opponent);
-            opponent.troopCount.AddCurrentValue(Mathf.FloorToInt(troopsConverted));
-            owner.troopCount.ReduceCurrentValue(Mathf.FloorToInt(troopsConverted));
-            Debug.Log(owner.troopCount.currentValue + " Player");
+            opponent.AddTroopCount(Mathf.FloorToInt(troopsConverted));
+            owner.SubtractTroopCount(Mathf.FloorToInt(troopsConverted));
+            Debug.Log(owner.troopCount + " Player");
         }
     }
 

@@ -5,7 +5,7 @@ namespace DChild.Gameplay.ArmyBattle
     public interface IArmyCombatInfo
     {
         ArmyAttack attackInfo { get; }
-        IArmyUnitModifier damageReductionModifier { get; }
+        ArmyDamageTypeModifier damageReductionModifier { get; }
         Health troopCount { get; }
         bool canAttack { get; }
     }

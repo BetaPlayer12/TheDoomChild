@@ -12,7 +12,7 @@ public class ArmyAIData : SerializedScriptableObject
     private RandomizedArmyAttackHandle m_randomAttack;
 
     
-    public ArmyGroupData ChooseAttack(int round)
+    public ArmyGroupTemplateData ChooseAttack(int round)
     {
         /*  var minusRoud = round - 1;
           for (int i = 0; i < m_aiAction.Length; i++)

@@ -9,8 +9,8 @@ public class PlayerArmyGroups : ScriptableObject
 {
 
     [SerializeField, InlineEditor(Expanded = true)]
-    private ArmyGroupData[] m_armyGroups;
+    private ArmyGroupTemplateData[] m_armyGroups;
 
-    public ArmyGroupData GetGroups(int index) => m_armyGroups[index];
+    public ArmyGroupTemplateData GetGroups(int index) => m_armyGroups[index];
     public int groupCount => m_armyGroups.Length;
 }

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DChild.Gameplay.ArmyBattle;
+using System;
 
 public class AttackDamageReduction : IArmyAbilityEffect
 {
@@ -16,12 +17,13 @@ public class AttackDamageReduction : IArmyAbilityEffect
         var convertedPercentage = PercentageConverter.ConvertPercentage(m_PowerReductionPercentage);
         if (m_appliedEffectToOpponent)
         {
-            opponent.damageReductionModifier.SetModifier(m_unitType, convertedPercentage);
+            //opponent.damageReductionModifier.SetModifier(m_unitType, convertedPercentage);
         }
         else
         {
-            owner.damageReductionModifier.SetModifier(m_unitType, convertedPercentage);
+            //owner.damageReductionModifier.SetModifier(m_unitType, convertedPercentage);
         }
+        throw new NotImplementedException();
     }
 
 

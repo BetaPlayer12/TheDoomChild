@@ -4,7 +4,7 @@ public class RandomizedArmyAttack : IArmyAIAction
 {
     public bool isRandomizedAction => true;
 
-    ArmyGroupData IArmyAIAction.GetAction() => null;
+    ArmyGroupTemplateData IArmyAIAction.GetAction() => null;
 
 
 }

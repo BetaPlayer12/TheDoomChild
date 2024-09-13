@@ -15,16 +15,16 @@ public class HealTroops : IArmyAbilityEffect
 
     private void Heal(Army owner, Army opponent)
     {
-        var ownerCurrentValue = owner.troopCount.currentValue;
-        var opponentCurrentValue = opponent.troopCount.currentValue;
+        var ownerCurrentValue = owner.troopCount;
+        var opponentCurrentValue = opponent.troopCount;
 
         if (m_appliedEffectToOpponent)
         {
-            opponent.troopCount.AddCurrentValue(opponentCurrentValue);
+            opponent.AddTroopCount(opponentCurrentValue);
         }
         else
         {
-            owner.troopCount.AddCurrentValue(ownerCurrentValue);
+            owner.AddTroopCount(ownerCurrentValue);
         }
     }
 }

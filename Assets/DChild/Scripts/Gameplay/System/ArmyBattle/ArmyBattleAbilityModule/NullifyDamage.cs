@@ -1,4 +1,5 @@
 using DChild.Gameplay.ArmyBattle;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -16,11 +17,12 @@ public class NullifyDamage : IArmyAbilityEffect
         var percentage = PercentageConverter.ConvertPercentage(m_powerPercentage);
         if (m_isAppliedToOpponent)
         {
-            opponent.powerModifier.SetModifier(m_unitType, percentage);
+            //opponent.powerModifier.SetModifier(m_unitType, percentage);
         }
         else
         {
-            owner.powerModifier.SetModifier(m_unitType, percentage);
+            //owner.powerModifier.SetModifier(m_unitType, percentage);
         }
+        throw new NotImplementedException();
     }
 }

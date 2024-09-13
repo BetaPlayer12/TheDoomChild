@@ -9,7 +9,7 @@ namespace DChild.Gameplay.ArmyBattle
         public void ChooseAttack(int round)
         {
             var chosenArmyGroup = m_AiAttackData.ChooseAttack(round);
-            m_currentAttackGroup = new ArmyAttackGroup(chosenArmyGroup);
+            //m_currentAttackGroup = new ArmyAttackGroup(chosenArmyGroup);
             m_currentAttack = CreateAttack(m_currentAttackGroup);
             SendAttackChosenEvent(CreateAttackEvent(m_currentAttack));
         }

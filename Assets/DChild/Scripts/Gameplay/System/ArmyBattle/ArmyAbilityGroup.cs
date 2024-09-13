@@ -8,9 +8,9 @@ namespace DChild.Gameplay.ArmyBattle
     [System.Serializable]
     public class ArmyAbilityGroup : ArmyCharacterGroup
     {
-        private IArmyAbilityInfo m_reference;
+        private ISpecialSkillGroup m_reference;
 
-        public ArmyAbilityGroup(IArmyAbilityInfo data) : base()
+        public ArmyAbilityGroup(ISpecialSkillGroup data) : base()
         {
             m_reference = data;
         }
@@ -19,7 +19,7 @@ namespace DChild.Gameplay.ArmyBattle
             m_reference = data.reference;
         }
 
-        public IArmyAbilityInfo reference => m_reference;
+        public ISpecialSkillGroup reference => m_reference;
 
         [ShowInInspector, PropertyOrder(0)]
         public string description => m_reference.abilityDescription;

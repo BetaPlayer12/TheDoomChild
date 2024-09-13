@@ -6,8 +6,8 @@ using DChild.Gameplay.ArmyBattle;
 public class ScriptedArmyAttack : IArmyAIAction
 { 
     [SerializeField]
-    private ArmyGroupData m_AttackGroupData;
+    private ArmyGroupTemplateData m_AttackGroupData;
     public bool isRandomizedAction => false;
 
-    ArmyGroupData IArmyAIAction.GetAction() => m_AttackGroupData;
+    ArmyGroupTemplateData IArmyAIAction.GetAction() => m_AttackGroupData;
 }

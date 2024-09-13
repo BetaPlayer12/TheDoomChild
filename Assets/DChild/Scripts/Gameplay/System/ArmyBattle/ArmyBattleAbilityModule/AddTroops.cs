@@ -19,15 +19,15 @@ public class AddTroops : IArmyAbilityEffect
         if (m_appliedEffectToOpponent)
         {
             var troopsConverted = PercentageConverter.ConvertTroopsPercentage(convertedTroopPercentage, opponent);
-            opponent.troopCount.AddCurrentValue(Mathf.FloorToInt(troopsConverted));
-            Debug.Log(opponent.troopCount.currentValue + " Opponent");
+            opponent.AddTroopCount(Mathf.FloorToInt(troopsConverted));
+            Debug.Log(opponent.troopCount + " Opponent");
         }
         else
         {
             
             var troopsConverted = PercentageConverter.ConvertTroopsPercentage(convertedTroopPercentage, owner);
-            owner.troopCount.AddCurrentValue(Mathf.FloorToInt(troopsConverted));
-            Debug.Log(owner.troopCount.currentValue+" Player");
+            owner.AddTroopCount(Mathf.FloorToInt(troopsConverted));
+            Debug.Log(owner.troopCount +" Player");
         }
     }
 

@@ -2,6 +2,7 @@
 using Sirenix.OdinInspector;
 using Sirenix.Utilities;
 using UnityEngine;
+using System;
 
 namespace DChild.Gameplay.ArmyBattle
 {
@@ -47,10 +48,20 @@ namespace DChild.Gameplay.ArmyBattle
             m_controlledArmy.GetAvailableAbilityGroups();
         }
 
+        public void SetArmyToControl(Army army)
+        {
+            m_controlledArmy = army;
+        }
+
+        public ArmyGroup[] GetArmyGroups()
+        {
+            throw new NotImplementedException();
+        }
+
         protected virtual void ChooseAttack(UnitType unitType)
         {
             var chosenGroups = m_controlledArmy.GetAvailableAttackGroups(unitType);
-            m_currentAttackGroup = chosenGroups[Random.Range(0, chosenGroups.Count)];
+            //m_currentAttackGroup = chosenGroups[Random.Range(0, chosenGroups.Count)];
             m_currentAttack = CreateAttack(m_currentAttackGroup);
             SendAttackChosenEvent(CreateAttackEvent(m_currentAttack));
         }
@@ -70,7 +81,11 @@ namespace DChild.Gameplay.ArmyBattle
             }
         }
 
-        protected ArmyAttack CreateAttack(ArmyAttackGroup armyAttackGroup) => new ArmyAttack(armyAttackGroup.unitType, armyAttackGroup.GetTotalPower(), m_controlledArmy.powerModifier.GetModifier(armyAttackGroup.unitType));  
+        protected ArmyAttack CreateAttack(ArmyAttackGroup armyAttackGroup)
+        {
+            ////return new ArmyAttack(armyAttackGroup.unitType, armyAttackGroup.GetTotalPower(), m_controlledArmy.powerModifier.GetModifier(armyAttackGroup.unitType));
+            throw new NotImplementedException();
+        }
 
         protected ArmyAttackEvent CreateAttackEvent(ArmyAttack armyAttack) => new ArmyAttackEvent(armyAttack);
     }

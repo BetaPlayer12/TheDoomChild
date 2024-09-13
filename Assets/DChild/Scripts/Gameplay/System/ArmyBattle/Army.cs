@@ -2,6 +2,7 @@
 using Sirenix.OdinInspector;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 namespace DChild.Gameplay.ArmyBattle
 {
@@ -12,20 +13,75 @@ namespace DChild.Gameplay.ArmyBattle
         private ArmyCompositionData m_initialComposition;
         //#endif
         [SerializeField]
-        private Health m_troopCount;
+        private int m_troopCount;
         [SerializeField, HideInEditorMode, TabGroup("Composition")]
         private ArmyComposition m_composition;
         [ShowInInspector, HideInEditorMode, ReadOnly]
-        private ArmyUnitModifier m_powerModifier;
+        private ArmyDamageTypeModifier m_powerModifier;
         [ShowInInspector, HideInEditorMode, ReadOnly]
-        private ArmyUnitModifier m_damageReductionModifier;
+        private ArmyDamageTypeModifier m_damageReductionModifier;
+
+        [SerializeField]
+        private ArmyInfo m_info;
 
         private List<ArmyAttackGroup> cacheAttackGroup;
         private List<ArmyAbilityGroup> cacheAbilityGroup;
+        [SerializeField]
+        private List<ISpecialSkillGroup> m_availableSpecialSkills;
 
-        public Health troopCount => m_troopCount;
-        public IArmyUnitModifier powerModifier => m_powerModifier;
-        public IArmyUnitModifier damageReductionModifier => m_damageReductionModifier;
+        public int troopCount => m_troopCount;
+        public ArmyDamageTypeModifier powerModifier => m_powerModifier;
+        public ArmyDamageTypeModifier damageReductionModifier => m_damageReductionModifier;
+
+        public Army(ArmyInfo info)
+        {
+            m_info = info;
+        }
+
+        public int GetTroopCount()
+        {
+            return m_troopCount;
+        }
+
+        public int AddTroopCount(int additionalTroops)
+        {
+            return m_troopCount + additionalTroops;
+        }
+
+        public int SubtractTroopCount(int subtractedTroops)
+        {
+            return m_troopCount - subtractedTroops;
+        }
+
+        public void ResetTroopCount()
+        {
+            throw new NotImplementedException(); 
+        }
+        
+        public List<IAttackGroup> GetAvailableGroups(DamageType damageType)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<IAttackGroup> SetAttackingGroups(DamageType damageType)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ResetGroupAvailability()
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<SpecialSkill> GetAvailableSkills()
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<SpecialSkill> SetSpecialSkillAvailability()
+        {
+            throw new NotImplementedException();
+        }
 
         public bool HasAvailableAttackGroup(UnitType unitType)
         {
@@ -89,7 +145,6 @@ namespace DChild.Gameplay.ArmyBattle
         public void SetArmyComposition(ArmyComposition armyComposition)
         {
             m_composition = armyComposition;
-            SetTroopCount(m_composition.troopCount);
         }
 
         public void RecordArmyCompositionTo(ref ArmyComposition armyComposition)
@@ -97,17 +152,10 @@ namespace DChild.Gameplay.ArmyBattle
             //armyComposition.CopyComposition(m_composition);
         }
 
-        public void SetTroopCount(int troopCount)
-        {
-            m_troopCount.SetMaxValue(troopCount);
-            m_troopCount.ResetValueToMax();
-        }
-
         public void Initialize()
         {
-            SetTroopCount(m_composition.troopCount);
-            m_powerModifier = new ArmyUnitModifier(1, 1, 1);
-            m_damageReductionModifier = new ArmyUnitModifier(0, 0, 0);
+            //m_powerModifier = new ArmyUnitModifier(1, 1, 1);
+            //m_damageReductionModifier = new ArmyUnitModifier(0, 0, 0);
             m_composition.attacks.ResetAvailability();
         }
 
@@ -126,8 +174,8 @@ namespace DChild.Gameplay.ArmyBattle
             }
 
             //#endif
-            m_powerModifier = new ArmyUnitModifier(1, 1, 1);
-            m_damageReductionModifier = new ArmyUnitModifier(0, 0, 0);
+            //m_powerModifier = new ArmyUnitModifier(1, 1, 1);
+            //m_damageReductionModifier = new ArmyUnitModifier(0, 0, 0);
             cacheAttackGroup = new List<ArmyAttackGroup>();
             cacheAbilityGroup = new List<ArmyAbilityGroup>();
         }

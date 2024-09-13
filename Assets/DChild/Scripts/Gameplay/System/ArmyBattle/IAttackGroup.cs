@@ -1,12 +1,14 @@
 ﻿namespace DChild.Gameplay.ArmyBattle
 {
-    public interface IArmyAttackInfo
+    public interface IAttackGroup
     {
         string groupName { get; }
         UnitType attackType { get; }
         int memberCount { get; }
         bool isUsingCharactersForPower { get; }
-        ArmyCharacterData GetMember(int index);
-        int GetTotalAttackPower();
+        int GetAttackPower();
+
+        ArmyCharacterGroup GetCharacterGroup();
+        DamageType GetDamageType();
     }
 }
