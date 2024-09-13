@@ -1,4 +1,5 @@
 ﻿
+using DChild.Gameplay.Cinematics.Cameras;
 using DChild.Gameplay.Combat;
 using DChild.Serialization;
 using Holysoft.Event;
@@ -46,6 +47,11 @@ namespace DChild.Gameplay.Environment
         [ShowInInspector, OnValueChanged("SetObjectStateDebug")]
         private bool m_isDestroyed;
         [SerializeField]
+        private bool m_forceShakeOnDestroy;
+        [SerializeField, ShowIf("m_forceShakeOnDestroy"), Indent]
+        private CameraShakeData m_onDestroyShake;
+
+        [SerializeField]
         private bool m_createDebris;
         [SerializeField, ShowIf("m_createDebris"), Indent]
         private AssetReferenceGameObject m_debris;
@@ -91,7 +97,7 @@ namespace DChild.Gameplay.Environment
             }
         }
 
-    
+
 
         public void RecordForceReceived(Vector2 forceDirection, float force)
         {
@@ -115,8 +121,6 @@ namespace DChild.Gameplay.Environment
             }
         }
 
-        
-
         public void Initialize()
         {
             m_isDestroyed = false;
@@ -128,6 +132,10 @@ namespace DChild.Gameplay.Environment
         {
             m_isDestroyed = true;
             m_onDestroy?.Invoke();
+            if (m_forceShakeOnDestroy)
+            {
+                GameplaySystem.cinema.ExecuteCameraShake(m_onDestroyShake);
+            }
             if (m_createDebris)
             {
                 InstantiateDebris(m_debris);
@@ -187,7 +195,7 @@ namespace DChild.Gameplay.Environment
             else
             {
                 //assuming the game object is particle effects rather than actual debris and effects shgould be going left to right
-                if(m_forceDirection.x == -1)
+                if (m_forceDirection.x == -1)
                 {
 
                     instanceTransform.localScale = new Vector3(m_forceDirection.x, instanceTransform.localScale.y, 1);
@@ -246,7 +254,7 @@ namespace DChild.Gameplay.Environment
         }
 
         private void Update()
-        {            
+        {
             if (m_willRepairSelf)
             {
                 if (m_isDestroyed)
@@ -258,7 +266,7 @@ namespace DChild.Gameplay.Environment
                         m_selfRepairTimer = 0;
                         RevertToFixState();
                     }
-                }   
+                }
             }
         }
 
