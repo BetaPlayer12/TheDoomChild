@@ -221,6 +221,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private Coroutine m_executeMoveCoroutine;
         private Coroutine m_detectRoutine;
         private float m_AwayfromOrigPosinSeconds;
+        bool m_constantVelocityCheck;
+        float m_velocityCheckTimer;
 
         private void OnAttackDone(object sender, EventActionArgs eventArgs)
         {
@@ -302,6 +304,7 @@ namespace DChild.Gameplay.Characters.Enemies
             }
             if (!m_isAggro)
             {
+                m_pathChecked = false;
                 m_stateHandle.OverrideState(State.ReturnToPatrol);
             }
         }
@@ -334,6 +337,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_animation.SetAnimation(0, m_info.transformUnAggroAnimation, false);
             }
             Debug.Log("?????????AHHHHHHHHHHHH");
+            m_pathChecked = false;
             m_targetInfo.Set(null, null);
             m_isDetecting = false;
             m_stateHandle.SetState(State.ReturnToPatrol);
@@ -362,6 +366,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_aggroGroup.SetActive(true);
             m_isAggro = true;
             m_mimicPustuleBombChain.enabled = false;
+            m_constantVelocityCheck = false;
             if (!IsFacingTarget())
             {
                 CustomTurn();
@@ -671,6 +676,18 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 m_returnToOriginalPos = true;
             }
+            if(m_constantVelocityCheck)
+            {
+                m_velocityCheckTimer += Time.deltaTime;
+            }
+            if(m_velocityCheckTimer>2)
+            {
+                m_velocityCheckTimer = 0;
+                if(m_rigidbody2D.velocity.x < .5f && m_rigidbody2D.velocity.x > -.5f)
+                {
+                    m_rigidbody2D.AddForce((Vector2.up * 2f) + (Vector2.right * 2f), ForceMode2D.Impulse);
+                }
+            }
             switch (m_stateHandle.currentState)
             {
                 case State.Detect:
@@ -729,6 +746,7 @@ namespace DChild.Gameplay.Characters.Enemies
                             m_returnToOriginalPos = false;
                             m_rigidbody2D.velocity = Vector2.up*3f;
                             m_pathChecked = false;
+                            m_constantVelocityCheck = true;
                         }
                         else
                         {
@@ -874,7 +892,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     break;
                 case State.Chasing:
                     m_agent.Stop();
-                    if(Vector2.Distance(m_targetInfo.position, transform.position)>3f)
+                    if(Vector2.Distance(m_targetInfo.position, transform.position)> m_info.patienceDistanceTolerance)
                     {
                         m_pathChecked = false;
                     }                 
@@ -919,6 +937,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         protected override void OnTargetDisappeared()
         {
+            m_pathChecked = false;
             m_stateHandle.OverrideState(State.ReturnToPatrol);
             m_hitbox.gameObject.SetActive(true);
             m_isDetecting = false;
