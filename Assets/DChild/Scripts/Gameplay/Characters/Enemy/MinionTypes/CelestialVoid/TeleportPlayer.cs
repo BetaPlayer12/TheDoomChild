@@ -63,7 +63,7 @@ public class TeleportPlayer : MonoBehaviour
     }
     private void OnTriggerExit2D(Collider2D collision)
     {
-        StartCoroutine(TurnOffRoutine());
+        m_teleportPlayerController.m_boxCollider.enabled = false;
     }
     //private void OnTriggerStay2D(Collider2D collision)
     //{
@@ -89,11 +89,10 @@ public class TeleportPlayer : MonoBehaviour
         return isInsideBounds;
     }
 
-    private IEnumerator TurnOffRoutine()
+    /*private IEnumerator TurnOffRoutine()
     {
         yield return new WaitForSeconds(.5f);
-        m_teleportPlayerController.m_boxCollider.enabled = false;
-    }
+    }*/
     /*public IEnumerator TriggerRoutine()
     {
         time = 0f;
