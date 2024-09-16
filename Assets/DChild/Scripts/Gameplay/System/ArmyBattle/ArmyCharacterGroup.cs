@@ -1,13 +1,20 @@
 ﻿using Sirenix.OdinInspector;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace DChild.Gameplay.ArmyBattle
 {
-    public abstract class ArmyCharacterGroup
+    [System.Serializable]
+    public class ArmyCharacterGroup : IAttackGroup, ISpecialSkillGroup
     {
+        [SerializeField]
+        private string m_name;
+        [SerializeField]
         protected List<ArmyCharacterData> m_armyGroupList;
         [ShowInInspector]
         private bool m_isAvailable;
+
+        public string name => m_name;
 
         public ArmyCharacterGroup()
         {
@@ -17,24 +24,51 @@ namespace DChild.Gameplay.ArmyBattle
         public ArmyCharacterGroup(ArmyCharacterGroup reference)
         {
             m_armyGroupList = new List<ArmyCharacterData>();
-            for (int i = 0; i < reference.armyGroupCount; i++)
-            {
-                m_armyGroupList.Add(reference.GetAvailableMember(i));
-            }
+            //for (int i = 0; i < reference.GetTroopCount; i++)
+            //{
+            //    m_armyGroupList.Add(reference.GetAvailableMember(i));
+            //}
             m_isAvailable = true;
         }
 
-
-        [ShowInInspector, PropertyOrder(0)]
-        public abstract string name { get; }
-        public int armyGroupCount => m_armyGroupList.Count;
-        public bool isAvailable => m_isAvailable;
-
-        public ArmyCharacterData GetAvailableMember(int index) => m_armyGroupList[index];
-
-        public void SetAvailability(bool isAvailable)
+        public ArmyCharacterData GetCharacter(int index)
         {
-            m_isAvailable = isAvailable;
+            return m_armyGroupList[index];
+        }
+
+        public int GetTroopCount()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public int GetAttackPower()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public ArmyCharacterGroup GetCharacterGroup()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public DamageType GetDamageType()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public bool HasSpecialSkill()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public ArmyCharacterGroup GetCharacterGroup(ArmyCharacterGroup characterGroup)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public SpecialSkill GetSpecialSkill()
+        {
+            throw new System.NotImplementedException();
         }
     }
 }
