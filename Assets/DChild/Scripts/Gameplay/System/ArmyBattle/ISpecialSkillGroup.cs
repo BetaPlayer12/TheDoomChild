@@ -2,12 +2,7 @@
 {
     public interface ISpecialSkillGroup
     {
-        string groupName { get; }
-        int memberCount { get; }
-        string abilityDescription { get; }
-        bool hasSpecialSkill { get; }
-        ArmyCharacterData GetMember(int index);
-        void UseAbility(Army owner, Army oppponent);
+        bool HasSpecialSkill();
 
         ArmyCharacterGroup GetCharacterGroup(ArmyCharacterGroup characterGroup);
 
