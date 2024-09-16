@@ -2,10 +2,7 @@
 {
     public interface IAttackGroup
     {
-        string groupName { get; }
-        UnitType attackType { get; }
-        int memberCount { get; }
-        bool isUsingCharactersForPower { get; }
+        int GetTroopCount();
         int GetAttackPower();
 
         ArmyCharacterGroup GetCharacterGroup();
