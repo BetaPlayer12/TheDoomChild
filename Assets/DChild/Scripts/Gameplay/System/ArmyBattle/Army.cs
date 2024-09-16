@@ -88,10 +88,10 @@ namespace DChild.Gameplay.ArmyBattle
             var groups = m_composition.attacks.GetAttackGroupsOfUnityType(unitType);
             for (int i = 0; i < groups.Count; i++)
             {
-                if (groups[i].isAvailable)
-                {
-                    return true;
-                }
+                //if (groups[i].isAvailable)
+                //{
+                //    return true;
+                //}
             }
 
             return false;
@@ -103,10 +103,10 @@ namespace DChild.Gameplay.ArmyBattle
             for (int i = 0; i < abilityList.count; i++)
             {
                 var group = abilityList.GetAbilityGroup(i);
-                if (group.isAvailable)
-                {
-                    return true;
-                }
+                //if (group.isAvailable)
+                //{
+                //    return true;
+                //}
             }
             return false;
         }
@@ -118,10 +118,10 @@ namespace DChild.Gameplay.ArmyBattle
             for (int i = 0; i < groups.Count; i++)
             {
                 var group = groups[i];
-                if (group.isAvailable)
-                {
-                    cacheAttackGroup.Add(group);
-                }
+                //if (group.isAvailable)
+                //{
+                //    cacheAttackGroup.Add(group);
+                //}
             }
             return cacheAttackGroup;
         }
@@ -133,10 +133,10 @@ namespace DChild.Gameplay.ArmyBattle
             for (int i = 0; i < abilityList.count; i++)
             {
                 var group = abilityList.GetAbilityGroup(i);
-                if (group.isAvailable)
-                {
-                    cacheAbilityGroup.Add(group);
-                }
+                //if (group.isAvailable)
+                //{
+                //    cacheAbilityGroup.Add(group);
+                //}
             }
 
             return cacheAbilityGroup;

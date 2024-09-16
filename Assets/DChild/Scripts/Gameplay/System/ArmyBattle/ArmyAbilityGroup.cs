@@ -21,14 +21,14 @@ namespace DChild.Gameplay.ArmyBattle
 
         public ISpecialSkillGroup reference => m_reference;
 
-        [ShowInInspector, PropertyOrder(0)]
-        public string description => m_reference.abilityDescription;
+        //[ShowInInspector, PropertyOrder(0)]
+        //public string description => m_reference.abilityDescription;
 
-        public override string name => m_reference.groupName;
+        //public string name => m_reference.groupName;
 
         public void UseAbility(Army owner, Army enemy)
         {
-            m_reference.UseAbility(owner, enemy);
+            //m_reference.UseAbility(owner, enemy);
         }
     }
 }

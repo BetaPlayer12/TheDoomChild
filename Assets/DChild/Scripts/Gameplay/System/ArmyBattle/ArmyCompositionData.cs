@@ -79,7 +79,7 @@ namespace DChild.Gameplay.ArmyBattle
                 }
             }
             return message;
-            string GetDetail(ISpecialSkillGroup data) => $"{data.groupName}({data.abilityDescription})";
+            //string GetDetail(ISpecialSkillGroup data) => $"{data.}({data.abilityDescription})";
         }
 
         private string GetSummarryMessage(UnitType unitType)
@@ -131,7 +131,7 @@ namespace DChild.Gameplay.ArmyBattle
                 }
             }
             return message;
-            string GetDetail(IAttackGroup data) => $"{data.groupName}({data.GetAttackPower()})";
+            //string GetDetail(IAttackGroup data) => $"{data.groupName}({data.GetAttackPower()})";
         }
 #endif
 

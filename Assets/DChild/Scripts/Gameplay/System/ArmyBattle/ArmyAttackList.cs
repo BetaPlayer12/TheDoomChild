@@ -33,18 +33,18 @@ namespace DChild.Gameplay.ArmyBattle
 
         public void AddAttackGroup(ArmyAttackGroup armyAttackGroup)
         {
-            var list = GetAttackGroupsOfUnityType(armyAttackGroup.unitType);
-            if (list.Contains(armyAttackGroup) == false)
-            {
-                list.Add(armyAttackGroup);
-                //Find A Way to Modify Same Group with different Member Count
-            }
+            //var list = GetAttackGroupsOfUnityType(armyAttackGroup.unitType);
+            //if (list.Contains(armyAttackGroup) == false)
+            //{
+            //    list.Add(armyAttackGroup);
+            //    //Find A Way to Modify Same Group with different Member Count
+            //}
         }
 
         public void RemoveAttackGroup(ArmyAttackGroup armyAttackGroup)
         {
-            var list = GetAttackGroupsOfUnityType(armyAttackGroup.unitType);
-            list.Remove(armyAttackGroup);
+            //var list = GetAttackGroupsOfUnityType(armyAttackGroup.unitType);
+            //list.Remove(armyAttackGroup);
         }
 
         public ArmyAttackGroup RemoveAttackGroup(UnitType unitType, int index)
@@ -103,7 +103,7 @@ namespace DChild.Gameplay.ArmyBattle
             {
                 for (int i = 0; i < groups.Count; i++)
                 {
-                    groups[i].SetAvailability(true);
+                    //groups[i].SetAvailability(true);
                 }
             }
         }

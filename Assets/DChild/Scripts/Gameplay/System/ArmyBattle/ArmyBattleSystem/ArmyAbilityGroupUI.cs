@@ -15,7 +15,7 @@ namespace DChild.Gameplay.ArmyBattle.UI
             if (group != null)
             {
                 UpdateText(m_groupLabel, group.name);
-                UpdateText(m_descriptionLabel, group.description);
+                //UpdateText(m_descriptionLabel, group.description);
             }
             else
             {

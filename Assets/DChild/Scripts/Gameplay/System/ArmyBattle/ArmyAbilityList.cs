@@ -31,7 +31,7 @@ namespace DChild.Gameplay.ArmyBattle
         {
             for (int i = 0; i < m_abilityGroups.Count; i++)
             {
-                m_abilityGroups[i].SetAvailability(true);
+                //m_abilityGroups[i].SetAvailability(true);
             }
         }
     }

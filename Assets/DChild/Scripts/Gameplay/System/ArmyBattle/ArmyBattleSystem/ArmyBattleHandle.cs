@@ -204,7 +204,7 @@ namespace DChild.Gameplay.ArmyBattle
         private void OnPlayerAbilityChosen(object sender, ArmyAbilityEvent eventArgs)
         {
             eventArgs.ability.UseAbility(m_player.armyController.controlledArmy, m_enemy.armyController.controlledArmy);
-            eventArgs.ability.SetAvailability(false);
+            //eventArgs.ability.SetAvailability(false);
         }
 
         private void Awake()

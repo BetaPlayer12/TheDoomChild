@@ -20,43 +20,43 @@ namespace DChild.Gameplay.ArmyBattle
         }
 
         public IAttackGroup reference => m_reference;
-        public UnitType unitType => m_reference.attackType;
+        //public UnitType unitType => m_reference.attackType;
 
         [ShowInInspector, PropertyOrder(0)]
         private int totalPower => GetTotalPower();
 
-        public override string name => m_reference.groupName;
+        //public string name => m_reference.groupName;
 
         public void SetMemberAvailability(params bool[] memberAvailability)
         {
             m_armyGroupList.Clear();
-            for (int i = 0; i < m_reference.memberCount; i++)
-            {
-                if (i >= memberAvailability.Length)
-                {
-                    break;
-                }
-                else if (memberAvailability[i])
-                {
-                    //m_armyGroupList.Add(reference.GetTroopCount(i));
-                }
-            }
+            //for (int i = 0; i < m_reference.memberCount; i++)
+            //{
+            //    if (i >= memberAvailability.Length)
+            //    {
+            //        break;
+            //    }
+            //    else if (memberAvailability[i])
+            //    {
+            //        //m_armyGroupList.Add(reference.GetTroopCount(i));
+            //    }
+            //}
         }
 
         public int GetTotalPower()
         {
             var power = 0;
-            if (m_reference.isUsingCharactersForPower)
-            {
-                for (int i = 0; i < m_armyGroupList.Count; i++)
-                {
-                    power += m_armyGroupList[i].power;
-                }
-            }
-            else
-            {
-                power = m_reference.GetAttackPower();
-            }
+            //if (m_reference.isUsingCharactersForPower)
+            //{
+            //    for (int i = 0; i < m_armyGroupList.Count; i++)
+            //    {
+            //        power += m_armyGroupList[i].power;
+            //    }
+            //}
+            //else
+            //{
+            //    power = m_reference.GetAttackPower();
+            //}
             return power;
         }
     }
