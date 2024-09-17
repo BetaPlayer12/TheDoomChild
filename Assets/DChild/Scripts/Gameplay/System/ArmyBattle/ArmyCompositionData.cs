@@ -58,10 +58,6 @@ namespace DChild.Gameplay.ArmyBattle
             for (int i = 0; i < m_groups.Length; i++)
             {
                 var group = m_groups[i];
-                if (group.hasAbility)
-                {
-                    abilities++;
-                }
             }
 
             return abilities;
@@ -73,10 +69,7 @@ namespace DChild.Gameplay.ArmyBattle
             for (int i = 0; i < m_groups.Length; i++)
             {
                 var group = m_groups[i];
-                if (group.hasAbility)
-                {
-                    //message += "\n" + GetDetail(group);
-                }
+      
             }
             return message;
             //string GetDetail(ISpecialSkillGroup data) => $"{data.}({data.abilityDescription})";
@@ -95,10 +88,7 @@ namespace DChild.Gameplay.ArmyBattle
             for (int i = 0; i < m_groups.Length; i++)
             {
                 var attackGroup = m_groups[i];
-                if (attackGroup.attackType == type)
-                {
-                    power += attackGroup.GetTotalAttackPower();
-                }
+
             }
 
             return power;
@@ -110,10 +100,7 @@ namespace DChild.Gameplay.ArmyBattle
             for (int i = 0; i < m_groups.Length; i++)
             {
                 var attackGroup = m_groups[i];
-                if (attackGroup.attackType == type)
-                {
-                    count++;
-                }
+
             }
 
             return count;
@@ -125,10 +112,6 @@ namespace DChild.Gameplay.ArmyBattle
             for (int i = 0; i < m_groups.Length; i++)
             {
                 var attackGroup = m_groups[i];
-                if (attackGroup.attackType == unitType)
-                {
-                    //message += "\n" + GetDetail(attackGroup);
-                }
             }
             return message;
             //string GetDetail(IAttackGroup data) => $"{data.groupName}({data.GetAttackPower()})";
