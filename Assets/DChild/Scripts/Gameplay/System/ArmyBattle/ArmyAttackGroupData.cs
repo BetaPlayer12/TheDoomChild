@@ -43,7 +43,7 @@ namespace DChild.Gameplay.ArmyBattle
                 var power = 0;
                 for (int i = 0; i < m_members.Length; i++)
                 {
-                    power += m_members[i]?.power ?? 0;
+                    power += m_members[i]?.attackPower ?? 0;
                 }
                 return power;
             }

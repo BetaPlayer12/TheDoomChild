@@ -43,9 +43,9 @@ namespace DChild.Gameplay.ArmyBattle
         }
 
         public int ID => m_ID;
-        public Sprite image => m_icon;
+        public Sprite icon => m_icon;
         public string name => m_name;
         public int troopCount => m_troopCount;
-        public int power => m_attackPower;
+        public int attackPower => m_attackPower;
     }
 }
