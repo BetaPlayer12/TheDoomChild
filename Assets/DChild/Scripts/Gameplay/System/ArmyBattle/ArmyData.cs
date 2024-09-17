@@ -7,7 +7,10 @@ namespace DChild.Gameplay.ArmyBattle
 {
     public class ArmyData
     {
-        public ArmyInfo info;
+        [SerializeField]
+        private ArmyInfo m_info;
+
+        public ArmyInfo info => m_info;
     }
 }
 
