@@ -25,12 +25,12 @@ namespace DChild.Gameplay.ArmyBattle
         public override void ChooseSpecial()
         {
             base.ChooseSpecial();
-            AbilityTypeChosen?.Invoke(m_controlledArmy.GetAvailableAbilityGroups());
+            //AbilityTypeChosen?.Invoke(m_controlledArmy.GetAvailableAbilityGroups());
         }
 
         protected override void ChooseAttack(UnitType unitType)
         {
-            AttackTypeChosen?.Invoke(m_controlledArmy.GetAvailableAttackGroups(unitType));
+            //AttackTypeChosen?.Invoke(m_controlledArmy.GetAvailableAttackGroups(unitType));
         }
     }
 }

@@ -10,7 +10,7 @@ namespace DChild.Gameplay.ArmyBattle
         private DamageType m_damageType;
         public ArmyController ApplyEffect(ArmyController owner, ArmyController target)
         {
-            target.controlledArmy.SetAttackingGroups(m_damageType);
+            //target.controlledArmy.SetAttackingGroups(m_damageType);
             throw new System.NotImplementedException();
         }
 

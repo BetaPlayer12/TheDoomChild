@@ -11,13 +11,15 @@ namespace DChild.Gameplay.ArmyBattle
 
         public ArmyController armyController => m_armyController;
         public ArmyAttack attackInfo => m_armyController.currentAttack;
-        public ArmyDamageTypeModifier damageReductionModifier => m_armyController.controlledArmy.damageReductionModifier;
+        //public ArmyDamageTypeModifier damageReductionModifier => m_armyController.controlledArmy.damageReductionModifier;
 
         public bool canAttack => !m_isTurnSkipped && m_attackLeftCount > 0;
 
         public int troopCount => m_armyController.controlledArmy.troopCount;
 
         Health IArmyCombatInfo.troopCount => throw new System.NotImplementedException();
+
+        public ArmyDamageTypeModifier damageReductionModifier => throw new System.NotImplementedException();
 
         public ArmyInstanceCombatHandle(ArmyController armyController)
         {
@@ -27,7 +29,7 @@ namespace DChild.Gameplay.ArmyBattle
 
         public void InitializeArmy()
         {
-            armyController.controlledArmy.Initialize();
+            //armyController.controlledArmy.Initialize();
         }
 
         public void HandleAttackEnd()

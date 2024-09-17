@@ -16,9 +16,9 @@ namespace DChild.Gameplay.ArmyBattle.UI
 
         public void UpdateOptions()
         {
-            m_rockButton.interactable = army.HasAvailableAttackGroup(UnitType.Rock);
-            m_paperButton.interactable = army.HasAvailableAttackGroup(UnitType.Paper);
-            m_scissorButton.interactable = army.HasAvailableAttackGroup(UnitType.Scissors);
+            //m_rockButton.interactable = army.HasAvailableAttackGroup(UnitType.Rock);
+            //m_paperButton.interactable = army.HasAvailableAttackGroup(UnitType.Paper);
+            //m_scissorButton.interactable = army.HasAvailableAttackGroup(UnitType.Scissors);
         }
 
         public void Initialize(PlayerArmyController controller)

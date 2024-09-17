@@ -12,7 +12,7 @@ namespace DChild.Gameplay.ArmyBattle.UI
 
         public void UpdateOptions()
         {
-            m_specialButton.interactable = army.HasAvailableAbilityGroup();
+            //m_specialButton.interactable = army.HasAvailableAbilityGroup();
         }
 
         public void Initialize(PlayerArmyController controller)

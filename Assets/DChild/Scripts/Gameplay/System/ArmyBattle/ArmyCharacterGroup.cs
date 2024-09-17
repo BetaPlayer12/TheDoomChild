@@ -5,7 +5,7 @@ using UnityEngine;
 namespace DChild.Gameplay.ArmyBattle
 {
     [System.Serializable]
-    public class ArmyCharacterGroup : IAttackGroup, ISpecialSkillGroup
+    public class ArmyCharacterGroup : IAttackingGroup, ISpecialSkillGroup
     {
         [SerializeField]
         private string m_name;
@@ -67,6 +67,16 @@ namespace DChild.Gameplay.ArmyBattle
         }
 
         public SpecialSkill GetSpecialSkill()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public bool HasSpecialSkill(bool hasSkill)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public SpecialSkill GetSpecialSkill(SpecialSkill specialSkill)
         {
             throw new System.NotImplementedException();
         }

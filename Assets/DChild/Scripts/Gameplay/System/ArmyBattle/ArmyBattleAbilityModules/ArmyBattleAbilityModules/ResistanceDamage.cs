@@ -12,13 +12,13 @@ namespace DChild.Gameplay.ArmyBattle
         private float m_modifier;
         public ArmyController ApplyEffect(ArmyController owner, ArmyController target)
         {
-            target.controlledArmy.damageReductionModifier.SetModifier(m_unitType, m_modifier);
+            //target.controlledArmy.damageReductionModifier.SetModifier(m_unitType, m_modifier);
             throw new System.NotImplementedException();
         }
 
         public ArmyController RemoveEffect(ArmyController owner, ArmyController target)
         {
-            target.controlledArmy.damageReductionModifier.SetModifier(m_unitType, m_modifier);
+            //target.controlledArmy.damageReductionModifier.SetModifier(m_unitType, m_modifier);
             throw new System.NotImplementedException();
         }
     }

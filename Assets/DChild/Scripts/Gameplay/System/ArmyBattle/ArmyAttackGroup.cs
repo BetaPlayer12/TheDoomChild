@@ -7,9 +7,9 @@ namespace DChild.Gameplay.ArmyBattle
     [System.Serializable]
     public class ArmyAttackGroup : ArmyCharacterGroup
     {
-        private IAttackGroup m_reference;
+        private IAttackingGroup m_reference;
 
-        public ArmyAttackGroup(IAttackGroup data) : base()
+        public ArmyAttackGroup(IAttackingGroup data) : base()
         {
             m_reference = data;
         }
@@ -19,7 +19,7 @@ namespace DChild.Gameplay.ArmyBattle
             m_reference = reference.reference;
         }
 
-        public IAttackGroup reference => m_reference;
+        public IAttackingGroup reference => m_reference;
         //public UnitType unitType => m_reference.attackType;
 
         [ShowInInspector, PropertyOrder(0)]

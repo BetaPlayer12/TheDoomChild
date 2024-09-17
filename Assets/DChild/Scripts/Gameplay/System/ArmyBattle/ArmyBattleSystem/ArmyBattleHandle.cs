@@ -50,8 +50,8 @@ namespace DChild.Gameplay.ArmyBattle
 
         public void InitializeBattle(ArmyComposition playerArmy, ArmyComposition enemyArmy)
         {
-            m_player.armyController.controlledArmy.SetArmyComposition(playerArmy);
-            m_enemy.armyController.controlledArmy.SetArmyComposition(enemyArmy);
+            //m_player.armyController.controlledArmy.SetArmyComposition(playerArmy);
+            //m_enemy.armyController.controlledArmy.SetArmyComposition(enemyArmy);
             m_visuals.InitializeArmyVisuals(m_player.armyController, m_enemy.armyController);
         }
 

@@ -13,13 +13,13 @@ namespace DChild.Gameplay.ArmyBattle
 
         public ArmyController ApplyEffect(ArmyController owner, ArmyController target)
         {
-            owner.controlledArmy.powerModifier.SetModifier(m_unit, m_damageModiferValue);
+            //owner.controlledArmy.powerModifier.SetModifier(m_unit, m_damageModiferValue);
             throw new System.NotImplementedException();
         }
 
         public ArmyController RemoveEffect(ArmyController owner, ArmyController target)
         {
-            owner.controlledArmy.powerModifier.ResetModifiers();
+            ////owner.controlledArmy.powerModifier.ResetModifiers();
             throw new System.NotImplementedException();
         }
     }
