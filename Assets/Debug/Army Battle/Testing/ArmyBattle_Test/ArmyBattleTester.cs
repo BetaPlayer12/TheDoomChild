@@ -16,6 +16,6 @@ public class ArmyBattleTester : MonoBehaviour
 
     public void StartBattle()
     {
-        ArmyBattleSystem.StartNewBattle(m_playerArmy.CreatePlayerArmy(), m_enemyArmy.GenerateArmyCompositionInstance());
+        //ArmyBattleSystem.StartNewBattle(m_playerArmy.CreatePlayerArmy(), m_enemyArmy.GenerateArmyCompositionInstance());
     }
 }

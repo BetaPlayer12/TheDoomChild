@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace DChild.Gameplay.ArmyBattle
 {
-    [CreateAssetMenu(fileName = "ArmyBattleCombatSimulatorData", menuName = "DChild/Gameplay/Army/Combat Simulator Data")]
+    [CreateAssetMenu(fileName = "ArmyBattleCombatSimulatorData", menuName = "DChild/Gameplay/Army/System/Combat Simulator Data")]
     public class ArmyBattleCombatSimulatorData : SerializedScriptableObject
     {
         [System.Serializable]

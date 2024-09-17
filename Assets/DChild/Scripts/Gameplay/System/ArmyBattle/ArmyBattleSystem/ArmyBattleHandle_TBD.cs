@@ -6,12 +6,12 @@ using UnityEngine;
 
 namespace DChild.Gameplay.ArmyBattle
 {
-    public class ArmyBattleHandle : MonoBehaviour
+    public class ArmyBattleHandle_TBD : MonoBehaviour
     {
         [SerializeField]
         private ArmyBattleResolver m_battleResolver;
         [SerializeField]
-        private ArmyBattleVisuals m_visuals;
+        private ArmyBattleVisuals_TBD m_visuals;
 
         private ArmyInstanceCombatHandle m_player;
         private ArmyInstanceCombatHandle m_enemy;
@@ -35,24 +35,24 @@ namespace DChild.Gameplay.ArmyBattle
        
         public void InitializeParticipants(ArmyInstanceCombatHandle player, ArmyInstanceCombatHandle enemy)
         {
-            if (m_player != null)
-            {
-                m_player.armyController.AttackChosen -= OnPlayerAttackChosen;
-                m_player.armyController.AbilityChosen -= OnPlayerAbilityChosen;
-            }
+            //if (m_player != null)
+            //{
+            //    m_player.armyController.AttackChosen -= OnPlayerAttackChosen;
+            //    m_player.armyController.AbilityChosen -= OnPlayerAbilityChosen;
+            //}
 
-            m_player = player;
-            m_player.armyController.AttackChosen += OnPlayerAttackChosen;
-            m_player.armyController.AbilityChosen += OnPlayerAbilityChosen;
-            m_enemy = enemy;
-            m_enemyAI = (ArmyAI)enemy.armyController;
+            //m_player = player;
+            //m_player.armyController.AttackChosen += OnPlayerAttackChosen;
+            //m_player.armyController.AbilityChosen += OnPlayerAbilityChosen;
+            //m_enemy = enemy;
+            //m_enemyAI = (ArmyAI)enemy.armyController;
         }
 
         public void InitializeBattle(ArmyComposition playerArmy, ArmyComposition enemyArmy)
         {
             //m_player.armyController.controlledArmy.SetArmyComposition(playerArmy);
             //m_enemy.armyController.controlledArmy.SetArmyComposition(enemyArmy);
-            m_visuals.InitializeArmyVisuals(m_player.armyController, m_enemy.armyController);
+            //m_visuals.InitializeArmyVisuals(m_player.armyController, m_enemy.armyController);
         }
 
         public void StartBattle()
@@ -136,12 +136,12 @@ namespace DChild.Gameplay.ArmyBattle
 
             do
             {
-                m_enemyAI.ChooseAttack(m_round);
-                if (m_player.canAttack)
-                {
-                    yield return WaitForAttacks();
-                }
-                m_battleResolver.ResolveBattle(m_player, m_enemy);
+                //m_enemyAI.ChooseAttack(m_round);
+                //if (m_player.canAttack)
+                //{
+                //    yield return WaitForAttacks();
+                //}
+                //m_battleResolver.ResolveBattle(m_player, m_enemy);
 
                 //Battle Animations should be done here
                 yield return m_visuals.StartBattleVisuals(m_player.armyController, m_enemy.armyController);

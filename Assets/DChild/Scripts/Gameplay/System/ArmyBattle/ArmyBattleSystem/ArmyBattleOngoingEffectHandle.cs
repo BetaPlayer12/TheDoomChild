@@ -33,7 +33,7 @@ namespace DChild.Gameplay.ArmyBattle
             m_ongoingEffects.Add(ongoingEffect);
         }
 
-        public void Initialize(ArmyBattleHandle armyBattleHandle)
+        public void Initialize(ArmyBattleHandle_TBD armyBattleHandle)
         {
             m_ongoingEffects = new List<OngoingEffect>();
 

@@ -42,7 +42,7 @@ namespace DChild.Gameplay.ArmyBattle.UI
 
         public void SelectCurrentAbility()
         {
-            m_source.ChooseAbility(m_currentChoice);
+            //m_source.ChooseAbility(m_currentChoice);
         }
 
         public void UpdateChoices(List<ArmyAbilityGroup> choices)

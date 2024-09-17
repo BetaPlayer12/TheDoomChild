@@ -5,6 +5,7 @@ using DChild.Gameplay.Characters.Players;
 using Sirenix.OdinInspector;
 using System.Collections;
 using UnityEngine;
+using Holysoft.Event;
 
 namespace DChild.Gameplay.ArmyBattle.Visualizer
 {
@@ -22,11 +23,15 @@ namespace DChild.Gameplay.ArmyBattle.Visualizer
         [SerializeField, MinValue(0)]
         private float m_postAttackDuration;
 
+        public event EventAction<EventActionArgs> OnFightEnd;
+
         [Button]
-        public void Initialize(DamageType[] playerUnitTypes, DamageType[] enemyUnitTypes)
+        public void Initialize(Army playerArmy, Army enemyArmy)
         {
-            m_player.GenerateArmy(playerUnitTypes);
-            m_enemy.GenerateArmy(enemyUnitTypes);
+            var temporaryType = new DamageType[] { DamageType.Melee, DamageType.Range, DamageType.Magic };
+
+            m_player.GenerateArmy(temporaryType);
+            m_enemy.GenerateArmy(temporaryType);
 
             m_deathHandle.Initialize(m_fightDuration);
         }
@@ -53,6 +58,8 @@ namespace DChild.Gameplay.ArmyBattle.Visualizer
             m_enemy.StopAttack();
 
             yield return new WaitForSeconds(m_postAttackDuration);
+
+            OnFightEnd?.Invoke(this, EventActionArgs.Empty);
         }
     }
 }

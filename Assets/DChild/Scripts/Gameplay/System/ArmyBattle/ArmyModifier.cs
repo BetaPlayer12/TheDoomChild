@@ -5,10 +5,16 @@ using System;
 
 namespace DChild.Gameplay.ArmyBattle
 {
-    public class ArmyModifier 
+    public struct ArmyModifier 
     {
         public ArmyDamageTypeModifier damageModifier;
         public ArmyDamageTypeModifier resistanceModifier;
+
+        public void Reset()
+        {
+            damageModifier.ResetModifiers();
+            resistanceModifier.ResetModifiers();
+        }
     }
 }
 

@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace DChild.Gameplay.ArmyBattle
 {
-    public class ArmyData
+    public class ArmyData 
     {
         public ArmyInfo info;
     }
