@@ -219,16 +219,12 @@ namespace DChild.Gameplay.Characters.Enemies
                 base.SetTarget(damageable);
                 if (m_stateHandle.currentState != State.Chasing && !m_isDetecting)
                 {
-                    m_patience = false;
+                    //m_patience = false;
                     m_selfCollider.SetActive(true);
                     m_isDetecting = true;
                     m_stateHandle.SetState(State.Detect);
                 }
-            }
-            else
-            {
-                 m_patience = true;
-                 m_isDetecting = false;
+                
             }
         }
 
@@ -343,6 +339,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator DetectRoutine()
         {
+            
             m_animation.SetAnimation(0, m_info.detectAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.detectAnimation);
             m_stateHandle.OverrideState(State.ReevaluateSituation);
@@ -416,9 +413,10 @@ namespace DChild.Gameplay.Characters.Enemies
 
             m_agent.Stop();
             m_dustTrail.Stop();
+            m_stabAttackBB.enabled = false;
             m_animation.SetAnimation(0, m_info.verticalStabEnd, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.verticalStabEnd);
-            m_stabAttackBB.enabled = false;
+            
             if (m_attackHit)
             {
                 m_dustImpact.Play();
@@ -612,7 +610,7 @@ namespace DChild.Gameplay.Characters.Enemies
             bool isRight = m_targetInfo.position.x >= transform.position.x;
             var movePos = new Vector2(transform.position.x + (isRight ? -3 : 3), m_targetInfo.position.y + 20);
             var wallDistance = Vector2.Distance(transform.position, WallPosition());
-            while (wallDistance <= 20)
+            while (wallDistance >= 20)
             {
                 movePos = new Vector2(movePos.x + 0.1f, movePos.y + 20);
                 break;
@@ -818,31 +816,41 @@ namespace DChild.Gameplay.Characters.Enemies
                     break;
 
                 case State.ReturnToPatrol:
-                    if (IsFacing(m_startPos))
+                    if (m_targetInfo.isValid)
                     {
-                        if (Vector2.Distance(m_startPos, transform.position) > 5f)
-                        {
-                            var rb2d = GetComponent<Rigidbody2D>();
-                            m_bodyCollider.enabled = false;
-                            m_agent.Stop();
-                            Vector3 dir = (m_startPos - (Vector2)rb2d.transform.position).normalized;
-                            rb2d.MovePosition(rb2d.transform.position + dir * m_info.move.speed * Time.fixedDeltaTime);
-                            m_animation.SetAnimation(0, m_info.patrol.animation, true);
-                        }
-                        else
-                        {
-                            m_stateHandle.OverrideState(State.Patrol);
-                        }
+                        m_turnState = State.Chasing;
+                        m_isDetecting = true;
+                        m_stateHandle.OverrideState(State.Chasing);
                     }
                     else
                     {
-                        m_turnState = State.ReturnToPatrol;
-                        m_stateHandle.SetState(State.Turning);
+                        if (IsFacing(m_startPos))
+                        {
+                            if (Vector2.Distance(m_startPos, transform.position) > 5f)
+                            {
+                                var rb2d = GetComponent<Rigidbody2D>();
+                                m_bodyCollider.enabled = false;
+                                m_agent.Stop();
+                                Vector3 dir = (m_startPos - (Vector2)rb2d.transform.position).normalized;
+                                rb2d.MovePosition(rb2d.transform.position + dir * m_info.move.speed * Time.fixedDeltaTime);
+                                m_animation.SetAnimation(0, m_info.patrol.animation, true);
+                            }
+                            else
+                            {
+                                m_stateHandle.OverrideState(State.Patrol);
+                            }
+                        }
+                        else
+                        {
+                            m_turnState = State.ReturnToPatrol;
+                            m_stateHandle.SetState(State.Turning);
+                        }
                     }
+       
                     break;
 
                 case State.Patrol:
-                    m_turnState = State.Patrol;
+                    m_turnState = State.ReevaluateSituation;
                     m_animation.DisableRootMotion();
                     m_animation.SetAnimation(0, m_info.patrol.animation, true);
                     var characterInfo = new PatrolHandle.CharacterInfo(m_character.centerMass.position, m_character.facing);
@@ -937,7 +945,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     else
 
                     {
-                        m_stateHandle.SetState(State.Patrol);
+                        m_stateHandle.SetState(State.ReturnToPatrol);
                         //timeCounter = 0;
                     }
                     break;
@@ -947,16 +955,18 @@ namespace DChild.Gameplay.Characters.Enemies
 
             if (m_targetInfo.isValid)
             {
-                if (TargetBlocked() || m_patience == true)
+                if (TargetBlocked())
                 {
                     var distanceTolerated = Vector2.Distance(m_targetInfo.position, transform.position);
                     Debug.Log("Distance Tolerated: " + distanceTolerated);
                     if ( distanceTolerated > m_info.patienceDistanceTolerance)
                     {
+                        Debug.Log("It Went to Patience UUGGGHHH");
                         Patience();
                     }
                 }
             }
+   
         }
         private Vector2 GroundPosition()
         {
@@ -965,6 +975,7 @@ namespace DChild.Gameplay.Characters.Enemies
         }
         protected override void OnTargetDisappeared()
         {
+            Debug.Log("Target Disappeared");
             m_stateHandle.OverrideState(State.ReturnToPatrol);
             m_isDetecting = false;
         }
@@ -977,6 +988,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_isDetecting = false;
             m_stateHandle.OverrideState(State.ReturnToPatrol);
             enabled = true;
+            
         }
 
         public override void ReturnToSpawnPoint()
