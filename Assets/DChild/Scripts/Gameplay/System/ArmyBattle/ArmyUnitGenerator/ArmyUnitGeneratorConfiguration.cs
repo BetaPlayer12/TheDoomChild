@@ -1,4 +1,5 @@
-﻿using Sirenix.OdinInspector;
+﻿using DChild.Gameplay.ArmyBattle.Battalion;
+using Sirenix.OdinInspector;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -24,7 +25,7 @@ namespace DChild.Gameplay.ArmyBattle.Units
 
         public GameObject GetRandomUnitTemplate() => m_unitTemplates[Random.Range(0, m_unitTemplates.Length)];
 
-        private ArmyBounds GenerateRelativeBounds(ArmyBounds reference)
+        private ArmyBattalionBounds GenerateRelativeBounds(ArmyBattalionBounds reference)
         {
             Vector2 minPoints = new Vector2(reference.size.x * m_sizeXPercent.x, reference.size.y * m_sizeYPercent.x);
             Vector2 maxPoints = new Vector2(reference.size.x * m_sizeXPercent.y, reference.size.y * m_sizeYPercent.y);
@@ -32,14 +33,14 @@ namespace DChild.Gameplay.ArmyBattle.Units
             var size = new Vector2(Mathf.Abs(minPoints.x - maxPoints.x), Mathf.Abs(minPoints.y - maxPoints.y));
             var center = new Vector2(minPoints.x + (size.x / 2), minPoints.y + (size.y / 2)) + reference.center - (reference.size / 2);
 
-            return new ArmyBounds()
+            return new ArmyBattalionBounds()
             {
                 center = center,
                 size = size
             };
         }
 
-        public List<Vector2> GenerateGridPositions(ArmyBounds reference)
+        public List<Vector2> GenerateGridPositions(ArmyBattalionBounds reference)
         {
             var gridPositions = new List<Vector2>();
             var relativeBounds = GenerateRelativeBounds(reference);
@@ -72,7 +73,7 @@ namespace DChild.Gameplay.ArmyBattle.Units
             return gridPositions;
         }
 
-        public void DrawGizmo(ArmyBounds reference)
+        public void DrawGizmo(ArmyBattalionBounds reference)
         {
             Gizmos.color = m_debugColor;
             var relativeBounds = GenerateRelativeBounds(reference);

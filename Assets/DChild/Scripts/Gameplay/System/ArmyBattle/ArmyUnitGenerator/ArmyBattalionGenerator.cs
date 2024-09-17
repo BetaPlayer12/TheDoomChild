@@ -1,13 +1,14 @@
-﻿using Sirenix.OdinInspector;
+﻿using DChild.Gameplay.ArmyBattle.Units;
+using Sirenix.OdinInspector;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace DChild.Gameplay.ArmyBattle.Units
+namespace DChild.Gameplay.ArmyBattle.Battalion
 {
-    public class ArmyGenerator : MonoBehaviour
+    public class ArmyBattalionGenerator : MonoBehaviour
     {
         [SerializeField,InlineEditor]
-        private ArmyGeneratorData m_data;
+        private ArmyBattalionGeneratorData m_data;
 
         public List<ArmyUnit> GenerateArmy(List<DamageType> types)
         {

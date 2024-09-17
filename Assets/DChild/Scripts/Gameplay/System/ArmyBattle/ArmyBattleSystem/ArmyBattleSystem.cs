@@ -1,8 +1,29 @@
-﻿using System;
+﻿using Holysoft.Event;
+using System;
 using UnityEngine;
 
 namespace DChild.Gameplay.ArmyBattle
 {
+    public class ArmyBattleTurnHandle : MonoBehaviour
+    {
+        [SerializeField]
+        private ArmyController m_player;
+        [SerializeField]
+        private ArmyController m_enemy;
+
+        public event EventAction<EventActionArgs> OnTurnStart;
+
+        public void TurnStart()
+        {
+            OnTurnStart?.Invoke(this,EventActionArgs.Empty);
+        }
+
+        public void CommenceTurn()
+        {
+
+        }
+    }
+
     public class ArmyBattleSystem : MonoBehaviour
     {
         private static ArmyBattleParticipantsHandle m_participantsHandle;

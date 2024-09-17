@@ -1,16 +1,16 @@
-﻿using Sirenix.OdinInspector;
+﻿using DChild.Gameplay.ArmyBattle.Units;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
-namespace DChild.Gameplay.ArmyBattle.Units
+namespace DChild.Gameplay.ArmyBattle.Battalion
 {
-    [CreateAssetMenu(fileName = "ArmyGeneratorData", menuName = "DChild/Gameplay/Army/Army Generator Data")]
-    public class ArmyGeneratorData : ScriptableObject
+    [CreateAssetMenu(fileName = "ArmyBattalionGeneratorData", menuName = "DChild/Gameplay/Army/Army Battalion Generator Data")]
+    public class ArmyBattalionGeneratorData : ScriptableObject
     {
-
         [SerializeField, Min(3)]
         private int m_maxUnitCount;
         [SerializeField]
-        private ArmyBounds m_armyBounds;
+        private ArmyBattalionBounds m_armyBounds;
         [SerializeField,TabGroup("Configuration","Melee"),HideLabel]
         private ArmyUnitGeneratorConfiguration m_meleeUnitGeneration;
         [SerializeField, TabGroup("Configuration", "Range"), HideLabel]
@@ -20,7 +20,7 @@ namespace DChild.Gameplay.ArmyBattle.Units
 
         public int maxUnitCount => m_maxUnitCount;
 
-        public ArmyBounds armyBounds => m_armyBounds;
+        public ArmyBattalionBounds armyBounds => m_armyBounds;
 
         public ArmyUnitGeneratorConfiguration GetConfiguration(DamageType damageType)
         {

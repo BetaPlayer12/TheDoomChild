@@ -1,10 +1,10 @@
 ﻿using UnityEditor;
 using UnityEngine;
 
-namespace DChild.Gameplay.ArmyBattle.Units
+namespace DChild.Gameplay.ArmyBattle.Battalion
 {
     [System.Serializable]
-    public struct ArmyBounds
+    public struct ArmyBattalionBounds
     {
         public Vector2 size;
         [HideInInspector]

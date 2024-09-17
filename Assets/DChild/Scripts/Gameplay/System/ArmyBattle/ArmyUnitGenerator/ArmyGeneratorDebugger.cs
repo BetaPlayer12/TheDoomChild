@@ -1,13 +1,14 @@
-﻿using Sirenix.OdinInspector;
+﻿using DChild.Gameplay.ArmyBattle.Units;
+using Sirenix.OdinInspector;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace DChild.Gameplay.ArmyBattle.Units
+namespace DChild.Gameplay.ArmyBattle.Battalion
 {
     public class ArmyGeneratorDebugger : MonoBehaviour
     {
         [SerializeField]
-        private ArmyGenerator m_generator;
+        private ArmyBattalionGenerator m_generator;
         [SerializeField]
         private DamageType[] m_typesToSpawn;
         [SerializeField]
