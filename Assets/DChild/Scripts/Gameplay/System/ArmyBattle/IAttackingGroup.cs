@@ -1,6 +1,6 @@
 ﻿namespace DChild.Gameplay.ArmyBattle
 {
-    public interface IAttackGroup
+    public interface IAttackingGroup
     {
         int GetTroopCount();
         int GetAttackPower();
