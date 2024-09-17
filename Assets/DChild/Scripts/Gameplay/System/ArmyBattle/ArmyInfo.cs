@@ -8,12 +8,14 @@ namespace DChild.Gameplay.ArmyBattle
     {
         [SerializeField]
         private ArmyGroup[] m_groups;
+        [SerializeField]
+        private string m_name;
         
-        public string name;
+        public string name => m_name;
 
         public ArmyInfo(string armyName, ArmyGroup[] groups)
         {
-            armyName = name;
+            m_name = armyName;
             m_groups = groups;
         }
 
@@ -22,9 +24,9 @@ namespace DChild.Gameplay.ArmyBattle
             return m_groups.Length;
         }
 
-        public ArmyGroup GetGroups(ArmyGroup[] groups)
+        public ArmyGroup[] GetGroups()
         {
-            return groups[0];
+            return m_groups;
         }
     }
 }
