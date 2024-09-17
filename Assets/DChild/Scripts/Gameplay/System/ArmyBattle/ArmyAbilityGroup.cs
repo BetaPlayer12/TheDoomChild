@@ -10,14 +10,18 @@ namespace DChild.Gameplay.ArmyBattle
     {
         private ISpecialSkillGroup m_reference;
 
-        public ArmyAbilityGroup(ISpecialSkillGroup data) : base()
+        public ArmyAbilityGroup(string name, ArmyCharacterData[] members) : base(name, members)
         {
-            m_reference = data;
         }
-        public ArmyAbilityGroup(ArmyAbilityGroup data) : base(data)
-        {
-            m_reference = data.reference;
-        }
+
+        //public ArmyAbilityGroup(ISpecialSkillGroup data) : base()
+        //{
+        //    m_reference = data;
+        //}
+        //public ArmyAbilityGroup(ArmyAbilityGroup data) : base(data)
+        //{
+        //    m_reference = data.reference;
+        //}
 
         public ISpecialSkillGroup reference => m_reference;
 

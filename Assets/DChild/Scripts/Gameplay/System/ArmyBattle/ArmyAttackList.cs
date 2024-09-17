@@ -118,7 +118,7 @@ namespace DChild.Gameplay.ArmyBattle
                 destination.Clear();
                 for (int i = 0; i < reference.Count; i++)
                 {
-                    destination.Add(new ArmyAttackGroup(reference[i].reference));
+                    //destination.Add(new ArmyAttackGroup(reference[i].reference));
                 }
             }
         }

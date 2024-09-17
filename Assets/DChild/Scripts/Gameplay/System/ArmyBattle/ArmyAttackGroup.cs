@@ -9,15 +9,19 @@ namespace DChild.Gameplay.ArmyBattle
     {
         private IAttackingGroup m_reference;
 
-        public ArmyAttackGroup(IAttackingGroup data) : base()
+        public ArmyAttackGroup(string name, ArmyCharacterData[] members) : base(name, members)
         {
-            m_reference = data;
         }
 
-        public ArmyAttackGroup(ArmyAttackGroup reference) : base(reference)
-        {
-            m_reference = reference.reference;
-        }
+        //public ArmyAttackGroup(IAttackingGroup data) : base()
+        //{
+        //    m_reference = data;
+        //}
+
+        //public ArmyAttackGroup(ArmyAttackGroup reference) : base(reference)
+        //{
+        //    m_reference = reference.reference;
+        //}
 
         public IAttackingGroup reference => m_reference;
         //public UnitType unitType => m_reference.attackType;
@@ -29,7 +33,7 @@ namespace DChild.Gameplay.ArmyBattle
 
         public void SetMemberAvailability(params bool[] memberAvailability)
         {
-            m_armyGroupList.Clear();
+            //m_armyGroupList.Clear();
             //for (int i = 0; i < m_reference.memberCount; i++)
             //{
             //    if (i >= memberAvailability.Length)
