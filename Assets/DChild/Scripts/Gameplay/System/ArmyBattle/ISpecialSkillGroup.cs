@@ -2,11 +2,11 @@
 {
     public interface ISpecialSkillGroup
     {
-        bool HasSpecialSkill();
+        bool HasSpecialSkill(bool hasSkill);
 
         ArmyCharacterGroup GetCharacterGroup(ArmyCharacterGroup characterGroup);
 
-        SpecialSkill GetSpecialSkill();
+        SpecialSkill GetSpecialSkill(SpecialSkill specialSkill);
 
     }
 }
