@@ -7,6 +7,8 @@ namespace DChild.Gameplay.ArmyBattle
         [SerializeField]
         private ArmyAIData m_AiAttackData;
 
+        public void SetAI(ArmyAIData aiAttackData) => m_AiAttackData = aiAttackData;
+
         public override ArmyTurnAction GetTurnAction(int turnNumber)
         {
             var chosenAttack = m_AiAttackData.ChooseAttack(turnNumber);

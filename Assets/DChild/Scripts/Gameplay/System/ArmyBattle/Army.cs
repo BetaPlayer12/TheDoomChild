@@ -3,21 +3,25 @@ using Sirenix.OdinInspector;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using System.Linq;
 
 namespace DChild.Gameplay.ArmyBattle
 {
-    public class Army : MonoBehaviour
+    [System.Serializable]
+    public class Army
     {
         //#endif
         [SerializeField]
         private int m_troopCount;
 
-        [SerializeField]
+        [SerializeField, FoldoutGroup("Info"), HideLabel]
         private ArmyInfo m_info;
-        [SerializeField]
+
         private List<IAttackingGroup> m_availableAttackingGroups;
-        [SerializeField]
+        private List<IAttackingGroup> m_usedAttackingGroups;
+
         private List<ISpecialSkillGroup> m_availableSpecialSkills;
+        private List<ISpecialSkillGroup> m_usedSpecialSkills;
 
         public ArmyModifier modifiers;
         public int troopCount => m_troopCount;
@@ -25,6 +29,15 @@ namespace DChild.Gameplay.ArmyBattle
         public Army(ArmyInfo info)
         {
             m_info = info;
+            m_troopCount = info.GetTroopCount();
+
+            m_availableAttackingGroups = new List<IAttackingGroup>();
+            m_usedAttackingGroups = new List<IAttackingGroup>();
+
+            m_availableSpecialSkills = new List<ISpecialSkillGroup>();
+            m_usedSpecialSkills = new List<ISpecialSkillGroup>();
+
+            ResetGroupAvailability();
         }
 
         public int AddTroopCount(int additionalTroops)
@@ -39,32 +52,89 @@ namespace DChild.Gameplay.ArmyBattle
 
         public void ResetTroopCount()
         {
-            throw new NotImplementedException();
+            m_troopCount = m_info.GetTroopCount();
+        }
+
+        public bool HasAvailableGroup(DamageType damageType)
+        {
+            for (int i = 0; i < m_availableAttackingGroups.Count; i++)
+            {
+                if (m_availableAttackingGroups[i].GetDamageType() == damageType)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         public List<IAttackingGroup> GetAvailableGroups(DamageType damageType)
         {
-            throw new NotImplementedException();
+            return m_availableAttackingGroups.Where(x => x.GetDamageType() == damageType).OrderBy(x => x.GetAttackPower()).ToList();
         }
 
         public void SetAttackingGroupAvailability(IAttackingGroup attackingGroup, bool isAvailable)
         {
-            throw new NotImplementedException();
+            if (isAvailable)
+            {
+                if (m_usedAttackingGroups.Contains(attackingGroup))
+                {
+                    m_usedAttackingGroups.Remove(attackingGroup);
+                    m_availableAttackingGroups.Add(attackingGroup);
+                }
+            }
+            else
+            {
+                if (m_availableAttackingGroups.Contains(attackingGroup))
+                {
+                    m_availableAttackingGroups.Remove(attackingGroup);
+                    m_usedAttackingGroups.Add(attackingGroup);
+                }
+            }
+
+        }
+
+        public List<ISpecialSkillGroup> GetAvailableSkills()
+        {
+            return m_availableSpecialSkills;
+        }
+
+        public void SetSpecialSkillAvailability(ISpecialSkillGroup group, bool isAvailable)
+        {
+            if (isAvailable)
+            {
+                if (m_usedSpecialSkills.Contains(group))
+                {
+                    m_usedSpecialSkills.Remove(group);
+                    m_availableSpecialSkills.Add(group);
+                }
+            }
+            else
+            {
+                if (m_availableSpecialSkills.Contains(group))
+                {
+                    m_availableSpecialSkills.Remove(group);
+                    m_usedSpecialSkills.Add(group);
+                }
+            }
         }
 
         public void ResetGroupAvailability()
         {
-            throw new NotImplementedException();
+            var armyGroups = m_info.GetGroups();
+            for (int i = 0; i < armyGroups.Length; i++)
+            {
+                var group = armyGroups[i];
+                m_availableAttackingGroups.Add(group);
+                if (group.HasSpecialSkill())
+                {
+                    m_availableSpecialSkills.Add(group);
+                }
+            }
+
+            m_usedAttackingGroups.Clear();
+            m_usedSpecialSkills.Clear();
         }
 
-        public List<SpecialSkill> GetAvailableSkills()
-        {
-            throw new NotImplementedException();
-        }
 
-        public void SetSpecialSkillAvailability(SpecialSkill group, bool isAvailable)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

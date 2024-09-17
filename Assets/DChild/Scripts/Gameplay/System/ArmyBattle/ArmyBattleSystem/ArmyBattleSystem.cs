@@ -11,6 +11,8 @@ namespace DChild.Gameplay.ArmyBattle
 
         [SerializeField]
         private ArmyBattleLocationInstantiator m_locationInstantiator;
+        [SerializeField]
+        private ArmyGenerator m_generator;
 
         [SerializeField]
         private ArmyBattleTurnHandle m_turnHandle;
@@ -20,7 +22,7 @@ namespace DChild.Gameplay.ArmyBattle
         [SerializeField]
         private ArmyController m_player;
         [SerializeField]
-        private ArmyController m_enemy;
+        private ArmyAI m_enemy;
 
         [Button]
         public void StartBattle()
@@ -41,8 +43,17 @@ namespace DChild.Gameplay.ArmyBattle
             }
 
             m_locationInstantiator.InstantiateLocation(BattleScenario.location);
+
             //Create Player Army
+
+
             //Create Enemy Army
+            if (BattleScenario.enemyToBattle != null)
+            {
+                var enemyArmy = m_generator.GenerateArmy(BattleScenario.enemyToBattle.armyData);
+                m_enemy.SetArmyToControl(enemyArmy);
+                m_enemy.SetAI(BattleScenario.enemyToBattle);
+            }
 
             m_fightManager.Initialize(m_player.controlledArmy, m_enemy.controlledArmy);
         }

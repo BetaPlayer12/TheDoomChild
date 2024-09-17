@@ -1,3 +1,4 @@
+using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,9 +6,13 @@ using UnityEngine;
 
 namespace DChild.Gameplay.ArmyBattle
 {
-    public class ArmyData 
+    [CreateAssetMenu(fileName = "ArmyData", menuName = "DChild/Gameplay/Army/Army Data")]
+    public class ArmyData : ScriptableObject
     {
-        public ArmyInfo info;
+        [SerializeField, HideLabel]
+        private ArmyInfo m_info;
+
+        public ArmyInfo info => m_info;
     }
 }
 

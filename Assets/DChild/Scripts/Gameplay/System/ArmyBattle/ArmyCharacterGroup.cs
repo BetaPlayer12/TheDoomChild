@@ -9,10 +9,11 @@ namespace DChild.Gameplay.ArmyBattle
     {
         [SerializeField]
         private string m_name;
-        [SerializeField]
+        [SerializeField, LabelText("@\"Members \" + GetMemberNames()")]
         private ArmyCharacterData[] m_members;
 
         public string name => m_name;
+        public int memberCount => m_members.Length;
 
         public ArmyCharacterGroup(string name, ArmyCharacterData[] members)
         {
@@ -23,6 +24,22 @@ namespace DChild.Gameplay.ArmyBattle
         public ArmyCharacterData GetCharacter(int index)
         {
             return m_members[index];
+        }
+
+        private string GetMemberNames()
+        {
+            string characterNames = "(";
+            for (int i = 0; i < m_members.Length; i++)
+            {
+                characterNames += m_members[i].name;
+                if (i < m_members.Length - 1)
+                {
+                    characterNames += " | ";
+                }
+            }
+            characterNames += ")";
+
+            return characterNames;
         }
     }
 }

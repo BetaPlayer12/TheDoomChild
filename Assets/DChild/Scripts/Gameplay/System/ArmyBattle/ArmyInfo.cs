@@ -4,27 +4,33 @@ using UnityEngine;
 
 namespace DChild.Gameplay.ArmyBattle
 {
-    public class ArmyInfo 
+    [System.Serializable]
+    public class ArmyInfo
     {
         [SerializeField]
+        private string m_name;
+        [SerializeField, Min(1)]
+        private int m_troopCount;
+        [SerializeField]
         private ArmyGroup[] m_groups;
-        
-        public string name;
 
-        public ArmyInfo(string armyName, ArmyGroup[] groups)
+        public string name => m_name;
+
+        public ArmyInfo(string armyName, int troopCount, ArmyGroup[] groups)
         {
-            armyName = name;
+            m_name = armyName;
+            m_troopCount = troopCount;
             m_groups = groups;
         }
 
         public int GetTroopCount()
         {
-            return m_groups.Length;
+            return m_troopCount;
         }
 
-        public ArmyGroup GetGroups(ArmyGroup[] groups)
+        public ArmyGroup[] GetGroups()
         {
-            return groups[0];
+            return m_groups;
         }
     }
 }
