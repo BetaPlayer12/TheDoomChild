@@ -8,6 +8,8 @@ namespace DChild.Gameplay.ArmyBattle
     [System.Serializable]
     public class ArmyGroup : IAttackingGroup, ISpecialSkillGroup
     {
+        [SerializeField]
+        private int m_id;
         [SerializeField, InfoBox("@\"Has Total Power of: \" + GetTotalCharacterGroupAttackPower()", InfoMessageType = InfoMessageType.None), HideLabel]
         private ArmyCharacterGroup m_members;
         [SerializeField]
@@ -17,8 +19,11 @@ namespace DChild.Gameplay.ArmyBattle
         [SerializeField, ShowIf("m_useCustomAttackPower"), Indent]
         private int m_attackPower;
 
-        public ArmyGroup(ArmyCharacterGroup members, DamageType type)
+        public int id => m_id;
+
+        public ArmyGroup(int id, ArmyCharacterGroup members, DamageType type)
         {
+            m_id = id;
             m_members = members;
             m_type = type;
 

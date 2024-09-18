@@ -8,6 +8,7 @@ namespace DChild.Gameplay.ArmyBattle
     public class ArmyBattleSystem : MonoBehaviour
     {
         public static ArmyBattleScenario BattleScenario;
+        public static RecruitedCharacterList DebugPlayerRecruitedCharacters;
 
         [SerializeField]
         private ArmyBattleLocationInstantiator m_locationInstantiator;
@@ -45,7 +46,15 @@ namespace DChild.Gameplay.ArmyBattle
             m_locationInstantiator.InstantiateLocation(BattleScenario.location);
 
             //Create Player Army
+            if (GameplaySystem.campaignSerializer != null)
+            {
 
+            }
+            else if (DebugPlayerRecruitedCharacters != null)
+            {
+                var playerArmy = m_generator.GenerateArmy(DebugPlayerRecruitedCharacters);
+                m_player.SetArmyToControl(playerArmy);
+            }
 
             //Create Enemy Army
             if (BattleScenario.enemyToBattle != null)

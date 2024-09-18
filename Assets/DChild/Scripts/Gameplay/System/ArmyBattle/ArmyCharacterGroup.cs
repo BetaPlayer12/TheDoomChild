@@ -9,7 +9,7 @@ namespace DChild.Gameplay.ArmyBattle
     {
         [SerializeField]
         private string m_name;
-        [SerializeField, LabelText("@\"Members \" + GetMemberNames()")]
+        [SerializeField, LabelText("@\"Members \" + GetMemberNames()"), AssetSelector]
         private ArmyCharacterData[] m_members;
 
         public string name => m_name;
@@ -31,6 +31,9 @@ namespace DChild.Gameplay.ArmyBattle
             string characterNames = "(";
             for (int i = 0; i < m_members.Length; i++)
             {
+                if (m_members[i] == null)
+                    continue;
+
                 characterNames += m_members[i].name;
                 if (i < m_members.Length - 1)
                 {

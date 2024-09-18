@@ -9,8 +9,6 @@ namespace DChild.Gameplay.ArmyBattle
     public class ArmyBattleHandle_TBD : MonoBehaviour
     {
         [SerializeField]
-        private ArmyBattleResolver m_battleResolver;
-        [SerializeField]
         private ArmyBattleVisuals_TBD m_visuals;
 
         private ArmyInstanceCombatHandle m_player;
