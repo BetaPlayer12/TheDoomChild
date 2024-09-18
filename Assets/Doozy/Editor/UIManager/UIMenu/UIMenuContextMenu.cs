@@ -223,6 +223,15 @@ namespace Doozy.Editor.UIManager.UIMenu
                 public static void CreateStop(MenuCommand command) => UIMenuUtils.AddToScene(TYPE_NAME, CATEGORY_NAME, "Stop");
             }
 
+            public static class DChild
+            {
+                private const string CATEGORY_NAME = "DChild";
+                private const string CATEGORY_MENU_PATH = TYPE_MENU_PATH + CATEGORY_NAME + "/";
+
+                [MenuItem(CATEGORY_MENU_PATH + "Main Menu Button", false, MENU_ITEM_PRIORITY)]
+                public static void CreateMainMenuButton(MenuCommand command) => UIMenuUtils.AddToScene(TYPE_NAME, CATEGORY_NAME, "MainMenuButton");
+            }
+
             public static class ScrollbarBasic
             {
                 private const string CATEGORY_NAME = "Scrollbar Basic";
