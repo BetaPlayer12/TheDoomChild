@@ -19,7 +19,7 @@ namespace DChild.Gameplay.ArmyBattle
 
         public ArmyController RemoveEffect(ArmyController owner, ArmyController target)
         {
-            ////owner.controlledArmy.powerModifier.ResetModifiers();
+            //owner.controlledArmy.powerModifier.ResetModifiers();
             throw new System.NotImplementedException();
         }
     }

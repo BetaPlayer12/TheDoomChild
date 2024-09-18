@@ -17,7 +17,7 @@ namespace DChild.Gameplay.ArmyBattle.Visualizer
         [Button]
         public void Initialize()
         {
-            m_manager.Initialize(m_playerUnits, m_enemyUnits);
+            //m_manager.Initialize(m_playerUnits, m_enemyUnits);
         }
 
         [Button]

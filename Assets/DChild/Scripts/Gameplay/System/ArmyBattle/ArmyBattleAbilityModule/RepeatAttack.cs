@@ -13,11 +13,11 @@ public class RepeatAttack : IArmyAbilityEffect
     {
         if (m_isAppliedToOpponent)
         {
-            ArmyBattleSystem.GetArmyCombatHandleOf(opponent).AddExtraAttack(m_extraAttack);
+            //ArmyBattleSystem.GetArmyCombatHandleOf(opponent).AddExtraAttack(m_extraAttack);
         }
         else
         {
-            ArmyBattleSystem.GetArmyCombatHandleOf(owner).AddExtraAttack(m_extraAttack);
+           // ArmyBattleSystem.GetArmyCombatHandleOf(owner).AddExtraAttack(m_extraAttack);
         }
     }
 }

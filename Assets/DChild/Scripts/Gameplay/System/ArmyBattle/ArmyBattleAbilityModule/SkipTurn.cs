@@ -11,11 +11,11 @@ public class SkipTurn : IArmyAbilityEffect
     {
         if (m_isAppliedToOpponent)
         {
-            ArmyBattleSystem.GetArmyCombatHandleOf(opponent).SkipTurn();
+            //ArmyBattleSystem.GetArmyCombatHandleOf(opponent).SkipTurn();
         }
         else
         {
-            ArmyBattleSystem.GetArmyCombatHandleOf(owner).SkipTurn();
+           // ArmyBattleSystem.GetArmyCombatHandleOf(owner).SkipTurn();
         }
     }
 

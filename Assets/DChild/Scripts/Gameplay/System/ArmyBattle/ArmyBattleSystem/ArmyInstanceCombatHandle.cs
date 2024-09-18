@@ -1,4 +1,5 @@
 ﻿using DChild.Gameplay.Combat;
+using System;
 
 namespace DChild.Gameplay.ArmyBattle
 {
@@ -10,18 +11,14 @@ namespace DChild.Gameplay.ArmyBattle
         private bool m_isTurnSkipped;
 
         public ArmyController armyController => m_armyController;
-        //public ArmyAttack attackInfo => m_armyController.currentAttack;
-        //public ArmyDamageTypeModifier damageReductionModifier => m_armyController.controlledArmy.damageReductionModifier;
+        public ArmyAttack attackInfo => throw new NotImplementedException();
+        public ArmyDamageTypeModifier damageReductionModifier => throw new NotImplementedException();
 
         public bool canAttack => !m_isTurnSkipped && m_attackLeftCount > 0;
 
-        public int troopCount => m_armyController.army.troopCount;
+        public int troopCount => m_armyController.controlledArmy.troopCount;
 
         Health IArmyCombatInfo.troopCount => throw new System.NotImplementedException();
-
-        public ArmyDamageTypeModifier damageReductionModifier => throw new System.NotImplementedException();
-
-        public ArmyAttack attackInfo => throw new System.NotImplementedException();
 
         public ArmyInstanceCombatHandle(ArmyController armyController)
         {

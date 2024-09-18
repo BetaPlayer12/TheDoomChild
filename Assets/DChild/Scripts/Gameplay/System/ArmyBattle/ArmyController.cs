@@ -9,18 +9,22 @@ namespace DChild.Gameplay.ArmyBattle
     public abstract class ArmyController : MonoBehaviour
     {
         [SerializeField]
-        protected Army m_army;
+        protected Army m_controlledArmy;
 
-        public Army army => m_army;
+        protected ArmyAttackGroup m_currentAttackGroup;
+
+        public Army controlledArmy => m_controlledArmy;
+
+        public abstract ArmyTurnAction GetTurnAction(int turnNumber);
 
         public void SetArmyToControl(Army army)
         {
-            m_army = army;
+            m_controlledArmy = army;
         }
 
         public ArmyGroup[] GetGroups()
         {
             throw new NotImplementedException();
-        }    
+        }
     }
 }

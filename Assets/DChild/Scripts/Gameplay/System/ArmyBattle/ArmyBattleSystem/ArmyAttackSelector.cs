@@ -44,7 +44,7 @@ namespace DChild.Gameplay.ArmyBattle.UI
 
         public void SelectCurrentAttack()
         {
-            m_source.ChooseAttack(m_currentChoice);
+            //m_source.ChooseAttack(m_currentChoice);
         }
 
         public void UpdateChoices(List<ArmyAttackGroup> choices)

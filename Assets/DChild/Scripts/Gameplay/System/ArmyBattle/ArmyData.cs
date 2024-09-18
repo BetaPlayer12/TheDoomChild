@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace DChild.Gameplay.ArmyBattle
 {
-    public class ArmyData
+    public class ArmyData 
     {
         [SerializeField]
         private ArmyInfo m_info;

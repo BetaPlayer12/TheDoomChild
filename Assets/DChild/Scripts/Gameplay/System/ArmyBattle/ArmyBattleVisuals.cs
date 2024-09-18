@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace DChild.Gameplay.ArmyBattle
 {
-    public class ArmyBattleVisuals : MonoBehaviour
+    public class ArmyBattleVisuals_TBD : MonoBehaviour
     {
         [SerializeField]
         private TextMeshProUGUI m_event;

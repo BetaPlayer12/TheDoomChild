@@ -8,7 +8,7 @@ namespace DChild.Gameplay.ArmyBattle.UI
     public class ArmyAttackPlayerUI : MonoBehaviour
     {
         [SerializeField]
-        private ArmyBattleHandle m_battleHandle;
+        private ArmyBattleHandle_TBD m_battleHandle;
         [SerializeField]
         private PlayerArmyController m_source;
 
@@ -41,13 +41,13 @@ namespace DChild.Gameplay.ArmyBattle.UI
 
         private void Awake()
         {
-            m_battleHandle.RoundStart += OnRoundStart;
-            m_source.AttackTypeChosen += OnPlayerAttackTypeChosen;
-            m_source.AbilityTypeChosen += OnPlayerAbilityTypeChosen;
-            m_attackOptions.Initialize(m_source);
-            m_attackSelector.Initialize(m_source);
-            m_abilityOptions.Initialize(m_source);
-            m_abilitySelector.Initialize(m_source);
+            //m_battleHandle.RoundStart += OnRoundStart;
+            //m_source.AttackTypeChosen += OnPlayerAttackTypeChosen;
+            //m_source.AbilityTypeChosen += OnPlayerAbilityTypeChosen;
+            //m_attackOptions.Initialize(m_source);
+            //m_attackSelector.Initialize(m_source);
+            //m_abilityOptions.Initialize(m_source);
+            //m_abilitySelector.Initialize(m_source);
         }
 
 

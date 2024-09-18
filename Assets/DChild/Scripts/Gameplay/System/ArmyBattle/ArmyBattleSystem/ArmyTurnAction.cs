@@ -6,7 +6,6 @@
         public int troopCount;
         public ArmyDamage attack;
 
-        public float damageModifier;
-        public float damageResistanceModifier;
+        public ArmyModifier modifiers;
     }
 }

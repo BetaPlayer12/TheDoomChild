@@ -21,7 +21,7 @@ namespace DChild.Gameplay.ArmyBattle
                 }
             };
 
-            ArmyBattleSystem.HandleOngoingEffect(effect, m_roundDuration);
+            //ArmyBattleSystem.HandleOngoingEffect(effect, m_roundDuration);
         }
     }
 }

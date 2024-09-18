@@ -19,43 +19,43 @@ public class AttackInfoRevealer : IArmyAbilityEffect
 
     public void ApplyEffect(Army owner, Army opponent)
     {
-        m_unityTypeInfo = ArmyBattleSystem.GetArmyCombatHandleOf(opponent).attackInfo.type;
-        float number = Random.Range(0f, 1f);
-        var convertedPercentage = PercentageConverter.ConvertPercentage(m_percentageChance);
+        //m_unityTypeInfo = ArmyBattleSystem.GetArmyCombatHandleOf(opponent).attackInfo.type;
+        //float number = Random.Range(0f, 1f);
+        //var convertedPercentage = PercentageConverter.ConvertPercentage(m_percentageChance);
 
-        Debug.Log(number+ " random number");
-        Debug.Log(convertedPercentage + " Converted percentage");
+        //Debug.Log(number+ " random number");
+        //Debug.Log(convertedPercentage + " Converted percentage");
 
-        if (m_fakeInfoRevealer)
-        {
-            if (number >= 0f && number <= convertedPercentage)
-            {
-                Debug.Log(m_unityTypeInfo);
-            }
-            else
-            {
-                RevealingFakeInfo();
-            }
-        }
-        else if (m_hostageReveal)
-        {
+        //if (m_fakeInfoRevealer)
+        //{
+        //    if (number >= 0f && number <= convertedPercentage)
+        //    {
+        //        Debug.Log(m_unityTypeInfo);
+        //    }
+        //    else
+        //    {
+        //        RevealingFakeInfo();
+        //    }
+        //}
+        //else if (m_hostageReveal)
+        //{
 
-            if (number >= 0f && number <= convertedPercentage)
-            {
-                Debug.Log(m_unityTypeInfo);
-            }
-            else
-            {
-                Debug.Log("No Info");
-            }
-        }
-        else
-        {
-            if (number >= 0f && number <= convertedPercentage)
-            {
-                Debug.Log(m_unityTypeInfo);
-            }
-        }
+        //    if (number >= 0f && number <= convertedPercentage)
+        //    {
+        //        Debug.Log(m_unityTypeInfo);
+        //    }
+        //    else
+        //    {
+        //        Debug.Log("No Info");
+        //    }
+        //}
+        //else
+        //{
+        //    if (number >= 0f && number <= convertedPercentage)
+        //    {
+        //        Debug.Log(m_unityTypeInfo);
+        //    }
+        //}
         
         
 

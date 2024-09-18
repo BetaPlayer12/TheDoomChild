@@ -7,7 +7,7 @@ public class RestartGame : IArmyAbilityEffect
 {
     public void ApplyEffect(Army owner, Army opponent)
     {
-            ArmyBattleSystem.GetArmyCombatHandleOf(opponent).Reset();
-            ArmyBattleSystem.GetArmyCombatHandleOf(owner).Reset();
+            //ArmyBattleSystem.GetArmyCombatHandleOf(opponent).Reset();
+            //ArmyBattleSystem.GetArmyCombatHandleOf(owner).Reset();
     }
 }

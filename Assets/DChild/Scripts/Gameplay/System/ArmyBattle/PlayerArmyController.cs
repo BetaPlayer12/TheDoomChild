@@ -1,36 +1,24 @@
-﻿using Holysoft.Event;
-using System;
-using System.Collections.Generic;
+﻿using UnityEngine;
 
 namespace DChild.Gameplay.ArmyBattle
 {
-
     public class PlayerArmyController : ArmyController
     {
-        public event Action<List<ArmyAttackGroup>> AttackTypeChosen;
-        public event Action<List<ArmyAbilityGroup>> AbilityTypeChosen;
+        [SerializeField]
+        private ArmyGroup m_chosenAttack;
 
-        public void ChooseAttack(ArmyAttackGroup attackGroup)
+        public void UseThisTurn(ArmyGroup chosenAttack)
         {
-            //m_currentAttackGroup = attackGroup;
-            //m_currentAttack = CreateAttack(attackGroup);
-            //SendAttackChosenEvent(CreateAttackEvent(m_currentAttack));
+            m_chosenAttack = chosenAttack;
         }
 
-        public void ChooseAbility(ArmyAbilityGroup abilityGroup)
+        public override ArmyTurnAction GetTurnAction(int turnNumber)
         {
-            //SendAbilityChosenEvent(abilityGroup);
-        }
-
-        public void ChooseSpecial()
-        {
-            //base.ChooseSpecial();
-            //AbilityTypeChosen?.Invoke(m_controlledArmy.GetAvailableAbilityGroups());
-        }
-
-        protected void ChooseAttack(UnitType unitType)
-        {
-            //AttackTypeChosen?.Invoke(m_controlledArmy.GetAvailableAttackGroups(unitType));
+            return new ArmyTurnAction()
+            {
+                troopCount = m_controlledArmy.troopCount,
+                //attack = new ArmyDamage(m_chosenAttack.GetDamageType(), m_chosenAttack.GetAttackPower())
+            };
         }
     }
 }

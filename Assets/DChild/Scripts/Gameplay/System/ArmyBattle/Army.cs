@@ -19,7 +19,7 @@ namespace DChild.Gameplay.ArmyBattle
         [SerializeField]
         private List<ISpecialSkillGroup> m_availableSpecialSkills;
 
-        public ArmyModifier ArmyModifiers;
+        public ArmyModifier modifiers;
         public int troopCount => m_troopCount;
 
         public Army(ArmyInfo info)
@@ -39,9 +39,9 @@ namespace DChild.Gameplay.ArmyBattle
 
         public void ResetTroopCount()
         {
-            throw new NotImplementedException(); 
+            throw new NotImplementedException();
         }
-        
+
         public List<IAttackingGroup> GetAvailableGroups(DamageType damageType)
         {
             throw new NotImplementedException();
