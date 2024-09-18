@@ -23,10 +23,10 @@ namespace DChild.Gameplay.ArmyBattle
 
         public IArmyCombatHandle GetArmyCombatHandleOf(Army army)
         {
-            if (m_player.army == army)
+            if (m_player.controlledArmy == army)
                 return m_playerCombatHandle;
 
-            if (m_enemy.army == army)
+            if (m_enemy.controlledArmy == army)
                 return m_enemyCombatHandle;
 
             throw new System.Exception($"{army.ToString()} Does is not a participant in the Battle");

@@ -8,13 +8,13 @@ namespace DChild.Gameplay.ArmyBattle
     {
         public ArmyController ApplyEffect(ArmyController owner, ArmyController target)
         {
-            target.army.GetAvailableSkills().Clear();
+            target.controlledArmy.GetAvailableSkills().Clear();
             throw new System.NotImplementedException();
         }
 
         public ArmyController RemoveEffect(ArmyController owner, ArmyController target)
         {
-            target.army.GetAvailableSkills().Clear();
+            target.controlledArmy.GetAvailableSkills().Clear();
             throw new System.NotImplementedException();
         }
     }

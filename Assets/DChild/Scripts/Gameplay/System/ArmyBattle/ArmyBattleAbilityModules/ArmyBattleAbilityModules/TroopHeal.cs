@@ -11,13 +11,13 @@ namespace DChild.Gameplay.ArmyBattle
 
         public ArmyController ApplyEffect(ArmyController owner, ArmyController target)
         {
-            owner.army.AddTroopCount(m_troopCount);
+            owner.controlledArmy.AddTroopCount(m_troopCount);
             throw new System.NotImplementedException();
         }
 
         public ArmyController RemoveEffect(ArmyController owner, ArmyController target)
         {
-            owner.army.SubtractTroopCount(m_troopCount);
+            owner.controlledArmy.SubtractTroopCount(m_troopCount);
             throw new System.NotImplementedException();
         }
     }

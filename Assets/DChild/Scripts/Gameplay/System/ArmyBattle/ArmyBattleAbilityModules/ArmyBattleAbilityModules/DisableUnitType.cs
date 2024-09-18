@@ -16,7 +16,7 @@ namespace DChild.Gameplay.ArmyBattle
 
         public ArmyController RemoveEffect(ArmyController owner, ArmyController target)
         {
-            target.army.ResetGroupAvailability();
+            target.controlledArmy.ResetGroupAvailability();
             throw new System.NotImplementedException();
         }
     }
