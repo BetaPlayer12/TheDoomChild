@@ -10,16 +10,18 @@ namespace DChild.Gameplay.ArmyBattle
         private bool m_isTurnSkipped;
 
         public ArmyController armyController => m_armyController;
-        public ArmyAttack attackInfo => m_armyController.currentAttack;
+        //public ArmyAttack attackInfo => m_armyController.currentAttack;
         //public ArmyDamageTypeModifier damageReductionModifier => m_armyController.controlledArmy.damageReductionModifier;
 
         public bool canAttack => !m_isTurnSkipped && m_attackLeftCount > 0;
 
-        public int troopCount => m_armyController.controlledArmy.troopCount;
+        public int troopCount => m_armyController.army.troopCount;
 
         Health IArmyCombatInfo.troopCount => throw new System.NotImplementedException();
 
         public ArmyDamageTypeModifier damageReductionModifier => throw new System.NotImplementedException();
+
+        public ArmyAttack attackInfo => throw new System.NotImplementedException();
 
         public ArmyInstanceCombatHandle(ArmyController armyController)
         {
@@ -35,7 +37,7 @@ namespace DChild.Gameplay.ArmyBattle
         public void HandleAttackEnd()
         {
             m_attackLeftCount--;
-            m_armyController.DisposeCurrentAttack();
+            //m_armyController.DisposeCurrentAttack();
         }
 
         public void SkipTurn()

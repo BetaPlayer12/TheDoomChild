@@ -17,7 +17,7 @@ namespace DChild.Gameplay.ArmyBattle.UI
 
         public void Initialize(PlayerArmyController controller)
         {
-            army = controller.controlledArmy;
+            army = controller.army;
             m_specialButton.onClickEvent.AddListener(controller.ChooseSpecial);
         }
     }

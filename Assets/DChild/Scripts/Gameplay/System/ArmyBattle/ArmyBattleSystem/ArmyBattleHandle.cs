@@ -37,13 +37,13 @@ namespace DChild.Gameplay.ArmyBattle
         {
             if (m_player != null)
             {
-                m_player.armyController.AttackChosen -= OnPlayerAttackChosen;
-                m_player.armyController.AbilityChosen -= OnPlayerAbilityChosen;
+                //m_player.armyController.AttackChosen -= OnPlayerAttackChosen;
+                //m_player.armyController.AbilityChosen -= OnPlayerAbilityChosen;
             }
 
             m_player = player;
-            m_player.armyController.AttackChosen += OnPlayerAttackChosen;
-            m_player.armyController.AbilityChosen += OnPlayerAbilityChosen;
+            //m_player.armyController.AttackChosen += OnPlayerAttackChosen;
+            //m_player.armyController.AbilityChosen += OnPlayerAbilityChosen;
             m_enemy = enemy;
             m_enemyAI = (ArmyAI)enemy.armyController;
         }
@@ -172,11 +172,11 @@ namespace DChild.Gameplay.ArmyBattle
             {
                 case (true, false):
                     CustomDebug.Log(CustomDebug.LogType.System_ArmyBattle, "Player Win");
-                    m_visuals.SetArmyAnimationToCelebrate(m_player.armyController.controlledArmy, "Player Win");
+                    m_visuals.SetArmyAnimationToCelebrate(m_player.armyController.army, "Player Win");
                     break;
                 case (false, true):
                     CustomDebug.Log(CustomDebug.LogType.System_ArmyBattle, "Player Lose");
-                    m_visuals.SetArmyAnimationToCelebrate(m_enemy.armyController.controlledArmy, "Player Lose");
+                    m_visuals.SetArmyAnimationToCelebrate(m_enemy.armyController.army, "Player Lose");
 
                     break;
                 case (false, false):
@@ -203,7 +203,7 @@ namespace DChild.Gameplay.ArmyBattle
 
         private void OnPlayerAbilityChosen(object sender, ArmyAbilityEvent eventArgs)
         {
-            eventArgs.ability.UseAbility(m_player.armyController.controlledArmy, m_enemy.armyController.controlledArmy);
+            eventArgs.ability.UseAbility(m_player.armyController.army, m_enemy.armyController.army);
             //eventArgs.ability.SetAvailability(false);
         }
 

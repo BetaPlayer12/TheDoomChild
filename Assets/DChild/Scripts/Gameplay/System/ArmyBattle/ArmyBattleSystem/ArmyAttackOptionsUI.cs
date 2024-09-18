@@ -23,10 +23,10 @@ namespace DChild.Gameplay.ArmyBattle.UI
 
         public void Initialize(PlayerArmyController controller)
         {
-            army = controller.controlledArmy;
-            m_rockButton.onClickEvent.AddListener(controller.ChooseRockAttack);
-            m_paperButton.onClickEvent.AddListener(controller.ChoosePaperAttacker);
-            m_scissorButton.onClickEvent.AddListener(controller.ChooseScissorAttack);
+            army = controller.army;
+            //m_rockButton.onClickEvent.AddListener(controller.ChooseRockAttack);
+            //m_paperButton.onClickEvent.AddListener(controller.ChoosePaperAttacker);
+            //m_scissorButton.onClickEvent.AddListener(controller.ChooseScissorAttack);
         }
     }
 }

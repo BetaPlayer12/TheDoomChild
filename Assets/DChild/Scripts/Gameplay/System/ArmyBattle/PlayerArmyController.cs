@@ -12,23 +12,23 @@ namespace DChild.Gameplay.ArmyBattle
 
         public void ChooseAttack(ArmyAttackGroup attackGroup)
         {
-            m_currentAttackGroup = attackGroup;
-            m_currentAttack = CreateAttack(attackGroup);
-            SendAttackChosenEvent(CreateAttackEvent(m_currentAttack));
+            //m_currentAttackGroup = attackGroup;
+            //m_currentAttack = CreateAttack(attackGroup);
+            //SendAttackChosenEvent(CreateAttackEvent(m_currentAttack));
         }
 
         public void ChooseAbility(ArmyAbilityGroup abilityGroup)
         {
-            SendAbilityChosenEvent(abilityGroup);
+            //SendAbilityChosenEvent(abilityGroup);
         }
 
-        public override void ChooseSpecial()
+        public void ChooseSpecial()
         {
-            base.ChooseSpecial();
+            //base.ChooseSpecial();
             //AbilityTypeChosen?.Invoke(m_controlledArmy.GetAvailableAbilityGroups());
         }
 
-        protected override void ChooseAttack(UnitType unitType)
+        protected void ChooseAttack(UnitType unitType)
         {
             //AttackTypeChosen?.Invoke(m_controlledArmy.GetAvailableAttackGroups(unitType));
         }

@@ -19,7 +19,7 @@ namespace DChild.Gameplay.ArmyBattle
 
         public IEnumerator StartBattleVisuals(ArmyController player, ArmyController enemy)
         {
-            m_event.text = $"Player Picked {player.currentAttack.type}({player.currentAttack.value}) \n Against \n Enemy {enemy.currentAttack.type}({enemy.currentAttack.value})";
+            //m_event.text = $"Player Picked {player.currentAttack.type}({player.currentAttack.value}) \n Against \n Enemy {enemy.currentAttack.type}({enemy.currentAttack.value})";
             //Code to Simulate Fighting between 2 Armies
             yield return null;
         }
