@@ -167,6 +167,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         [ShowInInspector]
         private StateHandle<State> m_stateHandle;
+        private State m_turnState;
         private ProjectileLauncher m_projectileLauncher;
         [ShowInInspector]
         private RandomAttackDecider<Attack> m_attackDecider;
@@ -266,7 +267,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_info.fadeOutAnimation, false);
             yield return new WaitForSeconds(0.5f);
             var random = UnityEngine.Random.Range(0, 2);
-            transform.position = new Vector2(m_targetInfo.position.x + (IsFacingTarget() ? -30 : 30), m_targetInfo.position.y+30);
+            transform.position = new Vector2(m_targetInfo.position.x + (IsFacingTarget() ? -30 : 30), m_targetInfo.position.y + 30f);
             if (!IsFacingTarget())
             {
                 CustomTurn();
@@ -324,16 +325,16 @@ namespace DChild.Gameplay.Characters.Enemies
             m_attackDecider.hasDecidedOnAttack = false;
         }
 
-        private void CalculateRunPath()
+        private IEnumerator CalculateRunPath()
         {
             bool isRight = m_targetInfo.position.x >= transform.position.x;
-            var movePos = new Vector2(transform.position.x + (isRight ? -3 : 3), m_targetInfo.position.y + 10);
-            while (Vector2.Distance(transform.position, WallPosition()) <= 5)
+            var movePos = new Vector2(transform.position.x + /*(isRight ? -10f : */10f, m_targetInfo.position.y + 40f);
+            while (Mathf.Abs(transform.position.x - m_targetInfo.position.x) <= 10)
             {
-                movePos = new Vector2(movePos.x + 0.1f, movePos.y);
-                break;
+                m_agent.SetDestination(movePos);
+                yield return null;
             }
-            m_agent.SetDestination(movePos);
+            yield return null;
         }
 
         private bool IsInRange(Vector2 position, float distance) => Vector2.Distance(position, m_character.centerMass.position) <= distance;
@@ -445,10 +446,12 @@ namespace DChild.Gameplay.Characters.Enemies
             m_stateHandle.ApplyQueuedState();
             yield return null;
         }
+        private bool m_isStillAttacking;
         private IEnumerator AttackRoutine2()
         {
             if (m_icePlungeSameAttackCounter != 3 && m_canUseIcePlunge)
             {
+                //m_stateHandle.Wait(State.ReevaluateSituation);
                 yield return new WaitForSeconds(1.25f);
                 if (m_character.facing == HorizontalDirection.Right)
                 {
@@ -459,7 +462,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_targetPoint = new Vector2(m_targetInfo.position.x + 10, m_targetInfo.position.y + 30f);
                 }
                 yield return new WaitForSeconds(1.25f);
-                if (!m_upDownSensor.isDetecting && !m_leftRightSensor.isDetecting || !m_upDownSensor.allRaysDetecting && !m_leftRightSensor.allRaysDetecting)
+                if (!m_upDownSensor.isDetecting && !m_leftRightSensor.isDetecting)
                 {
                     m_icePlungeSameAttackCounter++;
                     SpawnSpike();
@@ -471,9 +474,6 @@ namespace DChild.Gameplay.Characters.Enemies
                 {
                     yield return null;
                 }
-                m_selfCollider.SetActive(false);
-                m_flinchHandle.m_autoFlinch = true;
-                m_stateHandle.ApplyQueuedState();
             }
             else
             {
@@ -496,9 +496,14 @@ namespace DChild.Gameplay.Characters.Enemies
                     {
                         CustomTurn();
                     }
+                    yield return null;
                 }
+                yield return null;
                 m_stateHandle.OverrideState(State.ReevaluateSituation);
             }
+            m_selfCollider.SetActive(false);
+            m_flinchHandle.m_autoFlinch = true;
+            m_stateHandle.ApplyQueuedState();
             yield return null;
         }
         private IEnumerator IcePlungeCooldown()
@@ -508,13 +513,14 @@ namespace DChild.Gameplay.Characters.Enemies
             while (duration > timeLeft && !m_canUseIcePlunge)
             {
                 timeLeft += Time.deltaTime;
+                Debug.Log(timeLeft);
                 if (timeLeft >= duration)
                 {
-                    timeLeft = 0f;
+                    //timeLeft = 0f;
                     m_canUseIcePlunge = true;
                     m_icePlungeSameAttackCounter = 0;
                 }
-                yield break;
+                yield return null;
             }
             yield return null;
         }
@@ -546,6 +552,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 {
                     inRange = true;
                 }
+                m_animation.SetAnimation(0, m_info.patrol, true);
                 DynamicMovement(newPos, moveSpeed);
                 yield return null;
             }
@@ -559,16 +566,15 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void DynamicMovement(Vector2 target, float moveSpeed)
         {
-            var rb2d = GetComponent<Rigidbody2D>();
             m_agent.SetDestination(target);
             if (IsFacing(target))
             {
                 m_agent.Move(moveSpeed);
             }
-            else
+            /*else
             {
-                m_stateHandle.OverrideState(State.Turning);
-            }
+                CustomTurn();
+            }*/
         }
 
         private Vector2 GroundPosition()
@@ -612,6 +618,8 @@ namespace DChild.Gameplay.Characters.Enemies
             m_icePlunge = m_info.spike.GetComponent<IcePlunge>();
             m_patrolHandle.TurnRequest += OnTurnRequest;
             m_attackHandle.AttackDone += OnAttackDone;
+            m_flinchHandle.FlinchStart += OnFlinchStart;
+            m_flinchHandle.FlinchEnd += OnFlinchEnd;
             m_turnHandle.TurnDone += OnTurnDone;
             m_spectreIceShield.GetComponent<SpectreIceShield>().OnActivate += OnActivate;
             m_spectreIceShield.GetComponent<SpectreIceShield>().OnShieldDestroy += OnShieldDestroy;
@@ -659,16 +667,35 @@ namespace DChild.Gameplay.Characters.Enemies
                     break;
 
                 case State.ReturnToPatrol:
-                    m_stateHandle.OverrideState(State.Patrol);
-                    m_isDetecting = false;
+                    if (IsFacing(m_startPos))
+                    {
+                        if (Vector2.Distance(m_startPos, transform.position) > 5f)
+                        {
+                            var rb2d = GetComponent<Rigidbody2D>();
+                            m_bodyCollider.enabled = false;
+                            m_agent.Stop();
+                            Vector3 dir = (m_startPos - (Vector2)rb2d.transform.position).normalized;
+                            rb2d.MovePosition(rb2d.transform.position + dir * m_info.move.speed * Time.fixedDeltaTime);
+                            m_animation.SetAnimation(0, m_info.patrol.animation, true);
+                        }
+                        else
+                        {
+                            m_stateHandle.OverrideState(State.Patrol);
+                        }
+                    }
+                    else
+                    {
+                        m_turnState = State.ReturnToPatrol;
+                        m_stateHandle.SetState(State.Turning);
+                    }
                     break;
 
                 case State.Patrol:
+                    m_turnState = State.Patrol;
                     m_animation.DisableRootMotion();
                     m_animation.SetAnimation(0, m_info.patrol.animation, true);
                     var characterInfo = new PatrolHandle.CharacterInfo(m_character.centerMass.position, m_character.facing);
                     m_patrolHandle.Patrol(m_agent, m_info.patrol.speed, characterInfo);
-                    m_stateHandle.SetState(State.Patrol);
                     break;
 
                 case State.Idle:
@@ -686,6 +713,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_agent.Stop();
                     m_animation.SetAnimation(0, m_info.idleAnimation, true);
                     m_turnHandle.Execute();
+                    //CustomTurn();
                     break;
                 case State.Attacking:
                     m_stateHandle.Wait(State.Cooldown);
@@ -701,10 +729,8 @@ namespace DChild.Gameplay.Characters.Enemies
                     }
                     else
                     {
-
                         m_agent.Stop();
                         m_animation.SetAnimation(0, m_info.idleAnimation, true).TimeScale = 1f;
-
                     }
 
                     if (m_currentCD <= m_info.attackCD)
@@ -720,6 +746,10 @@ namespace DChild.Gameplay.Characters.Enemies
 
                     break;
                 case State.Chasing:
+                    if (Mathf.Abs(transform.position.x - m_targetInfo.transform.position.x) < 10f)
+                    {
+                        Debug.Log("chasing, close to target");
+                    }
                     m_agent.Stop();
                     m_attackDecider.hasDecidedOnAttack = false;
                     ChooseAttack();
@@ -729,11 +759,9 @@ namespace DChild.Gameplay.Characters.Enemies
                 case State.ReevaluateSituation:
                     if (m_targetInfo.isValid)
                     {
-
                         m_stateHandle.OverrideState(State.Chasing);
                     }
                     else
-
                     {
                         m_stateHandle.SetState(State.Patrol);
                     }
@@ -741,6 +769,17 @@ namespace DChild.Gameplay.Characters.Enemies
                 case State.WaitBehaviourEnd:
                     return;
             }
+/*
+            if (Mathf.Abs(transform.position.x - m_targetInfo.transform.position.x) < 10f)
+            {
+                m_isStillAttacking = true;
+                StartCoroutine(CalculateRunPath());
+                //m_agent.Move(m_info.move.speed);
+            }
+            else
+            {
+                m_isStillAttacking = false;
+            }*/
         }
 
         protected override void OnTargetDisappeared()
