@@ -222,7 +222,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_icePlunge.m_playerDamageable = m_targetInfo.transform.gameObject;
                     m_isDetecting = true;
                     m_enablePatience = false;
-                    m_stateHandle.SetState(State.Detect);
+                    m_stateHandle.OverrideState(State.Detect);
                 }
             }
             else
@@ -302,10 +302,10 @@ namespace DChild.Gameplay.Characters.Enemies
         //Patience Handler
         private IEnumerator PatienceRoutine()
         {
-            yield return new WaitForSeconds(5f);
+            //yield return new WaitForSeconds(1f);
             OnPlayerDisappeared?.Invoke(this, EventActionArgs.Empty);
             m_enablePatience = false;
-            m_targetInfo.Set(null, null);
+            m_targetInfo.Set(null);
             m_isDetecting = false;
             if (m_executeMoveCoroutine != null)
             {
@@ -318,6 +318,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_stateHandle.OverrideState(State.Patrol);
             StopAllCoroutines();
+            yield return null;
         }
 
         public override void ApplyData()
