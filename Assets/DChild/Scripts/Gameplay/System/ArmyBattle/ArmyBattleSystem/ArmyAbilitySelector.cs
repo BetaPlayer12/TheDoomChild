@@ -9,8 +9,8 @@ namespace DChild.Gameplay.ArmyBattle.UI
         private ArmyAbilityGroupUI m_display;
 
         private PlayerArmyController m_source;
-        private List<ArmyAbilityGroup> m_choices;
-        private ArmyAbilityGroup m_currentChoice;
+        //private List<ArmyAbilityGroup> m_choices;
+        //private ArmyAbilityGroup m_currentChoice;
         private int m_currentChoiceIndex;
 
         public void Initialize(PlayerArmyController controller)
@@ -20,24 +20,24 @@ namespace DChild.Gameplay.ArmyBattle.UI
 
         public void Next()
         {
-            m_currentChoiceIndex++;
-            if (m_currentChoiceIndex >= m_choices.Count)
-            {
-                m_currentChoiceIndex = 0;
-            }
-            m_currentChoice = m_choices[m_currentChoiceIndex];
-            UpdateDisplay();
+            //m_currentChoiceIndex++;
+            //if (m_currentChoiceIndex >= m_choices.Count)
+            //{
+            //    m_currentChoiceIndex = 0;
+            //}
+            //m_currentChoice = m_choices[m_currentChoiceIndex];
+            //UpdateDisplay();
         }
 
         public void Previous()
         {
-            m_currentChoiceIndex--;
-            if (m_currentChoiceIndex <= -1)
-            {
-                m_currentChoiceIndex = m_choices.Count - 1;
-            }
-            m_currentChoice = m_choices[m_currentChoiceIndex];
-            UpdateDisplay();
+            //m_currentChoiceIndex--;
+            //if (m_currentChoiceIndex <= -1)
+            //{
+            //    m_currentChoiceIndex = m_choices.Count - 1;
+            //}
+            //m_currentChoice = m_choices[m_currentChoiceIndex];
+            //UpdateDisplay();
         }
 
         public void SelectCurrentAbility()
@@ -45,37 +45,37 @@ namespace DChild.Gameplay.ArmyBattle.UI
             //m_source.ChooseAbility(m_currentChoice);
         }
 
-        public void UpdateChoices(List<ArmyAbilityGroup> choices)
-        {
-            m_choices.Clear();
-            m_choices.AddRange(choices);
-            m_currentChoiceIndex = 0;
-            if (m_choices.Count > 0)
-            {
-                m_currentChoice = m_choices[m_currentChoiceIndex];
-            }
-            else
-            {
-                m_currentChoice = null;
-            }
-            UpdateDisplay();
-        }
+        //public void UpdateChoices(List<ArmyAbilityGroup> choices)
+        //{
+        //    m_choices.Clear();
+        //    m_choices.AddRange(choices);
+        //    m_currentChoiceIndex = 0;
+        //    if (m_choices.Count > 0)
+        //    {
+        //        m_currentChoice = m_choices[m_currentChoiceIndex];
+        //    }
+        //    else
+        //    {
+        //        m_currentChoice = null;
+        //    }
+        //    UpdateDisplay();
+        //}
 
-        private void UpdateDisplay()
-        {
-            m_display.Display(m_currentChoice);
-        }
+        //private void UpdateDisplay()
+        //{
+        //    m_display.Display(m_currentChoice);
+        //}
 
-        private void Awake()
-        {
-            m_choices = new List<ArmyAbilityGroup>();
-        }
+        //private void Awake()
+        //{
+        //    m_choices = new List<ArmyAbilityGroup>();
+        //}
 
         public void Reset()
         {
-            m_currentChoice = null;
+           // m_currentChoice = null;
             m_currentChoiceIndex = 0;
-            UpdateDisplay();
+            //UpdateDisplay();
         }
     }
 }

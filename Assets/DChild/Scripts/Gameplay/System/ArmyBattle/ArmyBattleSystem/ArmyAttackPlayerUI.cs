@@ -34,10 +34,10 @@ namespace DChild.Gameplay.ArmyBattle.UI
             m_abilitySelector.Reset();
         }
 
-        private void OnPlayerAbilityTypeChosen(List<ArmyAbilityGroup> obj)
-        {
-            m_abilitySelector.UpdateChoices(obj);
-        }
+        //private void OnPlayerAbilityTypeChosen(List<ArmyAbilityGroup> obj)
+        //{
+        //    m_abilitySelector.UpdateChoices(obj);
+        //}
 
         private void Awake()
         {

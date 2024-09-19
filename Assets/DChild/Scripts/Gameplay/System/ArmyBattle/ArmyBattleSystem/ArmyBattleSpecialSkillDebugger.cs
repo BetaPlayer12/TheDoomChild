@@ -1,7 +1,7 @@
 ﻿using Sirenix.OdinInspector;
 using UnityEngine;
 
-namespace DChild.Gameplay.ArmyBattle
+namespace DChild.Gameplay.ArmyBattle.SpecialSkills
 {
     public class ArmyBattleSpecialSkillDebugger : MonoBehaviour
     {

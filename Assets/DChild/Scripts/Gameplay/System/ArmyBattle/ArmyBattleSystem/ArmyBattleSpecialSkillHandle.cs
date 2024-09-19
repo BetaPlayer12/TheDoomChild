@@ -2,9 +2,8 @@
 using UnityEngine;
 using static UnityEngine.UI.GridLayoutGroup;
 
-namespace DChild.Gameplay.ArmyBattle
+namespace DChild.Gameplay.ArmyBattle.SpecialSkills
 {
-
     public class ArmyBattleSpecialSkillHandle : MonoBehaviour
     {
         [System.Serializable]
