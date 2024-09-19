@@ -183,11 +183,13 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private float m_currentCD;
         private bool m_isDetecting;
+        private bool m_enablePatience;
 
         private Coroutine m_executeMoveCoroutine;
         private bool m_shardspawned = false;
 
         public EventAction<EventActionArgs> OnDetection;
+        public EventAction<EventActionArgs> OnPlayerDisappeared;
         public EventAction<EventActionArgs> OnDamaged;
 
         [SerializeField]
@@ -219,8 +221,13 @@ namespace DChild.Gameplay.Characters.Enemies
                 {
                     m_icePlunge.m_playerDamageable = m_targetInfo.transform.gameObject;
                     m_isDetecting = true;
+                    m_enablePatience = false;
                     m_stateHandle.SetState(State.Detect);
                 }
+            }
+            else
+            {
+                m_enablePatience = true;
             }
         }
 
@@ -293,19 +300,24 @@ namespace DChild.Gameplay.Characters.Enemies
         }
 
         //Patience Handler
-        private void Patience()
+        private IEnumerator PatienceRoutine()
         {
+            yield return new WaitForSeconds(5f);
+            OnPlayerDisappeared?.Invoke(this, EventActionArgs.Empty);
+            m_enablePatience = false;
+            m_targetInfo.Set(null, null);
+            m_isDetecting = false;
             if (m_executeMoveCoroutine != null)
             {
                 StopCoroutine(m_executeMoveCoroutine);
                 m_executeMoveCoroutine = null;
             }
             m_agent.Stop();
-            m_stateHandle.SetState(State.ReturnToPatrol);
+            m_hitbox.SetCanBlockDamageState(false);
+            m_hitbox.damageFXInfo.fx = m_hurtFX;
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
-            m_targetInfo.Set(null, null);
-            m_flinchHandle.m_autoFlinch = true;
-            m_isDetecting = false;
+            m_stateHandle.OverrideState(State.Patrol);
+            StopAllCoroutines();
         }
 
         public override void ApplyData()
@@ -769,6 +781,10 @@ namespace DChild.Gameplay.Characters.Enemies
                 case State.WaitBehaviourEnd:
                     return;
             }
+            if (m_enablePatience)
+            {
+                StartCoroutine(PatienceRoutine());
+            }
 /*
             if (Mathf.Abs(transform.position.x - m_targetInfo.transform.position.x) < 10f)
             {
@@ -806,7 +822,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         public override void ReturnToSpawnPoint()
         {
-            Patience();
+            //Patience();
         }
     }
 }

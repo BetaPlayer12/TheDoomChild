@@ -58,6 +58,7 @@ public class SpectreIceShield : MonoBehaviour
     protected void Awake()
     {
         m_spectreIceAI.GetComponent<SpectreIceAI>().OnDetection += OnDetection;
+        m_spectreIceAI.GetComponent<SpectreIceAI>().OnPlayerDisappeared += OnPlayerDisappeared;
         m_damageable.DamageTaken += OnDamageTaken;
     }
 
@@ -87,6 +88,13 @@ public class SpectreIceShield : MonoBehaviour
         m_spine.SetAnimation(0, m_activateAnimation, false);
         m_spine.SetAnimation(0, m_loopingIdleAnimation, true);
         m_hitbox.enabled = true;
+        //throw new NotImplementedException();
+    }
+    private void OnPlayerDisappeared(object sender, EventActionArgs eventArgs)
+    {
+        m_shieldHolder.Stop(); 
+        m_spine.SetAnimation(0, m_inactiveAnimation, false);
+        m_hitbox.enabled = false;
         //throw new NotImplementedException();
     }
     public void Restart()
