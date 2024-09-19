@@ -5,6 +5,7 @@ using System;
 
 namespace DChild.Gameplay.ArmyBattle
 {
+    [System.Serializable]
     public struct ArmyModifier 
     {
         public ArmyDamageTypeModifier damageModifier;

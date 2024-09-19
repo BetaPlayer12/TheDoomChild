@@ -1,6 +1,7 @@
 ﻿using DChild.Gameplay.ArmyBattle.Visualizer;
 using Holysoft.Event;
 using Sirenix.OdinInspector;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -47,7 +48,13 @@ namespace DChild.Gameplay.ArmyBattle
 
         private void OnFightEnd(object sender, EventActionArgs eventArgs)
         {
-            OnTurnEnd?.Invoke(this, eventArgs);
+            EndTurn();
+        }
+
+        [Button]
+        private void EndTurn()
+        {
+            OnTurnEnd?.Invoke(this, EventActionArgs.Empty);
         }
 
         private void Awake()

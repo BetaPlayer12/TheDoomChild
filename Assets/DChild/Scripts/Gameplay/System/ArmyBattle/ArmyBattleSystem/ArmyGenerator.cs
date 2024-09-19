@@ -42,7 +42,7 @@ namespace DChild.Gameplay.ArmyBattle
                 if (viableCharacters.Count > 0)
                 {
                     var newcharacterGroup = new ArmyCharacterGroup(characterGroup.name, viableCharacters.ToArray());
-                    var newArmyGroup = new ArmyGroup(armyGroup.id, newcharacterGroup, armyGroup.damageType);
+                    var newArmyGroup = new ArmyGroup(armyGroup.id, newcharacterGroup, armyGroup.damageType, armyGroup.specialSkill);
                     m_cachedCreatedGroupsReference.Add(armyGroup);
                     createdArmyGroup.Add(newArmyGroup);
                 }

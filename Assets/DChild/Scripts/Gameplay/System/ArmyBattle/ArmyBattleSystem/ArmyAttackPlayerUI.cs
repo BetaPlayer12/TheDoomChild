@@ -7,8 +7,8 @@ namespace DChild.Gameplay.ArmyBattle.UI
 {
     public class ArmyAttackPlayerUI : MonoBehaviour
     {
-        [SerializeField]
-        private ArmyBattleHandle_TBD m_battleHandle;
+        //[SerializeField]
+        //private ArmyBattleHandle_TBD m_battleHandle;
         [SerializeField]
         private PlayerArmyController m_source;
 

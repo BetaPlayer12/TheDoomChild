@@ -10,7 +10,7 @@ namespace DChild.Gameplay.ArmyBattle
         private float m_successChance;
         [SerializeField]
         private bool m_effectSuccessful;
-        public ArmyController ApplyEffect(ArmyController owner, ArmyController target)
+        public void ApplyEffect(ArmyController owner, ArmyController target)
         {
             float chance = Random.Range(0, 100);
             if ((chance <= m_successChance))
@@ -20,7 +20,7 @@ namespace DChild.Gameplay.ArmyBattle
             throw new System.NotImplementedException();
         }
 
-        public ArmyController RemoveEffect(ArmyController owner, ArmyController target)
+        public void RemoveEffect(ArmyController owner, ArmyController target)
         {
             throw new System.NotImplementedException();
         }
