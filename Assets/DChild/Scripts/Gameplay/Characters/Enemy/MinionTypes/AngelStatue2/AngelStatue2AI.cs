@@ -217,7 +217,11 @@ namespace DChild.Gameplay.Characters.Enemies
                 //    //Patience();
                 //    StartCoroutine(PatienceRoutine());
                 //}
-                m_enablePatience = true;
+                if(m_stateHandle.currentState != State.Idle || m_stateHandle.currentState != State.ReturnToSpawnPoint)
+                {
+                    m_enablePatience = true;
+                }
+             
                 //StartCoroutine(PatienceRoutine());
             }
         }
