@@ -19,4 +19,5 @@ namespace DChild.Gameplay.ArmyBattle
             ArmyBattleSystem.DebugPlayerRecruitedCharacters = new RecruitedCharacterList(m_playerRecruitedCharacters);
         }
     }
+
 }

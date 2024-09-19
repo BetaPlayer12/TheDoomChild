@@ -19,9 +19,14 @@ namespace DChild.Gameplay.ArmyBattle
         [SerializeField, ShowIf("m_useCustomAttackPower"), Indent]
         private int m_attackPower;
 
+        [SerializeField]
+        private bool m_hasSpecialSkill;
+        [SerializeField, ShowIf("m_hasSpecialSkill"), Indent, HideLabel, BoxGroup("Special Skill Info")]
+        private SpecialSkill m_specialSkill;
+
         public int id => m_id;
 
-        public ArmyGroup(int id, ArmyCharacterGroup members, DamageType type)
+        public ArmyGroup(int id, ArmyCharacterGroup members, DamageType type, SpecialSkill specialSkill)
         {
             m_id = id;
             m_members = members;
@@ -29,17 +34,14 @@ namespace DChild.Gameplay.ArmyBattle
 
             m_useCustomAttackPower = false;
             m_attackPower = GetTotalCharacterGroupAttackPower();
+
+            m_specialSkill = specialSkill;
+            m_hasSpecialSkill = m_specialSkill != null;
         }
 
-        public ArmyCharacterGroup GetCharacterGroup()
-        {
-            return m_members;
-        }
+        public ArmyCharacterGroup GetCharacterGroup() => m_members;
 
-        public DamageType GetDamageType()
-        {
-            return m_type;
-        }
+        public DamageType GetDamageType() => m_type;
 
         public int GetTroopCount()
         {
@@ -51,18 +53,9 @@ namespace DChild.Gameplay.ArmyBattle
             return totalTroopCount;
         }
 
-        public int GetAttackPower()
-        {
-            return m_attackPower;
-        }
-        public SpecialSkill GetSpecialSkill()
-        {
-            throw new System.NotImplementedException();
-        }
-        public bool HasSpecialSkill()
-        {
-            return false;
-        }
+        public int GetAttackPower() => m_attackPower;
+        public SpecialSkill GetSpecialSkill() => m_hasSpecialSkill ? m_specialSkill : null;
+        public bool HasSpecialSkill() => m_hasSpecialSkill;
 
         private int GetTotalCharacterGroupAttackPower()
         {

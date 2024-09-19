@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace DChild.Gameplay.ArmyBattle
 {
-    public interface ISpecialSkillModule
+    public interface ISpecialSkillModule : ISpecialSkillImplementor
     {
  
     }

@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8762055606266220326}
   - component: {fileID: 3938904806831809300}
+  - component: {fileID: 9010337518295323112}
   m_Layer: 0
   m_Name: Debugger
   m_TagString: Untagged
@@ -49,6 +50,20 @@ MonoBehaviour:
   m_battleScenario:
     m_enemyToBattle: {fileID: 0}
     m_location: 0
+--- !u!114 &9010337518295323112
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8762055606266220320}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bb664f4f17722a34ebd258e9cec33a84, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_handle: {fileID: 7289556706671694533}
+  m_owner: {fileID: 0}
 --- !u!1 &8762055607546447031
 GameObject:
   m_ObjectHideFlags: 0
@@ -62,6 +77,7 @@ GameObject:
   - component: {fileID: 9064165810040716005}
   - component: {fileID: 2225420059054573839}
   - component: {fileID: 8762055607546447033}
+  - component: {fileID: 7289556706671694533}
   m_Layer: 0
   m_Name: ArmyBattleSystem
   m_TagString: Untagged
@@ -100,6 +116,7 @@ MonoBehaviour:
   m_locationInstantiator: {fileID: 2225420059054573839}
   m_generator: {fileID: 9064165810040716005}
   m_turnHandle: {fileID: 8762055607546447033}
+  m_specialSkillHandle: {fileID: 7289556706671694533}
   m_fightManager: {fileID: 0}
   m_player: {fileID: 0}
   m_enemy: {fileID: 0}
@@ -144,3 +161,16 @@ MonoBehaviour:
   m_combatSimulator:
     m_data: {fileID: 11400000, guid: 63ce407c7004e2b43b1b599fbd8f5777, type: 2}
   m_fightManager: {fileID: 0}
+--- !u!114 &7289556706671694533
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8762055607546447031}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf7a7938092530740a306e675d908079, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_activeSkillList: []

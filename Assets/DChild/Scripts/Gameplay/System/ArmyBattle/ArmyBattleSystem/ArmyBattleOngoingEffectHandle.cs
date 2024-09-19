@@ -1,9 +1,11 @@
 ﻿using Holysoft.Event;
+using Sirenix.Serialization.Utilities;
 using System;
 using System.Collections.Generic;
 
 namespace DChild.Gameplay.ArmyBattle
 {
+
     public class ArmyBattleOngoingEffectHandle
     {
         private class OngoingEffect
@@ -33,14 +35,14 @@ namespace DChild.Gameplay.ArmyBattle
             m_ongoingEffects.Add(ongoingEffect);
         }
 
-        public void Initialize(ArmyBattleHandle_TBD armyBattleHandle)
-        {
-            m_ongoingEffects = new List<OngoingEffect>();
+        //public void Initialize(ArmyBattleHandle_TBD armyBattleHandle)
+        //{
+        //    m_ongoingEffects = new List<OngoingEffect>();
 
-            armyBattleHandle.RoundEnd += OnRoundeEnd;
-            armyBattleHandle.RoundStart += OnRoundStart;
-            armyBattleHandle.BattleEnd += OnBattleEnd;
-        }
+        //    armyBattleHandle.RoundEnd += OnRoundeEnd;
+        //    armyBattleHandle.RoundStart += OnRoundStart;
+        //    armyBattleHandle.BattleEnd += OnBattleEnd;
+        //}
 
         private void OnBattleEnd(object sender, EventActionArgs eventArgs)
         {
