@@ -33,6 +33,8 @@ namespace DChild.Gameplay.ArmyBattle
         public ArmyController player => m_player;
         public ArmyController enemy => m_enemy;
 
+        public ArmyFightManager fightManager => m_fightManager;
+
         //Feels Like A Hack Solution ATM
         public static ArmyController GetTargetOf(ArmyController reference)
         {
@@ -40,6 +42,14 @@ namespace DChild.Gameplay.ArmyBattle
                 return Instance.m_enemy;
 
             return Instance.m_player;
+        }
+
+        public static Vector3 GetBattlationPositionOf(ArmyController reference)
+        {
+            if (reference == Instance.m_player)
+                return Instance.fightManager.GetPlayerBattalionPosition();
+
+            return Instance.fightManager.GetEnemyBattalionPosition();
         }
 
         [Button]
@@ -64,6 +74,7 @@ namespace DChild.Gameplay.ArmyBattle
             {
                 m_turnHandle.TurnStart();
                 m_specialSkillHandle.ResolveActiveSkills();
+                m_specialSkillHandle.ReinstanteActivateEffects();
             }
         }
 

@@ -23,6 +23,8 @@ namespace DChild.Gameplay.ArmyBattle
         [ShowInInspector, DisableInPlayMode, HideInEditorMode]
         private int m_turnCount;
 
+        public int currentTurn => m_turnCount;
+
         [Button]
         public void TurnStart()
         {

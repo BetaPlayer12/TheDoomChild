@@ -1,4 +1,5 @@
 ﻿using Sirenix.OdinInspector;
+using Sirenix.Serialization;
 using UnityEngine;
 
 namespace DChild.Gameplay.ArmyBattle
@@ -15,8 +16,8 @@ namespace DChild.Gameplay.ArmyBattle
         private DamageType m_damageType;
         [SerializeField]
         private bool m_hasSpecialSkill;
-        [SerializeField, ShowIf("m_hasSpecialSkill"), Indent, HideReferenceObjectPicker,HideLabel,BoxGroup("Special Skill Info")]
-        private SpecialSkill m_specialSkill;
+        [OdinSerialize, ShowIf("m_hasSpecialSkill"), Indent, HideReferenceObjectPicker,HideLabel,BoxGroup("Special Skill Info")]
+        private SpecialSkill m_specialSkill = new SpecialSkill();
 
         public int id => m_id;
         public ArmyCharacterGroup armyCharacterGroup => m_armyCharacterGroup;

@@ -25,6 +25,10 @@ namespace DChild.Gameplay.ArmyBattle.Visualizer
 
         public event EventAction<EventActionArgs> OnFightEnd;
 
+        public Vector3 GetPlayerBattalionPosition() => m_player.centerPosition;
+        public Vector3 GetEnemyBattalionPosition() => m_enemy.centerPosition;
+
+
         [Button]
         public void Initialize(Army playerArmy, Army enemyArmy)
         {
