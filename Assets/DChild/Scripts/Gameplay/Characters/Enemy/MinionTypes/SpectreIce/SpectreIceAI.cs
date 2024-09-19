@@ -219,11 +219,11 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_selfCollider.SetActive(true);
                 if (m_stateHandle.currentState != State.Chasing && !m_isDetecting)
                 {
-                    m_icePlunge.m_playerDamageable = m_targetInfo.transform.gameObject;
                     m_isDetecting = true;
-                    m_enablePatience = false;
+                    m_icePlunge.m_playerDamageable = m_targetInfo.transform.gameObject;
                     m_stateHandle.OverrideState(State.Detect);
                 }
+                m_enablePatience = false;
             }
             else
             {
@@ -316,7 +316,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_hitbox.SetCanBlockDamageState(false);
             m_hitbox.damageFXInfo.fx = m_hurtFX;
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
-            m_stateHandle.OverrideState(State.Patrol);
+            m_stateHandle.SetState(State.Patrol);
             StopAllCoroutines();
             yield return null;
         }
