@@ -7,20 +7,18 @@ namespace DChild.Gameplay.ArmyBattle
     public class AddDamage : ISpecialSkillModule, ISpecialSkillImplementor
     {
         [SerializeField]
-        private int m_damageModiferValue;
+        private float m_damageModiferValue;
         [SerializeField]
-        private UnitType m_unit;
+        private DamageType m_unit;
 
-        public ArmyController ApplyEffect(ArmyController owner, ArmyController target)
+        public void ApplyEffect(ArmyController owner, ArmyController target)
         {
-            //owner.controlledArmy.powerModifier.SetModifier(m_unit, m_damageModiferValue);
-            throw new System.NotImplementedException();
+            owner.controlledArmy.modifiers.damageModifier.AddModifier(m_unit, m_damageModiferValue);
         }
 
-        public ArmyController RemoveEffect(ArmyController owner, ArmyController target)
+        public void RemoveEffect(ArmyController owner, ArmyController target)
         {
-            //owner.controlledArmy.powerModifier.ResetModifiers();
-            throw new System.NotImplementedException();
+            owner.controlledArmy.modifiers.damageModifier.ResetModifiers();        
         }
     }
 }

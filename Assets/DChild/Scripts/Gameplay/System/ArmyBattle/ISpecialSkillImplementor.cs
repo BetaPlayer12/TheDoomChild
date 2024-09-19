@@ -6,8 +6,8 @@ namespace DChild.Gameplay.ArmyBattle
 {
     public interface ISpecialSkillImplementor 
     {
-        ArmyController ApplyEffect(ArmyController owner, ArmyController target);
-        ArmyController RemoveEffect(ArmyController owner, ArmyController target);
+        void ApplyEffect(ArmyController owner, ArmyController target);
+        void RemoveEffect(ArmyController owner, ArmyController target);
     }
 }
 
