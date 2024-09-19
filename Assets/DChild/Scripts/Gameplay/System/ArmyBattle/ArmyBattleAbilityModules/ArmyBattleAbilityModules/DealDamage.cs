@@ -8,16 +8,16 @@ namespace DChild.Gameplay.ArmyBattle
     {
         [SerializeField]
         private int m_damageDealt;
-        public ArmyController ApplyEffect(ArmyController owner, ArmyController target)
+        public void ApplyEffect(ArmyController owner, ArmyController target)
         {
             target.controlledArmy.SubtractTroopCount(m_damageDealt);
-            throw new System.NotImplementedException();
+      
         }
 
-        public ArmyController RemoveEffect(ArmyController owner, ArmyController target)
+        public void RemoveEffect(ArmyController owner, ArmyController target)
         {
-            target.controlledArmy.SubtractTroopCount(m_damageDealt);
-            throw new System.NotImplementedException();
+           
+
         }
     }
 }

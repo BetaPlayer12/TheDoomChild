@@ -8,16 +8,18 @@ namespace DChild.Gameplay.ArmyBattle
     {
         [SerializeField]
         private DamageType m_damageType;
-        public ArmyController ApplyEffect(ArmyController owner, ArmyController target)
+        public void ApplyEffect(ArmyController owner, ArmyController target)
         {
+
+            // Should not Be Empty
+
             //target.controlledArmy.SetAttackingGroups(m_damageType);
-            throw new System.NotImplementedException();
+            Debug.Log("It works now Apply the Effects");
         }
 
-        public ArmyController RemoveEffect(ArmyController owner, ArmyController target)
+        public void RemoveEffect(ArmyController owner, ArmyController target)
         {
             target.controlledArmy.ResetGroupAvailability();
-            throw new System.NotImplementedException();
         }
     }
 }
