@@ -49,4 +49,8 @@ public class WardingCrystalEffects
     {
         m_soulEssenceDropper.MinionChecker(value, minions);
     }
+    public void ReturnBaseHealthMinion(GameObject minion)
+    {
+        m_increaseHealthMinion.ReturnToUnbuffedHealth(minion);
+    }
 }
