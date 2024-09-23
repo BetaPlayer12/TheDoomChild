@@ -113,6 +113,7 @@ public class BlackBloodBlob : MonoBehaviour
         yield return new WaitForAnimationComplete(m_animation.animationState, m_resurrectionOfBlob);
         m_canMove = true;
         m_animation.SetAnimation(0, m_idle, true);
+        m_damageable.SetHitboxActive(true);
         Ressurected?.Invoke(this, EventActionArgs.Empty);
 
     }
