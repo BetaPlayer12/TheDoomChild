@@ -1,5 +1,5 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
+using System.Collections.Generic;
 using Cinemachine;
 using DChild.Gameplay.Cinematics.Cameras;
 using Sirenix.OdinInspector;
@@ -7,7 +7,6 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Cinematics
 {
-
     [System.Serializable]
     public class CameraShakeHandle : MonoBehaviour
     {
@@ -21,12 +20,36 @@ namespace DChild.Gameplay.Cinematics
         private CinemachineBasicMultiChannelPerlin m_blendCamANoise;
         private CinemachineBasicMultiChannelPerlin m_blendCamBNoise;
 
+        private List<IVirtualCamera> m_registeredCamera;
+
         private CameraShakeInfo m_currentShakeInfo;
         [ShowInInspector, DisableInPlayMode, HideInEditorMode]
         private bool m_isExecutingShake;
 
         [ShowInInspector, DisableInPlayMode, HideInEditorMode]
         private bool m_isHandlingCameraBlendShake => m_isExecutingShake && GameplaySystem.cinema.currentBrain.ActiveBlend != null;
+
+        public void RegisterCamera(IVirtualCamera camera)
+        {
+            var referenceCamera = m_registeredCamera[0];
+            camera.noiseModule.m_NoiseProfile = referenceCamera.noiseModule.m_NoiseProfile;
+            camera.noiseModule.m_AmplitudeGain = referenceCamera.noiseModule.m_AmplitudeGain;
+            camera.noiseModule.m_FrequencyGain = referenceCamera.noiseModule.m_FrequencyGain;
+            m_registeredCamera.Add(camera);
+        }
+
+        public void UnregisterCamera(IVirtualCamera camera)
+        {
+            m_registeredCamera.Remove(camera);
+            camera.noiseModule.m_NoiseProfile = null;
+            camera.noiseModule.m_AmplitudeGain = 0;
+            camera.noiseModule.m_FrequencyGain = 0;
+        }
+
+        public void ClearRegisteredCameras()
+        {
+            m_registeredCamera.Clear();
+        }
 
         public void Execute(CameraShakeData data)
         {
@@ -80,6 +103,7 @@ namespace DChild.Gameplay.Cinematics
         private IEnumerator ExecuteShakeRoutine()
         {
             m_isExecutingShake = true;
+
             do
             {
                 m_blendHandle.Update(GameplaySystem.time.deltaTime);
@@ -103,13 +127,21 @@ namespace DChild.Gameplay.Cinematics
                                 m_blendCamB = null;
                             }
                             ApplyNoise(m_currentCamera.noiseModule, m_blendHandle.profile, m_blendHandle.amplitude, m_blendHandle.frequency);
+
+                            for (int i = 0; i < m_registeredCamera.Count; i++)
+                            {
+                                ApplyNoise(m_registeredCamera[i].noiseModule, m_blendHandle.profile, m_blendHandle.amplitude, m_blendHandle.frequency);
+                            }
                         }
                     }
                     else
                     {
-
-
                         ApplyNoise(m_currentCamera.noiseModule, m_blendHandle.profile, m_blendHandle.amplitude, m_blendHandle.frequency);
+
+                        for (int i = 0; i < m_registeredCamera.Count; i++)
+                        {
+                            ApplyNoise(m_registeredCamera[i].noiseModule, m_blendHandle.profile, m_blendHandle.amplitude, m_blendHandle.frequency);
+                        }
                     }
                 }
                 yield return null;
@@ -118,6 +150,10 @@ namespace DChild.Gameplay.Cinematics
             if (m_currentCamera != null)
             {
                 RemoveNoiseFromCamera(m_currentCamera.noiseModule);
+                for (int i = 0; i < m_registeredCamera.Count; i++)
+                {
+                    RemoveNoiseFromCamera(m_registeredCamera[i].noiseModule);
+                }
             }
             m_isExecutingShake = false;
         }
@@ -173,6 +209,7 @@ namespace DChild.Gameplay.Cinematics
         private void Awake()
         {
             m_blendHandle = new CameraShakeBlendHandle();
+            m_registeredCamera = new List<IVirtualCamera>();
         }
     }
 }
