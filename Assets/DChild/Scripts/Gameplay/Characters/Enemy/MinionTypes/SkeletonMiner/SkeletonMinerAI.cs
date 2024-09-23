@@ -334,9 +334,14 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             //m_Audiosource.clip = m_DeadClip;
             //m_Audiosource.Play();
+
+            //base.OnDestroyed(sender, eventArgs);
+
+            //m_stateHandle.OverrideState(State.WaitBehaviourEnd);
+
             StopAllCoroutines();
             base.OnDestroyed(sender, eventArgs);
-            
+
             m_stateHandle.OverrideState(State.WaitBehaviourEnd);
             if (m_attackRoutine != null)
             {
@@ -350,7 +355,6 @@ namespace DChild.Gameplay.Characters.Enemies
             if (m_animation.GetCurrentAnimation(0).ToString() != m_info.idleAnimation.animation)
                 m_movement.Stop();
 
-            m_pointLight.enabled = false;
             m_flinchHandle.gameObject.SetActive(false);
             m_animation.SetEmptyAnimation(0, 0);
             m_animation.SetEmptyAnimation(1, 0);
@@ -360,6 +364,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator ResurrectRoutine()
         {
+           
             m_hitbox.Disable();
             m_selfCollider.enabled = false;
             m_animation.SetAnimation(0, m_info.deathAnimation, false);
