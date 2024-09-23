@@ -31,10 +31,13 @@ namespace DChild.Gameplay.Cinematics
 
         public void RegisterCamera(IVirtualCamera camera)
         {
-            var referenceCamera = m_registeredCamera[0];
-            camera.noiseModule.m_NoiseProfile = referenceCamera.noiseModule.m_NoiseProfile;
-            camera.noiseModule.m_AmplitudeGain = referenceCamera.noiseModule.m_AmplitudeGain;
-            camera.noiseModule.m_FrequencyGain = referenceCamera.noiseModule.m_FrequencyGain;
+            if (m_registeredCamera.Count > 0)
+            {
+                var referenceCamera = m_registeredCamera[0];
+                camera.noiseModule.m_NoiseProfile = referenceCamera.noiseModule.m_NoiseProfile;
+                camera.noiseModule.m_AmplitudeGain = referenceCamera.noiseModule.m_AmplitudeGain;
+                camera.noiseModule.m_FrequencyGain = referenceCamera.noiseModule.m_FrequencyGain;
+            }
             m_registeredCamera.Add(camera);
         }
 
