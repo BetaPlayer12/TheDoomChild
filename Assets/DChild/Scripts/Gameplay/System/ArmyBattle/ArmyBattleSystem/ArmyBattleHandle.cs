@@ -23,6 +23,8 @@ namespace DChild.Gameplay.ArmyBattle
         private bool m_isEnemyArmyAlive;
         private bool m_hasOngoingBattle;
 
+        public int m_round;
+
         public bool hasOngoingBattle => m_hasOngoingBattle;
 
         public event EventAction<EventActionArgs> BattleStart;
@@ -30,6 +32,7 @@ namespace DChild.Gameplay.ArmyBattle
         public event EventAction<EventActionArgs> RoundEnd;
         public event EventAction<EventActionArgs> BattleEnd;
 
+       
         public void InitializeParticipants(ArmyInstanceCombatHandle player, ArmyInstanceCombatHandle enemy)
         {
             if (m_player != null)
@@ -56,6 +59,7 @@ namespace DChild.Gameplay.ArmyBattle
         {
             if (m_hasOngoingBattle == false)
             {
+                m_round = 1;
                 SubscribeToArmies();
                 BattleStart?.Invoke(this, EventActionArgs.Empty);
                 StartCoroutine(BattleRoutine());
@@ -67,6 +71,7 @@ namespace DChild.Gameplay.ArmyBattle
         {
             if (m_hasOngoingBattle)
             {
+                m_round = 0;
                 m_hasOngoingBattle = false;
                 UnsubscribeToArmies();
                 StopAllCoroutines();
@@ -131,7 +136,7 @@ namespace DChild.Gameplay.ArmyBattle
 
             do
             {
-                m_enemyAI.ChooseAttack();
+                m_enemyAI.ChooseAttack(m_round);
                 if (m_player.canAttack)
                 {
                     yield return WaitForAttacks();
@@ -147,6 +152,7 @@ namespace DChild.Gameplay.ArmyBattle
 
 
             RoundEnd?.Invoke(this, EventActionArgs.Empty);
+            m_round++;
             CustomDebug.Log(CustomDebug.LogType.System_ArmyBattle, "Round End");
         }
 

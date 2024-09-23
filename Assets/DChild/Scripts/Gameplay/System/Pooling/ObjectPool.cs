@@ -40,10 +40,11 @@ namespace DChild.Gameplay.Pooling
             else if (m_items.Count > 0)
             {
                 var retrievedInstance = RetrieveFromPool(component);
-                if(null != retrievedInstance)
+                if (null != retrievedInstance)
                 {
                     retrievedInstance.transform.position = position;
                     retrievedInstance.transform.rotation = rotation;
+                    retrievedInstance.transform.parent = null;
                 }
 
                 return retrievedInstance != null ? retrievedInstance : CreateInstance(gameObject, position, rotation);
