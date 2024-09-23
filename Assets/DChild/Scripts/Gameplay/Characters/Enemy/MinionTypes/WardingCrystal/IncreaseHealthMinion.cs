@@ -4,6 +4,8 @@ using UnityEngine;
 using DChild.Gameplay.Combat;
 using DChild.Gameplay.Pooling;
 using DChild;
+using DChild.Gameplay;
+
 public class IncreaseHealthMinion : MonoBehaviour
 {
 
@@ -11,6 +13,8 @@ public class IncreaseHealthMinion : MonoBehaviour
     private float m_additionalHealthPercentage;
     [SerializeField]
     private GameObject m_healVfx;
+    [SerializeField]
+    private GameObject m_LineRendererObj;
     private void Start()
     {
     }
@@ -22,7 +26,8 @@ public class IncreaseHealthMinion : MonoBehaviour
 
     public void AddHealth(GameObject minion)
     {
-        var minionCurrentmaxHealth = minion.GetComponent<Damageable>().health.maxValue;
+        Damageable m_minionDamageable = minion.GetComponent<Damageable>();
+        var minionCurrentmaxHealth = m_minionDamageable.health.maxValue;
         var minionAddHealth = GetMinionHealthPercentage(minionCurrentmaxHealth, m_additionalHealthPercentage);
         Debug.Log("ADDED "+minionAddHealth+"to "+minion.name+"'s max health");
 
@@ -30,23 +35,31 @@ public class IncreaseHealthMinion : MonoBehaviour
 
         // Change for maxhealth buff instead of heal
         var newMaxHealth = minionCurrentmaxHealth + Mathf.RoundToInt(minionAddHealth);
-        minion.GetComponent<Damageable>().health.SetMaxValue(newMaxHealth);
-        minion.GetComponent<Damageable>().Heal(Mathf.RoundToInt(minionAddHealth));
+        
+        m_minionDamageable.health.SetMaxValue(newMaxHealth);
+        m_minionDamageable.Heal(Mathf.RoundToInt(minionAddHealth));
     }
 
     public void ShowHealVFX(GameObject minion)
     {
+        //GameObject x = Instantiate(LineRendererObj,transform);
+        //x.GetComponent<LineConnect>().SetupLineConnect(transform.position, minion.transform);
         var minionComponent = minion.GetComponentInChildren<PoolableObject>();
         if (!minionComponent)
         {
-            var instance = GameSystem.poolManager.GetPool<PoolableObjectPool>().GetOrCreateItem(m_healVfx, gameObject.scene);
-            instance.SpawnAt(minion.transform.position, Quaternion.identity);
+            //var instance = GameSystem.poolManager.GetPool<PoolableObjectPool>().GetOrCreateItem(m_healVfx, gameObject.scene);
+            //instance.SpawnAt(minion.transform.position, Quaternion.identity);
+            var instance = GameSystem.poolManager.GetPool<PoolableObjectPool>().GetOrCreateItem(m_LineRendererObj, gameObject.scene);
+            var Linerender = instance.GetComponent<LineConnect>();
+            var Centermass = minion.GetComponentInParent<Character>().centerMass;
+            Linerender.SetupLineConnect(Centermass, transform);
             instance.transform.SetParent(minion.transform);
         }
     }
 
     public void RemoveHealVFX(GameObject minion)
     {
+        //minion.transform.
         var instance = minion.GetComponentInChildren<PoolableObject>();
         if (instance)
         {
