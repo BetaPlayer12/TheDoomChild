@@ -124,6 +124,7 @@ GameObject:
   - component: {fileID: 8339183818727156022}
   - component: {fileID: 3697975363527419229}
   - component: {fileID: 5912602399553495104}
+  - component: {fileID: 9201652275023267731}
   m_Layer: 11
   m_Name: CrumblingWall
   m_TagString: Untagged
@@ -235,18 +236,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: set_enabled
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
   m_onAlreadyDestroyed:
     m_PersistentCalls:
       m_Calls:
@@ -277,18 +266,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-      - m_Target: {fileID: 8339183819126183293}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: Heal
-        m_Mode: 3
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 9999999
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
       - m_Target: {fileID: 6947189464331195886}
         m_TargetAssemblyTypeName: 
         m_MethodName: SetActive
@@ -304,18 +281,6 @@ MonoBehaviour:
       - m_Target: {fileID: 8339183818727156019}
         m_TargetAssemblyTypeName: 
         m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: set_enabled
         m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -373,10 +338,10 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-      - m_Target: {fileID: 8339183819126183293}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: Heal
-        m_Mode: 3
+      - m_Target: {fileID: 7370553521916830134}
+        m_TargetAssemblyTypeName: BlackBloodBlob, Assembly-CSharp
+        m_MethodName: ResurrectionOfBlob
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -409,30 +374,20 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: set_enabled
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
-      - m_Target: {fileID: 2031746966613206012}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: ToggleOnTransition
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
+--- !u!114 &9201652275023267731
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8339183818727156019}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5bbc03943d48baa4f83e815b5dd31a93, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_model: {fileID: 7370553521916830134}
+  m_movement: {fileID: 7720449801081085}
 --- !u!1 &8339183820218320195
 GameObject:
   m_ObjectHideFlags: 0
@@ -533,6 +488,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: MovingEyeBlob
       objectReference: {fileID: 0}
+    - target: {fileID: 4440631700168160444, guid: e9f6b4c1768cd694392836c7b852b408,
+        type: 3}
+      propertyPath: m_mainInstance
+      value: 
+      objectReference: {fileID: 8339183818727156022}
     - target: {fileID: 4463763233329460820, guid: e9f6b4c1768cd694392836c7b852b408,
         type: 3}
       propertyPath: m_Mesh
@@ -551,6 +511,18 @@ BoxCollider2D:
     type: 3}
   m_PrefabInstance: {fileID: 6622891111868781834}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &7370553521916830134 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4440631700168160444, guid: e9f6b4c1768cd694392836c7b852b408,
+    type: 3}
+  m_PrefabInstance: {fileID: 6622891111868781834}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8339183819126183233}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aed4738a4da488d4d8e8e6cd530ea72b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8339183819126183233 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2905815581979852875, guid: e9f6b4c1768cd694392836c7b852b408,
@@ -655,6 +627,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 561d1f19bc239fb4a9bd0d0764b668cd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &7720449801081085
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8339183819126183233}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 332cef3fded5d774fb52b53db29bb860, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_speed: 0.1
+  m_startWaypoint: 0
+  m_waypoints: []
 --- !u!4 &8339183819126183234 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2905815581979852872, guid: e9f6b4c1768cd694392836c7b852b408,
