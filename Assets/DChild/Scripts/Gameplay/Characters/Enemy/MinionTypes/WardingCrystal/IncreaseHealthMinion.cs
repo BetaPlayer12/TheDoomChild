@@ -7,7 +7,7 @@ using DChild;
 public class IncreaseHealthMinion : MonoBehaviour
 {
 
-    [SerializeField]
+    [SerializeField][Range(0,100)]
     private float m_additionalHealthPercentage;
     [SerializeField]
     private GameObject m_healVfx;
