@@ -132,8 +132,11 @@ namespace DChild.Gameplay.Cinematics
                                 m_blendCamA = null;
                                 m_blendCamB = null;
                             }
-                            ApplyNoise(m_currentCamera.noiseModule, m_blendHandle.profile, m_blendHandle.amplitude, m_blendHandle.frequency);
 
+                            if (m_currentCamera != null)
+                            {
+                                ApplyNoise(m_currentCamera.noiseModule, m_blendHandle.profile, m_blendHandle.amplitude, m_blendHandle.frequency);
+                            }
                             for (int i = 0; i < m_registeredCamera.Count; i++)
                             {
                                 ApplyNoise(m_registeredCamera[i].noiseModule, m_blendHandle.profile, m_blendHandle.amplitude, m_blendHandle.frequency);
@@ -142,7 +145,10 @@ namespace DChild.Gameplay.Cinematics
                     }
                     else
                     {
-                        ApplyNoise(m_currentCamera.noiseModule, m_blendHandle.profile, m_blendHandle.amplitude, m_blendHandle.frequency);
+                        if (m_currentCamera != null)
+                        {
+                            ApplyNoise(m_currentCamera.noiseModule, m_blendHandle.profile, m_blendHandle.amplitude, m_blendHandle.frequency);
+                        }
 
                         for (int i = 0; i < m_registeredCamera.Count; i++)
                         {
@@ -156,10 +162,10 @@ namespace DChild.Gameplay.Cinematics
             if (m_currentCamera != null)
             {
                 RemoveNoiseFromCamera(m_currentCamera.noiseModule);
-                for (int i = 0; i < m_registeredCamera.Count; i++)
-                {
-                    RemoveNoiseFromCamera(m_registeredCamera[i].noiseModule);
-                }
+            }
+            for (int i = 0; i < m_registeredCamera.Count; i++)
+            {
+                RemoveNoiseFromCamera(m_registeredCamera[i].noiseModule);
             }
             m_isExecutingShake = false;
         }
