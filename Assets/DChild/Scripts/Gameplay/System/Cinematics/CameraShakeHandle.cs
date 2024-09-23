@@ -29,6 +29,9 @@ namespace DChild.Gameplay.Cinematics
         [ShowInInspector, DisableInPlayMode, HideInEditorMode]
         private bool m_isHandlingCameraBlendShake => m_isExecutingShake && GameplaySystem.cinema.currentBrain.ActiveBlend != null;
 
+        [ShowInInspector, DisableInPlayMode, HideInEditorMode]
+        public int m_registeredCameraCount => m_registeredCamera.Count;
+
         public void RegisterCamera(IVirtualCamera camera)
         {
             if (m_registeredCamera.Count > 0)
