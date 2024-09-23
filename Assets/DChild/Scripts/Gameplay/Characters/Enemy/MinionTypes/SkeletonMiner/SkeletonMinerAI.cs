@@ -334,14 +334,14 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             //m_Audiosource.clip = m_DeadClip;
             //m_Audiosource.Play();
-
+           
             //base.OnDestroyed(sender, eventArgs);
-
+            
             //m_stateHandle.OverrideState(State.WaitBehaviourEnd);
-
+           
             StopAllCoroutines();
             base.OnDestroyed(sender, eventArgs);
-
+            
             m_stateHandle.OverrideState(State.WaitBehaviourEnd);
             if (m_attackRoutine != null)
             {
