@@ -107,7 +107,7 @@ namespace DChild.Gameplay.Cinematics
             do
             {
                 m_blendHandle.Update(GameplaySystem.time.deltaTime);
-                if (m_currentCamera == null)
+                if (m_currentCamera == null && m_registeredCamera.Count == 0)
                 {
                     Debug.LogWarning("WARNING: Camera Shake Handle does not have a reference to a camera to apply Shake");
                 }
