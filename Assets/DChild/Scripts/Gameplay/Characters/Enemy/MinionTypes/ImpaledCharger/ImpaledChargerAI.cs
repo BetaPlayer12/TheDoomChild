@@ -418,6 +418,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator CartDiesRoutine()
         {
+            m_initialPos = new Vector2(transform.position.x, GroundPosition().y);
             m_stateHandle.Wait(State.ReevaluateSituation);
             m_animation.SetAnimation(0, m_info.deathCartOnlyAnimation, false).TimeScale = 0.5f;
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.deathCartOnlyAnimation);
@@ -538,7 +539,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_hitbox.SetInvulnerability(Invulnerability.Level_1);
 
             //m_animation.EnableRootMotion(true, false);
-            m_initialPos = new Vector2(transform.position.x, GroundPosition().y);
+            
         }
 
         protected override void Awake()
@@ -592,6 +593,21 @@ namespace DChild.Gameplay.Characters.Enemies
                 //    m_stateHandle.Wait(m_turnState);
                 //    m_turnHandle.Execute();
                 //    break;
+
+                case State.Returning:
+                    /*if (Vector2.Distance(m_initialPos, transform.position) > 2f)
+                    {
+                        m_animation.SetAnimation(0, IsFacing(m_initialPos) ? m_info.move.animation : m_info.moveBackwards.animation, true);
+                        m_movement.MoveTowards(Vector2.one * transform.localScale.x, IsFacing(m_initialPos) ? m_info.move.speed : m_info.moveBackwards.speed);
+                    }
+                    else
+                    {
+                        //m_randomTurnRoutine = StartCoroutine(RandomTurnRoutine());
+                        CustomTurn();
+                        m_stateHandle.OverrideState(State.Idle);
+                    }*/
+                    m_stateHandle.OverrideState(State.Idle);
+                    break;
 
                 case State.Attacking:
                     m_stateHandle.Wait(State.Cooldown);

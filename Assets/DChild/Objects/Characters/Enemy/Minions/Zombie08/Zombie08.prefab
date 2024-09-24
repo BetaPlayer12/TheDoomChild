@@ -88,7 +88,7 @@ MonoBehaviour:
   m_animator: {fileID: 2138311865766817242}
   m_animation: Death
   m_bodyDuration:
-    m_startTime: 3
+    m_startTime: 0.25
   m_fx:
   - {fileID: 2950181200506801850}
   - {fileID: 2906134609553661882}
@@ -216,7 +216,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_spine: {fileID: 2138311865766817242}
   m_physics: {fileID: 944813686643425525}
-  m_autoFlinch: 0
+  m_autoFlinch: 1
   m_enableMixFlinch: 1
   m_enableEmpytyIdle: 1
   m_alphaBlendStrength: 0.5
@@ -226,6 +226,7 @@ MonoBehaviour:
   m_idleAnimation: Idle
   m_enableFlinchColor: 0
   m_flinchColorAnimation: 
+  m_enableModule: 1
 --- !u!1001 &2799338189828367524
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -242,7 +243,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_damageFXInfo.m_fx
       value: 
-      objectReference: {fileID: 4025808106930532386, guid: 8a88a66cf00c45849ae287257e1ee932,
+      objectReference: {fileID: 8259047391205215404, guid: 960498dddf6d32f4aa75952e185f33f7,
         type: 3}
     - target: {fileID: 2781698181353348372, guid: 220ea2ec81f94ee40aed296c017e5a26,
         type: 3}
@@ -282,27 +283,27 @@ PrefabInstance:
     - target: {fileID: 2781698181353348372, guid: 220ea2ec81f94ee40aed296c017e5a26,
         type: 3}
       propertyPath: m_damageFXInfo.m_overrideColor
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2781698181353348372, guid: 220ea2ec81f94ee40aed296c017e5a26,
         type: 3}
       propertyPath: m_damageFXInfo.m_overrideScale
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3326082747316276675, guid: 220ea2ec81f94ee40aed296c017e5a26,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 9.3
+      value: 7.36
       objectReference: {fileID: 0}
     - target: {fileID: 3385484198086722848, guid: 220ea2ec81f94ee40aed296c017e5a26,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.354694
+      value: -0.35469818
       objectReference: {fileID: 0}
     - target: {fileID: 3385484198086722848, guid: 220ea2ec81f94ee40aed296c017e5a26,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 10.652063
+      value: 10.652065
       objectReference: {fileID: 0}
     - target: {fileID: 3471793942170408896, guid: 220ea2ec81f94ee40aed296c017e5a26,
         type: 3}
@@ -389,6 +390,12 @@ PrefabInstance:
       propertyPath: m_Name
       value: Zombie08Model
       objectReference: {fileID: 0}
+    - target: {fileID: 7144242617055307766, guid: 220ea2ec81f94ee40aed296c017e5a26,
+        type: 3}
+      propertyPath: skeletonDataAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: eaccc975d68265c4b82f54150f853024,
+        type: 2}
     - target: {fileID: 7144242617055307767, guid: 220ea2ec81f94ee40aed296c017e5a26,
         type: 3}
       propertyPath: m_RootOrder
@@ -449,6 +456,11 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 7144242617055307769, guid: 220ea2ec81f94ee40aed296c017e5a26,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: b375564f52b51b54d8ed919bade42aa8, type: 2}
     - target: {fileID: 7455918689059887037, guid: 220ea2ec81f94ee40aed296c017e5a26,
         type: 3}
       propertyPath: m_LocalRotation.w
@@ -474,6 +486,11 @@ PrefabInstance:
       propertyPath: rb
       value: 
       objectReference: {fileID: 453140755327037183}
+    - target: {fileID: 8123707689850537880, guid: 220ea2ec81f94ee40aed296c017e5a26,
+        type: 3}
+      propertyPath: m_animation
+      value: 
+      objectReference: {fileID: 2138311865766817242}
     - target: {fileID: 8483312737618599237, guid: 220ea2ec81f94ee40aed296c017e5a26,
         type: 3}
       propertyPath: m_Size.y
@@ -487,22 +504,22 @@ PrefabInstance:
     - target: {fileID: 8779136120475221405, guid: 220ea2ec81f94ee40aed296c017e5a26,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.6873982
+      value: -0.6874008
       objectReference: {fileID: 0}
     - target: {fileID: 8779136120475221405, guid: 220ea2ec81f94ee40aed296c017e5a26,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 13.1510105
+      value: 13.151012
       objectReference: {fileID: 0}
     - target: {fileID: 8947850471222196565, guid: 220ea2ec81f94ee40aed296c017e5a26,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.63730216
+      value: -0.6373062
       objectReference: {fileID: 0}
     - target: {fileID: 8947850471222196565, guid: 220ea2ec81f94ee40aed296c017e5a26,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 9.882979
+      value: 9.88298
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 220ea2ec81f94ee40aed296c017e5a26, type: 3}
@@ -614,6 +631,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d247ba06193faa74d9335f5481b2b56c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!61 &6008919820868401633 stripped
+BoxCollider2D:
+  m_CorrespondingSourceObject: {fileID: 8483312737618599237, guid: 220ea2ec81f94ee40aed296c017e5a26,
+    type: 3}
+  m_PrefabInstance: {fileID: 2799338189828367524}
+  m_PrefabAsset: {fileID: 0}
 --- !u!58 &6106537647395612596 stripped
 CircleCollider2D:
   m_CorrespondingSourceObject: {fileID: 8243831294525899536, guid: 220ea2ec81f94ee40aed296c017e5a26,
@@ -947,6 +970,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_loot: {fileID: 11400000, guid: 55597a7ec34167046a7652ae8f462c5b, type: 2}
   m_dropWhenDestroyed: 1
+--- !u!114 &5789167930971891691
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3473456634194973510}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d4914fa10fe1f74fbac7bbe8b95c9b2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_data: {fileID: 11400000, guid: 7c31273df1b3b9d4b9c9590fef88887f, type: 2}
 --- !u!114 &5832929494856543050
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1005,6 +1041,7 @@ MonoBehaviour:
   m_spineEventListener: {fileID: 4335968685337385103}
   m_hitbox: {fileID: 19048500084685232}
   m_selfCollider: {fileID: 6106537647395612596}
+  m_aggroBound: {fileID: 6008919820868401633}
   m_turnHandle: {fileID: 1770679920136409150}
   m_movement: {fileID: 4335968684059504227}
   m_patrolHandle: {fileID: 4335968684059504224}

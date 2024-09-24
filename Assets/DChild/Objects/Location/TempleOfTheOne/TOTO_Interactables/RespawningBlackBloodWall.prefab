@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 399806353655713979}
   - component: {fileID: 5510637071963244423}
   - component: {fileID: 1059222489902024283}
+  - component: {fileID: 4499249429768216618}
   m_Layer: 11
   m_Name: Wall
   m_TagString: InvisibleWall
@@ -28,6 +29,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6460320732999248843}
   m_Father: {fileID: 1337007508362085774}
@@ -44,10 +46,12 @@ SpriteRenderer:
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -109,6 +113,174 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 3.9064522, y: 7.088541}
   m_EdgeRadius: 0
+--- !u!114 &4499249429768216618
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 976490474421439331}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 798a06706630eac4f982cedb713cc1bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_object: {fileID: 0}
+  m_type: 0
+  m_forceShakeOnDestroy: 0
+  m_onDestroyShake: {fileID: 0}
+  m_createDebris: 0
+  m_debris:
+    m_AssetGUID: 
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_EditorAssetChanged: 0
+  m_copySorting: 0
+  m_applyDebrisColorChange: 0
+  m_colorToApply: {r: 1, g: 1, b: 1, a: 1}
+  m_onDestroy:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 6394685972472683467}
+        m_TargetAssemblyTypeName: DChild.MaterialParameterCall, Assembly-CSharp
+        m_MethodName: SetLerpSpeed
+        m_Mode: 4
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0.5
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 6394685972472683467}
+        m_TargetAssemblyTypeName: DChild.MaterialParameterCall, Assembly-CSharp
+        m_MethodName: SetValue
+        m_Mode: 4
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 1
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 6394685972472683467}
+        m_TargetAssemblyTypeName: DChild.MaterialParameterCall, Assembly-CSharp
+        m_MethodName: SetLerpSpeed
+        m_Mode: 4
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1059222489902024283}
+        m_TargetAssemblyTypeName: UnityEngine.Behaviour, UnityEngine
+        m_MethodName: set_enabled
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 6181226064889437843}
+        m_TargetAssemblyTypeName: UnityEngine.ParticleSystem, UnityEngine
+        m_MethodName: Play
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 5510637071963244423}
+        m_TargetAssemblyTypeName: UnityEngine.Renderer, UnityEngine
+        m_MethodName: set_enabled
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  m_onAlreadyDestroyed:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1059222489902024283}
+        m_TargetAssemblyTypeName: UnityEngine.Behaviour, UnityEngine
+        m_MethodName: set_enabled
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  m_onFix:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 6394685972472683467}
+        m_TargetAssemblyTypeName: DChild.MaterialParameterCall, Assembly-CSharp
+        m_MethodName: SetValue
+        m_Mode: 4
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 1
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1059222489902024283}
+        m_TargetAssemblyTypeName: UnityEngine.Behaviour, UnityEngine
+        m_MethodName: set_enabled
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+      - m_Target: {fileID: 6394685972472683467}
+        m_TargetAssemblyTypeName: UnityEngine.MonoBehaviour, UnityEngine
+        m_MethodName: StopAllCoroutines
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+      - m_Target: {fileID: 5510637071963244423}
+        m_TargetAssemblyTypeName: UnityEngine.Renderer, UnityEngine
+        m_MethodName: set_enabled
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+  m_willRepairSelf: 0
+  m_selfRepairTime: 0
 --- !u!1 &1870878418211116356
 GameObject:
   m_ObjectHideFlags: 0
@@ -137,6 +309,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -0.43, y: -3.3099995, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 399806353655713979}
   m_RootOrder: 0
@@ -148,19 +321,19 @@ ParticleSystem:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1870878418211116356}
-  serializedVersion: 6
+  serializedVersion: 8
   lengthInSec: 5
   simulationSpeed: 1
   stopAction: 0
   cullingMode: 0
   ringBufferMode: 0
   ringBufferLoopRange: {x: 0, y: 1}
+  emitterVelocityMode: 0
   looping: 0
   prewarm: 0
   playOnAwake: 0
   useUnscaledTime: 0
   autoRandomSeed: 1
-  useRigidbodyForVelocity: 1
   startDelay:
     serializedVersion: 2
     minMaxState: 0
@@ -710,6 +883,7 @@ ParticleSystem:
         m_RotationOrder: 4
     randomizeRotationDirection: 0
     maxNumParticles: 80
+    customEmitterVelocity: {x: 0, y: 0, z: 0}
     size3D: 0
     rotation3D: 0
     gravityModifier:
@@ -2292,6 +2466,62 @@ ParticleSystem:
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
+  LifetimeByEmitterSpeedModule:
+    enabled: 0
+    m_Curve:
+      serializedVersion: 2
+      minMaxState: 1
+      scalar: 1
+      minScalar: 1
+      maxCurve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 1
+          inSlope: 0
+          outSlope: -0.8
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0.33333334
+        - serializedVersion: 3
+          time: 1
+          value: 0.2
+          inSlope: -0.8
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0.33333334
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      minCurve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 1
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0.33333334
+        - serializedVersion: 3
+          time: 1
+          value: 1
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0.33333334
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+    m_Range: {x: 0, y: 1}
   ForceModule:
     enabled: 0
     x:
@@ -3722,19 +3952,20 @@ ParticleSystem:
     range: {x: 0, y: 1}
   CollisionModule:
     enabled: 0
-    serializedVersion: 3
+    serializedVersion: 4
     type: 0
     collisionMode: 0
     colliderForce: 0
     multiplyColliderForceByParticleSize: 0
     multiplyColliderForceByParticleSpeed: 0
     multiplyColliderForceByCollisionAngle: 1
-    plane0: {fileID: 0}
-    plane1: {fileID: 0}
-    plane2: {fileID: 0}
-    plane3: {fileID: 0}
-    plane4: {fileID: 0}
-    plane5: {fileID: 0}
+    m_Planes:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
     m_Dampen:
       serializedVersion: 2
       minMaxState: 0
@@ -3908,17 +4139,20 @@ ParticleSystem:
     interiorCollisions: 0
   TriggerModule:
     enabled: 0
-    collisionShape0: {fileID: 0}
-    collisionShape1: {fileID: 0}
-    collisionShape2: {fileID: 0}
-    collisionShape3: {fileID: 0}
-    collisionShape4: {fileID: 0}
-    collisionShape5: {fileID: 0}
+    serializedVersion: 2
     inside: 1
     outside: 0
     enter: 0
     exit: 0
+    colliderQueryMode: 0
     radiusScale: 1
+    primitives:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
   SubModule:
     serializedVersion: 2
     enabled: 0
@@ -4869,10 +5103,12 @@ ParticleSystemRenderer:
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -4899,6 +5135,7 @@ ParticleSystemRenderer:
   m_SortingLayer: -1
   m_SortingOrder: 2
   m_RenderMode: 0
+  m_MeshDistribution: 0
   m_SortMode: 0
   m_MinParticleSize: 0
   m_MaxParticleSize: 2
@@ -4915,11 +5152,17 @@ ParticleSystemRenderer:
   m_EnableGPUInstancing: 1
   m_ApplyActiveColorSpace: 1
   m_AllowRoll: 1
+  m_FreeformStretching: 0
+  m_RotateWithStretchDirection: 1
   m_VertexStreams: 0001030422
   m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
   m_Mesh1: {fileID: 0}
   m_Mesh2: {fileID: 0}
   m_Mesh3: {fileID: 0}
+  m_MeshWeighting: 1
+  m_MeshWeighting1: 1
+  m_MeshWeighting2: 1
+  m_MeshWeighting3: 1
   m_MaskInteraction: 0
 --- !u!1 &4298632809706796866
 GameObject:
@@ -4931,7 +5174,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8845956714623202250}
   - component: {fileID: 2073044433320843664}
-  - component: {fileID: 6387869103855430502}
+  - component: {fileID: 4364635990461815909}
   m_Layer: 11
   m_Name: RespawningBlackBloodWall
   m_TagString: Untagged
@@ -4949,6 +5192,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1337007508362085774}
   m_Father: {fileID: 0}
@@ -4971,62 +5215,8 @@ MonoBehaviour:
   m_event:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 7722687476297642932}
-        m_MethodName: Heal
-        m_Mode: 3
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 99999999
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 6394685972472683467}
-        m_MethodName: SetValue
-        m_Mode: 4
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 6394685972472683467}
-        m_MethodName: LerpValue
-        m_Mode: 4
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 1
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 1059222489902024283}
-        m_MethodName: set_enabled
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
-      - m_Target: {fileID: 0}
-        m_MethodName: ToggleOnTransition
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
       - m_Target: {fileID: 5221701599995996748}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
         m_MethodName: SetActive
         m_Mode: 6
         m_Arguments:
@@ -5037,19 +5227,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-      - m_Target: {fileID: 7722687476297642932}
-        m_MethodName: SetHitboxActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
-      - m_Target: {fileID: 6387869103855430502}
-        m_MethodName: RestoreObjects
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: BlackBloodBlob, Assembly-CSharp
+        m_MethodName: ResurrectionOfBlob
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -5057,9 +5237,33 @@ MonoBehaviour:
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
-          m_BoolArgument: 1
+          m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &6387869103855430502
+      - m_Target: {fileID: 776391348077977701}
+        m_TargetAssemblyTypeName: BlackBloodBlob, Assembly-CSharp
+        m_MethodName: ResurrectionOfBlob
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 4364635990461815909}
+        m_TargetAssemblyTypeName: DChild.Gameplay.Environment.BreakableObject, Assembly-CSharp
+        m_MethodName: SetObjectState
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &4364635990461815909
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -5068,72 +5272,28 @@ MonoBehaviour:
   m_GameObject: {fileID: 4298632809706796866}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e1ad8d90e77f4df48ab3b90e3c7930e5, type: 3}
+  m_Script: {fileID: 11500000, guid: 798a06706630eac4f982cedb713cc1bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_trackingType: 1
-  m_toTrack:
-  - {fileID: 7722687476297642932}
-  m_onAllObjectsDestroyed:
+  m_object: {fileID: 7722687476297642932}
+  m_type: 0
+  m_forceShakeOnDestroy: 0
+  m_onDestroyShake: {fileID: 0}
+  m_createDebris: 0
+  m_debris:
+    m_AssetGUID: 
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_EditorAssetChanged: 0
+  m_copySorting: 0
+  m_applyDebrisColorChange: 0
+  m_colorToApply: {r: 1, g: 1, b: 1, a: 1}
+  m_onDestroy:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2073044433320843664}
-        m_MethodName: ResetTimer
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 2073044433320843664}
-        m_MethodName: StartTimer
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 6394685972472683467}
-        m_MethodName: SetValue
-        m_Mode: 4
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 1
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 6394685972472683467}
-        m_MethodName: SetLerpSpeed
-        m_Mode: 4
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 1
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 6394685972472683467}
-        m_MethodName: LerpValue
-        m_Mode: 4
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 6181226064889437843}
-        m_MethodName: Play
+      - m_Target: {fileID: 4499249429768216618}
+        m_TargetAssemblyTypeName: DChild.Gameplay.Environment.BreakableObject, Assembly-CSharp
+        m_MethodName: SetObjectState
         m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -5143,28 +5303,76 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-      - m_Target: {fileID: 1059222489902024283}
-        m_MethodName: set_enabled
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: DChild.Gameplay.Environment.BreakableObject, Assembly-CSharp
+        m_MethodName: SetObjectState
         m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
-          m_FloatArgument: 1
+          m_FloatArgument: 0
           m_StringArgument: 
-          m_BoolArgument: 0
+          m_BoolArgument: 1
         m_CallState: 2
+      - m_Target: {fileID: 2073044433320843664}
+        m_TargetAssemblyTypeName: DChild.Gameplay.Environment.DelayedEventHandle,
+          Assembly-CSharp
+        m_MethodName: ResetTimer
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+      - m_Target: {fileID: 2073044433320843664}
+        m_TargetAssemblyTypeName: DChild.Gameplay.Environment.DelayedEventHandle,
+          Assembly-CSharp
+        m_MethodName: StartTimer
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+  m_onAlreadyDestroyed:
+    m_PersistentCalls:
+      m_Calls: []
+  m_onFix:
+    m_PersistentCalls:
+      m_Calls:
       - m_Target: {fileID: 0}
-        m_MethodName: ToggleOnTransition
+        m_TargetAssemblyTypeName: DChild.Gameplay.Environment.BreakableObject, Assembly-CSharp
+        m_MethodName: SetObjectState
         m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 1
+          m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 4499249429768216618}
+        m_TargetAssemblyTypeName: DChild.Gameplay.Environment.BreakableObject, Assembly-CSharp
+        m_MethodName: SetObjectState
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  m_willRepairSelf: 0
+  m_selfRepairTime: 0
 --- !u!1 &5221701599995996748
 GameObject:
   m_ObjectHideFlags: 0
@@ -5193,7 +5401,9 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 2248852237704434833}
   m_Father: {fileID: 1337007508362085774}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -5252,10 +5462,10 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 399806353655713979}
   - {fileID: 9064214366219735362}
-  - {fileID: 2413972710034863018}
   m_Father: {fileID: 8845956714623202250}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -5274,83 +5484,111 @@ MonoBehaviour:
   m_parameter: Vector1_Fade
   m_renderers:
   - {fileID: 5510637071963244423}
---- !u!1001 &5996132092655602094
+--- !u!1001 &3991879020412359897
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    m_TransformParent: {fileID: 1337007508362085774}
+    m_TransformParent: {fileID: 9064214366219735362}
     m_Modifications:
-    - target: {fileID: 1716047629126105270, guid: 9351e30cc115d7d488bf8668b2df88fa,
+    - target: {fileID: 2905815581979852872, guid: e9f6b4c1768cd694392836c7b852b408,
         type: 3}
-      propertyPath: m_Mesh
-      value: 
+      propertyPath: m_RootOrder
+      value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5977480033948744836, guid: 9351e30cc115d7d488bf8668b2df88fa,
-        type: 3}
-      propertyPath: m_Name
-      value: RespawningEyeBlob
-      objectReference: {fileID: 0}
-    - target: {fileID: 8265984644765448708, guid: 9351e30cc115d7d488bf8668b2df88fa,
+    - target: {fileID: 2905815581979852872, guid: e9f6b4c1768cd694392836c7b852b408,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -2.77
+      value: 2.98
       objectReference: {fileID: 0}
-    - target: {fileID: 8265984644765448708, guid: 9351e30cc115d7d488bf8668b2df88fa,
+    - target: {fileID: 2905815581979852872, guid: e9f6b4c1768cd694392836c7b852b408,
         type: 3}
       propertyPath: m_LocalPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 8265984644765448708, guid: 9351e30cc115d7d488bf8668b2df88fa,
+    - target: {fileID: 2905815581979852872, guid: e9f6b4c1768cd694392836c7b852b408,
         type: 3}
       propertyPath: m_LocalPosition.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 8265984644765448708, guid: 9351e30cc115d7d488bf8668b2df88fa,
-        type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8265984644765448708, guid: 9351e30cc115d7d488bf8668b2df88fa,
-        type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8265984644765448708, guid: 9351e30cc115d7d488bf8668b2df88fa,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8265984644765448708, guid: 9351e30cc115d7d488bf8668b2df88fa,
+    - target: {fileID: 2905815581979852872, guid: e9f6b4c1768cd694392836c7b852b408,
         type: 3}
       propertyPath: m_LocalRotation.w
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 8265984644765448708, guid: 9351e30cc115d7d488bf8668b2df88fa,
+    - target: {fileID: 2905815581979852872, guid: e9f6b4c1768cd694392836c7b852b408,
         type: 3}
-      propertyPath: m_RootOrder
-      value: 2
+      propertyPath: m_LocalRotation.x
+      value: -0
       objectReference: {fileID: 0}
-    - target: {fileID: 8265984644765448708, guid: 9351e30cc115d7d488bf8668b2df88fa,
+    - target: {fileID: 2905815581979852872, guid: e9f6b4c1768cd694392836c7b852b408,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2905815581979852872, guid: e9f6b4c1768cd694392836c7b852b408,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2905815581979852872, guid: e9f6b4c1768cd694392836c7b852b408,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 8265984644765448708, guid: 9351e30cc115d7d488bf8668b2df88fa,
+    - target: {fileID: 2905815581979852872, guid: e9f6b4c1768cd694392836c7b852b408,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 8265984644765448708, guid: 9351e30cc115d7d488bf8668b2df88fa,
+    - target: {fileID: 2905815581979852872, guid: e9f6b4c1768cd694392836c7b852b408,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 4.164
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 9351e30cc115d7d488bf8668b2df88fa, type: 3}
---- !u!4 &2413972710034863018 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 8265984644765448708, guid: 9351e30cc115d7d488bf8668b2df88fa,
+    - target: {fileID: 2905815581979852875, guid: e9f6b4c1768cd694392836c7b852b408,
+        type: 3}
+      propertyPath: m_Name
+      value: BlackBloodBlob
+      objectReference: {fileID: 0}
+    - target: {fileID: 2905815581979852876, guid: e9f6b4c1768cd694392836c7b852b408,
+        type: 3}
+      propertyPath: m_source
+      value: 
+      objectReference: {fileID: 7722687476297642932}
+    - target: {fileID: 4440631700168160444, guid: e9f6b4c1768cd694392836c7b852b408,
+        type: 3}
+      propertyPath: m_damageable
+      value: 
+      objectReference: {fileID: 7722687476297642932}
+    - target: {fileID: 4440631700168160444, guid: e9f6b4c1768cd694392836c7b852b408,
+        type: 3}
+      propertyPath: m_mainInstance
+      value: 
+      objectReference: {fileID: 4499249429768216618}
+    - target: {fileID: 4463763233329460820, guid: e9f6b4c1768cd694392836c7b852b408,
+        type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 2905815581979852919, guid: e9f6b4c1768cd694392836c7b852b408, type: 3}
+  m_SourcePrefab: {fileID: 100100000, guid: e9f6b4c1768cd694392836c7b852b408, type: 3}
+--- !u!114 &776391348077977701 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4440631700168160444, guid: e9f6b4c1768cd694392836c7b852b408,
     type: 3}
-  m_PrefabInstance: {fileID: 5996132092655602094}
+  m_PrefabInstance: {fileID: 3991879020412359897}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aed4738a4da488d4d8e8e6cd530ea72b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &2248852237704434833 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2905815581979852872, guid: e9f6b4c1768cd694392836c7b852b408,
+    type: 3}
+  m_PrefabInstance: {fileID: 3991879020412359897}
   m_PrefabAsset: {fileID: 0}

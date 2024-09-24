@@ -25,7 +25,7 @@ namespace DChild.Gameplay.Characters.AI
         [SerializeField, TabGroup("Reference")]
         protected Transform m_centerMass;
         [SerializeField]
-        private AggroBoundary m_aggroBoundary;
+        protected AggroBoundary m_aggroBoundary;
         [SerializeField, TabGroup("Data")]
         protected CharacterStatsData m_statsData;
 

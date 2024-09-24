@@ -8,9 +8,10 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: SPECTRE 3_SPECTRE 3
-  m_Shader: {fileID: -6465566751694194690, guid: caec37cbd946878438f1f6f9caa286fd,
+  m_Shader: {fileID: -6465566751694194690, guid: f926807410291be42a53103917a5212e,
     type: 3}
-  m_ValidKeywords: []
+  m_ValidKeywords:
+  - _TEXTURE_EFFECT_NONE
   m_InvalidKeywords:
   - _USE8NEIGHBOURHOOD_ON
   m_LightmapFlags: 4
@@ -24,6 +25,10 @@ Material:
     m_TexEnvs:
     - Texture2D_AC26AC0:
         m_Texture: {fileID: 2800000, guid: 4c9536051b3dafa4aade8b698926697c, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Glow_Mask_Texture:
+        m_Texture: {fileID: 2800000, guid: d299d650589b45c4cb44a1adc86e8201, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
@@ -66,19 +71,41 @@ Material:
     - Vector1_A8360A21: 0.5
     - Vector1_BAE05BE: 0
     - Vector1_BB0E45A7: 3
-    - Vector1_CutomTexHighlight: 0.5
+    - Vector1_CutomTexHighlight: 1.5
     - Vector1_EC901D17: -0.02
     - Vector1_F348C6A5: 0
     - Vector1_GradientScale: 5
     - Vector_Fade: 1
+    - _Color_Brightness: 1
     - _Cutoff: 0.1
+    - _DIssolve_Fade_Delay: 0
+    - _Dissolve_Amount: 0.001
+    - _Dissolve_Edge_Color_Bleed: 0.828
+    - _Dissolve_Scale: 5
+    - _Distort_Noise_Scale: 0
+    - _Distort_Noise_Scale_2: 0
+    - _Edge_Smoothness_Strength: 0.41
+    - _Edge_Smoothness_Threshold: 1.54
+    - _Gradient_Density: 5
+    - _Gradient_Distort_Amount: 0
+    - _Gradient_Distort_Strength: 0
+    - _OpacityDissolveControl: 1
     - _OutlineMipLevel: 0
     - _OutlineReferenceTexWidth: 1024
     - _OutlineSmoothness: 1
     - _OutlineWidth: 3
+    - _Overall_Opacity: 1
+    - _Pulse_Brightness_Intensity: 1
+    - _Pulse_Gradient: 0.1
+    - _Pulse_Speed: 0.5
     - _StencilComp: 8
     - _StencilRef: 1
     - _StraightAlphaInput: 0
+    - _TEXTURE_EFFECT: 0
+    - _Texture_Distort_Amount: 0
+    - _Texture_Distort_Noise_Scale: 0
+    - _Texture_Distort_Noise_Scale_2: 0
+    - _Texture_Distort_Strength: 0
     - _ThresholdEnd: 0.25
     - _Use8Neighbourhood: 1
     m_Colors:
@@ -93,5 +120,17 @@ Material:
     - Vector2_4D9CA5F6: {r: 2, g: 1, b: 0, a: 0}
     - Vector2_5C750283: {r: 0, g: 0, b: 0, a: 0}
     - Vector2_GradientNoiseOffset: {r: 0.5, g: 0.5, b: 0, a: 0}
+    - _Base_Color: {r: 4.709022, g: 12.99604, b: 0, a: 0}
+    - _Base_Static_Color: {r: 0.6415094, g: 0.6415094, b: 0.6415094, a: 1}
+    - _Dissolve_Edge_Base_Color: {r: 1, g: 1, b: 1, a: 1}
+    - _Dissolve_Edge_Color: {r: 3.211117, g: 0.08406066, b: 0.08406066, a: 1}
+    - _Distort_Noise_Offset: {r: 0, g: 0, b: 0, a: 0}
+    - _Distort_Noise_Offset_2: {r: 0, g: 0, b: 0, a: 0}
+    - _Edge_Color: {r: 0.8588235, g: 0, b: 0, a: 0}
+    - _Gradient_Noise_Movement: {r: -0.3, g: 0.2, b: 0, a: 0}
     - _OutlineColor: {r: 1, g: 1, b: 0, a: 1}
+    - _Pulse_Main_Color: {r: 67.51752, g: 33.08628, b: 0, a: 1}
+    - _Pulse_Second_Color: {r: 0, g: 0, b: 0, a: 1}
+    - _Texture_Distort_Noise_Offset: {r: 0, g: 0, b: 0, a: 0}
+    - _Texture_Distort_Noise_Offset_2: {r: 0, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []

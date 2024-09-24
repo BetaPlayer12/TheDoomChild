@@ -104,7 +104,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             Detect,
             Idle,
-            Patrol,
+            //Patrol,
             Turning,
             Attacking,
             Cooldown,
@@ -133,8 +133,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private AnimatedTurnHandle m_turnHandle;
         [SerializeField, TabGroup("Modules")]
         private MovementHandle2D m_movement;
-        [SerializeField, TabGroup("Modules")]
-        private PatrolHandle m_patrolHandle;
+        /*[SerializeField, TabGroup("Modules")]
+        private PatrolHandle m_patrolHandle;*/
         [SerializeField, TabGroup("Modules")]
         private AttackHandle m_attackHandle;
         [SerializeField, TabGroup("Modules")]
@@ -158,8 +158,8 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_edgeSensor;
 
-        [SerializeField]
-        private bool m_willPatrol;
+        /*[SerializeField]
+        private bool m_willPatrol;*/
 
         [ShowInInspector]
         private StateHandle<State> m_stateHandle;
@@ -209,7 +209,10 @@ namespace DChild.Gameplay.Characters.Enemies
                 //    //Patience();
                 //    StartCoroutine(PatienceRoutine());
                 //}
-                m_enablePatience = true;
+                if (m_stateHandle.currentState != State.Idle)
+                {
+                    m_enablePatience = true;
+                }
                 //StartCoroutine(PatienceRoutine());
             }
         }
@@ -349,8 +352,8 @@ namespace DChild.Gameplay.Characters.Enemies
             base.Start();
             m_currentMoveSpeed = UnityEngine.Random.Range(m_info.run.speed * .75f, m_info.run.speed * 1.25f);
             m_currentFullCD = UnityEngine.Random.Range(m_info.attackCD * .5f, m_info.attackCD * 2f);
-            m_stateHandle.OverrideState(m_willPatrol ? State.Patrol : State.Idle);
-            m_animation.animationState.TimeScale = m_willPatrol ? 1 : 0;
+            //m_stateHandle.OverrideState(m_willPatrol ? State.Patrol : State.Idle);
+            //m_animation.animationState.TimeScale = m_willPatrol ? 1 : 0;
             m_hitbox.Disable();
             m_boundingBox.SetActive(false);
             m_startPoint = transform.position;
@@ -361,14 +364,14 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             base.Awake();
             
-            m_patrolHandle.TurnRequest += OnTurnRequest;
+            //m_patrolHandle.TurnRequest += OnTurnRequest;
             m_attackHandle.AttackDone += OnAttackDone;
             m_turnHandle.TurnDone += OnTurnDone;
             var deathAnim = UnityEngine.Random.Range(0, 2) == 0 ? m_info.death1Animation : m_info.death2Animation;
             m_deathHandle.SetAnimation(deathAnim.animation);
             m_flinchHandle.FlinchStart += OnFlinchStart;
             m_flinchHandle.FlinchEnd += OnFlinchEnd;
-            m_stateHandle = new StateHandle<State>(State.Patrol, State.WaitBehaviourEnd);
+            m_stateHandle = new StateHandle<State>(State.Idle, State.WaitBehaviourEnd);
             m_attackDecider = new RandomAttackDecider<Attack>();
             UpdateAttackDeciderList();
         }
@@ -388,24 +391,24 @@ namespace DChild.Gameplay.Characters.Enemies
                     break;
 
                 case State.Idle:
-                    //m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                    m_animation.SetAnimation(0, m_info.assembleAnimation, false).TimeScale = 0;
                     break;
 
-                case State.Patrol:
+                /*case State.Patrol:
                     if (!m_wallSensor.isDetecting && m_groundSensor.isDetecting)
                     {
                         m_turnState = State.ReevaluateSituation;
                         m_animation.EnableRootMotion(false, false);
                         m_animation.SetAnimation(0, m_info.walk.animation, true);
                         var characterInfo = new PatrolHandle.CharacterInfo(m_character.centerMass.position, m_character.facing);
-                        m_patrolHandle.Patrol(m_movement, m_info.walk.speed, characterInfo);
+                        //m_patrolHandle.Patrol(m_movement, m_info.walk.speed, characterInfo);
                     }
                     else
                     {
                         m_movement.Stop();
                         m_animation.SetAnimation(0, m_info.idleAnimation, true);
                     }
-                    break;
+                    break;*/
 
                 case State.Turning:
                     m_stateHandle.Wait(m_turnState);
@@ -507,7 +510,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     }
                     else
                     {
-                        m_stateHandle.SetState(State.Patrol);
+                        m_stateHandle.SetState(State.Idle);
                     }
                     break;
                 case State.WaitBehaviourEnd:
@@ -523,7 +526,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         protected override void OnTargetDisappeared()
         {
-            m_stateHandle.OverrideState(State.Patrol);
+            m_stateHandle.OverrideState(State.Idle);
             m_currentPatience = 0;
             m_enablePatience = false;
             m_isDetecting = false;

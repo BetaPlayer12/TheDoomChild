@@ -94,6 +94,9 @@ namespace DChild.Gameplay.Characters.Enemies
             private BasicAnimationInfo m_idleAnimation = new BasicAnimationInfo();
             public BasicAnimationInfo idleAnimation => m_idleAnimation;
             [SerializeField]
+            private BasicAnimationInfo m_detectAnimation = new BasicAnimationInfo();
+            public BasicAnimationInfo detectAnimation => m_detectAnimation;
+            [SerializeField]
             private BasicAnimationInfo m_flinchAnimation = new BasicAnimationInfo();
             public BasicAnimationInfo flinchAnimation => m_flinchAnimation;
             //[SerializeField, ValueDropdown("GetAnimations")]
@@ -107,13 +110,19 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField, ValueDropdown("GetEvents")]
             private string m_breathEvent;
             public string breathEvent => m_breathEvent;
-
+            [SerializeField, ValueDropdown("GetEvents")]
+            private string m_poisionColliderOn;
+            public string poisionColliderOn => m_poisionColliderOn;
+            [SerializeField, ValueDropdown("GetEvents")]
+            private string m_poisionColliderOff;
+            public string poisionColliderOff => m_poisionColliderOff;
 
             public override void Initialize()
             {
 #if UNITY_EDITOR
                 m_patrol.SetData(m_skeletonDataAsset);
                 m_move.SetData(m_skeletonDataAsset);
+                m_detectAnimation.SetData(m_skeletonDataAsset);
                 m_attack1.SetData(m_skeletonDataAsset);
                 m_attack2.SetData(m_skeletonDataAsset);
                 //m_attack2_upward.SetData(m_skeletonDataAsset);
@@ -157,6 +166,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private GameObject m_attackBB;
         [SerializeField, TabGroup("Reference")]
         private Collider2D m_selfCollider;
+        [SerializeField, TabGroup("Reference")]
+        private Collider2D m_bodyCollider;
         [SerializeField, TabGroup("Modules")]
         private TransformTurnHandle m_turnHandle;
         [SerializeField, TabGroup("Modules")]
@@ -185,7 +196,7 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_edgeSensor;
         [SerializeField, TabGroup("FX")]
-        private ParticleFX m_breathFX;
+        private GameObject m_breathFX;
         //[SerializeField, TabGroup("Territory")]
         //private Collider2D m_territoryCollider;
         //[SerializeField, TabGroup("Renderer")]
@@ -210,7 +221,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private void OnAttackDone(object sender, EventActionArgs eventArgs)
         {
             GetComponent<IsolatedCharacterPhysics2D>().UseStepClimb(true);
-            m_breathFX.gameObject.GetComponent<ParticleSystem>().Stop();
+           
             m_flinchHandle.m_autoFlinch = true;
             m_animation.DisableRootMotion();
             m_stateHandle.ApplyQueuedState();
@@ -333,39 +344,48 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void UpdateAttackDeciderList()
         {
-            m_attackDecider.SetList(new AttackInfo<Attack>(Attack.Attack3, m_info.attack1.range),/**/
-                                    new AttackInfo<Attack>(Attack.Attack1, m_info.attack3.range),
+            m_attackDecider.SetList(new AttackInfo<Attack>(Attack.Attack3, m_info.attack3.range),/**/
+                                    //new AttackInfo<Attack>(Attack.Attack1, m_info.attack3.range),
                                     new AttackInfo<Attack>(Attack.Attack2, m_info.attack2.range));
             m_attackDecider.hasDecidedOnAttack = false;
         }
 
         private IEnumerator DetectRoutine()
         {
-            m_animation.SetAnimation(0, m_info.attack3.animation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack3.animation);
+            m_animation.SetAnimation(0, m_info.detectAnimation.animation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.detectAnimation.animation);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             //yield return new WaitForSeconds(m_info.detectionTime);
             m_stateHandle.OverrideState(State.ReevaluateSituation);
             yield return null;
         }
 
-
+        [SerializeField]
+        private Attacker m_attacker;
+        [SerializeField]
+        private AttackData m_attackDataBounce;
+        [SerializeField]
+        private AttackData m_attackDataNormal;
         private IEnumerator Attack2Routine()
         {
+           
             //m_stateHandle.Wait(State.ReevaluateSituation);
             m_movement.Stop();
             m_selfCollider.enabled = false;
+            m_attacker.SetData(m_attackDataBounce);
             m_animation.SetAnimation(0, m_info.attack2.animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack2.animation);
             m_animation.SetAnimation(0, m_info.attack2_loop, true);
             var bounceDir = new Vector2(m_info.attack2Velocity.x * transform.localScale.x, m_info.attack2Velocity.y);
             m_character.physics.SetVelocity(bounceDir);
             m_flinchHandle.gameObject.SetActive(false);
+            m_bodyCollider.enabled = false;
             //m_hitbox.SetInvulnerability(true);
             //m_hitbox.gameObject.SetActive(false);
             yield return new WaitForSeconds(m_info.attack2AirTime);
             yield return new WaitUntil(() => m_groundSensor.isDetecting);
             m_animation.SetAnimation(0, m_info.attack2_bounce, false);
+            m_bodyCollider.enabled = true;
             yield return new WaitForSeconds(.75f);
             m_character.physics.SetVelocity(new Vector2(m_info.attack2Bounce2Velocity.x * transform.localScale.x, m_info.attack2Bounce2Velocity.y));
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack2_bounce);
@@ -376,6 +396,7 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 GetComponent<IsolatedCharacterPhysics2D>().UseStepClimb(true);
             }
+            m_attacker.SetData(m_attackDataNormal);
             m_flinchHandle.gameObject.SetActive(true);
             m_flinchHandle.m_autoFlinch = true;
             //m_hitbox.SetInvulnerability(false);
@@ -390,6 +411,8 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             base.Start();
             m_spineEventListener.Subscribe(m_info.breathEvent, PoisonBreath);
+            m_spineEventListener.Subscribe(m_info.poisionColliderOn, PoisonColliderOn);
+            m_spineEventListener.Subscribe(m_info.poisionColliderOff, PoisonColliderOff);
             m_currentTimeScale = UnityEngine.Random.Range(1.0f, 2.0f);
             m_currentFullCD = UnityEngine.Random.Range(m_info.attackCD * .5f, m_info.attackCD * 2f);
             //GameplaySystem.SetBossHealth(m_character);
@@ -398,19 +421,41 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void PoisonBreath()
         {
-            if (m_stateHandle.currentState != State.Detect)
-            {
-                m_breathFX.Play();
-                m_bbRoutine = StartCoroutine(PoisonBreathBBRoutine());
-            }
+            /*if (m_stateHandle.currentState != State.Detect)
+            {*/
+                StopCoroutine(PoisonColliderFXOff());
+                m_attackBB.SetActive(false);
+                m_breathFX.SetActive(false);
+                m_breathFX.SetActive(true);
+                //m_bbRoutine = StartCoroutine(PoisonBreathBBRoutine());
+            //}
         }
 
+        private void PoisonColliderOn()
+        {
+            m_attackBB.SetActive(true);
+        }
+        private void PoisonColliderOff()
+        {
+            //m_attackBB.SetActive(false);
+            //m_breathFX.SetActive(false);
+            StartCoroutine(PoisonColliderFXOff());
+        }
+        private IEnumerator PoisonColliderFXOff()
+        {
+            yield return new WaitForSeconds(0.5f);
+            m_attackBB.SetActive(false);
+            yield return new WaitForSeconds(0.5f);
+            m_breathFX.SetActive(false);
+        }
         private IEnumerator PoisonBreathBBRoutine()
         {
             yield return new WaitForSeconds(1f);
             m_attackBB.SetActive(true);
+            yield return new WaitForSeconds(1f);
+            m_breathFX.SetActive(false);
             m_bbRoutine = null;
-            yield return null;
+            //yield return null;
         }
 
         protected override void Awake()
@@ -478,10 +523,10 @@ namespace DChild.Gameplay.Characters.Enemies
 
                     switch (m_attackDecider.chosenAttack.attack)
                     {
-                        case Attack.Attack1:
-                            m_animation.EnableRootMotion(true, false);
-                            m_attackHandle.ExecuteAttack(m_info.attack1.animation, m_info.idleAnimation.animation);
-                            break;
+                    //    case Attack.Attack1:
+                    //        m_animation.EnableRootMotion(true, false);
+                    //        m_attackHandle.ExecuteAttack(m_info.attack1.animation, m_info.idleAnimation.animation);
+                    //        break;
                         case Attack.Attack2:
                             m_animation.EnableRootMotion(false, false);
                             //m_attackHandle.ExecuteAttack(m_info.attack2_downward.animation, m_info.idleAnimation);
