@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DChild.Gameplay.Characters.Players.Modules;
+using System;
 using UnityEngine;
 
 namespace DChild.Gameplay.Characters.Players

@@ -2,6 +2,8 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor;
+using DChild.Gameplay.Items;
 #if UNITY_EDITOR
 using Sirenix.Utilities.Editor;
 #endif
@@ -16,12 +18,30 @@ namespace DChild
         protected int[] m_IDs;
 
         public int Count => m_IDs.Length;
-        public T GetInfo(int ID) => m_list.ContainsKey(ID) ? m_list[ID] : null;
+        public T GetInfo(int ID)
+        {
+            var item = m_list.ContainsKey(ID) ? m_list[ID] : null;
+            if (item == null)
+            {
+#if UNITY_EDITOR
+                var temp = new List<ItemData>(AssetDatabase.FindAssets("t:ItemData").Select(guid => AssetDatabase.LoadAssetAtPath<ItemData>(AssetDatabase.GUIDToAssetPath(guid))));
+                for (int x = 0; x < temp.Count; x++)
+                {
+                    if (temp[x].id == ID)
+                    {
+                        throw new UnityException("Missing from item list" + temp[x].itemName);
+                    }
+                }
+#endif
+            }
+            return item;
+        }
+
         public int[] GetIDs() => m_IDs;
 
 #if UNITY_EDITOR
 
-        [ShowInInspector, ListDrawerSettings(OnTitleBarGUI = "TitleBar", DraggableItems = true),AssetSelector]
+        [ShowInInspector, ListDrawerSettings(OnTitleBarGUI = "TitleBar", DraggableItems = true), AssetSelector]
         private List<T> m_hash = new List<T>();
 
         private void TitleBar()
@@ -72,6 +92,6 @@ namespace DChild
                 }
             }
         }
-#endif     
+#endif
     }
 }

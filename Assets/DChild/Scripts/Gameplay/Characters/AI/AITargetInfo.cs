@@ -34,7 +34,10 @@ namespace DChild.Gameplay.Characters.AI
             m_characterGroundedState = target.GetComponent<IGroundednessState>();
         }
 
-        
+        public IDamageable GetTargetDamagable()
+        {
+            return m_damageable;
+        }
 
         public AITargetInfo(IDamageable damageable)
         {

@@ -2,6 +2,7 @@
 using DChild.Gameplay.Combat.StatusAilment;
 using Holysoft.Event;
 using Sirenix.OdinInspector;
+using SUtil = Sirenix.Serialization.Utilities;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -24,7 +25,7 @@ namespace DChild.Gameplay.Characters.AI
         [SerializeField, TabGroup("Reference")]
         protected Transform m_centerMass;
         [SerializeField]
-        private AggroBoundary m_aggroBoundary;
+        protected AggroBoundary m_aggroBoundary;
         [SerializeField, TabGroup("Data")]
         protected CharacterStatsData m_statsData;
 
@@ -36,6 +37,9 @@ namespace DChild.Gameplay.Characters.AI
         private StatusEffectResistance m_statusResistance;
 
         protected Restriction m_currentRestrictions;
+
+
+        public event EventAction<EventActionArgs<bool>> ControllerStateChange;
 
         public virtual void ForcePassiveIdle(bool value)
         {
@@ -66,11 +70,17 @@ namespace DChild.Gameplay.Characters.AI
         public virtual void Enable()
         {
             enabled = true;
+            var eventCache =new EventActionArgs<bool>();
+            eventCache.Set(true);
+            ControllerStateChange?.Invoke(this, eventCache);
         }
 
         public virtual void Disable()
         {
             enabled = false;
+            var eventCache = new EventActionArgs<bool>();
+            eventCache.Set(false);
+            ControllerStateChange?.Invoke(this, eventCache);
         }
 
         public bool IsFacing(Vector2 position)
@@ -120,7 +130,10 @@ namespace DChild.Gameplay.Characters.AI
         {
             if (m_targetInfo.doesTargetExist == false)
             {
-                m_aggroBoundary.gameObject.SetActive(false);
+                if (m_aggroBoundary != null)
+            { 
+                    m_aggroBoundary.gameObject.SetActive(false);
+            }
                 SetTarget(null);
                 m_currentRestrictions |= Restriction.IgnoreTarget;
             }
@@ -131,9 +144,14 @@ namespace DChild.Gameplay.Characters.AI
         }
         public void SetActive()
         {
-            m_aggroBoundary.gameObject.SetActive(true);
-            m_currentRestrictions &= ~Restriction.IgnoreTarget;
-            this.enabled = true;
+
+            if (m_aggroBoundary != null)
+            {
+                m_aggroBoundary.gameObject.SetActive(true);
+                m_currentRestrictions &= ~Restriction.IgnoreTarget;
+                this.enabled = true;
+            }
+            
         }
 
         /// <summary>
@@ -208,6 +226,7 @@ namespace DChild.Gameplay.Characters.AI
         private static ContactFilter2D m_contactFilter;
         private static RaycastHit2D[] m_hitResults;
         private static bool m_isInitialized;
+
 
         private static void Initialize()
         {

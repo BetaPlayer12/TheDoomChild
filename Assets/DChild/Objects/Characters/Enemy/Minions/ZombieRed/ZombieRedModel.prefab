@@ -46,7 +46,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_multiRaycast:
-    m_config: {fileID: 11400000, guid: 4ba7b176e7a6f2049bf7f6ec304ccc2a, type: 2}
+    m_config: {fileID: 11400000, guid: 49921ea3244bb1648b96cb0d2cac9b58, type: 2}
     m_rayColor: {r: 1, g: 0, b: 0.617527, a: 1}
   m_enable: 1
   m_debugMode: 0
@@ -189,6 +189,8 @@ GameObject:
   - component: {fileID: 2550697406945093045}
   - component: {fileID: 3517313220194177261}
   - component: {fileID: 1985548386782214780}
+  - component: {fileID: 6451063170511495080}
+  - component: {fileID: 6873313097900370569}
   m_Layer: 13
   m_Name: ZombieRedModel
   m_TagString: Untagged
@@ -301,7 +303,7 @@ MonoBehaviour:
   disableRenderingOnOverride: 1
   _animationName: idle
   loop: 1
-  timeScale: 2
+  timeScale: 1
   m_alwaysUpdateMesh: 0
 --- !u!114 &3517313220194177261
 MonoBehaviour:
@@ -341,6 +343,39 @@ MonoBehaviour:
   - {fileID: 2550697408735603054}
   - {fileID: 7676730115776857885}
   - {fileID: 3613980283491451219}
+--- !u!114 &6451063170511495080
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2550697406945093047}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6bb0641d37f1cbc418dcf04f60a07c9e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_animation: {fileID: 0}
+  m_renderer: {fileID: 2550697406945093050}
+  m_startDissolveEvent: StartFade
+  m_dissolveDuration: 1
+  m_delay: 0
+--- !u!114 &6873313097900370569
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2550697406945093047}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ce36765c3609a7e438482540600a3b3a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_renderer: {fileID: 2550697406945093050}
+  m_color: {r: 0.34901962, g: 0.34901962, b: 0.34901962, a: 0}
+  m_fadeInDuration: 0.05
+  m_fadeOutDuration: 0.1
 --- !u!1 &2550697408735603048
 GameObject:
   m_ObjectHideFlags: 0
@@ -449,7 +484,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2728191353328015140}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.048668068, y: 7.7266345, z: 0}
+  m_LocalPosition: {x: -0.0486574, y: 7.7266345, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -514,6 +549,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7913955764830972342}
   - component: {fileID: 3551639738153664519}
+  - component: {fileID: 9180231375773359652}
   m_Layer: 16
   m_Name: SolidBodyCollider
   m_TagString: Untagged
@@ -528,8 +564,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2760912935969679038}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.13860956, y: 8.839768, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: 0.9999997, w: 0.00076492224}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -549,7 +585,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.5, y: 0}
+  m_Offset: {x: 0.37983716, y: -0.02000001}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -560,8 +596,29 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 3.5, y: 0.5}
+  m_Size: {x: 4.811714, y: 0.5}
   m_EdgeRadius: 0
+--- !u!114 &9180231375773359652
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2760912935969679038}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a1fd8daaed7b64148a34acb96ba14ce1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  skeletonRenderer: {fileID: 2550697406945093045}
+  boneName: root
+  followXYPosition: 1
+  followZPosition: 0
+  followBoneRotation: 0
+  followSkeletonFlip: 0
+  followLocalScale: 0
+  initializeOnAwake: 1
+  m_updateOnFixedUpdate: 0
 --- !u!1 &2987479217180622803
 GameObject:
   m_ObjectHideFlags: 0

@@ -56,6 +56,7 @@ MonoBehaviour:
   m_idleAnimation: idle
   m_enableFlinchColor: 0
   m_flinchColorAnimation: 
+  m_enableModule: 1
 --- !u!1 &5254074572277811064
 GameObject:
   m_ObjectHideFlags: 0
@@ -204,7 +205,7 @@ MonoBehaviour:
   m_animator: {fileID: 7535377047939781385}
   m_animation: death2
   m_bodyDuration:
-    m_startTime: 3
+    m_startTime: 0.25
   m_fx: []
   m_destroySource: 0
 --- !u!114 &7903112360300670701
@@ -234,7 +235,7 @@ PrefabInstance:
     - target: {fileID: 748729144771621780, guid: 581273cea94d1294a9c56f1ba54042dc,
         type: 3}
       propertyPath: m_maxHealth
-      value: 195
+      value: 250
       objectReference: {fileID: 0}
     - target: {fileID: 3756872488131836482, guid: 581273cea94d1294a9c56f1ba54042dc,
         type: 3}
@@ -690,6 +691,11 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: 3.4978418
       objectReference: {fileID: 0}
+    - target: {fileID: 1513198560581210523, guid: 661ffab6bcd284c4cb578801240ec6a1,
+        type: 3}
+      propertyPath: m_animation
+      value: 
+      objectReference: {fileID: 7535377047939781385}
     - target: {fileID: 1970300753481034200, guid: 661ffab6bcd284c4cb578801240ec6a1,
         type: 3}
       propertyPath: m_damageFXInfo.m_fx
@@ -774,7 +780,12 @@ PrefabInstance:
     - target: {fileID: 3647154348493762185, guid: 661ffab6bcd284c4cb578801240ec6a1,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.5063789
+      value: 0.5205879
+      objectReference: {fileID: 0}
+    - target: {fileID: 3647154348493762185, guid: 661ffab6bcd284c4cb578801240ec6a1,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 9.519024
       objectReference: {fileID: 0}
     - target: {fileID: 4461281733538018331, guid: 661ffab6bcd284c4cb578801240ec6a1,
         type: 3}
@@ -790,6 +801,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalPosition.y
       value: 6.092409
+      objectReference: {fileID: 0}
+    - target: {fileID: 5434900249215487290, guid: 661ffab6bcd284c4cb578801240ec6a1,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 2.827859
+      objectReference: {fileID: 0}
+    - target: {fileID: 5434900249215487290, guid: 661ffab6bcd284c4cb578801240ec6a1,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 9.185401
       objectReference: {fileID: 0}
     - target: {fileID: 5574875176287725154, guid: 661ffab6bcd284c4cb578801240ec6a1,
         type: 3}
@@ -835,12 +856,18 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: f4ba3effde8da3d45947efca2542e012, type: 2}
+      objectReference: {fileID: 2100000, guid: c26cfcf34c806204b988fa1641cfb1eb, type: 2}
     - target: {fileID: 6838728216547988280, guid: 661ffab6bcd284c4cb578801240ec6a1,
         type: 3}
       propertyPath: m_Name
       value: WerewolfModel
       objectReference: {fileID: 0}
+    - target: {fileID: 6838728216547988282, guid: 661ffab6bcd284c4cb578801240ec6a1,
+        type: 3}
+      propertyPath: skeletonDataAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: fdb236db5ba81db43a330e04cea33565,
+        type: 2}
     - target: {fileID: 6838728216547988283, guid: 661ffab6bcd284c4cb578801240ec6a1,
         type: 3}
       propertyPath: m_RootOrder
@@ -906,6 +933,11 @@ PrefabInstance:
       propertyPath: m_LocalRotation.z
       value: -0.45975086
       objectReference: {fileID: 0}
+    - target: {fileID: 7260716512293752674, guid: 661ffab6bcd284c4cb578801240ec6a1,
+        type: 3}
+      propertyPath: m_renderer
+      value: 
+      objectReference: {fileID: 2387721022200202743}
     - target: {fileID: 7493300769914185759, guid: 661ffab6bcd284c4cb578801240ec6a1,
         type: 3}
       propertyPath: m_LocalRotation.w
@@ -1003,6 +1035,12 @@ MonoBehaviour:
 --- !u!70 &2387721020232485155 stripped
 CapsuleCollider2D:
   m_CorrespondingSourceObject: {fileID: 6838728215117275105, guid: 661ffab6bcd284c4cb578801240ec6a1,
+    type: 3}
+  m_PrefabInstance: {fileID: 9208428067921417922}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &2387721022200202743 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 6838728216547988277, guid: 661ffab6bcd284c4cb578801240ec6a1,
     type: 3}
   m_PrefabInstance: {fileID: 9208428067921417922}
   m_PrefabAsset: {fileID: 0}

@@ -68,7 +68,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             if (m_hasExecuted)
             {
                 m_hasExecuted = false;
-                m_hitbox.Enable();
+                //m_hitbox.Enable();
             }
             m_wasUsed = false;
 
@@ -110,7 +110,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 m_dashRoutine = StartCoroutine(DashRoutine());
                 GameplaySystem.world.SetShadowColliders(true);
                 m_damageable.SetInvulnerability(Invulnerability.Level_2);
-                m_hitbox.Disable();
+                //m_hitbox.Disable();
                 m_wasUsed = true;
 
                 if (m_shadowFX != null)

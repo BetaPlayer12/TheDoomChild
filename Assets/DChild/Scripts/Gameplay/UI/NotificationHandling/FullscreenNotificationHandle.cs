@@ -1,6 +1,7 @@
 ﻿using DChild.Gameplay.Characters.Players;
 using DChild.Gameplay.Characters.Players.SoulSkills;
 using DChild.Gameplay.Items;
+using DChild.Gameplay.Systems.Journal;
 using DChild.Gameplay.Systems.Lore;
 using Doozy.Runtime.Signals;
 using Doozy.Runtime.UIManager.Containers;
@@ -75,7 +76,7 @@ namespace DChild.Gameplay.UI
         [SerializeField]
         private SubHandle<SoulSkillNotificationUI> m_soulSkillNotification = new SubHandle<SoulSkillNotificationUI>();
         [SerializeField]
-        private UIContainerSubHandle m_journalDetailedNotification;
+        private SubHandle<JournalNotificationUI> m_journalDetailedNotification = new SubHandle<JournalNotificationUI>();
         [SerializeField]
         private SubHandle<LoreInfoUI> m_loreNotification = new SubHandle<LoreInfoUI>();
         [SerializeField]
@@ -83,26 +84,40 @@ namespace DChild.Gameplay.UI
 
         #region Prompts
         [ContextMenu("Prompt/Journal")]
-        public void PromptJournalUpdateNotification()
+        public void PromptJournalUpdateNotification(JournalData journalData)
         {
-            AddNotificationRequest(new NotificationRequest<NotificationType>(m_journalDetailedNotification.priority, NotificationType.Journal_Detailed));
+            if (HasNotificationFor(journalData) == false)
+            {
+                AddNotificationRequest(new NotificationRequest<NotificationType>(m_journalDetailedNotification.priority, NotificationType.Journal_Detailed, journalData));
+            }
         }
 
         [ContextMenu("Prompt/Primary Skill")]
         public void QueueNotification(PrimarySkill primarySkillData)
         {
-            AddNotificationRequest(new NotificationRequest<NotificationType>(m_primarySkillNotification.priority, NotificationType.PrimarySkill, primarySkillData));
+            if (HasNotificationFor(primarySkillData) == false)
+            {
+                AddNotificationRequest(new NotificationRequest<NotificationType>(m_primarySkillNotification.priority, NotificationType.PrimarySkill, primarySkillData));
+            }
         }
 
         [ContextMenu("Prompt/Soul Skill")]
         public void QueueNotification(SoulSkill soulSkill)
         {
-            AddNotificationRequest(new NotificationRequest<NotificationType>(m_soulSkillNotification.priority, NotificationType.SoulSkill, soulSkill));
+            if (HasNotificationFor(soulSkill) == false)
+            {
+                AddNotificationRequest(new NotificationRequest<NotificationType>(m_soulSkillNotification.priority, NotificationType.SoulSkill, soulSkill));
+            }
+            
         }
 
         public void QueueNotification(LoreData data)
         {
-            AddNotificationRequest(new NotificationRequest<NotificationType>(m_soulSkillNotification.priority, NotificationType.Lore_Detailed, data));
+            if (HasNotificationFor(data) == false)
+            {
+                AddNotificationRequest(new NotificationRequest<NotificationType>(m_soulSkillNotification.priority, NotificationType.Lore_Detailed, data));
+            }
+            
         }
 
         public void QueueNotification(ItemData itemData)
@@ -137,7 +152,9 @@ namespace DChild.Gameplay.UI
                     soulSkillNotification.container.Show(true);
                     break;
                 case NotificationType.Journal_Detailed:
-                    m_journalDetailedNotification.container.Show(true);
+                    var journalUI = m_journalDetailedNotification.ui;
+                    journalUI.UpdateUI((JournalData)data);
+                    journalUI.container.Show(true);
                     break;
                 case NotificationType.Lore_Detailed:
                     var loreNorification = m_loreNotification.ui;

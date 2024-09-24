@@ -215,6 +215,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 //m_physics.gravityScale = m_cacheGravity;
             }
             //m_physics.velocity = Vector2.zero;
+            m_physics.gravityScale = m_cacheGravity;
             //base.AttackOver();
             //m_state.canAttack = true;
             m_animator.SetBool(m_animationParameter, false);
@@ -278,7 +279,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
                 if (m_comboResetDelayTimer <= 0)
                 {
-                    Reset();
+                    //Reset();
+                    ComboEnd();
                 }
             }
         }

@@ -32,6 +32,8 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
         //private RaySensor m_edgeSensor;
         [SerializeField, BoxGroup("FX")]
         private ParticleSystem m_fx;
+        [SerializeField, BoxGroup("FX")]
+        private GameObject m_fxGO;
 
         [SerializeField]
         private Vector2 m_pushForce;
@@ -74,8 +76,9 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
         public override void Reset()
         {
             //m_edgedFuryInfo.PlayFX(false);
-            m_fx.gameObject.SetActive(false);
-            m_fx.Stop();
+            //m_fx.gameObject.SetActive(false);
+            //m_fx.Stop();
+            m_fxGO.SetActive(false);
             m_edgedFuryInfo.ShowCollider(false);
             m_animator.SetBool(m_edgedFuryStateAnimationParameter, false);
             base.Reset();
@@ -95,8 +98,9 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             m_animator.SetBool(m_animationParameter, true);
             m_animator.SetBool(m_edgedFuryStateAnimationParameter, true);
             //m_edgedFuryInfo.PlayFX(true);
-            m_fx.gameObject.SetActive(true);
-            m_fx.Play();
+            //m_fx.gameObject.SetActive(true);
+            //m_fx.Play();
+            //m_fxGO.SetActive(true);
             //m_edgedFuryCooldownTimer = m_edgedFuryCooldown;
             //m_edgedFuryMovementCooldownTimer = m_edgedFuryMovementCooldown;
             //m_attacker.SetDamageModifier(m_slashComboInfo[m_currentSlashState].damageModifier * m_modifier.Get(PlayerModifier.AttackDamage));
@@ -104,6 +108,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
         public void EndExecution()
         {
+            m_fxGO.SetActive(false);
             m_edgedFuryInfo.ShowCollider(false);
             m_physics.gravityScale = m_cacheGravity;
             m_physics.velocity = Vector2.zero;
@@ -114,8 +119,9 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
         public override void Cancel()
         {
             //m_edgedFuryInfo.PlayFX(false);
-            m_fx.gameObject.SetActive(false);
-            m_fx.Stop();
+            //m_fx.gameObject.SetActive(false);
+            //m_fx.Stop();
+            m_fxGO.SetActive(false);
             m_physics.gravityScale = m_cacheGravity;
             m_physics.velocity = Vector2.zero;
             m_edgedFuryInfo.ShowCollider(false);
@@ -126,6 +132,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
         public void EnableCollision(bool value)
         {
+            m_fxGO.SetActive(true);
             m_rigidBody.WakeUp();
             m_edgedFuryInfo.ShowCollider(value);
             m_attackFX.transform.position = m_edgedFuryInfo.fxPosition.position;

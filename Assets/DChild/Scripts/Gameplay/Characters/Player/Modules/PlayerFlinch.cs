@@ -27,6 +27,15 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private float m_flinchState;
         private int m_flinchStateAnimationParameter;
 
+        private Coroutine m_flinchRoutine;
+
+        private bool m_knockbackEnabled;
+
+        public void EnableKnockback(bool enable)
+        {
+            m_knockbackEnabled = enable;
+        }
+
         public void Initialize(ComplexCharacterInfo info)
         {
             m_state = info.state;
@@ -38,6 +47,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
             playerGravityScale = m_rigidBody.gravityScale;
             m_defaultLinearDrag = m_rigidBody.drag;
+
+            m_knockbackEnabled = true;
         }
 
         public void SetConfiguration(FlinchStatsInfo info)
@@ -65,7 +76,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     isAerialKnockback = true;
                 }
 
-                StartCoroutine(FlinchRoutine(knockBackDirection, isAerialKnockback));
+                m_flinchRoutine = StartCoroutine(FlinchRoutine(knockBackDirection, isAerialKnockback));
             }
             else
             {
@@ -80,23 +91,41 @@ namespace DChild.Gameplay.Characters.Players.Modules
             int flinchState = Random.Range(1, m_configuration.numberOfFlinchStates + 1);
 
             m_state.waitForBehaviour = true;
-            m_rigidBody.gravityScale = m_configuration.flinchGravityScale;
-            m_rigidBody.drag = m_defaultLinearDrag;
-
-            if (isAerialKnockBack == true)
+            if (m_knockbackEnabled)
             {
-                aerialKnockBackPower = m_configuration.yKnockBackPower * m_configuration.aerialKnockBackMultiplier;
-            }
+                m_rigidBody.gravityScale = m_configuration.flinchGravityScale;
+                m_rigidBody.drag = m_defaultLinearDrag;
 
-            m_rigidBody.velocity = Vector2.zero;
-            m_rigidBody.AddForce(new Vector2(direction.x * knockBackPower, direction.y * aerialKnockBackPower), ForceMode2D.Impulse);
+                if (isAerialKnockBack == true)
+                {
+                    aerialKnockBackPower = m_configuration.yKnockBackPower * m_configuration.aerialKnockBackMultiplier;
+                }
+
+                m_rigidBody.velocity = Vector2.zero;
+                m_rigidBody.AddForce(new Vector2(direction.x * knockBackPower, direction.y * aerialKnockBackPower), ForceMode2D.Impulse);
+            }
             m_animator.SetBool(m_animationParameter, true);
             m_animator.SetInteger(m_flinchStateAnimationParameter, flinchState);
 
             yield return new WaitForSeconds(m_configuration.flinchDuration);
             m_animator.SetBool(m_animationParameter, false);
             m_state.waitForBehaviour = false;
-            m_rigidBody.gravityScale = playerGravityScale;
+            if (m_knockbackEnabled)
+            {
+                m_rigidBody.gravityScale = playerGravityScale;
+            }
+        }
+
+        public void CancelFlinch()
+        {
+            if (m_flinchRoutine != null)
+            {
+                StopCoroutine(m_flinchRoutine);
+                m_flinchRoutine = null;
+                m_animator.SetBool(m_animationParameter, false);
+                m_state.waitForBehaviour = false;
+                m_rigidBody.gravityScale = playerGravityScale;
+            }
         }
     }
 }

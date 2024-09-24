@@ -33,6 +33,7 @@ namespace DChild.Gameplay.Pathfinding
         private Vector3 m_previousPathSegment;
         private Vector3 m_lastPathSegment;
 
+        private bool m_wasEntityInStartingPathSegment;
         private bool m_canSearchPath;
 
         public bool refreshPath
@@ -50,6 +51,8 @@ namespace DChild.Gameplay.Pathfinding
         public Vector3 lastPathSegment => m_lastPathSegment;
         public bool isOnLastPathSegment => m_pathIndex == m_path.Count;
         public Vector3 directionToPathSegment => (m_currentPathSegment - transform.position).normalized;
+
+        public bool wasEntityInStartingPathSegment => m_wasEntityInStartingPathSegment;
 
         private Vector3 m_prevDirectionToPathSegment;
 
@@ -130,6 +133,7 @@ namespace DChild.Gameplay.Pathfinding
                 m_currentPathSegment = Vector3.zero;
                 m_previousPathSegment = Vector3.zero;
                 m_lastPathSegment = Vector3.zero;
+                m_wasEntityInStartingPathSegment = false;
             }
             else
             {
@@ -142,6 +146,8 @@ namespace DChild.Gameplay.Pathfinding
                 m_lastPathSegment = m_path[m_path.Count - 1];
                 m_prevDirectionToPathSegment = directionToPathSegment;
                 m_pathUpdated = true;
+
+                m_wasEntityInStartingPathSegment = transform.position == m_path[0];
             }
             m_canSearchPath = true;
         }

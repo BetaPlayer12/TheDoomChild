@@ -158,6 +158,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private Collider2D m_aggroCollider;
         [SerializeField, TabGroup("Reference")]
         private List<RaySensorFaceRotator> m_rotators;
+        [SerializeField, TabGroup("Reference")]
+        private IsolatedCharacterPhysics2D m_physics;
         //[SerializeField, TabGroup("Modules")]
         //private TransformTurnHandle m_turnHandle;
         [SerializeField, TabGroup("Modules")]
@@ -219,6 +221,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         public override void SetTarget(IDamageable damageable, Character m_target = null)
         {
+            Debug.Log("XYZ I detect the player 😐");
             if (damageable != null /*&& !ShotBlocked()*/)
             {
                 base.SetTarget(damageable);
@@ -231,7 +234,6 @@ namespace DChild.Gameplay.Characters.Enemies
                 if (!TargetBlocked() && !m_enablePatience)
                 {
                     m_selfCollider.SetActive(true);
-
                     if (!m_isDetecting)
                     {
                         m_isDetecting = true;
@@ -246,6 +248,10 @@ namespace DChild.Gameplay.Characters.Enemies
                     //var patienceRoutine = PatienceRoutine();
                     //StopCoroutine(patienceRoutine);
                     m_enablePatience = false;
+                }else
+                {
+                    //There is a rare chance that the target blocked becomes true and pusher waits for cart to return something even though it has not recieved anything (⌐■_■)
+                    m_enablePatience = true;
                 }
             }
             else
@@ -387,6 +393,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void CartIsDead(object sender, EventActionArgs eventArgs)
         {
+            m_physics.bodyType = RigidbodyType2D.Dynamic;
             m_isCartDead = true;
             this.transform.SetParent(null);
             m_solidCollider.SetActive(false);
@@ -411,6 +418,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator CartDiesRoutine()
         {
+            m_initialPos = new Vector2(transform.position.x, GroundPosition().y);
             m_stateHandle.Wait(State.ReevaluateSituation);
             m_animation.SetAnimation(0, m_info.deathCartOnlyAnimation, false).TimeScale = 0.5f;
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.deathCartOnlyAnimation);
@@ -531,7 +539,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_hitbox.SetInvulnerability(Invulnerability.Level_1);
 
             //m_animation.EnableRootMotion(true, false);
-            m_initialPos = new Vector2(transform.position.x, GroundPosition().y);
+            
         }
 
         protected override void Awake()
@@ -551,6 +559,7 @@ namespace DChild.Gameplay.Characters.Enemies
             switch (m_stateHandle.currentState)
             {
                 case State.Detect:
+
                     if (m_isCartDead)
                     {
                         m_movement.Stop();
@@ -570,9 +579,13 @@ namespace DChild.Gameplay.Characters.Enemies
 
                 case State.Idle:
                     m_animation.SetAnimation(0, !m_isCartDead ? m_info.idleAnimation : m_info.idleSoloAnimation, true);
+                        
                     if (m_isCartDead)
                     {
                         m_movement.Stop();
+                    }else
+                    {
+                        m_physics.bodyType = RigidbodyType2D.Dynamic;//
                     }
                     break;
 
@@ -581,9 +594,24 @@ namespace DChild.Gameplay.Characters.Enemies
                 //    m_turnHandle.Execute();
                 //    break;
 
+                case State.Returning:
+                    /*if (Vector2.Distance(m_initialPos, transform.position) > 2f)
+                    {
+                        m_animation.SetAnimation(0, IsFacing(m_initialPos) ? m_info.move.animation : m_info.moveBackwards.animation, true);
+                        m_movement.MoveTowards(Vector2.one * transform.localScale.x, IsFacing(m_initialPos) ? m_info.move.speed : m_info.moveBackwards.speed);
+                    }
+                    else
+                    {
+                        //m_randomTurnRoutine = StartCoroutine(RandomTurnRoutine());
+                        CustomTurn();
+                        m_stateHandle.OverrideState(State.Idle);
+                    }*/
+                    m_stateHandle.OverrideState(State.Idle);
+                    break;
+
                 case State.Attacking:
                     m_stateHandle.Wait(State.Cooldown);
-
+                        
                     switch (m_isCartDead)
                     {
                         case true:
@@ -591,6 +619,7 @@ namespace DChild.Gameplay.Characters.Enemies
                             break;
 
                         case false:
+                                m_physics.bodyType = RigidbodyType2D.Kinematic;
                             m_attackRoutine = StartCoroutine(AttackRoutine());
                             break;
                     }

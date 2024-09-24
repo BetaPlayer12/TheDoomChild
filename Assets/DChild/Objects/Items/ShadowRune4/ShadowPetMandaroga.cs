@@ -18,6 +18,8 @@ public class ShadowPetMandaroga : MonoBehaviour
     [SerializeField]
     private float m_duration;
     [SerializeField]
+    private Vector2 m_spawnOffset;
+    [SerializeField]
     private SpineRootAnimation m_spine;
 #if UNITY_EDITOR
     [SerializeField]
@@ -90,8 +92,6 @@ public class ShadowPetMandaroga : MonoBehaviour
         m_spine.SetAnimation(0, m_attackAnimation, true);
         //yield return new WaitForAnimationComplete(m_spine.animationState, m_attackAnimation);
         yield return new WaitForSeconds(m_duration);
-        m_spine.SetAnimation(0, m_idleAnimation, false);
-        yield return new WaitForAnimationComplete(m_spine.animationState, m_idleAnimation);
         m_spine.SetAnimation(0, m_deathAnimation, false);
         yield return new WaitForAnimationComplete(m_spine.animationState, m_deathAnimation);
         m_eventHandler.PetDesummon();
@@ -105,6 +105,7 @@ public class ShadowPetMandaroga : MonoBehaviour
             m_parentCharacter = GetComponentInParent<Character>();
         transform.SetParent(null);
         transform.localScale = new Vector3(m_parentCharacter.facing == HorizontalDirection.Right ? 1 : -1, 1, 1);
+        transform.position = new Vector3(m_parentCharacter.facing == HorizontalDirection.Right ? transform.position.x + m_spawnOffset.x : transform.position .x - m_spawnOffset.x, transform.position.y + m_spawnOffset.y, transform.position.z);
         m_physics.SetVelocity(Vector2.zero);
 
         m_groundSensorRotator.AlignRotationToFacing(m_parentCharacter.facing);

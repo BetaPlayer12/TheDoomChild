@@ -98,6 +98,8 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Reference")]
         private Collider2D m_bodyCollider;
         [SerializeField, TabGroup("Reference")]
+        private Collider2D m_bodyDamager;
+        [SerializeField, TabGroup("Reference")]
         private Health m_health;
         [SerializeField, TabGroup("Reference")]
         private Hitbox m_hitbox;
@@ -218,9 +220,11 @@ namespace DChild.Gameplay.Characters.Enemies
             m_stateHandle.Wait(State.ReevaluateSituation);
             m_agent.Stop();
             m_animation.SetAnimation(0, m_info.chargeAnimation, false);
+            m_bodyDamager.enabled = false;
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.chargeAnimation);
             m_animation.SetAnimation(0, m_info.meleeAttack.animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.meleeAttack.animation);
+            m_bodyDamager.enabled = true;
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_stateHandle.ApplyQueuedState();
             yield return null;
