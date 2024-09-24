@@ -4,11 +4,12 @@ using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 
 namespace DChild.Configurations
 {
     [System.Serializable]
-    public class VisualSettingsHandle
+    public class VisualSettingsHandle   
     {
         [SerializeField]
         private SupportedResolutions m_supportedResolutions;
@@ -18,6 +19,8 @@ namespace DChild.Configurations
         [BoxGroup("Configurators")]
         [SerializeField]
         private ScreenLighting m_screenLighting;
+
+        private AntialiasingMode m_antialiasing;
 
         private GameSettingsConfiguration m_configuration;
 
@@ -109,6 +112,37 @@ namespace DChild.Configurations
             }
         }
 
+        public bool bloom
+        {
+            get
+            {
+                return m_screenLighting.bloom;
+            }
+
+            set
+            {
+                m_screenLighting.bloom = value;
+                m_configuration.visualConfiguration.bloom = value;
+                SceneVisualsChange?.Invoke(this, EventActionArgs.Empty);
+            }
+        }
+
+        public int antiAliasing
+        {
+            get
+            {
+                return (int) m_antialiasing;
+            }
+
+            set
+            {
+                m_antialiasing = (AntialiasingMode) value;
+                m_configuration.visualConfiguration.antiAliasingIndex = value;
+                SceneVisualsChange?.Invoke(this, EventActionArgs.Empty);
+            }
+        }
+
+    
         public void Initialize(GameSettingsConfiguration configuration)
         {
             m_configuration = configuration;
@@ -118,9 +152,11 @@ namespace DChild.Configurations
             m_screenResolution.SetFullscreen(visualConfiguration.fullscreen);
             m_screenResolution.Apply();
 
-
             m_screenLighting.brightness = visualConfiguration.brightness;
             m_screenLighting.contrast = visualConfiguration.contrast;
+            m_screenLighting.bloom = visualConfiguration.bloom;
+
+            m_antialiasing = (AntialiasingMode) visualConfiguration.antiAliasingIndex;
             QualitySettings.vSyncCount = visualConfiguration.vsync ? 1 : 0;
         }
     }
