@@ -40,10 +40,15 @@ namespace DChild.Gameplay.ArmyBattle
                 }
                 return list;
             }
+            [SerializeField, ValueDropdown("GetAnimations")]
+            private List<string> m_animation;
+            [SerializeField, Min(0f)]
+            private List<float> m_delaytime;
 
+            public List<string> animation => m_animation;
+            public List<float> animationDelayTime => m_delaytime;
         }
-        [Serializable,ShowIf(
-            "@m_fxSpineSystem!=null")]
+        [Serializable]
         public class BasicAnimationInfo : VfxSpineTurnManager
         {
             [SerializeField, ValueDropdown("GetAnimations")]
