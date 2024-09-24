@@ -43,7 +43,7 @@ ParticleSystem:
   serializedVersion: 8
   lengthInSec: 0.5
   simulationSpeed: 1
-  stopAction: 0
+  stopAction: 3
   cullingMode: 0
   ringBufferMode: 0
   ringBufferLoopRange: {x: 0, y: 1}
@@ -4881,6 +4881,8 @@ GameObject:
   - component: {fileID: 9470100376856812}
   - component: {fileID: 9470100376856786}
   - component: {fileID: 9470100376856787}
+  - component: {fileID: -4085443055946000200}
+  - component: {fileID: 8482395477915769020}
   m_Layer: 0
   m_Name: GreenWarding CrystalFlinchFX_Holder
   m_TagString: Untagged
@@ -4915,7 +4917,7 @@ ParticleSystem:
   serializedVersion: 8
   lengthInSec: 0.3
   simulationSpeed: 1
-  stopAction: 0
+  stopAction: 3
   cullingMode: 0
   ringBufferMode: 0
   ringBufferLoopRange: {x: 0, y: 1}
@@ -9684,6 +9686,42 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
+--- !u!114 &-4085443055946000200
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9470100376856813}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6178cd111cba844a6e236cfbee492c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_poolableItemData: {fileID: 11400000, guid: 49cf385d18dc03549a0f259770417779, type: 2}
+  m_particleSystems:
+  - {fileID: 9470100376856786}
+  - {fileID: 9470100366454815}
+  - {fileID: 9470101568369791}
+  m_playOnAwake: 1
+  m_baseFlipped: 0
+  m_poolOnStop: 1
+--- !u!114 &8482395477915769020
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9470100376856813}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1840d18e90832834a9ffab8e92363e8a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_spriteRendererColorHandles: []
+  m_particleSystemColorHandles:
+  - {fileID: 9470100366454815}
+  - {fileID: 9470101568369791}
 --- !u!1 &9470101568369787
 GameObject:
   m_ObjectHideFlags: 0
@@ -9727,7 +9765,7 @@ ParticleSystem:
   serializedVersion: 8
   lengthInSec: 0.5
   simulationSpeed: 1
-  stopAction: 0
+  stopAction: 3
   cullingMode: 0
   ringBufferMode: 0
   ringBufferLoopRange: {x: 0, y: 1}

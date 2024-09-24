@@ -34,6 +34,9 @@ public class WardingCrystal : MonoBehaviour
     [SerializeField, Spine.Unity.SpineAnimation(dataField = "m_skeletonAnimation")]
     private string m_deadState;
 
+    [SerializeField, TabGroup("FX")]
+    private ParticleSystem Particles;
+
     private float Maxhealth;
     private bool m_isDead;
     // Start is called before the first frame update
@@ -43,7 +46,7 @@ public class WardingCrystal : MonoBehaviour
         m_damageable.Destroyed += Ondeath;
 
         Maxhealth = m_damageable.health.maxValue;
-        m_animation.SetAnimation(0, m_idleAnimation, true);
+        m_animation.AddAnimation(2, m_idleAnimation, true,0f);
     }
 
     private void Ondeath(object sender, EventActionArgs eventArgs)
@@ -53,8 +56,10 @@ public class WardingCrystal : MonoBehaviour
         {
             return;
         }
+        m_damageable.SetHitboxActive(false);
+        Particles.Play();
         StartCoroutine(DeathRoutine());
-        throw new NotImplementedException();
+        //throw new NotImplementedException();
     }
 
     private void OnDamageTaken(object sender, Damageable.DamageEventArgs eventArgs)
@@ -64,7 +69,7 @@ public class WardingCrystal : MonoBehaviour
             return;
         }
         StartCoroutine(DamageTakenRoutine());
-        throw new NotImplementedException();
+        //throw new NotImplementedException();
     }
 
     IEnumerator DamageTakenRoutine()
@@ -93,8 +98,10 @@ public class WardingCrystal : MonoBehaviour
     IEnumerator DeathRoutine()
     {
         m_isDead = true;
+        m_animation.animationState.AddEmptyAnimation(2, 0, 0f);
         m_animation.SetAnimation(0, m_deathAnimation, false);
-        yield return new WaitForAnimationComplete(m_animation.animationState, m_flinchAnimation);
+        yield return new WaitForAnimationComplete(m_animation.animationState, m_deathAnimation);
+        yield return new WaitForSeconds(4f);
         m_animation.SetAnimation(0, m_deadState,true);
     }
 }
