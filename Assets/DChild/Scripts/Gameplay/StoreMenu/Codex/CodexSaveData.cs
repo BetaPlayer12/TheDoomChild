@@ -26,9 +26,19 @@ namespace DChild.Menu.Codex
         {
             var subtabCount = (int)CodexSubtab._COUNT;
             m_codexDatas = new AcquisitionData[subtabCount];
-            for (int i = 0; i < subtabCount; i++)
+            if (codexData == null)
             {
-                m_codexDatas[i] = codexData.GetData((CodexSubtab)i);
+                for (int i = 0; i < subtabCount; i++)
+                {
+                    m_codexDatas[i] = new AcquisitionData();
+                }
+            }
+            else
+            {
+                for (int i = 0; i < subtabCount; i++)
+                {
+                    m_codexDatas[i] = codexData.GetData((CodexSubtab)i);
+                }
             }
         }
 

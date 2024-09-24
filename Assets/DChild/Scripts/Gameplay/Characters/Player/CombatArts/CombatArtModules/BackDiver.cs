@@ -33,6 +33,8 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
         //private RaySensor m_wallSensor;
         [SerializeField, BoxGroup("Sensors")]
         private RaySensor m_backWallSensor;
+        [SerializeField, BoxGroup("Sensors")]
+        private RaySensor m_groundSensor;
         [SerializeField]
         private Hitbox m_hitbox;
         [SerializeField]
@@ -40,7 +42,9 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
         [SerializeField]
         private Vector2 m_pushForce;
-        
+        [SerializeField]
+        private float m_landDuration;
+
         [SerializeField, BoxGroup("Projectile")]
         private Transform m_startPoint;
         [SerializeField, BoxGroup("Projectile")]
@@ -58,11 +62,14 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
         private bool m_canMove;
         private IPlayerModifer m_modifier;
         private int m_backDiverStateAnimationParameter;
+        private int m_groundStateAnimationParameter;
         private float m_backDiverCooldownTimer;
         private float m_backDiverMovementCooldownTimer;
 
         private Animator m_fxAnimator;
         private SkeletonAnimation m_skeletonAnimation;
+
+        private Coroutine m_landDurationRoutine;
 
         public bool CanBackDiver() => m_canBackDiver;
         //public bool CanMove() => m_canMove;
@@ -79,6 +86,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
             m_modifier = info.modifier;
             m_backDiverStateAnimationParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.BackDiver);
+            m_groundStateAnimationParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.IsGrounded);
             m_canBackDiver = true;
             m_canMove = true;
             m_backDiverMovementCooldownTimer = m_backDiverMovementCooldown;
@@ -118,6 +126,8 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             m_backDiverCooldownTimer = m_backDiverCooldown;
             m_backDiverMovementCooldownTimer = m_backDiverMovementCooldown;
             //m_attacker.SetDamageModifier(m_slashComboInfo[m_currentSlashState].damageModifier * m_modifier.Get(PlayerModifier.AttackDamage));
+            m_physics.constraints = RigidbodyConstraints2D.FreezeRotation;
+            m_physics.velocity = Vector2.zero;
             m_physics.AddForce(new Vector2(m_character.facing == HorizontalDirection.Left ? m_pushForce.x : -m_pushForce.x, m_pushForce.y), ForceMode2D.Impulse);
             StartCoroutine(HitboxRoutine());
         }
@@ -127,6 +137,12 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             if (m_hasExecuted)
             {
                 m_hasExecuted = false;
+            }
+            if (m_landDurationRoutine != null)
+            {
+                StopCoroutine(m_landDurationRoutine);
+                m_landDurationRoutine = null;
+                m_physics.constraints = RigidbodyConstraints2D.FreezeRotation;
             }
             //m_backDiverInfo.ShowCollider(false);
             //m_hitbox.Enable();
@@ -145,6 +161,12 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
                 m_hasExecuted = false;
                 m_hitbox.Enable();
             }
+            if (m_landDurationRoutine != null)
+            {
+                StopCoroutine(m_landDurationRoutine);
+                m_landDurationRoutine = null;
+                m_physics.constraints = RigidbodyConstraints2D.FreezeRotation;
+            }
             m_animator.SetBool(m_backDiverStateAnimationParameter, false);
             base.Cancel();
         }
@@ -154,6 +176,20 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             m_rigidBody.WakeUp();
             m_backDiverInfo.ShowCollider(value);
             m_attackFX.transform.position = m_backDiverInfo.fxPosition.position;
+        }
+
+        public void CheckGround()
+        {
+            m_groundSensor.Cast();
+            if (m_groundSensor.allRaysDetecting)
+            {
+                m_animator.SetBool(m_groundStateAnimationParameter, true);
+            }
+        }
+
+        public void LandOnGround()
+        {
+            m_landDurationRoutine = StartCoroutine(LandRoutine());
         }
 
         public void ResetBackDiver()
@@ -192,6 +228,15 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
                 m_hitbox.Enable();
                 m_hasExecuted = false;
             }
+            yield return null;
+        }
+
+        private IEnumerator LandRoutine()
+        {
+            m_physics.velocity = new Vector2(0, m_physics.velocity.y);
+            m_physics.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
+            yield return new WaitForSeconds(m_landDuration);
+            m_physics.constraints = RigidbodyConstraints2D.FreezeRotation;
             yield return null;
         }
 

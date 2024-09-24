@@ -25,7 +25,9 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField, TitleGroup("Movement")]
             private MovementInfo m_walk = new MovementInfo();
             public MovementInfo walk => m_walk;
-
+            [SerializeField, TitleGroup("Movement")]
+            private MovementInfo m_hop = new MovementInfo();
+            public MovementInfo hop => m_hop;
             //Attack Behaviours
             [SerializeField, TitleGroup("Combat")]
             private SimpleAttackInfo m_attack = new SimpleAttackInfo();
@@ -75,10 +77,18 @@ namespace DChild.Gameplay.Characters.Enemies
             private BasicAnimationInfo m_deathAnimation;
             public BasicAnimationInfo deathAnimation => m_deathAnimation;
 
+            [TitleGroup("Events")]
+            [SerializeField, ValueDropdown("GetEvents")]
+            private string m_jumpEvent;
+            public string jumpEvent => m_jumpEvent;
+            [SerializeField, ValueDropdown("GetEvents")]
+            private string m_landEvent;
+            public string landEvent => m_landEvent;
             public override void Initialize()
             {
 #if UNITY_EDITOR
                 m_walk.SetData(m_skeletonDataAsset);
+                m_hop.SetData(m_skeletonDataAsset);
                 m_attack.SetData(m_skeletonDataAsset);
 
                 m_idle1Animation.SetData(m_skeletonDataAsset);
@@ -135,6 +145,10 @@ namespace DChild.Gameplay.Characters.Enemies
         private DeathHandle m_deathHandle;
         [SerializeField, TabGroup("Modules")]
         private FlinchHandler m_flinchHandle;
+        [SerializeField, TabGroup("AttackHitbox")]
+        private GameObject m_RegularBoundingBox;
+        [SerializeField, TabGroup("AttackHitbox")]
+        private GameObject m_HopBoundingBox;
 
         private float m_currentPatience;
         private float m_currentCD;
@@ -152,9 +166,16 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_edgeSensor;
 
+        [SerializeField, TabGroup("VFX")]
+        private ParticleFX m_jumpVFX;
+        [SerializeField, TabGroup("VFX")]
+        private ParticleFX m_impactVFX;
+
         [SerializeField]
         private bool m_willPatrol;
         private Vector2 m_patrolDestination;
+        [SerializeField]
+        private SpineEventListener m_spineListener;
 
         [ShowInInspector]
         private StateHandle<State> m_stateHandle;
@@ -460,6 +481,8 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_hitbox.gameObject.SetActive(false);
             m_selfCollider.enabled = false;
             m_animation.SetAnimation(0, m_info.attack.animation, false);
+            m_RegularBoundingBox.SetActive(false);
+            m_HopBoundingBox.SetActive(true);
             var waitTime = m_animation.animationState.GetCurrent(0).AnimationEnd * .5f;
             yield return new WaitForSeconds(waitTime);
             //m_hitbox.gameObject.SetActive(true);
@@ -468,6 +491,8 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack.animation);
             GetComponent<IsolatedCharacterPhysics2D>().UseStepClimb(false);
             m_animation.SetAnimation(0, RandomIdleAnimation(), true);
+            m_RegularBoundingBox.SetActive(true);
+            m_HopBoundingBox.SetActive(false);
             m_selfCollider.enabled = true;
             m_stateHandle.ApplyQueuedState();
             yield return null;
@@ -481,7 +506,22 @@ namespace DChild.Gameplay.Characters.Enemies
             m_turnHandle.Execute(turnAnim, RandomIdleAnimation());
             yield return null;
         }
-
+        private void JumpEvent()
+        {
+            if(m_character.facing == HorizontalDirection.Left)
+            {
+                m_jumpVFX.transform.localScale = new Vector3(-1.3f, 1.3f, 1.3f);
+            }
+            else
+            {
+                m_jumpVFX.transform.localScale = new Vector3(1.3f, 1.3f, 1.3f);
+            }
+            Instantiate(m_jumpVFX, transform.position, Quaternion.identity);
+        }
+        private void LandEvent()
+        {
+            Instantiate(m_impactVFX, transform.position, Quaternion.identity);
+        }
         protected override void Start()
         {
             base.Start();
@@ -502,6 +542,8 @@ namespace DChild.Gameplay.Characters.Enemies
                 CustomTurn();
             //m_spineEventListener.Subscribe(m_info.explodeEvent, m_explodeFX.Play);
             GetComponent<IsolatedCharacterPhysics2D>().UseStepClimb(false);
+            m_spineListener.Subscribe(m_info.jumpEvent, JumpEvent);
+            m_spineListener.Subscribe(m_info.landEvent, LandEvent);
         }
 
         protected override void Awake()
@@ -554,7 +596,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         {
                             m_turnState = State.Patrol;
                             m_animation.EnableRootMotion(true, false);
-                            m_animation.SetAnimation(0, m_info.attack.animation, true);
+                            m_animation.SetAnimation(0, m_info.hop.animation, true);
                             var characterInfo = new PatrolHandle.CharacterInfo(m_character.centerMass.position, m_character.facing);
                         }
                         else

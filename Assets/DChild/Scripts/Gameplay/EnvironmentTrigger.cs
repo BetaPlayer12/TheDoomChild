@@ -1,6 +1,7 @@
 ﻿using DChild.Gameplay.Characters.Players;
 using DChild.Gameplay.Characters.Players.Modules;
 using DChild.Gameplay.Characters.Players.State;
+using DChild.Gameplay.Environment;
 using DChild.Serialization;
 using Sirenix.OdinInspector;
 using System.Collections;
@@ -30,6 +31,8 @@ namespace DChild.Gameplay
         private bool m_oneTimeOnly;
         [SerializeField]
         private bool m_waitForPlayerToBeGrounded;   //Using Coroutines to check for Player State before execution when this is TRUE. Have to Directly Access Player State for this to work.
+        [SerializeField]
+        private bool m_playerHitboxOnly;
         [SerializeField, TabGroup("Enter")]
         private UnityEvent m_enterEvents;
         [SerializeField, HideIf("m_oneTimeOnly"), TabGroup("Exit")]
@@ -101,10 +104,11 @@ namespace DChild.Gameplay
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
-
+            if (m_playerHitboxOnly && collision.tag != "Hitbox")
+                return;
 
             var playerObject = collision.gameObject.GetComponentInParent<PlayerControlledObject>();
-            if (playerObject != null && collision.tag != "Sensor")
+            if (playerObject != null && collision.tag != "Sensor" && playerObject.owner == (IPlayer)GameplaySystem.playerManager.player)
             {
                 if ((m_oneTimeOnly && !m_wasTriggered) || !m_oneTimeOnly)
                 {
@@ -132,41 +136,57 @@ namespace DChild.Gameplay
 
         private void OnTriggerExit2D(Collider2D collision)
         {
-            if (m_oneTimeOnly == false)
+            if (!transform.GetComponentInParent<HiddenAreaCover>())
+            {
+                if (!m_oneTimeOnly)
+                {
+                    TriggerExitEvent();
+                }
+                //else
+                //{
+                //    TriggerExitEvent();
+                //}
+
+                if (!m_waitForPlayerToBeGrounded)
+                {
+                    if (!m_oneTimeOnly)
+                        TriggerExitEvent();
+                }
+                else
+                {
+                    if (m_enterEventRoutine != null)
+                    {
+                        StopCoroutine(m_enterEventRoutine);
+                        m_enterEventRoutine = null;
+                    }
+
+                    if (m_exitEventRoutine == null)
+                    {
+                        m_exitEventRoutine = StartCoroutine(ExecuteExitWhenPlayerIsGrounded());
+                    }
+                }
+            }
+
+            if (!m_oneTimeOnly)
             {
                 var playerObject = collision.gameObject.GetComponentInParent<PlayerControlledObject>();
-                if (playerObject != null && collision.tag != "Sensor")
+                if (playerObject != null && collision.tag == "Hitbox" && playerObject.owner == (IPlayer)GameplaySystem.playerManager.player)
                 {
-                    Collider2D collider = GetComponent<Collider2D>(); 
-                    Transform transformToCheck = playerObject.transform; 
+                    Collider2D collider = GetComponent<Collider2D>();
+                    Transform transformToCheck = playerObject.transform;
 
                     if (collider.OverlapPoint(transformToCheck.position))
                     {
 
-                   }
-                   else
-                   {
-                        if (m_waitForPlayerToBeGrounded)
-                        {
-                            if (m_enterEventRoutine != null)
-                            {
-                                StopCoroutine(m_enterEventRoutine);
-                                m_enterEventRoutine = null;
-                            }
-
-                            if (m_exitEventRoutine == null)
-                            {
-                                m_exitEventRoutine = StartCoroutine(ExecuteExitWhenPlayerIsGrounded());
-                            }
-                        }
-                        else
-                        {
-                            TriggerExitEvent();
-                        }
+                    }
+                    else
+                    {
+                        TriggerExitEvent();
                     }
                 }
             }
         }
+
 
         private void OnValidate()
         {

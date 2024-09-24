@@ -238,6 +238,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     list.Add(reference[i].Name);
                 }
                 return list;
+                
             }
         }
 
@@ -353,10 +354,21 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Move Points")]
         private Transform m_GroundPoint;
 
+
         [SerializeField]
-        private List<Transform> m_spawnPoints;
+        private List<Transform> m_wavePattern1;
+        [SerializeField]
+        private List<Transform> m_wavePattern2;
+        [SerializeField]
+        private List<Transform> m_wavePattern3;
         [SerializeField]
         private Transform m_spearSpawnPoint;
+        [SerializeField]
+        private int m_hitCounter;
+        [SerializeField]
+        private int m_hitsToUnstuck;
+
+        private Dictionary<string, List<Transform>> m_ListOfPatterns = new Dictionary<string, List<Transform>>();
 
         [SpineBone]
         public string m_boneName;
@@ -383,6 +395,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_currentDroneBatches = obj.droneStrikeBatches;
             m_currentSummonSpeed = obj.droneStrikeSummonSpeed;
             m_currentSummonAmmount = obj.droneSummonAmmount;
+          
         }
 
         private void ChangeState()
@@ -417,8 +430,15 @@ namespace DChild.Gameplay.Characters.Enemies
                     StopAllCoroutines();
                     m_animation.SetAnimation(0, IsFacingTarget() ? m_info.stuckStateFlinchForwardAnimation : m_info.stuckStateFlinchBackwardAnimation, false);
                     m_stateHandle.OverrideState(State.Stucc);
+                    
                 }
             }
+        }
+
+        private void HitOnBee(object sender, Damageable.DamageEventArgs eventArgs)
+        {
+            Debug.Log("On me");
+            m_hitCounter++;
         }
 
         //private void OnFlinchEnd(object sender, EventActionArgs eventArgs)
@@ -584,6 +604,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 yield return new WaitForAnimationComplete(m_animation.animationState, m_info.phase4TransitionAnimation);
                 //yield return new WaitForSeconds(5);
                 //m_animation.EnableRootMotion(false, false);
+                m_damageable.DamageTaken += HitOnBee;
                 StartCoroutine(GroundStingerRoutine());
                 //m_animation.SetAnimation(0, m_info.idleAnimation, true);
             }
@@ -644,6 +665,7 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.summonDroneAnimation);
             for (int i = 0; i < m_currentDroneBatches; i++)
             {
+                Debug.Log("horizontal drone !!!");
                 //LaunchBeeProjectile();
                 m_animation.SetAnimation(0, m_info.orderDroneAttackAnimation, false).TimeScale = m_currentSummonSpeed;
                 yield return new WaitForAnimationComplete(m_animation.animationState, m_info.orderDroneAttackAnimation);
@@ -874,6 +896,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_colliderDamageGO.SetActive(false);
             m_agent.Stop();
             m_isDetecting = false;
+            m_damageable.DamageTaken -= HitOnBee;
         }
 
         private void LaunchBeeProjectile()
@@ -906,16 +929,35 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator LaunchBeeProjectileRoutine()
         {
+            //leandro spag code 
+            float rotation = transform.localScale.x < 1 ? 180 : 0;
+            var randomNumber = UnityEngine.Random.Range(0, m_ListOfPatterns.Count);
+            Debug.Log(m_ListOfPatterns.Count.ToString());
+            string[] patternKeys = new string[m_ListOfPatterns.Count];
+            m_ListOfPatterns.Keys.CopyTo(patternKeys, 0);
+            var randomPattern = patternKeys[randomNumber];
+            List<Transform> randomPatternList = m_ListOfPatterns[randomPattern];
             for (int i = 0; i < m_currentSummonAmmount; i++)
             {
-                float rotation = transform.localScale.x < 1 ? 180 : 0;
-                int rng = UnityEngine.Random.Range(0, m_spawnPoints.Count);
-                m_spawnPoints[rng].localRotation = Quaternion.Euler(new Vector3(0, 0, rotation));
+                Debug.Log("Randomly chosen list (" + randomPattern + "):");
+                //int rng = UnityEngine.Range(0, m_spawnPoints.Count);
+                randomPatternList[i].localRotation = Quaternion.Euler(new Vector3(-rotation, 0 , rotation));
                 //GameObject burst = Instantiate(m_info.burstGO, m_spawnPoints[rng].position, Quaternion.Euler(new Vector3(0, 0, rotation)));
-                m_launcher = new ProjectileLauncher(m_info.beeProjectile.projectileInfo, m_spawnPoints[rng]);
+                m_launcher = new ProjectileLauncher(m_info.beeProjectile.projectileInfo, randomPatternList[i]);
                 m_launcher.LaunchProjectile();
-                yield return new WaitForSeconds(.25f);
+                //yield return new WaitForSeconds(.25f);
+                randomPatternList[i].localRotation = Quaternion.Euler(new Vector3(0, 0, 0));
             }
+            yield return null;
+
+            //old logic
+            //float rotation = transform.localScale.x < 1 ? 180 : 0;
+            ////int rng = UnityEngine.Range(0, m_spawnPoints.Count);
+            //m_spawnPoints[i].localRotation = Quaternion.Euler(new Vector3(0, 0, rotation));
+            ////GameObject burst = Instantiate(m_info.burstGO, m_spawnPoints[rng].position, Quaternion.Euler(new Vector3(0, 0, rotation)));
+            //m_launcher = new ProjectileLauncher(m_info.beeProjectile.projectileInfo, m_spawnPoints[i]);
+            //m_launcher.LaunchProjectile();
+            //yield return new WaitForSeconds(.25f);
         }
 
         void SkeletonAnimation_UpdateLocal(ISkeletonAnimation animated)
@@ -1034,6 +1076,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.skeletonAnimation.UpdateLocal += SkeletonAnimation_UpdateLocal;
             //m_stingerLauncher = new ProjectileLauncher(m_info.stingerProjectile.projectileInfo, m_spawnPoints[0]);
 
+
         }
 
         protected override void Start()
@@ -1052,6 +1095,10 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_attackRangeCache = new List<float>();
             //AddToRangeCache(m_info.horizontalDroneAttack.range, m_info.spearChargeAttack.range, m_info.spearMeleeAttack.range, m_info.spearThrowAttack.range);
             m_attackUsed = new bool[m_attackCache.Count];
+
+            m_ListOfPatterns.Add("WavePatterns1", m_wavePattern1);
+            m_ListOfPatterns.Add("WavePatterns2", m_wavePattern2);
+            m_ListOfPatterns.Add("WavePatterns3", m_wavePattern3);
         }
 
         private void Update()
@@ -1082,6 +1129,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     break;
 
                 case State.Stucc:
+                   // hit counter = 3 to unstucc
                     if (m_info.groundStingerRecoverTime > m_currentRecoverTime)
                     {
                         if (m_animation.skeletonAnimation.AnimationState.GetCurrent(0).IsComplete)
@@ -1090,11 +1138,12 @@ namespace DChild.Gameplay.Characters.Enemies
                         }
                         m_currentRecoverTime += Time.deltaTime;
                     }
-                    else
+                    if (m_info.groundStingerRecoverTime < m_currentRecoverTime || m_hitCounter == m_hitsToUnstuck)
                     {
                         m_stateHandle.OverrideState(State.WaitBehaviourEnd);
                         StartCoroutine(GroundStingerRecoverRoutine());
                         m_currentRecoverTime = 0;
+                        m_hitCounter = 0;
                     }
                     break;
 

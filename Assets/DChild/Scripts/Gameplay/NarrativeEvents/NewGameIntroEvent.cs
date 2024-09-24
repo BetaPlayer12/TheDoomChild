@@ -1,5 +1,6 @@
 ﻿using Cinemachine;
 using DChild.Gameplay.Cinematics;
+using DChild.Gameplay.Systems;
 using DChild.Serialization;
 using DChild.Temp;
 using Doozy.Runtime.UIManager.Containers;
@@ -9,8 +10,10 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
 using UnityEngine.Playables;
+using UnityEngine.Video;
 
 namespace DChild.Gameplay.Narrative
 {
@@ -35,8 +38,6 @@ namespace DChild.Gameplay.Narrative
         }
 
         [SerializeField]
-        private PlayableDirector m_introCutscene;
-        [SerializeField]
         private Transform m_playerStartPosition;
         [SerializeField]
         private CinemachineVirtualCamera m_cameraToDisable;
@@ -54,6 +55,10 @@ namespace DChild.Gameplay.Narrative
         private ExtraDatabases m_database;
         [SerializeField]
         private InputActionReference m_wakeUpInput;
+        [SerializeField]
+        private UnityEvent m_introStartEvent;
+
+
         private PlayerInput m_playerInput;
 
         private bool m_isDone;
@@ -74,22 +79,25 @@ namespace DChild.Gameplay.Narrative
             m_isDone = ((SaveData)data).isDone;
             if (m_isDone == false)
             {
-                m_introCutscene.Play();
+                m_introStartEvent?.Invoke();
             }
         }
 
         public void Initialize()
         {
-            StartCoroutine(SetupPlayer());
             m_database.OnUse();
             m_storePickupSequence.SetActive(false);
-            m_introCutscene.Play();
+            GameplaySystem.playerManager.player.GetComponentInChildren<PlayerInput>().actions.FindActionMap("Gameplay").Disable();
+            m_introStartEvent?.Invoke();
         }
 
         public void TransferPlayerToStartPosition()
         {
             var player = GameplaySystem.playerManager.player.character;
             player.transform.position = m_playerStartPosition.position;
+
+            var skeleton = GameplaySystem.playerManager.player.character.GetComponentInChildren<SkeletonAnimation>();
+            var lyingDownAnimation = skeleton.state.SetAnimation(0, m_playerLyingDownAnimation, false);
         }
 
         public void PromptPlayerToStand()
@@ -120,10 +128,8 @@ namespace DChild.Gameplay.Narrative
             yield return WakeupPromptRoutine();
 
             var standAnimation = skeleton.state.SetAnimation(0, m_playerStandAnimation, false);
-            while (standAnimation.IsComplete == false)
-            {
-                yield return null;
-            }
+
+            yield return new WaitForSeconds(m_playerStandAnimation.Animation.Duration);
 
             Debug.Log("Wake Up Animation Completed");
             GameplaySystem.playerManager.StopCharacterControlOverride();
@@ -149,18 +155,6 @@ namespace DChild.Gameplay.Narrative
         private void PlayerInputFindActionMap(PlayerInput playerInput)
         {
             playerInput.actions.FindAction(m_wakeUpInput.action.name).performed += OnInputPerformed;
-        }
-
-        public IEnumerator SetupPlayer()
-        {         
-            yield return new WaitForSeconds(2f);
-            var skeleton = GameplaySystem.playerManager.player.character.GetComponentInChildren<SkeletonAnimation>();
-            TransferPlayerToStartPosition();
-            var lyingDownAnimation = skeleton.state.SetAnimation(0, m_playerLyingDownAnimation, false);
-            while (lyingDownAnimation.IsComplete == false)
-            {
-                yield return null;
-            }
         }
     }
 

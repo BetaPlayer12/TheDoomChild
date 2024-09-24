@@ -868,7 +868,7 @@ MonoBehaviour:
   addTrigger: 16
   removeTrigger: 0
   databases:
-  - {fileID: 11400000, guid: aa62e035642cd2744bbbf4b530e631a7, type: 2}
+  - {fileID: 11400000, guid: d3ebdff0435a578469d5225af25731e5, type: 2}
   condition:
     luaConditions: []
     questConditions: []
@@ -925,7 +925,7 @@ MonoBehaviour:
   trigger: 32
   condition:
     luaConditions:
-    - Variable["SoulLampsDestroyedCount"] < 3
+    - 0 <= Variable["LightsOff"] and Variable["LightsOff"] <= 12
     questConditions: []
     acceptedTags: []
     acceptedGameObjects: []
@@ -940,8 +940,7 @@ MonoBehaviour:
   setAnotherQuestEntryState: 0
   anotherQuestEntryNumber: 1
   anotherQuestEntryState: 0
-  luaCode: Variable["SoulLampsDestroyedCount"] = Variable["SoulLampsDestroyedCount"]
-    + 1
+  luaCode: Variable["LightsOff"] = Variable["LightsOff"] + 1
   sequence: 
   sequenceSpeaker: {fileID: 0}
   sequenceListener: {fileID: 0}
@@ -996,7 +995,7 @@ MonoBehaviour:
   useConversationTitlePicker: 1
   useBarkTitlePicker: 1
   useQuestNamePicker: 1
-  selectedDatabase: {fileID: 11400000, guid: aa62e035642cd2744bbbf4b530e631a7, type: 2}
+  selectedDatabase: {fileID: 11400000, guid: d3ebdff0435a578469d5225af25731e5, type: 2}
 --- !u!1 &6863715157356138743
 GameObject:
   m_ObjectHideFlags: 0
@@ -2789,7 +2788,7 @@ MonoBehaviour:
   trigger: 32
   condition:
     luaConditions:
-    - Variable["SoulLampsDestroyedCount"] == 3
+    - Variable["LightsOff"] >= 0
     questConditions: []
     acceptedTags: []
     acceptedGameObjects: []
@@ -2823,7 +2822,7 @@ MonoBehaviour:
   allowBarksDuringConversations: 0
   skipBarkIfNoValidEntries: 0
   cacheBarkLines: 0
-  conversation: Gameplay/Guide/ThreeSoulLampsDestroyed
+  conversation: SoulLampBanter
   conversationConversant: {fileID: 0}
   conversationActor: {fileID: 0}
   startConversationEntryID: -1
@@ -2846,7 +2845,7 @@ MonoBehaviour:
   useConversationTitlePicker: 1
   useBarkTitlePicker: 1
   useQuestNamePicker: 1
-  selectedDatabase: {fileID: 11400000, guid: aa62e035642cd2744bbbf4b530e631a7, type: 2}
+  selectedDatabase: {fileID: 11400000, guid: d3ebdff0435a578469d5225af25731e5, type: 2}
 --- !u!1001 &8834726688374981887
 PrefabInstance:
   m_ObjectHideFlags: 0

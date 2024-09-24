@@ -310,6 +310,7 @@ namespace DChild.Menu
             Debug.LogError("False Positive: Scene Done Event Sent");
             SceneDone?.Invoke(this, EventActionArgs.Empty);
             Debug.LogError("False Positive: Scene Done Reaction Done");
+            
             if (loadType == LoadType.Smart)
             {
                 m_loadDoneSignal.SendSignal();

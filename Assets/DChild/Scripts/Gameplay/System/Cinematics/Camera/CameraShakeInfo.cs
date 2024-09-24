@@ -1,4 +1,5 @@
-﻿using Sirenix.OdinInspector;
+﻿using Cinemachine;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace DChild.Gameplay.Cinematics.Cameras
@@ -6,15 +7,63 @@ namespace DChild.Gameplay.Cinematics.Cameras
     [System.Serializable]
     public class CameraShakeInfo
     {
-        [SerializeField]
-        private AnimationCurve m_amplitude;
-        [SerializeField]
-        private AnimationCurve m_frequency;
+        [System.Serializable]
+        public class Property
+        {
+            [SerializeField]
+            private bool m_useCurve;
+            [SerializeField, ShowIf("m_useCurve")]
+            private AnimationCurve m_curve;
+            [SerializeField, HideIf("m_useCurve")]
+            private float m_value;
+            [SerializeField, HideIf("m_useCurve")]
+            private bool m_useCurveModifier;
+            [SerializeField, ShowIf("@!m_useCurve && m_useCurveModifier")]
+            private AnimationCurve m_curveModifier;
+
+            public float GetValue(float time)
+            {
+                if (m_useCurve)
+                {
+                    return m_curve.Evaluate(time);
+                }
+                else
+                {
+                    if (m_useCurveModifier)
+                    {
+                        return m_value * m_curveModifier.Evaluate(time);
+                    }
+                    else
+                    {
+                        return m_value;
+                    }
+                }
+            }
+        }
+
+        [SerializeField, Min(0)]
+        private int m_priority;
+        [SerializeField, MinValue(0f)]
+        private float m_delay;
         [SerializeField, MinValue(0f)]
         private float m_duration;
 
-        public AnimationCurve amplitude => m_amplitude;
-        public AnimationCurve frequency => m_frequency;
+        [SerializeField, HideLabel]
+        private NoiseSettings m_noiseProfile;
+        [TitleGroup("Amplitude")]
+        [SerializeField, HideLabel]
+        private Property m_amplitudeProperty;
+        [TitleGroup("Frequency")]
+        [SerializeField, HideLabel]
+        private Property m_frequencyProperty;
+
+
+        public int priority => m_priority;
+        public NoiseSettings noiseProfile => m_noiseProfile;
+        public float delay => m_delay;
         public float duration => m_duration;
+
+        public float GetAmplitude(float time) => m_amplitudeProperty.GetValue(time / m_duration);
+        public float GetFrequency(float time) => m_frequencyProperty.GetValue(time / m_duration);
     }
 }

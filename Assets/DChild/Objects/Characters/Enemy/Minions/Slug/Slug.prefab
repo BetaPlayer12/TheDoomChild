@@ -74,6 +74,7 @@ MonoBehaviour:
   m_idleAnimation: Idle
   m_enableFlinchColor: 0
   m_flinchColorAnimation: 
+  m_enableModule: 1
 --- !u!114 &6130840986052142141
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -90,7 +91,7 @@ MonoBehaviour:
   m_animator: {fileID: 4887880220346636679}
   m_animation: Death
   m_bodyDuration:
-    m_startTime: 3
+    m_startTime: 0.25
   m_fx: []
   m_destroySource: 0
 --- !u!114 &5110260082625881187
@@ -202,7 +203,7 @@ PrefabInstance:
     - target: {fileID: 748729144771621780, guid: 581273cea94d1294a9c56f1ba54042dc,
         type: 3}
       propertyPath: m_maxHealth
-      value: 45
+      value: 150
       objectReference: {fileID: 0}
     - target: {fileID: 3756872488131836482, guid: 581273cea94d1294a9c56f1ba54042dc,
         type: 3}
@@ -634,6 +635,11 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: 3.025807
       objectReference: {fileID: 0}
+    - target: {fileID: 2636814090782271732, guid: 0f959a9b0ff33f645b018e04b10d4ccb,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: dca49af895e88494f8f91036bef78470, type: 2}
     - target: {fileID: 2636814090782271733, guid: 0f959a9b0ff33f645b018e04b10d4ccb,
         type: 3}
       propertyPath: m_Mesh
@@ -704,6 +710,12 @@ PrefabInstance:
       propertyPath: _animationName
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 2636814090782271739, guid: 0f959a9b0ff33f645b018e04b10d4ccb,
+        type: 3}
+      propertyPath: skeletonDataAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: d6376a00f0c01eb47a4f4635c52f3056,
+        type: 2}
     - target: {fileID: 3972803835090378147, guid: 0f959a9b0ff33f645b018e04b10d4ccb,
         type: 3}
       propertyPath: rb
@@ -910,6 +922,11 @@ PrefabInstance:
       propertyPath: m_damageFXInfo.m_overrideScale
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 9158544821348182243, guid: 0f959a9b0ff33f645b018e04b10d4ccb,
+        type: 3}
+      propertyPath: m_animation
+      value: 
+      objectReference: {fileID: 4887880220346636679}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0f959a9b0ff33f645b018e04b10d4ccb, type: 3}
 --- !u!70 &1114165085717003200 stripped

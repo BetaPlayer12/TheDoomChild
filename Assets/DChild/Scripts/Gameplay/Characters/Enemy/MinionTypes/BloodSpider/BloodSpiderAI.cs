@@ -152,6 +152,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private RaySensor m_groundSensor;
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_edgeSensor;
+        [SerializeField, TabGroup("Sensors")]
+        private RaySensor m_backWallSensor;
 
         [SerializeField, TabGroup("BoundingBox")]
         private BoundingBoxFollower m_attackBB;
@@ -172,8 +174,11 @@ namespace DChild.Gameplay.Characters.Enemies
         private float m_velOffset;
         [SerializeField, TabGroup("Cannon Values")]
         private Vector2 m_targetOffset;
+        [SerializeField, TabGroup("Cannon Values")]
+        private bool isStraightProjectile;
 
         private float m_targetDistance;
+        [SerializeField] float m_StompDetectRange;
 
         [ShowInInspector]
         private StateHandle<State> m_stateHandle;
@@ -191,6 +196,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private float m_currentCD;
         private float m_currentFullCD;
         private float m_currentTimeScale;
+        private float m_loopMove=0f;
         private Vector2 m_targetLastPos;
         private Vector2 m_startPoint;
         private Coroutine m_randomTurnRoutine;
@@ -207,7 +213,7 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 StopCoroutine(m_randomTurnRoutine);
             }
-            //m_spineEventListener.Subscribe(m_info.projectile.launchOnEvent, SpitProjectile);
+            m_spineEventListener.Subscribe(m_info.projectile.launchOnEvent, SpitProjectile);
             m_startPoint = transform.position;
             m_legsForStompAttack.SetActive(false);
         }
@@ -256,8 +262,12 @@ namespace DChild.Gameplay.Characters.Enemies
                 //obj.transform.parent = m_seedSpitTF;
                 //obj.transform.localPosition = new Vector2(4, -1.5f);
                 //
-
-
+                if(IsFacingTarget())
+                {
+                    m_targetLastPos = m_targetInfo.position + m_info.targetOffset;
+                }
+                //m_targetLastPos = m_targetInfo.position;
+                Debug.Log(m_targetLastPos+" THERE IT IS");
                 //Shoot Spit
                 m_muzzleFX.Play();
                 Vector2 target = m_targetLastPos;
@@ -265,14 +275,25 @@ namespace DChild.Gameplay.Characters.Enemies
                 Vector2 spitPos = new Vector2(transform.localScale.x < 0 ? m_throwPoint.position.x - 1.5f : m_throwPoint.position.x + 1.5f, m_throwPoint.position.y - 0.75f);
                 Vector3 v_diff = (target - spitPos);
                 float atan2 = Mathf.Atan2(v_diff.y, v_diff.x);
+                if(isStraightProjectile)
+                {
+                    Debug.Log(v_diff + " AAAAAAAAAAAAAAAAHHHHHHHHHH");
+                    m_projectileLauncher.AimAt(target);
+                    m_projectileLauncher.LaunchProjectile();
+                }
+                else
+                {
+                    var instance = GameSystem.poolManager.GetPool<ProjectilePool>().GetOrCreateItem(m_info.projectile.projectileInfo.projectile);
+                    //instance.gameObject.SetActive(false);
+                    instance.transform.position = m_throwPoint.position;
+                    var component = instance.GetComponent<Projectile>();
+                    component.ResetState();
+                    //component.GetComponent<IsolatedObjectPhysics2D>().AddForce(BallisticVel(), ForceMode2D.Impulse);
+                    component.GetComponent<IsolatedObjectPhysics2D>().SetVelocity(BallisticVel());
+                    //instance.gameObject.SetActive(true);
+                    //return instance.gameObject;
+                }
 
-                var instance = GameSystem.poolManager.GetPool<ProjectilePool>().GetOrCreateItem(m_info.projectile.projectileInfo.projectile);
-                instance.transform.position = m_throwPoint.position;
-                var component = instance.GetComponent<Projectile>();
-                component.ResetState();
-                //component.GetComponent<IsolatedObjectPhysics2D>().AddForce(BallisticVel(), ForceMode2D.Impulse);
-                component.GetComponent<IsolatedObjectPhysics2D>().SetVelocity(BallisticVel());
-                //return instance.gameObject;
             }
         }
 
@@ -317,6 +338,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnTurnDone(object sender, FacingEventArgs eventArgs)
         {
+            //CustomTurn();
             m_stateHandle.ApplyQueuedState();
         }
 
@@ -360,7 +382,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator DetectRoutine()
         {
-            m_animation.SetAnimation(0, m_info.idleAnimation, true)/*.MixDuration = 0*/;
+            m_animation.SetAnimation(0, m_info.idleAnimation, true)/*.MixDuration = 0*/
+                ;
             yield return new WaitForSeconds(2f);
             m_stateHandle.ApplyQueuedState();
             yield return null;
@@ -386,15 +409,19 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator ProjectileRoutine()
         {
             m_movement.Stop();
-            m_targetLastPos = m_targetInfo.position - m_info.targetOffset;
+            m_targetLastPos = m_targetInfo.position + m_info.targetOffset;
             m_animation.SetAnimation(0, m_info.spitAttack.animation, false).MixDuration = 0;
-            yield return new WaitUntil(() => m_attackBB.CurrentCollider != null);
-            SpitProjectile();
+            //yield return new WaitUntil(() => m_attackBB.CurrentCollider != null);
+            //SpitProjectile();
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.spitAttack.animation);
-            m_animation.EnableRootMotion(true, false);
-            m_animation.SetAnimation(0, m_info.move.animation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.move.animation);
-            m_animation.EnableRootMotion(false, false);
+            if(!m_backWallSensor.isDetecting)
+            {
+                m_animation.EnableRootMotion(true, false);
+                m_selfCollider.enabled = false;
+                m_animation.SetAnimation(0, m_info.move.animation, false).TimeScale = m_currentTimeScale;
+                yield return new WaitForAnimationComplete(m_animation.animationState, m_info.move.animation);
+                //m_animation.EnableRootMotion(false, false);
+            }
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_flinchHandle.m_autoFlinch = true;
             m_stateHandle.ApplyQueuedState();
@@ -463,7 +490,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_flinchHandle.FlinchEnd += OnFlinchEnd;
             m_stateHandle = new StateHandle<State>(m_willPatrol ? State.Patrol : State.Idle, State.WaitBehaviourEnd);
             m_attackDecider = new RandomAttackDecider<Attack>();
-            //m_projectileLauncher = new ProjectileLauncher(m_info.projectile.projectileInfo, m_throwPoint);
+            m_projectileLauncher = new ProjectileLauncher(m_info.projectile.projectileInfo, m_throwPoint);
             UpdateAttackDeciderList();
         }
 
@@ -528,9 +555,11 @@ namespace DChild.Gameplay.Characters.Enemies
                     {
                        
                         case Attack.Spit:
-                            m_animation.EnableRootMotion(false, false);
-                            if (IsTargetInRange(m_info.stompAttack.range))
+                            //m_animation.EnableRootMotion(false, false);
+                            if (IsTargetInRange(m_info.stompAttack.range)&&(transform.position.y+1)>m_targetInfo.transform.position.y)
                             {
+                                m_movement.Stop();
+                                m_selfCollider.enabled = true;
                                 StartCoroutine(StompRoutine());
                             }
                             else
@@ -577,16 +606,36 @@ namespace DChild.Gameplay.Characters.Enemies
                         if (IsFacingTarget())
                         {
                             m_attackDecider.DecideOnAttack();
-                            if (m_attackDecider.hasDecidedOnAttack && IsTargetInRange(m_attackDecider.chosenAttack.range) && !m_wallSensor.allRaysDetecting)
+                            if (m_attackDecider.hasDecidedOnAttack && IsTargetInRange(m_attackDecider.chosenAttack.range)&& !m_wallSensor.allRaysDetecting)
                             {
-                                m_movement.Stop();
-                                m_selfCollider.enabled = true;
-                                //m_animation.SetAnimation(0, m_info.idleAnimation, true);
-                                m_stateHandle.SetState(State.Attacking);
+                                m_loopMove = 0f;
+                                if (IsTargetInRange(m_StompDetectRange) && m_edgeSensor.isDetecting)
+                                {
+                                    if(IsTargetInRange(m_info.stompAttack.range))
+                                    {
+                                        m_movement.Stop();
+                                        m_selfCollider.enabled = true;
+                                        //m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                                        m_stateHandle.SetState(State.Attacking);
+                                    }
+                                    else
+                                    {
+                                        m_animation.EnableRootMotion(true, false);
+                                        m_selfCollider.enabled = false;
+                                        m_animation.SetAnimation(0, m_info.patrol.animation, true).TimeScale = m_currentTimeScale;
+                                    }
+                                }
+                                else if (IsTargetInRange(m_attackDecider.chosenAttack.range))
+                                {
+                                    m_movement.Stop();
+                                    m_selfCollider.enabled = true;
+                                    //m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                                    m_stateHandle.SetState(State.Attacking);
+                                }
                             }
                             else
                             {
-                                if (!m_wallSensor.isDetecting && m_groundSensor.isDetecting /*&& m_edgeSensor.isDetecting*/)
+                                if (!m_wallSensor.isDetecting && m_groundSensor.isDetecting && m_edgeSensor.isDetecting)
                                 {
                                     m_animation.EnableRootMotion(true, false);
                                     m_selfCollider.enabled = false;
@@ -594,10 +643,21 @@ namespace DChild.Gameplay.Characters.Enemies
                                 }
                                 else
                                 {
-                                    m_attackDecider.hasDecidedOnAttack = false;
-                                    m_movement.Stop();
-                                    m_selfCollider.enabled = true;
-                                    m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                                    if (!m_backWallSensor.isDetecting&&m_loopMove<0.5f)
+                                    {
+                                        m_loopMove += Time.deltaTime;
+                                        m_animation.EnableRootMotion(true, false);
+                                        m_animation.SetAnimation(0, m_info.move.animation, false);
+                                        //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.move.animation);
+                                        //m_animation.EnableRootMotion(false, false);
+                                    }else
+                                    {
+                                        m_attackDecider.hasDecidedOnAttack = false;
+                                        m_movement.Stop();
+                                        m_selfCollider.enabled = true;
+                                        m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                                    }
+                                    
                                 }
                             }
                         }

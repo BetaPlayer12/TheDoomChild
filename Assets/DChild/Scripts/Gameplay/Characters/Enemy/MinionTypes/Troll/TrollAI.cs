@@ -203,6 +203,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private Vector2 m_startPoint;
 
+        private Vector2 m_TargetLastPosition;
+
         protected override void Start()
         {
             base.Start();
@@ -233,8 +235,8 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_info.dirtProjectile.GetComponent<IsolatedObjectPhysics2D>().gravity.gravityScale = m_gravityScale;
 
-            m_targetDistance = Vector2.Distance(m_targetInfo.position, transform.position);
-            var dir = (m_targetInfo.position - new Vector2(transform.position.x, transform.position.y));
+            m_targetDistance = Vector2.Distance(m_TargetLastPosition, transform.position);
+            var dir = (m_TargetLastPosition - new Vector2(transform.position.x, transform.position.y));
             var h = dir.y;
             dir.y = 0;
             var dist = dir.magnitude;
@@ -260,10 +262,10 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void DirtProjectile()
         {
-            if (m_targetInfo.isValid)
-            {
-                if (IsFacingTarget())
-                {
+            //if (m_targetInfo.isValid)
+            //{
+                //if (IsFacingTarget())
+                //{
                     //Dirt FX
                     //GameObject obj = Instantiate(m_info.mouthSpitFX, m_seedSpitTF.position, Quaternion.identity);
                     //obj.transform.localScale = new Vector3(obj.transform.localScale.x * transform.localScale.x, obj.transform.localScale.y, obj.transform.localScale.z);
@@ -271,38 +273,39 @@ namespace DChild.Gameplay.Characters.Enemies
                     //obj.transform.localPosition = new Vector2(4, -1.5f);
                     //
 
-                    m_rockThrowFX.Play();
-                    //Shoot Spit
-                    var target = m_targetInfo.position;
-                    target = new Vector2(target.x, target.y - 2);
-                    Vector2 spitPos = new Vector2(transform.localScale.x < 0 ? m_throwPoint.position.x - 1.5f : m_throwPoint.position.x + 1.5f, m_throwPoint.position.y - 0.75f);
-                    Vector3 v_diff = (target - spitPos);
-                    float atan2 = Mathf.Atan2(v_diff.y, v_diff.x);
+              
+                //}
+                //else
+                //{
+                //    m_turnState = State.ReevaluateSituation;
+                //    m_stateHandle.SetState(State.Turning);
+                //}
+            //}
+            m_rockThrowFX.Play();
+            //Shoot Spit
+            var target = m_TargetLastPosition;
+            target = new Vector2(target.x, target.y - 2);
+            Vector2 spitPos = new Vector2(transform.localScale.x < 0 ? m_throwPoint.position.x - 1.5f : m_throwPoint.position.x + 1.5f, m_throwPoint.position.y - 0.75f);
+            Vector3 v_diff = (target - spitPos);
+            float atan2 = Mathf.Atan2(v_diff.y, v_diff.x);
 
-                    //GameObject projectile = Instantiate(m_info.dirtProjectile, spitPos, Quaternion.identity);
-                    //projectile.GetComponent<IsolatedObjectPhysics2D>().AddForce(BallisticVel(), ForceMode2D.Impulse);
+            //GameObject projectile = Instantiate(m_info.dirtProjectile, spitPos, Quaternion.identity);
+            //projectile.GetComponent<IsolatedObjectPhysics2D>().AddForce(BallisticVel(), ForceMode2D.Impulse);
 
-                    GameObject projectile = m_info.dirtProjectile;
-                    var instance = GameSystem.poolManager.GetPool<ProjectilePool>().GetOrCreateItem(projectile);
-                    instance.transform.position = m_throwPoint.position;
-                    var component = instance.GetComponent<Projectile>();
-                    component.ResetState();
-                    //component.GetComponent<IsolatedObjectPhysics2D>().AddForce(BallisticVel(), ForceMode2D.Impulse);
-                    component.GetComponent<IsolatedObjectPhysics2D>().SetVelocity(BallisticVel());
-                }
-                else
-                {
-                    m_turnState = State.ReevaluateSituation;
-                    m_stateHandle.OverrideState(State.Turning);
-                }
-            }
+            GameObject projectile = m_info.dirtProjectile;
+            var instance = GameSystem.poolManager.GetPool<ProjectilePool>().GetOrCreateItem(projectile);
+            instance.transform.position = m_throwPoint.position;
+            var component = instance.GetComponent<Projectile>();
+            component.ResetState();
+            //component.GetComponent<IsolatedObjectPhysics2D>().AddForce(BallisticVel(), ForceMode2D.Impulse);
+            component.GetComponent<IsolatedObjectPhysics2D>().SetVelocity(BallisticVel());
         }
 
         private void OnAttackDone(object sender, EventActionArgs eventArgs)
         {
             GetComponent<IsolatedCharacterPhysics2D>().UseStepClimb(true);
             for (int i = 0; i < m_fistHitboxes.Count; i++)
-                m_fistHitboxes[i].SetActive(false);
+                m_fistHitboxes[i].GetComponent<BoxCollider2D>().enabled = false;
             m_animation.DisableRootMotion();
             m_stateHandle.OverrideState(State.ReevaluateSituation);
         }
@@ -419,6 +422,19 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return null;
         }
 
+        private IEnumerator PunchRoutine()
+        {
+            //m_attackHandle.ExecuteAttack(m_info.punchAttack.animation, m_info.idleAnimation.animation);
+            m_TargetLastPosition = m_targetInfo.position;
+            m_animation.EnableRootMotion(true, false);
+            m_animation.SetAnimation(0, m_info.punchAttack, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.punchAttack);
+            m_animation.SetAnimation(0, m_info.idleAnimation, false);
+            yield return null;
+            m_animation.DisableRootMotion();          
+            m_stateHandle.ApplyQueuedState();
+        }
+
         protected override void Awake()
         {
             base.Awake();
@@ -441,10 +457,11 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 case State.Detect:
                     m_movement.Stop();
-                    m_animation.DisableRootMotion();
+                    m_animation.SetEmptyAnimation(0, 0);
                     if (IsFacingTarget())
                     {
                         m_stateHandle.Wait(State.ReevaluateSituation);
+                        //m_animation.DisableRootMotion();
                         StartCoroutine(DetectRoutine());
                     }
                     else
@@ -461,7 +478,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     if (!m_wallSensor.isDetecting && m_groundSensor.isDetecting)
                     {
                         m_turnState = State.ReevaluateSituation;
-                        m_animation.EnableRootMotion(true, false);
+                        //m_animation.EnableRootMotion(true, false);
                         m_animation.SetAnimation(0, m_info.patrol.animation, true);
                         var characterInfo = new PatrolHandle.CharacterInfo(m_character.centerMass.position, m_character.facing);
                         m_patrolHandle.Patrol(m_movement, m_info.patrol.speed, characterInfo);
@@ -483,8 +500,8 @@ namespace DChild.Gameplay.Characters.Enemies
                 case State.Attacking:
                     m_stateHandle.Wait(State.ReevaluateSituation);
                     
-                    for (int i = 0; i < m_fistHitboxes.Count; i++)
-                        m_fistHitboxes[i].SetActive(true);
+                    //for (int i = 0; i < m_fistHitboxes.Count; i++)
+                    //    m_fistHitboxes[i].SetActive(true);
                     switch (m_attackDecider.chosenAttack.attack)
                     {
                         case Attack.Pound:
@@ -496,7 +513,8 @@ namespace DChild.Gameplay.Characters.Enemies
                             if (!m_wallSensor.isDetecting)
                             {
                                 //m_animation.EnableRootMotion(true, false);
-                                m_attackHandle.ExecuteAttack(m_info.punchAttack.animation, m_info.idleAnimation.animation);
+                                //m_attackHandle.ExecuteAttack(m_info.punchAttack.animation, m_info.idleAnimation.animation);
+                                StartCoroutine(PunchRoutine());
                             }
                             else
                             {

@@ -57,6 +57,12 @@ namespace DChild.Gameplay.Characters.Enemies
             private BasicAnimationInfo m_detectAnimation;
             public BasicAnimationInfo detectAnimation => m_detectAnimation;
             [SerializeField]
+            private BasicAnimationInfo m_sleepingAnimation;
+            public BasicAnimationInfo sleepingAnimation => m_sleepingAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_awakenAnimation;
+            public BasicAnimationInfo awakenAnimation => m_awakenAnimation;
+            [SerializeField]
             private BasicAnimationInfo m_idleAnimation;
             public BasicAnimationInfo idleAnimation => m_idleAnimation;
             [SerializeField]
@@ -85,6 +91,8 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_attackMove.SetData(m_skeletonDataAsset);
                 m_attackLazer.SetData(m_skeletonDataAsset);
                 m_projectile.SetData(m_skeletonDataAsset);
+                m_sleepingAnimation.SetData(m_skeletonDataAsset);
+                m_awakenAnimation.SetData(m_skeletonDataAsset);
 
                 m_detectAnimation.SetData(m_skeletonDataAsset);
                 m_idleAnimation.SetData(m_skeletonDataAsset);
@@ -99,6 +107,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private enum State
         {
             Detect,
+            Sleeping,
             ReturnToPatrol,
             Patrol,
             Cooldown,
@@ -183,6 +192,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private Vector2 m_startPos;
 
         private Coroutine m_executeMoveCoroutine;
+        [SerializeField]
+        private bool m_isSleeping;
 
         private void OnAttackDone(object sender, EventActionArgs eventArgs)
         {
@@ -316,10 +327,16 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator DetectRoutine()
         {
+            if (m_isSleeping)
+            {
+                m_animation.SetAnimation(0, m_info.awakenAnimation, false);
+                yield return new WaitForAnimationComplete(m_animation.animationState, m_info.awakenAnimation);
+            }
             m_animation.SetAnimation(0, m_info.detectAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.detectAnimation);
             if (!IsFacingTarget())
                 CustomTurn();
+            m_isSleeping = false;
             m_stateHandle.OverrideState(State.ReevaluateSituation);
             yield return null;
         }
@@ -604,7 +621,16 @@ namespace DChild.Gameplay.Characters.Enemies
         protected override void Start()
         {
             base.Start();
-            m_animation.SetAnimation(0, m_info.patrol.animation, true);
+            var startState = m_info.patrol.animation;
+            if (m_isSleeping)
+            {
+                startState = m_info.sleepingAnimation.animation;
+            }
+            else
+            {
+                startState = m_info.patrol.animation;
+            }
+            m_animation.SetAnimation(0, startState, true);
             m_animation.DisableRootMotion();
             m_bodycollider.enabled = false;
             m_aimRoutine = AimRoutine();
@@ -615,7 +641,15 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             Debug.Log(m_info);
             base.Awake();
-            
+            var startState = State.Patrol;
+            if (m_isSleeping)
+            {
+                startState = State.Sleeping;
+            }
+            else
+            {
+                startState = State.Patrol;
+            }
             m_patrolHandle.TurnRequest += OnTurnRequest;
             m_attackHandle.AttackDone += OnAttackDone;
             m_flinchHandle.FlinchStart += OnFlinchStart;
@@ -623,7 +657,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_turnHandle.TurnDone += OnTurnDone;
             m_deathHandle.SetAnimation(m_info.deathAnimation.animation);
             m_projectileLauncher = new ProjectileLauncher(m_info.projectile.projectileInfo, m_muzzleLoopFX.transform);
-            m_stateHandle = new StateHandle<State>(State.Patrol, State.WaitBehaviourEnd);
+            m_stateHandle = new StateHandle<State>(startState, State.WaitBehaviourEnd);
             m_attackDecider = new RandomAttackDecider<Attack>();
             UpdateAttackDeciderList();
 
@@ -654,7 +688,14 @@ namespace DChild.Gameplay.Characters.Enemies
                         m_stateHandle.SetState(State.Turning);
                     }
                     break;
-
+                case State.Sleeping:
+                    m_agent.Stop();
+                    m_animation.SetAnimation(0, m_info.sleepingAnimation, true);/*
+                    if (IsTargetInRange(m_info.attackLazer.range))
+                    {
+                        m_stateHandle.OverrideState(State.Detect);
+                    }*/
+                    break;
                 case State.ReturnToPatrol:
                     //if (IsFacing(m_startPos))
                     //{
@@ -779,13 +820,18 @@ namespace DChild.Gameplay.Characters.Enemies
                     //How far is target, is it worth it to chase or go back to patrol
                     if (m_targetInfo.isValid)
                     {
-
                         m_stateHandle.OverrideState(State.Chasing);
                     }
                     else
-
                     {
-                        m_stateHandle.SetState(State.Patrol);
+                        if (m_isSleeping)
+                        {
+                            m_stateHandle.SetState(State.Sleeping);
+                        }
+                        else
+                        {
+                            m_stateHandle.SetState(State.Patrol);
+                        }
                         //timeCounter = 0;
                     }
                     break;

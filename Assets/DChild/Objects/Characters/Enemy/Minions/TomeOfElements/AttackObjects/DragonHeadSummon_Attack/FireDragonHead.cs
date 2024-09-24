@@ -19,8 +19,25 @@ namespace DChild.Gameplay.Projectiles
 
         public ParticleSystem m_flameEffect;
         public GameObject m_flameCollider;
+        public GameObject m_HeadCollider;
         public GameObject m_model;
         public Transform m_fireDragonMouthPos;
+
+        [SerializeField, TabGroup("Reference")]
+        private RaySensor m_roofSensor;
+        [SerializeField, TabGroup("Reference")]
+        private RaySensor m_wallSensor;
+        [SerializeField, TabGroup("Reference")]
+        private float m_moveOutOfWallSpeed;
+        [SerializeField, TabGroup("Reference")]
+        private SpineEventListener m_spineEventListener;
+        [SerializeField, ValueDropdown("GetEvents"), TabGroup("Animation")]
+        private string m_fireOnEvent;
+        [SerializeField, ValueDropdown("GetEvents"), TabGroup("Animation")]
+        private string m_fireOffEvent;
+        private Vector2 m_spawnPosition;
+        private Vector2 m_ToPlayerDirection;
+        private bool m_alreadyFlipped;
 
         public void InitializeField(SpineRootAnimation spineRoot)
         {
@@ -35,25 +52,75 @@ namespace DChild.Gameplay.Projectiles
             StartCoroutine(AttackRoutine());
         }
 
+        private void Awake()
+        {
+           //m_spineEventListener.Subscribe(m_fireOnEvent, ShootFire);
+           //m_spineEventListener.Subscribe(m_fireOffEvent, OffFire);
+        }
+
         private IEnumerator AttackRoutine()
         {
-            m_spine.SetAnimation(0, m_attackAnimation, false);
-            yield return new WaitForAnimationComplete(m_spine.animationState, m_attackAnimation);
+            //m_spine.SetAnimation(0, m_attackAnimation, false);
+
+            //THIS IS A TEMORARY FIXX
+            /*yield return new WaitForSeconds(1.7f);
+            ShootFire();
+            yield return new WaitForSeconds(1f);
+            OffFire();
+            */
+            Debug.Log("ASAAAAAAAAAAAA");
+            //yield return new WaitForAnimationComplete(m_spine.animationState, m_attackAnimation);
+            yield return new WaitForSeconds(1f);
             DestroyInstance();
             yield return null;
         }
 
         public void ShootFire()
         {
+            StartCoroutine(ShootFireDelayRoutine());
+            //m_flameEffect.Play(true);
+            //m_flameCollider.SetActive(true);
+        }
+        public IEnumerator ShootFireDelayRoutine()
+        {
             m_flameEffect.Play(true);
+            yield return new WaitForSeconds(0.3f);
             m_flameCollider.SetActive(true);
-
+        }
+        void Update()
+        {
+                /*if (m_roofSensor.isDetecting)
+                {
+                    transform.transform.localScale = new Vector3(-1, 1);
+                    //m_model.transform.position = Vector3.MoveTowards(m_model.transform.position, new Vector2(m_ToPlayerDirection.x, m_model.transform.position.y), m_moveOutOfWallSpeed);
+                    //m_model.transform.localScale = new Vector3(m_model.transform.position.x < m_ToPlayerDirection.x ? -1 : 1, 1);
+                    
+                    //m_alreadyFlipped = true;
+                }*/
+                
+                if (m_wallSensor.isDetecting&&!m_roofSensor.isDetecting)
+                {
+                    transform.position = Vector3.MoveTowards(transform.position, new Vector2(transform.position.x, m_ToPlayerDirection.y), m_moveOutOfWallSpeed);
+                }
+                //m_model.transform.localScale = new Vector3(transform.position.x < m_ToPlayerDirection.x ? -1 : 1, 1);
         }
 
         public void OffFire()
         {
             m_flameEffect.Stop(true);
             m_flameCollider.SetActive(false);
+            StartCoroutine(TurnHeadColliderOffRoutine());
+            StartCoroutine(AttackRoutine());
+        }
+        IEnumerator TurnOnHeadColliderRoutine()
+        {
+            yield return new WaitForSeconds(0.4f);
+            m_HeadCollider.SetActive(true);
+        }
+        IEnumerator TurnHeadColliderOffRoutine()
+        {
+            yield return new WaitForSeconds(0.1f);
+            m_HeadCollider.SetActive(false);
         }
 
         public void AdjustFireBreathRotationToPlayerPosition(Vector2 playerPosition)
@@ -63,16 +130,45 @@ namespace DChild.Gameplay.Projectiles
             var toPlayer = playerPosition - fireBreathPos;
             var rad = Mathf.Atan2(toPlayer.y, toPlayer.x);
 
-            m_model.transform.localScale = new Vector3(transform.position.x < playerPosition.x ? -1 : 1, transform.position.y < playerPosition.y ? -1 : 1);
+            StartCoroutine(TurnOnHeadColliderRoutine());
+            //m_model.transform.localScale = new Vector3(transform.position.x < playerPosition.x ? -1 : 1, transform.position.y < playerPosition.y ? -1 : 1);
+
+            //transform.localScale = new Vector3(m_model.transform.position.x < playerPosition.x ? -1 : 1, 1);
+
+            //m_model.transform.localScale = new Vector3(transform.position.x < playerPosition.x ? -1 : 1, 1);
 
             Debug.Log("Dragon Head: " + transform.position + "\n Dragon Scale: " + m_model.transform.localScale + "\n Player Pos: " + playerPosition);
         }
 
+        public void FlipModel()
+        {
+            m_model.transform.localScale = new Vector3(-1, 1);
+        }
         public void SetPlayerPosition(Vector2 playerPos)
         {
+            
+            m_ToPlayerDirection = (playerPos -(Vector2)transform.position).normalized;
+            Debug.Log(m_ToPlayerDirection);
+            m_spawnPosition = transform.position;
             m_playerPosition = playerPos;
             AdjustFireBreathRotationToPlayerPosition(m_playerPosition);
-            PlayAttackAnimation();
+            //PlayAttackAnimation();
+            
+        }
+
+        [SerializeField, PreviewField, TabGroup("Animation")]
+        protected SkeletonDataAsset m_skeletonDataAsset;
+
+        //#if UNITY_EDITOR
+        protected IEnumerable GetEvents()
+        {
+            ValueDropdownList<string> list = new ValueDropdownList<string>();
+            var reference = m_skeletonDataAsset.GetAnimationStateData().SkeletonData.Events.ToArray();
+            for (int i = 0; i < reference.Length; i++)
+            {
+                list.Add(reference[i].Name);
+            }
+            return list;
         }
     }
 }

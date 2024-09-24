@@ -30,6 +30,13 @@ namespace DChild.Gameplay.Combat
         private List<Hitbox> m_toDamage;
         private List<Info> m_infos;
 
+        public void ForceClearAffectedColliders()
+        {
+            m_affectedColliders.Clear();
+            m_toDamage.Clear();
+            m_infos.Clear();
+        }
+
         protected override bool IsValidColliderToHit(Collider2D collision) => true;
         protected override bool IsValidHitboxToHit(Collider2D collider2D, Hitbox hitbox) => hitbox.CanBeDamageBy(m_colliders);
         protected override void HandleDamageUniqueHitboxes(Collider2D collider2D)
@@ -61,7 +68,8 @@ namespace DChild.Gameplay.Combat
                 m_infos.Add(new Info(m_damageInterval));
             }
             base.OnValidCollider(collision, hitbox);
-            m_collisionRegistrator.RegisterHitboxAs(hitbox, true);
+            if(m_damageUniqueHitboxesOnly)
+                m_collisionRegistrator.RegisterHitboxAs(hitbox, true);
         }
 
         private void RemoveAffectedIndex(int i)

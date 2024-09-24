@@ -48,7 +48,7 @@ namespace DChild.Gameplay.Combat
 
         protected Collider2D[] m_colliders;
         private Collider2D m_triggeredCollider;
-        private IDamageDealer m_damageDealer;
+        protected IDamageDealer m_damageDealer;
         private static RaycastHit2D[] m_blockHitBuffer;
         public event Action<TargetInfo, Collider2D> DamageableDetected; //Turn this into EventActionArgs After
 

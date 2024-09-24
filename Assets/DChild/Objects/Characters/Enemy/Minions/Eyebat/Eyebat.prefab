@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 1213189201827118568}
   - component: {fileID: 7075637978871498664}
   - component: {fileID: 6454330033892790764}
+  - component: {fileID: 885200114613473372}
   m_Layer: 13
   m_Name: Sounds
   m_TagString: Untagged
@@ -60,6 +61,30 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_skeletonAnimation: {fileID: 2372107258974169212}
   m_data: {fileID: 11400000, guid: 38589c97610939243bc3b5ba2426bcfb, type: 2}
+--- !u!167 &885200114613473372
+AudioReverbZone:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 172944855792754333}
+  m_Enabled: 1
+  m_MinDistance: 50
+  m_MaxDistance: 100
+  m_ReverbPreset: 1
+  m_Room: -1000
+  m_RoomHF: -100
+  m_DecayTime: 1.49
+  m_DecayHFRatio: 0.83
+  m_Reflections: -2602
+  m_ReflectionsDelay: 0.007
+  m_Reverb: 200
+  m_ReverbDelay: 0.011
+  m_HFReference: 5000
+  m_Diffusion: 100
+  m_Density: 100
+  m_LFReference: 250
+  m_RoomLF: 0
 --- !u!1 &261181057741752664
 GameObject:
   m_ObjectHideFlags: 0
@@ -94,7 +119,7 @@ Transform:
   m_GameObject: {fileID: 261181057741752664}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: -0.325, y: 0.325, z: 0.325}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1213189201827118568}
@@ -148,6 +173,7 @@ MonoBehaviour:
   m_idleAnimation: idle
   m_enableFlinchColor: 0
   m_flinchColorAnimation: 
+  m_enableModule: 1
 --- !u!114 &3809903857694111574
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -273,7 +299,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   version: 4
-  m_agent: {fileID: 0}
+  m_agent: {fileID: 4297047201785970074}
   autoRepath:
     mode: 1
     period: 0.5
@@ -619,7 +645,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_character: {fileID: 2566015678839607411}
   m_animation: {fileID: 2458786254806780652}
-  m_data: {fileID: 11400000, guid: f53b4917b8c970d44889400ec15ea580, type: 2}
+  m_data: {fileID: 11400000, guid: e85891ad9182e264bb9924d6885931b7, type: 2}
   m_damageable: {fileID: 301562401213522186}
   m_centerMass: {fileID: 5442325686077853025}
   m_aggroBoundary: {fileID: 4904792588981987432}
@@ -647,6 +673,7 @@ MonoBehaviour:
   m_muzzleTelegraphFX: {fileID: 4733154735811266035}
   m_lazerOrigin: {fileID: 8846352137548938868}
   m_lazerAudio: {fileID: 9015670464954697964}
+  m_isSleeping: 0
 --- !u!114 &4155849486840406614
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -819,16 +846,32 @@ PrefabInstance:
       propertyPath: rb
       value: 
       objectReference: {fileID: 7160378608331818449}
+    - target: {fileID: 1879551167128795252, guid: 480accbacfb601d4698ddad13b51a8a8,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.6599101
+      objectReference: {fileID: 0}
     - target: {fileID: 1900037900003793760, guid: 480accbacfb601d4698ddad13b51a8a8,
         type: 3}
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 1900037900003793761, guid: 480accbacfb601d4698ddad13b51a8a8,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 32e91262449ddb04283958b96e943132, type: 2}
     - target: {fileID: 1900037900003793772, guid: 480accbacfb601d4698ddad13b51a8a8,
         type: 3}
       propertyPath: m_Name
       value: EyebatModel
       objectReference: {fileID: 0}
+    - target: {fileID: 1900037900003793774, guid: 480accbacfb601d4698ddad13b51a8a8,
+        type: 3}
+      propertyPath: skeletonDataAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 1a377d8caf33f654fb38c4ce1cc260c2,
+        type: 2}
     - target: {fileID: 1900037900003793775, guid: 480accbacfb601d4698ddad13b51a8a8,
         type: 3}
       propertyPath: m_RootOrder
@@ -999,6 +1042,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalPosition.y
       value: 4.016849
+      objectReference: {fileID: 0}
+    - target: {fileID: 7677474975380039785, guid: 480accbacfb601d4698ddad13b51a8a8,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.9894004
+      objectReference: {fileID: 0}
+    - target: {fileID: 7677474975380039785, guid: 480accbacfb601d4698ddad13b51a8a8,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.14521319
       objectReference: {fileID: 0}
     - target: {fileID: 7845902180363685716, guid: 480accbacfb601d4698ddad13b51a8a8,
         type: 3}

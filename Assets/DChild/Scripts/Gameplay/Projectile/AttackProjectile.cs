@@ -32,7 +32,10 @@ namespace DChild.Gameplay.Projectiles
 
         protected virtual void Collide()
         {
-
+            if (m_data != null)
+            {
+                GameplaySystem.cinema.ExecuteCameraShake(m_data.onCollideShake);
+            }
         }
 
         private void OnProjectileDealDamage(object sender, CombatConclusionEventArgs eventArgs)

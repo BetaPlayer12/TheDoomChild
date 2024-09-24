@@ -57,7 +57,8 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
         public void Disable()
         {
-            StartCoroutine(DisableRoutine());
+            if (this.gameObject.activeSelf)
+                StartCoroutine(DisableRoutine());
         }
 
         private IEnumerator DisableRoutine()

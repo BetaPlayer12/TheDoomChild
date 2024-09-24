@@ -1,0 +1,889 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2613445565663385285
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1501847708478524655}
+  m_Layer: 0
+  m_Name: QuestEntry_TheBrokenSword
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1501847708478524655
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2613445565663385285}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 957087518877211699}
+  - {fileID: 3647800437468931565}
+  m_Father: {fileID: 6656584862064988866}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &7247434206305206321
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7625994275205860639}
+  - component: {fileID: 6694078659559698807}
+  - component: {fileID: 1276878552664204005}
+  m_Layer: 11
+  m_Name: AttackShardIemGiver
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7625994275205860639
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7247434206305206321}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 957087518877211699}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6694078659559698807
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7247434206305206321}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d1c9b502fa3de6f4d82debffed6f8d24, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_data: {fileID: 11400000, guid: 832299907be2dd946abbc59e62114cdb, type: 2}
+--- !u!114 &1276878552664204005
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7247434206305206321}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c593457cd8105e148906690e1707c592, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  trigger: 2
+  condition:
+    luaConditions:
+    - Variable["hasBrokenSword"] == true
+    questConditions: []
+    acceptedTags: []
+    acceptedGameObjects: []
+    luaWizardIndex: -1
+    lastEvaluationValue: 0
+  setQuestState: 1
+  questName: TheBrokenSword
+  questState: 4
+  setQuestEntryState: 0
+  questEntryNumber: 1
+  questEntryState: 0
+  setAnotherQuestEntryState: 0
+  anotherQuestEntryNumber: 1
+  anotherQuestEntryState: 0
+  luaCode: Variable["hasBrokenSword"] = false
+  sequence: 
+  sequenceSpeaker: {fileID: 0}
+  sequenceListener: {fileID: 0}
+  waitOneFrameOnStartOrEnable: 1
+  alertMessage: 
+  textTable: {fileID: 0}
+  alertDuration: 0
+  sendMessages: []
+  barkSource: 0
+  barkConversation: 
+  barkText: 
+  barkTextSequence: 
+  barker: {fileID: 0}
+  barkTarget: {fileID: 0}
+  barkOrder: 0
+  allowBarksDuringConversations: 0
+  skipBarkIfNoValidEntries: 0
+  cacheBarkLines: 0
+  conversation: 
+  conversationConversant: {fileID: 0}
+  conversationActor: {fileID: 0}
+  startConversationEntryID: -1
+  exclusive: 0
+  replace: 0
+  skipIfNoValidEntries: 0
+  preventRestartOnSameFrameEnded: 0
+  stopConversationOnTriggerExit: 0
+  stopConversationIfTooFar: 0
+  maxConversationDistance: 5
+  monitorConversationDistanceFrequency: 1
+  showCursorDuringConversation: 0
+  pauseGameDuringConversation: 0
+  setActiveActions: []
+  setEnabledActions: []
+  setAnimatorStateActions: []
+  onExecute:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 6694078659559698807}
+        m_TargetAssemblyTypeName: DChild.Gameplay.Items.ItemGiver, Assembly-CSharp
+        m_MethodName: GiveItem
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 2426660004675204744}
+        m_TargetAssemblyTypeName: PixelCrushers.DialogueSystem.QuestStateListener,
+          Assembly-CSharp-firstpass
+        m_MethodName: UpdateIndicator
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  useConversationTitlePicker: 1
+  useBarkTitlePicker: 1
+  useQuestNamePicker: 1
+  selectedDatabase: {fileID: 11400000, guid: 1703b693a992cac4abf8992bf2ec5c1c, type: 2}
+--- !u!1 &8760787716166500140
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6656584862064988866}
+  - component: {fileID: 2426660004675204744}
+  - component: {fileID: 8130251190314677407}
+  - component: {fileID: 291540407126797808}
+  m_Layer: 0
+  m_Name: Quest_TheBrokenSword (Garden4)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6656584862064988866
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8760787716166500140}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -71.34, y: -129.87, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1501847708478524655}
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2426660004675204744
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8760787716166500140}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba2e3066672a3834182d094e4029952d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  questName: TheBrokenSword
+  questStateIndicatorLevels: []
+  questEntryStateIndicatorLevels:
+  - updateOnStartOnly: 0
+    entryNumber: 0
+    questState: 3
+    condition:
+      luaConditions:
+      - Variable["hasBrokenSword"] == false
+      questConditions: []
+      acceptedTags: []
+      acceptedGameObjects: []
+      luaWizardIndex: -1
+      lastEvaluationValue: 0
+    indicatorLevel: 0
+    onEnterState:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 7652538792577729783}
+          m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+          m_MethodName: SetActive
+          m_Mode: 6
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 1
+          m_CallState: 2
+  - updateOnStartOnly: 0
+    entryNumber: 0
+    questState: 3
+    condition:
+      luaConditions:
+      - Variable["hasBrokenSword"] == true
+      questConditions: []
+      acceptedTags: []
+      acceptedGameObjects: []
+      luaWizardIndex: -1
+      lastEvaluationValue: 0
+    indicatorLevel: 1
+    onEnterState:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 7652538792577729783}
+          m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+          m_MethodName: SetActive
+          m_Mode: 6
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - updateOnStartOnly: 0
+    entryNumber: 0
+    questState: 4
+    condition:
+      luaConditions: []
+      questConditions: []
+      acceptedTags: []
+      acceptedGameObjects: []
+      luaWizardIndex: -1
+      lastEvaluationValue: 0
+    indicatorLevel: 0
+    onEnterState:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 7652538792577729783}
+          m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+          m_MethodName: SetActive
+          m_Mode: 6
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  suppressOnEnterStateEventsOnStart: 0
+--- !u!114 &8130251190314677407
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8760787716166500140}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9788c61928f1bb24a8559f5d6aaed894, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  indicators:
+  - {fileID: 957087518877211692}
+--- !u!114 &291540407126797808
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8760787716166500140}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6546d1f34e0077748a93d4c356aa9411, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  addTrigger: 16
+  removeTrigger: 1024
+  databases:
+  - {fileID: 11400000, guid: 1703b693a992cac4abf8992bf2ec5c1c, type: 2}
+  condition:
+    luaConditions: []
+    questConditions: []
+    acceptedTags: []
+    acceptedGameObjects: []
+    luaWizardIndex: -1
+    lastEvaluationValue: 0
+  once: 0
+  onePerFrame: 0
+--- !u!1001 &1329754536576748027
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 1501847708478524655}
+    m_Modifications:
+    - target: {fileID: 254398696670144174, guid: a62a057707fb2574d907631cd7d8ae79,
+        type: 3}
+      propertyPath: luaCode
+      value: Variable["hasBrokenSword"] = true
+      objectReference: {fileID: 0}
+    - target: {fileID: 254398696670144174, guid: a62a057707fb2574d907631cd7d8ae79,
+        type: 3}
+      propertyPath: questName
+      value: TheBrokenSword
+      objectReference: {fileID: 0}
+    - target: {fileID: 254398696670144174, guid: a62a057707fb2574d907631cd7d8ae79,
+        type: 3}
+      propertyPath: questState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 254398696670144174, guid: a62a057707fb2574d907631cd7d8ae79,
+        type: 3}
+      propertyPath: conversation
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 254398696670144174, guid: a62a057707fb2574d907631cd7d8ae79,
+        type: 3}
+      propertyPath: selectedDatabase
+      value: 
+      objectReference: {fileID: 11400000, guid: 1703b693a992cac4abf8992bf2ec5c1c,
+        type: 2}
+    - target: {fileID: 254398696670144174, guid: a62a057707fb2574d907631cd7d8ae79,
+        type: 3}
+      propertyPath: conversationActor
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 254398696670144174, guid: a62a057707fb2574d907631cd7d8ae79,
+        type: 3}
+      propertyPath: skipIfNoValidEntries
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 254398696670144174, guid: a62a057707fb2574d907631cd7d8ae79,
+        type: 3}
+      propertyPath: onExecute.m_PersistentCalls.m_Calls.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 254398696670144174, guid: a62a057707fb2574d907631cd7d8ae79,
+        type: 3}
+      propertyPath: onExecute.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 254398696670144174, guid: a62a057707fb2574d907631cd7d8ae79,
+        type: 3}
+      propertyPath: onExecute.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 254398696670144174, guid: a62a057707fb2574d907631cd7d8ae79,
+        type: 3}
+      propertyPath: onExecute.m_PersistentCalls.m_Calls.Array.data[2].m_Mode
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 254398696670144174, guid: a62a057707fb2574d907631cd7d8ae79,
+        type: 3}
+      propertyPath: onExecute.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 3602891116014530911}
+    - target: {fileID: 254398696670144174, guid: a62a057707fb2574d907631cd7d8ae79,
+        type: 3}
+      propertyPath: onExecute.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 2426660004675204744}
+    - target: {fileID: 254398696670144174, guid: a62a057707fb2574d907631cd7d8ae79,
+        type: 3}
+      propertyPath: onExecute.m_PersistentCalls.m_Calls.Array.data[2].m_Target
+      value: 
+      objectReference: {fileID: 3825375660588308412}
+    - target: {fileID: 254398696670144174, guid: a62a057707fb2574d907631cd7d8ae79,
+        type: 3}
+      propertyPath: onExecute.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 254398696670144174, guid: a62a057707fb2574d907631cd7d8ae79,
+        type: 3}
+      propertyPath: onExecute.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 254398696670144174, guid: a62a057707fb2574d907631cd7d8ae79,
+        type: 3}
+      propertyPath: onExecute.m_PersistentCalls.m_Calls.Array.data[2].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 254398696670144174, guid: a62a057707fb2574d907631cd7d8ae79,
+        type: 3}
+      propertyPath: onExecute.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: GiveItem
+      objectReference: {fileID: 0}
+    - target: {fileID: 254398696670144174, guid: a62a057707fb2574d907631cd7d8ae79,
+        type: 3}
+      propertyPath: onExecute.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: UpdateIndicator
+      objectReference: {fileID: 0}
+    - target: {fileID: 254398696670144174, guid: a62a057707fb2574d907631cd7d8ae79,
+        type: 3}
+      propertyPath: onExecute.m_PersistentCalls.m_Calls.Array.data[2].m_MethodName
+      value: set_enabled
+      objectReference: {fileID: 0}
+    - target: {fileID: 254398696670144174, guid: a62a057707fb2574d907631cd7d8ae79,
+        type: 3}
+      propertyPath: onExecute.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: DChild.Gameplay.Items.ItemGiver, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 254398696670144174, guid: a62a057707fb2574d907631cd7d8ae79,
+        type: 3}
+      propertyPath: onExecute.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
+      value: PixelCrushers.DialogueSystem.QuestStateListener, Assembly-CSharp-firstpass
+      objectReference: {fileID: 0}
+    - target: {fileID: 254398696670144174, guid: a62a057707fb2574d907631cd7d8ae79,
+        type: 3}
+      propertyPath: onExecute.m_PersistentCalls.m_Calls.Array.data[2].m_TargetAssemblyTypeName
+      value: UnityEngine.Behaviour, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 254398696670144174, guid: a62a057707fb2574d907631cd7d8ae79,
+        type: 3}
+      propertyPath: onExecute.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 254398696670144174, guid: a62a057707fb2574d907631cd7d8ae79,
+        type: 3}
+      propertyPath: onExecute.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 254398696670144174, guid: a62a057707fb2574d907631cd7d8ae79,
+        type: 3}
+      propertyPath: onExecute.m_PersistentCalls.m_Calls.Array.data[2].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 1133438587203873737, guid: a62a057707fb2574d907631cd7d8ae79,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 34deac7c0d0abf64aa9971ea66e661fb,
+        type: 3}
+    - target: {fileID: 2372178329769258006, guid: a62a057707fb2574d907631cd7d8ae79,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2372178329769258006, guid: a62a057707fb2574d907631cd7d8ae79,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 546.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 2372178329769258006, guid: a62a057707fb2574d907631cd7d8ae79,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 147.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 2372178329769258006, guid: a62a057707fb2574d907631cd7d8ae79,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2372178329769258006, guid: a62a057707fb2574d907631cd7d8ae79,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2372178329769258006, guid: a62a057707fb2574d907631cd7d8ae79,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2372178329769258006, guid: a62a057707fb2574d907631cd7d8ae79,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2372178329769258006, guid: a62a057707fb2574d907631cd7d8ae79,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2372178329769258006, guid: a62a057707fb2574d907631cd7d8ae79,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2372178329769258006, guid: a62a057707fb2574d907631cd7d8ae79,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2372178329769258006, guid: a62a057707fb2574d907631cd7d8ae79,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2837912430755290695, guid: a62a057707fb2574d907631cd7d8ae79,
+        type: 3}
+      propertyPath: m_Size.x
+      value: 9.113252
+      objectReference: {fileID: 0}
+    - target: {fileID: 2837912430755290695, guid: a62a057707fb2574d907631cd7d8ae79,
+        type: 3}
+      propertyPath: m_Size.y
+      value: 0.8265686
+      objectReference: {fileID: 0}
+    - target: {fileID: 2837912430755290695, guid: a62a057707fb2574d907631cd7d8ae79,
+        type: 3}
+      propertyPath: m_Offset.x
+      value: -0.72668684
+      objectReference: {fileID: 0}
+    - target: {fileID: 2837912430755290695, guid: a62a057707fb2574d907631cd7d8ae79,
+        type: 3}
+      propertyPath: m_Offset.y
+      value: -0.5076904
+      objectReference: {fileID: 0}
+    - target: {fileID: 4220707520816927437, guid: a62a057707fb2574d907631cd7d8ae79,
+        type: 3}
+      propertyPath: m_promptOffset.y
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 5350381358703550942, guid: a62a057707fb2574d907631cd7d8ae79,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 2.0889142
+      objectReference: {fileID: 0}
+    - target: {fileID: 5350381358703550942, guid: a62a057707fb2574d907631cd7d8ae79,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 2.4680548
+      objectReference: {fileID: 0}
+    - target: {fileID: 5350381358703550942, guid: a62a057707fb2574d907631cd7d8ae79,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.3343
+      objectReference: {fileID: 0}
+    - target: {fileID: 5350381358703550942, guid: a62a057707fb2574d907631cd7d8ae79,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 6.8986
+      objectReference: {fileID: 0}
+    - target: {fileID: 6120174505958522883, guid: a62a057707fb2574d907631cd7d8ae79,
+        type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 8667032107062725900, guid: a62a057707fb2574d907631cd7d8ae79,
+        type: 3}
+      propertyPath: m_Name
+      value: BrokenSwordGiverTest_NPC
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: a62a057707fb2574d907631cd7d8ae79, type: 3}
+--- !u!4 &3647800437468931565 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2372178329769258006, guid: a62a057707fb2574d907631cd7d8ae79,
+    type: 3}
+  m_PrefabInstance: {fileID: 1329754536576748027}
+  m_PrefabAsset: {fileID: 0}
+--- !u!61 &3825375660588308412 stripped
+BoxCollider2D:
+  m_CorrespondingSourceObject: {fileID: 2837912430755290695, guid: a62a057707fb2574d907631cd7d8ae79,
+    type: 3}
+  m_PrefabInstance: {fileID: 1329754536576748027}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &7652538792577729783 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8667032107062725900, guid: a62a057707fb2574d907631cd7d8ae79,
+    type: 3}
+  m_PrefabInstance: {fileID: 1329754536576748027}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &3602891116014530911
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7652538792577729783}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d1c9b502fa3de6f4d82debffed6f8d24, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_data: {fileID: 11400000, guid: ae9e66ea1b21d90499adcc66288309dd, type: 2}
+--- !u!1001 &8286046409786023182
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 1501847708478524655}
+    m_Modifications:
+    - target: {fileID: 1135568908453108278, guid: 67a6d98b649a56045a02b03603dc74e0,
+        type: 3}
+      propertyPath: skeletonDataAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: bad8681de27cd6748907358f6e8127b8,
+        type: 2}
+    - target: {fileID: 2297555920595212241, guid: 67a6d98b649a56045a02b03603dc74e0,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 93ab8278c04cb494084f34c4b2040acb, type: 2}
+    - target: {fileID: 5285585408268783906, guid: 67a6d98b649a56045a02b03603dc74e0,
+        type: 3}
+      propertyPath: m_Layer
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 6020842367709294662, guid: 67a6d98b649a56045a02b03603dc74e0,
+        type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 9202456344484938018, guid: 67a6d98b649a56045a02b03603dc74e0,
+        type: 3}
+      propertyPath: m_Name
+      value: BlackSmith_NPC
+      objectReference: {fileID: 0}
+    - target: {fileID: 9202456344484938018, guid: 67a6d98b649a56045a02b03603dc74e0,
+        type: 3}
+      propertyPath: m_Layer
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 9202456344484938045, guid: 67a6d98b649a56045a02b03603dc74e0,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9202456344484938045, guid: 67a6d98b649a56045a02b03603dc74e0,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 518.41
+      objectReference: {fileID: 0}
+    - target: {fileID: 9202456344484938045, guid: 67a6d98b649a56045a02b03603dc74e0,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 147.97
+      objectReference: {fileID: 0}
+    - target: {fileID: 9202456344484938045, guid: 67a6d98b649a56045a02b03603dc74e0,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9202456344484938045, guid: 67a6d98b649a56045a02b03603dc74e0,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9202456344484938045, guid: 67a6d98b649a56045a02b03603dc74e0,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9202456344484938045, guid: 67a6d98b649a56045a02b03603dc74e0,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9202456344484938045, guid: 67a6d98b649a56045a02b03603dc74e0,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9202456344484938045, guid: 67a6d98b649a56045a02b03603dc74e0,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9202456344484938045, guid: 67a6d98b649a56045a02b03603dc74e0,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9202456344484938045, guid: 67a6d98b649a56045a02b03603dc74e0,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 67a6d98b649a56045a02b03603dc74e0, type: 3}
+--- !u!1 &957087518877211692 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 9202456344484938018, guid: 67a6d98b649a56045a02b03603dc74e0,
+    type: 3}
+  m_PrefabInstance: {fileID: 8286046409786023182}
+  m_PrefabAsset: {fileID: 0}
+--- !u!61 &886941018040765614
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 957087518877211692}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: -0.67237854, y: 0.056037903}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 12.430511, y: 3.80159}
+  m_EdgeRadius: 0
+--- !u!114 &68094692102147327
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 957087518877211692}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c593457cd8105e148906690e1707c592, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  trigger: 32
+  condition:
+    luaConditions: []
+    questConditions: []
+    acceptedTags: []
+    acceptedGameObjects: []
+    luaWizardIndex: -1
+    lastEvaluationValue: 0
+  setQuestState: 1
+  questName: 
+  questState: 4
+  setQuestEntryState: 0
+  questEntryNumber: 1
+  questEntryState: 0
+  setAnotherQuestEntryState: 0
+  anotherQuestEntryNumber: 1
+  anotherQuestEntryState: 0
+  luaCode: 
+  sequence: 
+  sequenceSpeaker: {fileID: 0}
+  sequenceListener: {fileID: 0}
+  waitOneFrameOnStartOrEnable: 1
+  alertMessage: 
+  textTable: {fileID: 0}
+  alertDuration: 0
+  sendMessages: []
+  barkSource: 0
+  barkConversation: 
+  barkText: 
+  barkTextSequence: 
+  barker: {fileID: 0}
+  barkTarget: {fileID: 0}
+  barkOrder: 0
+  allowBarksDuringConversations: 0
+  skipBarkIfNoValidEntries: 0
+  cacheBarkLines: 0
+  conversation: The Broken Sword
+  conversationConversant: {fileID: 0}
+  conversationActor: {fileID: 0}
+  startConversationEntryID: -1
+  exclusive: 0
+  replace: 0
+  skipIfNoValidEntries: 1
+  preventRestartOnSameFrameEnded: 0
+  stopConversationOnTriggerExit: 0
+  stopConversationIfTooFar: 0
+  maxConversationDistance: 5
+  monitorConversationDistanceFrequency: 1
+  showCursorDuringConversation: 0
+  pauseGameDuringConversation: 0
+  setActiveActions: []
+  setEnabledActions: []
+  setAnimatorStateActions: []
+  onExecute:
+    m_PersistentCalls:
+      m_Calls: []
+  useConversationTitlePicker: 1
+  useBarkTitlePicker: 1
+  useQuestNamePicker: 1
+  selectedDatabase: {fileID: 11400000, guid: 1703b693a992cac4abf8992bf2ec5c1c, type: 2}
+--- !u!114 &652161171375776466
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 957087518877211692}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6e2311e69bbd5cc4298ae02e0fe9275a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_hasDialogue: 1
+  m_hasConditionForDialogue: 0
+  m_promptOffset: {x: -1.42, y: 20.34, z: 0}
+--- !u!114 &4866068406035509908
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 957087518877211692}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a64578247383140469c45370654a984a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  actor: FLAVIO
+  persistentDataName: 
+  portrait: {fileID: 0}
+  spritePortrait: {fileID: 21300000, guid: 73f1960ae0da11d48a677b22391b4bb4, type: 3}
+  barkUISettings:
+    barkUI: {fileID: 0}
+    barkUIOffset: {x: 0, y: 2, z: 0}
+  standardDialogueUISettings:
+    subtitlePanelNumber: 0
+    customSubtitlePanel: {fileID: 0}
+    customSubtitlePanelOffset: {x: 0, y: 0, z: 0}
+    menuPanelNumber: 0
+    customMenuPanel: {fileID: 0}
+    customMenuPanelOffset: {x: 0, y: 0, z: 0}
+    useMenuPanelFor: 0
+    portraitAnimatorController: {fileID: 0}
+    setSubtitleColor: 0
+    applyColorToPrependedName: 0
+    prependActorNameSeparator: ': '
+    prependActorNameFormat: '{0}{1}'
+    subtitleColor: {r: 1, g: 1, b: 1, a: 1}
+--- !u!4 &957087518877211699 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 9202456344484938045, guid: 67a6d98b649a56045a02b03603dc74e0,
+    type: 3}
+  m_PrefabInstance: {fileID: 8286046409786023182}
+  m_PrefabAsset: {fileID: 0}

@@ -1,51 +1,42 @@
-﻿using DChild;
-using Holysoft.Event;
-using Sirenix.OdinInspector;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
-using UnityEngine.UI;
 
 namespace DChild.Configurations.Visuals
 {
-    public class GammaAdjuster : MonoBehaviour
+    [System.Serializable]
+    public class GammaAdjuster : IPostProcessAdjusterModule
     {
-        [HideInInspector] public Volume renderingVolume;
-        LiftGammaGain liftGammaGain;
+        [SerializeField]
+        private float m_gamma;
+        private LiftGammaGain m_liftGammaGain = null;
 
-        [Button]
-        public void SetGammaAlpha(float gammaAlpha)
+        public void ApplyConfiguration(PostProcessConfiguration configuration)
         {
-            liftGammaGain.gamma.Override(new Vector4(1f, 1f, 1f, gammaAlpha));
+            if (m_liftGammaGain != null)
+            {
+                m_liftGammaGain.gamma.Override(new Vector4(1f, 1f, 1f, configuration.gamma));
+                m_gamma = configuration.gamma;
+            }
         }
 
-        public float GetGammaAlpha() { return liftGammaGain.gamma.value.w; }
-        private void OnValueChange(object sender, EventActionArgs eventArgs)
+        public void ModifyConfiguration(ref PostProcessConfiguration configuration)
         {
-            SetGammaAlpha(GameSystem.settings.configuration.visualConfiguration.brightness);
+            configuration.gamma = m_gamma;
         }
 
-        private void Awake()
+        public bool ValidatePostProcess(Volume volume, ref string message)
         {
-            renderingVolume = GetComponent<Volume>();
-            if (!renderingVolume.profile.TryGet(out liftGammaGain)) throw new System.NullReferenceException(nameof(liftGammaGain));
-        }
-
-        private void OnEnable()
-        {
-            var settings = GameSystem.settings;
-            settings.visual.SceneVisualsChange += OnValueChange;
-            SetGammaAlpha(settings.configuration.visualConfiguration.brightness);
-        }
-
-
-        private void OnDisable()
-        {
-            var settings = GameSystem.settings;
-            settings.visual.SceneVisualsChange -= OnValueChange;
+            var result = volume.profile.TryGet(out LiftGammaGain liftGammaGain);
+            if (result)
+            {
+                m_liftGammaGain = liftGammaGain;
+            }
+            else
+            {
+                message += $"Missing Gamma \n";
+            }
+            return result;
         }
     }
 }

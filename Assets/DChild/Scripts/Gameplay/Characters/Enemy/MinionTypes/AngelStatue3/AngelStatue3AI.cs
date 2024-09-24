@@ -33,6 +33,15 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField]
             private SimpleAttackInfo m_attack = new SimpleAttackInfo();
             public SimpleAttackInfo attack => m_attack;
+            [SerializeField]
+            private SimpleAttackInfo m_windBladeAttack = new SimpleAttackInfo();
+            public SimpleAttackInfo windBladeAttack => m_windBladeAttack;
+            [SerializeField]
+            private SimpleAttackInfo m_swordCleaveAttack = new SimpleAttackInfo();
+            public SimpleAttackInfo swordCleaveAttack => m_swordCleaveAttack;
+            [SerializeField]
+            private SimpleAttackInfo m_stabAttack = new SimpleAttackInfo();
+            public SimpleAttackInfo stabAttack => m_stabAttack;
             [SerializeField, MinValue(0)]
             private float m_attackCD;
             public float attackCD => m_attackCD;
@@ -65,15 +74,50 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField]
             private BasicAnimationInfo m_platformAnimation;
             public BasicAnimationInfo platformAnimation => m_platformAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_wingBlockPushAnimaton;
+            public BasicAnimationInfo wingBlockPushAnimaton => m_wingBlockPushAnimaton;
+            [SerializeField]
+            private BasicAnimationInfo m_wingShieldAnimaton;
+            public BasicAnimationInfo wingShieldAnimaton => m_wingShieldAnimaton;
+            [SerializeField]
+            private BasicAnimationInfo m_wingShieldHitAnimation;
+            public BasicAnimationInfo wingShieldHitAnimation => m_wingShieldHitAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_wingShieldToIdleAnimation;
+            public BasicAnimationInfo wingShieldToIdleAnimation => m_wingShieldToIdleAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_wingShieldAnimatonIdle;
+            public BasicAnimationInfo wingShieldAnimatonIdle => m_wingShieldAnimatonIdle;
+           
 
-
+            [Title("Events")]
+            [SerializeField, ValueDropdown("GetEvents")]
+            private string m_attackSlashEvent;
+            public string attackSlashEvent => m_attackSlashEvent;
+            [SerializeField, ValueDropdown("GetEvents")]
+            private string m_attackStabEvent;
+            public string attackStabEvent => m_attackStabEvent;
+            [SerializeField, ValueDropdown("GetEvents")]
+            private string m_windProjectileEvent;
+            public string windProjectileEvent => m_windProjectileEvent;
+            [SerializeField, ValueDropdown("GetEvents")]
+            private string m_swordCleaveEvent;
+            public string swordCleaveEvent => m_swordCleaveEvent;
             public override void Initialize()
             {
 #if UNITY_EDITOR
                 m_move.SetData(m_skeletonDataAsset);
                 m_backMove.SetData(m_skeletonDataAsset);
                 m_attack.SetData(m_skeletonDataAsset);
-
+                m_windBladeAttack.SetData(m_skeletonDataAsset);
+                m_stabAttack.SetData(m_skeletonDataAsset);
+                m_swordCleaveAttack.SetData(m_skeletonDataAsset);
+                m_wingBlockPushAnimaton.SetData(m_skeletonDataAsset);
+                m_wingShieldAnimaton.SetData(m_skeletonDataAsset);
+                m_wingShieldAnimatonIdle.SetData(m_skeletonDataAsset);
+                m_wingShieldHitAnimation.SetData(m_skeletonDataAsset);
+                m_wingShieldToIdleAnimation.SetData(m_skeletonDataAsset);
                 m_idleAnimation.SetData(m_skeletonDataAsset);
                 m_detectAnimation.SetData(m_skeletonDataAsset);
                 m_flinchAnimation.SetData(m_skeletonDataAsset);
@@ -92,13 +136,16 @@ namespace DChild.Gameplay.Characters.Enemies
             Attacking,
             Cooldown,
             Chasing,
+            ReturnToSpawnPoint,
             ReevaluateSituation,
             WaitBehaviourEnd,
         }
 
         private enum Attack
         {
-            Attack,
+            SlashStabComboAttack,
+            SwordCleaveAttack,
+            WingShieldAttack,
             [HideInInspector]
             _COUNT
         }
@@ -106,7 +153,12 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Reference")]
         private GameObject m_selfCollider;
         [SerializeField, TabGroup("Reference")]
+        private GameObject m_bgStatue;
+        [SerializeField, TabGroup("Reference")]
         private GameObject m_boundBoxGO;
+        [SerializeField, TabGroup("Reference")]
+        private Hitbox m_hitbox;
+
         [SerializeField, TabGroup("Modules")]
         private AnimatedTurnHandle m_turnHandle;
         [SerializeField, TabGroup("Modules")]
@@ -125,6 +177,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private float m_currentRunAttackDuration;
         private bool m_enablePatience;
         private bool m_isDetecting;
+        private bool m_isDetectedOnce;
         private Vector2 m_startPoint;
 
         [SerializeField, TabGroup("Sensors")]
@@ -140,7 +193,9 @@ namespace DChild.Gameplay.Characters.Enemies
         private RandomAttackDecider<Attack> m_attackDecider;
 
         private State m_turnState;
-
+        
+        [SerializeField]
+        private float m_healthPercentageWingShieldActivate;
 
         //[SerializeField]
         //private AudioSource m_Audiosource;
@@ -155,7 +210,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_stateHandle.ApplyQueuedState();
         }
 
-        private void OnTurnRequest(object sender, EventActionArgs eventArgs) => m_stateHandle.SetState(State.Turning);
+       // private void OnTurnRequest(object sender, EventActionArgs eventArgs) => m_stateHandle.SetState(State.Turning);
 
         public override void SetTarget(IDamageable damageable, Character m_target = null)
         {
@@ -165,8 +220,9 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_selfCollider.SetActive(true);
                 if (m_stateHandle.currentState != State.Chasing && !m_isDetecting)
                 {
+                    m_stateHandle.OverrideState(State.Detect);
                     m_isDetecting = true;
-                    m_stateHandle.SetState(State.Detect);
+                   
                 }
                 m_currentPatience = 0;
                 //var patienceRoutine = PatienceRoutine();
@@ -204,7 +260,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_targetInfo.Set(null, null);
                 m_isDetecting = false;
                 m_enablePatience = false;
-                m_stateHandle.SetState(State.Idle);
+                m_stateHandle.SetState(State.ReturnToSpawnPoint);
             }
         }
         //private IEnumerator PatienceRoutine()
@@ -224,6 +280,7 @@ namespace DChild.Gameplay.Characters.Enemies
         //    m_stateHandle.SetState(State.Patrol);
         //}
 
+       
         protected override void OnDestroyed(object sender, EventActionArgs eventArgs)
         {
             //m_Audiosource.clip = m_DeadClip;
@@ -239,17 +296,17 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnFlinchStart(object sender, EventActionArgs eventArgs)
         {
-            StopAllCoroutines();
-            //m_animation.SetAnimation(0, m_info.flinchAnimation, false);
-            m_stateHandle.OverrideState(State.WaitBehaviourEnd);
+            //StopAllCoroutines();
+            ////m_animation.SetAnimation(0, m_info.flinchAnimation, false);
+            //m_stateHandle.OverrideState(State.WaitBehaviourEnd);
         }
 
         private void OnFlinchEnd(object sender, EventActionArgs eventArgs)
         {
-            if (m_animation.GetCurrentAnimation(0).ToString() != m_info.deathAnimation.animation)
-                m_animation.SetEmptyAnimation(0, 0);
-            //m_animation.SetAnimation(0, m_info.idleAnimation, true);
-            m_stateHandle.OverrideState(State.ReevaluateSituation);
+            //if (m_animation.GetCurrentAnimation(0).ToString() != m_info.deathAnimation.animation)
+            //    m_animation.SetEmptyAnimation(0, 0);
+            ////m_animation.SetAnimation(0, m_info.idleAnimation, true);
+            //m_stateHandle.OverrideState(State.ReevaluateSituation);
         }
 
         public override void ApplyData()
@@ -261,6 +318,8 @@ namespace DChild.Gameplay.Characters.Enemies
             }
         }
 
+        [SerializeField]
+        private Attacker m_swordAttacker;
         public void ResetAI()
         {
             m_selfCollider.SetActive(false);
@@ -273,34 +332,162 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void UpdateAttackDeciderList()
         {
-            m_attackDecider.SetList(new AttackInfo<Attack>(Attack.Attack, m_info.attack.range));
+            m_attackDecider.SetList(new AttackInfo<Attack>(Attack.SlashStabComboAttack, m_info.attack.range),
+                                    new AttackInfo<Attack>(Attack.SwordCleaveAttack, m_info.swordCleaveAttack.range), 
+                                    new AttackInfo<Attack>(Attack.WingShieldAttack, m_info.swordCleaveAttack.range));
             m_attackDecider.hasDecidedOnAttack = false;
         }
 
         private IEnumerator DetectRoutine()
         {
-            m_animation.SetAnimation(0, m_info.detectAnimation, false);
-            m_animation.animationState.TimeScale = 1;
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.detectAnimation);
+            m_bgStatue.transform.SetParent(null);
+           
+            if (!m_isDetectedOnce)
+            {
+                m_isDetectedOnce = true;
+                m_animation.SetAnimation(0, m_info.detectAnimation, false);
+                m_animation.animationState.TimeScale = 1;
+                yield return new WaitForAnimationComplete(m_animation.animationState, m_info.detectAnimation);
+                m_hitbox.Enable();
+                if (!IsFacingTarget())
+                {
+                    CustomTurn();
+                }
+            }
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_stateHandle.OverrideState(State.ReevaluateSituation);
             yield return null;
         }
+        [SerializeField]
+        private GameObject m_origWeapon;
+        [SerializeField]
+        private GameObject m_swordCleave;
 
+        [SerializeField]
+        private SpineEventListener m_spineListener;
+
+        private IEnumerator SwordCleaveRoutine()
+        {
+
+            m_animation.SetAnimation(0, m_info.swordCleaveAttack, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.swordCleaveAttack);
+            
+    
+        }
+
+        private IEnumerator ColliderAttackSlashRoutine()
+        {
+            m_origWeapon.SetActive(true);
+            yield return new WaitForSeconds(0.5f);
+            m_origWeapon.SetActive(false);
+        }
+
+        private IEnumerator ColliderAttackCleaveRoutine()
+        {
+            m_swordCleave.SetActive(true);
+            yield return new WaitForSeconds(0.5f);
+            m_swordCleave.SetActive(false);
+        }
+
+        private void ColliderForAttackEvent()
+        {
+            StartCoroutine(ColliderAttackSlashRoutine());
+        }
+        private void ColliderForCleaveEvent()
+        {
+            StartCoroutine(ColliderAttackCleaveRoutine());
+        }
+        private IEnumerator SwordCleaveAttack()
+        {
+            m_stateHandle.Wait(State.ReevaluateSituation);
+            yield return SwordCleaveRoutine();
+            m_attackDecider.hasDecidedOnAttack = false;
+            m_animation.SetAnimation(0, m_info.idleAnimation, true);
+            m_stateHandle.ApplyQueuedState();
+        }
+
+        private IEnumerator AttackSlashRoutine()
+        {
+            m_animation.SetAnimation(0, m_info.attack.animation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack.animation);
+           
+        }
+        private IEnumerator AttackStabRoutine()
+        {
+            m_animation.SetAnimation(0, m_info.stabAttack.animation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.stabAttack.animation);
+            
+        }
+        private IEnumerator WingPushRoutine()
+        {
+            m_animation.SetAnimation(0, m_info.wingShieldAnimaton.animation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.wingShieldAnimaton.animation);
+            m_animation.SetAnimation(0, m_info.wingShieldAnimatonIdle, false);
+            yield return new WaitForSeconds(3f);
+            m_animation.SetAnimation(0, m_info.wingShieldToIdleAnimation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.wingShieldToIdleAnimation.animation);
+        }
+        private IEnumerator SlashStabComboAttack()
+        {
+            m_stateHandle.Wait(State.ReevaluateSituation);
+            yield return AttackSlashRoutine();
+            yield return AttackStabRoutine();
+            m_animation.SetAnimation(0, m_info.idleAnimation, true);
+            m_attackDecider.hasDecidedOnAttack = false;
+            m_stateHandle.ApplyQueuedState();
+        }
+
+        private IEnumerator WingPushBehaviour()
+        {
+            m_stateHandle.Wait(State.ReevaluateSituation);
+            //m_flinchHandle.SetAnimation(m_info.wingShieldHitAnimation.animation);
+            yield return WingPushRoutine();
+            m_animation.SetAnimation(0, m_info.idleAnimation, true);
+            m_attackDecider.hasDecidedOnAttack = false;
+            m_stateHandle.ApplyQueuedState();
+        }
+        private IEnumerator ReturnToStartingPoint()
+        {
+            m_stateHandle.Wait(State.Idle);
+            var direction = (int)m_character.facing * Vector2.right;
+            if(!IsFacing(m_startPoint))
+            {
+                CustomTurn();
+            }
+            do
+            {
+                m_animation.SetAnimation(0, m_info.move, true);
+                m_movement.MoveTowards(direction, m_info.move.speed);
+                Debug.Log("Return to spot");
+                yield return null;
+
+            } while (Vector2.Distance(transform.position, m_startPoint) > 1f);
+            Debug.Log("outside loop");
+            m_stateHandle.ApplyQueuedState();
+        }
         protected override void Start()
         {
             base.Start();
+            m_spineListener.Subscribe(m_info.attackStabEvent, ColliderForAttackEvent);
+            m_spineListener.Subscribe(m_info.attackSlashEvent, ColliderForAttackEvent);
+            m_spineListener.Subscribe(m_info.swordCleaveEvent, ColliderForCleaveEvent);
             m_selfCollider.SetActive(false);
             m_startPoint = transform.position;
         }
 
+        private double CalculatePercentage(int currentValue, int maxValue)
+        {
+            double percentage = ((double)currentValue / maxValue) * 100;
+            return Math.Round(percentage, 2);
+        }
         protected override void Awake()
         {
             base.Awake();
-            
-            m_patrolHandle.TurnRequest += OnTurnRequest;
-            m_attackHandle.AttackDone += OnAttackDone;
-            m_turnHandle.TurnDone += OnTurnDone;
+            m_hitbox.Disable();
+            //m_patrolHandle.TurnRequest += OnTurnRequest;
+            //m_attackHandle.AttackDone += OnAttackDone;
+            //m_turnHandle.TurnDone += OnTurnDone;
+
             m_deathHandle.SetAnimation(m_info.deathAnimation.animation);
             m_flinchHandle.FlinchStart += OnFlinchStart;
             m_flinchHandle.FlinchEnd += OnFlinchEnd;
@@ -323,74 +510,108 @@ namespace DChild.Gameplay.Characters.Enemies
                     break;
 
                 case State.Idle:
-                    m_animation.SetAnimation(0, m_info.detectAnimation, false).AnimationStart = 0.15f;
-                    m_animation.animationState.TimeScale = 0;
-                    //if (m_animation.GetCurrentAnimation(0).ToString() != m_info.detectAnimation)
-                    //{
-                    //}
-                    break;
-
-                case State.Turning:
-                    m_stateHandle.Wait(m_turnState);
-                    m_turnHandle.Execute(m_info.turnAnimation.animation, m_info.idleAnimation.animation);
-                    break;
-
-                case State.Attacking:
-                    m_stateHandle.Wait(State.Cooldown);
-
-
-                    switch (m_attackDecider.chosenAttack.attack)
+                    m_movement.Stop();
+                    if (!m_isDetectedOnce)
                     {
-                        case Attack.Attack:
-                            m_animation.EnableRootMotion(true, false);
-                            m_attackHandle.ExecuteAttack(m_info.attack.animation, m_info.idleAnimation.animation);
-                            break;
-                    }
-                    m_attackDecider.hasDecidedOnAttack = false;
-
-                    break;
-
-                case State.Cooldown:
-                    //m_stateHandle.Wait(State.ReevaluateSituation);
-                    //if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
-                    if (IsTargetInRange(100))
-                    {
-                        if (!IsFacingTarget())
-                        {
-                            m_turnState = State.Cooldown;
-                            if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation.animation)
-                                m_stateHandle.SetState(State.Turning);
-                        }
-                        else
-                        {
-                            m_animation.EnableRootMotion(true, false);
-                            m_animation.SetAnimation(0, m_info.backMove.animation, true);
-                            m_movement.MoveTowards(Vector2.one * -transform.localScale.x, m_info.backMove.speed);
-                        }
+                        m_animation.SetAnimation(0, m_info.detectAnimation, true).AnimationStart = 0.15f;
+                        m_animation.animationState.TimeScale = 0;
                     }
                     else
                     {
                         m_animation.SetAnimation(0, m_info.idleAnimation, true);
-                    }
+                    }    
+                    //if (m_animation.GetCurrentAnimation(0).ToString() != m_info.detectAnimation)
+                    //{
+                    //}
+                    break;
+                case State.ReturnToSpawnPoint:
+                    StopAllCoroutines();
+                    StartCoroutine(ReturnToStartingPoint());
+                    break;
+                //case State.Turning:
+                //    m_stateHandle.Wait(m_turnState);
+                //    m_turnHandle.Execute(m_info.turnAnimation.animation, m_info.idleAnimation.animation);
+                //    break;
 
-                    if (m_currentCD <= m_info.attackCD)
+                case State.Attacking:  
+                    var healthPercentage = CalculatePercentage(m_damageable.health.currentValue, m_damageable.health.maxValue);
+                    Debug.Log(healthPercentage);
+                    StopAllCoroutines();
+                    if (m_attackDecider.hasDecidedOnAttack == false)
                     {
-                        m_currentCD += Time.deltaTime;
+                        m_attackDecider.DecideOnAttack();
                     }
-                    else
+                    switch (m_attackDecider.chosenAttack.attack)
                     {
-                        m_currentCD = 0;
-                        m_stateHandle.OverrideState(State.ReevaluateSituation);
+                        case Attack.SlashStabComboAttack:
+                            //m_animation.EnableRootMotion(true, false);
+                            //m_attackHandle.ExecuteAttack(m_info.attack.animation, m_info.idleAnimation.animation);
+                           StartCoroutine(SlashStabComboAttack());
+                            break;
+                        case Attack.SwordCleaveAttack:
+                            StartCoroutine(SwordCleaveAttack());
+                          
+                            break;
+                        case Attack.WingShieldAttack:
+                            if (healthPercentage < m_healthPercentageWingShieldActivate)
+                            {
+                                StartCoroutine(WingPushBehaviour());
+                            }
+                            else
+                            {
+                                m_attackDecider.hasDecidedOnAttack = false;
+                                m_stateHandle.SetState(State.ReevaluateSituation);
+                            }
+                            break;
                     }
+                
+
 
                     break;
+
+                //case State.Cooldown:
+                //    m_stateHandle.Wait(State.ReevaluateSituation);
+                //    if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
+                //    if (IsTargetInRange(100))
+                //    {
+                //        if (!IsFacingTarget())
+                //        {
+                //            m_turnState = State.Cooldown;
+                //            if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation.animation)
+                //                m_stateHandle.SetState(State.Turning);
+                //            CustomTurn();
+                //        }
+                //        else
+                //        {
+                //            m_animation.EnableRootMotion(true, false);
+                //            m_animation.SetAnimation(0, m_info.backMove.animation, true);
+                //            m_movement.MoveTowards(Vector2.one * -transform.localScale.x, m_info.backMove.speed);
+                //        }
+                //    }
+                //    else
+                //    {
+                //        m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                //    }
+
+                //    if (m_currentCD <= m_info.attackCD)
+                //    {
+                //        m_currentCD += Time.deltaTime;
+                //    }
+                //    else
+                //    {
+                //        m_currentCD = 0;
+                //        m_stateHandle.OverrideState(State.ReevaluateSituation);
+                //    }
+
+                    //break;
                 case State.Chasing:
-                    {
-                        if (IsFacingTarget())
+                    StopAllCoroutines();
+                    if (IsFacingTarget())
                         {
                             m_attackDecider.DecideOnAttack();
                             if (m_attackDecider.hasDecidedOnAttack && IsTargetInRange(m_attackDecider.chosenAttack.range) && !m_wallSensor.allRaysDetecting)
                             {
+                               
                                 m_movement.Stop();
                                 m_animation.SetAnimation(0, m_info.idleAnimation, true);
                                 m_stateHandle.SetState(State.Attacking);
@@ -406,18 +627,21 @@ namespace DChild.Gameplay.Characters.Enemies
                                 }
                                 else
                                 {
+                                    
                                     m_movement.Stop();
                                     m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                                    
                                 }
                             }
                         }
                         else
                         {
-                            m_turnState = State.ReevaluateSituation;
-                            if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation.animation)
-                                m_stateHandle.SetState(State.Turning);
+                            //m_turnState = State.ReevaluateSituation;
+                            //if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation.animation)
+                            //    m_stateHandle.SetState(State.Turning);
+                            CustomTurn();
                         }
-                    }
+                    
                     break;
 
                 case State.ReevaluateSituation:

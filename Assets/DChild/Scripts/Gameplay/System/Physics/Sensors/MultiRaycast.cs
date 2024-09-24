@@ -36,6 +36,12 @@ namespace DChild.Gameplay
             hitsList = new List<RaycastHit2D>();
         }
 
+        public void SetData(MultiRayCastData data)
+        {
+            m_config = data;
+            Initialize();
+        }
+
         public void Set(int rayCount, float castWidth, float castLength)
         {
             if (m_count != rayCount)
@@ -90,7 +96,7 @@ namespace DChild.Gameplay
                     {
                         hitsList.Add(hitBuffers[k]);
                     }
-                   
+
                     if (isDetecting == false)
                     {
                         isDetecting = true;

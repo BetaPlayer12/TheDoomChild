@@ -5,6 +5,7 @@
         int priority { get; }
         bool HasNotifications();
         void HandleNextNotification();
+        void RemoveAllQueuedNotifications();
     }
 
 }
