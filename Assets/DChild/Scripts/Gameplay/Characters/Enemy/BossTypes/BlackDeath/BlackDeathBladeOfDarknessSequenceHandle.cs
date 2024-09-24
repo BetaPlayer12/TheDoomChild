@@ -44,12 +44,14 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField]
         private Sequence[] m_sequences;
 
-        private bool m_isExecutinSequence;
+        private bool m_isExecutingSequence;
+
+        public bool isExecutingSequence => m_isExecutingSequence;
 
         [Button, HideInEditorMode]
         public void Execute()
         {
-            if (m_isExecutinSequence)
+            if (m_isExecutingSequence)
                 return;
 
             StopAllCoroutines();
@@ -58,7 +60,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator PlaySequencesRoutine()
         {
-            m_isExecutinSequence = true;
+            m_isExecutingSequence = true;
 
             yield return m_sequences[0].Execute();
             for (int i = 1; i < m_sequences.Length; i++)
@@ -71,7 +73,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 yield return sequence.Execute();
             }
 
-            m_isExecutinSequence = false;
+            m_isExecutingSequence = false;
         }
 
         private IEnumerator WaitForSequenceToBeDone(Sequence sequence)

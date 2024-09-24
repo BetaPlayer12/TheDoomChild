@@ -1,5 +1,7 @@
-﻿using DChild.Gameplay.Pooling;
+﻿using DChild.Gameplay.Characters;
+using DChild.Gameplay.Pooling;
 using Sirenix.OdinInspector;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -35,6 +37,8 @@ namespace DChild.Gameplay.Projectiles
         private float m_projectileSpeed;
         [SerializeField, Min(0)]
         private float m_fromCenterOffset;
+        [SerializeField, Min(0)]
+        private float m_interval;
         [SerializeField]
         private ScatterType m_type;
         [SerializeField, Wrap(1, 360), ShowIf("@m_type == ScatterType.Arc")]
@@ -49,6 +53,51 @@ namespace DChild.Gameplay.Projectiles
             for (int i = 0; i < m_projectileCount; i++)
             {
                 SpawnProjectile(configurations[i]);
+            }
+        }
+
+        [Button, HideInEditorMode]
+        public void SpawnProjectileInSequence(HorizontalDirection direction, bool launchImmidiately)
+        {
+            StopAllCoroutines();
+            StartCoroutine(SpawnProjectileInSequenceRoutine(direction, launchImmidiately));
+        }
+
+        private IEnumerator SpawnProjectileInSequenceRoutine(HorizontalDirection direction, bool launchImmidiately)
+        {
+            var configurations = CalculateConfiguration();
+            if (direction == HorizontalDirection.Right)
+            {
+                for (int i = 0; i < m_projectileCount; i++)
+                {
+                    SpawnProjectile(configurations[i]);
+                    if (launchImmidiately)
+                    {
+                        var projectile = m_spawnedProjectiles[i];
+                        m_spawnedProjectiles[i].Launch(projectile.transform.right, m_projectileSpeed);
+                    }
+                    yield return new WaitForSeconds(m_interval);
+                }
+            }
+            else
+            {
+                var spawnIndex = 0;
+                for (int i = m_projectileCount- 1; i >= 0; i--)
+                {
+                    SpawnProjectile(configurations[i]);
+                    if (launchImmidiately)
+                    {
+                        var projectile = m_spawnedProjectiles[spawnIndex];
+                        m_spawnedProjectiles[spawnIndex].Launch(projectile.transform.right, m_projectileSpeed);
+                    }
+                    yield return new WaitForSeconds(m_interval);
+                    spawnIndex++;
+                }
+            }
+
+            if (launchImmidiately)
+            {
+                m_spawnedProjectiles.Clear();
             }
         }
 

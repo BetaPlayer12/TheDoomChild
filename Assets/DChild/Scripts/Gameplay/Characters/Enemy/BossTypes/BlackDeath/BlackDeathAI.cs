@@ -325,7 +325,13 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Spawn Points")]
         private Transform m_projectilePoint;
         [SerializeField, TabGroup("Spawn Points")]
+        private List<Transform> m_teleportPoints;
+        [SerializeField, TabGroup("Spawn Points")]
+        private List<BlackDeathBladeOfDarknessSequenceHandle> m_blackDeathBladeOfDarknessSequenceHandle;
+        [SerializeField, TabGroup("Spawn Points")]
         private Collider2D m_randomSpawnCollider;
+        [SerializeField, TabGroup("Spawn Points")]
+        private List<ProjectileScatterHandle> m_bladeThrowHandler;
 
         private int m_currentPhaseIndex;
         private int m_attackCount;
@@ -501,7 +507,7 @@ namespace DChild.Gameplay.Characters.Enemies
             Debug.Log("Attack 1 phase 1");
             m_stateHandle.ApplyQueuedState();
 
-        }
+        }// phase 1 attack pattern 1
         private IEnumerator ScytheSlashBladeOfDarknessAttack()
         {
             //teleport to player
@@ -514,11 +520,12 @@ namespace DChild.Gameplay.Characters.Enemies
                 // canTeleport = true;
                 for (int i = 0; i < 2; i++)
                 {
-                    Debug.Log("ScytheSlash");
+                    Debug.Log("ScytheSlash " + i +" " + missCounter);
                     yield return ScytheSlashRoutine();
                 }
                 if (m_isPlayerHit == true)
                 {
+                    missCounter = 0;
                     break;
                 }
                 missCounter++;
@@ -535,44 +542,101 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 Debug.Log("Balde of darkness!!");
                 //blade of darkness
-                //yield return BladeOfDarknessRoutine();
+                m_animation.SetAnimation(0, m_info.idleAnimation.animation, true);
+                yield return BladeOfDarknessRoutinePattern(false);
             }
-           
+            yield return TeleportToTargetRoutine(RandomTeleportPoint(), new Vector2(20, -5));
             DecidedOnAttack(false);
             m_stateHandle.ApplyQueuedState();
+        }//phase 1 attack pattern 2
+        private IEnumerator BladeOfDarknessRoutinePattern(bool isPatterned, int pattern = 0)
+        {
+            var random = UnityEngine.Random.Range(0, 4);
+            BlackDeathBladeOfDarknessSequenceHandle cacheHandle = null;
+            if (!isPatterned)
+            {
+                switch (random)
+                {
+                    case 0:
+                        yield return TeleportToTargetRoutine(m_teleportPoints[0].position, new Vector2(20, -5));
+                        cacheHandle = m_blackDeathBladeOfDarknessSequenceHandle[0];
+                        break;
+                    case 1:
+                        yield return TeleportToTargetRoutine(m_teleportPoints[1].position, new Vector2(20, -5));
+                        cacheHandle = m_blackDeathBladeOfDarknessSequenceHandle[1];
+                        break;
+                    case 2:
+                        yield return TeleportToTargetRoutine(m_teleportPoints[0].position, new Vector2(20, -5));
+                        BladeThrowProjectileLauncher(2);
+                        cacheHandle = m_blackDeathBladeOfDarknessSequenceHandle[0];
+                        break;
+                    case 3:
+                        yield return TeleportToTargetRoutine(m_teleportPoints[0].position, new Vector2(20, -5));
+                        cacheHandle = m_blackDeathBladeOfDarknessSequenceHandle[2];
+                        break;
+                }
+                cacheHandle.Execute();
+                while (cacheHandle.isExecutingSequence)
+                {
+                    yield return null;
+                }
+            }
+            else
+            {
+                switch (pattern)
+                {
+                    case 0:
+                        yield return TeleportToTargetRoutine(m_teleportPoints[0].position, new Vector2(20, -5));
+                        cacheHandle = m_blackDeathBladeOfDarknessSequenceHandle[0];
+                        break;
+                    case 1:
+                        yield return TeleportToTargetRoutine(m_teleportPoints[1].position, new Vector2(20, -5));
+                        cacheHandle = m_blackDeathBladeOfDarknessSequenceHandle[1];
+                        break;
+                    case 2:
+                        yield return TeleportToTargetRoutine(m_teleportPoints[0].position, new Vector2(20, -5));
+                        BladeThrowProjectileLauncher(2);
+                        cacheHandle = m_blackDeathBladeOfDarknessSequenceHandle[0];
+                        break;
+                    case 3:
+                        yield return TeleportToTargetRoutine(m_teleportPoints[0].position, new Vector2(20, -5));
+                        cacheHandle = m_blackDeathBladeOfDarknessSequenceHandle[2];
+                        break;
+                }
+                cacheHandle.Execute();
+                while (cacheHandle.isExecutingSequence)
+                {
+                    yield return null;
+                }
+            }
+          
+        
+
+             
         }
         private IEnumerator TeleportBloodAttack()
         {
             m_stateHandle.Wait(State.ReevaluateSituation);
-            for (int i = 0; i < 3; i++)
-            {
-                yield return BloodLightningBarrageRoutine(8);
-                yield return null;
-            }
+            /* for (int i = 0; i < 3; i++)
+             {
+                 yield return BloodLightningBarrageRoutine(1);
+
+             }*/
+            yield return BloodLightningBarrageRoutine(1);
             //teleport away from player
             yield return TeleportToTargetRoutine(RandomTeleportPoint(), new Vector2(0f, 0f));
             DecidedOnAttack(false);
             m_stateHandle.ApplyQueuedState();
-        }
+        }//phase 1 attack pattern 3
         private IEnumerator BladeOfDarknessTeleportAttack()
         {
             m_stateHandle.Wait(State.ReevaluateSituation);
-            var random = UnityEngine.Random.Range(0, 2);
-            switch (random)
-            {
-                case 0:
-                    //yield return BladeOfDarknessRoutine(); pattern 1
-                    break;
-                case 1:
-                    //yield return BladeOfDarknessRoutine(); pattern 2
-                    break;
-                 
-            }
+            yield return BladeOfDarknessRoutinePattern(false); 
             //teleport away from player
             yield return TeleportToTargetRoutine(RandomTeleportPoint(), new Vector2(0f, 0f));
             DecidedOnAttack(false);
             m_stateHandle.ApplyQueuedState();
-        }
+        }//phase 1 attack pattern 4
         private IEnumerator PatternedBladeThrowAttack()
         {
             m_stateHandle.Wait(State.ReevaluateSituation);
@@ -581,11 +645,13 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return BladeThrowRoutine(8, 1);
             DecidedOnAttack(false);
             m_stateHandle.ApplyQueuedState();
-        }
+        }//phase 1 attack pattern 5
 
         private IEnumerator GuardsEdgeBladeOfDarknesssAttack()
         {
             m_stateHandle.Wait(State.ReevaluateSituation);
+            var bladeOfDarknessPattern1 = 0;
+            var bladeOfDarknessPattern2 = 1;
             var random = UnityEngine.Random.Range(0, 2);
             switch (random)
             {
@@ -595,17 +661,15 @@ namespace DChild.Gameplay.Characters.Enemies
                 case 1:
                     for (int i = 0; i < 2; i++)
                     {
-                        //yield return BladeOfDarknessRoutine(); but pattern1
+                        yield return BladeOfDarknessRoutinePattern(true, bladeOfDarknessPattern1);
                         Debug.Log("DakoAkonP2Y");
                     }
-
-                    //yield return BladeOfDarknessRoutine(); but pattern2
+                    yield return BladeOfDarknessRoutinePattern(true, bladeOfDarknessPattern2);
                     break;
             }
-            yield return null; 
             DecidedOnAttack(false);
             m_stateHandle.ApplyQueuedState();
-        }
+        }//phase 1 attack pattern 6
         //phase 2
         private IEnumerator ScytheSlashSingleBladeThrowAttack()
         {
@@ -632,25 +696,21 @@ namespace DChild.Gameplay.Characters.Enemies
             else
             {
                 yield return TeleportToTargetRoutine(CenterPointOfTheArena(), new Vector2(0f, 0f));
-                yield return BladeThrowRoutine(16, 0);
-                //blade of darkness
-                //yield return BladeOfDarknessRoutine();
+                yield return BladeThrowRoutine(16, 1);
             }
             yield return TeleportToTargetRoutine(RandomTeleportPoint(), new Vector2(0f, 0f));
             DecidedOnAttack(false);
             m_stateHandle.ApplyQueuedState();
-        }
+        }//phase 2 attack pattern 1
         private IEnumerator ScytheSlashBladeDarknessMurmurGuardsEdgeAttack()
         {
            
             m_stateHandle.Wait(State.ReevaluateSituation);
             var missCounter = 0f;
-            var random = UnityEngine.Random.Range(0, 2);
-        
             //if hit proceed to chose random attack then teleport awa
             while (!m_isPlayerHit && missCounter != 2)
             {
-                yield return TeleportToTargetRoutine(m_targetInfo.position, new Vector2(0f, 0f));
+                yield return TeleportToTargetRoutine(m_targetInfo.position, new Vector2(20f, -5f));
                 yield return ScytheSlashRoutine();
                 if (m_isPlayerHit == true)
                 {
@@ -659,23 +719,26 @@ namespace DChild.Gameplay.Characters.Enemies
                 missCounter++;
                 yield return null;
             }
+            var randomizedBladeOfDarkness3or4 = UnityEngine.Random.Range(2, 4);
             if (m_isPlayerHit == true)
             {
                 m_isPlayerHit = false;
                 m_hitCount = 0;
-                switch (random)
+                switch (randomizedBladeOfDarkness3or4)
                 {
-                    case 0:
+                    case 2:
+                        Debug.Log("murmurs mark");
                         //murmurs mark;
                         break;
-                    case 1:
-                        //blade of darkness;
+                    case 3:
+                        Debug.Log(randomizedBladeOfDarkness3or4);
+                        yield return BladeOfDarknessRoutinePattern(true, randomizedBladeOfDarkness3or4);
                         break;
-
                 }
             }
             else
             {
+                Debug.Log(" GuardsEdgeRoutine()");
                 //yield return GuardsEdgeRoutine();
             }
            
@@ -683,12 +746,11 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return TeleportToTargetRoutine(RandomTeleportPoint(), new Vector2(0f, 0f));
             DecidedOnAttack(false);
             m_stateHandle.ApplyQueuedState();
-        }//done
+        }//done //phase 2 attack pattern 2
         private IEnumerator TripleBloodLightningOrBladeDarkness()
         {
             m_stateHandle.Wait(State.ReevaluateSituation);
             var random = UnityEngine.Random.Range(0, 2);
-
             switch (random)
             {
                 case 0:
@@ -698,14 +760,17 @@ namespace DChild.Gameplay.Characters.Enemies
                     }
                     break;
                 case 1:
-                    //blade of darkness;
+                    for (int i = 0; i < 2; i++)
+                    {
+                        yield return BladeOfDarknessRoutinePattern(true, 2);
+                    }
+                    yield return BladeOfDarknessRoutinePattern(true, 3);
                     break;
 
             }
-  
             DecidedOnAttack(false);
             m_stateHandle.ApplyQueuedState();
-        }//done
+        }//done//phase 2 attack pattern 3
 
         private IEnumerator RandomTripleBloodLightningAttack()
         {
@@ -713,13 +778,13 @@ namespace DChild.Gameplay.Characters.Enemies
             //randomizeblood lighting
             for (int i = 0; i < 3; i++)
             {
-                yield return BloodLightningBarrageRoutine(8);
-                yield return null;
+                yield return BloodLightningBarrageRoutine(1);
+
             }
             DecidedOnAttack(false);
             m_stateHandle.ApplyQueuedState();
-  
-        }//done
+
+        }//done phase 2 attack pattern 4
 
         private IEnumerator TeleportBladeThrow()
         {
@@ -728,13 +793,64 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return TeleportToTargetRoutine(CenterPointOfTheArena(), new Vector2(0f,0f));
             for (int i = 0; i < 3; i++)
             {
-                yield return BladeThrowRoutine(8, 1);
+                m_animation.SetAnimation(0, m_info.attackDaggersIdle.animation, true);
+                Debug.Log("asdsadaa" + i);
+                yield return BladeThrowRoutineBatchARoutine(false);
             }
             yield return TeleportToTargetRoutine(RandomTeleportPoint(), new Vector2(0f, 0f));
             DecidedOnAttack(false);
             m_stateHandle.ApplyQueuedState();
 
-        }//done
+        }//done phase 2 attack pattern 5
+        [SerializeField]
+        private ProjectileScatterHandle m_projectileScatterA;
+        [SerializeField]
+        private ProjectileScatterHandle m_projectileScatterB;
+        public void BladeThrowProjectileLauncher(int attackPattern)
+        {
+            m_bladeThrowHandler[attackPattern].SpawnProjectiles();
+            m_bladeThrowHandler[attackPattern].LaunchSpawnedProjectiles();
+        }
+        private IEnumerator BladeThrowRoutineBatchARoutine(bool isRandomized, int batchCombo = 0)
+        {
+            if (isRandomized)
+            {
+               
+                if (batchCombo == 1)
+                {
+                    BladeThrowProjectileLauncher(0);
+                    yield return new WaitForSeconds(1f);
+                    BladeThrowProjectileLauncher(1);
+                }
+                else
+                {
+                    BladeThrowProjectileLauncher(1);
+                    yield return new WaitForSeconds(1f);
+                    BladeThrowProjectileLauncher(0);
+                }
+
+            }
+            else
+            {
+                Debug.Log("Randomized");
+                var random = UnityEngine.Random.Range(0, 2);
+                if (random == 0)
+                {
+                    BladeThrowProjectileLauncher(0);
+                    yield return new WaitForSeconds(1f);
+                    BladeThrowProjectileLauncher(1);
+                }
+                else
+                {
+                    BladeThrowProjectileLauncher(1);
+                    yield return new WaitForSeconds(1f);
+                    BladeThrowProjectileLauncher(0);
+                }
+
+            }
+            yield return new WaitForSeconds(1f);
+
+        }
         //phase 3 
         private IEnumerator TeleportGuardsEdgeMurmursMarkRoutine()
         {
@@ -1059,8 +1175,6 @@ namespace DChild.Gameplay.Characters.Enemies
                 yield return new WaitForSeconds(.5f);
             }
             //m_animation.SetAnimation(0, m_info.idleAnimation, true);
-            m_stateHandle.ApplyQueuedState();
-
             yield return null;
         }
 
@@ -1225,8 +1339,6 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.bloodLightningEndAnimation);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_hitbox.SetInvulnerability(Invulnerability.None);
-            m_stateHandle.ApplyQueuedState();
-            yield return null;
         }
 
         private IEnumerator BloodLightningBarragePhase3Routine(int lightningCount)
@@ -1563,7 +1675,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     switch (m_attackDecider.chosenAttack.attack)
                     {
                         case Attack.ScytheSlashDualBladeThrow:
-                            StartCoroutine(ScytheSlashDualBladeThrowAttack());
+                            StartCoroutine(TeleportBladeThrow());
                             break;
                         case Attack.ScytheSlashBladeOfDarkness:
                             //StartCoroutine(ScytheSlashBladeOfDarknessAttack());
