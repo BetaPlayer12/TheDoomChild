@@ -55,7 +55,7 @@ namespace DChild.Gameplay.Characters.AI
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
-            if (collision.tag != "Sensor")
+            if (collision.tag != "Sensor" && collision.tag == "Hitbox")
             {
                 if (m_spottedTarget == null)
                 {

@@ -195,7 +195,7 @@ namespace DChild.Gameplay.Characters.Enemies
         }
         public void InteractDetect()
         {
-            m_detectlimit = UnityEngine.Random.Range(1, 5);
+            m_detectlimit = UnityEngine.Random.Range(2, 5);
             m_detectcount = 0;
             m_movement.Stop();
             m_stateHandle.Wait(State.ReevaluateSituation);
@@ -322,8 +322,8 @@ namespace DChild.Gameplay.Characters.Enemies
             m_shadow.SetActive(true);
             m_animation.SetAnimation(0, m_info.detectAnimation, false);
             yield return new WaitForSeconds(.25f);
-            m_hitbox.gameObject.SetActive(true);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.detectAnimation);
+            m_hitbox.gameObject.SetActive(true);
             m_animation.SetAnimation(0, m_info.idleAggroAnimation, true);
             m_stateHandle.OverrideState(State.ReevaluateSituation);
             yield return null;

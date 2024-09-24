@@ -64,6 +64,10 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField, ValueDropdown("GetEvents")]
             private string m_hitboxStartEvent;
             public string hitboxStartEvent => m_hitboxStartEvent;
+            [Title("Events")]
+            [SerializeField, ValueDropdown("GetEvents")]
+            private string m_hitboxStartEvent_1;
+            public string hitboxStartEvent_1 => m_hitboxStartEvent_1;
 
             public override void Initialize()
             {
@@ -440,6 +444,7 @@ namespace DChild.Gameplay.Characters.Enemies
             }
             
             m_spineEventListener.Subscribe(m_info.hitboxStartEvent, EnableAttackBB);
+            m_spineEventListener.Subscribe(m_info.hitboxStartEvent_1, EnableAttackBB);
             m_startPoint = transform.position;  
         }
 

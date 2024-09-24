@@ -57,10 +57,15 @@ namespace DChild.Gameplay.Characters.Enemies
             private BasicAnimationInfo m_flinchAnimation = new BasicAnimationInfo();
             public BasicAnimationInfo flinchAnimation => m_flinchAnimation;
 
+            [Title("Projectiles")]
             [SerializeField]
             private SimpleProjectileAttackInfo m_projectile;
             public SimpleProjectileAttackInfo projectile => m_projectile;
-
+            
+            [SerializeField]
+            private SimpleProjectileAttackInfo m_deathFumes;
+            public SimpleProjectileAttackInfo deathFumes => m_deathFumes;
+            
             public override void Initialize()
             {
 #if UNITY_EDITOR
@@ -68,6 +73,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_move.SetData(m_skeletonDataAsset);
                 m_attack.SetData(m_skeletonDataAsset);
                 m_projectile.SetData(m_skeletonDataAsset);
+                m_deathFumes.SetData(m_skeletonDataAsset);
 
                 m_idleAnimation.SetData(m_skeletonDataAsset);
                 m_flinchAnimation.SetData(m_skeletonDataAsset);
@@ -108,6 +114,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private GameObject m_selfCollider;
         [SerializeField, TabGroup("Reference")]
         private Collider2D m_bodycollider;
+        [SerializeField, TabGroup("Reference")]
+        private Collider2D m_explosionBB;
         [SerializeField, TabGroup("Modules")]
         private PathFinderAgent m_agent;
         [SerializeField, TabGroup("Modules")]
@@ -125,6 +133,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private RandomAttackDecider<Attack> m_attackDecider;
 
         private ProjectileLauncher m_projectileLauncher;
+        private ProjectileLauncher m_projectileLauncherOnDeath;
 
         private float m_currentCD;
         private bool m_isDetecting;
@@ -170,7 +179,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_agent.Stop();
                 m_rigidbody2D.constraints = RigidbodyConstraints2D.FreezeRotation;
                 m_stateHandle.Wait(State.ReevaluateSituation);
-                StopAllCoroutines();
+                //StopAllCoroutines();
             }
         }
 
@@ -278,6 +287,14 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return null;
         }
 
+        private void DeathExplode()
+        {
+            m_explosionBB.enabled = true;
+            m_projectileLauncherOnDeath.AimAt(m_character.centerMass.position);
+            m_projectileLauncherOnDeath.LaunchProjectile();
+            /*m_info.projectile.projectileInfo*/
+        }
+
         private void LaunchProjectile()
         {
             if (m_targetInfo.isValid)
@@ -330,7 +347,8 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.DisableRootMotion();
             m_bodycollider.enabled = false;
             m_startPos = transform.position;
-
+            m_spineEventListener.Subscribe(m_info.deathFumes.launchOnEvent, DeathExplode);
+           
             m_spineEventListener.Subscribe(m_info.projectile.launchOnEvent, LaunchProjectile);
         }
 
@@ -344,6 +362,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_flinchHandle.FlinchEnd += OnFlinchEnd;
             m_deathHandle.SetAnimation(m_info.deathAnimation.animation);
             m_projectileLauncher = new ProjectileLauncher(m_info.projectile.projectileInfo, m_character.centerMass);
+            m_projectileLauncherOnDeath = new ProjectileLauncher(m_info.deathFumes.projectileInfo, m_character.centerMass);
             m_stateHandle = new StateHandle<State>(State.Patrol, State.WaitBehaviourEnd);
             m_attackDecider = new RandomAttackDecider<Attack>();
             UpdateAttackDeciderList();

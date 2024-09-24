@@ -158,6 +158,16 @@ namespace DChild.Gameplay.Characters.Enemies
         private Collider2D m_bodyCollider;
         [SerializeField, TabGroup("Reference")]
         private Collider2D m_legCollider;
+        [SerializeField, TabGroup("Reference")]
+        private int m_HealValue;
+        [SerializeField, TabGroup("Reference")]
+        private float m_summonCooldown;
+        [SerializeField, TabGroup("Reference")]
+        private ParticleSystem m_TeleportVFX;
+        [SerializeField, TabGroup("Reference")]
+        private GameObject m_shadow;
+        //[SerializeField, TabGroup("Reference")]
+        //private float m_TeleportCooldown;
         [SerializeField, TabGroup("Modules")]
         private AnimatedTurnHandle m_turnHandle;
         [SerializeField, TabGroup("Modules")]
@@ -177,6 +187,10 @@ namespace DChild.Gameplay.Characters.Enemies
         private bool m_enablePatience;
         private bool m_isDetecting;
         private Vector2 m_startPoint;
+        private bool m_HasHealed;
+        private float m_healthHealThreshold;
+        private float m_summonCooldownDuration=0f;
+        //private float m_teleportCooldownDuration = 0f;
 
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_wallSensor;
@@ -192,6 +206,10 @@ namespace DChild.Gameplay.Characters.Enemies
         private FlinchHandler m_flinchHandleWithBook;
         [SerializeField, TabGroup("Totem")]
         private TomeOfSpellsIceAI m_tome;
+        [SerializeField, TabGroup("Totem")]
+        private TomeOfSpellsFlameAI m_tomeFire;
+        [SerializeField, TabGroup("Totem")]
+        private TomeOfSpellsStormAI m_tomeStorm;
 
         [SerializeField]
         private bool m_willPatrol;
@@ -388,7 +406,14 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_currentFlinchAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_currentFlinchAnimation);
             m_animation.SetAnimation(0, m_currentFlinchAnimation, true);
-            m_stateHandle.ApplyQueuedState();
+            if (m_teleportRoutine == null && !m_wallSensor.allRaysDetecting && !m_backSensor.allRaysDetecting&& m_targetInfo!=null)
+            {
+                //m_stateHandle.Wait(State.ReevaluateSituation);
+                m_teleportRoutine = StartCoroutine(TeleportRoutine());
+            }else
+            {
+                m_stateHandle.ApplyQueuedState();
+            }
             yield return null;
         }
 
@@ -488,7 +513,83 @@ namespace DChild.Gameplay.Characters.Enemies
             if (m_bookState == BookState.WithBook)
             {
                 ApplyBookState(BookState.WithoutBook);
-                m_tome.SummonTome(m_targetInfo);
+                int count = 0;
+                do
+                {
+                    GameObject bookSpawned = null;
+                    int x = UnityEngine.Random.Range(1, 4);
+                    Debug.Log(x+" ??????????????????????????????");
+                    switch (x)
+                    {
+                        case 1:
+                            if (!m_tome.gameObject.activeSelf)
+                            {
+                                m_tome.SummonTome(m_targetInfo);
+                                bookSpawned = m_tome.gameObject;
+                            }
+                            else
+                            {
+                                if (!m_tomeFire.gameObject.activeSelf)
+                                {
+                                    m_tomeFire.SummonTome(m_targetInfo);
+                                    bookSpawned = m_tomeFire.gameObject;
+                                }
+                                else
+                                {
+                                    m_tomeStorm.SummonTome(m_targetInfo);
+                                    bookSpawned = m_tomeStorm.gameObject;
+                                }
+                            }
+                            break;
+
+                        case 2:
+                            if (!m_tomeFire.gameObject.activeSelf)
+                            {
+                                m_tomeFire.SummonTome(m_targetInfo);
+                                bookSpawned = m_tomeFire.gameObject;
+                            }
+                            else
+                            {
+                                if (!m_tomeStorm.gameObject.activeSelf)
+                                {
+                                    m_tomeStorm.SummonTome(m_targetInfo);
+                                    bookSpawned = m_tomeStorm.gameObject;
+                                }
+                                else
+                                {
+                                    m_tome.SummonTome(m_targetInfo);
+                                    bookSpawned = m_tome.gameObject;
+                                }
+                            }
+                            break;
+
+                        case 3:
+                            if (!m_tomeStorm.gameObject.activeSelf)
+                            {
+                                m_tomeStorm.SummonTome(m_targetInfo);
+                                bookSpawned = m_tomeStorm.gameObject;
+                            }
+                            else
+                            {
+                                if (!m_tome.gameObject.activeSelf)
+                                {
+                                    m_tome.SummonTome(m_targetInfo);
+                                    bookSpawned = m_tome.gameObject;
+                                }
+                                else
+                                {
+                                    m_tomeFire.SummonTome(m_targetInfo);
+                                    bookSpawned = m_tomeFire.gameObject;
+                                }
+                            }
+                            break;
+                    }
+                    count++;
+                    bookSpawned.transform.position += (count == 1 ? new Vector3(10f, 0f) : new Vector3(-10f, 0f));
+                } while (count < 2);
+
+                
+                
             }
         }
 
@@ -562,30 +663,141 @@ namespace DChild.Gameplay.Characters.Enemies
             }
         }
 
+        private void TeleportFleeing()
+        {
+            
+
+            if (IsTargetInRange(m_info.targetDistanceTolerance) && !m_wallSensor.allRaysDetecting && !m_backSensor.allRaysDetecting)
+            {
+                if (IsTargetInRange(m_info.fleeDistance))
+                {
+                    m_stateHandle.Wait(State.ReevaluateSituation);
+                    m_teleportRoutine = StartCoroutine(TeleportRoutine());
+                }
+                else
+                {
+                    if (IsFacingTarget())
+                    {
+                        if (m_animation.GetCurrentAnimation(0).ToString() != m_currentIdleAnimation)
+                            m_movement.Stop();
+
+                        m_selfCollider.enabled = true;
+                        m_animation.SetAnimation(0, m_currentIdleAnimation, true);
+                    }
+                    else
+                    {
+                        m_turnState = State.ReevaluateSituation;
+                        if (m_animation.GetCurrentAnimation(0).ToString() != m_currentTurnAnimation)
+                            m_stateHandle.SetState(State.Turning);
+                    }
+                }
+
+            }
+            else
+            {
+                if (IsFacingTarget())
+                {
+                    Move();
+                }
+                else
+                {
+                    if (!m_backSensor.allRaysDetecting)
+                    {
+                        m_turnState = State.ReevaluateSituation;
+                        if (m_animation.GetCurrentAnimation(0).ToString() != m_currentTurnAnimation)
+                            m_stateHandle.SetState(State.Turning);
+                    }
+                }
+            }
+        }
+
         private IEnumerator TeleportRoutine()
         {
+            m_TeleportVFX.Play();
+            m_shadow.SetActive(false);
+            m_animation.SetAnimation(0, m_info.teleportDisappearAnimation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.teleportDisappearAnimation);
             m_hitbox.Disable();
             m_movement.Stop();
             m_character.physics.simulateGravity = false;
             m_bodyCollider.enabled = false;
             m_legCollider.enabled = false;
-            m_animation.SetAnimation(0, m_info.teleportDisappearAnimation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.teleportDisappearAnimation);
-            yield return new WaitUntil(() => Vector2.Distance(m_targetInfo.position, transform.position) > m_info.targetDistanceTolerance);
-            transform.position = new Vector2(m_targetInfo.position.x + (UnityEngine.Random.Range(0, 2) == 1 ? 25f : -25f), GroundPosition(m_targetInfo.position).y);
             yield return new WaitForSeconds(2f);
+            //yield return new WaitUntil(() => Vector2.Distance(m_targetInfo.position, transform.position) > m_info.targetDistanceTolerance);
+            //int randomnum = UnityEngine.Random.Range(0, 2);
+            int randomnum;
+            Vector3 LastPosition = transform.position;
+            if (m_targetInfo.position.x < transform.position.x)
+            {
+                randomnum = 1;
+            }else
+            {
+                randomnum = 0;
+            }
+            transform.position = new Vector2(m_targetInfo.position.x + (randomnum==1 ? 50f : -50f), GroundPosition(transform.position).y);
+            //transform.position = new Vector2(m_targetInfo.position.x + (randomnum == 1 ? 25f : -25f), GroundPosition(m_targetInfo.position).y);
+            yield return new WaitForSeconds(0.6f);
+            /*
+            int check = 0;
+            yield return new WaitForSeconds(0.6f);
+            while (!m_groundSensor.isDetecting&&check<10)
+            {
+                check++;
+                Debug.Log(check+" "+transform.position);
+                transform.position -= new Vector3(0f, 1.5f);
+            }
+            */
             while (m_wallSensor.isDetecting && m_backSensor.isDetecting)
             {
-                transform.position = Vector3.MoveTowards(transform.position, m_targetInfo.position, m_currentMoveSpeed);
+                transform.position = Vector3.MoveTowards(transform.position, LastPosition, m_currentMoveSpeed);
                 yield return null;
             }
+            yield return new WaitForSeconds(0.6f);
+            if (!m_groundSensor.isDetecting)
+            {
+                if (randomnum == 0)
+                {
+                    transform.position += new Vector3(75f, 0);
+                    transform.position = new Vector3(transform.position.x, GroundPosition(transform.position).y);
+                }
+                else
+                {
+                    transform.position -= new Vector3(75f, 0);
+                    transform.position = new Vector3(transform.position.x, GroundPosition(transform.position).y);
+                }
+            }
+            m_animation.SetAnimation(0, m_info.teleportFromBelowAnimation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.teleportFromBelowAnimation);
+            //m_TeleportVFX.Play();
+            m_shadow.SetActive(true);
             m_hitbox.Enable();
             m_character.physics.simulateGravity = true;
             m_bodyCollider.enabled = true;
             m_legCollider.enabled = true;
-            m_animation.SetAnimation(0, m_info.teleportFromBelowAnimation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.teleportFromBelowAnimation);
             m_teleportRoutine = null;
+            m_animation.SetAnimation(0, m_currentIdleAnimation, true);
+            m_stateHandle.ApplyQueuedState();
+            yield return null;
+        }
+
+        private IEnumerator Healing()
+        {
+            m_stateHandle.Wait(State.ReevaluateSituation);
+            m_HasHealed = true;
+            m_animation.SetAnimation(0, m_info.healAnimation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.healAnimation);
+            GameplaySystem.combatManager.Heal(m_damageable, m_HealValue);
+            m_stateHandle.ApplyQueuedState();
+            yield return null;
+        }
+
+        private IEnumerator SummonBook()
+        {
+            m_stateHandle.Wait(State.ReevaluateSituation);
+            m_animation.SetAnimation(0,m_info.bookSummonAnimation,false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.bookSummonAnimation);
+            ApplyBookState(BookState.WithBook);
+            m_summonCooldownDuration = m_summonCooldown;
             m_stateHandle.ApplyQueuedState();
             yield return null;
         }
@@ -594,7 +806,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             base.Start();
 
-            ApplyBookState(BookState.WithBook);
+            ApplyBookState(BookState.WithoutBook);
             m_currentFullCD = UnityEngine.Random.Range(m_info.attackCD * .5f, m_info.attackCD * 2f);
             //m_aggroCollider.enabled = m_willPatrol ? true : false;
 
@@ -606,6 +818,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
             m_spineEventListener.Subscribe(m_info.summonTotemEvent, SummonTotem);
             m_startPoint = transform.position;
+            m_healthHealThreshold = (statsData.maxHealth * 0.2f);
         }
 
         protected override void Awake()
@@ -634,6 +847,8 @@ namespace DChild.Gameplay.Characters.Enemies
                     if (m_animation.GetCurrentAnimation(0).ToString() != m_currentIdleAnimation)
                         m_movement.Stop();
 
+                    
+
                     if (!IsFacingTarget())
                     {
                         m_turnState = State.Detect;
@@ -642,6 +857,11 @@ namespace DChild.Gameplay.Characters.Enemies
                     }
                     else
                     {
+                        if (m_bookState == BookState.WithoutBook && m_summonCooldownDuration <= 0)
+                        {
+                            StartCoroutine(SummonBook());
+                            break;
+                        }
                         m_stateHandle.OverrideState(State.ReevaluateSituation);
                     }
                     break;
@@ -750,48 +970,19 @@ namespace DChild.Gameplay.Characters.Enemies
 
                 case State.Fleeing:
 
-                    if (IsTargetInRange(m_info.targetDistanceTolerance) && !m_wallSensor.allRaysDetecting && !m_backSensor.allRaysDetecting)
+                    if (m_summonCooldownDuration > 0)
                     {
-                        if (IsTargetInRange(m_info.fleeDistance))
-                        {
-                            m_stateHandle.Wait(State.ReevaluateSituation);
-                            m_teleportRoutine = StartCoroutine(TeleportRoutine());
-                        }
-                        else
-                        {
-                            if (IsFacingTarget())
-                            {
-                                if (m_animation.GetCurrentAnimation(0).ToString() != m_currentIdleAnimation)
-                                    m_movement.Stop();
-
-                                m_selfCollider.enabled = true;
-                                m_animation.SetAnimation(0, m_currentIdleAnimation, true);
-                            }
-                            else
-                            {
-                                m_turnState = State.ReevaluateSituation;
-                                if (m_animation.GetCurrentAnimation(0).ToString() != m_currentTurnAnimation)
-                                    m_stateHandle.SetState(State.Turning);
-                            }
-                        }
-
+                        m_summonCooldownDuration -= Time.deltaTime;
                     }
-                    else
+
+                    if (m_damageable.health.currentValue < m_healthHealThreshold && !m_HasHealed)
                     {
-                        if (IsFacingTarget())
-                        {
-                            Move();
-                        }
-                        else
-                        {
-                            if (!m_backSensor.allRaysDetecting)
-                            {
-                                m_turnState = State.ReevaluateSituation;
-                                if (m_animation.GetCurrentAnimation(0).ToString() != m_currentTurnAnimation)
-                                    m_stateHandle.SetState(State.Turning);
-                            }
-                        }
+                        StartCoroutine(Healing());
+                        break;
                     }
+
+                    TeleportFleeing();
+                    
                     break;
 
                 case State.ReevaluateSituation:
@@ -801,6 +992,10 @@ namespace DChild.Gameplay.Characters.Enemies
                         switch (m_bookState)
                         {
                             case BookState.WithoutBook:
+                                if(m_summonCooldownDuration<=0 &&!m_tome.gameObject.activeSelf && !m_tomeFire.gameObject.activeSelf && !m_tomeStorm.gameObject.activeSelf)
+                                {
+                                    StartCoroutine(SummonBook());
+                                }
                                 m_stateHandle.SetState(State.Fleeing);
                                 break;
                             case BookState.WithBook:
@@ -826,6 +1021,10 @@ namespace DChild.Gameplay.Characters.Enemies
                     }
                     break;
                 case State.WaitBehaviourEnd:
+                    if (m_summonCooldownDuration > 0)
+                    {
+                        m_summonCooldownDuration -= Time.deltaTime;
+                    }
                     return;
             }
 

@@ -19,10 +19,10 @@ GameObject:
   - component: {fileID: 301668998168407696}
   - component: {fileID: 260933855365984288}
   - component: {fileID: 9001850105418550673}
-  - component: {fileID: 5467469482126588857}
   - component: {fileID: 5894549239971335363}
   - component: {fileID: 4469190170775864480}
   - component: {fileID: 3456034652551697044}
+  - component: {fileID: 2999491746418990651}
   m_Layer: 13
   m_Name: MimicPustuleBomb
   m_TagString: Character
@@ -84,7 +84,7 @@ MonoBehaviour:
   m_height: 0.5
   m_centerMass: {fileID: 2179534449112781218}
   m_isolatedObject: {fileID: 301668998168407696}
-  m_physics: {fileID: 5467469482126588857}
+  m_physics: {fileID: 0}
   m_colliders: {fileID: 6951513381634869671}
   m_AttackFX: {fileID: 0}
   m_facing: 1
@@ -155,15 +155,17 @@ MonoBehaviour:
   m_attackBB: {fileID: 3322901739042079786}
   m_pushDirection: {fileID: 5291048551100313788}
   m_PustuleBombsPosition: []
+  m_ExplosionBB: {fileID: 4181226930310690896}
   m_turnHandle: {fileID: 8686638512681665902}
   m_agent: {fileID: 2292168603449394193}
   m_attackHandle:
     m_animation: {fileID: 2715395151254739910}
   m_patrolHandle: {fileID: 5129505628628996812}
-  m_deathHandle: {fileID: 4666606840830070247}
   m_flinchHandle: {fileID: 5242269818498079581}
   m_wayPointPatrol: {fileID: 0}
   m_damageContactLocator: {fileID: 0}
+  navigationTracker: {fileID: 5406202349791231441}
+  movementOverrideHandle: {fileID: 3000270080125182595}
 --- !u!114 &604961951902240156
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -261,45 +263,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_duration:
     m_startTime: 0.15
---- !u!114 &5467469482126588857
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 52663249572869379}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 29150e23aad4b154eb74a477f7989649, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_simulateGravity: 0
-  m_gravity:
-    m_gravityScale: 10
-    m_direction: {x: 0, y: -1}
-    m_angle: -90
-    m_drawDirection: 0
-  m_useLinearDrag: 0
-  m_linearDrag:
-    m_x: 0
-    m_y: 0
-  m_useCoyoteTime: 0
-  m_coyoteTime:
-    m_duration: 0
-  m_useStepClimb: 0
-  m_stepClimber:
-    m_maxStepHeight: 0.01
-    stepSearchOvershoot: 0.01
-    m_detector: {fileID: 0}
-  m_calculateGroundAngle: 1
-  m_acceptableWalkableAngle:
-    m_min: 0
-    m_max: 0
-  m_legCollision: {fileID: 5942365368384257157}
-  m_legCollider: {fileID: 0}
-  m_legColliderLayerMask:
-    serializedVersion: 2
-    m_Bits: 65536
 --- !u!114 &5894549239971335363
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -351,6 +314,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_data: {fileID: 11400000, guid: c9ffb1b1c5c3b0b49bedda684415046a, type: 2}
+--- !u!114 &2999491746418990651
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 52663249572869379}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d9dd53d8b72e7244391ffd86337df106, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_isActive: 1
 --- !u!1 &203640016040936247
 GameObject:
   m_ObjectHideFlags: 0
@@ -407,6 +383,7 @@ MonoBehaviour:
   m_idleAnimation: Idle 1_UnAggro
   m_enableFlinchColor: 1
   m_flinchColorAnimation: Flinchcolor
+  m_enableModule: 1
 --- !u!1 &301668999446812786
 GameObject:
   m_ObjectHideFlags: 0
@@ -422,7 +399,6 @@ GameObject:
   - component: {fileID: 5129505628628996812}
   - component: {fileID: 2292168603449394193}
   - component: {fileID: 2292168603449394198}
-  - component: {fileID: 4666606840830070247}
   - component: {fileID: 2292168603449394195}
   m_Layer: 13
   m_Name: Behaviours
@@ -572,25 +548,6 @@ MonoBehaviour:
   targetCompatibility: {fileID: 0}
   repathRateCompatibility: NaN
   canSearchCompability: 0
---- !u!114 &4666606840830070247
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 301668999446812786}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5830f2bbb3b8ac149905b0850dbf3c4f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_source: {fileID: 260933855365984288}
-  m_animator: {fileID: 2715395151254739910}
-  m_animation: Death Explode_Fx
-  m_bodyDuration:
-    m_startTime: 1
-  m_fx: []
-  m_destroySource: 0
 --- !u!114 &2292168603449394195
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -704,6 +661,93 @@ Transform:
   m_Father: {fileID: 301668999446812797}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2120144077153305397
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3771342656458355750}
+  - component: {fileID: 6590790819695220644}
+  - component: {fileID: 4359844822680194870}
+  - component: {fileID: 3004651396660405219}
+  m_Layer: 11
+  m_Name: ExplodeBB
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3771342656458355750
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2120144077153305397}
+  m_LocalRotation: {x: -0, y: -0, z: -1, w: 0.00000031391647}
+  m_LocalPosition: {x: -0.08987427, y: 5.564911, z: 0}
+  m_LocalScale: {x: 1, y: -1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 678375193762091556}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!58 &6590790819695220644
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2120144077153305397}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 5.9874816e-13, y: -0.0000009536743}
+  serializedVersion: 2
+  m_Radius: 12
+--- !u!114 &4359844822680194870
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2120144077153305397}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d74578be2c646f438409c91e5fd4ee4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_canDetectInteractables: 0
+  m_damageUniqueHitboxesOnly: 0
+  m_collisionRegistrator: {fileID: 0}
+  m_ignoreColliderList: []
+--- !u!114 &3004651396660405219
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2120144077153305397}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a1fd8daaed7b64148a34acb96ba14ce1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  skeletonRenderer: {fileID: 6070641769478778412}
+  boneName: base
+  followXYPosition: 1
+  followZPosition: 1
+  followBoneRotation: 1
+  followSkeletonFlip: 1
+  followLocalScale: 0
+  initializeOnAwake: 1
+  m_updateOnFixedUpdate: 0
 --- !u!1 &3049915779313055801
 GameObject:
   m_ObjectHideFlags: 0
@@ -772,6 +816,62 @@ MonoBehaviour:
     PrefabModifications: []
     SerializationNodes: []
   m_data: {fileID: 0}
+--- !u!1 &4181226930310690896
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 678375193762091556}
+  - component: {fileID: 1095662060471754456}
+  m_Layer: 13
+  m_Name: BoundingBox
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &678375193762091556
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4181226930310690896}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 3771342656458355750}
+  m_Father: {fileID: 6070641769478778413}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1095662060471754456
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4181226930310690896}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e10454193b54c9a4eb8bfb67b80c746d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_centerMass: {fileID: 2179534449112781218}
+  m_data: {fileID: 11400000, guid: 9d93a530fb110824590fbd8f49274291, type: 2}
+  m_currentAttackInfo:
+    damage:
+      m_type: 1
+      m_value: 0
+    criticalDamageInfo:
+      chance: 0
+      damageModifier: 0
+    ignoreInvulnerability: 0
+    ignoresBlock: 0
 --- !u!1 &8891657059091492438
 GameObject:
   m_ObjectHideFlags: 0
@@ -1356,7 +1456,8 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 5534480547123791172, guid: 0082acf3036c14d45a195ea96625deb7, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 0082acf3036c14d45a195ea96625deb7, type: 3}
 --- !u!58 &720319907227100910 stripped
 CircleCollider2D:
@@ -1430,18 +1531,6 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 7872022250898410860}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &5942365368384257157 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4560052222324716009, guid: 0082acf3036c14d45a195ea96625deb7,
-    type: 3}
-  m_PrefabInstance: {fileID: 7872022250898410860}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 71b97b91669afc14aa205ed93d651be5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!23 &6070641769478778403 stripped
 MeshRenderer:
   m_CorrespondingSourceObject: {fileID: 4107364228798292815, guid: 0082acf3036c14d45a195ea96625deb7,
@@ -1454,7 +1543,7 @@ MonoBehaviour:
     type: 3}
   m_PrefabInstance: {fileID: 7872022250898410860}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 6070641769478778414}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d247ba06193faa74d9335f5481b2b56c, type: 3}
@@ -1466,6 +1555,43 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 7872022250898410860}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &6070641769478778414 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4107364228798292802, guid: 0082acf3036c14d45a195ea96625deb7,
+    type: 3}
+  m_PrefabInstance: {fileID: 7872022250898410860}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &8798363828957931643
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6070641769478778414}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42be6986c6a2a414fa5ceddb0018fe09, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_skeletonAnimation: {fileID: 6070641769478778412}
+  m_eventInfo:
+  - m_eventName: Death explode FX
+    m_onEventCalled:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 5224928624376903593}
+          m_TargetAssemblyTypeName: DChild.Gameplay.Characters.Enemies.MimicPustuleBombAI,
+            Assembly-CSharp
+          m_MethodName: ExplodeDamage
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!114 &6951513381634869671 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 956933628015527115, guid: 0082acf3036c14d45a195ea96625deb7,

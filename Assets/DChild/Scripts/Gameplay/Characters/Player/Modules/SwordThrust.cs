@@ -1,4 +1,6 @@
-﻿using Sirenix.OdinInspector;
+﻿using Holysoft.Event;
+using Sirenix.OdinInspector;
+using System;
 using UnityEngine;
 
 namespace DChild.Gameplay.Characters.Players.Modules
@@ -22,6 +24,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private float m_chargeTimer;
         private int m_swordThrustAnimationParameter;
         private int m_chargingAnimationParameter;
+
+        public event EventAction<EventActionArgs> OnThrust;
 
         public override void Initialize(ComplexCharacterInfo info)
         {
@@ -112,6 +116,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
             var direction = (float)m_character.facing;
             m_rigidBody.velocity = Vector2.zero;
             m_rigidBody.velocity = new Vector2(direction * m_configuration.thrustVelocity * m_modifier.Get(PlayerModifier.Dash_Distance), 0);
+
+            OnThrust?.Invoke(this, EventActionArgs.Empty);
         }
 
         public void EndSwordThrust()

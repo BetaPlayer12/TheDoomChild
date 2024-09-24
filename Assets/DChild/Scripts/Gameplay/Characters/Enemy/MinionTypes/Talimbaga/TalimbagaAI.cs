@@ -51,6 +51,9 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField]
             private BasicAnimationInfo m_deathAnimation = new BasicAnimationInfo();
             public BasicAnimationInfo deathAnimation => m_deathAnimation;
+            [SerializeField]
+            private LayerMask m_mask;
+            public LayerMask mask => m_mask;
 
             public override void Initialize()
             {
@@ -91,6 +94,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private MovementHandle2D m_movement;
         [SerializeField, TabGroup("Modules")]
         private PatrolHandle m_patrolHandle;
+        [SerializeField, TabGroup("Modules")]
+        private WayPointPatrol m_waypointHandle;
         [SerializeField, TabGroup("Modules")]
         private FlinchHandler m_flinchHandle;
         [SerializeField, TabGroup("Modules")]
@@ -163,25 +168,75 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator FlinchRoutine()
         {
             m_hitbox.Disable();
-            m_animation.SetAnimation(0, m_info.flinchAnimation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.flinchAnimation);
-            m_shadow.enabled = false;
-            m_shadowObject.SetActive(false);
-            m_animation.SetAnimation(0, m_info.burrowAnimation, false).MixDuration = 0;
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.burrowAnimation);
-            transform.position = m_startPoint;
-            yield return new WaitForSeconds(m_info.burrowDuration);
-            m_animation.SetAnimation(0, m_info.unburrowAnimation, false).MixDuration = 0;
-            m_animation.AddAnimation(0, m_info.idleAnimation, true, 0);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.idleAnimation);
-            m_shadow.enabled = true;
-            m_shadowObject.SetActive(true);
-            m_hitbox.Enable();
+            var flinchTrack = m_animation.SetAnimation(0, m_info.flinchAnimation, false);
+            flinchTrack.MixDuration = 0;
+            yield return new WaitForSpineAnimationComplete(flinchTrack);
+            yield return BurrowRoutine();
+            yield return UnburrowRoutine();
             //m_animation.SetAnimation(0, m_info.idleAnimation, true).MixDuration = 0;
             m_stateHandle.ApplyQueuedState();
             yield return null;
         }
+        private IEnumerator BurrowRoutine()
+        {
+            m_shadow.enabled = false;
+            m_shadowObject.SetActive(false);
+            var burrowTrack = m_animation.SetAnimation(0, m_info.burrowAnimation, false);
+            burrowTrack.MixDuration = 0;
+            yield return new WaitForSpineAnimationComplete(burrowTrack);
+            var randomNumber = UnityEngine.Random.RandomRange(0, 2);
+            //transform.position = m_startPoint;
+            var left = m_targetInfo.transform.position.x - 75;
+            var right = m_targetInfo.transform.position.x + 75;
+            transform.position = new Vector2(m_character.facing == HorizontalDirection.Left ? left : right, transform.position.y);
+            if (IsOverlappingWithEnvironment(transform.position, transform.eulerAngles.z) && m_character.facing == HorizontalDirection.Left)
+            {
+                transform.position = new Vector2(right, transform.position.y);
+            }
+            else if (IsOverlappingWithEnvironment(transform.position, transform.eulerAngles.z) && m_character.facing == HorizontalDirection.Right)
+            {
+                transform.position = new Vector2(left, transform.position.y);
+            }
+            if (IsFacingTarget())
+            {
+                CustomTurn();
+            }
+            yield return new WaitForSeconds(m_info.burrowDuration);
+        }
+        private IEnumerator UnburrowRoutine()
+        {
+            var unborrowTrack = m_animation.SetAnimation(0, m_info.unburrowAnimation, false);
+            yield return new WaitForSpineAnimationComplete(unborrowTrack);
+            unborrowTrack.MixDuration = 0;
+            /*unborrowTrack.MixDuration = 0;
+            m_animation.AddAnimation(0, m_info.idleAnimation, true, 0);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.idleAnimation);*/
+            m_shadow.enabled = true;
+            m_shadowObject.SetActive(true);
+            m_hitbox.Enable();
+            yield return null;
+        }
+        private bool IsOverlappingWithEnvironment(Vector2 position, float angle)
+        {
 
+            Collider2D[] hits = Physics2D.OverlapBoxAll(position, new Vector2(100f, 25f), angle, m_info.mask);
+
+            if (hits.Length > 0)
+            {
+                return true;
+            }
+
+            else
+            {
+                return false;
+            }
+
+        }/*
+        private void OnDrawGizmos()
+        {
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawCube(transform.position, new Vector3(100f, 25f, 0f));
+        }*/
         protected override void Start()
         {
             base.Start();
@@ -216,6 +271,14 @@ namespace DChild.Gameplay.Characters.Enemies
                     {
                         m_turnState = State.Patrol;
                         m_animation.SetAnimation(0, m_info.move.animation, true);
+                        if(m_character.facing == HorizontalDirection.Left)
+                        {
+                            m_waypointHandle.ForceNextWaypointIndex(0);
+                        }
+                        else
+                        {
+                            m_waypointHandle.ForceNextWaypointIndex(1);
+                        }
                         var characterInfo = new PatrolHandle.CharacterInfo(m_character.centerMass.position, m_character.facing);
                         m_patrolHandle.Patrol(m_movement, m_info.move.speed, characterInfo);
                     }
