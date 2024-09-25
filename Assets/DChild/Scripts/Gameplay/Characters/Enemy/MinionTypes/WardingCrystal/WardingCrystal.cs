@@ -19,6 +19,8 @@ public class WardingCrystal : MonoBehaviour
     private Damageable m_damageable;
     [SerializeField, TabGroup("Reference")]
     protected SpineRootAnimation m_animation;
+    [SerializeField, TabGroup("Reference")]
+    protected BuffMinions m_CrystalBuff;
     [SerializeField]
     private SkeletonAnimation m_skeletonAnimation;
     [SerializeField, Spine.Unity.SpineAnimation(dataField = "m_skeletonAnimation")]
@@ -58,6 +60,9 @@ public class WardingCrystal : MonoBehaviour
         }
         m_damageable.SetHitboxActive(false);
         Particles.Play();
+        m_CrystalBuff.gameObject.SetActive(false);
+        //m_CrystalBuff.RemoveBuffsToAll();
+        //m_CrystalBuff.enabled = false;
         StartCoroutine(DeathRoutine());
         //throw new NotImplementedException();
     }
