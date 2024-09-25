@@ -46,6 +46,7 @@ namespace DChild.Gameplay.Cinematics
             {
                 vCam.Activate();
                 m_offsetHandle.ApplyOffset(vCam, m_currentLookAhead);
+                m_cameraShakeHandle.RegisterCamera(vCam);
             }
             else
             {
@@ -83,6 +84,7 @@ namespace DChild.Gameplay.Cinematics
             if (m_useCameraPrioritization)
             {
                 vCam.Deactivate();
+                m_cameraShakeHandle.UnregisterCamera(vCam);
             }
             else
             {
@@ -148,6 +150,7 @@ namespace DChild.Gameplay.Cinematics
             m_currentVCam = null;
             m_previousCam = null;
             m_trackingCameras?.Clear();
+            m_cameraShakeHandle.ClearRegisteredCameras();
         }
 
         public void AllowTracking(ITrackingCamera trackingCamera)

@@ -56,6 +56,7 @@ MonoBehaviour:
   m_idleAnimation: Idle
   m_enableFlinchColor: 0
   m_flinchColorAnimation: 
+  m_enableModule: 1
 --- !u!1 &3101691603782506320
 GameObject:
   m_ObjectHideFlags: 0
@@ -285,7 +286,7 @@ MonoBehaviour:
   m_animator: {fileID: 9210280208371270211}
   m_animation: Death
   m_bodyDuration:
-    m_startTime: 3
+    m_startTime: 0.5
   m_fx: []
   m_destroySource: 0
 --- !u!114 &8858310385223778215
@@ -512,7 +513,12 @@ MonoBehaviour:
   m_wallSensor: {fileID: 289864991588742616}
   m_groundSensor: {fileID: 4930901222841501238}
   m_edgeSensor: {fileID: 5961726016438621782}
+  m_jumpVFX: {fileID: 3430407141013158620, guid: 1e18635bed52db94da1d77e7f9cc4928,
+    type: 3}
+  m_impactVFX: {fileID: 1538926387617866926, guid: 03e15c3a7a3e78243b97bf61e7f95588,
+    type: 3}
   m_willPatrol: 1
+  m_spineListener: {fileID: 6796431939148445462}
 --- !u!114 &813905184083730661
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -796,7 +802,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 2fc4592395c676f4ca97f77316db8f82, type: 2}
+      objectReference: {fileID: 2100000, guid: ef6b19e709395f541ba8d1627a7dcc44, type: 2}
     - target: {fileID: 793143530183456552, guid: df7d015f7a0a25e468721d77079957bb,
         type: 3}
       propertyPath: m_Name
@@ -806,7 +812,7 @@ PrefabInstance:
         type: 3}
       propertyPath: skeletonDataAsset
       value: 
-      objectReference: {fileID: 11400000, guid: 70e87849be9155a44a1e4021b739757c,
+      objectReference: {fileID: 11400000, guid: 4a3dcaedbd743bf4ca577a0035d572e1,
         type: 2}
     - target: {fileID: 793143530183456555, guid: df7d015f7a0a25e468721d77079957bb,
         type: 3}
@@ -866,7 +872,7 @@ PrefabInstance:
     - target: {fileID: 1091431134070858389, guid: df7d015f7a0a25e468721d77079957bb,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 7.971484
+      value: 7.97148
       objectReference: {fileID: 0}
     - target: {fileID: 1091431134070858389, guid: df7d015f7a0a25e468721d77079957bb,
         type: 3}
@@ -901,7 +907,7 @@ PrefabInstance:
     - target: {fileID: 5151209648746240905, guid: df7d015f7a0a25e468721d77079957bb,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 2.056078
+      value: 2.056076
       objectReference: {fileID: 0}
     - target: {fileID: 5367469870303871729, guid: df7d015f7a0a25e468721d77079957bb,
         type: 3}
@@ -962,7 +968,7 @@ PrefabInstance:
     - target: {fileID: 5788395883765980172, guid: df7d015f7a0a25e468721d77079957bb,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.1470604
+      value: 0.14705658
       objectReference: {fileID: 0}
     - target: {fileID: 6131614206898410776, guid: df7d015f7a0a25e468721d77079957bb,
         type: 3}
@@ -1017,7 +1023,7 @@ PrefabInstance:
     - target: {fileID: 8156016875316230234, guid: df7d015f7a0a25e468721d77079957bb,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 4.790533
+      value: 4.790535
       objectReference: {fileID: 0}
     - target: {fileID: 8305226052853878035, guid: df7d015f7a0a25e468721d77079957bb,
         type: 3}
@@ -1029,6 +1035,11 @@ PrefabInstance:
       propertyPath: m_LocalRotation.z
       value: 0.6816372
       objectReference: {fileID: 0}
+    - target: {fileID: 8626159350324620184, guid: df7d015f7a0a25e468721d77079957bb,
+        type: 3}
+      propertyPath: m_animation
+      value: 
+      objectReference: {fileID: 9210280208371270211}
     - target: {fileID: 8897896215499404308, guid: df7d015f7a0a25e468721d77079957bb,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1084,7 +1095,7 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 4116703414830672438}
   m_PrefabAsset: {fileID: 0}
---- !u!60 &7389560371288002527
+--- !u!60 &3162268116281660312
 PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

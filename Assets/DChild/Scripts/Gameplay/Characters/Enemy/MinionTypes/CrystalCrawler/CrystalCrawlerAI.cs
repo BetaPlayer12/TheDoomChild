@@ -311,9 +311,10 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 StopCoroutine(m_sneerRoutine);
             }
-            m_animation.SetEmptyAnimation(0, 0);
-            var deathAnim = UnityEngine.Random.Range(0, 2) == 0 ? m_info.death1Animation : m_info.death2Animation;
-            m_animation.SetAnimation(0, deathAnim, false);
+            //m_animation.SetEmptyAnimation(0, 0);
+            //var deathAnim = UnityEngine.Random.Range(0, 2) == 0 ? m_info.death1Animation : m_info.death2Animation;
+            //m_animation.SetAnimation(0, m_info.death2Animation, false);
+            Debug.Log("death");
             m_character.physics.UseStepClimb(true);
             if (m_animation.GetCurrentAnimation(0).ToString() != m_info.idleAnimation.animation)
                 m_movement.Stop();
@@ -362,11 +363,15 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator AttackRoutine(Vector2 target)
         {
+
+            //var spike = GameSystem.poolManager.GetPool<FXPool>().GetOrCreateItem(m_info.spikeGO);
+            //spike.GetComponent<CrystalCrawlerSpike>().StopShatterShard();
+            GameObject spike = m_info.spikeGO;
+            
+            spike.transform.position = transform.position;
             m_animation.SetAnimation(0, m_info.attack.animation, false);
             //float speed = (2f * transform.localScale.x);
             //var spike = this.InstantiateToScene(m_info.spikeGO, transform.position, Quaternion.identity);
-            var spike = GameSystem.poolManager.GetPool<FXPool>().GetOrCreateItem(m_info.spikeGO);
-            spike.transform.position = transform.position;
             //m_spike.transform.SetParent(null);
             //m_spike.transform.localScale = new Vector3(-transform.localScale.x, m_spike.transform.localScale.y, m_spike.transform.localScale.z);
             spike.transform.localScale = new Vector3(-transform.localScale.x, spike.transform.localScale.y, spike.transform.localScale.z);
@@ -379,10 +384,9 @@ namespace DChild.Gameplay.Characters.Enemies
                 yield return null;
             }
             yield return new WaitForSeconds(1f);
-            m_spikeEdgeSensor.transform.localPosition = new Vector2(7.5f, 2f);
-            spike.gameObject.SetActive(true);
-            spike.GetComponent<CrystalCrawlerSpike>().Play();
+            Instantiate(m_info.spikeGO, target, Quaternion.identity);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack.animation);
+            m_spikeEdgeSensor.transform.localPosition = new Vector2(7.5f, 2f); 
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             //yield return new WaitUntil(() => !m_spike.gameObject.activeSelf);
             //m_spike.transform.SetParent(m_model);
@@ -440,6 +444,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_patrolHandle.TurnRequest += OnTurnRequest;
             m_attackHandle.AttackDone += OnAttackDone;
             m_turnHandle.TurnDone += OnTurnDone;
+            m_spineEventListener.Subscribe(m_info.explodeEvent, m_explodeFX.Play);
             //m_deathHandle.SetAnimation(m_info.death1Animation.animation);
             m_flinchHandle.FlinchStart += OnFlinchStart;
             m_flinchHandle.FlinchEnd += OnFlinchEnd;
@@ -447,8 +452,6 @@ namespace DChild.Gameplay.Characters.Enemies
             m_attackDecider = new RandomAttackDecider<Attack>();
             UpdateAttackDeciderList();
         }
-
-
         private void Update()
         {
             //Debug.Log("Wall Sensor is " + m_wallSensor.isDetecting);

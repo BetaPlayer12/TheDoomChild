@@ -95,7 +95,7 @@ PrefabInstance:
     - target: {fileID: 7217284874745905563, guid: b10fd1d2abbd0e54684cb15684f21106,
         type: 3}
       propertyPath: lastTimeMaxDistanceCalced
-      value: 638284847544661740
+      value: 638610677752479209
       objectReference: {fileID: 0}
     - target: {fileID: 8577704834950402683, guid: b10fd1d2abbd0e54684cb15684f21106,
         type: 3}
@@ -114,18 +114,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b10fd1d2abbd0e54684cb15684f21106, type: 3}
---- !u!114 &87762544199890102 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4108830302692842043, guid: b10fd1d2abbd0e54684cb15684f21106,
-    type: 3}
-  m_PrefabInstance: {fileID: 4049497982234553997}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e2130a8bda7a1a544b7fe2cfe9725688, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &6015844688326133976
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -411,6 +399,21 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 3422546109927865967, guid: 25743858899c0384e82a42d37df5a70c,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3422546109927865967, guid: 25743858899c0384e82a42d37df5a70c,
+        type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3561508920447765742, guid: 25743858899c0384e82a42d37df5a70c,
+        type: 3}
+      propertyPath: m_maxHealth
+      value: 40
+      objectReference: {fileID: 0}
     - target: {fileID: 3721492303151305852, guid: 25743858899c0384e82a42d37df5a70c,
         type: 3}
       propertyPath: m_Size.x
@@ -419,7 +422,17 @@ PrefabInstance:
     - target: {fileID: 4687388676632156752, guid: 25743858899c0384e82a42d37df5a70c,
         type: 3}
       propertyPath: m_animation
-      value: Boulder_death
+      value: Boulder_deathSample
+      objectReference: {fileID: 0}
+    - target: {fileID: 4806727765538802362, guid: 25743858899c0384e82a42d37df5a70c,
+        type: 3}
+      propertyPath: m_playerHitboxOnly
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4806727765538802362, guid: 25743858899c0384e82a42d37df5a70c,
+        type: 3}
+      propertyPath: m_exitEvents.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_BoolArgument
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5112230078625527692, guid: 25743858899c0384e82a42d37df5a70c,
         type: 3}
@@ -446,7 +459,8 @@ PrefabInstance:
         type: 3}
       propertyPath: m_spawnedBoulder
       value: 
-      objectReference: {fileID: 87762544199890102}
+      objectReference: {fileID: 4108830302692842043, guid: b10fd1d2abbd0e54684cb15684f21106,
+        type: 3}
     - target: {fileID: 7918607621387935725, guid: 25743858899c0384e82a42d37df5a70c,
         type: 3}
       propertyPath: m_TriggerCollider
@@ -455,7 +469,7 @@ PrefabInstance:
     - target: {fileID: 7918607621387935725, guid: 25743858899c0384e82a42d37df5a70c,
         type: 3}
       propertyPath: m_spawnNewBoulderDelay.m_startTime
-      value: 0
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8437587812451271311, guid: 25743858899c0384e82a42d37df5a70c,
         type: 3}
@@ -654,7 +668,7 @@ SortingGroup:
   m_Enabled: 1
   m_SortingLayerID: -1150295711
   m_SortingLayer: -1
-  m_SortingOrder: 0
+  m_SortingOrder: 1
 --- !u!114 &4510383011528628021 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7918607621387935725, guid: 25743858899c0384e82a42d37df5a70c,

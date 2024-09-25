@@ -12,6 +12,8 @@ using System.Collections;
 using System.Collections.Generic;
 using DChild;
 using DChild.Gameplay.Characters.Enemies;
+using DChild.Gameplay.Inventories;
+using DChild.Gameplay.Items;
 
 namespace DChild.Gameplay.Characters.Enemies
 {
@@ -57,6 +59,9 @@ namespace DChild.Gameplay.Characters.Enemies
             private string m_detectAnimation;
             public string detectAnimation => m_detectAnimation;
             [SerializeField, ValueDropdown("GetAnimations")]
+            private string m_burrowAnim;
+            public string burrowAnim => m_burrowAnim;
+            [SerializeField, ValueDropdown("GetAnimations")]
             private string m_flinchAnimation;
             public string flinchAnimation => m_flinchAnimation;
             [SerializeField, ValueDropdown("GetAnimations")]
@@ -65,6 +70,11 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField, ValueDropdown("GetAnimations")]
             private string m_deathAnimation;
             public string deathAnimation => m_deathAnimation;
+
+            [Title("Events")]
+            [SerializeField, ValueDropdown("GetEvents")]
+            private string m_burrowEvent;
+            public string burrowEvent => m_burrowEvent;
 
             public override void Initialize()
             {
@@ -86,6 +96,7 @@ namespace DChild.Gameplay.Characters.Enemies
             Attacking,
             Cooldown,
             RunAway,
+            Burrow,
             Chasing,
             Flinch,
             ReevaluateSituation,
@@ -119,6 +130,12 @@ namespace DChild.Gameplay.Characters.Enemies
         private DeathHandle m_deathHandle;
         [SerializeField, TabGroup("Modules")]
         private FlinchHandler m_flinchHandle;
+        [SerializeField, TabGroup("Modules")]
+        private SpineEventListener m_spineListener;
+
+        [SerializeField, TabGroup("FX")]
+        private ParticleFX m_burrowFX;
+    
 
         private float m_currentPatience;
         private float m_currentCD;
@@ -145,6 +162,12 @@ namespace DChild.Gameplay.Characters.Enemies
         private RandomAttackDecider<Attack> m_attackDecider;
 
         private State m_turnState;
+
+        [SerializeField]
+        private Collider2D m_biteBox;
+
+        [SerializeField, Range(0, 1)]
+        private float m_stealPercentage;
 
         private Coroutine m_randomIdleRoutine;
         private Coroutine m_sneerRoutine;
@@ -191,10 +214,10 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_enablePatience = false;
                 }
             }
-            else
+            /*else
             {
                 m_enablePatience = true;
-            }
+            }*/
         }
 
         private bool TargetBlocked()
@@ -288,9 +311,9 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             //m_Audiosource.clip = m_DeadClip;
             //m_Audiosource.Play();
+            StartCoroutine(ReturnItem());
             StopAllCoroutines();
             base.OnDestroyed(sender, eventArgs);
-            
             m_characterPhysics.UseStepClimb(true);
             m_movement.Stop();
             m_selfCollider.enabled = false;
@@ -388,13 +411,17 @@ namespace DChild.Gameplay.Characters.Enemies
                 yield return null;
             }
         }
-
+        private void BurrowEvent()
+        {
+            m_burrowFX.Play();
+            //throw new System.NotImplementedException();
+        }
         protected override void Start()
         {
             base.Start();
             m_currentMoveSpeed = UnityEngine.Random.Range(m_info.move.speed * .75f, m_info.move.speed * 1.25f);
             m_currentFullCD = UnityEngine.Random.Range(m_info.attackCD * .5f, m_info.attackCD * 2f);
-
+            m_spineListener.Subscribe(m_info.burrowEvent, BurrowEvent);
             m_randomTurnRoutine = StartCoroutine(RandomTurnRoutine());
             if (m_willPatrol)
             {
@@ -409,7 +436,6 @@ namespace DChild.Gameplay.Characters.Enemies
         protected override void Awake()
         {
             base.Awake();
-            
             m_patrolHandle.TurnRequest += OnTurnRequest;
             m_attackHandle.AttackDone += OnAttackDone;
             m_turnHandle.TurnDone += OnTurnDone;
@@ -485,6 +511,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     {
                         case Attack.AttackMelee:
                             m_attackHandle.ExecuteAttack(m_info.attackMelee.animation, m_info.idleAnimation);
+                            StartCoroutine(BiteRoutine());
                             break;
                     }
                     m_attackDecider.hasDecidedOnAttack = false;
@@ -530,16 +557,17 @@ namespace DChild.Gameplay.Characters.Enemies
                     }
                     else
                     {
-                        if (Vector2.Distance(m_targetInfo.position, transform.position) <= m_info.targetDistanceTolerance && !m_wallSensor.isDetecting && m_groundSensor.isDetecting && m_edgeSensor.isDetecting)
+                        if (Vector2.Distance(m_targetInfo.position, transform.position) <= m_info.targetDistanceTolerance /*&& !m_wallSensor.isDetecting && m_groundSensor.isDetecting*/ && m_edgeSensor.isDetecting && !m_wallSensor.isDetecting)
                         {
                             var distance = Vector2.Distance(m_targetInfo.position, transform.position);
                             m_animation.SetAnimation(0, distance >= m_info.targetDistanceTolerance ? m_info.move.animation : m_info.patrol.animation, true);
-                            m_movement.MoveTowards(Vector2.one * transform.localScale.x, distance >= m_info.targetDistanceTolerance ? m_info.move.speed : m_info.patrol.speed);
+                            m_movement.MoveTowards(Vector2.one * transform.localScale.x, distance <= m_info.targetDistanceTolerance ? m_currentMoveSpeed : m_info.patrol.speed);
                         }
                         else
                         {
                             m_movement.Stop();
                             m_animation.SetAnimation(0, m_info.idleAnimation, true).TimeScale = 1f;
+                            m_stateHandle.OverrideState(State.Burrow);
                         }
                     }
 
@@ -557,12 +585,15 @@ namespace DChild.Gameplay.Characters.Enemies
                     }
 
                     break;
+                case State.Burrow:
+                    StartCoroutine(BurrowRoutine());
+                    break;
                 case State.Chasing:
                     {
                         if (IsFacingTarget())
                         {
                             m_attackDecider.DecideOnAttack();
-                            if (m_attackDecider.hasDecidedOnAttack && IsTargetInRange(m_attackDecider.chosenAttack.range) && !m_wallSensor.allRaysDetecting)
+                            if (m_attackDecider.hasDecidedOnAttack && IsTargetInRange(m_attackDecider.chosenAttack.range))
                             {
                                 m_movement.Stop();
                                 m_selfCollider.enabled = true;
@@ -637,7 +668,64 @@ namespace DChild.Gameplay.Characters.Enemies
                 }
             }
         }
+        private IEnumerator BurrowRoutine()
+        {
+            /*m_burrowFX.Play();*/
+            m_animation.SetAnimation(0, m_info.burrowAnim, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.burrowAnim);
+            m_burrowFX.Stop();
+            yield return null;
+        }
+        private IEnumerator BiteRoutine()
+        {
+            yield return new WaitForSeconds(.5f);
+            m_biteBox.enabled = true;
+            m_targetInfo.GetTargetDamagable().DamageTaken += RatMeleeAI_DamageTaken;
+            StartCoroutine(StealItems());
+            yield return new WaitForSeconds(.2f);
+            m_biteBox.enabled = false;
+            m_stateHandle.ApplyQueuedState();
+            yield return null;
+        }
+        private bool m_hasBitPlayer = false;
+        private void RatMeleeAI_DamageTaken(object sender, Damageable.DamageEventArgs eventArgs)
+        {
+            m_hasBitPlayer = true;
+            //throw new NotImplementedException();
+        }
 
+        private bool m_hasSteal = false;
+        private ItemData m_stolenItem;
+        private IEnumerator StealItems()
+        {
+            var random = UnityEngine.Random.RandomRange(0, 1f);
+            var playerInventory = GameplaySystem.playerManager.player.inventory.FindStoredItemsOfType(ItemCategory.Consumable);
+            if ((Mathf.Round(random * 10.0f) * 0.1f) <= m_stealPercentage && m_hasBitPlayer)
+            {
+                var randomItem = UnityEngine.Random.RandomRange(0, (playerInventory.Length));
+                if (playerInventory.Length > 0)
+                {
+                    GameplaySystem.playerManager.player.inventory.RemoveItem(playerInventory[randomItem].data, 1);
+                    m_stolenItem = playerInventory[randomItem].data;
+                    m_hasSteal = true;
+                    Debug.Log("You're too late, you'll never find your " + playerInventory[randomItem].data.name + " now!");
+                }
+                else
+                {
+                    Debug.Log("Aw man!");
+                }
+            }
+            m_hasBitPlayer = false;
+            yield return null;
+        }
+        private IEnumerator ReturnItem()
+        {
+            if (m_hasSteal)
+            {
+                GameplaySystem.playerManager.player.inventory.AddItem(m_stolenItem, 1);
+            }
+            yield return null;
+        }
         protected override void OnTargetDisappeared()
         {
             m_randomIdleRoutine = StartCoroutine(RandomIdleRoutine());

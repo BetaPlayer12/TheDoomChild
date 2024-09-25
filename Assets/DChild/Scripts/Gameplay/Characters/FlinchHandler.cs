@@ -32,7 +32,7 @@ namespace DChild.Gameplay.Characters
         [SerializeField]
         private SkeletonAnimation m_skeletonAnimation;
 
-        public void InitializeField(SpineRootAnimation spineRoot,IsolatedPhysics2D physics, SkeletonAnimation animation)
+        public void InitializeField(SpineRootAnimation spineRoot, IsolatedPhysics2D physics, SkeletonAnimation animation)
         {
             m_spine = spineRoot;
             m_physics = physics;
@@ -49,6 +49,7 @@ namespace DChild.Gameplay.Characters
         private string m_flinchColorAnimation;
 
         private bool m_isFlinching;
+        public bool m_enableModule = true;
 
         //public event EventAction<EventActionArgs> HitStopStart;
         public event EventAction<EventActionArgs> FlinchStart;
@@ -67,8 +68,8 @@ namespace DChild.Gameplay.Characters
 
         public virtual void Flinch(Vector2 directionToSource, RelativeDirection damageSource, AttackSummaryInfo attackInfo)
         {
-         
-            Flinch();
+            if (m_enableModule)
+                Flinch();
         }
 
         public void Flinch()
@@ -85,13 +86,6 @@ namespace DChild.Gameplay.Characters
             m_flinchRoutine = StartCoroutine(FlinchRoutine());
             if (!m_autoFlinch && m_enableMixFlinch)
                 StartCoroutine(FlinchMixRoutine());
-            if (m_enableFlinchColor)
-            {
-                if (m_flinchColorRoutine == null)
-                {
-                    m_flinchColorRoutine = StartCoroutine(FlinchColorRoutine());
-                }
-            }
         }
 
         private IEnumerator FlinchRoutine()
@@ -131,15 +125,6 @@ namespace DChild.Gameplay.Characters
             m_spine.animationState.GetCurrent(1).Alpha = m_alphaBlendStrength;
             m_spine.animationState.GetCurrent(1).MixDuration = 1;
             m_spine.animationState.GetCurrent(1).MixTime = 1;
-            yield return null;
-        }
-
-        private IEnumerator FlinchColorRoutine()
-        {
-            m_spine.SetAnimation(2, m_flinchColorAnimation, false);
-            yield return new WaitForAnimationComplete(m_spine.animationState, m_flinchColorAnimation);
-            m_spine.SetEmptyAnimation(2, 0);
-            m_flinchColorRoutine = null;
             yield return null;
         }
 

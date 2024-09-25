@@ -441,7 +441,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
             
                 m_projectileLauncherLeft = new ProjectileLauncher(m_info.projectile.projectileInfo, m_projectilePointsLeft[0]);
-                m_projectileLauncherLeft.AimAt(m_projectileTargetsLeft[0].position);
+                m_projectileLauncherLeft.AimAt(m_targetInfo.position);
                 m_projectileLauncherLeft.LaunchProjectile();
 
 
@@ -452,7 +452,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
          
                 m_projectileLauncherRight = new ProjectileLauncher(m_info.projectile.projectileInfo, m_projectilePointsRight[0]);
-                m_projectileLauncherRight.AimAt(m_projectileTargetsRight[0].position);
+                m_projectileLauncherRight.AimAt(m_targetInfo.position);
                 m_projectileLauncherRight.LaunchProjectile();
 
 

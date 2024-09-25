@@ -29,6 +29,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1684550542767219742}
   m_Father: {fileID: 1397857370112403442}
@@ -53,13 +54,16 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
-  m_Materials: []
+  m_Materials:
+  - {fileID: 2100000, guid: e23bec35191572f46a8ae1067fef157b, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -80,6 +84,7 @@ MeshRenderer:
   m_SortingLayerID: -1150295711
   m_SortingLayer: -1
   m_SortingOrder: 98
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!114 &8207760283748016776
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -113,7 +118,7 @@ MonoBehaviour:
     materialsInsideMask: []
     materialsOutsideMask: []
   disableRenderingOnOverride: 1
-  _animationName: 
+  _animationName: ShardStart
   loop: 0
   timeScale: 1
   m_alwaysUpdateMesh: 1
@@ -128,7 +133,7 @@ GameObject:
   - component: {fileID: 1684550542767219742}
   - component: {fileID: 668501795833353162}
   - component: {fileID: 8820249204591373997}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Hitbox
   m_TagString: Hitbox
   m_Icon: {fileID: 0}
@@ -145,6 +150,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -2.1388774, y: 0.030325904, z: -9.769608}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3773189302335265739}
   m_RootOrder: 0
@@ -156,7 +162,7 @@ BoxCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5642041204472883381}
-  m_Enabled: 0
+  m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 1
@@ -190,7 +196,7 @@ MonoBehaviour:
   m_collider2Ds:
   - {fileID: 668501795833353162}
   m_damageFXInfo:
-    m_fx: {fileID: 0}
+    m_fx: {fileID: 2334032989521269433, guid: 4951f0f12a17723409501618245a07e8, type: 3}
     m_overrideColor: 0
     m_colorToUse: {r: 0, g: 0, b: 0, a: 0}
     m_overrideScale: 0
@@ -210,7 +216,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 785314027163190341}
-  - component: {fileID: 3328769921600192374}
+  - component: {fileID: 5532928687773825147}
   m_Layer: 13
   m_Name: Stats
   m_TagString: Untagged
@@ -228,11 +234,12 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1397857370112403442}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3328769921600192374
+--- !u!114 &5532928687773825147
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -241,7 +248,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7233911833070920823}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a7d65502d98619e438c6388e3da86e37, type: 3}
+  m_Script: {fileID: 11500000, guid: a345e74751b90eb46865600dc3709da1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_maxHealth: 1
@@ -265,6 +272,7 @@ GameObject:
   - component: {fileID: 3181686438121280081}
   - component: {fileID: 6134004788816283944}
   - component: {fileID: 4719754496411980994}
+  - component: {fileID: 6023614407451391438}
   m_Layer: 13
   m_Name: CrystalCrawlerSpike
   m_TagString: Hitbox
@@ -280,11 +288,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8333105265767861173}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 67.56569, y: -55.727013, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 785314027163190341}
   - {fileID: 3773189302335265739}
+  - {fileID: 6117782055203252763}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
@@ -348,8 +358,16 @@ MonoBehaviour:
   m_slowFactor: 0
   m_fastFactor: 0
   m_fXObjects:
-    m_particleSystems: []
-    m_originalSimulationSpeed: []
+    m_particleSystems:
+    - {fileID: 6117782055203252772}
+    - {fileID: 6117782056370934158}
+    - {fileID: 6117782056114574475}
+    - {fileID: 6117782056247743220}
+    m_originalSimulationSpeed:
+    - 1
+    - 1
+    - 1
+    - 1
   m_spineObjects:
     m_skeletonAnimations:
     - {fileID: 8207760283748016776}
@@ -391,7 +409,7 @@ BoxCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8333105265767861173}
-  m_Enabled: 0
+  m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 1
@@ -439,9 +457,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 76c79fcdce9fe9a428d4fa7f084d6d71, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_poolableItemData: {fileID: 11400000, guid: b10a6a07fd7f10747b97c5b21dbcca82, type: 2}
   m_dustFX: {fileID: 0}
-  m_explodeFXGO: {fileID: 5049482292235253952, guid: af41dc15974603d4ea46145fdb903959,
+  m_explodeFXGO: {fileID: 4871133718667529869, guid: b802cdc07d7e73c4ebe762761c2ab9d2,
+    type: 3}
+  m_shatterFX: {fileID: 513512947604325441, guid: f8befa5dc4968b5478bac98407c5edfc,
     type: 3}
   m_spineListener: {fileID: 3181686438121280081}
   m_spine: {fileID: 5513819364579415400}
@@ -450,9 +469,13 @@ MonoBehaviour:
   m_startAnimation: ShardStart
   m_loopAnimation: ShardHold
   m_endAnimation: ShardEnd
+  m_shattterAnimation: ShardShatter
   m_event: DustFX
   m_hitbox: {fileID: 2405007305079409461}
+  m_hitbox2: {fileID: 668501795833353162}
   m_spikeDuration: 3
+  m_shatterFXGO: {fileID: 513512947604325441, guid: f8befa5dc4968b5478bac98407c5edfc,
+    type: 3}
   m_skeletonDataAsset: {fileID: 11400000, guid: 6bec9e3c012facc4aa5549fe116fa4c3,
     type: 2}
 --- !u!114 &5513819364579415400
@@ -495,7 +518,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_centerMass: {fileID: 3773189302335265739}
-  m_health: {fileID: 3328769921600192374}
+  m_health: {fileID: 5532928687773825147}
   m_resistance: {fileID: 0}
 --- !u!82 &4719754496411980994
 AudioSource:
@@ -593,3 +616,175 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &6023614407451391438
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8333105265767861173}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 798a06706630eac4f982cedb713cc1bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_object: {fileID: 6134004788816283944}
+  m_type: 0
+  m_forceShakeOnDestroy: 0
+  m_onDestroyShake: {fileID: 0}
+  m_createDebris: 0
+  m_debris:
+    m_AssetGUID: 
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_EditorAssetChanged: 0
+  m_copySorting: 0
+  m_applyDebrisColorChange: 0
+  m_colorToApply: {r: 1, g: 1, b: 1, a: 1}
+  m_onDestroy:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 293867388247744904}
+        m_TargetAssemblyTypeName: CrystalCrawlerSpike, Assembly-CSharp
+        m_MethodName: PlayShatterShard
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  m_onAlreadyDestroyed:
+    m_PersistentCalls:
+      m_Calls: []
+  m_onFix:
+    m_PersistentCalls:
+      m_Calls: []
+  m_willRepairSelf: 0
+  m_selfRepairTime: 0
+--- !u!1001 &1693076463210538155
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 1397857370112403442}
+    m_Modifications:
+    - target: {fileID: -8580977316548852169, guid: b802cdc07d7e73c4ebe762761c2ab9d2,
+        type: 3}
+      propertyPath: m_playOnAwake
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4871133718667529869, guid: b802cdc07d7e73c4ebe762761c2ab9d2,
+        type: 3}
+      propertyPath: m_Name
+      value: CrystalCrawler_GroundCrackCover_Holder
+      objectReference: {fileID: 0}
+    - target: {fileID: 4871133718667529871, guid: b802cdc07d7e73c4ebe762761c2ab9d2,
+        type: 3}
+      propertyPath: playOnAwake
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4871133718667529904, guid: b802cdc07d7e73c4ebe762761c2ab9d2,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4871133718667529904, guid: b802cdc07d7e73c4ebe762761c2ab9d2,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4871133718667529904, guid: b802cdc07d7e73c4ebe762761c2ab9d2,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4871133718667529904, guid: b802cdc07d7e73c4ebe762761c2ab9d2,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4871133718667529904, guid: b802cdc07d7e73c4ebe762761c2ab9d2,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4871133718667529904, guid: b802cdc07d7e73c4ebe762761c2ab9d2,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4871133718667529904, guid: b802cdc07d7e73c4ebe762761c2ab9d2,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4871133718667529904, guid: b802cdc07d7e73c4ebe762761c2ab9d2,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4871133718667529904, guid: b802cdc07d7e73c4ebe762761c2ab9d2,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4871133718667529904, guid: b802cdc07d7e73c4ebe762761c2ab9d2,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4871133718667529904, guid: b802cdc07d7e73c4ebe762761c2ab9d2,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4871133719630624037, guid: b802cdc07d7e73c4ebe762761c2ab9d2,
+        type: 3}
+      propertyPath: playOnAwake
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4871133719779014239, guid: b802cdc07d7e73c4ebe762761c2ab9d2,
+        type: 3}
+      propertyPath: playOnAwake
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4871133720449052704, guid: b802cdc07d7e73c4ebe762761c2ab9d2,
+        type: 3}
+      propertyPath: playOnAwake
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: b802cdc07d7e73c4ebe762761c2ab9d2, type: 3}
+--- !u!4 &6117782055203252763 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4871133718667529904, guid: b802cdc07d7e73c4ebe762761c2ab9d2,
+    type: 3}
+  m_PrefabInstance: {fileID: 1693076463210538155}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &6117782055203252772 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 4871133718667529871, guid: b802cdc07d7e73c4ebe762761c2ab9d2,
+    type: 3}
+  m_PrefabInstance: {fileID: 1693076463210538155}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &6117782056114574475 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 4871133720449052704, guid: b802cdc07d7e73c4ebe762761c2ab9d2,
+    type: 3}
+  m_PrefabInstance: {fileID: 1693076463210538155}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &6117782056247743220 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 4871133719779014239, guid: b802cdc07d7e73c4ebe762761c2ab9d2,
+    type: 3}
+  m_PrefabInstance: {fileID: 1693076463210538155}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &6117782056370934158 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 4871133719630624037, guid: b802cdc07d7e73c4ebe762761c2ab9d2,
+    type: 3}
+  m_PrefabInstance: {fileID: 1693076463210538155}
+  m_PrefabAsset: {fileID: 0}

@@ -1,4 +1,5 @@
-﻿using Sirenix.OdinInspector;
+﻿using Holysoft.Event;
+using Sirenix.OdinInspector;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -8,6 +9,15 @@ namespace DChild.Gameplay.Characters.Players.Modules
 {
     public class WhipAttack : AttackBehaviour
     {
+        public struct WhipAttackEventArgs : IEventActionArgs
+        {
+            public Type type;
+
+            public WhipAttackEventArgs(Type type)
+            {
+                this.type = type;
+            }
+        }
         public enum Type
         {
             Ground_Forward,
@@ -45,6 +55,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private bool m_adjustGravity;
         private bool m_canAirWhip;
         private float m_whipMovementCooldownTimer;
+
+        public event EventAction<WhipAttackEventArgs> OnWhip;
 
         public bool CanMove() => m_canMove;
         public bool CanAirWhip() => m_canAirWhip;
@@ -174,6 +186,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     break;
             }
             Record(type);
+            OnWhip?.Invoke(this, new WhipAttackEventArgs(type));
         }
 
         public override void AttackOver()

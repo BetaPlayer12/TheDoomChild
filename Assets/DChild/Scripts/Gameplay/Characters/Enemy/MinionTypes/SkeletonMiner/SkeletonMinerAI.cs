@@ -169,6 +169,10 @@ namespace DChild.Gameplay.Characters.Enemies
         private FlinchHandler m_flinchHandle;
         [SerializeField, TabGroup("Modules")]
         private Health m_health;
+        [SerializeField, TabGroup("Modules")]
+        private GameObject m_Damager_1;
+        [SerializeField, TabGroup("Modules")]
+        private GameObject m_Damager_2;
 
         private float m_currentPatience;
         private float m_currentCD;
@@ -330,6 +334,11 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             //m_Audiosource.clip = m_DeadClip;
             //m_Audiosource.Play();
+           
+            //base.OnDestroyed(sender, eventArgs);
+            
+            //m_stateHandle.OverrideState(State.WaitBehaviourEnd);
+           
             StopAllCoroutines();
             base.OnDestroyed(sender, eventArgs);
             
@@ -346,7 +355,6 @@ namespace DChild.Gameplay.Characters.Enemies
             if (m_animation.GetCurrentAnimation(0).ToString() != m_info.idleAnimation.animation)
                 m_movement.Stop();
 
-            m_pointLight.enabled = false;
             m_flinchHandle.gameObject.SetActive(false);
             m_animation.SetEmptyAnimation(0, 0);
             m_animation.SetEmptyAnimation(1, 0);
@@ -356,6 +364,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator ResurrectRoutine()
         {
+           
             m_hitbox.Disable();
             m_selfCollider.enabled = false;
             m_animation.SetAnimation(0, m_info.deathAnimation, false);
@@ -477,6 +486,17 @@ namespace DChild.Gameplay.Characters.Enemies
             }
         }
 
+        private IEnumerator ChangeAttackDamageRoutine()
+        {
+
+            yield return new WaitForSeconds(1.5f);
+            m_Damager_2.SetActive(true);
+            m_Damager_1.SetActive(false);
+            yield return new WaitForSeconds(1f);
+            m_Damager_2.SetActive(false);
+            m_Damager_1.SetActive(true);
+     
+        }
         protected override void Start()
         {
             base.Start();
@@ -579,7 +599,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     //m_attackRoutine = StartCoroutine(AttackRoutine()); //commented this out in favor of using attack handle to work with timescale 2
 
                     m_attackHandle.ExecuteAttack(m_info.idleToAttackAnimation.animation, m_info.idleAnimation.animation);
-
+                    StartCoroutine(ChangeAttackDamageRoutine());
                     break;
 
                 case State.Cooldown:
