@@ -17,15 +17,13 @@ namespace DChild.Gameplay.Systems.Journal
         [SerializeField]
         private TextMeshProUGUI m_itemDescription;
 
-        [SerializeField]
-        private Material m_materialShader;
 
         public void UpdateUI(JournalData journaldata)
         {
             m_notifinfo.sprite = journaldata.notification;
             m_itemName.text = journaldata.itemName;
             m_itemDescription.text = journaldata.itemDescription;
-            m_materialShader = journaldata.material;
+            m_notifinfo.material = journaldata.material;
         }
     }
 }
