@@ -315,9 +315,6 @@ namespace DChild.Gameplay.Characters.Enemies
         [ShowInInspector]
         private PhaseHandle<Phase, PhaseInfo> m_phaseHandle;
         [ShowInInspector]
-        private RandomAttackDecider<Pattern> m_patternDecider;
-        private Pattern m_currentPattern;
-        [ShowInInspector]
         private RandomAttackDecider<Attack> m_attackDecider;
         private Attack m_currentAttack;
         private ProjectileLauncher m_projectileLauncher;
@@ -325,13 +322,25 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Spawn Points")]
         private Transform m_projectilePoint;
         [SerializeField, TabGroup("Spawn Points")]
+        private BlackDeathSoundMark m_soundMark;
+        [SerializeField, TabGroup("Spawn Points")]
+        private Collider2D m_randomSpawnCollider;
+        [SerializeField, TabGroup("Spawn Points")]
+        private GameObject m_lightningChaseContainer;
+        [SerializeField, TabGroup("Spawn Points")]
+        private RoyalDeathGuardScytheProjectile m_royalDeathGuardScytheProjectile;
+        [SerializeField, TabGroup("Spawn Points")]
         private List<Transform> m_teleportPoints;
         [SerializeField, TabGroup("Spawn Points")]
         private List<BlackDeathBladeOfDarknessSequenceHandle> m_blackDeathBladeOfDarknessSequenceHandle;
         [SerializeField, TabGroup("Spawn Points")]
-        private Collider2D m_randomSpawnCollider;
-        [SerializeField, TabGroup("Spawn Points")]
         private List<ProjectileScatterHandle> m_bladeThrowHandler;
+        [SerializeField, TabGroup("Spawn Points")]
+        private List<BlackDeathBloodLightingBehaviourHandle> m_BlackDeathBloodLightingBehaviourHandle;
+        [SerializeField, TabGroup("Spawn Points")]
+        private List<BlackDeathBloodLightingBehaviourHandle> m_BlackDeathBloodLightingBehaviourHandle2;
+        [SerializeField, TabGroup("Spawn Points")]
+        private List<BlackDeathShadowClone> m_blackDeathClone;
 
         private int m_currentPhaseIndex;
         private int m_attackCount;
@@ -352,11 +361,11 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void ApplyPhaseData(PhaseInfo obj)
         {
-            m_currentPhaseIndex = obj.phaseIndex;
-            for (int i = 0; i < m_patternAttackCount.Length; i++)
+            if (m_attackDecider != null)
             {
-                m_patternAttackCount[i] = obj.patternAttackCount[i];
+                UpdateAttackDeciderList();
             }
+            base.ApplyData();
         }
 
         private void ChangeState()
@@ -386,6 +395,12 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_isDetecting = true;
                     m_stateHandle.OverrideState(State.Intro);
                     //GameEventMessage.SendEvent("Boss Encounter");
+                }
+
+                var chaseLightningBehaviors = m_lightningChaseContainer.GetComponentsInChildren<BlackDeathBloodLightningChaseHandle>();
+                for (int i = 0; i < chaseLightningBehaviors.Length; i++)
+                {
+                    chaseLightningBehaviors[i].SetTarget(m_targetInfo.transform);
                 }
             }
         }
@@ -440,7 +455,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_currentLightningSummonDuration = 2;
                     break;
             }
-            StartCoroutine(m_phaseHandle.currentPhase == Phase.PhaseThree ? BloodLightningBarragePhase3Routine(m_currentLightningCount) : BloodLightningBarrageRoutine(m_currentLightningCount));
+            /*StartCoroutine(m_phaseHandle.currentPhase == Phase.PhaseThree ? BloodLightningBarragePhase3Routine(m_currentLightningCount) : BloodLightningBarrageRoutine(m_currentLightningCount));*/
             yield return null;
         }
 
@@ -462,7 +477,19 @@ namespace DChild.Gameplay.Characters.Enemies
             m_movement.Stop();
             m_isDetecting = false;
         }
+        
         #region Attacks
+        private IEnumerator MurmursMarkRoutine()
+        {
+            m_soundMark.transform.position = m_targetInfo.position;
+            m_soundMark.Activate(m_targetInfo.transform);
+
+            while (m_soundMark.isActivated)
+            {
+                yield return null;
+            }
+        }
+
         private IEnumerator ScytheSlashDualBladeThrowAttack()
         {
             //teleport to player
@@ -498,7 +525,11 @@ namespace DChild.Gameplay.Characters.Enemies
             else
             {
                 yield return TeleportToTargetRoutine(CenterPointOfTheArena(), new Vector2(0f, 0f));
-                yield return BladeThrowRoutine(32, 1);
+                m_animation.SetAnimation(0, m_info.attackDaggersIdle, true);
+                for (int i = 0; i < 2; i++)
+                {
+                   yield return BladeThrowRoutineBatchARoutine(false, 0);
+                }
                 //teleport away from player
                 yield return TeleportToTargetRoutine(RandomTeleportPoint(), new Vector2(20, -5));
             }
@@ -543,7 +574,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 Debug.Log("Balde of darkness!!");
                 //blade of darkness
                 m_animation.SetAnimation(0, m_info.idleAnimation.animation, true);
-                yield return BladeOfDarknessRoutinePattern(false);
+                yield return BladeOfDarknessRoutinePattern(false,0);
             }
             yield return TeleportToTargetRoutine(RandomTeleportPoint(), new Vector2(20, -5));
             DecidedOnAttack(false);
@@ -614,6 +645,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
              
         }
+        
+
         private IEnumerator TeleportBloodAttack()
         {
             m_stateHandle.Wait(State.ReevaluateSituation);
@@ -622,8 +655,17 @@ namespace DChild.Gameplay.Characters.Enemies
                  yield return BloodLightningBarrageRoutine(1);
 
              }*/
-            yield return BloodLightningBarrageRoutine(1);
+
+            for (int i = 0; i < 3; i++)
+            {
+                Debug.LogWarning(i);
+                var random = UnityEngine.Random.Range(0, 6);
+                m_BlackDeathBloodLightingBehaviourHandle[random].Execute();
+                yield return new WaitForSeconds(2f);
+            }
+            //yield return BloodLightningBarrageRoutine(1);
             //teleport away from player
+            yield return new WaitForSeconds(1f);
             yield return TeleportToTargetRoutine(RandomTeleportPoint(), new Vector2(0f, 0f));
             DecidedOnAttack(false);
             m_stateHandle.ApplyQueuedState();
@@ -640,9 +682,12 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator PatternedBladeThrowAttack()
         {
             m_stateHandle.Wait(State.ReevaluateSituation);
-            yield return BladeThrowRoutine(8, 1);
-            yield return BladeThrowRoutine(8, 2);
-            yield return BladeThrowRoutine(8, 1);
+            yield return BladeThrowRoutineBatchARoutine(true);
+            yield return new WaitForSeconds(1f);
+            BladeThrowRoutineBatchBRoutine(true);
+            yield return new WaitForSeconds(1f);
+            yield return BladeThrowRoutineBatchARoutine(true);
+            yield return new WaitForSeconds(1f);
             DecidedOnAttack(false);
             m_stateHandle.ApplyQueuedState();
         }//phase 1 attack pattern 5
@@ -652,11 +697,11 @@ namespace DChild.Gameplay.Characters.Enemies
             m_stateHandle.Wait(State.ReevaluateSituation);
             var bladeOfDarknessPattern1 = 0;
             var bladeOfDarknessPattern2 = 1;
-            var random = UnityEngine.Random.Range(0, 2);
+            var random = UnityEngine.Random.Range(0, 1);
             switch (random)
             {
                 case 0:
-                    //yield return GuardsEdgeDiagonal();
+                    m_royalDeathGuardScytheProjectile.ExecuteFlight(m_character.centerMass.position, m_targetInfo.position);
                     break;
                 case 1:
                     for (int i = 0; i < 2; i++)
@@ -667,6 +712,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     yield return BladeOfDarknessRoutinePattern(true, bladeOfDarknessPattern2);
                     break;
             }
+            yield return null;
             DecidedOnAttack(false);
             m_stateHandle.ApplyQueuedState();
         }//phase 1 attack pattern 6
@@ -696,7 +742,8 @@ namespace DChild.Gameplay.Characters.Enemies
             else
             {
                 yield return TeleportToTargetRoutine(CenterPointOfTheArena(), new Vector2(0f, 0f));
-                yield return BladeThrowRoutine(16, 1);
+                yield return BladeThrowRoutineBatchARoutine(true);
+                
             }
             yield return TeleportToTargetRoutine(RandomTeleportPoint(), new Vector2(0f, 0f));
             DecidedOnAttack(false);
@@ -727,8 +774,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 switch (randomizedBladeOfDarkness3or4)
                 {
                     case 2:
-                        Debug.Log("murmurs mark");
-                        //murmurs mark;
+                        yield return MurmursMarkRoutine();
                         break;
                     case 3:
                         Debug.Log(randomizedBladeOfDarkness3or4);
@@ -738,6 +784,8 @@ namespace DChild.Gameplay.Characters.Enemies
             }
             else
             {
+                var scytheDestinationOffset = m_character.facing == HorizontalDirection.Left ? Vector3.left : Vector3.right;
+                m_royalDeathGuardScytheProjectile.ExecuteFlight(m_character.centerMass.position, m_character.centerMass.position + scytheDestinationOffset);
                 Debug.Log(" GuardsEdgeRoutine()");
                 //yield return GuardsEdgeRoutine();
             }
@@ -756,7 +804,10 @@ namespace DChild.Gameplay.Characters.Enemies
                 case 0:
                     for (int i = 0; i < 3; i++)
                     {
-                        yield return BloodLightningBarrageRoutine(8);
+                        Debug.LogWarning(i);
+                        var randomForLightning = UnityEngine.Random.Range(0, 6);
+                        m_BlackDeathBloodLightingBehaviourHandle[randomForLightning].Execute();
+                        yield return new WaitForSeconds(2f);
                     }
                     break;
                 case 1:
@@ -778,7 +829,9 @@ namespace DChild.Gameplay.Characters.Enemies
             //randomizeblood lighting
             for (int i = 0; i < 3; i++)
             {
-                yield return BloodLightningBarrageRoutine(1);
+                var randomForLightning = UnityEngine.Random.Range(0, 6);
+                m_BlackDeathBloodLightingBehaviourHandle[randomForLightning].Execute();
+                yield return new WaitForSeconds(2f);
 
             }
             DecidedOnAttack(false);
@@ -795,42 +848,78 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 m_animation.SetAnimation(0, m_info.attackDaggersIdle.animation, true);
                 Debug.Log("asdsadaa" + i);
-                yield return BladeThrowRoutineBatchARoutine(false);
+                yield return BladeThrowRoutineBatchARoutine(true);
             }
             yield return TeleportToTargetRoutine(RandomTeleportPoint(), new Vector2(0f, 0f));
             DecidedOnAttack(false);
             m_stateHandle.ApplyQueuedState();
 
         }//done phase 2 attack pattern 5
-        [SerializeField]
-        private ProjectileScatterHandle m_projectileScatterA;
-        [SerializeField]
-        private ProjectileScatterHandle m_projectileScatterB;
         public void BladeThrowProjectileLauncher(int attackPattern)
         {
             m_bladeThrowHandler[attackPattern].SpawnProjectiles();
             m_bladeThrowHandler[attackPattern].LaunchSpawnedProjectiles();
         }
-        private IEnumerator BladeThrowRoutineBatchARoutine(bool isRandomized, int batchCombo = 0)
+
+        private IEnumerator BladeThrowRoutineBatchBRoutine(bool isRandomized, int batchCombo = 0)
         {
             if (isRandomized)
             {
-               
-                if (batchCombo == 1)
+                Debug.Log("Randomized");
+                var random = UnityEngine.Random.Range(0, 3);
+                if (random == 0)
                 {
+                    BladeThrowProjectileLauncher(0);
+                    yield return new WaitForSeconds(1f);
+                    BladeThrowProjectileLauncher(1);
+                    yield return new WaitForSeconds(1f);
+                    BladeThrowProjectileLauncher(0);
+                }
+                else if(random == 1)
+                {
+                    BladeThrowProjectileLauncher(1);
+                    yield return new WaitForSeconds(1f);
                     BladeThrowProjectileLauncher(0);
                     yield return new WaitForSeconds(1f);
                     BladeThrowProjectileLauncher(1);
                 }
                 else
                 {
+                    BladeThrowProjectileLauncher(2);
+                    yield return new WaitForSeconds(1f);
+                }
+            }
+            else
+            {
+                Debug.Log("patterned");
+                if (batchCombo == 1)
+                {
+                    BladeThrowProjectileLauncher(0);
+                    yield return new WaitForSeconds(1f);
                     BladeThrowProjectileLauncher(1);
                     yield return new WaitForSeconds(1f);
                     BladeThrowProjectileLauncher(0);
                 }
-
+                else if(batchCombo == 2)
+                {
+                    BladeThrowProjectileLauncher(1);
+                    yield return new WaitForSeconds(1f);
+                    BladeThrowProjectileLauncher(0);
+                    yield return new WaitForSeconds(1f);
+                    BladeThrowProjectileLauncher(1);
+                }
+                else
+                {
+                    BladeThrowProjectileLauncher(2);
+                    yield return new WaitForSeconds(1f);
+                }
             }
-            else
+            yield return new WaitForSeconds(1f);
+
+        }
+        private IEnumerator BladeThrowRoutineBatchARoutine(bool isRandomized, int batchCombo = 0)
+        {
+            if (isRandomized)
             {
                 Debug.Log("Randomized");
                 var random = UnityEngine.Random.Range(0, 2);
@@ -846,23 +935,39 @@ namespace DChild.Gameplay.Characters.Enemies
                     yield return new WaitForSeconds(1f);
                     BladeThrowProjectileLauncher(0);
                 }
-
+            }
+            else
+            {
+                Debug.Log("patterned");
+                if (batchCombo == 1)
+                {
+                    BladeThrowProjectileLauncher(0);
+                    yield return new WaitForSeconds(1f);
+                    BladeThrowProjectileLauncher(1);
+                }
+                else
+                {
+                    BladeThrowProjectileLauncher(1);
+                    yield return new WaitForSeconds(1f);
+                    BladeThrowProjectileLauncher(0);
+                }
             }
             yield return new WaitForSeconds(1f);
 
         }
         //phase 3 
-        private IEnumerator TeleportGuardsEdgeMurmursMarkRoutine()
+        private IEnumerator TeleportGuardsEdgeMurmursMarkAttack()
         {
             m_stateHandle.Wait(State.ReevaluateSituation);
             var missCounter = 0;
             yield return TeleportToTargetRoutine(RandomTeleportPoint(), new Vector2(0f, 0f));
-            //teleport away but teleport front or back of player????
-            yield return TeleportToTargetRoutine(m_targetInfo.position, new Vector2(0f, 0f));
+            yield return new WaitForSeconds(1f);
+            yield return TeleportToTargetRoutine(m_targetInfo.position, new Vector2(-20f, 2f));
             
             while (!m_isPlayerHit && missCounter != 3)
             {
-                yield return ScytheSlashRoutine();
+
+                yield return ScytheSlashForwardRoutine();
                 if (m_isPlayerHit == true)
                 {
                 
@@ -871,20 +976,22 @@ namespace DChild.Gameplay.Characters.Enemies
                 missCounter++;
                 yield return null;
             }
-            //if (m_isPlayerHit == true)
-            //{
-            //    m_isPlayerHit = false;
-            //    m_hitCount = 0;
-            //}
+            if (m_isPlayerHit == true)
+            {
+                m_isPlayerHit = false;
+                m_hitCount = 0;
+            }
 
-            // yield return GuardsEdgeRoutine();
+            var scytheDestinationOffset = m_character.facing == HorizontalDirection.Left ? Vector3.left : Vector3.right;
+            m_royalDeathGuardScytheProjectile.ExecuteFlight(m_character.centerMass.position, m_character.centerMass.position + scytheDestinationOffset) ;
             //teleport away again but above player either front or back with offset
-            yield return TeleportToTargetRoutine(m_targetInfo.position, new Vector2(0f,0f));
-            // yield return DiagonalGuardsEdgeRoutine();
-            // yield return MurmursMarkRoutine();
+            yield return TeleportToTargetRoutine(m_targetInfo.position, new Vector2(-20f,10f));
+            yield return new WaitForSeconds(1f);
+            m_royalDeathGuardScytheProjectile.ExecuteFlight(m_character.centerMass.position, m_targetInfo.position);
+            yield return MurmursMarkRoutine();
             DecidedOnAttack(false);
             m_stateHandle.ApplyQueuedState();
-        }//done 
+        }//done phase 3 attack pattern 1
 
         private IEnumerator TeleportScytheSlashGuardsEdge()
         {
@@ -896,7 +1003,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 yield return TeleportToTargetRoutine(RandomTeleportPoint(), new Vector2(0f, 0f));
                 //teleport away but teleport front or back of player????
                 yield return TeleportToTargetRoutine(m_targetInfo.position, new Vector2(0f,0f));
-                yield return ScytheSlashRoutine();
+                yield return ScytheSlashForwardRoutine();
                 if (m_isPlayerHit == true)
                 {  
                     break;
@@ -906,6 +1013,7 @@ namespace DChild.Gameplay.Characters.Enemies
             }
             if (m_isPlayerHit)
             {
+                m_hitCount = 0;
                 m_isPlayerHit = false;
                 switch (random)
                 {
@@ -914,35 +1022,37 @@ namespace DChild.Gameplay.Characters.Enemies
                         yield return ScytheSlashRoutine();
                         break;
                     case 1:
-                        yield return TeleportToTargetRoutine(m_targetInfo.position, new Vector2(0f, 0f));
-                        // yield return DiagonalGuardsEdge();
+                        yield return TeleportToTargetRoutine(m_targetInfo.position, new Vector2(-20f, 10f));
+                        m_royalDeathGuardScytheProjectile.ExecuteFlight(m_character.centerMass.position,m_targetInfo.position);
                         break;
                 }
                
             }else
             {
-               
+
+                yield return TeleportToTargetRoutine(m_targetInfo.position, new Vector2(0f, 0f));
                 yield return ScytheSlashRoutine();
             }
 
 
             //teleport away again but above player either front or back with offset
             yield return TeleportToTargetRoutine(m_targetInfo.position, new Vector2(0f, 0f));
-            // yield return GuardsEdgeRoutine();
+            //GuardsEdgeRoutine
+            var scytheDestinationOffset = m_character.facing == HorizontalDirection.Left ? Vector3.left : Vector3.right;
+            m_royalDeathGuardScytheProjectile.ExecuteFlight(m_character.centerMass.position, m_character.centerMass.position + scytheDestinationOffset);
             yield return TeleportToTargetRoutine(RandomTeleportPoint(), new Vector2(0f, 0f));
             DecidedOnAttack(false);
             m_stateHandle.ApplyQueuedState();
-        }//done
+        }//done phase 3 attack pattern 2
         private IEnumerator Pattern4TripleBloodLightning()
         {
+            var chase = m_BlackDeathBloodLightingBehaviourHandle[4];
             m_stateHandle.Wait(State.ReevaluateSituation);
-            for (int i = 0; i < 3; i++)
-            {
-                yield return BloodLightningBarrageRoutine(8);
-            }
+            chase.Execute();
+            yield return new WaitForSeconds(1f);
             DecidedOnAttack(false);
             m_stateHandle.ApplyQueuedState();
-        }//done
+        }//donephase 3 attack pattern 3 not done
         //re use randomize blood lightning strike 
 
 
@@ -951,32 +1061,44 @@ namespace DChild.Gameplay.Characters.Enemies
             m_stateHandle.Wait(State.ReevaluateSituation);
             var random = UnityEngine.Random.Range(0, 2);
             yield return TeleportToTargetRoutine(CenterPointOfTheArena(), new Vector2(0f,0f));
-            yield return BladeThrowRoutine(16, 1);
+            m_animation.SetAnimation(0, m_info.attackDaggersIdle, true);
+            BladeThrowProjectileLauncher(5);
+            yield return new WaitForSeconds(2f);
             switch (random)
             {
                 case 0://clockwise rotation and counter clockwise
-                    yield return BladeThrowRoutine(32, 1);
-                    yield return BladeThrowRoutine(32, 2);
+
+                    //yield return BladeThrowRoutine(32, 1);
+                    m_bladeThrowHandler[3].SpawnProjectileInSequence(HorizontalDirection.Right,true);
+                    yield return new WaitForSeconds(2f);
+                    m_bladeThrowHandler[3].SpawnProjectileInSequence(HorizontalDirection.Left, true);
                     break;
                 case 1://counter clockwise and clockwise rotation
-                    yield return BladeThrowRoutine(32, 2);
-                    yield return BladeThrowRoutine(32, 1);
+                    m_bladeThrowHandler[3].SpawnProjectileInSequence(HorizontalDirection.Left, true);
+                    yield return new WaitForSeconds(2f);
+                    m_bladeThrowHandler[3].SpawnProjectileInSequence(HorizontalDirection.Right, true);
                     break;
             }
             // All directions?
-            yield return BladeThrowRoutine(16, 1);
+            yield return new WaitForSeconds(2f);
+            BladeThrowProjectileLauncher(5);
             yield return TeleportToTargetRoutine(RandomTeleportPoint(), new Vector2(0f, 0f));
+            yield return new WaitForSeconds(2f);
             DecidedOnAttack(false);
             m_stateHandle.ApplyQueuedState();
-        }//done
+        }//done phase 3 attack pattern 5
 
         private IEnumerator TeleportDiagonalsGuardsEdge()
         {
             m_stateHandle.Wait(State.ReevaluateSituation);
-            yield return TeleportToTargetRoutine(m_targetInfo.position, new Vector2(0f,9f));
-            //yield return DiagonalGuardsEdgeRoutine();
+            yield return TeleportToTargetRoutine(m_targetInfo.position, new Vector2(-20f,5f));
+            m_royalDeathGuardScytheProjectile.ExecuteFlight(m_character.centerMass.position, m_targetInfo.position);
+            yield return new WaitForSeconds(1f);
             //Teleport to the player front or back?!
-            yield return TeleportToTargetRoutine(m_targetInfo.position, new Vector2(0f,0f));
+            yield return TeleportToTargetRoutine(m_targetInfo.position, new Vector2(-20f, 0f));
+            var scytheDestinationOffset = m_character.facing == HorizontalDirection.Left ? Vector3.left : Vector3.right;
+            m_royalDeathGuardScytheProjectile.ExecuteFlight(m_character.centerMass.position, m_character.centerMass.position + scytheDestinationOffset);
+            yield return new WaitForSeconds(1f);
             //yield return GuardsEdgeRoutine();
             yield return TeleportToTargetRoutine(RandomTeleportPoint(), new Vector2(0f, 0f));
             DecidedOnAttack(false);
@@ -988,28 +1110,30 @@ namespace DChild.Gameplay.Characters.Enemies
             m_stateHandle.Wait(State.ReevaluateSituation);
             //teleport to center of the scene 
             yield return TeleportToTargetRoutine(CenterPointOfTheArena(), new Vector2(0f,0f));
-            var random = UnityEngine.Random.Range(0, 2);
-            var randomFacing = UnityEngine.Random.Range(0, 2) == 1 ? 1 : -1;
-            int cloneCount = m_currentPhaseIndex == 2 ? 1 : 2;
-            for (int i = 0; i < cloneCount; i++)
-            {
-                var clonePos = m_randomSpawnCollider.bounds.center + new Vector3(75 * randomFacing, 0, 0);
-                var clone = Instantiate(m_info.clone, clonePos, Quaternion.identity);
-                clone.GetComponent<BlackDeathCloneAI>().SetFacing(-randomFacing);
-                randomFacing = -randomFacing;
-                m_clones.Add(clone);
-            }
 
-            yield return BladeThrow2Routine(32, 1);
+            for (int i = 0; i < m_blackDeathClone.Count; i++)
+            {
+                if (!m_blackDeathClone[i].isActivated)
+                {
+                    m_blackDeathClone[i].Appear();
+                }
+              
+            }
+            
+            var random = UnityEngine.Random.Range(0, 2);
+            BladeThrowProjectileLauncher(5);
+            yield return new WaitForSeconds(2f);
             switch (random)
             {
-                case 0:
-                    yield return BladeThrowRoutine(32, 1);
-                    yield return BladeThrowRoutine(32, 2);
+                case 0://clockwise rotation and counter clockwise
+                    m_bladeThrowHandler[3].SpawnProjectileInSequence(HorizontalDirection.Right, true);
+                    yield return new WaitForSeconds(2f);
+                    m_bladeThrowHandler[3].SpawnProjectileInSequence(HorizontalDirection.Left, true);
                     break;
-                case 1:
-                    yield return BladeThrowRoutine(32, 2);
-                    yield return BladeThrowRoutine(32, 1);
+                case 1://counter clockwise and clockwise rotation
+                    m_bladeThrowHandler[3].SpawnProjectileInSequence(HorizontalDirection.Left, true);
+                    yield return new WaitForSeconds(2f);
+                    m_bladeThrowHandler[3].SpawnProjectileInSequence(HorizontalDirection.Right, true);
                     break;
             }
             yield return TeleportToTargetRoutine(RandomTeleportPoint(), new Vector2(0f, 0f));
@@ -1027,8 +1151,20 @@ namespace DChild.Gameplay.Characters.Enemies
                 yield return null;
 
             }
-            yield return BloodLightningRoutine(6);
-            yield return BloodLightningRoutine(2);
+
+            for (int i = 0; i < 6; i++)
+            {
+                var random = UnityEngine.Random.Range(0, 4);
+                m_BlackDeathBloodLightingBehaviourHandle2[random].Execute();
+                yield return new WaitForSeconds(1f);
+            }
+            yield return new WaitForSeconds(1f);
+            for (int i = 0; i < 2; i++)
+            {
+                m_BlackDeathBloodLightingBehaviourHandle2[i].Execute();
+                yield return new WaitForSeconds(1f);
+            }
+            yield return new WaitForSeconds(1f);
             yield return TeleportToTargetRoutine(RandomTeleportPoint(), new Vector2(0f, 0f));
             DecidedOnAttack(false);
             m_stateHandle.ApplyQueuedState();
@@ -1046,9 +1182,19 @@ namespace DChild.Gameplay.Characters.Enemies
                 yield return null;
 
             }
-            yield return BloodLightningRoutine(4);
-            //pre determined location?
-            yield return BloodLightningRoutine(4);
+            for (int i = 0; i < 4; i++)
+            {
+                var random = UnityEngine.Random.Range(0, 4);
+                m_BlackDeathBloodLightingBehaviourHandle2[random].Execute();
+                yield return new WaitForSeconds(1f);
+            }
+            yield return new WaitForSeconds(1f);
+            for (int i = 0; i < 4; i++)
+            {
+                m_BlackDeathBloodLightingBehaviourHandle2[i].Execute();
+                yield return new WaitForSeconds(1f);
+            }
+            yield return new WaitForSeconds(1f);
             yield return TeleportToTargetRoutine(RandomTeleportPoint(), new Vector2(0f, 0f));
             DecidedOnAttack(false);
             m_stateHandle.ApplyQueuedState();
@@ -1058,13 +1204,17 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator TeleportTargetBloodLightning()
         {
             m_stateHandle.Wait(State.ReevaluateSituation);
+            var chase = m_BlackDeathBloodLightingBehaviourHandle[4];
             for (int i = 0; i < 3; i++)
             {
                 yield return TeleportToTargetRoutine(RandomTeleportPoint(), new Vector2(0f, 0f));
             }
+            
             //sensor chase type lightning? 
-            yield return BloodLightningRoutine(1);
+
+            chase.Execute();
             //teleport away from player
+            yield return new WaitForSeconds(1f);
             yield return TeleportToTargetRoutine(RandomTeleportPoint(), new Vector2(0f, 0f));
             DecidedOnAttack(false);
             m_stateHandle.ApplyQueuedState();
@@ -1073,7 +1223,8 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_stateHandle.Wait(State.ReevaluateSituation);
             yield return TeleportToTargetRoutine(RandomTeleportPoint(), new Vector2(0f, 0f));
-            yield return BloodLightningBarrageRoutine(8);
+            m_BlackDeathBloodLightingBehaviourHandle[3].Execute();
+            yield return new WaitForSeconds(2f);
             yield return TeleportToTargetRoutine(RandomTeleportPoint(), new Vector2(0f, 0f));
             DecidedOnAttack(false);
             m_stateHandle.ApplyQueuedState();
@@ -1219,6 +1370,33 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return null;
         }
 
+        private IEnumerator ScytheSlashForwardRoutine()
+        {
+            //m_slashGroundFX.transform.localScale = new Vector3(transform.localScale.x == 1 ? -4.026736f : 4.026736f, m_slashGroundFX.transform.localScale.y, m_slashGroundFX.transform.localScale.z);
+            var fxRenderer = m_slashGroundFX.GetComponent<ParticleSystemRenderer>();
+            fxRenderer.flip = transform.localScale.x == 1 ? new Vector3(1, 0, 0) : Vector3.zero;
+            m_animation.SetAnimation(0, m_info.attack1.animation, false);
+            if (m_groundSensor.isDetecting)
+            {
+                m_slashGroundFX.Play();
+            }
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack1.animation);
+            m_animation.SetAnimation(0, m_info.attack2.animation, false);
+            if (m_groundSensor.isDetecting)
+            {
+                m_slashGroundFX.Play();
+            }
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack2.animation);
+            m_animation.SetAnimation(0, m_info.attack3.animation, false);
+            if (m_groundSensor.isDetecting)
+            {
+                m_slashGroundFX.Play();
+            }
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack3.animation);
+            m_animation.SetAnimation(0, m_info.idleAnimation, true);
+            //m_stateHandle.ApplyQueuedState();
+            yield return null;
+        }
         private IEnumerator TentacleBladesRoutine(int tentacleCount)
         {
             if (!m_groundSensor.isDetecting)
@@ -1273,32 +1451,7 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return null;
         }
 
-        private IEnumerator BloodLightningRoutine(int lightningCount/*, float lightningXPos*/)
-        {
-            m_animation.SetAnimation(0, m_info.bloodLightningAttack.animation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.bloodLightningAttack.animation);
-            m_animation.SetAnimation(0, m_info.bloodLightningIdleAnimation, true);
-            for (int z = 0; z < lightningCount; z++)
-            {
-                if (m_currentPhaseIndex == 4 && m_currentPattern != Pattern.AttackPattern3)
-                {
-                    GameObject instance = Instantiate(m_info.bloodLightning, new Vector2(RandomTeleportPoint().x, GroundPosition(m_randomSpawnCollider.bounds.center).y), Quaternion.identity);
-                    instance.transform.position = new Vector2(instance.transform.position.x, GroundPosition(instance.transform.position).y);
-                }
-                else
-                {
-
-                    GameObject instance = Instantiate(m_info.bloodLightning, new Vector2(m_targetInfo.position.x, GroundPosition(m_randomSpawnCollider.bounds.center).y), Quaternion.identity);
-                    instance.transform.position = new Vector2(instance.transform.position.x, GroundPosition(instance.transform.position).y);
-                }
-                yield return new WaitForSeconds(m_currentLightningSummonDuration);
-            }
-            m_animation.SetAnimation(0, m_info.bloodLightningEndAnimation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.bloodLightningEndAnimation);
-            m_animation.SetAnimation(0, m_info.idleAnimation, true);
-            m_stateHandle.ApplyQueuedState();
-            yield return null;
-        }
+      
 
         private IEnumerator BloodLightningBarrageRoutine(int lightningCount)
         {
@@ -1442,7 +1595,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private void UpdateAttackDeciderList()
         {
             //testing
-            m_attackDecider.SetList(new AttackInfo<Attack>(Attack.ScytheSlashDualBladeThrow, m_info.targetDistanceTolerance));
+            //m_attackDecider.SetList(new AttackInfo<Attack>(Attack.ScytheSlashDualBladeThrow, m_info.targetDistanceTolerance));
             /*m_patternDecider.SetList(new AttackInfo<Pattern>(Pattern.AttackPattern1, m_info.targetDistanceTolerance),
                                      new AttackInfo<Pattern>(Pattern.AttackPattern2, m_info.targetDistanceTolerance),
                                      new AttackInfo<Pattern>(Pattern.AttackPattern3, m_info.targetDistanceTolerance),
@@ -1455,115 +1608,53 @@ namespace DChild.Gameplay.Characters.Enemies
                                   , new AttackInfo<Attack>(Attack.ScytheSlash, m_info.attack1.range)
                                   , new AttackInfo<Attack>(Attack.ShadowClone, m_info.summonCloneAttack.range)
             //                      , new AttackInfo<Attack>(Attack.TentacleBlades, m_info.attack6A.range));*/
-            //switch (m_phaseHandle.currentPhase)
-            //{
-            //    case Phase.PhaseOne:
-            //        m_attackDecider.SetList(new AttackInfo<Attack>(Attack.ScytheSlashDualBladeThrow, m_info.targetDistanceTolerance),
-            //            new AttackInfo<Attack>(Attack.ScytheSlashBladeOfDarkness, m_info.targetDistanceTolerance),
-            //            new AttackInfo<Attack>(Attack.BloodLightningRPattern, m_info.targetDistanceTolerance),
-            //            new AttackInfo<Attack>(Attack.BladeDarknessRPatternOneTwo, m_info.targetDistanceTolerance),
-            //            new AttackInfo<Attack>(Attack.BladeThrowABA, m_info.targetDistanceTolerance),
-            //            new AttackInfo<Attack>(Attack.GuardsEdgeBladeDarkness, m_info.targetDistanceTolerance));
-            //        break;
-            //    case Phase.PhaseTwo:
-            //        m_attackDecider.SetList(new AttackInfo<Attack>(Attack.ScytheSlashSingleBladeThrow, m_info.targetDistanceTolerance),
-            //           new AttackInfo<Attack>(Attack.ScytheSlashBladeDarknessMurmurGuardsEdge, m_info.targetDistanceTolerance),
-            //           new AttackInfo<Attack>(Attack.TripleBloodLightningOrBladeDarkness, m_info.targetDistanceTolerance),
-            //           new AttackInfo<Attack>(Attack.RandomTripleBloodLightning, m_info.targetDistanceTolerance),
-            //           new AttackInfo<Attack>(Attack.TeleportBladeThrow, m_info.targetDistanceTolerance));
-            //        break;
-            //    case Phase.PhaseThree:
-            //        m_attackDecider.SetList(new AttackInfo<Attack>(Attack.TeleportGuardsEdgeMurmursMark, m_info.targetDistanceTolerance),
-            //          new AttackInfo<Attack>(Attack.TeleportScytheSlashGuardsEdge, m_info.targetDistanceTolerance),
-            //          new AttackInfo<Attack>(Attack.Pattern4TripleBloodLightning, m_info.targetDistanceTolerance),
-            //          new AttackInfo<Attack>(Attack.RandomTripleBloodLightning, m_info.targetDistanceTolerance),
-            //          new AttackInfo<Attack>(Attack.TeleportBladeThrowWithRotations, m_info.targetDistanceTolerance),
-            //          new AttackInfo<Attack>(Attack.TeleportDiagonalsGuardsEdge, m_info.targetDistanceTolerance),
-            //          new AttackInfo<Attack>(Attack.TeleportShadowBladeThrowWithRotations, m_info.targetDistanceTolerance));
-            //        break;
-            //    case Phase.PhaseFour:
-            //        break;
- 
-            //}
+            switch (m_phaseHandle.currentPhase)
+            {
+                case Phase.PhaseOne:
+                    m_attackDecider.SetList(new AttackInfo<Attack>(Attack.ScytheSlashDualBladeThrow, m_info.targetDistanceTolerance),
+                        new AttackInfo<Attack>(Attack.ScytheSlashBladeOfDarkness, m_info.targetDistanceTolerance),
+                        new AttackInfo<Attack>(Attack.BloodLightningRPattern, m_info.targetDistanceTolerance),
+                        new AttackInfo<Attack>(Attack.BladeDarknessRPatternOneTwo, m_info.targetDistanceTolerance),
+                        new AttackInfo<Attack>(Attack.BladeThrowABA, m_info.targetDistanceTolerance),
+                        new AttackInfo<Attack>(Attack.GuardsEdgeBladeDarkness, m_info.targetDistanceTolerance));
+                    break;
+                case Phase.PhaseTwo:
+                    m_attackDecider.SetList(new AttackInfo<Attack>(Attack.ScytheSlashSingleBladeThrow, m_info.targetDistanceTolerance),
+                       new AttackInfo<Attack>(Attack.ScytheSlashBladeDarknessMurmurGuardsEdge, m_info.targetDistanceTolerance),
+                       new AttackInfo<Attack>(Attack.TripleBloodLightningOrBladeDarkness, m_info.targetDistanceTolerance),
+                       new AttackInfo<Attack>(Attack.RandomTripleBloodLightning, m_info.targetDistanceTolerance),
+                       new AttackInfo<Attack>(Attack.TeleportBladeThrow, m_info.targetDistanceTolerance));
+                    break;
+                case Phase.PhaseThree:
+                    m_attackDecider.SetList(new AttackInfo<Attack>(Attack.TeleportGuardsEdgeMurmursMark, m_info.targetDistanceTolerance),
+                      new AttackInfo<Attack>(Attack.TeleportScytheSlashGuardsEdge, m_info.targetDistanceTolerance),
+                      new AttackInfo<Attack>(Attack.Pattern4TripleBloodLightning, m_info.targetDistanceTolerance),
+                      new AttackInfo<Attack>(Attack.RandomTripleBloodLightning, m_info.targetDistanceTolerance),
+                      new AttackInfo<Attack>(Attack.TeleportBladeThrowWithRotations, m_info.targetDistanceTolerance),
+                      new AttackInfo<Attack>(Attack.TeleportDiagonalsGuardsEdge, m_info.targetDistanceTolerance),
+                      new AttackInfo<Attack>(Attack.TeleportShadowBladeThrowWithRotations, m_info.targetDistanceTolerance));
+                    break;
+                case Phase.PhaseFour:
+                    m_attackDecider.SetList(new AttackInfo<Attack>(Attack.TeleportMultipleBloodLightningP1, m_info.targetDistanceTolerance),
+                    new AttackInfo<Attack>(Attack.TeleportMultipleBloodLightningP2, m_info.targetDistanceTolerance),
+                    new AttackInfo<Attack>(Attack.TeleportSingleBloodLightning, m_info.targetDistanceTolerance),
+                    new AttackInfo<Attack>(Attack.TeleportTargetBloodLightning, m_info.targetDistanceTolerance),
+                    new AttackInfo<Attack>(Attack.TeleportShadowBladeThrowWithRotations, m_info.targetDistanceTolerance));
+                    break;
+
+            }
 
             DecidedOnAttack(false);
         }
 
         public override void ApplyData()
         {
-            if (m_patternDecider != null)
+            if (m_attackDecider != null)
             {
                 UpdateAttackDeciderList();
             }
             base.ApplyData();
         }
-
-        private void ChoosePattern()
-        {
-            if (!m_patternDecider.hasDecidedOnAttack)
-            {
-                IsAllAttackComplete();
-                for (int i = 0; i < m_attackCache.Count; i++)
-                {
-                    m_patternDecider.DecideOnAttack();
-                    if (m_attackCache[i] != m_currentPattern && !m_attackUsed[i])
-                    {
-                        m_attackUsed[i] = true;
-                        m_currentPattern = m_attackCache[i];
-                        return;
-                    }
-                }
-            }
-        }
-
-        /*private void ExecuteAttack(Attack m_attack)
-        {
-            var randomFacing = UnityEngine.Random.Range(0, 2) == 1 ? 1 : -1;
-            switch (m_attack)
-            {
-                case Attack.BladeThrow:
-                    StartCoroutine(BladeThrowRoutine(8, m_currentBladeLoops));
-                    break;
-                case Attack.BladeCircleThrow:
-                    StartCoroutine(BladeThrow2Routine(32, m_currentBladeLoops));
-                    break;
-                case Attack.GiantBlades:
-                    StartCoroutine(GiantBladesRoutine());
-                    break;
-                case Attack.ScytheSlash:
-                    StartCoroutine(ScytheSlashRoutine());
-                    break;
-                case Attack.TeleportScytheSlash:
-                    StartCoroutine(TeleportToTargetRoutine(m_targetInfo.position, Attack.ScytheSlash, new Vector2(randomFacing * 20, -5)*//*, true*//*));
-                    break;
-                case Attack.ShadowClone:
-                    int cloneCount = m_currentPhaseIndex == 2 ? 1 : 2;
-                    for (int i = 0; i < cloneCount; i++)
-                    {
-                        var clonePos = m_randomSpawnCollider.bounds.center + new Vector3(75 * randomFacing, 0, 0);
-                        var clone = Instantiate(m_info.clone, clonePos, Quaternion.identity);
-                        clone.GetComponent<BlackDeathCloneAI>().SetFacing(-randomFacing);
-                        randomFacing = -randomFacing;
-                        m_clones.Add(clone);
-                    }
-                    break;
-                case Attack.TentacleBlades:
-                    StartCoroutine(TentacleBladesRoutine(m_currentTentacleCount));
-                    break;
-                case Attack.TentacleAttackUp:
-                    StartCoroutine(TentacleUpRoutine());
-                    break;
-                case Attack.TentacleAttackFront:
-                    StartCoroutine(TentacleFrontRoutine());
-                    break;
-                case Attack.BloodLightning:
-                    StartCoroutine(BloodLightningRoutine(m_currentLightningCount*//*, m_currentLightningXPos*//*));
-                    break;
-                case Attack.BloodLightningBarrage:
-                    StartCoroutine(BloodLightningBarrageRoutine(m_currentLightningCount));
-                    break;
-            }
-        }*/
 
         private bool m_isPlayerHit;
         private void AddHitCount(object sender, EventActionArgs eventArgs)
@@ -1602,30 +1693,20 @@ namespace DChild.Gameplay.Characters.Enemies
             m_hitDetector.PlayerHit += AddHitCount;
             m_deathHandle.SetAnimation(m_info.deathAnimation.animation);
             m_projectileLauncher = new ProjectileLauncher(m_info.projectile.projectileInfo, m_projectilePoint);
-            m_patternAttackCount = new int[2];
-           // m_patternDecider = new RandomAttackDecider<Pattern>();
             m_attackDecider = new RandomAttackDecider<Attack>();
-            //for (int i = 0; i < 3; i++)
-            //{
-            //    m_attackDecider[i] = new RandomAttackDecider<Attack>();
-            //}
             m_stateHandle = new StateHandle<State>(State.Idle, State.WaitBehaviourEnd);
             UpdateAttackDeciderList();
-            //m_patternCount = new float[4];
-            m_attackCache = new List<Pattern>();
             m_clones = new List<GameObject>();
             m_clones.Add(null);
-            //AddToAttackCache(Pattern.AttackPattern1, Pattern.AttackPattern2, Pattern.AttackPattern3, Pattern.AttackPattern4, Pattern.AttackPattern5, Pattern.AttackPattern6, Pattern.AttackPattern7);
-           // m_attackUsed = new bool[m_attackCache.Count];
+        
         }
-
         protected override void Start()
         {
             base.Start();
+            
             m_spineListener.Subscribe(m_info.deathFXEvent, m_deathFX.Play);
             m_spineListener.Subscribe(m_info.teleportFXEvent, m_teleportFX.Play);
             m_animation.DisableRootMotion();
-
             m_phaseHandle = new PhaseHandle<Phase, PhaseInfo>();
             m_phaseHandle.Initialize(Phase.PhaseOne, m_info.phaseInfo, m_character, ChangeState, ApplyPhaseData);
             m_phaseHandle.ApplyChange();
@@ -1664,10 +1745,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_movement.Stop();
                     break;
                 case State.Attacking:
-                    m_stateHandle.Wait(State.ReevaluateSituation);
-                    var randomFacing = UnityEngine.Random.Range(0, 2) == 1 ? 1 : -1;
-                    var randomAttack = UnityEngine.Random.Range(0, 2);
-                    var randomGroundPos = new Vector2(RandomTeleportPoint().x, GroundPosition(m_projectilePoint.position).y);
+                m_stateHandle.Wait(State.ReevaluateSituation);
                     if (m_attackDecider.hasDecidedOnAttack == false)
                     {
                         m_attackDecider.DecideOnAttack();
@@ -1675,50 +1753,67 @@ namespace DChild.Gameplay.Characters.Enemies
                     switch (m_attackDecider.chosenAttack.attack)
                     {
                         case Attack.ScytheSlashDualBladeThrow:
-                            StartCoroutine(TeleportBladeThrow());
+                            StartCoroutine(ScytheSlashDualBladeThrowAttack());
                             break;
                         case Attack.ScytheSlashBladeOfDarkness:
-                            //StartCoroutine(ScytheSlashBladeOfDarknessAttack());
+                            StartCoroutine(ScytheSlashBladeOfDarknessAttack());
                             break;
                         case Attack.BloodLightningRPattern:
-                           // StartCoroutine(TeleportBloodAttack());
+                            StartCoroutine(TeleportBloodAttack());
                             break;
                         case Attack.BladeDarknessRPatternOneTwo:
-
+                            StartCoroutine(BladeOfDarknessTeleportAttack());
                             break;
                         case Attack.BladeThrowABA:
+                            StartCoroutine(PatternedBladeThrowAttack());
                             break;
                         case Attack.GuardsEdgeBladeDarkness:
+                            StartCoroutine(GuardsEdgeBladeOfDarknesssAttack());
                             break;
                         case Attack.ScytheSlashSingleBladeThrow:
+                            StartCoroutine(ScytheSlashSingleBladeThrowAttack());
                             break;
                         case Attack.ScytheSlashBladeDarknessMurmurGuardsEdge:
+                            StartCoroutine(ScytheSlashBladeDarknessMurmurGuardsEdgeAttack());
                             break;
                         case Attack.TripleBloodLightningOrBladeDarkness:
+                            StartCoroutine(TripleBloodLightningOrBladeDarkness());
                             break;
                         case Attack.RandomTripleBloodLightning:
+                            StartCoroutine(RandomTripleBloodLightningAttack());
                             break;
                         case Attack.TeleportBladeThrow:
+                            StartCoroutine(TeleportBladeThrow());
                             break;
                         case Attack.TeleportGuardsEdgeMurmursMark:
+                            StartCoroutine(TeleportGuardsEdgeMurmursMarkAttack());
                             break;
                         case Attack.TeleportScytheSlashGuardsEdge:
+                            StartCoroutine(TeleportScytheSlashGuardsEdge());
                             break;
                         case Attack.Pattern4TripleBloodLightning:
+                            StartCoroutine(Pattern4TripleBloodLightning());
                             break;
                         case Attack.TeleportBladeThrowWithRotations:
+                            StartCoroutine(TeleportBladeThrowWithRotations());
                             break;
                         case Attack.TeleportDiagonalsGuardsEdge:
+                            StartCoroutine(TeleportDiagonalsGuardsEdge());
                             break;
                         case Attack.TeleportShadowBladeThrowWithRotations:
+                            StartCoroutine(TeleportShadowBladeThrowWithRotations());
                             break;
                         case Attack.TeleportMultipleBloodLightningP1:
+                            StartCoroutine(TeleportMultipleBloodLightningP1());
                             break;
                         case Attack.TeleportMultipleBloodLightningP2:
+                            StartCoroutine(TeleportMultipleBloodLightningP2());
                             break;
                         case Attack.TeleportTargetBloodLightning:
+                            StartCoroutine(TeleportTargetBloodLightning());
                             break;
                         case Attack.TeleportSingleBloodLightning:
+                            StartCoroutine(TeleportSingleBloodLightning());
                             break;
                        
                     }
@@ -2207,11 +2302,9 @@ namespace DChild.Gameplay.Characters.Enemies
                     break;
 
                 case State.Chasing:
-                    DecidedOnAttack(true);
-                   // ChoosePattern();
                     if (IsFacingTarget())
                     {
-                        if (m_attackDecider.hasDecidedOnAttack)
+                        if (!m_attackDecider.hasDecidedOnAttack)
                         {
                             m_hitCount = 0;
                             m_attackCount = 0;
@@ -2240,7 +2333,11 @@ namespace DChild.Gameplay.Characters.Enemies
                     return;
             }
         }
-
+        private Vector2 GroundPositionOfBlackDeath()
+        {
+            RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, 1000, DChildUtility.GetEnvironmentMask());
+            return hit.point;
+        }
         protected override void OnTargetDisappeared()
         {
             //m_stickToGround = false;

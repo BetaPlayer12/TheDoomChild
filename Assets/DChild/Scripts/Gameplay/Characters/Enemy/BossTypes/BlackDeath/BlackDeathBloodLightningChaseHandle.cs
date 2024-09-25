@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
+using Holysoft.Event;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -37,14 +39,35 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_isExecutinSequence = true;
 
+            bool areLightningDoneExecuting = false;
+
             for (int i = 0; i < m_spawnCount; i++)
             {
                 SpawnLighting(m_poolIndex);
                 yield return new WaitForSeconds(m_spawnInterval);
+
+                if (i == m_spawnCount - 1)
+                {
+                    m_pool[m_poolIndex].IsDone += OnLightingDone;
+                }
+
                 m_poolIndex = (int)Mathf.Repeat(m_poolIndex + 1, m_pool.Length);
             }
 
+            while (areLightningDoneExecuting == false)
+                yield return null;
+
+            for (int i = 0; i < m_pool.Length; i++)
+            {
+                m_pool[i].gameObject.SetActive(false);
+            }
             m_isExecutinSequence = false;
+
+
+            void OnLightingDone(object sender, EventActionArgs eventArgs)
+            {
+                areLightningDoneExecuting = true;
+            }
         }
 
         private void SpawnLighting(int poolIndex)
@@ -54,6 +77,7 @@ namespace DChild.Gameplay.Characters.Enemies
             var spawnPosition = m_toChase.position;
             spawnPosition.y = transform.position.y;
             instance.transform.position = spawnPosition;
+            instance.gameObject.SetActive(true);
             instance.Execute();
         }
     }

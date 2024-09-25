@@ -36,7 +36,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
             private void OnIsDone(object sender, EventActionArgs eventArgs)
             {
-                ((BlackDeathBladeOfDarkness)sender).IsDone -= OnIsDone;
+                ((BlackDeathBloodLightning)sender).IsDone -= OnIsDone;
                 IsDone?.Invoke(this, EventActionArgs.Empty);
             }
         }

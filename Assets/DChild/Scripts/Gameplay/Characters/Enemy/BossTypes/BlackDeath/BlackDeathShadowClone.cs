@@ -39,7 +39,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private float m_attackIntervalTimer;
         private bool m_canAttack;
 
-        private bool isActivated => gameObject.activeInHierarchy;
+        public bool isActivated => gameObject.activeInHierarchy;
+        
 
         [Button]
         public void Appear()

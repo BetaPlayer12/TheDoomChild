@@ -31,6 +31,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private float m_projectileSpawnDelay;
 
         private bool m_isActivated;
+        public bool isActivated => m_isActivated;
 
         [Button]
         public void Activate(Transform target)

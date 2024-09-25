@@ -46,8 +46,8 @@ namespace DChild.Gameplay.Characters.Enemies
             m_hurtBoxCollider.enabled = true;
             yield return new WaitForSeconds(m_timeToDeactivateHurtbox);
             m_hurtBoxCollider.enabled = false;
-            yield return new WaitForSeconds(.5f);
-            Destroy(this.gameObject);
+            /*yield return new WaitForSeconds(.5f);*/
+            /*Destroy(this.gameObject);*/
             yield return null;
 
             m_isSpawning = false;
