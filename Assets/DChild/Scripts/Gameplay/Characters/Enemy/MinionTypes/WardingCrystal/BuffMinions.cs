@@ -82,10 +82,10 @@ public class BuffMinions : MonoBehaviour
                 if (m_minionsInWardingRadius.Contains(minion))
                 {
                     m_wardingCrystalEffects.SoulEssenceBuff(m_minionsInWardingRadius);
-                    m_wardingCrystalEffects.MinionCount(false, m_minionsInWardingRadius);
                     m_wardingCrystalEffects.RemoveVFX(minion);
                     m_wardingCrystalEffects.ReturnBaseDamageMinion(minion);
                     m_wardingCrystalEffects.ReturnBaseHealthMinion(minion);
+                    m_wardingCrystalEffects.MinionCount(false, m_minionsInWardingRadius);
                     m_minionsInWardingRadius.Remove(minion);
                 }
             }
