@@ -22,8 +22,8 @@ public class BuffMinions : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.gameObject.layer == m_minionLayer &&
-            collision.gameObject.CompareTag(m_minionTag))
+        if(collision.gameObject.layer == m_minionLayer /*&&
+            collision.gameObject.CompareTag(m_minionTag)*/)
         {
             var minionAttacker = collision.GetComponentInParent<Attacker>();
             if (minionAttacker != null)
@@ -70,8 +70,8 @@ public class BuffMinions : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.gameObject.layer == m_minionLayer &&
-             collision.gameObject.CompareTag(m_minionTag))
+        if (collision.gameObject.layer == m_minionLayer /*&&
+             collision.gameObject.CompareTag(m_minionTag)*/)
         {
 
             var minionAttacker = collision.GetComponentInParent<Attacker>();
