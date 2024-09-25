@@ -85,6 +85,10 @@ namespace DChild.Gameplay.Combat
             }
         }
 
+        public Damage GetBaseDamage()
+        {
+            return m_baseDamage;
+        }
         public void SetDamage(Damage damage)
         {
             m_baseDamage = damage;
