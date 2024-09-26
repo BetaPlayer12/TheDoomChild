@@ -525,6 +525,11 @@ namespace DChild.Gameplay.Characters.Enemies
 
         protected override void OnDestroyed(object sender, EventActionArgs eventArgs)
         {
+            for (int i = 0; i < m_blackDeathClone.Count; i++)
+            {
+                m_blackDeathClone[i].gameObject.SetActive(false);
+            }
+
             Debug.Log("on na kooooo");
             StopAllCoroutines();
             m_movement.Stop();

@@ -39,7 +39,8 @@ namespace DChild.Gameplay.Characters.Enemies
             if (m_isSpawned)
                 return;
 
-            m_damageable.RessurectSelf();
+            GameplaySystem.combatManager.Heal(m_damageable, 999999999);
+            //m_damageable.RessurectSelf();
             m_animator.SetTrigger(m_activationParamID);
             m_animator.ResetTrigger(m_takeDamageParamID);
             m_isSpawned = true;

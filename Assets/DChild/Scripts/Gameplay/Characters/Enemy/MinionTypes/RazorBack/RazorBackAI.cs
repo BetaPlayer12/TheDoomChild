@@ -12,8 +12,6 @@ using System.Collections;
 using System.Collections.Generic;
 using DChild;
 using DChild.Gameplay.Characters.Enemies;
-using static UnityEditor.ShaderGraph.Internal.KeywordDependentCollection;
-
 namespace DChild.Gameplay.Characters.Enemies
 {
     [AddComponentMenu("DChild/Gameplay/Enemies/Minion/RazorBack")]
