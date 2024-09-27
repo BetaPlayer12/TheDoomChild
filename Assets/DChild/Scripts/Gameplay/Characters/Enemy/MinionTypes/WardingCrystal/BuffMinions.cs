@@ -18,6 +18,8 @@ public class BuffMinions : MonoBehaviour
     private List<GameObject> m_minionsInWardingRadius;
     [SerializeField]
     private List<GameObject> m_checkedMinions;
+    [SerializeField]
+    private GameObject WardingCrystalVFX;
     private bool m_isDead;
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -68,7 +70,19 @@ public class BuffMinions : MonoBehaviour
             //}
         
             //m_minionsInWardingRadius.Add(minion);
+        }
+        
+    }
 
+    private void FixedUpdate()
+    {
+        if (m_minionsInWardingRadius.Count > 0&& !WardingCrystalVFX.activeSelf)
+        {
+            WardingCrystalVFX.SetActive(true);
+            WardingCrystalVFX.GetComponent<ParticleSystem>().Play();
+        }else if(m_minionsInWardingRadius.Count==0)
+        {
+            WardingCrystalVFX.SetActive(false);
         }
     }
 

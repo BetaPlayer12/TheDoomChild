@@ -175,12 +175,18 @@ MonoBehaviour:
   m_fastFactor: 0
   m_fXObjects:
     m_particleSystems:
+    - {fileID: 6703688983395551045}
+    - {fileID: 71284015903724356}
+    - {fileID: 71284015818158944}
     - {fileID: 1518241449238109117}
     - {fileID: 1518241448182882876}
     - {fileID: 1518241448405340039}
     - {fileID: 1518241449850243036}
     - {fileID: 1518241448857900134}
     m_originalSimulationSpeed:
+    - 1
+    - 1
+    - 1
     - 1
     - 1
     - 1
@@ -585,7 +591,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 71284014837025166}
   m_Father: {fileID: 7996341238525250207}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -609,6 +616,7 @@ MonoBehaviour:
   m_minionTag: Hitbox
   m_minionsInWardingRadius: []
   m_checkedMinions: []
+  WardingCrystalVFX: {fileID: 71284014837025161}
 --- !u!58 &4785962087355217544
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -789,6 +797,105 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_animationTracks: []
   m_skeletonAnimation: {fileID: 5347895876200826708}
+--- !u!1001 &6219183649560755366
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 1362325815111087676}
+    m_Modifications:
+    - target: {fileID: 6247542696072328488, guid: 07c5d7bca23f5054492ca1c55bc46342,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6247542696072328488, guid: 07c5d7bca23f5054492ca1c55bc46342,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6247542696072328488, guid: 07c5d7bca23f5054492ca1c55bc46342,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6247542696072328488, guid: 07c5d7bca23f5054492ca1c55bc46342,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6247542696072328488, guid: 07c5d7bca23f5054492ca1c55bc46342,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6247542696072328488, guid: 07c5d7bca23f5054492ca1c55bc46342,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6247542696072328488, guid: 07c5d7bca23f5054492ca1c55bc46342,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6247542696072328488, guid: 07c5d7bca23f5054492ca1c55bc46342,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6247542696072328488, guid: 07c5d7bca23f5054492ca1c55bc46342,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6247542696072328488, guid: 07c5d7bca23f5054492ca1c55bc46342,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6247542696072328488, guid: 07c5d7bca23f5054492ca1c55bc46342,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6247542696072328495, guid: 07c5d7bca23f5054492ca1c55bc46342,
+        type: 3}
+      propertyPath: m_Name
+      value: Warding Crystal  SOURCE VFX_HOLDER
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 07c5d7bca23f5054492ca1c55bc46342, type: 3}
+--- !u!1 &71284014837025161 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6247542696072328495, guid: 07c5d7bca23f5054492ca1c55bc46342,
+    type: 3}
+  m_PrefabInstance: {fileID: 6219183649560755366}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &71284014837025166 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6247542696072328488, guid: 07c5d7bca23f5054492ca1c55bc46342,
+    type: 3}
+  m_PrefabInstance: {fileID: 6219183649560755366}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &71284015818158944 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 6247542697070776262, guid: 07c5d7bca23f5054492ca1c55bc46342,
+    type: 3}
+  m_PrefabInstance: {fileID: 6219183649560755366}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &71284015903724356 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 6247542697153179618, guid: 07c5d7bca23f5054492ca1c55bc46342,
+    type: 3}
+  m_PrefabInstance: {fileID: 6219183649560755366}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &6703688983395551045 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 812533633939258339, guid: 07c5d7bca23f5054492ca1c55bc46342,
+    type: 3}
+  m_PrefabInstance: {fileID: 6219183649560755366}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &6487882857347047797
 PrefabInstance:
   m_ObjectHideFlags: 0
