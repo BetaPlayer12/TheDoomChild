@@ -18,10 +18,14 @@ public class BuffMinions : MonoBehaviour
     private List<GameObject> m_minionsInWardingRadius;
     [SerializeField]
     private List<GameObject> m_checkedMinions;
-
+    private bool m_isDead;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        if(m_isDead)
+        {
+            return;
+        }
         if(collision.gameObject.layer == m_minionLayer /*&&
             collision.gameObject.CompareTag(m_minionTag)*/)
         {
@@ -34,7 +38,7 @@ public class BuffMinions : MonoBehaviour
                 {
                     return;
                 }
-
+                Debug.Log("ADDED " + minion.name);
                 //Minions Just got into Radius
                 m_wardingCrystalEffects.AddtionalAttackAndHealthBuff(minion);
                 m_wardingCrystalEffects.ShowVFX(minion);
@@ -81,6 +85,7 @@ public class BuffMinions : MonoBehaviour
                 var minion = minionAttacker.gameObject;
                 if (m_minionsInWardingRadius.Contains(minion))
                 {
+                    Debug.Log("REMOVED " + minion.name);
                     m_wardingCrystalEffects.SoulEssenceBuff(m_minionsInWardingRadius);
                     m_wardingCrystalEffects.RemoveVFX(minion);
                     m_wardingCrystalEffects.ReturnBaseDamageMinion(minion);
@@ -90,7 +95,24 @@ public class BuffMinions : MonoBehaviour
                 }
             }
         }
+    }
 
-
+    public void Cleanup()
+    {
+        m_isDead = true;
+        if(m_minionsInWardingRadius.Count<1)
+        {
+            Debug.Log("LOOOOOOOOOOOOOOOO");
+            return;
+        }
+        foreach(GameObject x in m_minionsInWardingRadius)
+        {
+            m_wardingCrystalEffects.SoulEssenceBuff(m_minionsInWardingRadius);
+            m_wardingCrystalEffects.RemoveVFX(x);
+            m_wardingCrystalEffects.ReturnBaseDamageMinion(x);
+            m_wardingCrystalEffects.ReturnBaseHealthMinion(x);
+            m_wardingCrystalEffects.MinionCount(false, m_minionsInWardingRadius);
+            m_minionsInWardingRadius.Remove(x);
+        }
     }
 }
