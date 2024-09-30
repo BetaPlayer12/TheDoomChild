@@ -603,7 +603,8 @@ namespace DChild.Gameplay.Characters.Enemies
                     
                     m_selfCollider.enabled = false;
                     m_animation.EnableRootMotion(true, false);
-                    var idleAnim = RandomIdleAnimation();
+                    //var idleAnim = RandomIdleAnimation();
+                    var idleAnim = m_info.detectAnimation.animation;
                     switch (m_attackDecider.chosenAttack.attack)
                     {
                         case Attack.Attack1:
@@ -634,7 +635,8 @@ namespace DChild.Gameplay.Characters.Enemies
                     {
                         if (m_animation.animationState.GetCurrent(0).IsComplete)
                         {
-                            m_animation.SetAnimation(0, RandomIdleAnimation(), true);
+                            m_animation.SetAnimation(0, m_info.detectAnimation, true);
+                            //m_animation.SetAnimation(0, RandomIdleAnimation(), true);
                         }
                         m_turnState = State.Cooldown;
                     }
