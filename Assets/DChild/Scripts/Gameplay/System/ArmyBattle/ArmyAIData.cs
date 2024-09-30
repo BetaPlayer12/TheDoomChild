@@ -19,7 +19,7 @@ namespace DChild.Gameplay.ArmyBattle
         public ArmyGroupTemplateData ChooseAttack(int round)
         {
             var actionIndex = round - 1;
-            if (m_aiAction.Length >= round)
+            if (m_aiAction.Length > actionIndex)
             {
                 if (m_aiAction[actionIndex].isRandomizedAction == false)
                 {

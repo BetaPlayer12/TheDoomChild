@@ -1,4 +1,5 @@
 ﻿using DChild.Gameplay.ArmyBattle.Battalion;
+using DChild.Gameplay.ArmyBattle.Units;
 using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
@@ -23,15 +24,34 @@ namespace DChild.Gameplay.ArmyBattle.Visualizer
             }
         }
 
+        [System.Serializable]
+        private class ArmyReference
+        {
+            private Army m_army;
+            private ArmyBattalionManager m_battalion;
+
+            public ArmyReference(Army army, ArmyBattalionManager battalion)
+            {
+                m_army = army;
+                m_battalion = battalion;
+                troopPerUnit = m_army.troopCount / m_battalion.GetTotalUnitCount();
+            }
+
+            public ArmyBattalionManager battalion => m_battalion;
+            public int troopPerUnit { get; private set; }
+            public bool HasAvailableGroup(DamageType damageType) => m_army.HasAvailableGroup(damageType);
+
+
+        }
+
         [SerializeField, MinMaxSlider(0, 1, true)]
         private Vector2 m_deathInFightOccurancePercent;
         [SerializeField, MinMaxSlider(1, 100, true)]
         private Vector2Int m_deathInFightInstanceRange;
 
-        [SerializeField, MinValue(1)]
-        private int m_playerTroopPerUnit;
-        [SerializeField, MinValue(1)]
-        private int m_enemyTroopPerUnit;
+
+        private ArmyReference m_player;
+        private ArmyReference m_enemy;
 
         private List<DeathOrderInfo> m_deathOrder;
 
@@ -42,8 +62,11 @@ namespace DChild.Gameplay.ArmyBattle.Visualizer
 
         private float deathInFightDuration => m_deathInFightOccuranceRange.y - m_deathInFightOccuranceRange.x;
 
-        public void Initialize(float fightDuration)
+        public void Initialize(Army playerArmy, ArmyBattalionManager playerBattalion, Army enemyArmy, ArmyBattalionManager enemyBattalion, float fightDuration)
         {
+            m_player = new ArmyReference(playerArmy, playerBattalion);
+            m_enemy = new ArmyReference(enemyArmy, enemyBattalion);
+
             m_deathOrder = new List<DeathOrderInfo>();
             m_deathInFightOccuranceRange = new Vector2(fightDuration * m_deathInFightOccurancePercent.x, fightDuration * m_deathInFightOccurancePercent.y);
 
@@ -51,12 +74,12 @@ namespace DChild.Gameplay.ArmyBattle.Visualizer
             m_nextEnemyUnitTypeToKillIndex = Random.Range(0, (int)DamageType._COUNT);
         }
 
-        public IEnumerator DyingInBattleRoutine(ArmyBattalionManager player, ArmyBattalionManager enemy, ArmyBattleCombatResult result)
+        public IEnumerator DyingInBattleRoutine(ArmyBattleCombatResult result)
         {
             m_deathOrder.Clear();
-            var playerUnitsToKillOff = CalculateUnitsToKillOff(player, result.player.remainingTroopCount, m_playerTroopPerUnit);
+            var playerUnitsToKillOff = CalculateUnitsToKillOff(m_player.battalion, result.player.remainingTroopCount, m_player.troopPerUnit);
             ScheduleDeaths(playerUnitsToKillOff, true);
-            var enemyUnitsToKillOff = CalculateUnitsToKillOff(enemy, result.enemy.remainingTroopCount, m_enemyTroopPerUnit);
+            var enemyUnitsToKillOff = CalculateUnitsToKillOff(m_enemy.battalion, result.enemy.remainingTroopCount, m_enemy.troopPerUnit);
             ScheduleDeaths(enemyUnitsToKillOff, false);
             m_deathOrder = m_deathOrder.OrderBy(x => x.time).ToList();
 
@@ -77,32 +100,52 @@ namespace DChild.Gameplay.ArmyBattle.Visualizer
 
                 if (deathOrder.isPlayerUnit)
                 {
-                    KillOffUnit(player, ref m_nextPlayerUnitTypeToKillIndex);
+                    KillOffUnit(m_player, ref m_nextPlayerUnitTypeToKillIndex);
                 }
                 else
                 {
-                    KillOffUnit(enemy, ref m_nextEnemyUnitTypeToKillIndex);
+                    KillOffUnit(m_enemy, ref m_nextEnemyUnitTypeToKillIndex);
                 }
             }
 
         }
 
-        private void KillOffUnit(ArmyBattalionManager battalion, ref int index)
+        private void KillOffUnit(ArmyReference reference, ref int index)
         {
-            var unitHandle = battalion.GetUnitHandle((DamageType)index);
-            if (unitHandle.GetUnitCount() > 1)
+            bool hasViableUnitToKillOff = false;
+            ArmyUnitsHandle unitHandle = null;
+            var maxAttempts = 3;
+            for (int attempts = 1; attempts <= maxAttempts; attempts++)
+            {
+                var damageType = (DamageType)index;
+                unitHandle = reference.battalion.GetUnitHandle(damageType);
+                if (unitHandle.GetUnitCount() == 0)
+                {
+                    NextIndex(ref index);
+                    continue;
+                }
+
+                if (unitHandle.GetUnitCount() == 1 && reference.HasAvailableGroup(damageType))
+                {
+                    NextIndex(ref index);
+                    continue;
+                }
+
+                hasViableUnitToKillOff = true;
+                break;
+            }
+
+            if (hasViableUnitToKillOff)
             {
                 unitHandle.KillOffUnits(1);
+                NextIndex(ref index);
             }
-            else
+
+            void NextIndex(ref int index)
             {
                 index += 1;
                 index = (int)Mathf.Repeat(index, ((int)DamageType._COUNT));
-                KillOffUnit(battalion, ref index);
             }
-
-            index += 1;
-            index = (int)Mathf.Repeat(index, ((int)DamageType._COUNT));
         }
 
         private void ScheduleDeaths(int unitsToKillOff, bool ofPlayerBattalion)

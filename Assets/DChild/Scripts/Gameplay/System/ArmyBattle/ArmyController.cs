@@ -6,7 +6,7 @@ using System;
 
 namespace DChild.Gameplay.ArmyBattle
 {
-    public abstract class ArmyController : MonoBehaviour
+    public abstract class ArmyController : SerializedMonoBehaviour
     {
         [SerializeField]
         protected Army m_controlledArmy;
@@ -16,6 +16,8 @@ namespace DChild.Gameplay.ArmyBattle
         public Army controlledArmy => m_controlledArmy;
 
         public abstract ArmyTurnAction GetTurnAction(int turnNumber);
+
+        public abstract void CleanUpForNextTurn();
 
         public void SetArmyToControl(Army army)
         {

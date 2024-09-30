@@ -18,5 +18,10 @@ namespace DChild.Gameplay.ArmyBattle
                 attack = new ArmyDamage(DamageType.Melee, 30)
             };
         }
+
+        public override void CleanUpForNextTurn()
+        {
+            return;
+        }
     }
 }

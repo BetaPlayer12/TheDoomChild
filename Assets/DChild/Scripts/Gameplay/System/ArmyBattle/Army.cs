@@ -75,21 +75,22 @@ namespace DChild.Gameplay.ArmyBattle
         {
             if (isAvailable)
             {
-                if (m_usedAttackingGroups.Contains(attackingGroup))
+                var relevantSkill = GetAvailableGroup(attackingGroup.id, m_usedAttackingGroups);
+                if (m_usedAttackingGroups.Contains(relevantSkill))
                 {
-                    m_usedAttackingGroups.Remove(attackingGroup);
-                    m_availableAttackingGroups.Add(attackingGroup);
+                    m_usedAttackingGroups.Remove(relevantSkill);
+                    m_availableAttackingGroups.Add(relevantSkill);
                 }
             }
             else
             {
-                if (m_availableAttackingGroups.Contains(attackingGroup))
+                var relevantSkill = GetAvailableGroup(attackingGroup.id, m_availableAttackingGroups);
+                if (m_availableAttackingGroups.Contains(relevantSkill))
                 {
-                    m_availableAttackingGroups.Remove(attackingGroup);
-                    m_usedAttackingGroups.Add(attackingGroup);
+                    m_availableAttackingGroups.Remove(relevantSkill);
+                    m_usedAttackingGroups.Add(relevantSkill);
                 }
             }
-
         }
 
         public List<ISpecialSkillGroup> GetAvailableSkills()
@@ -134,6 +135,24 @@ namespace DChild.Gameplay.ArmyBattle
             m_usedSpecialSkills.Clear();
         }
 
+        private IAttackingGroup GetAvailableGroup(int id, List<IAttackingGroup> reference)
+        {
+            for (int i = 0; i < reference.Count; i++)
+            {
+                if (reference[i].id == id)
+                    return reference[i];
+            }
+            return null;
+        }
 
+        private ISpecialSkillGroup GetAvailableGroup(int id, List<ISpecialSkillGroup> reference)
+        {
+            for (int i = 0; i < reference.Count; i++)
+            {
+                if (reference[i].id == id)
+                    return reference[i];
+            }
+            return null;
+        }
     }
 }

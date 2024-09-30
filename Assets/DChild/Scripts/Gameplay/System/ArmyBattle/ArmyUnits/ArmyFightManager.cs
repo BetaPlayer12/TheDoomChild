@@ -37,7 +37,7 @@ namespace DChild.Gameplay.ArmyBattle.Visualizer
             m_player.GenerateArmy(temporaryType);
             m_enemy.GenerateArmy(temporaryType);
 
-            m_deathHandle.Initialize(m_fightDuration);
+            m_deathHandle.Initialize(playerArmy, m_player, enemyArmy, m_enemy, m_fightDuration);
         }
 
         [Button]
@@ -45,7 +45,7 @@ namespace DChild.Gameplay.ArmyBattle.Visualizer
         {
             StopAllCoroutines();
             StartCoroutine(FightRoutine(result));
-            StartCoroutine(m_deathHandle.DyingInBattleRoutine(m_player, m_enemy, result));
+            StartCoroutine(m_deathHandle.DyingInBattleRoutine(result));
         }
 
         private IEnumerator FightRoutine(ArmyBattleCombatResult result)

@@ -2,6 +2,7 @@
 {
     public interface ISpecialSkillGroup
     {
+        int id { get; }
         bool HasSpecialSkill();
 
         ArmyCharacterGroup GetCharacterGroup();

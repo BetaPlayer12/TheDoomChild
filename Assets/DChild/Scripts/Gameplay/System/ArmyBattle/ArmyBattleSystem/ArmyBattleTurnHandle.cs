@@ -35,8 +35,8 @@ namespace DChild.Gameplay.ArmyBattle
         [Button]
         public void CommenceTurn()
         {
-            var playerTurn = m_player.GetTurnAction(m_turnCount - 1);
-            var enemyTurn = m_enemy.GetTurnAction(m_turnCount - 1);
+            var playerTurn = m_player.GetTurnAction(m_turnCount);
+            var enemyTurn = m_enemy.GetTurnAction(m_turnCount);
 
             var result = m_combatSimulator.CalculateCombatResult(playerTurn, enemyTurn);
             m_fightManager.VisualizeCombat(result);
@@ -50,7 +50,11 @@ namespace DChild.Gameplay.ArmyBattle
 
         private void OnFightEnd(object sender, EventActionArgs eventArgs)
         {
+            m_player.CleanUpForNextTurn();
+            m_enemy.CleanUpForNextTurn();
             EndTurn();
+
+            Debug.Log("Turn End");
         }
 
         [Button]

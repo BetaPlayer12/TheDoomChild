@@ -2,6 +2,7 @@
 {
     public interface IAttackingGroup
     {
+        int id { get; }
         int GetTroopCount();
         int GetAttackPower();
 
