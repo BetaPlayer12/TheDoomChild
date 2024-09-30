@@ -512,7 +512,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         private void FixedUpdate()
         {
-
             if (m_state.isDead)
                 return;
 
@@ -921,7 +920,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 {
                     if (m_state.isInShadowMode == false)
                     {
-                        if (m_skills.IsModuleActive(PrimarySkill.Dash) && m_state.canDash)
+                        if ((m_skills.IsModuleActive(PrimarySkill.Dash) || m_skills.IsModuleActive(PrimarySkill.ShadowDash)) && m_state.canDash)
                         {
                             m_wallStick?.Cancel();
                             FlipCharacter();
@@ -1229,7 +1228,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 {
                     if (m_state.isInShadowMode == false)
                     {
-                        if (m_skills.IsModuleActive(PrimarySkill.Dash) && m_state.canDash)
+                        if ((m_skills.IsModuleActive(PrimarySkill.Dash) || m_skills.IsModuleActive(PrimarySkill.ShadowDash)) && m_state.canDash)
                         {
                             if (m_state.isLevitating)
                             {
@@ -1439,7 +1438,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             {
                 HandleSlide();
 
-                if (m_input.jumpPressed)
+                if (m_skills.IsModuleActive(PlayerBehaviour.Jump) && m_input.jumpPressed)
                 {
                     if (m_crouch?.IsThereNoCeiling() ?? true)
                     {
@@ -1584,7 +1583,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             else if (m_state.isDashing)
             {
                 HandleDash();
-                if (m_input.jumpPressed)
+                if (m_skills.IsModuleActive(PlayerBehaviour.Jump) && m_input.jumpPressed)
                 {
                     m_activeDash?.Cancel();
                     m_movement?.SwitchConfigTo(Movement.Type.MidAir);
@@ -2069,7 +2068,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 {
                     if (m_state.isInShadowMode == false)
                     {
-                        if (m_skills.IsModuleActive(PrimarySkill.Dash) && m_state.canDash)
+                        if ((m_skills.IsModuleActive(PrimarySkill.Dash) || m_skills.IsModuleActive(PrimarySkill.ShadowDash)) && m_state.canDash)
                         {
                             m_idle?.Cancel();
                             m_movement?.Cancel();
@@ -2081,7 +2080,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                         }
                     }
                 }
-                else if (m_input.jumpPressed && m_earthShaker.CanEarthShaker() && !m_input.backDiverPressed)
+                else if (m_skills.IsModuleActive(PlayerBehaviour.Jump) && m_input.jumpPressed && m_earthShaker.CanEarthShaker() && !m_input.backDiverPressed)
                 {
                     if (m_state.isInShadowMode == false)
                     {
@@ -2218,12 +2217,12 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     m_activeDash = m_shadowDash;
                     m_shadowDash.ConsumeSource();
                 }
-                else
+                else if (m_skills.IsModuleActive(PrimarySkill.Dash))
                 {
                     m_activeDash = m_dash;
                 }
             }
-            else
+            else if (m_skills.IsModuleActive(PrimarySkill.Dash))
             {
                 m_activeDash = m_dash;
             }

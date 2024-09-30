@@ -63,9 +63,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_source: {fileID: 2246588728012819599}
   m_animator: {fileID: 4115583065793029993}
-  m_animation: DEATH_ANIMATION_combined
+  m_animation: Death
   m_bodyDuration:
-    m_startTime: 10
+    m_startTime: 5
   m_fx: []
   m_destroySource: 0
 --- !u!114 &4333320115670588045
@@ -191,8 +191,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_spine: {fileID: 4115583065793029993}
   m_physics: {fileID: 3003079225318263366}
-  m_autoFlinch: 0
-  m_enableMixFlinch: 0
+  m_autoFlinch: 1
+  m_enableMixFlinch: 1
   m_enableEmpytyIdle: 1
   m_alphaBlendStrength: 0.5
   m_mixDuration: 1
@@ -201,6 +201,7 @@ MonoBehaviour:
   m_idleAnimation: IDLE_POSE 2 _CHOSEN1
   m_enableFlinchColor: 0
   m_flinchColorAnimation: 
+  m_enableModule: 1
 --- !u!1001 &2954217301991766076
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -416,7 +417,7 @@ PrefabInstance:
     - target: {fileID: 5047825593369137110, guid: db8a0f6927d512045858ed6c6b49d579,
         type: 3}
       propertyPath: m_LocalScale.y
-      value: 1
+      value: 0.99999994
       objectReference: {fileID: 0}
     - target: {fileID: 5047825593369137110, guid: db8a0f6927d512045858ed6c6b49d579,
         type: 3}
@@ -488,6 +489,11 @@ PrefabInstance:
       propertyPath: m_LocalRotation.z
       value: -0.48574114
       objectReference: {fileID: 0}
+    - target: {fileID: 6846317990211128402, guid: db8a0f6927d512045858ed6c6b49d579,
+        type: 3}
+      propertyPath: m_animation
+      value: 
+      objectReference: {fileID: 4115583065793029993}
     - target: {fileID: 7011992778920922496, guid: db8a0f6927d512045858ed6c6b49d579,
         type: 3}
       propertyPath: rb
@@ -513,6 +519,17 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 8285073226172922071, guid: db8a0f6927d512045858ed6c6b49d579,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 9466dd376248270429ffea31c1867309, type: 2}
+    - target: {fileID: 8285073226172922072, guid: db8a0f6927d512045858ed6c6b49d579,
+        type: 3}
+      propertyPath: skeletonDataAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: bcfb3cd6e68f2944f95ef01ddade95ce,
+        type: 2}
     - target: {fileID: 8285073226172922073, guid: db8a0f6927d512045858ed6c6b49d579,
         type: 3}
       propertyPath: m_RootOrder
@@ -581,7 +598,7 @@ PrefabInstance:
     - target: {fileID: 8434311771512288242, guid: db8a0f6927d512045858ed6c6b49d579,
         type: 3}
       propertyPath: m_LocalScale.y
-      value: 1.0000001
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8434311771512288242, guid: db8a0f6927d512045858ed6c6b49d579,
         type: 3}
@@ -855,7 +872,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   serializationData:
-    SerializedFormat: 2
+    SerializedFormat: 0
     SerializedBytes: 
     ReferencedUnityObjects: []
     SerializedBytesString: 

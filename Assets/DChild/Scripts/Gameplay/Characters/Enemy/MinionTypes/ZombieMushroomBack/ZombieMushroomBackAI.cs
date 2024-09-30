@@ -185,6 +185,15 @@ namespace DChild.Gameplay.Characters.Enemies
         private State m_turnState;
         private Coroutine m_randomTurnRoutine;
         private bool m_sleep = true;
+        [SerializeField, TabGroup("FX")]
+        private ParticleFX m_poisonCloud;
+        [SerializeField, TabGroup("FX")]
+        private Collider2D m_poisonCloudCollider;
+        [SerializeField, TabGroup("FX")]
+        private ParticleFX m_cloudBurst;
+        [SerializeField, TabGroup("FX")]
+        private ParticleFX m_biteFX;
+
         private void OnAttackDone(object sender, EventActionArgs eventArgs)
         {
             m_flinchHandle.m_enableMixFlinch = true;
@@ -325,6 +334,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.EnableRootMotion(true, true);
             m_animation.SetAnimation(0, m_info.awakenAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.awakenAnimation);
+            SpawnCloud();
             StartCoroutine(AttackRoutine1());
         }
         private IEnumerator RandomTurnRoutine()
@@ -347,8 +357,13 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator AttackRoutine1()
         {
             m_animation.SetAnimation(0, m_info.attack1.animation, false);
+         
+            if (Vector2.Distance(m_targetInfo.position, m_character.centerMass.position) < 15)
+            {
+                m_cloudBurst.Play();  
+            }
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack1.animation);
-            SpawnCloud();
+            m_cloudBurst.Stop();
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_flinchHandle.m_autoFlinch = true;
             m_stateHandle.SetState(State.ReevaluateSituation);
@@ -359,6 +374,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
 
             yield return new WaitForSeconds(0.25f);
+            m_biteFX.Stop();
             attackbox.enabled = false;
             yield return null;
         }
@@ -370,11 +386,14 @@ namespace DChild.Gameplay.Characters.Enemies
         }
         private void SpawnCloud()
         {
-            Instantiate(m_info.poisoncloud, this.transform.position, Quaternion.identity);
+            //Instantiate(m_info.poisoncloud, this.transform.position, Quaternion.identity);
+            m_poisonCloud.Play();
+            m_poisonCloudCollider.enabled = true;
         }
         private void Bite()
         {
             attackbox.enabled = true;
+            m_biteFX.Play();
             StartCoroutine(AttackRoutine2());
 
         }

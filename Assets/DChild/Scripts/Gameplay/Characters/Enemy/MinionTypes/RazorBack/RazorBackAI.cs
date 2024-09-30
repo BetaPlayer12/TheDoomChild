@@ -12,7 +12,6 @@ using System.Collections;
 using System.Collections.Generic;
 using DChild;
 using DChild.Gameplay.Characters.Enemies;
-
 namespace DChild.Gameplay.Characters.Enemies
 {
     [AddComponentMenu("DChild/Gameplay/Enemies/Minion/RazorBack")]
@@ -40,8 +39,8 @@ namespace DChild.Gameplay.Characters.Enemies
             private string m_attackEnd;
             public string attackEnd => m_attackEnd;
             [SerializeField, ValueDropdown("GetAnimations"), TabGroup("Attack")]
-            private string m_attackAnticipation;
-            public string attackAnticipation => m_attackAnticipation;
+            private string m_attackJump;
+            public string attackJump => m_attackJump;
             [SerializeField, MinValue(0)]
             private float m_attackCD;
             public float attackCD => m_attackCD;
@@ -108,11 +107,7 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Reference")]
         private Collider2D m_selfCollider;
         [SerializeField, TabGroup("Reference")]
-        private GameObject m_boundBoxGO;
-        [SerializeField, TabGroup("Reference")]
         private Hitbox m_hitbox;
-        [SerializeField, TabGroup("Reference")]
-        private EdgeCollider2D m_edgeCollider;
         [SerializeField, TabGroup("Modules")]
         private TransformTurnHandle m_turnHandle;
         [SerializeField, TabGroup("Modules")]
@@ -276,7 +271,6 @@ namespace DChild.Gameplay.Characters.Enemies
             StopAllCoroutines();
             m_selfCollider.enabled = false;
             GetComponentInChildren<Hitbox>().gameObject.SetActive(false);
-            m_boundBoxGO.SetActive(false);
             base.OnDestroyed(sender, eventArgs);
             StartCoroutine(StopAttackRoutine());
             m_animation.SetAnimation(0, m_info.deathAnimation, false);
@@ -369,48 +363,8 @@ namespace DChild.Gameplay.Characters.Enemies
             m_selfCollider.enabled = false;
             m_animation.SetAnimation(0, m_info.attackStart.animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attackStart.animation);
-            m_trailDamageCoroutine = StartCoroutine(TrailDamageRoutine());
             m_trailFX.Play();
-            m_stateHandle.ApplyQueuedState();
-            yield return null;
-        }
-
-        private IEnumerator TrailDamageRoutine()
-        {
-            Vector2 startPoint = transform.position;
-            for (int i = 0; i < 2; i++)
-            {
-                var pos = transform.position - m_edgeCollider.transform.position;
-                pos = new Vector2(m_character.facing == HorizontalDirection.Right ? pos.x : -pos.x, pos.y);
-                m_Points.Add(pos);
-            }
-            //m_Points[0] = m_Points[0] + new Vector2(transform.position.x + 35, 0);
-            while (m_Points[0].x <= 35)
-            {
-                m_Points[0] = new Vector2(m_Points[0].x + Time.deltaTime * 40f, m_Points[0].y);
-                m_edgeCollider.points = m_Points.ToArray();
-                yield return null;
-            }
-        }
-
-        private IEnumerator ResetTrailDamageRoutine()
-        {
-            if (m_Points.Count > 0)
-            {
-                while (m_Points[0].x >= 0)
-                {
-                    m_Points[0] = new Vector2(m_Points[0].x - Time.deltaTime * 40f, m_Points[0].y);
-                    m_edgeCollider.points = m_Points.ToArray();
-                    yield return null;
-                }
-                for (int i = 0; i < m_Points.Count; i++)
-                {
-                    m_Points[i] = Vector2.zero;
-                }
-                m_edgeCollider.points = m_Points.ToArray();
-                m_Points.Clear();
-                m_edgeCollider.points = null;
-            }
+            StartCoroutine(AttackRoutine());
             yield return null;
         }
 
@@ -419,11 +373,11 @@ namespace DChild.Gameplay.Characters.Enemies
             m_selfCollider.enabled = false;
             m_animation.SetAnimation(0, m_info.attackLoop, true);
             //yield return new WaitForSeconds(1.4f);
-            float countdown = 0;
-            while (countdown < 1.5f /*|| !m_wallSensor.isDetecting*/)
+            float maxDistance = 6f;
+            float temptargetlocation = m_targetInfo.transform.position.x;
+            while (Mathf.Abs(transform.position.x - temptargetlocation) > maxDistance && !m_wallSensor.isDetecting && m_edgeSensor.isDetecting)
             {
-                m_movement.MoveTowards(Vector2.one * transform.localScale.x, m_currentMoveSpeed * 2.5f);
-                countdown += Time.deltaTime;
+                m_movement.MoveTowards(Vector2.one * transform.localScale.x, m_info.run.speed * 6);
                 yield return null;
             }
             m_trailFX.Stop();
@@ -431,25 +385,33 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 m_fxSystem[i].gameObject.SetActive(false);
             }
-            //m_trailFX.gameObject.SetActive(false);
-            //m_hitbox.SetInvulnerability(Invulnerability.None);
             m_movement.Stop();
             m_animation.SetAnimation(0, m_info.attackEnd, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attackEnd);
             m_flinchHandle.gameObject.SetActive(true);
-            m_selfCollider.enabled = true;
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
-            StartCoroutine(ResetTrailDamageRoutine());
-            yield return new WaitForSeconds(1f);
-            if (m_trailDamageCoroutine != null)
-            {
-                StopCoroutine(m_trailDamageCoroutine);
-            }
+            yield return new WaitForSeconds(0.5f);
+            m_flinchHandle.gameObject.SetActive(false);
             m_attackCoroutine = null;
             m_stateHandle.ApplyQueuedState();
             yield return null;
         }
-
+        private IEnumerator ExecuteMove(float attackRange)
+        {
+            if (!IsFacingTarget())
+            {
+                m_turnHandle.Execute();
+            }
+            m_animation.EnableRootMotion(false, true);
+            m_animation.SetAnimation(0, m_info.attackJump, false);
+            m_movement.MoveTowards(Vector2.one * transform.localScale.x, m_info.run.speed * 3);
+            m_movement.Stop();
+            m_flinchHandle.gameObject.SetActive(true);
+            m_attackCoroutine = null;
+            m_stateHandle.ApplyQueuedState();
+            yield return null;
+        }
+        
         private IEnumerator StopAttackRoutine()
         {
             m_trailFX.Stop();
@@ -462,7 +424,6 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attackEnd);
             m_selfCollider.enabled = true;
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
-            StartCoroutine(ResetTrailDamageRoutine());
             yield return new WaitForSeconds(1f);
             if (m_trailDamageCoroutine != null)
             {
@@ -518,8 +479,8 @@ namespace DChild.Gameplay.Characters.Enemies
                     if (IsFacingTarget())
                     {
                         m_stateHandle.Wait(State.ReevaluateSituation);
-                        //StartCoroutine(DetectRoutine());
-                        StartCoroutine(AttackStartRoutine());
+                        StartCoroutine(DetectRoutine());
+                        
                     }
                     else
                     {
@@ -561,9 +522,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         {
                             m_stateHandle.Wait(State.Cooldown);
                             m_animation.SetAnimation(0, m_info.idleAnimation, true);
-
                             m_attackCoroutine = StartCoroutine(AttackRoutine());
-
                             m_attackDecider.hasDecidedOnAttack = false;
                         }
                         else
@@ -576,7 +535,7 @@ namespace DChild.Gameplay.Characters.Enemies
                                 //m_animation.SetAnimation(0, distance >= m_info.targetDistanceTolerance ? m_info.run.animation : m_info.walk.animation, true);
                                 //m_movement.MoveTowards(Vector2.one * transform.localScale.x, distance >= m_info.targetDistanceTolerance ? m_info.run.speed : m_info.walk.speed);
                                 m_animation.SetAnimation(0, m_info.attackLoop, true);
-                                m_movement.MoveTowards(Vector2.one * transform.localScale.x, m_info.run.speed * 2.5f);
+                                m_movement.MoveTowards(Vector2.one * transform.localScale.x, m_info.run.speed);
                             }
                             else
                             {
@@ -662,7 +621,6 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_stateHandle.OverrideState(State.Patrol);
             GetComponentInChildren<Hitbox>().gameObject.SetActive(true);
-            m_boundBoxGO.SetActive(true);
             m_currentPatience = 0;
             m_enablePatience = false;
             m_isDetecting = false;

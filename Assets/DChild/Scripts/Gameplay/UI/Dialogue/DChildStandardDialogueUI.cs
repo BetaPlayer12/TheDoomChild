@@ -127,7 +127,7 @@ namespace DChild.UI
 
             if (isInCutscene == false)
             {
-
+                // This should be adjusted more as sometimes this can give unneccessary effects to summoned minions
                 GameplaySystem.minionManager?.ForbidAllFromAttackingTarget(true);
 
                 GameplaySystem.playerManager.EnableControls();

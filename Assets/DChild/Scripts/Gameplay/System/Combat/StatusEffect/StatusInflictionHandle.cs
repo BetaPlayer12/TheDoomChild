@@ -10,6 +10,7 @@ namespace DChild.Gameplay.Combat.StatusAilment
         [OdinSerialize, HideReferenceObjectPicker, OnValueChanged("Validate")]
         private Dictionary<StatusEffectType, StatusEffectData> m_list = new Dictionary<StatusEffectType, StatusEffectData>();
 
+        [Button]
         public void Inflict(StatusEffectReciever reciever, StatusEffectType statusEffect)
         {
             if (reciever.IsInflictedWith(statusEffect) == false)
@@ -28,7 +29,7 @@ namespace DChild.Gameplay.Combat.StatusAilment
             {
                 if (IsRNGSuccess(statusEffectChance[i].chance))
                 {
-                    Inflict(reciever,statusEffectChance[i].type);
+                    Inflict(reciever, statusEffectChance[i].type);
                 }
             }
         }

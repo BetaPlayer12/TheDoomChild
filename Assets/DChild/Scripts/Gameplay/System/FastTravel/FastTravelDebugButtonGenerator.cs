@@ -13,7 +13,7 @@ namespace DChild.Gameplay.FastTravel.Debug
         [SerializeField]
         private Transform m_content;
 
-
+#if UNITY_EDITOR
         [Button]
         private void GenerateButtons()
         {
@@ -30,5 +30,6 @@ namespace DChild.Gameplay.FastTravel.Debug
                 instance.GetComponent<FastTravelOptionButton>().SetData(m_toInstantiate.GetData(i));
             }
         }
+#endif
     }
 }

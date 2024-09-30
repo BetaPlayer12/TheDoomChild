@@ -89,6 +89,14 @@ namespace DChild.Gameplay.Characters.Enemies
             private int m_numberOfFireDragonHeads;
             public int numberOfFireDragonHeads => m_numberOfFireDragonHeads;
 
+            [SerializeField, BoxGroup("Dragon Head Configuration")]
+            private LayerMask m_mask;
+            public LayerMask mask => m_mask;
+
+            [SerializeField, BoxGroup("Dragon Head Configuration")]
+            private float m_wallCheckDistance;
+            public float wallCheckDistance => m_wallCheckDistance;
+
             public override void Initialize()
             {
 #if UNITY_EDITOR
@@ -142,6 +150,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private Collider2D m_bodyCollider;
         [SerializeField, TabGroup("Reference")]
         private IsolatedObjectPhysics2D m_isolatedObjectPhysics2D;
+        [SerializeField, TabGroup("Reference")]
+        private ParticleSystem IdleEffects;
         [SerializeField, TabGroup("Modules")]
         private TransformTurnHandle m_turnHandle;
         [SerializeField, TabGroup("Modules")]
@@ -178,6 +188,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private bool m_enablePatience;
         private Vector2 m_lastTargetPos;
         private Vector2 m_startPos;
+        private float m_justSummonedDelay = 0;
 
         private Coroutine m_executeMoveCoroutine;
         private Coroutine m_attackRoutine;
@@ -376,16 +387,19 @@ namespace DChild.Gameplay.Characters.Enemies
 
         public void SummonTome(AITargetInfo target)
         {
-            m_targetInfo = target;
-            transform.position = new Vector2(m_targetInfo.position.x, m_targetInfo.position.y + 10f);
+            
+            transform.position = new Vector2(target.position.x, target.position.y + 10f);
             m_isolatedObjectPhysics2D.simulateGravity = false;
             m_hitbox.Enable();
             m_flinchHandle.gameObject.SetActive(true);
             m_health.SetHealthPercentage(1f);
+            m_justSummonedDelay = 1.5f;
             enabled = true;
             this.gameObject.SetActive(true);
             this.transform.SetParent(null);
             Awake();
+            SetTarget(target.GetTargetDamagable());
+            //m_targetInfo = target;
             m_stateHandle.OverrideState(State.ReevaluateSituation);
         }
 
@@ -413,6 +427,11 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator FlameAttackRoutine()
         {
+            if (m_justSummonedDelay > 0)
+            {
+                yield return new WaitForSeconds(m_justSummonedDelay);
+                m_justSummonedDelay = 0f;
+            }
             m_animation.SetAnimation(0, m_info.attackFlameStartAnimation, false);
             StartCoroutine(SummonFireDragonHeadRoutine());
 
@@ -432,16 +451,128 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator SummonFireDragonHeadRoutine()
         {
             var playerCenter = m_targetInfo.position;
-            var offset = UnityEngine.Random.insideUnitCircle * m_info.fireDragonHeadOffset;
-            var spawnPosition = playerCenter + offset;
-            InstantiateFireDragonHead(spawnPosition, m_targetInfo.position);
+            var offset = new Vector2(m_info.fireDragonHeadOffset, 0);
+            int RandValue = UnityEngine.Random.Range(1, 3);
+
+            Raycaster.SetLayerMask(m_info.mask);
+
+            Raycaster.Cast(playerCenter, -Vector2.left, m_info.wallCheckDistance + m_info.fireDragonHeadOffset, true, out int m_WallsonRight,true);
+            Raycaster.Cast(playerCenter, Vector2.left, m_info.wallCheckDistance + m_info.fireDragonHeadOffset, true, out int m_WallsonLeft, true);
+            switch (RandValue)
+            {
+                case 1:
+                    
+
+                    if (m_WallsonRight > 0)
+                    {
+                        if(m_WallsonLeft >0)
+                        {
+                            yield return null;
+                        }else
+                        {
+                            var spawnPosition = playerCenter - offset;
+                            InstantiateFireDragonHead(spawnPosition, m_targetInfo.position, true);
+                        }
+                    }
+                    else
+                    {
+                        var spawnPosition = playerCenter + offset;
+                        InstantiateFireDragonHead(spawnPosition, m_targetInfo.position, false);
+                    }
+                    break;
+
+                case 2:
+
+                    if(m_WallsonLeft >0)
+                    {
+                        if(m_WallsonRight>0)
+                        {
+                            yield return null;
+                        }else
+                        {
+                            var spawnPosition = playerCenter + offset;
+                            InstantiateFireDragonHead(spawnPosition, m_targetInfo.position, false);
+                        }
+                    }
+                    else
+                    {
+                        var spawnPosition = playerCenter - offset;
+                        InstantiateFireDragonHead(spawnPosition, m_targetInfo.position, true);
+                    }
+                    break;
+                /*
+                case 1:
+                    if (Physics2D.Raycast(playerCenter, -Vector2.left, m_info.wallCheckDistance + m_info.fireDragonHeadOffset, m_info.mask))
+                    {
+                        if (Physics2D.Raycast(playerCenter, Vector2.left, m_info.wallCheckDistance + m_info.fireDragonHeadOffset, m_info.mask))
+                        {
+                            yield return null;
+                        }
+                        else
+                        {
+                            var spawnPosition = playerCenter - offset;
+                            InstantiateFireDragonHead(spawnPosition, m_targetInfo.position,true);
+                        }
+                    }
+                    else
+                    {
+                        //var offset = UnityEngine.Random.insideUnitCircle * m_info.fireDragonHeadOffset;
+                        var spawnPosition = playerCenter + offset;
+                        InstantiateFireDragonHead(spawnPosition, m_targetInfo.position,false);
+                    }
+
+                    break;
+
+                case 2:
+                    if (Physics2D.Raycast(playerCenter, Vector2.left, m_info.wallCheckDistance + m_info.fireDragonHeadOffset, m_info.mask))
+                    {
+                        if (Physics2D.Raycast(playerCenter, -Vector2.left, m_info.wallCheckDistance + m_info.fireDragonHeadOffset, m_info.mask))
+                        {
+                            yield return null;
+                        }
+                        else
+                        {
+                            var spawnPosition = playerCenter + offset;
+                            InstantiateFireDragonHead(spawnPosition, m_targetInfo.position,false);
+                        }
+                    }
+                    else
+                    {
+                        //var offset = UnityEngine.Random.insideUnitCircle * m_info.fireDragonHeadOffset;
+                        var spawnPosition = playerCenter - offset;
+                        InstantiateFireDragonHead(spawnPosition, m_targetInfo.position,true);
+                    }
+                    break;
+                    */
+            }
+
+            /*
+            if(Physics2D.Raycast(playerCenter, -Vector2.left, 25+m_info.fireDragonHeadOffset, m_info.mask))
+            {
+                if (Physics2D.Raycast(playerCenter, Vector2.left, 25 + m_info.fireDragonHeadOffset, m_info.mask))
+                {
+                    yield return null;
+                }else
+                {
+                    var spawnPosition = playerCenter + offset;
+                    InstantiateFireDragonHead(spawnPosition, m_targetInfo.position);
+                }
+            }
+            else
+            {
+                //var offset = UnityEngine.Random.insideUnitCircle * m_info.fireDragonHeadOffset;
+                var spawnPosition = playerCenter + offset;
+                InstantiateFireDragonHead(spawnPosition, m_targetInfo.position);
+            }*/
+            
             yield return null;
         }
 
-        private void InstantiateFireDragonHead(Vector2 spawnPosition, Vector2 playerPosition)
+        private void InstantiateFireDragonHead(Vector2 spawnPosition, Vector2 playerPosition,bool Flip)
         {
             var instance = GameSystem.poolManager.GetPool<PoolableObjectPool>().GetOrCreateItem(m_info.fireDragonHead, gameObject.scene);
             var toPlayer = playerPosition - spawnPosition;
+            Debug.Log(toPlayer);
             var rad = Mathf.Atan2(toPlayer.y, toPlayer.x);
             //Vector3 instScale = instance.GetComponent<Transform>().localScale;
 
@@ -460,6 +591,12 @@ namespace DChild.Gameplay.Characters.Enemies
             //Debug.Log("sCALE: " + instance.GetComponent<Transform>().localScale);
 
             instance.SpawnAt(spawnPosition, Quaternion.identity);
+            if(Flip)
+            {
+                //instance.transform.localScale = new Vector3(-1, 1);
+                instance.GetComponent<FireDragonHead>().FlipModel();
+            }
+            instance.GetComponent<FireDragonHead>().enabled = true;
             instance.GetComponent<FireDragonHead>().SetPlayerPosition(playerPosition);
         }
 

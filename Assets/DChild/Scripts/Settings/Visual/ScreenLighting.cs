@@ -15,6 +15,8 @@ public class ScreenLighting : MonoBehaviour
     [SerializeField]
     [Range(0, 3f)]
     public float m_contrast = 1.0f;
+    [Range(0, 1f)]
+    private bool m_bloom = true;
     private Material curMaterial;
     #endregion
 
@@ -53,6 +55,13 @@ public class ScreenLighting : MonoBehaviour
         {
             m_contrast = Mathf.Clamp(value, 0, 3f);
         }
+    }
+
+    public bool bloom
+    {
+        get => m_bloom;
+
+        set => m_bloom = value;
     }
 
     #region Properties

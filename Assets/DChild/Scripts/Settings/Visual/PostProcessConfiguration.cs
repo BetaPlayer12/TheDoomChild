@@ -4,5 +4,6 @@
     {
         public float gamma;
         public bool isBloomEnabled;
+        public int antiAliasingIndex;
     }
 }

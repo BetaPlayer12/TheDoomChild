@@ -1,4 +1,5 @@
-﻿using Sirenix.OdinInspector;
+﻿using Holysoft.Event;
+using Sirenix.OdinInspector;
 using Spine.Unity;
 using System;
 using System.Collections.Generic;
@@ -8,6 +9,16 @@ namespace DChild.Gameplay.Characters.Players.Modules
 {
     public class BasicSlashes : AttackBehaviour
     {
+        public struct BasicSlashEventArgs : IEventActionArgs
+        {
+            public Type type;
+
+            public BasicSlashEventArgs(Type type)
+            {
+                this.type = type;
+            }
+        }
+
         public enum Type
         {
             Ground_Overhead,
@@ -43,6 +54,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         private Animator m_fxAnimator;
         private SkeletonAnimation m_skeletonAnimation;
+
+        public event EventAction<BasicSlashEventArgs> OnSlash;
 
         public bool CanAirAttack() => m_canAirAttack;
 
@@ -163,6 +176,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     break;
             }
             Record(type);
+
+            OnSlash?.Invoke(this, new BasicSlashEventArgs(type));
         }
 
         public void PlayFXFor(Type type, bool play)
