@@ -448,6 +448,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator RandomTurnRoutine()
         {
+            /*
             while (true)
             {
                 var timer = UnityEngine.Random.Range(5, 10);
@@ -461,6 +462,9 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_stateHandle.SetState(State.Turning);
                 yield return null;
             }
+            */
+
+            yield return null;
         }
 
         private IEnumerator SneerRoutine()
@@ -528,17 +532,17 @@ namespace DChild.Gameplay.Characters.Enemies
                         || m_animation.GetCurrentAnimation(0).ToString() != m_info.idle4Animation.animation)
                         m_movement.Stop();
 
-                    if (!IsFacingTarget())
-                    {
-                        m_turnState = State.Detect;
-                        if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turn1Animation.animation && m_animation.GetCurrentAnimation(0).ToString() != m_info.turn2Animation.animation)
-                            m_stateHandle.SetState(State.Turning);
-                    }
-                    else
-                    {
+                    //if (!IsFacingTarget())
+                    //{
+                    //    m_turnState = State.Detect;
+                    //    if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turn1Animation.animation && m_animation.GetCurrentAnimation(0).ToString() != m_info.turn2Animation.animation)
+                    //        m_stateHandle.SetState(State.Turning);
+                    //}
+                    //else
+                    //{
                         m_stateHandle.Wait(State.ReevaluateSituation);
                         StartCoroutine(DetectRoutine());
-                    }
+                    //}
                     break;
 
                 case State.Idle:
@@ -559,7 +563,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     //        m_animation.SetAnimation(0, RandomIdleAnimation(), true);
                     //    }
                     //}
-                    if (!m_wallSensor.isDetecting && m_groundSensor.isDetecting)
+                    /*if (!m_wallSensor.isDetecting && m_groundSensor.isDetecting)
                     {
                         if (IsFacing(m_patrolDestination) && m_edgeSensor.allRaysDetecting)
                         {
@@ -576,12 +580,12 @@ namespace DChild.Gameplay.Characters.Enemies
                         }
                     }
                     else
-                    {
+                    {*/
                         if (m_animation.animationState.GetCurrent(0).IsComplete)
                         {
                             m_animation.SetAnimation(0, RandomIdleAnimation(), true);
                         }
-                    }
+                    //}
                     break;
 
                 case State.Standby:
@@ -620,9 +624,11 @@ namespace DChild.Gameplay.Characters.Enemies
                     //m_stateHandle.Wait(State.ReevaluateSituation);
                     if (!IsFacingTarget())
                     {
-                        m_turnState = State.Cooldown;
-                        if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turn1Animation.animation && m_animation.GetCurrentAnimation(0).ToString() != m_info.turn2Animation.animation)
-                            m_stateHandle.SetState(State.Turning);
+                        OnTargetDisappeared();
+                        m_turnState = State.ReevaluateSituation;
+                        //m_turnState = State.Cooldown;
+                        //if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turn1Animation.animation && m_animation.GetCurrentAnimation(0).ToString() != m_info.turn2Animation.animation)
+                        //    m_stateHandle.SetState(State.Turning);
                     }
                     else
                     {
@@ -630,6 +636,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         {
                             m_animation.SetAnimation(0, RandomIdleAnimation(), true);
                         }
+                        m_turnState = State.Cooldown;
                     }
 
                     if (m_currentCD <= m_currentFullCD)
@@ -661,7 +668,7 @@ namespace DChild.Gameplay.Characters.Enemies
                                 m_run = null;
                                 m_animation.SetAnimation(0, RandomIdleAnimation(), true);
                                 m_stateHandle.SetState(State.Attacking);
-                            }
+                            }/*
                             else
                             {
                                 if (m_run == null)
@@ -693,13 +700,14 @@ namespace DChild.Gameplay.Characters.Enemies
                                         m_animation.SetAnimation(0, RandomIdleAnimation(), true);
                                     }
                                 }
-                            }
+                            }*/
                         }
                         else
                         {
+                            OnTargetDisappeared();
                             m_turnState = State.ReevaluateSituation;
-                            if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turn1Animation.animation && m_animation.GetCurrentAnimation(0).ToString() != m_info.turn2Animation.animation)
-                                m_stateHandle.SetState(State.Turning);
+                            //if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turn1Animation.animation && m_animation.GetCurrentAnimation(0).ToString() != m_info.turn2Animation.animation)
+                            //    m_stateHandle.SetState(State.Turning);
                         }
                     }
                     break;
@@ -708,7 +716,14 @@ namespace DChild.Gameplay.Characters.Enemies
                     //How far is target, is it worth it to chase or go back to patrol
                     if (m_targetInfo.isValid)
                     {
-                        m_stateHandle.SetState(State.Chasing);
+                        /*if(IsFacing(m_targetInfo.position))
+                        {
+                            m_stateHandle.SetState(State.Patrol);
+                            OnTargetDisappeared();
+                        }else
+                        {*/
+                            m_stateHandle.SetState(State.Chasing);
+                        //}
                     }
                     else
                     {
