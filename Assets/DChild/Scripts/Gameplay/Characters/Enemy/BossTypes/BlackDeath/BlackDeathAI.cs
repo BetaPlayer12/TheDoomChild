@@ -47,8 +47,8 @@ namespace DChild.Gameplay.Characters.Enemies
             private SimpleAttackInfo m_attackDaggersTurn = new SimpleAttackInfo();
             public SimpleAttackInfo attackDaggersTurn => m_attackDaggersTurn;
             [SerializeField, TabGroup("BladeThrow")]
-            private float m_bladeThrowDurtation;
-            public float bladeThrowDurtation => m_bladeThrowDurtation;
+            private float m_bladeThrowDuration;
+            public float bladeThrowDurtation => m_bladeThrowDuration;
             [SerializeField, TabGroup("ScytheSlash")]
             private SimpleAttackInfo m_attack1 = new SimpleAttackInfo();
             public SimpleAttackInfo attack1 => m_attack1;
@@ -58,21 +58,6 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField, TabGroup("ScytheSlash")]
             private SimpleAttackInfo m_attack3 = new SimpleAttackInfo();
             public SimpleAttackInfo attack3 => m_attack3;
-            [SerializeField, TabGroup("BladeSpin")]
-            private SimpleAttackInfo m_attack4 = new SimpleAttackInfo();
-            public SimpleAttackInfo attack4 => m_attack4;
-            [SerializeField, TabGroup("BladeSpin")]
-            private SimpleAttackInfo m_attack5 = new SimpleAttackInfo();
-            public SimpleAttackInfo attack5 => m_attack5;
-            [SerializeField, TabGroup("TentacleBlades")]
-            private SimpleAttackInfo m_attack6A = new SimpleAttackInfo();
-            public SimpleAttackInfo attack6A => m_attack6A;
-            [SerializeField, TabGroup("TentacleBlades")]
-            private SimpleAttackInfo m_attack6B = new SimpleAttackInfo();
-            public SimpleAttackInfo attack6B => m_attack6B;
-            [SerializeField, TabGroup("TentacleBlades")]
-            private SimpleAttackInfo m_attack6C = new SimpleAttackInfo();
-            public SimpleAttackInfo attack6C => m_attack6C;
             [SerializeField, TabGroup("BloodLightning")]
             private SimpleAttackInfo m_bloodLightningAttack = new SimpleAttackInfo();
             public SimpleAttackInfo bloodLightningAttack => m_bloodLightningAttack;
@@ -127,10 +112,10 @@ namespace DChild.Gameplay.Characters.Enemies
             private BasicAnimationInfo m_introFXAnimation;
             public BasicAnimationInfo introFXAnimation => m_introFXAnimation;
 
-            [Title("Projectiles")]
+            [Title("Projectiles")]/*
             [SerializeField]
             private GameObject m_tentacle;
-            public GameObject tentacle => m_tentacle;
+            public GameObject tentacle => m_tentacle;*/
             [SerializeField]
             private GameObject m_bloodLightning;
             public GameObject bloodLightning => m_bloodLightning;
@@ -159,11 +144,6 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_attack1.SetData(m_skeletonDataAsset);
                 m_attack2.SetData(m_skeletonDataAsset);
                 m_attack3.SetData(m_skeletonDataAsset);
-                m_attack4.SetData(m_skeletonDataAsset);
-                m_attack5.SetData(m_skeletonDataAsset);
-                m_attack6A.SetData(m_skeletonDataAsset);
-                m_attack6B.SetData(m_skeletonDataAsset);
-                m_attack6C.SetData(m_skeletonDataAsset);
                 m_attack7.SetData(m_skeletonDataAsset);
                 m_summonCloneAttack.SetData(m_skeletonDataAsset);
                 m_bloodLightningAttack.SetData(m_skeletonDataAsset);
@@ -543,6 +523,8 @@ namespace DChild.Gameplay.Characters.Enemies
         #region Attacks
         private IEnumerator MurmursMarkRoutine()
         {
+            /*m_soundMarkAnticipation.transform.position = m_targetInfo.position;
+            m_soundMarkAnticipation.Play();*/
             m_soundMark.transform.position = m_targetInfo.position;
             m_soundMark.Activate(m_targetInfo.transform);
 
@@ -1406,7 +1388,7 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return null;
         }
 
-        private IEnumerator GiantBladesRoutine()
+        /*private IEnumerator GiantBladesRoutine()
         {
             m_animation.SetAnimation(0, m_info.attack7.animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack7.animation);
@@ -1417,7 +1399,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_stateHandle.ApplyQueuedState();
             yield return null;
-        }
+        }*/
 
         private IEnumerator ScytheSlashRoutine()
         {
@@ -1474,7 +1456,7 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_stateHandle.ApplyQueuedState();
             yield return null;
         }
-        private IEnumerator TentacleBladesRoutine(int tentacleCount)
+        /*private IEnumerator TentacleBladesRoutine(int tentacleCount)
         {
             if (!m_groundSensor.isDetecting)
             {
@@ -1503,14 +1485,14 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_stateHandle.ApplyQueuedState();
             yield return null;
-        }
+        }*/
 
         //private IEnumerator TentacleSummonRoutine()
         //{
         //    yield return null;
         //}
 
-        private IEnumerator TentacleUpRoutine()
+        /*private IEnumerator TentacleUpRoutine()
         {
             m_animation.SetAnimation(0, m_info.attack4.animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack4.animation);
@@ -1526,7 +1508,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_stateHandle.ApplyQueuedState();
             yield return null;
-        }
+        }*/
 
 
 
@@ -1620,7 +1602,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_info.teleportAppearAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.teleportAppearAnimation);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
-            yield return new WaitForSeconds(2f);
+            yield return new WaitForSeconds(1f);
             //if (attack == Attack.WaitAttackEnd)
             //{
             //    m_animation.SetAnimation(0, m_info.idleAnimation, true);

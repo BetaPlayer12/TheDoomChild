@@ -16,14 +16,12 @@ MonoBehaviour:
     SerializedFormat: 2
     SerializedBytes: 
     ReferencedUnityObjects:
-    - {fileID: 11400000, guid: 4338604aa5adbac4bb689f9479b6cf7b, type: 2}
+    - {fileID: 11400000, guid: 17c60850139c2cf4fa34cea98277e415, type: 2}
     - {fileID: 11400000, guid: 5092e13bce47a17499b861863d055d02, type: 2}
     - {fileID: 11400000, guid: 28744b0694df11b469e55814f30d3edb, type: 2}
     - {fileID: 11400000, guid: 0771658b2ef416147a56b9f12cdef071, type: 2}
     - {fileID: 11400000, guid: 48138f3bf3f46b5408a8ba39e742d118, type: 2}
-    - {fileID: 1968822184523695413, guid: 3ebf48238e3a83c4f8365e0f9e759878, type: 3}
     - {fileID: 8136459821925112988, guid: 62016f5dfef548f48a5397614aa6c1a2, type: 3}
-    - {fileID: 6584667121101917043, guid: 3b5fafea1b172054da45db1ce7a4e4a2, type: 3}
     - {fileID: 3795262486986069922, guid: db810eb29fc27e94a9b8e3b9988da6a4, type: 3}
     SerializedBytesString: 
     Prefab: {fileID: 0}
@@ -221,7 +219,7 @@ MonoBehaviour:
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
-      Data: Attack (daggers)
+      Data: attack(dagger)anticipation
     - Name: m_timeScale
       Entry: 4
       Data: 1
@@ -237,7 +235,7 @@ MonoBehaviour:
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
-      Data: Attack (daggers)(idle)
+      Data: attack(dagger)loop
     - Name: m_timeScale
       Entry: 4
       Data: 1
@@ -253,7 +251,7 @@ MonoBehaviour:
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
-      Data: Attack (daggers)(idle)turn
+      Data: attack(dagger)loop_turn
     - Name: m_timeScale
       Entry: 4
       Data: 1
@@ -263,16 +261,16 @@ MonoBehaviour:
     - Name: 
       Entry: 8
       Data: 
-    - Name: m_bladeThrowDurtation
+    - Name: m_bladeThrowDuration
       Entry: 4
-      Data: 1.5
+      Data: 0
     - Name: m_attack1
       Entry: 7
       Data: 11|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.BlackDeathAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
-      Data: Attack1
+      Data: attack_slash_combo
     - Name: m_timeScale
       Entry: 4
       Data: 1
@@ -288,7 +286,7 @@ MonoBehaviour:
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
-      Data: Attack2
+      Data: attack_slash_combo
     - Name: m_timeScale
       Entry: 4
       Data: 1
@@ -304,7 +302,7 @@ MonoBehaviour:
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
-      Data: Attack3
+      Data: attack_slash_combo
     - Name: m_timeScale
       Entry: 4
       Data: 1
@@ -314,93 +312,13 @@ MonoBehaviour:
     - Name: 
       Entry: 8
       Data: 
-    - Name: m_attack4
+    - Name: m_bloodLightningAttack
       Entry: 7
       Data: 14|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.BlackDeathAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
-      Data: Attack4
-    - Name: m_timeScale
-      Entry: 4
-      Data: 1
-    - Name: m_range
-      Entry: 4
-      Data: 20
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: m_attack5
-      Entry: 7
-      Data: 15|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.BlackDeathAI+Info,
-        Assembly-CSharp]], Assembly-CSharp
-    - Name: m_animation
-      Entry: 1
-      Data: Attack5
-    - Name: m_timeScale
-      Entry: 4
-      Data: 1
-    - Name: m_range
-      Entry: 4
-      Data: 20
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: m_attack6A
-      Entry: 7
-      Data: 16|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.BlackDeathAI+Info,
-        Assembly-CSharp]], Assembly-CSharp
-    - Name: m_animation
-      Entry: 1
-      Data: Attack6A
-    - Name: m_timeScale
-      Entry: 4
-      Data: 1
-    - Name: m_range
-      Entry: 4
-      Data: 20
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: m_attack6B
-      Entry: 7
-      Data: 17|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.BlackDeathAI+Info,
-        Assembly-CSharp]], Assembly-CSharp
-    - Name: m_animation
-      Entry: 1
-      Data: Attack6B
-    - Name: m_timeScale
-      Entry: 4
-      Data: 1
-    - Name: m_range
-      Entry: 4
-      Data: 20
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: m_attack6C
-      Entry: 7
-      Data: 18|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.BlackDeathAI+Info,
-        Assembly-CSharp]], Assembly-CSharp
-    - Name: m_animation
-      Entry: 1
-      Data: Attack6C
-    - Name: m_timeScale
-      Entry: 4
-      Data: 1
-    - Name: m_range
-      Entry: 4
-      Data: 20
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: m_bloodLightningAttack
-      Entry: 7
-      Data: 19|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.BlackDeathAI+Info,
-        Assembly-CSharp]], Assembly-CSharp
-    - Name: m_animation
-      Entry: 1
-      Data: Attack8_pre
+      Data: attack_8_pre_final
     - Name: m_timeScale
       Entry: 4
       Data: 1
@@ -412,11 +330,11 @@ MonoBehaviour:
       Data: 
     - Name: m_bloodLightningIdleAnimation
       Entry: 7
-      Data: 20|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.BlackDeathAI+Info,
+      Data: 15|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.BlackDeathAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
-      Data: Attack8_Idle
+      Data: attack_8_loop
     - Name: m_timeScale
       Entry: 4
       Data: 1
@@ -425,11 +343,11 @@ MonoBehaviour:
       Data: 
     - Name: m_bloodLightningEndAnimation
       Entry: 7
-      Data: 21|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.BlackDeathAI+Info,
+      Data: 16|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.BlackDeathAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
-      Data: Attack8_end
+      Data: attack_8_end
     - Name: m_timeScale
       Entry: 4
       Data: 1
@@ -438,11 +356,11 @@ MonoBehaviour:
       Data: 
     - Name: m_attack7
       Entry: 7
-      Data: 22|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.BlackDeathAI+Info,
+      Data: 17|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.BlackDeathAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
-      Data: Attack7
+      Data: attack_above_throw_final
     - Name: m_timeScale
       Entry: 4
       Data: 1
@@ -457,11 +375,11 @@ MonoBehaviour:
       Data: 1.5
     - Name: m_summonCloneAttack
       Entry: 7
-      Data: 23|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.BlackDeathAI+Info,
+      Data: 18|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.BlackDeathAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
-      Data: Attack7
+      Data: idle_doppelganger_attack
     - Name: m_timeScale
       Entry: 4
       Data: 1
@@ -476,11 +394,11 @@ MonoBehaviour:
       Data: 10
     - Name: m_deathAnimation
       Entry: 7
-      Data: 24|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.BlackDeathAI+Info,
+      Data: 19|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.BlackDeathAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
-      Data: Death
+      Data: death animation_final
     - Name: m_timeScale
       Entry: 4
       Data: 1
@@ -489,11 +407,11 @@ MonoBehaviour:
       Data: 
     - Name: m_flinchAnimation
       Entry: 7
-      Data: 25|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.BlackDeathAI+Info,
+      Data: 20|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.BlackDeathAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
-      Data: Flinch
+      Data: flinch 1_version 1
     - Name: m_timeScale
       Entry: 4
       Data: 1
@@ -502,11 +420,11 @@ MonoBehaviour:
       Data: 
     - Name: m_flinch2Animation
       Entry: 7
-      Data: 26|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.BlackDeathAI+Info,
+      Data: 21|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.BlackDeathAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
-      Data: Flinch2
+      Data: flinch 2_version 2
     - Name: m_timeScale
       Entry: 4
       Data: 1
@@ -515,11 +433,11 @@ MonoBehaviour:
       Data: 
     - Name: m_idleAnimation
       Entry: 7
-      Data: 27|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.BlackDeathAI+Info,
+      Data: 22|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.BlackDeathAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
-      Data: Idle
+      Data: idle
     - Name: m_timeScale
       Entry: 4
       Data: 1
@@ -528,11 +446,11 @@ MonoBehaviour:
       Data: 
     - Name: m_introAnimation
       Entry: 7
-      Data: 28|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.BlackDeathAI+Info,
+      Data: 23|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.BlackDeathAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
-      Data: Intro
+      Data: intro animation
     - Name: m_timeScale
       Entry: 4
       Data: 1
@@ -541,11 +459,11 @@ MonoBehaviour:
       Data: 
     - Name: m_teleportAppearAnimation
       Entry: 7
-      Data: 29|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.BlackDeathAI+Info,
+      Data: 24|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.BlackDeathAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
-      Data: Teleport(appear)
+      Data: Teleport (appear)final
     - Name: m_timeScale
       Entry: 4
       Data: 1
@@ -554,11 +472,11 @@ MonoBehaviour:
       Data: 
     - Name: m_teleportVanishAnimation
       Entry: 7
-      Data: 30|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.BlackDeathAI+Info,
+      Data: 25|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.BlackDeathAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
-      Data: Teleport(vanish)
+      Data: Teleport (disappear)final
     - Name: m_timeScale
       Entry: 4
       Data: 1
@@ -567,11 +485,11 @@ MonoBehaviour:
       Data: 
     - Name: m_turnAnimation
       Entry: 7
-      Data: 31|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.BlackDeathAI+Info,
+      Data: 26|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.BlackDeathAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
-      Data: Turn
+      Data: turn animation
     - Name: m_timeScale
       Entry: 4
       Data: 1
@@ -580,33 +498,30 @@ MonoBehaviour:
       Data: 
     - Name: m_introFXAnimation
       Entry: 7
-      Data: 32|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.BlackDeathAI+Info,
+      Data: 27|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.BlackDeathAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
-      Data: intro_efx
+      Data: intro animation
     - Name: m_timeScale
       Entry: 4
       Data: 1
     - Name: 
       Entry: 8
       Data: 
-    - Name: m_tentacle
-      Entry: 10
-      Data: 5
     - Name: m_bloodLightning
       Entry: 10
-      Data: 6
+      Data: 5
     - Name: m_clone
-      Entry: 10
-      Data: 7
+      Entry: 6
+      Data: 
     - Name: m_projectile
       Entry: 7
-      Data: 33|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleProjectileAttackInfo[[DChild.Gameplay.Characters.Enemies.BlackDeathAI+Info,
+      Data: 28|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleProjectileAttackInfo[[DChild.Gameplay.Characters.Enemies.BlackDeathAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
-      Data: Attack (daggers)(idle)
+      Data: attack(dagger)loop
     - Name: m_timeScale
       Entry: 4
       Data: 1
@@ -618,10 +533,10 @@ MonoBehaviour:
       Data: 500
     - Name: m_projectileInfo
       Entry: 7
-      Data: 34|DChild.Gameplay.Characters.ProjectileInfo, Assembly-CSharp
+      Data: 29|DChild.Gameplay.Characters.ProjectileInfo, Assembly-CSharp
     - Name: m_projectile
       Entry: 10
-      Data: 8
+      Data: 6
     - Name: m_speed
       Entry: 4
       Data: 50
@@ -633,10 +548,10 @@ MonoBehaviour:
       Data: 
     - Name: m_deathFXEvent
       Entry: 1
-      Data: Death Efx
+      Data: death burst
     - Name: m_teleportFXEvent
       Entry: 1
-      Data: Teleport_efx
+      Data: teleport
     - Name: 
       Entry: 8
       Data: 
