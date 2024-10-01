@@ -26,7 +26,12 @@ public class IncreaseHealthMinion : MonoBehaviour
 
     public void AddHealth(GameObject minion)
     {
-        Damageable m_minionDamageable = minion.GetComponent<Damageable>();
+        
+        Damageable m_minionDamageable = minion.GetComponentInParent<Damageable>();
+        if(!m_minionDamageable)
+        {
+            return;
+        }
         var minionCurrentmaxHealth = m_minionDamageable.health.maxValue;
         var minionAddHealth = GetMinionHealthPercentage(minionCurrentmaxHealth, m_additionalHealthPercentage);
         Debug.Log("ADDED "+minionAddHealth+"to "+minion.name+"'s max health");
@@ -69,9 +74,9 @@ public class IncreaseHealthMinion : MonoBehaviour
 
     public void ReturnToUnbuffedHealth(GameObject minion)
     {
-        var minionCurrentmaxHealth = minion.GetComponent<Damageable>().health.maxValue;
+        var minionCurrentmaxHealth = minion.GetComponentInParent<Damageable>().health.maxValue;
         var OriginalMaxHealth = UnbuffHealth(minionCurrentmaxHealth, m_additionalHealthPercentage);
-        minion.GetComponent<Damageable>().health.SetMaxValue(Mathf.RoundToInt(OriginalMaxHealth));
+        minion.GetComponentInParent<Damageable>().health.SetMaxValue(Mathf.RoundToInt(OriginalMaxHealth));
         Debug.Log("returned "+ minion.name+" to its max health of "+ OriginalMaxHealth);
     }
 
