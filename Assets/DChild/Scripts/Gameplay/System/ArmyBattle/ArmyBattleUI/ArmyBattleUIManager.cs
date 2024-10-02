@@ -9,7 +9,14 @@ namespace DChild.Gameplay.ArmyBattle.UI
     {
         [SerializeField]
         private ArmyBattlePlayerOption m_playerOption;
+        [SerializeField]
+        private ArmyParticipantDetailsUI m_participantDetails;
 
 
+        public void Initialize(PlayerArmyController player, ArmyController enemy)
+        {
+            m_playerOption.Initialize(player);
+            m_participantDetails.Display(player, enemy);
+        }
     }
 }

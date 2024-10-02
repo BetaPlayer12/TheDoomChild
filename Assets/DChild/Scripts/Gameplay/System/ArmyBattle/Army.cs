@@ -25,6 +25,8 @@ namespace DChild.Gameplay.ArmyBattle
         public ArmyModifier modifiers;
         public int troopCount => m_troopCount;
 
+        public ArmyOverviewData overview => m_info.overview;
+
         public Army(ArmyInfo info)
         {
             m_info = info;

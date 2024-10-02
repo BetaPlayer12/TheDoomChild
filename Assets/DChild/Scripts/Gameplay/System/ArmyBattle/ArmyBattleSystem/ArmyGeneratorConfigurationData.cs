@@ -9,13 +9,13 @@ namespace DChild.Gameplay.ArmyBattle
     public class ArmyGeneratorConfigurationData : SerializedScriptableObject
     {
         [SerializeField]
-        private string m_armyName;
+        private ArmyOverviewData m_armyOverview;
         [SerializeField]
         private ArmyGroupTemplateList m_generatableArmyGroup;
         [SerializeField]
         private Dictionary<ArmyGroupTemplateData, ArmyGroupTemplateData[]> m_replacementPair;
 
-        public string armyName => m_armyName;
+        public ArmyOverviewData armyOverview => m_armyOverview;
 
         public ArmyGroupTemplateList generatableArmyGroups => m_generatableArmyGroup;
 

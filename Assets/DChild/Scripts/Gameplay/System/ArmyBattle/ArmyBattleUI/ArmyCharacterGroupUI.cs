@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Sirenix.OdinInspector;
+using UnityEngine;
 
 namespace DChild.Gameplay.ArmyBattle.UI
 {
@@ -31,6 +32,12 @@ namespace DChild.Gameplay.ArmyBattle.UI
                     m_memberUIs[i].Display(null);
                 }
             }
+        }
+
+        [Button]
+        public void Display(ArmyGroupTemplateData armyGroupTemplateData)
+        {
+            Display(armyGroupTemplateData.armyCharacterGroup);
         }
     }
 }

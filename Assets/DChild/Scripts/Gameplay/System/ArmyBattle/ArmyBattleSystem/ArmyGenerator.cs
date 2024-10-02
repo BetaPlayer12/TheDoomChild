@@ -24,7 +24,7 @@ namespace DChild.Gameplay.ArmyBattle
             }
 
 
-            var armyInfo = new ArmyInfo(m_playerArmyConfiguration.armyName, troopCount, filteredArmyGroups.ToArray());
+            var armyInfo = new ArmyInfo(m_playerArmyConfiguration.armyOverview, troopCount, filteredArmyGroups.ToArray());
             return new Army(armyInfo);
         }
 

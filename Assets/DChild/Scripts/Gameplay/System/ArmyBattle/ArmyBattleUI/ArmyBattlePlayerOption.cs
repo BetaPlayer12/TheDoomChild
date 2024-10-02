@@ -9,6 +9,11 @@ namespace DChild.Gameplay.ArmyBattle.UI
         [SerializeField]
         private ArmyBattleAttackGroupSelection m_group;
 
+        public void Initialize(PlayerArmyController player)
+        {
+            m_player = player;
+        }
+
         public void SetAttackGroupSelection(ArmyDamageTypeOptionUI option)
         {
             var damageType = option.damageType;

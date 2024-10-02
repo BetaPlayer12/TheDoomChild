@@ -1,4 +1,5 @@
 ﻿using DChild.Gameplay.ArmyBattle.SpecialSkills;
+using DChild.Gameplay.ArmyBattle.UI;
 using DChild.Gameplay.ArmyBattle.Visualizer;
 using Holysoft.Event;
 using Sirenix.OdinInspector;
@@ -25,9 +26,11 @@ namespace DChild.Gameplay.ArmyBattle
         private ArmyBattleSpecialSkillHandle m_specialSkillHandle;
         [SerializeField]
         private ArmyFightManager m_fightManager;
+        [SerializeField]
+        private ArmyBattleUIManager m_uiManager;
 
         [SerializeField]
-        private ArmyController m_player;
+        private PlayerArmyController m_player;
         [SerializeField]
         private ArmyAI m_enemy;
 
@@ -123,7 +126,7 @@ namespace DChild.Gameplay.ArmyBattle
                 m_enemy.SetArmyToControl(enemyArmy);
                 m_enemy.SetAI(BattleScenario.enemyToBattle);
             }
-
+            m_uiManager.Initialize(m_player, m_enemy);
             m_fightManager.Initialize(m_player.controlledArmy, m_enemy.controlledArmy);
         }
 

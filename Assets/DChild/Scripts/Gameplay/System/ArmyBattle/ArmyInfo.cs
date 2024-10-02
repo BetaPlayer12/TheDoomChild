@@ -8,17 +8,20 @@ namespace DChild.Gameplay.ArmyBattle
     public class ArmyInfo
     {
         [SerializeField]
-        private string m_name;
+        private ArmyOverviewData m_overview;
+        [SerializeField] 
+        private Sprite m_icon;
+
         [SerializeField, Min(1)]
         private int m_troopCount;
         [SerializeField]
         private ArmyGroup[] m_groups;
 
-        public string name => m_name;
+        public ArmyOverviewData overview => m_overview;
 
-        public ArmyInfo(string armyName, int troopCount, ArmyGroup[] groups)
+        public ArmyInfo(ArmyOverviewData overview, int troopCount, ArmyGroup[] groups)
         {
-            m_name = armyName;
+            m_overview = overview;
             m_troopCount = troopCount;
             m_groups = groups;
         }

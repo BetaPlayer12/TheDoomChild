@@ -8,7 +8,7 @@ namespace DChild.Gameplay.ArmyBattle.UI
         [Button]
         public void Display(ArmyCharacterData characterData)
         {
-
+            Debug.Log($"Display: {characterData.name}");
         }
     }
 }

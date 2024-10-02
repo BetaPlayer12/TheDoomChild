@@ -11,8 +11,6 @@ namespace DChild.Gameplay.ArmyBattle
         [SerializeField]
         protected Army m_controlledArmy;
 
-        protected ArmyAttackGroup m_currentAttackGroup;
-
         public Army controlledArmy => m_controlledArmy;
 
         public abstract ArmyTurnAction GetTurnAction(int turnNumber);
