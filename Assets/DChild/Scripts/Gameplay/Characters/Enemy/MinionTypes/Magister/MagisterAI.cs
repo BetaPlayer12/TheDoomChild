@@ -818,7 +818,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
             m_spineEventListener.Subscribe(m_info.summonTotemEvent, SummonTotem);
             m_startPoint = transform.position;
-            m_healthHealThreshold = (statsData.maxHealth * 0.2f);
+            m_healthHealThreshold = (m_statsData.maxHealth * 0.2f);
         }
 
         protected override void Awake()
