@@ -314,6 +314,8 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Modules")]
         private MovementHandle2D m_movement;
         [SerializeField, TabGroup("Modules")]
+        private FlinchHandler m_flinchHandler;
+        [SerializeField, TabGroup("Modules")]
         private DeathHandle m_deathHandle;
 
         [SerializeField, TabGroup("Sensors")]
@@ -1931,6 +1933,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_hitDetector[1].PlayerHit += AddHitCount;
             m_hitDetector[2].PlayerHit += AddHitCount;
             m_deathHandle.SetAnimation(m_info.deathAnimation.animation);
+            m_damageable.DamageTaken += OnDamageTaken;
             m_projectileLauncher = new ProjectileLauncher(m_info.projectile.projectileInfo, m_projectilePoint);
             m_attackDecider = new RandomAttackDecider<Attack>();
             m_stateHandle = new StateHandle<State>(State.Idle, State.WaitBehaviourEnd);
@@ -1939,6 +1942,23 @@ namespace DChild.Gameplay.Characters.Enemies
             m_clones.Add(null);
 
         }
+        private int m_damageCount;
+        private void OnDamageTaken(object sender, Damageable.DamageEventArgs eventArgs)
+        {
+            //throw new NotImplementedException();
+            m_damageCount++;
+            
+        }
+        private IEnumerator FlinchRoutine()
+        {
+            if (m_damageCount % 4 == 0)
+            {
+                m_flinchHandler.m_enableModule = true;
+                yield return new WaitForSeconds(1f);
+                m_flinchHandler.m_enableModule = false;
+            }
+        }
+
         protected override void Start()
         {
             base.Start();
