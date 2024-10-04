@@ -25,7 +25,7 @@ namespace DChild.Gameplay.ArmyBattle
         public class VfxParticleTurnManager
         {
             [SerializeField]
-            public List<ParticleFX> m_fxPartcileSystem;
+            public List<ParticleSystem> m_fxPartcileSystem;
         }
         [Serializable]
         public class VfxSpineTurnManager
@@ -61,7 +61,7 @@ namespace DChild.Gameplay.ArmyBattle
             [SerializeField]
             public SpineEventListener m_spineListener;
             [SerializeField]
-            public List<ParticleFX> m_eventPartcileSystem;
+            public List<ParticleSystem> m_eventPartcileSystem;
             [SerializeField, Min(0f)]
             private List<float> m_delaytime;
 
@@ -124,8 +124,15 @@ namespace DChild.Gameplay.ArmyBattle
                         {
                             m_VfxSpineTurnManager[i].m_eventPartcileSystem[y].Stop();
                         }
-                            StartCoroutine(PlayRoutine(m_VfxSpineTurnManager[i].m_SpineModel, m_VfxSpineTurnManager[i].animation[x], m_VfxSpineTurnManager[i].animationDelayTime[x],
-                                m_VfxSpineTurnManager[i].m_spineListener, m_VfxSpineTurnManager[i].m_launchOnEvent[x], m_VfxSpineTurnManager[i].m_eventPartcileSystem[x]));
+                        if (m_VfxSpineTurnManager[i].m_spineListener != null){
+                            StartCoroutine(PlayEventRoutine(m_VfxSpineTurnManager[i].m_SpineModel, m_VfxSpineTurnManager[i].animation[x], m_VfxSpineTurnManager[i].animationDelayTime[x],
+                               m_VfxSpineTurnManager[i].m_spineListener, m_VfxSpineTurnManager[i].m_launchOnEvent[x], m_VfxSpineTurnManager[i].m_eventPartcileSystem[x]));
+                        }
+                        else
+                        {
+                            StartCoroutine(PlayRoutine(m_VfxSpineTurnManager[i].m_SpineModel, m_VfxSpineTurnManager[i].animation[x], m_VfxSpineTurnManager[i].animationDelayTime[x]));
+                        }
+                           
                         
                     }
                 }
@@ -134,7 +141,7 @@ namespace DChild.Gameplay.ArmyBattle
 
         }
       
-        private IEnumerator PlayRoutine(GameObject Spineasset, String animation,float delaytime, SpineEventListener spineListener, string particleevent, ParticleFX eventPartcileSystem)
+        private IEnumerator PlayEventRoutine(GameObject Spineasset, String animation,float delaytime, SpineEventListener spineListener, string particleevent, ParticleSystem eventPartcileSystem)
         {
 
             yield return new WaitForSeconds(delaytime);
@@ -142,6 +149,15 @@ namespace DChild.Gameplay.ArmyBattle
             skeletonAnimation = Spineasset.GetComponent<SkeletonAnimation>(); 
             skeletonAnimation.AnimationState.SetAnimation(0, animation, false);
             spineListener.Subscribe(particleevent, eventPartcileSystem.Play);
+            yield return new WaitForAnimationComplete(skeletonAnimation.AnimationState, animation);
+            yield return null;
+        }
+        private IEnumerator PlayRoutine(GameObject Spineasset, String animation, float delaytime)
+        {
+
+            yield return new WaitForSeconds(delaytime);
+            skeletonAnimation = Spineasset.GetComponent<SkeletonAnimation>();
+            skeletonAnimation.AnimationState.SetAnimation(0, animation, false);
             yield return new WaitForAnimationComplete(skeletonAnimation.AnimationState, animation);
             yield return null;
         }
