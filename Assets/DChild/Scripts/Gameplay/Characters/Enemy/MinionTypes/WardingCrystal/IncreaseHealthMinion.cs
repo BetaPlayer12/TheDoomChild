@@ -56,7 +56,16 @@ public class IncreaseHealthMinion : MonoBehaviour
             //instance.SpawnAt(minion.transform.position, Quaternion.identity);
             var instance = GameSystem.poolManager.GetPool<PoolableObjectPool>().GetOrCreateItem(m_LineRendererObj, gameObject.scene);
             var Linerender = instance.GetComponent<LineConnect>();
-            var Centermass = minion.GetComponentInParent<Character>().centerMass;
+            var Character = minion.GetComponentInParent<Character>();
+            Transform Centermass;
+            if (Character.GetBodyPart(BodyReference.BodyPart.Body))
+            {
+                Centermass = Character.GetBodyPart(BodyReference.BodyPart.Body);
+            }else
+            {
+                Centermass = minion.GetComponentInParent<Character>().centerMass;
+            }
+            
             Linerender.SetupLineConnect(Centermass, transform);
             instance.transform.SetParent(minion.transform);
         }
