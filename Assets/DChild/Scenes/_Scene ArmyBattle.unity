@@ -458,6 +458,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b71aa88e9bf8432f89217a09c5a0b21c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &194769394 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2495868467909223688, guid: ff96a9b70255dc144b1c85da45b55036,
+    type: 3}
+  m_PrefabInstance: {fileID: 194769391}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2116530769}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 042556206eddf814db8125006c290ae7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &249730605
 GameObject:
   m_ObjectHideFlags: 0
@@ -581,6 +593,7 @@ GameObject:
   - component: {fileID: 251076232}
   - component: {fileID: 251076231}
   - component: {fileID: 251076230}
+  - component: {fileID: 251076234}
   - component: {fileID: 251076229}
   - component: {fileID: 251076233}
   m_Layer: 5
@@ -722,7 +735,7 @@ MonoBehaviour:
   Id:
     Category: ArmyBattle
     Name: ParticipantDetails
-    Custom: 1
+    Custom: 0
 --- !u!114 &251076230
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1326,6 +1339,20 @@ MonoBehaviour:
       ToCustomValue: 1
       FromOffset: 0
       ToOffset: 0
+--- !u!114 &251076234
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 251076226}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 724c178a3f50bc545a927e5c8a6d4db4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_playerBanner: {fileID: 1228650608378116373}
+  m_enemyBanner: {fileID: 194769394}
 --- !u!1 &271410042
 GameObject:
   m_ObjectHideFlags: 0
@@ -4177,6 +4204,7 @@ GameObject:
   - component: {fileID: 1908781477}
   - component: {fileID: 1908781476}
   - component: {fileID: 1908781475}
+  - component: {fileID: 1908781479}
   - component: {fileID: 1908781474}
   - component: {fileID: 1908781473}
   m_Layer: 5
@@ -4883,7 +4911,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_player: {fileID: 0}
-  m_group: {fileID: 0}
+  m_damageSelection: {fileID: 0}
+  m_groupSelection: {fileID: 0}
+--- !u!114 &1908781479
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1908781471}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b0f5d818107b6c458accf9171e5e65e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_player: {fileID: 0}
+  m_damageSelection: {fileID: 0}
+  m_groupSelection: {fileID: 0}
 --- !u!1 &1998764580
 GameObject:
   m_ObjectHideFlags: 0
@@ -4993,6 +5037,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 65209429484771079, guid: d010eed03bdd5de4c82abb34a981d52f,
+        type: 3}
+      propertyPath: m_playerOption
+      value: 
+      objectReference: {fileID: 1908781478}
+    - target: {fileID: 65209429484771079, guid: d010eed03bdd5de4c82abb34a981d52f,
+        type: 3}
+      propertyPath: m_participantDetails
+      value: 
+      objectReference: {fileID: 251076234}
     - target: {fileID: 3938904806831809300, guid: d010eed03bdd5de4c82abb34a981d52f,
         type: 3}
       propertyPath: m_battleScenario.m_enemyToBattle
@@ -7333,6 +7387,18 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
+--- !u!114 &1228650608378116373 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2495868467909223688, guid: ff96a9b70255dc144b1c85da45b55036,
+    type: 3}
+  m_PrefabInstance: {fileID: 1228650608378116369}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 82699184}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 042556206eddf814db8125006c290ae7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &2377136430851006115
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7508,7 +7574,7 @@ PrefabInstance:
     - target: {fileID: 2377136430967115571, guid: 1b96205c49f98a54c9b00764c26c799c,
         type: 3}
       propertyPath: m_Name
-      value: View - ArmyUnits
+      value: View - AttackGroupSelection
       objectReference: {fileID: 0}
     - target: {fileID: 2377136430967115571, guid: 1b96205c49f98a54c9b00764c26c799c,
         type: 3}
