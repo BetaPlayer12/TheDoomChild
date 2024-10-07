@@ -41,6 +41,8 @@ namespace DChild.Gameplay.ArmyBattle
         [SerializeField, FoldoutGroup("Signals")]
         private SignalSender m_battleEndSignal;
         [SerializeField, FoldoutGroup("Signals")]
+        private SignalSender m_turnStartSignal;
+        [SerializeField, FoldoutGroup("Signals")]
         private SignalSender m_turnEndSignal;
 
         private bool m_hasBattleStarted;
@@ -72,6 +74,7 @@ namespace DChild.Gameplay.ArmyBattle
         }
 
         public static void StartBattleGameplay() => Instance.StartBattle();
+        public static void StartNewTurn() => Instance.StartTurn();
 
         [Button, ShowIf("@canBattleBeStarted == true")]
         public void StartBattle()
@@ -79,14 +82,15 @@ namespace DChild.Gameplay.ArmyBattle
             if (m_hasBattleStarted)
                 return;
 
-            StartTurn();
             m_battleStartSignal.SendSignal();
+            StartTurn();
             m_hasBattleStarted = true;
         }
 
-        private void StartTurn()
+        public void StartTurn()
         {
             m_uiManager.UpdatePlayerOptions();
+            m_turnStartSignal.SendSignal();
             m_turnHandle.TurnStart();
         }
 
@@ -104,14 +108,15 @@ namespace DChild.Gameplay.ArmyBattle
 
             if (endBattle == false)
             {
-                StartTurn();
                 m_specialSkillHandle.ResolveActiveSkills();
                 m_specialSkillHandle.ReinstanteActivateEffects();
                 m_turnEndSignal.SendSignal();
+                m_scenarioHandle.UpdateScenario(m_turnHandle.currentTurn + 1);
             }
             else
             {
                 m_battleEndSignal.SendSignal();
+                StartCoroutine(EndScenarioRoutine());
             }
         }
 
@@ -164,6 +169,12 @@ namespace DChild.Gameplay.ArmyBattle
         {
             yield return new WaitForSeconds(1.5f);
             m_scenarioHandle.StartScenario();
+        }
+
+        private IEnumerator EndScenarioRoutine()
+        {
+            yield return new WaitForSeconds(1.5f);
+            m_scenarioHandle.EndScenario(m_player.controlledArmy.troopCount > 0);
         }
 
         private void CreateParticipatingArmies()

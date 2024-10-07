@@ -1,4 +1,5 @@
 ﻿using Sirenix.OdinInspector;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -8,18 +9,18 @@ namespace DChild.Gameplay.ArmyBattle
     public abstract class ArmyBattleScenarioUpdateSubHandle
     {
         [System.Serializable]
-        public class ScenarioUpdateRequest
+        public abstract class ScenarioUpdateRequest
         {
             [SerializeField, MinValue(0)]
             private int m_priority;
-            [SerializeField,HideReferenceObjectPicker]
-            private UnityEvent m_scenarioModification = new UnityEvent();
 
             public int priority => m_priority;
-            public void TriggerScenario() => m_scenarioModification.Invoke();
+            public abstract void TriggerScenario();
         }
 
+        protected List<ScenarioUpdateRequest> m_scenarioUpdateRequests = new List<ScenarioUpdateRequest>();
+
         public abstract void Initialize(Army player, Army enemy);
-        public abstract ScenarioUpdateRequest GetValidRequest(int turnIndex);
+        public abstract List<ScenarioUpdateRequest> GetValidRequests(int turnIndex);
     }
 }

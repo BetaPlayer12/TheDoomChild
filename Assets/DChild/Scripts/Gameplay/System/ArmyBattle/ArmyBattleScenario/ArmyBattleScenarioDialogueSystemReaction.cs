@@ -1,26 +1,28 @@
-﻿using System.Collections.Generic;
+﻿using PixelCrushers.DialogueSystem;
+using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace DChild.Gameplay.ArmyBattle
 {
     [System.Serializable]
-    public class ArmyBattleScenarioTurnReaction : ArmyBattleScenarioUpdateSubHandle
+    public class ArmyBattleScenarioDialogueSystemReaction : ArmyBattleScenarioUpdateSubHandle
     {
         [System.Serializable]
         private class Request : ScenarioUpdateRequest
         {
             [SerializeField]
-            private UnityEvent m_scenarioModification;
+            private DialogueSystemTrigger m_trigger;
+
+            public bool CanBeTriggered() => m_trigger.condition.IsTrue(null);
 
             public override void TriggerScenario()
             {
-                m_scenarioModification?.Invoke();
+                m_trigger.OnUse();
             }
         }
 
         [SerializeField]
-        private Dictionary<int, ScenarioUpdateRequest> m_scenarioUpdates;
+        private Request[] m_requests;
 
         public override List<ScenarioUpdateRequest> GetValidRequests(int turnIndex)
         {
@@ -30,10 +32,15 @@ namespace DChild.Gameplay.ArmyBattle
             }
             m_scenarioUpdateRequests.Clear();
 
-            if (m_scenarioUpdates.TryGetValue(turnIndex, out var scenarioUpdateRequest))
+            for (int i = 0; i < m_requests.Length; i++)
             {
-                m_scenarioUpdateRequests.Add(scenarioUpdateRequest);
+                var request = m_requests[i];
+                if (request.CanBeTriggered())
+                {
+                    m_scenarioUpdateRequests.Add(request);
+                }
             }
+
             return m_scenarioUpdateRequests;
         }
 
