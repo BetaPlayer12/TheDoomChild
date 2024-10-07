@@ -7,5 +7,7 @@
         public ArmyDamage attack;
 
         public ArmyModifier modifiers;
+
+        public bool willAttack;
     }
 }

@@ -10,6 +10,13 @@ namespace DChild.Gameplay.ArmyBattle.Visualizer
 {
     public class ArmyMeleeAttack : ArmyAttackVisualizer
     {
+        [SerializeField]
+        private float m_visualAttackRange;
+        [SerializeField]
+        private float m_visualRunningSpeed;
+        [SerializeField]
+        private float m_toStartPositionTolerance;
+
         private List<ArmyUnit> m_targets;
         private List<ArmyUnitMelee> m_units;
         private List<Vector3> m_unitStartingPosition;
@@ -17,8 +24,6 @@ namespace DChild.Gameplay.ArmyBattle.Visualizer
         private static Dictionary<ArmyUnit, ArmyUnit> m_unitTargetPair;
 
         private bool m_isAttacking;
-
-        private const float SPEED_RUNNING = 200f;
 
         public override void Attack(List<ArmyUnit> units, IArmyBattalion target)
         {
@@ -117,7 +122,6 @@ namespace DChild.Gameplay.ArmyBattle.Visualizer
             }
 
             bool allUnitsAreNearTheirTarget = false;
-            var meleeRange = 45f;
             do
             {
                 allUnitsAreNearTheirTarget = true;
@@ -127,10 +131,10 @@ namespace DChild.Gameplay.ArmyBattle.Visualizer
                     if (unit.isAlive)
                     {
                         var target = targets[i];
-                        if (Mathf.Abs(unit.transform.position.x - target.transform.position.x) > meleeRange)
+                        if (Mathf.Abs(unit.transform.position.x - target.transform.position.x) > m_visualAttackRange)
                         {
                             var directionTowardsTarget = (target.transform.position - unit.transform.position).normalized;
-                            unit.transform.position += directionTowardsTarget * SPEED_RUNNING * GameplaySystem.time.deltaTime;
+                            unit.transform.position += directionTowardsTarget * m_visualRunningSpeed * GameplaySystem.time.deltaTime;
                             allUnitsAreNearTheirTarget = false;
                         }
                         else
@@ -166,10 +170,10 @@ namespace DChild.Gameplay.ArmyBattle.Visualizer
                     {
                         var target = m_targets[i];
                         var startingPoint = m_unitStartingPosition[i];
-                        if (Mathf.Abs(unit.transform.position.x - startingPoint.x) > 5f)
+                        if (Mathf.Abs(unit.transform.position.x - startingPoint.x) > m_toStartPositionTolerance)
                         {
                             var directionTowardsTarget = (startingPoint - unit.transform.position).normalized;
-                            unit.transform.position += directionTowardsTarget * SPEED_RUNNING * GameplaySystem.time.deltaTime;
+                            unit.transform.position += directionTowardsTarget * m_visualRunningSpeed * GameplaySystem.time.deltaTime;
                             allUnitsAreNearTheirTarget = false;
                         }
                         else

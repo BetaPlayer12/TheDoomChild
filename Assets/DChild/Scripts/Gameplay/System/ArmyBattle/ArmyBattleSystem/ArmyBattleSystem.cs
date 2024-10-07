@@ -1,9 +1,11 @@
 ﻿using DChild.Gameplay.ArmyBattle.SpecialSkills;
 using DChild.Gameplay.ArmyBattle.UI;
 using DChild.Gameplay.ArmyBattle.Visualizer;
+using Doozy.Runtime.Signals;
 using Holysoft.Event;
 using Sirenix.OdinInspector;
 using System;
+using System.Collections;
 using UnityEngine;
 
 namespace DChild.Gameplay.ArmyBattle
@@ -34,6 +36,19 @@ namespace DChild.Gameplay.ArmyBattle
         [SerializeField]
         private ArmyAI m_enemy;
 
+        [SerializeField, FoldoutGroup("Signals")]
+        private SignalSender m_battleStartSignal;
+        [SerializeField, FoldoutGroup("Signals")]
+        private SignalSender m_battleEndSignal;
+        [SerializeField, FoldoutGroup("Signals")]
+        private SignalSender m_turnEndSignal;
+
+        private bool m_hasBattleStarted;
+        private bool m_hasViableBattleSetup;
+        private ArmyBattleScenarioHandle m_scenarioHandle;
+
+        private bool canBattleBeStarted => m_hasViableBattleSetup && m_hasBattleStarted == false;
+
         public ArmyController player => m_player;
         public ArmyController enemy => m_enemy;
 
@@ -56,9 +71,22 @@ namespace DChild.Gameplay.ArmyBattle
             return Instance.fightManager.GetEnemyBattalionPosition();
         }
 
-        [Button]
+        public static void StartBattleGameplay() => Instance.StartBattle();
+
+        [Button, ShowIf("@canBattleBeStarted == true")]
         public void StartBattle()
         {
+            if (m_hasBattleStarted)
+                return;
+
+            StartTurn();
+            m_battleStartSignal.SendSignal();
+            m_hasBattleStarted = true;
+        }
+
+        private void StartTurn()
+        {
+            m_uiManager.UpdatePlayerOptions();
             m_turnHandle.TurnStart();
         }
 
@@ -76,9 +104,14 @@ namespace DChild.Gameplay.ArmyBattle
 
             if (endBattle == false)
             {
-                m_turnHandle.TurnStart();
+                StartTurn();
                 m_specialSkillHandle.ResolveActiveSkills();
                 m_specialSkillHandle.ReinstanteActivateEffects();
+                m_turnEndSignal.SendSignal();
+            }
+            else
+            {
+                m_battleEndSignal.SendSignal();
             }
         }
 
@@ -97,8 +130,6 @@ namespace DChild.Gameplay.ArmyBattle
             m_turnHandle.OnTurnEnd += OnTurnEnd;
         }
 
-
-
         private void Start()
         {
             if (BattleScenario == null)
@@ -108,6 +139,35 @@ namespace DChild.Gameplay.ArmyBattle
 
             m_locationInstantiator.InstantiateLocation(BattleScenario.location);
 
+            CreateParticipatingArmies();
+
+            m_uiManager.Initialize(m_player, m_enemy);
+            m_fightManager.Initialize(m_player.controlledArmy, m_enemy.controlledArmy);
+
+            m_hasViableBattleSetup = true;
+
+            InitializeBattleScenario();
+        }
+
+        private void InitializeBattleScenario()
+        {
+            var scenarioHandleInstance = Instantiate(BattleScenario.scenarioHandle) as GameObject;
+            m_scenarioHandle = scenarioHandleInstance.GetComponent<ArmyBattleScenarioHandle>();
+            m_scenarioHandle.Initialize(m_player.controlledArmy, m_enemy.controlledArmy);
+            if (canBattleBeStarted)
+            {
+                StartCoroutine(StartScenarioRoutine());
+            }
+        }
+
+        private IEnumerator StartScenarioRoutine()
+        {
+            yield return new WaitForSeconds(1.5f);
+            m_scenarioHandle.StartScenario();
+        }
+
+        private void CreateParticipatingArmies()
+        {
             //Create Player Army
             if (GameplaySystem.campaignSerializer != null)
             {
@@ -118,6 +178,7 @@ namespace DChild.Gameplay.ArmyBattle
                 var playerArmy = m_generator.GenerateArmy(DebugPlayerRecruitedCharacters);
                 m_player.SetArmyToControl(playerArmy);
             }
+            Debug.Log("Player Army Created");
 
             //Create Enemy Army
             if (BattleScenario.enemyToBattle != null)
@@ -125,11 +186,9 @@ namespace DChild.Gameplay.ArmyBattle
                 var enemyArmy = m_generator.GenerateArmy(BattleScenario.enemyToBattle.armyData);
                 m_enemy.SetArmyToControl(enemyArmy);
                 m_enemy.SetAI(BattleScenario.enemyToBattle);
+                Debug.Log("Enemy Army Created");
             }
-            m_uiManager.Initialize(m_player, m_enemy);
-            m_fightManager.Initialize(m_player.controlledArmy, m_enemy.controlledArmy);
         }
-
 
         private void OnDestroy()
         {

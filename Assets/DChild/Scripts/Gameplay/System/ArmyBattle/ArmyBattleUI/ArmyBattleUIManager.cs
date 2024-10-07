@@ -18,5 +18,10 @@ namespace DChild.Gameplay.ArmyBattle.UI
             m_playerOption.Initialize(player);
             m_participantDetails.Display(player, enemy);
         }
+
+        public void UpdatePlayerOptions()
+        {
+            m_playerOption.UpdateOptions();
+        }
     }
 }

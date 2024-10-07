@@ -7,7 +7,7 @@ namespace DChild.Gameplay.ArmyBattle.Battalion
 {
     public class ArmyBattalionGenerator : MonoBehaviour
     {
-        [SerializeField,InlineEditor]
+        [SerializeField, InlineEditor]
         private ArmyBattalionGeneratorData m_data;
 
         public List<ArmyUnit> GenerateArmy(List<DamageType> types)
@@ -46,6 +46,7 @@ namespace DChild.Gameplay.ArmyBattle.Battalion
             {
                 var position = GetRandomPosition();
                 var instance = Instantiate(configuration.GetRandomUnitTemplate());
+                instance.gameObject.name += $"[{i}]";
                 instance.transform.position = position;
                 spawnedUnits.Add(instance.GetComponent<ArmyUnit>());
             }

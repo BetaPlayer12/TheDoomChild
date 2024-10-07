@@ -17,10 +17,18 @@ namespace DChild.Gameplay.ArmyBattle
 
         public override ArmyTurnAction GetTurnAction(int turnNumber)
         {
+            if (m_chosenAttack == null)
+                return new ArmyTurnAction
+                {
+                    troopCount = m_controlledArmy.troopCount,
+                    willAttack = false
+                };
+
             return new ArmyTurnAction()
             {
                 troopCount = m_controlledArmy.troopCount,
-                attack = new ArmyDamage(m_chosenAttack.GetDamageType(), m_chosenAttack.GetAttackPower())
+                attack = new ArmyDamage(m_chosenAttack.GetDamageType(), m_chosenAttack.GetAttackPower()),
+                willAttack = true
             };
         }
         public override void CleanUpForNextTurn()
