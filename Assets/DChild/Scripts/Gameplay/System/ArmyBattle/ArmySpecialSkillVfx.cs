@@ -161,6 +161,10 @@ namespace DChild.Gameplay.ArmyBattle
             yield return new WaitForAnimationComplete(skeletonAnimation.AnimationState, animation);
             yield return null;
         }
+        private void SetTurn(int turn)
+        {
+            m_currentturn = turn;
+        }
         private void Start()
         {
             for (int i = 0; i < m_vfxParticleTurnManager.Count; i++)
@@ -173,6 +177,7 @@ namespace DChild.Gameplay.ArmyBattle
             }
 
         }
+
 
     }
        
