@@ -2655,6 +2655,7 @@ GameObject:
   - component: {fileID: 201852830911714003}
   - component: {fileID: 636607837292690887}
   - component: {fileID: 2414691642819478713}
+  - component: {fileID: 6285070581927038240}
   m_Layer: 13
   m_Name: SkeletonMinerModel
   m_TagString: Untagged
@@ -2745,7 +2746,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d247ba06193faa74d9335f5481b2b56c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  skeletonDataAsset: {fileID: 11400000, guid: 661b3a9ebd9efb545bf03813441847bc, type: 2}
+  skeletonDataAsset: {fileID: 11400000, guid: 0050b4eb25d3b5f47b76b431e7db742f, type: 2}
   initialSkinName: default
   initialFlipX: 0
   initialFlipY: 0
@@ -2837,8 +2838,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_animation: {fileID: 0}
   m_renderer: {fileID: 8490403263747253890}
-  m_startDissolveEvent: StartFade
-  m_dissolveDuration: 1
+  m_startDissolveEvent: 
+  m_dissolveDuration: 0.1
   m_delay: 0
 --- !u!114 &2414691642819478713
 MonoBehaviour:
@@ -2853,8 +2854,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_renderer: {fileID: 8490403263747253890}
-  m_color: {r: 0.34901962, g: 0.34901962, b: 0.34901962, a: 0}
+  m_color: {r: 0.6132076, g: 0.6132076, b: 0.6132076, a: 0}
   m_fadeInDuration: 0.05
+  m_fadeOutDuration: 0.1
+--- !u!114 &6285070581927038240
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8490403263747253903}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ce36765c3609a7e438482540600a3b3a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_renderer: {fileID: 8490403263747253890}
+  m_color: {r: 1, g: 1, b: 1, a: 0}
+  m_fadeInDuration: 0.005
   m_fadeOutDuration: 0.1
 --- !u!1 &8592360930749472193
 GameObject:
