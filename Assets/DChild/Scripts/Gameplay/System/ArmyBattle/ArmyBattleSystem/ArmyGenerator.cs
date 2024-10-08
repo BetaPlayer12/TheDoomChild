@@ -39,7 +39,20 @@ namespace DChild.Gameplay.ArmyBattle
                 var characterGroup = armyGroup.armyCharacterGroup;
                 viableCharacters = GetViableCharacters(characters, viableCharacters, characterGroup);
 
-                if (viableCharacters.Count > 0)
+                var canBeCreated = viableCharacters.Count > 0;
+                if (canBeCreated)
+                {
+                    for (int k = 0; k < armyGroup.requiredCharactersToBeAValidGroup.Length; k++)
+                    {
+                        if (viableCharacters.Contains(armyGroup.requiredCharactersToBeAValidGroup[k]) == false)
+                        {
+                            canBeCreated = false;
+                            break;
+                        }
+                    }
+                }
+
+                if (canBeCreated)
                 {
                     var newcharacterGroup = new ArmyCharacterGroup(characterGroup.name, viableCharacters.ToArray());
                     var newArmyGroup = new ArmyGroup(armyGroup.id, newcharacterGroup, armyGroup.damageType, armyGroup.specialSkill);
@@ -77,7 +90,7 @@ namespace DChild.Gameplay.ArmyBattle
                         var referenceGroup = replaceableArmyGroups[j];
                         for (int k = toBeModified.Count - 1; k >= 0; k--)
                         {
-                            if (referenceGroup.id == toBeModified[i].id)
+                            if (referenceGroup.id == toBeModified[k].id)
                             {
                                 toBeModified.RemoveAt(k);
                             }

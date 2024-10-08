@@ -1,3 +1,4 @@
+using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,12 +10,12 @@ namespace DChild.Gameplay.ArmyBattle
     {
         [SerializeField]
         private ArmyOverviewData m_overview;
-        [SerializeField] 
+        [SerializeField]
         private Sprite m_icon;
 
         [SerializeField, Min(1)]
         private int m_troopCount;
-        [SerializeField]
+        [SerializeField, ListDrawerSettings(NumberOfItemsPerPage = 5)]
         private ArmyGroup[] m_groups;
 
         public ArmyOverviewData overview => m_overview;
