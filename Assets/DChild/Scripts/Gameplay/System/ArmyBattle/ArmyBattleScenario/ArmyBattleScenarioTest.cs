@@ -25,9 +25,9 @@ namespace DChild.Gameplay.ArmyBattle
             ArmyBattleSystem.StartBattleGameplay();
         }
 
-        public override void UpdateScenario(int turnIndex)
+        public override void UpdateScenario()
         {
-            Debug.Log($"Army Battle Scenario: Turn {turnIndex}");
+            Debug.Log($"Army Battle Scenario: Turn");
             ArmyBattleSystem.StartNewTurn();
         }
     }

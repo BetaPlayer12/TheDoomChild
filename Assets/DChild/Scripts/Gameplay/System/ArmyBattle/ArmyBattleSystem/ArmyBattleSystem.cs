@@ -111,7 +111,7 @@ namespace DChild.Gameplay.ArmyBattle
                 m_specialSkillHandle.ResolveActiveSkills();
                 m_specialSkillHandle.ReinstanteActivateEffects();
                 m_turnEndSignal.SendSignal();
-                m_scenarioHandle.UpdateScenario(m_turnHandle.currentTurn + 1);
+                m_scenarioHandle.UpdateScenario();
             }
             else
             {

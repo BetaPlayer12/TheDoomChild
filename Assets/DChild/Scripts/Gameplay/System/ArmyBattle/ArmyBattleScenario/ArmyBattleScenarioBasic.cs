@@ -16,7 +16,14 @@ namespace DChild.Gameplay.ArmyBattle
 
         public override void EndScenario(bool playerWon)
         {
-            throw new System.NotImplementedException();
+            if (playerWon)
+            {
+                Debug.Log("Army Battle Scenario: Player Won");
+            }
+            else
+            {
+                Debug.Log("Army Battle Scenario: Player Lost");
+            }
         }
 
         public override void StartScenario()
@@ -24,9 +31,9 @@ namespace DChild.Gameplay.ArmyBattle
             m_introHandle.Execute();
         }
 
-        public override void UpdateScenario(int turnIndex)
+        public override void UpdateScenario()
         {
-            m_updateHandle.UpdateScenario(turnIndex);
+            m_updateHandle.UpdateScenario();
         }
     }
 }

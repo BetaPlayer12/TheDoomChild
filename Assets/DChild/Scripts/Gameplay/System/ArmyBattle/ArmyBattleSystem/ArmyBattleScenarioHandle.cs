@@ -10,7 +10,7 @@ namespace DChild.Gameplay.ArmyBattle
         protected Army player => m_playerArmy;
         protected Army enemy => m_enemyArmy;
         public abstract void StartScenario();
-        public abstract void UpdateScenario(int turnIndex);
+        public abstract void UpdateScenario();
         public abstract void EndScenario(bool playerWon);
 
         public void Initialize(Army player, Army enemy)
