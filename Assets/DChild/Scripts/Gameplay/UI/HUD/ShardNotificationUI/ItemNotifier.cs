@@ -12,7 +12,8 @@ namespace DChild.Gameplay.UI
         private List<ItemData> m_itemToMonitor;
         private void OnItemUpdate(object sender, ItemEventArgs eventArgs)
         {
-            if (m_itemToMonitor.Contains(eventArgs.data))
+            /*temp fix*/
+            if (m_itemToMonitor.Contains(eventArgs.data) && eventArgs.countModification > 0)
             {
                 GameplaySystem.gamplayUIHandle.notificationManager.QueueNotification(eventArgs.data);
             }

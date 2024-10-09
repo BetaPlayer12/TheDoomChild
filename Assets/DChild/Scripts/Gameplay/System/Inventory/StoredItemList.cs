@@ -136,7 +136,7 @@ namespace DChild.Gameplay.Inventories
                 {
                     m_items.Remove(storedItem);
                 }
-                InvokeInventoryItemUpdate(itemData, storedItem.count,count);
+                InvokeInventoryItemUpdate(itemData, storedItem.count, -count);
             }
         }
 
@@ -152,7 +152,7 @@ namespace DChild.Gameplay.Inventories
             {
                 storedItem.SetCount(count);
             }
-            InvokeInventoryItemUpdate(itemData, storedItem.count,count);
+            InvokeInventoryItemUpdate(itemData, storedItem.count, count);
         }
 
         public override void SetItemAsInfinite(ItemData itemData, bool isInfinite)
