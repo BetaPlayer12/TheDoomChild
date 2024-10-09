@@ -398,29 +398,45 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator ChargeAttackRoutine()
         {
-            m_animation.EnableRootMotion(true, false);
+            m_animation.DisableRootMotion();
+            //m_animation.EnableRootMotion(true, false);
             m_selfCollider.enabled = false;
 
             //if (m_groundSensor && m_edgeSensor.isDetecting)
             //{
-                         
-            //}
 
-            while (!m_playerSensor.isDetecting && !m_wallSensor.isDetecting)
+            //}
+            m_animation.SetAnimation(0, m_info.chargeToThrustAnimation.animation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.chargeToThrustAnimation.animation);
+
+            //while (!m_playerSensor.isDetecting && !m_wallSensor.isDetecting)
+            //{
+            //    m_animation.SetAnimation(0, m_info.move.animation, true)/*.TimeScale = m_currentTimeScale*/;
+            //    m_movement.MoveTowards(Vector2.right * transform.localScale.x, m_intafo.move.speed);
+            //    yield return null;
+            //}
+            var direction = m_character.facing == HorizontalDirection.Right ? Vector2.right : Vector2.left;
+            var playerPositionBackOffset = direction * 60;
+
+            var distanceToPlayer = Mathf.Abs(transform.position.x - (m_targetInfo.position.x + playerPositionBackOffset.x));
+            Debug.Log("Initial Distance: " + distanceToPlayer);
+            m_animation.SetAnimation(0, m_info.chargeAttack.animation, true);
+            while (distanceToPlayer >= 7f && !m_wallSensor.isDetecting)
             {
-                m_animation.SetAnimation(0, m_info.move.animation, true)/*.TimeScale = m_currentTimeScale*/;
+                distanceToPlayer = Mathf.Abs(transform.position.x - (m_targetInfo.position.x + playerPositionBackOffset.x));
+                Debug.Log(distanceToPlayer);
+                m_movement.MoveTowards(direction, 50);
                 yield return null;
             }
 
-            m_animation.SetAnimation(0, m_info.chargeToThrustAnimation.animation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.chargeToThrustAnimation.animation);
-            m_animation.SetAnimation(0, m_info.chargeAttack.animation, true);
-            yield return new WaitForSeconds(m_info.chargeAirTime);
+            //m_animation.SetAnimation(0, m_info.chargeAttack.animation, true);
+            //yield return new WaitForSeconds(m_info.chargeAirTime);
             //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.chargeAttack.animation);
+
+            m_movement.Stop();
 
             if (m_wallSensor.isDetecting)
             {
-                m_movement.Stop();
 
                 Debug.Log("Wall Detected");
 
@@ -507,7 +523,7 @@ namespace DChild.Gameplay.Characters.Enemies
         protected override void Awake()
         {
             base.Awake();
-            
+
             m_patrolHandle.TurnRequest += OnTurnRequest;
             m_attackHandle.AttackDone += OnAttackDone;
             m_turnHandle.TurnDone += OnTurnDone;
@@ -667,7 +683,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 //        //    if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation.animation)
                 //        //        m_stateHandle.SetState(State.Turning);
                 //        //}
-                        
+
                 //    }
                 //    break;
 

@@ -207,6 +207,59 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_skeletonAnimation: {fileID: 7424344471433016208}
   m_data: {fileID: 11400000, guid: 11560c50948a8d940aabec0f36fa92f1, type: 2}
+--- !u!1 &8872635822338030794
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6080391145743139011}
+  - component: {fileID: 6151029165956367714}
+  m_Layer: 13
+  m_Name: Body
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6080391145743139011
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8872635822338030794}
+  m_LocalRotation: {x: 0, y: 0, z: 0.7012633, w: 0.71290237}
+  m_LocalPosition: {x: 0.20286663, y: 4.5035424, z: 0}
+  m_LocalScale: {x: 1, y: -1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7424344471433016209}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6151029165956367714
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8872635822338030794}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a1fd8daaed7b64148a34acb96ba14ce1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  skeletonRenderer: {fileID: 7424344471433016208}
+  boneName: main3
+  followXYPosition: 1
+  followZPosition: 1
+  followBoneRotation: 1
+  followSkeletonFlip: 1
+  followLocalScale: 0
+  initializeOnAwake: 1
+  m_updateOnFixedUpdate: 0
 --- !u!1001 &5215943766147423284
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -327,7 +380,7 @@ MonoBehaviour:
   m_AttackFX: {fileID: 0}
   m_facing: -1
   m_bodyReference:
-    m_default: {fileID: 0}
+    m_default: {fileID: 6080391145743139011}
     m_list: []
 --- !u!114 &90872287518769445
 MonoBehaviour:
@@ -958,6 +1011,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d247ba06193faa74d9335f5481b2b56c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!4 &7424344471433016209 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1878147886272856077, guid: 6d349b22228eda74781471f9db176cb1,
+    type: 3}
+  m_PrefabInstance: {fileID: 9013977163050234780}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &7719056714078141929 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1587392802276183669, guid: 6d349b22228eda74781471f9db176cb1,
