@@ -4,10 +4,10 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 namespace DChild.Gameplay.ArmyBattle
 {
+
     [System.Serializable]
     public class ArmyBattleScenarioUpdateHandle : SerializedMonoBehaviour
     {
@@ -36,6 +36,8 @@ namespace DChild.Gameplay.ArmyBattle
             }
         }
 
+        [SerializeField, HideReferenceObjectPicker]
+        private ArmyBattleScenarioTrackerManager m_trackerManager = new ArmyBattleScenarioTrackerManager();
         [SerializeField]
         private Dictionary<DialogueSystemTrigger, int> m_dialoguePriorityPairs;
 
@@ -47,7 +49,9 @@ namespace DChild.Gameplay.ArmyBattle
 
         public void UpdateScenario()
         {
-            if(m_dialoguePriorityPairs.Count == 0)
+            m_trackerManager.UpdateTrackerValues();
+
+            if (m_dialoguePriorityPairs.Count == 0)
             {
                 ArmyBattleSystem.StartNewTurn();
                 return;

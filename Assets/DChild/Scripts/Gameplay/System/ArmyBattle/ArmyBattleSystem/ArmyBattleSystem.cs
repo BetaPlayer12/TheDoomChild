@@ -55,6 +55,11 @@ namespace DChild.Gameplay.ArmyBattle
         public ArmyController enemy => m_enemy;
 
         public ArmyFightManager fightManager => m_fightManager;
+        public ArmyBattleTurnHandle turnHandle => m_turnHandle;
+
+        public static int GetCurrentTurnNumber() => Instance.turnHandle.currentTurn;
+        public static ArmyController GetPlayer() => Instance.player;
+        public static ArmyController GetEnemy() => Instance.enemy;
 
         //Feels Like A Hack Solution ATM
         public static ArmyController GetTargetOf(ArmyController reference)
@@ -84,6 +89,7 @@ namespace DChild.Gameplay.ArmyBattle
 
             m_battleStartSignal.SendSignal();
             StartTurn();
+            m_scenarioHandle.UpdateScenario(); //For Trackers to Be Updated at Turn 1
             m_hasBattleStarted = true;
         }
 
@@ -102,6 +108,10 @@ namespace DChild.Gameplay.ArmyBattle
                 endBattle = true;
             }
             else if (m_enemy.controlledArmy.troopCount <= 0)
+            {
+                endBattle = true;
+            }
+            else if (m_player.HasViableTurnOptions() == false)
             {
                 endBattle = true;
             }

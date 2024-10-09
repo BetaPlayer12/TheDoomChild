@@ -24,6 +24,7 @@ namespace DChild.Gameplay.ArmyBattle
 
         public ArmyModifier modifiers;
         public int troopCount => m_troopCount;
+        public float troopCountPercent => (m_troopCount / m_info.GetTroopCount()) * 100f;
 
         public ArmyOverviewData overview => m_info.overview;
 

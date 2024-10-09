@@ -39,6 +39,8 @@ namespace DChild.Gameplay.ArmyBattle
             var enemyTurn = m_enemy.GetTurnAction(m_turnCount);
 
             var result = m_combatSimulator.CalculateCombatResult(playerTurn, enemyTurn);
+            m_player.controlledArmy.AddTroopCount(result.player.damageReceived);
+            m_enemy.controlledArmy.AddTroopCount(result.enemy.damageReceived);
             m_fightManager.VisualizeCombat(result);
         }
 

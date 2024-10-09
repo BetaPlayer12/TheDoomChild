@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 6595168835837241946}
   - component: {fileID: 8098791800625918690}
   - component: {fileID: 3222118740646109402}
+  - component: {fileID: 811352062979872810}
   m_Layer: 0
   m_Name: ArmyBattleScenario - Basic
   m_TagString: Untagged
@@ -71,13 +72,43 @@ MonoBehaviour:
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
     SerializationNodes:
+    - Name: m_trackerManager
+      Entry: 7
+      Data: 0|DChild.Gameplay.ArmyBattle.ArmyBattleScenarioTrackerManager, Assembly-CSharp
+    - Name: m_trackersTypesToCreate
+      Entry: 7
+      Data: 1|DChild.Gameplay.ArmyBattle.ArmyBattleTrackerType[], Assembly-CSharp
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: m_trackers
+      Entry: 7
+      Data: 2|DChild.Gameplay.ArmyBattle.IArmyBattleScenarioTracker[], Assembly-CSharp
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
     - Name: m_dialoguePriorityPairs
       Entry: 7
-      Data: 0|UnityEngine.Rendering.SerializedDictionary`2[[PixelCrushers.DialogueSystem.DialogueSystemTrigger,
+      Data: 3|UnityEngine.Rendering.SerializedDictionary`2[[PixelCrushers.DialogueSystem.DialogueSystemTrigger,
         Assembly-CSharp-firstpass],[System.Int32, mscorlib]], Unity.RenderPipelines.Core.Runtime
     - Name: comparer
       Entry: 7
-      Data: 1|System.Collections.Generic.ObjectEqualityComparer`1[[PixelCrushers.DialogueSystem.DialogueSystemTrigger,
+      Data: 4|System.Collections.Generic.ObjectEqualityComparer`1[[PixelCrushers.DialogueSystem.DialogueSystemTrigger,
         Assembly-CSharp-firstpass]], mscorlib
     - Name: 
       Entry: 8
@@ -91,3 +122,28 @@ MonoBehaviour:
     - Name: 
       Entry: 8
       Data: 
+--- !u!114 &811352062979872810
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5059631543305792888}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6546d1f34e0077748a93d4c356aa9411, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  addTrigger: 16
+  removeTrigger: 512
+  databases:
+  - {fileID: 11400000, guid: bcceefa5f349c41438c469ec95b91d2c, type: 2}
+  condition:
+    luaConditions: []
+    questConditions: []
+    acceptedTags: []
+    acceptedGameObjects: []
+    luaWizardIndex: -1
+    lastEvaluationValue: 0
+  once: 0
+  onePerFrame: 0

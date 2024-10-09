@@ -39,6 +39,7 @@ namespace DChild.Gameplay.ArmyBattle.Visualizer
 
             public ArmyBattalionManager battalion => m_battalion;
             public int troopPerUnit { get; private set; }
+            public int troopCount => m_army.troopCount;
             public bool HasAvailableGroup(DamageType damageType) => m_army.HasAvailableGroup(damageType);
 
 
@@ -114,25 +115,32 @@ namespace DChild.Gameplay.ArmyBattle.Visualizer
         {
             bool hasViableUnitToKillOff = false;
             ArmyUnitsHandle unitHandle = null;
-            var maxAttempts = 3;
-            for (int attempts = 1; attempts <= maxAttempts; attempts++)
+            if (reference.troopCount <= 0)
             {
-                var damageType = (DamageType)index;
-                unitHandle = reference.battalion.GetUnitHandle(damageType);
-                if (unitHandle.GetUnitCount() == 0)
-                {
-                    NextIndex(ref index);
-                    continue;
-                }
-
-                if (unitHandle.GetUnitCount() == 1 && reference.HasAvailableGroup(damageType))
-                {
-                    NextIndex(ref index);
-                    continue;
-                }
-
                 hasViableUnitToKillOff = true;
-                break;
+            }
+            else
+            {
+                var maxAttempts = 3;
+                for (int attempts = 1; attempts <= maxAttempts; attempts++)
+                {
+                    var damageType = (DamageType)index;
+                    unitHandle = reference.battalion.GetUnitHandle(damageType);
+                    if (unitHandle.GetUnitCount() == 0)
+                    {
+                        NextIndex(ref index);
+                        continue;
+                    }
+
+                    if (unitHandle.GetUnitCount() == 1 && reference.HasAvailableGroup(damageType))
+                    {
+                        NextIndex(ref index);
+                        continue;
+                    }
+
+                    hasViableUnitToKillOff = true;
+                    break;
+                }
             }
 
             if (hasViableUnitToKillOff)
@@ -160,10 +168,14 @@ namespace DChild.Gameplay.ArmyBattle.Visualizer
 
         private int CalculateUnitsToKillOff(ArmyBattalionManager battalion, int remainingTroopCount, int troopPerUnit)
         {
-            var numberOfUnitsToLive = Mathf.CeilToInt(remainingTroopCount / troopPerUnit);
-            var currentLiveUnits = battalion.GetTotalUnitCount();
-            var unitsToKillOff = currentLiveUnits - numberOfUnitsToLive;
-            return unitsToKillOff;
+            if (remainingTroopCount > 0)
+            {
+                var numberOfUnitsToLive = Mathf.CeilToInt(remainingTroopCount / troopPerUnit);
+                var currentLiveUnits = battalion.GetTotalUnitCount();
+                var unitsToKillOff = currentLiveUnits - numberOfUnitsToLive;
+                return unitsToKillOff;
+            }
+            return battalion.GetTotalUnitCount();
         }
     }
 }

@@ -15,6 +15,20 @@ namespace DChild.Gameplay.ArmyBattle
             m_chosenAttack = chosenAttack;
         }
 
+        public bool HasViableTurnOptions()
+        {
+            for (int i = 0; i < (int)DamageType._COUNT; i++)
+            {
+                if (m_controlledArmy.HasAvailableGroup((DamageType)i))
+                {
+                    return true;
+                }
+            }
+
+
+            return false;
+        }
+
         public override ArmyTurnAction GetTurnAction(int turnNumber)
         {
             if (m_chosenAttack == null)
