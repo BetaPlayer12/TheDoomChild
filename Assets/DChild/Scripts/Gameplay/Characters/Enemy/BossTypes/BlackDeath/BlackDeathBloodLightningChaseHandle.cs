@@ -74,8 +74,12 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             BlackDeathBloodLightning instance = m_pool[poolIndex];
 
-            var spawnPosition = m_toChase.position;
+            /*var spawnPosition = m_toChase.position;
             spawnPosition.y = transform.position.y;
+            instance.transform.position = spawnPosition;
+            instance.gameObject.SetActive(true);
+            instance.Execute();*/
+            var spawnPosition = new Vector3(m_toChase.position.x, transform.position.y, transform.position.z);
             instance.transform.position = spawnPosition;
             instance.gameObject.SetActive(true);
             instance.Execute();

@@ -1,4 +1,6 @@
-﻿using Holysoft.Event;
+﻿using DChild.Gameplay;
+using DChild.Gameplay.Characters.Players;
+using Holysoft.Event;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,6 +11,13 @@ public class BlackDeathHitDetector : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        PlayerHit?.Invoke(this, new EventActionArgs());
+        var playerObject = collision.gameObject.GetComponentInParent<PlayerControlledObject>();
+        if (playerObject != null && collision.tag != "Sensor" && playerObject.owner == (IPlayer)GameplaySystem.playerManager.player)
+        {
+            if (collision.tag == "Hitbox")
+            {
+                PlayerHit?.Invoke(this, new EventActionArgs());
+            }
+        }
     }
 }

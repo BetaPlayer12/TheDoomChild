@@ -20,10 +20,10 @@ public class WardingCrystalEffects
         m_increaseDamageMinion.MultiplyMinionDamage(minion);
     }
     
-    public void SoulEssenceBuff(List<GameObject> minions)
-    {
-        m_soulEssenceDropper.SoulEssenceCoroutine(minions);
-    }
+    //public void SoulEssenceBuff(List<GameObject> minions)
+    //{
+    //    m_soulEssenceDropper.SoulEssenceCoroutine(minions);
+    //}
 
     public void ShowVFX(GameObject minion)
     {
@@ -41,13 +41,23 @@ public class WardingCrystalEffects
     {
         m_increaseDamageMinion.ResetBaseDamage(minion);
     }
-    public void SetStatusEssenceDrop(bool value)
+    //public void SetStatusEssenceDrop(bool value)
+    //{
+    //    m_soulEssenceDropper.SetBuffValue(value);
+    //}
+    //public void MinionCount(bool value, List<GameObject> minions)
+    //{
+    //    m_soulEssenceDropper.MinionChecker(value, minions);
+    //}
+
+    public void RegisterDropBuff(GameObject minion)
     {
-        m_soulEssenceDropper.SetBuffValue(value);
+        m_soulEssenceDropper.RegisterMinion(minion);
     }
-    public void MinionCount(bool value, List<GameObject> minions)
+
+    public void UnregisterDropBuff(GameObject minion)
     {
-        m_soulEssenceDropper.MinionChecker(value, minions);
+        m_soulEssenceDropper.UnregisterMinion(minion);
     }
     public void ReturnBaseHealthMinion(GameObject minion)
     {
