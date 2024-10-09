@@ -42,14 +42,14 @@ namespace DChild.Gameplay.ArmyBattle
             ResetGroupAvailability();
         }
 
-        public int AddTroopCount(int additionalTroops)
+        public void AddTroopCount(int additionalTroops)
         {
-            return m_troopCount + additionalTroops;
+             m_troopCount += additionalTroops;
         }
 
-        public int SubtractTroopCount(int subtractedTroops)
+        public void SubtractTroopCount(int subtractedTroops)
         {
-            return m_troopCount - subtractedTroops;
+             m_troopCount -= subtractedTroops;
         }
 
         public void ResetTroopCount()

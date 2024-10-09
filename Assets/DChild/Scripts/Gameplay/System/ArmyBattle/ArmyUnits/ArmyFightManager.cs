@@ -56,10 +56,16 @@ namespace DChild.Gameplay.ArmyBattle.Visualizer
             m_player.Attack(result.player.attackType, m_enemy);
             m_enemy.Attack(result.enemy.attackType, m_player);
 
+            m_player.ShowBeingHit(true);
+            m_enemy.ShowBeingHit(true);
+
             yield return new WaitForSeconds(m_fightDuration);
 
             m_player.StopAttack();
             m_enemy.StopAttack();
+
+            m_player.ShowBeingHit(false);
+            m_enemy.ShowBeingHit(false);
 
             yield return new WaitForSeconds(m_postAttackDuration);
 

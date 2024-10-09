@@ -1,4 +1,5 @@
 ﻿using DChild.Gameplay.ArmyBattle.Units;
+using DChild.Gameplay.ArmyBattle.Visualizer;
 using Sirenix.OdinInspector;
 using System.Linq;
 using UnityEngine;
@@ -9,6 +10,8 @@ namespace DChild.Gameplay.ArmyBattle.Battalion
     {
         [SerializeField]
         private ArmyBattalionGenerator m_unitGenerator;
+        [SerializeField]
+        private ArmySpecialSkillVfx m_beingHitVFX;
         [SerializeField, TabGroup("Units", "Melee"), HideLabel]
         private ArmyUnitsHandle m_meleeUnitsHandle;
         [SerializeField, TabGroup("Units", "Range"), HideLabel]
@@ -77,6 +80,18 @@ namespace DChild.Gameplay.ArmyBattle.Battalion
                     return m_magicUnitsHandle;
                 default:
                     return null;
+            }
+        }
+
+        public void ShowBeingHit(bool isBeingHit)
+        {
+            if (isBeingHit)
+            {
+                m_beingHitVFX.PlayEffects();
+            }
+            else
+            {
+                m_beingHitVFX.StopEffects();
             }
         }
     }

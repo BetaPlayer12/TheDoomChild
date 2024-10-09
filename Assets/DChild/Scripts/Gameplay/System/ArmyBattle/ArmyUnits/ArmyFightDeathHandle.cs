@@ -118,6 +118,8 @@ namespace DChild.Gameplay.ArmyBattle.Visualizer
             if (reference.troopCount <= 0)
             {
                 hasViableUnitToKillOff = true;
+                var damageType = (DamageType)index;
+                unitHandle = reference.battalion.GetUnitHandle(damageType);
             }
             else
             {
