@@ -11,7 +11,7 @@ namespace DChild.Gameplay.ArmyBattle.Visualizer
         [SerializeField]
         private bool m_spawnAtTarget;
         [SerializeField]
-        private ParticleSystem m_fx;
+        private ArmySpecialSkillVfx m_fx;
 
         public override void Attack(List<ArmyUnit> units, IArmyBattalion target)
         {
@@ -19,12 +19,19 @@ namespace DChild.Gameplay.ArmyBattle.Visualizer
             {
                 m_fx.transform.position = target.centerPosition;
             }
-            m_fx.Play(true);
+            if (m_fx!=null)
+            {
+                m_fx.PlayEffects();
+            }
+            
         }
 
         public override void StopAttack(List<ArmyUnit> units)
         {
-            m_fx.Stop(true, ParticleSystemStopBehavior.StopEmitting);
+            if (m_fx != null)
+            {
+                m_fx.StopEffects();
+            }
         }
     }
 }
