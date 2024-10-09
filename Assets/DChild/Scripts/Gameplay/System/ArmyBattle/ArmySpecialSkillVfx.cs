@@ -90,7 +90,7 @@ namespace DChild.Gameplay.ArmyBattle
         private int m_currentturn=1;
         private SkeletonAnimation skeletonAnimation;
         [Button, HideInPrefabAssets]
-        private void PlayEffects()
+        public void PlayEffects()
         {
             for (int i = 0; i < m_vfxParticleTurnManager.Count; i++)
             {
@@ -140,7 +140,23 @@ namespace DChild.Gameplay.ArmyBattle
             }
 
         }
-      
+        public void StopEffects()
+        {
+            for (int i = 0; i < m_vfxParticleTurnManager.Count; i++)
+            {
+
+               
+                    for (int x = 0; x < m_vfxParticleTurnManager[i].m_fxPartcileSystem.Count; x++)
+                    {
+                        m_vfxParticleTurnManager[i].m_fxPartcileSystem[x].Stop(true, ParticleSystemStopBehavior.StopEmitting);
+                    }
+
+
+
+            }
+          
+
+        }
         private IEnumerator PlayEventRoutine(GameObject Spineasset, String animation,float delaytime, SpineEventListener spineListener, string particleevent, ParticleSystem eventPartcileSystem)
         {
 
