@@ -93,6 +93,22 @@ namespace DChild.Gameplay.Combat.StatusAilment
             }
         }
 
+        public void EnableUpdatableEffects()
+        {
+            for (int i = 0; i < m_inflictedStatusEffects.Count; i++)
+            {
+                m_inflictedStatusEffects[i].EnableModules();
+            }
+        }
+
+        public void DisableUpdatableEffects()
+        {
+            for (int i = 0; i < m_inflictedStatusEffects.Count; i++)
+            {
+                m_inflictedStatusEffects[i].DisableModules();
+            }
+        }
+
         public void RemoveAllActiveStatusEffects()
         {
             foreach (var statusEffect in m_inflictedStatusEffects)

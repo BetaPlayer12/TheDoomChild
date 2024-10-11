@@ -171,6 +171,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator ExplodeRoutine()
         {
+            enabled = false;
             if (m_health.isEmpty)
             {
                 yield return new WaitUntil(() => m_damageContactLocator.damageContactPoint != Vector2.zero);
@@ -193,6 +194,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_explodeBB.enabled = true;
             yield return new WaitForSeconds(.25f);
             m_explodeBB.enabled = false;
+            yield return new WaitForSeconds(1f);
             m_parentObject.SetActive(false);
             yield return null;
         }

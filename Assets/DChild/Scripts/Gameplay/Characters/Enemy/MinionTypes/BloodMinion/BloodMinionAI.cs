@@ -243,7 +243,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_deathFX.Play();
             base.OnDestroyed(sender, eventArgs);
             m_attackBB.SetActive(false);
-            
+
             m_movement.Stop();
             m_selfCollider.SetActive(false);
         }
@@ -261,6 +261,11 @@ namespace DChild.Gameplay.Characters.Enemies
                     if (!IsFacingTarget())
                     {
                         CustomTurn();
+                        m_flinchHandle.SetAnimation(m_info.flinchAnimation.animation);
+                    }
+                    else
+                    {
+                        m_flinchHandle.SetAnimation(m_info.flinch2Animation.animation);
                     }
                     var flinchFX = Instantiate(m_flinchFX.gameObject, m_flinchFX.transform.position, Quaternion.identity);
                     flinchFX.transform.GetChild(0).GetComponent<ParticleSystemRenderer>().flip = transform.position.x > m_targetInfo.position.x ? Vector3.zero : Vector3.right;
@@ -317,6 +322,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator AttackRoutine()
         {
+            m_flinchHandle.enabled = true;
             m_attackBB.SetActive(true);
             m_selfCollider.SetActive(false);
             m_isSubmerged = false;
@@ -324,16 +330,15 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_info.imerseAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.imerseAnimation);
             m_hitbox.Disable();
-            m_slashFX.gameObject.SetActive(true);
-            m_slashFX.GetComponent<ParticleSystemRenderer>().flip = m_character.facing == HorizontalDirection.Right ? Vector3.zero : Vector3.right;
-            m_slashFX.Play();
-            m_animation.SetAnimation(0, m_info.attack1.animation, false);
+            m_animation.SetAnimation(0, m_info.attack1, false);
             yield return new WaitForSeconds(m_info.attackHitboxDelay);
+            m_slashFX.GetComponent<ParticleSystemRenderer>().flip = m_character.facing == HorizontalDirection.Right ? Vector3.zero : Vector3.right;
             m_hitbox.Enable();
+            yield return new WaitForSeconds(.5f);
+            m_slashFX.Play();
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack1.animation);
             m_attackBB.SetActive(false);
             m_selfCollider.SetActive(true);
-            m_slashFX.gameObject.SetActive(false);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_stateHandle.ApplyQueuedState();
             yield return null;
@@ -343,12 +348,12 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_hitbox.Disable();
             m_animation.EnableRootMotion(true, false);
-            m_flinchHandle.gameObject.SetActive(false);
-            m_animation.SetAnimation(0, m_info.retreatAnimation, false);
+            m_flinchHandle.enabled = false;
+            AIBrainUtility.SetAnimation(m_animation, 0, m_info.retreatAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.retreatAnimation);
-            m_animation.SetAnimation(0, m_info.submergIdleAnimation, true);
+            AIBrainUtility.SetAnimation(m_animation, 0, m_info.submergIdleAnimation, true);
             //m_hitbox.gameObject.SetActive(true);
-            //m_flinchHandle.gameObject.SetActive(true);
+
             m_isSubmerged = true;
             m_stateHandle.ApplyQueuedState();
             yield return null;
@@ -357,18 +362,19 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator DetectRoutine()
         {
             m_hitbox.Enable();
-            m_animation.SetAnimation(0, m_info.imerseAnimation, false);
+            m_flinchHandle.enabled = true;
+            AIBrainUtility.SetAnimation(m_animation, 0, m_info.imerseAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.imerseAnimation);
-            m_animation.SetAnimation(0, m_info.idleAnimation, true);
+            AIBrainUtility.SetAnimation(m_animation, 0, m_info.idleAnimation, true);
             m_stateHandle.OverrideState(State.ReevaluateSituation);
             yield return null;
         }
 
         private IEnumerator SubmerseRoutine()
         {
-            m_animation.SetAnimation(0, m_info.submergAnimation, false);
+            AIBrainUtility.SetAnimation(m_animation, 0, m_info.submergAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.submergAnimation);
-            m_animation.SetAnimation(0, m_info.submergIdleAnimation, true);
+            AIBrainUtility.SetAnimation(m_animation, 0, m_info.submergIdleAnimation, true);
             m_stateHandle.ApplyQueuedState();
             yield return null;
         }
@@ -376,6 +382,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator ImerseRoutine()
         {
             m_hitbox.Enable();
+            m_flinchHandle.enabled = true;
             m_animation.SetAnimation(0, m_info.imerseAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.imerseAnimation);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
@@ -391,14 +398,15 @@ namespace DChild.Gameplay.Characters.Enemies
             m_hitbox.Disable();
             m_startPoint = transform.position;
             m_deathFX.gameObject.SetActive(false);
-            m_slashFX.gameObject.SetActive(false);
+            //m_slashFX.gameObject.SetActive(false);
             m_flinchFX.gameObject.SetActive(false);
         }
 
         protected override void Awake()
         {
             base.Awake();
-            
+
+
             m_patrolHandle.TurnRequest += OnTurnRequest;
             m_attackHandle.AttackDone += OnAttackDone;
             m_turnHandle.TurnDone += OnTurnDone;

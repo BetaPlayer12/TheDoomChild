@@ -1,6 +1,7 @@
 ﻿using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Tracing;
 using UnityEngine;
 
 namespace DChild.Gameplay.Combat.StatusAilment
@@ -53,6 +54,11 @@ namespace DChild.Gameplay.Combat.StatusAilment
             }
         }
 
+        public void InflictStatusTo(StatusEffectReciever reciever)
+        {
+           GameplaySystem.combatManager.Inflict(reciever, m_statusInflictions.ToArray());
+        }
+
         private bool Contains(StatusEffectType type, out int index)
         {
             for (int i = 0; i < m_statusInflictions.Count; i++)
@@ -95,12 +101,12 @@ namespace DChild.Gameplay.Combat.StatusAilment
 
         private void Awake()
         {
-            GetComponent<IAttacker>().TargetDamaged += OnTargetDamage;
             m_statusInflictions = new List<StatusEffectChance>();
             if (m_data != null)
             {
                 CopyData();
             }
+            GetComponent<IAttacker>().TargetDamaged += OnTargetDamage;
         }
     }
 }

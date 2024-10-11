@@ -19,6 +19,16 @@ namespace DChild.Gameplay.Characters
 
         private bool m_isTurning;
         private string m_turnAnimation;
+        
+        /// <summary>
+        /// Use Only for Special Scenarios do not rely on this to replace Other Turn Handles
+        /// </summary>
+        public void ExecuteWithAnimationByPass()
+        {
+            TurnCharacter();
+            Vector3 currentScale = GetFacingScale(m_character.facing);
+            m_character.transform.localScale = currentScale;
+        }
 
         public void Execute(string turn, string idle)
         {

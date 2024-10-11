@@ -1,4 +1,5 @@
 ﻿using DChild.Gameplay.Characters.Players.Behaviour;
+using Holysoft.Event;
 using Sirenix.OdinInspector;
 using Spine.Unity;
 using System.Collections.Generic;
@@ -50,6 +51,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         private Animator m_fxAnimator;
         private SkeletonAnimation m_skeletonAnimation;
+
+        public event EventAction<EventActionArgs> OnSlash;
 
         public bool CanSlashCombo() => m_canSlashCombo;
         public bool CanMove() => m_canMove;
@@ -106,6 +109,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
             m_comboResetDelayTimer = m_slashComboInfo[m_currentSlashState].nextAttackDelay;
             m_slashMovementCooldownTimer = /*m_slashMovementCooldown*/m_configuration.slashMovementCooldown;
+            OnSlash?.Invoke(this, EventActionArgs.Empty);
         }
 
         public override void Cancel()

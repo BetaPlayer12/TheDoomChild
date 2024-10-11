@@ -474,7 +474,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_character: {fileID: 6026451074131739425}
   m_animation: {fileID: 5918097056935352766}
-  m_data: {fileID: 11400000, guid: 215ea4c86c2037b42a51fff1dda0dd75, type: 2}
+  m_data: {fileID: 11400000, guid: c57e858da3a4fad418b4cfcd09678f44, type: 2}
   m_damageable: {fileID: 8363551329662513752}
   m_centerMass: {fileID: 3840825424827412376}
   m_aggroBoundary: {fileID: 4612278693585414296}
@@ -490,6 +490,7 @@ MonoBehaviour:
   - {fileID: 4100210840397477033}
   - {fileID: 8095325689234494107}
   - {fileID: 5502724921940747238}
+  m_physics: {fileID: 0}
   m_movement: {fileID: 8332211477544409607}
   m_patrolHandle: {fileID: 8332211477544409604}
   m_deathHandle: {fileID: 4963371031055754244}
@@ -542,7 +543,7 @@ MonoBehaviour:
     m_skeletonAnimations:
     - {fileID: 2663917853206931596}
     m_baseTimeScale:
-    - 2
+    - 1
   m_physicsObjects:
     m_rigidbody2Ds:
     - {fileID: 7443763812392699169}
@@ -1114,9 +1115,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7998054586090003138, guid: 3988d9f8370c0f9499f5e669f944d9f6,
         type: 3}
-      propertyPath: timeScale
-      value: 2
-      objectReference: {fileID: 0}
+      propertyPath: skeletonDataAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: e9c1b7245fb21de4d9173fae910e958f,
+        type: 2}
     - target: {fileID: 7998054586090003139, guid: 3988d9f8370c0f9499f5e669f944d9f6,
         type: 3}
       propertyPath: m_RootOrder
@@ -1177,6 +1179,11 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 7998054586090003149, guid: 3988d9f8370c0f9499f5e669f944d9f6,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 4d94155c4754df049b8f48b34439d7b5, type: 2}
     - target: {fileID: 8058928431458402374, guid: 3988d9f8370c0f9499f5e669f944d9f6,
         type: 3}
       propertyPath: m_LocalRotation.w

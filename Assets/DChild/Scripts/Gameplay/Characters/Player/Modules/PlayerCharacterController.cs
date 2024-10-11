@@ -102,6 +102,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private bool m_updateEnabled = true;
 
         public event EventAction<EventActionArgs> ControllerDisabled;
+        public event EventAction<EventActionArgs> ControllerEnabled;
 
         public void Disable()
         {
@@ -152,11 +153,13 @@ namespace DChild.Gameplay.Characters.Players.Modules
             {
                 m_movement?.SwitchConfigTo(Movement.Type.Jog);
             }
+            ControllerDisabled?.Invoke(this, EventActionArgs.Empty);
         }
 
         public void Enable()
         {
             m_updateEnabled = true;
+            ControllerEnabled?.Invoke(this, EventActionArgs.Empty);
         }
 
         private void HasTeleported(object sender, EventActionArgs eventArgs)
@@ -218,6 +221,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 #region Groundedness Switch
                 m_dash.Reset();
                 m_slide.Reset();
+                m_objectManipulation?.Cancel();
                 if (m_state.isGrounded)
                 {
                     m_physicsMat.SetPhysicsTo(PlayerPhysicsMatHandle.Type.Ground);
@@ -508,7 +512,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         private void FixedUpdate()
         {
-
             if (m_state.isDead)
                 return;
 
@@ -917,7 +920,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 {
                     if (m_state.isInShadowMode == false)
                     {
-                        if (m_skills.IsModuleActive(PrimarySkill.Dash) && m_state.canDash)
+                        if ((m_skills.IsModuleActive(PrimarySkill.Dash) || m_skills.IsModuleActive(PrimarySkill.ShadowDash)) && m_state.canDash)
                         {
                             m_wallStick?.Cancel();
                             FlipCharacter();
@@ -1225,7 +1228,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 {
                     if (m_state.isInShadowMode == false)
                     {
-                        if (m_skills.IsModuleActive(PrimarySkill.Dash) && m_state.canDash)
+                        if ((m_skills.IsModuleActive(PrimarySkill.Dash) || m_skills.IsModuleActive(PrimarySkill.ShadowDash)) && m_state.canDash)
                         {
                             if (m_state.isLevitating)
                             {
@@ -1255,7 +1258,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                         }
                     }
                 }
-                else if (((m_input.levitatePressed && m_state.isLevitating == false) || (m_input.levitateHeld && m_state.isLevitating == false)) && m_devilWings.CanLevitate() && !m_input.backDiverPressed)
+                else if (((m_input.levitatePressed && m_state.isLevitating == false) /*|| (m_input.levitateHeld && m_state.isLevitating == false)*/) && m_devilWings.CanLevitate() && !m_input.backDiverPressed)
                 {
                     if (m_state.isInShadowMode == false)
                     {
@@ -1299,7 +1302,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
                     if (m_input.horizontalInput != 0)
                     {
-                        if (m_state.isHighJumping == false && m_state.isLevitating == false)
+                        if (m_state.isHighJumping == false)
                         {
                             if (m_state.isInShadowMode == false)
                             {
@@ -1309,6 +1312,10 @@ namespace DChild.Gameplay.Characters.Players.Modules
                                     {
                                         if (m_wallStick?.IsThereAWall() ?? false)
                                         {
+                                            if (m_state.isLevitating)
+                                            {
+                                                m_devilWings?.Cancel();
+                                            }
                                             m_dash?.Reset();
                                             m_extraJump?.Reset();
                                             m_wallStick?.Execute();
@@ -1321,7 +1328,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 }
                 #endregion
 
-                if (m_input.levitateHeld && !m_devilWings.CanDetectWall() && (m_devilWings?.HaveEnoughSourceForMaintainingHeight() ?? true) == true)
+                if (m_input.levitateHeld && (m_devilWings?.HaveEnoughSourceForMaintainingHeight() ?? true) == true)
                     m_devilWings.EnableLevitate();
 
                 if (m_state.isLevitating)
@@ -1329,7 +1336,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     m_devilWings?.MaintainHeight();
                     m_devilWings?.GiveMovementBoost();
                     m_devilWings?.ConsumeSource();
-                    if (m_input.levitateHeld == false || (m_devilWings?.HaveEnoughSourceForMaintainingHeight() ?? true) == false || m_devilWings.CanDetectWall())
+                    if (m_input.levitateHeld == false || (m_devilWings?.HaveEnoughSourceForMaintainingHeight() ?? true) == false)
                     {
                         m_devilWings?.Cancel();
                     }
@@ -1431,7 +1438,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             {
                 HandleSlide();
 
-                if (m_input.jumpPressed)
+                if (m_skills.IsModuleActive(PlayerBehaviour.Jump) && m_input.jumpPressed)
                 {
                     if (m_crouch?.IsThereNoCeiling() ?? true)
                     {
@@ -1576,7 +1583,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             else if (m_state.isDashing)
             {
                 HandleDash();
-                if (m_input.jumpPressed)
+                if (m_skills.IsModuleActive(PlayerBehaviour.Jump) && m_input.jumpPressed)
                 {
                     m_activeDash?.Cancel();
                     m_movement?.SwitchConfigTo(Movement.Type.MidAir);
@@ -1613,23 +1620,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     m_movement?.SwitchConfigTo(Movement.Type.Jog);
                     m_objectManipulation?.Cancel();
                 }
-                //else if (m_input.dashPressed)
-                //{
-                //    if (m_state.isInShadowMode == false)
-                //    {
-                //        if (m_state.isInShadowMode == false)
-                //        {
-                //            if (m_skills.IsModuleActive(PrimarySkill.Dash) && m_state.canDash)
-                //            {
-                //                m_idle?.Cancel();
-                //                m_movement?.Cancel();
-                //                m_objectManipulation?.Cancel();
-                //                m_movement?.SwitchConfigTo(Movement.Type.Jog);
-                //                ExecuteDash();
-                //            }
-                //        }
-                //    }
-                //}
                 else
                 {
                     if (m_objectManipulation.IsThereAMovableObject())
@@ -2078,7 +2068,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 {
                     if (m_state.isInShadowMode == false)
                     {
-                        if (m_skills.IsModuleActive(PrimarySkill.Dash) && m_state.canDash)
+                        if ((m_skills.IsModuleActive(PrimarySkill.Dash) || m_skills.IsModuleActive(PrimarySkill.ShadowDash)) && m_state.canDash)
                         {
                             m_idle?.Cancel();
                             m_movement?.Cancel();
@@ -2090,7 +2080,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                         }
                     }
                 }
-                else if (m_input.jumpPressed && m_earthShaker.CanEarthShaker() && !m_input.backDiverPressed)
+                else if (m_skills.IsModuleActive(PlayerBehaviour.Jump) && m_input.jumpPressed && m_earthShaker.CanEarthShaker() && !m_input.backDiverPressed)
                 {
                     if (m_state.isInShadowMode == false)
                     {
@@ -2227,12 +2217,12 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     m_activeDash = m_shadowDash;
                     m_shadowDash.ConsumeSource();
                 }
-                else
+                else if (m_skills.IsModuleActive(PrimarySkill.Dash))
                 {
                     m_activeDash = m_dash;
                 }
             }
-            else
+            else if (m_skills.IsModuleActive(PrimarySkill.Dash))
             {
                 m_activeDash = m_dash;
             }

@@ -566,7 +566,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1763678174141112646}
   m_LocalRotation: {x: -0, y: -0, z: -0.9624197, w: -0.27156654}
-  m_LocalPosition: {x: 0.8480003, y: -0.8051456, z: 0}
+  m_LocalPosition: {x: 0.848001, y: -0.8051413, z: 0}
   m_LocalScale: {x: 1, y: -1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1515,7 +1515,7 @@ GameObject:
   - component: {fileID: 5420690100650373373}
   - component: {fileID: 4529077312605847613}
   - component: {fileID: 1207111588110111173}
-  - component: {fileID: 1133376052414547392}
+  - component: {fileID: 1061393082600423668}
   m_Layer: 13
   m_Name: AttackBB
   m_TagString: Untagged
@@ -1531,7 +1531,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5762822096744136105}
   m_LocalRotation: {x: -0, y: -0, z: -0.29966775, w: 0.9540436}
-  m_LocalPosition: {x: 0.54515076, y: 3.5520144, z: 0}
+  m_LocalPosition: {x: 0.5451546, y: 3.5520144, z: 0}
   m_LocalScale: {x: 1, y: -1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1575,7 +1575,7 @@ MonoBehaviour:
   followLocalScale: 0
   initializeOnAwake: 1
   m_updateOnFixedUpdate: 0
---- !u!60 &1133376052414547392
+--- !u!60 &1061393082600423668
 PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1844,6 +1844,8 @@ GameObject:
   - component: {fileID: 5426910346324179882}
   - component: {fileID: 5683350545633638061}
   - component: {fileID: 4225912763276408686}
+  - component: {fileID: 4010113933758843180}
+  - component: {fileID: 1940468538074874013}
   m_Layer: 13
   m_Name: RotlingModel
   m_TagString: Untagged
@@ -1957,7 +1959,7 @@ MonoBehaviour:
   disableRenderingOnOverride: 1
   _animationName: idle
   loop: 1
-  timeScale: 2
+  timeScale: 1
   m_alwaysUpdateMesh: 0
 --- !u!114 &5426910346324179882
 MonoBehaviour:
@@ -2012,6 +2014,39 @@ MonoBehaviour:
   - {fileID: 6405708905129640489}
   - {fileID: 2919494925429375045}
   - {fileID: 5307259491995675156}
+--- !u!114 &4010113933758843180
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6405708903363251952}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6bb0641d37f1cbc418dcf04f60a07c9e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_animation: {fileID: 0}
+  m_renderer: {fileID: 6405708903363251965}
+  m_startDissolveEvent: StartFade
+  m_dissolveDuration: 1
+  m_delay: 0
+--- !u!114 &1940468538074874013
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6405708903363251952}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ce36765c3609a7e438482540600a3b3a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_renderer: {fileID: 6405708903363251965}
+  m_color: {r: 0.34901962, g: 0.34901962, b: 0.34901962, a: 0}
+  m_fadeInDuration: 0.05
+  m_fadeOutDuration: 0.1
 --- !u!1 &6405708905129640495
 GameObject:
   m_ObjectHideFlags: 0

@@ -39,6 +39,8 @@ namespace DChild.Gameplay.Combat
 
         public IAttacker rootParentAttacker { get; private set; }
 
+        public float modifier => m_damageModifier;
+
         public event EventAction<CombatConclusionEventArgs> TargetDamaged;
         public event EventAction<BreakableObjectEventArgs> BreakableObjectDamage;
 
@@ -83,6 +85,10 @@ namespace DChild.Gameplay.Combat
             }
         }
 
+        public Damage GetBaseDamage()
+        {
+            return m_baseDamage;
+        }
         public void SetDamage(Damage damage)
         {
             m_baseDamage = damage;
@@ -138,6 +144,7 @@ namespace DChild.Gameplay.Combat
 
         private void Awake()
         {
+            m_damageModifier = 1;
             if (m_data != null)
             {
                 m_currentAttackInfo = m_data.info;

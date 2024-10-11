@@ -70,18 +70,28 @@ namespace DChild.Gameplay.Characters.Players.SoulSkills
                         }
                         else
                         {
-
-                            if (m_isRegenerating == false)
+                            if (health.currentValue == 0)
                             {
-                                m_isRegenerating = true;
-                                RegenStart?.Invoke(this, EventActionArgs.Empty);
+                                if (m_isRegenerating)
+                                {
+                                    m_isRegenerating = false;
+                                    RegenEnd?.Invoke(this, EventActionArgs.Empty);
+                                }
                             }
-
-                            timer -= GameplaySystem.time.deltaTime;
-                            if (timer <= 0)
+                            else
                             {
-                                GameplaySystem.combatManager.Heal(module, m_info.amount);
-                                timer = m_info.interval;
+                                if (m_isRegenerating == false)
+                                {
+                                    m_isRegenerating = true;
+                                    RegenStart?.Invoke(this, EventActionArgs.Empty);
+                                }
+
+                                timer -= GameplaySystem.time.deltaTime;
+                                if (timer <= 0)
+                                {
+                                    GameplaySystem.combatManager.Heal(module, m_info.amount);
+                                    timer = m_info.interval;
+                                }
                             }
                         }
                     }

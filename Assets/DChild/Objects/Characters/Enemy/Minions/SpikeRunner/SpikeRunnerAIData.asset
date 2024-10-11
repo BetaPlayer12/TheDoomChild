@@ -40,7 +40,7 @@ MonoBehaviour:
       Data: 1
     - Name: m_speed
       Entry: 4
-      Data: 0
+      Data: 25
     - Name: 
       Entry: 8
       Data: 
@@ -56,11 +56,11 @@ MonoBehaviour:
       Data: 1
     - Name: m_speed
       Entry: 4
-      Data: 0
+      Data: 25
     - Name: 
       Entry: 8
       Data: 
-    - Name: m_attack
+    - Name: m_meleeAttack
       Entry: 7
       Data: 3|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.ZombieMushroomAI+Info,
         Assembly-CSharp]], Assembly-CSharp
@@ -72,13 +72,29 @@ MonoBehaviour:
       Data: 1
     - Name: m_range
       Entry: 4
-      Data: 50
+      Data: 25
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: m_chargeAttack
+      Entry: 7
+      Data: 4|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.ZombieMushroomAI+Info,
+        Assembly-CSharp]], Assembly-CSharp
+    - Name: m_animation
+      Entry: 1
+      Data: MoveAttack1
+    - Name: m_timeScale
+      Entry: 4
+      Data: 1
+    - Name: m_range
+      Entry: 4
+      Data: 30
     - Name: 
       Entry: 8
       Data: 
     - Name: m_chargeAttackDuration
       Entry: 4
-      Data: 1
+      Data: 10
     - Name: m_attackCD
       Entry: 4
       Data: 1
@@ -88,9 +104,15 @@ MonoBehaviour:
     - Name: m_targetDistanceTolerance
       Entry: 4
       Data: 100
+    - Name: m_stuckInWallTime
+      Entry: 4
+      Data: 3
+    - Name: m_chargeAirTime
+      Entry: 4
+      Data: 0.5
     - Name: m_idleAnimation
       Entry: 7
-      Data: 4|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.ZombieMushroomAI+Info,
+      Data: 5|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.ZombieMushroomAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
@@ -103,7 +125,7 @@ MonoBehaviour:
       Data: 
     - Name: m_detectAnimation
       Entry: 7
-      Data: 5|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.ZombieMushroomAI+Info,
+      Data: 6|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.ZombieMushroomAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
@@ -116,7 +138,7 @@ MonoBehaviour:
       Data: 
     - Name: m_flinchAnimation
       Entry: 7
-      Data: 6|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.ZombieMushroomAI+Info,
+      Data: 7|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.ZombieMushroomAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
@@ -129,7 +151,7 @@ MonoBehaviour:
       Data: 
     - Name: m_turnAnimation
       Entry: 7
-      Data: 7|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.ZombieMushroomAI+Info,
+      Data: 8|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.ZombieMushroomAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
@@ -142,11 +164,76 @@ MonoBehaviour:
       Data: 
     - Name: m_deathAnimation
       Entry: 7
-      Data: 8|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.ZombieMushroomAI+Info,
+      Data: 9|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.ZombieMushroomAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
       Data: Death
+    - Name: m_timeScale
+      Entry: 4
+      Data: 1
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: m_chargeAttackAnimation
+      Entry: 7
+      Data: 10|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.ZombieMushroomAI+Info,
+        Assembly-CSharp]], Assembly-CSharp
+    - Name: m_animation
+      Entry: 1
+      Data: MoveAttack1
+    - Name: m_timeScale
+      Entry: 4
+      Data: 1
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: m_chargeImpactStickAnimation
+      Entry: 7
+      Data: 11|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.ZombieMushroomAI+Info,
+        Assembly-CSharp]], Assembly-CSharp
+    - Name: m_animation
+      Entry: 1
+      Data: ChargeImpactStick
+    - Name: m_timeScale
+      Entry: 4
+      Data: 1
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: m_stuckLoopAnimation
+      Entry: 7
+      Data: 12|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.ZombieMushroomAI+Info,
+        Assembly-CSharp]], Assembly-CSharp
+    - Name: m_animation
+      Entry: 1
+      Data: StuckLoop
+    - Name: m_timeScale
+      Entry: 4
+      Data: 1
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: m_unstickAnimation
+      Entry: 7
+      Data: 13|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.ZombieMushroomAI+Info,
+        Assembly-CSharp]], Assembly-CSharp
+    - Name: m_animation
+      Entry: 1
+      Data: Unstick
+    - Name: m_timeScale
+      Entry: 4
+      Data: 1
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: m_chargeToThrustAnimation
+      Entry: 7
+      Data: 14|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+BasicAnimationInfo[[DChild.Gameplay.Characters.Enemies.ZombieMushroomAI+Info,
+        Assembly-CSharp]], Assembly-CSharp
+    - Name: m_animation
+      Entry: 1
+      Data: RunToThrust
     - Name: m_timeScale
       Entry: 4
       Data: 1

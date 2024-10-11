@@ -16,6 +16,8 @@ using DChild.Gameplay.Pathfinding;
 using DarkTonic.MasterAudio;
 using DChild.Gameplay.Pooling;
 using DChild.Gameplay.Projectiles;
+using System.ComponentModel;
+using System.Data.SqlClient;
 
 namespace DChild.Gameplay.Characters.Enemies
 {
@@ -151,6 +153,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private Collider2D m_bodyCollider;
         [SerializeField, TabGroup("Reference")]
         private IsolatedObjectPhysics2D m_isolatedObjectPhysics2D;
+        [SerializeField, TabGroup("Reference")]
+        private ParticleSystem IdleEffects;
         [SerializeField, TabGroup("Modules")]
         private TransformTurnHandle m_turnHandle;
         [SerializeField, TabGroup("Modules")]
@@ -183,7 +187,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private ProjectileLauncher m_projectileLauncher;
         private ProjectileLauncher m_projectileLauncher2;
-
+        private Projectile[] m_projectileStorage;
+ 
 
         private bool[] m_attackUsed;
         private List<Attack> m_attackCache;
@@ -195,6 +200,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private bool m_enablePatience;
         private Vector2 m_lastTargetPos;
         private Vector2 m_startPos;
+        private float m_justSummonedDelay = 0f;
 
         private Coroutine m_executeMoveCoroutine;
         private Coroutine m_attackRoutine;
@@ -342,6 +348,7 @@ namespace DChild.Gameplay.Characters.Enemies
         protected override void OnDestroyed(object sender, EventActionArgs eventArgs)
         {
             StopAllCoroutines();
+
             base.OnDestroyed(sender, eventArgs);
             
             if (m_executeMoveCoroutine != null)
@@ -353,6 +360,11 @@ namespace DChild.Gameplay.Characters.Enemies
                 CustomTurn();
 
             m_agent.Stop();
+            for (int z = 0; z < m_projectileStorage.Length; z++)
+            {
+                m_projectileStorage[z].CallPoolRequest();
+            }
+            //component.CallPoolRequest();
             m_bodyCollider.enabled = false;
             m_selfCollider.SetActive(false);
             m_rigidbody2D.constraints = RigidbodyConstraints2D.FreezeRotation;
@@ -370,6 +382,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator DeathRoutine()
         {
+           
             m_agent.Stop();
             Debug.Log("DIE HERE");
             m_animation.SetAnimation(0, m_info.deathStartAnimation, false);
@@ -390,16 +403,19 @@ namespace DChild.Gameplay.Characters.Enemies
 
         public void SummonTome(AITargetInfo target)
         {
-            m_targetInfo = target;
-            transform.position = new Vector2(m_targetInfo.position.x, m_targetInfo.position.y + 10f);
+            //m_targetInfo = target;
+            transform.position = new Vector2(target.position.x, target.position.y + 10f);
             m_isolatedObjectPhysics2D.simulateGravity = false;
             m_hitbox.Enable();
             m_flinchHandle.gameObject.SetActive(true);
             m_health.SetHealthPercentage(1f);
             enabled = true;
+            m_justSummonedDelay = 1.5f;
             this.gameObject.SetActive(true);
             this.transform.SetParent(null);
             Awake();
+            SetTarget(target.GetTargetDamagable());
+            //m_targetInfo = target;
             m_stateHandle.OverrideState(State.ReevaluateSituation);
         }
 
@@ -424,9 +440,15 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator FrostAttackRoutine()
         {
-           // m_attackBlastFX.Play();
+            if (m_justSummonedDelay > 0)
+            {
+                yield return new WaitForSeconds(m_justSummonedDelay);
+                m_justSummonedDelay = 0f;
+            }
+            // m_attackBlastFX.Play();
             //m_attackSparkleFX.Play();
             LaunchProjectile2();
+         
             m_animation.SetAnimation(0, m_info.attackFrostStartAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attackFrostStartAnimation);
             m_animation.SetAnimation(0, m_info.attackFrost.animation, false);
@@ -434,6 +456,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_info.changeAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.changeAnimation);
             LaunchProjectile();
+         
             m_animation.SetAnimation(0, m_info.pattern2Animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.pattern2Animation);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
@@ -447,6 +470,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void LaunchIcePattern(int numberOfProjectiles, int rotations)
         {
+            
             for (int x = 0; x < rotations; x++)
             {
                 float angleStep = 360f / numberOfProjectiles;
@@ -465,6 +489,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     var instance = GameSystem.poolManager.GetPool<ProjectilePool>().GetOrCreateItem(projectile);
                     instance.transform.position = m_character.centerMass.position;
                     var component = instance.GetComponent<Projectile>();
+                    m_projectileStorage[z] = component;
                     component.ResetState();
                     Vector2 v = projectileMoveDirection;
                     var projRotation = Mathf.Atan2(v.y, v.x) * Mathf.Rad2Deg;
@@ -473,11 +498,13 @@ namespace DChild.Gameplay.Characters.Enemies
 
                     angle += angleStep;
                 }
+                
             }
             //yield return null;
         }
         private void LaunchIcePattern2(int numberOfProjectiles, int rotations)
         {
+            
             for (int x = 0; x < rotations; x++)
             {
                 float angleStep = 360f / numberOfProjectiles;
@@ -496,6 +523,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     var instance = GameSystem.poolManager.GetPool<ProjectilePool>().GetOrCreateItem(projectile);
                     instance.transform.position = m_character.centerMass.position;
                     var component = instance.GetComponent<Projectile>();
+                    m_projectileStorage[z] = component;
                     component.ResetState();
                     Vector2 v = projectileMoveDirection;
                     var projRotation = Mathf.Atan2(v.y, v.x) * Mathf.Rad2Deg;
@@ -504,6 +532,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
                     angle += angleStep;
                 }
+               
             }
             //yield return null;
         }
@@ -513,7 +542,9 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return new WaitForSeconds(delay);
             component.GetComponent<Rigidbody2D>().velocity = projectileMoveDirection;
             m_delayLaunchRoutine = null;
-        }
+           
+           
+            }
 
         private void LaunchProjectile()
         {
@@ -667,7 +698,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_stateHandle = new StateHandle<State>(State.Patrol, State.WaitBehaviourEnd);
             m_attackDecider = new RandomAttackDecider<Attack>();
             UpdateAttackDeciderList();
-
+            m_projectileStorage = new Projectile[4];
             m_attackCache = new List<Attack>();
             AddToAttackCache(Attack.AttackFrost);
             m_attackRangeCache = new List<float>();

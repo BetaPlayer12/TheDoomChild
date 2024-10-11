@@ -1,6 +1,7 @@
 ﻿using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 #if UNITY_EDITOR
 #endif
 
@@ -47,21 +48,33 @@ namespace DChild.Gameplay.Characters.AI
         {
             if (hasDecidedOnAttack == false)
             {
-                bool sameAttack = false;
+                bool isSameAttack = false;
                 int chosenAttackIndex = -1;
+                var checkForSameAttack = attackList.Count > 1 && m_maxSameAttackCount > 0;
                 do
                 {
                     var index = UnityEngine.Random.Range(0, attackList.Count);
                     chosenAttack = attackList[index];
                     chosenAttackIndex = Convert.ToInt32(chosenAttack.attack);
-                    sameAttack = m_previousChosenAttack == chosenAttackIndex;
-                } while (m_maxSameAttackCount > 0 && sameAttack && m_maxSameAttackCount == m_sameAttackCount);
-                EvaluateSameAttack(sameAttack, chosenAttackIndex);
+                    isSameAttack = m_previousChosenAttack == chosenAttackIndex;
+
+                } while (checkForSameAttack && isSameAttack && m_maxSameAttackCount <= m_sameAttackCount);
+                EvaluateSameAttack(isSameAttack, chosenAttackIndex);
                 hasDecidedOnAttack = true;
             }
+
+            Debug.Log($"chosen attack : {chosenAttack.attack} \n max same attack count : {m_sameAttackCount}");
         }
 
-
+        public void ForcedDecideOnAttack(int attackIndex)
+        {
+            if(hasDecidedOnAttack == false)
+            {
+                chosenAttack = attackList[attackIndex];
+                hasDecidedOnAttack = true;
+            }
+            
+        }
 
         /// <summary>
         /// 
@@ -79,23 +92,33 @@ namespace DChild.Gameplay.Characters.AI
             {
                 bool sameAttack = false;
                 int chosenAttackIndex = -1;
+                int index = -1;
                 do
                 {
-                    var index = UnityEngine.Random.Range(0, list.Length - 1);
+                    index = UnityEngine.Random.Range(0, list.Length - 1);
                     //chosenAttack = attackList[index];
                     var enumIndex = Convert.ToInt32(list[index]);
                     sameAttack = m_previousChosenAttack == enumIndex;
                     chosenAttackIndex = enumIndex;
                 } while (m_maxSameAttackCount > 0 && sameAttack && m_maxSameAttackCount == m_sameAttackCount);
 
+
+                bool isDecidedAttackPartOfList = false;
                 for (int i = 0; i < attackList.Count; i++)
                 {
                     if (Convert.ToInt32(attackList[i].attack) == chosenAttackIndex)
                     {
                         chosenAttack = attackList[i];
+                        isDecidedAttackPartOfList = true;
                         break;
                     }
                 }
+
+                if (isDecidedAttackPartOfList == false)
+                {
+                    chosenAttack = new AttackInfo<T>(list[index], 0);
+                }
+
                 EvaluateSameAttack(sameAttack, chosenAttackIndex);
                 hasDecidedOnAttack = true;
             }
@@ -109,7 +132,7 @@ namespace DChild.Gameplay.Characters.AI
             }
             else
             {
-                m_sameAttackCount = 0;
+                m_sameAttackCount = 1;
                 m_previousChosenAttack = chosenAttackIndex;
             }
         }

@@ -46,30 +46,33 @@ namespace DChild.Gameplay.Characters.Enemies
 
             [SerializeField, BoxGroup("Sound Wave Attacks")]
             private SimpleProjectileAttackInfo m_frontalScreamInfo = new SimpleProjectileAttackInfo();
+            [SerializeField, MinValue(0), BoxGroup("Sound Wave Attacks")]
+            private float m_frontalScreamAnticipationDuration;
+
             [SerializeField, BoxGroup("Sound Wave Attacks")]
             private SimpleProjectileAttackInfo m_diagonalSoundInfo = new SimpleProjectileAttackInfo();
             [SerializeField, BoxGroup("Sound Wave Attacks")]
             private MovementInfo m_diagonalSoundChaseInfo = new MovementInfo();
-
             [SerializeField, MinValue(1), BoxGroup("Sound Wave Attacks")]
             private float m_diagonalSoundHeight;
             [SerializeField, MinValue(0), BoxGroup("Sound Wave Attacks")]
             private float m_diagonalSoundInterval;
             public SimpleProjectileAttackInfo frontalScreamInfo => m_frontalScreamInfo;
+            public float frontalScreamAnticipationDuration => m_frontalScreamAnticipationDuration;
             public SimpleProjectileAttackInfo diagonalSoundInfo => m_diagonalSoundInfo;
             public MovementInfo diagonalSoundChaseInfo => m_diagonalSoundChaseInfo;
             public float diagonalSoundHeight => m_diagonalSoundHeight;
             public float diagonalSoundInterval => m_diagonalSoundInterval;
 
 
-            [SerializeField, BoxGroup("SoundBallThrow")]
-            private GameObject m_soundBallCharge;
             [SerializeField, HideReferenceObjectPicker, BoxGroup("SoundBallThrow")]
             private ProjectileInfo m_soundBall = new ProjectileInfo();
             [SerializeField, MinValue(0.1), BoxGroup("SoundBallThrow")]
             private float m_soundBallSpawnOffset;
             [SerializeField, BoxGroup("SoundBallThrow")]
             private BasicAnimationInfo m_chargeAnimation;
+            [SerializeField, MinValue(0.1), BoxGroup("SoundBallThrow")]
+            private float m_soundBallChargeDuration;
             [SerializeField, BoxGroup("SoundBallThrow")]
             private BasicAnimationInfo[] m_throwAnimations;
 
@@ -92,10 +95,10 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField, MinValue(0f), BoxGroup("Detonate In Place/Center Summon")]
             private float m_centerSpawnDistance = 1;
 
-            public GameObject soundBallCharge => m_soundBallCharge;
             public ProjectileInfo soundball => m_soundBall;
             public float soundBallSpawnOffset => m_soundBallSpawnOffset;
             public BasicAnimationInfo chargeAnimation => m_chargeAnimation;
+            public float soundBallChargeDuration => m_soundBallChargeDuration;
             public BasicAnimationInfo[] throwAnimations => m_throwAnimations;
             public BasicAnimationInfo summonAnimation => m_summonAnimation;
             public GameObject detonateInPlaceSoundBallsCenter => m_detonateInPlaceSoundBallsCenter;
@@ -215,6 +218,9 @@ namespace DChild.Gameplay.Characters.Enemies
         private SimpleTurnHandle m_turnHandle;
 
         [SerializeField]
+        private ParticleSystem m_frontalScreamIndicator;
+
+        [SerializeField]
         private Transform m_mouth;
         [SerializeField]
         private Transform[] m_pipes;
@@ -239,6 +245,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private PhaseInfo m_currentPhaseInfo;
 
         private float m_targetHeight;
+        private Vector3 m_frontalScreamIndicatorOffset;
         private bool m_hasAttacked;
         private CountdownTimer m_attackIntervalTimer;
         private List<Projectile> m_soundBallList;
@@ -377,13 +384,26 @@ namespace DChild.Gameplay.Characters.Enemies
             } while (isInRange == false);
             LookAt(m_targetInfo.position);
             yield return null;
+            yield return new WaitForSeconds(0.7f);
             m_animation.SetAnimation(0, attackInfo.animation, false);
             m_animation.AddAnimation(0, m_info.idleAnimation, true, 0f);
+
+            ShowFrontalScreamIndicator();
             //Spawn the Thingy via event
             yield return new WaitForAnimationComplete(m_animation.animationState, attackInfo.animation);
             m_hasAttacked = true;
             m_stateHandle.ApplyQueuedState();
             m_phaseHandle.allowPhaseChange = true;
+        }
+
+        private void ShowFrontalScreamIndicator()
+        {
+            m_frontalScreamIndicator.transform.parent = transform;
+            m_frontalScreamIndicator.transform.localPosition = m_frontalScreamIndicatorOffset;
+            m_frontalScreamIndicator.transform.localScale = Vector3.one;
+            m_frontalScreamIndicator.transform.parent = null;
+            m_frontalScreamIndicator.transform.rotation = Quaternion.identity;
+            m_frontalScreamIndicator.Play();
         }
 
         private IEnumerator DiagonalSoundRoutine()
@@ -584,19 +604,17 @@ namespace DChild.Gameplay.Characters.Enemies
             var soundCharges = m_currentPhaseInfo.GetAmountOfSoundBallToThrow(m_health);
             for (int i = 0; i < soundCharges; i++)
             {
-                var chargeInstance = GameSystem.poolManager.GetPool<FXPool>().GetOrCreateItem(m_info.soundBallCharge);
-                chargeInstance.GetComponentInChildren<ParticleCallback>().CallBack += OnChargeDone;
-                chargeInstance.transform.parent = m_soundBallThrowSpawn;
+                var instance = GameSystem.poolManager.GetPool<ProjectilePool>().GetOrCreateItem(m_info.soundball.projectile);
+                instance.transform.parent = m_soundBallThrowSpawn;
                 var offsetIndex = Mathf.CeilToInt((i + 1) / 2f);
                 var sign = Mathf.Pow(-1, i);
-                chargeInstance.transform.localPosition = new Vector3(offsetIndex * m_info.soundBallSpawnOffset * sign, 0, 0);
+                instance.transform.localPosition = new Vector3(offsetIndex * m_info.soundBallSpawnOffset * sign, 0, 0);
+                instance.Launch(Vector2.zero, 0);
+                instance.Impacted += OnEarlyImpact;
+                m_soundBallList.Add(instance);
             }
 
-            while (m_soundBallList.Count != soundCharges)
-            {
-                yield return null;
-            }
-            yield return new WaitForSeconds(1); // Wait for charge animation to be done
+            yield return new WaitForSeconds(m_info.soundBallChargeDuration); // Wait for charge animation to be done
 
             for (int i = 0; i < soundCharges; i++)
             {
@@ -621,18 +639,6 @@ namespace DChild.Gameplay.Characters.Enemies
             m_hasAttacked = true;
             m_stateHandle.ApplyQueuedState();
             m_phaseHandle.allowPhaseChange = true;
-
-            void OnChargeDone(object sender, EventActionArgs eventArgs)
-            {
-                var chargeInstance = (ParticleCallback)sender;
-                chargeInstance.CallBack -= OnChargeDone;
-                var instance = GameSystem.poolManager.GetPool<ProjectilePool>().GetOrCreateItem(m_info.soundball.projectile);
-                instance.transform.parent = chargeInstance.GetComponentInParent<ParticleFX>().transform.parent;
-                instance.transform.position = chargeInstance.transform.position;
-                instance.Launch(Vector2.zero, 0);
-                instance.Impacted += OnEarlyImpact;
-                m_soundBallList.Add(instance);
-            }
 
             void OnEarlyImpact(object sender, EventActionArgs eventArgs)
             {
@@ -669,10 +675,11 @@ namespace DChild.Gameplay.Characters.Enemies
                 for (int i = 0; i < m_pipes.Length; i++)
                 {
                     var instance = GameSystem.poolManager.GetPool<FXPool>().GetOrCreateItem(m_info.diagonalSoundInfo.projectileInfo.projectile);
-                    var scale = instance.transform.localScale;
+                    Vector3 scale = instance.transform.localScale;
                     instance.transform.parent = m_pipes[i];
-                    instance.transform.localPosition = Vector3.zero;
+                    //scale.x = Mathf.Abs(scale.x) * -1;
                     instance.transform.localScale = scale;
+                    instance.transform.localPosition = Vector3.zero;
                     instance.transform.localRotation = Quaternion.Euler(0, 0, 0);
                 }
             }
@@ -683,6 +690,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 instance.transform.parent = m_mouth;
                 instance.transform.localPosition = Vector3.zero;
                 instance.transform.localScale = scale;
+                //instance.transform.localRotation = Quaternion.Euler(0, 0, 0);
                 instance.transform.parent = null;
             }
         }
@@ -709,6 +717,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
             m_soundBallList = new List<Projectile>();
             m_damageable.Destroyed += OnDeath;
+
+            m_frontalScreamIndicatorOffset = m_frontalScreamIndicator.transform.localPosition;
         }
 
 

@@ -12,7 +12,13 @@ namespace DChild.Gameplay
     {
         public void SyncPlayerVisualsWith(SpineSyncer spineSyncer)
         {
+            GameplaySystem.playerManager.player.character.gameObject.SetActive(true);
             GameplaySystem.playerManager.SyncVisualsWith(spineSyncer);
+        }
+
+        public void RemovePlayerModelForCutscene()
+        {
+            GameplaySystem.playerManager.player.character.gameObject.SetActive(false);
         }
 
         public void DoCinematicUIMode(bool value)
@@ -20,9 +26,9 @@ namespace DChild.Gameplay
             GameplaySystem.gamplayUIHandle.ToggleCinematicMode(value);
         }
 
-        public void ForceCinematicUIMode()
+        public void ToggleCinematicBars(bool value)
         {
-            GameplaySystem.gamplayUIHandle.ToggleCinematicMode(true, true);
+            GameplaySystem.gamplayUIHandle.ToggleCinematicBars(value);
         }
 
         public void ToggleBossCombatUI(bool value)
@@ -80,7 +86,7 @@ namespace DChild.Gameplay
                 Debug.Log("enemies active");
             }
             //GameplaySystem.minionManager.ForcePassiveIdle(arePassive);
-            
+
         }
 
         public void SmartTransferPlayerTo(LocationData locationData)

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using DChild.Gameplay.Characters.Players;
 using DChild.Gameplay.Items;
 using Doozy.Runtime.Nody;
@@ -50,7 +51,7 @@ namespace DChild.Gameplay.Inventories
         private FlowController m_graph;
         [SerializeField]
         private QuickItemCooldown m_cooldown;
-
+        [SerializeField]
         private bool m_removeItemCountOnConsume;
         private IStoredItem m_currentItem;
         private ConsumableItemData m_currentItemData;
@@ -59,6 +60,10 @@ namespace DChild.Gameplay.Inventories
         private bool m_hideUI;
         public event EventAction<SelectionEventArgs> SelectedItem;
         public event EventAction<SelectionEventArgs> Update;
+
+        #region PRE_ALPHA
+        public event Action<string> ItemUsed;
+        #endregion
 
 
         public bool isWrapped => m_wrapped;
@@ -76,6 +81,7 @@ namespace DChild.Gameplay.Inventories
                 {
                     m_currentItemData.Use(m_player);
                     m_cooldown.StartCooldown();
+                    ItemUsed?.Invoke(m_currentItemData.itemName);
                 }
                 if (m_removeItemCountOnConsume)
                 {
@@ -241,7 +247,7 @@ namespace DChild.Gameplay.Inventories
             {
                 m_currentItem = m_selections.GetItem(m_currentIndex);
             }
-            m_removeItemCountOnConsume = true;
+            //m_removeItemCountOnConsume = true;
         }
 
         private void Start()
