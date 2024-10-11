@@ -9,6 +9,7 @@ using DChild.Gameplay.SoulSkills;
 using DChild.Gameplay.Inventories;
 using DChild.Gameplay.Characters.Players;
 using DChild.Menu.Codex;
+using DChild.Gameplay.Systems;
 
 namespace DChild.Serialization
 {
@@ -25,12 +26,15 @@ namespace DChild.Serialization
         private PlayerSoulSkillData m_soulSkillData;
         [SerializeField]
         private CombatArtsSaveData m_combatArtsData;
+        [SerializeField]
+        private WeaponUpgradeSaveData m_weaponUpgradeSaveData;
 
         public TradableInventorySerialization inventoryData => m_inventoryData;
         public CodexSaveData codexData { get => m_codexData; }
         public PrimarySkillsData skills { get => m_skills; }
         public PlayerSoulSkillData soulSkillData { get => m_soulSkillData; }
         public CombatArtsSaveData combatArtsData { get => m_combatArtsData; }
+        public WeaponUpgradeSaveData weaponUpgradeSaveData { get => m_weaponUpgradeSaveData;  }
 
         public PlayerCharacterData()
         {
@@ -41,12 +45,13 @@ namespace DChild.Serialization
             m_combatArtsData = new CombatArtsSaveData(new Gameplay.Characters.Player.CombatArt.Leveling.CombatArtLevel.SaveData(),0, new int[0]);
         }
 
-        public PlayerCharacterData(TradableInventorySerialization m_inventoryData, CodexSaveData m_codexData, PrimarySkillsData m_skills, PlayerSoulSkillData m_soulSkillData, CombatArtsSaveData combatArtsData)
+        public PlayerCharacterData(TradableInventorySerialization m_inventoryData, CodexSaveData m_codexData, PrimarySkillsData m_skills, PlayerSoulSkillData m_soulSkillData, CombatArtsSaveData combatArtsData, WeaponUpgradeSaveData weaponUpgradeSaveData)
         {
             this.m_inventoryData = m_inventoryData;
             this.m_codexData = m_codexData;
             this.m_skills = m_skills;
             this.m_soulSkillData = m_soulSkillData;
+            this.m_weaponUpgradeSaveData = weaponUpgradeSaveData;
             m_combatArtsData = combatArtsData;
         }
 

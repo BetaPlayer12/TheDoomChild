@@ -49,11 +49,16 @@ namespace DChild.Gameplay.Combat
 
         public virtual void TakeDamage(int totalDamage, DamageType type)
         {
+            if (!isAlive)
+            {
+                Debug.Log("___1111Im Already dead??");
+                return;
+            }
             m_health?.ReduceCurrentValue(totalDamage);
             CallDamageTaken(totalDamage, type);
             if (m_health?.isEmpty ?? false)
             {
-                Destroyed?.Invoke(this, EventActionArgs.Empty);
+                CallDestroyed();
             }
         }
 
@@ -108,6 +113,11 @@ namespace DChild.Gameplay.Combat
             DamageBlock?.Invoke(this, eventArgs);
         }
 
+        protected void CallDestroyed()
+        {
+            Destroyed?.Invoke(this, EventActionArgs.Empty);
+        }
+
         private void Awake()
         {
             m_hitboxes = GetComponentsInChildren<Hitbox>();
@@ -156,7 +166,7 @@ namespace DChild.Gameplay.Combat
         //    }
         //}
 
-       
+
 #endif
     }
 }

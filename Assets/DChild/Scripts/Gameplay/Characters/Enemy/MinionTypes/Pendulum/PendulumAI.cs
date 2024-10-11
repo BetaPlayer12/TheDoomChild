@@ -152,7 +152,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private RaySensor m_groundSensor;
         [SerializeField, TabGroup("BoundingBox")]
         private List<Collider2D> m_attackBBs;
-
+        [SerializeField, TabGroup("BoundingBox")]
+        private int m_swingnumber;
         [ShowInInspector]
         private StateHandle<State> m_stateHandle;
         [ShowInInspector]
@@ -290,6 +291,7 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_Audiosource.clip = m_DeadClip;
             //m_Audiosource.Play();
             StopAllCoroutines();
+            DisableAttackBB();
             base.OnDestroyed(sender, eventArgs);
             
             m_stateHandle.OverrideState(State.WaitBehaviourEnd);
@@ -419,18 +421,22 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_animation.SetAnimation(0, m_info.attackStartAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attackStartAnimation);
-            while (IsTargetInRange(m_attackDecider.chosenAttack.range + 20))
+
+            for (int i = 0; i < m_swingnumber; i++)
             {
+
                 m_animation.SetAnimation(0, m_info.attack.animation, true);
-                yield return null;
+                yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack.animation);
                 //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack.animation);
                 //m_animation.SetAnimation(0, m_info.attackMidSequenceAnimation, false);
                 //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attackMidSequenceAnimation);
             }
+            DisableAttackBB();
             m_animation.SetAnimation(0, m_info.attackEndAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attackEndAnimation);
             m_animation.SetAnimation(0, RandomIdleAnimation(), true);
             m_stateHandle.ApplyQueuedState();
+            yield return null;
         }
 
         private void EnableAttackBB()
@@ -440,7 +446,13 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_attackBBs[i].enabled = !m_attackBBs[i].enabled;
             }
         }
-
+        private void DisableAttackBB()
+        {
+            for (int i = 0; i < m_attackBBs.Count; i++)
+            {
+                m_attackBBs[i].enabled = false;
+            }
+        }
         protected override void Start()
         {
             base.Start();
@@ -538,8 +550,12 @@ namespace DChild.Gameplay.Characters.Enemies
                     }
                     else
                     {
-                        m_currentCD = 0;
-                        m_stateHandle.OverrideState(State.ReevaluateSituation);
+
+                        if (IsFacingTarget())
+                        {
+                            m_currentCD = 0;
+                            m_stateHandle.OverrideState(State.ReevaluateSituation);
+                        }
                     }
 
                     break;

@@ -56,6 +56,7 @@ MonoBehaviour:
   m_idleAnimation: dead_spear_bro_idle_animation1
   m_enableFlinchColor: 0
   m_flinchColorAnimation: 
+  m_enableModule: 1
 --- !u!1 &934693070580310053
 GameObject:
   m_ObjectHideFlags: 0
@@ -281,6 +282,7 @@ MonoBehaviour:
   m_idleAnimation: 6 idle final
   m_enableFlinchColor: 0
   m_flinchColorAnimation: 
+  m_enableModule: 1
 --- !u!1001 &2268434730353639388
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -291,7 +293,7 @@ PrefabInstance:
     - target: {fileID: 361038149966048411, guid: ba1538181454f7f4f9e3ffff08d43e1f,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.8466797
+      value: -0.8466816
       objectReference: {fileID: 0}
     - target: {fileID: 361038149966048411, guid: ba1538181454f7f4f9e3ffff08d43e1f,
         type: 3}
@@ -447,7 +449,7 @@ PrefabInstance:
     - target: {fileID: 5485048292151281164, guid: ba1538181454f7f4f9e3ffff08d43e1f,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.9837265
+      value: -0.9837284
       objectReference: {fileID: 0}
     - target: {fileID: 5485048292151281164, guid: ba1538181454f7f4f9e3ffff08d43e1f,
         type: 3}
@@ -689,6 +691,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eec63e2d8574ba947936161e71632309, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!4 &2636244815048219307 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4318613321244288375, guid: ba1538181454f7f4f9e3ffff08d43e1f,
+    type: 3}
+  m_PrefabInstance: {fileID: 2268434730353639388}
+  m_PrefabAsset: {fileID: 0}
 --- !u!198 &2772933815402977779 stripped
 ParticleSystem:
   m_CorrespondingSourceObject: {fileID: 4107399147846395439, guid: ba1538181454f7f4f9e3ffff08d43e1f,
@@ -779,7 +787,7 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 2268434730353639388}
   m_PrefabAsset: {fileID: 0}
---- !u!60 &2448177019359516081
+--- !u!60 &1385369015385820310
 PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -808,6 +816,29 @@ PolygonCollider2D:
       - {x: -17.725, y: 29.8982}
       - {x: 17.6723, y: 30.2027}
       - {x: 17.6723, y: -1.5631}
+--- !u!114 &329086056908073515
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5537072151090577288}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e10454193b54c9a4eb8bfb67b80c746d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_centerMass: {fileID: 5031670312706593890}
+  m_data: {fileID: 11400000, guid: cb5b197db1aa50440b1d68ca723cebd4, type: 2}
+  m_currentAttackInfo:
+    damage:
+      m_type: 1
+      m_value: 0
+    criticalDamageInfo:
+      chance: 0
+      damageModifier: 0
+    ignoreInvulnerability: 0
+    ignoresBlock: 0
 --- !u!114 &5580851523503775844 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5911031384884961208, guid: ba1538181454f7f4f9e3ffff08d43e1f,
@@ -850,7 +881,7 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 2268434730353639388}
   m_PrefabAsset: {fileID: 0}
---- !u!60 &5757504764735241245
+--- !u!60 &3449891816295616514
 PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -879,6 +910,29 @@ PolygonCollider2D:
       - {x: -18.0019, y: 11.803599}
       - {x: -1.9733999, y: 11.9196}
       - {x: -1.9733999, y: -0.1723}
+--- !u!114 &1332894963151130622
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6650011601832887791}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e10454193b54c9a4eb8bfb67b80c746d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_centerMass: {fileID: 2636244815048219307}
+  m_data: {fileID: 11400000, guid: aab3f8dea7d885043920b2597915559b, type: 2}
+  m_currentAttackInfo:
+    damage:
+      m_type: 1
+      m_value: 0
+    criticalDamageInfo:
+      chance: 0
+      damageModifier: 0
+    ignoreInvulnerability: 0
+    ignoresBlock: 0
 --- !u!198 &7562803604459731958 stripped
 ParticleSystem:
   m_CorrespondingSourceObject: {fileID: 8615210789533287466, guid: ba1538181454f7f4f9e3ffff08d43e1f,
@@ -969,7 +1023,7 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 2268434730353639388}
   m_PrefabAsset: {fileID: 0}
---- !u!60 &6547309561888861932
+--- !u!60 &2096743660762407201
 PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1471,7 +1525,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_character: {fileID: 3243312603512319691}
   m_animation: {fileID: 3206988555123979348}
-  m_data: {fileID: 11400000, guid: 5c5a4ef64ab2f6f4ba7f0339a3904229, type: 2}
+  m_data: {fileID: 11400000, guid: 1160ec4aad4ebcc4e8831ce37575fa85, type: 2}
   m_damageable: {fileID: 770541514681311154}
   m_centerMass: {fileID: 1907752826620351303}
   m_aggroBoundary: {fileID: 2282309385383037108}

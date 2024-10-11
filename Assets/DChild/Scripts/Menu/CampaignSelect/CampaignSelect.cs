@@ -94,6 +94,13 @@ namespace DChild.Menu
             SendCampaignSelectedEvent();
         }
 
+        public void ReloadSlots()
+        {
+            m_slotList = GameSystem.dataManager.campaignSlotList;
+            m_selectedSlot = m_slotList.GetSlot(m_currentNavigationIndex);
+            SendCampaignSelectedEvent();
+        }
+
     }
 
 }

@@ -16,6 +16,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private LedgeGrab m_ledgeGrab;
         private ShadowMorph m_shadowMorph;
         private ShadowGaugeRegen m_shadowGaugeRegen;
+        private ShadowSlide m_shadowSlide;
 
         #region Battle Abilities
         private AirLunge m_airLunge;
@@ -236,6 +237,16 @@ namespace DChild.Gameplay.Characters.Players.Modules
         public void SwordThrustPush()
         {
             m_swordThrust?.Push();
+        }
+
+        public void ShadowSlideEndTransitionStart()
+        {
+            m_shadowSlide.EndTransitionStart();
+        }
+
+        public void ShadowSlideEndTransitionEnd()
+        {
+            m_shadowSlide.EndTransitionEnd();
         }
 
         #region BattleAbilities
@@ -489,8 +500,18 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void BackDiverGetProjectile()
         {
-            m_teleportingSkull.Execute();
+            //m_teleportingSkull.Execute();
             //m_teleportingSkull.GetSpawnedProjectile(m_backDiver.spawnedProjectile);
+        }
+
+        public void BackDiverCheckGround()
+        {
+            m_backDiver.CheckGround();
+        }
+
+        public void BackDiverLandOnGround()
+        {
+            m_backDiver.LandOnGround();
         }
 
         public void BackDiverEnd()
@@ -625,6 +646,21 @@ namespace DChild.Gameplay.Characters.Players.Modules
         {
             m_airSlashRange.EndExecution();
         }
+
+        public void TeleportingSkullEnd()
+        {
+            m_teleportingSkull.EndExecution();
+        }
+
+        public void TeleportingSkullEnableCollision()
+        {
+            m_teleportingSkull.EnableCollision(true);
+        }
+
+        public void TeleportingSkullDisableCollision()
+        {
+            m_teleportingSkull.EnableCollision(false);
+        }
         #endregion
 
         public void SkullThrowSpawnProjectile()
@@ -697,6 +733,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_icarusWings = character.GetComponentInChildren<IcarusWings>();
             m_teleportingSkull = character.GetComponentInChildren<TeleportingSkull>();
             m_airSlashRange = character.GetComponentInChildren<AirSlashRange>();
+            m_shadowSlide = character.GetComponentInChildren<ShadowSlide>();
         }
 
         #region TESTING

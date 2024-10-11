@@ -19,6 +19,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private ProjectileInfo m_projectile;
         public ProjectileInfo projectile => m_projectile;
         private ProjectileInfo m_cacheProjectile;
+        
         [SerializeField]
         private Transform m_spawnPoint;
         [SerializeField]
@@ -36,6 +37,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private int m_skullThrowVariantParameter;
         private bool m_updateProjectileInfo;
         private Projectile m_spawnedProjectile;
+        private IPlayerModifer m_modifier;
         public Projectile spawnedProjectile => m_spawnedProjectile;
         private bool m_reachedVerticalThreshold = false;
 
@@ -124,12 +126,22 @@ namespace DChild.Gameplay.Characters.Players.Modules
             return (Vector2)m_spawnPoint.position;
         }
 
+        private Vector2 GetProjectilesCalculatedThrowDirection(Projectile projectile)
+        {
+            var direction = CalculateThrowDirection();
+            if(projectile.hasConstantSpeed)
+            {
+                direction = direction.normalized;
+            }
+            return direction;
+        }
         private void UpdateTrajectorySimulation()
         {
             var simulator = GameplaySystem.simulationHandler.GetTrajectorySimulator();
             simulator.SetStartPosition(GetStartingPosition());
 
-            var velocity = CalculateThrowDirection() * m_projectile.speed;
+            //var velocity = CalculateThrowDirection() * m_projectile.speed;
+            var velocity = GetProjectilesCalculatedThrowDirection(m_projectile.projectile.GetComponent<Projectile>()) * m_projectile.speed;
             velocity.x *= (int)m_character.facing;
             simulator.SetVelocity(velocity);
             simulator.SimulateTrajectory();
@@ -183,14 +195,14 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void SetProjectileInfo(ProjectileInfo info)
         {
-            m_cacheProjectile = m_projectile;
+            //m_cacheProjectile = m_projectile;
             if (m_projectile != info)
             {
                 
                 m_projectile = info;
                 m_launcher.SetProjectile(m_projectile);
-                var skullThrowVariantIndex = info.projectile.GetComponent<Projectile>().hasConstantSpeed ? 0 : 1;
-                m_animator.SetInteger(m_skullThrowVariantParameter, skullThrowVariantIndex);
+                var skullThrowVariantIndex = info.projectile.GetComponent<Projectile>().hasConstantSpeed ? true : false;
+                m_animator.SetBool(m_skullThrowVariantParameter, skullThrowVariantIndex);
                 m_updateProjectileInfo = true;
             }
         }
@@ -206,8 +218,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_willResetProjectile = false;
             m_projectile = m_cacheProjectile;
             m_launcher.SetProjectile(m_projectile);
-            var skullThrowVariantIndex = m_cacheProjectile.projectile.GetComponent<Projectile>().hasConstantSpeed ? 0 : 1;
-            m_animator.SetInteger(m_skullThrowVariantParameter, skullThrowVariantIndex);
+            var skullThrowVariantIndex = m_cacheProjectile.projectile.GetComponent<Projectile>().hasConstantSpeed ? true : false;
+            m_animator.SetBool(m_skullThrowVariantParameter, skullThrowVariantIndex);
             m_updateProjectileInfo = true;
         }
 
@@ -228,7 +240,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
         {
             m_skeletonAnimation.state.Complete += State_Complete;
 
-            var direction = CalculateThrowDirection();
+            //var direction = CalculateThrowDirection();
+            var direction = GetProjectilesCalculatedThrowDirection(m_spawnedProjectile);
             direction.x *= (int)m_character.facing;
 
             if (m_spawnedProjectile != null)
@@ -249,7 +262,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 }
 
                 m_launcher.LaunchProjectile(direction, m_spawnedProjectile.gameObject);
-
+                m_spawnedProjectile.GetComponent<Attacker>().SetDamageModifier(m_modifier.Get(PlayerModifier.AttackDamage));
                 var scale = m_spawnedProjectile.transform.localScale;
                 scale.x = 1;
                 m_spawnedProjectile.transform.localScale = scale;
@@ -257,8 +270,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
             }
             else
             {
-                var instance = GameSystem.poolManager.GetPool<ProjectilePool>().GetOrCreateItem(m_projectile.projectile);
-                instance.transform.position = m_spawnPoint.position;
+                var instance = GameSystem.poolManager.GetPool<ProjectilePool>().GetOrCreateItem(m_projectile.projectile, m_spawnPoint.position, Quaternion.identity);
+                //instance.transform.position = m_spawnPoint.position;
 
                 if (instance.TryGetComponentInChildren(out Animator animator))
                 {
@@ -280,9 +293,11 @@ namespace DChild.Gameplay.Characters.Players.Modules
         public void SpawnIdleProjectile()
         {
             //TEST
-            m_spawnedProjectile = GameSystem.poolManager.GetPool<ProjectilePool>().GetOrCreateItem(m_projectile.projectile);
-            m_spawnedProjectile.transform.position = m_spawnPoint.position;
+            m_spawnedProjectile = GameSystem.poolManager.GetPool<ProjectilePool>().GetOrCreateItem(m_projectile.projectile, m_spawnPoint.position, Quaternion.identity);
+            Debug.Log(m_spawnPoint.position);
+            //m_spawnedProjectile.transform.position = m_spawnPoint.position;
             m_spawnedProjectile.transform.parent = transform;
+            //m_spawnedProjectile.transform.rotation = Quaternion.identity;
             m_spawnedProjectile.GetComponent<Attacker>().SetParentAttacker(m_attacker);
             //TEST
 
@@ -370,6 +385,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_launcher.SetSpawnPoint(m_spawnPoint);
             m_updateProjectileInfo = true;
             m_cacheProjectile = m_projectile;
+            m_modifier = info.modifier;
         }
 
 

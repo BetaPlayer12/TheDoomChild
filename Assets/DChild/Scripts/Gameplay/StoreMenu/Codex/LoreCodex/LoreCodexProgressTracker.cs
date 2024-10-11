@@ -1,18 +1,40 @@
+using DChild.Gameplay;
+using DChild.Gameplay.UI;
+using DChild.Menu.Codex;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LoreCodexProgressTracker : MonoBehaviour
+namespace DChild.Codex.Lore
 {
-    // Start is called before the first frame update
-    void Start()
+    public class LoreCodexProgressTracker : CodexProgressTracker<LoreCodexList, LoreCodexData>
     {
-        
-    }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        public void RecordLoreToCodex(int ID)
+        {
+            if (HasInfoOf(ID) == false)
+            {
+                GameplaySystem.gamplayUIHandle.notificationManager.QueueNotification(StoreNotificationType.Bestiary);
+            }
+            SetProgress(ID, true);
+        }
+
+        public void RecordCharacterToCodex(LoreCodexData data)
+        {
+            RecordLoreToCodex(data.id);
+        }
+
+        private void Awake()
+        {
+
+        }
+
+#if UNITY_EDITOR
+        public void Initialize(GameObject character)
+        {
+
+        }
+#endif
     }
 }
+

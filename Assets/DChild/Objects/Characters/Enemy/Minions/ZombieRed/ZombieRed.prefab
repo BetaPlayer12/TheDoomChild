@@ -87,7 +87,7 @@ MonoBehaviour:
   m_animator: {fileID: 3150168643152902087}
   m_animation: Death3
   m_bodyDuration:
-    m_startTime: 3
+    m_startTime: 0.25
   m_fx:
   - {fileID: 465367816063399998}
   - {fileID: 1465575811416442170}
@@ -216,7 +216,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_spine: {fileID: 3150168643152902087}
   m_physics: {fileID: 4253594778198104808}
-  m_autoFlinch: 0
+  m_autoFlinch: 1
   m_enableMixFlinch: 1
   m_enableEmpytyIdle: 1
   m_alphaBlendStrength: 0.5
@@ -226,6 +226,7 @@ MonoBehaviour:
   m_idleAnimation: Idle1
   m_enableFlinchColor: 0
   m_flinchColorAnimation: 
+  m_enableModule: 1
 --- !u!1001 &8630246501980734443
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -247,6 +248,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.048662733
+      objectReference: {fileID: 0}
+    - target: {fileID: 182803244704829877, guid: 8241154d8961a3b498f5abbf26f46a69,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 7.7266345
       objectReference: {fileID: 0}
     - target: {fileID: 2550697406945093044, guid: 8241154d8961a3b498f5abbf26f46a69,
         type: 3}
@@ -303,11 +309,32 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2550697406945093045, guid: 8241154d8961a3b498f5abbf26f46a69,
+        type: 3}
+      propertyPath: initialSkinName
+      value: version1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2550697406945093045, guid: 8241154d8961a3b498f5abbf26f46a69,
+        type: 3}
+      propertyPath: skeletonDataAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: a2091a7115dec0f4d821a574e61bebb3,
+        type: 2}
     - target: {fileID: 2550697406945093047, guid: 8241154d8961a3b498f5abbf26f46a69,
         type: 3}
       propertyPath: m_Name
       value: ZombieRedModel
       objectReference: {fileID: 0}
+    - target: {fileID: 2550697406945093050, guid: 8241154d8961a3b498f5abbf26f46a69,
+        type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2550697406945093050, guid: 8241154d8961a3b498f5abbf26f46a69,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: fb15e4207152ae642846021983082e01, type: 2}
     - target: {fileID: 2550697406945093051, guid: 8241154d8961a3b498f5abbf26f46a69,
         type: 3}
       propertyPath: m_Mesh
@@ -363,6 +390,11 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: 7.622021
       objectReference: {fileID: 0}
+    - target: {fileID: 6451063170511495080, guid: 8241154d8961a3b498f5abbf26f46a69,
+        type: 3}
+      propertyPath: m_animation
+      value: 
+      objectReference: {fileID: 3150168643152902087}
     - target: {fileID: 7106897856564951772, guid: 8241154d8961a3b498f5abbf26f46a69,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -852,7 +884,7 @@ PrefabInstance:
     - target: {fileID: 7913955764830972342, guid: 8241154d8961a3b498f5abbf26f46a69,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.13860422
+      value: 0.000005335241
       objectReference: {fileID: 0}
     - target: {fileID: 8588064947015266996, guid: 8241154d8961a3b498f5abbf26f46a69,
         type: 3}
@@ -1386,7 +1418,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_loot: {fileID: 11400000, guid: 90a3b3e560a81c44095411df70cda55c, type: 2}
-  m_dropWhenDestroyed: 0
+  m_dropWhenDestroyed: 1
 --- !u!114 &466245843380686545
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1432,7 +1464,7 @@ MonoBehaviour:
     m_skeletonAnimations:
     - {fileID: 6098206707994224222}
     m_baseTimeScale:
-    - 2
+    - 1
   m_physicsObjects:
     m_rigidbody2Ds:
     - {fileID: 1663097250153040883}
@@ -1613,7 +1645,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_character: {fileID: 3041241503373307224}
   m_animation: {fileID: 3150168643152902087}
-  m_data: {fileID: 11400000, guid: d3e3db85f18c95747ad3d1ea053aa108, type: 2}
+  m_data: {fileID: 11400000, guid: c01dacdf5a2840c4f8237ed2d82f834f, type: 2}
   m_damageable: {fileID: 974930111555886113}
   m_centerMass: {fileID: 8452616459497312862}
   m_aggroBoundary: {fileID: 3484403563283408458}

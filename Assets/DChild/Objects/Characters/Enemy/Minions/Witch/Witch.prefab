@@ -56,6 +56,7 @@ MonoBehaviour:
   m_idleAnimation: Idle1
   m_enableFlinchColor: 0
   m_flinchColorAnimation: 
+  m_enableModule: 1
 --- !u!1 &6264854611805168568
 GameObject:
   m_ObjectHideFlags: 0
@@ -283,6 +284,7 @@ MonoBehaviour:
   m_idleAnimation: Flinch2
   m_enableFlinchColor: 0
   m_flinchColorAnimation: 
+  m_enableModule: 1
 --- !u!1001 &2990575431106765770
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -465,7 +467,13 @@ MonoBehaviour:
   m_groundSensor: {fileID: 8116705757086521156}
   m_edgeSensor: {fileID: 7383104384294717220}
   m_attackBB: {fileID: 2578074546761957705}
-  m_willPatrol: 0
+  m_shriekFX: {fileID: 7930499836210370698}
+  m_willStand: 0
+  m_leftPoint: 0
+  m_rightPoint: 0
+  m_moveCount: 0
+  m_timesToRunBackAndForth: 0
+  m_runBackAndForthPointsDecided: 0
 --- !u!114 &1470602242661512567
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -491,30 +499,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9dd53d8b72e7244391ffd86337df106, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isActive: 1
---- !u!114 &4311765940864446809
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8296342612795858042}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e10454193b54c9a4eb8bfb67b80c746d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_centerMass: {fileID: 7781312658313144909}
-  m_data: {fileID: 11400000, guid: 61bccbd2520174b4697ffa3e01df87b1, type: 2}
-  m_currentAttackInfo:
-    damage:
-      m_type: 1
-      m_value: 0
-    criticalDamageInfo:
-      chance: 0
-      damageModifier: 0
-    ignoreInvulnerability: 0
-    ignoresBlock: 0
+  m_isActive: 1
 --- !u!114 &5806558212517963972
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -587,9 +572,15 @@ MonoBehaviour:
   m_fastFactor: 0
   m_fXObjects:
     m_particleSystems:
+    - {fileID: 7930499836210370698}
+    - {fileID: 8460296561855273671}
+    - {fileID: 3403844739325273684}
     - {fileID: 7775345917501505926}
     - {fileID: 7728774849990119558}
     m_originalSimulationSpeed:
+    - 1
+    - 1
+    - 1
     - 1
     - 1
   m_spineObjects:
@@ -660,6 +651,65 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_duration:
     m_startTime: 0.15
+--- !u!114 &8220296208403981761
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8296342612795858042}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42be6986c6a2a414fa5ceddb0018fe09, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_skeletonAnimation: {fileID: 498483727725628526}
+  m_eventInfo:
+  - m_eventName: HitboxOn
+    m_onEventCalled:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 2578074546761957705}
+          m_TargetAssemblyTypeName: UnityEngine.Behaviour, UnityEngine
+          m_MethodName: set_enabled
+          m_Mode: 6
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 1
+          m_CallState: 2
+  - m_eventName: HitboxOff
+    m_onEventCalled:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 2578074546761957705}
+          m_TargetAssemblyTypeName: UnityEngine.Behaviour, UnityEngine
+          m_MethodName: set_enabled
+          m_Mode: 6
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+--- !u!114 &8299712764469339464
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8296342612795858042}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d9dd53d8b72e7244391ffd86337df106, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_isActive: 1
 --- !u!114 &8541091467676907465
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -716,12 +766,22 @@ PrefabInstance:
     - target: {fileID: 1473870679913893146, guid: 8b446e7c0c3c9b54f9d551d189ba08e6,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -2.4563904
+      value: -2.6927085
       objectReference: {fileID: 0}
     - target: {fileID: 1473870679913893146, guid: 8b446e7c0c3c9b54f9d551d189ba08e6,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 9.494583
+      value: 13.54566
+      objectReference: {fileID: 0}
+    - target: {fileID: 1473870679913893146, guid: 8b446e7c0c3c9b54f9d551d189ba08e6,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.46554875
+      objectReference: {fileID: 0}
+    - target: {fileID: 1473870679913893146, guid: 8b446e7c0c3c9b54f9d551d189ba08e6,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0.8850222
       objectReference: {fileID: 0}
     - target: {fileID: 2496671901723813963, guid: 8b446e7c0c3c9b54f9d551d189ba08e6,
         type: 3}
@@ -732,6 +792,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalPosition.y
       value: 14.44368
+      objectReference: {fileID: 0}
+    - target: {fileID: 2890323017433995434, guid: 8b446e7c0c3c9b54f9d551d189ba08e6,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 12.9
+      objectReference: {fileID: 0}
+    - target: {fileID: 3010775815661372574, guid: 8b446e7c0c3c9b54f9d551d189ba08e6,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5743157358030556774, guid: 8b446e7c0c3c9b54f9d551d189ba08e6,
         type: 3}
@@ -798,6 +868,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: WitchModel
       objectReference: {fileID: 0}
+    - target: {fileID: 5991864511206514245, guid: 8b446e7c0c3c9b54f9d551d189ba08e6,
+        type: 3}
+      propertyPath: m_currentAttackInfo.damage.m_type
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6631039503699573552, guid: 8b446e7c0c3c9b54f9d551d189ba08e6,
         type: 3}
       propertyPath: rb
@@ -817,6 +892,26 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.88850915
+      objectReference: {fileID: 0}
+    - target: {fileID: 7246898576502677901, guid: 8b446e7c0c3c9b54f9d551d189ba08e6,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 19.724483
+      objectReference: {fileID: 0}
+    - target: {fileID: 7378534182347318354, guid: 8b446e7c0c3c9b54f9d551d189ba08e6,
+        type: 3}
+      propertyPath: playOnAwake
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7682606994494718799, guid: 8b446e7c0c3c9b54f9d551d189ba08e6,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8787900846479375578, guid: 8b446e7c0c3c9b54f9d551d189ba08e6,
+        type: 3}
+      propertyPath: m_Name
+      value: Shaget
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8b446e7c0c3c9b54f9d551d189ba08e6, type: 3}
@@ -859,6 +954,12 @@ CircleCollider2D:
 --- !u!61 &2578074546761957705 stripped
 BoxCollider2D:
   m_CorrespondingSourceObject: {fileID: 7682606994494718799, guid: 8b446e7c0c3c9b54f9d551d189ba08e6,
+    type: 3}
+  m_PrefabInstance: {fileID: 5285312260060938758}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &3403844739325273684 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 7378534182347318354, guid: 8b446e7c0c3c9b54f9d551d189ba08e6,
     type: 3}
   m_PrefabInstance: {fileID: 5285312260060938758}
   m_PrefabAsset: {fileID: 0}
@@ -946,6 +1047,12 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 5285312260060938758}
   m_PrefabAsset: {fileID: 0}
+--- !u!198 &7930499836210370698 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 2835008175289129612, guid: 8b446e7c0c3c9b54f9d551d189ba08e6,
+    type: 3}
+  m_PrefabInstance: {fileID: 5285312260060938758}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &8116705757086521156 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4178609960498861378, guid: 8b446e7c0c3c9b54f9d551d189ba08e6,
@@ -958,3 +1065,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 11a5cea4c16e7c4478a55620f5e666e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!198 &8460296561855273671 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 4337020981137938625, guid: 8b446e7c0c3c9b54f9d551d189ba08e6,
+    type: 3}
+  m_PrefabInstance: {fileID: 5285312260060938758}
+  m_PrefabAsset: {fileID: 0}

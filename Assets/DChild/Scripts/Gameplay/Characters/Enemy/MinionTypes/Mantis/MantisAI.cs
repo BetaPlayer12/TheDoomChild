@@ -165,7 +165,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private Collider2D m_scratchAttackBB;
         [SerializeField, TabGroup("Hurtbox")]
         private Collider2D m_leapAttackBB;
-
+        [SerializeField, TabGroup("Hurtbox")]
+        private GameObject m_bodyCollider;
         [SerializeField]
         private bool m_willPatrol;
 
@@ -179,7 +180,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private Collider2D m_currentHurtbox;
 
         private Coroutine m_hurtboxCoroutine;
-
+        
         //[SerializeField]
         //private AudioSource m_Audiosource;
         //[SerializeField]
@@ -329,8 +330,9 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_movement.Stop();
             m_selfCollider.enabled = false;
-            
+            m_leapAttackBB.enabled = true;
             m_animation.SetAnimation(0, m_info.leapPrepAnimation, false);
+            m_bodyCollider.SetActive(false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.leapPrepAnimation);
             yield return new WaitForSeconds(m_info.leapWaitTime);
             m_leapAttackBB.enabled = true;
@@ -342,6 +344,7 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return new WaitUntil(() => m_groundSensor.isDetecting);
             //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.leapAnimation);
             m_movement.Stop();
+            m_bodyCollider.SetActive(true);
             m_attackDecider.hasDecidedOnAttack = false;
             m_leapAttackBB.enabled = false;
             if (!m_wallSensor.isDetecting)
@@ -438,11 +441,12 @@ namespace DChild.Gameplay.Characters.Enemies
                         case Attack.Scratch:
                             m_animation.EnableRootMotion(true, false);
                             m_attackHandle.ExecuteAttack(m_info.scratchAttack.animation, m_info.idleAnimation.animation);
-                            m_currentHurtbox = m_scratchAttackBB;
-                            m_hurtboxCoroutine = StartCoroutine(BoundingBoxRoutine(2.5f));
-                            
+                           
+                            /*m_currentHurtbox = m_scratchAttackBB;
+                            m_hurtboxCoroutine = StartCoroutine(BoundingBoxRoutine(2.5f));*/
 
-                    break;
+
+                            break;
                         case Attack.ScratchDeflect:
                             m_animation.EnableRootMotion(true, false);
                             m_attackHandle.ExecuteAttack(m_info.scratchAttack.animation, m_info.idleAnimation.animation);
@@ -452,7 +456,7 @@ namespace DChild.Gameplay.Characters.Enemies
                             //m_attackHandle.ExecuteAttack(m_info.leapRootAnimation, m_info.idleAnimation);
                             m_animation.EnableRootMotion(false, false);
                             StartCoroutine(LeapAttackRoutine());
-                            m_scratchAttackBB.enabled = false;
+                            /*m_scratchAttackBB.enabled = false;*/
                             break;
                     }
                     m_attackDecider.hasDecidedOnAttack = false;

@@ -53,6 +53,9 @@ namespace DChild.Gameplay.Characters.Enemies
             private BasicAnimationInfo m_idleAnimation = new BasicAnimationInfo();
             public BasicAnimationInfo idleAnimation => m_idleAnimation;
             [SerializeField]
+            private BasicAnimationInfo m_idleAnimation2 = new BasicAnimationInfo();
+            public BasicAnimationInfo idleAnimation2 => m_idleAnimation2;
+            [SerializeField]
             private BasicAnimationInfo m_surpriseAnimation = new BasicAnimationInfo();
             public BasicAnimationInfo surpriseAnimation => m_surpriseAnimation;
             [SerializeField]
@@ -90,6 +93,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_projectile.SetData(m_skeletonDataAsset);
 
                 m_idleAnimation.SetData(m_skeletonDataAsset);
+                m_idleAnimation2.SetData(m_skeletonDataAsset);
                 m_surpriseAnimation.SetData(m_skeletonDataAsset);
                 m_flinchAnimation.SetData(m_skeletonDataAsset);
                 m_turnAnimation.SetData(m_skeletonDataAsset);
@@ -132,7 +136,7 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Reference")]
         private SpineEventListener m_spineEventListener;
         [SerializeField, TabGroup("FX")]
-        private ParticleSystem m_smokeFX;
+        private GameObject m_smokeFX;
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_wallSensor;
         [SerializeField, TabGroup("Sensors")]
@@ -153,13 +157,13 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField]
         private Transform m_projectileStart;
 
+        private bool isFirstEncounter = true;
         protected override void Start()
         {
             base.Start();
 
             m_spineEventListener.Subscribe(m_info.dartFXEvent, LaunchProjectile);
-            m_spineEventListener.Subscribe(m_info.smokeFXEvent, SmokeStart);
-            m_spineEventListener.Subscribe(m_info.smokeStopFXEvent, SmokeEnd);
+           
             //GameplaySystem.SetBossHealth(m_character);
         }
 
@@ -173,16 +177,18 @@ namespace DChild.Gameplay.Characters.Enemies
             }
         }
 
-        private void SmokeStart()
+        public void SmokeStart()
         {
+            Debug.Log("START");
             m_smokeHitbox.SetActive(true);
-            m_smokeFX.Play();
+            m_smokeFX.SetActive(true);
         }
 
-        private void SmokeEnd()
+        public void SmokeEnd()
         {
+            Debug.Log("START");
             m_smokeHitbox.SetActive(false);
-            m_smokeFX.Stop();
+            m_smokeFX.SetActive(false);
         }
 
         private void OnAttackDone(object sender, EventActionArgs eventArgs)
@@ -242,7 +248,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnFlinchStart(object sender, EventActionArgs eventArgs)
         {
-            if (m_animation.GetCurrentAnimation(0).ToString() != m_info.attack1Hide.animation && m_animation.GetCurrentAnimation(0).ToString() != m_info.attack2Hide.animation)
+            if (m_animation.GetCurrentAnimation(0).ToString() != m_info.attack1.animation && m_animation.GetCurrentAnimation(0).ToString() != m_info.attack2.animation)
             {
                 StartCoroutine(FlinchRoutine());
             }
@@ -267,19 +273,53 @@ namespace DChild.Gameplay.Characters.Enemies
             if (m_flinchHandle.m_autoFlinch)
             {
                 if (m_animation.GetCurrentAnimation(0).ToString() != m_info.deathAnimation.animation)
-                    m_animation.SetAnimation(0, m_info.idleAnimation.animation, true);
+                    m_animation.SetAnimation(0, m_info.idleAnimation2.animation, true);
                 m_stateHandle.ApplyQueuedState();
             }
         }
 
-        private IEnumerator AttackRoutine()
+      
+        private IEnumerator SurpriseAttack()
         {
+            isFirstEncounter = false;
             m_animation.SetAnimation(0, m_info.surpriseAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.surpriseAnimation);
-            m_stateHandle.SetState(State.Attacking);
-            yield return null;
+            m_animation.SetAnimation(0, m_info.idleAnimation2, true);
         }
+        private IEnumerator AttackRoutineOne()
+        {
+            if (isFirstEncounter == true)
+            {
+                yield return SurpriseAttack();
+            }
+                
 
+            isFirstEncounter = false;
+            var target = new Vector2(m_targetInfo.position.x, m_projectileStart.position.y);
+            //var target = m_targetInfo.position; //No Parabola      
+            Vector2 spitPos = m_projectileStart.position;
+            Vector3 v_diff = (target - spitPos);
+            float atan2 = Mathf.Atan2(v_diff.y, v_diff.x);
+            //m_stingerPos.rotation = Quaternion.Euler(0f, 0f, postAtan2 * Mathf.Rad2Deg);
+            m_projectileLauncher.AimAt(target);
+            m_animation.EnableRootMotion(true, false);
+            m_attackHandle.ExecuteAttack(m_info.attack1.animation, m_info.idleAnimation2.animation);
+           
+
+        }
+        private IEnumerator AttackRoutineTwo()
+        {
+            if (isFirstEncounter == true)
+            {
+                yield return SurpriseAttack();
+            }
+
+            isFirstEncounter = false;
+            m_animation.EnableRootMotion(true, false);
+            m_attackHandle.ExecuteAttack(m_info.attack2.animation, m_info.idleAnimation2.animation);
+        }
+        
+  
         public override void ApplyData()
         {
             if (m_info != null)
@@ -309,7 +349,8 @@ namespace DChild.Gameplay.Characters.Enemies
         protected override void Awake()
         {
             base.Awake();
-            
+            m_spineEventListener.Subscribe(m_info.smokeFXEvent, SmokeStart);
+            m_spineEventListener.Subscribe(m_info.smokeStopFXEvent, SmokeEnd);
             m_attackHandle.AttackDone += OnAttackDone;
             m_turnHandle.TurnDone += OnTurnDone;
             m_deathHandle.SetAnimation(m_info.deathAnimation.animation);
@@ -329,6 +370,7 @@ namespace DChild.Gameplay.Characters.Enemies
             switch (m_stateHandle.currentState)
             {
                 case State.Burrowed:
+                    isFirstEncounter = true;
                     m_animation.EnableRootMotion(false, false);
                     m_animation.SetAnimation(0, m_info.idleAnimation.animation, true);
                     //m_animation.SetEmptyAnimation(0, 0);
@@ -341,25 +383,33 @@ namespace DChild.Gameplay.Characters.Enemies
 
                 case State.Attacking:
                     m_stateHandle.Wait(State.Cooldown);
-
-
                     switch (m_attackDecider.chosenAttack.attack)
                     {
                         case Attack.Attack1:
-                            var target = new Vector2(m_targetInfo.position.x, m_projectileStart.position.y);
-                            //var target = m_targetInfo.position; //No Parabola      
-                            Vector2 spitPos = m_projectileStart.position;
-                            Vector3 v_diff = (target - spitPos);
-                            float atan2 = Mathf.Atan2(v_diff.y, v_diff.x);
+                            //if(isFirstEncounter)
+                            //StartCoroutine(SurpriseAttack());
 
-                            //m_stingerPos.rotation = Quaternion.Euler(0f, 0f, postAtan2 * Mathf.Rad2Deg);
-                            m_projectileLauncher.AimAt(target);
-                            m_animation.EnableRootMotion(true, false);
-                            m_attackHandle.ExecuteAttack(m_info.attack1Hide.animation, m_info.idleAnimation.animation);
+                            //isFirstEncounter = false;
+                            //var target = new Vector2(m_targetInfo.position.x, m_projectileStart.position.y);
+                            ////var target = m_targetInfo.position; //No Parabola      
+                            //Vector2 spitPos = m_projectileStart.position;
+                            //Vector3 v_diff = (target - spitPos);
+                            //float atan2 = Mathf.Atan2(v_diff.y, v_diff.x);
+                            ////m_stingerPos.rotation = Quaternion.Euler(0f, 0f, postAtan2 * Mathf.Rad2Deg);
+                            //m_projectileLauncher.AimAt(target);
+                            //m_animation.EnableRootMotion(true, false);
+                            //m_attackHandle.ExecuteAttack(m_info.attack1.animation, m_info.idleAnimatio2n.animation);
+                            StartCoroutine(AttackRoutineOne());
+
                             break;
                         case Attack.Attack2:
-                            m_animation.EnableRootMotion(true, false);
-                            m_attackHandle.ExecuteAttack(m_info.attack2Hide.animation, m_info.idleAnimation.animation);
+                            //if (isFirstEncounter)
+                            //    StartCoroutine(SurpriseAttack());
+
+                            //isFirstEncounter = false;
+                            //m_animation.EnableRootMotion(true, false);
+                            //m_attackHandle.ExecuteAttack(m_info.attack2.animation, m_info.idleAnimatio2n.animation);
+                            StartCoroutine(AttackRoutineTwo());
                             break;
                     }
                     m_attackDecider.hasDecidedOnAttack = false;
@@ -378,7 +428,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     {
                         if (m_animation.animationState.GetCurrent(0).IsComplete)
                         {
-                            m_animation.SetAnimation(0, m_info.idleAnimation.animation, true);
+                            m_animation.SetAnimation(0, m_info.idleAnimation2.animation, true);
                         }
                     }
 
@@ -395,7 +445,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     break;
                 case State.Chasing:
                     {
-                        Debug.Log(IsFacingTarget());
+                        Debug.Log(IsFacingTarget() + " facing target");
                         if (IsFacingTarget())
                         {
                             if (!m_wallSensor.isDetecting && m_groundSensor.allRaysDetecting)
@@ -403,7 +453,7 @@ namespace DChild.Gameplay.Characters.Enemies
                                 m_attackDecider.DecideOnAttack();
                                 if (m_attackDecider.hasDecidedOnAttack && IsTargetInRange(m_attackDecider.chosenAttack.range))
                                 {
-                                    StartCoroutine(AttackRoutine());
+                                    m_stateHandle.SetState(State.Attacking);
                                 }
                                 else
                                 {
@@ -413,7 +463,9 @@ namespace DChild.Gameplay.Characters.Enemies
                                     //    m_animation.AddAnimation(0, m_info.idleAnimation, true, 0);
                                     //}
                                     m_attackDecider.hasDecidedOnAttack = false;
-                                    m_animation.SetAnimation(0, m_info.idleAnimation.animation, true);
+                                    Debug.Log(isFirstEncounter + "else");
+                                    m_stateHandle.SetState(State.ReevaluateSituation);
+                                    // m_animation.SetAnimation(0, m_info.idleAnimatio2n.animation, true);
                                 }
                             }
                             //else

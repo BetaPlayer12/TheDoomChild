@@ -55,6 +55,9 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField]
             private float m_targetDistanceTolerance;
             public float targetDistanceTolerance => m_targetDistanceTolerance;
+            [SerializeField]
+            private Vector2 m_targetOffset;
+            public Vector2 targetOffset => m_targetOffset;
 
 
             //Animations
@@ -167,6 +170,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private GameObject m_projectilePoint;
         [SerializeField]
         private GameObject m_targetPointIK;
+        [SerializeField]
+        private GameObject m_arrowPoint;
 
         private Vector2 m_lastTargetPos;
         private Vector2 m_startPoint;
@@ -327,23 +332,9 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             if (m_targetInfo.isValid)
             {
-                //m_info.projectile.projectileInfo.projectile.GetComponent<IsolatedObjectPhysics2D>().simulateGravity = m_attackDecider.chosenAttack.attack != Attack.Attack3 ? true : false;
-                //m_info.projectile.projectileInfo.projectile.GetComponent<IsolatedObjectPhysics2D>().simulateGravity = false;
                 m_targetPointIK.transform.position = m_lastTargetPos;
-                m_projectileLauncher.AimAt(m_lastTargetPos);
-                m_projectileLauncher.LaunchProjectile();
-                //if (m_chosenAttack != Attack.Attack3)
-                //{
-                //    //ShootProjectile();
-                //    m_projectileLauncher.AimAt(m_lastTargetPos);
-                //    m_projectileLauncher.LaunchProjectile();
-                //}
-                //else
-                //{
-                //    m_info.projectile.projectileInfo.projectile.transform.localScale = transform.localScale;
-                //    m_projectileLauncher.AimAt(new Vector2(m_shootStraight.position.x, m_projectileStart.position.y - GroundDistance()));
-                //    m_projectileLauncher.LaunchProjectile();
-                //}
+                //m_projectileLauncher.AimAt(m_lastTargetPos);
+                m_projectileLauncher.LaunchProjectile(m_character.facing == HorizontalDirection.Right ? m_arrowPoint.transform.right : -m_arrowPoint.transform.right);
             }
         }
 
@@ -379,7 +370,7 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_flinchHandle.FlinchStart += OnFlinchStart;
             //m_flinchHandle.FlinchEnd += OnFlinchEnd;
             m_damageable.DamageTaken += OnDamageTaken;
-            m_projectileLauncher = new ProjectileLauncher(m_info.projectile.projectileInfo, m_projectilePoint.transform);
+            m_projectileLauncher = new ProjectileLauncher(m_info.projectile.projectileInfo, m_arrowPoint.transform);
             m_stateHandle = new StateHandle<State>(m_willPatrol ? State.Patrol : State.Idle, State.WaitBehaviourEnd);
             m_attackDecider = new RandomAttackDecider<Attack>();
             UpdateAttackDeciderList();
@@ -437,7 +428,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
                 case State.Attacking:
                     m_stateHandle.Wait(State.Cooldown);
-                    m_lastTargetPos = m_targetInfo.position;
+                    m_lastTargetPos = new Vector2(m_targetInfo.position.x + UnityEngine.Random.Range(0, m_info.targetOffset.x), m_targetInfo.position.y + UnityEngine.Random.Range(0, m_info.targetOffset.y));
+
                     switch (m_chosenAttack)
                     {
                         case Attack.Attack1:
@@ -446,7 +438,8 @@ namespace DChild.Gameplay.Characters.Enemies
                             break;
                         case Attack.Attack2:
                             m_animation.EnableRootMotion(true, false);
-                            m_attackHandle.ExecuteAttack(m_info.shootDrawAttack.animation, m_info.idleAnimation.animation);
+                            //m_attackHandle.ExecuteAttack(m_info.shootDrawAttack.animation, m_info.idleAnimation.animation);
+                            m_attackHandle.ExecuteAttack(m_info.shootAttack.animation, m_info.idleAnimation.animation);
                             break;
                         case Attack.Attack3:
                             /*m_flinchHandle.gameObject.SetActive(false);
@@ -547,6 +540,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     {
                         if (IsFacing(m_lastTargetPos))
                         {
+                            //m_lastTargetPos = new Vector2(m_lastTargetPos.x + m_info.targetOffset.x, m_lastTargetPos.y + m_info.targetOffset.y);
                             m_targetPointIK.transform.position = m_lastTargetPos;
                         }
                         else

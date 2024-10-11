@@ -36,10 +36,12 @@ namespace DChild.Gameplay.Characters.Players
 
         [SerializeField]
         private PlayerPassiveModule m_passiveModule;
-        [ShowInInspector,ReadOnly]
+        [ShowInInspector, ReadOnly]
         private PrimarySkill m_unlockedSkills;
         [ShowInInspector, ReadOnly]
         private PrimarySkill m_activatedSkills;
+        [ShowInInspector, ReadOnly]
+        private PlayerBehaviour m_activatedBehaviour;
 
         public event EventAction<UpdateEventArgs> OnUpdate;
 
@@ -61,6 +63,17 @@ namespace DChild.Gameplay.Characters.Players
             m_passiveModule.SetModuleActive(module, isActive);
         }
 
+        public void SetModuleActive(PlayerBehaviour module, bool isActive)
+        {
+            if (isActive)
+            {
+                m_activatedBehaviour |= module;
+            }
+            else
+            {
+                m_activatedBehaviour &= ~module;
+            }
+        }
         public void SetModuleLock(PrimarySkill module, bool isUnlocked)
         {
             if (isUnlocked)
@@ -72,11 +85,18 @@ namespace DChild.Gameplay.Characters.Players
                 m_unlockedSkills &= ~module;
             }
             EndUpdate(module);
+            //Do this incase the thing is actually a passive module
         }
+
 
         public bool IsModuleActive(PrimarySkill module)
         {
             return IsModuleUnlock(module) && m_activatedSkills.HasFlag(module);
+        }
+
+        public bool IsModuleActive(PlayerBehaviour module)
+        {
+            return m_activatedBehaviour.HasFlag(module);
         }
 
         public bool IsModuleUnlock(PrimarySkill module) => m_unlockedSkills.HasFlag(module);
@@ -85,6 +105,7 @@ namespace DChild.Gameplay.Characters.Players
         {
             m_activatedSkills = PrimarySkill.All;
             m_unlockedSkills = PrimarySkill.All;
+            m_activatedBehaviour = PlayerBehaviour.All;
         }
 
         private void EndUpdate(PrimarySkill module)

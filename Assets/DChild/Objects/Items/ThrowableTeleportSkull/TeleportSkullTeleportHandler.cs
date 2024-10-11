@@ -7,10 +7,10 @@ namespace DChild.Gameplay.Environment
 {
     public class TeleportSkullTeleportHandler : MonoBehaviour
     {
-        private void Start()
-        {
-            GameplaySystem.playerManager.player.character.transform.position = Mathf.Abs(RoofPosition(transform.position).y - transform.position.y) < 5f ? new Vector3(transform.position.x, transform.position.y - GameplaySystem.playerManager.player.character.height) : transform.position;
-        }
+        //private void Start()
+        //{
+        //    GameplaySystem.playerManager.player.character.transform.position = Mathf.Abs(RoofPosition(transform.position).y - transform.position.y) < 5f ? new Vector3(transform.position.x, transform.position.y - GameplaySystem.playerManager.player.character.height) : transform.position;
+        //}
 
         protected Vector2 RoofPosition(Vector2 startPoint)
         {

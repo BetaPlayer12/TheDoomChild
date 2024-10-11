@@ -36,6 +36,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private RaySensor m_wallSensor;
         [SerializeField, BoxGroup("Sensors")]
         private RaySensor m_edgeSensor;
+        [SerializeField, BoxGroup("FX")]
+        private Animator m_whipFXAnimator;
 
         private bool m_canWhipCombo;
         private bool m_canMove;
@@ -110,6 +112,19 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
             m_comboResetDelayTimer = m_whipComboInfo[m_currentWhipState].nextAttackDelay;
             m_whipMovementCooldownTimer = /*m_whipMovementCooldown*/m_configuration.whipMovementCooldown;
+
+            switch (m_currentVisualWhipState)
+            {
+                case 0:
+                    m_whipFXAnimator.SetTrigger("WhipCombo1");
+                    break;
+                case 1:
+                    m_whipFXAnimator.SetTrigger("WhipCombo2");
+                    break;
+                case 2:
+                    m_whipFXAnimator.SetTrigger("WhipCombo1");
+                    break;
+            }
         }
 
         public override void Cancel()
@@ -138,21 +153,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_rigidBody.WakeUp();
             m_whipComboInfo[m_currentVisualWhipState].ShowCollider(value);
             m_attackFX.transform.position = m_whipComboInfo[m_currentVisualWhipState].fxPosition.position;
-
-            //switch (m_currentVisualSlashState)
-            //{
-            //    case 0:
-            //        m_fxAnimator.Play("SlashCombo1");
-            //        break;
-            //    case 1:
-            //        m_fxAnimator.Play("SlashCombo2");
-            //        break;
-            //    case 2:
-            //        m_fxAnimator.Play("SlashCombo3");
-            //        break;
-            //    default:
-            //        break;
-            //}
 
             //TEST
             if (CanAttack())

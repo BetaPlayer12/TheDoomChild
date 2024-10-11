@@ -2,7 +2,9 @@ using DChild.Gameplay.Characters.Players;
 using DChild.Gameplay.Characters.Players.SoulSkills;
 using DChild.Gameplay.Items;
 using DChild.Gameplay.Systems;
+using DChild.Gameplay.Systems.Journal;
 using DChild.Gameplay.Systems.Lore;
+using DChild.UI;
 using PixelCrushers.DialogueSystem;
 using Sirenix.OdinInspector;
 using System.Collections;
@@ -11,7 +13,7 @@ using UnityEngine;
 
 namespace DChild.Gameplay.UI
 {
-    public class UINotificationManager : MonoBehaviour, IUINotificationManager
+    public class UINotificationManager : SerializedMonoBehaviour, IUINotificationManager
     {
         [SerializeField, MinValue(0.01f)]
         private float m_notificationInterval = 0.01f;
@@ -20,114 +22,171 @@ namespace DChild.Gameplay.UI
         [SerializeField]
         private PromptNotificationHandle m_promptNotificationHandle;
 
-        private List<INotificationHandle> m_notificationHandles;
-        private bool m_hasActiveNotification;
-        private Coroutine m_ongoingNotificationRoutine;
+        private List<INotificationHandle> m_fullscreennotificationHandles;
+        private List<INotificationHandle> m_promptnotificationHandles;
+        private bool m_hasActiveFullNotification;
+        private bool m_hasActivePromptNotification;
+        private Coroutine m_ongoingFullNotificationRoutine;
+        private Coroutine m_ongoingPromptNotificationRoutine;
 
         #region Prompts
         [Button, FoldoutGroup("Options"), HideInEditorMode]
-        public void ShowJournalUpdateNotification()
+        public void ShowJournalUpdateNotification(JournalData journalData)
         {
-            m_fullscreenNotificationHandle.PromptJournalUpdateNotification();
-            EnableNotificationRoutine();
+            m_fullscreenNotificationHandle.PromptJournalUpdateNotification(journalData);
+            EnableFullNotificationRoutine();
         }
 
         [Button("Primary Skill Notification"), FoldoutGroup("Options"), HideInEditorMode]
         public void QueueNotification(PrimarySkill primarySkillData)
         {
             m_fullscreenNotificationHandle.QueueNotification(primarySkillData);
-            EnableNotificationRoutine();
+            EnableFullNotificationRoutine();
         }
 
         [Button("Soul Skill Notification"), FoldoutGroup("Options"), HideInEditorMode]
         public void QueueNotification(SoulSkill soulSkill)
         {
             m_fullscreenNotificationHandle.QueueNotification(soulSkill);
-            EnableNotificationRoutine();
+            EnableFullNotificationRoutine();
         }
 
         [Button("Lore Notification"), FoldoutGroup("Options"), HideInEditorMode]
         public void QueueNotification(LoreData data)
         {
             m_fullscreenNotificationHandle.QueueNotification(data);
-            EnableNotificationRoutine();
+            EnableFullNotificationRoutine();
         }
 
         [Button("Item Notification"), FoldoutGroup("Options"), HideInEditorMode]
         public void QueueNotification(ItemData itemData)
         {
             m_fullscreenNotificationHandle.QueueNotification(itemData);
-            EnableNotificationRoutine();
+            EnableFullNotificationRoutine();
         }
 
         [Button("Quest Notification"), FoldoutGroup("Options"), HideInEditorMode]
         public void QueueNotification(QuestEntryArgs questInfo)
         {
             m_promptNotificationHandle.QueueNotification(questInfo);
-            EnableNotificationRoutine();
+            EnablePromptNotificationRoutine();
         }
 
         [Button("Loot Notification"), FoldoutGroup("Options"), HideInEditorMode]
         public void QueueNotification(LootList lootList)
         {
             m_promptNotificationHandle.QueueNotification(lootList);
-            EnableNotificationRoutine();
+            EnablePromptNotificationRoutine();
         }
 
         [Button("Store Notification"), FoldoutGroup("Options"), HideInEditorMode]
         public void QueueNotification(StoreNotificationType notificationType)
         {
             m_promptNotificationHandle.QueueNotification(notificationType);
-            EnableNotificationRoutine();
+            EnablePromptNotificationRoutine();
         }
         #endregion
 
-        public void InitializePriorityHandling()
+        public void RemoveAllQueuedNotifications()
         {
-            if (m_notificationHandles == null)
+            for (int i = 0; i < m_fullscreennotificationHandles.Count; i++)
             {
-                InitializeNotificationHandles();
+                m_fullscreennotificationHandles[i].RemoveAllQueuedNotifications();
+            }
+            for (int i = 0; i < m_promptnotificationHandles.Count; i++)
+            {
+                m_promptnotificationHandles[i].RemoveAllQueuedNotifications();
+            }
+        }
+        
+        public void InitializeFullPriorityHandling()
+        {
+            if (m_fullscreennotificationHandles == null)
+            {
+                InitializeFullNotificationHandles();
             }
 
-            m_notificationHandles.Sort(SortPriorityComparison);
+            m_fullscreennotificationHandles.Sort(SortPriorityComparison);
         }
+        public void InitializePromptPriorityHandling()
+        {
+            if (m_promptnotificationHandles == null)
+            {
+                InitializePromptNotificationHandles();
+            }
 
+            m_promptnotificationHandles.Sort(SortPriorityComparison);
+        }
         [ContextMenu("Close Current Notification")]
-        public void CloseCurrentNotification()
+        public void CloseCurrentFullNotification()
         {
-            m_hasActiveNotification = false;
+            m_hasActiveFullNotification = false;
         }
-
-        private void InitializeNotificationHandles()
+        [ContextMenu("Close Current Notification")]
+        public void CloseCurrentPromptNotification()
         {
-            m_notificationHandles = new List<INotificationHandle>();
-            m_notificationHandles.Add(m_fullscreenNotificationHandle);
-            m_notificationHandles.Add(m_promptNotificationHandle);
+            m_hasActivePromptNotification = false;
+        }
+        private void InitializeFullNotificationHandles()
+        {
+            m_fullscreennotificationHandles = new List<INotificationHandle>();
+            m_fullscreennotificationHandles.Add(m_fullscreenNotificationHandle);
 
             m_fullscreenNotificationHandle.Initialize();
-            m_fullscreenNotificationHandle.AddListenerToOnNotificationHidden(CloseCurrentNotification);
+            m_fullscreenNotificationHandle.AddListenerToOnNotificationHidden(CloseCurrentFullNotification); 
+        }
+        private void InitializePromptNotificationHandles()
+        {
+            m_promptnotificationHandles = new List<INotificationHandle>();
+            m_promptnotificationHandles.Add(m_promptNotificationHandle);
 
             m_promptNotificationHandle.Initialize();
-            m_promptNotificationHandle.AddListenerToOnNotificationHidden(CloseCurrentNotification);
-
+            m_promptNotificationHandle.AddListenerToOnNotificationHidden(CloseCurrentPromptNotification);
         }
-
         private int SortPriorityComparison(INotificationHandle x, INotificationHandle y)
         {
             if (x.priority == y.priority)
                 return 0;
-            return x.priority > y.priority ? 1 : -1;
+            return x.priority < y.priority ? 1 : -1;
         }
 
-        private void EnableNotificationRoutine()
+        private void EnableFullNotificationRoutine()
         {
-            if (m_ongoingNotificationRoutine == null)
+            if (m_ongoingFullNotificationRoutine == null)
             {
-                m_ongoingNotificationRoutine = StartCoroutine(NotificationRoutine());
+                m_ongoingFullNotificationRoutine = StartCoroutine(NotificationFullRoutine());
             }
         }
+        private void EnablePromptNotificationRoutine()
+        {
+            if (m_ongoingPromptNotificationRoutine == null)
+            {
+                m_ongoingPromptNotificationRoutine = StartCoroutine(NotificationPromptRoutine());
+            }
+        }
+        private IEnumerator NotificationFullRoutine()
+        {
+            var waitTime = new WaitForSecondsRealtime(m_notificationInterval);
+            var endOfFrame = new WaitForEndOfFrame();
 
-        private IEnumerator NotificationRoutine()
+            do
+            {
+                while (DialogueManager.isConversationActive && !DChildStandardDialogueUI.currentConverstionIsABanter)
+                    yield return endOfFrame;
+
+                yield return endOfFrame;
+                HandleNextFullNotification();
+                do
+                {
+                    yield return endOfFrame;
+                } while (m_hasActiveFullNotification);
+                yield return waitTime;
+
+            } while (HasFullNotificationsLeft());
+
+            m_ongoingFullNotificationRoutine = null;
+        }
+        private IEnumerator NotificationPromptRoutine()
         {
             var waitTime = new WaitForSecondsRealtime(m_notificationInterval);
             var endOfFrame = new WaitForEndOfFrame();
@@ -138,23 +197,22 @@ namespace DChild.Gameplay.UI
                     yield return endOfFrame;
 
                 yield return endOfFrame;
-                HandleNextNotification();
+                HandleNextPromptNotification();
                 do
                 {
                     yield return endOfFrame;
-                } while (m_hasActiveNotification);
+                } while (m_hasActivePromptNotification);
                 yield return waitTime;
 
-            } while (HasNotificationsLeft());
+            } while (HasPromptNotificationsLeft());
 
-            m_ongoingNotificationRoutine = null;
+            m_ongoingPromptNotificationRoutine = null;
         }
-
-        private bool HasNotificationsLeft()
+        private bool HasFullNotificationsLeft()
         {
-            for (int i = 0; i < m_notificationHandles.Count; i++)
+            for (int i = 0; i < m_fullscreennotificationHandles.Count; i++)
             {
-                if (m_notificationHandles[i].HasNotifications())
+                if (m_fullscreennotificationHandles[i].HasNotifications())
                 {
                     return true;
                 }
@@ -163,19 +221,43 @@ namespace DChild.Gameplay.UI
             return false;
         }
 
-        private void HandleNextNotification()
+        private void HandleNextFullNotification()
         {
-            for (int i = 0; i < m_notificationHandles.Count; i++)
+            for (int i = 0; i < m_fullscreennotificationHandles.Count; i++)
             {
-                if (m_notificationHandles[i].HasNotifications())
+                if (m_fullscreennotificationHandles[i].HasNotifications())
                 {
-                    m_hasActiveNotification = true;
-                    m_notificationHandles[i].HandleNextNotification();
+                    m_hasActiveFullNotification = true;
+                    m_fullscreennotificationHandles[i].HandleNextNotification();
                     break;
                 }
             }
         }
+        private bool HasPromptNotificationsLeft()
+        {
+            for (int i = 0; i < m_promptnotificationHandles.Count; i++)
+            {
+                if (m_promptnotificationHandles[i].HasNotifications())
+                {
+                    return true;
+                }
+            }
 
+            return false;
+        }
+
+        private void HandleNextPromptNotification()
+        {
+            for (int i = 0; i < m_promptnotificationHandles.Count; i++)
+            {
+                if (m_promptnotificationHandles[i].HasNotifications())
+                {
+                    m_hasActivePromptNotification = true;
+                    m_promptnotificationHandles[i].HandleNextNotification();
+                    break;
+                }
+            }
+        }
 
     }
 }

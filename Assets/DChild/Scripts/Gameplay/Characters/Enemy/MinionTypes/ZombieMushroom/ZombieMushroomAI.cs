@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using DChild;
 using DChild.Gameplay.Characters.Enemies;
 using DChild.Gameplay.Environment;
+using PixelCrushers.DialogueSystem;
 
 namespace DChild.Gameplay.Characters.Enemies
 {
@@ -32,8 +33,11 @@ namespace DChild.Gameplay.Characters.Enemies
 
             //Attack Behaviours
             [SerializeField, TabGroup("Attack")]
-            private SimpleAttackInfo m_attack = new SimpleAttackInfo();
-            public SimpleAttackInfo attack => m_attack;
+            private SimpleAttackInfo m_meleeAttack = new SimpleAttackInfo();
+            public SimpleAttackInfo meleeAttack => m_meleeAttack;
+            [SerializeField, TabGroup("Attack")]
+            private SimpleAttackInfo m_chargeAttack = new SimpleAttackInfo();
+            public SimpleAttackInfo chargeAttack => m_chargeAttack;
             [SerializeField, MinValue(0), TabGroup("Attack")]
             private float m_chargeAttackDuration;
             public float chargeAttackDuration => m_chargeAttackDuration;
@@ -49,6 +53,12 @@ namespace DChild.Gameplay.Characters.Enemies
             private float m_targetDistanceTolerance;
             public float targetDistanceTolerance => m_targetDistanceTolerance;
 
+            [SerializeField]
+            private float m_stuckInWallTime;
+            public float stuckInWallTime => m_stuckInWallTime;
+            [SerializeField]
+            private float m_chargeAirTime;
+            public float chargeAirTime => m_chargeAirTime;
 
             //Animations
             [SerializeField]
@@ -66,19 +76,41 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField]
             private BasicAnimationInfo m_deathAnimation;
             public BasicAnimationInfo deathAnimation => m_deathAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_chargeAttackAnimation;
+            public BasicAnimationInfo chargeAttackAnimation => m_chargeAttackAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_chargeImpactStickAnimation;
+            public BasicAnimationInfo chargeImpactStickAnimation => m_chargeImpactStickAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_stuckLoopAnimation;
+            public BasicAnimationInfo stuckLoopAnimation => m_stuckLoopAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_unstickAnimation;
+            public BasicAnimationInfo unstickAnimation => m_unstickAnimation;
+            [SerializeField]
+            private BasicAnimationInfo m_chargeToThrustAnimation;
+            public BasicAnimationInfo chargeToThrustAnimation => m_chargeToThrustAnimation;
+
 
             public override void Initialize()
             {
 #if UNITY_EDITOR
                 m_patrol.SetData(m_skeletonDataAsset);
                 m_move.SetData(m_skeletonDataAsset);
-                m_attack.SetData(m_skeletonDataAsset);
+                m_meleeAttack.SetData(m_skeletonDataAsset);
+                m_chargeAttack.SetData(m_skeletonDataAsset);
 
                 m_idleAnimation.SetData(m_skeletonDataAsset);
                 m_detectAnimation.SetData(m_skeletonDataAsset);
                 m_flinchAnimation.SetData(m_skeletonDataAsset);
                 m_turnAnimation.SetData(m_skeletonDataAsset);
                 m_deathAnimation.SetData(m_skeletonDataAsset);
+                m_chargeAttackAnimation.SetData(m_skeletonDataAsset);
+                m_chargeImpactStickAnimation.SetData(m_skeletonDataAsset);
+                m_unstickAnimation.SetData(m_skeletonDataAsset);
+                m_stuckLoopAnimation.SetData(m_skeletonDataAsset);
+                m_chargeToThrustAnimation.SetData(m_skeletonDataAsset);
 #endif
             }
         }
@@ -92,7 +124,6 @@ namespace DChild.Gameplay.Characters.Enemies
             Turning,
             Attacking,
             Cooldown,
-            Chasing,
             Flinch,
             ReevaluateSituation,
             WaitBehaviourEnd,
@@ -101,6 +132,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private enum Attack
         {
             AttackMelee,
+            AttackCharge,
             [HideInInspector]
             _COUNT
         }
@@ -284,7 +316,7 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_Audiosource.Play();
             StopAllCoroutines();
             base.OnDestroyed(sender, eventArgs);
-            
+
             m_stateHandle.OverrideState(State.WaitBehaviourEnd);
             if (m_attackRoutine != null)
             {
@@ -338,7 +370,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void UpdateAttackDeciderList()
         {
-            m_attackDecider.SetList(new AttackInfo<Attack>(Attack.AttackMelee, m_info.attack.range)/**/);
+            m_attackDecider.SetList(new AttackInfo<Attack>(Attack.AttackMelee, m_info.meleeAttack.range), new AttackInfo<Attack>(Attack.AttackCharge, m_info.chargeAttack.range)/**/);
             m_attackDecider.hasDecidedOnAttack = false;
         }
 
@@ -355,22 +387,62 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator AttackRoutine()
         {
-            //m_animation.SetAnimation(0, m_info.detectAnimation, false);
-            //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.detectAnimation);
             m_selfCollider.enabled = false;
-            m_animation.SetAnimation(0, m_info.move.animation, true);
-            float time = 0;
-            while (time < m_info.chargeAttackDuration)
+            m_animation.SetAnimation(0, m_info.meleeAttack.animation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.meleeAttack.animation);
+            m_selfCollider.enabled = true;
+            m_animation.SetAnimation(0, m_info.idleAnimation, true);
+            m_stateHandle.ApplyQueuedState();
+            yield return null;
+        }
+
+        private IEnumerator ChargeAttackRoutine()
+        {
+            m_animation.DisableRootMotion();
+            //m_animation.EnableRootMotion(true, false);
+            m_selfCollider.enabled = false;
+
+            //if (m_groundSensor && m_edgeSensor.isDetecting)
+            //{
+
+            //}
+            m_animation.SetAnimation(0, m_info.chargeToThrustAnimation.animation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.chargeToThrustAnimation.animation);
+
+            //while (!m_playerSensor.isDetecting && !m_wallSensor.isDetecting)
+            //{
+            //    m_animation.SetAnimation(0, m_info.move.animation, true)/*.TimeScale = m_currentTimeScale*/;
+            //    m_movement.MoveTowards(Vector2.right * transform.localScale.x, m_intafo.move.speed);
+            //    yield return null;
+            //}
+            var direction = m_character.facing == HorizontalDirection.Right ? Vector2.right : Vector2.left;
+            var playerPositionBackOffset = direction * 60;
+
+            var distanceToPlayer = Mathf.Abs(transform.position.x - (m_targetInfo.position.x + playerPositionBackOffset.x));
+            Debug.Log("Initial Distance: " + distanceToPlayer);
+            m_animation.SetAnimation(0, m_info.chargeAttack.animation, true);
+            while (distanceToPlayer >= 7f && !m_wallSensor.isDetecting)
             {
-                time += Time.deltaTime;
-                if (m_wallSensor.isDetecting || !m_edgeSensor.isDetecting || m_playerSensor.isDetecting)
-                {
-                    time = m_info.chargeAttackDuration;
-                }
+                distanceToPlayer = Mathf.Abs(transform.position.x - (m_targetInfo.position.x + playerPositionBackOffset.x));
+                Debug.Log(distanceToPlayer);
+                m_movement.MoveTowards(direction, 50);
                 yield return null;
             }
-            m_animation.SetAnimation(0, m_info.attack.animation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack.animation);
+
+            //m_animation.SetAnimation(0, m_info.chargeAttack.animation, true);
+            //yield return new WaitForSeconds(m_info.chargeAirTime);
+            //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.chargeAttack.animation);
+
+            m_movement.Stop();
+
+            if (m_wallSensor.isDetecting)
+            {
+
+                Debug.Log("Wall Detected");
+
+                yield return StuckRoutine();
+            }
+
             m_selfCollider.enabled = true;
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_stateHandle.ApplyQueuedState();
@@ -451,7 +523,7 @@ namespace DChild.Gameplay.Characters.Enemies
         protected override void Awake()
         {
             base.Awake();
-            
+
             m_patrolHandle.TurnRequest += OnTurnRequest;
             m_attackHandle.AttackDone += OnAttackDone;
             m_turnHandle.TurnDone += OnTurnDone;
@@ -523,13 +595,17 @@ namespace DChild.Gameplay.Characters.Enemies
 
                 case State.Attacking:
                     m_stateHandle.Wait(State.Cooldown);
-
-
                     m_animation.EnableRootMotion(true, false);
+
                     switch (m_attackDecider.chosenAttack.attack)
                     {
                         case Attack.AttackMelee:
-                            //m_attackHandle.ExecuteAttack(m_info.attack.animation, m_info.idleAnimation);
+                            m_attackRoutine = StartCoroutine(AttackRoutine());
+                            break;
+                        case Attack.AttackCharge:
+                            m_attackRoutine = StartCoroutine(ChargeAttackRoutine());
+                            break;
+                        default:
                             m_attackRoutine = StartCoroutine(AttackRoutine());
                             break;
                     }
@@ -565,39 +641,71 @@ namespace DChild.Gameplay.Characters.Enemies
 
                     break;
 
-                case State.Chasing:
+                //case State.Chasing:
+                //    {
+                //        //if (IsFacingTarget())
+                //        //{
+                //        //    m_attackDecider.DecideOnAttack();
+                //        //    if (m_attackDecider.hasDecidedOnAttack && IsTargetInRange(/*m_attackDecider.chosenAttack.range*/ m_info.meleeAttackRange) && !m_wallSensor.allRaysDetecting)
+                //        //    {
+                //        //        if (m_animation.GetCurrentAnimation(0).ToString() != m_info.idleAnimation.animation)
+                //        //            m_movement.Stop();
+
+                //        //        m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                //        //        m_stateHandle.SetState(State.Attacking);
+                //        //    }
+                //        //    else
+                //        //    {
+                //        //        m_animation.EnableRootMotion(true, false);
+                //        //        if (m_groundSensor.isDetecting && m_edgeSensor.isDetecting)
+                //        //        {
+                //        //            m_selfCollider.enabled = false;
+                //        //            m_animation.SetAnimation(0, m_info.move.animation, true)/*.TimeScale = m_currentTimeScale*/;
+
+                //        //            m_movement.MoveTowards(Vector2.one * transform.localScale.x, m_info.move.speed);
+                //        //        }
+                //        //        else
+                //        //        {
+                //        //            if (m_animation.GetCurrentAnimation(0).ToString() != m_info.idleAnimation.animation)
+                //        //                m_movement.Stop();
+
+                //        //            m_selfCollider.enabled = true;
+                //        //            if (m_animation.animationState.GetCurrent(0).IsComplete)
+                //        //            {
+                //        //                m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                //        //            }
+                //        //        }
+                //        //    }
+                //        //}
+                //        //else
+                //        //{
+                //        //    m_turnState = State.ReevaluateSituation;
+                //        //    if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation.animation)
+                //        //        m_stateHandle.SetState(State.Turning);
+                //        //}
+
+                //    }
+                //    break;
+
+                case State.ReevaluateSituation:
+                    //How far is target, is it worth it to chase or go back to patrol
+                    if (m_targetInfo.isValid)
                     {
+                        //change chasing with a check for what attack it should do based on player distance (chase behaviour becomes part of charge attack)
+                        //m_stateHandle.SetState(State.Chasing);
                         if (IsFacingTarget())
                         {
-                            m_attackDecider.DecideOnAttack();
-                            if (m_attackDecider.hasDecidedOnAttack && IsTargetInRange(m_attackDecider.chosenAttack.range) && !m_wallSensor.allRaysDetecting)
+                            if (IsTargetInRange(m_info.meleeAttack.range))
                             {
-                                if (m_animation.GetCurrentAnimation(0).ToString() != m_info.idleAnimation.animation)
-                                    m_movement.Stop();
-
+                                m_attackDecider.ForcedDecideOnAttack(0);
                                 m_animation.SetAnimation(0, m_info.idleAnimation, true);
                                 m_stateHandle.SetState(State.Attacking);
                             }
                             else
                             {
-                                m_animation.EnableRootMotion(true, false);
-                                if (!m_wallSensor.isDetecting && m_groundSensor.isDetecting && m_edgeSensor.isDetecting)
-                                {
-                                    m_selfCollider.enabled = false;
-                                    m_animation.SetAnimation(0, m_info.move.animation, true)/*.TimeScale = m_currentTimeScale*/;
-                                    //m_movement.MoveTowards(Vector2.one * transform.localScale.x, m_info.move.speed);
-                                }
-                                else
-                                {
-                                    if (m_animation.GetCurrentAnimation(0).ToString() != m_info.idleAnimation.animation)
-                                        m_movement.Stop();
-
-                                    m_selfCollider.enabled = true;
-                                    if (m_animation.animationState.GetCurrent(0).IsComplete)
-                                    {
-                                        m_animation.SetAnimation(0, m_info.idleAnimation, true);
-                                    }
-                                }
+                                m_attackDecider.ForcedDecideOnAttack(1);
+                                m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                                m_stateHandle.SetState(State.Attacking);
                             }
                         }
                         else
@@ -606,14 +714,6 @@ namespace DChild.Gameplay.Characters.Enemies
                             if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation.animation)
                                 m_stateHandle.SetState(State.Turning);
                         }
-                    }
-                    break;
-
-                case State.ReevaluateSituation:
-                    //How far is target, is it worth it to chase or go back to patrol
-                    if (m_targetInfo.isValid)
-                    {
-                        m_stateHandle.SetState(State.Chasing);
                     }
                     else
                     {
@@ -644,6 +744,21 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_stateHandle.OverrideState(State.Standby);
                 }
             }
+        }
+
+        //move this to be done in charge attack instead of stuck state
+        private IEnumerator StuckRoutine()
+        {
+            m_animation.SetAnimation(0, m_info.chargeImpactStickAnimation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.chargeImpactStickAnimation);
+
+
+            m_animation.SetAnimation(0, m_info.stuckLoopAnimation, true);
+            //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.stuckLoopAnimation);
+            yield return new WaitForSeconds(m_info.stuckInWallTime);
+
+            m_animation.SetAnimation(0, m_info.unstickAnimation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.unstickAnimation);
         }
 
         protected override void OnTargetDisappeared()

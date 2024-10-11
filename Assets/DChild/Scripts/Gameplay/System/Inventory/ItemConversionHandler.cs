@@ -25,7 +25,7 @@ public class ItemConversionHandler : SerializedMonoBehaviour
     private void ConvertItemToCompletedVersion()
     {
         m_player.inventory.InventoryItemUpdate -= onPickup;
-        m_player.inventory.AddItem(m_item, -m_limit);
+        m_player.inventory.RemoveItem(m_item, m_limit);
         ItemCompletionReward();
         m_player.inventory.InventoryItemUpdate += onPickup;
     }
