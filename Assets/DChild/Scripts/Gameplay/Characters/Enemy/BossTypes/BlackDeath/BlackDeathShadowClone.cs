@@ -81,6 +81,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnDeath(object sender, EventActionArgs eventArgs)
         {
+            gameObject.SetActive(false);
             StopAllCoroutines();
             AllowAttack(false);
             m_deathFX.Play();
