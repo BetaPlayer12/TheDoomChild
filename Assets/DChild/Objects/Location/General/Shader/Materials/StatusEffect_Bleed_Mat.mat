@@ -8,9 +8,10 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: StatusEffect_Bleed_Mat
-  m_Shader: {fileID: -6465566751694194690, guid: 9d0134c32abaf4d4ba098c6759258ba1,
+  m_Shader: {fileID: -6465566751694194690, guid: b658970c5c802e44f847a9f17acdf205,
     type: 3}
-  m_ValidKeywords: []
+  m_ValidKeywords:
+  - _STATUS_EFFECT_BLEEDING
   m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -21,12 +22,36 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - _SampleTexture2D_2e419aa19f17406d9f60c9cc6db50bed_Texture_1:
+        m_Texture: {fileID: 2800000, guid: a4c97d356a80faf4cbec3452df52ce04, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SampleTexture2D_5490df21108f4980a0f836cc5415e736_Texture_1:
+        m_Texture: {fileID: 2800000, guid: 0338952b563fb0447a521e1e1728116c, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _Texture2DAsset_067811e621cc118da4526b51cc106b52_Out_0:
         m_Texture: {fileID: 2800000, guid: 3e0d9e1982301c14d8adc3a4202cf363, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Texture2DAsset_316FA9F_Out_0:
         m_Texture: {fileID: 2800000, guid: 3e0d9e1982301c14d8adc3a4202cf363, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Texture2DAsset_4c7e666249924c33b623ddeb25f0b2b3_Out_0:
+        m_Texture: {fileID: 2800000, guid: 3e0d9e1982301c14d8adc3a4202cf363, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Texture2DAsset_4f6051aecc264fd6b478cf64fa191cf7_Out_0:
+        m_Texture: {fileID: 2800000, guid: 4500cf6267a1d6e488006dfb85ff9b90, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Texture2DAsset_5168cb31571e46609b5828119817a2c6_Out_0:
+        m_Texture: {fileID: 2800000, guid: 82ffcc8a7c02afb48bb4ad566964cef5, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Texture2DAsset_52bbba81417f4d3ca25159a792d69527_Out_0:
+        m_Texture: {fileID: 2800000, guid: 1d2e01b86a6b54e4ca1f77d830e01b6c, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Texture2DAsset_5A5D3281_Out_0:
@@ -55,6 +80,41 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - _Bleeding_Overall_Brightness: 1
+    - _Bleeding_Overall_Opacity: 1
+    - _Corrosion_Overall_Color_Brightness: 1
+    - _Corrostion_Overall_Opacity: 5
+    - _Curse_Border_Size: 12
+    - _Curse_Color_Lerp: 0.6
+    - _Curse_Overall_Opacity: 1
+    - _Electric_Overall_Color_Brightness: 1
+    - _Flame_Overall_Color_Brightness: 1
+    - _Ice_Overall_Color_Brightness: 1
+    - _Mist_Fade_Strength: 0.8
+    - _Oil_Overall_Brightness: 1
+    - _Oil_Overall_OPacity: 1
+    - _Overall_Opacity: 0.2
+    - _Poison_Overall_Color_Brightness: 1
+    - _Poison_Overall_Opacity: 0.5
     - _RadialFade: 1
-    m_Colors: []
+    - _STATUS_EFFECT: 6
+    m_Colors:
+    - _Ash_Color: {r: 3.441591, g: 0.5045264, b: 0, a: 0}
+    - _Bleeding_Base_Color: {r: 0.3113208, g: 0.03083838, b: 0.03083838, a: 0}
+    - _Bleeding_Blend_Color: {r: 0, g: 0, b: 0, a: 0}
+    - _Corrosion_Base_Color: {r: 0.1603774, g: 0.07254807, b: 0.06278925, a: 1}
+    - _Corrosion_Blend_Color: {r: 0.5471698, g: 0.1561137, b: 0.04903879, a: 1}
+    - _Curse_Base_Color: {r: 0, g: 0, b: 0, a: 0}
+    - _Curse_Outer_Color: {r: 1, g: 0, b: 0, a: 0}
+    - _Electric_Base_Color: {r: 0.8867924, g: 0.7414637, b: 0.489409, a: 1}
+    - _Electric_Outer_Color: {r: 0.7075472, g: 0.5938857, b: 0.377136, a: 1}
+    - _Flame_Base_Color: {r: 3.953349, g: 0.2897743, b: 0, a: 0}
+    - _Flame_Secondary_Color: {r: 0.2470843, g: 0.005174541, b: 0, a: 0}
+    - _Ice_Base_Color: {r: 0.5707547, g: 0.9693395, b: 1, a: 0.227451}
+    - _Ice_Blend_Color: {r: 0, g: 0.05069103, b: 0.1698113, a: 0.227451}
+    - _Mist_Color: {r: 0.5707547, g: 0.9693395, b: 1, a: 1}
+    - _Oil_Base_Color: {r: 0.3396226, g: 0.04139711, b: 0, a: 0}
+    - _Oil_Blend_Color: {r: 0.1698113, g: 0.04596064, b: 0.02803488, a: 0}
+    - _Poison_Base_Color: {r: 0.1572232, g: 0.0499288, b: 0.2075472, a: 0.5019608}
+    - _Poison_Blend_Color: {r: 0.6140401, g: 0, b: 1.706962, a: 0.5803922}
   m_BuildTextureStacks: []

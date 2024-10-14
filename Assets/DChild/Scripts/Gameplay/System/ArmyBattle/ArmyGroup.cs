@@ -1,40 +1,72 @@
-﻿using Sirenix.OdinInspector;
+using DChild.Gameplay.ArmyBattle.SpecialSkills;
+using Sirenix.OdinInspector;
+using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace DChild.Gameplay.ArmyBattle
 {
-    public abstract class ArmyGroup
+    [System.Serializable]
+    public class ArmyGroup : IAttackingGroup, ISpecialSkillGroup
     {
-        protected List<ArmyCharacter> m_availableMembers;
-        [ShowInInspector]
-        private bool m_isAvailable;
+        [SerializeField]
+        private int m_id;
+        [SerializeField, InfoBox("@\"Has Total Power of: \" + GetTotalCharacterGroupAttackPower()", InfoMessageType = InfoMessageType.None), HideLabel]
+        private ArmyCharacterGroup m_members;
+        [SerializeField]
+        private DamageType m_type;
+        [SerializeField]
+        private bool m_useCustomAttackPower;
+        [SerializeField, ShowIf("m_useCustomAttackPower"), Indent]
+        private int m_attackPower;
 
-        public ArmyGroup()
+        [SerializeField]
+        private bool m_hasSpecialSkill;
+        [SerializeField, ShowIf("m_hasSpecialSkill"), Indent, HideLabel, BoxGroup("Special Skill Info")]
+        private SpecialSkill m_specialSkill;
+
+        public int id => m_id;
+
+        public ArmyGroup(int id, ArmyCharacterGroup members, DamageType type, SpecialSkill specialSkill)
         {
-            m_availableMembers = new List<ArmyCharacter>();
-            m_isAvailable = true;
+            m_id = id;
+            m_members = members;
+            m_type = type;
+
+            m_useCustomAttackPower = false;
+            m_attackPower = GetTotalCharacterGroupAttackPower();
+
+            m_specialSkill = specialSkill;
+            m_hasSpecialSkill = m_specialSkill != null;
         }
-        public ArmyGroup(ArmyGroup reference)
+
+        public ArmyCharacterGroup GetCharacterGroup() => m_members;
+
+        public DamageType GetDamageType() => m_type;
+
+        public int GetTroopCount()
         {
-            m_availableMembers = new List<ArmyCharacter>();
-            for (int i = 0; i < reference.availableMemberCount; i++)
+            var totalTroopCount = 0;
+            for (int i = 0; i < m_members.memberCount; i++)
             {
-                m_availableMembers.Add(reference.GetAvailableMember(i));
+                totalTroopCount += m_members.GetCharacter(i).troopCount;
             }
-            m_isAvailable = true;
+            return totalTroopCount;
         }
 
+        public int GetAttackPower() => m_attackPower;
+        public SpecialSkill GetSpecialSkill() => m_hasSpecialSkill ? m_specialSkill : null;
+        public bool HasSpecialSkill() => m_hasSpecialSkill;
 
-        [ShowInInspector, PropertyOrder(0)]
-        public abstract string groupName { get; }
-        public int availableMemberCount => m_availableMembers.Count;
-        public bool isAvailable => m_isAvailable;
-
-        public ArmyCharacter GetAvailableMember(int index) => m_availableMembers[index];
-
-        public void SetAvailability(bool isAvailable)
+        private int GetTotalCharacterGroupAttackPower()
         {
-            m_isAvailable = isAvailable;
+            var totalPower = 0;
+            for (int i = 0; i < m_members.memberCount; i++)
+            {
+                totalPower += m_members.GetCharacter(i).attackPower;
+            }
+            return totalPower;
         }
     }
 }
+
