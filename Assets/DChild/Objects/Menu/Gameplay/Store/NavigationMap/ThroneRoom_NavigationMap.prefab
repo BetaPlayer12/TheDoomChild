@@ -269,6 +269,8 @@ GameObject:
   - component: {fileID: 1721791454321669943}
   - component: {fileID: 8425122009669681249}
   - component: {fileID: 6190494435885989918}
+  - component: {fileID: 7496300775745791987}
+  - component: {fileID: 1206192895547920683}
   m_Layer: 5
   m_Name: ThroneRoom_NavigationMap
   m_TagString: Untagged
@@ -413,6 +415,166 @@ MonoBehaviour:
   ClearSelectedOnHide: 0
   AutoSelectAfterShow: 0
   AutoSelectTarget: {fileID: 0}
+--- !u!114 &7496300775745791987
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1026644922600692282}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6546d1f34e0077748a93d4c356aa9411, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  addTrigger: 16
+  removeTrigger: 1024
+  databases:
+  - {fileID: 11400000, guid: d35ddfa7a76ac164eb3c52fc0c021813, type: 2}
+  condition:
+    luaConditions: []
+    questConditions: []
+    acceptedTags: []
+    acceptedGameObjects: []
+    luaWizardIndex: -1
+    lastEvaluationValue: 0
+  once: 0
+  onePerFrame: 0
+--- !u!114 &1206192895547920683
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1026644922600692282}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b4cd8ce889d80b44c9a90cc3d055a805, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects:
+    - {fileID: 1160169786681253457}
+    - {fileID: 3322442453342118422}
+    - {fileID: 1399306859080188043}
+    - {fileID: 370291754556534139}
+    - {fileID: 2164109201216553354}
+    - {fileID: 4182683283806402346}
+    - {fileID: 8309707133041428273}
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: m_fogOfWarSegments
+      Entry: 7
+      Data: 0|System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[DChild.Gameplay.NavigationMap.NavMapFogOfWarSegment,
+        Assembly-CSharp]], mscorlib
+    - Name: comparer
+      Entry: 7
+      Data: 1|System.Collections.Generic.GenericEqualityComparer`1[[System.String,
+        mscorlib]], mscorlib
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 12
+      Data: 7
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: TR1_TRsceneONEbottom
+    - Name: $v
+      Entry: 10
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: TR1_TRsceneONEmid
+    - Name: $v
+      Entry: 10
+      Data: 1
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: TR1_TRsceneONEright
+    - Name: $v
+      Entry: 10
+      Data: 2
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: TR1_TRsceneONEmiddle
+    - Name: $v
+      Entry: 10
+      Data: 3
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: TR2_TRbossFIGHT
+    - Name: $v
+      Entry: 10
+      Data: 4
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: TR2_TRsceneTWOtop
+    - Name: $v
+      Entry: 10
+      Data: 5
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: TR2_TRsceneTWObottom
+    - Name: $v
+      Entry: 10
+      Data: 6
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+  m_sceneFogOFWars:
+  - {fileID: 5622217704040901595}
+  - {fileID: 7235394620937824197}
 --- !u!1 &1292433846137459716
 GameObject:
   m_ObjectHideFlags: 0
@@ -853,6 +1015,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 715499437108219098}
+  - component: {fileID: 5622217704040901595}
   m_Layer: 5
   m_Name: FogOfWar
   m_TagString: Untagged
@@ -884,6 +1047,33 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: -0.00012207031}
   m_SizeDelta: {x: 3024, y: 1400}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &5622217704040901595
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5257840545784350377}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bcd5e3fda8ac6fd4181ad675bf0607f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_editorList:
+    m_database: {fileID: 11400000, guid: d35ddfa7a76ac164eb3c52fc0c021813, type: 2}
+    m_infoList:
+    - m_reference: {fileID: 11400000, guid: d35ddfa7a76ac164eb3c52fc0c021813, type: 2}
+      m_varName: TR1_TRsceneONEbottom
+      m_gameObject: {fileID: 1160169786681253457}
+    - m_reference: {fileID: 11400000, guid: d35ddfa7a76ac164eb3c52fc0c021813, type: 2}
+      m_varName: TR1_TRsceneONEmid
+      m_gameObject: {fileID: 3322442453342118422}
+    - m_reference: {fileID: 11400000, guid: d35ddfa7a76ac164eb3c52fc0c021813, type: 2}
+      m_varName: TR1_TRsceneONEright
+      m_gameObject: {fileID: 1399306859080188043}
+    - m_reference: {fileID: 11400000, guid: d35ddfa7a76ac164eb3c52fc0c021813, type: 2}
+      m_varName: TR1_TRsceneONEmiddle
+      m_gameObject: {fileID: 370291754556534139}
 --- !u!1 &5794545450381646834
 GameObject:
   m_ObjectHideFlags: 0
@@ -931,6 +1121,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 888283561381246377}
+  - component: {fileID: 7235394620937824197}
   m_Layer: 5
   m_Name: FogOfWar2
   m_TagString: Untagged
@@ -961,6 +1152,30 @@ RectTransform:
   m_AnchoredPosition: {x: -0.00036621094, y: 7.9161377}
   m_SizeDelta: {x: 3024, y: 1415.8}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &7235394620937824197
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6010781840300825972}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bcd5e3fda8ac6fd4181ad675bf0607f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_editorList:
+    m_database: {fileID: 11400000, guid: d35ddfa7a76ac164eb3c52fc0c021813, type: 2}
+    m_infoList:
+    - m_reference: {fileID: 11400000, guid: d35ddfa7a76ac164eb3c52fc0c021813, type: 2}
+      m_varName: TR2_TRbossFIGHT
+      m_gameObject: {fileID: 2164109201216553354}
+    - m_reference: {fileID: 11400000, guid: d35ddfa7a76ac164eb3c52fc0c021813, type: 2}
+      m_varName: TR2_TRsceneTWOtop
+      m_gameObject: {fileID: 4182683283806402346}
+    - m_reference: {fileID: 11400000, guid: d35ddfa7a76ac164eb3c52fc0c021813, type: 2}
+      m_varName: TR2_TRsceneTWObottom
+      m_gameObject: {fileID: 8309707133041428273}
 --- !u!1 &6306081286258414206
 GameObject:
   m_ObjectHideFlags: 0
@@ -10323,7 +10538,7 @@ PrefabInstance:
     - target: {fileID: 5988293906334493692, guid: e0d14dce7f22b8243bab2ae61ef9845c,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.000015258789
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5988293906334493692, guid: e0d14dce7f22b8243bab2ae61ef9845c,
         type: 3}
@@ -10667,7 +10882,7 @@ PrefabInstance:
     - target: {fileID: 5988293906334493692, guid: e0d14dce7f22b8243bab2ae61ef9845c,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -0.0000076293945
+      value: -0.000015258789
       objectReference: {fileID: 0}
     - target: {fileID: 5988293906334493692, guid: e0d14dce7f22b8243bab2ae61ef9845c,
         type: 3}
