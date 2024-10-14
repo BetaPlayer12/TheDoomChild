@@ -26,7 +26,12 @@ public class IncreaseHealthMinion : MonoBehaviour
 
     public void AddHealth(GameObject minion)
     {
-        Damageable m_minionDamageable = minion.GetComponent<Damageable>();
+        
+        Damageable m_minionDamageable = minion.GetComponentInParent<Damageable>();
+        if(!m_minionDamageable)
+        {
+            return;
+        }
         var minionCurrentmaxHealth = m_minionDamageable.health.maxValue;
         var minionAddHealth = GetMinionHealthPercentage(minionCurrentmaxHealth, m_additionalHealthPercentage);
         Debug.Log("ADDED "+minionAddHealth+"to "+minion.name+"'s max health");
@@ -51,7 +56,16 @@ public class IncreaseHealthMinion : MonoBehaviour
             //instance.SpawnAt(minion.transform.position, Quaternion.identity);
             var instance = GameSystem.poolManager.GetPool<PoolableObjectPool>().GetOrCreateItem(m_LineRendererObj, gameObject.scene);
             var Linerender = instance.GetComponent<LineConnect>();
-            var Centermass = minion.GetComponentInParent<Character>().centerMass;
+            var Character = minion.GetComponentInParent<Character>();
+            Transform Centermass;
+            if (Character.GetBodyPart(BodyReference.BodyPart.Body))
+            {
+                Centermass = Character.GetBodyPart(BodyReference.BodyPart.Body);
+            }else
+            {
+                Centermass = minion.GetComponentInParent<Character>().centerMass;
+            }
+            
             Linerender.SetupLineConnect(Centermass, transform);
             instance.transform.SetParent(minion.transform);
         }
@@ -69,9 +83,9 @@ public class IncreaseHealthMinion : MonoBehaviour
 
     public void ReturnToUnbuffedHealth(GameObject minion)
     {
-        var minionCurrentmaxHealth = minion.GetComponent<Damageable>().health.maxValue;
+        var minionCurrentmaxHealth = minion.GetComponentInParent<Damageable>().health.maxValue;
         var OriginalMaxHealth = UnbuffHealth(minionCurrentmaxHealth, m_additionalHealthPercentage);
-        minion.GetComponent<Damageable>().health.SetMaxValue(Mathf.RoundToInt(OriginalMaxHealth));
+        minion.GetComponentInParent<Damageable>().health.SetMaxValue(Mathf.RoundToInt(OriginalMaxHealth));
         Debug.Log("returned "+ minion.name+" to its max health of "+ OriginalMaxHealth);
     }
 

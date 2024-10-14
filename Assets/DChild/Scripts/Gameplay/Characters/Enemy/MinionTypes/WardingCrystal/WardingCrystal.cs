@@ -61,6 +61,8 @@ public class WardingCrystal : MonoBehaviour
         m_damageable.SetHitboxActive(false);
         Particles.Play();
         m_CrystalBuff.gameObject.SetActive(false);
+        
+        //m_CrystalBuff.gameObject.SetActive(false);
         //m_CrystalBuff.RemoveBuffsToAll();
         //m_CrystalBuff.enabled = false;
         StartCoroutine(DeathRoutine());
@@ -105,6 +107,7 @@ public class WardingCrystal : MonoBehaviour
         m_isDead = true;
         m_animation.animationState.AddEmptyAnimation(2, 0, 0f);
         m_animation.SetAnimation(0, m_deathAnimation, false);
+        m_CrystalBuff.Cleanup();
         yield return new WaitForAnimationComplete(m_animation.animationState, m_deathAnimation);
         yield return new WaitForSeconds(4f);
         m_animation.SetAnimation(0, m_deadState,true);
