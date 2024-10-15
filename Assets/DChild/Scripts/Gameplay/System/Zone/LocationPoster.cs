@@ -1,6 +1,8 @@
 ﻿using DChild.Gameplay.Systems.Serialization;
 using Sirenix.OdinInspector;
+using System;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace DChild.Gameplay.Systems
 {
@@ -10,6 +12,21 @@ namespace DChild.Gameplay.Systems
         private LocationData m_data;
 
         public LocationData data { get => m_data; }
+
+        private void OnEnable()
+        {
+            SceneManager.sceneLoaded += OnSceneLoaded;
+        }
+
+        private void OnSceneLoaded(Scene arg0, LoadSceneMode arg1)
+        {
+            FindObjectOfType<WorldTypeManager>().SetCurrentWorldType(m_data.location);
+        }
+
+        private void OnDisable()
+        {
+            SceneManager.sceneLoaded -= OnSceneLoaded;
+        }
 
 #if UNITY_EDITOR
         [SerializeField, PropertyOrder(-1)]
