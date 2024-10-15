@@ -50,10 +50,13 @@ namespace DChild
                     m_activeZone = string.Empty;
                 }
 
-                if (m_gameplaySceneActive == false)
+                if (GameSystem.m_useGameModeValidator == false)
                 {
-                    LoadingHandle.LoadScenes(m_gameplayScene);
-                    m_gameplaySceneActive = true;
+                    if (m_gameplaySceneActive == false)
+                    {
+                        LoadingHandle.LoadScenes(m_gameplayScene);
+                        m_gameplaySceneActive = true;
+                    }
                 }
                 //if (m_activeZone != sceneName)
                 //{
