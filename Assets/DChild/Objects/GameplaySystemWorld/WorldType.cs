@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Systems
 {
-    public enum World 
+    public enum WorldType
     {
         Underworld,
         Overworld
