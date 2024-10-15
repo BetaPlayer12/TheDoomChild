@@ -86,6 +86,7 @@ namespace DChild
             }
         }
 
+        #region OLD
         public static void LoadZone(SceneInfo scene, bool withLoadingScene)
         {
             GameplaySystem.ListenToNextSceneLoad();
@@ -101,6 +102,23 @@ namespace DChild
         public static void LoadZone(SceneInfo scene, bool withLoadingScene, Action CallAfterSceneDone)
         {
             GameplaySystem.ListenToNextSceneLoad();
+            m_zoneLoader.LoadZone(scene, withLoadingScene, CallAfterSceneDone);
+            GameplaySystem.ClearCaches();
+        }
+        #endregion
+
+        public static void LoadZone(GameMode gameMode, SceneInfo scene, bool withLoadingScene)
+        {
+            GameplaySystem.ListenToNextSceneLoad();
+            m_gameModeValidator.SetupGameMode(gameMode);
+            m_zoneLoader.LoadZone(scene, withLoadingScene);
+            GameplaySystem.ClearCaches();
+        }
+
+        public static void LoadZone(GameMode gameMode, SceneInfo scene, bool withLoadingScene, Action CallAfterSceneDone)
+        {
+            GameplaySystem.ListenToNextSceneLoad();
+            m_gameModeValidator.SetupGameMode(gameMode);
             m_zoneLoader.LoadZone(scene, withLoadingScene, CallAfterSceneDone);
             GameplaySystem.ClearCaches();
         }
