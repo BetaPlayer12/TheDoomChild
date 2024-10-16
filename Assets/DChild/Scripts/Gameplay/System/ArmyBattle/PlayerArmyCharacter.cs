@@ -9,8 +9,8 @@ public class PlayerArmyCharacter : ScriptableObject
 {
 
     [SerializeField, InlineEditor(Expanded = true)]
-    private ArmyCharacter[] m_characters;
+    private ArmyCharacterData[] m_characters;
     
 
-    public ArmyCharacter GetMember(int index) => m_characters[index];
+    public ArmyCharacterData GetMember(int index) => m_characters[index];
 }

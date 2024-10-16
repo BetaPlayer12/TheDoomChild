@@ -1,135 +1,161 @@
-﻿using DChild.Gameplay.Combat;
-using Sirenix.OdinInspector;
+﻿using Sirenix.OdinInspector;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
+using DChild.Gameplay.ArmyBattle.SpecialSkills;
 
 namespace DChild.Gameplay.ArmyBattle
 {
-    public class Army : MonoBehaviour
+    [System.Serializable]
+    public class Army
     {
-        //#if UNITY_EDITOR
-        [SerializeField, HideInPlayMode]
-        private ArmyCompositionData m_initialComposition;
         //#endif
         [SerializeField]
-        private Health m_troopCount;
-        [SerializeField, HideInEditorMode, TabGroup("Composition")]
-        private ArmyComposition m_composition;
-        [ShowInInspector, HideInEditorMode, ReadOnly]
-        private ArmyUnitModifier m_powerModifier;
-        [ShowInInspector, HideInEditorMode, ReadOnly]
-        private ArmyUnitModifier m_damageReductionModifier;
+        private int m_troopCount;
 
-        private List<ArmyAttackGroup> cacheAttackGroup;
-        private List<ArmyAbilityGroup> cacheAbilityGroup;
+        [SerializeField, FoldoutGroup("Info"), HideLabel]
+        private ArmyInfo m_info;
 
-        public Health troopCount => m_troopCount;
-        public IArmyUnitModifier powerModifier => m_powerModifier;
-        public IArmyUnitModifier damageReductionModifier => m_damageReductionModifier;
+        private List<IAttackingGroup> m_availableAttackingGroups;
+        private List<IAttackingGroup> m_usedAttackingGroups;
 
-        public bool HasAvailableAttackGroup(UnitType unitType)
+        private List<ISpecialSkillGroup> m_availableSpecialSkills;
+        private List<ISpecialSkillGroup> m_usedSpecialSkills;
+
+        public ArmyModifier modifiers;
+        public int troopCount => m_troopCount;
+        public float troopCountPercent => (m_troopCount / m_info.GetTroopCount()) * 100f;
+
+        public ArmyOverviewData overview => m_info.overview;
+
+        public Army(ArmyInfo info)
         {
-            var groups = m_composition.attacks.GetAttackGroupsOfUnityType(unitType);
-            for (int i = 0; i < groups.Count; i++)
+            m_info = info;
+            m_troopCount = info.GetTroopCount();
+
+            m_availableAttackingGroups = new List<IAttackingGroup>();
+            m_usedAttackingGroups = new List<IAttackingGroup>();
+
+            m_availableSpecialSkills = new List<ISpecialSkillGroup>();
+            m_usedSpecialSkills = new List<ISpecialSkillGroup>();
+
+            ResetGroupAvailability();
+        }
+
+        public void AddTroopCount(int additionalTroops)
+        {
+             m_troopCount += additionalTroops;
+        }
+
+        public void SubtractTroopCount(int subtractedTroops)
+        {
+             m_troopCount -= subtractedTroops;
+        }
+
+        public void ResetTroopCount()
+        {
+            m_troopCount = m_info.GetTroopCount();
+        }
+
+        public bool HasAvailableGroup(DamageType damageType)
+        {
+            for (int i = 0; i < m_availableAttackingGroups.Count; i++)
             {
-                if (groups[i].isAvailable)
+                if (m_availableAttackingGroups[i].GetDamageType() == damageType)
                 {
                     return true;
                 }
             }
-
             return false;
         }
 
-        public bool HasAvailableAbilityGroup()
+        public List<IAttackingGroup> GetAvailableGroups(DamageType damageType)
         {
-            var abilityList = m_composition.abilities;
-            for (int i = 0; i < abilityList.count; i++)
+            return m_availableAttackingGroups.Where(x => x.GetDamageType() == damageType).OrderBy(x => x.GetAttackPower()).ToList();
+        }
+
+        public void SetAttackingGroupAvailability(IAttackingGroup attackingGroup, bool isAvailable)
+        {
+            if (isAvailable)
             {
-                var group = abilityList.GetAbilityGroup(i);
-                if (group.isAvailable)
+                var relevantSkill = GetAvailableGroup(attackingGroup.id, m_usedAttackingGroups);
+                if (m_usedAttackingGroups.Contains(relevantSkill))
                 {
-                    return true;
+                    m_usedAttackingGroups.Remove(relevantSkill);
+                    m_availableAttackingGroups.Add(relevantSkill);
                 }
             }
-            return false;
-        }
-
-        public List<ArmyAttackGroup> GetAvailableAttackGroups(UnitType unitType)
-        {
-            cacheAttackGroup.Clear();
-            var groups = m_composition.attacks.GetAttackGroupsOfUnityType(unitType);
-            for (int i = 0; i < groups.Count; i++)
+            else
             {
-                var group = groups[i];
-                if (group.isAvailable)
+                var relevantSkill = GetAvailableGroup(attackingGroup.id, m_availableAttackingGroups);
+                if (m_availableAttackingGroups.Contains(relevantSkill))
                 {
-                    cacheAttackGroup.Add(group);
+                    m_availableAttackingGroups.Remove(relevantSkill);
+                    m_usedAttackingGroups.Add(relevantSkill);
                 }
             }
-            return cacheAttackGroup;
         }
 
-        public List<ArmyAbilityGroup> GetAvailableAbilityGroups()
+        public List<ISpecialSkillGroup> GetAvailableSkills()
         {
-            cacheAbilityGroup.Clear();
-            var abilityList = m_composition.abilities;
-            for (int i = 0; i < abilityList.count; i++)
+            return m_availableSpecialSkills;
+        }
+
+        public void SetSpecialSkillAvailability(ISpecialSkillGroup group, bool isAvailable)
+        {
+            if (isAvailable)
             {
-                var group = abilityList.GetAbilityGroup(i);
-                if (group.isAvailable)
+                if (m_usedSpecialSkills.Contains(group))
                 {
-                    cacheAbilityGroup.Add(group);
+                    m_usedSpecialSkills.Remove(group);
+                    m_availableSpecialSkills.Add(group);
+                }
+            }
+            else
+            {
+                if (m_availableSpecialSkills.Contains(group))
+                {
+                    m_availableSpecialSkills.Remove(group);
+                    m_usedSpecialSkills.Add(group);
+                }
+            }
+        }
+
+        public void ResetGroupAvailability()
+        {
+            var armyGroups = m_info.GetGroups();
+            for (int i = 0; i < armyGroups.Length; i++)
+            {
+                var group = armyGroups[i];
+                m_availableAttackingGroups.Add(group);
+                if (group.HasSpecialSkill())
+                {
+                    m_availableSpecialSkills.Add(group);
                 }
             }
 
-            return cacheAbilityGroup;
+            m_usedAttackingGroups.Clear();
+            m_usedSpecialSkills.Clear();
         }
 
-        public void SetArmyComposition(ArmyComposition armyComposition)
+        private IAttackingGroup GetAvailableGroup(int id, List<IAttackingGroup> reference)
         {
-            m_composition = armyComposition;
-            SetTroopCount(m_composition.troopCount);
-        }
-
-        public void RecordArmyCompositionTo(ref ArmyComposition armyComposition)
-        {
-            //armyComposition.CopyComposition(m_composition);
-        }
-
-        public void SetTroopCount(int troopCount)
-        {
-            m_troopCount.SetMaxValue(troopCount);
-            m_troopCount.ResetValueToMax();
-        }
-
-        public void Initialize()
-        {
-            SetTroopCount(m_composition.troopCount);
-            m_powerModifier = new ArmyUnitModifier(1, 1, 1);
-            m_damageReductionModifier = new ArmyUnitModifier(0, 0, 0);
-            m_composition.attacks.ResetAvailability();
-        }
-
-        public override string ToString()
-        {
-            return $"{gameObject.name}(Army[{m_composition.name}])";
-        }
-
-        private void Awake()
-        {
-            //#if UNITY_EDITOR
-            if (m_initialComposition != null)
+            for (int i = 0; i < reference.Count; i++)
             {
-                m_composition = m_initialComposition.GenerateArmyCompositionInstance();
-                m_composition.attacks.ResetAvailability();
+                if (reference[i].id == id)
+                    return reference[i];
             }
+            return null;
+        }
 
-            //#endif
-            m_powerModifier = new ArmyUnitModifier(1, 1, 1);
-            m_damageReductionModifier = new ArmyUnitModifier(0, 0, 0);
-            cacheAttackGroup = new List<ArmyAttackGroup>();
-            cacheAbilityGroup = new List<ArmyAbilityGroup>();
+        private ISpecialSkillGroup GetAvailableGroup(int id, List<ISpecialSkillGroup> reference)
+        {
+            for (int i = 0; i < reference.Count; i++)
+            {
+                if (reference[i].id == id)
+                    return reference[i];
+            }
+            return null;
         }
     }
 }
