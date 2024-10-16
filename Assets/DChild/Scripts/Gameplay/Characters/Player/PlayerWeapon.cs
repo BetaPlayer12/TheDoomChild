@@ -4,6 +4,7 @@ using DChild.Gameplay.Combat;
 using DChild.Gameplay.Combat.StatusAilment;
 using DChild.Gameplay.Systems;
 using DChild.Serialization;
+using Holysoft.Collections;
 using Holysoft.Event;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -14,7 +15,7 @@ namespace DChild.Gameplay.Characters.Players
 
     [AddComponentMenu("DChild/Gameplay/Player/Player Weapon")]
     [System.Serializable]
-    public class PlayerWeapon : MonoBehaviour
+    public class PlayerWeapon : MonoBehaviour,ISerializable<WeaponUpgradeSaveData>
     {
         [SerializeField]
         private WeaponBaseStatsData m_defaultWeaponStatsData;
