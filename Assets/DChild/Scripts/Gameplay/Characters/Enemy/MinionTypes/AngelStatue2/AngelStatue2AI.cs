@@ -153,7 +153,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private float m_currentRunAttackDuration;
         private bool m_enablePatience;
         private bool m_isDetecting;
-        private Vector2 m_startpoint;
+        private Vector3 m_startpoint;
 
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_wallSensor;
@@ -217,7 +217,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 //    //Patience();
                 //    StartCoroutine(PatienceRoutine());
                 //}
-                if(m_stateHandle.currentState != State.Idle || m_stateHandle.currentState != State.ReturnToSpawnPoint)
+                if(m_stateHandle.currentState != State.Idle && m_stateHandle.currentState != State.ReturnToSpawnPoint && m_stateHandle.currentState != State.Detect)
                 {
                     m_enablePatience = true;
                 }
@@ -240,6 +240,7 @@ namespace DChild.Gameplay.Characters.Enemies
         //Patience Handler
         private void Patience()
         {
+
             if (m_currentPatience < m_info.patience)
             {
                 m_currentPatience += m_character.isolatedObject.deltaTime;
@@ -375,21 +376,30 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_stateHandle.Wait(State.Idle);
             var direction = (int)m_character.facing * Vector2.right;
-            if (!IsFacing(m_startpoint))
+            if(transform.position == m_startpoint)
             {
-                CustomTurn();
-               // m_turnHandle.Execute(m_info.turnAnimation.animation, m_info.idleAnimation.animation);
-                
-            }
-            do
-            {
-                m_animation.SetAnimation(0, m_info.move, true);
-                m_movement.MoveTowards(direction, m_info.move.speed);
-                Debug.Log("Return to spot");
                 yield return null;
+            }
+            else
+            {
+                if (!IsFacing(m_startpoint))
+                {
+                    CustomTurn();
+                    // m_turnHandle.Execute(m_info.turnAnimation.animation, m_info.idleAnimation.animation);
 
-            } while (Vector2.Distance(transform.position, m_startpoint) > 1f);
-            Debug.Log("outside loop");
+                }
+                do
+                {
+                    m_animation.SetAnimation(0, m_info.move, true);
+                    m_movement.MoveTowards(direction, m_info.move.speed);
+                    Debug.Log("Return to spot");
+                    yield return null;
+
+                } while (Vector2.Distance(transform.position, m_startpoint) > 1f);
+                Debug.Log("outside loop");
+            }
+         
+            
             m_stateHandle.ApplyQueuedState();
         }
 

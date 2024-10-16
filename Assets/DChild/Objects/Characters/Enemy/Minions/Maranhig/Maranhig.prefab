@@ -52,10 +52,11 @@ MonoBehaviour:
   m_alphaBlendStrength: 0.5
   m_mixDuration: 1
   m_skeletonAnimation: {fileID: 637216558802742482}
-  m_animation: Flinch
-  m_idleAnimation: Idle
+  m_animation: STATIONARY_Flinch
+  m_idleAnimation: STATIONARY_Dormant_Idle
   m_enableFlinchColor: 0
   m_flinchColorAnimation: 
+  m_enableModule: 1
 --- !u!1 &5944911587005230659
 GameObject:
   m_ObjectHideFlags: 0
@@ -142,7 +143,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_source: {fileID: 6138452718382794257}
   m_animator: {fileID: 8286669823959756279}
-  m_animation: Death
+  m_animation: STATIONARY_Death
   m_bodyDuration:
     m_startTime: 3
   m_fx: []
@@ -654,6 +655,11 @@ PrefabInstance:
       propertyPath: m_LocalRotation.z
       value: -0.065557964
       objectReference: {fileID: 0}
+    - target: {fileID: 413758086488711318, guid: cf1dd3bb50060344f82180db2eb9f99a,
+        type: 3}
+      propertyPath: m_centerMass
+      value: 
+      objectReference: {fileID: 7554016577589584628}
     - target: {fileID: 628312041229505375, guid: cf1dd3bb50060344f82180db2eb9f99a,
         type: 3}
       propertyPath: m_LocalRotation.w
@@ -869,6 +875,16 @@ PrefabInstance:
       propertyPath: m_LocalRotation.z
       value: 0.142843
       objectReference: {fileID: 0}
+    - target: {fileID: 3074535385201183175, guid: cf1dd3bb50060344f82180db2eb9f99a,
+        type: 3}
+      propertyPath: m_Size.x
+      value: 25
+      objectReference: {fileID: 0}
+    - target: {fileID: 3074535385201183175, guid: cf1dd3bb50060344f82180db2eb9f99a,
+        type: 3}
+      propertyPath: m_Offset.x
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 3082316394318670324, guid: cf1dd3bb50060344f82180db2eb9f99a,
         type: 3}
       propertyPath: m_LocalScale.x
@@ -984,6 +1000,16 @@ PrefabInstance:
       propertyPath: m_LocalRotation.z
       value: -0.10565073
       objectReference: {fileID: 0}
+    - target: {fileID: 3817130486905264328, guid: cf1dd3bb50060344f82180db2eb9f99a,
+        type: 3}
+      propertyPath: m_centerMass
+      value: 
+      objectReference: {fileID: 7554016577589584628}
+    - target: {fileID: 3929328160661503254, guid: cf1dd3bb50060344f82180db2eb9f99a,
+        type: 3}
+      propertyPath: m_centerMass
+      value: 
+      objectReference: {fileID: 7554016577589584628}
     - target: {fileID: 3983104684154748696, guid: cf1dd3bb50060344f82180db2eb9f99a,
         type: 3}
       propertyPath: m_LocalScale.x
@@ -1009,6 +1035,17 @@ PrefabInstance:
       propertyPath: m_LocalRotation.z
       value: -0.11951416
       objectReference: {fileID: 0}
+    - target: {fileID: 4338449232895505268, guid: cf1dd3bb50060344f82180db2eb9f99a,
+        type: 3}
+      propertyPath: _animationName
+      value: STATIONARY_Dormant_Idle
+      objectReference: {fileID: 0}
+    - target: {fileID: 4338449232895505268, guid: cf1dd3bb50060344f82180db2eb9f99a,
+        type: 3}
+      propertyPath: skeletonDataAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: b12b97396812af248b89e057ce98a1f6,
+        type: 2}
     - target: {fileID: 4338449232895505269, guid: cf1dd3bb50060344f82180db2eb9f99a,
         type: 3}
       propertyPath: m_RootOrder
@@ -1074,6 +1111,11 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 4338449232895505275, guid: cf1dd3bb50060344f82180db2eb9f99a,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 41378739e65ffd941acc93f35079713c, type: 2}
     - target: {fileID: 5417728819433058453, guid: cf1dd3bb50060344f82180db2eb9f99a,
         type: 3}
       propertyPath: m_LocalScale.x
@@ -1103,6 +1145,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalRotation.z
       value: 0.013212224
+      objectReference: {fileID: 0}
+    - target: {fileID: 5441375478908080729, guid: cf1dd3bb50060344f82180db2eb9f99a,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.22625542
+      objectReference: {fileID: 0}
+    - target: {fileID: 5441375478908080729, guid: cf1dd3bb50060344f82180db2eb9f99a,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 9.001759
       objectReference: {fileID: 0}
     - target: {fileID: 5632979179378915120, guid: cf1dd3bb50060344f82180db2eb9f99a,
         type: 3}
@@ -1243,6 +1295,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalRotation.z
       value: 0.0013426291
+      objectReference: {fileID: 0}
+    - target: {fileID: 6645025581488536914, guid: cf1dd3bb50060344f82180db2eb9f99a,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.20758057
+      objectReference: {fileID: 0}
+    - target: {fileID: 6645025581488536914, guid: cf1dd3bb50060344f82180db2eb9f99a,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 6.450657
       objectReference: {fileID: 0}
     - target: {fileID: 7157003457374892629, guid: cf1dd3bb50060344f82180db2eb9f99a,
         type: 3}
@@ -1519,7 +1581,7 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 3810781419914026918}
   m_PrefabAsset: {fileID: 0}
---- !u!60 &6294299150365323614
+--- !u!60 &680990244653981678
 PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1554,7 +1616,7 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 3810781419914026918}
   m_PrefabAsset: {fileID: 0}
---- !u!60 &9039471572186116849
+--- !u!60 &8999235600907333956
 PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1579,10 +1641,10 @@ PolygonCollider2D:
   m_AutoTiling: 0
   m_Points:
     m_Paths:
-    - - {x: 0.8738, y: 3.1919}
-      - {x: 36.1701, y: -0.4304}
-      - {x: 31.533998, y: -4.8539996}
-      - {x: 1.9939998, y: -5.6959}
+    - - {x: 0.8867, y: -1.7135}
+      - {x: 36.183, y: -5.3358}
+      - {x: 31.546898, y: -9.759399}
+      - {x: 2.0069, y: -10.6013}
 --- !u!114 &7515152128840378264 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6677064226217883710, guid: cf1dd3bb50060344f82180db2eb9f99a,
@@ -1613,7 +1675,7 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 3810781419914026918}
   m_PrefabAsset: {fileID: 0}
---- !u!60 &4383550808476165648
+--- !u!60 &6449958888538796037
 PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1648,7 +1710,7 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 3810781419914026918}
   m_PrefabAsset: {fileID: 0}
---- !u!60 &1717514063506790588
+--- !u!60 &3714830470172335757
 PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1673,10 +1735,10 @@ PolygonCollider2D:
   m_AutoTiling: 0
   m_Points:
     m_Paths:
-    - - {x: -6.6713, y: 15.3887}
-      - {x: 24.201, y: 14.701999}
-      - {x: 35.3046, y: -9.553599}
-      - {x: 1.8061, y: -9.5483}
+    - - {x: 0.043899998, y: 16.5794}
+      - {x: 15.0218, y: 17.7704}
+      - {x: 14.4874, y: -1.0770999}
+      - {x: 0.504, y: -1.0205001}
 --- !u!114 &7795134131139357894 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6399470707209139040, guid: cf1dd3bb50060344f82180db2eb9f99a,
