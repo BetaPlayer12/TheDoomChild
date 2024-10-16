@@ -1,36 +1,80 @@
-﻿using Holysoft.Event;
-using System;
+﻿using Sirenix.OdinInspector;
+using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace DChild.Gameplay.ArmyBattle
 {
-
     public class PlayerArmyController : ArmyController
     {
-        public event Action<List<ArmyAttackGroup>> AttackTypeChosen;
-        public event Action<List<ArmyAbilityGroup>> AbilityTypeChosen;
+        [SerializeField, ValueDropdown("GetAllAttackingGroups"), HideInEditorMode]
+        private IAttackingGroup m_chosenAttack;
 
-        public void ChooseAttack(ArmyAttackGroup attackGroup)
+        public void UseThisTurn(IAttackingGroup chosenAttack)
         {
-            m_currentAttackGroup = attackGroup;
-            m_currentAttack = CreateAttack(attackGroup);
-            SendAttackChosenEvent(CreateAttackEvent(m_currentAttack));
+            m_chosenAttack = chosenAttack;
         }
 
-        public void ChooseAbility(ArmyAbilityGroup abilityGroup)
+        public bool HasViableTurnOptions()
         {
-            SendAbilityChosenEvent(abilityGroup);
+            for (int i = 0; i < (int)DamageType._COUNT; i++)
+            {
+                if (m_controlledArmy.HasAvailableGroup((DamageType)i))
+                {
+                    return true;
+                }
+            }
+
+
+            return false;
         }
 
-        public override void ChooseSpecial()
+        public override ArmyTurnAction GetTurnAction(int turnNumber)
         {
-            base.ChooseSpecial();
-            AbilityTypeChosen?.Invoke(m_controlledArmy.GetAvailableAbilityGroups());
+            if (m_chosenAttack == null)
+                return new ArmyTurnAction
+                {
+                    troopCount = m_controlledArmy.troopCount,
+                    willAttack = false
+                };
+
+            return new ArmyTurnAction()
+            {
+                troopCount = m_controlledArmy.troopCount,
+                attack = new ArmyDamage(m_chosenAttack.GetDamageType(), m_chosenAttack.GetAttackPower()),
+                willAttack = true
+            };
+        }
+        public override void CleanUpForNextTurn()
+        {
+            if (m_chosenAttack == null)
+                return;
+
+            m_controlledArmy.SetAttackingGroupAvailability(m_chosenAttack, false);
+            m_chosenAttack = null;
         }
 
-        protected override void ChooseAttack(UnitType unitType)
+
+        private ValueDropdownList<IAttackingGroup> GetAllAttackingGroups()
         {
-            AttackTypeChosen?.Invoke(m_controlledArmy.GetAvailableAttackGroups(unitType));
+            ValueDropdownList<IAttackingGroup> list = new ValueDropdownList<IAttackingGroup>();
+
+            List<IAttackingGroup> attackingGroups = new List<IAttackingGroup>();
+
+            for (int i = 0; i < (int)DamageType._COUNT; i++)
+            {
+                attackingGroups.AddRange(m_controlledArmy.GetAvailableGroups((DamageType)i));
+            }
+
+            for (int i = 0; i < attackingGroups.Count; i++)
+            {
+                var group = attackingGroups[i];
+                list.Add(group.GetCharacterGroup().name, group);
+            }
+
+            return list;
         }
+
+
     }
 }
