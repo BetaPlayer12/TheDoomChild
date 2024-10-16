@@ -4,28 +4,31 @@ using UnityEngine;
 using Sirenix.OdinInspector;
 using DChild.Gameplay.SoulSkills;
 using DChild.Menu.Codex;
+using Holysoft.Collections;
+using DChild.Gameplay.Systems;
 
 namespace DChild.Gameplay.Characters.Players
 {
+
     [System.Serializable]
-    public class PlayerCharacterSerializer
+    public class PlayerCharacterSerializer : SerializedMonoBehaviour
     {
         [SerializeField, TabGroup("Inventory")]
-        private PlayerInventory m_inventory;
+        private ISerializable<TradableInventorySerialization> m_inventory;
         [SerializeField, TabGroup("Codex")]
-        private CodexProgressSerializer m_codex;
+        private ISerializable<CodexSaveData> m_codex;
         [SerializeField, TabGroup("Skill")]
-        private PlayerSkills m_playerSkills;
+        private ISerializable<PrimarySkillsData> m_playerSkills;
         [SerializeField, TabGroup("Equipped Soul Skill")]
-        private PlayerSoulSkillHandle m_soulSkillHandle;
+        private ISerializable<PlayerSoulSkillData> m_soulSkillHandle;
         [SerializeField]
-        private CombatArts m_combatArts;
+        private ISerializable<CombatArtsSaveData> m_combatArts;
         [SerializeField]
-        private PlayerWeapon m_playerWeapon;
+        private ISerializable<WeaponUpgradeSaveData> m_playerWeapon;
 
         public PlayerCharacterData SaveData()
         {
-            return new PlayerCharacterData(m_inventory.Save(),
+            return new PlayerCharacterData(m_inventory.SaveData(),
                                         m_codex.SaveData(),
                                         m_playerSkills.SaveData(),
                                         m_soulSkillHandle.SaveData(),
@@ -35,7 +38,7 @@ namespace DChild.Gameplay.Characters.Players
 
         public void LoadData(PlayerCharacterData data)
         {
-            m_inventory.Load(data.inventoryData);
+            m_inventory.LoadData(data.inventoryData);
             m_codex.LoadData(data.codexData);
             m_playerSkills.LoadData(data.skills);
             m_soulSkillHandle.LoadData(data.soulSkillData);
