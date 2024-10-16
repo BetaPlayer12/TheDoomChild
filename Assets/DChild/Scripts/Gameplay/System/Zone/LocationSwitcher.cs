@@ -49,9 +49,16 @@ namespace DChild.Gameplay.Systems
         }
 
         [Button]
-        public void Interact()
+        public void ForceActivation()
         {
-            Interact(GameplaySystem.playerManager.player.character);
+            if (m_handle.needsButtonInteraction)
+            {
+                Interact(GameplaySystem.playerManager.player.character);
+            }
+            else
+            {
+                GoToDestination(GameplaySystem.playerManager.player.character);
+            }
         }
 
         private IEnumerator DoTransition(Character character, TransitionType type)
