@@ -171,18 +171,66 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae28ddf2969f0824dbeff57060b30d07, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_SkeletonAnimation: {fileID: 0}
-  m_cartPosition: {fileID: 0}
+  m_SkeletonAnimation: {fileID: 203497404692434478}
+  m_cartPosition: {fileID: 4855125066646938419}
   Default:
     m_PersistentCalls:
       m_Calls: []
   Interact:
     m_PersistentCalls:
       m_Calls: []
-  m_Interact: 
-  m_Idle: 
-  m_startWithCart: 0
-  m_CartSprite: {fileID: 0}
+  m_Interact:
+  - Interaction
+  - Interaction_2
+  m_Idle:
+  - Idle
+  m_startWithCart: 1
+  m_CartSprite: {fileID: 21300000, guid: c7a4654504f400c42a2a19e543a72c48, type: 3}
+--- !u!114 &1054702059126321806
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6344056711499519834}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0cc064dd0124bb749aa872864526e014, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_oneTimeOnly: 0
+  m_waitForPlayerToBeGrounded: 0
+  m_playerHitboxOnly: 0
+  m_enterEvents:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4671298807983604145}
+        m_TargetAssemblyTypeName: MerchantInitializer, Assembly-CSharp
+        m_MethodName: InteractAction
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+  m_exitEvents:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4671298807983604145}
+        m_TargetAssemblyTypeName: MerchantInitializer, Assembly-CSharp
+        m_MethodName: DefaultAction
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
 --- !u!4 &6344056711499519835 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 652351094922304171, guid: 5dcc993320037ac40a69ea57c3f241ba,
@@ -263,3 +311,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bde47631ac9dfd24e83c461e4658b7d4, type: 3}
+--- !u!114 &203497404692434478 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8281676378336513887, guid: bde47631ac9dfd24e83c461e4658b7d4,
+    type: 3}
+  m_PrefabInstance: {fileID: 8087509480991211889}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d247ba06193faa74d9335f5481b2b56c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

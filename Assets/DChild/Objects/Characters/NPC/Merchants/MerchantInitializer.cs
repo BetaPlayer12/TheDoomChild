@@ -25,9 +25,9 @@ public class MerchantInitializer : MonoBehaviour
     [SerializeField, TabGroup("Actions")]
     private UnityEvent Default, Interact;
     [SerializeField, Spine.Unity.SpineAnimation, TabGroup("Animation")]
-    private string m_Interact;
+    private List<string> m_Interact;
     [SerializeField, Spine.Unity.SpineAnimation, TabGroup("Animation")]
-    private string m_Idle;
+    private List<string> m_Idle;
     [SerializeField, TabGroup("Initialize")]
     private bool m_startWithCart;
     [SerializeField, TabGroup("Initialize")]
@@ -46,12 +46,37 @@ public class MerchantInitializer : MonoBehaviour
     public void DefaultAction()
     {
         Default?.Invoke();
-        m_SkeletonAnimation.AnimationName= m_Idle;
+        m_SkeletonAnimation.AnimationName= ChooseIdleAnim();
     }
 
     public void InteractAction()
     {
         Interact?.Invoke();
-        m_SkeletonAnimation.AnimationName = m_Interact;
+        m_SkeletonAnimation.AnimationName = ChooseInteractAnim();
+    }
+
+    string ChooseIdleAnim()
+    {
+        if(m_Idle.Count>1)
+        {
+            int x = UnityEngine.Random.Range(0, m_Idle.Count);
+            return m_Idle[x];
+        }else
+        {
+            return m_Idle[0];
+        }
+    }
+
+    string ChooseInteractAnim()
+    {
+        if (m_Interact.Count > 1)
+        {
+            int x = UnityEngine.Random.Range(0, m_Interact.Count);
+            return m_Interact[x];
+        }
+        else
+        {
+            return m_Interact[0];
+        }
     }
 }
