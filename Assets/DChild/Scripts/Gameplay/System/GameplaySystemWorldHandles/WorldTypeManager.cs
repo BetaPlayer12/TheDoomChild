@@ -10,6 +10,8 @@ namespace DChild.Gameplay.Systems
         [SerializeField]
         private WorldType m_currentWorldType;
 
+        public WorldType CurrentWorldType => m_currentWorldType;
+
         [SerializeField]
         private LocationInWorldData m_underworldLocationsData;
         [SerializeField]
