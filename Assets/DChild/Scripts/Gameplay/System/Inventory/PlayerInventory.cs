@@ -2,6 +2,7 @@
 using DChild.Gameplay.SoulSkills;
 using DChild.Gameplay.Systems;
 using DChild.Gameplay.Trade;
+using Holysoft.Collections;
 using Holysoft.Event;
 using Sirenix.OdinInspector;
 using System.Collections.Generic;
@@ -9,7 +10,7 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Inventories
 {
-    public class PlayerInventory : MonoBehaviour, ITradeInventory, IInventory, ICurrency
+    public class PlayerInventory : MonoBehaviour, ITradeInventory, IInventory, ICurrency, ISerializable<TradableInventorySerialization>
     {
         [SerializeField]
         private ItemList m_referenceList;
@@ -47,9 +48,9 @@ namespace DChild.Gameplay.Inventories
         int ICurrency.amount => m_inventory.currency;
 
 
-        public TradableInventorySerialization Save() => new TradableInventorySerialization(m_inventory);
+        public TradableInventorySerialization SaveData() => new TradableInventorySerialization(m_inventory);
 
-        public void Load(TradableInventorySerialization serializedData)
+        public void LoadData(TradableInventorySerialization serializedData)
         {
             m_inventory.ClearList();
 

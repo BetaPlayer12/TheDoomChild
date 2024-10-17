@@ -1,5 +1,7 @@
 ﻿using DChild.Gameplay.Characters.Players;
 using DChild.Gameplay.Characters.Players.SoulSkills;
+using DChild.Serialization;
+using Holysoft.Collections;
 using Holysoft.Event;
 using Sirenix.OdinInspector;
 using System;
@@ -10,7 +12,7 @@ using UnityEngine;
 namespace DChild.Gameplay.SoulSkills
 {
 
-    public class PlayerSoulSkillHandle : SerializedMonoBehaviour
+    public class PlayerSoulSkillHandle : SerializedMonoBehaviour, ISerializable<PlayerSoulSkillData>
     {
         [SerializeField]
         private PlayerSoulSkillsConfiguration m_playerSoulSkillsConfiguration;
