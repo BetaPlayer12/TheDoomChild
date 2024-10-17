@@ -1,6 +1,7 @@
 ﻿using DChild.Serialization;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using Holysoft.Collections;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -8,7 +9,7 @@ using UnityEditor;
 
 namespace DChild.Menu.Codex
 {
-    public class CodexProgressSerializer : MonoBehaviour
+    public class CodexProgressSerializer : MonoBehaviour, ISerializable<CodexSaveData>
     {
         [SerializeField, ListDrawerSettings(HideAddButton = true, HideRemoveButton = true, DraggableItems = false, OnBeginListElementGUI = "OnBeginTrackerListGUI")]
         private CodexProgressTracker[] m_trackers = new CodexProgressTracker[(int)CodexSubtab._COUNT];
