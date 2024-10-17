@@ -34,7 +34,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7518031643020262915}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &4665764455124903692
 MonoBehaviour:
@@ -225,6 +225,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_list: {fileID: 11400000, guid: 0896bdf8e65b9464da6eeb39a04ab950, type: 2}
+  m_attacker: {fileID: 0}
 --- !u!1 &7518031641455754583
 GameObject:
   m_ObjectHideFlags: 0
@@ -255,7 +256,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7518031643020262915}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2531548895851099347
 MonoBehaviour:
@@ -310,7 +311,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7518031643020262915}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &7518031641492634118
 MonoBehaviour:
@@ -346,6 +347,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_defaultWeaponStatsData: {fileID: 11400000, guid: bc9f0a8a4ae06384ba9bdef8c0866bc5,
     type: 2}
+  m_currentWeaponLevel: 0
   m_baseDamage:
     m_type: 0
     m_value: 1
@@ -495,7 +497,7 @@ Transform:
   - {fileID: 5130850616900550213}
   - {fileID: 683531379906931769}
   m_Father: {fileID: 7518031643020262915}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &7518031642767482061
 MonoBehaviour:
@@ -532,7 +534,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c67f30565484b2a4b84512451f737093, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_notification: {fileID: 0}
 --- !u!114 &1475017650848671562
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -584,6 +585,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 6373920261766048459}
   - {fileID: 7518031641492634116}
   - {fileID: 7518031642767482062}
   - {fileID: 7518031641455754585}
@@ -617,12 +619,7 @@ MonoBehaviour:
   m_inventory: {fileID: 2531548895851099347}
   m_itemEffectHandle: {fileID: 2000943039735974509}
   m_moduleConfigurator: {fileID: 0}
-  m_serializer:
-    m_inventory: {fileID: 0}
-    m_codex: {fileID: 1475017650848671562}
-    m_playerSkills: {fileID: 7518031642767482061}
-    m_soulSkillHandle: {fileID: 9053890134280088711}
-    m_combatArts: {fileID: 6000878080324460512}
+  m_serializer: {fileID: 233810294478454533}
   m_controlledCharacter: {fileID: 0}
   m_state: {fileID: 0}
   m_damageable: {fileID: 0}
@@ -681,7 +678,7 @@ MonoBehaviour:
     m_skillResetRequester: {fileID: 0}
     m_statusEffectReciever: {fileID: 0}
     m_surfaceDector: {fileID: 0}
-    m_playerBehaviour: {fileID: 0}
+    m_playerBehaviour: 0
     m_skeletonGhost: {fileID: 0}
   m_skills: {fileID: 7518031642767482061}
   m_moduleContainer: {fileID: 0}
@@ -797,3 +794,80 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_maxValue: 200
+--- !u!1 &8722317098013533980
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6373920261766048459}
+  - component: {fileID: 233810294478454533}
+  m_Layer: 8
+  m_Name: Serializer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6373920261766048459
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8722317098013533980}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7518031643020262915}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &233810294478454533
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8722317098013533980}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d9a640cb91a006a49a4c12dabfcfe47d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects:
+    - {fileID: 2531548895851099347}
+    - {fileID: 1475017650848671562}
+    - {fileID: 7518031642767482061}
+    - {fileID: 9053890134280088711}
+    - {fileID: 6000878080324460512}
+    - {fileID: 7518031641492634119}
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: m_inventory
+      Entry: 10
+      Data: 0
+    - Name: m_codex
+      Entry: 10
+      Data: 1
+    - Name: m_playerSkills
+      Entry: 10
+      Data: 2
+    - Name: m_soulSkillHandle
+      Entry: 10
+      Data: 3
+    - Name: m_combatArts
+      Entry: 10
+      Data: 4
+    - Name: m_playerWeapon
+      Entry: 10
+      Data: 5

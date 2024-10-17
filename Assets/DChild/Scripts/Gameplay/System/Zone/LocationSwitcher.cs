@@ -49,15 +49,23 @@ namespace DChild.Gameplay.Systems
         }
 
         [Button]
-        public void Interact()
+        public void ForceActivation()
         {
-            Interact(GameplaySystem.playerManager.player.character);
+            if (m_handle.needsButtonInteraction)
+            {
+                Interact(GameplaySystem.playerManager.player.character);
+            }
+            else
+            {
+                GoToDestination(GameplaySystem.playerManager.player.character);
+            }
         }
 
         private IEnumerator DoTransition(Character character, TransitionType type)
         {
             m_handle.DoSceneTransition(character, type);
 
+            var WorldTypeVar = FindObjectOfType<WorldTypeManager>();
 
             if (type == TransitionType.Enter)
             {
@@ -71,7 +79,26 @@ namespace DChild.Gameplay.Systems
                 LoadingHandle.SetLoadType(LoadingHandle.LoadType.Smart);
                 Cache<LoadZoneFunctionHandle> cacheLoadZoneHandle = Cache<LoadZoneFunctionHandle>.Claim();
                 cacheLoadZoneHandle.Value.Initialize(m_destination, character, cacheLoadZoneHandle);
-                GameSystem.LoadZone(m_destination.sceneInfo, true, cacheLoadZoneHandle.Value.CallLocationArriveEvent);
+
+                //Remove when subsystem implementation is complete
+                if (GameSystem.m_useGameModeValidator)
+                {
+                    WorldTypeVar.SetCurrentWorldType(m_destination.location);
+
+                    if (WorldTypeVar.CurrentWorldType == WorldType.Underworld)
+                    {
+                        GameSystem.LoadZone(GameMode.Underworld, m_destination.sceneInfo, true, cacheLoadZoneHandle.Value.CallLocationArriveEvent);
+                    }
+                    else
+                    {
+                        GameSystem.LoadZone(GameMode.Overworld, m_destination.sceneInfo, true, cacheLoadZoneHandle.Value.CallLocationArriveEvent);
+                    }
+                }
+                else
+                {
+                    GameSystem.LoadZone(m_destination.sceneInfo, true, cacheLoadZoneHandle.Value.CallLocationArriveEvent);
+                }
+                
                 GameplaySystem.ClearCaches();
 
             }

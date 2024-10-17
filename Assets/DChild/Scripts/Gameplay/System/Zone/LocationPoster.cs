@@ -13,21 +13,6 @@ namespace DChild.Gameplay.Systems
 
         public LocationData data { get => m_data; }
 
-        private void OnEnable()
-        {
-            SceneManager.sceneLoaded += OnSceneLoaded;
-        }
-
-        private void OnSceneLoaded(Scene arg0, LoadSceneMode arg1)
-        {
-            FindObjectOfType<WorldTypeManager>().SetCurrentWorldType(m_data.location);
-        }
-
-        private void OnDisable()
-        {
-            SceneManager.sceneLoaded -= OnSceneLoaded;
-        }
-
 #if UNITY_EDITOR
         [SerializeField, PropertyOrder(-1)]
         private Transform m_locationPoint;
