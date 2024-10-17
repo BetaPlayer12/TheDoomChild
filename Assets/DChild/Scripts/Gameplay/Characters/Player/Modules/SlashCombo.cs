@@ -26,16 +26,16 @@ namespace DChild.Gameplay.Characters.Players.Modules
         //TEST
         [SerializeField, BoxGroup("Physics")]
         private Character m_character;
-        [SerializeField, BoxGroup("Physics")]
-        private Rigidbody2D m_physics;
+        //[SerializeField, BoxGroup("Physics")]
+        //private Rigidbody2D m_physics;
         //[SerializeField, BoxGroup("Physics")]
         //private List<Vector2> m_pushForce;
-        [SerializeField, BoxGroup("Sensors")]
-        private RaySensor m_enemySensor;
-        [SerializeField, BoxGroup("Sensors")]
-        private RaySensor m_wallSensor;
-        [SerializeField, BoxGroup("Sensors")]
-        private RaySensor m_edgeSensor;
+        //[SerializeField, BoxGroup("Sensors")]
+        //private RaySensor m_enemySensor;
+        //[SerializeField, BoxGroup("Sensors")]
+        //private RaySensor m_wallSensor;
+        //[SerializeField, BoxGroup("Sensors")]
+        //private RaySensor m_edgeSensor;
 
         private bool m_canSlashCombo;
         private bool m_canMove;
@@ -154,13 +154,13 @@ namespace DChild.Gameplay.Characters.Players.Modules
             }
 
             //TEST
-            m_enemySensor.Cast();
-            m_wallSensor.Cast();
-            m_edgeSensor.Cast();
-            if (!m_enemySensor.isDetecting && !m_wallSensor.allRaysDetecting && m_edgeSensor.isDetecting)
-            {
-                m_physics.AddForce(m_character.facing == HorizontalDirection.Right ? m_configuration.pushForce[m_currentVisualSlashState] : -m_configuration.pushForce[m_currentVisualSlashState], ForceMode2D.Impulse);
-            }
+            //m_enemySensor.Cast();
+            //m_wallSensor.Cast();
+            //m_edgeSensor.Cast();
+            //if (!m_enemySensor.isDetecting && !m_wallSensor.allRaysDetecting && m_edgeSensor.isDetecting)
+            //{
+            //    m_physics.AddForce(m_character.facing == HorizontalDirection.Right ? m_configuration.pushForce[m_currentVisualSlashState] : -m_configuration.pushForce[m_currentVisualSlashState], ForceMode2D.Impulse);
+            //}
         }
 
         public override void AttackOver()

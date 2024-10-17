@@ -65,6 +65,7 @@ namespace DChild.Gameplay.Systems
         {
             m_handle.DoSceneTransition(character, type);
 
+            var WorldTypeVar = FindObjectOfType<WorldTypeManager>();
 
             if (type == TransitionType.Enter)
             {
@@ -78,7 +79,26 @@ namespace DChild.Gameplay.Systems
                 LoadingHandle.SetLoadType(LoadingHandle.LoadType.Smart);
                 Cache<LoadZoneFunctionHandle> cacheLoadZoneHandle = Cache<LoadZoneFunctionHandle>.Claim();
                 cacheLoadZoneHandle.Value.Initialize(m_destination, character, cacheLoadZoneHandle);
-                GameSystem.LoadZone(m_destination.sceneInfo, true, cacheLoadZoneHandle.Value.CallLocationArriveEvent);
+
+                //Remove when subsystem implementation is complete
+                if (GameSystem.m_useGameModeValidator)
+                {
+                    WorldTypeVar.SetCurrentWorldType(m_destination.location);
+
+                    if (WorldTypeVar.CurrentWorldType == WorldType.Underworld)
+                    {
+                        GameSystem.LoadZone(GameMode.Underworld, m_destination.sceneInfo, true, cacheLoadZoneHandle.Value.CallLocationArriveEvent);
+                    }
+                    else
+                    {
+                        GameSystem.LoadZone(GameMode.Overworld, m_destination.sceneInfo, true, cacheLoadZoneHandle.Value.CallLocationArriveEvent);
+                    }
+                }
+                else
+                {
+                    GameSystem.LoadZone(m_destination.sceneInfo, true, cacheLoadZoneHandle.Value.CallLocationArriveEvent);
+                }
+                
                 GameplaySystem.ClearCaches();
 
             }
