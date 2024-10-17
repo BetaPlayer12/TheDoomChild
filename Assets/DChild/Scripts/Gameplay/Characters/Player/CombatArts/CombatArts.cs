@@ -1,11 +1,13 @@
 ﻿using DChild.Gameplay.Characters.Player.CombatArt.Leveling;
+using DChild.Gameplay.SoulSkills;
+using Holysoft.Collections;
 using Sirenix.OdinInspector;
 using System;
 using UnityEngine;
 
 namespace DChild.Gameplay.Characters.Players
 {
-    public class CombatArts : SerializedMonoBehaviour
+    public class CombatArts : SerializedMonoBehaviour, ISerializable<CombatArtsSaveData>
     {
         [SerializeField]
         private CombatArtLevel m_level;
