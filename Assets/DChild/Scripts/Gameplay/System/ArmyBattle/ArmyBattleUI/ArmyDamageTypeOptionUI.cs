@@ -17,8 +17,6 @@ namespace DChild.Gameplay.ArmyBattle.UI
         public void SetType(DamageType damageType)
         {
             m_damageType = damageType;
-
-            Debug.Log($"chosen dmg type: {m_damageType}");
         }
 
         public void SetInteractability(bool isInteractable)
