@@ -14,6 +14,9 @@ using DChild;
 using DChild.Gameplay.Characters.Enemies;
 using DChild.Gameplay.Environment;
 using UnityEngine.Events;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 
 public class MerchantInitializer : MonoBehaviour
@@ -28,20 +31,16 @@ public class MerchantInitializer : MonoBehaviour
     private List<string> m_Interact;
     [SerializeField, Spine.Unity.SpineAnimation, TabGroup("Animation")]
     private List<string> m_Idle;
-    [SerializeField, TabGroup("Initialize")]
+    [SerializeField, TabGroup("Appearance"),OnValueChanged("CartValueChanged")]
     private bool m_startWithCart;
-    [SerializeField, TabGroup("Initialize")]
+    [SerializeField, TabGroup("Appearance"),OnValueChanged("CartValueChanged")]
     private Sprite m_CartSprite;
+    [SerializeField, TabGroup("Appearance"),OnValueChanged("MerchantValueChanged")]
+    private SkeletonDataAsset m_MerchantSpineAnimation;
 
     private void Start()
     {
         DefaultAction();
-        if(!m_startWithCart)
-        {
-            m_cartPosition.gameObject.SetActive(false);
-            return;
-        }
-        m_cartPosition.sprite = m_CartSprite;
     }
     public void DefaultAction()
     {
@@ -78,5 +77,21 @@ public class MerchantInitializer : MonoBehaviour
         {
             return m_Interact[0];
         }
+    }
+
+    void CartValueChanged()
+    {
+        m_cartPosition.gameObject.SetActive(m_startWithCart);
+        m_cartPosition.sprite = m_CartSprite;
+    }
+
+    void MerchantValueChanged()
+    {
+        m_SkeletonAnimation.skeletonDataAsset = m_MerchantSpineAnimation;
+        m_SkeletonAnimation.Initialize(true);
+#if UNITY_EDITOR
+        EditorUtility.SetDirty(m_SkeletonAnimation);
+        EditorUtility.SetDirty(m_SkeletonAnimation.transform);
+#endif
     }
 }
