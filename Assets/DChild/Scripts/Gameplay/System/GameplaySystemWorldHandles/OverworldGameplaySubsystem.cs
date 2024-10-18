@@ -8,8 +8,20 @@ namespace DChild.Gameplay.Systems
     {
 
         #region Modules
-        private static GameplayUIHandle m_gameplayUIHandle;
+
         #endregion
+
+        private void AssignModule<T>(out T module) where T : MonoBehaviour, IGameplaySystemModule => module = GetComponentInChildren<T>();
+
+        private void AssignModules()
+        {
+
+        }
+
+        private void Awake()
+        {
+            AssignModules();
+        }
     }
 }
 
