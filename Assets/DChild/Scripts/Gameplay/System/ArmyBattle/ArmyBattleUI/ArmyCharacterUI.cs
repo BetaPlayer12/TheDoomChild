@@ -14,13 +14,9 @@ namespace DChild.Gameplay.ArmyBattle.UI
         [Button]
         public void Display(ArmyCharacterData characterData)
         {
-            if (characterData != null)
-            {
-                m_unitIcon.sprite = characterData.icon;
-                return;
-            }
-            m_unitIcon.enabled = false;
-            m_unitBackground.enabled = false;
+            m_unitIcon.sprite = characterData != null ? characterData.icon : null;
+            m_unitIcon.enabled = m_unitIcon.sprite != null;
+            m_unitBackground.enabled = m_unitIcon.enabled;
         }
     }
 }
