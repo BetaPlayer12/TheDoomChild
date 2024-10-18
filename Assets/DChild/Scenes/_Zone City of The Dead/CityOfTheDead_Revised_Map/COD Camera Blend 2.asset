@@ -14,10 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_CustomBlends:
   - m_From: City of the dead CM vcam upper
-    m_To: City of the dead CM vcam Cathedral Zoom out
+    m_To: SlidingDoor Closed VCam
     m_Blend:
       m_Style: 1
-      m_Time: 3
+      m_Time: 3.2
       m_CustomCurve:
         serializedVersion: 2
         m_Curve:
@@ -42,11 +42,11 @@ MonoBehaviour:
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 0
-  - m_From: City of the dead CM vcam intro lower
-    m_To: City of the dead CM vcam Cathedral Zoom out
+  - m_From: City of the dead CM vcam upper
+    m_To: SlidingDoor Open VCam
     m_Blend:
       m_Style: 1
-      m_Time: 3
+      m_Time: 3.2
       m_CustomCurve:
         serializedVersion: 2
         m_Curve:
@@ -71,7 +71,36 @@ MonoBehaviour:
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 0
-  - m_From: City of the dead CM vcam Cathedral Zoom out
+  - m_From: SlidingDoor Open VCam
+    m_To: City of the dead CM vcam upper
+    m_Blend:
+      m_Style: 1
+      m_Time: 2
+      m_CustomCurve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 0
+          inSlope: 2.4177184
+          outSlope: 2.4177184
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0.026234567
+        - serializedVersion: 3
+          time: 1
+          value: 1
+          inSlope: 0.3041718
+          outSlope: 0.3041718
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.07098764
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 0
+  - m_From: SlidingDoor Closed VCam
     m_To: City of the dead CM vcam upper
     m_Blend:
       m_Style: 1
@@ -101,39 +130,10 @@ MonoBehaviour:
         m_PostInfinity: 2
         m_RotationOrder: 0
   - m_From: City of the dead CM vcam Cathedral Zoom out
-    m_To: City of the dead CM vcam intro lower
+    m_To: SlidingDoor Closed VCam
     m_Blend:
       m_Style: 1
-      m_Time: 2
-      m_CustomCurve:
-        serializedVersion: 2
-        m_Curve:
-        - serializedVersion: 3
-          time: 0
-          value: 0
-          inSlope: 2.4177184
-          outSlope: 2.4177184
-          tangentMode: 0
-          weightedMode: 0
-          inWeight: 0
-          outWeight: 0.026234567
-        - serializedVersion: 3
-          time: 1
-          value: 1
-          inSlope: 0.3041718
-          outSlope: 0.3041718
-          tangentMode: 0
-          weightedMode: 0
-          inWeight: 0.07098764
-          outWeight: 0
-        m_PreInfinity: 2
-        m_PostInfinity: 2
-        m_RotationOrder: 0
-  - m_From: City of the dead CM vcam Cathedral Door
-    m_To: City of the dead CM vcam Cathedral Zoom out
-    m_Blend:
-      m_Style: 1
-      m_Time: 1.5
+      m_Time: 1.8
       m_CustomCurve:
         serializedVersion: 2
         m_Curve:
@@ -158,11 +158,11 @@ MonoBehaviour:
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 0
-  - m_From: City of the dead CM vcam Cathedral Zoom out
-    m_To: City of the dead CM vcam Cathedral Door
+  - m_From: SlidingDoor Closed VCam
+    m_To: City of the dead CM vcam Cathedral Zoom out
     m_Blend:
       m_Style: 1
-      m_Time: 1.5
+      m_Time: 1.8
       m_CustomCurve:
         serializedVersion: 2
         m_Curve:
@@ -216,69 +216,11 @@ MonoBehaviour:
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 0
-  - m_From: City of the dead CM vcam29
-    m_To: City of the dead CM vcam EXTENSION
-    m_Blend:
-      m_Style: 1
-      m_Time: 1.3
-      m_CustomCurve:
-        serializedVersion: 2
-        m_Curve:
-        - serializedVersion: 3
-          time: 0
-          value: 0
-          inSlope: 2.4177184
-          outSlope: 2.4177184
-          tangentMode: 0
-          weightedMode: 0
-          inWeight: 0
-          outWeight: 0.026234567
-        - serializedVersion: 3
-          time: 1
-          value: 1
-          inSlope: 0.3041718
-          outSlope: 0.3041718
-          tangentMode: 0
-          weightedMode: 0
-          inWeight: 0.07098764
-          outWeight: 0
-        m_PreInfinity: 2
-        m_PostInfinity: 2
-        m_RotationOrder: 0
-  - m_From: City of the dead CM vcam EXTENSION
-    m_To: City of the dead CM vcam29
-    m_Blend:
-      m_Style: 1
-      m_Time: 1.5
-      m_CustomCurve:
-        serializedVersion: 2
-        m_Curve:
-        - serializedVersion: 3
-          time: 0
-          value: 0
-          inSlope: 2.4177184
-          outSlope: 2.4177184
-          tangentMode: 0
-          weightedMode: 0
-          inWeight: 0
-          outWeight: 0.026234567
-        - serializedVersion: 3
-          time: 1
-          value: 1
-          inSlope: 0.3041718
-          outSlope: 0.3041718
-          tangentMode: 0
-          weightedMode: 0
-          inWeight: 0.07098764
-          outWeight: 0
-        m_PreInfinity: 2
-        m_PostInfinity: 2
-        m_RotationOrder: 0
-  - m_From: City of the dead CM vcam Cathedral Door
+  - m_From: SlidingDoor Open VCam
     m_To: City of the dead CM vcam37
     m_Blend:
       m_Style: 1
-      m_Time: 1.4
+      m_Time: 1.6
       m_CustomCurve:
         serializedVersion: 2
         m_Curve:
@@ -304,10 +246,10 @@ MonoBehaviour:
         m_PostInfinity: 2
         m_RotationOrder: 0
   - m_From: City of the dead CM vcam37
-    m_To: City of the dead CM vcam Cathedral Door
+    m_To: SlidingDoor Open VCam
     m_Blend:
       m_Style: 1
-      m_Time: 1.5
+      m_Time: 1.8
       m_CustomCurve:
         serializedVersion: 2
         m_Curve:
@@ -336,7 +278,7 @@ MonoBehaviour:
     m_To: City of the dead CM vcam37new
     m_Blend:
       m_Style: 1
-      m_Time: 1.1
+      m_Time: 1.4
       m_CustomCurve:
         serializedVersion: 2
         m_Curve:
@@ -394,7 +336,7 @@ MonoBehaviour:
     m_To: City of the dead CM vcam25
     m_Blend:
       m_Style: 1
-      m_Time: 1.3
+      m_Time: 1.5
       m_CustomCurve:
         serializedVersion: 2
         m_Curve:
@@ -423,7 +365,7 @@ MonoBehaviour:
     m_To: City of the dead CM vcam38new
     m_Blend:
       m_Style: 1
-      m_Time: 1.3
+      m_Time: 1.5
       m_CustomCurve:
         serializedVersion: 2
         m_Curve:
@@ -565,7 +507,7 @@ MonoBehaviour:
         m_PostInfinity: 2
         m_RotationOrder: 0
   - m_From: City of the dead CM vcam31
-    m_To: City of the dead CM vcam32
+    m_To: BlackbloodWall Destroyed Vcam
     m_Blend:
       m_Style: 1
       m_Time: 1.4
@@ -593,7 +535,7 @@ MonoBehaviour:
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 0
-  - m_From: City of the dead CM vcam32
+  - m_From: BlackbloodWall Destroyed Vcam
     m_To: City of the dead CM vcam31
     m_Blend:
       m_Style: 1
@@ -684,7 +626,7 @@ MonoBehaviour:
     m_To: City of the dead CM vcam26
     m_Blend:
       m_Style: 1
-      m_Time: 1.3
+      m_Time: 1.4
       m_CustomCurve:
         serializedVersion: 2
         m_Curve:
@@ -713,7 +655,7 @@ MonoBehaviour:
     m_To: City of the dead CM vcam25
     m_Blend:
       m_Style: 1
-      m_Time: 1.3
+      m_Time: 1.4
       m_CustomCurve:
         serializedVersion: 2
         m_Curve:
@@ -742,7 +684,7 @@ MonoBehaviour:
     m_To: City of the dead CM vcam26
     m_Blend:
       m_Style: 1
-      m_Time: 1.1
+      m_Time: 1.3
       m_CustomCurve:
         serializedVersion: 2
         m_Curve:
@@ -798,6 +740,122 @@ MonoBehaviour:
         m_RotationOrder: 0
   - m_From: City of the dead CM vcam40
     m_To: City of the dead CM vcam27
+    m_Blend:
+      m_Style: 1
+      m_Time: 1.3
+      m_CustomCurve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 0
+          inSlope: 2.4177184
+          outSlope: 2.4177184
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0.026234567
+        - serializedVersion: 3
+          time: 1
+          value: 1
+          inSlope: 0.3041718
+          outSlope: 0.3041718
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.07098764
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 0
+  - m_From: City of the dead CM vcam25
+    m_To: City of the dead CM vcam38
+    m_Blend:
+      m_Style: 1
+      m_Time: 1.2
+      m_CustomCurve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 0
+          inSlope: 2.4177184
+          outSlope: 2.4177184
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0.026234567
+        - serializedVersion: 3
+          time: 1
+          value: 1
+          inSlope: 0.3041718
+          outSlope: 0.3041718
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.07098764
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 0
+  - m_From: City of the dead CM vcam38
+    m_To: City of the dead CM vcam25
+    m_Blend:
+      m_Style: 1
+      m_Time: 1.2
+      m_CustomCurve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 0
+          inSlope: 2.4177184
+          outSlope: 2.4177184
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0.026234567
+        - serializedVersion: 3
+          time: 1
+          value: 1
+          inSlope: 0.3041718
+          outSlope: 0.3041718
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.07098764
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 0
+  - m_From: City of the dead CM vcam 30
+    m_To: City of the dead CM vcam EXTENSION
+    m_Blend:
+      m_Style: 1
+      m_Time: 1.6
+      m_CustomCurve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 0
+          inSlope: 2.4177184
+          outSlope: 2.4177184
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0.026234567
+        - serializedVersion: 3
+          time: 1
+          value: 1
+          inSlope: 0.3041718
+          outSlope: 0.3041718
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.07098764
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 0
+  - m_From: City of the dead CM vcam EXTENSION
+    m_To: City of the dead CM vcam 30
     m_Blend:
       m_Style: 1
       m_Time: 1.3
