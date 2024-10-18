@@ -1,4 +1,5 @@
 ﻿using DChild.Serialization;
+using Holysoft.Collections;
 using Holysoft.Event;
 using Sirenix.OdinInspector;
 using System;
@@ -18,7 +19,7 @@ namespace DChild.Gameplay.Characters.Players
         public bool isEnabled { get; }
     }
 
-    public class PlayerSkills : SerializedMonoBehaviour, IPrimarySkills
+    public class PlayerSkills : SerializedMonoBehaviour, IPrimarySkills, ISerializable<PrimarySkillsData>
     {
         [SerializeField]
         private PlayerModuleActivator m_moduleActivator;

@@ -15,7 +15,6 @@ namespace DChild.Gameplay.ArmyBattle.UI
         {
             m_armyName.text = overviewData.name.ToUpper();
             m_armyIcon.sprite = overviewData.icon;
-            Debug.Log($"ArmyBattle: Displaying {overviewData.name} in Banner");
         }
     }
 }
