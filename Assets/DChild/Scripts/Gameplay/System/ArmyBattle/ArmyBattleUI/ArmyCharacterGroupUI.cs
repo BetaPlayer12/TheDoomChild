@@ -11,26 +11,24 @@ namespace DChild.Gameplay.ArmyBattle.UI
         {
             if (armyCharacterGroup != null)
             {
+
                 for (int i = 0; i < m_memberUIs.Length; i++)
                 {
                     if (i < armyCharacterGroup.memberCount)
                     {
                         m_memberUIs[i].Display(armyCharacterGroup.GetCharacter(i));
+                        continue;
                     }
-                    else
-                    {
-                        //In case the number of Member UIs exceeds armyCharacterMember Count
-                        m_memberUIs[i].Display(null);
-                    }
-                }
-
-            }
-            else
-            {
-                for (int i = 0; i < m_memberUIs.Length; i++)
-                {
+                    //In case the number of Member UIs exceeds armyCharacterMember Count
                     m_memberUIs[i].Display(null);
                 }
+
+                return;
+            }
+
+            for (int i = 0; i < m_memberUIs.Length; i++)
+            {
+                m_memberUIs[i].Display(null);
             }
         }
 
