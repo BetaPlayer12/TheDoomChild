@@ -14,6 +14,9 @@ using DChild;
 using DChild.Gameplay.Characters.Enemies;
 using DChild.Gameplay.Environment;
 using UnityEngine.Events;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 
 public class MerchantInitializer : MonoBehaviour
@@ -86,6 +89,9 @@ public class MerchantInitializer : MonoBehaviour
     {
         m_SkeletonAnimation.skeletonDataAsset = m_MerchantSpineAnimation;
         m_SkeletonAnimation.Initialize(true);
-        m_SkeletonAnimation.AnimationName = m_Idle[0];
+#if UNITY_EDITOR
+        EditorUtility.SetDirty(m_SkeletonAnimation);
+        EditorUtility.SetDirty(m_SkeletonAnimation.transform);
+#endif
     }
 }
