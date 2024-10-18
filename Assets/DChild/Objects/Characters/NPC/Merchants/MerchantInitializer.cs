@@ -28,16 +28,20 @@ public class MerchantInitializer : MonoBehaviour
     private List<string> m_Interact;
     [SerializeField, Spine.Unity.SpineAnimation, TabGroup("Animation")]
     private List<string> m_Idle;
-    [SerializeField, TabGroup("Appearance"),OnValueChanged("CartValueChanged")]
+    [SerializeField, TabGroup("Initialize")]
     private bool m_startWithCart;
-    [SerializeField, TabGroup("Appearance"),OnValueChanged("CartValueChanged")]
+    [SerializeField, TabGroup("Initialize")]
     private Sprite m_CartSprite;
-    [SerializeField, TabGroup("Appearance"),OnValueChanged("MerchantValueChanged")]
-    private SkeletonDataAsset m_MerchantSpineAnimation;
 
     private void Start()
     {
         DefaultAction();
+        if(!m_startWithCart)
+        {
+            m_cartPosition.gameObject.SetActive(false);
+            return;
+        }
+        m_cartPosition.sprite = m_CartSprite;
     }
     public void DefaultAction()
     {
@@ -74,18 +78,5 @@ public class MerchantInitializer : MonoBehaviour
         {
             return m_Interact[0];
         }
-    }
-
-    void CartValueChanged()
-    {
-        m_cartPosition.gameObject.SetActive(m_startWithCart);
-        m_cartPosition.sprite = m_CartSprite;
-    }
-
-    void MerchantValueChanged()
-    {
-        m_SkeletonAnimation.skeletonDataAsset = m_MerchantSpineAnimation;
-        m_SkeletonAnimation.Initialize(true);
-        m_SkeletonAnimation.AnimationName = m_Idle[0];
     }
 }
