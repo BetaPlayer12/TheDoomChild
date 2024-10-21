@@ -41,6 +41,10 @@ public class MerchantInitializer : MonoBehaviour
     private void Start()
     {
         DefaultAction();
+        if(m_MerchantSpineAnimation)
+        {
+            m_SkeletonAnimation.loop = true;
+        }
     }
     public void DefaultAction()
     {
