@@ -40,15 +40,13 @@ public class MerchantInitializer : MonoBehaviour
 
     private void Start()
     {
-        DefaultAction();
-<<<<<<< HEAD
-        if(m_MerchantSpineAnimation)
+#if UNITY_EDITOR
+        if (m_MerchantSpineAnimation)
         {
             m_SkeletonAnimation.loop = true;
         }
-=======
-        m_SkeletonAnimation.loop = true;
->>>>>>> dd5e5827c298845925182ff31e4f0690ad1c029f
+#endif
+        DefaultAction();
     }
     public void DefaultAction()
     {
@@ -97,6 +95,7 @@ public class MerchantInitializer : MonoBehaviour
     {
         m_SkeletonAnimation.skeletonDataAsset = m_MerchantSpineAnimation;
         m_SkeletonAnimation.Initialize(true);
+        m_SkeletonAnimation.loop = true;
 #if UNITY_EDITOR
         EditorUtility.SetDirty(m_SkeletonAnimation);
         EditorUtility.SetDirty(m_SkeletonAnimation.transform);
