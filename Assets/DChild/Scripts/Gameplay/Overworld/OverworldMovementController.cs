@@ -12,14 +12,17 @@ public class OverworldMovementController : MonoBehaviour
     
     [SerializeField]
     private float m_moveSpeed;
+    [SerializeField]
+    private Rigidbody2D m_rigidbody;
+    [SerializeField]
+    private PlayerInput m_playerinput;
+    [SerializeField]
+    private OverworldObjectInteraction m_objectInteraction;
 
     private float m_currentSpeed;
     public float horizontalInput;
     public float verticalInput;
     public bool interactPressed;
-    private Rigidbody2D m_rigidbody;
-    private PlayerInput m_playerinput;
-    private OverworldObjectInteraction m_objectInteraction;
     public OverworldCharacterAnimatorHandle m_animationhandler;
 
     public void Move(float directionx, float directiony)
@@ -88,9 +91,9 @@ public class OverworldMovementController : MonoBehaviour
 
     private void Awake()
     {
-        m_playerinput = GetComponent<PlayerInput>();
-        m_rigidbody = GetComponent<Rigidbody2D>();
-        m_objectInteraction = GetComponent<OverworldObjectInteraction>();
+        //m_playerinput = GetComponent<PlayerInput>();
+        //m_rigidbody = GetComponent<Rigidbody2D>();
+       // m_objectInteraction = GetComponent<OverworldObjectInteraction>();
     }
 
     private void Reset()
