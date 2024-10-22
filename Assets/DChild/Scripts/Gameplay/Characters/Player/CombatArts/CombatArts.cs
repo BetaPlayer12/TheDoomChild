@@ -62,7 +62,7 @@ namespace DChild.Gameplay.Characters.Players
         {
             return m_abilityLevels[(int)battleAbility];
         }
-
+        [Button]
         public void SetAbilityLevel(CombatArt battleAbility, int level)
         {
             m_abilityLevels[(int)battleAbility] = Mathf.Max(0, level);
