@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -21,6 +22,21 @@ namespace DChild.Gameplay.Systems
         private void Awake()
         {
             AssignModules();
+        }
+
+        public static void LoadGame()
+        {
+            throw new NotImplementedException();
+        }
+
+        public static void PauseGame()
+        {
+            throw new NotImplementedException();
+        }
+
+        public static void ResumeGame()
+        {
+            throw new NotImplementedException();
         }
     }
 }
