@@ -244,24 +244,6 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""initialStateCheck"": true
                 },
                 {
-                    ""name"": ""AirLungeSlash"",
-                    ""type"": ""Button"",
-                    ""id"": ""bbc6a2a8-7fee-40d5-9914-5e1295c34e78"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": ""Press"",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""FireFist"",
-                    ""type"": ""Button"",
-                    ""id"": ""d7fb5865-5e82-4bc4-b80b-737d0db7af6a"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": ""Press"",
-                    ""initialStateCheck"": false
-                },
-                {
                     ""name"": ""ReaperHarvest"",
                     ""type"": ""Button"",
                     ""id"": ""f685cbfa-6500-46d4-ab03-7d9a8628765f"",
@@ -274,42 +256,6 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""name"": ""KrakenRage"",
                     ""type"": ""Button"",
                     ""id"": ""95f8fa15-1695-4820-8419-ec67b85004d5"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": ""Press"",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""FinalSlash"",
-                    ""type"": ""Button"",
-                    ""id"": ""8b615416-09f5-4e32-bc0a-86d1d0b57618"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": ""Press"",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""FinalSlashHeld"",
-                    ""type"": ""Button"",
-                    ""id"": ""861d417d-a219-4937-8ab1-33f44ebb56cd"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""FinalSlashReleased"",
-                    ""type"": ""Button"",
-                    ""id"": ""f44f244c-fb8a-4b70-b4e9-b0ffee1aa7a9"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""AirSlashCombo"",
-                    ""type"": ""Button"",
-                    ""id"": ""e0284d41-3608-46e9-816d-08b866d2fa21"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": ""Press"",
@@ -370,24 +316,6 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""NinthCircleSanction"",
-                    ""type"": ""Button"",
-                    ""id"": ""720d84e3-a098-43fc-884e-7af06fdd0025"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": ""Press"",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""DoomsdayKong"",
-                    ""type"": ""Button"",
-                    ""id"": ""9c35d31f-371e-4f96-9601-4c02fd7423a1"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": ""Press"",
-                    ""initialStateCheck"": false
-                },
-                {
                     ""name"": ""BackDiver"",
                     ""type"": ""Button"",
                     ""id"": ""cd863b72-c9f3-49b7-a81b-135ee848ccf1"",
@@ -424,15 +352,6 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""FencerFlash"",
-                    ""type"": ""Button"",
-                    ""id"": ""9a1de22a-ebd8-421a-8055-4df435cb3a02"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": ""Press"",
-                    ""initialStateCheck"": false
-                },
-                {
                     ""name"": ""DiagonalSwordDash"",
                     ""type"": ""Button"",
                     ""id"": ""b9c769c7-b8a7-4d59-9f18-836853fd89e6"",
@@ -445,33 +364,6 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""name"": ""ChampionsUprising"",
                     ""type"": ""Button"",
                     ""id"": ""7ea19d98-29d2-4e1f-bd67-2d482f4fe8d7"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": ""Press"",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""Eelecktrick"",
-                    ""type"": ""Button"",
-                    ""id"": ""19ddf923-99a8-4520-b776-665b9f67a546"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": ""Press"",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""EelecktrickHeld"",
-                    ""type"": ""Button"",
-                    ""id"": ""6a05cb88-875b-47f7-9b96-f936ac1086c1"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": ""Press"",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""EelecktrickReleased"",
-                    ""type"": ""Button"",
-                    ""id"": ""e1bd79f0-efa2-46a8-85d0-f4be538e6449"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": ""Press"",
@@ -1472,94 +1364,6 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": ""Two Modifiers"",
-                    ""id"": ""543eb0c8-3a13-400e-be63-fa6704b4cc68"",
-                    ""path"": ""TwoModifiers"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""AirLungeSlash"",
-                    ""isComposite"": true,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": ""modifier1"",
-                    ""id"": ""8fca0abb-69b5-409b-8eae-3711b7b643d1"",
-                    ""path"": ""<Keyboard>/leftShift"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard"",
-                    ""action"": ""AirLungeSlash"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""modifier2"",
-                    ""id"": ""ddab2703-5690-4a9a-9d2a-843c3580ddd7"",
-                    ""path"": ""<Keyboard>/w"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard"",
-                    ""action"": ""AirLungeSlash"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""binding"",
-                    ""id"": ""c6ea8096-49fb-47cf-9f4d-44f8fcc82369"",
-                    ""path"": ""<Mouse>/leftButton"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard"",
-                    ""action"": ""AirLungeSlash"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""Two Modifiers"",
-                    ""id"": ""7f4af3ca-10dd-42ce-9d85-e757f863cd02"",
-                    ""path"": ""TwoModifiers"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""FireFist"",
-                    ""isComposite"": true,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": ""modifier1"",
-                    ""id"": ""5f2a6202-372e-4d2b-b285-aa057e8fd460"",
-                    ""path"": ""<Keyboard>/leftShift"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard"",
-                    ""action"": ""FireFist"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""modifier2"",
-                    ""id"": ""beb936fe-7d22-4187-be90-dc2b01e3382a"",
-                    ""path"": ""<Keyboard>/s"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard"",
-                    ""action"": ""FireFist"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""binding"",
-                    ""id"": ""62fc9703-2f67-45a3-85e1-e5d118092ca2"",
-                    ""path"": ""<Keyboard>/f"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard"",
-                    ""action"": ""FireFist"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""Two Modifiers"",
                     ""id"": ""c23f8877-bd5b-4bf8-b8bc-3af9260b1f54"",
                     ""path"": ""TwoModifiers"",
                     ""interactions"": """",
@@ -1687,105 +1491,6 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": ""Keyboard"",
                     ""action"": ""KrakenRage"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""One Modifier"",
-                    ""id"": ""96867261-e3e2-4044-9a1f-fddc5d9bec86"",
-                    ""path"": ""OneModifier"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""FinalSlash"",
-                    ""isComposite"": true,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": ""modifier"",
-                    ""id"": ""34ae41f0-2dbf-4fa6-9d14-061b45215359"",
-                    ""path"": ""<Keyboard>/leftShift"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard"",
-                    ""action"": ""FinalSlash"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""binding"",
-                    ""id"": ""f41df86a-1448-4add-bfb3-1483f1a02e12"",
-                    ""path"": ""<Mouse>/leftButton"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard"",
-                    ""action"": ""FinalSlash"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""One Modifier"",
-                    ""id"": ""aa1a13a7-2a6c-4eee-81fe-ace8334523ab"",
-                    ""path"": ""OneModifier"",
-                    ""interactions"": ""Hold(duration=0.1,pressPoint=0.1)"",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""FinalSlashHeld"",
-                    ""isComposite"": true,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": ""modifier"",
-                    ""id"": ""11ec9c37-183d-4734-ad49-68c05290eddb"",
-                    ""path"": ""<Keyboard>/leftShift"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard"",
-                    ""action"": ""FinalSlashHeld"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""binding"",
-                    ""id"": ""4bb57938-563b-4d1f-be35-61969d8d8dfd"",
-                    ""path"": ""<Mouse>/leftButton"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard"",
-                    ""action"": ""FinalSlashHeld"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""One Modifier"",
-                    ""id"": ""0e935e7a-410e-44a2-8e51-e27abfc5dfee"",
-                    ""path"": ""OneModifier"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""AirSlashCombo"",
-                    ""isComposite"": true,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": ""modifier"",
-                    ""id"": ""ef814eb8-0ec0-41b7-827e-3ec7a88a5aed"",
-                    ""path"": ""<Keyboard>/leftShift"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard"",
-                    ""action"": ""AirSlashCombo"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""binding"",
-                    ""id"": ""cf6703bc-e095-46d9-b7da-3ff6393b1bfa"",
-                    ""path"": ""<Mouse>/leftButton"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard"",
-                    ""action"": ""AirSlashCombo"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -2066,61 +1771,6 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": ""Two Modifiers"",
-                    ""id"": ""810b0e23-620b-4567-a3b4-ecdf07738b97"",
-                    ""path"": ""TwoModifiers"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""NinthCircleSanction"",
-                    ""isComposite"": true,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": ""modifier1"",
-                    ""id"": ""b32eb127-64be-4da3-89ef-76a299c64ad0"",
-                    ""path"": ""<Keyboard>/leftShift"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard"",
-                    ""action"": ""NinthCircleSanction"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""modifier2"",
-                    ""id"": ""7986fb70-e37e-46d1-8f6e-260c2c12d2ff"",
-                    ""path"": ""<Keyboard>/s"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard"",
-                    ""action"": ""NinthCircleSanction"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""binding"",
-                    ""id"": ""1e0d531b-7113-40b5-8fe6-05aad7bfd7e6"",
-                    ""path"": ""<Mouse>/rightButton"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard"",
-                    ""action"": ""NinthCircleSanction"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""29976d38-c9b8-459b-bbfa-359859c7c231"",
-                    ""path"": ""<Keyboard>/1"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard"",
-                    ""action"": ""DoomsdayKong"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": ""Two Modifiers"",
                     ""id"": ""af838ae2-f117-4c2c-b1ee-53479311330c"",
                     ""path"": ""TwoModifiers"",
                     ""interactions"": """",
@@ -2220,94 +1870,6 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": ""Two Modifiers"",
-                    ""id"": ""bd2f67ef-f54e-474f-8386-dbd8edff2df2"",
-                    ""path"": ""TwoModifiers"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""FencerFlash"",
-                    ""isComposite"": true,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": ""modifier1"",
-                    ""id"": ""4f84f957-c46b-49ab-bcd5-90c17e93d959"",
-                    ""path"": ""<Keyboard>/leftShift"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard"",
-                    ""action"": ""FencerFlash"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""modifier2"",
-                    ""id"": ""9b99bd41-b93e-44b7-a31f-6b879c2317a3"",
-                    ""path"": ""<Keyboard>/a"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard"",
-                    ""action"": ""FencerFlash"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""binding"",
-                    ""id"": ""43ef0010-38cd-4cd5-85af-f28e2d2a8861"",
-                    ""path"": ""<Mouse>/rightButton"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard"",
-                    ""action"": ""FencerFlash"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""Two Modifiers"",
-                    ""id"": ""763d9d2f-7856-4749-8d07-1835540c1b9b"",
-                    ""path"": ""TwoModifiers"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""FencerFlash"",
-                    ""isComposite"": true,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": ""modifier1"",
-                    ""id"": ""4021a978-3d68-4b10-b634-cf1913a6adca"",
-                    ""path"": ""<Keyboard>/leftShift"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard"",
-                    ""action"": ""FencerFlash"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""modifier2"",
-                    ""id"": ""5ce03429-232a-402b-9c15-274413636a47"",
-                    ""path"": ""<Keyboard>/d"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard"",
-                    ""action"": ""FencerFlash"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""binding"",
-                    ""id"": ""b20f83b6-2df1-4dd9-bc4e-7da6063f5879"",
-                    ""path"": ""<Mouse>/rightButton"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard"",
-                    ""action"": ""FencerFlash"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""Two Modifiers"",
                     ""id"": ""63c3f676-9d1c-40c9-9cec-cc4cb7a760c0"",
                     ""path"": ""TwoModifiers"",
                     ""interactions"": """",
@@ -2382,28 +1944,6 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""action"": ""ChampionsUprising"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""dcc99350-c3b3-4a5a-804a-2c389d653e84"",
-                    ""path"": ""<Keyboard>/2"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard"",
-                    ""action"": ""Eelecktrick"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""24dabaeb-ecd9-484f-b262-1c6cb66e14cf"",
-                    ""path"": ""<Keyboard>/2"",
-                    ""interactions"": ""Press(pressPoint=0.1,behavior=1)"",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard"",
-                    ""action"": ""EelecktrickReleased"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
                 },
                 {
                     ""name"": ""Two Modifiers"",
@@ -2492,50 +2032,6 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""action"": ""LightningSpearReleased"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""One Modifier"",
-                    ""id"": ""556dccbf-c0a9-4212-a18c-72b6a16cc6c7"",
-                    ""path"": ""OneModifier"",
-                    ""interactions"": ""Press(pressPoint=0.1,behavior=1)"",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""FinalSlashReleased"",
-                    ""isComposite"": true,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": ""modifier"",
-                    ""id"": ""06aacd37-69e8-4299-bf52-3ae8822b3bf6"",
-                    ""path"": ""<Keyboard>/leftShift"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard"",
-                    ""action"": ""FinalSlashReleased"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""binding"",
-                    ""id"": ""7cdba2e8-ad07-4542-a7a0-5ad94ac03e0d"",
-                    ""path"": ""<Mouse>/leftButton"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard"",
-                    ""action"": ""FinalSlashReleased"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""7f796c44-f904-4589-bac8-06cdab50cf56"",
-                    ""path"": ""<Keyboard>/2"",
-                    ""interactions"": ""Hold(duration=0.1,pressPoint=0.1)"",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard"",
-                    ""action"": ""EelecktrickHeld"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
                 },
                 {
                     ""name"": ""Two Modifiers"",
@@ -3836,32 +3332,20 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         m_Gameplay_Pause = m_Gameplay.FindAction("Pause", throwIfNotFound: true);
         m_Gameplay_Store = m_Gameplay.FindAction("Store", throwIfNotFound: true);
         m_Gameplay_MouseDelta = m_Gameplay.FindAction("MouseDelta", throwIfNotFound: true);
-        m_Gameplay_AirLungeSlash = m_Gameplay.FindAction("AirLungeSlash", throwIfNotFound: true);
-        m_Gameplay_FireFist = m_Gameplay.FindAction("FireFist", throwIfNotFound: true);
         m_Gameplay_ReaperHarvest = m_Gameplay.FindAction("ReaperHarvest", throwIfNotFound: true);
         m_Gameplay_KrakenRage = m_Gameplay.FindAction("KrakenRage", throwIfNotFound: true);
-        m_Gameplay_FinalSlash = m_Gameplay.FindAction("FinalSlash", throwIfNotFound: true);
-        m_Gameplay_FinalSlashHeld = m_Gameplay.FindAction("FinalSlashHeld", throwIfNotFound: true);
-        m_Gameplay_FinalSlashReleased = m_Gameplay.FindAction("FinalSlashReleased", throwIfNotFound: true);
-        m_Gameplay_AirSlashCombo = m_Gameplay.FindAction("AirSlashCombo", throwIfNotFound: true);
         m_Gameplay_SovereignImpale = m_Gameplay.FindAction("SovereignImpale", throwIfNotFound: true);
         m_Gameplay_HellTrident = m_Gameplay.FindAction("HellTrident", throwIfNotFound: true);
         m_Gameplay_FoolsVerdict = m_Gameplay.FindAction("FoolsVerdict", throwIfNotFound: true);
         m_Gameplay_SoulFireBlast = m_Gameplay.FindAction("SoulFireBlast", throwIfNotFound: true);
         m_Gameplay_EdgedFury = m_Gameplay.FindAction("EdgedFury", throwIfNotFound: true);
         m_Gameplay_EdgedFuryReleased = m_Gameplay.FindAction("EdgedFuryReleased", throwIfNotFound: true);
-        m_Gameplay_NinthCircleSanction = m_Gameplay.FindAction("NinthCircleSanction", throwIfNotFound: true);
-        m_Gameplay_DoomsdayKong = m_Gameplay.FindAction("DoomsdayKong", throwIfNotFound: true);
         m_Gameplay_BackDiver = m_Gameplay.FindAction("BackDiver", throwIfNotFound: true);
         m_Gameplay_Barrier = m_Gameplay.FindAction("Barrier", throwIfNotFound: true);
         m_Gameplay_BarrierHeld = m_Gameplay.FindAction("BarrierHeld", throwIfNotFound: true);
         m_Gameplay_BarrierReleased = m_Gameplay.FindAction("BarrierReleased", throwIfNotFound: true);
-        m_Gameplay_FencerFlash = m_Gameplay.FindAction("FencerFlash", throwIfNotFound: true);
         m_Gameplay_DiagonalSwordDash = m_Gameplay.FindAction("DiagonalSwordDash", throwIfNotFound: true);
         m_Gameplay_ChampionsUprising = m_Gameplay.FindAction("ChampionsUprising", throwIfNotFound: true);
-        m_Gameplay_Eelecktrick = m_Gameplay.FindAction("Eelecktrick", throwIfNotFound: true);
-        m_Gameplay_EelecktrickHeld = m_Gameplay.FindAction("EelecktrickHeld", throwIfNotFound: true);
-        m_Gameplay_EelecktrickReleased = m_Gameplay.FindAction("EelecktrickReleased", throwIfNotFound: true);
         m_Gameplay_LightningSpear = m_Gameplay.FindAction("LightningSpear", throwIfNotFound: true);
         m_Gameplay_LightningSpearHeld = m_Gameplay.FindAction("LightningSpearHeld", throwIfNotFound: true);
         m_Gameplay_LightningSpearReleased = m_Gameplay.FindAction("LightningSpearReleased", throwIfNotFound: true);
@@ -3972,32 +3456,20 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
     private readonly InputAction m_Gameplay_Pause;
     private readonly InputAction m_Gameplay_Store;
     private readonly InputAction m_Gameplay_MouseDelta;
-    private readonly InputAction m_Gameplay_AirLungeSlash;
-    private readonly InputAction m_Gameplay_FireFist;
     private readonly InputAction m_Gameplay_ReaperHarvest;
     private readonly InputAction m_Gameplay_KrakenRage;
-    private readonly InputAction m_Gameplay_FinalSlash;
-    private readonly InputAction m_Gameplay_FinalSlashHeld;
-    private readonly InputAction m_Gameplay_FinalSlashReleased;
-    private readonly InputAction m_Gameplay_AirSlashCombo;
     private readonly InputAction m_Gameplay_SovereignImpale;
     private readonly InputAction m_Gameplay_HellTrident;
     private readonly InputAction m_Gameplay_FoolsVerdict;
     private readonly InputAction m_Gameplay_SoulFireBlast;
     private readonly InputAction m_Gameplay_EdgedFury;
     private readonly InputAction m_Gameplay_EdgedFuryReleased;
-    private readonly InputAction m_Gameplay_NinthCircleSanction;
-    private readonly InputAction m_Gameplay_DoomsdayKong;
     private readonly InputAction m_Gameplay_BackDiver;
     private readonly InputAction m_Gameplay_Barrier;
     private readonly InputAction m_Gameplay_BarrierHeld;
     private readonly InputAction m_Gameplay_BarrierReleased;
-    private readonly InputAction m_Gameplay_FencerFlash;
     private readonly InputAction m_Gameplay_DiagonalSwordDash;
     private readonly InputAction m_Gameplay_ChampionsUprising;
-    private readonly InputAction m_Gameplay_Eelecktrick;
-    private readonly InputAction m_Gameplay_EelecktrickHeld;
-    private readonly InputAction m_Gameplay_EelecktrickReleased;
     private readonly InputAction m_Gameplay_LightningSpear;
     private readonly InputAction m_Gameplay_LightningSpearHeld;
     private readonly InputAction m_Gameplay_LightningSpearReleased;
@@ -4031,32 +3503,20 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         public InputAction @Pause => m_Wrapper.m_Gameplay_Pause;
         public InputAction @Store => m_Wrapper.m_Gameplay_Store;
         public InputAction @MouseDelta => m_Wrapper.m_Gameplay_MouseDelta;
-        public InputAction @AirLungeSlash => m_Wrapper.m_Gameplay_AirLungeSlash;
-        public InputAction @FireFist => m_Wrapper.m_Gameplay_FireFist;
         public InputAction @ReaperHarvest => m_Wrapper.m_Gameplay_ReaperHarvest;
         public InputAction @KrakenRage => m_Wrapper.m_Gameplay_KrakenRage;
-        public InputAction @FinalSlash => m_Wrapper.m_Gameplay_FinalSlash;
-        public InputAction @FinalSlashHeld => m_Wrapper.m_Gameplay_FinalSlashHeld;
-        public InputAction @FinalSlashReleased => m_Wrapper.m_Gameplay_FinalSlashReleased;
-        public InputAction @AirSlashCombo => m_Wrapper.m_Gameplay_AirSlashCombo;
         public InputAction @SovereignImpale => m_Wrapper.m_Gameplay_SovereignImpale;
         public InputAction @HellTrident => m_Wrapper.m_Gameplay_HellTrident;
         public InputAction @FoolsVerdict => m_Wrapper.m_Gameplay_FoolsVerdict;
         public InputAction @SoulFireBlast => m_Wrapper.m_Gameplay_SoulFireBlast;
         public InputAction @EdgedFury => m_Wrapper.m_Gameplay_EdgedFury;
         public InputAction @EdgedFuryReleased => m_Wrapper.m_Gameplay_EdgedFuryReleased;
-        public InputAction @NinthCircleSanction => m_Wrapper.m_Gameplay_NinthCircleSanction;
-        public InputAction @DoomsdayKong => m_Wrapper.m_Gameplay_DoomsdayKong;
         public InputAction @BackDiver => m_Wrapper.m_Gameplay_BackDiver;
         public InputAction @Barrier => m_Wrapper.m_Gameplay_Barrier;
         public InputAction @BarrierHeld => m_Wrapper.m_Gameplay_BarrierHeld;
         public InputAction @BarrierReleased => m_Wrapper.m_Gameplay_BarrierReleased;
-        public InputAction @FencerFlash => m_Wrapper.m_Gameplay_FencerFlash;
         public InputAction @DiagonalSwordDash => m_Wrapper.m_Gameplay_DiagonalSwordDash;
         public InputAction @ChampionsUprising => m_Wrapper.m_Gameplay_ChampionsUprising;
-        public InputAction @Eelecktrick => m_Wrapper.m_Gameplay_Eelecktrick;
-        public InputAction @EelecktrickHeld => m_Wrapper.m_Gameplay_EelecktrickHeld;
-        public InputAction @EelecktrickReleased => m_Wrapper.m_Gameplay_EelecktrickReleased;
         public InputAction @LightningSpear => m_Wrapper.m_Gameplay_LightningSpear;
         public InputAction @LightningSpearHeld => m_Wrapper.m_Gameplay_LightningSpearHeld;
         public InputAction @LightningSpearReleased => m_Wrapper.m_Gameplay_LightningSpearReleased;
@@ -4143,30 +3603,12 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @MouseDelta.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnMouseDelta;
                 @MouseDelta.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnMouseDelta;
                 @MouseDelta.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnMouseDelta;
-                @AirLungeSlash.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnAirLungeSlash;
-                @AirLungeSlash.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnAirLungeSlash;
-                @AirLungeSlash.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnAirLungeSlash;
-                @FireFist.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnFireFist;
-                @FireFist.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnFireFist;
-                @FireFist.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnFireFist;
                 @ReaperHarvest.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnReaperHarvest;
                 @ReaperHarvest.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnReaperHarvest;
                 @ReaperHarvest.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnReaperHarvest;
                 @KrakenRage.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnKrakenRage;
                 @KrakenRage.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnKrakenRage;
                 @KrakenRage.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnKrakenRage;
-                @FinalSlash.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnFinalSlash;
-                @FinalSlash.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnFinalSlash;
-                @FinalSlash.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnFinalSlash;
-                @FinalSlashHeld.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnFinalSlashHeld;
-                @FinalSlashHeld.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnFinalSlashHeld;
-                @FinalSlashHeld.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnFinalSlashHeld;
-                @FinalSlashReleased.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnFinalSlashReleased;
-                @FinalSlashReleased.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnFinalSlashReleased;
-                @FinalSlashReleased.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnFinalSlashReleased;
-                @AirSlashCombo.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnAirSlashCombo;
-                @AirSlashCombo.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnAirSlashCombo;
-                @AirSlashCombo.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnAirSlashCombo;
                 @SovereignImpale.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnSovereignImpale;
                 @SovereignImpale.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnSovereignImpale;
                 @SovereignImpale.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnSovereignImpale;
@@ -4185,12 +3627,6 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @EdgedFuryReleased.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnEdgedFuryReleased;
                 @EdgedFuryReleased.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnEdgedFuryReleased;
                 @EdgedFuryReleased.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnEdgedFuryReleased;
-                @NinthCircleSanction.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnNinthCircleSanction;
-                @NinthCircleSanction.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnNinthCircleSanction;
-                @NinthCircleSanction.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnNinthCircleSanction;
-                @DoomsdayKong.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnDoomsdayKong;
-                @DoomsdayKong.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnDoomsdayKong;
-                @DoomsdayKong.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnDoomsdayKong;
                 @BackDiver.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnBackDiver;
                 @BackDiver.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnBackDiver;
                 @BackDiver.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnBackDiver;
@@ -4203,24 +3639,12 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @BarrierReleased.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnBarrierReleased;
                 @BarrierReleased.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnBarrierReleased;
                 @BarrierReleased.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnBarrierReleased;
-                @FencerFlash.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnFencerFlash;
-                @FencerFlash.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnFencerFlash;
-                @FencerFlash.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnFencerFlash;
                 @DiagonalSwordDash.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnDiagonalSwordDash;
                 @DiagonalSwordDash.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnDiagonalSwordDash;
                 @DiagonalSwordDash.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnDiagonalSwordDash;
                 @ChampionsUprising.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnChampionsUprising;
                 @ChampionsUprising.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnChampionsUprising;
                 @ChampionsUprising.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnChampionsUprising;
-                @Eelecktrick.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnEelecktrick;
-                @Eelecktrick.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnEelecktrick;
-                @Eelecktrick.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnEelecktrick;
-                @EelecktrickHeld.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnEelecktrickHeld;
-                @EelecktrickHeld.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnEelecktrickHeld;
-                @EelecktrickHeld.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnEelecktrickHeld;
-                @EelecktrickReleased.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnEelecktrickReleased;
-                @EelecktrickReleased.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnEelecktrickReleased;
-                @EelecktrickReleased.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnEelecktrickReleased;
                 @LightningSpear.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnLightningSpear;
                 @LightningSpear.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnLightningSpear;
                 @LightningSpear.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnLightningSpear;
@@ -4312,30 +3736,12 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @MouseDelta.started += instance.OnMouseDelta;
                 @MouseDelta.performed += instance.OnMouseDelta;
                 @MouseDelta.canceled += instance.OnMouseDelta;
-                @AirLungeSlash.started += instance.OnAirLungeSlash;
-                @AirLungeSlash.performed += instance.OnAirLungeSlash;
-                @AirLungeSlash.canceled += instance.OnAirLungeSlash;
-                @FireFist.started += instance.OnFireFist;
-                @FireFist.performed += instance.OnFireFist;
-                @FireFist.canceled += instance.OnFireFist;
                 @ReaperHarvest.started += instance.OnReaperHarvest;
                 @ReaperHarvest.performed += instance.OnReaperHarvest;
                 @ReaperHarvest.canceled += instance.OnReaperHarvest;
                 @KrakenRage.started += instance.OnKrakenRage;
                 @KrakenRage.performed += instance.OnKrakenRage;
                 @KrakenRage.canceled += instance.OnKrakenRage;
-                @FinalSlash.started += instance.OnFinalSlash;
-                @FinalSlash.performed += instance.OnFinalSlash;
-                @FinalSlash.canceled += instance.OnFinalSlash;
-                @FinalSlashHeld.started += instance.OnFinalSlashHeld;
-                @FinalSlashHeld.performed += instance.OnFinalSlashHeld;
-                @FinalSlashHeld.canceled += instance.OnFinalSlashHeld;
-                @FinalSlashReleased.started += instance.OnFinalSlashReleased;
-                @FinalSlashReleased.performed += instance.OnFinalSlashReleased;
-                @FinalSlashReleased.canceled += instance.OnFinalSlashReleased;
-                @AirSlashCombo.started += instance.OnAirSlashCombo;
-                @AirSlashCombo.performed += instance.OnAirSlashCombo;
-                @AirSlashCombo.canceled += instance.OnAirSlashCombo;
                 @SovereignImpale.started += instance.OnSovereignImpale;
                 @SovereignImpale.performed += instance.OnSovereignImpale;
                 @SovereignImpale.canceled += instance.OnSovereignImpale;
@@ -4354,12 +3760,6 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @EdgedFuryReleased.started += instance.OnEdgedFuryReleased;
                 @EdgedFuryReleased.performed += instance.OnEdgedFuryReleased;
                 @EdgedFuryReleased.canceled += instance.OnEdgedFuryReleased;
-                @NinthCircleSanction.started += instance.OnNinthCircleSanction;
-                @NinthCircleSanction.performed += instance.OnNinthCircleSanction;
-                @NinthCircleSanction.canceled += instance.OnNinthCircleSanction;
-                @DoomsdayKong.started += instance.OnDoomsdayKong;
-                @DoomsdayKong.performed += instance.OnDoomsdayKong;
-                @DoomsdayKong.canceled += instance.OnDoomsdayKong;
                 @BackDiver.started += instance.OnBackDiver;
                 @BackDiver.performed += instance.OnBackDiver;
                 @BackDiver.canceled += instance.OnBackDiver;
@@ -4372,24 +3772,12 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @BarrierReleased.started += instance.OnBarrierReleased;
                 @BarrierReleased.performed += instance.OnBarrierReleased;
                 @BarrierReleased.canceled += instance.OnBarrierReleased;
-                @FencerFlash.started += instance.OnFencerFlash;
-                @FencerFlash.performed += instance.OnFencerFlash;
-                @FencerFlash.canceled += instance.OnFencerFlash;
                 @DiagonalSwordDash.started += instance.OnDiagonalSwordDash;
                 @DiagonalSwordDash.performed += instance.OnDiagonalSwordDash;
                 @DiagonalSwordDash.canceled += instance.OnDiagonalSwordDash;
                 @ChampionsUprising.started += instance.OnChampionsUprising;
                 @ChampionsUprising.performed += instance.OnChampionsUprising;
                 @ChampionsUprising.canceled += instance.OnChampionsUprising;
-                @Eelecktrick.started += instance.OnEelecktrick;
-                @Eelecktrick.performed += instance.OnEelecktrick;
-                @Eelecktrick.canceled += instance.OnEelecktrick;
-                @EelecktrickHeld.started += instance.OnEelecktrickHeld;
-                @EelecktrickHeld.performed += instance.OnEelecktrickHeld;
-                @EelecktrickHeld.canceled += instance.OnEelecktrickHeld;
-                @EelecktrickReleased.started += instance.OnEelecktrickReleased;
-                @EelecktrickReleased.performed += instance.OnEelecktrickReleased;
-                @EelecktrickReleased.canceled += instance.OnEelecktrickReleased;
                 @LightningSpear.started += instance.OnLightningSpear;
                 @LightningSpear.performed += instance.OnLightningSpear;
                 @LightningSpear.canceled += instance.OnLightningSpear;
@@ -4665,32 +4053,20 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         void OnPause(InputAction.CallbackContext context);
         void OnStore(InputAction.CallbackContext context);
         void OnMouseDelta(InputAction.CallbackContext context);
-        void OnAirLungeSlash(InputAction.CallbackContext context);
-        void OnFireFist(InputAction.CallbackContext context);
         void OnReaperHarvest(InputAction.CallbackContext context);
         void OnKrakenRage(InputAction.CallbackContext context);
-        void OnFinalSlash(InputAction.CallbackContext context);
-        void OnFinalSlashHeld(InputAction.CallbackContext context);
-        void OnFinalSlashReleased(InputAction.CallbackContext context);
-        void OnAirSlashCombo(InputAction.CallbackContext context);
         void OnSovereignImpale(InputAction.CallbackContext context);
         void OnHellTrident(InputAction.CallbackContext context);
         void OnFoolsVerdict(InputAction.CallbackContext context);
         void OnSoulFireBlast(InputAction.CallbackContext context);
         void OnEdgedFury(InputAction.CallbackContext context);
         void OnEdgedFuryReleased(InputAction.CallbackContext context);
-        void OnNinthCircleSanction(InputAction.CallbackContext context);
-        void OnDoomsdayKong(InputAction.CallbackContext context);
         void OnBackDiver(InputAction.CallbackContext context);
         void OnBarrier(InputAction.CallbackContext context);
         void OnBarrierHeld(InputAction.CallbackContext context);
         void OnBarrierReleased(InputAction.CallbackContext context);
-        void OnFencerFlash(InputAction.CallbackContext context);
         void OnDiagonalSwordDash(InputAction.CallbackContext context);
         void OnChampionsUprising(InputAction.CallbackContext context);
-        void OnEelecktrick(InputAction.CallbackContext context);
-        void OnEelecktrickHeld(InputAction.CallbackContext context);
-        void OnEelecktrickReleased(InputAction.CallbackContext context);
         void OnLightningSpear(InputAction.CallbackContext context);
         void OnLightningSpearHeld(InputAction.CallbackContext context);
         void OnLightningSpearReleased(InputAction.CallbackContext context);
