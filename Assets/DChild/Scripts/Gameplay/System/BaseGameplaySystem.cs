@@ -18,10 +18,14 @@ public class BaseGameplaySystem : MonoBehaviour
 {
     private static BaseGameplaySystem m_instance;
     private static CampaignSlot m_campaignToLoad;
+    private static GameplayModifiers m_modifiers;
+    public static GameplayModifiers modifiers => m_modifiers;
 
     private static CampaignSerializer m_campaignSerializer;
 
     public static CampaignSerializer campaignSerializer => m_campaignSerializer;
+
+    public static AudioListenerPositioner audioListener { get; private set; }
 
     [SerializeField]
     private static WorldTypeManager m_worldTypeManager;

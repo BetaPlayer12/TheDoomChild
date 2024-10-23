@@ -12,8 +12,8 @@ namespace DChild.Gameplay
 {
     public static class GameplaySystemWrapper
     {
-        public static GameplayModifiers modifiers { get => throw new NotImplementedException(); }
-        public static AudioListenerPositioner audioListener { get => throw new NotImplementedException(); }
+        public static GameplayModifiers modifiers { get => BaseGameplaySystem.modifiers; }
+        public static AudioListenerPositioner audioListener { get => BaseGameplaySystem.audioListener; }
         public static BaseGameplayUIHandle gamplayUIHandle { get => BaseGameplaySystem.gamplayUIHandle; }
 
         public static ICombatManager combatManager { get => UnderworldGameplaySubsystem.combatManager; }
@@ -22,7 +22,7 @@ namespace DChild.Gameplay
         public static IWorld world { get => BaseGameplaySystem.world; }
         public static ITime time { get => BaseGameplaySystem.time; }
 
-        public static IPlayerManager playerManager { get => throw new NotImplementedException(); }
+        public static IPlayerManager playerManager { get => BaseGameplaySystem.GetCurrentWorldType() == WorldType.Underworld ? UnderworldGameplaySubsystem.playerManager : OverworldGameplaySubsystem.playerManager; }
         public static ISimulationHandler simulationHandler { get => BaseGameplaySystem.simulationHandler; }
         public static ILootHandler lootHandler { get => UnderworldGameplaySubsystem.lootHandler; }
         public static IHealthTracker healthTracker { get => UnderworldGameplaySubsystem.healthTracker; }
@@ -110,7 +110,6 @@ namespace DChild.Gameplay
         private static void LockPlayerToSpawnPosition()
         {
 
-        }
-
+        }      
     }
 }

@@ -9,7 +9,8 @@ namespace DChild.Gameplay.Systems
     {
 
         #region Modules
-
+        private static DChild.Gameplay.Systems.PlayerManager m_playerManager;
+        public static IPlayerManager playerManager => m_playerManager;
         #endregion
 
         private void AssignModule<T>(out T module) where T : MonoBehaviour, IGameplaySystemModule => module = GetComponentInChildren<T>();
