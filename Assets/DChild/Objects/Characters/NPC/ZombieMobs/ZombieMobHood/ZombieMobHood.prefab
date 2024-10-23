@@ -236,6 +236,8 @@ GameObject:
   - component: {fileID: 2166308357139259101}
   - component: {fileID: 2166308357139259098}
   - component: {fileID: 2166308357139259102}
+  - component: {fileID: 1555253930248988151}
+  - component: {fileID: 434642710958025753}
   m_Layer: 9
   m_Name: Model
   m_TagString: Untagged
@@ -288,7 +290,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: c60fa011f24445c419385771921bb1a6, type: 2}
+  - {fileID: 2100000, guid: 2019aeca88bb3874da642c99f555efbd, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -322,7 +324,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d247ba06193faa74d9335f5481b2b56c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  skeletonDataAsset: {fileID: 11400000, guid: 67b82b86baf43bd43949a305079839ce, type: 2}
+  skeletonDataAsset: {fileID: 11400000, guid: a72b900d6a0bfd84398118d952c2d44d, type: 2}
   initialSkinName: MobHood1
   initialFlipX: 0
   initialFlipY: 0
@@ -364,6 +366,39 @@ MonoBehaviour:
   useY: 1
   rb: {fileID: 2166308357037627578}
   siblingBoneNames: []
+--- !u!114 &1555253930248988151
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2166308357139259096}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ce36765c3609a7e438482540600a3b3a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_renderer: {fileID: 2166308357139259101}
+  m_color: {r: 0.34901962, g: 0.34901962, b: 0.34901962, a: 0}
+  m_fadeInDuration: 0.05
+  m_fadeOutDuration: 0.1
+--- !u!114 &434642710958025753
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2166308357139259096}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6bb0641d37f1cbc418dcf04f60a07c9e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_animation: {fileID: 6239757389530886338}
+  m_renderer: {fileID: 2166308357139259101}
+  m_startDissolveEvent: StartFade
+  m_dissolveDuration: 1
+  m_delay: 0
 --- !u!1 &3196247269126770570
 GameObject:
   m_ObjectHideFlags: 0
@@ -420,6 +455,7 @@ MonoBehaviour:
   m_idleAnimation: Idle
   m_enableFlinchColor: 0
   m_flinchColorAnimation: FlinchMix
+  m_enableModule: 1
 --- !u!1 &3970424804963323655
 GameObject:
   m_ObjectHideFlags: 0
