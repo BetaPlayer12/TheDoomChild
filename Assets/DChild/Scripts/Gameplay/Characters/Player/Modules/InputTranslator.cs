@@ -36,30 +36,19 @@ namespace DChild.Gameplay.Characters.Players.Modules
         public bool projectileThrowHeld;
 
         #region BattleAbilities Inputs
-        public bool airLungeSlashPressed;
-        public bool fireFistPressed;
         public bool reaperHarvestPressed;
         public bool krakenRagePressed;
-        public bool finalSlashPressed;
-        public bool finalSlashHeld;
-        //public bool finalSlashReleased;
-        public bool airSlashComboPressed;
         public bool sovereignImpalePressed;
         public bool hellTridentPressed;
         public bool foolsVerdictPressed;
         public bool soulFireBlastPressed;
         public bool edgedFuryPressed;
         public bool edgedFuryReleased;
-        public bool ninthCircleSanctionPressed;
-        public bool doomsdayKongPressed;
         public bool backDiverPressed;
         public bool barrierPressed;
         public bool barrierHeld;
-        public bool fencerFlashPressed;
         public bool diagonalSwordDashPressed;
         public bool championsUprisingPressed;
-        public bool eelecktrickPressed;
-        public bool eelecktrickHeld;
         public bool lightningSpearPressed;
         public bool lightningSpearHeld;
         public bool icarusWingsPressed;
@@ -192,22 +181,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
             }
         }
 
-        private void OnAirLungeSlash(InputValue value)
-        {
-            if (enabled == true)
-            {
-                airLungeSlashPressed = value.Get<float>() == 1;
-            }
-        }
-
-        private void OnFireFist(InputValue value)
-        {
-            if (enabled == true)
-            {
-                fireFistPressed = value.Get<float>() == 1;
-            }
-        }
-
         private void OnReaperHarvest(InputValue value)
         {
             if (enabled == true)
@@ -221,39 +194,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
             if (enabled == true)
             {
                 krakenRagePressed = value.Get<float>() == 1;
-            }
-        }
-
-        private void OnFinalSlash(InputValue value)
-        {
-            if (enabled == true)
-            {
-                var inputValue = value.Get<float>() == 1;
-                finalSlashPressed = inputValue;
-            }
-        }
-
-        private void OnFinalSlashHeld(InputValue value)
-        {
-            if (enabled == true)
-            {
-                finalSlashHeld = value.Get<float>() == 1;
-            }
-        }
-
-        private void OnFinalSlashReleased(InputValue value)
-        {
-            if (enabled == true)
-            {
-                finalSlashHeld = false;
-            }
-        }
-
-        private void OnAirSlashCombo(InputValue value)
-        {
-            if (enabled == true)
-            {
-                airSlashComboPressed = value.Get<float>() == 1;
             }
         }
 
@@ -305,23 +245,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 edgedFuryReleased = !edgedFuryReleased;
             }
         }
-
-        private void OnNinthCircleSanction(InputValue value)
-        {
-            if (enabled == true)
-            {
-                ninthCircleSanctionPressed = value.Get<float>() == 1;
-            }
-        }
-
-        private void OnDoomsdayKong(InputValue value)
-        {
-            if (enabled == true)
-            {
-                doomsdayKongPressed = value.Get<float>() == 1;
-            }
-        }
-
         private void OnBackDiver(InputValue value)
         {
             if (enabled == true)
@@ -353,15 +276,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 barrierHeld = false;
             }
         }
-
-        private void OnFencerFlash(InputValue value)
-        {
-            if (enabled == true)
-            {
-                fencerFlashPressed = value.Get<float>() == 1;
-            }
-        }
-
         private void OnDiagonalSwordDash(InputValue value)
         {
             if (enabled == true)
@@ -375,31 +289,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
             if (enabled == true)
             {
                 championsUprisingPressed = value.Get<float>() == 1;
-            }
-        }
-
-        private void OnEelecktrick(InputValue value)
-        {
-            if (enabled == true)
-            {
-                var inputValue = value.Get<float>() == 1;
-                eelecktrickPressed = inputValue;
-            }
-        }
-
-        private void OnEelecktrickHeld(InputValue value)
-        {
-            if (enabled == true)
-            {
-                eelecktrickHeld = value.Get<float>() == 1;
-            }
-        }
-
-        private void OnEelecktrickReleased(InputValue value)
-        {
-            if (enabled == true)
-            {
-                eelecktrickHeld = false;
             }
         }
 
@@ -574,26 +463,18 @@ namespace DChild.Gameplay.Characters.Players.Modules
             projectileThrowPressed = false;
             projectileThrowReleased = false;
 
-            airLungeSlashPressed = false;
-            fireFistPressed = false;
             reaperHarvestPressed = false;
             krakenRagePressed = false;
-            finalSlashPressed = false;
-            airSlashComboPressed = false;
             sovereignImpalePressed = false;
             hellTridentPressed = false;
             foolsVerdictPressed = false;
             soulFireBlastPressed = false;
             edgedFuryPressed = false;
             edgedFuryReleased = false;
-            ninthCircleSanctionPressed = false;
-            doomsdayKongPressed = false;
             backDiverPressed = false;
             barrierPressed = false;
-            fencerFlashPressed = false;
             diagonalSwordDashPressed = false;
             championsUprisingPressed = false;
-            eelecktrickPressed = false;
             lightningSpearPressed = false;
             icarusWingsPressed = false;
             teleportingSkullPressed = false;
@@ -624,29 +505,19 @@ namespace DChild.Gameplay.Characters.Players.Modules
             projectileThrowHeld = false;
             projectileThrowReleased = false;
 
-            airLungeSlashPressed = false;
-            fireFistPressed = false;
             reaperHarvestPressed = false;
             krakenRagePressed = false;
-            finalSlashPressed = false;
-            finalSlashHeld = false;
-            airSlashComboPressed = false;
             sovereignImpalePressed = false;
             hellTridentPressed = false;
             foolsVerdictPressed = false;
             soulFireBlastPressed = false;
             edgedFuryPressed = false;
             edgedFuryReleased = false;
-            ninthCircleSanctionPressed = false;
-            doomsdayKongPressed = false;
             backDiverPressed = false;
             barrierPressed = false;
             barrierHeld = false;
-            fencerFlashPressed = false;
             diagonalSwordDashPressed = false;
             championsUprisingPressed = false;
-            eelecktrickPressed = false;
-            eelecktrickHeld = false;
             lightningSpearPressed = false;
             lightningSpearHeld = false;
             icarusWingsPressed = false;
