@@ -2,8 +2,8 @@
 
 namespace DChild.Gameplay.ArmyBattle
 {
-    [System.Serializable]
-    public class ArmyBattleScenario
+    [CreateAssetMenu(fileName = "ArmyBattleScenario", menuName = "DChild/Gameplay/Army/BattleScenario")]
+    public class ArmyBattleScenario : ScriptableObject
     {
         [SerializeField]
         private ArmyAIData m_enemyToBattle;
