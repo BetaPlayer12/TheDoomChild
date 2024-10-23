@@ -32,14 +32,22 @@ namespace DChild.Gameplay.Systems
 
         public void SetCurrentWorldType(Location currentLocation)
         {
-            if(m_underworldLocationsData.Locations.Contains(currentLocation))
+            if(m_underworldLocationsData.Locations.Contains(currentLocation) || m_overworldLocationsData.Locations.Contains(currentLocation))
             {
-                m_currentWorldType = WorldType.Underworld;
+                if (m_underworldLocationsData.Locations.Contains(currentLocation))
+                {
+                    m_currentWorldType = WorldType.Underworld;
+                }
+                else
+                {
+                    m_currentWorldType = WorldType.Overworld;
+                }
             }
             else
             {
-                m_currentWorldType = WorldType.Overworld;
+                m_currentWorldType = WorldType.ArmyBattle;
             }
+            
 
             var args = new WorldTypeArgs(m_currentWorldType);
 

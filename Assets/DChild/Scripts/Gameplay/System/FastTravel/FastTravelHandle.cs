@@ -1,4 +1,5 @@
 ﻿using DChild.Gameplay.Characters.Players.Modules;
+using DChild.Gameplay.Systems;
 using DChild.Gameplay.Systems.Serialization;
 using DChild.Menu;
 using UnityEngine;
@@ -22,7 +23,28 @@ namespace DChild.Gameplay.FastTravel
 
             LoadingHandle.SetLoadType(LoadingHandle.LoadType.Smart);
             GameplaySystem.ResumeGame();
-            GameSystem.LoadZone(destination.sceneInfo, true, OnTransferPlayerDone);
+            if (GameSystem.m_useGameModeValidator)
+            {
+                var WorldTypeVar = FindObjectOfType<WorldTypeManager>();
+                WorldTypeVar.SetCurrentWorldType(destination.location);
+
+                switch (WorldTypeVar.CurrentWorldType)
+                {
+                    case WorldType.Underworld:
+                        GameSystem.LoadZone(GameMode.Underworld, destination.sceneInfo, true, OnTransferPlayerDone);
+                        break;
+                    case WorldType.Overworld:
+                        GameSystem.LoadZone(GameMode.Overworld, destination.sceneInfo, true, OnTransferPlayerDone);
+                        break;
+                    case WorldType.ArmyBattle:
+                        GameSystem.LoadZone(GameMode.ArmyBattle, destination.sceneInfo, true, OnTransferPlayerDone);
+                        break;
+                }
+            }
+            else
+            {
+                GameSystem.LoadZone(destination.sceneInfo, true, OnTransferPlayerDone);
+            }
         }
 
         private void OnTransferPlayerDone()
