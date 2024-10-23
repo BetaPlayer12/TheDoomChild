@@ -10,7 +10,7 @@ namespace DChild.Gameplay.ArmyBattle.UI
         private TextMeshProUGUI m_armyName;
         [SerializeField]
         private Image m_armyIcon;
-
+        
         public void Display(ArmyOverviewData overviewData)
         {
             m_armyName.text = overviewData.name.ToUpper();

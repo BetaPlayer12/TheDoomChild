@@ -3,12 +3,27 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using DChild.Gameplay.ArmyBattle.SpecialSkills;
+using Holysoft.Event;
 
 namespace DChild.Gameplay.ArmyBattle
 {
     [System.Serializable]
     public class Army
     {
+        public struct TroopCountChangeEventArgs : IEventActionArgs
+        {
+            public TroopCountChangeEventArgs(int currentTroopCount, float currentTroopCountPercent, int troopCountChange)
+            {
+                this.currentTroopCount = currentTroopCount;
+                this.currentTroopCountPercent = currentTroopCountPercent;
+                this.troopCountChange = troopCountChange;
+            }
+
+            public int currentTroopCount { get; }
+            public float currentTroopCountPercent { get; }
+            public int troopCountChange { get; }
+        }
+
         //#endif
         [SerializeField]
         private int m_troopCount;
@@ -28,6 +43,8 @@ namespace DChild.Gameplay.ArmyBattle
 
         public ArmyOverviewData overview => m_info.overview;
 
+        public event EventAction<TroopCountChangeEventArgs> OnTroopCountChange;
+
         public Army(ArmyInfo info)
         {
             m_info = info;
@@ -44,17 +61,21 @@ namespace DChild.Gameplay.ArmyBattle
 
         public void AddTroopCount(int additionalTroops)
         {
-             m_troopCount += additionalTroops;
+            m_troopCount += additionalTroops;
+            OnTroopCountChange?.Invoke(this, new TroopCountChangeEventArgs(m_troopCount, troopCountPercent, additionalTroops));
         }
 
         public void SubtractTroopCount(int subtractedTroops)
         {
-             m_troopCount -= subtractedTroops;
+            m_troopCount -= subtractedTroops;
+            OnTroopCountChange?.Invoke(this, new TroopCountChangeEventArgs(m_troopCount, troopCountPercent, -subtractedTroops));
         }
 
         public void ResetTroopCount()
         {
+            var previousTroopCount = m_troopCount;
             m_troopCount = m_info.GetTroopCount();
+            OnTroopCountChange?.Invoke(this, new TroopCountChangeEventArgs(previousTroopCount, 100, Mathf.Abs(previousTroopCount - m_troopCount)));
         }
 
         public bool HasAvailableGroup(DamageType damageType)
