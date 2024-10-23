@@ -35,8 +35,10 @@ namespace DChild.Gameplay.ArmyBattle
             SpriteRenderer.sprite = Appearance;
         }
         
+        [Button]
         public void InitiateEncounter()
         {
+
             ArmyBattleSystem.BattleScenario = Scenario;
             Debug.Log("ARMY BATTLE SCENARIO INITIATED :"+ArmyBattleSystem.BattleScenario.name);
         }
