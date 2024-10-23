@@ -245,6 +245,7 @@ MonoBehaviour:
   m_idleAnimation: Idle
   m_enableFlinchColor: 0
   m_flinchColorAnimation: FlinchMix
+  m_enableModule: 1
 --- !u!1 &1134344597662290335
 GameObject:
   m_ObjectHideFlags: 0
@@ -1071,6 +1072,8 @@ GameObject:
   - component: {fileID: 4410806867231845944}
   - component: {fileID: 4410806867231845948}
   - component: {fileID: 9151812854261153977}
+  - component: {fileID: 7397032485840221235}
+  - component: {fileID: 5021015704943606877}
   m_Layer: 9
   m_Name: Model
   m_TagString: Untagged
@@ -1123,7 +1126,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 9d18cc1f5716b4646828057d43f8ec96, type: 2}
+  - {fileID: 2100000, guid: bbf2d63aceb3c5a46809d575b172d3c4, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1157,7 +1160,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d247ba06193faa74d9335f5481b2b56c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  skeletonDataAsset: {fileID: 11400000, guid: 80591ab87cb345249ab8906e54a99dab, type: 2}
+  skeletonDataAsset: {fileID: 11400000, guid: 841df8d5b408e38438252d4766123819, type: 2}
   initialSkinName: MobFemale1
   initialFlipX: 0
   initialFlipY: 0
@@ -1214,6 +1217,39 @@ MonoBehaviour:
   boneRoot: {fileID: 6946989330077806465}
   flipBy180DegreeRotation: 0
   skeletonRenderer: {fileID: 4410806867231845944}
+--- !u!114 &7397032485840221235
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4410806867231845946}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ce36765c3609a7e438482540600a3b3a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_renderer: {fileID: 4410806867231845951}
+  m_color: {r: 0.34901962, g: 0.34901962, b: 0.34901962, a: 0}
+  m_fadeInDuration: 0.05
+  m_fadeOutDuration: 0.1
+--- !u!114 &5021015704943606877
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4410806867231845946}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6bb0641d37f1cbc418dcf04f60a07c9e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_animation: {fileID: 8484221814427385888}
+  m_renderer: {fileID: 4410806867231845951}
+  m_startDissolveEvent: StartFade
+  m_dissolveDuration: 1
+  m_delay: 0
 --- !u!1 &5027287078041683307
 GameObject:
   m_ObjectHideFlags: 0
