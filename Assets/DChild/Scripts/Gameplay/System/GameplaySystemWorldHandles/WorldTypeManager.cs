@@ -1,12 +1,23 @@
 using DChild.Gameplay.Environment;
+using Holysoft.Event;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace DChild.Gameplay.Systems
 {
-    public class WorldTypeManager : MonoBehaviour
+    public class WorldTypeManager : MonoBehaviour, IEventActionArgs
     {
+        public struct WorldTypeArgs : IEventActionArgs
+        {
+            public WorldType WorldType;
+
+            public WorldTypeArgs(WorldType currentWorldType)
+            {
+                WorldType = currentWorldType;
+            }
+        }
+
         [SerializeField]
         private WorldType m_currentWorldType;
 
@@ -16,6 +27,8 @@ namespace DChild.Gameplay.Systems
         private LocationInWorldData m_underworldLocationsData;
         [SerializeField]
         private LocationInWorldData m_overworldLocationsData;
+
+        public static event EventAction<WorldTypeArgs> OnWorldTypeChanged;
 
         public void SetCurrentWorldType(Location currentLocation)
         {
@@ -27,6 +40,10 @@ namespace DChild.Gameplay.Systems
             {
                 m_currentWorldType = WorldType.Overworld;
             }
+
+            var args = new WorldTypeArgs(m_currentWorldType);
+
+            OnWorldTypeChanged.Invoke(this, args);
         }
     }
 }
