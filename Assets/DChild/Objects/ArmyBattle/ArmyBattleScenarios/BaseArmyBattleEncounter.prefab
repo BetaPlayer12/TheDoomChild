@@ -95,6 +95,7 @@ GameObject:
   - component: {fileID: 780589969097184784}
   - component: {fileID: 780589969097184787}
   - component: {fileID: 780589969097184791}
+  - component: {fileID: 6187756918221393166}
   m_Layer: 11
   m_Name: BaseArmyBattleEncounter
   m_TagString: Sensor
@@ -111,7 +112,7 @@ Transform:
   m_GameObject: {fileID: 780589969097184786}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -49.806, y: 41.51, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.5, y: 1.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 780589968502977943}
@@ -132,6 +133,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Scenario: {fileID: 11400000, guid: b4543d4dea793564796661ec8d9c36b3, type: 2}
   SpriteRenderer: {fileID: 780589968502977942}
+  Repeatable: 0
   Appearance: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
 --- !u!58 &780589969097184791
 CircleCollider2D:
@@ -149,3 +151,29 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.5
+--- !u!61 &6187756918221393166
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 780589969097184786}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: -0.006713867, y: 0.0000019073486}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 0.7180557, y: 0.6867256}
+  m_EdgeRadius: 0
