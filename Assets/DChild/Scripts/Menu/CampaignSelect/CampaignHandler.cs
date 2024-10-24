@@ -1,5 +1,7 @@
 ﻿using System;
 using DChild.Gameplay;
+using DChild.Gameplay.Systems;
+using DChild.Gameplay.Systems.Serialization;
 using DChild.Menu.Campaign;
 using DChild.Serialization;
 using DChildDebug;
@@ -39,7 +41,28 @@ namespace DChild.Menu
             LoadingHandle.SetLoadType(LoadingHandle.LoadType.Force);
             GameplaySystem.SetCurrentCampaign(m_campaignSelect.selectedSlot);
             LoadingHandle.UnloadScenes(gameObject.scene.name);
-            GameSystem.LoadZone(m_campaignSelect.selectedSlot.sceneToLoad, true);
+            if (GameSystem.m_useGameModeValidator)
+            {
+                var WorldTypeVar = FindObjectOfType<WorldTypeManager>();
+                WorldTypeVar.SetCurrentWorldType(m_campaignSelect.selectedSlot.location);
+
+                switch (WorldTypeVar.CurrentWorldType)
+                {
+                    case WorldType.Underworld:
+                        GameSystem.LoadZone(GameMode.Underworld, m_campaignSelect.selectedSlot.sceneToLoad, true);
+                        break;
+                    case WorldType.Overworld:
+                        GameSystem.LoadZone(GameMode.Overworld, m_campaignSelect.selectedSlot.sceneToLoad, true);
+                        break;
+                    case WorldType.ArmyBattle:
+                        GameSystem.LoadZone(GameMode.ArmyBattle, m_campaignSelect.selectedSlot.sceneToLoad, true);
+                        break;
+                }
+            }
+            else
+            {
+                GameSystem.LoadZone(m_campaignSelect.selectedSlot.sceneToLoad, true);
+            }
         }
 
         private void OnDeleteAffirmed(object sender, EventActionArgs eventArgs)
