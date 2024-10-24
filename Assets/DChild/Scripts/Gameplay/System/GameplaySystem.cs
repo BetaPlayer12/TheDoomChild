@@ -12,6 +12,7 @@ using UnityEngine;
 using PixelCrushers.DialogueSystem;
 using System.Collections;
 using DChild.Gameplay.SoulSkills;
+using DChild.Gameplay.Systems.Serialization;
 
 namespace DChild.Gameplay
 {
@@ -135,7 +136,29 @@ namespace DChild.Gameplay
             PersistentDataManager.ApplySaveData(campaignSlot.dialogueSaveData, DatabaseResetOptions.KeepAllLoaded);
             m_healthTracker?.RemoveAllTrackers();
             LoadingHandle.SetLoadType(loadType);
-            GameSystem.LoadZone(m_campaignToLoad.sceneToLoad, true);
+            if (GameSystem.m_useGameModeValidator)
+            {
+                var WorldTypeVar = FindObjectOfType<WorldTypeManager>();
+
+                WorldTypeVar.SetCurrentWorldType(m_campaignToLoad.location);
+
+                switch (WorldTypeVar.CurrentWorldType)
+                {
+                    case WorldType.Underworld:
+                        GameSystem.LoadZone(GameMode.Underworld, m_campaignToLoad.sceneToLoad, true);
+                        break;
+                    case WorldType.Overworld:
+                        GameSystem.LoadZone(GameMode.Overworld, m_campaignToLoad.sceneToLoad, true);
+                        break;
+                    case WorldType.ArmyBattle:
+                        GameSystem.LoadZone(GameMode.ArmyBattle, m_campaignToLoad.sceneToLoad, true);
+                        break;
+                }
+            }
+            else
+            {
+                GameSystem.LoadZone(m_campaignToLoad.sceneToLoad, true);
+            }
             //Reload Items
             LoadingHandle.SceneDone += LoadGameDone;
         }
