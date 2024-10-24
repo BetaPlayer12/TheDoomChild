@@ -5,6 +5,7 @@ using DChild.Gameplay.Cinematics;
 using DChild.Gameplay.Combat;
 using DChild.Gameplay.SoulSkills;
 using DChild.Gameplay.Systems;
+using DChild.Gameplay.Systems.Serialization;
 using DChild.Gameplay.VFX;
 using DChild.Menu;
 using DChild.Serialization;
@@ -146,7 +147,29 @@ public class BaseGameplaySystem : MonoBehaviour
         ClearCaches();
         PersistentDataManager.ApplySaveData(campaignSlot.dialogueSaveData, DatabaseResetOptions.KeepAllLoaded);
         LoadingHandle.SetLoadType(loadType);
-        GameSystem.LoadZone(m_campaignToLoad.sceneToLoad, true);
+        if(GameSystem.m_useGameModeValidator)
+        {
+            var WorldTypeVar = FindObjectOfType<WorldTypeManager>();
+
+            WorldTypeVar.SetCurrentWorldType(m_campaignToLoad.location);
+
+            switch (WorldTypeVar.CurrentWorldType)
+            {
+                case WorldType.Underworld:
+                    GameSystem.LoadZone(GameMode.Underworld, m_campaignToLoad.sceneToLoad, true);
+                    break;
+                case WorldType.Overworld:
+                    GameSystem.LoadZone(GameMode.Overworld, m_campaignToLoad.sceneToLoad, true);
+                    break;
+                case WorldType.ArmyBattle:
+                    GameSystem.LoadZone(GameMode.ArmyBattle, m_campaignToLoad.sceneToLoad, true);
+                    break;
+            }
+        }
+        else
+        {
+            GameSystem.LoadZone(m_campaignToLoad.sceneToLoad, true);
+        }
         //Reload Items
         LoadingHandle.SceneDone += LoadGameDone;
     }
