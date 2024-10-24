@@ -37,7 +37,6 @@ namespace DChild.Gameplay.ArmyBattle.UI
 
         private void OnSignal(Signal signal)
         {
-            Debug.Log($"received data type was: {signal.valueType}");
 
             if (signal.valueType != typeof(bool))
             {
@@ -46,7 +45,6 @@ namespace DChild.Gameplay.ArmyBattle.UI
             }
 
             bool battleResult = (bool)signal.valueAsObject;
-            Debug.Log($"received data value was: {signal.valueAsObject}");
 
             if (battleResult != true)
             {

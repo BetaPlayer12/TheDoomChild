@@ -125,6 +125,7 @@ namespace DChild.Gameplay.ArmyBattle
             }
             else
             {
+                m_battleEndSignal.Payload.booleanValue = m_enemy.controlledArmy.troopCount <= 0;
                 m_battleEndSignal.SendSignal();
                 StartCoroutine(EndScenarioRoutine());
             }
