@@ -58,10 +58,6 @@ namespace DChild
                         m_gameplaySceneActive = true;
                     }
                 }
-                else
-                {
-                    GameModeValidator.Instance.SetupGameMode(GameMode.Underworld);
-                }
                 //if (m_activeZone != sceneName)
                 //{
                 LoadingHandle.LoadScenes(scene);

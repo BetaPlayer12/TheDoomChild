@@ -96,6 +96,8 @@ namespace DChild.Gameplay.Systems
 
         private void Awake()
         {
+            Debug.Log("Underworld Gameplay Awake");
+
             AssignModules();
 
             if (m_doNotTeleportPlayerOnAwake == false)
@@ -106,6 +108,8 @@ namespace DChild.Gameplay.Systems
 
         private void Start()
         {
+            Debug.Log("Underworld Gameplay Start");
+
             StartCoroutine(DelayedShowGameplay());
         }
 

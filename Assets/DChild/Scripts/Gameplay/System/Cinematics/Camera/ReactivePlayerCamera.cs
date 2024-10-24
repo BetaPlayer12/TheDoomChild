@@ -27,9 +27,6 @@ namespace DChild.Gameplay.Cinematics.Cameras
         [SerializeField, ShowIf("m_shakeOnAttackHit")]
         private CameraShakeData m_onSwordThrustShakeData;
 
-        [SerializeField]
-        private ICameraShakeHandle m_cameraShake;
-
         private ICinema m_cinema;
         private ISwordThrustState m_swordThrustState;
 

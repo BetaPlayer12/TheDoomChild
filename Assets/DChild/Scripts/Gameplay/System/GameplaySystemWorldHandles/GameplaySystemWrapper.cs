@@ -10,11 +10,13 @@ using System;
 
 namespace DChild.Gameplay
 {
-    public static class GameplaySystemWrapper
+    public static class GameplaySystem
     {
+        private static GameplayUIHandleWrapper uiHandle = new GameplayUIHandleWrapper();
+
         public static GameplayModifiers modifiers { get => BaseGameplaySystem.modifiers; }
         public static AudioListenerPositioner audioListener { get => BaseGameplaySystem.audioListener; }
-        public static BaseGameplayUIHandle gamplayUIHandle { get => BaseGameplaySystem.gamplayUIHandle; }
+        public static IGameplayUIHandle gamplayUIHandle { get => uiHandle; }
 
         public static ICombatManager combatManager { get => UnderworldGameplaySubsystem.combatManager; }
         public static IFXManager fXManager { get => BaseGameplaySystem.fXManager; }

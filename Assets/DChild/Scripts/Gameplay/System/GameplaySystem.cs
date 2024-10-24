@@ -21,7 +21,7 @@ namespace DChild.Gameplay
         public float SoulessenceAbsorption = 1;
     }
 
-    public class GameplaySystem : MonoBehaviour
+    public class GameplaySystemOLD : MonoBehaviour
     {
 #if UNITY_EDITOR
         [SerializeField]
@@ -36,7 +36,7 @@ namespace DChild.Gameplay
         private AudioListenerPositioner m_audioListener;
 
         private GameplaySettings m_settings;
-        private static GameplaySystem m_instance;
+        private static GameplaySystemOLD m_instance;
         private static CampaignSlot m_campaignToLoad;
         private static GameplayModifiers m_modifiers;
         public static GameplayModifiers modifiers => m_modifiers;

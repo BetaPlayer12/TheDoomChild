@@ -85,7 +85,7 @@ public class BaseGameplaySystem : MonoBehaviour
 
     public static WorldType GetCurrentWorldType()
     {
-        return m_worldTypeManager.CurrentWorldType;
+        return WorldType.Underworld;
     }
 
     public static void ResumeGame()
@@ -165,6 +165,8 @@ public class BaseGameplaySystem : MonoBehaviour
         }
         else
         {
+            Debug.Log("Base Gameplay Awake");
+
             m_instance = this;
             AssignModules();
             m_activatableModules = GetComponentsInChildren<IGameplayActivatable>();
@@ -187,6 +189,8 @@ public class BaseGameplaySystem : MonoBehaviour
 
     private void Start()
     {
+        Debug.Log("Base Gameplay Start");
+
         audioListener = m_audioListener;
         m_settings = GameSystem.settings?.gameplay ?? null;
         m_modifiers = new GameplayModifiers();
