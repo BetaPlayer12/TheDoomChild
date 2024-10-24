@@ -1,5 +1,6 @@
 using DarkTonic.MasterAudio;
 using DChild;
+using DChild.Configurations;
 using DChild.Gameplay;
 using DChild.Gameplay.Cinematics;
 using DChild.Gameplay.Combat;
@@ -16,6 +17,12 @@ using UnityEngine;
 
 public class BaseGameplaySystem : MonoBehaviour
 {
+    [SerializeField]
+    private bool m_doNotDeserializeOnAwake;
+    [SerializeField]
+    private AudioListenerPositioner m_audioListener;
+
+    private GameplaySettings m_settings;
     private static BaseGameplaySystem m_instance;
     private static CampaignSlot m_campaignToLoad;
     private static GameplayModifiers m_modifiers;
@@ -38,8 +45,8 @@ public class BaseGameplaySystem : MonoBehaviour
     private static World m_world;
     private static SimulationHandler m_simulation;
 
-    private static ZoneMoverHandle m_zoneMover;
     private static BaseGameplayUIHandle m_baseGameplayUIHandle;
+ 
     public static bool isGamePaused { get; private set; }
 
     public static BaseGameplayUIHandle gamplayUIHandle => m_baseGameplayUIHandle;
@@ -66,47 +73,19 @@ public class BaseGameplaySystem : MonoBehaviour
 
     private void AssignModules()
     {
+        AssignModule(out m_fxManager);
+        AssignModule(out m_cinema);
+        AssignModule(out m_world);
+        AssignModule(out m_simulation);
         AssignModule(out m_campaignSerializer);
+        AssignModule(out m_baseGameplayUIHandle);
     }
 
     private void AssignModule<T>(out T module) where T : MonoBehaviour, IGameplaySystemModule => module = GetComponentInChildren<T>();
 
-
-    protected void Awake()
-    {
-        if (m_instance)
-        {
-            Destroy(gameObject);
-        }
-        else
-        {
-            m_instance = this;
-            AssignModules();
-            var initializables = GetComponentsInChildren<IGameplayInitializable>();
-            for (int i = 0; i < initializables.Length; i++)
-            {
-                initializables[i].Initialize();
-            }
-            if (m_campaignToLoad != null)
-            {
-                m_campaignSerializer.SetSlot(m_campaignToLoad);
-            }
-        }
-    }
-
     public static WorldType GetCurrentWorldType()
     {
         return m_worldTypeManager.CurrentWorldType;
-    }
-
-    private void Start()
-    {
-        if (m_campaignToLoad != null)
-        {
-            m_campaignSerializer.SetSlot(m_campaignToLoad);
-
-            m_campaignToLoad = null;
-        }
     }
 
     public static void ResumeGame()
@@ -157,7 +136,7 @@ public class BaseGameplaySystem : MonoBehaviour
 
 
         m_campaignSerializer.SetSlot(m_campaignToLoad);
-        m_baseGameplayUIHandle.ResetGameplayUI();
+        //m_baseGameplayUIHandle.ResetGameplayUI();
         m_campaignSerializer.Load(SerializationScope.Gameplay, true);
     }
 
@@ -175,6 +154,82 @@ public class BaseGameplaySystem : MonoBehaviour
         else
         {
             m_campaignToLoad = campaignSlot;
+        }
+    }
+
+    protected void Awake()
+    {
+        if (m_instance)
+        {
+            Destroy(gameObject);
+        }
+        else
+        {
+            m_instance = this;
+            AssignModules();
+            m_activatableModules = GetComponentsInChildren<IGameplayActivatable>();
+            var initializables = GetComponentsInChildren<IGameplayInitializable>();
+            for (int i = 0; i < initializables.Length; i++)
+            {
+                initializables[i].Initialize();
+            }
+            if (m_campaignToLoad != null)
+            {
+                m_campaignSerializer.SetSlot(m_campaignToLoad);
+            }
+
+            if (m_doNotDeserializeOnAwake == false)
+            {
+                m_campaignSerializer.Load(SerializationScope.Gameplay, true);
+            }
+        }
+    }
+
+    private void Start()
+    {
+        audioListener = m_audioListener;
+        m_settings = GameSystem.settings?.gameplay ?? null;
+        m_modifiers = new GameplayModifiers();
+        isGamePaused = false;
+        if (m_campaignToLoad != null)
+        {
+            m_campaignSerializer.SetSlot(m_campaignToLoad);
+
+            m_campaignToLoad = null;
+        }
+    }
+
+    private void OnEnable()
+    {
+        for (int i = 0; i < m_activatableModules.Length; i++)
+        {
+            m_activatableModules[i].Enable();
+        }
+    }
+
+    private void OnDisable()
+    {
+        for (int i = 0; i < m_activatableModules.Length; i++)
+        {
+            m_activatableModules[i].Disable();
+        }
+    }
+
+    private void OnApplicationQuit()
+    {
+        Time.timeScale = 1;
+    }
+
+    private void OnDestroy()
+    {
+        if (this == m_instance)
+        {
+            m_fxManager = null;
+            m_cinema = null;
+            m_world = null;
+            m_simulation = null;
+            m_activatableModules = null;
+            GameTime.UnregisterValueChange(m_instance, GameTime.Factor.Multiplication);
         }
     }
 }

@@ -6,6 +6,8 @@ namespace DChild
 {
     public class GameModeValidator : MonoBehaviour
     {
+        public static GameModeValidator Instance { get; private set; }
+
         [SerializeField]
         private SceneInfo m_baseGameplayScene;
         [SerializeField]
@@ -92,6 +94,11 @@ namespace DChild
                     }
                     break;
             }
+        }
+
+        private void Awake()
+        {
+            Instance = this;
         }
     }
 
