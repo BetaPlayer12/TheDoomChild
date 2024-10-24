@@ -5,6 +5,7 @@ using DChild.Menu;
 using DChild.Visuals;
 using DChild.Temp;
 using UnityEngine;
+using DChild.Gameplay.Systems;
 
 namespace DChild.Gameplay
 {
@@ -115,7 +116,28 @@ namespace DChild.Gameplay
 
             LoadingHandle.SetLoadType(loadType);
             GameplaySystem.ResumeGame();
-            GameSystem.LoadZone(locationData.sceneInfo, true, OnTransferPlayerDone);
+            if (GameSystem.m_useGameModeValidator)
+            {
+                var WorldTypeVar = FindObjectOfType<WorldTypeManager>();
+                WorldTypeVar.SetCurrentWorldType(locationData.location);
+
+                switch (WorldTypeVar.CurrentWorldType)
+                {
+                    case WorldType.Underworld:
+                        GameSystem.LoadZone(GameMode.Underworld, locationData.sceneInfo, true, OnTransferPlayerDone);
+                        break;
+                    case WorldType.Overworld:
+                        GameSystem.LoadZone(GameMode.Overworld, locationData.sceneInfo, true, OnTransferPlayerDone);
+                        break;
+                    case WorldType.ArmyBattle:
+                        GameSystem.LoadZone(GameMode.ArmyBattle, locationData.sceneInfo, true, OnTransferPlayerDone);
+                        break;
+                }
+            }
+            else
+            {
+                GameSystem.LoadZone(locationData.sceneInfo, true, OnTransferPlayerDone);
+            }
         }
 
         private void OnTransferPlayerDone()
