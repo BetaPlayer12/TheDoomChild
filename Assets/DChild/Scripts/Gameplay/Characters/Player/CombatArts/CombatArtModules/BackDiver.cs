@@ -47,16 +47,6 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
         [SerializeField, BoxGroup("Projectile")]
         private Transform m_startPoint;
-        [SerializeField, BoxGroup("Projectile")]
-        private ProjectileInfo m_projectileInfo;
-        public ProjectileInfo projectile => m_projectileInfo;
-        private Projectile m_spawnedProjectile;
-        public Projectile spawnedProjectile => m_spawnedProjectile;
-        [SerializeField, BoxGroup("Projectile")]
-        private Vector2 m_targetOffset;
-
-        private ProjectileLauncher m_launcher;
-
 
         private bool m_canBackDiver;
         private bool m_canMove;
@@ -93,8 +83,6 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
             m_fxAnimator = m_attackFX.gameObject.GetComponentInChildren<Animator>();
             m_skeletonAnimation = m_attackFX.gameObject.GetComponent<SkeletonAnimation>();
-
-            m_launcher = new ProjectileLauncher(m_projectileInfo, m_startPoint);
         }
 
         //public void SetConfiguration(SlashComboStatsInfo info)
@@ -238,17 +226,6 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             yield return new WaitForSeconds(m_landDuration);
             m_physics.constraints = RigidbodyConstraints2D.FreezeRotation;
             yield return null;
-        }
-
-        public void Summon()
-        {
-            m_spawnedProjectile = GameSystem.poolManager.GetPool<ProjectilePool>().GetOrCreateItem(m_projectileInfo.projectile);
-            m_spawnedProjectile.transform.position = m_startPoint.position;
-            m_spawnedProjectile.GetComponent<Attacker>().SetParentAttacker(m_attacker);
-
-            //LaunchSpike(PuedisYnnusSpike.SkinType.Big, false, Quaternion.identity, true);
-            m_launcher.AimAt(new Vector2(m_startPoint.position.x + (m_character.facing == HorizontalDirection.Right ? m_targetOffset.x : -m_targetOffset.x), m_startPoint.position.y + m_targetOffset.y));
-            m_launcher.LaunchProjectile(m_startPoint.right, m_spawnedProjectile.gameObject);
         }
 
         protected Transform LookTransform(Transform startPoint, float distance)

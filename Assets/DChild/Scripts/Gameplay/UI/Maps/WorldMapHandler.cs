@@ -1,5 +1,6 @@
 ﻿using DChild.Gameplay.Characters.Players.Modules;
 using DChild.Gameplay.Environment;
+using DChild.Gameplay.Systems;
 using DChild.Gameplay.Systems.Serialization;
 using DChild.Gameplay.UI.Map;
 using DChild.Menu;
@@ -56,7 +57,28 @@ namespace DChild.Gameplay.UI
             LoadingHandle.SetLoadType(LoadingHandle.LoadType.Force);
             LoadingHandle.LoadingDone += OnLoadingDone;
             GameplaySystem.ResumeGame();
-            GameSystem.LoadZone(m_transferingTo.sceneInfo, true);
+            if(GameSystem.m_useGameModeValidator)
+            {
+                var WorldTypeVar = FindObjectOfType<WorldTypeManager>();
+                WorldTypeVar.SetCurrentWorldType(m_transferingTo.location);
+
+                switch (WorldTypeVar.CurrentWorldType)
+                {
+                    case WorldType.Underworld:
+                        GameSystem.LoadZone(GameMode.Underworld, m_transferingTo.sceneInfo, true);
+                        break;
+                    case WorldType.Overworld:
+                        GameSystem.LoadZone(GameMode.Overworld, m_transferingTo.sceneInfo, true);
+                        break;
+                    case WorldType.ArmyBattle:
+                        GameSystem.LoadZone(GameMode.ArmyBattle, m_transferingTo.sceneInfo, true);
+                        break;
+                }
+            }
+            else
+            {
+                GameSystem.LoadZone(m_transferingTo.sceneInfo, true);
+            }
 
             //Force Save for the Demo Delete this after proper saving is done
             GameplaySystem.campaignSerializer.slot.UpdateLocation(m_transferingTo.sceneInfo, m_transferingTo.location, m_transferingTo.position);

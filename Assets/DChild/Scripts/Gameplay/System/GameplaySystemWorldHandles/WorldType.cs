@@ -7,7 +7,8 @@ namespace DChild.Gameplay.Systems
     public enum WorldType
     {
         Underworld,
-        Overworld
+        Overworld,
+        ArmyBattle
     }
 }
 

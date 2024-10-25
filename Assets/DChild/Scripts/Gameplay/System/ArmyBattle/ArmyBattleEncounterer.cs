@@ -5,22 +5,25 @@ using Sirenix.OdinInspector;
 using DChild.Gameplay.Characters.Players;
 using DChild.Gameplay.Environment.Interractables;
 using Holysoft.Event;
+using DChild.Serialization;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
 
 namespace DChild.Gameplay.ArmyBattle
 {
-    public class ArmyBattleEncounterer : MonoBehaviour , IButtonToInteract
+    public class ArmyBattleEncounterer : MonoBehaviour , IButtonToInteract , ISerializableComponent
     {
         [SerializeField,TabGroup("Initialize")]
-        private ArmyBattleScenario Scenario;
+        private ArmyBattleScenario m_Scenario;
         [SerializeField, TabGroup("Reference")]
-        private SpriteRenderer SpriteRenderer;
+        private SpriteRenderer m_SpriteRenderer;
         [SerializeField, TabGroup("Reference")]
-        private bool Repeatable;
+        private bool m_Repeatable;
         [SerializeField, TabGroup("Initialize")]
-        private Sprite Appearance;
+        private Sprite m_Appearance;
+        [HideInInspector]
+        private bool m_IsDefeated;
 
         public event EventAction<EventActionArgs> InteractionOptionChange;
 
@@ -32,14 +35,14 @@ namespace DChild.Gameplay.ArmyBattle
 
         private void Awake()
         {
-            SpriteRenderer.sprite = Appearance;
+            m_SpriteRenderer.sprite = m_Appearance;
         }
         
         [Button]
         public void InitiateEncounter()
         {
 
-            ArmyBattleSystem.BattleScenario = Scenario;
+            ArmyBattleSystem.BattleScenario = m_Scenario;
             Debug.Log("ARMY BATTLE SCENARIO INITIATED :"+ArmyBattleSystem.BattleScenario.name);
         }
         /*
@@ -57,9 +60,30 @@ namespace DChild.Gameplay.ArmyBattle
             }
         }
         */
+        [Button]
+        public void DefeatArmy()
+        {
+            Debug.Log(name + " Is Defeated");
+            Destroy(this.gameObject);
+        }
         public void Interact(Character character)
         {
             InitiateEncounter();
+        }
+
+        public ISaveData Save()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void Load(ISaveData data)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void Initialize()
+        {
+            throw new System.NotImplementedException();
         }
     }
 }
