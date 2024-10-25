@@ -45,7 +45,6 @@ namespace DChild.Gameplay.Systems
         private static FXManager m_fxManager;
         private static Cinema m_cinema;
         private static World m_world;
-        private static SimulationHandler m_simulation;
 
         private static BaseGameplayUIHandle m_baseGameplayUIHandle;
 
@@ -69,8 +68,6 @@ namespace DChild.Gameplay.Systems
                 }
             }
         }
-
-        public static ISimulationHandler simulationHandler => m_simulation;
         #endregion
 
         private void AssignModules()
@@ -78,7 +75,6 @@ namespace DChild.Gameplay.Systems
             AssignModule(out m_fxManager);
             AssignModule(out m_cinema);
             AssignModule(out m_world);
-            AssignModule(out m_simulation);
             AssignModule(out m_campaignSerializer);
             AssignModule(out m_baseGameplayUIHandle);
         }
@@ -235,7 +231,6 @@ namespace DChild.Gameplay.Systems
                 m_fxManager = null;
                 m_cinema = null;
                 m_world = null;
-                m_simulation = null;
                 m_activatableModules = null;
                 GameTime.UnregisterValueChange(m_instance, GameTime.Factor.Multiplication);
             }
