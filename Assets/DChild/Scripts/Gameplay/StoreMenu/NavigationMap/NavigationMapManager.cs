@@ -33,7 +33,7 @@ namespace DChild.Gameplay.NavigationMap
 
             m_tracker.SetReferencePointPosition(m_currentMap, mapReferencePoint);
             m_tracker.SetInGameTrackReferencePoint(inGameReference);
-            m_tracker.SetCalculationOffsets(calculationOffset);         
+            m_tracker.SetCalculationOffsets(calculationOffset);
         }
 
         public void ForceMapUpdateOnNextOpen()

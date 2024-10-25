@@ -25,7 +25,7 @@ namespace DChild.Gameplay
         public static ITime time { get => BaseGameplaySystem.time; }
 
         public static IPlayerManager playerManager { get => BaseGameplaySystem.GetCurrentWorldType() == WorldType.Underworld ? UnderworldGameplaySubsystem.playerManager : OverworldGameplaySubsystem.playerManager; }
-        public static ISimulationHandler simulationHandler { get => BaseGameplaySystem.simulationHandler; }
+        public static ISimulationHandler simulationHandler { get => BaseGameplaySystem.GetCurrentWorldType() == WorldType.Underworld ? UnderworldGameplaySubsystem.simulationHandler : null; }
         public static ILootHandler lootHandler { get => UnderworldGameplaySubsystem.lootHandler; }
         public static IHealthTracker healthTracker { get => UnderworldGameplaySubsystem.healthTracker; }
         public static ISoulSkillManager soulSkillManager { get => UnderworldGameplaySubsystem.soulSkillManager; }
@@ -38,7 +38,7 @@ namespace DChild.Gameplay
         {
             isGamePaused = false;
             BaseGameplaySystem.ResumeGame();
-            if(BaseGameplaySystem.GetCurrentWorldType() == WorldType.Underworld)
+            if (BaseGameplaySystem.GetCurrentWorldType() == WorldType.Underworld)
             {
                 UnderworldGameplaySubsystem.ResumeGame();
             }
@@ -92,6 +92,14 @@ namespace DChild.Gameplay
         public static void ReloadGame()
         {
             BaseGameplaySystem.ReloadGame();
+            if (BaseGameplaySystem.GetCurrentWorldType() == WorldType.Underworld)
+            {
+                UnderworldGameplaySubsystem.LoadGame();
+            }
+            else
+            {
+                OverworldGameplaySubsystem.LoadGame();
+            }
         }
 
         public static void SetCurrentCampaign(CampaignSlot campaignSlot)
@@ -101,17 +109,18 @@ namespace DChild.Gameplay
 
         public static void SetInputActive(bool isActive)
         {
-
+            if (BaseGameplaySystem.GetCurrentWorldType() == WorldType.Underworld)
+            {
+                UnderworldGameplaySubsystem.SetInputActive(isActive);
+            }
         }
 
         public static void ListenToNextSceneLoad()
         {
-
+            if (BaseGameplaySystem.GetCurrentWorldType() == WorldType.Underworld)
+            {
+                UnderworldGameplaySubsystem.ListenToNextSceneLoad();
+            }
         }
-
-        private static void LockPlayerToSpawnPosition()
-        {
-
-        }      
     }
 }

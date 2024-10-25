@@ -99,9 +99,16 @@ namespace DChild.Gameplay.UI.CombatArts
                 else
                 {
                     var combatArtData = m_referenceList.GetCombatArtData(button.skillUnlock);
-                    array = new CombatArtSelectButton[combatArtData.maxLevel];
-                    array[button.unlockLevel - 1] = button;
-                    m_abilityButtonPair.Add(button.skillUnlock, array);
+                    try
+                    {
+                        array = new CombatArtSelectButton[combatArtData.maxLevel];
+                        array[button.unlockLevel - 1] = button;
+                        m_abilityButtonPair.Add(button.skillUnlock, array);
+                    }
+                    catch(Exception e)
+                    {
+                        Debug.LogError($"Combat Arts Reference File Doesn't Have {button.skillUnlock}");
+                    }
                 }
             }
         }

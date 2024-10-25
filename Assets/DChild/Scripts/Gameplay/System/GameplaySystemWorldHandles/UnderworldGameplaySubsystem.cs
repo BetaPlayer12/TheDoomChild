@@ -1,5 +1,7 @@
 using DChild.Gameplay.Combat;
 using DChild.Gameplay.SoulSkills;
+using DChild.Menu;
+using Holysoft.Event;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -55,12 +57,41 @@ namespace DChild.Gameplay.Systems
         public static void LoadGame()
         {
             m_healthTracker?.RemoveAllTrackers();
+            LoadingHandle.SceneDone += LoadGameDone;
         }
 
-        public static PlayerManager GetUnderworldPlayerManager()
+        public static void SetInputActive(bool isActive)
         {
-            return m_playerManager;
+            //Reverted comment because this is used by
+            //system to force player input based on game state i.e. when loading
+            if (isActive)
+            {
+                m_playerManager?.EnableInput();
+            }
+            else
+            {
+                m_playerManager?.DisableInput();
+            }
         }
+
+        public static void ListenToNextSceneLoad()
+        {
+            LoadingHandle.LoadingDone += OnLoadingSceneDone;
+        }
+
+        private static void OnLoadingSceneDone(object sender, EventActionArgs eventArgs)
+        {
+            LoadingHandle.LoadingDone -= OnLoadingSceneDone;
+            m_playerManager.FreezePlayerPosition(false);
+        }
+
+        private static void LoadGameDone(object sender, EventActionArgs eventArgs)
+        {
+            LoadingHandle.SceneDone -= LoadGameDone;
+
+            m_gameplayUIHandle.ResetGameplayUI();
+        }
+
         private static void LockPlayerToSpawnPosition()
         {
             if (GameplaySystem.campaignSerializer.slot == null)
