@@ -81,6 +81,7 @@ namespace DChild.Gameplay.Systems
             AssignModule(out m_healthTracker);
             AssignModule(out m_soulSkillManager);
             AssignModule(out m_minionManager);
+            AssignModule(out m_gameplayUIHandle);
         }
 
         private IEnumerator DelayedShowGameplay()

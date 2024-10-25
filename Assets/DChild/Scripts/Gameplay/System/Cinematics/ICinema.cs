@@ -26,6 +26,8 @@ namespace DChild.Gameplay.Cinematics
         void SetCameraPeekConfiguration(CameraPeekConfiguration configuration);
         void ApplyCameraPeekMode(CameraPeekMode look);
         void ExecuteCameraShake(CameraShakeData info);
+
+        void SetTrackingTarget(Transform trackingTarget);
     }
 
 }

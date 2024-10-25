@@ -201,7 +201,6 @@ namespace DChild.Gameplay.Cinematics
             m_offsetHandle = GetComponent<CameraPeekHandle>();
         }
 
-
 #if UNITY_EDITOR
         public void Initialized(Camera mainCamera)
         {
@@ -212,6 +211,8 @@ namespace DChild.Gameplay.Cinematics
         {
             m_trackingTarget = centerOfMass;
         }
+
+
 
 
 #endif
