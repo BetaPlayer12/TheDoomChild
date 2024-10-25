@@ -111,4 +111,3 @@ namespace DChild.Gameplay.Characters.Players.Modules
         }
     }
 }
-

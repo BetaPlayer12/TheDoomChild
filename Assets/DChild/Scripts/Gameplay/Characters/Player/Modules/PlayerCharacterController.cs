@@ -227,7 +227,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 else
                 {
                     m_physicsMat.SetPhysicsTo(PlayerPhysicsMatHandle.Type.Midair);
-
+                    m_rigidbody.velocity = new Vector2(m_rigidbody.velocity.x, m_rigidbody.velocity.y);
                     if (m_state.isCrouched)
                     {
                         m_crouch?.Cancel();
@@ -722,10 +722,10 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 m_whip?.ResetAerialGravityControl();
                 m_whip?.ResetAirAttacks();
                 m_devilWings?.EnableLevitate();
-                
+
                 #region Combat Arts Cooldowns
 
-                
+
 
                 if (m_diagonalSwordDash.CanDiagonalSwordDash() == false)
                 {
@@ -742,7 +742,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     m_reaperHarvest.HandleAttackTimer();
                 }
 
-              
+
                 if (m_edgedFury.CanEdgedFury() == false)
                 {
                     m_edgedFury.HandleAttackTimer();
@@ -888,7 +888,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     }
                 }
 
-                
+
             }
             else if (m_state.isSliding)
             {
@@ -915,7 +915,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                             return;
                         }
                     }
-                    else if (m_input.slashPressed && m_basicSlashes.CanAirAttack()  && !m_input.reaperHarvestPressed && !m_input.diagonalSwordDashPressed)
+                    else if (m_input.slashPressed && m_basicSlashes.CanAirAttack() && !m_input.reaperHarvestPressed && !m_input.diagonalSwordDashPressed)
                     {
                         PrepareForMidairAttack();
                         m_devilWings?.EnableLevitate();
@@ -932,7 +932,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                         }
                         return;
                     }
-                   
+
                     else if (m_input.reaperHarvestPressed && m_reaperHarvest.CanReaperHarvest() && m_abilities.IsAbilityActivated(CombatArt.ReaperHarvest))
                     {
                         if (m_state.isInShadowMode == false)
@@ -952,7 +952,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
                         return;
                     }
-                   
+
                     else if (m_input.whipPressed && m_whip.CanAirWhip() && !m_input.edgedFuryPressed)
                     {
                         if (m_skills.IsModuleActive(PrimarySkill.Whip))
@@ -973,7 +973,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
                         return;
                     }
-                    else if (m_input.edgedFuryPressed && m_edgedFury.CanEdgedFury()  && !m_input.lightningSpearPressed && m_abilities.IsAbilityActivated(CombatArt.EdgedFury))
+                    else if (m_input.edgedFuryPressed && m_edgedFury.CanEdgedFury() && !m_input.lightningSpearPressed && m_abilities.IsAbilityActivated(CombatArt.EdgedFury))
                     {
                         PrepareForMidairAttack();
                         m_devilWings?.Cancel();
@@ -1017,7 +1017,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
                         return;
                     }
-                    else if (m_input.lightningSpearPressed && m_airSlashRange.CanAirSlashRange() && ( !m_abilities.IsAbilityActivated(CombatArt.LightningSpear)))
+                    else if (m_input.lightningSpearPressed && m_airSlashRange.CanAirSlashRange() && (!m_abilities.IsAbilityActivated(CombatArt.LightningSpear)))
                     {
                         if (m_state.isInShadowMode == false)
                         {
@@ -1141,7 +1141,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 {
                     if (m_state.isInShadowMode == false)
                     {
-                        m_movement.Move(m_input.horizontalInput, true);
+                        m_movement.GroundMove(m_input.horizontalInput, true);
                     }
 
                     if (m_input.horizontalInput != 0)
@@ -1243,7 +1243,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 {
                     m_attackRegistrator?.ResetHitCache();
                 }
-               
+
                 if (m_barrier.IsDoingBarrier())
                 {
                     if (!m_input.barrierHeld && m_barrier.CanMove())
@@ -1331,7 +1331,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
                         return;
                     }
-                    
+
                 }
 
                 if (m_input.jumpPressed == true)
@@ -1402,7 +1402,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
                 if (m_state.canAttack)
                 {
-                    if (m_input.slashPressed  && !m_input.reaperHarvestPressed /*!(m_input.levitateHeld && m_input.slashHeld)*/)
+                    if (m_input.slashPressed && !m_input.reaperHarvestPressed /*!(m_input.levitateHeld && m_input.slashHeld)*/)
                     {
                         m_activeDash?.Cancel();
 
@@ -1467,7 +1467,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 if (m_state.canAttack)
                 {
                     #region Ground Attacks
-                    if (m_input.slashPressed  && !m_input.reaperHarvestPressed  && !m_input.sovereignImpalePressed)
+                    if (m_input.slashPressed && !m_input.reaperHarvestPressed && !m_input.sovereignImpalePressed)
                     {
                         m_whip.Cancel();
                         m_whipCombo.Cancel();
@@ -1512,7 +1512,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                             }
                         }
                     }
-                    else if (m_input.whipPressed  && !m_input.championsUprisingPressed)
+                    else if (m_input.whipPressed && !m_input.championsUprisingPressed)
                     {
                         if (m_state.isInShadowMode == false)
                         {
@@ -1547,7 +1547,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
                         return;
                     }
-                    
+
                     else if (m_input.reaperHarvestPressed && m_reaperHarvest.CanReaperHarvest() && m_abilities.IsAbilityActivated(CombatArt.ReaperHarvest))
                     {
                         if (m_state.isInShadowMode == false)
@@ -1565,7 +1565,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
                         return;
                     }
-                    else if (m_input.championsUprisingPressed && m_championsUprising.CanChampionsUprising()  && m_abilities.IsAbilityActivated(CombatArt.ChampionsUprising))
+                    else if (m_input.championsUprisingPressed && m_championsUprising.CanChampionsUprising() && m_abilities.IsAbilityActivated(CombatArt.ChampionsUprising))
                     {
                         if (m_state.isInShadowMode == false)
                         {
@@ -1582,8 +1582,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
                         return;
                     }
-                    
-                    else if (m_input.teleportingSkullPressed && m_teleportingSkull.canTeleport && !m_input.foolsVerdictPressed  && !m_input.hellTridentPressed)
+
+                    else if (m_input.teleportingSkullPressed && m_teleportingSkull.canTeleport && !m_input.foolsVerdictPressed && !m_input.hellTridentPressed)
                     {
                         m_teleportingSkull.TeleportToProjectile();
                         return;
@@ -1607,7 +1607,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                         }
                         return;
                     }
-                   
+
                     else if (m_input.hellTridentPressed && m_hellTrident.CanHellTrident() && m_abilities.IsAbilityActivated(CombatArt.HellTrident))
                     {
                         if (m_state.isInShadowMode == false)
@@ -1638,7 +1638,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
                         return;
                     }
-                    
+
                     else if (m_input.backDiverPressed && m_backDiver.CanBackDiver() && m_backDiver.HaveSpacetoExecute() && m_earthShaker.CanEarthShaker() && m_abilities.IsAbilityActivated(CombatArt.BackDiver))
                     {
                         if (m_state.isInShadowMode == false)
@@ -1710,7 +1710,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     {
                         if (m_skills.IsModuleActive(PrimarySkill.SwordThrust))
                         {
-                            if (m_input.slashHeld  && !m_input.reaperHarvestPressed/*!(m_input.levitateHeld && m_input.slashHeld)*/)
+                            if (m_input.slashHeld && !m_input.reaperHarvestPressed/*!(m_input.levitateHeld && m_input.slashHeld)*/)
                             {
                                 PrepareForGroundAttack();
                                 m_chargeAttackHandle.Set(m_swordThrust, () => m_input.slashHeld);
@@ -1992,12 +1992,17 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 {
                     m_idle?.Cancel();
                 }
-
-                m_movement?.Move(m_input.horizontalInput, true);
+                if (m_state.isGrounded)
+                    m_movement?.GroundMove(m_input.horizontalInput, true);
+                else
+                    m_movement?.AirMove(m_input.horizontalInput, false);
             }
             else
             {
-                m_movement?.Move(m_input.horizontalInput, false);
+                if (m_state.isGrounded)
+                    m_movement?.GroundMove(m_input.horizontalInput, true);
+                else
+                    m_movement?.AirMove(m_input.horizontalInput, false);
             }
         }
 
