@@ -54,12 +54,15 @@ namespace DChild.Gameplay
             }
         }
 
-        private void Start()
+        private IEnumerator Start()
         {
             GameSystem.CameraChange += OnCameraChange;
             switch (m_toFollowType)
             {
                 case ToFollow.Player:
+                    while (GameplaySystem.playerManager == null)
+                        yield return null;
+
                     m_toFollow = GameplaySystem.playerManager.player.character.centerMass;
                     break;
                 case ToFollow.Camera:

@@ -130,7 +130,7 @@ namespace DChild.UI
                 // This should be adjusted more as sometimes this can give unneccessary effects to summoned minions
                 GameplaySystem.minionManager?.ForbidAllFromAttackingTarget(true);
 
-                GameplaySystem.playerManager.EnableControls();
+                GameplaySystem.playerManager?.EnableControls();
                 if (m_skipUIShown)
                 {
                     GameplaySystem.gamplayUIHandle.ShowSequenceSkip(false);

@@ -99,11 +99,18 @@ namespace DChild.Gameplay.Systems
             Debug.Log("Underworld Gameplay Awake");
 
             AssignModules();
+            var initializables = GetComponentsInChildren<IGameplayInitializable>();
+            for (int i = 0; i < initializables.Length; i++)
+            {
+                initializables[i].Initialize();
+            }
 
             if (m_doNotTeleportPlayerOnAwake == false)
             {
                 LockPlayerToSpawnPosition();
             }
+
+            Debug.Log("Underworld Gameplay Awake Done");
         }
 
         private void Start()
@@ -111,6 +118,8 @@ namespace DChild.Gameplay.Systems
             Debug.Log("Underworld Gameplay Start");
 
             StartCoroutine(DelayedShowGameplay());
+
+            Debug.Log("Underworld Gameplay Start Done");
         }
 
         private void OnDestroy()
