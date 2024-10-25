@@ -472,7 +472,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         private void FixedUpdate()
         {
-            Debug.Log("ground " + m_state.isGrounded);
             if (m_state.isDead)
                 return;
 

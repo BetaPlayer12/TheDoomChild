@@ -138,7 +138,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 float dotProduct = Vector2.Dot(surfaceNormal, Vector2.right);
                 slopeAngle = Vector2.Angle(surfaceNormal, Vector2.up);
                 Debug.DrawRay(hit.point, surfaceNormal * 2, Color.red);
-                Debug.Log("Slope angle: " + slopeAngle);
+                /*Debug.Log("Slope angle: " + slopeAngle);*/
                 /*var xVelocity = speed * direction;
                 m_rigidbody.velocity = new Vector2(xVelocity, slopeAngle);*/
                 if (dotProduct > 0)
@@ -168,8 +168,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
                         }
 
                     }
-                    Debug.Log("Slope on the left side");
-                    Debug.Log(m_character.facing);
                 }
                 else if (dotProduct < 0)
                 {
@@ -198,8 +196,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
                             m_rigidbody.velocity = new Vector2(xVelocity, 0);
                         }*/
                     }
-                    Debug.Log("Slope on the right side");
-                    Debug.Log(m_character.facing);
                 }
                 else
                 {
