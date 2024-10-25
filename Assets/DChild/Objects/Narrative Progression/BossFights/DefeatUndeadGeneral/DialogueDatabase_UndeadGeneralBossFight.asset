@@ -208,7 +208,7 @@ MonoBehaviour:
       value: 
       type: 0
       typeString: 
-  - id: 96
+  - id: 266
     fields:
     - title: Name
       value: BanterTriggerAfterDefeat
@@ -218,6 +218,160 @@ MonoBehaviour:
       value: False
       type: 2
       typeString: CustomFieldType_Boolean
+    - title: Description
+      value: 
+      type: 0
+      typeString: CustomFieldType_Text
+  - id: 267
+    fields:
+    - title: Name
+      value: undeadGeneralIdleExpression
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Initial Value
+      value: 1
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Description
+      value: 
+      type: 0
+      typeString: CustomFieldType_Text
+  - id: 268
+    fields:
+    - title: Name
+      value: undeadGeneralAngryExpression
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Initial Value
+      value: 2
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Description
+      value: 
+      type: 0
+      typeString: CustomFieldType_Text
+  - id: 206
+    fields:
+    - title: Name
+      value: playerIdleExpression
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Initial Value
+      value: 1
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Description
+      value: 
+      type: 0
+      typeString: CustomFieldType_Text
+  - id: 216
+    fields:
+    - title: Name
+      value: playerThinkingExpression
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Initial Value
+      value: 2
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Description
+      value: 
+      type: 0
+      typeString: CustomFieldType_Text
+  - id: 208
+    fields:
+    - title: Name
+      value: playerFacingAwayExpression
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Initial Value
+      value: 3
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Description
+      value: 
+      type: 0
+      typeString: CustomFieldType_Text
+  - id: 209
+    fields:
+    - title: Name
+      value: playerExcitedExpression
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Initial Value
+      value: 4
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Description
+      value: 
+      type: 0
+      typeString: CustomFieldType_Text
+  - id: 210
+    fields:
+    - title: Name
+      value: necroIdleExpression
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Initial Value
+      value: 1
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Description
+      value: 
+      type: 0
+      typeString: CustomFieldType_Text
+  - id: 211
+    fields:
+    - title: Name
+      value: necroSurprisedExpression
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Initial Value
+      value: 2
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Description
+      value: 
+      type: 0
+      typeString: CustomFieldType_Text
+  - id: 212
+    fields:
+    - title: Name
+      value: necroSmirkingExpression
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Initial Value
+      value: 3
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Description
+      value: 
+      type: 0
+      typeString: CustomFieldType_Text
+  - id: 213
+    fields:
+    - title: Name
+      value: necroFrustratedExpression
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Initial Value
+      value: 4
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Description
+      value: 
+      type: 0
+      typeString: CustomFieldType_Text
+  - id: 214
+    fields:
+    - title: Name
+      value: necroTalkingExpression
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Initial Value
+      value: 5
+      type: 1
+      typeString: CustomFieldType_Number
     - title: Description
       value: 
       type: 0
@@ -375,9 +529,9 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Dialogue Text
-        value: No... Well, well, well, this is unexpected...You survived! Unexpected
-          but welcome. Yet I do wonder if this will be a challenge...with your current
-          state...
+        value: '[pic=undeadGeneralIdleExpression]No... Well, well, well, this is
+          unexpected...You survived! Unexpected but welcome. Yet I do wonder if this
+          will be a challenge...with your current state...'
         type: 0
         typeString: 
       - title: Parenthetical
@@ -448,7 +602,7 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Dialogue Text
-        value: He knows something.
+        value: '[pic=necroFrustratedExpression]He knows something.'
         type: 0
         typeString: 
       - title: Parenthetical
@@ -519,8 +673,8 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Dialogue Text
-        value: Heh. There it is. Hahaha...The war of your master will fail. The army
-          of the boy will prevail.
+        value: '[pic=undeadGeneralAngryExpression]Heh. There it is. Hahaha...The
+          war of your master will fail. The army of the boy will prevail.'
         type: 0
         typeString: 
       - title: Parenthetical
@@ -591,8 +745,8 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Dialogue Text
-        value: You are getting ahead of yourself - whoever you are. You will tell
-          me everything you know!
+        value: '[pic=playerExcitedExpression]You are getting ahead of yourself -
+          whoever you are. You will tell me everything you know!'
         type: 0
         typeString: 
       - title: Parenthetical
@@ -632,7 +786,7 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 16.8844
+        x: 15.707924
         y: 516.86975
         width: 160
         height: 30
@@ -663,8 +817,9 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Dialogue Text
-        value: Come now then. We should not keep our blades waiting. Maybe in the
-          heat of the battle my tongue will unreveal what you are looking for!
+        value: '[pic=undeadGeneralAngryExpression]Come now then. We should not keep
+          our blades waiting. Maybe in the heat of the battle my tongue will unreveal
+          what you are looking for!'
         type: 0
         typeString: 
       - title: Parenthetical
@@ -729,8 +884,9 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Dialogue Text
-        value: ' Defeating the legend himself in my arena will be a feat eternally
-          remembered. Time for my name to rise above yours!'
+        value: '[pic=undeadGeneralAngryExpression] Defeating the legend himself in
+          my arena will be a feat eternally remembered. Time for my name to rise
+          above yours!'
         type: 0
         typeString: 
       - title: Parenthetical
@@ -801,8 +957,9 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Dialogue Text
-        value: No matter. I have grown tired of effortlessly decimating droves of
-          miserably pathetic fools who think they can take my place.
+        value: '[pic=undeadGeneralIdleExpression]No matter. I have grown tired of
+          effortlessly decimating droves of miserably pathetic fools who think they
+          can take my place.'
         type: 0
         typeString: 
       - title: Parenthetical
@@ -847,7 +1004,7 @@ MonoBehaviour:
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 0, y: 0}
+    canvasScrollPosition: {x: 0, y: 237.99521}
     canvasZoom: 0.85000014
   - id: 55
     fields:
@@ -1001,8 +1158,9 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Dialogue Text
-        value: Make no mistake...this isn't over. Glory and victory...inside or outside
-          of this arena, in a century or millenia, will be my Master's win.
+        value: '[pic=undeadGeneralAngryExpression]Make no mistake...this isn''t over.
+          Glory and victory...inside or outside of this arena, in a century or millenia,
+          will be my Master''s win.'
         type: 0
         typeString: 
       - title: Parenthetical
@@ -1073,7 +1231,8 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Dialogue Text
-        value: 'Your last chance: Who is your master? Tell me everything you know!'
+        value: '[pic=playerIdleExpression]Your last chance: Who is your master? Tell
+          me everything you know!'
         type: 0
         typeString: 
       - title: Parenthetical
@@ -1144,7 +1303,7 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Dialogue Text
-        value: My lips are sealed!
+        value: '[pic=undeadGeneralAngryExpression]My lips are sealed!'
         type: 0
         typeString: 
       - title: Parenthetical
@@ -1184,7 +1343,7 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 32
+        x: 31.056595
         y: 326
         width: 160
         height: 30
@@ -1215,7 +1374,7 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Dialogue Text
-        value: Then you brought this upon yourself.
+        value: '[pic=playerFacingAwayExpression]Then you brought this upon yourself.'
         type: 0
         typeString: 
       - title: Parenthetical
@@ -1254,8 +1413,8 @@ MonoBehaviour:
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 0, y: 125.32716}
-    canvasZoom: 1.2399998
+    canvasScrollPosition: {x: 0, y: 133.98059}
+    canvasZoom: 1.0299999
   - id: 56
     fields:
     - title: Title
@@ -1590,11 +1749,11 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Actor
-        value: 9
+        value: 55
         type: 5
         typeString: CustomFieldType_Actor
       - title: Conversant
-        value: 1
+        value: -1
         type: 5
         typeString: CustomFieldType_Actor
       - title: Menu Text
@@ -1602,7 +1761,7 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Dialogue Text
-        value: Ah...so tasty...Hmm...a nice soul. True. Splendid. Honest.
+        value: Ah... so tasty... Hehe... a nice soul. Truly and honestly splendid!
         type: 0
         typeString: 
       - title: Parenthetical
@@ -1665,7 +1824,7 @@ MonoBehaviour:
         type: 5
         typeString: CustomFieldType_Actor
       - title: Conversant
-        value: -1
+        value: 55
         type: 5
         typeString: CustomFieldType_Actor
       - title: Menu Text
@@ -1673,7 +1832,7 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Dialogue Text
-        value: Did I kill a boy?
+        value: '[pic=playerIdleExpression]Did I kill a boy?'
         type: 0
         typeString: 
       - title: Parenthetical
@@ -1714,7 +1873,7 @@ MonoBehaviour:
       canvasRect:
         serializedVersion: 2
         x: 30
-        y: 144
+        y: 145
         width: 160
         height: 30
     - id: 4
@@ -1736,7 +1895,7 @@ MonoBehaviour:
         type: 5
         typeString: CustomFieldType_Actor
       - title: Conversant
-        value: -1
+        value: 1
         type: 5
         typeString: CustomFieldType_Actor
       - title: Menu Text
@@ -1744,8 +1903,8 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Dialogue Text
-        value: Not that I know of. Let's go to your castle. Maybe we could  find
-          there new clues.
+        value: '[pic=necroTalkingExpression]Not that I know of. Let''s go to the
+          castle. Maybe we find new clues there.'
         type: 0
         typeString: 
       - title: Parenthetical
@@ -1779,8 +1938,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 31
-        y: 213
+        x: 28
+        y: 214
         width: 160
         height: 30
     entryGroups: []
@@ -1926,11 +2085,11 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Actor
-        value: 25
+        value: 6
         type: 5
         typeString: CustomFieldType_Actor
       - title: Conversant
-        value: 1
+        value: -1
         type: 5
         typeString: CustomFieldType_Actor
       - title: Menu Text
@@ -1938,8 +2097,8 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Dialogue Text
-        value: Don't forget your mission! Those who defy us! This revolt will soon
-          find its end! Punish those who oppose us! Find them! Kill them!
+        value: '[pic=undeadGeneralIdleExpression]Make no mistake... this isn''t over.
+          Glory and victory...'
         type: 0
         typeString: 
       - title: Parenthetical
@@ -1980,7 +2139,7 @@ MonoBehaviour:
       canvasRect:
         serializedVersion: 2
         x: 30
-        y: 70
+        y: 69
         width: 160
         height: 30
     - id: 2
@@ -1998,11 +2157,11 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Actor
-        value: 1
+        value: 6
         type: 5
         typeString: CustomFieldType_Actor
       - title: Conversant
-        value: 25
+        value: -1
         type: 5
         typeString: CustomFieldType_Actor
       - title: Menu Text
@@ -2010,7 +2169,8 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Dialogue Text
-        value: 'Yes, my lord. One question: Did I kill a boy?'
+        value: '[pic=undeadGeneralAngryExpression]Inside or outside of this arena,
+          in a century or millenia, will be my masters win.'
         type: 0
         typeString: 
       - title: Parenthetical
@@ -2069,7 +2229,79 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Actor
+        value: 1
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
         value: 25
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: 
+        type: 0
+        typeString: 
+      - title: Dialogue Text
+        value: '[pic=playerIdleExpression]Your last chance: Who is your master? Tell
+          me everything you know!'
+        type: 0
+        typeString: 
+      - title: Parenthetical
+        value: 
+        type: 0
+        typeString: 
+      - title: Audio Files
+        value: '[]'
+        type: 3
+        typeString: CustomFieldType_Files
+      - title: Video File
+        value: 
+        type: 0
+        typeString: 
+      - title: Sequence
+        value: 
+        type: 0
+        typeString: 
+      conversationID: 178
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 178
+        originDialogueID: 3
+        destinationConversationID: 178
+        destinationDialogueID: 4
+        isConnector: 0
+        priority: 2
+      conditionsString: 
+      userScript: 
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 30
+        y: 170
+        width: 160
+        height: 30
+    - id: 4
+      fields:
+      - title: Title
+        value: 
+        type: 0
+        typeString: 
+      - title: Pictures
+        value: '[]'
+        type: 3
+        typeString: CustomFieldType_Files
+      - title: Description
+        value: 
+        type: 0
+        typeString: 
+      - title: Actor
+        value: 6
         type: 5
         typeString: CustomFieldType_Actor
       - title: Conversant
@@ -2081,8 +2313,78 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Dialogue Text
-        value: No. These are lies to be claimed by the opponent! Don't let them poison
-          your mind. Your mission is clear. Fulfill your purpose.
+        value: '[pic=undeadGeneralAngryExpression]My lips are sealed!'
+        type: 0
+        typeString: 
+      - title: Parenthetical
+        value: 
+        type: 0
+        typeString: 
+      - title: Audio Files
+        value: '[]'
+        type: 3
+        typeString: CustomFieldType_Files
+      - title: Video File
+        value: 
+        type: 0
+        typeString: 
+      - title: Sequence
+        value: 
+        type: 0
+        typeString: 
+      conversationID: 178
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 178
+        originDialogueID: 4
+        destinationConversationID: 178
+        destinationDialogueID: 5
+        isConnector: 0
+        priority: 2
+      conditionsString: 
+      userScript: 
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 30
+        y: 220
+        width: 160
+        height: 30
+    - id: 5
+      fields:
+      - title: Title
+        value: 
+        type: 0
+        typeString: 
+      - title: Pictures
+        value: '[]'
+        type: 3
+        typeString: CustomFieldType_Files
+      - title: Description
+        value: 
+        type: 0
+        typeString: 
+      - title: Actor
+        value: 1
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 6
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: 
+        type: 0
+        typeString: 
+      - title: Dialogue Text
+        value: '[pic=playerFacingAwayExpression]Then you brought this upon yourself.'
         type: 0
         typeString: 
       - title: Parenthetical
@@ -2117,7 +2419,7 @@ MonoBehaviour:
       canvasRect:
         serializedVersion: 2
         x: 30
-        y: 170
+        y: 270
         width: 160
         height: 30
     entryGroups: []
@@ -2275,7 +2577,7 @@ MonoBehaviour:
         type: 0
         typeString: CustomFieldType_Text
       - title: Dialogue Text
-        value: Tell me, what do you know!
+        value: Tell me, what do you know!?
         type: 0
         typeString: CustomFieldType_Text
       - title: Parenthetical
@@ -2315,8 +2617,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 30
-        y: 70
+        x: 40
+        y: 74
         width: 160
         height: 30
     - id: 2
@@ -2346,8 +2648,8 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Dialogue Text
-        value: You broke the rules of the realm of death! You went to the world of
-          living to kill an innocent boy!
+        value: You broke the rules of the realm of the death! You went to the world
+          of living to kill an innocent boy!
         type: 0
         typeString: 
       - title: Parenthetical
@@ -2458,8 +2760,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 29
-        y: 169
+        x: 33
+        y: 170
         width: 160
         height: 30
     - id: 4
@@ -2489,9 +2791,8 @@ MonoBehaviour:
         type: 0
         typeString: CustomFieldType_Text
       - title: Dialogue Text
-        value: I don't have a reason to lie! And that is why you are paying the price
-          now! You didn't know WHO the boy was and that will be your downfall! STOP
-          BUBBLING AND DIE!
+        value: I don't have a reasont o lie! And thgat is why you are paying the
+          price now!
         type: 0
         typeString: CustomFieldType_Text
       - title: Parenthetical
@@ -2517,7 +2818,13 @@ MonoBehaviour:
       delaySimStatus: 0
       falseConditionAction: Block
       conditionPriority: 2
-      outgoingLinks: []
+      outgoingLinks:
+      - originConversationID: 179
+        originDialogueID: 4
+        destinationConversationID: 179
+        destinationDialogueID: 5
+        isConnector: 0
+        priority: 2
       conditionsString: 
       userScript: 
       onExecute:
@@ -2527,6 +2834,72 @@ MonoBehaviour:
         serializedVersion: 2
         x: 29
         y: 219
+        width: 160
+        height: 30
+    - id: 5
+      fields:
+      - title: Title
+        value: 
+        type: 0
+        typeString: 
+      - title: Pictures
+        value: '[]'
+        type: 3
+        typeString: CustomFieldType_Files
+      - title: Description
+        value: 
+        type: 0
+        typeString: 
+      - title: Actor
+        value: 6
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 1
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: 
+        type: 0
+        typeString: 
+      - title: Dialogue Text
+        value: You didn't know WHO the boy was and that will be your downfall! STOP
+          TALKING AND DIE!
+        type: 0
+        typeString: 
+      - title: Parenthetical
+        value: 
+        type: 0
+        typeString: 
+      - title: Audio Files
+        value: '[]'
+        type: 3
+        typeString: CustomFieldType_Files
+      - title: Video File
+        value: 
+        type: 0
+        typeString: 
+      - title: Sequence
+        value: 
+        type: 0
+        typeString: 
+      conversationID: 179
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks: []
+      conditionsString: 
+      userScript: 
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 29
+        y: 269
         width: 160
         height: 30
     entryGroups: []
