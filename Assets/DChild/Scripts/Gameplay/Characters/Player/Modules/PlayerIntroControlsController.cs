@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Characters.Players.Modules
 {
-    public enum IntroActions 
+    public enum IntroActions
     {
         Jump,
         Crouch,
@@ -382,7 +382,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     m_groundJump?.HandleCutoffTimer();
                 }
 
-                m_movement.Move(m_input.horizontalInput, true);
+                m_movement.AirMove(m_input.horizontalInput, false);
             }
         }
 
@@ -397,7 +397,10 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 m_idle?.Cancel();
             }
 
-            m_movement?.Move(m_input.horizontalInput, true);
+            if (m_state.isGrounded)
+                m_movement?.GroundMove(m_input.horizontalInput, true);
+            else
+                m_movement?.AirMove(m_input.horizontalInput, false);
         }
 
         private void OnGroundednessStateChange(object sender, EventActionArgs eventArgs)

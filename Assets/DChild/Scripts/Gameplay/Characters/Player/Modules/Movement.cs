@@ -24,6 +24,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private Rigidbody2D m_rigidbody;
         private Character m_character;
         private Animator m_animator;
+        [SerializeField]
+        private CharacterState m_state;
         private int m_speedAnimationParameter;
         private int m_xInputAnimationParameter;
         private bool m_isTurning;
@@ -87,8 +89,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
             }
             m_isTurning = false;
         }
-
-        public void Move(float direction, bool faceDirection)
+        public LayerMask groundLayer;
+        public void AirMove(float direction, bool faceDirection)
         {
             if (direction == 0)
             {
@@ -108,5 +110,106 @@ namespace DChild.Gameplay.Characters.Players.Modules
             var xVelocity = speed * direction;
             m_rigidbody.velocity = new Vector2(xVelocity, m_rigidbody.velocity.y);
         }
+
+        public void GroundMove(float direction, bool faceDirection)
+        {
+            RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, Mathf.Infinity, groundLayer);
+            var slopeAngle = 0f;
+            if (direction == 0)
+            {
+                m_animator.SetFloat(m_speedAnimationParameter, 0);
+                m_animator.SetInteger(m_xInputAnimationParameter, 0);
+            }
+            else
+            {
+                if (faceDirection == true)
+                {
+                    UpdateFaceDirection(direction);
+                }
+
+                m_animator.SetFloat(m_speedAnimationParameter, 1);
+                m_animator.SetInteger(m_xInputAnimationParameter, direction > 0 ? 1 : -1);
+            }
+
+            var xVelocity = speed * direction;
+            if (hit.collider != null)
+            {
+                Vector2 surfaceNormal = hit.normal;
+                float dotProduct = Vector2.Dot(surfaceNormal, Vector2.right);
+                slopeAngle = Vector2.Angle(surfaceNormal, Vector2.up);
+                Debug.DrawRay(hit.point, surfaceNormal * 2, Color.red);
+                /*Debug.Log("Slope angle: " + slopeAngle);*/
+                /*var xVelocity = speed * direction;
+                m_rigidbody.velocity = new Vector2(xVelocity, slopeAngle);*/
+                if (dotProduct > 0)
+                {
+                    if (m_character.facing == HorizontalDirection.Left)
+                    {
+                        m_rigidbody.velocity = new Vector2(xVelocity, m_rigidbody.velocity.y);
+                        /*if (m_rigidbody.velocity.x == 0)
+                        {
+                            m_rigidbody.velocity = new Vector2(xVelocity, 0);
+                        }*/
+                    }
+                    else
+                    {
+                        if (!m_state.isGrounded)
+                        {
+                            m_rigidbody.velocity = new Vector2(xVelocity, m_rigidbody.velocity.y);
+                            if (m_rigidbody.velocity.x == 0)
+                            {
+
+                                m_rigidbody.velocity = new Vector2(xVelocity, m_rigidbody.velocity.y);
+                            }
+                        }
+                        else
+                        {
+                            m_rigidbody.velocity = new Vector2(xVelocity, -slopeAngle);
+                        }
+
+                    }
+                }
+                else if (dotProduct < 0)
+                {
+                    if (m_character.facing == HorizontalDirection.Left)
+                    {
+                        if (!m_state.isGrounded)
+                        {
+                            m_rigidbody.velocity = new Vector2(xVelocity, m_rigidbody.velocity.y);
+                            if (m_rigidbody.velocity.x == 0)
+                            {
+
+                                m_rigidbody.velocity = new Vector2(xVelocity, m_rigidbody.velocity.y);
+                            }
+                        }
+                        else
+                        {
+                            m_rigidbody.velocity = new Vector2(xVelocity, -slopeAngle);
+                        }
+                    }
+                    else
+                    {
+
+                        m_rigidbody.velocity = new Vector2(xVelocity, m_rigidbody.velocity.y);
+                        /*if (m_rigidbody.velocity.x == 0)
+                        {
+                            m_rigidbody.velocity = new Vector2(xVelocity, 0);
+                        }*/
+                    }
+                }
+                else
+                {
+                    m_rigidbody.velocity = new Vector2(xVelocity, m_rigidbody.velocity.y);
+                }
+            }
+            /*else
+            {*/
+            //}
+        }
+
+
     }
+
+
+
 }

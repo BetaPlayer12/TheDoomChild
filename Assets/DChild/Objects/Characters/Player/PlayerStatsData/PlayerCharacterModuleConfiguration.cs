@@ -7,7 +7,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 {
     [CreateAssetMenu(fileName = "PlayerCharacterModuleConfiguration", menuName = "DChild/Gameplay/Character/Player Character Module Configuration")]
     public class PlayerCharacterModuleConfiguration : ScriptableObject
-    {  
+    {
         [Header("Basic")]
         [Title("Movement")]
         [SerializeField, HideLabel]
@@ -93,7 +93,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         public WallJumpStatsInfo wallJumpInfo => m_wallJumpStatsInfo;
 
         [Title("Wall Movement")]
-        [SerializeField, HideLabel]       
+        [SerializeField, HideLabel]
         private WallMovementStatsInfo m_wallMovementStatsInfo;
         public WallMovementStatsInfo wallMovementInfo => m_wallMovementStatsInfo;
 
