@@ -92,6 +92,7 @@ GameObject:
   m_Component:
   - component: {fileID: 33829320913624855}
   - component: {fileID: 33829320913624872}
+  - component: {fileID: 7209000000000000001}
   m_Layer: 5
   m_Name: Section - SoulSkillList
   m_TagString: Untagged
@@ -153,6 +154,23 @@ MonoBehaviour:
   - {fileID: 8634034156397717186}
   m_navigationHandle: {fileID: 6739146570389101934}
   m_considerAllAsAvailable: 0
+--- !u!114 &7209000000000000001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 33829320913624854}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e7eb5d780b147acb4322f70656aaf82, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  m_scrollbar: {fileID: 7596599699829111345}
+  m_scrollUnitsPerStep: 6
+  m_continuousStep: 0.1
+  m_invertDirection: 0
+  m_stepCountOverride: 0
 --- !u!1 &33829320992711416
 GameObject:
   m_ObjectHideFlags: 0
@@ -367,7 +385,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 0
+  m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -4030,6 +4048,7 @@ MonoBehaviour:
   m_soulScroll: {fileID: 7596599699829111345}
   m_pageLabel: {fileID: 2242644081967738005}
   m_listUI: {fileID: 33829320913624872}
+  m_mouseWheel: {fileID: 7209000000000000001}
 --- !u!1001 &88968032311417682
 PrefabInstance:
   m_ObjectHideFlags: 0

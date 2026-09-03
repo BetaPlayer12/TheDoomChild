@@ -16,11 +16,38 @@ namespace DChild.Gameplay.SoulSkills.UI
         [SerializeField] private TextMeshProUGUI m_description;
         [SerializeField] private TextMeshProUGUI m_originEquipmentName;
 
+        private TextMeshProUGUI[] m_detailsText;
+
         public event System.Action<TextMeshProUGUI, TextMeshProUGUI, SoulSkill> soulSkillLocalize;
+
+        private void Awake()
+        {
+            ClearInfo();
+        }
+
+        public void ClearInfo()
+        {
+            SetTextVisible(false);
+        }
+
+        private void SetTextVisible(bool visible)
+        {
+            m_detailsText ??= m_parentCanvas.GetComponentsInChildren<TextMeshProUGUI>(true);
+            foreach (var text in m_detailsText)
+            {
+                text.enabled = visible;
+            }
+        }
 
         public void DisplayInfo(SoulSkill soulSkill, SoulEquipmentItem originEquipment)
         {
-            m_parentCanvas.enabled = soulSkill != null;
+            if (soulSkill == null)
+            {
+                ClearInfo();
+                return;
+            }
+
+            SetTextVisible(true);
             m_capcity.text = soulSkill.capacity.ToString();
 
             //m_soulIcon.sprite = soulSkill.icon;

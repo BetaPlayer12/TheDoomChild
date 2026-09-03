@@ -95,6 +95,7 @@ namespace DChild.Gameplay.SoulSkills
                 m_playerHandle.MaxCapacityChanged += OnMaxCapacityChanged;
                 m_skillSelection.OnSelected += OnSoulSkillSelected;
                 m_skillSelection.OnActionRequired += OnSoulSkillActionRequired;
+                m_availableListUI.OnPageUpdated += OnSoulSkillPageUpdated;
             }
             m_hasSubscribed = true;
 
@@ -124,6 +125,15 @@ namespace DChild.Gameplay.SoulSkills
         #endregion
 
         #region Event Callbacks
+        private void OnSoulSkillPageUpdated(bool hasAvailableSkills)
+        {
+            m_skillSelection.Reset();
+            if (!hasAvailableSkills)
+            {
+                m_infoUI.ClearInfo();
+            }
+        }
+
         private void OnSoulSkillSelected(object sender, SoulSkillUIEventArgs eventArgs)
         {
             var soulSkill = m_completeSoulSkillList.GetInfo(eventArgs.soulskillUI.soulSkillID);
