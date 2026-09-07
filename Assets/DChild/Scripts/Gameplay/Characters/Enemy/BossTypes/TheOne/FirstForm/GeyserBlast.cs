@@ -35,8 +35,8 @@ namespace DChild.Gameplay.Pooling
 
             m_geyserCollider.enabled = true;
 
-            yield return new WaitForSeconds(m_geyserDuration);
-
+            yield return new WaitForSeconds(6f);
+            m_poolCollider.enabled = false;
             m_geyserCollider.enabled = false;
         }
 
