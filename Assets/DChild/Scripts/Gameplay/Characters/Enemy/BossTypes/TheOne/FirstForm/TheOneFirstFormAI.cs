@@ -278,6 +278,9 @@ namespace DChild.Gameplay.Characters.Enemies
             private BasicAnimationInfo m_drillToGroundAnimation;
             public BasicAnimationInfo drillToGroundAnimation => m_drillToGroundAnimation;
             [SerializeField]
+            private BasicAnimationInfo m_diagonalDrillToGroundAnimation;
+            public BasicAnimationInfo diagonalDrillToGroundAnimation => m_diagonalDrillToGroundAnimation;
+            [SerializeField]
             private BasicAnimationInfo m_groundToDrillAnimation;
             public BasicAnimationInfo groundToDrillAnimation => m_groundToDrillAnimation;
             [SerializeField]
@@ -416,6 +419,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_scytheWaveAcidProjectile.SetData(m_skeletonDataAsset);
 
                 m_airTodrillDashDiagonal.SetData(m_skeletonDataAsset);
+                m_diagonalDrillToGroundAnimation.SetData(m_skeletonDataAsset);
                 m_drillDashDiagonal.SetData(m_skeletonDataAsset);
                 m_swordChangeAnimationToGreen.SetData(m_skeletonDataAsset);
                 m_swordChangeAnimationToNormal.SetData(m_skeletonDataAsset);
@@ -967,7 +971,7 @@ namespace DChild.Gameplay.Characters.Enemies
             Debug.Log("drill2route");
             if (IsTargetInRange(m_info.drillDash1Attack.range))
             {
-                m_animation.EnableRootMotion(false, false);
+                m_animation.DisableRootMotion();
                 var drillCount = 0;
                 while (drillCount < 2)
                 {
@@ -1012,8 +1016,8 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_info.drillToGroundAnimation, false);
             m_drillDamage.SetActive(false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.drillToGroundAnimation);
-            m_animation.SetAnimation(0, m_info.idleAnimation, true);
-            yield return new WaitForSeconds(2f);
+            m_animation.SetAnimation(0, m_info.idleCombatAnimation, true);
+            yield return new WaitForSeconds(m_info.defaultIdleTime);
             
         }
         private IEnumerator DrillDashComboPhase2Pattern4Routine()
@@ -1023,9 +1027,10 @@ namespace DChild.Gameplay.Characters.Enemies
             Vector3 targetPos = m_lastTargetPos;
             Vector3 drillDirection = (targetPos - transform.position).normalized;
             if (!IsFacing(targetPos))
-                CustomTurn();
+                CustomTurn();    
             m_animation.SetAnimation(0, m_info.airTodrillDashDiagonal.animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.airTodrillDashDiagonal.animation);
+            m_animation.SetAnimation(4, m_drillMixAnimation, false);
             m_animation.SetAnimation(0, m_info.drillDashDiagonal.animation, true);
             while (!m_groundSensor.isDetecting)
             {
@@ -1033,8 +1038,8 @@ namespace DChild.Gameplay.Characters.Enemies
                 yield return null;
             }
             m_hitbox.Disable();
-            m_animation.SetAnimation(0, m_info.drillToGroundAnimation.animation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.drillToGroundAnimation.animation);
+            m_animation.SetAnimation(0, m_info.diagonalDrillToGroundAnimation.animation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.diagonalDrillToGroundAnimation.animation);
             m_character.physics.simulateGravity = true;
             m_model.transform.rotation = Quaternion.identity;
             m_animation.SetEmptyAnimation(4, 0);
@@ -1082,8 +1087,10 @@ namespace DChild.Gameplay.Characters.Enemies
             Vector3 drillDirection = (targetPos - transform.position).normalized;
             if (!IsFacing(targetPos))
                 CustomTurn();
+            
             m_animation.SetAnimation(0, m_info.airTodrillDashDiagonal.animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.airTodrillDashDiagonal.animation);
+            m_animation.SetAnimation(4, m_drillMixAnimation, false);
             m_animation.SetAnimation(0, m_info.drillDashDiagonal.animation, true);
             while (!m_groundSensor.isDetecting)
             {
@@ -1091,8 +1098,8 @@ namespace DChild.Gameplay.Characters.Enemies
                 yield return null;
             }
             m_hitbox.Disable();
-            m_animation.SetAnimation(0, m_info.drillToGroundAnimation.animation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.drillToGroundAnimation.animation);
+            m_animation.SetAnimation(0, m_info.diagonalDrillToGroundAnimation.animation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.diagonalDrillToGroundAnimation.animation);
             m_character.physics.simulateGravity = true;
             m_model.transform.rotation = Quaternion.identity;
             m_animation.SetEmptyAnimation(4, 0);
@@ -1365,7 +1372,7 @@ namespace DChild.Gameplay.Characters.Enemies
             if (IsTargetInRange(m_info.drillDashAttackRange))
             {
                 Debug.Log("Player is in range, go to next pattern");
-                m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                m_animation.SetAnimation(0, m_info.idleCombatAnimation, true);
                 yield return new WaitForSeconds(m_info.phase1Pattern3IdleTime);
                 m_attackDecider.hasDecidedOnAttack = false;
                 m_stateHandle.ApplyQueuedState();
@@ -1388,7 +1395,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_info.drillToGroundAnimation, false);
             m_drillDamage.SetActive(false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.drillToGroundAnimation);
-            m_animation.SetAnimation(0, m_info.idleAnimation, true);
+            m_animation.SetAnimation(0, m_info.idleCombatAnimation, true);
             yield return new WaitForSeconds(m_info.phase1Pattern3IdleTime);
             yield return EvadePlayerRoutine();
             m_drillDashCurrentCounter++;
@@ -2275,7 +2282,7 @@ namespace DChild.Gameplay.Characters.Enemies
             switch (m_stateHandle.currentState)
             {
                 case State.Idle:
-                    m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                    m_animation.SetAnimation(0, m_info.idleCombatAnimation, true);
                     break;
                 case State.Intro:
                     StartCoroutine(IntroRoutine());
