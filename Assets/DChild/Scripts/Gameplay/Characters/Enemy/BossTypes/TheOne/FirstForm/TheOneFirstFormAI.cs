@@ -272,6 +272,9 @@ namespace DChild.Gameplay.Characters.Enemies
             private BasicAnimationInfo m_idleAnimation;
             public BasicAnimationInfo idleAnimation => m_idleAnimation;
             [SerializeField]
+            private BasicAnimationInfo m_rageQuakForPhaseChange;
+            public BasicAnimationInfo rageQuakForPhaseChange => m_rageQuakForPhaseChange;
+            [SerializeField]
             private BasicAnimationInfo m_idleCombatAnimation;
             public BasicAnimationInfo idleCombatAnimation => m_idleCombatAnimation;
             [SerializeField]
@@ -417,7 +420,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_scytheWaveBlackbloodProjectile.SetData(m_skeletonDataAsset);
                 m_scytheWavePoisonProjectile.SetData(m_skeletonDataAsset);
                 m_scytheWaveAcidProjectile.SetData(m_skeletonDataAsset);
-
+                m_rageQuakForPhaseChange.SetData(m_skeletonDataAsset);
                 m_airTodrillDashDiagonal.SetData(m_skeletonDataAsset);
                 m_diagonalDrillToGroundAnimation.SetData(m_skeletonDataAsset);
                 m_drillDashDiagonal.SetData(m_skeletonDataAsset);
@@ -794,12 +797,11 @@ namespace DChild.Gameplay.Characters.Enemies
                 CustomTurn();
 
             m_hitbox.Disable();
-            m_animation.EnableRootMotion(true, false);
             m_animation.SetAnimation(0, m_info.staggerAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.staggerAnimation);
-            m_animation.SetAnimation(0, m_info.summonSwordsAnimation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.summonSwordsAnimation);
-            m_animation.SetAnimation(0, m_info.idleAnimation, true);
+            m_animation.SetAnimation(0, m_info.rageQuakForPhaseChange, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.rageQuakForPhaseChange);
+            m_animation.SetAnimation(0, m_info.idleCombatAnimation, true);
             m_hitbox.Enable();
             m_hitbox.SetCanBlockDamageState(false);
             yield return new WaitForSeconds(m_info.phaseChangeToBlinkDelay);
