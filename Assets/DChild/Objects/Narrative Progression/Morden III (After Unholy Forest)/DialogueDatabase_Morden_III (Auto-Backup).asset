@@ -692,8 +692,8 @@ MonoBehaviour:
       value: False
       type: 2
       typeString: CustomFieldType_Boolean
-    - title: Display Name
-      value: 
+    - title: Alias
+      value: Tiberius
       type: 0
       typeString: CustomFieldType_Text
     portrait: {fileID: 0}
@@ -724,7 +724,7 @@ MonoBehaviour:
       type: 0
       typeString: CustomFieldType_Text
     portrait: {fileID: 0}
-    spritePortrait: {fileID: 21300000, guid: fcf9618cad8854040a6073a6bff14ece, type: 3}
+    spritePortrait: {fileID: 21300000, guid: e3ce593ffcead7040a20a8da0dd9a20e, type: 3}
     alternatePortraits: []
     spritePortraits:
     - {fileID: 21300000, guid: ec4295e321caccc4ba75483c486b4402, type: 3}
@@ -811,7 +811,7 @@ MonoBehaviour:
     spritePortrait: {fileID: 0}
     alternatePortraits: []
     spritePortraits: []
-  - id: 108
+  - id: 121
     fields:
     - title: Name
       value: Tiberius
@@ -834,10 +834,10 @@ MonoBehaviour:
     alternatePortraits: []
     spritePortraits:
     - {fileID: 21300000, guid: fc196ee4858f1ad44a0349854b9c6f4e, type: 3}
-  - id: 109
+  - id: 59
     fields:
     - title: Name
-      value: Corless
+      value: Old Man Corless
       type: 0
       typeString: 
     - title: Pictures
@@ -1007,6 +1007,76 @@ MonoBehaviour:
       typeString: 
     - title: Initial Value
       value: 2
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Description
+      value: 
+      type: 0
+      typeString: 
+  - id: 210
+    fields:
+    - title: Name
+      value: necroIdleExpression
+      type: 0
+      typeString: 
+    - title: Initial Value
+      value: 1
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Description
+      value: 
+      type: 0
+      typeString: 
+  - id: 211
+    fields:
+    - title: Name
+      value: necroSurprisedExpression
+      type: 0
+      typeString: 
+    - title: Initial Value
+      value: 2
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Description
+      value: 
+      type: 0
+      typeString: 
+  - id: 212
+    fields:
+    - title: Name
+      value: necroSmirkingExpression
+      type: 0
+      typeString: 
+    - title: Initial Value
+      value: 3
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Description
+      value: 
+      type: 0
+      typeString: 
+  - id: 213
+    fields:
+    - title: Name
+      value: necroFrustratedExpression
+      type: 0
+      typeString: 
+    - title: Initial Value
+      value: 4
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Description
+      value: 
+      type: 0
+      typeString: 
+  - id: 214
+    fields:
+    - title: Name
+      value: necroTalkingExpression
+      type: 0
+      typeString: 
+    - title: Initial Value
+      value: 5
       type: 1
       typeString: CustomFieldType_Number
     - title: Description
@@ -1278,7 +1348,7 @@ MonoBehaviour:
       canvasRect:
         serializedVersion: 2
         x: 30
-        y: 170
+        y: 170.84746
         width: 160
         height: 30
     - id: 4
@@ -1327,7 +1397,7 @@ MonoBehaviour:
         isConnector: 0
         priority: 2
       conditionsString: 
-      userScript: 
+      userScript: Actor["Sir_X"].Display_Name = Actor["Sir_X"].Alias
       onExecute:
         m_PersistentCalls:
           m_Calls: []
@@ -1793,7 +1863,7 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Actor
-        value: 109
+        value: 59
         type: 5
         typeString: CustomFieldType_Actor
       - title: Conversant
@@ -1848,7 +1918,7 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Actor
-        value: 109
+        value: 59
         type: 5
         typeString: CustomFieldType_Actor
       - title: Conversant
@@ -1904,7 +1974,7 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Actor
-        value: 109
+        value: 59
         type: 5
         typeString: CustomFieldType_Actor
       - title: Conversant
@@ -1944,8 +2014,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 31.94339
-        y: 725.66046
+        x: 29.401016
+        y: 726.5079
         width: 160
         height: 30
     - id: 16
@@ -1959,7 +2029,7 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Actor
-        value: 109
+        value: 59
         type: 5
         typeString: CustomFieldType_Actor
       - title: Conversant
@@ -2054,18 +2124,18 @@ MonoBehaviour:
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 9.044738, y: 10.214339}
-    canvasZoom: 1.4799997
-  - id: 2185
+    canvasScrollPosition: {x: 2.5423737, y: 446.61023}
+    canvasZoom: 1.18
+  - id: 2188
     fields:
     - title: Title
       value: Morden_Scene06/Adran Revelations - Part II - Sequence 2
       type: 0
-      typeString: 
+      typeString: CustomFieldType_Text
     - title: Description
       value: 
       type: 0
-      typeString: 
+      typeString: CustomFieldType_Text
     - title: Actor
       value: 1
       type: 5
@@ -2132,7 +2202,7 @@ MonoBehaviour:
         value: None()
         type: 0
         typeString: 
-      conversationID: 2185
+      conversationID: 2188
       isRoot: 0
       isGroup: 0
       nodeColor: 
@@ -2140,9 +2210,9 @@ MonoBehaviour:
       falseConditionAction: Block
       conditionPriority: 2
       outgoingLinks:
-      - originConversationID: 2185
+      - originConversationID: 2188
         originDialogueID: 0
-        destinationConversationID: 2185
+        destinationConversationID: 2188
         destinationDialogueID: 1
         isConnector: 0
         priority: 2
@@ -2172,7 +2242,7 @@ MonoBehaviour:
         type: 5
         typeString: CustomFieldType_Actor
       - title: Conversant
-        value: 108
+        value: 10
         type: 5
         typeString: CustomFieldType_Actor
       - title: Menu Text
@@ -2180,14 +2250,18 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Dialogue Text
-        value: What else can you tell me?
+        value: '[pic=playerThinkingExpression]What else can you tell me?'
         type: 0
         typeString: 
       - title: Sequence
-        value: Timeline(speed, AdranRevelationsPart2_SkyGarden_Timeline, 0);
+        value: 
         type: 0
         typeString: 
-      conversationID: 2185
+      - title: EventGuid
+        value: 39630712-b2a7-4200-b4f9-fe5dad212646
+        type: 0
+        typeString: 
+      conversationID: 2188
       isRoot: 0
       isGroup: 0
       nodeColor: 
@@ -2195,9 +2269,9 @@ MonoBehaviour:
       falseConditionAction: Block
       conditionPriority: 2
       outgoingLinks:
-      - originConversationID: 2185
+      - originConversationID: 2188
         originDialogueID: 1
-        destinationConversationID: 2185
+        destinationConversationID: 2188
         destinationDialogueID: 2
         isConnector: 0
         priority: 2
@@ -2208,7 +2282,7 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 29.082565
+        x: 27.590027
         y: 70
         width: 160
         height: 30
@@ -2223,7 +2297,7 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Actor
-        value: 108
+        value: 11
         type: 5
         typeString: CustomFieldType_Actor
       - title: Conversant
@@ -2235,14 +2309,15 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Dialogue Text
-        value: "Your victory against the Graveyard\u2019s warden was remarkable\u2026"
+        value: "[pic=sirXThinkingExpression]Your victory against the Graveyard\u2019s
+          warden was remarkable\u2026"
         type: 0
         typeString: 
       - title: Sequence
         value: 
         type: 0
         typeString: 
-      conversationID: 2185
+      conversationID: 2188
       isRoot: 0
       isGroup: 0
       nodeColor: 
@@ -2250,14 +2325,14 @@ MonoBehaviour:
       falseConditionAction: Block
       conditionPriority: 2
       outgoingLinks:
-      - originConversationID: 2185
+      - originConversationID: 2188
         originDialogueID: 2
-        destinationConversationID: 2185
+        destinationConversationID: 2188
         destinationDialogueID: 3
         isConnector: 0
         priority: 2
       conditionsString: 
-      userScript: 
+      userScript: Actor["Sir_X"].Display_Name = Actor["Sir_X"].Alias
       onExecute:
         m_PersistentCalls:
           m_Calls: []
@@ -2297,7 +2372,7 @@ MonoBehaviour:
         value: 
         type: 0
         typeString: 
-      conversationID: 2185
+      conversationID: 2188
       isRoot: 0
       isGroup: 0
       nodeColor: 
@@ -2305,9 +2380,9 @@ MonoBehaviour:
       falseConditionAction: Block
       conditionPriority: 2
       outgoingLinks:
-      - originConversationID: 2185
+      - originConversationID: 2188
         originDialogueID: 3
-        destinationConversationID: 2185
+        destinationConversationID: 2188
         destinationDialogueID: 4
         isConnector: 0
         priority: 2
@@ -2337,7 +2412,7 @@ MonoBehaviour:
         type: 5
         typeString: CustomFieldType_Actor
       - title: Conversant
-        value: 108
+        value: 121
         type: 5
         typeString: CustomFieldType_Actor
       - title: Menu Text
@@ -2352,7 +2427,7 @@ MonoBehaviour:
         value: 
         type: 0
         typeString: 
-      conversationID: 2185
+      conversationID: 2188
       isRoot: 0
       isGroup: 0
       nodeColor: 
@@ -2360,9 +2435,9 @@ MonoBehaviour:
       falseConditionAction: Block
       conditionPriority: 2
       outgoingLinks:
-      - originConversationID: 2185
+      - originConversationID: 2188
         originDialogueID: 4
-        destinationConversationID: 2185
+        destinationConversationID: 2188
         destinationDialogueID: 5
         isConnector: 0
         priority: 2
@@ -2388,11 +2463,11 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Actor
-        value: 108
+        value: 11
         type: 5
         typeString: CustomFieldType_Actor
       - title: Conversant
-        value: 108
+        value: 1
         type: 5
         typeString: CustomFieldType_Actor
       - title: Menu Text
@@ -2400,14 +2475,14 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Dialogue Text
-        value: "Giherr, the Lich Lord\u2026"
+        value: "[pic=sirXIdleExpression]Giherr, the Lich Lord\u2026"
         type: 0
         typeString: 
       - title: Sequence
         value: 
         type: 0
         typeString: 
-      conversationID: 2185
+      conversationID: 2188
       isRoot: 0
       isGroup: 0
       nodeColor: 
@@ -2415,14 +2490,14 @@ MonoBehaviour:
       falseConditionAction: Block
       conditionPriority: 2
       outgoingLinks:
-      - originConversationID: 2185
+      - originConversationID: 2188
         originDialogueID: 5
-        destinationConversationID: 2185
+        destinationConversationID: 2188
         destinationDialogueID: 6
         isConnector: 0
         priority: 2
       conditionsString: 
-      userScript: 
+      userScript: Actor["Sir_X"].Display_Name = Actor["Sir_X"].Alias
       onExecute:
         m_PersistentCalls:
           m_Calls: []
@@ -2443,7 +2518,7 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Actor
-        value: 108
+        value: 11
         type: 5
         typeString: CustomFieldType_Actor
       - title: Conversant
@@ -2455,15 +2530,15 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Dialogue Text
-        value: "You bested him on a whim. You see, he\u2019s not just some warden.
-          He\u2019s a Death Lord."
+        value: "[pic=sirXIdleExpression]You bested him on a whim. You see, he\u2019s
+          not just some warden. He\u2019s a Death Lord."
         type: 0
         typeString: 
       - title: Sequence
         value: 
         type: 0
         typeString: 
-      conversationID: 2185
+      conversationID: 2188
       isRoot: 0
       isGroup: 0
       nodeColor: 
@@ -2471,14 +2546,14 @@ MonoBehaviour:
       falseConditionAction: Block
       conditionPriority: 2
       outgoingLinks:
-      - originConversationID: 2185
+      - originConversationID: 2188
         originDialogueID: 6
-        destinationConversationID: 2185
+        destinationConversationID: 2188
         destinationDialogueID: 7
         isConnector: 0
         priority: 2
       conditionsString: 
-      userScript: 
+      userScript: Actor["Sir_X"].Display_Name = Actor["Sir_X"].Alias
       onExecute:
         m_PersistentCalls:
           m_Calls: []
@@ -2518,7 +2593,7 @@ MonoBehaviour:
         value: 
         type: 0
         typeString: 
-      conversationID: 2185
+      conversationID: 2188
       isRoot: 0
       isGroup: 0
       nodeColor: 
@@ -2526,9 +2601,9 @@ MonoBehaviour:
       falseConditionAction: Block
       conditionPriority: 2
       outgoingLinks:
-      - originConversationID: 2185
+      - originConversationID: 2188
         originDialogueID: 7
-        destinationConversationID: 2185
+        destinationConversationID: 2188
         destinationDialogueID: 8
         isConnector: 0
         priority: 2
@@ -2573,7 +2648,7 @@ MonoBehaviour:
         value: 
         type: 0
         typeString: 
-      conversationID: 2185
+      conversationID: 2188
       isRoot: 0
       isGroup: 0
       nodeColor: 
@@ -2581,9 +2656,9 @@ MonoBehaviour:
       falseConditionAction: Block
       conditionPriority: 2
       outgoingLinks:
-      - originConversationID: 2185
+      - originConversationID: 2188
         originDialogueID: 8
-        destinationConversationID: 2185
+        destinationConversationID: 2188
         destinationDialogueID: 9
         isConnector: 0
         priority: 2
@@ -2621,14 +2696,14 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Dialogue Text
-        value: What of it? Were you a spectator?
+        value: '[pic=playerThinkingExpression]What of it? Were you a spectator?'
         type: 0
         typeString: 
       - title: Sequence
         value: 
         type: 0
         typeString: 
-      conversationID: 2185
+      conversationID: 2188
       isRoot: 0
       isGroup: 0
       nodeColor: 
@@ -2636,9 +2711,9 @@ MonoBehaviour:
       falseConditionAction: Block
       conditionPriority: 2
       outgoingLinks:
-      - originConversationID: 2185
+      - originConversationID: 2188
         originDialogueID: 9
-        destinationConversationID: 2185
+        destinationConversationID: 2188
         destinationDialogueID: 10
         isConnector: 0
         priority: 2
@@ -2684,7 +2759,7 @@ MonoBehaviour:
         value: 
         type: 0
         typeString: 
-      conversationID: 2185
+      conversationID: 2188
       isRoot: 0
       isGroup: 0
       nodeColor: 
@@ -2692,9 +2767,9 @@ MonoBehaviour:
       falseConditionAction: Block
       conditionPriority: 2
       outgoingLinks:
-      - originConversationID: 2185
+      - originConversationID: 2188
         originDialogueID: 10
-        destinationConversationID: 2185
+        destinationConversationID: 2188
         destinationDialogueID: 11
         isConnector: 0
         priority: 2
@@ -2732,14 +2807,15 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Dialogue Text
-        value: "You\u2019re telling me you were the General?"
+        value: "[pic=playerThinkingExpression]You\u2019re telling me you were the
+          General?"
         type: 0
         typeString: 
       - title: Sequence
         value: 
         type: 0
         typeString: 
-      conversationID: 2185
+      conversationID: 2188
       isRoot: 0
       isGroup: 0
       nodeColor: 
@@ -2747,9 +2823,9 @@ MonoBehaviour:
       falseConditionAction: Block
       conditionPriority: 2
       outgoingLinks:
-      - originConversationID: 2185
+      - originConversationID: 2188
         originDialogueID: 11
-        destinationConversationID: 2185
+        destinationConversationID: 2188
         destinationDialogueID: 12
         isConnector: 0
         priority: 2
@@ -2794,7 +2870,7 @@ MonoBehaviour:
         value: 
         type: 0
         typeString: 
-      conversationID: 2185
+      conversationID: 2188
       isRoot: 0
       isGroup: 0
       nodeColor: 
@@ -2802,9 +2878,9 @@ MonoBehaviour:
       falseConditionAction: Block
       conditionPriority: 2
       outgoingLinks:
-      - originConversationID: 2185
+      - originConversationID: 2188
         originDialogueID: 12
-        destinationConversationID: 2185
+        destinationConversationID: 2188
         destinationDialogueID: 13
         isConnector: 0
         priority: 2
@@ -2842,14 +2918,14 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Dialogue Text
-        value: "What\u2019s the point of that spectacle?!"
+        value: "[pic=necroFrustratedExpression]What\u2019s the point of that spectacle?!"
         type: 0
         typeString: 
       - title: Sequence
         value: 
         type: 0
         typeString: 
-      conversationID: 2185
+      conversationID: 2188
       isRoot: 0
       isGroup: 0
       nodeColor: 
@@ -2857,9 +2933,9 @@ MonoBehaviour:
       falseConditionAction: Block
       conditionPriority: 2
       outgoingLinks:
-      - originConversationID: 2185
+      - originConversationID: 2188
         originDialogueID: 13
-        destinationConversationID: 2185
+        destinationConversationID: 2188
         destinationDialogueID: 14
         isConnector: 0
         priority: 2
@@ -2885,7 +2961,7 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Actor
-        value: 108
+        value: 11
         type: 5
         typeString: CustomFieldType_Actor
       - title: Conversant
@@ -2904,7 +2980,7 @@ MonoBehaviour:
         value: 
         type: 0
         typeString: 
-      conversationID: 2185
+      conversationID: 2188
       isRoot: 0
       isGroup: 0
       nodeColor: 
@@ -2912,21 +2988,21 @@ MonoBehaviour:
       falseConditionAction: Block
       conditionPriority: 2
       outgoingLinks:
-      - originConversationID: 2185
+      - originConversationID: 2188
         originDialogueID: 14
-        destinationConversationID: 2185
+        destinationConversationID: 2188
         destinationDialogueID: 15
         isConnector: 0
         priority: 2
       conditionsString: 
-      userScript: 
+      userScript: Actor["Sir_X"].Display_Name = Actor["Sir_X"].Alias
       onExecute:
         m_PersistentCalls:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
         x: 29.127663
-        y: 720
+        y: 720.7352
         width: 160
         height: 30
     - id: 15
@@ -2944,7 +3020,7 @@ MonoBehaviour:
         type: 5
         typeString: CustomFieldType_Actor
       - title: Conversant
-        value: 108
+        value: 121
         type: 5
         typeString: CustomFieldType_Actor
       - title: Menu Text
@@ -2952,14 +3028,15 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Dialogue Text
-        value: What was all that talk about ending my reign?
+        value: '[pic=playerExcitedExpression]What was all that talk about ending
+          my reign?'
         type: 0
         typeString: 
       - title: Sequence
         value: 
         type: 0
         typeString: 
-      conversationID: 2185
+      conversationID: 2188
       isRoot: 0
       isGroup: 0
       nodeColor: 
@@ -2967,9 +3044,9 @@ MonoBehaviour:
       falseConditionAction: Block
       conditionPriority: 2
       outgoingLinks:
-      - originConversationID: 2185
+      - originConversationID: 2188
         originDialogueID: 15
-        destinationConversationID: 2185
+        destinationConversationID: 2188
         destinationDialogueID: 16
         isConnector: 0
         priority: 2
@@ -2995,7 +3072,7 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Actor
-        value: 108
+        value: 11
         type: 5
         typeString: CustomFieldType_Actor
       - title: Conversant
@@ -3014,7 +3091,7 @@ MonoBehaviour:
         value: 
         type: 0
         typeString: 
-      conversationID: 2185
+      conversationID: 2188
       isRoot: 0
       isGroup: 0
       nodeColor: 
@@ -3022,14 +3099,14 @@ MonoBehaviour:
       falseConditionAction: Block
       conditionPriority: 2
       outgoingLinks:
-      - originConversationID: 2185
+      - originConversationID: 2188
         originDialogueID: 16
-        destinationConversationID: 2185
+        destinationConversationID: 2188
         destinationDialogueID: 17
         isConnector: 0
         priority: 2
       conditionsString: 
-      userScript: 
+      userScript: Actor["Sir_X"].Display_Name = Actor["Sir_X"].Alias
       onExecute:
         m_PersistentCalls:
           m_Calls: []
@@ -3054,7 +3131,7 @@ MonoBehaviour:
         type: 5
         typeString: CustomFieldType_Actor
       - title: Conversant
-        value: 108
+        value: 121
         type: 5
         typeString: CustomFieldType_Actor
       - title: Menu Text
@@ -3069,7 +3146,7 @@ MonoBehaviour:
         value: 
         type: 0
         typeString: 
-      conversationID: 2185
+      conversationID: 2188
       isRoot: 0
       isGroup: 0
       nodeColor: 
@@ -3077,9 +3154,9 @@ MonoBehaviour:
       falseConditionAction: Block
       conditionPriority: 2
       outgoingLinks:
-      - originConversationID: 2185
+      - originConversationID: 2188
         originDialogueID: 17
-        destinationConversationID: 2185
+        destinationConversationID: 2188
         destinationDialogueID: 18
         isConnector: 0
         priority: 2
@@ -3105,7 +3182,7 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Actor
-        value: 108
+        value: 11
         type: 5
         typeString: CustomFieldType_Actor
       - title: Conversant
@@ -3117,15 +3194,15 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Dialogue Text
-        value: "Well, we were curious how eager you were to fulfill your Master\u2019s
-          orders."
+        value: "[pic=sirXThinkingExpression]Well, we were curious how eager you were
+          to fulfill your Master\u2019s orders."
         type: 0
         typeString: 
       - title: Sequence
         value: 
         type: 0
         typeString: 
-      conversationID: 2185
+      conversationID: 2188
       isRoot: 0
       isGroup: 0
       nodeColor: 
@@ -3133,14 +3210,14 @@ MonoBehaviour:
       falseConditionAction: Block
       conditionPriority: 2
       outgoingLinks:
-      - originConversationID: 2185
+      - originConversationID: 2188
         originDialogueID: 18
-        destinationConversationID: 2185
+        destinationConversationID: 2188
         destinationDialogueID: 19
         isConnector: 0
         priority: 2
       conditionsString: 
-      userScript: 
+      userScript: Actor["Sir_X"].Display_Name = Actor["Sir_X"].Alias
       onExecute:
         m_PersistentCalls:
           m_Calls: []
@@ -3165,7 +3242,7 @@ MonoBehaviour:
         type: 5
         typeString: CustomFieldType_Actor
       - title: Conversant
-        value: 108
+        value: 121
         type: 5
         typeString: CustomFieldType_Actor
       - title: Menu Text
@@ -3180,7 +3257,7 @@ MonoBehaviour:
         value: 
         type: 0
         typeString: 
-      conversationID: 2185
+      conversationID: 2188
       isRoot: 0
       isGroup: 0
       nodeColor: 
@@ -3188,9 +3265,9 @@ MonoBehaviour:
       falseConditionAction: Block
       conditionPriority: 2
       outgoingLinks:
-      - originConversationID: 2185
+      - originConversationID: 2188
         originDialogueID: 19
-        destinationConversationID: 2185
+        destinationConversationID: 2188
         destinationDialogueID: 20
         isConnector: 0
         priority: 2
@@ -3216,7 +3293,7 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Actor
-        value: 108
+        value: 11
         type: 5
         typeString: CustomFieldType_Actor
       - title: Conversant
@@ -3235,7 +3312,7 @@ MonoBehaviour:
         value: 
         type: 0
         typeString: 
-      conversationID: 2185
+      conversationID: 2188
       isRoot: 0
       isGroup: 0
       nodeColor: 
@@ -3243,14 +3320,14 @@ MonoBehaviour:
       falseConditionAction: Block
       conditionPriority: 2
       outgoingLinks:
-      - originConversationID: 2185
+      - originConversationID: 2188
         originDialogueID: 20
-        destinationConversationID: 2185
+        destinationConversationID: 2188
         destinationDialogueID: 21
         isConnector: 0
         priority: 2
       conditionsString: 
-      userScript: 
+      userScript: Actor["Sir_X"].Display_Name = Actor["Sir_X"].Alias
       onExecute:
         m_PersistentCalls:
           m_Calls: []
@@ -3283,14 +3360,15 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Dialogue Text
-        value: "I didn\u2019t understand some of what you were saying."
+        value: "[pic=playerThinkingExpression]I didn\u2019t understand some of what
+          you were saying."
         type: 0
         typeString: 
       - title: Sequence
         value: 
         type: 0
         typeString: 
-      conversationID: 2185
+      conversationID: 2188
       isRoot: 0
       isGroup: 0
       nodeColor: 
@@ -3298,9 +3376,9 @@ MonoBehaviour:
       falseConditionAction: Block
       conditionPriority: 2
       outgoingLinks:
-      - originConversationID: 2185
+      - originConversationID: 2188
         originDialogueID: 21
-        destinationConversationID: 2185
+        destinationConversationID: 2188
         destinationDialogueID: 22
         isConnector: 0
         priority: 2
@@ -3345,7 +3423,7 @@ MonoBehaviour:
         value: 
         type: 0
         typeString: 
-      conversationID: 2185
+      conversationID: 2188
       isRoot: 0
       isGroup: 0
       nodeColor: 
@@ -3353,9 +3431,9 @@ MonoBehaviour:
       falseConditionAction: Block
       conditionPriority: 2
       outgoingLinks:
-      - originConversationID: 2185
+      - originConversationID: 2188
         originDialogueID: 22
-        destinationConversationID: 2185
+        destinationConversationID: 2188
         destinationDialogueID: 23
         isConnector: 0
         priority: 2
@@ -3381,11 +3459,11 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Actor
-        value: 108
+        value: 11
         type: 5
         typeString: CustomFieldType_Actor
       - title: Conversant
-        value: 108
+        value: 1
         type: 5
         typeString: CustomFieldType_Actor
       - title: Menu Text
@@ -3400,7 +3478,7 @@ MonoBehaviour:
         value: 
         type: 0
         typeString: 
-      conversationID: 2185
+      conversationID: 2188
       isRoot: 0
       isGroup: 0
       nodeColor: 
@@ -3408,21 +3486,21 @@ MonoBehaviour:
       falseConditionAction: Block
       conditionPriority: 2
       outgoingLinks:
-      - originConversationID: 2185
+      - originConversationID: 2188
         originDialogueID: 23
-        destinationConversationID: 2185
+        destinationConversationID: 2188
         destinationDialogueID: 24
         isConnector: 0
         priority: 2
       conditionsString: 
-      userScript: 
+      userScript: Actor["Sir_X"].Display_Name = Actor["Sir_X"].Alias
       onExecute:
         m_PersistentCalls:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 28.02877
-        y: 1171.0989
+        x: 27.324547
+        y: 1171.8031
         width: 160
         height: 30
     - id: 24
@@ -3436,7 +3514,7 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Actor
-        value: 108
+        value: 11
         type: 5
         typeString: CustomFieldType_Actor
       - title: Conversant
@@ -3448,15 +3526,15 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Dialogue Text
-        value: "If we are to, uh\u2026 perhaps, help each other in the meantime,
-          we can take care of both our problems\u2026"
+        value: "[pic=sirXThinkingExpression]If we are to, uh\u2026 perhaps, help
+          each other in the meantime, we can take care of both our problems\u2026"
         type: 0
         typeString: 
       - title: Sequence
         value: 
         type: 0
         typeString: 
-      conversationID: 2185
+      conversationID: 2188
       isRoot: 0
       isGroup: 0
       nodeColor: 
@@ -3464,14 +3542,14 @@ MonoBehaviour:
       falseConditionAction: Block
       conditionPriority: 2
       outgoingLinks:
-      - originConversationID: 2185
+      - originConversationID: 2188
         originDialogueID: 24
-        destinationConversationID: 2185
+        destinationConversationID: 2188
         destinationDialogueID: 25
         isConnector: 0
         priority: 2
       conditionsString: 
-      userScript: 
+      userScript: Actor["Sir_X"].Display_Name = Actor["Sir_X"].Alias
       onExecute:
         m_PersistentCalls:
           m_Calls: []
@@ -3504,14 +3582,15 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Dialogue Text
-        value: A temporary alliance seems necessary, Doomed Knight.
+        value: '[pic=necroFrustratedExpression]A temporary alliance seems necessary,
+          Doomed Knight.'
         type: 0
         typeString: 
       - title: Sequence
         value: 
         type: 0
         typeString: 
-      conversationID: 2185
+      conversationID: 2188
       isRoot: 0
       isGroup: 0
       nodeColor: 
@@ -3519,9 +3598,9 @@ MonoBehaviour:
       falseConditionAction: Block
       conditionPriority: 2
       outgoingLinks:
-      - originConversationID: 2185
+      - originConversationID: 2188
         originDialogueID: 25
-        destinationConversationID: 2185
+        destinationConversationID: 2188
         destinationDialogueID: 26
         isConnector: 0
         priority: 2
@@ -3551,7 +3630,7 @@ MonoBehaviour:
         type: 5
         typeString: CustomFieldType_Actor
       - title: Conversant
-        value: 1
+        value: 121
         type: 5
         typeString: CustomFieldType_Actor
       - title: Menu Text
@@ -3566,7 +3645,7 @@ MonoBehaviour:
         value: 
         type: 0
         typeString: 
-      conversationID: 2185
+      conversationID: 2188
       isRoot: 0
       isGroup: 0
       nodeColor: 
@@ -3574,9 +3653,9 @@ MonoBehaviour:
       falseConditionAction: Block
       conditionPriority: 2
       outgoingLinks:
-      - originConversationID: 2185
+      - originConversationID: 2188
         originDialogueID: 26
-        destinationConversationID: 2185
+        destinationConversationID: 2188
         destinationDialogueID: 27
         isConnector: 0
         priority: 2
@@ -3614,15 +3693,15 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Dialogue Text
-        value: "But know that if any of you betray me\u2026 my sword will deal with
-          you swiftly."
+        value: "[pic=playerExcitedExpression]But know that if any of you betray me\u2026
+          my sword will deal with you swiftly."
         type: 0
         typeString: 
       - title: Sequence
         value: 
         type: 0
         typeString: 
-      conversationID: 2185
+      conversationID: 2188
       isRoot: 0
       isGroup: 0
       nodeColor: 
@@ -3630,9 +3709,9 @@ MonoBehaviour:
       falseConditionAction: Block
       conditionPriority: 2
       outgoingLinks:
-      - originConversationID: 2185
+      - originConversationID: 2188
         originDialogueID: 27
-        destinationConversationID: 2185
+        destinationConversationID: 2188
         destinationDialogueID: 28
         isConnector: 0
         priority: 2
@@ -3658,11 +3737,11 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Actor
-        value: 108
+        value: 11
         type: 5
         typeString: CustomFieldType_Actor
       - title: Conversant
-        value: 108
+        value: 1
         type: 5
         typeString: CustomFieldType_Actor
       - title: Menu Text
@@ -3677,7 +3756,7 @@ MonoBehaviour:
         value: 
         type: 0
         typeString: 
-      conversationID: 2185
+      conversationID: 2188
       isRoot: 0
       isGroup: 0
       nodeColor: 
@@ -3685,14 +3764,14 @@ MonoBehaviour:
       falseConditionAction: Block
       conditionPriority: 2
       outgoingLinks:
-      - originConversationID: 2185
+      - originConversationID: 2188
         originDialogueID: 28
-        destinationConversationID: 2185
+        destinationConversationID: 2188
         destinationDialogueID: 29
         isConnector: 0
         priority: 2
       conditionsString: 
-      userScript: 
+      userScript: Actor["Sir_X"].Display_Name = Actor["Sir_X"].Alias
       onExecute:
         m_PersistentCalls:
           m_Calls: []
@@ -3713,7 +3792,7 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Actor
-        value: 108
+        value: 11
         type: 5
         typeString: CustomFieldType_Actor
       - title: Conversant
@@ -3733,7 +3812,7 @@ MonoBehaviour:
         value: 
         type: 0
         typeString: 
-      conversationID: 2185
+      conversationID: 2188
       isRoot: 0
       isGroup: 0
       nodeColor: 
@@ -3741,14 +3820,14 @@ MonoBehaviour:
       falseConditionAction: Block
       conditionPriority: 2
       outgoingLinks:
-      - originConversationID: 2185
+      - originConversationID: 2188
         originDialogueID: 29
-        destinationConversationID: 2185
+        destinationConversationID: 2188
         destinationDialogueID: 30
         isConnector: 0
         priority: 2
       conditionsString: 
-      userScript: 
+      userScript: Actor["Sir_X"].Display_Name = Actor["Sir_X"].Alias
       onExecute:
         m_PersistentCalls:
           m_Calls: []
@@ -3773,7 +3852,7 @@ MonoBehaviour:
         type: 5
         typeString: CustomFieldType_Actor
       - title: Conversant
-        value: 108
+        value: 121
         type: 5
         typeString: CustomFieldType_Actor
       - title: Menu Text
@@ -3785,10 +3864,73 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Sequence
-        value: Timeline(speed, AdranRevelationsPart2_SkyGarden_Timeline, 1);
+        value: 
         type: 0
         typeString: 
-      conversationID: 2185
+      - title: EventGuid
+        value: cf4acc99-04e7-4001-919b-b2f7db53899b
+        type: 0
+        typeString: 
+      conversationID: 2188
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 2188
+        originDialogueID: 30
+        destinationConversationID: 2188
+        destinationDialogueID: 31
+        isConnector: 0
+        priority: 2
+      conditionsString: 
+      userScript: 
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 35.241272
+        y: 1519.5673
+        width: 160
+        height: 30
+    - id: 31
+      fields:
+      - title: Title
+        value: 
+        type: 0
+        typeString: 
+      - title: Description
+        value: 
+        type: 0
+        typeString: 
+      - title: Actor
+        value: 121
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 1
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: 
+        type: 0
+        typeString: 
+      - title: Dialogue Text
+        value: 
+        type: 0
+        typeString: 
+      - title: Sequence
+        value: 
+        type: 0
+        typeString: 
+      - title: EventGuid
+        value: e8ae6f45-5dda-45af-8636-af4c59e1834e
+        type: 0
+        typeString: 
+      conversationID: 2188
       isRoot: 0
       isGroup: 0
       nodeColor: 
@@ -3804,12 +3946,12 @@ MonoBehaviour:
       canvasRect:
         serializedVersion: 2
         x: 32.42437
-        y: 1518.901
+        y: 1569.5673
         width: 160
         height: 30
     entryGroups: []
     canvasScrollPosition: {x: 0, y: 0}
-    canvasZoom: 0.5200005
+    canvasZoom: 1.2399999
   - id: 2186
     fields:
     - title: Title
