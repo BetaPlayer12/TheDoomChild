@@ -1448,6 +1448,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         {
             if (m_skills.IsModuleActive(PrimarySkill.SkullThrow) == false)
                 return;
+            if (m_state.isExecutingCombatArt) { return; }
             if (m_state.isInShadowMode)
                 return;
             if (m_state.isGrounded == false)
@@ -1469,6 +1470,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         {
             if (m_skills.IsModuleActive(PrimarySkill.SkullThrow) == false)
                 return;
+            if (m_state.isExecutingCombatArt) { return; }
             if (m_state.isInShadowMode)
                 return;
             if (m_state.isGrounded == false)
@@ -1669,6 +1671,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         {
             if (m_state.isExecutingCombatArt)
                 return;
+            if (m_state.isAimingProjectile) { return; }
             if (m_abilities.IsAbilityActivated(CombatArt.HellTrident))
             {
                 if (m_state.isInShadowMode == false)
@@ -1799,9 +1802,9 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         private void OnDiagonalSwordDashPerformedInput()
         {
-            if (m_state.isExecutingCombatArt){ return; }
+            if (m_state.isExecutingCombatArt) { return; }
             if (m_state.isAttacking) { return; }
-            if (m_state.isDoingEarthShaker){ return; }
+            if (m_state.isDoingEarthShaker) { return; }
             if (m_abilities.IsAbilityActivated(CombatArt.DiagonalSwordDash) && m_diagonalSwordDash.CanDiagonalSwordDash())
             {
                 if (m_state.isGrounded == false)
