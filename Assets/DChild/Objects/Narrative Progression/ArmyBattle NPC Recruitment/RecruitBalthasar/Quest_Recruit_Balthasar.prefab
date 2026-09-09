@@ -224,14 +224,15 @@ MonoBehaviour:
   m_CharacterReward:
   - {fileID: 11400000, guid: 80ea1d8c853b1fc45bbecbf816d59e00, type: 2}
   m_isFree: 0
-  m_Requirement: 0
-  m_TakeRequiredItemFromInvintory: 0
+  m_Requirement: 2
+  m_TakeRequiredItemFromInvintory: 1
   m_requiredSoulEssence: 200
   m_hasItem: {fileID: 0}
   m_ItemAmount: 0
-  m_CombatArt: 0
+  m_CombatArt: 4
   m_PrimarySkill: 0
-  armyCharacterData: {fileID: 0}
+  armyCharacterData:
+  - {fileID: 0}
   neededNPCsRecruited: 0
 --- !u!114 &4598359478133682810
 MonoBehaviour:
@@ -497,7 +498,7 @@ MonoBehaviour:
       - m_Target: {fileID: 7638641966485814126}
         m_TargetAssemblyTypeName: DChild.Gameplay.ArmyBattle.ArmyBattleCharacterReward,
           Assembly-CSharp
-        m_MethodName: AttemptGiveReward
+        m_MethodName: RecruitmentConfirmation
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -582,7 +583,7 @@ MonoBehaviour:
       - m_Target: {fileID: 7638641966485814126}
         m_TargetAssemblyTypeName: DChild.Gameplay.ArmyBattle.ArmyBattleCharacterReward,
           Assembly-CSharp
-        m_MethodName: AttemptGiveReward
+        m_MethodName: RecruitmentConfirmation
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -776,7 +777,7 @@ MonoBehaviour:
   allowBarksDuringConversations: 0
   skipBarkIfNoValidEntries: 0
   cacheBarkLines: 0
-  conversation: Recruit/RequirementBalthasar/UnMet
+  conversation: BalthasarLP
   conversationConversant: {fileID: 0}
   conversationActor: {fileID: 0}
   startConversationEntryID: -1
@@ -881,7 +882,7 @@ MonoBehaviour:
   allowBarksDuringConversations: 0
   skipBarkIfNoValidEntries: 0
   cacheBarkLines: 0
-  conversation: IntroDialogueBalthasar
+  conversation: BalthasarBR
   conversationConversant: {fileID: 0}
   conversationActor: {fileID: 0}
   startConversationEntryID: -1
@@ -986,7 +987,7 @@ MonoBehaviour:
   allowBarksDuringConversations: 0
   skipBarkIfNoValidEntries: 0
   cacheBarkLines: 0
-  conversation: Recruit/RequirementBalthasar/Met
+  conversation: BalthasarAR
   conversationConversant: {fileID: 0}
   conversationActor: {fileID: 0}
   startConversationEntryID: -1

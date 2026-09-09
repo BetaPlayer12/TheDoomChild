@@ -121,6 +121,10 @@ namespace DChild.Inputs
         {
             m_reader.OnBarrier(context);
         }
+        public void OnEarthShaker(InputAction.CallbackContext context)
+        {
+            m_reader.OnEarthShaker(context);
+        }
 
         public void OnReaperHarvest(InputAction.CallbackContext context)
         {
