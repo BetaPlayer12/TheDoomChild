@@ -1,9 +1,13 @@
 using DChild.Gameplay.Characters.Player.CombatArt.Leveling;
 using DChild.Gameplay.Characters.Players;
+using DChild.Menu.Inputs;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.UI;
 
 namespace DChild.Gameplay.UI.CombatArts
 {
@@ -29,6 +33,8 @@ namespace DChild.Gameplay.UI.CombatArts
         private CombatArtSelectRequirements[] m_artRequirements;
 
         private CombatArtSelectButton m_currentSelectedButton;
+        private InputAction m_submitAction;
+        private bool m_controllerUnlockHeld;
 
         public void Initialize()
         {
@@ -39,7 +45,8 @@ namespace DChild.Gameplay.UI.CombatArts
             m_unlockArtHandler.UnlockSuccessful += OnUnlockSuccessFull;
             m_unlockArtHandler.InitializeReferences(m_progressionReference, m_referenceList);
             m_unlockArtHandler.ResetUnlockProgress();
-            Select(m_firstSelected);
+            BindSubmitInput();
+            Select(m_firstSelected, false);
 
         }
 
@@ -51,8 +58,17 @@ namespace DChild.Gameplay.UI.CombatArts
 
         public void Select(CombatArtSelectButton button)
         {
+            Select(button, InputIconHandle.useGamepad);
+        }
+
+        private void Select(CombatArtSelectButton button, bool selectUnlockButton)
+        {
             if (button == m_currentSelectedButton)
+            {
+                if (selectUnlockButton)
+                    m_unlockArtHandler.SelectUnlockButton();
                 return;
+            }
 
             m_currentSelectedButton = button;
             var combatArtData = m_referenceList.GetCombatArtData(m_currentSelectedButton.skillUnlock);
@@ -64,6 +80,8 @@ namespace DChild.Gameplay.UI.CombatArts
             var availableSkillPoints = m_progressionReference.skillPoints.points;
             var combatArtCost = combatArtData.GetCombatArtLevelData(m_currentSelectedButton.unlockLevel).cost;
             m_unlockArtHandler.VerifyUnlockFunction(m_currentSelectedButton, availableSkillPoints >= combatArtCost);
+            if (selectUnlockButton)
+                m_unlockArtHandler.SelectUnlockButton();
             //static bool CanAfford(CombatSkillPoints points, CombatArtLevelData combatArtLevelData) => points.points >= combatArtLevelData.cost;
         }
 
@@ -91,8 +109,51 @@ namespace DChild.Gameplay.UI.CombatArts
             m_unlockArtHandler.ResetBranchingUIProgressors();
         }
 
+        private void BindSubmitInput()
+        {
+            if (m_submitAction != null)
+                return;
+
+            var inputModule = EventSystem.current?.currentInputModule as InputSystemUIInputModule;
+            m_submitAction = inputModule?.submit?.action;
+            if (m_submitAction == null)
+                return;
+
+            m_submitAction.started += OnSubmitStarted;
+            m_submitAction.canceled += OnSubmitCanceled;
+        }
+
+        private void UnbindSubmitInput()
+        {
+            if (m_submitAction == null)
+                return;
+
+            m_submitAction.started -= OnSubmitStarted;
+            m_submitAction.canceled -= OnSubmitCanceled;
+            m_submitAction = null;
+        }
+
+        private void OnSubmitStarted(InputAction.CallbackContext context)
+        {
+            if (!(context.control.device is Gamepad) || !m_unlockArtHandler.isUnlockButtonSelected || !CanUnlockSelectedCombatArt())
+                return;
+
+            m_controllerUnlockHeld = true;
+            StartUnlockSelectedCombatArt();
+        }
+
+        private void OnSubmitCanceled(InputAction.CallbackContext context)
+        {
+            if (!m_controllerUnlockHeld)
+                return;
+
+            m_controllerUnlockHeld = false;
+            ResetUnlock();
+        }
+
         private void OnUnlockSuccessFull()
         {
+            m_controllerUnlockHeld = false;
             m_unlockArtHandler.DisableUnlockFunction();
             ValidateButtonVisuals();
 
@@ -100,6 +161,8 @@ namespace DChild.Gameplay.UI.CombatArts
             var combatArtLevelData = combatArtData.GetCombatArtLevelData(m_currentSelectedButton.unlockLevel);
             m_progressionReference.skillPoints.AddPoint(-combatArtLevelData.cost);
             m_currentSelectedButton.SetState(CombatArtUnlockState.Unlocked);
+            if (InputIconHandle.useGamepad)
+                m_currentSelectedButton.uiButton.Select();
         }
 
         private void PopulateCombatArtList(CombatArtSelectButton[] buttons)
@@ -194,6 +257,18 @@ namespace DChild.Gameplay.UI.CombatArts
             var buttons = GetComponentsInChildren<CombatArtSelectButton>();
             PopulateCombatArtList(buttons);
             m_artRequirements = GetComponentsInChildren<CombatArtSelectRequirements>();
+        }
+
+        private void OnEnable()
+        {
+            BindSubmitInput();
+        }
+
+        private void OnDisable()
+        {
+            m_controllerUnlockHeld = false;
+            m_unlockArtHandler.ResetUnlockProgress();
+            UnbindSubmitInput();
         }
     }
         #endregion

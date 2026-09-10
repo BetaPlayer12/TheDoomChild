@@ -3,6 +3,7 @@ using Doozy.Runtime.UIManager.Components;
 using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace DChild.Gameplay.UI.CombatArts
 {
@@ -30,6 +31,15 @@ namespace DChild.Gameplay.UI.CombatArts
         private CanvasGroup m_unlockButtonCanvasGroup;
 
         public event Action UnlockSuccessful;
+
+        public bool isUnlockButtonInteractable => m_unlockButton.gameObject.activeInHierarchy && m_unlockButton.interactable;
+        public bool isUnlockButtonSelected => EventSystem.current != null && EventSystem.current.currentSelectedGameObject == m_unlockButton.gameObject;
+
+        public void SelectUnlockButton()
+        {
+            if (isUnlockButtonInteractable)
+                m_unlockButton.Select();
+        }
 
         public void InitializeReferences(Characters.Players.CombatArts progress, CombatArtList artList)
         {
