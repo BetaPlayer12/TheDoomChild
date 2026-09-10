@@ -27,6 +27,7 @@ namespace DChild.Gameplay.UI.CombatArts
         private float m_unlockProgress;
 
         private CombatArtUISelectableProgressor m_selectableProgressor;
+        private CanvasGroup m_unlockButtonCanvasGroup;
 
         public event Action UnlockSuccessful;
 
@@ -59,11 +60,12 @@ namespace DChild.Gameplay.UI.CombatArts
             m_progress.SetAbilityLevel(art, level);
         }
 
-        public void VerifyUnlockFunction(CombatArtSelectButton reference)
+        public void VerifyUnlockFunction(CombatArtSelectButton reference, bool canAfford)
         {
             var isUnlockable = reference.currentState == CombatArtUnlockState.Unlockable;
             m_unlockButton.gameObject.SetActive(isUnlockable);
-            //m_unlockButton.interactable = isUnlockable;
+            m_unlockButton.interactable = isUnlockable && canAfford;
+            m_unlockButtonCanvasGroup.alpha = canAfford ? 1f : 0.5f;
             if (isUnlockable)
             {
                 m_artToUnlock = reference.skillUnlock;
@@ -74,8 +76,13 @@ namespace DChild.Gameplay.UI.CombatArts
 
         public void DisableUnlockFunction()
         {
-            //m_unlockButton.interactable = false;
+            m_unlockButton.interactable = false;
             m_unlockButton.gameObject.SetActive(false);
+        }
+
+        private void Awake()
+        {
+            m_unlockButtonCanvasGroup = m_unlockButton.GetComponent<CanvasGroup>();
         }
 
         private IEnumerator UnlockProgressRoutine()

@@ -63,23 +63,26 @@ namespace DChild.Gameplay.UI.CombatArts
 
             var availableSkillPoints = m_progressionReference.skillPoints.points;
             var combatArtCost = combatArtData.GetCombatArtLevelData(m_currentSelectedButton.unlockLevel).cost;
-
-            if (availableSkillPoints < combatArtCost)
-            {
-                m_unlockArtHandler.DisableUnlockFunction();
-                return;
-            }
-
-            m_unlockArtHandler.VerifyUnlockFunction(m_currentSelectedButton);
+            m_unlockArtHandler.VerifyUnlockFunction(m_currentSelectedButton, availableSkillPoints >= combatArtCost);
             //static bool CanAfford(CombatSkillPoints points, CombatArtLevelData combatArtLevelData) => points.points >= combatArtLevelData.cost;
         }
 
         public void StartUnlockSelectedCombatArt()
         {
-            if (m_currentSelectedButton.currentState != CombatArtUnlockState.Unlockable)
+            if (!CanUnlockSelectedCombatArt())
                 return;
 
             m_unlockArtHandler.StartUnlockProgress();
+        }
+
+        private bool CanUnlockSelectedCombatArt()
+        {
+            if (m_currentSelectedButton == null || m_currentSelectedButton.currentState != CombatArtUnlockState.Unlockable)
+                return false;
+
+            var combatArtData = m_referenceList.GetCombatArtData(m_currentSelectedButton.skillUnlock);
+            var combatArtCost = combatArtData.GetCombatArtLevelData(m_currentSelectedButton.unlockLevel).cost;
+            return m_progressionReference.skillPoints.points >= combatArtCost;
         }
 
         public void ResetUnlock()
