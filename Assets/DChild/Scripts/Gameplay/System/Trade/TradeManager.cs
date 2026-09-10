@@ -12,9 +12,11 @@ using UnityEngine.UI;
 using DChild.Gameplay.Items;
 using I2.Loc;
 using DChild.Localization;
+using Doozy.Runtime.UIManager;
 using Doozy.Runtime.UIManager.Components;
 using Doozy.Runtime.UIManager.Containers;
 using Doozy._Examples.E24___Popup___with_Two_Buttons;
+using UnityEngine.InputSystem;
 
 namespace DChild.Gameplay.Trade
 {
@@ -43,6 +45,8 @@ namespace DChild.Gameplay.Trade
         private InventoryFilterToggleUI[] m_filterToggles;
         [SerializeField]
         private UIButton m_tradeButton;
+        [SerializeField]
+        private InputActionReference m_cycleSubTabInput;
 
 
         //[SerializeField]
@@ -57,6 +61,9 @@ namespace DChild.Gameplay.Trade
         [TermsPopup]
         public string _localizeMessage;
         private TradeShopVariableLocalizer m_termLocalizer;
+        private UIContainer m_tradeView;
+        private UIContainer m_confirmationView;
+        private CanvasGroup m_tradeButtonCanvasGroup;
         [SerializeField]
         private bool Localize = true;
 
@@ -88,8 +95,8 @@ namespace DChild.Gameplay.Trade
         {
             //if (item.reference == null) return;
 
-            m_itemBeingTradedUI.ShowDetails(item.reference);
             m_tradeHandle.SetItemToTrade((ITradeItem)item.reference);
+            DisplayItemDetails(item.reference);
             //m_highlight.enabled = true;
             //m_highlight.rectTransform.position = item.transform.position;
             UpdateTradeInteractability();
@@ -97,8 +104,10 @@ namespace DChild.Gameplay.Trade
 
         private void UpdateTradeInteractability()
         {
-            m_tradeHandle.CanBuyerAffordTransaction();
-            m_tradeButton.gameObject.SetActive(m_tradeHandle.CanBuyerAffordTransaction());
+            bool canTrade = m_tradeHandle.CanBuyerAffordTransaction();
+            m_tradeButton.interactable = canTrade;
+            m_tradeButton.SetState(canTrade ? UISelectionState.Normal : UISelectionState.Disabled);
+            m_tradeButtonCanvasGroup.alpha = canTrade ? 1f : 0.5f;
             //m_tradeOption.SetInteractability(enableTradeButton);
         }
 
@@ -155,6 +164,7 @@ namespace DChild.Gameplay.Trade
             else
             {
                 m_tradeHandle.SetItemToTrade(m_tradeHandle.currentItemBeingTraded);
+                DisplayItemDetails(m_tradeHandle.currentItemBeingTraded);
             }
             UpdateCurrencyUI();
             UpdateTradeInteractability();
@@ -176,12 +186,67 @@ namespace DChild.Gameplay.Trade
 
         private void UpdateCurrencyUI()
         {
-            m_playerCurrencies.UpdateUI(GameplaySystem.playerManager.player.inventory.GetCurrencyAmount(CurrencyType.SoulEssence), 0);
+            var buyer = m_tradeHandle.currentBuyer;
+            m_playerCurrencies.UpdateUI(
+                buyer.GetCurrencyAmount(CurrencyType.SoulEssence),
+                buyer.GetCurrencyAmount(CurrencyType.SilverCoin));
+        }
+
+        private void DisplayItemDetails(IStoredItem item)
+        {
+            m_itemBeingTradedUI.ShowDetails(item);
+            if (item == null)
+                return;
+
+            var ownedItem = m_tradeHandle.currentBuyer.GetTradeItem(item.data);
+            m_itemBeingTradedUI.SetOwnedCount(ownedItem?.count ?? 0);
+        }
+
+        private void OnCycleSubTab(InputAction.CallbackContext context)
+        {
+            if (!m_tradeView.isVisible || (m_confirmationView != null && !m_confirmationView.isHidden))
+                return;
+
+            float direction = context.ReadValue<float>();
+            if (Mathf.Approximately(direction, 0f))
+                return;
+
+            CycleFilter(direction > 0f ? 1 : -1);
+        }
+
+        private void CycleFilter(int direction)
+        {
+            int currentIndex = Array.FindIndex(m_filterToggles, filter => filter.isSelected);
+            if (currentIndex < 0)
+                currentIndex = direction > 0 ? -1 : 0;
+
+            for (int offset = 1; offset <= m_filterToggles.Length; offset++)
+            {
+                int index = (currentIndex + direction * offset + m_filterToggles.Length) % m_filterToggles.Length;
+                if (!m_filterToggles[index].isAvailable)
+                    continue;
+
+                m_filterToggles[index].Select();
+                return;
+            }
         }
         private void Awake()
         {
             m_transactionDetails.SetTransactionReference(m_tradeHandle.transactionInfo);
             m_termLocalizer = GetComponentInChildren<TradeShopVariableLocalizer>();
+            m_tradeView = GetComponent<UIContainer>();
+            m_confirmationView = m_tradeConfirmation.window.GetComponentInParent<UIContainer>();
+            m_tradeButtonCanvasGroup = m_tradeButton.GetComponent<CanvasGroup>();
+        }
+
+        private void OnEnable()
+        {
+            m_cycleSubTabInput.action.performed += OnCycleSubTab;
+        }
+
+        private void OnDisable()
+        {
+            m_cycleSubTabInput.action.performed -= OnCycleSubTab;
         }
 
     }

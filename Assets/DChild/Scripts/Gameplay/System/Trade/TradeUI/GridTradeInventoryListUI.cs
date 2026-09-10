@@ -15,8 +15,9 @@ namespace DChild.Gameplay.Trade.UI
         private int m_availableSlot;
 
         [SerializeField] private UIScrollbar m_gridScroll;
-        private int m_currentPageIndex;
-        private int m_totalSections;
+        [SerializeField, MinValue(1)] private int m_columnCount = 6;
+        private int m_currentRowIndex;
+        private int m_totalRowPositions;
 
         private ITradeItem[] m_filteredItemList;
 
@@ -28,30 +29,36 @@ namespace DChild.Gameplay.Trade.UI
         }
         public void SetupScroll(ITradeItem[] tradeItems, int toggleCount = 24)
         {
-            m_currentPageIndex = -1;
-            m_totalSections = Mathf.CeilToInt(tradeItems.Length / (float)toggleCount);
+            bool wasVisible = m_gridScroll.gameObject.activeSelf;
+            m_currentRowIndex = -1;
+            int visibleRows = Mathf.CeilToInt(toggleCount / (float)m_columnCount);
+            int totalRows = Mathf.CeilToInt(tradeItems.Length / (float)m_columnCount);
+            m_totalRowPositions = Mathf.Max(1, totalRows - visibleRows + 1);
+            bool shouldShow = m_totalRowPositions > 1;
 
-            m_gridScroll.gameObject.SetActive(m_totalSections > 1);
-            m_gridScroll.numberOfSteps = m_totalSections;
-            m_gridScroll.size = 1f / m_totalSections;
+            m_gridScroll.numberOfSteps = m_totalRowPositions;
+            m_gridScroll.size = totalRows > 0 ? Mathf.Clamp01(visibleRows / (float)totalRows) : 1f;
+            if (shouldShow && !wasVisible)
+                ResetScrollPosition();
+            m_gridScroll.gameObject.SetActive(shouldShow);
 
         }
         public void HandleScroll()
         {
-            int updatedPage = Mathf.RoundToInt(m_gridScroll.value * (m_totalSections - 1));
+            int updatedRow = Mathf.RoundToInt(m_gridScroll.value * (m_totalRowPositions - 1));
 
-            if (m_currentPageIndex != updatedPage)
+            if (m_currentRowIndex != updatedRow)
             {
-                m_currentPageIndex = updatedPage;
-                SetPage(m_currentPageIndex);
+                m_currentRowIndex = updatedRow;
+                SetPage(m_currentRowIndex);
                 UpdateUIList();
             }
         }
 
-        public void SetPage(int pageIndex)
+        public void SetPage(int rowIndex)
         {
-            m_page = pageIndex;
-            m_startIndex = pageIndex * itemUICount;
+            m_page = rowIndex;
+            m_startIndex = rowIndex * m_columnCount;
 
             m_availableSlot = itemUICount;
         }
@@ -117,9 +124,18 @@ namespace DChild.Gameplay.Trade.UI
 
         public override void Reset()
         {
-            SetPage(0);
+            ResetScrollPosition();
             m_filteredItemList = null;
         }
+
+        private void ResetScrollPosition()
+        {
+            m_currentRowIndex = 0;
+            SetPage(0);
+            m_gridScroll.SetValueWithoutNotify(0f);
+        }
+
+        private void OnEnable() => ResetScrollPosition();
 
      
     }
