@@ -7,9 +7,7 @@ using Sirenix.OdinInspector;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 namespace DChild.Gameplay.ArmyBattle.UI
 {
@@ -17,7 +15,7 @@ namespace DChild.Gameplay.ArmyBattle.UI
     public class ArmyGroupIndexHandle : MonoBehaviour, IPageHandle
     {
         [SerializeField]
-        private ArmyBattleAttackGroupSelection m_attackGroupSelection;
+        private MoreGroupsClassLabel m_panelLabel;
         [SerializeField]
         private UIButton m_previousButton;
         [SerializeField]
@@ -31,8 +29,8 @@ namespace DChild.Gameplay.ArmyBattle.UI
         [SerializeField]
         private List<AttackingGroupSelectableOptionUI> m_selectableGroups;
 
-        private List<IAttackingGroup> m_groups;
-        private List<IAttackingGroup> m_filteredGroups;
+        private List<IAttackingGroup> m_groups = new List<IAttackingGroup>();
+        private List<IAttackingGroup> m_filteredGroups = new List<IAttackingGroup>();
 
         [SerializeField]
         private UIScrollbar m_scrollBar;
@@ -47,28 +45,52 @@ namespace DChild.Gameplay.ArmyBattle.UI
 
         public int currentPage => m_page;
         public event EventAction<EventActionArgs> PageChange;
+        public event Action<IAttackingGroup> GroupSelected;
 
+        private int m_availableGroupCount;
+
+        public void SetGroups(
+            DamageType damageType,
+            List<IAttackingGroup> groups,
+            int availableGroupCount)
+        {
+            m_panelLabel?.SetPanelLabel(damageType);
+            m_groups = groups ?? new List<IAttackingGroup>();
+            m_availableGroupCount = availableGroupCount;
+
+            Initialize();
+        }
 
         public void Select(AttackingGroupSelectableOptionUI selectable)
         {
-            m_attackGroupSelection.SetSelection(selectable.selectionIndex);
+            if (selectable == null || selectable.group == null)
+                return;
+
+            GroupSelected?.Invoke(selectable.group);
         }
 
-        public void SetAvailableGroups(List<IAttackingGroup> groups)
+        public void SetAvailableGroups(DamageType damageType, List<IAttackingGroup> groups)
         {
-            this.m_groups = groups;
+            m_panelLabel?.SetPanelLabel(damageType);
+            m_groups = groups ?? new List<IAttackingGroup>();
             Initialize();
         }
 
         public void Initialize()
         {
-            m_totalPages = GetTotalPages();
+            m_totalPages = Mathf.Max(1, GetTotalPages());
             m_scrollBar.numberOfSteps = m_totalPages;
-            m_scrollBarIncrements = 1f / (m_totalPages - 1);
-            m_scrollBar.size = 1f / (m_totalPages);
+            m_scrollBarIncrements = m_totalPages > 1 ? 1f / (m_totalPages - 1) : 0f;
+            m_scrollBar.size = 1f / m_totalPages;
             m_scrollBar.value = 0;
 
             SetPage(0);
+        }   
+
+        private void EnsureReferenceAndSelect(AttackingGroupSelectableOptionUI entryButton)
+        {
+            var button = entryButton.GetComponent<UIButton>();
+            button.Select();
         }
 
         public void Display(List<IAttackingGroup> attackingGroups)
@@ -79,10 +101,15 @@ namespace DChild.Gameplay.ArmyBattle.UI
 
                 if (i < attackingGroups.Count)
                 {
-                    selectableGroup.SetSelectionIndex(m_startingIndex + i);
+                    int absoluteIndex = m_startingIndex + i;
+                    bool isUsed = absoluteIndex >= m_availableGroupCount;
+
+                    selectableGroup.SetSelectionIndex(absoluteIndex);
                     selectableGroup.Display(attackingGroups[i]);
+                    selectableGroup.SetUsed(isUsed);
                     continue;
                 }
+
                 selectableGroup.Display(null);
             }
         }
@@ -94,7 +121,7 @@ namespace DChild.Gameplay.ArmyBattle.UI
 
         public void SetPage(int pageIndex)
         {
-            if (pageIndex < 0 || pageIndex > m_totalPages)
+            if (pageIndex < 0 || pageIndex >= m_totalPages)
                 return;
 
             m_previousButton.interactable = pageIndex > 0;
@@ -157,7 +184,7 @@ namespace DChild.Gameplay.ArmyBattle.UI
 
         public void HandleScroll()
         {
-            if (m_cyclePageGuard)
+            if (m_cyclePageGuard || m_totalPages <= 1)
                 return;
 
             int updatedPage = Mathf.FloorToInt(m_scrollBar.value / m_scrollBarIncrements);
@@ -166,6 +193,15 @@ namespace DChild.Gameplay.ArmyBattle.UI
             if (m_page != updatedPage)
             {
                 SetPage(updatedPage);
+            }
+            EnsureReferenceAndSelect(m_selectableGroups[0]);
+        }
+
+        private void Awake()
+        {
+            if (m_panelLabel == null)
+            {
+                m_panelLabel = GetComponentInChildren<MoreGroupsClassLabel>(true);
             }
         }
     }

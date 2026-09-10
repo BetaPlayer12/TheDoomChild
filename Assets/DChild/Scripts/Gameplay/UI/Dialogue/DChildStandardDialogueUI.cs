@@ -1,5 +1,6 @@
 ﻿using DChild.Gameplay;
 using DChild.Gameplay.Characters.AI;
+using DChild.Gameplay.Systems;
 using DChildDebug.Cutscene;
 using Holysoft.Event;
 using PixelCrushers;
@@ -140,7 +141,14 @@ namespace DChild.UI
                 // This should be adjusted more as sometimes this can give unneccessary effects to summoned minions
                 GameplaySystem.minionManager?.ForbidAllFromAttackingTarget(true);
 
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+                if (BaseGameplayUIHandle.Instance == null)
+                {
+                    GameplaySystem.playerManager?.EnableControls();
+                }
+#else
                 GameplaySystem.playerManager?.EnableControls();
+#endif
                 if (m_skipUIShown)
                 {
                     GameplaySystem.gamplayUIHandle.ToggleSequenceSkip(false);

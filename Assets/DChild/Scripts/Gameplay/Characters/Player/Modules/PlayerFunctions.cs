@@ -336,6 +336,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             //m_edgedFury?.AttackOver();
             m_edgedFury.EndExecution();
         }
+
         public void BackDiverSummon()
         {
             //if (m_teleportingSkull.spawnedProjectile == null)

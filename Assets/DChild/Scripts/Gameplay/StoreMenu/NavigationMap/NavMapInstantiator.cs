@@ -17,6 +17,7 @@ namespace DChild.Gameplay.NavigationMap
         private RectTransform m_currentMap;
 
         public Location currentMap => m_currentLocation;
+        public ScrollRect scrollRect => m_scrollRect;
 
         public RectTransform LoadMapFor(Location location)
         {

@@ -21,8 +21,8 @@ namespace DChild.Gameplay.ArmyBattle.UI
 
         public void SetSpecialSelectionList(List<ISpecialSkillGroup> selection)
         {
-            m_specialSelection = selection;
-            m_selectedGroup = m_specialSelection[0];
+            m_specialSelection = selection ?? new List<ISpecialSkillGroup>();
+            m_selectedGroup = m_specialSelection.FirstOrDefault();
             //selectionIndex = 0;
         }
 
@@ -34,7 +34,14 @@ namespace DChild.Gameplay.ArmyBattle.UI
 
         public void SelectSpecialGroup(ISpecialSkillGroup receivedGroup)
         {
-            m_selectedGroup = m_specialSelection.Find(group => group.id == receivedGroup.id);
+            if (receivedGroup == null || m_specialSelection == null)
+                return;
+
+            var selectedGroup = m_specialSelection.Find(group => group.id == receivedGroup.id);
+            if (selectedGroup != null)
+            {
+                m_selectedGroup = selectedGroup;
+            }
         }
 
         //public void SetSelection(int index) => selectionIndex = index;

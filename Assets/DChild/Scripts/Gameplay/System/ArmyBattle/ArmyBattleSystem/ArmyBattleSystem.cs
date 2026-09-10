@@ -252,7 +252,7 @@ namespace DChild.Gameplay.ArmyBattle
 
             m_hasViableBattleSetup = true;
 
-            m_inputOverride.OverrideInput();
+            m_inputOverride.AddBindings();
 
             InitializeBattleScenario();
         }

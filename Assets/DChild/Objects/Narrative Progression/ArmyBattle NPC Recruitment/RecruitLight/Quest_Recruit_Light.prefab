@@ -113,7 +113,7 @@ MonoBehaviour:
   allowBarksDuringConversations: 0
   skipBarkIfNoValidEntries: 0
   cacheBarkLines: 0
-  conversation: Recruit/RequirementLight/Met
+  conversation: LaviAR
   conversationConversant: {fileID: 0}
   conversationActor: {fileID: 0}
   startConversationEntryID: -1
@@ -220,14 +220,15 @@ MonoBehaviour:
   m_CharacterReward:
   - {fileID: 11400000, guid: f37a05f54c1725a488b4c5494d42ab18, type: 2}
   m_isFree: 0
-  m_Requirement: 0
-  m_TakeRequiredItemFromInvintory: 0
+  m_Requirement: 1
+  m_TakeRequiredItemFromInvintory: 1
   m_requiredSoulEssence: 200
-  m_hasItem: {fileID: 0}
-  m_ItemAmount: 0
+  m_hasItem: {fileID: 11400000, guid: 9b38af47aa1305540a336e88c07f0038, type: 2}
+  m_ItemAmount: 1
   m_CombatArt: 0
-  m_PrimarySkill: 0
-  armyCharacterData: {fileID: 0}
+  m_PrimarySkill: 512
+  armyCharacterData:
+  - {fileID: 0}
   neededNPCsRecruited: 0
 --- !u!114 &6335102307177092877
 MonoBehaviour:
@@ -344,7 +345,7 @@ MonoBehaviour:
       - m_Target: {fileID: 6567293855625417468}
         m_TargetAssemblyTypeName: DChild.Gameplay.ArmyBattle.ArmyBattleCharacterReward,
           Assembly-CSharp
-        m_MethodName: AttemptGiveReward
+        m_MethodName: RecruitmentConfirmation
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -439,7 +440,7 @@ MonoBehaviour:
   allowBarksDuringConversations: 0
   skipBarkIfNoValidEntries: 0
   cacheBarkLines: 0
-  conversation: IntroDialogueLight
+  conversation: LaviBR
   conversationConversant: {fileID: 0}
   conversationActor: {fileID: 0}
   startConversationEntryID: -1
@@ -792,7 +793,7 @@ MonoBehaviour:
       - m_Target: {fileID: 6567293855625417468}
         m_TargetAssemblyTypeName: DChild.Gameplay.ArmyBattle.ArmyBattleCharacterReward,
           Assembly-CSharp
-        m_MethodName: AttemptGiveReward
+        m_MethodName: RecruitmentConfirmation
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -882,7 +883,7 @@ MonoBehaviour:
   allowBarksDuringConversations: 0
   skipBarkIfNoValidEntries: 0
   cacheBarkLines: 0
-  conversation: Recruit/RequirementLight/UnMet
+  conversation: LaviLP
   conversationConversant: {fileID: 0}
   conversationActor: {fileID: 0}
   startConversationEntryID: -1

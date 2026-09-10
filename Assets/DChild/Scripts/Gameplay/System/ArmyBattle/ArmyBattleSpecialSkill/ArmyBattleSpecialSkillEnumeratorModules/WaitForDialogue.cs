@@ -1,3 +1,4 @@
+using DChild.Gameplay.Systems;
 using PixelCrushers.DialogueSystem;
 using Spine;
 using System;
@@ -15,10 +16,18 @@ namespace DChild.Gameplay.ArmyBattle.SpecialSkills.Modules
         private bool m_activedialogue = false;
         public IEnumerator ApplyEffect(ArmyController owner, ArmyController target)
         {
+
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+            if (BaseGameplayUIHandle.Instance == null)
+            {
+                yield break;
+            }
+#endif
             /*UI NOTE*/
             /*Cannot display the visuals and apply the effects due to the NullException found here.*/
             DialogueManager.instance.StartConversation(m_dialoguetitle, null, null, 0);
             DialogueManager.instance.conversationEnded += OnConversationEnd;
+
             m_activedialogue = true;
             while (m_activedialogue)
             {

@@ -125,6 +125,12 @@ namespace DChild.Gameplay.ArmyBattle
                 }
             }
         }
+        public List<IAttackingGroup> GetUsedGroups(DamageType damageType)
+        {
+            return m_usedAttackingGroups
+                .Where(group => group.GetDamageType() == damageType)
+                .ToList();
+        }
 
         public void SetAttackingGroupAvailability(IAttackingGroup attackingGroup, bool isAvailable)
         {
@@ -151,6 +157,11 @@ namespace DChild.Gameplay.ArmyBattle
         public List<ISpecialSkillGroup> GetAvailableSkills()
         {
             return m_availableSpecialSkills;
+        }
+
+        public List<ISpecialSkillGroup> GetUsedSkills()
+        {
+            return m_usedSpecialSkills;
         }
 
         public void SetSpecialSkillAvailability(ISpecialSkillGroup group, bool isAvailable)

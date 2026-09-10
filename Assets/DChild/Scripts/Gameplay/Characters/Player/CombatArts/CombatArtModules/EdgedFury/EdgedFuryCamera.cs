@@ -11,9 +11,34 @@ public class EdgedFuryCamera : MonoBehaviour
     [SerializeField]
     private ParticleSystem m_fx;
 
+    private int m_cacheCullingMask;
+    private bool m_hasCullingMaskCache;
+
     public void ActivateCullingMask()
     {
+        if (m_camera == null)
+        {
+            return;
+        }
+
+        if (m_hasCullingMaskCache == false)
+        {
+            m_cacheCullingMask = m_camera.cullingMask;
+            m_hasCullingMaskCache = true;
+        }
+
         m_camera.cullingMask = m_mask;
+    }
+
+    public void RestoreCullingMask()
+    {
+        if (m_camera == null || m_hasCullingMaskCache == false)
+        {
+            return;
+        }
+
+        m_camera.cullingMask = m_cacheCullingMask;
+        m_hasCullingMaskCache = false;
     }
 
     //private IEnumerator CullingCameraRoutine()

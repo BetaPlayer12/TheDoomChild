@@ -6,6 +6,7 @@ using DChild.Gameplay.Inventories;
 using DChild.Gameplay.Items;
 using DChild.Gameplay.Systems;
 using DChild.Menu;
+using DChild.UI;
 using Doozy.Runtime.UIManager.Containers;
 using Holysoft.Event;
 using PixelCrushers.DialogueSystem;
@@ -17,10 +18,14 @@ using UnityEngine;
 
 public class WeaponUpgradeHandle : MonoBehaviour
 {
+
     [SerializeField]
     private WeaponUpgradeData[] m_weaponUpgradeData;
-    [SerializeField]
-    private ConfirmationRequestHandle m_confirmationRequest;
+    //[SerializeField]
+    //private ConfirmationRequestHandle m_confirmationRequest;
+
+    [SerializeField] private BlacksmithUI m_ui;
+
     [SerializeField]
     private PlayerInventory m_playerInventory;
     [SerializeField]
@@ -34,39 +39,97 @@ public class WeaponUpgradeHandle : MonoBehaviour
         IsViableForUpgrade(m_playerWeapon, m_playerInventory);
 
         //Hack Solution for COnfirmation
-        m_confirmationRequest.ShowView();
-        m_confirmationRequest.Execute(OnUpgradeConfirm);
+        //m_confirmationRequest.ShowView();
+        //m_confirmationRequest.Execute(OnUpgradeConfirm);
     }
     private void OnUpgradeConfirm(object sender, EventActionArgs eventArgs)
     {
         ExecuteUpgrade(m_playerWeapon, m_playerInventory);
-        m_confirmationRequest.HideView();
+        //m_confirmationRequest.HideView();
     }
 
     public bool IsViableForUpgrade(PlayerWeapon playerWeapon, PlayerInventory playerInventory)
     {
-        WeaponLevel nextWeaponLevel = playerWeapon.GetWeaponLevel() + 1;
-        bool hasRequirements = false;
+        WeaponLevel nextLevel = playerWeapon.GetWeaponLevel() + 1;
+        int levelIndex = (int)nextLevel;
 
-        for (int i = 0; i < m_weaponUpgradeData[(int)nextWeaponLevel].info.weaponUpgradeRequirement.Length; i++)
+        if (levelIndex < 0 || levelIndex >= m_weaponUpgradeData.Length)
         {
-            ItemData currentRequiredItem = m_weaponUpgradeData[(int)nextWeaponLevel].info.weaponUpgradeRequirement[i].item;
-            int currentRequiredItemAmount = m_weaponUpgradeData[(int)nextWeaponLevel].info.weaponUpgradeRequirement[i].amount;
+            Debug.LogWarning($"No upgrade data exists for {nextLevel}.");
+            return false;
+        }
 
-            if (playerInventory.GetCurrentAmount(currentRequiredItem) >= currentRequiredItemAmount)
+        WeaponUpgradeInfo upgradeInfo =
+            m_weaponUpgradeData[levelIndex].info;
+
+        WeaponUpgradeRequirement[] requirements =
+            upgradeInfo.weaponUpgradeRequirement ?? Array.Empty<WeaponUpgradeRequirement>();
+
+        List<BlacksmithRequirementUI> uiRows =
+            m_ui.requirementsUI;
+
+        m_ui.SetSubHeaderLabel(nextLevel);
+
+        bool hasAllRequirements = true;
+        bool canDisplayAllRequirements =
+            requirements.Length <= uiRows.Count;
+        int visibleRequirementCount =
+            Mathf.Min(requirements.Length, uiRows.Count);
+
+        for (int i = 0; i < requirements.Length; i++)
+        {
+            WeaponUpgradeRequirement requirement = requirements[i];
+
+            if (requirement?.item == null)
             {
-                hasRequirements = true;
+                Debug.LogError(
+                    $"Requirement {i} for {nextLevel} has no item assigned.");
+                hasAllRequirements = false;
+
+                if (i < visibleRequirementCount)
+                {
+                    uiRows[i].gameObject.SetActive(false);
+                }
+
+                continue;
             }
-            else
+
+            int inventoryQuantity =
+                playerInventory.GetCurrentAmount(requirement.item);
+
+            hasAllRequirements &=
+                inventoryQuantity >= requirement.amount;
+
+            if (i < visibleRequirementCount)
             {
-                hasRequirements = false;
-                break;
+                BlacksmithRequirementUI row = uiRows[i];
+
+                row.gameObject.SetActive(true);
+                row.SetDynamicVisuals(
+                    requirement.item,
+                    inventoryQuantity,
+                    requirement.amount);
             }
         }
 
-        m_weaponUpgradeData[(int)nextWeaponLevel].info.hasUpgradeRequirements = hasRequirements;
-        Debug.Log("Player has all requirements for next level " + m_weaponUpgradeData[(int)nextWeaponLevel].info.hasUpgradeRequirements);
-        return hasRequirements;
+        // Hide leftover UI rows from the previous upgrade level.
+        for (int i = visibleRequirementCount; i < uiRows.Count; i++)
+        {
+            uiRows[i].gameObject.SetActive(false);
+        }
+
+        if (!canDisplayAllRequirements)
+        {
+            Debug.LogError(
+                $"{nextLevel} has {requirements.Length} requirements, " +
+                $"but the UI only has {uiRows.Count} rows.");
+        }
+
+        bool isViable =
+            hasAllRequirements && canDisplayAllRequirements;
+
+        upgradeInfo.hasUpgradeRequirements = isViable;
+        return isViable;
     }
 
     //Effectively this is where we uh when ang item ang mga items needed turns into the actual upgrade
@@ -117,6 +180,9 @@ public class WeaponUpgradeHandle : MonoBehaviour
     private void Awake()
     {
         GameplaySystem.campaignSerializer.PostDeserialization += OnGameplayLoad;
+
+        m_ui.OnUpgradeConfirmed -= OnUpgradeConfirm;
+        m_ui.OnUpgradeConfirmed += OnUpgradeConfirm;
     }
 
     private void OnGameplayLoad(object sender, CampaignSlotUpdateEventArgs eventArgs)

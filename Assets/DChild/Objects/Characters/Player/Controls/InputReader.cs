@@ -96,6 +96,9 @@ namespace DChild.Inputs
         public event Action BarrierStartedEvent;
         public event Action BarrierPerformedEvent;
         public event Action BarrierCancelledEvent;
+        public event Action EarthShakerStartedEvent;
+        public event Action EarthShakerPerformedEvent;
+        public event Action EarthShakerCancelledEvent;
         public event Action AirSlashStartedEvent;
         public event Action AirSlashCancelledEvent;
         public event Action AirSlashPerformedEvent;
@@ -530,6 +533,23 @@ namespace DChild.Inputs
             if (context.phase == InputActionPhase.Canceled)
             {
                 BarrierCancelledEvent?.Invoke();
+            }
+        }
+        public void OnEarthShaker(InputAction.CallbackContext context)
+        {
+            if (context.phase == InputActionPhase.Started)
+            {
+                EarthShakerStartedEvent?.Invoke();
+            }
+
+            if (context.phase == InputActionPhase.Performed)
+            {
+                EarthShakerPerformedEvent?.Invoke();
+            }
+
+            if (context.phase == InputActionPhase.Canceled)
+            {
+                EarthShakerCancelledEvent?.Invoke();
             }
         }
 

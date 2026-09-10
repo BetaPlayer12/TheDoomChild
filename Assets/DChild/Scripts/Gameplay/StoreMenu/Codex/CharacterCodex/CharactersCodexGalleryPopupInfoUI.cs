@@ -16,6 +16,11 @@ namespace DChild.Menu.Codex.Characters
         [SerializeField]
         private TextMeshProUGUI m_description;
 
+        [SerializeField]
+        private TextMeshProUGUI m_doomknightRemarks;
+        [SerializeField]
+        private TextMeshProUGUI m_necroRemarks;
+
         private string creatureNameText
         {
             set
@@ -34,10 +39,30 @@ namespace DChild.Menu.Codex.Characters
                 m_description.text = "";
                 return;
             }
-
             creatureNameText = m_showDataOf.characterName;
             SetImage(m_creatureImage, m_showDataOf.infoImage);
-            m_description.text = m_showDataOf.description;
+
+            if (m_showDataOf.specialCharacter)
+            {
+                m_description.text = "";
+                if (m_showDataOf.doomedKnightComment)
+                {
+                    m_doomknightRemarks.gameObject.SetActive(true);
+                    m_doomknightRemarks.text = m_showDataOf.doomedknightRemarks;
+                }
+                if (m_showDataOf.secondInteract)
+                {
+                    m_necroRemarks.gameObject.SetActive(true);
+                    m_necroRemarks.text = m_showDataOf.necroRemarks;
+                }
+            }
+            else
+            {
+                m_description.text = m_showDataOf.description;      
+                m_doomknightRemarks.gameObject.SetActive(false);
+                m_necroRemarks.gameObject.SetActive(false);
+            }
+            
         }
 
         private void SetImage(Image image, Sprite sprite)

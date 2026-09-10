@@ -71,7 +71,9 @@ namespace DChild.Gameplay.Systems
         [SerializeField, FoldoutGroup("Object Prompt")]
         private UIContainer m_movableObjectPrompt;
 
-        [SerializeField]
+        [SerializeField, FoldoutGroup("Weapon Upgrade")]
+        private SignalSender m_weaponUpgradeSignal;
+        [SerializeField, FoldoutGroup("Weapon Upgrade")]
         private WeaponUpgradeHandle m_upgradeWeaponHandler;
 
         [SerializeField, FoldoutGroup("Extra References")]
@@ -286,6 +288,7 @@ namespace DChild.Gameplay.Systems
 
         public void OpenWeaponUpgradeConfirmationWindow()
         {
+            m_weaponUpgradeSignal.SendSignal();
             m_upgradeWeaponHandler.RequestUpgrade();
         }
 

@@ -101,8 +101,9 @@ namespace DChild.Gameplay.Environment
                     }
                 }
             }
-            m_activatedSlots = saveData.numberOfActivatedSlots;
-            m_isAlreadyActivated = m_activatedSlots >= m_slots.Count;
+            //m_activatedSlots = saveData.numberOfActivatedSlots;
+            //m_isAlreadyActivated = m_activatedSlots >= m_slots.Count;
+            m_isAlreadyActivated = saveData.isActivated;
             Debug.Log("the thingy is: " + m_isAlreadyActivated);
             for (int i = 0; i < m_activationIndicators.Count; i++)
             {
@@ -136,13 +137,14 @@ namespace DChild.Gameplay.Environment
 
             if (m_activatedSlots >= m_slots.Count && m_isAlreadyActivated == false)
             {
-                m_readyActivate = true;
-                m_isAlreadyActivated = true;
+                
+                //m_isAlreadyActivated = true;
                 for (int i = 0; i < m_slots.Count; i++)
                 {
                     m_slots[i].SetLockDown(true);
                 }
-                m_transistionToCompleteEvent?.Invoke();
+                m_readyActivate = true;
+                //m_transistionToCompleteEvent?.Invoke();
             }
             else
             {
@@ -162,6 +164,20 @@ namespace DChild.Gameplay.Environment
             for (int i = 0; i < m_slots.Count; i++)
             {
                 m_slots[i].StateChange += OnSlotStateChange;
+            }
+        }
+
+        private void Update()
+        {
+            if(m_isAlreadyActivated)
+            {
+                return;
+            }
+
+            if(m_readyActivate)
+            {
+                m_transistionToCompleteEvent?.Invoke();
+                m_isAlreadyActivated = true;
             }
         }
     }

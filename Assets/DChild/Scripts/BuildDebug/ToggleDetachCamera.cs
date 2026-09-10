@@ -13,6 +13,16 @@ namespace DChildDebug.Window
 
         public bool value => m_controller.enabled;
 
+        private void Awake()
+        {
+            m_controller.BackPerformed += ToggleOff;
+        }
+
+        private void OnDestroy()
+        {
+            m_controller.BackPerformed -= ToggleOff;
+        }
+
         [Button]
         public void ToggleOn()
         {

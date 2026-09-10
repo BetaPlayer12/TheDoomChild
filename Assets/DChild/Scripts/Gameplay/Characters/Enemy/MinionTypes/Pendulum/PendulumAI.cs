@@ -82,6 +82,10 @@ namespace DChild.Gameplay.Characters.Enemies
             private string m_hitboxStartEvent;
             public string hitboxStartEvent => m_hitboxStartEvent;
 
+            [SerializeField, ValueDropdown("GetEvents")]
+            private string m_hitboxStartStop;
+            public string hitboxOffEvent => m_hitboxStartStop;
+
             public override void Initialize()
             {
 #if UNITY_EDITOR
@@ -431,7 +435,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 //m_animation.SetAnimation(0, m_info.attackMidSequenceAnimation, false);
                 //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attackMidSequenceAnimation);
             }
-            DisableAttackBB();
+            //DisableAttackBB();
             m_animation.SetAnimation(0, m_info.attackEndAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attackEndAnimation);
             m_animation.SetAnimation(0, RandomIdleAnimation(), true);
@@ -461,6 +465,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_randomTurnRoutine = StartCoroutine(RandomTurnRoutine());
 
             m_spineEventListener.Subscribe(m_info.hitboxStartEvent, EnableAttackBB);
+            m_spineEventListener.Subscribe(m_info.hitboxOffEvent, DisableAttackBB);
         }
 
         protected override void Awake()

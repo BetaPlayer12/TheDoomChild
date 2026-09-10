@@ -24,6 +24,8 @@ namespace DChild.Gameplay.SoulSkills.UI
         private IReadOnlyCollection<int> m_playerAcquiredSkills;
         private IReadOnlyCollection<int> m_activatedSkills;
 
+        public event System.Action<bool> OnPageUpdated;
+
         #region Deprecated
         public SoulSkillUI GetButton(int index) => m_uiPair.Values.ElementAt(index);
 
@@ -98,6 +100,7 @@ namespace DChild.Gameplay.SoulSkills.UI
             var allIDs = m_completeList.GetIDs();
             int itemsPerPage = m_uiList.Length;
             int startOffset = pageNumber * itemsPerPage;
+            bool hasAvailableSkills = false;
 
             m_uiPair.Clear();
 
@@ -114,8 +117,11 @@ namespace DChild.Gameplay.SoulSkills.UI
                     int id = allIDs[dataIndex];
                     m_uiPair.Add(id, m_uiList[i]);
                     DisplayData(id);
+                    hasAvailableSkills |= m_playerAcquiredSkills.Contains(id);
                 }
             }
+
+            OnPageUpdated?.Invoke(hasAvailableSkills);
         }
 
         private void DisplayData(int id)

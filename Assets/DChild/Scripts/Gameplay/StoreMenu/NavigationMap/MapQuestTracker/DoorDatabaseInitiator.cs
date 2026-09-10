@@ -34,7 +34,7 @@ namespace DChild.QuestHints.DoorMapTracker
             for (int i = 1; i <= _NumberOfDoors; i++)
             {
                 //var itemName = "Door";
-                Variable var = template.CreateVariable(template.GetNextVariableID(_database), (_location.ToString() + "_" + "Scene" + _SceneNumber + "_" + _Tag + "_"+i), "false", FieldType.Boolean);
+                Variable var = template.CreateVariable(template.GetNextVariableID(_database), (_location.ToString() + "/" + "Scene" + _SceneNumber + "/" + _Tag + "_"+i), "false", FieldType.Boolean);
                 if (_database.variables.Contains(var))
                 {
                     _database.variables.Remove(var);
@@ -48,7 +48,7 @@ namespace DChild.QuestHints.DoorMapTracker
         private void AddSingleObject()
         {
             Template template = new Template();
-            Variable var = template.CreateVariable(template.GetNextVariableID(_database), (_location.ToString() + "_" + "Scene" + _SceneNumber + "_" + _Added_ObjectName), "false", FieldType.Boolean);
+            Variable var = template.CreateVariable(template.GetNextVariableID(_database), (_location.ToString() + "/" + "Scene" + _SceneNumber + "/" + _Added_ObjectName), "false", FieldType.Boolean);
             if (_database.variables.Contains(var))
             {
                 _database.variables.Remove(var);

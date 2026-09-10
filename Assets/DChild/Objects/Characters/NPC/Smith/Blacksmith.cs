@@ -99,28 +99,28 @@ namespace DChild.Gameplay.Characters
                 //m_upgradeFinishedDialogueTrigger.OnUse();
                 return;
             }
-            //GameplaySystem.gamplayUIHandle.OpenWeaponUpgradeConfirmationWindow();
+            GameplaySystem.gamplayUIHandle.OpenWeaponUpgradeConfirmationWindow();
             
-            //DEMO/TESTING/NEED ITS OWN UI
-            CharacterRecruitmentUI ui = GameplaySystem.gamplayUIHandle.ConfirmationRequest();
-            m_currentWeaponLevel = ((int)GameplaySystem.playerManager.player.weapon.GetWeaponLevel());
+            ////DEMO/TESTING/NEED ITS OWN UI
+            //CharacterRecruitmentUI ui = GameplaySystem.gamplayUIHandle.ConfirmationRequest();
+            //m_currentWeaponLevel = ((int)GameplaySystem.playerManager.player.weapon.GetWeaponLevel());
             
             
-            ui.AddAdditionalText(m_playerAttackStat+"->"+ (m_playerAttackStat + CalculateDamageIncrease(m_currentWeaponLevel)));
+            //ui.AddAdditionalText(m_playerAttackStat+"->"+ (m_playerAttackStat + CalculateDamageIncrease(m_currentWeaponLevel)));
 
-            m_currentSilverCoinCosst = (int)(m_InitialSilverCoinCost + (m_InitialSilverCoinCost * m_currentWeaponLevel));
-            ui.AddAdditionalText("\nCosts:"+ m_currentSilverCoinCosst + " Silver coins");
+            //m_currentSilverCoinCosst = (int)(m_InitialSilverCoinCost + (m_InitialSilverCoinCost * m_currentWeaponLevel));
+            //ui.AddAdditionalText("\nCosts:"+ m_currentSilverCoinCosst + " Silver coins");
 
-            m_currentAttackShardCosst = (int)(m_InitialAttackShardCost + (m_AttackShardAmountIncrease * m_currentWeaponLevel));
-            ui.AddAdditionalText("\nCosts:" + m_currentAttackShardCosst + " Attack Shards");
+            //m_currentAttackShardCosst = (int)(m_InitialAttackShardCost + (m_AttackShardAmountIncrease * m_currentWeaponLevel));
+            //ui.AddAdditionalText("\nCosts:" + m_currentAttackShardCosst + " Attack Shards");
 
 
-            ui.SetAcceptOffer(AcceptOffer);
-            ui.SetDeclineOffer(DeclineOffer);
-            ui.SetupUI("Upgrade Weapon to level:" + (m_currentWeaponLevel + 1));
-            //CHANGE THIS ^^^^^^^^^^^^ 
+            //ui.SetAcceptOffer(AcceptOffer);
+            //ui.SetDeclineOffer(DeclineOffer);
+            //ui.SetupUI("Upgrade Weapon to level:" + (m_currentWeaponLevel + 1));
+            ////CHANGE THIS ^^^^^^^^^^^^ 
 
-            BaseGameplaySystem.gamplayUIHandle.SendconfirmationSignal();
+            //BaseGameplaySystem.gamplayUIHandle.SendconfirmationSignal();
 
         }
         public void FreeUpgrade()

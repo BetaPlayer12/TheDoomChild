@@ -16,7 +16,9 @@ namespace DChild.Gameplay.ArmyBattle.UI
         {
             m_unitIcon.sprite = characterData != null ? characterData.icon : null;
             m_unitIcon.enabled = m_unitIcon.sprite != null;
-            m_unitBackground.enabled = m_unitIcon.enabled;
+
+            if (m_unitBackground != null)
+                m_unitBackground.enabled = m_unitIcon.enabled;
         }
     }
 }

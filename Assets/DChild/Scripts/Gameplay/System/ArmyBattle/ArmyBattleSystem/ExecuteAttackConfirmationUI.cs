@@ -40,8 +40,10 @@ namespace DChild.Gameplay.ArmyBattle.SpecialSkills
                     m_playerOptions.player.controlledArmy.SetSpecialSkillAvailability(receivedSpecialGroup, false);
                     break;
                 default:
-                    m_playerOptions.SelectCurrentAttackingGroup();
-                    m_turnHandle.CommenceTurn();
+                    if (m_playerOptions.TrySelectCurrentAttackingGroup())
+                    {
+                        m_turnHandle.CommenceTurn();
+                    }
                     break;
             }
         }

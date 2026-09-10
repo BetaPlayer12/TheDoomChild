@@ -190,6 +190,15 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
+                    ""name"": ""EarthShaker"",
+                    ""type"": ""Button"",
+                    ""id"": ""1f6fa784-8e4f-4f07-a967-6df0b75a536d"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
                     ""name"": ""HellTrident"",
                     ""type"": ""Button"",
                     ""id"": ""89e1049e-7b63-44dd-82e7-335d3087c10a"",
@@ -1895,6 +1904,72 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""action"": ""MordenThroneRoomTeleport"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""Keyboard"",
+                    ""id"": ""02682953-4ae7-4627-84c9-e47c8e73863b"",
+                    ""path"": ""OneModifier"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""EarthShaker"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""Modifier"",
+                    ""id"": ""bee8b5a0-36b0-4185-943f-8db444a815cc"",
+                    ""path"": ""<Keyboard>/s"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""EarthShaker"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Binding"",
+                    ""id"": ""e2cdd887-1d7e-4b22-a12e-805e4c8affb3"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""EarthShaker"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Gamepad"",
+                    ""id"": ""8d4e604e-c18a-4606-904f-165262311cc0"",
+                    ""path"": ""OneModifier"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""EarthShaker"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""modifier"",
+                    ""id"": ""c0f9b4a9-9d5a-44b6-b6cc-603f7deafb07"",
+                    ""path"": ""<Gamepad>/leftStick/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""EarthShaker"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""binding"",
+                    ""id"": ""1db2680c-bfde-48c6-b7c2-3d563699f633"",
+                    ""path"": ""<Gamepad>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""EarthShaker"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
                 }
             ]
         },
@@ -2981,6 +3056,15 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Back"",
+                    ""type"": ""Button"",
+                    ""id"": ""6c9c608b-4d95-4b01-b56b-5d98bc016ca2"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -3280,6 +3364,39 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""action"": ""Camera_Zoom"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b253aab1-d5d3-4d02-9080-66fd452b85f2"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""Back"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7a7d8f41-d188-46a7-ac96-123524b619dd"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Back"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""77e134e3-e3c3-4834-9552-9b316bf16207"",
+                    ""path"": ""<DualShockGamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""PS4"",
+                    ""action"": ""Back"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -3339,6 +3456,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         m_Underworld_MouseDelta = m_Underworld.FindAction("MouseDelta", throwIfNotFound: true);
         m_Underworld_AirSlashRanged = m_Underworld.FindAction("AirSlashRanged", throwIfNotFound: true);
         m_Underworld_Barrier = m_Underworld.FindAction("Barrier", throwIfNotFound: true);
+        m_Underworld_EarthShaker = m_Underworld.FindAction("EarthShaker", throwIfNotFound: true);
         m_Underworld_HellTrident = m_Underworld.FindAction("HellTrident", throwIfNotFound: true);
         m_Underworld_SoulFireBlast = m_Underworld.FindAction("SoulFireBlast", throwIfNotFound: true);
         m_Underworld_BackDiver = m_Underworld.FindAction("BackDiver", throwIfNotFound: true);
@@ -3380,6 +3498,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         m_DebugCamera_Camera_Horizontal = m_DebugCamera.FindAction("Camera_Horizontal", throwIfNotFound: true);
         m_DebugCamera_Camera_Vertical = m_DebugCamera.FindAction("Camera_Vertical", throwIfNotFound: true);
         m_DebugCamera_Camera_Zoom = m_DebugCamera.FindAction("Camera_Zoom", throwIfNotFound: true);
+        m_DebugCamera_Back = m_DebugCamera.FindAction("Back", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -3457,6 +3576,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
     private readonly InputAction m_Underworld_MouseDelta;
     private readonly InputAction m_Underworld_AirSlashRanged;
     private readonly InputAction m_Underworld_Barrier;
+    private readonly InputAction m_Underworld_EarthShaker;
     private readonly InputAction m_Underworld_HellTrident;
     private readonly InputAction m_Underworld_SoulFireBlast;
     private readonly InputAction m_Underworld_BackDiver;
@@ -3490,6 +3610,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         public InputAction @MouseDelta => m_Wrapper.m_Underworld_MouseDelta;
         public InputAction @AirSlashRanged => m_Wrapper.m_Underworld_AirSlashRanged;
         public InputAction @Barrier => m_Wrapper.m_Underworld_Barrier;
+        public InputAction @EarthShaker => m_Wrapper.m_Underworld_EarthShaker;
         public InputAction @HellTrident => m_Wrapper.m_Underworld_HellTrident;
         public InputAction @SoulFireBlast => m_Wrapper.m_Underworld_SoulFireBlast;
         public InputAction @BackDiver => m_Wrapper.m_Underworld_BackDiver;
@@ -3564,6 +3685,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @Barrier.started -= m_Wrapper.m_UnderworldActionsCallbackInterface.OnBarrier;
                 @Barrier.performed -= m_Wrapper.m_UnderworldActionsCallbackInterface.OnBarrier;
                 @Barrier.canceled -= m_Wrapper.m_UnderworldActionsCallbackInterface.OnBarrier;
+                @EarthShaker.started -= m_Wrapper.m_UnderworldActionsCallbackInterface.OnEarthShaker;
+                @EarthShaker.performed -= m_Wrapper.m_UnderworldActionsCallbackInterface.OnEarthShaker;
+                @EarthShaker.canceled -= m_Wrapper.m_UnderworldActionsCallbackInterface.OnEarthShaker;
                 @HellTrident.started -= m_Wrapper.m_UnderworldActionsCallbackInterface.OnHellTrident;
                 @HellTrident.performed -= m_Wrapper.m_UnderworldActionsCallbackInterface.OnHellTrident;
                 @HellTrident.canceled -= m_Wrapper.m_UnderworldActionsCallbackInterface.OnHellTrident;
@@ -3655,6 +3779,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @Barrier.started += instance.OnBarrier;
                 @Barrier.performed += instance.OnBarrier;
                 @Barrier.canceled += instance.OnBarrier;
+                @EarthShaker.started += instance.OnEarthShaker;
+                @EarthShaker.performed += instance.OnEarthShaker;
+                @EarthShaker.canceled += instance.OnEarthShaker;
                 @HellTrident.started += instance.OnHellTrident;
                 @HellTrident.performed += instance.OnHellTrident;
                 @HellTrident.canceled += instance.OnHellTrident;
@@ -3926,6 +4053,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
     private readonly InputAction m_DebugCamera_Camera_Horizontal;
     private readonly InputAction m_DebugCamera_Camera_Vertical;
     private readonly InputAction m_DebugCamera_Camera_Zoom;
+    private readonly InputAction m_DebugCamera_Back;
     public struct DebugCameraActions
     {
         private @PlayerControls m_Wrapper;
@@ -3933,6 +4061,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         public InputAction @Camera_Horizontal => m_Wrapper.m_DebugCamera_Camera_Horizontal;
         public InputAction @Camera_Vertical => m_Wrapper.m_DebugCamera_Camera_Vertical;
         public InputAction @Camera_Zoom => m_Wrapper.m_DebugCamera_Camera_Zoom;
+        public InputAction @Back => m_Wrapper.m_DebugCamera_Back;
         public InputActionMap Get() { return m_Wrapper.m_DebugCamera; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -3951,6 +4080,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @Camera_Zoom.started -= m_Wrapper.m_DebugCameraActionsCallbackInterface.OnCamera_Zoom;
                 @Camera_Zoom.performed -= m_Wrapper.m_DebugCameraActionsCallbackInterface.OnCamera_Zoom;
                 @Camera_Zoom.canceled -= m_Wrapper.m_DebugCameraActionsCallbackInterface.OnCamera_Zoom;
+                @Back.started -= m_Wrapper.m_DebugCameraActionsCallbackInterface.OnBack;
+                @Back.performed -= m_Wrapper.m_DebugCameraActionsCallbackInterface.OnBack;
+                @Back.canceled -= m_Wrapper.m_DebugCameraActionsCallbackInterface.OnBack;
             }
             m_Wrapper.m_DebugCameraActionsCallbackInterface = instance;
             if (instance != null)
@@ -3964,6 +4096,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @Camera_Zoom.started += instance.OnCamera_Zoom;
                 @Camera_Zoom.performed += instance.OnCamera_Zoom;
                 @Camera_Zoom.canceled += instance.OnCamera_Zoom;
+                @Back.started += instance.OnBack;
+                @Back.performed += instance.OnBack;
+                @Back.canceled += instance.OnBack;
             }
         }
     }
@@ -4015,6 +4150,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         void OnMouseDelta(InputAction.CallbackContext context);
         void OnAirSlashRanged(InputAction.CallbackContext context);
         void OnBarrier(InputAction.CallbackContext context);
+        void OnEarthShaker(InputAction.CallbackContext context);
         void OnHellTrident(InputAction.CallbackContext context);
         void OnSoulFireBlast(InputAction.CallbackContext context);
         void OnBackDiver(InputAction.CallbackContext context);
@@ -4060,5 +4196,6 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         void OnCamera_Horizontal(InputAction.CallbackContext context);
         void OnCamera_Vertical(InputAction.CallbackContext context);
         void OnCamera_Zoom(InputAction.CallbackContext context);
+        void OnBack(InputAction.CallbackContext context);
     }
 }

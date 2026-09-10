@@ -96,6 +96,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private GameObject m_attackBB;
         [SerializeField, TabGroup("Reference")]
         private Collider2D m_selfCollider;
+        [SerializeField, TabGroup("Reference")]
+        private GameObject[] m_CollidersToTurnOffAfterDeath;
         [SerializeField, TabGroup("Modules")]
         private TransformTurnHandle m_turnHandle;
         [SerializeField, TabGroup("Modules")]
@@ -226,7 +228,10 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_Audiosource.clip = m_DeadClip;
             //m_Audiosource.Play();
             base.OnDestroyed(sender, eventArgs);
-            
+            foreach(GameObject col in m_CollidersToTurnOffAfterDeath)
+            {
+                col.SetActive(false);
+            }
             m_movement.Stop();
         }
 
