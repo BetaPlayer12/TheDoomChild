@@ -68,10 +68,15 @@ namespace DChild.Gameplay.Inventories.UI
             m_name.text = data.itemName;
             m_icon.sprite = data.icon;
             m_description.text = data.description;
-            if (m_quantityLimit != null)
-                m_quantityLimit.text = $"{data.quantityLimit}";
+            SetQuantityValue(data.quantityLimit.ToString());
 
             LocalizeItemView?.Invoke(data);
+        }
+
+        protected void SetQuantityValue(string value)
+        {
+            if (m_quantityLimit != null)
+                m_quantityLimit.text = value;
         }
 
         private void AdjustUIAlphas(bool hasItemData)

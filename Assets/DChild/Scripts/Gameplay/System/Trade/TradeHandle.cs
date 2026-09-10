@@ -24,6 +24,7 @@ namespace DChild.Gameplay.Trade
 
         public ITradeItem currentItemBeingTraded => m_currentItemBeingTraded;
         public ITradeTransactionInfo transactionInfo => m_transaction;
+        public ITradeInventory currentBuyer => m_buyer;
         public ITradeInventory currentSeller => m_seller;
         public CurrencyType currencyTypeToTrade => m_currencyTypeToTrade;
 
