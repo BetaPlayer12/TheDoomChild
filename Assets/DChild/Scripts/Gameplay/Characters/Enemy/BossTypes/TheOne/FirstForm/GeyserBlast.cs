@@ -21,18 +21,17 @@ namespace DChild.Gameplay.Pooling
         private void Start()
         {
             m_geyserCollider.enabled = false;
-            m_poolCollider.enabled = true;
+            m_poolCollider.enabled = false;
 
             StartCoroutine(GeyserColliderRoutine());
         }
 
         private IEnumerator GeyserColliderRoutine()
         {
-            var m_geyserDelay = m_geyserParticles.startDelay;
-
             var m_geyserDuration = m_geyserParticles.duration;
-
-            yield return new WaitForSeconds(m_geyserDelay);
+            yield return new WaitForSeconds(1.5f);
+            m_poolCollider.enabled = true;
+            yield return new WaitForSeconds(0.5f);
 
             m_geyserCollider.enabled = true;
 

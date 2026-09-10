@@ -71,7 +71,7 @@ MonoBehaviour:
       - m_Target: {fileID: 5613080271556491269}
         m_TargetAssemblyTypeName: DChild.Gameplay.ArmyBattle.ArmyBattleCharacterReward,
           Assembly-CSharp
-        m_MethodName: AttemptGiveReward
+        m_MethodName: SendRecruitmentConfirmationUI
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -162,7 +162,7 @@ MonoBehaviour:
   allowBarksDuringConversations: 0
   skipBarkIfNoValidEntries: 0
   cacheBarkLines: 0
-  conversation: Recruit/RequirementAhab/Met
+  conversation: AhabAR
   conversationConversant: {fileID: 0}
   conversationActor: {fileID: 0}
   startConversationEntryID: -1
@@ -289,7 +289,7 @@ MonoBehaviour:
       - m_Target: {fileID: 5613080271556491269}
         m_TargetAssemblyTypeName: DChild.Gameplay.ArmyBattle.ArmyBattleCharacterReward,
           Assembly-CSharp
-        m_MethodName: AttemptGiveReward
+        m_MethodName: RecruitmentConfirmation
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -384,7 +384,7 @@ MonoBehaviour:
   allowBarksDuringConversations: 0
   skipBarkIfNoValidEntries: 0
   cacheBarkLines: 0
-  conversation: IntroDialogueAhab
+  conversation: AhabBR
   conversationConversant: {fileID: 0}
   conversationActor: {fileID: 0}
   startConversationEntryID: -1
@@ -632,14 +632,15 @@ MonoBehaviour:
   m_CharacterReward:
   - {fileID: 11400000, guid: 8874aa51f01863147a316bb5f03cc54d, type: 2}
   m_isFree: 0
-  m_Requirement: 0
+  m_Requirement: 2
   m_TakeRequiredItemFromInvintory: 0
   m_requiredSoulEssence: 200
   m_hasItem: {fileID: 0}
   m_ItemAmount: 0
-  m_CombatArt: 0
+  m_CombatArt: 7
   m_PrimarySkill: 0
-  armyCharacterData: {fileID: 0}
+  armyCharacterData:
+  - {fileID: 0}
   neededNPCsRecruited: 0
 --- !u!114 &2954672890931405209
 MonoBehaviour:
@@ -850,7 +851,7 @@ MonoBehaviour:
   allowBarksDuringConversations: 0
   skipBarkIfNoValidEntries: 0
   cacheBarkLines: 0
-  conversation: Recruit/RequirementAhab/UnMet
+  conversation: AhabLP
   conversationConversant: {fileID: 0}
   conversationActor: {fileID: 0}
   startConversationEntryID: -1

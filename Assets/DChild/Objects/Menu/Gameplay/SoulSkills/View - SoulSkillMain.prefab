@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 33829320794387252}
   - component: {fileID: 33829320794386633}
   - component: {fileID: 33829320794387253}
+  - component: {fileID: 6888131296743465626}
   m_Layer: 5
   m_Name: Section - SelectedSoulInfo
   m_TagString: Untagged
@@ -67,6 +68,20 @@ MonoBehaviour:
   m_name: {fileID: 33829322519000658}
   m_capcity: {fileID: 6506081173676238924}
   m_description: {fileID: 33829322434219657}
+  m_originEquipmentName: {fileID: 7687793774119367410}
+--- !u!114 &6888131296743465626
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 33829320794387251}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1966e658babeff44e96db47c7c743bc3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_equipmentList: {fileID: 11400000, guid: 76c4957d7bcbb784dbaf44dd32c849bf, type: 2}
 --- !u!1 &33829320913624854
 GameObject:
   m_ObjectHideFlags: 0
@@ -77,6 +92,7 @@ GameObject:
   m_Component:
   - component: {fileID: 33829320913624855}
   - component: {fileID: 33829320913624872}
+  - component: {fileID: 7209000000000000001}
   m_Layer: 5
   m_Name: Section - SoulSkillList
   m_TagString: Untagged
@@ -138,6 +154,23 @@ MonoBehaviour:
   - {fileID: 8634034156397717186}
   m_navigationHandle: {fileID: 6739146570389101934}
   m_considerAllAsAvailable: 0
+--- !u!114 &7209000000000000001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 33829320913624854}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e7eb5d780b147acb4322f70656aaf82, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  m_scrollbar: {fileID: 7596599699829111345}
+  m_scrollUnitsPerStep: 6
+  m_continuousStep: 0.1
+  m_invertDirection: 0
+  m_stepCountOverride: 0
 --- !u!1 &33829320992711416
 GameObject:
   m_ObjectHideFlags: 0
@@ -352,7 +385,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 0
+  m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -1519,7 +1552,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Soul Skill description goes here...
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 6a576fbe1b6faba498194776bfd96bc4, type: 2}
   m_sharedMaterial: {fileID: 21892830720195836, guid: 6a576fbe1b6faba498194776bfd96bc4,
@@ -1710,7 +1743,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: oSSUARY sTRIKE
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 03de9f858562ece4c9ac9d91b56d9ad5, type: 2}
   m_sharedMaterial: {fileID: 21213444537982326, guid: 03de9f858562ece4c9ac9d91b56d9ad5,
@@ -2802,7 +2835,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Origin: Equipment Name'
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 6a576fbe1b6faba498194776bfd96bc4, type: 2}
   m_sharedMaterial: {fileID: 21892830720195836, guid: 6a576fbe1b6faba498194776bfd96bc4,
@@ -3857,7 +3890,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 20
+  m_text: 0
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 03de9f858562ece4c9ac9d91b56d9ad5, type: 2}
   m_sharedMaterial: {fileID: 21213444537982326, guid: 03de9f858562ece4c9ac9d91b56d9ad5,
@@ -4015,6 +4048,7 @@ MonoBehaviour:
   m_soulScroll: {fileID: 7596599699829111345}
   m_pageLabel: {fileID: 2242644081967738005}
   m_listUI: {fileID: 33829320913624872}
+  m_mouseWheel: {fileID: 7209000000000000001}
 --- !u!1001 &88968032311417682
 PrefabInstance:
   m_ObjectHideFlags: 0

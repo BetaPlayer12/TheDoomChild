@@ -723,7 +723,7 @@ MonoBehaviour:
       type: 0
       typeString: CustomFieldType_Text
     portrait: {fileID: 0}
-    spritePortrait: {fileID: 21300000, guid: fcf9618cad8854040a6073a6bff14ece, type: 3}
+    spritePortrait: {fileID: 21300000, guid: e3ce593ffcead7040a20a8da0dd9a20e, type: 3}
     alternatePortraits: []
     spritePortraits:
     - {fileID: 21300000, guid: ec4295e321caccc4ba75483c486b4402, type: 3}
@@ -923,7 +923,7 @@ MonoBehaviour:
   - id: 302
     fields:
     - title: Title
-      value: IntroDialogueAhab
+      value: AhabBR
       type: 0
       typeString: 
     - title: Description
@@ -1382,10 +1382,64 @@ MonoBehaviour:
         typeString: 
       - title: Dialogue Text
         value: "Then I require something from you. I've heard tales of a magic\u2014or
-          was it an incantation that conjures a protective barrier. It is said to
-          absorb the fiercest blows that keep a man completely unscathed. Find that
-          magic, and I\u2019ll consider lending you my remaining strength. Until
-          then, get out of my sight."
+          was it an incantation that conjures a protective barrier."
+        type: 0
+        typeString: 
+      - title: Sequence
+        value: 
+        type: 0
+        typeString: 
+      conversationID: 302
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 302
+        originDialogueID: 7
+        destinationConversationID: 302
+        destinationDialogueID: 8
+        isConnector: 0
+        priority: 2
+      conditionsString: 
+      userScript: 
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 30
+        y: 371.0309
+        width: 160
+        height: 30
+    - id: 8
+      fields:
+      - title: Title
+        value: 
+        type: 0
+        typeString: 
+      - title: Description
+        value: 
+        type: 0
+        typeString: 
+      - title: Actor
+        value: 175
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 1
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: "It is said to absorb the fiercest blows that keep a man completely
+          unscathed. Find that magic, and I\u2019ll consider lending you my remaining
+          strength. Until then, get out of my sight."
+        type: 0
+        typeString: 
+      - title: Dialogue Text
+        value: 
         type: 0
         typeString: 
       - title: Sequence
@@ -1408,16 +1462,24 @@ MonoBehaviour:
       canvasRect:
         serializedVersion: 2
         x: 30
-        y: 370
+        y: 421.0309
         width: 160
         height: 30
-    entryGroups: []
-    canvasScrollPosition: {x: 0, y: 0}
-    canvasZoom: 1
+    entryGroups:
+    - name: Group
+      rect:
+        serializedVersion: 2
+        x: 234.0206
+        y: 395.95877
+        width: 2.0309296
+        height: 3.0618591
+      color: {r: 1, g: 1, b: 1, a: 0.5}
+    canvasScrollPosition: {x: 0, y: 302.14435}
+    canvasZoom: 0.97
   - id: 514
     fields:
     - title: Title
-      value: Recruit/RequirementAhab/Met
+      value: AhabAR
       type: 0
       typeString: 
     - title: Actor
@@ -1568,7 +1630,7 @@ MonoBehaviour:
   - id: 515
     fields:
     - title: Title
-      value: Recruit/RequirementAhab/UnMet
+      value: AhabLP
       type: 0
       typeString: CustomFieldType_Text
     - title: Actor
@@ -1871,7 +1933,7 @@ MonoBehaviour:
   - id: 517
     fields:
     - title: Title
-      value: Ahab_MordenLoops
+      value: 'AhabML '
       type: 0
       typeString: CustomFieldType_Text
     - title: Actor
