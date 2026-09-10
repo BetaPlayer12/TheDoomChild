@@ -783,7 +783,39 @@ MonoBehaviour:
           m_Calls: []
   Behaviours:
     Behaviours:
-    - EventName: PointerDoubleClick
+    - EventName: PointerEnter
+      Runners: []
+      Event:
+        m_PersistentCalls:
+          m_Calls:
+          - m_Target: {fileID: 404327327657837836}
+            m_TargetAssemblyTypeName: DChild.Gameplay.SoulSkills.UI.SoulSkillUI,
+              Assembly-CSharp
+            m_MethodName: ShowDetails
+            m_Mode: 1
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
+      BehaviourName: 0
+      Receiver:
+        ConnectionMode: 1
+        SignalProviderId:
+          Type: 0
+          Category: Pointer
+          Name: Enter
+        ProviderReference: {fileID: 0}
+        StreamId:
+          Category: None
+          Name: None
+          Custom: 0
+      Cooldown: 0
+      Selectable: {fileID: 8730459625170201669}
+    - EventName: PointerClick
       Runners: []
       Event:
         m_PersistentCalls:
@@ -801,13 +833,13 @@ MonoBehaviour:
               m_StringArgument: 
               m_BoolArgument: 0
             m_CallState: 2
-      BehaviourName: 5
+      BehaviourName: 4
       Receiver:
         ConnectionMode: 1
         SignalProviderId:
           Type: 0
           Category: Pointer
-          Name: DoubleClick
+          Name: Click
         ProviderReference: {fileID: 0}
         StreamId:
           Category: None
@@ -828,18 +860,6 @@ MonoBehaviour:
     Event:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 404327327657837836}
-          m_TargetAssemblyTypeName: DChild.Gameplay.SoulSkills.UI.SoulSkillUI, Assembly-CSharp
-          m_MethodName: ShowDetails
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
         - m_Target: {fileID: 1868899842531650794}
           m_TargetAssemblyTypeName: UnityEngine.CanvasGroup, UnityEngine
           m_MethodName: set_alpha
@@ -1991,7 +2011,7 @@ MonoBehaviour:
     OnFinishCallback:
       m_PersistentCalls:
         m_Calls: []
-    AnimationType: 4
+    AnimationType: 5
     Move:
       Settings:
         PlayMode: 0
@@ -2049,7 +2069,7 @@ MonoBehaviour:
       ToValue: {x: 0, y: 0, z: 0}
       CurrentValue: {x: 0, y: 0, z: 0}
       Enabled: 0
-      AnimationType: 4
+      AnimationType: 5
       StartPosition: {x: 0, y: 0, z: 0}
       FromReferenceValue: 1
       ToReferenceValue: 0
@@ -2153,7 +2173,7 @@ MonoBehaviour:
           m_PostInfinity: 2
           m_RotationOrder: 4
         StartDelay: 0
-        Duration: 0.2
+        Duration: 0.1
         Loops: 0
         LoopDelay: 0
         UseRandomStartDelay: 0
@@ -2179,7 +2199,7 @@ MonoBehaviour:
       FromValue: {x: 1, y: 1, z: 1}
       ToValue: {x: 1, y: 1, z: 1}
       CurrentValue: {x: 1, y: 1, z: 1}
-      Enabled: 0
+      Enabled: 1
       StartScale: {x: 1, y: 1, z: 1}
       FromReferenceValue: 1
       ToReferenceValue: 0
@@ -2892,7 +2912,7 @@ MonoBehaviour:
           m_PostInfinity: 2
           m_RotationOrder: 4
         StartDelay: 0
-        Duration: 0.2
+        Duration: 0.1
         Loops: 0
         LoopDelay: 0
         UseRandomStartDelay: 0
@@ -2917,21 +2937,21 @@ MonoBehaviour:
         FadeOutShake: 0
       FromValue: {r: 1, g: 1, b: 1, a: 0}
       ToValue: {r: 1, g: 1, b: 1, a: 0}
-      CurrentValue: {r: 0, g: 0, b: 0, a: 0}
-      Enabled: 0
+      CurrentValue: {r: 1, g: 1, b: 1, a: 0}
+      Enabled: 1
       StartColor: {r: 1, g: 1, b: 1, a: 0}
       FromReferenceValue: 1
-      ToReferenceValue: 0
+      ToReferenceValue: 2
       FromCustomValue: {r: 1, g: 1, b: 1, a: 1}
-      ToCustomValue: {r: 1, g: 1, b: 1, a: 1}
+      ToCustomValue: {r: 1, g: 1, b: 1, a: 0}
       FromHueOffset: 0
       ToHueOffset: 0
       FromSaturationOffset: 0
-      ToSaturationOffset: -0.5
+      ToSaturationOffset: 0
       FromLightnessOffset: 0
       ToLightnessOffset: 0
       FromAlphaOffset: 0
-      ToAlphaOffset: -0.5
+      ToAlphaOffset: 0
     UseCustomStartValue: 0
     CustomStartValue: {r: 1, g: 1, b: 1, a: 1}
 --- !u!114 &2256929241341669134
@@ -3462,7 +3482,7 @@ MonoBehaviour:
           m_PostInfinity: 2
           m_RotationOrder: 4
         StartDelay: 0
-        Duration: 0.2
+        Duration: 0.01
         Loops: 0
         LoopDelay: 0
         UseRandomStartDelay: 0
@@ -3486,22 +3506,22 @@ MonoBehaviour:
         Elasticity: 1
         FadeOutShake: 0
       FromValue: {r: 1, g: 1, b: 1, a: 1}
-      ToValue: {r: 1, g: 1, b: 1, a: 0.5}
-      CurrentValue: {r: 0, g: 0, b: 0, a: 0}
-      Enabled: 0
+      ToValue: {r: 0, g: 0, b: 0, a: 0}
+      CurrentValue: {r: 1, g: 1, b: 1, a: 1}
+      Enabled: 1
       StartColor: {r: 1, g: 1, b: 1, a: 1}
       FromReferenceValue: 1
-      ToReferenceValue: 0
+      ToReferenceValue: 2
       FromCustomValue: {r: 1, g: 1, b: 1, a: 1}
-      ToCustomValue: {r: 1, g: 1, b: 1, a: 1}
+      ToCustomValue: {r: 0, g: 0, b: 0, a: 0}
       FromHueOffset: 0
       ToHueOffset: 0
       FromSaturationOffset: 0
-      ToSaturationOffset: -0.5
+      ToSaturationOffset: 0
       FromLightnessOffset: 0
       ToLightnessOffset: 0
       FromAlphaOffset: 0
-      ToAlphaOffset: -0.5
+      ToAlphaOffset: 0
     UseCustomStartValue: 0
     CustomStartValue: {r: 1, g: 1, b: 1, a: 1}
 --- !u!114 &2004025312084618031

@@ -81,7 +81,7 @@ MonoBehaviour:
   allowBarksDuringConversations: 0
   skipBarkIfNoValidEntries: 0
   cacheBarkLines: 0
-  conversation: Recruit/RequirementNerd/Met
+  conversation: 'Lily(Nerd)AR '
   conversationConversant: {fileID: 0}
   conversationActor: {fileID: 0}
   startConversationEntryID: -1
@@ -312,7 +312,7 @@ MonoBehaviour:
       - m_Target: {fileID: 5357261185346008933}
         m_TargetAssemblyTypeName: DChild.Gameplay.ArmyBattle.ArmyBattleCharacterReward,
           Assembly-CSharp
-        m_MethodName: AttemptGiveReward
+        m_MethodName: RecruitmentConfirmation
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -408,7 +408,7 @@ MonoBehaviour:
         m_CallState: 2
   m_CharacterReward:
   - {fileID: 11400000, guid: 1729e45e5cede05479d4e0f1473492d3, type: 2}
-  m_isFree: 0
+  m_isFree: 1
   m_Requirement: 0
   m_TakeRequiredItemFromInvintory: 0
   m_requiredSoulEssence: 200
@@ -416,7 +416,8 @@ MonoBehaviour:
   m_ItemAmount: 0
   m_CombatArt: 0
   m_PrimarySkill: 0
-  armyCharacterData: {fileID: 0}
+  armyCharacterData:
+  - {fileID: 0}
   neededNPCsRecruited: 0
 --- !u!114 &104256738466459974
 MonoBehaviour:
@@ -501,7 +502,7 @@ MonoBehaviour:
       - m_Target: {fileID: 5357261185346008933}
         m_TargetAssemblyTypeName: DChild.Gameplay.ArmyBattle.ArmyBattleCharacterReward,
           Assembly-CSharp
-        m_MethodName: AttemptGiveReward
+        m_MethodName: RecruitmentConfirmation
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
