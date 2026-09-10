@@ -1,7 +1,6 @@
-﻿using Doozy.Runtime.UIManager.Components;
-using Holysoft.Event;
-using System;
+using Doozy.Runtime.UIManager.Components;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -17,110 +16,77 @@ namespace DChild.Gameplay.Inventories.UI
 
     public class InventorySlotInitializer : MonoBehaviour
     {
-        [SerializeField]
-        private PlayerInventoryUIHandle m_handle;
-        [SerializeField]
-        private InventoryUISwapHandle m_swapHandle;
-        [SerializeField]
-        private InventoryConditionalSpritesUI m_spriteCheckerUI;
+        [SerializeField] private PlayerInventoryUIHandle m_handle;
+        [SerializeField] private InventoryUISwapHandle m_swapHandle;
+        [SerializeField] private InventoryConditionalSpritesUI m_spriteCheckerUI;
+        [SerializeField] private UIToggleGroup m_itemGroup;
 
-        [SerializeField]
-        private UIToggleGroup m_itemGroup;
-
-        public event Action<InventoryItemUI> OnItemSelectDuringSwap;
-        public event Action<InventoryItemUI> OnQuickItemSlotSelected;
+        private readonly Dictionary<UIToggle, UnityAction<bool>> m_toggleListeners =
+            new Dictionary<UIToggle, UnityAction<bool>>();
+        private Coroutine m_bindTogglesRoutine;
 
         private ItemSprite SetIconSprite(string itemName)
         {
             if (itemName.Contains("Health Shard"))
                 return ItemSprite.HealthShard;
 
-            else if (itemName.Contains("Shadow Shard"))
+            if (itemName.Contains("Shadow Shard"))
                 return ItemSprite.ShadowShard;
 
-            else if (itemName.Contains("Keystone"))
+            if (itemName.Contains("Keystone"))
                 return ItemSprite.KeystoneFragment;
 
             return ItemSprite.Default;
         }
 
-        private void OnItemSelected(ItemUI tradeFilter)
+        private void AddToggleListener(UIToggle toggle)
         {
-            m_handle.FilterOutNonQuickItems(tradeFilter);
-            m_handle.Select(tradeFilter);
-        }
-
-        private void HandleSwap(ItemUI itemForSwap)
-        {
-            if (!m_swapHandle.isSwapping)
+            if (toggle == null || m_toggleListeners.ContainsKey(toggle))
                 return;
 
-            m_swapHandle.SetSwappingStatus(false);
+            var item = toggle.GetComponent<InventoryItemUI>();
+            if (item == null)
+                return;
 
-            OnItemSelectDuringSwap?.Invoke(itemForSwap as InventoryItemUI);
+            UnityAction<bool> listener = isOn => m_swapHandle.OnSlotToggleChanged(item, isOn);
+            m_toggleListeners.Add(toggle, listener);
+            toggle.OnValueChangedCallback.AddListener(listener);
         }
-
-        private void AddToggleOnListener(UIToggle toggle)
-        {
-            var events = new[] { toggle.OnToggleOnCallback.Event, toggle.OnInstantToggleOnCallback.Event };
-            var item = toggle.GetComponent<ItemUI>();
-
-            foreach (var @event in events)
-            {
-                @event.RemoveAllListeners();
-                @event.AddListener(() =>
-                {
-                    HandleSwap(item);
-                    OnItemSelected(item);
-                });
-            }
-
-            OnItemSelectDuringSwap += m_swapHandle.OnSecondItemSelected;
-        }
-
-        private void RemoveToggleEvents(UIToggle toggle)
-        {
-            OnItemSelectDuringSwap -= m_swapHandle.OnSecondItemSelected;
-        }
-
-        //private IEnumerator Start()
-        //{
-        //    while (m_itemGroup.numberOfToggles == 0)
-        //        yield return null;
-
-        //    var toggles = m_itemGroup.toggles;
-        //    AddToggleOnListener(m_itemGroup.FirstToggle);
-        //    for (int i = 0; i < toggles.Count; i++)
-        //    {
-        //        var toggle = toggles[i];
-        //        AddToggleOnListener(toggle);
-        //    }
-
-        //    Debug.Log("Inventory Slots Initialized: " + m_itemGroup.numberOfToggles);
-        //}
 
         private void OnEnable()
         {
-            var toggles = m_itemGroup.toggles;
-            //AddToggleOnListener(m_itemGroup.FirstToggle);
-            for (int i = 0; i < toggles.Count; i++)
-            {
-                var toggle = toggles[i];
-                AddToggleOnListener(toggle);
-            }
-
-            Debug.Log("Inventory Slots Initialized: " + m_itemGroup.numberOfToggles);
+            BindCurrentToggles();
+            m_bindTogglesRoutine = StartCoroutine(BindTogglesNextFrame());
         }
 
         private void OnDisable()
         {
-            var toggles = m_itemGroup.toggles;
-            //RemoveToggleEvents(m_itemGroup.FirstToggle);
-            for (int i = 0; i < toggles.Count; i++)
+            if (m_bindTogglesRoutine != null)
             {
-                var toggle = toggles[i];
-                RemoveToggleEvents(toggle);
+                StopCoroutine(m_bindTogglesRoutine);
+                m_bindTogglesRoutine = null;
             }
+
+            foreach (var pair in m_toggleListeners)
+            {
+                if (pair.Key != null)
+                    pair.Key.OnValueChangedCallback.RemoveListener(pair.Value);
+            }
+
+            m_toggleListeners.Clear();
+        }
+
+        private IEnumerator BindTogglesNextFrame()
+        {
+            yield return null;
+            m_bindTogglesRoutine = null;
+            BindCurrentToggles();
+        }
+
+        private void BindCurrentToggles()
+        {
+            foreach (var toggle in m_itemGroup.toggles)
+                AddToggleListener(toggle);
         }
     }
 }

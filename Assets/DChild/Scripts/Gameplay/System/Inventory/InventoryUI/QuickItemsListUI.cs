@@ -23,6 +23,28 @@ namespace DChild.Gameplay.Inventories.UI
             m_inventory.AddItem(itemUI.reference.data, itemUI.reference.count);
         }
 
+        public InventoryItemUI FindSlot(Items.ItemData itemData)
+        {
+            for (int i = 0; i < m_itemSlots.Count; i++)
+            {
+                if (m_itemSlots[i].reference?.data == itemData)
+                    return m_itemSlots[i];
+            }
+
+            return null;
+        }
+
+        public InventoryItemUI FindFirstEmptySlot()
+        {
+            for (int i = 0; i < m_itemSlots.Count; i++)
+            {
+                if (m_itemSlots[i].reference == null)
+                    return m_itemSlots[i];
+            }
+
+            return null;
+        }
+
         public void RemoveQuickItem(ItemUI itemUI)
         {
             m_inventory.RemoveItem(itemUI.reference.data, itemUI.reference.count);

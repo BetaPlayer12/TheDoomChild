@@ -52,9 +52,11 @@ namespace DChild.Gameplay.Inventories.UI
         {
             m_isQuickSlotSelected = quickItemSelected;
             UpdateUIList();
+        }
 
-            //cleanup & reset state
-            m_isQuickSlotSelected = false;
+        public void SetQuickSelectionMode(bool enabled)
+        {
+            m_isQuickSlotSelected = enabled;
         }
 
         private void UpdateUIList(ref int i, IStoredItem[] items, bool quickItemSelected)
@@ -79,6 +81,7 @@ namespace DChild.Gameplay.Inventories.UI
             itemUI.Show();
             itemUI.SetReference(storedItem);
             itemUI.SetIconColor(false);
+            itemUI.SetItemFrame(m_currentBG);
 
             var toggle = itemUI.GetComponent<UIToggle>();
 
@@ -97,8 +100,7 @@ namespace DChild.Gameplay.Inventories.UI
 
         public void ApplyQuickSelectionRestrictions(ItemUI itemUI, UIToggle toggle)
         {
-            var category = itemUI.reference.data.category;
-            bool isRestricted = category == ItemCategory.Key || category == ItemCategory.Quest;
+            bool isRestricted = !InventoryUISwapHandle.CanAssignToQuickItems(itemUI as InventoryItemUI);
 
             if (isRestricted)
             {

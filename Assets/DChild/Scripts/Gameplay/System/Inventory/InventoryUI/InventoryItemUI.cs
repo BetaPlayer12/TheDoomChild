@@ -1,9 +1,5 @@
-﻿using DChild.Gameplay.Items;
+using DChild.Gameplay.Items;
 using Doozy.Runtime.UIManager.Components;
-using Holysoft.Event;
-using Sirenix.OdinInspector;
-using System;
-using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -19,7 +15,7 @@ namespace DChild.Gameplay.Inventories.UI
 
         public override void Hide()
         {
-            m_toggle.SetIsOn(false);
+            m_toggle.SetIsOn(false, true, false);
 
             if (!m_isQuickItem)
                 m_toggle.interactable = false;
@@ -42,7 +38,7 @@ namespace DChild.Gameplay.Inventories.UI
 
         protected override void ShowDetailsOf(IStoredItem reference)
         {
-            if (reference == null || reference.data.category == Items.ItemCategory.SoulEssence)
+            if (reference == null || reference.data.category == ItemCategory.SoulEssence)
             {
                 Hide();
                 base.ShowDetailsOf(null);
@@ -57,6 +53,5 @@ namespace DChild.Gameplay.Inventories.UI
         {
             m_toggle = GetComponent<UIToggle>();
         }
-
     }
 }
