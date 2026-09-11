@@ -52,9 +52,44 @@ namespace DChild.Gameplay.Inventories.UI
         {
             m_isQuickSlotSelected = quickItemSelected;
             UpdateUIList();
+        }
 
-            //cleanup & reset state
-            m_isQuickSlotSelected = false;
+        public void SetQuickSelectionMode(bool enabled)
+        {
+            m_isQuickSlotSelected = enabled;
+        }
+
+        public InventoryItemUI FindSlot(ItemData itemData)
+        {
+            foreach (var itemUI in m_itemUIs)
+            {
+                var inventoryItemUI = itemUI as InventoryItemUI;
+                if (inventoryItemUI?.reference?.data == itemData)
+                    return inventoryItemUI;
+            }
+
+            return null;
+        }
+
+        public InventoryItemUI FindNearestOccupiedSlot(InventoryItemUI origin)
+        {
+            var originIndex = System.Array.IndexOf(m_itemUIs, origin);
+            if (originIndex < 0)
+                return null;
+
+            for (int i = originIndex; i < m_itemUIs.Length; i++)
+            {
+                if (m_itemUIs[i].reference != null)
+                    return m_itemUIs[i] as InventoryItemUI;
+            }
+
+            for (int i = originIndex - 1; i >= 0; i--)
+            {
+                if (m_itemUIs[i].reference != null)
+                    return m_itemUIs[i] as InventoryItemUI;
+            }
+
+            return null;
         }
 
         private void UpdateUIList(ref int i, IStoredItem[] items, bool quickItemSelected)
@@ -79,6 +114,7 @@ namespace DChild.Gameplay.Inventories.UI
             itemUI.Show();
             itemUI.SetReference(storedItem);
             itemUI.SetIconColor(false);
+            itemUI.SetItemFrame(m_currentBG);
 
             var toggle = itemUI.GetComponent<UIToggle>();
 
@@ -97,8 +133,7 @@ namespace DChild.Gameplay.Inventories.UI
 
         public void ApplyQuickSelectionRestrictions(ItemUI itemUI, UIToggle toggle)
         {
-            var category = itemUI.reference.data.category;
-            bool isRestricted = category == ItemCategory.Key || category == ItemCategory.Quest;
+            bool isRestricted = !InventoryUISwapHandle.CanAssignToQuickItems(itemUI as InventoryItemUI);
 
             if (isRestricted)
             {

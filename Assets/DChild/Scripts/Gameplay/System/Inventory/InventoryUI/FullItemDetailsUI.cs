@@ -68,7 +68,9 @@ namespace DChild.Gameplay.Inventories.UI
             m_name.text = data.itemName;
             m_icon.sprite = data.icon;
             m_description.text = data.description;
-            SetQuantityValue(data.quantityLimit.ToString());
+            SetQuantityValue(reference.hasInfiniteCount
+                ? "∞"
+                : $"{reference.count} / {data.quantityLimit}");
 
             LocalizeItemView?.Invoke(data);
         }
