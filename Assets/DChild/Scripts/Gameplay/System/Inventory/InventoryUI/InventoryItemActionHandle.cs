@@ -18,13 +18,35 @@ namespace DChild.Gameplay.Inventories.UI
 
             var itemCategory = inventoryitemUI.reference.data.category;
 
-            var isSwappable = itemCategory == Items.ItemCategory.Consumable
-                || itemCategory == Items.ItemCategory.Throwable
-                || itemCategory == Items.ItemCategory.Key
-                || itemCategory == Items.ItemCategory.Quest;
+            var isSwappable = inventoryitemUI.isQuickItem &&
+                (itemCategory == Items.ItemCategory.Consumable ||
+                 itemCategory == Items.ItemCategory.Throwable);
 
             m_swapButton.gameObject.SetActive(isSwappable);
             m_removeItemButton.gameObject.SetActive(inventoryitemUI.isQuickItem);
+        }
+
+        public bool TryFocusFirstActionButton()
+        {
+            if (TryFocus(m_swapButton))
+                return true;
+
+            return TryFocus(m_removeItemButton);
+        }
+
+        public bool IsActionButton(GameObject target)
+        {
+            return target != null &&
+                (target == m_swapButton.gameObject || target == m_removeItemButton.gameObject);
+        }
+
+        private bool TryFocus(UIButton button)
+        {
+            if (!button.gameObject.activeInHierarchy || !button.interactable)
+                return false;
+
+            button.Select();
+            return true;
         }
 
         private void Reset()
