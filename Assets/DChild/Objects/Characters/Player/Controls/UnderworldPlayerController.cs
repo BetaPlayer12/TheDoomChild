@@ -1605,7 +1605,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     m_earthShaker?.Reset();
                     PrepareForMidairAttack();
                     m_diagonalSwordDash?.Cancel();
-                    m_icarusWings?.Cancel();
+                    //m_icarusWings?.Cancel();
                     m_devilWings?.Cancel();
                     m_earthShaker?.StartExecution();
                     return;
@@ -2639,7 +2639,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_diagonalSwordDash?.Cancel();
             m_championsUprising?.Cancel();
             m_lightningSpear?.Cancel();
-            m_icarusWings?.Cancel();
+            //m_icarusWings?.Cancel();
             m_airSlashRange?.Cancel();
             m_teleportingSkull?.Cancel();
 
