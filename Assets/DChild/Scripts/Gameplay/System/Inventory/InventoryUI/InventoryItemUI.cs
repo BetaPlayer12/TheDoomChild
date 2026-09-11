@@ -1,4 +1,6 @@
 using DChild.Gameplay.Items;
+using Doozy.Runtime.UIManager;
+using Doozy.Runtime.UIManager.Animators;
 using Doozy.Runtime.UIManager.Components;
 using UnityEngine;
 using UnityEngine.UI;
@@ -9,16 +11,23 @@ namespace DChild.Gameplay.Inventories.UI
     {
         private UIToggle m_toggle;
 
+        [SerializeField] private UISelectableUIAnimator m_detailsAnimator;
+
         [SerializeField] private Image m_backgroundFrame;
         [SerializeField] private bool m_isQuickItem;
         public bool isQuickItem => m_isQuickItem;
 
         public override void Hide()
         {
+            m_reference = null;
+            m_detailsUI.ShowDetails(null);
             m_toggle.SetIsOn(false, true, false);
 
-            if (!m_isQuickItem)
-                m_toggle.interactable = false;
+            if (m_isQuickItem)
+                return;
+
+            m_toggle.interactable = false;
+            CompleteDisabledAnimation();
         }
 
         public override void SetIconColor(bool isModified)
@@ -52,6 +61,15 @@ namespace DChild.Gameplay.Inventories.UI
         private void OnEnable()
         {
             m_toggle = GetComponent<UIToggle>();
+        }
+
+        private void CompleteDisabledAnimation()
+        {
+            if (!m_detailsAnimator.IsStateEnabled(UISelectionState.Disabled))
+                return;
+
+            m_detailsAnimator.StopAllReactions();
+            m_detailsAnimator.disabledAnimation.SetProgressAtOne();
         }
     }
 }

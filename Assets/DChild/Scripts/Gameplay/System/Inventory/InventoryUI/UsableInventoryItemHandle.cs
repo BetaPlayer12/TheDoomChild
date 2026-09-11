@@ -23,8 +23,7 @@ namespace DChild.Gameplay.Inventories.UI
 
         private bool m_isQuickItem;
 
-        public event EventAction<EventActionArgs> AllItemCountConsumed;
-        public event EventAction<EventActionArgs> OnItemCountReduced;
+        public event Action<ItemData, bool, int> OnItemCountReduced;
         public event Action<IStoredItem> ItemConsumed;
 
         #region PRE_ALPHA
@@ -68,15 +67,33 @@ namespace DChild.Gameplay.Inventories.UI
                 {
                     UseItemFromInventory(m_item);
                     //m_inventory.RemoveItem(m_item);
-                    OnItemCountReduced?.Invoke(this, EventActionArgs.Empty);
+                    var remainingCount = GetCurrentAmount();
+                    OnItemCountReduced?.Invoke(m_item, m_isQuickItem, remainingCount);
                     ItemConsumed?.Invoke((IStoredItem)m_item);
-
-                    if (m_inventory.GetCurrentAmount(m_item) == 0)
-                    {
-                        AllItemCountConsumed?.Invoke(this, EventActionArgs.Empty);
-                    }
                 }
             }
+        }
+
+        public bool TryFocusUseButton()
+        {
+            if (!m_useItemButton.gameObject.activeInHierarchy || !m_useItemButton.interactable)
+                return false;
+
+            m_useItemButton.Select();
+            return true;
+        }
+
+        public bool IsUseButton(GameObject target)
+        {
+            return target != null && target == m_useItemButton.gameObject;
+        }
+
+        private int GetCurrentAmount()
+        {
+            if (m_isQuickItem)
+                return m_quickInventory.GetItem(m_item)?.count ?? 0;
+
+            return m_inventory.GetCurrentAmount(m_item);
         }
 
         private void Awake()

@@ -45,6 +45,27 @@ namespace DChild.Gameplay.Inventories.UI
             return null;
         }
 
+        public InventoryItemUI FindNearestOccupiedSlot(InventoryItemUI origin)
+        {
+            var originIndex = m_itemSlots.IndexOf(origin);
+            if (originIndex < 0)
+                return null;
+
+            for (int i = originIndex; i < m_itemSlots.Count; i++)
+            {
+                if (m_itemSlots[i].reference != null)
+                    return m_itemSlots[i];
+            }
+
+            for (int i = originIndex - 1; i >= 0; i--)
+            {
+                if (m_itemSlots[i].reference != null)
+                    return m_itemSlots[i];
+            }
+
+            return origin;
+        }
+
         public void RemoveQuickItem(ItemUI itemUI)
         {
             m_inventory.RemoveItem(itemUI.reference.data, itemUI.reference.count);

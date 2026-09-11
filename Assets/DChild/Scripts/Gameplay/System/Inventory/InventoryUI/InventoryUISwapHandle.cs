@@ -30,11 +30,14 @@ namespace DChild.Gameplay.Inventories.UI
         public InventoryItemUI itemOne => m_selectedItem;
 
         private InventoryItemUI m_operationOrigin;
+        private InventoryItemUI m_actionFocusOrigin;
         private InventoryItemUI m_pendingToggleOff;
         private InventoryItemUI m_suppressedActivation;
         private Coroutine m_resolveToggleOffRoutine;
+        private Coroutine m_submitRoutine;
 
         private InputAction m_cancelAction;
+        private InputAction m_submitAction;
         private bool m_backButtonBlocked;
         private Coroutine m_releaseBackButtonRoutine;
 
@@ -55,11 +58,15 @@ namespace DChild.Gameplay.Inventories.UI
             if (m_mode != InventoryInteractionMode.Browse)
                 CancelPendingAction();
 
+            ClearActionFocus();
+
             m_selectedItem = slotUI;
             m_handle.FocusAndPresent(slotUI);
 
             if (suppressNextActivation)
                 m_suppressedActivation = slotUI;
+            else
+                m_suppressedActivation = null;
         }
 
         public void OnSlotToggleChanged(InventoryItemUI slotUI, bool isOn)
@@ -67,22 +74,20 @@ namespace DChild.Gameplay.Inventories.UI
             if (slotUI == null)
                 return;
 
-            if (isOn)
+            if (m_suppressedActivation == slotUI)
             {
-                CancelPendingToggleOff();
-
-                if (m_suppressedActivation == slotUI)
-                {
-                    m_suppressedActivation = null;
-                    return;
-                }
-
                 m_suppressedActivation = null;
-                HandleSlotActivated(slotUI);
+                CancelPendingToggleOff();
                 return;
             }
 
-            m_suppressedActivation = null;
+            if (isOn)
+            {
+                CancelPendingToggleOff();
+                HandleSlotActivated(slotUI, false);
+                return;
+            }
+
             CancelPendingToggleOff();
             m_pendingToggleOff = slotUI;
             m_resolveToggleOffRoutine = StartCoroutine(ResolveToggleOffNextFrame());
@@ -117,16 +122,37 @@ namespace DChild.Gameplay.Inventories.UI
             if (slotUI?.reference?.data == null || !slotUI.isQuickItem || m_systemSwapHandle == null)
                 return;
 
+            var focusItem = slotUI;
             PrepareTransferrableItem(slotUI);
             m_systemSwapHandle.MoveQuickItemItemToPlayerInventory();
             ClearOperation(false);
             m_handle.SetQuickSelectionMode(false);
             m_handle.UpdateInventorySlots();
-            m_selectedItem = m_handle.firstSelectedItem;
-            m_handle.FocusAndPresent(m_selectedItem);
+            m_selectedItem = focusItem;
+            m_handle.FocusAndPresent(focusItem);
         }
 
-        private void HandleSlotActivated(InventoryItemUI slotUI)
+        public void RestoreAfterItemUse(InventoryItemUI slotUI, bool restoreActionFocus)
+        {
+            if (slotUI == null)
+                return;
+
+            m_selectedItem = slotUI;
+            m_handle.FocusAndPresent(slotUI);
+
+            if (restoreActionFocus && m_handle.TryFocusFirstAction())
+            {
+                m_actionFocusOrigin = slotUI;
+                BlockBackButton();
+                return;
+            }
+
+            ClearActionFocus();
+        }
+
+        public bool isActionFocused => m_actionFocusOrigin != null;
+
+        private void HandleSlotActivated(InventoryItemUI slotUI, bool focusQuickItemActions)
         {
             switch (m_mode)
             {
@@ -138,6 +164,8 @@ namespace DChild.Gameplay.Inventories.UI
                     }
 
                     SelectForBrowse(slotUI, false);
+                    if (focusQuickItemActions)
+                        TryFocusQuickItemActions(slotUI);
                     break;
 
                 case InventoryInteractionMode.AssignQuickItem:
@@ -266,6 +294,7 @@ namespace DChild.Gameplay.Inventories.UI
         {
             m_mode = InventoryInteractionMode.Browse;
             m_operationOrigin = null;
+            m_actionFocusOrigin = null;
             m_suppressedActivation = null;
             CancelPendingToggleOff();
 
@@ -300,30 +329,98 @@ namespace DChild.Gameplay.Inventories.UI
 
         public void BindCancelInput()
         {
-            if (m_cancelAction != null)
+            var inputModule = EventSystem.current?.currentInputModule as InputSystemUIInputModule;
+            if (inputModule == null)
                 return;
 
-            var inputModule = EventSystem.current?.currentInputModule as InputSystemUIInputModule;
-            m_cancelAction = inputModule?.cancel?.action;
-            if (m_cancelAction != null)
-                m_cancelAction.performed += OnCancelPerformed;
+            if (m_cancelAction == null)
+            {
+                m_cancelAction = inputModule.cancel?.action;
+                if (m_cancelAction != null)
+                    m_cancelAction.performed += OnCancelPerformed;
+            }
+
+            if (m_submitAction == null)
+            {
+                m_submitAction = inputModule.submit?.action;
+                if (m_submitAction != null)
+                    m_submitAction.performed += OnSubmitPerformed;
+            }
         }
 
-        private void UnbindCancelInput()
+        private void UnbindInput()
         {
-            if (m_cancelAction == null)
+            if (m_cancelAction != null)
+            {
+                m_cancelAction.performed -= OnCancelPerformed;
+                m_cancelAction = null;
+            }
+
+            if (m_submitAction != null)
+            {
+                m_submitAction.performed -= OnSubmitPerformed;
+                m_submitAction = null;
+            }
+        }
+
+        private void OnSubmitPerformed(InputAction.CallbackContext context)
+        {
+            var selectedObject = EventSystem.current?.currentSelectedGameObject;
+            var slotUI = selectedObject?.GetComponent<InventoryItemUI>();
+            if (slotUI == null)
                 return;
 
-            m_cancelAction.performed -= OnCancelPerformed;
-            m_cancelAction = null;
+            m_suppressedActivation = slotUI;
+            CancelPendingToggleOff();
+
+            if (m_submitRoutine != null)
+                StopCoroutine(m_submitRoutine);
+            m_submitRoutine = StartCoroutine(HandleControllerSubmitNextFrame(slotUI));
         }
 
         private void OnCancelPerformed(InputAction.CallbackContext context)
         {
+            if (m_mode == InventoryInteractionMode.Browse && m_actionFocusOrigin != null)
+            {
+                var focusItem = m_actionFocusOrigin;
+                m_actionFocusOrigin = null;
+                m_handle.FocusAndPresent(focusItem);
+                ReleaseBackButtonDeferred();
+                return;
+            }
+
             if (m_mode == InventoryInteractionMode.Browse)
                 return;
 
             CancelPendingAction(true);
+        }
+
+        private void TryFocusQuickItemActions(InventoryItemUI slotUI)
+        {
+            ClearActionFocus();
+
+            if (!slotUI.isQuickItem || slotUI.reference == null)
+                return;
+
+            if (!m_handle.TryFocusFirstAction())
+                return;
+
+            m_actionFocusOrigin = slotUI;
+            BlockBackButton();
+        }
+
+        private void ClearActionFocus()
+        {
+            m_actionFocusOrigin = null;
+            if (m_mode == InventoryInteractionMode.Browse)
+                ReleaseBackButton();
+        }
+
+        private void ReleaseBackButtonDeferred()
+        {
+            if (m_releaseBackButtonRoutine != null)
+                StopCoroutine(m_releaseBackButtonRoutine);
+            m_releaseBackButtonRoutine = StartCoroutine(ReleaseBackButtonNextFrame());
         }
 
         private IEnumerator ResolveToggleOffNextFrame()
@@ -333,7 +430,14 @@ namespace DChild.Gameplay.Inventories.UI
             var slotUI = m_pendingToggleOff;
             m_pendingToggleOff = null;
             m_resolveToggleOffRoutine = null;
-            HandleSlotActivated(slotUI);
+            HandleSlotActivated(slotUI, false);
+        }
+
+        private IEnumerator HandleControllerSubmitNextFrame(InventoryItemUI slotUI)
+        {
+            yield return null;
+            m_submitRoutine = null;
+            HandleSlotActivated(slotUI, true);
         }
 
         private void CancelPendingToggleOff()
@@ -370,6 +474,18 @@ namespace DChild.Gameplay.Inventories.UI
             m_backButtonBlocked = false;
         }
 
+        private void LateUpdate()
+        {
+            if (m_actionFocusOrigin == null)
+                return;
+
+            var currentSelection = EventSystem.current?.currentSelectedGameObject;
+            if (m_handle.IsActionButton(currentSelection))
+                return;
+
+            ClearActionFocus();
+        }
+
         private void OnEnable()
         {
             BindCancelInput();
@@ -377,8 +493,14 @@ namespace DChild.Gameplay.Inventories.UI
 
         private void OnDisable()
         {
-            UnbindCancelInput();
+            UnbindInput();
             CancelPendingToggleOff();
+
+            if (m_submitRoutine != null)
+            {
+                StopCoroutine(m_submitRoutine);
+                m_submitRoutine = null;
+            }
 
             if (m_releaseBackButtonRoutine != null)
             {
@@ -389,6 +511,7 @@ namespace DChild.Gameplay.Inventories.UI
             m_mode = InventoryInteractionMode.Browse;
             m_selectedItem = null;
             m_operationOrigin = null;
+            m_actionFocusOrigin = null;
             m_suppressedActivation = null;
             if (m_quickItemSectionBlocker != null)
                 m_quickItemSectionBlocker.SetActive(false);

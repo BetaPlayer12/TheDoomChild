@@ -59,6 +59,39 @@ namespace DChild.Gameplay.Inventories.UI
             m_isQuickSlotSelected = enabled;
         }
 
+        public InventoryItemUI FindSlot(ItemData itemData)
+        {
+            foreach (var itemUI in m_itemUIs)
+            {
+                var inventoryItemUI = itemUI as InventoryItemUI;
+                if (inventoryItemUI?.reference?.data == itemData)
+                    return inventoryItemUI;
+            }
+
+            return null;
+        }
+
+        public InventoryItemUI FindNearestOccupiedSlot(InventoryItemUI origin)
+        {
+            var originIndex = System.Array.IndexOf(m_itemUIs, origin);
+            if (originIndex < 0)
+                return null;
+
+            for (int i = originIndex; i < m_itemUIs.Length; i++)
+            {
+                if (m_itemUIs[i].reference != null)
+                    return m_itemUIs[i] as InventoryItemUI;
+            }
+
+            for (int i = originIndex - 1; i >= 0; i--)
+            {
+                if (m_itemUIs[i].reference != null)
+                    return m_itemUIs[i] as InventoryItemUI;
+            }
+
+            return null;
+        }
+
         private void UpdateUIList(ref int i, IStoredItem[] items, bool quickItemSelected)
         {
             for (; i <= m_availableSlot; i++)
