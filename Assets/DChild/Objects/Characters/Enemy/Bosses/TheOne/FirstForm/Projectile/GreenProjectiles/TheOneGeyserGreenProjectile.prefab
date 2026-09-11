@@ -9,8 +9,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6449756341144265477}
+  - component: {fileID: 1315542540395147641}
   - component: {fileID: 7718878134157557216}
-  - component: {fileID: 733749621004461359}
+  - component: {fileID: 1060436627463243972}
+  - component: {fileID: 1776087046005679679}
   m_Layer: 13
   m_Name: ColliderForNotPool
   m_TagString: Untagged
@@ -33,6 +35,19 @@ Transform:
   m_Father: {fileID: 6259809506083750856}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1315542540395147641
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 132707995177501787}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d4914fa10fe1f74fbac7bbe8b95c9b2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_data: {fileID: 11400000, guid: 0477e1e651ac74d458f74505fd17f839, type: 2}
 --- !u!61 &7718878134157557216
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -40,7 +55,7 @@ BoxCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 132707995177501787}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Density: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 1
@@ -59,7 +74,7 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 23.029629, y: 106}
   m_EdgeRadius: 0
---- !u!114 &733749621004461359
+--- !u!114 &1060436627463243972
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -68,13 +83,38 @@ MonoBehaviour:
   m_GameObject: {fileID: 132707995177501787}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9d74578be2c646f438409c91e5fd4ee4, type: 3}
+  m_Script: {fileID: 11500000, guid: 38f1c154d0bdfe644b279d0b4b6b7d08, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_canDetectInteractables: 0
   m_damageUniqueHitboxesOnly: 0
   m_collisionRegistrator: {fileID: 0}
   m_ignoreColliderList: []
+  m_damageInterval: 1
+--- !u!114 &1776087046005679679
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 132707995177501787}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e10454193b54c9a4eb8bfb67b80c746d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_centerMass: {fileID: 5050953322464262885}
+  m_data: {fileID: 11400000, guid: a6f0936465c614948965afe9bb70f23d, type: 2}
+  m_currentAttackInfo:
+    damage:
+      m_type: 1
+      m_value: 0
+    criticalDamageInfo:
+      chance: 0
+      damageModifier: 0
+    ignoreInvulnerability: 0
+    ignoresBlock: 0
+    isCrit: 0
 --- !u!1 &2468993767989008504
 GameObject:
   m_ObjectHideFlags: 0
@@ -87,9 +127,6 @@ GameObject:
   - component: {fileID: 5368162736228664093}
   - component: {fileID: 7300806532435804434}
   - component: {fileID: 6776751582834210659}
-  - component: {fileID: 4088663032234601645}
-  - component: {fileID: 7573426674235928029}
-  - component: {fileID: 9008681136404203301}
   - component: {fileID: 6235268960917678167}
   m_Layer: 13
   m_Name: TheOneGeyserGreenProjectile
@@ -222,63 +259,6 @@ MonoBehaviour:
   m_linearDrag:
     m_x: 0
     m_y: 0
---- !u!114 &4088663032234601645
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2468993767989008504}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e10454193b54c9a4eb8bfb67b80c746d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_centerMass: {fileID: 5050953322464262885}
-  m_data: {fileID: 11400000, guid: a6f0936465c614948965afe9bb70f23d, type: 2}
-  m_currentAttackInfo:
-    damage:
-      m_type: 1
-      m_value: 0
-    criticalDamageInfo:
-      chance: 0
-      damageModifier: 0
-    ignoreInvulnerability: 0
-    ignoresBlock: 0
-    isCrit: 0
---- !u!114 &7573426674235928029
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2468993767989008504}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 38f1c154d0bdfe644b279d0b4b6b7d08, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_canDetectInteractables: 0
-  m_damageUniqueHitboxesOnly: 0
-  m_collisionRegistrator: {fileID: 0}
-  m_ignoreColliderList: []
-  m_damageInterval: 1
---- !u!70 &9008681136404203301
-CapsuleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2468993767989008504}
-  m_Enabled: 0
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0.1348265, y: -0.24}
-  m_Size: {x: 40.136433, y: 7.181461}
-  m_Direction: 1
 --- !u!114 &6235268960917678167
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -294,7 +274,7 @@ MonoBehaviour:
   m_poolableItemData: {fileID: 11400000, guid: b04d526a974bdc04786839fe2c8491aa, type: 2}
   m_geyserCollider: {fileID: 7718878134157557216}
   m_poolCollider: {fileID: 9130882825165487290}
-  m_puddleDuration: 20
+  m_puddleDuration: 10
   m_geyserParticles: {fileID: 7620811677878756350}
 --- !u!1 &2973825010753533608
 GameObject:
@@ -5215,7 +5195,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6259809506083750856}
-  - component: {fileID: 5805593490023489641}
   - component: {fileID: 4586052518367676488}
   - component: {fileID: 8232189428145607277}
   m_Layer: 13
@@ -5241,32 +5220,6 @@ Transform:
   m_Father: {fileID: 5050953322464262885}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!61 &5805593490023489641
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3220627772569306929}
-  m_Enabled: 0
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 52}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0, y: 0}
-    oldSize: {x: 0, y: 0}
-    newSize: {x: 0, y: 0}
-    adaptiveTilingThreshold: 0
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 40, y: 106}
-  m_EdgeRadius: 0
 --- !u!114 &4586052518367676488
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5313,8 +5266,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6100227918278365148}
+  - component: {fileID: 7314796009845607314}
   - component: {fileID: 9130882825165487290}
-  - component: {fileID: 6444059702457895734}
+  - component: {fileID: 6734378668186794384}
+  - component: {fileID: 7504369259358540400}
   m_Layer: 13
   m_Name: PoolCollider
   m_TagString: Untagged
@@ -5337,23 +5292,7 @@ Transform:
   m_Father: {fileID: 5050953322464262885}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!70 &9130882825165487290
-CapsuleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7334069748414689305}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0.1348265, y: 2.11}
-  m_Size: {x: 40.136433, y: 7.181461}
-  m_Direction: 1
---- !u!114 &6444059702457895734
+--- !u!114 &7314796009845607314
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -5362,13 +5301,67 @@ MonoBehaviour:
   m_GameObject: {fileID: 7334069748414689305}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9d74578be2c646f438409c91e5fd4ee4, type: 3}
+  m_Script: {fileID: 11500000, guid: 3d4914fa10fe1f74fbac7bbe8b95c9b2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_data: {fileID: 11400000, guid: 0477e1e651ac74d458f74505fd17f839, type: 2}
+--- !u!70 &9130882825165487290
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7334069748414689305}
+  m_Enabled: 0
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0.1348265, y: 2.11}
+  m_Size: {x: 40.136433, y: 7.181461}
+  m_Direction: 1
+--- !u!114 &6734378668186794384
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7334069748414689305}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e10454193b54c9a4eb8bfb67b80c746d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_centerMass: {fileID: 5050953322464262885}
+  m_data: {fileID: 11400000, guid: a6f0936465c614948965afe9bb70f23d, type: 2}
+  m_currentAttackInfo:
+    damage:
+      m_type: 1
+      m_value: 0
+    criticalDamageInfo:
+      chance: 0
+      damageModifier: 0
+    ignoreInvulnerability: 0
+    ignoresBlock: 0
+    isCrit: 0
+--- !u!114 &7504369259358540400
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7334069748414689305}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38f1c154d0bdfe644b279d0b4b6b7d08, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_canDetectInteractables: 0
   m_damageUniqueHitboxesOnly: 0
   m_collisionRegistrator: {fileID: 0}
   m_ignoreColliderList: []
+  m_damageInterval: 1
 --- !u!1001 &649089266273204141
 PrefabInstance:
   m_ObjectHideFlags: 0

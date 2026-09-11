@@ -4,12 +4,15 @@ using DChild.Gameplay.Characters;
 using DChild.Gameplay.Characters.AI;
 using DChild.Gameplay.Characters.Enemies;
 using DChild.Gameplay.Combat;
+using DChild.Gameplay.Combat.StatusAilment;
 using DChild.Gameplay.Pooling;
 using DChild.Temp;
 using DG.Tweening;
 using Holysoft.Event;
 using Language.Lua;
+using NUnit.Framework;
 using Sirenix.OdinInspector;
+using Sirenix.Utilities;
 using Spine;
 using Spine.Unity;
 using Spine.Unity.Examples;
@@ -726,29 +729,30 @@ namespace DChild.Gameplay.Characters.Enemies
             m_hitbox.SetInvulnerability(Invulnerability.MAX);
             //m_cinematic.PlayCinematic(1, false);
             m_animation.animationState.TimeScale = 1;
-            m_hitbox.Enable();
+            
             m_hitbox.SetInvulnerability(Invulnerability.None);
             
-            m_animation.SetAnimation(0, m_info.walk.animation, true);
-            while (elapsedTime < walkDuration)
-            {
-                Vector2 direction = new Vector2(
-                    m_targetInfo.position.x - transform.position.x,
-                    0f
-                ).normalized;
+            //m_animation.SetAnimation(0, m_info.walk.animation, true);
+            //while (elapsedTime < walkDuration)
+            //{
+            //    Vector2 direction = new Vector2(
+            //        m_targetInfo.position.x - transform.position.x,
+            //        0f
+            //    ).normalized;
 
-                m_movement.MoveTowards(direction, m_info.walk.speed);
+            //    m_movement.MoveTowards(direction, m_info.walk.speed);
 
-                if (!IsFacingTarget())
-                {
-                    CustomTurn();
-                }
+            //    if (!IsFacingTarget())
+            //    {
+            //        CustomTurn();
+            //    }
 
-                elapsedTime += Time.deltaTime;
+            //    elapsedTime += Time.deltaTime;
 
-                yield return null;
-            }
+            //    yield return null;
+            //}
             yield return AlterBladeMonitorRoutine();
+            m_hitbox.Enable();
             m_attackDecider.hasDecidedOnAttack = false;
             m_stateHandle.ApplyQueuedState();
         }
@@ -804,7 +808,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_info.idleCombatAnimation, true);
             m_hitbox.Enable();
             m_hitbox.SetCanBlockDamageState(false);
-            yield return new WaitForSeconds(m_info.phaseChangeToBlinkDelay);
+            yield return new WaitForSeconds(m_info.defaultIdleTime);
             yield return AlterBladeMonitorRoutine();
             yield return BlinkRoutine(BlinkState.DisappearForward, BlinkState.AppearForward, new Vector2(25,0), m_info.midAirHeight, true, false, false);
             m_attackDecider.hasDecidedOnAttack = false;
@@ -1026,14 +1030,12 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_stateHandle.Wait(State.ReevaluateSituation);
             yield return BlinkRoutineWithFakeBlink(BlinkState.DisappearUpward, BlinkState.AppearUpward, new Vector2(30, 30), 20, false, false, false);
-            Vector3 targetPos = m_lastTargetPos;
-            Vector3 drillDirection = (targetPos - transform.position).normalized;
-            if (!IsFacing(targetPos))
-                CustomTurn();    
-            m_animation.SetAnimation(0, m_info.airTodrillDashDiagonal.animation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.airTodrillDashDiagonal.animation);
+            Vector3 drillDirection = m_character.facing == HorizontalDirection.Right ? new Vector3(1f, -1f, 0f).normalized : new Vector3(-1f, -1f, 0f).normalized;
             m_animation.SetAnimation(4, m_drillMixAnimation, false);
+            m_animation.SetAnimation(0, m_info.airTodrillDashDiagonal.animation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState,m_info.airTodrillDashDiagonal.animation);
             m_animation.SetAnimation(0, m_info.drillDashDiagonal.animation, true);
+
             while (!m_groundSensor.isDetecting)
             {
                 transform.position += drillDirection * 150f * Time.deltaTime;
@@ -1082,21 +1084,20 @@ namespace DChild.Gameplay.Characters.Enemies
 
             Debug.Log("drilldashcombo done");
         }
+        [SerializeField]
+        private Transform[] m_teleportSpotforDiagonalDrillDash;
         private IEnumerator DrillDashComboRoutine()
         {
-            yield return BlinkRoutineWithFakeBlink(BlinkState.DisappearUpward, BlinkState.AppearUpward, new Vector2(30,30) ,20,false, false, false);
-            Vector3 targetPos = m_lastTargetPos;
-            Vector3 drillDirection = (targetPos - transform.position).normalized;
-            if (!IsFacing(targetPos))
-                CustomTurn();
-            
+            yield return BlinkRoutineWithFakeBlink(BlinkState.DisappearUpward, BlinkState.AppearUpward, new Vector2(30,30) ,20,true, false, false);
+            Vector3 drillDirection = m_character.facing == HorizontalDirection.Right ? new Vector3(1f, -1f, 0f).normalized : new Vector3(-1f, -1f, 0f).normalized;
+            m_animation.SetAnimation(4, m_drillMixAnimation, false);
             m_animation.SetAnimation(0, m_info.airTodrillDashDiagonal.animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.airTodrillDashDiagonal.animation);
-            m_animation.SetAnimation(4, m_drillMixAnimation, false);
             m_animation.SetAnimation(0, m_info.drillDashDiagonal.animation, true);
+
             while (!m_groundSensor.isDetecting)
             {
-                transform.position += drillDirection * 150f * Time.deltaTime;
+                transform.position += drillDirection * 300f * Time.deltaTime;
                 yield return null;
             }
             m_hitbox.Disable();
@@ -1147,12 +1148,6 @@ namespace DChild.Gameplay.Characters.Enemies
         private GameObject m_swordStab;
         [SerializeField]
         private GameObject m_twinSlash;
-
-        [Button]
-        private void TestDualSwordCombo()
-        {
-            StartCoroutine(DualSwordComboAttackPattern1());
-        }
         private IEnumerator DualSwordComboForEvadeRoutine()
         {
             Debug.Log("DualSwordComboEvadeRoutine()");
@@ -1288,7 +1283,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator ProjectileWaveSlashForDualSwordPattern()//ProjectileWaveSlash
         {
             Debug.Log("phase1pattern2");
-            float walkDuration = 3f;
+            float walkDuration = 1.5f;
             float elapsedTime = 0f;
             if (IsTargetInRange(m_info.downwardSlash1Attack.range))
             {
@@ -1328,7 +1323,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             Debug.Log("phase1pattern2");
             m_stateHandle.Wait(State.ReevaluateSituation);
-            float walkDuration = 3f;
+            float walkDuration = 1.5f;
             float elapsedTime = 0f;
             if (IsTargetInRange(m_info.projectileWaveSlashAttackRange))
             {
@@ -1488,7 +1483,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_stateHandle.Wait(State.ReevaluateSituation);
             Debug.Log("phase1pattern4");
-            float walkDuration = 3f;
+            float walkDuration = 1.5f;
             float elapsedTime = 0f;
             var geyserAnimation = "";
                 GameObject geyserToSpawn = null;
@@ -1547,6 +1542,31 @@ namespace DChild.Gameplay.Characters.Enemies
         }
         [SerializeField]
         private GameObject m_twinSlashMidAir;
+        [SerializeField]
+        private GameObject m_downWardSlashCollider;
+        [SerializeField]
+        private GameObject m_downWardSlashCollider2;
+        public void StartDownWardSlashColliderController()
+        {
+            StartCoroutine(DownWardSlashColliderController());
+        }
+
+        public void StartDownWardSlash2ColliderController()
+        {
+            StartCoroutine(DownWardSlash2ColliderController());
+        }
+        private IEnumerator DownWardSlashColliderController()
+        {
+            m_downWardSlashCollider.SetActive(true);
+            yield return new WaitForSeconds(0.3f);
+            m_downWardSlashCollider.SetActive(false);
+        }
+        private IEnumerator DownWardSlash2ColliderController()
+        {
+            m_downWardSlashCollider2.SetActive(true);
+            yield return new WaitForSeconds(0.5f);
+            m_downWardSlashCollider2.SetActive(false);
+        }
         private IEnumerator DualSwordComboPhase2Pattern1()
         {
             Debug.Log("phase2pattern1");
@@ -1666,7 +1686,7 @@ namespace DChild.Gameplay.Characters.Enemies
             Debug.Log("fake blink");
             m_stateHandle.Wait(State.ReevaluateSituation);
             m_fakeBlinkChosenDrillDashBehavior = UnityEngine.Random.Range(0, 2);
-            yield return BlinkRoutine(BlinkState.DisappearBackward, BlinkState.AppearBackward, new Vector2(40, 0), 0, true, false, false);
+            yield return BlinkRoutine(BlinkState.DisappearBackward, BlinkState.AppearBackward, new Vector2(40, 0), 0, false, false, false);
             yield return m_fakeBlinkChosenDrillDashBehavior == 1 ? DrillDashComboRoutine() : DrillDash2Routine();
             m_attackDecider.hasDecidedOnAttack = false;
             m_stateHandle.ApplyQueuedState();
@@ -1775,7 +1795,10 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_animation.SetAnimation(0, m_info.idleAnimation, true);
             }
         }
-
+        private int RandomSpotForDiagonalDash()
+        {
+            return UnityEngine.Random.Range(    0,m_teleportSpotforDiagonalDrillDash.Length);
+        }
         private IEnumerator BlinkRoutineWithFakeBlink(BlinkState disappearState, BlinkState appearState, Vector2 positionOffset, float midAirHeight, bool fakeBlink, bool evadeBlink, bool isMidAir, bool oppositeSide = false)
         {
             Debug.Log("blinkroutine");
@@ -1834,17 +1857,47 @@ namespace DChild.Gameplay.Characters.Enemies
                     yield return null;
                 }
                 yield return new WaitForSeconds(0.3f);
-                m_model.SetActive(false);
-                yield return new WaitForSeconds(3f);
-                Vector2 positionOffsetForFakeBlink = new Vector2(7.5f, 0f);
-                lastPos = new Vector2(m_targetInfo.position.x + (m_targetInfo.transform.GetComponent<Character>().facing == HorizontalDirection.Right ? -positionOffsetForFakeBlink.x : positionOffsetForFakeBlink.x), m_targetInfo.position.y + positionOffsetForFakeBlink.y);
+                m_model.GetComponent<SkeletonGhost>().ghostingEnabled = false;
+                m_model.GetComponent<MeshRenderer>().enabled = false;
+                
+                int randomSpot = RandomSpotForDiagonalDash();
+
+                Transform lastPos2 = m_teleportSpotforDiagonalDrillDash[randomSpot];
+
+                transform.position = lastPos2.position;
+
+                switch (randomSpot)
+                {
+                    case 0:
+                        if (m_character.facing == HorizontalDirection.Left)
+                            CustomTurn();
+                        break;
+
+                    case 1:
+                        if (m_character.facing == HorizontalDirection.Left)
+                            CustomTurn();
+                        break;
+
+                    case 2:
+                        if (m_character.facing == HorizontalDirection.Left)
+                            CustomTurn();
+                        break;
+
+                    case 3:
+                        if (m_character.facing == HorizontalDirection.Right)
+                            CustomTurn();
+                        break;
+                    case 4:
+                        if (m_character.facing == HorizontalDirection.Right)
+                            CustomTurn();
+                        break;
+                }
+                yield return new WaitForSeconds(2f);
             }
-
-
-            transform.position = lastPos;
             m_blinkFX.Play();
             yield return new WaitForSeconds(m_info.blinkDuration);
-            m_model.SetActive(true);
+            m_model.GetComponent<SkeletonGhost>().ghostingEnabled = true;
+            m_model.GetComponent<MeshRenderer>().enabled = true;
             m_legCollider.enabled = true;
             m_bodyCollider.enabled = true;
             if (!IsFacingTarget())
@@ -2006,8 +2059,9 @@ namespace DChild.Gameplay.Characters.Enemies
                     blinkCount++;
                     yield return null;
                 }
-                yield return new WaitForSeconds(0.3f);      
-                m_model.SetActive(false);
+                yield return new WaitForSeconds(0.3f);
+                m_model.GetComponent<SkeletonGhost>().ghostingEnabled = false;
+                m_model.GetComponent<MeshRenderer>().enabled = false;
                 yield return new WaitForSeconds(3f);
                 Vector2 positionOffsetForFakeBlink = new Vector2(7.5f, 0f);
                 lastPos = new Vector2(m_targetInfo.position.x + (m_targetInfo.transform.GetComponent<Character>().facing == HorizontalDirection.Right ? -positionOffsetForFakeBlink.x : positionOffsetForFakeBlink.x), m_targetInfo.position.y + positionOffsetForFakeBlink.y);
@@ -2018,8 +2072,9 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_blinkFX.Play();
                 yield return new WaitForSeconds(m_info.blinkDuration);
                 m_character.physics.simulateGravity = true;
-                m_model.SetActive(true);
-                
+            m_model.GetComponent<SkeletonGhost>().ghostingEnabled = true;
+            m_model.GetComponent<MeshRenderer>().enabled = true;
+
             if (!IsFacingTarget())
                 CustomTurn();
             switch (appearState)
@@ -2040,6 +2095,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_legCollider.enabled = true;
             m_bodyCollider.enabled = true;
             m_character.physics.simulateGravity = true;
+            m_hitbox.Enable();
             m_animation.SetAnimation(0, m_blinkAppearAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_blinkAppearAnimation);
             m_hitbox.Enable();
@@ -2139,6 +2195,14 @@ namespace DChild.Gameplay.Characters.Enemies
             return selectedState;
         }
         [SerializeField] private int m_alternateBladeAttackCounter = 3;
+        [SerializeField]
+        private StatusInflictor m_statusInflictor;
+        [SerializeField]
+        private StatusEffectChanceData m_effectChancePoison;
+        [SerializeField]
+        private StatusEffectChanceData m_effectChanceAcid;
+        [SerializeField]
+        private StatusEffectChanceData m_effectChanceBlackBlood;
 
         private int m_currentAlternateBladeAttackCounter;
         private IEnumerator AlterBladeMonitorRoutine()
@@ -2146,6 +2210,7 @@ namespace DChild.Gameplay.Characters.Enemies
             Debug.Log("altermonitor");
             m_stateHandle.Wait(State.Attacking);
             m_currentSwordState = GetNextRandomSwordState();
+            Debug.Log(m_currentSwordState.ToString());
             yield return new WaitForSeconds(0.1f);
             yield return AlterBladeRoutine(m_currentSwordState);
             m_attackDecider.hasDecidedOnAttack = false;
@@ -2154,6 +2219,8 @@ namespace DChild.Gameplay.Characters.Enemies
         }
 
         private IAIAnimationInfo animationChangeSwordString;
+        [SerializeField]
+        private StatusInflictor[] m_statusInflictors;
         private IEnumerator AlterBladeRoutine(SwordState swordState)
         {
             Debug.Log("alterblade");
@@ -2175,6 +2242,12 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_drillMixAnimation = m_info.drillNormalMixAnimation.animation;
                     m_projectileLauncher = new ProjectileLauncher(m_info.slashNormalProjectile.projectileInfo, m_projectilePoint);
                     m_scytheWaveLauncher = new ProjectileLauncher(m_info.scytheWaveNormalProjectile.projectileInfo, m_scytheWavePoint);
+                    
+                    for (int i = 0; i < m_statusInflictors.Length; i++)
+                    {
+                       
+                        m_statusInflictors[i].SetData(null);
+                    }
                     break;
                 case SwordState.BlackBlood:
                     animationChangeSwordString = m_info.swordChangeAnimationToRed;
@@ -2182,6 +2255,11 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_drillMixAnimation = m_info.drillRedMixAnimation.animation;
                     m_projectileLauncher = new ProjectileLauncher(m_info.slashBlackbloodProjectile.projectileInfo, m_projectilePoint);
                     m_scytheWaveLauncher = new ProjectileLauncher(m_info.scytheWaveBlackbloodProjectile.projectileInfo, m_scytheWavePoint);
+
+                    for (int i = 0; i < m_statusInflictors.Length; i++)
+                    {
+                        m_statusInflictors[i].SetData(m_effectChanceBlackBlood);
+                    }
                     break;
                 case SwordState.Poison:
                     animationChangeSwordString = m_info.swordChangeAnimationToPurple;
@@ -2189,6 +2267,11 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_drillMixAnimation = m_info.drillPurpleMixAnimation.animation;
                     m_projectileLauncher = new ProjectileLauncher(m_info.slashPoisonProjectile.projectileInfo, m_projectilePoint);
                     m_scytheWaveLauncher = new ProjectileLauncher(m_info.scytheWavePoisonProjectile.projectileInfo, m_scytheWavePoint);
+
+                    for (int i = 0; i < m_statusInflictors.Length; i++)
+                    {
+                        m_statusInflictors[i].SetData(m_effectChancePoison);
+                    }
                     break;
                 case SwordState.Acid:
                     animationChangeSwordString = m_info.swordChangeAnimationToGreen;
@@ -2196,6 +2279,11 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_drillMixAnimation = m_info.drillGreenMixAnimation.animation;
                     m_projectileLauncher = new ProjectileLauncher(m_info.slashAcidProjectile.projectileInfo, m_projectilePoint);
                     m_scytheWaveLauncher = new ProjectileLauncher(m_info.scytheWaveAcidProjectile.projectileInfo, m_scytheWavePoint);
+
+                    for (int i = 0; i < m_statusInflictors.Length; i++)
+                    {
+                        m_statusInflictors[i].SetData(m_effectChanceAcid);
+                    }
                     break;
             }
             m_animation.SetAnimation(0, animationChangeSwordString.animation, false);
