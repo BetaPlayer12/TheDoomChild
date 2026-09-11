@@ -4,6 +4,7 @@ using DChild.Localization;
 using System;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace DChild.Gameplay.Trade.UI
 {
@@ -15,6 +16,12 @@ namespace DChild.Gameplay.Trade.UI
         private TextMeshProUGUI m_costLabel;
         [SerializeField]
         private TextMeshProUGUI m_countLabel;
+        [SerializeField]
+        private Image m_currencyIcon;
+        [SerializeField]
+        private Sprite m_soulEssenceIcon;
+        [SerializeField]
+        private Sprite m_silverCoinIcon;
 
         private CurrencyType m_costType;
 
@@ -25,9 +32,11 @@ namespace DChild.Gameplay.Trade.UI
             {
                 case CurrencyType.SoulEssence:
                     m_costTypeLabel.text = "S.E./";
+                    m_currencyIcon.sprite = m_soulEssenceIcon;
                     break;
                 case CurrencyType.SilverCoin:
                     m_costTypeLabel.text = "S.C./";
+                    m_currencyIcon.sprite = m_silverCoinIcon;
                     break;
             }
         }
@@ -47,12 +56,14 @@ namespace DChild.Gameplay.Trade.UI
             {
                 m_costLabel.text = "";
                 m_countLabel.text = "";
+                SetQuantityValue("");
             }
             else
             {
                 m_costLabel.text = ((ITradeItem)reference).cost.GetCostOfType(m_costType).ToString();
-                m_countLabel.text = reference.hasInfiniteCount? "99" : reference.count.ToString();
             }
         }
+
+        public void SetOwnedCount(int count) => SetQuantityValue(Mathf.Max(0, count).ToString());
     }
 }

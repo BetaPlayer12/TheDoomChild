@@ -16,6 +16,8 @@ namespace DChild.Gameplay.Inventories.UI
 
         [SerializeField] protected ItemCategory m_category;
         public ItemCategory category => m_category;
+        public bool isAvailable => gameObject.activeInHierarchy && m_toggle.isActiveAndEnabled && m_toggle.interactable;
+        public bool isSelected => m_toggle.IsOn;
 
         [BoxGroup("Category Icon"), SerializeField] protected Image m_targetIcon;
         [FoldoutGroup("Category Icon/State Sprites"), SerializeField] protected Sprite m_hasItems;
@@ -32,6 +34,8 @@ namespace DChild.Gameplay.Inventories.UI
         {
             UpdateLabel();
         }
+
+        public void Select() => m_toggle.SetIsOn(true);
 
         protected void UpdateLabel()
         {
