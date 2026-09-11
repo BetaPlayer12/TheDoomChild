@@ -111,6 +111,7 @@ namespace DChild.Gameplay.Characters.Players
                         player.BarrierEnd();
                         break;
                     case Command.EndDiagonalSwordDash:
+                        Debug.Log("end diagonal dash");
                         player.DiagonalSwordDashEnd();
                         break;
                     case Command.EndChampionsUprising:

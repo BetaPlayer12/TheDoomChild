@@ -66,5 +66,11 @@ namespace DChild.Gameplay
             m_model.Death += OnBlobDeath;
         }
 
+        public void ForceRessurection()
+        {
+            m_model.transform.rotation = Quaternion.Euler(m_nextRotation);
+            m_movement.enabled = true;
+        }
+
     }
 }

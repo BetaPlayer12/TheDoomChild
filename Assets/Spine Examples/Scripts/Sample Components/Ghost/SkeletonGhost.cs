@@ -51,12 +51,14 @@ namespace Spine.Unity.Examples {
 
 		[Header("Rendering")]
 		public Shader ghostShader;
-		public Color32 color = new Color32(0xFF, 0xFF, 0xFF, 0x00); // default for additive.
-		[Tooltip("Remember to set color alpha to 0 if Additive is true")]
+
+		[SerializeField]
+		public Color color = new Color(1f, 1f, 1f, 0f);
+
 		public bool additive = true;
-		[Tooltip("0 is Color and Alpha, 1 is Alpha only.")]
+
 		[Range(0, 1)]
-		public float textureFade = 1;
+		public float textureFade = 1f;
 
 		[Header("Sorting")]
 		public bool sortWithDistanceOnly;

@@ -1265,6 +1265,11 @@ PrefabInstance:
       propertyPath: m_LocalRotation.z
       value: 0.18842071
       objectReference: {fileID: 0}
+    - target: {fileID: 5865227588002973251, guid: 51a377dc739d3bb44a86ea035e5311c1,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5891922591597104516, guid: 51a377dc739d3bb44a86ea035e5311c1,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1329,7 +1334,7 @@ PrefabInstance:
     - target: {fileID: 6148890458111557174, guid: 51a377dc739d3bb44a86ea035e5311c1,
         type: 3}
       propertyPath: m_damageFXInfo.m_overrideColor
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6148890458111557174, guid: 51a377dc739d3bb44a86ea035e5311c1,
         type: 3}
@@ -1521,14 +1526,14 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 4165146802545516527}
   m_PrefabAsset: {fileID: 0}
---- !u!60 &2622161662316245651
+--- !u!60 &2774935730683459161
 PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 895321218008920644}
-  m_Enabled: 0
+  m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 1
@@ -1652,6 +1657,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 11a5cea4c16e7c4478a55620f5e666e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &6588662040597425915 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7107300084386935060, guid: 51a377dc739d3bb44a86ea035e5311c1,
+    type: 3}
+  m_PrefabInstance: {fileID: 4165146802545516527}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &7707991965922769490 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5995939444957406653, guid: 51a377dc739d3bb44a86ea035e5311c1,
+    type: 3}
+  m_PrefabInstance: {fileID: 4165146802545516527}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &7964545931964959793 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6289930681876845534, guid: 51a377dc739d3bb44a86ea035e5311c1,
@@ -1994,6 +2011,9 @@ MonoBehaviour:
   m_statsData: {fileID: 11400000, guid: 22922d82e2e2bac408a11b3eceaf9249, type: 2}
   m_attackBB: {fileID: 895321218008920644}
   m_selfCollider: {fileID: 5829909243177237841}
+  m_CollidersToTurnOffAfterDeath:
+  - {fileID: 7707991965922769490}
+  - {fileID: 6588662040597425915}
   m_turnHandle: {fileID: 1076785810}
   m_movement: {fileID: 108138522}
   m_patrolHandle: {fileID: 108138521}

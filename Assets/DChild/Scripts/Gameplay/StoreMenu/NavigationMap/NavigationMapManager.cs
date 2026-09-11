@@ -29,6 +29,7 @@ namespace DChild.Gameplay.NavigationMap
 
         [SerializeField, BoxGroup("Map Legend")] private UIContainerUIAnimator m_legendSection;
         [SerializeField, BoxGroup("Map Legend")] private SetTextToTextBox m_toggleIconsPrompt;
+        [SerializeField, BoxGroup("Map Legend")] private MapKeyboardPan m_keyboardPan;
 
         private NavigationMapIconManager m_iconManager;
 
@@ -84,6 +85,8 @@ namespace DChild.Gameplay.NavigationMap
 
         public void OpenMap()
         {
+            EnableKeyboardPan();
+
             if (m_mapNeedsCompleteUpdate)
             {
                 m_mapInstance?.UpdateFogOfWar();
@@ -119,14 +122,52 @@ namespace DChild.Gameplay.NavigationMap
 
         public void HideNavigationMap()
         {
+            DisableKeyboardPan();
+
+            if (m_currentMap == null)
+            {
+                return;
+            }
+
             var showMap = m_currentMap.GetComponent<UIContainer>();
             m_zoomHandler.OnMapZoom -= m_iconManager.OnMapZoom;
             showMap.Hide();
         }
+
         public void ShowNavigationMap()
         {
+            EnableKeyboardPan();
+
+            if (m_currentMap == null)
+            {
+                return;
+            }
+
             var showMap = m_currentMap.GetComponent<UIContainer>();
             showMap.Show();
+        }
+
+        private void EnableKeyboardPan()
+        {
+            if (m_keyboardPan == null)
+            {
+                return;
+            }
+
+            var playerManager = GameplaySystem.playerManager;
+            var playerInput = playerManager?.PlayerInput;
+            m_keyboardPan.enabled = m_keyboardPan.BindInput(playerInput);
+        }
+
+        private void DisableKeyboardPan()
+        {
+            if (m_keyboardPan == null)
+            {
+                return;
+            }
+
+            m_keyboardPan.enabled = false;
+            m_keyboardPan.UnbindInput();
         }
     }
 }

@@ -100,6 +100,19 @@ namespace DChild.Codex.Characters
         private Sprite m_infoImage;
         [SerializeField, TextArea]
         private string m_description;
+        [SerializeField]
+        private bool m_specialCharacter;
+        [SerializeField, ShowIf("m_specialCharacter")]
+        private bool m_firstInteract;
+        [SerializeField, ShowIf("m_specialCharacter")]
+        private bool m_doomedKnightComment; 
+        [SerializeField, ShowIf("m_specialCharacter")]
+        private bool m_secondInteract;
+
+        [SerializeField, TextArea, ShowIf("m_specialCharacter")]
+        private string m_doomedKnightRemarks;
+        [SerializeField, TextArea, ShowIf("m_specialCharacter")]
+        private string m_necroRemarks;
 
         [SerializeField]
         private CharacterType m_characterType;
@@ -113,6 +126,14 @@ namespace DChild.Codex.Characters
         public Sprite indexImage { get => m_indexImage; }
         public Sprite infoImage { get => m_infoImage; }
         public string description { get => m_description; }
+
+        public bool specialCharacter => m_specialCharacter;
+        public bool firstInteract { get => m_firstInteract; set { m_firstInteract = value; } }
+        public bool doomedKnightComment { get => m_doomedKnightComment; set { m_doomedKnightComment = value; } }
+        public bool secondInteract { get => m_secondInteract; set { m_secondInteract = value; } }
+
+        public string doomedknightRemarks => m_doomedKnightRemarks;
+        public string necroRemarks => m_necroRemarks;
 
         public CharacterType characterType => m_characterType;
         public ArmyCharacterData armyData => m_armyData;

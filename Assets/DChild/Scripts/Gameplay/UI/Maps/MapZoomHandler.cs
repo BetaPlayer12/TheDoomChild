@@ -1,11 +1,7 @@
 ﻿using DChild.Gameplay.Characters.Enemies;
-using Doozy.Runtime.Nody;
 using Holysoft.Event;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
-using UnityEngine.UI;
-using UnityEngine.UIElements;
 
 namespace DChild.Gameplay.UI.Map
 {
@@ -44,40 +40,51 @@ namespace DChild.Gameplay.UI.Map
         {
             m_currentMap = receivedMap;
             m_currentY = DEFAULT_ZOOM;
+            ApplyCurrentZoom();
         }
 
         public void SetZoomConstraints(float min, float max)
         {
             m_minZoom = min;
             m_maxZoom = max;
+            m_currentY = Mathf.Clamp(m_currentY, m_minZoom, m_maxZoom);
+            ApplyCurrentZoom();
         }
 
         public void Zoom()
         {
-            m_currentMap.localScale = new Vector2(m_currentY, m_currentY);
+            if (m_currentMap == null || Mouse.current == null)
+            {
+                return;
+            }
 
             var scrollWheel = Mouse.current.scroll.ReadValue();
+            if (Mathf.Approximately(scrollWheel.y, 0f))
+            {
+                return;
+            }
 
-            if (scrollWheel.y == 0) { return; }
+            var nextZoom = Mathf.Clamp(
+                m_currentY + (m_mapScale * Mathf.Sign(scrollWheel.y)),
+                m_minZoom,
+                m_maxZoom);
 
+            if (Mathf.Approximately(nextZoom, m_currentY))
+            {
+                return;
+            }
 
-            var ySign = Mathf.Sign(scrollWheel.y);
-
-            m_currentY += m_mapScale * ySign;
-
-            Debug.Log($"current y: {m_currentY}");
+            m_currentY = nextZoom;
+            ApplyCurrentZoom();
             OnMapZoom?.Invoke(this, new MapZoomEventActionArgs(scrollWheel, m_iconScale));
-
-            if (m_currentY < m_minZoom)
-            {
-                m_currentY = m_minZoom;
-            }
-            else if (m_currentY > m_maxZoom)
-            {
-                m_currentY = m_maxZoom;
-            }
-
         }
 
+        private void ApplyCurrentZoom()
+        {
+            if (m_currentMap != null)
+            {
+                m_currentMap.localScale = Vector3.one * m_currentY;
+            }
+        }
     }
 }

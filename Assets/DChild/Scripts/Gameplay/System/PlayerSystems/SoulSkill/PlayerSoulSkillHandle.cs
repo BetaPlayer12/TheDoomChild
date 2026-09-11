@@ -24,6 +24,9 @@ namespace DChild.Gameplay.SoulSkills
         [SerializeField, MinValue(1)]
         private int m_maxSoulCapacity = 1;
 
+        [SerializeField]
+        private bool m_soulskillHandleOnload = false;
+
         [ShowInInspector, HideInEditorMode]
         private int m_currentSoulCapacity;
         private HashSet<int> m_acquiredSkills;
@@ -56,9 +59,12 @@ namespace DChild.Gameplay.SoulSkills
             m_acquiredSkills.Clear();
             m_canBeActivatedAsPermanent.Clear();
             RemoveAllActiveSoulSkills();
-
+            
             if (data != null)
             {
+                //temporary bandaid fix
+                m_currentSoulCapacity = m_maxSoulCapacity;
+
                 for (int i = 0; i < data.acquiredSoulSkills.Length; i++)
                 {
                     var skillId = data.acquiredSoulSkills[i];
@@ -70,11 +76,12 @@ namespace DChild.Gameplay.SoulSkills
                 {
                     m_activatedSkillsID.Add(data.activatedSoulSkills[i]);
                 }
-
+                m_soulskillHandleOnload = true;
                 m_currentSoulCapacity = Mathf.Clamp(data.currentSoulCapacity, 0, m_maxSoulCapacity);
             }
 
             SaveDataLoaded?.Invoke(this, EventActionArgs.Empty);
+            m_soulskillHandleOnload = false;
         }
 
         public void AddSoulSkillEnergyPoint(int increment)
@@ -145,7 +152,7 @@ namespace DChild.Gameplay.SoulSkills
                 soulSkill.AttachTo(m_player);
                 SetActivationRestriction(soulSkill.id, asPermanent);
                 //Equipment Skill check to only deduct soul capacity if skill is not equipment skill
-                if (asPermanent == true)
+                if (asPermanent == true && m_soulskillHandleOnload == false)
                     m_currentSoulCapacity -= soulSkill.capacity;
             }
         }

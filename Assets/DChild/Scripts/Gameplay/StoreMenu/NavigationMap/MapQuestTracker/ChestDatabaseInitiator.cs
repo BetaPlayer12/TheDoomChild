@@ -30,7 +30,7 @@ namespace DChild.QuestHints.ChestMapTracker
                 var chestName = chest.gameObject.name;
 
                 var itemName = (GenerateCategory(chestName) + chestName);
-                Variable var = template.CreateVariable(template.GetNextVariableID(_database), (_location.ToString() + "_" + "Scene" + _SceneNumber + "_" + itemName), "false", FieldType.Boolean);
+                Variable var = template.CreateVariable(template.GetNextVariableID(_database), (_location.ToString() + "/" + "Scene" + _SceneNumber + "/" + itemName), "false", FieldType.Boolean);
                 if (_database.variables.Contains(var))
                 {
                     _database.variables.Remove(var);
@@ -46,7 +46,7 @@ namespace DChild.QuestHints.ChestMapTracker
             Template template = new Template();
             var chest = _AddSingleObject.name;
             var itemName = (GenerateCategory(chest) + chest);
-            Variable var = template.CreateVariable(template.GetNextVariableID(_database), (_location.ToString() + "_" + "Scene" + _SceneNumber + "_" + itemName), "false", FieldType.Boolean);
+            Variable var = template.CreateVariable(template.GetNextVariableID(_database), (_location.ToString() + "/" + "Scene" + _SceneNumber + "/" + itemName), "false", FieldType.Boolean);
             if (_database.variables.Contains(var))
             {
                 _database.variables.Remove(var);

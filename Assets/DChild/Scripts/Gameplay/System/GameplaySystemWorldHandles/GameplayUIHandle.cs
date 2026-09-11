@@ -191,6 +191,16 @@ namespace DChild.Gameplay.Systems
 
         public void ToggleSequenceSkip(bool willShow)
         {
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+            if (BaseGameplayUIHandle.Instance == null)
+            {
+                Debug.LogWarning(
+                    $"Skipping sequence-skip UI toggle ({willShow}) because the Base Gameplay UI is not loaded. " +
+                    "This is expected when debugging the ArmyBattle scene directly.");
+                return;
+            }
+#endif
+
             BaseGameplayUIHandle.Instance.ToggleSequenceSkip(willShow);
         }
 

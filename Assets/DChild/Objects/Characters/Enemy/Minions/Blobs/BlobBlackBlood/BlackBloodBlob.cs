@@ -1,14 +1,16 @@
+using DChild;
+using DChild.Gameplay;
 using DChild.Gameplay.Characters;
+using DChild.Gameplay.Combat;
 using DChild.Gameplay.Environment;
+using DChild.Gameplay.Pooling;
+using Holysoft.Event;
+using Mono.Cecil;
 using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using DChild;
-using DChild.Gameplay;
-using DChild.Gameplay.Combat;
-using Holysoft.Event;
-using DChild.Gameplay.Pooling;
+using System;
 
 public class BlackBloodBlob : MonoBehaviour
 {
@@ -70,7 +72,6 @@ public class BlackBloodBlob : MonoBehaviour
     [Button]
     public void BlobDeath()
     {
-
         Die();
     }
     [Button]
@@ -133,7 +134,10 @@ public class BlackBloodBlob : MonoBehaviour
         gameObject.SetActive(false);
 
     }
-
+    private void OnDestroyed(object sender, EventActionArgs eventArgs)
+    {
+        Die();
+    }
     public IEnumerator CeilingToLeftRoutine()
     {
         m_animation.SetAnimation(0, m_ceilingToLeft, false);
@@ -164,6 +168,7 @@ public class BlackBloodBlob : MonoBehaviour
     private void Awake()
     {
         //m_damageable.health.Death += Health_Death;
+        m_damageable.Destroyed += OnDestroyed;
     }
 
     

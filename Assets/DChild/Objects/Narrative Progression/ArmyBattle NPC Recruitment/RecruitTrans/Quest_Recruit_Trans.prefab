@@ -175,7 +175,7 @@ MonoBehaviour:
       - m_Target: {fileID: 3598493492602244472}
         m_TargetAssemblyTypeName: DChild.Gameplay.ArmyBattle.ArmyBattleCharacterReward,
           Assembly-CSharp
-        m_MethodName: AttemptGiveReward
+        m_MethodName: RecruitmentConfirmation
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -370,8 +370,8 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   m_CharacterReward:
-  - {fileID: 11400000, guid: 14505516a7156c34d8f346d235afaed2, type: 2}
-  m_isFree: 0
+  - {fileID: 11400000, guid: 851c3a6d917c7774a96a8a2a537b5114, type: 2}
+  m_isFree: 1
   m_Requirement: 0
   m_TakeRequiredItemFromInvintory: 0
   m_requiredSoulEssence: 200
@@ -379,7 +379,8 @@ MonoBehaviour:
   m_ItemAmount: 0
   m_CombatArt: 0
   m_PrimarySkill: 0
-  armyCharacterData: {fileID: 0}
+  armyCharacterData:
+  - {fileID: 0}
   neededNPCsRecruited: 0
 --- !u!114 &2451221537966277895
 MonoBehaviour:
@@ -647,7 +648,7 @@ MonoBehaviour:
   allowBarksDuringConversations: 0
   skipBarkIfNoValidEntries: 0
   cacheBarkLines: 0
-  conversation: IntroDialogueTrans
+  conversation: 'Arna(Trans)CL '
   conversationConversant: {fileID: 0}
   conversationActor: {fileID: 0}
   startConversationEntryID: -1
@@ -774,7 +775,7 @@ MonoBehaviour:
       - m_Target: {fileID: 3598493492602244472}
         m_TargetAssemblyTypeName: DChild.Gameplay.ArmyBattle.ArmyBattleCharacterReward,
           Assembly-CSharp
-        m_MethodName: AttemptGiveReward
+        m_MethodName: RecruitmentConfirmation
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -869,7 +870,7 @@ MonoBehaviour:
   allowBarksDuringConversations: 0
   skipBarkIfNoValidEntries: 0
   cacheBarkLines: 0
-  conversation: Recruit/RequirementTrans/Met
+  conversation: 'Arna(Trans)AR '
   conversationConversant: {fileID: 0}
   conversationActor: {fileID: 0}
   startConversationEntryID: -1
@@ -1030,7 +1031,7 @@ PrefabInstance:
     - target: {fileID: 4094224186386184450, guid: 2bee4c2cbcfdbb04189e960e305048ff,
         type: 3}
       propertyPath: conversation
-      value: IntroDialogueTrans
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 4094224186386184450, guid: 2bee4c2cbcfdbb04189e960e305048ff,
         type: 3}
@@ -1038,6 +1039,41 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 11400000, guid: 89c544c7d5d0c9c428dc965f01821c30,
         type: 2}
+    - target: {fileID: 4094224186386184450, guid: 2bee4c2cbcfdbb04189e960e305048ff,
+        type: 3}
+      propertyPath: onExecute.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4094224186386184450, guid: 2bee4c2cbcfdbb04189e960e305048ff,
+        type: 3}
+      propertyPath: onExecute.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4094224186386184450, guid: 2bee4c2cbcfdbb04189e960e305048ff,
+        type: 3}
+      propertyPath: onExecute.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 5417656217359629869}
+    - target: {fileID: 4094224186386184450, guid: 2bee4c2cbcfdbb04189e960e305048ff,
+        type: 3}
+      propertyPath: onExecute.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4094224186386184450, guid: 2bee4c2cbcfdbb04189e960e305048ff,
+        type: 3}
+      propertyPath: onExecute.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: CheckFirstTimeTalk
+      objectReference: {fileID: 0}
+    - target: {fileID: 4094224186386184450, guid: 2bee4c2cbcfdbb04189e960e305048ff,
+        type: 3}
+      propertyPath: onExecute.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: DChild.ArmyBattle.Recruitment.ArmyRecruitInteract, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 4094224186386184450, guid: 2bee4c2cbcfdbb04189e960e305048ff,
+        type: 3}
+      propertyPath: onExecute.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 5547452231710012914, guid: 2bee4c2cbcfdbb04189e960e305048ff,
         type: 3}
       propertyPath: m_RootOrder

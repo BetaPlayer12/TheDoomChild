@@ -434,6 +434,7 @@ GameObject:
   m_Component:
   - component: {fileID: 551703439}
   - component: {fileID: 551703440}
+  - component: {fileID: 8642569982776180500}
   m_Layer: 0
   m_Name: WeaponUpgrade
   m_TagString: Untagged
@@ -475,12 +476,39 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 2e4b8930130a4f34bae73f8a5f35c43a, type: 2}
   - {fileID: 11400000, guid: 806a42711d7741c428d192adadf8c3ea, type: 2}
   - {fileID: 11400000, guid: c8d4734bc2690e84db5f06449d588eab, type: 2}
-  m_confirmationRequest:
-    m_confirmation: {fileID: 0}
-    m_confirmationHeader: 
-    m_confirmationMessage: Upgrade weapon?
+  m_ui: {fileID: 0}
   m_playerInventory: {fileID: 0}
   m_playerWeapon: {fileID: 0}
+--- !u!114 &8642569982776180500
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 551703438}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78f003aa0ad0a4c469338c205df004d3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Payload:
+    StreamId:
+      Category: ConfirmationWindow
+      Name: WeaponUpgrade
+      Custom: 0
+    SignalValueType: 0
+    IntegerValue: 0
+    BooleanValue: 0
+    FloatValue: 0
+    StringValue: 
+    ColorValue: {r: 0, g: 0, b: 0, a: 0}
+    Vector2Value: {x: 0, y: 0}
+    Vector3Value: {x: 0, y: 0, z: 0}
+    Vector4Value: {x: 0, y: 0, z: 0, w: 0}
+  SendOnStart: 0
+  SendOnEnable: 0
+  SendOnDisable: 0
+  SendOnDestroy: 0
 --- !u!1 &754980111
 GameObject:
   m_ObjectHideFlags: 0
@@ -609,6 +637,7 @@ MonoBehaviour:
   m_playerHUD: {fileID: 0}
   m_interactablePrompt: {fileID: 0}
   m_movableObjectPrompt: {fileID: 0}
+  m_weaponUpgradeSignal: {fileID: 8642569982776180500}
   m_upgradeWeaponHandler: {fileID: 551703440}
   m_BossHealth: {fileID: 0}
   m_QuickItems: {fileID: 0}

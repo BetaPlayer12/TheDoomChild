@@ -27,16 +27,6 @@ namespace DChild.Gameplay.ArmyBattle.UI
         private SelectedSkillButton m_selectedSkill;
         public SelectedSkillButton selectedSkill => m_selectedSkill;
 
-        [FoldoutGroup("GLOW OVERRIDE")]
-        [SerializeField, FoldoutGroup("GLOW OVERRIDE/ASSETS")]
-        private Sprite m_meleeGlow;
-        [SerializeField, FoldoutGroup("GLOW OVERRIDE/ASSETS")]
-        private Sprite m_rangeGlow;
-        [SerializeField, FoldoutGroup("GLOW OVERRIDE/ASSETS")]
-        private Sprite m_magicGlow;
-        [SerializeField, FoldoutGroup("GLOW OVERRIDE/ASSETS")]
-        private List<Image> m_partyGlow;
-
 
         public virtual void Display(IAttackingGroup group)
         {
@@ -45,29 +35,6 @@ namespace DChild.Gameplay.ArmyBattle.UI
             m_selectedSkill.Display(m_damageType);
             m_partyName.Display(group);
             m_attackPowerUI.Display(group);
-
-            switch (m_damageType)
-            {
-                case DamageType.Melee:
-                    SelectGlow(m_meleeGlow);
-                    break;
-                case DamageType.Range:
-                    SelectGlow(m_rangeGlow);
-                    break;
-                case DamageType.Magic:
-                    SelectGlow(m_magicGlow);
-                    break;
-
-            }
-        }
-
-
-        public virtual void SelectGlow(Sprite glow)
-        {
-            foreach (Image glowClass in m_partyGlow)
-            {
-                glowClass.sprite = glow;
-            }
         }
     }
 }

@@ -392,6 +392,8 @@ GameObject:
   - component: {fileID: 1950618930815389720}
   - component: {fileID: 618207168023080015}
   - component: {fileID: 4860543419363520922}
+  - component: {fileID: 3739847938778457364}
+  - component: {fileID: 8347291056182309471}
   m_Layer: 5
   m_Name: View - WeaponUpgrade
   m_TagString: Untagged
@@ -452,7 +454,7 @@ CanvasGroup:
   m_Alpha: 1
   m_Interactable: 1
   m_BlocksRaycasts: 1
-  m_IgnoreParentGroups: 0
+  m_IgnoreParentGroups: 1
 --- !u!114 &1950618930815389720
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -489,7 +491,43 @@ MonoBehaviour:
     Runners: []
     Event:
       m_PersistentCalls:
-        m_Calls: []
+        m_Calls:
+        - m_Target: {fileID: 0}
+          m_TargetAssemblyTypeName: DChild.Menu.PauseHandle, Assembly-CSharp
+          m_MethodName: PauseGame
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+        - m_Target: {fileID: 3739847938778457364}
+          m_TargetAssemblyTypeName: DChild.UI.BlacksmithUI, Assembly-CSharp
+          m_MethodName: ForceSetUIControls
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+        - m_Target: {fileID: 3739847938778457364}
+          m_TargetAssemblyTypeName: DChild.UI.BlacksmithUI, Assembly-CSharp
+          m_MethodName: SelectYesWhenShown
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
   OnVisibleCallback:
     EventName: OnVisibleCallback
     Runners: []
@@ -518,13 +556,13 @@ MonoBehaviour:
   UseCustomStartPosition: 1
   AutoHideAfterShow: 0
   AutoHideAfterShowDelay: 0
-  DisableGameObjectWhenHidden: 0
+  DisableGameObjectWhenHidden: 1
   DisableCanvasWhenHidden: 1
   DisableGraphicRaycasterWhenHidden: 1
   ClearSelectedOnShow: 0
   ClearSelectedOnHide: 0
   AutoSelectAfterShow: 0
-  AutoSelectTarget: {fileID: 0}
+  AutoSelectTarget: {fileID: 4181664955314150590}
   Id:
     Category: Gameplay
     Name: WeaponUpgrade
@@ -1048,7 +1086,7 @@ MonoBehaviour:
           m_PostInfinity: 2
           m_RotationOrder: 4
         StartDelay: 0
-        Duration: 25
+        Duration: 0.25
         Loops: 0
         LoopDelay: 0
         UseRandomStartDelay: 0
@@ -1082,6 +1120,58 @@ MonoBehaviour:
       ToCustomValue: 0
       FromOffset: 0
       ToOffset: 0
+--- !u!114 &3739847938778457364
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1020552594529556706}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6e07ef7293993048946f6384f05261d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_yesButton: {fileID: 5163101215660646409}
+  m_subHeaderLabel: {fileID: 8893484947637365672}
+  m_requirementsUI:
+  - {fileID: 7350256171484179363}
+  - {fileID: 4293797842469904297}
+--- !u!114 &8347291056182309471
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1020552594529556706}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 420ae4a59c20428f9889251f18433a4c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Callback:
+    EventName: Callback
+    Runners: []
+    Event:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 3739847938778457364}
+          m_TargetAssemblyTypeName: DChild.UI.BlacksmithUI, Assembly-CSharp
+          m_MethodName: OnConfirmationSuccess
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  ButtonId:
+    Category: General
+    Name: Yes
+    Custom: 0
+  MultiplayerInfo: {fileID: 0}
 --- !u!1 &1476322894829086470
 GameObject:
   m_ObjectHideFlags: 0
@@ -1843,8 +1933,8 @@ RectTransform:
   m_Father: {fileID: 6204091829764999702}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 73, y: 59}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -1895,6 +1985,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6204091829764999702}
+  - component: {fileID: 1129420506958119124}
+  - component: {fileID: 275803036636594281}
   m_Layer: 0
   m_Name: Section - UpgradeVisuals
   m_TagString: Untagged
@@ -1925,6 +2017,46 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1129420506958119124
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2894189497451723147}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30649d3a9faa99c48a7b1166b86bf2a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Padding:
+    m_Left: 0
+    m_Right: 0
+    m_Top: 0
+    m_Bottom: 0
+  m_ChildAlignment: 4
+  m_Spacing: 8
+  m_ChildForceExpandWidth: 1
+  m_ChildForceExpandHeight: 1
+  m_ChildControlWidth: 0
+  m_ChildControlHeight: 0
+  m_ChildScaleWidth: 0
+  m_ChildScaleHeight: 0
+  m_ReverseArrangement: 0
+--- !u!114 &275803036636594281
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2894189497451723147}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_HorizontalFit: 2
+  m_VerticalFit: 0
 --- !u!1 &3476634442188661387
 GameObject:
   m_ObjectHideFlags: 0
@@ -1936,6 +2068,7 @@ GameObject:
   - component: {fileID: 8123103369424000605}
   - component: {fileID: 3700760849186643448}
   - component: {fileID: 3321768150424782888}
+  - component: {fileID: 4293797842469904297}
   m_Layer: 5
   m_Name: Image - Requirement - Coin
   m_TagString: Untagged
@@ -1960,9 +2093,9 @@ RectTransform:
   m_Father: {fileID: 6204091829764999702}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 170, y: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 236, y: 197}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3700760849186643448
@@ -2003,6 +2136,25 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &4293797842469904297
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3476634442188661387}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d5c8e01f539ef8438df6eb794530b39, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_currentCount: {fileID: 8942738792733599097}
+  m_background: {fileID: 3321768150424782888}
+  m_requirementIcon: {fileID: 9100693180019074745}
+  m_missingSprite: {fileID: 21300000, guid: 070f9d87eae51854fb357cf8bc933eb4, type: 3}
+  m_insufficientSprite: {fileID: 21300000, guid: 8fc7658fe28e18f4797b974804ab8c5c,
+    type: 3}
+  m_completeSprite: {fileID: 21300000, guid: b2078ef48e3319d44ad9e0d83fc948fe, type: 3}
 --- !u!1 &4020092985044002799
 GameObject:
   m_ObjectHideFlags: 0
@@ -2014,6 +2166,7 @@ GameObject:
   - component: {fileID: 665670097039567617}
   - component: {fileID: 4747526993677460585}
   - component: {fileID: 6742155775708149476}
+  - component: {fileID: 7350256171484179363}
   m_Layer: 5
   m_Name: Image - Requirement - AttackShard
   m_TagString: Untagged
@@ -2038,9 +2191,9 @@ RectTransform:
   m_Father: {fileID: 6204091829764999702}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -170, y: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 236, y: 197}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4747526993677460585
@@ -2081,6 +2234,25 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &7350256171484179363
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4020092985044002799}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d5c8e01f539ef8438df6eb794530b39, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_currentCount: {fileID: 4988959729551891681}
+  m_background: {fileID: 6742155775708149476}
+  m_requirementIcon: {fileID: 6617419473336337082}
+  m_missingSprite: {fileID: 21300000, guid: 070f9d87eae51854fb357cf8bc933eb4, type: 3}
+  m_insufficientSprite: {fileID: 21300000, guid: 8fc7658fe28e18f4797b974804ab8c5c,
+    type: 3}
+  m_completeSprite: {fileID: 21300000, guid: b2078ef48e3319d44ad9e0d83fc948fe, type: 3}
 --- !u!1 &4181664955314150590
 GameObject:
   m_ObjectHideFlags: 0
@@ -2224,12 +2396,43 @@ MonoBehaviour:
         m_PersistentCalls:
           m_Calls: []
   Behaviours:
-    Behaviours: []
+    Behaviours:
+    - EventName: PointerEnter
+      Runners: []
+      Event:
+        m_PersistentCalls:
+          m_Calls:
+          - m_Target: {fileID: 5163101215660646409}
+            m_TargetAssemblyTypeName: UnityEngine.UI.Selectable, UnityEngine.UI
+            m_MethodName: Select
+            m_Mode: 1
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
+      BehaviourName: 0
+      Receiver:
+        ConnectionMode: 1
+        SignalProviderId:
+          Type: 0
+          Category: Pointer
+          Name: Enter
+        ProviderReference: {fileID: 0}
+        StreamId:
+          Category: None
+          Name: None
+          Custom: 0
+      Cooldown: 0
+      Selectable: {fileID: 5163101215660646409}
     SignalSource: {fileID: 4181664955314150590}
     Selectable: {fileID: 5163101215660646409}
   Id:
-    Category: None
-    Name: None
+    Category: General
+    Name: Yes
     Custom: 0
   Cooldown: 0
 --- !u!114 &4237887013333900522
@@ -3229,7 +3432,7 @@ MonoBehaviour:
           m_PostInfinity: 2
           m_RotationOrder: 4
         StartDelay: 0
-        Duration: 0.2
+        Duration: 0.125
         Loops: 0
         LoopDelay: 0
         UseRandomStartDelay: 0
@@ -3255,14 +3458,14 @@ MonoBehaviour:
       FromValue: {x: 1, y: 1, z: 1}
       ToValue: {x: 1, y: 1, z: 1}
       CurrentValue: {x: 1, y: 1, z: 1}
-      Enabled: 0
+      Enabled: 1
       StartScale: {x: 1, y: 1, z: 1}
       FromReferenceValue: 1
       ToReferenceValue: 0
       FromCustomValue: {x: 1, y: 1, z: 1}
       ToCustomValue: {x: 1, y: 1, z: 1}
       FromOffset: {x: 0, y: 0, z: 0}
-      ToOffset: {x: 0, y: 0, z: 0}
+      ToOffset: {x: 0.25, y: 0.25, z: 0}
     Fade:
       Settings:
         PlayMode: 0
@@ -3954,12 +4157,43 @@ MonoBehaviour:
         m_PersistentCalls:
           m_Calls: []
   Behaviours:
-    Behaviours: []
+    Behaviours:
+    - EventName: PointerEnter
+      Runners: []
+      Event:
+        m_PersistentCalls:
+          m_Calls:
+          - m_Target: {fileID: 7224040259363788108}
+            m_TargetAssemblyTypeName: UnityEngine.UI.Selectable, UnityEngine.UI
+            m_MethodName: Select
+            m_Mode: 1
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
+      BehaviourName: 0
+      Receiver:
+        ConnectionMode: 1
+        SignalProviderId:
+          Type: 0
+          Category: Pointer
+          Name: Enter
+        ProviderReference: {fileID: 0}
+        StreamId:
+          Category: None
+          Name: None
+          Custom: 0
+      Cooldown: 0
+      Selectable: {fileID: 7224040259363788108}
     SignalSource: {fileID: 7760007265200216485}
     Selectable: {fileID: 7224040259363788108}
   Id:
     Category: General
-    Name: Back
+    Name: No
     Custom: 0
   Cooldown: 0
 --- !u!114 &5221334539302226654
@@ -4959,7 +5193,7 @@ MonoBehaviour:
           m_PostInfinity: 2
           m_RotationOrder: 4
         StartDelay: 0
-        Duration: 0.2
+        Duration: 0.125
         Loops: 0
         LoopDelay: 0
         UseRandomStartDelay: 0
@@ -4985,14 +5219,14 @@ MonoBehaviour:
       FromValue: {x: 1, y: 1, z: 1}
       ToValue: {x: 1, y: 1, z: 1}
       CurrentValue: {x: 1, y: 1, z: 1}
-      Enabled: 0
+      Enabled: 1
       StartScale: {x: 1, y: 1, z: 1}
       FromReferenceValue: 1
       ToReferenceValue: 0
       FromCustomValue: {x: 1, y: 1, z: 1}
       ToCustomValue: {x: 1, y: 1, z: 1}
       FromOffset: {x: 0, y: 0, z: 0}
-      ToOffset: {x: 0, y: 0, z: 0}
+      ToOffset: {x: 0.25, y: 0.25, z: 0}
     Fade:
       Settings:
         PlayMode: 0

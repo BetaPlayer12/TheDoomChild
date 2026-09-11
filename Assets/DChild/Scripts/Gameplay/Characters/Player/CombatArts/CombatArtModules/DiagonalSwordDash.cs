@@ -50,6 +50,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
         private bool m_canDiagonalSwordDash;
         private bool m_canMove;
+        private bool m_canReset;
         private IPlayerModifer m_modifier;
         private int m_diagonalSwordDashStateAnimationParameter;
         private float m_diagonalSwordDashCooldownTimer;
@@ -60,8 +61,9 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
         public bool CanDiagonalSwordDash() => m_canDiagonalSwordDash;
         public bool CanMove() => m_canMove;
-
+        public bool CanReset() => m_canReset;
         private Coroutine m_checkImpactCoroutine;
+        private bool m_hasExecuted;
 
         public override void Initialize(ComplexCharacterInfo info)
         {
@@ -85,16 +87,27 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
         public override void Reset()
         {
-            base.Reset();
+            m_state.waitForBehaviour = false;
+            m_state.isAttacking = false;
+            m_canDiagonalSwordDash = true;
             m_diagonalSwordDashInfo.ShowCollider(false);
             m_animator.SetBool(m_diagonalSwordDashStateAnimationParameter, false);
+            base.Reset();
         }
 
         public void Execute()
         {
+            m_hasExecuted = true;
+            Debug.Log("Start Execute");
+            //m_diagonalSwordDashFXAnimator.SetBool("WillPerformDSD", false);
             m_state.waitForBehaviour = true;
             m_state.isExecutingCombatArt = true;
             StopAllCoroutines();
+            //m_physics.velocity = Vector2.zero;
+            m_cacheGravity = m_physics.gravityScale;
+            m_physics.gravityScale = 0;
+            m_canReset = false;
+            Debug.Log("Middle Execute");
             m_state.isAttacking = true;
             m_state.canAttack = false;
             m_canDiagonalSwordDash = false;
@@ -103,51 +116,78 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             m_animator.SetBool(m_diagonalSwordDashStateAnimationParameter, true);
             m_diagonalSwordDashCooldownTimer = m_diagonalSwordDashCooldown;
             m_diagonalSwordDashMovementCooldownTimer = m_diagonalSwordDashMovementCooldown;
-            m_physics.velocity = Vector2.zero;
-            m_cacheGravity = m_physics.gravityScale;
-            m_physics.gravityScale = 0;
             m_diagonalSwordDashFXAnimator.SetTrigger("ActiveTrigger");
             if (m_checkImpactCoroutine != null)
             {
                 StopCoroutine(m_checkImpactCoroutine);
                 m_checkImpactCoroutine = null;
             }
+            Debug.Log("End Execute");
+            m_physics.gravityScale = m_cacheGravity;
         }
 
         public void EndExecution()
         {
+            Debug.Log("End Execute Start");
+            if (m_dashCoroutine != null)
+            {
+                StopCoroutine(m_dashCoroutine);
+                m_dashCoroutine = null;
+            }
+            // ALWAYS restore physics.
+            RestoreDashPhysics();
+            m_hasExecuted = false;
+            m_dashStarted = false;
             m_diagonalSwordDashInfo.ShowCollider(false);
-            m_canMove = true;
-            m_physics.gravityScale = m_cacheGravity;
-            m_animator.SetBool(m_diagonalSwordDashStateAnimationParameter, false);
             m_diagonalSwordDashFXAnimator.SetTrigger("EndTrigger");
+            m_state.isExecutingCombatArt = false;
+            m_state.waitForBehaviour = false;
+            Debug.Log("Middle End Execute");
+            m_animator.SetBool(m_diagonalSwordDashStateAnimationParameter,false);
+            m_canMove = true;
             if (m_checkImpactCoroutine != null)
             {
                 StopCoroutine(m_checkImpactCoroutine);
                 m_checkImpactCoroutine = null;
             }
-            m_state.isExecutingCombatArt = false;
             base.AttackOver();
+            Debug.Log("End End Execute");
         }
 
         public override void Cancel()
         {
+            if (!m_hasExecuted)
+                return;
+            Debug.Log("Start Cancel");
+            m_hasExecuted = false;
+            m_dashStarted = false;
+            if (m_dashCoroutine != null)
+            {
+                StopCoroutine(m_dashCoroutine);
+                m_dashCoroutine = null;
+            }
             m_diagonalSwordDashInfo.ShowCollider(false);
-            m_canMove = true;
-            m_fxAnimator.Play("Buffer");
-            StopAllCoroutines();
-            m_physics.gravityScale = m_cacheGravity;
-            m_animator.SetBool(m_diagonalSwordDashStateAnimationParameter, false);
             m_diagonalSwordDashFXAnimator.SetTrigger("EndTrigger");
+            m_state.isExecutingCombatArt = false;
+            m_state.waitForBehaviour = false;
+            RestoreDashPhysics();
+            m_fxAnimator.Play("Buffer");
+            Debug.Log("Middle Cancel");
+            m_animator.SetBool(m_diagonalSwordDashStateAnimationParameter,false);
+            m_canMove = true;
             if (m_checkImpactCoroutine != null)
             {
                 StopCoroutine(m_checkImpactCoroutine);
                 m_checkImpactCoroutine = null;
             }
-            m_state.isExecutingCombatArt = false;
             base.Cancel();
+            Debug.Log("End Cancel");
         }
 
+        private void RestoreDashPhysics()
+        {
+            m_physics.gravityScale = m_cacheGravity;
+        }
         public void EnableCollision(bool value)
         {
             m_rigidBody.WakeUp();
@@ -159,6 +199,8 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
 
         private IEnumerator CheckImpactRoutine()
         {
+            Debug.Log("Start CheckImpact");
+            //m_diagonalSwordDashFXAnimator.SetBool("WillPerformDSD", true);
             var timer = 0.25f;
             var hasChecked = false;
             while (!hasChecked)
@@ -167,6 +209,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
                 m_enemySensor.Cast();
                 if (m_enemySensor.isDetecting && timer >= 0.25f)
                 {
+                    Debug.Log("First If CheckImpact");
                     timer = 0f;
                     var hits = m_enemySensor.GetHits();
                     //var targetTransform = hits[1].transform;
@@ -184,6 +227,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
                 }
                 else
                 {
+                    Debug.Log("Else CheckImpact");
                     if (timer < 0.25f)
                     {
                         timer += Time.deltaTime;
@@ -192,6 +236,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
                 m_edgeSensor.Cast();
                 if (m_edgeSensor.isDetecting)
                 {
+                    Debug.Log("Second If CheckImpact");
                     hasChecked = true;
                     var hits = m_edgeSensor.GetHits();
                     //var targetTransform = hits[1].transform;
@@ -200,6 +245,7 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
                     {
                         if (Vector2.Distance(m_character.centerMass.position, hits[i].transform.position) < 25f)
                         {
+                            Debug.Log("Third If CheckImpact");
                             hitID = i;
                         }
                     }
@@ -212,11 +258,18 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
                 yield return null;
             }
             yield return null;
+            Debug.Log("End CheckImpact");
         }
-
+        private Coroutine m_dashCoroutine;
+        private bool m_dashStarted;
         public void StartDash()
         {
-            StartCoroutine(DashRoutine());
+            if (!m_hasExecuted) { return; }
+            if (m_dashStarted) { return; }
+            m_dashStarted = true;
+            m_cacheGravity = m_physics.gravityScale;
+            m_physics.gravityScale = 0f;
+            m_dashCoroutine =  StartCoroutine(DashRoutine());
         }
 
         public void HandleAttackTimer()
@@ -234,26 +287,70 @@ namespace DChild.Gameplay.Characters.Players.BattleAbilityModule
             }
         }
 
+        public void HandleMovementTimer()
+        {
+            if (m_diagonalSwordDashMovementCooldownTimer > 0)
+            {
+                m_diagonalSwordDashMovementCooldownTimer -=
+                    GameplaySystem.time.deltaTime;
+
+                m_canMove = false;
+            }
+            else
+            {
+                m_diagonalSwordDashMovementCooldownTimer =
+                    m_diagonalSwordDashMovementCooldown;
+
+                m_canMove = true;
+            }
+        }
+
+        public void HandleResetTimer()
+        {
+            if (m_diagonalSwordDashCooldownTimer > 0)
+            {
+                m_diagonalSwordDashCooldownTimer -= GameplaySystem.time.deltaTime;
+                m_canReset = true;
+            }
+            else
+            {
+                m_diagonalSwordDashCooldownTimer = m_diagonalSwordDashCooldown;
+                m_canReset = false;
+                //EndExecution();
+            }
+        }
+
+        public bool CanExecuteDash()
+        {
+            m_groundSensor.Cast();
+            return !m_groundSensor.isDetecting;
+        }
+
         private IEnumerator DashRoutine()
         {
+            Debug.Log("Start Dash");
             m_state.waitForBehaviour = true;
-            var timer = m_dashDuration;
-            m_wallSensor.Cast();
-            m_groundSensor.Cast();
-            while (/*timer >= 0 &&*/ !m_wallSensor.isDetecting && !m_groundSensor.isDetecting)
+            float timer = m_dashDuration;
+            while (m_hasExecuted && timer > 0f)
             {
                 m_wallSensor.Cast();
                 m_groundSensor.Cast();
+                if (m_wallSensor.isDetecting || m_groundSensor.isDetecting)
+                {
+                    break;
+                }
                 m_physics.velocity = new Vector2(m_character.facing == HorizontalDirection.Right ? m_pushForce.x : -m_pushForce.x, m_pushForce.y);
-                timer -= Time.deltaTime;
-                yield return null;
+                timer -= Time.fixedDeltaTime;
+                yield return new WaitForFixedUpdate();
             }
-            m_animator.SetBool(m_diagonalSwordDashStateAnimationParameter, false);
-            //Debug.Log("End Diagon Sword Dash");
-            m_physics.gravityScale = m_cacheGravity;
-            m_physics.velocity = new Vector2(m_character.facing == HorizontalDirection.Right ? -m_backForce.x : m_backForce.x, m_backForce.y);
-            //m_physics.velocity = Vector2.zero;
-            yield return null;
+            RestoreDashPhysics();
+            if (m_hasExecuted)
+            {
+                m_physics.velocity = new Vector2(m_character.facing == HorizontalDirection.Right ? -m_backForce.x : m_backForce.x, m_backForce.y);
+            }
+            m_dashStarted = false;
+            m_dashCoroutine = null;
+            Debug.Log("End Dash");
         }
 
         public void SetCritConfiguration(PlayerCritStatsInfo info)

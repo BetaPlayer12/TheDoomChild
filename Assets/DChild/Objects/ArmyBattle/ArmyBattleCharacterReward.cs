@@ -79,7 +79,7 @@ namespace DChild.Gameplay.ArmyBattle
         {
             CharacterRecruitmentUI ui = GameplaySystem.gamplayUIHandle.ConfirmationRequest();
             ui.SetAcceptOffer(AcceptOffer);
-            ui.SetDeclineOffer(null);
+            ui.SetDeclineOffer(DeclineOffer);
             ui.SetupUI(m_CharacterReward[0].name);
             BaseGameplaySystem.gamplayUIHandle.SendconfirmationSignal();
         }
@@ -174,10 +174,17 @@ namespace DChild.Gameplay.ArmyBattle
         {
             SetupConfirmationUI();
             SendRecruitmentConfirmationUI();
+            GameSystem.SetCursorVisibility(true);
+        }
+        private void DeclineOffer(object sender, EventActionArgs eventActionArgs)
+        {
+            GameSystem.SetCursorVisibility(false);
         }
 
         private void AcceptOffer(object sender, EventActionArgs eventActionArgs)
-        { 
+        {
+            GameSystem.SetCursorVisibility(false);
+
             if (!m_isFree)
             {
                 if(EvaluateRequirements() == false)

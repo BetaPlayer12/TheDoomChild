@@ -27,8 +27,8 @@ namespace DChild.Gameplay.ArmyBattle.UI
         [SerializeField]
         private List<SpecialSkillGroupOptionUI> m_selectableGroups;
 
-        private List<ISpecialSkillGroup> m_groups;
-        private List<ISpecialSkillGroup> m_filteredGroups;
+        private List<ISpecialSkillGroup> m_groups = new List<ISpecialSkillGroup>();
+        private List<ISpecialSkillGroup> m_filteredGroups = new List<ISpecialSkillGroup>();
 
         [SerializeField]
         private UIScrollbar m_scrollBar;
@@ -45,13 +45,17 @@ namespace DChild.Gameplay.ArmyBattle.UI
         private int m_totalPages;
         private float m_scrollBarIncrements;
         private bool m_cyclePageGuard;
+        private int m_availableGroupCount;
 
-        public int currentPage => throw new System.NotImplementedException();
+        public int currentPage => m_page;
 
         public event EventAction<EventActionArgs> PageChange;
 
         public void Select(SpecialSkillGroupOptionUI selectable)
         {
+            if (selectable == null || selectable.group == null || selectable.isUsed)
+                return;
+
             Debug.Log($"received special group: {selectable.group.GetCharacterGroup()}");
             m_specialSkillSelection.SelectSpecialGroup(selectable.group);
         }
@@ -64,7 +68,11 @@ namespace DChild.Gameplay.ArmyBattle.UI
 
                 if (i < specialGroups.Count)
                 {
+                    int absoluteIndex = m_startingIndex + i;
+                    bool isUsed = absoluteIndex >= m_availableGroupCount;
+
                     selectableGroup.Display(specialGroups[i]);
+                    selectableGroup.SetUsed(isUsed);
                     continue;
                 }
                 selectableGroup.Display(null);
@@ -108,11 +116,11 @@ namespace DChild.Gameplay.ArmyBattle.UI
 
         public void Initialize()
         {
-            Debug.Log($"total special groups: ${m_groups.Count}");
-            m_totalPages = GetTotalPages();
+            Debug.Log($"total special groups: {m_groups.Count}");
+            m_totalPages = Mathf.Max(1, GetTotalPages());
             m_scrollBar.numberOfSteps = m_totalPages;
-            m_scrollBarIncrements = 1f / (m_totalPages - 1);
-            m_scrollBar.size = 1f / (m_totalPages);
+            m_scrollBarIncrements = m_totalPages > 1 ? 1f / (m_totalPages - 1) : 0f;
+            m_scrollBar.size = 1f / m_totalPages;
             m_scrollBar.value = 0;
 
             SetPage(0);
@@ -121,9 +129,10 @@ namespace DChild.Gameplay.ArmyBattle.UI
         }
 
 
-        public void SetAvailableSpecialGroups(List<ISpecialSkillGroup> groups)
+        public void SetGroups(List<ISpecialSkillGroup> groups, int availableGroupCount)
         {
-            this.m_groups = groups;
+            m_groups = groups ?? new List<ISpecialSkillGroup>();
+            m_availableGroupCount = Mathf.Clamp(availableGroupCount, 0, m_groups.Count);
             Initialize();
         }
 
@@ -135,7 +144,7 @@ namespace DChild.Gameplay.ArmyBattle.UI
 
         public void SetPage(int pageIndex)
         {
-            if (pageIndex < 0 || pageIndex > m_totalPages)
+            if (pageIndex < 0 || pageIndex >= m_totalPages)
                 return;
 
             m_previousButton.interactable = pageIndex > 0;
@@ -167,7 +176,7 @@ namespace DChild.Gameplay.ArmyBattle.UI
 
         public void HandleScroll()
         {
-            if (m_cyclePageGuard)
+            if (m_cyclePageGuard || m_totalPages <= 1)
                 return;
 
             int updatedPage = Mathf.FloorToInt(m_scrollBar.value / m_scrollBarIncrements);

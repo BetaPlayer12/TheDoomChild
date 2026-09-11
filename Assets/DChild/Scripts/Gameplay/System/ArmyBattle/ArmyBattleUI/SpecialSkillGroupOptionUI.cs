@@ -17,9 +17,48 @@ namespace DChild.Gameplay.ArmyBattle.UI
         private Image m_icon;
         [SerializeField]
         private Sprite m_specialGlow;
+        [SerializeField]
+        private UIButton m_armyRow;
+        [SerializeField]
+        private GameObject m_usedOverlay;
 
         private ISpecialSkillGroup m_group;
+        private bool m_isUsed;
         public ISpecialSkillGroup group => m_group;
+        public bool isUsed => m_isUsed;
+
+        public void SetUsed(bool isUsed)
+        {
+            m_isUsed = isUsed;
+
+            if (m_armyRow == null)
+            {
+                m_armyRow = GetComponent<UIButton>();
+            }
+
+            if (m_usedOverlay == null)
+            {
+                var childTransforms = GetComponentsInChildren<Transform>(true);
+                for (int i = 0; i < childTransforms.Length; i++)
+                {
+                    if (childTransforms[i].name == "Image - UsedGroupOverlay")
+                    {
+                        m_usedOverlay = childTransforms[i].gameObject;
+                        break;
+                    }
+                }
+            }
+
+            if (m_usedOverlay != null)
+            {
+                m_usedOverlay.SetActive(isUsed);
+            }
+
+            if (m_armyRow != null)
+            {
+                m_armyRow.interactable = !isUsed;
+            }
+        }
 
         public void Display(ISpecialSkillGroup group)
         {
@@ -27,7 +66,6 @@ namespace DChild.Gameplay.ArmyBattle.UI
 
             if (group != null)
             {
-                SelectGlow(m_specialGlow);
                 selectedSkill.DisplaySpecialIcon();
                 characterGroupUI.Display(group.GetCharacterGroup() ?? null);
                 partyName.Display(group);
@@ -41,12 +79,9 @@ namespace DChild.Gameplay.ArmyBattle.UI
                 m_icon.color = m_icon.sprite ? Color.white : Color.clear;
                 return;
             }
-            gameObject.SetActive(false);
 
-            //if (targetCommandIcon.enabled == false)
-            //{
-            //    RestoreArmyGroupUI();
-            //}
+            m_isUsed = false;
+            gameObject.SetActive(false);
         }
     }
 }
