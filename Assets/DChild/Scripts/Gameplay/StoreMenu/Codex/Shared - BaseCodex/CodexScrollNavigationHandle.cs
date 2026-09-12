@@ -4,7 +4,6 @@ using Doozy.Runtime.UIManager.Components;
 using Holysoft.Event;
 using Sirenix.OdinInspector;
 using System;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
@@ -20,7 +19,9 @@ namespace DChild.Menu.Codex
 
         private int m_totalSections;
 
+        public Action<int> OnPageChangeStarted;
         public Action<int> OnCurrentPageChange;
+        public Action<int> OnPageChangeCompleted;
 
         [Button]
         public void SetupScroll(int entryListCount, int toggleCount)
@@ -61,9 +62,25 @@ namespace DChild.Menu.Codex
             }
         }
 
+        public bool TryMovePage(int direction)
+        {
+            if (m_totalSections <= 1 || direction == 0)
+                return false;
+
+            int targetPage = Mathf.Clamp(m_currentPageIndex + Math.Sign(direction), 0, m_totalSections - 1);
+            if (targetPage == m_currentPageIndex)
+                return false;
+
+            m_scrollBar.value = targetPage / (float)(m_totalSections - 1);
+            HandleScroll();
+            return m_currentPageIndex == targetPage;
+        }
+
         private void SetPage(int pageIndex)
         {
+            OnPageChangeStarted?.Invoke(pageIndex);
             OnCurrentPageChange?.Invoke(pageIndex);
+            OnPageChangeCompleted?.Invoke(pageIndex);
         }
     }
 
