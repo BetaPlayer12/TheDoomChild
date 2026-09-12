@@ -24,6 +24,7 @@ namespace DChild.Menu.Equipment.UI
 
         private List<SoulEquipmentItem> m_acquiredItems;
         private SoulSlot m_slotFilter;
+        private EquipmentCurrentItemUI m_currentItem;
 
         public void SetFilter(SoulSlot value) => m_slotFilter = value;
 
@@ -33,19 +34,23 @@ namespace DChild.Menu.Equipment.UI
             m_acquiredItems = acquiredItems;
         }
 
-        public void UpdateItems(EquipmentCurrentItemUI currentItem)
+        public void UpdateItems(EquipmentCurrentItemUI currentItem, bool selectFirstItem = true)
         {
-            Reset();
+            DisconnectGridItems();
+            m_currentItem = currentItem;
+
             var filteredItems = m_acquiredItems.Where(item => item.soulEquipment.Slot == m_slotFilter).ToList();
-            var hasItems = filteredItems != null && filteredItems.Count > 0;
+            int itemCount = Mathf.Min(filteredItems.Count, m_itemGrid.Count);
+            bool hasItems = itemCount > 0;
 
             m_noItemsLabel.gameObject.SetActive(!hasItems);
 
             int i = 0;
-            for (; i < filteredItems.Count; i++)
+            for (; i < itemCount; i++)
             {
                 var item = filteredItems[i];
 
+                m_itemGrid[i].ResetSelection();
                 m_itemGrid[i].OnGridItemSelected += currentItem.OnGridItemSelected;
                 m_equipmentUI.detailsUI.ConnectGridItem(m_itemGrid[i]);
                 m_itemGrid[i].Display(item);
@@ -54,13 +59,27 @@ namespace DChild.Menu.Equipment.UI
 
             for (; i < m_itemGrid.Count; i++)
             {
-                m_itemGrid[i].OnGridItemSelected -= currentItem.OnGridItemSelected;
-                m_equipmentUI.detailsUI.DisconnectGridItem(m_itemGrid[i]);
-
+                m_itemGrid[i].ResetSelection();
                 m_itemGrid[i].Display();
             }
 
-            m_equipButtonUI.UpdateButtonLabel(currentItem);
+            RefreshGridNavigation();
+
+            if (!hasItems)
+            {
+                m_equipmentUI.FocusCategory(m_slotFilter);
+                m_equipButtonUI.ClearSelection();
+                m_equipmentUI.detailsUI.Clear();
+                return;
+            }
+
+            if (selectFirstItem)
+            {
+                m_equipmentUI.EnterItemSelection(m_slotFilter);
+                m_itemGrid[0].Select();
+            }
+            else
+                m_itemGrid[0].PrepareAttachedItem();
         }
 
         public void SetItemDetails(SoulEquipmentItem equipmentItem)
@@ -68,10 +87,65 @@ namespace DChild.Menu.Equipment.UI
             m_equipmentUI.detailsUI.SetHighlightedEquipment(equipmentItem);
         }
 
-        public void Reset()
+        private void DisconnectGridItems()
         {
-            //m_itemGrid[0].GetComponent<UIToggle>().Select();
-            m_itemGrid[0].GetComponent<UIToggle>().SetIsOn(true);
+            foreach (EquipmentGridItemUI item in m_itemGrid)
+            {
+                if (m_currentItem != null)
+                    item.OnGridItemSelected -= m_currentItem.OnGridItemSelected;
+
+                m_equipmentUI.detailsUI.DisconnectGridItem(item);
+            }
+        }
+
+        private void RefreshGridNavigation()
+        {
+            var toggleGroup = GetComponentInChildren<UIToggleGroup>();
+            var gridLayout = toggleGroup?.GetComponent<GridLayoutGroup>();
+            if (toggleGroup == null || gridLayout == null)
+                return;
+
+            var gridToggles = toggleGroup.GetComponentsInChildren<UIToggle>()
+                .Where(toggle => toggle != toggleGroup)
+                .ToList();
+
+            foreach (UIToggle toggle in gridToggles)
+            {
+                var navigation = toggle.navigation;
+                navigation.mode = Navigation.Mode.None;
+                toggle.navigation = navigation;
+            }
+
+            var activeToggles = gridToggles
+                .Where(toggle => toggle.gameObject.activeInHierarchy && toggle.interactable)
+                .ToList();
+
+            int columnCount = gridLayout.constraintCount;
+            for (int index = 0; index < activeToggles.Count; index++)
+            {
+                int row = index / columnCount;
+                int column = index % columnCount;
+
+                var navigation = new Navigation
+                {
+                    mode = Navigation.Mode.Explicit,
+                    selectOnLeft = GetNavigationTarget(activeToggles, index, row, column - 1, columnCount),
+                    selectOnRight = GetNavigationTarget(activeToggles, index, row, column + 1, columnCount),
+                    selectOnUp = GetNavigationTarget(activeToggles, index, row - 1, column, columnCount),
+                    selectOnDown = GetNavigationTarget(activeToggles, index, row + 1, column, columnCount)
+                };
+
+                activeToggles[index].navigation = navigation;
+            }
+        }
+
+        private UIToggle GetNavigationTarget(List<UIToggle> toggles, int currentIndex, int row, int column, int columnCount)
+        {
+            if (row < 0 || column < 0 || column >= columnCount)
+                return toggles[currentIndex];
+
+            int targetIndex = row * columnCount + column;
+            return targetIndex < toggles.Count ? toggles[targetIndex] : toggles[currentIndex];
         }
     }
 }

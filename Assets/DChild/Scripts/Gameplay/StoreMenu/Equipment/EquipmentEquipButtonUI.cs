@@ -14,11 +14,10 @@ namespace DChild.Menu.Equipment.UI
 
         private SoulEquipmentItem m_selectedItem;
         private SoulEquipmentItem m_currentEquipped;
+        private EquipmentCurrentItemUI m_currentSlot;
 
         public event EventAction<ItemEquipEventArgs> OnItemEquipped;
-        public event EventAction<EventActionArgs> OnItemRemoved;
-
-        private EquipButtonLabel m_currentLabel;
+        public event EventAction<ItemEquipEventArgs> OnItemRemoved;
 
         private enum EquipButtonLabel
         {
@@ -29,15 +28,15 @@ namespace DChild.Menu.Equipment.UI
 
         private void SetLabel(EquipButtonLabel label)
         {
-            m_currentLabel = label;
             m_labelText.SetText($"BUTTONPROMPT{label}");
         }
 
         public void UpdateButtonLabel(EquipmentCurrentItemUI itemSlot)
         {
+            m_currentSlot = itemSlot;
             m_currentEquipped = itemSlot.currentItem;
 
-            var label = m_currentEquipped == null || itemSlot.itemImage.sprite == null
+            var label = m_currentEquipped == null
                 ? EquipButtonLabel.Equip
                 : m_currentEquipped != m_selectedItem
                     ? EquipButtonLabel.Replace
@@ -48,18 +47,41 @@ namespace DChild.Menu.Equipment.UI
 
         public void SetSelectedItem(SoulEquipmentItem item) => m_selectedItem = item;
 
+        public void ClearSelection()
+        {
+            m_selectedItem = null;
+            m_currentEquipped = null;
+            m_currentSlot = null;
+            SetLabel(EquipButtonLabel.Equip);
+        }
+
         public void EquipItem()
         {
-            if (m_currentLabel != EquipButtonLabel.Remove)
+            if (m_selectedItem == null || m_currentSlot == null)
+                return;
+
+            if (m_currentEquipped == m_selectedItem)
             {
-                //TODO: equipItem based on current value of m_selectedItem
-                OnItemEquipped?.Invoke(this, new ItemEquipEventArgs(m_selectedItem));
-                SetLabel(EquipButtonLabel.Remove);
+                var removedItem = m_currentEquipped;
+                if (!m_currentSlot.TryRemoveItem(removedItem))
+                    return;
+
+                OnItemRemoved?.Invoke(this, new ItemEquipEventArgs(removedItem));
+                m_currentEquipped = null;
+                SetLabel(EquipButtonLabel.Equip);
                 return;
             }
 
-            OnItemRemoved?.Invoke(this, EventActionArgs.Empty);
-            SetLabel(EquipButtonLabel.Equip);
+            var replacedItem = m_currentEquipped;
+            if (!m_currentSlot.TryEquipItem(m_selectedItem))
+                return;
+
+            if (replacedItem != null)
+                OnItemRemoved?.Invoke(this, new ItemEquipEventArgs(replacedItem));
+
+            OnItemEquipped?.Invoke(this, new ItemEquipEventArgs(m_selectedItem));
+            m_currentEquipped = m_selectedItem;
+            SetLabel(EquipButtonLabel.Remove);
         }
 
     }

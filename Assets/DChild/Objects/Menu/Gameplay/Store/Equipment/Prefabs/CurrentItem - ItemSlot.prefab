@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 446592305969513406}
   - component: {fileID: 1869849740046715868}
   - component: {fileID: 7970245927361868457}
-  - component: {fileID: 1197305481875603171}
   - component: {fileID: 9183819501693716148}
   - component: {fileID: 1101101716322016143}
   - component: {fileID: 2824440825639490743}
@@ -98,34 +97,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Controller: {fileID: 2856128063333298665}
   IsOn: 0
-  ToggleCommand: 1
+  ToggleCommand: 2
   SpriteTarget: {fileID: 9183819501693716148}
   NormalSprite: {fileID: 21300000, guid: 25547feda9642af4698be0d052824f51, type: 3}
   HighlightedSprite: {fileID: 0}
   PressedSprite: {fileID: 0}
-  SelectedSprite: {fileID: 0}
-  DisabledSprite: {fileID: 0}
---- !u!114 &1197305481875603171
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 325182637131430516}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 62fefd6246624808b4ecb84b0d27abd4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Controller: {fileID: 2856128063333298665}
-  IsOn: 0
-  ToggleCommand: 0
-  SpriteTarget: {fileID: 9183819501693716148}
-  NormalSprite: {fileID: 21300000, guid: 68f8580eff75086449449bd68371dbc6, type: 3}
-  HighlightedSprite: {fileID: 0}
-  PressedSprite: {fileID: 0}
-  SelectedSprite: {fileID: 0}
-  DisabledSprite: {fileID: 0}
+  SelectedSprite: {fileID: 21300000, guid: 68f8580eff75086449449bd68371dbc6, type: 3}
+  DisabledSprite: {fileID: 21300000, guid: 25547feda9642af4698be0d052824f51, type: 3}
 --- !u!114 &9183819501693716148
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1174,14 +1152,14 @@ MonoBehaviour:
       FromValue: {x: 1, y: 1, z: 1}
       ToValue: {x: 1, y: 1, z: 1}
       CurrentValue: {x: 0, y: 0, z: 0}
-      Enabled: 0
+      Enabled: 1
       StartScale: {x: 1, y: 1, z: 1}
       FromReferenceValue: 1
       ToReferenceValue: 0
       FromCustomValue: {x: 1, y: 1, z: 1}
       ToCustomValue: {x: 1, y: 1, z: 1}
       FromOffset: {x: 0, y: 0, z: 0}
-      ToOffset: {x: 0, y: 0, z: 0}
+      ToOffset: {x: 0.1, y: 0.1, z: 0}
     Fade:
       Settings:
         PlayMode: 0

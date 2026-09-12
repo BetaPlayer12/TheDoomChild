@@ -30,28 +30,45 @@ namespace DChild.Menu.Equipment.UI
             m_equipmentUI.selectionUI.equipButtonUI.UpdateButtonLabel(this);
         }
 
-        public void OnItemEquipped(object sender, ItemEquipEventArgs eventArgs)
+        public bool TryEquipItem(SoulEquipmentItem equipmentItem)
         {
-            m_currentItem = eventArgs.equipmentItem;
+            if (equipmentItem == null || equipmentItem.soulEquipment.Slot != m_soulSlot)
+                return false;
 
-            if (m_currentItem.soulEquipment.Slot != m_soulSlot)
-                return;
-
-            m_itemImage.sprite = m_currentItem.equippedIcon;
+            m_currentItem = equipmentItem;
+            m_itemImage.sprite = equipmentItem.equippedIcon;
             ToggleItemVisibility(true);
 
-            m_equipmentUI.equipmentHandle.EquipSoulEquipment(m_currentItem);
+            m_equipmentUI.equipmentHandle.EquipSoulEquipment(equipmentItem);
+            return true;
         }
 
-        public void OnItemRemoved(object sender, EventActionArgs eventArgs)
+        public bool TryRemoveItem(SoulEquipmentItem equipmentItem)
         {
-            if (m_currentItem.soulEquipment.Slot != m_soulSlot)
-                return;
+            if (equipmentItem == null || equipmentItem.soulEquipment.Slot != m_soulSlot || m_currentItem != equipmentItem)
+                return false;
 
+            m_equipmentUI.equipmentHandle.UnequipSoulEquipment(equipmentItem);
+
+            m_currentItem = null;
             m_itemImage.sprite = null;
             ToggleItemVisibility(false);
+            return true;
+        }
 
-            m_equipmentUI.equipmentHandle.UnequipSoulEquipment(m_currentItem);
+        public void Refresh()
+        {
+            if (m_equipmentUI.equipmentHandle.TryGetEquippedSoulEquipment(m_soulSlot, out SoulEquipmentItem equipmentItem))
+            {
+                m_currentItem = equipmentItem;
+                m_itemImage.sprite = equipmentItem.equippedIcon;
+                ToggleItemVisibility(true);
+                return;
+            }
+
+            m_currentItem = null;
+            m_itemImage.sprite = null;
+            ToggleItemVisibility(false);
         }
 
         private void ToggleItemVisibility(bool value)
@@ -60,16 +77,5 @@ namespace DChild.Menu.Equipment.UI
             m_undiscoveredCG.alpha = Convert.ToSingle(!value);
         }
 
-        private void Awake()
-        {
-            m_equipmentUI.selectionUI.equipButtonUI.OnItemEquipped += OnItemEquipped;
-            m_equipmentUI.selectionUI.equipButtonUI.OnItemRemoved += OnItemRemoved;
-        }
-
-        private void OnDestroy()
-        {
-            m_equipmentUI.selectionUI.equipButtonUI.OnItemEquipped -= OnItemEquipped;
-            m_equipmentUI.selectionUI.equipButtonUI.OnItemRemoved -= OnItemRemoved;
-        }
     }
 }

@@ -39,12 +39,29 @@ namespace DChild.Menu.Equipment.UI
             if (m_instantiatedRows.Count > 0)
                 Reset();
 
+            if (m_highlightedEquipment == null)
+            {
+                Clear();
+                return;
+            }
+
+            m_equipmentIcon.gameObject.SetActive(true);
             m_equipmentIcon.sprite = m_highlightedEquipment.icon;
             m_itemNameLabel.text = m_highlightedEquipment.itemName;
 
             var boostList = m_highlightedEquipment.soulEquipment.statBoostList;
             if (boostList != null)
                 ShowStatBuffs(boostList);
+        }
+
+        public void Clear()
+        {
+            Reset();
+            m_highlightedEquipment = null;
+            m_equipmentIcon.sprite = null;
+            m_equipmentIcon.gameObject.SetActive(false);
+            m_itemNameLabel.text = string.Empty;
+            m_bonusLabel.text = string.Empty;
         }
 
         private void ShowStatBuffs(List<IEquipmentStatBoostModule> statBuffs)

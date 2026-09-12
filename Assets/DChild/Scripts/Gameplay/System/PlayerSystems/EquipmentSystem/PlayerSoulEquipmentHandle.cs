@@ -77,7 +77,7 @@ namespace DChild.Gameplay.EquipmentSystem
             if(m_player.damageableModule.isAlive == false)
             {
                 //Unequip all equipment on death
-                for(int i = 0; i < m_eqiuppedItems.Count; i++)
+                for(int i = m_eqiuppedItems.Count - 1; i >= 0; i--)
                 {
                     UnequipSoulEquipment(m_eqiuppedItems[i].item);
                 }
@@ -128,7 +128,7 @@ namespace DChild.Gameplay.EquipmentSystem
         {
             if(m_eqiuppedItems.Count > 0)
             {
-                for(int i = 0; i < m_eqiuppedItems.Count; i++)
+                for(int i = m_eqiuppedItems.Count - 1; i >= 0; i--)
                 {
                     if (m_eqiuppedItems[i] != null)
                     {
@@ -175,6 +175,14 @@ namespace DChild.Gameplay.EquipmentSystem
         [Button]
         public void EquipSoulEquipment(SoulEquipmentItem soulEquipment)
         {
+            TryEquipSoulEquipment(soulEquipment);
+        }
+
+        public bool TryEquipSoulEquipment(SoulEquipmentItem soulEquipment)
+        {
+            if (soulEquipment == null)
+                return false;
+
             var equipment = soulEquipment.soulEquipment;
 
             //Check if soul equipment is acquired already 
@@ -188,11 +196,16 @@ namespace DChild.Gameplay.EquipmentSystem
             }
 
             if (isAcquired == false)
-                return;
+                return false;
 
-            //Prevent equipping item if one of the same slot is already equipped
-            if (m_equippedSoulSlotEquipmentPair.ContainsKey(equipment.Slot))
-                return;
+            if (m_equippedSoulSlotEquipmentPair.TryGetValue(equipment.Slot, out SoulEquipmentItem equippedItem))
+            {
+                if (equippedItem == soulEquipment)
+                    return true;
+
+                if (!TryUnequipSoulEquipment(equippedItem))
+                    return false;
+            }
 
             m_equippedSoulSlotEquipmentPair.Add(equipment.Slot, soulEquipment);
 
@@ -215,11 +228,21 @@ namespace DChild.Gameplay.EquipmentSystem
             {
                 statBoost.AttachTo(m_player);
             }
+
+            return true;
         }
 
         [Button]
         public void UnequipSoulEquipment(SoulEquipmentItem soulEquipment)
         {
+            TryUnequipSoulEquipment(soulEquipment);
+        }
+
+        public bool TryUnequipSoulEquipment(SoulEquipmentItem soulEquipment)
+        {
+            if (soulEquipment == null)
+                return false;
+
             var equipment = soulEquipment.soulEquipment;
 
             //Check if soul equipment is acquired already 
@@ -233,9 +256,14 @@ namespace DChild.Gameplay.EquipmentSystem
             }
 
             if (isAcquired == false)
-                return;
+                return false;
+
+            if (!m_equippedSoulSlotEquipmentPair.TryGetValue(equipment.Slot, out SoulEquipmentItem equippedItem) ||
+                equippedItem != soulEquipment)
+                return false;
 
             m_equippedSoulSlotEquipmentPair.Remove(equipment.Slot);
+            m_eqiuppedItems.RemoveAll(item => item.item == soulEquipment);
 
             foreach (SoulSkill soulSkill in equipment.soulSkillList)
             {
@@ -247,6 +275,8 @@ namespace DChild.Gameplay.EquipmentSystem
             {
                 statBoost.DetachFrom(m_player);
             }
+
+            return true;
         }
 
         [Button]
@@ -272,6 +302,11 @@ namespace DChild.Gameplay.EquipmentSystem
         public SoulEquipmentList GetFullSoulEquipmentList()
         {
             return m_data;
+        }
+
+        public bool TryGetEquippedSoulEquipment(SoulSlot slot, out SoulEquipmentItem equipmentItem)
+        {
+            return m_equippedSoulSlotEquipmentPair.TryGetValue(slot, out equipmentItem);
         }
     }
 }
