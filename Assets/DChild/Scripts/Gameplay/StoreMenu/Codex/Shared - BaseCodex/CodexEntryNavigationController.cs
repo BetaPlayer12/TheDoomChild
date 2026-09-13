@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.UI;
 
 namespace DChild.Menu.Codex
 {
@@ -12,8 +14,11 @@ namespace DChild.Menu.Codex
         private CodexScrollNavigationHandle m_scrollHandle;
         private CodexEntryNavigationItem m_lastSelectedEntry;
         private CodexEntryNavigationItem m_pendingEntry;
+        private InputAction m_moveAction;
+        private CanvasGroup[] m_parentCanvasGroups;
         private Vector2 m_pendingPosition;
         private bool m_hasPendingSelection;
+        private int m_pendingPageDirection;
 
         internal void Register(CodexEntryNavigationItem entry)
         {
@@ -208,6 +213,32 @@ namespace DChild.Menu.Codex
                 entry.DisableBuiltInNavigation();
         }
 
+        private bool CanHandleEmptyPageInput()
+        {
+            if (!isActiveAndEnabled || !gameObject.activeInHierarchy || !AreParentCanvasGroupsInteractable())
+                return false;
+
+            RefreshEntries();
+            foreach (CodexEntryNavigationItem entry in m_entries)
+            {
+                if (entry.IsAvailable())
+                    return false;
+            }
+
+            return true;
+        }
+
+        private bool AreParentCanvasGroupsInteractable()
+        {
+            foreach (CanvasGroup canvasGroup in m_parentCanvasGroups)
+            {
+                if (canvasGroup.isActiveAndEnabled && !canvasGroup.interactable)
+                    return false;
+            }
+
+            return true;
+        }
+
         private void CacheScrollHandle()
         {
             if (m_scrollHandle == null)
@@ -235,10 +266,72 @@ namespace DChild.Menu.Codex
             m_scrollHandle.OnPageChangeCompleted -= OnPageChangeCompleted;
         }
 
-        private void Awake() => RefreshEntries();
+        private void BindMoveInput()
+        {
+            if (m_moveAction != null)
+                return;
 
-        private void OnEnable() => SubscribeToPageChanges();
+            var inputModule = EventSystem.current?.currentInputModule as InputSystemUIInputModule;
+            m_moveAction = inputModule?.move?.action;
+            if (m_moveAction != null)
+                m_moveAction.performed += OnMovePerformed;
+        }
 
-        private void OnDisable() => UnsubscribeFromPageChanges();
+        private void UnbindMoveInput()
+        {
+            if (m_moveAction == null)
+                return;
+
+            m_moveAction.performed -= OnMovePerformed;
+            m_moveAction = null;
+        }
+
+        private void OnMovePerformed(InputAction.CallbackContext context)
+        {
+            if (!CanHandleEmptyPageInput())
+                return;
+
+            Vector2 input = context.ReadValue<Vector2>();
+            if (Mathf.Abs(input.y) <= Mathf.Abs(input.x) || Mathf.Approximately(input.y, 0f))
+                return;
+
+            m_pendingPageDirection = input.y < 0f ? 1 : -1;
+        }
+
+        private void LateUpdate()
+        {
+            if (m_pendingPageDirection == 0)
+                return;
+
+            int direction = m_pendingPageDirection;
+            m_pendingPageDirection = 0;
+
+            if (!CanHandleEmptyPageInput())
+                return;
+
+            CacheScrollHandle();
+            m_scrollHandle?.TryMovePage(direction);
+        }
+
+        private void Awake()
+        {
+            m_parentCanvasGroups = GetComponentsInParent<CanvasGroup>(true);
+            RefreshEntries();
+        }
+
+        private void OnEnable()
+        {
+            SubscribeToPageChanges();
+            BindMoveInput();
+        }
+
+        private void Start() => BindMoveInput();
+
+        private void OnDisable()
+        {
+            m_pendingPageDirection = 0;
+            UnsubscribeFromPageChanges();
+            UnbindMoveInput();
+        }
     }
 }
